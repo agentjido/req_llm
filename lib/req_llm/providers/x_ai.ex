@@ -151,14 +151,7 @@ defmodule ReqLLM.Providers.XAI do
       raise ReqLLM.Error.Invalid.Provider.exception(provider: model.provider)
     end
 
-    api_key_env = ReqLLM.Provider.Registry.get_env_key(:xai)
-    api_key = JidoKeys.get(api_key_env)
-
-    if !(api_key && api_key != "") do
-      raise ReqLLM.Error.Invalid.Parameter.exception(
-              parameter: "api_key (set via JidoKeys.put(#{inspect(api_key_env)}, key))"
-            )
-    end
+    api_key = ReqLLM.Key.fetch!(:xai, user_opts)
 
     # Extract tools separately to avoid validation issues
     {tools, other_opts} = Keyword.pop(user_opts, :tools, [])

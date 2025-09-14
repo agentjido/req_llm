@@ -114,14 +114,7 @@ defmodule ReqLLM.Providers.OpenAI do
       raise ReqLLM.Error.Invalid.Parameter.exception(parameter: "model: #{model.model}")
     end
 
-    api_key_env = ReqLLM.Provider.Registry.get_env_key(:openai)
-    api_key = JidoKeys.get(api_key_env)
-
-    if !(api_key && api_key != "") do
-      raise ReqLLM.Error.Invalid.Parameter.exception(
-              parameter: "api_key (set via JidoKeys.put(#{inspect(api_key_env)}, key))"
-            )
-    end
+    api_key = ReqLLM.Key.fetch!(:openai, user_opts)
 
     # Extract special keys that shouldn't be validated
     {tools, temp_opts} = Keyword.pop(user_opts, :tools, [])
