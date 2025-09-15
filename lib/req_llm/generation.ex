@@ -11,7 +11,9 @@ defmodule ReqLLM.Generation do
   with proper error handling.
   """
 
-  alias ReqLLM.{Model, Context, Response}
+  alias ReqLLM.{Context, Model, Response}
+
+  require Logger
 
   @base_schema NimbleOptions.new!(
                  temperature: [
@@ -78,6 +80,11 @@ defmodule ReqLLM.Generation do
                  user: [
                    type: :string,
                    doc: "User identifier for tracking/abuse detection"
+                 ],
+                 on_unsupported: [
+                   type: {:in, [:warn, :error, :ignore]},
+                   doc: "How to handle unsupported parameter translations",
+                   default: :warn
                  ]
                )
 
@@ -173,9 +180,12 @@ defmodule ReqLLM.Generation do
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          schema = dynamic_schema(provider_module),
          {:ok, validated_opts} <- NimbleOptions.validate(opts, schema),
-         context = build_context(messages, validated_opts),
+         {translated_opts, warnings} <-
+           translate_provider_options(provider_module, :chat, model, validated_opts),
+         :ok <- handle_warnings(translated_opts, warnings),
+         context = build_context(messages, translated_opts),
          {:ok, configured_request} <-
-           provider_module.prepare_request(:chat, model, context, validated_opts),
+           provider_module.prepare_request(:chat, model, context, translated_opts),
          {:ok, %Req.Response{body: decoded_response}} <- Req.request(configured_request) do
       Response.decode_response(decoded_response, model)
     end
@@ -240,7 +250,10 @@ defmodule ReqLLM.Generation do
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          schema = dynamic_schema(provider_module),
          {:ok, validated_opts} <- NimbleOptions.validate(opts, schema),
-         stream_opts = Keyword.put(validated_opts, :stream, true),
+         {translated_opts, warnings} <-
+           translate_provider_options(provider_module, :chat, model, validated_opts),
+         :ok <- handle_warnings(translated_opts, warnings),
+         stream_opts = Keyword.put(translated_opts, :stream, true),
          context = build_context(messages, stream_opts),
          {:ok, configured_request} <-
            provider_module.prepare_request(:chat, model, context, stream_opts),
@@ -278,6 +291,28 @@ defmodule ReqLLM.Generation do
   end
 
   # Private helper functions
+
+  defp translate_provider_options(provider_mod, operation, model, opts) do
+    if function_exported?(provider_mod, :translate_options, 3) do
+      provider_mod.translate_options(operation, model, opts)
+    else
+      {opts, []}
+    end
+  end
+
+  defp handle_warnings(opts, warnings) do
+    case opts[:on_unsupported] || :warn do
+      :ignore ->
+        :ok
+
+      :warn ->
+        Enum.each(warnings, &Logger.warning/1)
+        :ok
+
+      :error ->
+        if warnings == [], do: :ok, else: {:error, {:unsupported_options, warnings}}
+    end
+  end
 
   defp build_context(messages, opts) when is_binary(messages) do
     context = Context.new([Context.user(messages)])
@@ -366,15 +401,18 @@ defmodule ReqLLM.Generation do
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          options_schema = dynamic_schema(provider_module),
          {:ok, validated_opts} <- NimbleOptions.validate(opts, options_schema),
+         {translated_opts, warnings} <-
+           translate_provider_options(provider_module, :object, model, validated_opts),
+         :ok <- handle_warnings(translated_opts, warnings),
          {:ok, compiled_schema} <- ReqLLM.Schema.compile(object_schema),
-         context = build_context(messages, validated_opts),
+         context = build_context(messages, translated_opts),
          {:ok, configured_request} <-
            provider_module.prepare_request(
              :object,
              model,
              context,
              compiled_schema,
-             validated_opts
+             translated_opts
            ),
          {:ok, %Req.Response{body: decoded_response}} <- Req.request(configured_request) do
       Response.decode_object(decoded_response, model, object_schema)
@@ -419,8 +457,11 @@ defmodule ReqLLM.Generation do
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          options_schema = dynamic_schema(provider_module),
          {:ok, validated_opts} <- NimbleOptions.validate(opts, options_schema),
+         {translated_opts, warnings} <-
+           translate_provider_options(provider_module, :object, model, validated_opts),
+         :ok <- handle_warnings(translated_opts, warnings),
          {:ok, compiled_schema} <- ReqLLM.Schema.compile(object_schema),
-         stream_opts = Keyword.put(validated_opts, :stream, true),
+         stream_opts = Keyword.put(translated_opts, :stream, true),
          context = build_context(messages, stream_opts),
          {:ok, configured_request} <-
            provider_module.prepare_request(:object, model, context, compiled_schema, stream_opts),

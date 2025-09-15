@@ -221,6 +221,32 @@ defmodule ReqLLM.Provider.DSL do
 
       def provider_schema, do: @provider_schema
 
+      # Translation helper functions available to all providers
+      @doc false
+      def translate_rename(opts, from, to) when is_atom(from) and is_atom(to) do
+        case Keyword.pop(opts, from) do
+          {nil, opts} -> {opts, []}
+          {value, opts} -> {Keyword.put(opts, to, value), []}
+        end
+      end
+
+      @doc false
+      def translate_drop(opts, key, msg \\ nil) do
+        {value, opts} = Keyword.pop(opts, key)
+        warnings = if value != nil && msg, do: [msg], else: []
+        {opts, warnings}
+      end
+
+      @doc false
+      def translate_combine_warnings(results) do
+        {final_opts, all_warnings} =
+          Enum.reduce(results, {[], []}, fn {opts, warnings}, {acc_opts, acc_warns} ->
+            {Keyword.merge(acc_opts, opts), acc_warns ++ warnings}
+          end)
+
+        {final_opts, all_warnings}
+      end
+
       # Generate default_env_key callback if provided
       unquote(
         if default_env_key do

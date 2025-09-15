@@ -182,6 +182,44 @@ defmodule ReqLLM.Provider do
               {:ok, map()} | {:error, term()}
 
   @doc """
+  Translates canonical options to provider-specific parameters (optional).
+
+  This callback allows providers to modify option keys and values before
+  they are sent to the API. Useful for handling parameter name differences
+  and model-specific restrictions.
+
+  ## Parameters
+
+    * `operation` - The operation type (:chat, :embed, etc.)
+    * `model` - The ReqLLM.Model struct
+    * `opts` - Canonical options after validation
+
+  ## Returns
+
+    * `{translated_opts, warnings}` - Tuple of translated options and warning messages
+
+  ## Examples
+
+      # OpenAI o1 models need max_completion_tokens instead of max_tokens
+      def translate_options(:chat, %Model{model: <<"o1", _::binary>>}, opts) do
+        {opts, warnings} = translate_max_tokens(opts)
+        {opts, warnings}
+      end
+
+      # Drop unsupported parameters with warnings
+      def translate_options(:chat, %Model{model: <<"o1", _::binary>>}, opts) do
+        results = [
+          translate_rename(opts, :max_tokens, :max_completion_tokens),
+          translate_drop(opts, :temperature, "OpenAI o1 models do not support :temperature")
+        ]
+        translate_combine_warnings(results)
+      end
+
+  """
+  @callback translate_options(operation(), ReqLLM.Model.t(), keyword()) ::
+              {keyword(), [String.t()]}
+
+  @doc """
   Returns the default environment variable name for API authentication.
 
   This callback provides the fallback environment variable name when the
@@ -195,7 +233,7 @@ defmodule ReqLLM.Provider do
   """
   @callback default_env_key() :: String.t()
 
-  @optional_callbacks [extract_usage: 2, default_env_key: 0]
+  @optional_callbacks [extract_usage: 2, default_env_key: 0, translate_options: 3]
 
   @doc """
   Registry function to get provider module for a provider ID.
