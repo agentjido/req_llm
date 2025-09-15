@@ -200,7 +200,7 @@ defmodule ReqLLM.Provider do
 
   ## Examples
 
-      # OpenAI o1 models need max_completion_tokens instead of max_tokens
+      # OpenAI o1 and o3 models need max_completion_tokens instead of max_tokens
       def translate_options(:chat, %Model{model: <<"o1", _::binary>>}, opts) do
         {opts, warnings} = translate_max_tokens(opts)
         {opts, warnings}
@@ -211,6 +211,14 @@ defmodule ReqLLM.Provider do
         results = [
           translate_rename(opts, :max_tokens, :max_completion_tokens),
           translate_drop(opts, :temperature, "OpenAI o1 models do not support :temperature")
+        ]
+        translate_combine_warnings(results)
+      end
+
+      def translate_options(:chat, %Model{model: <<"o3", _::binary>>}, opts) do
+        results = [
+          translate_rename(opts, :max_tokens, :max_completion_tokens),
+          translate_drop(opts, :temperature, "OpenAI o3 models do not support :temperature")
         ]
         translate_combine_warnings(results)
       end
