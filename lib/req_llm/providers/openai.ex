@@ -179,6 +179,22 @@ defmodule ReqLLM.Providers.OpenAI do
     {final_opts, rename_warnings ++ drop_warnings}
   end
 
+  def translate_options(:chat, %ReqLLM.Model{model: <<"o3", _::binary>>}, opts) do
+    # O3 models: rename max_tokens and drop temperature
+    # Apply transformations sequentially to avoid conflicts
+    {opts_after_rename, rename_warnings} =
+      translate_rename(opts, :max_tokens, :max_completion_tokens)
+
+    {final_opts, drop_warnings} =
+      translate_drop(
+        opts_after_rename,
+        :temperature,
+        "OpenAI o3 models do not support :temperature – dropped"
+      )
+
+    {final_opts, rename_warnings ++ drop_warnings}
+  end
+
   def translate_options(_operation, _model, opts), do: {opts, []}
 
   # Req pipeline steps
