@@ -9,7 +9,7 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
   use Mix.Task
 
   @preferred_cli_env ["req.llm.stream_text": :dev]
-  @spec run([String.t()]) :: :ok
+  @spec run([String.t()]) :: :ok | no_return()
   @impl Mix.Task
   def run(args) do
     Application.ensure_all_started(:req_llm)
@@ -74,50 +74,51 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
 
     start_time = System.monotonic_time(:millisecond)
 
-    case ReqLLM.stream_text!(model_spec, prompt, stream_opts) do
-      {:ok, stream} ->
-        if !quiet, do: IO.puts("Response:")
+    try do
+      stream = ReqLLM.stream_text!(model_spec, prompt, stream_opts)
 
-        chunks = Enum.to_list(stream)
+      if !quiet, do: IO.puts("Response:")
 
-        # Print each chunk - handle potential error tuples
-        for {chunk, index} <- Enum.with_index(chunks, 1) do
-          cond do
-            verbose and not quiet ->
-              IO.puts("[#{index}]: #{inspect(chunk)}")
+      chunks = Enum.to_list(stream)
 
-            not quiet ->
-              case chunk do
-                {_status, _error} = error_tuple ->
-                  IO.puts("❌ Error in stream: #{inspect(error_tuple)}")
+      # Print each chunk - handle potential error tuples
+      for {chunk, index} <- Enum.with_index(chunks, 1) do
+        cond do
+          verbose and not quiet ->
+            IO.puts("[#{index}]: #{inspect(chunk)}")
 
-                chunk when is_binary(chunk) ->
-                  IO.write(chunk)
+          not quiet ->
+            case chunk do
+              {_status, _error} = error_tuple ->
+                IO.puts("❌ Error in stream: #{inspect(error_tuple)}")
 
-                other ->
-                  IO.puts("❌ Unexpected chunk type: #{inspect(other)}")
-              end
+              chunk when is_binary(chunk) ->
+                IO.write(chunk)
 
-            true ->
-              :ok
-          end
+              other ->
+                IO.puts("❌ Unexpected chunk type: #{inspect(other)}")
+            end
+
+          true ->
+            :ok
         end
+      end
 
-        # Debug output for empty responses
-        if Enum.empty?(chunks) and not quiet do
-          IO.puts("⚠️ No chunks received from stream")
-        end
+      # Debug output for empty responses
+      if Enum.empty?(chunks) and not quiet do
+        IO.puts("⚠️ No chunks received from stream")
+      end
 
-        if !quiet, do: IO.puts("")
+      if !quiet, do: IO.puts("")
 
-        if metrics do
-          show_key_stats(chunks, start_time, model_spec, prompt)
-        end
+      if metrics do
+        show_key_stats(chunks, start_time, model_spec, prompt)
+      end
 
-        if !quiet, do: IO.puts("✅ Completed")
-        :ok
-
-      {:error, error} ->
+      if !quiet, do: IO.puts("✅ Completed")
+      :ok
+    rescue
+      error ->
         IO.puts("❌ Error: #{inspect(error)}")
         System.halt(1)
     end
