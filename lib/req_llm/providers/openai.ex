@@ -12,9 +12,9 @@ defmodule ReqLLM.Providers.OpenAI do
 
   Set your OpenAI API key via JidoKeys (automatically picks up from .env):
 
-  # Option 1: Set directly in JidoKeys  
+  # Option 1: Set directly in JidoKeys
     ReqLLM.put_key(:openai_api_key, "sk-...")
-    
+
     # Option 2: Add to .env file (automatically loaded via JidoKeys+Dotenvy)
     OPENAI_API_KEY=sk-...
 
@@ -228,10 +228,11 @@ defmodule ReqLLM.Providers.OpenAI do
 
     %{
       model: request.options[:model] || request.options[:id],
-      temperature: request.options[:temperature],
-      max_tokens: request.options[:max_tokens],
       stream: request.options[:stream]
     }
+    |> maybe_put(:temperature, request.options[:temperature])
+    |> maybe_put(:max_tokens, request.options[:max_tokens])
+    |> maybe_put(:max_completion_tokens, request.options[:max_completion_tokens])
     |> Map.merge(context_data)
     |> Map.merge(tools_data)
     |> maybe_put(:top_p, request.options[:top_p])

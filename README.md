@@ -39,6 +39,7 @@ end
 - **Usage & cost extraction** on every response (`response.usage`)
 - **Plugin-based provider system**
   - Anthropic, OpenAI, Groq, Google, xAI and OpenRouter included
+  - Automatic parameter translation for model-specific requirements
   - Easily extendable with new providers (see [Adding a Provider Guide](guides/adding_a_provider.md))
 - **Context Codec protocol** converts ReqLLM structs to provider wire formats
 - **Extensive test matrix** (local fixtures + optional live calls)

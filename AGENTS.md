@@ -49,8 +49,10 @@ ReqLLM is a composable Elixir library for AI interactions built on Req, providin
   - `encode_body/1` - Transform context to provider JSON
   - `decode_response/1` - Parse API responses
   - `extract_usage/2` - Extract usage/cost data (optional)
+  - `translate_options/3` - Provider-specific parameter translation (optional)
 - Providers use `ReqLLM.Provider.DSL` macro for registration and metadata loading
 - Core API uses provider's `attach/3` to compose Req requests with provider-specific steps
+- **Options Translation**: Providers can implement `translate_options/3` to handle model-specific parameter requirements (e.g., OpenAI o1 models require `max_completion_tokens` instead of `max_tokens`)
 
 ### Protocol System
 - `ReqLLM.Context.Codec` - Protocol for encoding/decoding contexts to/from provider wire formats

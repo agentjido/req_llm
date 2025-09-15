@@ -290,6 +290,31 @@ case ReqLLM.Model.from("invalid:model") do
 end
 ```
 
+### Provider-Specific Parameter Requirements
+
+**Problem**: Some models require different parameter names (e.g., OpenAI o1 models need `max_completion_tokens` instead of `max_tokens`).
+
+**Solution**: ReqLLM automatically handles parameter translation. Use standard parameter names and let providers translate them as needed.
+
+```elixir
+# Use standard parameters - ReqLLM handles model-specific translation automatically
+{:ok, response} = ReqLLM.generate_text(
+  "openai:o1-mini", 
+  "Hello", 
+  max_tokens: 150,        # Automatically becomes max_completion_tokens for o1 models
+  temperature: 0.7        # Automatically dropped with warning for o1 models
+)
+
+# Control warning behavior with on_unsupported option
+{:ok, response} = ReqLLM.generate_text(
+  "openai:o1-mini",
+  "Hello",
+  max_tokens: 150,
+  temperature: 0.7,
+  on_unsupported: :ignore  # Suppress warnings for unsupported parameters
+)
+```
+
 ### Stream Processing Issues
 
 **Problem**: Assuming all stream chunks contain text data.
