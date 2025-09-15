@@ -160,6 +160,123 @@ defmodule ReqLLM.Providers.OpenAITest do
         assert warnings == []
       end
     end
+
+    test "o3 models translate max_tokens to max_completion_tokens" do
+      opts = [max_tokens: 1000, temperature: 0.7]
+      model = Model.new(:openai, "o3-mini")
+
+      {translated, warnings} = OpenAI.translate_options(:chat, model, opts)
+
+      assert translated[:max_completion_tokens] == 1000
+      refute Keyword.has_key?(translated, :max_tokens)
+      refute Keyword.has_key?(translated, :temperature)
+      assert length(warnings) == 1
+      assert List.first(warnings) =~ "OpenAI o3 models do not support :temperature"
+    end
+
+    test "o3-standard models translate max_tokens to max_completion_tokens" do
+      opts = [max_tokens: 2000, temperature: 1.0]
+      model = Model.new(:openai, "o3-standard")
+
+      {translated, warnings} = OpenAI.translate_options(:chat, model, opts)
+
+      assert translated[:max_completion_tokens] == 2000
+      refute Keyword.has_key?(translated, :max_tokens)
+      refute Keyword.has_key?(translated, :temperature)
+      assert length(warnings) == 1
+      assert List.first(warnings) =~ "OpenAI o3 models do not support :temperature"
+    end
+
+    test "o3 models handle missing max_tokens gracefully" do
+      opts = [temperature: 0.5, top_p: 0.9]
+      model = Model.new(:openai, "o3-mini")
+
+      {translated, warnings} = OpenAI.translate_options(:chat, model, opts)
+
+      refute Keyword.has_key?(translated, :max_tokens)
+      refute Keyword.has_key?(translated, :max_completion_tokens)
+      refute Keyword.has_key?(translated, :temperature)
+      assert translated[:top_p] == 0.9
+      assert length(warnings) == 1
+      assert List.first(warnings) =~ "OpenAI o3 models do not support :temperature"
+    end
+
+    test "o3 models handle missing temperature gracefully" do
+      opts = [max_tokens: 500, top_p: 0.8]
+      model = Model.new(:openai, "o3-mini")
+
+      {translated, warnings} = OpenAI.translate_options(:chat, model, opts)
+
+      assert translated[:max_completion_tokens] == 500
+      refute Keyword.has_key?(translated, :max_tokens)
+      assert translated[:top_p] == 0.8
+      assert warnings == []
+    end
+
+    test "o3 models preserve other options" do
+      opts = [max_tokens: 1500, top_p: 0.95, frequency_penalty: 0.1, presence_penalty: 0.2]
+      model = Model.new(:openai, "o3-mini")
+
+      {translated, warnings} = OpenAI.translate_options(:chat, model, opts)
+
+      assert translated[:max_completion_tokens] == 1500
+      assert translated[:top_p] == 0.95
+      assert translated[:frequency_penalty] == 0.1
+      assert translated[:presence_penalty] == 0.2
+      # No temperature in opts, so no warnings
+      assert warnings == []
+    end
+
+    test "non-chat operations are unchanged for o3 models" do
+      opts = [max_tokens: 1000, temperature: 0.7]
+      model = Model.new(:openai, "o3-mini")
+
+      {translated, warnings} = OpenAI.translate_options(:embedding, model, opts)
+
+      assert translated == opts
+      assert warnings == []
+    end
+
+    test "empty options are handled correctly for o3 models" do
+      opts = []
+      model = Model.new(:openai, "o3-standard")
+
+      {translated, warnings} = OpenAI.translate_options(:chat, model, opts)
+
+      assert translated == []
+      # No options to translate, no warnings
+      assert warnings == []
+    end
+
+    test "o3 model name matching is case sensitive and prefix-based" do
+      # Should match (starts with "o3")
+      o3_models = ["o3-mini", "o3-standard", "o3-anything"]
+
+      for model_name <- o3_models do
+        opts = [max_tokens: 1000, temperature: 0.7]
+        model = Model.new(:openai, model_name)
+
+        {translated, warnings} = OpenAI.translate_options(:chat, model, opts)
+
+        assert translated[:max_completion_tokens] == 1000
+        refute Keyword.has_key?(translated, :max_tokens)
+        refute Keyword.has_key?(translated, :temperature)
+        assert length(warnings) == 1
+      end
+
+      # Should not match (doesn't start with "o3")
+      non_o3_models = ["O3-mini", "gpt-o3", "model-o3-test"]
+
+      for model_name <- non_o3_models do
+        opts = [max_tokens: 1000, temperature: 0.7]
+        model = Model.new(:openai, model_name)
+
+        {translated, warnings} = OpenAI.translate_options(:chat, model, opts)
+
+        assert translated == opts
+        assert warnings == []
+      end
+    end
   end
 
   describe "translation helper functions" do

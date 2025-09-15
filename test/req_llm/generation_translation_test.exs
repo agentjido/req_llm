@@ -22,7 +22,7 @@ defmodule ReqLLM.Generation.TranslationTest do
       provider_mod = ReqLLM.Providers.OpenAI
       assert function_exported?(provider_mod, :translate_options, 3)
 
-      # Test the translation directly
+      # Test the translation directly for o1 models
       model = Model.new(:openai, "o1-mini")
       opts = [max_tokens: 1000, temperature: 0.7]
 
@@ -33,6 +33,23 @@ defmodule ReqLLM.Generation.TranslationTest do
       refute Keyword.has_key?(translated, :temperature)
       assert length(warnings) == 1
       assert List.first(warnings) =~ "OpenAI o1 models do not support :temperature"
+    end
+
+    test "provider with translate_options/3 callback works for o3 models" do
+      # Test that o3 models also use the same translation logic
+      provider_mod = ReqLLM.Providers.OpenAI
+      
+      # Test the translation directly for o3 models
+      model = Model.new(:openai, "o3-mini")
+      opts = [max_tokens: 1000, temperature: 0.7]
+
+      {translated, warnings} = provider_mod.translate_options(:chat, model, opts)
+
+      assert translated[:max_completion_tokens] == 1000
+      refute Keyword.has_key?(translated, :max_tokens)
+      refute Keyword.has_key?(translated, :temperature)
+      assert length(warnings) == 1
+      assert List.first(warnings) =~ "OpenAI o3 models do not support :temperature"
     end
   end
 
