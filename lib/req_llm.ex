@@ -65,7 +65,7 @@ defmodule ReqLLM do
   @doc """
   Stores an API key in the session keyring.
 
-  Keys from .env files are automatically loaded via JidoKeys+Dotenvy integration, 
+  Keys from .env files are automatically loaded via JidoKeys+Dotenvy integration,
   so you typically don't need to call this manually. Just add keys to your .env file.
 
   ## Parameters
@@ -232,6 +232,7 @@ defmodule ReqLLM do
 
   This is a convenience function that extracts just the text from the response.
   For access to usage metadata and other response data, use `generate_text/3`.
+  Raises on error.
 
   ## Parameters
 
@@ -239,8 +240,7 @@ defmodule ReqLLM do
 
   ## Examples
 
-      {:ok, text} = ReqLLM.generate_text!("anthropic:claude-3-sonnet", "Hello world")
-      text
+      ReqLLM.generate_text!("anthropic:claude-3-sonnet", "Hello world")
       #=> "Hello! How can I assist you today?"
 
   """
@@ -273,6 +273,7 @@ defmodule ReqLLM do
 
   This is a convenience function that extracts just the stream from the response.
   For access to usage metadata and other response data, use `stream_text/3`.
+  Raises on error.
 
   ## Parameters
 
@@ -280,8 +281,8 @@ defmodule ReqLLM do
 
   ## Examples
 
-      {:ok, stream} = ReqLLM.stream_text!("anthropic:claude-3-sonnet", "Tell me a story")
-      stream |> Enum.each(&IO.write/1)
+      ReqLLM.stream_text!("anthropic:claude-3-sonnet", "Tell me a story")
+      |> Enum.each(&IO.write/1)
 
   """
   defdelegate stream_text!(model_spec, messages, opts \\ []), to: Generation
@@ -344,8 +345,7 @@ defmodule ReqLLM do
 
   ## Examples
 
-      {:ok, object} = ReqLLM.generate_object!("anthropic:claude-3-sonnet", "Generate a person", schema)
-      object
+      ReqLLM.generate_object!("anthropic:claude-3-sonnet", "Generate a person", schema)
       #=> %{name: "John Doe", age: 30}
 
   """
@@ -386,6 +386,7 @@ defmodule ReqLLM do
 
   This is a convenience function that extracts just the stream from the response.
   For access to usage metadata and other response data, use `stream_object/4`.
+  Raises on error.
 
   ## Parameters
 
@@ -393,8 +394,8 @@ defmodule ReqLLM do
 
   ## Examples
 
-      {:ok, stream} = ReqLLM.stream_object!("anthropic:claude-3-sonnet", "Generate a character", schema)
-      stream |> Enum.each(&IO.inspect/1)
+      ReqLLM.stream_object!("anthropic:claude-3-sonnet", "Generate a character", schema)
+      |> Enum.each(&IO.inspect/1)
 
   """
   defdelegate stream_object!(model_spec, messages, schema, opts \\ []), to: Generation

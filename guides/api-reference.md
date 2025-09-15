@@ -46,8 +46,8 @@ Generate text returning only the text content.
 
 **Examples:**
 ```elixir
-{:ok, text} = ReqLLM.generate_text!("anthropic:claude-3-sonnet", "Hello")
-# text => "Hello! How can I assist you today?"
+ReqLLM.generate_text!("anthropic:claude-3-sonnet", "Hello")
+# => "Hello! How can I assist you today?"
 ```
 
 ### stream_text/3
@@ -79,8 +79,8 @@ Stream text generation returning only the stream.
 
 **Examples:**
 ```elixir
-{:ok, stream} = ReqLLM.stream_text!("anthropic:claude-3-sonnet", "Count to 10")
-stream |> Enum.each(&IO.write/1)
+ReqLLM.stream_text!("anthropic:claude-3-sonnet", "Count to 10")
+|> Enum.each(&IO.write/1)
 ```
 
 ## Structured Data Generation

@@ -41,7 +41,7 @@ model = %ReqLLM.Model{
 
 ```elixir
 # Development/simple cases
-text = ReqLLM.generate_text!("anthropic:claude-3-sonnet", "Hello")
+ReqLLM.generate_text!("anthropic:claude-3-sonnet", "Hello")
 
 # Production - need access to metadata, errors, usage data
 {:ok, response} = ReqLLM.generate_text("anthropic:claude-3-sonnet", "Hello")

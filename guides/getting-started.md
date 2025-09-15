@@ -14,11 +14,11 @@ end
 
 ```elixir
 ReqLLM.put_key(:anthropic_api_key, "sk-ant-...")
-{:ok, text} = ReqLLM.generate_text!("anthropic:claude-3-sonnet", "Hello")
+ReqLLM.generate_text!("anthropic:claude-3-sonnet", "Hello")
 # Returns: "Hello! How can I assist you today?"
 
-{:ok, stream} = ReqLLM.stream_text!("anthropic:claude-3-sonnet", "Tell me a story")
-stream |> Enum.each(&IO.write/1)
+ReqLLM.stream_text!("anthropic:claude-3-sonnet", "Tell me a story")
+|> Enum.each(&IO.write/1)
 ```
 
 ## Structured Data
@@ -73,7 +73,7 @@ messages = [
   ReqLLM.Context.system("You are a helpful coding assistant"),
   ReqLLM.Context.user("Write a function to reverse a list")
 ]
-{:ok, text} = ReqLLM.generate_text!("anthropic:claude-3-sonnet", messages)
+ReqLLM.generate_text!("anthropic:claude-3-sonnet", messages)
 ```
 
 ## Common Options

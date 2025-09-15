@@ -54,13 +54,13 @@ ReqLLM.put_key(:anthropic_api_key, "sk-ant-...")
 model = "anthropic:claude-3-sonnet"
 
 # Simple text generation
-{:ok, text} = ReqLLM.generate_text!(model, "Hello world")
-#=> {:ok, "Hello! How can I assist you today?"}
+ReqLLM.generate_text!(model, "Hello world")
+#=> "Hello! How can I assist you today?"
 
 # Structured data generation
 schema = [name: [type: :string, required: true], age: [type: :pos_integer]]
-{:ok, person} = ReqLLM.generate_object!(model, "Generate a person", schema)
-#=> {:ok, %{name: "John Doe", age: 30}}
+person = ReqLLM.generate_object!(model, "Generate a person", schema)
+#=> %{name: "John Doe", age: 30}
 
 # With system prompts and parameters
 {:ok, response} = ReqLLM.generate_text(
