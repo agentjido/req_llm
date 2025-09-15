@@ -223,7 +223,20 @@ defmodule ReqLLM.Provider.DSL do
 
       # Translation helper functions available to all providers
       @doc false
+      def validate_mutex!(opts, keys, msg) when is_list(keys) do
+        present = Enum.filter(keys, &Keyword.has_key?(opts, &1))
+
+        if length(present) > 1 do
+          raise ReqLLM.Error.Invalid.Parameter.exception(parameter: msg)
+        end
+
+        :ok
+      end
+
+      @doc false
       def translate_rename(opts, from, to) when is_atom(from) and is_atom(to) do
+        validate_mutex!(opts, [from, to], "#{from} and #{to} cannot be used together")
+
         case Keyword.pop(opts, from) do
           {nil, opts} -> {opts, []}
           {value, opts} -> {Keyword.put(opts, to, value), []}

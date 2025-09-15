@@ -242,13 +242,29 @@ defmodule ReqLLM.Providers.OpenAI do
           %{}
       end
 
+    # Determine which token parameter to use based on model
+    model_name = request.options[:model] || request.options[:id]
+
+    {max_key, max_value} =
+      case model_name do
+        <<"o1", _::binary>> ->
+          {:max_completion_tokens,
+           request.options[:max_tokens] || request.options[:max_completion_tokens]}
+
+        <<"o3", _::binary>> ->
+          {:max_completion_tokens,
+           request.options[:max_tokens] || request.options[:max_completion_tokens]}
+
+        _ ->
+          {:max_tokens, request.options[:max_tokens] || request.options[:max_completion_tokens]}
+      end
+
     %{
-      model: request.options[:model] || request.options[:id],
+      model: model_name,
       stream: request.options[:stream]
     }
     |> maybe_put(:temperature, request.options[:temperature])
-    |> maybe_put(:max_tokens, request.options[:max_tokens])
-    |> maybe_put(:max_completion_tokens, request.options[:max_completion_tokens])
+    |> maybe_put(max_key, max_value)
     |> Map.merge(context_data)
     |> Map.merge(tools_data)
     |> maybe_put(:top_p, request.options[:top_p])
