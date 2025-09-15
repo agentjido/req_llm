@@ -1,0 +1,38 @@
+#!/bin/sh
+set -e
+
+if [ $# -eq 0 ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+  cat <<USAGE >&2
+Usage: $(basename "$0") [elixir switches] [compiler switches] [.ex files]
+
+  -h, --help                Prints this message and exits
+  -o                        The directory to output compiled files
+  -v, --version             Prints Elixir version and exits (standalone)
+
+  --ignore-module-conflict  Does not emit warnings if a module was previously defined
+  --no-debug-info           Does not attach debug info to compiled modules
+  --no-docs                 Does not attach documentation to compiled modules
+  --profile time            Profile the time to compile modules
+  --verbose                 Prints compilation status
+  --warnings-as-errors      Treats warnings as errors and return non-zero exit status
+
+Options given after -- are passed down to the executed code.
+Options can be passed to the Erlang runtime using \$ELIXIR_ERL_OPTIONS.
+Options can be passed to the Erlang compiler using \$ERL_COMPILER_OPTIONS.
+USAGE
+  exit 1
+fi
+
+readlink_f () {
+  cd "$(dirname "$1")" > /dev/null
+  filename="$(basename "$1")"
+  if [ -h "$filename" ]; then
+    readlink_f "$(readlink "$filename")"
+  else
+    echo "$(pwd -P)/$filename"
+  fi
+}
+
+SELF=$(readlink_f "$0")
+SCRIPT_PATH=$(dirname "$SELF")
+exec "$SCRIPT_PATH"/elixir +elixirc "$@"
