@@ -151,7 +151,7 @@ defmodule ReqLLM.Providers.XAI do
       raise ReqLLM.Error.Invalid.Provider.exception(provider: model.provider)
     end
 
-    api_key = ReqLLM.Key.fetch!(:xai, user_opts)
+    api_key = ReqLLM.Keys.get!(model, user_opts)
 
     # Extract tools separately to avoid validation issues
     {tools, other_opts} = Keyword.pop(user_opts, :tools, [])

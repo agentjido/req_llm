@@ -116,7 +116,7 @@ defmodule ReqLLM.Providers.Google do
       raise ReqLLM.Error.Invalid.Parameter.exception(parameter: "model: #{model.model}")
     end
 
-    api_key = ReqLLM.Key.fetch!(:google, user_opts)
+    api_key = ReqLLM.Keys.get!(model, user_opts)
 
     # Extract tools separately to avoid validation issues
     {tools, other_opts} = Keyword.pop(user_opts, :tools, [])

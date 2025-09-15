@@ -36,7 +36,7 @@ defmodule ReqLLM do
 
   ## Configuration
 
-  ReqLLM uses the Kagi keyring for API key storage:
+  ReqLLM uses the JidoKeys keyring for API key storage:
 
       # Store API keys in session keyring
       ReqLLM.put_key(:anthropic_api_key, "sk-ant-...")
@@ -65,7 +65,7 @@ defmodule ReqLLM do
   @doc """
   Stores an API key in the session keyring.
 
-  Keys from .env files are automatically loaded via JidoKeys+Dotenvy integration, 
+  Keys from .env files are automatically loaded via JidoKeys+Dotenvy integration,
   so you typically don't need to call this manually. Just add keys to your .env file.
 
   ## Parameters

@@ -62,7 +62,7 @@ defmodule ReqLLM.MixProject do
       {:typed_struct, "~> 0.3.0"},
       {:splode, "~> 0.2.3"},
       {:server_sent_events, "~> 0.2"},
-      {:jido_keys, "~> 1.0"},
+      {:jido_keys, "~> 1.0", optional: true},
 
       # Dev/test dependencies
       {:ex_doc, "~> 0.31", only: :dev, runtime: false},

@@ -114,7 +114,7 @@ defmodule ReqLLM.Providers.OpenAI do
       raise ReqLLM.Error.Invalid.Parameter.exception(parameter: "model: #{model.model}")
     end
 
-    api_key = ReqLLM.Key.fetch!(:openai, user_opts)
+    api_key = ReqLLM.Keys.get!(model, user_opts)
 
     # Extract special keys that shouldn't be validated
     {tools, temp_opts} = Keyword.pop(user_opts, :tools, [])

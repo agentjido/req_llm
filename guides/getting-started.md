@@ -13,6 +13,7 @@ end
 ## Generate Text
 
 ```elixir
+# Configure your API key 
 ReqLLM.put_key(:anthropic_api_key, "sk-ant-...")
 {:ok, text} = ReqLLM.generate_text!("anthropic:claude-3-sonnet", "Hello")
 # Returns: "Hello! How can I assist you today?"
@@ -51,19 +52,26 @@ usage = ReqLLM.Response.usage(response)
 
 ## Key Management
 
-ReqLLM uses JidoKeys for secure API key storage with automatic .env pickup:
+ReqLLM provides flexible API key configuration with clear precedence:
 
 ```elixir
-# Option 1: Set keys directly  
+# Recommended: Use ReqLLM.put_key for secure in-memory storage
 ReqLLM.put_key(:anthropic_api_key, "sk-ant-...")
-ReqLLM.put_key("OPENAI_API_KEY", "sk-...")
+ReqLLM.put_key(:openai_api_key, "sk-...")
 
-# Option 2: Keys from .env are automatically loaded via JidoKeys+Dotenvy
-# Just add to your .env file:
+# Per-request override (highest priority)
+ReqLLM.generate_text("openai:gpt-4", "Hello", api_key: "sk-...")
+
+# Alternative: Environment variables
+System.put_env("ANTHROPIC_API_KEY", "sk-ant-...")
+
+# Alternative: Application configuration
+Application.put_env(:req_llm, :anthropic_api_key, "sk-ant-...")
+
+# Keys from .env are automatically loaded via JidoKeys
+# Just add to your .env file and they're picked up automatically:
 # ANTHROPIC_API_KEY=sk-ant-...
 # OPENAI_API_KEY=sk-...
-
-# Providers automatically retrieve keys from JidoKeys
 ```
 
 ## Message Context
