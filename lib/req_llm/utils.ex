@@ -43,10 +43,12 @@ defmodule ReqLLM.Utils do
 
   defp normalize_fixture_tuple(_, _), do: :error
 
+  @compile {:nowarn_unused_function, attach_fixture_step: 3}
   defp attach_fixture_step(request, provider, name) do
     case Code.ensure_loaded(LLMFixture) do
       {:module, LLMFixture} ->
-        step_fn = LLMFixture.step(provider, name)
+        # LLMFixture.step/2 only exists in test environment
+        step_fn = apply(LLMFixture, :step, [provider, name])
         Req.Request.append_request_steps(request, llm_fixture: step_fn)
 
       {:error, _} ->

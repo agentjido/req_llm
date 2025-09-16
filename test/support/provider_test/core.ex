@@ -4,7 +4,7 @@ defmodule ReqLLM.ProviderTest.Core do
 
   Verifies that ReqLLM properly:
   - Encodes generic requests into provider-specific format
-  - Makes successful API calls 
+  - Makes successful API calls
   - Returns properly normalized Response objects
   - Handles common parameters correctly
 
@@ -23,6 +23,7 @@ defmodule ReqLLM.ProviderTest.Core do
       import ReqLLM.ProviderTestHelpers
 
       @moduletag :capture_log
+      @moduletag :coverage
       @moduletag category: :core
       @moduletag provider: provider
 

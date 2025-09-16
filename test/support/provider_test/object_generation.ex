@@ -21,6 +21,7 @@ defmodule ReqLLM.ProviderTest.ObjectGeneration do
       import ReqLLM.ProviderTestHelpers
 
       @moduletag :capture_log
+      @moduletag :coverage
       @moduletag category: :object_generation
       @moduletag provider: provider
 
@@ -38,7 +39,11 @@ defmodule ReqLLM.ProviderTest.ObjectGeneration do
               unquote(model),
               "Generate a fictional character profile with name, age, occupation, and hobbies",
               schema,
-              fixture_opts(unquote(provider), "basic_object_generation", param_bundles().deterministic)
+              fixture_opts(
+                unquote(provider),
+                "basic_object_generation",
+                param_bundles().deterministic
+              )
             )
 
           # Verify we got a successful response
@@ -84,7 +89,11 @@ defmodule ReqLLM.ProviderTest.ObjectGeneration do
               unquote(model),
               "Generate a detailed profile for a software engineer with name, age, occupation, and skills",
               schema,
-              fixture_opts(unquote(provider), "streaming_object_generation", param_bundles().deterministic)
+              fixture_opts(
+                unquote(provider),
+                "streaming_object_generation",
+                param_bundles().deterministic
+              )
             )
 
           # For streaming responses in the new system, check if it's truly streaming
@@ -151,7 +160,11 @@ defmodule ReqLLM.ProviderTest.ObjectGeneration do
               unquote(model),
               "Generate a complete profile for a tech startup company including name, founding year, location, and other details",
               schema,
-              fixture_opts(unquote(provider), "complex_object_generation", param_bundles().deterministic)
+              fixture_opts(
+                unquote(provider),
+                "complex_object_generation",
+                param_bundles().deterministic
+              )
             )
 
           # Extract the object
@@ -204,17 +217,35 @@ defmodule ReqLLM.ProviderTest.ObjectGeneration do
           ]
 
           prompt = "Generate a blog article metadata"
-          opts = fixture_opts(unquote(provider), "object_consistency", param_bundles().deterministic)
+
+          opts =
+            fixture_opts(unquote(provider), "object_consistency", param_bundles().deterministic)
 
           # Non-streaming version
           {:ok, non_stream_response} =
-            ReqLLM.generate_object(unquote(model), prompt, schema, 
-              fixture_opts(unquote(provider), "object_consistency_non_stream", param_bundles().deterministic))
+            ReqLLM.generate_object(
+              unquote(model),
+              prompt,
+              schema,
+              fixture_opts(
+                unquote(provider),
+                "object_consistency_non_stream",
+                param_bundles().deterministic
+              )
+            )
 
           # Streaming version  
           {:ok, stream_response} =
-            ReqLLM.stream_object(unquote(model), prompt, schema,
-              fixture_opts(unquote(provider), "object_consistency_stream", param_bundles().deterministic))
+            ReqLLM.stream_object(
+              unquote(model),
+              prompt,
+              schema,
+              fixture_opts(
+                unquote(provider),
+                "object_consistency_stream",
+                param_bundles().deterministic
+              )
+            )
 
           # Extract objects
           non_stream_object = ReqLLM.Response.object(non_stream_response)

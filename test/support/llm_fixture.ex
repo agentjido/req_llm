@@ -53,7 +53,7 @@ defmodule LLMFixture do
   # Mode helpers
   # ---------------------------------------------------------------------------
   defp live?, do: System.get_env("LIVE") in ~w(1 true TRUE)
-  
+
   # ---------------------------------------------------------------------------
   # Timing configuration for replay
   # ---------------------------------------------------------------------------
@@ -67,36 +67,36 @@ defmodule LLMFixture do
   # Create a timing-aware stream for replay
   defp create_timing_stream(chunks, %{delay_ms: delay_ms, acceleration: accel}) do
     # Decode chunks and extract timing info
-    decoded_chunks = 
+    decoded_chunks =
       Enum.map(chunks, fn chunk ->
         case chunk do
-          %{"b64" => b64_data, "t_us" => timing} -> 
+          %{"b64" => b64_data, "t_us" => timing} ->
             %{data: decode_body(%{"b64" => b64_data}), t_us: timing}
-          %{"b64" => b64_data} -> 
+
+          %{"b64" => b64_data} ->
             %{data: decode_body(%{"b64" => b64_data}), t_us: 0}
-          other -> 
+
+          other ->
             %{data: inspect(other), t_us: 0}
         end
       end)
 
     # If no timing simulation, return immediate concatenation
     if accel == 0.0 and delay_ms == 0 do
-      decoded_chunks 
-      |> Enum.map(& &1.data)
-      |> Enum.join("")
+      decoded_chunks
+      |> Enum.map_join("", & &1.data)
     else
       # For now, let's simulate timing but still return concatenated data
       # This tests if stream_text! is blocking on the data generation
       total_delay = calculate_total_delay(decoded_chunks, delay_ms, accel)
-      
+
       # Sleep to simulate the time it would take to receive all chunks
       if total_delay > 0 do
         Process.sleep(total_delay)
       end
-      
-      decoded_chunks 
-      |> Enum.map(& &1.data)
-      |> Enum.join("")
+
+      decoded_chunks
+      |> Enum.map_join("", & &1.data)
     end
   end
 
@@ -105,23 +105,12 @@ defmodule LLMFixture do
       # Calculate total time based on last chunk timestamp
       last_chunk = List.last(chunks)
       # Scale by acceleration and add per-chunk delay
-      base_time = round((last_chunk.t_us / 1000) / accel)
+      base_time = round(last_chunk.t_us / 1000 / accel)
       total_chunk_delay = delay_ms * length(chunks)
       base_time + total_chunk_delay
     else
       delay_ms * length(chunks)
     end
-  end
-
-  defp calculate_sleep_time(current_t, last_t, delay_ms, accel) do
-    base_delay = if accel > 0.0 do
-      # Time difference scaled by acceleration
-      max(0, round(((current_t - last_t) / 1000) / accel))
-    else
-      0
-    end
-    
-    base_delay + delay_ms
   end
 
   # ---------------------------------------------------------------------------
@@ -180,19 +169,22 @@ defmodule LLMFixture do
   defp put_raw_chunk(path, chunk) when is_binary(chunk) do
     key = {:llmfixture_raw_stream_chunks, path}
     start_key = {:llmfixture_start_time, path}
-    
+
     # Initialize start time on first chunk
-    start_time = case Process.get(start_key) do
-      nil -> 
-        time = System.monotonic_time(:microsecond)
-        Process.put(start_key, time)
-        time
-      time -> time
-    end
-    
+    start_time =
+      case Process.get(start_key) do
+        nil ->
+          time = System.monotonic_time(:microsecond)
+          Process.put(start_key, time)
+          time
+
+        time ->
+          time
+      end
+
     # Calculate timestamp relative to start
     timestamp_us = System.monotonic_time(:microsecond) - start_time
-    
+
     current = Process.get(key) || []
     chunk_with_timing = %{bin: chunk, t_us: timestamp_us}
     Process.put(key, [chunk_with_timing | current])
@@ -206,11 +198,15 @@ defmodule LLMFixture do
 
     cond do
       Enum.any?(steps, fn {name, _} -> name == :stream_sse end) ->
-        {before_steps, after_steps} = Enum.split_while(steps, fn {name, _} -> name != :stream_sse end)
+        {before_steps, after_steps} =
+          Enum.split_while(steps, fn {name, _} -> name != :stream_sse end)
+
         %{req | response_steps: before_steps ++ [tap] ++ after_steps}
 
       Enum.any?(steps, fn {name, _} -> name == :llm_decode_response end) ->
-        {before_steps, after_steps} = Enum.split_while(steps, fn {name, _} -> name != :llm_decode_response end)
+        {before_steps, after_steps} =
+          Enum.split_while(steps, fn {name, _} -> name != :llm_decode_response end)
+
         %{req | response_steps: before_steps ++ [tap] ++ after_steps}
 
       true ->
@@ -244,11 +240,12 @@ defmodule LLMFixture do
           create_timing_stream(chunks, timing_config)
       end
 
-    {:ok, %Req.Response{
-      status: resp["status"], 
-      headers: resp["headers"],
-      body: body
-    }}
+    {:ok,
+     %Req.Response{
+       status: resp["status"],
+       headers: resp["headers"],
+       body: body
+     }}
   end
 
   # ---------------------------------------------------------------------------
@@ -323,13 +320,13 @@ defmodule LLMFixture do
                 encoded = %{"b64" => Base.encode64(binary), "t_us" => timestamp}
                 decoded = %{"decoded" => binary}
                 Map.merge(encoded, decoded)
-              
+
               # Legacy format (binary only)
               binary when is_binary(binary) ->
                 encoded = %{"b64" => Base.encode64(binary)}
                 decoded = %{"decoded" => binary}
                 Map.merge(encoded, decoded)
-                
+
               # Fallback
               other ->
                 encoded = encode_body(other)
@@ -425,8 +422,6 @@ defmodule LLMFixture do
     )
     |> String.replace(~r/"password"\s*:\s*"[^"]*"/i, ~s/"password":"[REDACTED:password]"/)
   end
-
-
 
   # Body → JSON-friendly encoding
   defp encode_body(%{__struct__: _} = body), do: inspect(body)

@@ -3,7 +3,7 @@ defmodule ReqLLM.ProviderTest.ToolCalling do
   Tool/function calling tests.
 
   Tests tool calling capabilities:
-  - Tool definition and registration  
+  - Tool definition and registration
   - Parameter schema validation
   - Tool execution and result handling
 
@@ -22,6 +22,7 @@ defmodule ReqLLM.ProviderTest.ToolCalling do
       import ReqLLM.ProviderTestHelpers
 
       @moduletag :capture_log
+      @moduletag :coverage
       @moduletag category: :tool_calling
       @moduletag provider: provider
 
@@ -50,7 +51,7 @@ defmodule ReqLLM.ProviderTest.ToolCalling do
 
         # Build options with deterministic base but override max_tokens for tool calling
         base_opts = param_bundles().deterministic |> Keyword.put(:max_tokens, max_tokens)
-        
+
         ReqLLM.generate_text(
           unquote(model),
           "What's the weather like in Paris, France?",
@@ -74,7 +75,7 @@ defmodule ReqLLM.ProviderTest.ToolCalling do
 
         max_tokens = if unquote(provider) == :xai, do: 500, else: 100
         base_opts = param_bundles().deterministic |> Keyword.put(:max_tokens, max_tokens)
-        
+
         ReqLLM.generate_text(
           unquote(model),
           "Tell me a joke about cats",
@@ -112,7 +113,7 @@ defmodule ReqLLM.ProviderTest.ToolCalling do
 
         max_tokens = if unquote(provider) == :xai, do: 500, else: 100
         base_opts = param_bundles().deterministic |> Keyword.put(:max_tokens, max_tokens)
-        
+
         ReqLLM.generate_text(
           unquote(model),
           "Tell me a joke about programming",
@@ -140,13 +141,14 @@ defmodule ReqLLM.ProviderTest.ToolCalling do
 
       # Helper for asserting no tool calls were made
       defp assert_no_tool_calls(response) do
-        tool_calls = 
+        tool_calls =
           Enum.filter(response.message.content || [], fn content ->
             content.type == :tool_call
           end)
 
-        assert Enum.empty?(tool_calls), "Expected no tool calls, but found: #{inspect(tool_calls)}"
-        
+        assert Enum.empty?(tool_calls),
+               "Expected no tool calls, but found: #{inspect(tool_calls)}"
+
         # Should have regular text content instead
         text = ReqLLM.Response.text(response)
         assert String.length(text) > 0, "Expected text response when no tools called"

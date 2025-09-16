@@ -34,7 +34,11 @@ defmodule ReqLLM.Coverage.Anthropic.ObjectGenerationTest do
           "anthropic:claude-3-5-sonnet-20241022",
           "Create a detailed fantasy RPG character with abilities and backstory",
           schema,
-          fixture_opts(:anthropic, "anthropic_streaming_object_fix", param_bundles().deterministic)
+          fixture_opts(
+            :anthropic,
+            "anthropic_streaming_object_fix",
+            param_bundles().deterministic
+          )
         )
 
       if response.stream? do
@@ -115,7 +119,11 @@ defmodule ReqLLM.Coverage.Anthropic.ObjectGenerationTest do
           "anthropic:claude-3-5-sonnet-20241022",
           "Generate a product listing for an electronic device with multiple features",
           schema,
-          fixture_opts(:anthropic, "streaming_tool_call_accumulation", param_bundles().deterministic)
+          fixture_opts(
+            :anthropic,
+            "streaming_tool_call_accumulation",
+            param_bundles().deterministic
+          )
         )
 
       if response.stream? do
