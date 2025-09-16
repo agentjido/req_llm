@@ -115,7 +115,12 @@ defmodule ReqLLM.ProviderTest.Streaming do
         end
 
         test "stream_text! returns immediately (LIVE timing test)" do
-          if System.get_env("LIVE") do
+          # Test timing in LIVE mode or when replay timing is enabled
+          timing_enabled = System.get_env("LIVE") || 
+                          (System.get_env("REPLAY_STREAM_DELAY_MS", "0") |> String.to_integer()) > 0 ||
+                          (System.get_env("REPLAY_STREAM_ACCEL", "0.0") |> String.to_float()) > 0.0
+
+          if timing_enabled do
             # Test the bang variant with timing to ensure it returns a true stream
             start = System.monotonic_time(:millisecond)
             
