@@ -1,0 +1,133 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtZXNzYWdlcyI6W3sicm9sZSI6InVzZXIiLCJjb250ZW50IjpbeyJ0ZXh0IjoiR2VuZXJhdGUgYSBmaWN0aW9uYWwgY2hhcmFjdGVyIHByb2ZpbGUgd2l0aCBuYW1lLCBhZ2UsIG9jY3VwYXRpb24sIGFuZCBob2JiaWVzIiwidHlwZSI6InRleHQifV19XSwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2VuZXJhdGUgc3RydWN0dXJlZCBvdXRwdXQgbWF0Y2hpbmcgdGhlIHByb3ZpZGVkIHNjaGVtYSIsImlucHV0X3NjaGVtYSI6eyJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sImhvYmJpZXMiOnsiZGVzY3JpcHRpb24iOiJMaXN0IG9mIGhvYmJpZXMgYW5kIGludGVyZXN0cyIsIml0ZW1zIjp7InR5cGUiOiJzdHJpbmcifSwidHlwZSI6ImFycmF5In0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbIm5hbWUiLCJhZ2UiXSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQifV0sInRlbXBlcmF0dXJlIjowLjAsIm1vZGVsIjoiY2xhdWRlLTMtNS1zb25uZXQtMjAyNDEwMjIiLCJtYXhfdG9rZW5zIjoxMH0="
+    },
+    "url": "https://api.anthropic.com/v1/messages",
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-api-key": [
+        "[REDACTED:x-api-key]"
+      ]
+    },
+    "method": "post",
+    "canonical_json": "{\"max_tokens\":10,\"messages\":[{\"content\":[{\"text\":\"Generate a fictional character profile with name, age, occupation, and hobbies\",\"type\":\"text\"}],\"role\":\"user\"}],\"model\":\"claude-3-5-sonnet-20241022\",\"stream\":false,\"temperature\":0.0,\"tools\":[{\"description\":\"Generate structured output matching the provided schema\",\"input_schema\":{\"properties\":{\"age\":{\"description\":\"Person's age in years\",\"minimum\":1,\"type\":\"integer\"},\"hobbies\":{\"description\":\"List of hobbies and interests\",\"items\":{\"type\":\"string\"},\"type\":\"array\"},\"name\":{\"description\":\"Person's full name\",\"type\":\"string\"},\"occupation\":{\"description\":\"Person's job or profession\",\"type\":\"string\"}},\"required\":[\"name\",\"age\"],\"type\":\"object\"},\"name\":\"structured_output\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "content": [
+        {
+          "text": "I'll help you generate a fictional character profile using",
+          "type": "text"
+        }
+      ],
+      "id": "msg_01Y66r5c2vPY3cYxRUiXqExr",
+      "model": "claude-3-5-sonnet-20241022",
+      "role": "assistant",
+      "stop_reason": "max_tokens",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 483,
+        "output_tokens": 10,
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": [
+        "a71659e7-a922-4ff7-99de-f3ba615face1"
+      ],
+      "anthropic-ratelimit-input-tokens-limit": [
+        "80000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "80000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2025-09-16T21:40:25Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "16000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "16000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2025-09-16T21:40:26Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "1000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2025-09-16T21:40:25Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "96000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "96000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2025-09-16T21:40:25Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "980385a8a9a5e800-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 16 Sep 2025 21:40:26 GMT"
+      ],
+      "request-id": [
+        "req_011CTCofjYYEUdXPhRdTyHjG"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "1016"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    }
+  },
+  "captured_at": "2025-09-16T21:40:26.221048Z"
+}

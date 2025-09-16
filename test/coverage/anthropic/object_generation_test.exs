@@ -29,18 +29,15 @@ defmodule ReqLLM.Coverage.Anthropic.ObjectGenerationTest do
         backstory: [type: :string, doc: "Brief character backstory"]
       ]
 
-      result =
-        use_fixture(:anthropic, "anthropic_streaming_object_fix", fn ->
-          ReqLLM.stream_object(
-            "anthropic:claude-3-5-sonnet-20241022",
-            "Create a detailed fantasy RPG character with abilities and backstory",
-            schema
-          )
-        end)
+      {:ok, response} =
+        ReqLLM.stream_object(
+          "anthropic:claude-3-5-sonnet-20241022",
+          "Create a detailed fantasy RPG character with abilities and backstory",
+          schema,
+          fixture_opts(:anthropic, "anthropic_streaming_object_fix", param_bundles().deterministic)
+        )
 
-      {:ok, response} = result
-
-      if ReqLLM.Test.LiveFixture.live_mode?() do
+      if response.stream? do
         # This is the key test for the streaming object fix
         # Before the fix: would return [%{}] (empty objects)
         # After the fix: should return complete objects with all fields
@@ -87,7 +84,7 @@ defmodule ReqLLM.Coverage.Anthropic.ObjectGenerationTest do
           assert first_object["backstory"] != ""
         end
       else
-        # Cached mode: verify the materialized object is complete
+        # Fixture mode: verify the materialized object is complete
         object = ReqLLM.Response.object(response)
 
         assert is_map(object)
@@ -113,18 +110,15 @@ defmodule ReqLLM.Coverage.Anthropic.ObjectGenerationTest do
         in_stock: [type: :boolean, doc: "Whether product is in stock"]
       ]
 
-      result =
-        use_fixture(:anthropic, "streaming_tool_call_accumulation", fn ->
-          ReqLLM.stream_object(
-            "anthropic:claude-3-5-sonnet-20241022",
-            "Generate a product listing for an electronic device with multiple features",
-            schema
-          )
-        end)
+      {:ok, response} =
+        ReqLLM.stream_object(
+          "anthropic:claude-3-5-sonnet-20241022",
+          "Generate a product listing for an electronic device with multiple features",
+          schema,
+          fixture_opts(:anthropic, "streaming_tool_call_accumulation", param_bundles().deterministic)
+        )
 
-      {:ok, response} = result
-
-      if ReqLLM.Test.LiveFixture.live_mode?() do
+      if response.stream? do
         # Verify streaming response structure
         assert response.stream?
         assert response.stream

@@ -1,0 +1,133 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtZXNzYWdlcyI6W3sicm9sZSI6InVzZXIiLCJjb250ZW50IjpbeyJ0ZXh0IjoiR2VuZXJhdGUgYSBjb21wbGV0ZSBwcm9maWxlIGZvciBhIHRlY2ggc3RhcnR1cCBjb21wYW55IGluY2x1ZGluZyBuYW1lLCBmb3VuZGluZyB5ZWFyLCBsb2NhdGlvbiwgYW5kIG90aGVyIGRldGFpbHMiLCJ0eXBlIjoidGV4dCJ9XX1dLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZGVzY3JpcHRpb24iOiJHZW5lcmF0ZSBzdHJ1Y3R1cmVkIG91dHB1dCBtYXRjaGluZyB0aGUgcHJvdmlkZWQgc2NoZW1hIiwiaW5wdXRfc2NoZW1hIjp7InByb3BlcnRpZXMiOnsiY29tcGFueV9uYW1lIjp7ImRlc2NyaXB0aW9uIjoiTmFtZSBvZiB0aGUgY29tcGFueSIsInR5cGUiOiJzdHJpbmcifSwiZW1wbG95ZWVfY291bnQiOnsiZGVzY3JpcHRpb24iOiJBcHByb3hpbWF0ZSBudW1iZXIgb2YgZW1wbG95ZWVzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwiZm91bmRlZF95ZWFyIjp7ImRlc2NyaXB0aW9uIjoiWWVhciBjb21wYW55IHdhcyBmb3VuZGVkIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwiaGVhZHF1YXJ0ZXJzX2NpdHkiOnsiZGVzY3JpcHRpb24iOiJDaXR5IHdoZXJlIEhRIGlzIGxvY2F0ZWQiLCJ0eXBlIjoic3RyaW5nIn0sImhlYWRxdWFydGVyc19jb3VudHJ5Ijp7ImRlc2NyaXB0aW9uIjoiQ291bnRyeSB3aGVyZSBIUSBpcyBsb2NhdGVkIiwidHlwZSI6InN0cmluZyJ9LCJpbmR1c3RyeSI6eyJkZXNjcmlwdGlvbiI6IlByaW1hcnkgaW5kdXN0cnkgb3Igc2VjdG9yIiwidHlwZSI6InN0cmluZyJ9LCJrZXlfcHJvZHVjdHMiOnsiZGVzY3JpcHRpb24iOiJNYWluIHByb2R1Y3RzIG9yIHNlcnZpY2VzIiwiaXRlbXMiOnsidHlwZSI6InN0cmluZyJ9LCJ0eXBlIjoiYXJyYXkifX0sInJlcXVpcmVkIjpbImNvbXBhbnlfbmFtZSIsImZvdW5kZWRfeWVhciIsImhlYWRxdWFydGVyc19jaXR5IiwiaGVhZHF1YXJ0ZXJzX2NvdW50cnkiXSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQifV0sInRlbXBlcmF0dXJlIjowLjAsIm1vZGVsIjoiY2xhdWRlLTMtNS1zb25uZXQtMjAyNDEwMjIiLCJtYXhfdG9rZW5zIjoxMH0="
+    },
+    "url": "https://api.anthropic.com/v1/messages",
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-api-key": [
+        "[REDACTED:x-api-key]"
+      ]
+    },
+    "method": "post",
+    "canonical_json": "{\"max_tokens\":10,\"messages\":[{\"content\":[{\"text\":\"Generate a complete profile for a tech startup company including name, founding year, location, and other details\",\"type\":\"text\"}],\"role\":\"user\"}],\"model\":\"claude-3-5-sonnet-20241022\",\"stream\":false,\"temperature\":0.0,\"tools\":[{\"description\":\"Generate structured output matching the provided schema\",\"input_schema\":{\"properties\":{\"company_name\":{\"description\":\"Name of the company\",\"type\":\"string\"},\"employee_count\":{\"description\":\"Approximate number of employees\",\"minimum\":1,\"type\":\"integer\"},\"founded_year\":{\"description\":\"Year company was founded\",\"minimum\":1,\"type\":\"integer\"},\"headquarters_city\":{\"description\":\"City where HQ is located\",\"type\":\"string\"},\"headquarters_country\":{\"description\":\"Country where HQ is located\",\"type\":\"string\"},\"industry\":{\"description\":\"Primary industry or sector\",\"type\":\"string\"},\"key_products\":{\"description\":\"Main products or services\",\"items\":{\"type\":\"string\"},\"type\":\"array\"}},\"required\":[\"company_name\",\"founded_year\",\"headquarters_city\",\"headquarters_country\"],\"type\":\"object\"},\"name\":\"structured_output\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "content": [
+        {
+          "text": "I'll help generate a company profile using the structure",
+          "type": "text"
+        }
+      ],
+      "id": "msg_01SvmvtoDBgszCRiBpWpHup6",
+      "model": "claude-3-5-sonnet-20241022",
+      "role": "assistant",
+      "stop_reason": "max_tokens",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 574,
+        "output_tokens": 10,
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": [
+        "a71659e7-a922-4ff7-99de-f3ba615face1"
+      ],
+      "anthropic-ratelimit-input-tokens-limit": [
+        "80000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "80000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2025-09-16T21:40:15Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "16000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "16000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2025-09-16T21:40:15Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "1000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2025-09-16T21:40:11Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "96000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "96000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2025-09-16T21:40:15Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "980385543f97e800-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 16 Sep 2025 21:40:15 GMT"
+      ],
+      "request-id": [
+        "req_011CTCoejnPxPQvSyQWKw2Z2"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "4139"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    }
+  },
+  "captured_at": "2025-09-16T21:40:15.842664Z"
+}
