@@ -9,12 +9,22 @@ ReqLLM is a composable Elixir library for AI interactions built on Req, providin
 - `mix test` - Run all tests using cached fixtures
 - `mix test test/req_llm_test.exs` - Run specific test file
 - `mix test --only describe:"model/1 top-level API"` - Run specific describe block
-- `mix test --only openai` - Run tests for specific provider using ExUnit tags
-- `mix test --only coverage` - Run capability coverage tests
 - `LIVE=true mix test` - Run against real APIs and (re)generate fixtures
-- `LIVE=true mix test --only openai` - Regenerate fixtures for single provider
 - `mix compile` - Compile the project
 - `mix quality` or `mix q` - Run quality checks (format, compile --warnings-as-errors, dialyzer, credo)
+
+#### Test Filtering with Semantic Tags
+ReqLLM uses structured key/value tags for precise test filtering:
+
+**Tag Dimensions:**
+- `category` - Test type (`:core`, `:streaming`, `:tools`, `:embedding`)
+- `provider` - LLM provider (`:anthropic`, `:openai`, `:google`, `:groq`, `:openrouter`, `:xai`)
+
+**Examples:**
+- `mix test --only "category:core"` - Run all core tests
+- `mix test --only "provider:anthropic"` - Run Anthropic tests only
+- `mix test --only "category:core" --only "provider:openrouter"` - Run OpenRouter core tests
+- `LIVE=true mix test --only "category:core" --only "provider:anthropic"` - Regenerate Anthropic core fixtures
 
 ### Code Quality
 - `mix format` - Format Elixir code

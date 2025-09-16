@@ -1,0 +1,94 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJUZWxsIG1lIGFib3V0IHRoZSBjb2xvciBibHVlIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJ0ZW1wZXJhdHVyZSI6MC44LCJtYXhPdXRwdXRUb2tlbnMiOjE1LCJjYW5kaWRhdGVDb3VudCI6MX19"
+    },
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBwophsPOldL0hUrtLo0x7WRzgsuwWagEY",
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "canonical_json": "{\"contents\":[{\"parts\":[{\"text\":\"Tell me about the color blue\"}],\"role\":\"user\"}],\"generationConfig\":{\"candidateCount\":1,\"maxOutputTokens\":15,\"temperature\":0.8}}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "candidates": [
+        {
+          "avgLogprobs": -0.025019252300262453,
+          "content": {
+            "parts": [
+              {
+                "text": "Blue is a color that evokes a wide range of emotions and associations, varying"
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "MAX_TOKENS"
+        }
+      ],
+      "modelVersion": "gemini-1.5-flash",
+      "responseId": "DGfJaO2UFoOVjMcPvdXnsQE",
+      "usageMetadata": {
+        "candidatesTokenCount": 15,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 15
+          }
+        ],
+        "promptTokenCount": 6,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 6
+          }
+        ],
+        "totalTokenCount": 21
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Tue, 16 Sep 2025 13:33:16 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=16318"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    }
+  },
+  "captured_at": "2025-09-16T13:33:16.559093Z"
+}

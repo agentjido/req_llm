@@ -1,0 +1,94 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJTYXkgaGVsbG8ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7InRlbXBlcmF0dXJlIjowLjAsIm1heE91dHB1dFRva2VucyI6MTAsImNhbmRpZGF0ZUNvdW50IjoxfX0="
+    },
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBwophsPOldL0hUrtLo0x7WRzgsuwWagEY",
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "canonical_json": "{\"contents\":[{\"parts\":[{\"text\":\"Say hello\"}],\"role\":\"user\"}],\"generationConfig\":{\"candidateCount\":1,\"maxOutputTokens\":10,\"temperature\":0.0}}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "candidates": [
+        {
+          "avgLogprobs": -0.004383541643619537,
+          "content": {
+            "parts": [
+              {
+                "text": "Hello!\n"
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP"
+        }
+      ],
+      "modelVersion": "gemini-1.5-flash",
+      "responseId": "XGbJaOfUFNXougfMkIToAQ",
+      "usageMetadata": {
+        "candidatesTokenCount": 3,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 3
+          }
+        ],
+        "promptTokenCount": 2,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2
+          }
+        ],
+        "totalTokenCount": 5
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Tue, 16 Sep 2025 13:30:17 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=13148"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    }
+  },
+  "captured_at": "2025-09-16T13:30:17.367821Z"
+}

@@ -37,6 +37,15 @@ defmodule ReqLLM.Embedding do
                    type: {:or, [:map, {:list, :any}]},
                    doc: "Provider-specific options (keyword list or map)",
                    default: []
+                 ],
+                 req_options: [
+                   type: {:or, [:map, {:list, :any}]},
+                   doc: "Req-specific options (keyword list or map)",
+                   default: []
+                 ],
+                 fixture: [
+                   type: {:or, [:string, {:tuple, [:atom, :string]}]},
+                   doc: "HTTP fixture for testing (provider inferred from model if string)"
                  ]
                )
 
@@ -94,35 +103,6 @@ defmodule ReqLLM.Embedding do
   def schema, do: @base_schema
 
   @doc """
-  Builds a dynamic schema by composing the base schema with provider-specific options.
-
-  ## Parameters
-
-    * `provider_mod` - Provider module that defines provider_schema/0 function
-
-  """
-  @spec dynamic_schema(module()) :: NimbleOptions.t()
-  def dynamic_schema(provider_mod) do
-    if function_exported?(provider_mod, :provider_schema, 0) do
-      provider_keys = provider_mod.provider_schema().schema
-
-      # Update the :provider_options key with provider-specific nested schema
-      updated_schema =
-        Keyword.update!(@base_schema.schema, :provider_options, fn opt ->
-          Keyword.merge(opt,
-            type: :keyword_list,
-            keys: provider_keys,
-            default: []
-          )
-        end)
-
-      NimbleOptions.new!(updated_schema)
-    else
-      @base_schema
-    end
-  end
-
-  @doc """
   Generates embeddings for a single text input.
 
   ## Parameters
@@ -152,11 +132,15 @@ defmodule ReqLLM.Embedding do
   def embed(model_spec, text, opts \\ []) do
     with {:ok, model} <- validate_model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
-         schema = dynamic_schema(provider_module),
+         schema = ReqLLM.Utils.compose_schema(@base_schema, provider_module),
          {:ok, validated_opts} <- NimbleOptions.validate(opts, schema),
          {:ok, configured_request} <-
            provider_module.prepare_request(:embedding, model, text, validated_opts),
-         {:ok, %Req.Response{body: decoded_response}} <- Req.request(configured_request) do
+         request_with_options =
+           configured_request
+           |> ReqLLM.Utils.merge_req_options(validated_opts)
+           |> ReqLLM.Utils.attach_fixture(model, validated_opts),
+         {:ok, %Req.Response{body: decoded_response}} <- Req.request(request_with_options) do
       extract_single_embedding(decoded_response)
     end
   end
@@ -191,16 +175,18 @@ defmodule ReqLLM.Embedding do
   def embed_many(model_spec, texts, opts \\ []) when is_list(texts) do
     with {:ok, model} <- validate_model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
-         schema = dynamic_schema(provider_module),
+         schema = ReqLLM.Utils.compose_schema(@base_schema, provider_module),
          {:ok, validated_opts} <- NimbleOptions.validate(opts, schema),
          {:ok, configured_request} <-
            provider_module.prepare_request(:embedding, model, texts, validated_opts),
-         {:ok, %Req.Response{body: decoded_response}} <- Req.request(configured_request) do
+         request_with_options =
+           configured_request
+           |> ReqLLM.Utils.merge_req_options(validated_opts)
+           |> ReqLLM.Utils.attach_fixture(model, validated_opts),
+         {:ok, %Req.Response{body: decoded_response}} <- Req.request(request_with_options) do
       extract_multiple_embeddings(decoded_response)
     end
   end
-
-  # Private helper functions
 
   defp extract_single_embedding(%{"data" => [%{"embedding" => embedding}]}) do
     {:ok, embedding}

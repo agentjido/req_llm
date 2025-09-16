@@ -1,0 +1,122 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYWJvdXQgdGhlIGNvbG9yIGJsdWUiLCJyb2xlIjoidXNlciJ9XSwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuOCwibW9kZWwiOiJsbGFtYS0zLjEtOGItaW5zdGFudCIsIm1heF90b2tlbnMiOjE1fQ=="
+    },
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": [
+        "[REDACTED:authorization]"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "canonical_json": "{\"max_tokens\":15,\"messages\":[{\"content\":\"Tell me about the color blue\",\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"stream\":false,\"temperature\":0.8}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "The color blue is a captivating and serene hue that has been a subject of",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1758029351,
+      "id": "chatcmpl-f7c98f43-4bbf-4360-a77f-197cbd9dc3cd",
+      "model": "llama-3.1-8b-instant",
+      "object": "chat.completion",
+      "service_tier": "on_demand",
+      "system_fingerprint": "fp_c54ae48ece",
+      "usage": {
+        "completion_time": 0.027251179,
+        "completion_tokens": 15,
+        "prompt_time": 0.002520428,
+        "prompt_tokens": 41,
+        "queue_time": 0.187418202,
+        "total_time": 0.029771607,
+        "total_tokens": 56
+      },
+      "usage_breakdown": null,
+      "x_groq": {
+        "id": "req_01k59be2dnfh38795csek2v021"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cache-control": [
+        "private, max-age=0, no-store, no-cache, must-revalidate"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9800b615badf73db-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 16 Sep 2025 13:29:11 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=7Poou8Xjqg.XX455iV42zGgX9ZXsBk2zzfcpwetbLDY-1758029351-1.0.1.1-ceTLh9Wcuy0HKjZL2T28IDv5iK8m3KbwGO9We4YfbZnxOyX.Kr0mJb8N56amjCSnJ4KgrEhXsWuotDDlvfo8yXxeiPJEW1Ac3qVVM_XWkLk; path=/; expires=Tue, 16-Sep-25 13:59:11 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-groq-region": [
+        "msp"
+      ],
+      "x-ratelimit-limit-requests": [
+        "14400"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "6000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "14396"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "5900"
+      ],
+      "x-ratelimit-reset-requests": [
+        "23.723999999s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "996ms"
+      ],
+      "x-request-id": [
+        "req_01k59be2dnfh38795csek2v021"
+      ]
+    }
+  },
+  "captured_at": "2025-09-16T13:29:11.498737Z"
+}

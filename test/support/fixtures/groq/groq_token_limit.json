@@ -1,0 +1,122 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwic3RyZWFtIjpmYWxzZSwibW9kZWwiOiJsbGFtYS0zLjEtOGItaW5zdGFudCIsIm1heF90b2tlbnMiOjV9"
+    },
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": [
+        "[REDACTED:authorization]"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "canonical_json": "{\"max_tokens\":5,\"messages\":[{\"content\":\"Write a very long story about dragons and adventures\",\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"stream\":false}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "In the land of E",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1758029351,
+      "id": "chatcmpl-e1db13a6-2d68-4864-bdb2-5fa58e8de41d",
+      "model": "llama-3.1-8b-instant",
+      "object": "chat.completion",
+      "service_tier": "on_demand",
+      "system_fingerprint": "fp_8804b970d6",
+      "usage": {
+        "completion_time": 0.004726946,
+        "completion_tokens": 5,
+        "prompt_time": 0.002514862,
+        "prompt_tokens": 44,
+        "queue_time": 0.187297765,
+        "total_time": 0.007241808,
+        "total_tokens": 49
+      },
+      "usage_breakdown": null,
+      "x_groq": {
+        "id": "req_01k59be251ejdv8zn5rz3hcrtd"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cache-control": [
+        "private, max-age=0, no-store, no-cache, must-revalidate"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9800b6140d0f73db-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 16 Sep 2025 13:29:11 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=I1mDpJzXD3ct1DmovRTe3LtDZ9jch0OrZZ9.a_xZl3w-1758029351-1.0.1.1-E9dDjulwQa.q86buo0s2f37nHzQS7l50oGRiVxzt9IfoKBOuSWtbWcv60tXQSRm3_LQlapFSYnzYPb19Txv7DdaiShEWgjvsox0owqKn_oY; path=/; expires=Tue, 16-Sep-25 13:59:11 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-groq-region": [
+        "msp"
+      ],
+      "x-ratelimit-limit-requests": [
+        "14400"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "6000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "14397"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "5916"
+      ],
+      "x-ratelimit-reset-requests": [
+        "17.736s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "836ms"
+      ],
+      "x-request-id": [
+        "req_01k59be251ejdv8zn5rz3hcrtd"
+      ]
+    }
+  },
+  "captured_at": "2025-09-16T13:29:11.203958Z"
+}

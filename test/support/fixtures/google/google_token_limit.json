@@ -1,0 +1,94 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJtYXhPdXRwdXRUb2tlbnMiOjUsImNhbmRpZGF0ZUNvdW50IjoxfX0="
+    },
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBwophsPOldL0hUrtLo0x7WRzgsuwWagEY",
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "canonical_json": "{\"contents\":[{\"parts\":[{\"text\":\"Write a very long story about dragons and adventures\"}],\"role\":\"user\"}],\"generationConfig\":{\"candidateCount\":1,\"maxOutputTokens\":5}}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "candidates": [
+        {
+          "avgLogprobs": -0.03822556138038635,
+          "content": {
+            "parts": [
+              {
+                "text": "The wind howled a"
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "MAX_TOKENS"
+        }
+      ],
+      "modelVersion": "gemini-1.5-flash",
+      "responseId": "-WbJaIGdKYGTjMcP1YKtwAw",
+      "usageMetadata": {
+        "candidatesTokenCount": 5,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 5
+          }
+        ],
+        "promptTokenCount": 9,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 9
+          }
+        ],
+        "totalTokenCount": 14
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Tue, 16 Sep 2025 13:33:00 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=18512"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    }
+  },
+  "captured_at": "2025-09-16T13:33:00.213913Z"
+}

@@ -1,0 +1,122 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtZXNzYWdlcyI6W3siY29udGVudCI6IldoYXQgaXMgMisyPyIsInJvbGUiOiJ1c2VyIn1dLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJtb2RlbCI6ImxsYW1hLTMuMS04Yi1pbnN0YW50IiwibWF4X3Rva2VucyI6MTB9"
+    },
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": [
+        "[REDACTED:authorization]"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "canonical_json": "{\"max_tokens\":10,\"messages\":[{\"content\":\"What is 2+2?\",\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"stream\":false,\"temperature\":0.0}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "2 + 2 = 4.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1758029350,
+      "id": "chatcmpl-3ab691db-2db0-42f8-9be3-2367dc54c93a",
+      "model": "llama-3.1-8b-instant",
+      "object": "chat.completion",
+      "service_tier": "on_demand",
+      "system_fingerprint": "fp_c54ae48ece",
+      "usage": {
+        "completion_time": 0.006155583,
+        "completion_tokens": 9,
+        "prompt_time": 0.00239302,
+        "prompt_tokens": 42,
+        "queue_time": 0.187423182,
+        "total_time": 0.008548603,
+        "total_tokens": 51
+      },
+      "usage_breakdown": null,
+      "x_groq": {
+        "id": "req_01k59be1kxeptrd904e4svnsva"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cache-control": [
+        "private, max-age=0, no-store, no-cache, must-revalidate"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9800b610999b73db-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 16 Sep 2025 13:29:10 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=FNRNQf9QHzcgB1tl69kGwXfrFFiaLCVl9sWG8z4jI9E-1758029350-1.0.1.1-c8nxIDbMNgDkZbJWsSC.k85y_7LFHs40Cmg8W5UNBwm3t29qs1X9Db6lEphJeQa7dp_L4QcZ8oyMYQskpaYTRmntWyKPM9RXnW61.cXhCo4; path=/; expires=Tue, 16-Sep-25 13:59:10 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-groq-region": [
+        "msp"
+      ],
+      "x-ratelimit-limit-requests": [
+        "14400"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "6000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "14399"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "5991"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "90ms"
+      ],
+      "x-request-id": [
+        "req_01k59be1kxeptrd904e4svnsva"
+      ]
+    }
+  },
+  "captured_at": "2025-09-16T13:29:10.657852Z"
+}

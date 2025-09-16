@@ -1,0 +1,97 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwic3RyZWFtIjpmYWxzZSwibW9kZWwiOiJvcGVuYWkvZ3B0LTRvLW1pbmkiLCJtYXhfdG9rZW5zIjo1fQ=="
+    },
+    "url": "https://openrouter.ai/api/v1/chat/completions",
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": [
+        "[REDACTED:authorization]"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "canonical_json": "{\"max_tokens\":5,\"messages\":[{\"content\":\"Write a very long story about dragons and adventures\",\"role\":\"user\"}],\"model\":\"openai/gpt-4o-mini\",\"stream\":false}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "### The Chronicles of Dr",
+            "reasoning": null,
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "length"
+        }
+      ],
+      "created": 1758029432,
+      "id": "gen-1758029432-QDUGeD5FKYag0NIxcUD9",
+      "model": "openai/gpt-4o-mini",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "system_fingerprint": "fp_51db84afab",
+      "usage": {
+        "completion_tokens": 5,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 16,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "total_tokens": 21
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "9800b80dae7d7aad-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 16 Sep 2025 13:30:32 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    }
+  },
+  "captured_at": "2025-09-16T13:30:32.598646Z"
+}

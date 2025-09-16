@@ -85,6 +85,15 @@ defmodule ReqLLM.Generation do
                    type: {:in, [:warn, :error, :ignore]},
                    doc: "How to handle unsupported parameter translations",
                    default: :warn
+                 ],
+                 req_options: [
+                   type: {:or, [:map, {:list, :any}]},
+                   doc: "Req-specific options (keyword list or map)",
+                   default: []
+                 ],
+                 fixture: [
+                   type: {:or, [:string, {:tuple, [:atom, :string]}]},
+                   doc: "HTTP fixture for testing (provider inferred from model if string)"
                  ]
                )
 
@@ -96,44 +105,6 @@ defmodule ReqLLM.Generation do
   """
   @spec schema :: NimbleOptions.t()
   def schema, do: @base_schema
-
-  @doc """
-  Builds a dynamic schema by composing the base schema with provider-specific options.
-
-  This function takes a provider module and creates a unified schema where provider-specific
-  options are nested under the :provider_options key with proper validation.
-
-  ## Parameters
-
-    * `provider_mod` - Provider module that defines provider_schema/0 function
-
-  ## Examples
-
-      schema = ReqLLM.Generation.dynamic_schema(ReqLLM.Providers.Groq)
-      NimbleOptions.validate([temperature: 0.7, provider_options: [service_tier: "auto"]], schema)
-      #=> {:ok, [temperature: 0.7, provider_options: [service_tier: "auto"]]}
-
-  """
-  @spec dynamic_schema(module()) :: NimbleOptions.t()
-  def dynamic_schema(provider_mod) do
-    if function_exported?(provider_mod, :provider_schema, 0) do
-      provider_keys = provider_mod.provider_schema().schema
-
-      # Update the :provider_options key with provider-specific nested schema
-      updated_schema =
-        Keyword.update!(@base_schema.schema, :provider_options, fn opt ->
-          Keyword.merge(opt,
-            type: :keyword_list,
-            keys: provider_keys,
-            default: []
-          )
-        end)
-
-      NimbleOptions.new!(updated_schema)
-    else
-      @base_schema
-    end
-  end
 
   @doc """
   Generates text using an AI model with full response metadata.
@@ -178,7 +149,7 @@ defmodule ReqLLM.Generation do
   def generate_text(model_spec, messages, opts \\ []) do
     with {:ok, model} <- Model.from(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
-         schema = dynamic_schema(provider_module),
+         schema = ReqLLM.Utils.compose_schema(@base_schema, provider_module),
          {:ok, validated_opts} <- NimbleOptions.validate(opts, schema),
          {translated_opts, warnings} <-
            translate_provider_options(provider_module, :chat, model, validated_opts),
@@ -186,7 +157,11 @@ defmodule ReqLLM.Generation do
          context = build_context(messages, translated_opts),
          {:ok, configured_request} <-
            provider_module.prepare_request(:chat, model, context, translated_opts),
-         {:ok, %Req.Response{body: decoded_response}} <- Req.request(configured_request) do
+         request_with_options =
+           configured_request
+           |> ReqLLM.Utils.merge_req_options(translated_opts)
+           |> ReqLLM.Utils.attach_fixture(model, translated_opts),
+         {:ok, %Req.Response{body: decoded_response}} <- Req.request(request_with_options) do
       Response.decode_response(decoded_response, model)
     end
   end
@@ -248,7 +223,7 @@ defmodule ReqLLM.Generation do
   def stream_text(model_spec, messages, opts \\ []) do
     with {:ok, model} <- Model.from(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
-         schema = dynamic_schema(provider_module),
+         schema = ReqLLM.Utils.compose_schema(@base_schema, provider_module),
          {:ok, validated_opts} <- NimbleOptions.validate(opts, schema),
          {translated_opts, warnings} <-
            translate_provider_options(provider_module, :chat, model, validated_opts),
@@ -257,7 +232,11 @@ defmodule ReqLLM.Generation do
          context = build_context(messages, stream_opts),
          {:ok, configured_request} <-
            provider_module.prepare_request(:chat, model, context, stream_opts),
-         {:ok, %Req.Response{body: decoded_response}} <- Req.request(configured_request) do
+         request_with_options =
+           configured_request
+           |> ReqLLM.Utils.merge_req_options(stream_opts)
+           |> ReqLLM.Utils.attach_fixture(model, stream_opts),
+         {:ok, %Req.Response{body: decoded_response}} <- Req.request(request_with_options) do
       Response.decode_response(decoded_response, model)
     end
   end
@@ -332,11 +311,18 @@ defmodule ReqLLM.Generation do
           message
 
         %{role: role, content: content} = message ->
-          Context.text(
-            String.to_existing_atom(to_string(role)),
-            content,
-            Map.get(message, :metadata, %{})
-          )
+          case validate_role(role) do
+            {:ok, role_atom} ->
+              Context.text(
+                role_atom,
+                content,
+                Map.get(message, :metadata, %{})
+              )
+
+            {:error, _} ->
+              raise ArgumentError,
+                    "Invalid role: #{inspect(role)}. Valid roles are: user, system, assistant, tool"
+          end
 
         other ->
           other
@@ -356,6 +342,21 @@ defmodule ReqLLM.Generation do
         Context.new([system_msg | Context.to_list(context)])
     end
   end
+
+  # Validate role and convert to atom safely
+  defp validate_role(role) when role in [:user, :system, :assistant, :tool], do: {:ok, role}
+
+  defp validate_role(role) when is_binary(role) do
+    case String.downcase(role) do
+      role_str when role_str in ~w(user system assistant tool) ->
+        {:ok, String.to_atom(role_str)}
+
+      _ ->
+        {:error, :invalid_role}
+    end
+  end
+
+  defp validate_role(_), do: {:error, :invalid_role}
 
   @doc """
   Generates structured data using an AI model with schema validation.
@@ -400,7 +401,7 @@ defmodule ReqLLM.Generation do
   def generate_object(model_spec, messages, object_schema, opts \\ []) do
     with {:ok, model} <- Model.from(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
-         options_schema = dynamic_schema(provider_module),
+         options_schema = ReqLLM.Utils.compose_schema(@base_schema, provider_module),
          {:ok, validated_opts} <- NimbleOptions.validate(opts, options_schema),
          {translated_opts, warnings} <-
            translate_provider_options(provider_module, :object, model, validated_opts),
@@ -415,7 +416,11 @@ defmodule ReqLLM.Generation do
              compiled_schema,
              translated_opts
            ),
-         {:ok, %Req.Response{body: decoded_response}} <- Req.request(configured_request) do
+         request_with_options =
+           configured_request
+           |> ReqLLM.Utils.merge_req_options(translated_opts)
+           |> ReqLLM.Utils.attach_fixture(model, translated_opts),
+         {:ok, %Req.Response{body: decoded_response}} <- Req.request(request_with_options) do
       Response.decode_object(decoded_response, model, object_schema)
     end
   end
@@ -456,7 +461,7 @@ defmodule ReqLLM.Generation do
   def stream_object(model_spec, messages, object_schema, opts \\ []) do
     with {:ok, model} <- Model.from(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
-         options_schema = dynamic_schema(provider_module),
+         options_schema = ReqLLM.Utils.compose_schema(@base_schema, provider_module),
          {:ok, validated_opts} <- NimbleOptions.validate(opts, options_schema),
          {translated_opts, warnings} <-
            translate_provider_options(provider_module, :object, model, validated_opts),
@@ -466,7 +471,11 @@ defmodule ReqLLM.Generation do
          context = build_context(messages, stream_opts),
          {:ok, configured_request} <-
            provider_module.prepare_request(:object, model, context, compiled_schema, stream_opts),
-         {:ok, %Req.Response{body: decoded_response}} <- Req.request(configured_request) do
+         request_with_options =
+           configured_request
+           |> ReqLLM.Utils.merge_req_options(stream_opts)
+           |> ReqLLM.Utils.attach_fixture(model, stream_opts),
+         {:ok, %Req.Response{body: decoded_response}} <- Req.request(request_with_options) do
       Response.decode_object_stream(decoded_response, model, object_schema)
     end
   end

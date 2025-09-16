@@ -1,0 +1,108 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgY3JlYXRpdmUgZ3JlZXRpbmciLCJyb2xlIjoidXNlciJ9XSwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuOCwibW9kZWwiOiJncm9rLTMiLCJtYXhfdG9rZW5zIjoyMCwibGl2ZV9zZWFyY2giOmZhbHNlLCJlbmFibGVfY2FjaGVkX3Byb21wdCI6dHJ1ZX0="
+    },
+    "url": "https://api.x.ai/v1/chat/completions",
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": [
+        "[REDACTED:authorization]"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "canonical_json": "{\"enable_cached_prompt\":true,\"live_search\":false,\"max_tokens\":20,\"messages\":[{\"content\":\"Write a creative greeting\",\"role\":\"user\"}],\"model\":\"grok-3\",\"stream\":false,\"temperature\":0.8}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "message": {
+            "content": "Hey there, sunshine! Wishing you a day as bright as your smile and as adventurous as your",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1758029418,
+      "id": "5a043949-5a14-ac7e-1c69-87ad54bd5b68_us-east-1",
+      "model": "grok-3",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_f02e6df795",
+      "usage": {
+        "completion_tokens": 20,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "num_sources_used": 0,
+        "prompt_tokens": 10,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 2,
+          "image_tokens": 0,
+          "text_tokens": 10
+        },
+        "total_tokens": 30
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9800b7b86a5f47a1-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 16 Sep 2025 13:30:19 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=DXLKfqbWpWDwHIQhP5mBkQE_86iUiMjp.KWSVf8LZvA-1758029419-1.0.1.1-vxuzuFLlzV0a_q.p.kaX8re8WO03aDmcxbvar4ty8dge3_0hxHHgeyNGBv.ABD5HYFgAnLfb5P2Zv2238fuJeD1vfV4yxFvHLJjiNsLViuw; path=/; expires=Tue, 16-Sep-25 14:00:19 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-request-id": [
+        "00-53d5c4d3dea26a5dacdb552f8dd84462-9491ed550023e3ad-01"
+      ],
+      "x-zero-data-retention": [
+        "false"
+      ]
+    }
+  },
+  "captured_at": "2025-09-16T13:30:19.287048Z"
+}

@@ -1,12 +1,15 @@
 defmodule ReqLLM.ProviderTest.Core do
   @moduledoc """
-  Core text generation functionality tests.
+  Core provider functionality tests.
 
-  Tests basic completion features that should work across all LLM providers:
-  - Simple prompts with and without system messages
-  - Parameter handling (temperature, max_tokens, etc.)  
-  - Response parsing and validation
-  - String vs Context input formats
+  Verifies that ReqLLM properly:
+  - Encodes generic requests into provider-specific format
+  - Makes successful API calls 
+  - Returns properly normalized Response objects
+  - Handles common parameters correctly
+
+  Tests use fixtures for fast, deterministic execution while supporting
+  live API recording with LIVE=true.
   """
 
   defmacro __using__(opts) do
@@ -16,94 +19,55 @@ defmodule ReqLLM.ProviderTest.Core do
     quote bind_quoted: [provider: provider, model: model] do
       use ExUnit.Case, async: false
 
-      import ReqLLM.Test.LiveFixture
+      import ReqLLM.Context
+      import ReqLLM.ProviderTestHelpers
 
-      alias ReqLLM.Test.LiveFixture, as: ReqFixture
+      @moduletag :capture_log
+      @moduletag category: :core
+      @moduletag provider: provider
 
-      @moduletag :coverage
-      @moduletag provider
+      test "request encoding and response parsing" do
+        # Test 1: Basic string prompt with deterministic params
+        ReqLLM.generate_text(
+          unquote(model),
+          "Hello world!",
+          fixture_opts(unquote(provider), "basic", param_bundles().deterministic)
+        )
+        |> assert_basic_response()
 
-      test "basic completion without system prompt" do
-        result =
-          use_fixture(unquote(provider), "basic_completion", fn ->
-            ctx = ReqLLM.Context.new([ReqLLM.Context.user("Hello!")])
-            ReqLLM.generate_text(unquote(model), ctx, max_tokens: 5)
-          end)
+        # Test 2: System message context to verify complex request encoding
+        context =
+          ReqLLM.Context.new([
+            system("You are a helpful assistant."),
+            user("Say hello")
+          ])
 
-        {:ok, resp} = result
-        text = ReqLLM.Response.text(resp)
-        assert is_binary(text)
-        assert text != ""
-        assert resp.id != nil
+        ReqLLM.generate_text(
+          unquote(model),
+          context,
+          fixture_opts(unquote(provider), "system_msg", param_bundles().deterministic)
+        )
+        |> assert_basic_response()
       end
 
-      test "completion with system prompt" do
-        result =
-          use_fixture(unquote(provider), "system_prompt_completion", fn ->
-            ctx =
-              ReqLLM.Context.new([
-                ReqLLM.Context.system("You are terse. Reply with ONE word."),
-                ReqLLM.Context.user("Greet me")
-              ])
+      test "parameter handling and constraints" do
+        # Test 1: Token limit enforcement
+        ReqLLM.generate_text(
+          unquote(model),
+          "Write a very long story about dragons and adventures",
+          fixture_opts(unquote(provider), "token_limit", param_bundles().minimal)
+        )
+        |> assert_basic_response()
+        # Should be short due to max_tokens: 5
+        |> assert_text_length(100)
 
-            ReqLLM.generate_text(unquote(model), ctx, max_tokens: 5)
-          end)
-
-        {:ok, resp} = result
-        text = ReqLLM.Response.text(resp)
-        assert is_binary(text)
-        assert text != ""
-        assert resp.id != nil
-      end
-
-      test "temperature parameter" do
-        result =
-          use_fixture(unquote(provider), "temperature_test", fn ->
-            ReqLLM.generate_text(
-              unquote(model),
-              "Say exactly: TEMPERATURE_TEST",
-              temperature: 0.0,
-              max_tokens: 10
-            )
-          end)
-
-        {:ok, resp} = result
-        text = ReqLLM.Response.text(resp)
-        assert is_binary(text)
-        assert text != ""
-        assert resp.id != nil
-      end
-
-      test "max_tokens parameter" do
-        result =
-          use_fixture(unquote(provider), "max_tokens_test", fn ->
-            ReqLLM.generate_text(
-              unquote(model),
-              "Write a story",
-              max_tokens: 5
-            )
-          end)
-
-        {:ok, resp} = result
-        text = ReqLLM.Response.text(resp)
-        assert is_binary(text)
-        assert text != ""
-        assert resp.id != nil
-        # Should be short due to max_tokens limit
-        assert String.length(text) < 100
-      end
-
-      test "string prompt (legacy format)" do
-        result =
-          use_fixture(unquote(provider), "string_prompt", fn ->
-            ReqLLM.generate_text(unquote(model), "Hello world!", max_tokens: 5)
-          end)
-
-        {:ok, resp} = result
-        text = ReqLLM.Response.text(resp)
-        assert is_binary(text)
-        assert text != ""
-        assert resp.id != nil
+        # Test 2: Temperature parameter (creative vs deterministic)
+        ReqLLM.generate_text(
+          unquote(model),
+          "Tell me about the color blue",
+          fixture_opts(unquote(provider), "creative", param_bundles().creative)
+        )
+        |> assert_basic_response()
       end
     end
   end

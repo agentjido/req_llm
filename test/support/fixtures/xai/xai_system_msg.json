@@ -1,0 +1,114 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtZXNzYWdlcyI6W3siY29udGVudCI6IllvdSBhcmUgYSBoZWxwZnVsIGFzc2lzdGFudC4iLCJyb2xlIjoic3lzdGVtIn0seyJjb250ZW50IjoiU2F5IGhlbGxvIiwicm9sZSI6InVzZXIifV0sInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsIm1vZGVsIjoiZ3Jvay0zIiwibWF4X3Rva2VucyI6MTAsImxpdmVfc2VhcmNoIjpmYWxzZSwiZW5hYmxlX2NhY2hlZF9wcm9tcHQiOnRydWV9"
+    },
+    "url": "https://api.x.ai/v1/chat/completions",
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": [
+        "[REDACTED:authorization]"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "canonical_json": "{\"enable_cached_prompt\":true,\"live_search\":false,\"max_tokens\":10,\"messages\":[{\"content\":\"You are a helpful assistant.\",\"role\":\"system\"},{\"content\":\"Say hello\",\"role\":\"user\"}],\"model\":\"grok-3\",\"stream\":false,\"temperature\":0.0}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "message": {
+            "content": "Hello! How can I help you today?",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1758029425,
+      "id": "87b29360-839b-0f44-f87e-512020a8e258_us-east-1",
+      "model": "grok-3",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_f02e6df795",
+      "usage": {
+        "completion_tokens": 9,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "num_sources_used": 0,
+        "prompt_tokens": 18,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 12,
+          "image_tokens": 0,
+          "text_tokens": 18
+        },
+        "total_tokens": 27
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9800b7e20e7747a1-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy-report-only": [
+        "script-src 'none'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=ypqehzyfYRvEa6SJ5tZ9VY457p7YWKSBPvqGBbmB3Rw-1758029425-1.0.1.1-pwJYyZ0JpyAtJZ2Xd8cixukzmU751vjZZ2O.RjxcEgwZxYWAjeIdPHYHfSJHhZnKyKn._3zJS60SiJC1E595rkuiabon2mGadBQe.cLEDEls2.JORNDhJ2YrWzBMFhLl80N1ZU9aubgbWtVujTnoUN2AQDg0R6DWjifI1wIjP7c; report-to cf-csp-endpoint"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 16 Sep 2025 13:30:25 GMT"
+      ],
+      "report-to": [
+        "{\"endpoints\":[{\"url\":\"https:\\/\\/csp-reporting.cloudflare.com\\/cdn-cgi\\/script_monitor\\/report?m=ypqehzyfYRvEa6SJ5tZ9VY457p7YWKSBPvqGBbmB3Rw-1758029425-1.0.1.1-pwJYyZ0JpyAtJZ2Xd8cixukzmU751vjZZ2O.RjxcEgwZxYWAjeIdPHYHfSJHhZnKyKn._3zJS60SiJC1E595rkuiabon2mGadBQe.cLEDEls2.JORNDhJ2YrWzBMFhLl80N1ZU9aubgbWtVujTnoUN2AQDg0R6DWjifI1wIjP7c\"}],\"group\":\"cf-csp-endpoint\",\"max_age\":86400}"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=J6eXDazAB6XzCOnYaF6QEeu7vjK13KO3dAyEqJOesvk-1758029425-1.0.1.1-bINEP5aIKDwrkUFHq9tDID9aoW58_V6wvKxKkSQOPTWqHzlChSzPRvrVOCiVrmVIL8SZGeohawSTVpuIO8bVah11WlRUWcnB0S6j9sepS_Q; path=/; expires=Tue, 16-Sep-25 14:00:25 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-request-id": [
+        "00-2ae5e58ae299338aa61bb1a433d1fd7c-85e11a9700241fc5-01"
+      ],
+      "x-zero-data-retention": [
+        "false"
+      ]
+    }
+  },
+  "captured_at": "2025-09-16T13:30:25.406369Z"
+}

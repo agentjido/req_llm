@@ -1,0 +1,108 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtZXNzYWdlcyI6W3siY29udGVudCI6IldoYXQgaXMgNSs1PyIsInJvbGUiOiJ1c2VyIn1dLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJtb2RlbCI6Imdyb2stMyIsIm1heF90b2tlbnMiOjEwLCJsaXZlX3NlYXJjaCI6ZmFsc2UsImVuYWJsZV9jYWNoZWRfcHJvbXB0Ijp0cnVlfQ=="
+    },
+    "url": "https://api.x.ai/v1/chat/completions",
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": [
+        "[REDACTED:authorization]"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "canonical_json": "{\"enable_cached_prompt\":true,\"live_search\":false,\"max_tokens\":10,\"messages\":[{\"content\":\"What is 5+5?\",\"role\":\"user\"}],\"model\":\"grok-3\",\"stream\":false,\"temperature\":0.0}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "message": {
+            "content": "5 + 5 equals 10.",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1758029417,
+      "id": "6ecccce5-c0d6-b963-79a6-b1365fdaf7a8_us-east-1",
+      "model": "grok-3",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_f02e6df795",
+      "usage": {
+        "completion_tokens": 9,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "num_sources_used": 0,
+        "prompt_tokens": 13,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 2,
+          "image_tokens": 0,
+          "text_tokens": 13
+        },
+        "total_tokens": 22
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9800b7b3983d47a1-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 16 Sep 2025 13:30:18 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=NWqIxSxh25m8q0OlQQ6fnmE3faQ6E.XrsJzieG2yTaE-1758029418-1.0.1.1-BoZVfU5ZuD8HQYBQlvC3QDPL2OsaQFXH54Oss4PusH7SdpqiTQFbkc1N7zQAwzKB733CA5MxyTqf1fmUTPQkS55wJDR52AEgZOxGrwL.5uo; path=/; expires=Tue, 16-Sep-25 14:00:18 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-request-id": [
+        "00-c1e0db0f426351a2950447c9577b9b5a-46e024270023a4f7-01"
+      ],
+      "x-zero-data-retention": [
+        "false"
+      ]
+    }
+  },
+  "captured_at": "2025-09-16T13:30:18.113945Z"
+}

@@ -8,7 +8,7 @@ defmodule ReqLLM.Generation.TranslationTest do
       # Anthropic doesn't have translate_options/3, so should work unchanged
       # We can't easily test this without mocking HTTP, so we'll just verify
       # it doesn't crash during the translation phase
-      schema = Generation.dynamic_schema(ReqLLM.Providers.Anthropic)
+      schema = ReqLLM.Utils.compose_schema(Generation.schema(), ReqLLM.Providers.Anthropic)
       opts = [max_tokens: 1000, temperature: 0.7]
 
       # This should validate successfully
@@ -59,7 +59,7 @@ defmodule ReqLLM.Generation.TranslationTest do
 
     test "dynamic schema includes on_unsupported option" do
       provider_mod = ReqLLM.Providers.OpenAI
-      schema = Generation.dynamic_schema(provider_mod)
+      schema = ReqLLM.Utils.compose_schema(Generation.schema(), provider_mod)
       on_unsupported_spec = Keyword.get(schema.schema, :on_unsupported)
 
       assert on_unsupported_spec != nil
@@ -69,7 +69,7 @@ defmodule ReqLLM.Generation.TranslationTest do
 
     test "on_unsupported option validates correctly" do
       provider_mod = ReqLLM.Providers.OpenAI
-      schema = Generation.dynamic_schema(provider_mod)
+      schema = ReqLLM.Utils.compose_schema(Generation.schema(), provider_mod)
 
       # Valid values
       assert {:ok, validated} = NimbleOptions.validate([on_unsupported: :warn], schema)
