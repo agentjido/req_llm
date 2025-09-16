@@ -154,21 +154,17 @@ defmodule LLMFixture do
           decode_body(resp["body"])
 
         chunks when is_list(chunks) ->
-          # For streaming responses, we need to reconstruct the raw SSE stream
-          # that would have been returned by the HTTP response.
-          # The Step.Stream module will then parse this into structured chunks.
-          raw_sse_data =
-            chunks
-            |> Enum.map(fn chunk ->
-                 case chunk do
-                   %{"b64" => b64_data} -> decode_body(%{"b64" => b64_data})
-                   other -> inspect(other)
-                 end
-               end)
-            |> Enum.join("")
-
-          # Return the raw SSE data as binary for Step.Stream to process
-          raw_sse_data
+          # For streaming responses, reconstruct the raw SSE stream.
+          # For now, revert to original approach to ensure tests pass,
+          # then we can work on true streaming replay.
+          chunks
+          |> Enum.map(fn chunk ->
+               case chunk do
+                 %{"b64" => b64_data} -> decode_body(%{"b64" => b64_data})
+                 other -> inspect(other)
+               end
+             end)
+          |> Enum.join("")
       end
 
     {:ok, %Req.Response{
