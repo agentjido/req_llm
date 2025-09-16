@@ -1,0 +1,131 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IHByb2dyYW1taW5nIiwicm9sZSI6InVzZXIifV0sInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XSwidGVtcGVyYXR1cmUiOjAuMCwibW9kZWwiOiJsbGFtYS0zLjEtOGItaW5zdGFudCIsIm1heF90b2tlbnMiOjEwMH0="
+    },
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": [
+        "[REDACTED:authorization]"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "canonical_json": "{\"max_tokens\":100,\"messages\":[{\"content\":\"Tell me a joke about programming\",\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"stream\":false,\"temperature\":0.0,\"tools\":[{\"function\":{\"description\":\"Get current weather information for a location\",\"name\":\"get_weather\",\"parameters\":{\"properties\":{\"location\":{\"type\":\"string\"}},\"required\":[\"location\"],\"type\":\"object\"}},\"type\":\"function\"},{\"function\":{\"description\":\"Tell a funny joke\",\"name\":\"tell_joke\",\"parameters\":{\"properties\":{\"topic\":{\"description\":\"Topic for the joke\",\"type\":\"string\"}},\"type\":\"object\"}},\"type\":\"function\"},{\"function\":{\"description\":\"Get the current time\",\"name\":\"get_time\",\"parameters\":{\"properties\":{},\"type\":\"object\"}},\"type\":\"function\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"topic\":\"programming\"}",
+                  "name": "tell_joke"
+                },
+                "id": "pf7gx0kb8",
+                "type": "function"
+              }
+            ]
+          }
+        }
+      ],
+      "created": 1758031282,
+      "id": "chatcmpl-0d244f84-b22d-4a10-ae74-6d0230a9b99d",
+      "model": "llama-3.1-8b-instant",
+      "object": "chat.completion",
+      "service_tier": "on_demand",
+      "system_fingerprint": "fp_c54ae48ece",
+      "usage": {
+        "completion_time": 0.028732649,
+        "completion_tokens": 16,
+        "prompt_time": 0.020206153,
+        "prompt_tokens": 310,
+        "queue_time": 0.187813795,
+        "total_time": 0.048938802,
+        "total_tokens": 326
+      },
+      "usage_breakdown": null,
+      "x_groq": {
+        "id": "req_01k59d9089er9rx9deggdew14m"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cache-control": [
+        "private, max-age=0, no-store, no-cache, must-revalidate"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9800e53b1cea2326-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 16 Sep 2025 14:01:22 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=gRTR8SmygMpgJbQuwKnjCoQ7W71pnSimX61d5wBwkPE-1758031282-1.0.1.1-GwJlSZBrev1_y5hf9cRUHMgNtBmN1w19XyKxQauEXg_ibKOkYg2ZXn8HiVCplqE7X.T42j3HASMVA.QAkE50FjUJ1k3iVCv.3gmbeb9fcPA; path=/; expires=Tue, 16-Sep-25 14:31:22 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-groq-region": [
+        "msp"
+      ],
+      "x-ratelimit-limit-requests": [
+        "14400"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "6000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "14397"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "5524"
+      ],
+      "x-ratelimit-reset-requests": [
+        "17.707999999s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "4.76s"
+      ],
+      "x-request-id": [
+        "req_01k59d9089er9rx9deggdew14m"
+      ]
+    }
+  },
+  "captured_at": "2025-09-16T14:01:22.615930Z"
+}

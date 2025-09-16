@@ -1,0 +1,119 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtZXNzYWdlcyI6W3siY29udGVudCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/Iiwicm9sZSI6InVzZXIifV0sInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsiZGVzY3JpcHRpb24iOiJUaGUgY2l0eSBhbmQgc3RhdGUsIGUuZy4gU2FuIEZyYW5jaXNjbywgQ0EiLCJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZGVzY3JpcHRpb24iOiJUaGUgdGVtcGVyYXR1cmUgdW5pdCB0byB1c2UiLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV0sInRlbXBlcmF0dXJlIjowLjAsIm1vZGVsIjoiZ3Jvay0zLW1pbmkiLCJtYXhfdG9rZW5zIjo1MDAsInRvb2xfY2hvaWNlIjoiYXV0byIsImxpdmVfc2VhcmNoIjpmYWxzZSwiZW5hYmxlX2NhY2hlZF9wcm9tcHQiOnRydWV9"
+    },
+    "url": "https://api.x.ai/v1/chat/completions",
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": [
+        "[REDACTED:authorization]"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "canonical_json": "{\"enable_cached_prompt\":true,\"live_search\":false,\"max_tokens\":500,\"messages\":[{\"content\":\"What's the weather like in Paris, France?\",\"role\":\"user\"}],\"model\":\"grok-3-mini\",\"stream\":false,\"temperature\":0.0,\"tool_choice\":\"auto\",\"tools\":[{\"function\":{\"description\":\"Get current weather information for a location\",\"name\":\"get_weather\",\"parameters\":{\"properties\":{\"location\":{\"description\":\"The city and state, e.g. San Francisco, CA\",\"type\":\"string\"},\"unit\":{\"description\":\"The temperature unit to use\",\"type\":\"string\"}},\"required\":[\"location\"],\"type\":\"object\"}},\"type\":\"function\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "message": {
+            "content": "",
+            "reasoning_content": "First, the user is asking about the weather in Paris, France. I have a function called \"get_weather\" that can retrieve current weather information.\n\nLet me check the available functions:\n\n- \"get_weather\": It requires a \"location\" parameter, which is a string like \"San Francisco, CA\". It also has an optional \"unit\" parameter for temperature unit.\n\nThe user specified \"Paris, France\". This matches the format; it's a city and country, similar to city and state.\n\nI need to decide if I can call this function. The required parameter \"location\" is provided: \"Paris, France\". The \"unit\" is not specified, but it's not required, so I can proceed without it. The function will likely use a default unit.\n\nIn the function description, \"unit\" is not marked as required, so I can call the function with just the \"location\".\n\nMy response should be to trigger the function call in the specified JSON format within <function_call> tags.\n\nI shouldn't make up any response; just call the function if it's appropriate.\n\nFinal decision: Call the \"get_weather\" function with the location as \"Paris, France\".\n\nFunction call format:\n\n<function_call>{\"action\": \"get_weather\", \"action_input\": {\"location\": \"Paris, France\"}}</function_call>\n\nThat seems correct.",
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"location\":\"Paris, France\"}",
+                  "name": "get_weather"
+                },
+                "id": "call_12494638",
+                "type": "function"
+              }
+            ]
+          }
+        }
+      ],
+      "created": 1758031298,
+      "id": "41d0372e-8c30-1b35-c756-019a15782204_us-east-1",
+      "model": "grok-3-mini",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_4fae27f477",
+      "usage": {
+        "completion_tokens": 28,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 268,
+          "rejected_prediction_tokens": 0
+        },
+        "num_sources_used": 0,
+        "prompt_tokens": 309,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 3,
+          "image_tokens": 0,
+          "text_tokens": 309
+        },
+        "total_tokens": 605
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9800e59dff5e1050-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 16 Sep 2025 14:01:43 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=T2YTrquAMMceXAt5UyQIUQXs4wJxJk_vVntfv.FVxR4-1758031303-1.0.1.1-lFRJUQHZioT0Ga3YWYZFKjWRf1Tb7P.A2iCGEeB0oiqnaH_MvZvYEArhBuT3I8A8SO8Hl2Dz7BZTzlYWgOr2xa7jT13FNvGra.LH7JYsPxY; path=/; expires=Tue, 16-Sep-25 14:31:43 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-request-id": [
+        "00-217bb51314395b95e0622aa36d9845a4-067c77df0000edda-01"
+      ],
+      "x-zero-data-retention": [
+        "false"
+      ]
+    }
+  },
+  "captured_at": "2025-09-16T14:01:43.281869Z"
+}

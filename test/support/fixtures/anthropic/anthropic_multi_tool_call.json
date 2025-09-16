@@ -1,0 +1,141 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtZXNzYWdlcyI6W3sicm9sZSI6InVzZXIiLCJjb250ZW50IjpbeyJ0ZXh0IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgcHJvZ3JhbW1pbmciLCJ0eXBlIjoidGV4dCJ9XX1dLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwiaW5wdXRfc2NoZW1hIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoiZ2V0X3dlYXRoZXIifSx7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJpbnB1dF9zY2hlbWEiOnsicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifSwibmFtZSI6InRlbGxfam9rZSJ9LHsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsImlucHV0X3NjaGVtYSI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoiZ2V0X3RpbWUifV0sInRlbXBlcmF0dXJlIjowLjAsIm1vZGVsIjoiY2xhdWRlLTMtNS1zb25uZXQtMjAyNDEwMjIiLCJtYXhfdG9rZW5zIjoxMDB9"
+    },
+    "url": "https://api.anthropic.com/v1/messages",
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-api-key": [
+        "[REDACTED:x-api-key]"
+      ]
+    },
+    "method": "post",
+    "canonical_json": "{\"max_tokens\":100,\"messages\":[{\"content\":[{\"text\":\"Tell me a joke about programming\",\"type\":\"text\"}],\"role\":\"user\"}],\"model\":\"claude-3-5-sonnet-20241022\",\"stream\":false,\"temperature\":0.0,\"tools\":[{\"description\":\"Get current weather information for a location\",\"input_schema\":{\"properties\":{\"location\":{\"type\":\"string\"}},\"required\":[\"location\"],\"type\":\"object\"},\"name\":\"get_weather\"},{\"description\":\"Tell a funny joke\",\"input_schema\":{\"properties\":{\"topic\":{\"description\":\"Topic for the joke\",\"type\":\"string\"}},\"type\":\"object\"},\"name\":\"tell_joke\"},{\"description\":\"Get the current time\",\"input_schema\":{\"properties\":{},\"type\":\"object\"},\"name\":\"get_time\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "content": [
+        {
+          "text": "I'll use the tell_joke function to get a programming-related joke for you.",
+          "type": "text"
+        },
+        {
+          "id": "toolu_014JEzhtHazXpRcf3dijav88",
+          "input": {
+            "topic": "programming"
+          },
+          "name": "tell_joke",
+          "type": "tool_use"
+        }
+      ],
+      "id": "msg_01LEg1ZXcGTfb5CGouxYms9D",
+      "model": "claude-3-5-sonnet-20241022",
+      "role": "assistant",
+      "stop_reason": "tool_use",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 474,
+        "output_tokens": 72,
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": [
+        "a71659e7-a922-4ff7-99de-f3ba615face1"
+      ],
+      "anthropic-ratelimit-input-tokens-limit": [
+        "80000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "80000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2025-09-16T13:59:36Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "16000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "16000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2025-09-16T13:59:37Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "1000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2025-09-16T13:59:27Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "96000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "96000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2025-09-16T13:59:36Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9800e26bfcfbf4e6-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 16 Sep 2025 13:59:37 GMT"
+      ],
+      "request-id": [
+        "req_011CTCCWxxcJhHVeKQ23Kzgy"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "9735"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    }
+  },
+  "captured_at": "2025-09-16T13:59:37.043281Z"
+}

@@ -1,0 +1,131 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtZXNzYWdlcyI6W3siY29udGVudCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/Iiwicm9sZSI6InVzZXIifV0sInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsiZGVzY3JpcHRpb24iOiJUaGUgY2l0eSBhbmQgc3RhdGUsIGUuZy4gU2FuIEZyYW5jaXNjbywgQ0EiLCJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZGVzY3JpcHRpb24iOiJUaGUgdGVtcGVyYXR1cmUgdW5pdCB0byB1c2UiLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV0sInRlbXBlcmF0dXJlIjowLjAsIm1vZGVsIjoibGxhbWEtMy4xLThiLWluc3RhbnQiLCJtYXhfdG9rZW5zIjoxMDB9"
+    },
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": [
+        "[REDACTED:authorization]"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "canonical_json": "{\"max_tokens\":100,\"messages\":[{\"content\":\"What's the weather like in Paris, France?\",\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"stream\":false,\"temperature\":0.0,\"tools\":[{\"function\":{\"description\":\"Get current weather information for a location\",\"name\":\"get_weather\",\"parameters\":{\"properties\":{\"location\":{\"description\":\"The city and state, e.g. San Francisco, CA\",\"type\":\"string\"},\"unit\":{\"description\":\"The temperature unit to use\",\"type\":\"string\"}},\"required\":[\"location\"],\"type\":\"object\"}},\"type\":\"function\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celcius\"}",
+                  "name": "get_weather"
+                },
+                "id": "yw3y5qnq2",
+                "type": "function"
+              }
+            ]
+          }
+        }
+      ],
+      "created": 1758031281,
+      "id": "chatcmpl-e05e36f1-e8a6-45f5-9490-2dfd7735fec6",
+      "model": "llama-3.1-8b-instant",
+      "object": "chat.completion",
+      "service_tier": "on_demand",
+      "system_fingerprint": "fp_8804b970d6",
+      "usage": {
+        "completion_time": 0.035396543,
+        "completion_tokens": 24,
+        "prompt_time": 0.015215915,
+        "prompt_tokens": 253,
+        "queue_time": 0.200785673,
+        "total_time": 0.050612458,
+        "total_tokens": 277
+      },
+      "usage_breakdown": null,
+      "x_groq": {
+        "id": "req_01k59d8zhreksbxhg5vmyt0wvr"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cache-control": [
+        "private, max-age=0, no-store, no-cache, must-revalidate"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9800e5362fb52326-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 16 Sep 2025 14:01:21 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=w1JAW7ovLd19me732ZT939ybH5xfr6nrubz7IfmLeYE-1758031281-1.0.1.1-NTloIH_n1gEwM2dhW97LsBJKk.C5k5hBPUOyGcghwbGxVoTSzi6_STr11Zwo5U..9_B.sOxeh8Asyi1eRUiMGce5y_0Q0tC9_zltZP3ytAA; path=/; expires=Tue, 16-Sep-25 14:31:21 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-groq-region": [
+        "msp"
+      ],
+      "x-ratelimit-limit-requests": [
+        "14400"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "6000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "14399"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "5984"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "160ms"
+      ],
+      "x-request-id": [
+        "req_01k59d8zhreksbxhg5vmyt0wvr"
+      ]
+    }
+  },
+  "captured_at": "2025-09-16T14:01:22.015653Z"
+}

@@ -18,10 +18,18 @@ defmodule ReqLLM.ProviderTestHelpers do
     assert response.id != nil
     assert is_binary(response.id)
 
-    # Text content validation
+    # Text content validation - tool calling responses may have empty text
     text = ReqLLM.Response.text(response)
     assert is_binary(text)
-    assert String.length(text) > 0
+
+    # For responses with tool calls, text may be empty
+    if has_tool_calls?(response) do
+      # Tool calling response - text can be empty
+      :ok
+    else
+      # Regular text response - must have content
+      assert String.length(text) > 0
+    end
 
     response
   end
@@ -64,5 +72,12 @@ defmodule ReqLLM.ProviderTestHelpers do
            "Expected text length <= #{max_length}, got #{actual_length}: #{inspect(text)}"
 
     response
+  end
+
+  # Helper to check if response has tool calls
+  defp has_tool_calls?(%ReqLLM.Response{message: message}) do
+    Enum.any?(message.content || [], fn content ->
+      content.type == :tool_call
+    end)
   end
 end
