@@ -1,0 +1,97 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtZXNzYWdlcyI6W3siY29udGVudCI6IlNheSBoZWxsbyBicmllZmx5Iiwicm9sZSI6InVzZXIifV0sInN0cmVhbSI6dHJ1ZSwibW9kZWwiOiJsbGFtYS0zLjEtOGItaW5zdGFudCIsIm1heF90b2tlbnMiOjEwfQ=="
+    },
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": [
+        "[REDACTED:authorization]"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "canonical_json": "{\"max_tokens\":10,\"messages\":[{\"content\":\"Say hello briefly\",\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"stream\":true}"
+  },
+  "response": {
+    "status": 200,
+    "body": null,
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cache-control": [
+        "no-cache"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "980323ad8a736210-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "text/event-stream"
+      ],
+      "date": [
+        "Tue, 16 Sep 2025 20:33:32 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=ABJVEhvj8jzZ_m0jylEQe96Kvfq.qAIEmnUs_yRCRNU-1758054812-1.0.1.1-y9U08OsRA.eVOnusbIbphvi5Q7OIoYty8loke20gops3KfB0wdm0YREEollYFaiff4INYFk0XY_Mmc0eHdoRfXJjtOS6MQ_62qStv7jLutQ; path=/; expires=Tue, 16-Sep-25 21:03:32 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-groq-region": [
+        "msp"
+      ],
+      "x-ratelimit-limit-requests": [
+        "14400"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "6000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "14399"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "5990"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "100ms"
+      ],
+      "x-request-id": [
+        "req_01k5a3q24pfzfand9dcrk5evs0"
+      ]
+    }
+  },
+  "captured_at": "2025-09-16T20:33:32.083936Z",
+  "chunks": [
+    {
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLTE5NDFjMzcxLTI0ZDEtNDZjNC1iYjc2LTQ3MGJkNGNlNWU1MiIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTgwNTQ4MTIsIm1vZGVsIjoibGxhbWEtMy4xLThiLWluc3RhbnQiLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF84YTEzZGZhYjJiIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQiLCJjb250ZW50IjoiIn0sImxvZ3Byb2JzIjpudWxsLCJmaW5pc2hfcmVhc29uIjpudWxsfV0sInhfZ3JvcSI6eyJpZCI6InJlcV8wMWs1YTNxMjRwZnpmYW5kOWRjcms1ZXZzMCJ9fQoKZGF0YTogeyJpZCI6ImNoYXRjbXBsLTE5NDFjMzcxLTI0ZDEtNDZjNC1iYjc2LTQ3MGJkNGNlNWU1MiIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTgwNTQ4MTIsIm1vZGVsIjoibGxhbWEtMy4xLThiLWluc3RhbnQiLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF84YTEzZGZhYjJiIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7ImNvbnRlbnQiOiJIZWxsbyJ9LCJsb2dwcm9icyI6bnVsbCwiZmluaXNoX3JlYXNvbiI6bnVsbH1dfQoKZGF0YTogeyJpZCI6ImNoYXRjbXBsLTE5NDFjMzcxLTI0ZDEtNDZjNC1iYjc2LTQ3MGJkNGNlNWU1MiIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTgwNTQ4MTIsIm1vZGVsIjoibGxhbWEtMy4xLThiLWluc3RhbnQiLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF84YTEzZGZhYjJiIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7ImNvbnRlbnQiOiIuIn0sImxvZ3Byb2JzIjpudWxsLCJmaW5pc2hfcmVhc29uIjpudWxsfV19CgpkYXRhOiB7ImlkIjoiY2hhdGNtcGwtMTk0MWMzNzEtMjRkMS00NmM0LWJiNzYtNDcwYmQ0Y2U1ZTUyIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc1ODA1NDgxMiwibW9kZWwiOiJsbGFtYS0zLjEtOGItaW5zdGFudCIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwXzhhMTNkZmFiMmIiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnt9LCJsb2dwcm9icyI6bnVsbCwiZmluaXNoX3JlYXNvbiI6InN0b3AifV0sInhfZ3JvcSI6eyJpZCI6InJlcV8wMWs1YTNxMjRwZnpmYW5kOWRjcms1ZXZzMCIsInVzYWdlIjp7InF1ZXVlX3RpbWUiOjAuMjUwODk4OTY2LCJwcm9tcHRfdG9rZW5zIjozOCwicHJvbXB0X3RpbWUiOjAuMDAyMDgxODk5LCJjb21wbGV0aW9uX3Rva2VucyI6MywiY29tcGxldGlvbl90aW1lIjowLjAwNDM0MDg4NywidG90YWxfdG9rZW5zIjo0MSwidG90YWxfdGltZSI6MC4wMDY0MjI3ODZ9fX0KCmRhdGE6IFtET05FXQoK",
+      "decoded": "data: {\"id\":\"chatcmpl-1941c371-24d1-46c4-bb76-470bd4ce5e52\",\"object\":\"chat.completion.chunk\",\"created\":1758054812,\"model\":\"llama-3.1-8b-instant\",\"system_fingerprint\":\"fp_8a13dfab2b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\"},\"logprobs\":null,\"finish_reason\":null}],\"x_groq\":{\"id\":\"req_01k5a3q24pfzfand9dcrk5evs0\"}}\n\ndata: {\"id\":\"chatcmpl-1941c371-24d1-46c4-bb76-470bd4ce5e52\",\"object\":\"chat.completion.chunk\",\"created\":1758054812,\"model\":\"llama-3.1-8b-instant\",\"system_fingerprint\":\"fp_8a13dfab2b\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\"Hello\"},\"logprobs\":null,\"finish_reason\":null}]}\n\ndata: {\"id\":\"chatcmpl-1941c371-24d1-46c4-bb76-470bd4ce5e52\",\"object\":\"chat.completion.chunk\",\"created\":1758054812,\"model\":\"llama-3.1-8b-instant\",\"system_fingerprint\":\"fp_8a13dfab2b\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\".\"},\"logprobs\":null,\"finish_reason\":null}]}\n\ndata: {\"id\":\"chatcmpl-1941c371-24d1-46c4-bb76-470bd4ce5e52\",\"object\":\"chat.completion.chunk\",\"created\":1758054812,\"model\":\"llama-3.1-8b-instant\",\"system_fingerprint\":\"fp_8a13dfab2b\",\"choices\":[{\"index\":0,\"delta\":{},\"logprobs\":null,\"finish_reason\":\"stop\"}],\"x_groq\":{\"id\":\"req_01k5a3q24pfzfand9dcrk5evs0\",\"usage\":{\"queue_time\":0.250898966,\"prompt_tokens\":38,\"prompt_time\":0.002081899,\"completion_tokens\":3,\"completion_time\":0.004340887,\"total_tokens\":41,\"total_time\":0.006422786}}}\n\ndata: [DONE]\n\n"
+    }
+  ]
+}

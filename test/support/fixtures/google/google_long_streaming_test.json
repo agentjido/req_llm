@@ -1,0 +1,94 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIGJyaWVmIGV4cGxhbmF0aW9uIG9mIGhvdyBtYWNoaW5lIGxlYXJuaW5nIHdvcmtzLiBJbmNsdWRlIHN1cGVydmlzZWQgbGVhcm5pbmcgYW5kIG5ldXJhbCBuZXR3b3Jrcy4ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7Im1heE91dHB1dFRva2VucyI6MjAwLCJjYW5kaWRhdGVDb3VudCI6MX19"
+    },
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBwophsPOldL0hUrtLo0x7WRzgsuwWagEY",
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "canonical_json": "{\"contents\":[{\"parts\":[{\"text\":\"Write a brief explanation of how machine learning works. Include supervised learning and neural networks.\"}],\"role\":\"user\"}],\"generationConfig\":{\"candidateCount\":1,\"maxOutputTokens\":200}}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "candidates": [
+        {
+          "avgLogprobs": -0.21518608093261718,
+          "content": {
+            "parts": [
+              {
+                "text": "Machine learning (ML) is a type of artificial intelligence (AI) that allows computer systems to learn from data without being explicitly programmed. Instead of relying on pre-defined rules, ML algorithms identify patterns, make predictions, and improve their performance over time based on the data they're exposed to.\n\nOne core approach is **supervised learning**, where the algorithm is trained on a labeled dataset. This means each data point is paired with the correct answer (the \"label\"). For example, to train an image classifier to recognize cats, you'd feed it many images labeled \"cat\" and \"not cat.\" The algorithm learns to map input features (like edges, colors, and shapes) to the correct label, and then uses this learned mapping to classify new, unseen images.\n\n**Neural networks** are a powerful type of algorithm used extensively in ML, particularly in supervised learning tasks.  They are inspired by the structure and function of the human brain. A neural network consists of interconnected nodes"
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "MAX_TOKENS"
+        }
+      ],
+      "modelVersion": "gemini-1.5-flash",
+      "responseId": "osnJaJSxGpKNjMcP4crR6AE",
+      "usageMetadata": {
+        "candidatesTokenCount": 200,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 200
+          }
+        ],
+        "promptTokenCount": 17,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 17
+          }
+        ],
+        "totalTokenCount": 217
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Tue, 16 Sep 2025 20:33:39 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=1559"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    }
+  },
+  "captured_at": "2025-09-16T20:33:39.953762Z"
+}
