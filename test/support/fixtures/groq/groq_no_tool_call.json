@@ -30,29 +30,29 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "What do you call a group of cats playing instruments?",
+            "content": "Cats are like tiny little dictators - they demand food at exactly 3am, then proceed to ignore you for the rest of the day while sleeping on your lap.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1758031282,
-      "id": "chatcmpl-3c4819d9-3350-43f6-9232-05d5ddf42846",
+      "created": 1758069085,
+      "id": "chatcmpl-bd71d21c-ec95-499e-aeaf-f578f2b9ed23",
       "model": "llama-3.1-8b-instant",
       "object": "chat.completion",
       "service_tier": "on_demand",
       "system_fingerprint": "fp_8804b970d6",
       "usage": {
-        "completion_time": 0.016216903,
-        "completion_tokens": 12,
-        "prompt_time": 0.031064943,
+        "completion_time": 0.080761788,
+        "completion_tokens": 36,
+        "prompt_time": 0.013219245,
         "prompt_tokens": 220,
-        "queue_time": 0.187682669,
-        "total_time": 0.047281846,
-        "total_tokens": 232
+        "queue_time": 0.188513546,
+        "total_time": 0.093981033,
+        "total_tokens": 256
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k59d8zz5e4c8dtm72w2w9sj9"
+        "id": "req_01k5ahanf8eeysqzhcc4qwxyeg"
       }
     },
     "headers": {
@@ -66,7 +66,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9800e5394b0a2326-ORD"
+        "9804802949af232e-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -75,13 +75,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 16 Sep 2025 14:01:22 GMT"
+        "Wed, 17 Sep 2025 00:31:25 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=b0EQyq9_YeIHVmh4Dpt3wKRzL__2.V7m3tJcOPNDVhk-1758031282-1.0.1.1-TylN4fGU_i65bKiVxg33WS6QGTVqzhDiSzG.J5afDX8.FGMbkaU1JMhL5qllTttbpPjIMyGgMx1AJp6oLwv4k7y.Z28wVk0MCcm_MnY4VBE; path=/; expires=Tue, 16-Sep-25 14:31:22 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=H7iTWbEAush42bLWsKtWPC19rz3xHB.HpvtqnzWdmRo-1758069085-1.0.1.1-qx.1isuE44oLaN9sUqKSJw7etZmh55_eMUdPO6MIzdt.21kP8frCra1v9nnmG2QeAmEt69IFoztAGKbUkChla8JU5zGQnSwvWTgP8MG29lA; path=/; expires=Wed, 17-Sep-25 01:01:25 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -102,21 +102,21 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "14398"
+        "14377"
       ],
       "x-ratelimit-remaining-tokens": [
-        "5729"
+        "5279"
       ],
       "x-ratelimit-reset-requests": [
-        "11.572s"
+        "2m17.724999999s"
       ],
       "x-ratelimit-reset-tokens": [
-        "2.71s"
+        "7.206s"
       ],
       "x-request-id": [
-        "req_01k59d8zz5e4c8dtm72w2w9sj9"
+        "req_01k5ahanf8eeysqzhcc4qwxyeg"
       ]
     }
   },
-  "captured_at": "2025-09-16T14:01:22.321801Z"
+  "captured_at": "2025-09-17T00:31:25.892333Z"
 }
