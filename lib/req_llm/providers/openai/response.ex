@@ -21,10 +21,13 @@ defimpl ReqLLM.Response.Codec, for: ReqLLM.Providers.OpenAI.Response do
   """
   def decode_response(%{payload: stream} = _wrapped_response, %Model{provider: :openai} = model)
       when is_struct(stream, Stream) do
-    # Convert SSE events to StreamChunks
+    # Convert SSE events to StreamChunks with tool-call assembly
     chunk_stream =
       stream
-      |> Stream.flat_map(&decode_sse_event/1)
+      |> Stream.transform(%{tc: %{}}, fn event, state ->
+        {chunks, new_state} = handle_sse_event(event, state)
+        {chunks, new_state}
+      end)
       |> Stream.reject(&is_nil/1)
 
     response = %Response{
@@ -58,41 +61,68 @@ defimpl ReqLLM.Response.Codec, for: ReqLLM.Providers.OpenAI.Response do
 
   def encode_request(_), do: {:error, :not_implemented}
 
-  # SSE Event decoding for streaming responses
-  defp decode_sse_event(%{event: "completion", data: %{"choices" => [%{"delta" => delta} | _]}}) do
-    decode_openai_delta(delta)
+  # SSE Event decoding and tool-call assembly
+  defp handle_sse_event(%{data: "[DONE]"}, state) do
+    {[StreamChunk.meta(%{done: true, finish_reason: :stop})], state}
   end
 
-  defp decode_sse_event(%{data: %{"choices" => [%{"delta" => delta} | _]}}) do
-    decode_openai_delta(delta)
+  defp handle_sse_event(%{event: _evt, data: %{"choices" => [%{"delta" => delta} | _]}}, state) do
+    handle_openai_delta(delta, state)
   end
 
-  defp decode_sse_event(_event), do: []
-
-  defp decode_openai_delta(%{"content" => content}) when is_binary(content) and content != "" do
-    [StreamChunk.text(content)]
+  defp handle_sse_event(%{data: %{"choices" => [%{"delta" => delta} | _]}}, state) do
+    handle_openai_delta(delta, state)
   end
 
-  defp decode_openai_delta(%{"tool_calls" => tool_calls}) when is_list(tool_calls) do
-    tool_calls
-    |> Enum.map(&decode_tool_call_delta/1)
-    |> Enum.reject(&is_nil/1)
+  defp handle_sse_event(_event, state), do: {[], state}
+
+  defp handle_openai_delta(%{"content" => content} = _delta, state)
+       when is_binary(content) and content != "" do
+    {[StreamChunk.text(content)], state}
   end
 
-  defp decode_openai_delta(_), do: []
+  defp handle_openai_delta(%{"tool_calls" => tool_calls} = _delta, state) when is_list(tool_calls) do
+    {emitted, new_state} =
+      Enum.reduce(tool_calls, {[], state}, fn tc, {acc_chunks, acc_state} ->
+        {maybe_chunk, updated_state} = assemble_tool_call(tc, acc_state)
+        chunks = if maybe_chunk, do: [maybe_chunk | acc_chunks], else: acc_chunks
+        {chunks, updated_state}
+      end)
 
-  defp decode_tool_call_delta(%{
-         "id" => id,
-         "type" => "function",
-         "function" => %{"name" => name, "arguments" => args_json}
-       }) do
-    case Jason.decode(args_json || "{}") do
-      {:ok, args} -> StreamChunk.tool_call(name, args, %{id: id})
-      {:error, _} -> nil
-    end
+    {Enum.reverse(emitted), new_state}
   end
 
-  defp decode_tool_call_delta(_), do: nil
+  defp handle_openai_delta(_delta, state), do: {[], state}
+
+  defp assemble_tool_call(%{"index" => index} = tc, %{tc: tc_state} = state) do
+    existing = Map.get(tc_state, index, %{id: nil, name: nil, args: "", emitted?: false})
+
+    id = Map.get(tc, "id", existing.id)
+    name = get_in(tc, ["function", "name"]) || existing.name
+    arg_piece = get_in(tc, ["function", "arguments"]) || ""
+    args_acc = existing.args <> arg_piece
+
+    {maybe_chunk, new_entry} =
+      case {existing.emitted?, Jason.decode(args_acc)} do
+        {true, _} ->
+          {nil, %{existing | id: id, name: name, args: args_acc}}
+
+        {false, {:ok, args_map}} when is_binary(name) and is_binary(id) ->
+          {StreamChunk.tool_call(name, args_map, %{id: id}), %{id: id, name: name, args: args_acc, emitted?: true}}
+
+        _ ->
+          {nil, %{existing | id: id, name: name, args: args_acc}}
+      end
+
+    new_state = put_in(state, [:tc, index], new_entry)
+    {maybe_chunk, new_state}
+  end
+
+  defp assemble_tool_call(tc, state) do
+    # Fallback when no index is present; use a synthetic key
+    assemble_tool_call(Map.put(tc, "index", :default), state)
+  end
+
 end
 
 defmodule ReqLLM.Providers.OpenAI.ResponseDecoder do

@@ -150,7 +150,12 @@ defmodule ReqLLM.Providers.OpenRouter do
 
     # Add tools back after validation
     opts = Keyword.put(opts, :tools, tools)
-    base_url = Keyword.get(user_opts, :base_url, default_base_url())
+
+    # Precedence: explicit :base_url option > gateway default > provider default
+    base_url =
+      Keyword.get(user_opts, :base_url) ||
+        ReqLLM.Gateway.base_url() ||
+        default_base_url()
     req_keys = __MODULE__.supported_provider_options() ++ [:model, :context]
 
     request
@@ -159,6 +164,7 @@ defmodule ReqLLM.Providers.OpenRouter do
     |> Req.Request.merge_options(
       Keyword.take(opts, req_keys) ++ [base_url: base_url, auth: {:bearer, api_key}]
     )
+    |> maybe_put_gateway_header()
     |> ReqLLM.Step.Error.attach()
     |> Req.Request.append_request_steps(llm_encode_body: &__MODULE__.encode_body/1)
     |> ReqLLM.Step.Stream.maybe_attach(opts[:stream])
@@ -175,6 +181,16 @@ defmodule ReqLLM.Providers.OpenRouter do
   end
 
   def extract_usage(_, _), do: {:error, :invalid_body}
+
+  defp maybe_put_gateway_header(%Req.Request{} = request) do
+    case ReqLLM.Gateway.service_token() do
+      token when is_binary(token) and token != "" ->
+        Req.Request.put_header(request, "x-service-token", token)
+
+      _ ->
+        request
+    end
+  end
 
   # Parameter validation helpers
   defp validate_parameter_ranges(opts) do
