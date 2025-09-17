@@ -1,0 +1,98 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtZXNzYWdlcyI6W3sicm9sZSI6InVzZXIiLCJjb250ZW50IjpbeyJ0eXBlIjoidGV4dCIsInRleHQiOiJHZW5lcmF0ZSBhIGJsb2cgYXJ0aWNsZSBtZXRhZGF0YSJ9XX1dLCJzdHJlYW0iOnRydWUsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsiYXV0aG9yIjp7ImRlc2NyaXB0aW9uIjoiQXJ0aWNsZSBhdXRob3IiLCJ0eXBlIjoic3RyaW5nIn0sInRhZ3MiOnsiZGVzY3JpcHRpb24iOiJBcnRpY2xlIHRhZ3Mgb3IgY2F0ZWdvcmllcyIsIml0ZW1zIjp7InR5cGUiOiJzdHJpbmcifSwidHlwZSI6ImFycmF5In0sInRpdGxlIjp7ImRlc2NyaXB0aW9uIjoiQXJ0aWNsZSB0aXRsZSIsInR5cGUiOiJzdHJpbmcifSwid29yZF9jb3VudCI6eyJkZXNjcmlwdGlvbiI6IkFwcHJveGltYXRlIHdvcmQgY291bnQiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9fSwicmVxdWlyZWQiOlsidGl0bGUiLCJhdXRob3IiLCJ3b3JkX2NvdW50Il0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XSwibW9kZWwiOiJsbGFtYS0zLjEtOGItaW5zdGFudCIsInRvb2xfY2hvaWNlIjp7ImZ1bmN0aW9uIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCJ9LCJ0eXBlIjoiZnVuY3Rpb24ifSwibWF4X3Rva2VucyI6MjAwLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": [
+        "[REDACTED:authorization]"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "canonical_json": "{\"max_tokens\":200,\"messages\":[{\"content\":[{\"text\":\"Generate a blog article metadata\",\"type\":\"text\"}],\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"stream\":true,\"temperature\":0.0,\"tool_choice\":{\"function\":{\"name\":\"structured_output\"},\"type\":\"function\"},\"tools\":[{\"function\":{\"description\":\"Generate structured output matching the provided schema\",\"name\":\"structured_output\",\"parameters\":{\"properties\":{\"author\":{\"description\":\"Article author\",\"type\":\"string\"},\"tags\":{\"description\":\"Article tags or categories\",\"items\":{\"type\":\"string\"},\"type\":\"array\"},\"title\":{\"description\":\"Article title\",\"type\":\"string\"},\"word_count\":{\"description\":\"Approximate word count\",\"minimum\":1,\"type\":\"integer\"}},\"required\":[\"title\",\"author\",\"word_count\"],\"type\":\"object\"}},\"type\":\"function\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "body": null,
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cache-control": [
+        "no-cache"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9809df20de611105-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "text/event-stream"
+      ],
+      "date": [
+        "Wed, 17 Sep 2025 16:10:04 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=ATpQzGtjNjOtzpa_o4UbUtisHY1eOqtIThFXaVYLIzw-1758125404-1.0.1.1-fciAZxAhHQXpLNmgk71YCndxod9TVWd1QdzwJx6UeEcOXbUYTwRnlvsaz54AToy2SZMqkUCn5xF9wDa9.aGMEwRbEZjY0XqCI4_3MGBYEJQ; path=/; expires=Wed, 17-Sep-25 16:40:04 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-groq-region": [
+        "msp"
+      ],
+      "x-ratelimit-limit-requests": [
+        "14400"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "6000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "14383"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "3364"
+      ],
+      "x-ratelimit-reset-requests": [
+        "1m41.668999999s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "26.354s"
+      ],
+      "x-request-id": [
+        "req_01k5c71c58ejxvjhg1cbjfjqra"
+      ]
+    }
+  },
+  "captured_at": "2025-09-17T16:10:04.621315Z",
+  "chunks": [
+    {
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLWExYmYzY2VjLThjY2QtNDNlNC1iMDYzLTQ1ZTY5YWY1NDcyNiIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTgxMjU0MDQsIm1vZGVsIjoibGxhbWEtMy4xLThiLWluc3RhbnQiLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF84ODA0Yjk3MGQ2IiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQiLCJjb250ZW50IjpudWxsfSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOm51bGx9XSwieF9ncm9xIjp7ImlkIjoicmVxXzAxazVjNzFjNThlanh2amhnMWNiamZqcXJhIn19CgpkYXRhOiB7ImlkIjoiY2hhdGNtcGwtYTFiZjNjZWMtOGNjZC00M2U0LWIwNjMtNDVlNjlhZjU0NzI2Iiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc1ODEyNTQwNCwibW9kZWwiOiJsbGFtYS0zLjEtOGItaW5zdGFudCIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwXzg4MDRiOTcwZDYiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsidG9vbF9jYWxscyI6W3siaWQiOiI0NGM1MG5zamsiLCJ0eXBlIjoiZnVuY3Rpb24iLCJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJhcmd1bWVudHMiOiJ7XCJhdXRob3JcIjpcIkpvaG4gRG9lXCIsXCJ0YWdzXCI6W1wiQUlcIixcIk1hY2hpbmUgTGVhcm5pbmdcIixcIkRlZXAgTGVhcm5pbmdcIl0sXCJ0aXRsZVwiOlwiSW50cm9kdWN0aW9uIHRvIEFydGlmaWNpYWwgSW50ZWxsaWdlbmNlXCIsXCJ3b3JkX2NvdW50XCI6NTAwfSJ9LCJpbmRleCI6MH1dfSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOm51bGx9XX0KCmRhdGE6IHsiaWQiOiJjaGF0Y21wbC1hMWJmM2NlYy04Y2NkLTQzZTQtYjA2My00NWU2OWFmNTQ3MjYiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU4MTI1NDA0LCJtb2RlbCI6ImxsYW1hLTMuMS04Yi1pbnN0YW50Iiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfODgwNGI5NzBkNiIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6e30sImxvZ3Byb2JzIjpudWxsLCJmaW5pc2hfcmVhc29uIjoidG9vbF9jYWxscyJ9XSwieF9ncm9xIjp7ImlkIjoicmVxXzAxazVjNzFjNThlanh2amhnMWNiamZqcXJhIiwidXNhZ2UiOnsicXVldWVfdGltZSI6MC4xODc0ODM1NzUsInByb21wdF90b2tlbnMiOjI5NiwicHJvbXB0X3RpbWUiOjAuMDE3NjE5NTI0LCJjb21wbGV0aW9uX3Rva2VucyI6NDEsImNvbXBsZXRpb25fdGltZSI6MC4wNTM4Njc3NSwidG90YWxfdG9rZW5zIjozMzcsInRvdGFsX3RpbWUiOjAuMDcxNDg3Mjc0fX19CgpkYXRhOiBbRE9ORV0KCg==",
+      "decoded": "data: {\"id\":\"chatcmpl-a1bf3cec-8ccd-43e4-b063-45e69af54726\",\"object\":\"chat.completion.chunk\",\"created\":1758125404,\"model\":\"llama-3.1-8b-instant\",\"system_fingerprint\":\"fp_8804b970d6\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":null},\"logprobs\":null,\"finish_reason\":null}],\"x_groq\":{\"id\":\"req_01k5c71c58ejxvjhg1cbjfjqra\"}}\n\ndata: {\"id\":\"chatcmpl-a1bf3cec-8ccd-43e4-b063-45e69af54726\",\"object\":\"chat.completion.chunk\",\"created\":1758125404,\"model\":\"llama-3.1-8b-instant\",\"system_fingerprint\":\"fp_8804b970d6\",\"choices\":[{\"index\":0,\"delta\":{\"tool_calls\":[{\"id\":\"44c50nsjk\",\"type\":\"function\",\"function\":{\"name\":\"structured_output\",\"arguments\":\"{\\\"author\\\":\\\"John Doe\\\",\\\"tags\\\":[\\\"AI\\\",\\\"Machine Learning\\\",\\\"Deep Learning\\\"],\\\"title\\\":\\\"Introduction to Artificial Intelligence\\\",\\\"word_count\\\":500}\"},\"index\":0}]},\"logprobs\":null,\"finish_reason\":null}]}\n\ndata: {\"id\":\"chatcmpl-a1bf3cec-8ccd-43e4-b063-45e69af54726\",\"object\":\"chat.completion.chunk\",\"created\":1758125404,\"model\":\"llama-3.1-8b-instant\",\"system_fingerprint\":\"fp_8804b970d6\",\"choices\":[{\"index\":0,\"delta\":{},\"logprobs\":null,\"finish_reason\":\"tool_calls\"}],\"x_groq\":{\"id\":\"req_01k5c71c58ejxvjhg1cbjfjqra\",\"usage\":{\"queue_time\":0.187483575,\"prompt_tokens\":296,\"prompt_time\":0.017619524,\"completion_tokens\":41,\"completion_time\":0.05386775,\"total_tokens\":337,\"total_time\":0.071487274}}}\n\ndata: [DONE]\n\n",
+      "t_us": 2
+    }
+  ]
+}

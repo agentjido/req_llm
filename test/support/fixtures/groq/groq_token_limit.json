@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwic3RyZWFtIjpmYWxzZSwibW9kZWwiOiJsbGFtYS0zLjEtOGItaW5zdGFudCIsIm1heF90b2tlbnMiOjV9"
+      "b64": "eyJtZXNzYWdlcyI6W3sicm9sZSI6InVzZXIiLCJjb250ZW50IjpbeyJ0eXBlIjoidGV4dCIsInRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dfV0sInN0cmVhbSI6ZmFsc2UsIm1vZGVsIjoibGxhbWEtMy4xLThiLWluc3RhbnQiLCJtYXhfdG9rZW5zIjo1fQ=="
     },
     "url": "https://api.groq.com/openai/v1/chat/completions",
     "headers": {
@@ -19,7 +19,7 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"max_tokens\":5,\"messages\":[{\"content\":\"Write a very long story about dragons and adventures\",\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"stream\":false}"
+    "canonical_json": "{\"max_tokens\":5,\"messages\":[{\"content\":[{\"text\":\"Write a very long story about dragons and adventures\",\"type\":\"text\"}],\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"stream\":false}"
   },
   "response": {
     "status": 200,
@@ -30,29 +30,29 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "In the realm of E",
+            "content": "In the land of E",
             "role": "assistant"
           }
         }
       ],
-      "created": 1758069082,
-      "id": "chatcmpl-e41a7ccd-e182-45d4-a579-bc22346cc052",
+      "created": 1758125399,
+      "id": "chatcmpl-aa518373-a33d-4071-ae11-3980f015b81c",
       "model": "llama-3.1-8b-instant",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_c54ae48ece",
+      "system_fingerprint": "fp_8a13dfab2b",
       "usage": {
-        "completion_time": 0.011181678,
+        "completion_time": 0.004588093,
         "completion_tokens": 5,
-        "prompt_time": 0.003153926,
+        "prompt_time": 0.002767971,
         "prompt_tokens": 44,
-        "queue_time": 0.187384635,
-        "total_time": 0.014335604,
+        "queue_time": 0.187534494,
+        "total_time": 0.007356064,
         "total_tokens": 49
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k5ahaj0peq78pset987yk6mr"
+        "id": "req_01k5c71742etkvmwvdjnpm5hdt"
       }
     },
     "headers": {
@@ -66,7 +66,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9804801328bd232e-ORD"
+        "9809df00adc71105-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -75,13 +75,13 @@
         "application/json"
       ],
       "date": [
-        "Wed, 17 Sep 2025 00:31:22 GMT"
+        "Wed, 17 Sep 2025 16:09:59 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=AQGlbimwVuaPUbA1ARqO3_z8RAImKsIsgGbEd4POJyg-1758069082-1.0.1.1-In33ud2AJ7EMYy2pVWHZlQ_BtbTRDzEz9BFhIKGryJDPk4U.IaDb_lRtSfTh5Ixz6wOpnKbzLgvrIvkbHxRgM4xWGNc7K7uK4J_tLbNiQTY; path=/; expires=Wed, 17-Sep-25 01:01:22 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=ObNTeofuxzYPolxftITUw.EHKQTJz4pBTKCUET4l5BM-1758125399-1.0.1.1-5zPB9A1lIEo6jbzUUS1Y.NVmeh9asLE5gfSDMlswixOJr40g1YSWDallYlQAiFGwWhHBfwAvmpG_6AJr_xSIH7u_PNz90uSUVRUfBFyz2Cc; path=/; expires=Wed, 17-Sep-25 16:39:59 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -102,21 +102,21 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "14385"
+        "14397"
       ],
       "x-ratelimit-remaining-tokens": [
-        "5930"
+        "5913"
       ],
       "x-ratelimit-reset-requests": [
-        "1m29.702s"
+        "17.730999999s"
       ],
       "x-ratelimit-reset-tokens": [
-        "698ms"
+        "866.999999ms"
       ],
       "x-request-id": [
-        "req_01k5ahaj0peq78pset987yk6mr"
+        "req_01k5c71742etkvmwvdjnpm5hdt"
       ]
     }
   },
-  "captured_at": "2025-09-17T00:31:22.296139Z"
+  "captured_at": "2025-09-17T16:09:59.396721Z"
 }

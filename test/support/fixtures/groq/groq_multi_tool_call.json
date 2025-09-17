@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IHByb2dyYW1taW5nIiwicm9sZSI6InVzZXIifV0sInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XSwidGVtcGVyYXR1cmUiOjAuMCwibW9kZWwiOiJsbGFtYS0zLjEtOGItaW5zdGFudCIsIm1heF90b2tlbnMiOjEwMH0="
+      "b64": "eyJtZXNzYWdlcyI6W3sicm9sZSI6InVzZXIiLCJjb250ZW50IjpbeyJ0eXBlIjoidGV4dCIsInRleHQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBwcm9ncmFtbWluZyJ9XX1dLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV0sIm1vZGVsIjoibGxhbWEtMy4xLThiLWluc3RhbnQiLCJtYXhfdG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "url": "https://api.groq.com/openai/v1/chat/completions",
     "headers": {
@@ -19,49 +19,40 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"max_tokens\":100,\"messages\":[{\"content\":\"Tell me a joke about programming\",\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"stream\":false,\"temperature\":0.0,\"tools\":[{\"function\":{\"description\":\"Get current weather information for a location\",\"name\":\"get_weather\",\"parameters\":{\"properties\":{\"location\":{\"type\":\"string\"}},\"required\":[\"location\"],\"type\":\"object\"}},\"type\":\"function\"},{\"function\":{\"description\":\"Tell a funny joke\",\"name\":\"tell_joke\",\"parameters\":{\"properties\":{\"topic\":{\"description\":\"Topic for the joke\",\"type\":\"string\"}},\"type\":\"object\"}},\"type\":\"function\"},{\"function\":{\"description\":\"Get the current time\",\"name\":\"get_time\",\"parameters\":{\"properties\":{},\"type\":\"object\"}},\"type\":\"function\"}]}"
+    "canonical_json": "{\"max_tokens\":100,\"messages\":[{\"content\":[{\"text\":\"Tell me a joke about programming\",\"type\":\"text\"}],\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"stream\":false,\"temperature\":0.0,\"tools\":[{\"function\":{\"description\":\"Get current weather information for a location\",\"name\":\"get_weather\",\"parameters\":{\"properties\":{\"location\":{\"type\":\"string\"}},\"required\":[\"location\"],\"type\":\"object\"}},\"type\":\"function\"},{\"function\":{\"description\":\"Tell a funny joke\",\"name\":\"tell_joke\",\"parameters\":{\"properties\":{\"topic\":{\"description\":\"Topic for the joke\",\"type\":\"string\"}},\"type\":\"object\"}},\"type\":\"function\"},{\"function\":{\"description\":\"Get the current time\",\"name\":\"get_time\",\"parameters\":{\"properties\":{},\"type\":\"object\"}},\"type\":\"function\"}]}"
   },
   "response": {
     "status": 200,
     "body": {
       "choices": [
         {
-          "finish_reason": "tool_calls",
+          "finish_reason": "stop",
           "index": 0,
           "logprobs": null,
           "message": {
-            "role": "assistant",
-            "tool_calls": [
-              {
-                "function": {
-                  "arguments": "{\"topic\":\"programming\"}",
-                  "name": "tell_joke"
-                },
-                "id": "pf7gx0kb8",
-                "type": "function"
-              }
-            ]
+            "content": "<function=tell_joke>{\"topic\": \"programming\"}",
+            "role": "assistant"
           }
         }
       ],
-      "created": 1758031282,
-      "id": "chatcmpl-0d244f84-b22d-4a10-ae74-6d0230a9b99d",
+      "created": 1758125401,
+      "id": "chatcmpl-f4fecc90-0bbb-4d74-a75e-54e594178a47",
       "model": "llama-3.1-8b-instant",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_c54ae48ece",
+      "system_fingerprint": "fp_8a13dfab2b",
       "usage": {
-        "completion_time": 0.028732649,
-        "completion_tokens": 16,
-        "prompt_time": 0.020206153,
+        "completion_time": 0.028031413,
+        "completion_tokens": 13,
+        "prompt_time": 0.018588975,
         "prompt_tokens": 310,
-        "queue_time": 0.187813795,
-        "total_time": 0.048938802,
-        "total_tokens": 326
+        "queue_time": 0.187725928,
+        "total_time": 0.046620388,
+        "total_tokens": 323
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k59d9089er9rx9deggdew14m"
+        "id": "req_01k5c718rgfwcac9t06g5chwyp"
       }
     },
     "headers": {
@@ -75,7 +66,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9800e53b1cea2326-ORD"
+        "9809df0b28211105-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -84,13 +75,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 16 Sep 2025 14:01:22 GMT"
+        "Wed, 17 Sep 2025 16:10:01 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=gRTR8SmygMpgJbQuwKnjCoQ7W71pnSimX61d5wBwkPE-1758031282-1.0.1.1-GwJlSZBrev1_y5hf9cRUHMgNtBmN1w19XyKxQauEXg_ibKOkYg2ZXn8HiVCplqE7X.T42j3HASMVA.QAkE50FjUJ1k3iVCv.3gmbeb9fcPA; path=/; expires=Tue, 16-Sep-25 14:31:22 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=1in1hgtcRs_IeX8oK0pI6nP_rTTCFFbyTMr2cF3UZHk-1758125401-1.0.1.1-dfHzs.pwfGp493fX1ECjUxpKOMsc2u.n779kKCQL6cNccFchaSNOlBPUwf3El9hWjsZ5zNsYlB1.fju93muM.Du80gikax4y7vImNfbyzE8; path=/; expires=Wed, 17-Sep-25 16:40:01 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -111,21 +102,21 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "14397"
+        "14391"
       ],
       "x-ratelimit-remaining-tokens": [
-        "5524"
+        "5605"
       ],
       "x-ratelimit-reset-requests": [
-        "17.707999999s"
+        "53.661999999s"
       ],
       "x-ratelimit-reset-tokens": [
-        "4.76s"
+        "3.948999999s"
       ],
       "x-request-id": [
-        "req_01k59d9089er9rx9deggdew14m"
+        "req_01k5c718rgfwcac9t06g5chwyp"
       ]
     }
   },
-  "captured_at": "2025-09-16T14:01:22.615930Z"
+  "captured_at": "2025-09-17T16:10:01.124574Z"
 }

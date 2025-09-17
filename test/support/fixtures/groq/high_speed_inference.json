@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtZXNzYWdlcyI6W3siY29udGVudCI6IldoYXQgaXMgMisyPyIsInJvbGUiOiJ1c2VyIn1dLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJtb2RlbCI6ImxsYW1hLTMuMS04Yi1pbnN0YW50IiwibWF4X3Rva2VucyI6MTB9"
+      "b64": "eyJtZXNzYWdlcyI6W3sicm9sZSI6InVzZXIiLCJjb250ZW50IjpbeyJ0eXBlIjoidGV4dCIsInRleHQiOiJXaGF0IGlzIDIrMj8ifV19XSwic3RyZWFtIjpmYWxzZSwibW9kZWwiOiJsbGFtYS0zLjEtOGItaW5zdGFudCIsIm1heF90b2tlbnMiOjEwLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "url": "https://api.groq.com/openai/v1/chat/completions",
     "headers": {
@@ -19,7 +19,7 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"max_tokens\":10,\"messages\":[{\"content\":\"What is 2+2?\",\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"stream\":false,\"temperature\":0.0}"
+    "canonical_json": "{\"max_tokens\":10,\"messages\":[{\"content\":[{\"text\":\"What is 2+2?\",\"type\":\"text\"}],\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"stream\":false,\"temperature\":0.0}"
   },
   "response": {
     "status": 200,
@@ -30,29 +30,29 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "2 + 2 = 4.",
+            "content": "2 + 2 = 4",
             "role": "assistant"
           }
         }
       ],
-      "created": 1758069083,
-      "id": "chatcmpl-a1aa36d2-7bf8-4d4f-b5cf-6b682dffde4b",
+      "created": 1758125399,
+      "id": "chatcmpl-2e3f8c06-801a-4706-8b40-bc6f2594d400",
       "model": "llama-3.1-8b-instant",
       "object": "chat.completion",
       "service_tier": "on_demand",
       "system_fingerprint": "fp_8a13dfab2b",
       "usage": {
-        "completion_time": 0.006198953,
-        "completion_tokens": 9,
-        "prompt_time": 0.002877586,
+        "completion_time": 0.006538481,
+        "completion_tokens": 8,
+        "prompt_time": 0.002037137,
         "prompt_tokens": 42,
-        "queue_time": 0.187106633,
-        "total_time": 0.009076539,
-        "total_tokens": 51
+        "queue_time": 0.187482782,
+        "total_time": 0.008575618,
+        "total_tokens": 50
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k5ahajwbeqdv50axjkjqfe0f"
+        "id": "req_01k5c717mcejhs5npmj1x9z668"
       }
     },
     "headers": {
@@ -66,7 +66,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98048018bec5232e-ORD"
+        "9809df03e93a1105-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -75,13 +75,13 @@
         "application/json"
       ],
       "date": [
-        "Wed, 17 Sep 2025 00:31:23 GMT"
+        "Wed, 17 Sep 2025 16:09:59 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=iktF14ET0XZNlHsE4ea1xQ84eB37TZzvhecrJ5qliS4-1758069083-1.0.1.1-dReXsiELwt1iBLwyDDm61IfrnutD5X3Ksqy1rTAQlX3BlFaaFwL5jIOGpG_p3zEfPTKxYokjCGw4X7XcTOdltSD3xHL_.PWEsLqUIloqYyg; path=/; expires=Wed, 17-Sep-25 01:01:23 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=Xpe2rmEFuMsQCUoQTkqxD6zJ90hHRUcqtZ0BTASokZw-1758125399-1.0.1.1-dML_qGw4MNsuzKutrPQm3QapbQdZ.XqAXmg8eFbwZBFnvq4RsC6T2kEpeJgzgDqdGoPO5mYdrlcu2ayMYM3DgQQjILXQXT4AWnf2y6P.3So; path=/; expires=Wed, 17-Sep-25 16:39:59 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -102,21 +102,21 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "14383"
+        "14395"
       ],
       "x-ratelimit-remaining-tokens": [
-        "5922"
+        "5869"
       ],
       "x-ratelimit-reset-requests": [
-        "1m41.436s"
+        "29.724999999s"
       ],
       "x-ratelimit-reset-tokens": [
-        "771ms"
+        "1.306999999s"
       ],
       "x-request-id": [
-        "req_01k5ahajwbeqdv50axjkjqfe0f"
+        "req_01k5c717mcejhs5npmj1x9z668"
       ]
     }
   },
-  "captured_at": "2025-09-17T00:31:23.172167Z"
+  "captured_at": "2025-09-17T16:09:59.919775Z"
 }

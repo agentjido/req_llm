@@ -1,0 +1,131 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtZXNzYWdlcyI6W3sicm9sZSI6InVzZXIiLCJjb250ZW50IjpbeyJ0eXBlIjoidGV4dCIsInRleHQiOiJHZW5lcmF0ZSBhIGNvbXBsZXRlIHByb2ZpbGUgZm9yIGEgdGVjaCBzdGFydHVwIGNvbXBhbnkgaW5jbHVkaW5nIG5hbWUsIGZvdW5kaW5nIHllYXIsIGxvY2F0aW9uLCBhbmQgb3RoZXIgZGV0YWlscyJ9XX1dLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZW5lcmF0ZSBzdHJ1Y3R1cmVkIG91dHB1dCBtYXRjaGluZyB0aGUgcHJvdmlkZWQgc2NoZW1hIiwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImNvbXBhbnlfbmFtZSI6eyJkZXNjcmlwdGlvbiI6Ik5hbWUgb2YgdGhlIGNvbXBhbnkiLCJ0eXBlIjoic3RyaW5nIn0sImVtcGxveWVlX2NvdW50Ijp7ImRlc2NyaXB0aW9uIjoiQXBwcm94aW1hdGUgbnVtYmVyIG9mIGVtcGxveWVlcyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sImZvdW5kZWRfeWVhciI6eyJkZXNjcmlwdGlvbiI6IlllYXIgY29tcGFueSB3YXMgZm91bmRlZCIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sImhlYWRxdWFydGVyc19jaXR5Ijp7ImRlc2NyaXB0aW9uIjoiQ2l0eSB3aGVyZSBIUSBpcyBsb2NhdGVkIiwidHlwZSI6InN0cmluZyJ9LCJoZWFkcXVhcnRlcnNfY291bnRyeSI6eyJkZXNjcmlwdGlvbiI6IkNvdW50cnkgd2hlcmUgSFEgaXMgbG9jYXRlZCIsInR5cGUiOiJzdHJpbmcifSwiaW5kdXN0cnkiOnsiZGVzY3JpcHRpb24iOiJQcmltYXJ5IGluZHVzdHJ5IG9yIHNlY3RvciIsInR5cGUiOiJzdHJpbmcifSwia2V5X3Byb2R1Y3RzIjp7ImRlc2NyaXB0aW9uIjoiTWFpbiBwcm9kdWN0cyBvciBzZXJ2aWNlcyIsIml0ZW1zIjp7InR5cGUiOiJzdHJpbmcifSwidHlwZSI6ImFycmF5In19LCJyZXF1aXJlZCI6WyJjb21wYW55X25hbWUiLCJmb3VuZGVkX3llYXIiLCJoZWFkcXVhcnRlcnNfY2l0eSIsImhlYWRxdWFydGVyc19jb3VudHJ5Il0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XSwibW9kZWwiOiJsbGFtYS0zLjEtOGItaW5zdGFudCIsInRvb2xfY2hvaWNlIjp7ImZ1bmN0aW9uIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCJ9LCJ0eXBlIjoiZnVuY3Rpb24ifSwibWF4X3Rva2VucyI6MjAwLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": [
+        "[REDACTED:authorization]"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "canonical_json": "{\"max_tokens\":200,\"messages\":[{\"content\":[{\"text\":\"Generate a complete profile for a tech startup company including name, founding year, location, and other details\",\"type\":\"text\"}],\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"stream\":false,\"temperature\":0.0,\"tool_choice\":{\"function\":{\"name\":\"structured_output\"},\"type\":\"function\"},\"tools\":[{\"function\":{\"description\":\"Generate structured output matching the provided schema\",\"name\":\"structured_output\",\"parameters\":{\"properties\":{\"company_name\":{\"description\":\"Name of the company\",\"type\":\"string\"},\"employee_count\":{\"description\":\"Approximate number of employees\",\"minimum\":1,\"type\":\"integer\"},\"founded_year\":{\"description\":\"Year company was founded\",\"minimum\":1,\"type\":\"integer\"},\"headquarters_city\":{\"description\":\"City where HQ is located\",\"type\":\"string\"},\"headquarters_country\":{\"description\":\"Country where HQ is located\",\"type\":\"string\"},\"industry\":{\"description\":\"Primary industry or sector\",\"type\":\"string\"},\"key_products\":{\"description\":\"Main products or services\",\"items\":{\"type\":\"string\"},\"type\":\"array\"}},\"required\":[\"company_name\",\"founded_year\",\"headquarters_city\",\"headquarters_country\"],\"type\":\"object\"}},\"type\":\"function\"}]}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"company_name\":\"Apexion Systems\",\"employee_count\":200,\"founded_year\":2015,\"headquarters_city\":\"San Francisco\",\"headquarters_country\":\"USA\",\"industry\":\"Artificial Intelligence and Cybersecurity\",\"key_products\":[\"AI-powered security software\",\"Cyber threat simulation platform\"]}",
+                  "name": "structured_output"
+                },
+                "id": "fcxpd6116",
+                "type": "function"
+              }
+            ]
+          }
+        }
+      ],
+      "created": 1758125403,
+      "id": "chatcmpl-e1baedac-6422-4558-bedf-4f6d39f5def9",
+      "model": "llama-3.1-8b-instant",
+      "object": "chat.completion",
+      "service_tier": "on_demand",
+      "system_fingerprint": "fp_8804b970d6",
+      "usage": {
+        "completion_time": 0.097843655,
+        "completion_tokens": 74,
+        "prompt_time": 0.022691874,
+        "prompt_tokens": 377,
+        "queue_time": 0.18743964,
+        "total_time": 0.120535529,
+        "total_tokens": 451
+      },
+      "usage_breakdown": null,
+      "x_groq": {
+        "id": "req_01k5c71befev6tv2gw8hq2xwx5"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cache-control": [
+        "private, max-age=0, no-store, no-cache, must-revalidate"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9809df1c49471105-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 17 Sep 2025 16:10:03 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=VDPBcpAs1y31q.tf0gq1mwfCAJF1UumDuMJMl.rjtrM-1758125403-1.0.1.1-XjI6sGfdAIDxIVr.QT6Obh85UWdsMx9bXHJiGA_CMaJ.SYvUZcEHkwJOv2aOLK8tCF7PEucLalgPgknzONNOUW_UZfzA0R6vACwyXQ2iITE; path=/; expires=Wed, 17-Sep-25 16:40:03 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-groq-region": [
+        "msp"
+      ],
+      "x-ratelimit-limit-requests": [
+        "14400"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "6000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "14385"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "4065"
+      ],
+      "x-ratelimit-reset-requests": [
+        "1m29.655999999s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "19.345s"
+      ],
+      "x-request-id": [
+        "req_01k5c71befev6tv2gw8hq2xwx5"
+      ]
+    }
+  },
+  "captured_at": "2025-09-17T16:10:03.963867Z"
+}
