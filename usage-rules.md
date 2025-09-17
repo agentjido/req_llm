@@ -21,12 +21,12 @@ Key concepts:
 
 ```elixir
 # Simple - good for basic usage
-{:ok, response} = ReqLLM.generate_text("anthropic:claude-3-sonnet", "Hello")
+{:ok, response} = ReqLLM.generate_text("anthropic:claude-3-haiku-20240307", "Hello")
 
 # Advanced - good for complex configurations  
 model = %ReqLLM.Model{
   provider: :anthropic,
-  model: "claude-3-sonnet",
+  model: "claude-3-haiku-20240307",
   temperature: 0.7,
   max_tokens: 1000
 }
@@ -41,10 +41,10 @@ model = %ReqLLM.Model{
 
 ```elixir
 # Development/simple cases
-ReqLLM.generate_text!("anthropic:claude-3-sonnet", "Hello")
+ReqLLM.generate_text!("anthropic:claude-3-haiku-20240307", "Hello")
 
 # Production - need access to metadata, errors, usage data
-{:ok, response} = ReqLLM.generate_text("anthropic:claude-3-sonnet", "Hello")
+{:ok, response} = ReqLLM.generate_text("anthropic:claude-3-haiku-20240307", "Hello")
 response.text()   #=> "Hello! How can I help?"
 response.usage()  #=> %{input_tokens: 10, output_tokens: 8}
 ```
@@ -63,7 +63,7 @@ context = Context.new([
   user("What's 2+2?")
 ])
 
-{:ok, response} = ReqLLM.generate_text("anthropic:claude-3-sonnet", context)
+{:ok, response} = ReqLLM.generate_text("anthropic:claude-3-haiku-20240307", context)
 ```
 
 **Avoid**: Manually constructing Message structs when helpers exist.
@@ -80,7 +80,7 @@ message = ReqLLM.Context.user([
   image_url("https://example.com/chart.png")
 ])
 
-{:ok, response} = ReqLLM.generate_text("anthropic:claude-3-sonnet", [message])
+{:ok, response} = ReqLLM.generate_text("anthropic:claude-3-haiku-20240307", [message])
 ```
 
 ### Streaming
@@ -88,7 +88,7 @@ message = ReqLLM.Context.user([
 **Best Practice**: Filter StreamChunks by type for clean processing.
 
 ```elixir
-{:ok, stream} = ReqLLM.stream_text("anthropic:claude-3-sonnet", "Tell a story")
+{:ok, stream} = ReqLLM.stream_text("anthropic:claude-3-haiku-20240307", "Tell a story")
 
 # Collect only text content
 text = stream
@@ -113,7 +113,7 @@ end)
 **Best Practice**: Pattern match on specific error types for appropriate handling.
 
 ```elixir
-case ReqLLM.generate_text("anthropic:claude-3-sonnet", "Hello") do
+case ReqLLM.generate_text("anthropic:claude-3-haiku-20240307", "Hello") do
   {:ok, response} -> 
     handle_success(response)
     
@@ -153,7 +153,7 @@ ReqLLM.put_key("anthropic_api_key", System.get_env("ANTHROPIC_API_KEY"))
 ReqLLM.put_key("openai_api_key", System.get_env("OPENAI_API_KEY"))
 
 # Providers automatically retrieve keys via JidoKeys
-{:ok, response} = ReqLLM.generate_text("anthropic:claude-3-sonnet", "Hello")
+{:ok, response} = ReqLLM.generate_text("anthropic:claude-3-haiku-20240307", "Hello")
 ```
 
 ## Tool Calling
@@ -260,7 +260,7 @@ end
 **Best Practice**: Process streams incrementally for large responses.
 
 ```elixir
-{:ok, stream} = ReqLLM.stream_text("anthropic:claude-3-sonnet", "Write a long story")
+{:ok, stream} = ReqLLM.stream_text("anthropic:claude-3-haiku-20240307", "Write a long story")
 
 stream
 |> Stream.filter(&(&1.type == :text))

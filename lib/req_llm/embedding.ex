@@ -73,7 +73,7 @@ defmodule ReqLLM.Embedding do
       ReqLLM.Embedding.validate_model("openai:text-embedding-3-small")
       #=> {:ok, %ReqLLM.Model{provider: :openai, model: "text-embedding-3-small"}}
 
-      ReqLLM.Embedding.validate_model("anthropic:claude-3-sonnet")
+      ReqLLM.Embedding.validate_model("anthropic:claude-3-haiku-20240307")
       #=> {:error, :embedding_not_supported}
 
   """

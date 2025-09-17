@@ -132,7 +132,7 @@ defmodule ReqLLM.Generation do
 
   ## Examples
 
-      {:ok, response} = ReqLLM.Generation.generate_text("anthropic:claude-3-sonnet", "Hello world")
+      {:ok, response} = ReqLLM.Generation.generate_text("anthropic:claude-3-haiku-20240307", "Hello world")
       ReqLLM.Response.text(response)
       #=> "Hello! How can I assist you today?"
 
@@ -179,7 +179,7 @@ defmodule ReqLLM.Generation do
 
   ## Examples
 
-      ReqLLM.Generation.generate_text!("anthropic:claude-3-sonnet", "Hello world")
+      ReqLLM.Generation.generate_text!("anthropic:claude-3-haiku-20240307", "Hello world")
       #=> "Hello! How can I assist you today?"
 
   """
@@ -207,7 +207,7 @@ defmodule ReqLLM.Generation do
 
   ## Examples
 
-      {:ok, response} = ReqLLM.Generation.stream_text("anthropic:claude-3-sonnet", "Tell me a story")
+      {:ok, response} = ReqLLM.Generation.stream_text("anthropic:claude-3-haiku-20240307", "Tell me a story")
       ReqLLM.Response.text_stream(response) |> Enum.each(&IO.write/1)
 
       # Access usage metadata after streaming
@@ -254,7 +254,7 @@ defmodule ReqLLM.Generation do
 
   ## Examples
 
-      ReqLLM.Generation.stream_text!("anthropic:claude-3-sonnet", "Tell me a story")
+      ReqLLM.Generation.stream_text!("anthropic:claude-3-haiku-20240307", "Tell me a story")
       |> Enum.each(&IO.write/1)
 
   """
@@ -383,7 +383,7 @@ defmodule ReqLLM.Generation do
 
   ## Examples
 
-      {:ok, response} = ReqLLM.Generation.generate_object("anthropic:claude-3-sonnet", "Generate a person", person_schema)
+      {:ok, response} = ReqLLM.Generation.generate_object("anthropic:claude-3-haiku-20240307", "Generate a person", person_schema)
       ReqLLM.Response.object(response)
       #=> %{name: "Alice Smith", age: 30, occupation: "Engineer"}
 
@@ -444,7 +444,7 @@ defmodule ReqLLM.Generation do
 
   ## Examples
 
-      {:ok, response} = ReqLLM.Generation.stream_object("anthropic:claude-3-sonnet", "Generate a person", person_schema)
+      {:ok, response} = ReqLLM.Generation.stream_object("anthropic:claude-3-haiku-20240307", "Generate a person", person_schema)
       ReqLLM.Response.object_stream(response) |> Enum.each(&IO.inspect/1)
 
       # Access usage metadata after streaming
@@ -493,7 +493,7 @@ defmodule ReqLLM.Generation do
 
   ## Examples
 
-      ReqLLM.Generation.generate_object!("anthropic:claude-3-sonnet", "Generate a person", person_schema)
+      ReqLLM.Generation.generate_object!("anthropic:claude-3-haiku-20240307", "Generate a person", person_schema)
       #=> %{name: "Alice Smith", age: 30, occupation: "Engineer"}
 
   """
@@ -523,7 +523,7 @@ defmodule ReqLLM.Generation do
 
   ## Examples
 
-      ReqLLM.Generation.stream_object!("anthropic:claude-3-sonnet", "Generate a person", person_schema)
+      ReqLLM.Generation.stream_object!("anthropic:claude-3-haiku-20240307", "Generate a person", person_schema)
       |> Enum.each(&IO.inspect/1)
 
   """

@@ -17,7 +17,7 @@ defmodule ReqLLM.Keys do
       ReqLLM.put_key(:anthropic_api_key, "sk-ant-...")
       
       # Works with models (extracts provider automatically)
-      model = ReqLLM.Model.from("anthropic:claude-3-sonnet")
+      model = ReqLLM.Model.from("anthropic:claude-3-haiku-20240307")
       key = ReqLLM.Keys.get!(model)
 
       # Per-request override (highest priority)

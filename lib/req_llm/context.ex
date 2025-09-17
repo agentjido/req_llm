@@ -146,7 +146,7 @@ defmodule ReqLLM.Context do
   ## Parameters
 
     * `context` - A `ReqLLM.Context` to encode
-    * `model` - Model specification (Model struct or string like "anthropic:claude-3-sonnet")
+    * `model` - Model specification (Model struct or string like "anthropic:claude-3-haiku-20240307")
 
   ## Returns
 
@@ -156,7 +156,7 @@ defmodule ReqLLM.Context do
   ## Examples
 
       # Zero-ceremony encoding with model string
-      Context.encode_request(context, "anthropic:claude-3-sonnet")
+      Context.encode_request(context, "anthropic:claude-3-haiku-20240307")
       #=> %{system: "...", messages: [...], max_tokens: 4096}
 
       # Encoding with Model struct

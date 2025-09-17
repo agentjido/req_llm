@@ -58,7 +58,7 @@ ReqLLM.put_key(:anthropic_api_key, "sk-ant-...")
 # Application: Application.put_env(:req_llm, :anthropic_api_key, "sk-ant-...")
 # .env files are auto-loaded via JidoKeys integration
 
-model = "anthropic:claude-3-sonnet"
+model = "anthropic:claude-3-haiku-20240307"
 
 # Simple text generation
 ReqLLM.generate_text!(model, "Hello world")
@@ -190,7 +190,7 @@ context = ReqLLM.Context.new([
   ReqLLM.Context.system("You are a helpful assistant"),  
   ReqLLM.Context.user("Hello!")
 ])
-model = ReqLLM.Model.from!("anthropic:claude-3-sonnet")
+model = ReqLLM.Model.from!("anthropic:claude-3-haiku-20240307")
 
 # Option 1: Use provider's prepare_request (recommended)
 {:ok, request} = Anthropic.prepare_request(:chat, model, context, temperature: 0.7)
