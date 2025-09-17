@@ -18,7 +18,7 @@ defmodule ReqLLM.Model do
       {:ok, model} = ReqLLM.Model.from("anthropic:claude-3-5-sonnet")
 
       # Create a model directly
-      model = ReqLLM.Model.new(:anthropic, "claude-3-sonnet", temperature: 0.5, max_tokens: 1000)
+      model = ReqLLM.Model.new(:anthropic, "claude-3-haiku-20240307", temperature: 0.5, max_tokens: 1000)
 
   """
 
@@ -57,7 +57,7 @@ defmodule ReqLLM.Model do
   ## Parameters
 
   - `provider` - The provider atom (e.g., `:anthropic`)
-  - `model` - The model name string (e.g., `"gpt-4"`, `"claude-3-sonnet"`)
+  - `model` - The model name string (e.g., `"gpt-4"`, `"claude-3-haiku-20240307"`)
   - `opts` - Optional keyword list of parameters
 
   ## Options
@@ -74,8 +74,8 @@ defmodule ReqLLM.Model do
       iex> ReqLLM.Model.new(:anthropic, "claude-3-5-sonnet")
       %ReqLLM.Model{provider: :anthropic, model: "claude-3-5-sonnet", max_tokens: nil, max_retries: 3}
 
-      iex> ReqLLM.Model.new(:anthropic, "claude-3-sonnet", max_tokens: 1000)
-      %ReqLLM.Model{provider: :anthropic, model: "claude-3-sonnet", max_tokens: 1000, max_retries: 3}
+      iex> ReqLLM.Model.new(:anthropic, "claude-3-haiku-20240307", max_tokens: 1000)
+      %ReqLLM.Model{provider: :anthropic, model: "claude-3-haiku-20240307", max_tokens: 1000, max_retries: 3}
 
   """
   @spec new(atom(), String.t(), keyword()) :: t()
@@ -117,7 +117,7 @@ defmodule ReqLLM.Model do
                                        capabilities: %{tool_call: true}})
 
       # From string specification
-      {:ok, model} = ReqLLM.Model.from("anthropic:claude-3-sonnet")
+      {:ok, model} = ReqLLM.Model.from("anthropic:claude-3-haiku-20240307")
 
   """
   @spec from(t() | {atom(), String.t(), keyword()} | {atom(), keyword()} | String.t()) ::
@@ -272,7 +272,7 @@ defmodule ReqLLM.Model do
 
   ## Examples
 
-      {:ok, model_with_metadata} = ReqLLM.Model.with_metadata("anthropic:claude-3-sonnet")
+      {:ok, model_with_metadata} = ReqLLM.Model.with_metadata("anthropic:claude-3-haiku-20240307")
       model_with_metadata.cost
       #=> %{"input" => 3.0, "output" => 15.0, ...}
 

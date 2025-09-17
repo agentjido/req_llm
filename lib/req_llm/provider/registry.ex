@@ -24,17 +24,17 @@ defmodule ReqLLM.Provider.Registry do
       module #=> ReqLLM.Providers.Anthropic
 
       # Get model information  
-      {:ok, model} = ReqLLM.Provider.Registry.get_model(:anthropic, "claude-3-sonnet")
+      {:ok, model} = ReqLLM.Provider.Registry.get_model(:anthropic, "claude-3-haiku-20240307")
       model.metadata.context_length #=> 200000
 
       # Check if a model exists
-      ReqLLM.Provider.Registry.model_exists?("anthropic:claude-3-sonnet") #=> true
+      ReqLLM.Provider.Registry.model_exists?("anthropic:claude-3-haiku-20240307") #=> true
 
       # List all providers
       ReqLLM.Provider.Registry.list_providers() #=> [:anthropic, :openai, :github_models]
 
       # List models for a provider
-      ReqLLM.Provider.Registry.list_models(:anthropic) #=> ["claude-3-sonnet", "claude-3-haiku", ...]
+      ReqLLM.Provider.Registry.list_models(:anthropic) #=> ["claude-3-haiku-20240307", "claude-3-haiku", ...]
 
   ## Integration
 
@@ -155,7 +155,7 @@ defmodule ReqLLM.Provider.Registry do
 
   ## Examples
 
-      {:ok, model} = ReqLLM.Provider.Registry.get_model(:anthropic, "claude-3-sonnet")
+      {:ok, model} = ReqLLM.Provider.Registry.get_model(:anthropic, "claude-3-haiku-20240307")
       model.metadata.context_length #=> 200000
       model.metadata.pricing.input  #=> 0.003
 
@@ -209,11 +209,11 @@ defmodule ReqLLM.Provider.Registry do
 
   ## Parameters
 
-    * `model_spec` - Model specification string (e.g., "anthropic:claude-3-sonnet")
+    * `model_spec` - Model specification string (e.g., "anthropic:claude-3-haiku-20240307")
 
   ## Examples
 
-      model = ReqLLM.Provider.Registry.get_model!("anthropic:claude-3-sonnet")
+      model = ReqLLM.Provider.Registry.get_model!("anthropic:claude-3-haiku-20240307")
       model.metadata.context_length #=> 200000
 
       ReqLLM.Provider.Registry.get_model!("unknown:model")
@@ -379,7 +379,7 @@ defmodule ReqLLM.Provider.Registry do
   ## Examples
 
       {:ok, models} = ReqLLM.Provider.Registry.list_models(:anthropic)
-      models #=> ["claude-3-sonnet", "claude-3-haiku", "claude-3-opus"]
+      models #=> ["claude-3-haiku-20240307", "claude-3-haiku", "claude-3-opus"]
 
       ReqLLM.Provider.Registry.list_models(:unknown)
       #=> {:error, :not_found}
@@ -414,7 +414,7 @@ defmodule ReqLLM.Provider.Registry do
 
   ## Parameters
 
-    * `model_spec` - Model specification string (e.g., "anthropic:claude-3-sonnet")
+    * `model_spec` - Model specification string (e.g., "anthropic:claude-3-haiku-20240307")
 
   ## Returns
 
@@ -422,7 +422,7 @@ defmodule ReqLLM.Provider.Registry do
 
   ## Examples
 
-      ReqLLM.Provider.Registry.model_exists?("anthropic:claude-3-sonnet") #=> true
+      ReqLLM.Provider.Registry.model_exists?("anthropic:claude-3-haiku-20240307") #=> true
       ReqLLM.Provider.Registry.model_exists?("unknown:model") #=> false
 
   """

@@ -168,17 +168,17 @@ defmodule ReqLLM do
   ## Parameters
 
     * `model_spec` - Model specification in various formats:
-      - String format: `"anthropic:claude-3-sonnet"`
-      - Tuple format: `{:anthropic, "claude-3-sonnet", temperature: 0.7}`
+      - String format: `"anthropic:claude-3-haiku-20240307"`
+      - Tuple format: `{:anthropic, "claude-3-haiku-20240307", temperature: 0.7}`
       - Model struct: `%ReqLLM.Model{}`
 
   ## Examples
 
-      ReqLLM.model("anthropic:claude-3-sonnet")
-      #=> {:ok, %ReqLLM.Model{provider: :anthropic, model: "claude-3-sonnet"}}
+      ReqLLM.model("anthropic:claude-3-haiku-20240307")
+      #=> {:ok, %ReqLLM.Model{provider: :anthropic, model: "claude-3-haiku-20240307"}}
 
-      ReqLLM.model({:anthropic, "claude-3-sonnet", temperature: 0.5})
-      #=> {:ok, %ReqLLM.Model{provider: :anthropic, model: "claude-3-sonnet", temperature: 0.5}}
+      ReqLLM.model({:anthropic, "claude-3-haiku-20240307", temperature: 0.5})
+      #=> {:ok, %ReqLLM.Model{provider: :anthropic, model: "claude-3-haiku-20240307", temperature: 0.5}}
 
   """
   @spec model(String.t() | {atom(), keyword()} | struct()) :: {:ok, struct()} | {:error, term()}
@@ -216,7 +216,7 @@ defmodule ReqLLM do
 
   ## Examples
 
-      {:ok, response} = ReqLLM.generate_text("anthropic:claude-3-sonnet", "Hello world")
+      {:ok, response} = ReqLLM.generate_text("anthropic:claude-3-haiku-20240307", "Hello world")
       ReqLLM.Response.text(response)
       #=> "Hello! How can I assist you today?"
 
@@ -240,7 +240,7 @@ defmodule ReqLLM do
 
   ## Examples
 
-      ReqLLM.generate_text!("anthropic:claude-3-sonnet", "Hello world")
+      ReqLLM.generate_text!("anthropic:claude-3-haiku-20240307", "Hello world")
       #=> "Hello! How can I assist you today?"
 
   """
@@ -258,7 +258,7 @@ defmodule ReqLLM do
 
   ## Examples
 
-      {:ok, response} = ReqLLM.stream_text("anthropic:claude-3-sonnet", "Tell me a story")
+      {:ok, response} = ReqLLM.stream_text("anthropic:claude-3-haiku-20240307", "Tell me a story")
       ReqLLM.Response.text_stream(response) |> Enum.each(&IO.write/1)
 
       # Access usage metadata after streaming
@@ -281,7 +281,7 @@ defmodule ReqLLM do
 
   ## Examples
 
-      ReqLLM.stream_text!("anthropic:claude-3-sonnet", "Tell me a story")
+      ReqLLM.stream_text!("anthropic:claude-3-haiku-20240307", "Tell me a story")
       |> Enum.each(&IO.write/1)
 
   """
@@ -319,12 +319,12 @@ defmodule ReqLLM do
         name: [type: :string, required: true],
         age: [type: :pos_integer, required: true]
       ]
-      {:ok, object} = ReqLLM.generate_object("anthropic:claude-3-sonnet", "Generate a person", schema)
+      {:ok, object} = ReqLLM.generate_object("anthropic:claude-3-haiku-20240307", "Generate a person", schema)
       #=> {:ok, %{name: "John Doe", age: 30}}
 
       # Generate an array of objects
       {:ok, objects} = ReqLLM.generate_object(
-        "anthropic:claude-3-sonnet",
+        "anthropic:claude-3-haiku-20240307",
         "Generate 3 heroes",
         schema,
         output: :array
@@ -345,7 +345,7 @@ defmodule ReqLLM do
 
   ## Examples
 
-      ReqLLM.generate_object!("anthropic:claude-3-sonnet", "Generate a person", schema)
+      ReqLLM.generate_object!("anthropic:claude-3-haiku-20240307", "Generate a person", schema)
       #=> %{name: "John Doe", age: 30}
 
   """
@@ -375,7 +375,7 @@ defmodule ReqLLM do
         name: [type: :string, required: true],
         description: [type: :string, required: true]
       ]
-      {:ok, stream} = ReqLLM.stream_object("anthropic:claude-3-sonnet", "Generate a character", schema)
+      {:ok, stream} = ReqLLM.stream_object("anthropic:claude-3-haiku-20240307", "Generate a character", schema)
       stream |> Enum.each(&IO.inspect/1)
 
   """
@@ -394,7 +394,7 @@ defmodule ReqLLM do
 
   ## Examples
 
-      ReqLLM.stream_object!("anthropic:claude-3-sonnet", "Generate a character", schema)
+      ReqLLM.stream_object!("anthropic:claude-3-haiku-20240307", "Generate a character", schema)
       |> Enum.each(&IO.inspect/1)
 
   """

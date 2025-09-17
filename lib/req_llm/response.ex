@@ -12,12 +12,12 @@ defmodule ReqLLM.Response do
   ## Examples
 
       # Basic response usage
-      {:ok, response} = ReqLLM.generate_text("anthropic:claude-3-sonnet", context)
+      {:ok, response} = ReqLLM.generate_text("anthropic:claude-3-haiku-20240307", context)
       response.text()  #=> "Hello! I'm Claude."
       response.usage()  #=> %{input_tokens: 12, output_tokens: 4}
 
       # Multi-turn conversation (no manual context building)
-      {:ok, response2} = ReqLLM.generate_text("anthropic:claude-3-sonnet", response.context)
+      {:ok, response2} = ReqLLM.generate_text("anthropic:claude-3-haiku-20240307", response.context)
 
       # Tool calling loop
       {:ok, final_response} = ReqLLM.Response.handle_tools(response, tools)
@@ -241,7 +241,7 @@ defmodule ReqLLM.Response do
   ## Parameters
 
     * `raw_data` - Raw provider response data or Stream
-    * `model` - Model specification (Model struct or string like "anthropic:claude-3-sonnet")
+    * `model` - Model specification (Model struct or string like "anthropic:claude-3-haiku-20240307")
 
   ## Returns
 
@@ -250,7 +250,7 @@ defmodule ReqLLM.Response do
 
   ## Examples
 
-      {:ok, response} = ReqLLM.Response.decode_response(raw_json, "anthropic:claude-3-sonnet")
+      {:ok, response} = ReqLLM.Response.decode_response(raw_json, "anthropic:claude-3-haiku-20240307")
       {:ok, response} = ReqLLM.Response.decode_response(raw_json, model_struct)
 
   """

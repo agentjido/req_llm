@@ -40,7 +40,7 @@ defmodule ReqLLM.StreamChunk do
 
   StreamChunk is designed to work with Elixir's Stream module:
 
-      {:ok, stream} = ReqLLM.stream_text("anthropic:claude-3-sonnet", "Tell a story")
+      {:ok, stream} = ReqLLM.stream_text("anthropic:claude-3-haiku-20240307", "Tell a story")
       
       stream
       |> Stream.filter(&(&1.type == :content))
@@ -196,7 +196,7 @@ defmodule ReqLLM.StreamChunk do
       # Multiple metadata fields
       chunk = ReqLLM.StreamChunk.meta(%{
         finish_reason: "tool_use",
-        model: "claude-3-sonnet"
+        model: "claude-3-haiku-20240307"
       })
 
   """

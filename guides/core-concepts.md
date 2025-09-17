@@ -116,7 +116,7 @@ request = Req.new()
 |> Req.Request.append_request_steps(log_request: &log_request/1)
 |> Req.Request.append_response_steps(cache_response: &cache/1)
 
-{:ok, configured} = ReqLLM.attach(request, "anthropic:claude-3-sonnet")
+{:ok, configured} = ReqLLM.attach(request, "anthropic:claude-3-haiku-20240307")
 {:ok, response} = Req.request(configured)
 ```
 
@@ -150,10 +150,10 @@ Transport vs Format separation:
 
 ```elixir
 # API call
-ReqLLM.generate_text("anthropic:claude-3-sonnet", "Hello")
+ReqLLM.generate_text("anthropic:claude-3-haiku-20240307", "Hello")
 
 # Model resolution  
-{:ok, model} = ReqLLM.Model.from("anthropic:claude-3-sonnet")
+{:ok, model} = ReqLLM.Model.from("anthropic:claude-3-haiku-20240307")
 
 # Provider lookup
 {:ok, provider} = ReqLLM.provider(:anthropic)
@@ -171,7 +171,7 @@ ReqLLM.generate_text("anthropic:claude-3-sonnet", "Hello")
 ### Streaming Flow
 
 ```elixir
-{:ok, response} = ReqLLM.stream_text("anthropic:claude-3-sonnet", "Tell a story")
+{:ok, response} = ReqLLM.stream_text("anthropic:claude-3-haiku-20240307", "Tell a story")
 # Returns %ReqLLM.Response{stream?: true, stream: #Stream<...>}
 
 response.stream
