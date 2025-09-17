@@ -1,99 +1,131 @@
 defprotocol ReqLLM.Context.Codec do
   @moduledoc """
-  Protocol for encoding canonical ReqLLM structures to provider wire JSON and decoding provider responses back to canonical structures.
+  Protocol for encoding canonical ReqLLM.Context structures to provider-specific request JSON.
 
-  This protocol enables clean separation between data translation and transport concerns,
-  allowing each provider to implement its own format conversion logic while maintaining
-  a unified interface.
+  This protocol handles the request encoding phase, converting ReqLLM contexts and models
+  into the JSON format expected by each provider's API.
 
-  ## Usage
+  ## Default Implementation
 
-      # Encoding: Canonical structures → Provider JSON
-      context |> ReqLLM.Context.wrap(model) |> ReqLLM.Context.Codec.encode()
+  The `Map` implementation provides a baseline OpenAI-compatible request format that works
+  for most providers including OpenAI, Groq, OpenRouter, and xAI:
 
-      # Decoding: Provider JSON → StreamChunks
-      response_data |> provider_tagged_struct() |> ReqLLM.Context.Codec.decode()
+      ReqLLM.Context.Codec.encode_request(context, model)
+      #=> %{
+      #     model: "gpt-4",
+      #     messages: [%{role: "user", content: "Hello"}],
+      #     stream: true,
+      #     max_tokens: 1000,
+      #     temperature: 0.7,
+      #     tools: [%{type: "function", function: %{name: "...", ...}}]
+      #   }
 
-  ## Implementation
+  ## Provider-Specific Overrides
 
-  Each provider implements this protocol for their specific tagged wrapper struct:
+  Providers that require different formats can implement their own protocol:
 
-      defimpl ReqLLM.Context.Codec, for: MyProvider.Tagged do
-        def encode(%MyProvider.Tagged{context: ctx}) do
-          # Convert ReqLLM.Context to provider JSON format
-        end
-
-        def decode(%MyProvider.Tagged{context: data}) do
-          # Convert provider response to StreamChunks
+      defimpl ReqLLM.Context.Codec, for: MyProvider.Context do
+        def encode_request(context, model) do
+          # Custom encoding logic for provider-specific format
         end
       end
+
+  ## Tool Encoding
+
+  Tools are automatically converted to OpenAI function format using `ReqLLM.Schema.to_openai_format/1`,
+  which handles parameter schema conversion from keyword lists to JSON Schema.
+
   """
 
   @fallback_to_any true
 
   @doc """
-  Encode canonical ReqLLM structures to provider wire JSON format for requests.
-
-  Takes a provider-specific tagged wrapper struct containing a `ReqLLM.Context`
-  and converts it to the JSON format expected by that provider's API.
-
-  ## Parameters
-
-    * `tagged_context` - A provider-specific tagged struct wrapping a `ReqLLM.Context`
-
-  ## Returns
-
-    * Provider-specific JSON structure ready for API transmission
-    * `{:error, reason}` if encoding fails
-
-  ## Examples
-
-      # Anthropic encoding
-      context
-      |> ReqLLM.Providers.Anthropic.Tagged.new()
-      |> ReqLLM.Context.Codec.encode_request()
-      #=> %{system: "...", messages: [...], max_tokens: 4096}
-
+  Encode context and model to provider-specific request JSON.
   """
-  @spec encode_request(t) :: term()
-  def encode_request(tagged_context)
+  @spec encode_request(ReqLLM.Context.t(), ReqLLM.Model.t()) :: term()
+  def encode_request(context, model)
+end
 
-  @doc """
-  Decode provider wire JSON back to canonical structures from responses.
+defimpl ReqLLM.Context.Codec, for: Map do
+  def encode_request(context, model) do
+    %{
+      model: extract_model_name(model),
+      messages: encode_messages(context.messages)
+    }
+    |> add_tools(Map.get(context, :tools, []))
+    |> filter_nil_values()
+  end
 
-  Takes a provider-specific tagged wrapper struct containing response data
-  and converts it to a list of `ReqLLM.StreamChunk` structs or other canonical formats.
+  defp extract_model_name(%{model: model_name}), do: model_name
+  defp extract_model_name(model) when is_binary(model), do: model
+  defp extract_model_name(_), do: "unknown"
 
-  ## Parameters
+  defp encode_messages(messages) do
+    Enum.map(messages, &encode_message/1)
+  end
 
-    * `tagged_data` - A provider-specific tagged struct wrapping response JSON
+  defp encode_message(%ReqLLM.Message{role: role, content: content}) do
+    %{
+      role: to_string(role),
+      content: encode_content(content)
+    }
+  end
 
-  ## Returns
+  defp encode_content(content) when is_binary(content), do: content
 
-    * List of `ReqLLM.StreamChunk.t()` structs
-    * `{:error, reason}` if decoding fails
+  defp encode_content(content) when is_list(content) do
+    Enum.map(content, &encode_content_part/1)
+  end
 
-  ## Examples
+  defp encode_content_part(%ReqLLM.Message.ContentPart{type: :text, text: text}) do
+    %{type: "text", text: text}
+  end
 
-      # Anthropic decoding
-      response_data
-      |> ReqLLM.Providers.Anthropic.Tagged.new()
-      |> ReqLLM.Context.Codec.decode_response()
-      #=> [%ReqLLM.StreamChunk{type: :text, text: "Hello!"}]
+  defp encode_content_part(%ReqLLM.Message.ContentPart{
+         type: :tool_call,
+         tool_name: name,
+         input: input,
+         tool_call_id: id
+       }) do
+    %{
+      id: id,
+      type: "function",
+      function: %{
+        name: name,
+        arguments: Jason.encode!(input)
+      }
+    }
+  end
 
-  """
-  @spec decode_response(t) :: term()
-  def decode_response(tagged_data)
+  defp encode_content_part(_), do: nil
+
+  defp add_tools(request, []), do: request
+
+  defp add_tools(request, tools) when is_list(tools) do
+    Map.put(request, :tools, encode_tools(tools))
+  end
+
+  defp encode_tools(tools) do
+    Enum.map(tools, &encode_tool/1)
+  end
+
+  defp encode_tool(tool) do
+    ReqLLM.Schema.to_openai_format(tool)
+  end
+
+  defp filter_nil_values(map) do
+    map
+    |> Enum.reject(fn {_k, v} -> is_nil(v) end)
+    |> Map.new()
+  end
+end
+
+defimpl ReqLLM.Context.Codec, for: ReqLLM.Context do
+  def encode_request(context, model) do
+    ReqLLM.Context.Codec.Map.encode_request(context, model)
+  end
 end
 
 defimpl ReqLLM.Context.Codec, for: Any do
-  @doc """
-  Default implementation for unsupported provider combinations.
-
-  Returns an error indicating that no codec implementation exists for the given type.
-  This ensures graceful failure when attempting to use an unsupported provider
-  or when a provider hasn't implemented the codec protocol.
-  """
-  def encode_request(_), do: {:error, :not_implemented}
-  def decode_response(_), do: {:error, :not_implemented}
+  def encode_request(_, _), do: {:error, :not_implemented}
 end

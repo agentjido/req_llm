@@ -1,121 +1,243 @@
 defprotocol ReqLLM.Response.Codec do
   @moduledoc """
-  Protocol for decoding provider response data to canonical ReqLLM.Response.
+  Protocol for decoding provider responses and SSE events to canonical ReqLLM structures.
 
-  Handles both tagged wrapper structs and direct raw data decoding, eliminating
-  wrap_response friction for simpler APIs.
+  This protocol handles both non-streaming response decoding and streaming SSE event processing,
+  converting provider-specific formats to canonical ReqLLM structures.
 
-  ## Zero-Ceremony Direct Decoding
+  ## Default Implementation
 
-  The protocol now supports direct decoding without requiring provider-specific
-  wrapper structs, using model information to dispatch to the correct provider:
+  The `Map` implementation provides baseline OpenAI-compatible decoding for common providers
+  that use the ChatCompletions API format (OpenAI, Groq, OpenRouter, xAI):
 
-      # Direct decoding from raw response data
-      ReqLLM.Response.Codec.decode(raw_anthropic_json, model)
-      #=> {:ok, %ReqLLM.Response{}}
+      # Non-streaming response decoding
+      ReqLLM.Response.Codec.decode_response(response_json, model)
+      #=> {:ok, %ReqLLM.Response{message: %ReqLLM.Message{...}, usage: %{...}}}
 
-      # Still supports tagged wrapper approach for internal use
-      wrapped_response |> ReqLLM.Response.Codec.decode()
-      #=> {:ok, %ReqLLM.Response{}}
+      # Streaming SSE event decoding
+      ReqLLM.Response.Codec.decode_sse_event(sse_event, model) 
+      #=> [%ReqLLM.StreamChunk{type: :content, text: "Hello"}]
 
-  ## Implementation
+  ## Provider-Specific Overrides
 
-  Each provider implements this protocol for their specific tagged wrapper struct
-  AND raw data types by implementing decode/1 and decode/2:
+  Providers with unique response formats implement their own protocol:
 
       defimpl ReqLLM.Response.Codec, for: MyProvider.Response do
-        def decode(%MyProvider.Response{data: raw_data, model: model}) do
-          decode_raw_data(raw_data, model)
+        def decode_response(data, model) do
+          # Custom decoding logic for provider-specific format
         end
 
-        def decode(raw_data, model) when is_map(raw_data) do
-          decode_raw_data(raw_data, model)
+        def decode_sse_event(event, model) do
+          # Custom SSE event processing
         end
-
-        def encode(_), do: {:error, :not_implemented}
       end
+
+  ## Response Pipeline
+
+  1. **Raw provider response** → `decode_response/2` → **ReqLLM.Response struct**
+  2. **SSE event** → `decode_sse_event/2` → **List of StreamChunk structs**
 
   """
 
   @fallback_to_any true
 
   @doc """
-  Decode provider response to canonical ReqLLM.Response.
-
-  Accepts either tagged wrapper structs or raw response data with model.
-
-  ## Parameters
-
-    * `data_or_tagged` - Raw response data OR provider-tagged wrapper struct
-
-  ## Returns
-
-    * `{:ok, %ReqLLM.Response{}}` on successful decoding
-    * `{:error, reason}` if decoding fails
-
-  ## Examples
-
-      # Tagged wrapper decoding (internal use)
-      raw_data
-      |> ReqLLM.Providers.Anthropic.Response.new(model)
-      |> ReqLLM.Response.Codec.decode_response()
-
-  """
-  @spec decode_response(t()) :: {:ok, ReqLLM.Response.t()} | {:error, term()}
-  def decode_response(data_or_tagged)
-
-  @doc """
-  Decode raw provider response data directly with model information.
-
-  This eliminates the need for wrap_response friction by allowing direct
-  decoding from raw response data using model information for provider dispatch.
-
-  ## Parameters
-
-    * `raw_data` - Raw provider response data (map, stream, etc.)
-    * `model` - Model struct containing provider information
-
-  ## Returns
-
-    * `{:ok, %ReqLLM.Response{}}` on successful decoding
-    * `{:error, reason}` if decoding fails
-
-  ## Examples
-
-      # Direct decoding (zero-ceremony API)
-      ReqLLM.Response.Codec.decode_response(raw_anthropic_json, model)
-      #=> {:ok, %ReqLLM.Response{context: ctx, message: msg, ...}}
-
+  Decode provider response data with model context.
   """
   @spec decode_response(t(), ReqLLM.Model.t()) :: {:ok, ReqLLM.Response.t()} | {:error, term()}
-  def decode_response(raw_data, model)
+  def decode_response(data, model)
 
   @doc """
-  Encode canonical response back to provider format (optional).
-
-  ## Parameters
-
-    * `tagged_response` - A provider-specific tagged struct containing ReqLLM.Response
-
-  ## Returns
-
-    * Provider-specific response format
-    * `{:error, :not_implemented}` if encoding is not supported
-
+  Decode SSE event data into StreamChunks with model context for streaming responses.
   """
-  @spec encode_request(t()) :: term() | {:error, term()}
-  def encode_request(tagged_response)
+  @spec decode_sse_event(t(), ReqLLM.Model.t()) :: [ReqLLM.StreamChunk.t()]
+  def decode_sse_event(sse_event, model)
+end
+
+defimpl ReqLLM.Response.Codec, for: ReqLLM.Response do
+  def decode_response(%ReqLLM.Response{} = response, _model), do: {:ok, response}
+  def decode_sse_event(_sse_event, _model), do: []
+end
+
+defimpl ReqLLM.Response.Codec, for: Map do
+  def decode_response(data, model) when is_map(data) do
+    decode_response_data(data, model.model || "unknown")
+  end
+
+  def decode_response(_data, _model) do
+    {:error, :not_implemented}
+  end
+
+  def decode_sse_event(%{data: data}, _model) when is_map(data) do
+    case data do
+      %{"choices" => [%{"delta" => delta} | _]} -> decode_delta(delta)
+      _ -> []
+    end
+  end
+
+  def decode_sse_event(_, _model), do: []
+
+  defp decode_delta(%{"content" => content}) when is_binary(content) and content != "" do
+    [ReqLLM.StreamChunk.text(content)]
+  end
+
+  defp decode_delta(%{"tool_calls" => tool_calls}) when is_list(tool_calls) do
+    tool_calls
+    |> Enum.map(&decode_tool_call_delta/1)
+    |> Enum.reject(&is_nil/1)
+  end
+
+  defp decode_delta(_), do: []
+
+  defp decode_tool_call_delta(%{
+         "id" => id,
+         "type" => "function",
+         "function" => %{"name" => name, "arguments" => args_json}
+       }) do
+    case Jason.decode(args_json || "{}") do
+      {:ok, args} -> ReqLLM.StreamChunk.tool_call(name, args, %{id: id})
+      {:error, _} -> ReqLLM.StreamChunk.tool_call(name, %{}, %{id: id})
+    end
+  end
+
+  defp decode_tool_call_delta(_), do: nil
+
+  defp decode_response_data(data, model) when is_map(data) do
+    id = Map.get(data, "id", "unknown")
+    model_name = Map.get(data, "model", model || "unknown")
+    usage = parse_usage(Map.get(data, "usage"))
+
+    choices = Map.get(data, "choices", [])
+    first_choice = Enum.at(choices, 0, %{})
+
+    finish_reason = parse_finish_reason(Map.get(first_choice, "finish_reason"))
+
+    content_chunks =
+      case first_choice do
+        %{"message" => message} -> decode_message(message)
+        %{"delta" => delta} -> decode_delta(delta)
+        _ -> []
+      end
+
+    message = build_message_from_chunks(content_chunks)
+
+    context = %ReqLLM.Context{
+      messages: if(message, do: [message], else: [])
+    }
+
+    response = %ReqLLM.Response{
+      id: id,
+      model: model_name,
+      context: context,
+      message: message,
+      stream?: false,
+      stream: nil,
+      usage: usage,
+      finish_reason: finish_reason,
+      provider_meta: Map.drop(data, ["id", "model", "choices", "usage"])
+    }
+
+    {:ok, response}
+  end
+
+  defp decode_message(%{"content" => content}) when is_binary(content) and content != "" do
+    [ReqLLM.StreamChunk.text(content)]
+  end
+
+  defp decode_message(%{"content" => content}) when is_list(content) do
+    content
+    |> Enum.map(&decode_content_part/1)
+    |> List.flatten()
+    |> Enum.reject(&is_nil/1)
+  end
+
+  defp decode_message(%{"tool_calls" => tool_calls}) when is_list(tool_calls) do
+    tool_calls
+    |> Enum.map(&decode_tool_call/1)
+    |> Enum.reject(&is_nil/1)
+  end
+
+  defp decode_message(_), do: []
+
+  defp decode_content_part(%{"type" => "text", "text" => text}) do
+    [ReqLLM.StreamChunk.text(text)]
+  end
+
+  defp decode_content_part(_), do: []
+
+  defp decode_tool_call(%{
+         "id" => id,
+         "type" => "function",
+         "function" => %{"name" => name, "arguments" => args_json}
+       }) do
+    case Jason.decode(args_json || "{}") do
+      {:ok, args} -> ReqLLM.StreamChunk.tool_call(name, args, %{id: id})
+      {:error, _} -> nil
+    end
+  end
+
+  defp decode_tool_call(_), do: nil
+
+  defp build_message_from_chunks([]), do: nil
+
+  defp build_message_from_chunks(chunks) do
+    content_parts =
+      chunks
+      |> Enum.map(&chunk_to_content_part/1)
+      |> Enum.reject(&is_nil/1)
+
+    if content_parts != [] do
+      %ReqLLM.Message{
+        role: :assistant,
+        content: content_parts,
+        metadata: %{}
+      }
+    end
+  end
+
+  defp chunk_to_content_part(%ReqLLM.StreamChunk{type: :content, text: text}) do
+    %ReqLLM.Message.ContentPart{type: :text, text: text}
+  end
+
+  defp chunk_to_content_part(%ReqLLM.StreamChunk{
+         type: :tool_call,
+         name: name,
+         arguments: args,
+         metadata: meta
+       }) do
+    %ReqLLM.Message.ContentPart{
+      type: :tool_call,
+      tool_name: name,
+      input: args,
+      tool_call_id: Map.get(meta, :id)
+    }
+  end
+
+  defp chunk_to_content_part(_), do: nil
+
+  defp parse_usage(%{
+         "prompt_tokens" => input,
+         "completion_tokens" => output,
+         "total_tokens" => total
+       }) do
+    %{
+      input_tokens: input,
+      output_tokens: output,
+      total_tokens: total
+    }
+  end
+
+  defp parse_usage(_), do: %{input_tokens: 0, output_tokens: 0, total_tokens: 0}
+
+  defp parse_finish_reason("stop"), do: :stop
+  defp parse_finish_reason("length"), do: :length
+  defp parse_finish_reason("tool_calls"), do: :tool_calls
+  defp parse_finish_reason("content_filter"), do: :content_filter
+  defp parse_finish_reason(reason) when is_binary(reason), do: reason
+  defp parse_finish_reason(_), do: nil
 end
 
 defimpl ReqLLM.Response.Codec, for: Any do
-  @doc """
-  Default implementation for unsupported types.
-
-  Returns an error indicating that no codec implementation exists for the given type.
-  This ensures graceful failure when attempting to use an unsupported provider
-  or when a provider hasn't implemented the response codec protocol.
-  """
-  def decode_response(_), do: {:error, :not_implemented}
   def decode_response(_, _), do: {:error, :not_implemented}
-  def encode_request(_), do: {:error, :not_implemented}
+  def decode_sse_event(_sse_event, _model), do: []
 end

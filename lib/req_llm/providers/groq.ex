@@ -1,33 +1,29 @@
 defmodule ReqLLM.Providers.Groq do
   @moduledoc """
-  Groq provider implementation using the Provider behavior.
+  Groq provider – 100% OpenAI Chat Completions compatible with Groq's high-performance hardware.
 
-  Groq provides fast LLM inference with OpenAI-compatible API endpoints.
-  It offers high-performance inference for various open-source models.
+  ## Protocol Usage
+
+  Uses the generic `ReqLLM.Context.Codec` and `ReqLLM.Response.Codec` protocols.
+  No custom wrapper modules – leverages the standard OpenAI-compatible codecs.
+
+  ## Groq-Specific Extensions
+
+  Beyond standard OpenAI parameters, Groq supports:
+  - `service_tier` - Performance tier (auto, on_demand, flex, performance)
+  - `reasoning_effort` - Reasoning level (none, default, low, medium, high)  
+  - `reasoning_format` - Format for reasoning output
+  - `search_settings` - Web search configuration
+  - `compound_custom` - Custom Compound systems configuration
+  - `logit_bias` - Token bias adjustments
+
+  See `provider_schema/0` for the complete Groq-specific schema and 
+  `ReqLLM.Provider.Options` for inherited OpenAI parameters.
 
   ## Configuration
 
-  Set your Groq API key via JidoKeys (automatically picks up from .env):
-
-      # Option 1: Set directly in JidoKeys
-      ReqLLM.put_key(:groq_api_key, "gsk_...")
-      
-      # Option 2: Add to .env file (automatically loaded via JidoKeys+Dotenvy)
+      # Add to .env file (automatically loaded)
       GROQ_API_KEY=gsk_...
-
-  ## Examples
-
-      # Simple text generation
-      model = ReqLLM.Model.from("groq:llama3-8b-8192")
-      {:ok, response} = ReqLLM.generate_text(model, "Hello!")
-
-      # Streaming
-      {:ok, stream} = ReqLLM.stream_text(model, "Tell me a story", stream: true)
-
-      # Tool calling
-      tools = [%ReqLLM.Tool{name: "get_weather", ...}]
-      {:ok, response} = ReqLLM.generate_text(model, "What's the weather?", tools: tools)
-
   """
 
   @behaviour ReqLLM.Provider
@@ -37,8 +33,6 @@ defmodule ReqLLM.Providers.Groq do
     base_url: "https://api.groq.com/openai/v1",
     metadata: "priv/models_dev/groq.json",
     default_env_key: "GROQ_API_KEY",
-    context_wrapper: ReqLLM.Providers.Groq.Context,
-    response_wrapper: ReqLLM.Providers.Groq.Response,
     provider_schema: [
       service_tier: [
         type: {:in, ~w(auto on_demand flex performance)},
@@ -70,7 +64,7 @@ defmodule ReqLLM.Providers.Groq do
     ]
 
   import ReqLLM.Provider.Utils,
-    only: [prepare_options!: 3, maybe_put: 3, ensure_parsed_body: 1]
+    only: [prepare_options!: 3, maybe_put: 3, maybe_put_skip: 4, ensure_parsed_body: 1]
 
   # OpenAI-compatible options that Groq supports
   @doc """
@@ -128,33 +122,23 @@ defmodule ReqLLM.Providers.Groq do
     end
 
     api_key = ReqLLM.Keys.get!(model, user_opts)
-
-    # Extract tools separately to avoid validation issues
     {tools, other_opts} = Keyword.pop(user_opts, :tools, [])
-
-    # Extract provider-specific options (already validated by dynamic schema)
     provider_opts = Keyword.get(other_opts, :provider_options, [])
-
-    # Remove provider_options from main opts since we handle them separately
     {_provider_options, core_opts} = Keyword.pop(other_opts, :provider_options, [])
 
-    # Prepare validated core options
     opts = prepare_options!(__MODULE__, model, core_opts)
-
-    # Add tools back after validation
     opts = Keyword.put(opts, :tools, tools)
-
-    # Merge provider-specific options into opts for encoding
     opts = Keyword.merge(opts, provider_opts)
 
     base_url = Keyword.get(user_opts, :base_url, default_base_url())
-    req_keys = __MODULE__.supported_provider_options() ++ [:model, :context]
+    req_keys = __MODULE__.supported_provider_options() ++ [:context]
+    model_name = model.model
 
     request
-    |> Req.Request.register_options(req_keys)
-    # Groq uses Bearer token authentication
+    |> Req.Request.register_options(req_keys ++ [:model])
     |> Req.Request.merge_options(
-      Keyword.take(opts, req_keys) ++ [base_url: base_url, auth: {:bearer, api_key}]
+      Keyword.take(opts, req_keys) ++
+        [model: model_name, base_url: base_url, auth: {:bearer, api_key}]
     )
     |> ReqLLM.Step.Error.attach()
     |> Req.Request.append_request_steps(llm_encode_body: &__MODULE__.encode_body/1)
@@ -179,17 +163,14 @@ defmodule ReqLLM.Providers.Groq do
     context_data =
       case request.options[:context] do
         %ReqLLM.Context{} = ctx ->
-          ctx
-          |> wrap_context()
-          |> ReqLLM.Context.Codec.encode_request()
+          model = request.options[:model]
+          ReqLLM.Context.Codec.encode_request(ctx, model)
 
         _ ->
           %{messages: request.options[:messages] || []}
       end
 
-    # Get the model name (Groq uses model names like "llama3-8b-8192")
-    model = request.options[:model]
-    model_name = if is_struct(model, ReqLLM.Model), do: model.model, else: model
+    model_name = request.options[:model]
 
     body =
       %{model: model_name}
@@ -202,23 +183,18 @@ defmodule ReqLLM.Providers.Groq do
       |> maybe_put(:presence_penalty, request.options[:presence_penalty])
       |> maybe_put(:user, request.options[:user])
       |> maybe_put(:seed, request.options[:seed])
-      # Groq-specific provider options
       |> maybe_put(:logit_bias, request.options[:logit_bias])
-      # Skip service_tier if it's "auto" (not available on free tier)
-      |> maybe_put_groq_service_tier(request.options[:service_tier])
-      # Skip reasoning_effort if it's "default" (problematic default value)
-      |> maybe_put_groq_reasoning_effort(request.options[:reasoning_effort])
+      |> maybe_put_skip(:service_tier, request.options[:service_tier], ["auto"])
+      |> maybe_put_skip(:reasoning_effort, request.options[:reasoning_effort], ["default"])
       |> maybe_put(:reasoning_format, request.options[:reasoning_format])
       |> maybe_put(:search_settings, request.options[:search_settings])
       |> maybe_put(:compound_custom, request.options[:compound_custom])
 
-    # Handle tools if provided
     body =
       case request.options[:tools] do
-        tools when is_list(tools) and (is_list(tools) and tools != []) ->
+        tools when is_list(tools) and tools != [] ->
           body = Map.put(body, :tools, Enum.map(tools, &ReqLLM.Tool.to_schema(&1, :openai)))
 
-          # Handle tool_choice if provided
           case request.options[:tool_choice] do
             nil -> body
             choice -> Map.put(body, :tool_choice, choice)
@@ -228,14 +204,10 @@ defmodule ReqLLM.Providers.Groq do
           body
       end
 
-    # Handle response format if provided
     body =
       case request.options[:response_format] do
-        format when is_map(format) ->
-          Map.put(body, :response_format, format)
-
-        _ ->
-          body
+        format when is_map(format) -> Map.put(body, :response_format, format)
+        _ -> body
       end
 
     try do
@@ -254,9 +226,34 @@ defmodule ReqLLM.Providers.Groq do
   def decode_response({req, resp}) do
     case resp.status do
       200 ->
-        body = ensure_parsed_body(resp.body)
-        # Return raw parsed data directly - no wrapping needed
-        {req, %{resp | body: body}}
+        model_name = req.options[:model]
+        model = %ReqLLM.Model{provider: :groq, model: model_name}
+        is_streaming = req.options[:stream] == true
+
+        if is_streaming do
+          chunk_stream =
+            resp.body
+            |> Stream.flat_map(&ReqLLM.Response.Codec.decode_sse_event(&1, model))
+            |> Stream.reject(&is_nil/1)
+
+          response = %ReqLLM.Response{
+            id: "stream-#{System.unique_integer([:positive])}",
+            model: model_name,
+            context: %ReqLLM.Context{messages: []},
+            message: nil,
+            stream?: true,
+            stream: chunk_stream,
+            usage: %{input_tokens: 0, output_tokens: 0, total_tokens: 0},
+            finish_reason: nil,
+            provider_meta: %{}
+          }
+
+          {req, %{resp | body: response}}
+        else
+          body = ensure_parsed_body(resp.body)
+          {:ok, response} = ReqLLM.Response.Codec.decode_response(body, model)
+          {req, %{resp | body: response}}
+        end
 
       status ->
         err =
@@ -269,13 +266,4 @@ defmodule ReqLLM.Providers.Groq do
         {req, err}
     end
   end
-
-  # Private helper functions for Groq-specific parameter handling
-  defp maybe_put_groq_service_tier(body, "auto"), do: body
-  defp maybe_put_groq_service_tier(body, nil), do: body
-  defp maybe_put_groq_service_tier(body, value), do: maybe_put(body, :service_tier, value)
-
-  defp maybe_put_groq_reasoning_effort(body, "default"), do: body
-  defp maybe_put_groq_reasoning_effort(body, nil), do: body
-  defp maybe_put_groq_reasoning_effort(body, value), do: maybe_put(body, :reasoning_effort, value)
 end

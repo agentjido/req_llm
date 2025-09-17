@@ -1,10 +1,20 @@
 defmodule ReqLLM.Step.Stream do
   @moduledoc """
-  Req step for handling Server-Sent Events (SSE).
+  Req step for handling Server-Sent Events (SSE) in provider-agnostic streaming responses.
 
   This step processes "text/event-stream" responses and converts them into
-  enumerable chunks for streaming AI responses. Non-streaming responses are
-  passed through unchanged.
+  enumerable chunks of standardized SSE events. The parsed events are then
+  processed by provider-specific `ReqLLM.Response.Codec.decode_sse_event/1`
+  protocol implementations to convert them into `ReqLLM.StreamChunk` structures.
+
+  ## Purpose
+
+  This step serves as the first stage in a two-phase streaming pipeline:
+
+  1. **SSE Parsing (this step)**: Converts raw SSE stream into structured events
+  2. **Provider Decoding**: Provider protocols convert events into StreamChunks
+
+  Non-streaming responses are passed through unchanged.
 
   ## Usage
 
@@ -12,19 +22,36 @@ defmodule ReqLLM.Step.Stream do
       |> ReqLLM.Step.Stream.attach()
 
   The step automatically detects SSE responses by content type and processes
-  them into structured chunks. Each chunk contains:
+  them into structured chunks. Each parsed SSE event contains:
 
   - `event` - The event type (e.g., "delta", "done")
   - `data` - The event data (JSON parsed if valid)
   - `id` - Event ID (if present)
   - `retry` - Retry interval (if present)
 
+  ## Processing Pipeline
+
+      Raw SSE Stream
+           ↓
+      ReqLLM.Step.Stream (this module)
+           ↓
+      Structured SSE Events
+           ↓
+      Provider's decode_sse_event/1
+           ↓
+      ReqLLM.StreamChunk structures
+
   ## Examples
 
-      # Streaming response
-      response = Req.get!(req, url: "https://api.example.com/stream")
+      # Streaming response - produces Stream of parsed SSE events
+      response = Req.get!(req, url: "https://api.example.com/stream", stream: true)
       response.body
-      #=> %Stream{} containing parsed SSE chunks
+      #=> %Stream{} containing parsed SSE events like %{event: "completion", data: %{...}}
+
+      # Provider then processes these events:
+      response.body
+      |> Stream.flat_map(&ReqLLM.Response.Codec.decode_sse_event/1)
+      #=> Stream of %ReqLLM.StreamChunk{} structs
 
       # Non-streaming response
       response = Req.get!(req, url: "https://api.example.com/chat")

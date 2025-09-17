@@ -1,10 +1,36 @@
 defmodule Mix.Tasks.Req.Llm.StreamText do
-  @shortdoc "Stream text generation from AI models"
+  @shortdoc "Stream text generation from any AI model"
 
   @moduledoc """
-  Mix task for streaming text generation from AI models.
+  Generic mix task for streaming text generation from any supported AI model.
 
-  Provides real-time streaming text generation with basic metrics.
+  Supports all providers in the ReqLLM ecosystem with real-time streaming 
+  and comprehensive metrics.
+
+  ## Usage
+
+      mix req.llm.stream_text "Your prompt here" --model provider:model-name
+
+  ## Examples
+
+      # Stream from Groq
+      mix req.llm.stream_text "Explain streaming APIs" --model groq:gemma2-9b-it
+
+      # Stream from OpenAI with options
+      mix req.llm.stream_text "Write a story" --model openai:gpt-4o --max-tokens 500 --temperature 0.8
+
+      # Stream from Anthropic with system prompt
+      mix req.llm.stream_text "Analyze this code" --model anthropic:claude-3-sonnet --system "You are a code reviewer"
+
+  ## Options
+
+      --model         Model specification (provider:model-name)
+      --system        System prompt/message
+      --max-tokens    Maximum tokens to generate
+      --temperature   Sampling temperature (0.0-2.0)
+      --verbose       Show detailed chunk information
+      --metrics       Show performance metrics
+      --quiet         Minimal output
   """
   use Mix.Task
 
@@ -33,34 +59,31 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
           p
 
         [] ->
-          IO.puts("Usage: mix req.llm.stream_text \"Your prompt here\"")
+          IO.puts(
+            "Usage: mix req.llm.stream_text \"Your prompt here\" --model provider:model-name"
+          )
+
+          IO.puts("")
+          IO.puts("Examples:")
+
+          IO.puts(
+            "  mix req.llm.stream_text \"Explain HTTP streaming\" --model groq:gemma2-9b-it"
+          )
+
+          IO.puts(
+            "  mix req.llm.stream_text \"Write a poem\" --model openai:gpt-4o --temperature 0.9"
+          )
+
           System.halt(1)
       end
 
-    model_spec = Keyword.get(opts, :model, "anthropic:claude-3-haiku-20240307")
+    model_spec = Keyword.get(opts, :model, "groq:gemma2-9b-it")
     quiet = Keyword.get(opts, :quiet, false)
     verbose = Keyword.get(opts, :verbose, false)
     metrics = Keyword.get(opts, :metrics, false)
 
-    # Check for API key configuration
-    provider = String.split(model_spec, ":") |> List.first()
-
-    jido_key =
-      case provider do
-        "anthropic" -> :anthropic_api_key
-        "openai" -> :openai_api_key
-        "openrouter" -> :openrouter_api_key
-        _ -> nil
-      end
-
-    if jido_key && !JidoKeys.get(jido_key) do
-      IO.puts("⚠️  Warning: API key for #{provider} not found in JidoKeys keyring.")
-      IO.puts("   Please set it with: JidoKeys.put(#{inspect(jido_key)}, \"your-api-key\")")
-      IO.puts("")
-    end
-
     if !quiet do
-      IO.puts("🚀 Streaming from #{model_spec}")
+      IO.puts("Streaming from #{model_spec}")
       IO.puts("Prompt: #{prompt}")
       IO.puts("")
     end
@@ -75,51 +98,83 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
     start_time = System.monotonic_time(:millisecond)
 
     try do
-      stream = ReqLLM.stream_text!(model_spec, prompt, stream_opts)
+      case ReqLLM.stream_text(model_spec, prompt, stream_opts) do
+        {:ok, response} ->
+          if !quiet do
+            IO.puts("Response:")
+            IO.puts("   Model: #{response.model}")
+            IO.puts("")
+          end
 
-      if !quiet, do: IO.puts("Response:")
+          {text_chunks, chunk_count} =
+            response.stream
+            |> Enum.reduce({[], 0}, fn chunk, {acc_chunks, count} ->
+              count = count + 1
 
-      chunks = Enum.to_list(stream)
+              cond do
+                verbose and not quiet ->
+                  IO.puts("[#{count}]: #{inspect(chunk)}")
 
-      # Print each chunk - handle potential error tuples
-      for {chunk, index} <- Enum.with_index(chunks, 1) do
-        cond do
-          verbose and not quiet ->
-            IO.puts("[#{index}]: #{inspect(chunk)}")
+                  case chunk do
+                    %ReqLLM.StreamChunk{type: :content, text: text} when is_binary(text) ->
+                      {[text | acc_chunks], count}
 
-          not quiet ->
-            case chunk do
-              {_status, _error} = error_tuple ->
-                IO.puts("❌ Error in stream: #{inspect(error_tuple)}")
+                    _ ->
+                      {acc_chunks, count}
+                  end
 
-              chunk when is_binary(chunk) ->
-                IO.write(chunk)
+                not quiet ->
+                  case chunk do
+                    %ReqLLM.StreamChunk{type: :content, text: text} when is_binary(text) ->
+                      IO.binwrite(:stdio, text)
+                      :io.put_chars(:standard_io, [])
+                      {[text | acc_chunks], count}
 
-              other ->
-                IO.puts("❌ Unexpected chunk type: #{inspect(other)}")
-            end
+                    %ReqLLM.StreamChunk{type: :tool_call, name: name} ->
+                      IO.binwrite(:stdio, "\n[TOOL CALL: #{name}]")
+                      :io.put_chars(:standard_io, [])
+                      {acc_chunks, count}
 
-          true ->
-            :ok
-        end
+                    %ReqLLM.StreamChunk{type: :meta} ->
+                      if verbose do
+                        IO.binwrite(:stdio, "\n[META]")
+                        :io.put_chars(:standard_io, [])
+                      end
+                      {acc_chunks, count}
+
+                    other ->
+                      if verbose, do: IO.puts("Other chunk: #{inspect(other)}")
+                      {acc_chunks, count}
+                  end
+
+                true ->
+                  case chunk do
+                    %ReqLLM.StreamChunk{type: :content, text: text} when is_binary(text) ->
+                      {[text | acc_chunks], count}
+
+                    _ ->
+                      {acc_chunks, count}
+                  end
+              end
+            end)
+
+          if !quiet, do: IO.puts("\n")
+
+          if metrics do
+            full_text = text_chunks |> Enum.reverse() |> Enum.join("")
+            show_key_stats(full_text, start_time, model_spec, prompt, chunk_count)
+          end
+
+          if !quiet, do: IO.puts("Streaming completed")
+          :ok
+
+        {:error, error} ->
+          IO.puts("Streaming failed: #{inspect(error)}")
+          System.halt(1)
       end
-
-      # Debug output for empty responses
-      if Enum.empty?(chunks) and not quiet do
-        IO.puts("⚠️ No chunks received from stream")
-      end
-
-      if !quiet, do: IO.puts("")
-
-      if metrics do
-        show_key_stats(chunks, start_time, model_spec, prompt)
-      end
-
-      if !quiet, do: IO.puts("✅ Completed")
-      :ok
     rescue
       error ->
-        IO.puts("❌ Error: #{inspect(error)}")
+        IO.puts("Error: #{inspect(error)}")
         System.halt(1)
     end
   end
@@ -133,21 +188,20 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
     end
   end
 
-  defp show_key_stats(chunks, start_time, model_spec, prompt) do
+  defp show_key_stats(full_text, start_time, model_spec, prompt, chunk_count) do
     end_time = System.monotonic_time(:millisecond)
     response_time = end_time - start_time
 
-    # Filter out non-string chunks and join
-    string_chunks = Enum.filter(chunks, &is_binary/1)
-    full_text = Enum.join(string_chunks, "")
     output_tokens = estimate_tokens(full_text)
     input_tokens = estimate_tokens(prompt)
     estimated_cost = calculate_cost(model_spec, input_tokens + output_tokens)
 
-    IO.puts("📊 Stats:")
+    IO.puts("Stats:")
     IO.puts("   Response time: #{response_time}ms")
+    IO.puts("   Chunks received: #{chunk_count}")
     IO.puts("   Output tokens: #{output_tokens}")
-    IO.puts("   Estimated input tokens: #{input_tokens}")
+    IO.puts("   Input tokens: #{input_tokens}")
+    IO.puts("   Total tokens: #{input_tokens + output_tokens}")
 
     if estimated_cost > 0 do
       IO.puts("   Estimated cost: $#{Float.round(estimated_cost, 6)}")
@@ -170,6 +224,8 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
         String.contains?(model_spec, "gpt-4o-mini") -> 0.6
         String.contains?(model_spec, "gpt-4o") -> 2.4
         String.contains?(model_spec, "deepseek") -> 0.28
+        # Groq is very affordable
+        String.contains?(model_spec, "groq:") -> 0.1
         true -> 0.0
       end
 

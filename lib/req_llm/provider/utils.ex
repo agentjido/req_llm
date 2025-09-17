@@ -84,6 +84,38 @@ defmodule ReqLLM.Provider.Utils do
   def maybe_put(opts, key, value) when is_map(opts), do: Map.put(opts, key, value)
 
   @doc """
+  Conditionally adds a key-value pair to opts, skipping if value is nil or in skip_values list.
+
+  This is useful for providers that need to omit certain default values from API requests.
+
+  ## Parameters
+
+  - `opts` - Options map or keyword list to update
+  - `key` - Key to add
+  - `value` - Value to add (will be skipped if nil or in skip_values)
+  - `skip_values` - List of values to skip (defaults to [])
+
+  ## Examples
+
+      iex> ReqLLM.Provider.Utils.maybe_put_skip(%{}, :service_tier, "auto", ["auto"])
+      %{}
+
+      iex> ReqLLM.Provider.Utils.maybe_put_skip(%{}, :service_tier, "performance", ["auto"])
+      %{service_tier: "performance"}
+
+      iex> ReqLLM.Provider.Utils.maybe_put_skip(%{}, :key, nil, [])
+      %{}
+  """
+  @spec maybe_put_skip(keyword() | map(), atom(), term(), list()) :: keyword() | map()
+  def maybe_put_skip(opts, key, value, skip_values) do
+    if is_nil(value) or value in skip_values do
+      opts
+    else
+      maybe_put(opts, key, value)
+    end
+  end
+
+  @doc """
   Raises an error if unknown options are present.
 
   ## Parameters
