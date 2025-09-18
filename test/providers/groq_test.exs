@@ -495,8 +495,8 @@ defmodule ReqLLM.Providers.GroqTest do
       {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string, required: true])
 
       # Test with max_tokens < 200
-      opts = [max_tokens: 50]
-      {:ok, request} = Groq.prepare_request(:object, model, context, schema, opts)
+      opts = [max_tokens: 50, compiled_schema: schema]
+      {:ok, request} = Groq.prepare_request(:object, model, context, opts)
 
       # Should be adjusted to 200
       assert request.options[:max_tokens] == 200
@@ -508,8 +508,8 @@ defmodule ReqLLM.Providers.GroqTest do
       {:ok, schema} = ReqLLM.Schema.compile([])
 
       # No max_tokens specified
-      opts = []
-      {:ok, request} = Groq.prepare_request(:object, model, context, schema, opts)
+      opts = [compiled_schema: schema]
+      {:ok, request} = Groq.prepare_request(:object, model, context, opts)
 
       # Should get default of 4096
       assert request.options[:max_tokens] == 4096
@@ -520,8 +520,8 @@ defmodule ReqLLM.Providers.GroqTest do
       context = context_fixture()
       {:ok, schema} = ReqLLM.Schema.compile(value: [type: :integer])
 
-      opts = [max_tokens: 1000]
-      {:ok, request} = Groq.prepare_request(:object, model, context, schema, opts)
+      opts = [max_tokens: 1000, compiled_schema: schema]
+      {:ok, request} = Groq.prepare_request(:object, model, context, opts)
 
       # Should remain unchanged
       assert request.options[:max_tokens] == 1000
@@ -536,9 +536,9 @@ defmodule ReqLLM.Providers.GroqTest do
       assert %ReqLLM.Error.Invalid.Parameter{} = error
       assert error.parameter =~ "operation: :embedding not supported"
 
-      # Test unsupported operation for 5-arg version  
+      # Test unsupported operation for object with schema  
       {:ok, schema} = ReqLLM.Schema.compile([])
-      {:error, error} = Groq.prepare_request(:embedding, model, context, schema, [])
+      {:error, error} = Groq.prepare_request(:embedding, model, context, [compiled_schema: schema])
       assert %ReqLLM.Error.Invalid.Parameter{} = error
       assert error.parameter =~ "operation: :embedding not supported"
     end

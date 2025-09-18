@@ -84,15 +84,9 @@ defmodule ReqLLM.Providers.Anthropic do
     end
   end
 
-  def prepare_request(operation, _model, _input, _opts) do
-    {:error,
-     ReqLLM.Error.Invalid.Parameter.exception(
-       parameter:
-         "operation: #{inspect(operation)} not supported by Anthropic provider. Supported operations: [:chat, :object]"
-     )}
-  end
-
-  def prepare_request(:object, model_input, %ReqLLM.Context{} = context, compiled_schema, opts) do
+  def prepare_request(:object, model_input, %ReqLLM.Context{} = context, opts) do
+    compiled_schema = Keyword.fetch!(opts, :compiled_schema)
+    
     # For object generation, we need to add the structured output tool
     # Extract the original schema from the compiled NimbleOptions
     _json_schema = ReqLLM.Schema.to_json(compiled_schema.schema)
@@ -128,6 +122,14 @@ defmodule ReqLLM.Providers.Anthropic do
 
     # Use the regular chat preparation with our modified options
     prepare_request(:chat, model_input, context, opts_with_max_tokens)
+  end
+
+  def prepare_request(operation, _model, _input, _opts) do
+    {:error,
+     ReqLLM.Error.Invalid.Parameter.exception(
+       parameter:
+         "operation: #{inspect(operation)} not supported by Anthropic provider. Supported operations: [:chat, :object]"
+     )}
   end
 
   @spec attach(Req.Request.t(), ReqLLM.Model.t() | String.t() | {atom(), keyword()}, keyword()) ::

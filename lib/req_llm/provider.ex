@@ -72,6 +72,7 @@ defmodule ReqLLM.Provider do
     * `model` - The ReqLLM.Model struct or model identifier
     * `data` - Operation-specific data (messages for chat, text for embed, etc.)
     * `opts` - Additional options (stream, temperature, etc.)
+      - For `:object` operations, opts includes `:compiled_schema` with the schema definition
 
   ## Returns
 
@@ -90,6 +91,13 @@ defmodule ReqLLM.Provider do
           stream: opts[:stream] || false
         })
         {:ok, request}
+      end
+
+      # Object generation with schema
+      def prepare_request(:object, model, context, opts) do
+        compiled_schema = Keyword.fetch!(opts, :compiled_schema)
+        # Use compiled_schema.schema for tool definitions
+        prepare_request(:chat, model, context, updated_opts)
       end
 
       # Embedding operation  

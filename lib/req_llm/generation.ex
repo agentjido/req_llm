@@ -482,8 +482,9 @@ defmodule ReqLLM.Generation do
          {:ok, compiled_schema} <- ReqLLM.Schema.compile(object_schema),
          stream_opts = Keyword.put(translated_opts, :stream, true),
          context = build_context(messages, stream_opts),
+         opts_with_schema = Keyword.put(stream_opts, :compiled_schema, compiled_schema),
          {:ok, configured_request} <-
-           provider_module.prepare_request(:object, model, context, compiled_schema, stream_opts),
+            provider_module.prepare_request(:object, model, context, opts_with_schema),
          request_with_options =
            configured_request
            |> ReqLLM.Utils.merge_req_options(stream_opts)

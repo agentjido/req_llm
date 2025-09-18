@@ -1,5 +1,7 @@
 # AGENTS.md - ReqLLM Development Guide
 
+**IMPORTANT: DO NOT WRITE COMMENTS INTO THE BODY OF ANY FUNCTIONS.**
+
 ## Project Overview
 ReqLLM is a composable Elixir library for AI interactions built on Req, providing a unified interface to AI providers through a plugin-based architecture.
 

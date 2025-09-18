@@ -63,8 +63,12 @@ defmodule ReqLLM.Providers.Groq do
 
   # Helper for validation and translation
   defp validate_and_translate!(provider_mod, model, raw_opts) do
-    # Separate context from user options since context is not user-configurable
-    {context, user_opts} = Keyword.pop(raw_opts, :context)
+    # Separate context and special test/internal options from user options
+    {context, remaining_opts} = Keyword.pop(raw_opts, :context)
+    
+    # Extract internal/test options that shouldn't be validated
+    internal_keys = [:req_options, :on_unsupported, :fixture, :req_http_options, :compiled_schema]
+    {internal_opts, user_opts} = Keyword.split(remaining_opts, internal_keys)
 
     schema = provider_mod.provider_extended_generation_schema()
     {:ok, valid_opts} = NimbleOptions.validate(user_opts, schema)
@@ -81,11 +85,13 @@ defmodule ReqLLM.Providers.Groq do
           translated_opts
       end
 
-    # Add context back if it was present
+    # Merge back all the options
+    final_opts = Keyword.merge(translated_opts, internal_opts)
+    
     if context do
-      Keyword.put(translated_opts, :context, context)
+      Keyword.put(final_opts, :context, context)
     else
-      translated_opts
+      final_opts
     end
   end
 
@@ -125,15 +131,9 @@ defmodule ReqLLM.Providers.Groq do
     end
   end
 
-  def prepare_request(operation, _model, _input, _opts) do
-    {:error,
-     ReqLLM.Error.Invalid.Parameter.exception(
-       parameter:
-         "operation: #{inspect(operation)} not supported by Groq provider. Supported operations: [:chat, :object]"
-     )}
-  end
-
-  def prepare_request(:object, model_input, %ReqLLM.Context{} = context, compiled_schema, opts) do
+  def prepare_request(:object, model_input, %ReqLLM.Context{} = context, opts) do
+    compiled_schema = Keyword.fetch!(opts, :compiled_schema)
+    
     structured_output_tool =
       ReqLLM.Tool.new!(
         name: "structured_output",
@@ -163,7 +163,7 @@ defmodule ReqLLM.Providers.Groq do
     prepare_request(:chat, model_input, context, opts_with_max_tokens)
   end
 
-  def prepare_request(operation, _model, _input, _schema, _opts) do
+  def prepare_request(operation, _model, _input, _opts) do
     {:error,
      ReqLLM.Error.Invalid.Parameter.exception(
        parameter:
