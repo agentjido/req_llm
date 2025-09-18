@@ -78,7 +78,7 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
     model_spec = Keyword.get(opts, :model, "groq:gemma2-9b-it")
     log_level = parse_log_level(Keyword.get(opts, :"log-level", "normal"))
     debug_dir = Keyword.get(opts, :"debug-dir")
-    
+
     # Derive behavior flags from log level
     quiet = log_level == :quiet
     verbose = log_level in [:verbose, :debug]
@@ -272,11 +272,19 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
   # Helper functions
   defp parse_log_level(level_string) do
     case String.downcase(level_string) do
-      "quiet" -> :quiet
-      "normal" -> :normal  
-      "verbose" -> :verbose
-      "debug" -> :debug
-      _ -> 
+      "quiet" ->
+        :quiet
+
+      "normal" ->
+        :normal
+
+      "verbose" ->
+        :verbose
+
+      "debug" ->
+        :debug
+
+      _ ->
         IO.puts("Warning: Unknown log level '#{level_string}'. Using 'normal'.")
         :normal
     end
@@ -285,15 +293,15 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
   # Debug helper functions
   defp debug_context(model_spec, prompt, stream_opts, opts) do
     env_vars = debug_env_vars()
-    
+
     IO.puts("""
     === DEBUG/CONTEXT =========================================
     CLI Arguments:
       Model: #{model_spec}
       Prompt: #{inspect(prompt)}
       Stream Options: #{inspect(stream_opts, pretty: true)}
-      All Options: #{inspect(Enum.into(opts, %{}), pretty: true)}
-    
+      All Options: #{inspect(Map.new(opts), pretty: true)}
+
     Environment Variables:
     #{env_vars}
     ============================================================
@@ -303,21 +311,20 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
   defp debug_env_vars do
     relevant_env_vars = [
       "ANTHROPIC_API_KEY",
-      "OPENAI_API_KEY", 
+      "OPENAI_API_KEY",
       "GROQ_API_KEY",
       "XAI_API_KEY",
       "GOOGLE_API_KEY",
       "OPENROUTER_API_KEY"
     ]
-    
+
     relevant_env_vars
-    |> Enum.map(fn var ->
+    |> Enum.map_join("\n", fn var ->
       case System.get_env(var) do
         nil -> "      #{var}: (not set)"
         _value -> "      #{var}: [REDACTED]"
       end
     end)
-    |> Enum.join("\n")
   end
 
   defp debug_request(response) do
@@ -328,10 +335,10 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
         IO.puts("=== DEBUG/REQUEST (unavailable) =======================")
         IO.puts("Request details not available in response")
         IO.puts("========================================================")
-        
+
       req ->
         headers = redact_sensitive_headers(req.headers || [])
-        
+
         IO.puts("""
         === DEBUG/REQUEST =========================================
         #{String.upcase(to_string(req.method || "POST"))} #{req.url}
@@ -346,7 +353,8 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
     Enum.map(headers, fn
       {key, _value} when key in ["authorization", "x-api-key", "api-key"] ->
         {key, "[REDACTED]"}
-      header -> 
+
+      header ->
         header
     end)
   end
@@ -370,9 +378,9 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
 
   defp debug_chunk(chunk, index, start_time) do
     elapsed_ms = System.monotonic_time(:millisecond) - start_time
-    
+
     {chunk_type, bytes, preview} = analyze_chunk(chunk)
-    
+
     IO.puts("CHUNK\t#{index}\t#{elapsed_ms}ms\t#{chunk_type}\t#{bytes}B\t#{preview}")
   end
 
@@ -398,7 +406,7 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
 
   defp debug_response_meta(response) do
     meta = extract_response_metadata(response)
-    
+
     IO.puts("""
     === DEBUG/RESPONSE META ===================================
     #{inspect(meta, pretty: true)}
@@ -428,16 +436,16 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
 
   defp write_debug_files(debug_dir, response, full_text) do
     File.mkdir_p!(debug_dir)
-    
+
     # Write request details
     request_data = extract_request_data(response)
     request_path = Path.join(debug_dir, "request.json")
     File.write!(request_path, Jason.encode!(request_data, pretty: true))
-    
+
     # Write response text
     response_path = Path.join(debug_dir, "response.txt")
     File.write!(response_path, full_text)
-    
+
     # Write summary
     summary = %{
       timestamp: DateTime.utc_now() |> DateTime.to_iso8601(),
@@ -445,9 +453,10 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
       text_length: String.length(full_text),
       metadata: Map.get(response, :metadata, %{})
     }
+
     summary_path = Path.join(debug_dir, "summary.json")
     File.write!(summary_path, Jason.encode!(summary, pretty: true))
-    
+
     IO.puts("Debug files written to: #{debug_dir}")
   rescue
     error ->
@@ -456,13 +465,16 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
 
   defp extract_request_data(response) do
     case Map.get(response, :request) do
-      nil -> %{error: "request_not_available"}
-      req -> %{
-        url: req.url,
-        method: req.method,
-        headers: redact_sensitive_headers(req.headers || []),
-        body: req.body
-      }
+      nil ->
+        %{error: "request_not_available"}
+
+      req ->
+        %{
+          url: req.url,
+          method: req.method,
+          headers: redact_sensitive_headers(req.headers || []),
+          body: req.body
+        }
     end
   end
 end

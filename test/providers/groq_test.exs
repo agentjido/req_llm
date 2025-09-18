@@ -538,7 +538,7 @@ defmodule ReqLLM.Providers.GroqTest do
 
       # Test unsupported operation for object with schema  
       {:ok, schema} = ReqLLM.Schema.compile([])
-      {:error, error} = Groq.prepare_request(:embedding, model, context, [compiled_schema: schema])
+      {:error, error} = Groq.prepare_request(:embedding, model, context, compiled_schema: schema)
       assert %ReqLLM.Error.Invalid.Parameter{} = error
       assert error.parameter =~ "operation: :embedding not supported"
     end

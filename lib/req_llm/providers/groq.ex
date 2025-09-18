@@ -65,7 +65,7 @@ defmodule ReqLLM.Providers.Groq do
   defp validate_and_translate!(provider_mod, model, raw_opts) do
     # Separate context and special test/internal options from user options
     {context, remaining_opts} = Keyword.pop(raw_opts, :context)
-    
+
     # Extract internal/test options that shouldn't be validated
     internal_keys = [:req_options, :on_unsupported, :fixture, :req_http_options, :compiled_schema]
     {internal_opts, user_opts} = Keyword.split(remaining_opts, internal_keys)
@@ -87,7 +87,7 @@ defmodule ReqLLM.Providers.Groq do
 
     # Merge back all the options
     final_opts = Keyword.merge(translated_opts, internal_opts)
-    
+
     if context do
       Keyword.put(final_opts, :context, context)
     else
@@ -133,7 +133,7 @@ defmodule ReqLLM.Providers.Groq do
 
   def prepare_request(:object, model_input, %ReqLLM.Context{} = context, opts) do
     compiled_schema = Keyword.fetch!(opts, :compiled_schema)
-    
+
     structured_output_tool =
       ReqLLM.Tool.new!(
         name: "structured_output",

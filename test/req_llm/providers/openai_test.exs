@@ -99,7 +99,7 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert request.options[:model] == model.model
       assert request.options[:temperature] == 0.5
       assert request.options[:max_tokens] == 50
-      assert String.starts_with?(request.headers["authorization"], "Bearer sk-")
+      assert String.starts_with?(List.first(request.headers["authorization"]), "Bearer test-key-")
 
       # Verify pipeline steps
       request_steps = Keyword.keys(request.request_steps)
@@ -122,7 +122,7 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert request.options[:dimensions] == 512
 
       # Verify authentication
-      assert String.starts_with?(request.headers["authorization"], "Bearer sk-")
+      assert String.starts_with?(List.first(request.headers["authorization"]), "Bearer test-key-")
     end
 
     test "error handling for invalid configurations" do

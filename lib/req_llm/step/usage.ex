@@ -111,11 +111,7 @@ defmodule ReqLLM.Step.Usage do
     reasoning_tokens = get_in(usage, ["completion_tokens_details", "reasoning_tokens"])
 
     usage_with_reasoning =
-      if is_integer(reasoning_tokens) and reasoning_tokens > 0 do
-        Map.put(base_usage, :reasoning, reasoning_tokens)
-      else
-        Map.put(base_usage, :reasoning, 0)
-      end
+      Map.put(base_usage, :reasoning, reasoning_tokens || 0)
 
     {:ok, usage_with_reasoning}
   end
@@ -133,10 +129,25 @@ defmodule ReqLLM.Step.Usage do
   @spec normalize_usage(map()) :: map()
   defp normalize_usage(usage) when is_map(usage) do
     %{
-      input: usage[:input] || usage["input"] || 0,
-      output: usage[:output] || usage["output"] || 0,
-      reasoning: usage[:reasoning] || usage["reasoning"] || 0
+      input:
+        usage[:input] || usage["input"] || usage["prompt_tokens"] || usage[:prompt_tokens] ||
+          usage["input_tokens"] || usage[:input_tokens] || 0,
+      output:
+        usage[:output] || usage["output"] || usage["completion_tokens"] ||
+          usage[:completion_tokens] || usage["output_tokens"] || usage[:output_tokens] || 0,
+      reasoning: usage[:reasoning] || usage["reasoning"] || get_reasoning_tokens(usage) || 0
     }
+  end
+
+  defp get_reasoning_tokens(usage) do
+    reasoning =
+      get_in(usage, ["completion_tokens_details", "reasoning_tokens"]) ||
+        get_in(usage, [:completion_tokens_details, :reasoning_tokens])
+
+    case reasoning do
+      n when is_integer(n) -> n
+      _ -> 0
+    end
   end
 
   @spec fetch_model(Req.Request.t()) :: {:ok, ReqLLM.Model.t()} | :error
@@ -158,13 +169,20 @@ defmodule ReqLLM.Step.Usage do
     input_cost = cost_map[:input] || cost_map["input"]
     output_cost = cost_map[:output] || cost_map["output"]
 
-    if input_cost && output_cost do
+    with {:ok, input_num} <- safe_to_number(input_tokens),
+         {:ok, output_num} <- safe_to_number(output_tokens),
+         true <- input_cost != nil and output_cost != nil do
       calculated_cost =
-        Float.round(input_tokens / 1000 * input_cost + output_tokens / 1000 * output_cost, 6)
+        Float.round(input_num / 1000 * input_cost + output_num / 1000 * output_cost, 6)
 
       {:ok, calculated_cost}
     else
-      {:ok, nil}
+      _ -> {:ok, nil}
     end
   end
+
+  @spec safe_to_number(any()) :: {:ok, number()} | :error
+  defp safe_to_number(value) when is_integer(value), do: {:ok, value}
+  defp safe_to_number(value) when is_float(value), do: {:ok, value}
+  defp safe_to_number(_), do: :error
 end

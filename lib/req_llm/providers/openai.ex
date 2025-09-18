@@ -49,7 +49,13 @@ defmodule ReqLLM.Providers.OpenAI do
     base_url: "https://api.openai.com/v1",
     metadata: "priv/models_dev/openai.json",
     default_env_key: "OPENAI_API_KEY",
-    provider_schema: []
+    provider_schema: [
+      dimensions: [
+        type: :pos_integer,
+        doc: "Dimensions for embedding models (e.g., text-embedding-3-small supports 512-1536)"
+      ],
+      encoding_format: [type: :string, doc: "Format for embedding output (float, base64)"]
+    ]
 
   import ReqLLM.Provider.Utils,
     only: [maybe_put: 3, ensure_parsed_body: 1]
@@ -62,7 +68,16 @@ defmodule ReqLLM.Providers.OpenAI do
     {context, remaining_opts} = Keyword.pop(raw_opts, :context)
 
     # Extract internal/test options that shouldn't be validated
-    internal_keys = [:req_options, :on_unsupported, :fixture, :req_http_options, :compiled_schema, :operation, :text]
+    internal_keys = [
+      :req_options,
+      :on_unsupported,
+      :fixture,
+      :req_http_options,
+      :compiled_schema,
+      :operation,
+      :text
+    ]
+
     {internal_opts, user_opts} = Keyword.split(remaining_opts, internal_keys)
 
     schema = provider_mod.provider_extended_generation_schema()
@@ -204,8 +219,9 @@ defmodule ReqLLM.Providers.OpenAI do
     |> Req.Request.register_options(req_keys ++ [:model])
     |> Req.Request.merge_options(
       Keyword.take(opts, req_keys) ++
-        [model: model_name, base_url: base_url, auth: {:bearer, api_key}]
+        [model: model_name, base_url: base_url]
     )
+    |> Req.Request.put_header("authorization", "Bearer #{api_key}")
     |> ReqLLM.Step.Error.attach()
     |> Req.Request.append_request_steps(llm_encode_body: &__MODULE__.encode_body/1)
     |> ReqLLM.Step.Stream.maybe_attach(opts[:stream])
