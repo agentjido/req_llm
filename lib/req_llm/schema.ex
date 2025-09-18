@@ -413,4 +413,75 @@ defmodule ReqLLM.Schema do
       "parameters" => to_json(tool.parameter_schema)
     }
   end
+
+  @doc """
+  Validate data against a keyword schema.
+
+  Takes a data map and validates it against a NimbleOptions-style keyword schema.
+  The data is first converted to keyword format for NimbleOptions validation.
+
+  ## Parameters
+
+    * `data` - Map of data to validate
+    * `schema` - Keyword schema definition
+
+  ## Returns
+
+    * `{:ok, validated_data}` - Successfully validated data
+    * `{:error, error}` - Validation error with details
+
+  ## Examples
+
+      iex> schema = [name: [type: :string, required: true], age: [type: :integer]]
+      iex> data = %{"name" => "Alice", "age" => 30}
+      iex> ReqLLM.Schema.validate(data, schema)
+      {:ok, [name: "Alice", age: 30]}
+
+      iex> schema = [name: [type: :string, required: true]]  
+      iex> data = %{"age" => 30}
+      iex> ReqLLM.Schema.validate(data, schema)
+      {:error, %ReqLLM.Error.Validation.Error{...}}
+
+  """
+  @spec validate(map(), keyword()) :: {:ok, keyword()} | {:error, ReqLLM.Error.t()}
+  def validate(data, schema) when is_map(data) and is_list(schema) do
+    with {:ok, compiled_schema} <- compile(schema) do
+      # Convert string keys to atoms for NimbleOptions validation
+      keyword_data =
+        data
+        |> Enum.map(fn {k, v} ->
+          key = if is_binary(k), do: String.to_existing_atom(k), else: k
+          {key, v}
+        end)
+
+      case NimbleOptions.validate(keyword_data, compiled_schema) do
+        {:ok, validated_data} ->
+          {:ok, validated_data}
+
+        {:error, %NimbleOptions.ValidationError{} = error} ->
+          {:error,
+           ReqLLM.Error.Validation.Error.exception(
+             tag: :schema_validation_failed,
+             reason: Exception.message(error),
+             context: [data: data, schema: schema]
+           )}
+      end
+    end
+  rescue
+    ArgumentError ->
+      # Handle the case where string keys don't exist as atoms
+      {:error,
+       ReqLLM.Error.Validation.Error.exception(
+         tag: :invalid_keys,
+         reason: "Data contains keys that don't match schema field names",
+         context: [data: data, schema: schema]
+       )}
+  end
+
+  def validate(data, _schema) do
+    {:error,
+     ReqLLM.Error.Invalid.Parameter.exception(
+       parameter: "Data must be a map, got: #{inspect(data)}"
+     )}
+  end
 end

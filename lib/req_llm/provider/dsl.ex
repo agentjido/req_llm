@@ -190,8 +190,9 @@ defmodule ReqLLM.Provider.DSL do
     # Load metadata if file exists
     metadata = load_metadata(metadata_path)
 
-    # Build provider schema from opts, falling back to all generation keys if empty
+    # Build provider schema and extended generation schema
     provider_schema_definition = build_provider_schema(provider_schema_opts)
+    extended_schema_definition = build_extended_generation_schema(provider_schema_opts)
 
     quote do
       # Store metadata as module attribute
@@ -200,17 +201,17 @@ defmodule ReqLLM.Provider.DSL do
       # Build the provider schema at compile time
       @provider_schema unquote(provider_schema_definition)
 
+      # Build the extended generation schema (base + provider options)
+      @extended_generation_schema unquote(extended_schema_definition)
+
       # Optional helpers for accessing provider info
       def metadata, do: @req_llm_metadata
       def provider_id, do: unquote(provider_id)
 
       # Provider option helpers
       def supported_provider_options do
-        # Return both core generation options and provider-specific options
-        core_options = ReqLLM.Provider.Options.all_generation_keys()
-        provider_options = @provider_schema.schema |> Keyword.keys()
-        # Exclude :provider_options as it's a meta-key, not an actual validation target
-        (core_options ++ provider_options) |> Enum.reject(&(&1 == :provider_options))
+        # Return keys from the merged schema
+        @extended_generation_schema.schema |> Keyword.keys()
       end
 
       def default_provider_opts do
@@ -220,6 +221,8 @@ defmodule ReqLLM.Provider.DSL do
       end
 
       def provider_schema, do: @provider_schema
+
+      def provider_extended_generation_schema, do: @extended_generation_schema
 
       # Translation helper functions available to all providers
       @doc false
@@ -316,17 +319,30 @@ defmodule ReqLLM.Provider.DSL do
     end
   end
 
+  # Private helper to build extended generation schema (base + provider options)
+  defp build_extended_generation_schema(provider_schema_opts) do
+    quote do
+      # Get the base generation schema and merge with provider-specific options
+      base_schema = ReqLLM.Provider.Options.generation_schema().schema
+      provider_options = unquote(provider_schema_opts)
+
+      # Merge the schemas - provider options extend base options
+      merged_schema = Keyword.merge(base_schema, provider_options)
+      NimbleOptions.new!(merged_schema)
+    end
+  end
+
   # Compile-time validation that provider schema keys don't overlap with core options
   defp validate_schema_keys(schema_opts) do
-    core_keys = ReqLLM.Generation.schema().schema |> Keyword.keys()
+    core_keys = ReqLLM.Provider.Options.generation_schema().schema |> Keyword.keys()
 
     Enum.each(schema_opts, fn {key, _opts} ->
       if key in core_keys do
-        raise CompileError,
-          description:
-            "Provider schema key #{inspect(key)} conflicts with core generation option. " <>
-              "Core keys: #{inspect(core_keys)}. " <>
-              "Provider-specific options should be unique to the provider."
+        IO.warn(
+          "Provider schema key #{inspect(key)} conflicts with core generation option. " <>
+            "This will be an error in a future version. " <>
+            "Consider using a provider-specific name to avoid conflicts."
+        )
       end
     end)
   end

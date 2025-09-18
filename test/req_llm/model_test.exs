@@ -57,6 +57,14 @@ defmodule ReqLLM.ModelTest do
     test "rejects invalid model in 3-tuple" do
       {:error, error} = Model.from({:anthropic, :invalid, []})
       assert error.class == :validation and error.tag == :invalid_model_spec
+
+      # Test invalid provider in 3-tuple
+      {:error, error2} = Model.from({"string_provider", "model", []})
+      assert error2.class == :validation and error2.tag == :invalid_model_spec
+
+      # Test invalid opts in 3-tuple  
+      {:error, error3} = Model.from({:anthropic, "model", "invalid_opts"})
+      assert error3.class == :validation and error3.tag == :invalid_model_spec
     end
   end
 
@@ -201,11 +209,61 @@ defmodule ReqLLM.ModelTest do
       assert is_map(model.capabilities) and is_map(model.modalities)
     end
 
-    test "returns error for nonexistent model and provider" do
-      {:error, reason1} = Model.with_metadata("anthropic:totally-fake-model")
-      assert is_binary(reason1) and String.contains?(reason1, "not found")
+    test "handles successful metadata loading with all field transformations" do
+      {:ok, model} = Model.with_metadata("anthropic:claude-3-5-sonnet-20241022")
 
-      {:error, _reason2} = Model.with_metadata("fake-provider:model")
+      # Verify metadata fields are properly populated and transformed
+      assert is_map(model.limit)
+      assert is_integer(model.limit.context) and model.limit.context > 0
+      assert is_integer(model.limit.output) and model.limit.output > 0
+
+      assert is_map(model.cost)
+      assert is_number(model.cost.input) and model.cost.input >= 0
+      assert is_number(model.cost.output) and model.cost.output >= 0
+
+      assert is_map(model.capabilities)
+      assert is_boolean(model.capabilities.reasoning)
+      assert is_boolean(model.capabilities.tool_call)
+      assert is_boolean(model.capabilities.temperature)
+      assert is_boolean(model.capabilities.attachment)
+
+      assert is_map(model.modalities)
+      assert is_list(model.modalities.input) and Enum.all?(model.modalities.input, &is_atom/1)
+      assert is_list(model.modalities.output) and Enum.all?(model.modalities.output, &is_atom/1)
+    end
+
+    test "handles model not found in provider file" do
+      {:error, reason} = Model.with_metadata("anthropic:definitely-does-not-exist")
+      assert is_binary(reason) and String.contains?(reason, "not found")
+    end
+
+    test "handles invalid base model specs" do
+      {:error, error} = Model.with_metadata("invalid-spec")
+      assert error.class == :validation and error.tag == :invalid_model_spec
+    end
+  end
+
+  describe "default_model/1" do
+    test "returns default model when specified" do
+      spec = %{default_model: "gpt-4", models: %{"gpt-3.5" => %{}, "gpt-4" => %{}}}
+      assert Model.default_model(spec) == "gpt-4"
+    end
+
+    test "returns first model when no default specified" do
+      spec = %{default_model: nil, models: %{"model-a" => %{}, "model-b" => %{}}}
+      # Note: Map.keys/1 order is not guaranteed, but there should be a result
+      result = Model.default_model(spec)
+      assert result in ["model-a", "model-b"]
+    end
+
+    test "returns nil when no models available" do
+      spec = %{default_model: nil, models: %{}}
+      assert Model.default_model(spec) == nil
+    end
+
+    test "returns default even when models map is empty" do
+      spec = %{default_model: "specific-model", models: %{}}
+      assert Model.default_model(spec) == "specific-model"
     end
   end
 

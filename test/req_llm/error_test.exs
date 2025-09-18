@@ -3,72 +3,200 @@ defmodule ReqLLM.ErrorTest do
 
   alias ReqLLM.Error
 
+  # Shared test helpers
+  defp assert_error_fields(error, expected_fields) do
+    assert error.__exception__ == true
+
+    for {field, value} <- expected_fields do
+      assert Map.get(error, field) == value
+    end
+  end
+
+  defp assert_message_format(error_module, error, expected_message) do
+    assert error_module.message(error) == expected_message
+  end
+
   describe "error class hierarchy" do
-    test "error classes identify as their correct class" do
-      assert Error.Invalid.error_class?()
-      assert Error.API.error_class?()
-      assert Error.Validation.error_class?()
-      assert Error.Unknown.error_class?()
+    test "error classes identify correctly" do
+      for class <- [Error.Invalid, Error.API, Error.Validation, Error.Unknown] do
+        assert class.error_class?()
+      end
     end
   end
 
-  describe "Invalid.Parameter" do
-    test "creates error with parameter field and formats message" do
-      error = Error.Invalid.Parameter.exception(parameter: "model")
-      assert error.parameter == "model"
-      assert error.__exception__ == true
-      assert Error.Invalid.Parameter.message(error) == "Invalid parameter: model"
+  describe "basic error types" do
+    # Table-driven test for simple error types with single field
+    simple_errors = [
+      {Error.Invalid.Parameter, :parameter, "model", "Invalid parameter: model"},
+      {Error.Invalid.Provider, :provider, "nonexistent", "Unknown provider: nonexistent"},
+      {Error.Invalid.NotImplemented, :feature, "streaming", "streaming not implemented"},
+      {Error.Invalid.Schema, :reason, "missing property", "Invalid schema: missing property"},
+      {Error.Invalid.Role, :role, :invalid_role,
+       "Invalid role: :invalid_role. Must be :user, :assistant, :system, or :tool"}
+    ]
+
+    for {error_module, field, value, expected_message} <- simple_errors do
+      test "#{inspect(error_module)} creates error and formats message" do
+        error = unquote(error_module).exception([{unquote(field), unquote(value)}])
+        assert_error_fields(error, [{unquote(field), unquote(value)}])
+        assert_message_format(unquote(error_module), error, unquote(expected_message))
+      end
     end
   end
 
-  describe "API.Request" do
-    test "creates error with all fields and formats message with status" do
-      error =
-        Error.API.Request.exception(
-          reason: "timeout",
-          status: 408,
-          response_body: "{}",
-          request_body: "{}",
-          cause: :timeout
-        )
+  describe "API request errors" do
+    test "API.Request formats with and without status" do
+      # With status
+      error = Error.API.Request.exception(reason: "timeout", status: 408)
+      assert_message_format(Error.API.Request, error, "API request failed (408): timeout")
 
-      assert error.reason == "timeout"
-      assert error.status == 408
-      assert error.response_body == "{}"
-      assert error.request_body == "{}"
-      assert error.cause == :timeout
-      assert Error.API.Request.message(error) == "API request failed (408): timeout"
-    end
-
-    test "formats message without status when nil" do
+      # Without status
       error = Error.API.Request.exception(reason: "network error", status: nil)
-      assert Error.API.Request.message(error) == "API request failed: network error"
+      assert_message_format(Error.API.Request, error, "API request failed: network error")
+    end
+
+    test "API.Response formats with and without status" do
+      # With status
+      error = Error.API.Response.exception(reason: "invalid json", status: 200)
+
+      assert_message_format(
+        Error.API.Response,
+        error,
+        "Provider response error (200): invalid json"
+      )
+
+      # Without status
+      error = Error.API.Response.exception(reason: "parse error", status: nil)
+      assert_message_format(Error.API.Response, error, "Provider response error: parse error")
     end
   end
 
-  describe "API.Response" do
-    test "creates error with fields and formats message with status" do
+  describe "message-related errors" do
+    test "Invalid.Message formats with and without index" do
+      # With index
+      error = Error.Invalid.Message.exception(reason: "empty content", index: 2)
+      assert_message_format(Error.Invalid.Message, error, "Message at index 2: empty content")
+
+      # Without index
+      error = Error.Invalid.Message.exception(reason: "invalid format", index: nil)
+      assert_message_format(Error.Invalid.Message, error, "invalid format")
+    end
+
+    test "Invalid.MessageList formats message with received value" do
+      received = "not a list"
+      error = Error.Invalid.MessageList.exception(reason: "test", received: received)
+
+      assert_message_format(
+        Error.Invalid.MessageList,
+        error,
+        "Expected a list of messages, got: \"not a list\""
+      )
+
+      # Test with nil received
+      error = Error.Invalid.MessageList.exception(reason: "test")
+
+      assert_message_format(
+        Error.Invalid.MessageList,
+        error,
+        "Expected a list of messages, got: nil"
+      )
+    end
+
+    test "Invalid.Content formats message with received value" do
+      received = %{invalid: "content"}
+      error = Error.Invalid.Content.exception(reason: "test", received: received)
+
+      expected =
+        "Content must be a string or list of ContentPart structs, got: %{invalid: \"content\"}"
+
+      assert_message_format(Error.Invalid.Content, error, expected)
+
+      # Test with nil received
+      error = Error.Invalid.Content.exception(reason: "test")
+      expected_nil = "Content must be a string or list of ContentPart structs, got: nil"
+      assert_message_format(Error.Invalid.Content, error, expected_nil)
+    end
+  end
+
+  describe "complex API errors" do
+    test "API.SchemaValidation message formatting" do
+      # Custom message
+      error = Error.API.SchemaValidation.exception(message: "Custom schema error")
+      assert_message_format(Error.API.SchemaValidation, error, "Custom schema error")
+
+      # With path and errors
       error =
-        Error.API.Response.exception(
-          reason: "invalid json",
-          response_body: "invalid",
-          status: 200
+        Error.API.SchemaValidation.exception(
+          errors: ["Required field missing", "Invalid type"],
+          json_path: "$.user.name"
         )
 
-      assert error.reason == "invalid json"
-      assert error.response_body == "invalid"
-      assert error.status == 200
-      assert Error.API.Response.message(error) == "Provider response error (200): invalid json"
+      assert_message_format(
+        Error.API.SchemaValidation,
+        error,
+        "Schema validation failed at $.user.name: Required field missing, Invalid type"
+      )
+
+      # Errors only
+      error = Error.API.SchemaValidation.exception(errors: ["Error 1", "Error 2", "Error 3"])
+
+      assert_message_format(
+        Error.API.SchemaValidation,
+        error,
+        "Schema validation failed: Error 1, Error 2, Error 3"
+      )
+
+      # Error truncation (>3 errors)
+      error =
+        Error.API.SchemaValidation.exception(errors: ["Error 1", "Error 2", "Error 3", "Error 4"])
+
+      message = Error.API.SchemaValidation.message(error)
+      assert message == "Schema validation failed: Error 1, Error 2, Error 3"
+      refute String.contains?(message, "Error 4")
+
+      # Fallback message
+      error = Error.API.SchemaValidation.exception([])
+      assert_message_format(Error.API.SchemaValidation, error, "Schema validation failed")
     end
 
-    test "formats message without status when nil" do
-      error = Error.API.Response.exception(reason: "parse error", status: nil)
-      assert Error.API.Response.message(error) == "Provider response error: parse error"
+    test "API.JSONDecode message formatting" do
+      # Custom message
+      error = Error.API.JSONDecode.exception(message: "Invalid JSON syntax")
+      assert_message_format(Error.API.JSONDecode, error, "JSON decode error: Invalid JSON syntax")
+
+      # With position and partial
+      error = Error.API.JSONDecode.exception(partial: "{ \"incomplete\": \"json", position: 23)
+
+      assert_message_format(
+        Error.API.JSONDecode,
+        error,
+        "JSON decode error at position 23. Partial: { \"incomplete\": \"json..."
+      )
+
+      # Partial only
+      error = Error.API.JSONDecode.exception(partial: "{ \"incomplete\": \"json")
+
+      assert_message_format(
+        Error.API.JSONDecode,
+        error,
+        "JSON decode error. Partial: { \"incomplete\": \"json..."
+      )
+
+      # Long partial truncation
+      long_partial = String.duplicate("a", 100)
+      error = Error.API.JSONDecode.exception(partial: long_partial)
+      message = Error.API.JSONDecode.message(error)
+      assert String.contains?(message, String.slice(long_partial, 0, 50))
+      assert String.ends_with?(message, "...")
+
+      # Fallback message
+      error = Error.API.JSONDecode.exception([])
+      assert_message_format(Error.API.JSONDecode, error, "JSON decode error")
     end
   end
 
-  describe "Validation.Error" do
-    test "creates error with all fields and correct type" do
+  describe "validation and unknown errors" do
+    test "Validation.Error creation and formatting" do
       error =
         Error.Validation.Error.exception(
           tag: :invalid_model,
@@ -77,143 +205,95 @@ defmodule ReqLLM.ErrorTest do
         )
 
       assert %Error.Validation.Error{} = error
-      assert error.tag == :invalid_model
-      assert error.reason == "Model not found"
-      assert error.context == [model: "test"]
-      assert Error.Validation.Error.message(error) == "Model not found"
-    end
-  end
 
-  describe "Unknown.Unknown" do
-    test "creates error with error field and formats message" do
+      assert_error_fields(error,
+        tag: :invalid_model,
+        reason: "Model not found",
+        context: [model: "test"]
+      )
+
+      assert_message_format(Error.Validation.Error, error, "Model not found")
+    end
+
+    test "Unknown.Unknown error formatting" do
       original_error = %RuntimeError{message: "something went wrong"}
       error = Error.Unknown.Unknown.exception(error: original_error)
 
-      assert error.error == original_error
-      assert Error.Unknown.Unknown.message(error) == "Unknown error: #{inspect(original_error)}"
-    end
-  end
-
-  describe "Invalid.Provider" do
-    test "creates error with provider field and formats message" do
-      error = Error.Invalid.Provider.exception(provider: "nonexistent")
-      assert error.provider == "nonexistent"
-      assert Error.Invalid.Provider.message(error) == "Unknown provider: nonexistent"
-    end
-  end
-
-  describe "Invalid.NotImplemented" do
-    test "creates error with feature field and formats message" do
-      error = Error.Invalid.NotImplemented.exception(feature: "streaming")
-      assert error.feature == "streaming"
-      assert Error.Invalid.NotImplemented.message(error) == "streaming not implemented"
-    end
-  end
-
-  describe "Invalid.Schema" do
-    test "creates error with reason field and formats message" do
-      error = Error.Invalid.Schema.exception(reason: "missing required property")
-      assert error.reason == "missing required property"
-      assert Error.Invalid.Schema.message(error) == "Invalid schema: missing required property"
-    end
-  end
-
-  describe "Invalid.Message" do
-    test "creates error with reason and index, formats message with index" do
-      error = Error.Invalid.Message.exception(reason: "empty content", index: 2)
-      assert error.reason == "empty content"
-      assert error.index == 2
-      assert Error.Invalid.Message.message(error) == "Message at index 2: empty content"
-    end
-
-    test "formats message without index when nil" do
-      error = Error.Invalid.Message.exception(reason: "invalid format", index: nil)
-      assert Error.Invalid.Message.message(error) == "invalid format"
-    end
-  end
-
-  describe "Invalid.MessageList" do
-    test "creates error and formats message with received value" do
-      received = "not a list"
-      error = Error.Invalid.MessageList.exception(reason: "not a list", received: received)
-
-      assert error.reason == "not a list"
-      assert error.received == received
-
-      assert Error.Invalid.MessageList.message(error) ==
-               "Expected a list of messages, got: #{inspect(received)}"
-    end
-
-    test "formats message with received field even when nil" do
-      error = Error.Invalid.MessageList.exception(reason: "empty list")
-      assert Error.Invalid.MessageList.message(error) == "Expected a list of messages, got: nil"
-    end
-  end
-
-  describe "Invalid.Content" do
-    test "creates error and formats message with received value" do
-      received = %{invalid: "content"}
-      error = Error.Invalid.Content.exception(reason: "wrong type", received: received)
-
-      assert error.reason == "wrong type"
-      assert error.received == received
-
-      assert Error.Invalid.Content.message(error) ==
-               "Content must be a string or list of ContentPart structs, got: #{inspect(received)}"
-    end
-
-    test "formats message with received field even when nil" do
-      error = Error.Invalid.Content.exception(reason: "empty content")
-
-      assert Error.Invalid.Content.message(error) ==
-               "Content must be a string or list of ContentPart structs, got: nil"
-    end
-  end
-
-  describe "Invalid.Role" do
-    test "creates error with role field and formats message" do
-      error = Error.Invalid.Role.exception(role: :invalid_role)
-      assert error.role == :invalid_role
-
-      assert Error.Invalid.Role.message(error) ==
-               "Invalid role: :invalid_role. Must be :user, :assistant, :system, or :tool"
+      assert_message_format(
+        Error.Unknown.Unknown,
+        error,
+        "Unknown error: #{inspect(original_error)}"
+      )
     end
   end
 
   describe "validation_error/3 helper" do
-    test "creates validation error with tag, reason, and context" do
+    test "creates validation error with context" do
       error = Error.validation_error(:invalid_model_spec, "Bad model", model: "test")
-
       assert %Error.Validation.Error{} = error
-      assert error.tag == :invalid_model_spec
-      assert error.reason == "Bad model"
-      assert error.context == [model: "test"]
+
+      assert_error_fields(error,
+        tag: :invalid_model_spec,
+        reason: "Bad model",
+        context: [model: "test"]
+      )
     end
 
     test "creates validation error with default empty context" do
       error = Error.validation_error(:test_error, "Test reason")
-
-      assert error.tag == :test_error
-      assert error.reason == "Test reason"
-      assert error.context == []
+      assert_error_fields(error, tag: :test_error, reason: "Test reason", context: [])
     end
   end
 
-  describe "error serialization" do
-    test "errors are exceptions and can be raised" do
+  describe "Splode integration" do
+    # Table-driven test for error class verification
+    error_classes = [
+      {Error.Invalid.Parameter, :invalid, [parameter: "test"]},
+      {Error.API.Request, :api, [reason: "test"]},
+      {Error.Validation.Error, :validation, [tag: :test, reason: "test"]},
+      {Error.Unknown.Unknown, :unknown, [error: "test"]}
+    ]
+
+    test "error classes have correct class identifiers and exception behavior" do
+      for {error_module, expected_class, fields} <- unquote(Macro.escape(error_classes)) do
+        error = error_module.exception(fields)
+        assert error.class == expected_class
+        assert error.__exception__ == true
+        assert is_binary(Exception.message(error))
+      end
+    end
+
+    test "all error types implement proper exception behavior" do
+      errors = [
+        Error.Invalid.Parameter.exception(parameter: "test"),
+        Error.Invalid.Provider.exception(provider: "test"),
+        Error.Invalid.NotImplemented.exception(feature: "test"),
+        Error.Invalid.Schema.exception(reason: "test"),
+        Error.Invalid.Message.exception(reason: "test"),
+        Error.Invalid.MessageList.exception(reason: "test"),
+        Error.Invalid.Content.exception(reason: "test"),
+        Error.Invalid.Role.exception(role: :invalid),
+        Error.API.Request.exception(reason: "test"),
+        Error.API.Response.exception(reason: "test"),
+        Error.API.SchemaValidation.exception(message: "test"),
+        Error.API.JSONDecode.exception(message: "test"),
+        Error.Validation.Error.exception(tag: :test, reason: "test"),
+        Error.Unknown.Unknown.exception(error: "test")
+      ]
+
+      for error <- errors do
+        assert error.__exception__ == true
+        assert is_binary(Exception.message(error))
+        assert is_atom(error.class)
+      end
+    end
+
+    test "errors can be raised" do
       error = Error.Invalid.Parameter.exception(parameter: "test")
 
       assert_raise Error.Invalid.Parameter, "Invalid parameter: test", fn ->
         raise error
       end
-    end
-
-    test "errors maintain Splode structure" do
-      error = Error.API.Request.exception(reason: "test", status: 400)
-
-      assert error.__struct__ == Error.API.Request
-      assert error.__exception__ == true
-      assert is_binary(Exception.message(error))
     end
   end
 end

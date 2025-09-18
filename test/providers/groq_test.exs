@@ -22,7 +22,7 @@ defmodule ReqLLM.Providers.GroqTest do
 
     test "provider schema separation from core options" do
       schema_keys = Groq.provider_schema().schema |> Keyword.keys()
-      core_keys = ReqLLM.Generation.schema().schema |> Keyword.keys()
+      core_keys = ReqLLM.Provider.Options.generation_schema().schema |> Keyword.keys()
 
       # Provider-specific keys should not overlap with core generation keys
       overlap = MapSet.intersection(MapSet.new(schema_keys), MapSet.new(core_keys))
@@ -39,6 +39,28 @@ defmodule ReqLLM.Providers.GroqTest do
       core_without_meta = Enum.reject(core_keys, &(&1 == :provider_options))
       missing = core_without_meta -- supported
       assert missing == [], "Missing core generation keys: #{inspect(missing)}"
+    end
+
+    test "provider_extended_generation_schema includes both base and provider options" do
+      extended_schema = Groq.provider_extended_generation_schema()
+      extended_keys = extended_schema.schema |> Keyword.keys()
+
+      # Should include all core generation keys
+      core_keys = ReqLLM.Provider.Options.all_generation_keys()
+      core_without_meta = Enum.reject(core_keys, &(&1 == :provider_options))
+
+      for core_key <- core_without_meta do
+        assert core_key in extended_keys,
+               "Extended schema missing core key: #{core_key}"
+      end
+
+      # Should include provider-specific keys
+      provider_keys = Groq.provider_schema().schema |> Keyword.keys()
+
+      for provider_key <- provider_keys do
+        assert provider_key in extended_keys,
+               "Extended schema missing provider key: #{provider_key}"
+      end
     end
   end
 
@@ -93,7 +115,7 @@ defmodule ReqLLM.Providers.GroqTest do
   end
 
   describe "body encoding & context translation" do
-    test "encode_body produces correct JSON structure" do
+    test "encode_body without tools" do
       model = ReqLLM.Model.from!("groq:llama-3.1-8b-instant")
       context = context_fixture()
 
@@ -116,37 +138,14 @@ defmodule ReqLLM.Providers.GroqTest do
       assert is_list(decoded["messages"])
       assert length(decoded["messages"]) == 2
       assert decoded["stream"] == false
+      refute Map.has_key?(decoded, "tools")
 
       [system_msg, user_msg] = decoded["messages"]
       assert system_msg["role"] == "system"
       assert user_msg["role"] == "user"
     end
 
-    test "encode_body handles options correctly" do
-      model = ReqLLM.Model.from!("groq:llama-3.1-8b-instant")
-      context = context_fixture()
-
-      test_cases = [
-        {[context: context, model: model.model, stream: false],
-         fn json -> refute Map.has_key?(json, "temperature") end},
-        {[context: context, model: model.model, stream: false, temperature: 0.2, max_tokens: 55],
-         fn json ->
-           assert json["temperature"] == 0.2
-           assert json["max_tokens"] == 55
-         end},
-        {[context: context, model: model.model, stream: false, reasoning_effort: "high"],
-         fn json -> assert json["reasoning_effort"] == "high" end}
-      ]
-
-      for {options, assertion} <- test_cases do
-        mock_request = %Req.Request{options: options}
-        updated_request = Groq.encode_body(mock_request)
-        decoded = Jason.decode!(updated_request.body)
-        assertion.(decoded)
-      end
-    end
-
-    test "encode_body handles tools correctly" do
+    test "encode_body with tools but no tool_choice" do
       model = ReqLLM.Model.from!("groq:llama-3.1-8b-instant")
       context = context_fixture()
 
@@ -174,9 +173,128 @@ defmodule ReqLLM.Providers.GroqTest do
 
       assert is_list(decoded["tools"])
       assert length(decoded["tools"]) == 1
+      refute Map.has_key?(decoded, "tool_choice")
 
       [encoded_tool] = decoded["tools"]
       assert encoded_tool["function"]["name"] == "test_tool"
+    end
+
+    test "encode_body with tools and tool_choice" do
+      model = ReqLLM.Model.from!("groq:llama-3.1-8b-instant")
+      context = context_fixture()
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "specific_tool",
+          description: "A specific tool",
+          parameter_schema: [
+            value: [type: :string, required: true, doc: "A value parameter"]
+          ],
+          callback: fn _ -> {:ok, "result"} end
+        )
+
+      tool_choice = %{type: "function", function: %{name: "specific_tool"}}
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          tools: [tool],
+          tool_choice: tool_choice
+        ]
+      }
+
+      updated_request = Groq.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      assert is_list(decoded["tools"])
+
+      assert decoded["tool_choice"] == %{
+               "type" => "function",
+               "function" => %{"name" => "specific_tool"}
+             }
+    end
+
+    test "encode_body with response_format" do
+      model = ReqLLM.Model.from!("groq:llama-3.1-8b-instant")
+      context = context_fixture()
+
+      response_format = %{type: "json_object"}
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          response_format: response_format
+        ]
+      }
+
+      updated_request = Groq.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      assert decoded["response_format"] == %{"type" => "json_object"}
+    end
+
+    test "encode_body provider-specific options with skip values" do
+      model = ReqLLM.Model.from!("groq:llama-3.1-8b-instant")
+      context = context_fixture()
+
+      test_cases = [
+        # Skip values should not appear in JSON
+        {[service_tier: "auto"], fn json -> refute Map.has_key?(json, "service_tier") end},
+        {[reasoning_effort: "default"],
+         fn json -> refute Map.has_key?(json, "reasoning_effort") end},
+        # Non-skip values should appear
+        {[service_tier: "performance"],
+         fn json -> assert json["service_tier"] == "performance" end},
+        {[reasoning_effort: "high"], fn json -> assert json["reasoning_effort"] == "high" end},
+        {[reasoning_format: "json"], fn json -> assert json["reasoning_format"] == "json" end},
+        {[search_settings: %{domains: ["example.com"]}],
+         fn json ->
+           assert json["search_settings"] == %{"domains" => ["example.com"]}
+         end}
+      ]
+
+      for {provider_opts, assertion} <- test_cases do
+        options = [context: context, model: model.model, stream: false] ++ provider_opts
+        mock_request = %Req.Request{options: options}
+        updated_request = Groq.encode_body(mock_request)
+        decoded = Jason.decode!(updated_request.body)
+        assertion.(decoded)
+      end
+    end
+
+    test "encode_body handles standard OpenAI options" do
+      model = ReqLLM.Model.from!("groq:llama-3.1-8b-instant")
+      context = context_fixture()
+
+      test_cases = [
+        {[temperature: 0.2, max_tokens: 55, top_p: 0.9, frequency_penalty: 0.1],
+         fn json ->
+           assert json["temperature"] == 0.2
+           assert json["max_tokens"] == 55
+           assert json["top_p"] == 0.9
+           assert json["frequency_penalty"] == 0.1
+         end},
+        {[presence_penalty: 0.2, user: "test_user", seed: 12345],
+         fn json ->
+           assert json["presence_penalty"] == 0.2
+           assert json["user"] == "test_user"
+           assert json["seed"] == 12345
+         end},
+        {[logit_bias: %{"50256" => -100}],
+         fn json -> assert json["logit_bias"] == %{"50256" => -100} end}
+      ]
+
+      for {options, assertion} <- test_cases do
+        full_options = [context: context, model: model.model, stream: false] ++ options
+        mock_request = %Req.Request{options: full_options}
+        updated_request = Groq.encode_body(mock_request)
+        decoded = Jason.decode!(updated_request.body)
+        assertion.(decoded)
+      end
     end
   end
 
@@ -244,11 +362,12 @@ defmodule ReqLLM.Providers.GroqTest do
         body: mock_stream
       }
 
-      # Create a mock request with context
+      # Create a mock request with context and model
       context = context_fixture()
+      model = "llama-3.1-8b-instant"
 
       mock_req = %Req.Request{
-        options: [context: context, stream: true]
+        options: [context: context, stream: true, model: model]
       }
 
       # Test decode_response directly  
@@ -260,16 +379,65 @@ defmodule ReqLLM.Providers.GroqTest do
       response = resp.body
       assert response.stream? == true
       assert is_struct(response.stream, Stream)
+      assert response.model == model
 
       # Verify context is preserved (original messages only in streaming)
       assert length(response.context.messages) == 2
+
+      # Verify stream structure and processing
+      assert response.usage == %{input_tokens: 0, output_tokens: 0, total_tokens: 0}
+      assert response.finish_reason == nil
+      assert response.provider_meta == %{}
+    end
+
+    test "decode_response handles API errors with non-200 status" do
+      # Create error response
+      error_body = %{
+        "error" => %{
+          "message" => "Invalid API key",
+          "type" => "authentication_error",
+          "code" => "invalid_api_key"
+        }
+      }
+
+      mock_resp = %Req.Response{
+        status: 401,
+        body: error_body
+      }
+
+      context = context_fixture()
+
+      mock_req = %Req.Request{
+        options: [context: context, model: "llama-3.1-8b-instant"]
+      }
+
+      # Test decode_response error handling
+      {req, error} = Groq.decode_response({mock_req, mock_resp})
+
+      assert req == mock_req
+      assert %ReqLLM.Error.API.Response{} = error
+      assert error.status == 401
+      assert error.reason == "Groq API error"
+      assert error.response_body == error_body
     end
   end
 
   describe "option translation" do
-    test "provider does not implement translate_options/3" do
-      # Most providers don't implement translate_options/3, verify this
-      refute function_exported?(Groq, :translate_options, 3)
+    test "provider implements translate_options/3" do
+      # Groq now implements translate_options/3 for stream? alias handling
+      assert function_exported?(Groq, :translate_options, 3)
+    end
+
+    test "translate_options handles stream? alias" do
+      model = ReqLLM.Model.from!("groq:llama-3.1-8b-instant")
+
+      # Test stream? -> stream translation
+      opts = [temperature: 0.7, stream?: true]
+      {translated_opts, warnings} = Groq.translate_options(:chat, model, opts)
+
+      assert Keyword.get(translated_opts, :stream) == true
+      refute Keyword.has_key?(translated_opts, :stream?)
+      assert warnings == []
     end
 
     test "provider-specific option handling" do
@@ -283,6 +451,96 @@ defmodule ReqLLM.Providers.GroqTest do
         assert provider_option in supported_opts,
                "Expected #{provider_option} to be in supported options"
       end
+    end
+  end
+
+  describe "usage extraction" do
+    test "extract_usage with valid usage data" do
+      model = ReqLLM.Model.from!("groq:llama-3.1-8b-instant")
+
+      body_with_usage = %{
+        "usage" => %{
+          "prompt_tokens" => 10,
+          "completion_tokens" => 20,
+          "total_tokens" => 30
+        }
+      }
+
+      {:ok, usage} = Groq.extract_usage(body_with_usage, model)
+      assert usage["prompt_tokens"] == 10
+      assert usage["completion_tokens"] == 20
+      assert usage["total_tokens"] == 30
+    end
+
+    test "extract_usage with missing usage data" do
+      model = ReqLLM.Model.from!("groq:llama-3.1-8b-instant")
+      body_without_usage = %{"choices" => []}
+
+      {:error, :no_usage_found} = Groq.extract_usage(body_without_usage, model)
+    end
+
+    test "extract_usage with invalid body type" do
+      model = ReqLLM.Model.from!("groq:llama-3.1-8b-instant")
+
+      {:error, :invalid_body} = Groq.extract_usage("invalid", model)
+      {:error, :invalid_body} = Groq.extract_usage(nil, model)
+      {:error, :invalid_body} = Groq.extract_usage(123, model)
+    end
+  end
+
+  describe "object generation edge cases" do
+    test "prepare_request for :object with low max_tokens gets adjusted" do
+      model = ReqLLM.Model.from!("groq:llama-3.1-8b-instant")
+      context = context_fixture()
+      {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string, required: true])
+
+      # Test with max_tokens < 200
+      opts = [max_tokens: 50]
+      {:ok, request} = Groq.prepare_request(:object, model, context, schema, opts)
+
+      # Should be adjusted to 200
+      assert request.options[:max_tokens] == 200
+    end
+
+    test "prepare_request for :object with nil max_tokens gets default" do
+      model = ReqLLM.Model.from!("groq:llama-3.1-8b-instant")
+      context = context_fixture()
+      {:ok, schema} = ReqLLM.Schema.compile([])
+
+      # No max_tokens specified
+      opts = []
+      {:ok, request} = Groq.prepare_request(:object, model, context, schema, opts)
+
+      # Should get default of 4096
+      assert request.options[:max_tokens] == 4096
+    end
+
+    test "prepare_request for :object with sufficient max_tokens unchanged" do
+      model = ReqLLM.Model.from!("groq:llama-3.1-8b-instant")
+      context = context_fixture()
+      {:ok, schema} = ReqLLM.Schema.compile(value: [type: :integer])
+
+      opts = [max_tokens: 1000]
+      {:ok, request} = Groq.prepare_request(:object, model, context, schema, opts)
+
+      # Should remain unchanged
+      assert request.options[:max_tokens] == 1000
+    end
+
+    test "prepare_request rejects unsupported operations" do
+      model = ReqLLM.Model.from!("groq:llama-3.1-8b-instant")
+      context = context_fixture()
+
+      # Test unsupported operation for 3-arg version
+      {:error, error} = Groq.prepare_request(:embedding, model, context, [])
+      assert %ReqLLM.Error.Invalid.Parameter{} = error
+      assert error.parameter =~ "operation: :embedding not supported"
+
+      # Test unsupported operation for 5-arg version  
+      {:ok, schema} = ReqLLM.Schema.compile([])
+      {:error, error} = Groq.prepare_request(:embedding, model, context, schema, [])
+      assert %ReqLLM.Error.Invalid.Parameter{} = error
+      assert error.parameter =~ "operation: :embedding not supported"
     end
   end
 

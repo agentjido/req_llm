@@ -1,524 +1,288 @@
 defmodule ReqLLM.Context.CodecTest do
   use ExUnit.Case, async: true
 
+  alias ReqLLM.Context
   alias ReqLLM.Context.Codec
+  alias ReqLLM.Message
   alias ReqLLM.Message.ContentPart
-  alias ReqLLM.Providers.Anthropic
-  alias ReqLLM.Providers.OpenAI
-  alias ReqLLM.{Context, Message, StreamChunk}
+  alias ReqLLM.Model
+  alias ReqLLM.Tool
 
-  # Common test fixtures
-  setup do
-    simple_context = Context.new([Context.user("Hello")])
+  # Test helpers for consistent test data creation
+  defp create_message(role, content, opts \\ []) do
+    content_parts =
+      case content do
+        text when is_binary(text) -> [%ContentPart{type: :text, text: text}]
+        parts when is_list(parts) -> parts
+        part -> [part]
+      end
 
-    system_context =
-      Context.new([
-        Context.system("You are helpful"),
-        Context.user("Hi"),
-        Context.assistant("How can I help?")
-      ])
-
-    mixed_content_parts = [
-      ContentPart.text("Check weather: "),
-      ContentPart.tool_call("call_123", "get_weather", %{location: "NYC"}),
-      ContentPart.text(" Done!")
-    ]
-
-    complex_context =
-      Context.new([
-        Context.system("System prompt"),
-        %Message{role: :user, content: [ContentPart.text("User message")]},
-        %Message{role: :assistant, content: mixed_content_parts}
-      ])
-
-    %{
-      simple_context: simple_context,
-      system_context: system_context,
-      complex_context: complex_context,
-      mixed_content_parts: mixed_content_parts
+    %Message{
+      role: role,
+      content: content_parts,
+      metadata: Keyword.get(opts, :metadata, %{})
     }
   end
 
-  describe "protocol fallback behavior" do
-    test "returns error for unsupported types" do
-      unsupported = %{some: "data"}
+  defp create_tool_call_part(name, input, id) do
+    %ContentPart{
+      type: :tool_call,
+      tool_name: name,
+      input: input,
+      tool_call_id: id
+    }
+  end
 
-      assert Codec.encode_request(unsupported) == {:error, :not_implemented}
-      assert Codec.decode_response(unsupported) == {:error, :not_implemented}
+  defp create_weather_tool do
+    {:ok, tool} =
+      Tool.new(
+        name: "get_weather",
+        description: "Get current weather",
+        parameter_schema: [location: [type: :string, required: true]],
+        callback: fn _ -> {:ok, "sunny"} end
+      )
+
+    tool
+  end
+
+  describe "protocol implementations" do
+    test "ReqLLM.Context delegates to Map implementation" do
+      message = create_message(:user, "Hello")
+      context = Context.new([message])
+      model = %Model{provider: :openai, model: "gpt-4"}
+
+      result = Codec.encode_request(context, model)
+
+      assert result == %{
+               model: "gpt-4",
+               messages: [%{role: "user", content: "Hello"}]
+             }
+    end
+
+    test "Any implementation returns error for unsupported types" do
+      test_cases = [
+        {:unknown_type, %Model{provider: :test, model: "test"}},
+        {:some_atom, "test-model"},
+        {42, "test-model"}
+      ]
+
+      for {input, model} <- test_cases do
+        assert Codec.encode_request(input, model) == {:error, :not_implemented}
+      end
     end
   end
 
-  describe "Anthropic codec implementation" do
-    test "basic encoding", %{simple_context: context} do
-      tagged = %Anthropic.Context{context: context}
-      encoded = Codec.encode_request(tagged)
+  describe "basic message encoding" do
+    test "encodes single and multiple messages with different roles" do
+      messages = [
+        create_message(:system, "You are helpful"),
+        create_message(:user, "Hello"),
+        create_message(:assistant, "Hi there!"),
+        create_message(:tool, "Result")
+      ]
 
-      assert length(encoded.messages) == 1
-      assert hd(encoded.messages).role == "user"
-      refute Map.has_key?(encoded, :system)
+      context = Context.new(messages)
+      model = %Model{provider: :openai, model: "gpt-4"}
+
+      result = Codec.encode_request(context, model)
+
+      assert result == %{
+               model: "gpt-4",
+               messages: [
+                 %{role: "system", content: "You are helpful"},
+                 %{role: "user", content: "Hello"},
+                 %{role: "assistant", content: "Hi there!"},
+                 %{role: "tool", content: "Result"}
+               ]
+             }
     end
 
-    test "system message extraction", %{system_context: context} do
-      tagged = %Anthropic.Context{context: context}
-      encoded = Codec.encode_request(tagged)
+    test "handles different content formats" do
+      test_cases = [
+        # Binary string content
+        {"Simple text", "Simple text"},
+        # Single text part (flattened)
+        {[%ContentPart{type: :text, text: "Single part"}], "Single part"},
+        # Multiple parts (not flattened)
+        {[
+           %ContentPart{type: :text, text: "Part 1"},
+           create_tool_call_part("test", %{}, "123")
+         ],
+         [
+           %{type: "text", text: "Part 1"},
+           %{id: "123", type: "function", function: %{name: "test", arguments: "{}"}}
+         ]}
+      ]
 
-      assert encoded.system == "You are helpful"
-      assert length(encoded.messages) == 2
-      assert Enum.map(encoded.messages, & &1.role) == ["user", "assistant"]
-    end
+      for {input_content, expected_content} <- test_cases do
+        message = %Message{role: :user, content: input_content, metadata: %{}}
+        context = %{messages: [message]}
+        model = %Model{provider: :openai, model: "gpt-4"}
 
-    test "rejects multiple system messages" do
-      context =
-        Context.new([
-          Context.system("First"),
-          Context.system("Second"),
-          Context.user("Hello")
-        ])
-
-      tagged = %Anthropic.Context{context: context}
-
-      assert_raise RuntimeError, "Multiple system messages not supported", fn ->
-        Codec.encode_request(tagged)
+        result = Codec.encode_request(context, model)
+        assert result.messages == [%{role: "user", content: expected_content}]
       end
     end
 
-    test "content part encoding - text, image, tool_call", %{mixed_content_parts: parts} do
-      image_part = ContentPart.image("base64data", "image/jpeg")
-      all_parts = [ContentPart.text("Text")] ++ [image_part] ++ parts
-
-      message = %Message{role: :user, content: all_parts}
-      context = Context.new([message])
-      tagged = %Anthropic.Context{context: context}
-      encoded = Codec.encode_request(tagged)
-
-      content = hd(encoded.messages).content
-      assert length(content) == 5
-
-      # Text part
-      assert Enum.at(content, 0) == %{"type" => "text", "text" => "Text"}
-
-      # Image part  
-      image_encoded = Enum.at(content, 1)
-      assert image_encoded["type"] == "image"
-      assert image_encoded["source"]["type"] == "base64"
-      assert image_encoded["source"]["media_type"] == "image/jpeg"
-      assert image_encoded["source"]["data"] == "base64data"
-
-      # Tool call part
-      tool_encoded = Enum.at(content, 3)
-      assert tool_encoded["type"] == "tool_use"
-      assert tool_encoded["id"] == "call_123"
-      assert tool_encoded["name"] == "get_weather"
-      assert tool_encoded["input"] == %{location: "NYC"}
-    end
-
-    test "image_url type encoding for compatibility" do
-      image_url_part = ContentPart.image_url("data:image/png;base64,iVBORw0KGgo=")
-      message = %Message{role: :user, content: [image_url_part]}
-      context = Context.new([message])
-      tagged = %Anthropic.Context{context: context}
-      encoded = Codec.encode_request(tagged)
-
-      content = hd(hd(encoded.messages).content)
-      assert content["type"] == "image"
-      assert content["source"]["type"] == "base64"
-      assert content["source"]["data"] == "iVBORw0KGgo="
-    end
-
-    test "response decoding - text, tool_use, thinking" do
-      response = %{
-        "content" => [
-          %{"type" => "text", "text" => "Hello!"},
-          %{
-            "type" => "tool_use",
-            "id" => "tool_1",
-            "name" => "search",
-            "input" => %{"q" => "test"}
-          },
-          %{"type" => "thinking", "text" => "Let me think..."}
-        ]
-      }
-
-      tagged = %Anthropic.Context{context: response}
-      chunks = Codec.decode_response(tagged)
-
-      assert length(chunks) == 3
-      assert Enum.at(chunks, 0) == StreamChunk.text("Hello!")
-
-      tool_chunk = Enum.at(chunks, 1)
-      assert tool_chunk.type == :tool_call
-      assert tool_chunk.name == "search"
-      assert tool_chunk.arguments == %{"q" => "test"}
-      assert tool_chunk.metadata.id == "tool_1"
-
-      assert Enum.at(chunks, 2) == StreamChunk.thinking("Let me think...")
-    end
-
-    test "decoding ignores unknown content blocks and malformed data" do
-      response = %{
-        "content" => [
-          %{"type" => "text", "text" => "Valid"},
-          %{"type" => "unknown_type", "data" => "ignored"},
-          # Missing text field
-          %{"type" => "text"},
-          # Missing required fields
-          %{"type" => "tool_use"},
-          %{"type" => "text", "text" => "Also valid"}
-        ]
-      }
-
-      tagged = %Anthropic.Context{context: response}
-      chunks = Codec.decode_response(tagged)
-
-      assert length(chunks) == 2
-      assert Enum.map(chunks, & &1.text) == ["Valid", "Also valid"]
-    end
-
-    test "empty context and edge cases" do
-      # Empty context
-      empty_context = Context.new([])
-      tagged = %Anthropic.Context{context: empty_context}
-      encoded = Codec.encode_request(tagged)
-      assert encoded.messages == []
-      refute Map.has_key?(encoded, :system)
-
-      # System-only context
-      system_only = Context.new([Context.system("Only system")])
-      tagged = %Anthropic.Context{context: system_only}
-      encoded = Codec.encode_request(tagged)
-      assert encoded.system == "Only system"
-      assert encoded.messages == []
-
-      # Empty content parts
-      empty_message = %Message{role: :user, content: []}
-      context = Context.new([empty_message])
-      tagged = %Anthropic.Context{context: context}
-      encoded = Codec.encode_request(tagged)
-      assert hd(encoded.messages).content == []
-
-      # Empty response
-      empty_response = %{"content" => []}
-      tagged = %Anthropic.Context{context: empty_response}
-      chunks = Codec.decode_response(tagged)
-      assert chunks == []
-    end
-  end
-
-  describe "OpenAI codec implementation" do
-    test "basic encoding", %{simple_context: context} do
-      tagged = %OpenAI.Context{context: context}
-      encoded = Codec.encode_request(tagged)
-
-      assert length(encoded.messages) == 1
-      assert hd(encoded.messages)["role"] == "user"
-      assert hd(encoded.messages)["content"] == "Hello"
-    end
-
-    test "system message handling", %{system_context: context} do
-      tagged = %OpenAI.Context{context: context}
-      encoded = Codec.encode_request(tagged)
-
-      assert length(encoded.messages) == 3
-      roles = Enum.map(encoded.messages, & &1["role"])
-      assert roles == ["system", "user", "assistant"]
-    end
-
-    test "content encoding - single text vs multi-part" do
-      # Single text becomes string
-      single_text = Context.new([Context.user("Simple")])
-      tagged = %OpenAI.Context{context: single_text}
-      encoded = Codec.encode_request(tagged)
-      assert hd(encoded.messages)["content"] == "Simple"
-
-      # Multi-part becomes array
-      parts = [ContentPart.text("Text"), ContentPart.image("data", "image/png")]
-      multi_message = %Message{role: :user, content: parts}
-      multi_context = Context.new([multi_message])
-      tagged = %OpenAI.Context{context: multi_context}
-      encoded = Codec.encode_request(tagged)
-
-      content = hd(encoded.messages)["content"]
-      assert is_list(content)
-      assert length(content) == 2
-    end
-
-    test "content part encoding - image, image_url, tool_call" do
-      parts = [
-        ContentPart.image("base64data", "image/jpeg"),
-        ContentPart.image_url("https://example.com/image.jpg"),
-        ContentPart.tool_call("call_1", "search", %{q: "test"})
+    test "filters unsupported content parts and handles single text after filtering" do
+      # Test case 1: Multiple parts after filtering
+      mixed_content = [
+        %ContentPart{type: :text, text: "Keep this"},
+        # Returns nil, gets filtered
+        %ContentPart{type: :image_url, url: "filtered.jpg"},
+        create_tool_call_part("keep_tool", %{arg: "value"}, "456")
       ]
 
-      message = %Message{role: :assistant, content: parts}
-      context = Context.new([message])
-      tagged = %OpenAI.Context{context: context}
-      encoded = Codec.encode_request(tagged)
+      message = create_message(:user, mixed_content)
+      context = %{messages: [message]}
+      model = %Model{provider: :openai, model: "gpt-4"}
 
-      content = hd(encoded.messages)["content"]
-      assert length(content) == 3
+      result = Codec.encode_request(context, model)
 
-      # Image with data
-      image_part = Enum.at(content, 0)
-      assert image_part["type"] == "image_url"
-      assert image_part["image_url"]["url"] == "data:image/jpeg;base64,base64data"
-
-      # Image URL
-      image_url_part = Enum.at(content, 1)
-      assert image_url_part["type"] == "image_url"
-      assert image_url_part["image_url"]["url"] == "https://example.com/image.jpg"
-
-      # Tool call
-      tool_part = Enum.at(content, 2)
-      assert tool_part["type"] == "function"
-      assert tool_part["function"]["name"] == "search"
-      assert tool_part["function"]["arguments"] == ~s|{"q":"test"}|
-      assert tool_part["id"] == "call_1"
-    end
-
-    test "response decoding - text and tool calls" do
-      # Text response
-      text_response = %{"choices" => [%{"message" => %{"content" => "Hello world"}}]}
-      tagged = %OpenAI.Context{context: text_response}
-      chunks = Codec.decode_response(tagged)
-      assert length(chunks) == 1
-      assert hd(chunks) == StreamChunk.text("Hello world")
-
-      # Tool calls response
-      tool_response = %{
-        "choices" => [
-          %{
-            "message" => %{
-              "tool_calls" => [
-                %{
-                  "id" => "call_1",
-                  "function" => %{
-                    "name" => "get_weather",
-                    "arguments" => ~s|{"location":"NYC"}|
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-
-      tagged = %OpenAI.Context{context: tool_response}
-      chunks = Codec.decode_response(tagged)
-      assert length(chunks) == 1
-
-      chunk = hd(chunks)
-      assert chunk.type == :tool_call
-      assert chunk.name == "get_weather"
-      assert chunk.arguments == %{"location" => "NYC"}
-      assert chunk.metadata.id == "call_1"
-    end
-
-    test "response decoding edge cases" do
-      # Empty content
-      empty_response = %{"choices" => [%{"message" => %{"content" => ""}}]}
-      tagged = %OpenAI.Context{context: empty_response}
-      chunks = Codec.decode_response(tagged)
-      assert chunks == []
-
-      # Invalid JSON in tool arguments
-      bad_json_response = %{
-        "choices" => [
-          %{
-            "message" => %{
-              "tool_calls" => [
-                %{
-                  "id" => "call_1",
-                  "function" => %{
-                    "name" => "test",
-                    "arguments" => "invalid json {"
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-
-      tagged = %OpenAI.Context{context: bad_json_response}
-      chunks = Codec.decode_response(tagged)
-      assert length(chunks) == 1
-      assert hd(chunks).arguments == %{}
-
-      # Malformed responses
-      malformed = %{"choices" => [%{"message" => %{}}]}
-      tagged = %OpenAI.Context{context: malformed}
-      chunks = Codec.decode_response(tagged)
-      assert chunks == []
-    end
-  end
-
-  describe "round-trip data integrity" do
-    test "Anthropic encode-decode preserves content types", %{complex_context: context} do
-      # Encode to Anthropic format
-      tagged = %Anthropic.Context{context: context}
-      encoded = Codec.encode_request(tagged)
-
-      # Verify encoding structure
-      assert encoded.system == "System prompt"
-      assert length(encoded.messages) == 2
-
-      # Check content ordering preservation
-      assistant_content = Enum.at(encoded.messages, 1).content
-      assert length(assistant_content) == 3
-      types = Enum.map(assistant_content, & &1["type"])
-      assert types == ["text", "tool_use", "text"]
-
-      # Simulate Anthropic response with similar content
-      response_data = %{
-        "content" => [
-          %{"type" => "text", "text" => "I'll help you"},
-          %{
-            "type" => "tool_use",
-            "id" => "new_call",
-            "name" => "search",
-            "input" => %{"q" => "help"}
-          }
-        ]
-      }
-
-      # Decode response
-      response_tagged = %Anthropic.Context{context: response_data}
-      chunks = Codec.decode_response(response_tagged)
-
-      assert length(chunks) == 2
-      assert Enum.at(chunks, 0).type == :content
-      assert Enum.at(chunks, 1).type == :tool_call
-      assert Enum.at(chunks, 1).name == "search"
-    end
-
-    test "OpenAI encode-decode preserves message structure", %{system_context: context} do
-      # Encode to OpenAI format
-      tagged = %OpenAI.Context{context: context}
-      encoded = Codec.encode_request(tagged)
-
-      assert length(encoded.messages) == 3
-      roles = Enum.map(encoded.messages, & &1["role"])
-      assert roles == ["system", "user", "assistant"]
-
-      # Simulate OpenAI response
-      response_data = %{
-        "choices" => [
-          %{
-            "message" => %{
-              "content" => "I'm here to help you with anything you need."
-            }
-          }
-        ]
-      }
-
-      # Decode response
-      response_tagged = %OpenAI.Context{context: response_data}
-      chunks = Codec.decode_response(response_tagged)
-
-      assert length(chunks) == 1
-      assert hd(chunks).type == :content
-      assert hd(chunks).text == "I'm here to help you with anything you need."
-    end
-
-    test "content ordering consistency across providers" do
-      # Create mixed content message
-      parts = [
-        ContentPart.text("Step 1: "),
-        ContentPart.tool_call("call_a", "action_a", %{param: "a"}),
-        ContentPart.text(" Step 2: "),
-        ContentPart.tool_call("call_b", "action_b", %{param: "b"}),
-        ContentPart.text(" Done!")
+      expected_content = [
+        %{type: "text", text: "Keep this"},
+        %{
+          id: "456",
+          type: "function",
+          function: %{name: "keep_tool", arguments: ~s({"arg":"value"})}
+        }
       ]
 
-      message = %Message{role: :assistant, content: parts}
-      context = Context.new([message])
+      assert result.messages == [%{role: "user", content: expected_content}]
 
-      # Test Anthropic ordering
-      anthropic_tagged = %Anthropic.Context{context: context}
-      anthropic_encoded = Codec.encode_request(anthropic_tagged)
-      anthropic_content = hd(anthropic_encoded.messages).content
-      anthropic_types = Enum.map(anthropic_content, & &1["type"])
-      assert anthropic_types == ["text", "tool_use", "text", "tool_use", "text"]
+      # Test case 2: Single text part after filtering (hits line 90)
+      filtered_to_single = [
+        %ContentPart{type: :text, text: "Only this remains"},
+        # Returns nil, gets filtered
+        %ContentPart{type: :image_url, url: "filtered.jpg"}
+      ]
 
-      # Test OpenAI ordering  
-      openai_tagged = %OpenAI.Context{context: context}
-      openai_encoded = Codec.encode_request(openai_tagged)
-      openai_content = hd(openai_encoded.messages)["content"]
-      openai_types = Enum.map(openai_content, & &1["type"])
-      # OpenAI uses "function" instead of "tool_use"
-      expected_openai = ["text", "function", "text", "function", "text"]
-      assert openai_types == expected_openai
-    end
+      message2 = create_message(:user, filtered_to_single)
+      context2 = %{messages: [message2]}
 
-    test "unicode and special characters preservation" do
-      unicode_text = "Hello 世界! Emoji: 🌍 Math: ∑∞ Special: <>&\"'"
-      context = Context.new([Context.user(unicode_text)])
-
-      # Test Anthropic
-      anthropic_tagged = %Anthropic.Context{context: context}
-      anthropic_encoded = Codec.encode_request(anthropic_tagged)
-      assert hd(hd(anthropic_encoded.messages).content)["text"] == unicode_text
-
-      # Test OpenAI
-      openai_tagged = %OpenAI.Context{context: context}
-      openai_encoded = Codec.encode_request(openai_tagged)
-      assert hd(openai_encoded.messages)["content"] == unicode_text
-    end
-
-    test "large payload handling" do
-      # Create large content
-      # ~20KB
-      large_text = String.duplicate("Large content block. ", 1000)
-      large_context = Context.new([Context.user(large_text)])
-
-      # Should encode without issues
-      anthropic_tagged = %Anthropic.Context{context: large_context}
-      anthropic_encoded = Codec.encode_request(anthropic_tagged)
-      encoded_text = hd(hd(anthropic_encoded.messages).content)["text"]
-      assert String.length(encoded_text) > 15000
-      assert encoded_text == large_text
-
-      openai_tagged = %OpenAI.Context{context: large_context}
-      openai_encoded = Codec.encode_request(openai_tagged)
-      assert hd(openai_encoded.messages)["content"] == large_text
+      result2 = Codec.encode_request(context2, model)
+      assert result2.messages == [%{role: "user", content: "Only this remains"}]
     end
   end
 
-  describe "error handling and validation" do
-    test "malformed context structures" do
-      # Context with nil messages should not crash encoding
-      try do
-        bad_context = %Context{messages: nil}
-        tagged = %Anthropic.Context{context: bad_context}
-        # This might raise but shouldn't crash the VM
-        Codec.encode_request(tagged)
-      rescue
-        # Expected to fail gracefully
-        _ -> :ok
+  describe "model name extraction" do
+    test "extracts model name from different input types" do
+      context = %{messages: []}
+
+      test_cases = [
+        {%Model{provider: :openai, model: "gpt-4"}, "gpt-4"},
+        {"gpt-3.5-turbo", "gpt-3.5-turbo"},
+        {%{name: "some-model"}, "unknown"},
+        {:invalid, "unknown"}
+      ]
+
+      for {model_input, expected} <- test_cases do
+        result = Codec.encode_request(context, model_input)
+        assert result.model == expected
+      end
+    end
+  end
+
+  describe "tool handling" do
+    test "encodes tools when present and omits when empty/missing" do
+      weather_tool = create_weather_tool()
+      message = create_message(:user, "What's the weather?")
+
+      test_cases = [
+        # With tools
+        {%{messages: [message], tools: [weather_tool]}, true},
+        # Empty tools list
+        {%{messages: [message], tools: []}, false},
+        # No tools key
+        {%{messages: [message]}, false}
+      ]
+
+      model = %Model{provider: :openai, model: "gpt-4"}
+
+      for {context, should_have_tools} <- test_cases do
+        result = Codec.encode_request(context, model)
+
+        if should_have_tools do
+          assert Map.has_key?(result, :tools)
+          assert [tool_spec] = result.tools
+          assert tool_spec["type"] == "function"
+          assert tool_spec["function"]["name"] == "get_weather"
+          assert tool_spec["function"]["description"] == "Get current weather"
+          assert is_map(tool_spec["function"]["parameters"])
+        else
+          refute Map.has_key?(result, :tools)
+        end
+
+        # Common assertions
+        assert result.model == "gpt-4"
+        assert result.messages == [%{role: "user", content: "What's the weather?"}]
       end
     end
 
-    test "provider-specific error scenarios" do
-      # Test tool call with missing fields
-      incomplete_tool = %Message.ContentPart{
-        type: :tool_call,
-        tool_name: "test",
-        input: %{},
-        # Missing ID
-        tool_call_id: nil
+    test "encodes tool calls in messages" do
+      tool_call_part = create_tool_call_part("get_weather", %{location: "New York"}, "call_123")
+      message = create_message(:assistant, [tool_call_part])
+
+      context = Context.new([message])
+      model = %Model{provider: :openai, model: "gpt-4"}
+
+      result = Codec.encode_request(context, model)
+
+      expected = %{
+        model: "gpt-4",
+        messages: [
+          %{
+            role: "assistant",
+            content: [
+              %{
+                id: "call_123",
+                type: "function",
+                function: %{
+                  name: "get_weather",
+                  arguments: ~s({"location":"New York"})
+                }
+              }
+            ]
+          }
+        ]
       }
 
-      message = %Message{role: :assistant, content: [incomplete_tool]}
-      context = Context.new([message])
+      assert result == expected
+    end
+  end
 
-      # Should encode without crashing (providers handle missing fields)
-      anthropic_tagged = %Anthropic.Context{context: context}
-      anthropic_encoded = Codec.encode_request(anthropic_tagged)
-      assert is_map(anthropic_encoded)
+  describe "edge cases" do
+    test "handles empty contexts and malformed JSON encoding" do
+      # Empty messages
+      empty_result =
+        Codec.encode_request(%{messages: []}, %Model{provider: :openai, model: "gpt-4"})
 
-      openai_tagged = %OpenAI.Context{context: context}
-      openai_encoded = Codec.encode_request(openai_tagged)
-      assert is_map(openai_encoded)
+      assert empty_result == %{model: "gpt-4", messages: []}
+
+      # Tool call with atoms (Jason can handle this)
+      bad_input = %{circular: :cannot_encode_atoms_safely}
+      tool_call = create_tool_call_part("test_tool", bad_input, "call_456")
+      message = create_message(:assistant, [tool_call])
+
+      context = %{messages: [message]}
+      model = %Model{provider: :openai, model: "gpt-4"}
+
+      result = Codec.encode_request(context, model)
+
+      assert %{
+               messages: [
+                 %{
+                   role: "assistant",
+                   content: [
+                     %{
+                       function: %{arguments: json_string}
+                     }
+                   ]
+                 }
+               ]
+             } = result
+
+      assert is_binary(json_string)
     end
   end
 end

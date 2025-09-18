@@ -38,12 +38,10 @@ defmodule ReqLLM.Providers.Groq do
         type: {:in, ~w(auto on_demand flex performance)},
         doc: "Performance tier for Groq requests"
       ],
-      # Groq-specific performance and service options
       reasoning_effort: [
         type: {:in, ~w(none default low medium high)},
         doc: "Reasoning effort level"
       ],
-      # Reasoning capabilities
       reasoning_format: [
         type: :string,
         doc: "Format for reasoning output"
@@ -52,32 +50,45 @@ defmodule ReqLLM.Providers.Groq do
         type: :map,
         doc: "Web search configuration with include/exclude domains"
       ],
-      # Search and compound features
       compound_custom: [
         type: :map,
         doc: "Custom configuration for Compound systems"
-      ],
-      logit_bias: [
-        type: :map,
-        doc: "Logit bias adjustments for tokens"
       ]
     ]
 
   import ReqLLM.Provider.Utils,
-    only: [prepare_options!: 3, maybe_put: 3, maybe_put_skip: 4, ensure_parsed_body: 1]
+    only: [maybe_put: 3, maybe_put_skip: 4, ensure_parsed_body: 1]
 
-  @body_options [
-    :temperature,
-    :max_tokens,
-    :top_p,
-    :frequency_penalty,
-    :presence_penalty,
-    :user,
-    :seed,
-    :logit_bias
-  ]
+  require Logger
 
-  # OpenAI-compatible options that Groq supports
+  # Helper for validation and translation
+  defp validate_and_translate!(provider_mod, model, raw_opts) do
+    # Separate context from user options since context is not user-configurable
+    {context, user_opts} = Keyword.pop(raw_opts, :context)
+
+    schema = provider_mod.provider_extended_generation_schema()
+    {:ok, valid_opts} = NimbleOptions.validate(user_opts, schema)
+
+    # Apply provider-specific translations
+    translated_opts =
+      case provider_mod.translate_options(:chat, model, valid_opts) do
+        {translated_opts, warnings} when is_list(warnings) ->
+          # Emit warnings to the logger
+          Enum.each(warnings, &Logger.warning/1)
+          translated_opts
+
+        translated_opts ->
+          translated_opts
+      end
+
+    # Add context back if it was present
+    if context do
+      Keyword.put(translated_opts, :context, context)
+    else
+      translated_opts
+    end
+  end
+
   @doc """
   Attaches the Groq plugin to a Req request.
 
@@ -175,7 +186,8 @@ defmodule ReqLLM.Providers.Groq do
     provider_opts = Keyword.get(other_opts, :provider_options, [])
     {_provider_options, core_opts} = Keyword.pop(other_opts, :provider_options, [])
 
-    opts = prepare_options!(__MODULE__, model, core_opts)
+    # Use new validation approach
+    opts = validate_and_translate!(__MODULE__, model, core_opts)
     opts = Keyword.put(opts, :tools, tools)
     opts = Keyword.merge(opts, provider_opts)
 
@@ -205,6 +217,19 @@ defmodule ReqLLM.Providers.Groq do
   end
 
   def extract_usage(_, _), do: {:error, :invalid_body}
+
+  @impl ReqLLM.Provider
+  def translate_options(_operation, _model, opts) do
+    # Groq is OpenAI-compatible, so most options pass through unchanged
+    # Handle stream? -> stream alias for backward compatibility
+    case Keyword.pop(opts, :stream?) do
+      {nil, rest} ->
+        {rest, []}
+
+      {stream_value, rest} ->
+        {Keyword.put(rest, :stream, stream_value), []}
+    end
+  end
 
   # Req pipeline steps
   @impl ReqLLM.Provider
@@ -319,7 +344,19 @@ defmodule ReqLLM.Providers.Groq do
 
   # Helper function for adding basic body options
   defp add_basic_options(body, request_options) do
-    Enum.reduce(@body_options, body, fn key, acc ->
+    # Define the standard OpenAI options that Groq supports in the request body
+    body_options = [
+      :temperature,
+      :max_tokens,
+      :top_p,
+      :frequency_penalty,
+      :presence_penalty,
+      :user,
+      :seed,
+      :logit_bias
+    ]
+
+    Enum.reduce(body_options, body, fn key, acc ->
       maybe_put(acc, key, request_options[key])
     end)
   end

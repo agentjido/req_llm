@@ -74,7 +74,22 @@ defimpl ReqLLM.Context.Codec, for: Map do
   defp encode_content(content) when is_binary(content), do: content
 
   defp encode_content(content) when is_list(content) do
-    Enum.map(content, &encode_content_part/1)
+    content
+    |> Enum.map(&encode_content_part/1)
+    |> maybe_flatten_single_text()
+  end
+
+  # Flatten single text content to a string for cleaner wire format
+  defp maybe_flatten_single_text([%{type: "text", text: text}]), do: text
+
+  defp maybe_flatten_single_text(content) do
+    # Filter out nil values first
+    filtered = Enum.reject(content, &is_nil/1)
+
+    case filtered do
+      [%{type: "text", text: text}] -> text
+      _ -> filtered
+    end
   end
 
   defp encode_content_part(%ReqLLM.Message.ContentPart{type: :text, text: text}) do

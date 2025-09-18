@@ -425,31 +425,6 @@ defmodule ReqLLM.Provider.Options do
                                transforms: [
                                  type: {:list, :string},
                                  doc: "Prompt transforms to apply (OpenRouter-specific)"
-                               ],
-
-                               # Groq-specific parameters
-                               service_tier: [
-                                 type: :string,
-                                 doc:
-                                   "Performance tier: auto, on_demand, flex, performance (Groq-specific)"
-                               ],
-                               reasoning_effort: [
-                                 type: :string,
-                                 doc:
-                                   "Reasoning effort level: none, default, low, medium, high (Groq-specific)"
-                               ],
-                               reasoning_format: [
-                                 type: :string,
-                                 doc: "Format for reasoning output (Groq-specific)"
-                               ],
-                               search_settings: [
-                                 type: :map,
-                                 doc:
-                                   "Web search configuration with include/exclude domains (Groq-specific)"
-                               ],
-                               compound_custom: [
-                                 type: :map,
-                                 doc: "Custom configuration for Compound systems (Groq-specific)"
                                ]
                              )
 
@@ -529,12 +504,17 @@ defmodule ReqLLM.Provider.Options do
 
   ## Examples
 
-      iex> ReqLLM.Provider.Options.validate_provider_options(
+      iex> {:ok, result} = ReqLLM.Provider.Options.validate_provider_options(
       ...>   id: :openai,
       ...>   base_url: "https://api.openai.com/v1",
       ...>   env: ["OPENAI_API_KEY"]
       ...> )
-      {:ok, [id: :openai, base_url: "https://api.openai.com/v1", env: ["OPENAI_API_KEY"]]}
+      iex> result[:id]
+      :openai
+      iex> result[:base_url]
+      "https://api.openai.com/v1"
+      iex> result[:env]
+      ["OPENAI_API_KEY"]
   """
   def validate_provider_options(opts) do
     NimbleOptions.validate(opts, @provider_options_schema)
@@ -545,12 +525,17 @@ defmodule ReqLLM.Provider.Options do
 
   ## Examples
 
-      iex> ReqLLM.Provider.Options.validate_generation_options(
+      iex> {:ok, result} = ReqLLM.Provider.Options.validate_generation_options(
       ...>   temperature: 0.7,
       ...>   max_tokens: 1000,
       ...>   stream: true
       ...> )
-      {:ok, [temperature: 0.7, max_tokens: 1000, stream: true]}
+      iex> result[:temperature]
+      0.7
+      iex> result[:max_tokens]
+      1000
+      iex> result[:stream]
+      true
   """
   def validate_generation_options(opts) do
     NimbleOptions.validate(opts, @generation_options_schema)
@@ -561,12 +546,17 @@ defmodule ReqLLM.Provider.Options do
 
   ## Examples
 
-      iex> ReqLLM.Provider.Options.validate_capabilities(
+      iex> {:ok, result} = ReqLLM.Provider.Options.validate_capabilities(
       ...>   id: "gpt-4",
       ...>   reasoning: true,
       ...>   tool_call: true
       ...> )
-      {:ok, [id: "gpt-4", reasoning: true, tool_call: true]}
+      iex> result[:id]
+      "gpt-4"
+      iex> result[:reasoning]
+      true
+      iex> result[:tool_call]
+      true
   """
   def validate_capabilities(opts) do
     NimbleOptions.validate(opts, @model_capabilities_schema)
@@ -643,6 +633,21 @@ defmodule ReqLLM.Provider.Options do
   end
 
   @doc """
+  Returns the base generation options schema used for end-user parameters.
+
+  This schema contains vendor-neutral options that apply to all providers.
+  Providers extend this via their provider_schema in the DSL.
+  """
+  def generation_schema, do: @generation_options_schema
+
+  @doc """
+  Returns the base provider configuration schema.
+
+  This schema contains provider-level connection and configuration options.
+  """
+  def provider_schema_base, do: @provider_options_schema
+
+  @doc """
   Extracts provider-specific options from a mixed options list.
 
   This is useful for separating standard options from provider-specific ones.
@@ -677,8 +682,11 @@ defmodule ReqLLM.Provider.Options do
 
       iex> defaults = [temperature: 0.7, max_tokens: 1000]
       iex> user_opts = [temperature: 0.9]
-      iex> ReqLLM.Provider.Options.merge_with_defaults(user_opts, defaults)
-      [temperature: 0.9, max_tokens: 1000]
+      iex> result = ReqLLM.Provider.Options.merge_with_defaults(user_opts, defaults)
+      iex> result[:temperature]
+      0.9
+      iex> result[:max_tokens]
+      1000
   """
   def merge_with_defaults(opts, defaults) do
     Keyword.merge(defaults, opts)

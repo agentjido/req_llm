@@ -3,210 +3,168 @@ defmodule ReqLLM.StreamChunkTest do
 
   alias ReqLLM.StreamChunk
 
-  describe "text/2" do
-    test "creates content chunk with text" do
-      chunk = StreamChunk.text("Hello")
-
-      assert chunk.type == :content
-      assert chunk.text == "Hello"
-      assert chunk.metadata == %{}
-      assert is_nil(chunk.name)
-      assert is_nil(chunk.arguments)
-    end
-
-    test "creates content chunk with metadata" do
-      metadata = %{token_count: 5, position: 1}
-      chunk = StreamChunk.text("Hello world", metadata)
-
-      assert chunk.type == :content
-      assert chunk.text == "Hello world"
-      assert chunk.metadata == metadata
-    end
-
-    test "handles empty and unicode text" do
-      empty_chunk = StreamChunk.text("")
-      unicode_chunk = StreamChunk.text("こんにちは 🌍")
-
-      assert empty_chunk.text == ""
-      assert unicode_chunk.text == "こんにちは 🌍"
-    end
+  # Shared test helpers
+  defp assert_chunk_fields(chunk, expected_fields) do
+    Enum.each(expected_fields, fn {field, value} ->
+      assert Map.get(chunk, field) == value
+    end)
   end
 
-  describe "thinking/2" do
-    test "creates thinking chunk with reasoning text" do
-      chunk = StreamChunk.thinking("Let me consider this...")
-
-      assert chunk.type == :thinking
-      assert chunk.text == "Let me consider this..."
-      assert chunk.metadata == %{}
-      assert is_nil(chunk.name)
-      assert is_nil(chunk.arguments)
-    end
-
-    test "creates thinking chunk with metadata" do
-      metadata = %{reasoning_step: 1, confidence: 0.8}
-      chunk = StreamChunk.thinking("First, I need to...", metadata)
-
-      assert chunk.type == :thinking
-      assert chunk.text == "First, I need to..."
-      assert chunk.metadata == metadata
-    end
-
-    test "handles multiline thinking content" do
-      content = """
-      Let me think about this step by step:
-      1. First consideration
-      2. Second point
-      """
-
-      chunk = StreamChunk.thinking(content)
-      assert chunk.text == content
-    end
+  defp assert_nil_fields(chunk, fields) do
+    Enum.each(fields, fn field ->
+      assert is_nil(Map.get(chunk, field))
+    end)
   end
 
-  describe "tool_call/3" do
-    test "creates tool call chunk with name and arguments" do
-      args = %{city: "New York", unit: "celsius"}
-      chunk = StreamChunk.tool_call("get_weather", args)
+  describe "constructor functions" do
+    test "text/2 creates content chunks" do
+      basic_chunk = StreamChunk.text("Hello")
+      with_meta = StreamChunk.text("Hello", %{token_count: 5})
 
-      assert chunk.type == :tool_call
-      assert chunk.name == "get_weather"
-      assert chunk.arguments == args
-      assert chunk.metadata == %{}
-      assert is_nil(chunk.text)
+      assert_chunk_fields(basic_chunk, type: :content, text: "Hello", metadata: %{})
+      assert_nil_fields(basic_chunk, [:name, :arguments])
+
+      assert_chunk_fields(with_meta, type: :content, text: "Hello", metadata: %{token_count: 5})
     end
 
-    test "creates tool call chunk with metadata" do
-      args = %{query: "Elixir programming"}
-      metadata = %{call_id: "123", partial: true}
-      chunk = StreamChunk.tool_call("search_web", args, metadata)
+    test "thinking/2 creates thinking chunks" do
+      basic_chunk = StreamChunk.thinking("Consider this...")
+      with_meta = StreamChunk.thinking("Step 1...", %{step: 1})
 
-      assert chunk.type == :tool_call
-      assert chunk.name == "search_web"
-      assert chunk.arguments == args
-      assert chunk.metadata == metadata
+      assert_chunk_fields(basic_chunk, type: :thinking, text: "Consider this...", metadata: %{})
+      assert_nil_fields(basic_chunk, [:name, :arguments])
+
+      assert_chunk_fields(with_meta, type: :thinking, text: "Step 1...", metadata: %{step: 1})
     end
 
-    test "handles empty arguments map" do
-      chunk = StreamChunk.tool_call("no_args_function", %{})
+    test "tool_call/3 creates tool call chunks" do
+      args = %{city: "NYC", unit: "celsius"}
+      basic_chunk = StreamChunk.tool_call("get_weather", args)
+      with_meta = StreamChunk.tool_call("search", %{q: "test"}, %{call_id: "123"})
 
-      assert chunk.name == "no_args_function"
-      assert chunk.arguments == %{}
+      assert_chunk_fields(basic_chunk,
+        type: :tool_call,
+        name: "get_weather",
+        arguments: args,
+        metadata: %{}
+      )
+
+      assert is_nil(basic_chunk.text)
+
+      assert_chunk_fields(with_meta,
+        type: :tool_call,
+        name: "search",
+        arguments: %{q: "test"},
+        metadata: %{call_id: "123"}
+      )
     end
 
-    test "handles complex nested arguments" do
-      args = %{
-        filters: %{
-          location: ["US", "CA"],
-          date_range: %{start: "2024-01-01", end: "2024-12-31"}
-        },
-        limit: 10
-      }
-
-      chunk = StreamChunk.tool_call("complex_search", args)
-      assert chunk.arguments == args
-    end
-  end
-
-  describe "meta/2" do
-    test "creates metadata chunk" do
+    test "meta/2 creates metadata chunks" do
       data = %{finish_reason: "stop", model: "claude-3"}
-      chunk = StreamChunk.meta(data)
+      basic_chunk = StreamChunk.meta(data)
+      merged_chunk = StreamChunk.meta(%{status: "ok"}, %{tokens: 42})
 
-      assert chunk.type == :meta
-      assert chunk.metadata == data
-      assert is_nil(chunk.text)
-      assert is_nil(chunk.name)
-      assert is_nil(chunk.arguments)
-    end
+      assert_chunk_fields(basic_chunk, type: :meta, metadata: data)
+      assert_nil_fields(basic_chunk, [:text, :name, :arguments])
 
-    test "merges extra metadata" do
-      base_data = %{finish_reason: "stop"}
-      extra_data = %{tokens_used: 42, duration_ms: 150}
-      chunk = StreamChunk.meta(base_data, extra_data)
-
-      expected = Map.merge(base_data, extra_data)
-      assert chunk.metadata == expected
-    end
-
-    test "handles usage statistics" do
-      usage_data = %{
-        usage: %{
-          input_tokens: 100,
-          output_tokens: 50,
-          total_tokens: 150
-        },
-        finish_reason: "stop"
-      }
-
-      chunk = StreamChunk.meta(usage_data)
-      assert chunk.metadata == usage_data
-    end
-
-    test "extra metadata overrides base data on conflicts" do
-      base = %{priority: "low", status: "pending"}
-      extra = %{priority: "high"}
-      chunk = StreamChunk.meta(base, extra)
-
-      assert chunk.metadata.priority == "high"
-      assert chunk.metadata.status == "pending"
+      assert_chunk_fields(merged_chunk, type: :meta, metadata: %{status: "ok", tokens: 42})
     end
   end
 
-  describe "validate/1" do
-    test "validates content chunks successfully" do
-      valid_chunk = StreamChunk.text("Valid content")
-      assert {:ok, ^valid_chunk} = StreamChunk.validate(valid_chunk)
+  describe "validation" do
+    # Table-driven validation tests
+    @valid_chunks [
+      {:content, StreamChunk.text("valid")},
+      {:thinking, StreamChunk.thinking("valid reasoning")},
+      {:tool_call, StreamChunk.tool_call("func", %{arg: "value"})},
+      {:meta, StreamChunk.meta(%{key: "value"})}
+    ]
+
+    @invalid_chunks [
+      {:content_nil_text, %StreamChunk{type: :content, text: nil},
+       "Content chunks must have non-nil text"},
+      {:thinking_nil_text, %StreamChunk{type: :thinking, text: nil},
+       "Thinking chunks must have non-nil text"},
+      {:tool_call_nil_name, %StreamChunk{type: :tool_call, name: nil, arguments: %{}},
+       "Tool call chunks must have non-nil name and arguments"},
+      {:tool_call_nil_args, %StreamChunk{type: :tool_call, name: "func", arguments: nil},
+       "Tool call chunks must have non-nil name and arguments"},
+      {:meta_nil_metadata, %StreamChunk{type: :meta, metadata: nil},
+       "Meta chunks must have metadata map"},
+      {:unknown_type, %StreamChunk{type: :unknown}, "Unknown chunk type: :unknown"}
+    ]
+
+    test "validates valid chunks" do
+      for {_type, chunk} <- @valid_chunks do
+        assert {:ok, ^chunk} = StreamChunk.validate(chunk)
+      end
     end
 
-    test "validates thinking chunks successfully" do
-      valid_chunk = StreamChunk.thinking("Valid reasoning")
-      assert {:ok, ^valid_chunk} = StreamChunk.validate(valid_chunk)
+    test "rejects invalid chunks" do
+      for {_name, chunk, expected_error} <- @invalid_chunks do
+        assert {:error, ^expected_error} = StreamChunk.validate(chunk)
+      end
     end
 
-    test "validates tool call chunks successfully" do
-      valid_chunk = StreamChunk.tool_call("func_name", %{arg: "value"})
-      assert {:ok, ^valid_chunk} = StreamChunk.validate(valid_chunk)
+    test "validates edge cases" do
+      # Empty values are valid
+      valid_edge_cases = [
+        StreamChunk.text(""),
+        StreamChunk.thinking(""),
+        StreamChunk.tool_call("", %{}),
+        StreamChunk.meta(%{})
+      ]
+
+      for chunk <- valid_edge_cases do
+        assert {:ok, ^chunk} = StreamChunk.validate(chunk)
+      end
+    end
+  end
+
+  describe "content handling" do
+    test "handles various text content types" do
+      test_cases = [
+        {"empty", ""},
+        {"unicode", "🚀 émojis and ñ chars"},
+        {"whitespace", "   \n\t  "},
+        {"multiline", "Line 1\nLine 2\nLine 3"},
+        {"long", String.duplicate("a", 1000)}
+      ]
+
+      for {_description, content} <- test_cases do
+        content_chunk = StreamChunk.text(content)
+        thinking_chunk = StreamChunk.thinking(content)
+
+        assert content_chunk.text == content
+        assert thinking_chunk.text == content
+        assert {:ok, _} = StreamChunk.validate(content_chunk)
+        assert {:ok, _} = StreamChunk.validate(thinking_chunk)
+      end
     end
 
-    test "validates meta chunks successfully" do
-      valid_chunk = StreamChunk.meta(%{finish_reason: "stop"})
-      assert {:ok, ^valid_chunk} = StreamChunk.validate(valid_chunk)
-    end
+    test "handles complex data structures" do
+      complex_args = %{
+        nested: %{deep: %{value: "test"}},
+        list: [1, 2, %{inner: true}],
+        mixed_types: %{
+          string: "test",
+          integer: 42,
+          float: 3.14,
+          boolean: true,
+          atom: :key,
+          nil_value: nil
+        }
+      }
 
-    test "rejects content chunks with nil text" do
-      invalid_chunk = %StreamChunk{type: :content, text: nil}
+      chunk = StreamChunk.tool_call("complex_tool", complex_args)
+      assert chunk.arguments == complex_args
+      assert {:ok, _} = StreamChunk.validate(chunk)
 
-      assert {:error, "Content chunks must have non-nil text"} =
-               StreamChunk.validate(invalid_chunk)
-    end
-
-    test "rejects thinking chunks with nil text" do
-      invalid_chunk = %StreamChunk{type: :thinking, text: nil}
-
-      assert {:error, "Thinking chunks must have non-nil text"} =
-               StreamChunk.validate(invalid_chunk)
-    end
-
-    test "rejects tool call chunks with missing name or arguments" do
-      invalid_chunk_name = %StreamChunk{type: :tool_call, name: nil, arguments: %{}}
-      invalid_chunk_args = %StreamChunk{type: :tool_call, name: "func", arguments: nil}
-
-      assert {:error, "Tool call chunks must have non-nil name and arguments"} =
-               StreamChunk.validate(invalid_chunk_name)
-
-      assert {:error, "Tool call chunks must have non-nil name and arguments"} =
-               StreamChunk.validate(invalid_chunk_args)
-    end
-
-    test "rejects meta chunks with nil metadata" do
-      invalid_chunk = %StreamChunk{type: :meta, metadata: nil}
-      assert {:error, "Meta chunks must have metadata map"} = StreamChunk.validate(invalid_chunk)
-    end
-
-    test "rejects chunks with unknown type" do
-      invalid_chunk = %StreamChunk{type: :unknown}
-      assert {:error, "Unknown chunk type: :unknown"} = StreamChunk.validate(invalid_chunk)
+      # Test metadata merging preserves complex structures
+      complex_meta = %{usage: %{input: 10, output: 25}, metrics: [1, 2, 3]}
+      meta_chunk = StreamChunk.meta(complex_meta, %{extra: true})
+      assert meta_chunk.metadata.usage == %{input: 10, output: 25}
+      assert meta_chunk.metadata.extra == true
     end
   end
 
@@ -217,88 +175,119 @@ defmodule ReqLLM.StreamChunkTest do
       end
     end
 
-    test "provides default empty metadata map" do
+    test "provides default metadata and pattern matching" do
       chunk = struct!(StreamChunk, %{type: :content, text: "test"})
       assert chunk.metadata == %{}
-    end
 
-    test "allows field access via pattern matching" do
-      chunk = StreamChunk.text("test content", %{id: 123})
-
-      assert %StreamChunk{type: :content, text: text, metadata: %{id: id}} = chunk
-      assert text == "test content"
-      assert id == 123
+      # Test pattern matching works
+      assert %StreamChunk{type: :content, text: "test", metadata: %{}} = chunk
     end
   end
 
-  describe "edge cases and boundary conditions" do
-    setup do
-      %{
-        empty_text: "",
-        long_text: String.duplicate("a", 10_000),
-        unicode_text: "🚀 Testing with émojis and ñ special chars",
-        whitespace_text: "   \n\t  ",
-        empty_metadata: %{},
-        nested_metadata: %{level1: %{level2: %{value: "deep"}}}
-      }
+  describe "constructor guard clauses" do
+    test "enforces parameter type guards" do
+      # text/2 guards
+      assert_raise FunctionClauseError, fn -> StreamChunk.text(123) end
+      assert_raise FunctionClauseError, fn -> StreamChunk.text("hello", "not a map") end
+
+      # thinking/2 guards  
+      assert_raise FunctionClauseError, fn -> StreamChunk.thinking(:not_binary) end
+      assert_raise FunctionClauseError, fn -> StreamChunk.thinking("thinking", :not_map) end
+
+      # tool_call/3 guards
+      assert_raise FunctionClauseError, fn -> StreamChunk.tool_call(:not_binary, %{}) end
+      assert_raise FunctionClauseError, fn -> StreamChunk.tool_call("name", :not_map) end
+      assert_raise FunctionClauseError, fn -> StreamChunk.tool_call("name", %{}, :not_map) end
+
+      # meta/2 guards
+      assert_raise FunctionClauseError, fn -> StreamChunk.meta(:not_map) end
+      assert_raise FunctionClauseError, fn -> StreamChunk.meta(%{}, :not_map) end
+    end
+  end
+
+  describe "inspect protocol" do
+    test "formats chunks with appropriate previews" do
+      # Content and thinking chunks show text preview
+      content_chunk = StreamChunk.text("Hello world")
+      thinking_chunk = StreamChunk.thinking("Let me consider this carefully")
+
+      content_inspect = inspect(content_chunk)
+      thinking_inspect = inspect(thinking_chunk)
+
+      assert content_inspect =~ "#StreamChunk<:content \"Hello world\">"
+      assert thinking_inspect =~ "#StreamChunk<:thinking thinking: \"Let me consider this...\">"
+
+      # Tool call chunks show function signature
+      tool_chunk = StreamChunk.tool_call("get_weather", %{city: "NYC"})
+      empty_args_chunk = StreamChunk.tool_call("no_args", %{})
+
+      tool_inspect = inspect(tool_chunk)
+      empty_inspect = inspect(empty_args_chunk)
+
+      assert tool_inspect =~ "#StreamChunk<:tool_call get_weather(...)>"
+      assert empty_inspect =~ "#StreamChunk<:tool_call no_args()>"
+
+      # Meta chunks show keys
+      meta_chunk = StreamChunk.meta(%{finish_reason: "stop", tokens: 42})
+      single_key_chunk = StreamChunk.meta(%{status: "complete"})
+
+      meta_inspect = inspect(meta_chunk)
+      single_inspect = inspect(single_key_chunk)
+
+      assert meta_inspect =~ "#StreamChunk<:meta meta:"
+      assert meta_inspect =~ "finish_reason" or meta_inspect =~ "tokens"
+      assert single_inspect =~ "#StreamChunk<:meta meta: status>"
     end
 
-    test "handles edge case text content", %{
-      empty_text: empty,
-      long_text: long,
-      unicode_text: unicode,
-      whitespace_text: whitespace
-    } do
-      empty_chunk = StreamChunk.text(empty)
-      long_chunk = StreamChunk.text(long)
-      unicode_chunk = StreamChunk.text(unicode)
-      whitespace_chunk = StreamChunk.text(whitespace)
+    test "handles text truncation at 20 characters" do
+      long_text = "This text is definitely longer than twenty characters"
+      exactly_20 = "12345678901234567890"
+      short_text = "Short"
 
-      assert empty_chunk.text == empty
-      assert long_chunk.text == long
-      assert unicode_chunk.text == unicode
-      assert whitespace_chunk.text == whitespace
+      long_chunk = StreamChunk.text(long_text)
+      exact_chunk = StreamChunk.text(exactly_20)
+      short_chunk = StreamChunk.text(short_text)
 
-      # All should validate successfully
-      assert {:ok, _} = StreamChunk.validate(empty_chunk)
-      assert {:ok, _} = StreamChunk.validate(long_chunk)
-      assert {:ok, _} = StreamChunk.validate(unicode_chunk)
-      assert {:ok, _} = StreamChunk.validate(whitespace_chunk)
+      long_inspect = inspect(long_chunk)
+      exact_inspect = inspect(exact_chunk)
+      short_inspect = inspect(short_chunk)
+
+      # Long text gets truncated with ellipsis
+      assert long_inspect =~ "\"This text is definit...\""
+      refute long_inspect =~ long_text
+
+      # Exactly 20 chars shows fully without ellipsis
+      assert exact_inspect =~ "\"12345678901234567890\""
+      refute exact_inspect =~ "..."
+
+      # Short text shows fully
+      assert short_inspect =~ "\"Short\""
+      refute short_inspect =~ "..."
     end
 
-    test "handles complex metadata structures", %{nested_metadata: nested} do
-      chunk = StreamChunk.text("test", nested)
-      assert get_in(chunk.metadata, [:level1, :level2, :value]) == "deep"
-    end
+    test "handles special cases in inspect" do
+      # Test nil text handling
+      invalid_chunk = %StreamChunk{type: :content, text: nil}
+      assert inspect(invalid_chunk) =~ "nil"
 
-    test "preserves metadata types and structures" do
-      metadata = %{
-        boolean_flag: true,
-        number_value: 42.5,
-        list_data: [1, 2, 3],
-        atom_key: :some_atom,
-        datetime: ~N[2024-01-01 12:00:00]
-      }
+      # Test empty string
+      empty_chunk = StreamChunk.text("")
+      assert inspect(empty_chunk) =~ "\"\""
 
-      chunk = StreamChunk.meta(metadata)
-      assert chunk.metadata == metadata
-    end
+      # Test unicode truncation
+      unicode_text = "Hello 🚀🌍🎉🔥💎✨⭐️🌟🎨🎯🎪🎭🎮🎲🎸 more text here"
+      unicode_chunk = StreamChunk.text(unicode_text)
+      unicode_inspect = inspect(unicode_chunk)
+      assert unicode_inspect =~ "..."
+      refute unicode_inspect =~ unicode_text
 
-    test "handles tool calls with various argument types" do
-      args = %{
-        string: "test",
-        integer: 42,
-        float: 3.14,
-        boolean: true,
-        list: [1, 2, 3],
-        map: %{nested: "value"},
-        atom: :key,
-        nil_value: nil
-      }
-
-      chunk = StreamChunk.tool_call("multi_type_tool", args)
-      assert chunk.arguments == args
-      assert {:ok, _} = StreamChunk.validate(chunk)
+      # Test multiple metadata keys formatting
+      many_keys = %{a: 1, b: 2, c: 3, d: 4, e: 5}
+      multi_chunk = StreamChunk.meta(many_keys)
+      multi_inspect = inspect(multi_chunk)
+      comma_count = multi_inspect |> String.graphemes() |> Enum.count(&(&1 == ","))
+      # 5 keys = 4 commas
+      assert comma_count == 4
     end
   end
 end

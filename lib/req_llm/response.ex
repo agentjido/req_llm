@@ -330,7 +330,7 @@ defmodule ReqLLM.Response do
   end
 
   # Helper function to extract structured object from tool calls
-  defp extract_object_from_response(response, _schema) do
+  defp extract_object_from_response(response, schema) do
     case tool_calls(response) do
       [] ->
         {:error, %ReqLLM.Error.API.Response{reason: "No structured output found in response"}}
@@ -342,8 +342,20 @@ defmodule ReqLLM.Response do
             {:error, %ReqLLM.Error.API.Response{reason: "No structured_output tool call found"}}
 
           %{arguments: object} ->
-            # TODO: Add schema validation here
-            {:ok, object}
+            # Validate the extracted object against the original schema
+            case ReqLLM.Schema.validate(object, schema) do
+              {:ok, _validated_data} ->
+                {:ok, object}
+
+              {:error, validation_error} ->
+                {:error,
+                 %ReqLLM.Error.API.Response{
+                   reason:
+                     "Structured output failed schema validation: #{Exception.message(validation_error)}",
+                   status: 422,
+                   response_body: object
+                 }}
+            end
         end
     end
   end

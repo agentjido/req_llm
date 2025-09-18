@@ -2,375 +2,590 @@ defmodule ReqLLM.Response.CodecTest do
   use ExUnit.Case, async: true
 
   alias ReqLLM.Message.ContentPart
-  alias ReqLLM.Providers.Anthropic
   alias ReqLLM.Response.Codec
-  alias ReqLLM.{Response, Model, Context, Message}
+  alias ReqLLM.{Context, Message, Model, Response, StreamChunk}
 
-  # Common test fixtures
-  setup do
-    model = Model.new(:anthropic, "claude-3-haiku-20240307")
+  # Test helpers
+  defp test_model(opts \\ []) do
+    defaults = [provider: :openai, model: "gpt-4"]
+    struct!(Model, Keyword.merge(defaults, opts))
+  end
 
-    basic_anthropic_response = %{
-      "id" => "msg_01234567890",
-      "model" => "claude-3-haiku-20240307",
-      "content" => [
-        %{"type" => "text", "text" => "Hello! How can I help you today?"}
-      ],
-      "usage" => %{
-        "input_tokens" => 10,
-        "output_tokens" => 25
-      },
-      "stop_reason" => "end_turn"
-    }
-
-    tool_use_response = %{
-      "id" => "msg_tool123",
-      "model" => "claude-3-haiku-20240307",
-      "content" => [
-        %{"type" => "text", "text" => "I'll help you check the weather."},
-        %{
-          "type" => "tool_use",
-          "id" => "toolu_123",
-          "name" => "get_weather",
-          "input" => %{"location" => "NYC"}
+  defp complete_response_data(overrides \\ %{}) do
+    Map.merge(
+      %{
+        "id" => "chatcmpl-123",
+        "model" => "gpt-4-turbo",
+        "choices" => [
+          %{
+            "message" => %{"content" => "Hello, world!"},
+            "finish_reason" => "stop"
+          }
+        ],
+        "usage" => %{
+          "prompt_tokens" => 12,
+          "completion_tokens" => 5,
+          "total_tokens" => 17
         }
-      ],
-      "usage" => %{
-        "input_tokens" => 15,
-        "output_tokens" => 30
       },
-      "stop_reason" => "tool_use"
-    }
-
-    thinking_response = %{
-      "id" => "msg_think456",
-      "model" => "claude-3-7-sonnet-20250219",
-      "content" => [
-        %{"type" => "thinking", "text" => "Let me think about this problem..."},
-        %{"type" => "text", "text" => "Based on my analysis, the answer is 42."}
-      ],
-      "usage" => %{
-        "input_tokens" => 20,
-        "output_tokens" => 35
-      },
-      "stop_reason" => "end_turn"
-    }
-
-    %{
-      model: model,
-      basic_anthropic_response: basic_anthropic_response,
-      tool_use_response: tool_use_response,
-      thinking_response: thinking_response
-    }
+      overrides
+    )
   end
 
-  describe "protocol fallback behavior" do
-    test "returns error for unsupported types", %{model: model} do
-      unsupported = %{some: "data"}
+  describe "Response protocol implementation" do
+    test "returns response as-is and empty SSE events" do
+      message = %Message{
+        role: :assistant,
+        content: [%ContentPart{type: :text, text: "Hello"}],
+        metadata: %{}
+      }
 
-      assert Codec.decode_response(unsupported, model) == {:error, :not_implemented}
-      assert Codec.encode_request(unsupported) == {:error, :not_implemented}
+      response = %Response{
+        id: "test-123",
+        model: "test-model",
+        context: Context.new([message]),
+        message: message,
+        usage: %{input_tokens: 10, output_tokens: 5},
+        finish_reason: :stop
+      }
+
+      model = test_model()
+
+      assert {:ok, ^response} = Codec.decode_response(response, model)
+      assert [] = Codec.decode_sse_event(response, model)
     end
   end
 
-  describe "Anthropic.Response codec implementation" do
-    test "basic response decoding", %{model: model, basic_anthropic_response: response} do
-      wrapped = %Anthropic.Response{payload: response}
+  describe "Map protocol - decode_response/2" do
+    test "decodes complete OpenAI-compatible response" do
+      model = test_model()
+      data = complete_response_data()
 
-      {:ok, decoded} = Codec.decode_response(wrapped, model)
-
-      assert %Response{} = decoded
-      assert decoded.id == "msg_01234567890"
-      assert decoded.model == "claude-3-haiku-20240307"
-      assert decoded.stream? == false
-      assert decoded.usage.input_tokens == 10
-      assert decoded.usage.output_tokens == 25
-      assert decoded.usage.total_tokens == 35
-      assert decoded.finish_reason == :stop
-
-      # Check message content
-      assert %Message{role: :assistant} = decoded.message
-
-      assert [%ContentPart{type: :text, text: "Hello! How can I help you today?"}] =
-               decoded.message.content
-
-      # Check context contains the message
-      assert [%Message{role: :assistant}] = decoded.context.messages
+      assert {:ok, response} = Codec.decode_response(data, model)
+      assert response.id == "chatcmpl-123"
+      assert response.model == "gpt-4-turbo"
+      assert response.finish_reason == :stop
+      assert response.usage == %{input_tokens: 12, output_tokens: 5, total_tokens: 17}
+      assert response.message.role == :assistant
+      assert [%ContentPart{type: :text, text: "Hello, world!"}] = response.message.content
     end
 
-    test "tool use response decoding", %{model: model, tool_use_response: response} do
-      wrapped = %Anthropic.Response{payload: response}
+    # Table-driven tests for missing/malformed fields
+    missing_field_tests = [
+      {"missing id",
+       %{
+         "model" => "gpt-4",
+         "choices" => [%{"message" => %{"content" => "Test"}, "finish_reason" => "stop"}]
+       }, "unknown", "gpt-4"},
+      {"missing model",
+       %{
+         "id" => "test-123",
+         "choices" => [%{"message" => %{"content" => "Test"}, "finish_reason" => "stop"}]
+       }, "test-123", "gpt-4"},
+      {"missing usage",
+       %{
+         "id" => "test-123",
+         "model" => "gpt-4",
+         "choices" => [%{"message" => %{"content" => "Test"}, "finish_reason" => "stop"}]
+       }, "test-123", "gpt-4"},
+      {"empty choices", %{"id" => "test-123", "model" => "gpt-4", "choices" => []}, "test-123",
+       "gpt-4"},
+      {"missing choices", %{"id" => "test-123", "model" => "gpt-4"}, "test-123", "gpt-4"}
+    ]
 
-      {:ok, decoded} = Codec.decode_response(wrapped, model)
+    for {desc, data, expected_id, expected_model} <- missing_field_tests do
+      test "handles #{desc}" do
+        model = test_model()
+        data = unquote(Macro.escape(data))
 
-      assert decoded.id == "msg_tool123"
-      assert decoded.finish_reason == :tool_calls
+        assert {:ok, response} = Codec.decode_response(data, model)
+        assert response.id == unquote(expected_id)
+        assert response.model == unquote(expected_model)
 
-      # Check mixed content parts
-      assert %Message{role: :assistant, content: content_parts} = decoded.message
-      assert length(content_parts) == 2
+        # Missing usage should default to zeros
+        if not Map.has_key?(data, "usage") do
+          assert response.usage == %{input_tokens: 0, output_tokens: 0, total_tokens: 0}
+        end
 
-      # Text part
-      text_part = Enum.at(content_parts, 0)
-      assert %ContentPart{type: :text, text: "I'll help you check the weather."} = text_part
-
-      # Tool call part
-      tool_part = Enum.at(content_parts, 1)
-
-      assert %ContentPart{
-               type: :tool_call,
-               tool_name: "get_weather",
-               input: %{"location" => "NYC"},
-               tool_call_id: "toolu_123"
-             } = tool_part
-    end
-
-    test "thinking response decoding", %{model: model, thinking_response: response} do
-      wrapped = %Anthropic.Response{payload: response}
-
-      {:ok, decoded} = Codec.decode_response(wrapped, model)
-
-      assert decoded.id == "msg_think456"
-      assert decoded.model == "claude-3-7-sonnet-20250219"
-
-      # Check mixed content parts including thinking
-      assert %Message{role: :assistant, content: content_parts} = decoded.message
-      assert length(content_parts) == 2
-
-      # Thinking part (converted to reasoning type)
-      thinking_part = Enum.at(content_parts, 0)
-
-      assert %ContentPart{type: :reasoning, text: "Let me think about this problem..."} =
-               thinking_part
-
-      # Text part
-      text_part = Enum.at(content_parts, 1)
-
-      assert %ContentPart{type: :text, text: "Based on my analysis, the answer is 42."} =
-               text_part
-    end
-
-    test "stream response decoding", %{model: model} do
-      stream = Stream.cycle(["chunk1", "chunk2"])
-      wrapped = %Anthropic.Response{payload: stream}
-
-      result = Codec.decode_response(wrapped, model)
-
-      case result do
-        {:ok, decoded} ->
-          assert decoded.stream? == true
-          assert decoded.stream == stream
-          assert decoded.id == "streaming-response"
-          assert decoded.message == nil
-          assert decoded.context.messages == []
-
-        {:error, :unsupported_provider} ->
-          # Stream support might not be fully implemented yet
-          # This is acceptable for now
-          :ok
+        # Empty/missing choices should result in nil message
+        if data["choices"] in [[], nil] do
+          assert response.message == nil
+          assert response.finish_reason == nil
+        end
       end
     end
 
-    test "empty content handling", %{model: model} do
-      empty_response = %{
-        "id" => "msg_empty",
-        "model" => "claude-3-haiku-20240307",
-        "content" => [],
-        "usage" => %{"input_tokens" => 5, "output_tokens" => 0},
-        "stop_reason" => "end_turn"
+    test "preserves provider metadata" do
+      model = test_model()
+
+      data =
+        complete_response_data(%{
+          "system_fingerprint" => "fp-123",
+          "created" => 1_234_567_890,
+          "object" => "chat.completion"
+        })
+
+      assert {:ok, response} = Codec.decode_response(data, model)
+
+      expected_meta = %{
+        "system_fingerprint" => "fp-123",
+        "created" => 1_234_567_890,
+        "object" => "chat.completion"
       }
 
-      wrapped = %Anthropic.Response{payload: empty_response}
-      {:ok, decoded} = Codec.decode_response(wrapped, model)
-
-      assert decoded.message == nil
-      assert decoded.context.messages == []
+      assert response.provider_meta == expected_meta
     end
 
-    test "malformed content handling", %{model: model} do
-      malformed_response = %{
-        "id" => "msg_bad",
-        "model" => "claude-3-haiku-20240307",
-        "content" => [
-          %{"type" => "text", "text" => "Valid text"},
-          %{"type" => "unknown_type", "data" => "ignored"},
-          # Missing text field
-          %{"type" => "text"},
-          # Missing required fields
-          %{"type" => "tool_use"},
-          %{"type" => "text", "text" => "Another valid text"}
-        ],
-        "usage" => %{"input_tokens" => 10, "output_tokens" => 5},
-        "stop_reason" => "end_turn"
-      }
+    # Table-driven tests for content types
+    content_type_tests = [
+      {"text list content",
+       [%{"type" => "text", "text" => "Hello "}, %{"type" => "text", "text" => "world!"}],
+       [%ContentPart{type: :text, text: "Hello "}, %ContentPart{type: :text, text: "world!"}]},
+      {"mixed valid/invalid content",
+       [
+         %{"type" => "text", "text" => "Valid text"},
+         %{"type" => "image", "url" => "http://example.com/img.jpg"},
+         %{"type" => "unknown", "data" => "something"}
+       ], [%ContentPart{type: :text, text: "Valid text"}]}
+    ]
 
-      wrapped = %Anthropic.Response{payload: malformed_response}
-      {:ok, decoded} = Codec.decode_response(wrapped, model)
+    for {desc, input_content, expected_content} <- content_type_tests do
+      test "handles #{desc}" do
+        model = test_model()
 
-      # Should only include valid content parts
-      assert %Message{content: content_parts} = decoded.message
-      assert length(content_parts) == 2
-      assert Enum.map(content_parts, & &1.text) == ["Valid text", "Another valid text"]
+        data =
+          complete_response_data(%{
+            "choices" => [
+              %{
+                "message" => %{"content" => unquote(Macro.escape(input_content))},
+                "finish_reason" => "stop"
+              }
+            ]
+          })
+
+        assert {:ok, response} = Codec.decode_response(data, model)
+        assert response.message.content == unquote(Macro.escape(expected_content))
+      end
     end
 
-    test "usage parsing edge cases", %{model: model} do
-      # Missing usage
-      no_usage = %{
-        "id" => "msg_no_usage",
-        "content" => [%{"type" => "text", "text" => "Hello"}]
-      }
+    # Tool call tests consolidated
+    test "handles tool calls variations" do
+      model = test_model()
 
-      wrapped = %Anthropic.Response{payload: no_usage}
-      {:ok, decoded} = Codec.decode_response(wrapped, model)
+      # Valid tool call
+      valid_data =
+        complete_response_data(%{
+          "choices" => [
+            %{
+              "message" => %{
+                "tool_calls" => [
+                  %{
+                    "id" => "call-123",
+                    "type" => "function",
+                    "function" => %{
+                      "name" => "get_weather",
+                      "arguments" => ~s({"location":"NYC"})
+                    }
+                  }
+                ]
+              },
+              "finish_reason" => "tool_calls"
+            }
+          ]
+        })
 
-      assert decoded.usage == %{input_tokens: 0, output_tokens: 0, total_tokens: 0}
+      assert {:ok, response} = Codec.decode_response(valid_data, model)
+      assert response.finish_reason == :tool_calls
 
-      # Partial usage
-      partial_usage = %{
-        "id" => "msg_partial",
-        "content" => [%{"type" => "text", "text" => "Hello"}],
-        "usage" => %{"input_tokens" => 10}
-      }
+      assert [
+               %ContentPart{
+                 type: :tool_call,
+                 tool_name: "get_weather",
+                 input: %{"location" => "NYC"},
+                 tool_call_id: "call-123"
+               }
+             ] = response.message.content
 
-      wrapped = %Anthropic.Response{payload: partial_usage}
-      {:ok, decoded} = Codec.decode_response(wrapped, model)
+      # Invalid JSON arguments - should result in nil message
+      invalid_data =
+        complete_response_data(%{
+          "choices" => [
+            %{
+              "message" => %{
+                "tool_calls" => [
+                  %{
+                    "id" => "call-123",
+                    "type" => "function",
+                    "function" => %{"name" => "test_tool", "arguments" => "invalid json"}
+                  }
+                ]
+              },
+              "finish_reason" => "tool_calls"
+            }
+          ]
+        })
 
-      assert decoded.usage == %{input_tokens: 0, output_tokens: 0, total_tokens: 0}
+      assert {:ok, response} = Codec.decode_response(invalid_data, model)
+      assert response.message == nil
+
+      # Nil arguments - should use empty map
+      nil_args_data =
+        complete_response_data(%{
+          "choices" => [
+            %{
+              "message" => %{
+                "tool_calls" => [
+                  %{
+                    "id" => "call-123",
+                    "type" => "function",
+                    "function" => %{"name" => "test_tool", "arguments" => nil}
+                  }
+                ]
+              },
+              "finish_reason" => "tool_calls"
+            }
+          ]
+        })
+
+      assert {:ok, response} = Codec.decode_response(nil_args_data, model)
+
+      assert [
+               %ContentPart{
+                 type: :tool_call,
+                 tool_name: "test_tool",
+                 input: %{},
+                 tool_call_id: "call-123"
+               }
+             ] = response.message.content
+
+      # Malformed tool calls - should filter out invalid ones
+      mixed_data =
+        complete_response_data(%{
+          "choices" => [
+            %{
+              "message" => %{
+                "tool_calls" => [
+                  %{
+                    "id" => "call-123",
+                    "type" => "function",
+                    "function" => %{"name" => "valid_tool", "arguments" => ~s({"param":"value"})}
+                  },
+                  %{"id" => "call-456", "type" => "invalid_type"},
+                  # Missing id and function
+                  %{"type" => "function"}
+                ]
+              }
+            }
+          ]
+        })
+
+      assert {:ok, response} = Codec.decode_response(mixed_data, model)
+
+      assert [
+               %ContentPart{
+                 type: :tool_call,
+                 tool_name: "valid_tool",
+                 input: %{"param" => "value"},
+                 tool_call_id: "call-123"
+               }
+             ] = response.message.content
     end
 
-    test "finish reason mapping", %{model: model} do
-      test_cases = [
-        {"end_turn", :stop},
-        {"max_tokens", :length},
-        {"tool_use", :tool_calls},
-        {"stop_sequence", :stop},
-        {"unknown_reason", "unknown_reason"},
-        {nil, nil}
+    test "handles delta responses (streaming format)" do
+      model = test_model()
+
+      data =
+        complete_response_data(%{
+          "choices" => [
+            %{
+              "delta" => %{"content" => "Hello world"},
+              "finish_reason" => "stop"
+            }
+          ]
+        })
+
+      assert {:ok, response} = Codec.decode_response(data, model)
+      assert response.message.role == :assistant
+      assert [%ContentPart{type: :text, text: "Hello world"}] = response.message.content
+    end
+
+    # Table-driven tests for finish_reason variations
+    finish_reason_tests = [
+      {"stop", :stop},
+      {"length", :length},
+      {"tool_calls", :tool_calls},
+      {"content_filter", :content_filter},
+      {"custom_reason", "custom_reason"},
+      {nil, nil},
+      {123, nil}
+    ]
+
+    for {input_reason, expected_reason} <- finish_reason_tests do
+      test "handles finish_reason: #{inspect(input_reason)}" do
+        model = test_model()
+
+        data =
+          complete_response_data(%{
+            "choices" => [
+              %{
+                "message" => %{"content" => "Test"},
+                "finish_reason" => unquote(Macro.escape(input_reason))
+              }
+            ]
+          })
+
+        assert {:ok, response} = Codec.decode_response(data, model)
+        assert response.finish_reason == unquote(Macro.escape(expected_reason))
+      end
+    end
+
+    test "returns error for non-map data" do
+      model = test_model()
+
+      for invalid_data <- ["invalid", 123, []] do
+        assert {:error, :not_implemented} = Codec.decode_response(invalid_data, model)
+      end
+    end
+  end
+
+  describe "Map protocol - decode_sse_event/2" do
+    test "decodes various delta formats" do
+      model = test_model()
+
+      # Content delta
+      content_event = %{data: %{"choices" => [%{"delta" => %{"content" => "Hello world"}}]}}
+
+      assert [%StreamChunk{type: :content, text: "Hello world"}] =
+               Codec.decode_sse_event(content_event, model)
+
+      # Empty/nil content should return empty list
+      for empty_content <- ["", nil] do
+        empty_event = %{data: %{"choices" => [%{"delta" => %{"content" => empty_content}}]}}
+        assert [] = Codec.decode_sse_event(empty_event, model)
+      end
+
+      # Tool call delta
+      tool_event = %{
+        data: %{
+          "choices" => [
+            %{
+              "delta" => %{
+                "tool_calls" => [
+                  %{
+                    "id" => "call-123",
+                    "type" => "function",
+                    "function" => %{
+                      "name" => "get_weather",
+                      "arguments" => ~s({"location":"NYC"})
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+
+      assert [
+               %StreamChunk{
+                 type: :tool_call,
+                 name: "get_weather",
+                 arguments: %{"location" => "NYC"},
+                 metadata: %{id: "call-123"}
+               }
+             ] = Codec.decode_sse_event(tool_event, model)
+
+      # Tool call delta with invalid/nil JSON
+      for invalid_args <- ["invalid json", nil] do
+        invalid_event = %{
+          data: %{
+            "choices" => [
+              %{
+                "delta" => %{
+                  "tool_calls" => [
+                    %{
+                      "id" => "call-123",
+                      "type" => "function",
+                      "function" => %{"name" => "test_tool", "arguments" => invalid_args}
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+
+        assert [
+                 %StreamChunk{
+                   type: :tool_call,
+                   name: "test_tool",
+                   arguments: %{},
+                   metadata: %{id: "call-123"}
+                 }
+               ] = Codec.decode_sse_event(invalid_event, model)
+      end
+
+      # Multiple tool calls
+      multi_tool_event = %{
+        data: %{
+          "choices" => [
+            %{
+              "delta" => %{
+                "tool_calls" => [
+                  %{
+                    "id" => "call-123",
+                    "type" => "function",
+                    "function" => %{"name" => "tool_one", "arguments" => "{\"a\":1}"}
+                  },
+                  %{
+                    "id" => "call-456",
+                    "type" => "function",
+                    "function" => %{"name" => "tool_two", "arguments" => "{\"b\":2}"}
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+
+      result = Codec.decode_sse_event(multi_tool_event, model)
+      assert length(result) == 2
+      assert Enum.any?(result, &(&1.name == "tool_one"))
+      assert Enum.any?(result, &(&1.name == "tool_two"))
+
+      # Malformed tool calls - should filter out invalid
+      malformed_event = %{
+        data: %{
+          "choices" => [
+            %{
+              "delta" => %{
+                "tool_calls" => [
+                  %{
+                    "id" => "call-123",
+                    "type" => "function",
+                    "function" => %{"name" => "valid_tool", "arguments" => "{}"}
+                  },
+                  %{"id" => "call-456", "type" => "invalid_type"},
+                  # Missing required fields
+                  %{"type" => "function"}
+                ]
+              }
+            }
+          ]
+        }
+      }
+
+      assert [
+               %StreamChunk{
+                 type: :tool_call,
+                 name: "valid_tool",
+                 arguments: %{},
+                 metadata: %{id: "call-123"}
+               }
+             ] = Codec.decode_sse_event(malformed_event, model)
+    end
+
+    test "returns empty list for invalid event formats" do
+      model = test_model()
+
+      # Various invalid formats should return empty list
+      invalid_events = [
+        "invalid",
+        %{data: "string"},
+        %{data: []},
+        %{other: %{}},
+        # Missing choices
+        %{data: %{"model" => "gpt-4"}},
+        # Unknown delta format
+        %{data: %{"choices" => [%{"delta" => %{"unknown_field" => "value"}}]}}
       ]
 
-      for {anthropic_reason, expected_reason} <- test_cases do
-        response = %{
-          "id" => "msg_test",
-          "content" => [%{"type" => "text", "text" => "Test"}],
-          "stop_reason" => anthropic_reason
-        }
-
-        wrapped = %Anthropic.Response{payload: response}
-        {:ok, decoded} = Codec.decode_response(wrapped, model)
-
-        assert decoded.finish_reason == expected_reason
+      for event <- invalid_events do
+        assert [] = Codec.decode_sse_event(event, model)
       end
     end
+  end
 
-    test "provider metadata preservation", %{model: model} do
-      response_with_meta = %{
-        "id" => "msg_meta",
-        "model" => "claude-3-haiku-20240307",
-        "content" => [%{"type" => "text", "text" => "Test"}],
-        "usage" => %{"input_tokens" => 1, "output_tokens" => 1},
-        "stop_reason" => "end_turn",
-        "custom_field" => "custom_value",
-        "another_meta" => %{"nested" => "data"}
-      }
+  describe "Any protocol implementation (fallback)" do
+    test "handles various data types" do
+      model = test_model()
+      fallback_data = ["string", 123, [], {:tuple, :data}, %Date{year: 2024, month: 1, day: 1}]
 
-      wrapped = %Anthropic.Response{payload: response_with_meta}
-      {:ok, decoded} = Codec.decode_response(wrapped, model)
-
-      # Custom fields should be preserved in provider_meta
-      assert decoded.provider_meta["custom_field"] == "custom_value"
-      assert decoded.provider_meta["another_meta"] == %{"nested" => "data"}
-
-      # Standard fields should not be in provider_meta
-      refute Map.has_key?(decoded.provider_meta, "id")
-      refute Map.has_key?(decoded.provider_meta, "model")
-      refute Map.has_key?(decoded.provider_meta, "content")
-      refute Map.has_key?(decoded.provider_meta, "usage")
-      refute Map.has_key?(decoded.provider_meta, "stop_reason")
-    end
-
-    test "unsupported provider error" do
-      openai_model = Model.new(:openai, "gpt-4")
-      wrapped = %Anthropic.Response{payload: %{}}
-
-      assert Codec.decode_response(wrapped, openai_model) == {:error, :unsupported_provider}
-    end
-
-    test "encoding not supported" do
-      wrapped = %Anthropic.Response{payload: %{}}
-
-      assert Codec.encode_request(wrapped) == {:error, :not_implemented}
+      for data <- fallback_data do
+        assert {:error, :not_implemented} = Codec.decode_response(data, model)
+        assert [] = Codec.decode_sse_event(data, model)
+      end
     end
   end
 
-  describe "error handling" do
-    test "decode with malformed payload", %{model: model} do
-      # Non-map, non-stream payload
-      wrapped = %Anthropic.Response{payload: "invalid"}
+  describe "edge cases and robustness" do
+    test "handles extreme and malformed data gracefully" do
+      model = test_model()
 
-      assert {:error, _error} = Codec.decode_response(wrapped, model)
-    end
+      # Large content
+      large_content = String.duplicate("A", 100_000)
 
-    test "decode without model parameter" do
-      wrapped = %Anthropic.Response{payload: %{}}
+      large_data =
+        complete_response_data(%{
+          "choices" => [
+            %{
+              "message" => %{"content" => large_content},
+              "finish_reason" => "length"
+            }
+          ]
+        })
 
-      assert Codec.decode_response(wrapped) == {:error, :not_implemented}
-    end
+      assert {:ok, response} = Codec.decode_response(large_data, model)
+      assert response.message.content == [%ContentPart{type: :text, text: large_content}]
 
-    test "runtime errors during decoding", %{model: model} do
-      # This should trigger an error in decode_anthropic_json
-      bad_response = %{
-        # nil text should cause issues
-        "content" => [%{"type" => "text", "text" => nil}]
+      # Deeply nested malformed data should not crash
+      complex_malformed = %{
+        "id" => "test",
+        "choices" => [
+          %{
+            "message" => %{
+              "content" => [
+                %{"type" => "text", "text" => "valid text"},
+                %{"type" => "text", "text" => ""},
+                %{"invalid" => "structure"}
+              ],
+              "tool_calls" => [
+                %{
+                  "id" => "call-123",
+                  "type" => "function",
+                  "function" => %{"name" => "valid_tool", "arguments" => "{}"}
+                }
+              ]
+            }
+          }
+        ],
+        "usage" => "invalid_usage"
       }
 
-      wrapped = %Anthropic.Response{payload: bad_response}
-      result = Codec.decode_response(wrapped, model)
+      assert {:ok, response} = Codec.decode_response(complex_malformed, model)
+      assert response.id == "test"
+      assert response.usage == %{input_tokens: 0, output_tokens: 0, total_tokens: 0}
 
-      # Should return error tuple, not crash
-      assert {:error, _error} = result
-    end
-  end
+      # Model edge cases
+      nil_model_data = %{"id" => "test", "model" => nil, "choices" => []}
+      assert {:ok, response} = Codec.decode_response(nil_model_data, model)
+      # Map.get with nil value doesn't use fallback
+      assert response.model == nil
 
-  describe "integration with existing patterns" do
-    test "decoded response works with Context operations", %{
-      model: model,
-      basic_anthropic_response: response
-    } do
-      wrapped = %Anthropic.Response{payload: response}
-      {:ok, decoded} = Codec.decode_response(wrapped, model)
+      nil_model_field = %{"id" => "test", "model" => "gpt-3.5-turbo", "choices" => []}
+      nil_model_struct = %Model{provider: :openai, model: nil}
+      assert {:ok, response} = Codec.decode_response(nil_model_field, nil_model_struct)
+      assert response.model == "gpt-3.5-turbo"
 
-      # Can extract context
-      assert %Context{messages: [%Message{role: :assistant}]} = decoded.context
+      # Empty response
+      assert {:ok, response} = Codec.decode_response(%{}, model)
+      assert response.id == "unknown"
+      assert response.model == "gpt-4"
+      assert response.usage == %{input_tokens: 0, output_tokens: 0, total_tokens: 0}
 
-      # Can build new context from response
-      user_context = Context.new([Context.user("Hello")])
-      combined_messages = Context.to_list(user_context) ++ Context.to_list(decoded.context)
-      combined_context = Context.new(combined_messages)
-
-      assert length(combined_context.messages) == 2
-      assert Enum.map(combined_context.messages, & &1.role) == [:user, :assistant]
-    end
-
-    test "response message content can be converted to StreamChunks", %{
-      model: model,
-      tool_use_response: response
-    } do
-      wrapped = %Anthropic.Response{payload: response}
-      {:ok, decoded} = Codec.decode_response(wrapped, model)
-
-      # Convert message content back to chunks (simulating streaming equivalence)
-      content_parts = decoded.message.content
-
-      # Text part
-      text_part = Enum.at(content_parts, 0)
-      assert text_part.type == :text
-      assert text_part.text == "I'll help you check the weather."
-
-      # Tool call part  
-      tool_part = Enum.at(content_parts, 1)
-      assert tool_part.type == :tool_call
-      assert tool_part.tool_name == "get_weather"
-      assert tool_part.input == %{"location" => "NYC"}
+      # Nil model should raise KeyError
+      assert_raise(KeyError, fn -> Codec.decode_response(%{"id" => "test"}, nil) end)
     end
   end
 end

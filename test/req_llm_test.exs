@@ -23,7 +23,7 @@ defmodule ReqLLMTest do
 
   describe "provider/1 top-level API" do
     test "returns provider module for valid provider" do
-      assert {:ok, ReqLLM.Providers.Anthropic} = ReqLLM.provider(:anthropic)
+      assert {:ok, ReqLLM.Providers.Groq} = ReqLLM.provider(:groq)
     end
 
     test "returns error for invalid provider" do

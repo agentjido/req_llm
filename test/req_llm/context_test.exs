@@ -204,17 +204,6 @@ defmodule ReqLLM.ContextTest do
     end
   end
 
-  describe "wrap/2 function" do
-    test "wraps context with provider model" do
-      context = Context.new([Context.system("Test")])
-      {:ok, model} = ReqLLM.Model.from("anthropic:claude-3-haiku-20240307")
-
-      wrapped = Context.wrap(context, model)
-
-      assert %ReqLLM.Providers.Anthropic.Context{context: ^context} = wrapped
-    end
-  end
-
   describe "Enumerable protocol" do
     setup do
       context =
