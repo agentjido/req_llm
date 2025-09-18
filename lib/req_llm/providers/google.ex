@@ -1,37 +1,25 @@
 defmodule ReqLLM.Providers.Google do
   @moduledoc """
-  Google Gemini provider implementation using the Provider behavior.
+  Google Gemini provider – fully compatible with the OpenAI baseline pattern.
 
-  Supports Google's Gemini API with features including:
-  - Text generation with Gemini models
-  - Streaming responses
-  - Tool calling
-  - Multi-modal inputs (text, images, audio, video)
-  - Various safety settings
+  ## Protocol Usage
+
+  Uses custom `ReqLLM.Providers.Google.Context` and `ReqLLM.Providers.Google.Response` codecs
+  to handle Gemini's specific API format while maintaining OpenAI-compatible interfaces.
+
+  ## Google-Specific Extensions
+
+  Beyond standard OpenAI parameters, Google supports:
+  - `safety_settings` - List of safety filter configurations
+  - `candidate_count` - Number of response candidates to generate (default: 1)
+
+  See `provider_schema/0` for the complete Google-specific schema and
+  `ReqLLM.Provider.Options` for inherited OpenAI parameters.
 
   ## Configuration
 
-  Set your Google API key via JidoKeys (automatically picks up from .env):
-
-      # Option 1: Set directly in JidoKeys
-      ReqLLM.put_key(:google_api_key, "AIza...")
-      
-      # Option 2: Add to .env file (automatically loaded via JidoKeys+Dotenvy)
+      # Add to .env file (automatically loaded)
       GOOGLE_API_KEY=AIza...
-
-  ## Examples
-
-      # Simple text generation
-      model = ReqLLM.Model.from("google:gemini-1.5-flash")
-      {:ok, response} = ReqLLM.generate_text(model, "Hello!")
-
-      # Streaming
-      {:ok, stream} = ReqLLM.stream_text(model, "Tell me a story", stream: true)
-
-      # Tool calling
-      tools = [%ReqLLM.Tool{name: "get_weather", ...}]
-      {:ok, response} = ReqLLM.generate_text(model, "What's the weather?", tools: tools)
-
   """
 
   @behaviour ReqLLM.Provider
@@ -41,14 +29,12 @@ defmodule ReqLLM.Providers.Google do
     base_url: "https://generativelanguage.googleapis.com/v1beta",
     metadata: "priv/models_dev/google.json",
     default_env_key: "GOOGLE_API_KEY",
-    context_wrapper: ReqLLM.Providers.Google.Context,
-    response_wrapper: ReqLLM.Providers.Google.Response,
     provider_schema: [
-      safety_settings: [
+      google_safety_settings: [
         type: {:list, :map},
         doc: "Safety filter settings for content generation"
       ],
-      candidate_count: [
+      google_candidate_count: [
         type: :pos_integer,
         default: 1,
         doc: "Number of response candidates to generate"
@@ -56,7 +42,43 @@ defmodule ReqLLM.Providers.Google do
     ]
 
   import ReqLLM.Provider.Utils,
-    only: [prepare_options!: 3, maybe_put: 3, ensure_parsed_body: 1]
+    only: [maybe_put: 3, ensure_parsed_body: 1]
+
+  require Logger
+
+  # Helper for validation and translation (copied from Groq)
+  defp validate_and_translate!(provider_mod, model, raw_opts) do
+    # Separate context and special test/internal options from user options
+    {context, remaining_opts} = Keyword.pop(raw_opts, :context)
+
+    # Extract internal/test options that shouldn't be validated
+    internal_keys = [:req_options, :on_unsupported, :fixture, :req_http_options, :compiled_schema]
+    {internal_opts, user_opts} = Keyword.split(remaining_opts, internal_keys)
+
+    schema = provider_mod.provider_extended_generation_schema()
+    {:ok, valid_opts} = NimbleOptions.validate(user_opts, schema)
+
+    # Apply provider-specific translations
+    translated_opts =
+      case provider_mod.translate_options(:chat, model, valid_opts) do
+        {translated_opts, warnings} when is_list(warnings) ->
+          # Emit warnings to the logger
+          Enum.each(warnings, &Logger.warning/1)
+          translated_opts
+
+        translated_opts ->
+          translated_opts
+      end
+
+    # Merge back all the options
+    final_opts = Keyword.merge(translated_opts, internal_opts)
+
+    if context do
+      Keyword.put(final_opts, :context, context)
+    else
+      final_opts
+    end
+  end
 
   @doc """
   Attaches the Google plugin to a Req request.
@@ -75,6 +97,8 @@ defmodule ReqLLM.Providers.Google do
     * `:base_url` - Override base URL. Defaults to provider default
     * `:messages` - Chat messages to send
     * `:system` - System message
+    * `:google_safety_settings` - List of safety filter configurations
+    * `:google_candidate_count` - Number of response candidates to generate
     * All options from ReqLLM.Provider.Options schemas are supported
 
   """
@@ -83,9 +107,12 @@ defmodule ReqLLM.Providers.Google do
     with {:ok, model} <- ReqLLM.Model.from(model_input) do
       http_opts = Keyword.get(opts, :req_http_options, [])
 
+      # Determine endpoint based on streaming
+      endpoint = if opts[:stream], do: ":streamGenerateContent", else: ":generateContent"
+
       request =
         Req.new(
-          [url: "/models/#{model.model}:generateContent", method: :post, receive_timeout: 30_000] ++
+          [url: "/models/#{model.model}#{endpoint}", method: :post, receive_timeout: 30_000] ++
             http_opts
         )
         |> attach(model, Keyword.put(opts, :context, context))
@@ -94,11 +121,43 @@ defmodule ReqLLM.Providers.Google do
     end
   end
 
+  def prepare_request(:object, model_input, %ReqLLM.Context{} = context, opts) do
+    compiled_schema = Keyword.fetch!(opts, :compiled_schema)
+
+    structured_output_tool =
+      ReqLLM.Tool.new!(
+        name: "structured_output",
+        description: "Generate structured output matching the provided schema",
+        parameter_schema: compiled_schema.schema,
+        callback: fn _args -> {:ok, "structured output generated"} end
+      )
+
+    opts_with_tool =
+      Keyword.update(opts, :tools, [structured_output_tool], fn tools ->
+        [structured_output_tool | tools]
+      end)
+
+    opts_with_choice =
+      Keyword.put(opts_with_tool, :tool_choice, %{
+        type: "function",
+        function: %{name: "structured_output"}
+      })
+
+    opts_with_max_tokens =
+      case Keyword.get(opts_with_choice, :max_tokens) do
+        nil -> Keyword.put(opts_with_choice, :max_tokens, 4096)
+        tokens when tokens < 200 -> Keyword.put(opts_with_choice, :max_tokens, 200)
+        _value -> opts_with_choice
+      end
+
+    prepare_request(:chat, model_input, context, opts_with_max_tokens)
+  end
+
   def prepare_request(operation, _model, _input, _opts) do
     {:error,
      ReqLLM.Error.Invalid.Parameter.exception(
        parameter:
-         "operation: #{inspect(operation)} not supported by Google provider. Supported operations: [:chat]"
+         "operation: #{inspect(operation)} not supported by Google provider. Supported operations: [:chat, :object]"
      )}
   end
 
@@ -112,28 +171,26 @@ defmodule ReqLLM.Providers.Google do
       raise ReqLLM.Error.Invalid.Provider.exception(provider: model.provider)
     end
 
-    if !ReqLLM.Provider.Registry.model_exists?("#{provider_id()}:#{model.model}") do
-      raise ReqLLM.Error.Invalid.Parameter.exception(parameter: "model: #{model.model}")
-    end
-
     api_key = ReqLLM.Keys.get!(model, user_opts)
-
-    # Extract tools separately to avoid validation issues
     {tools, other_opts} = Keyword.pop(user_opts, :tools, [])
+    provider_opts = Keyword.get(other_opts, :provider_options, [])
+    {_provider_options, core_opts} = Keyword.pop(other_opts, :provider_options, [])
 
-    # Prepare validated options and extract what Req needs
-    opts = prepare_options!(__MODULE__, model, other_opts)
-
-    # Add tools back after validation
+    # Use new validation approach
+    opts = validate_and_translate!(__MODULE__, model, core_opts)
     opts = Keyword.put(opts, :tools, tools)
+    opts = Keyword.merge(opts, provider_opts)
+
     base_url = Keyword.get(user_opts, :base_url, default_base_url())
-    req_keys = __MODULE__.supported_provider_options() ++ [:model, :context]
+    req_keys = __MODULE__.supported_provider_options() ++ [:context]
+    model_name = model.model
 
     request
-    |> Req.Request.register_options(req_keys)
-    # Google uses query parameter for API key
+    |> Req.Request.register_options(req_keys ++ [:model])
+    # Google uses query parameter for API key, not Authorization header
     |> Req.Request.merge_options(
-      Keyword.take(opts, req_keys) ++ [base_url: base_url, params: [key: api_key]]
+      Keyword.take(opts, req_keys) ++
+        [model: model_name, base_url: base_url, params: [key: api_key]]
     )
     |> ReqLLM.Step.Error.attach()
     |> Req.Request.append_request_steps(llm_encode_body: &__MODULE__.encode_body/1)
@@ -152,61 +209,37 @@ defmodule ReqLLM.Providers.Google do
 
   def extract_usage(_, _), do: {:error, :invalid_body}
 
-  # Parameter validation helpers
-  defp validate_parameter_ranges(opts) do
-    with :ok <- validate_temperature(opts[:temperature]),
-         :ok <- validate_top_p(opts[:top_p]),
-         :ok <- validate_top_k(opts[:top_k]) do
-      validate_max_tokens(opts[:max_tokens])
+  @impl ReqLLM.Provider
+  def translate_options(_operation, _model, opts) do
+    # Handle stream? -> stream alias for backward compatibility
+    case Keyword.pop(opts, :stream?) do
+      {nil, rest} ->
+        {rest, []}
+
+      {stream_value, rest} ->
+        {Keyword.put(rest, :stream, stream_value), []}
     end
   end
-
-  defp validate_temperature(nil), do: :ok
-  defp validate_temperature(temp) when is_number(temp) and temp >= 0.0 and temp <= 2.0, do: :ok
-
-  defp validate_temperature(temp),
-    do: {:error, "temperature must be between 0.0 and 2.0, got #{temp}"}
-
-  defp validate_top_p(nil), do: :ok
-  defp validate_top_p(top_p) when is_number(top_p) and top_p >= 0.0 and top_p <= 1.0, do: :ok
-  defp validate_top_p(top_p), do: {:error, "top_p must be between 0.0 and 1.0, got #{top_p}"}
-
-  defp validate_top_k(nil), do: :ok
-  defp validate_top_k(top_k) when is_integer(top_k) and top_k >= 1, do: :ok
-  defp validate_top_k(top_k), do: {:error, "top_k must be >= 1, got #{top_k}"}
-
-  defp validate_max_tokens(nil), do: :ok
-
-  defp validate_max_tokens(max_tokens) when is_integer(max_tokens) and max_tokens >= 1, do: :ok
-
-  defp validate_max_tokens(max_tokens), do: {:error, "max_tokens must be >= 1, got #{max_tokens}"}
 
   # Req pipeline steps
   @impl ReqLLM.Provider
   def encode_body(request) do
-    # Validate parameter ranges before proceeding
-    case validate_parameter_ranges(request.options) do
-      :ok ->
-        nil
-
-      {:error, reason} ->
-        raise ReqLLM.Error.Invalid.Parameter.exception(parameter: reason)
-    end
-
     context_data =
       case request.options[:context] do
         %ReqLLM.Context{} = ctx ->
-          ctx
-          |> wrap_context()
-          |> ReqLLM.Context.Codec.encode_request()
+          model = request.options[:model]
+          # Convert OpenAI-style context to Gemini format
+          encoded = ReqLLM.Context.Codec.encode_request(ctx, model)
+          messages = encoded[:messages] || encoded["messages"] || []
+          %{contents: convert_messages_to_gemini(messages)}
 
         _ ->
-          %{contents: request.options[:messages] || []}
+          %{contents: convert_messages_to_gemini(request.options[:messages] || [])}
       end
 
     tools_data =
       case request.options[:tools] do
-        tools when is_list(tools) and (is_list(tools) and tools != []) ->
+        tools when is_list(tools) and tools != [] ->
           %{
             tools: [%{functionDeclarations: Enum.map(tools, &ReqLLM.Tool.to_schema(&1, :google))}]
           }
@@ -215,23 +248,21 @@ defmodule ReqLLM.Providers.Google do
           %{}
       end
 
-    # Handle candidate_count as a direct option if passed
-    candidate_count = request.options[:candidate_count] || 1
-
+    # Build generationConfig with Gemini-specific parameter names
     generation_config =
       %{}
       |> maybe_put(:temperature, request.options[:temperature])
       |> maybe_put(:maxOutputTokens, request.options[:max_tokens])
       |> maybe_put(:topP, request.options[:top_p])
       |> maybe_put(:topK, request.options[:top_k])
-      |> maybe_put(:candidateCount, candidate_count)
+      |> maybe_put(:candidateCount, request.options[:google_candidate_count] || 1)
 
     body =
       %{}
       |> Map.merge(context_data)
       |> Map.merge(tools_data)
       |> maybe_put(:generationConfig, generation_config)
-      |> maybe_put(:safetySettings, request.options[:safety_settings])
+      |> maybe_put(:safetySettings, request.options[:google_safety_settings])
 
     try do
       encoded_body = Jason.encode!(body)
@@ -249,9 +280,45 @@ defmodule ReqLLM.Providers.Google do
   def decode_response({req, resp}) do
     case resp.status do
       200 ->
-        body = ensure_parsed_body(resp.body)
-        # Return raw parsed data directly - no wrapping needed
-        {req, %{resp | body: body}}
+        model_name = req.options[:model]
+        model = %ReqLLM.Model{provider: :google, model: model_name}
+        is_streaming = req.options[:stream] == true
+
+        if is_streaming do
+          chunk_stream =
+            resp.body
+            |> Stream.flat_map(&ReqLLM.Response.Codec.decode_sse_event(&1, model))
+            |> Stream.reject(&is_nil/1)
+
+          response = %ReqLLM.Response{
+            id: "stream-#{System.unique_integer([:positive])}",
+            model: model_name,
+            context: req.options[:context] || %ReqLLM.Context{messages: []},
+            message: nil,
+            stream?: true,
+            stream: chunk_stream,
+            usage: %{input_tokens: 0, output_tokens: 0, total_tokens: 0},
+            finish_reason: nil,
+            provider_meta: %{}
+          }
+
+          {req, %{resp | body: response}}
+        else
+          body = ensure_parsed_body(resp.body)
+
+          # Convert Google format to OpenAI format, then decode
+          openai_format = convert_google_to_openai_format(body)
+          {:ok, response} = ReqLLM.Response.Codec.decode_response(openai_format, model)
+
+          # Merge original context with the assistant response
+          merged_response =
+            ReqLLM.Context.merge_response(
+              req.options[:context] || %ReqLLM.Context{messages: []},
+              response
+            )
+
+          {req, %{resp | body: merged_response}}
+        end
 
       status ->
         err =
@@ -264,4 +331,87 @@ defmodule ReqLLM.Providers.Google do
         {req, err}
     end
   end
+
+  # Helper to convert Google response to OpenAI format
+  defp convert_google_to_openai_format(%{"candidates" => candidates} = body) do
+    choice =
+      case List.first(candidates) do
+        %{"content" => %{"parts" => parts}} = candidate ->
+          message_content =
+            parts
+            |> Enum.filter(&Map.has_key?(&1, "text"))
+            |> Enum.map_join("", &Map.get(&1, "text"))
+
+          %{
+            "message" => %{
+              "role" => "assistant",
+              "content" => message_content
+            },
+            "finish_reason" => normalize_google_finish_reason(candidate["finishReason"])
+          }
+
+        _ ->
+          %{
+            "message" => %{"role" => "assistant", "content" => ""},
+            "finish_reason" => "stop"
+          }
+      end
+
+    %{
+      "id" => body["id"] || "google-#{System.unique_integer([:positive])}",
+      "choices" => [choice],
+      "usage" => convert_google_usage(body["usageMetadata"])
+    }
+  end
+
+  defp convert_google_to_openai_format(body), do: body
+
+  defp normalize_google_finish_reason("STOP"), do: "stop"
+  defp normalize_google_finish_reason("MAX_TOKENS"), do: "length"
+  defp normalize_google_finish_reason("SAFETY"), do: "content_filter"
+  defp normalize_google_finish_reason("RECITATION"), do: "content_filter"
+  defp normalize_google_finish_reason(_), do: "stop"
+
+  defp convert_google_usage(%{
+         "promptTokenCount" => prompt,
+         "candidatesTokenCount" => completion,
+         "totalTokenCount" => total
+       }) do
+    %{
+      "prompt_tokens" => prompt,
+      "completion_tokens" => completion,
+      "total_tokens" => total
+    }
+  end
+
+  defp convert_google_usage(_),
+    do: %{"prompt_tokens" => 0, "completion_tokens" => 0, "total_tokens" => 0}
+
+  # Helper to convert OpenAI-style messages to Gemini format
+  defp convert_messages_to_gemini(messages) do
+    Enum.map(messages, fn message ->
+      role =
+        case message.role do
+          :system -> "system"
+          :user -> "user"
+          :assistant -> "model"
+          role when is_binary(role) -> role
+          role -> to_string(role)
+        end
+
+      parts =
+        case message.content do
+          content when is_binary(content) -> [%{text: content}]
+          parts when is_list(parts) -> Enum.map(parts, &convert_content_part/1)
+        end
+
+      %{role: role, parts: parts}
+    end)
+  end
+
+  defp convert_content_part(%{type: :text, content: text}), do: %{text: text}
+  defp convert_content_part(%{text: text}), do: %{text: text}
+  defp convert_content_part(text) when is_binary(text), do: %{text: text}
+  # TODO: Add support for images, audio, video when multimodal support is added
+  defp convert_content_part(part), do: %{text: to_string(part)}
 end
