@@ -2,21 +2,28 @@ defmodule ReqLLM.Providers.OpenAI do
   @moduledoc """
   OpenAI provider implementation using the Provider behavior.
 
-  Supports OpenAI's Chat Completions API with features including:
+  Supports OpenAI's Chat Completions API and Embeddings API with features including:
   - Text generation with GPT models
-  - Streaming responses
+  - Streaming responses  
   - Tool calling
   - Multi-modal inputs (text and images)
+  - Embeddings generation
+  - O1/O3 model support with automatic parameter translation
+
+  ## Protocol Usage
+
+  Uses the generic `ReqLLM.Context.Codec` and `ReqLLM.Response.Codec` protocols.
+  No custom wrapper modules – leverages the standard OpenAI-compatible codecs.
 
   ## Configuration
 
-  Set your OpenAI API key via JidoKeys (automatically picks up from .env):
+  Set your OpenAI API key via environment variable or JidoKeys:
 
-  # Option 1: Set directly in JidoKeys
-    ReqLLM.put_key(:openai_api_key, "sk-...")
+      # Option 1: Environment variable (automatically loaded)
+      OPENAI_API_KEY=sk-...
 
-    # Option 2: Add to .env file (automatically loaded via JidoKeys+Dotenvy)
-    OPENAI_API_KEY=sk-...
+      # Option 2: Set directly in JidoKeys
+      ReqLLM.put_key(:openai_api_key, "sk-...")
 
   ## Examples
 
@@ -31,6 +38,8 @@ defmodule ReqLLM.Providers.OpenAI do
       tools = [%ReqLLM.Tool{name: "get_weather", ...}]
       {:ok, response} = ReqLLM.generate_text(model, "What's the weather?", tools: tools)
 
+      # Embeddings
+      {:ok, embedding} = ReqLLM.generate_embedding("openai:text-embedding-3-small", "Hello world")
   """
 
   @behaviour ReqLLM.Provider
@@ -40,14 +49,47 @@ defmodule ReqLLM.Providers.OpenAI do
     base_url: "https://api.openai.com/v1",
     metadata: "priv/models_dev/openai.json",
     default_env_key: "OPENAI_API_KEY",
-    context_wrapper: ReqLLM.Providers.OpenAI.Context,
-    response_wrapper: ReqLLM.Providers.OpenAI.Response,
     provider_schema: []
 
   import ReqLLM.Provider.Utils,
-    only: [prepare_options!: 3, maybe_put: 3, ensure_parsed_body: 1]
+    only: [maybe_put: 3, ensure_parsed_body: 1]
 
-  # OpenAI currently shares core options - no provider-specific options yet
+  require Logger
+
+  # Helper for validation and translation
+  defp validate_and_translate!(provider_mod, model, raw_opts) do
+    # Separate context and special test/internal options from user options
+    {context, remaining_opts} = Keyword.pop(raw_opts, :context)
+
+    # Extract internal/test options that shouldn't be validated
+    internal_keys = [:req_options, :on_unsupported, :fixture, :req_http_options, :compiled_schema, :operation, :text]
+    {internal_opts, user_opts} = Keyword.split(remaining_opts, internal_keys)
+
+    schema = provider_mod.provider_extended_generation_schema()
+    {:ok, valid_opts} = NimbleOptions.validate(user_opts, schema)
+
+    # Apply provider-specific translations
+    translated_opts =
+      case provider_mod.translate_options(:chat, model, valid_opts) do
+        {translated_opts, warnings} when is_list(warnings) ->
+          # Emit warnings to the logger
+          Enum.each(warnings, &Logger.warning/1)
+          translated_opts
+
+        translated_opts ->
+          translated_opts
+      end
+
+    # Merge back all the options
+    final_opts = Keyword.merge(translated_opts, internal_opts)
+
+    if context do
+      Keyword.put(final_opts, :context, context)
+    else
+      final_opts
+    end
+  end
+
   @doc """
   Attaches the OpenAI plugin to a Req request.
 
@@ -61,9 +103,11 @@ defmodule ReqLLM.Providers.OpenAI do
 
     * `:temperature` - Controls randomness (0.0-2.0). Defaults to 0.7
     * `:max_tokens` - Maximum tokens to generate. Defaults to 1024
-    * `:stream?` - Enable streaming responses. Defaults to false
+    * `:stream?` - Enable streaming responses. Defaults to false (alias for :stream)
+    * `:stream` - Enable streaming responses. Defaults to false
     * `:base_url` - Override base URL. Defaults to provider default
     * `:messages` - Chat messages to send
+    * `:system` - System message
     * All options from ReqLLM.Provider.Options schemas are supported
 
   """
@@ -78,6 +122,38 @@ defmodule ReqLLM.Providers.OpenAI do
 
       {:ok, request}
     end
+  end
+
+  def prepare_request(:object, model_input, %ReqLLM.Context{} = context, opts) do
+    compiled_schema = Keyword.fetch!(opts, :compiled_schema)
+
+    structured_output_tool =
+      ReqLLM.Tool.new!(
+        name: "structured_output",
+        description: "Generate structured output matching the provided schema",
+        parameter_schema: compiled_schema.schema,
+        callback: fn _args -> {:ok, "structured output generated"} end
+      )
+
+    opts_with_tool =
+      Keyword.update(opts, :tools, [structured_output_tool], fn tools ->
+        [structured_output_tool | tools]
+      end)
+
+    opts_with_choice =
+      Keyword.put(opts_with_tool, :tool_choice, %{
+        type: "function",
+        function: %{name: "structured_output"}
+      })
+
+    opts_with_max_tokens =
+      case Keyword.get(opts_with_choice, :max_tokens) do
+        nil -> Keyword.put(opts_with_choice, :max_tokens, 4096)
+        tokens when tokens < 200 -> Keyword.put(opts_with_choice, :max_tokens, 200)
+        _value -> opts_with_choice
+      end
+
+    prepare_request(:chat, model_input, context, opts_with_max_tokens)
   end
 
   def prepare_request(:embedding, model_input, text, opts) do
@@ -96,7 +172,7 @@ defmodule ReqLLM.Providers.OpenAI do
     {:error,
      ReqLLM.Error.Invalid.Parameter.exception(
        parameter:
-         "operation: #{inspect(operation)} not supported by OpenAI provider. Supported operations: [:chat, :embedding]"
+         "operation: #{inspect(operation)} not supported by OpenAI provider. Supported operations: [:chat, :object, :embedding]"
      )}
   end
 
@@ -110,34 +186,26 @@ defmodule ReqLLM.Providers.OpenAI do
       raise ReqLLM.Error.Invalid.Provider.exception(provider: model.provider)
     end
 
-    if !ReqLLM.Provider.Registry.model_exists?("#{provider_id()}:#{model.model}") do
-      raise ReqLLM.Error.Invalid.Parameter.exception(parameter: "model: #{model.model}")
-    end
-
     api_key = ReqLLM.Keys.get!(model, user_opts)
+    {tools, other_opts} = Keyword.pop(user_opts, :tools, [])
+    provider_opts = Keyword.get(other_opts, :provider_options, [])
+    {_provider_options, core_opts} = Keyword.pop(other_opts, :provider_options, [])
 
-    # Extract special keys that shouldn't be validated
-    {tools, temp_opts} = Keyword.pop(user_opts, :tools, [])
-    {operation, temp_opts} = Keyword.pop(temp_opts, :operation, nil)
-    {text, other_opts} = Keyword.pop(temp_opts, :text, nil)
-
-    # Prepare validated options and extract what Req needs
-    opts = prepare_options!(__MODULE__, model, other_opts)
-
-    # Add back the special keys after validation
-    opts =
-      opts
-      |> Keyword.put(:tools, tools)
-      |> maybe_put(:operation, operation)
-      |> maybe_put(:text, text)
+    # Use new validation approach
+    opts = validate_and_translate!(__MODULE__, model, core_opts)
+    opts = Keyword.put(opts, :tools, tools)
+    opts = Keyword.merge(opts, provider_opts)
 
     base_url = Keyword.get(user_opts, :base_url, default_base_url())
-    req_keys = __MODULE__.supported_provider_options() ++ [:model, :context, :operation, :text]
+    req_keys = __MODULE__.supported_provider_options() ++ [:context, :operation, :text]
+    model_name = model.model
 
     request
-    |> Req.Request.register_options(req_keys)
-    |> Req.Request.merge_options(Keyword.take(opts, req_keys) ++ [base_url: base_url])
-    |> Req.Request.put_header("authorization", "Bearer #{api_key}")
+    |> Req.Request.register_options(req_keys ++ [:model])
+    |> Req.Request.merge_options(
+      Keyword.take(opts, req_keys) ++
+        [model: model_name, base_url: base_url, auth: {:bearer, api_key}]
+    )
     |> ReqLLM.Step.Error.attach()
     |> Req.Request.append_request_steps(llm_encode_body: &__MODULE__.encode_body/1)
     |> ReqLLM.Step.Stream.maybe_attach(opts[:stream])
@@ -162,14 +230,17 @@ defmodule ReqLLM.Providers.OpenAI do
     {opts_after_rename, rename_warnings} =
       translate_rename(opts, :max_tokens, :max_completion_tokens)
 
+    {opts_after_stream, stream_warnings} =
+      translate_stream_alias(opts_after_rename)
+
     {final_opts, drop_warnings} =
       translate_drop(
-        opts_after_rename,
+        opts_after_stream,
         :temperature,
         "OpenAI o1 models do not support :temperature – dropped"
       )
 
-    {final_opts, rename_warnings ++ drop_warnings}
+    {final_opts, rename_warnings ++ stream_warnings ++ drop_warnings}
   end
 
   def translate_options(:chat, %ReqLLM.Model{model: <<"o3", _::binary>>}, opts) do
@@ -178,17 +249,34 @@ defmodule ReqLLM.Providers.OpenAI do
     {opts_after_rename, rename_warnings} =
       translate_rename(opts, :max_tokens, :max_completion_tokens)
 
+    {opts_after_stream, stream_warnings} =
+      translate_stream_alias(opts_after_rename)
+
     {final_opts, drop_warnings} =
       translate_drop(
-        opts_after_rename,
+        opts_after_stream,
         :temperature,
         "OpenAI o3 models do not support :temperature – dropped"
       )
 
-    {final_opts, rename_warnings ++ drop_warnings}
+    {final_opts, rename_warnings ++ stream_warnings ++ drop_warnings}
   end
 
-  def translate_options(_operation, _model, opts), do: {opts, []}
+  def translate_options(_operation, _model, opts) do
+    # Handle stream? -> stream alias for backward compatibility
+    translate_stream_alias(opts)
+  end
+
+  # Private translation helpers
+  defp translate_stream_alias(opts) do
+    case Keyword.pop(opts, :stream?) do
+      {nil, rest} ->
+        {rest, []}
+
+      {stream_value, rest} ->
+        {Keyword.put(rest, :stream, stream_value), []}
+    end
+  end
 
   # Req pipeline steps
   @impl ReqLLM.Provider
@@ -218,59 +306,47 @@ defmodule ReqLLM.Providers.OpenAI do
     context_data =
       case request.options[:context] do
         %ReqLLM.Context{} = ctx ->
-          ctx
-          |> wrap_context()
-          |> ReqLLM.Context.Codec.encode_request()
+          model = request.options[:model]
+          ReqLLM.Context.Codec.encode_request(ctx, model)
 
         _ ->
           %{messages: request.options[:messages] || []}
       end
 
-    tools_data =
+    model_name = request.options[:model]
+
+    body =
+      %{model: model_name}
+      |> Map.merge(context_data)
+      |> add_basic_options(request.options)
+      |> maybe_put(:stream, request.options[:stream])
+      |> add_token_limits(model_name, request.options)
+
+    body =
       case request.options[:tools] do
-        tools when is_list(tools) and (is_list(tools) and tools != []) ->
-          %{tools: Enum.map(tools, &ReqLLM.Schema.to_openai_format/1)}
+        tools when is_list(tools) and tools != [] ->
+          body = Map.put(body, :tools, Enum.map(tools, &ReqLLM.Tool.to_schema(&1, :openai)))
+
+          case request.options[:tool_choice] do
+            nil -> body
+            choice -> Map.put(body, :tool_choice, choice)
+          end
 
         _ ->
-          %{}
+          body
       end
 
-    # Determine which token parameter to use based on model
-    model_name = request.options[:model] || request.options[:id]
-
-    {max_key, max_value} =
-      case model_name do
-        <<"o1", _::binary>> ->
-          {:max_completion_tokens,
-           request.options[:max_tokens] || request.options[:max_completion_tokens]}
-
-        <<"o3", _::binary>> ->
-          {:max_completion_tokens,
-           request.options[:max_tokens] || request.options[:max_completion_tokens]}
-
-        _ ->
-          {:max_tokens, request.options[:max_tokens] || request.options[:max_completion_tokens]}
-      end
-
-    %{
-      model: model_name,
-      stream: request.options[:stream]
-    }
-    |> maybe_put(:temperature, request.options[:temperature])
-    |> maybe_put(max_key, max_value)
-    |> Map.merge(context_data)
-    |> Map.merge(tools_data)
-    |> maybe_put(:top_p, request.options[:top_p])
-    |> maybe_put(:frequency_penalty, request.options[:frequency_penalty])
-    |> maybe_put(:presence_penalty, request.options[:presence_penalty])
-    |> maybe_put(:stop, request.options[:stop])
+    case request.options[:response_format] do
+      format when is_map(format) -> Map.put(body, :response_format, format)
+      _ -> body
+    end
   end
 
   defp encode_embedding_body(request) do
     input = request.options[:text]
 
     %{
-      model: request.options[:model] || request.options[:id],
+      model: request.options[:model],
       input: input
     }
     |> maybe_put(:dimensions, request.options[:dimensions])
@@ -282,9 +358,53 @@ defmodule ReqLLM.Providers.OpenAI do
   def decode_response({req, resp}) do
     case resp.status do
       200 ->
-        body = ensure_parsed_body(resp.body)
-        # Return raw parsed data directly - no wrapping needed
-        {req, %{resp | body: body}}
+        operation = req.options[:operation]
+
+        case operation do
+          :embedding ->
+            # Handle embedding response - return raw parsed data
+            body = ensure_parsed_body(resp.body)
+            {req, %{resp | body: body}}
+
+          _ ->
+            # Handle chat completion response
+            model_name = req.options[:model]
+            model = %ReqLLM.Model{provider: :openai, model: model_name}
+            is_streaming = req.options[:stream] == true
+
+            if is_streaming do
+              chunk_stream =
+                resp.body
+                |> Stream.flat_map(&ReqLLM.Response.Codec.decode_sse_event(&1, model))
+                |> Stream.reject(&is_nil/1)
+
+              response = %ReqLLM.Response{
+                id: "stream-#{System.unique_integer([:positive])}",
+                model: model_name,
+                context: req.options[:context] || %ReqLLM.Context{messages: []},
+                message: nil,
+                stream?: true,
+                stream: chunk_stream,
+                usage: %{input_tokens: 0, output_tokens: 0, total_tokens: 0},
+                finish_reason: nil,
+                provider_meta: %{}
+              }
+
+              {req, %{resp | body: response}}
+            else
+              body = ensure_parsed_body(resp.body)
+              {:ok, response} = ReqLLM.Response.Codec.decode_response(body, model)
+
+              # Merge original context with the assistant response
+              merged_response =
+                ReqLLM.Context.merge_response(
+                  req.options[:context] || %ReqLLM.Context{messages: []},
+                  response
+                )
+
+              {req, %{resp | body: merged_response}}
+            end
+        end
 
       status ->
         err =
@@ -295,6 +415,38 @@ defmodule ReqLLM.Providers.OpenAI do
           )
 
         {req, err}
+    end
+  end
+
+  # Helper function for adding basic body options
+  defp add_basic_options(body, request_options) do
+    # Define the standard OpenAI options that are supported in the request body
+    body_options = [
+      :temperature,
+      :top_p,
+      :frequency_penalty,
+      :presence_penalty,
+      :user,
+      :seed,
+      :stop
+    ]
+
+    Enum.reduce(body_options, body, fn key, acc ->
+      maybe_put(acc, key, request_options[key])
+    end)
+  end
+
+  # Helper function for adding token limits based on model type
+  defp add_token_limits(body, model_name, request_options) do
+    case model_name do
+      <<"o1", _::binary>> ->
+        maybe_put(body, :max_completion_tokens, request_options[:max_completion_tokens])
+
+      <<"o3", _::binary>> ->
+        maybe_put(body, :max_completion_tokens, request_options[:max_completion_tokens])
+
+      _ ->
+        maybe_put(body, :max_tokens, request_options[:max_tokens])
     end
   end
 end
