@@ -109,6 +109,8 @@ defmodule ReqLLM.Provider.DSL do
 
   """
 
+  require Logger
+
   @doc """
   Sigil for defining lists of atoms from space-separated words.
 
@@ -116,16 +118,6 @@ defmodule ReqLLM.Provider.DSL do
 
       ~a[temperature max_tokens top_p]  # => [:temperature, :max_tokens, :top_p]
   """
-
-  # defmacro sigil_a({:<<>>, _, [string]}, _mods) do
-  #   list =
-  #     string
-  #     |> String.split(~r/\s+/, trim: true)
-  #     |> Enum.map(&String.to_atom/1)
-
-  #   Macro.escape(list)
-  # end
-
   defmacro __using__(opts) do
     # Validate required options
     id = Keyword.fetch!(opts, :id)
@@ -362,16 +354,16 @@ defmodule ReqLLM.Provider.DSL do
               atomize_keys(data)
 
             {:error, error} ->
-              IO.warn("Failed to parse JSON metadata from #{path}: #{inspect(error)}")
+              Logger.warning("Failed to parse JSON metadata from #{path}: #{inspect(error)}")
               %{}
           end
 
         {:error, error} ->
-          IO.warn("Failed to read metadata file #{path}: #{inspect(error)}")
+          Logger.warning("Failed to read metadata file #{path}: #{inspect(error)}")
           %{}
       end
     else
-      IO.warn("Metadata file not found: #{path}")
+      Logger.warning("Metadata file not found: #{path}")
       %{}
     end
   end
