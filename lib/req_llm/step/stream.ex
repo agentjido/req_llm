@@ -119,16 +119,18 @@ defmodule ReqLLM.Step.Stream do
   @spec parse_sse_stream(binary() | Enumerable.t()) :: Enumerable.t()
   defp parse_sse_stream(body) when is_binary(body) do
     {events, _remaining} = ServerSentEvents.parse(body)
-
-    events
-    |> Stream.map(&process_sse_event/1)
-    |> Stream.reject(&is_nil/1)
+    to_event_stream(events)
   end
 
   defp parse_sse_stream(stream) when is_struct(stream, Stream) do
     stream
     |> Stream.transform("", &accumulate_and_parse/2)
     |> Stream.flat_map(& &1)
+    |> to_event_stream()
+  end
+
+  defp to_event_stream(events) do
+    events
     |> Stream.map(&process_sse_event/1)
     |> Stream.reject(&is_nil/1)
   end
@@ -142,22 +144,11 @@ defmodule ReqLLM.Step.Stream do
 
   @spec process_sse_event(map()) :: map() | nil
   defp process_sse_event(%{data: data} = event) when is_binary(data) do
-    case try_parse_json(data) do
-      parsed when is_map(parsed) ->
-        %{event | data: parsed}
-
-      _ ->
-        event
+    case Jason.decode(data) do
+      {:ok, parsed} when is_map(parsed) -> %{event | data: parsed}
+      {:error, _} -> event
     end
   end
 
   defp process_sse_event(event), do: event
-
-  @spec try_parse_json(binary()) :: map() | binary()
-  defp try_parse_json(value) do
-    case Jason.decode(value) do
-      {:ok, decoded} -> decoded
-      {:error, _} -> value
-    end
-  end
 end

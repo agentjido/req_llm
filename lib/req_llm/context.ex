@@ -166,7 +166,43 @@ defmodule ReqLLM.Context do
   @spec encode_request(t(), ReqLLM.Model.t() | String.t()) :: term() | {:error, term()}
   def encode_request(%__MODULE__{} = ctx, model_input) do
     model = resolve_model(model_input)
-    ctx |> wrap(model) |> ReqLLM.Context.Codec.encode_request()
+    ctx |> wrap(model) |> ReqLLM.Context.Codec.encode_request(model)
+  end
+
+  @doc """
+  Merges the original context with a response to create an updated context.
+
+  Takes a context and a response, then creates a new context containing
+  the original messages plus the assistant response message.
+
+  ## Parameters
+
+    * `context` - Original ReqLLM.Context
+    * `response` - ReqLLM.Response containing the assistant message
+
+  ## Returns
+
+    * Updated response with merged context
+
+  ## Examples
+
+      context = ReqLLM.Context.new([user("Hello")])
+      response = %ReqLLM.Response{message: assistant("Hi there!")}
+      updated_response = ReqLLM.Context.merge_response(context, response)
+      # response.context now contains both user and assistant messages
+
+  """
+  @spec merge_response(t(), ReqLLM.Response.t()) :: ReqLLM.Response.t()
+  def merge_response(context, response) do
+    case {context, response.message} do
+      {%__MODULE__{} = ctx, %Message{} = msg} ->
+        updated_messages = ctx.messages ++ [msg]
+        updated_context = %__MODULE__{messages: updated_messages}
+        %{response | context: updated_context}
+
+      _ ->
+        response
+    end
   end
 
   # Helper function to resolve model input to Model struct

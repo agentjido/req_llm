@@ -140,6 +140,7 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
                         IO.binwrite(:stdio, "\n[META]")
                         :io.put_chars(:standard_io, [])
                       end
+
                       {acc_chunks, count}
 
                     other ->

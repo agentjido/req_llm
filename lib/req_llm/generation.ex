@@ -162,7 +162,7 @@ defmodule ReqLLM.Generation do
            |> ReqLLM.Utils.merge_req_options(translated_opts)
            |> ReqLLM.Utils.attach_fixture(model, translated_opts),
          {:ok, %Req.Response{body: decoded_response}} <- Req.request(request_with_options) do
-      Response.decode_response(decoded_response, model)
+      {:ok, decoded_response}
     end
   end
 
@@ -237,7 +237,7 @@ defmodule ReqLLM.Generation do
            |> ReqLLM.Utils.merge_req_options(stream_opts)
            |> ReqLLM.Utils.attach_fixture(model, stream_opts),
          {:ok, %Req.Response{body: decoded_response}} <- Req.request(request_with_options) do
-      Response.decode_response(decoded_response, model)
+      {:ok, decoded_response}
     end
   end
 
@@ -421,7 +421,20 @@ defmodule ReqLLM.Generation do
            |> ReqLLM.Utils.merge_req_options(translated_opts)
            |> ReqLLM.Utils.attach_fixture(model, translated_opts),
          {:ok, %Req.Response{body: decoded_response}} <- Req.request(request_with_options) do
-      Response.decode_object(decoded_response, model, object_schema)
+      # Provider already decoded to ReqLLM.Response, now extract object from tool calls
+      case ReqLLM.Response.tool_calls(decoded_response) do
+        [] ->
+          {:error, %ReqLLM.Error.API.Response{reason: "No structured output found in response"}}
+
+        tool_calls ->
+          case Enum.find(tool_calls, &(&1.name == "structured_output")) do
+            nil ->
+              {:error, %ReqLLM.Error.API.Response{reason: "No structured_output tool call found"}}
+
+            %{arguments: object} ->
+              {:ok, %{decoded_response | object: object}}
+          end
+      end
     end
   end
 
@@ -476,7 +489,7 @@ defmodule ReqLLM.Generation do
            |> ReqLLM.Utils.merge_req_options(stream_opts)
            |> ReqLLM.Utils.attach_fixture(model, stream_opts),
          {:ok, %Req.Response{body: decoded_response}} <- Req.request(request_with_options) do
-      Response.decode_object_stream(decoded_response, model, object_schema)
+      {:ok, decoded_response}
     end
   end
 

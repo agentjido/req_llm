@@ -88,31 +88,22 @@ defmodule ReqLLM.Step.Error do
     )
   end
 
+  @error_messages %{
+    400 => "Bad Request - Invalid parameters or malformed request",
+    401 => "Unauthorized - Invalid or missing API key",
+    403 => "Forbidden - Insufficient permissions or quota exceeded",
+    404 => "Not Found - Endpoint or resource not found",
+    429 => "Rate Limited - Too many requests"
+  }
+
   @spec determine_error_reason(Req.Response.t()) :: String.t()
-  defp determine_error_reason(response) do
-    case response.status do
-      400 ->
-        extract_api_error_message(response.body) ||
-          "Bad Request - Invalid parameters or malformed request"
+  defp determine_error_reason(%{status: status, body: body}) do
+    api_message = extract_api_error_message(body)
 
-      401 ->
-        extract_api_error_message(response.body) || "Unauthorized - Invalid or missing API key"
-
-      403 ->
-        extract_api_error_message(response.body) ||
-          "Forbidden - Insufficient permissions or quota exceeded"
-
-      404 ->
-        extract_api_error_message(response.body) || "Not Found - Endpoint or resource not found"
-
-      429 ->
-        extract_api_error_message(response.body) || "Rate Limited - Too many requests"
-
-      status when status >= 500 ->
-        extract_api_error_message(response.body) || "Server Error - Internal API error"
-
-      status ->
-        extract_api_error_message(response.body) || "HTTP Error #{status}"
+    cond do
+      api_message -> api_message
+      status >= 500 -> "Server Error - Internal API error"
+      true -> Map.get(@error_messages, status, "HTTP Error #{status}")
     end
   end
 

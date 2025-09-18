@@ -16,42 +16,6 @@ defmodule ReqLLM.Provider.Utils do
   """
 
   @doc """
-  Normalizes various prompt formats into a standardized messages list.
-
-  ## Parameters
-
-  - `prompt` - Can be a string, list of messages, or any other type that can be converted to string
-
-  ## Returns
-
-  A list of message maps with `:role` and `:content` keys.
-
-  ## Examples
-
-      iex> ReqLLM.Provider.Utils.normalize_messages("What is the weather?")
-      [%{role: "user", content: "What is the weather?"}]
-
-      iex> messages = [%{role: "user", content: "Hello"}, %{role: "assistant", content: "Hi there!"}]
-      iex> ReqLLM.Provider.Utils.normalize_messages(messages)
-      [%{role: "user", content: "Hello"}, %{role: "assistant", content: "Hi there!"}]
-
-      iex> ReqLLM.Provider.Utils.normalize_messages(123)
-      [%{role: "user", content: "123"}]
-  """
-  @spec normalize_messages(binary() | list() | term()) :: [map()]
-  def normalize_messages(prompt) when is_binary(prompt) do
-    [%{role: "user", content: prompt}]
-  end
-
-  def normalize_messages(messages) when is_list(messages) do
-    messages
-  end
-
-  def normalize_messages(prompt) do
-    [%{role: "user", content: to_string(prompt)}]
-  end
-
-  @doc """
   Conditionally puts a value into a keyword list or map if the value is not nil.
 
   ## Parameters
@@ -116,108 +80,6 @@ defmodule ReqLLM.Provider.Utils do
   end
 
   @doc """
-  Raises an error if unknown options are present.
-
-  ## Parameters
-
-  - `opts` - Options to validate
-  - `allowed` - List of allowed option keys
-
-  ## Returns
-
-  The original options if all keys are allowed.
-
-  ## Raises
-
-  `ReqLLM.Error.Invalid.Parameter` if unknown options are found.
-
-  ## Examples
-
-      iex> ReqLLM.Provider.Utils.reject_unknown!([temperature: 0.7], [:temperature, :max_tokens])
-      [temperature: 0.7]
-
-      iex> ReqLLM.Provider.Utils.reject_unknown!([bad_key: "value"], [:temperature])
-      ** (ReqLLM.Error.Invalid.Parameter) unsupported options: [:bad_key]
-  """
-  @spec reject_unknown!(keyword(), [atom()]) :: keyword()
-  def reject_unknown!(opts, allowed) do
-    case Keyword.keys(opts) -- allowed do
-      [] ->
-        opts
-
-      unknown ->
-        raise ReqLLM.Error.Invalid.Parameter.exception(
-                parameter: "unsupported options: #{inspect(unknown)}"
-              )
-    end
-  end
-
-  @doc """
-  Validates generation options against a subset schema, raising on error.
-
-  ## Parameters
-
-  - `opts` - Options to validate
-  - `allowed_keys` - Keys to include in validation schema
-
-  ## Returns
-
-  The validated options.
-
-  ## Raises
-
-  `NimbleOptions.ValidationError` if validation fails.
-
-  ## Examples
-
-      iex> ReqLLM.Provider.Utils.validate_subset!([temperature: 0.7], [:temperature, :max_tokens])
-      [temperature: 0.7]
-  """
-  @spec validate_subset!(keyword(), [atom()]) :: keyword()
-  def validate_subset!(opts, allowed_keys) do
-    schema = ReqLLM.Provider.Options.generation_subset_schema(allowed_keys)
-    NimbleOptions.validate!(opts, schema)
-  end
-
-  @doc """
-  Adds context to options if present in user options, with type validation.
-
-  ## Parameters
-
-  - `opts` - Current options keyword list
-  - `user_opts` - Original user options to check for context
-
-  ## Returns
-
-  Options with context added if present.
-
-  ## Raises
-
-  `ReqLLM.Error.Invalid.Parameter` if context is not a ReqLLM.Context struct.
-
-  ## Examples
-
-      iex> context = %ReqLLM.Context{messages: []}
-      iex> ReqLLM.Provider.Utils.maybe_put_context([model: "gpt-4"], [context: context])
-      [model: "gpt-4", context: context]
-  """
-  @spec maybe_put_context(keyword(), keyword()) :: keyword()
-  def maybe_put_context(opts, user_opts) do
-    case Keyword.get(user_opts, :context) do
-      %ReqLLM.Context{} = ctx ->
-        Keyword.put(opts, :context, ctx)
-
-      nil ->
-        opts
-
-      other ->
-        raise ReqLLM.Error.Invalid.Parameter.exception(
-                parameter: "context must be ReqLLM.Context, got: #{inspect(other)}"
-              )
-    end
-  end
-
-  @doc """
   Ensures the response body is parsed from JSON if it's binary.
 
   Common utility for providers to ensure they have parsed JSON data
@@ -277,12 +139,47 @@ defmodule ReqLLM.Provider.Utils do
   """
   @spec prepare_options!(module(), ReqLLM.Model.t(), keyword()) :: keyword()
   def prepare_options!(provider_mod, %ReqLLM.Model{} = model, user_opts) do
+    supported_options = provider_mod.supported_provider_options()
+
     user_opts
     |> ReqLLM.Provider.Options.extract_generation_opts()
-    |> reject_unknown!(provider_mod.supported_provider_options())
-    |> validate_subset!(provider_mod.supported_provider_options())
+    |> reject_unknown_inline(supported_options)
+    |> validate_subset_inline(supported_options)
     |> then(&Keyword.merge(provider_mod.default_provider_opts(), &1))
     |> Keyword.put(:model, model.model)
-    |> maybe_put_context(user_opts)
+    |> maybe_put_context_inline(user_opts)
+  end
+
+  # Inlined helper functions for prepare_options!/3
+  defp reject_unknown_inline(opts, allowed) do
+    case Keyword.keys(opts) -- allowed do
+      [] ->
+        opts
+
+      unknown ->
+        raise ReqLLM.Error.Invalid.Parameter.exception(
+                parameter: "unsupported options: #{inspect(unknown)}"
+              )
+    end
+  end
+
+  defp validate_subset_inline(opts, allowed_keys) do
+    schema = ReqLLM.Provider.Options.generation_subset_schema(allowed_keys)
+    NimbleOptions.validate!(opts, schema)
+  end
+
+  defp maybe_put_context_inline(opts, user_opts) do
+    case Keyword.get(user_opts, :context) do
+      %ReqLLM.Context{} = ctx ->
+        Keyword.put(opts, :context, ctx)
+
+      nil ->
+        opts
+
+      other ->
+        raise ReqLLM.Error.Invalid.Parameter.exception(
+                parameter: "context must be ReqLLM.Context, got: #{inspect(other)}"
+              )
+    end
   end
 end

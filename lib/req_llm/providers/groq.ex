@@ -11,13 +11,13 @@ defmodule ReqLLM.Providers.Groq do
 
   Beyond standard OpenAI parameters, Groq supports:
   - `service_tier` - Performance tier (auto, on_demand, flex, performance)
-  - `reasoning_effort` - Reasoning level (none, default, low, medium, high)  
+  - `reasoning_effort` - Reasoning level (none, default, low, medium, high)
   - `reasoning_format` - Format for reasoning output
   - `search_settings` - Web search configuration
   - `compound_custom` - Custom Compound systems configuration
   - `logit_bias` - Token bias adjustments
 
-  See `provider_schema/0` for the complete Groq-specific schema and 
+  See `provider_schema/0` for the complete Groq-specific schema and
   `ReqLLM.Provider.Options` for inherited OpenAI parameters.
 
   ## Configuration
@@ -66,6 +66,17 @@ defmodule ReqLLM.Providers.Groq do
   import ReqLLM.Provider.Utils,
     only: [prepare_options!: 3, maybe_put: 3, maybe_put_skip: 4, ensure_parsed_body: 1]
 
+  @body_options [
+    :temperature,
+    :max_tokens,
+    :top_p,
+    :frequency_penalty,
+    :presence_penalty,
+    :user,
+    :seed,
+    :logit_bias
+  ]
+
   # OpenAI-compatible options that Groq supports
   @doc """
   Attaches the Groq plugin to a Req request.
@@ -107,7 +118,45 @@ defmodule ReqLLM.Providers.Groq do
     {:error,
      ReqLLM.Error.Invalid.Parameter.exception(
        parameter:
-         "operation: #{inspect(operation)} not supported by Groq provider. Supported operations: [:chat]"
+         "operation: #{inspect(operation)} not supported by Groq provider. Supported operations: [:chat, :object]"
+     )}
+  end
+
+  def prepare_request(:object, model_input, %ReqLLM.Context{} = context, compiled_schema, opts) do
+    structured_output_tool =
+      ReqLLM.Tool.new!(
+        name: "structured_output",
+        description: "Generate structured output matching the provided schema",
+        parameter_schema: compiled_schema.schema,
+        callback: fn _args -> {:ok, "structured output generated"} end
+      )
+
+    opts_with_tool =
+      Keyword.update(opts, :tools, [structured_output_tool], fn tools ->
+        [structured_output_tool | tools]
+      end)
+
+    opts_with_choice =
+      Keyword.put(opts_with_tool, :tool_choice, %{
+        type: "function",
+        function: %{name: "structured_output"}
+      })
+
+    opts_with_max_tokens =
+      case Keyword.get(opts_with_choice, :max_tokens) do
+        nil -> Keyword.put(opts_with_choice, :max_tokens, 4096)
+        tokens when tokens < 200 -> Keyword.put(opts_with_choice, :max_tokens, 200)
+        _value -> opts_with_choice
+      end
+
+    prepare_request(:chat, model_input, context, opts_with_max_tokens)
+  end
+
+  def prepare_request(operation, _model, _input, _schema, _opts) do
+    {:error,
+     ReqLLM.Error.Invalid.Parameter.exception(
+       parameter:
+         "operation: #{inspect(operation)} not supported by Groq provider. Supported operations: [:chat, :object]"
      )}
   end
 
@@ -175,15 +224,8 @@ defmodule ReqLLM.Providers.Groq do
     body =
       %{model: model_name}
       |> Map.merge(context_data)
-      |> maybe_put(:temperature, request.options[:temperature])
-      |> maybe_put(:max_tokens, request.options[:max_tokens])
-      |> maybe_put(:top_p, request.options[:top_p])
+      |> add_basic_options(request.options)
       |> maybe_put(:stream, request.options[:stream])
-      |> maybe_put(:frequency_penalty, request.options[:frequency_penalty])
-      |> maybe_put(:presence_penalty, request.options[:presence_penalty])
-      |> maybe_put(:user, request.options[:user])
-      |> maybe_put(:seed, request.options[:seed])
-      |> maybe_put(:logit_bias, request.options[:logit_bias])
       |> maybe_put_skip(:service_tier, request.options[:service_tier], ["auto"])
       |> maybe_put_skip(:reasoning_effort, request.options[:reasoning_effort], ["default"])
       |> maybe_put(:reasoning_format, request.options[:reasoning_format])
@@ -239,7 +281,7 @@ defmodule ReqLLM.Providers.Groq do
           response = %ReqLLM.Response{
             id: "stream-#{System.unique_integer([:positive])}",
             model: model_name,
-            context: %ReqLLM.Context{messages: []},
+            context: req.options[:context] || %ReqLLM.Context{messages: []},
             message: nil,
             stream?: true,
             stream: chunk_stream,
@@ -252,7 +294,15 @@ defmodule ReqLLM.Providers.Groq do
         else
           body = ensure_parsed_body(resp.body)
           {:ok, response} = ReqLLM.Response.Codec.decode_response(body, model)
-          {req, %{resp | body: response}}
+
+          # Merge original context with the assistant response
+          merged_response =
+            ReqLLM.Context.merge_response(
+              req.options[:context] || %ReqLLM.Context{messages: []},
+              response
+            )
+
+          {req, %{resp | body: merged_response}}
         end
 
       status ->
@@ -265,5 +315,12 @@ defmodule ReqLLM.Providers.Groq do
 
         {req, err}
     end
+  end
+
+  # Helper function for adding basic body options
+  defp add_basic_options(body, request_options) do
+    Enum.reduce(@body_options, body, fn key, acc ->
+      maybe_put(acc, key, request_options[key])
+    end)
   end
 end

@@ -70,7 +70,6 @@ defmodule ReqLLM.Step.Usage do
     end
   end
 
-  # Gets the provider module from the request options
   @spec get_provider_module(Req.Request.t()) :: module() | nil
   defp get_provider_module(%Req.Request{options: options}) do
     case options[:model] do
@@ -85,27 +84,23 @@ defmodule ReqLLM.Step.Usage do
     end
   end
 
-  # Extracts token usage from provider responses with normalization
   @spec extract_usage(any, module() | nil) :: {:ok, map()} | :error
   defp extract_usage(body, provider_module) do
-    # Try provider-specific extraction first if provider implements it
     case provider_module do
-      nil ->
-        fallback_extract_usage(body)
-
-      module when is_atom(module) ->
-        if function_exported?(module, :extract_usage, 2) do
-          case module.extract_usage(body, nil) do
-            {:ok, usage} -> {:ok, normalize_usage(usage)}
-            _ -> fallback_extract_usage(body)
-          end
-        else
-          fallback_extract_usage(body)
-        end
+      nil -> fallback_extract_usage(body)
+      module -> provider_extract_usage(body, module) || fallback_extract_usage(body)
     end
   end
 
-  # Fallback usage extraction for standard formats
+  defp provider_extract_usage(body, module) when is_atom(module) do
+    if function_exported?(module, :extract_usage, 2) do
+      case module.extract_usage(body, nil) do
+        {:ok, usage} -> {:ok, normalize_usage(usage)}
+        _ -> nil
+      end
+    end
+  end
+
   @spec fallback_extract_usage(any) :: {:ok, map()} | :error
   defp fallback_extract_usage(%{"usage" => usage}) when is_map(usage) do
     base_usage = %{
@@ -113,7 +108,6 @@ defmodule ReqLLM.Step.Usage do
       output: usage["completion_tokens"] || usage["output_tokens"] || 0
     }
 
-    # Check for detailed token breakdown (e.g., OpenAI o1 models with reasoning)
     reasoning_tokens = get_in(usage, ["completion_tokens_details", "reasoning_tokens"])
 
     usage_with_reasoning =
@@ -126,7 +120,6 @@ defmodule ReqLLM.Step.Usage do
     {:ok, usage_with_reasoning}
   end
 
-  # Handle top-level token fields (some smaller APIs)
   defp fallback_extract_usage(%{"prompt_tokens" => input, "completion_tokens" => output}) do
     {:ok, %{input: input, output: output, reasoning: 0}}
   end
@@ -137,7 +130,6 @@ defmodule ReqLLM.Step.Usage do
 
   defp fallback_extract_usage(_), do: :error
 
-  # Normalizes usage data to standard format
   @spec normalize_usage(map()) :: map()
   defp normalize_usage(usage) when is_map(usage) do
     %{
@@ -147,7 +139,6 @@ defmodule ReqLLM.Step.Usage do
     }
   end
 
-  # Finds the model from request private data or options
   @spec fetch_model(Req.Request.t()) :: {:ok, ReqLLM.Model.t()} | :error
   defp fetch_model(%Req.Request{private: private, options: options}) do
     case private[:req_llm_model] || options[:model] do
@@ -156,7 +147,6 @@ defmodule ReqLLM.Step.Usage do
     end
   end
 
-  # Calculates cost based on token usage and model pricing
   @spec compute_cost(%{input: any(), output: any(), reasoning: any()}, ReqLLM.Model.t()) ::
           {:ok, float() | nil}
   defp compute_cost(%{input: _input_tokens, output: _output_tokens}, %ReqLLM.Model{cost: nil}) do
@@ -165,7 +155,6 @@ defmodule ReqLLM.Step.Usage do
 
   defp compute_cost(%{input: input_tokens, output: output_tokens}, %ReqLLM.Model{cost: cost_map})
        when is_map(cost_map) do
-    # Handle both atom and string keys from model metadata
     input_cost = cost_map[:input] || cost_map["input"]
     output_cost = cost_map[:output] || cost_map["output"]
 
