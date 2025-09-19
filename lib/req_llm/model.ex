@@ -304,6 +304,7 @@ defmodule ReqLLM.Model do
   # Note: Not all providers are fully implemented - some are metadata-only
   @valid_providers [
     :alibaba,
+    :alibaba_cn,
     :amazon_bedrock,
     :anthropic,
     :azure,
@@ -346,6 +347,7 @@ defmodule ReqLLM.Model do
     :wandb,
     :xai,
     :zai,
+    :zai_coding_plan,
     :zhipuai
   ]
 

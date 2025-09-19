@@ -1,0 +1,41 @@
+{
+  "models": [
+    {
+      "attachment": false,
+      "cost": {
+        "input": 1,
+        "output": 5
+      },
+      "id": "qwen3-coder-plus",
+      "knowledge": "2025-04",
+      "last_updated": "2025-07-23",
+      "limit": {
+        "context": 1048576,
+        "output": 65536
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Qwen3 Coder Plus",
+      "open_weights": true,
+      "provider": "alibaba-cn",
+      "provider_model_id": "qwen3-coder-plus",
+      "reasoning": false,
+      "release_date": "2025-07-23",
+      "temperature": true,
+      "tool_call": true
+    }
+  ],
+  "provider": {
+    "base_url": null,
+    "doc": "AI model provider",
+    "env": [],
+    "id": "alibaba-cn",
+    "name": "Alibaba (China)"
+  }
+}

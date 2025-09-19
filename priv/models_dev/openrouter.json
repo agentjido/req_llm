@@ -2200,6 +2200,36 @@
     {
       "attachment": false,
       "cost": {
+        "input": 0.14,
+        "output": 1.4
+      },
+      "id": "qwen/qwen3-next-80b-a3b-instruct",
+      "knowledge": "2025-04",
+      "last_updated": "2025-09-11",
+      "limit": {
+        "context": 262144,
+        "output": 262144
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Qwen3 Next 80B A3B Instruct",
+      "open_weights": true,
+      "provider": "openrouter",
+      "provider_model_id": "qwen/qwen3-next-80b-a3b-instruct",
+      "reasoning": false,
+      "release_date": "2025-09-11",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
         "input": 0,
         "output": 0
       },
