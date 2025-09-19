@@ -234,6 +234,26 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert gen_config["maxOutputTokens"] == 500
       assert gen_config["candidateCount"] == 2
     end
+
+    test "encode_body for embedding operation" do
+      
+      mock_request = %Req.Request{
+        options: [
+          operation: :embedding,
+          model: "gemini-embedding-001",
+          text: "Hello, world!",
+          dimensions: 768
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      # Check embedding-specific structure
+      assert decoded["model"] == "models/gemini-embedding-001"
+      assert decoded["content"]["parts"] == [%{"text" => "Hello, world!"}]
+      assert decoded["outputDimensionality"] == 768
+    end
   end
 
   describe "response decoding" do
@@ -340,6 +360,29 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert response.usage == %{input_tokens: 0, output_tokens: 0, total_tokens: 0}
       assert response.finish_reason == nil
       assert response.provider_meta == %{}
+    end
+
+    test "decode_response for embedding returns raw body" do
+      # Create a mock embedding response body
+      embedding_response = %{
+        "embedding" => %{
+          "values" => [0.1, -0.2, 0.3, 0.4, -0.5]
+        }
+      }
+
+      mock_resp = %Req.Response{
+        status: 200,
+        body: embedding_response
+      }
+
+      mock_req = %Req.Request{
+        options: [operation: :embedding, model: "gemini-embedding-001"]
+      }
+
+      {req, resp} = Google.decode_response({mock_req, mock_resp})
+
+      assert req == mock_req
+      assert resp.body == embedding_response
     end
 
     test "decode_response handles API errors with non-200 status" do
@@ -479,23 +522,39 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert request.options[:max_tokens] == 1000
     end
 
+    test "prepare_request creates configured embedding request" do
+      model = ReqLLM.Model.from!("google:gemini-embedding-001")
+      text = "Hello, world!"
+      opts = [dimensions: 768]
+
+      {:ok, request} = Google.prepare_request(:embedding, model, text, opts)
+
+      assert request.method == :post
+      assert request.url.path == "/models/gemini-embedding-001:embedContent"
+
+      # Check request options contain embedding-specific data
+      assert request.options[:text] == text
+      assert request.options[:operation] == :embedding
+      assert request.options[:dimensions] == 768
+    end
+
     test "prepare_request rejects unsupported operations" do
       model = ReqLLM.Model.from!("google:gemini-1.5-flash")
       context = context_fixture()
 
       # Test unsupported operation for 3-arg version
-      {:error, error} = Google.prepare_request(:embedding, model, context, [])
+      {:error, error} = Google.prepare_request(:unsupported_operation, model, context, [])
       assert %ReqLLM.Error.Invalid.Parameter{} = error
-      assert error.parameter =~ "operation: :embedding not supported"
+      assert error.parameter =~ "operation: :unsupported_operation not supported"
 
       # Test unsupported operation for object with schema  
       {:ok, schema} = ReqLLM.Schema.compile([])
 
       {:error, error} =
-        Google.prepare_request(:embedding, model, context, compiled_schema: schema)
+        Google.prepare_request(:unsupported_operation, model, context, compiled_schema: schema)
 
       assert %ReqLLM.Error.Invalid.Parameter{} = error
-      assert error.parameter =~ "operation: :embedding not supported"
+      assert error.parameter =~ "operation: :unsupported_operation not supported"
     end
   end
 

@@ -38,6 +38,10 @@ defmodule ReqLLM.Providers.Google do
         type: :pos_integer,
         default: 1,
         doc: "Number of response candidates to generate"
+      ],
+      dimensions: [
+        type: :pos_integer,
+        doc: "Number of dimensions for the embedding vector (128-3072, recommended: 768, 1536, or 3072)"
       ]
     ]
 
@@ -52,7 +56,7 @@ defmodule ReqLLM.Providers.Google do
     {context, remaining_opts} = Keyword.pop(raw_opts, :context)
 
     # Extract internal/test options that shouldn't be validated
-    internal_keys = [:req_options, :on_unsupported, :fixture, :req_http_options, :compiled_schema]
+    internal_keys = [:req_options, :on_unsupported, :fixture, :req_http_options, :compiled_schema, :operation, :text]
     {internal_opts, user_opts} = Keyword.split(remaining_opts, internal_keys)
 
     schema = provider_mod.provider_extended_generation_schema()
@@ -153,11 +157,23 @@ defmodule ReqLLM.Providers.Google do
     prepare_request(:chat, model_input, context, opts_with_max_tokens)
   end
 
+  def prepare_request(:embedding, model_input, text, opts) do
+    with {:ok, model} <- ReqLLM.Model.from(model_input) do
+      http_opts = Keyword.get(opts, :req_http_options, [])
+
+      request =
+        Req.new([url: "/models/#{model.model}:embedContent", method: :post, receive_timeout: 30_000] ++ http_opts)
+        |> attach(model, Keyword.merge(opts, text: text, operation: :embedding))
+
+      {:ok, request}
+    end
+  end
+
   def prepare_request(operation, _model, _input, _opts) do
     {:error,
      ReqLLM.Error.Invalid.Parameter.exception(
        parameter:
-         "operation: #{inspect(operation)} not supported by Google provider. Supported operations: [:chat, :object]"
+         "operation: #{inspect(operation)} not supported by Google provider. Supported operations: [:chat, :object, :embedding]"
      )}
   end
 
@@ -182,7 +198,7 @@ defmodule ReqLLM.Providers.Google do
     opts = Keyword.merge(opts, provider_opts)
 
     base_url = Keyword.get(user_opts, :base_url, default_base_url())
-    req_keys = __MODULE__.supported_provider_options() ++ [:context]
+    req_keys = __MODULE__.supported_provider_options() ++ [:context, :operation, :text]
     model_name = model.model
 
     request
@@ -224,6 +240,28 @@ defmodule ReqLLM.Providers.Google do
   # Req pipeline steps
   @impl ReqLLM.Provider
   def encode_body(request) do
+    body =
+      case request.options[:operation] do
+        :embedding ->
+          encode_embedding_body(request)
+
+        _ ->
+          encode_chat_body(request)
+      end
+
+    try do
+      encoded_body = Jason.encode!(body)
+
+      request
+      |> Req.Request.put_header("content-type", "application/json")
+      |> Map.put(:body, encoded_body)
+    rescue
+      error ->
+        reraise error, __STACKTRACE__
+    end
+  end
+
+  defp encode_chat_body(request) do
     context_data =
       case request.options[:context] do
         %ReqLLM.Context{} = ctx ->
@@ -257,67 +295,76 @@ defmodule ReqLLM.Providers.Google do
       |> maybe_put(:topK, request.options[:top_k])
       |> maybe_put(:candidateCount, request.options[:google_candidate_count] || 1)
 
-    body =
-      %{}
-      |> Map.merge(context_data)
-      |> Map.merge(tools_data)
-      |> maybe_put(:generationConfig, generation_config)
-      |> maybe_put(:safetySettings, request.options[:google_safety_settings])
+    %{}
+    |> Map.merge(context_data)
+    |> Map.merge(tools_data)
+    |> maybe_put(:generationConfig, generation_config)
+    |> maybe_put(:safetySettings, request.options[:google_safety_settings])
+  end
 
-    try do
-      encoded_body = Jason.encode!(body)
-
-      request
-      |> Req.Request.put_header("content-type", "application/json")
-      |> Map.put(:body, encoded_body)
-    rescue
-      error ->
-        reraise error, __STACKTRACE__
-    end
+  defp encode_embedding_body(request) do
+    %{
+      model: "models/#{request.options[:model]}",
+      content: %{
+        parts: [%{text: request.options[:text]}]
+      }
+    }
+    |> maybe_put(:outputDimensionality, request.options[:dimensions])
   end
 
   @impl ReqLLM.Provider
   def decode_response({req, resp}) do
     case resp.status do
       200 ->
-        model_name = req.options[:model]
-        model = %ReqLLM.Model{provider: :google, model: model_name}
-        is_streaming = req.options[:stream] == true
+        operation = req.options[:operation]
 
-        if is_streaming do
-          chunk_stream =
-            resp.body
-            |> Stream.flat_map(&ReqLLM.Response.Codec.decode_sse_event(&1, model))
-            |> Stream.reject(&is_nil/1)
+        case operation do
+          :embedding ->
+            # Handle embedding response - return raw parsed data
+            body = ensure_parsed_body(resp.body)
+            {req, %{resp | body: body}}
 
-          response = %ReqLLM.Response{
-            id: "stream-#{System.unique_integer([:positive])}",
-            model: model_name,
-            context: req.options[:context] || %ReqLLM.Context{messages: []},
-            message: nil,
-            stream?: true,
-            stream: chunk_stream,
-            usage: %{input_tokens: 0, output_tokens: 0, total_tokens: 0},
-            finish_reason: nil,
-            provider_meta: %{}
-          }
+          _ ->
+            # Handle chat completion response
+            model_name = req.options[:model]
+            model = %ReqLLM.Model{provider: :google, model: model_name}
+            is_streaming = req.options[:stream] == true
 
-          {req, %{resp | body: response}}
-        else
-          body = ensure_parsed_body(resp.body)
+            if is_streaming do
+              chunk_stream =
+                resp.body
+                |> Stream.flat_map(&ReqLLM.Response.Codec.decode_sse_event(&1, model))
+                |> Stream.reject(&is_nil/1)
 
-          # Convert Google format to OpenAI format, then decode
-          openai_format = convert_google_to_openai_format(body)
-          {:ok, response} = ReqLLM.Response.Codec.decode_response(openai_format, model)
+              response = %ReqLLM.Response{
+                id: "stream-#{System.unique_integer([:positive])}",
+                model: model_name,
+                context: req.options[:context] || %ReqLLM.Context{messages: []},
+                message: nil,
+                stream?: true,
+                stream: chunk_stream,
+                usage: %{input_tokens: 0, output_tokens: 0, total_tokens: 0},
+                finish_reason: nil,
+                provider_meta: %{}
+              }
 
-          # Merge original context with the assistant response
-          merged_response =
-            ReqLLM.Context.merge_response(
-              req.options[:context] || %ReqLLM.Context{messages: []},
-              response
-            )
+              {req, %{resp | body: response}}
+            else
+              body = ensure_parsed_body(resp.body)
 
-          {req, %{resp | body: merged_response}}
+              # Convert Google format to OpenAI format, then decode
+              openai_format = convert_google_to_openai_format(body)
+              {:ok, response} = ReqLLM.Response.Codec.decode_response(openai_format, model)
+
+              # Merge original context with the assistant response
+              merged_response =
+                ReqLLM.Context.merge_response(
+                  req.options[:context] || %ReqLLM.Context{messages: []},
+                  response
+                )
+
+              {req, %{resp | body: merged_response}}
+            end
         end
 
       status ->
