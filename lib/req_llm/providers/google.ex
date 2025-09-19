@@ -41,7 +41,8 @@ defmodule ReqLLM.Providers.Google do
       ],
       dimensions: [
         type: :pos_integer,
-        doc: "Number of dimensions for the embedding vector (128-3072, recommended: 768, 1536, or 3072)"
+        doc:
+          "Number of dimensions for the embedding vector (128-3072, recommended: 768, 1536, or 3072)"
       ]
     ]
 
@@ -56,7 +57,16 @@ defmodule ReqLLM.Providers.Google do
     {context, remaining_opts} = Keyword.pop(raw_opts, :context)
 
     # Extract internal/test options that shouldn't be validated
-    internal_keys = [:req_options, :on_unsupported, :fixture, :req_http_options, :compiled_schema, :operation, :text]
+    internal_keys = [
+      :req_options,
+      :on_unsupported,
+      :fixture,
+      :req_http_options,
+      :compiled_schema,
+      :operation,
+      :text
+    ]
+
     {internal_opts, user_opts} = Keyword.split(remaining_opts, internal_keys)
 
     schema = provider_mod.provider_extended_generation_schema()
@@ -162,7 +172,10 @@ defmodule ReqLLM.Providers.Google do
       http_opts = Keyword.get(opts, :req_http_options, [])
 
       request =
-        Req.new([url: "/models/#{model.model}:embedContent", method: :post, receive_timeout: 30_000] ++ http_opts)
+        Req.new(
+          [url: "/models/#{model.model}:embedContent", method: :post, receive_timeout: 30_000] ++
+            http_opts
+        )
         |> attach(model, Keyword.merge(opts, text: text, operation: :embedding))
 
       {:ok, request}

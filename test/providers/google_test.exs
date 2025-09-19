@@ -236,7 +236,6 @@ defmodule ReqLLM.Providers.GoogleTest do
     end
 
     test "encode_body for embedding operation" do
-      
       mock_request = %Req.Request{
         options: [
           operation: :embedding,

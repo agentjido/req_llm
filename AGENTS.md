@@ -32,7 +32,7 @@ ReqLLM uses structured key/value tags for precise test filtering:
 - `mix format` - Format Elixir code
 - `mix format --check-formatted` - Check if code is properly formatted
 - `mix dialyzer` - Run Dialyzer type analysis
-- `mix credo --strict` - Run Credo linting
+- `mix credo --strict` - Run Credo linting (includes custom rule to enforce no comments in function bodies)
 
 ## Architecture & Structure
 
