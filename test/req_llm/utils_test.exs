@@ -115,12 +115,12 @@ defmodule ReqLLM.UtilsTest do
     test "returns base schema unchanged when provider has no schema function", %{
       base_schema: base_schema
     } do
-      result = Utils.compose_schema(base_schema, MockProviderWithoutSchema)
+      result = ReqLLM.Provider.Options.compose_schema(base_schema, MockProviderWithoutSchema)
       assert result == base_schema
     end
 
     test "composes schema when provider has schema function", %{base_schema: base_schema} do
-      result = Utils.compose_schema(base_schema, MockProviderWithSchema)
+      result = ReqLLM.Provider.Options.compose_schema(base_schema, MockProviderWithSchema)
 
       assert %NimbleOptions{} = result
       provider_options = Keyword.get(result.schema, :provider_options)
@@ -133,7 +133,7 @@ defmodule ReqLLM.UtilsTest do
     end
 
     test "validates composed schema correctly", %{base_schema: base_schema} do
-      composed = Utils.compose_schema(base_schema, MockProviderWithSchema)
+      composed = ReqLLM.Provider.Options.compose_schema(base_schema, MockProviderWithSchema)
 
       # Valid options should pass
       assert {:ok, _result} =
@@ -160,11 +160,11 @@ defmodule ReqLLM.UtilsTest do
       invalid_schema = %NimbleOptions{schema: [model: [type: :string, required: true]]}
 
       assert_raise KeyError, fn ->
-        Utils.compose_schema(invalid_schema, MockProviderWithSchema)
+        ReqLLM.Provider.Options.compose_schema(invalid_schema, MockProviderWithSchema)
       end
 
       assert_raise KeyError, fn ->
-        Utils.compose_schema(nil, MockProviderWithSchema)
+        ReqLLM.Provider.Options.compose_schema(nil, MockProviderWithSchema)
       end
     end
   end

@@ -3,439 +3,422 @@ defmodule ReqLLM.Provider.OptionsTest do
 
   alias ReqLLM.Provider.Options
 
-  doctest ReqLLM.Provider.Options
+  # Mock provider for testing - implements minimal Provider behavior
+  defmodule MockProvider do
+    @behaviour ReqLLM.Provider
 
-  # Test helper for schema validation patterns
-  defp assert_schema_has_keys(schema, expected_keys) do
-    assert %NimbleOptions{} = schema
+    def provider_id, do: :mock
+    def default_base_url, do: "https://api.mock.com"
+    def supported_provider_options, do: [:custom_option, :another_option]
 
-    for key <- expected_keys do
-      assert Keyword.has_key?(schema.schema, key), "Expected schema to have key #{key}"
-    end
-  end
-
-  # Test helper for validation success cases
-  defp assert_validates_successfully(validation_fn, opts, expected_keys \\ []) do
-    assert {:ok, validated} = validation_fn.(opts)
-
-    for {key, expected_value} <- expected_keys do
-      assert validated[key] == expected_value,
-             "Expected #{key} to be #{inspect(expected_value)}, got #{inspect(validated[key])}"
-    end
-
-    validated
-  end
-
-  # Test helper for validation error cases
-  defp assert_validation_error(validation_fn, opts) do
-    assert {:error, %NimbleOptions.ValidationError{}} = validation_fn.(opts)
-  end
-
-  describe "schema accessor functions" do
-    test "all schema accessors return proper NimbleOptions with expected keys" do
-      schema_tests = [
-        {&Options.provider_options_schema/0, [:id, :base_url]},
-        {&Options.model_capabilities_schema/0, [:id, :reasoning, :tool_call]},
-        {&Options.model_limits_schema/0, [:context, :output]},
-        {&Options.model_cost_schema/0, [:input, :output]},
-        {&Options.generation_options_schema/0, [:temperature, :max_tokens]},
-        {&Options.complete_options_schema/0, [:provider, :capabilities, :generation]}
-      ]
-
-      for {schema_fn, expected_keys} <- schema_tests do
-        assert_schema_has_keys(schema_fn.(), expected_keys)
-      end
-    end
-
-    test "schema aliases return correct references" do
-      assert Options.generation_schema() == Options.generation_options_schema()
-      assert Options.provider_schema_base() == Options.provider_options_schema()
-    end
-  end
-
-  describe "validation functions" do
-    test "successful validations with defaults applied" do
-      validation_cases = [
-        {
-          &Options.validate_provider_options/1,
-          [id: :openai, base_url: "https://api.openai.com/v1"],
-          [id: :openai, retry_attempts: 3, retry_delay: 1000]
-        },
-        {
-          &Options.validate_generation_options/1,
-          [temperature: 0.7, max_tokens: 1000],
-          [temperature: 0.7, max_tokens: 1000, n: 1, stream: false]
-        },
-        {
-          &Options.validate_capabilities/1,
-          [id: "gpt-4", reasoning: true],
-          [id: "gpt-4", reasoning: true, attachment: false, temperature: true]
-        },
-        {
-          &Options.validate_limits/1,
-          [context: 128_000, output: 4096],
-          [context: 128_000, output: 4096]
-        },
-        {
-          &Options.validate_cost/1,
-          [input: 3.0, output: 15.0],
-          [input: 3.0, output: 15.0]
-        }
-      ]
-
-      for {validation_fn, valid_opts, expected_pairs} <- validation_cases do
-        assert_validates_successfully(validation_fn, valid_opts, expected_pairs)
-      end
-    end
-
-    test "validation failures for invalid inputs" do
-      error_cases = [
-        # missing required :id
-        {&Options.validate_provider_options/1, [base_url: "https://api.openai.com/v1"]},
-        # wrong type
-        {&Options.validate_generation_options/1, [temperature: "invalid"]},
-        # invalid enum
-        {&Options.validate_capabilities/1, [id: "gpt-4", modalities: %{input: [:invalid]}]},
-        # negative integer
-        {&Options.validate_limits/1, [context: -100]},
-        # wrong type
-        {&Options.validate_cost/1, [input: "free"]}
-      ]
-
-      for {validation_fn, invalid_opts} <- error_cases do
-        assert_validation_error(validation_fn, invalid_opts)
-      end
-    end
-  end
-
-  describe "key listing functions" do
-    test "all key functions return lists containing expected keys" do
-      key_tests = [
-        {&Options.all_provider_keys/0, [:id, :base_url, :api_key, :timeout]},
-        {&Options.all_generation_keys/0, [:temperature, :max_tokens, :stream, :tools]},
-        {&Options.all_capability_keys/0, [:id, :reasoning, :tool_call, :modalities]},
-        {&Options.all_limit_keys/0, [:context, :output, :rate_limit]},
-        {&Options.all_cost_keys/0, [:input, :output, :cache_read, :training]}
-      ]
-
-      for {key_fn, expected_keys} <- key_tests do
-        keys = key_fn.()
-        assert is_list(keys)
-
-        for expected_key <- expected_keys do
-          assert expected_key in keys, "Expected #{expected_key} in #{inspect(keys)}"
-        end
-      end
-    end
-  end
-
-  describe "extract_provider_options/1" do
-    test "separates standard and custom options correctly" do
-      opts = [
-        temperature: 0.7,
-        max_tokens: 100,
-        custom_param: "value",
-        another_custom: 42
-      ]
-
-      {standard, custom} = Options.extract_provider_options(opts)
-
-      # Standard options should be included
-      assert standard[:temperature] == 0.7
-      assert standard[:max_tokens] == 100
-      refute Keyword.has_key?(standard, :custom_param)
-
-      # Custom options should be separated
-      assert custom[:custom_param] == "value"
-      assert custom[:another_custom] == 42
-      refute Keyword.has_key?(custom, :temperature)
-    end
-
-    test "edge cases and special handling" do
-      test_cases = [
-        # stream? alias handling
-        {
-          [stream?: true, temperature: 0.5],
-          fn {standard, custom} ->
-            assert standard[:stream] == true
-            assert standard[:temperature] == 0.5
-            refute Keyword.has_key?(standard, :stream?)
-            assert custom == []
-          end
-        },
-        # provider_options exclusion
-        {
-          [temperature: 0.7, provider_options: %{custom: "value"}],
-          fn {standard, custom} ->
-            assert standard[:temperature] == 0.7
-            refute Keyword.has_key?(standard, :provider_options)
-            assert custom[:provider_options] == %{custom: "value"}
-          end
-        },
-        # empty options
-        {
-          [],
-          fn {standard, custom} ->
-            assert standard == []
-            assert custom == []
-          end
-        }
-      ]
-
-      for {input_opts, assertion_fn} <- test_cases do
-        result = Options.extract_provider_options(input_opts)
-        assertion_fn.(result)
-      end
-    end
-  end
-
-  describe "extract_generation_opts/1" do
-    test "extracts only generation options from mixed input" do
-      mixed_opts = [
-        temperature: 0.7,
-        custom_param: "value",
-        max_tokens: 100,
-        another_custom: 42
-      ]
-
-      generation_opts = Options.extract_generation_opts(mixed_opts)
-
-      assert generation_opts[:temperature] == 0.7
-      assert generation_opts[:max_tokens] == 100
-      refute Keyword.has_key?(generation_opts, :custom_param)
-      refute Keyword.has_key?(generation_opts, :another_custom)
-    end
-  end
-
-  describe "utility functions" do
-    test "merge_with_defaults/2 handles precedence correctly" do
-      defaults = [temperature: 0.7, max_tokens: 1000, stream: false]
-      user_opts = [temperature: 0.9, top_p: 0.8]
-
-      merged = Options.merge_with_defaults(user_opts, defaults)
-
-      # user override
-      assert merged[:temperature] == 0.9
-      # from defaults
-      assert merged[:max_tokens] == 1000
-      # from defaults  
-      assert merged[:stream] == false
-      # user addition
-      assert merged[:top_p] == 0.8
-
-      # Edge cases
-      assert Options.merge_with_defaults([], defaults) == defaults
-      assert Options.merge_with_defaults(user_opts, []) == user_opts
-    end
-
-    test "generation_subset_schema/1 creates filtered schemas" do
-      keys = [:temperature, :max_tokens]
-      schema = Options.generation_subset_schema(keys)
-
-      assert %NimbleOptions{} = schema
-      assert Keyword.has_key?(schema.schema, :temperature)
-      assert Keyword.has_key?(schema.schema, :max_tokens)
-      refute Keyword.has_key?(schema.schema, :top_p)
-
-      # Should validate successfully
-      assert {:ok, validated} = NimbleOptions.validate([temperature: 0.7], schema)
-      assert validated[:temperature] == 0.7
-
-      # Handle edge cases
-      empty_schema = Options.generation_subset_schema([])
-      assert %NimbleOptions{} = empty_schema
-      assert empty_schema.schema == []
-
-      # Handle unknown keys gracefully
-      mixed_schema = Options.generation_subset_schema([:temperature, :unknown_key])
-      assert Keyword.has_key?(mixed_schema.schema, :temperature)
-      refute Keyword.has_key?(mixed_schema.schema, :unknown_key)
-    end
-
-    test "validate_generation_options/2 with only: option" do
-      opts = [temperature: 0.7, max_tokens: 100]
-      keys = [:temperature, :max_tokens]
-
-      assert {:ok, validated} = Options.validate_generation_options(opts, only: keys)
-      assert validated[:temperature] == 0.7
-      assert validated[:max_tokens] == 100
-
-      # Should fail for unsupported keys
-      assert_validation_error(
-        fn opts -> Options.validate_generation_options(opts, only: [:temperature]) end,
-        temperature: 0.7,
-        top_p: 0.9
+    # Provider schema with custom options
+    def provider_schema do
+      NimbleOptions.new!(
+        custom_option: [type: :string, doc: "Custom provider option"],
+        another_option: [type: :integer, doc: "Another custom option"]
       )
-
-      # Empty options should work
-      assert {:ok, []} = Options.validate_generation_options([], only: keys)
     end
 
-    test "filter_generation_options/2 and filter_for_provider/2" do
-      opts = [
-        temperature: 0.7,
-        unsupported_key: "value",
-        max_tokens: 100,
-        another_unsupported: 42
-      ]
+    # Translation function that renames max_tokens for o1 models
+    def translate_options(:chat, %ReqLLM.Model{model: <<"o1", _::binary>>}, opts) do
+      case Keyword.pop(opts, :max_tokens) do
+        {nil, rest} ->
+          {rest, []}
 
-      keys = [:temperature, :max_tokens]
-      filtered = Options.filter_generation_options(opts, keys)
+        {value, rest} ->
+          new_opts = Keyword.put(rest, :max_completion_tokens, value)
+          warning = "Renamed :max_tokens to :max_completion_tokens for o1 model"
+          {new_opts, [warning]}
+      end
+    end
 
-      assert filtered[:temperature] == 0.7
-      assert filtered[:max_tokens] == 100
-      refute Keyword.has_key?(filtered, :unsupported_key)
+    def translate_options(_operation, _model, opts), do: {opts, []}
 
-      # Edge cases
-      assert Options.filter_generation_options([], keys) == []
-      assert Options.filter_generation_options(opts, []) == []
+    # Required Provider callbacks (stubs)
+    def attach(_request, _model, _opts), do: nil
+    def prepare_request(_operation, _model, _input, _opts), do: {:error, :not_implemented}
+    def encode_body(_request), do: nil
+    def decode_response(_response), do: nil
+  end
 
-      # filter_for_provider should work the same for any provider
-      provider_filtered = Options.filter_for_provider(opts, :openai)
-      assert provider_filtered[:temperature] == 0.7
-      assert provider_filtered[:max_tokens] == 100
-      refute Keyword.has_key?(provider_filtered, :unsupported_key)
+  # Provider without custom schema for fallback testing
+  defmodule SimpleProvider do
+    @behaviour ReqLLM.Provider
+
+    def provider_id, do: :simple
+    def default_base_url, do: "https://api.simple.com"
+    def supported_provider_options, do: []
+
+    # Required Provider callbacks (stubs)
+    def attach(_request, _model, _opts), do: nil
+    def prepare_request(_operation, _model, _input, _opts), do: {:error, :not_implemented}
+    def encode_body(_request), do: nil
+    def decode_response(_response), do: nil
+  end
+
+  describe "Options.process/4 - core functionality" do
+    test "validates and passes through standard generation options" do
+      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+      opts = [temperature: 0.7, max_tokens: 1000]
+
+      assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts)
+      assert processed[:temperature] == 0.7
+      assert processed[:max_tokens] == 1000
+    end
+
+    test "returns error for invalid generation options" do
+      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+      opts = [temperature: "invalid"]
+
+      assert {:error, %ReqLLM.Error.Unknown.Unknown{}} =
+               Options.process(MockProvider, :chat, model, opts)
+    end
+
+    test "handles empty options with defaults" do
+      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+      opts = []
+
+      assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts)
+      # Should have default values
+      assert processed[:stream] == false
+      assert processed[:n] == 1
     end
   end
 
-  describe "complex validation scenarios" do
-    test "comprehensive generation options validation" do
-      complex_opts = [
+  describe "Options.process/4 - provider-specific options" do
+    test "validates provider options nested under :provider_options key" do
+      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+
+      opts = [
         temperature: 0.7,
+        provider_options: [
+          custom_option: "test_value",
+          another_option: 42
+        ]
+      ]
+
+      assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts)
+      assert processed[:temperature] == 0.7
+      assert processed[:provider_options][:custom_option] == "test_value"
+      assert processed[:provider_options][:another_option] == 42
+    end
+
+    test "rejects invalid provider options" do
+      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+
+      opts = [
+        temperature: 0.7,
+        provider_options: [
+          custom_option: "valid",
+          # should be integer
+          another_option: "invalid_type"
+        ]
+      ]
+
+      assert {:error, %ReqLLM.Error.Unknown.Unknown{}} =
+               Options.process(MockProvider, :chat, model, opts)
+    end
+
+    test "works with providers that have no custom schema" do
+      model = %ReqLLM.Model{provider: :simple, model: "test-model"}
+      opts = [temperature: 0.7]
+
+      assert {:ok, processed} = Options.process(SimpleProvider, :chat, model, opts)
+      assert processed[:temperature] == 0.7
+      refute Keyword.has_key?(processed, :provider_options)
+    end
+
+    test "supports nested provider options" do
+      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+
+      opts = [
+        temperature: 0.8,
+        provider_options: [
+          custom_option: "nested_value",
+          another_option: 200
+        ]
+      ]
+
+      assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts)
+      assert processed[:temperature] == 0.8
+      assert processed[:provider_options][:custom_option] == "nested_value"
+      assert processed[:provider_options][:another_option] == 200
+    end
+  end
+
+  describe "Options.process/4 - req_options handling" do
+    test "preserves req_options for merging into Req request" do
+      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+
+      opts = [
+        temperature: 0.7,
+        req_options: [
+          timeout: 60_000,
+          retry_attempts: 5
+        ]
+      ]
+
+      assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts)
+      assert processed[:temperature] == 0.7
+      assert processed[:req_options][:timeout] == 60_000
+      assert processed[:req_options][:retry_attempts] == 5
+    end
+
+    test "handles missing req_options gracefully" do
+      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+      opts = [temperature: 0.7]
+
+      assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts)
+      assert processed[:temperature] == 0.7
+      refute Keyword.has_key?(processed, :req_options)
+    end
+  end
+
+  describe "Options.process/4 - provider translation" do
+    test "applies provider-specific option translation" do
+      model = %ReqLLM.Model{provider: :mock, model: "o1-preview"}
+      opts = [temperature: 0.7, max_tokens: 1000]
+
+      assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts)
+
+      # max_tokens should be renamed to max_completion_tokens
+      assert processed[:temperature] == 0.7
+      assert processed[:max_completion_tokens] == 1000
+      refute Keyword.has_key?(processed, :max_tokens)
+    end
+
+    test "handles translation warnings based on on_unsupported setting" do
+      import ExUnit.CaptureLog
+
+      model = %ReqLLM.Model{provider: :mock, model: "o1-preview"}
+      opts = [max_tokens: 1000, on_unsupported: :warn]
+
+      log_output =
+        capture_log(fn ->
+          assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts)
+          assert processed[:max_completion_tokens] == 1000
+        end)
+
+      assert log_output =~ "Renamed :max_tokens to :max_completion_tokens"
+    end
+
+    test "translation works correctly for o1 models" do
+      model = %ReqLLM.Model{provider: :mock, model: "o1-preview"}
+
+      opts = [
         max_tokens: 1000,
-        tools: [%{type: "function", function: %{name: "get_weather"}}],
-        tool_choice: "auto",
-        reasoning: "auto",
-        thinking: true,
-        stream: true,
-        stream_format: :sse,
-        safety_settings: [%{category: "HARM_CATEGORY_HARASSMENT"}]
+        context: %ReqLLM.Context{messages: []}
       ]
 
-      validated =
-        assert_validates_successfully(
-          &Options.validate_generation_options/1,
-          complex_opts,
-          temperature: 0.7,
-          reasoning: "auto",
-          stream: true
-        )
+      assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts)
 
-      assert length(validated[:tools]) == 1
-    end
-
-    test "comprehensive provider options validation" do
-      complex_provider_opts = [
-        id: :custom_provider,
-        name: "Custom Provider",
-        base_url: "https://api.custom.com/v1",
-        env: ["CUSTOM_API_KEY", "CUSTOM_ORG_KEY"],
-        timeout: 45_000,
-        retry_attempts: 5
-      ]
-
-      assert_validates_successfully(
-        &Options.validate_provider_options/1,
-        complex_provider_opts,
-        id: :custom_provider,
-        timeout: 45_000
-      )
-    end
-
-    test "complex model capabilities with modalities" do
-      complex_capabilities = [
-        id: "multimodal-model",
-        modalities: %{
-          input: [:text, :image, :audio, :video],
-          output: [:text, :image, :audio]
-        },
-        reasoning: true,
-        tool_call: true,
-        knowledge: "2024-04"
-      ]
-
-      validated =
-        assert_validates_successfully(
-          &Options.validate_capabilities/1,
-          complex_capabilities,
-          reasoning: true,
-          tool_call: true
-        )
-
-      assert validated[:modalities][:input] == [:text, :image, :audio, :video]
+      # max_tokens should be translated to max_completion_tokens by the mock provider
+      assert processed[:max_completion_tokens] == 1000
+      refute Keyword.has_key?(processed, :max_tokens)
+      assert %ReqLLM.Context{} = processed[:context]
     end
   end
 
-  describe "edge cases and enum validations" do
-    test "reasoning parameter validation in generation vs capabilities" do
-      # Generation schema allows specific enum values
-      valid_reasoning_values = [nil, false, true, "low", "auto", "high"]
+  describe "Options.process/4 - internal keys handling" do
+    test "preserves internal keys and bypasses validation" do
+      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
 
-      for value <- valid_reasoning_values do
-        assert {:ok, _} = Options.validate_generation_options(reasoning: value)
-      end
-
-      assert_validation_error(&Options.validate_generation_options/1, reasoning: "invalid")
-
-      # Capabilities schema only allows booleans
-      for value <- [true, false] do
-        assert {:ok, _} = Options.validate_capabilities(id: "test", reasoning: value)
-      end
-
-      assert_validation_error(&Options.validate_capabilities/1, id: "test", reasoning: "auto")
-    end
-
-    test "stop sequences multiple format support" do
-      stop_test_cases = [
-        {[stop: "END"], "END"},
-        {[stop: ["\\n", "END", "STOP"]], ["\\n", "END", "STOP"]},
-        {[stop_sequences: ["\\n", "END"]], ["\\n", "END"]}
+      opts = [
+        temperature: 0.7,
+        # Internal keys that should bypass validation
+        req_options: %{unknown: "value"},
+        fixture: :test_fixture,
+        operation: :embedding,
+        text: "input text",
+        context: %ReqLLM.Context{messages: []}
       ]
 
-      for {opts, expected} <- stop_test_cases do
-        validated = assert_validates_successfully(&Options.validate_generation_options/1, opts)
-        key = if Keyword.has_key?(opts, :stop), do: :stop, else: :stop_sequences
-        assert validated[key] == expected
+      assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts)
+
+      assert processed[:temperature] == 0.7
+      assert processed[:req_options] == %{unknown: "value"}
+      assert processed[:fixture] == :test_fixture
+      assert processed[:operation] == :embedding
+      assert processed[:text] == "input text"
+      assert %ReqLLM.Context{} = processed[:context]
+    end
+
+    test "validates context when provided" do
+      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+
+      # Valid context
+      valid_opts = [temperature: 0.7, context: %ReqLLM.Context{messages: []}]
+      assert {:ok, processed} = Options.process(MockProvider, :chat, model, valid_opts)
+      assert %ReqLLM.Context{} = processed[:context]
+
+      # Invalid context should raise specific error
+      invalid_opts = [temperature: 0.7, context: "invalid"]
+
+      assert_raise ReqLLM.Error.Invalid.Parameter, fn ->
+        Options.process!(MockProvider, :chat, model, invalid_opts)
+      end
+    end
+  end
+
+  describe "Options.process/4 - error handling" do
+    test "process/4 returns error tuples while process!/4 raises" do
+      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+      invalid_opts = [temperature: "invalid"]
+
+      # process/4 returns error tuple
+      assert {:error, %ReqLLM.Error.Unknown.Unknown{}} =
+               Options.process(MockProvider, :chat, model, invalid_opts)
+
+      # process!/4 raises exception
+      assert_raise NimbleOptions.ValidationError, fn ->
+        Options.process!(MockProvider, :chat, model, invalid_opts)
+      end
+    end
+  end
+
+  describe "Options.process/4 - provider key collision detection" do
+    # Provider that defines options conflicting with core generation options
+    defmodule ConflictingProvider do
+      @behaviour ReqLLM.Provider
+
+      def provider_id, do: :conflicting
+      def default_base_url, do: "https://api.conflicting.com"
+      # These conflict!
+      def supported_provider_options, do: [:temperature, :max_tokens]
+
+      # Provider schema with conflicting options
+      def provider_schema do
+        NimbleOptions.new!(
+          temperature: [type: :string, doc: "Conflicting temperature option"],
+          max_tokens: [type: :string, doc: "Conflicting max_tokens option"],
+          safe_option: [type: :integer, doc: "Non-conflicting option"]
+        )
+      end
+
+      # Required Provider callbacks (stubs)
+      def attach(_request, _model, _opts), do: nil
+      def prepare_request(_operation, _model, _input, _opts), do: {:error, :not_implemented}
+      def encode_body(_request), do: nil
+      def decode_response(_response), do: nil
+    end
+
+    test "detects when provider options shadow core generation options" do
+      model = %ReqLLM.Model{provider: :conflicting, model: "test-model"}
+      opts = [temperature: 0.7]
+
+      assert_raise ReqLLM.Error.Invalid.Parameter, fn ->
+        Options.process!(ConflictingProvider, :chat, model, opts)
       end
     end
 
-    test "enum validations for stream_format and logprobs" do
-      # stream_format enum
-      for format <- [:sse, :chunked, :json, :text] do
-        assert {:ok, validated} = Options.validate_generation_options(stream_format: format)
-        assert validated[:stream_format] == format
-      end
+    test "provides helpful error message about conflicting keys" do
+      model = %ReqLLM.Model{provider: :conflicting, model: "test-model"}
+      opts = [temperature: 0.7]
 
-      assert_validation_error(&Options.validate_generation_options/1, stream_format: :invalid)
+      error =
+        assert_raise ReqLLM.Error.Invalid.Parameter, fn ->
+          Options.process!(ConflictingProvider, :chat, model, opts)
+        end
 
-      # logprobs as boolean or positive integer
-      logprobs_cases = [
-        {[logprobs: true], true},
-        {[logprobs: false], false},
-        {[logprobs: 5], 5}
+      assert error.parameter =~
+               "Provider conflicting defines options that shadow core generation options"
+
+      assert error.parameter =~ "temperature, max_tokens"
+      assert error.parameter =~ "Provider-specific options must not conflict"
+    end
+
+    test "allows providers with non-conflicting options to work normally" do
+      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+
+      opts = [
+        temperature: 0.7,
+        provider_options: [custom_option: "test", another_option: 42]
       ]
 
-      for {opts, expected} <- logprobs_cases do
-        validated = assert_validates_successfully(&Options.validate_generation_options/1, opts)
-        assert validated[:logprobs] == expected
-      end
+      assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts)
+      assert processed[:temperature] == 0.7
+      assert processed[:provider_options][:custom_option] == "test"
+    end
+  end
 
-      # Invalid logprobs values
-      for invalid_value <- [0, -1] do
-        assert_validation_error(&Options.validate_generation_options/1, logprobs: invalid_value)
+  describe "Options.process/4 - enhanced error messages" do
+    test "suggests provider_options for unknown options that match provider schema" do
+      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+
+      opts = [
+        temperature: 0.7,
+        # This matches provider schema
+        custom_option: "should be nested",
+        unknown_option: "totally unknown"
+      ]
+
+      case Options.process(MockProvider, :chat, model, opts) do
+        {:error,
+         %ReqLLM.Error.Unknown.Unknown{error: %NimbleOptions.ValidationError{message: message}}} ->
+          assert message =~ "Suggestion: The following options appear to be provider-specific"
+          assert message =~ "custom_option"
+          assert message =~ "provider_options"
+
+        other ->
+          flunk("Expected enhanced validation error, got: #{inspect(other)}")
       end
     end
 
-    test "empty options handling" do
-      # Generation options should succeed with defaults
-      assert {:ok, result} = Options.validate_generation_options([])
-      # default
-      assert result[:stream] == false
-      # default
-      assert result[:n] == 1
+    test "provides helpful suggestions for similar option names" do
+      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
 
-      # Capabilities require id
-      assert_validation_error(&Options.validate_capabilities/1, [])
+      opts = [
+        temperature: 0.7,
+        # Similar to custom_option
+        custon_option: "typo in custom_option"
+      ]
+
+      case Options.process(MockProvider, :chat, model, opts) do
+        {:error,
+         %ReqLLM.Error.Unknown.Unknown{error: %NimbleOptions.ValidationError{message: message}}} ->
+          assert message =~ "Did you mean one of these provider-specific options"
+          assert message =~ "custon_option -> custom_option"
+
+        other ->
+          flunk("Expected enhanced validation error, got: #{inspect(other)}")
+      end
+    end
+
+    test "provides tips for invalid value errors" do
+      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+      # Should be a number
+      opts = [temperature: "invalid"]
+
+      case Options.process(MockProvider, :chat, model, opts) do
+        {:error,
+         %ReqLLM.Error.Unknown.Unknown{error: %NimbleOptions.ValidationError{message: message}}} ->
+          assert message =~ "Tip: Check the documentation for valid parameter ranges"
+          assert message =~ "provider_options key"
+
+        other ->
+          flunk("Expected enhanced validation error, got: #{inspect(other)}")
+      end
+    end
+  end
+
+  describe "Options.process/4 - edge cases" do
+    test "handles stream/stream? alias conversion" do
+      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+
+      # stream? should be converted to stream
+      opts_with_alias = [stream?: true, temperature: 0.7]
+      assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts_with_alias)
+      assert processed[:stream] == true
+      refute Keyword.has_key?(processed, :stream?)
+    end
+
+    test "handles provider without translate_options callback" do
+      model = %ReqLLM.Model{provider: :simple, model: "test-model"}
+      opts = [temperature: 0.7, max_tokens: 1000]
+
+      assert {:ok, processed} = Options.process(SimpleProvider, :chat, model, opts)
+      assert processed[:temperature] == 0.7
+      assert processed[:max_tokens] == 1000
     end
   end
 end

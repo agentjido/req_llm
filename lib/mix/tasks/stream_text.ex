@@ -4,7 +4,7 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
   @moduledoc """
   Generic mix task for streaming text generation from any supported AI model.
 
-  Supports all providers in the ReqLLM ecosystem with real-time streaming 
+  Supports all providers in the ReqLLM ecosystem with real-time streaming
   and comprehensive metrics.
 
   ## Usage
@@ -46,8 +46,12 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
           system: :string,
           max_tokens: :integer,
           temperature: :float,
-          "log-level": :string,
-          "debug-dir": :string
+          log_level: :string,
+          debug_dir: :string
+        ],
+        aliases: [
+          l: :log_level,
+          d: :debug_dir
         ]
       )
 
@@ -76,8 +80,8 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
       end
 
     model_spec = Keyword.get(opts, :model, "groq:gemma2-9b-it")
-    log_level = parse_log_level(Keyword.get(opts, :"log-level", "normal"))
-    debug_dir = Keyword.get(opts, :"debug-dir")
+    log_level = parse_log_level(Keyword.get(opts, :log_level, "normal"))
+    debug_dir = Keyword.get(opts, :debug_dir)
 
     # Derive behavior flags from log level
     quiet = log_level == :quiet
@@ -108,7 +112,7 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
     try do
       case ReqLLM.stream_text(model_spec, prompt, stream_opts) do
         {:ok, response} ->
-          # Debug: Show request details  
+          # Debug: Show request details
           if debug do
             debug_request(response)
           end
@@ -122,7 +126,19 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
           # Debug: Show streaming timeline header
           if debug do
             IO.puts("=== DEBUG/STREAMING TIMELINE =============================")
-            IO.puts("INDEX\tELAPSED\tTYPE\tBYTES\tPREVIEW")
+
+            IO.puts(
+              String.pad_trailing("INDEX", 8) <>
+                String.pad_trailing("ELAPSED", 12) <>
+                String.pad_trailing("TYPE", 12) <> String.pad_trailing("BYTES", 8) <> "PREVIEW"
+            )
+
+            IO.puts(
+              String.pad_trailing("-----", 8) <>
+                String.pad_trailing("-----------", 12) <>
+                String.pad_trailing("-----------", 12) <>
+                String.pad_trailing("-----", 8) <> "-------"
+            )
           end
 
           {text_chunks, chunk_count} =
@@ -136,7 +152,17 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
               end
 
               cond do
-                verbose and not debug ->
+                debug ->
+                  # Debug mode: show only debug timeline, no streaming text
+                  case chunk do
+                    %ReqLLM.StreamChunk{type: :content, text: text} when is_binary(text) ->
+                      {[text | acc_chunks], count}
+
+                    _ ->
+                      {acc_chunks, count}
+                  end
+
+                verbose ->
                   IO.puts("[#{count}]: #{inspect(chunk)}")
 
                   case chunk do
@@ -205,15 +231,54 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
           if !quiet, do: IO.puts("Streaming completed")
           :ok
 
+        {:error, %ReqLLM.Error.Invalid.Provider{provider: provider}} ->
+          IO.puts("Error: Unknown provider '#{provider}'. Please check that the provider is supported and properly configured.")
+          IO.puts("Available providers: openai, groq, xai (others may require additional setup)")
+          System.halt(1)
+
+        {:error, %ReqLLM.Error.Invalid.Parameter{parameter: param}} ->
+          IO.puts("Error: #{param}")
+          System.halt(1)
+
+        {:error, %ReqLLM.Error.API.Request{reason: reason, status: status}} when not is_nil(status) ->
+          IO.puts("API Error (#{status}): #{reason}")
+          System.halt(1)
+
+        {:error, %ReqLLM.Error.API.Request{reason: reason}} ->
+          IO.puts("API Error: #{reason}")
+          System.halt(1)
+
         {:error, error} ->
-          IO.puts("Streaming failed: #{inspect(error)}")
+          IO.puts("Streaming failed: #{format_error(error)}")
           System.halt(1)
       end
     rescue
+      error in UndefinedFunctionError ->
+        case error do
+          %UndefinedFunctionError{module: nil, function: :prepare_request} ->
+            IO.puts("Error: Provider not properly configured or not available. Please check your model specification.")
+            System.halt(1)
+
+          _ ->
+            IO.puts("Unexpected error: #{format_error(error)}")
+            System.halt(1)
+        end
+
       error ->
-        IO.puts("Error: #{inspect(error)}")
+        IO.puts("Unexpected error: #{format_error(error)}")
         System.halt(1)
     end
+  end
+
+  defp format_error(%{__struct__: _} = error) do
+    case Exception.message(error) do
+      message when is_binary(message) -> message
+      _ -> inspect(error)
+    end
+  end
+
+  defp format_error(error) do
+    inspect(error)
   end
 
   defp maybe_add_option(opts_list, parsed_opts, target_key, source_key \\ nil) do
@@ -381,7 +446,14 @@ defmodule Mix.Tasks.Req.Llm.StreamText do
 
     {chunk_type, bytes, preview} = analyze_chunk(chunk)
 
-    IO.puts("CHUNK\t#{index}\t#{elapsed_ms}ms\t#{chunk_type}\t#{bytes}B\t#{preview}")
+    # Format with consistent column widths
+    index_str = String.pad_trailing("#{index}", 8)
+    elapsed_str = String.pad_trailing("#{elapsed_ms}ms", 12)
+    type_str = String.pad_trailing("#{chunk_type}", 12)
+    bytes_str = String.pad_trailing("#{bytes}B", 8)
+
+    # Send debug output to stderr so it doesn't mix with content
+    IO.puts(:stderr, index_str <> elapsed_str <> type_str <> bytes_str <> preview)
   end
 
   defp analyze_chunk(%ReqLLM.StreamChunk{type: type, text: text}) when is_binary(text) do

@@ -1,237 +1,61 @@
 defmodule ReqLLM.Provider.Options do
   @moduledoc """
-  Comprehensive provider options module for ReqLLM.
+  Runtime generation options processing for ReqLLM providers.
 
-  This module defines all possible provider options that can be used across different
-  AI model providers, including both provider-level configuration and model-level
-  parameters. Options are validated using NimbleOptions schemas.
+  This module handles only the core generation options that are truly universal 
+  across providers, plus the orchestration logic for validation, translation, 
+  and provider-specific option handling.
 
-  ## Option Categories
+  ## Design Principles
 
-  1. **Provider Configuration** - Base settings for provider connections
-  2. **Model Capabilities** - What features a model supports
-  3. **Generation Parameters** - Runtime options for text generation
-  4. **Cost & Limits** - Pricing and usage constraints
-  5. **Advanced Options** - Provider-specific advanced settings
+  1. **Universal Core**: Only include options supported by most major providers
+  2. **Provider Extensions**: Allow providers to define their own options via `provider_schema/0`
+  3. **Clean Separation**: Metadata (capabilities, costs) belongs in separate modules
+
+  ## Core Options
+
+  The following options are considered universal:
+  - `temperature`, `max_tokens` - Basic sampling control
+  - `top_p`, `top_k` - Advanced sampling  
+  - `frequency_penalty`, `presence_penalty` - Repetition control
+  - `seed`, `stop` - Deterministic generation and control
+  - `tools`, `tool_choice` - Function calling
+  - `n`, `stream` - Output control
+  - `user` - Tracking/identification
+
+  ## Provider-Specific Options
+
+  Providers can extend the schema via:
+  ```elixir
+  def provider_schema do
+    NimbleOptions.new!([
+      dimensions: [type: :pos_integer, doc: "Embedding dimensions"],
+      custom_param: [type: :string, doc: "Provider-specific parameter"]
+    ])
+  end
+  ```
+
+  ## Usage
+
+  The main entry point is `process/4` which handles the complete pipeline:
+  ```elixir
+  {:ok, processed_opts} = Options.process(MyProvider, :chat, model, user_opts)
+  ```
   """
 
-  # Provider-level configuration options schema
-  @provider_options_schema NimbleOptions.new!(
-                             id: [
-                               type: :atom,
-                               required: true,
-                               doc:
-                                 "Unique identifier for the provider (e.g., :anthropic, :openai)"
-                             ],
-                             name: [
-                               type: :string,
-                               doc: "Human-readable name of the provider"
-                             ],
-                             base_url: [
-                               type: :string,
-                               required: true,
-                               doc: "Base URL for the provider's API endpoint"
-                             ],
-                             env: [
-                               type: {:list, :string},
-                               default: [],
-                               doc: "List of environment variable names for API keys"
-                             ],
-                             doc: [
-                               type: :string,
-                               doc: "Documentation or description of the provider"
-                             ],
-                             metadata: [
-                               type: :string,
-                               doc: "Path to JSON metadata file containing model information"
-                             ],
-                             api_key: [
-                               type: :string,
-                               doc:
-                                 "API key for authentication (can also be set via environment variable)"
-                             ],
-                             organization_id: [
-                               type: :string,
-                               doc: "Organization ID for providers that support it (e.g., OpenAI)"
-                             ],
-                             project_id: [
-                               type: :string,
-                               doc:
-                                 "Project ID for providers that require it (e.g., Google Vertex AI)"
-                             ],
-                             region: [
-                               type: :string,
-                               doc: "Region for regional endpoints (e.g., AWS Bedrock, Azure)"
-                             ],
-                             deployment_id: [
-                               type: :string,
-                               doc: "Deployment ID for Azure OpenAI deployments"
-                             ],
-                             version: [
-                               type: :string,
-                               doc: "API version to use"
-                             ],
-                             timeout: [
-                               type: :pos_integer,
-                               default: 30_000,
-                               doc: "Request timeout in milliseconds"
-                             ],
-                             retry_attempts: [
-                               type: :non_neg_integer,
-                               default: 3,
-                               doc: "Number of retry attempts for failed requests"
-                             ],
-                             retry_delay: [
-                               type: :pos_integer,
-                               default: 1000,
-                               doc: "Delay between retry attempts in milliseconds"
-                             ]
-                           )
-
-  # Model capability options schema
-  @model_capabilities_schema NimbleOptions.new!(
-                               id: [
-                                 type: :string,
-                                 required: true,
-                                 doc: "Model identifier"
-                               ],
-                               provider_model_id: [
-                                 type: :string,
-                                 doc: "Provider-specific model ID (may differ from generic ID)"
-                               ],
-                               name: [
-                                 type: :string,
-                                 doc: "Human-readable model name"
-                               ],
-                               modalities: [
-                                 type: :map,
-                                 doc: "Supported input/output modalities",
-                                 keys: [
-                                   input: [
-                                     type:
-                                       {:list, {:in, [:text, :image, :audio, :video, :document]}},
-                                     doc: "Supported input modalities"
-                                   ],
-                                   output: [
-                                     type: {:list, {:in, [:text, :image, :audio, :video]}},
-                                     doc: "Supported output modalities"
-                                   ]
-                                 ]
-                               ],
-                               attachment: [
-                                 type: :boolean,
-                                 default: false,
-                                 doc: "Whether the model supports file attachments"
-                               ],
-                               reasoning: [
-                                 type: :boolean,
-                                 default: false,
-                                 doc:
-                                   "Whether the model supports explicit reasoning/thinking tokens"
-                               ],
-                               tool_call: [
-                                 type: :boolean,
-                                 default: false,
-                                 doc: "Whether the model supports function/tool calling"
-                               ],
-                               temperature: [
-                                 type: :boolean,
-                                 default: true,
-                                 doc: "Whether the model supports temperature parameter"
-                               ],
-                               open_weights: [
-                                 type: :boolean,
-                                 default: false,
-                                 doc: "Whether the model weights are open source"
-                               ],
-                               knowledge: [
-                                 type: :string,
-                                 doc: "Knowledge cutoff date (YYYY-MM or YYYY-MM-DD format)"
-                               ],
-                               release_date: [
-                                 type: :string,
-                                 doc: "Model release date (YYYY-MM-DD format)"
-                               ],
-                               last_updated: [
-                                 type: :string,
-                                 doc: "Last update date (YYYY-MM-DD format)"
-                               ]
-                             )
-
-  # Model limit options schema
-  @model_limits_schema NimbleOptions.new!(
-                         context: [
-                           type: :pos_integer,
-                           doc: "Maximum context window size in tokens"
-                         ],
-                         output: [
-                           type: :pos_integer,
-                           doc: "Maximum output tokens"
-                         ],
-                         rate_limit: [
-                           type: :map,
-                           doc: "Rate limiting configuration",
-                           keys: [
-                             requests_per_minute: [
-                               type: :pos_integer,
-                               doc: "Maximum requests per minute"
-                             ],
-                             tokens_per_minute: [
-                               type: :pos_integer,
-                               doc: "Maximum tokens per minute"
-                             ],
-                             requests_per_day: [
-                               type: :pos_integer,
-                               doc: "Maximum requests per day"
-                             ]
-                           ]
-                         ]
-                       )
-
-  # Model cost options schema
-  @model_cost_schema NimbleOptions.new!(
-                       input: [
-                         type: :float,
-                         doc: "Cost per million input tokens"
-                       ],
-                       output: [
-                         type: :float,
-                         doc: "Cost per million output tokens"
-                       ],
-                       cache_read: [
-                         type: :float,
-                         doc: "Cost per million cached input tokens (for providers with caching)"
-                       ],
-                       cache_write: [
-                         type: :float,
-                         doc: "Cost per million tokens to write to cache"
-                       ],
-                       training: [
-                         type: :float,
-                         doc: "Cost per million training tokens (for fine-tuned models)"
-                       ],
-                       image: [
-                         type: :float,
-                         doc: "Cost per image (for image generation models)"
-                       ],
-                       audio: [
-                         type: :float,
-                         doc: "Cost per minute of audio (for audio models)"
-                       ]
-                     )
-
-  # Generation parameter options schema
+  # Core generation options - only truly universal parameters
   @generation_options_schema NimbleOptions.new!(
-                               # Core generation parameters
+                               # Basic sampling (supported by virtually all providers)
                                temperature: [
                                  type: :float,
-                                 doc:
-                                   "Controls randomness in output (0.0 to 2.0, provider-dependent)"
+                                 doc: "Controls randomness in output (0.0 to 2.0)"
                                ],
                                max_tokens: [
                                  type: :pos_integer,
                                  doc: "Maximum number of tokens to generate"
                                ],
+
+                               # Advanced sampling (widely supported)
                                top_p: [
                                  type: :float,
                                  doc: "Nucleus sampling parameter (0.0 to 1.0)"
@@ -240,412 +64,191 @@ defmodule ReqLLM.Provider.Options do
                                  type: :pos_integer,
                                  doc: "Top-k sampling parameter"
                                ],
+
+                               # Repetition control (OpenAI, Anthropic, others)
                                frequency_penalty: [
                                  type: :float,
-                                 doc:
-                                   "Penalize tokens based on frequency in the output (-2.0 to 2.0)"
+                                 doc: "Penalize tokens based on frequency (-2.0 to 2.0)"
                                ],
                                presence_penalty: [
                                  type: :float,
-                                 doc:
-                                   "Penalize tokens based on presence in the output (-2.0 to 2.0)"
-                               ],
-                               repetition_penalty: [
-                                 type: :float,
-                                 doc: "Alternative repetition penalty (provider-specific)"
+                                 doc: "Penalize tokens based on presence (-2.0 to 2.0)"
                                ],
 
-                               # Sampling control
+                               # Control parameters
                                seed: [
-                                 type: :integer,
+                                 type: :pos_integer,
                                  doc: "Random seed for deterministic generation"
                                ],
                                stop: [
                                  type: {:or, [:string, {:list, :string}]},
                                  doc: "Stop sequences to end generation"
                                ],
-                               stop_sequences: [
-                                 type: {:list, :string},
-                                 doc: "Alternative name for stop sequences (provider-specific)"
+                               user: [
+                                 type: :string,
+                                 doc: "User identifier for tracking and abuse detection"
                                ],
 
-                               # Output format
-                               response_format: [
-                                 type: {:or, [:map, :string]},
-                                 doc: "Response format specification (e.g., JSON mode)"
-                               ],
-                               json_mode: [
-                                 type: :boolean,
-                                 doc: "Enable JSON output mode"
+                               # System prompt (widely supported)
+                               system_prompt: [
+                                 type: :string,
+                                 doc: "System prompt to set context and instructions"
                                ],
 
-                               # Advanced sampling
-                               n: [
-                                 type: :pos_integer,
-                                 default: 1,
-                                 doc: "Number of completions to generate"
-                               ],
-                               best_of: [
-                                 type: :pos_integer,
-                                 doc: "Generate best_of completions and return the best one"
-                               ],
-                               logprobs: [
-                                 type: {:or, [:boolean, :pos_integer]},
-                                 doc: "Include log probabilities in the response"
-                               ],
-                               echo: [
-                                 type: :boolean,
-                                 doc: "Echo the prompt in the response"
-                               ],
-                               logit_bias: [
-                                 type: :map,
-                                 doc: "Token ID to bias value mapping"
+                               # Reasoning for advanced models
+                               reasoning: [
+                                 type: {:in, [nil, false, true, "low", "auto", "high"]},
+                                 doc: "Request reasoning/thinking tokens from the model"
                                ],
 
-                               # Tool/Function calling
+                               # Function/tool calling (widely supported)
                                tools: [
-                                 type: {:list, :map},
+                                 type: {:list, :any},
                                  doc: "List of available tools/functions"
                                ],
                                tool_choice: [
                                  type: {:or, [:string, :atom, :map]},
                                  doc:
-                                   "Tool selection strategy (auto, none, required, or specific tool)"
-                               ],
-                               functions: [
-                                 type: {:list, :map},
-                                 doc: "Legacy function definitions (deprecated in favor of tools)"
-                               ],
-                               function_call: [
-                                 type: {:or, [:string, :map]},
-                                 doc: "Legacy function call strategy (deprecated)"
+                                   "Tool selection strategy (auto, none, required, or specific)"
                                ],
 
-                               # System and context
-                               system_prompt: [
-                                 type: :string,
-                                 doc: "System prompt to set context"
+                               # Output control
+                               n: [
+                                 type: :pos_integer,
+                                 default: 1,
+                                 doc: "Number of completions to generate"
                                ],
-                               system: [
-                                 type: :string,
-                                 doc: "Alternative name for system prompt"
-                               ],
-                               user: [
-                                 type: :string,
-                                 doc: "User identifier for tracking"
-                               ],
-
-                               # Reasoning (for models that support it)
-                               reasoning: [
-                                 type: {:in, [nil, false, true, "low", "auto", "high"]},
-                                 doc: "Request reasoning/thinking tokens from the model"
-                               ],
-                               thinking: [
-                                 type: :boolean,
-                                 doc:
-                                   "Enable thinking/reasoning tokens (Anthropic-specific beta feature)"
-                               ],
-
-                               # Streaming
                                stream: [
                                  type: :boolean,
                                  default: false,
-                                 doc: "Enable streaming response"
-                               ],
-                               stream_format: [
-                                 type: {:in, [:sse, :chunked, :json, :text]},
-                                 default: :sse,
-                                 doc: "Streaming transport format"
-                               ],
-                               chunk_timeout: [
-                                 type: :pos_integer,
-                                 default: 30_000,
-                                 doc: "Timeout between stream chunks in milliseconds"
+                                 doc: "Enable streaming responses"
                                ],
 
-                               # Provider-specific
+                               # Provider-specific options container
                                provider_options: [
-                                 type: :map,
-                                 doc:
-                                   "Provider-specific options that don't fit standard parameters"
+                                 type: {:list, :any},
+                                 doc: "Provider-specific options (nested under this key)"
                                ],
 
-                               # Safety and moderation
-                               safety_settings: [
-                                 type: {:list, :map},
-                                 doc: "Safety filter settings (Google, Anthropic)"
+                               # Framework options
+                               on_unsupported: [
+                                 type: {:in, [:warn, :error, :ignore]},
+                                 doc: "How to handle unsupported parameter translations",
+                                 default: :warn
                                ],
-                               moderation: [
-                                 type: :boolean,
-                                 doc: "Enable content moderation"
+                               req_options: [
+                                 type: {:list, :any},
+                                 doc: "Req HTTP client options"
                                ],
 
-                               # Caching (provider-specific)
-                               cache_control: [
-                                 type: :map,
-                                 doc: "Cache control settings for providers that support caching"
-                               ],
-                               use_cache: [
-                                 type: :boolean,
-                                 doc: "Enable response caching"
-                               ],
-                               candidate_count: [
+                               # HTTP client options
+                               receive_timeout: [
                                  type: :pos_integer,
-                                 doc:
-                                   "Number of response candidates to generate (Google-specific)"
-                               ],
-
-                               # OpenRouter-specific parameters
-                               top_logprobs: [
-                                 type: :pos_integer,
-                                 doc:
-                                   "Number of top log probabilities to return (OpenRouter-specific)"
-                               ],
-                               min_p: [
-                                 type: :float,
-                                 doc:
-                                   "Minimum probability threshold for tokens (OpenRouter-specific)"
-                               ],
-                               top_a: [
-                                 type: :float,
-                                 doc: "Top-a sampling parameter (OpenRouter-specific)"
-                               ],
-                               models: [
-                                 type: {:list, :string},
-                                 doc: "Alternative model list for routing (OpenRouter-specific)"
-                               ],
-                               provider: [
-                                 type: :map,
-                                 doc: "Provider routing preferences (OpenRouter-specific)"
-                               ],
-                               usage: [
-                                 type: :map,
-                                 doc: "Usage tracking preferences (OpenRouter-specific)"
-                               ],
-                               transforms: [
-                                 type: {:list, :string},
-                                 doc: "Prompt transforms to apply (OpenRouter-specific)"
+                                 doc: "Timeout for receiving HTTP responses in milliseconds",
+                                 default: 30_000
                                ]
                              )
 
-  # Complete options schema combining all categories
-  @complete_options_schema NimbleOptions.new!(
-                             provider: [
-                               type: :keyword_list,
-                               doc: "Provider configuration options",
-                               keys: @provider_options_schema.schema
-                             ],
-                             capabilities: [
-                               type: :keyword_list,
-                               doc: "Model capability options",
-                               keys: @model_capabilities_schema.schema
-                             ],
-                             limits: [
-                               type: :keyword_list,
-                               doc: "Model limit options",
-                               keys: @model_limits_schema.schema
-                             ],
-                             cost: [
-                               type: :keyword_list,
-                               doc: "Model cost options",
-                               keys: @model_cost_schema.schema
-                             ],
-                             generation: [
-                               type: :keyword_list,
-                               doc: "Generation parameter options",
-                               keys: @generation_options_schema.schema
-                             ]
-                           )
+  # Internal keys that bypass validation (framework concerns)
+  @internal_keys [
+    :req_options,
+    :on_unsupported,
+    :fixture,
+    :req_http_options,
+    :compiled_schema,
+    :operation,
+    :text,
+    :context
+  ]
 
   @doc """
-  Provider-level configuration options.
-
-  These options configure the provider connection and authentication.
-  """
-  def provider_options_schema, do: @provider_options_schema
-
-  @doc """
-  Model capability options.
-
-  These options describe what features and modalities a model supports.
-  """
-  def model_capabilities_schema, do: @model_capabilities_schema
-
-  @doc """
-  Model limit options.
-
-  These options define the constraints and limits of a model.
-  """
-  def model_limits_schema, do: @model_limits_schema
-
-  @doc """
-  Model cost options.
-
-  These options define the pricing structure for a model.
-  """
-  def model_cost_schema, do: @model_cost_schema
-
-  @doc """
-  Generation parameter options.
-
-  These are runtime options that can be passed when generating text.
-  """
-  def generation_options_schema, do: @generation_options_schema
-
-  @doc """
-  Complete options schema combining all option categories.
-
-  This can be used for validating a complete set of provider and generation options.
-  """
-  def complete_options_schema, do: @complete_options_schema
-
-  @doc """
-  Validates provider options against the schema.
-
-  ## Examples
-
-      iex> {:ok, result} = ReqLLM.Provider.Options.validate_provider_options(
-      ...>   id: :openai,
-      ...>   base_url: "https://api.openai.com/v1",
-      ...>   env: ["OPENAI_API_KEY"]
-      ...> )
-      iex> result[:id]
-      :openai
-      iex> result[:base_url]
-      "https://api.openai.com/v1"
-      iex> result[:env]
-      ["OPENAI_API_KEY"]
-  """
-  def validate_provider_options(opts) do
-    NimbleOptions.validate(opts, @provider_options_schema)
-  end
-
-  @doc """
-  Validates generation options against the schema.
-
-  ## Examples
-
-      iex> {:ok, result} = ReqLLM.Provider.Options.validate_generation_options(
-      ...>   temperature: 0.7,
-      ...>   max_tokens: 1000,
-      ...>   stream: true
-      ...> )
-      iex> result[:temperature]
-      0.7
-      iex> result[:max_tokens]
-      1000
-      iex> result[:stream]
-      true
-  """
-  def validate_generation_options(opts) do
-    NimbleOptions.validate(opts, @generation_options_schema)
-  end
-
-  @doc """
-  Validates model capabilities against the schema.
-
-  ## Examples
-
-      iex> {:ok, result} = ReqLLM.Provider.Options.validate_capabilities(
-      ...>   id: "gpt-4",
-      ...>   reasoning: true,
-      ...>   tool_call: true
-      ...> )
-      iex> result[:id]
-      "gpt-4"
-      iex> result[:reasoning]
-      true
-      iex> result[:tool_call]
-      true
-  """
-  def validate_capabilities(opts) do
-    NimbleOptions.validate(opts, @model_capabilities_schema)
-  end
-
-  @doc """
-  Validates model limits against the schema.
-
-  ## Examples
-
-      iex> ReqLLM.Provider.Options.validate_limits(
-      ...>   context: 128000,
-      ...>   output: 4096
-      ...> )
-      {:ok, [context: 128000, output: 4096]}
-  """
-  def validate_limits(opts) do
-    NimbleOptions.validate(opts, @model_limits_schema)
-  end
-
-  @doc """
-  Validates model cost options against the schema.
-
-  ## Examples
-
-      iex> ReqLLM.Provider.Options.validate_cost(
-      ...>   input: 3.0,
-      ...>   output: 15.0
-      ...> )
-      {:ok, [input: 3.0, output: 15.0]}
-  """
-  def validate_cost(opts) do
-    NimbleOptions.validate(opts, @model_cost_schema)
-  end
-
-  @doc """
-  Returns a list of all known provider option keys.
-  """
-  def all_provider_keys do
-    @provider_options_schema.schema
-    |> Keyword.keys()
-  end
-
-  @doc """
-  Returns a list of all known generation option keys.
-  """
-  def all_generation_keys do
-    @generation_options_schema.schema
-    |> Keyword.keys()
-  end
-
-  @doc """
-  Returns a list of all known model capability keys.
-  """
-  def all_capability_keys do
-    @model_capabilities_schema.schema
-    |> Keyword.keys()
-  end
-
-  @doc """
-  Returns a list of all known model limit keys.
-  """
-  def all_limit_keys do
-    @model_limits_schema.schema
-    |> Keyword.keys()
-  end
-
-  @doc """
-  Returns a list of all known model cost keys.
-  """
-  def all_cost_keys do
-    @model_cost_schema.schema
-    |> Keyword.keys()
-  end
-
-  @doc """
-  Returns the base generation options schema used for end-user parameters.
-
-  This schema contains vendor-neutral options that apply to all providers.
-  Providers extend this via their provider_schema in the DSL.
+  Returns the core generation options schema.
   """
   def generation_schema, do: @generation_options_schema
 
   @doc """
-  Returns the base provider configuration schema.
+  Main processing function - validates, translates, and composes options.
 
-  This schema contains provider-level connection and configuration options.
+  This is the primary public API for option processing. It handles:
+  1. Provider key collision detection (prevents shadowing core options)
+  2. Validation against composed schema (core + provider options)
+  3. Provider-specific option translation 
+  4. Internal option preservation
+  5. Error wrapping for consistency
+
+  ## Parameters
+  - `provider_mod` - Provider module implementing the Provider behavior
+  - `operation` - Operation type (:chat, :embedding, :object, etc.)
+  - `model` - ReqLLM.Model struct
+  - `opts` - Raw user options keyword list
+
+  ## Returns
+  `{:ok, processed_opts}` or `{:error, wrapped_error}`
+
+  ## Examples
+      model = %ReqLLM.Model{provider: :openai, model: "gpt-4"}
+      
+      opts = [
+        temperature: 0.7,
+        provider_options: [dimensions: 512, encoding_format: "float"]
+      ]
+      {:ok, processed} = Options.process(MyProvider, :chat, model, opts)
   """
-  def provider_schema_base, do: @provider_options_schema
+  @spec process(module(), atom(), ReqLLM.Model.t(), keyword()) ::
+          {:ok, keyword()} | {:error, term()}
+  def process(provider_mod, operation, model, opts) do
+    processed_opts = process!(provider_mod, operation, model, opts)
+    {:ok, processed_opts}
+  rescue
+    error in [NimbleOptions.ValidationError] ->
+      # Enhance validation error messages with helpful suggestions
+      enhanced_error = enhance_validation_error(error, provider_mod, opts)
+      {:error, ReqLLM.Error.Unknown.Unknown.exception(error: enhanced_error)}
+
+    error ->
+      {:error, error}
+  end
+
+  @doc """
+  Same as process/4 but raises on error.
+  """
+  @spec process!(module(), atom(), ReqLLM.Model.t(), keyword()) :: keyword()
+  def process!(provider_mod, operation, model, opts) do
+    {internal_opts, user_opts} = Keyword.split(opts, @internal_keys)
+    user_opts = handle_stream_alias(user_opts)
+
+    # Check for key collisions before schema validation
+    check_provider_key_collisions!(provider_mod, user_opts)
+
+    schema = compose_schema_internal(@generation_options_schema, provider_mod)
+    validated_opts = NimbleOptions.validate!(user_opts, schema)
+
+    {provider_options, standard_opts} = Keyword.pop(validated_opts, :provider_options, [])
+    flattened_for_translation = Keyword.merge(standard_opts, provider_options)
+    translated_opts = apply_translation(provider_mod, operation, model, flattened_for_translation)
+
+    final_opts =
+      if provider_options == [] do
+        translated_opts
+      else
+        Keyword.put(translated_opts, :provider_options, provider_options)
+      end
+
+    final_opts = handle_warnings(final_opts, opts)
+
+    final_opts
+    |> Keyword.merge(internal_opts)
+    |> validate_context(opts)
+  end
+
+  # Public utility functions
+
+  @doc """
+  Returns a list of all generation option keys.
+  """
+  def all_generation_keys do
+    @generation_options_schema.schema |> Keyword.keys()
+  end
 
   @doc """
   Extracts provider-specific options from a mixed options list.
@@ -659,37 +262,27 @@ defmodule ReqLLM.Provider.Options do
       {[temperature: 0.7, max_tokens: 100], [custom_param: "value"]}
   """
   def extract_provider_options(opts) do
-    # Handle stream? -> stream alias for backward compatibility
-    opts_with_aliases =
-      case Keyword.pop(opts, :stream?) do
-        {nil, rest} -> rest
-        {stream_value, rest} -> Keyword.put(rest, :stream, stream_value)
-      end
-
-    # Exclude provider_options from being treated as a standard generation option
-    # since it's a meta-container, not an actual parameter
+    opts_with_aliases = handle_stream_alias(opts)
     known_keys = all_generation_keys() |> Enum.reject(&(&1 == :provider_options))
-
     {standard, custom} = Keyword.split(opts_with_aliases, known_keys)
-
     {standard, custom}
   end
 
   @doc """
-  Merges options with defaults, respecting provider-specific overrides.
+  Extracts only generation options from a mixed options list.
+
+  Unlike `extract_provider_options/1`, this returns only the generation 
+  options without the unused remainder.
 
   ## Examples
 
-      iex> defaults = [temperature: 0.7, max_tokens: 1000]
-      iex> user_opts = [temperature: 0.9]
-      iex> result = ReqLLM.Provider.Options.merge_with_defaults(user_opts, defaults)
-      iex> result[:temperature]
-      0.9
-      iex> result[:max_tokens]
-      1000
+      iex> mixed_opts = [temperature: 0.7, custom_param: "value", max_tokens: 100]
+      iex> ReqLLM.Provider.Options.extract_generation_opts(mixed_opts)
+      [temperature: 0.7, max_tokens: 100]
   """
-  def merge_with_defaults(opts, defaults) do
-    Keyword.merge(defaults, opts)
+  def extract_generation_opts(opts) do
+    {generation_opts, _rest} = extract_provider_options(opts)
+    generation_opts
   end
 
   @doc """
@@ -739,41 +332,242 @@ defmodule ReqLLM.Provider.Options do
   end
 
   @doc """
-  Filters options to only include those supported by a specific provider.
-
-  This function would typically be implemented by each provider to filter
-  out unsupported options.
-  """
-  def filter_for_provider(opts, provider) when is_atom(provider) do
-    # This would be implemented based on provider capabilities
-    # For now, return all standard generation options
-    {standard, _custom} = extract_provider_options(opts)
-    standard
-  end
-
-  @doc """
-  Extracts only generation options from a mixed options list.
-
-  Unlike `extract_provider_options/1`, this returns only the generation 
-  options without the unused remainder.
-
-  ## Parameters
-
-  - `opts` - Mixed options list
-
-  ## Returns
-
-  Keyword list containing only generation options.
+  Merges options with defaults, respecting user-provided overrides.
 
   ## Examples
 
-      iex> mixed_opts = [temperature: 0.7, custom_param: "value", max_tokens: 100]
-      iex> ReqLLM.Provider.Options.extract_generation_opts(mixed_opts)
-      [temperature: 0.7, max_tokens: 100]
+      iex> defaults = [temperature: 0.7, max_tokens: 1000]
+      iex> user_opts = [temperature: 0.9]
+      iex> result = ReqLLM.Provider.Options.merge_with_defaults(user_opts, defaults)
+      iex> result[:temperature]
+      0.9
+      iex> result[:max_tokens]
+      1000
   """
-  @spec extract_generation_opts(keyword()) :: keyword()
-  def extract_generation_opts(opts) do
-    {generation_opts, _rest} = extract_provider_options(opts)
-    generation_opts
+  def merge_with_defaults(opts, defaults) do
+    Keyword.merge(defaults, opts)
+  end
+
+  @doc """
+  Builds a dynamic schema by composing base schema with provider-specific options.
+
+  This function takes a base schema and provider module, creating a unified schema where 
+  provider-specific options are nested under the :provider_options key with proper validation.
+
+  This is the public API for schema composition and should be used by external modules
+  that need to validate options with provider-specific extensions.
+
+  ## Parameters
+
+  - `base_schema` - Base NimbleOptions schema (usually generation_options_schema/0)  
+  - `provider_mod` - Provider module that may implement provider_schema/0
+
+  ## Examples
+
+      schema = ReqLLM.Provider.Options.compose_schema(
+        ReqLLM.Provider.Options.generation_schema(),
+        MyProvider
+      )
+  """
+  def compose_schema(base_schema, provider_mod) do
+    compose_schema_internal(base_schema, provider_mod)
+  end
+
+  # Private helper functions
+
+  defp handle_stream_alias(opts) do
+    case Keyword.pop(opts, :stream?) do
+      {nil, rest} -> rest
+      {value, rest} -> Keyword.put(rest, :stream, value)
+    end
+  end
+
+  defp compose_schema_internal(base_schema, provider_mod) do
+    if function_exported?(provider_mod, :provider_schema, 0) do
+      provider_schema = provider_mod.provider_schema()
+
+      updated_keys =
+        Keyword.update!(base_schema.schema, :provider_options, fn opt ->
+          Keyword.merge(opt,
+            type: :keyword_list,
+            keys: provider_schema.schema,
+            default: []
+          )
+        end)
+
+      NimbleOptions.new!(updated_keys)
+    else
+      base_schema
+    end
+  end
+
+  defp apply_translation(provider_mod, operation, model, opts) do
+    if function_exported?(provider_mod, :translate_options, 3) do
+      case provider_mod.translate_options(operation, model, opts) do
+        {translated_opts, warnings} when is_list(warnings) ->
+          Process.put(:req_llm_warnings, warnings)
+          translated_opts
+
+        translated_opts ->
+          translated_opts
+      end
+    else
+      opts
+    end
+  end
+
+  defp handle_warnings(opts, original_opts) do
+    warnings = Process.get(:req_llm_warnings, [])
+    Process.delete(:req_llm_warnings)
+
+    if warnings == [] do
+      opts
+    else
+      case Keyword.get(original_opts, :on_unsupported, :warn) do
+        :warn ->
+          Enum.each(warnings, fn warning ->
+            require Logger
+
+            Logger.warning(warning)
+          end)
+
+          opts
+
+        :error ->
+          raise ReqLLM.Error.Validation.Error.exception(errors: warnings)
+
+        :ignore ->
+          opts
+      end
+    end
+  end
+
+  defp validate_context(opts, original_opts) do
+    case Keyword.get(original_opts, :context) do
+      %ReqLLM.Context{} = ctx ->
+        Keyword.put(opts, :context, ctx)
+
+      nil ->
+        opts
+
+      other ->
+        raise ReqLLM.Error.Invalid.Parameter.exception(
+                parameter: "context must be ReqLLM.Context, got: #{inspect(other)}"
+              )
+    end
+  end
+
+  defp check_provider_key_collisions!(provider_mod, _opts) do
+    if function_exported?(provider_mod, :provider_schema, 0) do
+      provider_schema = provider_mod.provider_schema()
+      provider_keys = Keyword.keys(provider_schema.schema)
+      core_keys = all_generation_keys() |> Enum.reject(&(&1 == :provider_options))
+
+      collisions = MapSet.intersection(MapSet.new(provider_keys), MapSet.new(core_keys))
+
+      if !Enum.empty?(collisions) do
+        collision_list = Enum.join(collisions, ", ")
+
+        raise ReqLLM.Error.Invalid.Parameter.exception(
+                parameter:
+                  "Provider #{provider_mod.provider_id()} defines options that shadow core generation options: #{collision_list}. " <>
+                    "Provider-specific options must not conflict with core ReqLLM generation options. " <>
+                    "Please rename these provider options or move them to a different namespace."
+              )
+      end
+    end
+  end
+
+  defp enhance_validation_error(%NimbleOptions.ValidationError{} = error, provider_mod, opts) do
+    enhanced_message = enhance_error_message(error.message, provider_mod, opts)
+    %{error | message: enhanced_message}
+  end
+
+  defp enhance_error_message(message, provider_mod, opts) do
+    cond do
+      String.contains?(message, "unknown options") ->
+        enhance_unknown_options_error(message, provider_mod, opts)
+
+      String.contains?(message, "invalid value") ->
+        enhance_invalid_value_error(message, provider_mod)
+
+      true ->
+        message
+    end
+  end
+
+  defp enhance_unknown_options_error(message, provider_mod, opts) do
+    unknown_keys = extract_unknown_keys_from_opts(opts)
+    provider_suggestions = get_provider_option_suggestions(provider_mod, unknown_keys)
+
+    base_message = message
+
+    if provider_suggestions == "" do
+      base_message
+    else
+      base_message <> "\n\n" <> provider_suggestions
+    end
+  end
+
+  defp enhance_invalid_value_error(message, _provider_mod) do
+    message <>
+      "\n\nTip: Check the documentation for valid parameter ranges and types. " <>
+      "For provider-specific options, nest them under the :provider_options key."
+  end
+
+  defp extract_unknown_keys_from_opts(opts) do
+    core_keys = all_generation_keys()
+    user_keys = Keyword.keys(opts)
+    unknown_keys = user_keys -- (core_keys -- @internal_keys)
+    unknown_keys
+  end
+
+  defp get_provider_option_suggestions(provider_mod, unknown_keys) do
+    if function_exported?(provider_mod, :provider_schema, 0) and unknown_keys != [] do
+      provider_schema = provider_mod.provider_schema()
+      provider_keys = Keyword.keys(provider_schema.schema)
+
+      matching_keys = Enum.filter(unknown_keys, fn key -> key in provider_keys end)
+
+      if matching_keys == [] do
+        suggestions = suggest_similar_keys(unknown_keys, provider_keys)
+
+        if suggestions == "" do
+          ""
+        else
+          "Suggestion: Did you mean one of these provider-specific options? #{suggestions}\n" <>
+            "Provider-specific options should be nested under :provider_options: [provider_options: [your_option: value]]"
+        end
+      else
+        keys_str = matching_keys |> Enum.map_join(", ", &inspect/1)
+
+        "Suggestion: The following options appear to be provider-specific and should be nested under :provider_options: #{keys_str}\n" <>
+          "Example: [temperature: 0.7, provider_options: [#{keys_str |> String.replace(~r/[:,]/, "")} => value]]"
+      end
+    else
+      ""
+    end
+  end
+
+  defp suggest_similar_keys(unknown_keys, provider_keys) do
+    suggestions =
+      for unknown <- unknown_keys,
+          provider <- provider_keys,
+          similar?(unknown, provider) do
+        "#{unknown} -> #{provider}"
+      end
+
+    if suggestions == [] do
+      ""
+    else
+      Enum.join(suggestions, ", ")
+    end
+  end
+
+  defp similar?(key1, key2) do
+    str1 = Atom.to_string(key1)
+    str2 = Atom.to_string(key2)
+
+    String.jaro_distance(str1, str2) > 0.7
   end
 end

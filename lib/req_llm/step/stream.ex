@@ -75,28 +75,143 @@ defmodule ReqLLM.Step.Stream do
     Req.Request.append_response_steps(req, stream_sse: &__MODULE__.handle/1)
   end
 
+
+
   @doc """
-  Conditionally attaches the SSE streaming step to a Req request struct.
+  Conditionally attaches real-time streaming to a Req request struct with model support.
+
+  This method processes chunks as they arrive and stores the stream in request 
+  private data for provider access. This is the primary streaming method.
 
   ## Parameters
     - `req` - The Req request struct
     - `stream_enabled` - Whether streaming is enabled
+    - `model` - The ReqLLM.Model for provider-specific decoding
 
   ## Returns
-    - Updated Req request struct with the step attached if streaming is enabled
+    - Updated Req request struct with real-time streaming attached and stream stored
 
   ## Examples
 
-      # Streaming enabled - step attached
-      request |> ReqLLM.Step.Stream.maybe_attach(true)
+      # Real-time streaming enabled - attaches streaming and stores stream
+      request |> ReqLLM.Step.Stream.maybe_attach(true, model)
 
       # Streaming disabled - request unchanged
-      request |> ReqLLM.Step.Stream.maybe_attach(false)
+      request |> ReqLLM.Step.Stream.maybe_attach(false, model)
 
   """
-  @spec maybe_attach(Req.Request.t(), boolean()) :: Req.Request.t()
-  def maybe_attach(req, true), do: attach(req)
-  def maybe_attach(req, _), do: req
+  @spec maybe_attach(Req.Request.t(), boolean(), ReqLLM.Model.t()) :: Req.Request.t()
+  def maybe_attach(req, false, _model), do: req
+
+  def maybe_attach(req, true, model) do
+    {req_with_stream, stream} = attach_real_time(req, true, model)
+
+    # Store the stream in the request so decode_response can use it
+    Req.Request.put_private(req_with_stream, :real_time_stream, stream)
+  end
+
+  @doc """
+  Attaches real-time streaming to a Req request using :into callback.
+
+  This method processes SSE chunks as they arrive from the network instead of
+  waiting for the complete response. It returns a Stream that yields chunks
+  in real-time.
+
+  ## Parameters
+    - `req` - The Req request struct
+    - `stream_enabled` - Whether streaming is enabled
+    - `model` - The ReqLLM.Model for provider-specific decoding
+
+  ## Returns
+    - `{updated_request, stream}` where stream yields ReqLLM.StreamChunk structs
+
+  ## Examples
+
+      {request, stream} = ReqLLM.Step.Stream.attach_real_time(request, true, model)
+      Task.async(fn -> Req.request(request) end)
+      stream |> Enum.each(&IO.inspect/1)
+
+  """
+  @spec attach_real_time(Req.Request.t(), boolean(), ReqLLM.Model.t()) ::
+          {Req.Request.t(), Enumerable.t()}
+  def attach_real_time(req, false, _model), do: {req, []}
+
+  def attach_real_time(req, true, model) do
+    owner_pid = self()
+
+    # Create the :into callback that processes chunks as they arrive
+    into_callback = fn
+      {:data, chunk}, {req, resp} ->
+        buffer = Req.Request.get_private(req, :sse_buffer, "")
+        {events, remaining_buffer} = ServerSentEvents.parse(buffer <> chunk)
+        req_with_buffer = Req.Request.put_private(req, :sse_buffer, remaining_buffer)
+
+        # Process events and send to owner process
+        parsed_events = Enum.map(events, &process_sse_event/1)
+
+        # Check for DONE events to terminate stream
+        has_done_event =
+          Enum.any?(parsed_events, fn event ->
+            case event do
+              %{data: "[DONE]"} -> true
+              %{data: %{"choices" => [%{"finish_reason" => reason}]}} when reason != nil -> true
+              _ -> false
+            end
+          end)
+
+        if has_done_event do
+          send(owner_pid, :stream_done)
+        end
+
+        decoded_chunks =
+          parsed_events
+          |> Enum.flat_map(&ReqLLM.Response.Codec.decode_sse_event(&1, model))
+          |> Enum.reject(&is_nil/1)
+
+        if decoded_chunks != [] do
+          send(owner_pid, {:stream_chunks, decoded_chunks})
+        end
+
+        {:cont, {req_with_buffer, resp}}
+
+      {:status, _status}, acc ->
+        {:cont, acc}
+
+      {:headers, _headers}, acc ->
+        {:cont, acc}
+
+      :done, acc ->
+        send(owner_pid, :stream_done)
+        {:cont, acc}
+
+      _other, acc ->
+        {:cont, acc}
+    end
+
+    # Build the real-time stream using Stream.resource
+    stream =
+      Stream.resource(
+        fn -> :receiving end,
+        fn
+          :receiving ->
+            receive do
+              {:stream_chunks, chunks} -> {chunks, :receiving}
+              :stream_done -> {:halt, :done}
+            after
+              30_000 -> {:halt, :timeout}
+            end
+
+          state ->
+            {:halt, state}
+        end,
+        fn _ -> :ok end
+      )
+
+    # Store the :into callback in request private data for use during execution
+    updated_req = Req.Request.put_private(req, :streaming_into_callback, into_callback)
+
+    {updated_req, stream}
+  end
 
   @doc false
   @spec handle({Req.Request.t(), Req.Response.t()}) ::

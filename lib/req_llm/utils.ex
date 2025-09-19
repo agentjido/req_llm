@@ -56,34 +56,4 @@ defmodule ReqLLM.Utils do
         request
     end
   end
-
-  # ---------------------------------------------------------------------------
-  # Schema composition utilities  
-  # ---------------------------------------------------------------------------
-
-  @doc """
-  Builds a dynamic schema by composing a base schema with provider-specific options.
-
-  This function takes a base schema and provider module, creating a unified schema where 
-  provider-specific options are nested under the :provider_options key with proper validation.
-  """
-  def compose_schema(base_schema, provider_mod) do
-    if function_exported?(provider_mod, :provider_schema, 0) do
-      provider_keys = provider_mod.provider_schema().schema
-
-      # Update the :provider_options key with provider-specific nested schema
-      updated_schema =
-        Keyword.update!(base_schema.schema, :provider_options, fn opt ->
-          Keyword.merge(opt,
-            type: :keyword_list,
-            keys: provider_keys,
-            default: []
-          )
-        end)
-
-      NimbleOptions.new!(updated_schema)
-    else
-      base_schema
-    end
-  end
 end

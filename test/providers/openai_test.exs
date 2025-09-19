@@ -80,7 +80,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     test "prepare_request creates configured embedding request" do
       model = ReqLLM.Model.from!("openai:text-embedding-3-small")
       text = "Hello, world!"
-      opts = [dimensions: 512]
+      opts = [provider_options: [dimensions: 512]]
 
       {:ok, request} = OpenAI.prepare_request(:embedding, model, text, opts)
 
@@ -89,11 +89,12 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert request.method == :post
     end
 
-    test "attach configures authentication and pipeline for chat" do
+    test "prepare_request configures authentication and pipeline for chat" do
       model = ReqLLM.Model.from!("openai:gpt-4o")
+      prompt = "Hello, world!"
       opts = [temperature: 0.5, max_tokens: 50]
 
-      request = Req.new() |> OpenAI.attach(model, opts)
+      {:ok, request} = OpenAI.prepare_request(:chat, model, prompt, opts)
 
       # Verify core options
       assert request.options[:model] == model.model
@@ -109,17 +110,18 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert :llm_decode_response in response_steps
     end
 
-    test "attach configures authentication and pipeline for embedding" do
+    test "prepare_request configures authentication and pipeline for embedding" do
       model = ReqLLM.Model.from!("openai:text-embedding-3-small")
-      opts = [operation: :embedding, text: "Hello, world!", dimensions: 512]
+      text = "Hello, world!"
+      opts = [provider_options: [dimensions: 512]]
 
-      request = Req.new() |> OpenAI.attach(model, opts)
+      {:ok, request} = OpenAI.prepare_request(:embedding, model, text, opts)
 
       # Verify embedding-specific options
       assert request.options[:model] == model.model
       assert request.options[:operation] == :embedding
       assert request.options[:text] == "Hello, world!"
-      assert request.options[:dimensions] == 512
+      assert request.options[:provider_options][:dimensions] == 512
 
       # Verify authentication
       assert String.starts_with?(List.first(request.headers["authorization"]), "Bearer test-key-")
@@ -320,7 +322,7 @@ defmodule ReqLLM.Providers.OpenAITest do
           operation: :embedding,
           model: model.model,
           text: text,
-          dimensions: 512
+          provider_options: [dimensions: 512]
         ]
       }
 
@@ -407,21 +409,22 @@ defmodule ReqLLM.Providers.OpenAITest do
         %{"choices" => [%{"finish_reason" => "stop"}]}
       ]
 
-      # Create a mock stream
-      mock_stream = Stream.map(stream_chunks, & &1)
+      # Create a mock stream for real-time streaming
+      mock_real_time_stream = Stream.map(stream_chunks, & &1)
 
-      # Create a mock Req response with streaming body
+      # Create a mock Req response
       mock_resp = %Req.Response{
         status: 200,
-        body: mock_stream
+        body: nil
       }
 
-      # Create a mock request with context and model
+      # Create a mock request with context, model, and real-time stream
       context = context_fixture()
       model = "gpt-4o"
 
       mock_req = %Req.Request{
-        options: [context: context, stream: true, model: model]
+        options: [context: context, stream: true, model: model],
+        private: %{real_time_stream: mock_real_time_stream}
       }
 
       # Test decode_response directly  
@@ -441,7 +444,7 @@ defmodule ReqLLM.Providers.OpenAITest do
       # Verify stream structure and processing
       assert response.usage == %{input_tokens: 0, output_tokens: 0, total_tokens: 0}
       assert response.finish_reason == nil
-      assert response.provider_meta == %{}
+      assert Map.has_key?(response.provider_meta, :http_task)
     end
 
     test "decode_response for embedding returns raw body" do
@@ -516,15 +519,14 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert function_exported?(OpenAI, :translate_options, 3)
     end
 
-    test "translate_options handles stream? alias" do
+    test "translate_options passes through normal options unchanged" do
       model = ReqLLM.Model.from!("openai:gpt-4o")
 
-      # Test stream? -> stream translation
-      opts = [temperature: 0.7, stream?: true]
+      # Test that normal translation returns options unchanged
+      opts = [temperature: 0.7, max_tokens: 1000]
       {translated_opts, warnings} = OpenAI.translate_options(:chat, model, opts)
 
-      assert Keyword.get(translated_opts, :stream) == true
-      refute Keyword.has_key?(translated_opts, :stream?)
+      assert translated_opts == opts
       assert warnings == []
     end
 
@@ -615,7 +617,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     test "prepare_request for embedding with all options" do
       model = ReqLLM.Model.from!("openai:text-embedding-3-large")
       text = "Sample text for embedding"
-      opts = [dimensions: 1024, encoding_format: "float", user: "test-user"]
+      opts = [provider_options: [dimensions: 1024, encoding_format: "float"], user: "test-user"]
 
       {:ok, request} = OpenAI.prepare_request(:embedding, model, text, opts)
 
@@ -634,8 +636,7 @@ defmodule ReqLLM.Providers.OpenAITest do
           operation: :embedding,
           model: model.model,
           text: "Test embedding text",
-          dimensions: 512,
-          encoding_format: "base64",
+          provider_options: [dimensions: 512, encoding_format: "base64"],
           user: "test-user-123"
         ]
       }
@@ -661,7 +662,7 @@ defmodule ReqLLM.Providers.OpenAITest do
           Context.user("Hello")
         ])
 
-      assert_raise ArgumentError, ~r/should have exactly one system message/, fn ->
+      assert_raise ArgumentError, ~r/should have at most one system message/, fn ->
         Context.validate!(invalid_context)
       end
     end

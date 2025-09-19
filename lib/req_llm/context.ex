@@ -212,8 +212,9 @@ defmodule ReqLLM.Context do
     system_prompt = Keyword.get(opts, :system_prompt)
     convert_loose? = Keyword.get(opts, :convert_loose, true)
 
-    with {:ok, ctx0} <- to_context(prompt, convert_loose?),
-         ctx1 <- maybe_add_system(ctx0, system_prompt) do
+    with {:ok, ctx0} <- to_context(prompt, convert_loose?) do
+      ctx1 = maybe_add_system(ctx0, system_prompt)
+
       if validate? do
         case validate(ctx1) do
           {:ok, ctx1} -> {:ok, ctx1}
@@ -246,7 +247,7 @@ defmodule ReqLLM.Context do
   @doc false
   defp to_context(%__MODULE__{} = context, _convert_loose?), do: {:ok, context}
 
-  @doc false  
+  @doc false
   defp to_context(prompt, _convert_loose?) when is_binary(prompt) do
     {:ok, new([user(prompt)])}
   end
@@ -262,11 +263,14 @@ defmodule ReqLLM.Context do
     |> Enum.with_index()
     |> Enum.reduce_while({:ok, []}, fn {item, _idx}, {:ok, acc} ->
       case convert_item(item, convert_loose?) do
-        {:ok, msg} when is_struct(msg, Message) -> 
+        {:ok, msg} when is_struct(msg, Message) ->
           {:cont, {:ok, acc ++ [msg]}}
-        {:ok, msgs} when is_list(msgs) -> 
+
+        {:ok, msgs} when is_list(msgs) ->
           {:cont, {:ok, acc ++ msgs}}
-        {:error, _} = err -> {:halt, err}
+
+        {:error, _} = err ->
+          {:halt, err}
       end
     end)
     |> case do
@@ -302,17 +306,21 @@ defmodule ReqLLM.Context do
           [message] -> {:ok, message}
           messages when is_list(messages) -> {:ok, messages}
         end
-      error -> error
+
+      error ->
+        error
     end
   end
 
   @doc false
-  defp convert_loose_map(%{role: role, content: content}) when is_atom(role) and is_binary(content) do
+  defp convert_loose_map(%{role: role, content: content})
+       when is_atom(role) and is_binary(content) do
     {:ok, text(role, content)}
   end
 
   @doc false
-  defp convert_loose_map(%{"role" => role, "content" => content}) when is_binary(role) and is_binary(content) do
+  defp convert_loose_map(%{"role" => role, "content" => content})
+       when is_binary(role) and is_binary(content) do
     case role do
       "user" -> {:ok, text(:user, content)}
       "assistant" -> {:ok, text(:assistant, content)}
@@ -321,16 +329,17 @@ defmodule ReqLLM.Context do
     end
   end
 
-  @doc false  
+  @doc false
   defp convert_loose_map(_map), do: {:error, :invalid_loose_map}
 
   @doc false
   defp maybe_add_system(context, nil), do: context
 
   @doc false
-  defp maybe_add_system(%__MODULE__{messages: messages} = context, system_prompt) when is_binary(system_prompt) do
+  defp maybe_add_system(%__MODULE__{messages: messages} = context, system_prompt)
+       when is_binary(system_prompt) do
     has_system? = Enum.any?(messages, &(&1.role == :system))
-    
+
     if has_system? do
       context
     else
@@ -404,21 +413,24 @@ defmodule ReqLLM.Context do
   defimpl Inspect do
     def inspect(%{messages: msgs}, opts) do
       msg_count = length(msgs)
-      
+
       if msg_count <= 2 do
         # Single line for short contexts
         role_previews =
           msgs
-          |> Enum.map(fn msg ->
-            content_preview = case List.first(msg.content) do
-              %{text: text} when is_binary(text) -> 
-                trimmed = String.slice(text, 0, 40)
-                if String.length(text) > 40, do: trimmed <> "...", else: trimmed
-              _ -> ""
-            end
+          |> Enum.map_join(", ", fn msg ->
+            content_preview =
+              case List.first(msg.content) do
+                %{text: text} when is_binary(text) ->
+                  trimmed = String.slice(text, 0, 40)
+                  if String.length(text) > 40, do: trimmed <> "...", else: trimmed
+
+                _ ->
+                  ""
+              end
+
             "#{msg.role}:\"#{content_preview}\""
           end)
-          |> Enum.join(", ")
 
         Inspect.Algebra.concat([
           "#Context<",
@@ -433,13 +445,16 @@ defmodule ReqLLM.Context do
           msgs
           |> Enum.with_index()
           |> Enum.map(fn {msg, idx} ->
-            content_preview = case List.first(msg.content) do
-              %{text: text} when is_binary(text) -> 
-                trimmed = String.slice(text, 0, 60)
-                if String.length(text) > 60, do: trimmed <> "...", else: trimmed
-              _ -> ""
-            end
-            
+            content_preview =
+              case List.first(msg.content) do
+                %{text: text} when is_binary(text) ->
+                  trimmed = String.slice(text, 0, 60)
+                  if String.length(text) > 60, do: trimmed <> "...", else: trimmed
+
+                _ ->
+                  ""
+              end
+
             "  [#{idx}] #{msg.role}: \"#{content_preview}\""
           end)
 

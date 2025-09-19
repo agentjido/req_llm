@@ -171,16 +171,21 @@ defmodule ReqLLM.Embedding do
   def embed(model_spec, text, opts \\ []) do
     with {:ok, model} <- validate_model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
-         schema = ReqLLM.Utils.compose_schema(@base_schema, provider_module),
-         {:ok, validated_opts} <- NimbleOptions.validate(opts, schema),
-         {:ok, configured_request} <-
-           provider_module.prepare_request(:embedding, model, text, validated_opts),
-         request_with_options =
-           configured_request
-           |> ReqLLM.Utils.merge_req_options(validated_opts)
-           |> ReqLLM.Utils.attach_fixture(model, validated_opts),
-         {:ok, %Req.Response{body: decoded_response}} <- Req.request(request_with_options) do
+         {:ok, request} <- provider_module.prepare_request(:embedding, model, text, opts),
+         {:ok, %Req.Response{status: status, body: decoded_response}} when status in 200..299 <-
+           Req.request(request) do
       extract_single_embedding(decoded_response)
+    else
+      {:ok, %Req.Response{status: status, body: body}} ->
+        {:error,
+         ReqLLM.Error.API.Request.exception(
+           reason: "HTTP #{status}: Request failed",
+           status: status,
+           response_body: body
+         )}
+
+      {:error, error} ->
+        {:error, error}
     end
   end
 
@@ -214,16 +219,21 @@ defmodule ReqLLM.Embedding do
   def embed_many(model_spec, texts, opts \\ []) when is_list(texts) do
     with {:ok, model} <- validate_model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
-         schema = ReqLLM.Utils.compose_schema(@base_schema, provider_module),
-         {:ok, validated_opts} <- NimbleOptions.validate(opts, schema),
-         {:ok, configured_request} <-
-           provider_module.prepare_request(:embedding, model, texts, validated_opts),
-         request_with_options =
-           configured_request
-           |> ReqLLM.Utils.merge_req_options(validated_opts)
-           |> ReqLLM.Utils.attach_fixture(model, validated_opts),
-         {:ok, %Req.Response{body: decoded_response}} <- Req.request(request_with_options) do
+         {:ok, request} <- provider_module.prepare_request(:embedding, model, texts, opts),
+         {:ok, %Req.Response{status: status, body: decoded_response}} when status in 200..299 <-
+           Req.request(request) do
       extract_multiple_embeddings(decoded_response)
+    else
+      {:ok, %Req.Response{status: status, body: body}} ->
+        {:error,
+         ReqLLM.Error.API.Request.exception(
+           reason: "HTTP #{status}: Request failed",
+           status: status,
+           response_body: body
+         )}
+
+      {:error, error} ->
+        {:error, error}
     end
   end
 
