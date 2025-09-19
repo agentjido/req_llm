@@ -168,11 +168,10 @@ defmodule ReqLLM.ContextTest do
       assert ^context = Context.validate!(context)
     end
 
-    test "validate/1 fails with no system message" do
+    test "validate/1 succeeds with no system message" do
       context = Context.new([Context.user("Hello")])
 
-      assert {:error, "Context should have exactly one system message, found 0"} =
-               Context.validate(context)
+      assert {:ok, ^context} = Context.validate(context)
     end
 
     test "validate/1 fails with multiple system messages" do
@@ -183,12 +182,17 @@ defmodule ReqLLM.ContextTest do
           Context.user("Hello")
         ])
 
-      assert {:error, "Context should have exactly one system message, found 2"} =
+      assert {:error, "Context should have at most one system message, found 2"} =
                Context.validate(context)
     end
 
     test "validate!/1 raises with invalid context" do
-      context = Context.new([Context.user("No system message")])
+      context =
+        Context.new([
+          Context.system("First system"),
+          Context.system("Second system"),
+          Context.user("Hello")
+        ])
 
       assert_raise ArgumentError, ~r/Invalid context/, fn ->
         Context.validate!(context)
@@ -291,7 +295,17 @@ defmodule ReqLLM.ContextTest do
         ])
 
       inspected = inspect(context)
-      assert inspected == "#Context<4 msgs: system,user,assistant,user>"
+
+      expected = """
+      #Context<4 messages:
+        [0] system: "System"
+        [1] user: "Hello"
+        [2] assistant: "Hi there"
+        [3] user: "Thanks"
+      >\
+      """
+
+      assert inspected == expected
     end
 
     test "handles empty context" do
@@ -305,7 +319,199 @@ defmodule ReqLLM.ContextTest do
       context = Context.new([Context.system("Only system")])
 
       inspected = inspect(context)
-      assert inspected == "#Context<1 msgs: system>"
+      assert inspected == "#Context<1 msgs: system:\"Only system\">"
+    end
+  end
+
+  describe "normalize/2" do
+    test "normalizes string input to user message" do
+      {:ok, context} = Context.normalize("Hello world")
+
+      assert %Context{messages: [message]} = context
+      assert message.role == :user
+      assert [%ContentPart{type: :text, text: "Hello world"}] = message.content
+    end
+
+    test "passes through Context struct unchanged" do
+      original = Context.new([Context.system("System"), Context.user("Hello")])
+      {:ok, context} = Context.normalize(original, validate: false)
+
+      assert context == original
+    end
+
+    test "wraps Message struct in Context" do
+      message = Context.user("Test message")
+      {:ok, context} = Context.normalize(message, validate: false)
+
+      assert %Context{messages: [^message]} = context
+    end
+
+    test "processes list of mixed types" do
+      input = [
+        Context.system("System prompt"),
+        "User message",
+        Context.assistant("Assistant response")
+      ]
+
+      {:ok, context} = Context.normalize(input)
+
+      assert length(context.messages) == 3
+      assert [system_msg, user_msg, assistant_msg] = context.messages
+      assert system_msg.role == :system
+      assert user_msg.role == :user
+      assert assistant_msg.role == :assistant
+    end
+
+    test "converts loose map with atom keys" do
+      input = %{role: :user, content: "Map message"}
+      {:ok, context} = Context.normalize(input, validate: false)
+
+      assert %Context{messages: [message]} = context
+      assert message.role == :user
+      assert [%ContentPart{type: :text, text: "Map message"}] = message.content
+    end
+
+    test "converts loose map with string keys" do
+      input = %{"role" => "user", "content" => "String key message"}
+      {:ok, context} = Context.normalize(input, validate: false)
+
+      assert %Context{messages: [message]} = context
+      assert message.role == :user
+      assert [%ContentPart{type: :text, text: "String key message"}] = message.content
+    end
+
+    test "adds system prompt when none exists" do
+      {:ok, context} =
+        Context.normalize("Hello", system_prompt: "You are helpful", validate: false)
+
+      assert length(context.messages) == 2
+      assert [system_msg, user_msg] = context.messages
+      assert system_msg.role == :system
+      assert [%ContentPart{type: :text, text: "You are helpful"}] = system_msg.content
+      assert user_msg.role == :user
+    end
+
+    test "does not add system prompt when one already exists" do
+      input = [Context.system("Existing system"), "User message"]
+      {:ok, context} = Context.normalize(input, system_prompt: "New system", validate: false)
+
+      assert length(context.messages) == 2
+      assert [system_msg, _user_msg] = context.messages
+      assert system_msg.role == :system
+      assert [%ContentPart{type: :text, text: "Existing system"}] = system_msg.content
+    end
+
+    test "skips validation when validate: false" do
+      # Context with no system message would normally fail validation
+      {:ok, context} = Context.normalize("Hello", validate: false)
+
+      assert %Context{messages: [message]} = context
+      assert message.role == :user
+    end
+
+    test "runs validation by default and succeeds without system message" do
+      {:ok, context} = Context.normalize("Hello")
+
+      assert %Context{messages: [message]} = context
+      assert message.role == :user
+    end
+
+    test "runs validation by default and succeeds with system message" do
+      {:ok, context} = Context.normalize("Hello", system_prompt: "You are helpful")
+
+      assert length(context.messages) == 2
+      assert [system_msg, user_msg] = context.messages
+      assert system_msg.role == :system
+      assert user_msg.role == :user
+    end
+
+    test "runs validation by default and fails with multiple system messages" do
+      input = [
+        Context.system("First system"),
+        Context.system("Second system"),
+        "User message"
+      ]
+
+      {:error, reason} = Context.normalize(input)
+
+      assert reason == "Context should have at most one system message, found 2"
+    end
+
+    test "rejects invalid loose maps when convert_loose: false" do
+      input = %{role: :user, content: "Test"}
+      {:error, reason} = Context.normalize(input, convert_loose: false, validate: false)
+
+      assert reason == :invalid_prompt
+    end
+
+    test "rejects invalid input types" do
+      {:error, reason} = Context.normalize(:invalid, validate: false)
+      assert reason == :invalid_prompt
+
+      {:error, reason} = Context.normalize(123, validate: false)
+      assert reason == :invalid_prompt
+    end
+
+    test "rejects loose maps with invalid role" do
+      input = %{"role" => "invalid_role", "content" => "Test"}
+      {:error, reason} = Context.normalize(input, validate: false)
+
+      assert reason == :invalid_role
+    end
+
+    test "rejects loose maps without required keys" do
+      input = %{content: "Missing role"}
+      {:error, reason} = Context.normalize(input, validate: false)
+
+      assert reason == :invalid_loose_map
+
+      input = %{role: :user}
+      {:error, reason} = Context.normalize(input, validate: false)
+
+      assert reason == :invalid_loose_map
+    end
+
+    test "handles empty list" do
+      {:ok, context} = Context.normalize([], validate: false)
+
+      assert %Context{messages: []} = context
+    end
+
+    test "handles nested contexts in lists" do
+      nested_context = Context.new([Context.user("Nested message")])
+      input = [Context.system("System"), nested_context, "Another message"]
+
+      {:ok, context} = Context.normalize(input)
+
+      assert length(context.messages) == 3
+      assert [system_msg, nested_msg, user_msg] = context.messages
+      assert system_msg.role == :system
+      assert nested_msg.role == :user
+      assert user_msg.role == :user
+    end
+
+    test "handles empty nested context" do
+      empty_context = Context.new([])
+
+      {:error, reason} =
+        Context.normalize([Context.system("System"), empty_context], validate: false)
+
+      assert reason == :empty_context
+    end
+  end
+
+  describe "normalize!/2" do
+    test "returns context on success" do
+      context = Context.normalize!("Hello", system_prompt: "System", validate: false)
+
+      assert %Context{messages: messages} = context
+      assert length(messages) == 2
+    end
+
+    test "raises on error" do
+      assert_raise ArgumentError, ~r/Failed to normalize context/, fn ->
+        Context.normalize!(:invalid)
+      end
     end
   end
 

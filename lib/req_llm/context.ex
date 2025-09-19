@@ -170,6 +170,178 @@ defmodule ReqLLM.Context do
   end
 
   @doc """
+  Normalize any "prompt-ish" input into a validated ReqLLM.Context.
+
+  Accepts various input types and converts them to a proper Context struct:
+  - String: converts to user message
+  - Message struct: wraps in Context  
+  - Context struct: passes through
+  - List: processes each item and creates Context from all messages
+  - Loose maps: converts to Message if they have role/content keys
+
+  ## Options
+
+    * `:system_prompt` - String to add as system message if none exists
+    * `:validate` - Boolean to run validation (default: true)
+    * `:convert_loose` - Boolean to allow loose maps with role/content (default: true)
+
+  ## Examples
+
+      # String to user message
+      Context.normalize("Hello")
+      #=> {:ok, %Context{messages: [%Message{role: :user, content: [%ContentPart{text: "Hello"}]}]}}
+
+      # Add system prompt
+      Context.normalize("Hello", system_prompt: "You are helpful")
+      #=> {:ok, %Context{messages: [%Message{role: :system}, %Message{role: :user}]}}
+
+      # List of mixed types
+      Context.normalize([%Message{role: :system}, "Hello"])
+
+  """
+  @spec normalize(
+          String.t()
+          | Message.t()
+          | t()
+          | map()
+          | [String.t() | Message.t() | t() | map()],
+          keyword()
+        ) :: {:ok, t()} | {:error, term()}
+  def normalize(prompt, opts \\ []) do
+    validate? = Keyword.get(opts, :validate, true)
+    system_prompt = Keyword.get(opts, :system_prompt)
+    convert_loose? = Keyword.get(opts, :convert_loose, true)
+
+    with {:ok, ctx0} <- to_context(prompt, convert_loose?),
+         ctx1 <- maybe_add_system(ctx0, system_prompt) do
+      if validate? do
+        case validate(ctx1) do
+          {:ok, ctx1} -> {:ok, ctx1}
+          {:error, _} = error -> error
+        end
+      else
+        {:ok, ctx1}
+      end
+    end
+  end
+
+  @doc """
+  Bang version of normalize/2 that raises on error.
+  """
+  @spec normalize!(
+          String.t()
+          | Message.t()
+          | t()
+          | map()
+          | [String.t() | Message.t() | t() | map()],
+          keyword()
+        ) :: t()
+  def normalize!(prompt, opts \\ []) do
+    case normalize(prompt, opts) do
+      {:ok, context} -> context
+      {:error, reason} -> raise ArgumentError, "Failed to normalize context: #{inspect(reason)}"
+    end
+  end
+
+  @doc false
+  defp to_context(%__MODULE__{} = context, _convert_loose?), do: {:ok, context}
+
+  @doc false  
+  defp to_context(prompt, _convert_loose?) when is_binary(prompt) do
+    {:ok, new([user(prompt)])}
+  end
+
+  @doc false
+  defp to_context(%Message{} = message, _convert_loose?) do
+    {:ok, new([message])}
+  end
+
+  @doc false
+  defp to_context(list, convert_loose?) when is_list(list) do
+    list
+    |> Enum.with_index()
+    |> Enum.reduce_while({:ok, []}, fn {item, _idx}, {:ok, acc} ->
+      case convert_item(item, convert_loose?) do
+        {:ok, msg} when is_struct(msg, Message) -> 
+          {:cont, {:ok, acc ++ [msg]}}
+        {:ok, msgs} when is_list(msgs) -> 
+          {:cont, {:ok, acc ++ msgs}}
+        {:error, _} = err -> {:halt, err}
+      end
+    end)
+    |> case do
+      {:ok, msgs} -> {:ok, new(msgs)}
+      error -> error
+    end
+  end
+
+  @doc false
+  defp to_context(map, true) when is_map(map) do
+    case convert_loose_map(map) do
+      {:ok, message} -> {:ok, new([message])}
+      error -> error
+    end
+  end
+
+  @doc false
+  defp to_context(_prompt, _convert_loose?), do: {:error, :invalid_prompt}
+
+  @doc false
+  defp convert_item(%__MODULE__{} = context, _convert_loose?) do
+    case to_list(context) do
+      [] -> {:error, :empty_context}
+      messages -> {:ok, messages}
+    end
+  end
+
+  @doc false
+  defp convert_item(item, convert_loose?) do
+    case to_context(item, convert_loose?) do
+      {:ok, context} ->
+        case to_list(context) do
+          [message] -> {:ok, message}
+          messages when is_list(messages) -> {:ok, messages}
+        end
+      error -> error
+    end
+  end
+
+  @doc false
+  defp convert_loose_map(%{role: role, content: content}) when is_atom(role) and is_binary(content) do
+    {:ok, text(role, content)}
+  end
+
+  @doc false
+  defp convert_loose_map(%{"role" => role, "content" => content}) when is_binary(role) and is_binary(content) do
+    case role do
+      "user" -> {:ok, text(:user, content)}
+      "assistant" -> {:ok, text(:assistant, content)}
+      "system" -> {:ok, text(:system, content)}
+      _ -> {:error, :invalid_role}
+    end
+  end
+
+  @doc false  
+  defp convert_loose_map(_map), do: {:error, :invalid_loose_map}
+
+  @doc false
+  defp maybe_add_system(context, nil), do: context
+
+  @doc false
+  defp maybe_add_system(%__MODULE__{messages: messages} = context, system_prompt) when is_binary(system_prompt) do
+    has_system? = Enum.any?(messages, &(&1.role == :system))
+    
+    if has_system? do
+      context
+    else
+      %__MODULE__{messages: [system(system_prompt) | messages]}
+    end
+  end
+
+  @doc false
+  defp maybe_add_system(context, _), do: context
+
+  @doc """
   Merges the original context with a response to create an updated context.
 
   Takes a context and a response, then creates a new context containing
@@ -216,9 +388,9 @@ defmodule ReqLLM.Context do
     system_count = Enum.count(messages, &(&1.role == :system))
 
     case system_count do
-      0 -> {:error, "Context should have exactly one system message, found 0"}
+      0 -> :ok
       1 -> :ok
-      n -> {:error, "Context should have exactly one system message, found #{n}"}
+      n -> {:error, "Context should have at most one system message, found #{n}"}
     end
   end
 
@@ -231,17 +403,56 @@ defmodule ReqLLM.Context do
 
   defimpl Inspect do
     def inspect(%{messages: msgs}, opts) do
-      roles =
-        msgs
-        |> Enum.map_join(",", & &1.role)
+      msg_count = length(msgs)
+      
+      if msg_count <= 2 do
+        # Single line for short contexts
+        role_previews =
+          msgs
+          |> Enum.map(fn msg ->
+            content_preview = case List.first(msg.content) do
+              %{text: text} when is_binary(text) -> 
+                trimmed = String.slice(text, 0, 40)
+                if String.length(text) > 40, do: trimmed <> "...", else: trimmed
+              _ -> ""
+            end
+            "#{msg.role}:\"#{content_preview}\""
+          end)
+          |> Enum.join(", ")
 
-      Inspect.Algebra.concat([
-        "#Context<",
-        Inspect.Algebra.to_doc(length(msgs), opts),
-        " msgs: ",
-        roles,
-        ">"
-      ])
+        Inspect.Algebra.concat([
+          "#Context<",
+          Inspect.Algebra.to_doc(msg_count, opts),
+          " msgs: ",
+          role_previews,
+          ">"
+        ])
+      else
+        # Multi-line for longer contexts
+        msg_docs =
+          msgs
+          |> Enum.with_index()
+          |> Enum.map(fn {msg, idx} ->
+            content_preview = case List.first(msg.content) do
+              %{text: text} when is_binary(text) -> 
+                trimmed = String.slice(text, 0, 60)
+                if String.length(text) > 60, do: trimmed <> "...", else: trimmed
+              _ -> ""
+            end
+            
+            "  [#{idx}] #{msg.role}: \"#{content_preview}\""
+          end)
+
+        Inspect.Algebra.concat([
+          "#Context<",
+          Inspect.Algebra.to_doc(msg_count, opts),
+          " messages:",
+          Inspect.Algebra.line(),
+          Inspect.Algebra.concat(Enum.intersperse(msg_docs, Inspect.Algebra.line())),
+          Inspect.Algebra.line(),
+          ">"
+        ])
+      end
     end
   end
 
