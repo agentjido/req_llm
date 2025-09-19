@@ -154,15 +154,62 @@ defmodule ReqLLM.Generation do
          {translated_opts, warnings} <-
            translate_provider_options(provider_module, :chat, model, validated_opts),
          :ok <- handle_warnings(translated_opts, warnings),
-         context = build_context(messages, translated_opts),
+         {:ok, context} <- build_context(messages, translated_opts),
          {:ok, configured_request} <-
            provider_module.prepare_request(:chat, model, context, translated_opts),
          request_with_options =
            configured_request
+           |> ReqLLM.Step.Error.attach()
+           |> add_instrumentation_step()
            |> ReqLLM.Utils.merge_req_options(translated_opts)
            |> ReqLLM.Utils.attach_fixture(model, translated_opts),
-         {:ok, %Req.Response{body: decoded_response}} <- Req.request(request_with_options) do
+         {:ok, %Req.Response{status: status, body: decoded_response}} when status in 200..299 <-
+           Req.request(request_with_options) do
       {:ok, decoded_response}
+    else
+      {:ok, %Req.Response{status: status, body: body}} ->
+        {:error,
+         ReqLLM.Error.API.Request.exception(
+           reason: "HTTP #{status}: Request failed",
+           status: status,
+           response_body: body
+         )}
+
+      {:error, %ReqLLM.Error.API.Request{}} = error ->
+        error
+
+      {:error, %ReqLLM.Error.Invalid.Provider{}} = error ->
+        error
+
+      {:error, %ReqLLM.Error.Invalid.Role{}} = error ->
+        error
+
+      {:error, %ReqLLM.Error.Invalid.Message{}} = error ->
+        error
+
+      {:error, %ReqLLM.Error.Validation.Error{}} = error ->
+        error
+
+      {:error, %Mint.TransportError{} = error} ->
+        {:error,
+         ReqLLM.Error.API.Request.exception(
+           reason: "Network error: #{Exception.message(error)}",
+           cause: error
+         )}
+
+      {:error, %Req.Response{status: status, body: body}} ->
+        {:error,
+         ReqLLM.Error.API.Request.exception(
+           reason: "HTTP #{status}: Request failed",
+           status: status,
+           response_body: body
+         )}
+
+      {:error, reason} when is_binary(reason) ->
+        {:error, ReqLLM.Error.API.Request.exception(reason: reason)}
+
+      {:error, other} ->
+        {:error, ReqLLM.Error.Unknown.Unknown.exception(error: other)}
     end
   end
 
@@ -229,15 +276,62 @@ defmodule ReqLLM.Generation do
            translate_provider_options(provider_module, :chat, model, validated_opts),
          :ok <- handle_warnings(translated_opts, warnings),
          stream_opts = Keyword.put(translated_opts, :stream, true),
-         context = build_context(messages, stream_opts),
+         {:ok, context} <- build_context(messages, stream_opts),
          {:ok, configured_request} <-
            provider_module.prepare_request(:chat, model, context, stream_opts),
          request_with_options =
            configured_request
+           |> ReqLLM.Step.Error.attach()
+           |> add_instrumentation_step()
            |> ReqLLM.Utils.merge_req_options(stream_opts)
            |> ReqLLM.Utils.attach_fixture(model, stream_opts),
-         {:ok, %Req.Response{body: decoded_response}} <- Req.request(request_with_options) do
+         {:ok, %Req.Response{status: status, body: decoded_response}} when status in 200..299 <-
+           Req.request(request_with_options) do
       {:ok, decoded_response}
+    else
+      {:ok, %Req.Response{status: status, body: body}} ->
+        {:error,
+         ReqLLM.Error.API.Request.exception(
+           reason: "HTTP #{status}: Request failed",
+           status: status,
+           response_body: body
+         )}
+
+      {:error, %ReqLLM.Error.API.Request{}} = error ->
+        error
+
+      {:error, %ReqLLM.Error.Invalid.Provider{}} = error ->
+        error
+
+      {:error, %ReqLLM.Error.Invalid.Role{}} = error ->
+        error
+
+      {:error, %ReqLLM.Error.Invalid.Message{}} = error ->
+        error
+
+      {:error, %ReqLLM.Error.Validation.Error{}} = error ->
+        error
+
+      {:error, %Mint.TransportError{} = error} ->
+        {:error,
+         ReqLLM.Error.API.Request.exception(
+           reason: "Network error: #{Exception.message(error)}",
+           cause: error
+         )}
+
+      {:error, %Req.Response{status: status, body: body}} ->
+        {:error,
+         ReqLLM.Error.API.Request.exception(
+           reason: "HTTP #{status}: Request failed",
+           status: status,
+           response_body: body
+         )}
+
+      {:error, reason} when is_binary(reason) ->
+        {:error, ReqLLM.Error.API.Request.exception(reason: reason)}
+
+      {:error, other} ->
+        {:error, ReqLLM.Error.Unknown.Unknown.exception(error: other)}
     end
   end
 
@@ -272,6 +366,15 @@ defmodule ReqLLM.Generation do
 
   # Private helper functions
 
+  defp add_instrumentation_step(request) do
+    Req.Request.append_request_steps(request,
+      llm_instrumentation: fn req ->
+        Logger.debug("ReqLLM: Making request to #{req.url}")
+        req
+      end
+    )
+  end
+
   defp translate_provider_options(provider_mod, operation, model, opts) do
     if function_exported?(provider_mod, :translate_options, 3) do
       provider_mod.translate_options(operation, model, opts)
@@ -296,40 +399,61 @@ defmodule ReqLLM.Generation do
 
   defp build_context(messages, opts) when is_binary(messages) do
     context = Context.new([Context.user(messages)])
-    add_system_prompt(context, opts)
+    {:ok, add_system_prompt(context, opts)}
   end
 
   defp build_context(%Context{} = context, opts) do
-    add_system_prompt(context, opts)
+    {:ok, add_system_prompt(context, opts)}
   end
 
   defp build_context(messages, opts) when is_list(messages) do
     # Convert plain message maps to Context if needed
-    message_structs =
-      Enum.map(messages, fn
-        %ReqLLM.Message{} = message ->
-          message
+    case convert_message_list(messages) do
+      {:ok, message_structs} ->
+        context = Context.new(message_structs)
+        {:ok, add_system_prompt(context, opts)}
 
-        %{role: role, content: content} = message ->
-          case validate_role(role) do
-            {:ok, role_atom} ->
-              Context.text(
-                role_atom,
-                content,
-                Map.get(message, :metadata, %{})
-              )
+      {:error, _} = error ->
+        error
+    end
+  end
 
-            {:error, _} ->
-              raise ArgumentError,
-                    "Invalid role: #{inspect(role)}. Valid roles are: user, system, assistant, tool"
-          end
+  defp convert_message_list(messages) do
+    messages
+    |> Enum.with_index()
+    |> Enum.reduce_while({:ok, []}, fn {message, index}, {:ok, acc} ->
+      case convert_single_message(message, index) do
+        {:ok, converted} -> {:cont, {:ok, [converted | acc]}}
+        {:error, _} = error -> {:halt, error}
+      end
+    end)
+    |> case do
+      {:ok, messages} -> {:ok, Enum.reverse(messages)}
+      {:error, _} = error -> error
+    end
+  end
 
-        other ->
-          other
-      end)
+  defp convert_single_message(%ReqLLM.Message{} = message, _index) do
+    {:ok, message}
+  end
 
-    context = Context.new(message_structs)
-    add_system_prompt(context, opts)
+  defp convert_single_message(%{role: role, content: content} = message, _index) do
+    case validate_role(role) do
+      {:ok, role_atom} ->
+        converted = Context.text(role_atom, content, Map.get(message, :metadata, %{}))
+        {:ok, converted}
+
+      {:error, _} ->
+        {:error, ReqLLM.Error.Invalid.Role.exception(role: role)}
+    end
+  end
+
+  defp convert_single_message(_other, index) do
+    {:error,
+     ReqLLM.Error.Invalid.Message.exception(
+       reason: "Invalid message format at index #{index}",
+       index: index
+     )}
   end
 
   defp add_system_prompt(%Context{} = context, opts) do
