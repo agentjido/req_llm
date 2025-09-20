@@ -323,7 +323,7 @@ defmodule ReqLLM.Provider.OptionsTest do
       assert error.parameter =~
                "Provider conflicting defines options that shadow core generation options"
 
-      assert error.parameter =~ "temperature, max_tokens"
+      assert error.parameter =~ "max_tokens, temperature"
       assert error.parameter =~ "Provider-specific options must not conflict"
     end
 

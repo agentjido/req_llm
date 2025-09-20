@@ -3,7 +3,7 @@
 **IMPORTANT: DO NOT WRITE COMMENTS INTO THE BODY OF ANY FUNCTIONS.**
 
 ## Project Overview
-ReqLLM is a composable Elixir library for AI interactions built on Req, providing a unified interface to AI providers through a plugin-based architecture.
+ReqLLM is a composable Elixir library for AI interactions built on Req, providing a unified interface to AI providers through a plugin-based architecture. The library uses OpenAI Chat Completions as the baseline API standard, with providers implementing translation layers for non-compatible APIs.
 
 ## Common Commands
 
@@ -40,10 +40,11 @@ ReqLLM uses structured key/value tags for precise test filtering:
 - `lib/req_llm.ex` - Main API facade with generate_text/3, stream_text/3, generate_object/4
 - `lib/req_llm/` - Core modules (Model, Provider, Error structures, protocols)
 - `lib/req_llm/providers/` - Provider-specific implementations (Anthropic, OpenAI, etc.)
-- `test/` - Consolidated capability-oriented test suites
-  - `coverage/<provider>/` - Provider-specific capability tests  
-  - `support/` - shared helpers (e.g. `live_fixture.ex`, provider test macros)
-  - Test files are intentionally few and broad; new behavior should extend an existing suite when possible instead of adding many micro-tests
+- `test/` - Three-tier testing architecture (see `test/AGENTS.md` for detailed testing guide)
+  - `test/req_llm/` - Core package tests (NO API calls, unit tests with mocks)
+  - `test/provider/` - Mocked provider-specific tests (NO API calls, tests provider nuances)
+  - `test/coverage/` - Live API coverage tests (fixture-based, high-level API only)
+  - `test/support/` - Shared helpers (live fixtures, HTTP mocks, test macros)
 
 ### Core Data Structures
 - `ReqLLM.Context` - Conversation history as a collection of messages

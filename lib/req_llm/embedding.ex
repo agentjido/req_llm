@@ -170,6 +170,7 @@ defmodule ReqLLM.Embedding do
         ) :: {:ok, [float()]} | {:error, term()}
   def embed(model_spec, text, opts \\ []) do
     with {:ok, model} <- validate_model(model_spec),
+         :ok <- validate_text(text),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, request} <- provider_module.prepare_request(:embedding, model, text, opts),
          {:ok, %Req.Response{status: status, body: decoded_response}} when status in 200..299 <-
@@ -218,6 +219,7 @@ defmodule ReqLLM.Embedding do
         ) :: {:ok, [[float()]]} | {:error, term()}
   def embed_many(model_spec, texts, opts \\ []) when is_list(texts) do
     with {:ok, model} <- validate_model(model_spec),
+         :ok <- validate_texts(texts),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, request} <- provider_module.prepare_request(:embedding, model, texts, opts),
          {:ok, %Req.Response{status: status, body: decoded_response}} when status in 200..299 <-
@@ -235,6 +237,28 @@ defmodule ReqLLM.Embedding do
       {:error, error} ->
         {:error, error}
     end
+  end
+
+  defp validate_text("") do
+    {:error,
+     ReqLLM.Error.Invalid.Parameter.exception(
+       parameter: "text: cannot be empty"
+     )}
+  end
+
+  defp validate_text(text) when is_binary(text) do
+    :ok
+  end
+
+  defp validate_texts([]) do
+    {:error,
+     ReqLLM.Error.Invalid.Parameter.exception(
+       parameter: "texts: cannot be empty"
+     )}
+  end
+
+  defp validate_texts(texts) when is_list(texts) do
+    :ok
   end
 
   defp extract_single_embedding(%{"data" => [%{"embedding" => embedding}]}) do

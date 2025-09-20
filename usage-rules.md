@@ -1,329 +1,135 @@
 # ReqLLM Usage Rules
 
-This document provides best practices and guidelines for using ReqLLM effectively in Elixir applications.
+ReqLLM provides two API layers for AI interactions: high-level convenience functions and low-level Req plugin access.
 
-## Core Purpose and Scope
+## High-Level API
 
-ReqLLM is a composable library for AI interactions that normalizes LLM provider differences through a plugin-based architecture. It treats each provider as a Req plugin, handling format translation via a Codec protocol while leveraging Req's HTTP infrastructure.
-
-Key concepts:
-- **Provider Plugins**: Each AI provider (Anthropic, OpenAI) implements the `ReqLLM.Provider` behavior
-- **Codec Protocols**: Translate between canonical structures and provider-specific formats
-- **Model Specifications**: Flexible ways to specify models (string, tuple, struct)
-- **StreamChunks**: Unified output format across all providers
-- **Context/Message/ContentPart**: Provider-agnostic conversation structures
-
-## Essential Usage Guidelines
-
-### Model Specifications
-
-**Best Practice**: Start with string format and graduate to struct format as needed.
+### Text Generation
 
 ```elixir
-# Simple - good for basic usage
-{:ok, response} = ReqLLM.generate_text("anthropic:claude-3-sonnet", "Hello")
+# Simple text generation
+ReqLLM.generate_text!("anthropic:claude-3-sonnet", "Hello world")
+#=> "Hello! How can I assist you today?"
 
-# Advanced - good for complex configurations  
-model = %ReqLLM.Model{
-  provider: :anthropic,
-  model: "claude-3-sonnet",
-  temperature: 0.7,
-  max_tokens: 1000
-}
-{:ok, response} = ReqLLM.generate_text(model, "Hello")
+# With full response metadata
+{:ok, response} = ReqLLM.generate_text("openai:gpt-4", "Hello", temperature: 0.7)
+response.usage  #=> %{input_tokens: 8, output_tokens: 12, total_cost: 0.0006}
 ```
 
-**Avoid**: Creating Model structs manually when string format suffices.
-
-### API Function Selection
-
-**Best Practice**: Use bang variants (`!`) for simple use cases, full functions for production.
+### Streaming
 
 ```elixir
-# Development/simple cases
-ReqLLM.generate_text!("anthropic:claude-3-sonnet", "Hello")
-
-# Production - need access to metadata, errors, usage data
-{:ok, response} = ReqLLM.generate_text("anthropic:claude-3-sonnet", "Hello")
-response.text()   #=> "Hello! How can I help?"
-response.usage()  #=> %{input_tokens: 10, output_tokens: 8}
+ReqLLM.stream_text!("anthropic:claude-3-sonnet", "Write a story")
+|> Stream.each(&IO.write(&1.text))
+|> Stream.run()
 ```
 
-**Avoid**: Using bang variants when you need detailed error handling or usage tracking.
-
-### Context and Message Construction
-
-**Best Practice**: Import context helpers for clean message building.
+### Structured Objects
 
 ```elixir
-import ReqLLM.Context
+schema = [name: [type: :string, required: true], age: [type: :pos_integer]]
+person = ReqLLM.generate_object!("openai:gpt-4", "Generate a person", schema)
+#=> %{name: "John Doe", age: 30}
+```
 
-context = Context.new([
-  system("You are a helpful assistant"),
-  user("What's 2+2?")
+### Tools
+
+```elixir
+weather_tool = ReqLLM.tool(
+  name: "get_weather",
+  description: "Get current weather for a location",
+  parameter_schema: [location: [type: :string, required: true]],
+  callback: {WeatherAPI, :fetch_weather}
+)
+
+ReqLLM.generate_text("openai:gpt-4", "What's the weather in Paris?", tools: [weather_tool])
+```
+
+### Context & Messages
+
+```elixir
+context = ReqLLM.Context.new([
+  ReqLLM.Context.system("You are a helpful coding assistant"),
+  ReqLLM.Context.user("Explain recursion in Elixir")
 ])
 
 {:ok, response} = ReqLLM.generate_text("anthropic:claude-3-sonnet", context)
 ```
 
-**Avoid**: Manually constructing Message structs when helpers exist.
-
-### Multimodal Content
-
-**Best Practice**: Import ContentPart helpers for clean multimodal handling.
+### Model Specifications
 
 ```elixir
-import ReqLLM.Message.ContentPart
+# String format
+ReqLLM.generate_text("anthropic:claude-3-sonnet", "Hello")
 
-message = ReqLLM.Context.user([
-  text("Analyze this image"),
-  image_url("https://example.com/chart.png")
-])
+# Tuple format with options
+ReqLLM.generate_text({:anthropic, "claude-3-sonnet", temperature: 0.7}, "Hello")
 
-{:ok, response} = ReqLLM.generate_text("anthropic:claude-3-sonnet", [message])
+# Model struct
+model = %ReqLLM.Model{provider: :anthropic, model: "claude-3-sonnet", max_tokens: 100}
+ReqLLM.generate_text(model, "Hello")
 ```
 
-### Streaming
-
-**Best Practice**: Filter StreamChunks by type for clean processing.
+### Key Management
 
 ```elixir
-{:ok, stream} = ReqLLM.stream_text("anthropic:claude-3-sonnet", "Tell a story")
+# Keys auto-loaded from .env files via JidoKeys
+# ANTHROPIC_API_KEY=sk-ant-...
+# OPENAI_API_KEY=sk-...
 
-# Collect only text content
-text = stream
-|> Stream.filter(&(&1.type == :text))
-|> Stream.map(&(&1.text))
-|> Enum.join()
+# Optional manual storage
+ReqLLM.put_key(:anthropic_api_key, "sk-ant-...")
+ReqLLM.get_key(:openai_api_key)
 
-# Handle different chunk types  
-stream
-|> Enum.each(fn chunk ->
-  case chunk.type do
-    :text -> IO.write(chunk.text)
-    :tool_call -> handle_tool_call(chunk)
-    :meta -> handle_metadata(chunk)
-    _ -> :ok
-  end
-end)
+# Per-request override
+ReqLLM.generate_text("openai:gpt-4", "Hello", api_key: "sk-...")
 ```
 
-### Error Handling
+## Low-Level API
 
-**Best Practice**: Pattern match on specific error types for appropriate handling.
+Direct Req plugin access for custom HTTP control:
+
+```elixir
+# Canonical implementation from ReqLLM.Generation.generate_text/3
+with {:ok, model} <- ReqLLM.Model.from("anthropic:claude-3-sonnet"),
+     {:ok, provider_module} <- ReqLLM.provider(model.provider),
+     {:ok, request} <- provider_module.prepare_request(:chat, model, "Hello!", temperature: 0.7),
+     {:ok, %Req.Response{body: response}} <- Req.request(request) do
+  {:ok, response}
+end
+
+# Custom headers and middleware
+{:ok, model} = ReqLLM.Model.from("anthropic:claude-3-sonnet")
+{:ok, provider_module} = ReqLLM.provider(model.provider)
+{:ok, request} = provider_module.prepare_request(:chat, model, "Hello!")
+
+custom_request = 
+  request
+  |> Req.Request.put_header("x-request-id", "my-id")
+  |> Req.Request.put_header("x-source", "my-app")
+
+{:ok, response} = Req.request(custom_request)
+```
+
+## Error Handling
 
 ```elixir
 case ReqLLM.generate_text("anthropic:claude-3-sonnet", "Hello") do
-  {:ok, response} -> 
-    handle_success(response)
-    
-  {:error, %ReqLLM.Error.Invalid.Provider{}} ->
-    Logger.error("Unsupported provider")
-    {:error, :unsupported_provider}
-    
-  {:error, %ReqLLM.Error.API.RateLimit{retry_after: seconds}} ->
-    Logger.warn("Rate limited, retry after #{seconds}s")
+  {:ok, response} -> response.text
+  {:error, %ReqLLM.Error.API.RateLimit{retry_after: seconds}} -> 
     :timer.sleep(seconds * 1000)
-    retry_request()
-    
-  {:error, %ReqLLM.Error.API.Authentication{}} ->
-    Logger.error("Authentication failed - check API key")
+  {:error, %ReqLLM.Error.API.Authentication{}} -> 
     {:error, :auth_failed}
-    
-  {:error, error} ->
-    Logger.error("Unexpected error: #{inspect(error)}")
+  {:error, error} -> 
     {:error, :unknown}
 end
 ```
 
-## Configuration and Setup
+## Essential Options
 
-### Key Management
-
-**Important**: ReqLLM uses JidoKeys with automatic .env loading via Dotenvy.
-
-```elixir
-# Preferred - JidoKeys automatically loads from .env files
-# No explicit setup needed if keys are in .env as:
-# ANTHROPIC_API_KEY=sk-ant-...
-# OPENAI_API_KEY=sk-...
-
-# Optional manual key setup
-ReqLLM.put_key("anthropic_api_key", System.get_env("ANTHROPIC_API_KEY"))
-ReqLLM.put_key("openai_api_key", System.get_env("OPENAI_API_KEY"))
-
-# Providers automatically retrieve keys via JidoKeys
-{:ok, response} = ReqLLM.generate_text("anthropic:claude-3-sonnet", "Hello")
-```
-
-## Tool Calling
-
-### Tool Definition
-
-**Best Practice**: Define tools with comprehensive parameter schemas using NimbleOptions.
-
-```elixir
-weather_tool = ReqLLM.Tool.new!(
-  name: "get_weather", 
-  description: "Get current weather for a location",
-  parameter_schema: [
-    location: [type: :string, required: true, doc: "City name"],
-    units: [type: :string, default: "celsius", doc: "Temperature units"]
-  ],
-  callback: {WeatherAPI, :fetch_weather}
-)
-```
-
-### Tool Execution
-
-**Best Practice**: Handle tool execution errors gracefully with proper return tuples.
-
-```elixir
-defmodule WeatherAPI do
-  def fetch_weather(%{location: location, units: units}) do
-    case HTTPClient.get("/weather", location: location, units: units) do
-      {:ok, %{status: 200, body: data}} ->
-        {:ok, data}
-        
-      {:ok, %{status: 404}} ->
-        {:error, "Location not found"}
-        
-      {:error, reason} ->
-        {:error, "Weather service unavailable: #{inspect(reason)}"}
-    end
-  rescue
-    error ->
-      {:error, "Weather fetch failed: #{Exception.message(error)}"}
-  end
-end
-```
-
-## Advanced Usage Patterns
-
-### Custom Req Middleware
-
-**Best Practice**: Use provider's `attach/3` with custom Req pipeline steps.
-
-```elixir
-def traced_generate_text(model_spec, messages, opts \\ []) do
-  with {:ok, model} <- ReqLLM.Model.from(model_spec),
-       {:ok, provider_module} <- ReqLLM.Provider.get(model.provider) do
-    
-    request = Req.new()
-    |> provider_module.attach(model, opts)
-    |> Req.Request.append_request_steps(tracing: &add_request_tracing/1)
-    
-    Req.request(request)
-  end
-end
-
-defp add_request_tracing(request) do
-  request_id = UUID.uuid4()
-  %{request | 
-    headers: [{"x-request-id", request_id} | request.headers],
-    private: Map.put(request.private, :trace_id, request_id)
-  }
-end
-```
-
-### Usage Monitoring
-
-**Best Practice**: Extract usage data from Response structs for monitoring.
-
-```elixir
-def monitored_generation(model_spec, messages, opts \\ []) do
-  start_time = System.monotonic_time()
-  
-  case ReqLLM.generate_text(model_spec, messages, opts) do
-    {:ok, response} ->
-      duration = System.monotonic_time() - start_time
-      
-      Logger.info("LLM Generation", [
-        model: inspect(model_spec),
-        usage: response.usage(),
-        duration_ms: System.convert_time_unit(duration, :native, :millisecond)
-      ])
-      
-      {:ok, response.text()}
-      
-    {:error, error} ->
-      Logger.error("LLM Generation failed: #{inspect(error)}")
-      {:error, error}
-  end
-end
-```
-
-## Performance Considerations
-
-### Memory Management
-
-**Best Practice**: Process streams incrementally for large responses.
-
-```elixir
-{:ok, stream} = ReqLLM.stream_text("anthropic:claude-3-sonnet", "Write a long story")
-
-stream
-|> Stream.filter(&(&1.type == :text))
-|> Stream.chunk_every(100)  # Process in chunks
-|> Stream.each(&process_chunk/1)
-|> Stream.run()
-```
-
-### Connection Reuse
-
-**Important**: ReqLLM leverages Req's connection pooling automatically. Avoid creating new clients per request.
-
-## Common Pitfalls
-
-### Model Specification Errors
-
-**Problem**: Using unsupported model names or invalid provider IDs.
-
-**Solution**: Use `ReqLLM.Model.from/1` to validate specifications early.
-
-```elixir
-case ReqLLM.Model.from("invalid:model") do
-  {:ok, model} -> proceed_with_model(model)
-  {:error, error} -> 
-    Logger.error("Invalid model spec: #{inspect(error)}")
-    use_fallback_model()
-end
-```
-
-### Provider-Specific Parameter Requirements
-
-**Problem**: Some models require different parameter names (e.g., OpenAI o1 models need `max_completion_tokens` instead of `max_tokens`).
-
-**Solution**: ReqLLM automatically handles parameter translation. Use standard parameter names and let providers translate them as needed.
-
-```elixir
-# Use standard parameters - ReqLLM handles model-specific translation automatically
-{:ok, response} = ReqLLM.generate_text(
-  "openai:o1-mini", 
-  "Hello", 
-  max_tokens: 150,        # Automatically becomes max_completion_tokens for o1 models
-  temperature: 0.7        # Automatically dropped with warning for o1 models
-)
-
-# Control warning behavior with on_unsupported option
-{:ok, response} = ReqLLM.generate_text(
-  "openai:o1-mini",
-  "Hello",
-  max_tokens: 150,
-  temperature: 0.7,
-  on_unsupported: :ignore  # Suppress warnings for unsupported parameters
-)
-```
-
-### Stream Processing Issues
-
-**Problem**: Assuming all stream chunks contain text data.
-
-**Solution**: Always filter by chunk type before processing.
-
-```elixir
-# Safe stream processing
-text_chunks = stream
-|> Stream.filter(fn chunk -> chunk.type == :text and chunk.text != nil end)
-|> Stream.map(&(&1.text))
-```
+- `:temperature` - Randomness (0.0-2.0)
+- `:max_tokens` - Response length limit
+- `:tools` - Function calling definitions
+- `:system_prompt` - System message
+- `:provider_options` - Provider-specific parameters
+- `:api_key` - Override stored key

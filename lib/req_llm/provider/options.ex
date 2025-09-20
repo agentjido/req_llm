@@ -466,7 +466,7 @@ defmodule ReqLLM.Provider.Options do
       collisions = MapSet.intersection(MapSet.new(provider_keys), MapSet.new(core_keys))
 
       if !Enum.empty?(collisions) do
-        collision_list = Enum.join(collisions, ", ")
+        collision_list = collisions |> Enum.sort() |> Enum.join(", ")
 
         raise ReqLLM.Error.Invalid.Parameter.exception(
                 parameter:
