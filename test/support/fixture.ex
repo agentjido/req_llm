@@ -37,9 +37,8 @@ defmodule ReqLLM.Step.Fixture.Backend do
         # to placing before provider decode.
         request = insert_tap_step(request)
 
-        # Save fixture at the end after all provider decoding is done
-        request
-        |> Req.Request.append_response_steps(llm_fixture_save: &save_fixture_response/1)
+        # Save fixture BEFORE decoding to capture raw response
+        insert_save_step(request)
       else
         Logger.debug("Fixture: REPLAY mode")
         # Short-circuit the pipeline with stubbed response
@@ -200,6 +199,22 @@ defmodule ReqLLM.Step.Fixture.Backend do
 
       true ->
         Req.Request.prepend_response_steps(req, [tap])
+    end
+  end
+
+  # Insert the save step before :llm_decode_response to capture raw response
+  defp insert_save_step(%Req.Request{} = req) do
+    steps = req.response_steps
+    save = {:llm_fixture_save, &save_fixture_response/1}
+
+    if Enum.any?(steps, fn {name, _} -> name == :llm_decode_response end) do
+      {before_steps, after_steps} =
+        Enum.split_while(steps, fn {name, _} -> name != :llm_decode_response end)
+
+      %{req | response_steps: before_steps ++ [save] ++ after_steps}
+    else
+      # If no :llm_decode_response step, append at the end
+      Req.Request.append_response_steps(req, [save])
     end
   end
 
@@ -411,8 +426,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
     |> String.replace(~r/"password"\s*:\s*"[^"]*"/i, ~s/"password":"[REDACTED:password]"/)
   end
 
-  # Body → JSON-friendly encoding
-  defp encode_body(%{__struct__: _} = body), do: inspect(body)
+  # Body → JSON-friendly encoding  
   defp encode_body(bin) when is_binary(bin), do: %{"b64" => Base.encode64(bin)}
   # JSON already
   defp encode_body(other), do: other
