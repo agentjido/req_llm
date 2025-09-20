@@ -201,7 +201,7 @@ defmodule ReqLLM.Providers.Google do
     |> ReqLLM.Step.Stream.maybe_attach(user_opts[:stream] == true, model)
     |> Req.Request.append_response_steps(llm_decode_response: &__MODULE__.decode_response/1)
     |> ReqLLM.Step.Usage.attach(model)
-    |> ReqLLM.Step.LLMFixture.maybe_attach(model, user_opts)
+    |> ReqLLM.Step.Fixture.maybe_attach(model, user_opts)
   end
 
   @impl ReqLLM.Provider

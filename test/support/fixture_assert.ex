@@ -1,4 +1,4 @@
-defmodule LLMFixture.Assert do
+defmodule ReqLLM.Step.Fixture.Assert do
   @moduledoc """
   Assertion helpers for validating Context.Codec encoding and option translation
   in LLM fixture files.
@@ -25,8 +25,8 @@ defmodule LLMFixture.Assert do
         user("Hello")
       ])
       
-      LLMFixture.Assert.assert_encoded(:anthropic, "test_fixture", context, 
-                                      "anthropic:claude-3-haiku-20240307")
+      ReqLLM.Step.Fixture.Assert.assert_encoded(:anthropic, "test_fixture", context, 
+                 "anthropic:claude-3-haiku-20240307")
   """
   def assert_encoded(provider, fixture_name, context, model, opts \\ []) do
     %{"request" => %{"canonical_json" => recorded}} = load_fixture(provider, fixture_name)
@@ -50,8 +50,8 @@ defmodule LLMFixture.Assert do
 
   ## Examples
 
-      LLMFixture.Assert.assert_options(:anthropic, "test_fixture", fn json ->
-        json["max_tokens"] == 100 and json["temperature"] == 0.5
+      ReqLLM.Step.Fixture.Assert.assert_options(:anthropic, "test_fixture", fn json ->
+      json["max_tokens"] == 100 and json["temperature"] == 0.5
       end)
   """
   def assert_options(provider, fixture_name, assertion_fn) when is_function(assertion_fn, 1) do

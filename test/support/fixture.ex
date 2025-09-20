@@ -1,4 +1,4 @@
-defmodule LLMFixture do
+defmodule ReqLLM.Step.Fixture.Backend do
   @moduledoc """
   HTTP fixture recording & replay system for ReqLLM tests.
 
@@ -21,10 +21,10 @@ defmodule LLMFixture do
 
     fn request ->
       path = fixture_path(provider, safe_fixture_name)
-      Logger.debug("LLMFixture intercepted request for #{provider}/#{safe_fixture_name}")
+      Logger.debug("Fixture intercepted request for #{provider}/#{safe_fixture_name}")
 
       if live?() do
-        Logger.debug("LLMFixture: LIVE mode - tagging request for recording")
+        Logger.debug("Fixture: LIVE mode - tagging request for recording")
         # Tag the request and add response steps to capture the response
         request =
           request
@@ -41,7 +41,7 @@ defmodule LLMFixture do
         request
         |> Req.Request.append_response_steps(llm_fixture_save: &save_fixture_response/1)
       else
-        Logger.debug("LLMFixture: REPLAY mode")
+        Logger.debug("Fixture: REPLAY mode")
         # Short-circuit the pipeline with stubbed response
         {:ok, response} = handle_replay(path)
         {request, response}

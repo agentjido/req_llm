@@ -41,7 +41,7 @@ defmodule ReqLLM.Provider.Defaults do
   called independently:
 
   - `prepare_chat_request/4`
-  - `prepare_object_request/4` 
+  - `prepare_object_request/4`
   - `prepare_embedding_request/4`
   - `default_attach/3`
   - `default_encode_body/1`
@@ -309,7 +309,7 @@ defmodule ReqLLM.Provider.Defaults do
     |> ReqLLM.Step.Stream.maybe_attach(user_opts[:stream] == true, model)
     |> Req.Request.append_response_steps(llm_decode_response: &provider_mod.decode_response/1)
     |> ReqLLM.Step.Usage.attach(model)
-    |> ReqLLM.Step.LLMFixture.maybe_attach(model, user_opts)
+    |> ReqLLM.Step.Fixture.maybe_attach(model, user_opts)
   end
 
   @doc """
@@ -459,7 +459,7 @@ defmodule ReqLLM.Provider.Defaults do
   end
 
   defp decode_error_response(req, resp, status) do
-    # Get provider name from the stored model or fallback to parsing model string  
+    # Get provider name from the stored model or fallback to parsing model string
     provider_name =
       case req.private[:req_llm_model] do
         %ReqLLM.Model{provider: provider_id} ->

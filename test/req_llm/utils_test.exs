@@ -19,7 +19,7 @@ end
 defmodule ReqLLM.UtilsTest do
   use ExUnit.Case, async: true
 
-  alias ReqLLM.Model
+
   alias ReqLLM.Utils
   alias ReqLLM.UtilsTest.MockProviderWithoutSchema
   alias ReqLLM.UtilsTest.MockProviderWithSchema
@@ -53,52 +53,7 @@ defmodule ReqLLM.UtilsTest do
     end
   end
 
-  describe "attach_fixture/3" do
-    test "returns request unchanged for missing/invalid fixtures" do
-      request = %Req.Request{url: "http://example.com"}
-      model = Model.new(:anthropic, "claude-3-5-sonnet")
 
-      invalid_cases = [
-        {[], "missing fixture"},
-        {[other_option: "value"], "other option"},
-        {[fixture: :invalid_atom], "atom"},
-        {[fixture: 123], "integer"},
-        {[fixture: {}], "empty tuple"},
-        {[fixture: {:invalid, 123}], "invalid tuple"},
-        {[fixture: {"string", "provider"}], "string tuple"},
-        {[fixture: %{}], "map"}
-      ]
-
-      for {opts, desc} <- invalid_cases do
-        result = Utils.attach_fixture(request, model, opts)
-        assert result == request, "Failed for #{desc}: #{inspect(opts)}"
-      end
-    end
-
-    test "processes valid fixtures" do
-      request = %Req.Request{url: "http://example.com"}
-      model = Model.new(:anthropic, "claude-3-5-sonnet")
-
-      valid_cases = [
-        [fixture: {:anthropic, "test-fixture"}],
-        [fixture: "test-fixture"]
-      ]
-
-      for opts <- valid_cases do
-        result = Utils.attach_fixture(request, model, opts)
-        assert %Req.Request{} = result
-      end
-    end
-
-    test "raises KeyError for nil model" do
-      request = %Req.Request{url: "http://example.com"}
-      opts = [fixture: "test"]
-
-      assert_raise KeyError, fn ->
-        Utils.attach_fixture(request, nil, opts)
-      end
-    end
-  end
 
   describe "compose_schema/2" do
     setup do

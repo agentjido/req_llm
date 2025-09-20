@@ -1,17 +1,17 @@
-defmodule ReqLLM.Step.LLMFixture do
+defmodule ReqLLM.Step.Fixture do
   @moduledoc """
   Req step that attaches test fixture functionality when running in test environments.
 
   This step:
   * Conditionally attaches fixture steps based on the `:fixture` option
-  * Only activates when the LLMFixture module is available (test environment)
+  * Only activates when the Fixture module is available (test environment)
   * Normalizes fixture tuples to `{provider, name}` format
   * No-ops gracefully when fixtures aren't available
 
   ## Usage
 
       request
-      |> ReqLLM.Step.LLMFixture.attach(model, opts)
+      |> ReqLLM.Step.Fixture.attach(model, opts)
 
   ## Options
 
@@ -22,7 +22,7 @@ defmodule ReqLLM.Step.LLMFixture do
   """
 
   @doc """
-  Attaches the LLMFixture step to a Req request if fixture option is present.
+  Attaches the Fixture step to a Req request if fixture option is present.
 
   ## Parameters
 
@@ -33,10 +33,10 @@ defmodule ReqLLM.Step.LLMFixture do
   ## Examples
 
       request
-      |> ReqLLM.Step.LLMFixture.maybe_attach(model, fixture: "test_response")
+      |> ReqLLM.Step.Fixture.maybe_attach(model, fixture: "test_response")
 
-      request  
-      |> ReqLLM.Step.LLMFixture.maybe_attach(model, fixture: {:openai, "chat_completion"})
+      request
+      |> ReqLLM.Step.Fixture.maybe_attach(model, fixture: {:openai, "chat_completion"})
   """
   @spec maybe_attach(Req.Request.t(), ReqLLM.Model.t(), keyword()) :: Req.Request.t()
   def maybe_attach(%Req.Request{} = request, model, opts) do
@@ -65,14 +65,14 @@ defmodule ReqLLM.Step.LLMFixture do
   @compile {:nowarn_unused_function, attach_fixture_step: 3}
   @spec attach_fixture_step(Req.Request.t(), atom(), String.t()) :: Req.Request.t()
   defp attach_fixture_step(request, provider, name) do
-    case Code.ensure_loaded(LLMFixture) do
-      {:module, LLMFixture} ->
-        # LLMFixture.step/2 only exists in test environment
-        step_fn = apply(LLMFixture, :step, [provider, name])
+    case Code.ensure_loaded(ReqLLM.Step.Fixture.Backend) do
+      {:module, ReqLLM.Step.Fixture.Backend} ->
+        # Backend.step/2 only exists in test environment
+        step_fn = apply(ReqLLM.Step.Fixture.Backend, :step, [provider, name])
         Req.Request.append_request_steps(request, llm_fixture: step_fn)
 
       {:error, _} ->
-        # No-op if LLMFixture not available
+        # No-op if Backend not available
         request
     end
   end
