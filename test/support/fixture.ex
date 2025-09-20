@@ -9,6 +9,22 @@ defmodule ReqLLM.Step.Fixture.Backend do
   require Logger
 
   # ---------------------------------------------------------------------------
+  # Export for external chunk capture (used by streaming)
+  # ---------------------------------------------------------------------------
+  def capture_raw_chunk(path, chunk) when is_binary(chunk) do
+    put_raw_chunk(path, chunk)
+  end
+
+  def save_streaming_fixture(%Req.Request{} = request, %Req.Response{} = response) do
+    case request.private[:llm_fixture_path] do
+      nil -> :ok
+      path ->
+        encode_info = capture_request_body(request)
+        save_fixture(path, encode_info, request, response)
+    end
+  end
+
+  # ---------------------------------------------------------------------------
   # Main entry point – returns a Req request step (arity-1 function)
   # ---------------------------------------------------------------------------
   def step(provider, fixture_name) do
@@ -37,8 +53,13 @@ defmodule ReqLLM.Step.Fixture.Backend do
         # to placing before provider decode.
         request = insert_tap_step(request)
 
-        # Save fixture BEFORE decoding to capture raw response
-        insert_save_step(request)
+        # For streaming, fixture saving is handled in the :into callback completion
+        # For non-streaming, save fixture BEFORE decoding to capture raw response
+        if is_real_time_streaming?(request) do
+          request
+        else
+          insert_save_step(request)
+        end
       else
         Logger.debug("Fixture: REPLAY mode")
         # Short-circuit the pipeline with stubbed response
@@ -52,6 +73,11 @@ defmodule ReqLLM.Step.Fixture.Backend do
   # Mode helpers
   # ---------------------------------------------------------------------------
   defp live?, do: System.get_env("LIVE") in ~w(1 true TRUE)
+
+  defp is_real_time_streaming?(%Req.Request{} = request) do
+    # Check if the request has a real-time stream stored (indicating streaming mode)
+    request.private[:real_time_stream] != nil
+  end
 
   # Create a Stream that properly yields StreamChunk objects for replay
   defp make_stream(chunks) do

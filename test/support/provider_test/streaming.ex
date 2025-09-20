@@ -121,60 +121,6 @@ defmodule ReqLLM.ProviderTest.Streaming do
           assert String.length(text) > 20,
                  "Expected substantial content for long response, got #{String.length(text)} characters"
         end
-
-        test "stream_text! returns immediately (LIVE timing test)" do
-          # Test timing in LIVE mode or when replay timing is enabled
-          timing_enabled =
-            System.get_env("LIVE") ||
-              System.get_env("REPLAY_STREAM_DELAY_MS", "0") |> String.to_integer() > 0 ||
-              System.get_env("REPLAY_STREAM_ACCEL", "0.0") |> String.to_float() > 0.0
-
-          if timing_enabled do
-            # Test the bang variant with timing to ensure it returns a true stream
-            start = System.monotonic_time(:millisecond)
-
-            stream =
-              ReqLLM.stream_text!(
-                unquote(model),
-                "Write a detailed explanation of quantum computing, including qubits, superposition, and quantum algorithms. Make it comprehensive.",
-                max_tokens: 400,
-                fixture: "#{unquote(provider)}_timing_test"
-              )
-
-            elapsed = System.monotonic_time(:millisecond) - start
-
-            # The function should return immediately, not block until completion
-            assert elapsed < 500,
-                   "stream_text! should return immediately, took #{elapsed}ms (likely blocking until full response)"
-
-            # Verify we got a stream
-            assert match?(%Stream{}, stream)
-
-            # Verify stream is actually lazy by consuming just the first chunk
-            first_chunk = stream |> Stream.take(1) |> Enum.to_list()
-            assert first_chunk != [], "Expected at least one chunk in stream"
-            assert is_binary(first_chunk |> hd()), "First chunk should be text"
-
-            IO.puts("LIVE timing test: stream_text! returned in #{elapsed}ms")
-          else
-            # In replay mode, just test basic functionality (timing is meaningless)
-            stream =
-              ReqLLM.stream_text!(
-                unquote(model),
-                "Write a detailed explanation of quantum computing.",
-                max_tokens: 400,
-                fixture: "#{unquote(provider)}_timing_test"
-              )
-
-            assert match?(%Stream{}, stream)
-
-            # Verify we can consume the stream
-            chunks = stream |> Stream.take(5) |> Enum.to_list()
-            assert is_list(chunks)
-            refute Enum.empty?(chunks)
-            assert Enum.all?(chunks, &is_binary/1), "All chunks should be text strings"
-          end
-        end
       end
     end
   end

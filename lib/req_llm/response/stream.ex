@@ -1,4 +1,6 @@
 defmodule ReqLLM.Response.Stream do
+  require Logger
+
   @moduledoc """
   Stream processing utilities for ReqLLM responses.
 
@@ -74,7 +76,8 @@ defmodule ReqLLM.Response.Stream do
     chunks
     |> Enum.filter(&(&1.type == :meta))
     |> Enum.reduce(existing_usage, fn chunk, acc ->
-      Map.merge(acc || %{}, chunk.usage || %{})
+      usage = Map.get(chunk.metadata || %{}, :usage) || Map.get(chunk.metadata || %{}, "usage") || %{}
+      Map.merge(acc || %{}, usage)
     end)
   end
 end
