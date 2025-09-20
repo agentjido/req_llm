@@ -150,17 +150,20 @@ defmodule ReqLLM.Providers.GoogleTest do
 
       # Should have Google's structure
       assert is_list(decoded["contents"])
-      assert length(decoded["contents"]) == 2
+      assert length(decoded["contents"]) == 1  # Only user message, system is separate
       refute Map.has_key?(decoded, "tools")
 
       # Check generationConfig
       assert Map.has_key?(decoded, "generationConfig")
       assert decoded["generationConfig"]["candidateCount"] == 1
 
-      [system_msg, user_msg] = decoded["contents"]
-      assert system_msg["role"] == "system"
+      # Check system instruction is separate
+      assert Map.has_key?(decoded, "systemInstruction")
+      assert decoded["systemInstruction"]["parts"]
+
+      # Only user message in contents now
+      [user_msg] = decoded["contents"]
       assert user_msg["role"] == "user"
-      assert is_list(system_msg["parts"])
       assert is_list(user_msg["parts"])
     end
 

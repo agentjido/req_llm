@@ -4,8 +4,8 @@ defmodule ReqLLM.Generation.TranslationTest do
   alias ReqLLM.{Generation, Model}
 
   describe "provider translation integration through public API" do
-    test "provider without translate_options/3 callback works normally" do
-      # Anthropic doesn't have translate_options/3, so should work unchanged
+    test "provider with default translate_options/3 callback works normally" do
+      # All providers have translate_options/3 now (either custom or default)
       # We can't easily test this without mocking HTTP, so we'll just verify
       # it doesn't crash during the translation phase
       schema =
@@ -40,12 +40,14 @@ defmodule ReqLLM.Generation.TranslationTest do
 
   describe "generation pipeline integration (without HTTP mocking)" do
     test "generation.ex recognizes translate_options/3 callback presence" do
-      # Verify that providers with and without the callback are handled correctly
+      # All providers now have translate_options/3 (either custom or default implementation)
       openai_provider = ReqLLM.Providers.OpenAI
+      groq_provider = ReqLLM.Providers.Groq
       anthropic_provider = ReqLLM.Providers.Anthropic
 
       assert function_exported?(openai_provider, :translate_options, 3)
-      refute function_exported?(anthropic_provider, :translate_options, 3)
+      assert function_exported?(groq_provider, :translate_options, 3)
+      assert function_exported?(anthropic_provider, :translate_options, 3)
     end
   end
 

@@ -249,17 +249,17 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp encode_chat_body(request) do
-    context_data =
+    {system_instruction, contents} =
       case request.options[:context] do
         %ReqLLM.Context{} = ctx ->
           model = request.options[:model]
           # Convert OpenAI-style context to Gemini format
           encoded = ReqLLM.Context.Codec.encode_request(ctx, model)
           messages = encoded[:messages] || encoded["messages"] || []
-          %{contents: convert_messages_to_gemini(messages)}
+          split_messages_for_gemini(messages)
 
         _ ->
-          %{contents: convert_messages_to_gemini(request.options[:messages] || [])}
+          split_messages_for_gemini(request.options[:messages] || [])
       end
 
     tools_data =
@@ -283,7 +283,8 @@ defmodule ReqLLM.Providers.Google do
       |> maybe_put(:candidateCount, request.options[:google_candidate_count] || 1)
 
     %{}
-    |> Map.merge(context_data)
+    |> maybe_put(:systemInstruction, system_instruction)
+    |> Map.put(:contents, contents)
     |> Map.merge(tools_data)
     |> maybe_put(:generationConfig, generation_config)
     |> maybe_put(:safetySettings, request.options[:google_safety_settings])
@@ -421,16 +422,47 @@ defmodule ReqLLM.Providers.Google do
   defp convert_google_usage(_),
     do: %{"prompt_tokens" => 0, "completion_tokens" => 0, "total_tokens" => 0}
 
-  # Helper to convert OpenAI-style messages to Gemini format
+  # Split messages into system instruction and contents for Google Gemini
+  defp split_messages_for_gemini(messages) do
+    {system_msgs, chat_msgs} =
+      Enum.split_with(messages, fn message ->
+        case message do
+          %{role: :system} -> true
+          %{"role" => "system"} -> true
+          %{"role" => :system} -> true
+          %{role: "system"} -> true
+          _ -> false
+        end
+      end)
+
+    system_instruction =
+      case system_msgs do
+        [] ->
+          nil
+
+        system_messages ->
+          combined_text =
+            system_messages
+            |> Enum.map(&extract_text_content/1)
+            |> Enum.join("\n\n")
+
+          %{parts: [%{text: combined_text}]}
+      end
+
+    contents = convert_messages_to_gemini(chat_msgs)
+
+    {system_instruction, contents}
+  end
+
+  # Helper to convert OpenAI-style messages to Gemini format (non-system messages only)
   defp convert_messages_to_gemini(messages) do
     Enum.map(messages, fn message ->
       role =
         case message.role do
-          :system -> "system"
           :user -> "user"
           :assistant -> "model"
-          role when is_binary(role) -> role
-          role -> to_string(role)
+          role when is_binary(role) and role != "system" -> role
+          role when role != :system -> to_string(role)
         end
 
       parts =
@@ -441,6 +473,34 @@ defmodule ReqLLM.Providers.Google do
 
       %{role: role, parts: parts}
     end)
+  end
+
+  # Extract text content from a message for system instruction
+  defp extract_text_content(%{content: content}) when is_binary(content), do: content
+  defp extract_text_content(%{"content" => content}) when is_binary(content), do: content
+
+  defp extract_text_content(%{content: parts}) when is_list(parts) do
+    extract_parts_text(parts)
+  end
+
+  defp extract_text_content(%{"content" => parts}) when is_list(parts) do
+    extract_parts_text(parts)
+  end
+
+  defp extract_text_content(content) when is_binary(content), do: content
+  defp extract_text_content(_), do: ""
+
+  defp extract_parts_text(parts) do
+    parts
+    |> Enum.map(fn
+      %{type: :text, content: text} -> text
+      %{"type" => "text", "text" => text} -> text
+      %{text: text} -> text
+      %{"text" => text} -> text
+      text when is_binary(text) -> text
+      part -> to_string(part)
+    end)
+    |> Enum.join("")
   end
 
   defp convert_content_part(%{type: :text, content: text}), do: %{text: text}
