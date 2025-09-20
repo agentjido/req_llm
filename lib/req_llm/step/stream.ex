@@ -75,7 +75,41 @@ defmodule ReqLLM.Step.Stream do
     Req.Request.append_response_steps(req, stream_sse: &__MODULE__.handle/1)
   end
 
+  @doc """
+  Conditionally attaches basic SSE streaming to a Req request struct.
 
+  This is a simple helper for cases where only basic SSE parsing is needed
+  without real-time streaming or model-specific decoding.
+
+  ## Parameters
+    - `req` - The Req request struct
+    - `stream_enabled` - Whether streaming is enabled (falsy values: false, nil, 0, "", [])
+
+  ## Returns
+    - Updated Req request struct with SSE streaming attached or unchanged
+
+  ## Examples
+
+      # Streaming enabled - attaches basic SSE parsing
+      request |> ReqLLM.Step.Stream.maybe_attach(true)
+
+      # Streaming disabled - request unchanged (falsy values)
+      request |> ReqLLM.Step.Stream.maybe_attach(false)
+      request |> ReqLLM.Step.Stream.maybe_attach(nil)
+      request |> ReqLLM.Step.Stream.maybe_attach(0)
+
+  """
+  @spec maybe_attach(Req.Request.t(), any()) :: Req.Request.t()
+  def maybe_attach(req, stream_enabled) do
+    case stream_enabled do
+      false -> req
+      nil -> req
+      0 -> req
+      "" -> req
+      [] -> req
+      _ -> attach(req)
+    end
+  end
 
   @doc """
   Conditionally attaches real-time streaming to a Req request struct with model support.

@@ -170,7 +170,9 @@ defmodule ReqLLM.EmbeddingTest do
       assert {:error, error} =
                Embedding.embed("openai:text-embedding-3-small", "Hello", dimensions: -1)
 
-      assert error.__struct__ == NimbleOptions.ValidationError
+      # The error gets wrapped in Unknown, so we need to check the wrapped error
+      assert %ReqLLM.Error.Unknown.Unknown{} = error
+      assert %NimbleOptions.ValidationError{} = error.error
     end
   end
 

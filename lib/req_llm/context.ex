@@ -319,13 +319,24 @@ defmodule ReqLLM.Context do
   end
 
   @doc false
+  defp convert_loose_map(%{role: role, content: content})
+       when is_binary(role) and is_binary(content) do
+    case role do
+      "user" -> {:ok, text(:user, content)}
+      "assistant" -> {:ok, text(:assistant, content)}
+      "system" -> {:ok, text(:system, content)}
+      _ -> {:error, ReqLLM.Error.Invalid.Role.exception(role: role)}
+    end
+  end
+
+  @doc false
   defp convert_loose_map(%{"role" => role, "content" => content})
        when is_binary(role) and is_binary(content) do
     case role do
       "user" -> {:ok, text(:user, content)}
       "assistant" -> {:ok, text(:assistant, content)}
       "system" -> {:ok, text(:system, content)}
-      _ -> {:error, :invalid_role}
+      _ -> {:error, ReqLLM.Error.Invalid.Role.exception(role: role)}
     end
   end
 

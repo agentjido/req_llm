@@ -444,6 +444,28 @@ defmodule ReqLLM.ContextTest do
       assert reason == :invalid_prompt
     end
 
+    test "accepts OpenAI message format with atom keys and string roles" do
+      input = [
+        %{role: "system", content: "You are helpful"},
+        %{role: "user", content: "Hello"},
+        %{role: "assistant", content: "Hi there!"}
+      ]
+
+      {:ok, context} = Context.normalize(input, validate: false)
+
+      assert length(context.messages) == 3
+      assert [system_msg, user_msg, assistant_msg] = context.messages
+
+      assert system_msg.role == :system
+      assert [%ContentPart{type: :text, text: "You are helpful"}] = system_msg.content
+
+      assert user_msg.role == :user
+      assert [%ContentPart{type: :text, text: "Hello"}] = user_msg.content
+
+      assert assistant_msg.role == :assistant
+      assert [%ContentPart{type: :text, text: "Hi there!"}] = assistant_msg.content
+    end
+
     test "rejects invalid input types" do
       {:error, reason} = Context.normalize(:invalid, validate: false)
       assert reason == :invalid_prompt
@@ -456,7 +478,8 @@ defmodule ReqLLM.ContextTest do
       input = %{"role" => "invalid_role", "content" => "Test"}
       {:error, reason} = Context.normalize(input, validate: false)
 
-      assert reason == :invalid_role
+      assert %ReqLLM.Error.Invalid.Role{} = reason
+      assert reason.role == "invalid_role"
     end
 
     test "rejects loose maps without required keys" do

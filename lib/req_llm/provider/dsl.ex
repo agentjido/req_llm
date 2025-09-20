@@ -142,9 +142,8 @@ defmodule ReqLLM.Provider.DSL do
     end
 
     quote do
-      # Implement Req plugin pattern (no formal behaviour needed)
+      use ReqLLM.Provider.Defaults
 
-      # Store configuration for use in callbacks
       @provider_id unquote(id)
       @base_url unquote(base_url)
       @metadata_path unquote(metadata_path)
@@ -153,15 +152,12 @@ defmodule ReqLLM.Provider.DSL do
       @context_wrapper unquote(context_wrapper)
       @response_wrapper unquote(response_wrapper)
 
-      # Set external resource if metadata file exists
       if @metadata_path do
         @external_resource @metadata_path
       end
 
-      # Register provider before compilation completes
       @before_compile ReqLLM.Provider.DSL
 
-      # Implement default_base_url function
       def default_base_url do
         @base_url
       end

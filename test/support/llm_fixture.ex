@@ -54,62 +54,51 @@ defmodule LLMFixture do
   # ---------------------------------------------------------------------------
   defp live?, do: System.get_env("LIVE") in ~w(1 true TRUE)
 
-  # ---------------------------------------------------------------------------
-  # Timing configuration for replay
-  # ---------------------------------------------------------------------------
-  defp replay_timing_config do
-    %{
-      delay_ms: System.get_env("REPLAY_STREAM_DELAY_MS", "0") |> String.to_integer(),
-      acceleration: System.get_env("REPLAY_STREAM_ACCEL", "0.0") |> String.to_float()
-    }
-  end
+  # Create a Stream that properly yields StreamChunk objects for replay
+  defp make_stream(chunks) do
+    # First, convert all chunks to StreamChunk objects
+    all_stream_chunks =
+      Enum.flat_map(chunks, fn chunk ->
+        # Decode the raw SSE data
+        raw_data = decode_body(%{"b64" => chunk["b64"]})
 
-  # Create a timing-aware stream for replay
-  defp create_timing_stream(chunks, %{delay_ms: delay_ms, acceleration: accel}) do
-    # Decode chunks and extract timing info
-    decoded_chunks =
-      Enum.map(chunks, fn chunk ->
-        case chunk do
-          %{"b64" => b64_data, "t_us" => timing} ->
-            %{data: decode_body(%{"b64" => b64_data}), t_us: timing}
-
-          %{"b64" => b64_data} ->
-            %{data: decode_body(%{"b64" => b64_data}), t_us: 0}
-
-          other ->
-            %{data: inspect(other), t_us: 0}
-        end
+        # Parse SSE events from the raw data
+        parse_sse_events(raw_data)
       end)
 
-    # If no timing simulation, return immediate concatenation
-    if accel == 0.0 and delay_ms == 0 do
-      decoded_chunks
-      |> Enum.map_join("", & &1.data)
-    else
-      # For now, let's simulate timing but still return concatenated data
-      # This tests if stream_text! is blocking on the data generation
-      total_delay = calculate_total_delay(decoded_chunks, delay_ms, accel)
-
-      # Sleep to simulate the time it would take to receive all chunks
-      if total_delay > 0 do
-        Process.sleep(total_delay)
-      end
-
-      decoded_chunks
-      |> Enum.map_join("", & &1.data)
-    end
+    # Create a Stream struct from the list of chunks
+    Stream.map(all_stream_chunks, & &1)
   end
 
-  defp calculate_total_delay(chunks, delay_ms, accel) do
-    if accel > 0.0 and length(chunks) > 1 do
-      # Calculate total time based on last chunk timestamp
-      last_chunk = List.last(chunks)
-      # Scale by acceleration and add per-chunk delay
-      base_time = round(last_chunk.t_us / 1000 / accel)
-      total_chunk_delay = delay_ms * length(chunks)
-      base_time + total_chunk_delay
-    else
-      delay_ms * length(chunks)
+  # Parse Server-Sent Events data into StreamChunk objects
+  defp parse_sse_events(raw_data) do
+    raw_data
+    |> String.split("\n\n")
+    |> Enum.map(&String.trim/1)
+    |> Enum.reject(&(&1 == ""))
+    |> Enum.flat_map(&parse_single_sse_event/1)
+  end
+
+  # Parse a single SSE event
+  defp parse_single_sse_event(event_text) do
+    case String.trim(event_text) do
+      "data: [DONE]" ->
+        # Terminal event, emit meta chunk with finish reason
+        [ReqLLM.StreamChunk.meta(%{finish_reason: "stop"})]
+
+      "data: " <> json_str ->
+        # Parse the JSON data
+        case Jason.decode(json_str) do
+          {:ok, data} ->
+            # Use OpenAI's codec to decode this event
+            ReqLLM.Response.Codec.decode_sse_event(%{data: data}, nil)
+
+          {:error, _} ->
+            []
+        end
+
+      _ ->
+        []
     end
   end
 
@@ -235,9 +224,8 @@ defmodule LLMFixture do
           decode_body(resp["body"])
 
         chunks when is_list(chunks) ->
-          # For streaming responses, create timing-aware replay stream
-          timing_config = replay_timing_config()
-          create_timing_stream(chunks, timing_config)
+          # For streaming responses, create a Stream of StreamChunks
+          make_stream(chunks)
       end
 
     {:ok,

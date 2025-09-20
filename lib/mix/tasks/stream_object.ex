@@ -1,20 +1,20 @@
-defmodule Mix.Tasks.Req.Llm.GenerateObject do
-  @shortdoc "Generate structured objects from any AI model"
+defmodule Mix.Tasks.Req.Llm.StreamObject do
+  @shortdoc "Stream structured objects from any AI model"
 
   @moduledoc """
-  Mix task for structured object generation from any supported AI model.
+  Mix task for structured object streaming from any supported AI model.
 
   ## Usage
 
-      mix req.llm.generate_object "Your prompt here" --model provider:model-name
+      mix req.llm.stream_object "Your prompt here" --model provider:model-name
 
   ## Examples
 
-      # Generate from OpenAI
-      mix req.llm.generate_object "Generate a user profile for John" --model openai:gpt-4o-mini
+      # Stream from OpenAI
+      mix req.llm.stream_object "Generate a user profile for John" --model openai:gpt-4o-mini
 
-      # Generate from Anthropic
-      mix req.llm.generate_object "Extract person info: John works at Acme Corp" --model anthropic:claude-3-sonnet
+      # Stream from Anthropic
+      mix req.llm.stream_object "Extract person info: John works at Acme Corp" --model anthropic:claude-3-sonnet
 
   ## Options
 
@@ -26,7 +26,7 @@ defmodule Mix.Tasks.Req.Llm.GenerateObject do
   """
   use Mix.Task
 
-  @preferred_cli_env ["req.llm.generate_object": :dev]
+  @preferred_cli_env ["req.llm.stream_object": :dev]
   @spec run([String.t()]) :: :ok | no_return()
   @impl Mix.Task
   def run(args) do
@@ -53,18 +53,18 @@ defmodule Mix.Tasks.Req.Llm.GenerateObject do
 
         [] ->
           IO.puts(
-            "Usage: mix req.llm.generate_object \"Your prompt here\" --model provider:model-name"
+            "Usage: mix req.llm.stream_object \"Your prompt here\" --model provider:model-name"
           )
 
           IO.puts("")
           IO.puts("Examples:")
 
           IO.puts(
-            "  mix req.llm.generate_object \"Generate a user profile for John\" --model openai:gpt-4o-mini"
+            "  mix req.llm.stream_object \"Generate a user profile for John\" --model openai:gpt-4o-mini"
           )
 
           IO.puts(
-            "  mix req.llm.generate_object \"Extract person info: John works at Acme\" --model anthropic:claude-3-sonnet"
+            "  mix req.llm.stream_object \"Extract person info: John works at Acme\" --model anthropic:claude-3-sonnet"
           )
 
           System.halt(1)
@@ -87,7 +87,7 @@ defmodule Mix.Tasks.Req.Llm.GenerateObject do
     ]
 
     if !quiet do
-      IO.puts("Generating object from #{model_spec}")
+      IO.puts("Streaming object from #{model_spec}")
       IO.puts("Prompt: #{prompt}")
       IO.puts("")
     end
@@ -102,7 +102,7 @@ defmodule Mix.Tasks.Req.Llm.GenerateObject do
     start_time = System.monotonic_time(:millisecond)
 
     try do
-      case ReqLLM.Generation.generate_object(model_spec, prompt, schema, generate_opts) do
+      case ReqLLM.Generation.stream_object(model_spec, prompt, schema, generate_opts) do
         {:ok, response} ->
           # Debug: Show request details
           if debug do
@@ -115,9 +115,7 @@ defmodule Mix.Tasks.Req.Llm.GenerateObject do
             IO.puts("")
           end
 
-          generated_object = ReqLLM.Response.object(response)
-
-          # Debug: Show full response structure 
+          # Debug: Show full response structure
           if debug do
             IO.puts("=== FULL RESPONSE STRUCTURE ===========================")
             IO.puts(inspect(response, pretty: true, limit: :infinity))
@@ -126,8 +124,52 @@ defmodule Mix.Tasks.Req.Llm.GenerateObject do
           end
 
           if !quiet do
-            IO.puts("Generated Object:")
-            IO.puts(Jason.encode!(generated_object, pretty: true))
+            IO.puts("Streaming Object:")
+          end
+
+          # Debug: First let's see what's in the raw stream
+          _raw_chunks =
+            if debug do
+              IO.puts("=== DEBUG/RAW STREAM CHUNKS ===========================")
+              chunks = Enum.to_list(response.stream)
+              IO.puts("Total chunks received: #{length(chunks)}")
+
+              chunks
+              |> Enum.with_index()
+              |> Enum.each(fn {chunk, index} ->
+                IO.puts("Chunk #{index + 1}: #{inspect(chunk, pretty: true, limit: :infinity)}")
+                # Extra debug for tool_call chunks
+                if chunk.type == :tool_call do
+                  IO.puts("  Tool name: #{inspect(chunk.name)}")
+
+                  IO.puts(
+                    "  Tool arguments: #{inspect(chunk.arguments, pretty: true, limit: :infinity)}"
+                  )
+
+                  IO.puts(
+                    "  Chunk metadata: #{inspect(chunk.metadata, pretty: true, limit: :infinity)}"
+                  )
+                end
+              end)
+
+              chunks
+            else
+              Enum.to_list(response.stream)
+            end
+
+          # Stream the object and collect chunks for analysis  
+          object_stream = ReqLLM.Response.object_stream(response)
+
+          if debug do
+            IO.puts("=== DEBUG/FILTERED OBJECT STREAM =====================")
+          end
+
+          final_object = stream_and_collect_object(object_stream, quiet)
+
+          if !quiet do
+            IO.puts("")
+            IO.puts("Final Object:")
+            IO.puts(Jason.encode!(final_object, pretty: true))
             IO.puts("")
           end
 
@@ -137,10 +179,10 @@ defmodule Mix.Tasks.Req.Llm.GenerateObject do
           end
 
           if metrics do
-            show_key_stats(generated_object, start_time, model_spec, prompt, response)
+            show_key_stats(final_object, start_time, model_spec, prompt, response)
           end
 
-          if !quiet, do: IO.puts("Object generation completed")
+          if !quiet, do: IO.puts("Object streaming completed")
           :ok
 
         {:error, %ReqLLM.Error.Invalid.Provider{provider: provider}} ->
@@ -165,7 +207,7 @@ defmodule Mix.Tasks.Req.Llm.GenerateObject do
           System.halt(1)
 
         {:error, error} ->
-          IO.puts("Object generation failed: #{format_error(error)}")
+          IO.puts("Object streaming failed: #{format_error(error)}")
           System.halt(1)
       end
     rescue
@@ -189,6 +231,24 @@ defmodule Mix.Tasks.Req.Llm.GenerateObject do
     end
   end
 
+  defp stream_and_collect_object(object_stream, quiet) do
+    object_stream
+    |> Enum.reduce(%{}, fn chunk, acc ->
+      if !quiet do
+        IO.puts("Filtered chunk: #{inspect(chunk, pretty: true, limit: :infinity)}")
+      end
+
+      # For object streaming, chunks represent partial object updates
+      case chunk do
+        %{} = object_part ->
+          Map.merge(acc, object_part)
+
+        _ ->
+          acc
+      end
+    end)
+  end
+
   defp format_error(%{__struct__: _} = error) do
     case Exception.message(error) do
       message when is_binary(message) -> message
@@ -209,7 +269,7 @@ defmodule Mix.Tasks.Req.Llm.GenerateObject do
     end
   end
 
-  defp show_key_stats(generated_object, start_time, model_spec, _prompt, response) do
+  defp show_key_stats(final_object, start_time, model_spec, _prompt, response) do
     end_time = System.monotonic_time(:millisecond)
     response_time = end_time - start_time
 
@@ -217,9 +277,9 @@ defmodule Mix.Tasks.Req.Llm.GenerateObject do
     output_tokens = get_nested(response, [:usage, :output_tokens], 0)
 
     # Estimate object complexity
-    object_json = Jason.encode!(generated_object)
+    object_json = Jason.encode!(final_object)
     object_size = byte_size(object_json)
-    field_count = count_fields(generated_object)
+    field_count = count_fields(final_object)
 
     estimated_cost = calculate_cost(model_spec, input_tokens + output_tokens)
 

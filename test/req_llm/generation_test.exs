@@ -5,27 +5,30 @@ defmodule ReqLLM.GenerationTest do
 
   describe "generate_text/3 core functionality with fixtures" do
     test "accepts string input format" do
-      {:ok, response} = Generation.generate_text(
-        "openai:gpt-4o-mini", 
-        "Hello", 
-        fixture: "openai_basic"
-      )
-      
+      {:ok, response} =
+        Generation.generate_text(
+          "openai:gpt-4o-mini",
+          "Hello",
+          fixture: "openai_basic"
+        )
+
       assert %Response{} = response
-      assert response.model =~ "gpt-4o-mini"  # Model might have version suffix
+      # Model might have version suffix
+      assert response.model =~ "gpt-4o-mini"
       assert is_binary(Response.text(response))
       assert String.length(Response.text(response)) > 0
     end
 
     test "accepts Context input format" do
       context = Context.new([Context.user("Hello world")])
-      
-      {:ok, response} = Generation.generate_text(
-        "openai:gpt-4o-mini", 
-        context,
-        fixture: "openai_basic"
-      )
-      
+
+      {:ok, response} =
+        Generation.generate_text(
+          "openai:gpt-4o-mini",
+          context,
+          fixture: "openai_basic"
+        )
+
       assert %Response{} = response
     end
 
@@ -35,26 +38,29 @@ defmodule ReqLLM.GenerationTest do
         %{role: "assistant", content: "Hi there!"}
       ]
 
-      {:ok, response} = Generation.generate_text(
-        "openai:gpt-4o-mini", 
-        messages,
-        fixture: "openai_basic"
-      )
-      
+      {:ok, response} =
+        Generation.generate_text(
+          "openai:gpt-4o-mini",
+          messages,
+          fixture: "openai_basic"
+        )
+
       assert %Response{} = response
     end
 
     test "handles system prompt option" do
-      {:ok, response} = Generation.generate_text(
-        "openai:gpt-4o-mini",
-        "Hello",
-        system_prompt: "Be helpful",
-        fixture: "openai_system_msg"
-      )
-      
+      {:ok, response} =
+        Generation.generate_text(
+          "openai:gpt-4o-mini",
+          "Hello",
+          system_prompt: "Be helpful",
+          fixture: "openai_system_msg"
+        )
+
       assert %Response{} = response
       # System prompt gets added to context, which we can verify indirectly
-      assert length(response.context.messages) >= 2  # system + user at minimum
+      # system + user at minimum
+      assert length(response.context.messages) >= 2
     end
   end
 
@@ -108,12 +114,13 @@ defmodule ReqLLM.GenerationTest do
 
   describe "generate_text!/3" do
     test "returns text on success" do
-      result = Generation.generate_text!(
-        "openai:gpt-4o-mini", 
-        "Hello", 
-        fixture: "openai_basic"
-      )
-      
+      result =
+        Generation.generate_text!(
+          "openai:gpt-4o-mini",
+          "Hello",
+          fixture: "openai_basic"
+        )
+
       assert is_binary(result)
       assert String.length(result) > 0
     end
@@ -127,15 +134,28 @@ defmodule ReqLLM.GenerationTest do
 
   describe "stream_text/3 core functionality" do
     test "returns streaming response with fixture" do
-      {:ok, response} = Generation.stream_text(
-        "openai:gpt-4o-mini", 
-        "Tell me a story",
-        fixture: "openai_streaming_test"
-      )
-      
+      {:ok, response} =
+        Generation.stream_text(
+          "openai:gpt-4o-mini",
+          "Tell me a story",
+          fixture: "openai_streaming_test"
+        )
+
       assert %Response{} = response
       assert response.stream? == true
       assert is_struct(response.stream, Stream)
+
+      # Verify the stream contains expected chunks
+      chunks = Enum.to_list(response.stream)
+
+      content_chunks = Enum.filter(chunks, &(&1.type == :content))
+      meta_chunks = Enum.filter(chunks, &(&1.type == :meta))
+
+      assert length(content_chunks) == 2
+      assert Enum.map(content_chunks, & &1.text) == ["Hello", "!"]
+
+      assert length(meta_chunks) == 1
+      assert hd(meta_chunks).metadata[:finish_reason] == "stop"
     end
   end
 
@@ -150,12 +170,13 @@ defmodule ReqLLM.GenerationTest do
 
   describe "stream_text!/3" do
     test "returns stream on success" do
-      result = Generation.stream_text!(
-        "openai:gpt-4o-mini", 
-        "Hello",
-        fixture: "openai_streaming_test"
-      )
-      
+      result =
+        Generation.stream_text!(
+          "openai:gpt-4o-mini",
+          "Hello",
+          fixture: "openai_streaming_test"
+        )
+
       assert is_struct(result, Stream)
     end
 
@@ -188,7 +209,7 @@ defmodule ReqLLM.GenerationTest do
 
     test "provider schema composition works" do
       provider_schema =
-        ReqLLM.Utils.compose_schema(
+        ReqLLM.Provider.Options.compose_schema(
           Generation.schema(),
           ReqLLM.Providers.OpenAI
         )
@@ -202,26 +223,28 @@ defmodule ReqLLM.GenerationTest do
   describe "options and generation parameters" do
     test "accepts generation options without errors" do
       # Test that options are validated and passed through without HTTP calls
-      {:ok, response} = Generation.generate_text(
-        "openai:gpt-4o-mini",
-        "Hello",
-        temperature: 0.8,
-        max_tokens: 50,
-        top_p: 0.9,
-        fixture: "openai_creative"
-      )
-      
+      {:ok, response} =
+        Generation.generate_text(
+          "openai:gpt-4o-mini",
+          "Hello",
+          temperature: 0.8,
+          max_tokens: 50,
+          top_p: 0.9,
+          fixture: "openai_creative"
+        )
+
       assert %Response{} = response
     end
 
     test "handles provider-specific options" do
-      {:ok, response} = Generation.generate_text(
-        "openai:gpt-4o-mini", 
-        "Hello",
-        frequency_penalty: 0.1,
-        fixture: "penalty_params"
-      )
-      
+      {:ok, response} =
+        Generation.generate_text(
+          "openai:gpt-4o-mini",
+          "Hello",
+          frequency_penalty: 0.1,
+          fixture: "penalty_params"
+        )
+
       assert %Response{} = response
     end
   end

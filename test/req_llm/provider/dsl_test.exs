@@ -39,6 +39,8 @@ defmodule ReqLLM.Provider.DSLTest do
 
   # Pre-define test provider modules to avoid dynamic compilation issues
   defmodule TestProvider do
+    @behaviour ReqLLM.Provider
+
     use ReqLLM.Provider.DSL,
       id: :test_provider,
       base_url: "https://api.test.com/v1",
@@ -52,6 +54,8 @@ defmodule ReqLLM.Provider.DSLTest do
   end
 
   defmodule TestProviderWithWrappers do
+    @behaviour ReqLLM.Provider
+
     use ReqLLM.Provider.DSL,
       id: :test_wrappers,
       base_url: "https://api.wrappers.com/v1",
@@ -67,6 +71,8 @@ defmodule ReqLLM.Provider.DSLTest do
   end
 
   defmodule EmptySchemaProvider do
+    @behaviour ReqLLM.Provider
+
     use ReqLLM.Provider.DSL,
       id: :empty_schema,
       base_url: "https://empty.com"
@@ -233,6 +239,8 @@ defmodule ReqLLM.Provider.DSLTest do
     test "loads and atomizes metadata from JSON" do
       with_test_metadata("metadata_test.json", test_metadata_content(), fn metadata_path ->
         defmodule TestMetadataProvider do
+          @behaviour ReqLLM.Provider
+
           use ReqLLM.Provider.DSL,
             id: :test_metadata,
             base_url: "https://api.metadata.com/v1",
@@ -261,6 +269,8 @@ defmodule ReqLLM.Provider.DSLTest do
     test "handles metadata loading errors gracefully" do
       # Missing file
       defmodule MissingMetadataProvider do
+        @behaviour ReqLLM.Provider
+
         use ReqLLM.Provider.DSL,
           id: :missing_metadata,
           base_url: "https://missing.com",
@@ -277,6 +287,8 @@ defmodule ReqLLM.Provider.DSLTest do
       File.write!("test/fixtures/invalid.json", "invalid json")
 
       defmodule InvalidJSONProvider do
+        @behaviour ReqLLM.Provider
+
         use ReqLLM.Provider.DSL,
           id: :invalid_json,
           base_url: "https://invalid.com",
@@ -294,6 +306,8 @@ defmodule ReqLLM.Provider.DSLTest do
       File.chmod!("test/fixtures/readonly.json", 0o000)
 
       defmodule ReadErrorProvider do
+        @behaviour ReqLLM.Provider
+
         use ReqLLM.Provider.DSL,
           id: :read_error,
           base_url: "https://readonly.com",
@@ -319,6 +333,8 @@ defmodule ReqLLM.Provider.DSLTest do
 
       with_test_metadata("atomize_complex.json", complex_content, fn path ->
         defmodule AtomizeComplexProvider do
+          @behaviour ReqLLM.Provider
+
           use ReqLLM.Provider.DSL,
             id: :atomize_complex,
             base_url: "https://atomize.com",
@@ -341,6 +357,8 @@ defmodule ReqLLM.Provider.DSLTest do
 
       with_test_metadata("atomize_list.json", list_content, fn path ->
         defmodule AtomizeListProvider do
+          @behaviour ReqLLM.Provider
+
           use ReqLLM.Provider.DSL,
             id: :atomize_list,
             base_url: "https://atomize.com",
@@ -360,6 +378,8 @@ defmodule ReqLLM.Provider.DSLTest do
 
       with_test_metadata("atomize_primitive.json", primitive_content, fn path ->
         defmodule AtomizePrimitiveProvider do
+          @behaviour ReqLLM.Provider
+
           use ReqLLM.Provider.DSL,
             id: :atomize_primitive,
             base_url: "https://atomize.com",
@@ -397,6 +417,8 @@ defmodule ReqLLM.Provider.DSLTest do
       warning_output =
         ExUnit.CaptureIO.capture_io(:stderr, fn ->
           defmodule ConflictingProvider do
+            @behaviour ReqLLM.Provider
+
             use ReqLLM.Provider.DSL,
               id: :conflicting,
               base_url: "https://conflict.com",

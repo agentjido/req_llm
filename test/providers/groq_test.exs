@@ -67,10 +67,10 @@ defmodule ReqLLM.Providers.GroqTest do
   describe "request preparation & pipeline wiring" do
     test "prepare_request creates configured request" do
       model = ReqLLM.Model.from!("groq:llama-3.1-8b-instant")
-      context = context_fixture()
+      prompt = "Hello world"
       opts = [temperature: 0.7, max_tokens: 100]
 
-      {:ok, request} = Groq.prepare_request(:chat, model, context, opts)
+      {:ok, request} = Groq.prepare_request(:chat, model, prompt, opts)
 
       assert %Req.Request{} = request
       assert request.url.path == "/chat/completions"
@@ -83,11 +83,11 @@ defmodule ReqLLM.Providers.GroqTest do
 
       request = Req.new() |> Groq.attach(model, opts)
 
-      # Verify core options
-      assert request.options[:model] == model.model
-      assert request.options[:temperature] == 0.5
-      assert request.options[:max_tokens] == 50
-      assert {:bearer, _key} = request.options[:auth]
+      # Verify authentication
+      auth_header = Enum.find(request.headers, fn {name, _} -> name == "authorization" end)
+      assert auth_header != nil
+      {_, [auth_value]} = auth_header
+      assert String.starts_with?(auth_value, "Bearer ")
 
       # Verify pipeline steps
       request_steps = Keyword.keys(request.request_steps)
@@ -99,10 +99,10 @@ defmodule ReqLLM.Providers.GroqTest do
 
     test "error handling for invalid configurations" do
       model = ReqLLM.Model.from!("groq:llama-3.1-8b-instant")
-      context = context_fixture()
+      prompt = "Hello world"
 
       # Unsupported operation
-      {:error, error} = Groq.prepare_request(:unsupported, model, context, [])
+      {:error, error} = Groq.prepare_request(:unsupported, model, prompt, [])
       assert %ReqLLM.Error.Invalid.Parameter{} = error
 
       # Provider mismatch
@@ -314,7 +314,7 @@ defmodule ReqLLM.Providers.GroqTest do
       context = context_fixture()
 
       mock_req = %Req.Request{
-        options: [context: context, stream: false]
+        options: [context: context, stream: false, model: "groq:llama-3.1-8b-instant"]
       }
 
       # Test decode_response directly
@@ -346,28 +346,22 @@ defmodule ReqLLM.Providers.GroqTest do
     end
 
     test "decode_response handles streaming responses" do
-      # Create mock streaming chunks
-      stream_chunks = [
-        %{"choices" => [%{"delta" => %{"content" => "Hello"}}]},
-        %{"choices" => [%{"delta" => %{"content" => " world"}}]},
-        %{"choices" => [%{"finish_reason" => "stop"}]}
-      ]
-
-      # Create a mock stream
-      mock_stream = Stream.map(stream_chunks, & &1)
-
       # Create a mock Req response with streaming body
       mock_resp = %Req.Response{
         status: 200,
-        body: mock_stream
+        body: []
       }
 
-      # Create a mock request with context and model
+      # Create a mock request with context and model and real-time stream
       context = context_fixture()
       model = "llama-3.1-8b-instant"
 
+      # Mock the real-time stream that would be created by the Stream step
+      mock_stream = ["Hello", " world", "!"]
+
       mock_req = %Req.Request{
-        options: [context: context, stream: true, model: model]
+        options: [context: context, stream: true, model: model],
+        private: %{real_time_stream: mock_stream}
       }
 
       # Test decode_response directly  
@@ -378,7 +372,7 @@ defmodule ReqLLM.Providers.GroqTest do
 
       response = resp.body
       assert response.stream? == true
-      assert is_struct(response.stream, Stream)
+      assert response.stream == mock_stream
       assert response.model == model
 
       # Verify context is preserved (original messages only in streaming)
@@ -387,7 +381,8 @@ defmodule ReqLLM.Providers.GroqTest do
       # Verify stream structure and processing
       assert response.usage == %{input_tokens: 0, output_tokens: 0, total_tokens: 0}
       assert response.finish_reason == nil
-      assert response.provider_meta == %{}
+      assert is_map(response.provider_meta)
+      # In test scenario with mock stream, no http_task is created
     end
 
     test "decode_response handles API errors with non-200 status" do
@@ -417,27 +412,15 @@ defmodule ReqLLM.Providers.GroqTest do
       assert req == mock_req
       assert %ReqLLM.Error.API.Response{} = error
       assert error.status == 401
-      assert error.reason == "Groq API error"
+      assert error.reason =~ " API error"
       assert error.response_body == error_body
     end
   end
 
   describe "option translation" do
-    test "provider implements translate_options/3" do
-      # Groq now implements translate_options/3 for stream? alias handling
+    test "provider uses default translate_options/3" do
+      # Groq uses default pass-through translate_options implementation
       assert function_exported?(Groq, :translate_options, 3)
-    end
-
-    test "translate_options handles stream? alias" do
-      model = ReqLLM.Model.from!("groq:llama-3.1-8b-instant")
-
-      # Test stream? -> stream translation
-      opts = [temperature: 0.7, stream?: true]
-      {translated_opts, warnings} = Groq.translate_options(:chat, model, opts)
-
-      assert Keyword.get(translated_opts, :stream) == true
-      refute Keyword.has_key?(translated_opts, :stream?)
-      assert warnings == []
     end
 
     test "provider-specific option handling" do
@@ -491,12 +474,12 @@ defmodule ReqLLM.Providers.GroqTest do
   describe "object generation edge cases" do
     test "prepare_request for :object with low max_tokens gets adjusted" do
       model = ReqLLM.Model.from!("groq:llama-3.1-8b-instant")
-      context = context_fixture()
+      prompt = "Generate a person"
       {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string, required: true])
 
       # Test with max_tokens < 200
       opts = [max_tokens: 50, compiled_schema: schema]
-      {:ok, request} = Groq.prepare_request(:object, model, context, opts)
+      {:ok, request} = Groq.prepare_request(:object, model, prompt, opts)
 
       # Should be adjusted to 200
       assert request.options[:max_tokens] == 200
@@ -504,12 +487,12 @@ defmodule ReqLLM.Providers.GroqTest do
 
     test "prepare_request for :object with nil max_tokens gets default" do
       model = ReqLLM.Model.from!("groq:llama-3.1-8b-instant")
-      context = context_fixture()
+      prompt = "Generate an object"
       {:ok, schema} = ReqLLM.Schema.compile([])
 
       # No max_tokens specified
       opts = [compiled_schema: schema]
-      {:ok, request} = Groq.prepare_request(:object, model, context, opts)
+      {:ok, request} = Groq.prepare_request(:object, model, prompt, opts)
 
       # Should get default of 4096
       assert request.options[:max_tokens] == 4096
@@ -517,11 +500,11 @@ defmodule ReqLLM.Providers.GroqTest do
 
     test "prepare_request for :object with sufficient max_tokens unchanged" do
       model = ReqLLM.Model.from!("groq:llama-3.1-8b-instant")
-      context = context_fixture()
+      prompt = "Generate data"
       {:ok, schema} = ReqLLM.Schema.compile(value: [type: :integer])
 
       opts = [max_tokens: 1000, compiled_schema: schema]
-      {:ok, request} = Groq.prepare_request(:object, model, context, opts)
+      {:ok, request} = Groq.prepare_request(:object, model, prompt, opts)
 
       # Should remain unchanged
       assert request.options[:max_tokens] == 1000
@@ -529,18 +512,21 @@ defmodule ReqLLM.Providers.GroqTest do
 
     test "prepare_request rejects unsupported operations" do
       model = ReqLLM.Model.from!("groq:llama-3.1-8b-instant")
-      context = context_fixture()
+      prompt = "Hello world"
 
-      # Test unsupported operation for 3-arg version
-      {:error, error} = Groq.prepare_request(:embedding, model, context, [])
+      # Embedding is now supported via defaults, so test an actually unsupported operation
+      {:error, error} = Groq.prepare_request(:unsupported, model, prompt, [])
       assert %ReqLLM.Error.Invalid.Parameter{} = error
-      assert error.parameter =~ "operation: :embedding not supported"
+      assert error.parameter =~ "operation: :unsupported not supported"
 
       # Test unsupported operation for object with schema  
       {:ok, schema} = ReqLLM.Schema.compile([])
-      {:error, error} = Groq.prepare_request(:embedding, model, context, compiled_schema: schema)
+
+      {:error, error} =
+        Groq.prepare_request(:another_unsupported, model, prompt, compiled_schema: schema)
+
       assert %ReqLLM.Error.Invalid.Parameter{} = error
-      assert error.parameter =~ "operation: :embedding not supported"
+      assert error.parameter =~ "operation: :another_unsupported not supported"
     end
   end
 
@@ -554,7 +540,7 @@ defmodule ReqLLM.Providers.GroqTest do
           Context.user("Hello")
         ])
 
-      assert_raise ArgumentError, ~r/should have exactly one system message/, fn ->
+      assert_raise ArgumentError, ~r/Context should have at most one system message/, fn ->
         Context.validate!(invalid_context)
       end
     end

@@ -1,17 +1,18 @@
 defmodule ReqLLM.Providers.Google do
   @moduledoc """
-  Google Gemini provider – fully compatible with the OpenAI baseline pattern.
+  Google Gemini provider – built on the OpenAI baseline defaults with Gemini-specific customizations.
 
   ## Protocol Usage
 
-  Uses custom `ReqLLM.Providers.Google.Context` and `ReqLLM.Providers.Google.Response` codecs
-  to handle Gemini's specific API format while maintaining OpenAI-compatible interfaces.
+  Uses the generic `ReqLLM.Context.Codec` and `ReqLLM.Response.Codec` protocols
+  with custom encoding/decoding to translate between OpenAI format and Gemini API format.
 
   ## Google-Specific Extensions
 
   Beyond standard OpenAI parameters, Google supports:
-  - `safety_settings` - List of safety filter configurations
-  - `candidate_count` - Number of response candidates to generate (default: 1)
+  - `google_safety_settings` - List of safety filter configurations
+  - `google_candidate_count` - Number of response candidates to generate (default: 1)
+  - `dimensions` - Number of dimensions for embedding vectors
 
   See `provider_schema/0` for the complete Google-specific schema and
   `ReqLLM.Provider.Options` for inherited OpenAI parameters.
@@ -46,96 +47,59 @@ defmodule ReqLLM.Providers.Google do
       ]
     ]
 
+  use ReqLLM.Provider.Defaults
+
   import ReqLLM.Provider.Utils,
     only: [maybe_put: 3, ensure_parsed_body: 1]
 
   require Logger
 
-  # Helper for validation and translation (copied from Groq)
-  defp validate_and_translate!(provider_mod, model, raw_opts) do
-    # Separate context and special test/internal options from user options
-    {context, remaining_opts} = Keyword.pop(raw_opts, :context)
-
-    # Extract internal/test options that shouldn't be validated
-    internal_keys = [
-      :req_options,
-      :on_unsupported,
-      :fixture,
-      :req_http_options,
-      :compiled_schema,
-      :operation,
-      :text
-    ]
-
-    {internal_opts, user_opts} = Keyword.split(remaining_opts, internal_keys)
-
-    schema = provider_mod.provider_extended_generation_schema()
-    {:ok, valid_opts} = NimbleOptions.validate(user_opts, schema)
-
-    # Apply provider-specific translations
-    translated_opts =
-      case provider_mod.translate_options(:chat, model, valid_opts) do
-        {translated_opts, warnings} when is_list(warnings) ->
-          # Emit warnings to the logger
-          Enum.each(warnings, &Logger.warning/1)
-          translated_opts
-
-        translated_opts ->
-          translated_opts
-      end
-
-    # Merge back all the options
-    final_opts = Keyword.merge(translated_opts, internal_opts)
-
-    if context do
-      Keyword.put(final_opts, :context, context)
-    else
-      final_opts
-    end
-  end
-
   @doc """
-  Attaches the Google plugin to a Req request.
+  Custom prepare_request for chat operations to use Google's specific endpoints.
 
-  ## Parameters
-
-    * `request` - The Req request to attach to
-    * `model_input` - The model (ReqLLM.Model struct, string, or tuple) that triggers this provider
-    * `opts` - Options keyword list (validated against comprehensive schema)
-
-  ## Request Options
-
-    * `:temperature` - Controls randomness (0.0-2.0). Defaults to 0.7
-    * `:max_tokens` - Maximum tokens to generate. Defaults to 1024
-    * `:stream?` - Enable streaming responses. Defaults to false
-    * `:base_url` - Override base URL. Defaults to provider default
-    * `:messages` - Chat messages to send
-    * `:system` - System message
-    * `:google_safety_settings` - List of safety filter configurations
-    * `:google_candidate_count` - Number of response candidates to generate
-    * All options from ReqLLM.Provider.Options schemas are supported
-
+  Uses Google's :generateContent and :streamGenerateContent endpoints instead
+  of the standard OpenAI /chat/completions endpoint.
   """
   @impl ReqLLM.Provider
-  def prepare_request(:chat, model_input, %ReqLLM.Context{} = context, opts) do
-    with {:ok, model} <- ReqLLM.Model.from(model_input) do
-      http_opts = Keyword.get(opts, :req_http_options, [])
+  def prepare_request(:chat, model_spec, prompt, opts) do
+    with {:ok, model} <- ReqLLM.Model.from(model_spec),
+         {:ok, context} <- ReqLLM.Context.normalize(prompt, opts),
+         opts_with_context = Keyword.put(opts, :context, context),
+         {:ok, processed_opts} <-
+           ReqLLM.Provider.Options.process(__MODULE__, :chat, model, opts_with_context) do
+      http_opts = Keyword.get(processed_opts, :req_http_options, [])
 
       # Determine endpoint based on streaming
-      endpoint = if opts[:stream], do: ":streamGenerateContent", else: ":generateContent"
+      endpoint =
+        if processed_opts[:stream], do: ":streamGenerateContent", else: ":generateContent"
+
+      req_keys =
+        __MODULE__.supported_provider_options() ++
+          [:context, :operation, :text, :stream, :model, :provider_options]
 
       request =
         Req.new(
-          [url: "/models/#{model.model}#{endpoint}", method: :post, receive_timeout: 30_000] ++
-            http_opts
+          [
+            url: "/models/#{model.model}#{endpoint}",
+            method: :post,
+            receive_timeout: Keyword.get(processed_opts, :receive_timeout, 30_000)
+          ] ++ http_opts
         )
-        |> attach(model, Keyword.put(opts, :context, context))
+        |> Req.Request.register_options(req_keys)
+        |> Req.Request.merge_options(
+          Keyword.take(processed_opts, req_keys) ++
+            [
+              model: model.model,
+              base_url: Keyword.get(processed_opts, :base_url, default_base_url())
+            ]
+        )
+        |> attach(model, processed_opts)
 
       {:ok, request}
     end
   end
 
-  def prepare_request(:object, model_input, %ReqLLM.Context{} = context, opts) do
+  def prepare_request(:object, model_spec, prompt, opts) do
     compiled_schema = Keyword.fetch!(opts, :compiled_schema)
 
     structured_output_tool =
@@ -146,52 +110,73 @@ defmodule ReqLLM.Providers.Google do
         callback: fn _args -> {:ok, "structured output generated"} end
       )
 
-    opts_with_tool =
-      Keyword.update(opts, :tools, [structured_output_tool], fn tools ->
-        [structured_output_tool | tools]
-      end)
-
-    opts_with_choice =
-      Keyword.put(opts_with_tool, :tool_choice, %{
-        type: "function",
-        function: %{name: "structured_output"}
-      })
-
-    opts_with_max_tokens =
-      case Keyword.get(opts_with_choice, :max_tokens) do
-        nil -> Keyword.put(opts_with_choice, :max_tokens, 4096)
-        tokens when tokens < 200 -> Keyword.put(opts_with_choice, :max_tokens, 200)
-        _value -> opts_with_choice
+    # Adjust max_tokens for structured output with Google-specific minimums
+    opts_with_tokens =
+      case Keyword.get(opts, :max_tokens) do
+        nil -> Keyword.put(opts, :max_tokens, 4096)
+        tokens when tokens < 200 -> Keyword.put(opts, :max_tokens, 200)
+        _tokens -> opts
       end
 
-    prepare_request(:chat, model_input, context, opts_with_max_tokens)
+    opts_with_tool =
+      opts_with_tokens
+      |> Keyword.update(:tools, [structured_output_tool], &[structured_output_tool | &1])
+      |> Keyword.put(:tool_choice, %{type: "function", function: %{name: "structured_output"}})
+      |> Keyword.put(:operation, :object)
+
+    prepare_request(:chat, model_spec, prompt, opts_with_tool)
   end
 
-  def prepare_request(:embedding, model_input, text, opts) do
-    with {:ok, model} <- ReqLLM.Model.from(model_input) do
-      http_opts = Keyword.get(opts, :req_http_options, [])
+  def prepare_request(:embedding, model_spec, text, opts) do
+    # Handle dimensions as a provider-specific option if passed at top level
+    opts_normalized =
+      case Keyword.pop(opts, :dimensions) do
+        {nil, rest} ->
+          rest
+
+        {dimensions_value, rest} ->
+          provider_options = Keyword.get(rest, :provider_options, [])
+          updated_provider_options = Keyword.put(provider_options, :dimensions, dimensions_value)
+          Keyword.put(rest, :provider_options, updated_provider_options)
+      end
+
+    with {:ok, model} <- ReqLLM.Model.from(model_spec),
+         opts_with_text = Keyword.merge(opts_normalized, text: text, operation: :embedding),
+         {:ok, processed_opts} <-
+           ReqLLM.Provider.Options.process(__MODULE__, :embedding, model, opts_with_text) do
+      http_opts = Keyword.get(processed_opts, :req_http_options, [])
+
+      req_keys =
+        __MODULE__.supported_provider_options() ++
+          [:context, :operation, :text, :stream, :model, :provider_options]
 
       request =
         Req.new(
-          [url: "/models/#{model.model}:embedContent", method: :post, receive_timeout: 30_000] ++
-            http_opts
+          [
+            url: "/models/#{model.model}:embedContent",
+            method: :post,
+            receive_timeout: Keyword.get(processed_opts, :receive_timeout, 30_000)
+          ] ++ http_opts
         )
-        |> attach(model, Keyword.merge(opts, text: text, operation: :embedding))
+        |> Req.Request.register_options(req_keys)
+        |> Req.Request.merge_options(
+          Keyword.take(processed_opts, req_keys) ++
+            [
+              model: model.model,
+              base_url: Keyword.get(processed_opts, :base_url, default_base_url())
+            ]
+        )
+        |> attach(model, processed_opts)
 
       {:ok, request}
     end
   end
 
-  def prepare_request(operation, _model, _input, _opts) do
-    {:error,
-     ReqLLM.Error.Invalid.Parameter.exception(
-       parameter:
-         "operation: #{inspect(operation)} not supported by Google provider. Supported operations: [:chat, :object, :embedding]"
-     )}
+  # Delegate all other operations to defaults (which will return appropriate errors)
+  def prepare_request(operation, model_spec, input, opts) do
+    ReqLLM.Provider.Defaults.prepare_request(__MODULE__, operation, model_spec, input, opts)
   end
 
-  @spec attach(Req.Request.t(), ReqLLM.Model.t() | String.t() | {atom(), keyword()}, keyword()) ::
-          Req.Request.t()
   @impl ReqLLM.Provider
   def attach(%Req.Request{} = request, model_input, user_opts \\ []) do
     %ReqLLM.Model{} = model = ReqLLM.Model.from!(model_input)
@@ -201,31 +186,22 @@ defmodule ReqLLM.Providers.Google do
     end
 
     api_key = ReqLLM.Keys.get!(model, user_opts)
-    {tools, other_opts} = Keyword.pop(user_opts, :tools, [])
-    provider_opts = Keyword.get(other_opts, :provider_options, [])
-    {_provider_options, core_opts} = Keyword.pop(other_opts, :provider_options, [])
 
-    # Use new validation approach
-    opts = validate_and_translate!(__MODULE__, model, core_opts)
-    opts = Keyword.put(opts, :tools, tools)
-    opts = Keyword.merge(opts, provider_opts)
-
-    base_url = Keyword.get(user_opts, :base_url, default_base_url())
-    req_keys = __MODULE__.supported_provider_options() ++ [:context, :operation, :text]
-    model_name = model.model
+    # Register extra options that might be passed but aren't standard Req options
+    extra_option_keys =
+      [:model, :compiled_schema, :temperature, :max_tokens, :app_referer, :app_title, :fixture] ++
+        __MODULE__.supported_provider_options()
 
     request
-    |> Req.Request.register_options(req_keys ++ [:model])
     # Google uses query parameter for API key, not Authorization header
-    |> Req.Request.merge_options(
-      Keyword.take(opts, req_keys) ++
-        [model: model_name, base_url: base_url, params: [key: api_key]]
-    )
+    |> Req.Request.register_options(extra_option_keys)
+    |> Req.Request.merge_options([model: model.model, params: [key: api_key]] ++ user_opts)
     |> ReqLLM.Step.Error.attach()
     |> Req.Request.append_request_steps(llm_encode_body: &__MODULE__.encode_body/1)
-    |> ReqLLM.Step.Stream.maybe_attach(opts[:stream])
+    |> ReqLLM.Step.Stream.maybe_attach(user_opts[:stream] == true, model)
     |> Req.Request.append_response_steps(llm_decode_response: &__MODULE__.decode_response/1)
     |> ReqLLM.Step.Usage.attach(model)
+    |> ReqLLM.Step.LLMFixture.maybe_attach(model, user_opts)
   end
 
   @impl ReqLLM.Provider

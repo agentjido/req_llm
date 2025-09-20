@@ -305,7 +305,8 @@ defmodule ReqLLM.Providers.OpenRouterTest do
       context = context_fixture()
 
       mock_req = %Req.Request{
-        options: [context: context, stream: false]
+        options: [context: context, stream: false],
+        private: %{req_llm_model: model}
       }
 
       # Test decode_response directly
@@ -361,7 +362,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
         options: [context: context, stream: true, model: model]
       }
 
-      # Test decode_response directly  
+      # Test decode_response directly
       {req, resp} = OpenRouter.decode_response({mock_req, mock_resp})
 
       assert req == mock_req
@@ -398,8 +399,11 @@ defmodule ReqLLM.Providers.OpenRouterTest do
 
       context = context_fixture()
 
+      model = ReqLLM.Model.from!("openrouter:openai/gpt-4")
+
       mock_req = %Req.Request{
-        options: [context: context, model: "openai/gpt-4"]
+        options: [context: context, model: "openai/gpt-4"],
+        private: %{req_llm_model: model}
       }
 
       # Test decode_response error handling
@@ -417,18 +421,6 @@ defmodule ReqLLM.Providers.OpenRouterTest do
     test "provider implements translate_options/3" do
       # OpenRouter implements translate_options/3 for various alias handling
       assert function_exported?(OpenRouter, :translate_options, 3)
-    end
-
-    test "translate_options handles stream? alias" do
-      model = ReqLLM.Model.from!("openrouter:openai/gpt-4")
-
-      # Test stream? -> stream translation
-      opts = [temperature: 0.7, stream?: true]
-      {translated_opts, warnings} = OpenRouter.translate_options(:chat, model, opts)
-
-      assert Keyword.get(translated_opts, :stream) == true
-      refute Keyword.has_key?(translated_opts, :stream?)
-      assert warnings == []
     end
 
     test "translate_options validates openrouter_top_k with OpenAI models" do
@@ -582,7 +574,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
       assert %ReqLLM.Error.Invalid.Parameter{} = error
       assert error.parameter =~ "operation: :embedding not supported"
 
-      # Test unsupported operation for object with schema  
+      # Test unsupported operation for object with schema
       {:ok, schema} = ReqLLM.Schema.compile([])
 
       {:error, error} =
@@ -603,7 +595,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
           Context.user("Hello")
         ])
 
-      assert_raise ArgumentError, ~r/should have exactly one system message/, fn ->
+      assert_raise ArgumentError, ~r/should have at most one system message/, fn ->
         Context.validate!(invalid_context)
       end
     end

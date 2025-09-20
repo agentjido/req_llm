@@ -68,7 +68,7 @@ defmodule ReqLLM.Providers.XAITest do
     test "prepare_request creates configured request" do
       model = ReqLLM.Model.from!("xai:grok-3")
       context = context_fixture()
-      opts = [temperature: 0.7, max_completion_tokens: 100]
+      opts = [temperature: 0.7, provider_options: [max_completion_tokens: 100]]
 
       {:ok, request} = XAI.prepare_request(:chat, model, context, opts)
 
@@ -79,15 +79,12 @@ defmodule ReqLLM.Providers.XAITest do
 
     test "attach configures authentication and pipeline" do
       model = ReqLLM.Model.from!("xai:grok-3")
-      opts = [temperature: 0.5, max_completion_tokens: 50]
+      opts = [temperature: 0.5, provider_options: [max_completion_tokens: 50]]
 
       request = Req.new() |> XAI.attach(model, opts)
 
-      # Verify core options
-      assert request.options[:model] == model.model
-      assert request.options[:temperature] == 0.5
-      assert request.options[:max_completion_tokens] == 50
-      assert {:bearer, _key} = request.options[:auth]
+      # Verify authentication header (not options since that's done in prepare_request)
+      assert request.headers["authorization"] |> Enum.any?(&String.starts_with?(&1, "Bearer "))
 
       # Verify pipeline steps
       request_steps = Keyword.keys(request.request_steps)
@@ -339,28 +336,22 @@ defmodule ReqLLM.Providers.XAITest do
     end
 
     test "decode_response handles streaming responses" do
-      # Create mock streaming chunks
-      stream_chunks = [
-        %{"choices" => [%{"delta" => %{"content" => "Hello"}}]},
-        %{"choices" => [%{"delta" => %{"content" => " world"}}]},
-        %{"choices" => [%{"finish_reason" => "stop"}]}
-      ]
-
-      # Create a mock stream
-      mock_stream = Stream.map(stream_chunks, & &1)
-
       # Create a mock Req response with streaming body
       mock_resp = %Req.Response{
         status: 200,
-        body: mock_stream
+        body: []
       }
 
-      # Create a mock request with context and model
+      # Create a mock request with context and model and real-time stream
       context = context_fixture()
       model = "grok-3"
 
+      # Mock the real-time stream that would be created by the Stream step
+      mock_stream = ["Hello", " world", "!"]
+
       mock_req = %Req.Request{
-        options: [context: context, stream: true, model: model]
+        options: [context: context, stream: true, model: model],
+        private: %{real_time_stream: mock_stream}
       }
 
       # Test decode_response directly  
@@ -371,7 +362,7 @@ defmodule ReqLLM.Providers.XAITest do
 
       response = resp.body
       assert response.stream? == true
-      assert is_struct(response.stream, Stream)
+      assert response.stream == mock_stream
       assert response.model == model
 
       # Verify context is preserved (original messages only in streaming)
@@ -380,7 +371,8 @@ defmodule ReqLLM.Providers.XAITest do
       # Verify stream structure and processing
       assert response.usage == %{input_tokens: 0, output_tokens: 0, total_tokens: 0}
       assert response.finish_reason == nil
-      assert response.provider_meta == %{}
+      assert is_map(response.provider_meta)
+      assert Map.has_key?(response.provider_meta, :http_task)
     end
 
     test "decode_response handles API errors with non-200 status" do
@@ -546,7 +538,7 @@ defmodule ReqLLM.Providers.XAITest do
       {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string, required: true])
 
       # Test with max_completion_tokens < 200
-      opts = [max_completion_tokens: 50, compiled_schema: schema]
+      opts = [provider_options: [max_completion_tokens: 50], compiled_schema: schema]
       {:ok, request} = XAI.prepare_request(:object, model, context, opts)
 
       # Should be adjusted to 200
@@ -571,7 +563,7 @@ defmodule ReqLLM.Providers.XAITest do
       context = context_fixture()
       {:ok, schema} = ReqLLM.Schema.compile(value: [type: :integer])
 
-      opts = [max_completion_tokens: 1000, compiled_schema: schema]
+      opts = [provider_options: [max_completion_tokens: 1000], compiled_schema: schema]
       {:ok, request} = XAI.prepare_request(:object, model, context, opts)
 
       # Should remain unchanged
@@ -605,7 +597,7 @@ defmodule ReqLLM.Providers.XAITest do
           Context.user("Hello")
         ])
 
-      assert_raise ArgumentError, ~r/should have exactly one system message/, fn ->
+      assert_raise ArgumentError, ~r/should have at most one system message/, fn ->
         Context.validate!(invalid_context)
       end
     end
