@@ -2,8 +2,8 @@ defmodule ReqLLM.Provider.Options do
   @moduledoc """
   Runtime generation options processing for ReqLLM providers.
 
-  This module handles only the core generation options that are truly universal 
-  across providers, plus the orchestration logic for validation, translation, 
+  This module handles only the core generation options that are truly universal
+  across providers, plus the orchestration logic for validation, translation,
   and provider-specific option handling.
 
   ## Design Principles
@@ -16,7 +16,7 @@ defmodule ReqLLM.Provider.Options do
 
   The following options are considered universal:
   - `temperature`, `max_tokens` - Basic sampling control
-  - `top_p`, `top_k` - Advanced sampling  
+  - `top_p`, `top_k` - Advanced sampling
   - `frequency_penalty`, `presence_penalty` - Repetition control
   - `seed`, `stop` - Deterministic generation and control
   - `tools`, `tool_choice` - Function calling
@@ -172,7 +172,7 @@ defmodule ReqLLM.Provider.Options do
   This is the primary public API for option processing. It handles:
   1. Provider key collision detection (prevents shadowing core options)
   2. Validation against composed schema (core + provider options)
-  3. Provider-specific option translation 
+  3. Provider-specific option translation
   4. Internal option preservation
   5. Error wrapping for consistency
 
@@ -187,7 +187,7 @@ defmodule ReqLLM.Provider.Options do
 
   ## Examples
       model = %ReqLLM.Model{provider: :openai, model: "gpt-4"}
-      
+
       opts = [
         temperature: 0.7,
         provider_options: [dimensions: 512, encoding_format: "float"]
@@ -271,7 +271,7 @@ defmodule ReqLLM.Provider.Options do
   @doc """
   Extracts only generation options from a mixed options list.
 
-  Unlike `extract_provider_options/1`, this returns only the generation 
+  Unlike `extract_provider_options/1`, this returns only the generation
   options without the unused remainder.
 
   ## Examples
@@ -351,7 +351,7 @@ defmodule ReqLLM.Provider.Options do
   @doc """
   Builds a dynamic schema by composing base schema with provider-specific options.
 
-  This function takes a base schema and provider module, creating a unified schema where 
+  This function takes a base schema and provider module, creating a unified schema where
   provider-specific options are nested under the :provider_options key with proper validation.
 
   This is the public API for schema composition and should be used by external modules
@@ -359,7 +359,7 @@ defmodule ReqLLM.Provider.Options do
 
   ## Parameters
 
-  - `base_schema` - Base NimbleOptions schema (usually generation_options_schema/0)  
+  - `base_schema` - Base NimbleOptions schema (usually generation_options_schema/0)
   - `provider_mod` - Provider module that may implement provider_schema/0
 
   ## Examples
@@ -518,7 +518,7 @@ defmodule ReqLLM.Provider.Options do
   defp extract_unknown_keys_from_opts(opts) do
     core_keys = all_generation_keys()
     user_keys = Keyword.keys(opts)
-    unknown_keys = user_keys -- (core_keys -- @internal_keys)
+    unknown_keys = user_keys -- core_keys -- @internal_keys
     unknown_keys
   end
 
