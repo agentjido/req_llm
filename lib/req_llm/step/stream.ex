@@ -1,6 +1,4 @@
 defmodule ReqLLM.Step.Stream do
-  require Logger
-
   @moduledoc """
   Req step for handling Server-Sent Events (SSE) in provider-agnostic streaming responses.
 
@@ -61,6 +59,8 @@ defmodule ReqLLM.Step.Stream do
       #=> "Regular JSON response"
 
   """
+
+  require Logger
 
   @doc """
   Attaches the SSE streaming step to a Req request struct.
@@ -184,8 +184,10 @@ defmodule ReqLLM.Step.Stream do
           case Code.ensure_loaded(ReqLLM.Step.Fixture.Backend) do
             {:module, ReqLLM.Step.Fixture.Backend} ->
               apply(ReqLLM.Step.Fixture.Backend, :capture_raw_chunk, [path, chunk])
+
             {:error, _} ->
-              :ok  # No fixture backend available
+              # No fixture backend available
+              :ok
           end
         end
 
@@ -215,8 +217,6 @@ defmodule ReqLLM.Step.Stream do
           |> Enum.flat_map(&ReqLLM.Response.Codec.decode_sse_event(&1, model))
           |> Enum.reject(&is_nil/1)
 
-
-
         if decoded_chunks != [] do
           send(owner_pid, {:stream_chunks, decoded_chunks})
         end
@@ -232,14 +232,18 @@ defmodule ReqLLM.Step.Stream do
       :done, acc ->
         # Save fixture when streaming is complete
         {req, resp} = acc
+
         if _path = Req.Request.get_private(req, :llm_fixture_path) do
           case Code.ensure_loaded(ReqLLM.Step.Fixture.Backend) do
             {:module, ReqLLM.Step.Fixture.Backend} ->
               apply(ReqLLM.Step.Fixture.Backend, :save_streaming_fixture, [req, resp])
+
             {:error, _} ->
-              :ok  # No fixture backend available
+              # No fixture backend available
+              :ok
           end
         end
+
         send(owner_pid, :stream_done)
         {:cont, acc}
 

@@ -257,8 +257,7 @@ defmodule ReqLLM.Model do
     %{
       model
       | limit: ReqLLM.Metadata.merge_with_defaults(model.limit, default_limit),
-        modalities:
-          ReqLLM.Metadata.merge_with_defaults(model.modalities, default_modalities),
+        modalities: ReqLLM.Metadata.merge_with_defaults(model.modalities, default_modalities),
         capabilities:
           ReqLLM.Metadata.merge_with_defaults(model.capabilities, default_capabilities)
     }
@@ -283,15 +282,13 @@ defmodule ReqLLM.Model do
          {:ok, full_metadata} <- ReqLLM.Model.Metadata.load_full_metadata(model_spec) do
       enhanced_model = %{
         base_model
-        | limit:
-            get_in(full_metadata, ["limit"]) |> ReqLLM.Metadata.map_string_keys_to_atoms(),
+        | limit: get_in(full_metadata, ["limit"]) |> ReqLLM.Metadata.map_string_keys_to_atoms(),
           modalities:
             get_in(full_metadata, ["modalities"])
             |> ReqLLM.Metadata.map_string_keys_to_atoms()
             |> ReqLLM.Metadata.convert_modality_values(),
           capabilities: ReqLLM.Metadata.build_capabilities_from_metadata(full_metadata),
-          cost:
-            get_in(full_metadata, ["cost"]) |> ReqLLM.Metadata.map_string_keys_to_atoms()
+          cost: get_in(full_metadata, ["cost"]) |> ReqLLM.Metadata.map_string_keys_to_atoms()
       }
 
       {:ok, enhanced_model}

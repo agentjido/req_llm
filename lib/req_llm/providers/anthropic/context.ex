@@ -48,12 +48,14 @@ defmodule ReqLLM.Providers.Anthropic.Context do
   defp extract_model_name(_), do: "unknown"
 
   defp add_messages(request, messages) do
-    {system_messages, non_system_messages} = 
+    {system_messages, non_system_messages} =
       Enum.split_with(messages, fn %ReqLLM.Message{role: role} -> role == :system end)
 
-    request = 
+    request =
       case system_messages do
-        [] -> request
+        [] ->
+          request
+
         [%ReqLLM.Message{content: content} | _] ->
           # Anthropic only accepts one system message at top level
           Map.put(request, :system, encode_content(content))
@@ -82,7 +84,8 @@ defmodule ReqLLM.Providers.Anthropic.Context do
 
     case content_blocks do
       [] -> ""
-      [%{type: "text", text: text}] -> text  # Simplify single text blocks
+      # Simplify single text blocks
+      [%{type: "text", text: text}] -> text
       blocks -> blocks
     end
   end
@@ -130,7 +133,7 @@ defmodule ReqLLM.Providers.Anthropic.Context do
   defp encode_tool(tool) do
     # Convert from ReqLLM tool to Anthropic format
     openai_schema = ReqLLM.Schema.to_openai_format(tool)
-    
+
     %{
       name: openai_schema["function"]["name"],
       description: openai_schema["function"]["description"],

@@ -51,6 +51,7 @@ defmodule ReqLLM.Providers.Anthropic do
     ]
 
   import ReqLLM.Provider.Utils, only: [maybe_put: 3, ensure_parsed_body: 1]
+
   require Logger
 
   @impl ReqLLM.Provider
@@ -76,7 +77,7 @@ defmodule ReqLLM.Providers.Anthropic do
   @impl ReqLLM.Provider
   def attach(request, model, user_opts) do
     # Validate provider compatibility
-    unless model.provider == :anthropic do
+    if model.provider != :anthropic do
       raise ReqLLM.Error.Invalid.Provider.exception(provider: model.provider)
     end
 
@@ -110,7 +111,8 @@ defmodule ReqLLM.Providers.Anthropic do
     body =
       case operation do
         :chat -> encode_chat_body(request)
-        :object -> encode_chat_body(request) # Object uses same chat format with tools
+        # Object uses same chat format with tools
+        :object -> encode_chat_body(request)
       end
 
     json_body = Jason.encode!(body)
@@ -138,10 +140,10 @@ defmodule ReqLLM.Providers.Anthropic do
 
   def extract_usage(_, _), do: {:error, :invalid_body}
 
-  @impl ReqLLM.Provider  
+  @impl ReqLLM.Provider
   def translate_options(_operation, _model, opts) do
     # Anthropic-specific parameter translation
-    translated_opts = 
+    translated_opts =
       opts
       |> translate_stop_parameter()
       |> translate_unsupported_parameters()
@@ -258,7 +260,7 @@ defmodule ReqLLM.Providers.Anthropic do
 
   defp maybe_add_tools(body, options) do
     tools = get_option(options, :tools, [])
-    
+
     case tools do
       [] ->
         body
@@ -275,7 +277,7 @@ defmodule ReqLLM.Providers.Anthropic do
 
   # Handle both map and keyword list options (for tests vs real requests)
   defp get_option(options, key, default \\ nil)
-  
+
   defp get_option(options, key, default) when is_map(options) do
     Map.get(options, key, default)
   end
@@ -286,7 +288,7 @@ defmodule ReqLLM.Providers.Anthropic do
 
   defp tool_to_anthropic_format(tool) do
     schema = ReqLLM.Tool.to_schema(tool, :openai)
-    
+
     %{
       name: schema["function"]["name"],
       description: schema["function"]["description"],
@@ -296,9 +298,12 @@ defmodule ReqLLM.Providers.Anthropic do
 
   defp translate_stop_parameter(opts) do
     case Keyword.get(opts, :stop) do
-      nil -> opts
-      stop when is_binary(stop) -> 
+      nil ->
+        opts
+
+      stop when is_binary(stop) ->
         opts |> Keyword.delete(:stop) |> Keyword.put(:stop_sequences, [stop])
+
       stop when is_list(stop) ->
         opts |> Keyword.delete(:stop) |> Keyword.put(:stop_sequences, stop)
     end
@@ -306,7 +311,14 @@ defmodule ReqLLM.Providers.Anthropic do
 
   defp translate_unsupported_parameters(opts) do
     # Remove parameters not supported by Anthropic
-    unsupported = [:presence_penalty, :frequency_penalty, :logprobs, :top_logprobs, :response_format]
+    unsupported = [
+      :presence_penalty,
+      :frequency_penalty,
+      :logprobs,
+      :top_logprobs,
+      :response_format
+    ]
+
     Enum.reduce(unsupported, opts, &Keyword.delete(&2, &1))
   end
 
@@ -332,9 +344,9 @@ defmodule ReqLLM.Providers.Anthropic do
 
   defp decode_anthropic_response(req, resp, operation) do
     model_name = req.options[:model]
-    
+
     # Handle case where model_name might be nil
-    model = 
+    model =
       case model_name do
         nil ->
           case req.private[:req_llm_model] do

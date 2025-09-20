@@ -150,7 +150,8 @@ defmodule ReqLLM.Providers.GoogleTest do
 
       # Should have Google's structure
       assert is_list(decoded["contents"])
-      assert length(decoded["contents"]) == 1  # Only user message, system is separate
+      # Only user message, system is separate
+      assert length(decoded["contents"]) == 1
       refute Map.has_key?(decoded, "tools")
 
       # Check generationConfig

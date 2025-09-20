@@ -63,7 +63,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
       # Verify authentication
       api_key_header = Enum.find(request.headers, fn {name, _} -> name == "x-api-key" end)
       assert api_key_header != nil
-      
+
       version_header = Enum.find(request.headers, fn {name, _} -> name == "anthropic-version" end)
       assert version_header != nil
 
@@ -114,13 +114,14 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
       assert decoded["model"] == "claude-3-5-sonnet-20241022"
       assert is_list(decoded["messages"])
-      assert length(decoded["messages"]) == 1  # Only user message, system goes to top-level
+      # Only user message, system goes to top-level
+      assert length(decoded["messages"]) == 1
       assert decoded["stream"] == false
       refute Map.has_key?(decoded, "tools")
 
       # Check top-level system parameter (Anthropic format)
       assert decoded["system"] == "You are a helpful assistant."
-      
+
       [user_msg] = decoded["messages"]
       assert user_msg["role"] == "user"
       assert user_msg["content"] == "Hello, how are you?"
@@ -205,7 +206,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
       # Verify usage normalization
       assert is_integer(response.usage.input_tokens)
-      assert is_integer(response.usage.output_tokens) 
+      assert is_integer(response.usage.output_tokens)
       assert is_integer(response.usage.total_tokens)
 
       # Verify context advancement (original + assistant)
@@ -248,21 +249,21 @@ defmodule ReqLLM.Providers.AnthropicTest do
   describe "option translation" do
     test "translate_options converts stop to stop_sequences" do
       model = ReqLLM.Model.from!("anthropic:claude-3-5-sonnet-20241022")
-      
+
       # Test single stop string
-      {translated_opts, []} = Anthropic.translate_options(:chat, model, [stop: "STOP"])
+      {translated_opts, []} = Anthropic.translate_options(:chat, model, stop: "STOP")
       assert Keyword.get(translated_opts, :stop_sequences) == ["STOP"]
       assert Keyword.get(translated_opts, :stop) == nil
 
       # Test stop list
-      {translated_opts, []} = Anthropic.translate_options(:chat, model, [stop: ["STOP", "END"]])
+      {translated_opts, []} = Anthropic.translate_options(:chat, model, stop: ["STOP", "END"])
       assert Keyword.get(translated_opts, :stop_sequences) == ["STOP", "END"]
       assert Keyword.get(translated_opts, :stop) == nil
     end
 
     test "translate_options removes unsupported parameters" do
       model = ReqLLM.Model.from!("anthropic:claude-3-5-sonnet-20241022")
-      
+
       opts = [
         temperature: 0.7,
         presence_penalty: 0.1,
@@ -272,10 +273,10 @@ defmodule ReqLLM.Providers.AnthropicTest do
       ]
 
       {translated_opts, []} = Anthropic.translate_options(:chat, model, opts)
-      
+
       # Should keep supported parameters
       assert Keyword.get(translated_opts, :temperature) == 0.7
-      
+
       # Should remove unsupported parameters
       assert Keyword.get(translated_opts, :presence_penalty) == nil
       assert Keyword.get(translated_opts, :frequency_penalty) == nil

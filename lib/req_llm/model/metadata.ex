@@ -43,8 +43,6 @@ defmodule ReqLLM.Model.Metadata do
     end
   end
 
-
-
   defp load_model_from_provider_file(provider_path, specific_model_id) do
     with {:ok, content} <- File.read(provider_path),
          {:ok, %{"models" => models}} <- Jason.decode(content),
@@ -109,8 +107,6 @@ defmodule ReqLLM.Model.Metadata do
          )}
     end
   end
-
-
 
   @doc """
   Exposes model metadata for a provider and model from the registry.

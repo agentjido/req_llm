@@ -17,7 +17,9 @@ defmodule ReqLLM.Step.Fixture.Backend do
 
   def save_streaming_fixture(%Req.Request{} = request, %Req.Response{} = response) do
     case request.private[:llm_fixture_path] do
-      nil -> :ok
+      nil ->
+        :ok
+
       path ->
         encode_info = capture_request_body(request)
         save_fixture(path, encode_info, request, response)

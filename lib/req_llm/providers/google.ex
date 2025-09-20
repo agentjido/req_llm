@@ -443,8 +443,7 @@ defmodule ReqLLM.Providers.Google do
         system_messages ->
           combined_text =
             system_messages
-            |> Enum.map(&extract_text_content/1)
-            |> Enum.join("\n\n")
+            |> Enum.map_join("\n\n", &extract_text_content/1)
 
           %{parts: [%{text: combined_text}]}
       end
@@ -492,7 +491,7 @@ defmodule ReqLLM.Providers.Google do
 
   defp extract_parts_text(parts) do
     parts
-    |> Enum.map(fn
+    |> Enum.map_join("", fn
       %{type: :text, content: text} -> text
       %{"type" => "text", "text" => text} -> text
       %{text: text} -> text
@@ -500,18 +499,13 @@ defmodule ReqLLM.Providers.Google do
       text when is_binary(text) -> text
       part -> to_string(part)
     end)
-    |> Enum.join("")
   end
 
   defp convert_content_part(%{type: :text, content: text}), do: %{text: text}
   defp convert_content_part(%{text: text}), do: %{text: text}
   defp convert_content_part(text) when is_binary(text), do: %{text: text}
 
-  defp convert_content_part(%{
-         type: :file,
-         data: data,
-         media_type: media_type
-       })
+  defp convert_content_part(%{type: :file, data: data, media_type: media_type})
        when is_binary(data) do
     encoded_data = Base.encode64(data)
 

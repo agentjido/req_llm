@@ -42,9 +42,9 @@ defmodule ReqLLM.Providers.Anthropic.Response do
     id = Map.get(data, "id", "unknown")
     model_name = Map.get(data, "model", model.model || "unknown")
     usage = parse_usage(Map.get(data, "usage"))
-    
+
     finish_reason = parse_finish_reason(Map.get(data, "stop_reason"))
-    
+
     content_chunks = decode_content(Map.get(data, "content", []))
     message = build_message_from_chunks(content_chunks)
 
@@ -109,12 +109,7 @@ defmodule ReqLLM.Providers.Anthropic.Response do
     ReqLLM.StreamChunk.text(text)
   end
 
-  defp decode_content_block(%{
-         "type" => "tool_use", 
-         "id" => id,
-         "name" => name,
-         "input" => input
-       }) do
+  defp decode_content_block(%{"type" => "tool_use", "id" => id, "name" => name, "input" => input}) do
     ReqLLM.StreamChunk.tool_call(name, input, %{id: id})
   end
 
@@ -132,7 +127,7 @@ defmodule ReqLLM.Providers.Anthropic.Response do
        }) do
     # Anthropic sends partial JSON that needs to be accumulated
     # For now, we'll create a tool call chunk with partial data
-    args = 
+    args =
       case Jason.decode(json_fragment || "{}") do
         {:ok, parsed} -> parsed
         {:error, _} -> %{partial: json_fragment}
@@ -147,11 +142,7 @@ defmodule ReqLLM.Providers.Anthropic.Response do
     [ReqLLM.StreamChunk.text(text)]
   end
 
-  defp decode_content_block_start(%{
-         "type" => "tool_use",
-         "id" => id,
-         "name" => name
-       }) do
+  defp decode_content_block_start(%{"type" => "tool_use", "id" => id, "name" => name}) do
     # Tool call start - send empty arguments that will be filled by deltas
     [ReqLLM.StreamChunk.tool_call(name, %{}, %{id: id, start: true})]
   end
@@ -195,10 +186,7 @@ defmodule ReqLLM.Providers.Anthropic.Response do
 
   defp chunk_to_content_part(_), do: nil
 
-  defp parse_usage(%{
-         "input_tokens" => input,
-         "output_tokens" => output
-       }) do
+  defp parse_usage(%{"input_tokens" => input, "output_tokens" => output}) do
     %{
       input_tokens: input,
       output_tokens: output,
