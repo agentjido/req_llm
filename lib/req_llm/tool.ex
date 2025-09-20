@@ -1,6 +1,6 @@
 defmodule ReqLLM.Tool do
   @moduledoc """
-  Simplified tool definition for AI model function calling.
+  Tool definition for AI model function calling.
 
   Tools enable AI models to call external functions, perform actions, and retrieve information.
   Each tool has a name, description, parameters schema, and a callback function to execute.

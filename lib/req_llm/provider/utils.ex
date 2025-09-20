@@ -113,6 +113,4 @@ defmodule ReqLLM.Provider.Utils do
   end
 
   def ensure_parsed_body(body), do: body
-
-
 end

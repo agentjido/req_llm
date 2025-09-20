@@ -240,10 +240,7 @@ defmodule ReqLLM.Embedding do
   end
 
   defp validate_text("") do
-    {:error,
-     ReqLLM.Error.Invalid.Parameter.exception(
-       parameter: "text: cannot be empty"
-     )}
+    {:error, ReqLLM.Error.Invalid.Parameter.exception(parameter: "text: cannot be empty")}
   end
 
   defp validate_text(text) when is_binary(text) do
@@ -251,10 +248,7 @@ defmodule ReqLLM.Embedding do
   end
 
   defp validate_texts([]) do
-    {:error,
-     ReqLLM.Error.Invalid.Parameter.exception(
-       parameter: "texts: cannot be empty"
-     )}
+    {:error, ReqLLM.Error.Invalid.Parameter.exception(parameter: "texts: cannot be empty")}
   end
 
   defp validate_texts(texts) when is_list(texts) do
