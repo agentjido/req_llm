@@ -34,7 +34,7 @@ defmodule ReqLLM.Coverage.Anthropic.CoreTest do
       ReqLLM.generate_text(
         "anthropic:claude-3-haiku-20240307",
         "Count from 1 to 10, then say STOP",
-        stop_sequences: ["STOP"],
+        stop: ["STOP"],
         max_tokens: 50,
         fixture: "stop_sequences"
       )

@@ -91,7 +91,10 @@ defmodule ReqLLM.Providers.Groq do
         _tokens -> opts_with_tool
       end
 
-    prepare_request(:chat, model_spec, prompt, opts_with_tokens)
+    # Preserve the :object operation for response decoding
+    opts_with_operation = Keyword.put(opts_with_tokens, :operation, :object)
+
+    prepare_request(:chat, model_spec, prompt, opts_with_operation)
   end
 
   # Delegate all other operations to defaults

@@ -301,6 +301,7 @@ defmodule ReqLLM.Provider.Defaults do
         provider_mod.supported_provider_options()
 
     request
+    |> Req.Request.put_header("content-type", "application/json")
     |> Req.Request.put_header("authorization", "Bearer #{api_key}")
     |> Req.Request.register_options(extra_option_keys)
     |> Req.Request.merge_options([model: model.model, auth: {:bearer, api_key}] ++ user_opts)
