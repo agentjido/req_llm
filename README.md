@@ -4,164 +4,141 @@
 [![Documentation](https://img.shields.io/badge/hex-docs-blue.svg)](https://hexdocs.pm/req_llm)
 [![License](https://img.shields.io/hexpm/l/req_llm.svg)](https://github.com/agentjido/req_llm/blob/main/LICENSE)
 
-A [Req](https://github.com/wojtekmach/req)-based library for LLM interactions, providing a unified interface to AI providers through a plugin-based architecture.
+A [Req](https://github.com/wojtekmach/req)-based package to call LLM APIs. The purpose is to standardize the API calls and API responses for all supported LLM providers.
 
-## Why ReqLLM?
+## Why Req LLM?
 
-ReqLLM brings the composability and middleware advantages of the Req ecosystem to LLM interactions. With its plugin architecture, provider/model auto-sync, typed data structures, and ergonomic helpers, it provides a robust foundation for building AI-powered applications in Elixir while leveraging Req's powerful middleware, tracing, and instrumentation capabilities.
+LLM API's are often inconsistent. ReqLLM aims to provide a consistent, data-driven, idiomatic Elixir interface to make requests to these API's and standardize the responses, making it easier to work with LLMs in Elixir.  
 
-## Installation
+This package provides **two-layers** of client interfaces. The top layer is a high-level, provider-agnostic interface that mimic's the Vercel AI SDK and lives in `ReqLLM.ex` using methods like `generate_text/3`. This package seeks to standardize this high-level API across all supported providers, making it easy for Elixir developers to with standard features supported by LLMs. However, any high level abstraction requires trade-offs in terms of flexibility and customization.
 
-Add `req_llm` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:req_llm, "~> 1.0-rc"}
-  ]
-end
-```
-
-**Requirements:** Elixir ~> 1.15, OTP 24+
-
-## Features
-
-- **45 providers / 665+ models** auto-synced from [models.dev](https://models.dev) (`mix req_llm.models.sync`)
-  - Cost, context length, modality and capability metadata included
-- **Typed data structures** for every call
-  - Context, Message, ContentPart, StreamChunk, Tool
-  - All structs are `Jason.Encoder`s and can be inspected / persisted
-  
-- **Two ergonomic client layers**
-  - Low-level `Req` plugin interface with full HTTP + model metadata
-  - Vercel AI-style helpers (`generate_text/3`, `stream_text/3`, bang `!` variants)
-- **Streaming built in** (`ReqLLM.stream_text/3`) — each chunk is a `StreamChunk`
-- **Usage & cost extraction** on every response (`response.usage`)
-- **Plugin-based provider system**
-  - Anthropic, OpenAI, Groq, Google, xAI and OpenRouter included
-  - Automatic parameter translation for model-specific requirements
-  - Easily extendable with new providers (see [Adding a Provider Guide](guides/adding_a_provider.md))
-- **Context Codec protocol** converts ReqLLM structs to provider wire formats
-- **Extensive test matrix** (local fixtures + optional live calls)
+The low-level client interface directly utilizes `Req` plugins to make HTTP requests to the LLM API's.  This layer is more flexible and customizable, but requires more knowledge of the underlying API's.  This package is built around the OpenAI API Baseline standard, making it easier to implement providers that follow this standard. Providers such as _Anthropic_ who do not follow the OpenAI standard are heavily customized through callbacks and protocols.
 
 ## Quick Start
 
 ```elixir
-# Configure API keys (recommended approach)
-ReqLLM.put_key(:anthropic_api_key, "sk-ant-...")
-
-# Override per-request (highest priority)
-# Per-request: ReqLLM.generate_text(model, "hi", api_key: "sk-live-...")
-
-# Alternative methods:
-# Environment: System.put_env("ANTHROPIC_API_KEY", "sk-ant-...")  
-# Application: Application.put_env(:req_llm, :anthropic_api_key, "sk-ant-...")
-# .env files are auto-loaded via JidoKeys integration
-
+# Keys are picked up from .env files or environment variables - see `ReqLLM.Keys`
 model = "anthropic:claude-3-sonnet"
 
-# Simple text generation
 ReqLLM.generate_text!(model, "Hello world")
 #=> "Hello! How can I assist you today?"
 
-# Structured data generation
 schema = [name: [type: :string, required: true], age: [type: :pos_integer]]
 person = ReqLLM.generate_object!(model, "Generate a person", schema)
 #=> %{name: "John Doe", age: 30}
 
-# With system prompts and parameters
 {:ok, response} = ReqLLM.generate_text(
   model,
-  [
-    system("You are a helpful coding assistant"),
-    user("Explain recursion in Elixir")
-  ],
+  ReqLLM.Context.new([
+    ReqLLM.Context.system("You are a helpful coding assistant"),
+    ReqLLM.Context.user("Explain recursion in Elixir")
+  ]),
   temperature: 0.7,
   max_tokens: 200
 )
 
-# Tool calling
-weather_tool = ReqLLM.tool(
-  name: "get_weather",
-  description: "Get current weather for a location",
-  parameter_schema: [
-    location: [type: :string, required: true, doc: "City name"]
-  ],
-  callback: fn args -> {:ok, "Sunny, 72°F"} end
-)
 
 {:ok, response} = ReqLLM.generate_text(
   model,
   "What's the weather in Paris?",
-  tools: [weather_tool]
+  tools: [
+    ReqLLM.tool(
+      name: "get_weather",
+      description: "Get current weather for a location",
+      parameter_schema: [
+        location: [type: :string, required: true, doc: "City name"]
+      ],
+      callback: {Weather, :fetch_weather, [:extra, :args]}
+    )
+  ]
 )
 
-# Streaming text generation
 ReqLLM.stream_text!(model, "Write a short story")
 |> Stream.each(&IO.write(&1.text))
 |> Stream.run()
-
-# Embeddings
-{:ok, embeddings} = ReqLLM.embed_many("openai:text-embedding-3-small", ["Hello", "World"])
 ```
 
-## Provider Support
+## Features
 
-| Provider   | Chat | Streaming | Tools | Embeddings |
-|------------|------|-----------|-------|------------|
-| Anthropic  | ✓    | ✓         | ✓     | ✗          |
-| OpenAI     | ✓    | ✓         | ✓     | ✓          |
-| Google     | ✓    | ✓         | ✓     | ✗          |
-| Groq       | ✓    | ✓         | ✓     | ✗          |
-| xAI        | ✓    | ✓         | ✓     | ✗          |
-| OpenRouter | ✓    | ✓         | ✓     | ✗          |
+- **Provider-agnostic model registry**  
+  - 45 providers / 665+ models auto-synced from [models.dev](https://models.dev) (`mix req_llm.models.sync`)  
+  - Cost, context length, modality, capability and deprecation metadata included
+
+- **Canonical data model**  
+  - Typed `Context`, `Message`, `ContentPart`, `Tool`, `StreamChunk`, `Response`, `Usage`  
+  - Multi-modal content parts (text, image URL, tool call, binary)  
+  - All structs implement `Jason.Encoder` for simple persistence / inspection  
+
+- **Two client layers**  
+  - Low-level Req plugin with full HTTP control (`Provider.prepare_request/4`, `attach/3`)  
+  - High-level Vercel-AI style helpers (`generate_text/3`, `stream_text/3`, `generate_object/4`, bang variants)  
+
+- **Structured object generation**  
+  - `generate_object/4` renders JSON-compatible Elixir maps validated by a NimbleOptions-compiled schema  
+  - Zero-copy mapping to provider JSON-schema / function-calling endpoints  
+
+- **Embedding generation**  
+  - Single or batch embeddings via `Embedding.generate/3` (Not all providers support this)
+  - Automatic dimension / encoding validation and usage accounting
+
+- **First-class streaming**  
+  - `stream_text/3` returns a lazy `Stream` of `StreamChunk` structs with delta text, role, index  
+  - Works uniformly across providers with internal SSE / chunked-response adaptation  
+
+- **Usage & cost tracking**  
+  - `response.usage` exposes input/output tokens and USD cost, calculated from model metadata or provider invoices  
+
+- **Schema-driven option validation**  
+  - All public APIs validate options with NimbleOptions; errors are raised as `ReqLLM.Error.Invalid.*` (Splode)  
+
+- **Automatic parameter translation & codecs**  
+  - Provider DSL translates canonical options (e.g. `max_tokens` -> `max_completion_tokens` for o1 & o3) to provider-specific names  
+  - `Context.Codec` and `Response.Codec` protocols map ReqLLM structs to wire formats and back  
+
+- **Flexible model specification**  
+  - Accepts `"provider:model"`, `{:provider, "model", opts}` tuples, or `%ReqLLM.Model{}` structs  
+  - Helper functions for parsing, introspection and default-merging  
+
+- **Secure, layered key management** (`ReqLLM.Keys`)  
+  - Per-request override → in-memory keyring (JidoKeys) → application config → env vars /.env files  
+
+- **Extensive reliability tooling**  
+  - Fixture-backed test matrix (`LiveFixture`) supports cached, live, or provider-filtered runs  
+  - Dialyzer, Credo strict rules, and no-comment enforcement keep code quality high
 
 ## API Key Management
 
-ReqLLM provides flexible API key management with clear precedence order:
+ReqLLM makes key management as easy and flexible as possible - this needs to _just work_.
 
-1. **Per-request keys** (highest priority)
-2. **ReqLLM.put_key** (recommended - secure in-memory storage)
-3. **Application configuration**
-4. **Environment variables**
-5. **JidoKeys** (.env auto-loading)
+**Please submit a PR if your key management use case is not covered**
+
+Keys are pulled from multiple sources with clear precedence: per-request override → in-memory storage → application config → environment variables → .env files.
 
 ```elixir
-# Recommended: Secure in-memory storage
+# Store keys in memory (recommended)
 ReqLLM.put_key(:openai_api_key, "sk-...")
 ReqLLM.put_key(:anthropic_api_key, "sk-ant-...")
 
-# Per-request override (highest priority)
+# Retrieve keys with source info
+{:ok, key, source} = ReqLLM.get_key(:openai)
+```
+
+All functions accept an `api_key` parameter to override the stored key:
+
+```elixir
 ReqLLM.generate_text("openai:gpt-4", "Hello", api_key: "sk-...")
-
-# Alternative: Application configuration
-Application.put_env(:req_llm, :openai_api_key, "sk-...")
-
-# Alternative: Environment variables
-System.put_env("OPENAI_API_KEY", "sk-...")
-
-# .env files are automatically loaded via JidoKeys integration
-# OPENAI_API_KEY=sk-...
-# ANTHROPIC_API_KEY=sk-ant-...
-
-# Helper functions show expected keys
-ReqLLM.Keys.env_var_name(:openai)    #=> "OPENAI_API_KEY"
-ReqLLM.Keys.config_key(:openai)      #=> :openai_api_key
-
-# Debug key source (useful for troubleshooting)
-{:ok, key, source} = ReqLLM.Keys.get(:openai)
-#=> {:ok, "sk-...", :jido}  # Shows key came from ReqLLM.put_key
+ReqLLM.stream_text("anthropic:claude-3-sonnet", "Story", api_key: "sk-ant-...")
 ```
 
 ## Usage Cost Tracking
 
-Every response includes detailed usage and cost information:
+Every response includes detailed usage and cost information calculated from model metadata:
 
 ```elixir
 {:ok, response} = ReqLLM.generate_text("openai:gpt-4", "Hello")
 
 response.usage
-#=> %ReqLLM.Usage{
+#=> %{
 #     input_tokens: 8,
 #     output_tokens: 12,
 #     total_tokens: 20,
@@ -171,41 +148,41 @@ response.usage
 #   }
 ```
 
+A telemetry event `[:req_llm, :token_usage]` is published on every request with token counts and calculated costs.
+
 ## Adding a Provider
 
-See the [Adding a Provider Guide](guides/adding_a_provider.md) for detailed instructions on implementing new providers using the `ReqLLM.Plugin` behaviour.
+ReqLLM uses OpenAI Chat Completions as the baseline API standard. Providers that support this format (like Groq, OpenRouter, xAI) require minimal overrides using the `ReqLLM.Provider.DSL`. Model metadata is automatically synced from [models.dev](https://models.dev).
+
+Providers implement the `ReqLLM.Provider` behavior with functions like `encode_body/1`, `decode_response/1`, and optional parameter translation via `translate_options/3`.
+
+See the [Adding a Provider Guide](guides/adding_a_provider.md) for detailed implementation instructions.
 
 ## Lower-Level Req Plugin API
 
-For advanced use cases, you can use ReqLLM providers directly as Req plugins:
+For advanced use cases, you can use ReqLLM providers directly as Req plugins. This is the canonical implementation used by `ReqLLM.generate_text/3`:
 
 ```elixir
-alias ReqLLM.Providers.Anthropic
+# The canonical pattern from ReqLLM.Generation.generate_text/3
+with {:ok, model} <- ReqLLM.Model.from("anthropic:claude-3-sonnet"), # Parse model spec
+     {:ok, provider_module} <- ReqLLM.provider(model.provider),        # Get provider module
+     {:ok, request} <- provider_module.prepare_request(:chat, model, "Hello!", temperature: 0.7), # Build Req request
+     {:ok, %Req.Response{body: response}} <- Req.request(request) do   # Execute HTTP request
+  {:ok, response}
+end
 
-# Configure your API key
-ReqLLM.put_key(:anthropic_api_key, "sk-ant-...")
+# Customize the Req pipeline with additional headers or middleware
+{:ok, model} = ReqLLM.Model.from("anthropic:claude-3-sonnet")
+{:ok, provider_module} = ReqLLM.provider(model.provider)
+{:ok, request} = provider_module.prepare_request(:chat, model, "Hello!", temperature: 0.7)
 
-# Build context and model
-context = ReqLLM.Context.new([
-  ReqLLM.Context.system("You are a helpful assistant"),  
-  ReqLLM.Context.user("Hello!")
-])
-model = ReqLLM.Model.from!("anthropic:claude-3-sonnet")
+# Add custom headers or middleware before sending
+custom_request = 
+  request
+  |> Req.Request.put_header("x-request-id", "my-custom-id")
+  |> Req.Request.put_header("x-source", "my-app")
 
-# Option 1: Use provider's prepare_request (recommended)
-{:ok, request} = Anthropic.prepare_request(:chat, model, context, temperature: 0.7)
-{:ok, response} = Req.request(request)
-
-# Option 2: Build Req request manually with attach
-request = 
-  Req.new(url: "/messages", method: :post)
-  |> Anthropic.attach(model, context: context, temperature: 0.7)
-
-{:ok, response} = Req.request(request)
-
-# Access response data
-response.body["content"]
-#=> [%{"type" => "text", "text" => "Hello! How can I help you today?"}]
+{:ok, response} = Req.request(custom_request)
 ```
 
 This approach gives you full control over the Req pipeline, allowing you to add custom middleware, modify requests, or integrate with existing Req-based applications.
@@ -238,11 +215,8 @@ mix deps.get
 # Run tests with cached fixtures
 mix test
 
-# Run tests against live APIs (regenerates fixtures)
-LIVE=true mix test
-
 # Run quality checks
-mix q  # format, compile, dialyzer, credo
+mix quality  # format, compile, dialyzer, credo
 
 # Generate documentation
 mix docs
@@ -250,27 +224,23 @@ mix docs
 
 ### Testing with Fixtures
 
-ReqLLM uses a sophisticated fixture system powered by `LiveFixture`:
+Tests use cached JSON fixtures by default. To regenerate fixtures against live APIs (optional):
 
-- **Default mode**: Tests run against cached JSON fixtures
-- **Live mode** (`LIVE=true`): Tests run against real APIs and regenerate fixtures
-- **Provider filtering** (`FIXTURE_FILTER=anthropic`): Regenerate fixtures for specific providers only
+```bash
+# Regenerate all fixtures
+LIVE=true mix test
+
+# Regenerate specific provider fixtures using test tags
+LIVE=true mix test --only "provider:anthropic"
+```
 
 ## Contributing
 
-We welcome contributions! Please:
-
 1. Fork the repository
-2. Create a feature branch
+2. Create a feature branch  
 3. Add tests for your changes
-4. Run `mix q` to ensure quality standards
+4. Run `mix quality` to ensure standards
 5. Submit a pull request
-
-### Running Tests
-
-- `mix test` - Run all tests with fixtures
-- `LIVE=true mix test` - Run against live APIs (requires API keys)
-- `FIXTURE_FILTER=openai mix test` - Limit to specific provider
 
 ## License
 
