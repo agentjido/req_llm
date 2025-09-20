@@ -7,7 +7,7 @@ defmodule ReqLLM.MessagingTest do
   describe "ContentPart" do
     test "creates content parts" do
       assert %ContentPart{type: :text, text: "Hello"} = ContentPart.text("Hello")
-      assert %ContentPart{type: :reasoning, text: "Think..."} = ContentPart.reasoning("Think...")
+      assert %ContentPart{type: :thinking, text: "Think..."} = ContentPart.thinking("Think...")
 
       assert %ContentPart{type: :image_url, url: "http://ex.com/img.jpg"} =
                ContentPart.image_url("http://ex.com/img.jpg")
@@ -73,8 +73,8 @@ defmodule ReqLLM.MessagingTest do
 
       assert inspect(%Message{
                role: :assistant,
-               content: [ContentPart.text("Hi"), ContentPart.reasoning("Think")]
-             }) =~ "#Message<:assistant text,reasoning>"
+               content: [ContentPart.text("Hi"), ContentPart.thinking("Think")]
+             }) =~ "#Message<:assistant text,thinking>"
 
       assert inspect(%Message{role: :system, content: []}) =~ "#Message<:system >"
     end

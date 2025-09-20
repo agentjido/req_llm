@@ -108,7 +108,7 @@ defmodule ReqLLM.Keys do
   @spec env_var_name(atom) :: String.t()
   def env_var_name(provider) when is_atom(provider) do
     # Try provider's default_env_key callback first
-    case ReqLLM.Provider.get(provider) do
+    case ReqLLM.Provider.Registry.get_provider(provider) do
       {:ok, module} ->
         if function_exported?(module, :default_env_key, 0) do
           module.default_env_key()

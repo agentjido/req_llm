@@ -20,7 +20,7 @@ defmodule ReqLLM.Capability do
   def capabilities(model_input) do
     with {:ok, %ReqLLM.Model{provider: provider, model: model_name}} <-
            normalize_model(model_input),
-         {:ok, metadata} <- get_model_metadata(provider, model_name) do
+         {:ok, metadata} <- ReqLLM.Model.Metadata.get_model_metadata(provider, model_name) do
       extract_capabilities(metadata)
     else
       _ -> []
@@ -216,25 +216,4 @@ defmodule ReqLLM.Capability do
     do: "#{provider}:#{model}"
 
   defp format_model_name(model_spec) when is_binary(model_spec), do: model_spec
-
-  # Get model metadata from registry
-  defp get_model_metadata(provider, model_name) do
-    case Registry.get_provider_metadata(provider) do
-      {:ok, provider_metadata} ->
-        models =
-          Map.get(provider_metadata, :models) ||
-            Map.get(provider_metadata, "models") ||
-            []
-
-        case Enum.find(models, fn model ->
-               (Map.get(model, :id) || Map.get(model, "id")) == model_name
-             end) do
-          nil -> {:error, :model_not_found}
-          model_metadata -> {:ok, model_metadata}
-        end
-
-      {:error, _reason} ->
-        {:error, :model_not_found}
-    end
-  end
 end

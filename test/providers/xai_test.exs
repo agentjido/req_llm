@@ -597,9 +597,11 @@ defmodule ReqLLM.Providers.XAITest do
           Context.user("Hello")
         ])
 
-      assert_raise ArgumentError, ~r/should have at most one system message/, fn ->
-        Context.validate!(invalid_context)
-      end
+      assert_raise ReqLLM.Error.Validation.Error,
+                   ~r/should have at most one system message/,
+                   fn ->
+                     Context.validate!(invalid_context)
+                   end
     end
   end
 

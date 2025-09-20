@@ -5,8 +5,9 @@ defmodule ReqLLM.ModelCoverageTest do
 
   describe "with_metadata/1 edge cases" do
     test "handles model not found in provider file" do
-      {:error, reason} = Model.with_metadata("anthropic:definitely-does-not-exist")
-      assert is_binary(reason) and String.contains?(reason, "not found")
+      {:error, error} = Model.with_metadata("anthropic:definitely-does-not-exist")
+      assert error.class == :validation and error.tag == :model_not_found
+      assert String.contains?(error.reason, "not found")
     end
 
     test "handles unknown provider error" do

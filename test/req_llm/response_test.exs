@@ -1,6 +1,20 @@
 # Shared test helpers
 defmodule ReqLLM.ResponseTest.Helpers do
+  import ExUnit.Assertions
+
   alias ReqLLM.{Context, Message, Message.ContentPart, Response}
+
+  @doc """
+  Assert multiple struct fields at once for cleaner tests.
+  """
+  def assert_fields(struct, expected_fields) when is_list(expected_fields) do
+    Enum.each(expected_fields, fn {field, expected_value} ->
+      actual_value = Map.get(struct, field)
+
+      assert actual_value == expected_value,
+             "Expected #{field} to be #{inspect(expected_value)}, got #{inspect(actual_value)}"
+    end)
+  end
 
   def create_response(opts \\ []) do
     defaults = %{
@@ -52,19 +66,20 @@ defmodule ReqLLM.ResponseTest do
 
       response = create_response(id: "test-123", context: context, message: message)
 
-      assert %Response{
-               id: "test-123",
-               model: "test-model",
-               context: ^context,
-               message: ^message,
-               object: nil,
-               stream?: false,
-               stream: nil,
-               usage: nil,
-               finish_reason: nil,
-               provider_meta: %{},
-               error: nil
-             } = response
+      # Test all default values efficiently
+      assert_fields(response,
+        id: "test-123",
+        model: "test-model",
+        context: context,
+        message: message,
+        object: nil,
+        stream?: false,
+        stream: nil,
+        usage: nil,
+        finish_reason: nil,
+        provider_meta: %{},
+        error: nil
+      )
     end
 
     test "struct enforces required fields" do
@@ -122,9 +137,9 @@ defmodule ReqLLM.ResponseTest do
       end
     end
 
-    test "returns empty string when message is nil" do
+    test "returns nil when message is nil" do
       response = create_response(message: nil)
-      assert Response.text(response) == ""
+      assert Response.text(response) == nil
     end
   end
 
@@ -362,7 +377,7 @@ defmodule ReqLLM.ResponseTest do
       error_stream = Stream.repeatedly(fn -> raise "Stream error" end)
       response = create_response(message: nil, stream?: true, stream: error_stream)
 
-      assert {:error, %RuntimeError{message: "Stream error"}} = Response.join_stream(response)
+      assert {:error, %Error.API.Stream{}} = Response.join_stream(response)
     end
 
     test "preserves original response fields" do
@@ -385,6 +400,33 @@ defmodule ReqLLM.ResponseTest do
       assert materialized.model == "original-model"
       assert materialized.finish_reason == :length
       assert materialized.provider_meta == %{custom: "data"}
+    end
+
+    test "property: text_stream followed by join equals text extraction" do
+      # Generate test data with multiple content chunks
+      text_parts = ["Hello", " ", "world", "!", " How", " are", " you?"]
+      chunks = Enum.map(text_parts, &%StreamChunk{type: :content, text: &1})
+
+      response =
+        create_response(
+          message: nil,
+          stream?: true,
+          stream: Stream.cycle(chunks) |> Stream.take(length(chunks))
+        )
+
+      # Join the stream and extract text
+      {:ok, joined} = Response.join_stream(response)
+      joined_text = Response.text(joined)
+
+      # Collect text stream and join manually
+      streamed_text =
+        response
+        |> Response.text_stream()
+        |> Enum.join("")
+
+      # Property: both methods should produce the same result
+      assert joined_text == streamed_text
+      assert joined_text == Enum.join(text_parts, "")
     end
   end
 

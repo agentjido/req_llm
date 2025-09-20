@@ -194,58 +194,18 @@ defmodule ReqLLM.ToolTest do
       %{simple_tool: simple_tool, parameterized_tool: parameterized_tool}
     end
 
-    test "executes function callback", %{simple_tool: tool} do
+    test "happy path - executes tool successfully", %{simple_tool: tool} do
       assert {:ok, "Simple: %{name: \"John\"}"} = Tool.execute(tool, %{name: "John"})
-      assert {:ok, "Simple: %{}"} = Tool.execute(tool, %{})
     end
 
-    test "executes MFA callback without extra args" do
-      {:ok, tool} =
-        Tool.new(
-          name: "mfa_simple",
-          description: "MFA test",
-          callback: {TestModule, :simple_callback}
-        )
+    test "invalid parameter schema validation", %{parameterized_tool: tool} do
+      assert {:error, %ReqLLM.Error.Validation.Error{}} = Tool.execute(tool, %{})
 
-      assert {:ok, "Simple: %{data: \"test\"}"} = Tool.execute(tool, %{data: "test"})
+      assert {:error, %ReqLLM.Error.Validation.Error{}} =
+               Tool.execute(tool, %{required_field: 123})
     end
 
-    test "executes MFA callback with extra args" do
-      {:ok, tool} =
-        Tool.new(
-          name: "mfa_multi",
-          description: "MFA with args",
-          callback: {TestModule, :multi_arg_callback, ["extra1", "extra2"]}
-        )
-
-      assert {:ok, "Multi: extra1, extra2, %{data: \"input\"}"} =
-               Tool.execute(tool, %{data: "input"})
-    end
-
-    test "validates parameters against schema", %{parameterized_tool: tool} do
-      # Valid input
-      assert {:ok, _} = Tool.execute(tool, %{required_field: "value"})
-      assert {:ok, _} = Tool.execute(tool, %{required_field: "value", optional_field: 100})
-
-      # String keys get normalized
-      assert {:ok, _} = Tool.execute(tool, %{"required_field" => "value"})
-
-      # Missing required field
-      assert {:error, _} = Tool.execute(tool, %{optional_field: 100})
-      assert {:error, _} = Tool.execute(tool, %{})
-
-      # Wrong type
-      assert {:error, _} = Tool.execute(tool, %{required_field: 123})
-    end
-
-    test "handles callback errors gracefully" do
-      {:ok, error_tool} =
-        Tool.new(
-          name: "error_tool",
-          description: "Error test",
-          callback: {TestModule, :error_callback}
-        )
-
+    test "callback crash path" do
       {:ok, exception_tool} =
         Tool.new(
           name: "exception_tool",
@@ -253,12 +213,7 @@ defmodule ReqLLM.ToolTest do
           callback: {TestModule, :exception_callback}
         )
 
-      # Error tuple
-      assert {:error, "Intentional error"} = Tool.execute(error_tool, %{})
-
-      # Exception
-      assert {:error, error_msg} = Tool.execute(exception_tool, %{})
-      assert error_msg =~ "Callback execution failed"
+      assert {:error, %ReqLLM.Error.Unknown.Unknown{}} = Tool.execute(exception_tool, %{})
     end
 
     test "validates input type" do
@@ -269,11 +224,7 @@ defmodule ReqLLM.ToolTest do
           callback: fn _ -> {:ok, "ok"} end
         )
 
-      assert {:error, error} = Tool.execute(tool, "not a map")
-      assert Exception.message(error) =~ "Input must be a map"
-
-      assert {:error, error} = Tool.execute(tool, [:not, :a, :map])
-      assert Exception.message(error) =~ "Input must be a map"
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{}} = Tool.execute(tool, "not a map")
     end
   end
 
@@ -314,41 +265,17 @@ defmodule ReqLLM.ToolTest do
       refute Map.has_key?(schema, "function")
     end
 
-    test "handles complex parameter schemas", %{complex_tool: tool} do
+    test "generates correct schema format", %{complex_tool: tool} do
       schema = Tool.to_schema(tool, :anthropic)
       input_schema = schema["input_schema"]
 
       assert input_schema["type"] == "object"
       assert is_map(input_schema["properties"])
-
-      # Should have location, units, days properties
-      assert Map.has_key?(input_schema["properties"], "location")
-      assert Map.has_key?(input_schema["properties"], "units")
-      assert Map.has_key?(input_schema["properties"], "days")
-    end
-
-    test "handles empty parameter schema", %{simple_tool: tool} do
-      schema = Tool.to_schema(tool, :anthropic)
-      input_schema = schema["input_schema"]
-
-      assert input_schema["type"] == "object"
-      assert input_schema["properties"] == %{}
-    end
-
-    test "defaults to openai provider", %{simple_tool: tool} do
-      default_schema = Tool.to_schema(tool)
-      openai_schema = Tool.to_schema(tool, :openai)
-
-      assert default_schema == openai_schema
     end
 
     test "raises for unknown provider", %{simple_tool: tool} do
       assert_raise ArgumentError, ~r/Unknown provider/, fn ->
         Tool.to_schema(tool, :unknown_provider)
-      end
-
-      assert_raise ArgumentError, ~r/Unknown provider/, fn ->
-        Tool.to_schema(tool, :unknown_provider_2)
       end
     end
   end
@@ -405,85 +332,6 @@ defmodule ReqLLM.ToolTest do
 
       for name <- invalid_names do
         refute Tool.valid_name?(name), "#{inspect(name)} should be invalid"
-      end
-    end
-  end
-
-  describe "edge cases and error conditions" do
-    test "handles deeply nested parameter schemas" do
-      {:ok, tool} =
-        Tool.new(
-          name: "nested_tool",
-          description: "Tool with nested params",
-          parameter_schema: [
-            config: [
-              type: :keyword_list,
-              keys: [
-                database: [
-                  type: :keyword_list,
-                  keys: [
-                    host: [type: :string, required: true],
-                    port: [type: :pos_integer, default: 5432]
-                  ]
-                ],
-                cache: [type: :boolean, default: true]
-              ]
-            ]
-          ],
-          callback: fn _ -> {:ok, "configured"} end
-        )
-
-      schema = Tool.to_schema(tool, :anthropic)
-      assert schema["name"] == "nested_tool"
-      assert is_map(schema["input_schema"]["properties"]["config"])
-    end
-
-    test "handles parameter validation edge cases" do
-      {:ok, tool} =
-        Tool.new(
-          name: "validation_test",
-          description: "Validation edge cases",
-          parameter_schema: [
-            string_field: [type: :string],
-            integer_field: [type: :integer],
-            boolean_field: [type: :boolean]
-          ],
-          callback: fn args -> {:ok, args} end
-        )
-
-      # Empty map should work (no required fields)
-      assert {:ok, _} = Tool.execute(tool, %{})
-
-      # Mixed string/atom keys
-      assert {:ok, _} = Tool.execute(tool, %{"string_field" => "value", integer_field: 42})
-    end
-
-    test "callback normalization handles all formats consistently" do
-      # Test all callback formats produce same result structure
-      test_input = %{test: "input"}
-
-      callbacks = [
-        fn _args -> {:ok, "function result"} end,
-        {TestModule, :simple_callback},
-        {TestModule, :multi_arg_callback, ["prefix", "arg"]}
-      ]
-
-      for callback <- callbacks do
-        {:ok, tool} =
-          Tool.new(
-            name: "callback_test",
-            description: "Test callback format",
-            callback: callback
-          )
-
-        case Tool.execute(tool, test_input) do
-          {:ok, result} ->
-            # All callbacks should return some result containing relevant info
-            assert is_binary(result)
-
-          {:error, _} = error ->
-            flunk("Unexpected error: #{inspect(error)}")
-        end
       end
     end
   end

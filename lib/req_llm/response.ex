@@ -62,7 +62,8 @@ defmodule ReqLLM.Response do
   Extract text content from the response message.
 
   Returns the concatenated text from all content parts in the assistant message.
-  For streaming responses, this may be nil until the stream is joined.
+  Returns nil when no message is present. For streaming responses, this may be nil 
+  until the stream is joined.
 
   ## Examples
 
@@ -70,8 +71,8 @@ defmodule ReqLLM.Response do
       "Hello! I'm Claude and I can help you with questions."
 
   """
-  @spec text(t()) :: String.t()
-  def text(%__MODULE__{message: nil}), do: ""
+  @spec text(t()) :: String.t() | nil
+  def text(%__MODULE__{message: nil}), do: nil
 
   def text(%__MODULE__{message: %Message{content: content}}) do
     content
@@ -166,13 +167,40 @@ defmodule ReqLLM.Response do
 
   """
   @spec text_stream(t()) :: Enumerable.t()
-  def text_stream(%__MODULE__{stream?: false}), do: [] |> Stream.map(& &1)
-  def text_stream(%__MODULE__{stream: nil}), do: [] |> Stream.map(& &1)
+  def text_stream(%__MODULE__{stream?: false}), do: []
+  def text_stream(%__MODULE__{stream: nil}), do: []
 
   def text_stream(%__MODULE__{stream: stream}) do
     stream
     |> Stream.filter(&(&1.type == :content))
     |> Stream.map(& &1.text)
+  end
+
+  # ---------- Stream Helpers ----------
+
+  @doc """
+  Create a stream of structured objects from a streaming response.
+
+  Only yields valid objects from tool call stream chunks, filtering out
+  metadata and other chunk types.
+
+  ## Examples
+
+      response
+      |> ReqLLM.Response.object_stream()
+      |> Stream.each(&IO.inspect/1)
+      |> Stream.run()
+
+  """
+  @spec object_stream(t()) :: Enumerable.t()
+  def object_stream(%__MODULE__{stream?: false}), do: []
+  def object_stream(%__MODULE__{stream: nil}), do: []
+
+  def object_stream(%__MODULE__{stream: stream}) do
+    stream
+    |> Stream.filter(&(&1.type == :tool_call))
+    |> Stream.filter(&(&1.name == "structured_output"))
+    |> Stream.map(& &1.arguments)
   end
 
   @doc """
@@ -191,42 +219,7 @@ defmodule ReqLLM.Response do
   def join_stream(%__MODULE__{stream: nil} = response), do: {:ok, response}
 
   def join_stream(%__MODULE__{stream: stream} = response) do
-    # Collect all stream chunks
-    chunks = Enum.to_list(stream)
-
-    # Build message from content chunks
-    content_text =
-      chunks
-      |> Enum.filter(&(&1.type == :content))
-      |> Enum.map_join("", & &1.text)
-
-    # Extract final usage and metadata from meta chunks
-    final_usage =
-      chunks
-      |> Enum.filter(&(&1.type == :meta))
-      |> Enum.reduce(response.usage, fn chunk, acc ->
-        Map.merge(acc || %{}, chunk.usage || %{})
-      end)
-
-    # Build the assistant message
-    message = %Message{
-      role: :assistant,
-      content: [%{type: :text, text: content_text}],
-      metadata: %{}
-    }
-
-    # Update response with materialized data
-    updated_response = %{
-      response
-      | message: message,
-        usage: final_usage,
-        stream?: false,
-        stream: nil
-    }
-
-    {:ok, updated_response}
-  rescue
-    error -> {:error, error}
+    ReqLLM.Response.Stream.join(stream, response)
   end
 
   @doc """
@@ -256,8 +249,8 @@ defmodule ReqLLM.Response do
   """
   @spec decode_response(term(), Model.t() | String.t()) :: {:ok, t()} | {:error, term()}
   def decode_response(raw_data, model_input) do
-    model = resolve_model(model_input)
-    {:ok, provider_mod} = ReqLLM.Provider.get(model.provider)
+    model = if is_binary(model_input), do: Model.from!(model_input), else: model_input
+    {:ok, provider_mod} = ReqLLM.Provider.Registry.get_provider(model.provider)
 
     wrapped_data =
       if function_exported?(provider_mod, :wrap_response, 1) do
@@ -322,13 +315,6 @@ defmodule ReqLLM.Response do
     # object_stream/1 can extract objects from tool_call chunks
   end
 
-  # Helper function to resolve model input to Model struct
-  defp resolve_model(%Model{} = model), do: model
-
-  defp resolve_model(model_string) when is_binary(model_string) do
-    Model.from!(model_string)
-  end
-
   # Helper function to extract structured object from tool calls
   defp extract_object_from_response(response, schema) do
     case tool_calls(response) do
@@ -366,30 +352,5 @@ defmodule ReqLLM.Response do
   @spec object(t()) :: map() | nil
   def object(%__MODULE__{object: object}) do
     object
-  end
-
-  @doc """
-  Create a stream of structured objects from a streaming response.
-
-  Only yields valid objects from tool call stream chunks, filtering out
-  metadata and other chunk types.
-
-  ## Examples
-
-      response
-      |> ReqLLM.Response.object_stream()
-      |> Stream.each(&IO.inspect/1)
-      |> Stream.run()
-
-  """
-  @spec object_stream(t()) :: Enumerable.t()
-  def object_stream(%__MODULE__{stream?: false}), do: [] |> Stream.map(& &1)
-  def object_stream(%__MODULE__{stream: nil}), do: [] |> Stream.map(& &1)
-
-  def object_stream(%__MODULE__{stream: stream}) do
-    stream
-    |> Stream.filter(&(&1.type == :tool_call))
-    |> Stream.filter(&(&1.name == "structured_output"))
-    |> Stream.map(& &1.arguments)
   end
 end

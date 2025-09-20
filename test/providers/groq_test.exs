@@ -540,9 +540,11 @@ defmodule ReqLLM.Providers.GroqTest do
           Context.user("Hello")
         ])
 
-      assert_raise ArgumentError, ~r/Context should have at most one system message/, fn ->
-        Context.validate!(invalid_context)
-      end
+      assert_raise ReqLLM.Error.Validation.Error,
+                   ~r/Context should have at most one system message/,
+                   fn ->
+                     Context.validate!(invalid_context)
+                   end
     end
   end
 end

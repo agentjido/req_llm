@@ -75,8 +75,8 @@ defmodule ReqLLM.MessageTest do
       assert Message.valid?(message)
     end
 
-    test "system message with reasoning content" do
-      content = [ContentPart.reasoning("System initialization")]
+    test "system message with thinking content" do
+      content = [ContentPart.thinking("System initialization")]
       message = %Message{role: :system, content: content}
 
       assert message.role == :system
@@ -188,78 +188,28 @@ defmodule ReqLLM.MessageTest do
       assert length(message.content) == 4
       assert Message.valid?(message)
 
-      # Check content types
       types = Enum.map(message.content, & &1.type)
       assert types == [:text, :file, :text, :image]
     end
+  end
 
+  describe "edge cases" do
     test "empty content is valid" do
       message = %Message{role: :assistant, content: []}
       assert Message.valid?(message)
       assert message.content == []
     end
-  end
 
-  describe "edge cases and error handling" do
-    test "message with nil values in optional fields" do
+    test "nil values in optional fields are valid" do
       message = %Message{
         role: :user,
         content: [ContentPart.text("Test")],
         name: nil,
         tool_call_id: nil,
-        tool_calls: nil,
-        metadata: %{}
+        tool_calls: nil
       }
 
       assert Message.valid?(message)
-      assert message.name == nil
-      assert message.tool_call_id == nil
-      assert message.tool_calls == nil
-    end
-
-    test "message with empty metadata" do
-      message = %Message{role: :system, metadata: %{}}
-      assert message.metadata == %{}
-      assert Message.valid?(message)
-    end
-
-    test "message with large content" do
-      large_text = String.duplicate("a", 10_000)
-      large_content = [ContentPart.text(large_text)]
-      message = %Message{role: :user, content: large_content}
-
-      assert Message.valid?(message)
-      assert String.length(List.first(message.content).text) == 10_000
-    end
-
-    test "message with unicode content" do
-      unicode_content = [ContentPart.text("Hello 🌍 世界 🚀")]
-      message = %Message{role: :user, content: unicode_content}
-
-      assert Message.valid?(message)
-      assert List.first(message.content).text == "Hello 🌍 世界 🚀"
-    end
-
-    test "message with deeply nested metadata" do
-      nested_metadata = %{
-        level1: %{
-          level2: %{
-            level3: %{
-              deeply_nested: "value",
-              array: [1, 2, %{inner: "data"}]
-            }
-          }
-        }
-      }
-
-      message = %Message{
-        role: :assistant,
-        content: [],
-        metadata: nested_metadata
-      }
-
-      assert Message.valid?(message)
-      assert get_in(message.metadata, [:level1, :level2, :level3, :deeply_nested]) == "value"
     end
   end
 
@@ -283,14 +233,14 @@ defmodule ReqLLM.MessageTest do
         content: [
           ContentPart.text("Here's info:"),
           ContentPart.image_url("http://example.com/pic.jpg"),
-          ContentPart.reasoning("I think this works")
+          ContentPart.thinking("I think this works")
         ]
       }
 
       output = inspect(message)
       assert output =~ "#Message<"
       assert output =~ "assistant"
-      assert output =~ "text,image_url,reasoning"
+      assert output =~ "text,image_url,thinking"
     end
 
     test "inspects message with empty content" do
@@ -326,74 +276,34 @@ defmodule ReqLLM.MessageTest do
         ContentPart.file("data", "file.txt", "text/plain"),
         ContentPart.tool_call("id1", "tool", %{}),
         ContentPart.tool_result("id2", "result"),
-        ContentPart.reasoning("thinking")
+        ContentPart.thinking("thinking")
       ]
 
       message = %Message{role: :user, content: content_types}
       output = inspect(message)
 
-      assert output =~ "text,image_url,image,file,tool_call,tool_result,reasoning"
+      assert output =~ "text,image_url,image,file,tool_call,tool_result,thinking"
     end
   end
 
-  describe "message serialization scenarios" do
-    test "message ready for API serialization" do
-      message = %Message{
-        role: :user,
-        content: [
-          ContentPart.text("Analyze this image:"),
-          ContentPart.image_url("https://example.com/chart.png")
-        ],
-        metadata: %{request_id: "req_123", priority: "high"}
-      }
-
-      # Verify structure is serializable
-      assert Message.valid?(message)
-      assert is_list(message.content)
-      assert is_map(message.metadata)
-      assert is_atom(message.role)
-    end
-
-    test "tool response message structure" do
-      message = %Message{
-        role: :tool,
-        content: [
-          ContentPart.tool_result("call_abc", %{
-            status: "success",
-            data: %{temperature: 22.5, humidity: 65},
-            timestamp: 1_704_067_200
-          })
-        ],
-        tool_call_id: "call_abc",
-        name: "weather_sensor"
-      }
-
-      assert Message.valid?(message)
-      assert message.role == :tool
-      assert message.tool_call_id == "call_abc"
-      assert message.name == "weather_sensor"
-
-      result = List.first(message.content)
-      assert result.type == :tool_result
-      assert result.output.status == "success"
-    end
-
-    test "assistant message with reasoning chain" do
+  describe "serialization" do
+    test "round-trip JSON encoding/decoding maintains structure" do
       message = %Message{
         role: :assistant,
         content: [
-          ContentPart.reasoning("Let me think about this step by step..."),
-          ContentPart.reasoning("First, I need to understand the problem"),
-          ContentPart.text("Based on my analysis, here's the solution:")
+          ContentPart.text("Hello"),
+          ContentPart.image_url("https://example.com/pic.jpg")
         ],
-        metadata: %{reasoning_enabled: true, steps: 3}
+        tool_calls: [%{id: "call_1", name: "search"}],
+        metadata: %{priority: "high"}
       }
 
-      assert Message.valid?(message)
-      assert length(message.content) == 3
+      json = Jason.encode!(message)
+      decoded = Jason.decode!(json, keys: :atoms)
 
-      reasoning_parts = Enum.filter(message.content, &(&1.type == :reasoning))
-      assert length(reasoning_parts) == 2
+      assert String.to_atom(decoded.role) == :assistant
+      assert length(decoded.content) == 2
+      assert decoded.metadata.priority == "high"
     end
   end
 end

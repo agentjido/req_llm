@@ -52,6 +52,15 @@ defmodule ReqLLM.Tool do
       # Anthropic tool format
       anthropic_schema = ReqLLM.Tool.to_schema(tool, :anthropic)
 
+  ## Functions
+
+    * `new/1` - Creates a new Tool from the given options
+    * `new!/1` - Creates a new Tool from the given options, raising on error
+    * `execute/2` - Executes a tool with the given input parameters
+    * `to_schema/2` - Converts a Tool to provider-specific schema format
+    * `to_json_schema/1` - Converts a Tool to JSON Schema format for LLM integration
+    * `valid_name?/1` - Validates a tool name for compliance with function calling standards
+
   """
 
   use TypedStruct
@@ -336,7 +345,6 @@ defmodule ReqLLM.Tool do
   defp validate_input(%__MODULE__{compiled: nil}, input), do: {:ok, input}
 
   defp validate_input(%__MODULE__{compiled: schema}, input) do
-    # Convert string keys to atoms for validation
     normalized_input = normalize_input_keys(input)
 
     case NimbleOptions.validate(normalized_input, schema) do
@@ -371,21 +379,30 @@ defmodule ReqLLM.Tool do
     apply(module, function, [input])
   rescue
     error ->
-      {:error, "Callback execution failed: #{Exception.message(error)}"}
+      {:error,
+       ReqLLM.Error.Unknown.Unknown.exception(
+         error: "Callback execution failed: #{Exception.message(error)}"
+       )}
   end
 
   defp call_callback({module, function, args}, input) do
     apply(module, function, args ++ [input])
   rescue
     error ->
-      {:error, "Callback execution failed: #{Exception.message(error)}"}
+      {:error,
+       ReqLLM.Error.Unknown.Unknown.exception(
+         error: "Callback execution failed: #{Exception.message(error)}"
+       )}
   end
 
   defp call_callback(fun, input) when is_function(fun, 1) do
     fun.(input)
   rescue
     error ->
-      {:error, "Callback execution failed: #{Exception.message(error)}"}
+      {:error,
+       ReqLLM.Error.Unknown.Unknown.exception(
+         error: "Callback execution failed: #{Exception.message(error)}"
+       )}
   end
 
   defimpl Inspect do

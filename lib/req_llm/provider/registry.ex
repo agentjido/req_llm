@@ -171,15 +171,19 @@ defmodule ReqLLM.Provider.Registry do
         case find_model_metadata(provider_info, model_name) do
           {:ok, model_metadata} ->
             # Create enhanced model with structured fields populated from metadata
-            limit = get_in(model_metadata, ["limit"]) |> map_string_keys_to_atoms()
+            limit =
+              get_in(model_metadata, ["limit"])
+              |> ReqLLM.Model.Metadata.map_string_keys_to_atoms()
 
             modalities =
               get_in(model_metadata, ["modalities"])
-              |> map_string_keys_to_atoms()
-              |> convert_modality_values()
+              |> ReqLLM.Model.Metadata.map_string_keys_to_atoms()
+              |> ReqLLM.Model.Metadata.convert_modality_values()
 
-            capabilities = build_capabilities_from_metadata(model_metadata)
-            cost = get_in(model_metadata, ["cost"]) |> map_string_keys_to_atoms()
+            capabilities = ReqLLM.Model.Metadata.build_capabilities_from_metadata(model_metadata)
+
+            cost =
+              get_in(model_metadata, ["cost"]) |> ReqLLM.Model.Metadata.map_string_keys_to_atoms()
 
             enhanced_model =
               ReqLLM.Model.new(provider_id, model_name,
@@ -612,59 +616,6 @@ defmodule ReqLLM.Provider.Registry do
   rescue
     ArgumentError ->
       {:error, "Unknown provider in specification"}
-  end
-
-  # Whitelist of safe metadata keys to convert to atoms (copied from Model module)
-  @safe_metadata_keys ~w[
-    input output context text image reasoning tool_call temperature
-    cache_read cache_write limit modalities capabilities cost
-  ]
-
-  defp map_string_keys_to_atoms(nil), do: nil
-
-  defp map_string_keys_to_atoms(map) when is_map(map) do
-    Map.new(map, fn
-      {key, value} when is_binary(key) and key in @safe_metadata_keys ->
-        atom_key = String.to_existing_atom(key)
-        {atom_key, value}
-
-      {key, value} when is_binary(key) ->
-        # Keep unsafe keys as strings to prevent atom leakage
-        {key, value}
-
-      {key, value} ->
-        {key, value}
-    end)
-  rescue
-    ArgumentError ->
-      # If any safe key doesn't exist as an atom, just return the map as-is
-      map
-  end
-
-  defp build_capabilities_from_metadata(metadata) do
-    %{
-      reasoning: Map.get(metadata, "reasoning", false),
-      tool_call: Map.get(metadata, "tool_call", false),
-      temperature: Map.get(metadata, "temperature", false),
-      attachment: Map.get(metadata, "attachment", false)
-    }
-  end
-
-  # Convert modality string values to atoms
-  defp convert_modality_values(nil), do: nil
-
-  defp convert_modality_values(modalities) when is_map(modalities) do
-    modalities
-    |> Map.new(fn
-      {:input, values} when is_list(values) ->
-        {:input, Enum.map(values, &String.to_atom/1)}
-
-      {:output, values} when is_list(values) ->
-        {:output, Enum.map(values, &String.to_atom/1)}
-
-      {key, value} ->
-        {key, value}
-    end)
   end
 
   @doc false

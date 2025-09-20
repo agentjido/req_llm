@@ -253,6 +253,18 @@ defmodule ReqLLM.Error do
     end
   end
 
+  defmodule API.Stream do
+    @moduledoc "Error for stream processing failures."
+    use Splode.Error,
+      fields: [:reason, :cause],
+      class: :api
+
+    @spec message(map()) :: String.t()
+    def message(%{reason: reason}) do
+      reason
+    end
+  end
+
   @doc """
   Creates a validation error with the given tag, reason, and context.
 

@@ -1,5 +1,6 @@
 defmodule ReqLLM.CapabilityTest do
   use ExUnit.Case, async: true
+
   import ExUnit.CaptureLog
 
   alias ReqLLM.Capability
@@ -115,31 +116,32 @@ defmodule ReqLLM.CapabilityTest do
   describe "validate!/2" do
     test "passes validation when model supports all required capabilities" do
       model = "anthropic:claude-3-haiku-20240307"
-      
+
       assert :ok = Capability.validate!(model, temperature: 0.7, max_tokens: 100)
       assert :ok = Capability.validate!(model, [])
     end
 
     test "ignores unsupported capabilities by default" do
       model = "anthropic:claude-3-haiku-20240307"
-      
+
       # Assuming the model doesn't support reasoning
       assert :ok = Capability.validate!(model, reasoning: true)
     end
 
     test "logs warning for unsupported capabilities when configured" do
       model = "anthropic:claude-3-haiku-20240307"
-      
-      log = capture_log(fn ->
-        assert :ok = Capability.validate!(model, reasoning: true, on_unsupported: :warn)
-      end)
-      
+
+      log =
+        capture_log(fn ->
+          assert :ok = Capability.validate!(model, reasoning: true, on_unsupported: :warn)
+        end)
+
       assert log =~ "does not support"
     end
 
     test "raises error for unsupported capabilities when configured" do
       model = "anthropic:claude-3-haiku-20240307"
-      
+
       assert_raise ReqLLM.Error.Invalid.Capability, fn ->
         Capability.validate!(model, reasoning: true, on_unsupported: :error)
       end
@@ -147,40 +149,43 @@ defmodule ReqLLM.CapabilityTest do
 
     test "works with Model struct" do
       model = %ReqLLM.Model{provider: :anthropic, model: "claude-3-haiku-20240307"}
-      
+
       assert :ok = Capability.validate!(model, temperature: 0.7)
     end
 
     test "handles multiple unsupported capabilities" do
       model = "anthropic:claude-3-haiku-20240307"
-      
+
       assert_raise ReqLLM.Error.Invalid.Capability, ~r/reasoning/, fn ->
-        Capability.validate!(model, [
-          reasoning: true, 
-          top_k: 0.5,  # Another capability that might not be supported
+        Capability.validate!(model,
+          reasoning: true,
+          # Another capability that might not be supported
+          top_k: 0.5,
           on_unsupported: :error
-        ])
+        )
       end
     end
 
     test "extracts capabilities from various option types" do
       model = "anthropic:claude-3-haiku-20240307"
-      
+
       # These should all pass since they're basic capabilities
-      assert :ok = Capability.validate!(model, [
-        temperature: 0.7,
-        top_p: 0.9,
-        tools: [],
-        stop_sequences: ["END"]
-      ])
+      assert :ok =
+               Capability.validate!(model,
+                 temperature: 0.7,
+                 top_p: 0.9,
+                 tools: [],
+                 stop_sequences: ["END"]
+               )
     end
 
     test "handles streaming flag correctly" do
       model = "anthropic:claude-3-haiku-20240307"
-      
+
       # Stream flag should map to streaming capability
       assert :ok = Capability.validate!(model, stream: true)
-      assert :ok = Capability.validate!(model, stream: false)  # Should not require capability
+      # Should not require capability
+      assert :ok = Capability.validate!(model, stream: false)
     end
   end
 end

@@ -9,7 +9,7 @@ defmodule ReqLLM.Step.Fixture.Assert do
   @doc """
   Assert that the canonical JSON in a fixture matches the expected Context encoding.
 
-  This validates that ReqLLM.Context.encode_request/2 produces the expected result
+  This validates that ReqLLM.Context.Codec.encode_request/2 produces the expected result
   for a given context and model combination.
 
   ## Options
@@ -30,7 +30,14 @@ defmodule ReqLLM.Step.Fixture.Assert do
   """
   def assert_encoded(provider, fixture_name, context, model, opts \\ []) do
     %{"request" => %{"canonical_json" => recorded}} = load_fixture(provider, fixture_name)
-    expected = ReqLLM.Context.encode_request(context, model) |> normalize_for_comparison()
+
+    resolved_model = resolve_model(model)
+    wrapped_context = ReqLLM.Context.wrap(context, resolved_model)
+
+    expected =
+      ReqLLM.Context.Codec.encode_request(wrapped_context, resolved_model)
+      |> normalize_for_comparison()
+
     recorded_normalized = recorded |> normalize_for_comparison() |> scrub(opts)
     expected_scrubbed = expected |> scrub(opts)
 
@@ -96,6 +103,12 @@ defmodule ReqLLM.Step.Fixture.Assert do
   end
 
   # Private helpers
+
+  defp resolve_model(%ReqLLM.Model{} = model), do: model
+
+  defp resolve_model(model_string) when is_binary(model_string) do
+    ReqLLM.Model.from!(model_string)
+  end
 
   defp load_fixture(provider, fixture_name) do
     path = fixture_path(provider, fixture_name)

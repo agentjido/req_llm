@@ -233,8 +233,9 @@ defmodule ReqLLM.ModelTest do
     end
 
     test "handles model not found in provider file" do
-      {:error, reason} = Model.with_metadata("anthropic:definitely-does-not-exist")
-      assert is_binary(reason) and String.contains?(reason, "not found")
+      {:error, error} = Model.with_metadata("anthropic:definitely-does-not-exist")
+      assert error.class == :validation and error.tag == :model_not_found
+      assert String.contains?(error.reason, "not found")
     end
 
     test "handles invalid base model specs" do
@@ -369,6 +370,15 @@ defmodule ReqLLM.ModelTest do
         {:ok, model} = Model.from("#{hyphenated}:test-model")
         assert model.provider == expected_atom
       end
+    end
+
+    test "regression test for provider with hyphen parsing" do
+      {:ok, parsed_atom} = Model.parse_provider("google-vertex")
+      assert parsed_atom == :google_vertex
+
+      {:ok, model} = Model.from("google-vertex:test-model")
+      assert model.provider == :google_vertex
+      assert model.model == "test-model"
     end
   end
 

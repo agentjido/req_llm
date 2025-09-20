@@ -154,15 +154,13 @@ defmodule ReqLLM.Model do
   def from(provider_model_string) when is_binary(provider_model_string) do
     case String.split(provider_model_string, ":", parts: 2) do
       [provider_str, model_name] when provider_str != "" and model_name != "" ->
-        case parse_provider(provider_str) do
+        case ReqLLM.Model.Metadata.parse_provider(provider_str) do
           {:ok, provider} ->
-            # Try to get metadata from provider registry, fallback to basic model
             case ReqLLM.Provider.Registry.get_model(provider, model_name) do
               {:ok, _} = result ->
                 result
 
               {:error, _} ->
-                # Fallback to creating basic model without metadata
                 {:ok, new(provider, model_name)}
             end
 
@@ -258,9 +256,11 @@ defmodule ReqLLM.Model do
 
     %{
       model
-      | limit: merge_with_defaults(model.limit, default_limit),
-        modalities: merge_with_defaults(model.modalities, default_modalities),
-        capabilities: merge_with_defaults(model.capabilities, default_capabilities)
+      | limit: ReqLLM.Model.Metadata.merge_with_defaults(model.limit, default_limit),
+        modalities:
+          ReqLLM.Model.Metadata.merge_with_defaults(model.modalities, default_modalities),
+        capabilities:
+          ReqLLM.Model.Metadata.merge_with_defaults(model.capabilities, default_capabilities)
     }
   end
 
@@ -277,198 +277,42 @@ defmodule ReqLLM.Model do
       #=> %{"input" => 3.0, "output" => 15.0, ...}
 
   """
-  @spec with_metadata(String.t()) :: {:ok, t()} | {:error, String.t()}
+  @spec with_metadata(String.t()) :: {:ok, t()} | {:error, term()}
   def with_metadata(model_spec) when is_binary(model_spec) do
     with {:ok, base_model} <- from(model_spec),
-         {:ok, full_metadata} <- load_full_metadata(model_spec) do
+         {:ok, full_metadata} <- ReqLLM.Model.Metadata.load_full_metadata(model_spec) do
       enhanced_model = %{
         base_model
-        | limit: get_in(full_metadata, ["limit"]) |> map_string_keys_to_atoms(),
+        | limit:
+            get_in(full_metadata, ["limit"]) |> ReqLLM.Model.Metadata.map_string_keys_to_atoms(),
           modalities:
             get_in(full_metadata, ["modalities"])
-            |> map_string_keys_to_atoms()
-            |> convert_modality_values(),
-          capabilities: build_capabilities_from_metadata(full_metadata),
-          cost: get_in(full_metadata, ["cost"]) |> map_string_keys_to_atoms()
+            |> ReqLLM.Model.Metadata.map_string_keys_to_atoms()
+            |> ReqLLM.Model.Metadata.convert_modality_values(),
+          capabilities: ReqLLM.Model.Metadata.build_capabilities_from_metadata(full_metadata),
+          cost:
+            get_in(full_metadata, ["cost"]) |> ReqLLM.Model.Metadata.map_string_keys_to_atoms()
       }
 
       {:ok, enhanced_model}
     end
   end
 
-  defp merge_with_defaults(nil, defaults), do: defaults
-  defp merge_with_defaults(existing, defaults), do: Map.merge(defaults, existing)
+  @doc """
+  Parses a provider string to a valid provider atom.
 
-  # Define a comprehensive list of valid provider atoms based on available metadata
-  # These atoms are safe because they're defined at compile time, not from user input
-  # Note: Not all providers are fully implemented - some are metadata-only
-  @valid_providers [
-    :alibaba,
-    :alibaba_cn,
-    :amazon_bedrock,
-    :anthropic,
-    :azure,
-    :baseten,
-    :cerebras,
-    :chutes,
-    :cloudflare_workers_ai,
-    :deepinfra,
-    :deepseek,
-    :fastrouter,
-    :fireworks_ai,
-    :github_copilot,
-    :github_models,
-    :google,
-    :google_vertex,
-    :google_vertex_anthropic,
-    :groq,
-    :huggingface,
-    :inception,
-    :inference,
-    :llama,
-    :lmstudio,
-    :mistral,
-    :modelscope,
-    :moonshotai,
-    :moonshotai_cn,
-    :morph,
-    :nvidia,
-    :openai,
-    :opencode,
-    :openrouter,
-    :requesty,
-    :submodel,
-    :synthetic,
-    :togetherai,
-    :upstage,
-    :v0,
-    :venice,
-    :vercel,
-    :wandb,
-    :xai,
-    :zai,
-    :zai_coding_plan,
-    :zhipuai
-  ]
+  Delegates to `ReqLLM.Model.Metadata.parse_provider/1`.
+  """
+  @spec parse_provider(String.t()) :: {:ok, atom()} | {:error, String.t()}
+  def parse_provider(str), do: ReqLLM.Model.Metadata.parse_provider(str)
 
-  defp parse_provider(str) when is_binary(str) do
-    # Convert hyphenated provider names to underscored atoms
-    atom_candidate = String.replace(str, "-", "_")
+  @doc """
+  Loads full metadata from JSON files for enhanced model creation.
 
-    # Only use String.to_existing_atom to prevent atom table leaks
-    try do
-      atom = String.to_existing_atom(atom_candidate)
-
-      if atom in @valid_providers do
-        {:ok, atom}
-      else
-        {:error, "Unsupported provider: #{str}"}
-      end
-    rescue
-      ArgumentError -> {:error, "Unknown provider: #{str}"}
-    end
-  end
-
-  # Load full metadata from JSON files for enhanced model creation
-  defp load_full_metadata(model_spec) do
-    priv_dir = Application.app_dir(:req_llm, "priv")
-
-    case String.split(model_spec, ":", parts: 2) do
-      [provider_id, specific_model_id] ->
-        provider_path = Path.join([priv_dir, "models_dev", "#{provider_id}.json"])
-        load_model_from_provider_file(provider_path, specific_model_id)
-
-      [single_model_id] ->
-        metadata_path = Path.join([priv_dir, "models_dev", "#{single_model_id}.json"])
-        load_individual_model_file(metadata_path)
-    end
-  end
-
-  defp load_model_from_provider_file(provider_path, specific_model_id) do
-    with {:ok, content} <- File.read(provider_path),
-         {:ok, %{"models" => models}} <- Jason.decode(content),
-         %{} = model_data <- Enum.find(models, &(&1["id"] == specific_model_id)) do
-      {:ok, model_data}
-    else
-      {:error, :enoent} ->
-        {:error, "Provider metadata not found: #{provider_path}"}
-
-      {:error, %Jason.DecodeError{} = error} ->
-        {:error, "Invalid JSON in #{provider_path}: #{Exception.message(error)}"}
-
-      nil ->
-        {:error, "Model #{specific_model_id} not found in provider file"}
-
-      _ ->
-        {:error, "Failed to load model metadata"}
-    end
-  end
-
-  defp load_individual_model_file(metadata_path) do
-    with {:ok, content} <- File.read(metadata_path),
-         {:ok, data} <- Jason.decode(content) do
-      {:ok, data}
-    else
-      {:error, :enoent} ->
-        {:error, "Model metadata not found: #{metadata_path}"}
-
-      {:error, %Jason.DecodeError{} = error} ->
-        {:error, "Invalid JSON in #{metadata_path}: #{Exception.message(error)}"}
-    end
-  end
-
-  # Whitelist of safe metadata keys to convert to atoms
-  @safe_metadata_keys ~w[
-    input output context text image reasoning tool_call temperature
-    cache_read cache_write limit modalities capabilities cost
-  ]
-
-  defp map_string_keys_to_atoms(nil), do: nil
-
-  defp map_string_keys_to_atoms(map) when is_map(map) do
-    Map.new(map, fn
-      {key, value} when is_binary(key) and key in @safe_metadata_keys ->
-        atom_key = String.to_existing_atom(key)
-        {atom_key, value}
-
-      {key, value} when is_binary(key) ->
-        # Keep unsafe keys as strings to prevent atom leakage
-        {key, value}
-
-      {key, value} ->
-        {key, value}
-    end)
-  rescue
-    ArgumentError ->
-      # If any safe key doesn't exist as an atom, just return the map as-is
-      map
-  end
-
-  defp build_capabilities_from_metadata(metadata) do
-    %{
-      reasoning: Map.get(metadata, "reasoning", false),
-      tool_call: Map.get(metadata, "tool_call", false),
-      temperature: Map.get(metadata, "temperature", false),
-      attachment: Map.get(metadata, "attachment", false)
-    }
-  end
-
-  # Convert modality string values to atoms
-  defp convert_modality_values(nil), do: nil
-
-  defp convert_modality_values(modalities) when is_map(modalities) do
-    modalities
-    |> Map.new(fn
-      {:input, values} when is_list(values) ->
-        {:input, Enum.map(values, &String.to_atom/1)}
-
-      {:output, values} when is_list(values) ->
-        {:output, Enum.map(values, &String.to_atom/1)}
-
-      {key, value} ->
-        {key, value}
-    end)
-  end
+  Delegates to `ReqLLM.Model.Metadata.load_full_metadata/1`.
+  """
+  @spec load_full_metadata(String.t()) :: {:ok, map()} | {:error, term()}
+  def load_full_metadata(model_spec), do: ReqLLM.Model.Metadata.load_full_metadata(model_spec)
 
   @doc """
   Gets the default model for a provider spec.
@@ -499,10 +343,6 @@ defmodule ReqLLM.Model do
   """
   @spec default_model(map()) :: binary() | nil
   def default_model(spec) do
-    spec.default_model ||
-      case Map.keys(spec.models) do
-        [first_model | _] -> first_model
-        [] -> nil
-      end
+    ReqLLM.Model.Metadata.default_model(spec)
   end
 end

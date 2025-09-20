@@ -9,7 +9,11 @@ defmodule ReqLLM.Message.ContentPart do
   - `:file` - File attachment
   - `:tool_call` - Tool invocation
   - `:tool_result` - Tool execution result
-  - `:reasoning` - Chain-of-thought reasoning content
+  - `:thinking` - Chain-of-thought thinking content
+
+  ## See also
+
+  - `ReqLLM.Message` - Multi-modal message composition using ContentPart collections
   """
 
   use TypedStruct
@@ -17,7 +21,7 @@ defmodule ReqLLM.Message.ContentPart do
   @derive Jason.Encoder
 
   typedstruct enforce: true do
-    field(:type, :text | :image_url | :image | :file | :tool_call | :tool_result | :reasoning,
+    field(:type, :text | :image_url | :image | :file | :tool_call | :tool_result | :thinking,
       enforce: true
     )
 
@@ -33,18 +37,22 @@ defmodule ReqLLM.Message.ContentPart do
     field(:metadata, map(), default: %{})
   end
 
+  @spec valid?(t()) :: boolean()
+  def valid?(%__MODULE__{type: type}) when is_atom(type), do: true
+  def valid?(_), do: false
+
   @spec text(String.t()) :: t()
   def text(content), do: %__MODULE__{type: :text, text: content}
 
   @spec text(String.t(), map()) :: t()
   def text(content, metadata), do: %__MODULE__{type: :text, text: content, metadata: metadata}
 
-  @spec reasoning(String.t()) :: t()
-  def reasoning(content), do: %__MODULE__{type: :reasoning, text: content}
+  @spec thinking(String.t()) :: t()
+  def thinking(content), do: %__MODULE__{type: :thinking, text: content}
 
-  @spec reasoning(String.t(), map()) :: t()
-  def reasoning(content, metadata),
-    do: %__MODULE__{type: :reasoning, text: content, metadata: metadata}
+  @spec thinking(String.t(), map()) :: t()
+  def thinking(content, metadata),
+    do: %__MODULE__{type: :thinking, text: content, metadata: metadata}
 
   @spec image_url(String.t()) :: t()
   def image_url(url), do: %__MODULE__{type: :image_url, url: url}
@@ -70,7 +78,7 @@ defmodule ReqLLM.Message.ContentPart do
       content_desc =
         case type do
           :text -> inspect_text(part.text, opts)
-          :reasoning -> inspect_text(part.text, opts)
+          :thinking -> inspect_text(part.text, opts)
           :image_url -> "url: #{part.url}"
           :image -> "#{part.media_type} (#{byte_size(part.data)} bytes)"
           :file -> "#{part.media_type} (#{byte_size(part.data || <<>>)} bytes)"

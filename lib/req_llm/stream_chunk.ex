@@ -177,6 +177,12 @@ defmodule ReqLLM.StreamChunk do
 
   Used for finish reasons, usage statistics, and other non-content information.
 
+  ## Warning
+
+  The `metadata` field contains provider-specific keys that may be merged or transformed
+  when chunks are processed by `ReqLLM.Response.join_stream/1`. Provider-specific keys
+  should not be relied upon for application logic.
+
   ## Parameters
 
     * `data` - The metadata map
@@ -244,6 +250,37 @@ defmodule ReqLLM.StreamChunk do
     end
   end
 
+  @doc """
+  Bang version of validate/1; raises on invalid chunk.
+
+  ## Parameters
+
+    * `chunk` - The StreamChunk struct to validate
+
+  ## Returns
+
+    * Returns the chunk if valid
+    * Raises `ArgumentError` if invalid
+
+  ## Examples
+
+      chunk = ReqLLM.StreamChunk.text("Hello")
+      ReqLLM.StreamChunk.validate!(chunk)
+      #=> %ReqLLM.StreamChunk{...}
+
+      invalid_chunk = %ReqLLM.StreamChunk{type: :content, text: nil}
+      ReqLLM.StreamChunk.validate!(invalid_chunk)
+      #=> ** (ArgumentError) Content chunks must have non-nil text
+
+  """
+  @spec validate!(t()) :: t()
+  def validate!(chunk) do
+    case validate(chunk) do
+      {:ok, chunk} -> chunk
+      {:error, reason} -> raise ArgumentError, reason
+    end
+  end
+
   # Private validation helpers
 
   defp validate_by_type(%{type: :content, text: text}) when is_binary(text), do: :ok
@@ -272,12 +309,11 @@ defmodule ReqLLM.StreamChunk do
       content_desc =
         case type do
           :content ->
-            text_preview = inspect_text(chunk.text, 20)
-            "#{text_preview}"
+            inspect_text(chunk.text, 20)
 
           :thinking ->
             text_preview = inspect_text(chunk.text, 20)
-            "thinking: #{text_preview}"
+            "thinking: " <> text_preview
 
           :tool_call ->
             args_preview =
@@ -287,11 +323,11 @@ defmodule ReqLLM.StreamChunk do
                 "()"
               end
 
-            "#{chunk.name}#{args_preview}"
+            chunk.name <> args_preview
 
           :meta ->
             meta_keys = chunk.metadata |> Map.keys() |> Enum.join(",")
-            "meta: #{meta_keys}"
+            "meta: " <> meta_keys
         end
 
       Inspect.Algebra.concat([
@@ -308,9 +344,9 @@ defmodule ReqLLM.StreamChunk do
     defp inspect_text(text, max_length) when is_binary(text) do
       if String.length(text) > max_length do
         truncated = String.slice(text, 0, max_length)
-        "\"#{truncated}...\""
+        "\"" <> truncated <> "...\""
       else
-        "\"#{text}\""
+        "\"" <> text <> "\""
       end
     end
   end

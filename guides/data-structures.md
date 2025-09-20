@@ -177,7 +177,7 @@ end)
 text_part = ContentPart.text("Explain this data")
 
 # Reasoning content (for models supporting chain-of-thought)
-reasoning_part = ContentPart.reasoning("Let me think step by step...")
+thinking_part = ContentPart.thinking("Let me think step by step...")
 
 # Image from URL
 image_url_part = ContentPart.image_url("https://example.com/chart.jpg")

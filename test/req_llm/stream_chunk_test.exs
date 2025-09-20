@@ -72,15 +72,18 @@ defmodule ReqLLM.StreamChunkTest do
   end
 
   describe "validation" do
-    # Table-driven validation tests
-    @valid_chunks [
+    @valid_cases [
       {:content, StreamChunk.text("valid")},
       {:thinking, StreamChunk.thinking("valid reasoning")},
       {:tool_call, StreamChunk.tool_call("func", %{arg: "value"})},
-      {:meta, StreamChunk.meta(%{key: "value"})}
+      {:meta, StreamChunk.meta(%{key: "value"})},
+      {:empty_text, StreamChunk.text("")},
+      {:empty_thinking, StreamChunk.thinking("")},
+      {:empty_args, StreamChunk.tool_call("", %{})},
+      {:empty_meta, StreamChunk.meta(%{})}
     ]
 
-    @invalid_chunks [
+    @invalid_cases [
       {:content_nil_text, %StreamChunk{type: :content, text: nil},
        "Content chunks must have non-nil text"},
       {:thinking_nil_text, %StreamChunk{type: :thinking, text: nil},
@@ -95,28 +98,25 @@ defmodule ReqLLM.StreamChunkTest do
     ]
 
     test "validates valid chunks" do
-      for {_type, chunk} <- @valid_chunks do
+      for {_name, chunk} <- @valid_cases do
         assert {:ok, ^chunk} = StreamChunk.validate(chunk)
       end
     end
 
     test "rejects invalid chunks" do
-      for {_name, chunk, expected_error} <- @invalid_chunks do
+      for {_name, chunk, expected_error} <- @invalid_cases do
         assert {:error, ^expected_error} = StreamChunk.validate(chunk)
       end
     end
 
-    test "validates edge cases" do
-      # Empty values are valid
-      valid_edge_cases = [
-        StreamChunk.text(""),
-        StreamChunk.thinking(""),
-        StreamChunk.tool_call("", %{}),
-        StreamChunk.meta(%{})
-      ]
+    test "validate!/1 bang version" do
+      valid_chunk = StreamChunk.text("Hello")
+      assert ^valid_chunk = StreamChunk.validate!(valid_chunk)
 
-      for chunk <- valid_edge_cases do
-        assert {:ok, ^chunk} = StreamChunk.validate(chunk)
+      invalid_chunk = %StreamChunk{type: :content, text: nil}
+
+      assert_raise ArgumentError, "Content chunks must have non-nil text", fn ->
+        StreamChunk.validate!(invalid_chunk)
       end
     end
   end
