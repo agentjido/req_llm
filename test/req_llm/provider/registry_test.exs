@@ -440,11 +440,8 @@ defmodule ReqLLM.Provider.RegistryTest do
     end
 
     test "returns nil for unknown provider" do
-      # get_env_key currently has a bug - it doesn't handle the error case from get_provider_metadata
-      # This test documents the current behavior
-      assert_raise CaseClauseError, fn ->
-        Registry.get_env_key(:unknown_provider)
-      end
+      # get_env_key should handle unknown providers gracefully
+      assert Registry.get_env_key(:unknown_provider) == nil
     end
   end
 

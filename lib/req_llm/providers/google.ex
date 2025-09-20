@@ -47,8 +47,6 @@ defmodule ReqLLM.Providers.Google do
       ]
     ]
 
-  use ReqLLM.Provider.Defaults
-
   import ReqLLM.Provider.Utils,
     only: [maybe_put: 3, ensure_parsed_body: 1]
 
@@ -178,7 +176,7 @@ defmodule ReqLLM.Providers.Google do
   end
 
   @impl ReqLLM.Provider
-  def attach(%Req.Request{} = request, model_input, user_opts \\ []) do
+  def attach(%Req.Request{} = request, model_input, user_opts) do
     %ReqLLM.Model{} = model = ReqLLM.Model.from!(model_input)
 
     if model.provider != provider_id() do

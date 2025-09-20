@@ -154,7 +154,7 @@ defmodule ReqLLM.Model do
   def from(provider_model_string) when is_binary(provider_model_string) do
     case String.split(provider_model_string, ":", parts: 2) do
       [provider_str, model_name] when provider_str != "" and model_name != "" ->
-        case ReqLLM.Model.Metadata.parse_provider(provider_str) do
+        case ReqLLM.Metadata.parse_provider(provider_str) do
           {:ok, provider} ->
             case ReqLLM.Provider.Registry.get_model(provider, model_name) do
               {:ok, _} = result ->
@@ -256,11 +256,11 @@ defmodule ReqLLM.Model do
 
     %{
       model
-      | limit: ReqLLM.Model.Metadata.merge_with_defaults(model.limit, default_limit),
+      | limit: ReqLLM.Metadata.merge_with_defaults(model.limit, default_limit),
         modalities:
-          ReqLLM.Model.Metadata.merge_with_defaults(model.modalities, default_modalities),
+          ReqLLM.Metadata.merge_with_defaults(model.modalities, default_modalities),
         capabilities:
-          ReqLLM.Model.Metadata.merge_with_defaults(model.capabilities, default_capabilities)
+          ReqLLM.Metadata.merge_with_defaults(model.capabilities, default_capabilities)
     }
   end
 
@@ -284,14 +284,14 @@ defmodule ReqLLM.Model do
       enhanced_model = %{
         base_model
         | limit:
-            get_in(full_metadata, ["limit"]) |> ReqLLM.Model.Metadata.map_string_keys_to_atoms(),
+            get_in(full_metadata, ["limit"]) |> ReqLLM.Metadata.map_string_keys_to_atoms(),
           modalities:
             get_in(full_metadata, ["modalities"])
-            |> ReqLLM.Model.Metadata.map_string_keys_to_atoms()
-            |> ReqLLM.Model.Metadata.convert_modality_values(),
-          capabilities: ReqLLM.Model.Metadata.build_capabilities_from_metadata(full_metadata),
+            |> ReqLLM.Metadata.map_string_keys_to_atoms()
+            |> ReqLLM.Metadata.convert_modality_values(),
+          capabilities: ReqLLM.Metadata.build_capabilities_from_metadata(full_metadata),
           cost:
-            get_in(full_metadata, ["cost"]) |> ReqLLM.Model.Metadata.map_string_keys_to_atoms()
+            get_in(full_metadata, ["cost"]) |> ReqLLM.Metadata.map_string_keys_to_atoms()
       }
 
       {:ok, enhanced_model}
@@ -301,10 +301,10 @@ defmodule ReqLLM.Model do
   @doc """
   Parses a provider string to a valid provider atom.
 
-  Delegates to `ReqLLM.Model.Metadata.parse_provider/1`.
+  Delegates to `ReqLLM.Metadata.parse_provider/1`.
   """
   @spec parse_provider(String.t()) :: {:ok, atom()} | {:error, String.t()}
-  def parse_provider(str), do: ReqLLM.Model.Metadata.parse_provider(str)
+  def parse_provider(str), do: ReqLLM.Metadata.parse_provider(str)
 
   @doc """
   Loads full metadata from JSON files for enhanced model creation.
@@ -343,6 +343,6 @@ defmodule ReqLLM.Model do
   """
   @spec default_model(map()) :: binary() | nil
   def default_model(spec) do
-    ReqLLM.Model.Metadata.default_model(spec)
+    ReqLLM.Metadata.default_model(spec)
   end
 end

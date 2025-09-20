@@ -1,9 +1,10 @@
 defmodule ReqLLM.Model.Metadata do
   @moduledoc """
-  Handles loading, parsing, and processing metadata for AI models.
+  Handles loading metadata from JSON files for AI models.
 
-  This module serves as the central hub for all metadata operations including
-  JSON loading, provider parsing, capability extraction, and data transformations.
+  This module is responsible for loading model metadata from provider files 
+  in the priv/models_dev directory. For metadata processing and validation,
+  see `ReqLLM.Metadata`.
   """
 
   @doc """
@@ -42,48 +43,7 @@ defmodule ReqLLM.Model.Metadata do
     end
   end
 
-  @doc """
-  Parses a provider string to a valid provider atom.
 
-  Converts hyphenated provider names to underscored atoms and validates
-  against the list of supported providers.
-
-  ## Parameters
-
-  - `str` - Provider name string (e.g., "anthropic", "google-vertex")
-
-  ## Returns
-
-  `{:ok, atom}` if provider is valid, `{:error, reason}` otherwise.
-
-  ## Examples
-
-      iex> ReqLLM.Model.Metadata.parse_provider("anthropic")
-      {:ok, :anthropic}
-
-      iex> ReqLLM.Model.Metadata.parse_provider("google-vertex") 
-      {:ok, :google_vertex}
-
-      iex> ReqLLM.Model.Metadata.parse_provider("unknown")
-      {:error, "Unknown provider: unknown"}
-
-  """
-  @spec parse_provider(String.t()) :: {:ok, atom()} | {:error, String.t()}
-  def parse_provider(str) when is_binary(str) do
-    atom_candidate = String.replace(str, "-", "_")
-
-    try do
-      atom = String.to_existing_atom(atom_candidate)
-
-      if atom in valid_providers() do
-        {:ok, atom}
-      else
-        {:error, "Unsupported provider: #{str}"}
-      end
-    rescue
-      ArgumentError -> {:error, "Unknown provider: #{str}"}
-    end
-  end
 
   defp load_model_from_provider_file(provider_path, specific_model_id) do
     with {:ok, content} <- File.read(provider_path),
@@ -150,112 +110,7 @@ defmodule ReqLLM.Model.Metadata do
     end
   end
 
-  # Whitelist of safe metadata keys to convert to atoms
-  @safe_metadata_keys ~w[
-    input output context text image reasoning tool_call temperature
-    cache_read cache_write limit modalities capabilities cost
-  ]
 
-  @doc """
-  Converts string keys in metadata maps to atoms for safe keys only.
-
-  This prevents atom leakage by only converting known safe keys to atoms.
-  """
-  @spec map_string_keys_to_atoms(map() | nil) :: map() | nil
-  def map_string_keys_to_atoms(nil), do: nil
-
-  def map_string_keys_to_atoms(map) when is_map(map) do
-    Map.new(map, fn
-      {key, value} when is_binary(key) and key in @safe_metadata_keys ->
-        atom_key = String.to_existing_atom(key)
-        {atom_key, value}
-
-      {key, value} when is_binary(key) ->
-        {key, value}
-
-      {key, value} ->
-        {key, value}
-    end)
-  rescue
-    ArgumentError ->
-      map
-  end
-
-  @doc """
-  Builds capabilities map from metadata.
-  """
-  @spec build_capabilities_from_metadata(map()) :: map()
-  def build_capabilities_from_metadata(metadata) do
-    %{
-      reasoning: Map.get(metadata, "reasoning", false),
-      tool_call: Map.get(metadata, "tool_call", false),
-      temperature: Map.get(metadata, "temperature", false),
-      attachment: Map.get(metadata, "attachment", false)
-    }
-  end
-
-  @doc """
-  Converts modality string values to atoms.
-  """
-  @spec convert_modality_values(map() | nil) :: map() | nil
-  def convert_modality_values(nil), do: nil
-
-  def convert_modality_values(modalities) when is_map(modalities) do
-    modalities
-    |> Map.new(fn
-      {:input, values} when is_list(values) ->
-        {:input, Enum.map(values, &String.to_atom/1)}
-
-      {:output, values} when is_list(values) ->
-        {:output, Enum.map(values, &String.to_atom/1)}
-
-      {key, value} ->
-        {key, value}
-    end)
-  end
-
-  @doc """
-  Merges model metadata with defaults for missing fields.
-  """
-  @spec merge_with_defaults(map() | nil, map()) :: map()
-  def merge_with_defaults(nil, defaults), do: defaults
-  def merge_with_defaults(existing, defaults), do: Map.merge(defaults, existing)
-
-  @doc """
-  Gets the default model for a provider spec.
-
-  Falls back to the first available model if no default is specified.
-
-  ## Parameters
-
-  - `spec` - Provider spec struct with `:default_model` and `:models` fields
-
-  ## Returns
-
-  The default model string, or `nil` if no models are available.
-
-  ## Examples
-
-      iex> spec = %{default_model: "gpt-4", models: %{"gpt-3.5" => %{}, "gpt-4" => %{}}}
-      iex> ReqLLM.Model.Metadata.default_model(spec)
-      "gpt-4"
-
-      iex> spec = %{default_model: nil, models: %{"model-a" => %{}, "model-b" => %{}}}
-      iex> ReqLLM.Model.Metadata.default_model(spec)
-      "model-a"
-
-      iex> spec = %{default_model: nil, models: %{}}
-      iex> ReqLLM.Model.Metadata.default_model(spec)
-      nil
-  """
-  @spec default_model(map()) :: binary() | nil
-  def default_model(spec) do
-    spec.default_model ||
-      case Map.keys(spec.models) do
-        [first_model | _] -> first_model
-        [] -> nil
-      end
-  end
 
   @doc """
   Exposes model metadata for a provider and model from the registry.
@@ -298,20 +153,5 @@ defmodule ReqLLM.Model.Metadata do
       {:error, _reason} ->
         {:error, :model_not_found}
     end
-  end
-
-  # Delegate to the generated module for valid providers
-  # This list is auto-generated by the model sync task to stay in sync with models.dev
-  defp valid_providers do
-    ReqLLM.Provider.Generated.ValidProviders.list()
-  rescue
-    UndefinedFunctionError ->
-      # Fallback if generated module doesn't exist yet
-      # This can happen on first compile before running the sync task
-      IO.warn(
-        "Generated ValidProviders module not found. Run 'mix req_llm.model_sync' to generate it."
-      )
-
-      []
   end
 end

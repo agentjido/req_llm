@@ -18,11 +18,8 @@ defmodule ReqLLM.Capability do
   """
   @spec capabilities(ReqLLM.Model.t() | binary()) :: [atom()]
   def capabilities(model_input) do
-    with {:ok, %ReqLLM.Model{provider: provider, model: model_name}} <-
-           normalize_model(model_input),
-         {:ok, metadata} <- ReqLLM.Model.Metadata.get_model_metadata(provider, model_name) do
-      extract_capabilities(metadata)
-    else
+    case normalize_model(model_input) do
+      {:ok, %ReqLLM.Model{} = model} -> extract_capabilities_from_model(model)
       _ -> []
     end
   end
@@ -126,48 +123,77 @@ defmodule ReqLLM.Capability do
   defp normalize_model(%ReqLLM.Model{} = model), do: {:ok, model}
   defp normalize_model(model_spec), do: ReqLLM.Model.from(model_spec)
 
-  # All possible capabilities
-  @all_capabilities [
-    :max_tokens,
-    :system_prompt,
-    :temperature,
-    :top_p,
-    :top_k,
-    :tools,
-    :tool_choice,
-    :reasoning,
-    :stop_sequences,
-    :streaming,
-    :metadata
-  ]
+  # Extract capabilities from a Model struct, preferring validated capabilities if available
+  defp extract_capabilities_from_model(%ReqLLM.Model{capabilities: capabilities})
+       when not is_nil(capabilities) do
+    # Use validated capabilities from the model struct when available
+    validated_capabilities = for {key, true} <- capabilities, do: key
 
-  # Extract all supported capabilities from model metadata
-  defp extract_capabilities(metadata) do
-    @all_capabilities
-    |> Enum.filter(&capability_supported?(&1, metadata))
+    # Add additional capabilities that are always supported
+    additional_capabilities = [:max_tokens, :system_prompt, :metadata, :stop_sequences]
+
+    # Add tool-related capabilities based on tool_call support
+    tool_capabilities =
+      if Map.get(capabilities, :tool_call, false), do: [:tools, :tool_choice], else: []
+
+    # Add streaming (assume supported unless explicitly disabled)
+    streaming_capabilities = [:streaming]
+
+    (validated_capabilities ++
+       additional_capabilities ++ tool_capabilities ++ streaming_capabilities)
+    |> Enum.uniq()
   end
 
-  # Check if a specific capability is supported by this model's metadata
-  defp capability_supported?(capability, metadata) do
-    case capability do
-      # Basic generation features - all models support these
-      :max_tokens -> true
-      :system_prompt -> true
-      :metadata -> true
-      # Sampling parameters
-      :temperature -> Map.get(metadata, "temperature", false)
-      :top_p -> Map.get(metadata, "top_p", false)
-      :top_k -> Map.get(metadata, "top_k", false)
-      # Advanced features
-      :tools -> Map.get(metadata, "tool_call", false)
-      :tool_choice -> Map.get(metadata, "tool_call", false)
-      :reasoning -> Map.get(metadata, "reasoning", false)
-      # Response control
-      :stop_sequences -> true
-      :streaming -> Map.get(metadata, "streaming", true)
-      # Unknown capabilities default to false
-      _ -> false
+  defp extract_capabilities_from_model(%ReqLLM.Model{provider: provider, model: model_name}) do
+    # Fallback to loading metadata directly
+    case ReqLLM.Model.Metadata.get_model_metadata(provider, model_name) do
+      {:ok, metadata} -> extract_capabilities(metadata)
+      _ -> []
     end
+  end
+
+  # Extract all supported capabilities from model metadata (fallback method)
+  defp extract_capabilities(metadata) do
+    capabilities = ReqLLM.Metadata.build_capabilities_from_metadata(metadata)
+
+    # Get validated capabilities from metadata structure
+    validated_capabilities = for {key, true} <- capabilities, do: key
+
+    # Add additional capabilities that are always supported or derived from other metadata
+    additional_capabilities = [
+      # All models support token limits
+      :max_tokens,
+      # All models support system prompts
+      :system_prompt,
+      # All models have metadata
+      :metadata,
+      # All models support stop sequences
+      :stop_sequences
+    ]
+
+    # Add sampling parameters based on metadata
+    sampling_capabilities =
+      for {key, supported} <- %{
+            temperature: Map.get(metadata, "temperature", false),
+            top_p: Map.get(metadata, "top_p", false),
+            top_k: Map.get(metadata, "top_k", false)
+          },
+          supported,
+          do: key
+
+    # Add streaming support (default to true if not specified)
+    streaming_capabilities =
+      if Map.get(metadata, "streaming", true), do: [:streaming], else: []
+
+    # Add tool-related capabilities based on tool_call support
+    tool_capabilities =
+      if Map.get(metadata, "tool_call", false), do: [:tools, :tool_choice], else: []
+
+    (validated_capabilities ++
+       additional_capabilities ++
+       sampling_capabilities ++
+       streaming_capabilities ++ tool_capabilities)
+    |> Enum.uniq()
   end
 
   # Extract capability requirements from user options
