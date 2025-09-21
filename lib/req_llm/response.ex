@@ -14,7 +14,7 @@ defmodule ReqLLM.Response do
       # Basic response usage
       {:ok, response} = ReqLLM.generate_text("anthropic:claude-3-sonnet", context)
       response.text()  #=> "Hello! I'm Claude."
-      response.usage()  #=> %{input_tokens: 12, output_tokens: 4}
+      response.usage()  #=> %{input_tokens: 12, output_tokens: 4, total_cost: 0.016}
 
       # Multi-turn conversation (no manual context building)
       {:ok, response2} = ReqLLM.generate_text("anthropic:claude-3-sonnet", response.context)
@@ -49,7 +49,7 @@ defmodule ReqLLM.Response do
     field(:stream, Enumerable.t() | nil, default: nil)
 
     # ---------- Metadata ----------
-    field(:usage, %{optional(atom()) => integer()} | nil)
+    field(:usage, map() | nil)
     field(:finish_reason, atom() | String.t() | nil)
     # Raw provider extras
     field(:provider_meta, map(), default: %{})
@@ -133,10 +133,10 @@ defmodule ReqLLM.Response do
   ## Examples
 
       iex> ReqLLM.Response.usage(response)
-      %{input_tokens: 12, output_tokens: 8, total_tokens: 20}
+      %{input_tokens: 12, output_tokens: 8, total_tokens: 20, input_cost: 0.01, output_cost: 0.02, total_cost: 0.03}
 
   """
-  @spec usage(t()) :: %{optional(atom()) => integer()} | nil
+  @spec usage(t()) :: map() | nil
   def usage(%__MODULE__{usage: usage}), do: usage
 
   @doc """

@@ -330,6 +330,142 @@ defmodule ReqLLM.Step.UsageTest do
     end
   end
 
+  describe "handle/1 - Response struct with cost breakdown" do
+    setup do
+      setup_telemetry()
+    end
+
+    test "extracts usage from Response struct and adds cost fields" do
+      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03})
+      request = mock_request(model: model)
+
+      response_body = %ReqLLM.Response{
+        id: "test-id",
+        model: "gpt-4",
+        context: %ReqLLM.Context{messages: []},
+        message: nil,
+        usage: %{input_tokens: 100, output_tokens: 50, total_tokens: 150},
+        finish_reason: nil
+      }
+
+      response = mock_response(response_body)
+
+      {_req, updated_resp} = Usage.handle({request, response})
+
+      # Check private storage has breakdown
+      usage_data = updated_resp.private[:req_llm][:usage]
+      assert usage_data.tokens.input == 100
+      assert usage_data.tokens.output == 50
+      assert usage_data.cost == 0.0025
+      assert usage_data.input_cost == 0.001
+      assert usage_data.output_cost == 0.0015
+      assert usage_data.total_cost == 0.0025
+
+      # Check Response.usage now includes cost fields
+      response_usage = updated_resp.body.usage
+      assert response_usage.input_tokens == 100
+      assert response_usage.output_tokens == 50
+      assert response_usage.total_tokens == 150
+      assert response_usage.input_cost == 0.001
+      assert response_usage.output_cost == 0.0015
+      assert response_usage.total_cost == 0.0025
+
+      # Check telemetry includes breakdown
+      assert_receive {:telemetry_event, [:req_llm, :token_usage], measurements, metadata}
+      assert measurements.cost == 0.0025
+      assert measurements.input_cost == 0.001
+      assert measurements.output_cost == 0.0015
+      assert measurements.total_cost == 0.0025
+      assert metadata.model == model
+    end
+
+    test "handles Response struct without cost data gracefully" do
+      model = Model.new(:openai, "gpt-4")  # no cost map
+      request = mock_request(model: model)
+
+      response_body = %ReqLLM.Response{
+        id: "test-id",
+        model: "gpt-4",
+        context: %ReqLLM.Context{messages: []},
+        message: nil,
+        usage: %{input_tokens: 100, output_tokens: 50, total_tokens: 150},
+        finish_reason: nil
+      }
+
+      response = mock_response(response_body)
+
+      {_req, updated_resp} = Usage.handle({request, response})
+
+      # Check no cost fields are added
+      response_usage = updated_resp.body.usage
+      assert response_usage.input_tokens == 100
+      assert response_usage.output_tokens == 50
+      assert response_usage.total_tokens == 150
+      refute Map.has_key?(response_usage, :input_cost)
+      refute Map.has_key?(response_usage, :output_cost)  
+      refute Map.has_key?(response_usage, :total_cost)
+    end
+
+    test "handles Response struct with malformed usage gracefully" do
+      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03})
+      request = mock_request(model: model)
+
+      response_body = %ReqLLM.Response{
+        id: "test-id",
+        model: "gpt-4",
+        context: %ReqLLM.Context{messages: []},
+        message: nil,
+        usage: %{input_tokens: "not_a_number", output_tokens: 50, total_tokens: 150},
+        finish_reason: nil
+      }
+
+      response = mock_response(response_body)
+
+      {_req, updated_resp} = Usage.handle({request, response})
+
+      # Should not add cost fields when tokens are malformed
+      response_usage = updated_resp.body.usage
+      assert response_usage.input_tokens == "not_a_number"
+      assert response_usage.output_tokens == 50
+      refute Map.has_key?(response_usage, :input_cost)
+      refute Map.has_key?(response_usage, :output_cost)
+      refute Map.has_key?(response_usage, :total_cost)
+    end
+
+    test "preserves Response fields when adding cost breakdown" do
+      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03})
+      request = mock_request(model: model)
+
+      original_message = %ReqLLM.Message{role: :assistant, content: [%{type: :text, text: "Hello"}]}
+
+      response_body = %ReqLLM.Response{
+        id: "test-id",
+        model: "gpt-4",
+        context: %ReqLLM.Context{messages: []},
+        message: original_message,
+        usage: %{input_tokens: 100, output_tokens: 50},
+        finish_reason: :stop,
+        provider_meta: %{custom: "data"}
+      }
+
+      response = mock_response(response_body)
+
+      {_req, updated_resp} = Usage.handle({request, response})
+
+      # All original fields should be preserved
+      assert updated_resp.body.id == "test-id"
+      assert updated_resp.body.model == "gpt-4"
+      assert updated_resp.body.message == original_message
+      assert updated_resp.body.finish_reason == :stop
+      assert updated_resp.body.provider_meta == %{custom: "data"}
+
+      # And cost fields should be added
+      assert updated_resp.body.usage.input_cost == 0.001
+      assert updated_resp.body.usage.output_cost == 0.0015
+      assert updated_resp.body.usage.total_cost == 0.0025
+    end
+  end
+
   describe "integration with Req pipeline" do
     test "usage step works properly in Req pipeline" do
       model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03})
