@@ -3,40 +3,10 @@
     {
       "attachment": false,
       "cost": {
-        "input": 0.6,
-        "output": 2.5
-      },
-      "id": "Moonshotai-Kimi-K2-Instruct-0905",
-      "knowledge": "2025-08",
-      "last_updated": "2025-09-05",
-      "limit": {
-        "context": 262144,
-        "output": 262144
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "moonshotai/Kimi-K2-Instruct-0905",
-      "open_weights": true,
-      "provider": "baseten",
-      "provider_model_id": "Moonshotai-Kimi-K2-Instruct-0905",
-      "reasoning": false,
-      "release_date": "2025-09-05",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
         "input": 0.38,
         "output": 1.53
       },
-      "id": "Qwen-Qwen3-Coder-480B-A35B-Instruct",
+      "id": "Qwen3/Qwen3-Coder-480B-A35B-Instruct",
       "knowledge": "2025-04",
       "last_updated": "2025-07-23",
       "limit": {
@@ -51,12 +21,42 @@
           "text"
         ]
       },
-      "name": "Qwen/Qwen3-Coder-480B-A35B-Instruct",
+      "name": "Qwen3 Coder 480B A35B Instruct",
       "open_weights": true,
       "provider": "baseten",
-      "provider_model_id": "Qwen-Qwen3-Coder-480B-A35B-Instruct",
+      "provider_model_id": "Qwen3/Qwen3-Coder-480B-A35B-Instruct",
       "reasoning": false,
       "release_date": "2025-07-23",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.6,
+        "output": 2.5
+      },
+      "id": "moonshotai/Kimi-K2-Instruct-0905",
+      "knowledge": "2025-08",
+      "last_updated": "2025-09-05",
+      "limit": {
+        "context": 262144,
+        "output": 262144
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Kimi K2 Instruct 0905",
+      "open_weights": true,
+      "provider": "baseten",
+      "provider_model_id": "moonshotai/Kimi-K2-Instruct-0905",
+      "reasoning": false,
+      "release_date": "2025-09-05",
       "temperature": true,
       "tool_call": true
     }

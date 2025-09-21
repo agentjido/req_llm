@@ -3,64 +3,6 @@
     {
       "attachment": false,
       "cost": {
-        "input": 0.15,
-        "output": 0.6
-      },
-      "id": "accounts/fireworks/gpt-oss-120b",
-      "last_updated": "2025-08-05",
-      "limit": {
-        "context": 131072,
-        "output": 32768
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "GPT OSS 120B",
-      "open_weights": true,
-      "provider": "fireworks-ai",
-      "provider_model_id": "accounts/fireworks/gpt-oss-120b",
-      "reasoning": true,
-      "release_date": "2025-08-05",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0.05,
-        "output": 0.2
-      },
-      "id": "accounts/fireworks/gpt-oss-20b",
-      "last_updated": "2025-08-05",
-      "limit": {
-        "context": 131072,
-        "output": 32768
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "GPT OSS 20B",
-      "open_weights": true,
-      "provider": "fireworks-ai",
-      "provider_model_id": "accounts/fireworks/gpt-oss-20b",
-      "reasoning": true,
-      "release_date": "2025-08-05",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
         "input": 3,
         "output": 8
       },
@@ -205,6 +147,64 @@
       "provider_model_id": "accounts/fireworks/models/glm-4p5-air",
       "reasoning": true,
       "release_date": "2025-08-01",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.15,
+        "output": 0.6
+      },
+      "id": "accounts/fireworks/models/gpt-oss-120b",
+      "last_updated": "2025-08-05",
+      "limit": {
+        "context": 131072,
+        "output": 32768
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "GPT OSS 120B",
+      "open_weights": true,
+      "provider": "fireworks-ai",
+      "provider_model_id": "accounts/fireworks/models/gpt-oss-120b",
+      "reasoning": true,
+      "release_date": "2025-08-05",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.05,
+        "output": 0.2
+      },
+      "id": "accounts/fireworks/models/gpt-oss-20b",
+      "last_updated": "2025-08-05",
+      "limit": {
+        "context": 131072,
+        "output": 32768
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "GPT OSS 20B",
+      "open_weights": true,
+      "provider": "fireworks-ai",
+      "provider_model_id": "accounts/fireworks/models/gpt-oss-20b",
+      "reasoning": true,
+      "release_date": "2025-08-05",
       "temperature": true,
       "tool_call": true
     },

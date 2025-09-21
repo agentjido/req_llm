@@ -476,6 +476,68 @@
     {
       "attachment": false,
       "cost": {
+        "cache_read": 0.02,
+        "input": 0.2,
+        "output": 0.5
+      },
+      "id": "grok-4-fast-non-reasoning",
+      "knowledge": "2024-11",
+      "last_updated": "2025-09-21",
+      "limit": {
+        "context": 2000000,
+        "output": 64000
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Grok 4 Fast Non-Reasoning",
+      "open_weights": false,
+      "provider": "xai",
+      "provider_model_id": "grok-4-fast-non-reasoning",
+      "reasoning": false,
+      "release_date": "2025-09-21",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "cache_read": 0.02,
+        "input": 0.2,
+        "output": 0.5
+      },
+      "id": "grok-4-fast-reasoning",
+      "knowledge": "2024-11",
+      "last_updated": "2025-09-21",
+      "limit": {
+        "context": 2000000,
+        "output": 64000
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Grok 4 Fast Reasoning",
+      "open_weights": false,
+      "provider": "xai",
+      "provider_model_id": "grok-4-fast-reasoning",
+      "reasoning": true,
+      "release_date": "2025-09-21",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
         "cache_read": 5,
         "input": 5,
         "output": 15

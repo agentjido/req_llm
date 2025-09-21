@@ -416,6 +416,35 @@
     {
       "attachment": false,
       "cost": {
+        "input": 0.25,
+        "output": 1
+      },
+      "id": "meituan-longcat/LongCat-Flash-Chat-FP8",
+      "last_updated": "2025-09-10",
+      "limit": {
+        "context": 131072,
+        "output": 131072
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "LongCat Flash Chat FP8",
+      "open_weights": true,
+      "provider": "chutes",
+      "provider_model_id": "meituan-longcat/LongCat-Flash-Chat-FP8",
+      "reasoning": false,
+      "release_date": "2025-09-10",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
         "input": 0.06664,
         "output": 0.266688
       },

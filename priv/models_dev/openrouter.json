@@ -2777,6 +2777,39 @@
     {
       "attachment": false,
       "cost": {
+        "cache_read": 0,
+        "cache_write": 0,
+        "input": 0,
+        "output": 0
+      },
+      "id": "x-ai/grok-4-fast:free",
+      "knowledge": "2024-11",
+      "last_updated": "2025-08-19",
+      "limit": {
+        "context": 2000000,
+        "output": 2000000
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Grok 4 Fast (free)",
+      "open_weights": false,
+      "provider": "openrouter",
+      "provider_model_id": "x-ai/grok-4-fast:free",
+      "reasoning": true,
+      "release_date": "2025-08-19",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
         "cache_read": 0.75,
         "cache_write": 15,
         "input": 3,

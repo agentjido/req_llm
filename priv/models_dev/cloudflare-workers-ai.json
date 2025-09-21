@@ -954,6 +954,35 @@
     {
       "attachment": false,
       "cost": {
+        "input": 0.0052,
+        "output": 0.0052
+      },
+      "id": "nova-3",
+      "last_updated": "2025-07-08",
+      "limit": {
+        "context": 0,
+        "output": 0
+      },
+      "modalities": {
+        "input": [
+          "audio"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "@cf/deepgram/nova-3",
+      "open_weights": true,
+      "provider": "cloudflare-workers-ai",
+      "provider_model_id": "nova-3",
+      "reasoning": false,
+      "release_date": "2025-06-05",
+      "temperature": false,
+      "tool_call": false
+    },
+    {
+      "attachment": false,
+      "cost": {
         "input": 0,
         "output": 0
       },
@@ -979,6 +1008,35 @@
       "release_date": "2024-04-01",
       "temperature": true,
       "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.015,
+        "output": 0.015
+      },
+      "id": "aura-1",
+      "last_updated": "2025-07-07",
+      "limit": {
+        "context": 0,
+        "output": 0
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "audio"
+        ]
+      },
+      "name": "@cf/deepgram/aura-1",
+      "open_weights": true,
+      "provider": "cloudflare-workers-ai",
+      "provider_model_id": "aura-1",
+      "reasoning": false,
+      "release_date": "2025-08-27",
+      "temperature": false,
+      "tool_call": false
     },
     {
       "attachment": false,
@@ -1534,6 +1592,35 @@
     {
       "attachment": false,
       "cost": {
+        "input": 0.007,
+        "output": 0.007
+      },
+      "id": "lucid-origin",
+      "last_updated": "2025-08-05",
+      "limit": {
+        "context": 0,
+        "output": 0
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "image"
+        ]
+      },
+      "name": "@cf/leonardo/lucid-origin",
+      "open_weights": false,
+      "provider": "cloudflare-workers-ai",
+      "provider_model_id": "lucid-origin",
+      "reasoning": false,
+      "release_date": "2025-08-25",
+      "temperature": false,
+      "tool_call": false
+    },
+    {
+      "attachment": false,
+      "cost": {
         "input": 0,
         "output": 0
       },
@@ -1646,6 +1733,35 @@
       "release_date": "2023-11-15",
       "temperature": true,
       "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.0058,
+        "output": 0.0058
+      },
+      "id": "phoenix-1.0",
+      "last_updated": "2025-08-25",
+      "limit": {
+        "context": 0,
+        "output": 0
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "image"
+        ]
+      },
+      "name": "@cf/leonardo/phoenix-1.0",
+      "open_weights": false,
+      "provider": "cloudflare-workers-ai",
+      "provider_model_id": "phoenix-1.0",
+      "reasoning": false,
+      "release_date": "2025-08-25",
+      "temperature": false,
+      "tool_call": false
     },
     {
       "attachment": false,
