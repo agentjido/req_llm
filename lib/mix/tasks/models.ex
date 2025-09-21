@@ -277,12 +277,6 @@ defmodule Mix.Tasks.ReqLlm.Models do
     end
   end
 
-  defp extract_model_ids(models_json) do
-    # Extract model IDs using regex - simple but works for our structured data
-    Regex.scan(~r/"id":\s*"([^"]+)"/s, models_json)
-    |> Enum.map(fn [_, id] -> id end)
-  end
-
   defp format_number(num) when num >= 1_000_000 do
     "#{Float.round(num / 1_000_000, 1)}M"
   end
