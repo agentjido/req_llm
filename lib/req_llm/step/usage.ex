@@ -58,17 +58,18 @@ defmodule ReqLLM.Step.Usage do
       # Keep legacy total cost for telemetry compatibility
       total_cost = cost_breakdown && cost_breakdown.total_cost
       meta = %{tokens: usage, cost: total_cost}
-      
+
       # Add cost breakdown to meta if available
-      meta = if cost_breakdown do
-        Map.merge(meta, %{
-          input_cost: cost_breakdown.input_cost,
-          output_cost: cost_breakdown.output_cost,
-          total_cost: cost_breakdown.total_cost
-        })
-      else
-        meta
-      end
+      meta =
+        if cost_breakdown do
+          Map.merge(meta, %{
+            input_cost: cost_breakdown.input_cost,
+            output_cost: cost_breakdown.output_cost,
+            total_cost: cost_breakdown.total_cost
+          })
+        else
+          meta
+        end
 
       # Emit telemetry event for monitoring
       :telemetry.execute(@event, meta, %{model: model})
@@ -76,22 +77,31 @@ defmodule ReqLLM.Step.Usage do
       # Store usage data in response private for access by callers
       req_llm_data = Map.get(resp.private, :req_llm, %{})
       updated_req_llm_data = Map.put(req_llm_data, :usage, meta)
-      
+
       # Update Response.usage field with cost information if resp.body is a Response
-      updated_resp = case resp.body do
-        %ReqLLM.Response{usage: response_usage} when is_map(response_usage) and cost_breakdown != nil ->
-          augmented_usage = Map.merge(response_usage, %{
-            input_cost: cost_breakdown.input_cost,
-            output_cost: cost_breakdown.output_cost,
-            total_cost: cost_breakdown.total_cost
-          })
-          updated_body = %{resp.body | usage: augmented_usage}
-          %{resp | body: updated_body}
-        _ ->
-          resp
-      end
-      
-      updated_resp = %{updated_resp | private: Map.put(updated_resp.private, :req_llm, updated_req_llm_data)}
+      updated_resp =
+        case resp.body do
+          %ReqLLM.Response{usage: response_usage}
+          when is_map(response_usage) and cost_breakdown != nil ->
+            augmented_usage =
+              Map.merge(response_usage, %{
+                input_cost: cost_breakdown.input_cost,
+                output_cost: cost_breakdown.output_cost,
+                total_cost: cost_breakdown.total_cost
+              })
+
+            updated_body = %{resp.body | usage: augmented_usage}
+            %{resp | body: updated_body}
+
+          _ ->
+            resp
+        end
+
+      updated_resp = %{
+        updated_resp
+        | private: Map.put(updated_resp.private, :req_llm, updated_req_llm_data)
+      }
+
       {req, updated_resp}
     else
       _ -> {req, resp}
@@ -192,11 +202,15 @@ defmodule ReqLLM.Step.Usage do
 
   @spec compute_cost_breakdown(%{input: any(), output: any(), reasoning: any()}, ReqLLM.Model.t()) ::
           {:ok, %{input_cost: float(), output_cost: float(), total_cost: float()} | nil}
-  defp compute_cost_breakdown(%{input: _input_tokens, output: _output_tokens}, %ReqLLM.Model{cost: nil}) do
+  defp compute_cost_breakdown(%{input: _input_tokens, output: _output_tokens}, %ReqLLM.Model{
+         cost: nil
+       }) do
     {:ok, nil}
   end
 
-  defp compute_cost_breakdown(%{input: input_tokens, output: output_tokens}, %ReqLLM.Model{cost: cost_map})
+  defp compute_cost_breakdown(%{input: input_tokens, output: output_tokens}, %ReqLLM.Model{
+         cost: cost_map
+       })
        when is_map(cost_map) do
     input_rate = cost_map[:input] || cost_map["input"]
     output_rate = cost_map[:output] || cost_map["output"]
@@ -208,11 +222,12 @@ defmodule ReqLLM.Step.Usage do
       output_cost = Float.round(output_num / 1000 * output_rate, 6)
       total_cost = Float.round(input_cost + output_cost, 6)
 
-      {:ok, %{
-        input_cost: input_cost,
-        output_cost: output_cost,
-        total_cost: total_cost
-      }}
+      {:ok,
+       %{
+         input_cost: input_cost,
+         output_cost: output_cost,
+         total_cost: total_cost
+       }}
     else
       _ -> {:ok, nil}
     end

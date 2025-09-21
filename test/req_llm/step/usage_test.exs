@@ -380,7 +380,8 @@ defmodule ReqLLM.Step.UsageTest do
     end
 
     test "handles Response struct without cost data gracefully" do
-      model = Model.new(:openai, "gpt-4")  # no cost map
+      # no cost map
+      model = Model.new(:openai, "gpt-4")
       request = mock_request(model: model)
 
       response_body = %ReqLLM.Response{
@@ -402,7 +403,7 @@ defmodule ReqLLM.Step.UsageTest do
       assert response_usage.output_tokens == 50
       assert response_usage.total_tokens == 150
       refute Map.has_key?(response_usage, :input_cost)
-      refute Map.has_key?(response_usage, :output_cost)  
+      refute Map.has_key?(response_usage, :output_cost)
       refute Map.has_key?(response_usage, :total_cost)
     end
 
@@ -436,7 +437,10 @@ defmodule ReqLLM.Step.UsageTest do
       model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03})
       request = mock_request(model: model)
 
-      original_message = %ReqLLM.Message{role: :assistant, content: [%{type: :text, text: "Hello"}]}
+      original_message = %ReqLLM.Message{
+        role: :assistant,
+        content: [%{type: :text, text: "Hello"}]
+      }
 
       response_body = %ReqLLM.Response{
         id: "test-id",
