@@ -219,7 +219,7 @@ defmodule ReqLLM.Step.Usage do
     end
   end
 
-  @spec compute_cost_breakdown(%{input: any(), output: any(), reasoning: any()}, ReqLLM.Model.t()) ::
+  @spec compute_cost_breakdown(map(), ReqLLM.Model.t()) ::
           {:ok, %{input_cost: float(), output_cost: float(), total_cost: float()} | nil}
   defp compute_cost_breakdown(%{input: _input_tokens, output: _output_tokens}, %ReqLLM.Model{
          cost: nil
@@ -241,15 +241,9 @@ defmodule ReqLLM.Step.Usage do
          true <- input_rate != nil and output_rate != nil do
       # Extract cached tokens and calculate split
       cached_tokens =
-        case usage do
-          %{cached_input: c} ->
-            case safe_to_number(c) do
-              {:ok, n} -> min(max(n, 0), max(input_num, 0))
-              _ -> 0
-            end
-
-          _ ->
-            0
+        case safe_to_number(Map.get(usage, :cached_input, 0)) do
+          {:ok, n} -> min(max(n, 0), max(input_num, 0))
+          _ -> 0
         end
 
       uncached_tokens = max(input_num - cached_tokens, 0)
