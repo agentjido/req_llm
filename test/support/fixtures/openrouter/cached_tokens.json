@@ -1,0 +1,89 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJuIjoxLCJtYXhfdG9rZW5zIjoxMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJFeHBsYWluIHF1YW50dW0gY29tcHV0aW5nIGluIHNpbXBsZSB0ZXJtcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im1ldGEtbGxhbWEvbGxhbWEtMy4yLTNiLWluc3RydWN0OmZyZWUiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "url": "https://openrouter.ai/api/v1/chat/completions",
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": [
+        "[REDACTED:authorization]"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "canonical_json": "{\"max_tokens\":10,\"messages\":[{\"content\":\"Explain quantum computing in simple terms\",\"role\":\"user\"}],\"model\":\"meta-llama/llama-3.2-3b-instruct:free\",\"n\":1,\"seed\":42,\"stream\":false,\"temperature\":0.0}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Quantum computing is a new way of processing information",
+            "reasoning": null,
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "length"
+        }
+      ],
+      "created": 1758490574,
+      "id": "gen-1758490574-R2ZJoxGIYWuOFdf5Ifwh",
+      "model": "meta-llama/llama-3.2-3b-instruct:free",
+      "object": "chat.completion",
+      "provider": "Venice",
+      "usage": {
+        "completion_tokens": 10,
+        "prompt_tokens": 740,
+        "total_tokens": 750
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "982cb267790deaff-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 21 Sep 2025 21:36:15 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    }
+  },
+  "captured_at": "2025-09-21T21:36:15.527499Z"
+}

@@ -234,7 +234,11 @@ defmodule ReqLLM.Step.Usage do
        when is_map(cost_map) do
     input_rate = cost_map[:input] || cost_map["input"]
     output_rate = cost_map[:output] || cost_map["output"]
-    cached_rate = cost_map[:cached_input] || cost_map["cached_input"] || input_rate
+
+    cached_rate =
+      cost_map[:cached_input] || cost_map["cached_input"] ||
+        cost_map[:cache_read] || cost_map["cache_read"] ||
+        input_rate
 
     with {:ok, input_num} <- safe_to_number(input_tokens),
          {:ok, output_num} <- safe_to_number(output_tokens),

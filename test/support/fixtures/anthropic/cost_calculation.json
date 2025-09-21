@@ -1,0 +1,133 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtZXNzYWdlcyI6W3sicm9sZSI6InVzZXIiLCJjb250ZW50IjoiSGkgdGhlcmUhIn1dLCJzdHJlYW0iOmZhbHNlLCJtb2RlbCI6ImNsYXVkZS0zLTUtaGFpa3UtMjAyNDEwMjIiLCJtYXhfdG9rZW5zIjoxMCwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "url": "https://api.anthropic.com/v1/messages",
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-api-key": [
+        "[REDACTED:x-api-key]"
+      ]
+    },
+    "method": "post",
+    "canonical_json": "{\"max_tokens\":10,\"messages\":[{\"content\":\"Hi there!\",\"role\":\"user\"}],\"model\":\"claude-3-5-haiku-20241022\",\"stream\":false,\"temperature\":0.0}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "content": [
+        {
+          "text": "Hello! How are you doing today? Is there",
+          "type": "text"
+        }
+      ],
+      "id": "msg_01AyDS5UXoKA7fvfUibeURS9",
+      "model": "claude-3-5-haiku-20241022",
+      "role": "assistant",
+      "stop_reason": "max_tokens",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 10,
+        "output_tokens": 10,
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": [
+        "a71659e7-a922-4ff7-99de-f3ba615face1"
+      ],
+      "anthropic-ratelimit-input-tokens-limit": [
+        "100000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "100000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2025-09-21T21:36:10Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "20000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "20000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2025-09-21T21:36:10Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "1000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2025-09-21T21:36:10Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "120000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "120000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2025-09-21T21:36:10Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "982cb24efca94848-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 21 Sep 2025 21:36:10 GMT"
+      ],
+      "request-id": [
+        "req_011CTNGPWvzY62kuJhJDKjeQ"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "843"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    }
+  },
+  "captured_at": "2025-09-21T21:36:11.028312Z"
+}

@@ -1,0 +1,122 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJDb3VudCBmcm9tIDEgdG8gMTAiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJsbGFtYS0zLjEtOGItaW5zdGFudCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "url": "https://api.groq.com/openai/v1/chat/completions",
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": [
+        "[REDACTED:authorization]"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "canonical_json": "{\"max_tokens\":10,\"messages\":[{\"content\":\"Count from 1 to 10\",\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"seed\":42,\"stream\":false,\"temperature\":0.0}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Here's the count from 1 to 10",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1758490569,
+      "id": "chatcmpl-e30bcceb-8af4-43e7-9386-b0734b095e32",
+      "model": "llama-3.1-8b-instant",
+      "object": "chat.completion",
+      "service_tier": "on_demand",
+      "system_fingerprint": "fp_58885f0e49",
+      "usage": {
+        "completion_time": 0.01101195,
+        "completion_tokens": 10,
+        "prompt_time": 0.002381744,
+        "prompt_tokens": 42,
+        "queue_time": 0.192173054,
+        "total_time": 0.013393694,
+        "total_tokens": 52
+      },
+      "usage_breakdown": null,
+      "x_groq": {
+        "id": "req_01k5q39ayvfxyst4wh25kv00mw"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cache-control": [
+        "private, max-age=0, no-store, no-cache, must-revalidate"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "982cb24c6ad7ae77-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 21 Sep 2025 21:36:09 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=YRpnD2fFSKiXoO6DsJT5dsv4_dHu7Ukzu0Q8XR8Hp.Q-1758490569-1.0.1.1-Iw3JZhmvxFuoZQJnb_C1M8I.XgxmxrfRKsNHnlsJeyNiuMY4ztKrW7xgMxQcVT7bBH4o7vL6OwC1nzBVpO_5EaHuk0aWIw5zlgXrQ2cn_Ew; path=/; expires=Sun, 21-Sep-25 22:06:09 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-groq-region": [
+        "msp"
+      ],
+      "x-ratelimit-limit-requests": [
+        "14400"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "6000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "14397"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "5925"
+      ],
+      "x-ratelimit-reset-requests": [
+        "17.716999999s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "750ms"
+      ],
+      "x-request-id": [
+        "req_01k5q39ayvfxyst4wh25kv00mw"
+      ]
+    }
+  },
+  "captured_at": "2025-09-21T21:36:09.854757Z"
+}
