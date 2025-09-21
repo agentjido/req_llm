@@ -151,6 +151,7 @@ defmodule ReqLLM.Provider.Options do
 
   # Internal keys that bypass validation (framework concerns)
   @internal_keys [
+    :api_key,
     :req_options,
     :on_unsupported,
     :fixture,
