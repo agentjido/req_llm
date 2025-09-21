@@ -97,4 +97,4 @@ ReqLLM.generate_text!(
 
 ## Available Providers
 
-Run `mix req_llm.models` for up-to-date list of supported models.
+Run `mix req_llm.model_sync` for up-to-date list of supported models.

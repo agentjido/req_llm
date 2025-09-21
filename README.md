@@ -61,7 +61,7 @@ ReqLLM.stream_text!(model, "Write a short story")
 ## Features
 
 - **Provider-agnostic model registry**  
-  - 45 providers / 665+ models auto-synced from [models.dev](https://models.dev) (`mix req_llm.models.sync`)  
+  - 45 providers / 665+ models auto-synced from [models.dev](https://models.dev) (`mix req_llm.model_sync`)  
   - Cost, context length, modality, capability and deprecation metadata included
 
 - **Canonical data model**  
