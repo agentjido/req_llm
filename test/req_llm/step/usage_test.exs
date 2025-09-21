@@ -330,6 +330,144 @@ defmodule ReqLLM.Step.UsageTest do
     end
   end
 
+  describe "handle/1 - cached tokens support" do
+    setup do
+      setup_telemetry()
+    end
+
+    test "extracts cached tokens from OpenAI usage format" do
+      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03, cached_input: 0.005})
+      request = mock_request(model: model)
+
+      # OpenAI format with cached tokens in prompt_tokens_details
+      response_body = %{
+        "usage" => %{
+          "prompt_tokens" => 2006,
+          "completion_tokens" => 300,
+          "total_tokens" => 2306,
+          "prompt_tokens_details" => %{
+            "cached_tokens" => 1920
+          },
+          "completion_tokens_details" => %{
+            "reasoning_tokens" => 0
+          }
+        }
+      }
+
+      response = mock_response(response_body)
+      {_req, updated_resp} = Usage.handle({request, response})
+
+      usage_data = updated_resp.private[:req_llm][:usage]
+      assert usage_data.tokens.input == 2006
+      assert usage_data.tokens.output == 300
+      assert usage_data.tokens.reasoning == 0
+      assert usage_data.tokens.cached_input == 1920
+
+      # Check cost calculation with cached vs uncached split
+      # Uncached: 86 tokens * 0.01 / 1000 = 0.00086
+      # Cached: 1920 tokens * 0.005 / 1000 = 0.0096
+      # Input cost: 0.00086 + 0.0096 = 0.010460
+      # Output cost: 300 * 0.03 / 1000 = 0.009
+      # Total: 0.019460
+      expected_input_cost = Float.round((86 * 0.01 + 1920 * 0.005) / 1000, 6)
+      expected_output_cost = Float.round(300 * 0.03 / 1000, 6)
+      expected_total_cost = Float.round(expected_input_cost + expected_output_cost, 6)
+
+      assert usage_data.cost == expected_total_cost
+      assert usage_data.input_cost == expected_input_cost
+      assert usage_data.output_cost == expected_output_cost
+    end
+
+    test "handles cached tokens without cached_input rate (uses input rate)" do
+      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03})
+      request = mock_request(model: model)
+
+      response_body = %{
+        "usage" => %{
+          "prompt_tokens" => 1000,
+          "completion_tokens" => 100,
+          "prompt_tokens_details" => %{"cached_tokens" => 500}
+        }
+      }
+
+      response = mock_response(response_body)
+      {_req, updated_resp} = Usage.handle({request, response})
+
+      usage_data = updated_resp.private[:req_llm][:usage]
+      assert usage_data.tokens.cached_input == 500
+
+      # Both cached and uncached should use input rate when cached_input not specified
+      # Input cost: 1000 * 0.01 / 1000 = 0.01 (same as before)
+      expected_input_cost = Float.round(1000 * 0.01 / 1000, 6)
+      expected_output_cost = Float.round(100 * 0.03 / 1000, 6)
+
+      assert usage_data.input_cost == expected_input_cost
+      assert usage_data.output_cost == expected_output_cost
+    end
+
+    test "handles Response struct with cached tokens" do
+      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03, cached_input: 0.005})
+      request = mock_request(model: model)
+
+      response_body = %ReqLLM.Response{
+        id: "test-id",
+        model: "gpt-4",
+        context: %ReqLLM.Context{messages: []},
+        message: nil,
+        usage: %{
+          input_tokens: 1000,
+          output_tokens: 200,
+          total_tokens: 1200,
+          # Simulate cached tokens already extracted by provider
+          cached_tokens: 800
+        },
+        finish_reason: nil
+      }
+
+      response = mock_response(response_body)
+      {_req, updated_resp} = Usage.handle({request, response})
+
+      # Check Response.usage includes cached_tokens and correct costs
+      response_usage = updated_resp.body.usage
+      assert response_usage.input_tokens == 1000
+      assert response_usage.output_tokens == 200
+      assert response_usage.cached_tokens == 800
+
+      # Cost calculation: uncached=200, cached=800
+      # Input: (200*0.01 + 800*0.005)/1000 = 0.006
+      # Output: 200*0.03/1000 = 0.006  
+      # Total: 0.012
+      expected_input_cost = Float.round((200 * 0.01 + 800 * 0.005) / 1000, 6)
+      expected_output_cost = Float.round(200 * 0.03 / 1000, 6)
+
+      assert response_usage.input_cost == expected_input_cost
+      assert response_usage.output_cost == expected_output_cost
+      assert response_usage.total_cost == expected_input_cost + expected_output_cost
+    end
+
+    test "handles edge cases with cached tokens" do
+      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03, cached_input: 0.005})
+      request = mock_request(model: model)
+
+      test_cases = [
+        # Cached tokens > input tokens (should be clamped)
+        %{"usage" => %{"prompt_tokens" => 100, "completion_tokens" => 50, "prompt_tokens_details" => %{"cached_tokens" => 150}}},
+        # Cached tokens = 0 
+        %{"usage" => %{"prompt_tokens" => 100, "completion_tokens" => 50, "prompt_tokens_details" => %{"cached_tokens" => 0}}},
+        # Non-integer cached tokens (should be converted)
+        %{"usage" => %{"prompt_tokens" => 100, "completion_tokens" => 50, "prompt_tokens_details" => %{"cached_tokens" => 80.7}}}
+      ]
+
+      for {response_body, expected_cached} <- Enum.zip(test_cases, [100, 0, 80]) do
+        response = mock_response(response_body)
+        {_req, updated_resp} = Usage.handle({request, response})
+
+        usage_data = updated_resp.private[:req_llm][:usage]
+        assert usage_data.tokens.cached_input == expected_cached
+      end
+    end
+  end
+
   describe "handle/1 - Response struct with cost breakdown" do
     setup do
       setup_telemetry()

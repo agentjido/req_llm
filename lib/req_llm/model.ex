@@ -25,7 +25,7 @@ defmodule ReqLLM.Model do
   use TypedStruct
 
   @type modality :: :text | :audio | :image | :video | :pdf
-  @type cost :: %{input: float(), output: float()}
+  @type cost :: %{input: float(), output: float()} | %{input: float(), output: float(), cached_input: float()}
   @type limit :: %{context: non_neg_integer(), output: non_neg_integer()}
   @type capabilities :: %{
           reasoning: boolean(),
@@ -68,6 +68,7 @@ defmodule ReqLLM.Model do
   - `:modalities` - Input/output modalities map with lists of supported types
   - `:capabilities` - Model capabilities like `:reasoning`, `:tool_call`, `:temperature`, `:attachment`
   - `:cost` - Pricing information with `:input` and `:output` cost per 1K tokens
+     Optional `:cached_input` cost per 1K tokens (defaults to `:input` rate if not specified)
 
   ## Examples
 

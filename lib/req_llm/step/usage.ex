@@ -83,12 +83,18 @@ defmodule ReqLLM.Step.Usage do
         case resp.body do
           %ReqLLM.Response{usage: response_usage}
           when is_map(response_usage) and cost_breakdown != nil ->
-            augmented_usage =
-              Map.merge(response_usage, %{
-                input_cost: cost_breakdown.input_cost,
-                output_cost: cost_breakdown.output_cost,
-                total_cost: cost_breakdown.total_cost
-              })
+            cached_tokens = usage[:cached_input] || 0
+            
+            augmented_usage = response_usage
+              |> Map.put_new(:input_tokens, usage.input)
+              |> Map.put_new(:output_tokens, usage.output)
+              |> Map.put_new(:total_tokens, usage.input + usage.output)
+              |> then(fn m -> if cached_tokens > 0, do: Map.put(m, :cached_tokens, cached_tokens), else: m end)
+              |> Map.merge(%{
+                  input_cost: cost_breakdown.input_cost,
+                  output_cost: cost_breakdown.output_cost,
+                  total_cost: cost_breakdown.total_cost
+                })
 
             updated_body = %{resp.body | usage: augmented_usage}
             %{resp | body: updated_body}
@@ -141,25 +147,15 @@ defmodule ReqLLM.Step.Usage do
 
   @spec fallback_extract_usage(any) :: {:ok, map()} | :error
   defp fallback_extract_usage(%{"usage" => usage}) when is_map(usage) do
-    base_usage = %{
-      input: usage["prompt_tokens"] || usage["input_tokens"] || 0,
-      output: usage["completion_tokens"] || usage["output_tokens"] || 0
-    }
-
-    reasoning_tokens = get_in(usage, ["completion_tokens_details", "reasoning_tokens"])
-
-    usage_with_reasoning =
-      Map.put(base_usage, :reasoning, reasoning_tokens || 0)
-
-    {:ok, usage_with_reasoning}
+    {:ok, normalize_usage(usage)}
   end
 
   defp fallback_extract_usage(%{"prompt_tokens" => input, "completion_tokens" => output}) do
-    {:ok, %{input: input, output: output, reasoning: 0}}
+    {:ok, %{input: input, output: output, reasoning: 0, cached_input: 0}}
   end
 
   defp fallback_extract_usage(%{"input_tokens" => input, "output_tokens" => output}) do
-    {:ok, %{input: input, output: output, reasoning: 0}}
+    {:ok, %{input: input, output: output, reasoning: 0, cached_input: 0}}
   end
 
   defp fallback_extract_usage(%ReqLLM.Response{usage: usage}) when is_map(usage) do
@@ -177,7 +173,10 @@ defmodule ReqLLM.Step.Usage do
       output:
         usage[:output] || usage["output"] || usage["completion_tokens"] ||
           usage[:completion_tokens] || usage["output_tokens"] || usage[:output_tokens] || 0,
-      reasoning: usage[:reasoning] || usage["reasoning"] || get_reasoning_tokens(usage) || 0
+      reasoning: usage[:reasoning] || usage["reasoning"] || get_reasoning_tokens(usage) || 0,
+      cached_input: usage[:cached_input] || usage["cached_input"] || 
+          usage[:cached_tokens] || usage["cached_tokens"] || 
+          get_cached_input_tokens(usage) || 0
     }
   end
 
@@ -188,6 +187,22 @@ defmodule ReqLLM.Step.Usage do
 
     case reasoning do
       n when is_integer(n) -> n
+      _ -> 0
+    end
+  end
+
+  defp get_cached_input_tokens(usage) do
+    cached =
+      get_in(usage, ["prompt_tokens_details", "cached_tokens"]) ||
+        get_in(usage, [:prompt_tokens_details, :cached_tokens])
+
+    input_tokens = 
+      usage[:input] || usage["input"] || usage["prompt_tokens"] || usage[:prompt_tokens] ||
+        usage["input_tokens"] || usage[:input_tokens] || 0
+
+    case cached do
+      n when is_integer(n) -> min(max(n, 0), input_tokens)
+      n when is_float(n) -> min(max(trunc(n), 0), input_tokens)
       _ -> 0
     end
   end
@@ -208,17 +223,33 @@ defmodule ReqLLM.Step.Usage do
     {:ok, nil}
   end
 
-  defp compute_cost_breakdown(%{input: input_tokens, output: output_tokens}, %ReqLLM.Model{
+  defp compute_cost_breakdown(%{input: input_tokens, output: output_tokens} = usage, %ReqLLM.Model{
          cost: cost_map
        })
        when is_map(cost_map) do
     input_rate = cost_map[:input] || cost_map["input"]
     output_rate = cost_map[:output] || cost_map["output"]
+    cached_rate = cost_map[:cached_input] || cost_map["cached_input"] || input_rate
 
     with {:ok, input_num} <- safe_to_number(input_tokens),
          {:ok, output_num} <- safe_to_number(output_tokens),
          true <- input_rate != nil and output_rate != nil do
-      input_cost = Float.round(input_num / 1000 * input_rate, 6)
+      # Extract cached tokens and calculate split
+      cached_tokens = case usage do
+        %{cached_input: c} -> 
+          case safe_to_number(c) do 
+            {:ok, n} -> min(max(n, 0), max(input_num, 0))
+            _ -> 0
+          end
+        _ -> 0
+      end
+      uncached_tokens = max(input_num - cached_tokens, 0)
+
+      # Calculate costs with cached vs uncached rates
+      input_cost = Float.round(
+        (uncached_tokens / 1000 * input_rate) + (cached_tokens / 1000 * cached_rate), 
+        6
+      )
       output_cost = Float.round(output_num / 1000 * output_rate, 6)
       total_cost = Float.round(input_cost + output_cost, 6)
 
