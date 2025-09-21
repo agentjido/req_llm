@@ -518,8 +518,7 @@ defmodule ReqLLM.Provider.Options do
   defp extract_unknown_keys_from_opts(opts) do
     core_keys = all_generation_keys()
     user_keys = Keyword.keys(opts)
-    unknown_keys = user_keys -- core_keys -- @internal_keys
-    unknown_keys
+    user_keys -- (core_keys ++ @internal_keys)
   end
 
   defp get_provider_option_suggestions(provider_mod, unknown_keys) do
