@@ -249,16 +249,9 @@ defmodule Mix.Tasks.Req.Llm.StreamObject do
     end)
   end
 
-  defp format_error(%{__struct__: _} = error) do
-    case Exception.message(error) do
-      message when is_binary(message) -> message
-      _ -> inspect(error)
-    end
-  end
+  defp format_error(%{__struct__: _} = error), do: Exception.message(error)
 
-  defp format_error(error) do
-    inspect(error)
-  end
+  defp format_error(error), do: inspect(error)
 
   defp maybe_add_option(opts_list, parsed_opts, target_key, source_key \\ nil) do
     source_key = source_key || target_key

@@ -138,23 +138,23 @@ defmodule Mix.Tasks.ReqLlm.Shared do
 
   def handle_common_errors({:ok, result}), do: {:ok, result}
 
-  def handle_rescue_errors do
-    fn
-      %UndefinedFunctionError{module: nil, function: :prepare_request} ->
-        IO.puts(
-          "Error: Provider not properly configured or not available. Please check your model specification."
-        )
+  @spec handle_rescue_error(any()) :: no_return()
+  def handle_rescue_error(%UndefinedFunctionError{module: nil, function: :prepare_request}) do
+    IO.puts(
+      "Error: Provider not properly configured or not available. Please check your model specification."
+    )
 
-        System.halt(1)
+    System.halt(1)
+  end
 
-      %UndefinedFunctionError{} = error ->
-        IO.puts("Unexpected error: #{format_error(error)}")
-        System.halt(1)
+  def handle_rescue_error(%UndefinedFunctionError{} = error) do
+    IO.puts("Unexpected error: #{format_error(error)}")
+    System.halt(1)
+  end
 
-      error ->
-        IO.puts("Unexpected error: #{format_error(error)}")
-        System.halt(1)
-    end
+  def handle_rescue_error(error) do
+    IO.puts("Unexpected error: #{format_error(error)}")
+    System.halt(1)
   end
 
   def show_stats(content, start_time, model_spec, prompt, response, type \\ :text) do
@@ -209,12 +209,7 @@ defmodule Mix.Tasks.ReqLlm.Shared do
     end
   end
 
-  defp format_error(%{__struct__: _} = error) do
-    case Exception.message(error) do
-      message when is_binary(message) -> message
-      _ -> inspect(error)
-    end
-  end
+  defp format_error(%{__struct__: _} = error), do: Exception.message(error)
 
   defp format_error(error), do: inspect(error)
 

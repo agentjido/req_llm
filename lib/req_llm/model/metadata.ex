@@ -132,22 +132,18 @@ defmodule ReqLLM.Model.Metadata do
   @spec get_model_metadata(atom(), String.t()) :: {:ok, map()} | {:error, term()}
   def get_model_metadata(provider_id, model_name)
       when is_atom(provider_id) and is_binary(model_name) do
-    case ReqLLM.Provider.Registry.get_provider_metadata(provider_id) do
-      {:ok, provider_metadata} ->
-        models =
-          Map.get(provider_metadata, :models) ||
-            Map.get(provider_metadata, "models") ||
-            []
+    {:ok, provider_metadata} = ReqLLM.Provider.Registry.get_provider_metadata(provider_id)
 
-        case Enum.find(models, fn model ->
-               (Map.get(model, :id) || Map.get(model, "id")) == model_name
-             end) do
-          nil -> {:error, :model_not_found}
-          model_metadata -> {:ok, model_metadata}
-        end
+    models =
+      Map.get(provider_metadata, :models) ||
+        Map.get(provider_metadata, "models") ||
+        []
 
-      {:error, _reason} ->
-        {:error, :model_not_found}
+    case Enum.find(models, fn model ->
+           (Map.get(model, :id) || Map.get(model, "id")) == model_name
+         end) do
+      nil -> {:error, :model_not_found}
+      model_metadata -> {:ok, model_metadata}
     end
   end
 end

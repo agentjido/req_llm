@@ -58,7 +58,7 @@ defmodule Mix.Tasks.ReqLlm.StreamText do
           |> Shared.handle_common_errors()
           |> handle_success(quiet, verbose, metrics, start_time, model_spec, prompt)
         rescue
-          error -> Shared.handle_rescue_errors().(error)
+          error -> Shared.handle_rescue_error(error)
         end
 
       {:error, :no_prompt} ->
