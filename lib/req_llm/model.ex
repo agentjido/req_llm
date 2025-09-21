@@ -25,7 +25,9 @@ defmodule ReqLLM.Model do
   use TypedStruct
 
   @type modality :: :text | :audio | :image | :video | :pdf
-  @type cost :: %{input: float(), output: float()} | %{input: float(), output: float(), cached_input: float()}
+  @type cost ::
+          %{input: float(), output: float()}
+          | %{input: float(), output: float(), cached_input: float()}
   @type limit :: %{context: non_neg_integer(), output: non_neg_integer()}
   @type capabilities :: %{
           reasoning: boolean(),

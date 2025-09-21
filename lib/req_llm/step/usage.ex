@@ -84,17 +84,20 @@ defmodule ReqLLM.Step.Usage do
           %ReqLLM.Response{usage: response_usage}
           when is_map(response_usage) and cost_breakdown != nil ->
             cached_tokens = usage[:cached_input] || 0
-            
-            augmented_usage = response_usage
+
+            augmented_usage =
+              response_usage
               |> Map.put_new(:input_tokens, usage.input)
               |> Map.put_new(:output_tokens, usage.output)
               |> Map.put_new(:total_tokens, usage.input + usage.output)
-              |> then(fn m -> if cached_tokens > 0, do: Map.put(m, :cached_tokens, cached_tokens), else: m end)
+              |> then(fn m ->
+                if cached_tokens > 0, do: Map.put(m, :cached_tokens, cached_tokens), else: m
+              end)
               |> Map.merge(%{
-                  input_cost: cost_breakdown.input_cost,
-                  output_cost: cost_breakdown.output_cost,
-                  total_cost: cost_breakdown.total_cost
-                })
+                input_cost: cost_breakdown.input_cost,
+                output_cost: cost_breakdown.output_cost,
+                total_cost: cost_breakdown.total_cost
+              })
 
             updated_body = %{resp.body | usage: augmented_usage}
             %{resp | body: updated_body}
@@ -174,8 +177,9 @@ defmodule ReqLLM.Step.Usage do
         usage[:output] || usage["output"] || usage["completion_tokens"] ||
           usage[:completion_tokens] || usage["output_tokens"] || usage[:output_tokens] || 0,
       reasoning: usage[:reasoning] || usage["reasoning"] || get_reasoning_tokens(usage) || 0,
-      cached_input: usage[:cached_input] || usage["cached_input"] || 
-          usage[:cached_tokens] || usage["cached_tokens"] || 
+      cached_input:
+        usage[:cached_input] || usage["cached_input"] ||
+          usage[:cached_tokens] || usage["cached_tokens"] ||
           get_cached_input_tokens(usage) || 0
     }
   end
@@ -196,7 +200,7 @@ defmodule ReqLLM.Step.Usage do
       get_in(usage, ["prompt_tokens_details", "cached_tokens"]) ||
         get_in(usage, [:prompt_tokens_details, :cached_tokens])
 
-    input_tokens = 
+    input_tokens =
       usage[:input] || usage["input"] || usage["prompt_tokens"] || usage[:prompt_tokens] ||
         usage["input_tokens"] || usage[:input_tokens] || 0
 
@@ -223,9 +227,10 @@ defmodule ReqLLM.Step.Usage do
     {:ok, nil}
   end
 
-  defp compute_cost_breakdown(%{input: input_tokens, output: output_tokens} = usage, %ReqLLM.Model{
-         cost: cost_map
-       })
+  defp compute_cost_breakdown(
+         %{input: input_tokens, output: output_tokens} = usage,
+         %ReqLLM.Model{cost: cost_map}
+       )
        when is_map(cost_map) do
     input_rate = cost_map[:input] || cost_map["input"]
     output_rate = cost_map[:output] || cost_map["output"]
@@ -235,21 +240,27 @@ defmodule ReqLLM.Step.Usage do
          {:ok, output_num} <- safe_to_number(output_tokens),
          true <- input_rate != nil and output_rate != nil do
       # Extract cached tokens and calculate split
-      cached_tokens = case usage do
-        %{cached_input: c} -> 
-          case safe_to_number(c) do 
-            {:ok, n} -> min(max(n, 0), max(input_num, 0))
-            _ -> 0
-          end
-        _ -> 0
-      end
+      cached_tokens =
+        case usage do
+          %{cached_input: c} ->
+            case safe_to_number(c) do
+              {:ok, n} -> min(max(n, 0), max(input_num, 0))
+              _ -> 0
+            end
+
+          _ ->
+            0
+        end
+
       uncached_tokens = max(input_num - cached_tokens, 0)
 
       # Calculate costs with cached vs uncached rates
-      input_cost = Float.round(
-        (uncached_tokens / 1000 * input_rate) + (cached_tokens / 1000 * cached_rate), 
-        6
-      )
+      input_cost =
+        Float.round(
+          uncached_tokens / 1000 * input_rate + cached_tokens / 1000 * cached_rate,
+          6
+        )
+
       output_cost = Float.round(output_num / 1000 * output_rate, 6)
       total_cost = Float.round(input_cost + output_cost, 6)
 

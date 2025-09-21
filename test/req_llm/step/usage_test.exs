@@ -451,11 +451,29 @@ defmodule ReqLLM.Step.UsageTest do
 
       test_cases = [
         # Cached tokens > input tokens (should be clamped)
-        %{"usage" => %{"prompt_tokens" => 100, "completion_tokens" => 50, "prompt_tokens_details" => %{"cached_tokens" => 150}}},
+        %{
+          "usage" => %{
+            "prompt_tokens" => 100,
+            "completion_tokens" => 50,
+            "prompt_tokens_details" => %{"cached_tokens" => 150}
+          }
+        },
         # Cached tokens = 0 
-        %{"usage" => %{"prompt_tokens" => 100, "completion_tokens" => 50, "prompt_tokens_details" => %{"cached_tokens" => 0}}},
+        %{
+          "usage" => %{
+            "prompt_tokens" => 100,
+            "completion_tokens" => 50,
+            "prompt_tokens_details" => %{"cached_tokens" => 0}
+          }
+        },
         # Non-integer cached tokens (should be converted)
-        %{"usage" => %{"prompt_tokens" => 100, "completion_tokens" => 50, "prompt_tokens_details" => %{"cached_tokens" => 80.7}}}
+        %{
+          "usage" => %{
+            "prompt_tokens" => 100,
+            "completion_tokens" => 50,
+            "prompt_tokens_details" => %{"cached_tokens" => 80.7}
+          }
+        }
       ]
 
       for {response_body, expected_cached} <- Enum.zip(test_cases, [100, 0, 80]) do
