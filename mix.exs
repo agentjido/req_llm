@@ -15,7 +15,7 @@ defmodule ReqLLM.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
 
       # Test coverage
-      test_coverage: [tool: ExCoveralls],
+      test_coverage: [tool: ExCoveralls, export: "cov", exclude: [:coverage]],
       preferred_cli_env: [
         coveralls: :test,
         "coveralls.detail": :test,

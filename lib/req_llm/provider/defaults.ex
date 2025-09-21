@@ -293,13 +293,7 @@ defmodule ReqLLM.Provider.Defaults do
       raise ReqLLM.Error.Invalid.Provider.exception(provider: model.provider)
     end
 
-    # Skip API key validation when using fixtures for testing
-    api_key =
-      if user_opts[:fixture] do
-        "test-api-key"
-      else
-        ReqLLM.Keys.get!(model, user_opts)
-      end
+    api_key = ReqLLM.Keys.get!(model, user_opts)
 
     # Register options that might be passed by users but aren't standard Req options
     extra_option_keys =
