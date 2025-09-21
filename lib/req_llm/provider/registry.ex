@@ -924,10 +924,12 @@ defmodule ReqLLM.Provider.Registry do
   @spec get_env_key(atom()) :: String.t() | nil
   def get_env_key(provider_id) when is_atom(provider_id) do
     # Try metadata first
-    {:ok, metadata} = get_provider_metadata(provider_id)
-
-    case get_in(metadata, ["provider", "env"]) || get_in(metadata, [:provider, :env]) do
-      [env_var | _] when is_binary(env_var) -> env_var
+    with {:ok, metadata} <- get_provider_metadata(provider_id),
+         env_list when is_list(env_list) <-
+           get_in(metadata, ["provider", "env"]) || get_in(metadata, [:provider, :env]),
+         [env_var | _] when is_binary(env_var) <- env_list do
+      env_var
+    else
       _ -> try_provider_default_env_key(provider_id)
     end
   end
