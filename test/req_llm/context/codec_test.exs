@@ -327,7 +327,7 @@ defmodule ReqLLM.Context.CodecTest do
 
       assert length(result.messages) == 1
       assert length(hd(result.messages).tool_calls) == 2
-      
+
       [first_call, second_call] = hd(result.messages).tool_calls
       assert first_call.id == "call_123"
       assert first_call.function.name == "get_weather"

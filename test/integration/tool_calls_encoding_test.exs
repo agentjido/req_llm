@@ -1,15 +1,15 @@
 defmodule ReqLLM.Integration.ToolCallsEncodingTest do
+  @moduledoc """
+  Integration test demonstrating that tool_calls encoding works correctly
+  for OpenAI-style API requests. This verifies the fix for GitHub issue #44.
+  """
+
   use ExUnit.Case, async: true
 
   alias ReqLLM.Context
   alias ReqLLM.Context.Codec
   alias ReqLLM.Message
   alias ReqLLM.Model
-
-  @moduledoc """
-  Integration test demonstrating that tool_calls encoding works correctly
-  for OpenAI-style API requests. This verifies the fix for GitHub issue #44.
-  """
 
   describe "OpenAI tool calling integration" do
     test "encodes a complete conversation with tool calls correctly" do
@@ -22,7 +22,9 @@ defmodule ReqLLM.Integration.ToolCallsEncodingTest do
       messages = [
         %Message{
           role: :user,
-          content: [%Message.ContentPart{type: :text, text: "What's the weather in Paris and New York?"}]
+          content: [
+            %Message.ContentPart{type: :text, text: "What's the weather in Paris and New York?"}
+          ]
         },
         %Message{
           role: :assistant,
@@ -58,10 +60,13 @@ defmodule ReqLLM.Integration.ToolCallsEncodingTest do
         },
         %Message{
           role: :assistant,
-          content: [%Message.ContentPart{
-            type: :text,
-            text: "The weather in Paris is 22°C and sunny, while in New York it's 18°C and cloudy."
-          }]
+          content: [
+            %Message.ContentPart{
+              type: :text,
+              text:
+                "The weather in Paris is 22°C and sunny, while in New York it's 18°C and cloudy."
+            }
+          ]
         }
       ]
 
@@ -97,10 +102,12 @@ defmodule ReqLLM.Integration.ToolCallsEncodingTest do
       # can be called in a single assistant message
       message = %Message{
         role: :assistant,
-        content: [%Message.ContentPart{
-          type: :text,
-          text: "I'll get that information for you."
-        }],
+        content: [
+          %Message.ContentPart{
+            type: :text,
+            text: "I'll get that information for you."
+          }
+        ],
         tool_calls: [
           %{
             id: "call_1",
