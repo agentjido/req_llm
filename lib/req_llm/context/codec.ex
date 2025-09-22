@@ -35,6 +35,32 @@ defprotocol ReqLLM.Context.Codec do
   Tools are automatically converted to OpenAI function format using `ReqLLM.Schema.to_openai_format/1`,
   which handles parameter schema conversion from keyword lists to JSON Schema.
 
+  ## Tool Calls in Messages
+
+  When assistant messages contain `tool_calls`, they are encoded at the message level (not in content):
+
+      message = %ReqLLM.Message{
+        role: :assistant,
+        content: [],
+        tool_calls: [
+          %{
+            id: "call_123",
+            type: "function",
+            function: %{
+              name: "get_weather",
+              arguments: ~s({"location": "Paris"})
+            }
+          }
+        ]
+      }
+
+      # Encodes to:
+      %{
+        role: "assistant",
+        content: [],
+        tool_calls: [...]  # At message level, not in content
+      }
+
   """
 
   @fallback_to_any true
@@ -64,11 +90,18 @@ defimpl ReqLLM.Context.Codec, for: Map do
     Enum.map(messages, &encode_message/1)
   end
 
-  defp encode_message(%ReqLLM.Message{role: role, content: content}) do
-    %{
+  defp encode_message(%ReqLLM.Message{role: role, content: content, tool_calls: tool_calls}) do
+    base_message = %{
       role: to_string(role),
       content: encode_content(content)
     }
+
+    # Add tool_calls if present and not nil
+    case tool_calls do
+      nil -> base_message
+      [] -> base_message
+      calls -> Map.put(base_message, :tool_calls, calls)
+    end
   end
 
   defp encode_content(content) when is_binary(content), do: content

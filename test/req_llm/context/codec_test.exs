@@ -249,6 +249,163 @@ defmodule ReqLLM.Context.CodecTest do
 
       assert result == expected
     end
+
+    test "encodes tool_calls field at message level" do
+      # This test reproduces the issue from GitHub #44
+      message = %Message{
+        role: :assistant,
+        content: [],
+        tool_calls: [
+          %{
+            id: "call_123",
+            type: "function",
+            function: %{
+              name: "get_weather",
+              arguments: Jason.encode!(%{location: "Paris"})
+            }
+          }
+        ]
+      }
+
+      context = Context.new([message])
+      model = %Model{provider: :openai, model: "gpt-4"}
+
+      result = Codec.encode_request(context, model)
+
+      # OpenAI expects tool_calls at the message level, not in content
+      expected = %{
+        model: "gpt-4",
+        messages: [
+          %{
+            role: "assistant",
+            content: [],
+            tool_calls: [
+              %{
+                id: "call_123",
+                type: "function",
+                function: %{
+                  name: "get_weather",
+                  arguments: ~s({"location":"Paris"})
+                }
+              }
+            ]
+          }
+        ]
+      }
+
+      assert result == expected
+    end
+
+    test "handles multiple tool_calls in a single message" do
+      message = %Message{
+        role: :assistant,
+        content: [],
+        tool_calls: [
+          %{
+            id: "call_123",
+            type: "function",
+            function: %{
+              name: "get_weather",
+              arguments: Jason.encode!(%{location: "Paris"})
+            }
+          },
+          %{
+            id: "call_456",
+            type: "function",
+            function: %{
+              name: "get_time",
+              arguments: Jason.encode!(%{timezone: "UTC"})
+            }
+          }
+        ]
+      }
+
+      context = Context.new([message])
+      model = %Model{provider: :openai, model: "gpt-4"}
+
+      result = Codec.encode_request(context, model)
+
+      assert length(result.messages) == 1
+      assert length(hd(result.messages).tool_calls) == 2
+      
+      [first_call, second_call] = hd(result.messages).tool_calls
+      assert first_call.id == "call_123"
+      assert first_call.function.name == "get_weather"
+      assert second_call.id == "call_456"
+      assert second_call.function.name == "get_time"
+    end
+
+    test "omits tool_calls field when nil or empty" do
+      # Test with nil tool_calls
+      message_nil = %Message{
+        role: :assistant,
+        content: [%ContentPart{type: :text, text: "Hello"}],
+        tool_calls: nil
+      }
+
+      context_nil = Context.new([message_nil])
+      model = %Model{provider: :openai, model: "gpt-4"}
+
+      result_nil = Codec.encode_request(context_nil, model)
+      refute Map.has_key?(hd(result_nil.messages), :tool_calls)
+
+      # Test with empty tool_calls list
+      message_empty = %Message{
+        role: :assistant,
+        content: [%ContentPart{type: :text, text: "Hello"}],
+        tool_calls: []
+      }
+
+      context_empty = Context.new([message_empty])
+      result_empty = Codec.encode_request(context_empty, model)
+      refute Map.has_key?(hd(result_empty.messages), :tool_calls)
+    end
+
+    test "handles messages with both content and tool_calls" do
+      # Assistant can have both text content and tool calls
+      message = %Message{
+        role: :assistant,
+        content: [%ContentPart{type: :text, text: "I'll check the weather for you."}],
+        tool_calls: [
+          %{
+            id: "call_789",
+            type: "function",
+            function: %{
+              name: "get_weather",
+              arguments: Jason.encode!(%{location: "London"})
+            }
+          }
+        ]
+      }
+
+      context = Context.new([message])
+      model = %Model{provider: :openai, model: "gpt-4"}
+
+      result = Codec.encode_request(context, model)
+
+      expected = %{
+        model: "gpt-4",
+        messages: [
+          %{
+            role: "assistant",
+            # Single text content gets flattened to string
+            content: "I'll check the weather for you.",
+            tool_calls: [
+              %{
+                id: "call_789",
+                type: "function",
+                function: %{
+                  name: "get_weather",
+                  arguments: ~s({"location":"London"})
+                }
+              }
+            ]
+          }
+        ]
+      }
+
+      assert result == expected
+    end
   end
 
   describe "edge cases" do
