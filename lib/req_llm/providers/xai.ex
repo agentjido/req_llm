@@ -304,14 +304,9 @@ defmodule ReqLLM.Providers.XAI do
 
   defp decode_streaming_response(req, resp, model_name) do
     # Real-time streaming - use the stream created by Stream step
+    # The request has already been initiated by the initial Req.request call
+    # We just need to return the configured stream, not make another request
     real_time_stream = Req.Request.get_private(req, :real_time_stream, [])
-
-    # Start HTTP request in background task
-    http_task =
-      Task.async(fn ->
-        into_callback = Req.Request.get_private(req, :streaming_into_callback)
-        Req.request(req, into: into_callback)
-      end)
 
     response = %ReqLLM.Response{
       id: "stream-#{System.unique_integer([:positive])}",
@@ -322,7 +317,7 @@ defmodule ReqLLM.Providers.XAI do
       stream: real_time_stream,
       usage: %{input_tokens: 0, output_tokens: 0, total_tokens: 0},
       finish_reason: nil,
-      provider_meta: %{http_task: http_task}
+      provider_meta: %{}
     }
 
     {req, %{resp | body: response}}

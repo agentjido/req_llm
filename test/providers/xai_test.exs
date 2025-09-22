@@ -372,7 +372,8 @@ defmodule ReqLLM.Providers.XAITest do
       assert response.usage == %{input_tokens: 0, output_tokens: 0, total_tokens: 0}
       assert response.finish_reason == nil
       assert is_map(response.provider_meta)
-      assert Map.has_key?(response.provider_meta, :http_task)
+      # http_task removed after fix for issue #42 (no duplicate request execution)
+      assert response.provider_meta == %{}
     end
 
     test "decode_response handles API errors with non-200 status" do

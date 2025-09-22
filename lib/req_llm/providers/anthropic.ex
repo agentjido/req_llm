@@ -375,15 +375,12 @@ defmodule ReqLLM.Providers.Anthropic do
           {existing_stream, %{}}
 
         _ ->
+          # Real-time streaming - use the stream created by Stream step
+          # The request has already been initiated by the initial Req.request call
+          # We just need to return the configured stream, not make another request
           real_time_stream = Req.Request.get_private(req, :real_time_stream, [])
 
-          http_task =
-            Task.async(fn ->
-              into_callback = Req.Request.get_private(req, :streaming_into_callback)
-              Req.request(req, into: into_callback)
-            end)
-
-          {real_time_stream, %{http_task: http_task}}
+          {real_time_stream, %{}}
       end
 
     response = %ReqLLM.Response{
