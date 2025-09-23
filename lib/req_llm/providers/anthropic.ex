@@ -371,15 +371,41 @@ defmodule ReqLLM.Providers.Anthropic do
     {stream, provider_meta} =
       case resp.body do
         %Stream{} = existing_stream ->
-          # This is the SSE event stream from Step.Stream
-          # We need to decode these events to chunks
+          # Check if we have raw SSE data or already parsed events
+          # This handles both fixture (pre-parsed) and real streaming (raw) cases
           model = %ReqLLM.Model{provider: :anthropic, model: model_name}
-          chunk_stream = 
+
+          chunk_stream =
             existing_stream
-            |> Stream.flat_map(&ReqLLM.Providers.Anthropic.Response.decode_sse_event(&1, model))
+            |> Stream.flat_map(&decode_stream_item(&1, model))
             |> Stream.reject(&is_nil/1)
-          
+
           {chunk_stream, %{}}
+
+        raw_sse when is_binary(raw_sse) ->
+          # When using :into callback, we get raw SSE string back
+          # Parse it and convert to chunks
+          model = %ReqLLM.Model{provider: :anthropic, model: model_name}
+          {events, _} = ServerSentEvents.parse(raw_sse)
+
+          chunks =
+            events
+            |> Enum.map(&process_sse_event/1)
+            |> Enum.flat_map(&ReqLLM.Providers.Anthropic.Response.decode_sse_event(&1, model))
+            |> Enum.reject(&is_nil/1)
+
+          # Convert to a stream that yields all chunks at once
+          stream =
+            Stream.resource(
+              fn -> chunks end,
+              fn
+                [] -> {:halt, []}
+                chunks -> {chunks, []}
+              end,
+              fn _ -> :ok end
+            )
+
+          {stream, %{}}
 
         _ ->
           # Fall back to real-time stream if available
@@ -439,4 +465,35 @@ defmodule ReqLLM.Providers.Anthropic do
     context = req.options[:context] || %ReqLLM.Context{messages: []}
     ReqLLM.Context.merge_response(context, response)
   end
+
+  # Decode a stream item which could be raw SSE or parsed event
+  defp decode_stream_item(item, model) do
+    case item do
+      # Already parsed SSE event (from fixtures or SSE step)
+      %{data: _} = event ->
+        ReqLLM.Providers.Anthropic.Response.decode_sse_event(event, model)
+
+      # Raw binary chunk that needs SSE parsing
+      chunk when is_binary(chunk) ->
+        {events, _} = ServerSentEvents.parse(chunk)
+
+        events
+        |> Enum.map(&process_sse_event/1)
+        |> Enum.flat_map(&ReqLLM.Providers.Anthropic.Response.decode_sse_event(&1, model))
+
+      # Skip anything else
+      _ ->
+        []
+    end
+  end
+
+  # Process raw SSE event by parsing JSON in data field
+  defp process_sse_event(%{data: data} = event) when is_binary(data) do
+    case Jason.decode(data) do
+      {:ok, parsed} when is_map(parsed) -> %{event | data: parsed}
+      {:error, _} -> event
+    end
+  end
+
+  defp process_sse_event(event), do: event
 end

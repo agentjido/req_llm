@@ -70,13 +70,16 @@ defimpl ReqLLM.Response.Codec, for: Map do
 
   def decode_sse_event(%{data: data}, _model) when is_map(data) do
     case data do
-      %{"choices" => [%{"delta" => delta} | _]} -> decode_delta(delta)
-      
+      %{"choices" => [%{"delta" => delta} | _]} ->
+        decode_delta(delta)
+
       # Anthropic streaming format
-      %{"type" => "content_block_delta", "delta" => %{"text" => text}} when is_binary(text) and text != "" ->
+      %{"type" => "content_block_delta", "delta" => %{"text" => text}}
+      when is_binary(text) and text != "" ->
         [ReqLLM.StreamChunk.text(text)]
-      
-      _ -> []
+
+      _ ->
+        []
     end
   end
 
