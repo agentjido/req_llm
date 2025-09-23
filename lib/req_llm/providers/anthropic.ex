@@ -368,18 +368,22 @@ defmodule ReqLLM.Providers.Anthropic do
   end
 
   defp decode_streaming_response(req, resp, model_name) do
-    # Similar structure to defaults but use Anthropic-specific stream handling
     {stream, provider_meta} =
       case resp.body do
         %Stream{} = existing_stream ->
-          {existing_stream, %{}}
+          # This is the SSE event stream from Step.Stream
+          # We need to decode these events to chunks
+          model = %ReqLLM.Model{provider: :anthropic, model: model_name}
+          chunk_stream = 
+            existing_stream
+            |> Stream.flat_map(&ReqLLM.Providers.Anthropic.Response.decode_sse_event(&1, model))
+            |> Stream.reject(&is_nil/1)
+          
+          {chunk_stream, %{}}
 
         _ ->
-          # Real-time streaming - use the stream created by Stream step
-          # The request has already been initiated by the initial Req.request call
-          # We just need to return the configured stream, not make another request
+          # Fall back to real-time stream if available
           real_time_stream = Req.Request.get_private(req, :real_time_stream, [])
-
           {real_time_stream, %{}}
       end
 

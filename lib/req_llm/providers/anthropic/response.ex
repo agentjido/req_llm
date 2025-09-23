@@ -77,11 +77,35 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   @spec decode_sse_event(map(), ReqLLM.Model.t()) :: [ReqLLM.StreamChunk.t()]
   def decode_sse_event(%{data: data}, _model) when is_map(data) do
     case data do
-      %{"type" => "content_block_delta", "delta" => delta} ->
-        decode_content_delta(delta)
+      %{"type" => "content_block_delta", "delta" => delta} = event ->
+        chunks = decode_content_delta(delta)
+        # Add index to metadata for proper accumulation if present
+        if index = Map.get(event, "index") do
+          Enum.map(chunks, fn chunk ->
+            %{chunk | metadata: Map.put(chunk.metadata, :block_index, index)}
+          end)
+        else
+          chunks
+        end
 
-      %{"type" => "content_block_start", "content_block" => block} ->
-        decode_content_block_start(block)
+      %{"type" => "content_block_start", "content_block" => block} = event ->
+        chunks = decode_content_block_start(block)
+        # Add index to metadata if present
+        if index = Map.get(event, "index") do
+          Enum.map(chunks, fn chunk ->
+            %{chunk | metadata: Map.put(chunk.metadata, :block_index, index)}
+          end)
+        else
+          chunks
+        end
+
+      %{"type" => "content_block_stop"} = event ->
+        # Signal end of block for accumulation
+        if index = Map.get(event, "index") do
+          [ReqLLM.StreamChunk.meta(%{type: :block_stop, block_index: index})]
+        else
+          [ReqLLM.StreamChunk.meta(%{type: :block_stop})]
+        end
 
       _ ->
         []
@@ -119,21 +143,10 @@ defmodule ReqLLM.Providers.Anthropic.Response do
     [ReqLLM.StreamChunk.text(text)]
   end
 
-  defp decode_content_delta(%{
-         "type" => "tool_call_delta",
-         "id" => id,
-         "name" => name,
-         "partial_json" => json_fragment
-       }) do
-    # Anthropic sends partial JSON that needs to be accumulated
-    # For now, we'll create a tool call chunk with partial data
-    args =
-      case Jason.decode(json_fragment || "{}") do
-        {:ok, parsed} -> parsed
-        {:error, _} -> %{partial: json_fragment}
-      end
-
-    [ReqLLM.StreamChunk.tool_call(name, args, %{id: id, partial: true})]
+  defp decode_content_delta(%{"type" => "input_json_delta", "partial_json" => json_fragment}) do
+    # Anthropic sends partial JSON for tool use input
+    # Store as metadata so it can be accumulated
+    [ReqLLM.StreamChunk.meta(%{type: :tool_input_delta, partial_json: json_fragment})]
   end
 
   defp decode_content_delta(_), do: []

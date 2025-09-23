@@ -140,7 +140,10 @@ defmodule ReqLLM.Step.Stream do
   def maybe_attach(req, false, _model), do: req
 
   def maybe_attach(req, true, model) do
-    {req_with_stream, stream} = attach_real_time(req, true, model)
+    # First attach the SSE parsing step
+    req_with_sse = attach(req)
+    
+    {req_with_stream, stream} = attach_real_time(req_with_sse, true, model)
 
     # Store the stream in the request so decode_response can use it
     Req.Request.put_private(req_with_stream, :real_time_stream, stream)
