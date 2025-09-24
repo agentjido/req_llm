@@ -2,26 +2,135 @@ defmodule Mix.Tasks.ReqLlm.ModelSync do
   @shortdoc "Synchronize model data from models.dev API"
 
   @moduledoc """
-  Simplified model synchronization task.
+  Synchronize AI model catalog and pricing data from the models.dev API.
 
-  This task fetches model data from models.dev API (which now includes cost data)
-  and saves provider JSON files to the /priv directory.
+  This task fetches comprehensive model information including capabilities, pricing,
+  and provider details from models.dev API and generates local JSON files for use
+  by the ReqLLM library. Essential for keeping model data up-to-date.
 
   ## Usage
 
-      # Sync models from models.dev
+      mix req_llm.model_sync [options]
+
+  ## Options
+
+      --verbose               Show detailed progress and statistics during sync
+
+  ## Examples
+
+      # Basic synchronization (quiet mode)
       mix req_llm.model_sync
 
-      # Verbose output
+      # Detailed synchronization with progress information
       mix req_llm.model_sync --verbose
+
+  ## What This Task Does
+
+  1. **Fetches Model Data**: Downloads complete model catalog from models.dev API
+  2. **Processes Providers**: Extracts and organizes data by AI provider
+  3. **Merges Local Patches**: Applies any local model customizations
+  4. **Generates Files**: Creates JSON files for each provider
+  5. **Updates Code**: Regenerates ValidProviders module with available providers
 
   ## Output Structure
 
-      priv/models_dev/providers/
-      ├── anthropic.json         # Anthropic models with cost data
-      ├── openai.json            # OpenAI models with cost data
-      ├── google.json            # Google models with cost data
-      └── ...                    # All other providers
+  After running, the following files are created/updated:
+
+      priv/models_dev/
+      ├── anthropic.json         # Anthropic models (Claude, etc.)
+      ├── openai.json            # OpenAI models (GPT-4, GPT-3.5, etc.)
+      ├── google.json            # Google models (Gemini, etc.)
+      ├── groq.json              # Groq models
+      ├── xai.json               # xAI models (Grok, etc.)
+      ├── openrouter.json        # OpenRouter proxy models
+      └── ...                    # Additional providers as available
+
+      lib/req_llm/provider/generated/
+      └── valid_providers.ex     # Generated list of valid provider atoms
+
+  ## Data Sources
+
+  **Primary**: models.dev API (https://models.dev/api.json)
+  - Official model specifications
+  - Current pricing information  
+  - Provider configuration details
+  - Model capabilities and limits
+
+  **Local Patches**: priv/models_local/*.json (optional)
+  - Custom model definitions
+  - Provider-specific overrides
+  - Local testing models
+
+  ## Provider Information Included
+
+  For each provider, the following data is synchronized:
+
+      - Provider ID and display name
+      - Base API URL and authentication requirements
+      - Environment variable names for API keys
+      - Complete model catalog with IDs and names
+      - Pricing information (input/output token costs)
+      - Model capabilities (context length, supported features)
+      - Provider-specific configuration requirements
+
+  ## Local Customization
+
+  You can add local model definitions by creating JSON files in:
+
+      priv/models_local/
+      ├── custom_provider.json
+      └── model_overrides.json
+
+  Local patch files should follow this structure:
+
+      {
+        "provider": {
+          "id": "custom_provider",
+          "name": "My Custom Provider"
+        },
+        "models": [
+          {
+            "id": "custom-model-1",
+            "name": "Custom Model 1",
+            "pricing": {
+              "input": 0.001,
+              "output": 0.002
+            }
+          }
+        ]
+      }
+
+  ## When to Run This Task
+
+  - **After library updates**: When ReqLLM is updated to ensure model compatibility
+  - **New provider support**: When providers add new models or change pricing
+  - **Regular maintenance**: Weekly or monthly to keep pricing current
+  - **Before production**: Always sync before deploying to production
+
+  ## Error Handling
+
+  Common issues and solutions:
+
+  - **Network errors**: Check internet connection and models.dev API status
+  - **API changes**: models.dev API structure may change, requiring code updates  
+  - **File permissions**: Ensure write access to priv/ and lib/ directories
+  - **Invalid patches**: Local patch files must follow valid JSON structure
+
+  ## Integration with ReqLLM
+
+  The synchronized data is automatically used by:
+
+  - Provider validation during model selection
+  - Cost estimation for usage tracking
+  - Model capability detection
+  - Provider configuration and authentication setup
+
+  ## Development Notes
+
+  - Task runs in :dev environment by default
+  - Generates Elixir modules that are compiled into the application
+  - Provider IDs are normalized (kebab-case to snake_case atoms)
+  - Model data is pruned to remove unnecessary fields for efficiency
   """
 
   use Mix.Task
@@ -60,6 +169,9 @@ defmodule Mix.Tasks.ReqLlm.ModelSync do
       OptionParser.parse(args,
         switches: [
           verbose: :boolean
+        ],
+        aliases: [
+          v: :verbose
         ]
       )
 
