@@ -484,6 +484,45 @@ defmodule ReqLLM.Providers.GoogleTest do
       {:error, :invalid_body} = Google.extract_usage(nil, model)
       {:error, :invalid_body} = Google.extract_usage(123, model)
     end
+
+    test "extract_usage with cached content tokens" do
+      model = ReqLLM.Model.from!("google:gemini-1.5-flash")
+
+      body_with_cached_tokens = %{
+        "usageMetadata" => %{
+          "promptTokenCount" => 500,
+          "candidatesTokenCount" => 200,
+          "totalTokenCount" => 700,
+          "promptFeedback" => %{
+            "cachedContentTokenCount" => 120
+          }
+        }
+      }
+
+      {:ok, usage} = Google.extract_usage(body_with_cached_tokens, model)
+      assert usage["promptTokenCount"] == 500
+      assert usage["candidatesTokenCount"] == 200
+      assert usage["totalTokenCount"] == 700
+      assert usage["cached_input"] == 120
+    end
+
+    test "extract_usage without cached content tokens" do
+      model = ReqLLM.Model.from!("google:gemini-1.5-flash")
+
+      body_without_cached_tokens = %{
+        "usageMetadata" => %{
+          "promptTokenCount" => 10,
+          "candidatesTokenCount" => 20,
+          "totalTokenCount" => 30
+        }
+      }
+
+      {:ok, usage} = Google.extract_usage(body_without_cached_tokens, model)
+      assert usage["promptTokenCount"] == 10
+      assert usage["candidatesTokenCount"] == 20
+      assert usage["totalTokenCount"] == 30
+      refute Map.has_key?(usage, "cached_input")
+    end
   end
 
   describe "object generation edge cases" do

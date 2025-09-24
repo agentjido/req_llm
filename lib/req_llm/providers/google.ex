@@ -205,12 +205,26 @@ defmodule ReqLLM.Providers.Google do
   @impl ReqLLM.Provider
   def extract_usage(body, _model) when is_map(body) do
     case body do
-      %{"usageMetadata" => usage} -> {:ok, usage}
-      _ -> {:error, :no_usage_found}
+      %{"usageMetadata" => usage} ->
+        usage_with_cached = add_cached_tokens(usage)
+        {:ok, usage_with_cached}
+
+      _ ->
+        {:error, :no_usage_found}
     end
   end
 
   def extract_usage(_, _), do: {:error, :invalid_body}
+
+  defp add_cached_tokens(usage) do
+    cached_tokens = get_in(usage, ["promptFeedback", "cachedContentTokenCount"]) || 0
+
+    if cached_tokens > 0 do
+      Map.put(usage, "cached_input", cached_tokens)
+    else
+      usage
+    end
+  end
 
   @impl ReqLLM.Provider
   def translate_options(_operation, _model, opts) do

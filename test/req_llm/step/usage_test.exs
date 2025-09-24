@@ -445,6 +445,41 @@ defmodule ReqLLM.Step.UsageTest do
       assert response_usage.total_cost == expected_input_cost + expected_output_cost
     end
 
+    test "uses cache_read pricing when cached_input not specified" do
+      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03, cache_read: 0.005})
+      request = mock_request(model: model)
+
+      response_body = %{
+        "usage" => %{
+          "prompt_tokens" => 1000,
+          "completion_tokens" => 100,
+          "prompt_tokens_details" => %{"cached_tokens" => 600}
+        }
+      }
+
+      response = mock_response(response_body)
+      {_req, updated_resp} = Usage.handle({request, response})
+
+      usage_data = updated_resp.private[:req_llm][:usage]
+      assert usage_data.tokens.input == 1000
+      assert usage_data.tokens.output == 100
+      assert usage_data.tokens.cached_input == 600
+
+      # Cost calculation with cache_read fallback:
+      # Uncached: 400 tokens * 0.01 / 1000 = 0.004
+      # Cached: 600 tokens * 0.005 / 1000 = 0.003  
+      # Input cost: 0.004 + 0.003 = 0.007
+      # Output cost: 100 * 0.03 / 1000 = 0.003
+      # Total: 0.01
+      expected_input_cost = Float.round((400 * 0.01 + 600 * 0.005) / 1000, 6)
+      expected_output_cost = Float.round(100 * 0.03 / 1000, 6)
+      expected_total_cost = Float.round(expected_input_cost + expected_output_cost, 6)
+
+      assert usage_data.cost == expected_total_cost
+      assert usage_data.input_cost == expected_input_cost
+      assert usage_data.output_cost == expected_output_cost
+    end
+
     test "handles edge cases with cached tokens" do
       model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03, cached_input: 0.005})
       request = mock_request(model: model)
@@ -483,6 +518,234 @@ defmodule ReqLLM.Step.UsageTest do
         usage_data = updated_resp.private[:req_llm][:usage]
         assert usage_data.tokens.cached_input == expected_cached
       end
+    end
+  end
+
+  describe "token clamping behavior" do
+    setup do
+      setup_telemetry()
+    end
+
+    test "clamps cached tokens when greater than input tokens" do
+      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03, cached_input: 0.005})
+      request = mock_request(model: model)
+
+      response_body = %{
+        "usage" => %{
+          "prompt_tokens" => 500,
+          "completion_tokens" => 200,
+          "prompt_tokens_details" => %{"cached_tokens" => 750}
+        }
+      }
+
+      response = mock_response(response_body)
+      {_req, updated_resp} = Usage.handle({request, response})
+
+      usage_data = updated_resp.private[:req_llm][:usage]
+      assert usage_data.tokens.input == 500
+      assert usage_data.tokens.cached_input == 500
+
+      # Cost should reflect clamped cached tokens: all input tokens are cached
+      expected_input_cost = Float.round(500 * 0.005 / 1000, 6)
+      expected_output_cost = Float.round(200 * 0.03 / 1000, 6)
+      assert usage_data.input_cost == expected_input_cost
+      assert usage_data.output_cost == expected_output_cost
+    end
+
+    test "clamps cached tokens when less than 0" do
+      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03, cached_input: 0.005})
+      request = mock_request(model: model)
+
+      response_body = %{
+        "usage" => %{
+          "prompt_tokens" => 300,
+          "completion_tokens" => 150,
+          "prompt_tokens_details" => %{"cached_tokens" => -50}
+        }
+      }
+
+      response = mock_response(response_body)
+      {_req, updated_resp} = Usage.handle({request, response})
+
+      usage_data = updated_resp.private[:req_llm][:usage]
+      assert usage_data.tokens.input == 300
+      assert usage_data.tokens.cached_input == 0
+
+      # Cost should reflect no cached tokens: all input tokens use regular rate
+      expected_input_cost = Float.round(300 * 0.01 / 1000, 6)
+      expected_output_cost = Float.round(150 * 0.03 / 1000, 6)
+      assert usage_data.input_cost == expected_input_cost
+      assert usage_data.output_cost == expected_output_cost
+    end
+
+    test "handles input tokens = 0 with cached tokens set to 0" do
+      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03, cached_input: 0.005})
+      request = mock_request(model: model)
+
+      response_body = %{
+        "usage" => %{
+          "prompt_tokens" => 0,
+          "completion_tokens" => 100,
+          "prompt_tokens_details" => %{"cached_tokens" => 25}
+        }
+      }
+
+      response = mock_response(response_body)
+      {_req, updated_resp} = Usage.handle({request, response})
+
+      usage_data = updated_resp.private[:req_llm][:usage]
+      assert usage_data.tokens.input == 0
+      assert usage_data.tokens.cached_input == 0
+
+      # No input cost, only output cost
+      assert usage_data.input_cost == 0.0
+      expected_output_cost = Float.round(100 * 0.03 / 1000, 6)
+      assert usage_data.output_cost == expected_output_cost
+    end
+
+    test "handles invalid cached token values by defaulting to 0" do
+      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03, cached_input: 0.005})
+      request = mock_request(model: model)
+
+      invalid_values = ["string", nil, %{invalid: "map"}, [1, 2, 3]]
+
+      for invalid_value <- invalid_values do
+        response_body = %{
+          "usage" => %{
+            "prompt_tokens" => 200,
+            "completion_tokens" => 80,
+            "prompt_tokens_details" => %{"cached_tokens" => invalid_value}
+          }
+        }
+
+        response = mock_response(response_body)
+        {_req, updated_resp} = Usage.handle({request, response})
+
+        usage_data = updated_resp.private[:req_llm][:usage]
+        assert usage_data.tokens.input == 200
+        assert usage_data.tokens.cached_input == 0
+
+        # Should use regular input rate for all tokens
+        expected_input_cost = Float.round(200 * 0.01 / 1000, 6)
+        expected_output_cost = Float.round(80 * 0.03 / 1000, 6)
+        assert usage_data.input_cost == expected_input_cost
+        assert usage_data.output_cost == expected_output_cost
+      end
+    end
+
+    test "truncates float cached token values to integers" do
+      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03, cached_input: 0.005})
+      request = mock_request(model: model)
+
+      float_test_cases = [
+        {123.45, 123},
+        {67.89, 67},
+        {0.9, 0},
+        {999.1, 999}
+      ]
+
+      for {float_value, expected_int} <- float_test_cases do
+        response_body = %{
+          "usage" => %{
+            "prompt_tokens" => 1000,
+            "completion_tokens" => 100,
+            "prompt_tokens_details" => %{"cached_tokens" => float_value}
+          }
+        }
+
+        response = mock_response(response_body)
+        {_req, updated_resp} = Usage.handle({request, response})
+
+        usage_data = updated_resp.private[:req_llm][:usage]
+        assert usage_data.tokens.input == 1000
+        assert usage_data.tokens.cached_input == expected_int
+
+        # Cost calculation should use truncated value
+        uncached_tokens = 1000 - expected_int
+
+        expected_input_cost =
+          Float.round((uncached_tokens * 0.01 + expected_int * 0.005) / 1000, 6)
+
+        expected_output_cost = Float.round(100 * 0.03 / 1000, 6)
+        assert usage_data.input_cost == expected_input_cost
+        assert usage_data.output_cost == expected_output_cost
+      end
+    end
+
+    test "normal valid case with cached tokens between 0 and input tokens" do
+      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03, cached_input: 0.005})
+      request = mock_request(model: model)
+
+      response_body = %{
+        "usage" => %{
+          "prompt_tokens" => 800,
+          "completion_tokens" => 300,
+          "prompt_tokens_details" => %{"cached_tokens" => 400}
+        }
+      }
+
+      response = mock_response(response_body)
+      {_req, updated_resp} = Usage.handle({request, response})
+
+      usage_data = updated_resp.private[:req_llm][:usage]
+      assert usage_data.tokens.input == 800
+      assert usage_data.tokens.cached_input == 400
+
+      # Cost calculation: 400 uncached at 0.01, 400 cached at 0.005
+      # 0.004
+      uncached_cost = 400 * 0.01 / 1000
+      # 0.002  
+      cached_cost = 400 * 0.005 / 1000
+      expected_input_cost = Float.round(uncached_cost + cached_cost, 6)
+      expected_output_cost = Float.round(300 * 0.03 / 1000, 6)
+      expected_total_cost = Float.round(expected_input_cost + expected_output_cost, 6)
+
+      assert usage_data.input_cost == expected_input_cost
+      assert usage_data.output_cost == expected_output_cost
+      assert usage_data.cost == expected_total_cost
+
+      # Verify telemetry includes clamped values
+      assert_receive {:telemetry_event, [:req_llm, :token_usage], measurements, _metadata}
+      assert measurements.cost == expected_total_cost
+      assert measurements.input_cost == expected_input_cost
+      assert measurements.output_cost == expected_output_cost
+    end
+
+    test "clamping works with Response struct usage" do
+      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03, cached_input: 0.005})
+      request = mock_request(model: model)
+
+      # Test Response struct with cached_tokens > input_tokens
+      response_body = %ReqLLM.Response{
+        id: "test-id",
+        model: "gpt-4",
+        context: %ReqLLM.Context{messages: []},
+        message: nil,
+        usage: %{
+          input_tokens: 250,
+          output_tokens: 100,
+          total_tokens: 350,
+          cached_tokens: 400
+        },
+        finish_reason: nil
+      }
+
+      response = mock_response(response_body)
+      {_req, updated_resp} = Usage.handle({request, response})
+
+      # Check Response.usage has clamped cached_tokens
+      response_usage = updated_resp.body.usage
+      assert response_usage.input_tokens == 250
+      assert response_usage.output_tokens == 100
+      # Should be clamped to input_tokens
+      assert response_usage.cached_tokens == 250
+
+      # Cost should reflect all input tokens as cached
+      expected_input_cost = Float.round(250 * 0.005 / 1000, 6)
+      expected_output_cost = Float.round(100 * 0.03 / 1000, 6)
+
+      assert response_usage.input_cost == expected_input_cost
+      assert response_usage.output_cost == expected_output_cost
     end
   end
 

@@ -177,10 +177,7 @@ defmodule ReqLLM.Step.Usage do
         usage[:output] || usage["output"] || usage["completion_tokens"] ||
           usage[:completion_tokens] || usage["output_tokens"] || usage[:output_tokens] || 0,
       reasoning: usage[:reasoning] || usage["reasoning"] || get_reasoning_tokens(usage) || 0,
-      cached_input:
-        usage[:cached_input] || usage["cached_input"] ||
-          usage[:cached_tokens] || usage["cached_tokens"] ||
-          get_cached_input_tokens(usage) || 0
+      cached_input: get_cached_input_tokens(usage)
     }
   end
 
@@ -197,18 +194,16 @@ defmodule ReqLLM.Step.Usage do
 
   defp get_cached_input_tokens(usage) do
     cached =
-      get_in(usage, ["prompt_tokens_details", "cached_tokens"]) ||
+      usage[:cached_input] || usage["cached_input"] ||
+        usage[:cached_tokens] || usage["cached_tokens"] ||
+        get_in(usage, ["prompt_tokens_details", "cached_tokens"]) ||
         get_in(usage, [:prompt_tokens_details, :cached_tokens])
 
     input_tokens =
       usage[:input] || usage["input"] || usage["prompt_tokens"] || usage[:prompt_tokens] ||
         usage["input_tokens"] || usage[:input_tokens] || 0
 
-    case cached do
-      n when is_integer(n) -> min(max(n, 0), input_tokens)
-      n when is_float(n) -> min(max(trunc(n), 0), input_tokens)
-      _ -> 0
-    end
+    clamp_tokens(cached, input_tokens)
   end
 
   @spec fetch_model(Req.Request.t()) :: {:ok, ReqLLM.Model.t()} | :error
@@ -244,11 +239,7 @@ defmodule ReqLLM.Step.Usage do
          {:ok, output_num} <- safe_to_number(output_tokens),
          true <- input_rate != nil and output_rate != nil do
       # Extract cached tokens and calculate split
-      cached_tokens =
-        case safe_to_number(Map.get(usage, :cached_input, 0)) do
-          {:ok, n} -> min(max(n, 0), max(input_num, 0))
-          _ -> 0
-        end
+      cached_tokens = clamp_tokens(Map.get(usage, :cached_input, 0), input_num)
 
       uncached_tokens = max(input_num - cached_tokens, 0)
 
@@ -273,8 +264,24 @@ defmodule ReqLLM.Step.Usage do
     end
   end
 
+  # Safely clamps a value to a valid token count within bounds.
+  # Converts the value to a number and clamps it between 0 and the maximum allowed value.
+  # Returns 0 if the value cannot be converted to a number.
+  @spec clamp_tokens(any(), number()) :: integer()
+  defp clamp_tokens(value, max_allowed) do
+    case safe_to_number(value) do
+      {:ok, int} ->
+        int
+        |> max(0)
+        |> min(max(max_allowed, 0))
+
+      _ ->
+        0
+    end
+  end
+
   @spec safe_to_number(any()) :: {:ok, number()} | :error
   defp safe_to_number(value) when is_integer(value), do: {:ok, value}
-  defp safe_to_number(value) when is_float(value), do: {:ok, value}
+  defp safe_to_number(value) when is_float(value), do: {:ok, trunc(value)}
   defp safe_to_number(_), do: :error
 end

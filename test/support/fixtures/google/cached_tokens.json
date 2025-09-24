@@ -45,14 +45,17 @@
             "tokenCount": 10
           }
         ],
-        "promptTokenCount": 6,
+        "promptTokenCount": 500,
         "promptTokensDetails": [
           {
             "modality": "TEXT",
-            "tokenCount": 6
+            "tokenCount": 500
           }
         ],
-        "totalTokenCount": 16
+        "totalTokenCount": 510,
+        "promptFeedback": {
+          "cachedContentTokenCount": 120
+        }
       }
     },
     "headers": {
