@@ -189,7 +189,9 @@ defmodule Mix.Tasks.ReqLlm.Gen do
     debug = log_level == :debug
 
     if not quiet do
-      IO.puts("#{model_spec} → \"#{String.slice(prompt, 0, 50)}#{if String.length(prompt) > 50, do: "...", else: ""}\"\n")
+      IO.puts(
+        "#{model_spec} → \"#{String.slice(prompt, 0, 50)}#{if String.length(prompt) > 50, do: "...", else: ""}\"\n"
+      )
     end
 
     generate_opts = build_generate_opts(opts)
@@ -210,7 +212,9 @@ defmodule Mix.Tasks.ReqLlm.Gen do
     debug = log_level == :debug
 
     if not quiet do
-      IO.puts("#{model_spec} → \"#{String.slice(prompt, 0, 50)}#{if String.length(prompt) > 50, do: "...", else: ""}\"\n")
+      IO.puts(
+        "#{model_spec} → \"#{String.slice(prompt, 0, 50)}#{if String.length(prompt) > 50, do: "...", else: ""}\"\n"
+      )
     end
 
     stream_opts = build_generate_opts(opts)
@@ -304,7 +308,16 @@ defmodule Mix.Tasks.ReqLlm.Gen do
     if not quiet do
       IO.puts("")
       response_with_chunk_count = Map.put(response, :chunk_count, chunk_count)
-      show_stats(full_text, start_time, model_spec, prompt, response_with_chunk_count, :stream, debug)
+
+      show_stats(
+        full_text,
+        start_time,
+        model_spec,
+        prompt,
+        response_with_chunk_count,
+        :stream,
+        debug
+      )
     end
 
     :ok
@@ -663,13 +676,16 @@ defmodule Mix.Tasks.ReqLlm.Gen do
     estimated_cost = calculate_cost_from_registry(model_spec, input_tokens, output_tokens)
 
     # Clean, one-line stats format
-    cost_display = if estimated_cost > 0 do
-      "$#{:erlang.float_to_binary(estimated_cost, decimals: 6)}"
-    else
-      "unknown"
-    end
+    cost_display =
+      if estimated_cost > 0 do
+        "$#{:erlang.float_to_binary(estimated_cost, decimals: 6)}"
+      else
+        "unknown"
+      end
 
-    IO.puts("Stats: #{response_time}ms • #{input_tokens + output_tokens} tokens (#{input_tokens}→#{output_tokens}) • #{cost_display}")
+    IO.puts(
+      "Stats: #{response_time}ms • #{input_tokens + output_tokens} tokens (#{input_tokens}→#{output_tokens}) • #{cost_display}"
+    )
 
     if debug do
       case type do
