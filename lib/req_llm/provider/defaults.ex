@@ -191,7 +191,6 @@ defmodule ReqLLM.Provider.Defaults do
          http_opts = Keyword.get(opts, :req_http_options, []),
          {:ok, processed_opts} <-
            ReqLLM.Provider.Options.process(provider_mod, :chat, model, opts_with_context) do
-
       req_keys =
         provider_mod.supported_provider_options() ++
           [:context, :operation, :text, :stream, :model, :provider_options]
@@ -255,7 +254,6 @@ defmodule ReqLLM.Provider.Defaults do
          http_opts = Keyword.get(opts, :req_http_options, []),
          {:ok, processed_opts} <-
            ReqLLM.Provider.Options.process(provider_mod, :embedding, model, opts_with_text) do
-
       req_keys =
         provider_mod.supported_provider_options() ++
           [:context, :operation, :text, :stream, :model, :provider_options]
