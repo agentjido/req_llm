@@ -248,4 +248,17 @@ defmodule ReqLLM.GenerationTest do
       assert %Response{} = response
     end
   end
+
+  describe "generate_text/3 with req_http_options" do
+    test "correctly passes http options to Req" do
+      # We pass an intentionally invalid option to Req. If `req_http_options` are being passed correctly,
+      # Req's internal validation will raise an ArgumentError. This confirms the options are being passed
+      # all the way to `Req.new/1` without making a real network request.
+      assert_raise ArgumentError, ~r/got unsupported atom method :invalid_method/, fn ->
+        Generation.generate_text("openai:gpt-4o-mini", "Hello",
+          req_http_options: [method: :invalid_method]
+        )
+      end
+    end
+  end
 end

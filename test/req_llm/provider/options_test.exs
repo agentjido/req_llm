@@ -146,13 +146,13 @@ defmodule ReqLLM.Provider.OptionsTest do
     end
   end
 
-  describe "Options.process/4 - req_options handling" do
-    test "preserves req_options for merging into Req request" do
+  describe "Options.process/4 - req_http_options handling" do
+    test "preserves req_http_options for merging into Req request" do
       model = %ReqLLM.Model{provider: :mock, model: "test-model"}
 
       opts = [
         temperature: 0.7,
-        req_options: [
+        req_http_options: [
           timeout: 60_000,
           retry_attempts: 5
         ]
@@ -160,17 +160,17 @@ defmodule ReqLLM.Provider.OptionsTest do
 
       assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts)
       assert processed[:temperature] == 0.7
-      assert processed[:req_options][:timeout] == 60_000
-      assert processed[:req_options][:retry_attempts] == 5
+      assert processed[:req_http_options][:timeout] == 60_000
+      assert processed[:req_http_options][:retry_attempts] == 5
     end
 
-    test "handles missing req_options gracefully" do
+    test "handles missing req_http_options gracefully" do
       model = %ReqLLM.Model{provider: :mock, model: "test-model"}
       opts = [temperature: 0.7]
 
       assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts)
       assert processed[:temperature] == 0.7
-      refute Keyword.has_key?(processed, :req_options)
+      refute Keyword.has_key?(processed, :req_http_options)
     end
   end
 
@@ -226,7 +226,7 @@ defmodule ReqLLM.Provider.OptionsTest do
       opts = [
         temperature: 0.7,
         # Internal keys that should bypass validation
-        req_options: %{unknown: "value"},
+        req_http_options: %{unknown: "value"},
         fixture: :test_fixture,
         operation: :embedding,
         text: "input text",
@@ -236,7 +236,7 @@ defmodule ReqLLM.Provider.OptionsTest do
       assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts)
 
       assert processed[:temperature] == 0.7
-      assert processed[:req_options] == %{unknown: "value"}
+      assert processed[:req_http_options] == %{unknown: "value"}
       assert processed[:fixture] == :test_fixture
       assert processed[:operation] == :embedding
       assert processed[:text] == "input text"

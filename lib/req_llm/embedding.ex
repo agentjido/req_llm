@@ -53,7 +53,7 @@ defmodule ReqLLM.Embedding do
                    doc: "Provider-specific options (keyword list or map)",
                    default: []
                  ],
-                 req_options: [
+                 req_http_options: [
                    type: {:or, [:map, {:list, :any}]},
                    doc: "Req-specific options (keyword list or map)",
                    default: []

@@ -136,7 +136,7 @@ defmodule ReqLLM.Provider.Options do
                                  doc: "How to handle unsupported parameter translations",
                                  default: :warn
                                ],
-                               req_options: [
+                               req_http_options: [
                                  type: {:list, :any},
                                  doc: "Req HTTP client options"
                                ],
@@ -152,7 +152,6 @@ defmodule ReqLLM.Provider.Options do
   # Internal keys that bypass validation (framework concerns)
   @internal_keys [
     :api_key,
-    :req_options,
     :on_unsupported,
     :fixture,
     :req_http_options,

@@ -86,9 +86,9 @@ defmodule ReqLLM.Generation do
                    doc: "How to handle unsupported parameter translations",
                    default: :warn
                  ],
-                 req_options: [
+                 req_http_options: [
                    type: {:or, [:map, {:list, :any}]},
-                   doc: "Req-specific options (keyword list or map)",
+                   doc: "Req-specific HTTP options (keyword list or map)",
                    default: []
                  ],
                  fixture: [

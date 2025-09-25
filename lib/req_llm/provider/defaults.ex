@@ -188,9 +188,9 @@ defmodule ReqLLM.Provider.Defaults do
     with {:ok, model} <- ReqLLM.Model.from(model_spec),
          {:ok, context} <- ReqLLM.Context.normalize(prompt, opts),
          opts_with_context = Keyword.put(opts, :context, context),
+         http_opts = Keyword.get(opts, :req_http_options, []),
          {:ok, processed_opts} <-
            ReqLLM.Provider.Options.process(provider_mod, :chat, model, opts_with_context) do
-      http_opts = Keyword.get(processed_opts, :req_http_options, [])
 
       req_keys =
         provider_mod.supported_provider_options() ++
@@ -252,9 +252,9 @@ defmodule ReqLLM.Provider.Defaults do
   def prepare_embedding_request(provider_mod, model_spec, text, opts) do
     with {:ok, model} <- ReqLLM.Model.from(model_spec),
          opts_with_text = Keyword.merge(opts, text: text, operation: :embedding),
+         http_opts = Keyword.get(opts, :req_http_options, []),
          {:ok, processed_opts} <-
            ReqLLM.Provider.Options.process(provider_mod, :embedding, model, opts_with_text) do
-      http_opts = Keyword.get(processed_opts, :req_http_options, [])
 
       req_keys =
         provider_mod.supported_provider_options() ++
