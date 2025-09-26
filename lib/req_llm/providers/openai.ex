@@ -10,10 +10,10 @@ defmodule ReqLLM.Providers.OpenAI do
   - Embeddings generation
   - O1/O3 model support with automatic parameter translation
 
-  ## Protocol Usage
+  ## Implementation
 
-  Uses the generic `ReqLLM.Context.Codec` and `ReqLLM.Response.Codec` protocols.
-  No custom wrapper modules – leverages the standard OpenAI-compatible codecs.
+  Uses built-in OpenAI-style encoding/decoding defaults.
+  No custom request/response handling needed.
 
   ## Configuration
 

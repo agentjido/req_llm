@@ -117,8 +117,9 @@ defmodule ReqLLM.Step.Fixture.Backend do
         # Parse the JSON data
         case Jason.decode(json_str) do
           {:ok, data} ->
-            # Use OpenAI's codec to decode this event
-            ReqLLM.Response.Codec.decode_sse_event(%{data: data}, nil)
+            # Use default SSE event decoding
+            fake_model = %ReqLLM.Model{provider: :openai, model: "gpt-4"}
+            ReqLLM.Provider.Defaults.default_decode_sse_event(%{data: data}, fake_model)
 
           {:error, _} ->
             []

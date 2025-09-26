@@ -7,9 +7,9 @@ defmodule ReqLLM.Integration.ToolCallsEncodingTest do
   use ExUnit.Case, async: true
 
   alias ReqLLM.Context
-  alias ReqLLM.Context.Codec
   alias ReqLLM.Message
   alias ReqLLM.Model
+  alias ReqLLM.Provider.Defaults
 
   describe "OpenAI tool calling integration" do
     test "encodes a complete conversation with tool calls correctly" do
@@ -73,10 +73,10 @@ defmodule ReqLLM.Integration.ToolCallsEncodingTest do
       context = Context.new(messages)
       model = %Model{provider: :openai, model: "gpt-4"}
 
-      result = Codec.encode_request(context, model)
+      result = Defaults.encode_context_to_openai_format(context, model)
 
       # Verify the structure matches OpenAI's expected format
-      assert result.model == "gpt-4"
+      assert result.messages
       assert length(result.messages) == 5
 
       # Check that the assistant message with tool_calls is properly encoded
@@ -139,9 +139,9 @@ defmodule ReqLLM.Integration.ToolCallsEncodingTest do
       context = Context.new([message])
       model = %Model{provider: :openai, model: "gpt-4o"}
 
-      result = Codec.encode_request(context, model)
+      result = Defaults.encode_context_to_openai_format(context, model)
 
-      assert result.model == "gpt-4o"
+      assert result.messages
       [encoded_message] = result.messages
 
       # Verify OpenAI format requirements

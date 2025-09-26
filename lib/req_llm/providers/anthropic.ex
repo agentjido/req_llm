@@ -54,24 +54,89 @@ defmodule ReqLLM.Providers.Anthropic do
 
   require Logger
 
+  @extra_option_keys ~w(
+    model compiled_schema temperature max_tokens app_referer app_title fixture
+  )a
+
+  @req_keys ~w(
+    context operation text stream model provider_options
+  )a
+
+  @body_options ~w(
+    temperature top_p stop_sequences
+  )a
+
+  @unsupported_parameters ~w(
+    presence_penalty frequency_penalty logprobs top_logprobs response_format
+  )a
+
+  @default_anthropic_version "2023-06-01"
+  @anthropic_beta_tools "tools-2024-05-16"
+
   @impl ReqLLM.Provider
-  def prepare_request(operation, model_spec, input, opts) do
-    case operation do
-      :chat ->
-        prepare_chat_request(model_spec, input, opts)
+  def prepare_request(:chat, model_spec, prompt, opts) do
+    with {:ok, model} <- ReqLLM.Model.from(model_spec),
+         {:ok, context} <- ReqLLM.Context.normalize(prompt, opts),
+         opts_with_context = Keyword.put(opts, :context, context),
+         {:ok, processed_opts} <-
+           ReqLLM.Provider.Options.process(__MODULE__, :chat, model, opts_with_context) do
+      http_opts = Keyword.get(processed_opts, :req_http_options, [])
 
-      :object ->
-        prepare_object_request(model_spec, input, opts)
+      req_keys = supported_provider_options() ++ @req_keys
 
-      _ ->
-        supported_operations = [:chat, :object]
+      request =
+        Req.new(
+          [
+            url: "/v1/messages",
+            method: :post,
+            receive_timeout: Keyword.get(processed_opts, :receive_timeout, 30_000)
+          ] ++ http_opts
+        )
+        |> Req.Request.register_options(req_keys)
+        |> Req.Request.merge_options(
+          Keyword.take(processed_opts, req_keys) ++
+            [
+              model: model.model,
+              base_url: Keyword.get(processed_opts, :base_url, default_base_url())
+            ]
+        )
+        |> attach(model, processed_opts)
 
-        {:error,
-         ReqLLM.Error.Invalid.Parameter.exception(
-           parameter:
-             "operation: #{inspect(operation)} not supported by #{inspect(__MODULE__)}. Supported operations: #{inspect(supported_operations)}"
-         )}
+      {:ok, request}
     end
+  end
+
+  @impl ReqLLM.Provider
+  def prepare_request(:object, model_spec, prompt, opts) do
+    compiled_schema = Keyword.fetch!(opts, :compiled_schema)
+
+    structured_output_tool =
+      ReqLLM.Tool.new!(
+        name: "structured_output",
+        description: "Generate structured output matching the provided schema",
+        parameter_schema: compiled_schema.schema,
+        callback: fn _args -> {:ok, "structured output generated"} end
+      )
+
+    opts_with_tool =
+      opts
+      |> Keyword.update(:tools, [structured_output_tool], &[structured_output_tool | &1])
+      |> Keyword.put(:tool_choice, %{type: "tool", name: "structured_output"})
+      |> Keyword.put_new(:max_tokens, 4096)
+      |> Keyword.put(:operation, :object)
+
+    prepare_request(:chat, model_spec, prompt, opts_with_tool)
+  end
+
+  @impl ReqLLM.Provider
+  def prepare_request(operation, _model_spec, _input, _opts) do
+    supported_operations = [:chat, :object]
+
+    {:error,
+     ReqLLM.Error.Invalid.Parameter.exception(
+       parameter:
+         "operation: #{inspect(operation)} not supported by #{inspect(__MODULE__)}. Supported operations: #{inspect(supported_operations)}"
+     )}
   end
 
   @impl ReqLLM.Provider
@@ -84,15 +149,14 @@ defmodule ReqLLM.Providers.Anthropic do
     api_key = ReqLLM.Keys.get!(model, user_opts)
 
     # Register options that might be passed by users but aren't standard Req options
-    extra_option_keys =
-      [:model, :compiled_schema, :temperature, :max_tokens, :app_referer, :app_title, :fixture] ++
-        supported_provider_options()
+    extra_option_keys = @extra_option_keys ++ supported_provider_options()
 
     request
     |> Req.Request.register_options(extra_option_keys ++ [:anthropic_version, :anthropic_beta])
     |> Req.Request.put_header("content-type", "application/json")
     |> Req.Request.put_header("x-api-key", api_key)
     |> Req.Request.put_header("anthropic-version", get_anthropic_version(user_opts))
+    |> Req.Request.put_private(:req_llm_model, model)
     |> maybe_add_beta_header(user_opts)
     |> Req.Request.merge_options([model: model.model] ++ user_opts)
     |> ReqLLM.Step.Error.attach()
@@ -106,14 +170,18 @@ defmodule ReqLLM.Providers.Anthropic do
 
   @impl ReqLLM.Provider
   def encode_body(request) do
-    operation = request.options[:operation] || :chat
+    context = request.options[:context]
+    model_name = request.options[:model]
+
+    # Use Anthropic-specific context encoding
+    body_data = ReqLLM.Providers.Anthropic.Context.encode_request(context, %{model: model_name})
 
     body =
-      case operation do
-        :chat -> encode_chat_body(request)
-        # Object uses same chat format with tools
-        :object -> encode_chat_body(request)
-      end
+      body_data
+      |> add_basic_options(request.options)
+      |> maybe_put(:stream, request.options[:stream])
+      |> maybe_put(:max_tokens, request.options[:max_tokens])
+      |> maybe_add_tools(request.options)
 
     json_body = Jason.encode!(body)
     %{request | body: json_body}
@@ -141,6 +209,11 @@ defmodule ReqLLM.Providers.Anthropic do
   def extract_usage(_, _), do: {:error, :invalid_body}
 
   @impl ReqLLM.Provider
+  def decode_sse_event(event, model) do
+    ReqLLM.Providers.Anthropic.Response.decode_sse_event(event, model)
+  end
+
+  @impl ReqLLM.Provider
   def translate_options(_operation, _model, opts) do
     # Anthropic-specific parameter translation
     translated_opts =
@@ -153,69 +226,14 @@ defmodule ReqLLM.Providers.Anthropic do
 
   # Private implementation functions
 
-  defp prepare_chat_request(model_spec, prompt, opts) do
-    with {:ok, model} <- ReqLLM.Model.from(model_spec),
-         {:ok, context} <- ReqLLM.Context.normalize(prompt, opts),
-         opts_with_context = Keyword.put(opts, :context, context),
-         {:ok, processed_opts} <-
-           ReqLLM.Provider.Options.process(__MODULE__, :chat, model, opts_with_context) do
-      http_opts = Keyword.get(processed_opts, :req_http_options, [])
-
-      req_keys =
-        supported_provider_options() ++
-          [:context, :operation, :text, :stream, :model, :provider_options]
-
-      request =
-        Req.new(
-          [
-            url: "/v1/messages",
-            method: :post,
-            receive_timeout: Keyword.get(processed_opts, :receive_timeout, 30_000)
-          ] ++ http_opts
-        )
-        |> Req.Request.register_options(req_keys)
-        |> Req.Request.merge_options(
-          Keyword.take(processed_opts, req_keys) ++
-            [
-              model: model.model,
-              base_url: Keyword.get(processed_opts, :base_url, default_base_url())
-            ]
-        )
-        |> attach(model, processed_opts)
-
-      {:ok, request}
-    end
-  end
-
-  defp prepare_object_request(model_spec, prompt, opts) do
-    compiled_schema = Keyword.fetch!(opts, :compiled_schema)
-
-    structured_output_tool =
-      ReqLLM.Tool.new!(
-        name: "structured_output",
-        description: "Generate structured output matching the provided schema",
-        parameter_schema: compiled_schema.schema,
-        callback: fn _args -> {:ok, "structured output generated"} end
-      )
-
-    opts_with_tool =
-      opts
-      |> Keyword.update(:tools, [structured_output_tool], &[structured_output_tool | &1])
-      |> Keyword.put(:tool_choice, %{type: "tool", name: "structured_output"})
-      |> Keyword.put_new(:max_tokens, 4096)
-      |> Keyword.put(:operation, :object)
-
-    prepare_chat_request(model_spec, prompt, opts_with_tool)
-  end
-
   defp get_anthropic_version(user_opts) do
-    Keyword.get(user_opts, :anthropic_version, "2023-06-01")
+    Keyword.get(user_opts, :anthropic_version, @default_anthropic_version)
   end
 
   defp maybe_add_beta_header(request, user_opts) do
     # Add beta header if tools are being used
     if has_tools?(user_opts) do
-      Req.Request.put_header(request, "anthropic-beta", "tools-2024-05-16")
+      Req.Request.put_header(request, "anthropic-beta", @anthropic_beta_tools)
     else
       request
     end
@@ -226,29 +244,9 @@ defmodule ReqLLM.Providers.Anthropic do
     is_list(tools) and tools != []
   end
 
-  defp encode_chat_body(request) do
-    context = request.options[:context]
-    model_name = request.options[:model]
-
-    # Use Anthropic-specific context encoding
-    body_data = ReqLLM.Providers.Anthropic.Context.encode_request(context, %{model: model_name})
-
-    body_data
-    |> add_basic_options(request.options)
-    |> maybe_put(:stream, request.options[:stream])
-    |> maybe_put(:max_tokens, request.options[:max_tokens])
-    |> maybe_add_tools(request.options)
-  end
-
   defp add_basic_options(body, request_options) do
-    body_options = [
-      :temperature,
-      :top_p,
-      :stop_sequences
-    ]
-
     body =
-      Enum.reduce(body_options, body, fn key, acc ->
+      Enum.reduce(@body_options, body, fn key, acc ->
         maybe_put(acc, key, request_options[key])
       end)
 
@@ -311,15 +309,7 @@ defmodule ReqLLM.Providers.Anthropic do
 
   defp translate_unsupported_parameters(opts) do
     # Remove parameters not supported by Anthropic
-    unsupported = [
-      :presence_penalty,
-      :frequency_penalty,
-      :logprobs,
-      :top_logprobs,
-      :response_format
-    ]
-
-    Enum.reduce(unsupported, opts, &Keyword.delete(&2, &1))
+    Enum.reduce(@unsupported_parameters, opts, &Keyword.delete(&2, &1))
   end
 
   defp decode_success_response(req, resp) do

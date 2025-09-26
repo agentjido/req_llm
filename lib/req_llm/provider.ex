@@ -241,7 +241,41 @@ defmodule ReqLLM.Provider do
   """
   @callback default_env_key() :: String.t()
 
-  @optional_callbacks [extract_usage: 2, default_env_key: 0, translate_options: 3]
+  @doc """
+  Decode provider SSE event to list of StreamChunk structs for streaming responses.
+
+  This is called by ReqLLM.Step.Stream during real-time streaming to convert
+  provider-specific SSE events into canonical StreamChunk structures.
+
+  ## Parameters
+
+    * `event` - The SSE event data (typically a map)
+    * `model` - The ReqLLM.Model struct
+
+  ## Returns
+
+    * `[ReqLLM.StreamChunk.t()]` - List of decoded stream chunks (may be empty)
+
+  ## Examples
+
+      def decode_sse_event(%{data: %{"choices" => [%{"delta" => delta}]}}, _model) do
+        case delta do
+          %{"content" => content} when content != "" ->
+            [ReqLLM.StreamChunk.text(content)]
+          _ ->
+            []
+        end
+      end
+
+  """
+  @callback decode_sse_event(map(), ReqLLM.Model.t()) :: [ReqLLM.StreamChunk.t()]
+
+  @optional_callbacks [
+    extract_usage: 2,
+    default_env_key: 0,
+    translate_options: 3,
+    decode_sse_event: 2
+  ]
 
   @doc """
   Registry function with bang syntax (raises on error).

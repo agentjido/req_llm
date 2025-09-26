@@ -7,27 +7,25 @@ _Rev. 2025-02 – ReqLLM 1.0.0-rc.3_
 The checklist is now split in two.  
 Pick **ONE** column depending on what the remote API looks like.
 
-| Fast path – OpenAI compatible               | Advanced path – custom protocol                     |
-|---------------------------------------------|-----------------------------------------------------|
-| ☑  `lib/req_llm/providers/<provider>.ex`    | ☑  `lib/req_llm/providers/<provider>.ex`            |
-| ☑  `priv/models_dev/<provider>.json`        | ☑  `priv/models_dev/<provider>.json`                |
-| ☐  unit tests / live fixtures               | ☐  unit tests / live fixtures                       |
-| _No extra modules needed_                   | ☐  `context.ex` implementing `ReqLLM.Context.Codec` |
-|                                             | ☐  `response.ex` implementing `ReqLLM.Response.Codec`|
+| OpenAI-compatible providers                 |
+|---------------------------------------------|
+| ☑  `lib/req_llm/providers/<provider>.ex`    |
+| ☑  `priv/models_dev/<provider>.json`        |
+| ☐  unit tests / live fixtures               |
 
-Why the split? 95% of new providers on the market expose a "Chat Completions"
+95% of new providers on the market expose a "Chat Completions"
 endpoint that is 1-for-1 wire-compatible with OpenAI.  
-For those you can reuse the generic `ReqLLM.Context.Codec` /
-`ReqLLM.Response.Codec` implementations and skip two entire modules.
+For those you can use the built-in OpenAI-style encoding/decoding 
+and skip implementing custom request/response handling.
 
 ---
 
 ## Overview
 
-This guide shows both approaches:
+This guide shows:
 
-1. Minimal OpenAI-style implementation (same pattern used by the **Groq** provider).  
-2. Opting-in to custom codecs when the remote JSON deviates.  
+1. Minimal OpenAI-style implementation using built-in defaults (same pattern used by the **Groq** provider).  
+2. Custom encoding/decoding when the remote JSON deviates from OpenAI format.  
 3. Leveraging `prepare_request/4` for multi-operation providers (chat, completions, embeddings, images …).
 
 ---
@@ -51,7 +49,7 @@ defmodule ReqLLM.Providers.MyOpenAI do
     base_url: "https://api.my-openai.com/v1",
     metadata: "priv/models_dev/my_openai.json",
     default_env_key: "MY_OPENAI_API_KEY",
-    # generic codecs are used – nothing else to configure
+    # built-in OpenAI-style encoding/decoding is used automatically
     provider_schema: [
       # Only list options that **do not** exist in the OpenAI spec
       organisation_id: [type: :string, doc: "Optional tenant id"]
@@ -131,59 +129,11 @@ defmodule ReqLLM.Providers.MyOpenAI do
   # 3️⃣  encode_body – still needed (adds provider-specific extras)
   # ---------------------------------------------------------------------------
 
-  @impl ReqLLM.Provider
-  def encode_body(req) do
-    context_json =
-      case req.options[:context] do
-        %ReqLLM.Context{} = ctx -> ReqLLM.Context.Codec.encode_request(ctx, req.options[:model])
-        _ -> %{messages: req.options[:messages] || []}
-      end
+  # encode_body/1 and decode_response/1 are provided automatically
+  # by the DSL using built-in OpenAI-style defaults.
+  # Only implement these if you need provider-specific customizations.
 
-    body =
-      %{
-        model: req.options[:model]
-      }
-      |> Map.merge(context_json)
-      |> maybe_put(:temperature, req.options[:temperature])
-      |> maybe_put(:max_tokens, req.options[:max_tokens])
-      |> maybe_put_skip(:organisation_id, req.options[:organisation_id], [nil])
-      |> maybe_put(:stream, req.options[:stream])
-      |> maybe_put(:tools, req.options[:tools] |> tools_to_openai_schema())
-
-    req
-    |> Req.Request.put_header("content-type", "application/json")
-    |> Map.put(:body, Jason.encode!(body))
-  end
-
-  defp tools_to_openai_schema([]), do: nil
-  defp tools_to_openai_schema(list), do: Enum.map(list, &ReqLLM.Tool.to_schema(&1, :openai))
-
-  # ---------------------------------------------------------------------------
-  # 4️⃣  decode_response – generic OpenAI codec does 99%
-  # ---------------------------------------------------------------------------
-
-  @impl ReqLLM.Provider
-  def decode_response({req, resp}) do
-    case resp.status do
-      200 ->
-        {:ok, response} =
-          resp.body
-          |> ensure_parsed_body()
-          |> ReqLLM.Response.Codec.decode_response(%ReqLLM.Model{provider: provider_id(), model: req.options[:model]})
-
-        {req, %{resp | body: response}}
-
-      status ->
-        err =
-          ReqLLM.Error.API.Response.exception(
-            reason: "MyOpenAI API error",
-            status: status,
-            response_body: resp.body
-          )
-
-        {req, err}
-    end
-  end
+  # decode_response/1 is also provided automatically by the DSL
 
   # Usage extraction is identical to Groq / OpenAI
   @impl ReqLLM.Provider
@@ -192,25 +142,30 @@ defmodule ReqLLM.Providers.MyOpenAI do
 end
 ```
 
-### Five lines you no longer need
+### What you no longer need
 
-```
-context_wrapper: ...,
-response_wrapper: ...,
-defmodule ReqLLM.Providers.MyOpenAI.Context do ...
-defmodule ReqLLM.Providers.MyOpenAI.Response do ...
-ReqLLM.Context.Codec/Response.Codec implementations
-```
+OpenAI-compatible providers get built-in encoding/decoding automatically:
+
+- No `encode_body/1` or `decode_response/1` implementations needed
+- No custom context or response modules
+- No protocol implementations
+- No wrapper configurations
 
 ---
 
-## 2. Provider module – **custom protocol skeleton (when not OpenAI-ish)**
+## 2. Non-OpenAI wire formats
 
-If the remote JSON schema is _not_ OpenAI-style you can still use the older
-pattern (context + response codecs).  
-The existing section "2. Context & Response codec modules" in the previous
-guide is unchanged and now lives in **adding_a_provider_custom.md** to keep
-this document focused.
+If the remote JSON schema is _not_ OpenAI-style, you can override 
+`encode_body/1` and/or `decode_response/1` directly in your provider.
+
+For partial customization, leverage the built-in helpers:
+- `ReqLLM.Provider.Defaults.build_openai_chat_body/1` - Complete OpenAI body with context, options, tools
+- `ReqLLM.Provider.Defaults.encode_context_to_openai_format/2` - Context encoding only
+- `ReqLLM.Provider.Defaults.decode_response_body_openai_format/2` - Response decoding
+- `ReqLLM.Provider.Defaults.default_decode_sse_event/2` - Streaming events
+
+See the Google provider for an example of translating between 
+OpenAI format and a custom wire format.
 
 ---
 
@@ -247,11 +202,11 @@ Identical process. Focus on the cheapest, deterministic model, use
 
 ## 6. Best practices recap
 
-• Prefer the **fast** OpenAI pattern – fewer lines, fewer bugs.  
+• Prefer the OpenAI-compatible pattern with built-in defaults – fewer lines, fewer bugs.  
 • Move logic into `attach/3`; keep `prepare_request/4` a thin dispatcher.  
 • `provider_schema` is **only** for fields outside the OpenAI spec.  
 • Use `ReqLLM.Keys` – never read `System.get_env/1` directly.  
-• Do not ship custom codecs unless you must: they double your test surface.  
+• Only override `encode_body/1` and `decode_response/1` when necessary.  
 • Start small, add streaming, tools, vision, etc. incrementally.
 
 ---

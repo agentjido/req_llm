@@ -38,7 +38,7 @@ ReqLLM uses structured key/value tags for precise test filtering:
 
 ### Core Structure
 - `lib/req_llm.ex` - Main API facade with generate_text/3, stream_text/3, generate_object/4
-- `lib/req_llm/` - Core modules (Model, Provider, Error structures, protocols)
+- `lib/req_llm/` - Core modules (Model, Provider, Error structures)
 - `lib/req_llm/providers/` - Provider-specific implementations (Anthropic, OpenAI, etc.)
 - `test/` - Three-tier testing architecture (see `test/AGENTS.md` for detailed testing guide)
   - `test/req_llm/` - Core package tests (NO API calls, unit tests with mocks)
@@ -67,10 +67,10 @@ ReqLLM uses structured key/value tags for precise test filtering:
 - Core API uses provider's `attach/3` to compose Req requests with provider-specific steps
 - **Options Translation**: Providers can implement `translate_options/3` to handle model-specific parameter requirements (e.g., OpenAI o1 models require `max_completion_tokens` instead of `max_tokens`)
 
-### Protocol System
-- `ReqLLM.Context.Codec` - Protocol for encoding/decoding contexts to/from provider wire formats
-- `ReqLLM.Response.Codec` - Protocol for decoding provider responses to canonical Response structs
-- Each provider implements these protocols for their specific data formats
+### Encoding/Decoding System
+- Provider callbacks handle encoding/decoding requests and responses
+- Built-in defaults provide OpenAI-style wire format handling
+- Providers can override `encode_body/1` and `decode_response/1` for custom formats
 
 ## Code Style & Conventions
 

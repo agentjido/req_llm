@@ -126,11 +126,11 @@ request = Req.new()
 ## Format Translation
 
 ### Context Encoding
-- `ReqLLM.Context.Codec` handles canonical-to-provider request format
-- Provider-specific wrappers transform messages and options
+- Provider callbacks handle canonical-to-provider request format
+- Built-in defaults provide OpenAI-style encoding, providers can override
 
 ### Response Decoding  
-- `ReqLLM.Response.Codec` handles provider-to-canonical response format
+- Provider callbacks handle provider-to-canonical response format
 - Unified streaming chunks across all providers
 
 ## Req Integration
@@ -212,7 +212,7 @@ end
 ### Integration Points
 
 1. `ReqLLM.Provider` behavior with `prepare_request/4` and `attach/3` callbacks
-2. Context/Response codec protocols for format translation  
+2. Provider callbacks with built-in defaults for format translation  
 3. Models.dev metadata for capabilities and pricing
 
 ## Testing

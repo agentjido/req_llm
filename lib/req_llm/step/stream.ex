@@ -4,15 +4,15 @@ defmodule ReqLLM.Step.Stream do
 
   This step processes "text/event-stream" responses and converts them into
   enumerable chunks of standardized SSE events. The parsed events are then
-  processed by provider-specific `ReqLLM.Response.Codec.decode_sse_event/1`
-  protocol implementations to convert them into `ReqLLM.StreamChunk` structures.
+  processed by provider-specific `decode_sse_event/2` callback implementations 
+  to convert them into `ReqLLM.StreamChunk` structures.
 
   ## Purpose
 
   This step serves as the first stage in a two-phase streaming pipeline:
 
   1. **SSE Parsing (this step)**: Converts raw SSE stream into structured events
-  2. **Provider Decoding**: Provider protocols convert events into StreamChunks
+  2. **Provider Decoding**: Provider callbacks convert events into StreamChunks
 
   Non-streaming responses are passed through unchanged.
 
@@ -50,7 +50,7 @@ defmodule ReqLLM.Step.Stream do
 
       # Provider then processes these events:
       response.body
-      |> Stream.flat_map(&ReqLLM.Response.Codec.decode_sse_event/1)
+      |> Stream.flat_map(&provider.decode_sse_event/1)
       #=> Stream of %ReqLLM.StreamChunk{} structs
 
       # Non-streaming response
@@ -212,9 +212,12 @@ defmodule ReqLLM.Step.Stream do
           send(owner_pid, :stream_done)
         end
 
+        # Get the provider module for decoding
+        {:ok, provider_mod} = ReqLLM.Provider.Registry.get_provider(model.provider)
+
         decoded_chunks =
           parsed_events
-          |> Enum.flat_map(&ReqLLM.Response.Codec.decode_sse_event(&1, model))
+          |> Enum.flat_map(&provider_mod.decode_sse_event(&1, model))
           |> Enum.reject(&is_nil/1)
 
         if decoded_chunks != [] do

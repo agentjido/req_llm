@@ -2,10 +2,9 @@ defmodule ReqLLM.Providers.Google do
   @moduledoc """
   Google Gemini provider – built on the OpenAI baseline defaults with Gemini-specific customizations.
 
-  ## Protocol Usage
+  ## Implementation
 
-  Uses the generic `ReqLLM.Context.Codec` and `ReqLLM.Response.Codec` protocols
-  with custom encoding/decoding to translate between OpenAI format and Gemini API format.
+  Uses built-in defaults with custom encoding/decoding to translate between OpenAI format and Gemini API format.
 
   ## Google-Specific Extensions
 
@@ -266,9 +265,9 @@ defmodule ReqLLM.Providers.Google do
     {system_instruction, contents} =
       case request.options[:context] do
         %ReqLLM.Context{} = ctx ->
-          model = request.options[:model]
+          model_name = request.options[:model]
           # Convert OpenAI-style context to Gemini format
-          encoded = ReqLLM.Context.Codec.encode_request(ctx, model)
+          encoded = ReqLLM.Provider.Defaults.encode_context_to_openai_format(ctx, model_name)
           messages = encoded[:messages] || encoded["messages"] || []
           split_messages_for_gemini(messages)
 
@@ -335,7 +334,7 @@ defmodule ReqLLM.Providers.Google do
             if is_streaming do
               chunk_stream =
                 resp.body
-                |> Stream.flat_map(&ReqLLM.Response.Codec.decode_sse_event(&1, model))
+                |> Stream.flat_map(&ReqLLM.Provider.Defaults.default_decode_sse_event(&1, model))
                 |> Stream.reject(&is_nil/1)
 
               response = %ReqLLM.Response{
@@ -356,7 +355,9 @@ defmodule ReqLLM.Providers.Google do
 
               # Convert Google format to OpenAI format, then decode
               openai_format = convert_google_to_openai_format(body)
-              {:ok, response} = ReqLLM.Response.Codec.decode_response(openai_format, model)
+
+              {:ok, response} =
+                ReqLLM.Provider.Defaults.decode_response_body_openai_format(openai_format, model)
 
               # Merge original context with the assistant response
               merged_response =
@@ -533,4 +534,9 @@ defmodule ReqLLM.Providers.Google do
 
   # TODO: Add support for images, audio, video when multimodal support is added
   defp convert_content_part(part), do: %{text: to_string(part)}
+
+  @impl ReqLLM.Provider
+  def decode_sse_event(event, model) do
+    ReqLLM.Provider.Defaults.default_decode_sse_event(event, model)
+  end
 end

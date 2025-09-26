@@ -12,7 +12,7 @@ LLM API's are often inconsistent. ReqLLM aims to provide a consistent, data-driv
 
 This package provides **two-layers** of client interfaces. The top layer is a high-level, provider-agnostic interface that mimic's the Vercel AI SDK and lives in `ReqLLM.ex` using methods like `generate_text/3`. This package seeks to standardize this high-level API across all supported providers, making it easy for Elixir developers to with standard features supported by LLMs. However, any high level abstraction requires trade-offs in terms of flexibility and customization.
 
-The low-level client interface directly utilizes `Req` plugins to make HTTP requests to the LLM API's.  This layer is more flexible and customizable, but requires more knowledge of the underlying API's.  This package is built around the OpenAI API Baseline standard, making it easier to implement providers that follow this standard. Providers such as _Anthropic_ who do not follow the OpenAI standard are heavily customized through callbacks and protocols.
+The low-level client interface directly utilizes `Req` plugins to make HTTP requests to the LLM API's.  This layer is more flexible and customizable, but requires more knowledge of the underlying API's.  This package is built around the OpenAI API Baseline standard, making it easier to implement providers that follow this standard. Providers such as _Anthropic_ who do not follow the OpenAI standard are heavily customized through provider callbacks.
 
 ## Quick Start
 
@@ -93,7 +93,7 @@ ReqLLM.stream_text!(model, "Write a short story")
 
 - **Automatic parameter translation & codecs**  
   - Provider DSL translates canonical options (e.g. `max_tokens` -> `max_completion_tokens` for o1 & o3) to provider-specific names  
-  - `Context.Codec` and `Response.Codec` protocols map ReqLLM structs to wire formats and back  
+  - Built-in OpenAI-style encoding/decoding with provider callback overrides for custom formats  
 
 - **Flexible model specification**  
   - Accepts `"provider:model"`, `{:provider, "model", opts}` tuples, or `%ReqLLM.Model{}` structs  

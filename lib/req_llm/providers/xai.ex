@@ -2,10 +2,10 @@ defmodule ReqLLM.Providers.XAI do
   @moduledoc """
   xAI (Grok) provider – OpenAI Chat Completions compatible with xAI's models and features.
 
-  ## Protocol Usage
+  ## Implementation
 
-  Uses the generic `ReqLLM.Context.Codec` and `ReqLLM.Response.Codec` protocols.
-  No custom wrapper modules – leverages the standard OpenAI-compatible codecs.
+  Uses built-in OpenAI-style encoding/decoding defaults.
+  No custom wrapper modules – leverages the standard OpenAI-compatible implementations.
 
   ## xAI-Specific Extensions
 
@@ -325,7 +325,7 @@ defmodule ReqLLM.Providers.XAI do
 
   defp decode_non_streaming_response(req, resp, model, operation) do
     body = ensure_parsed_body(resp.body)
-    {:ok, response} = ReqLLM.Response.Codec.decode_response(body, model)
+    {:ok, response} = ReqLLM.Provider.Defaults.decode_response_body_openai_format(body, model)
 
     final_response =
       case operation do

@@ -1,15 +1,15 @@
 defmodule ReqLLM.Step.Fixture.Assert do
   @moduledoc """
-  Assertion helpers for validating Context.Codec encoding and option translation
+  Assertion helpers for validating provider encoding and option translation
   in LLM fixture files.
   """
 
   import ExUnit.Assertions
 
   @doc """
-  Assert that the canonical JSON in a fixture matches the expected Context encoding.
+  Assert that the canonical JSON in a fixture matches the expected context encoding.
 
-  This validates that ReqLLM.Context.Codec.encode_request/2 produces the expected result
+  This validates that Provider.Defaults.encode_context_to_openai_format/2 produces the expected result
   for a given context and model combination.
 
   ## Options
@@ -35,7 +35,10 @@ defmodule ReqLLM.Step.Fixture.Assert do
     wrapped_context = ReqLLM.Context.wrap(context, resolved_model)
 
     expected =
-      ReqLLM.Context.Codec.encode_request(wrapped_context, resolved_model)
+      ReqLLM.Provider.Defaults.encode_context_to_openai_format(
+        wrapped_context,
+        resolved_model.model
+      )
       |> normalize_for_comparison()
 
     recorded_normalized = recorded |> normalize_for_comparison() |> scrub(opts)

@@ -2,10 +2,10 @@ defmodule ReqLLM.Providers.OpenRouter do
   @moduledoc """
   OpenRouter provider – OpenAI Chat Completions compatible with OpenRouter's unified API.
 
-  ## Protocol Usage
+  ## Implementation
 
-  Uses the generic `ReqLLM.Context.Codec` and `ReqLLM.Response.Codec` protocols.
-  No custom wrapper modules – leverages the standard OpenAI-compatible codecs.
+  Uses built-in OpenAI-style encoding/decoding defaults.
+  No custom wrapper modules – leverages the standard OpenAI-compatible implementations.
 
   ## OpenRouter-Specific Extensions
 

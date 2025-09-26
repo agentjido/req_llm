@@ -2,10 +2,10 @@ defmodule ReqLLM.Providers.Groq do
   @moduledoc """
   Groq provider – 100% OpenAI Chat Completions compatible with Groq's high-performance hardware.
 
-  ## Protocol Usage
+  ## Implementation
 
-  Uses the generic `ReqLLM.Context.Codec` and `ReqLLM.Response.Codec` protocols.
-  No custom wrapper modules – leverages the standard OpenAI-compatible codecs.
+  Uses built-in OpenAI-style encoding/decoding defaults.
+  No custom request/response handling needed – leverages the standard OpenAI wire format.
 
   ## Groq-Specific Extensions
 
