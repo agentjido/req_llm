@@ -57,7 +57,7 @@ defmodule ReqLLM.ProviderTest.ToolCalling do
           "What's the weather like in Paris, France?",
           fixture_opts(unquote(provider), "basic_tool_call", base_opts ++ [tools: tools])
         )
-        |> assert_basic_response()
+        |> assert_tool_calling_response()
         |> assert_tool_call_response("get_weather")
       end
 
@@ -119,7 +119,7 @@ defmodule ReqLLM.ProviderTest.ToolCalling do
           "Tell me a joke about programming",
           fixture_opts(unquote(provider), "multi_tool_call", base_opts ++ [tools: tools])
         )
-        |> assert_basic_response()
+        |> assert_tool_calling_response()
         |> assert_tool_call_response("tell_joke")
       end
 

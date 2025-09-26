@@ -155,6 +155,25 @@ defmodule ReqLLM.ProviderTestHelpers do
   end
 
   @doc """
+  Assert that a tool calling response has the expected basic structure.
+
+  Verifies:
+  - Response structure is valid
+  - Context advancement (original messages + new assistant message)
+
+  Note: Does not require text content since tool calling responses may have no text.
+  """
+  def assert_tool_calling_response({:ok, %ReqLLM.Response{} = response}) do
+    response
+    |> assert_response_structure()
+    |> assert_context_advancement()
+  end
+
+  def assert_tool_calling_response(other) do
+    flunk("Expected {:ok, %ReqLLM.Response{}}, got: #{inspect(other)}")
+  end
+
+  @doc """
   Assert that the response context contains the original messages plus assistant response.
   """
   def assert_context_advancement(%ReqLLM.Response{context: context, message: message} = response)

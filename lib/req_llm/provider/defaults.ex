@@ -404,22 +404,61 @@ defmodule ReqLLM.Provider.Defaults do
     Enum.map(messages, &encode_openai_message/1)
   end
 
-  defp encode_openai_message(%ReqLLM.Message{
-         role: role,
+  defp encode_openai_message(%ReqLLM.Message{} = msg) do
+    case msg.role do
+      :assistant -> encode_openai_message_assistant(msg)
+      :tool -> encode_openai_message_tool(msg)
+      _ -> encode_openai_message_generic(msg)
+    end
+  end
+
+  defp encode_openai_message_assistant(%ReqLLM.Message{content: content, tool_calls: tool_calls}) do
+    # Only include text content parts in content; extract tool calls into top-level field
+    text_content = encode_openai_text_content_only(content)
+    calls_from_parts = extract_tool_calls_from_parts(content)
+    calls = normalize_openai_tool_calls((tool_calls || []) ++ calls_from_parts)
+
+    base =
+      %{
+        role: "assistant"
+      }
+      |> maybe_put(:content, text_content)
+
+    case calls do
+      [] -> base
+      _ -> Map.put(base, :tool_calls, calls)
+    end
+  end
+
+  defp encode_openai_message_tool(%ReqLLM.Message{
          content: content,
-         tool_calls: tool_calls
+         tool_call_id: msg_tool_call_id
        }) do
-    base_message = %{
+    # Build content string and tool_call_id from either message or first tool_result part
+    {tool_call_id, content_string} =
+      case extract_tool_result(content) do
+        {id, output} ->
+          id_to_use = msg_tool_call_id || id
+          {id_to_use, encode_tool_output_to_string(output)}
+
+        nil ->
+          # Fallback: join text parts; content must be string
+          {msg_tool_call_id, text_only_join(content)}
+      end
+
+    content_to_use = if content_string == "", do: "No output", else: content_string
+
+    %{}
+    |> Map.put(:role, "tool")
+    |> maybe_put(:tool_call_id, tool_call_id)
+    |> maybe_put(:content, content_to_use)
+  end
+
+  defp encode_openai_message_generic(%ReqLLM.Message{role: role, content: content}) do
+    %{
       role: to_string(role),
       content: encode_openai_content(content)
     }
-
-    # Add tool_calls if present and not nil
-    case tool_calls do
-      nil -> base_message
-      [] -> base_message
-      calls -> Map.put(base_message, :tool_calls, calls)
-    end
   end
 
   defp encode_openai_content(content) when is_binary(content), do: content
@@ -447,23 +486,109 @@ defmodule ReqLLM.Provider.Defaults do
     %{type: "text", text: text}
   end
 
-  defp encode_openai_content_part(%ReqLLM.Message.ContentPart{
-         type: :tool_call,
-         tool_name: name,
-         input: input,
-         tool_call_id: id
-       }) do
+  # Tool calls should NOT be encoded into content - they go to top-level tool_calls
+  defp encode_openai_content_part(%ReqLLM.Message.ContentPart{type: :tool_call}), do: nil
+
+  defp encode_openai_content_part(_), do: nil
+
+  # Helper functions for tool calling support
+
+  defp encode_openai_text_content_only(parts) when is_list(parts) do
+    encoded =
+      parts
+      |> Enum.map(&encode_openai_content_part/1)
+      |> maybe_flatten_single_text()
+
+    case encoded do
+      [] -> nil
+      "" -> nil
+      content -> content
+    end
+  end
+
+  defp text_only_join(parts) do
+    parts
+    |> Enum.filter(&(&1.type == :text))
+    |> Enum.map_join("", & &1.text)
+  end
+
+  defp extract_tool_result(parts) do
+    # Return {id, output} from the first tool_result part if present
+    Enum.find_value(parts, fn
+      %ReqLLM.Message.ContentPart{type: :tool_result, tool_call_id: id, output: output} ->
+        {id, output}
+
+      _ ->
+        nil
+    end)
+  end
+
+  defp encode_tool_output_to_string(output) when is_binary(output), do: output
+  defp encode_tool_output_to_string(output), do: Jason.encode!(output)
+
+  defp extract_tool_calls_from_parts(parts) do
+    for %ReqLLM.Message.ContentPart{
+          type: :tool_call,
+          tool_name: name,
+          input: input,
+          tool_call_id: id
+        } <- parts do
+      %{
+        "id" => id,
+        "type" => "function",
+        "function" => %{
+          "name" => name,
+          "arguments" => input
+        }
+      }
+    end
+  end
+
+  defp normalize_openai_tool_calls(calls) when is_list(calls) do
+    calls
+    |> Enum.map(&normalize_openai_tool_call/1)
+    |> Enum.reject(&is_nil/1)
+  end
+
+  defp normalize_openai_tool_call(%{"id" => id, "type" => "function", "function" => fnc}) do
     %{
-      id: id,
-      type: "function",
-      function: %{
-        name: name,
-        arguments: Jason.encode!(input)
+      "id" => id || generate_tool_call_id(),
+      "type" => "function",
+      "function" => %{
+        "name" => fnc["name"],
+        "arguments" => normalize_arguments(fnc["arguments"])
       }
     }
   end
 
-  defp encode_openai_content_part(_), do: nil
+  defp normalize_openai_tool_call(%{id: id, function: %{name: name, arguments: args}}) do
+    %{
+      "id" => id || generate_tool_call_id(),
+      "type" => "function",
+      "function" => %{
+        "name" => name,
+        "arguments" => normalize_arguments(args)
+      }
+    }
+  end
+
+  defp normalize_openai_tool_call(%{name: name, arguments: args} = m) do
+    %{
+      "id" => Map.get(m, :id) || Map.get(m, "id") || generate_tool_call_id(),
+      "type" => "function",
+      "function" => %{
+        "name" => name || Map.get(m, "name"),
+        "arguments" => normalize_arguments(args || Map.get(m, "arguments"))
+      }
+    }
+  end
+
+  defp normalize_openai_tool_call(_), do: nil
+
+  defp normalize_arguments(args) when is_binary(args), do: args
+  defp normalize_arguments(args), do: Jason.encode!(args || %{})
+
+  defp generate_tool_call_id, do: "call_#{System.unique_integer([:positive])}"
 
   @doc """
   Decodes OpenAI-format response body to ReqLLM.Response.

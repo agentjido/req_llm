@@ -56,31 +56,118 @@ defmodule ReqLLM.Provider.DefaultsTest do
         ]
       }
 
-      expected_message_result = %{
+      # Both should result in the same encoding: tool_calls at the top level
+
+      result1 =
+        Defaults.encode_context_to_openai_format(
+          %Context{messages: [message_tool_calls]},
+          "gpt-4"
+        )
+
+      result2 =
+        Defaults.encode_context_to_openai_format(
+          %Context{messages: [content_tool_calls]},
+          "gpt-4"
+        )
+
+      # Both should have the same structure
+      assert %{messages: [%{role: "assistant", tool_calls: [tool_call1]}]} = result1
+      assert %{messages: [%{role: "assistant", tool_calls: [tool_call2]}]} = result2
+
+      # Verify tool call structure 
+      assert tool_call1["id"] == "call_123"
+      assert tool_call1["type"] == "function"
+      assert tool_call1["function"]["name"] == "get_weather"
+      assert tool_call1["function"]["arguments"] == ~s({"city":"New York"})
+
+      assert tool_call2["id"] == "call_123"
+      assert tool_call2["type"] == "function"
+      assert tool_call2["function"]["name"] == "get_weather"
+      assert Jason.decode!(tool_call2["function"]["arguments"]) == %{"city" => "New York"}
+    end
+
+    test "encodes tool messages correctly" do
+      # Test tool message with result
+      tool_result_message = %Message{
+        role: :tool,
+        content: [
+          %ContentPart{
+            type: :tool_result,
+            tool_call_id: "call_123",
+            output: %{temperature: "72F", condition: "sunny"}
+          }
+        ]
+      }
+
+      expected_result = %{
+        messages: [
+          %{
+            role: "tool",
+            tool_call_id: "call_123",
+            content: ~s({"temperature":"72F","condition":"sunny"})
+          }
+        ]
+      }
+
+      assert Defaults.encode_context_to_openai_format(
+               %Context{messages: [tool_result_message]},
+               "gpt-4"
+             ) == expected_result
+    end
+
+    test "normalizes tool call arguments to JSON strings" do
+      # Test with map arguments (should be JSON encoded)
+      map_args_message = %Message{
+        role: :assistant,
+        content: [],
+        tool_calls: [
+          %{
+            id: "call_456",
+            function: %{name: "calculate", arguments: %{a: 1, b: 2}}
+          }
+        ]
+      }
+
+      result =
+        Defaults.encode_context_to_openai_format(
+          %Context{messages: [map_args_message]},
+          "gpt-4"
+        )
+
+      # Extract the tool call to verify the structure and content
+      assert %{messages: [%{role: "assistant", tool_calls: [tool_call]}]} = result
+      assert tool_call["id"] == "call_456"
+      assert tool_call["type"] == "function"
+      assert tool_call["function"]["name"] == "calculate"
+      # Verify arguments is valid JSON that parses to the original map
+      assert Jason.decode!(tool_call["function"]["arguments"]) == %{"a" => 1, "b" => 2}
+    end
+
+    test "combines text content and tool calls correctly" do
+      # Assistant message with both text and tool call
+      mixed_message = %Message{
+        role: :assistant,
+        content: [
+          %ContentPart{type: :text, text: "I'll check the weather for you."},
+          %ContentPart{
+            type: :tool_call,
+            tool_name: "get_weather",
+            input: %{city: "New York"},
+            tool_call_id: "call_789"
+          }
+        ]
+      }
+
+      expected_result = %{
         messages: [
           %{
             role: "assistant",
-            content: [],
+            content: "I'll check the weather for you.",
             tool_calls: [
               %{
-                id: "call_123",
-                type: "function",
-                function: %{name: "get_weather", arguments: ~s({"city":"New York"})}
-              }
-            ]
-          }
-        ]
-      }
-
-      expected_content_result = %{
-        messages: [
-          %{
-            role: "assistant",
-            content: [
-              %{
-                id: "call_123",
-                type: "function",
-                function: %{name: "get_weather", arguments: ~s({"city":"New York"})}
+                "id" => "call_789",
+                "type" => "function",
+                "function" => %{"name" => "get_weather", "arguments" => ~s({"city":"New York"})}
               }
             ]
           }
@@ -88,14 +175,9 @@ defmodule ReqLLM.Provider.DefaultsTest do
       }
 
       assert Defaults.encode_context_to_openai_format(
-               %Context{messages: [message_tool_calls]},
+               %Context{messages: [mixed_message]},
                "gpt-4"
-             ) == expected_message_result
-
-      assert Defaults.encode_context_to_openai_format(
-               %Context{messages: [content_tool_calls]},
-               "gpt-4"
-             ) == expected_content_result
+             ) == expected_result
     end
   end
 
