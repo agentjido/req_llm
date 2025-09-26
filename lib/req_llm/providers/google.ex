@@ -428,6 +428,7 @@ defmodule ReqLLM.Providers.Google do
   defp extract_tool_calls(parts) do
     for %{"functionCall" => %{} = call} <- parts do
       call_id = Map.get(call, "id", "tool_call_#{System.unique_integer([:positive])}")
+
       encoded_args =
         call
         |> Map.get("args", %{})
