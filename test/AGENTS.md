@@ -71,7 +71,7 @@ defmodule ReqLLM.Coverage.Anthropic.CoreTest do
 
   test "basic text generation" do
     {:ok, response} = use_fixture(:provider, "basic-text", fn ->
-      ReqLLM.generate_text("anthropic:claude-3-sonnet", "Hello!")
+      ReqLLM.generate_text("anthropic:claude-3-sonnet-20240229", "Hello!")
     end)
     
     assert is_binary(response.text)

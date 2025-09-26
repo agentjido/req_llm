@@ -8,7 +8,7 @@ ReqLLM provides two API layers for AI interactions: high-level convenience funct
 
 ```elixir
 # Simple text generation
-ReqLLM.generate_text!("anthropic:claude-3-sonnet", "Hello world")
+ReqLLM.generate_text!("anthropic:claude-3-sonnet-20240229", "Hello world")
 #=> "Hello! How can I assist you today?"
 
 # With full response metadata
@@ -19,7 +19,7 @@ response.usage  #=> %{input_tokens: 8, output_tokens: 12, total_cost: 0.0006}
 ### Streaming
 
 ```elixir
-ReqLLM.stream_text!("anthropic:claude-3-sonnet", "Write a story")
+ReqLLM.stream_text!("anthropic:claude-3-sonnet-20240229", "Write a story")
 |> Stream.each(&IO.write(&1.text))
 |> Stream.run()
 ```
@@ -53,20 +53,20 @@ context = ReqLLM.Context.new([
   ReqLLM.Context.user("Explain recursion in Elixir")
 ])
 
-{:ok, response} = ReqLLM.generate_text("anthropic:claude-3-sonnet", context)
+{:ok, response} = ReqLLM.generate_text("anthropic:claude-3-sonnet-20240229", context)
 ```
 
 ### Model Specifications
 
 ```elixir
 # String format
-ReqLLM.generate_text("anthropic:claude-3-sonnet", "Hello")
+ReqLLM.generate_text("anthropic:claude-3-sonnet-20240229", "Hello")
 
 # Tuple format with options
-ReqLLM.generate_text({:anthropic, "claude-3-sonnet", temperature: 0.7}, "Hello")
+ReqLLM.generate_text({:anthropic, "claude-3-sonnet-20240229", temperature: 0.7}, "Hello")
 
 # Model struct
-model = %ReqLLM.Model{provider: :anthropic, model: "claude-3-sonnet", max_tokens: 100}
+model = %ReqLLM.Model{provider: :anthropic, model: "claude-3-sonnet-20240229", max_tokens: 100}
 ReqLLM.generate_text(model, "Hello")
 ```
 
@@ -91,7 +91,7 @@ Direct Req plugin access for custom HTTP control:
 
 ```elixir
 # Canonical implementation from ReqLLM.Generation.generate_text/3
-with {:ok, model} <- ReqLLM.Model.from("anthropic:claude-3-sonnet"),
+with {:ok, model} <- ReqLLM.Model.from("anthropic:claude-3-sonnet-20240229"),
      {:ok, provider_module} <- ReqLLM.provider(model.provider),
      {:ok, request} <- provider_module.prepare_request(:chat, model, "Hello!", temperature: 0.7),
      {:ok, %Req.Response{body: response}} <- Req.request(request) do
@@ -99,7 +99,7 @@ with {:ok, model} <- ReqLLM.Model.from("anthropic:claude-3-sonnet"),
 end
 
 # Custom headers and middleware
-{:ok, model} = ReqLLM.Model.from("anthropic:claude-3-sonnet")
+{:ok, model} = ReqLLM.Model.from("anthropic:claude-3-sonnet-20240229")
 {:ok, provider_module} = ReqLLM.provider(model.provider)
 {:ok, request} = provider_module.prepare_request(:chat, model, "Hello!")
 
@@ -114,7 +114,7 @@ custom_request =
 ## Error Handling
 
 ```elixir
-case ReqLLM.generate_text("anthropic:claude-3-sonnet", "Hello") do
+case ReqLLM.generate_text("anthropic:claude-3-sonnet-20240229", "Hello") do
   {:ok, response} -> response.text
   {:error, %ReqLLM.Error.API.RateLimit{retry_after: seconds}} -> 
     :timer.sleep(seconds * 1000)

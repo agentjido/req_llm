@@ -112,7 +112,7 @@ Canonical Response
 ### Composable Middleware
 
 ```elixir
-{:ok, model} = ReqLLM.Model.from("anthropic:claude-3-sonnet")
+{:ok, model} = ReqLLM.Model.from("anthropic:claude-3-sonnet-20240229")
 {:ok, provider} = ReqLLM.provider(:anthropic)
 
 request = Req.new()
@@ -153,10 +153,10 @@ Transport vs Format separation:
 
 ```elixir
 # API call
-ReqLLM.generate_text("anthropic:claude-3-sonnet", "Hello")
+ReqLLM.generate_text("anthropic:claude-3-sonnet-20240229", "Hello")
 
 # Model resolution  
-{:ok, model} = ReqLLM.Model.from("anthropic:claude-3-sonnet")
+{:ok, model} = ReqLLM.Model.from("anthropic:claude-3-sonnet-20240229")
 
 # Provider lookup
 {:ok, provider} = ReqLLM.provider(:anthropic)
@@ -174,7 +174,7 @@ request = Req.new() |> provider.attach(model, [])
 ### Streaming Flow
 
 ```elixir
-{:ok, response} = ReqLLM.stream_text("anthropic:claude-3-sonnet", "Tell a story")
+{:ok, response} = ReqLLM.stream_text("anthropic:claude-3-sonnet-20240229", "Tell a story")
 # Returns %ReqLLM.Response{stream?: true, stream: #Stream<...>}
 
 response.stream

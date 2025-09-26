@@ -18,7 +18,7 @@ The low-level client interface directly utilizes `Req` plugins to make HTTP requ
 
 ```elixir
 # Keys are picked up from .env files or environment variables - see `ReqLLM.Keys`
-model = "anthropic:claude-3-sonnet"
+model = "anthropic:claude-3-sonnet-20240229"
 
 ReqLLM.generate_text!(model, "Hello world")
 #=> "Hello! How can I assist you today?"
@@ -164,7 +164,7 @@ For advanced use cases, you can use ReqLLM providers directly as Req plugins. Th
 
 ```elixir
 # The canonical pattern from ReqLLM.Generation.generate_text/3
-with {:ok, model} <- ReqLLM.Model.from("anthropic:claude-3-sonnet"), # Parse model spec
+with {:ok, model} <- ReqLLM.Model.from("anthropic:claude-3-sonnet-20240229"), # Parse model spec
      {:ok, provider_module} <- ReqLLM.provider(model.provider),        # Get provider module
      {:ok, request} <- provider_module.prepare_request(:chat, model, "Hello!", temperature: 0.7), # Build Req request
      {:ok, %Req.Response{body: response}} <- Req.request(request) do   # Execute HTTP request
@@ -173,6 +173,11 @@ end
 
 # Customize the Req pipeline with additional headers or middleware
 {:ok, model} = ReqLLM.Model.from("anthropic:claude-3-sonnet")
+{:ok, provider_module} = ReqLLM.provider(model.provider)
+{:ok, request} = provider_module.prepare_request(:chat, model, "Hello!", temperature: 0.7)
+
+# Add custom headers or middleware before sending
+{:ok, model} = ReqLLM.Model.from("anthropic:claude-3-sonnet-20240229")
 {:ok, provider_module} = ReqLLM.provider(model.provider)
 {:ok, request} = provider_module.prepare_request(:chat, model, "Hello!", temperature: 0.7)
 

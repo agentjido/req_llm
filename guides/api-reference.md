@@ -17,12 +17,12 @@ Returns a canonical ReqLLM.Response with usage data, context, and metadata.
 **Examples:**
 ```elixir
 # Simple text generation
-{:ok, response} = ReqLLM.generate_text("anthropic:claude-3-sonnet", "Hello world")
+{:ok, response} = ReqLLM.generate_text("anthropic:claude-3-sonnet-20240229", "Hello world")
 ReqLLM.Response.text(response)  # => "Hello! How can I assist you today?"
 
 # With options
 {:ok, response} = ReqLLM.generate_text(
-  "anthropic:claude-3-sonnet", 
+  "anthropic:claude-3-sonnet-20240229", 
   "Write a haiku",
   temperature: 0.8,
   max_tokens: 100
@@ -33,7 +33,7 @@ ctx = ReqLLM.context([
   ReqLLM.Context.system("You are a helpful assistant"),
   ReqLLM.Context.user("What's 2+2?")
 ])
-{:ok, response} = ReqLLM.generate_text("anthropic:claude-3-sonnet", ctx)
+{:ok, response} = ReqLLM.generate_text("anthropic:claude-3-sonnet-20240229", ctx)
 ```
 
 ### generate_text!/3
@@ -46,7 +46,7 @@ Generate text returning only the text content.
 
 **Examples:**
 ```elixir
-ReqLLM.generate_text!("anthropic:claude-3-sonnet", "Hello")
+ReqLLM.generate_text!("anthropic:claude-3-sonnet-20240229", "Hello")
 # => "Hello! How can I assist you today?"
 ```
 
@@ -62,7 +62,7 @@ Returns a canonical ReqLLM.Response containing usage data and stream.
 
 **Examples:**
 ```elixir
-{:ok, response} = ReqLLM.stream_text("anthropic:claude-3-sonnet", "Tell me a story")
+{:ok, response} = ReqLLM.stream_text("anthropic:claude-3-sonnet-20240229", "Tell me a story")
 ReqLLM.Response.text_stream(response) |> Enum.each(&IO.write/1)
 
 # Access usage after streaming
@@ -79,7 +79,7 @@ Stream text generation returning only the stream.
 
 **Examples:**
 ```elixir
-ReqLLM.stream_text!("anthropic:claude-3-sonnet", "Count to 10")
+ReqLLM.stream_text!("anthropic:claude-3-sonnet-20240229", "Count to 10")
 |> Enum.each(&IO.write/1)
 ```
 
@@ -101,7 +101,7 @@ schema = [
   name: [type: :string, required: true],
   age: [type: :pos_integer, required: true]
 ]
-{:ok, response} = ReqLLM.generate_object("anthropic:claude-3-sonnet", "Generate a person", schema)
+{:ok, response} = ReqLLM.generate_object("anthropic:claude-3-sonnet-20240229", "Generate a person", schema)
 ```
 
 ### generate_object!/4
@@ -164,14 +164,14 @@ ReqLLM accepts flexible model specifications:
 ### String Format
 ```elixir
 "provider:model"
-"anthropic:claude-3-sonnet"
+"anthropic:claude-3-sonnet-20240229"
 "openai:gpt-4o"
 "ollama:llama3"
 ```
 
 ### Tuple Format
 ```elixir
-{:anthropic, "claude-3-sonnet", temperature: 0.7}
+{:anthropic, "claude-3-sonnet-20240229", temperature: 0.7}
 {:openai, "gpt-4o", max_tokens: 1000}
 ```
 
@@ -179,7 +179,7 @@ ReqLLM accepts flexible model specifications:
 ```elixir
 %ReqLLM.Model{
   provider: :anthropic,
-  model: "claude-3-sonnet", 
+  model: "claude-3-sonnet-20240229", 
   temperature: 0.7,
   max_tokens: 1000
 }
@@ -210,7 +210,7 @@ ReqLLM accepts flexible model specifications:
 ctx = ReqLLM.context("Hello")
 
 {:ok, response} = ReqLLM.generate_text(
-  "anthropic:claude-3-sonnet",
+  "anthropic:claude-3-sonnet-20240229",
   ctx,
   temperature: 0.8,
   max_tokens: 500,
@@ -266,7 +266,7 @@ weather_tool = ReqLLM.tool(
 )
 
 {:ok, response} = ReqLLM.generate_text(
-  "anthropic:claude-3-sonnet",
+  "anthropic:claude-3-sonnet-20240229",
   "What's the weather in Paris?",
   tools: [weather_tool]
 )
