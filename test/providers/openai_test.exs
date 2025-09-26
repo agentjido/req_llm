@@ -618,7 +618,7 @@ defmodule ReqLLM.Providers.OpenAITest do
       model = ReqLLM.Model.from!("openai:gpt-5")
       opts = [max_tokens: 1500, temperature: 0.7, top_p: 0.9]
       {translated_opts, warnings} = OpenAI.translate_options(:chat, model, opts)
-      
+
       assert translated_opts[:max_completion_tokens] == 1500
       assert translated_opts[:temperature] == 0.7
       assert translated_opts[:top_p] == 0.9
@@ -630,7 +630,7 @@ defmodule ReqLLM.Providers.OpenAITest do
       model = ReqLLM.Model.from!("openai:gpt-5-mini")
       opts = [max_tokens: 2500, temperature: 0.5]
       {translated_opts, warnings} = OpenAI.translate_options(:chat, model, opts)
-      
+
       assert translated_opts[:max_completion_tokens] == 2500
       assert translated_opts[:temperature] == 0.5
       refute Keyword.has_key?(translated_opts, :max_tokens)
@@ -641,7 +641,7 @@ defmodule ReqLLM.Providers.OpenAITest do
       model = ReqLLM.Model.from!("openai:o4-mini")
       opts = [max_tokens: 3000, temperature: 0.8]
       {translated_opts, warnings} = OpenAI.translate_options(:chat, model, opts)
-      
+
       assert translated_opts[:max_completion_tokens] == 3000
       refute Keyword.has_key?(translated_opts, :max_tokens)
       refute Keyword.has_key?(translated_opts, :temperature)
