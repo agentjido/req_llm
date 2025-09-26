@@ -7,7 +7,7 @@ defmodule ReqLLM.Providers.GoogleRoleFixTest do
   describe "role conversion for Gemini" do
     test "converts assistant role to model in encoded messages" do
       # Create a context with assistant messages
-      context = 
+      context =
         Context.new([
           Context.user("Hello"),
           Context.assistant("Hi there! How can I help you?"),
@@ -41,9 +41,14 @@ defmodule ReqLLM.Providers.GoogleRoleFixTest do
 
       # Check each message's role
       assert Enum.at(contents, 0)["role"] == "user"
-      assert Enum.at(contents, 1)["role"] == "model", "Assistant role should be converted to 'model'"
+
+      assert Enum.at(contents, 1)["role"] == "model",
+             "Assistant role should be converted to 'model'"
+
       assert Enum.at(contents, 2)["role"] == "user"
-      assert Enum.at(contents, 3)["role"] == "model", "Assistant role should be converted to 'model'"
+
+      assert Enum.at(contents, 3)["role"] == "model",
+             "Assistant role should be converted to 'model'"
 
       # Ensure no 'assistant' role remains
       refute Enum.any?(contents, fn msg -> msg["role"] == "assistant" end),
@@ -51,7 +56,7 @@ defmodule ReqLLM.Providers.GoogleRoleFixTest do
     end
 
     test "handles system messages separately" do
-      context = 
+      context =
         Context.new([
           Context.system("You are a helpful assistant"),
           Context.user("Hello"),
@@ -102,11 +107,11 @@ defmodule ReqLLM.Providers.GoogleRoleFixTest do
       body = Jason.decode!(updated_request.body)
 
       contents = body["contents"]
-      
+
       # All assistant messages should be converted to model
       assert Enum.at(contents, 1)["role"] == "model"
       assert Enum.at(contents, 3)["role"] == "model"
-      
+
       # Content should be preserved
       assert Enum.at(contents, 1)["parts"] == [%{"text" => "Hi!"}]
       assert Enum.at(contents, 3)["parts"] == [%{"text" => "I'm doing well, thanks!"}]

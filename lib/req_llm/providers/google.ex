@@ -515,8 +515,8 @@ defmodule ReqLLM.Providers.Google do
           "user" -> "user"
           :assistant -> "model"
           "assistant" -> "model"
-          :system -> "user"  # Shouldn't happen as system messages are filtered
-          "system" -> "user"  # Shouldn't happen as system messages are filtered
+          :system -> "user"
+          "system" -> "user"
           other when is_binary(other) -> other
           other -> to_string(other)
         end
