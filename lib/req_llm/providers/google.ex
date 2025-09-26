@@ -391,11 +391,21 @@ defmodule ReqLLM.Providers.Google do
             |> Enum.filter(&Map.has_key?(&1, "text"))
             |> Enum.map_join("", &Map.get(&1, "text"))
 
+          tool_calls = extract_tool_calls(parts)
+
+          message = %{
+            "role" => "assistant",
+            "content" => message_content
+          }
+
+          message =
+            case tool_calls do
+              [] -> message
+              _ -> Map.put(message, "tool_calls", tool_calls)
+            end
+
           %{
-            "message" => %{
-              "role" => "assistant",
-              "content" => message_content
-            },
+            "message" => message,
             "finish_reason" => normalize_google_finish_reason(candidate["finishReason"])
           }
 
@@ -414,6 +424,25 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp convert_google_to_openai_format(body), do: body
+
+  defp extract_tool_calls(parts) do
+    for %{"functionCall" => %{} = call} <- parts do
+      call_id = Map.get(call, "id", "tool_call_#{System.unique_integer([:positive])}")
+      encoded_args =
+        call
+        |> Map.get("args", %{})
+        |> Jason.encode!()
+
+      %{
+        "id" => call_id,
+        "type" => "function",
+        "function" => %{
+          "name" => call["name"],
+          "arguments" => encoded_args
+        }
+      }
+    end
+  end
 
   defp normalize_google_finish_reason("STOP"), do: "stop"
   defp normalize_google_finish_reason("MAX_TOKENS"), do: "length"

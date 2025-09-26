@@ -320,6 +320,54 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert List.last(response.context.messages).role == :assistant
     end
 
+    test "decode_response preserves tool calls" do
+      google_response = %{
+        "candidates" => [
+          %{
+            "content" => %{
+              "parts" => [
+                %{
+                  "functionCall" => %{
+                    "name" => "demo_tool",
+                    "args" => %{"payload" => "value"},
+                    "id" => "call-1"
+                  }
+                }
+              ],
+              "role" => "model"
+            },
+            "finishReason" => "STOP"
+          }
+        ],
+        "usageMetadata" => %{
+          "promptTokenCount" => 12,
+          "candidatesTokenCount" => 3,
+          "totalTokenCount" => 15
+        }
+      }
+
+      mock_resp = %Req.Response{status: 200, body: google_response}
+
+      context = context_fixture()
+
+      mock_req = %Req.Request{
+        options: [context: context, stream: false, model: "gemini-1.5-flash"]
+      }
+
+      {_req, resp} = Google.decode_response({mock_req, mock_resp})
+
+      response = resp.body
+      assert %ReqLLM.Response{} = response
+
+      tool_calls = ReqLLM.Response.tool_calls(response)
+
+      assert [%{name: "demo_tool", arguments: %{"payload" => "value"}, id: tool_call_id}] =
+               tool_calls
+
+      assert tool_call_id == "call-1"
+      assert ReqLLM.Response.finish_reason(response) == :stop
+    end
+
     test "decode_response handles streaming responses" do
       # Create mock streaming chunks (Google format)
       stream_chunks = [
