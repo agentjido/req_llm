@@ -290,6 +290,51 @@ defmodule ReqLLM.Providers.OpenAITest do
       refute Map.has_key?(decoded, "temperature")
     end
 
+    test "encode_body for gpt-5 models uses max_completion_tokens" do
+      model = ReqLLM.Model.from!("openai:gpt-5")
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          max_completion_tokens: 2500,
+          temperature: 0.7
+        ]
+      }
+
+      updated_request = OpenAI.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      assert decoded["model"] == "gpt-5"
+      assert decoded["max_completion_tokens"] == 2500
+      assert decoded["temperature"] == 0.7
+      refute Map.has_key?(decoded, "max_tokens")
+    end
+
+    test "encode_body for o4 models uses max_completion_tokens" do
+      model = ReqLLM.Model.from!("openai:o4-mini")
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          max_completion_tokens: 3000
+        ]
+      }
+
+      updated_request = OpenAI.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      assert decoded["model"] == "o4-mini"
+      assert decoded["max_completion_tokens"] == 3000
+      refute Map.has_key?(decoded, "max_tokens")
+      refute Map.has_key?(decoded, "temperature")
+    end
+
     test "encode_body for regular models uses max_tokens" do
       model = ReqLLM.Model.from!("openai:gpt-4o")
       context = context_fixture()
@@ -567,6 +612,41 @@ defmodule ReqLLM.Providers.OpenAITest do
 
       assert translated_opts == opts
       assert warnings == []
+    end
+
+    test "translate_options for gpt-5 models renames max_tokens but keeps temperature" do
+      model = ReqLLM.Model.from!("openai:gpt-5")
+      opts = [max_tokens: 1500, temperature: 0.7, top_p: 0.9]
+      {translated_opts, warnings} = OpenAI.translate_options(:chat, model, opts)
+      
+      assert translated_opts[:max_completion_tokens] == 1500
+      assert translated_opts[:temperature] == 0.7
+      assert translated_opts[:top_p] == 0.9
+      refute Keyword.has_key?(translated_opts, :max_tokens)
+      assert warnings == []
+    end
+
+    test "translate_options for gpt-5-mini models renames max_tokens" do
+      model = ReqLLM.Model.from!("openai:gpt-5-mini")
+      opts = [max_tokens: 2500, temperature: 0.5]
+      {translated_opts, warnings} = OpenAI.translate_options(:chat, model, opts)
+      
+      assert translated_opts[:max_completion_tokens] == 2500
+      assert translated_opts[:temperature] == 0.5
+      refute Keyword.has_key?(translated_opts, :max_tokens)
+      assert warnings == []
+    end
+
+    test "translate_options for o4 models renames max_tokens and drops temperature" do
+      model = ReqLLM.Model.from!("openai:o4-mini")
+      opts = [max_tokens: 3000, temperature: 0.8]
+      {translated_opts, warnings} = OpenAI.translate_options(:chat, model, opts)
+      
+      assert translated_opts[:max_completion_tokens] == 3000
+      refute Keyword.has_key?(translated_opts, :max_tokens)
+      refute Keyword.has_key?(translated_opts, :temperature)
+      assert length(warnings) == 1
+      assert List.first(warnings) =~ "OpenAI o4 models do not support :temperature"
     end
 
     test "translate_options for non-chat operations passes through unchanged" do
