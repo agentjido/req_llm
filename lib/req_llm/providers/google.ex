@@ -500,16 +500,37 @@ defmodule ReqLLM.Providers.Google do
   # Helper to convert OpenAI-style messages to Gemini format (non-system messages only)
   defp convert_messages_to_gemini(messages) do
     Enum.map(messages, fn message ->
+      # Extract role from either map with string keys or struct
+      raw_role =
+        case message do
+          %{role: role} -> role
+          %{"role" => role} -> role
+          _ -> "user"
+        end
+
+      # Convert role to Gemini format
       role =
-        case message.role do
+        case raw_role do
           :user -> "user"
+          "user" -> "user"
           :assistant -> "model"
-          role when is_binary(role) and role != "system" -> role
-          role when role != :system -> to_string(role)
+          "assistant" -> "model"
+          :system -> "user"  # Shouldn't happen as system messages are filtered
+          "system" -> "user"  # Shouldn't happen as system messages are filtered
+          other when is_binary(other) -> other
+          other -> to_string(other)
+        end
+
+      # Extract content from either map with string keys or struct
+      raw_content =
+        case message do
+          %{content: content} -> content
+          %{"content" => content} -> content
+          _ -> ""
         end
 
       parts =
-        case message.content do
+        case raw_content do
           content when is_binary(content) -> [%{text: content}]
           parts when is_list(parts) -> Enum.map(parts, &convert_content_part/1)
         end
@@ -546,7 +567,9 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp convert_content_part(%{type: :text, content: text}), do: %{text: text}
+  defp convert_content_part(%{"type" => "text", "text" => text}), do: %{text: text}
   defp convert_content_part(%{text: text}), do: %{text: text}
+  defp convert_content_part(%{"text" => text}), do: %{text: text}
   defp convert_content_part(text) when is_binary(text), do: %{text: text}
 
   defp convert_content_part(%{type: :file, data: data, media_type: media_type})
