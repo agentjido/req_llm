@@ -226,9 +226,15 @@ defmodule ReqLLM.Generation do
     with {:ok, model} <- Model.from(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          stream_opts = Keyword.put(opts, :stream, true),
-         {:ok, request} <- provider_module.prepare_request(:chat, model, messages, stream_opts),
-         {:ok, %Req.Response{body: response}} <- Req.request(request) do
-      {:ok, response}
+         {:ok, request} <- provider_module.prepare_request(:chat, model, messages, stream_opts) do
+      # Extract the :into callback if present for real-time streaming
+      into_callback = Req.Request.get_private(request, :streaming_into_callback)
+      req_opts = if into_callback, do: [into: into_callback], else: []
+
+      case Req.request(request, req_opts) do
+        {:ok, %Req.Response{body: response}} -> {:ok, response}
+        error -> error
+      end
     end
   end
 
@@ -394,9 +400,15 @@ defmodule ReqLLM.Generation do
          {:ok, compiled_schema} <- ReqLLM.Schema.compile(object_schema),
          stream_opts =
            Keyword.put(opts, :stream, true) |> Keyword.put(:compiled_schema, compiled_schema),
-         {:ok, request} <- provider_module.prepare_request(:object, model, messages, stream_opts),
-         {:ok, %Req.Response{body: response}} <- Req.request(request) do
-      {:ok, response}
+         {:ok, request} <- provider_module.prepare_request(:object, model, messages, stream_opts) do
+      # Extract the :into callback if present for real-time streaming
+      into_callback = Req.Request.get_private(request, :streaming_into_callback)
+      req_opts = if into_callback, do: [into: into_callback], else: []
+
+      case Req.request(request, req_opts) do
+        {:ok, %Req.Response{body: response}} -> {:ok, response}
+        error -> error
+      end
     end
   end
 
