@@ -173,6 +173,9 @@ defmodule ReqLLM.Provider.Defaults do
       :chat ->
         prepare_chat_request(provider_mod, model_spec, input, opts)
 
+      :response ->
+        prepare_response_request(provider_mod, model_spec, input, opts)
+
       :object ->
         prepare_object_request(provider_mod, model_spec, input, opts)
 
@@ -180,7 +183,7 @@ defmodule ReqLLM.Provider.Defaults do
         prepare_embedding_request(provider_mod, model_spec, input, opts)
 
       _ ->
-        supported_operations = [:chat, :object, :embedding]
+        supported_operations = [:chat, :response, :object, :embedding]
 
         {:error,
          ReqLLM.Error.Invalid.Parameter.exception(
@@ -219,6 +222,48 @@ defmodule ReqLLM.Provider.Defaults do
           Keyword.take(processed_opts, req_keys) ++
             [
               model: model.model,
+              base_url: Keyword.get(processed_opts, :base_url, provider_mod.default_base_url())
+            ]
+        )
+        |> provider_mod.attach(model, processed_opts)
+
+      {:ok, request}
+    end
+  end
+
+  @doc """
+  Prepares a response completion request for OpenAI Responses API.
+  """
+  @spec prepare_response_request(module(), term(), term(), keyword()) ::
+          {:ok, Req.Request.t()} | {:error, Exception.t()}
+  def prepare_response_request(provider_mod, model_spec, prompt, opts) do
+    with {:ok, model} <- ReqLLM.Model.from(model_spec),
+         {:ok, context} <- ReqLLM.Context.normalize(prompt, opts),
+         opts_with_context = Keyword.put(opts, :context, context),
+         http_opts = Keyword.get(opts, :req_http_options, []),
+         {:ok, processed_opts} <-
+           ReqLLM.Provider.Options.process(provider_mod, :response, model, opts_with_context) do
+      req_keys =
+        provider_mod.supported_provider_options() ++
+          [:context, :operation, :input, :stream, :model, :provider_options]
+
+      # Use custom endpoint path if provided, otherwise default to /responses
+      endpoint_path = Keyword.get(processed_opts, :endpoint_path, "/responses")
+
+      request =
+        Req.new(
+          [
+            url: endpoint_path,
+            method: :post,
+            receive_timeout: Keyword.get(processed_opts, :receive_timeout, 30_000)
+          ] ++ http_opts
+        )
+        |> Req.Request.register_options(req_keys)
+        |> Req.Request.merge_options(
+          Keyword.take(processed_opts, req_keys) ++
+            [
+              model: model.model,
+              operation: :response,
               base_url: Keyword.get(processed_opts, :base_url, provider_mod.default_base_url())
             ]
         )
@@ -331,6 +376,9 @@ defmodule ReqLLM.Provider.Defaults do
       case request.options[:operation] do
         :embedding ->
           encode_embedding_body(request)
+
+        :response ->
+          encode_response_body(request)
 
         _ ->
           encode_chat_body(request)
@@ -720,6 +768,50 @@ defmodule ReqLLM.Provider.Defaults do
     |> maybe_put(:dimensions, provider_opts[:dimensions])
     |> maybe_put(:encoding_format, provider_opts[:encoding_format])
   end
+
+  defp encode_response_body(request) do
+    # For Responses API, we need to convert the context to a prompt
+    prompt = case request.options[:context] do
+      %ReqLLM.Context{} = context ->
+        # Convert context messages to a single prompt string
+        context
+        |> Enum.map(fn
+          %ReqLLM.Message{role: :system, content: content} ->
+            "System: #{extract_text_from_content(content)}"
+          %ReqLLM.Message{role: :user, content: content} ->
+            "User: #{extract_text_from_content(content)}"
+          %ReqLLM.Message{role: :assistant, content: content} ->
+            "Assistant: #{extract_text_from_content(content)}"
+        end)
+        |> Enum.join("\n\n")
+
+      _ ->
+        # Fallback to input if context not available
+        request.options[:input] || ""
+    end
+
+    base_body = %{
+      model: request.options[:model],
+      input: prompt
+    }
+
+    # Add basic options that are supported by Responses API
+    base_body
+    |> maybe_put(:temperature, request.options[:temperature])
+    |> maybe_put(:max_tokens, request.options[:max_tokens])
+    |> maybe_put(:stream, request.options[:stream])
+    |> maybe_put(:user, request.options[:user])
+  end
+
+  # Helper function to extract text content from message content parts
+  defp extract_text_from_content(content) when is_binary(content), do: content
+  defp extract_text_from_content(content) when is_list(content) do
+    content
+    |> Enum.filter(&match?(%{type: :text}, &1))
+    |> Enum.map(&Map.get(&1, :text, ""))
+    |> Enum.join(" ")
+  end
+  defp extract_text_from_content(_), do: ""
 
   defp add_basic_options(body, request_options) do
     body_options = [

@@ -86,6 +86,23 @@ defmodule ReqLLM.Providers.OpenAI do
     prepare_request(:chat, model_spec, prompt, opts_with_tool)
   end
 
+  def prepare_request(:response, model_spec, input, opts) do
+    # Use default preparation with custom endpoint path for Responses API
+    opts_for_responses = 
+      opts
+      |> Keyword.put(:endpoint_path, "/responses")
+
+    case ReqLLM.Provider.Defaults.prepare_request(__MODULE__, :response, model_spec, input, opts_for_responses) do
+      {:error, %ReqLLM.Error.Invalid.Parameter{parameter: param}} ->
+        # Customize error message for unsupported operations
+        custom_param = String.replace(param, inspect(__MODULE__), "OpenAI provider")
+        {:error, ReqLLM.Error.Invalid.Parameter.exception(parameter: custom_param)}
+
+      result ->
+        result
+    end
+  end
+
   # Delegate all other operations to defaults
   def prepare_request(operation, model_spec, input, opts) do
     case ReqLLM.Provider.Defaults.prepare_request(__MODULE__, operation, model_spec, input, opts) do

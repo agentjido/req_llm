@@ -57,7 +57,7 @@ defmodule ReqLLM.Provider do
 
   """
 
-  @type operation :: :chat | :embed | :moderate | atom()
+  @type operation :: :chat | :response | :embed | :moderate | atom()
 
   @doc """
   Prepares a new request for a specific operation type.

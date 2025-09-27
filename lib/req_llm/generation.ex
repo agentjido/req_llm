@@ -150,7 +150,8 @@ defmodule ReqLLM.Generation do
   def generate_text(model_spec, messages, opts \\ []) do
     with {:ok, model} <- Model.from(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
-         {:ok, request} <- provider_module.prepare_request(:chat, model, messages, opts),
+         operation = get_operation_from_opts(opts),
+         {:ok, request} <- provider_module.prepare_request(operation, model, messages, opts),
          {:ok, %Req.Response{status: status, body: decoded_response}} when status in 200..299 <-
            Req.request(request) do
       {:ok, decoded_response}
@@ -225,8 +226,9 @@ defmodule ReqLLM.Generation do
   def stream_text(model_spec, messages, opts \\ []) do
     with {:ok, model} <- Model.from(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
+         operation = get_operation_from_opts(opts),
          stream_opts = Keyword.put(opts, :stream, true),
-         {:ok, request} <- provider_module.prepare_request(:chat, model, messages, stream_opts),
+         {:ok, request} <- provider_module.prepare_request(operation, model, messages, stream_opts),
          {:ok, %Req.Response{body: response}} <- Req.request(request) do
       {:ok, response}
     end
@@ -427,6 +429,20 @@ defmodule ReqLLM.Generation do
     case stream_object(model_spec, messages, object_schema, opts) do
       {:ok, response} -> Response.object_stream(response)
       {:error, error} -> raise error
+    end
+  end
+
+  # Private helper function to extract operation from provider_options
+  defp get_operation_from_opts(opts) do
+    case Keyword.get(opts, :provider_options, []) do
+      provider_opts when is_list(provider_opts) ->
+        Keyword.get(provider_opts, :operation, :chat)
+
+      provider_opts when is_map(provider_opts) ->
+        Map.get(provider_opts, :operation, :chat)
+
+      _ ->
+        :chat
     end
   end
 end
