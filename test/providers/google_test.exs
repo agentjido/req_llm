@@ -368,6 +368,65 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert ReqLLM.Response.finish_reason(response) == :stop
     end
 
+    test "decode_response preserves text and tool calls when both are present" do
+      google_response = %{
+        "candidates" => [
+          %{
+            "content" => %{
+              "parts" => [
+                %{"text" => "Starting your search now."},
+                %{
+                  "functionCall" => %{
+                    "name" => "lookup_results",
+                    "args" => %{
+                      "params" => %{"query" => "example", "category" => "generic"},
+                      "options" => %{"limit" => 25, "sort" => "relevance"}
+                    },
+                    "id" => "lookup-call-1"
+                  }
+                }
+              ],
+              "role" => "model"
+            },
+            "finishReason" => "STOP"
+          }
+        ],
+        "usageMetadata" => %{
+          "promptTokenCount" => 20,
+          "candidatesTokenCount" => 8,
+          "totalTokenCount" => 28
+        }
+      }
+
+      mock_resp = %Req.Response{status: 200, body: google_response}
+
+      context = context_fixture()
+
+      mock_req = %Req.Request{
+        options: [context: context, stream: false, model: "gemini-1.5-flash"]
+      }
+
+      {_req, resp} = Google.decode_response({mock_req, mock_resp})
+
+      response = resp.body
+      assert %ReqLLM.Response{} = response
+
+      assert ReqLLM.Response.text(response) == "Starting your search now."
+
+      tool_calls = ReqLLM.Response.tool_calls(response)
+
+      assert [tool_call] = tool_calls
+      assert tool_call.name == "lookup_results"
+      assert tool_call.id == "lookup-call-1"
+
+      assert tool_call.arguments == %{
+               "params" => %{"query" => "example", "category" => "generic"},
+               "options" => %{"limit" => 25, "sort" => "relevance"}
+             }
+
+      assert ReqLLM.Response.finish_reason(response) == :stop
+    end
+
     test "decode_response handles streaming responses" do
       # Create mock streaming chunks (Google format)
       stream_chunks = [

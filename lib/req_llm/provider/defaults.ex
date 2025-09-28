@@ -527,15 +527,28 @@ defmodule ReqLLM.Provider.Defaults do
 
   def default_decode_sse_event(_, _model), do: []
 
-  defp decode_openai_message(%{"content" => content}) when is_binary(content) and content != "" do
-    [ReqLLM.StreamChunk.text(content)]
+  defp decode_openai_message(%{"content" => content} = message)
+       when is_binary(content) and content != "" do
+    chunks = [ReqLLM.StreamChunk.text(content)]
+    chunks ++ decode_openai_message(Map.delete(message, "content"))
   end
 
-  defp decode_openai_message(%{"content" => content}) when is_list(content) do
-    content
-    |> Enum.map(&decode_openai_content_part/1)
-    |> List.flatten()
-    |> Enum.reject(&is_nil/1)
+  defp decode_openai_message(%{"content" => content} = message) when is_list(content) do
+    chunks =
+      content
+      |> Enum.map(&decode_openai_content_part/1)
+      |> List.flatten()
+      |> Enum.reject(&is_nil/1)
+
+    chunks ++ decode_openai_message(Map.delete(message, "content"))
+  end
+
+  defp decode_openai_message(%{"content" => ""} = message) do
+    decode_openai_message(Map.delete(message, "content"))
+  end
+
+  defp decode_openai_message(%{"content" => nil} = message) do
+    decode_openai_message(Map.delete(message, "content"))
   end
 
   defp decode_openai_message(%{"tool_calls" => tool_calls}) when is_list(tool_calls) do
