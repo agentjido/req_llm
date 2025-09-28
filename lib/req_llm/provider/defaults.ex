@@ -404,11 +404,7 @@ defmodule ReqLLM.Provider.Defaults do
     Enum.map(messages, &encode_openai_message/1)
   end
 
-  defp encode_openai_message(%ReqLLM.Message{
-         role: role,
-         content: content,
-         tool_calls: tool_calls
-       }) do
+  defp encode_openai_message(%ReqLLM.Message{role: role, content: content, tool_calls: tool_calls}) do
     base_message = %{
       role: to_string(role),
       content: encode_openai_content(content)
