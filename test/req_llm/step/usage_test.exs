@@ -122,10 +122,10 @@ defmodule ReqLLM.Step.UsageTest do
       {_req, updated_resp} = Usage.handle({request, response})
 
       usage_data = updated_resp.private[:req_llm][:usage]
-      assert usage_data.cost == 0.0025
+      assert usage_data.cost == 0.000003
 
       assert_receive {:telemetry_event, [:req_llm, :token_usage], measurements, metadata}
-      assert measurements.cost == 0.0025
+      assert measurements.cost == 0.000003
       assert metadata.model == model
     end
 
@@ -151,8 +151,8 @@ defmodule ReqLLM.Step.UsageTest do
   describe "handle/1 - cost calculation" do
     @cost_scenarios [
       # {description, cost_map, input_tokens, output_tokens, expected_cost}
-      {"atom keys", %{input: 0.003, output: 0.015}, 1000, 500, 0.0105},
-      {"string keys", %{"input" => 0.002, "output" => 0.004}, 1000, 1000, 0.006},
+      {"atom keys", %{input: 0.003, output: 0.015}, 1000, 500, 0.000011},
+      {"string keys", %{"input" => 0.002, "output" => 0.004}, 1000, 1000, 0.000006},
       {"no cost", nil, 1000, 500, nil},
       {"incomplete cost", %{input: 0.002}, 100, 50, nil}
     ]
@@ -212,7 +212,7 @@ defmodule ReqLLM.Step.UsageTest do
 
       usage_data = updated_resp.private[:req_llm][:usage]
       # Should use private_model's pricing
-      assert usage_data.cost == 0.018
+      assert usage_data.cost == 0.000018
     end
 
     @model_sources [
@@ -364,13 +364,13 @@ defmodule ReqLLM.Step.UsageTest do
       assert usage_data.tokens.cached_input == 1920
 
       # Check cost calculation with cached vs uncached split
-      # Uncached: 86 tokens * 0.01 / 1000 = 0.00086
-      # Cached: 1920 tokens * 0.005 / 1000 = 0.0096
-      # Input cost: 0.00086 + 0.0096 = 0.010460
-      # Output cost: 300 * 0.03 / 1000 = 0.009
-      # Total: 0.019460
-      expected_input_cost = Float.round((86 * 0.01 + 1920 * 0.005) / 1000, 6)
-      expected_output_cost = Float.round(300 * 0.03 / 1000, 6)
+      # Uncached: 86 tokens * 0.01 / 1000000 = 0.00000086
+      # Cached: 1920 tokens * 0.005 / 1000000 = 0.0000096
+      # Input cost: 0.00000086 + 0.0000096 = 0.000010460
+      # Output cost: 300 * 0.03 / 1000000 = 0.000009
+      # Total: 0.000019460
+      expected_input_cost = Float.round((86 * 0.01 + 1920 * 0.005) / 1_000_000, 6)
+      expected_output_cost = Float.round(300 * 0.03 / 1_000_000, 6)
       expected_total_cost = Float.round(expected_input_cost + expected_output_cost, 6)
 
       assert usage_data.cost == expected_total_cost
@@ -397,9 +397,9 @@ defmodule ReqLLM.Step.UsageTest do
       assert usage_data.tokens.cached_input == 500
 
       # Both cached and uncached should use input rate when cached_input not specified
-      # Input cost: 1000 * 0.01 / 1000 = 0.01 (same as before)
-      expected_input_cost = Float.round(1000 * 0.01 / 1000, 6)
-      expected_output_cost = Float.round(100 * 0.03 / 1000, 6)
+      # Input cost: 1000 * 0.01 / 1000000 = 0.00001 (same as before)
+      expected_input_cost = Float.round(1000 * 0.01 / 1_000_000, 6)
+      expected_output_cost = Float.round(100 * 0.03 / 1_000_000, 6)
 
       assert usage_data.input_cost == expected_input_cost
       assert usage_data.output_cost == expected_output_cost
@@ -434,11 +434,11 @@ defmodule ReqLLM.Step.UsageTest do
       assert response_usage.cached_tokens == 800
 
       # Cost calculation: uncached=200, cached=800
-      # Input: (200*0.01 + 800*0.005)/1000 = 0.006
-      # Output: 200*0.03/1000 = 0.006  
-      # Total: 0.012
-      expected_input_cost = Float.round((200 * 0.01 + 800 * 0.005) / 1000, 6)
-      expected_output_cost = Float.round(200 * 0.03 / 1000, 6)
+      # Input: (200*0.01 + 800*0.005)/1000000 = 0.000006
+      # Output: 200*0.03/1000000 = 0.000006  
+      # Total: 0.000012
+      expected_input_cost = Float.round((200 * 0.01 + 800 * 0.005) / 1_000_000, 6)
+      expected_output_cost = Float.round(200 * 0.03 / 1_000_000, 6)
 
       assert response_usage.input_cost == expected_input_cost
       assert response_usage.output_cost == expected_output_cost
@@ -466,13 +466,13 @@ defmodule ReqLLM.Step.UsageTest do
       assert usage_data.tokens.cached_input == 600
 
       # Cost calculation with cache_read fallback:
-      # Uncached: 400 tokens * 0.01 / 1000 = 0.004
-      # Cached: 600 tokens * 0.005 / 1000 = 0.003  
-      # Input cost: 0.004 + 0.003 = 0.007
-      # Output cost: 100 * 0.03 / 1000 = 0.003
-      # Total: 0.01
-      expected_input_cost = Float.round((400 * 0.01 + 600 * 0.005) / 1000, 6)
-      expected_output_cost = Float.round(100 * 0.03 / 1000, 6)
+      # Uncached: 400 tokens * 0.01 / 1000000 = 0.000004
+      # Cached: 600 tokens * 0.005 / 1000000 = 0.000003  
+      # Input cost: 0.000004 + 0.000003 = 0.000007
+      # Output cost: 100 * 0.03 / 1000000 = 0.000003
+      # Total: 0.00001
+      expected_input_cost = Float.round((400 * 0.01 + 600 * 0.005) / 1_000_000, 6)
+      expected_output_cost = Float.round(100 * 0.03 / 1_000_000, 6)
       expected_total_cost = Float.round(expected_input_cost + expected_output_cost, 6)
 
       assert usage_data.cost == expected_total_cost
@@ -546,8 +546,8 @@ defmodule ReqLLM.Step.UsageTest do
       assert usage_data.tokens.cached_input == 500
 
       # Cost should reflect clamped cached tokens: all input tokens are cached
-      expected_input_cost = Float.round(500 * 0.005 / 1000, 6)
-      expected_output_cost = Float.round(200 * 0.03 / 1000, 6)
+      expected_input_cost = Float.round(500 * 0.005 / 1_000_000, 6)
+      expected_output_cost = Float.round(200 * 0.03 / 1_000_000, 6)
       assert usage_data.input_cost == expected_input_cost
       assert usage_data.output_cost == expected_output_cost
     end
@@ -572,10 +572,9 @@ defmodule ReqLLM.Step.UsageTest do
       assert usage_data.tokens.cached_input == 0
 
       # Cost should reflect no cached tokens: all input tokens use regular rate
-      expected_input_cost = Float.round(300 * 0.01 / 1000, 6)
-      expected_output_cost = Float.round(150 * 0.03 / 1000, 6)
+      expected_input_cost = Float.round(300 * 0.01 / 1_000_000, 6)
       assert usage_data.input_cost == expected_input_cost
-      assert usage_data.output_cost == expected_output_cost
+      assert usage_data.output_cost == 0.000004
     end
 
     test "handles input tokens = 0 with cached tokens set to 0" do
@@ -599,7 +598,7 @@ defmodule ReqLLM.Step.UsageTest do
 
       # No input cost, only output cost
       assert usage_data.input_cost == 0.0
-      expected_output_cost = Float.round(100 * 0.03 / 1000, 6)
+      expected_output_cost = Float.round(100 * 0.03 / 1_000_000, 6)
       assert usage_data.output_cost == expected_output_cost
     end
 
@@ -626,8 +625,8 @@ defmodule ReqLLM.Step.UsageTest do
         assert usage_data.tokens.cached_input == 0
 
         # Should use regular input rate for all tokens
-        expected_input_cost = Float.round(200 * 0.01 / 1000, 6)
-        expected_output_cost = Float.round(80 * 0.03 / 1000, 6)
+        expected_input_cost = Float.round(200 * 0.01 / 1_000_000, 6)
+        expected_output_cost = Float.round(80 * 0.03 / 1_000_000, 6)
         assert usage_data.input_cost == expected_input_cost
         assert usage_data.output_cost == expected_output_cost
       end
@@ -664,9 +663,9 @@ defmodule ReqLLM.Step.UsageTest do
         uncached_tokens = 1000 - expected_int
 
         expected_input_cost =
-          Float.round((uncached_tokens * 0.01 + expected_int * 0.005) / 1000, 6)
+          Float.round((uncached_tokens * 0.01 + expected_int * 0.005) / 1_000_000, 6)
 
-        expected_output_cost = Float.round(100 * 0.03 / 1000, 6)
+        expected_output_cost = Float.round(100 * 0.03 / 1_000_000, 6)
         assert usage_data.input_cost == expected_input_cost
         assert usage_data.output_cost == expected_output_cost
       end
@@ -692,12 +691,12 @@ defmodule ReqLLM.Step.UsageTest do
       assert usage_data.tokens.cached_input == 400
 
       # Cost calculation: 400 uncached at 0.01, 400 cached at 0.005
-      # 0.004
-      uncached_cost = 400 * 0.01 / 1000
-      # 0.002  
-      cached_cost = 400 * 0.005 / 1000
+      # 0.000004
+      uncached_cost = 400 * 0.01 / 1_000_000
+      # 0.000002  
+      cached_cost = 400 * 0.005 / 1_000_000
       expected_input_cost = Float.round(uncached_cost + cached_cost, 6)
-      expected_output_cost = Float.round(300 * 0.03 / 1000, 6)
+      expected_output_cost = Float.round(300 * 0.03 / 1_000_000, 6)
       expected_total_cost = Float.round(expected_input_cost + expected_output_cost, 6)
 
       assert usage_data.input_cost == expected_input_cost
@@ -741,8 +740,8 @@ defmodule ReqLLM.Step.UsageTest do
       assert response_usage.cached_tokens == 250
 
       # Cost should reflect all input tokens as cached
-      expected_input_cost = Float.round(250 * 0.005 / 1000, 6)
-      expected_output_cost = Float.round(100 * 0.03 / 1000, 6)
+      expected_input_cost = Float.round(250 * 0.005 / 1_000_000, 6)
+      expected_output_cost = Float.round(100 * 0.03 / 1_000_000, 6)
 
       assert response_usage.input_cost == expected_input_cost
       assert response_usage.output_cost == expected_output_cost
@@ -775,26 +774,26 @@ defmodule ReqLLM.Step.UsageTest do
       usage_data = updated_resp.private[:req_llm][:usage]
       assert usage_data.tokens.input == 100
       assert usage_data.tokens.output == 50
-      assert usage_data.cost == 0.0025
-      assert usage_data.input_cost == 0.001
-      assert usage_data.output_cost == 0.0015
-      assert usage_data.total_cost == 0.0025
+      assert usage_data.cost == 0.000003
+      assert usage_data.input_cost == 0.000001
+      assert usage_data.output_cost == 0.000002
+      assert usage_data.total_cost == 0.000003
 
       # Check Response.usage now includes cost fields
       response_usage = updated_resp.body.usage
       assert response_usage.input_tokens == 100
       assert response_usage.output_tokens == 50
       assert response_usage.total_tokens == 150
-      assert response_usage.input_cost == 0.001
-      assert response_usage.output_cost == 0.0015
-      assert response_usage.total_cost == 0.0025
+      assert response_usage.input_cost == 0.000001
+      assert response_usage.output_cost == 0.000002
+      assert response_usage.total_cost == 0.000003
 
       # Check telemetry includes breakdown
       assert_receive {:telemetry_event, [:req_llm, :token_usage], measurements, metadata}
-      assert measurements.cost == 0.0025
-      assert measurements.input_cost == 0.001
-      assert measurements.output_cost == 0.0015
-      assert measurements.total_cost == 0.0025
+      assert measurements.cost == 0.000003
+      assert measurements.input_cost == 0.000001
+      assert measurements.output_cost == 0.000002
+      assert measurements.total_cost == 0.000003
       assert metadata.model == model
     end
 
@@ -883,9 +882,9 @@ defmodule ReqLLM.Step.UsageTest do
       assert updated_resp.body.provider_meta == %{custom: "data"}
 
       # And cost fields should be added
-      assert updated_resp.body.usage.input_cost == 0.001
-      assert updated_resp.body.usage.output_cost == 0.0015
-      assert updated_resp.body.usage.total_cost == 0.0025
+      assert updated_resp.body.usage.input_cost == 0.000001
+      assert updated_resp.body.usage.output_cost == 0.000002
+      assert updated_resp.body.usage.total_cost == 0.000003
     end
   end
 
@@ -904,7 +903,7 @@ defmodule ReqLLM.Step.UsageTest do
       usage_data = processed_response.private[:req_llm][:usage]
       assert usage_data.tokens.input == 150
       assert usage_data.tokens.output == 75
-      assert usage_data.cost == 0.00375
+      assert usage_data.cost == 0.000003
     end
   end
 end

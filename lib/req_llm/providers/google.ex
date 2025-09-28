@@ -74,11 +74,15 @@ defmodule ReqLLM.Providers.Google do
         __MODULE__.supported_provider_options() ++
           [:context, :operation, :text, :stream, :model, :provider_options]
 
+      # Add alt=sse parameter for streaming requests
+      base_params = if processed_opts[:stream], do: [alt: "sse"], else: []
+
       request =
         Req.new(
           [
             url: "/models/#{model.model}#{endpoint}",
             method: :post,
+            params: base_params,
             receive_timeout: Keyword.get(processed_opts, :receive_timeout, 30_000)
           ] ++ http_opts
         )
@@ -195,7 +199,6 @@ defmodule ReqLLM.Providers.Google do
     |> Req.Request.merge_options([model: model.model, params: [key: api_key]] ++ user_opts)
     |> ReqLLM.Step.Error.attach()
     |> Req.Request.append_request_steps(llm_encode_body: &__MODULE__.encode_body/1)
-    |> ReqLLM.Step.Stream.maybe_attach(user_opts[:stream] == true, model)
     |> Req.Request.append_response_steps(llm_decode_response: &__MODULE__.decode_response/1)
     |> ReqLLM.Step.Usage.attach(model)
     |> ReqLLM.Step.Fixture.maybe_attach(model, user_opts)
@@ -326,48 +329,26 @@ defmodule ReqLLM.Providers.Google do
             {req, %{resp | body: body}}
 
           _ ->
-            # Handle chat completion response
+            # Handle chat completion response (non-streaming only)
             model_name = req.options[:model]
             model = %ReqLLM.Model{provider: :google, model: model_name}
-            is_streaming = req.options[:stream] == true
 
-            if is_streaming do
-              chunk_stream =
-                resp.body
-                |> Stream.flat_map(&ReqLLM.Provider.Defaults.default_decode_sse_event(&1, model))
-                |> Stream.reject(&is_nil/1)
+            body = ensure_parsed_body(resp.body)
 
-              response = %ReqLLM.Response{
-                id: "stream-#{System.unique_integer([:positive])}",
-                model: model_name,
-                context: req.options[:context] || %ReqLLM.Context{messages: []},
-                message: nil,
-                stream?: true,
-                stream: chunk_stream,
-                usage: %{input_tokens: 0, output_tokens: 0, total_tokens: 0},
-                finish_reason: nil,
-                provider_meta: %{}
-              }
+            # Convert Google format to OpenAI format, then decode
+            openai_format = convert_google_to_openai_format(body)
 
-              {req, %{resp | body: response}}
-            else
-              body = ensure_parsed_body(resp.body)
+            {:ok, response} =
+              ReqLLM.Provider.Defaults.decode_response_body_openai_format(openai_format, model)
 
-              # Convert Google format to OpenAI format, then decode
-              openai_format = convert_google_to_openai_format(body)
+            # Merge original context with the assistant response
+            merged_response =
+              ReqLLM.Context.merge_response(
+                req.options[:context] || %ReqLLM.Context{messages: []},
+                response
+              )
 
-              {:ok, response} =
-                ReqLLM.Provider.Defaults.decode_response_body_openai_format(openai_format, model)
-
-              # Merge original context with the assistant response
-              merged_response =
-                ReqLLM.Context.merge_response(
-                  req.options[:context] || %ReqLLM.Context{messages: []},
-                  response
-                )
-
-              {req, %{resp | body: merged_response}}
-            end
+            {req, %{resp | body: merged_response}}
         end
 
       status ->
@@ -466,6 +447,61 @@ defmodule ReqLLM.Providers.Google do
 
   defp convert_google_usage(_),
     do: %{"prompt_tokens" => 0, "completion_tokens" => 0, "total_tokens" => 0}
+
+  @impl ReqLLM.Provider
+  def attach_stream(model, context, opts, _finch_name) do
+    api_key = ReqLLM.Keys.get!(model, opts)
+
+    # Build request body using provider's encode logic
+    body = build_google_streaming_body(model, context, opts)
+
+    # Build the complete URL with Google's specific endpoint and auth
+    url =
+      "#{default_base_url()}/models/#{model.model}:streamGenerateContent?alt=sse&key=#{api_key}"
+
+    # Create Finch request without Authorization header (Google uses API key in query)
+    headers = [
+      {"Content-Type", "application/json"},
+      {"Accept", "text/event-stream"}
+    ]
+
+    finch_request = Finch.build(:post, url, headers, body)
+    {:ok, finch_request}
+  rescue
+    error ->
+      {:error,
+       ReqLLM.Error.API.Request.exception(
+         reason: "Failed to build Google stream request: #{inspect(error)}"
+       )}
+  end
+
+  defp build_google_streaming_body(model, context, opts) do
+    # Create a minimal request struct to reuse the existing encode_body logic
+    temp_request = %Req.Request{
+      method: :post,
+      url: URI.parse("https://example.com/temp"),
+      headers: %{},
+      body: {:json, %{}},
+      options:
+        Map.new(
+          [
+            model: model.model,
+            context: context,
+            stream: true,
+            operation: :chat
+          ] ++ Keyword.delete(opts, :finch_name)
+        )
+    }
+
+    # Use the provider's encode_body to build the JSON
+    encoded_request = encode_body(temp_request)
+    encoded_request.body
+  end
+
+  @impl ReqLLM.Provider
+  def decode_sse_event(event, model) do
+    decode_google_sse_event(event, model)
+  end
 
   # Split messages into system instruction and contents for Google Gemini
   defp split_messages_for_gemini(messages) do
@@ -588,8 +624,107 @@ defmodule ReqLLM.Providers.Google do
   # TODO: Add support for images, audio, video when multimodal support is added
   defp convert_content_part(part), do: %{text: to_string(part)}
 
-  @impl ReqLLM.Provider
-  def decode_sse_event(event, model) do
-    ReqLLM.Provider.Defaults.default_decode_sse_event(event, model)
+  # Google-specific SSE event decoding
+  defp decode_google_sse_event(%{data: data}, model) when is_map(data) do
+    case data do
+      %{
+        "candidates" => [%{"content" => %{"parts" => parts}, "finishReason" => finish_reason} | _],
+        "usageMetadata" => usage
+      }
+      when finish_reason != nil ->
+        # Final chunk with usage metadata
+        text_parts = extract_text_from_parts(parts)
+        chunks = if text_parts == "", do: [], else: [ReqLLM.StreamChunk.text(text_parts)]
+
+        usage_chunk =
+          ReqLLM.StreamChunk.meta(%{
+            usage: convert_google_usage_for_streaming(usage),
+            finish_reason: normalize_google_finish_reason(finish_reason),
+            model: model.model,
+            terminal?: true
+          })
+
+        chunks ++ [usage_chunk]
+
+      %{
+        "candidates" => [%{"content" => %{"parts" => parts}, "finishReason" => finish_reason} | _]
+      }
+      when finish_reason != nil ->
+        # Final chunk without usage metadata
+        text_parts = extract_text_from_parts(parts)
+        chunks = if text_parts == "", do: [], else: [ReqLLM.StreamChunk.text(text_parts)]
+
+        meta_chunk =
+          ReqLLM.StreamChunk.meta(%{
+            finish_reason: normalize_google_finish_reason(finish_reason),
+            terminal?: true
+          })
+
+        chunks ++ [meta_chunk]
+
+      %{"candidates" => [%{"content" => %{"parts" => parts}} | _], "usageMetadata" => usage} ->
+        # Chunk with content and usage metadata
+        text_parts = extract_text_from_parts(parts)
+        chunks = if text_parts == "", do: [], else: [ReqLLM.StreamChunk.text(text_parts)]
+
+        usage_chunk =
+          ReqLLM.StreamChunk.meta(%{
+            usage: convert_google_usage_for_streaming(usage),
+            model: model.model
+          })
+
+        chunks ++ [usage_chunk]
+
+      %{"candidates" => [%{"content" => %{"parts" => parts}} | _]} ->
+        # Regular content chunk
+        text_parts = extract_text_from_parts(parts)
+        if text_parts == "", do: [], else: [ReqLLM.StreamChunk.text(text_parts)]
+
+      %{"usageMetadata" => usage} ->
+        # Usage-only chunk
+        [
+          ReqLLM.StreamChunk.meta(%{
+            usage: convert_google_usage_for_streaming(usage),
+            model: model.model,
+            terminal?: true
+          })
+        ]
+
+      _ ->
+        []
+    end
+  end
+
+  defp decode_google_sse_event(_, _model), do: []
+
+  defp extract_text_from_parts(parts) do
+    parts
+    |> Enum.filter(&Map.has_key?(&1, "text"))
+    |> Enum.map_join("", &Map.get(&1, "text"))
+  end
+
+  defp convert_google_usage_for_streaming(%{
+         "promptTokenCount" => prompt,
+         "candidatesTokenCount" => completion,
+         "totalTokenCount" => total
+       }) do
+    %{
+      "prompt_tokens" => prompt,
+      "completion_tokens" => completion,
+      "total_tokens" => total
+    }
+  end
+
+  defp convert_google_usage_for_streaming(usage) do
+    # Handle legacy format or missing fields
+    prompt = Map.get(usage, "promptTokenCount", 0)
+    completion = Map.get(usage, "candidatesTokenCount", 0)
+    total = Map.get(usage, "totalTokenCount", prompt + completion)
+
+    %{
+      "prompt_tokens" => prompt,
+      "completion_tokens" => completion,
+      "total_tokens" => total
+    }
   end
 end

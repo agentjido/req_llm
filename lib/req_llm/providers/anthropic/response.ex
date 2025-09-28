@@ -83,6 +83,36 @@ defmodule ReqLLM.Providers.Anthropic.Response do
       %{"type" => "content_block_start", "content_block" => block} ->
         decode_content_block_start(block)
 
+      # Terminal events with metadata
+      %{"type" => "message_stop"} ->
+        [ReqLLM.StreamChunk.meta(%{terminal?: true})]
+
+      %{"type" => "message_delta", "delta" => delta} ->
+        finish_reason =
+          case Map.get(delta, "stop_reason") do
+            "end_turn" -> :stop
+            "max_tokens" -> :length
+            "stop_sequence" -> :stop
+            "tool_use" -> :tool_calls
+            _ -> :unknown
+          end
+
+        usage = Map.get(data, "usage", %{})
+
+        chunks = [ReqLLM.StreamChunk.meta(%{finish_reason: finish_reason, terminal?: true})]
+
+        # Add usage chunk if present
+        if usage == %{} do
+          chunks
+        else
+          usage_chunk = ReqLLM.StreamChunk.meta(%{usage: usage})
+          [usage_chunk | chunks]
+        end
+
+      %{"type" => "ping"} ->
+        # Keep-alive ping, no content
+        []
+
       _ ->
         []
     end

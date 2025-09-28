@@ -261,9 +261,9 @@ defmodule ReqLLM.ContextTest do
 
       assert %Context{messages: messages} = result
       assert length(messages) == 3
-      # New messages are reversed and prepended to original messages
+      # New messages are appended to original messages
       roles = Enum.map(messages, & &1.role)
-      assert roles == [:user, :assistant, :system]
+      assert roles == [:system, :user, :assistant]
     end
 
     test "into/1 with empty context preserves order" do

@@ -26,6 +26,25 @@ defmodule ReqLLM.Step.Fixture.Backend do
     end
   end
 
+  @doc """
+  Save streaming fixture using HTTPContext instead of Req.Request/Response.
+
+  This version is used by the new Finch streaming pipeline which doesn't use
+  Req.Request/Response structs but provides HTTPContext with minimal metadata.
+  """
+  def save_streaming_fixture(
+        %ReqLLM.Streaming.FinchClient.HTTPContext{} = http_context,
+        path,
+        canonical_json
+      ) do
+    if path do
+      encode_info = %{canonical_json: canonical_json}
+      save_fixture_with_context(path, encode_info, http_context)
+    else
+      :ok
+    end
+  end
+
   # ---------------------------------------------------------------------------
   # Main entry point – returns a Req request step (arity-1 function)
   # ---------------------------------------------------------------------------
@@ -374,6 +393,74 @@ defmodule ReqLLM.Step.Fixture.Backend do
 
     File.write!(path, Jason.encode!(data, pretty: true))
     Logger.debug("Saved HTTP fixture → #{Path.relative_to_cwd(path)}")
+  end
+
+  # HTTPContext version for Finch streaming pipeline
+  defp save_fixture_with_context(
+         path,
+         encode_info,
+         %ReqLLM.Streaming.FinchClient.HTTPContext{} = http_context
+       ) do
+    File.mkdir_p!(Path.dirname(path))
+
+    # Check if we captured stream chunks (prefer raw tap capture)
+    stream_chunks =
+      case Process.delete({:llmfixture_raw_stream_chunks, path}) do
+        nil -> Process.delete({:llmfixture_stream_chunks, path})
+        raw when is_list(raw) -> Enum.reverse(raw)
+      end
+
+    response_data = %{
+      status: http_context.status || 200,
+      headers: http_context.resp_headers || %{},
+      body: if(!stream_chunks, do: %{})
+    }
+
+    data = %{
+      captured_at: DateTime.utc_now() |> DateTime.to_iso8601(),
+      request: %{
+        method: String.upcase(to_string(http_context.method)),
+        url: http_context.url,
+        headers: sanitize_headers(http_context.req_headers || %{}),
+        canonical_json: sanitize_json(encode_info.canonical_json),
+        body: encode_body(encode_info.canonical_json)
+      },
+      response: response_data
+    }
+
+    # Add chunks field if we have stream data
+    data =
+      if stream_chunks do
+        chunks =
+          Enum.map(stream_chunks, fn chunk ->
+            case chunk do
+              # New format with timing metadata
+              %{bin: binary, t_us: timestamp} ->
+                encoded = %{"b64" => Base.encode64(binary), "t_us" => timestamp}
+                decoded = %{"decoded" => binary}
+                Map.merge(encoded, decoded)
+
+              # Legacy format (binary only)
+              binary when is_binary(binary) ->
+                encoded = %{"b64" => Base.encode64(binary)}
+                decoded = %{"decoded" => binary}
+                Map.merge(encoded, decoded)
+
+              # Fallback
+              other ->
+                encoded = encode_body(other)
+                decoded = %{"decoded" => inspect(other)}
+                Map.merge(encoded, decoded)
+            end
+          end)
+
+        Map.put(data, "chunks", chunks)
+      else
+        data
+      end
+
+    File.write!(path, Jason.encode!(data, pretty: true))
+    Logger.debug("Saved HTTP fixture (HTTPContext) → #{Path.relative_to_cwd(path)}")
   end
 
   # ---------------------------------------------------------------------------

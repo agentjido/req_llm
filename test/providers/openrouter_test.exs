@@ -412,7 +412,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
       assert req == mock_req
       assert %ReqLLM.Error.API.Response{} = error
       assert error.status == 401
-      assert error.reason == "OpenRouter API error"
+      assert error.reason == "Openrouter API error"
       assert error.response_body == error_body
     end
   end

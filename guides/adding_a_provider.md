@@ -120,7 +120,7 @@ defmodule ReqLLM.Providers.MyOpenAI do
     )
     |> ReqLLM.Step.Error.attach()
     |> Req.Request.append_request_steps(llm_encode_body: &__MODULE__.encode_body/1)
-    |> ReqLLM.Step.Stream.attach(opts)
+    # Streaming is now handled via ReqLLM.Streaming module
     |> Req.Request.append_response_steps(llm_decode_response: &__MODULE__.decode_response/1)
     |> ReqLLM.Step.Usage.attach(model)
   end

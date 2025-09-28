@@ -34,6 +34,9 @@ defmodule ReqLLM.Provider.Defaults do
   - `decode_response/1` - Standard response decoding with error handling
   - `extract_usage/2` - Usage extraction from standard `usage` field
   - `translate_options/3` - No-op translation (pass-through)
+  - `decode_sse_event/2` - OpenAI-compatible SSE event decoding
+  - `attach_stream/4` - OpenAI-compatible streaming request building
+  - `display_name/0` - Human-readable provider name from provider_id
 
   ## Runtime Functions
 
@@ -48,6 +51,9 @@ defmodule ReqLLM.Provider.Defaults do
   - `default_decode_response/1`
   - `default_extract_usage/2`
   - `default_translate_options/3`
+  - `default_decode_sse_event/2`
+  - `default_attach_stream/5`
+  - `default_display_name/1`
 
   ## Customization Examples
 
@@ -148,6 +154,22 @@ defmodule ReqLLM.Provider.Defaults do
         ReqLLM.Provider.Defaults.default_decode_sse_event(event, model)
       end
 
+      @doc """
+      Default implementation of attach_stream/4.
+
+      Builds complete streaming requests using OpenAI-compatible format.
+      """
+      @impl ReqLLM.Provider
+      def attach_stream(model, context, opts, finch_name) do
+        ReqLLM.Provider.Defaults.default_attach_stream(
+          __MODULE__,
+          model,
+          context,
+          opts,
+          finch_name
+        )
+      end
+
       # Make all default implementations overridable
       defoverridable prepare_request: 4,
                      attach: 3,
@@ -155,7 +177,8 @@ defmodule ReqLLM.Provider.Defaults do
                      decode_response: 1,
                      extract_usage: 2,
                      translate_options: 3,
-                     decode_sse_event: 2
+                     decode_sse_event: 2,
+                     attach_stream: 4
     end
   end
 
@@ -316,7 +339,6 @@ defmodule ReqLLM.Provider.Defaults do
     |> Req.Request.merge_options([model: model.model, auth: {:bearer, api_key}] ++ user_opts)
     |> ReqLLM.Step.Error.attach()
     |> Req.Request.append_request_steps(llm_encode_body: &provider_mod.encode_body/1)
-    |> ReqLLM.Step.Stream.maybe_attach(user_opts[:stream] == true, model)
     |> Req.Request.append_response_steps(llm_decode_response: &provider_mod.decode_response/1)
     |> ReqLLM.Step.Usage.attach(model)
     |> ReqLLM.Step.Fixture.maybe_attach(model, user_opts)
@@ -383,6 +405,95 @@ defmodule ReqLLM.Provider.Defaults do
           {keyword(), [String.t()]}
   def default_translate_options(_operation, _model, opts) do
     {opts, []}
+  end
+
+  @doc """
+  Default implementation of attach_stream/4.
+
+  Builds complete streaming requests using OpenAI-compatible format and returns
+  a complete Finch.Request.t() ready for streaming execution.
+  """
+  @spec default_attach_stream(
+          module(),
+          ReqLLM.Model.t(),
+          ReqLLM.Context.t(),
+          keyword(),
+          atom()
+        ) :: {:ok, Finch.Request.t()} | {:error, Exception.t()}
+  def default_attach_stream(provider_mod, model, context, opts, _finch_name) do
+    # Get API key
+    api_key = ReqLLM.Keys.get!(model, opts)
+
+    # Get streaming HTTP configuration using legacy streaming_http/3
+    # This will be called on providers that define streaming_http/3
+    stream_config =
+      if function_exported?(provider_mod, :streaming_http, 3) do
+        provider_mod.streaming_http(model, api_key, opts)
+      else
+        # Fallback to default OpenAI-compatible config
+        %{
+          path: "/chat/completions",
+          headers: [
+            {"Authorization", "Bearer " <> api_key},
+            {"Content-Type", "application/json"}
+          ]
+        }
+      end
+
+    path = Map.fetch!(stream_config, :path)
+    base_headers = Map.fetch!(stream_config, :headers)
+
+    # Merge headers from streaming config
+    headers = base_headers ++ [{"Accept", "text/event-stream"}]
+
+    # Build URL 
+    method = :post
+
+    url =
+      case Keyword.get(opts, :base_url) do
+        nil ->
+          provider_mod.default_base_url() <> path
+
+        base_url ->
+          "#{base_url}#{path}"
+      end
+
+    # Build request body using provider's encode logic
+    body = build_streaming_body(provider_mod, model, context, opts)
+
+    # Create Finch request
+    finch_request = Finch.build(method, url, headers, body)
+    {:ok, finch_request}
+  rescue
+    error ->
+      {:error,
+       ReqLLM.Error.API.Request.exception(
+         reason: "Failed to build stream request: #{inspect(error)}"
+       )}
+  end
+
+  @doc """
+  Default display name implementation.
+
+  Returns a human-readable display name based on the provider_id from DSL,
+  or falls back to capitalizing the module name.
+  """
+  @spec default_display_name(module()) :: String.t()
+  def default_display_name(provider_mod) do
+    # Try to get provider_id from DSL metadata first
+    case function_exported?(provider_mod, :provider_id, 0) do
+      true ->
+        provider_mod.provider_id()
+        |> Atom.to_string()
+        |> String.capitalize()
+
+      false ->
+        # Fallback to module name
+        provider_mod
+        |> Module.split()
+        |> List.last()
+        |> String.replace("Provider", "")
+    end
   end
 
   # Private helper functions
@@ -518,11 +629,36 @@ defmodule ReqLLM.Provider.Defaults do
   Provider.Defaults for the protocol removal refactoring.
   """
   @spec default_decode_sse_event(map(), ReqLLM.Model.t()) :: [ReqLLM.StreamChunk.t()]
-  def default_decode_sse_event(%{data: data}, _model) when is_map(data) do
+  def default_decode_sse_event(%{data: data}, model) when is_map(data) do
     case data do
-      %{"choices" => [%{"delta" => delta} | _]} -> decode_openai_delta(delta)
-      _ -> []
+      %{"choices" => [%{"delta" => delta} | _], "usage" => usage} ->
+        # Stream chunk with usage metadata
+        chunks = decode_openai_delta(delta)
+        usage_chunk = ReqLLM.StreamChunk.meta(%{usage: usage, model: model.model})
+        chunks ++ [usage_chunk]
+
+      %{"choices" => [], "usage" => usage} ->
+        # Final usage-only chunk (OpenAI streaming with stream_options.include_usage)
+        [ReqLLM.StreamChunk.meta(%{usage: usage, model: model.model, terminal?: true})]
+
+      %{"choices" => [%{"delta" => delta, "finish_reason" => finish_reason} | _]}
+      when finish_reason != nil ->
+        # Final chunk with finish reason
+        chunks = decode_openai_delta(delta)
+        meta_chunk = ReqLLM.StreamChunk.meta(%{finish_reason: finish_reason, terminal?: true})
+        chunks ++ [meta_chunk]
+
+      %{"choices" => [%{"delta" => delta} | _]} ->
+        decode_openai_delta(delta)
+
+      _ ->
+        []
     end
+  end
+
+  # Handle terminal [DONE] event
+  def default_decode_sse_event(%{data: "[DONE]"}, _model) do
+    [ReqLLM.StreamChunk.meta(%{terminal?: true})]
   end
 
   def default_decode_sse_event(_, _model), do: []
@@ -750,14 +886,11 @@ defmodule ReqLLM.Provider.Defaults do
   end
 
   defp decode_error_response(req, resp, status) do
-    # Get provider name from the stored model or fallback to parsing model string
+    # Get provider name using the display_name/0 callback
     provider_name =
       case req.private[:req_llm_model] do
         %ReqLLM.Model{provider: provider_id} ->
-          case provider_id do
-            :openrouter -> "OpenRouter"
-            other -> other |> Atom.to_string() |> String.capitalize()
-          end
+          get_provider_display_name(provider_id)
 
         _ ->
           # Fallback to parsing model name if req_llm_model not available
@@ -766,12 +899,8 @@ defmodule ReqLLM.Provider.Defaults do
               "Unknown"
 
             model_str ->
-              prefix = model_str |> String.split(":") |> List.first()
-
-              case prefix do
-                "openrouter" -> "OpenRouter"
-                other -> String.capitalize(other)
-              end
+              provider_id = model_str |> String.split(":") |> List.first() |> String.to_atom()
+              get_provider_display_name(provider_id)
           end
       end
 
@@ -886,5 +1015,92 @@ defmodule ReqLLM.Provider.Defaults do
   defp merge_response_with_context(req, response) do
     context = req.options[:context] || %ReqLLM.Context{messages: []}
     ReqLLM.Context.merge_response(context, response)
+  end
+
+  # Helper functions for default stream request building
+
+  defp build_streaming_body(provider_mod, model, context, opts) do
+    # Create a temporary Req request to use existing encode_body logic
+    req_opts =
+      [
+        model: model.model,
+        context: context,
+        stream: true
+      ] ++ Keyword.delete(opts, :finch_name)
+
+    # Create minimal request struct with required fields
+    temp_request = %Req.Request{
+      method: :post,
+      url: URI.parse("https://example.com/temp"),
+      headers: %{},
+      body: {:json, %{}},
+      options: Map.new(req_opts)
+    }
+
+    # Use provider's encode_body to build the JSON
+    encoded_request = provider_mod.encode_body(temp_request)
+
+    # Return the encoded body (should be JSON string)
+    encoded_request.body
+  rescue
+    _error ->
+      # Fallback to basic OpenAI-compatible streaming body structure
+      build_fallback_streaming_body(model, context, opts)
+  end
+
+  defp build_fallback_streaming_body(model, context, opts) do
+    # Convert context to basic OpenAI-compatible format
+    messages =
+      context.messages
+      |> Enum.map(fn message ->
+        # Extract text content from ContentPart list
+        text_content =
+          message.content
+          |> Enum.filter(&(&1.type == :text))
+          |> Enum.map_join("", & &1.text)
+
+        %{
+          role: message.role,
+          content: text_content
+        }
+      end)
+
+    body = %{
+      model: model.model,
+      messages: messages,
+      stream: true
+    }
+
+    # Add optional parameters
+    body
+    |> maybe_add_streaming_param(:temperature, opts)
+    |> maybe_add_streaming_param(:max_tokens, opts)
+    |> maybe_add_streaming_param(:top_p, opts)
+    |> Jason.encode!()
+  end
+
+  defp maybe_add_streaming_param(body, key, opts) do
+    case Keyword.get(opts, key) do
+      nil -> body
+      value -> Map.put(body, key, value)
+    end
+  end
+
+  # Helper function to get provider display name using display_name/0 callback
+  defp get_provider_display_name(provider_id) do
+    # Try to resolve the provider module
+    provider_mod = ReqLLM.Provider.get!(provider_id)
+
+    # Check if display_name/0 function exists and call it
+    if function_exported?(provider_mod, :display_name, 0) do
+      provider_mod.display_name()
+    else
+      # Fallback to capitalizing the provider_id
+      provider_id |> Atom.to_string() |> String.capitalize()
+    end
+  rescue
+    # Handle cases where provider can't be resolved
+    _ ->
+      provider_id |> Atom.to_string() |> String.capitalize()
   end
 end

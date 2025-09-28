@@ -184,7 +184,9 @@ defmodule ReqLLM.Providers.OpenAI do
           add_embedding_options(body, request.options)
 
         _ ->
-          add_token_limits(body, request.options[:model], request.options)
+          body
+          |> add_token_limits(request.options[:model], request.options)
+          |> add_stream_options(request.options)
       end
 
     # Re-encode with enhancements
@@ -233,6 +235,16 @@ defmodule ReqLLM.Providers.OpenAI do
       maybe_put(body, :max_completion_tokens, request_options[:max_completion_tokens])
     else
       maybe_put(body, :max_tokens, request_options[:max_tokens])
+    end
+  end
+
+  @doc false
+  defp add_stream_options(body, request_options) do
+    # Automatically include usage data when streaming for better user experience
+    if request_options[:stream] do
+      maybe_put(body, :stream_options, %{include_usage: true})
+    else
+      body
     end
   end
 end

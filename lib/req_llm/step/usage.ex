@@ -243,14 +243,14 @@ defmodule ReqLLM.Step.Usage do
 
       uncached_tokens = max(input_num - cached_tokens, 0)
 
-      # Calculate costs with cached vs uncached rates
+      # Calculate costs with cached vs uncached rates (costs are per million tokens)
       input_cost =
         Float.round(
-          uncached_tokens / 1000 * input_rate + cached_tokens / 1000 * cached_rate,
+          uncached_tokens / 1_000_000 * input_rate + cached_tokens / 1_000_000 * cached_rate,
           6
         )
 
-      output_cost = Float.round(output_num / 1000 * output_rate, 6)
+      output_cost = Float.round(output_num / 1_000_000 * output_rate, 6)
       total_cost = Float.round(input_cost + output_cost, 6)
 
       {:ok,

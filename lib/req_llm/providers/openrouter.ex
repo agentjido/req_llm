@@ -243,6 +243,7 @@ defmodule ReqLLM.Providers.OpenRouter do
       |> maybe_put(:top_a, request.options[:openrouter_top_a])
       |> maybe_put(:top_logprobs, request.options[:openrouter_top_logprobs])
       |> add_openrouter_specific_options(request.options)
+      |> add_stream_options(request.options)
 
     # Re-encode with OpenRouter extensions
     encoded_body = Jason.encode!(enhanced_body)
@@ -267,6 +268,16 @@ defmodule ReqLLM.Providers.OpenRouter do
     Enum.reduce(openrouter_options, body, fn key, acc ->
       maybe_put(acc, key, request_options[key])
     end)
+  end
+
+  # Helper function for adding stream options (mirrors OpenAI implementation)
+  defp add_stream_options(body, request_options) do
+    # Automatically include usage data when streaming for better user experience
+    if request_options[:stream] do
+      maybe_put(body, :stream_options, %{include_usage: true})
+    else
+      body
+    end
   end
 
   # Helper function for adding OpenRouter app attribution headers

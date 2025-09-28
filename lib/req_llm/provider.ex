@@ -13,6 +13,7 @@ defmodule ReqLLM.Provider do
   - **Body Encoding**: Transform Context to provider-specific JSON via `encode_body/1`
   - **Response Parsing**: Decode API responses via `decode_response/1`
   - **Usage Extraction**: Parse usage/cost data via `extract_usage/2` (optional)
+  - **Streaming Configuration**: Build complete streaming requests via `attach_stream/4` (recommended)
 
   ## Implementation Pattern
 
@@ -44,6 +45,23 @@ defmodule ReqLLM.Provider do
           |> add_auth_headers()
           |> Req.Request.append_request_steps(llm_encode_body: &encode_body/1)
           |> Req.Request.append_response_steps(llm_decode_response: &decode_response/1)
+        end
+
+        @impl ReqLLM.Provider
+        def attach_stream(model, context, opts, finch_name) do
+          url = "https://api.example.com/v1/chat/completions"
+          api_key = ReqLLM.Keys.get!(model, opts)
+          headers = [
+            {"Authorization", "Bearer " <> api_key},
+            {"Content-Type", "application/json"}
+          ]
+          body = Jason.encode!(%{
+            model: model.model,
+            messages: encode_context_messages(context),
+            stream: true
+          })
+          request = Finch.build(:post, url, headers, body)
+          {:ok, request}
         end
 
         def encode_body(request) do
@@ -244,8 +262,10 @@ defmodule ReqLLM.Provider do
   @doc """
   Decode provider SSE event to list of StreamChunk structs for streaming responses.
 
-  This is called by ReqLLM.Step.Stream during real-time streaming to convert
-  provider-specific SSE events into canonical StreamChunk structures.
+  This is called by ReqLLM.StreamServer during real-time streaming to convert
+  provider-specific SSE events into canonical StreamChunk structures. For terminal
+  events (like "[DONE]"), providers should return metadata chunks with usage
+  information and finish reasons.
 
   ## Parameters
 
@@ -255,6 +275,17 @@ defmodule ReqLLM.Provider do
   ## Returns
 
     * `[ReqLLM.StreamChunk.t()]` - List of decoded stream chunks (may be empty)
+
+  ## Terminal Metadata
+
+  For terminal SSE events, providers should return metadata chunks:
+
+      # Final usage and completion metadata
+      ReqLLM.StreamChunk.meta(%{
+        usage: %{input_tokens: 10, output_tokens: 25},
+        finish_reason: :stop,
+        terminal?: true
+      })
 
   ## Examples
 
@@ -267,14 +298,88 @@ defmodule ReqLLM.Provider do
         end
       end
 
+      # Handle terminal [DONE] event
+      def decode_sse_event(%{data: "[DONE]"}, _model) do
+        # Provider should have accumulated usage data
+        [ReqLLM.StreamChunk.meta(%{terminal?: true})]
+      end
+
   """
   @callback decode_sse_event(map(), ReqLLM.Model.t()) :: [ReqLLM.StreamChunk.t()]
+
+  @doc """
+  Build complete Finch request for streaming operations.
+
+  This callback creates a complete Finch.Request struct for streaming operations,
+  allowing providers to specify their streaming endpoint, headers, and request body
+  format. This consolidates streaming request preparation into a single callback.
+
+  ## Parameters
+
+    * `model` - The ReqLLM.Model struct
+    * `context` - The Context with messages to stream
+    * `opts` - Additional options (temperature, max_tokens, etc.)
+    * `finch_name` - Finch process name for connection pooling
+
+  ## Returns
+
+    * `{:ok, Finch.Request.t()}` - Successfully built streaming request
+    * `{:error, Exception.t()}` - Request building error
+
+  ## Examples
+
+      def attach_stream(model, context, opts, _finch_name) do
+        url = "https://api.openai.com/v1/chat/completions"
+        api_key = ReqLLM.Keys.get!(model, opts)
+        headers = [
+          {"Authorization", "Bearer " <> api_key},
+          {"Content-Type", "application/json"}
+        ]
+        
+        body = Jason.encode!(%{
+          model: model.model,
+          messages: encode_messages(context.messages),
+          stream: true
+        })
+        
+        request = Finch.build(:post, url, headers, body)
+        {:ok, request}
+      end
+
+      # Anthropic with different endpoint and headers
+      def attach_stream(model, context, opts, _finch_name) do
+        url = "https://api.anthropic.com/v1/messages"
+        api_key = ReqLLM.Keys.get!(model, opts)
+        headers = [
+          {"Authorization", "Bearer " <> api_key},
+          {"Content-Type", "application/json"},
+          {"anthropic-version", "2023-06-01"}
+        ]
+        
+        body = Jason.encode!(%{
+          model: model.model,
+          messages: encode_anthropic_messages(context),
+          stream: true
+        })
+        
+        request = Finch.build(:post, url, headers, body)
+        {:ok, request}
+      end
+
+  """
+  @callback attach_stream(
+              ReqLLM.Model.t(),
+              ReqLLM.Context.t(),
+              keyword(),
+              atom()
+            ) :: {:ok, Finch.Request.t()} | {:error, Exception.t()}
 
   @optional_callbacks [
     extract_usage: 2,
     default_env_key: 0,
     translate_options: 3,
-    decode_sse_event: 2
+    decode_sse_event: 2,
+    attach_stream: 4
   ]
 
   @doc """

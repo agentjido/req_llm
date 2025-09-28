@@ -19,7 +19,7 @@ defmodule Mix.Tasks.ReqLlm.Gen do
   ## Options
 
       --model, -m MODEL       Model specification in format provider:model-name
-                             Default: groq:gemma2-9b-it
+                              Default: openai:gpt-4o-mini
 
       --system, -s SYSTEM     System prompt/message to set context for the AI
 
@@ -59,10 +59,10 @@ defmodule Mix.Tasks.ReqLlm.Gen do
         --model anthropic:claude-3-sonnet \\
         --json --stream \\
         --temperature 0.1 \\
-        --log-level verbose
+        --log-level debug
 
       # Quick generation without extra output
-      mix req_llm.gen "What is 2+2?" --log-level quiet
+      mix req_llm.gen "What is 2+2?" --log-level warning
 
   ## JSON Schema
 
@@ -83,6 +83,13 @@ defmodule Mix.Tasks.ReqLlm.Gen do
       google      - Google Gemini models
       openrouter  - OpenRouter (access to multiple providers)
       xai         - xAI Grok models
+
+  ## Configuration
+
+  The default model can be configured in your application config:
+
+      # config/config.exs
+      config :req_llm, default_model: "openai:gpt-4o-mini"
 
   ## Environment Variables
 
@@ -127,17 +134,16 @@ defmodule Mix.Tasks.ReqLlm.Gen do
   require Logger
 
   @preferred_cli_env ["req_llm.gen": :dev]
+  @log_levels [:warning, :info, :debug]
+
   @spec run([String.t()]) :: :ok | no_return()
   @impl Mix.Task
   def run(args) do
-    # Parse with additional switches for the consolidated task
     extra_switches = [stream: :boolean, json: :boolean]
     {opts, args_list, _} = parse_args(args, extra_switches)
 
-    # Set logger level early, before starting the application
     log_level = parse_log_level(Keyword.get(opts, :log_level))
-    logger_level = if log_level == :debug, do: :debug, else: :info
-    Logger.configure(level: logger_level)
+    Logger.configure(level: if(log_level == :debug, do: :debug, else: :warning))
 
     Application.ensure_all_started(:req_llm)
 
@@ -145,20 +151,19 @@ defmodule Mix.Tasks.ReqLlm.Gen do
       {:ok, prompt} ->
         model_spec = Keyword.get(opts, :model, default_model())
 
-        # Determine mode from flags
-        streaming = Keyword.get(opts, :stream, false)
-        json_mode = Keyword.get(opts, :json, false)
+        case validate_model_spec(model_spec) do
+          {:ok, _model} ->
+            streaming = Keyword.get(opts, :stream, false)
+            json_mode = Keyword.get(opts, :json, false)
 
-        # Validate model exists (basic validation only)
-        # Skip strict capability validation since it's handled at the API level
-        case validate_model_capabilities(model_spec, []) do
-          {:ok, _metadata} ->
-            execute_generation(model_spec, prompt, opts, log_level, streaming, json_mode)
+            mode =
+              {if(json_mode, do: :json, else: :text), if(streaming, do: :stream, else: :full)}
 
-          {:error, _error_msg} ->
-            # For now, proceed anyway if model metadata isn't available
-            # The actual API call will validate compatibility
-            execute_generation(model_spec, prompt, opts, log_level, streaming, json_mode)
+            execute_generation(mode, model_spec, prompt, opts, log_level)
+
+          {:error, error_type} ->
+            handle_validation_error(error_type, model_spec)
+            System.halt(1)
         end
 
       {:error, :no_prompt} ->
@@ -166,445 +171,261 @@ defmodule Mix.Tasks.ReqLlm.Gen do
     end
   end
 
-  # Route to appropriate generation function based on mode
-  defp execute_generation(model_spec, prompt, opts, log_level, streaming, json_mode) do
-    case {streaming, json_mode} do
-      {false, false} ->
-        execute_text_generation(model_spec, prompt, opts, log_level)
+  # Unified execution with mode dispatch
+  defp execute_generation(mode, model_spec, prompt, opts, log_level) do
+    {call_fun, success_handler} = mode_dispatcher(mode)
 
-      {true, false} ->
-        execute_streaming_text(model_spec, prompt, opts, log_level)
+    show_banner(mode, model_spec, prompt, log_level)
 
-      {false, true} ->
-        execute_object_generation(model_spec, prompt, opts, log_level)
-
-      {true, true} ->
-        execute_streaming_object(model_spec, prompt, opts, log_level)
-    end
-  end
-
-  # Standard text generation (non-streaming)
-  defp execute_text_generation(model_spec, prompt, opts, log_level) do
-    quiet = log_level == :quiet
-    debug = log_level == :debug
-
-    if not quiet do
-      IO.puts(
-        "#{model_spec} → \"#{String.slice(prompt, 0, 50)}#{if String.length(prompt) > 50, do: "...", else: ""}\"\n"
-      )
-    end
-
-    generate_opts = build_generate_opts(opts)
+    opts = build_generate_opts(opts)
     start_time = System.monotonic_time(:millisecond)
 
-    try do
-      ReqLLM.Generation.generate_text(model_spec, prompt, generate_opts)
-      |> handle_common_errors()
-      |> handle_text_success(quiet, debug, start_time, model_spec, prompt)
-    rescue
-      error -> handle_rescue_error(error)
+    call_args =
+      case mode do
+        {:json, _} -> [model_spec, prompt, default_object_schema(), opts]
+        _ -> [model_spec, prompt, opts]
+      end
+
+    case apply(call_fun, call_args) do
+      {:ok, result} ->
+        success_handler.(result, log_level, model_spec, prompt, start_time)
+
+      {:error, error} ->
+        log_puts(format_error(error), :warning, log_level)
+        System.halt(1)
+    end
+  rescue
+    error ->
+      log_puts("Unexpected error: #{format_error(error)}", :warning, log_level)
+      System.halt(1)
+  end
+
+  # Mode dispatcher - maps mode tuples to API functions and handlers
+  defp mode_dispatcher(mode) do
+    case mode do
+      {:text, :full} ->
+        {&ReqLLM.Generation.generate_text/3, &handle_text_result/5}
+
+      {:text, :stream} ->
+        {&ReqLLM.Generation.stream_text/3, &handle_stream_text_result/5}
+
+      {:json, :full} ->
+        {&ReqLLM.Generation.generate_object/4, &handle_object_result/5}
+
+      {:json, :stream} ->
+        {&ReqLLM.Generation.stream_object/4, &handle_stream_object_result/5}
     end
   end
 
-  # Streaming text generation
-  defp execute_streaming_text(model_spec, prompt, opts, log_level) do
-    quiet = log_level == :quiet
-    debug = log_level == :debug
+  # Unified banner display
+  defp show_banner({_content_type, _stream_type}, _model_spec, _prompt, log_level)
+       when log_level == :warning,
+       do: :ok
 
-    if not quiet do
-      IO.puts(
-        "#{model_spec} → \"#{String.slice(prompt, 0, 50)}#{if String.length(prompt) > 50, do: "...", else: ""}\"\n"
-      )
-    end
+  defp show_banner({content_type, _stream_type}, model_spec, prompt, log_level) do
+    prompt_preview = String.slice(prompt, 0, 50)
+    prompt_suffix = if String.length(prompt) > 50, do: "...", else: ""
 
-    stream_opts = build_generate_opts(opts)
-    start_time = System.monotonic_time(:millisecond)
+    case content_type do
+      :text ->
+        log_puts("#{model_spec} → \"#{prompt_preview}#{prompt_suffix}\"\n", :info, log_level)
 
-    try do
-      ReqLLM.stream_text(model_spec, prompt, stream_opts)
-      |> handle_common_errors()
-      |> handle_streaming_text_success(quiet, debug, start_time, model_spec, prompt)
-    rescue
-      error -> handle_rescue_error(error)
+      :json ->
+        log_puts("Generating object from #{model_spec}", :info, log_level)
+        log_puts("Prompt: #{prompt}", :info, log_level)
+        log_puts("", :info, log_level)
     end
   end
 
-  # Object generation (non-streaming)
-  defp execute_object_generation(model_spec, prompt, opts, log_level) do
-    quiet = log_level == :quiet
-    debug = log_level == :debug
-    metrics = log_level in [:verbose, :debug]
-
-    if not quiet do
-      IO.puts("Generating object from #{model_spec}")
-      IO.puts("Prompt: #{prompt}")
-      IO.puts("")
-    end
-
-    schema = default_object_schema()
-    generate_opts = build_generate_opts(opts)
-    start_time = System.monotonic_time(:millisecond)
-
-    try do
-      ReqLLM.Generation.generate_object(model_spec, prompt, schema, generate_opts)
-      |> handle_common_errors()
-      |> handle_object_success(quiet, debug, metrics, start_time, model_spec, prompt)
-    rescue
-      error -> handle_rescue_error(error)
-    end
-  end
-
-  # Streaming object generation
-  defp execute_streaming_object(model_spec, prompt, opts, log_level) do
-    quiet = log_level == :quiet
-    debug = log_level == :debug
-    metrics = log_level in [:verbose, :debug]
-
-    if not quiet do
-      IO.puts("Streaming object from #{model_spec}")
-      IO.puts("Prompt: #{prompt}")
-      IO.puts("")
-    end
-
-    schema = default_object_schema()
-    generate_opts = build_generate_opts(opts)
-    start_time = System.monotonic_time(:millisecond)
-
-    try do
-      ReqLLM.Generation.stream_object(model_spec, prompt, schema, generate_opts)
-      |> handle_common_errors()
-      |> handle_streaming_object_success(quiet, debug, metrics, start_time, model_spec, prompt)
-    rescue
-      error -> handle_rescue_error(error)
-    end
-  end
-
-  # Success handlers for different generation modes
-
-  defp handle_text_success({:ok, response}, quiet, debug, start_time, model_spec, prompt) do
+  # Result handlers
+  defp handle_text_result(response, log_level, model_spec, prompt, start_time) do
     text = ReqLLM.Response.text(response)
-
-    if quiet do
-      IO.puts(text)
-    else
-      IO.puts(text)
-      IO.puts("")
-      show_stats(text, start_time, model_spec, prompt, response, :text, debug)
-    end
-
-    :ok
+    IO.puts(text)
+    show_text_stats(text, start_time, model_spec, prompt, response, log_level)
   end
 
-  defp handle_streaming_text_success(
-         {:ok, response},
-         quiet,
-         debug,
-         start_time,
-         model_spec,
-         prompt
-       ) do
-    {full_text, chunk_count} = stream_text_response(response, quiet, debug)
+  defp handle_stream_text_result(stream_response, log_level, model_spec, prompt, start_time) do
+    accumulated_text =
+      stream_response.stream
+      |> Enum.reduce("", fn chunk, acc ->
+        case chunk.type do
+          :content ->
+            text = chunk.text || ""
+            IO.write(text)
+            acc <> text
 
-    if not quiet do
-      IO.puts("")
-      response_with_chunk_count = Map.put(response, :chunk_count, chunk_count)
-
-      show_stats(
-        full_text,
-        start_time,
-        model_spec,
-        prompt,
-        response_with_chunk_count,
-        :stream,
-        debug
-      )
-    end
-
-    :ok
-  end
-
-  defp handle_object_success(
-         {:ok, response},
-         quiet,
-         debug,
-         metrics,
-         start_time,
-         model_spec,
-         prompt
-       ) do
-    if debug, do: debug_request(response)
-
-    generated_object = ReqLLM.Response.object(response)
-
-    if debug do
-      IO.puts("=== FULL RESPONSE STRUCTURE ===========================")
-      IO.puts(inspect(response, pretty: true, limit: :infinity))
-      IO.puts("========================================================")
-      IO.puts("")
-    end
-
-    if quiet do
-      IO.puts(Jason.encode!(generated_object, pretty: true))
-    else
-      IO.puts("Response:")
-      IO.puts("   Model: #{response.model}")
-      IO.puts("")
-      IO.puts("Generated Object:")
-      IO.puts(Jason.encode!(generated_object, pretty: true))
-      IO.puts("")
-    end
-
-    if debug, do: debug_response_meta(response)
-
-    if metrics do
-      show_object_stats(generated_object, start_time, model_spec, prompt, response)
-    end
-
-    if not quiet, do: IO.puts("Object generation completed")
-    :ok
-  end
-
-  defp handle_streaming_object_success(
-         {:ok, response},
-         quiet,
-         debug,
-         metrics,
-         start_time,
-         model_spec,
-         prompt
-       ) do
-    if debug, do: debug_request(response)
-
-    if not quiet do
-      IO.puts("Response:")
-      IO.puts("   Model: #{response.model}")
-      IO.puts("")
-    end
-
-    if debug do
-      IO.puts("=== FULL RESPONSE STRUCTURE ===========================")
-      IO.puts(inspect(response, pretty: true, limit: :infinity))
-      IO.puts("========================================================")
-      IO.puts("")
-    end
-
-    if not quiet do
-      IO.puts("Streaming Object:")
-    end
-
-    # Stream the object and collect final result
-    final_object = stream_object_response(response, quiet, debug)
-
-    if quiet do
-      IO.puts(Jason.encode!(final_object, pretty: true))
-    else
-      IO.puts("")
-      IO.puts("Final Object:")
-      IO.puts(Jason.encode!(final_object, pretty: true))
-      IO.puts("")
-    end
-
-    if debug, do: debug_response_meta(response)
-
-    if metrics do
-      show_object_stats(final_object, start_time, model_spec, prompt, response)
-    end
-
-    if not quiet, do: IO.puts("Object streaming completed")
-    :ok
-  end
-
-  # Streaming helpers
-
-  defp stream_text_response(response, quiet, verbose) do
-    response.stream
-    |> Enum.reduce({[], 0}, fn chunk, {acc_chunks, count} ->
-      count = count + 1
-
-      cond do
-        verbose ->
-          IO.puts("[#{count}]: #{inspect(chunk)}")
-          collect_text_chunk(chunk, acc_chunks, count)
-
-        not quiet ->
-          case chunk do
-            %ReqLLM.StreamChunk{type: :content, text: text} when is_binary(text) ->
-              IO.binwrite(:stdio, text)
-              :io.put_chars(:standard_io, [])
-              {[text | acc_chunks], count}
-
-            %ReqLLM.StreamChunk{type: :tool_call, name: name} ->
-              IO.binwrite(:stdio, "\n[TOOL CALL: #{name}]")
-              :io.put_chars(:standard_io, [])
-              {acc_chunks, count}
-
-            _ ->
-              {acc_chunks, count}
-          end
-
-        true ->
-          collect_text_chunk(chunk, acc_chunks, count)
-      end
-    end)
-    |> then(fn {chunks, count} ->
-      text = chunks |> Enum.reverse() |> Enum.join("")
-      {text, count}
-    end)
-  end
-
-  defp stream_object_response(response, quiet, debug) do
-    # Debug: First let's see what's in the raw stream
-    _raw_chunks =
-      if debug do
-        IO.puts("=== DEBUG/RAW STREAM CHUNKS ===========================")
-        chunks = Enum.to_list(response.stream)
-        IO.puts("Total chunks received: #{length(chunks)}")
-
-        chunks
-        |> Enum.with_index()
-        |> Enum.each(fn {chunk, index} ->
-          IO.puts("Chunk #{index + 1}: #{inspect(chunk, pretty: true, limit: :infinity)}")
-          # Extra debug for tool_call chunks
-          if chunk.type == :tool_call do
-            IO.puts("  Tool name: #{inspect(chunk.name)}")
-
-            IO.puts(
-              "  Tool arguments: #{inspect(chunk.arguments, pretty: true, limit: :infinity)}"
-            )
-
-            IO.puts(
-              "  Chunk metadata: #{inspect(chunk.metadata, pretty: true, limit: :infinity)}"
-            )
-          end
-        end)
-
-        chunks
-      else
-        Enum.to_list(response.stream)
-      end
-
-    # Stream the object and collect chunks for analysis
-    object_stream = ReqLLM.Response.object_stream(response)
-
-    if debug do
-      IO.puts("=== DEBUG/FILTERED OBJECT STREAM =====================")
-    end
-
-    stream_and_collect_object(object_stream, quiet)
-  end
-
-  defp stream_and_collect_object(object_stream, quiet) do
-    object_stream
-    |> Enum.reduce(%{}, fn chunk, acc ->
-      if not quiet do
-        IO.puts("Filtered chunk: #{inspect(chunk, pretty: true, limit: :infinity)}")
-      end
-
-      # For object streaming, chunks represent partial object updates
-      case chunk do
-        %{} = object_part ->
-          Map.merge(acc, object_part)
-
-        _ ->
-          acc
-      end
-    end)
-  end
-
-  defp collect_text_chunk(%ReqLLM.StreamChunk{type: :content, text: text}, acc_chunks, count)
-       when is_binary(text) do
-    {[text | acc_chunks], count}
-  end
-
-  defp collect_text_chunk(_, acc_chunks, count), do: {acc_chunks, count}
-
-  # Consolidated utility functions from shared.ex
-
-  @common_switches [
-    model: :string,
-    system: :string,
-    max_tokens: :integer,
-    temperature: :float,
-    log_level: :string,
-    debug_dir: :string
-  ]
-
-  @common_aliases [
-    m: :model,
-    s: :system,
-    t: :temperature,
-    l: :log_level,
-    d: :debug_dir
-  ]
-
-  defp parse_args(args, extra_switches) do
-    switches = Keyword.merge(@common_switches, extra_switches)
-    aliases = @common_aliases
-
-    OptionParser.parse(args, switches: switches, aliases: aliases)
-  end
-
-  defp validate_prompt(args_list, task_name) do
-    case args_list do
-      [prompt | _] ->
-        {:ok, prompt}
-
-      [] ->
-        show_usage(task_name)
-        {:error, :no_prompt}
-    end
-  end
-
-  defp show_usage(task_name) do
-    examples =
-      case task_name do
-        "gen" ->
-          [
-            ~s(  mix req_llm.gen "Explain APIs" --model groq:gemma2-9b-it),
-            ~s(  mix req_llm.gen "Write a story" --model openai:gpt-4o --stream),
-            ~s(  mix req_llm.gen "Generate user profile" --model openai:gpt-4o-mini --json),
-            ~s(  mix req_llm.gen "Extract person info" --model anthropic:claude-3-sonnet --json --stream)
-          ]
-      end
-
-    case task_name do
-      "gen" ->
-        IO.puts(
-          ~s(Usage: mix req_llm.gen "Your prompt here" [--stream] [--json] --model provider:model-name)
-        )
-    end
+          _ ->
+            acc
+        end
+      end)
 
     IO.puts("")
-    IO.puts("Examples:")
-    Enum.each(examples, &IO.puts/1)
+
+    show_text_stats(
+      accumulated_text,
+      start_time,
+      model_spec,
+      prompt,
+      stream_response,
+      log_level
+    )
   end
 
-  defp parse_log_level(level_string) do
-    case String.downcase(level_string || "normal") do
-      "quiet" ->
-        :quiet
+  defp handle_object_result(response, log_level, model_spec, prompt, start_time) do
+    object = Map.get(response, :object, %{})
 
-      "normal" ->
-        :normal
+    case Jason.encode(object, pretty: true) do
+      {:ok, json} -> IO.puts(json)
+      {:error, _} -> IO.puts(inspect(object, pretty: true))
+    end
 
-      "verbose" ->
-        :verbose
+    show_object_stats(object, start_time, model_spec, prompt, response, log_level)
+  end
 
-      "debug" ->
-        :debug
+  defp handle_stream_object_result(stream, log_level, model_spec, prompt, start_time) do
+    final_object =
+      stream
+      |> Enum.reduce(%{}, fn chunk, acc ->
+        partial = Map.get(chunk, :object, %{})
+        Map.merge(acc, partial)
+      end)
+
+    case Jason.encode(final_object, pretty: true) do
+      {:ok, json} -> IO.puts(json)
+      {:error, _} -> IO.puts(inspect(final_object, pretty: true))
+    end
+
+    response = %{object: final_object, chunk_count: Enum.count(stream)}
+    show_object_stats(final_object, start_time, model_spec, prompt, response, log_level)
+  end
+
+  # Statistics display
+  defp show_text_stats(_text, _start_time, _model_spec, _prompt, _response_data, :warning),
+    do: :ok
+
+  defp show_text_stats(_text, start_time, _model_spec, _prompt, response_data, :info) do
+    response_time = System.monotonic_time(:millisecond) - start_time
+
+    # Try to extract usage from different response types
+    usage =
+      case response_data do
+        %{usage: usage} -> usage
+        %ReqLLM.StreamResponse{} -> ReqLLM.StreamResponse.usage(response_data)
+        _ -> nil
+      end
+
+    case {usage, response_data} do
+      {%{input_tokens: input, output_tokens: output, total_cost: cost}, _} ->
+        cost_str = :erlang.float_to_binary(cost, decimals: 6)
+        IO.puts("\n#{response_time}ms • #{input}→#{output} tokens • ~$#{cost_str}")
+
+      {_, %ReqLLM.StreamResponse{}} ->
+        IO.puts("\n#{response_time}ms • streaming")
 
       _ ->
-        IO.puts("Warning: Unknown log level '#{level_string}'. Using 'normal'.")
-        :normal
+        IO.puts("\n#{response_time}ms")
     end
   end
 
-  defp build_generate_opts(opts) do
-    []
-    |> maybe_add_option(opts, :system_prompt, :system)
-    |> maybe_add_option(opts, :max_tokens)
-    |> maybe_add_option(opts, :temperature)
-    |> Enum.reject(fn {_key, val} -> is_nil(val) end)
+  defp show_text_stats(text, start_time, _model_spec, _prompt, response_data, log_level) do
+    response_time = System.monotonic_time(:millisecond) - start_time
+    char_count = String.length(text || "")
+    word_count = (text || "") |> String.split(~r/\s+/, trim: true) |> length()
+
+    log_puts("   Response time: #{response_time}ms", :debug, log_level)
+    log_puts("   Characters: #{char_count}", :debug, log_level)
+    log_puts("   Words: #{word_count}", :debug, log_level)
+
+    # Try to extract usage from different response types
+    usage =
+      case response_data do
+        %{usage: usage} -> usage
+        %ReqLLM.StreamResponse{} -> ReqLLM.StreamResponse.usage(response_data)
+        _ -> nil
+      end
+
+    # Show usage data from response if available
+    case usage do
+      %{input_tokens: input, output_tokens: output} = usage ->
+        log_puts("   Input tokens: #{input}", :debug, log_level)
+        log_puts("   Output tokens: #{output}", :debug, log_level)
+        log_puts("   Total tokens: #{input + output}", :debug, log_level)
+
+        if Map.has_key?(usage, :total_cost) do
+          cost = :erlang.float_to_binary(usage.total_cost, decimals: 6)
+          log_puts("   Cost: $#{cost}", :debug, log_level)
+          # credo:disable-for-next-line Credo.Check.Warning.IoInspect
+          IO.inspect(usage, label: "DEBUG: Full usage object")
+        end
+
+      _ ->
+        estimated_tokens = estimate_tokens(text || "")
+        log_puts("   Estimated tokens: #{estimated_tokens}", :debug, log_level)
+    end
+
+    # Show chunk count for streaming responses
+    case response_data do
+      %ReqLLM.StreamResponse{stream: stream} ->
+        chunk_count = Enum.count(stream)
+        log_puts("   Chunks received: #{chunk_count}", :debug, log_level)
+
+      %{chunk_count: chunk_count} ->
+        log_puts("   Chunks received: #{chunk_count}", :debug, log_level)
+
+      _ ->
+        :ok
+    end
+  end
+
+  defp show_object_stats(_object, _start_time, _model_spec, _prompt, _response, log_level)
+       when log_level not in [:debug],
+       do: :ok
+
+  defp show_object_stats(object, start_time, model_spec, _prompt, response, log_level) do
+    response_time = System.monotonic_time(:millisecond) - start_time
+    input_tokens = get_nested(response, [:usage, :input_tokens], 0)
+    output_tokens = get_nested(response, [:usage, :output_tokens], 0)
+
+    object_json = Jason.encode!(object)
+    object_size = byte_size(object_json)
+    field_count = count_fields(object)
+    estimated_cost = calculate_estimated_cost(model_spec, input_tokens, output_tokens)
+
+    log_puts("   Response time: #{response_time}ms", :debug, log_level)
+    log_puts("   Object size: #{object_size} bytes", :debug, log_level)
+    log_puts("   Field count: #{field_count}", :debug, log_level)
+    log_puts("   Input tokens: #{input_tokens}", :debug, log_level)
+    log_puts("   Output tokens: #{output_tokens}", :debug, log_level)
+    log_puts("   Total tokens: #{input_tokens + output_tokens}", :debug, log_level)
+
+    cost_display =
+      if estimated_cost > 0 do
+        "$#{:erlang.float_to_binary(estimated_cost, decimals: 6)}"
+      else
+        "Unknown"
+      end
+
+    log_puts("   Estimated cost: #{cost_display}", :debug, log_level)
+
+    if Map.has_key?(response, :chunk_count) do
+      log_puts("   Chunks received: #{response.chunk_count}", :debug, log_level)
+    end
+  end
+
+  # Centralized logging helper
+  defp log_puts(message, min_level, current_level) do
+    if level_index(current_level) >= level_index(min_level) do
+      IO.puts(message)
+    end
+  end
+
+  defp level_index(level) do
+    Enum.find_index(@log_levels, &(&1 == level)) || 1
+  end
+
+  # Configuration and validation helpers
+  defp default_model do
+    Application.get_env(:req_llm, :default_model, "openai:gpt-4o-mini")
   end
 
   defp default_object_schema do
@@ -616,232 +437,40 @@ defmodule Mix.Tasks.ReqLlm.Gen do
     ]
   end
 
-  defp handle_common_errors({:error, %ReqLLM.Error.Invalid.Provider{provider: provider}}) do
-    IO.puts(
-      "Error: Unknown provider '#{provider}'. Please check that the provider is supported and properly configured."
-    )
-
-    IO.puts("Available providers: openai, groq, xai (others may require additional setup)")
-    System.halt(1)
+  defp build_generate_opts(opts) do
+    []
+    |> maybe_add_option(opts, :system)
+    |> maybe_add_option(opts, :max_tokens)
+    |> maybe_add_option(opts, :temperature)
   end
 
-  defp handle_common_errors({:error, %ReqLLM.Error.Invalid.Parameter{parameter: param}}) do
-    IO.puts("Error: #{param}")
-    System.halt(1)
-  end
-
-  defp handle_common_errors({:error, %ReqLLM.Error.API.Request{reason: reason, status: status}})
-       when not is_nil(status) do
-    IO.puts("API Error (#{status}): #{reason}")
-    System.halt(1)
-  end
-
-  defp handle_common_errors({:error, %ReqLLM.Error.API.Request{reason: reason}}) do
-    IO.puts("API Error: #{reason}")
-    System.halt(1)
-  end
-
-  defp handle_common_errors({:error, error}) do
-    IO.puts("Operation failed: #{format_error(error)}")
-    System.halt(1)
-  end
-
-  defp handle_common_errors({:ok, result}), do: {:ok, result}
-
-  @spec handle_rescue_error(any()) :: no_return()
-  defp handle_rescue_error(%UndefinedFunctionError{module: nil, function: :prepare_request}) do
-    IO.puts(
-      "Error: Provider not properly configured or not available. Please check your model specification."
-    )
-
-    System.halt(1)
-  end
-
-  defp handle_rescue_error(%UndefinedFunctionError{} = error) do
-    IO.puts("Unexpected error: #{format_error(error)}")
-    System.halt(1)
-  end
-
-  defp handle_rescue_error(error) do
-    IO.puts("Unexpected error: #{format_error(error)}")
-    System.halt(1)
-  end
-
-  defp show_stats(content, start_time, model_spec, prompt, response, type, debug) do
-    end_time = System.monotonic_time(:millisecond)
-    response_time = end_time - start_time
-
-    input_tokens = get_nested(response, [:usage, :input_tokens], 0)
-    output_tokens = get_nested(response, [:usage, :output_tokens], 0)
-    estimated_cost = calculate_cost_from_registry(model_spec, input_tokens, output_tokens)
-
-    # Clean, one-line stats format
-    cost_display =
-      if estimated_cost > 0 do
-        "$#{:erlang.float_to_binary(estimated_cost, decimals: 6)}"
-      else
-        "unknown"
-      end
-
-    IO.puts(
-      "Stats: #{response_time}ms • #{input_tokens + output_tokens} tokens (#{input_tokens}→#{output_tokens}) • #{cost_display}"
-    )
-
-    if debug do
-      case type do
-        :text ->
-          output_tokens_est = estimate_tokens(content)
-          input_tokens_est = estimate_tokens(prompt)
-          IO.puts("   Debug - Output tokens: #{output_tokens} (est: #{output_tokens_est})")
-          IO.puts("   Debug - Input tokens: #{input_tokens} (est: #{input_tokens_est})")
-
-        :stream ->
-          chunk_count = Map.get(response, :chunk_count, 0)
-          IO.puts("   Debug - Chunks received: #{chunk_count}")
-      end
-    end
-  end
-
-  defp show_object_stats(object, start_time, model_spec, _prompt, response) do
-    end_time = System.monotonic_time(:millisecond)
-    response_time = end_time - start_time
-
-    input_tokens = get_nested(response, [:usage, :input_tokens], 0)
-    output_tokens = get_nested(response, [:usage, :output_tokens], 0)
-
-    # Estimate object complexity
-    object_json = Jason.encode!(object)
-    object_size = byte_size(object_json)
-    field_count = count_fields(object)
-
-    estimated_cost = calculate_cost_from_registry(model_spec, input_tokens, output_tokens)
-
-    IO.puts("   Response time: #{response_time}ms")
-    IO.puts("   Object size: #{object_size} bytes")
-    IO.puts("   Field count: #{field_count}")
-    IO.puts("   Input tokens: #{input_tokens}")
-    IO.puts("   Output tokens: #{output_tokens}")
-    IO.puts("   Total tokens: #{input_tokens + output_tokens}")
-
-    if estimated_cost > 0 do
-      IO.puts("   Estimated cost: $#{:erlang.float_to_binary(estimated_cost, decimals: 6)}")
-    else
-      IO.puts("   Estimated cost: Unknown")
-    end
-  end
-
-  defp debug_request(response) do
-    case Map.get(response, :request) do
-      nil ->
-        IO.puts("=== DEBUG/REQUEST (unavailable) =======================")
-        IO.puts("Request details not available in response")
-        IO.puts("========================================================")
-
-      req ->
-        headers = redact_sensitive_headers(req.headers || [])
-
-        IO.puts("""
-        === DEBUG/REQUEST =========================================
-        #{String.upcase(to_string(req.method || "POST"))} #{req.url}
-        Headers: #{inspect(headers, pretty: true)}
-        Body: #{format_request_body(req.body)}
-        ============================================================
-        """)
-    end
-  end
-
-  defp debug_response_meta(response) do
-    meta = extract_response_metadata(response)
-
-    IO.puts("""
-    === DEBUG/RESPONSE META ===================================
-    #{inspect(meta, pretty: true)}
-    ============================================================
-    """)
-  end
-
-  defp extract_response_metadata(response) do
-    %{
-      model: Map.get(response, :model, "unknown"),
-      usage: Map.get(response, :usage, "unavailable"),
-      request_id: get_nested(response, [:metadata, :request_id], "unavailable"),
-      provider_metadata: Map.get(response, :metadata, %{})
-    }
-  end
-
-  defp validate_model_capabilities(model_spec, required_capabilities) do
-    case ReqLLM.Model.Metadata.load_full_metadata(model_spec) do
-      {:ok, metadata} ->
-        # Check if all required capabilities are supported
-        supported = get_model_capabilities(metadata)
-
-        case check_capabilities(required_capabilities, supported) do
-          :ok ->
-            {:ok, metadata}
-
-          {:missing, missing_caps} ->
-            {:error,
-             "Model '#{model_spec}' does not support required capabilities: #{Enum.join(missing_caps, ", ")}. Supported: #{Enum.join(supported, ", ")}"}
-        end
-
-      {:error, _} ->
-        # If we can't load metadata, assume model is valid (fallback to existing behavior)
-        # This maintains backward compatibility when model registry is incomplete
-        {:ok, nil}
-    end
-  end
-
-  defp calculate_cost_from_registry(model_spec, input_tokens, output_tokens) do
-    case ReqLLM.Model.Metadata.load_full_metadata(model_spec) do
-      {:ok, metadata} ->
-        case extract_pricing(metadata) do
-          {:ok, input_cost, output_cost} ->
-            input_tokens / 1_000_000 * input_cost + output_tokens / 1_000_000 * output_cost
-
-          {:error, _} ->
-            # Fallback to hardcoded calculation
-            calculate_cost(model_spec, input_tokens + output_tokens)
-        end
-
-      {:error, _} ->
-        # Fallback to hardcoded calculation
-        calculate_cost(model_spec, input_tokens + output_tokens)
-    end
-  end
-
-  defp default_model do
-    Application.get_env(:req_llm, :default_model, "groq:gemma2-9b-it")
-  end
-
-  # Private helper functions
-
-  defp maybe_add_option(opts_list, parsed_opts, target_key, source_key \\ nil) do
-    source_key = source_key || target_key
-
-    case Keyword.get(parsed_opts, source_key) do
+  defp maybe_add_option(opts_list, parsed_opts, key) do
+    case Keyword.get(parsed_opts, key) do
       nil -> opts_list
-      value -> Keyword.put(opts_list, target_key, value)
+      value -> Keyword.put(opts_list, key, value)
     end
   end
 
-  defp estimate_tokens(text), do: max(1, div(String.length(text), 4))
+  # Cost calculation using model metadata system
+  defp calculate_estimated_cost(model_spec, input_tokens, output_tokens) do
+    case ReqLLM.Model.from(model_spec) do
+      {:ok, %ReqLLM.Model{cost: cost_map}} when is_map(cost_map) ->
+        input_rate = cost_map[:input] || cost_map["input"] || 0.0
+        output_rate = cost_map[:output] || cost_map["output"] || 0.0
 
-  defp calculate_cost(model_spec, tokens) do
-    cost_per_million =
-      cond do
-        String.contains?(model_spec, "claude-3-haiku") -> 0.25
-        String.contains?(model_spec, "claude-3-5-sonnet") -> 3.0
-        String.contains?(model_spec, "claude-3-sonnet") -> 3.0
-        String.contains?(model_spec, "claude-3-opus") -> 15.0
-        String.contains?(model_spec, "gpt-4o-mini") -> 0.6
-        String.contains?(model_spec, "gpt-4o") -> 2.4
-        String.contains?(model_spec, "deepseek") -> 0.28
-        String.contains?(model_spec, "groq:") -> 0.1
-        true -> 0.0
-      end
+        input_cost = input_tokens / 1_000_000 * input_rate
+        output_cost = output_tokens / 1_000_000 * output_rate
 
-    tokens / 1_000_000 * cost_per_million
+        Float.round(input_cost + output_cost, 6)
+
+      _ ->
+        # No cost data available
+        0.0
+    end
   end
+
+  # Utility functions
+  defp estimate_tokens(text), do: max(1, div(String.length(text), 4))
 
   defp count_fields(obj) when is_map(obj) do
     Enum.reduce(obj, 0, fn {_key, value}, acc ->
@@ -869,77 +498,104 @@ defmodule Mix.Tasks.ReqLlm.Gen do
   defp format_error(%{__struct__: _} = error), do: Exception.message(error)
   defp format_error(error), do: inspect(error)
 
-  defp redact_sensitive_headers(headers) do
-    Enum.map(headers, fn
-      {key, _value} when key in ["authorization", "x-api-key", "api-key"] ->
-        {key, "[REDACTED]"}
-
-      header ->
-        header
-    end)
+  defp parse_args(args, extra_switches) do
+    OptionParser.parse(args,
+      switches:
+        [
+          model: :string,
+          system: :string,
+          max_tokens: :integer,
+          temperature: :float,
+          log_level: :string
+        ] ++ extra_switches,
+      aliases: [
+        m: :model,
+        s: :system,
+        t: :temperature,
+        l: :log_level
+      ]
+    )
   end
 
-  defp format_request_body(body) when is_map(body) do
-    Jason.encode!(body, pretty: true)
-  rescue
-    _ -> inspect(body, pretty: true)
-  end
-
-  defp format_request_body(body) when is_binary(body) do
-    case Jason.decode(body) do
-      {:ok, decoded} -> Jason.encode!(decoded, pretty: true)
-      {:error, _} -> body
-    end
-  end
-
-  defp format_request_body(body) do
-    inspect(body, pretty: true)
-  end
-
-  defp get_model_capabilities(metadata) do
-    # Look for capabilities in various possible formats
-    capabilities =
-      Map.get(metadata, "capabilities") ||
-        Map.get(metadata, :capabilities) ||
-        Map.get(metadata, "supports") ||
-        Map.get(metadata, :supports) ||
-        []
-
-    # Convert to normalized list of atoms
-    capabilities
-    |> Enum.map(fn
-      cap when is_binary(cap) -> String.to_atom(cap)
-      cap when is_atom(cap) -> cap
-      _ -> nil
-    end)
-    |> Enum.reject(&is_nil/1)
-  end
-
-  defp check_capabilities(required, supported) do
-    missing = Enum.reject(required, &(&1 in supported))
-
-    case missing do
-      [] -> :ok
-      _ -> {:missing, Enum.map(missing, &to_string/1)}
-    end
-  end
-
-  defp extract_pricing(metadata) do
-    pricing =
-      Map.get(metadata, "pricing") ||
-        Map.get(metadata, :pricing) ||
-        Map.get(metadata, "cost") ||
-        Map.get(metadata, :cost)
-
-    case pricing do
-      %{"input" => input, "output" => output} when is_number(input) and is_number(output) ->
-        {:ok, input, output}
-
-      %{:input => input, :output => output} when is_number(input) and is_number(output) ->
-        {:ok, input, output}
+  defp validate_prompt(args_list, _task_name) do
+    case args_list do
+      [prompt | _] when is_binary(prompt) and prompt != "" ->
+        {:ok, prompt}
 
       _ ->
-        {:error, :pricing_not_found}
+        IO.puts("Error: Prompt is required")
+        {:error, :no_prompt}
     end
+  end
+
+  defp parse_log_level(nil), do: :info
+  defp parse_log_level("warning"), do: :warning
+  defp parse_log_level("info"), do: :info
+  defp parse_log_level("debug"), do: :debug
+  defp parse_log_level(_), do: :info
+
+  defp validate_model_spec(model_spec) do
+    case ReqLLM.Model.from(model_spec) do
+      {:ok, model} ->
+        case ReqLLM.Provider.Registry.get_model(model.provider, model.model) do
+          {:ok, enhanced_model} -> {:ok, enhanced_model}
+          {:error, :provider_not_found} -> {:error, {:invalid_provider, model.provider}}
+          {:error, :model_not_found} -> {:error, {:unknown_model, model.provider, model.model}}
+        end
+
+      {:error, %{tag: :invalid_provider, context: context}} ->
+        {:error, {:invalid_provider, context[:provider]}}
+
+      {:error, error} ->
+        {:error, {:invalid_spec, error}}
+    end
+  end
+
+  defp handle_validation_error({:unknown_model, provider, model}, _model_spec) do
+    IO.puts("Error: Unknown model '#{model}' for provider '#{provider}'")
+
+    case ReqLLM.Provider.Registry.list_models(provider) do
+      {:ok, [_ | _] = available_models} ->
+        IO.puts("Available #{provider} models:")
+
+        Enum.each(available_models, fn model_entry ->
+          model_name =
+            case model_entry do
+              %{id: id} -> id
+              model_str when is_binary(model_str) -> model_str
+              _ -> "unknown"
+            end
+
+          IO.puts("  • #{model_name}")
+        end)
+
+      _ ->
+        :ok
+    end
+  end
+
+  defp handle_validation_error({:invalid_provider, provider}, _model_spec) do
+    IO.puts("Error: Unknown provider '#{provider}'")
+    IO.puts("Available providers:")
+
+    try do
+      providers = ReqLLM.Provider.Registry.list_implemented_providers()
+
+      Enum.each(providers, fn provider_atom ->
+        IO.puts("  • #{provider_atom}")
+      end)
+    rescue
+      _ ->
+        IO.puts("  Could not load provider list")
+    end
+  end
+
+  defp handle_validation_error({:invalid_spec, error}, model_spec) do
+    IO.puts("Error: Invalid model specification '#{model_spec}'")
+    IO.puts("Details: #{Exception.message(error)}")
+  end
+
+  defp handle_validation_error(error, model_spec) do
+    IO.puts("Error validating model '#{model_spec}': #{inspect(error)}")
   end
 end

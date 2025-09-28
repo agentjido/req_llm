@@ -77,6 +77,7 @@ defmodule ReqLLM.MixProject do
       {:server_sent_events, "~> 0.2"},
       {:splode, "~> 0.2.3"},
       {:typed_struct, "~> 0.3.0"},
+      {:uniq, "~> 0.6"},
 
       # Dev/test dependencies
       {:ex_doc, "~> 0.31", only: :dev, runtime: false},

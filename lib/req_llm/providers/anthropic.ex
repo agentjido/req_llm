@@ -161,7 +161,6 @@ defmodule ReqLLM.Providers.Anthropic do
     |> Req.Request.merge_options([model: model.model] ++ user_opts)
     |> ReqLLM.Step.Error.attach()
     |> Req.Request.append_request_steps(llm_encode_body: &encode_body/1)
-    |> ReqLLM.Step.Stream.maybe_attach(user_opts[:stream] == true, model)
     |> Req.Request.append_response_steps(llm_decode_response: &decode_response/1)
     |> ReqLLM.Step.Usage.attach(model)
     |> ReqLLM.Step.Fixture.maybe_attach(model, user_opts)
@@ -207,6 +206,43 @@ defmodule ReqLLM.Providers.Anthropic do
   end
 
   def extract_usage(_, _), do: {:error, :invalid_body}
+
+  @impl ReqLLM.Provider
+  def attach_stream(model, context, opts, _finch_name) do
+    api_key = ReqLLM.Keys.get!(model, opts)
+
+    # Build request body using provider's encode logic
+    body = build_anthropic_streaming_body(model, context, opts)
+
+    # Build the URL with Anthropic's specific endpoint
+    base_url = Keyword.get(opts, :base_url, default_base_url())
+    url = "#{base_url}/v1/messages"
+
+    # Create Finch request with Anthropic's specific headers
+    headers = [
+      {"Content-Type", "application/json"},
+      {"Accept", "text/event-stream"},
+      {"x-api-key", api_key},
+      {"anthropic-version", get_anthropic_version(opts)}
+    ]
+
+    # Add beta header if tools are being used
+    headers =
+      if has_tools?(opts) do
+        [{"anthropic-beta", @anthropic_beta_tools} | headers]
+      else
+        headers
+      end
+
+    finch_request = Finch.build(:post, url, headers, body)
+    {:ok, finch_request}
+  rescue
+    error ->
+      {:error,
+       ReqLLM.Error.API.Request.exception(
+         reason: "Failed to build Anthropic stream request: #{inspect(error)}"
+       )}
+  end
 
   @impl ReqLLM.Provider
   def decode_sse_event(event, model) do
@@ -322,9 +358,20 @@ defmodule ReqLLM.Providers.Anthropic do
   end
 
   defp decode_error_response(req, resp, status) do
+    reason =
+      try do
+        case Jason.decode(resp.body) do
+          {:ok, %{"error" => %{"message" => message}}} -> message
+          {:ok, %{"error" => %{"type" => error_type}}} -> "#{error_type}"
+          _ -> "Anthropic API error"
+        end
+      rescue
+        _ -> "Anthropic API error"
+      end
+
     err =
       ReqLLM.Error.API.Response.exception(
-        reason: "Anthropic API error",
+        reason: reason,
         status: status,
         response_body: resp.body
       )
@@ -424,5 +471,27 @@ defmodule ReqLLM.Providers.Anthropic do
   defp merge_response_with_context(req, response) do
     context = req.options[:context] || %ReqLLM.Context{messages: []}
     ReqLLM.Context.merge_response(context, response)
+  end
+
+  defp build_anthropic_streaming_body(model, context, opts) do
+    # Create a minimal request struct to reuse the existing encode_body logic
+    temp_request = %Req.Request{
+      method: :post,
+      url: URI.parse("https://example.com/temp"),
+      headers: %{},
+      body: {:json, %{}},
+      options:
+        Map.new(
+          [
+            model: model.model,
+            context: context,
+            stream: true,
+            operation: :chat
+          ] ++ opts
+        )
+    }
+
+    %{body: json_body} = encode_body(temp_request)
+    json_body
   end
 end

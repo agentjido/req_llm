@@ -221,44 +221,52 @@ defmodule ReqLLM.Generation do
           String.t() | {atom(), keyword()} | struct(),
           String.t() | list(),
           keyword()
-        ) :: {:ok, Response.t()} | {:error, term()}
+        ) :: {:ok, ReqLLM.StreamResponse.t()} | {:error, term()}
   def stream_text(model_spec, messages, opts \\ []) do
     with {:ok, model} <- Model.from(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
-         stream_opts = Keyword.put(opts, :stream, true),
-         {:ok, request} <- provider_module.prepare_request(:chat, model, messages, stream_opts),
-         {:ok, %Req.Response{body: response}} <- Req.request(request) do
-      {:ok, response}
+         {:ok, context} <- ReqLLM.Context.normalize(messages, opts) do
+      ReqLLM.Streaming.start_stream(provider_module, model, context, opts)
     end
   end
 
   @doc """
-  Streams text generation using an AI model, returning only the stream.
+  **DEPRECATED**: This function will be removed in a future version.
 
-  This is a convenience function that extracts just the stream from the response.
-  For access to usage metadata and other response data, use `stream_text/3`.
-  Raises on error.
+  The streaming API has been redesigned to return a composite `StreamResponse` struct
+  that provides both the stream and metadata. Use `stream_text/3` instead:
 
-  ## Parameters
+      {:ok, response} = ReqLLM.Generation.stream_text(model, messages)
+      response.stream |> Enum.each(&IO.write/1)
 
-  Same as `stream_text/3`.
+  For simple text extraction, use:
 
-  ## Examples
-
-      ReqLLM.Generation.stream_text!("anthropic:claude-3-sonnet", "Tell me a story")
-      |> Enum.each(&IO.write/1)
-
+      text = ReqLLM.StreamResponse.text(response)
   """
+  @deprecated "Use stream_text/3 with StreamResponse instead"
   @spec stream_text!(
           String.t() | {atom(), keyword()} | struct(),
           String.t() | list(),
           keyword()
         ) :: Enumerable.t() | no_return()
-  def stream_text!(model_spec, messages, opts \\ []) do
-    case stream_text(model_spec, messages, opts) do
-      {:ok, response} -> Response.text_stream(response)
-      {:error, error} -> raise error
-    end
+  def stream_text!(_model_spec, _messages, _opts \\ []) do
+    IO.warn("""
+    ReqLLM.Generation.stream_text!/3 is deprecated and will be removed in a future version.
+
+    Please migrate to the new streaming API:
+
+    Old code:
+        ReqLLM.Generation.stream_text!(model, messages) |> Enum.each(&IO.write/1)
+
+    New code:
+        {:ok, response} = ReqLLM.Generation.stream_text(model, messages)
+        response.stream |> Enum.each(&IO.write/1)
+
+    Or for simple text extraction:
+        text = ReqLLM.StreamResponse.text(response)
+    """)
+
+    :ok
   end
 
   @doc """
@@ -358,8 +366,9 @@ defmodule ReqLLM.Generation do
   @doc """
   Streams structured data generation using an AI model with schema validation.
 
-  Returns a canonical ReqLLM.Response containing usage data and object stream.
-  For simple object streaming without metadata, use `stream_object!/4`.
+  Returns a `ReqLLM.StreamResponse` that provides both real-time structured data streaming
+  and concurrent metadata collection. Uses the same Finch-based streaming infrastructure
+  as `stream_text/3` with HTTP/2 multiplexing and connection pooling.
 
   ## Parameters
 
@@ -372,14 +381,31 @@ defmodule ReqLLM.Generation do
 
   Same as `generate_object/4`.
 
+  ## Returns
+
+    * `{:ok, stream_response}` - StreamResponse with object stream and metadata task
+    * `{:error, reason}` - Request failed or invalid parameters
+
   ## Examples
 
+      # Stream structured data generation
       {:ok, response} = ReqLLM.Generation.stream_object("anthropic:claude-3-sonnet", "Generate a person", person_schema)
-      ReqLLM.Response.object_stream(response) |> Enum.each(&IO.inspect/1)
 
-      # Access usage metadata after streaming
-      ReqLLM.Response.usage(response)
-      #=> %{input_tokens: 25, output_tokens: 15}
+      # Process structured chunks as they arrive
+      response.stream
+      |> Stream.filter(&(&1.type in [:content, :tool_call]))
+      |> Stream.each(&IO.inspect/1)
+      |> Stream.run()
+
+      # Concurrent metadata collection
+      usage = ReqLLM.StreamResponse.usage(response)
+      #=> %{input_tokens: 25, output_tokens: 15, total_cost: 0.045}
+
+  ## Structure Notes
+
+  Object streaming may include both content chunks (partial JSON) and tool_call chunks
+  depending on the provider's structured output implementation. Use appropriate filtering
+  based on your needs.
 
   """
   @spec stream_object(
@@ -387,46 +413,64 @@ defmodule ReqLLM.Generation do
           String.t() | list(),
           keyword(),
           keyword()
-        ) :: {:ok, Response.t()} | {:error, term()}
+        ) :: {:ok, ReqLLM.StreamResponse.t()} | {:error, term()}
   def stream_object(model_spec, messages, object_schema, opts \\ []) do
     with {:ok, model} <- Model.from(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, compiled_schema} <- ReqLLM.Schema.compile(object_schema),
-         stream_opts =
-           Keyword.put(opts, :stream, true) |> Keyword.put(:compiled_schema, compiled_schema),
-         {:ok, request} <- provider_module.prepare_request(:object, model, messages, stream_opts),
-         {:ok, %Req.Response{body: response}} <- Req.request(request) do
-      {:ok, response}
+         {:ok, context} <- ReqLLM.Context.normalize(messages, opts) do
+      opts_with_schema = Keyword.put(opts, :compiled_schema, compiled_schema)
+      ReqLLM.Streaming.start_stream(provider_module, model, context, opts_with_schema)
     end
   end
 
   @doc """
-  Streams structured data generation using an AI model, returning only the stream.
+  **DEPRECATED**: This function will be removed in a future version.
 
-  This is a convenience function that extracts just the stream from the response.
-  For access to usage metadata and other response data, use `stream_object/4`.
-  Raises on error.
+  The streaming API has been redesigned to return a composite `StreamResponse` struct
+  that provides both the stream and metadata. Use `stream_object/4` instead:
 
-  ## Parameters
+      {:ok, response} = ReqLLM.Generation.stream_object(model, messages, schema)
+      response.stream |> Enum.each(&IO.inspect/1)
+
+  For simple object extraction, use:
+
+      object = ReqLLM.StreamResponse.object(response)
+
+  ## Legacy Parameters
 
   Same as `stream_object/4`.
 
-  ## Examples
+  ## Legacy Examples
 
       ReqLLM.Generation.stream_object!("anthropic:claude-3-sonnet", "Generate a person", person_schema)
       |> Enum.each(&IO.inspect/1)
 
   """
+  @deprecated "Use stream_object/4 with StreamResponse instead"
   @spec stream_object!(
           String.t() | {atom(), keyword()} | struct(),
           String.t() | list(),
           keyword(),
           keyword()
         ) :: Enumerable.t() | no_return()
-  def stream_object!(model_spec, messages, object_schema, opts \\ []) do
-    case stream_object(model_spec, messages, object_schema, opts) do
-      {:ok, response} -> Response.object_stream(response)
-      {:error, error} -> raise error
-    end
+  def stream_object!(_model_spec, _messages, _object_schema, _opts \\ []) do
+    IO.warn("""
+    ReqLLM.Generation.stream_object!/4 is deprecated and will be removed in a future version.
+
+    Please migrate to the new streaming API:
+
+    Old code:
+        ReqLLM.Generation.stream_object!(model, messages, schema) |> Enum.each(&IO.inspect/1)
+
+    New code:
+        {:ok, response} = ReqLLM.Generation.stream_object(model, messages, schema)
+        response.stream |> Enum.each(&IO.inspect/1)
+
+    Or for simple object extraction:
+        object = ReqLLM.StreamResponse.object(response)
+    """)
+
+    :ok
   end
 end

@@ -9,13 +9,13 @@ defmodule ReqLLM.Context do
   ## Example
 
       import ReqLLM.Context
-      
+
       context = Context.new([
         system("You are a helpful assistant"),
         user("What's the weather like?"),
         assistant("I'll check that for you")
       ])
-      
+
       Context.validate!(context)
   """
 
@@ -40,12 +40,53 @@ defmodule ReqLLM.Context do
   @spec to_list(t()) :: [Message.t()]
   def to_list(%__MODULE__{messages: msgs}), do: msgs
 
+  @doc "Append a message to the context."
+  @spec append(t(), Message.t()) :: t()
+  def append(%__MODULE__{messages: msgs} = ctx, %Message{} = msg) do
+    %{ctx | messages: msgs ++ [msg]}
+  end
+
+  @spec append(t(), [Message.t()]) :: t()
+  def append(%__MODULE__{} = ctx, msgs) when is_list(msgs) do
+    %{ctx | messages: ctx.messages ++ msgs}
+  end
+
+  @doc "Prepend a message to the context."
+  @spec prepend(t(), Message.t()) :: t()
+  def prepend(%__MODULE__{messages: msgs} = ctx, %Message{} = msg) do
+    %{ctx | messages: [msg | msgs]}
+  end
+
+  @doc "Concatenate two contexts."
+  @spec concat(t(), t()) :: t()
+  def concat(%__MODULE__{} = ctx, %__MODULE__{} = other) do
+    %{ctx | messages: ctx.messages ++ other.messages}
+  end
+
+  @doc "Append a user message to the context."
+  @spec push_user(t(), String.t() | [ContentPart.t()], map()) :: t()
+  def push_user(ctx, content, meta \\ %{}) do
+    append(ctx, user(content, meta))
+  end
+
+  @doc "Append an assistant message to the context."
+  @spec push_assistant(t(), String.t() | [ContentPart.t()], map()) :: t()
+  def push_assistant(ctx, content, meta \\ %{}) do
+    append(ctx, assistant(content, meta))
+  end
+
+  @doc "Prepend a system message to the context."
+  @spec push_system(t(), String.t() | [ContentPart.t()], map()) :: t()
+  def push_system(ctx, content, meta \\ %{}) do
+    prepend(ctx, system(content, meta))
+  end
+
   @doc """
   Normalize any "prompt-ish" input into a validated ReqLLM.Context.
 
   Accepts various input types and converts them to a proper Context struct:
   - String: converts to user message
-  - Message struct: wraps in Context  
+  - Message struct: wraps in Context
   - Context struct: passes through
   - List: processes each item and creates Context from all messages
   - Loose maps: converts to Message if they have role/content keys
@@ -180,6 +221,43 @@ defmodule ReqLLM.Context do
     %Message{role: :system, content: content, metadata: meta}
   end
 
+  @doc "Shortcut for a tool message; accepts a string or content parts list."
+  @spec tool([ContentPart.t()] | String.t(), map()) :: Message.t()
+  def tool(content, meta \\ %{})
+  def tool(content, meta) when is_binary(content), do: text(:tool, content, meta)
+
+  def tool(content, meta) when is_list(content) do
+    %Message{role: :tool, content: content, metadata: meta}
+  end
+
+  @doc "Build an assistant message with a tool call."
+  @spec assistant_tool_call(String.t(), term(), keyword()) :: Message.t()
+  def assistant_tool_call(name, input, opts \\ []) do
+    id = opts[:id] || generate_id()
+    meta = Keyword.get(opts, :meta, %{})
+    assistant([ContentPart.tool_call(id, name, input)], meta)
+  end
+
+  @doc "Build an assistant message with multiple tool calls."
+  @spec assistant_tool_calls([%{id: String.t(), name: String.t(), input: term()}], map()) ::
+          Message.t()
+  def assistant_tool_calls(calls, meta \\ %{}) do
+    parts = Enum.map(calls, &ContentPart.tool_call(&1.id, &1.name, &1.input))
+    assistant(parts, meta)
+  end
+
+  @doc "Build a tool result message."
+  @spec tool_result_message(String.t(), String.t(), term(), map()) :: Message.t()
+  def tool_result_message(tool_name, tool_call_id, output, meta \\ %{}) do
+    %Message{
+      role: :tool,
+      name: tool_name,
+      tool_call_id: tool_call_id,
+      content: [ContentPart.tool_result(tool_call_id, output)],
+      metadata: meta
+    }
+  end
+
   @doc "Build a text-only message for the given role."
   @spec text(atom(), String.t(), map()) :: Message.t()
   def text(role, content, meta \\ %{}) when is_binary(content) do
@@ -289,7 +367,7 @@ defmodule ReqLLM.Context do
     def into(%ReqLLM.Context{messages: messages}) do
       collector = fn
         list, {:cont, message} -> [message | list]
-        list, :done -> %ReqLLM.Context{messages: Enum.reverse(list, messages)}
+        list, :done -> %ReqLLM.Context{messages: messages ++ Enum.reverse(list)}
         _list, :halt -> :ok
       end
 
@@ -357,6 +435,10 @@ defmodule ReqLLM.Context do
   end
 
   # Private functions
+
+  defp generate_id do
+    Uniq.UUID.uuid7()
+  end
 
   defp to_context(%__MODULE__{} = context, _convert_loose?), do: {:ok, context}
 
