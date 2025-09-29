@@ -136,7 +136,7 @@ defmodule Mix.Tasks.ReqLlm.Gen do
   @preferred_cli_env ["req_llm.gen": :dev]
   @log_levels [:warning, :info, :debug]
 
-  @spec run([String.t()]) :: :ok | no_return()
+  @spec run([String.t()]) :: no_return()
   @impl Mix.Task
   def run(args) do
     extra_switches = [stream: :boolean, json: :boolean]
@@ -537,40 +537,16 @@ defmodule Mix.Tasks.ReqLlm.Gen do
   defp validate_model_spec(model_spec) do
     case ReqLLM.Model.from(model_spec) do
       {:ok, model} ->
-        case ReqLLM.Provider.Registry.get_model(model.provider, model.model) do
-          {:ok, enhanced_model} -> {:ok, enhanced_model}
-          {:error, :provider_not_found} -> {:error, {:invalid_provider, model.provider}}
-          {:error, :model_not_found} -> {:error, {:unknown_model, model.provider, model.model}}
-        end
+        {:ok, model}
 
       {:error, %{tag: :invalid_provider, context: context}} ->
         {:error, {:invalid_provider, context[:provider]}}
 
+      {:error, %{tag: :invalid_model_spec} = error} ->
+        {:error, {:invalid_spec, error}}
+
       {:error, error} ->
         {:error, {:invalid_spec, error}}
-    end
-  end
-
-  defp handle_validation_error({:unknown_model, provider, model}, _model_spec) do
-    IO.puts("Error: Unknown model '#{model}' for provider '#{provider}'")
-
-    case ReqLLM.Provider.Registry.list_models(provider) do
-      {:ok, [_ | _] = available_models} ->
-        IO.puts("Available #{provider} models:")
-
-        Enum.each(available_models, fn model_entry ->
-          model_name =
-            case model_entry do
-              %{id: id} -> id
-              model_str when is_binary(model_str) -> model_str
-              _ -> "unknown"
-            end
-
-          IO.puts("  • #{model_name}")
-        end)
-
-      _ ->
-        :ok
     end
   end
 
@@ -593,9 +569,5 @@ defmodule Mix.Tasks.ReqLlm.Gen do
   defp handle_validation_error({:invalid_spec, error}, model_spec) do
     IO.puts("Error: Invalid model specification '#{model_spec}'")
     IO.puts("Details: #{Exception.message(error)}")
-  end
-
-  defp handle_validation_error(error, model_spec) do
-    IO.puts("Error validating model '#{model_spec}': #{inspect(error)}")
   end
 end
