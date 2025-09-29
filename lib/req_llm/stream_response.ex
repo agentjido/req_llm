@@ -152,6 +152,117 @@ defmodule ReqLLM.StreamResponse do
   end
 
   @doc """
+  Extract tool call chunks from the stream.
+
+  Returns a stream that yields only `:tool_call` type chunks, suitable for
+  processing function calls made by the assistant.
+
+  ## Parameters
+
+    * `stream_response` - The StreamResponse struct
+
+  ## Returns
+
+  A lazy stream of tool call chunks.
+
+  ## Examples
+
+      {:ok, stream_response} = ReqLLM.stream_text("anthropic:claude-3-sonnet", "Call get_time tool")
+      
+      stream_response
+      |> ReqLLM.StreamResponse.tool_calls()
+      |> Stream.each(fn tool_call -> IO.inspect(tool_call.name) end)
+      |> Stream.run()
+
+  """
+  @spec tool_calls(t()) :: Enumerable.t()
+  def tool_calls(%__MODULE__{stream: stream}) do
+    stream
+    |> Stream.filter(&(&1.type == :tool_call))
+  end
+
+  @doc """
+  Collect all tool calls from the stream into a list.
+
+  Consumes the stream chunks and extracts all tool call information into
+  a structured format suitable for execution.
+
+  ## Parameters
+
+    * `stream_response` - The StreamResponse struct
+
+  ## Returns
+
+  A list of maps with tool call details including `:id`, `:name`, and `:arguments`.
+
+  ## Examples
+
+      {:ok, stream_response} = ReqLLM.stream_text("anthropic:claude-3-sonnet", "Call calculator")
+      
+      tool_calls = ReqLLM.StreamResponse.extract_tool_calls(stream_response)
+      #=> [%{id: "call_123", name: "calculator", arguments: %{"operation" => "add", "a" => 2, "b" => 3}}]
+
+  """
+  @spec extract_tool_calls(t()) :: [map()]
+  def extract_tool_calls(%__MODULE__{stream: stream}) do
+    chunks = Enum.to_list(stream)
+
+    # Extract base tool calls
+    tool_calls =
+      chunks
+      |> Enum.filter(&(&1.type == :tool_call))
+      |> Enum.map(fn chunk ->
+        %{
+          id: Map.get(chunk.metadata, :id) || "call_#{:erlang.unique_integer()}",
+          name: chunk.name,
+          arguments: chunk.arguments || %{},
+          index: Map.get(chunk.metadata, :index, 0)
+        }
+      end)
+
+    # Collect argument fragments from meta chunks
+    arg_fragments =
+      chunks
+      |> Enum.filter(&(&1.type == :meta))
+      |> Enum.filter(fn chunk ->
+        Map.has_key?(chunk.metadata, :tool_call_args)
+      end)
+      |> Enum.group_by(fn chunk ->
+        chunk.metadata.tool_call_args.index
+      end)
+      |> Map.new(fn {index, fragments} ->
+        accumulated_json =
+          fragments
+          |> Enum.map_join("", & &1.metadata.tool_call_args.fragment)
+
+        {index, accumulated_json}
+      end)
+
+    # Merge accumulated arguments back into tool calls
+    tool_calls
+    |> Enum.map(fn tool_call ->
+      case Map.get(arg_fragments, tool_call.index) do
+        nil ->
+          # No accumulated arguments, keep as is
+          Map.delete(tool_call, :index)
+
+        json_str ->
+          # Parse accumulated JSON arguments
+          case Jason.decode(json_str) do
+            {:ok, args} ->
+              tool_call
+              |> Map.put(:arguments, args)
+              |> Map.delete(:index)
+
+            {:error, _} ->
+              # Invalid JSON, keep empty arguments
+              Map.delete(tool_call, :index)
+          end
+      end
+    end)
+  end
+
+  @doc """
   Await the metadata task and return usage statistics.
 
   Blocks until the metadata collection task completes and returns the usage map

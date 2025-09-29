@@ -258,6 +258,102 @@ defmodule ReqLLM.Context do
     }
   end
 
+  @doc """
+  Execute a list of tool calls and append their results to the context.
+
+  Takes a list of tool call maps (with :id, :name, :arguments keys) and a list
+  of available tools, executes each call, and appends the results as tool messages.
+
+  ## Parameters
+
+    * `context` - The context to append results to
+    * `tool_calls` - List of tool call maps with :id, :name, :arguments
+    * `available_tools` - List of ReqLLM.Tool structs to execute against
+
+  ## Returns
+
+  Updated context with tool result messages appended.
+
+  ## Examples
+
+      tool_calls = [%{id: "call_1", name: "calculator", arguments: %{"operation" => "add", "a" => 2, "b" => 3}}]
+      context = Context.execute_and_append_tools(context, tool_calls, tools)
+
+  """
+  @spec execute_and_append_tools(t(), [map()], [ReqLLM.Tool.t()]) :: t()
+  def execute_and_append_tools(context, tool_calls, available_tools) do
+    Enum.reduce(tool_calls, context, fn tool_call, ctx ->
+      case find_and_execute_tool(tool_call, available_tools) do
+        {:ok, result} ->
+          tool_result_msg = tool_result_message(tool_call.name, tool_call.id, result)
+          append(ctx, tool_result_msg)
+
+        {:error, _error} ->
+          # Still append an error message for transparency
+          error_result = %{error: "Tool execution failed"}
+          tool_result_msg = tool_result_message(tool_call.name, tool_call.id, error_result)
+          append(ctx, tool_result_msg)
+      end
+    end)
+  end
+
+  @doc """
+  Build an assistant message from collected text and tool calls.
+
+  Convenience function for creating assistant messages that may contain both
+  text content and tool calls from streaming responses.
+
+  ## Parameters
+
+    * `text` - Text content from the response
+    * `tool_calls` - List of tool call maps with :id, :name, :arguments
+    * `meta` - Optional metadata map
+
+  ## Returns
+
+  Assistant message with appropriate content parts.
+
+  """
+  @spec assistant_with_tools(String.t(), [map()], map()) :: Message.t()
+  def assistant_with_tools(text, tool_calls, meta \\ %{}) do
+    content_parts =
+      case {text, tool_calls} do
+        {"", []} ->
+          []
+
+        {text, []} when is_binary(text) ->
+          [ContentPart.text(text)]
+
+        {"", calls} when is_list(calls) ->
+          Enum.map(calls, fn call ->
+            ContentPart.tool_call(call.id, call.name, call.arguments)
+          end)
+
+        {text, calls} when is_binary(text) and is_list(calls) ->
+          [ContentPart.text(text)] ++
+            Enum.map(calls, fn call ->
+              ContentPart.tool_call(call.id, call.name, call.arguments)
+            end)
+      end
+
+    %Message{
+      role: :assistant,
+      content: content_parts,
+      metadata: meta
+    }
+  end
+
+  # Private helper to find and execute a tool by name
+  defp find_and_execute_tool(%{name: name, arguments: args}, available_tools) do
+    case Enum.find(available_tools, fn tool -> tool.name == name end) do
+      nil ->
+        {:error, "Tool #{name} not found"}
+
+      tool ->
+        ReqLLM.Tool.execute(tool, args)
+    end
+  end
+
   @doc "Build a text-only message for the given role."
   @spec text(atom(), String.t(), map()) :: Message.t()
   def text(role, content, meta \\ %{}) when is_binary(content) do

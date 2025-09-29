@@ -714,6 +714,7 @@ defmodule ReqLLM.Provider.Defaults do
 
   defp decode_openai_delta(_), do: []
 
+  # Handle complete tool call delta with all fields
   defp decode_openai_tool_call_delta(%{
          "id" => id,
          "type" => "function",
@@ -723,6 +724,29 @@ defmodule ReqLLM.Provider.Defaults do
       {:ok, args} -> ReqLLM.StreamChunk.tool_call(name, args, %{id: id})
       {:error, _} -> ReqLLM.StreamChunk.tool_call(name, %{}, %{id: id})
     end
+  end
+
+  # Handle tool call delta with only name (arguments may come in later chunks)
+  defp decode_openai_tool_call_delta(%{
+         "id" => id,
+         "type" => "function",
+         "function" => %{"name" => name}
+       }) do
+    ReqLLM.StreamChunk.tool_call(name, %{}, %{id: id})
+  end
+
+  # Handle partial argument chunks by storing them as metadata
+  defp decode_openai_tool_call_delta(%{
+         "function" => %{"arguments" => args_fragment},
+         "index" => index
+       }) do
+    # Create a meta chunk that carries argument fragments for accumulation
+    ReqLLM.StreamChunk.meta(%{
+      tool_call_args: %{
+        index: index,
+        fragment: args_fragment
+      }
+    })
   end
 
   defp decode_openai_tool_call_delta(_), do: nil
