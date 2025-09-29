@@ -321,12 +321,17 @@ defmodule ReqLLM.Providers.Google do
     case resp.status do
       200 ->
         operation = req.options[:operation]
+        is_streaming = req.options[:stream] == true
 
         case operation do
           :embedding ->
             # Handle embedding response - return raw parsed data
             body = ensure_parsed_body(resp.body)
             {req, %{resp | body: body}}
+
+          _ when is_streaming ->
+            # Handle streaming response using defaults
+            ReqLLM.Provider.Defaults.default_decode_response({req, resp})
 
           _ ->
             # Handle chat completion response (non-streaming only)
