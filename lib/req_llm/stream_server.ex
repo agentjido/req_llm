@@ -75,6 +75,7 @@ defmodule ReqLLM.StreamServer do
     :fixture_path,
     :http_context,
     :canonical_json,
+    :protocol_parser,
     sse_buffer: "",
     queue: :queue.new(),
     status: :init,
@@ -250,7 +251,15 @@ defmodule ReqLLM.StreamServer do
 
   @impl GenServer
   def init(state) do
-    {:ok, state}
+    # Inject protocol parser function
+    protocol_parser =
+      if function_exported?(state.provider_mod, :parse_stream_protocol, 2) do
+        &state.provider_mod.parse_stream_protocol/2
+      else
+        &ReqLLM.Provider.parse_stream_protocol/2
+      end
+
+    {:ok, %{state | protocol_parser: protocol_parser}}
   end
 
   @impl GenServer
@@ -373,6 +382,21 @@ defmodule ReqLLM.StreamServer do
     {:reply, :ok, new_state}
   end
 
+  defp parse_protocol_events(chunk, state) do
+    # Call the injected protocol parser
+    case state.protocol_parser.(chunk, state.sse_buffer) do
+      {:ok, events, new_buffer} ->
+        {events, new_buffer}
+
+      {:incomplete, new_buffer} ->
+        {[], new_buffer}
+
+      {:error, reason} ->
+        Logger.warning("Protocol parse error: #{inspect(reason)}")
+        {[], state.sse_buffer}
+    end
+  end
+
   defp process_data_chunk(chunk, state) do
     # Capture raw chunk for fixture system BEFORE processing
     if state.fixture_path && is_binary(chunk) do
@@ -391,8 +415,8 @@ defmodule ReqLLM.StreamServer do
       end
     end
 
-    # Accumulate and parse SSE events
-    {events, new_buffer} = SSE.accumulate_and_parse(chunk, state.sse_buffer)
+    # Use provider's protocol parser (defaults to SSE if not overridden)
+    {events, new_buffer} = parse_protocol_events(chunk, state)
 
     # Decode events using provider
     stream_chunks =
@@ -400,7 +424,7 @@ defmodule ReqLLM.StreamServer do
       |> Enum.map(&SSE.process_sse_event/1)
       |> Enum.flat_map(fn event ->
         if termination_event?(event) do
-          # Handle completion signal  
+          # Handle completion signal
           []
         else
           # Let provider decode the event

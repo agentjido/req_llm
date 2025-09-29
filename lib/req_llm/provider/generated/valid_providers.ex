@@ -12,6 +12,7 @@ defmodule ReqLLM.Provider.Generated.ValidProviders do
     :alibaba_cn,
     :amazon_bedrock,
     :anthropic,
+    :bedrock,
     :azure,
     :baseten,
     :cerebras,
