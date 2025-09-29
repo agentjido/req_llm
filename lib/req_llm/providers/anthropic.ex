@@ -47,6 +47,15 @@ defmodule ReqLLM.Providers.Anthropic do
       anthropic_metadata: [
         type: :map,
         doc: "Optional metadata to include with the request"
+      ],
+      thinking: [
+        type: :map,
+        doc:
+          "Enable thinking/reasoning for supported models (e.g. %{type: \"enabled\", budget_tokens: 4096})"
+      ],
+      reasoning_effort: [
+        type: :atom,
+        doc: "Reasoning effort level (low, medium, high) - converted to thinking parameter"
       ]
     ]
 
@@ -63,7 +72,7 @@ defmodule ReqLLM.Providers.Anthropic do
   )a
 
   @body_options ~w(
-    temperature top_p stop_sequences
+    temperature top_p stop_sequences thinking
   )a
 
   @unsupported_parameters ~w(
@@ -233,12 +242,31 @@ defmodule ReqLLM.Providers.Anthropic do
       {"anthropic-version", get_anthropic_version(opts)}
     ]
 
-    # Add beta header if tools are being used
-    headers =
+    # Add beta headers for features being used
+    beta_features = []
+
+    beta_features =
       if has_tools?(opts) do
-        [{"anthropic-beta", @anthropic_beta_tools} | headers]
+        [@anthropic_beta_tools | beta_features]
       else
-        headers
+        beta_features
+      end
+
+    # TODO: Add thinking beta when we know the correct header format
+    # beta_features = if has_thinking?(opts) do
+    #   ["thinking-2025-01-19" | beta_features]
+    # else
+    #   beta_features
+    # end
+
+    headers =
+      case beta_features do
+        [] ->
+          headers
+
+        features ->
+          beta_header = Enum.join(features, ",")
+          [{"anthropic-beta", beta_header} | headers]
       end
 
     finch_request = Finch.build(:post, url, headers, body)
@@ -262,6 +290,7 @@ defmodule ReqLLM.Providers.Anthropic do
     translated_opts =
       opts
       |> translate_stop_parameter()
+      |> translate_reasoning_effort()
       |> translate_unsupported_parameters()
 
     {translated_opts, []}
@@ -274,11 +303,30 @@ defmodule ReqLLM.Providers.Anthropic do
   end
 
   defp maybe_add_beta_header(request, user_opts) do
-    # Add beta header if tools are being used
-    if has_tools?(user_opts) do
-      Req.Request.put_header(request, "anthropic-beta", @anthropic_beta_tools)
-    else
-      request
+    beta_features = []
+
+    # Add tools beta if tools are being used
+    beta_features =
+      if has_tools?(user_opts) do
+        [@anthropic_beta_tools | beta_features]
+      else
+        beta_features
+      end
+
+    # TODO: Add thinking beta when we know the correct header format
+    # beta_features = if has_thinking?(user_opts) do
+    #   ["thinking-2025-01-19" | beta_features]
+    # else
+    #   beta_features
+    # end
+
+    case beta_features do
+      [] ->
+        request
+
+      features ->
+        beta_header = Enum.join(features, ",")
+        Req.Request.put_header(request, "anthropic-beta", beta_header)
     end
   end
 
@@ -286,6 +334,16 @@ defmodule ReqLLM.Providers.Anthropic do
     tools = Keyword.get(user_opts, :tools, [])
     is_list(tools) and tools != []
   end
+
+  # defp has_thinking?(user_opts) do
+  #   # Check if thinking parameter is present or reasoning_effort is set
+  #   thinking = Keyword.get(user_opts, :thinking)
+  #   reasoning_effort = Keyword.get(user_opts, :reasoning_effort)
+  #   provider_options = Keyword.get(user_opts, :provider_options, [])
+  #   provider_reasoning_effort = Keyword.get(provider_options, :reasoning_effort)
+
+  #   not is_nil(thinking) or not is_nil(reasoning_effort) or not is_nil(provider_reasoning_effort)
+  # end
 
   defp add_basic_options(body, request_options) do
     body =
@@ -335,6 +393,47 @@ defmodule ReqLLM.Providers.Anthropic do
       description: schema["function"]["description"],
       input_schema: schema["function"]["parameters"]
     }
+  end
+
+  defp translate_reasoning_effort(opts) do
+    case Keyword.get(opts, :reasoning_effort) do
+      nil ->
+        opts
+
+      :low ->
+        opts
+        |> Keyword.delete(:reasoning_effort)
+        |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: 1024})
+
+      :medium ->
+        opts
+        |> Keyword.delete(:reasoning_effort)
+        |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: 2048})
+
+      :high ->
+        opts
+        |> Keyword.delete(:reasoning_effort)
+        |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: 4096})
+
+      # Handle string values too (for CLI compatibility)
+      "low" ->
+        opts
+        |> Keyword.delete(:reasoning_effort)
+        |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: 1024})
+
+      "medium" ->
+        opts
+        |> Keyword.delete(:reasoning_effort)
+        |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: 2048})
+
+      "high" ->
+        opts
+        |> Keyword.delete(:reasoning_effort)
+        |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: 4096})
+
+      _ ->
+        opts
+    end
   end
 
   defp translate_stop_parameter(opts) do

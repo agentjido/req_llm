@@ -133,11 +133,33 @@ defmodule ReqLLM.Response do
   ## Examples
 
       iex> ReqLLM.Response.usage(response)
-      %{input_tokens: 12, output_tokens: 8, total_tokens: 20, input_cost: 0.01, output_cost: 0.02, total_cost: 0.03}
+      %{input_tokens: 12, output_tokens: 8, total_tokens: 20, reasoning_tokens: 64, input_cost: 0.01, output_cost: 0.02, total_cost: 0.03}
 
   """
   @spec usage(t()) :: map() | nil
   def usage(%__MODULE__{usage: usage}), do: usage
+
+  @doc """
+  Get reasoning token count from the response usage.
+
+  Returns the number of reasoning tokens used by reasoning models (GPT-5, o1, o3, etc.)
+  during their internal thinking process. Returns 0 if no reasoning tokens were used.
+
+  ## Examples
+
+      iex> ReqLLM.Response.reasoning_tokens(response)
+      64
+
+  """
+  @spec reasoning_tokens(t()) :: integer()
+  def reasoning_tokens(%__MODULE__{usage: %{reasoning_tokens: tokens}}) when is_integer(tokens), do: tokens
+  def reasoning_tokens(%__MODULE__{usage: usage}) when is_map(usage) do
+    # Try various possible keys for reasoning tokens
+    usage[:reasoning_tokens] || usage["reasoning_tokens"] ||
+    get_in(usage, [:completion_tokens_details, :reasoning_tokens]) ||
+    get_in(usage, ["completion_tokens_details", "reasoning_tokens"]) || 0
+  end
+  def reasoning_tokens(%__MODULE__{}), do: 0
 
   @doc """
   Check if the response completed successfully without errors.

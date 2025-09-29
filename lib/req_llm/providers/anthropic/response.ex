@@ -139,6 +139,10 @@ defmodule ReqLLM.Providers.Anthropic.Response do
     ReqLLM.StreamChunk.text(text)
   end
 
+  defp decode_content_block(%{"type" => "thinking", "text" => text}) do
+    ReqLLM.StreamChunk.thinking(text)
+  end
+
   defp decode_content_block(%{"type" => "tool_use", "id" => id, "name" => name, "input" => input}) do
     ReqLLM.StreamChunk.tool_call(name, input, %{id: id})
   end
@@ -147,6 +151,10 @@ defmodule ReqLLM.Providers.Anthropic.Response do
 
   defp decode_content_delta(%{"type" => "text_delta", "text" => text}) when is_binary(text) do
     [ReqLLM.StreamChunk.text(text)]
+  end
+
+  defp decode_content_delta(%{"type" => "thinking_delta", "text" => text}) when is_binary(text) do
+    [ReqLLM.StreamChunk.thinking(text)]
   end
 
   defp decode_content_delta(%{
@@ -170,6 +178,10 @@ defmodule ReqLLM.Providers.Anthropic.Response do
 
   defp decode_content_block_start(%{"type" => "text", "text" => text}) do
     [ReqLLM.StreamChunk.text(text)]
+  end
+
+  defp decode_content_block_start(%{"type" => "thinking", "text" => text}) do
+    [ReqLLM.StreamChunk.thinking(text)]
   end
 
   defp decode_content_block_start(%{"type" => "tool_use", "id" => id, "name" => name}) do
@@ -198,6 +210,10 @@ defmodule ReqLLM.Providers.Anthropic.Response do
 
   defp chunk_to_content_part(%ReqLLM.StreamChunk{type: :content, text: text}) do
     %ReqLLM.Message.ContentPart{type: :text, text: text}
+  end
+
+  defp chunk_to_content_part(%ReqLLM.StreamChunk{type: :thinking, text: text}) do
+    %ReqLLM.Message.ContentPart{type: :thinking, text: text}
   end
 
   defp chunk_to_content_part(%ReqLLM.StreamChunk{

@@ -8,7 +8,8 @@ defmodule ReqLLM.Providers.OpenAI do
   - Tool calling
   - Multi-modal inputs (text and images)
   - Embeddings generation
-  - O1/O3 model support with automatic parameter translation
+  - O1/O3/GPT-5 model support with automatic parameter translation
+  - Reasoning effort control for GPT-5 models
 
   ## Implementation
 
@@ -54,7 +55,11 @@ defmodule ReqLLM.Providers.OpenAI do
         type: :pos_integer,
         doc: "Dimensions for embedding models (e.g., text-embedding-3-small supports 512-1536)"
       ],
-      encoding_format: [type: :string, doc: "Format for embedding output (float, base64)"]
+      encoding_format: [type: :string, doc: "Format for embedding output (float, base64)"],
+      reasoning_effort: [
+        type: {:in, [:minimal, :low, :medium, :high]},
+        doc: "Reasoning effort level for GPT-5 models (minimal, low, medium, high)"
+      ]
     ]
 
   import ReqLLM.Provider.Utils, only: [maybe_put: 3]
@@ -187,6 +192,7 @@ defmodule ReqLLM.Providers.OpenAI do
           body
           |> add_token_limits(request.options[:model], request.options)
           |> add_stream_options(request.options)
+          |> add_reasoning_effort(request.options)
       end
 
     # Re-encode with enhancements
@@ -246,5 +252,11 @@ defmodule ReqLLM.Providers.OpenAI do
     else
       body
     end
+  end
+
+  @doc false
+  defp add_reasoning_effort(body, request_options) do
+    provider_opts = request_options[:provider_options] || []
+    maybe_put(body, :reasoning_effort, provider_opts[:reasoning_effort])
   end
 end

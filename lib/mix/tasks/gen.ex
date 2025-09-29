@@ -29,6 +29,9 @@ defmodule Mix.Tasks.ReqLlm.Gen do
       --temperature, -t TEMP  Sampling temperature for randomness (0.0-2.0)
                              Lower values = more focused, higher = more creative
 
+      --reasoning-effort EFFORT Reasoning effort for GPT-5 models
+                              (minimal, low, medium, high)
+
       --stream                Stream output in real-time (default: false)
       --json                  Generate structured JSON object (default: text)
 
@@ -48,6 +51,11 @@ defmodule Mix.Tasks.ReqLlm.Gen do
         --model openai:gpt-4o \\
         --system "You are a creative science fiction writer" \\
         --stream
+
+      # Generate with GPT-5 and high reasoning effort
+      mix req_llm.gen "Solve this complex math problem step by step" \\
+        --model openai:gpt-5-mini \\
+        --reasoning-effort high
 
       # Generate structured JSON object
       mix req_llm.gen "Create a user profile for John Smith, age 30, engineer in Seattle" \\
@@ -139,7 +147,7 @@ defmodule Mix.Tasks.ReqLlm.Gen do
   @spec run([String.t()]) :: no_return()
   @impl Mix.Task
   def run(args) do
-    extra_switches = [stream: :boolean, json: :boolean]
+    extra_switches = [stream: :boolean, json: :boolean, reasoning_effort: :string]
     {opts, args_list, _} = parse_args(args, extra_switches)
 
     log_level = parse_log_level(Keyword.get(opts, :log_level))
@@ -245,21 +253,35 @@ defmodule Mix.Tasks.ReqLlm.Gen do
   end
 
   defp handle_stream_text_result(stream_response, log_level, model_spec, prompt, start_time) do
-    accumulated_text =
+    {accumulated_text, reasoning_text} =
       stream_response.stream
-      |> Enum.reduce("", fn chunk, acc ->
+      |> Enum.reduce({"", ""}, fn chunk, {text_acc, reasoning_acc} ->
         case chunk.type do
           :content ->
             text = chunk.text || ""
             IO.write(text)
-            acc <> text
+            {text_acc <> text, reasoning_acc}
+
+          :thinking ->
+            reasoning = chunk.text || ""
+            # Show reasoning tokens in a different color/style if log level allows
+            if log_level != :warning do
+              IO.write(IO.ANSI.faint() <> IO.ANSI.cyan() <> reasoning <> IO.ANSI.reset())
+            end
+            {text_acc, reasoning_acc <> reasoning}
 
           _ ->
-            acc
+            {text_acc, reasoning_acc}
         end
       end)
 
     IO.puts("")
+
+    # Show reasoning token count in the stats if we have any
+    if reasoning_text != "" and log_level != :warning do
+      reasoning_tokens = estimate_tokens(reasoning_text)
+      IO.puts("#{IO.ANSI.faint()}[Reasoning: #{reasoning_tokens} tokens]#{IO.ANSI.reset()}")
+    end
 
     show_text_stats(
       accumulated_text,
@@ -315,9 +337,14 @@ defmodule Mix.Tasks.ReqLlm.Gen do
       end
 
     case {usage, response_data} do
-      {%{input_tokens: input, output_tokens: output, total_cost: cost}, _} ->
+      {%{input_tokens: input, output_tokens: output, total_cost: cost} = usage, _} ->
         cost_str = :erlang.float_to_binary(cost, decimals: 6)
-        IO.puts("\n#{response_time}ms • #{input}→#{output} tokens • ~$#{cost_str}")
+        reasoning_info = if Map.get(usage, :reasoning_tokens, 0) > 0 do
+          " (#{usage.reasoning_tokens} reasoning)"
+        else
+          ""
+        end
+        IO.puts("\n#{response_time}ms • #{input}→#{output} tokens#{reasoning_info} • ~$#{cost_str}")
 
       {_, %ReqLLM.StreamResponse{}} ->
         IO.puts("\n#{response_time}ms • streaming")
@@ -349,6 +376,12 @@ defmodule Mix.Tasks.ReqLlm.Gen do
       %{input_tokens: input, output_tokens: output} = usage ->
         log_puts("   Input tokens: #{input}", :debug, log_level)
         log_puts("   Output tokens: #{output}", :debug, log_level)
+        
+        reasoning_tokens = Map.get(usage, :reasoning_tokens, 0)
+        if reasoning_tokens > 0 do
+          log_puts("   Reasoning tokens: #{reasoning_tokens}", :debug, log_level)
+        end
+        
         log_puts("   Total tokens: #{input + output}", :debug, log_level)
 
         if Map.has_key?(usage, :total_cost) do
@@ -438,10 +471,22 @@ defmodule Mix.Tasks.ReqLlm.Gen do
   end
 
   defp build_generate_opts(opts) do
-    []
+    base_opts = []
     |> maybe_add_option(opts, :system)
     |> maybe_add_option(opts, :max_tokens)
     |> maybe_add_option(opts, :temperature)
+    
+    # Add reasoning_effort as a provider option
+    case Keyword.get(opts, :reasoning_effort) do
+      nil -> base_opts
+      effort when effort in ["minimal", "low", "medium", "high"] ->
+        effort_atom = String.to_atom(effort)
+        provider_options = [reasoning_effort: effort_atom]
+        Keyword.put(base_opts, :provider_options, provider_options)
+      invalid_effort ->
+        IO.puts("Warning: Invalid reasoning effort '#{invalid_effort}'. Must be minimal, low, medium, or high. Ignoring.")
+        base_opts
+    end
   end
 
   defp maybe_add_option(opts_list, parsed_opts, key) do
