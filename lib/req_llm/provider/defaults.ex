@@ -446,7 +446,7 @@ defmodule ReqLLM.Provider.Defaults do
     # Merge headers from streaming config
     headers = base_headers ++ [{"Accept", "text/event-stream"}]
 
-    # Build URL 
+    # Build URL
     method = :post
 
     url =
@@ -501,7 +501,7 @@ defmodule ReqLLM.Provider.Defaults do
   @doc """
   Encodes ReqLLM.Context to OpenAI-compatible format.
 
-  This function moves the logic from ReqLLM.Context.Codec.Map directly into 
+  This function moves the logic from ReqLLM.Context.Codec.Map directly into
   Provider.Defaults for the protocol removal refactoring.
   """
   @spec encode_context_to_openai_format(ReqLLM.Context.t(), String.t()) :: map()
@@ -515,18 +515,14 @@ defmodule ReqLLM.Provider.Defaults do
     Enum.map(messages, &encode_openai_message/1)
   end
 
-  defp encode_openai_message(%ReqLLM.Message{
-         role: role,
-         content: content,
-         tool_calls: tool_calls
-       }) do
+  defp encode_openai_message(%ReqLLM.Message{role: r, content: c, tool_calls: tc}) do
     base_message = %{
-      role: to_string(role),
-      content: encode_openai_content(content)
+      role: to_string(r),
+      content: encode_openai_content(c)
     }
 
     # Add tool_calls if present and not nil
-    case tool_calls do
+    case tc do
       nil -> base_message
       [] -> base_message
       calls -> Map.put(base_message, :tool_calls, calls)
@@ -796,7 +792,7 @@ defmodule ReqLLM.Provider.Defaults do
       def encode_body(req) do
         body = Defaults.build_openai_chat_body(req)
         |> Map.put(:my_provider_field, req.options[:my_provider_field])
-        
+
         req
         |> Req.Request.put_header("content-type", "application/json")
         |> Map.put(:body, Jason.encode!(body))
