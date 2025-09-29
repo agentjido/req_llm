@@ -101,10 +101,10 @@ defmodule ReqLLM.Providers.Anthropic.Context do
          tool_call_id: id
        }) do
     %{
-      type: "tool",
+      type: "tool_use",
       id: id,
       name: name,
-      arguments: input
+      input: input
     }
   end
 

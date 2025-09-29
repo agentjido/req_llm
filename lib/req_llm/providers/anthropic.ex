@@ -175,11 +175,18 @@ defmodule ReqLLM.Providers.Anthropic do
     # Use Anthropic-specific context encoding
     body_data = ReqLLM.Providers.Anthropic.Context.encode_request(context, %{model: model_name})
 
+    # Ensure max_tokens is always present (required by Anthropic)
+    max_tokens =
+      case request.options[:max_tokens] do
+        nil -> default_max_tokens(model_name)
+        v -> v
+      end
+
     body =
       body_data
       |> add_basic_options(request.options)
       |> maybe_put(:stream, request.options[:stream])
-      |> maybe_put(:max_tokens, request.options[:max_tokens])
+      |> Map.put(:max_tokens, max_tokens)
       |> maybe_add_tools(request.options)
 
     json_body = Jason.encode!(body)
@@ -472,6 +479,8 @@ defmodule ReqLLM.Providers.Anthropic do
     context = req.options[:context] || %ReqLLM.Context{messages: []}
     ReqLLM.Context.merge_response(context, response)
   end
+
+  defp default_max_tokens(_model_name), do: 1024
 
   defp build_anthropic_streaming_body(model, context, opts) do
     # Create a minimal request struct to reuse the existing encode_body logic
