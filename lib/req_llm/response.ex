@@ -152,13 +152,16 @@ defmodule ReqLLM.Response do
 
   """
   @spec reasoning_tokens(t()) :: integer()
-  def reasoning_tokens(%__MODULE__{usage: %{reasoning_tokens: tokens}}) when is_integer(tokens), do: tokens
+  def reasoning_tokens(%__MODULE__{usage: %{reasoning_tokens: tokens}}) when is_integer(tokens),
+    do: tokens
+
   def reasoning_tokens(%__MODULE__{usage: usage}) when is_map(usage) do
     # Try various possible keys for reasoning tokens
     usage[:reasoning_tokens] || usage["reasoning_tokens"] ||
-    get_in(usage, [:completion_tokens_details, :reasoning_tokens]) ||
-    get_in(usage, ["completion_tokens_details", "reasoning_tokens"]) || 0
+      get_in(usage, [:completion_tokens_details, :reasoning_tokens]) ||
+      get_in(usage, ["completion_tokens_details", "reasoning_tokens"]) || 0
   end
+
   def reasoning_tokens(%__MODULE__{}), do: 0
 
   @doc """

@@ -701,7 +701,8 @@ defmodule ReqLLM.Provider.Defaults do
     [ReqLLM.StreamChunk.text(content)]
   end
 
-  defp decode_openai_delta(%{"reasoning_content" => reasoning}) when is_binary(reasoning) and reasoning != "" do
+  defp decode_openai_delta(%{"reasoning_content" => reasoning})
+       when is_binary(reasoning) and reasoning != "" do
     [ReqLLM.StreamChunk.thinking(reasoning)]
   end
 
@@ -763,20 +764,19 @@ defmodule ReqLLM.Provider.Defaults do
 
   defp openai_chunk_to_content_part(_), do: nil
 
-  defp parse_openai_usage(%{
-         "prompt_tokens" => input,
-         "completion_tokens" => output,
-         "total_tokens" => total
-       } = usage) do
+  defp parse_openai_usage(
+         %{"prompt_tokens" => input, "completion_tokens" => output, "total_tokens" => total} =
+           usage
+       ) do
     # Extract reasoning tokens from completion_tokens_details if present
     reasoning_tokens = get_in(usage, ["completion_tokens_details", "reasoning_tokens"]) || 0
-    
+
     base_usage = %{
       input_tokens: input,
       output_tokens: output,
       total_tokens: total
     }
-    
+
     # Only add reasoning_tokens if > 0 to keep the response clean
     if reasoning_tokens > 0 do
       Map.put(base_usage, :reasoning_tokens, reasoning_tokens)

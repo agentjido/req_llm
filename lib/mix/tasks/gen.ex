@@ -268,6 +268,7 @@ defmodule Mix.Tasks.ReqLlm.Gen do
             if log_level != :warning do
               IO.write(IO.ANSI.faint() <> IO.ANSI.cyan() <> reasoning <> IO.ANSI.reset())
             end
+
             {text_acc, reasoning_acc <> reasoning}
 
           _ ->
@@ -339,12 +340,17 @@ defmodule Mix.Tasks.ReqLlm.Gen do
     case {usage, response_data} do
       {%{input_tokens: input, output_tokens: output, total_cost: cost} = usage, _} ->
         cost_str = :erlang.float_to_binary(cost, decimals: 6)
-        reasoning_info = if Map.get(usage, :reasoning_tokens, 0) > 0 do
-          " (#{usage.reasoning_tokens} reasoning)"
-        else
-          ""
-        end
-        IO.puts("\n#{response_time}ms • #{input}→#{output} tokens#{reasoning_info} • ~$#{cost_str}")
+
+        reasoning_info =
+          if Map.get(usage, :reasoning_tokens, 0) > 0 do
+            " (#{usage.reasoning_tokens} reasoning)"
+          else
+            ""
+          end
+
+        IO.puts(
+          "\n#{response_time}ms • #{input}→#{output} tokens#{reasoning_info} • ~$#{cost_str}"
+        )
 
       {_, %ReqLLM.StreamResponse{}} ->
         IO.puts("\n#{response_time}ms • streaming")
@@ -376,12 +382,13 @@ defmodule Mix.Tasks.ReqLlm.Gen do
       %{input_tokens: input, output_tokens: output} = usage ->
         log_puts("   Input tokens: #{input}", :debug, log_level)
         log_puts("   Output tokens: #{output}", :debug, log_level)
-        
+
         reasoning_tokens = Map.get(usage, :reasoning_tokens, 0)
+
         if reasoning_tokens > 0 do
           log_puts("   Reasoning tokens: #{reasoning_tokens}", :debug, log_level)
         end
-        
+
         log_puts("   Total tokens: #{input + output}", :debug, log_level)
 
         if Map.has_key?(usage, :total_cost) do
@@ -471,20 +478,27 @@ defmodule Mix.Tasks.ReqLlm.Gen do
   end
 
   defp build_generate_opts(opts) do
-    base_opts = []
-    |> maybe_add_option(opts, :system)
-    |> maybe_add_option(opts, :max_tokens)
-    |> maybe_add_option(opts, :temperature)
-    
+    base_opts =
+      []
+      |> maybe_add_option(opts, :system)
+      |> maybe_add_option(opts, :max_tokens)
+      |> maybe_add_option(opts, :temperature)
+
     # Add reasoning_effort as a provider option
     case Keyword.get(opts, :reasoning_effort) do
-      nil -> base_opts
+      nil ->
+        base_opts
+
       effort when effort in ["minimal", "low", "medium", "high"] ->
         effort_atom = String.to_atom(effort)
         provider_options = [reasoning_effort: effort_atom]
         Keyword.put(base_opts, :provider_options, provider_options)
+
       invalid_effort ->
-        IO.puts("Warning: Invalid reasoning effort '#{invalid_effort}'. Must be minimal, low, medium, or high. Ignoring.")
+        IO.puts(
+          "Warning: Invalid reasoning effort '#{invalid_effort}'. Must be minimal, low, medium, or high. Ignoring."
+        )
+
         base_opts
     end
   end

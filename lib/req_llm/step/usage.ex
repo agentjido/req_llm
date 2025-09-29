@@ -91,7 +91,9 @@ defmodule ReqLLM.Step.Usage do
               |> Map.put_new(:output_tokens, usage.output)
               |> Map.put_new(:total_tokens, usage.input + usage.output)
               |> then(fn m ->
-                if usage.reasoning > 0, do: Map.put(m, :reasoning_tokens, usage.reasoning), else: m
+                if usage.reasoning > 0,
+                  do: Map.put(m, :reasoning_tokens, usage.reasoning),
+                  else: m
               end)
               |> then(fn m ->
                 if cached_tokens > 0, do: Map.put(m, :cached_tokens, cached_tokens), else: m
