@@ -206,12 +206,19 @@ defmodule Mix.Tasks.ReqLlm.Gen do
         success_handler.(result, log_level, model_spec, prompt, start_time)
 
       {:error, error} ->
-        log_puts(format_error(error), :warning, log_level)
+        handle_generation_error(error, model_spec, log_level)
         System.halt(1)
     end
   rescue
     error ->
-      log_puts("Unexpected error: #{format_error(error)}", :warning, log_level)
+      error_message = format_error(error)
+
+      if api_key_missing_error?(error_message) do
+        handle_missing_api_key_error(error_message, model_spec, log_level)
+      else
+        log_puts("Unexpected error: #{error_message}", :warning, log_level)
+      end
+
       System.halt(1)
   end
 
@@ -638,6 +645,117 @@ defmodule Mix.Tasks.ReqLlm.Gen do
   defp handle_validation_error({:invalid_spec, error}, model_spec) do
     IO.puts("Error: Invalid model specification '#{model_spec}'")
     IO.puts("Details: #{Exception.message(error)}")
+  end
+
+  defp handle_generation_error(error, model_spec, log_level) do
+    error_message = format_error(error)
+
+    cond do
+      api_key_missing_error?(error_message) ->
+        handle_missing_api_key_error(error_message, model_spec, log_level)
+
+      model_not_found_error?(error, error_message) ->
+        log_puts(error_message, :warning, log_level)
+
+        case parse_provider_from_spec(model_spec) do
+          {:ok, provider} ->
+            list_provider_models(provider)
+
+          {:error, _} ->
+            :ok
+        end
+
+      true ->
+        log_puts(error_message, :warning, log_level)
+    end
+  end
+
+  defp api_key_missing_error?(error_message) do
+    String.contains?(error_message, "api_key option or") or
+      String.contains?(error_message, "_API_KEY") or
+      String.contains?(error_message, "API key")
+  end
+
+  defp handle_missing_api_key_error(error_message, model_spec, log_level) do
+    case parse_provider_from_spec(model_spec) do
+      {:ok, provider_id} ->
+        case ReqLLM.Provider.Registry.get_provider(provider_id) do
+          {:ok, provider_module} ->
+            env_var = apply(provider_module, :default_env_key, [])
+            log_puts("Error: API key not found for #{provider_id}", :warning, log_level)
+            log_puts("\nPlease set your API key using one of these methods:", :warning, log_level)
+
+            log_puts(
+              "  1. Environment variable: export #{env_var}=your-api-key",
+              :warning,
+              log_level
+            )
+
+            log_puts(
+              "  2. Application config: config :req_llm, #{provider_id}_api_key: \"your-api-key\"",
+              :warning,
+              log_level
+            )
+
+            log_puts(
+              "  3. Pass directly: generate_text(model, prompt, api_key: \"your-api-key\")",
+              :warning,
+              log_level
+            )
+
+          {:error, _} ->
+            log_puts("Error: #{error_message}", :warning, log_level)
+        end
+
+      {:error, _} ->
+        log_puts("Error: #{error_message}", :warning, log_level)
+    end
+  end
+
+  defp model_not_found_error?(error, error_message) do
+    cond do
+      is_struct(error, ReqLLM.Error.API) and error.status == 404 ->
+        true
+
+      String.contains?(error_message, "404") ->
+        true
+
+      String.contains?(String.downcase(error_message), "model") and
+          String.contains?(String.downcase(error_message), ["not found", "invalid", "unknown"]) ->
+        true
+
+      true ->
+        false
+    end
+  end
+
+  defp parse_provider_from_spec(model_spec) when is_binary(model_spec) do
+    case String.split(model_spec, ":", parts: 2) do
+      [provider_str, _model] when provider_str != "" ->
+        ReqLLM.Metadata.parse_provider(provider_str)
+
+      _ ->
+        {:error, :invalid_spec}
+    end
+  end
+
+  defp parse_provider_from_spec(_), do: {:error, :invalid_spec}
+
+  defp list_provider_models(provider) do
+    case ReqLLM.Provider.Registry.list_models(provider) do
+      {:ok, models} when models != [] ->
+        IO.puts("\nAvailable #{provider} models:")
+
+        Enum.each(models, fn model ->
+          IO.puts("  • #{provider}:#{model}")
+        end)
+
+      {:ok, []} ->
+        IO.puts("\n(No models found for provider #{provider})")
+
+      {:error, _} ->
+        :ok
+    end
   end
 
   defp resolve_schema(opts) do
