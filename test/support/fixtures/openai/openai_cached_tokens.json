@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMCwibWF4X3Rva2VucyI6MTAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiQ291bnQgZnJvbSAxIHRvIDEwIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3B0LTRvLW1pbmkiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWF4X3Rva2VucyI6NTAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiRXhwbGFpbiBxdWFudHVtIGNvbXB1dGluZyBpbiBzaW1wbGUgdGVybXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncHQtNG8tbWluaSIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "url": "https://api.openai.com/v1/chat/completions",
     "headers": {
@@ -19,7 +19,7 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"max_tokens\":10,\"messages\":[{\"content\":\"Count from 1 to 10\",\"role\":\"user\"}],\"model\":\"gpt-4o-mini\",\"seed\":42,\"stream\":false,\"temperature\":0.0}"
+    "canonical_json": "{\"max_tokens\":50,\"messages\":[{\"content\":\"Explain quantum computing in simple terms\",\"role\":\"user\"}],\"model\":\"gpt-4o-mini\",\"seed\":42,\"stream\":false,\"temperature\":0.0}"
   },
   "response": {
     "status": 200,
@@ -31,32 +31,32 @@
           "logprobs": null,
           "message": {
             "annotations": [],
-            "content": "Sure! Here you go: 1, ",
+            "content": "Sure! Quantum computing is a new type of computing that uses the principles of quantum mechanics, which is the science that explains how very small particles, like atoms and photons, behave.\n\nHere are the key ideas in simple terms:\n\n1. **Bits vs",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1758490578,
-      "id": "chatcmpl-CIM1CeJk0MHzUaso9kBMZ7X4knSCK",
+      "created": 1759248463,
+      "id": "chatcmpl-CLXB9R5KBY0fTe02dL1soOVhTnVsR",
       "model": "gpt-4o-mini-2024-07-18",
       "object": "chat.completion",
       "service_tier": "default",
-      "system_fingerprint": "fp_51db84afab",
+      "system_fingerprint": "fp_560af6e559",
       "usage": {
-        "completion_tokens": 10,
+        "completion_tokens": 50,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
           "reasoning_tokens": 0,
           "rejected_prediction_tokens": 0
         },
-        "prompt_tokens": 14,
+        "prompt_tokens": 13,
         "prompt_tokens_details": {
           "audio_tokens": 0,
           "cached_tokens": 0
         },
-        "total_tokens": 24
+        "total_tokens": 63
       }
     },
     "headers": {
@@ -70,7 +70,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "982cb27f4d611f93-ORD"
+        "9874f98e39763c96-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -79,13 +79,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 21 Sep 2025 21:36:18 GMT"
+        "Tue, 30 Sep 2025 16:07:45 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "247"
+        "1307"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -97,8 +97,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=iX5RBuk4N7ExA6MiT4qmUArMpTXDBF0a10O0zKHHH1w-1758490578-1.0.1.1-wrt8Gx2N5U.0VkeGRb4E.HcdTqBw3O.MLV.Pj5VlDFAjYJya.vNmoVaXKjA_VvO2vKF9WShjWXx0oRc0XFrmlwluCce.k9XUUOAJ_2DI.V0; path=/; expires=Sun, 21-Sep-25 22:06:18 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=lV0xajnAn5IFDvIighVOsrBqRC.8Vyg1BxxfgVXx.D0-1758490578239-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=u9dE9Qvg9NvdsOiaJXbwGPPKiWsuuUMp6_cfNXIl1vs-1759248465-1.0.1.1-1DoD8t9Q0VJgLb34D2tVC0vofapU6Vs.CDrLMS_13jeXh3VrF5WZXroiuO5IUVur.YRGqFFDMk1UEqE1lA2HxMqzgUz6R4s0M0rtc1DoND0; path=/; expires=Tue, 30-Sep-25 16:37:45 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=7AZmERDx3bx66oFPAjadZ_WiRD8VX.e0eTToFmOHD48-1759248465076-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -110,7 +110,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "388"
+        "1614"
       ],
       "x-openai-proxy-wasm": [
         "v0.1"
@@ -125,7 +125,7 @@
         "4999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "3999993"
+        "3999987"
       ],
       "x-ratelimit-reset-requests": [
         "12ms"
@@ -134,9 +134,9 @@
         "0s"
       ],
       "x-request-id": [
-        "req_241dcc3b9063432c8d00d242fd225204"
+        "req_86e7e78f376f4f08a5f72fa8cd373b20"
       ]
     }
   },
-  "captured_at": "2025-09-21T21:36:18.196019Z"
+  "captured_at": "2025-09-30T16:07:44.994622Z"
 }

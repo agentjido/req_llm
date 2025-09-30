@@ -32,7 +32,7 @@ defmodule ReqLLM.ProviderTest.Usage do
           ReqLLM.generate_text(
             unquote(model),
             "Count from 1 to 10",
-            Keyword.merge([fixture: "basic_usage"], param_bundles().deterministic)
+            fixture_opts(unquote(provider), "basic_usage", param_bundles(unquote(provider)).deterministic)
           )
 
         # Verify response and usage structure
@@ -67,7 +67,7 @@ defmodule ReqLLM.ProviderTest.Usage do
           ReqLLM.generate_text(
             unquote(model),
             "Explain quantum computing in simple terms",
-            Keyword.merge([fixture: "cached_tokens"], param_bundles().deterministic)
+            fixture_opts(unquote(provider), "cached_tokens", param_bundles(unquote(provider)).deterministic)
           )
 
         assert is_map(response.usage)
@@ -90,9 +90,10 @@ defmodule ReqLLM.ProviderTest.Usage do
           ReqLLM.generate_text(
             unquote(model),
             "Hi there!",
-            Keyword.merge(
-              [fixture: "cost_calculation", max_tokens: 10],
-              param_bundles().deterministic
+            fixture_opts(
+              unquote(provider),
+              "cost_calculation",
+              Keyword.merge([max_tokens: 10], param_bundles(unquote(provider)).deterministic)
             )
           )
 

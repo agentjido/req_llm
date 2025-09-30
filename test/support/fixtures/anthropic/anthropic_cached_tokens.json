@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtZXNzYWdlcyI6W3sicm9sZSI6InVzZXIiLCJjb250ZW50IjoiSGkgdGhlcmUhIn1dLCJzdHJlYW0iOmZhbHNlLCJtb2RlbCI6ImNsYXVkZS0zLTUtaGFpa3UtMjAyNDEwMjIiLCJtYXhfdG9rZW5zIjoxMCwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtZXNzYWdlcyI6W3sicm9sZSI6InVzZXIiLCJjb250ZW50IjoiRXhwbGFpbiBxdWFudHVtIGNvbXB1dGluZyBpbiBzaW1wbGUgdGVybXMifV0sInN0cmVhbSI6ZmFsc2UsIm1vZGVsIjoiY2xhdWRlLTMtNS1oYWlrdS0yMDI0MTAyMiIsIm1heF90b2tlbnMiOjUwLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "url": "https://api.anthropic.com/v1/messages",
     "headers": {
@@ -22,18 +22,18 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"max_tokens\":10,\"messages\":[{\"content\":\"Hi there!\",\"role\":\"user\"}],\"model\":\"claude-3-5-haiku-20241022\",\"stream\":false,\"temperature\":0.0}"
+    "canonical_json": "{\"max_tokens\":50,\"messages\":[{\"content\":\"Explain quantum computing in simple terms\",\"role\":\"user\"}],\"model\":\"claude-3-5-haiku-20241022\",\"stream\":false,\"temperature\":0.0}"
   },
   "response": {
     "status": 200,
     "body": {
       "content": [
         {
-          "text": "Hello! How are you doing today? Is there",
+          "text": "Here's a simple explanation of quantum computing:\n\nTraditional Computing:\n- Uses bits (0 or 1)\n- Like a light switch: on or off\n- Processes information sequentially\n- Good for standard calculations\n\nQuantum",
           "type": "text"
         }
       ],
-      "id": "msg_01AyDS5UXoKA7fvfUibeURS9",
+      "id": "msg_01Hr4P7fr95jhvc7y5UKVGMB",
       "model": "claude-3-5-haiku-20241022",
       "role": "assistant",
       "stop_reason": "max_tokens",
@@ -46,8 +46,8 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 10,
-        "output_tokens": 10,
+        "input_tokens": 14,
+        "output_tokens": 50,
         "service_tier": "standard"
       }
     },
@@ -62,7 +62,7 @@
         "100000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-09-21T21:36:10Z"
+        "2025-09-30T16:07:52Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "20000"
@@ -71,7 +71,7 @@
         "20000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-09-21T21:36:10Z"
+        "2025-09-30T16:07:54Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -80,7 +80,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-09-21T21:36:10Z"
+        "2025-09-30T16:07:52Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "120000"
@@ -89,13 +89,13 @@
         "120000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-09-21T21:36:10Z"
+        "2025-09-30T16:07:52Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "982cb24efca94848-ORD"
+        "9874f9c849ed0231-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -104,10 +104,10 @@
         "application/json"
       ],
       "date": [
-        "Sun, 21 Sep 2025 21:36:10 GMT"
+        "Tue, 30 Sep 2025 16:07:53 GMT"
       ],
       "request-id": [
-        "req_011CTNGPWvzY62kuJhJDKjeQ"
+        "req_011CTesdkgzvxRySR6Sr3ib8"
       ],
       "server": [
         "cloudflare"
@@ -122,12 +122,12 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "843"
+        "1521"
       ],
       "x-robots-tag": [
         "none"
       ]
     }
   },
-  "captured_at": "2025-09-21T21:36:11.028312Z"
+  "captured_at": "2025-09-30T16:07:53.843114Z"
 }

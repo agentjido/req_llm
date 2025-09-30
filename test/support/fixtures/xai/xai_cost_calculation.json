@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhpIHRoZXJlISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhpIHRoZXJlISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "url": "https://api.x.ai/v1/chat/completions",
     "headers": {
@@ -19,14 +19,14 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"max_completion_tokens\":10,\"messages\":[{\"content\":\"Hi there!\",\"role\":\"user\"}],\"model\":\"grok-3\",\"seed\":42,\"stream\":false,\"temperature\":0.0}"
+    "canonical_json": "{\"max_completion_tokens\":50,\"messages\":[{\"content\":\"Hi there!\",\"role\":\"user\"}],\"model\":\"grok-3\",\"seed\":42,\"stream\":false,\"temperature\":0.0}"
   },
   "response": {
     "status": 200,
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": "stop",
           "index": 0,
           "message": {
             "content": "Hey there! How can I help you today?",
@@ -35,8 +35,8 @@
           }
         }
       ],
-      "created": 1758490637,
-      "id": "eebef3b0-fee6-2e48-71fe-318e86720250_us-east-1",
+      "created": 1759248474,
+      "id": "13c26a6d-bbe0-8484-2880-8781fcf1e60d_us-east-1",
       "model": "grok-3",
       "object": "chat.completion",
       "system_fingerprint": "fp_f02e6df795",
@@ -70,22 +70,28 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "982cb3f16c12225e-ORD"
+        "9874f9d82a4fd94a-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy-report-only": [
+        "script-src 'none'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=gte2TmqgLw4hG7pXITZAOGqD5TArWmvAmPj7uuiX33o-1759248475-1.0.1.1-gbCV0OAXJNWFC9vF3PuNfU7hoArZ1dhQkPbZRUzKbQPwRe.h_lGVoaLvbeLLsjiUsPw4vHz8yjM2RpxBGReu6lNs4g7p1TlspbbhVsjmm0iHzv5QEJXZRZkUfnI0L1MXbcxc2ijjcf5weNwTpqzc9HYt.ATvdaRheZbKHG4GtwA; report-to cf-csp-endpoint"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Sun, 21 Sep 2025 21:37:17 GMT"
+        "Tue, 30 Sep 2025 16:07:55 GMT"
+      ],
+      "report-to": [
+        "{\"endpoints\":[{\"url\":\"https:\\/\\/csp-reporting.cloudflare.com\\/cdn-cgi\\/script_monitor\\/report?m=gte2TmqgLw4hG7pXITZAOGqD5TArWmvAmPj7uuiX33o-1759248475-1.0.1.1-gbCV0OAXJNWFC9vF3PuNfU7hoArZ1dhQkPbZRUzKbQPwRe.h_lGVoaLvbeLLsjiUsPw4vHz8yjM2RpxBGReu6lNs4g7p1TlspbbhVsjmm0iHzv5QEJXZRZkUfnI0L1MXbcxc2ijjcf5weNwTpqzc9HYt.ATvdaRheZbKHG4GtwA\"}],\"group\":\"cf-csp-endpoint\",\"max_age\":86400}"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=8PBv6AOiuURbyTu7.sr2hmuYVCE0dOZ__YoRNXVeoRk-1758490637-1.0.1.1-2f.dzuk8UEkRnLfZvUTP_zErWfEZA4qMxaX42G5r8M..DjdstktPtLakZRHPMsM92ZUU2YEnBYjpsyPEVHjbK739Unb34f_YoBcP39SNQ7k; path=/; expires=Sun, 21-Sep-25 22:07:17 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=9FtjLMP7r3zVNmFoGUY_BWfNJwN18DEsBMPbNv9blPU-1759248475-1.0.1.1-IBSd_Fodjhcg2ikC_TswuoPYxzqYb0DpDKebzT.bBRxn399YJ2fugKD23YxidGrH4K1mS86Ib5Ja1dRhSkdng3qS6y.ejOihivWgZOrtnwU; path=/; expires=Tue, 30-Sep-25 16:37:55 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -97,12 +103,12 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-c627d4bd978fc68d35cc51ffa9ba51aa-d4d6c6370045b059-01"
+        "00-8f51ce08132c85d3fcb5c3ae949623ec-dab78b9b000822d7-01"
       ],
       "x-zero-data-retention": [
         "false"
       ]
     }
   },
-  "captured_at": "2025-09-21T21:37:17.415702Z"
+  "captured_at": "2025-09-30T16:07:55.477674Z"
 }

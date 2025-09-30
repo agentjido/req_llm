@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtZXNzYWdlcyI6W3sicm9sZSI6InVzZXIiLCJjb250ZW50IjoiQ291bnQgZnJvbSAxIHRvIDEwIn1dLCJzdHJlYW0iOmZhbHNlLCJtb2RlbCI6ImNsYXVkZS0zLTUtaGFpa3UtMjAyNDEwMjIiLCJtYXhfdG9rZW5zIjoxMCwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtZXNzYWdlcyI6W3sicm9sZSI6InVzZXIiLCJjb250ZW50IjoiSGkgdGhlcmUhIn1dLCJzdHJlYW0iOmZhbHNlLCJtb2RlbCI6ImNsYXVkZS0zLTUtaGFpa3UtMjAyNDEwMjIiLCJtYXhfdG9rZW5zIjo1MCwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "url": "https://api.anthropic.com/v1/messages",
     "headers": {
@@ -22,21 +22,21 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"max_tokens\":10,\"messages\":[{\"content\":\"Count from 1 to 10\",\"role\":\"user\"}],\"model\":\"claude-3-5-haiku-20241022\",\"stream\":false,\"temperature\":0.0}"
+    "canonical_json": "{\"max_tokens\":50,\"messages\":[{\"content\":\"Hi there!\",\"role\":\"user\"}],\"model\":\"claude-3-5-haiku-20241022\",\"stream\":false,\"temperature\":0.0}"
   },
   "response": {
     "status": 200,
     "body": {
       "content": [
         {
-          "text": "Here's counting from 1 to 10",
+          "text": "Hello! How are you doing today? Is there anything I can help you with?",
           "type": "text"
         }
       ],
-      "id": "msg_01FpQsLLTNi9ThUyVSKJakza",
+      "id": "msg_0119y6fqUYshWY9fzimS5erA",
       "model": "claude-3-5-haiku-20241022",
       "role": "assistant",
-      "stop_reason": "max_tokens",
+      "stop_reason": "end_turn",
       "stop_sequence": null,
       "type": "message",
       "usage": {
@@ -46,8 +46,8 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 15,
-        "output_tokens": 10,
+        "input_tokens": 10,
+        "output_tokens": 20,
         "service_tier": "standard"
       }
     },
@@ -62,7 +62,7 @@
         "100000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-09-21T21:36:12Z"
+        "2025-09-30T16:07:51Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "20000"
@@ -71,7 +71,7 @@
         "20000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-09-21T21:36:12Z"
+        "2025-09-30T16:07:52Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -80,7 +80,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-09-21T21:36:11Z"
+        "2025-09-30T16:07:51Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "120000"
@@ -89,13 +89,13 @@
         "120000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-09-21T21:36:12Z"
+        "2025-09-30T16:07:51Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "982cb25a5a564848-ORD"
+        "9874f9c038db0231-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -104,10 +104,10 @@
         "application/json"
       ],
       "date": [
-        "Sun, 21 Sep 2025 21:36:12 GMT"
+        "Tue, 30 Sep 2025 16:07:52 GMT"
       ],
       "request-id": [
-        "req_011CTNGPeg5PPKn4Xz1F5ESk"
+        "req_011CTesdfA89jM5RD3dbCq4s"
       ],
       "server": [
         "cloudflare"
@@ -122,12 +122,12 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "811"
+        "1198"
       ],
       "x-robots-tag": [
         "none"
       ]
     }
   },
-  "captured_at": "2025-09-21T21:36:12.693630Z"
+  "captured_at": "2025-09-30T16:07:52.242895Z"
 }

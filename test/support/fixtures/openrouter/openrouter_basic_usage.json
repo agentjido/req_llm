@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJuIjoxLCJtYXhfdG9rZW5zIjoxMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJtZXRhLWxsYW1hL2xsYW1hLTMuMi0zYi1pbnN0cnVjdDpmcmVlIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJuIjoxLCJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJDb3VudCBmcm9tIDEgdG8gMTAiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJtZXRhLWxsYW1hL2xsYW1hLTMuMi0zYi1pbnN0cnVjdDpmcmVlIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "url": "https://openrouter.ai/api/v1/chat/completions",
     "headers": {
@@ -19,7 +19,7 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"max_tokens\":10,\"messages\":[{\"content\":\"Hi there!\",\"role\":\"user\"}],\"model\":\"meta-llama/llama-3.2-3b-instruct:free\",\"n\":1,\"seed\":42,\"stream\":false,\"temperature\":0.0}"
+    "canonical_json": "{\"max_tokens\":50,\"messages\":[{\"content\":\"Count from 1 to 10\",\"role\":\"user\"}],\"model\":\"meta-llama/llama-3.2-3b-instruct:free\",\"n\":1,\"seed\":42,\"stream\":false,\"temperature\":0.0}"
   },
   "response": {
     "status": 200,
@@ -30,7 +30,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "How can I assist you today?",
+            "content": "$$1, 2, 3, 4, 5, 6, 7, 8, 9, 10$$",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -38,15 +38,15 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1758490573,
-      "id": "gen-1758490572-BEawv8DfLzPxXSZUwWwY",
+      "created": 1759248467,
+      "id": "gen-1759248467-hd4YqMCLe4tcmvTZuidz",
       "model": "meta-llama/llama-3.2-3b-instruct:free",
       "object": "chat.completion",
       "provider": "Venice",
       "usage": {
-        "completion_tokens": 8,
-        "prompt_tokens": 736,
-        "total_tokens": 744
+        "completion_tokens": 31,
+        "prompt_tokens": 960,
+        "total_tokens": 991
       }
     },
     "headers": {
@@ -54,7 +54,7 @@
         "*"
       ],
       "cf-ray": [
-        "982cb2606c20eaff-ORD"
+        "9874f9abda1a000e-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -63,7 +63,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 21 Sep 2025 21:36:13 GMT"
+        "Tue, 30 Sep 2025 16:07:48 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -85,5 +85,5 @@
       ]
     }
   },
-  "captured_at": "2025-09-21T21:36:13.909532Z"
+  "captured_at": "2025-09-30T16:07:48.487242Z"
 }

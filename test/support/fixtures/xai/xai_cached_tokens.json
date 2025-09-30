@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkNvdW50IGZyb20gMSB0byAxMCIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkV4cGxhaW4gcXVhbnR1bSBjb21wdXRpbmcgaW4gc2ltcGxlIHRlcm1zIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay0zIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "url": "https://api.x.ai/v1/chat/completions",
     "headers": {
@@ -19,7 +19,7 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"max_completion_tokens\":10,\"messages\":[{\"content\":\"Count from 1 to 10\",\"role\":\"user\"}],\"model\":\"grok-3\",\"seed\":42,\"stream\":false,\"temperature\":0.0}"
+    "canonical_json": "{\"max_completion_tokens\":50,\"messages\":[{\"content\":\"Explain quantum computing in simple terms\",\"role\":\"user\"}],\"model\":\"grok-3\",\"seed\":42,\"stream\":false,\"temperature\":0.0}"
   },
   "response": {
     "status": 200,
@@ -29,19 +29,19 @@
           "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "1, 2, 3, ",
+            "content": "Quantum computing is a new and advanced type of computing that uses the principles of quantum mechanics to process information. Quantum mechanics is a branch of physics that explains how very tiny things, like atoms and particles, behave in strange and unique ways.\n\nHere’s a",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1758490636,
-      "id": "87789d91-70a1-eab9-afc5-053af3910572_us-east-1",
+      "created": 1759248475,
+      "id": "14ef5f40-a24e-7158-1def-504345ab7bfb_us-east-1",
       "model": "grok-3",
       "object": "chat.completion",
       "system_fingerprint": "fp_f02e6df795",
       "usage": {
-        "completion_tokens": 10,
+        "completion_tokens": 50,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
@@ -49,14 +49,14 @@
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
-        "prompt_tokens": 13,
+        "prompt_tokens": 12,
         "prompt_tokens_details": {
           "audio_tokens": 0,
           "cached_tokens": 2,
           "image_tokens": 0,
-          "text_tokens": 13
+          "text_tokens": 12
         },
-        "total_tokens": 23
+        "total_tokens": 62
       }
     },
     "headers": {
@@ -70,7 +70,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "982cb3ee3fd3225e-ORD"
+        "9874f9dc6faad94a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -79,13 +79,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 21 Sep 2025 21:37:16 GMT"
+        "Tue, 30 Sep 2025 16:07:56 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=7WO26BQg62JYEdv.UAFjboLjt6GDkxNDZrhp9nU1P.4-1758490636-1.0.1.1-pOX3n.Fi9tpiblIQ4ViJfqgzo1EitASo8sMDg0KbiyQT_cYSHuoqAsNqqV8IPMoX8aZaFz16Alv5gMiMUgWn8Kg3kjARJqKc5U9u0PrvWDA; path=/; expires=Sun, 21-Sep-25 22:07:16 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=0bELjjHYw.3_3sW0bBpqXVzQMPPuVMzW6x0U09fTuvM-1759248476-1.0.1.1-l1VIgiXTvkA5iIyjX804ZrFTUOEFLCURi6S670VIPYLKwbDksKdO5ZmuKzxRrdhgU2NNT2xNwIfPvGsG8H76qxfV.9COCo5F1mIXxjmWJJQ; path=/; expires=Tue, 30-Sep-25 16:37:56 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -97,12 +97,12 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-94975f6379f2a995fcb1fe4583e4f2f9-6ff407f0002d1d93-01"
+        "00-27990cbd1b1c173d53583c7f14369599-23fd9e0a0008e9bc-01"
       ],
       "x-zero-data-retention": [
         "false"
       ]
     }
   },
-  "captured_at": "2025-09-21T21:37:16.917312Z"
+  "captured_at": "2025-09-30T16:07:56.827973Z"
 }

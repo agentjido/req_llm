@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJFeHBsYWluIHF1YW50dW0gY29tcHV0aW5nIGluIHNpbXBsZSB0ZXJtcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImxsYW1hLTMuMS04Yi1pbnN0YW50Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJDb3VudCBmcm9tIDEgdG8gMTAiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJsbGFtYS0zLjEtOGItaW5zdGFudCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "url": "https://api.groq.com/openai/v1/chat/completions",
     "headers": {
@@ -19,40 +19,40 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"max_tokens\":50,\"messages\":[{\"content\":\"Explain quantum computing in simple terms\",\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"seed\":42,\"stream\":false,\"temperature\":0.0}"
+    "canonical_json": "{\"max_tokens\":50,\"messages\":[{\"content\":\"Count from 1 to 10\",\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"seed\":42,\"stream\":false,\"temperature\":0.0}"
   },
   "response": {
     "status": 200,
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": "stop",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "**What is Quantum Computing?**\n\nQuantum computing is a new way of processing information that's different from the way computers work today. Regular computers use \"bits\" to store and process information. A bit is like a light switch - it can be",
+            "content": "1, 2, 3, 4, 5, 6, 7, 8, 9, 10.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759241170,
-      "id": "chatcmpl-042a89da-a678-44f4-9f29-bddc1314f0f9",
+      "created": 1759248465,
+      "id": "chatcmpl-2ea9dc19-f715-438e-bd76-2730159953d1",
       "model": "llama-3.1-8b-instant",
       "object": "chat.completion",
       "service_tier": "on_demand",
       "system_fingerprint": "fp_a7a2f9abbf",
       "usage": {
-        "completion_time": 0.074832542,
-        "completion_tokens": 50,
-        "prompt_time": 0.011356076,
+        "completion_time": 0.034748004,
+        "completion_tokens": 30,
+        "prompt_time": 0.002608158,
         "prompt_tokens": 42,
-        "queue_time": 0.202803079,
-        "total_time": 0.086188618,
-        "total_tokens": 92
+        "queue_time": 0.205084578,
+        "total_time": 0.037356162,
+        "total_tokens": 72
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6df3v8nf848frc3vx75dcpz"
+        "id": "req_01k6dp2fagf1fa9d6zebf8xmhe"
       }
     },
     "headers": {
@@ -66,7 +66,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "987447816e31ef0e-ORD"
+        "9874f99b7d7e50bb-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -75,13 +75,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 30 Sep 2025 14:06:10 GMT"
+        "Tue, 30 Sep 2025 16:07:45 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=iCp4l2Y06jzc4MPt_cd.YRVhZGUI8Y.vXmtunYNgC9c-1759241170-1.0.1.1-B2hvtTj59Qd73g2Tc8Chxv8LOUA3q1i_Z6ER_IOK3jKSCiutGFeSGhwiOc7koCHjk0_JWdKcnSJGD.QgXU23h71dqdmMaGnqcAq3NgCeXg0; path=/; expires=Tue, 30-Sep-25 14:36:10 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=E_Pt__Gjw30hcxrZVhcol65Lhgo8ePIcuWf5qVLCkWs-1759248465-1.0.1.1-7aRt.g3Xk0xFxaE7Z_DWXapK64yE3h.6SC3KvoifyXvUUYcg4piChV1LmUT50m64848tvtsNqDwC8YI4l7kgvRafggdc17e9MW96A.tJ0fM; path=/; expires=Tue, 30-Sep-25 16:37:45 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -102,21 +102,21 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "14393"
+        "14399"
       ],
       "x-ratelimit-remaining-tokens": [
-        "4974"
+        "5990"
       ],
       "x-ratelimit-reset-requests": [
-        "41.157s"
+        "6s"
       ],
       "x-ratelimit-reset-tokens": [
-        "10.256s"
+        "100ms"
       ],
       "x-request-id": [
-        "req_01k6df3v8nf848frc3vx75dcpz"
+        "req_01k6dp2fagf1fa9d6zebf8xmhe"
       ]
     }
   },
-  "captured_at": "2025-09-30T14:06:10.507385Z"
+  "captured_at": "2025-09-30T16:07:45.402255Z"
 }
