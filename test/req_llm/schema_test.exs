@@ -201,26 +201,30 @@ defmodule ReqLLM.SchemaTest do
     end
 
     test "converts :in type with doc option" do
-      result = Schema.nimble_type_to_json_schema({:in, [:red, :green, :blue]}, doc: "Color choice")
+      result =
+        Schema.nimble_type_to_json_schema({:in, [:red, :green, :blue]}, doc: "Color choice")
+
       assert result == %{
-        "type" => "string", 
-        "enum" => [:red, :green, :blue],
-        "description" => "Color choice"
-      }
+               "type" => "string",
+               "enum" => [:red, :green, :blue],
+               "description" => "Color choice"
+             }
     end
 
     test "converts {:list, {:in, choices}} for arrays with enum constraints" do
       result = Schema.nimble_type_to_json_schema({:list, {:in, [:red, :green, :blue]}}, [])
+
       assert result == %{
-        "type" => "array", 
-        "items" => %{"type" => "string", "enum" => [:red, :green, :blue]}
-      }
+               "type" => "array",
+               "items" => %{"type" => "string", "enum" => [:red, :green, :blue]}
+             }
 
       result = Schema.nimble_type_to_json_schema({:list, {:in, 1..5}}, [])
+
       assert result == %{
-        "type" => "array", 
-        "items" => %{"type" => "integer", "minimum" => 1, "maximum" => 5}
-      }
+               "type" => "array",
+               "items" => %{"type" => "integer", "minimum" => 1, "maximum" => 5}
+             }
 
       mapset = MapSet.new(["small", "medium", "large"])
       result = Schema.nimble_type_to_json_schema({:list, {:in, mapset}}, [])
@@ -231,15 +235,17 @@ defmodule ReqLLM.SchemaTest do
     end
 
     test "converts {:list, {:in, choices}} with doc option" do
-      result = Schema.nimble_type_to_json_schema(
-        {:list, {:in, [:urgent, :normal, :low]}}, 
-        doc: "List of priority levels"
-      )
+      result =
+        Schema.nimble_type_to_json_schema(
+          {:list, {:in, [:urgent, :normal, :low]}},
+          doc: "List of priority levels"
+        )
+
       assert result == %{
-        "type" => "array", 
-        "items" => %{"type" => "string", "enum" => [:urgent, :normal, :low]},
-        "description" => "List of priority levels"
-      }
+               "type" => "array",
+               "items" => %{"type" => "string", "enum" => [:urgent, :normal, :low]},
+               "description" => "List of priority levels"
+             }
     end
   end
 
@@ -444,24 +450,24 @@ defmodule ReqLLM.SchemaTest do
       result = Schema.to_json(schema)
 
       assert result["properties"]["color"] == %{
-        "type" => "string", 
-        "enum" => [:red, :green, :blue],
-        "description" => "Product color"
-      }
-      
+               "type" => "string",
+               "enum" => [:red, :green, :blue],
+               "description" => "Product color"
+             }
+
       assert result["properties"]["size"] == %{
-        "type" => "integer", 
-        "minimum" => 1, 
-        "maximum" => 10,
-        "description" => "Size from 1 to 10"
-      }
-      
+               "type" => "integer",
+               "minimum" => 1,
+               "maximum" => 10,
+               "description" => "Size from 1 to 10"
+             }
+
       assert result["properties"]["tags"] == %{
-        "type" => "array", 
-        "items" => %{"type" => "string", "enum" => [:urgent, :normal, :low]},
-        "description" => "Priority tags"
-      }
-      
+               "type" => "array",
+               "items" => %{"type" => "string", "enum" => [:urgent, :normal, :low]},
+               "description" => "Priority tags"
+             }
+
       assert result["required"] == ["color"]
     end
 
@@ -470,7 +476,7 @@ defmodule ReqLLM.SchemaTest do
         status: [type: {:in, [:active, :inactive]}, required: true],
         priority: [type: {:in, 1..5}]
       ]
-      
+
       # Valid data
       data = %{"status" => :active, "priority" => 3}
       assert {:ok, validated} = Schema.validate(data, schema)

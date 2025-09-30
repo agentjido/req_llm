@@ -254,14 +254,23 @@ defmodule ReqLLM.Schema do
           %{"type" => "array", "items" => %{"type" => "string", "enum" => choices}}
 
         {:list, {:in, first..last//_step}} ->
-          %{"type" => "array", "items" => %{"type" => "integer", "minimum" => first, "maximum" => last}}
+          %{
+            "type" => "array",
+            "items" => %{"type" => "integer", "minimum" => first, "maximum" => last}
+          }
 
         {:list, {:in, %MapSet{} = choices}} ->
-          %{"type" => "array", "items" => %{"type" => "string", "enum" => MapSet.to_list(choices)}}
+          %{
+            "type" => "array",
+            "items" => %{"type" => "string", "enum" => MapSet.to_list(choices)}
+          }
 
         {:list, {:in, choices}} when is_struct(choices) ->
           try do
-            %{"type" => "array", "items" => %{"type" => "string", "enum" => Enum.to_list(choices)}}
+            %{
+              "type" => "array",
+              "items" => %{"type" => "string", "enum" => Enum.to_list(choices)}
+            }
           rescue
             _ -> %{"type" => "array", "items" => %{"type" => "string"}}
           end
