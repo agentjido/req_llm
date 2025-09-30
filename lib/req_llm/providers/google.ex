@@ -39,6 +39,10 @@ defmodule ReqLLM.Providers.Google do
         default: 1,
         doc: "Number of response candidates to generate"
       ],
+      google_thinking_budget: [
+        type: :non_neg_integer,
+        doc: "Thinking token budget for Gemini 2.5 models (0 disables thinking, omit for dynamic)"
+      ],
       dimensions: [
         type: :pos_integer,
         doc:
@@ -297,6 +301,7 @@ defmodule ReqLLM.Providers.Google do
       |> maybe_put(:topP, request.options[:top_p])
       |> maybe_put(:topK, request.options[:top_k])
       |> maybe_put(:candidateCount, request.options[:google_candidate_count] || 1)
+      |> maybe_add_thinking_config(request.options[:google_thinking_budget])
 
     %{}
     |> maybe_put(:systemInstruction, system_instruction)
@@ -366,6 +371,13 @@ defmodule ReqLLM.Providers.Google do
 
         {req, err}
     end
+  end
+
+  # Helper to add thinking configuration if specified
+  defp maybe_add_thinking_config(config, nil), do: config
+
+  defp maybe_add_thinking_config(config, budget) when is_integer(budget) and budget >= 0 do
+    Map.put(config, :thinkingConfig, %{thinkingBudget: budget})
   end
 
   # Helper to convert Google response to OpenAI format
