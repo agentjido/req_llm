@@ -407,6 +407,46 @@ defmodule ReqLLM.Provider do
               {[ReqLLM.StreamChunk.t()], any()}
 
   @doc """
+  Parse raw binary stream protocol data into events.
+
+  This callback allows providers to implement custom streaming protocols (SSE, AWS Event Stream,
+  etc.) while maintaining a consistent interface. The default implementation uses SSE parsing.
+
+  ## Parameters
+
+    * `chunk` - Raw binary chunk from the HTTP stream
+    * `buffer` - Accumulated buffer from previous incomplete chunks
+
+  ## Returns
+
+    * `{:ok, events, rest}` - Successfully parsed events with remaining buffer data
+    * `{:incomplete, buffer}` - Need more data, return the accumulated buffer
+    * `{:error, reason}` - Parse error
+
+  ## Examples
+
+      # Default SSE implementation (provided automatically)
+      def parse_stream_protocol(chunk, buffer) do
+        data = buffer <> chunk
+        {events, new_buffer} = ReqLLM.Streaming.SSE.accumulate_and_parse(data, "")
+        {:ok, events, new_buffer}
+      end
+
+      # Custom binary protocol (e.g., AWS Event Stream)
+      def parse_stream_protocol(chunk, buffer) do
+        data = buffer <> chunk
+        case ReqLLM.AWSEventStream.parse_binary(data) do
+          {:ok, events, rest} -> {:ok, events, rest}
+          {:incomplete, data} -> {:incomplete, data}
+          {:error, reason} -> {:error, reason}
+        end
+      end
+
+  """
+  @callback parse_stream_protocol(binary(), binary()) ::
+              {:ok, [map()], binary()} | {:incomplete, binary()} | {:error, term()}
+
+  @doc """
   Build complete Finch request for streaming operations.
 
   This callback creates a complete Finch.Request struct for streaming operations,
@@ -481,8 +521,20 @@ defmodule ReqLLM.Provider do
     decode_sse_event: 3,
     init_stream_state: 1,
     flush_stream_state: 2,
+    parse_stream_protocol: 2,
     attach_stream: 4
   ]
+
+  @doc """
+  Default implementation of parse_stream_protocol using SSE parsing.
+
+  Providers can override this to implement custom streaming protocols.
+  """
+  def parse_stream_protocol(chunk, buffer) do
+    _data = buffer <> chunk
+    {events, new_buffer} = ReqLLM.Streaming.SSE.accumulate_and_parse(chunk, buffer)
+    {:ok, events, new_buffer}
+  end
 
   @doc """
   Registry function with bang syntax (raises on error).
