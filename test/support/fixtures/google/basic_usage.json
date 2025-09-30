@@ -26,19 +26,19 @@
           "content": {
             "parts": [
               {
-                "text": "1, 2, 3, 4, 5, 6, 7, 8, 9, 10"
+                "text": "1, 2, 3, 4, 5, 6, 7, 8, "
               }
             ],
             "role": "model"
           },
-          "finishReason": "STOP",
+          "finishReason": "MAX_TOKENS",
           "index": 0
         }
       ],
       "modelVersion": "gemini-2.5-flash",
-      "responseId": "9urbaMDiCrePjMcPzenJ2Qo",
+      "responseId": "AezbaI2LO6qXjMcPnsP2yQs",
       "usageMetadata": {
-        "candidatesTokenCount": 29,
+        "candidatesTokenCount": 23,
         "promptTokenCount": 9,
         "promptTokensDetails": [
           {
@@ -47,7 +47,7 @@
           }
         ],
         "thoughtsTokenCount": 24,
-        "totalTokenCount": 62
+        "totalTokenCount": 56
       }
     },
     "headers": {
@@ -58,13 +58,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 30 Sep 2025 14:36:38 GMT"
+        "Tue, 30 Sep 2025 14:41:05 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=1674"
+        "gfet4t7; dur=1105"
       ],
       "transfer-encoding": [
         "chunked"
@@ -85,5 +85,5 @@
       ]
     }
   },
-  "captured_at": "2025-09-30T14:36:38.188566Z"
+  "captured_at": "2025-09-30T14:41:05.959154Z"
 }

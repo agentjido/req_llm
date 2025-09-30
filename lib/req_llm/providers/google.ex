@@ -450,11 +450,11 @@ defmodule ReqLLM.Providers.Google do
   defp normalize_google_finish_reason("RECITATION"), do: "content_filter"
   defp normalize_google_finish_reason(_), do: "stop"
 
-  defp convert_google_usage(%{
-         "promptTokenCount" => prompt,
-         "candidatesTokenCount" => completion,
-         "totalTokenCount" => total
-       }) do
+  defp convert_google_usage(%{"promptTokenCount" => prompt, "totalTokenCount" => total} = usage) do
+    completion =
+      usage["candidatesTokenCount"] || usage["thoughtsTokenCount"] ||
+        max(0, total - prompt)
+
     %{
       "prompt_tokens" => prompt,
       "completion_tokens" => completion,
