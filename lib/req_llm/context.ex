@@ -157,6 +157,55 @@ defmodule ReqLLM.Context do
   end
 
   @doc """
+  Deserialize a JSON string or decoded map back into a Context struct.
+
+  Takes either a JSON string or a map (from `Jason.decode!/1`) and reconstructs
+  a proper Context struct by leveraging the existing normalize/2 function.
+
+  ## Examples
+
+      # From JSON string
+      context = Context.new([Context.user("Hello")])
+      json_string = Jason.encode!(context)
+      {:ok, restored_context} = Context.from_json(json_string)
+
+      # From already decoded map
+      decoded_map = Jason.decode!(json_string)
+      {:ok, restored_context} = Context.from_json(decoded_map)
+
+  """
+  @spec from_json(String.t() | map()) :: {:ok, t()} | {:error, term()}
+  def from_json(json_string) when is_binary(json_string) do
+    case Jason.decode(json_string) do
+      {:ok, decoded_map} -> from_json(decoded_map)
+      {:error, %Jason.DecodeError{} = error} -> {:error, {:json_decode_error, error}}
+    end
+  end
+
+  def from_json(%{"messages" => messages}) when is_list(messages) do
+    case reconstruct_messages_from_json(messages) do
+      {:ok, rebuilt_messages} -> {:ok, new(rebuilt_messages)}
+      error -> error
+    end
+  end
+
+  def from_json(_), do: {:error, :invalid_json_structure}
+
+  @doc """
+  Bang version of from_json/1 that raises on error.
+  """
+  @spec from_json!(String.t() | map()) :: t()
+  def from_json!(input) do
+    case from_json(input) do
+      {:ok, context} ->
+        context
+
+      {:error, reason} ->
+        raise ArgumentError, "Failed to deserialize context from JSON: #{inspect(reason)}"
+    end
+  end
+
+  @doc """
   Merges the original context with a response to create an updated context.
 
   Takes a context and a response, then creates a new context containing
@@ -653,5 +702,48 @@ defmodule ReqLLM.Context do
       true -> :ok
       false -> {:error, "Context contains invalid messages"}
     end
+  end
+
+  # Reconstruct messages from JSON data
+  defp reconstruct_messages_from_json(messages_data) do
+    messages = Enum.map(messages_data, &reconstruct_message_from_json/1)
+    {:ok, messages}
+  catch
+    {:error, reason} -> {:error, reason}
+  end
+
+  # Reconstruct a single Message struct from JSON data
+  defp reconstruct_message_from_json(%{"role" => role, "content" => content_data} = msg_data) do
+    role_atom = String.to_atom(role)
+
+    content_parts =
+      Enum.map(content_data, fn part ->
+        %ContentPart{
+          type: String.to_atom(part["type"]),
+          text: part["text"],
+          url: part["url"],
+          data: part["data"],
+          media_type: part["media_type"],
+          filename: part["filename"],
+          tool_call_id: part["tool_call_id"],
+          tool_name: part["tool_name"],
+          input: part["input"],
+          output: part["output"],
+          metadata: atomize_string_keys(part["metadata"] || %{})
+        }
+      end)
+
+    %Message{
+      role: role_atom,
+      content: content_parts,
+      name: msg_data["name"],
+      tool_call_id: msg_data["tool_call_id"],
+      tool_calls: msg_data["tool_calls"],
+      metadata: atomize_string_keys(msg_data["metadata"] || %{})
+    }
+  end
+
+  defp atomize_string_keys(map) when is_map(map) do
+    Map.new(map, fn {k, v} -> {String.to_atom(k), v} end)
   end
 end
