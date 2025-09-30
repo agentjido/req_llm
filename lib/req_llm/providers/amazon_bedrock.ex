@@ -1,4 +1,4 @@
-defmodule ReqLLM.Providers.Bedrock do
+defmodule ReqLLM.Providers.AmazonBedrock do
   @moduledoc """
   AWS Bedrock provider implementation using the Provider behavior.
 
@@ -64,13 +64,12 @@ defmodule ReqLLM.Providers.Bedrock do
   @behaviour ReqLLM.Provider
 
   use ReqLLM.Provider.DSL,
-    id: :bedrock,
+    id: :amazon_bedrock,
     base_url: "https://bedrock-runtime.{region}.amazonaws.com",
     metadata: "priv/models_dev/amazon-bedrock.json",
     default_env_key: "AWS_ACCESS_KEY_ID",
     provider_schema: [
       region: [
-        # Base URL will be constructed with region
         type: :string,
         default: "us-east-1",
         doc: "AWS region where Bedrock is available"
@@ -92,16 +91,22 @@ defmodule ReqLLM.Providers.Bedrock do
   import ReqLLM.Provider.Utils,
     only: [ensure_parsed_body: 1]
 
-  alias ReqLLM.AWSEventStream
   alias ReqLLM.Error
   alias ReqLLM.Error.Invalid.Parameter, as: InvalidParameter
   alias ReqLLM.Step
 
+  @dialyzer :no_match
+  # Base URL will be constructed with region
   @model_families %{
-    "anthropic" => ReqLLM.Providers.Bedrock.Anthropic
+    "anthropic" => ReqLLM.Providers.AmazonBedrock.Anthropic
   }
 
   @known_but_unsupported ~w(meta amazon cohere ai21 mistral deepseek)
+
+  def default_base_url do
+    # Override to handle region template
+    "https://bedrock-runtime.{region}.amazonaws.com"
+  end
 
   @impl ReqLLM.Provider
   def prepare_request(:chat, model_input, input, opts) do
@@ -248,7 +253,7 @@ defmodule ReqLLM.Providers.Bedrock do
     # Bedrock uses AWS Event Stream protocol
     data = buffer <> chunk
 
-    case AWSEventStream.parse_binary(data) do
+    case ReqLLM.Providers.AmazonBedrock.AWSEventStream.parse_binary(data) do
       {:ok, events, rest} ->
         # Return parsed events and remaining buffer
         {:ok, events, rest}
@@ -298,13 +303,13 @@ defmodule ReqLLM.Providers.Bedrock do
 
   def extract_usage(_, _), do: {:error, :invalid_body}
 
-  def wrap_response(%ReqLLM.Providers.Bedrock.Response{} = already_wrapped) do
+  def wrap_response(%ReqLLM.Providers.AmazonBedrock.Response{} = already_wrapped) do
     # Don't double-wrap
     already_wrapped
   end
 
   def wrap_response(data) when is_map(data) do
-    %ReqLLM.Providers.Bedrock.Response{payload: data}
+    %ReqLLM.Providers.AmazonBedrock.Response{payload: data}
   end
 
   def wrap_response(data), do: data
@@ -336,17 +341,33 @@ defmodule ReqLLM.Providers.Bedrock do
   end
 
   defp validate_aws_credentials!(creds) do
-    if !(creds[:access_key_id] && creds[:secret_access_key]) do
-      raise ArgumentError, """
-      AWS credentials required for Bedrock. Please provide either:
+    case {creds[:access_key_id], creds[:secret_access_key]} do
+      {nil, _} ->
+        raise ArgumentError, """
+        AWS credentials required for Bedrock. Please provide either:
 
-      1. Environment variables:
-         AWS_ACCESS_KEY_ID=...
-         AWS_SECRET_ACCESS_KEY=...
+        1. Environment variables:
+           AWS_ACCESS_KEY_ID=...
+           AWS_SECRET_ACCESS_KEY=...
 
-      2. Options:
-         access_key_id: "...", secret_access_key: "..."
-      """
+        2. Options:
+           access_key_id: "...", secret_access_key: "..."
+        """
+
+      {_, nil} ->
+        raise ArgumentError, """
+        AWS credentials required for Bedrock. Please provide either:
+
+        1. Environment variables:
+           AWS_ACCESS_KEY_ID=...
+           AWS_SECRET_ACCESS_KEY=...
+
+        2. Options:
+           access_key_id: "...", secret_access_key: "..."
+        """
+
+      {_, _} ->
+        :ok
     end
   end
 
@@ -419,14 +440,11 @@ defmodule ReqLLM.Providers.Bedrock do
       query: query
     } = finch_request
 
-    # Ensure body is binary
+    # Ensure body is binary (Finch always provides binary or nil)
     body_binary =
-      cond do
-        is_binary(body) -> body
-        body == nil -> ""
-        is_list(body) -> IO.iodata_to_binary(body)
-        is_map(body) -> Jason.encode!(body)
-        true -> inspect(body)
+      case body do
+        nil -> ""
+        binary when is_binary(binary) -> binary
       end
 
     # Build URL

@@ -404,7 +404,10 @@ defmodule ReqLLM.ModelTest do
 
   defp load_models_from_file(models_dir, filename) do
     provider_atom =
-      filename |> String.trim_trailing(".json") |> String.replace("-", "_") |> String.to_atom()
+      filename
+      |> String.trim_trailing(".json")
+      |> String.replace("-", "_")
+      |> String.to_atom()
 
     file_path = Path.join(models_dir, filename)
 

@@ -1,4 +1,4 @@
-defmodule ReqLLM.Providers.Bedrock.Anthropic do
+defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
   @moduledoc """
   Anthropic model family support for AWS Bedrock.
 
@@ -11,16 +11,27 @@ defmodule ReqLLM.Providers.Bedrock.Anthropic do
   Formats a ReqLLM context into Anthropic-specific request format for Bedrock.
   """
   def format_request(_model_id, context, opts) do
-    # Convert ReqLLM context to Anthropic format
-    messages =
-      context.messages
-      |> Enum.map(&convert_message/1)
+    # Extract system message if present
+    {system_message, other_messages} =
+      case context.messages do
+        [%{role: :system, content: content} | rest] ->
+          {format_content_as_text(content), rest}
+
+        messages ->
+          {nil, messages}
+      end
+
+    # Convert remaining messages to Anthropic format
+    messages = Enum.map(other_messages, &convert_message/1)
 
     # Build Anthropic request body
     body = %{
       messages: messages,
       max_tokens: opts[:max_tokens] || 1024
     }
+
+    # Add system message if present
+    body = if system_message, do: Map.put(body, :system, system_message), else: body
 
     # Add optional parameters
     body
@@ -30,6 +41,16 @@ defmodule ReqLLM.Providers.Bedrock.Anthropic do
     |> maybe_add_param(:stop_sequences, opts[:stop_sequences])
     |> maybe_add_param(:anthropic_version, "bedrock-2023-05-31")
   end
+
+  defp format_content_as_text(content) when is_list(content) do
+    content
+    |> Enum.map_join(" ", fn
+      %{text: text} -> text
+      _ -> ""
+    end)
+  end
+
+  defp format_content_as_text(text) when is_binary(text), do: text
 
   defp convert_message(message) do
     %{
@@ -182,10 +203,17 @@ defmodule ReqLLM.Providers.Bedrock.Anthropic do
   end
 
   defp convert_stream_event(%{"type" => "content_block_delta", "delta" => delta}) do
+    text =
+      case delta do
+        %{"text" => t} -> t
+        %{"partial_json" => json} -> json
+        _ -> ""
+      end
+
     {:ok,
      %StreamChunk{
        type: :content,
-       text: delta["text"] || "",
+       text: text,
        metadata: %{index: Map.get(delta, "index", 0)}
      }}
   end
@@ -204,10 +232,11 @@ defmodule ReqLLM.Providers.Bedrock.Anthropic do
        type: :meta,
        metadata: %{
          type: :delta,
+         finish_reason: delta["stop_reason"],
          stop_reason: delta["stop_reason"],
          stop_sequence: delta["stop_sequence"],
          usage: %{
-           output_tokens: usage["output_tokens"]
+           "output_tokens" => usage["output_tokens"]
          }
        }
      }}

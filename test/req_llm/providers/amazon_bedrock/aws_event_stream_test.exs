@@ -1,34 +1,13 @@
-defmodule ReqLLM.AWSEventStreamTest do
+defmodule ReqLLM.Providers.AmazonBedrock.AWSEventStreamTest do
   use ExUnit.Case, async: true
 
-  alias ReqLLM.AWSEventStream
+  alias ReqLLM.Providers.AmazonBedrock.AWSEventStream
 
   describe "parse_binary/1" do
     test "parses valid AWS Event Stream message" do
-      # Build a simple test message
-      # Message structure: total_length | headers_length | prelude_crc | headers | payload | message_crc
-
-      # For this test, we'll create a minimal message with no headers
-      headers = <<>>
+      # Build a simple test message using the proper helper
       payload = Jason.encode!(%{"type" => "test", "data" => "hello"})
-
-      headers_length = byte_size(headers)
-      payload_length = byte_size(payload)
-      # 16 = prelude(12) + message_crc(4)
-      total_length = 16 + headers_length + payload_length
-
-      # Calculate CRCs (simplified - using 0 for test)
-      prelude_crc = 0
-      message_crc = 0
-
-      binary = <<
-        total_length::32-big,
-        headers_length::32-big,
-        prelude_crc::32-big,
-        headers::binary,
-        payload::binary,
-        message_crc::32-big
-      >>
+      binary = build_test_message(payload)
 
       assert {:ok, events, rest} = AWSEventStream.parse_binary(binary)
       assert length(events) == 1

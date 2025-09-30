@@ -1,4 +1,4 @@
-defmodule ReqLLM.AWSEventStream do
+defmodule ReqLLM.Providers.AmazonBedrock.AWSEventStream do
   @moduledoc """
   Parser for AWS Event Stream protocol.
 

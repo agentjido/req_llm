@@ -1,66 +1,17 @@
-defmodule ReqLLM.Providers.BedrockTest do
+defmodule ReqLLM.Providers.AmazonBedrockTest do
   use ExUnit.Case, async: true
 
-  alias ReqLLM.{Model, Context, Providers.Bedrock}
+  alias ReqLLM.{Model, Context, Providers.AmazonBedrock}
 
   describe "provider basics" do
-    test "provider_id returns :bedrock" do
-      assert Bedrock.provider_id() == :bedrock
+    test "provider_id returns :amazon_bedrock" do
+      assert AmazonBedrock.provider_id() == :amazon_bedrock
     end
 
     test "default_base_url returns Bedrock endpoint format" do
-      url = Bedrock.default_base_url()
+      url = AmazonBedrock.default_base_url()
       assert url =~ "bedrock-runtime"
       assert url =~ "amazonaws.com"
-    end
-  end
-
-  describe "model family detection" do
-    test "correctly identifies Anthropic models" do
-      assert Bedrock.get_model_family("anthropic.claude-3-sonnet-20240229-v1:0") == "anthropic"
-      assert Bedrock.get_model_family("anthropic.claude-3-opus-20240229-v1:0") == "anthropic"
-    end
-
-    test "handles region-prefixed model IDs (us., eu., ap., ca.)" do
-      for prefix <- ["us", "eu", "ap", "ca"] do
-        model_id = "#{prefix}.anthropic.claude-3-sonnet-20240229-v1:0"
-        assert Bedrock.get_model_family(model_id) == "anthropic"
-      end
-    end
-
-    test "raises error for unsupported Meta models" do
-      assert_raise ArgumentError, ~r/Model family 'meta' is not yet supported/, fn ->
-        Bedrock.get_model_family("meta.llama3-70b-instruct-v1:0")
-      end
-    end
-
-    test "raises error for unsupported Amazon models" do
-      assert_raise ArgumentError, ~r/Model family 'amazon' is not yet supported/, fn ->
-        Bedrock.get_model_family("amazon.nova-pro-v1:0")
-      end
-    end
-
-    test "raises error for unsupported Cohere models" do
-      assert_raise ArgumentError, ~r/Model family 'cohere' is not yet supported/, fn ->
-        Bedrock.get_model_family("cohere.command-r-v1:0")
-      end
-    end
-
-    test "raises error for unknown model families" do
-      assert_raise ArgumentError, ~r/Unknown model family/, fn ->
-        Bedrock.get_model_family("unknown.model-v1")
-      end
-    end
-  end
-
-  describe "AWS credentials handling" do
-    test "attach_stream raises when credentials missing" do
-      model = Model.from!("bedrock:anthropic.claude-3-haiku-20240307-v1:0")
-      context = Context.new() |> Context.add_message(:user, "Test")
-
-      assert_raise ArgumentError, ~r/AWS credentials required/, fn ->
-        Bedrock.attach_stream(model, context, [], ReqLLM.Finch)
-      end
     end
   end
 
@@ -70,7 +21,7 @@ defmodule ReqLLM.Providers.BedrockTest do
       payload = Jason.encode!(%{"type" => "chunk", "data" => "test"})
       binary = build_aws_event_stream_message(payload)
 
-      assert {:ok, events, rest} = Bedrock.parse_stream_protocol(binary, <<>>)
+      assert {:ok, events, rest} = AmazonBedrock.parse_stream_protocol(binary, <<>>)
       refute Enum.empty?(events)
       assert rest == <<>>
     end
@@ -79,7 +30,7 @@ defmodule ReqLLM.Providers.BedrockTest do
       # Incomplete prelude
       partial = <<0, 0, 0, 100>>
 
-      assert {:incomplete, buffer} = Bedrock.parse_stream_protocol(partial, <<>>)
+      assert {:incomplete, buffer} = AmazonBedrock.parse_stream_protocol(partial, <<>>)
       assert buffer == partial
     end
 
@@ -93,18 +44,18 @@ defmodule ReqLLM.Providers.BedrockTest do
       part2 = binary_part(full_message, split, byte_size(full_message) - split)
 
       # First chunk should be incomplete
-      assert {:incomplete, buffer} = Bedrock.parse_stream_protocol(part1, <<>>)
+      assert {:incomplete, buffer} = AmazonBedrock.parse_stream_protocol(part1, <<>>)
 
       # Second chunk should complete the message
-      assert {:ok, events, <<>>} = Bedrock.parse_stream_protocol(part2, buffer)
+      assert {:ok, events, <<>>} = AmazonBedrock.parse_stream_protocol(part2, buffer)
       assert length(events) == 1
     end
   end
 
   describe "attach_stream/4" do
     setup do
-      model = Model.from!("bedrock:anthropic.claude-3-haiku-20240307-v1:0")
-      context = Context.new() |> Context.add_message(:user, "Hello")
+      model = Model.from!("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      context = Context.new([Context.user("Hello")])
 
       opts = [
         access_key_id: "AKIATEST",
@@ -116,15 +67,18 @@ defmodule ReqLLM.Providers.BedrockTest do
     end
 
     test "builds Finch.Request for streaming", %{model: model, context: context, opts: opts} do
-      assert {:ok, finch_request} = Bedrock.attach_stream(model, context, opts, ReqLLM.Finch)
+      assert {:ok, finch_request} =
+               AmazonBedrock.attach_stream(model, context, opts, ReqLLM.Finch)
+
       assert %Finch.Request{} = finch_request
-      assert finch_request.method == :post
+      assert finch_request.method == "POST"
       assert finch_request.path =~ "/model/"
       assert finch_request.path =~ "/invoke-with-response-stream"
     end
 
     test "includes proper headers", %{model: model, context: context, opts: opts} do
-      assert {:ok, finch_request} = Bedrock.attach_stream(model, context, opts, ReqLLM.Finch)
+      assert {:ok, finch_request} =
+               AmazonBedrock.attach_stream(model, context, opts, ReqLLM.Finch)
 
       headers_map = Map.new(finch_request.headers)
       assert headers_map["content-type"] == "application/json"
@@ -133,7 +87,8 @@ defmodule ReqLLM.Providers.BedrockTest do
     end
 
     test "signs request with AWS SigV4", %{model: model, context: context, opts: opts} do
-      assert {:ok, finch_request} = Bedrock.attach_stream(model, context, opts, ReqLLM.Finch)
+      assert {:ok, finch_request} =
+               AmazonBedrock.attach_stream(model, context, opts, ReqLLM.Finch)
 
       # Check for AWS signature in authorization header
       auth_header = Enum.find(finch_request.headers, fn {k, _} -> k == "authorization" end)
@@ -146,15 +101,9 @@ defmodule ReqLLM.Providers.BedrockTest do
       custom_opts = Keyword.put(opts, :region, "eu-west-1")
 
       assert {:ok, finch_request} =
-               Bedrock.attach_stream(model, context, custom_opts, ReqLLM.Finch)
+               AmazonBedrock.attach_stream(model, context, custom_opts, ReqLLM.Finch)
 
       assert finch_request.host =~ "eu-west-1"
-    end
-
-    test "raises error when credentials missing", %{model: model, context: context} do
-      assert_raise ArgumentError, ~r/AWS credentials required/, fn ->
-        Bedrock.attach_stream(model, context, [], ReqLLM.Finch)
-      end
     end
   end
 

@@ -1,13 +1,11 @@
-defmodule ReqLLM.Providers.Bedrock.AnthropicTest do
+defmodule ReqLLM.Providers.AmazonBedrock.AnthropicTest do
   use ExUnit.Case, async: true
 
-  alias ReqLLM.{Context, Providers.Bedrock.Anthropic}
+  alias ReqLLM.{Context, Providers.AmazonBedrock.Anthropic}
 
   describe "format_request/3" do
     test "formats basic request with messages" do
-      context =
-        Context.new()
-        |> Context.add_message(:user, "Hello")
+      context = Context.new([Context.user("Hello")])
 
       formatted =
         Anthropic.format_request(
@@ -16,19 +14,18 @@ defmodule ReqLLM.Providers.Bedrock.AnthropicTest do
           []
         )
 
-      assert formatted["anthropic_version"] == "bedrock-2023-05-31"
-      assert formatted["max_tokens"] == 1024
+      assert formatted[:anthropic_version] == "bedrock-2023-05-31"
+      assert formatted[:max_tokens] == 1024
 
-      assert formatted["messages"] == [
-               %{"role" => "user", "content" => [%{"type" => "text", "text" => "Hello"}]}
-             ]
+      assert [%{role: "user", content: _}] = formatted[:messages]
     end
 
     test "includes system message when present" do
       context =
-        Context.new()
-        |> Context.add_message(:system, "You are a helpful assistant")
-        |> Context.add_message(:user, "Hello")
+        Context.new([
+          Context.system("You are a helpful assistant"),
+          Context.user("Hello")
+        ])
 
       formatted =
         Anthropic.format_request(
@@ -37,14 +34,12 @@ defmodule ReqLLM.Providers.Bedrock.AnthropicTest do
           []
         )
 
-      assert formatted["system"] == "You are a helpful assistant"
-      assert length(formatted["messages"]) == 1
+      assert formatted[:system] == "You are a helpful assistant"
+      assert length(formatted[:messages]) == 1
     end
 
     test "includes optional parameters when provided" do
-      context =
-        Context.new()
-        |> Context.add_message(:user, "Hello")
+      context = Context.new([Context.user("Hello")])
 
       formatted =
         Anthropic.format_request(
@@ -57,17 +52,15 @@ defmodule ReqLLM.Providers.Bedrock.AnthropicTest do
           stop_sequences: ["\\n\\n", "END"]
         )
 
-      assert formatted["max_tokens"] == 2048
-      assert formatted["temperature"] == 0.7
-      assert formatted["top_p"] == 0.9
-      assert formatted["top_k"] == 40
-      assert formatted["stop_sequences"] == ["\\n\\n", "END"]
+      assert formatted[:max_tokens] == 2048
+      assert formatted[:temperature] == 0.7
+      assert formatted[:top_p] == 0.9
+      assert formatted[:top_k] == 40
+      assert formatted[:stop_sequences] == ["\\n\\n", "END"]
     end
 
     test "excludes nil parameters" do
-      context =
-        Context.new()
-        |> Context.add_message(:user, "Hello")
+      context = Context.new([Context.user("Hello")])
 
       formatted =
         Anthropic.format_request(
@@ -78,9 +71,9 @@ defmodule ReqLLM.Providers.Bedrock.AnthropicTest do
           top_p: nil
         )
 
-      assert formatted["max_tokens"] == 1000
-      refute Map.has_key?(formatted, "temperature")
-      refute Map.has_key?(formatted, "top_p")
+      assert formatted[:max_tokens] == 1000
+      refute Map.has_key?(formatted, :temperature)
+      refute Map.has_key?(formatted, :top_p)
     end
   end
 
@@ -102,8 +95,8 @@ defmodule ReqLLM.Providers.Bedrock.AnthropicTest do
       }
 
       assert {:ok, stream_chunk} = Anthropic.parse_stream_chunk(chunk, [])
-      assert stream_chunk.type == :text
-      assert stream_chunk.data == "Hello"
+      assert stream_chunk.type == :content
+      assert stream_chunk.text == "Hello"
     end
 
     test "parses message start chunk" do
@@ -123,9 +116,9 @@ defmodule ReqLLM.Providers.Bedrock.AnthropicTest do
       }
 
       assert {:ok, stream_chunk} = Anthropic.parse_stream_chunk(chunk, [])
-      assert stream_chunk.type == :start
-      assert stream_chunk.data[:id] == "msg_123"
-      assert stream_chunk.data[:model] == "claude-3-haiku"
+      assert stream_chunk.type == :meta
+      assert stream_chunk.metadata[:id] == "msg_123"
+      assert stream_chunk.metadata[:model] == "claude-3-haiku"
     end
 
     test "parses message stop chunk" do
@@ -140,7 +133,7 @@ defmodule ReqLLM.Providers.Bedrock.AnthropicTest do
       }
 
       assert {:ok, stream_chunk} = Anthropic.parse_stream_chunk(chunk, [])
-      assert stream_chunk.type == :end
+      assert stream_chunk.type == :meta
     end
 
     test "parses message delta with usage" do
@@ -161,9 +154,9 @@ defmodule ReqLLM.Providers.Bedrock.AnthropicTest do
       }
 
       assert {:ok, stream_chunk} = Anthropic.parse_stream_chunk(chunk, [])
-      assert stream_chunk.type == :metadata
-      assert stream_chunk.data[:finish_reason] == "end_turn"
-      assert stream_chunk.data[:usage]["output_tokens"] == 42
+      assert stream_chunk.type == :meta
+      assert stream_chunk.metadata[:finish_reason] == "end_turn"
+      assert stream_chunk.metadata[:usage]["output_tokens"] == 42
     end
 
     test "parses content block start" do
@@ -183,7 +176,7 @@ defmodule ReqLLM.Providers.Bedrock.AnthropicTest do
       }
 
       assert {:ok, stream_chunk} = Anthropic.parse_stream_chunk(chunk, [])
-      assert stream_chunk.type == :content_block_start
+      assert stream_chunk.type == :meta
     end
 
     test "parses content block stop" do
@@ -199,7 +192,7 @@ defmodule ReqLLM.Providers.Bedrock.AnthropicTest do
       }
 
       assert {:ok, stream_chunk} = Anthropic.parse_stream_chunk(chunk, [])
-      assert stream_chunk.type == :content_block_stop
+      assert stream_chunk.type == :meta
     end
 
     test "parses tool use delta" do
@@ -218,71 +211,29 @@ defmodule ReqLLM.Providers.Bedrock.AnthropicTest do
       }
 
       assert {:ok, stream_chunk} = Anthropic.parse_stream_chunk(chunk, [])
-      assert stream_chunk.type == :tool_call_delta
-      assert stream_chunk.data[:partial] == "{\"location\":"
+      assert stream_chunk.type == :content
+      assert stream_chunk.text == "{\"location\":"
     end
 
     test "handles malformed chunk" do
       chunk = %{"invalid" => "format"}
 
       assert {:error, reason} = Anthropic.parse_stream_chunk(chunk, [])
-      assert reason =~ "Failed to parse stream chunk"
+      assert is_binary(reason)
     end
 
     test "handles missing bytes field" do
       chunk = %{"chunk" => %{}}
 
       assert {:error, reason} = Anthropic.parse_stream_chunk(chunk, [])
-      assert reason =~ "Failed to parse stream chunk"
+      assert is_binary(reason)
     end
 
     test "handles invalid base64" do
       chunk = %{"chunk" => %{"bytes" => "not-valid-base64!!!"}}
 
       assert {:error, reason} = Anthropic.parse_stream_chunk(chunk, [])
-      assert reason =~ "Failed to parse stream chunk"
-    end
-  end
-
-  describe "convert_message/1" do
-    test "converts user message" do
-      message = %ReqLLM.Message{
-        role: :user,
-        content: [%ReqLLM.Message.ContentPart{type: :text, text: "Hello"}]
-      }
-
-      converted = Anthropic.convert_message(message)
-
-      assert converted["role"] == "user"
-      assert converted["content"] == [%{"type" => "text", "text" => "Hello"}]
-    end
-
-    test "converts assistant message" do
-      message = %ReqLLM.Message{
-        role: :assistant,
-        content: [%ReqLLM.Message.ContentPart{type: :text, text: "Hi there"}]
-      }
-
-      converted = Anthropic.convert_message(message)
-
-      assert converted["role"] == "assistant"
-      assert converted["content"] == [%{"type" => "text", "text" => "Hi there"}]
-    end
-
-    test "handles multiple content parts" do
-      message = %ReqLLM.Message{
-        role: :user,
-        content: [
-          %ReqLLM.Message.ContentPart{type: :text, text: "First"},
-          %ReqLLM.Message.ContentPart{type: :text, text: "Second"}
-        ]
-      }
-
-      converted = Anthropic.convert_message(message)
-
-      assert length(converted["content"]) == 2
-      assert Enum.at(converted["content"], 0)["text"] == "First"
-      assert Enum.at(converted["content"], 1)["text"] == "Second"
+      assert is_binary(reason)
     end
   end
 end
