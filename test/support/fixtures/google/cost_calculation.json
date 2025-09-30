@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7InRlbXBlcmF0dXJlIjowLjAsIm1heE91dHB1dFRva2VucyI6NTAsImNhbmRpZGF0ZUNvdW50IjoxLCJ0aGlua2luZ0NvbmZpZyI6eyJ0aGlua2luZ0J1ZGdldCI6MH19fQ=="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIaSB0aGVyZSEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7InRlbXBlcmF0dXJlIjowLjAsIm1heE91dHB1dFRva2VucyI6NTAsImNhbmRpZGF0ZUNvdW50IjoxfX0="
     },
     "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyBwophsPOldL0hUrtLo0x7WRzgsuwWagEY",
     "headers": {
@@ -16,7 +16,7 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"contents\":[{\"parts\":[{\"text\":\"Hello world!\"}],\"role\":\"user\"}],\"generationConfig\":{\"candidateCount\":1,\"maxOutputTokens\":50,\"temperature\":0.0,\"thinkingConfig\":{\"thinkingBudget\":0}}}"
+    "canonical_json": "{\"contents\":[{\"parts\":[{\"text\":\"Hi there!\"}],\"role\":\"user\"}],\"generationConfig\":{\"candidateCount\":1,\"maxOutputTokens\":50,\"temperature\":0.0}}"
   },
   "response": {
     "status": 200,
@@ -26,7 +26,7 @@
           "content": {
             "parts": [
               {
-                "text": "Hello there! How can I help you today?"
+                "text": "Hi there! How can I help you today?"
               }
             ],
             "role": "model"
@@ -36,7 +36,7 @@
         }
       ],
       "modelVersion": "gemini-2.5-flash",
-      "responseId": "2erbaJz0Ep2UjMcPs8u2GA",
+      "responseId": "8-rbaI-MMriOjMcP0vLiyAo",
       "usageMetadata": {
         "candidatesTokenCount": 10,
         "promptTokenCount": 4,
@@ -46,7 +46,8 @@
             "tokenCount": 4
           }
         ],
-        "totalTokenCount": 14
+        "thoughtsTokenCount": 419,
+        "totalTokenCount": 433
       }
     },
     "headers": {
@@ -57,13 +58,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 30 Sep 2025 14:36:09 GMT"
+        "Tue, 30 Sep 2025 14:36:35 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=491"
+        "gfet4t7; dur=4323"
       ],
       "transfer-encoding": [
         "chunked"
@@ -84,5 +85,5 @@
       ]
     }
   },
-  "captured_at": "2025-09-30T14:36:09.428395Z"
+  "captured_at": "2025-09-30T14:36:35.838132Z"
 }

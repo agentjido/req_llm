@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7InRlbXBlcmF0dXJlIjowLjAsIm1heE91dHB1dFRva2VucyI6NTAsImNhbmRpZGF0ZUNvdW50IjoxLCJ0aGlua2luZ0NvbmZpZyI6eyJ0aGlua2luZ0J1ZGdldCI6MH19fQ=="
+      "b64": "eyJ0b29scyI6W3siZnVuY3Rpb25EZWNsYXJhdGlvbnMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19XX1dLCJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJ0ZW1wZXJhdHVyZSI6MC4wLCJtYXhPdXRwdXRUb2tlbnMiOjEwMCwiY2FuZGlkYXRlQ291bnQiOjF9fQ=="
     },
     "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyBwophsPOldL0hUrtLo0x7WRzgsuwWagEY",
     "headers": {
@@ -16,7 +16,7 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"contents\":[{\"parts\":[{\"text\":\"Hello world!\"}],\"role\":\"user\"}],\"generationConfig\":{\"candidateCount\":1,\"maxOutputTokens\":50,\"temperature\":0.0,\"thinkingConfig\":{\"thinkingBudget\":0}}}"
+    "canonical_json": "{\"contents\":[{\"parts\":[{\"text\":\"Tell me a joke about cats\"}],\"role\":\"user\"}],\"generationConfig\":{\"candidateCount\":1,\"maxOutputTokens\":100,\"temperature\":0.0},\"tools\":[{\"functionDeclarations\":[{\"description\":\"Get current weather information for a location\",\"name\":\"get_weather\",\"parameters\":{\"properties\":{\"location\":{\"type\":\"string\"}},\"required\":[\"location\"],\"type\":\"object\"}}]}]}"
   },
   "response": {
     "status": 200,
@@ -26,7 +26,7 @@
           "content": {
             "parts": [
               {
-                "text": "Hello there! How can I help you today?"
+                "text": "Why did the cat sit on the computer?\n\nBecause it wanted to keep an eye on the mouse!"
               }
             ],
             "role": "model"
@@ -36,17 +36,17 @@
         }
       ],
       "modelVersion": "gemini-2.5-flash",
-      "responseId": "2erbaJz0Ep2UjMcPs8u2GA",
+      "responseId": "GuvbaLXuEfrQjMcP4obSaQ",
       "usageMetadata": {
-        "candidatesTokenCount": 10,
-        "promptTokenCount": 4,
+        "candidatesTokenCount": 21,
+        "promptTokenCount": 46,
         "promptTokensDetails": [
           {
             "modality": "TEXT",
-            "tokenCount": 4
+            "tokenCount": 46
           }
         ],
-        "totalTokenCount": 14
+        "totalTokenCount": 67
       }
     },
     "headers": {
@@ -57,13 +57,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 30 Sep 2025 14:36:09 GMT"
+        "Tue, 30 Sep 2025 14:37:14 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=491"
+        "gfet4t7; dur=547"
       ],
       "transfer-encoding": [
         "chunked"
@@ -84,5 +84,5 @@
       ]
     }
   },
-  "captured_at": "2025-09-30T14:36:09.428395Z"
+  "captured_at": "2025-09-30T14:37:14.292423Z"
 }

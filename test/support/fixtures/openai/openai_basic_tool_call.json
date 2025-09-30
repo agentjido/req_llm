@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtZXNzYWdlcyI6W3siY29udGVudCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/Iiwicm9sZSI6InVzZXIifV0sInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsiZGVzY3JpcHRpb24iOiJUaGUgY2l0eSBhbmQgc3RhdGUsIGUuZy4gU2FuIEZyYW5jaXNjbywgQ0EiLCJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZGVzY3JpcHRpb24iOiJUaGUgdGVtcGVyYXR1cmUgdW5pdCB0byB1c2UiLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV0sIm1vZGVsIjoiZ3B0LTRvLW1pbmkiLCJtYXhfdG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1heF90b2tlbnMiOjEwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdwdC00by1taW5pIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsiZGVzY3JpcHRpb24iOiJUaGUgY2l0eSBhbmQgc3RhdGUsIGUuZy4gU2FuIEZyYW5jaXNjbywgQ0EiLCJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZGVzY3JpcHRpb24iOiJUaGUgdGVtcGVyYXR1cmUgdW5pdCB0byB1c2UiLCJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "url": "https://api.openai.com/v1/chat/completions",
     "headers": {
@@ -19,7 +19,7 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"max_tokens\":100,\"messages\":[{\"content\":\"What's the weather like in Paris, France?\",\"role\":\"user\"}],\"model\":\"gpt-4o-mini\",\"stream\":false,\"temperature\":0.0,\"tools\":[{\"function\":{\"description\":\"Get current weather information for a location\",\"name\":\"get_weather\",\"parameters\":{\"properties\":{\"location\":{\"description\":\"The city and state, e.g. San Francisco, CA\",\"type\":\"string\"},\"unit\":{\"description\":\"The temperature unit to use\",\"type\":\"string\"}},\"required\":[\"location\"],\"type\":\"object\"}},\"type\":\"function\"}]}"
+    "canonical_json": "{\"max_tokens\":100,\"messages\":[{\"content\":\"What's the weather like in Paris, France?\",\"role\":\"user\"}],\"model\":\"gpt-4o-mini\",\"seed\":42,\"stream\":false,\"temperature\":0.0,\"tools\":[{\"function\":{\"description\":\"Get current weather information for a location\",\"name\":\"get_weather\",\"parameters\":{\"properties\":{\"location\":{\"description\":\"The city and state, e.g. San Francisco, CA\",\"type\":\"string\"},\"unit\":{\"description\":\"The temperature unit to use\",\"enum\":[\"celsius\",\"fahrenheit\"],\"type\":\"string\"}},\"required\":[\"location\"],\"type\":\"object\"}},\"type\":\"function\"}]}"
   },
   "response": {
     "status": 200,
@@ -40,15 +40,15 @@
                   "arguments": "{\"location\":\"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "call_1AIMktMHe16WhNOPAzY8rngy",
+                "id": "call_cKiQNwzHWyGiTTNuKWsSfv6O",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1758031144,
-      "id": "chatcmpl-CGQUyFamz4AIwRTelfBz0fPBz283N",
+      "created": 1759243019,
+      "id": "chatcmpl-CLVlLxsJcZ19ncKG3F9YSupd9QrJk",
       "model": "gpt-4o-mini-2024-07-18",
       "object": "chat.completion",
       "service_tier": "default",
@@ -61,12 +61,12 @@
           "reasoning_tokens": 0,
           "rejected_prediction_tokens": 0
         },
-        "prompt_tokens": 78,
+        "prompt_tokens": 85,
         "prompt_tokens_details": {
           "audio_tokens": 0,
           "cached_tokens": 0
         },
-        "total_tokens": 94
+        "total_tokens": 101
       }
     },
     "headers": {
@@ -80,7 +80,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9800e1dd8ecda6ee-ORD"
+        "987474a3fbfefa17-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,13 +89,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 16 Sep 2025 13:59:05 GMT"
+        "Tue, 30 Sep 2025 14:36:59 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "502"
+        "439"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -107,8 +107,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=KciNzbeTCY4w9LHUgiDELA0I.MKIExlNQJ.7zwDvzW0-1758031145-1.0.1.1-T54rT17IhwYLjRpJfWlQXwoKvWnrC4aqC.5pJ0LsabX48cxQJGP.zqOC1Xu.96s0hlfK7wQHA0QfyktXT6Hf0V5OuXaYXsEMXxfSlD_dodk; path=/; expires=Tue, 16-Sep-25 14:29:05 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=OLkhK7jo9vC3r4s1RSUYxc7QvoOAtY3lD.3aUIs4uf4-1758031145256-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=FQ1aqxeGET44JqhtuSWyrnADVs0hP3LNujSIZ.j54ds-1759243019-1.0.1.1-79tQF9BYES6pO6ObN227U09ClD1Idq7BdW6Y1dr_ZSoV_ro.bV_2sDlAHmydC22ilE69P_4ho0fqJI7WgET7kVJnBx6JAfPwV.mY94idOEY; path=/; expires=Tue, 30-Sep-25 15:06:59 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=TjNpT_DXl846hAbfgg7bzgpjz_IyzbcQ5dP3Qr0DptU-1759243019947-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -120,7 +120,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "635"
+        "639"
       ],
       "x-openai-proxy-wasm": [
         "v0.1"
@@ -144,9 +144,9 @@
         "0s"
       ],
       "x-request-id": [
-        "req_e0d3a3f1c72a43e9b4de161ffad7f2c0"
+        "req_3f54b826f2a240f98c1d84089a88387e"
       ]
     }
   },
-  "captured_at": "2025-09-16T13:59:05.297752Z"
+  "captured_at": "2025-09-30T14:36:59.937550Z"
 }

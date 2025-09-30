@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7InRlbXBlcmF0dXJlIjowLjAsIm1heE91dHB1dFRva2VucyI6NTAsImNhbmRpZGF0ZUNvdW50IjoxLCJ0aGlua2luZ0NvbmZpZyI6eyJ0aGlua2luZ0J1ZGdldCI6MH19fQ=="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJFeHBsYWluIHF1YW50dW0gY29tcHV0aW5nIGluIHNpbXBsZSB0ZXJtcyJ9XSwicm9sZSI6InVzZXIifV0sImdlbmVyYXRpb25Db25maWciOnsidGVtcGVyYXR1cmUiOjAuMCwibWF4T3V0cHV0VG9rZW5zIjo1MCwiY2FuZGlkYXRlQ291bnQiOjF9fQ=="
     },
     "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyBwophsPOldL0hUrtLo0x7WRzgsuwWagEY",
     "headers": {
@@ -16,7 +16,7 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"contents\":[{\"parts\":[{\"text\":\"Hello world!\"}],\"role\":\"user\"}],\"generationConfig\":{\"candidateCount\":1,\"maxOutputTokens\":50,\"temperature\":0.0,\"thinkingConfig\":{\"thinkingBudget\":0}}}"
+    "canonical_json": "{\"contents\":[{\"parts\":[{\"text\":\"Explain quantum computing in simple terms\"}],\"role\":\"user\"}],\"generationConfig\":{\"candidateCount\":1,\"maxOutputTokens\":50,\"temperature\":0.0}}"
   },
   "response": {
     "status": 200,
@@ -24,29 +24,24 @@
       "candidates": [
         {
           "content": {
-            "parts": [
-              {
-                "text": "Hello there! How can I help you today?"
-              }
-            ],
             "role": "model"
           },
-          "finishReason": "STOP",
+          "finishReason": "MAX_TOKENS",
           "index": 0
         }
       ],
       "modelVersion": "gemini-2.5-flash",
-      "responseId": "2erbaJz0Ep2UjMcPs8u2GA",
+      "responseId": "9OrbaK2EHeCTjMcPoeuqkQc",
       "usageMetadata": {
-        "candidatesTokenCount": 10,
-        "promptTokenCount": 4,
+        "promptTokenCount": 7,
         "promptTokensDetails": [
           {
             "modality": "TEXT",
-            "tokenCount": 4
+            "tokenCount": 7
           }
         ],
-        "totalTokenCount": 14
+        "thoughtsTokenCount": 49,
+        "totalTokenCount": 56
       }
     },
     "headers": {
@@ -57,13 +52,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 30 Sep 2025 14:36:09 GMT"
+        "Tue, 30 Sep 2025 14:36:36 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=491"
+        "gfet4t7; dur=622"
       ],
       "transfer-encoding": [
         "chunked"
@@ -84,5 +79,5 @@
       ]
     }
   },
-  "captured_at": "2025-09-30T14:36:09.428395Z"
+  "captured_at": "2025-09-30T14:36:36.482762Z"
 }

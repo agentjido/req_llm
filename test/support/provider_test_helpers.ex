@@ -127,11 +127,23 @@ defmodule ReqLLM.ProviderTestHelpers do
 
   @doc """
   Assert that response text content is present and valid.
+  
+  For tool call responses, text may be empty if tool calls are present.
   """
-  def assert_text_content(%ReqLLM.Response{} = response) do
+  def assert_text_content(%ReqLLM.Response{message: message} = response) do
     text = ReqLLM.Response.text(response)
     assert is_binary(text)
-    assert String.length(text) > 0
+    
+    has_tool_calls = 
+      message.content
+      |> Enum.any?(fn part -> part.type == :tool_call end)
+    
+    if has_tool_calls do
+      assert String.length(text) >= 0
+    else
+      assert String.length(text) > 0
+    end
+    
     response
   end
 

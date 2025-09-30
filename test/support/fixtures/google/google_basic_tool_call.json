@@ -1,0 +1,95 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJ0b29scyI6W3siZnVuY3Rpb25EZWNsYXJhdGlvbnMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRoZSBjaXR5IGFuZCBzdGF0ZSwgZS5nLiBTYW4gRnJhbmNpc2NvLCBDQSIsInR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJkZXNjcmlwdGlvbiI6IlRoZSB0ZW1wZXJhdHVyZSB1bml0IHRvIHVzZSIsImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fV19XSwiY29udGVudHMiOlt7InBhcnRzIjpbeyJ0ZXh0IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7InRlbXBlcmF0dXJlIjowLjAsIm1heE91dHB1dFRva2VucyI6MTAwLCJjYW5kaWRhdGVDb3VudCI6MX19"
+    },
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyBwophsPOldL0hUrtLo0x7WRzgsuwWagEY",
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "canonical_json": "{\"contents\":[{\"parts\":[{\"text\":\"What's the weather like in Paris, France?\"}],\"role\":\"user\"}],\"generationConfig\":{\"candidateCount\":1,\"maxOutputTokens\":100,\"temperature\":0.0},\"tools\":[{\"functionDeclarations\":[{\"description\":\"Get current weather information for a location\",\"name\":\"get_weather\",\"parameters\":{\"properties\":{\"location\":{\"description\":\"The city and state, e.g. San Francisco, CA\",\"type\":\"string\"},\"unit\":{\"description\":\"The temperature unit to use\",\"enum\":[\"celsius\",\"fahrenheit\"],\"type\":\"string\"}},\"required\":[\"location\"],\"type\":\"object\"}}]}]}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "functionCall": {
+                  "args": {
+                    "location": "Paris, France"
+                  },
+                  "name": "get_weather"
+                },
+                "thoughtSignature": "CqYCAdHtim+GJuo+enqHukuMn4zDc4qtPhwaXKyIPBnwg20WGhx6pQzhRkqAfa8Ee9oCqJQ2i+D0mwKWAoiLbrqI59twstgRIF+AzTNYUP1INji9cPRwzntXWje6g6bAGjW1ECURmFlwiqc/MP1JyqlMwbo/2mR6CEWPlCFOAP2KW/M1fPyt17wjAlfAa2A7cCLlZpYiXXNtlqbAGUkH1J+iv4OLb+H+afsgpBcWJOXqgSl9sf/65E2/T4R/fvPWc9GGFNvAJ7z8RORRkii/A1dU0eOeCiBZiJzFAWBeieDYzb+1L0UsmQ0GGDDZme5iw5HKMCPBU4obYwBaRvnxqCxUf3q72o0HK/e3WWfcrVyYH3fl4xZHVC4Bqq4wFhPEh3KVt0XWidGG"
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-2.5-flash",
+      "responseId": "G-vbaLPKJpuPjMcP_OOl-Qo",
+      "usageMetadata": {
+        "candidatesTokenCount": 17,
+        "promptTokenCount": 90,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 90
+          }
+        ],
+        "thoughtsTokenCount": 64,
+        "totalTokenCount": 171
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Tue, 30 Sep 2025 14:37:15 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=1312"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    }
+  },
+  "captured_at": "2025-09-30T14:37:15.625874Z"
+}

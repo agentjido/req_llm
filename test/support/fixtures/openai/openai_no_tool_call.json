@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV0sIm1vZGVsIjoiZ3B0LTRvLW1pbmkiLCJtYXhfdG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1heF90b2tlbnMiOjEwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3B0LTRvLW1pbmkiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "url": "https://api.openai.com/v1/chat/completions",
     "headers": {
@@ -19,7 +19,7 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"max_tokens\":100,\"messages\":[{\"content\":\"Tell me a joke about cats\",\"role\":\"user\"}],\"model\":\"gpt-4o-mini\",\"stream\":false,\"temperature\":0.0,\"tools\":[{\"function\":{\"description\":\"Get current weather information for a location\",\"name\":\"get_weather\",\"parameters\":{\"properties\":{\"location\":{\"type\":\"string\"}},\"required\":[\"location\"],\"type\":\"object\"}},\"type\":\"function\"}]}"
+    "canonical_json": "{\"max_tokens\":100,\"messages\":[{\"content\":\"Tell me a joke about cats\",\"role\":\"user\"}],\"model\":\"gpt-4o-mini\",\"seed\":42,\"stream\":false,\"temperature\":0.0,\"tools\":[{\"function\":{\"description\":\"Get current weather information for a location\",\"name\":\"get_weather\",\"parameters\":{\"properties\":{\"location\":{\"type\":\"string\"}},\"required\":[\"location\"],\"type\":\"object\"}},\"type\":\"function\"}]}"
   },
   "response": {
     "status": 200,
@@ -37,8 +37,8 @@
           }
         }
       ],
-      "created": 1758031145,
-      "id": "chatcmpl-CGQUzis7pEOfi1GLR0MQwmsEbtGPU",
+      "created": 1759243018,
+      "id": "chatcmpl-CLVlKyx12Mx1in3ZVZXw9jX68WOV4",
       "model": "gpt-4o-mini-2024-07-18",
       "object": "chat.completion",
       "service_tier": "default",
@@ -70,7 +70,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9800e1e2bf43a6ee-ORD"
+        "9874749d191afa17-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -79,13 +79,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 16 Sep 2025 13:59:06 GMT"
+        "Tue, 30 Sep 2025 14:36:58 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "556"
+        "860"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -97,8 +97,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=Kz8vVUw7P2LVMTiW2gPlcqyi1ZxGoNJk1wHPNDL7ZAI-1758031146-1.0.1.1-SWquq0GpxOV.ql8IDL8XSwe0dwSAbhkCZ3Xcq2XWRMHYzD8BIBHG.ktamP0kxfwBurPTpHDzmAhKNKcFaa6eOF2Ydcwsjj_qCGeGSm50SqI; path=/; expires=Tue, 16-Sep-25 14:29:06 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=X3utQ2_vBdGO7FydQ40yQ91IgoITZaJqpEBSfmr..jY-1758031146146-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=hXGN0Jb4jJcBUNsNXhbYXL8CFksA8qtw4kQzhmZI_cU-1759243018-1.0.1.1-mT3.FJDMSByFwsXvAQU4cNLrhQsmwaQl7VVwGrmmx._uQqlE29v8tHE_xfw87ULidO7omCnBtzljLwqtIK.13c5ba9ZnFur5gL6fJ0tM7U0; path=/; expires=Tue, 30-Sep-25 15:06:58 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=Uk3l9MF82FO7aAFKqmcoam9i9OJi4z4eGQoFBodaC20-1759243018842-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -110,7 +110,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "700"
+        "1017"
       ],
       "x-openai-proxy-wasm": [
         "v0.1"
@@ -134,9 +134,9 @@
         "0s"
       ],
       "x-request-id": [
-        "req_9630dce488844d348653ac475b17cd1f"
+        "req_9bf50a2c23ca47edae723496f1e809de"
       ]
     }
   },
-  "captured_at": "2025-09-16T13:59:06.077205Z"
+  "captured_at": "2025-09-30T14:36:58.832672Z"
 }

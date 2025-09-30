@@ -1,0 +1,83 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJ0b29scyI6W3siZnVuY3Rpb25EZWNsYXJhdGlvbnMiOlt7ImRlc2NyaXB0aW9uIjoiR2VuZXJhdGUgc3RydWN0dXJlZCBvdXRwdXQgbWF0Y2hpbmcgdGhlIHByb3ZpZGVkIHNjaGVtYSIsIm5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJjb21wYW55X25hbWUiOnsiZGVzY3JpcHRpb24iOiJOYW1lIG9mIHRoZSBjb21wYW55IiwidHlwZSI6InN0cmluZyJ9LCJlbXBsb3llZV9jb3VudCI6eyJkZXNjcmlwdGlvbiI6IkFwcHJveGltYXRlIG51bWJlciBvZiBlbXBsb3llZXMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJmb3VuZGVkX3llYXIiOnsiZGVzY3JpcHRpb24iOiJZZWFyIGNvbXBhbnkgd2FzIGZvdW5kZWQiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJoZWFkcXVhcnRlcnNfY2l0eSI6eyJkZXNjcmlwdGlvbiI6IkNpdHkgd2hlcmUgSFEgaXMgbG9jYXRlZCIsInR5cGUiOiJzdHJpbmcifSwiaGVhZHF1YXJ0ZXJzX2NvdW50cnkiOnsiZGVzY3JpcHRpb24iOiJDb3VudHJ5IHdoZXJlIEhRIGlzIGxvY2F0ZWQiLCJ0eXBlIjoic3RyaW5nIn0sImluZHVzdHJ5Ijp7ImRlc2NyaXB0aW9uIjoiUHJpbWFyeSBpbmR1c3RyeSBvciBzZWN0b3IiLCJ0eXBlIjoic3RyaW5nIn0sImtleV9wcm9kdWN0cyI6eyJkZXNjcmlwdGlvbiI6Ik1haW4gcHJvZHVjdHMgb3Igc2VydmljZXMiLCJpdGVtcyI6eyJ0eXBlIjoic3RyaW5nIn0sInR5cGUiOiJhcnJheSJ9fSwicmVxdWlyZWQiOlsiY29tcGFueV9uYW1lIiwiZm91bmRlZF95ZWFyIiwiaGVhZHF1YXJ0ZXJzX2NpdHkiLCJoZWFkcXVhcnRlcnNfY291bnRyeSJdLCJ0eXBlIjoib2JqZWN0In19XX1dLCJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJHZW5lcmF0ZSBhIGNvbXBsZXRlIHByb2ZpbGUgZm9yIGEgdGVjaCBzdGFydHVwIGNvbXBhbnkgaW5jbHVkaW5nIG5hbWUsIGZvdW5kaW5nIHllYXIsIGxvY2F0aW9uLCBhbmQgb3RoZXIgZGV0YWlscyJ9XSwicm9sZSI6InVzZXIifV0sImdlbmVyYXRpb25Db25maWciOnsidGVtcGVyYXR1cmUiOjAuMCwibWF4T3V0cHV0VG9rZW5zIjoyMDAsImNhbmRpZGF0ZUNvdW50IjoxfX0="
+    },
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyBwophsPOldL0hUrtLo0x7WRzgsuwWagEY",
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "canonical_json": "{\"contents\":[{\"parts\":[{\"text\":\"Generate a complete profile for a tech startup company including name, founding year, location, and other details\"}],\"role\":\"user\"}],\"generationConfig\":{\"candidateCount\":1,\"maxOutputTokens\":200,\"temperature\":0.0},\"tools\":[{\"functionDeclarations\":[{\"description\":\"Generate structured output matching the provided schema\",\"name\":\"structured_output\",\"parameters\":{\"properties\":{\"company_name\":{\"description\":\"Name of the company\",\"type\":\"string\"},\"employee_count\":{\"description\":\"Approximate number of employees\",\"minimum\":1,\"type\":\"integer\"},\"founded_year\":{\"description\":\"Year company was founded\",\"minimum\":1,\"type\":\"integer\"},\"headquarters_city\":{\"description\":\"City where HQ is located\",\"type\":\"string\"},\"headquarters_country\":{\"description\":\"Country where HQ is located\",\"type\":\"string\"},\"industry\":{\"description\":\"Primary industry or sector\",\"type\":\"string\"},\"key_products\":{\"description\":\"Main products or services\",\"items\":{\"type\":\"string\"},\"type\":\"array\"}},\"required\":[\"company_name\",\"founded_year\",\"headquarters_city\",\"headquarters_country\"],\"type\":\"object\"}}]}]}"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "role": "model"
+          },
+          "finishReason": "MAX_TOKENS",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-2.5-flash",
+      "responseId": "9-rbaK6gO5qZjMcP85u3mAM",
+      "usageMetadata": {
+        "promptTokenCount": 192,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 192
+          }
+        ],
+        "thoughtsTokenCount": 199,
+        "totalTokenCount": 391
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Tue, 30 Sep 2025 14:36:39 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=1792"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    }
+  },
+  "captured_at": "2025-09-30T14:36:40.021982Z"
+}

@@ -1,12 +1,15 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtZXNzYWdlcyI6W3sicm9sZSI6InVzZXIiLCJjb250ZW50IjpbeyJ0ZXh0IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJ0eXBlIjoidGV4dCJ9XX1dLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwiaW5wdXRfc2NoZW1hIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsiZGVzY3JpcHRpb24iOiJUaGUgY2l0eSBhbmQgc3RhdGUsIGUuZy4gU2FuIEZyYW5jaXNjbywgQ0EiLCJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZGVzY3JpcHRpb24iOiJUaGUgdGVtcGVyYXR1cmUgdW5pdCB0byB1c2UiLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJnZXRfd2VhdGhlciJ9XSwidGVtcGVyYXR1cmUiOjAuMCwibW9kZWwiOiJjbGF1ZGUtMy01LXNvbm5ldC0yMDI0MTAyMiIsIm1heF90b2tlbnMiOjEwMH0="
+      "b64": "eyJtZXNzYWdlcyI6W3sicm9sZSI6InVzZXIiLCJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8ifV0sInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJpbnB1dF9zY2hlbWEiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRoZSBjaXR5IGFuZCBzdGF0ZSwgZS5nLiBTYW4gRnJhbmNpc2NvLCBDQSIsInR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJkZXNjcmlwdGlvbiI6IlRoZSB0ZW1wZXJhdHVyZSB1bml0IHRvIHVzZSIsImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fV0sIm1vZGVsIjoiY2xhdWRlLTMtNS1zb25uZXQtMjAyNDEwMjIiLCJ0ZW1wZXJhdHVyZSI6MC4wLCJtYXhfdG9rZW5zIjoxMDB9"
     },
     "url": "https://api.anthropic.com/v1/messages",
     "headers": {
       "accept-encoding": [
         "gzip"
+      ],
+      "anthropic-beta": [
+        "tools-2024-05-16"
       ],
       "anthropic-version": [
         "2023-06-01"
@@ -22,7 +25,7 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"max_tokens\":100,\"messages\":[{\"content\":[{\"text\":\"What's the weather like in Paris, France?\",\"type\":\"text\"}],\"role\":\"user\"}],\"model\":\"claude-3-5-sonnet-20241022\",\"stream\":false,\"temperature\":0.0,\"tools\":[{\"description\":\"Get current weather information for a location\",\"input_schema\":{\"properties\":{\"location\":{\"description\":\"The city and state, e.g. San Francisco, CA\",\"type\":\"string\"},\"unit\":{\"description\":\"The temperature unit to use\",\"type\":\"string\"}},\"required\":[\"location\"],\"type\":\"object\"},\"name\":\"get_weather\"}]}"
+    "canonical_json": "{\"max_tokens\":100,\"messages\":[{\"content\":\"What's the weather like in Paris, France?\",\"role\":\"user\"}],\"model\":\"claude-3-5-sonnet-20241022\",\"stream\":false,\"temperature\":0.0,\"tools\":[{\"description\":\"Get current weather information for a location\",\"input_schema\":{\"properties\":{\"location\":{\"description\":\"The city and state, e.g. San Francisco, CA\",\"type\":\"string\"},\"unit\":{\"description\":\"The temperature unit to use\",\"enum\":[\"celsius\",\"fahrenheit\"],\"type\":\"string\"}},\"required\":[\"location\"],\"type\":\"object\"},\"name\":\"get_weather\"}]}"
   },
   "response": {
     "status": 200,
@@ -33,7 +36,7 @@
           "type": "text"
         },
         {
-          "id": "toolu_01VMHp6e3SHxaGB3rwdESJ4B",
+          "id": "toolu_01BH4gv4SJjMcR8Uapv5NbTs",
           "input": {
             "location": "Paris, France"
           },
@@ -41,7 +44,7 @@
           "type": "tool_use"
         }
       ],
-      "id": "msg_017qiCoupHqz9CrMkB5Gqajw",
+      "id": "msg_01So1249q2JqDdFxeLbKpJhH",
       "model": "claude-3-5-sonnet-20241022",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -54,7 +57,7 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 423,
+        "input_tokens": 433,
         "output_tokens": 69,
         "service_tier": "standard"
       }
@@ -70,7 +73,7 @@
         "80000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-09-16T13:59:21Z"
+        "2025-09-30T14:36:55Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "16000"
@@ -79,7 +82,7 @@
         "16000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-09-16T13:59:22Z"
+        "2025-09-30T14:36:57Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -88,7 +91,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-09-16T13:59:19Z"
+        "2025-09-30T14:36:54Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "96000"
@@ -97,13 +100,13 @@
         "96000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-09-16T13:59:21Z"
+        "2025-09-30T14:36:55Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9800e237bfccf4e6-ORD"
+        "987474890fe8e828-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -112,10 +115,10 @@
         "application/json"
       ],
       "date": [
-        "Tue, 16 Sep 2025 13:59:22 GMT"
+        "Tue, 30 Sep 2025 14:36:56 GMT"
       ],
       "request-id": [
-        "req_011CTCCWMGkmrRrZTJxuXrgD"
+        "req_011CTekhSEYKhNNdroSJH3iC"
       ],
       "server": [
         "cloudflare"
@@ -130,12 +133,12 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "3248"
+        "2269"
       ],
       "x-robots-tag": [
         "none"
       ]
     }
   },
-  "captured_at": "2025-09-16T13:59:22.242111Z"
+  "captured_at": "2025-09-30T14:36:56.853398Z"
 }

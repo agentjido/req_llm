@@ -37,31 +37,31 @@
                   "arguments": "{\"location\":\"Paris, France\",\"unit\":\"fahrenheit\"}",
                   "name": "get_weather"
                 },
-                "id": "3qynrjcxs",
+                "id": "byqk9fr5b",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1759241121,
-      "id": "chatcmpl-3b82473c-115b-4978-9dc8-0013627e9164",
+      "created": 1759242971,
+      "id": "chatcmpl-cf49e876-a195-41f5-91c1-764e8080fe07",
       "model": "llama-3.1-8b-instant",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_50a6be1b6f",
+      "system_fingerprint": "fp_90c2e79dab",
       "usage": {
-        "completion_time": 0.032733037,
+        "completion_time": 0.034902427,
         "completion_tokens": 24,
-        "prompt_time": 0.01714594,
+        "prompt_time": 0.016850687,
         "prompt_tokens": 261,
-        "queue_time": 0.203310091,
-        "total_time": 0.049878977,
+        "queue_time": 0.20423344,
+        "total_time": 0.051753114,
         "total_tokens": 285
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6df2bwbfqrvbj48ydb9kfgj"
+        "id": "req_01k6dgtst4fgbrn1v24gq0r3z1"
       }
     },
     "headers": {
@@ -75,7 +75,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "987446525dc6ef0e-ORD"
+        "987473783ae9607d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -84,13 +84,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 30 Sep 2025 14:05:21 GMT"
+        "Tue, 30 Sep 2025 14:36:11 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=9DTgCCnNpkL5DZtIpqDE8CH8yqw0tc1jOwbeTc9i3W4-1759241121-1.0.1.1-ki2YAMJaLfrqc0gik460Penhwv9dCblww3Jmt3Z0opzzzGmEO9PfKWSwov65RAEivQx6HOZybCt6CyCQh6HA5ZiGa0TpDMXVYJ.LOpGBIi8; path=/; expires=Tue, 30-Sep-25 14:35:21 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=BDbVR7K0PZyeIdeIsDbkcCMQtiYDaIVNgQxJwu6M6s0-1759242971-1.0.1.1-Utj02jcOaPvFc4ASvJazkvvPCEp23elCMHBuXaTtaR8GIP0wRkvSCf4TYLgBMXzZphhU2j7B8NDOYJpWsl4PnB1mcKvMCtY5Gt_lplGmUwM; path=/; expires=Tue, 30-Sep-25 15:06:11 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -114,18 +114,18 @@
         "14397"
       ],
       "x-ratelimit-remaining-tokens": [
-        "5478"
+        "5458"
       ],
       "x-ratelimit-reset-requests": [
-        "17.454999999s"
+        "17.65s"
       ],
       "x-ratelimit-reset-tokens": [
-        "5.218s"
+        "5.411999999s"
       ],
       "x-request-id": [
-        "req_01k6df2bwbfqrvbj48ydb9kfgj"
+        "req_01k6dgtst4fgbrn1v24gq0r3z1"
       ]
     }
   },
-  "captured_at": "2025-09-30T14:05:21.934441Z"
+  "captured_at": "2025-09-30T14:36:11.272363Z"
 }
