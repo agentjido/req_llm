@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtZXNzYWdlcyI6W3sicm9sZSI6InVzZXIiLCJjb250ZW50IjpbeyJ0eXBlIjoidGV4dCIsInRleHQiOiJUZWxsIG1lIGFib3V0IHRoZSBjb2xvciBibHVlIn1dfV0sInN0cmVhbSI6ZmFsc2UsIm1vZGVsIjoibGxhbWEtMy4xLThiLWluc3RhbnQiLCJtYXhfdG9rZW5zIjoxNSwidGVtcGVyYXR1cmUiOjAuOH0="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhYm91dCB0aGUgY29sb3IgYmx1ZSIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImxsYW1hLTMuMS04Yi1pbnN0YW50Iiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuOSwidG9wX3AiOjAuOH0="
     },
     "url": "https://api.groq.com/openai/v1/chat/completions",
     "headers": {
@@ -19,7 +19,7 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"max_tokens\":15,\"messages\":[{\"content\":[{\"text\":\"Tell me about the color blue\",\"type\":\"text\"}],\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"stream\":false,\"temperature\":0.8}"
+    "canonical_json": "{\"max_tokens\":100,\"messages\":[{\"content\":\"Tell me about the color blue\",\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"stream\":false,\"temperature\":0.9,\"top_p\":0.8}"
   },
   "response": {
     "status": 200,
@@ -30,29 +30,29 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "The color blue is a calming and versatile hue that has captivated human imagination",
+            "content": "The color blue is a fascinating topic that has captivated human imagination for centuries. Here are some interesting facts and aspects about the color blue:\n\n**Physical Properties:**\n\n1. **Wavelength:** Blue is a color with a wavelength between 450-495 nanometers, which falls within the visible light spectrum.\n2. **Pigmentation:** Blue is created by the absorption of light in the red and yellow parts of the spectrum, while reflecting the blue light.\n\n**Cultural Significance:**\n\n",
             "role": "assistant"
           }
         }
       ],
-      "created": 1758125399,
-      "id": "chatcmpl-90d20f81-fa16-4478-8493-994ba6b92187",
+      "created": 1759241177,
+      "id": "chatcmpl-2d054d18-eedd-4392-a98d-7a5df4765058",
       "model": "llama-3.1-8b-instant",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_8a13dfab2b",
+      "system_fingerprint": "fp_90c2e79dab",
       "usage": {
-        "completion_time": 0.025571866,
-        "completion_tokens": 15,
-        "prompt_time": 0.002385489,
+        "completion_time": 0.16706476,
+        "completion_tokens": 100,
+        "prompt_time": 0.002840767,
         "prompt_tokens": 41,
-        "queue_time": 0.187811776,
-        "total_time": 0.027957355,
-        "total_tokens": 56
+        "queue_time": 0.231946101,
+        "total_time": 0.169905527,
+        "total_tokens": 141
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k5c717bretktej38n1gz60bw"
+        "id": "req_01k6df42fwe06r2y38rfyvk8mr"
       }
     },
     "headers": {
@@ -66,7 +66,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9809df023f5b1105-ORD"
+        "987447afd8b10011-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -75,13 +75,13 @@
         "application/json"
       ],
       "date": [
-        "Wed, 17 Sep 2025 16:09:59 GMT"
+        "Tue, 30 Sep 2025 14:06:17 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=kWOUQPlh_ewj_FMrAbe56e4UYuchw7N8AKzIdgSAKqc-1758125399-1.0.1.1-PDk_e2V7HLvkKDdho_ZVg7rX2wGG8Ie_roPm4iiPmxutBl6nI0O4H711fZQIvoaMqc2L2bcIAhZ6urqNgAIYqUVcCVBhGmBnFDtYjeI98.A; path=/; expires=Wed, 17-Sep-25 16:39:59 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=KynJahlDSS784gV1I9hPYHXIvH0PiY2uqH3beudO2BM-1759241177-1.0.1.1-wowhFh.UlzHdB8eERzRo7DinKAgkhl3tVzbXIi8E7jRFWhwsqUCTdfpXoV4A_n6azAPj75E_xCumGFZGkGbAkQeBtpadaRobTjmQr47pIpE; path=/; expires=Tue, 30-Sep-25 14:36:17 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -93,7 +93,7 @@
         "1.1 google"
       ],
       "x-groq-region": [
-        "msp"
+        "yul"
       ],
       "x-ratelimit-limit-requests": [
         "14400"
@@ -102,21 +102,21 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "14396"
+        "14387"
       ],
       "x-ratelimit-remaining-tokens": [
-        "5894"
+        "5321"
       ],
       "x-ratelimit-reset-requests": [
-        "23.754s"
+        "1m17.713999999s"
       ],
       "x-ratelimit-reset-tokens": [
-        "1.054999999s"
+        "6.786s"
       ],
       "x-request-id": [
-        "req_01k5c717bretktej38n1gz60bw"
+        "req_01k6df42fwe06r2y38rfyvk8mr"
       ]
     }
   },
-  "captured_at": "2025-09-17T16:09:59.667922Z"
+  "captured_at": "2025-09-30T14:06:17.976065Z"
 }

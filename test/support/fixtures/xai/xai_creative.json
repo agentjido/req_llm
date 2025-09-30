@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYWJvdXQgdGhlIGNvbG9yIGJsdWUiLCJyb2xlIjoidXNlciJ9XSwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuOCwibW9kZWwiOiJncm9rLTMiLCJtYXhfdG9rZW5zIjoxNSwibGl2ZV9zZWFyY2giOmZhbHNlLCJlbmFibGVfY2FjaGVkX3Byb21wdCI6dHJ1ZX0="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGFib3V0IHRoZSBjb2xvciBibHVlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay0zIiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuOSwidG9wX3AiOjAuOH0="
     },
     "url": "https://api.x.ai/v1/chat/completions",
     "headers": {
@@ -19,7 +19,7 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"enable_cached_prompt\":true,\"live_search\":false,\"max_tokens\":15,\"messages\":[{\"content\":\"Tell me about the color blue\",\"role\":\"user\"}],\"model\":\"grok-3\",\"stream\":false,\"temperature\":0.8}"
+    "canonical_json": "{\"max_completion_tokens\":100,\"messages\":[{\"content\":\"Tell me about the color blue\",\"role\":\"user\"}],\"model\":\"grok-3\",\"stream\":false,\"temperature\":0.9,\"top_p\":0.8}"
   },
   "response": {
     "status": 200,
@@ -29,19 +29,19 @@
           "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "The color blue is a primary color in the visible spectrum, lying between green",
+            "content": "The color blue is a primary color in the visible spectrum, situated between green and violet. It is often associated with qualities like calmness, serenity, and stability, and it holds various meanings and significance across cultures, science, and psychology. Here’s a detailed exploration of the color blue:\n\n### 1. **Physical and Scientific Aspects**\n- **Wavelength**: Blue light has a wavelength typically ranging from approximately 450 to 495 nanometers in the visible spectrum.\n- **Perception**: The human eye",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1758029420,
-      "id": "aa78aac1-7132-7e24-b5e9-51346ff02695_us-east-1",
+      "created": 1759241087,
+      "id": "4e923d65-4799-27bc-339f-6069168d4718_us-east-1",
       "model": "grok-3",
       "object": "chat.completion",
       "system_fingerprint": "fp_f02e6df795",
       "usage": {
-        "completion_tokens": 15,
+        "completion_tokens": 100,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
@@ -56,7 +56,7 @@
           "image_tokens": 0,
           "text_tokens": 12
         },
-        "total_tokens": 27
+        "total_tokens": 112
       }
     },
     "headers": {
@@ -70,7 +70,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9800b7c58c6147a1-ORD"
+        "98744579beabd240-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -79,13 +79,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 16 Sep 2025 13:30:24 GMT"
+        "Tue, 30 Sep 2025 14:04:52 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=3g_MLR9d.boB1trm04H_j8_KsqHhmgeZwi.tE7jI4yQ-1758029424-1.0.1.1-ap5ae7xs5XcQBIwzCUSHFuNqSmNDYByEXHlyIdeYFqMYCwtXPw0fzaw4kocVaCoZHRWSQjRoi5nPiaHSt_ixoqB3PG0ndg6RPzIuddGZTrE; path=/; expires=Tue, 16-Sep-25 14:00:24 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=7aZBnLoC_fkzy52A4VWkJjeqvlSMlobvWbU5f10B7Rc-1759241092-1.0.1.1-htfcm.vx9ZaKaxXpAULuCow71iXrS8JjRFEuOaGRnQkN9LG3NflyyX7J3iKEf0qYy0s7zjsRcPaUc1dMrBcXxzDi8a41c1motXW.Z4Hj3Xo; path=/; expires=Tue, 30-Sep-25 14:34:52 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -97,12 +97,12 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-d7bae30032f23310abccab53fdcae748-9c16af840023f7fe-01"
+        "00-57bc046d0b9f2603d7895ff03b088799-d62016550002d01d-01"
       ],
       "x-zero-data-retention": [
         "false"
       ]
     }
   },
-  "captured_at": "2025-09-16T13:30:24.189829Z"
+  "captured_at": "2025-09-30T14:04:52.746051Z"
 }

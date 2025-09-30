@@ -11,5 +11,5 @@ defmodule ReqLLM.Coverage.Google.StreamingTest do
 
   use ReqLLM.ProviderTest.Streaming,
     provider: :google,
-    model: "google:gemini-1.5-flash"
+    model: "google:gemini-2.5-flash"
 end

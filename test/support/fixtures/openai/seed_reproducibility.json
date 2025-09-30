@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtZXNzYWdlcyI6W3siY29udGVudCI6IkdlbmVyYXRlIGEgcmFuZG9tIG51bWJlciIsInJvbGUiOiJ1c2VyIn1dLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJtb2RlbCI6ImdwdC00by1taW5pIiwibWF4X3Rva2VucyI6MTB9"
+      "b64": "eyJtYXhfdG9rZW5zIjoxMCwibWF4X3Rva2VucyI6MTAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSByYW5kb20gbnVtYmVyIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3B0LTRvLW1pbmkiLCJzZWVkIjoxMjM0NSwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "url": "https://api.openai.com/v1/chat/completions",
     "headers": {
@@ -19,7 +19,7 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"max_tokens\":10,\"messages\":[{\"content\":\"Generate a random number\",\"role\":\"user\"}],\"model\":\"gpt-4o-mini\",\"stream\":false,\"temperature\":0.0}"
+    "canonical_json": "{\"max_tokens\":10,\"messages\":[{\"content\":\"Generate a random number\",\"role\":\"user\"}],\"model\":\"gpt-4o-mini\",\"seed\":12345,\"stream\":false,\"temperature\":0.0}"
   },
   "response": {
     "status": 200,
@@ -31,14 +31,14 @@
           "logprobs": null,
           "message": {
             "annotations": [],
-            "content": "Sure! Here’s a random number: **42",
+            "content": "Sure! Here’s a random number: **47",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1758029426,
-      "id": "chatcmpl-CGQ3Ga9NpQ4C92828pNJNqZI4USM0",
+      "created": 1759241166,
+      "id": "chatcmpl-CLVHSJRAmRNqFjA9kxH6lOgaa6mz2",
       "model": "gpt-4o-mini-2024-07-18",
       "object": "chat.completion",
       "service_tier": "default",
@@ -70,7 +70,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9800b7e9ab0feaef-ORD"
+        "9874476a2cd1f153-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -79,13 +79,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 16 Sep 2025 13:30:26 GMT"
+        "Tue, 30 Sep 2025 14:06:06 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "412"
+        "280"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -97,8 +97,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=0mb.y6oyRhC8rbtUJAzNToTP7WRflZ56W4_nwN3Yqjw-1758029426-1.0.1.1-pQ5.AdqDwcUy58KrJ.fPUGRhQVUZy0Ktf8o4dMzRgYRTrDprWeP4xydBbiK63ObS_QauoYAQYQK_x8vdKIT5gAndZ0w9pKLW62Q7AA_ETk4; path=/; expires=Tue, 16-Sep-25 14:00:26 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=Rq.g8qEF4chBgeE342Ck0t53tlYiRJ0sbo__zRp3UKE-1758029426816-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=_b.bVs8C.DXqYTaICfAx6paxjM7lfivprEolzpDY3qY-1759241166-1.0.1.1-LHbDJPzu6PxFSdTstAY0GHd16Xyc8SpEllgPaAnSL7lyC55aYqwcP2eFQ8atsLbD5S42ossgSJVvWaaUpJUx5B_7P3VhBd_3izkO3l4Sczc; path=/; expires=Tue, 30-Sep-25 14:36:06 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=U4yw2KuQwSQW1BpRqaQ9nICFIR6bjdMNr_MAV5APHA8-1759241166778-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -110,7 +110,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "575"
+        "298"
       ],
       "x-openai-proxy-wasm": [
         "v0.1"
@@ -134,9 +134,9 @@
         "0s"
       ],
       "x-request-id": [
-        "req_5ea73d7ed03447058431872dd6f10b2b"
+        "req_b7f43626d2aa4651ac37d04d3c1edabd"
       ]
     }
   },
-  "captured_at": "2025-09-16T13:30:26.749406Z"
+  "captured_at": "2025-09-30T14:06:06.780706Z"
 }

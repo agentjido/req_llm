@@ -17,7 +17,7 @@ defmodule ReqLLM.Coverage.Groq.CoreTest do
         "groq:llama-3.1-8b-instant",
         "What is 2+2?",
         temperature: 0.0,
-        max_tokens: 10,
+        max_tokens: 20,
         fixture: "high_speed_inference"
       )
 

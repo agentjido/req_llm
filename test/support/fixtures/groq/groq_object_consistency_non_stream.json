@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtZXNzYWdlcyI6W3sicm9sZSI6InVzZXIiLCJjb250ZW50IjpbeyJ0eXBlIjoidGV4dCIsInRleHQiOiJHZW5lcmF0ZSBhIGJsb2cgYXJ0aWNsZSBtZXRhZGF0YSJ9XX1dLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZW5lcmF0ZSBzdHJ1Y3R1cmVkIG91dHB1dCBtYXRjaGluZyB0aGUgcHJvdmlkZWQgc2NoZW1hIiwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImF1dGhvciI6eyJkZXNjcmlwdGlvbiI6IkFydGljbGUgYXV0aG9yIiwidHlwZSI6InN0cmluZyJ9LCJ0YWdzIjp7ImRlc2NyaXB0aW9uIjoiQXJ0aWNsZSB0YWdzIG9yIGNhdGVnb3JpZXMiLCJpdGVtcyI6eyJ0eXBlIjoic3RyaW5nIn0sInR5cGUiOiJhcnJheSJ9LCJ0aXRsZSI6eyJkZXNjcmlwdGlvbiI6IkFydGljbGUgdGl0bGUiLCJ0eXBlIjoic3RyaW5nIn0sIndvcmRfY291bnQiOnsiZGVzY3JpcHRpb24iOiJBcHByb3hpbWF0ZSB3b3JkIGNvdW50IiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifX0sInJlcXVpcmVkIjpbInRpdGxlIiwiYXV0aG9yIiwid29yZF9jb3VudCJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV0sIm1vZGVsIjoibGxhbWEtMy4xLThiLWluc3RhbnQiLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQifSwidHlwZSI6ImZ1bmN0aW9uIn0sIm1heF90b2tlbnMiOjIwMCwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBibG9nIGFydGljbGUgbWV0YWRhdGEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJsbGFtYS0zLjEtOGItaW5zdGFudCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQifSwidHlwZSI6ImZ1bmN0aW9uIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsiYXV0aG9yIjp7ImRlc2NyaXB0aW9uIjoiQXJ0aWNsZSBhdXRob3IiLCJ0eXBlIjoic3RyaW5nIn0sInRhZ3MiOnsiZGVzY3JpcHRpb24iOiJBcnRpY2xlIHRhZ3Mgb3IgY2F0ZWdvcmllcyIsIml0ZW1zIjp7InR5cGUiOiJzdHJpbmcifSwidHlwZSI6ImFycmF5In0sInRpdGxlIjp7ImRlc2NyaXB0aW9uIjoiQXJ0aWNsZSB0aXRsZSIsInR5cGUiOiJzdHJpbmcifSwid29yZF9jb3VudCI6eyJkZXNjcmlwdGlvbiI6IkFwcHJveGltYXRlIHdvcmQgY291bnQiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9fSwicmVxdWlyZWQiOlsidGl0bGUiLCJhdXRob3IiLCJ3b3JkX2NvdW50Il0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "url": "https://api.groq.com/openai/v1/chat/completions",
     "headers": {
@@ -19,7 +19,7 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"max_tokens\":200,\"messages\":[{\"content\":[{\"text\":\"Generate a blog article metadata\",\"type\":\"text\"}],\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"stream\":false,\"temperature\":0.0,\"tool_choice\":{\"function\":{\"name\":\"structured_output\"},\"type\":\"function\"},\"tools\":[{\"function\":{\"description\":\"Generate structured output matching the provided schema\",\"name\":\"structured_output\",\"parameters\":{\"properties\":{\"author\":{\"description\":\"Article author\",\"type\":\"string\"},\"tags\":{\"description\":\"Article tags or categories\",\"items\":{\"type\":\"string\"},\"type\":\"array\"},\"title\":{\"description\":\"Article title\",\"type\":\"string\"},\"word_count\":{\"description\":\"Approximate word count\",\"minimum\":1,\"type\":\"integer\"}},\"required\":[\"title\",\"author\",\"word_count\"],\"type\":\"object\"}},\"type\":\"function\"}]}"
+    "canonical_json": "{\"max_tokens\":200,\"messages\":[{\"content\":\"Generate a blog article metadata\",\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"seed\":42,\"stream\":false,\"temperature\":0.0,\"tool_choice\":{\"function\":{\"name\":\"structured_output\"},\"type\":\"function\"},\"tools\":[{\"function\":{\"description\":\"Generate structured output matching the provided schema\",\"name\":\"structured_output\",\"parameters\":{\"properties\":{\"author\":{\"description\":\"Article author\",\"type\":\"string\"},\"tags\":{\"description\":\"Article tags or categories\",\"items\":{\"type\":\"string\"},\"type\":\"array\"},\"title\":{\"description\":\"Article title\",\"type\":\"string\"},\"word_count\":{\"description\":\"Approximate word count\",\"minimum\":1,\"type\":\"integer\"}},\"required\":[\"title\",\"author\",\"word_count\"],\"type\":\"object\"}},\"type\":\"function\"}]}"
   },
   "response": {
     "status": 200,
@@ -34,34 +34,34 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"author\":\"John Doe\",\"tags\":[\"Cybersecurity\",\"Technology\",\"Security\"],\"title\":\"The Importance of Cybersecurity in the Modern World\",\"word_count\":500}",
+                  "arguments": "{\"author\":\"John Doe\",\"tags\":[\"SEO\",\"Metadata\",\"Blog Articles\"],\"title\":\"Meta Description of Blog Article\",\"word_count\":250}",
                   "name": "structured_output"
                 },
-                "id": "5q9vsssdk",
+                "id": "70zg58902",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1758125404,
-      "id": "chatcmpl-3150e17c-c47a-4003-8971-4868441cffc2",
+      "created": 1759241168,
+      "id": "chatcmpl-35fb53cc-dcbe-4070-977d-7a6d95a89728",
       "model": "llama-3.1-8b-instant",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_c54ae48ece",
+      "system_fingerprint": "fp_50a6be1b6f",
       "usage": {
-        "completion_time": 0.062655687,
-        "completion_tokens": 46,
-        "prompt_time": 0.017632127,
+        "completion_time": 0.060016151,
+        "completion_tokens": 41,
+        "prompt_time": 0.016583166,
         "prompt_tokens": 296,
-        "queue_time": 0.187511283,
-        "total_time": 0.080287814,
-        "total_tokens": 342
+        "queue_time": 0.205441484,
+        "total_time": 0.076599317,
+        "total_tokens": 337
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k5c71btxejxah0cyzv9nfymq"
+        "id": "req_01k6df3snte4s8dxhk89f6whhs"
       }
     },
     "headers": {
@@ -75,7 +75,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9809df1ebc201105-ORD"
+        "987447774d24ef0e-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -84,13 +84,13 @@
         "application/json"
       ],
       "date": [
-        "Wed, 17 Sep 2025 16:10:04 GMT"
+        "Tue, 30 Sep 2025 14:06:08 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=qBRkpdtrAsaGm9mEpO6pkO2Di8AOOLZHxtsyKExfG_U-1758125404-1.0.1.1-kWTHay_j4466pNzgliIVaItLzRsYngR2gMy7yRLQPnoWEpnoEwX6prySzVGjD5lLr2jn2X.8Kt2ZARZ_anPevfXBjH10DcHF20eAcgv3qzs; path=/; expires=Wed, 17-Sep-25 16:40:04 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=6HmFbEkrnFSIIHD.4YPFvuJACjtRZNuhO2ShND3wx94-1759241168-1.0.1.1-P3ZxyUIF6ggTySxL4aK1VqbLLqpUa5.aMybF.2oG5v02Si9EmTg3O4g14kH.tiuOUbKsNKdqeotRvjjH3iYXDh7a5FGzXFieDN0WM2UvCA8; path=/; expires=Tue, 30-Sep-25 14:36:08 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -102,7 +102,7 @@
         "1.1 google"
       ],
       "x-groq-region": [
-        "msp"
+        "yul"
       ],
       "x-ratelimit-limit-requests": [
         "14400"
@@ -111,21 +111,21 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "14384"
+        "14397"
       ],
       "x-ratelimit-remaining-tokens": [
-        "3674"
+        "5986"
       ],
       "x-ratelimit-reset-requests": [
-        "1m35.601999999s"
+        "15.058s"
       ],
       "x-ratelimit-reset-tokens": [
-        "23.258s"
+        "140ms"
       ],
       "x-request-id": [
-        "req_01k5c71btxejxah0cyzv9nfymq"
+        "req_01k6df3snte4s8dxhk89f6whhs"
       ]
     }
   },
-  "captured_at": "2025-09-17T16:10:04.300899Z"
+  "captured_at": "2025-09-30T14:06:08.853020Z"
 }

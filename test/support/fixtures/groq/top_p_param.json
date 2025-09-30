@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtZXNzYWdlcyI6W3sicm9sZSI6InVzZXIiLCJjb250ZW50IjpbeyJ0eXBlIjoidGV4dCIsInRleHQiOiJUZWxsIG1lIGEgYnJpZWYgZmFjdCJ9XX1dLCJzdHJlYW0iOmZhbHNlLCJtb2RlbCI6ImxsYW1hLTMuMS04Yi1pbnN0YW50IiwibWF4X3Rva2VucyI6MjAsInRlbXBlcmF0dXJlIjowLjcsInRvcF9wIjowLjl9"
+      "b64": "eyJtYXhfdG9rZW5zIjoyMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgYnJpZWYgZmFjdCIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImxsYW1hLTMuMS04Yi1pbnN0YW50Iiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuNywidG9wX3AiOjAuOX0="
     },
     "url": "https://api.groq.com/openai/v1/chat/completions",
     "headers": {
@@ -19,40 +19,40 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"max_tokens\":20,\"messages\":[{\"content\":[{\"text\":\"Tell me a brief fact\",\"type\":\"text\"}],\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"stream\":false,\"temperature\":0.7,\"top_p\":0.9}"
+    "canonical_json": "{\"max_tokens\":20,\"messages\":[{\"content\":\"Tell me a brief fact\",\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"stream\":false,\"temperature\":0.7,\"top_p\":0.9}"
   },
   "response": {
     "status": 200,
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "length",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Butterflies taste with their feet.",
+            "content": "The shortest war in history was between Britain and Zanzibar on August 27, 1896",
             "role": "assistant"
           }
         }
       ],
-      "created": 1758125400,
-      "id": "chatcmpl-19752645-d257-4f55-b2aa-68ee1654f28c",
+      "created": 1759241178,
+      "id": "chatcmpl-432d09e1-90f3-4cc1-9406-244562d62905",
       "model": "llama-3.1-8b-instant",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_c54ae48ece",
+      "system_fingerprint": "fp_3ddc9808b3",
       "usage": {
-        "completion_time": 0.015574663,
-        "completion_tokens": 9,
-        "prompt_time": 0.002554327,
+        "completion_time": 0.020047583,
+        "completion_tokens": 20,
+        "prompt_time": 0.002003944,
         "prompt_tokens": 40,
-        "queue_time": 0.187051014,
-        "total_time": 0.01812899,
-        "total_tokens": 49
+        "queue_time": 0.203744367,
+        "total_time": 0.022051527,
+        "total_tokens": 60
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k5c717w9ejhvj6wffagqhnfv"
+        "id": "req_01k6df42xmfaqacqxxs9sje511"
       }
     },
     "headers": {
@@ -66,7 +66,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9809df057a891105-ORD"
+        "987447b288bd0011-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -75,13 +75,13 @@
         "application/json"
       ],
       "date": [
-        "Wed, 17 Sep 2025 16:10:00 GMT"
+        "Tue, 30 Sep 2025 14:06:18 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=YjcoHBSXmFfLZlKTXWyeaSRiJBbTyDfgOAoj1Il4KKg-1758125400-1.0.1.1-6Cbh0IJV_eUeJSgpIzIIMxuRBZqbkSU8._GsYG190SdEusjuQdPkiscYrL_pUiv3Y.gMS7Ha4mSo6BgpSEruUCJjrFx58O8pkt7MozWZBT0; path=/; expires=Wed, 17-Sep-25 16:40:00 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=tmqfCxgrRa5xHtAa.l1BumtLsw0kqHmRStoAUy9rC9I-1759241178-1.0.1.1-XC9q25_.X5_MEO8ztIaixGgxCas.YXYUQdS6m9wX2.p75JcGTzbuQfF2OZwKAeecgrr1KfxqPzJJZ2CHE3.Oox08WepHV35xp.kO5F_8qjU; path=/; expires=Tue, 30-Sep-25 14:36:18 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -93,7 +93,7 @@
         "1.1 google"
       ],
       "x-groq-region": [
-        "msp"
+        "yul"
       ],
       "x-ratelimit-limit-requests": [
         "14400"
@@ -102,21 +102,21 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "14394"
+        "14386"
       ],
       "x-ratelimit-remaining-tokens": [
-        "5842"
+        "5225"
       ],
       "x-ratelimit-reset-requests": [
-        "35.747s"
+        "1m23.560999999s"
       ],
       "x-ratelimit-reset-tokens": [
-        "1.578999999s"
+        "7.741s"
       ],
       "x-request-id": [
-        "req_01k5c717w9ejhvj6wffagqhnfv"
+        "req_01k6df42xmfaqacqxxs9sje511"
       ]
     }
   },
-  "captured_at": "2025-09-17T16:10:00.182049Z"
+  "captured_at": "2025-09-30T14:06:18.275819Z"
 }

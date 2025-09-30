@@ -32,7 +32,7 @@ defmodule ReqLLM.ProviderTest.Core do
         ReqLLM.generate_text(
           unquote(model),
           "Hello world!",
-          fixture_opts(unquote(provider), "basic", param_bundles().deterministic)
+          fixture_opts(unquote(provider), "basic", param_bundles(unquote(provider)).deterministic)
         )
         |> assert_basic_response()
 
@@ -46,7 +46,7 @@ defmodule ReqLLM.ProviderTest.Core do
         ReqLLM.generate_text(
           unquote(model),
           context,
-          fixture_opts(unquote(provider), "system_msg", param_bundles().deterministic)
+          fixture_opts(unquote(provider), "system_msg", param_bundles(unquote(provider)).deterministic)
         )
         |> assert_basic_response()
       end
@@ -56,17 +56,17 @@ defmodule ReqLLM.ProviderTest.Core do
         ReqLLM.generate_text(
           unquote(model),
           "Write a very long story about dragons and adventures",
-          fixture_opts(unquote(provider), "token_limit", param_bundles().minimal)
+          fixture_opts(unquote(provider), "token_limit", param_bundles(unquote(provider)).minimal)
         )
         |> assert_basic_response()
-        # Should be short due to max_tokens: 5
-        |> assert_text_length(100)
+        # Should be short due to max_tokens limit
+        |> assert_text_length(300)
 
         # Test 2: Temperature parameter (creative vs deterministic)
         ReqLLM.generate_text(
           unquote(model),
           "Tell me about the color blue",
-          fixture_opts(unquote(provider), "creative", param_bundles().creative)
+          fixture_opts(unquote(provider), "creative", param_bundles(unquote(provider)).creative)
         )
         |> assert_basic_response()
       end

@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtZXNzYWdlcyI6W3sicm9sZSI6InVzZXIiLCJjb250ZW50IjpbeyJ0eXBlIjoidGV4dCIsInRleHQiOiJIZWxsbyB3b3JsZCEifV19XSwic3RyZWFtIjpmYWxzZSwibW9kZWwiOiJsbGFtYS0zLjEtOGItaW5zdGFudCIsIm1heF90b2tlbnMiOjEwLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJsbGFtYS0zLjEtOGItaW5zdGFudCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "url": "https://api.groq.com/openai/v1/chat/completions",
     "headers": {
@@ -19,40 +19,40 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"max_tokens\":10,\"messages\":[{\"content\":[{\"text\":\"Hello world!\",\"type\":\"text\"}],\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"stream\":false,\"temperature\":0.0}"
+    "canonical_json": "{\"max_tokens\":50,\"messages\":[{\"content\":\"Hello world!\",\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"seed\":42,\"stream\":false,\"temperature\":0.0}"
   },
   "response": {
     "status": 200,
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": "stop",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello world! It's nice to meet you.",
+            "content": "Hello World. It's nice to meet you. Is there something I can help you with, or would you like to chat?",
             "role": "assistant"
           }
         }
       ],
-      "created": 1758125398,
-      "id": "chatcmpl-c0778225-3866-43d5-abe5-a534fc025c5f",
+      "created": 1759241176,
+      "id": "chatcmpl-cd18efc5-da53-428f-97b9-0e0ba25f7aee",
       "model": "llama-3.1-8b-instant",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_8804b970d6",
+      "system_fingerprint": "fp_90c2e79dab",
       "usage": {
-        "completion_time": 0.015485879,
-        "completion_tokens": 10,
-        "prompt_time": 0.002101306,
+        "completion_time": 0.037875449,
+        "completion_tokens": 27,
+        "prompt_time": 0.002781558,
         "prompt_tokens": 38,
-        "queue_time": 0.192561419,
-        "total_time": 0.017587185,
-        "total_tokens": 48
+        "queue_time": 0.203315344,
+        "total_time": 0.040657007,
+        "total_tokens": 65
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k5c716k5fvsbd0z03prfghx5"
+        "id": "req_01k6df41jvfa9sdt2db1g0j2w9"
       }
     },
     "headers": {
@@ -66,7 +66,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9809defd2ab61105-ORD"
+        "987447a9ff3d0011-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -75,13 +75,13 @@
         "application/json"
       ],
       "date": [
-        "Wed, 17 Sep 2025 16:09:58 GMT"
+        "Tue, 30 Sep 2025 14:06:16 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=agqPHe8.u8wqKcC0WD7z4znaJwbdwSrZEE0iTJlLjmE-1758125398-1.0.1.1-ZDaLQ.KJj8xBIcTSymBmP2bViCIrlV7bsleoBuJFthDStrjcejRkQSIH2R_EzjgkwtTfcucLXWxR6aFren7yNpR9v16KJtfwrvJg2eZQxRI; path=/; expires=Wed, 17-Sep-25 16:39:58 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=kZuX.NZLI8_hmSPHj1Z.8LFTBirqcSBObkAdvlKctGI-1759241176-1.0.1.1-LiEYV8.Ew1k6F.inXEo5.73uQzyfnVAMx.GNFrK3xXXOCTjHUuSKyppCpYvj25U5zVs0_QJZHKi6g05W6R3boiitS00VwVCS1zzsiCAs.2Q; path=/; expires=Tue, 30-Sep-25 14:36:16 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -93,7 +93,7 @@
         "1.1 google"
       ],
       "x-groq-region": [
-        "msp"
+        "yul"
       ],
       "x-ratelimit-limit-requests": [
         "14400"
@@ -102,21 +102,21 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "14399"
+        "14390"
       ],
       "x-ratelimit-remaining-tokens": [
-        "5991"
+        "5416"
       ],
       "x-ratelimit-reset-requests": [
-        "6s"
+        "54.38s"
       ],
       "x-ratelimit-reset-tokens": [
-        "90ms"
+        "5.836999999s"
       ],
       "x-request-id": [
-        "req_01k5c716k5fvsbd0z03prfghx5"
+        "req_01k6df41jvfa9sdt2db1g0j2w9"
       ]
     }
   },
-  "captured_at": "2025-09-17T16:09:58.873212Z"
+  "captured_at": "2025-09-30T14:06:16.929377Z"
 }

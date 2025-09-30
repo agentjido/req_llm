@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtZXNzYWdlcyI6W3siY29udGVudCI6IllvdSBhcmUgYSBoZWxwZnVsIGFzc2lzdGFudC4iLCJyb2xlIjoic3lzdGVtIn0seyJjb250ZW50IjoiU2F5IGhlbGxvIiwicm9sZSI6InVzZXIifV0sInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsIm1vZGVsIjoib3BlbmFpL2dwdC00by1taW5pIiwibWF4X3Rva2VucyI6MTB9"
+      "b64": "eyJuIjoxLCJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJZb3UgYXJlIGEgaGVscGZ1bCBhc3Npc3RhbnQuIiwicm9sZSI6InN5c3RlbSJ9LHsiY29udGVudCI6IlNheSBoZWxsbyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNG8tbWluaSIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "url": "https://openrouter.ai/api/v1/chat/completions",
     "headers": {
@@ -19,7 +19,7 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"max_tokens\":10,\"messages\":[{\"content\":\"You are a helpful assistant.\",\"role\":\"system\"},{\"content\":\"Say hello\",\"role\":\"user\"}],\"model\":\"openai/gpt-4o-mini\",\"stream\":false,\"temperature\":0.0}"
+    "canonical_json": "{\"max_tokens\":50,\"messages\":[{\"content\":\"You are a helpful assistant.\",\"role\":\"system\"},{\"content\":\"Say hello\",\"role\":\"user\"}],\"model\":\"openai/gpt-4o-mini\",\"n\":1,\"seed\":42,\"stream\":false,\"temperature\":0.0}"
   },
   "response": {
     "status": 200,
@@ -38,8 +38,8 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1758029435,
-      "id": "gen-1758029435-NWCgr7eHhoOERS4uorlT",
+      "created": 1759241119,
+      "id": "gen-1759241119-8lnARlQ9M5NeDct6pCIW",
       "model": "openai/gpt-4o-mini",
       "object": "chat.completion",
       "provider": "OpenAI",
@@ -62,7 +62,7 @@
         "*"
       ],
       "cf-ray": [
-        "9800b8209c257aad-ORD"
+        "98744647bff1ef0a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -71,7 +71,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 16 Sep 2025 13:30:35 GMT"
+        "Tue, 30 Sep 2025 14:05:20 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -93,5 +93,5 @@
       ]
     }
   },
-  "captured_at": "2025-09-16T13:30:35.581321Z"
+  "captured_at": "2025-09-30T14:05:20.571476Z"
 }

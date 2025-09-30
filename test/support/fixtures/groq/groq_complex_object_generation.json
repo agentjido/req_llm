@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtZXNzYWdlcyI6W3sicm9sZSI6InVzZXIiLCJjb250ZW50IjpbeyJ0eXBlIjoidGV4dCIsInRleHQiOiJHZW5lcmF0ZSBhIGNvbXBsZXRlIHByb2ZpbGUgZm9yIGEgdGVjaCBzdGFydHVwIGNvbXBhbnkgaW5jbHVkaW5nIG5hbWUsIGZvdW5kaW5nIHllYXIsIGxvY2F0aW9uLCBhbmQgb3RoZXIgZGV0YWlscyJ9XX1dLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZW5lcmF0ZSBzdHJ1Y3R1cmVkIG91dHB1dCBtYXRjaGluZyB0aGUgcHJvdmlkZWQgc2NoZW1hIiwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImNvbXBhbnlfbmFtZSI6eyJkZXNjcmlwdGlvbiI6Ik5hbWUgb2YgdGhlIGNvbXBhbnkiLCJ0eXBlIjoic3RyaW5nIn0sImVtcGxveWVlX2NvdW50Ijp7ImRlc2NyaXB0aW9uIjoiQXBwcm94aW1hdGUgbnVtYmVyIG9mIGVtcGxveWVlcyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sImZvdW5kZWRfeWVhciI6eyJkZXNjcmlwdGlvbiI6IlllYXIgY29tcGFueSB3YXMgZm91bmRlZCIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sImhlYWRxdWFydGVyc19jaXR5Ijp7ImRlc2NyaXB0aW9uIjoiQ2l0eSB3aGVyZSBIUSBpcyBsb2NhdGVkIiwidHlwZSI6InN0cmluZyJ9LCJoZWFkcXVhcnRlcnNfY291bnRyeSI6eyJkZXNjcmlwdGlvbiI6IkNvdW50cnkgd2hlcmUgSFEgaXMgbG9jYXRlZCIsInR5cGUiOiJzdHJpbmcifSwiaW5kdXN0cnkiOnsiZGVzY3JpcHRpb24iOiJQcmltYXJ5IGluZHVzdHJ5IG9yIHNlY3RvciIsInR5cGUiOiJzdHJpbmcifSwia2V5X3Byb2R1Y3RzIjp7ImRlc2NyaXB0aW9uIjoiTWFpbiBwcm9kdWN0cyBvciBzZXJ2aWNlcyIsIml0ZW1zIjp7InR5cGUiOiJzdHJpbmcifSwidHlwZSI6ImFycmF5In19LCJyZXF1aXJlZCI6WyJjb21wYW55X25hbWUiLCJmb3VuZGVkX3llYXIiLCJoZWFkcXVhcnRlcnNfY2l0eSIsImhlYWRxdWFydGVyc19jb3VudHJ5Il0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XSwibW9kZWwiOiJsbGFtYS0zLjEtOGItaW5zdGFudCIsInRvb2xfY2hvaWNlIjp7ImZ1bmN0aW9uIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCJ9LCJ0eXBlIjoiZnVuY3Rpb24ifSwibWF4X3Rva2VucyI6MjAwLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBjb21wbGV0ZSBwcm9maWxlIGZvciBhIHRlY2ggc3RhcnR1cCBjb21wYW55IGluY2x1ZGluZyBuYW1lLCBmb3VuZGluZyB5ZWFyLCBsb2NhdGlvbiwgYW5kIG90aGVyIGRldGFpbHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJsbGFtYS0zLjEtOGItaW5zdGFudCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQifSwidHlwZSI6ImZ1bmN0aW9uIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsiY29tcGFueV9uYW1lIjp7ImRlc2NyaXB0aW9uIjoiTmFtZSBvZiB0aGUgY29tcGFueSIsInR5cGUiOiJzdHJpbmcifSwiZW1wbG95ZWVfY291bnQiOnsiZGVzY3JpcHRpb24iOiJBcHByb3hpbWF0ZSBudW1iZXIgb2YgZW1wbG95ZWVzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwiZm91bmRlZF95ZWFyIjp7ImRlc2NyaXB0aW9uIjoiWWVhciBjb21wYW55IHdhcyBmb3VuZGVkIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwiaGVhZHF1YXJ0ZXJzX2NpdHkiOnsiZGVzY3JpcHRpb24iOiJDaXR5IHdoZXJlIEhRIGlzIGxvY2F0ZWQiLCJ0eXBlIjoic3RyaW5nIn0sImhlYWRxdWFydGVyc19jb3VudHJ5Ijp7ImRlc2NyaXB0aW9uIjoiQ291bnRyeSB3aGVyZSBIUSBpcyBsb2NhdGVkIiwidHlwZSI6InN0cmluZyJ9LCJpbmR1c3RyeSI6eyJkZXNjcmlwdGlvbiI6IlByaW1hcnkgaW5kdXN0cnkgb3Igc2VjdG9yIiwidHlwZSI6InN0cmluZyJ9LCJrZXlfcHJvZHVjdHMiOnsiZGVzY3JpcHRpb24iOiJNYWluIHByb2R1Y3RzIG9yIHNlcnZpY2VzIiwiaXRlbXMiOnsidHlwZSI6InN0cmluZyJ9LCJ0eXBlIjoiYXJyYXkifX0sInJlcXVpcmVkIjpbImNvbXBhbnlfbmFtZSIsImZvdW5kZWRfeWVhciIsImhlYWRxdWFydGVyc19jaXR5IiwiaGVhZHF1YXJ0ZXJzX2NvdW50cnkiXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "url": "https://api.groq.com/openai/v1/chat/completions",
     "headers": {
@@ -19,7 +19,7 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"max_tokens\":200,\"messages\":[{\"content\":[{\"text\":\"Generate a complete profile for a tech startup company including name, founding year, location, and other details\",\"type\":\"text\"}],\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"stream\":false,\"temperature\":0.0,\"tool_choice\":{\"function\":{\"name\":\"structured_output\"},\"type\":\"function\"},\"tools\":[{\"function\":{\"description\":\"Generate structured output matching the provided schema\",\"name\":\"structured_output\",\"parameters\":{\"properties\":{\"company_name\":{\"description\":\"Name of the company\",\"type\":\"string\"},\"employee_count\":{\"description\":\"Approximate number of employees\",\"minimum\":1,\"type\":\"integer\"},\"founded_year\":{\"description\":\"Year company was founded\",\"minimum\":1,\"type\":\"integer\"},\"headquarters_city\":{\"description\":\"City where HQ is located\",\"type\":\"string\"},\"headquarters_country\":{\"description\":\"Country where HQ is located\",\"type\":\"string\"},\"industry\":{\"description\":\"Primary industry or sector\",\"type\":\"string\"},\"key_products\":{\"description\":\"Main products or services\",\"items\":{\"type\":\"string\"},\"type\":\"array\"}},\"required\":[\"company_name\",\"founded_year\",\"headquarters_city\",\"headquarters_country\"],\"type\":\"object\"}},\"type\":\"function\"}]}"
+    "canonical_json": "{\"max_tokens\":200,\"messages\":[{\"content\":\"Generate a complete profile for a tech startup company including name, founding year, location, and other details\",\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"seed\":42,\"stream\":false,\"temperature\":0.0,\"tool_choice\":{\"function\":{\"name\":\"structured_output\"},\"type\":\"function\"},\"tools\":[{\"function\":{\"description\":\"Generate structured output matching the provided schema\",\"name\":\"structured_output\",\"parameters\":{\"properties\":{\"company_name\":{\"description\":\"Name of the company\",\"type\":\"string\"},\"employee_count\":{\"description\":\"Approximate number of employees\",\"minimum\":1,\"type\":\"integer\"},\"founded_year\":{\"description\":\"Year company was founded\",\"minimum\":1,\"type\":\"integer\"},\"headquarters_city\":{\"description\":\"City where HQ is located\",\"type\":\"string\"},\"headquarters_country\":{\"description\":\"Country where HQ is located\",\"type\":\"string\"},\"industry\":{\"description\":\"Primary industry or sector\",\"type\":\"string\"},\"key_products\":{\"description\":\"Main products or services\",\"items\":{\"type\":\"string\"},\"type\":\"array\"}},\"required\":[\"company_name\",\"founded_year\",\"headquarters_city\",\"headquarters_country\"],\"type\":\"object\"}},\"type\":\"function\"}]}"
   },
   "response": {
     "status": 200,
@@ -34,34 +34,34 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"company_name\":\"Apexion Systems\",\"employee_count\":200,\"founded_year\":2015,\"headquarters_city\":\"San Francisco\",\"headquarters_country\":\"USA\",\"industry\":\"Artificial Intelligence and Cybersecurity\",\"key_products\":[\"AI-powered security software\",\"Cyber threat simulation platform\"]}",
+                  "arguments": "{\"company_name\":\"TechSpark\",\"employee_count\":50,\"founded_year\":2018,\"headquarters_city\":\"San Francisco\",\"headquarters_country\":\"USA\",\"industry\":\"Artificial Intelligence\",\"key_products\":[\"AI-powered chatbots\",\"Machine Learning algorithms\"]}",
                   "name": "structured_output"
                 },
-                "id": "fcxpd6116",
+                "id": "mtmj2s16j",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1758125403,
-      "id": "chatcmpl-e1baedac-6422-4558-bedf-4f6d39f5def9",
+      "created": 1759241169,
+      "id": "chatcmpl-ba2a8f51-869a-477a-83a4-c29112c81ae7",
       "model": "llama-3.1-8b-instant",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_8804b970d6",
+      "system_fingerprint": "fp_3ddc9808b3",
       "usage": {
-        "completion_time": 0.097843655,
-        "completion_tokens": 74,
-        "prompt_time": 0.022691874,
+        "completion_time": 0.091256488,
+        "completion_tokens": 68,
+        "prompt_time": 0.022647749,
         "prompt_tokens": 377,
-        "queue_time": 0.18743964,
-        "total_time": 0.120535529,
-        "total_tokens": 451
+        "queue_time": 0.206921451,
+        "total_time": 0.113904237,
+        "total_tokens": 445
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k5c71befev6tv2gw8hq2xwx5"
+        "id": "req_01k6df3t0tf6n9a395grrea271"
       }
     },
     "headers": {
@@ -75,7 +75,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9809df1c49471105-ORD"
+        "987447798d7cef0e-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -84,13 +84,13 @@
         "application/json"
       ],
       "date": [
-        "Wed, 17 Sep 2025 16:10:03 GMT"
+        "Tue, 30 Sep 2025 14:06:09 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=VDPBcpAs1y31q.tf0gq1mwfCAJF1UumDuMJMl.rjtrM-1758125403-1.0.1.1-XjI6sGfdAIDxIVr.QT6Obh85UWdsMx9bXHJiGA_CMaJ.SYvUZcEHkwJOv2aOLK8tCF7PEucLalgPgknzONNOUW_UZfzA0R6vACwyXQ2iITE; path=/; expires=Wed, 17-Sep-25 16:40:03 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=sjwlfmW0.Mj.jGVCheCi7X2a1k.6VlHLn40gsY.WvUk-1759241169-1.0.1.1-AKk7R5vYDzP28JOtB1QKYyexGBfQHjDP0gSO1rYz8ayEEuw5eRaEDKvyumQwSvTVXe60T9KGdoZ5xpEKhGJTjeTUKp8K.knue1SG23FenIc; path=/; expires=Tue, 30-Sep-25 14:36:09 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -102,7 +102,7 @@
         "1.1 google"
       ],
       "x-groq-region": [
-        "msp"
+        "yul"
       ],
       "x-ratelimit-limit-requests": [
         "14400"
@@ -111,21 +111,21 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "14385"
+        "14395"
       ],
       "x-ratelimit-remaining-tokens": [
-        "4065"
+        "5636"
       ],
       "x-ratelimit-reset-requests": [
-        "1m29.655999999s"
+        "29.705999999s"
       ],
       "x-ratelimit-reset-tokens": [
-        "19.345s"
+        "3.636999999s"
       ],
       "x-request-id": [
-        "req_01k5c71befev6tv2gw8hq2xwx5"
+        "req_01k6df3t0tf6n9a395grrea271"
       ]
     }
   },
-  "captured_at": "2025-09-17T16:10:03.963867Z"
+  "captured_at": "2025-09-30T14:06:09.266847Z"
 }

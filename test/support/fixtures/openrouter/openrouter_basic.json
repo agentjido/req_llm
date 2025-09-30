@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJtb2RlbCI6Im9wZW5haS9ncHQtNG8tbWluaSIsIm1heF90b2tlbnMiOjEwfQ=="
+      "b64": "eyJuIjoxLCJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJvcGVuYWkvZ3B0LTRvLW1pbmkiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "url": "https://openrouter.ai/api/v1/chat/completions",
     "headers": {
@@ -19,7 +19,7 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"max_tokens\":10,\"messages\":[{\"content\":\"Hello world!\",\"role\":\"user\"}],\"model\":\"openai/gpt-4o-mini\",\"stream\":false,\"temperature\":0.0}"
+    "canonical_json": "{\"max_tokens\":50,\"messages\":[{\"content\":\"Hello world!\",\"role\":\"user\"}],\"model\":\"openai/gpt-4o-mini\",\"n\":1,\"seed\":42,\"stream\":false,\"temperature\":0.0}"
   },
   "response": {
     "status": 200,
@@ -38,8 +38,8 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1758029433,
-      "id": "gen-1758029433-yWQu0GPaTFCw6WvL7b1s",
+      "created": 1759241119,
+      "id": "gen-1759241119-4TLXtEvNul2t3Lg7dTjd",
       "model": "openai/gpt-4o-mini",
       "object": "chat.completion",
       "provider": "OpenAI",
@@ -62,7 +62,7 @@
         "*"
       ],
       "cf-ray": [
-        "9800b8195a1d7aad-ORD"
+        "987446435986ef0a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -71,7 +71,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 16 Sep 2025 13:30:34 GMT"
+        "Tue, 30 Sep 2025 14:05:19 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -93,5 +93,5 @@
       ]
     }
   },
-  "captured_at": "2025-09-16T13:30:34.869671Z"
+  "captured_at": "2025-09-30T14:05:19.915193Z"
 }

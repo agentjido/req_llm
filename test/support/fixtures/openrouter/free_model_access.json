@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkIiwicm9sZSI6InVzZXIifV0sInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsIm1vZGVsIjoib3BlbmFpL2dwdC00by1taW5pIiwibWF4X3Rva2VucyI6MTB9"
+      "b64": "eyJuIjoxLCJtYXhfdG9rZW5zIjoxMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNG8tbWluaSIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "url": "https://openrouter.ai/api/v1/chat/completions",
     "headers": {
@@ -19,7 +19,7 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"max_tokens\":10,\"messages\":[{\"content\":\"Hello world\",\"role\":\"user\"}],\"model\":\"openai/gpt-4o-mini\",\"stream\":false,\"temperature\":0.0}"
+    "canonical_json": "{\"max_tokens\":10,\"messages\":[{\"content\":\"Hello world\",\"role\":\"user\"}],\"model\":\"openai/gpt-4o-mini\",\"n\":1,\"stream\":false,\"temperature\":0.0}"
   },
   "response": {
     "status": 200,
@@ -38,8 +38,8 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1758029430,
-      "id": "gen-1758029430-SUW3yWhJvjOJj9WUuzeN",
+      "created": 1759241118,
+      "id": "gen-1759241118-z5uZRZOTAOhq9QYsg0NY",
       "model": "openai/gpt-4o-mini",
       "object": "chat.completion",
       "provider": "OpenAI",
@@ -62,7 +62,7 @@
         "*"
       ],
       "cf-ray": [
-        "9800b8040b877aad-ORD"
+        "9874463fbf8aef0a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -71,7 +71,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 16 Sep 2025 13:30:31 GMT"
+        "Tue, 30 Sep 2025 14:05:19 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -93,5 +93,5 @@
       ]
     }
   },
-  "captured_at": "2025-09-16T13:30:31.135779Z"
+  "captured_at": "2025-09-30T14:05:19.223781Z"
 }

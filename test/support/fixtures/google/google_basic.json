@@ -1,9 +1,9 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7InRlbXBlcmF0dXJlIjowLjAsIm1heE91dHB1dFRva2VucyI6MTAsImNhbmRpZGF0ZUNvdW50IjoxfX0="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7InRlbXBlcmF0dXJlIjowLjAsIm1heE91dHB1dFRva2VucyI6NTAsImNhbmRpZGF0ZUNvdW50IjoxLCJ0aGlua2luZ0NvbmZpZyI6eyJ0aGlua2luZ0J1ZGdldCI6MH19fQ=="
     },
-    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBwophsPOldL0hUrtLo0x7WRzgsuwWagEY",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyBwophsPOldL0hUrtLo0x7WRzgsuwWagEY",
     "headers": {
       "accept-encoding": [
         "gzip"
@@ -16,43 +16,37 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"contents\":[{\"parts\":[{\"text\":\"Hello world!\"}],\"role\":\"user\"}],\"generationConfig\":{\"candidateCount\":1,\"maxOutputTokens\":10,\"temperature\":0.0}}"
+    "canonical_json": "{\"contents\":[{\"parts\":[{\"text\":\"Hello world!\"}],\"role\":\"user\"}],\"generationConfig\":{\"candidateCount\":1,\"maxOutputTokens\":50,\"temperature\":0.0,\"thinkingConfig\":{\"thinkingBudget\":0}}}"
   },
   "response": {
     "status": 200,
     "body": {
       "candidates": [
         {
-          "avgLogprobs": -0.057677339762449265,
           "content": {
             "parts": [
               {
-                "text": "Hello there!\n"
+                "text": "Hello there! How can I help you today?"
               }
             ],
             "role": "model"
           },
-          "finishReason": "STOP"
+          "finishReason": "STOP",
+          "index": 0
         }
       ],
-      "modelVersion": "gemini-1.5-flash",
-      "responseId": "52bJaIv3NP2OjMcPmdDjiQI",
+      "modelVersion": "gemini-2.5-flash",
+      "responseId": "9uXbaKzYGYab1MkP3sCekQg",
       "usageMetadata": {
-        "candidatesTokenCount": 4,
-        "candidatesTokensDetails": [
+        "candidatesTokenCount": 10,
+        "promptTokenCount": 4,
+        "promptTokensDetails": [
           {
             "modality": "TEXT",
             "tokenCount": 4
           }
         ],
-        "promptTokenCount": 3,
-        "promptTokensDetails": [
-          {
-            "modality": "TEXT",
-            "tokenCount": 3
-          }
-        ],
-        "totalTokenCount": 7
+        "totalTokenCount": 14
       }
     },
     "headers": {
@@ -63,13 +57,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 16 Sep 2025 13:32:37 GMT"
+        "Tue, 30 Sep 2025 14:15:18 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=13404"
+        "gfet4t7; dur=402"
       ],
       "transfer-encoding": [
         "chunked"
@@ -90,5 +84,5 @@
       ]
     }
   },
-  "captured_at": "2025-09-16T13:32:37.227987Z"
+  "captured_at": "2025-09-30T14:15:18.436165Z"
 }

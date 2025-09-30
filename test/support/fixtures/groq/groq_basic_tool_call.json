@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtZXNzYWdlcyI6W3sicm9sZSI6InVzZXIiLCJjb250ZW50IjpbeyJ0eXBlIjoidGV4dCIsInRleHQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyJ9XX1dLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGhlIGNpdHkgYW5kIHN0YXRlLCBlLmcuIFNhbiBGcmFuY2lzY28sIENBIiwidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImRlc2NyaXB0aW9uIjoiVGhlIHRlbXBlcmF0dXJlIHVuaXQgdG8gdXNlIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dLCJtb2RlbCI6ImxsYW1hLTMuMS04Yi1pbnN0YW50IiwibWF4X3Rva2VucyI6MTAwLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJsbGFtYS0zLjEtOGItaW5zdGFudCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGhlIGNpdHkgYW5kIHN0YXRlLCBlLmcuIFNhbiBGcmFuY2lzY28sIENBIiwidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImRlc2NyaXB0aW9uIjoiVGhlIHRlbXBlcmF0dXJlIHVuaXQgdG8gdXNlIiwiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "url": "https://api.groq.com/openai/v1/chat/completions",
     "headers": {
@@ -19,7 +19,7 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"max_tokens\":100,\"messages\":[{\"content\":[{\"text\":\"What's the weather like in Paris, France?\",\"type\":\"text\"}],\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"stream\":false,\"temperature\":0.0,\"tools\":[{\"function\":{\"description\":\"Get current weather information for a location\",\"name\":\"get_weather\",\"parameters\":{\"properties\":{\"location\":{\"description\":\"The city and state, e.g. San Francisco, CA\",\"type\":\"string\"},\"unit\":{\"description\":\"The temperature unit to use\",\"type\":\"string\"}},\"required\":[\"location\"],\"type\":\"object\"}},\"type\":\"function\"}]}"
+    "canonical_json": "{\"max_tokens\":100,\"messages\":[{\"content\":\"What's the weather like in Paris, France?\",\"role\":\"user\"}],\"model\":\"llama-3.1-8b-instant\",\"seed\":42,\"stream\":false,\"temperature\":0.0,\"tools\":[{\"function\":{\"description\":\"Get current weather information for a location\",\"name\":\"get_weather\",\"parameters\":{\"properties\":{\"location\":{\"description\":\"The city and state, e.g. San Francisco, CA\",\"type\":\"string\"},\"unit\":{\"description\":\"The temperature unit to use\",\"enum\":[\"celsius\",\"fahrenheit\"],\"type\":\"string\"}},\"required\":[\"location\"],\"type\":\"object\"}},\"type\":\"function\"}]}"
   },
   "response": {
     "status": 200,
@@ -34,34 +34,34 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"location\":\"Paris, France\",\"unit\":\"Celsius\"}",
+                  "arguments": "{\"location\":\"Paris, France\",\"unit\":\"fahrenheit\"}",
                   "name": "get_weather"
                 },
-                "id": "w3cb0wbmw",
+                "id": "3qynrjcxs",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1758125400,
-      "id": "chatcmpl-848b49cd-fcf3-4cd7-988f-906be78d9505",
+      "created": 1759241121,
+      "id": "chatcmpl-3b82473c-115b-4978-9dc8-0013627e9164",
       "model": "llama-3.1-8b-instant",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_8a13dfab2b",
+      "system_fingerprint": "fp_50a6be1b6f",
       "usage": {
-        "completion_time": 0.02632457,
-        "completion_tokens": 22,
-        "prompt_time": 0.015197417,
-        "prompt_tokens": 253,
-        "queue_time": 0.187582511,
-        "total_time": 0.041521987,
-        "total_tokens": 275
+        "completion_time": 0.032733037,
+        "completion_tokens": 24,
+        "prompt_time": 0.01714594,
+        "prompt_tokens": 261,
+        "queue_time": 0.203310091,
+        "total_time": 0.049878977,
+        "total_tokens": 285
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k5c7184xejjb1t1vx09ca9yv"
+        "id": "req_01k6df2bwbfqrvbj48ydb9kfgj"
       }
     },
     "headers": {
@@ -75,7 +75,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9809df072c061105-ORD"
+        "987446525dc6ef0e-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -84,13 +84,13 @@
         "application/json"
       ],
       "date": [
-        "Wed, 17 Sep 2025 16:10:00 GMT"
+        "Tue, 30 Sep 2025 14:05:21 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=.48lY1Nwpd7utW.Djb1pwdqEKl86_TFiWZBKkgpQZ8Y-1758125400-1.0.1.1-I1v1YWhu.NFqKDN0HSUm6mXqqqx52SQ.eIUV9JeBJWWdoU0XWl0lyxY8Fao82cmF4XZqrkImhfZpvKL2XMH6EHPj4TwUg.F11gaB7TIMbZU; path=/; expires=Wed, 17-Sep-25 16:40:00 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=9DTgCCnNpkL5DZtIpqDE8CH8yqw0tc1jOwbeTc9i3W4-1759241121-1.0.1.1-ki2YAMJaLfrqc0gik460Penhwv9dCblww3Jmt3Z0opzzzGmEO9PfKWSwov65RAEivQx6HOZybCt6CyCQh6HA5ZiGa0TpDMXVYJ.LOpGBIi8; path=/; expires=Tue, 30-Sep-25 14:35:21 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -102,7 +102,7 @@
         "1.1 google"
       ],
       "x-groq-region": [
-        "msp"
+        "yul"
       ],
       "x-ratelimit-limit-requests": [
         "14400"
@@ -111,21 +111,21 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "14393"
+        "14397"
       ],
       "x-ratelimit-remaining-tokens": [
-        "5815"
+        "5478"
       ],
       "x-ratelimit-reset-requests": [
-        "41.722999999s"
+        "17.454999999s"
       ],
       "x-ratelimit-reset-tokens": [
-        "1.845s"
+        "5.218s"
       ],
       "x-request-id": [
-        "req_01k5c7184xejjb1t1vx09ca9yv"
+        "req_01k6df2bwbfqrvbj48ydb9kfgj"
       ]
     }
   },
-  "captured_at": "2025-09-17T16:10:00.486318Z"
+  "captured_at": "2025-09-30T14:05:21.934441Z"
 }

@@ -11,5 +11,5 @@ defmodule ReqLLM.Coverage.Google.ToolCallingTest do
 
   use ReqLLM.ProviderTest.ToolCalling,
     provider: :google,
-    model: "google:gemini-1.5-flash"
+    model: "google:gemini-2.5-flash"
 end

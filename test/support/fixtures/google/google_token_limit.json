@@ -1,9 +1,9 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJtYXhPdXRwdXRUb2tlbnMiOjUsImNhbmRpZGF0ZUNvdW50IjoxfX0="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJ0ZW1wZXJhdHVyZSI6MC41LCJtYXhPdXRwdXRUb2tlbnMiOjUwLCJjYW5kaWRhdGVDb3VudCI6MSwidGhpbmtpbmdDb25maWciOnsidGhpbmtpbmdCdWRnZXQiOjB9fX0="
     },
-    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBwophsPOldL0hUrtLo0x7WRzgsuwWagEY",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyBwophsPOldL0hUrtLo0x7WRzgsuwWagEY",
     "headers": {
       "accept-encoding": [
         "gzip"
@@ -16,43 +16,37 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"contents\":[{\"parts\":[{\"text\":\"Write a very long story about dragons and adventures\"}],\"role\":\"user\"}],\"generationConfig\":{\"candidateCount\":1,\"maxOutputTokens\":5}}"
+    "canonical_json": "{\"contents\":[{\"parts\":[{\"text\":\"Write a very long story about dragons and adventures\"}],\"role\":\"user\"}],\"generationConfig\":{\"candidateCount\":1,\"maxOutputTokens\":50,\"temperature\":0.5,\"thinkingConfig\":{\"thinkingBudget\":0}}}"
   },
   "response": {
     "status": 200,
     "body": {
       "candidates": [
         {
-          "avgLogprobs": -0.03822556138038635,
           "content": {
             "parts": [
               {
-                "text": "The wind howled a"
+                "text": "The wind, a ancient, knowing whisper, carried the scent of ozone and pine, a scent as old as the mountains themselves. It ruffled the scales of Ignis, not yet the colossal, fire-forged legend he would become, but a"
               }
             ],
             "role": "model"
           },
-          "finishReason": "MAX_TOKENS"
+          "finishReason": "MAX_TOKENS",
+          "index": 0
         }
       ],
-      "modelVersion": "gemini-1.5-flash",
-      "responseId": "-WbJaIGdKYGTjMcP1YKtwAw",
+      "modelVersion": "gemini-2.5-flash",
+      "responseId": "8-XbaJOPOOac1MkPrbf6yAM",
       "usageMetadata": {
-        "candidatesTokenCount": 5,
-        "candidatesTokensDetails": [
-          {
-            "modality": "TEXT",
-            "tokenCount": 5
-          }
-        ],
-        "promptTokenCount": 9,
+        "candidatesTokenCount": 50,
+        "promptTokenCount": 10,
         "promptTokensDetails": [
           {
             "modality": "TEXT",
-            "tokenCount": 9
+            "tokenCount": 10
           }
         ],
-        "totalTokenCount": 14
+        "totalTokenCount": 60
       }
     },
     "headers": {
@@ -63,13 +57,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 16 Sep 2025 13:33:00 GMT"
+        "Tue, 30 Sep 2025 14:15:15 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=18512"
+        "gfet4t7; dur=2158"
       ],
       "transfer-encoding": [
         "chunked"
@@ -90,5 +84,5 @@
       ]
     }
   },
-  "captured_at": "2025-09-16T13:33:00.213913Z"
+  "captured_at": "2025-09-30T14:15:15.944965Z"
 }

@@ -8,7 +8,7 @@ defmodule ReqLLM.Coverage.Google.CoreTest do
 
   use ReqLLM.ProviderTest.Core,
     provider: :google,
-    model: "google:gemini-1.5-flash"
+    model: "google:gemini-2.5-flash"
 
   # Google-specific tests would go here
   # Currently simplified due to API availability

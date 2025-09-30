@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwic3RyZWFtIjpmYWxzZSwibW9kZWwiOiJvcGVuYWkvZ3B0LTRvLW1pbmkiLCJtYXhfdG9rZW5zIjo1fQ=="
+      "b64": "eyJuIjoxLCJtYXhfdG9rZW5zIjoyMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC00by1taW5pIiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuNX0="
     },
     "url": "https://openrouter.ai/api/v1/chat/completions",
     "headers": {
@@ -19,7 +19,7 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"max_tokens\":5,\"messages\":[{\"content\":\"Write a very long story about dragons and adventures\",\"role\":\"user\"}],\"model\":\"openai/gpt-4o-mini\",\"stream\":false}"
+    "canonical_json": "{\"max_tokens\":20,\"messages\":[{\"content\":\"Write a very long story about dragons and adventures\",\"role\":\"user\"}],\"model\":\"openai/gpt-4o-mini\",\"n\":1,\"stream\":false,\"temperature\":0.5}"
   },
   "response": {
     "status": 200,
@@ -30,7 +30,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "### The Chronicles of Dr",
+            "content": "### The Chronicles of Eldoria: The Dragon's Heart\n\n#### Chapter 1: The Whispering",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -38,14 +38,14 @@
           "native_finish_reason": "length"
         }
       ],
-      "created": 1758029432,
-      "id": "gen-1758029432-QDUGeD5FKYag0NIxcUD9",
+      "created": 1759241115,
+      "id": "gen-1759241115-sadhQkkbuArIR4tN24bf",
       "model": "openai/gpt-4o-mini",
       "object": "chat.completion",
       "provider": "OpenAI",
       "system_fingerprint": "fp_51db84afab",
       "usage": {
-        "completion_tokens": 5,
+        "completion_tokens": 20,
         "completion_tokens_details": {
           "reasoning_tokens": 0
         },
@@ -54,7 +54,7 @@
           "audio_tokens": 0,
           "cached_tokens": 0
         },
-        "total_tokens": 21
+        "total_tokens": 36
       }
     },
     "headers": {
@@ -62,7 +62,7 @@
         "*"
       ],
       "cf-ray": [
-        "9800b80dae7d7aad-ORD"
+        "9874462a6deeef0a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -71,7 +71,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 16 Sep 2025 13:30:32 GMT"
+        "Tue, 30 Sep 2025 14:05:15 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -93,5 +93,5 @@
       ]
     }
   },
-  "captured_at": "2025-09-16T13:30:32.598646Z"
+  "captured_at": "2025-09-30T14:05:16.034546Z"
 }

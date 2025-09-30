@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYWJvdXQgdGhlIGNvbG9yIGJsdWUiLCJyb2xlIjoidXNlciJ9XSwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuOCwibW9kZWwiOiJvcGVuYWkvZ3B0LTRvLW1pbmkiLCJtYXhfdG9rZW5zIjoxNX0="
+      "b64": "eyJuIjoxLCJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhYm91dCB0aGUgY29sb3IgYmx1ZSIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNG8tbWluaSIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjksInRvcF9wIjowLjh9"
     },
     "url": "https://openrouter.ai/api/v1/chat/completions",
     "headers": {
@@ -19,7 +19,7 @@
       ]
     },
     "method": "post",
-    "canonical_json": "{\"max_tokens\":15,\"messages\":[{\"content\":\"Tell me about the color blue\",\"role\":\"user\"}],\"model\":\"openai/gpt-4o-mini\",\"stream\":false,\"temperature\":0.8}"
+    "canonical_json": "{\"max_tokens\":100,\"messages\":[{\"content\":\"Tell me about the color blue\",\"role\":\"user\"}],\"model\":\"openai/gpt-4o-mini\",\"n\":1,\"stream\":false,\"temperature\":0.9,\"top_p\":0.8}"
   },
   "response": {
     "status": 200,
@@ -30,7 +30,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Blue is one of the primary colors in the additive color model and is often",
+            "content": "The color blue is one of the primary colors in the additive color model, where it is combined with red and green to create a wide spectrum of colors. In the subtractive color model, used in painting and printing, blue can be created by mixing cyan and magenta.\n\n**Symbolism and Meaning:**\nBlue is often associated with a variety of meanings and emotions. It is frequently linked to calmness, tranquility, and serenity, reminiscent of the sky and the ocean. This connection to nature can",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -38,14 +38,14 @@
           "native_finish_reason": "length"
         }
       ],
-      "created": 1758029432,
-      "id": "gen-1758029432-VDUtwoJby1IZoZVmOQDU",
+      "created": 1759241116,
+      "id": "gen-1759241116-iG1UAkmpkOkUyH2EicvV",
       "model": "openai/gpt-4o-mini",
       "object": "chat.completion",
       "provider": "OpenAI",
       "system_fingerprint": "fp_51db84afab",
       "usage": {
-        "completion_tokens": 15,
+        "completion_tokens": 100,
         "completion_tokens_details": {
           "reasoning_tokens": 0
         },
@@ -54,7 +54,7 @@
           "audio_tokens": 0,
           "cached_tokens": 0
         },
-        "total_tokens": 28
+        "total_tokens": 113
       }
     },
     "headers": {
@@ -62,7 +62,7 @@
         "*"
       ],
       "cf-ray": [
-        "9800b81299447aad-ORD"
+        "9874462f6e3def0a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -71,7 +71,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 16 Sep 2025 13:30:33 GMT"
+        "Tue, 30 Sep 2025 14:05:16 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -93,5 +93,5 @@
       ]
     }
   },
-  "captured_at": "2025-09-16T13:30:33.406625Z"
+  "captured_at": "2025-09-30T14:05:18.112647Z"
 }

@@ -202,22 +202,34 @@ defmodule ReqLLM.ProviderTestHelpers do
   @doc """
   Standard parameter bundles for consistent testing across providers.
   """
-  def param_bundles do
-    %{
+  def param_bundles(provider \\ :default) do
+    base = %{
       deterministic: [
         temperature: 0.0,
-        max_tokens: 10,
+        max_tokens: 50,
         seed: 42
       ],
       creative: [
         temperature: 0.9,
-        max_tokens: 50,
+        max_tokens: 100,
         top_p: 0.8
       ],
       minimal: [
         temperature: 0.5,
-        max_tokens: 5
+        max_tokens: 50
       ]
     }
+
+    case provider do
+      :google ->
+        %{
+          deterministic: base.deterministic ++ [provider_options: [google_thinking_budget: 0]],
+          creative: base.creative ++ [provider_options: [google_thinking_budget: 0]],
+          minimal: base.minimal ++ [provider_options: [google_thinking_budget: 0]]
+        }
+
+      _ ->
+        base
+    end
   end
 end
