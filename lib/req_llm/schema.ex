@@ -249,6 +249,23 @@ defmodule ReqLLM.Schema do
         {:list, :pos_integer} ->
           %{"type" => "array", "items" => %{"type" => "integer", "minimum" => 1}}
 
+        # Handle {:list, {:in, choices}} for arrays with enum constraints - must be before general {:list, item_type}
+        {:list, {:in, choices}} when is_list(choices) ->
+          %{"type" => "array", "items" => %{"type" => "string", "enum" => choices}}
+
+        {:list, {:in, first..last//_step}} ->
+          %{"type" => "array", "items" => %{"type" => "integer", "minimum" => first, "maximum" => last}}
+
+        {:list, {:in, %MapSet{} = choices}} ->
+          %{"type" => "array", "items" => %{"type" => "string", "enum" => MapSet.to_list(choices)}}
+
+        {:list, {:in, choices}} when is_struct(choices) ->
+          try do
+            %{"type" => "array", "items" => %{"type" => "string", "enum" => Enum.to_list(choices)}}
+          rescue
+            _ -> %{"type" => "array", "items" => %{"type" => "string"}}
+          end
+
         {:list, item_type} ->
           %{"type" => "array", "items" => nimble_type_to_json_schema(item_type, [])}
 
@@ -263,6 +280,23 @@ defmodule ReqLLM.Schema do
 
         :atom ->
           %{"type" => "string"}
+
+        # Handle :in type for enums and ranges
+        {:in, choices} when is_list(choices) ->
+          %{"type" => "string", "enum" => choices}
+
+        {:in, first..last//_step} ->
+          %{"type" => "integer", "minimum" => first, "maximum" => last}
+
+        {:in, %MapSet{} = choices} ->
+          %{"type" => "string", "enum" => MapSet.to_list(choices)}
+
+        {:in, choices} when is_struct(choices) ->
+          try do
+            %{"type" => "string", "enum" => Enum.to_list(choices)}
+          rescue
+            _ -> %{"type" => "string"}
+          end
 
         # Fallback to string for unknown types
         _ ->

@@ -171,6 +171,76 @@ defmodule ReqLLM.SchemaTest do
       result = Schema.nimble_type_to_json_schema(:string, [])
       assert result == %{"type" => "string"}
     end
+
+    test "converts :in type with list choices" do
+      result = Schema.nimble_type_to_json_schema({:in, [:red, :green, :blue]}, [])
+      assert result == %{"type" => "string", "enum" => [:red, :green, :blue]}
+
+      result = Schema.nimble_type_to_json_schema({:in, ["small", "medium", "large"]}, [])
+      assert result == %{"type" => "string", "enum" => ["small", "medium", "large"]}
+    end
+
+    test "converts :in type with range choices" do
+      result = Schema.nimble_type_to_json_schema({:in, 1..10}, [])
+      assert result == %{"type" => "integer", "minimum" => 1, "maximum" => 10}
+
+      result = Schema.nimble_type_to_json_schema({:in, 0..255}, [])
+      assert result == %{"type" => "integer", "minimum" => 0, "maximum" => 255}
+
+      # Range with step
+      result = Schema.nimble_type_to_json_schema({:in, 1..10//2}, [])
+      assert result == %{"type" => "integer", "minimum" => 1, "maximum" => 10}
+    end
+
+    test "converts :in type with MapSet choices" do
+      mapset = MapSet.new([:active, :passive, :disabled])
+      result = Schema.nimble_type_to_json_schema({:in, mapset}, [])
+      assert result["type"] == "string"
+      # MapSet.to_list/1 doesn't guarantee order, so we check the elements are present
+      assert Enum.sort(result["enum"]) == [:active, :disabled, :passive]
+    end
+
+    test "converts :in type with doc option" do
+      result = Schema.nimble_type_to_json_schema({:in, [:red, :green, :blue]}, doc: "Color choice")
+      assert result == %{
+        "type" => "string", 
+        "enum" => [:red, :green, :blue],
+        "description" => "Color choice"
+      }
+    end
+
+    test "converts {:list, {:in, choices}} for arrays with enum constraints" do
+      result = Schema.nimble_type_to_json_schema({:list, {:in, [:red, :green, :blue]}}, [])
+      assert result == %{
+        "type" => "array", 
+        "items" => %{"type" => "string", "enum" => [:red, :green, :blue]}
+      }
+
+      result = Schema.nimble_type_to_json_schema({:list, {:in, 1..5}}, [])
+      assert result == %{
+        "type" => "array", 
+        "items" => %{"type" => "integer", "minimum" => 1, "maximum" => 5}
+      }
+
+      mapset = MapSet.new(["small", "medium", "large"])
+      result = Schema.nimble_type_to_json_schema({:list, {:in, mapset}}, [])
+      assert result["type"] == "array"
+      assert result["items"]["type"] == "string"
+      # MapSet.to_list/1 doesn't guarantee order, so we check the elements are present
+      assert Enum.sort(result["items"]["enum"]) == ["large", "medium", "small"]
+    end
+
+    test "converts {:list, {:in, choices}} with doc option" do
+      result = Schema.nimble_type_to_json_schema(
+        {:list, {:in, [:urgent, :normal, :low]}}, 
+        doc: "List of priority levels"
+      )
+      assert result == %{
+        "type" => "array", 
+        "items" => %{"type" => "string", "enum" => [:urgent, :normal, :low]},
+        "description" => "List of priority levels"
+      }
+    end
   end
 
   describe "to_anthropic_format/1" do
@@ -360,6 +430,52 @@ defmodule ReqLLM.SchemaTest do
 
       assert anthropic_schema == openai_schema
       assert openai_schema == google_schema
+    end
+  end
+
+  describe ":in type integration tests" do
+    test "converts schema with :in types in to_json/1" do
+      schema = [
+        color: [type: {:in, [:red, :green, :blue]}, required: true, doc: "Product color"],
+        size: [type: {:in, 1..10}, doc: "Size from 1 to 10"],
+        tags: [type: {:list, {:in, [:urgent, :normal, :low]}}, doc: "Priority tags"]
+      ]
+
+      result = Schema.to_json(schema)
+
+      assert result["properties"]["color"] == %{
+        "type" => "string", 
+        "enum" => [:red, :green, :blue],
+        "description" => "Product color"
+      }
+      
+      assert result["properties"]["size"] == %{
+        "type" => "integer", 
+        "minimum" => 1, 
+        "maximum" => 10,
+        "description" => "Size from 1 to 10"
+      }
+      
+      assert result["properties"]["tags"] == %{
+        "type" => "array", 
+        "items" => %{"type" => "string", "enum" => [:urgent, :normal, :low]},
+        "description" => "Priority tags"
+      }
+      
+      assert result["required"] == ["color"]
+    end
+
+    test "validates data with :in type constraints" do
+      schema = [
+        status: [type: {:in, [:active, :inactive]}, required: true],
+        priority: [type: {:in, 1..5}]
+      ]
+      
+      # Valid data
+      data = %{"status" => :active, "priority" => 3}
+      assert {:ok, validated} = Schema.validate(data, schema)
+      assert validated[:status] == :active
+      assert validated[:priority] == 3
     end
   end
 
