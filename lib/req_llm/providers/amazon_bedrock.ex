@@ -492,7 +492,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   defp get_model_family(model_id) do
     normalized_id =
       case String.split(model_id, ".", parts: 2) do
-        [possible_region, rest] when possible_region in ["us", "eu", "ap", "ca"] ->
+        [possible_region, rest] when possible_region in ["us", "eu", "ap", "ca", "global"] ->
           rest
 
         _ ->
