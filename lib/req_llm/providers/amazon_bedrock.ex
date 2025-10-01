@@ -93,6 +93,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
   alias ReqLLM.Error
   alias ReqLLM.Error.Invalid.Parameter, as: InvalidParameter
+  alias ReqLLM.Providers.AmazonBedrock.AWSEventStream
   alias ReqLLM.Step
 
   @dialyzer :no_match
@@ -253,7 +254,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     # Bedrock uses AWS Event Stream protocol
     data = buffer <> chunk
 
-    case ReqLLM.Providers.AmazonBedrock.AWSEventStream.parse_binary(data) do
+    case AWSEventStream.parse_binary(data) do
       {:ok, events, rest} ->
         # Return parsed events and remaining buffer
         {:ok, events, rest}
@@ -396,6 +397,14 @@ defmodule ReqLLM.Providers.AmazonBedrock do
             {k, if(is_list(v), do: List.first(v), else: v)}
           end)
 
+        # Add session token if provided
+        headers =
+          if aws_creds[:session_token] do
+            Map.put(headers, "x-amz-security-token", aws_creds[:session_token])
+          else
+            headers
+          end
+
         body = req.body || ""
 
         signed_headers_list =
@@ -454,6 +463,14 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     # Convert headers to map with lowercase keys (AWS SigV4 requirement)
     # aws_auth expects map with lowercase header names
     headers_map = Map.new(headers, fn {k, v} -> {String.downcase(k), v} end)
+
+    # Add session token if provided
+    headers_map =
+      if aws_creds[:session_token] do
+        Map.put(headers_map, "x-amz-security-token", aws_creds[:session_token])
+      else
+        headers_map
+      end
 
     # Sign using aws_auth - returns list of header tuples
     signed_headers =
