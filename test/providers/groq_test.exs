@@ -8,8 +8,6 @@ defmodule ReqLLM.Providers.GroqTest do
 
   use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Groq
 
-  import ReqLLM.ProviderTestHelpers
-
   alias ReqLLM.Context
   alias ReqLLM.Providers.Groq
 

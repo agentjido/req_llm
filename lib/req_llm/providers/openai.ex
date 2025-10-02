@@ -56,6 +56,10 @@ defmodule ReqLLM.Providers.OpenAI do
         doc: "Dimensions for embedding models (e.g., text-embedding-3-small supports 512-1536)"
       ],
       encoding_format: [type: :string, doc: "Format for embedding output (float, base64)"],
+      max_completion_tokens: [
+        type: :integer,
+        doc: "Maximum completion tokens (required for reasoning models like o1, o3, gpt-5)"
+      ],
       reasoning_effort: [
         type: {:in, [:minimal, :low, :medium, :high]},
         doc: "Reasoning effort level for GPT-5 models (minimal, low, medium, high)"
@@ -85,8 +89,12 @@ defmodule ReqLLM.Providers.OpenAI do
     opts_with_tool =
       opts
       |> Keyword.update(:tools, [structured_output_tool], &[structured_output_tool | &1])
-      |> Keyword.put(:tool_choice, %{type: "function", function: %{name: "structured_output"}})
+      |> Keyword.put(:tool_choice, %{
+        type: "function",
+        function: %{name: "structured_output"}
+      })
       |> Keyword.put_new(:max_tokens, 4096)
+      |> Keyword.put(:operation, :object)
 
     prepare_request(:chat, model_spec, prompt, opts_with_tool)
   end
@@ -193,6 +201,7 @@ defmodule ReqLLM.Providers.OpenAI do
           |> add_token_limits(request.options[:model], request.options)
           |> add_stream_options(request.options)
           |> add_reasoning_effort(request.options)
+          |> translate_tool_choice_format()
       end
 
     # Re-encode with enhancements
@@ -258,5 +267,34 @@ defmodule ReqLLM.Providers.OpenAI do
   defp add_reasoning_effort(body, request_options) do
     provider_opts = request_options[:provider_options] || []
     maybe_put(body, :reasoning_effort, provider_opts[:reasoning_effort])
+  end
+
+  @doc false
+  defp translate_tool_choice_format(body) do
+    # Handle both atom and string keys in body
+    {tool_choice, body_key} =
+      cond do
+        Map.has_key?(body, :tool_choice) -> {Map.get(body, :tool_choice), :tool_choice}
+        Map.has_key?(body, "tool_choice") -> {Map.get(body, "tool_choice"), "tool_choice"}
+        true -> {nil, nil}
+      end
+
+    # Handle both atom and string keys in tool_choice map
+    type = tool_choice && (Map.get(tool_choice, :type) || Map.get(tool_choice, "type"))
+    name = tool_choice && (Map.get(tool_choice, :name) || Map.get(tool_choice, "name"))
+
+    if type == "tool" && name do
+      # Build replacement with same key types as tool_choice
+      replacement =
+        if is_map_key(tool_choice, :type) do
+          %{type: "function", function: %{name: name}}
+        else
+          %{"type" => "function", "function" => %{"name" => name}}
+        end
+
+      Map.put(body, body_key, replacement)
+    else
+      body
+    end
   end
 end

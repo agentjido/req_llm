@@ -8,8 +8,6 @@ defmodule ReqLLM.Providers.OpenRouterTest do
 
   use ReqLLM.ProviderCase, provider: ReqLLM.Providers.OpenRouter
 
-  import ReqLLM.ProviderTestHelpers
-
   alias ReqLLM.Context
   alias ReqLLM.Providers.OpenRouter
 

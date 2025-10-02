@@ -375,6 +375,39 @@
     {
       "attachment": true,
       "cost": {
+        "cache_read": 0.3,
+        "cache_write": 3.75,
+        "input": 3,
+        "output": 15
+      },
+      "id": "anthropic.claude-sonnet-4-5-20250929-v1:0",
+      "knowledge": "2025-07-31",
+      "last_updated": "2025-09-29",
+      "limit": {
+        "context": 200000,
+        "output": 64000
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Claude Sonnet 4.5",
+      "open_weights": false,
+      "provider": "amazon-bedrock",
+      "provider_model_id": "anthropic.claude-sonnet-4-5-20250929-v1:0",
+      "reasoning": true,
+      "release_date": "2025-09-29",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": true,
+      "cost": {
         "input": 0.72,
         "output": 0.72
       },

@@ -659,24 +659,34 @@ defmodule ReqLLM.Provider.Defaults do
 
   def default_decode_sse_event(_, _model), do: []
 
-  defp decode_openai_message(%{"content" => content}) when is_binary(content) and content != "" do
+  defp decode_openai_message(message) when is_map(message) do
+    content_chunks = decode_openai_content(message)
+    tool_call_chunks = decode_openai_tool_calls(message)
+    content_chunks ++ tool_call_chunks
+  end
+
+  defp decode_openai_message(_), do: []
+
+  defp decode_openai_content(%{"content" => content}) when is_binary(content) and content != "" do
     [ReqLLM.StreamChunk.text(content)]
   end
 
-  defp decode_openai_message(%{"content" => content}) when is_list(content) do
+  defp decode_openai_content(%{"content" => content}) when is_list(content) do
     content
     |> Enum.map(&decode_openai_content_part/1)
     |> List.flatten()
     |> Enum.reject(&is_nil/1)
   end
 
-  defp decode_openai_message(%{"tool_calls" => tool_calls}) when is_list(tool_calls) do
+  defp decode_openai_content(_), do: []
+
+  defp decode_openai_tool_calls(%{"tool_calls" => tool_calls}) when is_list(tool_calls) do
     tool_calls
     |> Enum.map(&decode_openai_tool_call/1)
     |> Enum.reject(&is_nil/1)
   end
 
-  defp decode_openai_message(_), do: []
+  defp decode_openai_tool_calls(_), do: []
 
   defp decode_openai_content_part(%{"type" => "text", "text" => text}) do
     [ReqLLM.StreamChunk.text(text)]

@@ -26,85 +26,10 @@ defmodule ReqLLM.Streaming.FinchClient do
   requests with proper authentication, headers, and request body formatting.
   """
 
+  alias ReqLLM.Streaming.Fixtures.HTTPContext
+  alias ReqLLM.StreamServer
+
   require Logger
-
-  defmodule HTTPContext do
-    @moduledoc """
-    Lightweight HTTP context for streaming operations.
-
-    This struct contains the minimal HTTP metadata needed for fixture capture
-    and debugging, replacing the heavier Req.Request/Response structs for
-    streaming operations.
-    """
-
-    @derive Jason.Encoder
-    defstruct [
-      :url,
-      :method,
-      :req_headers,
-      :status,
-      :resp_headers
-    ]
-
-    @type t :: %__MODULE__{
-            url: String.t(),
-            method: :get | :post | :put | :patch | :delete,
-            req_headers: map(),
-            status: integer() | nil,
-            resp_headers: map() | nil
-          }
-
-    @doc """
-    Creates a new HTTPContext from request parameters.
-    """
-    @spec new(String.t(), :get | :post | :put | :patch | :delete, map()) :: t()
-    def new(url, method, headers) do
-      %__MODULE__{
-        url: url,
-        method: method,
-        req_headers: sanitize_headers(headers),
-        status: nil,
-        resp_headers: nil
-      }
-    end
-
-    @doc """
-    Updates the context with response status and headers.
-    """
-    @spec update_response(t(), integer(), map()) :: t()
-    def update_response(%__MODULE__{} = context, status, headers) do
-      %{context | status: status, resp_headers: sanitize_headers(headers)}
-    end
-
-    # Remove sensitive headers that might contain API keys
-    defp sanitize_headers(headers) when is_map(headers) do
-      sensitive_keys = [
-        "authorization",
-        "x-api-key",
-        "anthropic-api-key",
-        "openai-api-key",
-        "x-auth-token",
-        "bearer",
-        "api-key",
-        "access-token"
-      ]
-
-      Enum.reduce(sensitive_keys, headers, fn key, acc ->
-        case Map.get(acc, key) do
-          nil -> acc
-          _value -> Map.put(acc, key, "[REDACTED:#{key}]")
-        end
-      end)
-    end
-
-    defp sanitize_headers(headers) when is_list(headers) do
-      headers
-      |> Map.new()
-      |> sanitize_headers()
-    end
-
-    defp sanitize_headers(headers), do: headers
-  end
 
   @doc """
   Starts a streaming HTTP request and forwards events to StreamServer.
@@ -142,39 +67,36 @@ defmodule ReqLLM.Streaming.FinchClient do
         stream_server_pid,
         finch_name \\ ReqLLM.Finch
       ) do
-    with {:ok, finch_request, http_context, canonical_json} <-
-           build_stream_request(provider_mod, model, context, opts, finch_name),
-         {:ok, task_pid} <-
-           start_streaming_task(finch_request, stream_server_pid, finch_name, http_context) do
-      {:ok, task_pid, http_context, canonical_json}
+    alias ReqLLM.Streaming.Fixtures
+
+    case Fixtures.replay_path(opts) do
+      {:fixture, fixture_path} ->
+        start_fixture_replay(fixture_path, stream_server_pid, model)
+
+      :no_fixture ->
+        with {:ok, finch_request, http_context, canonical_json} <-
+               build_stream_request(provider_mod, model, context, opts, finch_name),
+             {:ok, task_pid} <-
+               start_streaming_task(
+                 finch_request,
+                 stream_server_pid,
+                 finch_name,
+                 http_context,
+                 Fixtures.capture_path(opts)
+               ) do
+          {:ok, task_pid, http_context, canonical_json}
+        end
     end
   end
 
   # Build Finch.Request using provider callback
   defp build_stream_request(provider_mod, model, context, opts, finch_name) do
-    # Use provider's attach_stream/4 callback
+    alias ReqLLM.Streaming.Fixtures
+
     case provider_mod.attach_stream(model, context, opts, finch_name) do
       {:ok, finch_request} ->
-        # Extract HTTP context from the request for fixture capture
-        url =
-          if (finch_request.scheme == :https and finch_request.port == 443) or
-               (finch_request.scheme == :http and finch_request.port == 80) do
-            "#{finch_request.scheme}://#{finch_request.host}#{finch_request.path}"
-          else
-            "#{finch_request.scheme}://#{finch_request.host}:#{finch_request.port}#{finch_request.path}"
-          end
-
-        method = String.downcase(finch_request.method) |> String.to_atom()
-
-        http_context =
-          HTTPContext.new(
-            url,
-            method,
-            Map.new(finch_request.headers)
-          )
-
-        # Extract canonical JSON from finch request body for fixture capture
-        canonical_json = extract_canonical_json(finch_request)
+        http_context = Fixtures.HTTPContext.from_finch_request(finch_request)
+        canonical_json = Fixtures.canonical_json_from_finch_request(finch_request)
 
         {:ok, finch_request, http_context, canonical_json}
 
@@ -188,83 +110,82 @@ defmodule ReqLLM.Streaming.FinchClient do
       {:error, {:build_request_failed, error}}
   end
 
-  # Extract JSON from Finch request body
-  defp extract_canonical_json(%Finch.Request{body: body}) do
-    case body do
-      nil ->
-        %{}
+  # Start fixture replay task
+  defp start_fixture_replay(fixture_path, stream_server_pid, _model) do
+    # Use VCR to replay fixture into stream server
+    case Code.ensure_loaded(ReqLLM.Test.VCR) do
+      {:module, ReqLLM.Test.VCR} ->
+        {:ok, task_pid} =
+          apply(ReqLLM.Test.VCR, :replay_into_stream_server, [fixture_path, stream_server_pid])
 
-      binary when is_binary(binary) ->
-        case Jason.decode(binary) do
-          {:ok, json} -> json
-          {:error, _} -> %{raw_body: binary}
-        end
+        # Create minimal http_context for compatibility
+        http_context = %HTTPContext{
+          url: "fixture://#{fixture_path}",
+          method: :post,
+          req_headers: %{},
+          status: 200,
+          resp_headers: %{}
+        }
 
-      {:stream, _} ->
-        %{streaming_body: true}
+        # Extract canonical_json from fixture for compatibility
+        transcript = apply(ReqLLM.Test.VCR, :load!, [fixture_path])
+        canonical_json = Map.get(transcript.request, :canonical_json, %{})
 
-      other ->
-        %{unknown_body: inspect(other)}
+        {:ok, task_pid, http_context, canonical_json}
+
+      {:error, _} ->
+        {:error, :vcr_not_available}
     end
-  rescue
-    _ -> %{}
   end
 
   # Start supervised task for Finch streaming
-  defp start_streaming_task(finch_request, stream_server_pid, finch_name, http_context) do
-    parent_pid = self()
-
+  defp start_streaming_task(
+         finch_request,
+         stream_server_pid,
+         finch_name,
+         _http_context,
+         _fixture_path
+       ) do
     task_pid =
       Task.Supervisor.async_nolink(ReqLLM.TaskSupervisor, fn ->
         finch_stream_callback = fn
           {:status, status}, acc ->
-            updated_context = HTTPContext.update_response(acc, status, %{})
-            GenServer.call(stream_server_pid, {:http_event, {:status, status}})
-            updated_context
+            StreamServer.http_event(stream_server_pid, {:status, status})
+            acc
 
           {:headers, headers}, acc ->
-            # Update context with response headers
-            current_status = acc.status || 200
-
-            updated_context =
-              HTTPContext.update_response(acc, current_status, Map.new(headers))
-
-            GenServer.call(stream_server_pid, {:http_event, {:headers, headers}})
-            updated_context
+            StreamServer.http_event(stream_server_pid, {:headers, headers})
+            acc
 
           {:data, chunk}, acc ->
-            GenServer.call(stream_server_pid, {:http_event, {:data, chunk}})
+            StreamServer.http_event(stream_server_pid, {:data, chunk})
             acc
 
           :done, acc ->
-            GenServer.call(stream_server_pid, {:http_event, :done})
+            StreamServer.http_event(stream_server_pid, :done)
             acc
         end
 
         try do
-          case Finch.stream(finch_request, finch_name, http_context, finch_stream_callback) do
-            {:ok, final_context} ->
+          case Finch.stream(finch_request, finch_name, :ok, finch_stream_callback) do
+            {:ok, _} ->
               Logger.debug("Finch streaming completed successfully")
-              send(parent_pid, {:stream_task_completed, final_context})
               :ok
 
             {:error, reason, _partial_acc} ->
               Logger.error("Finch streaming failed: #{inspect(reason)}")
-              GenServer.call(stream_server_pid, {:http_event, {:error, reason}})
-              send(parent_pid, {:stream_task_failed, reason})
+              StreamServer.http_event(stream_server_pid, {:error, reason})
               {:error, reason}
           end
         catch
           :exit, reason ->
             Logger.error("Finch streaming task exited: #{inspect(reason)}")
-            GenServer.call(stream_server_pid, {:http_event, {:error, {:exit, reason}}})
-            send(parent_pid, {:stream_task_failed, {:exit, reason}})
+            StreamServer.http_event(stream_server_pid, {:error, {:exit, reason}})
             {:error, {:exit, reason}}
 
           kind, reason ->
             Logger.error("Finch streaming task crashed: #{kind} #{inspect(reason)}")
-            GenServer.call(stream_server_pid, {:http_event, {:error, {kind, reason}}})
-            send(parent_pid, {:stream_task_failed, {kind, reason}})
+            StreamServer.http_event(stream_server_pid, {:error, {kind, reason}})
             {:error, {kind, reason}}
         end
       end)

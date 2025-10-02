@@ -8,8 +8,6 @@ defmodule ReqLLM.Providers.XAITest do
 
   use ReqLLM.ProviderCase, provider: ReqLLM.Providers.XAI
 
-  import ReqLLM.ProviderTestHelpers
-
   alias ReqLLM.Context
   alias ReqLLM.Providers.XAI
 

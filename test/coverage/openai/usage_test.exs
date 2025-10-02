@@ -1,10 +1,10 @@
 defmodule ReqLLM.Coverage.OpenAI.UsageTest do
   @moduledoc """
-  OpenAI provider usage calculation tests.
+  OpenAI usage and cost calculation coverage tests.
 
-  Tests cost calculations, cached token handling, and usage metrics 
-  for OpenAI models using live/fixture mode.
+  Run with REQ_LLM_FIXTURES_MODE=record to test against live API and record fixtures.
+  Otherwise uses fixtures for fast, reliable testing.
   """
 
-  use ReqLLM.ProviderTest.Usage, provider: :openai, model: "openai:gpt-4o-mini"
+  use ReqLLM.ProviderTest.Usage, provider: :openai
 end

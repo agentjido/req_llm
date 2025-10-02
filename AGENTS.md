@@ -12,6 +12,7 @@ ReqLLM is a composable Elixir library for AI interactions built on Req, providin
 - `mix test test/req_llm_test.exs` - Run specific test file
 - `mix test --only describe:"model/1 top-level API"` - Run specific describe block
 - `LIVE=true mix test` - Run against real APIs and (re)generate fixtures
+- `REQ_LLM_DEBUG=1 mix test` - Run tests with verbose fixture debugging output
 - `mix compile` - Compile the project
 - `mix quality` or `mix q` - Run quality checks (format, compile --warnings-as-errors, dialyzer, credo)
 

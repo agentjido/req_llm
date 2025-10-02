@@ -8,8 +8,6 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
   use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic
 
-  import ReqLLM.ProviderTestHelpers
-
   alias ReqLLM.Providers.Anthropic
 
   describe "provider contract" do

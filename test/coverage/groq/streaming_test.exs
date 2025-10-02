@@ -5,11 +5,9 @@ defmodule ReqLLM.Coverage.Groq.StreamingTest do
   Uses shared provider test macros to eliminate duplication while maintaining
   clear per-provider test organization and failure reporting.
 
-  Run with LIVE=true to test against live API and capture fixtures.
+  Run with REQ_LLM_FIXTURES_MODE=record to test against live API and capture fixtures.
   Otherwise uses cached fixtures for fast, reliable testing.
   """
 
-  use ReqLLM.ProviderTest.Streaming,
-    provider: :groq,
-    model: "groq:llama-3.1-8b-instant"
+  use ReqLLM.ProviderTest.Streaming, provider: :groq
 end

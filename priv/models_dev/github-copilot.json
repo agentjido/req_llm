@@ -164,6 +164,33 @@
     },
     {
       "attachment": true,
+      "id": "claude-sonnet-4.5",
+      "knowledge": "2025-03-31",
+      "last_updated": "2025-09-29",
+      "limit": {
+        "context": 128000,
+        "output": 16000
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Claude Sonnet 4.5 (Preview)",
+      "open_weights": false,
+      "provider": "github-copilot",
+      "provider_model_id": "claude-sonnet-4.5",
+      "reasoning": true,
+      "release_date": "2025-09-29",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": true,
       "id": "gemini-2.0-flash-001",
       "knowledge": "2024-06",
       "last_updated": "2024-12-11",

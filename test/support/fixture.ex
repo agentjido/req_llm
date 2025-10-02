@@ -33,7 +33,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
   Req.Request/Response structs but provides HTTPContext with minimal metadata.
   """
   def save_streaming_fixture(
-        %ReqLLM.Streaming.FinchClient.HTTPContext{} = http_context,
+        %ReqLLM.Streaming.Fixtures.HTTPContext{} = http_context,
         path,
         canonical_json
       ) do
@@ -58,16 +58,30 @@ defmodule ReqLLM.Step.Fixture.Backend do
 
     fn request ->
       path = fixture_path(provider, safe_fixture_name)
-      Logger.debug("Fixture intercepted request for #{provider}/#{safe_fixture_name}")
+      mode = ReqLLM.Test.Env.fixtures_mode()
+
+      if debug?() do
+        IO.puts("[Fixture] step: provider=#{provider}, name=#{safe_fixture_name}")
+        IO.puts("[Fixture] path: #{Path.relative_to_cwd(path)}")
+        IO.puts("[Fixture] mode: #{mode}, exists: #{File.exists?(path)}")
+      end
+
+      Logger.debug("Fixture step: provider=#{provider}, name=#{safe_fixture_name}")
+      Logger.debug("Fixture path: #{path}")
+      Logger.debug("Fixture mode: #{mode}")
+      Logger.debug("Fixture exists: #{File.exists?(path)}")
 
       if live?() do
-        Logger.debug("Fixture: LIVE mode - tagging request for recording")
+        debug?() && IO.puts("[Fixture] RECORD mode - will save to #{Path.relative_to_cwd(path)}")
+        Logger.debug("Fixture RECORD mode - will save to #{Path.relative_to_cwd(path)}")
         # Tag the request and add response steps to capture the response
         request =
           request
           |> Req.Request.put_private(:llm_fixture_path, path)
           |> Req.Request.put_private(:llm_fixture_provider, provider)
           |> Req.Request.put_private(:llm_fixture_name, safe_fixture_name)
+
+        Logger.debug("Fixture request tagged with path and provider")
 
         # Insert a non-invasive tap step to capture RAW SSE bytes after decompression
         # but before our SSE parsing step. If we can't find the stream step, fall back
@@ -77,14 +91,17 @@ defmodule ReqLLM.Step.Fixture.Backend do
         # For streaming, fixture saving is handled in the :into callback completion
         # For non-streaming, save fixture BEFORE decoding to capture raw response
         if is_real_time_streaming?(request) do
+          Logger.debug("Fixture streaming request - saving handled in callback")
           request
         else
+          Logger.debug("Fixture non-streaming request - inserting save step")
           insert_save_step(request)
         end
       else
-        Logger.debug("Fixture: REPLAY mode")
+        Logger.debug("Fixture REPLAY mode - loading from #{Path.relative_to_cwd(path)}")
         # Short-circuit the pipeline with stubbed response
         {:ok, response} = handle_replay(path)
+        Logger.debug("Fixture loaded successfully, status=#{response.status}")
         {request, response}
       end
     end
@@ -93,60 +110,13 @@ defmodule ReqLLM.Step.Fixture.Backend do
   # ---------------------------------------------------------------------------
   # Mode helpers
   # ---------------------------------------------------------------------------
-  defp live?, do: System.get_env("LIVE") in ~w(1 true TRUE)
+  defp live?, do: ReqLLM.Test.Env.fixtures_mode() == :record
+
+  defp debug?, do: System.get_env("REQ_LLM_DEBUG") in ["1", "true"]
 
   defp is_real_time_streaming?(%Req.Request{} = request) do
     # Check if the request has a real-time stream stored (indicating streaming mode)
     request.private[:real_time_stream] != nil
-  end
-
-  # Create a Stream that properly yields StreamChunk objects for replay
-  defp make_stream(chunks) do
-    # First, convert all chunks to StreamChunk objects
-    all_stream_chunks =
-      Enum.flat_map(chunks, fn chunk ->
-        # Decode the raw SSE data
-        raw_data = decode_body(%{"b64" => chunk["b64"]})
-
-        # Parse SSE events from the raw data
-        parse_sse_events(raw_data)
-      end)
-
-    # Create a Stream struct from the list of chunks
-    Stream.map(all_stream_chunks, & &1)
-  end
-
-  # Parse Server-Sent Events data into StreamChunk objects
-  defp parse_sse_events(raw_data) do
-    raw_data
-    |> String.split("\n\n")
-    |> Enum.map(&String.trim/1)
-    |> Enum.reject(&(&1 == ""))
-    |> Enum.flat_map(&parse_single_sse_event/1)
-  end
-
-  # Parse a single SSE event
-  defp parse_single_sse_event(event_text) do
-    case String.trim(event_text) do
-      "data: [DONE]" ->
-        # Terminal event, emit meta chunk with finish reason
-        [ReqLLM.StreamChunk.meta(%{finish_reason: "stop"})]
-
-      "data: " <> json_str ->
-        # Parse the JSON data
-        case Jason.decode(json_str) do
-          {:ok, data} ->
-            # Use default SSE event decoding
-            fake_model = %ReqLLM.Model{provider: :openai, model: "gpt-4"}
-            ReqLLM.Provider.Defaults.default_decode_sse_event(%{data: data}, fake_model)
-
-          {:error, _} ->
-            []
-        end
-
-      _ ->
-        []
-    end
   end
 
   # ---------------------------------------------------------------------------
@@ -273,31 +243,55 @@ defmodule ReqLLM.Step.Fixture.Backend do
     if !File.exists?(path) do
       raise """
       Fixture not found: #{path}
-      Run the test once with LIVE=true to capture it.
+      Run the test once with REQ_LLM_FIXTURES_MODE=record to capture it.
       """
     end
 
-    fixture_data = path |> File.read!() |> Jason.decode!()
-    resp = fixture_data["response"]
+    case ReqLLM.Test.VCR.load(path) do
+      {:ok, transcript} ->
+        body =
+          if ReqLLM.Test.VCR.streaming?(transcript) do
+            {provider_mod, model} = extract_provider_and_model_from_transcript(transcript)
+            ReqLLM.Test.VCR.replay_as_stream(transcript, provider_mod, model)
+          else
+            ReqLLM.Test.VCR.replay_response_body(transcript)
+          end
 
-    body =
-      case fixture_data["chunks"] do
-        nil ->
-          # Regular non-streaming response
-          decode_body(resp["body"])
+        {:ok,
+         %Req.Response{
+           status: ReqLLM.Test.VCR.status(transcript),
+           headers: ReqLLM.Test.VCR.headers(transcript),
+           body: body
+         }}
 
-        chunks when is_list(chunks) ->
-          # For streaming responses, create a Stream of StreamChunks
-          make_stream(chunks)
-      end
-
-    {:ok,
-     %Req.Response{
-       status: resp["status"],
-       headers: resp["headers"],
-       body: body
-     }}
+      {:error, _} ->
+        raise """
+        Failed to load Transcript fixture: #{path}
+        The fixture may be in legacy format. Delete and regenerate with REQ_LLM_FIXTURES_MODE=record.
+        """
+    end
   end
+
+  defp extract_provider_and_model_from_transcript(%ReqLLM.Test.Transcript{} = transcript) do
+    provider = transcript.provider
+    provider_mod = provider_module(provider)
+    model = ReqLLM.Model.from!(transcript.model_spec)
+    {provider_mod, model}
+  end
+
+  defp derive_provider_from_path(path) do
+    path
+    |> Path.dirname()
+    |> Path.basename()
+    |> String.to_atom()
+  end
+
+  defp provider_module(:anthropic), do: ReqLLM.Providers.Anthropic
+  defp provider_module(:openai), do: ReqLLM.Providers.OpenAI
+  defp provider_module(:google), do: ReqLLM.Providers.Google
+  defp provider_module(:groq), do: ReqLLM.Providers.Groq
+  defp provider_module(:openrouter), do: ReqLLM.Providers.OpenRouter
+  defp provider_module(:xai), do: ReqLLM.Providers.XAI
 
   # ---------------------------------------------------------------------------
   # Response step for saving fixtures in LIVE mode
@@ -319,148 +313,240 @@ defmodule ReqLLM.Step.Fixture.Backend do
   # ---------------------------------------------------------------------------
   # Request capture helpers
   # ---------------------------------------------------------------------------
-  defp capture_request_body(%Req.Request{body: body}) do
-    case body do
-      {:json, json_map} ->
-        %{canonical_json: json_map}
+  defp capture_request_body(%Req.Request{} = request) do
+    canonical_json =
+      case request.private[:llm_canonical_json] do
+        nil ->
+          case request.body do
+            {:json, json_map} -> json_map
+            other when is_binary(other) -> Jason.decode!(other)
+            other -> other
+          end
 
-      other ->
-        %{canonical_json: other}
+        json_map ->
+          json_map
+      end
+
+    %{canonical_json: canonical_json}
+  end
+
+  # ---------------------------------------------------------------------------
+  # Record branch - Use VCR/Transcript format
+  # ---------------------------------------------------------------------------
+  defp save_fixture(path, encode_info, %Req.Request{} = req, %Req.Response{} = resp) do
+    debug?() && IO.puts("[Fixture] Saving to #{Path.relative_to_cwd(path)}")
+    Logger.debug("Fixture saving: path=#{Path.relative_to_cwd(path)}")
+
+    # Check if we captured stream chunks (prefer raw tap capture)
+    stream_chunks =
+      case Process.delete({:llmfixture_raw_stream_chunks, path}) do
+        nil -> Process.delete({:llmfixture_stream_chunks, path})
+        raw when is_list(raw) -> Enum.reverse(raw)
+      end
+
+    debug?() &&
+      IO.puts("[Fixture] Stream chunks: #{if stream_chunks, do: length(stream_chunks), else: 0}")
+
+    Logger.debug("Fixture stream chunks: #{if stream_chunks, do: length(stream_chunks), else: 0}")
+
+    provider = derive_provider_from_path(path)
+    model_spec = derive_model_spec(provider, encode_info.canonical_json)
+
+    debug?() && IO.puts("[Fixture] Provider: #{provider}, model: #{model_spec}")
+    Logger.debug("Fixture provider: #{provider}, model_spec: #{model_spec}")
+
+    request_meta = %{
+      method: to_string(req.method),
+      url: URI.to_string(req.url),
+      headers: mapify_headers(req.headers),
+      canonical_json: encode_info.canonical_json
+    }
+
+    response_meta = %{
+      status: resp.status,
+      headers: mapify_headers(resp.headers)
+    }
+
+    Logger.debug("Fixture request: method=#{request_meta.method}, url=#{request_meta.url}")
+    Logger.debug("Fixture response: status=#{response_meta.status}")
+
+    if stream_chunks do
+      # Use ChunkCollector for streaming
+      {:ok, collector} = ReqLLM.Test.ChunkCollector.start_link()
+
+      Enum.each(stream_chunks, fn chunk ->
+        binary =
+          case chunk do
+            %{bin: bin} -> bin
+            bin when is_binary(bin) -> bin
+            other -> inspect(other)
+          end
+
+        ReqLLM.Test.ChunkCollector.add_chunk(collector, binary)
+      end)
+
+      Logger.debug("Fixture recording streaming response with collector")
+
+      case ReqLLM.Test.VCR.record(path,
+             provider: provider,
+             model: model_spec,
+             request: request_meta,
+             response: response_meta,
+             collector: collector
+           ) do
+        :ok ->
+          debug?() &&
+            IO.puts("[Fixture] Saved successfully (streaming) → #{Path.relative_to_cwd(path)}")
+
+          Logger.debug("Fixture saved successfully → #{Path.relative_to_cwd(path)}")
+
+        {:error, reason} ->
+          debug?() && IO.puts("[Fixture] ERROR saving (streaming): #{inspect(reason)}")
+          Logger.error("Fixture save failed: #{inspect(reason)}")
+      end
+    else
+      # Non-streaming - encode body as JSON
+      body = Jason.encode!(encode_body(resp.body))
+      body_size = byte_size(body)
+
+      Logger.debug("Fixture recording non-streaming response, body_size=#{body_size}")
+
+      case ReqLLM.Test.VCR.record(path,
+             provider: provider,
+             model: model_spec,
+             request: request_meta,
+             response: response_meta,
+             body: body
+           ) do
+        :ok ->
+          debug?() &&
+            IO.puts(
+              "[Fixture] Saved successfully (non-streaming) → #{Path.relative_to_cwd(path)}"
+            )
+
+          Logger.debug("Fixture saved successfully → #{Path.relative_to_cwd(path)}")
+
+        {:error, reason} ->
+          debug?() && IO.puts("[Fixture] ERROR saving (non-streaming): #{inspect(reason)}")
+          Logger.error("Fixture save failed: #{inspect(reason)}")
+      end
     end
   end
 
-  # ---------------------------------------------------------------------------
-  # Record branch - Updated to handle 4-arity
-  # ---------------------------------------------------------------------------
-  defp save_fixture(path, encode_info, %Req.Request{} = req, %Req.Response{} = resp) do
-    File.mkdir_p!(Path.dirname(path))
-
-    # Check if we captured stream chunks (prefer raw tap capture)
-    stream_chunks =
-      case Process.delete({:llmfixture_raw_stream_chunks, path}) do
-        nil -> Process.delete({:llmfixture_stream_chunks, path})
-        raw when is_list(raw) -> Enum.reverse(raw)
-      end
-
-    response_data = %{
-      status: resp.status,
-      headers: mapify_headers(resp.headers),
-      body: if(!stream_chunks, do: encode_body(resp.body))
-    }
-
-    data = %{
-      captured_at: DateTime.utc_now() |> DateTime.to_iso8601(),
-      request: %{
-        method: req.method,
-        url: URI.to_string(req.url),
-        headers: mapify_headers(req.headers),
-        canonical_json: sanitize_json(encode_info.canonical_json),
-        body: encode_body(req.body)
-      },
-      response: response_data
-    }
-
-    # Add chunks field if we have stream data
-    data =
-      if stream_chunks do
-        chunks =
-          Enum.map(stream_chunks, fn chunk ->
-            case chunk do
-              # New format with timing metadata
-              %{bin: binary, t_us: timestamp} ->
-                encoded = %{"b64" => Base.encode64(binary), "t_us" => timestamp}
-                decoded = %{"decoded" => binary}
-                Map.merge(encoded, decoded)
-
-              # Legacy format (binary only)
-              binary when is_binary(binary) ->
-                encoded = %{"b64" => Base.encode64(binary)}
-                decoded = %{"decoded" => binary}
-                Map.merge(encoded, decoded)
-
-              # Fallback
-              other ->
-                encoded = encode_body(other)
-                decoded = %{"decoded" => inspect(other)}
-                Map.merge(encoded, decoded)
-            end
-          end)
-
-        Map.put(data, "chunks", chunks)
-      else
-        data
-      end
-
-    File.write!(path, Jason.encode!(data, pretty: true))
-    Logger.debug("Saved HTTP fixture → #{Path.relative_to_cwd(path)}")
-  end
-
-  # HTTPContext version for Finch streaming pipeline
+  # HTTPContext version for Finch streaming pipeline - Use VCR/Transcript format
   defp save_fixture_with_context(
          path,
          encode_info,
-         %ReqLLM.Streaming.FinchClient.HTTPContext{} = http_context
+         %ReqLLM.Streaming.Fixtures.HTTPContext{} = http_context
        ) do
-    File.mkdir_p!(Path.dirname(path))
+    debug?() &&
+      IO.puts("[Fixture] save_fixture_with_context called for #{Path.relative_to_cwd(path)}")
 
     # Check if we captured stream chunks (prefer raw tap capture)
     stream_chunks =
       case Process.delete({:llmfixture_raw_stream_chunks, path}) do
-        nil -> Process.delete({:llmfixture_stream_chunks, path})
-        raw when is_list(raw) -> Enum.reverse(raw)
+        nil ->
+          debug?() && IO.puts("[Fixture] No raw stream chunks, checking regular chunks")
+          Process.delete({:llmfixture_stream_chunks, path})
+
+        raw when is_list(raw) ->
+          debug?() && IO.puts("[Fixture] Found #{length(raw)} raw stream chunks")
+          Enum.reverse(raw)
       end
 
-    response_data = %{
+    debug?() &&
+      IO.puts(
+        "[Fixture] stream_chunks: #{inspect(stream_chunks != nil)}, count: #{if stream_chunks, do: length(stream_chunks), else: 0}"
+      )
+
+    provider = derive_provider_from_path(path)
+    model_spec = derive_model_spec(provider, encode_info.canonical_json)
+
+    request_meta = %{
+      method: String.upcase(to_string(http_context.method)),
+      url: http_context.url,
+      headers: http_context.req_headers || %{},
+      canonical_json: encode_info.canonical_json
+    }
+
+    # Convert headers to list format (VCR expects a list, not a map)
+    headers =
+      case http_context.resp_headers do
+        h when is_map(h) -> Enum.to_list(h)
+        h when is_list(h) -> h
+        _ -> []
+      end
+
+    response_meta = %{
       status: http_context.status || 200,
-      headers: http_context.resp_headers || %{},
-      body: if(!stream_chunks, do: %{})
+      headers: headers
     }
 
-    data = %{
-      captured_at: DateTime.utc_now() |> DateTime.to_iso8601(),
-      request: %{
-        method: String.upcase(to_string(http_context.method)),
-        url: http_context.url,
-        headers: sanitize_headers(http_context.req_headers || %{}),
-        canonical_json: sanitize_json(encode_info.canonical_json),
-        body: encode_body(encode_info.canonical_json)
-      },
-      response: response_data
-    }
+    debug?() && IO.puts("[Fixture] response_meta: #{inspect(response_meta)}")
 
-    # Add chunks field if we have stream data
-    data =
-      if stream_chunks do
-        chunks =
-          Enum.map(stream_chunks, fn chunk ->
-            case chunk do
-              # New format with timing metadata
-              %{bin: binary, t_us: timestamp} ->
-                encoded = %{"b64" => Base.encode64(binary), "t_us" => timestamp}
-                decoded = %{"decoded" => binary}
-                Map.merge(encoded, decoded)
+    if stream_chunks do
+      # Use ChunkCollector for streaming
+      debug?() &&
+        IO.puts("[Fixture] Creating ChunkCollector for #{length(stream_chunks)} chunks")
 
-              # Legacy format (binary only)
-              binary when is_binary(binary) ->
-                encoded = %{"b64" => Base.encode64(binary)}
-                decoded = %{"decoded" => binary}
-                Map.merge(encoded, decoded)
+      debug?() && IO.puts("[Fixture] First chunk: #{inspect(Enum.at(stream_chunks, 0))}")
+      {:ok, collector} = ReqLLM.Test.ChunkCollector.start_link()
 
-              # Fallback
-              other ->
-                encoded = encode_body(other)
-                decoded = %{"decoded" => inspect(other)}
-                Map.merge(encoded, decoded)
-            end
-          end)
+      Enum.each(stream_chunks, fn chunk ->
+        binary =
+          case chunk do
+            %{bin: bin} -> bin
+            bin when is_binary(bin) -> bin
+            other -> inspect(other)
+          end
 
-        Map.put(data, "chunks", chunks)
-      else
-        data
-      end
+        ReqLLM.Test.ChunkCollector.add_chunk(collector, binary)
+      end)
 
-    File.write!(path, Jason.encode!(data, pretty: true))
-    Logger.debug("Saved HTTP fixture (HTTPContext) → #{Path.relative_to_cwd(path)}")
+      debug?() &&
+        IO.puts(
+          "[Fixture] Calling VCR.record for streaming fixture at #{Path.relative_to_cwd(path)}"
+        )
+
+      result =
+        ReqLLM.Test.VCR.record(path,
+          provider: provider,
+          model: model_spec,
+          request: request_meta,
+          response: response_meta,
+          collector: collector
+        )
+
+      IO.puts("[Fixture] VCR.record result: #{inspect(result)}")
+      result
+    else
+      # Non-streaming (though HTTPContext is usually for streaming)
+      ReqLLM.Test.VCR.record(path,
+        provider: provider,
+        model: model_spec,
+        request: request_meta,
+        response: response_meta,
+        body: ""
+      )
+    end
+
+    Logger.debug("Saved Transcript fixture (HTTPContext) → #{Path.relative_to_cwd(path)}")
+  end
+
+  # ---------------------------------------------------------------------------
+  # New format helpers (shared with Recorder)
+  # ---------------------------------------------------------------------------
+  defp derive_model_spec(provider, canonical_json) when is_map(canonical_json) do
+    model_name = Map.get(canonical_json, "model")
+    "#{provider}:#{model_name}"
+  end
+
+  defp derive_model_spec(provider, canonical_json) when is_binary(canonical_json) do
+    parsed = Jason.decode!(canonical_json)
+    model_name = Map.get(parsed, "model")
+    "#{provider}:#{model_name}"
+  rescue
+    _ -> "#{provider}:unknown"
   end
 
   # ---------------------------------------------------------------------------
@@ -494,62 +580,10 @@ defmodule ReqLLM.Step.Fixture.Backend do
     end)
   end
 
-  # Sanitize sensitive fields from JSON data (prompts, API keys, etc.)
-  # For string JSON, try to decode and sanitize, falling back to regex replacement
-  defp sanitize_json(data) when is_binary(data) do
-    data
-    |> Jason.decode!()
-    |> sanitize_json_data()
-    |> Jason.encode!()
-  rescue
-    _ -> sanitize_json_string(data)
-  end
-
-  defp sanitize_json(data), do: sanitize_json_data(data)
-
-  # Sanitize JSON data structure
-  defp sanitize_json_data(data) when is_map(data) do
-    sensitive_keys = ["api_key", "access_token", "password", "secret", "authorization", "bearer"]
-
-    Enum.reduce(data, %{}, fn {key, value}, acc ->
-      key_str = to_string(key) |> String.downcase()
-
-      new_value =
-        if Enum.any?(sensitive_keys, &String.contains?(key_str, &1)) do
-          "[REDACTED:#{key}]"
-        else
-          sanitize_json_data(value)
-        end
-
-      Map.put(acc, key, new_value)
-    end)
-  end
-
-  defp sanitize_json_data(data) when is_list(data) do
-    Enum.map(data, &sanitize_json_data/1)
-  end
-
-  defp sanitize_json_data(data), do: data
-
-  # Fallback regex-based sanitization for string JSON
-  defp sanitize_json_string(data) do
-    data
-    |> String.replace(~r/"api_key"\s*:\s*"[^"]*"/i, ~s/"api_key":"[REDACTED:api_key]"/)
-    |> String.replace(
-      ~r/"access_token"\s*:\s*"[^"]*"/i,
-      ~s/"access_token":"[REDACTED:access_token]"/
-    )
-    |> String.replace(~r/"password"\s*:\s*"[^"]*"/i, ~s/"password":"[REDACTED:password]"/)
-  end
-
   # Body → JSON-friendly encoding  
   defp encode_body(bin) when is_binary(bin), do: %{"b64" => Base.encode64(bin)}
   # JSON already
   defp encode_body(other), do: other
-
-  # Reverse of the above
-  defp decode_body(%{"b64" => b64}), do: Base.decode64!(b64)
-  defp decode_body(other), do: other
 
   # ---------------------------------------------------------------------------
   # Path helper

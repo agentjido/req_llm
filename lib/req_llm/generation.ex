@@ -419,8 +419,23 @@ defmodule ReqLLM.Generation do
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, compiled_schema} <- ReqLLM.Schema.compile(object_schema),
          {:ok, context} <- ReqLLM.Context.normalize(messages, opts) do
-      opts_with_schema = Keyword.put(opts, :compiled_schema, compiled_schema)
-      ReqLLM.Streaming.start_stream(provider_module, model, context, opts_with_schema)
+      structured_output_tool =
+        ReqLLM.Tool.new!(
+          name: "structured_output",
+          description: "Generate structured output matching the provided schema",
+          parameter_schema: compiled_schema.schema,
+          callback: fn _args -> {:ok, "structured output generated"} end
+        )
+
+      opts_with_tools =
+        opts
+        |> Keyword.put(:compiled_schema, compiled_schema)
+        |> Keyword.update(:tools, [structured_output_tool], &[structured_output_tool | &1])
+        |> Keyword.put(:tool_choice, %{type: "tool", name: "structured_output"})
+        |> Keyword.put_new(:max_tokens, 4096)
+        |> Keyword.put(:operation, :object)
+
+      ReqLLM.Streaming.start_stream(provider_module, model, context, opts_with_tools)
     end
   end
 

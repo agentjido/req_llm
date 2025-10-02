@@ -7,16 +7,16 @@ defmodule ReqLLM.TestSupport.FakeKeys do
   """
 
   @doc """
-  Installs fake API keys for all registered providers when not in LIVE mode.
+  Installs fake API keys for all registered providers when not in record mode.
 
   Keys are only injected if:
-  1. LIVE environment variable is not set to "1", "true", or "TRUE"
+  1. Fixture mode is not set to :record
   2. No real key exists in environment variables or application config
 
   Keys are installed via JidoKeys if available, otherwise as environment variables.
   """
   def install! do
-    if System.get_env("LIVE") not in ~w(1 true TRUE) do
+    if ReqLLM.Test.Env.fixtures_mode() != :record do
       providers = ReqLLM.Provider.Registry.list_providers()
 
       for provider <- providers do

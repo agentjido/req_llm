@@ -197,6 +197,31 @@ defmodule ReqLLM.StreamServer do
   end
 
   @doc """
+  Forward an HTTP event to the server for processing.
+
+  This is the primary interface for HTTP clients to deliver streaming events.
+  Provides backpressure through synchronous GenServer.call.
+
+  ## Parameters
+
+    * `server` - StreamServer process
+    * `event` - HTTP event tuple: `{:status, integer()}`, `{:headers, list()}`,
+                `{:data, binary()}`, `:done`, or `{:error, term()}`
+
+  ## Examples
+
+      ReqLLM.StreamServer.http_event(server, {:status, 200})
+      ReqLLM.StreamServer.http_event(server, {:headers, [{"content-type", "text/event-stream"}]})
+      ReqLLM.StreamServer.http_event(server, {:data, "data: {...}\\n\\n"})
+      ReqLLM.StreamServer.http_event(server, :done)
+
+  """
+  @spec http_event(server(), term()) :: :ok
+  def http_event(server, event) do
+    GenServer.call(server, {:http_event, event})
+  end
+
+  @doc """
   Set HTTP context and canonical JSON for fixture capture.
 
   This is called by the streaming pipeline to provide the HTTP metadata
@@ -213,7 +238,7 @@ defmodule ReqLLM.StreamServer do
       ReqLLM.StreamServer.set_fixture_context(server, http_context, request_json)
 
   """
-  @spec set_fixture_context(server(), ReqLLM.Streaming.FinchClient.HTTPContext.t(), any()) :: :ok
+  @spec set_fixture_context(server(), ReqLLM.Streaming.Fixtures.HTTPContext.t(), any()) :: :ok
   def set_fixture_context(server, http_context, canonical_json) do
     GenServer.call(server, {:set_fixture_context, http_context, canonical_json})
   end
@@ -332,7 +357,7 @@ defmodule ReqLLM.StreamServer do
 
     new_state =
       case reason do
-        :normal -> finalize_stream(state)
+        :normal -> finalize_stream_with_fixture(state)
         _ -> %{state | status: {:error, {:http_task_failed, reason}}}
       end
 
@@ -354,7 +379,17 @@ defmodule ReqLLM.StreamServer do
   end
 
   defp process_http_event({:headers, headers}, state) do
-    new_state = %{state | headers: headers}
+    alias ReqLLM.Streaming.Fixtures.HTTPContext
+
+    updated_http_context =
+      if state.http_context do
+        status = state.http_status || 200
+        HTTPContext.update_response(state.http_context, status, Map.new(headers))
+      else
+        state.http_context
+      end
+
+    new_state = %{state | headers: headers, http_context: updated_http_context}
     {:reply, :ok, new_state}
   end
 
@@ -488,25 +523,43 @@ defmodule ReqLLM.StreamServer do
   end
 
   defp finalize_stream_with_fixture(state) do
-    # Save fixture if needed
+    debug? = System.get_env("REQ_LLM_DEBUG") in ["1", "true"]
+
+    debug? &&
+      IO.puts(
+        "[StreamServer] finalize_stream_with_fixture: fixture_path=#{inspect(state.fixture_path)}, has_http_context=#{inspect(state.http_context != nil)}, has_canonical_json=#{inspect(state.canonical_json != nil)}"
+      )
+
     if state.fixture_path && state.http_context && state.canonical_json do
+      debug? &&
+        IO.puts(
+          "[StreamServer] Attempting to save streaming fixture to #{Path.relative_to_cwd(state.fixture_path)}"
+        )
+
       try do
         case Code.ensure_loaded(ReqLLM.Step.Fixture.Backend) do
           {:module, ReqLLM.Step.Fixture.Backend} ->
+            debug? && IO.puts("[StreamServer] Calling save_streaming_fixture...")
+
             apply(ReqLLM.Step.Fixture.Backend, :save_streaming_fixture, [
               state.http_context,
               state.fixture_path,
               state.canonical_json
             ])
 
+            debug? && IO.puts("[StreamServer] save_streaming_fixture completed")
+
           {:error, _} ->
+            debug? && IO.puts("[StreamServer] Could not load ReqLLM.Step.Fixture.Backend")
             :ok
         end
       rescue
-        # Log fixture errors but don't break streaming
         error ->
+          debug? && IO.puts("[StreamServer] Error saving fixture: #{inspect(error)}")
           Logger.warning("Failed to save streaming fixture: #{inspect(error)}")
       end
+    else
+      debug? && IO.puts("[StreamServer] Skipping fixture save - missing requirements")
     end
 
     # Continue with normal finalization

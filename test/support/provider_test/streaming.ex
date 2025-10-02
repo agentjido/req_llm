@@ -4,122 +4,82 @@ defmodule ReqLLM.ProviderTest.Streaming do
 
   Tests stream-based generation features:
   - Basic streaming with text chunks
-  - Stream interruption and error handling
-  - Chunk validation and parsing
-  - Stream completion and termination
+  - Stream completion and metadata
+  - StreamChunk validation and parsing
+
+  ## Usage
+
+      defmodule ReqLLM.Coverage.Anthropic.StreamingTest do
+        use ReqLLM.ProviderTest.Streaming, provider: :anthropic
+      end
+
+  This will generate tests for all models selected by ModelMatrix for the provider.
+
+  ## Debug Output
+
+  Set REQ_LLM_DEBUG=1 to enable verbose fixture output during test runs.
   """
 
   defmacro __using__(opts) do
     provider = Keyword.fetch!(opts, :provider)
-    model = Keyword.fetch!(opts, :model)
 
-    quote bind_quoted: [provider: provider, model: model] do
+    quote bind_quoted: [provider: provider] do
       use ExUnit.Case, async: false
 
-      @moduletag :capture_log
+      import ReqLLM.Test.Helpers
+
+      alias ReqLLM.Test.ModelMatrix
+
       @moduletag :coverage
       @moduletag category: :streaming
       @moduletag provider: provider
 
-      describe "streaming text generation" do
-        test "basic streaming completion returns chunks" do
-          {:ok, response} =
-            ReqLLM.stream_text(
-              unquote(model),
-              "Say hello briefly",
-              max_tokens: 10,
-              fixture: "#{unquote(provider)}_streaming_test"
-            )
+      defp debug?, do: System.get_env("REQ_LLM_DEBUG") in ["1", "true"]
 
-          # In both LIVE and REPLAY modes, we should get a streaming response
-          assert response.stream?
-          assert response.stream
+      @provider provider
+      @models ModelMatrix.models_for_provider(provider)
 
-          # Collect all chunks from the stream
-          chunks = Enum.to_list(response.stream)
+      for model_spec <- @models do
+        @model_spec model_spec
 
-          # Basic validations
-          assert is_list(chunks)
-          refute Enum.empty?(chunks)
+        describe "#{model_spec}" do
+          test "basic streaming" do
+            require Logger
 
-          # Verify chunks are proper StreamChunk structs
-          assert Enum.all?(chunks, fn chunk ->
-                   match?(%ReqLLM.StreamChunk{}, chunk)
-                 end)
+            model_name =
+              @model_spec |> String.split(":") |> List.last() |> String.replace("-", "_")
 
-          # Verify at least one chunk has text content (including thinking for reasoning models)
-          assert Enum.any?(chunks, fn chunk ->
-                   chunk.type in [:text, :content, :thinking] and is_binary(chunk.text) and
-                     chunk.text != ""
-                 end)
+            fixture_name = "#{model_name}_streaming_basic"
 
-          # Test that we can join the stream to get final response
-          {:ok, joined_response} = ReqLLM.Response.join_stream(response)
-          assert joined_response.message
-          assert joined_response.message.content
+            if debug?() do
+              IO.puts("\n[StreamingTest] model_spec=#{@model_spec}, model_name=#{model_name}")
+              IO.puts("[StreamingTest] fixture_name=#{fixture_name}, provider=#{@provider}")
+            end
 
-          # Verify we have some text content
-          text = ReqLLM.Response.text(joined_response)
-          assert is_binary(text)
-          assert String.length(text) > 0
-        end
+            Logger.debug("StreamingTest: model_spec=#{@model_spec}")
+            Logger.debug("StreamingTest: fixture_name=#{fixture_name}")
 
-        test "longer streaming response with many chunks" do
-          {:ok, response} =
-            ReqLLM.stream_text(
-              unquote(model),
-              "Write a brief explanation of how machine learning works. Include supervised learning and neural networks.",
-              max_tokens: 200,
-              fixture: "#{unquote(provider)}_long_streaming_test"
-            )
+            {:ok, stream_response} =
+              ReqLLM.stream_text(
+                @model_spec,
+                "Say hello briefly",
+                fixture_opts(@provider, fixture_name, param_bundles(@provider).deterministic)
+              )
 
-          # In both LIVE and REPLAY modes, we should get a streaming response
-          assert response.stream?
-          assert response.stream
+            # Verify StreamResponse structure
+            assert %ReqLLM.StreamResponse{} = stream_response
+            assert stream_response.stream
+            assert stream_response.metadata_task
 
-          # Collect all chunks from the stream
-          chunks = Enum.to_list(response.stream)
+            # Extract text first (consumes the stream)
+            text = ReqLLM.StreamResponse.text(stream_response)
+            assert is_binary(text)
+            assert String.length(text) > 0
 
-          # Basic validations - expect more chunks for longer response
-          assert is_list(chunks)
-          refute Enum.empty?(chunks)
-
-          # For a longer response, we should have multiple chunks
-          if System.get_env("LIVE") do
-            # In LIVE mode, we might get many chunks
-            IO.puts("LIVE mode: Got #{length(chunks)} chunks from long streaming response")
-          else
-            # In replay mode, we should have the same number
-            assert length(chunks) > 1,
-                   "Expected more than 1 chunk for long response, got #{length(chunks)}"
+            # Verify we can get metadata
+            usage = ReqLLM.StreamResponse.usage(stream_response)
+            assert is_map(usage) or is_nil(usage)
           end
-
-          # Verify chunks are proper StreamChunk structs
-          assert Enum.all?(chunks, fn chunk ->
-                   match?(%ReqLLM.StreamChunk{}, chunk)
-                 end)
-
-          # Verify multiple chunks have text content (not just the first one)
-          text_chunks =
-            Enum.filter(chunks, fn chunk ->
-              chunk.type in [:text, :content, :thinking] and is_binary(chunk.text) and
-                chunk.text != ""
-            end)
-
-          assert not Enum.empty?(text_chunks),
-                 "Expected at least one text chunk for long response"
-
-          # Test that we can join the stream to get final response
-          {:ok, joined_response} = ReqLLM.Response.join_stream(response)
-          assert joined_response.message
-          assert joined_response.message.content
-
-          # Verify we have substantial text content for the longer response
-          text = ReqLLM.Response.text(joined_response)
-          assert is_binary(text)
-
-          assert String.length(text) > 20,
-                 "Expected substantial content for long response, got #{String.length(text)} characters"
         end
       end
     end

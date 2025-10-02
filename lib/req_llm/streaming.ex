@@ -139,14 +139,15 @@ defmodule ReqLLM.Streaming do
 
   # Start StreamServer with provider configuration
   defp start_stream_server(provider_mod, model, opts) do
+    alias ReqLLM.Streaming.Fixtures
+
     server_opts = [
       provider_mod: provider_mod,
       model: model,
-      fixture_path: Keyword.get(opts, :fixture_path),
+      fixture_path: Fixtures.capture_path(opts),
       high_watermark: Keyword.get(opts, :high_watermark, 500)
     ]
 
-    # Add GenServer options if provided
     genserver_opts = Keyword.take(opts, [:name, :timeout, :debug, :spawn_opt, :hibernate_after])
     all_opts = Keyword.merge(server_opts, genserver_opts)
 
@@ -183,8 +184,9 @@ defmodule ReqLLM.Streaming do
 
   # Set fixture context if fixture capture is enabled
   defp set_fixture_context_if_needed(server_pid, http_context, canonical_json) do
-    # Only set fixture context if this is a LIVE test run (fixture capture enabled)
-    if System.get_env("LIVE") in ~w(1 true TRUE) do
+    alias ReqLLM.Streaming.Fixtures
+
+    if Fixtures.mode() == :record do
       StreamServer.set_fixture_context(server_pid, http_context, canonical_json)
     else
       :ok

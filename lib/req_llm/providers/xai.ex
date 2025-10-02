@@ -76,48 +76,31 @@ defmodule ReqLLM.Providers.XAI do
   """
   @impl ReqLLM.Provider
   def prepare_request(:object, model_spec, prompt, opts) do
-    compiled_schema = Keyword.fetch!(opts, :compiled_schema)
-
-    structured_output_tool =
-      ReqLLM.Tool.new!(
-        name: "structured_output",
-        description: "Generate structured output matching the provided schema",
-        parameter_schema: compiled_schema.schema,
-        callback: fn _args -> {:ok, "structured output generated"} end
-      )
-
-    opts_with_tool =
-      opts
-      |> Keyword.update(:tools, [structured_output_tool], &[structured_output_tool | &1])
-      |> Keyword.put(:tool_choice, %{type: "function", function: %{name: "structured_output"}})
-
-    # Adjust max_completion_tokens for structured output with xAI-specific handling
-    provider_opts = Keyword.get(opts_with_tool, :provider_options, [])
+    provider_opts = Keyword.get(opts, :provider_options, [])
 
     opts_with_tokens =
       case Keyword.get(provider_opts, :max_completion_tokens) do
         nil ->
           Keyword.put(
-            opts_with_tool,
+            opts,
             :provider_options,
             Keyword.put(provider_opts, :max_completion_tokens, 4096)
           )
 
         tokens when tokens < 200 ->
           Keyword.put(
-            opts_with_tool,
+            opts,
             :provider_options,
             Keyword.put(provider_opts, :max_completion_tokens, 200)
           )
 
         _tokens ->
-          opts_with_tool
+          opts
       end
 
-    # Use the default chat preparation with structured output tools
     ReqLLM.Provider.Defaults.prepare_request(
       __MODULE__,
-      :chat,
+      :object,
       model_spec,
       prompt,
       opts_with_tokens

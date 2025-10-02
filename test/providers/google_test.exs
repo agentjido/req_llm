@@ -8,8 +8,6 @@ defmodule ReqLLM.Providers.GoogleTest do
 
   use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Google
 
-  import ReqLLM.ProviderTestHelpers
-
   alias ReqLLM.Context
   alias ReqLLM.Providers.Google
 

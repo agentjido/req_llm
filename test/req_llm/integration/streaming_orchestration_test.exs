@@ -64,34 +64,6 @@ defmodule ReqLLM.Integration.StreamingOrchestrationTest do
 
       assert match?({:error, _}, result)
     end
-
-    @tag :skip
-    test "handles invalid context" do
-      model = %Model{provider: :openai, model: "gpt-4"}
-
-      result =
-        try do
-          Streaming.start_stream(ReqLLM.Providers.OpenAI, model, nil, [])
-        catch
-          _, _ -> {:error, :invalid_args}
-        end
-
-      # Actually, the system might handle nil context gracefully
-      # so we just verify we get a proper response structure
-      case result do
-        {:ok, stream_response} ->
-          assert %ReqLLM.StreamResponse{} = stream_response
-          # Cancel task safely - don't wait for metadata task since it might exit
-          try do
-            stream_response.cancel.()
-          catch
-            :exit, _ -> :ok
-          end
-
-        {:error, _} ->
-          :ok
-      end
-    end
   end
 
   describe "component coordination" do

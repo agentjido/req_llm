@@ -60,6 +60,7 @@ defmodule Mix.Tasks.ReqLlm.ModelSync do
   - Custom model definitions
   - Provider-specific overrides
   - Local testing models
+  - Model exclusions
 
   ## Provider Information Included
 
@@ -97,6 +98,17 @@ defmodule Mix.Tasks.ReqLlm.ModelSync do
               "output": 0.002
             }
           }
+        ]
+      }
+
+  To exclude models from a provider:
+
+      {
+        "provider": {
+          "id": "xai"
+        },
+        "exclude": [
+          "grok-vision-beta"
         ]
       }
 
@@ -387,6 +399,15 @@ defmodule Mix.Tasks.ReqLlm.ModelSync do
 
             {:ok, provider_id, patch_models}
 
+          {:ok, %{"provider" => %{"id" => provider_id}, "exclude" => exclusions}} ->
+            if verbose? do
+              IO.puts(
+                "  Loading exclusions: #{Path.basename(patch_file)} (#{length(exclusions)} models)"
+              )
+            end
+
+            {:ok, provider_id, {:exclude, exclusions}}
+
           {:ok, _} ->
             IO.puts("Warning: Invalid patch file structure: #{patch_file}")
             {:error, :invalid_structure}
@@ -402,6 +423,31 @@ defmodule Mix.Tasks.ReqLlm.ModelSync do
     end
   end
 
+  defp merge_patch_data(models_data, provider_id, {:exclude, exclusions}, verbose?) do
+    case Map.get(models_data, provider_id) do
+      nil ->
+        if verbose? do
+          IO.puts("    Skipping exclusions for unknown provider: #{provider_id}")
+        end
+
+        models_data
+
+      provider_data ->
+        existing_models = provider_data["models"] || %{}
+
+        exclusion_set = MapSet.new(exclusions)
+        filtered_models = Map.drop(existing_models, MapSet.to_list(exclusion_set))
+
+        if verbose? do
+          excluded_count = map_size(existing_models) - map_size(filtered_models)
+          IO.puts("    Provider #{provider_id}: excluded #{excluded_count} models")
+        end
+
+        updated_provider_data = Map.put(provider_data, "models", filtered_models)
+        Map.put(models_data, provider_id, updated_provider_data)
+    end
+  end
+
   defp merge_patch_data(models_data, provider_id, patch_models, verbose?) do
     case Map.get(models_data, provider_id) do
       nil ->
@@ -414,12 +460,10 @@ defmodule Mix.Tasks.ReqLlm.ModelSync do
       provider_data ->
         existing_models = provider_data["models"] || %{}
 
-        # Convert patch models list to map for easier merging
         patch_models_map =
           patch_models
           |> Map.new(fn model -> {model["id"], model} end)
 
-        # Merge patch models into existing models (patches override)
         merged_models = Map.merge(existing_models, patch_models_map)
 
         if verbose? do

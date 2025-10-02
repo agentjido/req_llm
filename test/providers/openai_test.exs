@@ -8,8 +8,6 @@ defmodule ReqLLM.Providers.OpenAITest do
 
   use ReqLLM.ProviderCase, provider: ReqLLM.Providers.OpenAI
 
-  import ReqLLM.ProviderTestHelpers
-
   alias ReqLLM.Context
   alias ReqLLM.Providers.OpenAI
 

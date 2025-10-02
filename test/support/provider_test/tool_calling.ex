@@ -8,119 +8,166 @@ defmodule ReqLLM.ProviderTest.ToolCalling do
   - Tool execution and result handling
 
   Tests use fixtures for fast, deterministic execution while supporting
-  live API recording with LIVE=true.
+  live API recording with REQ_LLM_FIXTURES_MODE=record.
+
+  ## Usage
+
+      defmodule ReqLLM.Coverage.Anthropic.ToolCallingTest do
+        use ReqLLM.ProviderTest.ToolCalling, provider: :anthropic
+      end
+
+  This will generate tests for all models selected by ModelMatrix for the provider.
   """
 
   defmacro __using__(opts) do
     provider = Keyword.fetch!(opts, :provider)
-    model = Keyword.fetch!(opts, :model)
 
-    quote bind_quoted: [provider: provider, model: model] do
+    quote bind_quoted: [provider: provider] do
       use ExUnit.Case, async: false
 
       import ReqLLM.Context
-      import ReqLLM.ProviderTestHelpers
+      import ReqLLM.Test.Helpers
 
-      @moduletag :capture_log
+      alias ReqLLM.Test.ModelMatrix
+
       @moduletag :coverage
       @moduletag category: :tool_calling
       @moduletag provider: provider
 
-      test "basic tool calling with get_weather function" do
-        tools = [
-          ReqLLM.tool(
-            name: "get_weather",
-            description: "Get current weather information for a location",
-            parameter_schema: [
-              location: [
-                type: :string,
-                required: true,
-                doc: "The city and state, e.g. San Francisco, CA"
-              ],
-              unit: [
-                type: {:in, ["celsius", "fahrenheit"]},
-                doc: "The temperature unit to use"
-              ]
-            ],
-            callback: fn _args -> {:ok, "Weather data would go here"} end
-          )
-        ]
+      defp debug?, do: System.get_env("REQ_LLM_DEBUG") in ["1", "true"]
 
-        # xAI reasoning models need more tokens for tool calling
-        max_tokens = if unquote(provider) == :xai, do: 500, else: 100
+      @provider provider
+      @models ModelMatrix.models_for_provider(provider)
 
-        # Build options with deterministic base but override max_tokens for tool calling
-        base_opts = param_bundles().deterministic |> Keyword.put(:max_tokens, max_tokens)
+      for model_spec <- @models do
+        @model_spec model_spec
 
-        ReqLLM.generate_text(
-          unquote(model),
-          "What's the weather like in Paris, France?",
-          fixture_opts(unquote(provider), "basic_tool_call", base_opts ++ [tools: tools])
-        )
-        |> assert_basic_response()
-        |> assert_tool_call_response("get_weather")
-      end
+        describe "#{model_spec}" do
+          test "basic tool calling with get_weather function" do
+            require Logger
 
-      test "no tool called when query doesn't match" do
-        tools = [
-          ReqLLM.tool(
-            name: "get_weather",
-            description: "Get current weather information for a location",
-            parameter_schema: [
-              location: [type: :string, required: true]
-            ],
-            callback: fn _args -> {:ok, "Weather data"} end
-          )
-        ]
+            model_name =
+              @model_spec |> String.split(":") |> List.last() |> String.replace("-", "_")
 
-        max_tokens = if unquote(provider) == :xai, do: 500, else: 100
-        base_opts = param_bundles().deterministic |> Keyword.put(:max_tokens, max_tokens)
+            fixture_name = "#{model_name}_basic_tool_call"
 
-        ReqLLM.generate_text(
-          unquote(model),
-          "Tell me a joke about cats",
-          fixture_opts(unquote(provider), "no_tool_call", base_opts ++ [tools: tools])
-        )
-        |> assert_basic_response()
-        |> assert_no_tool_calls()
-      end
+            if debug?() do
+              IO.puts("\n[ToolCallingTest] model_spec=#{@model_spec}, model_name=#{model_name}")
+              IO.puts("[ToolCallingTest] fixture_name=#{fixture_name}, provider=#{@provider}")
+            end
 
-      test "multi-tool selection chooses correct tool" do
-        tools = [
-          ReqLLM.tool(
-            name: "get_weather",
-            description: "Get current weather information for a location",
-            parameter_schema: [
-              location: [type: :string, required: true]
-            ],
-            callback: fn _args -> {:ok, "Weather data"} end
-          ),
-          ReqLLM.tool(
-            name: "tell_joke",
-            description: "Tell a funny joke",
-            parameter_schema: [
-              topic: [type: :string, doc: "Topic for the joke"]
-            ],
-            callback: fn _args -> {:ok, "Why did the cat cross the road?"} end
-          ),
-          ReqLLM.tool(
-            name: "get_time",
-            description: "Get the current time",
-            parameter_schema: [],
-            callback: fn _args -> {:ok, "12:00 PM"} end
-          )
-        ]
+            Logger.debug("ToolCallingTest: model_spec=#{@model_spec}")
+            Logger.debug("ToolCallingTest: fixture_name=#{fixture_name}")
 
-        max_tokens = if unquote(provider) == :xai, do: 500, else: 100
-        base_opts = param_bundles().deterministic |> Keyword.put(:max_tokens, max_tokens)
+            tools = [
+              ReqLLM.tool(
+                name: "get_weather",
+                description: "Get current weather information for a location",
+                parameter_schema: [
+                  location: [
+                    type: :string,
+                    required: true,
+                    doc: "The city and state, e.g. San Francisco, CA"
+                  ],
+                  unit: [
+                    type: {:in, ["celsius", "fahrenheit"]},
+                    doc: "The temperature unit to use"
+                  ]
+                ],
+                callback: fn _args -> {:ok, "Weather data would go here"} end
+              )
+            ]
 
-        ReqLLM.generate_text(
-          unquote(model),
-          "Tell me a joke about programming",
-          fixture_opts(unquote(provider), "multi_tool_call", base_opts ++ [tools: tools])
-        )
-        |> assert_basic_response()
-        |> assert_tool_call_response("tell_joke")
+            max_tokens = if @provider == :xai, do: 500, else: 100
+
+            base_opts =
+              param_bundles(@provider).deterministic |> Keyword.put(:max_tokens, max_tokens)
+
+            ReqLLM.generate_text(
+              @model_spec,
+              "What's the weather like in Paris, France?",
+              fixture_opts(@provider, fixture_name, base_opts ++ [tools: tools])
+            )
+            |> assert_basic_response()
+            |> assert_tool_call_response("get_weather")
+          end
+
+          test "no tool called when query doesn't match" do
+            model_name =
+              @model_spec |> String.split(":") |> List.last() |> String.replace("-", "_")
+
+            fixture_name = "#{model_name}_no_tool_call"
+
+            tools = [
+              ReqLLM.tool(
+                name: "get_weather",
+                description: "Get current weather information for a location",
+                parameter_schema: [
+                  location: [type: :string, required: true]
+                ],
+                callback: fn _args -> {:ok, "Weather data"} end
+              )
+            ]
+
+            max_tokens = if @provider == :xai, do: 500, else: 100
+
+            base_opts =
+              param_bundles(@provider).deterministic |> Keyword.put(:max_tokens, max_tokens)
+
+            ReqLLM.generate_text(
+              @model_spec,
+              "Tell me a joke about cats",
+              fixture_opts(@provider, fixture_name, base_opts ++ [tools: tools])
+            )
+            |> assert_basic_response()
+            |> assert_no_tool_calls()
+          end
+
+          test "multi-tool selection chooses correct tool" do
+            model_name =
+              @model_spec |> String.split(":") |> List.last() |> String.replace("-", "_")
+
+            fixture_name = "#{model_name}_multi_tool_call"
+
+            tools = [
+              ReqLLM.tool(
+                name: "get_weather",
+                description: "Get current weather information for a location",
+                parameter_schema: [
+                  location: [type: :string, required: true]
+                ],
+                callback: fn _args -> {:ok, "Weather data"} end
+              ),
+              ReqLLM.tool(
+                name: "tell_joke",
+                description: "Tell a funny joke",
+                parameter_schema: [
+                  topic: [type: :string, doc: "Topic for the joke"]
+                ],
+                callback: fn _args -> {:ok, "Why did the cat cross the road?"} end
+              ),
+              ReqLLM.tool(
+                name: "get_time",
+                description: "Get the current time",
+                parameter_schema: [],
+                callback: fn _args -> {:ok, "12:00 PM"} end
+              )
+            ]
+
+            max_tokens = if @provider == :xai, do: 500, else: 100
+
+            base_opts =
+              param_bundles(@provider).deterministic |> Keyword.put(:max_tokens, max_tokens)
+
+            ReqLLM.generate_text(
+              @model_spec,
+              "Tell me a joke about programming",
+              fixture_opts(@provider, fixture_name, base_opts ++ [tools: tools])
+            )
+            |> assert_basic_response()
+            |> assert_tool_call_response("tell_joke")
+          end
+        end
       end
 
       # Helper for tool call specific assertions

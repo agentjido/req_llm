@@ -2,7 +2,7 @@ defmodule ReqLLM.Streaming.FinchClientTest do
   use ExUnit.Case, async: true
 
   alias ReqLLM.Streaming.FinchClient
-  alias ReqLLM.Streaming.FinchClient.HTTPContext
+  alias ReqLLM.Streaming.Fixtures.HTTPContext
   alias ReqLLM.{Model, Context}
 
   describe "HTTPContext" do

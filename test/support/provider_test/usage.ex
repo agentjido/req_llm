@@ -9,110 +9,152 @@ defmodule ReqLLM.ProviderTest.Usage do
   - Provides accurate usage metrics in Response objects
 
   Tests use fixtures for fast, deterministic execution while supporting
-  live API recording with LIVE=true.
+  live API recording with REQ_LLM_FIXTURES_MODE=record.
+
+  ## Usage
+
+      defmodule ReqLLM.Coverage.Anthropic.UsageTest do
+        use ReqLLM.ProviderTest.Usage, provider: :anthropic
+      end
+
+  This will generate tests for all models selected by ModelMatrix for the provider.
+
+  ## Debug Output
+
+  Set REQ_LLM_DEBUG=1 to enable verbose fixture output during test runs.
   """
 
   defmacro __using__(opts) do
     provider = Keyword.fetch!(opts, :provider)
-    model = Keyword.fetch!(opts, :model)
 
-    quote bind_quoted: [provider: provider, model: model] do
+    quote bind_quoted: [provider: provider] do
       use ExUnit.Case, async: false
 
       import ReqLLM.Context
-      import ReqLLM.ProviderTestHelpers
+      import ReqLLM.Test.Helpers
 
-      @moduletag :capture_log
+      alias ReqLLM.Test.ModelMatrix
+
       @moduletag :coverage
       @moduletag category: :usage
       @moduletag provider: provider
 
-      test "basic usage calculation" do
-        {:ok, response} =
-          ReqLLM.generate_text(
-            unquote(model),
-            "Count from 1 to 10",
-            fixture_opts(unquote(provider), "basic_usage", param_bundles(unquote(provider)).deterministic)
-          )
+      defp debug?, do: System.get_env("REQ_LLM_DEBUG") in ["1", "true"]
 
-        # Verify response and usage structure
-        assert %ReqLLM.Response{} = response
-        assert ReqLLM.Response.text(response) != ""
-        assert is_map(response.usage)
+      @provider provider
+      @models ModelMatrix.models_for_provider(provider)
 
-        input_tokens = response.usage[:input_tokens] || response.usage[:input]
-        output_tokens = response.usage[:output_tokens] || response.usage[:output]
+      for model_spec <- @models do
+        @model_spec model_spec
 
-        assert is_number(input_tokens) and input_tokens > 0
-        assert is_number(output_tokens) and output_tokens >= 0
+        describe "#{model_spec}" do
+          test "basic usage calculation" do
+            require Logger
 
-        # Verify cost calculations if model has pricing
-        case ReqLLM.Model.from(unquote(model)) do
-          {:ok, %ReqLLM.Model{cost: cost_map}} when is_map(cost_map) ->
-            assert is_number(response.usage.input_cost) and response.usage.input_cost >= 0
-            assert is_number(response.usage.output_cost) and response.usage.output_cost >= 0
-            assert is_number(response.usage.total_cost) and response.usage.total_cost >= 0
+            model_name =
+              @model_spec |> String.split(":") |> List.last() |> String.replace("-", "_")
 
-            # Use approximate equality for floating point arithmetic
-            expected = response.usage.input_cost + response.usage.output_cost
-            assert abs(response.usage.total_cost - expected) < 0.00001
+            fixture_name = "#{model_name}_basic_usage"
 
-          _ ->
-            refute Map.has_key?(response.usage, :input_cost)
-        end
-      end
+            if debug?() do
+              IO.puts("\n[UsageTest] model_spec=#{@model_spec}, model_name=#{model_name}")
+              IO.puts("[UsageTest] fixture_name=#{fixture_name}, provider=#{@provider}")
+            end
 
-      test "cached token handling" do
-        {:ok, response} =
-          ReqLLM.generate_text(
-            unquote(model),
-            "Explain quantum computing in simple terms",
-            fixture_opts(unquote(provider), "cached_tokens", param_bundles(unquote(provider)).deterministic)
-          )
+            Logger.debug("UsageTest: model_spec=#{@model_spec}")
+            Logger.debug("UsageTest: fixture_name=#{fixture_name}")
 
-        assert is_map(response.usage)
+            {:ok, response} =
+              ReqLLM.generate_text(
+                @model_spec,
+                "Count from 1 to 10",
+                fixture_opts(@provider, fixture_name, param_bundles(@provider).deterministic)
+              )
 
-        # OpenAI may provide cached_tokens, others should handle gracefully
-        case unquote(provider) do
-          :openai ->
-            cached_tokens = response.usage[:cached_tokens] || 0
-            assert is_number(cached_tokens) and cached_tokens >= 0
+            assert %ReqLLM.Response{} = response
+            assert ReqLLM.Response.text(response) != ""
+            assert is_map(response.usage)
 
-          _ ->
-            # Other providers don't support cached tokens - verify normal usage
             input_tokens = response.usage[:input_tokens] || response.usage[:input]
+            output_tokens = response.usage[:output_tokens] || response.usage[:output]
+
             assert is_number(input_tokens) and input_tokens > 0
-        end
-      end
+            assert is_number(output_tokens) and output_tokens >= 0
 
-      test "cost calculations with various token counts" do
-        {:ok, response} =
-          ReqLLM.generate_text(
-            unquote(model),
-            "Hi there!",
-            fixture_opts(
-              unquote(provider),
-              "cost_calculation",
-              Keyword.merge([max_tokens: 10], param_bundles(unquote(provider)).deterministic)
-            )
-          )
+            case ReqLLM.Model.from(@model_spec) do
+              {:ok, %ReqLLM.Model{cost: cost_map}} when is_map(cost_map) ->
+                assert is_number(response.usage.input_cost) and response.usage.input_cost >= 0
+                assert is_number(response.usage.output_cost) and response.usage.output_cost >= 0
+                assert is_number(response.usage.total_cost) and response.usage.total_cost >= 0
 
-        assert is_map(response.usage)
-        input_tokens = response.usage[:input_tokens] || response.usage[:input]
-        output_tokens = response.usage[:output_tokens] || response.usage[:output]
+                expected = response.usage.input_cost + response.usage.output_cost
+                assert abs(response.usage.total_cost - expected) < 0.00001
 
-        assert is_number(input_tokens) and input_tokens > 0
-        assert is_number(output_tokens) and output_tokens >= 0
+              _ ->
+                refute Map.has_key?(response.usage, :input_cost)
+            end
+          end
 
-        # Test cost calculations if pricing available
-        case ReqLLM.Model.from(unquote(model)) do
-          {:ok, %ReqLLM.Model{cost: cost_map}} when is_map(cost_map) ->
-            assert response.usage.total_cost >= 0
-            assert response.usage.input_cost >= 0
-            assert response.usage.output_cost >= 0
+          test "cached token handling" do
+            model_name =
+              @model_spec |> String.split(":") |> List.last() |> String.replace("-", "_")
 
-          _ ->
-            :ok
+            fixture_name = "#{model_name}_cached_tokens"
+
+            {:ok, response} =
+              ReqLLM.generate_text(
+                @model_spec,
+                "Explain quantum computing in simple terms",
+                fixture_opts(@provider, fixture_name, param_bundles(@provider).deterministic)
+              )
+
+            assert is_map(response.usage)
+
+            case @provider do
+              :openai ->
+                cached_tokens = response.usage[:cached_tokens] || 0
+                assert is_number(cached_tokens) and cached_tokens >= 0
+
+              _ ->
+                input_tokens = response.usage[:input_tokens] || response.usage[:input]
+                assert is_number(input_tokens) and input_tokens > 0
+            end
+          end
+
+          test "cost calculations with various token counts" do
+            model_name =
+              @model_spec |> String.split(":") |> List.last() |> String.replace("-", "_")
+
+            fixture_name = "#{model_name}_cost_calculation"
+
+            {:ok, response} =
+              ReqLLM.generate_text(
+                @model_spec,
+                "Hi there!",
+                fixture_opts(
+                  @provider,
+                  fixture_name,
+                  Keyword.merge([max_tokens: 10], param_bundles(@provider).deterministic)
+                )
+              )
+
+            assert is_map(response.usage)
+            input_tokens = response.usage[:input_tokens] || response.usage[:input]
+            output_tokens = response.usage[:output_tokens] || response.usage[:output]
+
+            assert is_number(input_tokens) and input_tokens > 0
+            assert is_number(output_tokens) and output_tokens >= 0
+
+            case ReqLLM.Model.from(@model_spec) do
+              {:ok, %ReqLLM.Model{cost: cost_map}} when is_map(cost_map) ->
+                assert response.usage.total_cost >= 0
+                assert response.usage.input_cost >= 0
+                assert response.usage.output_cost >= 0
+
+              _ ->
+                :ok
+            end
+          end
         end
       end
     end
