@@ -515,19 +515,28 @@ defmodule ReqLLM.Provider.Defaults do
     Enum.map(messages, &encode_openai_message/1)
   end
 
-  defp encode_openai_message(%ReqLLM.Message{role: r, content: c, tool_calls: tc}) do
+  defp encode_openai_message(%ReqLLM.Message{
+         role: r,
+         content: c,
+         tool_calls: tc,
+         tool_call_id: tcid
+       }) do
     base_message = %{
       role: to_string(r),
       content: encode_openai_content(c)
     }
 
-    # Add tool_calls if present and not nil
-    case tc do
-      nil -> base_message
-      [] -> base_message
-      calls -> Map.put(base_message, :tool_calls, calls)
-    end
+    base_message
+    |> maybe_add_tool_calls(tc)
+    |> maybe_add_tool_call_id(tcid)
   end
+
+  defp maybe_add_tool_calls(message, nil), do: message
+  defp maybe_add_tool_calls(message, []), do: message
+  defp maybe_add_tool_calls(message, calls), do: Map.put(message, :tool_calls, calls)
+
+  defp maybe_add_tool_call_id(message, nil), do: message
+  defp maybe_add_tool_call_id(message, id), do: Map.put(message, :tool_call_id, id)
 
   defp encode_openai_content(content) when is_binary(content), do: content
 
@@ -545,6 +554,7 @@ defmodule ReqLLM.Provider.Defaults do
     filtered = Enum.reject(content, &is_nil/1)
 
     case filtered do
+      [] -> ""
       [%{type: "text", text: text}] -> text
       _ -> filtered
     end
@@ -760,9 +770,31 @@ defmodule ReqLLM.Provider.Defaults do
       |> Enum.reject(&is_nil/1)
 
     if content_parts != [] do
+      {tool_call_parts, text_parts} =
+        Enum.split_with(content_parts, fn part -> part.type == :tool_call end)
+
+      tool_calls =
+        case tool_call_parts do
+          [] ->
+            nil
+
+          parts ->
+            Enum.map(parts, fn part ->
+              %{
+                id: part.tool_call_id,
+                type: "function",
+                function: %{
+                  name: part.tool_name,
+                  arguments: Jason.encode!(part.input)
+                }
+              }
+            end)
+        end
+
       %ReqLLM.Message{
         role: :assistant,
-        content: content_parts,
+        content: text_parts,
+        tool_calls: tool_calls,
         metadata: %{}
       }
     end
