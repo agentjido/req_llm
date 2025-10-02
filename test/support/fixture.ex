@@ -517,7 +517,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
           collector: collector
         )
 
-      IO.puts("[Fixture] VCR.record result: #{inspect(result)}")
+      debug?() && IO.puts("[Fixture] VCR.record result: #{inspect(result)}")
       result
     else
       # Non-streaming (though HTTPContext is usually for streaming)
@@ -580,7 +580,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
     end)
   end
 
-  # Body → JSON-friendly encoding  
+  # Body → JSON-friendly encoding
   defp encode_body(bin) when is_binary(bin), do: %{"b64" => Base.encode64(bin)}
   # JSON already
   defp encode_body(other), do: other

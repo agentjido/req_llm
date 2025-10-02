@@ -6,7 +6,7 @@ config :logger, :console,
 
 config :req_llm, :test_models, ~w(
   anthropic:claude-3-5-haiku-20241022
-  anthropic:claude-3-opus-20240229
+  anthropic:claude-3-5-sonnet-20241022
   openai:gpt-4o-mini
   openai:gpt-3.5-turbo
   google:gemini-1.5-flash

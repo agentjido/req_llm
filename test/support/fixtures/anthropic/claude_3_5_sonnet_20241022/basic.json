@@ -1,9 +1,20 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtZXNzYWdlcyI6W3sicm9sZSI6InVzZXIiLCJjb250ZW50IjoiRXhwbGFpbiBxdWFudHVtIGNvbXB1dGluZyBpbiBzaW1wbGUgdGVybXMifV0sInN0cmVhbSI6ZmFsc2UsIm1vZGVsIjoiY2xhdWRlLTMtNS1oYWlrdS0yMDI0MTAyMiIsIm1heF90b2tlbnMiOjUwLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtMy01LXNvbm5ldC0yMDI0MTAyMiIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
-    "url": "https://api.anthropic.com/v1/messages",
+    "canonical_json": {
+      "max_tokens": 50,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "claude-3-5-sonnet-20241022",
+      "stream": false,
+      "temperature": 0.0
+    },
     "headers": {
       "accept-encoding": [
         "gzip"
@@ -17,26 +28,23 @@
       "user-agent": [
         "req/0.5.15"
       ],
-      "x-api-key": [
-        "[REDACTED:x-api-key]"
-      ]
+      "x-api-key": "[REDACTED:x-api-key]"
     },
     "method": "post",
-    "canonical_json": "{\"max_tokens\":50,\"messages\":[{\"content\":\"Explain quantum computing in simple terms\",\"role\":\"user\"}],\"model\":\"claude-3-5-haiku-20241022\",\"stream\":false,\"temperature\":0.0}"
+    "url": "https://api.anthropic.com/v1/messages"
   },
   "response": {
-    "status": 200,
     "body": {
       "content": [
         {
-          "text": "Here's a simple explanation of quantum computing:\n\nTraditional Computing:\n- Uses bits (0 or 1)\n- Like a light switch: on or off\n- Processes information sequentially\n- Good for standard calculations\n\nQuantum",
+          "text": "Hi there! How can I help you today?",
           "type": "text"
         }
       ],
-      "id": "msg_01Hr4P7fr95jhvc7y5UKVGMB",
-      "model": "claude-3-5-haiku-20241022",
+      "id": "msg_01Syf8pBqWt7KUGvQ8RAUeDA",
+      "model": "claude-3-5-sonnet-20241022",
       "role": "assistant",
-      "stop_reason": "max_tokens",
+      "stop_reason": "end_turn",
       "stop_sequence": null,
       "type": "message",
       "usage": {
@@ -46,8 +54,8 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 14,
-        "output_tokens": 50,
+        "input_tokens": 10,
+        "output_tokens": 13,
         "service_tier": "standard"
       }
     },
@@ -56,22 +64,22 @@
         "a71659e7-a922-4ff7-99de-f3ba615face1"
       ],
       "anthropic-ratelimit-input-tokens-limit": [
-        "100000"
+        "80000"
       ],
       "anthropic-ratelimit-input-tokens-remaining": [
-        "100000"
+        "80000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-09-30T16:07:52Z"
+        "2025-10-02T14:28:03Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
-        "20000"
+        "16000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "20000"
+        "16000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-09-30T16:07:54Z"
+        "2025-10-02T14:28:03Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -80,22 +88,22 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-09-30T16:07:52Z"
+        "2025-10-02T14:28:03Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
-        "120000"
+        "96000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "120000"
+        "96000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-09-30T16:07:52Z"
+        "2025-10-02T14:28:03Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9874f9c849ed0231-ORD"
+        "9884e24e7af3872f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -104,10 +112,10 @@
         "application/json"
       ],
       "date": [
-        "Tue, 30 Sep 2025 16:07:53 GMT"
+        "Thu, 02 Oct 2025 14:28:03 GMT"
       ],
       "request-id": [
-        "req_011CTesdkgzvxRySR6Sr3ib8"
+        "req_011CTiXe5cj86fZ8k2GXZ9xG"
       ],
       "server": [
         "cloudflare"
@@ -122,12 +130,12 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "1521"
+        "820"
       ],
       "x-robots-tag": [
         "none"
       ]
-    }
-  },
-  "captured_at": "2025-09-30T16:07:53.843114Z"
+    },
+    "status": 200
+  }
 }

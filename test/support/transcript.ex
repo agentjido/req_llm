@@ -33,7 +33,8 @@ defmodule ReqLLM.Test.Transcript do
   end
 
   @sensitive_headers ~w(authorization x-api-key api-key)
-  @sensitive_json_keys ~w(api_key apiKey authorization token)
+  # Use exact matches to avoid false positives (e.g., max_tokens matching "token")
+  @sensitive_json_keys ~w(api_key apiKey authorization access_token auth_token bearer_token)
 
   @spec new(keyword()) :: t()
   def new(attrs), do: struct!(__MODULE__, attrs)
@@ -389,7 +390,7 @@ defmodule ReqLLM.Test.Transcript do
       k_str = to_string(k) |> String.downcase()
 
       {k,
-       if(Enum.any?(@sensitive_json_keys, &String.contains?(k_str, &1)),
+       if(k_str in @sensitive_json_keys,
          do: "[REDACTED:#{k}]",
          else: sanitize_json(v)
        )}
