@@ -1,0 +1,57 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiWW91IGFyZSBhIGhlbHBmdWwsIGNyZWF0aXZlIGFzc2lzdGFudC4iLCJyb2xlIjoic3lzdGVtIn0seyJjb250ZW50IjoiU2F5IGhlbGxvIGluIG9uZSBzaG9ydCwgaW1hZ2luYXRpdmUgc2VudGVuY2UuIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibGxhbWEtMy4xLThiLWluc3RhbnQiLCJzdHJlYW0iOnRydWUsInRlbXBlcmF0dXJlIjowLjksInRvcF9wIjowLjh9"
+    },
+    "canonical_json": {
+      "max_tokens": 100,
+      "messages": [
+        {
+          "content": "You are a helpful, creative assistant.",
+          "role": "system"
+        },
+        {
+          "content": "Say hello in one short, imaginative sentence.",
+          "role": "user"
+        }
+      ],
+      "model": "llama-3.1-8b-instant",
+      "stream": true,
+      "temperature": 0.9,
+      "top_p": 0.8
+    },
+    "headers": {
+      "accept": "text/event-stream",
+      "authorization": "[REDACTED:authorization]",
+      "content-type": "application/json"
+    },
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "b64": ""
+    },
+    "headers": {
+      "alt-svc": "h3=\":443\"; ma=86400",
+      "cache-control": "no-cache",
+      "cf-cache-status": "DYNAMIC",
+      "cf-ray": "9885bc603d3c49f1-ORD",
+      "content-type": "text/event-stream",
+      "date": "Thu, 02 Oct 2025 16:56:55 GMT",
+      "server": "cloudflare",
+      "set-cookie": "__cf_bm=QG.CHALCrp8wvOeZbf4xwS_TwbV9n04oE1.xZHTPXPg-1759424215-1.0.1.1-Rn1AuIzfXOSqKG8N8zdOkxqnXYRIaljdFfFMhYrUmOZht_Dm5s0ULWK5h1e8OT1kK8xUMIGDxGTr5jGNyO7bQtm3yMeMBG0lqg9tsjYXlT0; path=/; expires=Thu, 02-Oct-25 17:26:55 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None",
+      "vary": "Origin",
+      "via": "1.1 google",
+      "x-groq-region": "yul",
+      "x-ratelimit-limit-requests": "14400",
+      "x-ratelimit-limit-tokens": "6000",
+      "x-ratelimit-remaining-requests": "14389",
+      "x-ratelimit-remaining-tokens": "5368",
+      "x-ratelimit-reset-requests": "1m5.553999999s",
+      "x-ratelimit-reset-tokens": "6.318s",
+      "x-request-id": "req_01k6jxny2qe00vt55a069ynr6g"
+    },
+    "status": 200
+  }
+}

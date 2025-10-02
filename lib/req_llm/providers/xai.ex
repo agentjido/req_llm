@@ -61,7 +61,7 @@ defmodule ReqLLM.Providers.XAI do
       ]
     ]
 
-  # use ReqLLM.Provider.Defaults
+  use ReqLLM.Provider.Defaults
 
   import ReqLLM.Provider.Utils,
     only: [maybe_put: 3, maybe_put_skip: 4, ensure_parsed_body: 1]

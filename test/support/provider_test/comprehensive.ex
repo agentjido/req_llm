@@ -33,6 +33,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
     quote bind_quoted: [provider: provider] do
       use ExUnit.Case, async: false
 
+      import ExUnit.Case
       import ReqLLM.Context
       import ReqLLM.Test.Helpers
 
@@ -246,44 +247,46 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             |> assert_basic_response()
           end
 
-          @tag category: :object_generation
-          test "object generation (streaming)" do
-            schema = [
-              name: [type: :string, required: true, doc: "Person's full name"],
-              age: [type: :pos_integer, required: true, doc: "Person's age in years"],
-              occupation: [type: :string, doc: "Person's job or profession"]
-            ]
+          if :tool_call in ReqLLM.capabilities(model_spec) do
+            @tag category: :object_generation
+            test "object generation (streaming)" do
+              schema = [
+                name: [type: :string, required: true, doc: "Person's full name"],
+                age: [type: :pos_integer, required: true, doc: "Person's age in years"],
+                occupation: [type: :string, doc: "Person's job or profession"]
+              ]
 
-            {:ok, response} =
-              ReqLLM.stream_object(
-                @model_spec,
-                "Generate a software engineer profile",
-                schema,
-                fixture_opts(
-                  @provider,
-                  "object_streaming",
-                  Keyword.put(param_bundles(@provider).deterministic, :max_tokens, 200)
+              {:ok, response} =
+                ReqLLM.stream_object(
+                  @model_spec,
+                  "Generate a software engineer profile",
+                  schema,
+                  fixture_opts(
+                    @provider,
+                    "object_streaming",
+                    Keyword.put(param_bundles(@provider).deterministic, :max_tokens, 200)
+                  )
                 )
-              )
 
-            response =
-              if match?(%ReqLLM.StreamResponse{}, response) do
-                {:ok, resp} = ReqLLM.StreamResponse.to_response(response)
-                resp
-              else
-                response
-              end
+              response =
+                if match?(%ReqLLM.StreamResponse{}, response) do
+                  {:ok, resp} = ReqLLM.StreamResponse.to_response(response)
+                  resp
+                else
+                  response
+                end
 
-            object = ReqLLM.Response.object(response)
+              object = ReqLLM.Response.object(response)
 
-            assert is_map(object)
-            assert map_size(object) > 0
-            assert Map.has_key?(object, "name")
-            assert Map.has_key?(object, "age")
-            assert is_binary(object["name"])
-            assert object["name"] != ""
-            assert is_integer(object["age"])
-            assert object["age"] > 0
+              assert is_map(object)
+              assert map_size(object) > 0
+              assert Map.has_key?(object, "name")
+              assert Map.has_key?(object, "age")
+              assert is_binary(object["name"])
+              assert object["name"] != ""
+              assert is_integer(object["age"])
+              assert object["age"] > 0
+            end
           end
         end
       end

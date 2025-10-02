@@ -56,6 +56,8 @@ defmodule ReqLLM.Providers.Groq do
       ]
     ]
 
+  use ReqLLM.Provider.Defaults
+
   import ReqLLM.Provider.Utils, only: [maybe_put: 3, maybe_put_skip: 4]
 
   require Logger

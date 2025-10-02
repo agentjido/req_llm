@@ -1,0 +1,106 @@
+{
+  "captured_at": "2025-10-02T16:38:16.562957Z",
+  "chunks": [
+    {
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLUNNR2JuZGlWZWxZckxMajlTTHp0WlhvMzRLNlZtIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc1OTQyMzA5NSwibW9kZWwiOiJncHQtNG8tbWluaS0yMDI0LTA3LTE4Iiwic2VydmljZV90aWVyIjoiZGVmYXVsdCIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwXzU2MGFmNmU1NTkiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsicm9sZSI6ImFzc2lzdGFudCIsImNvbnRlbnQiOiIiLCJyZWZ1c2FsIjpudWxsfSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOm51bGx9XSwidXNhZ2UiOm51bGwsIm9iZnVzY2F0aW9uIjoiS0VTUE9aUUJTIn0KCg==",
+      "decoded": "data: {\"id\":\"chatcmpl-CMGbndiVelYrLLj9SLztZXo34K6Vm\",\"object\":\"chat.completion.chunk\",\"created\":1759423095,\"model\":\"gpt-4o-mini-2024-07-18\",\"service_tier\":\"default\",\"system_fingerprint\":\"fp_560af6e559\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\",\"refusal\":null},\"logprobs\":null,\"finish_reason\":null}],\"usage\":null,\"obfuscation\":\"KESPOZQBS\"}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLUNNR2JuZGlWZWxZckxMajlTTHp0WlhvMzRLNlZtIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc1OTQyMzA5NSwibW9kZWwiOiJncHQtNG8tbWluaS0yMDI0LTA3LTE4Iiwic2VydmljZV90aWVyIjoiZGVmYXVsdCIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwXzU2MGFmNmU1NTkiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsiY29udGVudCI6IkhlbGxvIn0sImxvZ3Byb2JzIjpudWxsLCJmaW5pc2hfcmVhc29uIjpudWxsfV0sInVzYWdlIjpudWxsLCJvYmZ1c2NhdGlvbiI6Im12d09KWiJ9CgpkYXRhOiB7ImlkIjoiY2hhdGNtcGwtQ01HYm5kaVZlbFlyTExqOVNMenRaWG8zNEs2Vm0iLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5NDIzMDk1LCJtb2RlbCI6ImdwdC00by1taW5pLTIwMjQtMDctMTgiLCJzZXJ2aWNlX3RpZXIiOiJkZWZhdWx0Iiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfNTYwYWY2ZTU1OSIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJjb250ZW50IjoiLCJ9LCJsb2dwcm9icyI6bnVsbCwiZmluaXNoX3JlYXNvbiI6bnVsbH1dLCJ1c2FnZSI6bnVsbCwib2JmdXNjYXRpb24iOiJQd0x2YmExdm40In0KCg==",
+      "decoded": "data: {\"id\":\"chatcmpl-CMGbndiVelYrLLj9SLztZXo34K6Vm\",\"object\":\"chat.completion.chunk\",\"created\":1759423095,\"model\":\"gpt-4o-mini-2024-07-18\",\"service_tier\":\"default\",\"system_fingerprint\":\"fp_560af6e559\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\"Hello\"},\"logprobs\":null,\"finish_reason\":null}],\"usage\":null,\"obfuscation\":\"mvwOJZ\"}\n\ndata: {\"id\":\"chatcmpl-CMGbndiVelYrLLj9SLztZXo34K6Vm\",\"object\":\"chat.completion.chunk\",\"created\":1759423095,\"model\":\"gpt-4o-mini-2024-07-18\",\"service_tier\":\"default\",\"system_fingerprint\":\"fp_560af6e559\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\",\"},\"logprobs\":null,\"finish_reason\":null}],\"usage\":null,\"obfuscation\":\"PwLvba1vn4\"}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLUNNR2JuZGlWZWxZckxMajlTTHp0WlhvMzRLNlZtIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc1OTQyMzA5NSwibW9kZWwiOiJncHQtNG8tbWluaS0yMDI0LTA3LTE4Iiwic2VydmljZV90aWVyIjoiZGVmYXVsdCIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwXzU2MGFmNmU1NTkiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsiY29udGVudCI6IiBsaWtlIn0sImxvZ3Byb2JzIjpudWxsLCJmaW5pc2hfcmVhc29uIjpudWxsfV0sInVzYWdlIjpudWxsLCJvYmZ1c2NhdGlvbiI6Ilk1eUVqYiJ9CgpkYXRhOiB7ImlkIjoiY2hhdGNtcGwtQ01HYm5kaVZlbFlyTExqOVNMenRaWG8zNEs2Vm0iLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5NDIzMDk1LCJtb2RlbCI6ImdwdC00by1taW5pLTIwMjQtMDctMTgiLCJzZXJ2aWNlX3RpZXIiOiJkZWZhdWx0Iiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfNTYwYWY2ZTU1OSIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJjb250ZW50IjoiIGEifSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOm51bGx9XSwidXNhZ2UiOm51bGwsIm9iZnVzY2F0aW9uIjoiQjJtVVJXSm5OIn0KCg==",
+      "decoded": "data: {\"id\":\"chatcmpl-CMGbndiVelYrLLj9SLztZXo34K6Vm\",\"object\":\"chat.completion.chunk\",\"created\":1759423095,\"model\":\"gpt-4o-mini-2024-07-18\",\"service_tier\":\"default\",\"system_fingerprint\":\"fp_560af6e559\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\" like\"},\"logprobs\":null,\"finish_reason\":null}],\"usage\":null,\"obfuscation\":\"Y5yEjb\"}\n\ndata: {\"id\":\"chatcmpl-CMGbndiVelYrLLj9SLztZXo34K6Vm\",\"object\":\"chat.completion.chunk\",\"created\":1759423095,\"model\":\"gpt-4o-mini-2024-07-18\",\"service_tier\":\"default\",\"system_fingerprint\":\"fp_560af6e559\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\" a\"},\"logprobs\":null,\"finish_reason\":null}],\"usage\":null,\"obfuscation\":\"B2mURWJnN\"}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLUNNR2JuZGlWZWxZckxMajlTTHp0WlhvMzRLNlZtIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc1OTQyMzA5NSwibW9kZWwiOiJncHQtNG8tbWluaS0yMDI0LTA3LTE4Iiwic2VydmljZV90aWVyIjoiZGVmYXVsdCIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwXzU2MGFmNmU1NTkiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsiY29udGVudCI6IiBzaG9vdGluZyJ9LCJsb2dwcm9icyI6bnVsbCwiZmluaXNoX3JlYXNvbiI6bnVsbH1dLCJ1c2FnZSI6bnVsbCwib2JmdXNjYXRpb24iOiJSUiJ9CgpkYXRhOiB7ImlkIjoiY2hhdGNtcGwtQ01HYm5kaVZlbFlyTExqOVNMenRaWG8zNEs2Vm0iLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5NDIzMDk1LCJtb2RlbCI6ImdwdC00by1taW5pLTIwMjQtMDctMTgiLCJzZXJ2aWNlX3RpZXIiOiJkZWZhdWx0Iiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfNTYwYWY2ZTU1OSIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJjb250ZW50IjoiIHN0YXIifSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOm51bGx9XSwidXNhZ2UiOm51bGwsIm9iZnVzY2F0aW9uIjoiSzgxQk1JIn0KCg==",
+      "decoded": "data: {\"id\":\"chatcmpl-CMGbndiVelYrLLj9SLztZXo34K6Vm\",\"object\":\"chat.completion.chunk\",\"created\":1759423095,\"model\":\"gpt-4o-mini-2024-07-18\",\"service_tier\":\"default\",\"system_fingerprint\":\"fp_560af6e559\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\" shooting\"},\"logprobs\":null,\"finish_reason\":null}],\"usage\":null,\"obfuscation\":\"RR\"}\n\ndata: {\"id\":\"chatcmpl-CMGbndiVelYrLLj9SLztZXo34K6Vm\",\"object\":\"chat.completion.chunk\",\"created\":1759423095,\"model\":\"gpt-4o-mini-2024-07-18\",\"service_tier\":\"default\",\"system_fingerprint\":\"fp_560af6e559\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\" star\"},\"logprobs\":null,\"finish_reason\":null}],\"usage\":null,\"obfuscation\":\"K81BMI\"}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLUNNR2JuZGlWZWxZckxMajlTTHp0WlhvMzRLNlZtIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc1OTQyMzA5NSwibW9kZWwiOiJncHQtNG8tbWluaS0yMDI0LTA3LTE4Iiwic2VydmljZV90aWVyIjoiZGVmYXVsdCIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwXzU2MGFmNmU1NTkiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsiY29udGVudCI6IiB3aGlzcGVyIn0sImxvZ3Byb2JzIjpudWxsLCJmaW5pc2hfcmVhc29uIjpudWxsfV0sInVzYWdlIjpudWxsLCJvYmZ1c2NhdGlvbiI6IklHUiJ9CgpkYXRhOiB7ImlkIjoiY2hhdGNtcGwtQ01HYm5kaVZlbFlyTExqOVNMenRaWG8zNEs2Vm0iLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5NDIzMDk1LCJtb2RlbCI6ImdwdC00by1taW5pLTIwMjQtMDctMTgiLCJzZXJ2aWNlX3RpZXIiOiJkZWZhdWx0Iiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfNTYwYWY2ZTU1OSIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJjb250ZW50IjoiaW5nIn0sImxvZ3Byb2JzIjpudWxsLCJmaW5pc2hfcmVhc29uIjpudWxsfV0sInVzYWdlIjpudWxsLCJvYmZ1c2NhdGlvbiI6InFReXVnZkxiIn0KCg==",
+      "decoded": "data: {\"id\":\"chatcmpl-CMGbndiVelYrLLj9SLztZXo34K6Vm\",\"object\":\"chat.completion.chunk\",\"created\":1759423095,\"model\":\"gpt-4o-mini-2024-07-18\",\"service_tier\":\"default\",\"system_fingerprint\":\"fp_560af6e559\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\" whisper\"},\"logprobs\":null,\"finish_reason\":null}],\"usage\":null,\"obfuscation\":\"IGR\"}\n\ndata: {\"id\":\"chatcmpl-CMGbndiVelYrLLj9SLztZXo34K6Vm\",\"object\":\"chat.completion.chunk\",\"created\":1759423095,\"model\":\"gpt-4o-mini-2024-07-18\",\"service_tier\":\"default\",\"system_fingerprint\":\"fp_560af6e559\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\"ing\"},\"logprobs\":null,\"finish_reason\":null}],\"usage\":null,\"obfuscation\":\"qQyugfLb\"}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLUNNR2JuZGlWZWxZckxMajlTTHp0WlhvMzRLNlZtIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc1OTQyMzA5NSwibW9kZWwiOiJncHQtNG8tbWluaS0yMDI0LTA3LTE4Iiwic2VydmljZV90aWVyIjoiZGVmYXVsdCIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwXzU2MGFmNmU1NTkiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsiY29udGVudCI6IiB3aXNoZXMifSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOm51bGx9XSwidXNhZ2UiOm51bGwsIm9iZnVzY2F0aW9uIjoiZWRCeSJ9CgpkYXRhOiB7ImlkIjoiY2hhdGNtcGwtQ01HYm5kaVZlbFlyTExqOVNMenRaWG8zNEs2Vm0iLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5NDIzMDk1LCJtb2RlbCI6ImdwdC00by1taW5pLTIwMjQtMDctMTgiLCJzZXJ2aWNlX3RpZXIiOiJkZWZhdWx0Iiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfNTYwYWY2ZTU1OSIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJjb250ZW50IjoiIGFjcm9zcyJ9LCJsb2dwcm9icyI6bnVsbCwiZmluaXNoX3JlYXNvbiI6bnVsbH1dLCJ1c2FnZSI6bnVsbCwib2JmdXNjYXRpb24iOiJlc1Y0In0KCg==",
+      "decoded": "data: {\"id\":\"chatcmpl-CMGbndiVelYrLLj9SLztZXo34K6Vm\",\"object\":\"chat.completion.chunk\",\"created\":1759423095,\"model\":\"gpt-4o-mini-2024-07-18\",\"service_tier\":\"default\",\"system_fingerprint\":\"fp_560af6e559\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\" wishes\"},\"logprobs\":null,\"finish_reason\":null}],\"usage\":null,\"obfuscation\":\"edBy\"}\n\ndata: {\"id\":\"chatcmpl-CMGbndiVelYrLLj9SLztZXo34K6Vm\",\"object\":\"chat.completion.chunk\",\"created\":1759423095,\"model\":\"gpt-4o-mini-2024-07-18\",\"service_tier\":\"default\",\"system_fingerprint\":\"fp_560af6e559\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\" across\"},\"logprobs\":null,\"finish_reason\":null}],\"usage\":null,\"obfuscation\":\"esV4\"}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLUNNR2JuZGlWZWxZckxMajlTTHp0WlhvMzRLNlZtIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc1OTQyMzA5NSwibW9kZWwiOiJncHQtNG8tbWluaS0yMDI0LTA3LTE4Iiwic2VydmljZV90aWVyIjoiZGVmYXVsdCIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwXzU2MGFmNmU1NTkiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsiY29udGVudCI6IiB0aGUifSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOm51bGx9XSwidXNhZ2UiOm51bGwsIm9iZnVzY2F0aW9uIjoiSGlHamhhZCJ9CgpkYXRhOiB7ImlkIjoiY2hhdGNtcGwtQ01HYm5kaVZlbFlyTExqOVNMenRaWG8zNEs2Vm0iLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5NDIzMDk1LCJtb2RlbCI6ImdwdC00by1taW5pLTIwMjQtMDctMTgiLCJzZXJ2aWNlX3RpZXIiOiJkZWZhdWx0Iiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfNTYwYWY2ZTU1OSIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJjb250ZW50IjoiIHZlbHZldCJ9LCJsb2dwcm9icyI6bnVsbCwiZmluaXNoX3JlYXNvbiI6bnVsbH1dLCJ1c2FnZSI6bnVsbCwib2JmdXNjYXRpb24iOiJaWTg5In0KCg==",
+      "decoded": "data: {\"id\":\"chatcmpl-CMGbndiVelYrLLj9SLztZXo34K6Vm\",\"object\":\"chat.completion.chunk\",\"created\":1759423095,\"model\":\"gpt-4o-mini-2024-07-18\",\"service_tier\":\"default\",\"system_fingerprint\":\"fp_560af6e559\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\" the\"},\"logprobs\":null,\"finish_reason\":null}],\"usage\":null,\"obfuscation\":\"HiGjhad\"}\n\ndata: {\"id\":\"chatcmpl-CMGbndiVelYrLLj9SLztZXo34K6Vm\",\"object\":\"chat.completion.chunk\",\"created\":1759423095,\"model\":\"gpt-4o-mini-2024-07-18\",\"service_tier\":\"default\",\"system_fingerprint\":\"fp_560af6e559\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\" velvet\"},\"logprobs\":null,\"finish_reason\":null}],\"usage\":null,\"obfuscation\":\"ZY89\"}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLUNNR2JuZGlWZWxZckxMajlTTHp0WlhvMzRLNlZtIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc1OTQyMzA5NSwibW9kZWwiOiJncHQtNG8tbWluaS0yMDI0LTA3LTE4Iiwic2VydmljZV90aWVyIjoiZGVmYXVsdCIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwXzU2MGFmNmU1NTkiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsiY29udGVudCI6IiBuaWdodCJ9LCJsb2dwcm9icyI6bnVsbCwiZmluaXNoX3JlYXNvbiI6bnVsbH1dLCJ1c2FnZSI6bnVsbCwib2JmdXNjYXRpb24iOiJDcVFmeiJ9CgpkYXRhOiB7ImlkIjoiY2hhdGNtcGwtQ01HYm5kaVZlbFlyTExqOVNMenRaWG8zNEs2Vm0iLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5NDIzMDk1LCJtb2RlbCI6ImdwdC00by1taW5pLTIwMjQtMDctMTgiLCJzZXJ2aWNlX3RpZXIiOiJkZWZhdWx0Iiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfNTYwYWY2ZTU1OSIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJjb250ZW50IjoiIHNreSJ9LCJsb2dwcm9icyI6bnVsbCwiZmluaXNoX3JlYXNvbiI6bnVsbH1dLCJ1c2FnZSI6bnVsbCwib2JmdXNjYXRpb24iOiJ6MHZ2cVdTIn0KCg==",
+      "decoded": "data: {\"id\":\"chatcmpl-CMGbndiVelYrLLj9SLztZXo34K6Vm\",\"object\":\"chat.completion.chunk\",\"created\":1759423095,\"model\":\"gpt-4o-mini-2024-07-18\",\"service_tier\":\"default\",\"system_fingerprint\":\"fp_560af6e559\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\" night\"},\"logprobs\":null,\"finish_reason\":null}],\"usage\":null,\"obfuscation\":\"CqQfz\"}\n\ndata: {\"id\":\"chatcmpl-CMGbndiVelYrLLj9SLztZXo34K6Vm\",\"object\":\"chat.completion.chunk\",\"created\":1759423095,\"model\":\"gpt-4o-mini-2024-07-18\",\"service_tier\":\"default\",\"system_fingerprint\":\"fp_560af6e559\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\" sky\"},\"logprobs\":null,\"finish_reason\":null}],\"usage\":null,\"obfuscation\":\"z0vvqWS\"}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLUNNR2JuZGlWZWxZckxMajlTTHp0WlhvMzRLNlZtIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc1OTQyMzA5NSwibW9kZWwiOiJncHQtNG8tbWluaS0yMDI0LTA3LTE4Iiwic2VydmljZV90aWVyIjoiZGVmYXVsdCIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwXzU2MGFmNmU1NTkiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsiY29udGVudCI6IiEifSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOm51bGx9XSwidXNhZ2UiOm51bGwsIm9iZnVzY2F0aW9uIjoibFVjalBObUx3RyJ9CgpkYXRhOiB7ImlkIjoiY2hhdGNtcGwtQ01HYm5kaVZlbFlyTExqOVNMenRaWG8zNEs2Vm0iLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5NDIzMDk1LCJtb2RlbCI6ImdwdC00by1taW5pLTIwMjQtMDctMTgiLCJzZXJ2aWNlX3RpZXIiOiJkZWZhdWx0Iiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfNTYwYWY2ZTU1OSIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6e30sImxvZ3Byb2JzIjpudWxsLCJmaW5pc2hfcmVhc29uIjoic3RvcCJ9XSwidXNhZ2UiOm51bGwsIm9iZnVzY2F0aW9uIjoia0J5VEEifQoKZGF0YTogeyJpZCI6ImNoYXRjbXBsLUNNR2JuZGlWZWxZckxMajlTTHp0WlhvMzRLNlZtIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc1OTQyMzA5NSwibW9kZWwiOiJncHQtNG8tbWluaS0yMDI0LTA3LTE4Iiwic2VydmljZV90aWVyIjoiZGVmYXVsdCIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwXzU2MGFmNmU1NTkiLCJjaG9pY2VzIjpbXSwidXNhZ2UiOnsicHJvbXB0X3Rva2VucyI6MjgsImNvbXBsZXRpb25fdG9rZW5zIjoxNSwidG90YWxfdG9rZW5zIjo0MywicHJvbXB0X3Rva2Vuc19kZXRhaWxzIjp7ImNhY2hlZF90b2tlbnMiOjAsImF1ZGlvX3Rva2VucyI6MH0sImNvbXBsZXRpb25fdG9rZW5zX2RldGFpbHMiOnsicmVhc29uaW5nX3Rva2VucyI6MCwiYXVkaW9fdG9rZW5zIjowLCJhY2NlcHRlZF9wcmVkaWN0aW9uX3Rva2VucyI6MCwicmVqZWN0ZWRfcHJlZGljdGlvbl90b2tlbnMiOjB9fSwib2JmdXNjYXRpb24iOiJrek5TN0RWQ0s0In0KCg==",
+      "decoded": "data: {\"id\":\"chatcmpl-CMGbndiVelYrLLj9SLztZXo34K6Vm\",\"object\":\"chat.completion.chunk\",\"created\":1759423095,\"model\":\"gpt-4o-mini-2024-07-18\",\"service_tier\":\"default\",\"system_fingerprint\":\"fp_560af6e559\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\"!\"},\"logprobs\":null,\"finish_reason\":null}],\"usage\":null,\"obfuscation\":\"lUcjPNmLwG\"}\n\ndata: {\"id\":\"chatcmpl-CMGbndiVelYrLLj9SLztZXo34K6Vm\",\"object\":\"chat.completion.chunk\",\"created\":1759423095,\"model\":\"gpt-4o-mini-2024-07-18\",\"service_tier\":\"default\",\"system_fingerprint\":\"fp_560af6e559\",\"choices\":[{\"index\":0,\"delta\":{},\"logprobs\":null,\"finish_reason\":\"stop\"}],\"usage\":null,\"obfuscation\":\"kByTA\"}\n\ndata: {\"id\":\"chatcmpl-CMGbndiVelYrLLj9SLztZXo34K6Vm\",\"object\":\"chat.completion.chunk\",\"created\":1759423095,\"model\":\"gpt-4o-mini-2024-07-18\",\"service_tier\":\"default\",\"system_fingerprint\":\"fp_560af6e559\",\"choices\":[],\"usage\":{\"prompt_tokens\":28,\"completion_tokens\":15,\"total_tokens\":43,\"prompt_tokens_details\":{\"cached_tokens\":0,\"audio_tokens\":0},\"completion_tokens_details\":{\"reasoning_tokens\":0,\"audio_tokens\":0,\"accepted_prediction_tokens\":0,\"rejected_prediction_tokens\":0}},\"obfuscation\":\"kzNS7DVCK4\"}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogW0RPTkVdCgo=",
+      "decoded": "data: [DONE]\n\n"
+    }
+  ],
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiWW91IGFyZSBhIGhlbHBmdWwsIGNyZWF0aXZlIGFzc2lzdGFudC4iLCJyb2xlIjoic3lzdGVtIn0seyJjb250ZW50IjoiU2F5IGhlbGxvIGluIG9uZSBzaG9ydCwgaW1hZ2luYXRpdmUgc2VudGVuY2UuIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3B0LTRvLW1pbmkiLCJzdHJlYW0iOnRydWUsInN0cmVhbV9vcHRpb25zIjp7ImluY2x1ZGVfdXNhZ2UiOnRydWV9LCJ0ZW1wZXJhdHVyZSI6MC45LCJ0b3BfcCI6MC44fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 100,
+      "messages": [
+        {
+          "content": "You are a helpful, creative assistant.",
+          "role": "system"
+        },
+        {
+          "content": "Say hello in one short, imaginative sentence.",
+          "role": "user"
+        }
+      ],
+      "model": "gpt-4o-mini",
+      "stream": true,
+      "stream_options": {
+        "include_usage": true
+      },
+      "temperature": 0.9,
+      "top_p": 0.8
+    },
+    "headers": {
+      "accept": "text/event-stream",
+      "authorization": "[REDACTED:authorization]",
+      "content-type": "application/json"
+    },
+    "method": "POST",
+    "url": "https://api.openai.com/v1/chat/completions"
+  },
+  "response": {
+    "body": null,
+    "headers": {
+      "access-control-expose-headers": "X-Request-ID",
+      "alt-svc": "h3=\":443\"; ma=86400",
+      "cf-cache-status": "DYNAMIC",
+      "cf-ray": "9885a10aba6872cb-ORD",
+      "content-type": "text/event-stream; charset=utf-8",
+      "date": "Thu, 02 Oct 2025 16:38:16 GMT",
+      "openai-organization": "epic-creative-sogybe",
+      "openai-processing-ms": "251",
+      "openai-project": "proj_j5AhgU4eLMRmsoO9FDg7BRD3",
+      "openai-version": "2020-10-01",
+      "server": "cloudflare",
+      "set-cookie": "_cfuvid=MMrwL4ZBFpXpTHipH0KtYTpcHB_WI4ke5os_nXD9RAg-1759423096179-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+      "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+      "x-content-type-options": "nosniff",
+      "x-envoy-upstream-service-time": "649",
+      "x-openai-proxy-wasm": "v0.1",
+      "x-ratelimit-limit-requests": "5000",
+      "x-ratelimit-limit-tokens": "4000000",
+      "x-ratelimit-remaining-requests": "4999",
+      "x-ratelimit-remaining-tokens": "3999976",
+      "x-ratelimit-reset-requests": "12ms",
+      "x-ratelimit-reset-tokens": "0s",
+      "x-request-id": "req_0e061df1e87148018014452f91234fc1"
+    },
+    "status": 200
+  }
+}

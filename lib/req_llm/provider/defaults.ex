@@ -728,11 +728,12 @@ defmodule ReqLLM.Provider.Defaults do
   defp decode_openai_tool_call_delta(%{
          "id" => id,
          "type" => "function",
+         "index" => index,
          "function" => %{"name" => name, "arguments" => args_json}
        }) do
     case Jason.decode(args_json || "{}") do
-      {:ok, args} -> ReqLLM.StreamChunk.tool_call(name, args, %{id: id})
-      {:error, _} -> ReqLLM.StreamChunk.tool_call(name, %{}, %{id: id})
+      {:ok, args} -> ReqLLM.StreamChunk.tool_call(name, args, %{id: id, index: index})
+      {:error, _} -> ReqLLM.StreamChunk.tool_call(name, %{}, %{id: id, index: index})
     end
   end
 
@@ -740,9 +741,10 @@ defmodule ReqLLM.Provider.Defaults do
   defp decode_openai_tool_call_delta(%{
          "id" => id,
          "type" => "function",
+         "index" => index,
          "function" => %{"name" => name}
        }) do
-    ReqLLM.StreamChunk.tool_call(name, %{}, %{id: id})
+    ReqLLM.StreamChunk.tool_call(name, %{}, %{id: id, index: index})
   end
 
   # Handle partial argument chunks by storing them as metadata
