@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtMy01LWhhaWt1LTIwMjQxMDIyIiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0X3NjaGVtYSI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifSwibmFtZSI6ImdldF93ZWF0aGVyIn0seyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwiaW5wdXRfc2NoZW1hIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJ0ZWxsX2pva2UifSx7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJpbnB1dF9zY2hlbWEiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifSwibmFtZSI6ImdldF90aW1lIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoxNTAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtMy01LWhhaWt1LTIwMjQxMDIyIiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0X3NjaGVtYSI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifSwibmFtZSI6ImdldF93ZWF0aGVyIn0seyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwiaW5wdXRfc2NoZW1hIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJ0ZWxsX2pva2UifSx7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJpbnB1dF9zY2hlbWEiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifSwibmFtZSI6ImdldF90aW1lIn1dfQ=="
     },
     "canonical_json": {
-      "max_tokens": 100,
+      "max_tokens": 150,
       "messages": [
         {
           "content": "What's the weather like in Paris, France?",
@@ -85,11 +85,11 @@
     "body": {
       "content": [
         {
-          "text": "Let me check the current weather in Paris for you.",
+          "text": "I'll check the current weather in Paris for you right now.",
           "type": "text"
         },
         {
-          "id": "toolu_01LeY9LTc7udEmYck6WnZQia",
+          "id": "toolu_01EsYCXCUsHr91tCEjghfQHE",
           "input": {
             "location": "Paris, France",
             "unit": "celsius"
@@ -98,7 +98,7 @@
           "type": "tool_use"
         }
       ],
-      "id": "msg_01GfGE66RKV9eaK6s2ecFyCe",
+      "id": "msg_01Dh7z6eMF71f6PM2x2eh9HS",
       "model": "claude-3-5-haiku-20241022",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -112,7 +112,7 @@
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
         "input_tokens": 449,
-        "output_tokens": 84,
+        "output_tokens": 86,
         "service_tier": "standard"
       }
     },
@@ -127,7 +127,7 @@
         "100000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-02T15:06:48Z"
+        "2025-10-02T15:44:40Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "20000"
@@ -136,7 +136,7 @@
         "20000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-02T15:06:49Z"
+        "2025-10-02T15:44:42Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -145,7 +145,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-02T15:06:48Z"
+        "2025-10-02T15:44:40Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "120000"
@@ -154,13 +154,13 @@
         "120000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-02T15:06:48Z"
+        "2025-10-02T15:44:40Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98851b1338bfe257-ORD"
+        "9885528c8833f32d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -169,10 +169,10 @@
         "application/json"
       ],
       "date": [
-        "Thu, 02 Oct 2025 15:06:49 GMT"
+        "Thu, 02 Oct 2025 15:44:41 GMT"
       ],
       "request-id": [
-        "req_011CTiabV5NocnZZZhfGvw5w"
+        "req_011CTidUykwek3nHdCzeqPpq"
       ],
       "server": [
         "cloudflare"
@@ -187,7 +187,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "1429"
+        "1508"
       ],
       "x-robots-tag": [
         "none"

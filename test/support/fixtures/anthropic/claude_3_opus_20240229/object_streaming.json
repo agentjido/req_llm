@@ -1,0 +1,141 @@
+{
+  "captured_at": "2025-10-02T15:44:19.712172Z",
+  "chunks": [
+    {
+      "b64": "ZXZlbnQ6IG1lc3NhZ2Vfc3RhcnQKZGF0YTogeyJ0eXBlIjoibWVzc2FnZV9zdGFydCIsIm1lc3NhZ2UiOnsiaWQiOiJtc2dfMDFXUjR5bTZkNFBWOHRNNmdnR1JOTHU4IiwidHlwZSI6Im1lc3NhZ2UiLCJyb2xlIjoiYXNzaXN0YW50IiwibW9kZWwiOiJjbGF1ZGUtMy1vcHVzLTIwMjQwMjI5IiwiY29udGVudCI6W10sInN0b3BfcmVhc29uIjpudWxsLCJzdG9wX3NlcXVlbmNlIjpudWxsLCJ1c2FnZSI6eyJpbnB1dF90b2tlbnMiOjQyNiwiY2FjaGVfY3JlYXRpb25faW5wdXRfdG9rZW5zIjowLCJjYWNoZV9yZWFkX2lucHV0X3Rva2VucyI6MCwiY2FjaGVfY3JlYXRpb24iOnsiZXBoZW1lcmFsXzVtX2lucHV0X3Rva2VucyI6MCwiZXBoZW1lcmFsXzFoX2lucHV0X3Rva2VucyI6MH0sIm91dHB1dF90b2tlbnMiOjExLCJzZXJ2aWNlX3RpZXIiOiJzdGFuZGFyZCJ9fSAgfQoKZXZlbnQ6IGNvbnRlbnRfYmxvY2tfc3RhcnQKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19zdGFydCIsImluZGV4IjowLCJjb250ZW50X2Jsb2NrIjp7InR5cGUiOiJ0b29sX3VzZSIsImlkIjoidG9vbHVfMDEyQ05HN1E0Zm5jTVgyQVhUZXlXV01DIiwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwiaW5wdXQiOnt9fSAgICAgICAgfQoKZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoiaW5wdXRfanNvbl9kZWx0YSIsInBhcnRpYWxfanNvbiI6IiJ9ICAgICAgIH0KCg==",
+      "decoded": "event: message_start\ndata: {\"type\":\"message_start\",\"message\":{\"id\":\"msg_01WR4ym6d4PV8tM6ggGRNLu8\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"claude-3-opus-20240229\",\"content\":[],\"stop_reason\":null,\"stop_sequence\":null,\"usage\":{\"input_tokens\":426,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"cache_creation\":{\"ephemeral_5m_input_tokens\":0,\"ephemeral_1h_input_tokens\":0},\"output_tokens\":11,\"service_tier\":\"standard\"}}  }\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":0,\"content_block\":{\"type\":\"tool_use\",\"id\":\"toolu_012CNG7Q4fncMX2AXTeyWWMC\",\"name\":\"structured_output\",\"input\":{}}        }\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"input_json_delta\",\"partial_json\":\"\"}       }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IHBpbmcKZGF0YTogeyJ0eXBlIjogInBpbmcifQoKZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoiaW5wdXRfanNvbl9kZWx0YSIsInBhcnRpYWxfanNvbiI6IntcIm5hbSJ9ICAgICAgICAgICB9CgpldmVudDogcGluZwpkYXRhOiB7InR5cGUiOiAicGluZyJ9CgpldmVudDogY29udGVudF9ibG9ja19kZWx0YQpkYXRhOiB7InR5cGUiOiJjb250ZW50X2Jsb2NrX2RlbHRhIiwiaW5kZXgiOjAsImRlbHRhIjp7InR5cGUiOiJpbnB1dF9qc29uX2RlbHRhIiwicGFydGlhbF9qc29uIjoiZVwiOiBcIkpvaCJ9ICAgICAgICB9Cgo=",
+      "decoded": "event: ping\ndata: {\"type\": \"ping\"}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"input_json_delta\",\"partial_json\":\"{\\\"nam\"}           }\n\nevent: ping\ndata: {\"type\": \"ping\"}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"input_json_delta\",\"partial_json\":\"e\\\": \\\"Joh\"}        }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IHBpbmcKZGF0YTogeyJ0eXBlIjogInBpbmcifQoK",
+      "decoded": "event: ping\ndata: {\"type\": \"ping\"}\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoiaW5wdXRfanNvbl9kZWx0YSIsInBhcnRpYWxfanNvbiI6Im4gU21pIn0gICAgfQoKZXZlbnQ6IHBpbmcKZGF0YTogeyJ0eXBlIjogInBpbmcifQoKZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoiaW5wdXRfanNvbl9kZWx0YSIsInBhcnRpYWxfanNvbiI6InRoXCIifSAgICAgfQoK",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"input_json_delta\",\"partial_json\":\"n Smi\"}    }\n\nevent: ping\ndata: {\"type\": \"ping\"}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"input_json_delta\",\"partial_json\":\"th\\\"\"}     }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoiaW5wdXRfanNvbl9kZWx0YSIsInBhcnRpYWxfanNvbiI6IiwgXCJhZyJ9ICAgfQoKZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoiaW5wdXRfanNvbl9kZWx0YSIsInBhcnRpYWxfanNvbiI6ImVcIjogMzUifSAgICAgICAgICB9Cgo=",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"input_json_delta\",\"partial_json\":\", \\\"ag\"}   }\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"input_json_delta\",\"partial_json\":\"e\\\": 35\"}          }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoiaW5wdXRfanNvbl9kZWx0YSIsInBhcnRpYWxfanNvbiI6IiwgXCJvIn0gICAgICAgICAgICAgIH0KCg==",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"input_json_delta\",\"partial_json\":\", \\\"o\"}              }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoiaW5wdXRfanNvbl9kZWx0YSIsInBhcnRpYWxfanNvbiI6ImNjdXBhdGkifSAgICAgICAgIH0KCg==",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"input_json_delta\",\"partial_json\":\"ccupati\"}         }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoiaW5wdXRfanNvbl9kZWx0YSIsInBhcnRpYWxfanNvbiI6Im9uXCI6IFwiU29mdCJ9ICAgICAgICAgICAgIH0KCg==",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"input_json_delta\",\"partial_json\":\"on\\\": \\\"Soft\"}             }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoiaW5wdXRfanNvbl9kZWx0YSIsInBhcnRpYWxfanNvbiI6IndhcmUgRW5naW5lIn0gICAgIH0KCg==",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"input_json_delta\",\"partial_json\":\"ware Engine\"}     }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoiaW5wdXRfanNvbl9kZWx0YSIsInBhcnRpYWxfanNvbiI6ImVyXCJ9In0gICAgICAgICAgICB9Cgo=",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"input_json_delta\",\"partial_json\":\"er\\\"}\"}            }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfc3RvcApkYXRhOiB7InR5cGUiOiJjb250ZW50X2Jsb2NrX3N0b3AiLCJpbmRleCI6MCB9Cgo=",
+      "decoded": "event: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":0 }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IG1lc3NhZ2VfZGVsdGEKZGF0YTogeyJ0eXBlIjoibWVzc2FnZV9kZWx0YSIsImRlbHRhIjp7InN0b3BfcmVhc29uIjoidG9vbF91c2UiLCJzdG9wX3NlcXVlbmNlIjpudWxsfSwidXNhZ2UiOnsiaW5wdXRfdG9rZW5zIjo0MjYsImNhY2hlX2NyZWF0aW9uX2lucHV0X3Rva2VucyI6MCwiY2FjaGVfcmVhZF9pbnB1dF90b2tlbnMiOjAsIm91dHB1dF90b2tlbnMiOjY5fSAgICAgICAgICAgICAgfQoKZXZlbnQ6IG1lc3NhZ2Vfc3RvcApkYXRhOiB7InR5cGUiOiJtZXNzYWdlX3N0b3AiICAgICB9Cgo=",
+      "decoded": "event: message_delta\ndata: {\"type\":\"message_delta\",\"delta\":{\"stop_reason\":\"tool_use\",\"stop_sequence\":null},\"usage\":{\"input_tokens\":426,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"output_tokens\":69}              }\n\nevent: message_stop\ndata: {\"type\":\"message_stop\"     }\n\n"
+    }
+  ],
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiY2xhdWRlLTMtb3B1cy0yMDI0MDIyOSIsInN0cmVhbSI6dHJ1ZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbF9jaG9pY2UiOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwidHlwZSI6InRvb2wifSwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2VuZXJhdGUgc3RydWN0dXJlZCBvdXRwdXQgbWF0Y2hpbmcgdGhlIHByb3ZpZGVkIHNjaGVtYSIsImlucHV0X3NjaGVtYSI6eyJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbIm5hbWUiLCJhZ2UiXSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQifV19"
+    },
+    "canonical_json": {
+      "max_tokens": 200,
+      "messages": [
+        {
+          "content": "Generate a software engineer profile",
+          "role": "user"
+        }
+      ],
+      "model": "claude-3-opus-20240229",
+      "stream": true,
+      "temperature": 0.0,
+      "tool_choice": {
+        "name": "structured_output",
+        "type": "tool"
+      },
+      "tools": [
+        {
+          "description": "Generate structured output matching the provided schema",
+          "input_schema": {
+            "properties": {
+              "age": {
+                "description": "Person's age in years",
+                "minimum": 1,
+                "type": "integer"
+              },
+              "name": {
+                "description": "Person's full name",
+                "type": "string"
+              },
+              "occupation": {
+                "description": "Person's job or profession",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "age"
+            ],
+            "type": "object"
+          },
+          "name": "structured_output"
+        }
+      ]
+    },
+    "headers": {
+      "accept": "text/event-stream",
+      "anthropic-beta": "tools-2024-05-16",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": null,
+    "headers": {
+      "anthropic-organization-id": "a71659e7-a922-4ff7-99de-f3ba615face1",
+      "anthropic-ratelimit-input-tokens-limit": "40000",
+      "anthropic-ratelimit-input-tokens-remaining": "40000",
+      "anthropic-ratelimit-input-tokens-reset": "2025-10-02T15:44:17Z",
+      "anthropic-ratelimit-output-tokens-limit": "8000",
+      "anthropic-ratelimit-output-tokens-remaining": "8000",
+      "anthropic-ratelimit-output-tokens-reset": "2025-10-02T15:44:16Z",
+      "anthropic-ratelimit-requests-limit": "1000",
+      "anthropic-ratelimit-requests-remaining": "999",
+      "anthropic-ratelimit-requests-reset": "2025-10-02T15:44:16Z",
+      "anthropic-ratelimit-tokens-limit": "48000",
+      "anthropic-ratelimit-tokens-remaining": "48000",
+      "anthropic-ratelimit-tokens-reset": "2025-10-02T15:44:16Z",
+      "cache-control": "no-cache",
+      "cf-cache-status": "DYNAMIC",
+      "cf-ray": "988551f8c84d1263-ORD",
+      "content-type": "text/event-stream; charset=utf-8",
+      "date": "Thu, 02 Oct 2025 15:44:17 GMT",
+      "request-id": "req_011CTidTEf5p1hd4jdWUiurY",
+      "server": "cloudflare",
+      "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+      "via": "1.1 google",
+      "x-envoy-upstream-service-time": "1084",
+      "x-robots-tag": "none"
+    },
+    "status": 200
+  }
+}

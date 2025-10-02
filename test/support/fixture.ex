@@ -61,7 +61,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
       # Get model from request private data (set by provider attach)
       model = request.private[:req_llm_model]
 
-      unless model do
+      if !model do
         raise ArgumentError, "Model not found in request.private[:req_llm_model]"
       end
 
@@ -69,12 +69,18 @@ defmodule ReqLLM.Step.Fixture.Backend do
       mode = ReqLLM.Test.Fixtures.mode()
 
       if debug?() do
-        IO.puts("[Fixture] step: model=#{model.provider}:#{model.model}, name=#{safe_fixture_name}")
+        IO.puts(
+          "[Fixture] step: model=#{model.provider}:#{model.model}, name=#{safe_fixture_name}"
+        )
+
         IO.puts("[Fixture] path: #{Path.relative_to_cwd(path)}")
         IO.puts("[Fixture] mode: #{mode}, exists: #{File.exists?(path)}")
       end
 
-      Logger.debug("Fixture step: model=#{model.provider}:#{model.model}, name=#{safe_fixture_name}")
+      Logger.debug(
+        "Fixture step: model=#{model.provider}:#{model.model}, name=#{safe_fixture_name}"
+      )
+
       Logger.debug("Fixture path: #{path}")
       Logger.debug("Fixture mode: #{mode}")
       Logger.debug("Fixture exists: #{File.exists?(path)}")

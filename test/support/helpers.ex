@@ -306,6 +306,13 @@ defmodule ReqLLM.Test.Helpers do
           minimal: base.minimal ++ [provider_options: [google_thinking_budget: 0]]
         }
 
+      :anthropic ->
+        %{
+          deterministic: base.deterministic,
+          creative: [temperature: 0.9, max_tokens: 100],
+          minimal: base.minimal
+        }
+
       _ ->
         base
     end

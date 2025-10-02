@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtMy01LXNvbm5ldC0yMDI0MTAyMiIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJpbnB1dF9zY2hlbWEiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJnZXRfd2VhdGhlciJ9LHsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsImlucHV0X3NjaGVtYSI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoidGVsbF9qb2tlIn0seyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwiaW5wdXRfc2NoZW1hIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJnZXRfdGltZSJ9XX0="
+      "b64": "eyJtYXhfdG9rZW5zIjoxNTAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtMy01LXNvbm5ldC0yMDI0MTAyMiIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJpbnB1dF9zY2hlbWEiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJnZXRfd2VhdGhlciJ9LHsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsImlucHV0X3NjaGVtYSI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoidGVsbF9qb2tlIn0seyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwiaW5wdXRfc2NoZW1hIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJnZXRfdGltZSJ9XX0="
     },
     "canonical_json": {
-      "max_tokens": 100,
+      "max_tokens": 150,
       "messages": [
         {
           "content": "What's the weather like in Paris, France?",
@@ -89,7 +89,7 @@
           "type": "text"
         },
         {
-          "id": "toolu_018gpVyQShWpPBJswzF7bd75",
+          "id": "toolu_019HmWTE27WmtyvAKJXpSW8P",
           "input": {
             "location": "Paris, France"
           },
@@ -97,7 +97,7 @@
           "type": "tool_use"
         }
       ],
-      "id": "msg_01WCQxe7CSGEMpVTZvQDAm2G",
+      "id": "msg_014RF6Kg46ZYrqfVfRAto512",
       "model": "claude-3-5-sonnet-20241022",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -126,7 +126,7 @@
         "80000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-02T15:06:39Z"
+        "2025-10-02T15:43:19Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "16000"
@@ -135,7 +135,7 @@
         "16000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-02T15:06:40Z"
+        "2025-10-02T15:43:20Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -144,7 +144,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-02T15:06:39Z"
+        "2025-10-02T15:43:19Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "96000"
@@ -153,13 +153,13 @@
         "96000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-02T15:06:39Z"
+        "2025-10-02T15:43:19Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98851ad8ebc5e257-ORD"
+        "9885508f4e18f32d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -168,10 +168,10 @@
         "application/json"
       ],
       "date": [
-        "Thu, 02 Oct 2025 15:06:40 GMT"
+        "Thu, 02 Oct 2025 15:43:20 GMT"
       ],
       "request-id": [
-        "req_011CTiaaoQv53ewLZFyTpGMi"
+        "req_011CTidNyQCQ4m6Vyv1r4y89"
       ],
       "server": [
         "cloudflare"
@@ -186,7 +186,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "1327"
+        "1753"
       ],
       "x-robots-tag": [
         "none"

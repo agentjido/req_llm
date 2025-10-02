@@ -67,7 +67,7 @@ defmodule ReqLLM.Streaming.FinchClient do
         stream_server_pid,
         finch_name \\ ReqLLM.Finch
       ) do
-    case ReqLLM.Test.Fixtures.replay_path(model, opts) do
+    case maybe_replay_fixture(model, opts) do
       {:fixture, fixture_path} ->
         start_fixture_replay(fixture_path, stream_server_pid, model)
 
@@ -80,7 +80,7 @@ defmodule ReqLLM.Streaming.FinchClient do
                  stream_server_pid,
                  finch_name,
                  http_context,
-                 ReqLLM.Test.Fixtures.capture_path(model, opts)
+                 maybe_capture_fixture(model, opts)
                ) do
           {:ok, task_pid, http_context, canonical_json}
         end
@@ -193,5 +193,19 @@ defmodule ReqLLM.Streaming.FinchClient do
     error ->
       Logger.error("Failed to start streaming task: #{inspect(error)}")
       {:error, {:task_start_failed, error}}
+  end
+
+  defp maybe_replay_fixture(model, opts) do
+    case Code.ensure_loaded(ReqLLM.Test.Fixtures) do
+      {:module, mod} -> apply(mod, :replay_path, [model, opts])
+      {:error, _} -> :no_fixture
+    end
+  end
+
+  defp maybe_capture_fixture(model, opts) do
+    case Code.ensure_loaded(ReqLLM.Test.Fixtures) do
+      {:module, mod} -> apply(mod, :capture_path, [model, opts])
+      {:error, _} -> nil
+    end
   end
 end

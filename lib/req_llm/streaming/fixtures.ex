@@ -76,6 +76,7 @@ defmodule ReqLLM.Streaming.Fixtures do
         "anthropic-api-key",
         "openai-api-key",
         "x-auth-token",
+        "bearer",
         "api-key",
         "access-token"
       ]

@@ -3,13 +3,31 @@ defmodule ReqLLM.GenerationTest do
 
   alias ReqLLM.{Context, Generation, Response, StreamResponse}
 
-  describe "generate_text/3 core functionality with fixtures" do
+  setup do
+    # Stub HTTP responses for testing
+    Req.Test.stub(ReqLLM.GenerationTest, fn conn ->
+      Req.Test.json(conn, %{
+        "id" => "cmpl_test_123",
+        "model" => "gpt-4o-mini-2024-07-18",
+        "choices" => [
+          %{
+            "message" => %{"role" => "assistant", "content" => "Hello! How can I help you today?"}
+          }
+        ],
+        "usage" => %{"prompt_tokens" => 10, "completion_tokens" => 9, "total_tokens" => 19}
+      })
+    end)
+
+    :ok
+  end
+
+  describe "generate_text/3 core functionality" do
     test "accepts string input format" do
       {:ok, response} =
         Generation.generate_text(
           "openai:gpt-4o-mini",
           "Hello",
-          fixture: "openai_basic"
+          req_http_options: [plug: {Req.Test, ReqLLM.GenerationTest}]
         )
 
       assert %Response{} = response
@@ -26,7 +44,7 @@ defmodule ReqLLM.GenerationTest do
         Generation.generate_text(
           "openai:gpt-4o-mini",
           context,
-          fixture: "openai_basic"
+          req_http_options: [plug: {Req.Test, ReqLLM.GenerationTest}]
         )
 
       assert %Response{} = response
@@ -42,7 +60,7 @@ defmodule ReqLLM.GenerationTest do
         Generation.generate_text(
           "openai:gpt-4o-mini",
           messages,
-          fixture: "openai_basic"
+          req_http_options: [plug: {Req.Test, ReqLLM.GenerationTest}]
         )
 
       assert %Response{} = response
@@ -54,7 +72,7 @@ defmodule ReqLLM.GenerationTest do
           "openai:gpt-4o-mini",
           "Hello",
           system_prompt: "Be helpful",
-          fixture: "openai_system_msg"
+          req_http_options: [plug: {Req.Test, ReqLLM.GenerationTest}]
         )
 
       assert %Response{} = response
@@ -118,7 +136,7 @@ defmodule ReqLLM.GenerationTest do
         Generation.generate_text!(
           "openai:gpt-4o-mini",
           "Hello",
-          fixture: "openai_basic"
+          req_http_options: [plug: {Req.Test, ReqLLM.GenerationTest}]
         )
 
       assert is_binary(result)
@@ -133,19 +151,32 @@ defmodule ReqLLM.GenerationTest do
   end
 
   describe "stream_text/3 core functionality" do
-    test "returns streaming response with fixture" do
+    setup do
+      # Stub streaming response with SSE format
+      Req.Test.stub(ReqLLM.GenerationStreamTest, fn conn ->
+        sse_body =
+          ~s(data: {"id":"chatcmpl-123","choices":[{"delta":{"content":"Hello"}}]}\n\n) <>
+            ~s(data: {"id":"chatcmpl-123","choices":[{"delta":{"content":" world"}}]}\n\n) <>
+            "data: [DONE]\n\n"
+
+        conn
+        |> Plug.Conn.put_resp_header("content-type", "text/event-stream")
+        |> Plug.Conn.send_resp(200, sse_body)
+      end)
+
+      :ok
+    end
+
+    test "returns streaming response" do
       {:ok, response} =
         Generation.stream_text(
           "openai:gpt-4o-mini",
           "Tell me a story",
-          fixture: "openai_streaming_test"
+          req_http_options: [plug: {Req.Test, ReqLLM.GenerationStreamTest}]
         )
 
       assert %StreamResponse{} = response
       assert is_function(response.stream)
-
-      # Verify we have a valid stream (fixture-based streams may be empty)
-      assert Enum.empty?(response.stream) || length(Enum.to_list(response.stream)) >= 0
     end
   end
 
@@ -193,7 +224,6 @@ defmodule ReqLLM.GenerationTest do
 
   describe "options and generation parameters" do
     test "accepts generation options without errors" do
-      # Test that options are validated and passed through without HTTP calls
       {:ok, response} =
         Generation.generate_text(
           "openai:gpt-4o-mini",
@@ -201,7 +231,7 @@ defmodule ReqLLM.GenerationTest do
           temperature: 0.8,
           max_tokens: 50,
           top_p: 0.9,
-          fixture: "openai_creative"
+          req_http_options: [plug: {Req.Test, ReqLLM.GenerationTest}]
         )
 
       assert %Response{} = response
@@ -213,7 +243,7 @@ defmodule ReqLLM.GenerationTest do
           "openai:gpt-4o-mini",
           "Hello",
           frequency_penalty: 0.1,
-          fixture: "penalty_params"
+          req_http_options: [plug: {Req.Test, ReqLLM.GenerationTest}]
         )
 
       assert %Response{} = response

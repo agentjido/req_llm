@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiY2xhdWRlLTMtNS1oYWlrdS0yMDI0MTAyMiIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjV9"
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS0zLTUtaGFpa3UtMjAyNDEwMjIiLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC41fQ=="
     },
     "canonical_json": {
-      "max_tokens": 50,
+      "max_tokens": 100,
       "messages": [
         {
           "content": "Write a very long story about dragons and adventures",
@@ -37,11 +37,11 @@
     "body": {
       "content": [
         {
-          "text": "Here's the beginning of an epic dragon adventure story:\n\nThe Dragon's Call\n\nIn the misty mountains of Eldoria, where ancient peaks touched the clouds and forgotten secrets slumbered in deep valleys, young Aria knew she was different",
+          "text": "Here's the beginning of an epic dragon adventure story:\n\nThe Dragon's Prophecy\n\nIn the misty mountains of Eldoria, where ancient peaks touched the clouds and forgotten secrets slumbered in deep caverns, a prophecy had long been whispered among the elder dragons. For centuries, they had spoken of a time when the balance between magic and mortal kingdoms would be tested, and a young hero would rise to challenge the darkness that threatened to consume their world.",
           "type": "text"
         }
       ],
-      "id": "msg_01JG2f3fWqzmjH1KfestRzwj",
+      "id": "msg_01TwTbJNKPNvnwD3zRj39ppN",
       "model": "claude-3-5-haiku-20241022",
       "role": "assistant",
       "stop_reason": "max_tokens",
@@ -55,7 +55,7 @@
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
         "input_tokens": 16,
-        "output_tokens": 50,
+        "output_tokens": 100,
         "service_tier": "standard"
       }
     },
@@ -70,7 +70,7 @@
         "100000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-02T15:06:25Z"
+        "2025-10-02T15:45:35Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "20000"
@@ -79,7 +79,7 @@
         "20000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-02T15:06:27Z"
+        "2025-10-02T15:45:37Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -88,7 +88,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-02T15:06:25Z"
+        "2025-10-02T15:45:35Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "120000"
@@ -97,13 +97,13 @@
         "120000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-02T15:06:25Z"
+        "2025-10-02T15:45:35Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98851a847fc7e257-ORD"
+        "988553e17aebf32d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -112,10 +112,10 @@
         "application/json"
       ],
       "date": [
-        "Thu, 02 Oct 2025 15:06:27 GMT"
+        "Thu, 02 Oct 2025 15:45:37 GMT"
       ],
       "request-id": [
-        "req_011CTiaZoV6ipX7KjC5ocgwL"
+        "req_011CTidYzuWh7DcihRsB7FbZ"
       ],
       "server": [
         "cloudflare"
@@ -130,7 +130,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "1713"
+        "2664"
       ],
       "x-robots-tag": [
         "none"
