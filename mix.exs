@@ -80,6 +80,8 @@ defmodule ReqLLM.MixProject do
       {:uniq, "~> 0.6"},
 
       # Dev/test dependencies
+      {:bandit, "~> 1.8", only: :dev, runtime: false},
+      {:tidewave, "~> 0.5", only: :dev, runtime: false},
       {:ex_doc, "~> 0.31", only: :dev, runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},

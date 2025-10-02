@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "req_llm": {
+      "type": "stdio",
+      "command": "mcp-proxy",
+      "args": [
+        "http://localhost:10001/tidewave/mcp"
+      ],
+      "env": {}
+    }
+  }
+}
