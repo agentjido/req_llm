@@ -139,12 +139,10 @@ defmodule ReqLLM.Streaming do
 
   # Start StreamServer with provider configuration
   defp start_stream_server(provider_mod, model, opts) do
-    alias ReqLLM.Streaming.Fixtures
-
     server_opts = [
       provider_mod: provider_mod,
       model: model,
-      fixture_path: Fixtures.capture_path(opts),
+      fixture_path: ReqLLM.Test.Fixtures.capture_path(model, opts),
       high_watermark: Keyword.get(opts, :high_watermark, 500)
     ]
 
@@ -184,9 +182,7 @@ defmodule ReqLLM.Streaming do
 
   # Set fixture context if fixture capture is enabled
   defp set_fixture_context_if_needed(server_pid, http_context, canonical_json) do
-    alias ReqLLM.Streaming.Fixtures
-
-    if Fixtures.mode() == :record do
+    if ReqLLM.Test.Fixtures.mode() == :record do
       StreamServer.set_fixture_context(server_pid, http_context, canonical_json)
     else
       :ok

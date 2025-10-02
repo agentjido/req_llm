@@ -544,7 +544,8 @@ defmodule ReqLLM.StreamServer do
             apply(ReqLLM.Step.Fixture.Backend, :save_streaming_fixture, [
               state.http_context,
               state.fixture_path,
-              state.canonical_json
+              state.canonical_json,
+              state.model
             ])
 
             debug? && IO.puts("[StreamServer] save_streaming_fixture completed")

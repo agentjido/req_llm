@@ -67,9 +67,7 @@ defmodule ReqLLM.Streaming.FinchClient do
         stream_server_pid,
         finch_name \\ ReqLLM.Finch
       ) do
-    alias ReqLLM.Streaming.Fixtures
-
-    case Fixtures.replay_path(opts) do
+    case ReqLLM.Test.Fixtures.replay_path(model, opts) do
       {:fixture, fixture_path} ->
         start_fixture_replay(fixture_path, stream_server_pid, model)
 
@@ -82,7 +80,7 @@ defmodule ReqLLM.Streaming.FinchClient do
                  stream_server_pid,
                  finch_name,
                  http_context,
-                 Fixtures.capture_path(opts)
+                 ReqLLM.Test.Fixtures.capture_path(model, opts)
                ) do
           {:ok, task_pid, http_context, canonical_json}
         end

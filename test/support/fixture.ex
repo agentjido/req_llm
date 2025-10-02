@@ -35,11 +35,12 @@ defmodule ReqLLM.Step.Fixture.Backend do
   def save_streaming_fixture(
         %ReqLLM.Streaming.Fixtures.HTTPContext{} = http_context,
         path,
-        canonical_json
+        canonical_json,
+        model
       ) do
     if path do
       encode_info = %{canonical_json: canonical_json}
-      save_fixture_with_context(path, encode_info, http_context)
+      save_fixture_with_context(path, encode_info, http_context, model)
     else
       :ok
     end
@@ -48,7 +49,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
   # ---------------------------------------------------------------------------
   # Main entry point – returns a Req request step (arity-1 function)
   # ---------------------------------------------------------------------------
-  def step(provider, fixture_name) do
+  def step(_provider, fixture_name) do
     # Validate fixture name to prevent path traversal
     safe_fixture_name = Path.basename(fixture_name)
 
@@ -57,16 +58,23 @@ defmodule ReqLLM.Step.Fixture.Backend do
     end
 
     fn request ->
-      path = fixture_path(provider, safe_fixture_name)
-      mode = ReqLLM.Test.Env.fixtures_mode()
+      # Get model from request private data (set by provider attach)
+      model = request.private[:req_llm_model]
+
+      unless model do
+        raise ArgumentError, "Model not found in request.private[:req_llm_model]"
+      end
+
+      path = ReqLLM.Test.FixturePath.file(model, safe_fixture_name)
+      mode = ReqLLM.Test.Fixtures.mode()
 
       if debug?() do
-        IO.puts("[Fixture] step: provider=#{provider}, name=#{safe_fixture_name}")
+        IO.puts("[Fixture] step: model=#{model.provider}:#{model.model}, name=#{safe_fixture_name}")
         IO.puts("[Fixture] path: #{Path.relative_to_cwd(path)}")
         IO.puts("[Fixture] mode: #{mode}, exists: #{File.exists?(path)}")
       end
 
-      Logger.debug("Fixture step: provider=#{provider}, name=#{safe_fixture_name}")
+      Logger.debug("Fixture step: model=#{model.provider}:#{model.model}, name=#{safe_fixture_name}")
       Logger.debug("Fixture path: #{path}")
       Logger.debug("Fixture mode: #{mode}")
       Logger.debug("Fixture exists: #{File.exists?(path)}")
@@ -78,10 +86,9 @@ defmodule ReqLLM.Step.Fixture.Backend do
         request =
           request
           |> Req.Request.put_private(:llm_fixture_path, path)
-          |> Req.Request.put_private(:llm_fixture_provider, provider)
           |> Req.Request.put_private(:llm_fixture_name, safe_fixture_name)
 
-        Logger.debug("Fixture request tagged with path and provider")
+        Logger.debug("Fixture request tagged with path")
 
         # Insert a non-invasive tap step to capture RAW SSE bytes after decompression
         # but before our SSE parsing step. If we can't find the stream step, fall back
@@ -100,7 +107,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
       else
         Logger.debug("Fixture REPLAY mode - loading from #{Path.relative_to_cwd(path)}")
         # Short-circuit the pipeline with stubbed response
-        {:ok, response} = handle_replay(path)
+        {:ok, response} = handle_replay(path, model)
         Logger.debug("Fixture loaded successfully, status=#{response.status}")
         {request, response}
       end
@@ -239,7 +246,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
   # ---------------------------------------------------------------------------
   # Replay branch
   # ---------------------------------------------------------------------------
-  defp handle_replay(path) do
+  defp handle_replay(path, model) do
     if !File.exists?(path) do
       raise """
       Fixture not found: #{path}
@@ -251,7 +258,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
       {:ok, transcript} ->
         body =
           if ReqLLM.Test.VCR.streaming?(transcript) do
-            {provider_mod, model} = extract_provider_and_model_from_transcript(transcript)
+            provider_mod = provider_module(model.provider)
             ReqLLM.Test.VCR.replay_as_stream(transcript, provider_mod, model)
           else
             ReqLLM.Test.VCR.replay_response_body(transcript)
@@ -270,20 +277,6 @@ defmodule ReqLLM.Step.Fixture.Backend do
         The fixture may be in legacy format. Delete and regenerate with REQ_LLM_FIXTURES_MODE=record.
         """
     end
-  end
-
-  defp extract_provider_and_model_from_transcript(%ReqLLM.Test.Transcript{} = transcript) do
-    provider = transcript.provider
-    provider_mod = provider_module(provider)
-    model = ReqLLM.Model.from!(transcript.model_spec)
-    {provider_mod, model}
-  end
-
-  defp derive_provider_from_path(path) do
-    path
-    |> Path.dirname()
-    |> Path.basename()
-    |> String.to_atom()
   end
 
   defp provider_module(:anthropic), do: ReqLLM.Providers.Anthropic
@@ -349,11 +342,12 @@ defmodule ReqLLM.Step.Fixture.Backend do
 
     Logger.debug("Fixture stream chunks: #{if stream_chunks, do: length(stream_chunks), else: 0}")
 
-    provider = derive_provider_from_path(path)
-    model_spec = derive_model_spec(provider, encode_info.canonical_json)
+    # Get model from request private data
+    model = req.private[:req_llm_model]
+    model_spec = "#{model.provider}:#{model.model}"
 
-    debug?() && IO.puts("[Fixture] Provider: #{provider}, model: #{model_spec}")
-    Logger.debug("Fixture provider: #{provider}, model_spec: #{model_spec}")
+    debug?() && IO.puts("[Fixture] Model: #{model_spec}")
+    Logger.debug("Fixture model_spec: #{model_spec}")
 
     request_meta = %{
       method: to_string(req.method),
@@ -388,7 +382,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
       Logger.debug("Fixture recording streaming response with collector")
 
       case ReqLLM.Test.VCR.record(path,
-             provider: provider,
+             provider: model.provider,
              model: model_spec,
              request: request_meta,
              response: response_meta,
@@ -412,7 +406,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
       Logger.debug("Fixture recording non-streaming response, body_size=#{body_size}")
 
       case ReqLLM.Test.VCR.record(path,
-             provider: provider,
+             provider: model.provider,
              model: model_spec,
              request: request_meta,
              response: response_meta,
@@ -437,7 +431,8 @@ defmodule ReqLLM.Step.Fixture.Backend do
   defp save_fixture_with_context(
          path,
          encode_info,
-         %ReqLLM.Streaming.Fixtures.HTTPContext{} = http_context
+         %ReqLLM.Streaming.Fixtures.HTTPContext{} = http_context,
+         model
        ) do
     debug?() &&
       IO.puts("[Fixture] save_fixture_with_context called for #{Path.relative_to_cwd(path)}")
@@ -459,8 +454,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
         "[Fixture] stream_chunks: #{inspect(stream_chunks != nil)}, count: #{if stream_chunks, do: length(stream_chunks), else: 0}"
       )
 
-    provider = derive_provider_from_path(path)
-    model_spec = derive_model_spec(provider, encode_info.canonical_json)
+    model_spec = "#{model.provider}:#{model.model}"
 
     request_meta = %{
       method: String.upcase(to_string(http_context.method)),
@@ -510,7 +504,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
 
       result =
         ReqLLM.Test.VCR.record(path,
-          provider: provider,
+          provider: model.provider,
           model: model_spec,
           request: request_meta,
           response: response_meta,
@@ -522,7 +516,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
     else
       # Non-streaming (though HTTPContext is usually for streaming)
       ReqLLM.Test.VCR.record(path,
-        provider: provider,
+        provider: model.provider,
         model: model_spec,
         request: request_meta,
         response: response_meta,
@@ -531,22 +525,6 @@ defmodule ReqLLM.Step.Fixture.Backend do
     end
 
     Logger.debug("Saved Transcript fixture (HTTPContext) → #{Path.relative_to_cwd(path)}")
-  end
-
-  # ---------------------------------------------------------------------------
-  # New format helpers (shared with Recorder)
-  # ---------------------------------------------------------------------------
-  defp derive_model_spec(provider, canonical_json) when is_map(canonical_json) do
-    model_name = Map.get(canonical_json, "model")
-    "#{provider}:#{model_name}"
-  end
-
-  defp derive_model_spec(provider, canonical_json) when is_binary(canonical_json) do
-    parsed = Jason.decode!(canonical_json)
-    model_name = Map.get(parsed, "model")
-    "#{provider}:#{model_name}"
-  rescue
-    _ -> "#{provider}:unknown"
   end
 
   # ---------------------------------------------------------------------------
@@ -584,10 +562,4 @@ defmodule ReqLLM.Step.Fixture.Backend do
   defp encode_body(bin) when is_binary(bin), do: %{"b64" => Base.encode64(bin)}
   # JSON already
   defp encode_body(other), do: other
-
-  # ---------------------------------------------------------------------------
-  # Path helper
-  # ---------------------------------------------------------------------------
-  defp fixture_path(provider, name),
-    do: Path.join([__DIR__, "fixtures", to_string(provider), "#{name}.json"])
 end

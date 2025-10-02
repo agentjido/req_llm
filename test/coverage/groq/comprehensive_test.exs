@@ -1,10 +1,10 @@
-defmodule ReqLLM.Coverage.OpenAI.CoreTest do
+defmodule ReqLLM.Coverage.Groq.ComprehensiveTest do
   @moduledoc """
-  Core OpenAI API feature coverage tests using simple fixtures.
-
+  Comprehensive Groq API feature coverage tests.
+  
   Run with REQ_LLM_FIXTURES_MODE=record to test against live API and record fixtures.
   Otherwise uses fixtures for fast, reliable testing.
   """
-
-  use ReqLLM.ProviderTest.Core, provider: :openai
+  
+  use ReqLLM.ProviderTest.Comprehensive, provider: :groq
 end

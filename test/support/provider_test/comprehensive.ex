@@ -54,18 +54,14 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
           test "basic generate_text (non-streaming)" do
             require Logger
 
-            model_name =
-              @model_spec |> String.split(":") |> List.last() |> String.replace("-", "_")
-
             if debug?() do
               IO.puts("\n[Comprehensive] model_spec=#{@model_spec}, test=basic_generate")
-              IO.puts("[Comprehensive] fixture_path=#{model_name}/basic")
             end
 
             ReqLLM.generate_text(
               @model_spec,
               "Hello world!",
-              fixture_opts(@provider, model_name, "basic", param_bundles(@provider).deterministic)
+              fixture_opts(@provider, "basic", param_bundles(@provider).deterministic)
             )
             |> assert_basic_response()
           end
@@ -74,12 +70,8 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
           test "stream_text with system context and creative params" do
             require Logger
 
-            model_name =
-              @model_spec |> String.split(":") |> List.last() |> String.replace("-", "_")
-
             if debug?() do
               IO.puts("\n[Comprehensive] model_spec=#{@model_spec}, test=streaming")
-              IO.puts("[Comprehensive] fixture_path=#{model_name}/streaming")
             end
 
             context =
@@ -94,7 +86,6 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 context,
                 fixture_opts(
                   @provider,
-                  model_name,
                   "streaming",
                   param_bundles(@provider).creative
                 )
@@ -115,15 +106,11 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
 
           @tag category: :core
           test "token limit constraints" do
-            model_name =
-              @model_spec |> String.split(":") |> List.last() |> String.replace("-", "_")
-
             ReqLLM.generate_text(
               @model_spec,
               "Write a very long story about dragons and adventures",
               fixture_opts(
                 @provider,
-                model_name,
                 "token_limit",
                 param_bundles(@provider).minimal
               )
@@ -136,12 +123,8 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
           test "usage metrics and cost calculations" do
             require Logger
 
-            model_name =
-              @model_spec |> String.split(":") |> List.last() |> String.replace("-", "_")
-
             if debug?() do
               IO.puts("\n[Comprehensive] model_spec=#{@model_spec}, test=usage")
-              IO.puts("[Comprehensive] fixture_path=#{model_name}/usage")
             end
 
             {:ok, response} =
@@ -150,7 +133,6 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 "Hi there!",
                 fixture_opts(
                   @provider,
-                  model_name,
                   "usage",
                   Keyword.merge([max_tokens: 10], param_bundles(@provider).deterministic)
                 )
@@ -190,9 +172,6 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
 
           @tag category: :tool_calling
           test "tool calling - multi-tool selection" do
-            model_name =
-              @model_spec |> String.split(":") |> List.last() |> String.replace("-", "_")
-
             tools = [
               ReqLLM.tool(
                 name: "get_weather",
@@ -227,7 +206,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             ReqLLM.generate_text(
               @model_spec,
               "What's the weather like in Paris, France?",
-              fixture_opts(@provider, model_name, "multi_tool", base_opts ++ [tools: tools])
+              fixture_opts(@provider, "multi_tool", base_opts ++ [tools: tools])
             )
             |> assert_basic_response()
             |> assert_tool_call_response("get_weather")
@@ -235,9 +214,6 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
 
           @tag category: :tool_calling
           test "tool calling - no tool when inappropriate" do
-            model_name =
-              @model_spec |> String.split(":") |> List.last() |> String.replace("-", "_")
-
             tools = [
               ReqLLM.tool(
                 name: "get_weather",
@@ -257,7 +233,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             ReqLLM.generate_text(
               @model_spec,
               "Tell me a joke about cats",
-              fixture_opts(@provider, model_name, "no_tool", base_opts ++ [tools: tools])
+              fixture_opts(@provider, "no_tool", base_opts ++ [tools: tools])
             )
             |> assert_basic_response()
             |> assert_no_tool_calls()
@@ -265,9 +241,6 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
 
           @tag category: :object_generation
           test "object generation (streaming)" do
-            model_name =
-              @model_spec |> String.split(":") |> List.last() |> String.replace("-", "_")
-
             schema = [
               name: [type: :string, required: true, doc: "Person's full name"],
               age: [type: :pos_integer, required: true, doc: "Person's age in years"],
@@ -281,7 +254,6 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 schema,
                 fixture_opts(
                   @provider,
-                  model_name,
                   "object_streaming",
                   Keyword.put(param_bundles(@provider).deterministic, :max_tokens, 200)
                 )

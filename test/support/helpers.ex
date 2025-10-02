@@ -264,17 +264,17 @@ defmodule ReqLLM.Test.Helpers do
   end
 
   @doc """
-  Create fixture options by adding the :fixture key with provider and name.
+  Create fixture options by adding the :fixture key with test name only.
 
-  Used by coverage tests to record/replay fixtures with consistent naming.
+  Path is automatically derived from the model. Provider parameter kept for API compatibility.
 
   ## Examples
 
       iex> fixture_opts(:anthropic, "basic", [temperature: 0.0])
-      [temperature: 0.0, fixture: "anthropic_basic"]
+      [temperature: 0.0, fixture: "basic"]
   """
-  def fixture_opts(provider, name, extra_opts \\ []) do
-    Keyword.put(extra_opts, :fixture, "#{provider}_#{name}")
+  def fixture_opts(_provider, name, extra_opts \\ []) do
+    Keyword.put(extra_opts, :fixture, name)
   end
 
   @doc """
