@@ -187,7 +187,6 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
     models = load_registry()
     specs = select_models(models, model_spec, opts)
-    state = load_state()
 
     if Enum.empty?(specs) do
       Mix.raise("No models match spec: #{inspect(model_spec)}")
@@ -197,16 +196,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
     recording = opts[:record_all] || opts[:record]
 
-    to_record =
-      if recording do
-        Enum.count(specs, fn {provider, model_id} ->
-          opts[:record_all] || Map.get(state, "#{provider}:#{model_id}") != "pass"
-        end)
-      else
-        0
-      end
-
-    mode_text = if recording, do: "#{to_record} to record", else: "replay mode"
+    mode_text = if recording, do: "#{total_specs} to record", else: "replay mode"
 
     Mix.shell().info("Testing #{total_specs} model(s) (#{mode_text})...\n")
 
@@ -226,7 +216,11 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
     elapsed = System.monotonic_time(:millisecond) - start_time
 
-    save_state(results)
+    if recording do
+      run_ts = DateTime.utc_now() |> DateTime.truncate(:second)
+      save_state(results, run_ts)
+    end
+
     print_summary(results, elapsed)
   end
 
@@ -361,9 +355,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
         :fail -> IO.ANSI.red() <> "FAIL"
       end
 
-    Mix.shell().info(
-      "  #{icon} #{result.model_id} (#{result.passed}/#{result.total})#{IO.ANSI.reset()}"
-    )
+    Mix.shell().info("  #{icon} #{result.model_id}#{IO.ANSI.reset()}")
 
     if result.fixtures && !Enum.empty?(result.fixtures) do
       fixtures_text = Enum.join(result.fixtures, ", ")
@@ -515,11 +507,18 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     end
   end
 
-  defp save_state(results) do
+  defp save_state(results, run_ts) do
     priv_dir = :code.priv_dir(:req_llm)
     path = Path.join(priv_dir, "supported_models.json")
 
-    existing_state = load_state()
+    existing =
+      case File.read(path) do
+        {:ok, content} -> Jason.decode!(content)
+        _ -> %{}
+      end
+
+    existing_state = Map.get(existing, "state", %{})
+    existing_recorded = Map.get(existing, "last_recorded", %{})
 
     new_state =
       results
@@ -529,26 +528,45 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
         Map.put(acc, result.model_spec, status)
       end)
 
-    sorted_state =
-      new_state
-      |> Enum.sort_by(fn {key, _} -> key end)
+    ts = DateTime.to_iso8601(run_ts)
 
-    json = build_sorted_json(sorted_state, DateTime.utc_now() |> DateTime.to_iso8601())
-    File.write!(path, json)
+    new_recorded =
+      results
+      |> Enum.reject(&(&1.status == :skipped))
+      |> Enum.reduce(existing_recorded, fn result, acc ->
+        Map.put(acc, result.model_spec, ts)
+      end)
+
+    json = build_sorted_json(new_state, new_recorded)
+
+    case File.read(path) do
+      {:ok, prev} when prev == json -> :ok
+      _ -> File.write!(path, json)
+    end
   end
 
-  defp build_sorted_json(state, timestamp) do
+  defp build_sorted_json(state, last_recorded) do
     state_json =
       state
-      |> Enum.map_join(",\n    ", fn {key, value} ->
-        ~s("#{key}": "#{value}")
+      |> Enum.sort_by(fn {k, _} -> k end)
+      |> Enum.map_join(",\n    ", fn {k, v} ->
+        ~s("#{k}": "#{v}")
+      end)
+
+    recorded_json =
+      last_recorded
+      |> Enum.sort_by(fn {k, _} -> k end)
+      |> Enum.map_join(",\n    ", fn {k, v} ->
+        ~s("#{k}": "#{v}")
       end)
 
     """
     {
-      "last_validated": "#{timestamp}",
       "state": {
         #{state_json}
+      },
+      "last_recorded": {
+        #{recorded_json}
       }
     }
     """
