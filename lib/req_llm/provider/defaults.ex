@@ -761,6 +761,18 @@ defmodule ReqLLM.Provider.Defaults do
     })
   end
 
+  # Handle tool call without index field (legacy or non-streaming format)
+  defp decode_openai_tool_call_delta(%{
+         "id" => id,
+         "type" => "function",
+         "function" => %{"name" => name, "arguments" => args_json}
+       }) do
+    case Jason.decode(args_json || "{}") do
+      {:ok, args} -> ReqLLM.StreamChunk.tool_call(name, args, %{id: id})
+      {:error, _} -> ReqLLM.StreamChunk.tool_call(name, %{}, %{id: id})
+    end
+  end
+
   defp decode_openai_tool_call_delta(_), do: nil
 
   defp build_openai_message_from_chunks([]), do: nil

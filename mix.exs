@@ -91,10 +91,10 @@ defmodule ReqLLM.MixProject do
 
   defp package do
     [
-      description: "Composable Elixir library for LLM interactions built on Req",
+      description: "Composable Elixir library for LLM interactions built on Req & Finch",
       licenses: ["Apache-2.0"],
       maintainers: ["Mike Hostetler"],
-      links: %{"GitHub" => @source_url},
+      links: %{"GitHub" => @source_url, "Agent Jido" => "https://agentjido.xyz"},
       files: ~w(lib priv mix.exs LICENSE README.md AGENTS.md usage-rules.md guides .formatter.exs)
     ]
   end
