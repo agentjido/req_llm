@@ -55,34 +55,34 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "length",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\nBecause they're afraid of the cheetahs! 😸\n\n(No function/tool was needed for this response)",
-            "reasoning": "Okay, the user asked for a joke about cats. Let me think. The tools provided include a weather function, but that's not relevant here. Since there's no joke function, I can't use any tools. I should just tell a joke directly. Here's one: Why don't cats play poker in the jungle? Because they're afraid of the cheetahs. It's a play on words with \"cheat\" and \"cheetah\". That should work.\n",
+            "content": "",
+            "reasoning": "Okay, the user asked for a joke about cats. Let me think. The tools provided include a function to get weather, but that's not related to jokes. Since there's no function for telling jokes or retrieving them, I can't use any tool here. I should inform the user that I can't perform that task with the available tools. Maybe offer to tell a joke without using any functions. Let me check the instructions again. The user might expect a joke, but the assistant is supposed to use tools if possible. Since no tool exists for jokes, I need to respond that I can't use any tool here. Then, perhaps proceed to tell a joke as a regular response. But according to the problem setup, if no",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759515134,
-      "id": "chatcmpl-3dfe128e-e90c-4835-ba23-cedb3ba30eb0",
+      "created": 1759520307,
+      "id": "chatcmpl-97c1d199-f045-40df-aa03-0de138b4de01",
       "model": "qwen/qwen3-32b",
       "object": "chat.completion",
       "service_tier": "on_demand",
       "system_fingerprint": "fp_5cf921caa2",
       "usage": {
-        "completion_time": 0.306465618,
-        "completion_tokens": 145,
-        "prompt_time": 0.006307087,
+        "completion_time": 0.324026171,
+        "completion_tokens": 150,
+        "prompt_time": 0.006145726,
         "prompt_tokens": 153,
-        "queue_time": 0.203930018,
-        "total_time": 0.312772705,
-        "total_tokens": 298
+        "queue_time": 0.203980637,
+        "total_time": 0.330171897,
+        "total_tokens": 303
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6nmcj9sfzgas6s0h00xe0sg"
+        "id": "req_01k6nsae1kfcxt3dgsxejr29x5"
       }
     },
     "headers": {
@@ -96,7 +96,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988e6814d9301aeb-ORD"
+        "988ee6602d33a2a1-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -105,13 +105,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 18:12:14 GMT"
+        "Fri, 03 Oct 2025 19:38:27 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=4u3v1NqijLLQNIBdLbKw4FcJNbqGmPiZ2q30ITEWJ94-1759515134-1.0.1.1-FpgFuji9OnCV.1Jo4xDjRTWnlQxzDONLT1GnGmY5WzWMzOQvMu6xocbbwYNoHpcsbjaNhyJpV23M1DdtE.Y8HU197rTDSTKHCVduOWsonjk; path=/; expires=Fri, 03-Oct-25 18:42:14 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=zO8A0OqiDY8GJv1Wwi4QpAsRgdlIjkRjsiP9lpxaOwQ-1759520307-1.0.1.1-Pesmz4DU03zCANrxVKIoHzJIf0ldcKd3dD_G7GnOMN6_GB.cp65wJnLn9.7pyGyGZrtDp8Xh1OQWsYyHn0cWOrZp.yUJil2leC2lILASaQI; path=/; expires=Fri, 03-Oct-25 20:08:27 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -132,19 +132,19 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "960"
+        "899"
       ],
       "x-ratelimit-remaining-tokens": [
-        "5461"
+        "4640"
       ],
       "x-ratelimit-reset-requests": [
-        "57m34.912s"
+        "2h25m25.531s"
       ],
       "x-ratelimit-reset-tokens": [
-        "5.381999999s"
+        "13.593999999s"
       ],
       "x-request-id": [
-        "req_01k6nmcj9sfzgas6s0h00xe0sg"
+        "req_01k6nsae1kfcxt3dgsxejr29x5"
       ]
     },
     "status": 200

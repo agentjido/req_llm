@@ -55,34 +55,34 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": "stop",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "",
-            "reasoning": "Okay, the user just asked me to tell them a joke about cats. Hmm, let me see. They also mentioned I could use a function called get_weather if needed, but I don't think that's necessary for a joke. I should focus on coming up with a good cat joke instead.\n\nFirst, I need to understand the context. The user wants a joke, so it should be light-hearted and maybe a bit punny. Since it's about cats, I can think about common cat behaviors or characteristics that people find funny or relatable.\n\nLet me brainstorm a bit. Cats are known for their independence, their love for naps, their curious nature, and sometimes their mischievous habits. Maybe I can play on words",
+            "content": "Why don't cats play poker in the jungle? Because there are too many cheetahs!",
+            "reasoning": "Okay, the user just asked me to tell them a joke about cats. Hmm, I remember that the function I can call is get_weather, but that's for weather information. Since there's no tool for jokes, maybe I should just provide a joke myself instead of calling any function. Let me think of a good cat joke. How about something simple and classic? Yeah, that should work. I'll just share the joke directly without needing to call any tools.\n",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759517023,
-      "id": "chatcmpl-0f5b6273-96c9-4066-b036-4f724317fcb4",
+      "created": 1759519327,
+      "id": "chatcmpl-33ee40cd-b92b-461b-a01c-d9cea4ca5bb6",
       "model": "deepseek-r1-distill-llama-70b",
       "object": "chat.completion",
       "service_tier": "on_demand",
       "system_fingerprint": "fp_1bbe7845ec",
       "usage": {
-        "completion_time": 0.745371038,
-        "completion_tokens": 150,
-        "prompt_time": 0.024824475,
+        "completion_time": 0.738477709,
+        "completion_tokens": 119,
+        "prompt_time": 0.02073828,
         "prompt_tokens": 130,
-        "queue_time": 0.200238769,
-        "total_time": 0.770195513,
-        "total_tokens": 280
+        "queue_time": 0.199102461,
+        "total_time": 0.759215989,
+        "total_tokens": 249
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6np6632edqb8ahggfq83tab"
+        "id": "req_01k6nrcg05frdac4aksg345eaw"
       }
     },
     "headers": {
@@ -96,7 +96,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988e962d394bdadc-ORD"
+        "988ece6caff7141c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -105,13 +105,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 18:43:43 GMT"
+        "Fri, 03 Oct 2025 19:22:07 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=_SwkWywkanMBKj.HYAeDJ1TyvkHR28QeV_DDtFm1vUI-1759517023-1.0.1.1-BEjoxov7EN2BEfnm19cNQPfj5hj1CdZ5nqrHCvo86V6tNq2ojY5evl9m4sYhxTFAyxu16MmidDMfo5_nlJjjWRosaz0Cgku0KguS.vQB.Zw; path=/; expires=Fri, 03-Oct-25 19:13:43 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=vF4dgGA6dwolih8QRHJDn3ZHqvsUxC96LBtkuvBOQyY-1759519327-1.0.1.1-XzSa6_nhUVtZrMy6vuRqez5CEJDZEDiAJDOhCHXYhnUQwzboqJRH0_VP7k_hFp9KKiQV6BXD276NTDu0HNEteu9m0kj2hjEWOpLQ0d0XELc; path=/; expires=Fri, 03-Oct-25 19:52:07 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -132,19 +132,19 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "992"
+        "998"
       ],
       "x-ratelimit-remaining-tokens": [
-        "5457"
+        "5885"
       ],
       "x-ratelimit-reset-requests": [
-        "11m30.758s"
+        "2m52.031999999s"
       ],
       "x-ratelimit-reset-tokens": [
-        "5.426s"
+        "1.141s"
       ],
       "x-request-id": [
-        "req_01k6np6632edqb8ahggfq83tab"
+        "req_01k6nrcg05frdac4aksg345eaw"
       ]
     },
     "status": 200

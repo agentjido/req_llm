@@ -136,6 +136,12 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
               IO.puts("\n[Comprehensive] model_spec=#{@model_spec}, test=usage")
             end
 
+            max_tokens =
+              case ReqLLM.Model.from(@model_spec) do
+                {:ok, %{capabilities: %{reasoning: true}}} -> 500
+                _ -> 10
+              end
+
             {:ok, response} =
               ReqLLM.generate_text(
                 @model_spec,
@@ -143,7 +149,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 fixture_opts(
                   @provider,
                   "usage",
-                  Keyword.merge([max_tokens: 10], param_bundles(@provider).deterministic)
+                  Keyword.put(param_bundles(@provider).deterministic, :max_tokens, max_tokens)
                 )
               )
 

@@ -117,10 +117,7 @@ defmodule ReqLLM.Providers.Groq do
   """
   @impl ReqLLM.Provider
   def encode_body(request) do
-    # Start with default encoding
     request = ReqLLM.Provider.Defaults.default_encode_body(request)
-
-    # Parse the encoded body to add Groq-specific options
     body = Jason.decode!(request.body)
 
     enhanced_body =
@@ -132,8 +129,178 @@ defmodule ReqLLM.Providers.Groq do
       |> maybe_put(:compound_custom, request.options[:compound_custom])
       |> maybe_put(:logit_bias, request.options[:logit_bias])
 
-    # Re-encode with Groq extensions
     encoded_body = Jason.encode!(enhanced_body)
     Map.put(request, :body, encoded_body)
   end
+
+  @doc """
+  Custom SSE event decoding that normalizes `<think>` tags in streaming responses.
+
+  Maintains state across events using the process dictionary to handle tags split across chunks.
+  When a content delta arrives, it's accumulated in a buffer and emitted as `:thinking` or
+  `:content` chunks based on `<think>...</think>` tag boundaries.
+  """
+  @impl ReqLLM.Provider
+  def decode_sse_event(event, model) do
+    chunks = ReqLLM.Provider.Defaults.default_decode_sse_event(event, model)
+    
+    chunks
+    |> Enum.flat_map(fn chunk ->
+      case chunk.type do
+        :content ->
+          transform_content_chunk(chunk)
+        _ ->
+          [chunk]
+      end
+    end)
+  end
+
+  defp transform_content_chunk(chunk) do
+    state = Process.get(:groq_think_state, %{mode: :text, buffer: ""})
+    {emitted_chunks, new_state} = consume_stream_delta(state, chunk.text)
+    Process.put(:groq_think_state, new_state)
+    emitted_chunks
+  end
+
+  @doc """
+  Custom response decoding that normalizes `<think>` tags into reasoning content parts.
+
+  Some Groq models (qwen/qwen3-32b, deepseek-r1-distill-llama-70b) embed thinking content
+  within `<think>...</think>` tags in the message content field. This override normalizes
+  those responses to extract thinking content as `:thinking` content parts, matching the
+  behavior of models that use separate `delta.reasoning` fields.
+
+  For non-streaming: splits `<think>` blocks from message content into `:thinking` and `:text` parts.
+  For streaming: wraps the stream to convert embedded `<think>` sequences in chunks into separate chunks.
+  """
+  @impl ReqLLM.Provider
+  def decode_response({req, %Req.Response{} = resp}) do
+    {req, decoded} = ReqLLM.Provider.Defaults.default_decode_response({req, resp})
+
+    case decoded.body do
+      %ReqLLM.Response{stream?: false, message: %ReqLLM.Message{} = msg, context: ctx} = r ->
+        new_msg = normalize_msg_think_tags(msg)
+        new_ctx = %{ctx | messages: List.replace_at(ctx.messages, -1, new_msg)}
+        {req, %{decoded | body: %{r | message: new_msg, context: new_ctx}}}
+
+      %ReqLLM.Response{stream?: true, stream: _stream} = _r ->
+        {req, decoded}
+
+      _ ->
+        {req, decoded}
+    end
+  end
+
+  defp normalize_msg_think_tags(%ReqLLM.Message{content: parts} = msg) when is_list(parts) do
+    new_parts =
+      parts
+      |> Enum.flat_map(fn
+        %{type: :text, text: t} when is_binary(t) -> split_think_blocks(t)
+        other -> [other]
+      end)
+      |> merge_adjacent_same_type()
+
+    %{msg | content: new_parts}
+  end
+
+  defp split_think_blocks(text) when is_binary(text) do
+    do_split(text, :text, [])
+    |> Enum.reverse()
+  end
+
+  defp do_split("", _mode, acc), do: acc
+
+  defp do_split(text, :text, acc) do
+    case :binary.match(text, "<think>") do
+      :nomatch ->
+        prepend_if_nonempty(acc, {:text, text})
+
+      {pos, 7} ->
+        pre = binary_part(text, 0, pos)
+        rest = binary_part(text, pos + 7, byte_size(text) - pos - 7)
+        acc = prepend_if_nonempty(acc, {:text, pre})
+        do_split(rest, :thinking, acc)
+    end
+  end
+
+  defp do_split(text, :thinking, acc) do
+    case :binary.match(text, "</think>") do
+      :nomatch ->
+        prepend_if_nonempty(acc, {:thinking, text})
+
+      {pos, 8} ->
+        inner = binary_part(text, 0, pos)
+        rest = binary_part(text, pos + 8, byte_size(text) - pos - 8)
+        acc = prepend_if_nonempty(acc, {:thinking, inner})
+        do_split(rest, :text, acc)
+    end
+  end
+
+  defp prepend_if_nonempty(acc, {_type, ""}), do: acc
+  defp prepend_if_nonempty(acc, {:text, t}), do: [%{type: :text, text: t} | acc]
+  defp prepend_if_nonempty(acc, {:thinking, t}), do: [%{type: :thinking, text: t} | acc]
+
+  defp merge_adjacent_same_type(parts) do
+    Enum.reduce(parts, [], fn part, acc ->
+      case {acc, part} do
+        {[%{type: t, text: a} = prev | rest], %{type: t, text: b}} ->
+          [%{prev | text: a <> b} | rest]
+
+        _ ->
+          [part | acc]
+      end
+    end)
+    |> Enum.reverse()
+  end
+
+  defp consume_stream_delta(%{buffer: buf} = st, delta) do
+    buf = buf <> (delta || "")
+    consume_complete_segments(%{st | buffer: buf})
+  end
+
+  defp consume_complete_segments(%{mode: :text, buffer: buf} = st) do
+    case :binary.match(buf, "<think>") do
+      :nomatch ->
+        if byte_size(buf) > 6 do
+          take = byte_size(buf) - 6
+          emit = binary_part(buf, 0, take)
+          keep = binary_part(buf, take, 6)
+          {[ReqLLM.StreamChunk.text(emit)], %{st | buffer: keep}}
+        else
+          {[], st}
+        end
+
+      {pos, 7} ->
+        pre = binary_part(buf, 0, pos)
+        rest = binary_part(buf, pos + 7, byte_size(buf) - pos - 7)
+        emits = if pre == "", do: [], else: [ReqLLM.StreamChunk.text(pre)]
+        {more, st2} = consume_complete_segments(%{mode: :thinking, buffer: rest})
+        {emits ++ more, st2}
+    end
+  end
+
+  defp consume_complete_segments(%{mode: :thinking, buffer: buf} = st) do
+    case :binary.match(buf, "</think>") do
+      :nomatch ->
+        if byte_size(buf) > 7 do
+          take = byte_size(buf) - 7
+          emit = binary_part(buf, 0, take)
+          keep = binary_part(buf, take, 7)
+          {[ReqLLM.StreamChunk.thinking(emit)], %{st | buffer: keep}}
+        else
+          {[], st}
+        end
+
+      {pos, 8} ->
+        inner = binary_part(buf, 0, pos)
+        rest = binary_part(buf, pos + 8, byte_size(buf) - pos - 8)
+        emits = if inner == "", do: [], else: [ReqLLM.StreamChunk.thinking(inner)]
+        {more, st2} = consume_complete_segments(%{mode: :text, buffer: rest})
+        {emits ++ more, st2}
+    end
+  end
+
+  defp flush_stream_state(%{mode: :text, buffer: ""}), do: []
+  defp flush_stream_state(%{mode: :text, buffer: b}), do: [ReqLLM.StreamChunk.text(b)]
+  defp flush_stream_state(%{mode: :thinking, buffer: b}), do: [ReqLLM.StreamChunk.thinking(b)]
 end

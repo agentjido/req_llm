@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJxd2VuL3F3ZW4zLTMyYiIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGkgdGhlcmUhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoicXdlbi9xd2VuMy0zMmIiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
-      "max_tokens": 50,
+      "max_tokens": 200,
       "messages": [
         {
           "content": "Hi there!",
@@ -35,33 +35,33 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": "stop",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "<think>\nOkay, the user said \"Hi there!\" so I should respond in a friendly and welcoming way. Let me make sure to acknowledge their greeting and offer assistance. I'll keep it simple and open-ended to encourage them to ask questions or share",
+            "content": "<think>\nOkay, the user said \"Hi there!\" so I should respond in a friendly and welcoming way. Let me make sure to acknowledge their greeting and offer assistance. I'll keep it simple and open-ended to encourage them to ask questions or share what's on their mind. Something like \"Hello! How can I assist you today?\" That should work. I need to check if there's any specific context I should consider, but since there's none, a general response is best. Alright, ready to go.\n</think>\n\nHello! How can I assist you today? 😊",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759515137,
-      "id": "chatcmpl-a27a4c59-f0bb-4dc6-a4ea-9c3b36010b77",
+      "created": 1759520309,
+      "id": "chatcmpl-d62e3418-ffc5-4233-af58-f2d04f657ef4",
       "model": "qwen/qwen3-32b",
       "object": "chat.completion",
       "service_tier": "on_demand",
       "system_fingerprint": "fp_5cf921caa2",
       "usage": {
-        "completion_time": 0.087783704,
-        "completion_tokens": 50,
-        "prompt_time": 4.78182e-4,
+        "completion_time": 0.218832233,
+        "completion_tokens": 118,
+        "prompt_time": 4.31504e-4,
         "prompt_tokens": 11,
-        "queue_time": 0.208371196,
-        "total_time": 0.088261886,
-        "total_tokens": 61
+        "queue_time": 0.203682162,
+        "total_time": 0.219263737,
+        "total_tokens": 129
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6nmcn20fzw85srdb30kzxwm"
+        "id": "req_01k6nsag31f1a9c2w7xhc4zm0c"
       }
     },
     "headers": {
@@ -75,7 +75,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988e6826af801aeb-ORD"
+        "988ee66d3c90a2a1-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -84,13 +84,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 18:12:17 GMT"
+        "Fri, 03 Oct 2025 19:38:29 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=Z.9kHypQ.KaK5ETkaIKo8BjXfKEYZOpGFLC1DCSbmKQ-1759515137-1.0.1.1-KRdDpJe16oAnFpwRHHYH2_NUQLg9Yb84LNGhoYPtMtGtkTMOT3MeHtdo5gRNcpHSXYvHM7GdBJMwbrMvgu5TLd23nSJFNM8RkVjiwRE1f5M; path=/; expires=Fri, 03-Oct-25 18:42:17 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=Bb1ydfPP_i4xnZ6ciDp6pyBqoFJuBuUtT1L8hDA36Lc-1759520309-1.0.1.1-ZDfxs00djyNnba4NCrWlCYl3l2_HKVZQ.dBmnyyoU.1eZXieRFBOd9q61QVC9nyFCaB_6st2lGC4kMZVlbN2Sw1yVlAQ6HwqSFG43uF53m0; path=/; expires=Fri, 03-Oct-25 20:08:29 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -111,19 +111,19 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "955"
+        "895"
       ],
       "x-ratelimit-remaining-tokens": [
-        "4514"
+        "4378"
       ],
       "x-ratelimit-reset-requests": [
-        "1h4m47.517s"
+        "2h31m11.487s"
       ],
       "x-ratelimit-reset-tokens": [
-        "14.851s"
+        "16.216999999s"
       ],
       "x-request-id": [
-        "req_01k6nmcn20fzw85srdb30kzxwm"
+        "req_01k6nsag31f1a9c2w7xhc4zm0c"
       ]
     },
     "status": 200

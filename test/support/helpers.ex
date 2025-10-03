@@ -324,7 +324,7 @@ defmodule ReqLLM.Test.Helpers do
           creative: [temperature: 0.9, max_tokens: 100],
           minimal: base.minimal,
           tool_test_tokens: base.tool_test_tokens,
-          reasoning_effort: base.reasoning_effort,
+          reasoning_effort: :low,
           reasoning_prompts: base.reasoning_prompts,
           validate_cached_tokens: false
         }
