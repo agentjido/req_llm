@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjE1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdwdC01Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjMwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdwdC01IiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
-      "max_completion_tokens": 150,
+      "max_completion_tokens": 300,
       "messages": [
         {
           "content": "What's the weather like in Paris, France?",
@@ -12,9 +12,9 @@
         }
       ],
       "model": "gpt-5",
+      "reasoning_effort": "low",
       "seed": 42,
       "stream": false,
-      "temperature": 0.0,
       "tools": [
         {
           "function": {
@@ -87,11 +87,48 @@
   },
   "response": {
     "body": {
-      "error": {
-        "code": "unsupported_value",
-        "message": "Unsupported value: 'temperature' does not support 0.0 with this model. Only the default (1) value is supported.",
-        "param": "temperature",
-        "type": "invalid_request_error"
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "message": {
+            "annotations": [],
+            "content": null,
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
+                  "name": "get_weather"
+                },
+                "id": "call_xBRDAS0Vi9aQGvFEynIX3CDe",
+                "type": "function"
+              }
+            ]
+          }
+        }
+      ],
+      "created": 1759526282,
+      "id": "chatcmpl-CMhS6OsYyrpl620OKWhUGIIa8O17l",
+      "model": "gpt-5-2025-08-07",
+      "object": "chat.completion",
+      "service_tier": "default",
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 30,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "prompt_tokens": 186,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "total_tokens": 216
       }
     },
     "headers": {
@@ -105,7 +142,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988bb5f32b86eaef-ORD"
+        "988f783eb98b8b98-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -114,13 +151,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 10:21:06 GMT"
+        "Fri, 03 Oct 2025 21:18:04 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "21"
+        "2030"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -132,17 +169,20 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=BXRIs12uRhNDkVJIlKcwbTp6RtHTMHBzceF6H_PWFi0-1759486866-1.0.1.1-u_SeTGsxX8pBRy8ko7wg4vgvS3.rULlnqVe.vwuBiHFNd6c0qjZj6vi76CtU3somSwilEpsNra5n3dCxoMQRuzpXSWt8S0Xx0ZvbpE3tILs; path=/; expires=Fri, 03-Oct-25 10:51:06 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=SsPxvSkI7vQzUUhWEY6obDZ5orpWnOOCI0CX47BgXXs-1759486866510-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=k1JGrjVwszte68xjoqfH.FnmaguIIpxI0mDn1gexjnI-1759526284-1.0.1.1-Qg5YKxw1ZypiqEwyQJ2amvamGzCKqwV0ughBKOtvaB3vq3tE9_QKWmoqgKT25Py77hrlONgQNxZV5GjMyJEkZ1trx9_8f7NguYRxddyNcEE; path=/; expires=Fri, 03-Oct-25 21:48:04 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=37Wp8rb.Xy78ImbV9nGkHDjMmt_v7KzlFqXc.bNaJhs-1759526284352-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
       ],
       "x-content-type-options": [
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "40"
+        "2254"
       ],
       "x-openai-proxy-wasm": [
         "v0.1"
@@ -166,9 +206,9 @@
         "0s"
       ],
       "x-request-id": [
-        "req_cf99035e437f408d8bc6e65194969961"
+        "req_958556f8ceeb421b89cbce0a7b47994c"
       ]
     },
-    "status": 400
+    "status": 200
   }
 }

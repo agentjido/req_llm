@@ -48,20 +48,20 @@ defmodule ReqLLM.Provider do
         end
 
         @impl ReqLLM.Provider
-        def attach_stream(model, context, opts, finch_name) do
-          url = "https://api.example.com/v1/chat/completions"
-          api_key = ReqLLM.Keys.get!(model, opts)
-          headers = [
-            {"Authorization", "Bearer " <> api_key},
-            {"Content-Type", "application/json"}
-          ]
-          body = Jason.encode!(%{
-            model: model.model,
-            messages: encode_context_messages(context),
-            stream: true
-          })
-          request = Finch.build(:post, url, headers, body)
-          {:ok, request}
+        def attach_stream(model, context, opts, _finch_name) do
+          operation = Keyword.get(opts, :operation, :chat)
+          processed_opts = ReqLLM.Provider.Options.process!(__MODULE__, operation, model, Keyword.merge(opts, stream: true, context: context))
+          
+          with {:ok, req} <- prepare_request(operation, model, context, processed_opts),
+               req <- attach(req, model, processed_opts),
+               {req, _resp} <- encode_body(req) do
+            url = URI.to_string(req.url)
+            headers = req.headers |> Enum.map(fn {k, [v | _]} -> {k, v} end)
+            body = req.body
+            
+            finch_request = Finch.build(:post, url, headers, body)
+            {:ok, finch_request}
+          end
         end
 
         def encode_body(request) do

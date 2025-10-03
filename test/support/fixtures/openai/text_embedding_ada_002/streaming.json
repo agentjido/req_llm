@@ -44,19 +44,19 @@
       "access-control-expose-headers": "X-Request-ID",
       "alt-svc": "h3=\":443\"; ma=86400",
       "cf-cache-status": "DYNAMIC",
-      "cf-ray": "988bb5f9bd54a3e4-ORD",
+      "cf-ray": "988f2b79da98f50d-ORD",
       "content-length": "235",
       "content-type": "application/json",
-      "date": "Fri, 03 Oct 2025 10:21:07 GMT",
+      "date": "Fri, 03 Oct 2025 20:25:37 GMT",
       "openai-organization": "epic-creative-sogybe",
       "openai-processing-ms": "5",
       "openai-project": "proj_j5AhgU4eLMRmsoO9FDg7BRD3",
       "openai-version": "2020-10-01",
       "server": "cloudflare",
-      "set-cookie": "_cfuvid=VQJAULhGnLNqyHOp2iANUSCxfsHaMauWEXTFqx5kE_E-1759486867540-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+      "set-cookie": "_cfuvid=EHsSPPFPyJo1hCZ6Cvev.AsiS7EUo4R9UQ07gd0_KcU-1759523137645-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
       "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
       "x-content-type-options": "nosniff",
-      "x-envoy-upstream-service-time": "26",
+      "x-envoy-upstream-service-time": "22",
       "x-openai-proxy-wasm": "v0.1",
       "x-ratelimit-limit-requests": "5000",
       "x-ratelimit-limit-tokens": "5000000",
@@ -64,7 +64,7 @@
       "x-ratelimit-remaining-tokens": "4999976",
       "x-ratelimit-reset-requests": "12ms",
       "x-ratelimit-reset-tokens": "0s",
-      "x-request-id": "req_f32d7197aa8e460184adec6327105765"
+      "x-request-id": "req_dc1a2700e748433fa5f9457e812347de"
     },
     "status": 404
   }

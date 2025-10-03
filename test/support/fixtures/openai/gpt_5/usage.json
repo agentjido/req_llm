@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhpIHRoZXJlISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdwdC01Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncHQtNSIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlfQ=="
     },
     "canonical_json": {
-      "max_completion_tokens": 50,
+      "max_completion_tokens": 500,
       "messages": [
         {
           "content": "Hi there!",
@@ -13,8 +13,7 @@
       ],
       "model": "gpt-5",
       "seed": 42,
-      "stream": false,
-      "temperature": 0.0
+      "stream": false
     },
     "headers": {
       "accept-encoding": [
@@ -33,11 +32,38 @@
   },
   "response": {
     "body": {
-      "error": {
-        "code": "unsupported_value",
-        "message": "Unsupported value: 'temperature' does not support 0.0 with this model. Only the default (1) value is supported.",
-        "param": "temperature",
-        "type": "invalid_request_error"
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "annotations": [],
+            "content": "Hi! How can I help you today?",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759526280,
+      "id": "chatcmpl-CMhS4gQYMzXhZ9U6Ebx1PxqjcgdHZ",
+      "model": "gpt-5-2025-08-07",
+      "object": "chat.completion",
+      "service_tier": "default",
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 18,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "prompt_tokens": 9,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "total_tokens": 27
       }
     },
     "headers": {
@@ -51,7 +77,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988bb77eb980eaef-ORD"
+        "988f7835cdf08b98-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -60,13 +86,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 10:22:09 GMT"
+        "Fri, 03 Oct 2025 21:18:02 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "18"
+        "1319"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -78,17 +104,20 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=1gazV6qkuLLkGPu4lP9k_DJDt0dIIgFgKvzYVfhXJ1I-1759486929-1.0.1.1-1GZ9QNFy3SS9JA4_oZykxp9n17.BCmxykFSxFENlZxAM6uUgnVWFodTxup4ZcXl2ILRwaUn2gZ.0yHpmocC4yU.4V1RvNXgYM7yshBPZNQo; path=/; expires=Fri, 03-Oct-25 10:52:09 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=yDn0yTRHp.wZESyfqR8OQ9xpcCZKuesrzcnK8_Y8OPU-1759486929855-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=D6NN2.uXZFUMpFiKdvD7DraLeePBbBBpvsBZX1Iz3fI-1759526282-1.0.1.1-25SA4iqadsc8rNN9gM6Qe4zFvhxziGD47wpFkDZL2E8tarmP2wJVhh0w1mKht6fJbYMxWFEc9dfLyFPPHk04XKdVDor7RaMOsFSWDQj74cc; path=/; expires=Fri, 03-Oct-25 21:48:02 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=f47DwSnP4mMJhRsta1Oyq5eYCQCXf0z19j6toPmr_Ho-1759526282006-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
       ],
       "x-content-type-options": [
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "37"
+        "1344"
       ],
       "x-openai-proxy-wasm": [
         "v0.1"
@@ -112,9 +141,9 @@
         "0s"
       ],
       "x-request-id": [
-        "req_5340f496632341f2a1e620b851cc304f"
+        "req_d369aac00c3e4bdc98869242b0c2e0a6"
       ]
     },
-    "status": 400
+    "status": 200
   }
 }

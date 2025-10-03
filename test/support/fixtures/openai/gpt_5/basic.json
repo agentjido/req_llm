@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdwdC01Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncHQtNSIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZX0="
     },
     "canonical_json": {
-      "max_completion_tokens": 50,
+      "max_completion_tokens": 200,
       "messages": [
         {
           "content": "Hello world!",
@@ -12,9 +12,9 @@
         }
       ],
       "model": "gpt-5",
+      "reasoning_effort": "low",
       "seed": 42,
-      "stream": false,
-      "temperature": 0.0
+      "stream": false
     },
     "headers": {
       "accept-encoding": [
@@ -33,11 +33,38 @@
   },
   "response": {
     "body": {
-      "error": {
-        "code": "unsupported_value",
-        "message": "Unsupported value: 'temperature' does not support 0.0 with this model. Only the default (1) value is supported.",
-        "param": "temperature",
-        "type": "invalid_request_error"
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "annotations": [],
+            "content": "Hello! How can I help you today?",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759526279,
+      "id": "chatcmpl-CMhS3jqIdFRO5A0rq3n7ncklY3Bxm",
+      "model": "gpt-5-2025-08-07",
+      "object": "chat.completion",
+      "service_tier": "default",
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 18,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "prompt_tokens": 9,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "total_tokens": 27
       }
     },
     "headers": {
@@ -51,7 +78,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988bb767a960eaef-ORD"
+        "988f782d2b4b8b98-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -60,13 +87,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 10:22:06 GMT"
+        "Fri, 03 Oct 2025 21:18:00 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "11"
+        "1282"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -78,17 +105,20 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=Nx6_2NHSWKDWYDdH0ogBojqv_B8h_bTTB8J7czzbEgU-1759486926-1.0.1.1-1td51hFbTIzbBaN.QTUSgMoGQsetXeE5_f.TRHVzsbIQCr7WQPKTP9QYqFhp9Iwy6669.BucnV0AjMELxqelQdtjgPLh6U3p4cbAZJbFsX8; path=/; expires=Fri, 03-Oct-25 10:52:06 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=FttJySWQpIyXU5Qr4TYutsvjBaMNRu.0Ypn0ZX1ICVM-1759486926089-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=l2uApeiNrUWAc6eXvjU.0pdNGtSaxaQ3I7u4s8kh45A-1759526280-1.0.1.1-xZbaNgDvOCil0G6cZs9WgKHbjcmYK6FP6qsdBoIG1GyUP5as3qwTZrBkxhB7yLgC9WRxqPFofQde.IlVA18qQgT5o5bRbkKDwmXzOqAPGd8; path=/; expires=Fri, 03-Oct-25 21:48:00 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=gUr6b.qtczKkHdyDpwga_Jr5f6RdrwCETj9F_rH.qEg-1759526280581-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
       ],
       "x-content-type-options": [
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "24"
+        "1311"
       ],
       "x-openai-proxy-wasm": [
         "v0.1"
@@ -112,9 +142,9 @@
         "0s"
       ],
       "x-request-id": [
-        "req_10a6ffaf6d444e6a9b092340a2366d6b"
+        "req_07bd7ce9eccf486f8c48459f21745feb"
       ]
     },
-    "status": 400
+    "status": 200
   }
 }

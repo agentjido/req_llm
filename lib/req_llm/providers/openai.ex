@@ -61,7 +61,9 @@ defmodule ReqLLM.Providers.OpenAI do
         doc: "Maximum completion tokens (required for reasoning models like o1, o3, gpt-5)"
       ],
       reasoning_effort: [
-        type: {:in, [:minimal, :low, :medium, :high]},
+        type:
+          {:or,
+           [{:in, [:minimal, :low, :medium, :high]}, {:in, ["minimal", "low", "medium", "high"]}]},
         doc: "Reasoning effort level for GPT-5 models (minimal, low, medium, high)"
       ]
     ]
@@ -93,7 +95,7 @@ defmodule ReqLLM.Providers.OpenAI do
         type: "function",
         function: %{name: "structured_output"}
       })
-      |> Keyword.put_new(:max_tokens, 4096)
+      |> put_default_max_tokens_for_model(model_spec)
       |> Keyword.put(:operation, :object)
 
     prepare_request(:chat, model_spec, prompt, opts_with_tool)
@@ -115,70 +117,29 @@ defmodule ReqLLM.Providers.OpenAI do
   @doc """
   Translates provider-specific options for different model types.
 
+  Uses a profile-based system to apply model-specific parameter transformations.
+  Profiles are resolved from model metadata and capabilities, making it easy to
+  add new model-specific rules without modifying this function.
+
   ## Reasoning Models
 
   Models with reasoning capabilities (o1, o3, o4, gpt-5, etc.) have special parameter requirements:
-  - `max_tokens` must be renamed to `max_completion_tokens`
-  - `temperature` is not supported and will be dropped for o1/o3 models
+  - `max_tokens` is renamed to `max_completion_tokens`
+  - `temperature` may be unsupported or restricted depending on the specific model
 
   ## Returns
 
   `{translated_opts, warnings}` where warnings is a list of transformation messages.
   """
   @impl ReqLLM.Provider
-  def translate_options(:chat, %ReqLLM.Model{model: model_name, capabilities: capabilities}, opts) do
-    # Check if this is a reasoning model either by capabilities or model name patterns
-    is_reasoning_model =
-      (is_map(capabilities) && Map.get(capabilities, :reasoning) == true) ||
-        is_o_series_model?(model_name) ||
-        is_gpt5_model?(model_name) ||
-        is_reasoning_codex_model?(model_name)
-
-    if is_reasoning_model do
-      # All reasoning models need max_completion_tokens instead of max_tokens
-      {opts_after_rename, rename_warnings} =
-        translate_rename(opts, :max_tokens, :max_completion_tokens)
-
-      # Only o1/o3 models don't support temperature
-      if is_o_series_model?(model_name) do
-        {final_opts, drop_warnings} =
-          translate_drop(
-            opts_after_rename,
-            :temperature,
-            "OpenAI #{get_model_series(model_name)} models do not support :temperature – dropped"
-          )
-
-        {final_opts, rename_warnings ++ drop_warnings}
-      else
-        {opts_after_rename, rename_warnings}
-      end
-    else
-      {opts, []}
-    end
+  def translate_options(operation, %ReqLLM.Model{} = model, opts) do
+    steps = ReqLLM.Providers.OpenAI.ParamProfiles.steps_for(operation, model)
+    ReqLLM.ParamTransform.apply(opts, steps)
   end
 
   def translate_options(_operation, _model, opts) do
     {opts, []}
   end
-
-  # Helper functions for model type detection
-  defp is_o_series_model?(<<"o1", _::binary>>), do: true
-  defp is_o_series_model?(<<"o3", _::binary>>), do: true
-  defp is_o_series_model?(<<"o4", _::binary>>), do: true
-  defp is_o_series_model?(_), do: false
-
-  defp is_gpt5_model?(<<"gpt-5", _::binary>>), do: true
-  defp is_gpt5_model?(_), do: false
-
-  defp is_reasoning_codex_model?(<<"codex", rest::binary>>),
-    do: String.contains?(rest, "mini-latest")
-
-  defp is_reasoning_codex_model?(_), do: false
-
-  defp get_model_series(<<"o1", _::binary>>), do: "o1"
-  defp get_model_series(<<"o3", _::binary>>), do: "o3"
-  defp get_model_series(<<"o4", _::binary>>), do: "o4"
-  defp get_model_series(_), do: "reasoning"
 
   @doc """
   Custom body encoding that adds OpenAI-specific token handling for O1/O3 models.
@@ -244,14 +205,38 @@ defmodule ReqLLM.Providers.OpenAI do
 
   @doc false
   defp add_token_limits(body, model_name, request_options) do
-    # Check if this is a reasoning model that needs max_completion_tokens
-    if is_o_series_model?(model_name) || is_gpt5_model?(model_name) ||
-         is_reasoning_codex_model?(model_name) do
-      maybe_put(body, :max_completion_tokens, request_options[:max_completion_tokens])
+    if is_reasoning_model_name?(model_name) do
+      maybe_put(
+        body,
+        :max_completion_tokens,
+        request_options[:max_completion_tokens] || request_options[:max_tokens]
+      )
     else
-      maybe_put(body, :max_tokens, request_options[:max_tokens])
+      body
+      |> maybe_put(:max_tokens, request_options[:max_tokens])
+      |> maybe_put(:max_completion_tokens, request_options[:max_completion_tokens])
     end
   end
+
+  defp put_default_max_tokens_for_model(opts, model_spec) do
+    case ReqLLM.Model.from(model_spec) do
+      {:ok, %{model: model_name}} when is_binary(model_name) ->
+        if is_reasoning_model_name?(model_name) do
+          Keyword.put_new(opts, :max_completion_tokens, 4096)
+        else
+          Keyword.put_new(opts, :max_tokens, 4096)
+        end
+
+      _ ->
+        Keyword.put_new(opts, :max_tokens, 4096)
+    end
+  end
+
+  defp is_reasoning_model_name?(<<"gpt-5", _::binary>>), do: true
+  defp is_reasoning_model_name?(<<"o1", _::binary>>), do: true
+  defp is_reasoning_model_name?(<<"o3", _::binary>>), do: true
+  defp is_reasoning_model_name?(<<"o4", _::binary>>), do: true
+  defp is_reasoning_model_name?(_), do: false
 
   @doc false
   defp add_stream_options(body, request_options) do

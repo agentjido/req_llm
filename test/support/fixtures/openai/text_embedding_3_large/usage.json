@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJ0ZXh0LWVtYmVkZGluZy0zLWxhcmdlIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjoxMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJ0ZXh0LWVtYmVkZGluZy0zLWxhcmdlIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
-      "max_tokens": 50,
+      "max_tokens": 10,
       "messages": [
         {
           "content": "Hi there!",
@@ -48,7 +48,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988bb6685f24eaef-ORD"
+        "988f2b77a91461bb-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -57,14 +57,14 @@
         "application/json; charset=utf-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 10:21:25 GMT"
+        "Fri, 03 Oct 2025 20:25:37 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=3NFrIDs9ANrbkbAYe6duJxZYZ.vfBLt0QZeLOOU33DA-1759486885-1.0.1.1-pdAc9h17xLJ1HTsDf6TWtMqlX1fJmMfsJkz.GkRLgTIQNsl9XUJuD..UnR3gWHfGaR6fHfkjKmdOscSMKShqL3GUNktmv_7WdpquEBauy4g; path=/; expires=Fri, 03-Oct-25 10:51:25 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=WxJ7gqj2OuVMCC.twxxxc7U8rQTjK4Vsgla1Z0wai7c-1759486885236-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=y0EMdG_R5d4zr93D03SdemAacWq6o1Xa7w2mVgV18x8-1759523137-1.0.1.1-hgGARY9jZ26DATwnjgeNDBZcYGXsO4qYg7iz3WcLfaNfJLu5GWf6XUWE4xim9vOWI372jcLsW_yJ3v7PQ5a2IanTF3lJcuPR_o84NhJbXHM; path=/; expires=Fri, 03-Oct-25 20:55:37 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=J0.tw0n2Sidsw2DcKUbL2an06dyNjngW0PHZggddvKk-1759523137276-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -79,13 +79,13 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "5"
+        "3"
       ],
       "x-openai-proxy-wasm": [
         "v0.1"
       ],
       "x-request-id": [
-        "req_a7824269b62241aeb7b5df4d9f7298d0"
+        "req_934745cfc2b649b8bf0a102f57fee727"
       ]
     },
     "status": 403

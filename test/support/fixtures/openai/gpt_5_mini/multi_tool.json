@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjE1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdwdC01LW1pbmkiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjE1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdwdC01LW1pbmkiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "max_completion_tokens": 150,
@@ -14,7 +14,6 @@
       "model": "gpt-5-mini",
       "seed": 42,
       "stream": false,
-      "temperature": 0.0,
       "tools": [
         {
           "function": {
@@ -87,11 +86,48 @@
   },
   "response": {
     "body": {
-      "error": {
-        "code": "unsupported_value",
-        "message": "Unsupported value: 'temperature' does not support 0.0 with this model. Only the default (1) value is supported.",
-        "param": "temperature",
-        "type": "invalid_request_error"
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "message": {
+            "annotations": [],
+            "content": null,
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
+                  "name": "get_weather"
+                },
+                "id": "call_SqxOmwfpCEZL3qbLbNFqIi0O",
+                "type": "function"
+              }
+            ]
+          }
+        }
+      ],
+      "created": 1759524195,
+      "id": "chatcmpl-CMguRrikOtgCCZHFdd8qlxdddbpz5",
+      "model": "gpt-5-mini-2025-08-07",
+      "object": "chat.completion",
+      "service_tier": "default",
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 30,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "prompt_tokens": 186,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "total_tokens": 216
       }
     },
     "headers": {
@@ -105,7 +141,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988bb755980aeaef-ORD"
+        "988f45490889540f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -114,13 +150,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 10:22:03 GMT"
+        "Fri, 03 Oct 2025 20:43:16 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "14"
+        "1706"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -132,17 +168,20 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=t8f8Q2aTJtGDALQyHf1TKhRVwCzYY8DbSrPu4DKglHc-1759486923-1.0.1.1-6LZ3u64OjzRqG.AkXciv58wiUvjiJWfva4ThhC2LYgrGH9LraXXRpi8.YrCDrnQy5Gi1sz8CPvl5vCLaBa3FA5BWtwYJ5_g5c56o8GpXN8I; path=/; expires=Fri, 03-Oct-25 10:52:03 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=Y009UCb3ELRJs8KfulhEZm27jx1fdpG1suIaOh9a5zc-1759486923195-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=qX181xgXtSpo5ExMfphjafOUUwoa3.KYlk9Fpv.rEMw-1759524196-1.0.1.1-mR2xaLBEMmo_VWpL.aCynVHsriRCys81lKUGMEw0WFMhRIuRA5fCdq8.hOLmly4uC0NxnS9FGrvOBhxXuCqaeo0K02RcQ9TgJWgASAqKwsQ; path=/; expires=Fri, 03-Oct-25 21:13:16 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=kObwK4gQfQGMZo8MJ1mm2zL8Q7M.KQLMNFpHezmjaXg-1759524196661-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
       ],
       "x-content-type-options": [
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "34"
+        "1888"
       ],
       "x-openai-proxy-wasm": [
         "v0.1"
@@ -157,7 +196,7 @@
         "4999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "3999987"
+        "3999986"
       ],
       "x-ratelimit-reset-requests": [
         "12ms"
@@ -166,9 +205,9 @@
         "0s"
       ],
       "x-request-id": [
-        "req_4928116c926846a491a1d97b2fc70253"
+        "req_7ec810440a784f2ab682982583e916a6"
       ]
     },
-    "status": 400
+    "status": 200
   }
 }

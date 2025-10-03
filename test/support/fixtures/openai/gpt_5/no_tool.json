@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjE1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3B0LTUiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjMwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3B0LTUiLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
-      "max_completion_tokens": 150,
+      "max_completion_tokens": 300,
       "messages": [
         {
           "content": "Tell me a joke about cats",
@@ -12,9 +12,9 @@
         }
       ],
       "model": "gpt-5",
+      "reasoning_effort": "low",
       "seed": 42,
       "stream": false,
-      "temperature": 0.0,
       "tools": [
         {
           "function": {
@@ -53,11 +53,38 @@
   },
   "response": {
     "body": {
-      "error": {
-        "code": "unsupported_value",
-        "message": "Unsupported value: 'temperature' does not support 0.0 with this model. Only the default (1) value is supported.",
-        "param": "temperature",
-        "type": "invalid_request_error"
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "annotations": [],
+            "content": "Why don’t cats play poker in the jungle? Too many cheetahs.",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759526284,
+      "id": "chatcmpl-CMhS85J8Zsn9pLdQsbSlgHL9j8tMx",
+      "model": "gpt-5-2025-08-07",
+      "object": "chat.completion",
+      "service_tier": "default",
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 153,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 128,
+          "rejected_prediction_tokens": 0
+        },
+        "prompt_tokens": 132,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "total_tokens": 285
       }
     },
     "headers": {
@@ -71,7 +98,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988bb76f3bebeaef-ORD"
+        "988f784d5c698b98-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -80,13 +107,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 10:22:07 GMT"
+        "Fri, 03 Oct 2025 21:18:08 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "9"
+        "3691"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -98,17 +125,20 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=OkZHYaBS4sU.MSHOpwFmlraq5duKDiZIAXu5GZgzfPA-1759486927-1.0.1.1-rxBlf2QaEOwvxt.AtDUxgOgPBl3dJ6mNxB3pxM6DKeZ7QxrOXI50QEpgDT_oC6YukCuCCnbrzYthAgK65ZIT1fL2OWaY.B46Jka35KjJGt8; path=/; expires=Fri, 03-Oct-25 10:52:07 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=OnBzQIqjqr9UxJie574IIMVEeW8U6xB1MASqeusBOEA-1759486927314-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=vX4.clEyYLby8VBoiYhWMbFj8nw63HpzO066z65_S9o-1759526288-1.0.1.1-0Iq6tFCFFtFcqIcdONhTVMDn.u0J_Lj_L.CphTZnRPPZpKjDrAiaShhctexaTIovqvIl08FMWFIebq0.Y5GyyblxRwOxD3M8JZvgIOGMOGY; path=/; expires=Fri, 03-Oct-25 21:48:08 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=OTb.uxbk37xyAy83t_FXVn4lfkQ3u2okOQ_gjUnH6hI-1759526288133-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
       ],
       "x-content-type-options": [
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "28"
+        "3711"
       ],
       "x-openai-proxy-wasm": [
         "v0.1"
@@ -132,9 +162,9 @@
         "0s"
       ],
       "x-request-id": [
-        "req_232c1324e57540d6a52211bc1cfca575"
+        "req_ce0e4a7aa7544b1094a667645cd7e6ea"
       ]
     },
-    "status": 400
+    "status": 200
   }
 }

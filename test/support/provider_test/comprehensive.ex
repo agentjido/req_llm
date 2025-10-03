@@ -60,10 +60,18 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
               IO.puts("\n[Comprehensive] model_spec=#{@model_spec}, test=basic_generate")
             end
 
+            opts =
+              reasoning_overlay(
+                @model_spec,
+                @provider,
+                param_bundles(@provider).deterministic,
+                200
+              )
+
             ReqLLM.generate_text(
               @model_spec,
               "Hello world!",
-              fixture_opts(@provider, "basic", param_bundles(@provider).deterministic)
+              fixture_opts(@provider, "basic", opts)
             )
             |> assert_basic_response()
           end
@@ -82,15 +90,14 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 user("Say hello in one short, imaginative sentence.")
               ])
 
+            opts =
+              reasoning_overlay(@model_spec, @provider, param_bundles(@provider).creative, 200)
+
             {:ok, stream_response} =
               ReqLLM.stream_text(
                 @model_spec,
                 context,
-                fixture_opts(
-                  @provider,
-                  "streaming",
-                  param_bundles(@provider).creative
-                )
+                fixture_opts(@provider, "streaming", opts)
               )
 
             assert %ReqLLM.StreamResponse{} = stream_response
@@ -115,14 +122,15 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
 
           @tag category: :core
           test "token limit constraints" do
+            opts =
+              param_bundles(@provider).minimal
+              |> Keyword.put(:max_tokens, 100)
+              |> then(&reasoning_overlay(@model_spec, @provider, &1, nil))
+
             ReqLLM.generate_text(
               @model_spec,
               "Write a very long story about dragons and adventures",
-              fixture_opts(
-                @provider,
-                "token_limit",
-                Keyword.put(param_bundles(@provider).minimal, :max_tokens, 100)
-              )
+              fixture_opts(@provider, "token_limit", opts)
             )
             |> assert_basic_response()
             |> assert_text_length(150)
@@ -216,6 +224,14 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             base_opts =
               param_bundles(@provider).deterministic
               |> Keyword.put(:max_tokens, param_bundles(@provider).tool_test_tokens)
+              |> then(
+                &reasoning_overlay(
+                  @model_spec,
+                  @provider,
+                  &1,
+                  param_bundles(@provider).tool_test_tokens * 2
+                )
+              )
 
             result =
               ReqLLM.generate_text(
@@ -250,6 +266,14 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             base_opts =
               param_bundles(@provider).deterministic
               |> Keyword.put(:max_tokens, param_bundles(@provider).tool_test_tokens)
+              |> then(
+                &reasoning_overlay(
+                  @model_spec,
+                  @provider,
+                  &1,
+                  param_bundles(@provider).tool_test_tokens * 2
+                )
+              )
 
             ReqLLM.generate_text(
               @model_spec,
@@ -268,16 +292,17 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 occupation: [type: :string, doc: "Person's job or profession"]
               ]
 
+              opts =
+                param_bundles(@provider).deterministic
+                |> Keyword.put(:max_tokens, 200)
+                |> then(&reasoning_overlay(@model_spec, @provider, &1, 200))
+
               {:ok, response} =
                 ReqLLM.stream_object(
                   @model_spec,
                   "Generate a software engineer profile",
                   schema,
-                  fixture_opts(
-                    @provider,
-                    "object_streaming",
-                    Keyword.put(param_bundles(@provider).deterministic, :max_tokens, 200)
-                  )
+                  fixture_opts(@provider, "object_streaming", opts)
                 )
 
               response =

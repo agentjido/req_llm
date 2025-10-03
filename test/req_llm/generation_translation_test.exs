@@ -33,8 +33,9 @@ defmodule ReqLLM.Generation.TranslationTest do
       assert translated[:max_completion_tokens] == 1000
       refute Keyword.has_key?(translated, :max_tokens)
       refute Keyword.has_key?(translated, :temperature)
-      assert length(warnings) == 1
-      assert List.first(warnings) =~ "OpenAI o1 models do not support :temperature"
+      assert length(warnings) == 2
+      assert Enum.any?(warnings, &(&1 =~ ":temperature"))
+      assert Enum.any?(warnings, &(&1 =~ "max_tokens"))
     end
   end
 

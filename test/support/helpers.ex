@@ -469,4 +469,55 @@ defmodule ReqLLM.Test.Helpers do
 
     response
   end
+
+  @doc """
+  Merge extra options into the :provider_options key.
+
+  Ensures :provider_options is a keyword list and merges extra options into it.
+  """
+  def merge_provider_options(opts, extra) do
+    Keyword.update(opts, :provider_options, List.wrap(extra), fn existing ->
+      Keyword.merge(List.wrap(existing), List.wrap(extra))
+    end)
+  end
+
+  @doc """
+  Apply reasoning model overlay to test options.
+
+  For models with :reasoning capability, this helper:
+  - Adds reasoning_effort to :provider_options
+  - Ensures sufficient max_tokens for reasoning models
+
+  ## Parameters
+
+  - `model_spec` - Model specification string (e.g., "openai:gpt-5")
+  - `provider` - Provider atom (e.g., :openai)
+  - `base_opts` - Base options keyword list
+  - `min_tokens` - Optional minimum token count for reasoning models
+
+  ## Examples
+
+      iex> reasoning_overlay("openai:gpt-5", :openai, [temperature: 0.0], 200)
+      [temperature: 0.0, max_tokens: 200, provider_options: [reasoning_effort: "low"]]
+  """
+  def reasoning_overlay(model_spec, provider, base_opts, min_tokens \\ nil) do
+    case ReqLLM.Model.from(model_spec) do
+      {:ok, %{capabilities: %{reasoning: true}}} ->
+        cfg = param_bundles(provider)
+        reasoning_effort = cfg[:reasoning_effort] || :medium
+
+        opts =
+          base_opts
+          |> merge_provider_options(reasoning_effort: reasoning_effort)
+
+        if is_integer(min_tokens) and (opts[:max_tokens] || 0) < min_tokens do
+          Keyword.put(opts, :max_tokens, min_tokens)
+        else
+          opts
+        end
+
+      _ ->
+        base_opts
+    end
+  end
 end

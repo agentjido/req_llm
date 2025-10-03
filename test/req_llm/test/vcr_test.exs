@@ -6,7 +6,7 @@ defmodule ReqLLM.Test.VCRTest do
   @fixture_dir "tmp/vcr_test"
 
   setup do
-    File.rm_rf!(@fixture_dir)
+    File.rm_rf(@fixture_dir)
     File.mkdir_p!(@fixture_dir)
     :ok
   end

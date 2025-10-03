@@ -1,0 +1,65 @@
+{
+  "captured_at": "2025-10-03T21:02:44.873872Z",
+  "chunks": [
+    {
+      "b64": "ZGF0YTogeyJjYW5kaWRhdGVzIjogW3siY29udGVudCI6IHsicGFydHMiOiBbeyJ0ZXh0IjogIkdyZWV0aW5ncyJ9XSwicm9sZSI6ICJtb2RlbCJ9LCJpbmRleCI6IDB9XSwidXNhZ2VNZXRhZGF0YSI6IHsicHJvbXB0VG9rZW5Db3VudCI6IDE4LCJjYW5kaWRhdGVzVG9rZW5Db3VudCI6IDEsInRvdGFsVG9rZW5Db3VudCI6IDE5LCJwcm9tcHRUb2tlbnNEZXRhaWxzIjogW3sibW9kYWxpdHkiOiAiVEVYVCIsInRva2VuQ291bnQiOiAxOH1dfSwibW9kZWxWZXJzaW9uIjogImdlbWluaS0yLjUtZmxhc2gtbGl0ZS1wcmV2aWV3LTA5LTIwMjUiLCJyZXNwb25zZUlkIjogIjlEbmdhTV9NTDVTSHV3ZVE2SnBoIn0NCg0K",
+      "decoded": "data: {\"candidates\": [{\"content\": {\"parts\": [{\"text\": \"Greetings\"}],\"role\": \"model\"},\"index\": 0}],\"usageMetadata\": {\"promptTokenCount\": 18,\"candidatesTokenCount\": 1,\"totalTokenCount\": 19,\"promptTokensDetails\": [{\"modality\": \"TEXT\",\"tokenCount\": 18}]},\"modelVersion\": \"gemini-2.5-flash-lite-preview-09-2025\",\"responseId\": \"9DngaM_ML5SHuweQ6Jph\"}\r\n\r\n"
+    },
+    {
+      "b64": "ZGF0YTogeyJjYW5kaWRhdGVzIjogW3siY29udGVudCI6IHsicGFydHMiOiBbeyJ0ZXh0IjogIiwgZmVsbG93IHNwYXJrIGluIHRoZSBjb3NtaWMgZHVzdCEifV0sInJvbGUiOiAibW9kZWwifSwiZmluaXNoUmVhc29uIjogIlNUT1AiLCJpbmRleCI6IDB9XSwidXNhZ2VNZXRhZGF0YSI6IHsicHJvbXB0VG9rZW5Db3VudCI6IDE4LCJjYW5kaWRhdGVzVG9rZW5Db3VudCI6IDksInRvdGFsVG9rZW5Db3VudCI6IDI3LCJwcm9tcHRUb2tlbnNEZXRhaWxzIjogW3sibW9kYWxpdHkiOiAiVEVYVCIsInRva2VuQ291bnQiOiAxOH1dfSwibW9kZWxWZXJzaW9uIjogImdlbWluaS0yLjUtZmxhc2gtbGl0ZS1wcmV2aWV3LTA5LTIwMjUiLCJyZXNwb25zZUlkIjogIjlEbmdhTV9NTDVTSHV3ZVE2SnBoIn0NCg0K",
+      "decoded": "data: {\"candidates\": [{\"content\": {\"parts\": [{\"text\": \", fellow spark in the cosmic dust!\"}],\"role\": \"model\"},\"finishReason\": \"STOP\",\"index\": 0}],\"usageMetadata\": {\"promptTokenCount\": 18,\"candidatesTokenCount\": 9,\"totalTokenCount\": 27,\"promptTokensDetails\": [{\"modality\": \"TEXT\",\"tokenCount\": 18}]},\"modelVersion\": \"gemini-2.5-flash-lite-preview-09-2025\",\"responseId\": \"9DngaM_ML5SHuweQ6Jph\"}\r\n\r\n"
+    }
+  ],
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJTYXkgaGVsbG8gaW4gb25lIHNob3J0LCBpbWFnaW5hdGl2ZSBzZW50ZW5jZS4ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjEwMCwidGVtcGVyYXR1cmUiOjAuOSwidG9wUCI6MC44fSwic3lzdGVtSW5zdHJ1Y3Rpb24iOnsicGFydHMiOlt7InRleHQiOiJZb3UgYXJlIGEgaGVscGZ1bCwgY3JlYXRpdmUgYXNzaXN0YW50LiJ9XX19"
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Say hello in one short, imaginative sentence."
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 100,
+        "temperature": 0.9,
+        "topP": 0.8
+      },
+      "systemInstruction": {
+        "parts": [
+          {
+            "text": "You are a helpful, creative assistant."
+          }
+        ]
+      }
+    },
+    "headers": {
+      "accept": "text/event-stream",
+      "content-type": "application/json"
+    },
+    "method": "POST",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite-preview-09-2025:streamGenerateContent"
+  },
+  "response": {
+    "body": null,
+    "headers": {
+      "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+      "content-disposition": "attachment",
+      "content-type": "text/event-stream",
+      "date": "Fri, 03 Oct 2025 21:02:44 GMT",
+      "server": "scaffolding on HTTPServer2",
+      "server-timing": "gfet4t7; dur=184",
+      "vary": "Referer",
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "SAMEORIGIN",
+      "x-xss-protection": "0"
+    },
+    "status": 200
+  }
+}

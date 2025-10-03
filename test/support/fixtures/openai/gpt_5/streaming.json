@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiWW91IGFyZSBhIGhlbHBmdWwsIGNyZWF0aXZlIGFzc2lzdGFudC4iLCJyb2xlIjoic3lzdGVtIn0seyJjb250ZW50IjoiU2F5IGhlbGxvIGluIG9uZSBzaG9ydCwgaW1hZ2luYXRpdmUgc2VudGVuY2UuIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3B0LTUiLCJzdHJlYW0iOnRydWUsInN0cmVhbV9vcHRpb25zIjp7ImluY2x1ZGVfdXNhZ2UiOnRydWV9LCJ0ZW1wZXJhdHVyZSI6MC45LCJ0b3BfcCI6MC44fQ=="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJZb3UgYXJlIGEgaGVscGZ1bCwgY3JlYXRpdmUgYXNzaXN0YW50LiIsInJvbGUiOiJzeXN0ZW0ifSx7ImNvbnRlbnQiOiJTYXkgaGVsbG8gaW4gb25lIHNob3J0LCBpbWFnaW5hdGl2ZSBzZW50ZW5jZS4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncHQtNSIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzdHJlYW0iOmZhbHNlfQ=="
     },
     "canonical_json": {
-      "max_tokens": 100,
+      "max_completion_tokens": 200,
       "messages": [
         {
           "content": "You are a helpful, creative assistant.",
@@ -16,12 +16,8 @@
         }
       ],
       "model": "gpt-5",
-      "stream": true,
-      "stream_options": {
-        "include_usage": true
-      },
-      "temperature": 0.9,
-      "top_p": 0.8
+      "reasoning_effort": "low",
+      "stream": false
     },
     "headers": {
       "accept": "text/event-stream",
@@ -33,30 +29,57 @@
   },
   "response": {
     "body": {
-      "error": {
-        "code": "unsupported_parameter",
-        "message": "Unsupported parameter: 'max_tokens' is not supported with this model. Use 'max_completion_tokens' instead.",
-        "param": "max_tokens",
-        "type": "invalid_request_error"
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "annotations": [],
+            "content": "Hello from the pocket between seconds, where ideas first learn to fly.",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759526292,
+      "id": "chatcmpl-CMhSGDyvawlMpirsDTzZRyQxS290R",
+      "model": "gpt-5-2025-08-07",
+      "object": "chat.completion",
+      "service_tier": "default",
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 151,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 128,
+          "rejected_prediction_tokens": 0
+        },
+        "prompt_tokens": 27,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "total_tokens": 178
       }
     },
     "headers": {
       "access-control-expose-headers": "X-Request-ID",
       "alt-svc": "h3=\":443\"; ma=86400",
       "cf-cache-status": "DYNAMIC",
-      "cf-ray": "988bb77fbaf4e826-ORD",
-      "content-length": "245",
+      "cf-ray": "988f787eea38c365-ORD",
+      "content-length": "840",
       "content-type": "application/json",
-      "date": "Fri, 03 Oct 2025 10:22:09 GMT",
+      "date": "Fri, 03 Oct 2025 21:18:14 GMT",
       "openai-organization": "epic-creative-sogybe",
-      "openai-processing-ms": "24",
+      "openai-processing-ms": "2444",
       "openai-project": "proj_j5AhgU4eLMRmsoO9FDg7BRD3",
       "openai-version": "2020-10-01",
       "server": "cloudflare",
-      "set-cookie": "_cfuvid=_ypHNrD3IJKNYo2XDaK7hz76ipLqGuzO7NLJ1JeuKCk-1759486929965-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+      "set-cookie": "_cfuvid=CJuoYEfMk7noHO0alR6CYM0q6q9jO8ttkEEIvxXu3DA-1759526294822-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
       "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
       "x-content-type-options": "nosniff",
-      "x-envoy-upstream-service-time": "45",
+      "x-envoy-upstream-service-time": "2461",
       "x-openai-proxy-wasm": "v0.1",
       "x-ratelimit-limit-requests": "5000",
       "x-ratelimit-limit-tokens": "2000000",
@@ -64,8 +87,8 @@
       "x-ratelimit-remaining-tokens": "1999976",
       "x-ratelimit-reset-requests": "12ms",
       "x-ratelimit-reset-tokens": "0s",
-      "x-request-id": "req_8d873bd6aa4d44f6b6aa1532e0f0f9b2"
+      "x-request-id": "req_28ad59117c7a496a9969ee948c80557e"
     },
-    "status": 400
+    "status": 200
   }
 }

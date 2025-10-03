@@ -584,8 +584,9 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert translated_opts[:top_p] == 0.9
       refute Keyword.has_key?(translated_opts, :max_tokens)
       refute Keyword.has_key?(translated_opts, :temperature)
-      assert length(warnings) == 1
-      assert List.first(warnings) =~ "OpenAI o1 models do not support :temperature"
+      assert length(warnings) == 2
+      assert Enum.any?(warnings, &(&1 =~ "max_tokens"))
+      assert Enum.any?(warnings, &(&1 =~ ":temperature"))
     end
 
     test "translate_options for o3 models renames max_tokens and drops temperature" do
@@ -598,8 +599,9 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert translated_opts[:frequency_penalty] == 0.1
       refute Keyword.has_key?(translated_opts, :max_tokens)
       refute Keyword.has_key?(translated_opts, :temperature)
-      assert length(warnings) == 1
-      assert List.first(warnings) =~ "OpenAI o3 models do not support :temperature"
+      assert length(warnings) == 2
+      assert Enum.any?(warnings, &(&1 =~ "max_tokens"))
+      assert Enum.any?(warnings, &(&1 =~ ":temperature"))
     end
 
     test "translate_options for regular models passes through unchanged" do
@@ -612,27 +614,31 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert warnings == []
     end
 
-    test "translate_options for gpt-5 models renames max_tokens but keeps temperature" do
+    test "translate_options for gpt-5 models renames max_tokens and drops sampling params" do
       model = ReqLLM.Model.from!("openai:gpt-5")
       opts = [max_tokens: 1500, temperature: 0.7, top_p: 0.9]
       {translated_opts, warnings} = OpenAI.translate_options(:chat, model, opts)
 
       assert translated_opts[:max_completion_tokens] == 1500
-      assert translated_opts[:temperature] == 0.7
-      assert translated_opts[:top_p] == 0.9
+      refute Keyword.has_key?(translated_opts, :temperature)
+      refute Keyword.has_key?(translated_opts, :top_p)
       refute Keyword.has_key?(translated_opts, :max_tokens)
-      assert warnings == []
+      assert length(warnings) == 3
+      assert Enum.any?(warnings, &(&1 =~ "max_tokens"))
+      assert Enum.any?(warnings, &(&1 =~ "sampling parameters"))
     end
 
-    test "translate_options for gpt-5-mini models renames max_tokens" do
+    test "translate_options for gpt-5-mini models renames max_tokens and drops sampling params" do
       model = ReqLLM.Model.from!("openai:gpt-5-mini")
       opts = [max_tokens: 2500, temperature: 0.5]
       {translated_opts, warnings} = OpenAI.translate_options(:chat, model, opts)
 
       assert translated_opts[:max_completion_tokens] == 2500
-      assert translated_opts[:temperature] == 0.5
+      refute Keyword.has_key?(translated_opts, :temperature)
       refute Keyword.has_key?(translated_opts, :max_tokens)
-      assert warnings == []
+      assert length(warnings) == 2
+      assert Enum.any?(warnings, &(&1 =~ "max_tokens"))
+      assert Enum.any?(warnings, &(&1 =~ "sampling parameters"))
     end
 
     test "translate_options for o4 models renames max_tokens and drops temperature" do
@@ -643,8 +649,9 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert translated_opts[:max_completion_tokens] == 3000
       refute Keyword.has_key?(translated_opts, :max_tokens)
       refute Keyword.has_key?(translated_opts, :temperature)
-      assert length(warnings) == 1
-      assert List.first(warnings) =~ "OpenAI o4 models do not support :temperature"
+      assert length(warnings) == 2
+      assert Enum.any?(warnings, &(&1 =~ "max_tokens"))
+      assert Enum.any?(warnings, &(&1 =~ ":temperature"))
     end
 
     test "translate_options for non-chat operations passes through unchanged" do

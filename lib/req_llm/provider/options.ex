@@ -220,6 +220,9 @@ defmodule ReqLLM.Provider.Options do
     # Check for key collisions before schema validation
     check_provider_key_collisions!(provider_mod, user_opts)
 
+    # Auto-hoist provider-specific top-level options into :provider_options
+    user_opts = auto_hoist_provider_options(provider_mod, user_opts)
+
     schema = compose_schema_internal(@generation_options_schema, provider_mod)
     validated_opts = NimbleOptions.validate!(user_opts, schema)
 
@@ -379,6 +382,25 @@ defmodule ReqLLM.Provider.Options do
     case Keyword.pop(opts, :stream?) do
       {nil, rest} -> rest
       {value, rest} -> Keyword.put(rest, :stream, value)
+    end
+  end
+
+  defp auto_hoist_provider_options(provider_mod, opts) do
+    if function_exported?(provider_mod, :provider_schema, 0) do
+      provider_schema = provider_mod.provider_schema()
+      provider_keys = Keyword.keys(provider_schema.schema)
+
+      {provider_specific, rest} = Keyword.split(opts, provider_keys)
+
+      if provider_specific == [] do
+        opts
+      else
+        existing_provider_opts = Keyword.get(rest, :provider_options, [])
+        merged_provider_opts = Keyword.merge(provider_specific, existing_provider_opts)
+        Keyword.put(rest, :provider_options, merged_provider_opts)
+      end
+    else
+      opts
     end
   end
 
