@@ -199,6 +199,46 @@ defmodule ReqLLM.Test.TranscriptTest do
       assert canonical["api_key"] =~ "REDACTED"
       assert canonical["model"] == "claude-3-haiku-20240307"
     end
+
+    test "sanitizes sensitive URL query parameters" do
+      transcript = %{
+        valid_transcript()
+        | request: %{
+            method: "POST",
+            url: "https://generativelanguage.googleapis.com/v1beta/models/gemini:generateContent?key=AIzaSyA8A-ZQ8x7fImehoOYbWtuHelAYzGjH-bw",
+            headers: [],
+            canonical_json: %{}
+          }
+      }
+
+      json_map = Transcript.to_map(transcript)
+      url = json_map["request"]["url"]
+
+      assert url =~ "key=%5BREDACTED%3Akey%5D"
+      refute url =~ "AIzaSyA8A-ZQ8x7fImehoOYbWtuHelAYzGjH-bw"
+    end
+
+    test "sanitizes multiple URL query parameters" do
+      transcript = %{
+        valid_transcript()
+        | request: %{
+            method: "POST",
+            url: "https://api.example.com/endpoint?api_key=secret123&model=gpt-4&token=abc&other=value",
+            headers: [],
+            canonical_json: %{}
+          }
+      }
+
+      json_map = Transcript.to_map(transcript)
+      url = json_map["request"]["url"]
+
+      assert url =~ "api_key=%5BREDACTED%3Aapi_key%5D"
+      assert url =~ "token=%5BREDACTED%3Atoken%5D"
+      assert url =~ "model=gpt-4"
+      assert url =~ "other=value"
+      refute url =~ "secret123"
+      refute url =~ "abc"
+    end
   end
 
   defp valid_transcript do
