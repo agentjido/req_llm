@@ -38,13 +38,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "The wind whipped Anya's braid against her cheek, tasting of salt and the promise of rain. Her eyes, the color of storm clouds, scanned the horizon, searching for the familiar silhouette of the Skyfire Mountains. For years, Anya had dreamt of reaching their peak, where legend whispered the last true dragon slumbered.\n\nAnya wasn't a knight, nor a mage, nor any of the heroes the bards sang about. She was a cartographer, a chronicler of the",
+            "content": "The wind whipped Elara's crimson hair around her face as she clung to the craggy cliff face, the scent of salt and brine heavy in the air. Below, the turbulent ocean roared, threatening to swallow the small fishing village of Atheria whole. But Elara wasn't afraid of the storm, not anymore. She was afraid of what lay within it.\n\nElara was a Dragonrider, a rare breed chosen by the ancient dragons to become their partners in a symbiotic bond.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759454616,
-      "id": "chatcmpl-bc563656-f0f8-4f50-90fb-28cfe3223d2f",
+      "created": 1759490474,
+      "id": "chatcmpl-afbc59a9-8d5d-4198-90ad-d7567de4905e",
       "model": "gemma2-9b-it",
       "object": "chat.completion",
       "service_tier": "on_demand",
@@ -52,15 +52,15 @@
       "usage": {
         "completion_time": 0.181818182,
         "completion_tokens": 100,
-        "prompt_time": 0.00125698,
+        "prompt_time": 0.001251959,
         "prompt_tokens": 18,
-        "queue_time": 0.110362612,
-        "total_time": 0.183075162,
+        "queue_time": 0.087737061,
+        "total_time": 0.183070141,
         "total_tokens": 118
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6ktnq2qe8nr7cpwhw7dn5aq"
+        "id": "req_01k6mww0ngexvb6wkyp9v05gv7"
       }
     },
     "headers": {
@@ -74,7 +74,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9888a299ea5d61bb-ORD"
+        "988c0e0a882d7fb0-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -83,13 +83,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 01:23:36 GMT"
+        "Fri, 03 Oct 2025 11:21:14 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=MmPp_v5n85ZnLHk65shXszxxAh_2LEA0.8AsPEdmDyU-1759454616-1.0.1.1-nmbDPxyx07swYNld1dXW52BnvixyFQIj2Aj9mOFa1I1BmynK4vc2BEZtxpN.9lgXEDtDGBUlff1Ff2WCw7LG06nwdxT5P3oxwvg9Yirdmt4; path=/; expires=Fri, 03-Oct-25 01:53:36 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=e9nOepSNBWb5oVWkwlKyPN94DNpojqoKmpMrSu0nLrw-1759490474-1.0.1.1-b4hT.LSqvPlGMr9UOq7r21vSzAPQampHa1_fK9.KXyJFxi9FmVbAECfjpoEzVnoKph4BShEBvZzJKC19sr8XZYZWhvCR88fFy2FSZVKby9g; path=/; expires=Fri, 03-Oct-25 11:51:14 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -113,16 +113,16 @@
         "14397"
       ],
       "x-ratelimit-remaining-tokens": [
-        "12839"
+        "14020"
       ],
       "x-ratelimit-reset-requests": [
-        "17.631s"
+        "17.653999999s"
       ],
       "x-ratelimit-reset-tokens": [
-        "8.643s"
+        "3.92s"
       ],
       "x-request-id": [
-        "req_01k6ktnq2qe8nr7cpwhw7dn5aq"
+        "req_01k6mww0ngexvb6wkyp9v05gv7"
       ]
     },
     "status": 200

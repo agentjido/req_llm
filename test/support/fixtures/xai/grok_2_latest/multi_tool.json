@@ -101,15 +101,15 @@
                   "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "call_31792825",
+                "id": "call_80231893",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1759454615,
-      "id": "19b05a8c-0636-ca87-6f5d-71102fd8a4ca_us-east-1",
+      "created": 1759490473,
+      "id": "2f8f347d-09d0-7b88-b329-f13805e6fdd7_us-east-1",
       "model": "grok-2-1212",
       "object": "chat.completion",
       "system_fingerprint": "fp_fced99f24f",
@@ -143,28 +143,22 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9888a2945e501910-ORD"
+        "988c0e03185a803a-ORD"
       ],
       "connection": [
         "keep-alive"
-      ],
-      "content-security-policy-report-only": [
-        "script-src 'none'; connect-src 'none'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=B5Fo8IpJEomLny.54DIdronsmvU0PReLkGJZ3k3mf8Q-1759454616-1.0.1.1-k0eO9An_9oLgBM6p4D7rydGytzToFOT8XczoxpTXK6b8Z1UbhRAJPGVJseEBBNXznhNfpXcefzNl4wa8Z_jan9mX_7vbldG9qu5Rar7pOVUhp2OlqLes17.nMGTOMIm.SWCC26U1JoQzCKqGq3_lOZeq6fK_25QuIAw_6.do.KE; report-to cf-csp-endpoint"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 01:23:36 GMT"
-      ],
-      "report-to": [
-        "{\"endpoints\":[{\"url\":\"https:\\/\\/csp-reporting.cloudflare.com\\/cdn-cgi\\/script_monitor\\/report?m=B5Fo8IpJEomLny.54DIdronsmvU0PReLkGJZ3k3mf8Q-1759454616-1.0.1.1-k0eO9An_9oLgBM6p4D7rydGytzToFOT8XczoxpTXK6b8Z1UbhRAJPGVJseEBBNXznhNfpXcefzNl4wa8Z_jan9mX_7vbldG9qu5Rar7pOVUhp2OlqLes17.nMGTOMIm.SWCC26U1JoQzCKqGq3_lOZeq6fK_25QuIAw_6.do.KE\"}],\"group\":\"cf-csp-endpoint\",\"max_age\":86400}"
+        "Fri, 03 Oct 2025 11:21:14 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=XEGTMV94dNlNF6bvi0m4QIK.ukOyjnihDHVz.nCfBEc-1759454616-1.0.1.1-s5axojE5atnI14XTFwDSSQwkgtOsD3X3tvwtqYS8A1PUueJkEGELYdOOHEXCjE4FtXO8AtubISzlTq2.Is4q9Mu18IREarXXkp9Drnf.KKw; path=/; expires=Fri, 03-Oct-25 01:53:36 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=ICSzfpqG6hc.xN9Avly0z2smV8fKpJ7m1jPlxRJWPR0-1759490474-1.0.1.1-3fWHJxxLSLDCmLBzlzLeS8xyC5HHxzhG_WoWXTlb9YdvpOPDVpD67YCBVjXJRMQbzshzNGLtm7HpHSuSbXQ4QgTey89cqqunpsDAEzusvc4; path=/; expires=Fri, 03-Oct-25 11:51:14 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -176,7 +170,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-18708e869f9fe5b2958d56491ba1434a-0d7a27660001c22d-01"
+        "00-59b48e269004470fc85ce8b419f4edf3-6146dcc70015e273-01"
       ],
       "x-zero-data-retention": [
         "false"

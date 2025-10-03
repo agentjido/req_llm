@@ -17,13 +17,13 @@ ReqLLM is a composable Elixir library for AI interactions built on Req, providin
 - `mix quality` or `mix q` - Run quality checks (format, compile --warnings-as-errors, dialyzer, credo)
 
 ### Coverage Validation
-- `mix req_llm.cover` - Show models with passing fixtures
-- `mix req_llm.cover "*:*"` - Validate all models (parallel, fixture-based)
-- `mix req_llm.cover --quick` - Validate quick test subset (config/config.exs)
-- `mix req_llm.cover anthropic` - Validate all Anthropic models
-- `mix req_llm.cover "openai:gpt-4o"` - Validate specific model
-- `mix req_llm.cover "xai:*" --record` - Re-record fixtures for xAI models
-- `mix req_llm.cover --list` - List all models from registry (priv/models_dev/)
+- `mix mc` or `mix req_llm.model_compat` - Show models with passing fixtures
+- `mix mc "*:*"` - Validate all models (parallel, fixture-based)
+- `mix mc --sample` - Validate sample model subset (config/config.exs)
+- `mix mc anthropic` - Validate all Anthropic models
+- `mix mc "openai:gpt-4o"` - Validate specific model
+- `mix mc "xai:*" --record` - Re-record fixtures for xAI models
+- `mix mc --available` - List all models from registry (priv/models_dev/)
 
 **Coverage System Architecture:**
 - **Model Registry**: `priv/models_dev/*.json` (synced via `mix req_llm.model_sync`)

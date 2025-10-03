@@ -107,7 +107,8 @@ defmodule ReqLLM.MixProject do
         "dialyzer",
         "credo --strict"
       ],
-      q: ["quality"]
+      q: ["quality"],
+      mc: ["req_llm.model_compat"]
     ]
   end
 end
