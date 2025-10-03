@@ -1,0 +1,131 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtb3NzLTEyMGIiLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC41fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 100,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-oss-120b",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.groq.com/openai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "",
+            "reasoning": "The user wants a very long story about dragons and adventures. We need to produce a lengthy story. There's no disallowed content. It's fine. Should be creative, maybe several chapters. Ensure it's long. Provide engaging narrative. Let's produce a multi-part story with characters, world-building, quests, dragons, etc. Make it \"very long\" but within reasonable limits for this response. Perhaps a few thousand words? We can produce a long story, maybe 1500-2000",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759435647,
+      "id": "chatcmpl-be6b49db-1dd1-45c0-8dae-0c9219d6b2a8",
+      "model": "openai/gpt-oss-120b",
+      "object": "chat.completion",
+      "service_tier": "on_demand",
+      "system_fingerprint": "fp_ed9190d8b7",
+      "usage": {
+        "completion_time": 0.198627428,
+        "completion_tokens": 100,
+        "prompt_time": 0.003196231,
+        "prompt_tokens": 80,
+        "queue_time": 0.208069976,
+        "total_time": 0.201823659,
+        "total_tokens": 180
+      },
+      "usage_breakdown": null,
+      "x_groq": {
+        "id": "req_01k6k8jsw2ea8va1f1tdmtqjjd"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cache-control": [
+        "private, max-age=0, no-store, no-cache, must-revalidate"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9886d378afe961c7-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Thu, 02 Oct 2025 20:07:27 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=yImTMRqFWDho1Uvp0DmXkvPHD6wbriQsCR053.3Tugc-1759435647-1.0.1.1-w7V38SmsWBOE2mhOmnt90wXJQGks6wqiiE_HlzcvvDcA8Wfj3jRgrXmKWXZckKrF69aMImBVhlTYTdEVHZBWOeE7RCIG8CtyhKhvjEuXUWY; path=/; expires=Thu, 02-Oct-25 20:37:27 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-groq-region": [
+        "yul"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "8000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "998"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "7919"
+      ],
+      "x-ratelimit-reset-requests": [
+        "2m43.634999999s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "607.499999ms"
+      ],
+      "x-request-id": [
+        "req_01k6k8jsw2ea8va1f1tdmtqjjd"
+      ]
+    },
+    "status": 200
+  }
+}

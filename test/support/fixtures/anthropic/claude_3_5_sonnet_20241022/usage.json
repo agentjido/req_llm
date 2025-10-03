@@ -35,107 +35,40 @@
   },
   "response": {
     "body": {
-      "content": [
-        {
-          "text": "Hello! How can I help you today?",
-          "type": "text"
-        }
-      ],
-      "id": "msg_018r5jLeTk6REVzf2VpWybnx",
-      "model": "claude-3-5-sonnet-20241022",
-      "role": "assistant",
-      "stop_reason": "end_turn",
-      "stop_sequence": null,
-      "type": "message",
-      "usage": {
-        "cache_creation": {
-          "ephemeral_1h_input_tokens": 0,
-          "ephemeral_5m_input_tokens": 0
-        },
-        "cache_creation_input_tokens": 0,
-        "cache_read_input_tokens": 0,
-        "input_tokens": 10,
-        "output_tokens": 12,
-        "service_tier": "standard"
-      }
+      "b64": "ZXJyb3IgY29kZTogNTI1"
     },
     "headers": {
-      "anthropic-organization-id": [
-        "a71659e7-a922-4ff7-99de-f3ba615face1"
-      ],
-      "anthropic-ratelimit-input-tokens-limit": [
-        "80000"
-      ],
-      "anthropic-ratelimit-input-tokens-remaining": [
-        "80000"
-      ],
-      "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-02T16:34:36Z"
-      ],
-      "anthropic-ratelimit-output-tokens-limit": [
-        "16000"
-      ],
-      "anthropic-ratelimit-output-tokens-remaining": [
-        "16000"
-      ],
-      "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-02T16:34:36Z"
-      ],
-      "anthropic-ratelimit-requests-limit": [
-        "1000"
-      ],
-      "anthropic-ratelimit-requests-remaining": [
-        "999"
-      ],
-      "anthropic-ratelimit-requests-reset": [
-        "2025-10-02T16:34:35Z"
-      ],
-      "anthropic-ratelimit-tokens-limit": [
-        "96000"
-      ],
-      "anthropic-ratelimit-tokens-remaining": [
-        "96000"
-      ],
-      "anthropic-ratelimit-tokens-reset": [
-        "2025-10-02T16:34:36Z"
-      ],
-      "cf-cache-status": [
-        "DYNAMIC"
+      "cache-control": [
+        "private, max-age=0, no-store, no-cache, must-revalidate, post-check=0, pre-check=0"
       ],
       "cf-ray": [
-        "98859bad4dc9d95e-ORD"
+        "9888a39c0dd6dc06-ORD"
       ],
       "connection": [
         "keep-alive"
       ],
       "content-type": [
-        "application/json"
+        "text/plain; charset=UTF-8"
       ],
       "date": [
-        "Thu, 02 Oct 2025 16:34:37 GMT"
+        "Fri, 03 Oct 2025 01:24:44 GMT"
       ],
-      "request-id": [
-        "req_011CTihHn6sv8va89WeGrgdt"
+      "expires": [
+        "Thu, 01 Jan 1970 00:00:01 GMT"
+      ],
+      "referrer-policy": [
+        "same-origin"
       ],
       "server": [
         "cloudflare"
       ],
-      "strict-transport-security": [
-        "max-age=31536000; includeSubDomains; preload"
-      ],
-      "transfer-encoding": [
-        "chunked"
-      ],
-      "via": [
-        "1.1 google"
-      ],
-      "x-envoy-upstream-service-time": [
-        "1206"
+      "x-frame-options": [
+        "SAMEORIGIN"
       ],
       "x-robots-tag": [
         "none"
       ]
     },
-    "status": 200
+    "status": 525
   }
 }

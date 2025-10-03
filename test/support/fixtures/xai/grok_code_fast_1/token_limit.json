@@ -1,0 +1,116 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay1jb2RlLWZhc3QtMSIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjV9"
+    },
+    "canonical_json": {
+      "max_completion_tokens": 100,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "grok-code-fast-1",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.x.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "message": {
+            "content": "### The Dragon's Legacy\n\nIn the shadowed valleys of Eldoria, where ancient mountains pierced the sky like jagged teeth, legends whispered of dragons. These were not mere beasts of fire and scale, but guardians of forgotten realms, keepers of secrets that could shatter worlds or mend them. Our tale begins with Elara, a young scribe from the humble village of Thornewood, whose life was about to be rewritten by destiny.\n\n#### The Discovery\n\nElara had always been drawn to the old tales. At",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759449834,
+      "id": "f3f38c2d-ed5b-a40f-7e94-05f1247af4f3_us-east-1",
+      "model": "grok-code-fast-1",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_10f00c862d",
+      "usage": {
+        "completion_tokens": 100,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 229,
+          "rejected_prediction_tokens": 0
+        },
+        "num_sources_used": 0,
+        "prompt_tokens": 213,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 192,
+          "image_tokens": 0,
+          "text_tokens": 213
+        },
+        "total_tokens": 542
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "98882ddafff65f00-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 03 Oct 2025 00:03:57 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=SvnNoSqvGt9Ea_7JdUjN8TvQIUIOs3kd8vcbWCL9_zw-1759449837-1.0.1.1-qIavjgSm5GEOWg3lLnoR4NCGV83ogdZVxjZzRVWd5KTQyeqd9.QvERn092DP2KD1kbCCUwIr3cbKTsuNR6YaOGVfZKOd6rEoRtp0iGswb3A; path=/; expires=Fri, 03-Oct-25 00:33:57 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-request-id": [
+        "00-2bf07aa9e70b036e3ddf5eea21aea430-08a385e3003c7f66-01"
+      ],
+      "x-zero-data-retention": [
+        "false"
+      ]
+    },
+    "status": 200
+  }
+}

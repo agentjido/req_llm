@@ -1,0 +1,122 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay0zLWxhdGVzdCIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjV9"
+    },
+    "canonical_json": {
+      "max_completion_tokens": 100,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "grok-3-latest",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.x.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "message": {
+            "content": "**The Chronicles of Emberflame: A Dragon's Legacy**\n\nIn the ancient realm of Eldergleam, where jagged mountains pierced the heavens and vast forests whispered secrets of old, dragons were not mere myths but living legends. They were the guardians of the land, the keepers of balance, and the wielders of elemental fury. Among them, none were as revered—or as feared—as the Emberflame Clan, dragons of fire and molten wrath whose scales shimmered like the heart of a volcano",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759449537,
+      "id": "d4c5f742-3300-8cb5-3913-e77b2160c900_us-east-1",
+      "model": "grok-3",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_f02e6df795",
+      "usage": {
+        "completion_tokens": 100,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "num_sources_used": 0,
+        "prompt_tokens": 15,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 2,
+          "image_tokens": 0,
+          "text_tokens": 15
+        },
+        "total_tokens": 115
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "98882691191e10a1-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy-report-only": [
+        "script-src 'none'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=O7ZVbrhvigt3mpMRILRFtrFfJQgV.AoqxecZ1oe1nGw-1759449544-1.0.1.1-TP9X8l_._d28AGBFvyKS4kyO6sklz21Kcspm0Wl0UoqyXd6J0762SLbkGpKnEkc50gqDqoZmquWIXXILnzYOYS1_WHPARhkL_BFUkZx_2BJ7uGaIy36Rgv4Dn2Nz.nhUc28TXjO5Vkr3v79egijTtse5MKFppuLnmRhnp18lltA; report-to cf-csp-endpoint"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Thu, 02 Oct 2025 23:59:04 GMT"
+      ],
+      "report-to": [
+        "{\"endpoints\":[{\"url\":\"https:\\/\\/csp-reporting.cloudflare.com\\/cdn-cgi\\/script_monitor\\/report?m=O7ZVbrhvigt3mpMRILRFtrFfJQgV.AoqxecZ1oe1nGw-1759449544-1.0.1.1-TP9X8l_._d28AGBFvyKS4kyO6sklz21Kcspm0Wl0UoqyXd6J0762SLbkGpKnEkc50gqDqoZmquWIXXILnzYOYS1_WHPARhkL_BFUkZx_2BJ7uGaIy36Rgv4Dn2Nz.nhUc28TXjO5Vkr3v79egijTtse5MKFppuLnmRhnp18lltA\"}],\"group\":\"cf-csp-endpoint\",\"max_age\":86400}"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=i1vyPIvDIb7TlJrDE3otCmNKuOOSd2CX3Va43bEq9wM-1759449544-1.0.1.1-IY3GOTnKL8mBnW8sAso4axFOCgNMc3KFEcKk63YQ4YrzzBZo6VLrW.d8u3Yva77nHyDAMuunRCpjclqU5.w.iqt7mTjtvyr9ar8NiladNbo; path=/; expires=Fri, 03-Oct-25 00:29:04 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-request-id": [
+        "00-81a1f95b07e9cb5d7868e8e556a03ce7-b967b917003cd856-01"
+      ],
+      "x-zero-data-retention": [
+        "false"
+      ]
+    },
+    "status": 200
+  }
+}

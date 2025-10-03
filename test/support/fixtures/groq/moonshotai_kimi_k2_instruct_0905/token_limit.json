@@ -1,0 +1,130 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im1vb25zaG90YWkva2ltaS1rMi1pbnN0cnVjdC0wOTA1Iiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuNX0="
+    },
+    "canonical_json": {
+      "max_tokens": 100,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "moonshotai/kimi-k2-instruct-0905",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.groq.com/openai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Title: The Ember-Scale Chronicles  \nSubtitle: A Very Long Story About Dragons and Adventures  \n\n––––––––––––––––––––––––––––  \nPrologue – The World Beneath the Wing  \n––––––––––––––––––––––––––––  \n\nThere is a saying in the star-faring empire of Valdris: “Every map is a lie until a dragon has flown over it.”  \nThe empire’s cartographers print it in tiny letters along",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759435651,
+      "id": "chatcmpl-3ee1d8a0-795f-4108-825b-a6dc16e48d2c",
+      "model": "moonshotai/kimi-k2-instruct-0905",
+      "object": "chat.completion",
+      "service_tier": "on_demand",
+      "system_fingerprint": "fp_b8565bb333",
+      "usage": {
+        "completion_time": 0.416663148,
+        "completion_tokens": 100,
+        "prompt_time": 0.010246603,
+        "prompt_tokens": 34,
+        "queue_time": 0.073330414,
+        "total_time": 0.426909751,
+        "total_tokens": 134
+      },
+      "usage_breakdown": null,
+      "x_groq": {
+        "id": "req_01k6k8jxm6ekna67pzhmayh387"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cache-control": [
+        "private, max-age=0, no-store, no-cache, must-revalidate"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9886d390a8e261c7-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Thu, 02 Oct 2025 20:07:31 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=FjOoBMKoMIgVAWye19fxHr58shR7A3utJiaGTzyPOBA-1759435651-1.0.1.1-G4emmZIIWds2p0l4ufWueJJ4O9eLYUncd76RZPDDz7MGkxDHG80_yD5h38m3iOsu_qJ_P4elpdwA_QTnRXsHIYEuKpa87rvcoycihM_V7RE; path=/; expires=Thu, 02-Oct-25 20:37:31 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-groq-region": [
+        "yul"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "995"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "9965"
+      ],
+      "x-ratelimit-reset-requests": [
+        "7m3.806999999s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "210ms"
+      ],
+      "x-request-id": [
+        "req_01k6k8jxm6ekna67pzhmayh387"
+      ]
+    },
+    "status": 200
+  }
+}

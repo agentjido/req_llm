@@ -1,0 +1,130 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im1vb25zaG90YWkva2ltaS1rMi1pbnN0cnVjdCIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjV9"
+    },
+    "canonical_json": {
+      "max_tokens": 100,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "moonshotai/kimi-k2-instruct",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.groq.com/openai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Title: The Emberveil Codex  \nA Dragon-Adventure in Seven Reckonings  \n≈ 275 000 characters – one very long tale  \n\n––––––––––––––––––––  \nRECKONING I  \nTHE MAP THAT BLED  \n––––––––––––––––––––  \n\n1  \nThe parchment arrived on the first night of the Ember Moon, slipped under the gate of the monastery of St. Elowen like a guilty secret.  \n",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759435642,
+      "id": "chatcmpl-c2ff4620-3d00-44d3-b081-37a01e5167da",
+      "model": "moonshotai/kimi-k2-instruct",
+      "object": "chat.completion",
+      "service_tier": "on_demand",
+      "system_fingerprint": "fp_b8565bb333",
+      "usage": {
+        "completion_time": 0.461165415,
+        "completion_tokens": 100,
+        "prompt_time": 0.010043447,
+        "prompt_tokens": 34,
+        "queue_time": 0.074626648,
+        "total_time": 0.471208862,
+        "total_tokens": 134
+      },
+      "usage_breakdown": null,
+      "x_groq": {
+        "id": "req_01k6k8jmp8e9h84c5h9wyjatgk"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cache-control": [
+        "private, max-age=0, no-store, no-cache, must-revalidate"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9886d3577da261c7-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Thu, 02 Oct 2025 20:07:22 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=fTsybnA20tqUYQoEakSfvvYWIaSfcUQq81GdWXTOk50-1759435642-1.0.1.1-U6EK0oOuHv3hLV8NCNgoo8n9mHz1OacRhi3HozaYLoSGnquxou9bI6ai5i2eI4ggehxz9OCrwap0gdAWthobZ5kI51n0dUMQiGqHsvQ9kc0; path=/; expires=Thu, 02-Oct-25 20:37:22 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-groq-region": [
+        "yul"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "10000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "996"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "9965"
+      ],
+      "x-ratelimit-reset-requests": [
+        "5m36.612999999s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "210ms"
+      ],
+      "x-request-id": [
+        "req_01k6k8jmp8e9h84c5h9wyjatgk"
+      ]
+    },
+    "status": 200
+  }
+}

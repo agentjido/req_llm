@@ -38,29 +38,29 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "In the land of Eridoria, where the sun dipped into the horizon and painted the sky with hues of crimson and gold, the legend of the dragons lived on. For centuries, these majestic creatures had roamed the skies, their scales glinting like diamonds in the sunlight, their wings beating powerful and strong. They were the guardians of the land, the keepers of ancient secrets, and the bringers of wisdom.\n\nIn a small village nestled in the heart of the Whispering Woods,",
+            "content": "In the land of Eridoria, where the sun dipped into the horizon and painted the sky with hues of crimson and gold, dragons ruled the skies. These magnificent creatures had been a part of Eridoria's history for as long as anyone could remember. Their scales glistened like polished jewels, and their roar could be heard for miles. They were revered and feared in equal measure, for they were the guardians of the land and its secrets.\n\nIn a small village nestled in the heart of",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759424213,
-      "id": "chatcmpl-be21a954-cb5c-4ae4-ac30-91cc2e57ecc0",
+      "created": 1759454613,
+      "id": "chatcmpl-9d8876d9-c61b-429a-a890-ebdf0540c5b8",
       "model": "llama-3.1-8b-instant",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_33e8adf159",
+      "system_fingerprint": "fp_7b3cfae3af",
       "usage": {
-        "completion_time": 0.131128308,
+        "completion_time": 0.142716423,
         "completion_tokens": 100,
-        "prompt_time": 0.002301079,
+        "prompt_time": 0.005460453,
         "prompt_tokens": 44,
-        "queue_time": 0.259043374,
-        "total_time": 0.133429387,
+        "queue_time": 0.212247236,
+        "total_time": 0.148176876,
         "total_tokens": 144
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6jxnvr0fzq9dxdjb61f9g4h"
+        "id": "req_01k6ktnka2fw1b9gh4brq7586c"
       }
     },
     "headers": {
@@ -74,7 +74,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9885bc5178e3109c-ORD"
+        "9888a281d935003d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -83,13 +83,13 @@
         "application/json"
       ],
       "date": [
-        "Thu, 02 Oct 2025 16:56:53 GMT"
+        "Fri, 03 Oct 2025 01:23:33 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=ZL2oxgYZMlVrY4YVVzkN2yN0HzM5b3nJ7jKJONkVijk-1759424213-1.0.1.1-Q.9Tjv09ueUAkrMNYIF6VFFeeDqJMs.N91K7TuQFvgLpG5hf9EvQe7SKnNTwLB6MjTGwiZNcpAXl9.O5hNFYesLt9pkdV3STAYJhRa3NX2g; path=/; expires=Thu, 02-Oct-25 17:26:53 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=VPc1Tjv54JMbYDGSDFwHV4GuY6dBjWVXLnBkSl14ogI-1759454613-1.0.1.1-5.JWjA0OT71Oy.bIR2T.h.Asb4BntvzwHD8B.TKg3U3xIQRbp_nb8xciW4E9axYmkYYxY018ZLR0YIg9_RFHXR8dUntVhJMEF7OyNtyFwQk; path=/; expires=Fri, 03-Oct-25 01:53:33 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -110,19 +110,19 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "14393"
+        "14399"
       ],
       "x-ratelimit-remaining-tokens": [
-        "5941"
+        "5981"
       ],
       "x-ratelimit-reset-requests": [
-        "41.553999999s"
+        "6s"
       ],
       "x-ratelimit-reset-tokens": [
-        "586.999999ms"
+        "190ms"
       ],
       "x-request-id": [
-        "req_01k6jxnvr0fzq9dxdjb61f9g4h"
+        "req_01k6ktnka2fw1b9gh4brq7586c"
       ]
     },
     "status": 200

@@ -1,0 +1,130 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImRlZXBzZWVrLXIxLWRpc3RpbGwtbGxhbWEtNzBiIiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuNX0="
+    },
+    "canonical_json": {
+      "max_tokens": 100,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "deepseek-r1-distill-llama-70b",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.groq.com/openai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "<think>\nOkay, so I'm trying to write a very long story about dragons and adventures. Hmm, where do I even start? I guess I should first outline the main elements of the story. Dragons are a key part, so I need to decide what kind of dragons they are. Are they friendly, fierce, wise, or something else? Maybe a mix of different types to add depth.\n\nNext, the adventure part. Adventures usually involve a quest or a journey. Maybe the protagonist is on",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759435633,
+      "id": "chatcmpl-eda55d11-12c9-4d8d-ac76-460915bbe715",
+      "model": "deepseek-r1-distill-llama-70b",
+      "object": "chat.completion",
+      "service_tier": "on_demand",
+      "system_fingerprint": "fp_1bbe7845ec",
+      "usage": {
+        "completion_time": 0.420650744,
+        "completion_tokens": 100,
+        "prompt_time": 0.010381059,
+        "prompt_tokens": 12,
+        "queue_time": 0.205126488,
+        "total_time": 0.431031803,
+        "total_tokens": 112
+      },
+      "usage_breakdown": null,
+      "x_groq": {
+        "id": "req_01k6k8jcdce61st6ex8m6ac0f9"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cache-control": [
+        "private, max-age=0, no-store, no-cache, must-revalidate"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9886d3228dbf61c7-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Thu, 02 Oct 2025 20:07:13 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=yP6KkbyNh0_Y2K8TovJ1f26ae8YfNcLBgfb3g9OAodg-1759435633-1.0.1.1-mKhQZaCNY5zxIw0XOmF4fGd5e55ymA4IXImqWqI.j4tTkFcbMDYQum2ZKc8nlnHbndpCXth1_3IeJGtd22HlsP0e0Foey.8twY6gmII3CKY; path=/; expires=Thu, 02-Oct-25 20:37:13 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-groq-region": [
+        "yul"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "6000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "996"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "5981"
+      ],
+      "x-ratelimit-reset-requests": [
+        "5m41.065999999s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "190ms"
+      ],
+      "x-request-id": [
+        "req_01k6k8jcdce61st6ex8m6ac0f9"
+      ]
+    },
+    "status": 200
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiWW91IGFyZSBhIGhlbHBmdWwsIGNyZWF0aXZlIGFzc2lzdGFudC4iLCJyb2xlIjoic3lzdGVtIn0seyJjb250ZW50IjoiU2F5IGhlbGxvIGluIG9uZSBzaG9ydCwgaW1hZ2luYXRpdmUgc2VudGVuY2UuIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay00Iiwic3RyZWFtIjp0cnVlLCJ0ZW1wZXJhdHVyZSI6MC45LCJ0b3BfcCI6MC44fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 100,
+      "messages": [
+        {
+          "content": "You are a helpful, creative assistant.",
+          "role": "system"
+        },
+        {
+          "content": "Say hello in one short, imaginative sentence.",
+          "role": "user"
+        }
+      ],
+      "model": "grok-4",
+      "stream": true,
+      "temperature": 0.9,
+      "top_p": 0.8
+    },
+    "headers": {
+      "accept": "text/event-stream",
+      "authorization": "[REDACTED:authorization]",
+      "content-type": "application/json"
+    },
+    "method": "POST",
+    "url": "https://api.x.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "b64": ""
+    },
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "*",
+      "cache-control": "no-cache",
+      "cf-cache-status": "DYNAMIC",
+      "cf-ray": "98882ac289c4b6cc-ORD",
+      "content-type": "text/event-stream",
+      "date": "Fri, 03 Oct 2025 00:01:48 GMT",
+      "server": "cloudflare",
+      "set-cookie": "__cf_bm=3tfG3qvwKKvW_CRi2R_gD8COedTmqUCgJ3DINrG0hVI-1759449708-1.0.1.1-0IGwkgxmc4sjudV5D_G9Wfc4cxNz8VWqKVjjLx4RJPtuSxhZGOtnMsU_qPLx5.bR_mHN1Y5PC2UBfx5HQDIytlEBo21UxbDuZxyQI9R7vjA; path=/; expires=Fri, 03-Oct-25 00:31:48 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None",
+      "strict-transport-security": "max-age=31536000",
+      "vary": "origin, access-control-request-method, access-control-request-headers",
+      "x-request-id": "00-e1d99d261429fcfc71fc67ac6ebac049-3268500b003c7479-01",
+      "x-zero-data-retention": "false"
+    },
+    "status": 200
+  }
+}

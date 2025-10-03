@@ -1,0 +1,118 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMy1taW5pLWxhdGVzdCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 50,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "grok-3-mini-latest",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.x.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello! I'm Grok, an AI created by xAI to be helpful, truthful, and a bit witty. It's great to hear from you—what's on your mind or how can I assist today? 😊",
+            "reasoning_content": "First, the user said \"Hello world!\" This is a common greeting, often used as a simple test message in programming, like the classic \"Hello, World!\" program.\n\nAs Grok, I'm an AI created by xAI, and I'm supposed to be helpful, truthful, and maximally truthful. My responses should be engaging, informative, and aligned with my identity.\n\nPossible ways to respond:\n\n1. **Mirror the greeting:** Keep it simple and friendly, like \"Hello! How can I help you today?\"\n\n2. **Add a fun twist:** Since I'm Grok, I could reference my origins or make a joke to make it more interesting.\n\n3. **Provide context:** If this is a reference to programming, I could acknowledge that.\n\nThe user might be testing me, as \"Hello world\" is a standard first message. I should respond in a way that initiates conversation.\n\nKey principles:\n\n- Be helpful: Offer assistance.\n\n- Be truthful: Don't fabricate anything.\n\n- Maximize truth: Ensure my response is accurate.\n\nStructure my response:\n\n- Start with a greeting to reciprocate.\n\n- Introduce myself briefly if needed.\n\n- Ask a question to continue the conversation.\n\nPossible response:\n\n\"Hello! I'm Grok, created by xAI. It's great to hear from you. What can I do for you today?\"\n\nThis is polite, informative, and engaging.\n\nIf I want to be more playful:\n\n\"Hello world! Wait, that's my line too. I'm Grok, your AI assistant. How can I assist you?\"\n\nThat adds a bit of humor by referencing the phrase.\n\nEnsure it's not too verbose. Keep it concise.\n\nFinal decision: Go with a friendly, helpful response that acknowledges the greeting and offers help.",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759449646,
+      "id": "012a8542-b174-e244-d721-26dd7ef58709_us-east-1",
+      "model": "grok-3-mini",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_4fae27f477",
+      "usage": {
+        "completion_tokens": 43,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 344,
+          "rejected_prediction_tokens": 0
+        },
+        "num_sources_used": 0,
+        "prompt_tokens": 10,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 3,
+          "image_tokens": 0,
+          "text_tokens": 10
+        },
+        "total_tokens": 397
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9888294399560d35-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 03 Oct 2025 00:00:50 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=jg3oSrMiQPM96ZzFtfrD8uOu6bcHSvLm0Q_dGc0En_Q-1759449650-1.0.1.1-WDZngueG00wqpSEj1GI7o1jhWdg2QVnTyK_s_FikgZx1yOWM_V.q2gQxNE15iT6RAwfv_tp8OTLvKVleRXsObtVNadiJjPYozFUE3TIwdH4; path=/; expires=Fri, 03-Oct-25 00:30:50 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-request-id": [
+        "00-afa68fd763cdf84b4bf515c62268120d-f4819a2a003cff6f-01"
+      ],
+      "x-zero-data-retention": [
+        "false"
+      ]
+    },
+    "status": 200
+  }
+}

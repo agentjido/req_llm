@@ -1,0 +1,117 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay0zLW1pbmktZmFzdCIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjV9"
+    },
+    "canonical_json": {
+      "max_completion_tokens": 100,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "grok-3-mini-fast",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.x.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "message": {
+            "content": "Below is a very long story about dragons and adventures. I've titled it \"Wings of Destiny: The Chronicles of Eldoria.\" This is a complete, self-contained narrative with multiple chapters to give it depth and length. It's an epic fantasy tale filled with heroic quests, fierce battles, ancient secrets, and the majestic presence of dragons. I aimed for an engaging story with vivid descriptions, character development, and plot twists to keep you hooked. Enjoy!\n\n---\n\n# Wings of Destiny: The Chronicles of Eld",
+            "reasoning_content": "First, the user asked for a \"very long story about dragons and adventures.\" I need to create a narrative that's extensive, so I'll aim for a story with multiple chapters or sections to make it feel lengthy.\n\nKey elements:\n- Dragons: These should be central. I can include different types – fire-breathing, ice dragons, friendly ones, or antagonistic ones.\n- Adventures: The story should involve quests, explorations, battles, discoveries, etc.\n\nStructure the story:\n1. **Introduction**: Set the scene, introduce the main characters, and establish the world. Maybe a medieval fantasy setting with kingdoms, magic, and dragons.\n2. **Rising Action**: Build up the plot with adventures, conflicts, and character development.\n3. **Climax**: The peak of the adventure, like a big battle or a major revelation.\n4. **Falling Action**: Resolve some conflicts and lead to the end.\n5. **Conclusion**: Wrap up the story with a satisfying ending.\n\nMake it engaging:\n- Characters: Need a protagonist, perhaps a young hero or a dragon rider. Include side characters like friends, mentors, villains.\n- Plot: Start with a problem, like a dragon threat or a quest for a lost artifact.\n- Themes: Adventure, bravery, friendship, the bond between humans and dragons.\n\nLength: Since it's \"very long,\" I'll write a detailed story, but keep it manageable. Aim for 1500-3000 words, divided into sections.\n\nOutline the story:\n- **Title**: Something catchy, like \"The Dragon's Quest\" or \"Legends of the Skies.\"\n- **Chapter 1**: Introduce the protagonist in a peaceful village, then introduce the dragon element.\n- **Chapter 2**: The adventure begins – perhaps the village is attacked, and the hero sets out.\n- **Chapter 3**: Encounters and alliances, maybe meeting other characters or a friendly dragon.\n- **Chapter 4**: Building up to the main conflict.\n- **Chapter 5**: Climax with a dragon battle.\n- **Chapter 6**: Resolution and aftermath.\n\nEnsure it's original: Avoid copying existing stories like \"How to Train Your Dragon.\" Make it unique.\n\nLanguage and Style:\n- Descriptive: Use vivid descriptions for dragons, landscapes, and actions.\n- Dialogue: Include conversations to make it dynamic.\n- Pacing: Vary it to keep the reader interested – fast-paced action and slower character moments.\n\nFinally, end with a moral or a twist to make it memorable.",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759449587,
+      "id": "b449e9f2-5272-3698-f735-144d019ab57a_us-east-1",
+      "model": "grok-3-mini",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_4fae27f477",
+      "usage": {
+        "completion_tokens": 100,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 501,
+          "rejected_prediction_tokens": 0
+        },
+        "num_sources_used": 0,
+        "prompt_tokens": 16,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 2,
+          "image_tokens": 0,
+          "text_tokens": 16
+        },
+        "total_tokens": 617
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "988827d3881cd95e-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Thu, 02 Oct 2025 23:59:53 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=DETifUUkNWLRorXFO8rRf7ZZRI9zYJLdRkzhRPnAApc-1759449593-1.0.1.1-WsOO_Pn.45hvxm7B.bA8oonDzV60vw9ghvP5fnQd9fzENWWVs87AahMgq5DxATlK.4opTZFhV5UEsiPD33z.lWq2bVeaByi_WkTqmVEv72U; path=/; expires=Fri, 03-Oct-25 00:29:53 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-request-id": [
+        "00-1a17ffc216b7093c6277c50059ef6470-4b5d20610045cfeb-01"
+      ],
+      "x-zero-data-retention": [
+        "false"
+      ]
+    },
+    "status": 200
+  }
+}

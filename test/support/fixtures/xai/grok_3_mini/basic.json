@@ -1,0 +1,118 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMy1taW5pIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_completion_tokens": 50,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "grok-3-mini",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.x.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello! I'm Grok, an AI created by xAI to be helpful, truthful, and a bit witty. What's on your mind today—need help with anything, or just saying hi? 😊",
+            "reasoning_content": "First, the user said \"Hello world!\" This is a common greeting, often used as a simple test message, like in programming where \"Hello, World!\" is the first program many people write.\n\nAs Grok, I'm an AI built by xAI, and I'm supposed to be helpful, truthful, and not based on any other companies' models. My response should align with that.\n\nA typical response to \"Hello world!\" could be a friendly greeting back. Since this is an initial interaction, I should introduce myself briefly to make it engaging.\n\nPossible responses:\n\n1. Simply say \"Hello!\" back.\n\n2. Be more elaborate: \"Hello! How can I assist you today?\"\n\n3. Reference the programming aspect: \"Hello, world! It's great to see that classic greeting. I'm Grok, here to help.\"\n\nI need to ensure I'm truthful. I'm not based on other companies' models, so I shouldn't imply otherwise.\n\nKeep it concise and friendly, as per my persona.\n\nFinally, end with an invitation for further interaction to make it useful.\n\nStructure:\n\n- Greet back.\n\n- Introduce myself.\n\n- Ask how I can help.",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759449561,
+      "id": "d5bff235-01a2-9daa-773d-b6eacf1b1569_us-east-1",
+      "model": "grok-3-mini",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_4fae27f477",
+      "usage": {
+        "completion_tokens": 41,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 231,
+          "rejected_prediction_tokens": 0
+        },
+        "num_sources_used": 0,
+        "prompt_tokens": 10,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 3,
+          "image_tokens": 0,
+          "text_tokens": 10
+        },
+        "total_tokens": 282
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9888272cbea0f842-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Thu, 02 Oct 2025 23:59:23 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=cqTw05Nrmugdmb2YxZkBHQat7BI8_EI5Qj9_Wj5inrA-1759449563-1.0.1.1-4z8HWRtkqe28GjIf37nQavym82NZ3F762zGDsUm5IXDOESoooghcgwlA_4EG9XOptYB.nebJcz_FXdyYWX2qkhmrJSsml9owfVPPhFxV2E4; path=/; expires=Fri, 03-Oct-25 00:29:23 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-request-id": [
+        "00-4f547e176e1810aa4cf9f3c1d52dbc43-bb692230003cc7a6-01"
+      ],
+      "x-zero-data-retention": [
+        "false"
+      ]
+    },
+    "status": 200
+  }
+}

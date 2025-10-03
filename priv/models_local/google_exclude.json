@@ -1,0 +1,8 @@
+{
+  "excluded_models": [
+    "gemini-1.5-flash",
+    "gemini-1.5-flash-8b",
+    "gemini-1.5-pro"
+  ],
+  "reason": "Models deprecated in Google v1beta API - return 404 errors. Use gemini-2.5 models instead."
+}

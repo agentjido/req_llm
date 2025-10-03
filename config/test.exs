@@ -13,6 +13,6 @@ config :req_llm, :test_models, ~w(
   google:gemini-1.5-pro
   groq:gemma2-9b-it
   groq:llama-3.1-8b-instant
-  xai:grok-beta
   xai:grok-2-latest
+  xai:grok-3-fast
 )

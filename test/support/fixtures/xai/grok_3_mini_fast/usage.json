@@ -1,0 +1,118 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhpIHRoZXJlISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMy1taW5pLWZhc3QiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 50,
+      "messages": [
+        {
+          "content": "Hi there!",
+          "role": "user"
+        }
+      ],
+      "model": "grok-3-mini-fast",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.x.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hi! How can I help you today? 😊",
+            "reasoning_content": "First, the user said, \"Hi there!\" which is a casual greeting. As an AI assistant, I should respond in a friendly and engaging manner to build rapport.\n\nMy role is to be helpful, truthful, and engaging. I need to keep responses clear and not verbose, as per the system prompt.\n\nA good response to a greeting could be:\n- Acknowledge the greeting.\n- Introduce myself or remind them who I am.\n- Ask a question to continue the conversation, making it interactive.\n\nSince this is the start of the conversation, I should keep it light and inviting.\n\nPossible response structure:\n1. Greet back.\n2. Optionally, add a bit about myself.\n3. Pose a question or offer help.\n\nFor example:\n- \"Hi! How can I assist you today?\"\n- Or, \"Hello! It's nice to chat. What's on your mind?\"\n\nThe system prompt says: \"Keep your response to user clear; please do not make your response verbose!\" So, I need to be concise.\n\nFinal response idea:\n- Start with \"Hi!\" or \"Hello!\"\n- Add a helpful element.\n\nMake it personal: Since I'm Grok, built by xAI, I could mention that subtly if it fits.\n\nKeep it simple: \"Hi there! How can I help you today?\"\n\nThat seems straightforward and aligns with the prompt.",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759449577,
+      "id": "f345ad3e-89a2-ab14-6118-aa8845a661e9_us-east-1",
+      "model": "grok-3-mini",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_4fae27f477",
+      "usage": {
+        "completion_tokens": 11,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 272,
+          "rejected_prediction_tokens": 0
+        },
+        "num_sources_used": 0,
+        "prompt_tokens": 10,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 2,
+          "image_tokens": 0,
+          "text_tokens": 10
+        },
+        "total_tokens": 293
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "98882790b8b2d95e-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Thu, 02 Oct 2025 23:59:39 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=vOmWBRkXTpbe_qiyEyyGNhqKFv9Le8RotBCSrkDZmhM-1759449579-1.0.1.1-6JQRGvyqltWmz.KK_1JDMGeXmvOQQaU4zMOPZMwZ5ECKypRb_720czwIXFUlGyUGDJyLh3BjXO7_fcxjB42Jtf0zq3VqXDPeQAM6WQKiuRo; path=/; expires=Fri, 03-Oct-25 00:29:39 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-request-id": [
+        "00-eb4758e89b9672de7c6ec9f625342dc6-50a33321003c3159-01"
+      ],
+      "x-zero-data-retention": [
+        "false"
+      ]
+    },
+    "status": 200
+  }
+}

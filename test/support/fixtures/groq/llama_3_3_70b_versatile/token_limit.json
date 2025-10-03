@@ -1,0 +1,130 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImxsYW1hLTMuMy03MGItdmVyc2F0aWxlIiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuNX0="
+    },
+    "canonical_json": {
+      "max_tokens": 100,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "llama-3.3-70b-versatile",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.groq.com/openai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "In the land of Eridoria, where the sun dipped into the horizon and painted the sky with hues of crimson and gold, the village of Brindlemark lay nestled in a valley. It was a small, peaceful village, surrounded by rolling hills and dense forests, where the air was sweet with the scent of blooming wildflowers. The villagers of Brindlemark lived simple lives, tending to their gardens, herding their livestock, and crafting their wares. But amidst the",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759435577,
+      "id": "chatcmpl-9d53ef30-996d-4bea-99d8-f626b551bb77",
+      "model": "llama-3.3-70b-versatile",
+      "object": "chat.completion",
+      "service_tier": "on_demand",
+      "system_fingerprint": "fp_9e1e8f8435",
+      "usage": {
+        "completion_time": 0.20520034,
+        "completion_tokens": 100,
+        "prompt_time": 0.002258383,
+        "prompt_tokens": 44,
+        "queue_time": 0.213538068,
+        "total_time": 0.207458723,
+        "total_tokens": 144
+      },
+      "usage_breakdown": null,
+      "x_groq": {
+        "id": "req_01k6k8gnyjfmds0sx7r2t05as3"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cache-control": [
+        "private, max-age=0, no-store, no-cache, must-revalidate"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9886d1c5f821cca3-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Thu, 02 Oct 2025 20:06:17 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=EWnkP2iXKd0TMJZOL6KC_1CDNf7.MROtAmRkuIfX1vI-1759435577-1.0.1.1-3iQL4U8oKjl0Jbf2UwXUQCCEK6np.aGY4lUSeOsAml_4hH06nnxC6S3pEkkpEsY7iBT6fe7dEhyzWzmn2URkN_s8I8dyvDSCVn5lpji04aY; path=/; expires=Thu, 02-Oct-25 20:36:17 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-groq-region": [
+        "yul"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "12000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "994"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "11673"
+      ],
+      "x-ratelimit-reset-requests": [
+        "8m37.139s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "1.631s"
+      ],
+      "x-request-id": [
+        "req_01k6k8gnyjfmds0sx7r2t05as3"
+      ]
+    },
+    "status": 200
+  }
+}

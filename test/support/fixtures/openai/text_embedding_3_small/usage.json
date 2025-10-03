@@ -1,0 +1,93 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJ0ZXh0LWVtYmVkZGluZy0zLXNtYWxsIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 50,
+      "messages": [
+        {
+          "content": "Hi there!",
+          "role": "user"
+        }
+      ],
+      "model": "text-embedding-3-small",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "error": {
+        "code": null,
+        "message": "You are not allowed to sample from this model",
+        "param": null,
+        "type": "invalid_request_error"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "988bb751299feaef-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json; charset=utf-8"
+      ],
+      "date": [
+        "Fri, 03 Oct 2025 10:22:02 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=1TNVn6RJn2Vq8uNV0yLxc2rioOfK0Ipy7vZyzBdfMF0-1759486922-1.0.1.1-6FM3KsgYFMcPf1p6jpJ8nuHldyFO5h3Hkg6kLcKYD5V2RaD_F1E8.5fMQ3Tv4HhhcSvwn0ZsQeaW6BiR_dS0UK4MnnBYIAPs_M2hcX5eiIk; path=/; expires=Fri, 03-Oct-25 10:52:02 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=Kogga23MhYzNbO0vt3igIEGTIqJPAwaTYZ4.SGMV4.0-1759486922483-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-envoy-upstream-service-time": [
+        "6"
+      ],
+      "x-openai-proxy-wasm": [
+        "v0.1"
+      ],
+      "x-request-id": [
+        "req_75c6eae3c34a470b87b99d29dbb5c943"
+      ]
+    },
+    "status": 403
+  }
+}

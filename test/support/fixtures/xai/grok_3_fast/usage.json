@@ -1,0 +1,123 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhpIHRoZXJlISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMy1mYXN0Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_completion_tokens": 50,
+      "messages": [
+        {
+          "content": "Hi there!",
+          "role": "user"
+        }
+      ],
+      "model": "grok-3-fast",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.x.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hey there! How can I help you today?",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759454616,
+      "id": "470639cc-0257-082e-7411-f72cb115adc1_us-east-1",
+      "model": "grok-3",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_f02e6df795",
+      "usage": {
+        "completion_tokens": 10,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "num_sources_used": 0,
+        "prompt_tokens": 9,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 2,
+          "image_tokens": 0,
+          "text_tokens": 9
+        },
+        "total_tokens": 19
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9888a29b6cbc003d-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy-report-only": [
+        "script-src 'none'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=fYJE0XY6qNxXQ6WxJsJMaXwgWMSMTA4bheyZCpITE4M-1759454617-1.0.1.1-tEl8JqcYgvI5XoZPIgXaUk_j4g02Kly9AjXKvFOU4DZOO3JdjzOOTglcxJhlK5ZwS6WAZEh88w.JpMa8X0LJto5cxaUuoansIwyfxFVY1uei9YlrlmLagr23XyZcBkVZp8Kr_U8DKnOAK6cQRKGtpKlHdd89j5m8k7igy94TQjk; report-to cf-csp-endpoint"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 03 Oct 2025 01:23:37 GMT"
+      ],
+      "report-to": [
+        "{\"endpoints\":[{\"url\":\"https:\\/\\/csp-reporting.cloudflare.com\\/cdn-cgi\\/script_monitor\\/report?m=fYJE0XY6qNxXQ6WxJsJMaXwgWMSMTA4bheyZCpITE4M-1759454617-1.0.1.1-tEl8JqcYgvI5XoZPIgXaUk_j4g02Kly9AjXKvFOU4DZOO3JdjzOOTglcxJhlK5ZwS6WAZEh88w.JpMa8X0LJto5cxaUuoansIwyfxFVY1uei9YlrlmLagr23XyZcBkVZp8Kr_U8DKnOAK6cQRKGtpKlHdd89j5m8k7igy94TQjk\"}],\"group\":\"cf-csp-endpoint\",\"max_age\":86400}"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=uyF7z488O7Emg.r9tYammW4ClSxFcHes9gYWdktkN.E-1759454617-1.0.1.1-R9ekT6uh5FDM2thH7YIvay0Nwk7mhbD2ASdaWpI24OeUncoti9V2iXuoWXmMLq72Ly.u2jZ6K6VdvDz4.7dnOX7ASVPnjVaVI_x2c_tlKjE; path=/; expires=Fri, 03-Oct-25 01:53:37 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-request-id": [
+        "00-8f53ddcf1c84461ca6e2a348acd13cce-86ea5c410001961e-01"
+      ],
+      "x-zero-data-retention": [
+        "false"
+      ]
+    },
+    "status": 200
+  }
+}
