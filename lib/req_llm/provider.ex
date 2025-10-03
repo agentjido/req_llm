@@ -308,6 +308,105 @@ defmodule ReqLLM.Provider do
   @callback decode_sse_event(map(), ReqLLM.Model.t()) :: [ReqLLM.StreamChunk.t()]
 
   @doc """
+  Initialize provider-specific streaming state (optional).
+
+  This callback allows providers to set up stateful transformations for streaming
+  responses. The returned state will be threaded through `decode_sse_event/3` calls
+  and passed to `flush_stream_state/2` when the stream ends.
+
+  ## Parameters
+
+    * `model` - The ReqLLM.Model struct
+
+  ## Returns
+
+  Provider-specific state of any type. Commonly a map with transformation state.
+
+  ## Examples
+
+      # Initialize state for <think> tag parsing
+      def init_stream_state(_model) do
+        %{mode: :text, buffer: ""}
+      end
+
+  """
+  @callback init_stream_state(ReqLLM.Model.t()) :: any()
+
+  @doc """
+  Decode SSE event with provider-specific state (optional, alternative to decode_sse_event/2).
+
+  This stateful variant of `decode_sse_event/2` allows providers to maintain state
+  across streaming chunks. Use this when your provider needs to accumulate data or
+  track parsing state across multiple SSE events.
+
+  If both `decode_sse_event/3` and `decode_sse_event/2` are defined, the 3-arity
+  version takes precedence during streaming.
+
+  ## Parameters
+
+    * `event` - Parsed SSE event map with `:event`, `:data`, etc.
+    * `model` - The ReqLLM.Model struct
+    * `provider_state` - Current provider state from `init_stream_state/1`
+
+  ## Returns
+
+  `{chunks, new_provider_state}` where:
+    * `chunks` - List of StreamChunk structs to emit
+    * `new_provider_state` - Updated state for next event
+
+  ## Examples
+
+      def decode_sse_event(event, model, state) do
+        chunks = ReqLLM.Provider.Defaults.default_decode_sse_event(event, model)
+        
+        Enum.reduce(chunks, {[], state}, fn chunk, {acc, st} ->
+          case chunk.type do
+            :content ->
+              {emitted, new_st} = transform_content(st, chunk.text)
+              {acc ++ emitted, new_st}
+            _ ->
+              {acc ++ [chunk], st}
+          end
+        end)
+      end
+
+  """
+  @callback decode_sse_event(map(), ReqLLM.Model.t(), any()) ::
+              {[ReqLLM.StreamChunk.t()], any()}
+
+  @doc """
+  Flush buffered provider state when stream ends (optional).
+
+  This callback is invoked when the stream completes, allowing providers to emit
+  any buffered content that hasn't been sent yet. This is useful for stateful
+  transformations that may hold partial data waiting for completion signals.
+
+  ## Parameters
+
+    * `model` - The ReqLLM.Model struct
+    * `provider_state` - Final provider state from last `decode_sse_event/3`
+
+  ## Returns
+
+  `{chunks, new_provider_state}` where:
+    * `chunks` - List of final StreamChunk structs to emit
+    * `new_provider_state` - Updated state (often with buffer cleared)
+
+  ## Examples
+
+      def flush_stream_state(_model, %{buffer: ""} = state) do
+        {[], state}
+      end
+
+      def flush_stream_state(_model, %{mode: :thinking, buffer: text} = state) do
+        {[ReqLLM.StreamChunk.thinking(text)], %{state | buffer: ""}}
+      end
+
+  """
+  @callback flush_stream_state(ReqLLM.Model.t(), any()) ::
+              {[ReqLLM.StreamChunk.t()], any()}
+
+  @doc """
   Build complete Finch request for streaming operations.
 
   This callback creates a complete Finch.Request struct for streaming operations,
@@ -379,6 +478,9 @@ defmodule ReqLLM.Provider do
     default_env_key: 0,
     translate_options: 3,
     decode_sse_event: 2,
+    decode_sse_event: 3,
+    init_stream_state: 1,
+    flush_stream_state: 2,
     attach_stream: 4
   ]
 

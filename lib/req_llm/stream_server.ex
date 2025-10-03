@@ -42,6 +42,7 @@ defmodule ReqLLM.StreamServer do
 
   - `provider_mod`: Provider module for event decoding
   - `model`: ReqLLM.Model struct for provider context  
+  - `provider_state`: Optional provider-specific state for stateful transformations
   - `sse_buffer`: Binary buffer for SSE parsing across chunks
   - `queue`: Token chunks awaiting consumer retrieval
   - `status`: Current session status (`:init`, `:streaming`, `:done`, `{:error, reason}`)
@@ -75,6 +76,7 @@ defmodule ReqLLM.StreamServer do
     :fixture_path,
     :http_context,
     :canonical_json,
+    :provider_state,
     sse_buffer: "",
     queue: :queue.new(),
     status: :init,
@@ -109,9 +111,15 @@ defmodule ReqLLM.StreamServer do
     provider_mod = Keyword.fetch!(opts, :provider_mod)
     model = Keyword.fetch!(opts, :model)
 
+    provider_state =
+      if function_exported?(provider_mod, :init_stream_state, 1) do
+        provider_mod.init_stream_state(model)
+      end
+
     state = %__MODULE__{
       provider_mod: provider_mod,
       model: model,
+      provider_state: provider_state,
       fixture_path: Keyword.get(opts, :fixture_path),
       high_watermark: Keyword.get(opts, :high_watermark, 500)
     }
@@ -438,22 +446,28 @@ defmodule ReqLLM.StreamServer do
     # Accumulate and parse SSE events
     {events, new_buffer} = SSE.accumulate_and_parse(chunk, state.sse_buffer)
 
-    # Decode events using provider
-    stream_chunks =
+    # Decode events using provider (with optional state threading)
+    {stream_chunks, new_provider_state} =
       events
       |> Enum.map(&SSE.process_sse_event/1)
-      |> Enum.flat_map(fn event ->
+      |> Enum.reduce({[], state.provider_state}, fn event, {chunks_acc, prov_state} ->
         if termination_event?(event) do
-          # Handle completion signal  
-          []
+          {chunks_acc, prov_state}
         else
-          # Let provider decode the event
-          decode_provider_event(event, state.provider_mod, state.model)
+          {new_chunks, updated_prov_state} =
+            decode_provider_event(event, state.provider_mod, state.model, prov_state)
+
+          {chunks_acc ++ new_chunks, updated_prov_state}
         end
       end)
 
     # Enqueue chunks and check for completion
-    new_state = enqueue_chunks(stream_chunks, %{state | sse_buffer: new_buffer})
+    new_state =
+      enqueue_chunks(stream_chunks, %{
+        state
+        | sse_buffer: new_buffer,
+          provider_state: new_provider_state
+      })
 
     # Check if any events signaled completion
     new_state =
@@ -468,12 +482,18 @@ defmodule ReqLLM.StreamServer do
     {:reply, :ok, new_state}
   end
 
-  defp decode_provider_event(event, provider_mod, model) do
-    if function_exported?(provider_mod, :decode_sse_event, 2) do
-      provider_mod.decode_sse_event(event, model)
-    else
-      # Fall back to default decoding
-      ReqLLM.Provider.Defaults.default_decode_sse_event(event, model)
+  defp decode_provider_event(event, provider_mod, model, provider_state) do
+    cond do
+      function_exported?(provider_mod, :decode_sse_event, 3) ->
+        provider_mod.decode_sse_event(event, model, provider_state)
+
+      function_exported?(provider_mod, :decode_sse_event, 2) ->
+        chunks = provider_mod.decode_sse_event(event, model)
+        {chunks, provider_state}
+
+      true ->
+        chunks = ReqLLM.Provider.Defaults.default_decode_sse_event(event, model)
+        {chunks, provider_state}
     end
   end
 
@@ -526,7 +546,18 @@ defmodule ReqLLM.StreamServer do
   end
 
   defp finalize_stream(state) do
-    # Extract any final metadata from the last chunks
+    state =
+      if function_exported?(state.provider_mod, :flush_stream_state, 2) do
+        {flush_chunks, new_provider_state} =
+          state.provider_mod.flush_stream_state(state.model, state.provider_state)
+
+        state
+        |> Map.put(:provider_state, new_provider_state)
+        |> then(&enqueue_chunks(flush_chunks, &1))
+      else
+        state
+      end
+
     metadata = extract_final_metadata(state)
     %{state | status: :done, metadata: metadata}
   end

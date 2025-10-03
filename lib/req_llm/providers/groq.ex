@@ -134,32 +134,52 @@ defmodule ReqLLM.Providers.Groq do
   end
 
   @doc """
-  Custom SSE event decoding that normalizes `<think>` tags in streaming responses.
+  Initialize streaming state for <think> tag normalization.
 
-  Maintains state across events using the process dictionary to handle tags split across chunks.
-  When a content delta arrives, it's accumulated in a buffer and emitted as `:thinking` or
-  `:content` chunks based on `<think>...</think>` tag boundaries.
+  Returns initial state with :text mode and empty buffer.
   """
   @impl ReqLLM.Provider
-  def decode_sse_event(event, model) do
+  def init_stream_state(_model) do
+    %{mode: :text, buffer: ""}
+  end
+
+  @doc """
+  Stateful SSE event decoding that normalizes `<think>` tags.
+
+  Maintains state across events to handle tags split across chunks.
+  Returns updated chunks and new state.
+  """
+  @impl ReqLLM.Provider
+  def decode_sse_event(event, model, provider_state) do
     chunks = ReqLLM.Provider.Defaults.default_decode_sse_event(event, model)
-    
-    chunks
-    |> Enum.flat_map(fn chunk ->
+
+    Enum.reduce(chunks, {[], provider_state}, fn chunk, {acc, state} ->
       case chunk.type do
         :content ->
-          transform_content_chunk(chunk)
+          {emitted, new_state} = consume_stream_delta(state, chunk.text)
+          {acc ++ emitted, new_state}
+
         _ ->
-          [chunk]
+          {acc ++ [chunk], state}
       end
     end)
   end
 
-  defp transform_content_chunk(chunk) do
-    state = Process.get(:groq_think_state, %{mode: :text, buffer: ""})
-    {emitted_chunks, new_state} = consume_stream_delta(state, chunk.text)
-    Process.put(:groq_think_state, new_state)
-    emitted_chunks
+  @doc """
+  Flush any remaining buffered content when stream ends.
+
+  Emits final thinking or text chunk if buffer is non-empty.
+  """
+  @impl ReqLLM.Provider
+  def flush_stream_state(_model, %{mode: mode, buffer: buffer} = state) do
+    chunks =
+      case {mode, buffer} do
+        {_, ""} -> []
+        {:text, b} -> [ReqLLM.StreamChunk.text(b)]
+        {:thinking, b} -> [ReqLLM.StreamChunk.thinking(b)]
+      end
+
+    {chunks, %{state | buffer: ""}}
   end
 
   @doc """
@@ -177,13 +197,15 @@ defmodule ReqLLM.Providers.Groq do
   def decode_response({req, %Req.Response{} = resp}) do
     {req, decoded} = ReqLLM.Provider.Defaults.default_decode_response({req, resp})
 
-    case decoded.body do
-      %ReqLLM.Response{stream?: false, message: %ReqLLM.Message{} = msg, context: ctx} = r ->
+    case decoded do
+      %Req.Response{
+        body: %ReqLLM.Response{stream?: false, message: %ReqLLM.Message{} = msg, context: ctx} = r
+      } ->
         new_msg = normalize_msg_think_tags(msg)
         new_ctx = %{ctx | messages: List.replace_at(ctx.messages, -1, new_msg)}
         {req, %{decoded | body: %{r | message: new_msg, context: new_ctx}}}
 
-      %ReqLLM.Response{stream?: true, stream: _stream} = _r ->
+      %Req.Response{} ->
         {req, decoded}
 
       _ ->
@@ -299,8 +321,4 @@ defmodule ReqLLM.Providers.Groq do
         {emits ++ more, st2}
     end
   end
-
-  defp flush_stream_state(%{mode: :text, buffer: ""}), do: []
-  defp flush_stream_state(%{mode: :text, buffer: b}), do: [ReqLLM.StreamChunk.text(b)]
-  defp flush_stream_state(%{mode: :thinking, buffer: b}), do: [ReqLLM.StreamChunk.thinking(b)]
 end
