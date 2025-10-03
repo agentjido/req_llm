@@ -1,7 +1,5 @@
 defmodule Mix.Tasks.ReqLlm.ModelCompat do
   @shortdoc "Validate ReqLLM model coverage with fixture-based testing"
-  @preferred_cli_env :test
-  
   @moduledoc """
   Validate ReqLLM model coverage using the fixture system.
 
@@ -36,10 +34,12 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
   use Mix.Task
 
+  @preferred_cli_env :test
+
   @impl Mix.Task
   def run(args) do
     Application.ensure_all_started(:req_llm)
-    
+
     {opts, positional, _} =
       OptionParser.parse(args,
         switches: [
@@ -80,7 +80,8 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
                 Map.get(state, "#{provider}:#{m["id"]}") == "pass"
               end)
 
-            IO.ANSI.faint() <> " (#{provider_passing}/#{length(filtered)} passing)" <> IO.ANSI.reset()
+            IO.ANSI.faint() <>
+              " (#{provider_passing}/#{length(filtered)} passing)" <> IO.ANSI.reset()
           else
             IO.ANSI.faint() <> " (no provider yet)" <> IO.ANSI.reset()
           end
@@ -102,7 +103,10 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     end)
 
     provider_count = map_size(models)
-    implemented_count = Enum.count(models, fn {p, _} -> MapSet.member?(implemented_providers, p) end)
+
+    implemented_count =
+      Enum.count(models, fn {p, _} -> MapSet.member?(implemented_providers, p) end)
+
     total_models = models |> Enum.map(fn {_, ms} -> length(ms) end) |> Enum.sum()
     tested = map_size(state)
     passing = state |> Enum.count(fn {_, status} -> status == "pass" end)
@@ -204,9 +208,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
     mode_text = if recording, do: "#{to_record} to record", else: "replay mode"
 
-    Mix.shell().info(
-      "Testing #{total_specs} model(s) (#{mode_text})...\n"
-    )
+    Mix.shell().info("Testing #{total_specs} model(s) (#{mode_text})...\n")
 
     start_time = System.monotonic_time(:millisecond)
 
@@ -445,11 +447,12 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
       end
 
     if opts[:sample] && spec do
-      provider_atom = if String.contains?(spec, ":") do
-        spec |> String.split(":", parts: 2) |> List.first() |> String.to_atom()
-      else
-        String.to_atom(spec)
-      end
+      provider_atom =
+        if String.contains?(spec, ":") do
+          spec |> String.split(":", parts: 2) |> List.first() |> String.to_atom()
+        else
+          String.to_atom(spec)
+        end
 
       Enum.filter(base_filter, fn {p, _} -> p == provider_atom end)
     else

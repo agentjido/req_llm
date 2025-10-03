@@ -23,7 +23,7 @@ defmodule ReqLLM.Provider.Registry do
       {:ok, module} = ReqLLM.Provider.Registry.get_provider(:anthropic)
       module #=> ReqLLM.Providers.Anthropic
 
-      # Get model information  
+      # Get model information
       {:ok, model} = ReqLLM.Provider.Registry.get_model(:anthropic, "claude-3-sonnet")
       model.metadata.context_length #=> 200000
 
@@ -63,7 +63,7 @@ defmodule ReqLLM.Provider.Registry do
   ## Parameters
 
     * `provider_id` - Unique identifier for the provider (atom)
-    * `module` - The provider module implementing Req plugin pattern  
+    * `module` - The provider module implementing Req plugin pattern
     * `metadata` - Provider metadata including supported models
 
   ## Examples
@@ -337,7 +337,7 @@ defmodule ReqLLM.Provider.Registry do
       ReqLLM.Provider.Registry.implemented?(:anthropic)
       #=> true
 
-      ReqLLM.Provider.Registry.implemented?(:mistral)  
+      ReqLLM.Provider.Registry.implemented?(:mistral)
       #=> false (metadata-only)
 
   """
@@ -495,7 +495,7 @@ defmodule ReqLLM.Provider.Registry do
     :persistent_term.put(@registry_key, final_registry)
 
     Logger.debug(
-      "Provider registry initialized with #{map_size(final_registry)} providers (#{map_size(registry_map)} with modules, #{map_size(json_only_registry)} metadata-only)"
+      "ReqLLM provider registry initialized with #{map_size(final_registry)} providers (#{map_size(registry_map)} implemented, #{map_size(json_only_registry)} metadata-only)"
     )
 
     :ok
@@ -682,7 +682,7 @@ defmodule ReqLLM.Provider.Registry do
 
     with {:ok, content} <- File.read(file_path),
          {:ok, data} <- Jason.decode(content) do
-      # Convert string keys to atom keys for easier access  
+      # Convert string keys to atom keys for easier access
       {:ok, atomize_json_keys(data)}
     end
   end
@@ -810,7 +810,7 @@ defmodule ReqLLM.Provider.Registry do
     end
   end
 
-  # Validate limits section of model metadata  
+  # Validate limits section of model metadata
   defp validate_model_limits(model) do
     case extract_model_section(model, ["limit", :limit, "limits", :limits]) do
       nil ->

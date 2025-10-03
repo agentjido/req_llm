@@ -205,7 +205,8 @@ defmodule ReqLLM.Test.TranscriptTest do
         valid_transcript()
         | request: %{
             method: "POST",
-            url: "https://generativelanguage.googleapis.com/v1beta/models/gemini:generateContent?key=AIzaSyA8A-ZQ8x7fImehoOYbWtuHelAYzGjH-bw",
+            url:
+              "https://generativelanguage.googleapis.com/v1beta/models/gemini:generateContent?key=AIzaSyA8A-ZQ8x7fImehoOYbWtuHelAYzGjH-bw",
             headers: [],
             canonical_json: %{}
           }
@@ -223,7 +224,8 @@ defmodule ReqLLM.Test.TranscriptTest do
         valid_transcript()
         | request: %{
             method: "POST",
-            url: "https://api.example.com/endpoint?api_key=secret123&model=gpt-4&token=abc&other=value",
+            url:
+              "https://api.example.com/endpoint?api_key=secret123&model=gpt-4&token=abc&other=value",
             headers: [],
             canonical_json: %{}
           }
