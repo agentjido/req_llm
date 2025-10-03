@@ -1,0 +1,119 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwNDgsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiQ2FsY3VsYXRlIDE1IHRpbWVzIDMuIFRoaW5rIHN0ZXAtYnktc3RlcC4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTMtbWluaSIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjEuMH0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2048,
+      "messages": [
+        {
+          "content": "Calculate 15 times 3. Think step-by-step.",
+          "role": "user"
+        }
+      ],
+      "model": "grok-3-mini",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.x.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "To calculate 15 times 3, I'll break it down step by step for clarity:\n\n1. Understand the operation: Multiplication means adding the number 15 to itself the number of times specified, which is 3 in this case. So, we're calculating 15 + 15 + 15.\n\n2. Perform the addition:\n   - First, add 15 + 15 = 30.\n   - Next, add the result to another 15: 30 + 15 = 45.\n\n3. Alternatively, using standard multiplication:\n   - Multiply 15 by 3 directly:\n     - 3 × 5 = 15 (write down 5, carry over 1).\n     - 3 × 1 = 3, plus the carry-over 1 = 4.\n   - So, 15 × 3 = 45.\n\n4. Verify the result: I can think of it as (10 × 3) + (5 × 3) = 30 + 15 = 45.\n\nThe final result is 45.",
+            "reasoning_content": "First, the user asked me to calculate 15 times 3 and to think step-by-step. So, I need to demonstrate my reasoning process.\n\nThe calculation is simple: 15 multiplied by 3.\n\nStep-by-step breakdown:\n\n1. Multiplication means adding a number to itself a certain number of times. So, 15 times 3 is 15 added three times.\n\n2. First addition: 15 + 15 = 30\n\n3. Second addition: 30 + 15 = 45\n\n4. So, 15 + 15 + 15 = 45\n\nI could also use the standard multiplication method:\n\n   15\n\nx   3\n\n------\n\n   45   (3 times 5 is 15, write down 5, carry over 1)\n\n         (3 times 1 is 3, plus carry over 1 is 4)\n\nSo, the result is 45.\n\nI should confirm this mentally: 10 times 3 is 30, and 5 times 3 is 15, so 30 + 15 = 45. Yes.\n\nMy response should be helpful, clear, and follow the instruction to think step-by-step. Since this is a straightforward calculation, I'll present it in a structured way.\n\nFinally, output the answer in a boxed format as per the instruction. So, the final answer should be \\boxed{45}.",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759509988,
+      "id": "fb732c4b-c8e0-9b17-5f54-e265348618a8_us-east-1",
+      "model": "grok-3-mini",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_4fae27f477",
+      "usage": {
+        "completion_tokens": 216,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 285,
+          "rejected_prediction_tokens": 0
+        },
+        "num_sources_used": 0,
+        "prompt_tokens": 19,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 2,
+          "image_tokens": 0,
+          "text_tokens": 19
+        },
+        "total_tokens": 520
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "988dea725b3feae8-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 03 Oct 2025 16:46:33 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=6W5bfiMIB7gzjEveBJ4Mo6Tb2cNF3ideWY_CB5etNMc-1759509993-1.0.1.1-C3g1jZ6JbvnKR_78E2yHIKiu7dtmGsjzbzKcGOnTzxDQMibYHN2PNXOcfxCkQaEaLWJerhnUNeZ1Ukog0xQQnK0tc4_pwDOrZnPlHZPM5lY; path=/; expires=Fri, 03-Oct-25 17:16:33 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-request-id": [
+        "00-5a20d95f6f3639d58b5cd6951deec266-d242e4a80004cf9f-01"
+      ],
+      "x-zero-data-retention": [
+        "false"
+      ]
+    },
+    "status": 200
+  }
+}

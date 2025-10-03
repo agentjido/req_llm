@@ -58,35 +58,35 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "I'm sorry, but I don't have the capability to tell jokes. My available tools are limited to things like getting weather information. If you'd like, I can help with that—just let me know a location!",
-            "reasoning_content": "First, the user asked: \"Tell me a joke about cats.\" This is a request for a joke, which is not related to any of the available functions. The only available function is \"get_weather\", which is for getting weather information based on a location.\n\nI need to check if this query can be addressed using the available functions. The available functions are limited to getting weather, so no, this doesn't match.\n\nThe instructions say: \"If the user's query can be addressed using an available function, and all required parameters are provided or obviously inferable, trigger a function call.\" In this case, it cannot be addressed using any available function.\n\nFurther, it says: \"Do not call a function if no matching functions apply or if parameters are missing/unclear. Ask for clarification only if none of the provided functions are able to advance the user's request.\"\n\nSince none of the functions can advance this request, I should not call a function. Instead, I should respond directly or ask for clarification if needed. But the query is clear; it's just not something I can handle with the tools I have.\n\nThe instructions emphasize keeping responses clear and not verbose. So, I should just politely respond that I can't help with that or suggest something related if possible.\n\nMy response should be helpful. I could say something like: \"I'm sorry, but I don't have the capability to tell jokes. I can help with weather information if you'd like.\"\n\nThat way, I'm redirecting to what I can do.\n\nFinally, ensure that I don't use the <function_call> tag unless I'm actually calling a function. In this case, I'm not.",
+            "content": "I apologize, but I don't have the capability to tell jokes. I'm here to help with tasks like getting weather information. If you have a question about that or something else, let me know!",
+            "reasoning_content": "First, the user asked for a joke about cats. Looking at the available functions, I have only one: \"get_weather\", which is for getting weather information based on a location.\n\nThis query doesn't relate to weather at all. It's about telling a joke, which isn't covered by any of the provided functions.\n\nThe instructions say: \"If the user's query can be addressed using an available function, and all required parameters are provided or obviously inferable, trigger a function call.\"\n\nIn this case, no available function matches the query. So, I shouldn't call any function.\n\nAdditionally, \"Ask for clarification only if none of the provided functions are able to advance the user's request.\" That's exactly the situation here. None of the functions can advance this request.\n\nI should keep my response clear and not verbose. So, I need to respond directly, perhaps by saying I can't help with that or asking if they meant something else.\n\nThe system prompt emphasizes: \"You are only permitted to use the <function_call> tag in your response only if you have made the decision to call a function.\" Since I'm not calling a function, I shouldn't include any <function_call> tags.\n\nMy response should be helpful. I could politely inform the user that I'm not equipped to tell jokes and redirect or clarify.\n\nFinal decision: Respond without calling a function, keep it concise.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759449567,
-      "id": "9749c76d-23cc-795d-5548-fa4f3aa8eb46_us-east-1",
+      "created": 1759510006,
+      "id": "2b190597-c304-d0fc-99c8-7a682454108f_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 41,
+        "completion_tokens": 39,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 327,
+          "reasoning_tokens": 271,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
         "prompt_tokens": 277,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 232,
+          "cached_tokens": 276,
           "image_tokens": 0,
           "text_tokens": 277
         },
-        "total_tokens": 645
+        "total_tokens": 587
       }
     },
     "headers": {
@@ -100,7 +100,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988827547efcf842-ORD"
+        "988deae45a78eae8-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -109,13 +109,13 @@
         "application/json"
       ],
       "date": [
-        "Thu, 02 Oct 2025 23:59:31 GMT"
+        "Fri, 03 Oct 2025 16:46:49 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=pdxHIBAuHSu.H0Fy3IdunO4WxamZuiskXW17u0_7prI-1759449571-1.0.1.1-UPZQPX7m_HrZeMKsDHQo8tSViwpxsdi3OMLlst_FMuyVs9kJpriXWLqxbXaNNw7rvWgpb4GqZj.NbuBDIOqeqvq9R.FlXdgagpJydsnUtVo; path=/; expires=Fri, 03-Oct-25 00:29:31 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=5hmEmx7irRMfeaY2QbdKNDiuRQGheUhfiMDuWmZN6WA-1759510009-1.0.1.1-E9ovzU4L0QoNfyx65C.s2G9PwWdkBJbEjKnskr86OslK6ozVaY6uqaX_cB7Nxm4FwEyx861bUHJYmEX282NqsUdPyy2CwHH9C2.dR07.2ck; path=/; expires=Fri, 03-Oct-25 17:16:49 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -127,7 +127,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-938ae6d1535c819aed29538ef7057343-974db0100045fd33-01"
+        "00-4111e6518c4ec46b464d541a78834dbc-ed78f5fe00054930-01"
       ],
       "x-zero-data-retention": [
         "false"

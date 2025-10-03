@@ -1,9 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay0yLTEyMTIiLCJzZWVkIjo0Miwic3RyZWFtIjp0cnVlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJ0eXBlIjoidG9vbCJ9LCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZW5lcmF0ZSBzdHJ1Y3R1cmVkIG91dHB1dCBtYXRjaGluZyB0aGUgcHJvdmlkZWQgc2NoZW1hIiwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbIm5hbWUiLCJhZ2UiXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjQwOTYsIm1heF90b2tlbnMiOjIwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTItMTIxMiIsInNlZWQiOjQyLCJzdHJlYW0iOnRydWUsInRlbXBlcmF0dXJlIjowLjAsInRvb2xfY2hvaWNlIjp7ImZ1bmN0aW9uIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCJ9LCJ0eXBlIjoiZnVuY3Rpb24ifSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2VuZXJhdGUgc3RydWN0dXJlZCBvdXRwdXQgbWF0Y2hpbmcgdGhlIHByb3ZpZGVkIHNjaGVtYSIsIm5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiYWdlIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
+      "max_completion_tokens": 4096,
       "max_tokens": 200,
       "messages": [
         {
@@ -16,8 +17,10 @@
       "stream": true,
       "temperature": 0.0,
       "tool_choice": {
-        "name": "structured_output",
-        "type": "tool"
+        "function": {
+          "name": "structured_output"
+        },
+        "type": "function"
       },
       "tools": [
         {
@@ -61,21 +64,21 @@
   },
   "response": {
     "body": {
-      "b64": "ZGF0YTogeyJpZCI6ImQ2ZTFkYmZkLWM5MTMtMTJmYi0yZjllLTNmZWEzYzc0Yzc2MV91cy1lYXN0LTEiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5NDQ5MzUwLCJtb2RlbCI6Imdyb2stMi0xMjEyIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJpZCI6ImNhbGxfNjg4MDk2NDIiLCJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJhcmd1bWVudHMiOiJ7XCJhZ2VcIjozMixcIm5hbWVcIjpcIkpvaG4gRG9lXCIsXCJvY2N1cGF0aW9uXCI6XCJTb2Z0d2FyZSBFbmdpbmVlclwifSJ9LCJpbmRleCI6MCwidHlwZSI6ImZ1bmN0aW9uIn1dfSwiZmluaXNoX3JlYXNvbiI6InRvb2xfY2FsbHMifV0sInN5c3RlbV9maW5nZXJwcmludCI6ImZwX2ZjZWQ5OWYyNGYifQoKZGF0YTogW0RPTkVdCgo="
+      "b64": "ZGF0YTogeyJpZCI6ImI0ODFiODEyLWZkODktNTU1Ny00MDhkLWYyZTM2ZWMwMDY5OF91cy1lYXN0LTEiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5NTA5OTgwLCJtb2RlbCI6Imdyb2stMi0xMjEyIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJpZCI6ImNhbGxfMjkxNDQ4NDQiLCJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJhcmd1bWVudHMiOiJ7XCJhZ2VcIjozMCxcIm5hbWVcIjpcIkpvaG4gRG9lXCIsXCJvY2N1cGF0aW9uXCI6XCJTb2Z0d2FyZSBFbmdpbmVlclwifSJ9LCJpbmRleCI6MCwidHlwZSI6ImZ1bmN0aW9uIn1dfSwiZmluaXNoX3JlYXNvbiI6InRvb2xfY2FsbHMifV0sInN5c3RlbV9maW5nZXJwcmludCI6ImZwX2ZjZWQ5OWYyNGYifQoKZGF0YTogW0RPTkVdCgo="
     },
     "headers": {
       "access-control-allow-origin": "*",
       "access-control-expose-headers": "*",
       "cache-control": "no-cache",
       "cf-cache-status": "DYNAMIC",
-      "cf-ray": "98882203bc1f61fc-ORD",
+      "cf-ray": "988dea3e5f70e82e-ORD",
       "content-type": "text/event-stream",
-      "date": "Thu, 02 Oct 2025 23:55:49 GMT",
+      "date": "Fri, 03 Oct 2025 16:46:19 GMT",
       "server": "cloudflare",
-      "set-cookie": "__cf_bm=DnOzK5SmINJhpJn_Qr.5maKejA74jjE.EJf__9_sqYA-1759449349-1.0.1.1-hgOJ0MKmSaxGAvpdlT.QAMiRmK.RxkB9mF7t1FBjdk1gbsk0j3SAmnIo3N2FHLwI_4sLZ.HyOpQAcqlmKbTuS9lvJ9MMMXx4RE9eNlGvK_w; path=/; expires=Fri, 03-Oct-25 00:25:49 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None",
+      "set-cookie": "__cf_bm=hFLjAOVZs4rF_.bNnoigFNAg3GNkdPO2mMJwlezB2f8-1759509979-1.0.1.1-gO.EkXibzvMmP..zhhYzttukdIsBW4GJAXisrz3T_kNaxMC7MYFNa6Y5StN4UGq36ckHByoL456VA5gZACVOs.cdGBAoposvbncdbdpvB2w; path=/; expires=Fri, 03-Oct-25 17:16:19 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None",
       "strict-transport-security": "max-age=31536000",
       "vary": "origin, access-control-request-method, access-control-request-headers",
-      "x-request-id": "00-0d5c6c007f33e02e17a2ad3e23327a42-ce57d6f50045d406-01",
+      "x-request-id": "00-cdebedefc969f1f1d883c0404ebc19a1-a9a9084f0004ced0-01",
       "x-zero-data-retention": "false"
     },
     "status": 200

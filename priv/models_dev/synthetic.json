@@ -596,6 +596,36 @@
       "release_date": "2025-07-28",
       "temperature": true,
       "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.55,
+        "output": 2.19
+      },
+      "id": "hf:zai-org/GLM-4.6",
+      "knowledge": "2025-04",
+      "last_updated": "2025-09-30",
+      "limit": {
+        "context": 200000,
+        "output": 96000
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "GLM 4.6",
+      "open_weights": true,
+      "provider": "synthetic",
+      "provider_model_id": "hf:zai-org/GLM-4.6",
+      "reasoning": true,
+      "release_date": "2025-09-30",
+      "temperature": true,
+      "tool_call": true
     }
   ],
   "provider": {

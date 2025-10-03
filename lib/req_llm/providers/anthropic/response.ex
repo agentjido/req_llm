@@ -139,6 +139,10 @@ defmodule ReqLLM.Providers.Anthropic.Response do
     ReqLLM.StreamChunk.text(text)
   end
 
+  defp decode_content_block(%{"type" => "thinking", "thinking" => text}) do
+    ReqLLM.StreamChunk.thinking(text)
+  end
+
   defp decode_content_block(%{"type" => "thinking", "text" => text}) do
     ReqLLM.StreamChunk.thinking(text)
   end
@@ -152,6 +156,11 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   defp decode_content_block_delta(%{"type" => "text_delta", "text" => text}, _index)
        when is_binary(text) do
     [ReqLLM.StreamChunk.text(text)]
+  end
+
+  defp decode_content_block_delta(%{"type" => "thinking_delta", "thinking" => text}, _index)
+       when is_binary(text) do
+    [ReqLLM.StreamChunk.thinking(text)]
   end
 
   defp decode_content_block_delta(%{"type" => "thinking_delta", "text" => text}, _index)
@@ -172,6 +181,10 @@ defmodule ReqLLM.Providers.Anthropic.Response do
 
   defp decode_content_block_start(%{"type" => "text", "text" => text}, _index) do
     [ReqLLM.StreamChunk.text(text)]
+  end
+
+  defp decode_content_block_start(%{"type" => "thinking", "thinking" => text}, _index) do
+    [ReqLLM.StreamChunk.thinking(text)]
   end
 
   defp decode_content_block_start(%{"type" => "thinking", "text" => text}, _index) do

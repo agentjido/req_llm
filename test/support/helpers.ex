@@ -295,7 +295,15 @@ defmodule ReqLLM.Test.Helpers do
       minimal: [
         temperature: 0.5,
         max_tokens: 50
-      ]
+      ],
+      tool_test_tokens: 150,
+      reasoning_effort: :low,
+      reasoning_prompts: %{
+        basic: "Solve 12*7 and show your internal thinking (brief).",
+        streaming_system: "You are a careful, step-by-step reasoner.",
+        streaming_user: "Briefly think through your approach, then answer: What is 15*3?"
+      },
+      validate_cached_tokens: false
     }
 
     case provider do
@@ -303,14 +311,48 @@ defmodule ReqLLM.Test.Helpers do
         %{
           deterministic: base.deterministic ++ [provider_options: [google_thinking_budget: 0]],
           creative: base.creative ++ [provider_options: [google_thinking_budget: 0]],
-          minimal: base.minimal ++ [provider_options: [google_thinking_budget: 0]]
+          minimal: base.minimal ++ [provider_options: [google_thinking_budget: 0]],
+          tool_test_tokens: base.tool_test_tokens,
+          reasoning_effort: base.reasoning_effort,
+          reasoning_prompts: base.reasoning_prompts,
+          validate_cached_tokens: false
         }
 
       :anthropic ->
         %{
           deterministic: base.deterministic,
           creative: [temperature: 0.9, max_tokens: 100],
-          minimal: base.minimal
+          minimal: base.minimal,
+          tool_test_tokens: base.tool_test_tokens,
+          reasoning_effort: base.reasoning_effort,
+          reasoning_prompts: base.reasoning_prompts,
+          validate_cached_tokens: false
+        }
+
+      :xai ->
+        %{
+          deterministic: base.deterministic,
+          creative: base.creative,
+          minimal: base.minimal,
+          tool_test_tokens: 500,
+          reasoning_effort: "low",
+          reasoning_prompts: %{
+            basic: "Calculate 15 times 3. Think step-by-step.",
+            streaming_system: "You are a helpful math tutor.",
+            streaming_user: "What is 8 plus 7? Show your reasoning."
+          },
+          validate_cached_tokens: false
+        }
+
+      :openai ->
+        %{
+          deterministic: base.deterministic,
+          creative: base.creative,
+          minimal: base.minimal,
+          tool_test_tokens: base.tool_test_tokens,
+          reasoning_effort: base.reasoning_effort,
+          reasoning_prompts: base.reasoning_prompts,
+          validate_cached_tokens: true
         }
 
       _ ->
@@ -341,26 +383,39 @@ defmodule ReqLLM.Test.Helpers do
   Assert text response length is within expected range.
   """
   def assert_text_length(response, min_length) do
-    text = Response.text(response)
+    text = Response.text(response) || ""
+    thinking = Response.thinking(response) || ""
+    combined_length = String.length(text) + String.length(thinking)
 
-    assert String.length(text) >= min_length,
-           "Expected text length >= #{min_length}, got #{String.length(text)}"
+    assert combined_length >= min_length,
+           "Expected text or thinking length >= #{min_length}, got #{combined_length} (text: #{String.length(text)}, thinking: #{String.length(thinking)})"
 
     response
   end
 
+  defp assert_text_content(%Response{message: nil} = response) do
+    flunk("Expected response with message, got nil message")
+    response
+  end
+
   defp assert_text_content(%Response{message: message} = response) do
-    text = Response.text(response)
+    text = Response.text(response) || ""
+    thinking = Response.thinking(response) || ""
+
     assert is_binary(text)
+    assert is_binary(thinking)
 
     has_tool_calls =
       message.content
       |> Enum.any?(fn part -> part.type == :tool_call end)
 
+    combined_length = String.length(text) + String.length(thinking)
+
     if has_tool_calls do
-      assert String.length(text) >= 0
+      assert combined_length >= 0
     else
-      assert String.length(text) > 0
+      assert combined_length > 0,
+             "Expected text or thinking content, got text=#{inspect(text)}, thinking=#{inspect(thinking)}"
     end
 
     response
@@ -379,6 +434,28 @@ defmodule ReqLLM.Test.Helpers do
 
   defp assert_context_advancement(%Response{} = response) do
     assert %Context{} = response.context
+    response
+  end
+
+  @doc """
+  Assert that a response contains at least one tool call in the message content.
+
+  Verifies:
+  - At least one content part has type :tool_call
+  - Tool call has tool_name
+  - Tool call has input (arguments map)
+  """
+  def assert_has_tool_call(response) do
+    tool_call_content =
+      Enum.find(response.message.content, fn content ->
+        content.type == :tool_call
+      end)
+
+    assert tool_call_content, "Expected to find at least one tool_call in message content"
+    assert tool_call_content.tool_name
+    assert tool_call_content.input
+    assert is_map(tool_call_content.input)
+
     response
   end
 end

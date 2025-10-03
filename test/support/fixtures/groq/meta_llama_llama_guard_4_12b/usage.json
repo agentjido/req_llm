@@ -1,0 +1,131 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJtZXRhLWxsYW1hL2xsYW1hLWd1YXJkLTQtMTJiIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 50,
+      "messages": [
+        {
+          "content": "Hi there!",
+          "role": "user"
+        }
+      ],
+      "model": "meta-llama/llama-guard-4-12b",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.groq.com/openai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "safe",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759513820,
+      "id": "chatcmpl-d6300e5a-7247-4413-a085-de271be02396",
+      "model": "meta-llama/llama-guard-4-12b",
+      "object": "chat.completion",
+      "service_tier": "on_demand",
+      "system_fingerprint": "fp_712a32085d",
+      "usage": {
+        "completion_time": 0.00612441,
+        "completion_tokens": 2,
+        "prompt_time": 0.022069496,
+        "prompt_tokens": 202,
+        "queue_time": 0.118644936,
+        "total_time": 0.028193906,
+        "total_tokens": 204
+      },
+      "usage_breakdown": null,
+      "x_groq": {
+        "id": "req_01k6nk4fnhe93aq8e89b7mt6rr"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cache-control": [
+        "private, max-age=0, no-store, no-cache, must-revalidate"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "988e48042ea2508f-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 03 Oct 2025 17:50:21 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=bJflpMX7FM0GSEGEdAfnbtZaD7aT26aK1G5eVbSu9Cw-1759513821-1.0.1.1-g6C_5ipsBTo17OTifhDg8DcHb9Y7ItHjlGBwcxcUXSExpn5TP44j77KkRkBN1_E4qLKBzq1OB8ZM.kLMKzS4M_YLx0tsVek1FvXDttNoF40; path=/; expires=Fri, 03-Oct-25 18:20:21 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-groq-region": [
+        "yul"
+      ],
+      "x-ratelimit-limit-requests": [
+        "14400"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "15000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "14398"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "14976"
+      ],
+      "x-ratelimit-reset-requests": [
+        "11.433s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "96ms"
+      ],
+      "x-request-id": [
+        "req_01k6nk4fnhe93aq8e89b7mt6rr"
+      ]
+    },
+    "status": 200
+  }
+}

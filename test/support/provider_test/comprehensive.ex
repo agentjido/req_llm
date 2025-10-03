@@ -2,14 +2,15 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
   @moduledoc """
   Comprehensive per-model provider tests.
 
-  Consolidates all provider capability testing into 7 focused tests per model:
+  Consolidates all provider capability testing into up to 8 focused tests per model:
   1. Basic generate_text (non-streaming)
   2. Streaming with system context + creative params
   3. Token limit constraints
   4. Usage metrics and cost calculations
   5. Tool calling - multi-tool selection
   6. Tool calling - no tool when inappropriate
-  7. Object generation (streaming)
+  7. Object generation (streaming) - only for models with :tool_call capability
+  8. Reasoning/thinking tokens - only for models with :reasoning capability
 
   Tests use fixtures for fast, deterministic execution while supporting
   live API recording with REQ_LLM_FIXTURES_MODE=record.
@@ -101,7 +102,14 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             # Assert response structure without context advancement check
             # (streaming doesn't auto-append to context)
             assert %ReqLLM.Response{} = response
-            assert ReqLLM.Response.text(response) != ""
+
+            text = ReqLLM.Response.text(response) || ""
+            thinking = ReqLLM.Response.thinking(response) || ""
+            combined = text <> thinking
+
+            assert combined != "",
+                   "Expected text or thinking content, got empty (text: #{inspect(text)}, thinking: #{inspect(thinking)})"
+
             assert response.message.role == :assistant
           end
 
@@ -165,7 +173,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 refute Map.has_key?(response.usage, :input_cost)
             end
 
-            if @provider == :openai do
+            if param_bundles(@provider).validate_cached_tokens do
               cached_tokens = response.usage[:cached_tokens] || 0
               assert is_number(cached_tokens) and cached_tokens >= 0
             end
@@ -199,10 +207,9 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
               )
             ]
 
-            max_tokens = if @provider == :xai, do: 500, else: 150
-
             base_opts =
-              param_bundles(@provider).deterministic |> Keyword.put(:max_tokens, max_tokens)
+              param_bundles(@provider).deterministic
+              |> Keyword.put(:max_tokens, param_bundles(@provider).tool_test_tokens)
 
             result =
               ReqLLM.generate_text(
@@ -234,10 +241,9 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
               )
             ]
 
-            max_tokens = if @provider == :xai, do: 500, else: 150
-
             base_opts =
-              param_bundles(@provider).deterministic |> Keyword.put(:max_tokens, max_tokens)
+              param_bundles(@provider).deterministic
+              |> Keyword.put(:max_tokens, param_bundles(@provider).tool_test_tokens)
 
             ReqLLM.generate_text(
               @model_spec,
@@ -288,21 +294,98 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
               assert object["age"] > 0
             end
           end
+
+          if :reasoning in ReqLLM.capabilities(model_spec) do
+            @tag category: :reasoning
+            test "reasoning/thinking tokens (non-streaming + streaming)" do
+              if debug?() do
+                IO.puts("\n[Comprehensive] model_spec=#{@model_spec}, test=reasoning")
+              end
+
+              provider_config = param_bundles(@provider)
+
+              base_opts =
+                provider_config.deterministic
+                |> Keyword.delete(:temperature)
+                |> Keyword.merge(
+                  max_tokens: 2048,
+                  temperature: 1.0,
+                  provider_options: [reasoning_effort: provider_config.reasoning_effort]
+                )
+
+              prompt = provider_config.reasoning_prompts.basic
+
+              {:ok, response} =
+                ReqLLM.generate_text(
+                  @model_spec,
+                  prompt,
+                  fixture_opts(@provider, "reasoning_basic", base_opts)
+                )
+
+              assert %ReqLLM.Response{} = response
+              assert response.message.role == :assistant
+
+              text = ReqLLM.Response.text(response) || ""
+              thinking = ReqLLM.Response.thinking(response) || ""
+              combined = text <> thinking
+              assert combined != ""
+
+              has_thinking_part? =
+                Enum.any?(
+                  response.message.content,
+                  &(&1.type == :thinking and is_binary(&1.text) and &1.text != "")
+                )
+
+              assert has_thinking_part?,
+                     "Expected assistant message to include :thinking content parts"
+
+              last = List.last(response.context.messages)
+              assert last == response.message
+              assert Enum.any?(last.content, &(&1.type == :thinking))
+
+              context =
+                ReqLLM.Context.new([
+                  system(provider_config.reasoning_prompts.streaming_system),
+                  user(provider_config.reasoning_prompts.streaming_user)
+                ])
+
+              stream_opts =
+                provider_config.creative
+                |> Keyword.delete(:temperature)
+                |> Keyword.merge(
+                  max_tokens: 2048,
+                  temperature: 1.0,
+                  provider_options: [reasoning_effort: provider_config.reasoning_effort]
+                )
+
+              {:ok, stream_response} =
+                ReqLLM.stream_text(
+                  @model_spec,
+                  context,
+                  fixture_opts(@provider, "reasoning_streaming", stream_opts)
+                )
+
+              assert %ReqLLM.StreamResponse{} = stream_response
+              assert stream_response.stream
+              assert stream_response.metadata_task
+
+              {thinking_count, _acc_text} =
+                stream_response.stream
+                |> Enum.reduce({0, ""}, fn chunk, {count, acc} ->
+                  case chunk.type do
+                    :thinking -> {count + 1, acc <> (chunk.text || "")}
+                    _ -> {count, acc}
+                  end
+                end)
+
+              assert thinking_count > 0, "Expected at least one :thinking stream chunk"
+
+              {:ok, response} = ReqLLM.StreamResponse.to_response(stream_response)
+              assert %ReqLLM.Response{} = response
+              assert response.message.role == :assistant
+            end
+          end
         end
-      end
-
-      defp assert_has_tool_call(response) do
-        tool_call_content =
-          Enum.find(response.message.content, fn content ->
-            content.type == :tool_call
-          end)
-
-        assert tool_call_content, "Expected to find at least one tool_call in message content"
-        assert tool_call_content.tool_name
-        assert tool_call_content.input
-        assert is_map(tool_call_content.input)
-
-        response
       end
     end
   end

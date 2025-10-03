@@ -101,15 +101,15 @@
                   "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "call_57144287",
+                "id": "call_70365202",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1759449534,
-      "id": "7153e0e0-426e-0d36-dd9a-202f16e78096_us-east-1",
+      "created": 1759509982,
+      "id": "d38d5b4e-7c45-c83b-1636-2aecec75c3eb_us-east-1",
       "model": "grok-3",
       "object": "chat.completion",
       "system_fingerprint": "fp_f02e6df795",
@@ -125,7 +125,7 @@
         "prompt_tokens": 329,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 3,
+          "cached_tokens": 328,
           "image_tokens": 0,
           "text_tokens": 329
         },
@@ -143,7 +143,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98882686889510a1-ORD"
+        "988dea4ffaed10b3-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -152,13 +152,13 @@
         "application/json"
       ],
       "date": [
-        "Thu, 02 Oct 2025 23:58:55 GMT"
+        "Fri, 03 Oct 2025 16:46:23 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=pjqYj02fIWu3WRMcBuexcYR53SRCbJiw9fKcsWnhRC0-1759449535-1.0.1.1-1FlsoNRAgeXJQvcYBOp2Q3tm26EXT6meOpOSQGseqMioori2VPg.lnpM82vBD8kUbNbV_N.oBOozV_k9XGg04C7nO1lT6p.9HsYFay3IqF0; path=/; expires=Fri, 03-Oct-25 00:28:55 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=w.4HceGUCTQvf2AmJzLSvPb8ONrN3WjxC7_c_TFm.Jk-1759509983-1.0.1.1-iuUW52HYwkYUSbSIyOj8GhHpRf83nLLf4HZUmaZ4FCVZ_0mXv9nOWNHqE1mp1GOsFPGwnockJp8v0ceY28UUj6Ud8ix5urJhwAGDn6FN9SY; path=/; expires=Fri, 03-Oct-25 17:16:23 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -170,7 +170,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-623fff6cc0ad820fa6d2bb5a4db181b7-4f8a5475003cc27c-01"
+        "00-301657d602299a32268548c3b990ffd6-1ec4efd10004a9ea-01"
       ],
       "x-zero-data-retention": [
         "false"

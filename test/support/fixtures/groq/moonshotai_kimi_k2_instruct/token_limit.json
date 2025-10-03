@@ -38,29 +38,29 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Title: The Emberveil Codex  \nA Dragon-Adventure in Seven Reckonings  \n≈ 275 000 characters – one very long tale  \n\n––––––––––––––––––––  \nRECKONING I  \nTHE MAP THAT BLED  \n––––––––––––––––––––  \n\n1  \nThe parchment arrived on the first night of the Ember Moon, slipped under the gate of the monastery of St. Elowen like a guilty secret.  \n",
+            "content": "Title: The Ember-Scaled Cartographer  \nA Dragon’s-Eye Chronicle of the World Unfolding  \n\n––––––––––––––––––––––––––––––––––  \nPrologue – The Map that Breathed  \n––––––––––––––––––––––––––––––––––  \n\nIn the archives of the Sky-Forge Observatory—an alabaster tower that drifts three miles above the Sea of Persistent Stars—there is a map that",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759435642,
-      "id": "chatcmpl-c2ff4620-3d00-44d3-b081-37a01e5167da",
+      "created": 1759513826,
+      "id": "chatcmpl-4512b8e2-f551-4aef-9660-b1ae75a4908b",
       "model": "moonshotai/kimi-k2-instruct",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_b8565bb333",
+      "system_fingerprint": "fp_6e6ff3688b",
       "usage": {
-        "completion_time": 0.461165415,
+        "completion_time": 0.405692581,
         "completion_tokens": 100,
-        "prompt_time": 0.010043447,
+        "prompt_time": 0.010006408,
         "prompt_tokens": 34,
-        "queue_time": 0.074626648,
-        "total_time": 0.471208862,
+        "queue_time": 0.142439001,
+        "total_time": 0.415698989,
         "total_tokens": 134
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6k8jmp8e9h84c5h9wyjatgk"
+        "id": "req_01k6nk4n29eaastj0t9nkksev4"
       }
     },
     "headers": {
@@ -74,7 +74,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9886d3577da261c7-ORD"
+        "988e4826addb7a44-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -83,13 +83,13 @@
         "application/json"
       ],
       "date": [
-        "Thu, 02 Oct 2025 20:07:22 GMT"
+        "Fri, 03 Oct 2025 17:50:26 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=fTsybnA20tqUYQoEakSfvvYWIaSfcUQq81GdWXTOk50-1759435642-1.0.1.1-U6EK0oOuHv3hLV8NCNgoo8n9mHz1OacRhi3HozaYLoSGnquxou9bI6ai5i2eI4ggehxz9OCrwap0gdAWthobZ5kI51n0dUMQiGqHsvQ9kc0; path=/; expires=Thu, 02-Oct-25 20:37:22 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=PkD4V3kRbrVRji7E_Ts3C89zrgQcCI37rkuJC0xrJ68-1759513826-1.0.1.1-_TWVPRB79oXL9_pM66OClRUSxgBR21tVsChnrP5_Adu_kGd6wHA5KTklFrbz.iKYf52a4mynRdv.mFvsQL5UtuPdf2QcAiL_F9sMKRrJaCk; path=/; expires=Fri, 03-Oct-25 18:20:26 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -110,19 +110,19 @@
         "10000"
       ],
       "x-ratelimit-remaining-requests": [
-        "996"
+        "999"
       ],
       "x-ratelimit-remaining-tokens": [
         "9965"
       ],
       "x-ratelimit-reset-requests": [
-        "5m36.612999999s"
+        "1m26.4s"
       ],
       "x-ratelimit-reset-tokens": [
         "210ms"
       ],
       "x-request-id": [
-        "req_01k6k8jmp8e9h84c5h9wyjatgk"
+        "req_01k6nk4n29eaastj0t9nkksev4"
       ]
     },
     "status": 200

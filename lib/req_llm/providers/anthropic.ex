@@ -227,8 +227,15 @@ defmodule ReqLLM.Providers.Anthropic do
   def attach_stream(model, context, opts, _finch_name) do
     api_key = ReqLLM.Keys.get!(model, opts)
 
+    # Extract and merge provider_options for translation
+    {provider_options, standard_opts} = Keyword.pop(opts, :provider_options, [])
+    flattened_opts = Keyword.merge(standard_opts, provider_options)
+
+    # Translate provider options (including reasoning_effort) before building body
+    {translated_opts, _warnings} = translate_options(:chat, model, flattened_opts)
+
     # Build request body using provider's encode logic
-    body = build_anthropic_streaming_body(model, context, opts)
+    body = build_anthropic_streaming_body(model, context, translated_opts)
 
     # Build the URL with Anthropic's specific endpoint
     base_url = Keyword.get(opts, :base_url, default_base_url())

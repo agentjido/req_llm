@@ -661,8 +661,9 @@ defmodule ReqLLM.Provider.Defaults do
 
   defp decode_openai_message(message) when is_map(message) do
     content_chunks = decode_openai_content(message)
+    reasoning_chunks = decode_openai_reasoning(message)
     tool_call_chunks = decode_openai_tool_calls(message)
-    content_chunks ++ tool_call_chunks
+    content_chunks ++ reasoning_chunks ++ tool_call_chunks
   end
 
   defp decode_openai_message(_), do: []
@@ -679,6 +680,18 @@ defmodule ReqLLM.Provider.Defaults do
   end
 
   defp decode_openai_content(_), do: []
+
+  defp decode_openai_reasoning(%{"reasoning" => reasoning})
+       when is_binary(reasoning) and reasoning != "" do
+    [ReqLLM.StreamChunk.thinking(reasoning)]
+  end
+
+  defp decode_openai_reasoning(%{"reasoning_content" => reasoning})
+       when is_binary(reasoning) and reasoning != "" do
+    [ReqLLM.StreamChunk.thinking(reasoning)]
+  end
+
+  defp decode_openai_reasoning(_), do: []
 
   defp decode_openai_tool_calls(%{"tool_calls" => tool_calls}) when is_list(tool_calls) do
     tool_calls
@@ -711,7 +724,18 @@ defmodule ReqLLM.Provider.Defaults do
     [ReqLLM.StreamChunk.text(content)]
   end
 
+  defp decode_openai_delta(%{"content" => parts}) when is_list(parts) do
+    parts
+    |> Enum.flat_map(&decode_openai_content_part/1)
+    |> Enum.reject(&is_nil/1)
+  end
+
   defp decode_openai_delta(%{"reasoning_content" => reasoning})
+       when is_binary(reasoning) and reasoning != "" do
+    [ReqLLM.StreamChunk.thinking(reasoning)]
+  end
+
+  defp decode_openai_delta(%{"reasoning" => reasoning})
        when is_binary(reasoning) and reasoning != "" do
     [ReqLLM.StreamChunk.thinking(reasoning)]
   end
@@ -794,6 +818,10 @@ defmodule ReqLLM.Provider.Defaults do
 
   defp openai_chunk_to_content_part(%ReqLLM.StreamChunk{type: :content, text: text}) do
     %ReqLLM.Message.ContentPart{type: :text, text: text}
+  end
+
+  defp openai_chunk_to_content_part(%ReqLLM.StreamChunk{type: :thinking, text: text}) do
+    %ReqLLM.Message.ContentPart{type: :thinking, text: text}
   end
 
   defp openai_chunk_to_content_part(%ReqLLM.StreamChunk{

@@ -37,14 +37,14 @@
           "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "In the ancient land of Eldoria, where the mountains kissed the sky and the forests whispered secrets of old, there lived a young adventurer named Elara. She was known throughout the land for her bravery and her insatiable thirst for adventure. Her heart yearned for the thrill of the unknown, and her dreams were filled with the majestic creatures that roamed the skies—dragons.\n\nOne crisp morning, as the sun painted the horizon with hues of gold and pink, Elara received a summons from the wise",
+            "content": "In the ancient realm of Eldoria, where the skies were painted with the hues of twilight and the earth bore the scars of forgotten battles, dragons ruled supreme. These majestic creatures, with scales that shimmered like the stars and eyes that held the wisdom of the ages, were both revered and feared. Among them, the most legendary was Aeloria, the Dragon Queen, whose breath could ignite the heavens and whose voice could command the winds.\n\nIn the village of Thornwood, nestled at the edge",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759490475,
-      "id": "21a1d48f-b1ea-7592-12f5-a989ea244915_us-east-1",
+      "created": 1759513703,
+      "id": "a6ababac-2fb7-f3bb-e504-83d3c019cff6_us-east-1",
       "model": "grok-2-1212",
       "object": "chat.completion",
       "system_fingerprint": "fp_fced99f24f",
@@ -78,22 +78,28 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988c0e0e6b67803a-ORD"
+        "988e4529aa3cdadf-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy-report-only": [
+        "script-src 'none'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=zz3Eejxtfo7YkuH4BtX5uOc6qClLoimWmjY6_GimgcM-1759513705-1.0.1.1-OAzKnSLnWcxzj.fq.F9iOwqcVOtr2In1Dd6VHMH5UoUUSo8u_KvqGPT6on5nt5Vsk49eKy_peDJC.hCYwSTvpfMVhmKuhgr7UrGRoQsZ5KGFRmfQQ.8VELSMGyoX7.AjSjgl6t1I9GH.1BESNEtE6vhx9iLwN1W_OezpZAWFrQo; report-to cf-csp-endpoint"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 11:21:16 GMT"
+        "Fri, 03 Oct 2025 17:48:25 GMT"
+      ],
+      "report-to": [
+        "{\"endpoints\":[{\"url\":\"https:\\/\\/csp-reporting.cloudflare.com\\/cdn-cgi\\/script_monitor\\/report?m=zz3Eejxtfo7YkuH4BtX5uOc6qClLoimWmjY6_GimgcM-1759513705-1.0.1.1-OAzKnSLnWcxzj.fq.F9iOwqcVOtr2In1Dd6VHMH5UoUUSo8u_KvqGPT6on5nt5Vsk49eKy_peDJC.hCYwSTvpfMVhmKuhgr7UrGRoQsZ5KGFRmfQQ.8VELSMGyoX7.AjSjgl6t1I9GH.1BESNEtE6vhx9iLwN1W_OezpZAWFrQo\"}],\"group\":\"cf-csp-endpoint\",\"max_age\":86400}"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=.oBzGg.0GnaDWVCmdDNo4Jc.aPPgU1f0iBWsiEQrfcQ-1759490476-1.0.1.1-EeT.dHoNwrI6KIMnzOc2n87oMqLlafFFJ2HJrzpGb9X8_LLfgqDx_W.bHnn80AML94mE5bJ5GunvPbYJdg.eWLTMWfXQtKQOuzXOobqmtYE; path=/; expires=Fri, 03-Oct-25 11:51:16 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=SlcLoy17700HQsa1_34HLmIH6kB16x8x7Yc4OJN3Kus-1759513705-1.0.1.1-UBGzVDZwoH9r8sLL1irI7nNEepbVDihF8qpKbH0BGj9SVdWoanaWLQzxdlhPLRRuk62CZ5Mt2u.1S5FGVddW4TJHgNu9iFNIQdwrdhVVEgU; path=/; expires=Fri, 03-Oct-25 18:18:25 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -105,7 +111,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-907ca276ae40bad43356a3fb390db53e-cb9d01630015acab-01"
+        "00-5b51b6b5a77347c3f2e3e6e6d98ddd08-586b85fb00070424-01"
       ],
       "x-zero-data-retention": [
         "false"

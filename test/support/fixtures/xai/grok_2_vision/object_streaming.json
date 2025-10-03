@@ -1,20 +1,10 @@
 {
-  "captured_at": "2025-10-02T23:56:08.261584Z",
-  "chunks": [
-    {
-      "b64": "ZGF0YTogeyJpZCI6ImI4ZGZiMjg2LTAwYTYtNzAwMS03MjFmLTZlMzhlZmRkMzQ1NV91cy1lYXN0LTEiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5NDQ5MzY4LCJtb2RlbCI6Imdyb2stMi12aXNpb24tMTIxMiIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siaWQiOiJjYWxsXzk0NDQzMTgzIiwiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwiYXJndW1lbnRzIjoie1wiYWdlXCI6MzIsXCJuYW1lXCI6XCJBbGV4IEpvaG5zb25cIixcIm9jY3VwYXRpb25cIjpcIlNvZnR3YXJlIEVuZ2luZWVyXCJ9In0sImluZGV4IjowLCJ0eXBlIjoiZnVuY3Rpb24ifV19LCJmaW5pc2hfcmVhc29uIjoidG9vbF9jYWxscyJ9XSwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfMjM2ZGI0NWMwMyJ9Cgo=",
-      "decoded": "data: {\"id\":\"b8dfb286-00a6-7001-721f-6e38efdd3455_us-east-1\",\"object\":\"chat.completion.chunk\",\"created\":1759449368,\"model\":\"grok-2-vision-1212\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"tool_calls\":[{\"id\":\"call_94443183\",\"function\":{\"name\":\"structured_output\",\"arguments\":\"{\\\"age\\\":32,\\\"name\\\":\\\"Alex Johnson\\\",\\\"occupation\\\":\\\"Software Engineer\\\"}\"},\"index\":0,\"type\":\"function\"}]},\"finish_reason\":\"tool_calls\"}],\"system_fingerprint\":\"fp_236db45c03\"}\n\n"
-    },
-    {
-      "b64": "ZGF0YTogW0RPTkVdCgo=",
-      "decoded": "data: [DONE]\n\n"
-    }
-  ],
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay0yLXZpc2lvbiIsInNlZWQiOjQyLCJzdHJlYW0iOnRydWUsInRlbXBlcmF0dXJlIjowLjAsInRvb2xfY2hvaWNlIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsInR5cGUiOiJ0b29sIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibmFtZSIsImFnZSJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjQwOTYsIm1heF90b2tlbnMiOjIwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTItdmlzaW9uIiwic2VlZCI6NDIsInN0cmVhbSI6dHJ1ZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbF9jaG9pY2UiOnsiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0In0sInR5cGUiOiJmdW5jdGlvbiJ9LCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZW5lcmF0ZSBzdHJ1Y3R1cmVkIG91dHB1dCBtYXRjaGluZyB0aGUgcHJvdmlkZWQgc2NoZW1hIiwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbIm5hbWUiLCJhZ2UiXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
+      "max_completion_tokens": 4096,
       "max_tokens": 200,
       "messages": [
         {
@@ -27,8 +17,10 @@
       "stream": true,
       "temperature": 0.0,
       "tool_choice": {
-        "name": "structured_output",
-        "type": "tool"
+        "function": {
+          "name": "structured_output"
+        },
+        "type": "function"
       },
       "tools": [
         {
@@ -71,20 +63,22 @@
     "url": "https://api.x.ai/v1/chat/completions"
   },
   "response": {
-    "body": null,
+    "body": {
+      "b64": "ZGF0YTogeyJpZCI6IjAyZTgyYzcyLTc2ZjctZTQxOC1hZjEzLTQ0MmEyN2Q1ODdjMF91cy1lYXN0LTEiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5NTA5OTc3LCJtb2RlbCI6Imdyb2stMi12aXNpb24tMTIxMiIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siaWQiOiJjYWxsXzM4NTQ1NjkwIiwiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwiYXJndW1lbnRzIjoie1wiYWdlXCI6MzAsXCJuYW1lXCI6XCJKb2huIERvZVwiLFwib2NjdXBhdGlvblwiOlwiU29mdHdhcmUgRW5naW5lZXJcIn0ifSwiaW5kZXgiOjAsInR5cGUiOiJmdW5jdGlvbiJ9XX0sImZpbmlzaF9yZWFzb24iOiJ0b29sX2NhbGxzIn1dLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF8yMzZkYjQ1YzAzIn0KCmRhdGE6IFtET05FXQoK"
+    },
     "headers": {
       "access-control-allow-origin": "*",
       "access-control-expose-headers": "*",
       "cache-control": "no-cache",
       "cf-cache-status": "DYNAMIC",
-      "cf-ray": "98882259bd9d0558-ORD",
+      "cf-ray": "988dea281f681497-ORD",
       "content-type": "text/event-stream",
-      "date": "Thu, 02 Oct 2025 23:56:03 GMT",
+      "date": "Fri, 03 Oct 2025 16:46:16 GMT",
       "server": "cloudflare",
-      "set-cookie": "__cf_bm=IkvFKWCgVVusvbjQGzQmfIHI3zJosDR1G7w3oLquF78-1759449363-1.0.1.1-pu8.eOsa3X50Y_b72Ik9ubAtV6G7.PaXFEc0yBsttAIDeYVRyRMxBwupxQm9wbwsSINnV0GjGIWXO4f43ESKt4lspSiaj7_yFs._c35PlA0; path=/; expires=Fri, 03-Oct-25 00:26:03 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None",
+      "set-cookie": "__cf_bm=fd_BTn0AJJl0H6sSitE6fljA6rgHgwIXPMlEoUTjF4A-1759509976-1.0.1.1-n2toKr_C6ttEMSJbiOCGfhKTQ3X0LyAqPn4coUI8rqrJVTMzGwNy5.kmS3oKiv_HRnXaO_m8IY2Mmyj2EEGglZPUZeO4V5BkBeW0V85PFSk; path=/; expires=Fri, 03-Oct-25 17:16:16 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None",
       "strict-transport-security": "max-age=31536000",
       "vary": "origin, access-control-request-method, access-control-request-headers",
-      "x-request-id": "00-6d25db9b7c33620033ddcaca45f8f69d-f96ed95d003cc138-01",
+      "x-request-id": "00-106682b2811cac093554f64b21df1e84-0301bef300054195-01",
       "x-zero-data-retention": "false"
     },
     "status": 200

@@ -93,7 +93,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "reasoning": "Okay, the user is asking about the weather in Paris, France. Let me check which tool I can use here. The available functions are get_weather, tell_joke, and get_time. The get_weather function seems appropriate here. The parameters required are location and unit. The user didn't specify the unit, so I should probably default to celsius since France uses it. Let me make sure to include the location as \"Paris, France\" and set the unit to celsius. I'll call the get_weather function with these parameters.\n",
+            "reasoning": "Okay, the user is asking about the weather in Paris, France. Let me check which tool I can use here. The available functions are get_weather, tell_joke, and get_time. The get_weather function seems appropriate here. The parameters required are location and unit. The user didn't specify the unit, so I should probably default to celsius since France uses it. I'll call get_weather with location as Paris, France and unit as celsius.\n",
             "role": "assistant",
             "tool_calls": [
               {
@@ -101,31 +101,31 @@
                   "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "kh3m48zaw",
+                "id": "z7e9k0btd",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1759435645,
-      "id": "chatcmpl-764c3c13-54c3-4f15-a46a-8755a138d462",
+      "created": 1759513830,
+      "id": "chatcmpl-7dec37b6-e26b-412a-b0c1-1b70ef165ecf",
       "model": "qwen/qwen3-32b",
       "object": "chat.completion",
       "service_tier": "on_demand",
       "system_fingerprint": "fp_5cf921caa2",
       "usage": {
-        "completion_time": 0.238893834,
-        "completion_tokens": 142,
-        "prompt_time": 0.012909073,
+        "completion_time": 0.21404058,
+        "completion_tokens": 126,
+        "prompt_time": 0.010947445,
         "prompt_tokens": 274,
-        "queue_time": 0.219897962,
-        "total_time": 0.251802907,
-        "total_tokens": 416
+        "queue_time": 0.203890277,
+        "total_time": 0.224988025,
+        "total_tokens": 400
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6k8jr50ea0atg516a4d42bz"
+        "id": "req_01k6nk4rfbebhs2j86xxf4caa8"
       }
     },
     "headers": {
@@ -139,7 +139,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9886d36d9d4261c7-ORD"
+        "988e483c7a8e0045-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -148,13 +148,13 @@
         "application/json"
       ],
       "date": [
-        "Thu, 02 Oct 2025 20:07:25 GMT"
+        "Fri, 03 Oct 2025 17:50:30 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=F03VcmJF9SzvEFen0MpjvNc.CHUyAF.v46ly3uKSGi0-1759435645-1.0.1.1-mqUPI27T5Pv156Gsb_oi9YF5OzHbEQvSo1uMTLVk4kKNlBeAV_B6UvhskbqnvoeiWFAazx9su4evSUNFeNL8SfdOrHyKJFTm4RIzazX7vfI; path=/; expires=Thu, 02-Oct-25 20:37:25 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=zafV_KMcSLzsPUUQIWMSSwvUjZlZ67UXU0xaXd.4PWw-1759513830-1.0.1.1-FiH01erPA4U6SOwE6X8bHAd5Y4Us5bsLahARjddSq2.aG.NqAtvD0y6UM6uzPrwSalNRC_T1QUGFqdmhjkTGbNCzUrxbHJ5a3bE2lUn7QmI; path=/; expires=Fri, 03-Oct-25 18:20:30 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -178,16 +178,16 @@
         "995"
       ],
       "x-ratelimit-remaining-tokens": [
-        "5716"
+        "5072"
       ],
       "x-ratelimit-reset-requests": [
-        "7m10.595s"
+        "7m11.410999999s"
       ],
       "x-ratelimit-reset-tokens": [
-        "2.836s"
+        "9.278999999s"
       ],
       "x-request-id": [
-        "req_01k6k8jr50ea0atg516a4d42bz"
+        "req_01k6nk4rfbebhs2j86xxf4caa8"
       ]
     },
     "status": 200

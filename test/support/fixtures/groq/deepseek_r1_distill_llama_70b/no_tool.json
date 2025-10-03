@@ -55,34 +55,34 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": "stop",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "",
-            "reasoning": "Okay, the user just asked me to tell them a joke about cats. Let me think about what they might be looking for. They might be in a casual setting, maybe just trying to have a laugh or entertain themselves. Cats are a popular topic for jokes because they're relatable and often have funny behaviors.\n\nI should come up with a simple and lighthearted joke that's easy to understand. Maybe a play on words would work well here. Let me brainstorm a few ideas. Hmm, why did the cat join a band? Oh, because it wanted to be a purr-cussionist! That's catchy and ties into the cat's sound, which is a common joke theme.\n\nI should make sure the joke",
+            "content": "Sure, here's a classic cat joke:\n\nWhy don't cats play poker in the jungle?  \nBecause there are too many cheetahs! 😸",
+            "reasoning": "Okay, the user just asked me to tell them a joke about cats. Hmm, I remember that the function I can call is get_weather, but that's for weather information. Since there's no tool for jokes, maybe I should just provide a joke myself instead of calling any function. Let me think of a good cat joke. How about something simple and classic? Yeah, that should work. I'll just share it without using any tools.\n",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759435628,
-      "id": "chatcmpl-b439f787-db73-4997-b464-8446ba436e54",
+      "created": 1759513830,
+      "id": "chatcmpl-100e1541-a148-41b3-bbc6-b43885fecfa2",
       "model": "deepseek-r1-distill-llama-70b",
       "object": "chat.completion",
       "service_tier": "on_demand",
       "system_fingerprint": "fp_1bbe7845ec",
       "usage": {
-        "completion_time": 0.823225958,
-        "completion_tokens": 150,
-        "prompt_time": 0.024577803,
+        "completion_time": 0.760515806,
+        "completion_tokens": 127,
+        "prompt_time": 0.024423069,
         "prompt_tokens": 130,
-        "queue_time": 0.205745649,
-        "total_time": 0.847803761,
-        "total_tokens": 280
+        "queue_time": 0.200539122,
+        "total_time": 0.784938875,
+        "total_tokens": 257
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6k8j6nse3xr8fq2pjccyjj7"
+        "id": "req_01k6nk4rksebjv4z8wy765kemp"
       }
     },
     "headers": {
@@ -96,7 +96,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9886d2fdcd9261c7-ORD"
+        "988e483d6d0561fc-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -105,13 +105,13 @@
         "application/json"
       ],
       "date": [
-        "Thu, 02 Oct 2025 20:07:08 GMT"
+        "Fri, 03 Oct 2025 17:50:31 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=igJJ5ySbd_11GW9xjp1kgBqZpNYWT62g6uHQz4vs6oI-1759435628-1.0.1.1-YrQXZCge1PBMeQuSKw76Y4lSes.kzvcrnjQqiCCqlnY_DmWtw7RB1N.sFgN8eLAGTHvzRgRg0J6lnn0rO1CKRa.TRKCtbIOb6GkQtbe1YAU; path=/; expires=Thu, 02-Oct-25 20:37:08 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=E9gKpw1XXoSLztozWUaA8fHifvgoxO0jVrEqLikRjFA-1759513831-1.0.1.1-vBe8m29wQlspRamHZqfv7gLuMR02scQMLyuEqU0UHqByou3oxUD98v4bMDmkYoZbsYV1Up.o.Tz_WY7wyp6qx1BFaeJNyrbUG4JIm0Lk010; path=/; expires=Fri, 03-Oct-25 18:20:31 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -132,19 +132,19 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "998"
+        "995"
       ],
       "x-ratelimit-remaining-tokens": [
-        "5977"
+        "5589"
       ],
       "x-ratelimit-reset-requests": [
-        "2m52.392s"
+        "7m11.165s"
       ],
       "x-ratelimit-reset-tokens": [
-        "226.999999ms"
+        "4.103s"
       ],
       "x-request-id": [
-        "req_01k6k8j6nse3xr8fq2pjccyjj7"
+        "req_01k6nk4rksebjv4z8wy765kemp"
       ]
     },
     "status": 200

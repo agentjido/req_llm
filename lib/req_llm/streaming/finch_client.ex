@@ -69,6 +69,14 @@ defmodule ReqLLM.Streaming.FinchClient do
       ) do
     case maybe_replay_fixture(model, opts) do
       {:fixture, fixture_path} ->
+        if System.get_env("REQ_LLM_DEBUG") == "1" do
+          test_name = Keyword.get(opts, :fixture, Path.basename(fixture_path, ".json"))
+
+          IO.puts(
+            "[Fixture] step: model=#{model.provider}:#{model.model}, name=#{test_name}"
+          )
+        end
+
         start_fixture_replay(fixture_path, stream_server_pid, model)
 
       :no_fixture ->

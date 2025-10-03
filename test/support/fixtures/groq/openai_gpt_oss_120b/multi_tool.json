@@ -1,0 +1,195 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxNTAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJvcGVuYWkvZ3B0LW9zcy0xMjBiIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+    },
+    "canonical_json": {
+      "max_tokens": 150,
+      "messages": [
+        {
+          "content": "What's the weather like in Paris, France?",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-oss-120b",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tools": [
+        {
+          "function": {
+            "description": "Get current weather information for a location",
+            "name": "get_weather",
+            "parameters": {
+              "properties": {
+                "location": {
+                  "type": "string"
+                },
+                "unit": {
+                  "enum": [
+                    "celsius",
+                    "fahrenheit"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "location"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        },
+        {
+          "function": {
+            "description": "Tell a funny joke",
+            "name": "tell_joke",
+            "parameters": {
+              "properties": {
+                "topic": {
+                  "description": "Topic for the joke",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "function"
+        },
+        {
+          "function": {
+            "description": "Get the current time",
+            "name": "get_time",
+            "parameters": {
+              "properties": {},
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.groq.com/openai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "reasoning": "User asks: \"What's the weather like in Paris, France?\" Need to fetch current weather. Use function get_weather with location \"Paris, France\". Probably default unit celsius. We'll call function.",
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
+                  "name": "get_weather"
+                },
+                "id": "fc_dbe51738-8e63-4dbc-be1c-cabe51c9dabc",
+                "type": "function"
+              }
+            ]
+          }
+        }
+      ],
+      "created": 1759513827,
+      "id": "chatcmpl-db5571a4-c1f7-47d2-a4e7-cd5c1f83b004",
+      "model": "openai/gpt-oss-120b",
+      "object": "chat.completion",
+      "service_tier": "on_demand",
+      "system_fingerprint": "fp_213abb2467",
+      "usage": {
+        "completion_time": 0.162759148,
+        "completion_tokens": 78,
+        "prompt_time": 0.012483183,
+        "prompt_tokens": 183,
+        "queue_time": 0.205700738,
+        "total_time": 0.175242331,
+        "total_tokens": 261
+      },
+      "usage_breakdown": null,
+      "x_groq": {
+        "id": "req_01k6nk4nq5fqg9p0dwm2c5m1ep"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cache-control": [
+        "private, max-age=0, no-store, no-cache, must-revalidate"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "988e482abaa0d130-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 03 Oct 2025 17:50:27 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=zbxSQWANe7LOjk9SqdI8l9Tm0Wz4CSJVNe6cf0WeGWk-1759513827-1.0.1.1-zIP1bmc9neBfiQl5lNikCKEpLH1g8CghEnSOOOZ32OOPFm.gkTjZQ5GxMZlBIHYlT7NwnU6x0j_R4.eEGC0h66ql2ItSlJRTusqf3j0UJ84; path=/; expires=Fri, 03-Oct-25 18:20:27 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-groq-region": [
+        "yul"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "8000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "995"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "7500"
+      ],
+      "x-ratelimit-reset-requests": [
+        "7m10.961s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "3.7465s"
+      ],
+      "x-request-id": [
+        "req_01k6nk4nq5fqg9p0dwm2c5m1ep"
+      ]
+    },
+    "status": 200
+  }
+}

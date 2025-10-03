@@ -8,6 +8,34 @@
   },
   "models": [
     {
+      "id": "grok-3-mini",
+      "reasoning": true
+    },
+    {
+      "id": "grok-3-mini-fast",
+      "reasoning": true
+    },
+    {
+      "id": "grok-3-mini-fast-latest",
+      "reasoning": true
+    },
+    {
+      "id": "grok-3-mini-latest",
+      "reasoning": true
+    },
+    {
+      "id": "grok-4",
+      "reasoning": false
+    },
+    {
+      "id": "grok-4-fast",
+      "reasoning": false
+    },
+    {
+      "id": "grok-code-fast-1",
+      "reasoning": false
+    },
+    {
       "attachment": false,
       "cost": {
         "cache_read": 0.02,
@@ -33,7 +61,7 @@
       "open_weights": false,
       "provider": "xai",
       "provider_model_id": "grok-4-fast-reasoning",
-      "reasoning": true,
+      "reasoning": false,
       "release_date": "2025-09-21",
       "temperature": true,
       "tool_call": true

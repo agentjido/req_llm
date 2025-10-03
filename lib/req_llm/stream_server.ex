@@ -411,6 +411,15 @@ defmodule ReqLLM.StreamServer do
   defp process_data_chunk(chunk, state) do
     # Capture raw chunk for fixture system BEFORE processing
     if state.fixture_path && is_binary(chunk) do
+      if System.get_env("REQ_LLM_DEBUG") == "1" do
+        Logger.debug("""
+        StreamServer fixture capture:
+          path: #{state.fixture_path}
+          chunk_size: #{byte_size(chunk)}
+          first_bytes: #{inspect(binary_part(chunk, 0, min(64, byte_size(chunk))))}
+        """)
+      end
+
       try do
         case Code.ensure_loaded(ReqLLM.Step.Fixture.Backend) do
           {:module, ReqLLM.Step.Fixture.Backend} ->

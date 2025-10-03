@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibWlzdHJhbC1zYWJhLTI0YiIsInNlZWQiOjQyLCJzdHJlYW0iOnRydWUsInRlbXBlcmF0dXJlIjowLjAsInRvb2xfY2hvaWNlIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsInR5cGUiOiJ0b29sIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibmFtZSIsImFnZSJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibWlzdHJhbC1zYWJhLTI0YiIsInNlZWQiOjQyLCJzdHJlYW0iOnRydWUsInRlbXBlcmF0dXJlIjowLjAsInRvb2xfY2hvaWNlIjp7ImZ1bmN0aW9uIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCJ9LCJ0eXBlIjoiZnVuY3Rpb24ifSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2VuZXJhdGUgc3RydWN0dXJlZCBvdXRwdXQgbWF0Y2hpbmcgdGhlIHByb3ZpZGVkIHNjaGVtYSIsIm5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiYWdlIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
       "max_tokens": 200,
@@ -16,8 +16,10 @@
       "stream": true,
       "temperature": 0.0,
       "tool_choice": {
-        "name": "structured_output",
-        "type": "tool"
+        "function": {
+          "name": "structured_output"
+        },
+        "type": "function"
       },
       "tools": [
         {
@@ -62,7 +64,8 @@
   "response": {
     "body": {
       "error": {
-        "message": "'tool_choice' : value must be a string (auto or none) or an object like `{'type': 'function', 'function': {'name': 'my_function'}}`",
+        "code": "model_decommissioned",
+        "message": "The model `mistral-saba-24b` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.",
         "type": "invalid_request_error"
       }
     },
@@ -70,16 +73,16 @@
       "alt-svc": "h3=\":443\"; ma=86400",
       "cache-control": "private, max-age=0, no-store, no-cache, must-revalidate",
       "cf-cache-status": "DYNAMIC",
-      "cf-ray": "9886d3220f81b97d-ORD",
-      "content-length": "187",
+      "cf-ray": "988e481d1a95fa13-ORD",
+      "content-length": "277",
       "content-type": "application/json",
-      "date": "Thu, 02 Oct 2025 20:07:13 GMT",
+      "date": "Fri, 03 Oct 2025 17:50:24 GMT",
       "server": "cloudflare",
-      "set-cookie": "__cf_bm=awIO5w6FW_M4NmWNg6S87_JEdmAvDwSvV3HPHX4rpzA-1759435632-1.0.1.1-NlyexgfTpxcLCk3rAhX8T1qaSDy.f7OH8s2g68K9pww1E2IQO2r8cOU5NrsBlJkpBQZsK2TTLfEUiis4Ng1DvIdPZHmn.6RPxuo7_yGNPOo; path=/; expires=Thu, 02-Oct-25 20:37:12 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None",
+      "set-cookie": "__cf_bm=k9MzL2nsTX8nHDNVnXMdXFPoPKDEVJLXs4sx3O9bbMg-1759513824-1.0.1.1-qCm3HeBjHaEe56b3oupaQBOcjbRAnNZZrRXqYCGtp2VdHMwUxu4MkQwFLQjee3XSO_kWNEJfSjYtGGw10j0XmIJt5iB7QRh9Qa.j63Wo1k0; path=/; expires=Fri, 03-Oct-25 18:20:24 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None",
       "vary": "Origin",
       "via": "1.1 google",
       "x-groq-region": "yul",
-      "x-request-id": "req_01k6k8jcate61948bb1t2d6p6c"
+      "x-request-id": "req_01k6nk4kjcea393wgzrmk5vgfg"
     },
     "status": 400
   }

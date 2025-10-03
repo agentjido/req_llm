@@ -1,0 +1,85 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJsbGFtYTMtNzBiLTgxOTIiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 50,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "llama3-70b-8192",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.groq.com/openai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "error": {
+        "code": "model_decommissioned",
+        "message": "The model `llama3-70b-8192` has been decommissioned and is no longer supported. Please refer to https://console.groq.com/docs/deprecations for a recommendation on which model to use instead.",
+        "type": "invalid_request_error"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cache-control": [
+        "private, max-age=0, no-store, no-cache, must-revalidate"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "988e480a6c952b4b-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 03 Oct 2025 17:50:21 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=xN5cbMPLcG6.7GC.djtwQgAMQHqdLtQ7v.SoRVmirTk-1759513821-1.0.1.1-AIx8fmC8S8GC.DXrIXf90ntY24nDqXCxxTPFwgffSlNUT4vkXxj0b9O5kK1BRxES5Ei9muhTONgcI5gMG_NfMJRvvgWuwEUF3qJMWtBhl2E; path=/; expires=Fri, 03-Oct-25 18:20:21 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-groq-region": [
+        "yul"
+      ],
+      "x-request-id": [
+        "req_01k6nk4gp1e9es813k04h4pq6y"
+      ]
+    },
+    "status": 400
+  }
+}

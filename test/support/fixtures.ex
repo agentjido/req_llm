@@ -37,25 +37,46 @@ defmodule ReqLLM.Test.Fixtures do
   @spec replay_path(ReqLLM.Model.t() | String.t(), keyword()) ::
           {:fixture, String.t()} | :no_fixture
   def replay_path(model_or_spec, opts) do
-    case {mode(), Keyword.get(opts, :fixture)} do
-      {:replay, nil} ->
-        :no_fixture
+    result =
+      case {mode(), Keyword.get(opts, :fixture)} do
+        {:replay, nil} ->
+          :no_fixture
 
-      {:replay, test_name} when is_binary(test_name) ->
-        path = ReqLLM.Test.FixturePath.file(model_or_spec, test_name)
+        {:replay, test_name} when is_binary(test_name) ->
+          path = ReqLLM.Test.FixturePath.file(model_or_spec, test_name)
 
-        if File.exists?(path) do
-          {:fixture, path}
-        else
-          raise """
-          Fixture not found: #{path}
-          Run the test with REQ_LLM_FIXTURES_MODE=record to capture it.
-          """
+          if File.exists?(path) do
+            {:fixture, path}
+          else
+            raise """
+            Fixture not found: #{path}
+            Run the test with REQ_LLM_FIXTURES_MODE=record to capture it.
+            """
+          end
+
+        _ ->
+          :no_fixture
+      end
+
+    if match?({:fixture, _}, result) && System.get_env("REQ_LLM_DEBUG") == "1" do
+      {:fixture, path} = result
+
+      model =
+        case model_or_spec do
+          %ReqLLM.Model{} = m -> m
+          spec when is_binary(spec) -> ReqLLM.Model.from!(spec)
         end
 
-      _ ->
-        :no_fixture
+      test_name = Keyword.get(opts, :fixture, Path.basename(path, ".json"))
+
+      require Logger
+
+      Logger.debug(
+        "[Fixture] step: model=#{model.provider}:#{model.model}, name=#{test_name}"
+      )
     end
+
+    result
   end
 
   @doc """
@@ -74,20 +95,39 @@ defmodule ReqLLM.Test.Fixtures do
   """
   @spec capture_path(ReqLLM.Model.t() | String.t(), keyword()) :: String.t() | nil
   def capture_path(model_or_spec, opts) do
-    case Keyword.get(opts, :fixture_path) do
-      nil ->
-        if mode() == :record do
-          case Keyword.get(opts, :fixture) do
-            test_name when is_binary(test_name) ->
-              ReqLLM.Test.FixturePath.file(model_or_spec, test_name)
+    result =
+      case Keyword.get(opts, :fixture_path) do
+        nil ->
+          if mode() == :record do
+            case Keyword.get(opts, :fixture) do
+              test_name when is_binary(test_name) ->
+                ReqLLM.Test.FixturePath.file(model_or_spec, test_name)
 
-            _ ->
-              nil
+              _ ->
+                nil
+            end
           end
+
+        explicit_path ->
+          Path.expand(explicit_path)
+      end
+
+    if result && System.get_env("REQ_LLM_DEBUG") == "1" do
+      model =
+        case model_or_spec do
+          %ReqLLM.Model{} = m -> m
+          spec when is_binary(spec) -> ReqLLM.Model.from!(spec)
         end
 
-      explicit_path ->
-        Path.expand(explicit_path)
+      test_name = Keyword.get(opts, :fixture, Path.basename(result, ".json"))
+
+      require Logger
+
+      Logger.debug(
+        "[Fixture] step: model=#{model.provider}:#{model.model}, name=#{test_name}"
+      )
     end
+
+    result
   end
 end

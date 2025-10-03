@@ -1,0 +1,66 @@
+{
+  "captured_at": "2025-10-03T17:50:20.496123Z",
+  "chunks": [
+    {
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLTBkNDRiMTQ4LTM3YjgtNDEwYy1iYmE4LTkwYjQ5NzJlOGM3MCIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk1MTM4MjAsIm1vZGVsIjoibWV0YS1sbGFtYS9sbGFtYS1ndWFyZC00LTEyYiIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwXzJlNmYwZjk3OGUiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsicm9sZSI6ImFzc2lzdGFudCIsImNvbnRlbnQiOiIifSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOm51bGx9XSwieF9ncm9xIjp7ImlkIjoicmVxXzAxazZuazRmM3NmcGZhamNnZ25lMnJkNXY5In19Cgo=",
+      "decoded": "data: {\"id\":\"chatcmpl-0d44b148-37b8-410c-bba8-90b4972e8c70\",\"object\":\"chat.completion.chunk\",\"created\":1759513820,\"model\":\"meta-llama/llama-guard-4-12b\",\"system_fingerprint\":\"fp_2e6f0f978e\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\"},\"logprobs\":null,\"finish_reason\":null}],\"x_groq\":{\"id\":\"req_01k6nk4f3sfpfajcggne2rd5v9\"}}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLTBkNDRiMTQ4LTM3YjgtNDEwYy1iYmE4LTkwYjQ5NzJlOGM3MCIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk1MTM4MjAsIm1vZGVsIjoibWV0YS1sbGFtYS9sbGFtYS1ndWFyZC00LTEyYiIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwXzJlNmYwZjk3OGUiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsiY29udGVudCI6InNhZmUifSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOm51bGx9XX0KCmRhdGE6IHsiaWQiOiJjaGF0Y21wbC0wZDQ0YjE0OC0zN2I4LTQxMGMtYmJhOC05MGI0OTcyZThjNzAiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5NTEzODIwLCJtb2RlbCI6Im1ldGEtbGxhbWEvbGxhbWEtZ3VhcmQtNC0xMmIiLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF8yZTZmMGY5NzhlIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7fSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOiJzdG9wIn1dLCJ4X2dyb3EiOnsiaWQiOiJyZXFfMDFrNm5rNGYzc2ZwZmFqY2dnbmUycmQ1djkiLCJ1c2FnZSI6eyJxdWV1ZV90aW1lIjowLjExMjQzNjA3MiwicHJvbXB0X3Rva2VucyI6MTI0LCJwcm9tcHRfdGltZSI6MC4wMTQwMTgxMDksImNvbXBsZXRpb25fdG9rZW5zIjoyLCJjb21wbGV0aW9uX3RpbWUiOjAuMDA2MTY1NjQ2LCJ0b3RhbF90b2tlbnMiOjEyNiwidG90YWxfdGltZSI6MC4wMjAxODM3NTV9fSwidXNhZ2UiOnsicXVldWVfdGltZSI6MC4xMTI0MzYwNzIsInByb21wdF90b2tlbnMiOjEyNCwicHJvbXB0X3RpbWUiOjAuMDE0MDE4MTA5LCJjb21wbGV0aW9uX3Rva2VucyI6MiwiY29tcGxldGlvbl90aW1lIjowLjAwNjE2NTY0NiwidG90YWxfdG9rZW5zIjoxMjYsInRvdGFsX3RpbWUiOjAuMDIwMTgzNzU1fX0KCmRhdGE6IFtET05FXQoK",
+      "decoded": "data: {\"id\":\"chatcmpl-0d44b148-37b8-410c-bba8-90b4972e8c70\",\"object\":\"chat.completion.chunk\",\"created\":1759513820,\"model\":\"meta-llama/llama-guard-4-12b\",\"system_fingerprint\":\"fp_2e6f0f978e\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\"safe\"},\"logprobs\":null,\"finish_reason\":null}]}\n\ndata: {\"id\":\"chatcmpl-0d44b148-37b8-410c-bba8-90b4972e8c70\",\"object\":\"chat.completion.chunk\",\"created\":1759513820,\"model\":\"meta-llama/llama-guard-4-12b\",\"system_fingerprint\":\"fp_2e6f0f978e\",\"choices\":[{\"index\":0,\"delta\":{},\"logprobs\":null,\"finish_reason\":\"stop\"}],\"x_groq\":{\"id\":\"req_01k6nk4f3sfpfajcggne2rd5v9\",\"usage\":{\"queue_time\":0.112436072,\"prompt_tokens\":124,\"prompt_time\":0.014018109,\"completion_tokens\":2,\"completion_time\":0.006165646,\"total_tokens\":126,\"total_time\":0.020183755}},\"usage\":{\"queue_time\":0.112436072,\"prompt_tokens\":124,\"prompt_time\":0.014018109,\"completion_tokens\":2,\"completion_time\":0.006165646,\"total_tokens\":126,\"total_time\":0.020183755}}\n\ndata: [DONE]\n\n"
+    }
+  ],
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiWW91IGFyZSBhIGhlbHBmdWwsIGNyZWF0aXZlIGFzc2lzdGFudC4iLCJyb2xlIjoic3lzdGVtIn0seyJjb250ZW50IjoiU2F5IGhlbGxvIGluIG9uZSBzaG9ydCwgaW1hZ2luYXRpdmUgc2VudGVuY2UuIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibWV0YS1sbGFtYS9sbGFtYS1ndWFyZC00LTEyYiIsInN0cmVhbSI6dHJ1ZSwidGVtcGVyYXR1cmUiOjAuOSwidG9wX3AiOjAuOH0="
+    },
+    "canonical_json": {
+      "max_tokens": 100,
+      "messages": [
+        {
+          "content": "You are a helpful, creative assistant.",
+          "role": "system"
+        },
+        {
+          "content": "Say hello in one short, imaginative sentence.",
+          "role": "user"
+        }
+      ],
+      "model": "meta-llama/llama-guard-4-12b",
+      "stream": true,
+      "temperature": 0.9,
+      "top_p": 0.8
+    },
+    "headers": {
+      "accept": "text/event-stream",
+      "authorization": "[REDACTED:authorization]",
+      "content-type": "application/json"
+    },
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions"
+  },
+  "response": {
+    "body": null,
+    "headers": {
+      "alt-svc": "h3=\":443\"; ma=86400",
+      "cache-control": "no-cache",
+      "cf-cache-status": "DYNAMIC",
+      "cf-ray": "988e48007d3e22e1-ORD",
+      "content-type": "text/event-stream",
+      "date": "Fri, 03 Oct 2025 17:50:20 GMT",
+      "server": "cloudflare",
+      "set-cookie": "__cf_bm=W0FYMUiRUgH4n6RAutb10SjTYinbkCggfDr0DAkOUuU-1759513820-1.0.1.1-8it3SmWsZtJE6VQfVVB7XAB8p0caa9QDM7sFwZFQiEMgqp_g5lA7J92HbRveevs_.9GRiHhn3ZycO9FGNnXp7VOXvrgA3lK481lqx8NFoz0; path=/; expires=Fri, 03-Oct-25 18:20:20 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None",
+      "vary": "Origin",
+      "via": "1.1 google",
+      "x-groq-region": "yul",
+      "x-ratelimit-limit-requests": "14400",
+      "x-ratelimit-limit-tokens": "15000",
+      "x-ratelimit-remaining-requests": "14399",
+      "x-ratelimit-remaining-tokens": "14969",
+      "x-ratelimit-reset-requests": "6s",
+      "x-ratelimit-reset-tokens": "124ms",
+      "x-request-id": "req_01k6nk4f3sfpfajcggne2rd5v9"
+    },
+    "status": 200
+  }
+}

@@ -1,0 +1,195 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxNTAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJkZWVwc2Vlay1yMS1kaXN0aWxsLWxsYW1hLTcwYiIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+    },
+    "canonical_json": {
+      "max_tokens": 150,
+      "messages": [
+        {
+          "content": "What's the weather like in Paris, France?",
+          "role": "user"
+        }
+      ],
+      "model": "deepseek-r1-distill-llama-70b",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tools": [
+        {
+          "function": {
+            "description": "Get current weather information for a location",
+            "name": "get_weather",
+            "parameters": {
+              "properties": {
+                "location": {
+                  "type": "string"
+                },
+                "unit": {
+                  "enum": [
+                    "celsius",
+                    "fahrenheit"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "location"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        },
+        {
+          "function": {
+            "description": "Tell a funny joke",
+            "name": "tell_joke",
+            "parameters": {
+              "properties": {
+                "topic": {
+                  "description": "Topic for the joke",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "function"
+        },
+        {
+          "function": {
+            "description": "Get the current time",
+            "name": "get_time",
+            "parameters": {
+              "properties": {},
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.groq.com/openai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "reasoning": "Okay, the user is asking about the weather in Paris, France. I need to use the provided functions to help them.\n\nFirst, I'll check the available tools. There's a get_weather function which seems perfect for this. It requires the location and optionally the unit.\n\nThe user didn't specify the unit, so I'll just provide the location as \"Paris, France\".\n\nI'll structure the tool call with the function name \"get_weather\" and the arguments as {\"location\": \"Paris, France\"}.\n",
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"location\":\"Paris, France\"}",
+                  "name": "get_weather"
+                },
+                "id": "78nvm15cj",
+                "type": "function"
+              }
+            ]
+          }
+        }
+      ],
+      "created": 1759513829,
+      "id": "chatcmpl-e34dbf60-acc2-4653-be22-8637061c6a80",
+      "model": "deepseek-r1-distill-llama-70b",
+      "object": "chat.completion",
+      "service_tier": "on_demand",
+      "system_fingerprint": "fp_1bbe7845ec",
+      "usage": {
+        "completion_time": 0.530157943,
+        "completion_tokens": 133,
+        "prompt_time": 0.028069852,
+        "prompt_tokens": 209,
+        "queue_time": 0.199594876,
+        "total_time": 0.558227795,
+        "total_tokens": 342
+      },
+      "usage_breakdown": null,
+      "x_groq": {
+        "id": "req_01k6nk4qsnfqqvn7b0dnqw8wpb"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cache-control": [
+        "private, max-age=0, no-store, no-cache, must-revalidate"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "988e48382f1461fc-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 03 Oct 2025 17:50:29 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=ASDv5i3UH2rO5r0zJ8p4C5GM8gGjFpccIqotjbuhWKs-1759513829-1.0.1.1-A_jGVni8lV_L_HvszHyVccZO_uL_G6qyvS0DvQVKQgaUfs01faRAXrxkBXLVzC_GcVxxro5yJFbvxhc3veK_9YLsxJcdxrEnQuXK6scfnDg; path=/; expires=Fri, 03-Oct-25 18:20:29 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-groq-region": [
+        "yul"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "6000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "996"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "5844"
+      ],
+      "x-ratelimit-reset-requests": [
+        "5m44.809s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "1.551999999s"
+      ],
+      "x-request-id": [
+        "req_01k6nk4qsnfqqvn7b0dnqw8wpb"
+      ]
+    },
+    "status": 200
+  }
+}

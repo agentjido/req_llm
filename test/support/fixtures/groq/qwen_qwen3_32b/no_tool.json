@@ -55,34 +55,34 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "length",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Here's a cat joke for you:\n\n\"Why did the cat fall off the roof? Because it was a little tipsy!\" 😸\n\n(No tool call was needed for this joke.)",
-            "reasoning": "Okay, the user asked for a joke about cats. Let me think. The tools provided include a weather function, but that's not relevant here. Since there's no joke function, I can't use any tools. I should just tell a cat joke directly. Maybe something classic like, \"Why did the cat fall off the roof? Because it was a little tipsy!\" That's a simple pun. No tool call needed here.\n",
+            "content": "Here's a cat joke for you:\n\nWhy did the cat join a band?  \nBecause it",
+            "reasoning": "Okay, the user asked for a joke about cats. Let me think. The tools provided include a function to get weather information, but that's not related to jokes. Since there's no function for telling jokes or retrieving cat jokes specifically, I can't use any of the provided tools here. I need to respond by either telling a joke directly or explaining that I can't access external tools for jokes. Since the instructions say to use functions if possible, but there's none available for this query, I should proceed to answer without using a tool. So, I'll come up with a simple cat joke to share with the user.\n",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759435641,
-      "id": "chatcmpl-64c3f4c9-6e68-46b5-8a01-a7fd3b045bd7",
+      "created": 1759513828,
+      "id": "chatcmpl-221b94ea-898c-437f-9132-f07b39750c5f",
       "model": "qwen/qwen3-32b",
       "object": "chat.completion",
       "service_tier": "on_demand",
       "system_fingerprint": "fp_5cf921caa2",
       "usage": {
-        "completion_time": 0.309911367,
-        "completion_tokens": 131,
-        "prompt_time": 0.006177276,
+        "completion_time": 0.358397843,
+        "completion_tokens": 150,
+        "prompt_time": 0.006639324,
         "prompt_tokens": 153,
-        "queue_time": 0.209803383,
-        "total_time": 0.316088643,
-        "total_tokens": 284
+        "queue_time": 0.202980157,
+        "total_time": 0.365037167,
+        "total_tokens": 303
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6k8jm18ehjby3155m8vkcmb"
+        "id": "req_01k6nk4pbxfqkadj5qxfn8j70j"
       }
     },
     "headers": {
@@ -96,7 +96,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9886d353497f61c7-ORD"
+        "988e482efe200045-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -105,13 +105,13 @@
         "application/json"
       ],
       "date": [
-        "Thu, 02 Oct 2025 20:07:21 GMT"
+        "Fri, 03 Oct 2025 17:50:28 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=nicKg4okGfhG.HL.45H.fcEmGXA8DNq29hWusE7rSJ4-1759435641-1.0.1.1-GTlPDEdDVs3R.CICDPVvD5ODyG9v1HjEo5f2ahVEyJ9nfb9dskcPoZc7vxnSxRgjJ25BfMUAa2YCA6rbfN0tKJI5rkzFnue7R174g7EjJ7k; path=/; expires=Thu, 02-Oct-25 20:37:21 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=oxKSYIsX4kwtiAYNITnEhnIo8K01ozY6tDV2_qnvkCM-1759513828-1.0.1.1-WcfTgoFeU4XTlVSuWZnzHAxu8mNe5pnxfFbtv1nNRWuWqhyO8hUwR6ICuGsyXbA4SW5pGaJccooFHVcIzsHu0Cb0Go_GsZSc6U5u7lZSu0Y; path=/; expires=Fri, 03-Oct-25 18:20:28 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -132,19 +132,19 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "997"
+        "999"
       ],
       "x-ratelimit-remaining-tokens": [
         "5846"
       ],
       "x-ratelimit-reset-requests": [
-        "4m9.743s"
+        "1m26.4s"
       ],
       "x-ratelimit-reset-tokens": [
         "1.54s"
       ],
       "x-request-id": [
-        "req_01k6k8jm18ehjby3155m8vkcmb"
+        "req_01k6nk4pbxfqkadj5qxfn8j70j"
       ]
     },
     "status": 200

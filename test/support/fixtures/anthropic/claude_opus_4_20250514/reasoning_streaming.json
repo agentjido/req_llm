@@ -1,0 +1,233 @@
+{
+  "captured_at": "2025-10-03T15:20:06.671103Z",
+  "chunks": [
+    {
+      "b64": "ZXZlbnQ6IG1lc3NhZ2Vfc3RhcnQKZGF0YTogeyJ0eXBlIjoibWVzc2FnZV9zdGFydCIsIm1lc3NhZ2UiOnsiaWQiOiJtc2dfMDE3eEJqeUJBSzVBNzJ4NkR4cTk0dlRnIiwidHlwZSI6Im1lc3NhZ2UiLCJyb2xlIjoiYXNzaXN0YW50IiwibW9kZWwiOiJjbGF1ZGUtb3B1cy00LTIwMjUwNTE0IiwiY29udGVudCI6W10sInN0b3BfcmVhc29uIjpudWxsLCJzdG9wX3NlcXVlbmNlIjpudWxsLCJ1c2FnZSI6eyJpbnB1dF90b2tlbnMiOjY2LCJjYWNoZV9jcmVhdGlvbl9pbnB1dF90b2tlbnMiOjAsImNhY2hlX3JlYWRfaW5wdXRfdG9rZW5zIjowLCJjYWNoZV9jcmVhdGlvbiI6eyJlcGhlbWVyYWxfNW1faW5wdXRfdG9rZW5zIjowLCJlcGhlbWVyYWxfMWhfaW5wdXRfdG9rZW5zIjowfSwib3V0cHV0X3Rva2VucyI6OCwic2VydmljZV90aWVyIjoic3RhbmRhcmQifX0gIH0KCmV2ZW50OiBjb250ZW50X2Jsb2NrX3N0YXJ0CmRhdGE6IHsidHlwZSI6ImNvbnRlbnRfYmxvY2tfc3RhcnQiLCJpbmRleCI6MCwiY29udGVudF9ibG9jayI6eyJ0eXBlIjoidGhpbmtpbmciLCJ0aGlua2luZyI6IiIsInNpZ25hdHVyZSI6IiJ9ICAgICAgfQoKZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoidGhpbmtpbmdfZGVsdGEiLCJ0aGlua2luZyI6IkkgbmVlZCB0byBjYWxjdWxhdGUgMTUgIn0gICAgICAgICAgICAgICB9Cgo=",
+      "decoded": "event: message_start\ndata: {\"type\":\"message_start\",\"message\":{\"id\":\"msg_017xBjyBAK5A72x6Dxq94vTg\",\"type\":\"message\",\"role\":\"assistant\",\"model\":\"claude-opus-4-20250514\",\"content\":[],\"stop_reason\":null,\"stop_sequence\":null,\"usage\":{\"input_tokens\":66,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"cache_creation\":{\"ephemeral_5m_input_tokens\":0,\"ephemeral_1h_input_tokens\":0},\"output_tokens\":8,\"service_tier\":\"standard\"}}  }\n\nevent: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":0,\"content_block\":{\"type\":\"thinking\",\"thinking\":\"\",\"signature\":\"\"}      }\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"I need to calculate 15 \"}               }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IHBpbmcKZGF0YTogeyJ0eXBlIjogInBpbmcifQoKZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoidGhpbmtpbmdfZGVsdGEiLCJ0aGlua2luZyI6IsOXIDMuXG5cbkxldCBtZSB0aGluayB0aHJvdWdoIHRoaXMifSAgICAgICAgICAgICAgfQoK",
+      "decoded": "event: ping\ndata: {\"type\": \"ping\"}\n\nevent: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"× 3.\\n\\nLet me think through this\"}              }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoidGhpbmtpbmdfZGVsdGEiLCJ0aGlua2luZyI6IiBzdGVwIGJ5IHN0ZXA6XG4tIDE1IMOXIDMgbWVhbnMgYWRkaW5nIn0gICAgICAgICAgIH0KCg==",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\" step by step:\\n- 15 × 3 means adding\"}           }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoidGhpbmtpbmdfZGVsdGEiLCJ0aGlua2luZyI6IiAxNSB0aHJlZSB0aW1lczoifSAgICAgICB9Cgo=",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\" 15 three times:\"}       }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoidGhpbmtpbmdfZGVsdGEiLCJ0aGlua2luZyI6IiAxNSArIDE1ICsifSAgICAgfQoK",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\" 15 + 15 +\"}     }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoidGhpbmtpbmdfZGVsdGEiLCJ0aGlua2luZyI6IiAxNVxuLSBPciJ9ICAgICAgICAgICB9Cgo=",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\" 15\\n- Or\"}           }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoidGhpbmtpbmdfZGVsdGEiLCJ0aGlua2luZyI6IiBJIGNhbiBicmVhayBpdCBkb3duOiAxNSDDlyAifSAgICB9Cgo=",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\" I can break it down: 15 × \"}    }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoidGhpbmtpbmdfZGVsdGEiLCJ0aGlua2luZyI6IjMgPSAoMTAgKyAifSAgICAgICAgICAgIH0KCg==",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"3 = (10 + \"}            }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoidGhpbmtpbmdfZGVsdGEiLCJ0aGlua2luZyI6IjUpIMOXIDMgPSAoIn0gICAgICAgICB9Cgo=",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"5) × 3 = (\"}         }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoidGhpbmtpbmdfZGVsdGEiLCJ0aGlua2luZyI6IjEwIMOXIDMpICsgKCJ9ICAgICAgICAgIH0KCg==",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"10 × 3) + (\"}          }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoidGhpbmtpbmdfZGVsdGEiLCJ0aGlua2luZyI6IjUgw5cgMykgPSAifSAgICAgICAgfQoK",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"5 × 3) = \"}        }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoidGhpbmtpbmdfZGVsdGEiLCJ0aGlua2luZyI6IjMwICsgMTUgPSAifSAgICAgICAgICAgICB9Cgo=",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"30 + 15 = \"}             }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoidGhpbmtpbmdfZGVsdGEiLCJ0aGlua2luZyI6IjQ1XG4tIE9yIEkgY2FuIHRoaW5rIn0gICAgICAgICAgICB9Cgo=",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"45\\n- Or I can think\"}            }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoidGhpbmtpbmdfZGVsdGEiLCJ0aGlua2luZyI6IiBvZiBpdCBhczoifSAgICAgICB9Cgo=",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\" of it as:\"}       }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoidGhpbmtpbmdfZGVsdGEiLCJ0aGlua2luZyI6IiAxNSDDlyAzID0ifSAgICAgfQoK",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\" 15 × 3 =\"}     }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoidGhpbmtpbmdfZGVsdGEiLCJ0aGlua2luZyI6IiAxNSDDlyAifSAgICAgICB9Cgo=",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\" 15 × \"}       }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoidGhpbmtpbmdfZGVsdGEiLCJ0aGlua2luZyI6IjMgPSA0NVxuXG5MZXQifSAgICAgIH0KCg==",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"3 = 45\\n\\nLet\"}      }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoidGhpbmtpbmdfZGVsdGEiLCJ0aGlua2luZyI6IiBtZSB2ZXJpZnk6ICJ9ICAgICAgIH0KCg==",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\" me verify: \"}       }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoidGhpbmtpbmdfZGVsdGEiLCJ0aGlua2luZyI6IlxuLSAxNSArIn0gIH0KCg==",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\"\\n- 15 +\"}  }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoidGhpbmtpbmdfZGVsdGEiLCJ0aGlua2luZyI6IiAxNSA9In0gICAgICAgfQoK",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\" 15 =\"}       }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoidGhpbmtpbmdfZGVsdGEiLCJ0aGlua2luZyI6IiAzMFxuLSAzMCArIn0gfQoK",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\" 30\\n- 30 +\"} }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoidGhpbmtpbmdfZGVsdGEiLCJ0aGlua2luZyI6IiAxNSA9IDQ1XG5cblNvIn0gICAgICAgIH0KCg==",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\" 15 = 45\\n\\nSo\"}        }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoidGhpbmtpbmdfZGVsdGEiLCJ0aGlua2luZyI6IiAxNSDDlyAzID0ifSAgICAgICB9Cgo=",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\" 15 × 3 =\"}       }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoidGhpbmtpbmdfZGVsdGEiLCJ0aGlua2luZyI6IiA0NSJ9ICAgICAgICAgICB9Cgo=",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"thinking_delta\",\"thinking\":\" 45\"}           }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjowLCJkZWx0YSI6eyJ0eXBlIjoic2lnbmF0dXJlX2RlbHRhIiwic2lnbmF0dXJlIjoiRXUwRENrWUlDQmdDS2tERHQzRXB3ZlJ3THovRWtMZWhpZG9pVys1bU90anRINTVyMkF2TEF6WG5iQ0RoUzdaSnZyNW1zQ0RLcmZtSmErUDE0YjZUSWlhb254WEJrLzZ6RGhHc0VneDcwWko2S1ZlK09TMXhRWFFhREJGd21wL3VtdkNOYU5XUE1DSXc4U25HY3dsOVRJYktFa0lSQzl6VEJ1VDFGU2JGNDF3cUhEck1TMTVTb2tIRzBvS1Q1WU5YZ0lDMFVPYk9DR3ZKS3RRQ1B3L0JXNnpMQ3BLd0FxdldmdXd4WnErcjFWMlJMb3NaR1BTVnNORnhCK0Fkc2NrQkJWMlIwWk4rM2ZiUFp2SWVkYU1CakcxTjlOQTM5T0ovWTdjbVVzbW1jNTZORWZaSzROL1NLY1AzSjA3ZnVQdnRIWDdrOHRvMXVzNmxtWWZRempTRlBRSUJVeW5xRlJxM2l0YVc4SDlRTVhFYnprSDUrL3NUT21Ncjc1QmQ0N3RRTGRDdXcwQXJ5bGY4OGxvUkxwbXJ4bGJSY1l5TEpHK3ZyQUVvOXFQWUlNRHlqL3dnM3BabWJFSjdnMVVTZEVKU0ZTbGJ6Ynk2eUd6RE5qdHR1S2N3WjFJbGg2UnE2dTBFUGovbG0zU3lYdGdxZjhhSy94SHEzOWRhcXVmT042U3d2RU12VC9jWUxlL0l6eGluQURueVl0U0ZZSGM5NStsRy9IS25UaEExS0VpNE1GUXFvU25LUHp2NG80OWphOE1KUWJYYVdKenpxMDJ2S3g1MG5ZMDEvSkJScTUveEtTaDRsMS9udkFRWVgzRTc3OHFsYmdvUWF4cnVZVG9xYUNHRVhDaDNQYWhINUJ6TFZxWTRPWU9BdEJnQiJ9ICAgICAgICB9Cgo=",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":0,\"delta\":{\"type\":\"signature_delta\",\"signature\":\"Eu0DCkYICBgCKkDDt3EpwfRwLz/EkLehidoiW+5mOtjtH55r2AvLAzXnbCDhS7ZJvr5msCDKrfmJa+P14b6TIiaonxXBk/6zDhGsEgx70ZJ6KVe+OS1xQXQaDBFwmp/umvCNaNWPMCIw8SnGcwl9TIbKEkIRC9zTBuT1FSbF41wqHDrMS15SokHG0oKT5YNXgIC0UObOCGvJKtQCPw/BW6zLCpKwAqvWfuwxZq+r1V2RLosZGPSVsNFxB+AdsckBBV2R0ZN+3fbPZvIedaMBjG1N9NA39OJ/Y7cmUsmmc56NEfZK4N/SKcP3J07fuPvtHX7k8to1us6lmYfQzjSFPQIBUynqFRq3itaW8H9QMXEbzkH5+/sTOmMr75Bd47tQLdCuw0Arylf88loRLpmrxlbRcYyLJG+vrAEo9qPYIMDyj/wg3pZmbEJ7g1USdEJSFSlbzby6yGzDNjttuKcwZ1Ilh6Rq6u0EPj/lm3SyXtgqf8aK/xHq39daqufON6SwvEMvT/cYLe/IzxinADnyYtSFYHc95+lG/HKnThA1KEi4MFQqoSnKPzv4o49ja8MJQbXaWJzzq02vKx50nY01/JBRq5/xKSh4l1/nvAQYX3E778qlbgoQaxruYToqaCGEXCh3PahH5BzLVqY4OYOAtBgB\"}        }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfc3RvcApkYXRhOiB7InR5cGUiOiJjb250ZW50X2Jsb2NrX3N0b3AiLCJpbmRleCI6MCAgICAgICAgIH0KCg==",
+      "decoded": "event: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":0         }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfc3RhcnQKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19zdGFydCIsImluZGV4IjoxLCJjb250ZW50X2Jsb2NrIjp7InR5cGUiOiJ0ZXh0IiwidGV4dCI6IiJ9ICAgIH0KCg==",
+      "decoded": "event: content_block_start\ndata: {\"type\":\"content_block_start\",\"index\":1,\"content_block\":{\"type\":\"text\",\"text\":\"\"}    }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjoxLCJkZWx0YSI6eyJ0eXBlIjoidGV4dF9kZWx0YSIsInRleHQiOiJJJ2xsIGNhbGN1bGF0ZSAxNSDDlyAzIn0gICAgICAgICAgICAgICB9Cgo=",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"I'll calculate 15 × 3\"}               }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjoxLCJkZWx0YSI6eyJ0eXBlIjoidGV4dF9kZWx0YSIsInRleHQiOiIgYnkifSAgfQoK",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\" by\"}  }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjoxLCJkZWx0YSI6eyJ0eXBlIjoidGV4dF9kZWx0YSIsInRleHQiOiIgYnJlYWtpbmcgaXQgZG93bjoifSAgICAgICAgICAgIH0KCg==",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\" breaking it down:\"}            }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjoxLCJkZWx0YSI6eyJ0eXBlIjoidGV4dF9kZWx0YSIsInRleHQiOiJcblxuMTUgw5cgMyBjYW4ifSAgICAgICAgfQoK",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"\\n\\n15 × 3 can\"}        }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjoxLCJkZWx0YSI6eyJ0eXBlIjoidGV4dF9kZWx0YSIsInRleHQiOiIgYmUgdGhvdWdodCJ9ICAgICB9Cgo=",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\" be thought\"}     }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjoxLCJkZWx0YSI6eyJ0eXBlIjoidGV4dF9kZWx0YSIsInRleHQiOiIgb2YgYXM6XG4tIDEwIn0gICAgICAgfQoK",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\" of as:\\n- 10\"}       }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjoxLCJkZWx0YSI6eyJ0eXBlIjoidGV4dF9kZWx0YSIsInRleHQiOiIgw5cgMyA9IDMwIn0gICAgICAgICB9Cgo=",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\" × 3 = 30\"}         }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjoxLCJkZWx0YSI6eyJ0eXBlIjoidGV4dF9kZWx0YSIsInRleHQiOiJcbi0gNSDDlyAzIn0gICAgICAgICAgfQoK",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"\\n- 5 × 3\"}          }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjoxLCJkZWx0YSI6eyJ0eXBlIjoidGV4dF9kZWx0YSIsInRleHQiOiIgPSAxNVxuLSAifX0KCg==",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\" = 15\\n- \"}}\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjoxLCJkZWx0YSI6eyJ0eXBlIjoidGV4dF9kZWx0YSIsInRleHQiOiIzMCArIDE1ID0gIn0gICAgICAgICAgIH0KCg==",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"30 + 15 = \"}           }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjoxLCJkZWx0YSI6eyJ0eXBlIjoidGV4dF9kZWx0YSIsInRleHQiOiI0NVxuXG5UaGVyZWZvcmUsIDE1IMOXIn0gICAgICAgICAgICAgICB9Cgo=",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\"45\\n\\nTherefore, 15 ×\"}               }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfZGVsdGEKZGF0YTogeyJ0eXBlIjoiY29udGVudF9ibG9ja19kZWx0YSIsImluZGV4IjoxLCJkZWx0YSI6eyJ0eXBlIjoidGV4dF9kZWx0YSIsInRleHQiOiIgMyA9IDQ1In0gICAgICAgICAgICAgfQoK",
+      "decoded": "event: content_block_delta\ndata: {\"type\":\"content_block_delta\",\"index\":1,\"delta\":{\"type\":\"text_delta\",\"text\":\" 3 = 45\"}             }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IGNvbnRlbnRfYmxvY2tfc3RvcApkYXRhOiB7InR5cGUiOiJjb250ZW50X2Jsb2NrX3N0b3AiLCJpbmRleCI6MSAgICAgICAgICAgfQoK",
+      "decoded": "event: content_block_stop\ndata: {\"type\":\"content_block_stop\",\"index\":1           }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IG1lc3NhZ2VfZGVsdGEKZGF0YTogeyJ0eXBlIjoibWVzc2FnZV9kZWx0YSIsImRlbHRhIjp7InN0b3BfcmVhc29uIjoiZW5kX3R1cm4iLCJzdG9wX3NlcXVlbmNlIjpudWxsfSwidXNhZ2UiOnsiaW5wdXRfdG9rZW5zIjo2NiwiY2FjaGVfY3JlYXRpb25faW5wdXRfdG9rZW5zIjowLCJjYWNoZV9yZWFkX2lucHV0X3Rva2VucyI6MCwib3V0cHV0X3Rva2VucyI6MjYyfSAgICAgICAgICAgICB9Cgo=",
+      "decoded": "event: message_delta\ndata: {\"type\":\"message_delta\",\"delta\":{\"stop_reason\":\"end_turn\",\"stop_sequence\":null},\"usage\":{\"input_tokens\":66,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"output_tokens\":262}             }\n\n"
+    },
+    {
+      "b64": "ZXZlbnQ6IG1lc3NhZ2Vfc3RvcApkYXRhOiB7InR5cGUiOiJtZXNzYWdlX3N0b3AiICAgICAgICAgICAgfQoK",
+      "decoded": "event: message_stop\ndata: {\"type\":\"message_stop\"            }\n\n"
+    }
+  ],
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IkJyaWVmbHkgdGhpbmsgdGhyb3VnaCB5b3VyIGFwcHJvYWNoLCB0aGVuIGFuc3dlcjogV2hhdCBpcyAxNSozPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1vcHVzLTQtMjAyNTA1MTQiLCJzdHJlYW0iOnRydWUsInN5c3RlbSI6IllvdSBhcmUgYSBjYXJlZnVsLCBzdGVwLWJ5LXN0ZXAgcmVhc29uZXIuIiwidGVtcGVyYXR1cmUiOjEuMCwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifX0="
+    },
+    "canonical_json": {
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "content": "Briefly think through your approach, then answer: What is 15*3?",
+          "role": "user"
+        }
+      ],
+      "model": "claude-opus-4-20250514",
+      "stream": true,
+      "system": "You are a careful, step-by-step reasoner.",
+      "temperature": 1.0,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
+    },
+    "headers": {
+      "accept": "text/event-stream",
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": null,
+    "headers": {
+      "anthropic-organization-id": "a71659e7-a922-4ff7-99de-f3ba615face1",
+      "anthropic-ratelimit-input-tokens-limit": "450000",
+      "anthropic-ratelimit-input-tokens-remaining": "450000",
+      "anthropic-ratelimit-input-tokens-reset": "2025-10-03T15:20:01Z",
+      "anthropic-ratelimit-output-tokens-limit": "90000",
+      "anthropic-ratelimit-output-tokens-remaining": "90000",
+      "anthropic-ratelimit-output-tokens-reset": "2025-10-03T15:20:01Z",
+      "anthropic-ratelimit-requests-limit": "1000",
+      "anthropic-ratelimit-requests-remaining": "999",
+      "anthropic-ratelimit-requests-reset": "2025-10-03T15:20:01Z",
+      "anthropic-ratelimit-tokens-limit": "540000",
+      "anthropic-ratelimit-tokens-remaining": "540000",
+      "anthropic-ratelimit-tokens-reset": "2025-10-03T15:20:01Z",
+      "cache-control": "no-cache",
+      "cf-cache-status": "DYNAMIC",
+      "cf-ray": "988d6bd088c7fa23-ORD",
+      "content-type": "text/event-stream; charset=utf-8",
+      "date": "Fri, 03 Oct 2025 15:20:02 GMT",
+      "request-id": "req_011CTkVQsNSFKgknLFS1tNtG",
+      "server": "cloudflare",
+      "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+      "via": "1.1 google",
+      "x-envoy-upstream-service-time": "1455",
+      "x-robots-tag": "none"
+    },
+    "status": 200
+  }
+}

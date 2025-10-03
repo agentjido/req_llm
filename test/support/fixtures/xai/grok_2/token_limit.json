@@ -37,14 +37,14 @@
           "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "In the ancient land of Eldoria, where the mountains kissed the sky and the forests whispered secrets, dragons ruled supreme. These majestic creatures were not just beasts of legend but guardians of the realm, each with their own territory and unique powers. Among them, the most revered was the Silver Dragon, Seraphine, whose scales shimmered like moonlight and whose wisdom was sought by all.\n\nOur story begins with a young adventurer named Kael, a spirited lad from the village of Thornwood. Kael",
+            "content": "In the realm of Eldoria, where the mountains kissed the sky and the forests whispered ancient secrets, dragons ruled the skies. These majestic creatures, with scales that shimmered like the stars and eyes that burned with the fire of a thousand suns, were both revered and feared. Among them, the most legendary was the Dragon Queen, Aeloria, whose wisdom and power were unmatched.\n\nOur story begins with a young adventurer named Kael, who dreamed of meeting the Dragon Queen and learning the secrets",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759449346,
-      "id": "d039e10d-ba4e-3a83-cafb-941dcc433beb_us-east-1",
+      "created": 1759509981,
+      "id": "1c49c642-9caa-33cb-0a2c-d16e15892c8e_us-east-1",
       "model": "grok-2-1212",
       "object": "chat.completion",
       "system_fingerprint": "fp_fced99f24f",
@@ -78,22 +78,28 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988821f0284a21b1-ORD"
+        "988dea493ec172e4-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy-report-only": [
+        "script-src 'none'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=Blr24dqtHa7uSaJ1Co8WLz2oC4cmsL2e0RlqJjONVc4-1759509982-1.0.1.1-i6AggSKLLu0lPUHjxITuST6sPNJIIt3Q7hniyMwoITF5me1t_eTGqcLUDuVRjdKjLXYE1BXgaufXNfRhRW0.GzD0lmeojw1ofaEVuKCpE95iajkzLMHQoOlZGNGaFE0B2YKx2nnoJS9ZfoUDSxW4cKcnyfyw4c40Vhoatyssm8Q; report-to cf-csp-endpoint"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Thu, 02 Oct 2025 23:55:47 GMT"
+        "Fri, 03 Oct 2025 16:46:22 GMT"
+      ],
+      "report-to": [
+        "{\"endpoints\":[{\"url\":\"https:\\/\\/csp-reporting.cloudflare.com\\/cdn-cgi\\/script_monitor\\/report?m=Blr24dqtHa7uSaJ1Co8WLz2oC4cmsL2e0RlqJjONVc4-1759509982-1.0.1.1-i6AggSKLLu0lPUHjxITuST6sPNJIIt3Q7hniyMwoITF5me1t_eTGqcLUDuVRjdKjLXYE1BXgaufXNfRhRW0.GzD0lmeojw1ofaEVuKCpE95iajkzLMHQoOlZGNGaFE0B2YKx2nnoJS9ZfoUDSxW4cKcnyfyw4c40Vhoatyssm8Q\"}],\"group\":\"cf-csp-endpoint\",\"max_age\":86400}"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=Bk7sa4.HAOd0Kaudt6gqXKVzdY_F6bvFGa87PaxEOOg-1759449347-1.0.1.1-tUUYyXOPEQrRUwtkB8AL84W5EfDpWE_D.lcFk0TJV2ai3wWHESxy7yvN6zIbqjJboP_0UAJS.IN7sWz.xIi9VoekHrJSbs8djgR9sogz3LU; path=/; expires=Fri, 03-Oct-25 00:25:47 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=xlsq_QuFpHhDRXNvl6zT6LB_NyweOdcDLLIb1IrDSM0-1759509982-1.0.1.1-iRNpJwj5Mz_w3QsNc9qrYif9SwXo0wP3s..2aJBFeEz6bIFUjV_UO4JhtoQ0ckAr_95ZuWpBk1T_Nq2QUpFu8RX23F2RnYoOjrRlehFt6KA; path=/; expires=Fri, 03-Oct-25 17:16:22 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -105,7 +111,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-9731eafeaee7ba7409f6109578bc1842-daf2240d0045be7f-01"
+        "00-da9afe06dc9fd347b1cae57c3d676997-a346b6d400053f4a-01"
       ],
       "x-zero-data-retention": [
         "false"

@@ -464,7 +464,10 @@ defmodule Mix.Tasks.ReqLlm.ModelSync do
           patch_models
           |> Map.new(fn model -> {model["id"], model} end)
 
-        merged_models = Map.merge(existing_models, patch_models_map)
+        merged_models =
+          Map.merge(existing_models, patch_models_map, fn _key, existing, patch ->
+            Map.merge(existing, patch)
+          end)
 
         if verbose? do
           added_count =

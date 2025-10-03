@@ -1,0 +1,119 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwNDgsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiQ2FsY3VsYXRlIDE1IHRpbWVzIDMuIFRoaW5rIHN0ZXAtYnktc3RlcC4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTMtbWluaS1sYXRlc3QiLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjoxLjB9"
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2048,
+      "messages": [
+        {
+          "content": "Calculate 15 times 3. Think step-by-step.",
+          "role": "user"
+        }
+      ],
+      "model": "grok-3-mini-latest",
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.x.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Sure, I'll calculate 15 times 3 for you, and I'll break it down step by step to make it clear and easy to follow.\n\n### Step 1: Understand the operation\n   - Multiplication means adding a number to itself a certain number of times. So, 15 times 3 is the same as adding 15 three times: 15 + 15 + 15.\n\n### Step 2: Perform the addition\n   - First, add 15 and 15: 15 + 15 = 30.\n   - Next, add the third 15 to that result: 30 + 15 = 45.\n\n### Step 3: Verify with direct multiplication\n   - We can also multiply directly:\n     - Break down 15 into its place values: 10 + 5.\n     - Multiply each part by 3: (10 × 3) + (5 × 3) = 30 + 15 = 45.\n   - Or, using standard multiplication:\n     - 5 × 3 = 15 (write down 5 and carry over 1).\n     - 1 × 3 = 3, plus the carry-over 1 = 4.\n     - So, the result is 45.\n\n### Final Answer\n15 times 3 equals 45.  \n\nIf you have any more questions or want to try a different example, just let me know!",
+            "reasoning_content": "First, the user asked to calculate 15 times 3 and to think step-by-step. I need to provide a step-by-step explanation of the multiplication.\n\nBasic multiplication: 15 × 3. I know that multiplication is repeated addition, so 15 × 3 means 15 added to itself 3 times.\n\nStep-by-step:\n\n1. Understand the operation: Multiply 15 by 3.\n\n2. Break it down: I can think of 15 as 10 + 5, so (10 + 5) × 3.\n\n3. Distribute: 10 × 3 + 5 × 3 = 30 + 15 = 45.\n\nI could also do it directly:\n\n- Multiply the ones place: 5 × 3 = 15. Write down 5, carry over 1.\n\n- Multiply the tens place: 1 × 3 = 3, plus the carry-over 1 makes 4.\n\n- So, it's 45.\n\nSince it's straightforward, I should keep it simple.\n\nFinal answer: 15 × 3 = 45.\n\nStructure my response:\n\n- Start with the problem: \"I need to calculate 15 times 3.\"\n\n- Step 1: Explain what multiplication means.\n\n- Step 2: Perform the calculation.\n\n- Step 3: State the result.\n\nMake it clear and educational.\n\nResponse outline:\n\n1. \"First, recall that multiplication is a way to add a number to itself multiple times. So, 15 times 3 means adding 15 three times.\"\n\n2. \"Let's do that: 15 + 15 + 15.\"\n\n3. \"15 + 15 = 30\"\n\n4. \"30 + 15 = 45\"\n\n5. \"Alternatively, using standard multiplication: 15 × 3 = 45.\"\n\n6. \"So, the final answer is 45.\"",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759509999,
+      "id": "2c714e38-c2d1-406a-21f2-56ba6540fe9c_us-east-1",
+      "model": "grok-3-mini",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_4fae27f477",
+      "usage": {
+        "completion_tokens": 289,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 384,
+          "rejected_prediction_tokens": 0
+        },
+        "num_sources_used": 0,
+        "prompt_tokens": 19,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 2,
+          "image_tokens": 0,
+          "text_tokens": 19
+        },
+        "total_tokens": 692
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "988deab78b9a86d2-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 03 Oct 2025 16:46:44 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=JqAFCIaJHObrgvel935Lal1rdN9hvacJemEW.dJbjLg-1759510004-1.0.1.1-ONffYxIEP0hBC.MKYelwLQgsVkZMyGBWtv1e6EbBhxZC_JN3HqMZCr0yQ1VKRIyI9D3ApXaKu4fShGt7N4yWnyf6vR7Dz5KSB9TpsB5Fhng; path=/; expires=Fri, 03-Oct-25 17:16:44 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-request-id": [
+        "00-d4d4f2eb7d9304880d104cab04f76002-4478b6b300053a49-01"
+      ],
+      "x-zero-data-retention": [
+        "false"
+      ]
+    },
+    "status": 200
+  }
+}

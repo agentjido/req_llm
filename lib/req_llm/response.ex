@@ -81,6 +81,26 @@ defmodule ReqLLM.Response do
   end
 
   @doc """
+  Extract thinking/reasoning content from the response message.
+
+  Returns the concatenated thinking content if the message contains thinking parts, empty string otherwise.
+
+  ## Examples
+
+      iex> ReqLLM.Response.thinking(response)
+      "The user is asking about the weather..."
+
+  """
+  @spec thinking(t()) :: String.t() | nil
+  def thinking(%__MODULE__{message: nil}), do: nil
+
+  def thinking(%__MODULE__{message: %Message{content: content}}) do
+    content
+    |> Enum.filter(&(&1.type == :thinking))
+    |> Enum.map_join("", & &1.text)
+  end
+
+  @doc """
   Extract tool calls from the response message.
 
   Returns a list of tool calls if the message contains them, empty list otherwise.

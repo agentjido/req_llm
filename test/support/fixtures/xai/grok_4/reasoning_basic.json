@@ -1,0 +1,117 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwNDgsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiQ2FsY3VsYXRlIDE1IHRpbWVzIDMuIFRoaW5rIHN0ZXAtYnktc3RlcC4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTQiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjEuMH0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 2048,
+      "messages": [
+        {
+          "content": "Calculate 15 times 3. Think step-by-step.",
+          "role": "user"
+        }
+      ],
+      "model": "grok-4",
+      "seed": 42,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.x.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "### Step-by-Step Calculation: 15 × 3\n\n1. **Understand the operation**: We're multiplying 15 by 3, which means adding 15 to itself three times (15 + 15 + 15).\n\n2. **Break it down**:\n   - Split 15 into 10 + 5 for easier calculation.\n   - 10 × 3 = 30.\n   - 5 × 3 = 15.\n\n3. **Add the results**: 30 + 15 = 45.\n\n4. **Verify**: Alternatively, 15 + 15 = 30, and 30 + 15 = 45. Same result.\n\nThe final answer is **45**.",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759505282,
+      "id": "d166b9d6-8a53-100d-bb4e-b7568bba659f_us-east-1",
+      "model": "grok-4-0709",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_19e21a36c0",
+      "usage": {
+        "completion_tokens": 142,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 163,
+          "rejected_prediction_tokens": 0
+        },
+        "num_sources_used": 0,
+        "prompt_tokens": 696,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 679,
+          "image_tokens": 0,
+          "text_tokens": 696
+        },
+        "total_tokens": 1001
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "988d778e89d51401-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 03 Oct 2025 15:28:06 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=znOyoc01YRxRihRm5TS1HUYcGKJTN1GWqt6svNxNnwg-1759505286-1.0.1.1-NYsEoVtlaTO7vwArb0f5UxQBkkyu1xOkfmygxG5oabVztp9I5uCsBzbdJVfrsSBIq.5V.Udx3jAO9QixvW20iwpu8Ydc5.7sgx1gQTkoFZs; path=/; expires=Fri, 03-Oct-25 15:58:06 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-request-id": [
+        "00-cdfd0ffd219faed98e781e8ea0b16115-2f1b09410001c081-01"
+      ],
+      "x-zero-data-retention": [
+        "false"
+      ]
+    },
+    "status": 200
+  }
+}

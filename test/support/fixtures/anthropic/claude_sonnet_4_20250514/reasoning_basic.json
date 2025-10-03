@@ -1,0 +1,150 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1zb25uZXQtNC0yMDI1MDUxNCIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjoxLjAsInRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19"
+    },
+    "canonical_json": {
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "claude-sonnet-4-20250514",
+      "stream": false,
+      "temperature": 1.0,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "EuADCkYICBgCKkBbX2MdPWi6PAMBhvjDPAzrm+Lo4YhiLbSG7UidvlKgxvAKmgJxM1K0ln0oPUMIV43eNyDAsKhG++dbyboNyHSAEgyJ4LCBoG0lqmN7X1EaDJjrkIAgLjK0TGbAiyIwZPpWIwqh/6DKDqgIngFw+8yD38PlPj6k9LAOmKxxZ6sMJWmN1mfV3m1WutW1/d+yKscC/cURxDaGcgv2shby/Cl+xiFn7Bbnu1I0R/OIPhTpqMekXyLFDQRy4t/K+yOqd9jMMVHZtu/TnPsvfrDtnlZsChddKbNIM841WtzFosvsDN/aVOSJBuC0UzJ/LRTzDi2vEwYmMzvxE5CvawQ9FbhmQ0Qm/CliYRfSeohI9iMk9wHTpwRvpu9GPluUFzDQVHzlxbqDtBjrRLaFvVCIxXC8DFSvs9qVsanc9Pkpwvxhi1F5AYQy3y6q/2eJv/RvfAi3ISJsDDDmQlWR+JkcM44P0k5C8yzXawY6dFxa9POaVrgrbTmpNW3+QMzaW8owXfdT6rowg+wGQFbsejhjFqwhRt6/qqpyVT9qB2K+mIjUtV0FzhIi+0iGbF6TunICuDkt6AEFhPhlKUkaTymAbnQIw3yegEZ1xqoOcaTWFYR9cZBcMlJ3dO9nGAE=",
+          "thinking": "I need to solve 12 * 7.\n\nI can do this in a few ways:\n- 12 * 7 = (10 + 2) * 7 = 10*7 + 2*7 = 70 + 14 = 84\n- Or I can think of it as 12 * 7 = 12 * (5 + 2) = 12*5 + 12*2 = 60 + 24 = 84\n- Or just recall that 12 * 7 = 84 from memory\n\nLet me double-check: 7 * 12 = 7 * 10 + 7 * 2 = 70 + 14 = 84. Yes, that's correct.",
+          "type": "thinking"
+        },
+        {
+          "text": "**Internal thinking:** I can break this down as 12 × 7 = (10 + 2) × 7 = (10 × 7) + (2 × 7) = 70 + 14\n\n**Answer:** 12 × 7 = 84",
+          "type": "text"
+        }
+      ],
+      "id": "msg_01NnPoCWZyULkxN3kXQ7Hvgx",
+      "model": "claude-sonnet-4-20250514",
+      "role": "assistant",
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 50,
+        "output_tokens": 261,
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": [
+        "a71659e7-a922-4ff7-99de-f3ba615face1"
+      ],
+      "anthropic-ratelimit-input-tokens-limit": [
+        "450000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "450000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2025-10-03T15:19:47Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "90000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "90000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2025-10-03T15:19:51Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "1000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2025-10-03T15:19:45Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "540000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "540000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2025-10-03T15:19:47Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "988d6b6cad88e804-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 03 Oct 2025 15:19:50 GMT"
+      ],
+      "request-id": [
+        "req_011CTkVPgyavoruzoz5Siuhw"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "5497"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  }
+}

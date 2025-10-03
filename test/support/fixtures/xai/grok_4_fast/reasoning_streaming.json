@@ -1,0 +1,52 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IllvdSBhcmUgYSBoZWxwZnVsIG1hdGggdHV0b3IuIiwicm9sZSI6InN5c3RlbSJ9LHsiY29udGVudCI6IldoYXQgaXMgOCBwbHVzIDc/IFNob3cgeW91ciByZWFzb25pbmcuIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay00LWZhc3QiLCJzdHJlYW0iOnRydWUsInRlbXBlcmF0dXJlIjoxLjAsInRvcF9wIjowLjh9"
+    },
+    "canonical_json": {
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "content": "You are a helpful math tutor.",
+          "role": "system"
+        },
+        {
+          "content": "What is 8 plus 7? Show your reasoning.",
+          "role": "user"
+        }
+      ],
+      "model": "grok-4-fast",
+      "stream": true,
+      "temperature": 1.0,
+      "top_p": 0.8
+    },
+    "headers": {
+      "accept": "text/event-stream",
+      "authorization": "[REDACTED:authorization]",
+      "content-type": "application/json"
+    },
+    "method": "POST",
+    "url": "https://api.x.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "b64": ""
+    },
+    "headers": {
+      "access-control-allow-origin": "*",
+      "access-control-expose-headers": "*",
+      "cache-control": "no-cache",
+      "cf-cache-status": "DYNAMIC",
+      "cf-ray": "988d76a90888eae0-ORD",
+      "content-type": "text/event-stream",
+      "date": "Fri, 03 Oct 2025 15:27:25 GMT",
+      "server": "cloudflare",
+      "set-cookie": "__cf_bm=TkoYR69qo7a9BvlPvyA3TKSjEjVtkgXYUI.KgQ8X0N8-1759505245-1.0.1.1-30aevqQwvrwW8SEWKnRIyPSM3ivIBPZd9zQ_D3bjnBEnSI7cAr8V4xNT4lzCg6J2jVxJ84Gq6RCS3.HOXxNoSWmLc1FPsF5yjirzlmYX_vk; path=/; expires=Fri, 03-Oct-25 15:57:25 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None",
+      "strict-transport-security": "max-age=31536000",
+      "vary": "origin, access-control-request-method, access-control-request-headers",
+      "x-request-id": "00-3e1cf62c18252631d7836ecf2214b324-5d1d66b70001c827-01",
+      "x-zero-data-retention": "false"
+    },
+    "status": 200
+  }
+}
