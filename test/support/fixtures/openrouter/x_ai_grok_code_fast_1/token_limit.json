@@ -1,0 +1,114 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6IngtYWkvZ3Jvay1jb2RlLWZhc3QtMSIsIm4iOjEsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjV9"
+    },
+    "canonical_json": {
+      "max_tokens": 100,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "x-ai/grok-code-fast-1",
+      "n": 1,
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "# The Chronicles of Emberfang: A Dragon's Odyssey\n\n## Prologue: The Awakening Flame\n\nIn the shadowed valleys of Eldoria, where ancient mountains pierced the sky like jagged teeth, dragons were not mere beasts of legend but guardians of forgotten secrets. Long ago, the Great Wyrm Emberfang had forged a pact with the human clans, binding the fiery creatures to the land's fate. But as centuries waned, the dragons retreated to their volcanic lairs, their scales growing cold against the",
+            "reasoning": "First, the user asked for a \"very long story about dragons and adventures.\" This is a creative, open-ended request. I need to make it maximally informative and structured, but since it's a story, it should be engaging and well-written.\n\n\n## Crafting the Story  \n- The user requested a long story about dragons and adventures, suggesting a creative, open-ended narrative.  \n- It needs to be informative, structured, and engaging, balancing storytelling with depth.  \n- The focus is on writing a compelling adventure, ensuring it captivates while meeting the user's imaginative request.  \n- Planning to include dragons as central characters, weaving in epic quests and challenges for richness.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "First, the user asked for a \"very long story about dragons and adventures.\" This is a creative, open-ended request. I need to make it maximally informative and structured, but since it's a story, it should be engaging and well-written.\n\n\n## Crafting the Story  \n- The user requested a long story about dragons and adventures, suggesting a creative, open-ended narrative.  \n- It needs to be informative, structured, and engaging, balancing storytelling with depth.  \n- The focus is on writing a compelling adventure, ensuring it captivates while meeting the user's imaginative request.  \n- Planning to include dragons as central characters, weaving in epic quests and challenges for richness.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "length"
+        }
+      ],
+      "created": 1759529868,
+      "id": "gen-1759529868-F2KvtA9adZjalDz7v52F",
+      "model": "x-ai/grok-code-fast-1",
+      "object": "chat.completion",
+      "provider": "xAI",
+      "system_fingerprint": "fp_10f00c862d",
+      "usage": {
+        "completion_tokens": 331,
+        "completion_tokens_details": {
+          "reasoning_tokens": 231
+        },
+        "prompt_tokens": 213,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 192
+        },
+        "total_tokens": 544
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "988fcfcc3fc01d00-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 03 Oct 2025 22:17:48 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

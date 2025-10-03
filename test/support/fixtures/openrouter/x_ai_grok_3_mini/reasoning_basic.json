@@ -1,0 +1,116 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6IngtYWkvZ3Jvay0zLW1pbmkiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjoxLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "x-ai/grok-3-mini",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "To solve 12 * 7:\n\n- Internal thinking (brief): I break it down as 10 * 7 = 70, and 2 * 7 = 14. Then, add them: 70 + 14 = 84.\n\nFinal answer: 84.",
+            "reasoning": "First, the user asked to \"Solve 12*7 and show your internal thinking (brief).\" So, I need to calculate 12 multiplied by 7 and explain my thought process briefly.\n\nThe actual calculation: 12 times 7. I know that 10 times 7 is 70, and 2 times 7 is 14. So, adding those together: 70 + 14 = 84.\n\nI could also do it directly: 12 * 7 = 84.\n\nNow, for the internal thinking, I have to show it briefly. That means I should write a short explanation of how I arrived at the answer.\n\nStructure my response:\n\n1. Start with the calculation.\n\n2. Follow with a brief internal thinking process.\n\nFor example: \"To solve 12 * 7, I break it down: 10 * 7 = 70, and 2 * 7 = 14. Adding them up: 70 + 14 = 84.\"\n\nThat seems concise.\n\nFinally, end with the answer.\n\nMake sure my response is clear and directly addresses the user's request.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "First, the user asked to \"Solve 12*7 and show your internal thinking (brief).\" So, I need to calculate 12 multiplied by 7 and explain my thought process briefly.\n\nThe actual calculation: 12 times 7. I know that 10 times 7 is 70, and 2 times 7 is 14. So, adding those together: 70 + 14 = 84.\n\nI could also do it directly: 12 * 7 = 84.\n\nNow, for the internal thinking, I have to show it briefly. That means I should write a short explanation of how I arrived at the answer.\n\nStructure my response:\n\n1. Start with the calculation.\n\n2. Follow with a brief internal thinking process.\n\nFor example: \"To solve 12 * 7, I break it down: 10 * 7 = 70, and 2 * 7 = 14. Adding them up: 70 + 14 = 84.\"\n\nThat seems concise.\n\nFinally, end with the answer.\n\nMake sure my response is clear and directly addresses the user's request.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1759529815,
+      "id": "gen-1759529815-dDFzkJsq6jaJkHCR8BGb",
+      "model": "x-ai/grok-3-mini",
+      "object": "chat.completion",
+      "provider": "xAI",
+      "system_fingerprint": "fp_4fae27f477",
+      "usage": {
+        "completion_tokens": 284,
+        "completion_tokens_details": {
+          "reasoning_tokens": 226
+        },
+        "prompt_tokens": 20,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 2
+        },
+        "total_tokens": 304
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "988fce851b6fe417-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 03 Oct 2025 22:16:56 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

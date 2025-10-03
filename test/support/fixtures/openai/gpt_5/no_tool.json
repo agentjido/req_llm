@@ -1,19 +1,25 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjMwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3B0LTUiLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMDAsIm1vZGVsIjoiZ3B0LTUiLCJyZWFzb25pbmciOnsiZWZmb3J0IjoibG93In0sInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
-      "max_completion_tokens": 300,
-      "messages": [
+      "input": [
         {
-          "content": "Tell me a joke about cats",
+          "content": [
+            {
+              "text": "Tell me a joke about cats",
+              "type": "input_text"
+            }
+          ],
           "role": "user"
         }
       ],
+      "max_output_tokens": 300,
       "model": "gpt-5",
-      "reasoning_effort": "low",
-      "seed": 42,
+      "reasoning": {
+        "effort": "low"
+      },
       "stream": false,
       "tools": [
         {
@@ -49,48 +55,18 @@
       ]
     },
     "method": "post",
-    "url": "https://api.openai.com/v1/chat/completions"
+    "url": "https://api.openai.com/v1/responses"
   },
   "response": {
     "body": {
-      "choices": [
-        {
-          "finish_reason": "stop",
-          "index": 0,
-          "message": {
-            "annotations": [],
-            "content": "Why don’t cats play poker in the jungle? Too many cheetahs.",
-            "refusal": null,
-            "role": "assistant"
-          }
-        }
-      ],
-      "created": 1759526284,
-      "id": "chatcmpl-CMhS85J8Zsn9pLdQsbSlgHL9j8tMx",
-      "model": "gpt-5-2025-08-07",
-      "object": "chat.completion",
-      "service_tier": "default",
-      "system_fingerprint": null,
-      "usage": {
-        "completion_tokens": 153,
-        "completion_tokens_details": {
-          "accepted_prediction_tokens": 0,
-          "audio_tokens": 0,
-          "reasoning_tokens": 128,
-          "rejected_prediction_tokens": 0
-        },
-        "prompt_tokens": 132,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 0
-        },
-        "total_tokens": 285
+      "error": {
+        "code": "missing_required_parameter",
+        "message": "Missing required parameter: 'tools[0].name'.",
+        "param": "tools[0].name",
+        "type": "invalid_request_error"
       }
     },
     "headers": {
-      "access-control-expose-headers": [
-        "X-Request-ID"
-      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -98,7 +74,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988f784d5c698b98-ORD"
+        "988fb50fceff88cd-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -107,13 +83,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:18:08 GMT"
+        "Fri, 03 Oct 2025 21:59:33 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "3691"
+        "10"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -125,46 +101,22 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=vX4.clEyYLby8VBoiYhWMbFj8nw63HpzO066z65_S9o-1759526288-1.0.1.1-0Iq6tFCFFtFcqIcdONhTVMDn.u0J_Lj_L.CphTZnRPPZpKjDrAiaShhctexaTIovqvIl08FMWFIebq0.Y5GyyblxRwOxD3M8JZvgIOGMOGY; path=/; expires=Fri, 03-Oct-25 21:48:08 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=OTb.uxbk37xyAy83t_FXVn4lfkQ3u2okOQ_gjUnH6hI-1759526288133-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=UY7p5z8svdPx8L.Lkd8vo0.VZeB3rR75lGK9AJ6qx_w-1759528773-1.0.1.1-klk7Zhwu7iGJKi7fzAHnXhDOU_LhhEaaWlCtw3x1TmZFc6oxkmBOjTcne6jjyVkxMWzp0joyMum2mOXsCTfeHbx1ztEBdXW.S9v1QTmsTpg; path=/; expires=Fri, 03-Oct-25 22:29:33 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=Xgfw6JzSJF74.IxClI9mL.zrGLNcsm4XQwDay8uPTd0-1759528773186-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
-      ],
-      "transfer-encoding": [
-        "chunked"
       ],
       "x-content-type-options": [
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "3711"
-      ],
-      "x-openai-proxy-wasm": [
-        "v0.1"
-      ],
-      "x-ratelimit-limit-requests": [
-        "5000"
-      ],
-      "x-ratelimit-limit-tokens": [
-        "2000000"
-      ],
-      "x-ratelimit-remaining-requests": [
-        "4999"
-      ],
-      "x-ratelimit-remaining-tokens": [
-        "1999991"
-      ],
-      "x-ratelimit-reset-requests": [
-        "12ms"
-      ],
-      "x-ratelimit-reset-tokens": [
-        "0s"
+        "13"
       ],
       "x-request-id": [
-        "req_ce0e4a7aa7544b1094a667645cd7e6ea"
+        "req_38df18ed6d9e083a69229e39c30e466a"
       ]
     },
-    "status": 200
+    "status": 400
   }
 }

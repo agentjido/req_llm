@@ -1,0 +1,115 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJ4LWFpL2dyb2stMy1taW5pLWJldGEiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 50,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "x-ai/grok-3-mini-beta",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! I'm Grok, your helpful and truthful AI assistant built by xAI. It's great to hear from you—classic \"Hello world!\" greeting, by the way. What's on your mind? How can I assist today? 😊",
+            "reasoning": "First, the user said: \"Hello world!\" This is a classic greeting, often used as the first program output in programming tutorials, like in Python or C++. It's not a question or a command; it's just a friendly hello.\n\nAs Grok, I'm an AI built by xAI, and I'm supposed to be helpful, truthful, and maximally truthful. My responses should align with that.\n\nIn my system prompt, it says: \"You are Grok, a helpful and maximally truthful AI built by xAI, not based on any other companies and their models.\" So, I need to respond in character.\n\nA typical response to \"Hello world!\" could be a simple greeting back, like \"Hello to you too!\" or something more engaging since I'm an AI.\n\nI should make it fun and relevant. Maybe reference the programming aspect, as \"Hello world!\" is iconic in coding.\n\nPossible responses:\n\n1. Simple: \"Hi there! How can I help you today?\"\n\n2. Playful: \"Hello world! Wait, that's my line too. What's up?\"\n\n3. Informative: \"Greetings! I'm Grok, created by xAI. How can I assist?\"\n\nSince the user might be testing or just saying hi, I should keep it light and invite further interaction.\n\nEnsure I'm not claiming to be based on other models; I'm purely from xAI.\n\nFinally, structure the response: Start with a greeting, perhaps introduce myself briefly, and end with an offer to help.\n\nResponse idea: \"Hello! I'm Grok, your AI assistant from xAI. Nice to meet you. What can I do for you today?\"",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "First, the user said: \"Hello world!\" This is a classic greeting, often used as the first program output in programming tutorials, like in Python or C++. It's not a question or a command; it's just a friendly hello.\n\nAs Grok, I'm an AI built by xAI, and I'm supposed to be helpful, truthful, and maximally truthful. My responses should align with that.\n\nIn my system prompt, it says: \"You are Grok, a helpful and maximally truthful AI built by xAI, not based on any other companies and their models.\" So, I need to respond in character.\n\nA typical response to \"Hello world!\" could be a simple greeting back, like \"Hello to you too!\" or something more engaging since I'm an AI.\n\nI should make it fun and relevant. Maybe reference the programming aspect, as \"Hello world!\" is iconic in coding.\n\nPossible responses:\n\n1. Simple: \"Hi there! How can I help you today?\"\n\n2. Playful: \"Hello world! Wait, that's my line too. What's up?\"\n\n3. Informative: \"Greetings! I'm Grok, created by xAI. How can I assist?\"\n\nSince the user might be testing or just saying hi, I should keep it light and invite further interaction.\n\nEnsure I'm not claiming to be based on other models; I'm purely from xAI.\n\nFinally, structure the response: Start with a greeting, perhaps introduce myself briefly, and end with an offer to help.\n\nResponse idea: \"Hello! I'm Grok, your AI assistant from xAI. Nice to meet you. What can I do for you today?\"",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1759529875,
+      "id": "gen-1759529875-7Oi0Ur3BhMXedaQfqPwb",
+      "model": "x-ai/grok-3-mini",
+      "object": "chat.completion",
+      "provider": "xAI",
+      "system_fingerprint": "fp_4fae27f477",
+      "usage": {
+        "completion_tokens": 377,
+        "completion_tokens_details": {
+          "reasoning_tokens": 329
+        },
+        "prompt_tokens": 10,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 3
+        },
+        "total_tokens": 387
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "988fcff91b1e9121-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 03 Oct 2025 22:17:55 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

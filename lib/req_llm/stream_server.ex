@@ -500,6 +500,7 @@ defmodule ReqLLM.StreamServer do
   defp termination_event?(%{data: "[DONE]"}), do: true
   defp termination_event?(%{data: %{"done" => true}}), do: true
   defp termination_event?(%{data: %{"type" => "message_stop"}}), do: true
+  defp termination_event?(%{data: %{"type" => "response.completed"}}), do: true
   defp termination_event?(_), do: false
 
   defp enqueue_chunks(chunks, state) do

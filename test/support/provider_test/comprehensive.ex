@@ -41,7 +41,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
       alias ReqLLM.Test.ModelMatrix
 
       @moduletag :coverage
-      @moduletag provider: provider
+      @moduletag provider: to_string(provider)
 
       defp debug?, do: System.get_env("REQ_LLM_DEBUG") in ["1", "true"]
 

@@ -11,6 +11,7 @@ config :req_llm, :test_models, ~w(
     groq:llama-3.1-8b-instant
     xai:grok-2-latest
     xai:grok-3-fast
+    openrouter:x-ai/grok-4-fast:free
   )
 
 if config_env() == :test do

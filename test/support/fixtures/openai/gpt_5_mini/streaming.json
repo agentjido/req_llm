@@ -1,27 +1,35 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiWW91IGFyZSBhIGhlbHBmdWwsIGNyZWF0aXZlIGFzc2lzdGFudC4iLCJyb2xlIjoic3lzdGVtIn0seyJjb250ZW50IjoiU2F5IGhlbGxvIGluIG9uZSBzaG9ydCwgaW1hZ2luYXRpdmUgc2VudGVuY2UuIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3B0LTUtbWluaSIsInN0cmVhbSI6dHJ1ZSwic3RyZWFtX29wdGlvbnMiOnsiaW5jbHVkZV91c2FnZSI6dHJ1ZX0sInRlbXBlcmF0dXJlIjowLjksInRvcF9wIjowLjh9"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IllvdSBhcmUgYSBoZWxwZnVsLCBjcmVhdGl2ZSBhc3Npc3RhbnQuIiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJzeXN0ZW0ifSx7ImNvbnRlbnQiOlt7InRleHQiOiJTYXkgaGVsbG8gaW4gb25lIHNob3J0LCBpbWFnaW5hdGl2ZSBzZW50ZW5jZS4iLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoyMDAsIm1vZGVsIjoiZ3B0LTUtbWluaSIsInJlYXNvbmluZyI6eyJlZmZvcnQiOiJsb3cifSwic3RyZWFtIjp0cnVlfQ=="
     },
     "canonical_json": {
-      "max_tokens": 100,
-      "messages": [
+      "input": [
         {
-          "content": "You are a helpful, creative assistant.",
+          "content": [
+            {
+              "text": "You are a helpful, creative assistant.",
+              "type": "input_text"
+            }
+          ],
           "role": "system"
         },
         {
-          "content": "Say hello in one short, imaginative sentence.",
+          "content": [
+            {
+              "text": "Say hello in one short, imaginative sentence.",
+              "type": "input_text"
+            }
+          ],
           "role": "user"
         }
       ],
+      "max_output_tokens": 200,
       "model": "gpt-5-mini",
-      "stream": true,
-      "stream_options": {
-        "include_usage": true
+      "reasoning": {
+        "effort": "low"
       },
-      "temperature": 0.9,
-      "top_p": 0.8
+      "stream": true
     },
     "headers": {
       "accept": "text/event-stream",
@@ -29,42 +37,34 @@
       "content-type": "application/json"
     },
     "method": "POST",
-    "url": "https://api.openai.com/v1/chat/completions"
+    "url": "https://api.openai.com/v1/responses"
   },
   "response": {
     "body": {
       "error": {
-        "code": "unsupported_parameter",
-        "message": "Unsupported parameter: 'max_tokens' is not supported with this model. Use 'max_completion_tokens' instead.",
-        "param": "max_tokens",
+        "code": "unsupported_value",
+        "message": "Your organization must be verified to stream this model. Please go to: https://platform.openai.com/settings/organization/general and click on Verify Organization. If you just verified, it can take up to 15 minutes for access to propagate.",
+        "param": "stream",
         "type": "invalid_request_error"
       }
     },
     "headers": {
-      "access-control-expose-headers": "X-Request-ID",
       "alt-svc": "h3=\":443\"; ma=86400",
       "cf-cache-status": "DYNAMIC",
-      "cf-ray": "988f4547ffcc86fe-ORD",
-      "content-length": "245",
+      "cf-ray": "988fb518ae2bf83f-ORD",
+      "content-length": "369",
       "content-type": "application/json",
-      "date": "Fri, 03 Oct 2025 20:43:14 GMT",
+      "date": "Fri, 03 Oct 2025 21:59:34 GMT",
       "openai-organization": "epic-creative-sogybe",
       "openai-processing-ms": "17",
       "openai-project": "proj_j5AhgU4eLMRmsoO9FDg7BRD3",
       "openai-version": "2020-10-01",
       "server": "cloudflare",
-      "set-cookie": "_cfuvid=gTB86F9miPj9wbeY6hvslSBo0FWzh9iU13DrxVNzZEM-1759524194660-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+      "set-cookie": "_cfuvid=ySUqTQ7PJpTkI3hVjnxrOHy3fmnAAHKWhxZBGVicMWo-1759528774593-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
       "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
       "x-content-type-options": "nosniff",
-      "x-envoy-upstream-service-time": "37",
-      "x-openai-proxy-wasm": "v0.1",
-      "x-ratelimit-limit-requests": "5000",
-      "x-ratelimit-limit-tokens": "4000000",
-      "x-ratelimit-remaining-requests": "4999",
-      "x-ratelimit-remaining-tokens": "3999976",
-      "x-ratelimit-reset-requests": "12ms",
-      "x-ratelimit-reset-tokens": "0s",
-      "x-request-id": "req_e37877255eed44c9bd4c9cdf9c19cca1"
+      "x-envoy-upstream-service-time": "20",
+      "x-request-id": "req_f54eef10502d0edfbc3481d5f7766bd3"
     },
     "status": 400
   }

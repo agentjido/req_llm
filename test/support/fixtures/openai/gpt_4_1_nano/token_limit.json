@@ -1,19 +1,23 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdwdC00LjEtbmFubyIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjV9"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoiZ3B0LTQuMS1uYW5vIiwic3RyZWFtIjpmYWxzZX0="
     },
     "canonical_json": {
-      "max_tokens": 100,
-      "messages": [
+      "input": [
         {
-          "content": "Write a very long story about dragons and adventures",
+          "content": [
+            {
+              "text": "Write a very long story about dragons and adventures",
+              "type": "input_text"
+            }
+          ],
           "role": "user"
         }
       ],
+      "max_output_tokens": 100,
       "model": "gpt-4.1-nano",
-      "stream": false,
-      "temperature": 0.5
+      "stream": false
     },
     "headers": {
       "accept-encoding": [
@@ -28,49 +32,79 @@
       ]
     },
     "method": "post",
-    "url": "https://api.openai.com/v1/chat/completions"
+    "url": "https://api.openai.com/v1/responses"
   },
   "response": {
     "body": {
-      "choices": [
+      "background": false,
+      "billing": {
+        "payer": "developer"
+      },
+      "created_at": 1759528764,
+      "error": null,
+      "id": "resp_0e69531f98e486380068e0473c11c8819abdd74912ad1a6c47",
+      "incomplete_details": {
+        "reason": "max_output_tokens"
+      },
+      "instructions": null,
+      "max_output_tokens": 100,
+      "max_tool_calls": null,
+      "metadata": {},
+      "model": "gpt-4.1-nano-2025-04-14",
+      "object": "response",
+      "output": [
         {
-          "finish_reason": "length",
-          "index": 0,
-          "logprobs": null,
-          "message": {
-            "annotations": [],
-            "content": "Once upon a time, in a land where the sky stretched endlessly and the mountains pierced the clouds, there existed a realm called Eldoria—a land woven with magic, mystery, and legends of ancient dragons. For centuries, dragons had been both revered and feared by the inhabitants of Eldoria. Some believed they were the guardians of the world, wise and noble beings, while others whispered tales of their fiery temperaments and destructive power. Yet, despite the fears and myths, the dragons held a deep connection",
-            "refusal": null,
-            "role": "assistant"
-          }
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Once upon a time, in a land nestled between towering mountains and vast, shimmering oceans, there existed a world unlike any other—dracoria, the realm of dragons. These majestic creatures, with scales that shimmered like jewels and wings that could blot out the sun, had long been the guardians of balance and wisdom in this mystical land. Yet, their existence was shrouded in legend, whispered about in tales told by villagers and explorers who dared to dream beyond the horizon.\n\n### The Birth",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0e69531f98e486380068e0473d0a38819a9046b56217a59f93",
+          "role": "assistant",
+          "status": "incomplete",
+          "type": "message"
         }
       ],
-      "created": 1759523139,
-      "id": "chatcmpl-CMgdPFoNS7SpozA1SepAiYeaVKyvS",
-      "model": "gpt-4.1-nano-2025-04-14",
-      "object": "chat.completion",
+      "parallel_tool_calls": true,
+      "previous_response_id": null,
+      "prompt_cache_key": null,
+      "reasoning": {
+        "effort": null,
+        "summary": null
+      },
+      "safety_identifier": null,
       "service_tier": "default",
-      "system_fingerprint": "fp_7c233bf9d1",
-      "usage": {
-        "completion_tokens": 100,
-        "completion_tokens_details": {
-          "accepted_prediction_tokens": 0,
-          "audio_tokens": 0,
-          "reasoning_tokens": 0,
-          "rejected_prediction_tokens": 0
+      "status": "incomplete",
+      "store": true,
+      "temperature": 1.0,
+      "text": {
+        "format": {
+          "type": "text"
         },
-        "prompt_tokens": 16,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
+        "verbosity": "medium"
+      },
+      "tool_choice": "auto",
+      "tools": [],
+      "top_logprobs": 0,
+      "top_p": 1.0,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 16,
+        "input_tokens_details": {
           "cached_tokens": 0
         },
+        "output_tokens": 100,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
         "total_tokens": 116
-      }
+      },
+      "user": null
     },
     "headers": {
-      "access-control-expose-headers": [
-        "X-Request-ID"
-      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -78,7 +112,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988f2b858f951e95-ORD"
+        "988fb4d7088561d8-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -87,13 +121,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 20:25:40 GMT"
+        "Fri, 03 Oct 2025 21:59:26 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "1322"
+        "2083"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -105,8 +139,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=0Xvm2jwjP826SoR.GFet2nlhmL18WyAVkB8Q_qGb2go-1759523140-1.0.1.1-YFhbYDlEO39dN9.tpq7KsVXfC5t9qTTNP1o19_fS0_trp_q9RYmvEbJBYkDg1IW204nkajJCyICVbVkgJaDZK6In9VzRZGTBnGOIF0_3OfI; path=/; expires=Fri, 03-Oct-25 20:55:40 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=4eshIIbyLN8Q3KJ_sOduaysjgTQK2upGj_wySNwlMvs-1759523140829-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=.lWlgVZ6TrHzYqUBMaiPN5C189PTYq4C0UbzB2XgtzI-1759528766-1.0.1.1-ddkw.lnoGnKsGDKb4y7UX4pDRmlI6DwO6Q3LIiJVNkbHiN1Mq4S0yyr78uGJHipzGttOoSfd5yRoorEAWm03Abn.RnnrJfDebTur1mUZgb4; path=/; expires=Fri, 03-Oct-25 22:29:26 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=DvITP3evsnKCnTaMbIQHxAJLMztTNEbi.xq8qWydi6k-1759528766244-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -118,10 +152,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "1341"
-      ],
-      "x-openai-proxy-wasm": [
-        "v0.1"
+        "2089"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -133,7 +164,7 @@
         "4999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "3999985"
+        "3999965"
       ],
       "x-ratelimit-reset-requests": [
         "12ms"
@@ -142,7 +173,7 @@
         "0s"
       ],
       "x-request-id": [
-        "req_4c3522864d9a4a119515aaadb8cc185b"
+        "req_9015fe29473ed36e7095ba5cbddc65a4"
       ]
     },
     "status": 200

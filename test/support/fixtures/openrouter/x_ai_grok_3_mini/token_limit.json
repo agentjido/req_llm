@@ -1,0 +1,115 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6IngtYWkvZ3Jvay0zLW1pbmkiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuNX0="
+    },
+    "canonical_json": {
+      "max_tokens": 100,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "x-ai/grok-3-mini",
+      "n": 1,
+      "reasoning_effort": "low",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Below is a very long, original story about dragons and adventures. I've crafted it to be engaging, with detailed descriptions, character development, and a full narrative arc. The story is divided into chapters for readability, but it's one cohesive tale. I hope you enjoy it!\n\n---\n\n# **The Emberheart Chronicles: Wings of Destiny**\n\n## Chapter 1: The Shadow of the Skies\n\nIn the ancient realm of Eldoria, where emerald forests kissed the snow-capped peaks of the Dragonspine",
+            "reasoning": "First, the user asked for a \"very long story about dragons and adventures.\" So, I need to create an original story that's extensive. Since it's a story, it should have a plot, characters, setting, conflict, and resolution.\n\nKey elements:\n- **Dragons**: These should be central. I can make them magical, intelligent beings, perhaps with different types like fire-breathing, ice dragons, or benevolent ones.\n- **Adventures**: The story needs excitement, quests, explorations, battles, and discoveries.\n\nStructure of the story:\n1. **Introduction**: Set the scene, introduce main characters, and establish the world.\n2. **Rising Action**: Build tension with adventures, challenges, and encounters with dragons.\n3. **Climax**: The peak of the adventure, maybe a big battle or a major revelation.\n4. **Falling Action**: Resolve the conflicts.\n5. **Conclusion**: Wrap up the story with lessons learned or a new beginning.\n\nMake it very long: Aim for a detailed narrative. I can describe settings vividly, develop characters deeply, and include subplots. Since this is text-based, I'll write a substantial amount, say 1000-2000 words, but keep it engaging.\n\nCharacters:\n- Protagonist: A young adventurer or a dragon rider.\n- Allies: Friends, mentors, other dragons.\n- Antagonists: Evil dragons, villains seeking power.\n- Supporting characters: Villagers, wizards, etc.\n\nSetting: A fantasy world with kingdoms, ancient forests, mountains where dragons live, hidden caves, etc.\n\nPlot Idea:\n- Start with a village threatened by a rogue dragon.\n- The protagonist embarks on a quest to find a legendary dragon that can help defeat it.\n- Along the way, adventures include fighting monsters, solving puzzles, making alliances.\n- Include elements like magic, prophecies, and moral dilemmas.\n\nEnsure it's original: Don't copy from existing stories like \"How to Train Your Dragon\" or \"The Hobbit.\" Make it unique.\n\nTone and Style:\n- Engaging, descriptive language.\n- Mix of action, dialogue, and introspection.\n- Keep it age-appropriate; assume general audience.\n\nFinally, end the story satisfactorily.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "First, the user asked for a \"very long story about dragons and adventures.\" So, I need to create an original story that's extensive. Since it's a story, it should have a plot, characters, setting, conflict, and resolution.\n\nKey elements:\n- **Dragons**: These should be central. I can make them magical, intelligent beings, perhaps with different types like fire-breathing, ice dragons, or benevolent ones.\n- **Adventures**: The story needs excitement, quests, explorations, battles, and discoveries.\n\nStructure of the story:\n1. **Introduction**: Set the scene, introduce main characters, and establish the world.\n2. **Rising Action**: Build tension with adventures, challenges, and encounters with dragons.\n3. **Climax**: The peak of the adventure, maybe a big battle or a major revelation.\n4. **Falling Action**: Resolve the conflicts.\n5. **Conclusion**: Wrap up the story with lessons learned or a new beginning.\n\nMake it very long: Aim for a detailed narrative. I can describe settings vividly, develop characters deeply, and include subplots. Since this is text-based, I'll write a substantial amount, say 1000-2000 words, but keep it engaging.\n\nCharacters:\n- Protagonist: A young adventurer or a dragon rider.\n- Allies: Friends, mentors, other dragons.\n- Antagonists: Evil dragons, villains seeking power.\n- Supporting characters: Villagers, wizards, etc.\n\nSetting: A fantasy world with kingdoms, ancient forests, mountains where dragons live, hidden caves, etc.\n\nPlot Idea:\n- Start with a village threatened by a rogue dragon.\n- The protagonist embarks on a quest to find a legendary dragon that can help defeat it.\n- Along the way, adventures include fighting monsters, solving puzzles, making alliances.\n- Include elements like magic, prophecies, and moral dilemmas.\n\nEnsure it's original: Don't copy from existing stories like \"How to Train Your Dragon\" or \"The Hobbit.\" Make it unique.\n\nTone and Style:\n- Engaging, descriptive language.\n- Mix of action, dialogue, and introspection.\n- Keep it age-appropriate; assume general audience.\n\nFinally, end the story satisfactorily.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "length"
+        }
+      ],
+      "created": 1759529859,
+      "id": "gen-1759529859-j9J17lz7tktMeM6iUIeM",
+      "model": "x-ai/grok-3-mini",
+      "object": "chat.completion",
+      "provider": "xAI",
+      "system_fingerprint": "fp_4fae27f477",
+      "usage": {
+        "completion_tokens": 538,
+        "completion_tokens_details": {
+          "reasoning_tokens": 438
+        },
+        "prompt_tokens": 16,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 2
+        },
+        "total_tokens": 554
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "988fcf97fe4ee417-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 03 Oct 2025 22:17:40 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

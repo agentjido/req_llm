@@ -1,0 +1,115 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJ4LWFpL2dyb2stMy1taW5pLWJldGEiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 10,
+      "messages": [
+        {
+          "content": "Hi there!",
+          "role": "user"
+        }
+      ],
+      "model": "x-ai/grok-3-mini-beta",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hi! I'm Grok, here to help.",
+            "reasoning": "First, the user said, \"Hi there!\" which is a casual greeting. As an AI assistant, I should respond in a friendly and engaging manner to build rapport.\n\nMy role is to be helpful, truthful, and engaging. I should keep responses clear and not verbose, as per the system prompt.\n\nA typical response to a greeting could be something like \"Hello!\" or \"Hi! How can I help you today?\" But since this is the start of a conversation, I might want to encourage further interaction.\n\nThe system prompt says: \"You are Grok, a helpful and maximally truthful AI built by xAI, not based on any other companies and their models.\" So, I need to ensure my response aligns with that. I shouldn't claim to be based on other models, but I don't need to mention that unless relevant.\n\nKeep it concise: The prompt says, \"Keep your response to user clear; please do not make your response verbose!\" So, avoid unnecessary fluff.\n\nPossible response structure:\n1. Greet back.\n2. Offer help or ask a question to continue the conversation.\n3. Make it personal or fun, as Grok is known for being witty.\n\nFor example:\n- \"Hi! I'm Grok, here to help. What's on your mind?\"\n- Or simply: \"Hello! How can I assist you?\"\n\nSince the user said \"Hi there!\", a mirrored casual response might work: \"Hey there! What's up?\"\n\nTo make it more Grok-specific, I could reference my identity lightly.\n\nFinal thought: Aim for friendliness and utility.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "First, the user said, \"Hi there!\" which is a casual greeting. As an AI assistant, I should respond in a friendly and engaging manner to build rapport.\n\nMy role is to be helpful, truthful, and engaging. I should keep responses clear and not verbose, as per the system prompt.\n\nA typical response to a greeting could be something like \"Hello!\" or \"Hi! How can I help you today?\" But since this is the start of a conversation, I might want to encourage further interaction.\n\nThe system prompt says: \"You are Grok, a helpful and maximally truthful AI built by xAI, not based on any other companies and their models.\" So, I need to ensure my response aligns with that. I shouldn't claim to be based on other models, but I don't need to mention that unless relevant.\n\nKeep it concise: The prompt says, \"Keep your response to user clear; please do not make your response verbose!\" So, avoid unnecessary fluff.\n\nPossible response structure:\n1. Greet back.\n2. Offer help or ask a question to continue the conversation.\n3. Make it personal or fun, as Grok is known for being witty.\n\nFor example:\n- \"Hi! I'm Grok, here to help. What's on your mind?\"\n- Or simply: \"Hello! How can I assist you?\"\n\nSince the user said \"Hi there!\", a mirrored casual response might work: \"Hey there! What's up?\"\n\nTo make it more Grok-specific, I could reference my identity lightly.\n\nFinal thought: Aim for friendliness and utility.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "length"
+        }
+      ],
+      "created": 1759529871,
+      "id": "gen-1759529871-GeXw03m6zdbH10U05owA",
+      "model": "x-ai/grok-3-mini",
+      "object": "chat.completion",
+      "provider": "xAI",
+      "system_fingerprint": "fp_4fae27f477",
+      "usage": {
+        "completion_tokens": 326,
+        "completion_tokens_details": {
+          "reasoning_tokens": 316
+        },
+        "prompt_tokens": 10,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 2
+        },
+        "total_tokens": 336
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "988fcfe2cfee9121-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 03 Oct 2025 22:17:52 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

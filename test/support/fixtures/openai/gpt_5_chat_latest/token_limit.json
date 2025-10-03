@@ -1,19 +1,26 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3B0LTUtY2hhdC1sYXRlc3QiLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC41fQ=="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoiZ3B0LTUtY2hhdC1sYXRlc3QiLCJyZWFzb25pbmciOnsiZWZmb3J0IjoibG93In0sInN0cmVhbSI6ZmFsc2V9"
     },
     "canonical_json": {
-      "max_completion_tokens": 100,
-      "messages": [
+      "input": [
         {
-          "content": "Write a very long story about dragons and adventures",
+          "content": [
+            {
+              "text": "Write a very long story about dragons and adventures",
+              "type": "input_text"
+            }
+          ],
           "role": "user"
         }
       ],
+      "max_output_tokens": 100,
       "model": "gpt-5-chat-latest",
-      "stream": false,
-      "temperature": 0.5
+      "reasoning": {
+        "effort": "low"
+      },
+      "stream": false
     },
     "headers": {
       "accept-encoding": [
@@ -28,49 +35,18 @@
       ]
     },
     "method": "post",
-    "url": "https://api.openai.com/v1/chat/completions"
+    "url": "https://api.openai.com/v1/responses"
   },
   "response": {
     "body": {
-      "choices": [
-        {
-          "finish_reason": "length",
-          "index": 0,
-          "logprobs": null,
-          "message": {
-            "annotations": [],
-            "content": "Here’s a long, original fantasy story about dragons and adventures:\n\n---\n\n### The Song of Emberwind\n\nLong ago, before the kingdoms of men had spread across the valleys and plains, the world belonged to fire and sky. Dragons soared over mountain peaks, their wings blotting out the sun, their roars shaking forests to their roots. They were not merely beasts, but ancient intelligences—keepers of secrets, guardians of elements, and sometimes, bringers of ruin.  \n\nBy the time our",
-            "refusal": null,
-            "role": "assistant"
-          }
-        }
-      ],
-      "created": 1759523121,
-      "id": "chatcmpl-CMgd7SjWkDoicFhishZcYyVm2mKOk",
-      "model": "gpt-5-chat-latest",
-      "object": "chat.completion",
-      "service_tier": "default",
-      "system_fingerprint": "fp_2cc0e7c72e",
-      "usage": {
-        "completion_tokens": 100,
-        "completion_tokens_details": {
-          "accepted_prediction_tokens": 0,
-          "audio_tokens": 0,
-          "reasoning_tokens": 0,
-          "rejected_prediction_tokens": 0
-        },
-        "prompt_tokens": 16,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 0
-        },
-        "total_tokens": 116
+      "error": {
+        "code": "unsupported_parameter",
+        "message": "Unsupported parameter: 'reasoning.effort' is not supported with this model.",
+        "param": "reasoning.effort",
+        "type": "invalid_request_error"
       }
     },
     "headers": {
-      "access-control-expose-headers": [
-        "X-Request-ID"
-      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -78,7 +54,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988f2b17b8fbe826-ORD"
+        "988fb506ba702306-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -87,13 +63,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 20:25:23 GMT"
+        "Fri, 03 Oct 2025 21:59:31 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "1311"
+        "90"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -105,46 +81,22 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=u0X5W0dzA.Y3iEf7EXUVnIvRmt98oqk1gKl.qlclqC8-1759523123-1.0.1.1-WitH_7knS4dNFXWlwgUgXR5HIdo2P.mKAnaY.kJBXVr9Jm_byHpLSieyN28mqDY9pK3oVhOPkjhqbI_bfj8UWsCZKI6zbaRMSGZ8djHflLI; path=/; expires=Fri, 03-Oct-25 20:55:23 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=65J6GP34vvamDxPc7pfSjVWknlB52lc9KtGoMMaln.w-1759523123250-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=dFom2wMcg8ybd20S.13.PgxnMfCw9zNpp3owi2EKeYU-1759528771-1.0.1.1-6pnSWBHy8PgG4gpUjojzMgz0zzyWg94ZzATd4WfxpPeFY4kKwmcZ2gPdkKJulL1rE9QLw0wIGT5FXRQUCzIp4Jruf4Imh7vKA_VG8WHcSQk; path=/; expires=Fri, 03-Oct-25 22:29:31 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=AaHVaybdvvrP31chrAYlPPd.a0O7e9hRmiNFvUus.1M-1759528771799-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
-      ],
-      "transfer-encoding": [
-        "chunked"
       ],
       "x-content-type-options": [
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "1324"
-      ],
-      "x-openai-proxy-wasm": [
-        "v0.1"
-      ],
-      "x-ratelimit-limit-requests": [
-        "5000"
-      ],
-      "x-ratelimit-limit-tokens": [
-        "800000"
-      ],
-      "x-ratelimit-remaining-requests": [
-        "4999"
-      ],
-      "x-ratelimit-remaining-tokens": [
-        "799985"
-      ],
-      "x-ratelimit-reset-requests": [
-        "12ms"
-      ],
-      "x-ratelimit-reset-tokens": [
-        "1ms"
+        "94"
       ],
       "x-request-id": [
-        "req_6e74b5ace46f4f8283571e4bb3db4dd1"
+        "req_4c5b19420f9dc92e24a1d2fd6804f7fe"
       ]
     },
-    "status": 200
+    "status": 400
   }
 }

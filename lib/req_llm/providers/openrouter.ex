@@ -80,6 +80,10 @@ defmodule ReqLLM.Providers.OpenRouter do
         type: :integer,
         doc: "Number of top log probabilities to return"
       ],
+      reasoning_effort: [
+        type: :string,
+        doc: "Reasoning effort level for extended thinking models (e.g., 'low', 'medium', 'high')"
+      ],
       app_referer: [
         type: :string,
         doc: "HTTP-Referer header for app identification on OpenRouter"
@@ -242,6 +246,7 @@ defmodule ReqLLM.Providers.OpenRouter do
       |> maybe_put(:min_p, request.options[:openrouter_min_p])
       |> maybe_put(:top_a, request.options[:openrouter_top_a])
       |> maybe_put(:top_logprobs, request.options[:openrouter_top_logprobs])
+      |> maybe_put(:reasoning_effort, request.options[:reasoning_effort])
       |> add_openrouter_specific_options(request.options)
       |> add_stream_options(request.options)
 

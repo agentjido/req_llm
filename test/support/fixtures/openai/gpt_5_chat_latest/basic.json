@@ -1,20 +1,26 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdwdC01LWNoYXQtbGF0ZXN0Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhlbGxvIHdvcmxkISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjIwMCwibW9kZWwiOiJncHQtNS1jaGF0LWxhdGVzdCIsInJlYXNvbmluZyI6eyJlZmZvcnQiOiJsb3cifSwic3RyZWFtIjpmYWxzZX0="
     },
     "canonical_json": {
-      "max_completion_tokens": 50,
-      "messages": [
+      "input": [
         {
-          "content": "Hello world!",
+          "content": [
+            {
+              "text": "Hello world!",
+              "type": "input_text"
+            }
+          ],
           "role": "user"
         }
       ],
+      "max_output_tokens": 200,
       "model": "gpt-5-chat-latest",
-      "seed": 42,
-      "stream": false,
-      "temperature": 0.0
+      "reasoning": {
+        "effort": "low"
+      },
+      "stream": false
     },
     "headers": {
       "accept-encoding": [
@@ -29,49 +35,18 @@
       ]
     },
     "method": "post",
-    "url": "https://api.openai.com/v1/chat/completions"
+    "url": "https://api.openai.com/v1/responses"
   },
   "response": {
     "body": {
-      "choices": [
-        {
-          "finish_reason": "stop",
-          "index": 0,
-          "logprobs": null,
-          "message": {
-            "annotations": [],
-            "content": "Hello! 🌍  \nHow are you doing today?",
-            "refusal": null,
-            "role": "assistant"
-          }
-        }
-      ],
-      "created": 1759523119,
-      "id": "chatcmpl-CMgd5O2dIjJyqIlzfxVpwtknKvRSj",
-      "model": "gpt-5-chat-latest",
-      "object": "chat.completion",
-      "service_tier": "default",
-      "system_fingerprint": "fp_fc9eb31594",
-      "usage": {
-        "completion_tokens": 11,
-        "completion_tokens_details": {
-          "accepted_prediction_tokens": 0,
-          "audio_tokens": 0,
-          "reasoning_tokens": 0,
-          "rejected_prediction_tokens": 0
-        },
-        "prompt_tokens": 10,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 0
-        },
-        "total_tokens": 21
+      "error": {
+        "code": "unsupported_parameter",
+        "message": "Unsupported parameter: 'reasoning.effort' is not supported with this model.",
+        "param": "reasoning.effort",
+        "type": "invalid_request_error"
       }
     },
     "headers": {
-      "access-control-expose-headers": [
-        "X-Request-ID"
-      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -79,7 +54,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988f2b097db6e826-ORD"
+        "988fb4fb2bfd2306-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -88,13 +63,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 20:25:20 GMT"
+        "Fri, 03 Oct 2025 21:59:30 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "441"
+        "202"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -106,46 +81,22 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=QhP86hQoMwUsbkOOoTf7jGrj4QHkMUPTNdpFSjgMljI-1759523120-1.0.1.1-fKAOt3N9z.YEiTfzmhPSykfvUo0ffzX8wqvQsUBJLFxEjHbSPetxeDAPBGHB_0C8oWt0.NsI6CWy1zmvHAr1.FnRwiTvfKV5VQ8cbzTa7co; path=/; expires=Fri, 03-Oct-25 20:55:20 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=aDfNAsYe0Y2teT8phpPbZ6_CrhhYI65bkUYIyiYrp3c-1759523120148-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=ViJzg1CnPnTEYrbQFeCBNzqwfTlBnB_KVVnihEZGIZQ-1759528770-1.0.1.1-A_uvaPRBB0TewszeQb9qZNMpPLVT2KaJhO.WK9ZpAFc82ripdCrTb4ZZ9iI9OfjfGhvBLj7LMgJZmrHAw7EXboTPkfmp5CKRLjV0J7cTKEg; path=/; expires=Fri, 03-Oct-25 22:29:30 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=aGRWvA6ExntGQt6EPtXztlrD7J.LVBrHpvfAwZPx2xM-1759528770079-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
-      ],
-      "transfer-encoding": [
-        "chunked"
       ],
       "x-content-type-options": [
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "484"
-      ],
-      "x-openai-proxy-wasm": [
-        "v0.1"
-      ],
-      "x-ratelimit-limit-requests": [
-        "5000"
-      ],
-      "x-ratelimit-limit-tokens": [
-        "800000"
-      ],
-      "x-ratelimit-remaining-requests": [
-        "4999"
-      ],
-      "x-ratelimit-remaining-tokens": [
-        "799995"
-      ],
-      "x-ratelimit-reset-requests": [
-        "12ms"
-      ],
-      "x-ratelimit-reset-tokens": [
-        "0s"
+        "205"
       ],
       "x-request-id": [
-        "req_4328f064697d486e82f5578ca5631338"
+        "req_7bc6fabd7a13140c2537bd704c16307a"
       ]
     },
-    "status": 200
+    "status": 400
   }
 }

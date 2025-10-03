@@ -1,19 +1,23 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdwdC00LjEtbWluaSIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjV9"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoiZ3B0LTQuMS1taW5pIiwic3RyZWFtIjpmYWxzZX0="
     },
     "canonical_json": {
-      "max_tokens": 100,
-      "messages": [
+      "input": [
         {
-          "content": "Write a very long story about dragons and adventures",
+          "content": [
+            {
+              "text": "Write a very long story about dragons and adventures",
+              "type": "input_text"
+            }
+          ],
           "role": "user"
         }
       ],
+      "max_output_tokens": 100,
       "model": "gpt-4.1-mini",
-      "stream": false,
-      "temperature": 0.5
+      "stream": false
     },
     "headers": {
       "accept-encoding": [
@@ -28,49 +32,79 @@
       ]
     },
     "method": "post",
-    "url": "https://api.openai.com/v1/chat/completions"
+    "url": "https://api.openai.com/v1/responses"
   },
   "response": {
     "body": {
-      "choices": [
+      "background": false,
+      "billing": {
+        "payer": "developer"
+      },
+      "created_at": 1759528764,
+      "error": null,
+      "id": "resp_078a3c30fae04fdc0068e0473cdb08819aad37ecaed6fb65c7",
+      "incomplete_details": {
+        "reason": "max_output_tokens"
+      },
+      "instructions": null,
+      "max_output_tokens": 100,
+      "max_tool_calls": null,
+      "metadata": {},
+      "model": "gpt-4.1-mini-2025-04-14",
+      "object": "response",
+      "output": [
         {
-          "finish_reason": "length",
-          "index": 0,
-          "logprobs": null,
-          "message": {
-            "annotations": [],
-            "content": "Certainly! Here is a long, immersive story about dragons and adventures:\n\n---\n\n**The Chronicles of Eldoria: The Dragon’s Awakening**\n\nIn the ancient land of Eldoria, where towering mountains kissed the skies and vast forests whispered secrets of old, dragons were not mere legends—they were the heartbeat of the world. For centuries, these majestic creatures soared through the heavens, their scales shimmering like molten jewels, their roars echoing thunder across the valleys. But as time passed, dragons retreated into",
-            "refusal": null,
-            "role": "assistant"
-          }
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Certainly! Here’s a long and immersive story about dragons and adventures:\n\n---\n\n### The Dragon’s Legacy\n\nIn a time long forgotten by most, when magic still whispered through the leaves of ancient forests and stars sang their secrets to the night, there was a land called Eryndor. This land was famed not only for its sprawling mountains and endless rivers but also for the dragons that soared through its skies, majestic and fierce.\n\nThese dragons were not mere beasts; they were the keepers of ancient",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_078a3c30fae04fdc0068e0473fa230819a90ded2f779347d48",
+          "role": "assistant",
+          "status": "incomplete",
+          "type": "message"
         }
       ],
-      "created": 1759523131,
-      "id": "chatcmpl-CMgdHdGQ2pLeFteV1drG5aMUOSWN3",
-      "model": "gpt-4.1-mini-2025-04-14",
-      "object": "chat.completion",
+      "parallel_tool_calls": true,
+      "previous_response_id": null,
+      "prompt_cache_key": null,
+      "reasoning": {
+        "effort": null,
+        "summary": null
+      },
+      "safety_identifier": null,
       "service_tier": "default",
-      "system_fingerprint": "fp_95d112f245",
-      "usage": {
-        "completion_tokens": 100,
-        "completion_tokens_details": {
-          "accepted_prediction_tokens": 0,
-          "audio_tokens": 0,
-          "reasoning_tokens": 0,
-          "rejected_prediction_tokens": 0
+      "status": "incomplete",
+      "store": true,
+      "temperature": 1.0,
+      "text": {
+        "format": {
+          "type": "text"
         },
-        "prompt_tokens": 16,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
+        "verbosity": "medium"
+      },
+      "tool_choice": "auto",
+      "tools": [],
+      "top_logprobs": 0,
+      "top_p": 1.0,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 16,
+        "input_tokens_details": {
           "cached_tokens": 0
         },
+        "output_tokens": 100,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
         "total_tokens": 116
-      }
+      },
+      "user": null
     },
     "headers": {
-      "access-control-expose-headers": [
-        "X-Request-ID"
-      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -78,7 +112,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988f2b549e160165-ORD"
+        "988fb4dc09e30bf0-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -87,13 +121,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 20:25:33 GMT"
+        "Fri, 03 Oct 2025 21:59:29 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "2112"
+        "4404"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -105,8 +139,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=ubPCdoaA.Q8ffAQfelpBgJL9OJTnE.hHtnWVwDKitb0-1759523133-1.0.1.1-8U7u3w0xZ79QtEl0KIGxdWo72a3XMCDLv9TyXDK34TVziexBVo4.cTnVrWuDQLwJ8PemlzoERdYczhKnWddB_8ylg.tS6c7zCWj_pAYm10U; path=/; expires=Fri, 03-Oct-25 20:55:33 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=4ZT7l0hgfWoAkGzT9E_IcgRiEZV.Ec76a4TNUCwIFi4-1759523133846-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=ZhTF2dtvlYXo5AbqKO72FNFwGqgkuroCNfKs.dNULjQ-1759528769-1.0.1.1-4pR0jYT3IvTwuX9y7Yr4BqgoPeCU0jUKP51OxswQlqhGrdUjlrBruBmaV.zAsneuFwIX1r.MG2XDT5OSxR09Z8sLpCXnVcbu926SXSihCic; path=/; expires=Fri, 03-Oct-25 22:29:29 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=GBlhYb9DpxvrlbHsZiQfTqz_DMC8MLTs3_WSmCVWPNo-1759528769280-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -118,10 +152,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "2145"
-      ],
-      "x-openai-proxy-wasm": [
-        "v0.1"
+        "4407"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -133,7 +164,7 @@
         "4999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "3999985"
+        "3999965"
       ],
       "x-ratelimit-reset-requests": [
         "12ms"
@@ -142,7 +173,7 @@
         "0s"
       ],
       "x-request-id": [
-        "req_0b5f5bd38e76460d9abcabc219191eb3"
+        "req_e0b06dcf5949f07bbe665e7efe5eff67"
       ]
     },
     "status": 200

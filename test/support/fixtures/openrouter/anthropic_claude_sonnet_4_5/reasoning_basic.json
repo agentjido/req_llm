@@ -1,0 +1,109 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImFudGhyb3BpYy9jbGF1ZGUtc29ubmV0LTQuNSIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjEuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "anthropic/claude-sonnet-4.5",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "12 × 7 = **84**\n\n**Thinking:** I broke 12 into (10 + 2), then: 10×7 = 70, and 2×7 = 14, so 70 + 14 = 84",
+            "reasoning": "I need to calculate 12 * 7.\n\n12 * 7 = 12 * 7\n= (10 + 2) * 7\n= 10 * 7 + 2 * 7\n= 70 + 14\n= 84\n\nOr I can just recall that 12 * 7 = 84.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "signature": "Eq8CCkgICBABGAIqQBJ8IJfJxU9+MZi3JaNHfZWT7lXFuAGsduCTzHQOe1XUmmyM+rpedlIhXtVKCkar2kx6F5a/IRmmjXMTv5QG7KQSDFEJcdNujufy7k7E+hoMzJaCS3RVpmmyu5B/IjCLJcIKpeBctzRmiHsAoeQahoysaNaUEwULTJB9Aza+uRYqE2s5CGuQCCL7YgwSJsEqlAFiXChr3pmpZ28+9Tt3I0hejNB5II/ENgVx9SEaSFXFfXdkBYKQGK7tbQYk45aoyUFP2ZgNNhnyuxb+ycS+r1dsNRrwaz3o8k/UGSQ9S1KhE47meBISqN4xLh/qXCbMHDQ9bMfy3I/5IlFqj48DE8ZKbNXLynmFrxYJoY1bE2QwrGWia80G8+FljiobYPeJP4NxGrvhGAE=",
+                "text": "I need to calculate 12 * 7.\n\n12 * 7 = 12 * 7\n= (10 + 2) * 7\n= 10 * 7 + 2 * 7\n= 70 + 14\n= 84\n\nOr I can just recall that 12 * 7 = 84.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1759528914,
+      "id": "gen-1759528914-T0428hCoXygbmdGAV3Ea",
+      "model": "anthropic/claude-sonnet-4.5",
+      "object": "chat.completion",
+      "provider": "Amazon Bedrock",
+      "usage": {
+        "completion_tokens": 155,
+        "prompt_tokens": 50,
+        "total_tokens": 205
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "988fb8803a5313fb-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 03 Oct 2025 22:01:56 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

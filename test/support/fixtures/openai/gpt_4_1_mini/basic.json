@@ -1,20 +1,23 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncHQtNC4xLW1pbmkiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhlbGxvIHdvcmxkISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjUwLCJtb2RlbCI6ImdwdC00LjEtbWluaSIsInN0cmVhbSI6ZmFsc2V9"
     },
     "canonical_json": {
-      "max_tokens": 50,
-      "messages": [
+      "input": [
         {
-          "content": "Hello world!",
+          "content": [
+            {
+              "text": "Hello world!",
+              "type": "input_text"
+            }
+          ],
           "role": "user"
         }
       ],
+      "max_output_tokens": 50,
       "model": "gpt-4.1-mini",
-      "seed": 42,
-      "stream": false,
-      "temperature": 0.0
+      "stream": false
     },
     "headers": {
       "accept-encoding": [
@@ -29,49 +32,77 @@
       ]
     },
     "method": "post",
-    "url": "https://api.openai.com/v1/chat/completions"
+    "url": "https://api.openai.com/v1/responses"
   },
   "response": {
     "body": {
-      "choices": [
+      "background": false,
+      "billing": {
+        "payer": "developer"
+      },
+      "created_at": 1759528769,
+      "error": null,
+      "id": "resp_07dc089de28a5e040068e04741ac44819bb9ee9d532943c32a",
+      "incomplete_details": null,
+      "instructions": null,
+      "max_output_tokens": 50,
+      "max_tool_calls": null,
+      "metadata": {},
+      "model": "gpt-4.1-mini-2025-04-14",
+      "object": "response",
+      "output": [
         {
-          "finish_reason": "stop",
-          "index": 0,
-          "logprobs": null,
-          "message": {
-            "annotations": [],
-            "content": "Hello! How can I assist you today?",
-            "refusal": null,
-            "role": "assistant"
-          }
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Hello! How can I assist you today?",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_07dc089de28a5e040068e047420930819ba944ebdcb1501d08",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
         }
       ],
-      "created": 1759523130,
-      "id": "chatcmpl-CMgdGRdd26ljRqOYw71eGrracMMfx",
-      "model": "gpt-4.1-mini-2025-04-14",
-      "object": "chat.completion",
+      "parallel_tool_calls": true,
+      "previous_response_id": null,
+      "prompt_cache_key": null,
+      "reasoning": {
+        "effort": null,
+        "summary": null
+      },
+      "safety_identifier": null,
       "service_tier": "default",
-      "system_fingerprint": "fp_6d7dcc9a98",
-      "usage": {
-        "completion_tokens": 9,
-        "completion_tokens_details": {
-          "accepted_prediction_tokens": 0,
-          "audio_tokens": 0,
-          "reasoning_tokens": 0,
-          "rejected_prediction_tokens": 0
+      "status": "completed",
+      "store": true,
+      "temperature": 1.0,
+      "text": {
+        "format": {
+          "type": "text"
         },
-        "prompt_tokens": 10,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
+        "verbosity": "medium"
+      },
+      "tool_choice": "auto",
+      "tools": [],
+      "top_logprobs": 0,
+      "top_p": 1.0,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 10,
+        "input_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 19
-      }
+        "output_tokens": 10,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 20
+      },
+      "user": null
     },
     "headers": {
-      "access-control-expose-headers": [
-        "X-Request-ID"
-      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -79,7 +110,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988f2b4b2b310165-ORD"
+        "988fb4fa18a80bf0-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -88,13 +119,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 20:25:30 GMT"
+        "Fri, 03 Oct 2025 21:59:30 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "608"
+        "641"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -106,8 +137,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=ZbTfH2y2gSKoGtlFMkcID0pQOJqTZzH7Ty4g3o9z9dE-1759523130-1.0.1.1-CogHFwaM_Hap2cCUjTsAdlogJ2vmWwg9Z5UzqBlarXO9_LcpixJMcw2a3Bg5myCZBRlC70ECAI8qKsv.WdHIaQuW_JhPIm8bb1SS_4BiDVs; path=/; expires=Fri, 03-Oct-25 20:55:30 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=czwbzJpbF05TAFo5eDV7TVqj6Zjda46o.dPlEzRBwgQ-1759523130824-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=qDC2wv1gxKJONxpTlkhuLfsr3xShjVrWjqOXDjAjm04-1759528770-1.0.1.1-mf68B9sPcikMGwYqeuuApsCHCuqlkcuXd7iKxHbzkN6qB41ULYSFTCDbykN4UxePCzluJ_12Ju2cE02Gnq6Wc__pUsXxNxwv9Ep.LbdG0is; path=/; expires=Fri, 03-Oct-25 22:29:30 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=gJyvCMiGVBdVbgxzp5TVLx7qCGCyPHyX1_atPHFJvTM-1759528770335-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -119,10 +150,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "634"
-      ],
-      "x-openai-proxy-wasm": [
-        "v0.1"
+        "644"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -134,7 +162,7 @@
         "4999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "3999995"
+        "3999971"
       ],
       "x-ratelimit-reset-requests": [
         "12ms"
@@ -143,7 +171,7 @@
         "0s"
       ],
       "x-request-id": [
-        "req_f61af2c2b00c458a832b8aa2a4e4cf2d"
+        "req_fb52aaac2a67823e5961c38c04fc8147"
       ]
     },
     "status": 200

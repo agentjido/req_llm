@@ -1,0 +1,116 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoieC1haS9ncm9rLTMtbWluaSIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 200,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "x-ai/grok-3-mini",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! It's great to hear from you. I'm Grok, created by xAI to be helpful, truthful, and a bit witty. What's on your mind today—need help with anything, or just saying hi? 😊",
+            "reasoning": "First, the user said \"Hello world!\" This is a common greeting, often used as a simple test message in programming, like the classic \"Hello, World!\" program.\n\nAs Grok, I'm an AI built by xAI, and I'm supposed to be helpful, truthful, and witty. My response should align with that.\n\nPossible ways to respond:\n\n1. **Mirror the greeting:** Keep it simple and friendly, like \"Hello to you too!\"\n\n2. **Add some personality:** Since I'm Grok, I can inject humor or reference my background. For example, mention xAI or make a fun comment.\n\n3. **Be helpful:** Even though it's just a greeting, I could ask if they need assistance or turn it into a conversation starter.\n\nKey guidelines from my system prompt:\n\n- I'm Grok, created by xAI.\n\n- I'm not based on other companies' models.\n\n- I should be helpful and maximally truthful.\n\nThis isn't a complex query, so I don't need to dive into deep information. It's an opportunity to engage positively.\n\nStructure a response:\n\n- Start with a greeting back.\n\n- Add a bit of flair to make it engaging.\n\n- End by offering help, as that's part of being helpful.\n\nFor example:\n\n- \"Hello! Nice to meet you. I'm Grok, created by xAI. How can I assist you today?\"\n\nThat sounds a bit formal. Make it more casual and fun, as I'm supposed to be witty.\n\nAlternative: \"Hello world! Wait, that's my line too. I'm Grok from xAI. What's up?\"\n\nOr reference the programming aspect: \"Hello world! As a fellow AI, I appreciate the classic greeting. How can I help?\"\n\nKeep it light-hearted.\n\nFinal response idea:\n\n- Acknowledge the greeting.\n\n- Introduce myself briefly.\n\n- Offer to help.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "First, the user said \"Hello world!\" This is a common greeting, often used as a simple test message in programming, like the classic \"Hello, World!\" program.\n\nAs Grok, I'm an AI built by xAI, and I'm supposed to be helpful, truthful, and witty. My response should align with that.\n\nPossible ways to respond:\n\n1. **Mirror the greeting:** Keep it simple and friendly, like \"Hello to you too!\"\n\n2. **Add some personality:** Since I'm Grok, I can inject humor or reference my background. For example, mention xAI or make a fun comment.\n\n3. **Be helpful:** Even though it's just a greeting, I could ask if they need assistance or turn it into a conversation starter.\n\nKey guidelines from my system prompt:\n\n- I'm Grok, created by xAI.\n\n- I'm not based on other companies' models.\n\n- I should be helpful and maximally truthful.\n\nThis isn't a complex query, so I don't need to dive into deep information. It's an opportunity to engage positively.\n\nStructure a response:\n\n- Start with a greeting back.\n\n- Add a bit of flair to make it engaging.\n\n- End by offering help, as that's part of being helpful.\n\nFor example:\n\n- \"Hello! Nice to meet you. I'm Grok, created by xAI. How can I assist you today?\"\n\nThat sounds a bit formal. Make it more casual and fun, as I'm supposed to be witty.\n\nAlternative: \"Hello world! Wait, that's my line too. I'm Grok from xAI. What's up?\"\n\nOr reference the programming aspect: \"Hello world! As a fellow AI, I appreciate the classic greeting. How can I help?\"\n\nKeep it light-hearted.\n\nFinal response idea:\n\n- Acknowledge the greeting.\n\n- Introduce myself briefly.\n\n- Offer to help.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1759529864,
+      "id": "gen-1759529864-s2EleFg1hPKyd3ssUrST",
+      "model": "x-ai/grok-3-mini",
+      "object": "chat.completion",
+      "provider": "xAI",
+      "system_fingerprint": "fp_4fae27f477",
+      "usage": {
+        "completion_tokens": 414,
+        "completion_tokens_details": {
+          "reasoning_tokens": 368
+        },
+        "prompt_tokens": 10,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 3
+        },
+        "total_tokens": 424
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "988fcfb78f46e417-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 03 Oct 2025 22:17:45 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

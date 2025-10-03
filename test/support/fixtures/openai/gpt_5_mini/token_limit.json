@@ -1,17 +1,25 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3B0LTUtbWluaSIsInN0cmVhbSI6ZmFsc2V9"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoiZ3B0LTUtbWluaSIsInJlYXNvbmluZyI6eyJlZmZvcnQiOiJsb3cifSwic3RyZWFtIjpmYWxzZX0="
     },
     "canonical_json": {
-      "max_completion_tokens": 100,
-      "messages": [
+      "input": [
         {
-          "content": "Write a very long story about dragons and adventures",
+          "content": [
+            {
+              "text": "Write a very long story about dragons and adventures",
+              "type": "input_text"
+            }
+          ],
           "role": "user"
         }
       ],
+      "max_output_tokens": 100,
       "model": "gpt-5-mini",
+      "reasoning": {
+        "effort": "low"
+      },
       "stream": false
     },
     "headers": {
@@ -27,48 +35,84 @@
       ]
     },
     "method": "post",
-    "url": "https://api.openai.com/v1/chat/completions"
+    "url": "https://api.openai.com/v1/responses"
   },
   "response": {
     "body": {
-      "choices": [
+      "background": false,
+      "billing": {
+        "payer": "developer"
+      },
+      "created_at": 1759528772,
+      "error": null,
+      "id": "resp_000826c9d6680e590068e0474402bc8197a5cf0f1fe0e14c5e",
+      "incomplete_details": {
+        "reason": "max_output_tokens"
+      },
+      "instructions": null,
+      "max_output_tokens": 100,
+      "max_tool_calls": null,
+      "metadata": {},
+      "model": "gpt-5-mini-2025-08-07",
+      "object": "response",
+      "output": [
         {
-          "finish_reason": "length",
-          "index": 0,
-          "message": {
-            "annotations": [],
-            "content": "",
-            "refusal": null,
-            "role": "assistant"
-          }
+          "id": "rs_000826c9d6680e590068e0474528c88197b3ded5470521f104",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Part I — The Smoke Before Dawn\n\nWhen the first ember fell from the sky the",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_000826c9d6680e590068e04745dc388197abc876eaae91853d",
+          "role": "assistant",
+          "status": "incomplete",
+          "type": "message"
         }
       ],
-      "created": 1759524191,
-      "id": "chatcmpl-CMguNBbZb6xpwUNtdyhBXHu3qFuKR",
-      "model": "gpt-5-mini-2025-08-07",
-      "object": "chat.completion",
+      "parallel_tool_calls": true,
+      "previous_response_id": null,
+      "prompt_cache_key": null,
+      "reasoning": {
+        "effort": "low",
+        "summary": null
+      },
+      "safety_identifier": null,
       "service_tier": "default",
-      "system_fingerprint": null,
-      "usage": {
-        "completion_tokens": 100,
-        "completion_tokens_details": {
-          "accepted_prediction_tokens": 0,
-          "audio_tokens": 0,
-          "reasoning_tokens": 100,
-          "rejected_prediction_tokens": 0
+      "status": "incomplete",
+      "store": true,
+      "temperature": 1.0,
+      "text": {
+        "format": {
+          "type": "text"
         },
-        "prompt_tokens": 15,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
+        "verbosity": "medium"
+      },
+      "tool_choice": "auto",
+      "tools": [],
+      "top_logprobs": 0,
+      "top_p": 1.0,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 15,
+        "input_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 115
-      }
+        "output_tokens": 86,
+        "output_tokens_details": {
+          "reasoning_tokens": 64
+        },
+        "total_tokens": 101
+      },
+      "user": null
     },
     "headers": {
-      "access-control-expose-headers": [
-        "X-Request-ID"
-      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -76,7 +120,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988f4531e860540f-ORD"
+        "988fb508bfa26167-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -85,13 +129,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 20:43:13 GMT"
+        "Fri, 03 Oct 2025 21:59:34 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "1765"
+        "2250"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -103,8 +147,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=6Yz0zFaNHS5PHpFgehRdph6IowHu_gi23o9OJpJ69BU-1759524193-1.0.1.1-4nG7GB8I4.SxAkS.D7jr6T4EgjutgWaAGN3ZJua96xI2p6Kez3EwTTSmZ5MqqqZH32sBu.Nvjv9wNvONmtbpMaJ27TNYppfchW6JCsCAqbI; path=/; expires=Fri, 03-Oct-25 21:13:13 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=PkVXM0lh5uFI9UAYq_8iL1pyX.0H5q3BkMXTdh36tvk-1759524193027-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=nG0CiULteR1tqPn5mQnZ4emhU7HNmzje2eZP8R9_eSw-1759528774-1.0.1.1-4Hi046ZTeXNbUyaR99DJNdDib5g_BptXvVxK0BjEOBjYgdlwSruhz2d28SQwfETnlwcdENVjGBikI_6F20J2broEkuu3qCD4BBexgC9y9iY; path=/; expires=Fri, 03-Oct-25 22:29:34 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=NFCTvJT6wyKA.n85Id.ybU.LJ9zp2RGJO1pROGS.xsk-1759528774289-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -116,10 +160,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "1960"
-      ],
-      "x-openai-proxy-wasm": [
-        "v0.1"
+        "2252"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -131,16 +172,16 @@
         "4999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "3999985"
+        "3999768"
       ],
       "x-ratelimit-reset-requests": [
         "12ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "0s"
+        "3ms"
       ],
       "x-request-id": [
-        "req_f6b394a13881431495331df4b26535e2"
+        "req_66928decc4701ecb194bb0beca7cc84a"
       ]
     },
     "status": 200

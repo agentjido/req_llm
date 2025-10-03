@@ -1,19 +1,25 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwNDgsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiU29sdmUgMTIqNyBhbmQgc2hvdyB5b3VyIGludGVybmFsIHRoaW5raW5nIChicmllZikuIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3B0LTUiLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2V9"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjIwNDgsIm1vZGVsIjoiZ3B0LTUiLCJyZWFzb25pbmciOnsiZWZmb3J0IjoibG93In0sInN0cmVhbSI6ZmFsc2V9"
     },
     "canonical_json": {
-      "max_completion_tokens": 2048,
-      "messages": [
+      "input": [
         {
-          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "content": [
+            {
+              "text": "Solve 12*7 and show your internal thinking (brief).",
+              "type": "input_text"
+            }
+          ],
           "role": "user"
         }
       ],
+      "max_output_tokens": 2048,
       "model": "gpt-5",
-      "reasoning_effort": "low",
-      "seed": 42,
+      "reasoning": {
+        "effort": "low"
+      },
       "stream": false
     },
     "headers": {
@@ -29,48 +35,82 @@
       ]
     },
     "method": "post",
-    "url": "https://api.openai.com/v1/chat/completions"
+    "url": "https://api.openai.com/v1/responses"
   },
   "response": {
     "body": {
-      "choices": [
+      "background": false,
+      "billing": {
+        "payer": "developer"
+      },
+      "created_at": 1759528766,
+      "error": null,
+      "id": "resp_071023da6b1fa43b0068e0473e903c819ba537591462c07309",
+      "incomplete_details": null,
+      "instructions": null,
+      "max_output_tokens": 2048,
+      "max_tool_calls": null,
+      "metadata": {},
+      "model": "gpt-5-2025-08-07",
+      "object": "response",
+      "output": [
         {
-          "finish_reason": "stop",
-          "index": 0,
-          "message": {
-            "annotations": [],
-            "content": "I can’t share my internal chain-of-thought, but here’s the result:\n12 × 7 = 84.",
-            "refusal": null,
-            "role": "assistant"
-          }
+          "id": "rs_071023da6b1fa43b0068e0473f3278819b8d77b92ffc24e102",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "I can’t share my internal thinking, but the result is 84.",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_071023da6b1fa43b0068e04742df10819ba875d128c19e46d0",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
         }
       ],
-      "created": 1759526288,
-      "id": "chatcmpl-CMhSCGSMDiOA4MlMJWIFzLkWJ1xRF",
-      "model": "gpt-5-2025-08-07",
-      "object": "chat.completion",
+      "parallel_tool_calls": true,
+      "previous_response_id": null,
+      "prompt_cache_key": null,
+      "reasoning": {
+        "effort": "low",
+        "summary": null
+      },
+      "safety_identifier": null,
       "service_tier": "default",
-      "system_fingerprint": null,
-      "usage": {
-        "completion_tokens": 226,
-        "completion_tokens_details": {
-          "accepted_prediction_tokens": 0,
-          "audio_tokens": 0,
-          "reasoning_tokens": 192,
-          "rejected_prediction_tokens": 0
+      "status": "completed",
+      "store": true,
+      "temperature": 1.0,
+      "text": {
+        "format": {
+          "type": "text"
         },
-        "prompt_tokens": 19,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
+        "verbosity": "medium"
+      },
+      "tool_choice": "auto",
+      "tools": [],
+      "top_logprobs": 0,
+      "top_p": 1.0,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 19,
+        "input_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 245
-      }
+        "output_tokens": 277,
+        "output_tokens_details": {
+          "reasoning_tokens": 256
+        },
+        "total_tokens": 296
+      },
+      "user": null
     },
     "headers": {
-      "access-control-expose-headers": [
-        "X-Request-ID"
-      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -78,7 +118,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988f78654bdf8b98-ORD"
+        "988fb4e69d6288cd-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -87,13 +127,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:18:12 GMT"
+        "Fri, 03 Oct 2025 21:59:31 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "3800"
+        "4872"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -105,8 +145,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=c.bbeXy.LJiX3T87roQU8t3uFNk00p3IRYhtaJZdWAw-1759526292-1.0.1.1-bbid2neluxS5ZWzi9ZGQRkhBw7_xbp1eBl8CHKfp6QMjSe7ql_TknnMc_uVeU4712XDutVmau9J1JDrJgMEuomA6RIwjxkAH9w7cR1_IeNY; path=/; expires=Fri, 03-Oct-25 21:48:12 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=rT9FOaYQAb42k_ShZNflIYrzq7qPxs.Hw1jl0lR3VdY-1759526292224-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=t41wusWOisYEisA_bzqhGaixgIhEivNCjRz0Jn_fLrM-1759528771-1.0.1.1-tVqb2tHo1PCgsiwvl9mE5dainU0YtzZXVFhnJX6V7jMIAyTVZZ6AtQt0rGGzYZwuJ3JNKb81qjF2XaAOjXaQLHH.tGhRwc6TcO0Cb1lHWfk; path=/; expires=Fri, 03-Oct-25 22:29:31 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=niQ.DWtWYqEBJo42ow_qisczdjrP59oK3XKbToOAWRA-1759528771457-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -118,31 +158,10 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "3972"
-      ],
-      "x-openai-proxy-wasm": [
-        "v0.1"
-      ],
-      "x-ratelimit-limit-requests": [
-        "5000"
-      ],
-      "x-ratelimit-limit-tokens": [
-        "2000000"
-      ],
-      "x-ratelimit-remaining-requests": [
-        "4999"
-      ],
-      "x-ratelimit-remaining-tokens": [
-        "1999985"
-      ],
-      "x-ratelimit-reset-requests": [
-        "12ms"
-      ],
-      "x-ratelimit-reset-tokens": [
-        "0s"
+        "4882"
       ],
       "x-request-id": [
-        "req_eb7a5e844e774dd1855df78d4d15e926"
+        "req_c98852c9d4238a2fbb11c768c9b6e647"
       ]
     },
     "status": 200

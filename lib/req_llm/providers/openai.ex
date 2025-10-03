@@ -72,10 +72,49 @@ defmodule ReqLLM.Providers.OpenAI do
 
   require Logger
 
-  @doc """
-  Custom prepare_request for :object operations to maintain OpenAI-specific token handling and O1/O3 model support.
-  """
   @impl ReqLLM.Provider
+  @doc """
+  Custom prepare_request to route reasoning models to /v1/responses endpoint.
+  
+  - :chat operations detect model type and route to appropriate endpoint
+  - :object operations maintain OpenAI-specific token handling
+  """
+  def prepare_request(:chat, model_spec, prompt, opts) do
+    with {:ok, model} <- ReqLLM.Model.from(model_spec),
+         {:ok, context} <- ReqLLM.Context.normalize(prompt, opts),
+         opts_with_context = Keyword.put(opts, :context, context),
+         http_opts = Keyword.get(opts, :req_http_options, []),
+         {:ok, processed_opts} <-
+           ReqLLM.Provider.Options.process(__MODULE__, :chat, model, opts_with_context) do
+      responses_api? = use_responses_api?(model)
+      path = if responses_api?, do: "/responses", else: "/chat/completions"
+
+      req_keys =
+        supported_provider_options() ++
+          [:context, :operation, :text, :stream, :model, :provider_options, :responses_api]
+
+      request =
+        Req.new(
+          [
+            url: path,
+            method: :post,
+            receive_timeout: Keyword.get(processed_opts, :receive_timeout, 30_000)
+          ] ++ http_opts
+        )
+        |> Req.Request.register_options(req_keys)
+        |> Req.Request.merge_options(
+          Keyword.take(processed_opts, req_keys) ++
+            [
+              model: model.model,
+              base_url: Keyword.get(processed_opts, :base_url, default_base_url()),
+              responses_api: responses_api?
+            ]
+        )
+        |> attach(model, processed_opts)
+
+      {:ok, request}
+    end
+  end
 
   def prepare_request(:object, model_spec, prompt, opts) do
     compiled_schema = Keyword.fetch!(opts, :compiled_schema)
@@ -142,14 +181,69 @@ defmodule ReqLLM.Providers.OpenAI do
   end
 
   @doc """
-  Custom body encoding that adds OpenAI-specific token handling for O1/O3 models.
+  Custom attach_stream to route reasoning models to /v1/responses endpoint for streaming.
+  """
+  @impl ReqLLM.Provider
+  def attach_stream(model, context, opts, _finch_name) do
+    api_key = ReqLLM.Keys.get!(model, opts)
+    responses_api? = use_responses_api?(model)
+    path = if responses_api?, do: "/responses", else: "/chat/completions"
+
+    headers = [
+      {"Authorization", "Bearer " <> api_key},
+      {"Content-Type", "application/json"},
+      {"Accept", "text/event-stream"}
+    ]
+
+    url =
+      case Keyword.get(opts, :base_url) do
+        nil -> default_base_url() <> path
+        base_url -> "#{base_url}#{path}"
+      end
+
+    req_opts =
+      [
+        model: model.model,
+        context: context,
+        stream: true,
+        responses_api: responses_api?
+      ] ++ Keyword.delete(opts, :finch_name)
+
+    temp_request = %Req.Request{
+      method: :post,
+      url: URI.parse("https://example.com/temp"),
+      headers: %{},
+      body: {:json, %{}},
+      options: Map.new(req_opts)
+    }
+
+    encoded_request = encode_body(temp_request)
+    body = encoded_request.body
+
+    {:ok, Finch.build(:post, url, headers, body)}
+  rescue
+    error ->
+      {:error,
+       ReqLLM.Error.API.Request.exception(
+         reason: "Failed to build streaming request",
+         details: Exception.message(error)
+       )}
+  end
+
+  @doc """
+  Custom body encoding that adds OpenAI-specific token handling for O1/O3 models and Responses API format.
   """
   @impl ReqLLM.Provider
   def encode_body(request) do
-    # Start with default encoding
-    request = ReqLLM.Provider.Defaults.default_encode_body(request)
+    if request.options[:responses_api] do
+      encode_responses_body(request)
+    else
+      encode_chat_body(request)
+    end
+  end
 
-    # Parse the encoded body to add model-specific token handling
+  defp encode_chat_body(request) do
+    request = ReqLLM.Provider.Defaults.default_encode_body(request)
     body = Jason.decode!(request.body)
 
     enhanced_body =
@@ -165,10 +259,64 @@ defmodule ReqLLM.Providers.OpenAI do
           |> translate_tool_choice_format()
       end
 
-    # Re-encode with enhancements
-    encoded_body = Jason.encode!(enhanced_body)
-    Map.put(request, :body, encoded_body)
+    Map.put(request, :body, Jason.encode!(enhanced_body))
   end
+
+  defp encode_responses_body(request) do
+    ctx = request.options[:context] || %ReqLLM.Context{messages: []}
+    provider_opts = request.options[:provider_options] || []
+
+    input =
+      Enum.map(ctx.messages, fn msg ->
+        content =
+          Enum.flat_map(msg.content, fn part ->
+            case part.type do
+              :text -> [%{"type" => "input_text", "text" => part.text}]
+              _ -> []
+            end
+          end)
+
+        %{"role" => Atom.to_string(msg.role), "content" => content}
+      end)
+
+    max_output_tokens =
+      request.options[:max_output_tokens] ||
+        request.options[:max_completion_tokens] ||
+        request.options[:max_tokens]
+
+    body =
+      %{"model" => request.options[:model], "input" => input}
+      |> maybe_put("stream", request.options[:stream])
+      |> maybe_put("max_output_tokens", max_output_tokens)
+      |> maybe_put("tools", encode_tools_if_any(request))
+      |> maybe_put("tool_choice", encode_tool_choice_if_any(request))
+      |> maybe_put("reasoning", encode_reasoning_effort(provider_opts[:reasoning_effort]))
+
+    Map.put(request, :body, Jason.encode!(body))
+  end
+
+  defp encode_tools_if_any(request) do
+    case request.options[:tools] do
+      nil -> nil
+      [] -> nil
+      tools -> Enum.map(tools, &ReqLLM.Tool.to_schema/1)
+    end
+  end
+
+  defp encode_tool_choice_if_any(request) do
+    case request.options[:tool_choice] do
+      nil -> nil
+      choice -> choice
+    end
+  end
+
+  defp encode_reasoning_effort(nil), do: nil
+
+  defp encode_reasoning_effort(effort) when is_atom(effort),
+    do: %{"effort" => Atom.to_string(effort)}
+
+  defp encode_reasoning_effort(effort) when is_binary(effort), do: %{"effort" => effort}
+  defp encode_reasoning_effort(_), do: nil
 
   defp add_embedding_options(body, request_options) do
     provider_opts = request_options[:provider_options] || []
@@ -179,17 +327,64 @@ defmodule ReqLLM.Providers.OpenAI do
   end
 
   @doc """
-  Custom decode_response to ensure proper "OpenAI API error" naming.
+  Custom decode_response to handle both Chat Completions and Responses API formats.
   """
   @impl ReqLLM.Provider
   def decode_response({req, resp}) do
-    case resp.status do
-      200 ->
+    case {req.options[:responses_api], resp.status} do
+      {true, 200} ->
+        decode_responses_api({req, resp})
+
+      {_, 200} ->
         ReqLLM.Provider.Defaults.default_decode_response({req, resp})
 
-      status ->
+      {_, status} ->
         decode_openai_error_response(req, resp, status)
     end
+  end
+
+  defp decode_responses_api({req, resp}) do
+    body = ReqLLM.Provider.Utils.ensure_parsed_body(resp.body)
+
+    text =
+      body["output_text"] ||
+        (body["output"] || [])
+        |> Enum.find_value(fn seg ->
+          case seg do
+            %{"type" => "output_text", "text" => t} -> t
+            _ -> nil
+          end
+        end) || ""
+
+    usage = %{
+      input_tokens: get_in(body, ["usage", "input_tokens"]) || 0,
+      output_tokens: get_in(body, ["usage", "output_tokens"]) || 0,
+      total_tokens:
+        (get_in(body, ["usage", "input_tokens"]) || 0) +
+          (get_in(body, ["usage", "output_tokens"]) || 0)
+    }
+
+    msg = %ReqLLM.Message{
+      role: :assistant,
+      content: [%ReqLLM.Message.ContentPart{type: :text, text: text}]
+    }
+
+    response = %ReqLLM.Response{
+      id: body["id"] || "unknown",
+      model: body["model"] || req.options[:model],
+      context: %ReqLLM.Context{messages: if(text == "", do: [], else: [msg])},
+      message: msg,
+      stream?: false,
+      stream: nil,
+      usage: usage,
+      finish_reason: :stop,
+      provider_meta: Map.drop(body, ["id", "model", "output_text", "output", "usage"])
+    }
+
+    ctx = req.options[:context] || %ReqLLM.Context{messages: []}
+    merged_response = %{response | context: ReqLLM.Context.append(ctx, msg)}
+
+    {req, %{resp | body: merged_response}}
   end
 
   defp decode_openai_error_response(req, resp, status) do
@@ -201,6 +396,57 @@ defmodule ReqLLM.Providers.OpenAI do
       )
 
     {req, err}
+  end
+
+  @doc """
+  Custom decode_sse_event to handle both Chat Completions and Responses API SSE events.
+  """
+  @impl ReqLLM.Provider
+  def decode_sse_event(%{data: data} = event, model) when is_map(data) do
+    cond do
+      Map.has_key?(data, "choices") ->
+        ReqLLM.Provider.Defaults.default_decode_sse_event(event, model)
+
+      is_binary(data["type"]) and String.starts_with?(data["type"], "response.") ->
+        decode_responses_sse_event(data, model)
+
+      true ->
+        []
+    end
+  end
+
+  def decode_sse_event(%{data: "[DONE]"}, _model) do
+    [ReqLLM.StreamChunk.meta(%{terminal?: true})]
+  end
+
+  def decode_sse_event(_event, _model), do: []
+
+  defp decode_responses_sse_event(data, model) do
+    case data["type"] do
+      "response.output_text.delta" ->
+        text = data["delta"] || ""
+        if text == "", do: [], else: [ReqLLM.StreamChunk.text(text)]
+
+      "response.usage" ->
+        usage_data = data["usage"] || %{}
+
+        usage = %{
+          input_tokens: usage_data["input_tokens"] || 0,
+          output_tokens: usage_data["output_tokens"] || 0,
+          total_tokens: (usage_data["input_tokens"] || 0) + (usage_data["output_tokens"] || 0)
+        }
+
+        [ReqLLM.StreamChunk.meta(%{usage: usage, model: model.model})]
+
+      "response.output_text.done" ->
+        []
+
+      "response.completed" ->
+        [ReqLLM.StreamChunk.meta(%{terminal?: true, finish_reason: :stop})]
+
+      _ ->
+        []
+    end
   end
 
   @doc false
@@ -233,10 +479,24 @@ defmodule ReqLLM.Providers.OpenAI do
   end
 
   defp is_reasoning_model_name?(<<"gpt-5", _::binary>>), do: true
+  defp is_reasoning_model_name?(<<"gpt-4.1", _::binary>>), do: true
   defp is_reasoning_model_name?(<<"o1", _::binary>>), do: true
   defp is_reasoning_model_name?(<<"o3", _::binary>>), do: true
   defp is_reasoning_model_name?(<<"o4", _::binary>>), do: true
   defp is_reasoning_model_name?(_), do: false
+
+  @doc false
+  defp use_responses_api?(%ReqLLM.Model{model: model_name}), do: use_responses_api?(model_name)
+  defp use_responses_api?(<<"gpt-5", _::binary>>), do: true
+  defp use_responses_api?(<<"gpt-4.1", _::binary>>), do: true
+  defp use_responses_api?(<<"gpt-image-1">>), do: true
+  defp use_responses_api?(<<"computer-use-preview">>), do: true
+  defp use_responses_api?(<<"o1-mini", _::binary>>), do: false
+  defp use_responses_api?(<<"o1-preview", _::binary>>), do: false
+  defp use_responses_api?(<<"o1">>), do: true
+  defp use_responses_api?(<<"o3", _::binary>>), do: true
+  defp use_responses_api?(<<"o4", _::binary>>), do: true
+  defp use_responses_api?(_), do: false
 
   @doc false
   defp add_stream_options(body, request_options) do
