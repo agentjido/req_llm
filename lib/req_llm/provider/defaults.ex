@@ -100,7 +100,7 @@ defmodule ReqLLM.Provider.Defaults do
       Sets up Bearer token authentication and standard pipeline steps.
       """
       @impl ReqLLM.Provider
-      def attach(request, model_input, user_opts \\ []) do
+      def attach(request, model_input, user_opts) do
         ReqLLM.Provider.Defaults.default_attach(__MODULE__, request, model_input, user_opts)
       end
 
