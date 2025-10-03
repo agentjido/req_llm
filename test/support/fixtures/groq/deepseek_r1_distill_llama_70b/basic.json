@@ -44,24 +44,24 @@
           }
         }
       ],
-      "created": 1759513827,
-      "id": "chatcmpl-23bd41e8-694a-4b46-8a74-83ee2f930277",
+      "created": 1759517016,
+      "id": "chatcmpl-62730074-a3eb-41e4-b8f5-cfe2154aad74",
       "model": "deepseek-r1-distill-llama-70b",
       "object": "chat.completion",
       "service_tier": "on_demand",
       "system_fingerprint": "fp_1bbe7845ec",
       "usage": {
-        "completion_time": 0.070293326,
+        "completion_time": 0.071716615,
         "completion_tokens": 16,
-        "prompt_time": 0.014225549,
+        "prompt_time": 0.009597842,
         "prompt_tokens": 6,
-        "queue_time": 0.209158042,
-        "total_time": 0.084518875,
+        "queue_time": 0.200019565,
+        "total_time": 0.081314457,
         "total_tokens": 22
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6nk4nw3eayb3k3hvfd15apa"
+        "id": "req_01k6np605zecwr1g6t3r9zptje"
       }
     },
     "headers": {
@@ -75,7 +75,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988e482bb9a261fc-ORD"
+        "988e96073951dadc-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -84,13 +84,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 17:50:27 GMT"
+        "Fri, 03 Oct 2025 18:43:36 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=xWSLklI5hF7d8tqcNlJK5Rmp0NWFGXXp2AVUfWUEt3U-1759513827-1.0.1.1-ymcwSETx3EF7lLBqeH1d_n1GQwBwJ1.pyzfhqJcyIsQp6l6o2q96AxovKY501r7HBPZdH9wo8ykE.ie.G6Y.89KAMASqALYVZ1mYp44yRv8; path=/; expires=Fri, 03-Oct-25 18:20:27 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=SSqpboLfRzwT0KMzNtCFA0eO5lz4DzbWszS8ZsUbGRY-1759517016-1.0.1.1-SWjC9Y51rKyTfcNAXlr8Y1KLSvUCa0q3VKMsRQ.oDtfHYDYrtYtJvO_CuCk..LPM0FJugjXm39tuvQpljqtzk5qtvrgfQWI7All3WWVFxMw; path=/; expires=Fri, 03-Oct-25 19:13:36 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -123,7 +123,7 @@
         "90ms"
       ],
       "x-request-id": [
-        "req_01k6nk4nw3eayb3k3hvfd15apa"
+        "req_01k6np605zecwr1g6t3r9zptje"
       ]
     },
     "status": 200

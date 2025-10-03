@@ -59,6 +59,8 @@ defmodule ReqLLM.Test.Fixtures do
       end
 
     if match?({:fixture, _}, result) && System.get_env("REQ_LLM_DEBUG") == "1" do
+      require Logger
+
       {:fixture, path} = result
 
       model =
@@ -69,11 +71,7 @@ defmodule ReqLLM.Test.Fixtures do
 
       test_name = Keyword.get(opts, :fixture, Path.basename(path, ".json"))
 
-      require Logger
-
-      Logger.debug(
-        "[Fixture] step: model=#{model.provider}:#{model.model}, name=#{test_name}"
-      )
+      Logger.debug("[Fixture] step: model=#{model.provider}:#{model.model}, name=#{test_name}")
     end
 
     result
@@ -113,6 +111,8 @@ defmodule ReqLLM.Test.Fixtures do
       end
 
     if result && System.get_env("REQ_LLM_DEBUG") == "1" do
+      require Logger
+
       model =
         case model_or_spec do
           %ReqLLM.Model{} = m -> m
@@ -121,11 +121,7 @@ defmodule ReqLLM.Test.Fixtures do
 
       test_name = Keyword.get(opts, :fixture, Path.basename(result, ".json"))
 
-      require Logger
-
-      Logger.debug(
-        "[Fixture] step: model=#{model.provider}:#{model.model}, name=#{test_name}"
-      )
+      Logger.debug("[Fixture] step: model=#{model.provider}:#{model.model}, name=#{test_name}")
     end
 
     result

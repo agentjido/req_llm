@@ -1,20 +1,20 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJvcGVuYWkvZ3B0LW9zcy0yMGIiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtb3NzLTEyMGIiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjEuMH0="
     },
     "canonical_json": {
-      "max_tokens": 50,
+      "max_tokens": 2048,
       "messages": [
         {
-          "content": "Hello world!",
+          "content": "Solve 12*7 and show your internal thinking (brief).",
           "role": "user"
         }
       ],
-      "model": "openai/gpt-oss-20b",
+      "model": "openai/gpt-oss-120b",
       "seed": 42,
       "stream": false,
-      "temperature": 0.0
+      "temperature": 1.0
     },
     "headers": {
       "accept-encoding": [
@@ -35,34 +35,34 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": "stop",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "",
-            "reasoning": "The user says \"Hello world!\" Probably expecting a response. This is a simple greeting. We should respond with a friendly greeting. Maybe ask how can help. No special instructions. We'll keep it short.",
+            "content": "**Internal thinking (brief):**  \n- Multiply 12 by 7.  \n- \\(12 \\times 7 = (10 \\times 7) + (2 \\times 7) = 70 + 14 = 84\\).\n\n**Result:**  \n\\(12 \\times 7 = 84\\).",
+            "reasoning": "We need to solve 12*7 = 84. Show internal thinking brief. Provide answer.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759516060,
-      "id": "chatcmpl-5d604a43-2967-490b-8727-228baac3498f",
-      "model": "openai/gpt-oss-20b",
+      "created": 1759516067,
+      "id": "chatcmpl-565a4a14-227c-4196-a1e3-a665f84d8af7",
+      "model": "openai/gpt-oss-120b",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_3d587a02fb",
+      "system_fingerprint": "fp_213abb2467",
       "usage": {
-        "completion_time": 0.050113224,
-        "completion_tokens": 50,
-        "prompt_time": 0.003527822,
-        "prompt_tokens": 74,
-        "queue_time": 0.20111219,
-        "total_time": 0.053641046,
-        "total_tokens": 124
+        "completion_time": 0.204125723,
+        "completion_tokens": 96,
+        "prompt_time": 0.004282774,
+        "prompt_tokens": 84,
+        "queue_time": 0.708915452,
+        "total_time": 0.208408497,
+        "total_tokens": 180
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6nn8ttsfc0aqc7zfpf394xq"
+        "id": "req_01k6nn90avfchsh3h59xrmbntc"
       }
     },
     "headers": {
@@ -76,7 +76,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988e7eb1fe0f02c0-ORD"
+        "988e7ed53e33116f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -85,13 +85,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 18:27:40 GMT"
+        "Fri, 03 Oct 2025 18:27:47 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=2klIjUiqSX0cSMeYCapq3aWnN.QAUL9Ew0cITXSXUxc-1759516060-1.0.1.1-_.BdjEEgTZmGyYUb9IVh0QQLWCD3J3o.Xm6RMGZzKwJ6.uLVY7qYq8nc5XREs2._OZILdZpWpOJJnd8skdTiL4Bbsa429oLK7ZQpBQkRbbQ; path=/; expires=Fri, 03-Oct-25 18:57:40 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=6iAVINjsc0GmcRq3afWeaSzlk1UKGwyZmHHW6dqASik-1759516067-1.0.1.1-REYncG4ypqt.OY89OZN2GGb1rSPeKyuYPEvPTrNIbOKGBGqZCPZ00yqT6ktVI5KLFWF5PgWmTRcGU8a1_evoyZSXo9nuvjat1Bq6lRPufDE; path=/; expires=Fri, 03-Oct-25 18:57:47 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -112,19 +112,19 @@
         "8000"
       ],
       "x-ratelimit-remaining-requests": [
-        "965"
+        "977"
       ],
       "x-ratelimit-remaining-tokens": [
-        "6908"
+        "7397"
       ],
       "x-ratelimit-reset-requests": [
-        "50m23.682s"
+        "33m6.843999999s"
       ],
       "x-ratelimit-reset-tokens": [
-        "8.1865s"
+        "4.5215s"
       ],
       "x-request-id": [
-        "req_01k6nn8ttsfc0aqc7zfpf394xq"
+        "req_01k6nn90avfchsh3h59xrmbntc"
       ]
     },
     "status": 200

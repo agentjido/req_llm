@@ -38,30 +38,30 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "**The Crimson Sky and the Sapphire Sea**\n\n",
-            "reasoning": "User wants a very long story about dragons and adventures. Likely a fantasy narrative. We need to produce a long story. There's no explicit limit, but we should aim for a substantial length. Let's write a fairly long story, maybe 2000-3000 words. We'll include multiple characters, plot, dragons, adventure. We'll keep it engaging. We'll write in a narrative style. Let's do it.",
+            "content": "",
+            "reasoning": "The user requests: \"Write a very long story about dragons and adventures\". They want a long story. There's no disallowed content. It's a creative writing request. We can comply. We need to produce a long story about dragons and adventures. We should ensure it's engaging, with multiple characters, plot, etc. The user didn't specify length, but \"very long\" suggests a substantial piece. We can produce maybe 2000+ words? But we need to consider token limits.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759513823,
-      "id": "chatcmpl-b8f7240d-ff92-4ece-909e-a2dabc4069bd",
+      "created": 1759516059,
+      "id": "chatcmpl-fd301bd6-7db4-4b19-ac77-4ae40885694f",
       "model": "openai/gpt-oss-20b",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_77f8660d1d",
+      "system_fingerprint": "fp_3d587a02fb",
       "usage": {
-        "completion_time": 0.098673397,
+        "completion_time": 0.098940841,
         "completion_tokens": 100,
-        "prompt_time": 0.003857652,
+        "prompt_time": 0.003915495,
         "prompt_tokens": 80,
-        "queue_time": 0.200969124,
-        "total_time": 0.102531049,
+        "queue_time": 0.201425233,
+        "total_time": 0.102856336,
         "total_tokens": 180
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6nk4jb9e9w84gnth2dvxw4f"
+        "id": "req_01k6nn8sa5fc9azgqr058wm89t"
       }
     },
     "headers": {
@@ -75,7 +75,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988e48151fa86af6-ORD"
+        "988e7ea83cf502c0-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -84,13 +84,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 17:50:23 GMT"
+        "Fri, 03 Oct 2025 18:27:39 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=dNfqBUapDIdy0RJwCRcdzczVqufu.el0wjRvKFwCUp8-1759513823-1.0.1.1-Pwa0s0_19lJZmDVHcGq.xDI6QSCtIjlWi3OGXF22dHjwdzqpvrIz.oKaTVDOXMPWsFJBF4nw7BbhBbV2cvd9zclAABKf1t6zAleL2qarj6M; path=/; expires=Fri, 03-Oct-25 18:20:23 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=QAQbwKvMLRUliTjPWjUJBsU0niEluJT_ZtVLZtWRq3k-1759516059-1.0.1.1-Cav.gxr0PBkh2lUPI9pOLUiJ0vwzy4v5lOO25LgcPM2qyYFGzFPx07Y1m1kqHdHuxm5r5Spir6BPColXkOjYLWTwvt6yevbsqTCXQ1XKgbA; path=/; expires=Fri, 03-Oct-25 18:57:39 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -111,19 +111,19 @@
         "8000"
       ],
       "x-ratelimit-remaining-requests": [
-        "997"
+        "969"
       ],
       "x-ratelimit-remaining-tokens": [
-        "7575"
+        "7554"
       ],
       "x-ratelimit-reset-requests": [
-        "4m18.783999999s"
+        "44m38.047s"
       ],
       "x-ratelimit-reset-tokens": [
-        "3.182499999s"
+        "3.3425s"
       ],
       "x-request-id": [
-        "req_01k6nk4jb9e9w84gnth2dvxw4f"
+        "req_01k6nn8sa5fc9azgqr058wm89t"
       ]
     },
     "status": 200

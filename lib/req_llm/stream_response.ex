@@ -413,6 +413,12 @@ defmodule ReqLLM.StreamResponse do
       |> Enum.filter(&(&1.type == :content))
       |> Enum.map_join("", & &1.text)
 
+    # Collect all thinking/reasoning content
+    thinking_content =
+      chunks
+      |> Enum.filter(&(&1.type == :thinking))
+      |> Enum.map_join("", & &1.text)
+
     # Accumulate JSON fragments from meta chunks
     json_fragments_by_index =
       chunks
@@ -454,11 +460,9 @@ defmodule ReqLLM.StreamResponse do
 
     # Create content parts
     content_parts =
-      if text_content == "" do
-        []
-      else
-        [%{type: :text, text: text_content}]
-      end
+      []
+      |> maybe_add_text_part(text_content)
+      |> maybe_add_thinking_part(thinking_content)
 
     %ReqLLM.Message{
       role: :assistant,
@@ -467,6 +471,12 @@ defmodule ReqLLM.StreamResponse do
       metadata: %{}
     }
   end
+
+  defp maybe_add_text_part(parts, ""), do: parts
+  defp maybe_add_text_part(parts, text), do: parts ++ [%{type: :text, text: text}]
+
+  defp maybe_add_thinking_part(parts, ""), do: parts
+  defp maybe_add_thinking_part(parts, thinking), do: parts ++ [%{type: :thinking, text: thinking}]
 
   # Extract object from message tool calls (for structured output)
   defp extract_object_from_message(%ReqLLM.Message{tool_calls: tool_calls})

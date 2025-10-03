@@ -1,0 +1,131 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMtMzJiIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjoxLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "qwen/qwen3-32b",
+      "seed": 42,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.groq.com/openai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "<think>\nOkay, let's solve 12 multiplied by 7. Hmm, I remember that multiplication is just repeated addition. So if I have 12 added together 7 times, that should give me the answer. Let me break it down to make sure I don't make a mistake.\n\nFirst, I can split 12 into 10 and 2. That way, maybe it's easier to multiply each part by 7 and then add them up. So 10 times 7 is 70. Then 2 times 7 is 14. Adding those together, 70 plus 14 equals 84. That seems right. Wait, let me double-check using another method just to be sure.\n\nAnother way is to do standard multiplication. 12 times 7. Starting with the ones place: 2 times 7 is 14. Write down 4 and carry over 1. Then 1 times 7 is 7, plus the carried over 1 makes 8. So putting it together, it's 84. Yeah, that matches my first result. Let me see if there's another way to confirm. Maybe using a known fact. I know that 10 times 7 is 70, and 12 is 10 plus 2, so adding 2 more 7s (which is 14) to 70 gives 84. All methods lead to the same answer, so I think it's correct.\n</think>\n\nTo solve **12 × 7**:  \n1. Break apart 12 into **10 + 2**:  \n   - **10 × 7 = 70**  \n   - **2 × 7 = 14**  \n2. Add the results: **70 + 14 = 84**.  \n\n**Answer:** 84.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759515134,
+      "id": "chatcmpl-480a2012-32a7-459f-999b-e2e531b4fcf9",
+      "model": "qwen/qwen3-32b",
+      "object": "chat.completion",
+      "service_tier": "on_demand",
+      "system_fingerprint": "fp_5cf921caa2",
+      "usage": {
+        "completion_time": 0.741349037,
+        "completion_tokens": 399,
+        "prompt_time": 7.66148e-4,
+        "prompt_tokens": 23,
+        "queue_time": 0.203229704,
+        "total_time": 0.742115185,
+        "total_tokens": 422
+      },
+      "usage_breakdown": null,
+      "x_groq": {
+        "id": "req_01k6nmch7reb39c3j87p5t8tx6"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cache-control": [
+        "private, max-age=0, no-store, no-cache, must-revalidate"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "988e680e18e61aeb-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Fri, 03 Oct 2025 18:12:14 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=BfyI2Y2R9g4Uoh57xZzzIge1NQJIpJxHlyZfLV6qtu4-1759515134-1.0.1.1-1GY5SFugnl_I8uM06K20TLEQ8zrCzemZmAbWdEmNDBiA45tgEufwF4KJNC1bWZj7uagDs8hvb1mKn_I.rt93TGzkrwGA93LDiwpHmWb3NDU; path=/; expires=Fri, 03-Oct-25 18:42:14 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-groq-region": [
+        "yul"
+      ],
+      "x-ratelimit-limit-requests": [
+        "1000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "6000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "961"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "5976"
+      ],
+      "x-ratelimit-reset-requests": [
+        "55m18.015s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "240ms"
+      ],
+      "x-request-id": [
+        "req_01k6nmch7reb39c3j87p5t8tx6"
+      ]
+    },
+    "status": 200
+  }
+}

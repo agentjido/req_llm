@@ -44,24 +44,24 @@
           }
         }
       ],
-      "created": 1759513831,
-      "id": "chatcmpl-accaeea3-ee7e-4981-8d66-8d4982744ee0",
+      "created": 1759515137,
+      "id": "chatcmpl-dee15a33-857c-4e5d-9c83-25c60563ba47",
       "model": "qwen/qwen3-32b",
       "object": "chat.completion",
       "service_tier": "on_demand",
       "system_fingerprint": "fp_5cf921caa2",
       "usage": {
-        "completion_time": 0.107393594,
+        "completion_time": 0.092351919,
         "completion_tokens": 50,
-        "prompt_time": 4.38493e-4,
+        "prompt_time": 4.68922e-4,
         "prompt_tokens": 11,
-        "queue_time": 0.204315482,
-        "total_time": 0.107832087,
+        "queue_time": 0.204872906,
+        "total_time": 0.092820841,
         "total_tokens": 61
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6nk4shaewcvztkc4ngcscm8"
+        "id": "req_01k6nmcndte008g8qmrgar2f6s"
       }
     },
     "headers": {
@@ -75,7 +75,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988e484349660045-ORD"
+        "988e6829082c1aeb-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -84,13 +84,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 17:50:31 GMT"
+        "Fri, 03 Oct 2025 18:12:17 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=vcHT6UIMuHnPAFwp2Z9NS3htqMlw_aAVdHAJyX.bilY-1759513831-1.0.1.1-0MSGPqq4bt9oZHqoJeqZj2D1LWYN.TZ761fAGnjv0yIeOwvhVBcxRssNvEkbgoSQj4epBForo2CmNAoaYBU81QKAg5p8A4SvbXebP9Ifi4U; path=/; expires=Fri, 03-Oct-25 18:20:31 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=yOM.OUt1EFaw90tYOHp0lFHiAE9YYXOKuR_uYUX3XUM-1759515137-1.0.1.1-EzgGhqnQsAOTxT50hEiQ7jnYNpU12H31LYwT5i10pa_vTMBRPyK67.hwTCDyzsJmPrrsOqMgs8lsER5shoxMeZYA1Pa2uouDJn.Dpf033lU; path=/; expires=Fri, 03-Oct-25 18:42:17 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -111,19 +111,19 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "993"
+        "954"
       ],
       "x-ratelimit-remaining-tokens": [
-        "4911"
+        "4490"
       ],
       "x-ratelimit-reset-requests": [
-        "10m4.264999999s"
+        "1h6m14.021s"
       ],
       "x-ratelimit-reset-tokens": [
-        "10.883999999s"
+        "15.093s"
       ],
       "x-request-id": [
-        "req_01k6nk4shaewcvztkc4ngcscm8"
+        "req_01k6nmcndte008g8qmrgar2f6s"
       ]
     },
     "status": 200

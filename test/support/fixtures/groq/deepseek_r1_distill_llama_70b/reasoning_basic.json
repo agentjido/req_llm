@@ -1,20 +1,20 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJkZWVwc2Vlay1yMS1kaXN0aWxsLWxsYW1hLTcwYiIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImRlZXBzZWVrLXIxLWRpc3RpbGwtbGxhbWEtNzBiIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjoxLjB9"
     },
     "canonical_json": {
-      "max_tokens": 50,
+      "max_tokens": 2048,
       "messages": [
         {
-          "content": "Hi there!",
+          "content": "Solve 12*7 and show your internal thinking (brief).",
           "role": "user"
         }
       ],
       "model": "deepseek-r1-distill-llama-70b",
       "seed": 42,
       "stream": false,
-      "temperature": 0.0
+      "temperature": 1.0
     },
     "headers": {
       "accept-encoding": [
@@ -39,29 +39,29 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "<think>\n\n</think>\n\nHello! How can I assist you today? 😊",
+            "content": "<think>\nFirst, I recognize that 12 multiplied by 7 is required.\n\nI can break down the multiplication by using the distributive property to simplify the calculation. \n\nI'll multiply 10 by 7 to get 70 and 2 by 7 to get 14. \n\nFinally, I'll add the two results together to find the total.\n</think>\n\nSure, let's solve \\(12 \\times 7\\) step by step.\n\n1. **Breakdown the numbers**:\n   \\[\n   12 = 10 + 2\n   \\]\n\n2. **Apply the distributive property**:\n   \\[\n   12 \\times 7 = (10 + 2) \\times 7 = (10 \\times 7) + (2 \\times 7)\n   \\]\n\n3. **Calculate each part**:\n   \\[\n   10 \\times 7 = 70\n   \\]\n   \\[\n   2 \\times 7 = 14\n   \\]\n\n4. **Add the results together**:\n   \\[\n   70 + 14 = 84\n   \\]\n\n**Final Answer:**\n\\[\n\\boxed{84}\n\\]",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759517022,
-      "id": "chatcmpl-25b227ff-5e4a-4675-a733-271deef77f04",
+      "created": 1759517018,
+      "id": "chatcmpl-4095be64-d83d-4e6d-b30e-748e2639e116",
       "model": "deepseek-r1-distill-llama-70b",
       "object": "chat.completion",
       "service_tier": "on_demand",
       "system_fingerprint": "fp_1bbe7845ec",
       "usage": {
-        "completion_time": 0.088154196,
-        "completion_tokens": 16,
-        "prompt_time": 0.009682991,
-        "prompt_tokens": 6,
-        "queue_time": 0.25955635,
-        "total_time": 0.097837187,
-        "total_tokens": 22
+        "completion_time": 0.708181229,
+        "completion_tokens": 247,
+        "prompt_time": 0.010622331,
+        "prompt_tokens": 17,
+        "queue_time": 0.199502148,
+        "total_time": 0.71880356,
+        "total_tokens": 264
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6np65n7edpa9kd4nvq621kg"
+        "id": "req_01k6np61yzfpgv2stmtrh8p1g4"
       }
     },
     "headers": {
@@ -75,7 +75,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988e962a7836dadc-ORD"
+        "988e9612cfc3dadc-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -84,13 +84,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 18:43:42 GMT"
+        "Fri, 03 Oct 2025 18:43:39 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=2nvjeX58OOetG1gbu1bHk8kNuj6rOnWbkxO0_FZ2INY-1759517022-1.0.1.1-BnXFLqAbmVVN0NUN5j_r8lYJ2g1zBtRFzNnf0_90ax1EC19AYEbL7z2XkfcWdVdznVGXit0LmDHmAZPe6ck_KLquUUOhAJzHBcYGwDeCJFE; path=/; expires=Fri, 03-Oct-25 19:13:42 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=oi_yXr_t74MrZ8E9CZBMDc2JEZsB6QMzb0N4eyvhaA4-1759517019-1.0.1.1-g0O4Q8FQWAwA39iP91FpPvTwefb60wbhVbjHVedx.K3kiJtuNKf3nO3JBOThjKKL0OCQCVuaBR_mWHFP2bHpXxlPAkVgFul_1AVw_MAcfEU; path=/; expires=Fri, 03-Oct-25 19:13:39 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -111,19 +111,19 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "993"
+        "997"
       ],
       "x-ratelimit-remaining-tokens": [
-        "5440"
+        "5982"
       ],
       "x-ratelimit-reset-requests": [
-        "10m3.812999999s"
+        "4m17.880999999s"
       ],
       "x-ratelimit-reset-tokens": [
-        "5.6s"
+        "180ms"
       ],
       "x-request-id": [
-        "req_01k6np65n7edpa9kd4nvq621kg"
+        "req_01k6np61yzfpgv2stmtrh8p1g4"
       ]
     },
     "status": 200

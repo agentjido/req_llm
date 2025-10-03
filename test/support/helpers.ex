@@ -297,7 +297,7 @@ defmodule ReqLLM.Test.Helpers do
         max_tokens: 50
       ],
       tool_test_tokens: 150,
-      reasoning_effort: :low,
+      reasoning_effort: "low",
       reasoning_prompts: %{
         basic: "Solve 12*7 and show your internal thinking (brief).",
         streaming_system: "You are a careful, step-by-step reasoner.",
@@ -353,6 +353,17 @@ defmodule ReqLLM.Test.Helpers do
           reasoning_effort: base.reasoning_effort,
           reasoning_prompts: base.reasoning_prompts,
           validate_cached_tokens: true
+        }
+
+      :groq ->
+        %{
+          deterministic: base.deterministic,
+          creative: base.creative,
+          minimal: base.minimal,
+          tool_test_tokens: base.tool_test_tokens,
+          reasoning_effort: "default",
+          reasoning_prompts: base.reasoning_prompts,
+          validate_cached_tokens: false
         }
 
       _ ->

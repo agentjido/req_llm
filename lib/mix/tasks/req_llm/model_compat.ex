@@ -110,10 +110,11 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     total_models = models |> Enum.map(fn {_, ms} -> length(ms) end) |> Enum.sum()
     tested = map_size(state)
     passing = state |> Enum.count(fn {_, status} -> status == "pass" end)
+    excluded = state |> Enum.count(fn {_, status} -> status == "excluded" end)
 
     Mix.shell().info(
       IO.ANSI.faint() <>
-        "#{implemented_count}/#{provider_count} providers implemented • #{total_models} models • #{tested} tested • #{passing} passing\n" <>
+        "#{implemented_count}/#{provider_count} providers implemented • #{total_models} models • #{tested} tested • #{passing} passing • #{excluded} excluded\n" <>
         IO.ANSI.reset()
     )
   end
@@ -375,6 +376,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
       case status do
         "pass" -> IO.ANSI.green() <> "✓" <> IO.ANSI.reset()
         "fail" -> IO.ANSI.red() <> "✗" <> IO.ANSI.reset()
+        "excluded" -> IO.ANSI.yellow() <> "⊘" <> IO.ANSI.reset()
         _ -> IO.ANSI.faint() <> "•" <> IO.ANSI.reset()
       end
 
@@ -520,12 +522,19 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     existing_state = Map.get(existing, "state", %{})
     existing_recorded = Map.get(existing, "last_recorded", %{})
 
+    excluded_models = load_excluded_models()
+
     new_state =
       results
       |> Enum.reject(&(&1.status == :skipped))
       |> Enum.reduce(existing_state, fn result, acc ->
         status = if result.status == :pass, do: "pass", else: "fail"
         Map.put(acc, result.model_spec, status)
+      end)
+      |> then(fn state ->
+        Enum.reduce(excluded_models, state, fn spec, acc ->
+          Map.put(acc, spec, "excluded")
+        end)
       end)
 
     ts = DateTime.to_iso8601(run_ts)
@@ -603,5 +612,35 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   defp get_implemented_providers do
     providers = ReqLLM.Provider.Registry.list_implemented_providers()
     MapSet.new(providers)
+  end
+
+  defp load_excluded_models do
+    priv_dir = :code.priv_dir(:req_llm)
+    patches_dir = Path.join(priv_dir, "models_local")
+
+    if File.dir?(patches_dir) do
+      patches_dir
+      |> File.ls!()
+      |> Enum.filter(&String.ends_with?(&1, ".json"))
+      |> Enum.flat_map(fn filename ->
+        path = Path.join(patches_dir, filename)
+
+        case File.read(path) do
+          {:ok, content} ->
+            case Jason.decode(content) do
+              {:ok, %{"provider" => %{"id" => provider_id}, "exclude" => exclusions}} ->
+                Enum.map(exclusions, fn model_id -> "#{provider_id}:#{model_id}" end)
+
+              _ ->
+                []
+            end
+
+          _ ->
+            []
+        end
+      end)
+    else
+      []
+    end
   end
 end

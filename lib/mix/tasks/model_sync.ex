@@ -528,6 +528,9 @@ defmodule Mix.Tasks.ReqLlm.ModelSync do
     module_path = Path.join(generated_dir, "valid_providers.ex")
     File.write!(module_path, module_code)
 
+    # Format the generated file
+    Code.format_file!(module_path) |> then(&File.write!(module_path, &1))
+
     if verbose? do
       IO.puts("  Generated #{module_path}")
     end
