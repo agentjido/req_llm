@@ -284,16 +284,25 @@ defmodule ReqLLM.Providers.OpenAI do
         request.options[:max_completion_tokens] ||
         request.options[:max_tokens]
 
+    tools = encode_tools_if_any(request)
+    tool_choice = encode_tool_choice_if_any(request)
+    reasoning = encode_reasoning_effort(provider_opts[:reasoning_effort])
+
     body =
-      %{"model" => request.options[:model], "input" => input}
-      |> maybe_put("stream", request.options[:stream])
-      |> maybe_put("max_output_tokens", max_output_tokens)
-      |> maybe_put("tools", encode_tools_if_any(request))
-      |> maybe_put("tool_choice", encode_tool_choice_if_any(request))
-      |> maybe_put("reasoning", encode_reasoning_effort(provider_opts[:reasoning_effort]))
+      Map.new()
+      |> Map.put("model", request.options[:model])
+      |> Map.put("input", input)
+      |> maybe_put_string("stream", request.options[:stream])
+      |> maybe_put_string("max_output_tokens", max_output_tokens)
+      |> maybe_put_string("tools", tools)
+      |> maybe_put_string("tool_choice", tool_choice)
+      |> maybe_put_string("reasoning", reasoning)
 
     Map.put(request, :body, Jason.encode!(body))
   end
+
+  defp maybe_put_string(map, _key, nil), do: map
+  defp maybe_put_string(map, key, value), do: Map.put(map, key, value)
 
   defp encode_tools_if_any(request) do
     case request.options[:tools] do
