@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIaSB0aGVyZSEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjEwLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0aGlua2luZ0NvbmZpZyI6eyJ0aGlua2luZ0J1ZGdldCI6MH19fQ=="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIaSB0aGVyZSEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjEwLCJ0ZW1wZXJhdHVyZSI6MC4wfX0="
     },
     "canonical_json": {
       "contents": [
@@ -17,10 +17,7 @@
       "generationConfig": {
         "candidateCount": 1,
         "maxOutputTokens": 10,
-        "temperature": 0.0,
-        "thinkingConfig": {
-          "thinkingBudget": 0
-        }
+        "temperature": 0.0
       }
     },
     "headers": {
@@ -53,13 +50,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:41 GMT"
+        "Fri, 03 Oct 2025 23:26:04 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=36"
+        "gfet4t7; dur=26"
       ],
       "transfer-encoding": [
         "chunked"

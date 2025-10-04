@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjUsInRoaW5raW5nQ29uZmlnIjp7InRoaW5raW5nQnVkZ2V0IjowfX19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjUsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fX0="
     },
     "canonical_json": {
       "contents": [
@@ -19,7 +19,8 @@
         "maxOutputTokens": 100,
         "temperature": 0.5,
         "thinkingConfig": {
-          "thinkingBudget": 0
+          "includeThoughts": true,
+          "thinkingBudget": 4096
         }
       }
     },
@@ -39,10 +40,33 @@
   },
   "response": {
     "body": {
-      "error": {
-        "code": 400,
-        "message": "Budget 0 is invalid. This model only works in thinking mode.",
-        "status": "INVALID_ARGUMENT"
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**Deconstructing the Dragon Story**\n\nAlright, so the user wants a *really* long story about dragons and adventures. Okay, I get it. \"Very long\" means more than just a quick quest. I need to think in terms of a multi-act structure, a real narrative arc. No simple \"fetch quest\" will do. To satisfy this user, I need to think beyond the immediate goal.\n\nThat means I'll need subplots, give the characters some real depth and growth, build a compelling world for them to inhabit, and design a journey that feels significant, not just a series of events. This is a chance to flex my world-building muscles and create something truly epic.\n",
+                "thought": true
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "MAX_TOKENS",
+          "index": 0
+        }
+      ],
+      "modelVersion": "models/gemini-2.5-pro",
+      "responseId": "vFvgaIaZJpnY_uMPrrbkuA8",
+      "usageMetadata": {
+        "promptTokenCount": 10,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 10
+          }
+        ],
+        "thoughtsTokenCount": 99,
+        "totalTokenCount": 109
       }
     },
     "headers": {
@@ -53,13 +77,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:44 GMT"
+        "Fri, 03 Oct 2025 23:26:52 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=63"
+        "gfet4t7; dur=2605"
       ],
       "transfer-encoding": [
         "chunked"
@@ -79,6 +103,6 @@
         "0"
       ]
     },
-    "status": 400
+    "status": 200
   }
 }

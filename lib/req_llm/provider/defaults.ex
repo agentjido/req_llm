@@ -705,6 +705,10 @@ defmodule ReqLLM.Provider.Defaults do
     [ReqLLM.StreamChunk.text(text)]
   end
 
+  defp decode_openai_content_part(%{"type" => "thinking", "thinking" => thinking}) do
+    [ReqLLM.StreamChunk.thinking(thinking)]
+  end
+
   defp decode_openai_content_part(_), do: []
 
   defp decode_openai_tool_call(%{

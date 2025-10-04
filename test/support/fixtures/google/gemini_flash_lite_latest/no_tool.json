@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxNTAsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7InRoaW5raW5nQnVkZ2V0IjowfX0sInRvb2xzIjpbeyJmdW5jdGlvbkRlY2xhcmF0aW9ucyI6W3siZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX1dfV19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjozMDAsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fSwidG9vbHMiOlt7ImZ1bmN0aW9uRGVjbGFyYXRpb25zIjpbeyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fV19XX0="
     },
     "canonical_json": {
       "contents": [
@@ -16,10 +16,11 @@
       ],
       "generationConfig": {
         "candidateCount": 1,
-        "maxOutputTokens": 150,
+        "maxOutputTokens": 300,
         "temperature": 0.0,
         "thinkingConfig": {
-          "thinkingBudget": 0
+          "includeThoughts": true,
+          "thinkingBudget": 4096
         }
       },
       "tools": [
@@ -65,19 +66,19 @@
           "content": {
             "parts": [
               {
-                "text": "Why don't cats play poker in the jungle?\n\nBecause there are too many cheetahs!"
+                "text": "**My Approach to Crafting a Purr-fect Joke**\n\nOkay, so the user wants a cat joke, right? Easy enough, though the *get_weather* tool is about as useful here as a fish is to a tree. It's completely irrelevant. No problem, I can handle this without any tools, purely from my own... well, computational humor database.\n\nThe first step is always analysis. *What kind of joke do they want?* It's creative, playful, so I need to go straight to joke generation. Time to get my comedic gears grinding. I can't lean on any external data, so it's all me.\n\n*Let's see, what are the cat joke tropes? Puns? Wordplay? Behavioral observations?* I have to brainstorm a few options.\n\n*   **Option 1:** \"Why don't cats play poker? Too many cheetahs.\" It's okay, a little predictable, but a solid pun.\n*   **Option 2:** \"What do you call a pile of kittens? A meow-ntain.\" It's okay, better.\n*   **Option 3:** \"Why are cats bad storytellers? Because they only have one tail.\" Alright, simple and it works, but I think I can do better.\n*   **Option 4:** \"What do you call a cat that gets everything it wants? Purr-suasive.\" *Ding Ding Ding!* That's a good one!\n\nI've got it. I'll go with a classic, short, punchy joke. Now, I just need to deliver it clearly. Here's my chosen joke!\n\n*Why don't cats play poker in the jungle?*\n*Too many cheetahs!*\n",
+                "thought": true
               }
             ],
             "role": "model"
           },
-          "finishReason": "STOP",
+          "finishReason": "MAX_TOKENS",
           "index": 0
         }
       ],
       "modelVersion": "gemini-2.5-flash-lite-preview-09-2025",
-      "responseId": "9zngaPSjLKmT1MkPv4iAIQ",
+      "responseId": "m1vgaNH6AoKO_PUPlsmo4QM",
       "usageMetadata": {
-        "candidatesTokenCount": 20,
         "promptTokenCount": 46,
         "promptTokensDetails": [
           {
@@ -85,7 +86,8 @@
             "tokenCount": 46
           }
         ],
-        "totalTokenCount": 66
+        "thoughtsTokenCount": 299,
+        "totalTokenCount": 345
       }
     },
     "headers": {
@@ -96,13 +98,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:47 GMT"
+        "Fri, 03 Oct 2025 23:26:19 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=305"
+        "gfet4t7; dur=3329"
       ],
       "transfer-encoding": [
         "chunked"

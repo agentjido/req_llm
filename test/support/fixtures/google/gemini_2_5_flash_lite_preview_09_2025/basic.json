@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0aGlua2luZ0NvbmZpZyI6eyJ0aGlua2luZ0J1ZGdldCI6MH19fQ=="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMCwidGVtcGVyYXR1cmUiOjAuMCwidGhpbmtpbmdDb25maWciOnsiaW5jbHVkZVRob3VnaHRzIjp0cnVlLCJ0aGlua2luZ0J1ZGdldCI6NDA5Nn19fQ=="
     },
     "canonical_json": {
       "contents": [
@@ -16,10 +16,11 @@
       ],
       "generationConfig": {
         "candidateCount": 1,
-        "maxOutputTokens": 50,
+        "maxOutputTokens": 200,
         "temperature": 0.0,
         "thinkingConfig": {
-          "thinkingBudget": 0
+          "includeThoughts": true,
+          "thinkingBudget": 4096
         }
       }
     },
@@ -44,19 +45,23 @@
           "content": {
             "parts": [
               {
-                "text": "Hello! How can I help you today?"
+                "text": "**Analyzing and Responding to a Simple Greeting**\n\nOkay, so the input is \"Hello world!\". Classic, right? Almost reflex at this point. That triggers the immediate understanding that this is a simple greeting, possibly a test, or just a friendly opening. No real information, just a social signal.\n\nMy next step is determining the *best* response. Clearly, a reciprocal greeting is the baseline. It's polite and expected. But, for an AI assistant, just mirroring the greeting seems a bit… underwhelming. I want to be helpful and welcoming.\n\nSo, I start considering options: \"Hello!\", \"Hi there!\", those all work. But, I decide that a follow-up is best. Asking a question sets the stage for a conversation and signals that I'm ready to assist. \n\nFinally, I land on \"Hello! How can I assist you today?\". It's professional, friendly, and open-ended. Perfect. Let's see what happens next!\n",
+                "thought": true
+              },
+              {
+                "text": "Hello!"
               }
             ],
             "role": "model"
           },
-          "finishReason": "STOP",
+          "finishReason": "MAX_TOKENS",
           "index": 0
         }
       ],
       "modelVersion": "gemini-2.5-flash-lite-preview-09-2025",
-      "responseId": "9DngaL3UBsKs1MkPlsDsCQ",
+      "responseId": "lVvgaLetDcae_uMP0Y-boAc",
       "usageMetadata": {
-        "candidatesTokenCount": 9,
+        "candidatesTokenCount": 2,
         "promptTokenCount": 4,
         "promptTokensDetails": [
           {
@@ -64,7 +69,8 @@
             "tokenCount": 4
           }
         ],
-        "totalTokenCount": 13
+        "thoughtsTokenCount": 196,
+        "totalTokenCount": 202
       }
     },
     "headers": {
@@ -75,13 +81,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:44 GMT"
+        "Fri, 03 Oct 2025 23:26:13 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=217"
+        "gfet4t7; dur=1736"
       ],
       "transfer-encoding": [
         "chunked"

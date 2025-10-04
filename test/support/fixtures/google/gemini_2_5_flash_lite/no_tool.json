@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxNTAsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7InRoaW5raW5nQnVkZ2V0IjowfX0sInRvb2xzIjpbeyJmdW5jdGlvbkRlY2xhcmF0aW9ucyI6W3siZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX1dfV19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjozMDAsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fSwidG9vbHMiOlt7ImZ1bmN0aW9uRGVjbGFyYXRpb25zIjpbeyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fV19XX0="
     },
     "canonical_json": {
       "contents": [
@@ -16,10 +16,11 @@
       ],
       "generationConfig": {
         "candidateCount": 1,
-        "maxOutputTokens": 150,
+        "maxOutputTokens": 300,
         "temperature": 0.0,
         "thinkingConfig": {
-          "thinkingBudget": 0
+          "includeThoughts": true,
+          "thinkingBudget": 4096
         }
       },
       "tools": [
@@ -65,7 +66,12 @@
           "content": {
             "parts": [
               {
-                "text": "Why are cats such bad poker players?\n\nBecause they always have a fur ace up their sleeve!"
+                "text": "**No Weather Reports Needed, Just a Cat Joke!**\n\nOkay, so the user wants a cat joke, plain and simple. I've got this. The `get_weather` tool? Totally irrelevant. It's like bringing a ruler to a baking contest. I'm trained to be resourceful, and in this case, that means I need to deliver the goods directly. Time to tap into my internal reservoir of jokes and hopefully, give the user a chuckle. No fancy tools, no external data - just me and a good old-fashioned punchline. Let's see if I can pull this off!\n",
+                "thought": true
+              },
+              {
+                "text": "Why don't cats play poker in the jungle? Too many cheetahs!",
+                "thoughtSignature": "CqICAdHtim903+y56J74jitLrcstuSD1OBRDohIfC4EVFFuHBejkx8XxhzJLESBlKgPQVoQApybj5JiZsDFXAxwFPhBbtFtSmQTYJAU2nhpza+UJr7MdD4deHY9Nphg6ctO2ahRgggAMLLjiY2+Ng3MosgF6P5nhNVZpEAmv0+C+RJAIqDQj3eSYSd/rsUvqVe/8lReetawvL5VHijmhPYy0Jb16bqJpcqglq0P9Qhl2uslFKHYbh3boxgaXeDAm9Fb9nv1rdx39STbYcaD2sypTh76oTa/mjbDIavGMl9LFXe8Bx3SHMFQkC9973X/O5c2Xho44WqckIui8dq89DRnyFnUoX4rqjz69qKufXeaiw0Tf9Jh83PVcQcmT9O72xA+WDHo="
               }
             ],
             "role": "model"
@@ -75,9 +81,9 @@
         }
       ],
       "modelVersion": "gemini-2.5-flash-lite",
-      "responseId": "8DngaIakG9Ss1MkP-c33gAw",
+      "responseId": "lFvgaN3yB6fg_uMPm7D46A4",
       "usageMetadata": {
-        "candidatesTokenCount": 20,
+        "candidatesTokenCount": 16,
         "promptTokenCount": 46,
         "promptTokensDetails": [
           {
@@ -85,7 +91,8 @@
             "tokenCount": 46
           }
         ],
-        "totalTokenCount": 66
+        "thoughtsTokenCount": 56,
+        "totalTokenCount": 118
       }
     },
     "headers": {
@@ -96,13 +103,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:40 GMT"
+        "Fri, 03 Oct 2025 23:26:12 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=407"
+        "gfet4t7; dur=1384"
       ],
       "transfer-encoding": [
         "chunked"

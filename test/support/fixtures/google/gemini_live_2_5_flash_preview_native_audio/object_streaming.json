@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMCwidGVtcGVyYXR1cmUiOjAuMCwidGhpbmtpbmdDb25maWciOnsidGhpbmtpbmdCdWRnZXQiOjB9fSwidG9vbHMiOlt7ImZ1bmN0aW9uRGVjbGFyYXRpb25zIjpbeyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibmFtZSIsImFnZSJdLCJ0eXBlIjoib2JqZWN0In19XX1dfQ=="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMCwidGVtcGVyYXR1cmUiOjAuMCwidGhpbmtpbmdDb25maWciOnsiaW5jbHVkZVRob3VnaHRzIjp0cnVlLCJ0aGlua2luZ0J1ZGdldCI6NDA5Nn19LCJ0b29sQ29uZmlnIjp7ImZ1bmN0aW9uQ2FsbGluZ0NvbmZpZyI6eyJhbGxvd2VkRnVuY3Rpb25OYW1lcyI6WyJzdHJ1Y3R1cmVkX291dHB1dCJdLCJtb2RlIjoiQU5ZIn19LCJ0b29scyI6W3siZnVuY3Rpb25EZWNsYXJhdGlvbnMiOlt7ImRlc2NyaXB0aW9uIjoiR2VuZXJhdGUgc3RydWN0dXJlZCBvdXRwdXQgbWF0Y2hpbmcgdGhlIHByb3ZpZGVkIHNjaGVtYSIsIm5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiYWdlIl0sInR5cGUiOiJvYmplY3QifX1dfV19"
     },
     "canonical_json": {
       "contents": [
@@ -19,7 +19,16 @@
         "maxOutputTokens": 200,
         "temperature": 0.0,
         "thinkingConfig": {
-          "thinkingBudget": 0
+          "includeThoughts": true,
+          "thinkingBudget": 4096
+        }
+      },
+      "toolConfig": {
+        "functionCallingConfig": {
+          "allowedFunctionNames": [
+            "structured_output"
+          ],
+          "mode": "ANY"
         }
       },
       "tools": [
@@ -74,9 +83,9 @@
       "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
       "content-length": "291",
       "content-type": "text/event-stream",
-      "date": "Fri, 03 Oct 2025 21:02:44 GMT",
+      "date": "Fri, 03 Oct 2025 23:26:03 GMT",
       "server": "scaffolding on HTTPServer2",
-      "server-timing": "gfet4t7; dur=36",
+      "server-timing": "gfet4t7; dur=31",
       "vary": "Referer",
       "x-content-type-options": "nosniff",
       "x-frame-options": "SAMEORIGIN",

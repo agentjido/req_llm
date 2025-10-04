@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIaSB0aGVyZSEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwMCwidGVtcGVyYXR1cmUiOjAuMCwidGhpbmtpbmdDb25maWciOnsidGhpbmtpbmdCdWRnZXQiOjB9fX0="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIaSB0aGVyZSEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwMCwidGVtcGVyYXR1cmUiOjAuMH19"
     },
     "canonical_json": {
       "contents": [
@@ -17,10 +17,7 @@
       "generationConfig": {
         "candidateCount": 1,
         "maxOutputTokens": 500,
-        "temperature": 0.0,
-        "thinkingConfig": {
-          "thinkingBudget": 0
-        }
+        "temperature": 0.0
       }
     },
     "headers": {
@@ -39,10 +36,27 @@
   },
   "response": {
     "body": {
-      "error": {
-        "code": 400,
-        "message": "Budget 0 is invalid. This model only works in thinking mode.",
-        "status": "INVALID_ARGUMENT"
+      "candidates": [
+        {
+          "content": {
+            "role": "model"
+          },
+          "finishReason": "MAX_TOKENS",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-2.5-pro",
+      "responseId": "C2XgaLS7Louo_uMPoMWWoAc",
+      "usageMetadata": {
+        "promptTokenCount": 4,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4
+          }
+        ],
+        "thoughtsTokenCount": 499,
+        "totalTokenCount": 503
       }
     },
     "headers": {
@@ -53,13 +67,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:42 GMT"
+        "Sat, 04 Oct 2025 00:06:35 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=42"
+        "gfet4t7; dur=5188"
       ],
       "transfer-encoding": [
         "chunked"
@@ -79,6 +93,6 @@
         "0"
       ]
     },
-    "status": 400
+    "status": 200
   }
 }

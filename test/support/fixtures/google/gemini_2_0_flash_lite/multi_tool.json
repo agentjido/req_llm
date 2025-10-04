@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyJ9XSwicm9sZSI6InVzZXIifV0sImdlbmVyYXRpb25Db25maWciOnsiY2FuZGlkYXRlQ291bnQiOjEsIm1heE91dHB1dFRva2VucyI6MTUwLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0aGlua2luZ0NvbmZpZyI6eyJ0aGlua2luZ0J1ZGdldCI6MH19LCJ0b29scyI6W3siZnVuY3Rpb25EZWNsYXJhdGlvbnMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LHsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LHsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX1dfV19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyJ9XSwicm9sZSI6InVzZXIifV0sImdlbmVyYXRpb25Db25maWciOnsiY2FuZGlkYXRlQ291bnQiOjEsIm1heE91dHB1dFRva2VucyI6MTUwLCJ0ZW1wZXJhdHVyZSI6MC4wfSwidG9vbHMiOlt7ImZ1bmN0aW9uRGVjbGFyYXRpb25zIjpbeyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSx7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSx7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19XX1dfQ=="
     },
     "canonical_json": {
       "contents": [
@@ -17,10 +17,7 @@
       "generationConfig": {
         "candidateCount": 1,
         "maxOutputTokens": 150,
-        "temperature": 0.0,
-        "thinkingConfig": {
-          "thinkingBudget": 0
-        }
+        "temperature": 0.0
       },
       "tools": [
         {
@@ -108,7 +105,7 @@
         }
       ],
       "modelVersion": "gemini-2.0-flash-lite",
-      "responseId": "-DngaLe8B5ix1MkPt-GBMA",
+      "responseId": "jFvgaJj2EvSU_uMP5d-y6A8",
       "usageMetadata": {
         "candidatesTokenCount": 7,
         "candidatesTokensDetails": [
@@ -135,13 +132,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:48 GMT"
+        "Fri, 03 Oct 2025 23:26:04 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=455"
+        "gfet4t7; dur=409"
       ],
       "transfer-encoding": [
         "chunked"

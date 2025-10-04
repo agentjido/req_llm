@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0aGlua2luZ0NvbmZpZyI6eyJ0aGlua2luZ0J1ZGdldCI6MH19fQ=="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMCwidGVtcGVyYXR1cmUiOjAuMCwidGhpbmtpbmdDb25maWciOnsiaW5jbHVkZVRob3VnaHRzIjp0cnVlLCJ0aGlua2luZ0J1ZGdldCI6NDA5Nn19fQ=="
     },
     "canonical_json": {
       "contents": [
@@ -16,10 +16,11 @@
       ],
       "generationConfig": {
         "candidateCount": 1,
-        "maxOutputTokens": 50,
+        "maxOutputTokens": 200,
         "temperature": 0.0,
         "thinkingConfig": {
-          "thinkingBudget": 0
+          "includeThoughts": true,
+          "thinkingBudget": 4096
         }
       }
     },
@@ -44,19 +45,23 @@
           "content": {
             "parts": [
               {
-                "text": "Hello! How can I help you today?"
+                "text": "**Analyzing a Simple Greeting**\n\nOkay, so the user types \"Hello world!\". Classic. Practically the *Hello, World!* of conversation.  My first instinct is to analyze the input: it's a simple greeting, a very basic opener. Now, I need to figure out the best response.\n\nSince it's a greeting, a reciprocal greeting is expected.  It's like the fundamental law of polite interaction, right?  But I want to go beyond just the bare minimum.  Being friendly and helpful is key.\n\nA simple \"Hello!\" would suffice, but I'm thinking I can do better.  I should probably add a follow-up question or statement to show I'm actually paying attention.  This is about building rapport, providing value.\n\nSo, I'm going with \"Hello! How can I assist you today?\".  It's polite, shows I'm ready to help, and doesn't assume anything.  Perfect.\n",
+                "thought": true
+              },
+              {
+                "text": "Hello!"
               }
             ],
             "role": "model"
           },
-          "finishReason": "STOP",
+          "finishReason": "MAX_TOKENS",
           "index": 0
         }
       ],
       "modelVersion": "gemini-2.5-flash-lite-preview-09-2025",
-      "responseId": "9zngaIm9F-Ky1MkP2OXdiQE",
+      "responseId": "k1vgaJy3C86T_uMPq_HH8As",
       "usageMetadata": {
-        "candidatesTokenCount": 9,
+        "candidatesTokenCount": 2,
         "promptTokenCount": 4,
         "promptTokensDetails": [
           {
@@ -64,7 +69,8 @@
             "tokenCount": 4
           }
         ],
-        "totalTokenCount": 13
+        "thoughtsTokenCount": 196,
+        "totalTokenCount": 202
       }
     },
     "headers": {
@@ -75,13 +81,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:47 GMT"
+        "Fri, 03 Oct 2025 23:26:11 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=219"
+        "gfet4t7; dur=1871"
       ],
       "transfer-encoding": [
         "chunked"

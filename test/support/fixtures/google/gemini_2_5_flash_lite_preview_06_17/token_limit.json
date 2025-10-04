@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjUsInRoaW5raW5nQ29uZmlnIjp7InRoaW5raW5nQnVkZ2V0IjowfX19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjUsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fX0="
     },
     "canonical_json": {
       "contents": [
@@ -19,7 +19,8 @@
         "maxOutputTokens": 100,
         "temperature": 0.5,
         "thinkingConfig": {
-          "thinkingBudget": 0
+          "includeThoughts": true,
+          "thinkingBudget": 4096
         }
       }
     },
@@ -44,7 +45,8 @@
           "content": {
             "parts": [
               {
-                "text": "The wind, a capricious sculptor, had carved the Dragon's Tooth Mountains into jagged peaks that clawed at the sapphire sky. For centuries, these ancient behemoths, scales shimmering like a thousand sunsets, had slumbered within their stony lairs. But the age of slumber was drawing to a close. Whispers of unrest, carried on the breath of the mountain winds, spoke of a growing darkness, a shadow that threatened to engulf the land of Aeridor.\n\nIn the humble village of O"
+                "text": "**Initial Assessment: Crafting an Epic Dragon Tale**\n\nOkay, so I've got this request: \"a very long story about dragons and adventures.\" My first step, as always, is to *really* understand the scope. \"Very long\" means this isn't some quick little snippet; we're talking a sprawling narrative. That signals the need for a complex plot, with layers of character development, intricate world-building, multiple interwoven plot threads, and of course, a truly satisfying resolution. It can't be a simple fetch quest or a one-and-done encounter.\n\nAnd then there's the core element: \"dragons.\" That's the exciting part! This immediately conjures images, themes, and potential directions.\n",
+                "thought": true
               }
             ],
             "role": "model"
@@ -54,9 +56,8 @@
         }
       ],
       "modelVersion": "gemini-2.5-flash-lite-preview-06-17",
-      "responseId": "8zngaM3YJZS41MkP1P-4oQ4",
+      "responseId": "klvgaNLLNrmp_uMP6Ois6Q4",
       "usageMetadata": {
-        "candidatesTokenCount": 100,
         "promptTokenCount": 10,
         "promptTokensDetails": [
           {
@@ -64,7 +65,8 @@
             "tokenCount": 10
           }
         ],
-        "totalTokenCount": 110
+        "thoughtsTokenCount": 99,
+        "totalTokenCount": 109
       }
     },
     "headers": {
@@ -75,13 +77,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:43 GMT"
+        "Fri, 03 Oct 2025 23:26:10 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=709"
+        "gfet4t7; dur=1608"
       ],
       "transfer-encoding": [
         "chunked"

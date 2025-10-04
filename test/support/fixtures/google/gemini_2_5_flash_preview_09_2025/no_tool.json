@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxNTAsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7InRoaW5raW5nQnVkZ2V0IjowfX0sInRvb2xzIjpbeyJmdW5jdGlvbkRlY2xhcmF0aW9ucyI6W3siZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX1dfV19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjozMDAsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fSwidG9vbHMiOlt7ImZ1bmN0aW9uRGVjbGFyYXRpb25zIjpbeyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fV19XX0="
     },
     "canonical_json": {
       "contents": [
@@ -16,10 +16,11 @@
       ],
       "generationConfig": {
         "candidateCount": 1,
-        "maxOutputTokens": 150,
+        "maxOutputTokens": 300,
         "temperature": 0.0,
         "thinkingConfig": {
-          "thinkingBudget": 0
+          "includeThoughts": true,
+          "thinkingBudget": 4096
         }
       },
       "tools": [
@@ -65,19 +66,19 @@
           "content": {
             "parts": [
               {
-                "text": "Why was the cat sitting on the computer?\n\nBecause it wanted to keep an eye on the mouse!"
+                "text": "**Here's how I approached this, step-by-step:**\n\nOkay, the user wants a cat joke. Simple enough, but my toolset is limited.  All I have is this `weather_api`, which is clearly useless here.  Generating a joke requires creativity, not data retrieval.  So, I'm on my own.\n\nI started brainstorming. Puns are a reliable starting point, so I came up with \"What do you call a cat that can swim? A catfish.\" But, yeah, it's pretty basic.  Then, I went for a classic: \"Why are cats bad at telling secrets? Because they let the cat out of the bag!\" It's a solid option, but I wanted something a little fresher.  A knock-knock joke seemed viable, so I tried, \"Knock, knock. Who's there? Cat. Cat who? Cat-astrophe!\"  Meh, a bit overdone.\n\nFinally, I thought about cat behavior, specifically their… *ahem*… affinity for lounging and watching things.  That led me to \"Why did the cat sit on the computer? To keep an eye on the mouse!\"  I like that one because it plays on both cat and computer terminology, which gives it a bit of an edge. I think it's the best of the bunch. Time to format that and present it.\n",
+                "thought": true
               }
             ],
             "role": "model"
           },
-          "finishReason": "STOP",
+          "finishReason": "MAX_TOKENS",
           "index": 0
         }
       ],
       "modelVersion": "gemini-2.5-flash-preview-09-2025",
-      "responseId": "9zngaIjLGNWm1MkPy9eRgQI",
+      "responseId": "k1vgaKrsC_SS_uMPiI2foQ8",
       "usageMetadata": {
-        "candidatesTokenCount": 21,
         "promptTokenCount": 46,
         "promptTokensDetails": [
           {
@@ -85,7 +86,8 @@
             "tokenCount": 46
           }
         ],
-        "totalTokenCount": 67
+        "thoughtsTokenCount": 299,
+        "totalTokenCount": 345
       }
     },
     "headers": {
@@ -96,13 +98,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:47 GMT"
+        "Fri, 03 Oct 2025 23:26:11 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=432"
+        "gfet4t7; dur=3628"
       ],
       "transfer-encoding": [
         "chunked"

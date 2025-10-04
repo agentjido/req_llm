@@ -223,6 +223,9 @@ defmodule ReqLLM.Provider.Options do
     # Auto-hoist provider-specific top-level options into :provider_options
     user_opts = auto_hoist_provider_options(provider_mod, user_opts)
 
+    # Apply pre-validation normalization (allows providers to filter/map unsupported options)
+    user_opts = apply_pre_validation(provider_mod, operation, model, user_opts)
+
     schema = compose_schema_internal(@generation_options_schema, provider_mod)
     validated_opts = NimbleOptions.validate!(user_opts, schema)
 
@@ -420,6 +423,22 @@ defmodule ReqLLM.Provider.Options do
       NimbleOptions.new!(updated_keys)
     else
       base_schema
+    end
+  end
+
+  defp apply_pre_validation(provider_mod, operation, model, opts) do
+    if function_exported?(provider_mod, :pre_validate_options, 3) do
+      case provider_mod.pre_validate_options(operation, model, opts) do
+        {normalized_opts, warnings} when is_list(warnings) ->
+          existing_warnings = Process.get(:req_llm_warnings, [])
+          Process.put(:req_llm_warnings, existing_warnings ++ warnings)
+          normalized_opts
+
+        normalized_opts ->
+          normalized_opts
+      end
+    else
+      opts
     end
   end
 

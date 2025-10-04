@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjUsInRoaW5raW5nQ29uZmlnIjp7InRoaW5raW5nQnVkZ2V0IjowfX19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjV9fQ=="
     },
     "canonical_json": {
       "contents": [
@@ -17,10 +17,7 @@
       "generationConfig": {
         "candidateCount": 1,
         "maxOutputTokens": 100,
-        "temperature": 0.5,
-        "thinkingConfig": {
-          "thinkingBudget": 0
-        }
+        "temperature": 0.5
       }
     },
     "headers": {
@@ -41,11 +38,11 @@
     "body": {
       "candidates": [
         {
-          "avgLogprobs": -0.4104609976009447,
+          "avgLogprobs": -0.5394097145157631,
           "content": {
             "parts": [
               {
-                "text": "The wind, a biting, salt-laced gale, whipped at Elara’s cloak as she clung to the jagged cliffs of Dragon’s Tooth Island. Below, the churning grey sea gnawed at the rocks, a constant, hungry roar. Above, the sky was a canvas of bruised purple and angry grey, mirroring the turmoil in her heart.\n\nElara wasn't a warrior, a sorceress, or a dragon slayer. She was a librarian, a caretaker of stories"
+                "text": "The wind howled a mournfully beautiful song across the jagged peaks of the Dragon's Tooth Mountains, a song Elara knew by heart. She was a scavenger, a survivor, and a dreamer, all rolled into one dusty, leather-clad package. Her life was a constant dance on the edge of danger, foraging for scraps in the dragon-haunted lands, always one step ahead of the monstrous beasts and the desperate, lawless men who also called these mountains home.\n\nElara"
               }
             ],
             "role": "model"
@@ -54,13 +51,13 @@
         }
       ],
       "modelVersion": "gemini-2.0-flash",
-      "responseId": "-DngaPSDHdbB1MkPrLLhCA",
+      "responseId": "i1vgaOHyLsKT_uMP8PHfgAw",
       "usageMetadata": {
-        "candidatesTokenCount": 98,
+        "candidatesTokenCount": 99,
         "candidatesTokensDetails": [
           {
             "modality": "TEXT",
-            "tokenCount": 98
+            "tokenCount": 99
           }
         ],
         "promptTokenCount": 9,
@@ -70,7 +67,7 @@
             "tokenCount": 9
           }
         ],
-        "totalTokenCount": 107
+        "totalTokenCount": 108
       }
     },
     "headers": {
@@ -81,13 +78,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:49 GMT"
+        "Fri, 03 Oct 2025 23:26:04 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=953"
+        "gfet4t7; dur=1072"
       ],
       "transfer-encoding": [
         "chunked"

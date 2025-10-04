@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjUsInRoaW5raW5nQ29uZmlnIjp7InRoaW5raW5nQnVkZ2V0IjowfX19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjUsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fX0="
     },
     "canonical_json": {
       "contents": [
@@ -19,7 +19,8 @@
         "maxOutputTokens": 100,
         "temperature": 0.5,
         "thinkingConfig": {
-          "thinkingBudget": 0
+          "includeThoughts": true,
+          "thinkingBudget": 4096
         }
       }
     },
@@ -44,7 +45,8 @@
           "content": {
             "parts": [
               {
-                "text": "## The Aetherium Ascendant: A Chronicle of Scales and Starlight\n\n**Prologue: The Whispers of the Obsidian Peaks**\n\nFor millennia, the world of Aerthos had been a tapestry woven with the mundane and the magnificent. Yet, above the highest peaks of the Obsidian Range, where the air grew thin and the stars seemed close enough to touch, resided the true sovereigns of the sky: the dragons. Not the mindless beasts of folklore, but beings of profound intellect, elemental"
+                "text": "**Crafting an Epic Tale: Dragons, Adventures, and Length**\n\nOkay, so the prompt is pretty straightforward: a *very long* story about *dragons* and *adventures*. My mind immediately starts dissecting this. \"Very long\" means this is going to be a multi-act structure, a deep dive into world-building, intricate character arcs, and significant plot progression. No surface-level stuff here, we're talking commitment.\n\nAnd the dragons? They can't just be scaled brutes. They need to be central, with their own culture, a level of intelligence, and unique abilities beyond just fire-breathing. This isn't just a monster hunt; this is a deep exploration of a fascinating species and their place within a complex world. This is the foundation to build upon.\n",
+                "thought": true
               }
             ],
             "role": "model"
@@ -54,9 +56,8 @@
         }
       ],
       "modelVersion": "gemini-2.5-flash-preview-09-2025",
-      "responseId": "9TngaKOVG56z1MkPzZrHyAE",
+      "responseId": "m1vgaLq-FvnL_uMPvJTr2Qc",
       "usageMetadata": {
-        "candidatesTokenCount": 100,
         "promptTokenCount": 10,
         "promptTokensDetails": [
           {
@@ -64,7 +65,8 @@
             "tokenCount": 10
           }
         ],
-        "totalTokenCount": 110
+        "thoughtsTokenCount": 99,
+        "totalTokenCount": 109
       }
     },
     "headers": {
@@ -75,13 +77,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:45 GMT"
+        "Fri, 03 Oct 2025 23:26:19 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=877"
+        "gfet4t7; dur=1979"
       ],
       "transfer-encoding": [
         "chunked"

@@ -232,9 +232,45 @@ defmodule ReqLLM.Providers.Google do
     end
   end
 
+  def pre_validate_options(_operation, model, opts) do
+    {provider_opts, rest} = Keyword.pop(opts, :provider_options, [])
+
+    {effort, provider_opts} = Keyword.pop(provider_opts, :reasoning_effort)
+
+    provider_opts =
+      case effort do
+        nil ->
+          provider_opts
+
+        effort_value ->
+          budget = translate_reasoning_effort_to_budget(effort_value, model)
+
+          case Keyword.fetch(provider_opts, :google_thinking_budget) do
+            {:ok, existing} when is_integer(existing) and existing > 0 ->
+              provider_opts
+
+            {:ok, 0} ->
+              Keyword.put(provider_opts, :google_thinking_budget, budget)
+
+            :error ->
+              Keyword.put(provider_opts, :google_thinking_budget, budget)
+          end
+      end
+
+    {Keyword.put(rest, :provider_options, provider_opts), []}
+  end
+
+  defp translate_reasoning_effort_to_budget(:low, _model), do: 4096
+  defp translate_reasoning_effort_to_budget(:medium, _model), do: 8192
+  defp translate_reasoning_effort_to_budget(:high, _model), do: 16384
+  defp translate_reasoning_effort_to_budget("low", model), do: translate_reasoning_effort_to_budget(:low, model)
+  defp translate_reasoning_effort_to_budget("medium", model), do: translate_reasoning_effort_to_budget(:medium, model)
+  defp translate_reasoning_effort_to_budget("high", model), do: translate_reasoning_effort_to_budget(:high, model)
+  defp translate_reasoning_effort_to_budget(budget, _model) when is_integer(budget), do: budget
+  defp translate_reasoning_effort_to_budget(_unknown, _model), do: 8192
+
   @impl ReqLLM.Provider
   def translate_options(_operation, _model, opts) do
-    # Handle stream? -> stream alias for backward compatibility
     case Keyword.pop(opts, :stream?) do
       {nil, rest} ->
         {rest, []}
@@ -285,9 +321,12 @@ defmodule ReqLLM.Providers.Google do
     tools_data =
       case request.options[:tools] do
         tools when is_list(tools) and tools != [] ->
+          tool_config = build_google_tool_config(request.options[:tool_choice])
+
           %{
             tools: [%{functionDeclarations: Enum.map(tools, &ReqLLM.Tool.to_schema(&1, :google))}]
           }
+          |> maybe_put(:toolConfig, tool_config)
 
         _ ->
           %{}
@@ -373,29 +412,61 @@ defmodule ReqLLM.Providers.Google do
     end
   end
 
+  # Helper to build Google toolConfig from OpenAI-style tool_choice
+  defp build_google_tool_config(nil), do: nil
+
+  defp build_google_tool_config(%{type: "function", function: %{name: name}}) do
+    %{
+      functionCallingConfig: %{
+        mode: "ANY",
+        allowedFunctionNames: [name]
+      }
+    }
+  end
+
+  defp build_google_tool_config("required") do
+    %{functionCallingConfig: %{mode: "ANY"}}
+  end
+
+  defp build_google_tool_config("auto"), do: %{functionCallingConfig: %{mode: "AUTO"}}
+  defp build_google_tool_config("none"), do: %{functionCallingConfig: %{mode: "NONE"}}
+  defp build_google_tool_config(_), do: nil
+
   # Helper to add thinking configuration if specified
   defp maybe_add_thinking_config(config, nil), do: config
 
-  defp maybe_add_thinking_config(config, budget) when is_integer(budget) and budget >= 0 do
-    Map.put(config, :thinkingConfig, %{thinkingBudget: budget})
+  defp maybe_add_thinking_config(config, budget) when is_integer(budget) and budget > 0 do
+    Map.put(config, :thinkingConfig, %{thinkingBudget: budget, includeThoughts: true})
   end
 
-  # Helper to convert Google response to OpenAI format
+  defp maybe_add_thinking_config(config, 0) do
+    config
+  end
+
   defp convert_google_to_openai_format(%{"candidates" => candidates} = body) do
     choice =
       case List.first(candidates) do
         %{"content" => %{"parts" => parts}} = candidate ->
-          message_content =
-            parts
-            |> Enum.filter(&Map.has_key?(&1, "text"))
-            |> Enum.map_join("", &Map.get(&1, "text"))
-
+          {content_parts, has_thinking?} = convert_google_parts_to_content(parts)
           tool_calls = extract_tool_calls(parts)
 
-          message = %{
-            "role" => "assistant",
-            "content" => message_content
-          }
+          message =
+            if has_thinking? or tool_calls != [] do
+              %{
+                "role" => "assistant",
+                "content" => content_parts
+              }
+            else
+              text_content =
+                content_parts
+                |> Enum.filter(&(&1["type"] == "text"))
+                |> Enum.map_join("", & &1["text"])
+
+              %{
+                "role" => "assistant",
+                "content" => text_content
+              }
+            end
 
           message =
             case tool_calls do
@@ -406,6 +477,12 @@ defmodule ReqLLM.Providers.Google do
           %{
             "message" => message,
             "finish_reason" => normalize_google_finish_reason(candidate["finishReason"])
+          }
+
+        %{"content" => _content, "finishReason" => finish_reason} ->
+          %{
+            "message" => %{"role" => "assistant", "content" => ""},
+            "finish_reason" => normalize_google_finish_reason(finish_reason)
           }
 
         _ ->
@@ -423,6 +500,22 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp convert_google_to_openai_format(body), do: body
+
+  defp convert_google_parts_to_content(parts) do
+    content_parts =
+      parts
+      |> Enum.filter(&Map.has_key?(&1, "text"))
+      |> Enum.map(fn part ->
+        if Map.get(part, "thought", false) do
+          %{"type" => "thinking", "thinking" => part["text"]}
+        else
+          %{"type" => "text", "text" => part["text"]}
+        end
+      end)
+
+    has_thinking? = Enum.any?(content_parts, &(&1["type"] == "thinking"))
+    {content_parts, has_thinking?}
+  end
 
   defp extract_tool_calls(parts) do
     for %{"functionCall" => %{} = call} <- parts do
@@ -451,15 +544,22 @@ defmodule ReqLLM.Providers.Google do
   defp normalize_google_finish_reason(_), do: "stop"
 
   defp convert_google_usage(%{"promptTokenCount" => prompt, "totalTokenCount" => total} = usage) do
+    thoughts = usage["thoughtsTokenCount"] || 0
     completion =
-      usage["candidatesTokenCount"] || usage["thoughtsTokenCount"] ||
-        max(0, total - prompt)
+      usage["candidatesTokenCount"] ||
+        max(0, total - prompt - thoughts)
 
-    %{
+    base = %{
       "prompt_tokens" => prompt,
       "completion_tokens" => completion,
       "total_tokens" => total
     }
+
+    if thoughts > 0 do
+      Map.put(base, "completion_tokens_details", %{"reasoning_tokens" => thoughts})
+    else
+      base
+    end
   end
 
   defp convert_google_usage(_),
@@ -467,23 +567,28 @@ defmodule ReqLLM.Providers.Google do
 
   @impl ReqLLM.Provider
   def attach_stream(model, context, opts, _finch_name) do
-    api_key = ReqLLM.Keys.get!(model, opts)
+    req_only_keys = [:params, :model, :base_url, :finch_name, :fixture]
+    {req_opts, user_opts} = Keyword.split(opts, req_only_keys)
 
-    # Build request body using provider's encode logic
-    body = build_google_streaming_body(model, context, opts)
+    opts_to_process = Keyword.merge(user_opts, context: context, stream: true)
 
-    # Build the complete URL with Google's specific endpoint and auth
-    url =
-      "#{default_base_url()}/models/#{model.model}:streamGenerateContent?alt=sse&key=#{api_key}"
+    with {:ok, processed_opts} <-
+           ReqLLM.Provider.Options.process(__MODULE__, :chat, model, opts_to_process) do
+      api_key = ReqLLM.Keys.get!(model, opts)
+      base_url = Keyword.get(req_opts, :base_url, default_base_url())
 
-    # Create Finch request without Authorization header (Google uses API key in query)
-    headers = [
-      {"Content-Type", "application/json"},
-      {"Accept", "text/event-stream"}
-    ]
+      body = build_google_streaming_body(model, context, processed_opts)
 
-    finch_request = Finch.build(:post, url, headers, body)
-    {:ok, finch_request}
+      url = "#{base_url}/models/#{model.model}:streamGenerateContent?alt=sse&key=#{api_key}"
+
+      headers = [
+        {"Content-Type", "application/json"},
+        {"Accept", "text/event-stream"}
+      ]
+
+      finch_request = Finch.build(:post, url, headers, body)
+      {:ok, finch_request}
+    end
   rescue
     error ->
       {:error,
@@ -649,9 +754,7 @@ defmodule ReqLLM.Providers.Google do
         "usageMetadata" => usage
       }
       when finish_reason != nil ->
-        # Final chunk with usage metadata
-        text_parts = extract_text_from_parts(parts)
-        chunks = if text_parts == "", do: [], else: [ReqLLM.StreamChunk.text(text_parts)]
+        chunks = extract_chunks_from_parts(parts)
 
         usage_chunk =
           ReqLLM.StreamChunk.meta(%{
@@ -667,9 +770,7 @@ defmodule ReqLLM.Providers.Google do
         "candidates" => [%{"content" => %{"parts" => parts}, "finishReason" => finish_reason} | _]
       }
       when finish_reason != nil ->
-        # Final chunk without usage metadata
-        text_parts = extract_text_from_parts(parts)
-        chunks = if text_parts == "", do: [], else: [ReqLLM.StreamChunk.text(text_parts)]
+        chunks = extract_chunks_from_parts(parts)
 
         meta_chunk =
           ReqLLM.StreamChunk.meta(%{
@@ -680,9 +781,7 @@ defmodule ReqLLM.Providers.Google do
         chunks ++ [meta_chunk]
 
       %{"candidates" => [%{"content" => %{"parts" => parts}} | _], "usageMetadata" => usage} ->
-        # Chunk with content and usage metadata
-        text_parts = extract_text_from_parts(parts)
-        chunks = if text_parts == "", do: [], else: [ReqLLM.StreamChunk.text(text_parts)]
+        chunks = extract_chunks_from_parts(parts)
 
         usage_chunk =
           ReqLLM.StreamChunk.meta(%{
@@ -693,12 +792,9 @@ defmodule ReqLLM.Providers.Google do
         chunks ++ [usage_chunk]
 
       %{"candidates" => [%{"content" => %{"parts" => parts}} | _]} ->
-        # Regular content chunk
-        text_parts = extract_text_from_parts(parts)
-        if text_parts == "", do: [], else: [ReqLLM.StreamChunk.text(text_parts)]
+        extract_chunks_from_parts(parts)
 
       %{"usageMetadata" => usage} ->
-        # Usage-only chunk
         [
           ReqLLM.StreamChunk.meta(%{
             usage: convert_google_usage_for_streaming(usage),
@@ -714,34 +810,52 @@ defmodule ReqLLM.Providers.Google do
 
   defp decode_google_sse_event(_, _model), do: []
 
-  defp extract_text_from_parts(parts) do
+  defp extract_chunks_from_parts(parts) do
     parts
-    |> Enum.filter(&Map.has_key?(&1, "text"))
-    |> Enum.map_join("", &Map.get(&1, "text"))
-  end
+    |> Enum.flat_map(fn part ->
+      cond do
+        Map.has_key?(part, "text") ->
+          text = Map.get(part, "text")
 
-  defp convert_google_usage_for_streaming(%{
-         "promptTokenCount" => prompt,
-         "candidatesTokenCount" => completion,
-         "totalTokenCount" => total
-       }) do
-    %{
-      "prompt_tokens" => prompt,
-      "completion_tokens" => completion,
-      "total_tokens" => total
-    }
+          if text != "" do
+            if Map.get(part, "thought", false) do
+              [ReqLLM.StreamChunk.thinking(text)]
+            else
+              [ReqLLM.StreamChunk.text(text)]
+            end
+          else
+            []
+          end
+
+        Map.has_key?(part, "functionCall") ->
+          call = part["functionCall"]
+          name = call["name"]
+          args = call["args"] || %{}
+          call_id = Map.get(call, "id", "call_#{System.unique_integer([:positive])}")
+          [ReqLLM.StreamChunk.tool_call(name, args, %{id: call_id})]
+
+        true ->
+          []
+      end
+    end)
   end
 
   defp convert_google_usage_for_streaming(usage) do
-    # Handle legacy format or missing fields
     prompt = Map.get(usage, "promptTokenCount", 0)
     completion = Map.get(usage, "candidatesTokenCount", 0)
     total = Map.get(usage, "totalTokenCount", prompt + completion)
+    thoughts = Map.get(usage, "thoughtsTokenCount", 0)
 
-    %{
+    base = %{
       "prompt_tokens" => prompt,
       "completion_tokens" => completion,
       "total_tokens" => total
     }
+
+    if thoughts > 0 do
+      Map.put(base, "completion_tokens_details", %{"reasoning_tokens" => thoughts})
+    else
+      base
+    end
   end
 end

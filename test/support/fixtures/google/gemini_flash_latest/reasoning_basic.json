@@ -1,0 +1,112 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJTb2x2ZSAxMio3IGFuZCBzaG93IHlvdXIgaW50ZXJuYWwgdGhpbmtpbmcgKGJyaWVmKS4ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwNDgsInRlbXBlcmF0dXJlIjoxLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fX0="
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Solve 12*7 and show your internal thinking (brief)."
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 2048,
+        "temperature": 1.0,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingBudget": 4096
+        }
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=%5BREDACTED%3Akey%5D"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**Solving a Simple Multiplication Problem**\n\nOkay, so I need to figure out what 12 times 7 is. No problem. Let's break this down. The most efficient way, in my opinion, is decomposition. I'll split 12 into 10 and 2.  Then, I'll multiply each part by 7 and add the results.\n\nFirst, 10 times 7 is easy: that's 70.  Next, 2 times 7 is 14.  Now I just need to add those together: 70 plus 14 equals 84.\n\nJust to be certain, I'll quickly verify. I'll double-check it the way I'd teach someone else -  7 times 10 is 70, 7 times 2 is 14, and, of course, 70 plus 14 is 84. Looks good. So the final answer is 84.\n",
+                "thought": true
+              },
+              {
+                "text": "**Internal Thinking (Brief):**\n\n1.  Decompose 12 into $10 + 2$.\n2.  Calculate $10 \\times 7 = 70$.\n3.  Calculate $2 \\times 7 = 14$.\n4.  Add the parts: $70 + 14 = 84$.\n\n**Answer:**\n\n84"
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-2.5-flash-preview-09-2025",
+      "responseId": "PGXgaM6eHPi0_uMPqaHL6Ag",
+      "usageMetadata": {
+        "candidatesTokenCount": 84,
+        "promptTokenCount": 15,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 15
+          }
+        ],
+        "thoughtsTokenCount": 177,
+        "totalTokenCount": 276
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Sat, 04 Oct 2025 00:07:24 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=2828"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  }
+}

@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjUsInRoaW5raW5nQ29uZmlnIjp7InRoaW5raW5nQnVkZ2V0IjowfX19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjUsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fX0="
     },
     "canonical_json": {
       "contents": [
@@ -19,7 +19,8 @@
         "maxOutputTokens": 100,
         "temperature": 0.5,
         "thinkingConfig": {
-          "thinkingBudget": 0
+          "includeThoughts": true,
+          "thinkingBudget": 4096
         }
       }
     },
@@ -44,7 +45,8 @@
           "content": {
             "parts": [
               {
-                "text": "The wind, a restless spirit, whipped through the jagged peaks of the Dragon's Teeth mountains, carrying with it the scent of pine, ancient stone, and the faintest whisper of ozone – the signature of dragonfire. In a hidden valley, cradled by these formidable spires, lay the village of Oakhaven. It was a place of sturdy stone cottages, thatched roofs, and the comforting murmur of everyday life. But Oakhaven, like all settlements near the Dragon's Teeth"
+                "text": "**Breaking Down the Epic Dragon Tale**\n\nOkay, so I'm tackling this \"very long story about dragons and adventures\" request. My mind immediately starts dissecting the prompt. \"Very long\" - that's the key. This isn't a quick anecdote; it needs a sprawling plot, a rich cast of characters, a fully realized world, and real character growth. Think multiple arcs, interwoven narratives, and a journey, not just a quick errand. \"Dragons\" –  right, they're the center. That means scales, fire, magic, ancient lore, maybe different dragon species, and definitely a significant role for them, not just as a backdrop.  \"Adventures\" implies risk, discovery, challenges, and probably some epic battles or clever escapes. I need to make sure I create a world that makes the reader *feel* the grand scale of the world and characters. This is going to be good.\n",
+                "thought": true
               }
             ],
             "role": "model"
@@ -54,9 +56,8 @@
         }
       ],
       "modelVersion": "gemini-2.5-flash-lite",
-      "responseId": "7zngaLbfHL-w1MkPp_iRqAE",
+      "responseId": "iFvgaM_4Hueu_uMPq5awiA8",
       "usageMetadata": {
-        "candidatesTokenCount": 100,
         "promptTokenCount": 10,
         "promptTokensDetails": [
           {
@@ -64,7 +65,8 @@
             "tokenCount": 10
           }
         ],
-        "totalTokenCount": 110
+        "thoughtsTokenCount": 99,
+        "totalTokenCount": 109
       }
     },
     "headers": {
@@ -75,13 +77,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:39 GMT"
+        "Fri, 03 Oct 2025 23:26:00 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=692"
+        "gfet4t7; dur=1857"
       ],
       "transfer-encoding": [
         "chunked"

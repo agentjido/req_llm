@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjUsInRoaW5raW5nQ29uZmlnIjp7InRoaW5raW5nQnVkZ2V0IjowfX19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjUsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fX0="
     },
     "canonical_json": {
       "contents": [
@@ -19,7 +19,8 @@
         "maxOutputTokens": 100,
         "temperature": 0.5,
         "thinkingConfig": {
-          "thinkingBudget": 0
+          "includeThoughts": true,
+          "thinkingBudget": 4096
         }
       }
     },
@@ -39,10 +40,33 @@
   },
   "response": {
     "body": {
-      "error": {
-        "code": 400,
-        "message": "Budget 0 is invalid. This model only works in thinking mode.",
-        "status": "INVALID_ARGUMENT"
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**Initial Breakdown: Shaping the Dragon's Tale**\n\nOkay, so I've got this prompt, a user, likely another expert in this space, wants a \"very long story about dragons and adventures.\" Right. Let's break this down. First, the core elements: dragons and adventure. That's a classic pairing, but it's the foundation. Now, the length - \"very long.\" That means a multi-act structure, definitely. I'm thinking several key turning points, perhaps a classic three-act structure, but possibly even stretching it to four or five. It *must* have significant character development, complex plotting with subplots that intertwine, and a resolution that feels epic, earns the reader's investment, and leaves a lasting impression.\n",
+                "thought": true
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "MAX_TOKENS",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-2.5-pro",
+      "responseId": "E2XgaI3PBcDh_uMP1PGP6A4",
+      "usageMetadata": {
+        "promptTokenCount": 10,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 10
+          }
+        ],
+        "thoughtsTokenCount": 99,
+        "totalTokenCount": 109
       }
     },
     "headers": {
@@ -53,13 +77,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:42 GMT"
+        "Sat, 04 Oct 2025 00:06:43 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=45"
+        "gfet4t7; dur=2733"
       ],
       "transfer-encoding": [
         "chunked"
@@ -79,6 +103,6 @@
         "0"
       ]
     },
-    "status": 400
+    "status": 200
   }
 }

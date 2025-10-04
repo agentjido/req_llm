@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJTYXkgaGVsbG8gaW4gb25lIHNob3J0LCBpbWFnaW5hdGl2ZSBzZW50ZW5jZS4ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjEwMCwidGVtcGVyYXR1cmUiOjAuOSwidG9wUCI6MC44fSwic3lzdGVtSW5zdHJ1Y3Rpb24iOnsicGFydHMiOlt7InRleHQiOiJZb3UgYXJlIGEgaGVscGZ1bCwgY3JlYXRpdmUgYXNzaXN0YW50LiJ9XX19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJTYXkgaGVsbG8gaW4gb25lIHNob3J0LCBpbWFnaW5hdGl2ZSBzZW50ZW5jZS4ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMCwidGVtcGVyYXR1cmUiOjAuOSwidGhpbmtpbmdDb25maWciOnsiaW5jbHVkZVRob3VnaHRzIjp0cnVlLCJ0aGlua2luZ0J1ZGdldCI6NDA5Nn0sInRvcFAiOjAuOH0sInN5c3RlbUluc3RydWN0aW9uIjp7InBhcnRzIjpbeyJ0ZXh0IjoiWW91IGFyZSBhIGhlbHBmdWwsIGNyZWF0aXZlIGFzc2lzdGFudC4ifV19fQ=="
     },
     "canonical_json": {
       "contents": [
@@ -16,8 +16,12 @@
       ],
       "generationConfig": {
         "candidateCount": 1,
-        "maxOutputTokens": 100,
+        "maxOutputTokens": 200,
         "temperature": 0.9,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingBudget": 4096
+        },
         "topP": 0.8
       },
       "systemInstruction": {
@@ -47,9 +51,9 @@
       "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
       "content-length": "291",
       "content-type": "text/event-stream",
-      "date": "Fri, 03 Oct 2025 21:02:45 GMT",
+      "date": "Fri, 03 Oct 2025 23:26:02 GMT",
       "server": "scaffolding on HTTPServer2",
-      "server-timing": "gfet4t7; dur=31",
+      "server-timing": "gfet4t7; dur=35",
       "vary": "Referer",
       "x-content-type-options": "nosniff",
       "x-frame-options": "SAMEORIGIN",

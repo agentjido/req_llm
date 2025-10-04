@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIaSB0aGVyZSEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwMCwidGVtcGVyYXR1cmUiOjAuMCwidGhpbmtpbmdDb25maWciOnsidGhpbmtpbmdCdWRnZXQiOjB9fX0="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIaSB0aGVyZSEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwMCwidGVtcGVyYXR1cmUiOjAuMH19"
     },
     "canonical_json": {
       "contents": [
@@ -17,10 +17,7 @@
       "generationConfig": {
         "candidateCount": 1,
         "maxOutputTokens": 500,
-        "temperature": 0.0,
-        "thinkingConfig": {
-          "thinkingBudget": 0
-        }
+        "temperature": 0.0
       }
     },
     "headers": {
@@ -54,7 +51,7 @@
         }
       ],
       "modelVersion": "gemini-2.5-flash-lite",
-      "responseId": "8TngaNqJOaix1MkP1vaa-Q8",
+      "responseId": "hFvgaLq_LPHP_uMPpbuqsAg",
       "usageMetadata": {
         "candidatesTokenCount": 10,
         "promptTokenCount": 4,
@@ -75,13 +72,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:41 GMT"
+        "Fri, 03 Oct 2025 23:25:56 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=367"
+        "gfet4t7; dur=301"
       ],
       "transfer-encoding": [
         "chunked"

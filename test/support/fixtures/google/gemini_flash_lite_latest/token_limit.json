@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjUsInRoaW5raW5nQ29uZmlnIjp7InRoaW5raW5nQnVkZ2V0IjowfX19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjUsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fX0="
     },
     "canonical_json": {
       "contents": [
@@ -19,7 +19,8 @@
         "maxOutputTokens": 100,
         "temperature": 0.5,
         "thinkingConfig": {
-          "thinkingBudget": 0
+          "includeThoughts": true,
+          "thinkingBudget": 4096
         }
       }
     },
@@ -44,7 +45,8 @@
           "content": {
             "parts": [
               {
-                "text": "## The Obsidian Heart and the Whispering Peaks: An Epic of Scale and Spirit\n\nThe world of Aerthos was a tapestry woven from emerald forests, sapphire seas, and mountains that clawed at the very belly of the sky. And in those highest, most inaccessible peaks lived the Sky-Lords: the Dragons.\n\nOur tale begins not with a roar, but with a whisper, carried on the wind that perpetually scoured the jagged spine of the Wyrmfang Range. It was the"
+                "text": "**Laying the Foundation for an Epic Dragon Tale**\n\nOkay, so the user wants a *long* story about dragons and adventure. My expert brain immediately starts breaking this down. We need a truly sweeping narrative, not just a series of events. That means multiple locations, real character development, a significant conflict, and, of course, a resolution that feels earned and epic. No shortchanging this request!\n\nFirst, I need to nail down the world. This setting is crucial, it needs to be expansive enough to support a journey. \"Aerthos\" – yeah, that sounds right, suitably epic and fantasy-driven. Good start. Now, where do we go from there?\n",
+                "thought": true
               }
             ],
             "role": "model"
@@ -54,9 +56,8 @@
         }
       ],
       "modelVersion": "gemini-2.5-flash-lite-preview-09-2025",
-      "responseId": "-DngaMXtD-Gc1MkPuMLnsQg",
+      "responseId": "kVvgaNf_EcXP_uMPu7HYoAc",
       "usageMetadata": {
-        "candidatesTokenCount": 100,
         "promptTokenCount": 10,
         "promptTokensDetails": [
           {
@@ -64,7 +65,8 @@
             "tokenCount": 10
           }
         ],
-        "totalTokenCount": 110
+        "thoughtsTokenCount": 99,
+        "totalTokenCount": 109
       }
     },
     "headers": {
@@ -75,13 +77,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:48 GMT"
+        "Fri, 03 Oct 2025 23:26:09 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=508"
+        "gfet4t7; dur=1674"
       ],
       "transfer-encoding": [
         "chunked"

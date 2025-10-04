@@ -312,7 +312,7 @@ defmodule ReqLLM.Test.Helpers do
           deterministic: base.deterministic ++ [provider_options: [google_thinking_budget: 0]],
           creative: base.creative ++ [provider_options: [google_thinking_budget: 0]],
           minimal: base.minimal ++ [provider_options: [google_thinking_budget: 0]],
-          tool_test_tokens: base.tool_test_tokens,
+          tool_test_tokens: 300,
           reasoning_effort: base.reasoning_effort,
           reasoning_prompts: base.reasoning_prompts,
           validate_cached_tokens: false

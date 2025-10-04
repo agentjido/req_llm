@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0aGlua2luZ0NvbmZpZyI6eyJ0aGlua2luZ0J1ZGdldCI6MH19fQ=="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMCwidGVtcGVyYXR1cmUiOjAuMCwidGhpbmtpbmdDb25maWciOnsiaW5jbHVkZVRob3VnaHRzIjp0cnVlLCJ0aGlua2luZ0J1ZGdldCI6NDA5Nn19fQ=="
     },
     "canonical_json": {
       "contents": [
@@ -16,10 +16,11 @@
       ],
       "generationConfig": {
         "candidateCount": 1,
-        "maxOutputTokens": 50,
+        "maxOutputTokens": 200,
         "temperature": 0.0,
         "thinkingConfig": {
-          "thinkingBudget": 0
+          "includeThoughts": true,
+          "thinkingBudget": 4096
         }
       }
     },
@@ -44,19 +45,19 @@
           "content": {
             "parts": [
               {
-                "text": "Hello there!"
+                "text": "**Responding to a Simple Greeting**\n\nOkay, so I'm presented with \"Hello world!\". Classic. I know exactly what this means. It's the programmer's or, more generally, the newcomer's \"hello,\" right? They're initiating, testing me out, or just being polite. No problem.\n\nMy immediate instinct is to match their tone.  \"Hello!\" seems a bit... blunt. \"Hello there!\" has a touch more warmth, but I need to show I'm here to help, to be useful. I'll need to offer some direction, too.  I've got a couple of good options in mind:\n\n*   **Option 1:** Just a simple \"Hello!\" but this feels a little *too* basic for someone who might be testing the waters.\n*   **Option 2:** \"Hello there! How can I help you today?\"  This is a good, solid approach. Welcoming, sets an expectation of assistance...\n*   **Option 3:** I could try something playful, but I'll stick to professionalism.  For now,  Option 2 hits the mark.\n",
+                "thought": true
               }
             ],
             "role": "model"
           },
-          "finishReason": "STOP",
+          "finishReason": "MAX_TOKENS",
           "index": 0
         }
       ],
       "modelVersion": "gemini-2.5-flash-preview-09-2025",
-      "responseId": "9jngaL3VF5Gu1MkPuaKaoAU",
+      "responseId": "j1vgaMWxINfO_uMPo7zY8Qs",
       "usageMetadata": {
-        "candidatesTokenCount": 3,
         "promptTokenCount": 4,
         "promptTokensDetails": [
           {
@@ -64,7 +65,8 @@
             "tokenCount": 4
           }
         ],
-        "totalTokenCount": 7
+        "thoughtsTokenCount": 199,
+        "totalTokenCount": 203
       }
     },
     "headers": {
@@ -75,13 +77,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:46 GMT"
+        "Fri, 03 Oct 2025 23:26:07 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=267"
+        "gfet4t7; dur=2743"
       ],
       "transfer-encoding": [
         "chunked"

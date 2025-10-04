@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxNTAsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7InRoaW5raW5nQnVkZ2V0IjowfX0sInRvb2xzIjpbeyJmdW5jdGlvbkRlY2xhcmF0aW9ucyI6W3siZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX1dfV19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjozMDAsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fSwidG9vbHMiOlt7ImZ1bmN0aW9uRGVjbGFyYXRpb25zIjpbeyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fV19XX0="
     },
     "canonical_json": {
       "contents": [
@@ -16,10 +16,11 @@
       ],
       "generationConfig": {
         "candidateCount": 1,
-        "maxOutputTokens": 150,
+        "maxOutputTokens": 300,
         "temperature": 0.0,
         "thinkingConfig": {
-          "thinkingBudget": 0
+          "includeThoughts": true,
+          "thinkingBudget": 4096
         }
       },
       "tools": [
@@ -65,7 +66,12 @@
           "content": {
             "parts": [
               {
-                "text": "Why are cats such bad poker players?\n\nBecause they always have a fur ace up their sleeve!"
+                "text": "**Alright, here's what I'm thinking.**\n\nThe user wants a cat joke, plain and simple. I've got to give them what they're after.  The problem is, my tools are useless here. `get_weather`? Absolutely no help in this situation. It's like trying to use a hammer to write poetry! So, forget the tools. I need to rely on my own comedic abilities, or at least my memory for jokes. I'll just deliver a cat joke directly, bypassing any unnecessary fluff. They know their stuff; they just want a good laugh, and I'm the one who needs to provide it.\n",
+                "thought": true
+              },
+              {
+                "text": "Why don't cats play poker in the jungle? Too many cheetahs!",
+                "thoughtSignature": "CqICAdHtim/b0KZmb4IuKNcaXVGryTvBl6Noc4VopwDqhuowJYFdvjTzy4JQvlNRBBtlAsujDjfHNA/bbUlENl+E2R5E4Vdz29vv+mK7lk2gx+gcSzHJ2burQaHTeA9Bpg4Ohr3cEcxPzPRZ2ZdmoJnxImbdy1njjasocS7kXeB/FmEQIYDBlv247xpm5W182+RaB9b09nX4+lEyZYGVAwn3DCbslCFWN3Q7/A59Ht++2TtOymVvZ4X/lopVTdv5wmFkJucPGrl/hHcVBLqL9dPq4QUtnRtzHNqUfRashKT9As6ecM78o7tNBWUl9RxEE/o9KZ+aWv42kTxlCTTOnDvJU31hQY4Ibgcnkmn5+icFKKjdExlfAnoMItfw+f+evklJwxc="
               }
             ],
             "role": "model"
@@ -75,9 +81,9 @@
         }
       ],
       "modelVersion": "gemini-2.5-flash-lite-preview-06-17",
-      "responseId": "8TngaLjzM9Ss1MkP-c33gAw",
+      "responseId": "iVvgaMa7HrTf_uMPgMau0A4",
       "usageMetadata": {
-        "candidatesTokenCount": 20,
+        "candidatesTokenCount": 16,
         "promptTokenCount": 46,
         "promptTokensDetails": [
           {
@@ -85,7 +91,8 @@
             "tokenCount": 46
           }
         ],
-        "totalTokenCount": 66
+        "thoughtsTokenCount": 56,
+        "totalTokenCount": 118
       }
     },
     "headers": {
@@ -96,13 +103,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:41 GMT"
+        "Fri, 03 Oct 2025 23:26:01 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=387"
+        "gfet4t7; dur=1633"
       ],
       "transfer-encoding": [
         "chunked"

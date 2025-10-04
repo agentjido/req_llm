@@ -75,7 +75,7 @@ defmodule ReqLLM.Providers.OpenAI do
   @impl ReqLLM.Provider
   @doc """
   Custom prepare_request to route reasoning models to /v1/responses endpoint.
-  
+
   - :chat operations detect model type and route to appropriate endpoint
   - :object operations maintain OpenAI-specific token handling
   """

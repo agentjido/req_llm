@@ -294,8 +294,8 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
 
               opts =
                 param_bundles(@provider).deterministic
-                |> Keyword.put(:max_tokens, 200)
-                |> then(&reasoning_overlay(@model_spec, @provider, &1, 200))
+                |> Keyword.put(:max_tokens, 500)
+                |> then(&reasoning_overlay(@model_spec, @provider, &1, 500))
 
               {:ok, response} =
                 ReqLLM.stream_object(

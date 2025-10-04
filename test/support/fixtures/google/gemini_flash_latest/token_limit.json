@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjUsInRoaW5raW5nQ29uZmlnIjp7InRoaW5raW5nQnVkZ2V0IjowfX19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjUsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fX0="
     },
     "canonical_json": {
       "contents": [
@@ -19,7 +19,8 @@
         "maxOutputTokens": 100,
         "temperature": 0.5,
         "thinkingConfig": {
-          "thinkingBudget": 0
+          "includeThoughts": true,
+          "thinkingBudget": 4096
         }
       }
     },
@@ -44,7 +45,8 @@
           "content": {
             "parts": [
               {
-                "text": "## The Aetherium Ascendant: A Chronicle of Scales and Starlight\n\n**Prologue: The Whispers of the Obsidian Peaks**\n\nThe world of Aerthos was a tapestry woven with the threads of elemental magic. At its heart lay the Obsidian Peaks, a jagged crown piercing the heavens, the undisputed domain of the dragons. For millennia, they had ruled, not as tyrants, but as custodians of the world’s balance. Their scales shimmered with the captured light of sun"
+                "text": "**Breaking Down the Dragon's Lair: Building a Monumental Story**\n\nOkay, so the brief is straightforward: a *long* story about dragons and adventure. My initial thought process? Deconstruct, deconstruct, deconstruct! \"Very long\" means I'm not just stringing together a few scenes; I'm building a world. A sprawling narrative structure, multiple plot arcs intertwining, complex character development, the works. This isn't a sprint; it's an epic marathon.\n\nThen, the dragons. They are absolutely *central*. This isn't just a backdrop; they're the engine. I need to think about different types: fiery, ice-breathing, maybe some with unique elemental affinities. Roles are crucial too. Are they just monstrous antagonists? Allies? Ancient, slumbering forces with the power to tip the balance? This will inform how the adventure unfolds. And I'll need a deep understanding of their biology, culture, and place in the world. This will be the foundation for an unforgettable story.\n",
+                "thought": true
               }
             ],
             "role": "model"
@@ -54,9 +56,8 @@
         }
       ],
       "modelVersion": "gemini-2.5-flash-preview-09-2025",
-      "responseId": "9TngaIjGF6is1MkPhu_C0QI",
+      "responseId": "QGXgaLPsN-eu_uMPq5awiA8",
       "usageMetadata": {
-        "candidatesTokenCount": 100,
         "promptTokenCount": 10,
         "promptTokensDetails": [
           {
@@ -64,7 +65,8 @@
             "tokenCount": 10
           }
         ],
-        "totalTokenCount": 110
+        "thoughtsTokenCount": 99,
+        "totalTokenCount": 109
       }
     },
     "headers": {
@@ -75,13 +77,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:45 GMT"
+        "Sat, 04 Oct 2025 00:07:28 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=868"
+        "gfet4t7; dur=2266"
       ],
       "transfer-encoding": [
         "chunked"

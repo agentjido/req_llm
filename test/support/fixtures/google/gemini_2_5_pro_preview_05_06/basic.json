@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0aGlua2luZ0NvbmZpZyI6eyJ0aGlua2luZ0J1ZGdldCI6MH19fQ=="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMCwidGVtcGVyYXR1cmUiOjAuMCwidGhpbmtpbmdDb25maWciOnsiaW5jbHVkZVRob3VnaHRzIjp0cnVlLCJ0aGlua2luZ0J1ZGdldCI6NDA5Nn19fQ=="
     },
     "canonical_json": {
       "contents": [
@@ -16,10 +16,11 @@
       ],
       "generationConfig": {
         "candidateCount": 1,
-        "maxOutputTokens": 50,
+        "maxOutputTokens": 200,
         "temperature": 0.0,
         "thinkingConfig": {
-          "thinkingBudget": 0
+          "includeThoughts": true,
+          "thinkingBudget": 4096
         }
       }
     },
@@ -39,10 +40,33 @@
   },
   "response": {
     "body": {
-      "error": {
-        "code": 400,
-        "message": "Budget 0 is invalid. This model only works in thinking mode.",
-        "status": "INVALID_ARGUMENT"
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**Processing a Simple Greeting**\n\nOkay, so the user said \"Hello world!\". My first thought is to recognize this immediately - it's a classic programmer's phrase. It's *the* phrase. We all know it, it's almost a rite of passage. It's probably the first thing anyone types when they're learning a new language, a kind of test to make sure everything's set up right.\n\nSo, let's look at the intent. Are they just saying hi? Probably. Testing me? Possibly. Giving a little wink to the programming community? Absolutely. They're not looking for some deep, philosophical answer, right? No, keep it straightforward. They're expecting a simple, friendly response with a slight nod to the 'hello world' tradition.\n\nOkay, let's keep it clean: \"Hello! How can I help you today?\" Perfect.\n",
+                "thought": true
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "MAX_TOKENS",
+          "index": 0
+        }
+      ],
+      "modelVersion": "models/gemini-2.5-pro",
+      "responseId": "rlvgaKuWKMXc_uMP4-Cn2As",
+      "usageMetadata": {
+        "promptTokenCount": 4,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4
+          }
+        ],
+        "thoughtsTokenCount": 199,
+        "totalTokenCount": 203
       }
     },
     "headers": {
@@ -53,13 +77,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:47 GMT"
+        "Fri, 03 Oct 2025 23:26:38 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=42"
+        "gfet4t7; dur=3646"
       ],
       "transfer-encoding": [
         "chunked"
@@ -79,6 +103,6 @@
         "0"
       ]
     },
-    "status": 400
+    "status": 200
   }
 }

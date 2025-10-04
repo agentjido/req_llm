@@ -1,0 +1,112 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJTb2x2ZSAxMio3IGFuZCBzaG93IHlvdXIgaW50ZXJuYWwgdGhpbmtpbmcgKGJyaWVmKS4ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwNDgsInRlbXBlcmF0dXJlIjoxLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fX0="
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Solve 12*7 and show your internal thinking (brief)."
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 2048,
+        "temperature": 1.0,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingBudget": 4096
+        }
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=%5BREDACTED%3Akey%5D"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**Calculating 12 * 7: My Thought Process**\n\nAlright, I need to figure out 12 times 7. My first instinct, of course, is to just do the calculation directly: 12 * 7 = 84. It's a fairly common multiplication, and I *could* just pull that answer out, but let's show how I might arrive at it mentally in more detail.\n\nIf I didn't immediately see the answer, I'd probably break this down. The most natural way to go, for mental math, is to decompose 12 into 10 + 2. Then, it becomes (10 + 2) * 7.  That simplifies to (10 * 7) + (2 * 7), which is 70 + 14, and that equals 84. Perfect.\n",
+                "thought": true
+              },
+              {
+                "text": "To solve 12 * 7:\n\n**Internal Thinking (brief):**\n\n1.  **Decompose 12:** Think of 12 as (10 + 2).\n2.  **Distribute:** Multiply each part by 7.\n    *   10 * 7 = 70\n    *   2 * 7 = 14\n3.  **Combine:** Add the results.\n    *   70 + 14 = 84\n\n**Solution:**\n\n12 * 7 = 84"
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "models/gemini-2.5-flash-preview-05-20",
+      "responseId": "h1vgaONMjc7-4w-H54WoCA",
+      "usageMetadata": {
+        "candidatesTokenCount": 120,
+        "promptTokenCount": 15,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 15
+          }
+        ],
+        "thoughtsTokenCount": 259,
+        "totalTokenCount": 394
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 03 Oct 2025 23:25:59 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=3477"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  }
+}

@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxNTAsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7InRoaW5raW5nQnVkZ2V0IjowfX0sInRvb2xzIjpbeyJmdW5jdGlvbkRlY2xhcmF0aW9ucyI6W3siZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX1dfV19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjo2MDAsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fSwidG9vbHMiOlt7ImZ1bmN0aW9uRGVjbGFyYXRpb25zIjpbeyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fV19XX0="
     },
     "canonical_json": {
       "contents": [
@@ -16,10 +16,11 @@
       ],
       "generationConfig": {
         "candidateCount": 1,
-        "maxOutputTokens": 150,
+        "maxOutputTokens": 600,
         "temperature": 0.0,
         "thinkingConfig": {
-          "thinkingBudget": 0
+          "includeThoughts": true,
+          "thinkingBudget": 4096
         }
       },
       "tools": [
@@ -65,7 +66,12 @@
           "content": {
             "parts": [
               {
-                "text": "Why don't cats play poker in the jungle?\n\nBecause there are too many cheetahs!"
+                "text": "**The Cat Joke Conundrum**\n\nOkay, so the user wants a cat joke, easy enough! First things first, I check what tools I have at my disposal. Hmm, the only thing here is the `weather_api`.  That's a bust. Weather's got nothing to do with comedy. Alright, looks like I'm going to have to conjure up something clever on my own.\n\nTime to brainstorm some cat puns and humor. Let's see...  \"Catfish\" is too obvious, I can do better than that.  \"Letting the cat out of the bag\" is a classic, but perhaps a bit overused.  The knock-knock joke is okay, but I can go for something fresher. Ah-ha! I think something that plays on the cat's inherent nature, perhaps their love for a warm spot, mixed with computer terminology. \n\nI'm liking the image of a cat sprawled across the keyboard, keeping an eye on the \"mouse.\"  That's got potential. It's got that nice blend of silly and relatable. Yep, that's the one. Let's make sure the delivery is on point – gotta keep that light, playful tone. I think I've got it!\n",
+                "thought": true
+              },
+              {
+                "text": "Why did the cat sit on the computer?\n\nTo keep an eye on the mouse!",
+                "thoughtSignature": "CoUJAdHtim+z0kTfyC3jmqA0NpdhbteGQ2Q1iX0ZEbFapGP9AixaI3CKXwPmXy64IiTzXm4o/0UOcYkrclX+rm3xDUsAGBkO4OCOR3U6zs0vbripVB96J0chfDVwhmFz4njiUCM2GsliiUuBCaloqewGiv345z/QUdSw/Ssgltf849hA0NahUf6nX3YFfge6EenKQGf8ut9rkYTbqXa1VvBsroDlE54srQzys/DafM0c/okj/WhnULqamcFL/UcWs1xvGtyyx+1oYWAj3EoK96RMggtuXfeHzro9j2utIu7mT1LOJU2+/YkVG9NU+xfSEJJDriC7YIORp4CkeREe2MNdqXhBpEa/G8+M4DOlr0072fHlrVZE0Ux5weyi1VGkgXPnXGCrCup3xK5duK5jlIgNF25TCvXvUEKKYIzCqOs/AEJwnp9L9dYg/5SbJAyXRQSbcD1/CH+R409GLij2DL4xTg8InDiHtCXonVlRzBlb5AchIUoHP1nrf+6tUz0BKnJR604uzaSnEJYiwDM0pReEMMt+6jTRMr75Moze2mGXD/9072SViqvyndz8U8VWl220LXfFwOCEEyOk3Bg/m+n3YXoFRZI2nsCQxPIF11FvZ0psOpFb+fGsIxALInkZuRVxIfw8yVBptMX91P8Kf3qFKtfaXt5BbP9hl1FZEfuT4XSBt+1ucanT+tSfrghE1wYFnMEm8bJHc3yV+BAXSSfSOgoxVEoarDi/kboLQWHxQ8hKY2wiXzHTGgtCxsmGS6D6AwI61QU1s3PR/YuvOsBNhaAXhmkitOeKBxIyuf2+KM8vLLLxDFmNYpgWl/gRmODUB3S3+lYmB6wq7V942Et7wMfdP9LEl2IALduXpr5Y7GojsrCYPEws52zHmxeoOHQAZLv3SbeevEtoC88avb4MpID29twdy31IYg4qay3uy0GendjHcEYlQYO17IEaP4OOCZaLEFoFyc8l5PTgw/01RUN7U6CIiGr0UVs3+Bjdw75jJTMqm9DEn+YvbXJG0ZSNQRLjum9f/Iyz1V4W8+xmkRU7t2m4tJEzB06quE8u0nP3tD765hs/cstywvD6DoMd3D2ffGHApZYJDrVvhmiMqBLgANZp6CG8d8bjJfsES/loWAnOAwWOAqx2ihx71Pwh2d45Sm40hzpwHiti4dx+0s8WdeFiubPyIosPVwHO96KfL0EEn/jxAeK8KGO5HpcQzhM0jN1mfhSL6uOTY/k/Q7LrV5E9CCWYVceMI9cZb8La6BkcIHxI5yAkS9VGLPJIP1gODtnjYieKgpBA8aK6aBc7mUFKr3GWnhTXD7PTKzwfBPi1BJqDJ1mhUd6zpdwbZu86rhAq7PQPdeTWTb2M1JI+S/hXZ3+omZVviAVks6ZXaoTWdCh0jboT9FBXgcBtT8zYy4cRAU5JHXxB30z6gvP8oG5dK3tIRuhmpDInsMmxyOy6b5lOY/SVT3vPxeRB5/3nOjsAvJt9jEJT99QVl84xxBBcH2a8eL047lGACl1iW19iPTp0mSbUNXZIHB3GG6H8PM8="
               }
             ],
             "role": "model"
@@ -75,9 +81,9 @@
         }
       ],
       "modelVersion": "gemini-2.5-flash-preview-09-2025",
-      "responseId": "9jngaNXEC-uy1MkP6PPkgAw",
+      "responseId": "UmXgaIH_CoPe_uMPnoyV8Ak",
       "usageMetadata": {
-        "candidatesTokenCount": 20,
+        "candidatesTokenCount": 18,
         "promptTokenCount": 46,
         "promptTokensDetails": [
           {
@@ -85,7 +91,8 @@
             "tokenCount": 46
           }
         ],
-        "totalTokenCount": 66
+        "thoughtsTokenCount": 322,
+        "totalTokenCount": 386
       }
     },
     "headers": {
@@ -96,13 +103,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:46 GMT"
+        "Sat, 04 Oct 2025 00:07:46 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=409"
+        "gfet4t7; dur=3631"
       ],
       "transfer-encoding": [
         "chunked"

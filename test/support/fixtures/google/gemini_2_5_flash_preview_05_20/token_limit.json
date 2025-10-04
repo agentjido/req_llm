@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjUsInRoaW5raW5nQ29uZmlnIjp7InRoaW5raW5nQnVkZ2V0IjowfX19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjUsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fX0="
     },
     "canonical_json": {
       "contents": [
@@ -19,7 +19,8 @@
         "maxOutputTokens": 100,
         "temperature": 0.5,
         "thinkingConfig": {
-          "thinkingBudget": 0
+          "includeThoughts": true,
+          "thinkingBudget": 4096
         }
       }
     },
@@ -44,7 +45,8 @@
           "content": {
             "parts": [
               {
-                "text": "The wind, a ancient whisper, carried the scent of pine and something else – something metallic and primal. It rustled the scales of a young dragon, not yet fully grown, but already burdened by the weight of a name: Ignis. His scales, a deep, smoldering crimson, were still soft in places, the edges of his wings not yet hardened for the true rigors of high-altitude flight. He lay curled on a sun-drenched ledge, a precarious perch overlooking"
+                "text": "**Breaking Down the Dragon's Tale**\n\nOkay, so I got the prompt: \"Very long story about dragons and adventures.\" My first move is always to deconstruct it. \"Very long\" immediately screams \"epic.\" I'm thinking multiple acts, a real character arc, and a chance to build a world that's more than just a backdrop. We're talking significant development, not just a series of events. It needs to be satisfying.\n\nThen there's \"dragons.\" And this is where it gets interesting. I'm not going to just throw in fire-breathers. I need to think about *what* kind of dragons, their role in the world. Are they villains, allies, ancient guardians, something else entirely? The type of dragon is going to fundamentally influence everything else - the plot, the characters, the tone. I'm already envisioning possible types and their relationship to the overall world building. This is going to be good.\n",
+                "thought": true
               }
             ],
             "role": "model"
@@ -54,9 +56,8 @@
         }
       ],
       "modelVersion": "models/gemini-2.5-flash-preview-05-20",
-      "responseId": "8jngaKeTH9iv1MkPm-yokQE",
+      "responseId": "k1vgaJKKCtfO_uMPo7zY8Qs",
       "usageMetadata": {
-        "candidatesTokenCount": 100,
         "promptTokenCount": 10,
         "promptTokensDetails": [
           {
@@ -64,7 +65,8 @@
             "tokenCount": 10
           }
         ],
-        "totalTokenCount": 110
+        "thoughtsTokenCount": 99,
+        "totalTokenCount": 109
       }
     },
     "headers": {
@@ -75,13 +77,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:42 GMT"
+        "Fri, 03 Oct 2025 23:26:11 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=1675"
+        "gfet4t7; dur=2042"
       ],
       "transfer-encoding": [
         "chunked"

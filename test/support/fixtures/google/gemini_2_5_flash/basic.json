@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0aGlua2luZ0NvbmZpZyI6eyJ0aGlua2luZ0J1ZGdldCI6MH19fQ=="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMCwidGVtcGVyYXR1cmUiOjAuMCwidGhpbmtpbmdDb25maWciOnsiaW5jbHVkZVRob3VnaHRzIjp0cnVlLCJ0aGlua2luZ0J1ZGdldCI6NDA5Nn19fQ=="
     },
     "canonical_json": {
       "contents": [
@@ -16,10 +16,11 @@
       ],
       "generationConfig": {
         "candidateCount": 1,
-        "maxOutputTokens": 50,
+        "maxOutputTokens": 200,
         "temperature": 0.0,
         "thinkingConfig": {
-          "thinkingBudget": 0
+          "includeThoughts": true,
+          "thinkingBudget": 4096
         }
       }
     },
@@ -44,7 +45,11 @@
           "content": {
             "parts": [
               {
-                "text": "Hello there! How can I help you today?"
+                "text": "**Responding to a Simple Start**\n\nOkay, so the user said \"Hello world!\". Ah, the classic! That's how we all begin, isn't it? A simple, almost ritualistic declaration. It signifies a beginning, a willingness to engage. I need to reciprocate that welcoming gesture. I should respond in kind, maybe with a friendly acknowledgment of their greeting. It's important to make them feel comfortable and encourage further interaction, especially at this early stage. This is about building a rapport, starting with a shared understanding of this very basic, universal starting point.\n",
+                "thought": true
+              },
+              {
+                "text": "Hello there! Welcome! How can I help you today?"
               }
             ],
             "role": "model"
@@ -54,9 +59,9 @@
         }
       ],
       "modelVersion": "gemini-2.5-flash",
-      "responseId": "-zngaJyXHPuo1MkPs5enyAs",
+      "responseId": "QmXgaJGuKZTO_uMPrNakgQI",
       "usageMetadata": {
-        "candidatesTokenCount": 10,
+        "candidatesTokenCount": 12,
         "promptTokenCount": 4,
         "promptTokensDetails": [
           {
@@ -64,7 +69,8 @@
             "tokenCount": 4
           }
         ],
-        "totalTokenCount": 14
+        "thoughtsTokenCount": 33,
+        "totalTokenCount": 49
       }
     },
     "headers": {
@@ -75,13 +81,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:51 GMT"
+        "Sat, 04 Oct 2025 00:07:30 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=450"
+        "gfet4t7; dur=1650"
       ],
       "transfer-encoding": [
         "chunked"

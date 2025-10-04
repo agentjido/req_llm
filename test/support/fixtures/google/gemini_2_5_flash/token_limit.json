@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjUsInRoaW5raW5nQ29uZmlnIjp7InRoaW5raW5nQnVkZ2V0IjowfX19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjUsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fX0="
     },
     "canonical_json": {
       "contents": [
@@ -19,7 +19,8 @@
         "maxOutputTokens": 100,
         "temperature": 0.5,
         "thinkingConfig": {
-          "thinkingBudget": 0
+          "includeThoughts": true,
+          "thinkingBudget": 4096
         }
       }
     },
@@ -44,7 +45,8 @@
           "content": {
             "parts": [
               {
-                "text": "The sun beat down on the ancient, scarred peaks of the Dragon’s Tooth Mountains, casting long, jagged shadows across the sprawling, green plains of Eldoria. For centuries, these mountains had been a silent, imposing border, a mythical wall between the known world and the whispered, terrifying realm of dragons. But today, the silence was broken.\n\nA tremor, deep and resonant, shook the very foundations of theoria. It wasn't an earthquake; the rhythm was too deliberate, too"
+                "text": "**Initial Brainstorm: Dragons, Adventure, and Length**\n\nOkay, so I've got this prompt, \"Very long story about dragons and adventures.\" Right away, the \"very long\" part is key. That screams scope - multiple acts, character development, a rich world, subplots weaving in and out, and likely a good chunk of time passing. The sheer length gives me a lot of freedom, but it also means I need to carefully consider the pacing and ensure the narrative's sustained interest.\n\nThen, there are the dragons. Ah, dragons! The possibilities are endless. Am I going for the classic fire-breathing beasts, or something more nuanced? Intelligent, perhaps? Maybe elemental? Good dragons, evil dragons, or something in between? How do they interact with the human characters? Are they antagonists, allies, both, or something more complex? I need to figure out the nature of the dragons and their role in this world – that's the foundation of the story.\n",
+                "thought": true
               }
             ],
             "role": "model"
@@ -54,9 +56,8 @@
         }
       ],
       "modelVersion": "gemini-2.5-flash",
-      "responseId": "9zngaMGqGI6i1MkPuNKg8As",
+      "responseId": "VGXgaPj3MtHi_uMPiKz2GA",
       "usageMetadata": {
-        "candidatesTokenCount": 100,
         "promptTokenCount": 10,
         "promptTokensDetails": [
           {
@@ -64,7 +65,8 @@
             "tokenCount": 10
           }
         ],
-        "totalTokenCount": 110
+        "thoughtsTokenCount": 99,
+        "totalTokenCount": 109
       }
     },
     "headers": {
@@ -75,13 +77,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:47 GMT"
+        "Sat, 04 Oct 2025 00:07:48 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=1084"
+        "gfet4t7; dur=2598"
       ],
       "transfer-encoding": [
         "chunked"

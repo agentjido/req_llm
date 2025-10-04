@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjUsInRoaW5raW5nQ29uZmlnIjp7InRoaW5raW5nQnVkZ2V0IjowfX19"
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjV9fQ=="
     },
     "canonical_json": {
       "contents": [
@@ -17,10 +17,7 @@
       "generationConfig": {
         "candidateCount": 1,
         "maxOutputTokens": 100,
-        "temperature": 0.5,
-        "thinkingConfig": {
-          "thinkingBudget": 0
-        }
+        "temperature": 0.5
       }
     },
     "headers": {
@@ -41,11 +38,11 @@
     "body": {
       "candidates": [
         {
-          "avgLogprobs": -0.5188107346043442,
+          "avgLogprobs": -0.3861745452880859,
           "content": {
             "parts": [
               {
-                "text": "The wind, a rasping, icy claw, tore at Elara's crimson cloak as she clung to the precipice. Below, the valley of Whisperwind stretched, a tapestry woven from emerald forests and silver rivers, but her gaze was fixed on the jagged peaks of the Dragon's Tooth mountains. It was there, in the heart of the storm-wreathed peaks, that the legend of Ignis, the Fire-Hearted, was said to reside.\n\nElara,"
+                "text": "The wind, a razor honed on the peaks of the Dragon's Tooth Mountains, whipped at Elara's crimson cloak as she clung to the precipice. Below, the valley floor, a patchwork quilt of emerald fields and sapphire rivers, seemed a world away. But Elara, a young woman with eyes the color of storm clouds and a spirit as fiery as a dragon's breath, wasn't looking down. She was looking up, at the swirling vortex of grey clouds that heralded"
               }
             ],
             "role": "model"
@@ -54,13 +51,13 @@
         }
       ],
       "modelVersion": "gemini-2.0-flash-lite",
-      "responseId": "-DngaNuEJZuw1MkPyvK36As",
+      "responseId": "jlvgaJ2UEZ3O_uMPo5zWmAc",
       "usageMetadata": {
-        "candidatesTokenCount": 99,
+        "candidatesTokenCount": 100,
         "candidatesTokensDetails": [
           {
             "modality": "TEXT",
-            "tokenCount": 99
+            "tokenCount": 100
           }
         ],
         "promptTokenCount": 9,
@@ -70,7 +67,7 @@
             "tokenCount": 9
           }
         ],
-        "totalTokenCount": 108
+        "totalTokenCount": 109
       }
     },
     "headers": {
@@ -81,13 +78,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:49 GMT"
+        "Fri, 03 Oct 2025 23:26:07 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=1140"
+        "gfet4t7; dur=891"
       ],
       "transfer-encoding": [
         "chunked"

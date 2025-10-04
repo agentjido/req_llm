@@ -1,0 +1,112 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJTb2x2ZSAxMio3IGFuZCBzaG93IHlvdXIgaW50ZXJuYWwgdGhpbmtpbmcgKGJyaWVmKS4ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwNDgsInRlbXBlcmF0dXJlIjoxLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fX0="
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Solve 12*7 and show your internal thinking (brief)."
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 2048,
+        "temperature": 1.0,
+        "thinkingConfig": {
+          "includeThoughts": true,
+          "thinkingBudget": 4096
+        }
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=%5BREDACTED%3Akey%5D"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**Deconstructing the Multiplication**\n\nOkay, here's how I'd approach 12 * 7, keeping it concise and showing the thought process requested.\n\nFirst, the answer: 12 * 7 = 84.\n\nNow, let's break down my *internal thinking*. My mind doesn't immediately see \"12\" and \"7\". Instead, I tend to leverage decomposition, which is the distributive property in action.\n\n*   **Step 1:** I see the number 12, and I immediately think, \"That's just (10 + 2).\"\n*   **Step 2:** Now, I'm multiplying each of those parts by 7. I do (10 * 7) and then (2 * 7). The 10 * 7 gives me 70, that's easy.  2 * 7 gives me 14.\n*   **Step 3:** The final step, I simply add the results. 70 + 14 = 84.\n\nThere you have it. That's how I, as a model trained on human-written text, would *think* through that basic multiplication problem. It's a method that is intuitive for a great many people.\n",
+                "thought": true
+              },
+              {
+                "text": "**Answer:** 84\n\n**Internal Thinking:**\n\n1.  Break down 12 into more manageable parts: 10 and 2.\n2.  Multiply each part by 7:\n    *   10 * 7 = 70\n    *   2 * 7 = 14\n3.  Add the results together: 70 + 14 = 84."
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-2.5-pro",
+      "responseId": "HmXgaPDOA4Ov_uMPhMDTwAc",
+      "usageMetadata": {
+        "candidatesTokenCount": 89,
+        "promptTokenCount": 15,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 15
+          }
+        ],
+        "thoughtsTokenCount": 865,
+        "totalTokenCount": 969
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Sat, 04 Oct 2025 00:06:54 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "server-timing": [
+        "gfet4t7; dur=10940"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  }
+}

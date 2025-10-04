@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIaSB0aGVyZSEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwMCwidGVtcGVyYXR1cmUiOjAuMCwidGhpbmtpbmdDb25maWciOnsidGhpbmtpbmdCdWRnZXQiOjB9fX0="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIaSB0aGVyZSEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwMCwidGVtcGVyYXR1cmUiOjAuMH19"
     },
     "canonical_json": {
       "contents": [
@@ -17,10 +17,7 @@
       "generationConfig": {
         "candidateCount": 1,
         "maxOutputTokens": 500,
-        "temperature": 0.0,
-        "thinkingConfig": {
-          "thinkingBudget": 0
-        }
+        "temperature": 0.0
       }
     },
     "headers": {
@@ -44,7 +41,7 @@
           "content": {
             "parts": [
               {
-                "text": "Hi! How can I help you today?"
+                "text": "Hi there! How can I help you today?"
               }
             ],
             "role": "model"
@@ -54,9 +51,9 @@
         }
       ],
       "modelVersion": "gemini-2.5-flash",
-      "responseId": "-TngaLS5BcOg1MkP5dX0oQE",
+      "responseId": "SGXgaMHDLung_uMPi9GyiQ8",
       "usageMetadata": {
-        "candidatesTokenCount": 9,
+        "candidatesTokenCount": 10,
         "promptTokenCount": 4,
         "promptTokensDetails": [
           {
@@ -64,7 +61,8 @@
             "tokenCount": 4
           }
         ],
-        "totalTokenCount": 13
+        "thoughtsTokenCount": 184,
+        "totalTokenCount": 198
       }
     },
     "headers": {
@@ -75,13 +73,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:49 GMT"
+        "Sat, 04 Oct 2025 00:07:36 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=593"
+        "gfet4t7; dur=1974"
       ],
       "transfer-encoding": [
         "chunked"

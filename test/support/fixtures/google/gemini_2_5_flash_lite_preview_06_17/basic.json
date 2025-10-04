@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0aGlua2luZ0NvbmZpZyI6eyJ0aGlua2luZ0J1ZGdldCI6MH19fQ=="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMCwidGVtcGVyYXR1cmUiOjAuMCwidGhpbmtpbmdDb25maWciOnsiaW5jbHVkZVRob3VnaHRzIjp0cnVlLCJ0aGlua2luZ0J1ZGdldCI6NDA5Nn19fQ=="
     },
     "canonical_json": {
       "contents": [
@@ -16,10 +16,11 @@
       ],
       "generationConfig": {
         "candidateCount": 1,
-        "maxOutputTokens": 50,
+        "maxOutputTokens": 200,
         "temperature": 0.0,
         "thinkingConfig": {
-          "thinkingBudget": 0
+          "includeThoughts": true,
+          "thinkingBudget": 4096
         }
       }
     },
@@ -44,19 +45,19 @@
           "content": {
             "parts": [
               {
-                "text": "Hello there! It's nice to hear from you. How can I help you today?"
+                "text": "**Analyzing the User's \"Hello World!\"**\n\nOkay, so the user's opened with \"Hello world!\" Hmm, a classic. It's almost... nostalgic.  That's the go-to intro for any programmer, really.  My job here is to make sure I'm responding appropriately and, you know, not just boring.  \n\nSo, I'm thinking, a simple \"Hello there!\" would be okay, but maybe a little bland.  \"Hello, world! A classic greeting!\" That's better, it acknowledges the significance of the phrase.  I could go for something more enthusiastic like \"Hello! It's great to hear from you!\" but it feels a bit... much.  Offering assistance right off the bat, \"Hello world! How can I assist you today?\" that's not bad either, maybe a little too direct at this stage.\n\nConsidering all this, I'm going to lean towards a slightly enthusiastic acknowledgement. I think something like \"Hello there! A classic greeting. How can I help you\" would be perfect. It's friendly, recognizes the phrase, and then gets right to the point of offering assistance. Yeah, that's what I'll go with.\n",
+                "thought": true
               }
             ],
             "role": "model"
           },
-          "finishReason": "STOP",
+          "finishReason": "MAX_TOKENS",
           "index": 0
         }
       ],
       "modelVersion": "gemini-2.5-flash-lite-preview-06-17",
-      "responseId": "9DngaKz_E7Wf1MkP74GD0Qs",
+      "responseId": "kVvgaJCADp2p_uMP7rC-uA0",
       "usageMetadata": {
-        "candidatesTokenCount": 19,
         "promptTokenCount": 4,
         "promptTokensDetails": [
           {
@@ -64,7 +65,8 @@
             "tokenCount": 4
           }
         ],
-        "totalTokenCount": 23
+        "thoughtsTokenCount": 199,
+        "totalTokenCount": 203
       }
     },
     "headers": {
@@ -75,13 +77,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:44 GMT"
+        "Fri, 03 Oct 2025 23:26:09 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=344"
+        "gfet4t7; dur=2384"
       ],
       "transfer-encoding": [
         "chunked"

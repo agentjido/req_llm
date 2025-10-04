@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0aGlua2luZ0NvbmZpZyI6eyJ0aGlua2luZ0J1ZGdldCI6MH19fQ=="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMCwidGVtcGVyYXR1cmUiOjAuMCwidGhpbmtpbmdDb25maWciOnsiaW5jbHVkZVRob3VnaHRzIjp0cnVlLCJ0aGlua2luZ0J1ZGdldCI6NDA5Nn19fQ=="
     },
     "canonical_json": {
       "contents": [
@@ -16,10 +16,11 @@
       ],
       "generationConfig": {
         "candidateCount": 1,
-        "maxOutputTokens": 50,
+        "maxOutputTokens": 200,
         "temperature": 0.0,
         "thinkingConfig": {
-          "thinkingBudget": 0
+          "includeThoughts": true,
+          "thinkingBudget": 4096
         }
       }
     },
@@ -39,10 +40,33 @@
   },
   "response": {
     "body": {
-      "error": {
-        "code": 400,
-        "message": "Budget 0 is invalid. This model only works in thinking mode.",
-        "status": "INVALID_ARGUMENT"
+      "candidates": [
+        {
+          "content": {
+            "parts": [
+              {
+                "text": "**Initial Assessment: A Familiar Greeting & Coding Cue**\n\nOkay, so the user just typed \"Hello world!\". My first thought is, ah, the classic. That's *the* phrase, isn't it? The quintessential first step in any coding journey. It's a universal symbol, a nod to the shared experience of learning something new. I immediately consider the user's intent. Is it just a friendly greeting? Probably. Is it a quick check to see if I'm even functioning? Very likely. My expert intuition tells me they're probably also referencing the programming tradition.\n\nIt's unlikely they're expecting some complex, in-depth analysis.  The best approach here is to keep it simple, friendly, and show I understand the context. So, I need to come up with a response that acknowledges the user without overcomplicating things.  The response should be simple and direct.\n",
+                "thought": true
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "MAX_TOKENS",
+          "index": 0
+        }
+      ],
+      "modelVersion": "gemini-2.5-pro-preview-06-05",
+      "responseId": "jlvgaLOcJdGZ_uMP_OD66Ac",
+      "usageMetadata": {
+        "promptTokenCount": 4,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4
+          }
+        ],
+        "thoughtsTokenCount": 199,
+        "totalTokenCount": 203
       }
     },
     "headers": {
@@ -53,13 +77,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:50 GMT"
+        "Fri, 03 Oct 2025 23:26:06 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=36"
+        "gfet4t7; dur=4089"
       ],
       "transfer-encoding": [
         "chunked"
@@ -79,6 +103,6 @@
         "0"
       ]
     },
-    "status": 400
+    "status": 200
   }
 }

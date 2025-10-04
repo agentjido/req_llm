@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0aGlua2luZ0NvbmZpZyI6eyJ0aGlua2luZ0J1ZGdldCI6MH19fQ=="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMCwidGVtcGVyYXR1cmUiOjAuMCwidGhpbmtpbmdDb25maWciOnsiaW5jbHVkZVRob3VnaHRzIjp0cnVlLCJ0aGlua2luZ0J1ZGdldCI6NDA5Nn19fQ=="
     },
     "canonical_json": {
       "contents": [
@@ -16,10 +16,11 @@
       ],
       "generationConfig": {
         "candidateCount": 1,
-        "maxOutputTokens": 50,
+        "maxOutputTokens": 200,
         "temperature": 0.0,
         "thinkingConfig": {
-          "thinkingBudget": 0
+          "includeThoughts": true,
+          "thinkingBudget": 4096
         }
       }
     },
@@ -44,19 +45,19 @@
           "content": {
             "parts": [
               {
-                "text": "Hello there! It's nice to hear from you. How can I help you today?"
+                "text": "**Responding to a Familiar Greeting**\n\nOkay, so I see a simple \"Hello world!\" as the input. That's... well, it's pretty much the go-to greeting, isn't it? Classic.  It's the first thing most people write when they're learning something new. \n\nMy immediate thought is to keep it friendly and appropriate, of course. No need to overcomplicate things here. I could just acknowledge it directly with a simple \"Hello there!\" or \"Hi!\" but that feels a little *too* basic.  \n\nA playful acknowledgment might be better, maybe something like, \"Hello, world! A classic greeting!\" or even, \"Ah, the classic 'Hello, world!' How can I help you today?\" I could also go for a more enthusiastic greeting like \"Hello! It's great to hear from you!\". \n\nHowever, given the simplicity of the initial input, I think a friendly and slightly enthusiastic acknowledgment combined with a question is the best approach. It shows recognition of the phrase without being overly verbose. Let's try something like this: \"Hello there! A classic greeting. How can I help you?\". I think that strikes a nice balance.\n",
+                "thought": true
               }
             ],
             "role": "model"
           },
-          "finishReason": "STOP",
+          "finishReason": "MAX_TOKENS",
           "index": 0
         }
       ],
       "modelVersion": "gemini-2.5-flash-lite",
-      "responseId": "8TngaJHXHZuw1MkPyvK36As",
+      "responseId": "jlvgaIGhE-G-_uMPzOOp2Qc",
       "usageMetadata": {
-        "candidatesTokenCount": 19,
         "promptTokenCount": 4,
         "promptTokensDetails": [
           {
@@ -64,7 +65,8 @@
             "tokenCount": 4
           }
         ],
-        "totalTokenCount": 23
+        "thoughtsTokenCount": 199,
+        "totalTokenCount": 203
       }
     },
     "headers": {
@@ -75,13 +77,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:02:41 GMT"
+        "Fri, 03 Oct 2025 23:26:06 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=395"
+        "gfet4t7; dur=2425"
       ],
       "transfer-encoding": [
         "chunked"
