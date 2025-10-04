@@ -6,30 +6,63 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   Models are sourced from priv/models_dev/*.json (synced via mix req_llm.model_sync).
   Fixture validation state is tracked in priv/supported_models.json (auto-generated).
 
+  ## Selection Principles
+
+  Models are selected using clear precedence: **spec → type → sample**
+
+  - **spec**: Pattern over providers/models
+    - When **no spec provided** (just `mix mc`): Uses default sets from config (`:test_models` or `:test_embedding_models`)
+    - When **spec provided** (e.g., `"anthropic:*"`, `"*:*"`): Uses ALL matching models from registry
+  - **type**: Filters by operation capability using registry metadata
+    - `text` (default): Only text-generation models
+    - `embedding`: Only embedding models
+    - `all`: Both text and embedding models
+  - **sample** (optional): Further reduces using `:sample_text_models` or `:sample_embedding_models`.
+    If not configured, falls back to one model per provider.
+
+  **Important**: 
+  - Only **implemented providers** are included (registry models without implementation are skipped)
+  - Config lists (`:test_models`, `:test_embedding_models`) are defaults only, not hard filters
+  - Explicit specs like `"anthropic:*"` test ALL registry models for that provider
+
   ## Usage
 
-      mix req_llm.model_compat                    # List covered models
-      mix req_llm.model_compat --available        # List all available models
+      mix req_llm.model_compat                    # Show covered models (passing fixtures)
+      mix req_llm.model_compat --sample           # Test sample models from config
+      mix req_llm.model_compat --available        # List all registry models (unfiltered)
 
       ### Test using local fixtures
-      mix req_llm.model_compat "anthropic:*"      # Test all Anthropic models
-      mix req_llm.model_compat "openai:gpt-4o"    # Test specific model
-      mix req_llm.model_compat "*:*"              # Test all models (uses fixtures)
+      mix req_llm.model_compat "anthropic:*"      # ALL Anthropic text models from registry
+      mix req_llm.model_compat "openai:gpt-4o"    # Specific model
+      mix req_llm.model_compat "*:*"              # ALL models from implemented providers
+
+      ### Test by operation type
+      mix req_llm.model_compat "google:*" --type all        # Google text + embedding models
+      mix req_llm.model_compat "google:*" --type embedding  # Google embedding models only
+      mix req_llm.model_compat "*:*" --type text            # All implemented text models
+
+      ### Sample subset testing
+      mix req_llm.model_compat --sample           # Sample subset (~1 per provider if not configured)
+      mix req_llm.model_compat "anthropic:*" --sample --type text
 
       ### Record new fixtures
-      mix req_llm.model_compat --sample           # Test sample models from config/config.exs
-      mix req_llm.model_compat "openai:*" --record # Record fixtures for OpenAI models
-
-      ### Debug
-      mix req_llm.model_compat --debug            # Verbose output with fixture details
+      mix req_llm.model_compat "openai:*" --record
+      mix req_llm.model_compat "google:*" --type embedding --record
 
   ## Flags
 
-      --available        List all models from models.dev API registry
-      --sample           Test sample model subset (config/config.exs)
+      --available        List all models from models.dev API registry (no implementation filter)
+      --sample           Further reduce to sample subset (see :sample_* config or fallback)
+      --type TYPE        Operation type: text (default), embedding, or all
       --record           Re-record fixtures (live API calls)
       --record-all       Force re-record all fixtures (ignores state)
       --debug            Enable verbose fixture debugging
+
+  ## Notes
+
+  - When no spec is provided (or `"*:*"` is used), only implemented providers are considered
+  - If a spec refers to an unimplemented provider, it will be skipped with a warning
+  - The final model list is deterministic and stable
   """
 
   use Mix.Task
@@ -45,6 +78,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
         switches: [
           sample: :boolean,
           available: :boolean,
+          type: :string,
           record: :boolean,
           record_all: :boolean,
           debug: :boolean
@@ -62,7 +96,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   defp list_models(opts) do
     models = load_registry()
     state = load_state()
-    sample_specs = if opts[:sample], do: get_sample_models()
+    sample_specs = if opts[:sample], do: default_specs_for_operation(:text)
     implemented_providers = get_implemented_providers()
 
     Mix.shell().info("\n#{header(opts[:sample])}\n")
@@ -133,52 +167,51 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
   defp show_covered_models do
     Mix.shell().info("\n----------------------------------------------------")
-    Mix.shell().info("Covered Models")
+    Mix.shell().info("Model Coverage Status")
     Mix.shell().info("----------------------------------------------------\n")
 
     state = load_state()
     models = load_registry()
+    implemented = get_implemented_providers()
 
-    covered =
-      state
-      |> Enum.filter(fn {_spec, status} -> status == "pass" end)
-      |> Enum.map(fn {spec, _} -> spec end)
-      |> Enum.sort()
+    models
+    |> Enum.filter(fn {provider, _} -> MapSet.member?(implemented, provider) end)
+    |> Enum.sort_by(fn {provider, _} -> provider end)
+    |> Enum.each(fn {provider, provider_models} ->
+      Mix.shell().info(
+        IO.ANSI.cyan() <>
+          IO.ANSI.bright() <>
+          provider_name(provider) <> IO.ANSI.reset()
+      )
 
-    if Enum.empty?(covered) do
-      Mix.shell().info("No models validated yet.\n")
-      Mix.shell().info("Run: mix req_llm.model_compat \"*:*\" --record\n")
-    else
-      covered
-      |> Enum.group_by(fn spec ->
-        [provider, _] = String.split(spec, ":", parts: 2)
-        provider
-      end)
-      |> Enum.sort_by(fn {provider, _} -> provider end)
-      |> Enum.each(fn {provider, specs} ->
-        Mix.shell().info(
-          IO.ANSI.cyan() <>
-            IO.ANSI.bright() <>
-            provider_name(provider) <> IO.ANSI.reset()
-        )
+      statuses = %{pass: 0, fail: 0, excluded: 0, untested: 0}
 
-        Enum.each(specs, fn spec ->
-          [_, model_id] = String.split(spec, ":", parts: 2)
-          model = find_model(models, provider, model_id)
-
-          if model do
-            print_covered_model(model, spec)
-          end
+      statuses =
+        Enum.reduce(provider_models, statuses, fn model, acc ->
+          spec = "#{provider}:#{model["id"]}"
+          status = Map.get(state, spec, "untested")
+          print_model_status(model, spec, status)
+          Map.update(acc, String.to_atom(status), 1, &(&1 + 1))
         end)
 
-        Mix.shell().info("")
-      end)
+      total = length(provider_models)
+      pass_pct = Float.round(statuses.pass / total * 100, 1)
 
-      total = models |> Enum.map(fn {_, ms} -> length(ms) end) |> Enum.sum()
-      pct = Float.round(length(covered) / total * 100, 1)
+      Mix.shell().info(
+        "  " <>
+          IO.ANSI.faint() <>
+          "#{statuses.pass} pass, #{statuses.fail} fail, #{statuses.excluded} excluded, #{statuses.untested} untested | #{pass_pct}% coverage" <>
+          IO.ANSI.reset()
+      )
 
-      Mix.shell().info("Coverage: #{length(covered)}/#{total} models validated (#{pct}%)\n")
-    end
+      Mix.shell().info("")
+    end)
+
+    total_models = models |> Enum.map(fn {_, ms} -> length(ms) end) |> Enum.sum()
+    total_pass = state |> Enum.count(fn {_spec, status} -> status == "pass" end)
+    total_pct = Float.round(total_pass / total_models * 100, 1)
+
+    Mix.shell().info("Overall Coverage: #{total_pass}/#{total_models} models validated (#{total_pct}%)\n")
   end
 
   defp do_run_coverage(model_spec, opts) do
@@ -217,10 +250,8 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
     elapsed = System.monotonic_time(:millisecond) - start_time
 
-    if recording do
-      run_ts = DateTime.utc_now() |> DateTime.truncate(:second)
-      save_state(results, run_ts)
-    end
+    run_ts = DateTime.utc_now() |> DateTime.truncate(:second)
+    save_state(results, run_ts)
 
     print_summary(results, elapsed)
   end
@@ -228,19 +259,25 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   defp test_model(provider, model_id, opts) do
     spec = "#{provider}:#{model_id}"
     mode = if opts[:record_all] || opts[:record], do: "record", else: "replay"
+    operation = parse_operation_type(opts[:type])
+    category = operation_to_category(operation)
 
     env = [
       {"REQ_LLM_MODELS", spec},
+      {"REQ_LLM_OPERATION", Atom.to_string(operation)},
       {"REQ_LLM_FIXTURES_MODE", mode},
       {"REQ_LLM_DEBUG", "1"}
     ]
 
-    Mix.shell().info("  Testing #{spec}...")
+    Mix.shell().info("  Testing #{spec} (#{operation})...")
+
+    test_args =
+      build_test_args(provider, category, operation)
 
     {output, exit_code} =
       System.cmd(
         "mix",
-        ["test", "--only", "provider:#{provider}", "--only", "coverage"],
+        test_args,
         env: env,
         stderr_to_stdout: true
       )
@@ -252,6 +289,19 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     end
 
     parse_test_result(provider, model_id, output, exit_code)
+  end
+
+  defp build_test_args(provider, _category, operation) do
+    case operation do
+      :all ->
+        ["test", "--only", "provider:#{provider}"]
+
+      :embedding ->
+        ["test", "test/coverage/#{provider}/embedding_test.exs", "--only", "provider:#{provider}"]
+
+      :text ->
+        ["test", "test/coverage/#{provider}/comprehensive_test.exs", "--only", "provider:#{provider}"]
+    end
   end
 
   defp parse_test_result(provider, model_id, output, exit_code) do
@@ -394,7 +444,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     Mix.shell().info("  #{status_icon} #{model["id"]}#{tier_text}")
   end
 
-  defp print_covered_model(model, _spec) do
+  defp print_model_status(model, _spec, status) do
     tier_color =
       case model["tier"] do
         "flagship" -> IO.ANSI.yellow()
@@ -406,52 +456,183 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     tier_text =
       if model["tier"], do: " #{tier_color}(#{model["tier"]})#{IO.ANSI.reset()}", else: ""
 
-    Mix.shell().info("  #{IO.ANSI.green()}PASS#{IO.ANSI.reset()} #{model["id"]}#{tier_text}")
-  end
-
-  defp select_models(registry, spec, opts) do
-    all_models =
-      registry
-      |> Enum.flat_map(fn {provider, models} ->
-        Enum.map(models, fn model -> {provider, model["id"]} end)
-      end)
-
-    base_filter =
-      cond do
-        opts[:sample] ->
-          sample = get_sample_models()
-          Enum.filter(all_models, fn {p, m} -> Enum.member?(sample, "#{p}:#{m}") end)
-
-        is_nil(spec) || spec == "*:*" ->
-          all_models
-
-        String.contains?(spec, ":") ->
-          [provider_part, model_part] = String.split(spec, ":", parts: 2)
-
-          if model_part == "*" do
-            provider_atom = String.to_atom(provider_part)
-            Enum.filter(all_models, fn {p, _} -> p == provider_atom end)
-          else
-            Enum.filter(all_models, fn {p, m} -> "#{p}:#{m}" == spec end)
-          end
-
-        true ->
-          provider_atom = String.to_atom(spec)
-          Enum.filter(all_models, fn {p, _} -> p == provider_atom end)
+    {status_icon, status_color} =
+      case status do
+        "pass" -> {"✓", IO.ANSI.green()}
+        "fail" -> {"✗", IO.ANSI.red()}
+        "excluded" -> {"−", IO.ANSI.yellow()}
+        "untested" -> {"?", IO.ANSI.faint()}
+        _ -> {"?", IO.ANSI.faint()}
       end
 
-    if opts[:sample] && spec do
-      provider_atom =
-        if String.contains?(spec, ":") do
-          spec |> String.split(":", parts: 2) |> List.first() |> String.to_atom()
-        else
-          String.to_atom(spec)
+    Mix.shell().info("  #{status_color}#{status_icon}#{IO.ANSI.reset()} #{model["id"]}#{tier_text}")
+  end
+
+  defp select_models(registry, raw_spec, opts) do
+    operation = parse_operation_type(opts[:type])
+    implemented = get_implemented_providers()
+
+    candidates =
+      if is_nil(raw_spec) do
+        default_specs_for_operation(operation)
+        |> Enum.map(&parse_spec_tuple/1)
+        |> Enum.reject(&is_nil/1)
+        |> Enum.filter(fn {p, m} ->
+          MapSet.member?(implemented, p) and model_in_registry?(registry, p, m)
+        end)
+      else
+        registry
+        |> expand_spec_to_candidates(raw_spec, implemented)
+        |> Enum.filter(fn {p, m} ->
+          model_supports_operation?(registry, p, m, operation)
+        end)
+      end
+
+    final =
+      if opts[:sample] do
+        sample_set = sample_model_set(operation, registry, candidates)
+        candidates |> Enum.filter(fn {p, m} -> MapSet.member?(sample_set, "#{p}:#{m}") end)
+      else
+        candidates
+      end
+
+    final |> Enum.uniq() |> Enum.sort()
+  end
+
+  defp default_specs_for_operation(:text) do
+    Application.get_env(:req_llm, :test_models, [])
+  end
+
+  defp default_specs_for_operation(:embedding) do
+    Application.get_env(:req_llm, :test_embedding_models, [])
+  end
+
+  defp default_specs_for_operation(:all) do
+    Application.get_env(:req_llm, :test_models, []) ++
+      Application.get_env(:req_llm, :test_embedding_models, [])
+  end
+
+  defp parse_spec_tuple(spec) when is_binary(spec) do
+    case String.split(spec, ":", parts: 2) do
+      [provider, model_id] -> {String.to_atom(provider), model_id}
+      _ -> nil
+    end
+  end
+
+  defp model_in_registry?(registry, provider, model_id) do
+    find_model(registry, provider, model_id) != nil
+  end
+
+  defp model_supports_operation?(_registry, _p, _m, :all), do: true
+
+  defp model_supports_operation?(registry, provider, model_id, :embedding) do
+    case find_model(registry, provider, model_id) do
+      nil -> false
+      model -> is_embedding_model?(model)
+    end
+  end
+
+  defp model_supports_operation?(registry, provider, model_id, :text) do
+    case find_model(registry, provider, model_id) do
+      nil -> false
+      model -> not is_embedding_model?(model)
+    end
+  end
+
+  defp is_embedding_model?(model) do
+    t = Map.get(model, "type")
+    outputs = get_in(model, ["modalities", "output"]) || []
+    t == "embedding" or Enum.member?(outputs, "embedding")
+  end
+
+  defp expand_spec_to_candidates(registry, spec, implemented) do
+    cond do
+      is_nil(spec) or spec == "*:*" ->
+        all_implemented_pairs(registry, implemented)
+
+      String.contains?(spec, ":") ->
+        [provider_part, model_part] = String.split(spec, ":", parts: 2)
+        provider_atom = String.to_atom(provider_part)
+
+        cond do
+          not MapSet.member?(implemented, provider_atom) ->
+            Mix.shell().info("  Skipping #{provider_part}: provider not implemented")
+            []
+
+          model_part == "*" ->
+            pairs_for_provider(registry, provider_atom)
+
+          true ->
+            case find_model(registry, provider_atom, model_part) do
+              nil ->
+                Mix.shell().info("  Skipping #{provider_part}:#{model_part} (not in registry)")
+
+                []
+
+              _ ->
+                [{provider_atom, model_part}]
+            end
         end
 
-      Enum.filter(base_filter, fn {p, _} -> p == provider_atom end)
-    else
-      base_filter
+      true ->
+        provider_atom = String.to_atom(spec)
+
+        if MapSet.member?(implemented, provider_atom) do
+          pairs_for_provider(registry, provider_atom)
+        else
+          Mix.shell().info("  Skipping #{spec}: provider not implemented")
+          []
+        end
     end
+  end
+
+  defp all_implemented_pairs(registry, implemented) do
+    registry
+    |> Enum.flat_map(fn {provider, models} ->
+      if MapSet.member?(implemented, provider) do
+        Enum.map(models, fn m -> {provider, m["id"]} end)
+      else
+        []
+      end
+    end)
+  end
+
+  defp pairs_for_provider(registry, provider) do
+    case Map.get(registry, provider) do
+      nil -> []
+      models -> Enum.map(models, fn m -> {provider, m["id"]} end)
+    end
+  end
+
+  defp sample_model_set(operation, _registry, current_candidates) do
+    cfg =
+      case operation do
+        :text ->
+          Application.get_env(:req_llm, :sample_text_models, [])
+
+        :embedding ->
+          Application.get_env(:req_llm, :sample_embedding_models, [])
+
+        :all ->
+          Application.get_env(:req_llm, :sample_text_models, []) ++
+            Application.get_env(:req_llm, :sample_embedding_models, [])
+      end
+
+    sample_specs =
+      if cfg == [] do
+        current_candidates
+        |> Enum.group_by(fn {p, _m} -> p end)
+        |> Enum.flat_map(fn {_provider, models} ->
+          models
+          |> Enum.sort_by(fn {_p, m} -> m end)
+          |> Enum.take(1)
+        end)
+        |> Enum.map(fn {p, m} -> "#{p}:#{m}" end)
+      else
+        cfg
+      end
+
+    MapSet.new(sample_specs)
   end
 
   defp filter_by_specs(models, _provider, nil), do: models
@@ -605,10 +786,6 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   defp header(true), do: "Sample Models"
   defp header(_), do: "Model Coverage"
 
-  defp get_sample_models do
-    Application.get_env(:req_llm, :test_models, [])
-  end
-
   defp get_implemented_providers do
     providers = ReqLLM.Provider.Registry.list_implemented_providers()
     MapSet.new(providers)
@@ -643,4 +820,14 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
       []
     end
   end
+
+  defp parse_operation_type(nil), do: :text
+  defp parse_operation_type("all"), do: :all
+  defp parse_operation_type("text"), do: :text
+  defp parse_operation_type("embedding"), do: :embedding
+  defp parse_operation_type(type), do: String.to_atom(type)
+
+  defp operation_to_category(:text), do: "core"
+  defp operation_to_category(:embedding), do: "embedding"
+  defp operation_to_category(_), do: "core"
 end

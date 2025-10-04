@@ -133,7 +133,6 @@ defmodule ReqLLM.Providers.Google do
   end
 
   def prepare_request(:embedding, model_spec, text, opts) do
-    # Handle dimensions as a provider-specific option if passed at top level
     opts_normalized =
       case Keyword.pop(opts, :dimensions) do
         {nil, rest} ->
@@ -151,6 +150,11 @@ defmodule ReqLLM.Providers.Google do
            ReqLLM.Provider.Options.process(__MODULE__, :embedding, model, opts_with_text) do
       http_opts = Keyword.get(processed_opts, :req_http_options, [])
 
+      endpoint =
+        if is_list(text),
+          do: ":batchEmbedContents",
+          else: ":embedContent"
+
       req_keys =
         __MODULE__.supported_provider_options() ++
           [:context, :operation, :text, :stream, :model, :provider_options]
@@ -158,7 +162,7 @@ defmodule ReqLLM.Providers.Google do
       request =
         Req.new(
           [
-            url: "/models/#{model.model}:embedContent",
+            url: "/models/#{model.model}#{endpoint}",
             method: :post,
             receive_timeout: Keyword.get(processed_opts, :receive_timeout, 30_000)
           ] ++ http_opts
@@ -358,14 +362,52 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp encode_embedding_body(request) do
-    %{
-      model: "models/#{request.options[:model]}",
-      content: %{
-        parts: [%{text: request.options[:text]}]
-      }
-    }
-    |> maybe_put(:outputDimensionality, request.options[:dimensions])
+    text = request.options[:text]
+
+    case text do
+      texts when is_list(texts) ->
+        requests =
+          Enum.map(texts, fn t ->
+            %{
+              model: "models/#{request.options[:model]}",
+              content: %{parts: [%{text: t}]}
+            }
+            |> maybe_put(:outputDimensionality, request.options[:dimensions])
+          end)
+
+        %{requests: requests}
+
+      single_text when is_binary(single_text) ->
+        %{
+          model: "models/#{request.options[:model]}",
+          content: %{parts: [%{text: single_text}]}
+        }
+        |> maybe_put(:outputDimensionality, request.options[:dimensions])
+    end
   end
+
+  defp normalize_embedding_response(%{"embedding" => %{"values" => values}})
+       when is_list(values) do
+    %{"data" => [%{"index" => 0, "embedding" => values}]}
+  end
+
+  defp normalize_embedding_response(%{"embeddings" => embeddings}) when is_list(embeddings) do
+    data =
+      embeddings
+      |> Enum.with_index()
+      |> Enum.map(fn
+        {%{"values" => values}, idx} ->
+          %{"index" => idx, "embedding" => values}
+
+        {other, idx} ->
+          vals = get_in(other, ["embedding", "values"]) || other["values"] || []
+          %{"index" => idx, "embedding" => vals}
+      end)
+
+    %{"data" => data}
+  end
+
+  defp normalize_embedding_response(other), do: other
 
   @impl ReqLLM.Provider
   def decode_response({req, resp}) do
@@ -376,9 +418,9 @@ defmodule ReqLLM.Providers.Google do
 
         case operation do
           :embedding ->
-            # Handle embedding response - return raw parsed data
             body = ensure_parsed_body(resp.body)
-            {req, %{resp | body: body}}
+            normalized = normalize_embedding_response(body)
+            {req, %{resp | body: normalized}}
 
           _ when is_streaming ->
             # Handle streaming response using defaults

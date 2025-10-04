@@ -11,19 +11,30 @@ defmodule ReqLLM.Test.ModelMatrix do
     - `"all"` - All available models
     - `"anthropic:*"` - All models from Anthropic
     - `"openai:gpt-4o,anthropic:claude-3-5-sonnet"` - Specific models
+  - `REQ_LLM_OPERATION` - Operation type filter (default: text)
+    - `"text"` - Text generation models (default)
+    - `"embedding"` - Embedding models only
   - `REQ_LLM_SAMPLE` - Number of models to sample per provider
   - `REQ_LLM_EXCLUDE` - Models to exclude (space or comma separated)
   - `REQ_LLM_INCLUDE_RESPONSES` - Include OpenAI o1/o3 models that require /v1/responses (default: excluded)
 
   ## Examples
 
-      # Get selected model specs
+      # Get selected model specs (text models, default)
       specs = ModelMatrix.selected_specs()
       # => ["openai:gpt-4o", "anthropic:claude-3-5-sonnet", ...]
+
+      # Get embedding models only
+      specs = ModelMatrix.selected_specs(operation: :embedding)
+      # => ["openai:text-embedding-3-small", "google:text-embedding-004", ...]
 
       # Get models for specific provider
       specs = ModelMatrix.models_for_provider(:anthropic)
       # => ["anthropic:claude-3-5-sonnet", "anthropic:claude-3-haiku", ...]
+
+      # Get embedding models for specific provider
+      specs = ModelMatrix.models_for_provider(:google, operation: :embedding)
+      # => ["google:text-embedding-004", "google:gemini-embedding-001"]
   """
 
   alias ReqLLM.Provider.Registry
@@ -41,30 +52,46 @@ defmodule ReqLLM.Test.ModelMatrix do
     xai:grok-2-latest
   ))
 
+  @embedding_models Application.compile_env(:req_llm, :test_embedding_models, ~w(
+    openai:text-embedding-3-small
+    openai:text-embedding-3-large
+    openai:text-embedding-ada-002
+    google:text-embedding-004
+    google:gemini-embedding-001
+  ))
+
+  @type operation :: :text | :embedding
   @type opts :: [
           env: %{optional(String.t()) => String.t() | nil},
-          registry: module()
+          registry: module(),
+          operation: operation()
         ]
 
   @doc """
   Returns list of model specs to test based on configuration.
 
   Selection priority:
-  1. opts[:env] map or REQ_LLM_MODELS environment variable
-  2. Default models from config
-  3. Applies sampling if opts[:env]["REQ_LLM_SAMPLE"] or REQ_LLM_SAMPLE is set
-  4. Applies exclusions if opts[:env]["REQ_LLM_EXCLUDE"] or REQ_LLM_EXCLUDE is set
+  1. opts[:operation] or opts[:env]["REQ_LLM_OPERATION"] determines model set (:text or :embedding)
+  2. opts[:env] map or REQ_LLM_MODELS environment variable for pattern matching
+  3. Default models from config for the specified operation
+  4. Applies sampling if opts[:env]["REQ_LLM_SAMPLE"] or REQ_LLM_SAMPLE is set
+  5. Applies exclusions if opts[:env]["REQ_LLM_EXCLUDE"] or REQ_LLM_EXCLUDE is set
 
   ## Options
 
     * `:env` - Map of environment variables to use instead of System.get_env
     * `:registry` - Registry module to use (default: ReqLLM.Provider.Registry)
+    * `:operation` - Operation type (:text or :embedding, default: :text)
 
   ## Examples
 
-      # Default models (production usage)
+      # Default models (text generation)
       ModelMatrix.selected_specs()
       # => ["openai:gpt-4o", "openai:gpt-4o-mini", ...]
+
+      # Embedding models
+      ModelMatrix.selected_specs(operation: :embedding)
+      # => ["openai:text-embedding-3-small", "google:text-embedding-004", ...]
 
       # All models with custom env (test usage)
       ModelMatrix.selected_specs(env: %{"REQ_LLM_MODELS" => "all"}, registry: FakeRegistry)
@@ -82,12 +109,15 @@ defmodule ReqLLM.Test.ModelMatrix do
     env = Keyword.get(opts, :env, %{})
     registry = Keyword.get(opts, :registry, Registry)
 
+    operation =
+      parse_operation(Keyword.get(opts, :operation) || get_env_value(env, "REQ_LLM_OPERATION"))
+
     pattern = get_env_value(env, "REQ_LLM_MODELS")
     sample = get_env_value(env, "REQ_LLM_SAMPLE")
     exclude = get_env_value(env, "REQ_LLM_EXCLUDE")
     include_responses = get_env_value(env, "REQ_LLM_INCLUDE_RESPONSES")
 
-    resolve_base_selection(pattern, registry)
+    resolve_base_selection(pattern, registry, operation)
     |> maybe_sample(sample)
     |> maybe_exclude(exclude)
     |> maybe_exclude_responses_only(include_responses)
@@ -122,13 +152,20 @@ defmodule ReqLLM.Test.ModelMatrix do
     Map.get(env_map, key) || System.get_env(key)
   end
 
-  defp resolve_base_selection(pattern, registry) do
+  defp parse_operation(nil), do: :text
+  defp parse_operation(:text), do: :text
+  defp parse_operation(:embedding), do: :embedding
+  defp parse_operation("text"), do: :text
+  defp parse_operation("embedding"), do: :embedding
+  defp parse_operation(_), do: :text
+
+  defp resolve_base_selection(pattern, registry, operation) do
     case pattern do
       "all" ->
         all_model_specs(registry)
 
       nil ->
-        default_model_specs()
+        default_model_specs(operation)
 
       pattern_str ->
         resolve_patterns(pattern_str, registry)
@@ -175,9 +212,8 @@ defmodule ReqLLM.Test.ModelMatrix do
     end)
   end
 
-  defp default_model_specs do
-    @default_models
-  end
+  defp default_model_specs(:text), do: @default_models
+  defp default_model_specs(:embedding), do: @embedding_models
 
   defp maybe_sample(specs, nil), do: specs
 

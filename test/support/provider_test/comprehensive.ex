@@ -46,7 +46,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
       defp debug?, do: System.get_env("REQ_LLM_DEBUG") in ["1", "true"]
 
       @provider provider
-      @models ModelMatrix.models_for_provider(provider)
+      @models ModelMatrix.models_for_provider(provider, operation: :text)
 
       for model_spec <- @models do
         @model_spec model_spec
