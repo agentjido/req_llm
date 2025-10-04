@@ -211,7 +211,9 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     total_pass = state |> Enum.count(fn {_spec, status} -> status == "pass" end)
     total_pct = Float.round(total_pass / total_models * 100, 1)
 
-    Mix.shell().info("Overall Coverage: #{total_pass}/#{total_models} models validated (#{total_pct}%)\n")
+    Mix.shell().info(
+      "Overall Coverage: #{total_pass}/#{total_models} models validated (#{total_pct}%)\n"
+    )
   end
 
   defp do_run_coverage(model_spec, opts) do
@@ -266,7 +268,8 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
       {"REQ_LLM_MODELS", spec},
       {"REQ_LLM_OPERATION", Atom.to_string(operation)},
       {"REQ_LLM_FIXTURES_MODE", mode},
-      {"REQ_LLM_DEBUG", "1"}
+      {"REQ_LLM_DEBUG", "1"},
+      {"REQ_LLM_INCLUDE_RESPONSES", "1"}
     ]
 
     Mix.shell().info("  Testing #{spec} (#{operation})...")
@@ -300,7 +303,12 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
         ["test", "test/coverage/#{provider}/embedding_test.exs", "--only", "provider:#{provider}"]
 
       :text ->
-        ["test", "test/coverage/#{provider}/comprehensive_test.exs", "--only", "provider:#{provider}"]
+        [
+          "test",
+          "test/coverage/#{provider}/comprehensive_test.exs",
+          "--only",
+          "provider:#{provider}"
+        ]
     end
   end
 
@@ -465,7 +473,9 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
         _ -> {"?", IO.ANSI.faint()}
       end
 
-    Mix.shell().info("  #{status_color}#{status_icon}#{IO.ANSI.reset()} #{model["id"]}#{tier_text}")
+    Mix.shell().info(
+      "  #{status_color}#{status_icon}#{IO.ANSI.reset()} #{model["id"]}#{tier_text}"
+    )
   end
 
   defp select_models(registry, raw_spec, opts) do

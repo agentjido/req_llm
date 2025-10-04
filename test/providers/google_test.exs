@@ -411,8 +411,7 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert response.provider_meta == %{}
     end
 
-    test "decode_response for embedding returns raw body" do
-      # Create a mock embedding response body
+    test "decode_response for embedding returns normalized OpenAI format" do
       embedding_response = %{
         "embedding" => %{
           "values" => [0.1, -0.2, 0.3, 0.4, -0.5]
@@ -431,7 +430,10 @@ defmodule ReqLLM.Providers.GoogleTest do
       {req, resp} = Google.decode_response({mock_req, mock_resp})
 
       assert req == mock_req
-      assert resp.body == embedding_response
+
+      assert resp.body == %{
+               "data" => [%{"index" => 0, "embedding" => [0.1, -0.2, 0.3, 0.4, -0.5]}]
+             }
     end
 
     test "decode_response handles API errors with non-200 status" do
