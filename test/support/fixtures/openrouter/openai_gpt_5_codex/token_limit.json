@@ -1,0 +1,114 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1jb2RleCIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC41fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 100,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-5-codex",
+      "n": 1,
+      "reasoning_effort": "low",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "In the far reaches of the world, beyond charted oceans and beneath constellations that most star-maps had forgotten, there lay the chain of islands known to sailors as the Aegir’s Crown. These islands rose steeply from emerald waters, their cliffs etched by time, their vaulting peaks veiled in mists that were said to be the breath of the dragons who called",
+            "reasoning": "**Starting fantasy tale creation**",
+            "reasoning_details": [
+              {
+                "format": "openai-responses-v1",
+                "index": 0,
+                "summary": "**Starting fantasy tale creation**",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "gAAAAABo4ne-x8C-72YT31SQqd8E-gpEXVcvANOYks4YStHX6j-XwqgHES3p4JFhf-N6aAAuliCXQWtfp4X7gfm5afV9JLuaqHWvc40lSPadoHyZFq800ncQugaznh5XtpEO2bh9TvJVOgaYA-6LdfEsGjol9g8MhbwtUJgYIm_R2bXqf1qFYTdDIWL03McySm4LrBXyoto9TMHhl6Bdmxs0iY5FUjBucWxafmCE05Um5POWidPkaeVCoszU9tnpckreazWLl2C5EZTE37zFbCfdf_A3ZLZosbWPecrh60Muyo0QHvxX60LFFEwtyzBVMU7vxKEBzW37jzTmvA9xZ4heBykZwWt-MBPMECLxkvQUW_wugB3zIwfEJFs6TZGdBkS-Ent9QdB8WnAdsIvpVxJQWKDD9RuH-QcqxQn8mnQ54zO7cUqdoqv-7Zh4Nkhz7UQcrV2FS0niOd7rG8rcJdx5BOZ9s2hqRr0y5akmpBXVmXc8g9-eXktnU58unYUnY18O5VWxgqhvsAd3sPiYXQ2KYE_S8sZqY5auQbouc6nhK4Kz3oo7wD6pKzkjEIlFJ_FyF_xHXBZougJnlX-piqPGDUy5gBttjmXqdtE7IMy5csW1MIljcNR44JuuM-ug58YogkDyValaPxDktME0IXdM_v3vr1Cd7XuuXGgL01RFKaqLTnnG3KQaZZad2dbBp9pCaP6ju4vP188oyHnp5Q9JfGRLm5PzrES37gxH0Sj_Lvc0OOgHVUyoTtdVJfvTQvqSrbA4E5atwCHnCOUchbX3VKLucaIESpCLJnpTJ90HGByxrlm81T-l7xeiOkec-P4e3kbSwp-KpCMplXt-IDw6qy0U-81Fd1zalLzjzNN-JwHN7MdgqfgA30CYWWwQvmxxe1UaUxUs11q8T_iRjKt9_qeVM_6BZw==",
+                "format": "openai-responses-v1",
+                "id": "rs_0dc4f7167d1956b50168e277bdf6dc81949cd620573b50fc80",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "max_output_tokens"
+        }
+      ],
+      "created": 1759672253,
+      "id": "gen-1759672253-nPXltHjD02Ekayq2SRew",
+      "model": "openai/gpt-5-codex",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "usage": {
+        "completion_tokens": 83,
+        "prompt_tokens": 15,
+        "total_tokens": 98
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "989d63fd9f558e5c-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 05 Oct 2025 13:50:53 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

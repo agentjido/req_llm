@@ -1,0 +1,114 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9vNC1taW5pIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjV9"
+    },
+    "canonical_json": {
+      "max_tokens": 100,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "openai/o4-mini",
+      "n": 1,
+      "reasoning_effort": "low",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "",
+            "reasoning": "**Planning a dragon adventure**\n\nThe user is looking for a very long story about dragons and adventures. They didn't specify an exact length, but I'll aim for something between 1500 to 2000 words to meet the request for \"very long.\" \n\nI think I can create a multi-chapter epic with characters, using headings for clarity but avoiding markdown or bullet points for the main story. I want to be cautious about how I format it, ensuring it’s engaging!",
+            "reasoning_details": [
+              {
+                "format": "openai-responses-v1",
+                "index": 0,
+                "summary": "**Planning a dragon adventure**\n\nThe user is looking for a very long story about dragons and adventures. They didn't specify an exact length, but I'll aim for something between 1500 to 2000 words to meet the request for \"very long.\" \n\nI think I can create a multi-chapter epic with characters, using headings for clarity but avoiding markdown or bullet points for the main story. I want to be cautious about how I format it, ensuring it’s engaging!",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "gAAAAABo4nfBxdf0jBTMl5adXPZNQ6IrnkA-qCcxjQxaF8vAXGArffOzNRVpy0AHj65nBUR419lqp6vmQIuDugH7vkQqwsvJP-eOXtVuOF9H0FA2Dl6YHoEsVmcLTmhVfIJy0o5sv3-gFqvTUtzcuwyOK1D7Fdo-9Dn59x1WZSoiLjmCRfT-Izt_oORCjVNmhxzeFPUvbvZddY3Ch_yIftwCsXVPtX8NI4KWG-M6NXrswc2KkjrFbRqGz7VZw7we9TPc_ldAmN5v6Dq37dDf9YaoQpEBzYQAZXbQlmqSy9ht5Ieyz4fIL_0mjJciZWMPJBaPZIlvITrXL8J_6Tjl5NoPDUuBEhNHLUxn7CPxyhrK2MeZCYpyfvArMBTLkVFGQPzBcHy7jDQZHhQMfZG_rpTMZ7hpIQXhbU32KLK-d1JQjKxgeCrkZgQzI8cpp9naA6kjhIP2X026rdJhC92td4FvDgecbF6UJzf1k84R4WVyW63pii_IYNYTSfYZ5jqP_B5seA4o351ixQO2UoqnQsq1hcwsrPA4L3umRJ97wIbQ-RYABbcqra6xNZ3roknB1VS0NKJkwPB6NK6BS0ZYBJ4wwb-q5mM-4EM8u7OI8PonH2RvTHsYKCtwSu1v5skaUZP7NWftLVD8uJmOwVrBXeEq9pNWeR9rFBE05Ec-D0rs2IwXf-r0Ykmk91muBhCPysVl0AQzxZKJFQ8jjHBdugoHQD_YQbS17eU2h4oKNy_TZ969T6E4nPwWCAEGKf9WoDUxdagWC2XTyX_k06xZG3oI-By5t_SQuUP2iYNRKBgERDnbSJPRDHXKlhXOkEBEyTU9fWwP4-a4OEhbrCnNFJEyho53Ty0UPFPT5dOhlsnEN_s7GGzk-irpxJ38HRV39fTSqtSB6lZ7xtspfcYyTDe_dr907ycX6hADQeLaY8qsWprjCx4EIvi1Hlc_mpyVJXDkaP_HquDjfVYTNYrqCQkX2wVSP1Q_WXz9I2Dz1KS2BEmWZW7p6lBRAKxOkUYO-bD5PQB3Aqjb3DOa78nwkQMYpvKWl6FGaDv7eeljEn0F0qmFpwzPEWXU4q7ziw19qkVVFnFGtPDEYKw7_-dyBLjGYLWDm7_EexUazeRyqfWtsCKirMB6DMNW-dY2x37K5SVx5xOByME1XQeZpg_XsEXKgpKGZyMChAautqtf2KEqSQZr_MyfRx-p0uPIJ2Vq5476OvjWPTgCWi-KBwwLRTNCVnq5nZn_2MmA5I-3ILmlrhk25qhrglsnabPlAZAp8s-VoIb6bUqSHPCX5w5v6yyxbXUTfXH-diJLcvgjC2iVlRtr0VoenV3AQS2lWTF94wQ0h8V0vcQZ1iFwq5zP5GFlWyWiOoaswEkli7U-_qehuei6YwYvlHgDRgK93MeqsBD1sPqJeR7HE9YjNnbLMLGGWXxXls71fw==",
+                "format": "openai-responses-v1",
+                "id": "rs_0f8bd9918c05d1490168e277bdabfc819380f7b992d4fdc4a0",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "max_output_tokens"
+        }
+      ],
+      "created": 1759672253,
+      "id": "gen-1759672253-YpL9TjiMQAzasTr1XP7w",
+      "model": "openai/o4-mini",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 15,
+        "total_tokens": 79
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "989d63fd9e881048-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 05 Oct 2025 13:50:53 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

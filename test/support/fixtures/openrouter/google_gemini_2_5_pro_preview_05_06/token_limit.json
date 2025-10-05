@@ -1,0 +1,114 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LXByby1wcmV2aWV3LTA1LTA2IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjV9"
+    },
+    "canonical_json": {
+      "max_tokens": 100,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-2.5-pro-preview-05-06",
+      "n": 1,
+      "reasoning_effort": "low",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "The world of Aerthos was a tapestry woven with threads of",
+            "reasoning": "**Defining the Narrative Scope**\n\nI'm starting with the prompt and breaking it down. A \"very long story about dragons and adventures\" is my playground. The broadness of it is freeing. I'm focusing on key elements: dragons and adventure.\n\n\n**Considering Dragon Archetypes**\n\nI've moved past the initial broad strokes. Now, I'm exploring dragon archetypes. Thinking about different dragon types – elemental, chromatic, metallic – and how they'd shape the world is key. This helps me define the scope and build the world for Elara and Ign.\n\n\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "**Defining the Narrative Scope**\n\nI'm starting with the prompt and breaking it down. A \"very long story about dragons and adventures\" is my playground. The broadness of it is freeing. I'm focusing on key elements: dragons and adventure.\n\n\n**Considering Dragon Archetypes**\n\nI've moved past the initial broad strokes. Now, I'm exploring dragon archetypes. Thinking about different dragon types – elemental, chromatic, metallic – and how they'd shape the world is key. This helps me define the scope and build the world for Elara and Ign.\n\n\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "MAX_TOKENS"
+        }
+      ],
+      "created": 1759671188,
+      "id": "gen-1759671188-nDfE3pIUr7qmFa80UEKi",
+      "model": "google/gemini-2.5-pro",
+      "object": "chat.completion",
+      "provider": "Google",
+      "usage": {
+        "completion_tokens": 97,
+        "completion_tokens_details": {
+          "image_tokens": 0,
+          "reasoning_tokens": 85
+        },
+        "prompt_tokens": 9,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 106
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "989d49ff4b4c3c96-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 05 Oct 2025 13:33:10 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

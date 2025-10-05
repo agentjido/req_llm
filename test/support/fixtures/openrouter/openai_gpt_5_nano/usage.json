@@ -1,0 +1,114 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGkgdGhlcmUhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC01LW5hbm8iLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Hi there!",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-5-nano",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hi there! How can I help you today? I can answer questions, draft or edit text, help with coding, explain concepts, brainstorm ideas, or just chat. What would you like to do? If you have a topic in mind, tell me and I’ll dive in.",
+            "reasoning": "**Formulating a friendly response**\n\nI need to respond to the user's greeting concisely and in a friendly way. Since they said \"Hi there!\", I might say something like, \"Hello! How can I help you today?\" It could be good to let them know my capabilities, like answering questions, brainstorming, writing, coding, and translating. I could also ask what they'd like to do, providing options like planning or learning. Keeping it brief is key!**Creating a concise greeting**\n\nI want to keep my response friendly but avoid being too long. I could say, \"Hi! How can I help you today?\" and then list some things I can do, like answer questions, draft emails or essays, help with coding, or brainstorm ideas. I should invite the user to share a topic if they have one, and ask whether they prefer brief answers or more detailed discussions. I want to keep it simple and clear!",
+            "reasoning_details": [
+              {
+                "format": "openai-responses-v1",
+                "index": 0,
+                "summary": "**Formulating a friendly response**\n\nI need to respond to the user's greeting concisely and in a friendly way. Since they said \"Hi there!\", I might say something like, \"Hello! How can I help you today?\" It could be good to let them know my capabilities, like answering questions, brainstorming, writing, coding, and translating. I could also ask what they'd like to do, providing options like planning or learning. Keeping it brief is key!**Creating a concise greeting**\n\nI want to keep my response friendly but avoid being too long. I could say, \"Hi! How can I help you today?\" and then list some things I can do, like answer questions, draft emails or essays, help with coding, or brainstorm ideas. I should invite the user to share a topic if they have one, and ask whether they prefer brief answers or more detailed discussions. I want to keep it simple and clear!",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "gAAAAABo4nfBO0uWyBGWOQ8fD64XMgqfU1nqDPkuzjmWuO08q--ZGGC9LlyfvwPajvffityKw3p1QOpLBzAca2pKTf6m0Pzr_ES9yAF85mUZSoG50FHEkz2c45mU1xM52JhES0FNZHZNQzFAry9X30NyYKkrumc4dlOp_dVvKchrbbeFYifu2zVDT7Nw72rk6b3opdwdq2hGolBOZAtyxhaK1VyYCGGIyxtQGclMUU_p3D9MlFdmxg9rqLZLOIuw6RJwVKbty13MSkr7sCG0liWeL4xSShYDuuOTtHHhohuDEu1PG-S53KDUha2XePw7AayRLRQpYqsXxjB0sFaPxr8Dn32ZISugxOnuAjkXhguSGexCxrgeb6eUitcWH2Tr4IHX0GsLIQedj7xlnWrpYpegu36fmhSusW8bxrVfDAKbmWayVsGjLvDocH8wdwC9wSSYdKAfHPYeZW4KD6HpXif_fUYyCw6HuFHqjs1o3qJWHP8qhXwGJUvP2HcONAJtS5ZrP6MdzT9hm5QAR6ykgfVxCjg4Y7U5RznoCVu1OZkyHw8QA-qxmocRrP5dPo58txuXpYw_P26WvB23UBfgM4-KsDh-UUdcJ-9LeSliyK6Q3wYiJNhcilQ5zhdEZSR9_FeXmmMCc-GsQoKqbYLszr2i4rDu7ZFzS3aUMXEJw0-T7bk3i4CAUdm5A3wK_SJzMXMoRijMmOpUqUJ2rd6ALeL7RFPU3UcImrZm5x9Xg6iqT9X79CL4SRkjeGIDTU6h7P-3U1_6uGVkn5kxuec5wZAJrWj_HLdQSD26dTxTBgxZfdsRT0zmciKltxsPjvVHvO3cN2HHOiWc4rEIef0G0LTd8QN1Fb0SPQ3swTSd_ZIeWVMaJIULtg_R3AOdTAwdYXDPDG_OJrDDUIr3e93GMavj4k1Tbtx4UbD0sdB1Va5qD_7pz3vQ2ktsUmPlq5zEyCat_c-b_8YTAOq7ddwfMYaIIcwYr-PTLN7lIvWUz5ugZmWUJqB1p6k3vc--fbnSjJ0bH4GRsh987m2VaivO7LCB_p2Ymg5nB_0tbAtU07vFgqrIWuDe-DevJwdDZfKuvL_EVWwJVLgd257FAT1-mr7vInObzYg8Dgz0vu14ivgEz3B5B3hDUeUH4yovUE47MHAVMz1XzGX9y_Lj-Te5NCynMlLZ-Ysz-wSuEn4165ZmjX0Nj12INtwWfYoHQLMtSWeEvmBwZFNOZmBFgWfQoVHSwHPJUgD96kN7tqr8dAtU5OSLTxuwkiIXvHO_0giYL2rOnEgiVYRDQ5RTThbqKHRPjtTEpGzxJzxjtuSKv4iTGE-3uAbyNHRuLKch8HaHOh3yAcVcOyoI2TKdrdZYwdenoRaq9JrmxjoPEx28ygJKQEwtDFM_zq9asPzbqZAsVrqY_d_B5iAXoLYCOCsW919zXgQ5mkMj8uk7giSpcrLtZdpJFWvoFY1tO7KByadoA1OszSi3yEP-zKbuAn7FFD2e22BOpd4giEgRyZtKN8gQi9uMnMOP3qdNqG5XyqG6uf3UDXudJHxk3AMR1VjLDfCcnFNgNIpqPJ5_WEXubUbY0PAHTHS1b3C--CGO2SeM6X6SjPerXUzd4woSaWWZfz-3H3rOPgbKB63G7dNU5rRZZ8VFH0jmZ2Xq4rVr48ZtTJmOcaihwEbxPBJhn8GmoijNaM4IKH1Dc_RICHMhcmLCMreSDrPOJYUpMjBE20MM6_dNXFnyJHeqDQ2PlUYGF6NtK1s9XAy6SzqpOYJPJCwXKF1VQiFl07HU2FO_nZbdLKl_UyDof-rutd0FHGykB1D2ln3oo1AodDBbJIvrDWpgsO9-I9D8XbYyx7GByUVNJXrawgGiZJE3M_y2H4nUh9XBNc5y_OhzQF1DtipgC20mvgQgfi89D556P-VUGNOP9yMIBfpgF9XDXPOlZPeMJGj7TWn-y0-iT5iUU29DtH6ueUeD9Ak7bTTesQEAU_XQ6JIp5OWvsa8ypgB_eD7a12BUXGySxPtS3U88lQcn2XC7QIYMzKKCoc53XspyS18VxNGJu4W8w9GBirbTZuFqQsdCVhtK088D6I6HEVFjXg9KLZOoGK0tjPVDhN0Jzl_xoZkVX97ZrnN5qeMvh-Sp5YxoNBgoS_PqZJEz3cBvdnwxTYoxD-hUblpjt80hgH8aYrz7cNoYkL6Fs4RbIt2PE2KRtw4eW5vVzPJkLCXgLQC4cYYS9W4n3BjCnonY9HHBLDmtsVbsYP93234lte9_NyNlsnSTTUySctXU3Y-m2-CH7kvm8j3YlU_EQPbq38kR4qM94oRcvxyeieDHUvpaawb1-Kb5rnXbtBMUVTZpQkdsVKrJCNbCnCVEajv7cE0Gu56IkDqFcWXpvX08tYlX7L7FnA11SG0vad3Xtesm0y4e1vW_8zB7peYMpyU961mmfiJb6kfKHF0skhSmqbEoSzO-86kAyI0HjdhqVGS7LCq4B3xDC26O4cv0legB3vKz0vxYn-lcwehhSQTD85IepRgKPyCnT-1hBvPgQM94jICkJ9Zc3hqwKm6_GWT3YBXRn5dk_1NoxmtWGxTv7dTriOP8rTz8c0fTt1smT5ItKCF86zuvAshsETyp_2IaEqiOYk6c9WQJQ75X2t20L0qdHr8_bY5tqoFUIQ==",
+                "format": "openai-responses-v1",
+                "id": "rs_059a5483e96bbe060168e277bba46881978c856aa03abff214",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1759672250,
+      "id": "gen-1759672250-FnVnuPETxyYYqkwT57Mw",
+      "model": "openai/gpt-5-nano",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "usage": {
+        "completion_tokens": 319,
+        "prompt_tokens": 9,
+        "total_tokens": 328
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "989d63eb6f48e7fa-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 05 Oct 2025 13:50:51 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

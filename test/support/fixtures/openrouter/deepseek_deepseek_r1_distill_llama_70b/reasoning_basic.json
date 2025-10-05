@@ -1,0 +1,100 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImRlZXBzZWVrL2RlZXBzZWVrLXIxLWRpc3RpbGwtbGxhbWEtNzBiIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MS4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "deepseek/deepseek-r1-distill-llama-70b",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Sure! Let's solve \\(12 \\times 7\\) step by step.\n\n\\[\n\\begin{align*}\n12 \\times 7 &= (10 + 2) \\times 7 \\quad \\text{(Breaking down 12 into 10 and 2)} \\\\\n&= 10 \\times 7 + 2 \\times 7 \\quad \\text{(Distributive property)} \\\\\n&= 70 + 14 \\\\\n&= 84\n\\end{align*}\n\\]\n\n\\(\\boxed{84}\\)",
+            "reasoning": "I need to multiply 12 by 7.\n\nI'll break down 12 into 10 and 2 for easier calculation.\n\nFirst, I'll multiply 10 by 7, which equals 70.\n\nNext, I'll multiply 2 by 7, resulting in 14.\n\nFinally, I'll add the two results together: 70 plus 14 equals 84.\n\nSo, the final answer is 84.\n",
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1759672055,
+      "id": "gen-1759672055-0sVC6udYdj8JvhJmzASF",
+      "model": "deepseek/deepseek-r1-distill-llama-70b",
+      "object": "chat.completion",
+      "provider": "Chutes",
+      "usage": {
+        "completion_tokens": 200,
+        "prompt_tokens": 20,
+        "total_tokens": 220
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "989d5f291ae621de-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 05 Oct 2025 13:47:36 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

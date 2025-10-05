@@ -1,0 +1,100 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImRlZXBzZWVrL2RlZXBzZWVrLWNoYXQtdjMuMSIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjEuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "deepseek/deepseek-chat-v3.1",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "To solve 12 × 7, I can break it down mentally:  \n- 10 × 7 = 70  \n- 2 × 7 = 14  \n- Then, 70 + 14 = 84  \n\nThus, 12 × 7 = 84.",
+            "reasoning": "First, I need to solve 12 multiplied by 7. Multiplication is just repeated addition, so I can think of it as adding 12 seven times.\n\nLet me add 12 seven times:\n\n12 + 12 = 24\n\n24 + 12 = 36\n\n36 + 12 = 48\n\n48 + 12 = 60\n\n60 + 12 = 72\n\n72 + 12 = 84\n\nSo, after adding seven times, I get 84.\n\nI know that 10 times 7 is 70, and 2 times 7 is 14, so if I add 70 and 14, I get 84. That's another way to do it.\n\nTherefore, 12 times 7 is 84.",
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1759672068,
+      "id": "gen-1759672068-1rkwniRQbRzYvHazuAD3",
+      "model": "deepseek/deepseek-chat-v3.1",
+      "object": "chat.completion",
+      "provider": "Chutes",
+      "usage": {
+        "completion_tokens": 217,
+        "prompt_tokens": 18,
+        "total_tokens": 235
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "989d5f7eea34eafd-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 05 Oct 2025 13:47:49 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

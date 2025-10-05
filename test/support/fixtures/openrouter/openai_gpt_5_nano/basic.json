@@ -1,0 +1,115 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC01LW5hbm8iLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 200,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-5-nano",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! Nice to meet you. How can I help you today? If you’re just exploring, I can answer questions, help with code, brainstorm ideas, or explain concepts.",
+            "reasoning": "**Crafting a friendly response**\n\nI need to respond with a greeting and possibly ask how I can help the user. It should be brief and friendly. I might even consider including a few options for how they can direct the conversation. There's no need for an image, so I'll keep the response straightforward and welcoming. It's important to make the user feel valued and that I'm here to assist!",
+            "reasoning_details": [
+              {
+                "format": "openai-responses-v1",
+                "index": 0,
+                "summary": "**Crafting a friendly response**\n\nI need to respond with a greeting and possibly ask how I can help the user. It should be brief and friendly. I might even consider including a few options for how they can direct the conversation. There's no need for an image, so I'll keep the response straightforward and welcoming. It's important to make the user feel valued and that I'm here to assist!",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "gAAAAABo4nfKulkdG2dYgTY30SGXxUwYT-hfxLvyMG5RQQXZlwHiF8jPVWjyYT4TI392CuuYk7lw52-q7B0VgklndIMiyJcrDqaKtOYVPbfnY1lxAYyRqzaduWO9kSmnymoNQlmhjSarPXJE4pSelhNtG2m98K2_0SNm1frHZW48sPGitPMf083oMxmrxh4PftCwScQx3dXm4QfEr5yMwXyLPobmvznK89nvJjXr4x4dGBxgLFXyHBAD28Zxe_Xf9dDPFRKPaHTncaOI84XW3JxzeK8zDMYufPWTHuoqv9YKg9zklyqwAidwBZg5Y46SHoJULYuAxnL1a3vmahj8H08uz4SFToqShz453Q4WWVqeR9s5cVj6z8TMYpiRPFoQM0gTso4_OKv3QkCVs6SKUlEA2LCw1BOygq5XKhxU4b9mWe0nWwIdzmMkrksvbmmPOt1-IvxEAsn9UShpsJqQYpSdswHpLe5CP8t2fkMiMGcgqbibBp1YLDS5l4AuxbuQ_kFyIqezOBPUnXWydGcOxWkL_OlOzmWJpiUQEKZlE-NU8wMDOAhGMeXJz7zVjZRycEdW5UxF-s0qnTjiukivv9emLdHbef54YgTzxW3pma057BS05JVEgBoSxe9znXd6eDmh310qKMHJtq6Mrhy5a9egOWjpCIXElKtyNbGOFwWguBc_3Wh88bw7u3NaDO99pi5FEMa6WXgtQm62a_41odpr7-HQSZgPdA6bvcWwZpHp7GJrW1pfF_MUdTf_6vBWPXoxfGDxXGQXdMkK8ZZuxSW3xP4tsfSgKAKQnWAGBSmnyd08Rj6eme-28orI7nBblvM7CtccNc6_ud-clsgam_gsqoOANfHmilxJKv182qaidNO1ZdndEhjj6yG4Mi9U6DRPHBtinB7TnpEVVnFnx-bd9ItMBw_RorAIWbodAfHCYfgkL6uwJaWxH-vs-u21kFyrEKnYF3YZqCnpthtmE4JPeLCWtgl-KkIEl7OxQWG-BMJ7aUygEwQ=",
+                "format": "openai-responses-v1",
+                "id": "rs_00bf2df0c423de250168e277c86b608197bf5b743d2e8f7a04",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1759672263,
+      "id": "gen-1759672263-zygaEfzNjFv70LQMDG6h",
+      "model": "openai/gpt-5-nano",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "usage": {
+        "completion_tokens": 42,
+        "prompt_tokens": 9,
+        "total_tokens": 51
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "989d643f8a05e7fa-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 05 Oct 2025 13:51:04 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

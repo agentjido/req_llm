@@ -1,0 +1,114 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGkgdGhlcmUhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC01LW1pbmkiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Hi there!",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-5-mini",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! How can I help you today?",
+            "reasoning": "I'm thinking about how to start a friendly greeting. I want to respond warmly and ask how I can help the user with their needs. It might be a good idea to briefly mention my capabilities, so that the user knows what I can assist them with. Keeping it concise seems important too, as I want to make sure my message is clear and direct. Overall, I want to set a welcoming tone!",
+            "reasoning_details": [
+              {
+                "format": "openai-responses-v1",
+                "index": 0,
+                "summary": "I'm thinking about how to start a friendly greeting. I want to respond warmly and ask how I can help the user with their needs. It might be a good idea to briefly mention my capabilities, so that the user knows what I can assist them with. Keeping it concise seems important too, as I want to make sure my message is clear and direct. Overall, I want to set a welcoming tone!",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "gAAAAABo4nfGfwo_hot1rgAjH_ZV7KQ_D96G642MCDmQvNC-IuT71wF37q0ptbRe9OJljgRRlP2AL-suNYPoTqvETjwmKJPdkZUfgTf62lP8195_3KeGg5zI8GsY9TWZ-RbZtt8x7xtsbvHsKGB7RsEqf5HdSvd6hJMrNtyX2o_5admPuIQeyC1Wyo7IMVIc1SiKdy_QKmbMeTp3H7xogcqFPgv7Wh1WfrfVUZiWBmPRnNgQB8YtYIDsrF9Y-BmJ27nr5CSZ3su9GeFw0M6eszkHfh3vZrIUqX41p1yEkXno1pi0HpmDlQhx0_CpMkMZwu3gnoCdpvaZTOTkDgDXB5SPf3mqXnU27FEKlEOvFdvtcRtDFiDdnckDM5pcuXC3Gl3DVCnKHQV0Vl8NHadxiaoBAICsz2qnbyXxG0qv-YOBbIyXV5lVRiGaQPYvi_r_4NKtYmNRWi_4szsAhjyR75XvnOFx08ILdBekj_MQ_8sitZ-3RpKqnfQNLI1IbYhvtlT0Nr4VYtUWlEsQIyEPFIdaf6BrVyqDE437o6kY_U7Xsx6fZLvdAQcLpSc4rqr7NE-RKikT3JvGaoaTdkq3dhldhUAToIdKheur-xvpQ2DZOtLAHpZlu5-0gn3jNA5aPgeVJiF3AWsoVGXXlsszd1qNycdure4hRiZMh8nICsZ5n3_YscMwgrtzeJ1IZMavyoTYQsQg7gAHmC-eVS7LdB_Nz-GMMCPviFpHmINuKmHTk9eVNGg_6H6g_JsopXXHBjCVGbiQpWnJ6h5hLHqI4vrtg5AZNCM3qRE7-ePmTY037z36F_nIh6L6OoAEtMLmaVmfAWriXXCZf8vlvx6AlMnLQprUlb8XJlU8dAqz4hiXwy20oisIFLn-UE9rGS8Wnke3-f3QjS7Poq8F2C4P6mALbexZ526mHV--ULwnFfXSNZOgkeTFVBDu2ixLInoHnMs8RX60-k4f",
+                "format": "openai-responses-v1",
+                "id": "rs_0e3e12f1d045655d0168e277c2d2548190a601c965a401f466",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1759672258,
+      "id": "gen-1759672258-LDnoWfCz5XSTHTJ8bR8e",
+      "model": "openai/gpt-5-mini",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "usage": {
+        "completion_tokens": 15,
+        "prompt_tokens": 9,
+        "total_tokens": 24
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "989d641d8e87e1f7-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 05 Oct 2025 13:50:58 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

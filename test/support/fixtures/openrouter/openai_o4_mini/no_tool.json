@@ -1,0 +1,129 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9vNC1taW5pIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+    },
+    "canonical_json": {
+      "max_tokens": 300,
+      "messages": [
+        {
+          "content": "Tell me a joke about cats",
+          "role": "user"
+        }
+      ],
+      "model": "openai/o4-mini",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tools": [
+        {
+          "function": {
+            "description": "Get current weather information for a location",
+            "name": "get_weather",
+            "parameters": {
+              "properties": {
+                "location": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "location"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Why did the cat sit on the computer?  \nBecause it wanted to keep an eye on the mouse! 😸",
+            "reasoning": null,
+            "reasoning_details": [
+              {
+                "data": "gAAAAABo4ne81INFxoLaiBvSdem9O5FYaD3BZ31T4TesgePqioazSCJagS9_vAwnkg2ufZQ3uH9HOKqhz31pjrlsPl4zj9x8NCDJlbNJHS-wHuyF4Ylq_QBCDfMbCJ_ICvrq2TGszLriq3TkK3gmzGETLWIex6t0q8sHr9XSQdMDZK04nND4MKwqBKJx-esFk0hUDHCrQINmv9xGqvH-jkVXQf3wrg2FWXOXRoA8Eobxr2ZeXYUm9vZrAdIDHWNfIyDTVt1FMyuGQv5-uajSQ7O9gm0E3JChfKhmx1AjhlKFhdCjDZ-hPdnKW8M99hycMfwPy_TpGgA1K7AwDRL0R7XC0sBtR5sZaa_-ZVJGGB0tJh9luAe3w-ECLnZ_s0ksHl2G1NZfdOit0aTM_qniegb6sMMNOQfNmCBQd6aoyi_L5n5UaZcZytNBuzrWZnxrANPkK4r1w97T1uTfp8oKTjUljPQ8ELuiZBMmThzTXq_jsrWMeffBAhQtyRalgA5OU370ogUe9zq-3Tnnfrk-Tt90B0RGSExMC3Q3lkXotDy89LSIsLYa55eac-Mdp-Nmi2XXAa0SWoI87NDmQfJAd_V9C0NqvrgQKH4K2J_mdEyoxPqMMw6_wecHdkWpPXlqOkDjRzLgeabQeBt1MMk5AYZZstL36eaXVWZqxxjgHGq2CkX0yPAGeLfmIOKl_l_30-IiBXzJnnCyQPzwyOmyCoYpcx4lIlv32Pyl2GGluR2veFSAWYJD4rXLEVsIV7t1Y2lVs45XfHnXD0UlE8tGJSCiJ4Caz7v8sXGyM6uODdMx9TbWPzhgjYxgDXVy4f-UpJ0weBC0nmMvdWqtrzB3hT2f1CmO4bAADX1uWIsZoGrQKTznZO5UW6DfFJ5QetsREvG-zi67nunRMIEU7OCiq2uHCdlFUtfsP16q4SrkaMnjKsnkXyD2ZHphkkQhSGFv4OElMSjv6TO5x7jMg31BeHlKes9RbsxpBw==",
+                "format": "openai-responses-v1",
+                "id": "rs_0b21a7d995165d6f0168e277bc34c4819090b86d81c40fa5b1",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1759672251,
+      "id": "gen-1759672251-hVDRbnhcApkSVLed0UlP",
+      "model": "openai/o4-mini",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "usage": {
+        "completion_tokens": 29,
+        "prompt_tokens": 47,
+        "total_tokens": 76
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "989d63f49faf1048-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 05 Oct 2025 13:50:51 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

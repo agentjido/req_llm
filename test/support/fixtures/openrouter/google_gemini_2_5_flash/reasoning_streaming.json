@@ -1,0 +1,68 @@
+{
+  "captured_at": "2025-10-05T13:35:55.741650Z",
+  "chunks": [
+    {
+      "b64": "OiBPUEVOUk9VVEVSIFBST0NFU1NJTkcKCg==",
+      "decoded": ": OPENROUTER PROCESSING\n\n"
+    },
+    {
+      "b64": "OiBPUEVOUk9VVEVSIFBST0NFU1NJTkcKCjogT1BFTlJPVVRFUiBQUk9DRVNTSU5HCgpkYXRhOiB7ImlkIjoiZ2VuLTE3NTk2NzEzNTQtN3FLd29BSEh0ODJ0U2Y4c2VqZ3MiLCJwcm92aWRlciI6Ikdvb2dsZSIsIm1vZGVsIjoiZ29vZ2xlL2dlbWluaS0yLjUtZmxhc2giLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5NjcxMzU0LCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsicm9sZSI6ImFzc2lzdGFudCIsImNvbnRlbnQiOiJUbyBjYWxjdWxhdGUgMTUgKiAzLCBJIGNhbiBlaXRoZXIgYWRkIDE1IHRocmVlIHRpbWVzICgxNSArIDE1ICsgMTUpIG9yIG11bHRpcGx5IHRoZSB0ZW5zIGFuZCBvbmVzIHNlcGFyYXRlbHk6XG5cbjEuICAxNSArIDE1ID0gMzBcbjIuICAzMCArIDE1ID0gNDVcblxuQWx0ZXJuYXRpdmVseToiLCJyZWFzb25pbmciOm51bGwsInJlYXNvbmluZ19kZXRhaWxzIjpbXX0sImZpbmlzaF9yZWFzb24iOm51bGwsIm5hdGl2ZV9maW5pc2hfcmVhc29uIjpudWxsLCJsb2dwcm9icyI6bnVsbH1dfQoK",
+      "decoded": ": OPENROUTER PROCESSING\n\n: OPENROUTER PROCESSING\n\ndata: {\"id\":\"gen-1759671354-7qKwoAHHt82tSf8sejgs\",\"provider\":\"Google\",\"model\":\"google/gemini-2.5-flash\",\"object\":\"chat.completion.chunk\",\"created\":1759671354,\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"To calculate 15 * 3, I can either add 15 three times (15 + 15 + 15) or multiply the tens and ones separately:\\n\\n1.  15 + 15 = 30\\n2.  30 + 15 = 45\\n\\nAlternatively:\",\"reasoning\":null,\"reasoning_details\":[]},\"finish_reason\":null,\"native_finish_reason\":null,\"logprobs\":null}]}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6Imdlbi0xNzU5NjcxMzU0LTdxS3dvQUhIdDgydFNmOHNlamdzIiwicHJvdmlkZXIiOiJHb29nbGUiLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LWZsYXNoIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc1OTY3MTM1NCwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQiLCJjb250ZW50IjoiXG4xLiAgMyAqIDEwID0gMzBcbjIuICAzICogNSA9IDE1XG4zLiAgMzAgKyAxNSA9IDQ1XG5cblRoZSBhbnN3ZXIgaXMgNDUuIiwicmVhc29uaW5nIjpudWxsLCJyZWFzb25pbmdfZGV0YWlscyI6W119LCJmaW5pc2hfcmVhc29uIjoic3RvcCIsIm5hdGl2ZV9maW5pc2hfcmVhc29uIjoiU1RPUCIsImxvZ3Byb2JzIjpudWxsfV19Cgo=",
+      "decoded": "data: {\"id\":\"gen-1759671354-7qKwoAHHt82tSf8sejgs\",\"provider\":\"Google\",\"model\":\"google/gemini-2.5-flash\",\"object\":\"chat.completion.chunk\",\"created\":1759671354,\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\\n1.  3 * 10 = 30\\n2.  3 * 5 = 15\\n3.  30 + 15 = 45\\n\\nThe answer is 45.\",\"reasoning\":null,\"reasoning_details\":[]},\"finish_reason\":\"stop\",\"native_finish_reason\":\"STOP\",\"logprobs\":null}]}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6Imdlbi0xNzU5NjcxMzU0LTdxS3dvQUhIdDgydFNmOHNlamdzIiwicHJvdmlkZXIiOiJHb29nbGUiLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LWZsYXNoIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc1OTY3MTM1NCwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQiLCJjb250ZW50IjoiIn0sImZpbmlzaF9yZWFzb24iOm51bGwsIm5hdGl2ZV9maW5pc2hfcmVhc29uIjpudWxsLCJsb2dwcm9icyI6bnVsbH1dLCJ1c2FnZSI6eyJwcm9tcHRfdG9rZW5zIjozMSwiY29tcGxldGlvbl90b2tlbnMiOjMwNiwidG90YWxfdG9rZW5zIjozMzcsImNvc3QiOjAuMDAwNzc0MywiaXNfYnlvayI6ZmFsc2UsInByb21wdF90b2tlbnNfZGV0YWlscyI6eyJjYWNoZWRfdG9rZW5zIjowLCJhdWRpb190b2tlbnMiOjB9LCJjb3N0X2RldGFpbHMiOnsidXBzdHJlYW1faW5mZXJlbmNlX2Nvc3QiOm51bGwsInVwc3RyZWFtX2luZmVyZW5jZV9wcm9tcHRfY29zdCI6MC4wMDAwMDkzLCJ1cHN0cmVhbV9pbmZlcmVuY2VfY29tcGxldGlvbnNfY29zdCI6MC4wMDA3NjV9LCJjb21wbGV0aW9uX3Rva2Vuc19kZXRhaWxzIjp7InJlYXNvbmluZ190b2tlbnMiOjE5MCwiaW1hZ2VfdG9rZW5zIjowfX19CgpkYXRhOiBbRE9ORV0KCg==",
+      "decoded": "data: {\"id\":\"gen-1759671354-7qKwoAHHt82tSf8sejgs\",\"provider\":\"Google\",\"model\":\"google/gemini-2.5-flash\",\"object\":\"chat.completion.chunk\",\"created\":1759671354,\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\"},\"finish_reason\":null,\"native_finish_reason\":null,\"logprobs\":null}],\"usage\":{\"prompt_tokens\":31,\"completion_tokens\":306,\"total_tokens\":337,\"cost\":0.0007743,\"is_byok\":false,\"prompt_tokens_details\":{\"cached_tokens\":0,\"audio_tokens\":0},\"cost_details\":{\"upstream_inference_cost\":null,\"upstream_inference_prompt_cost\":0.0000093,\"upstream_inference_completions_cost\":0.000765},\"completion_tokens_details\":{\"reasoning_tokens\":190,\"image_tokens\":0}}}\n\ndata: [DONE]\n\n"
+    }
+  ],
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IllvdSBhcmUgYSBjYXJlZnVsLCBzdGVwLWJ5LXN0ZXAgcmVhc29uZXIuIiwicm9sZSI6InN5c3RlbSJ9LHsiY29udGVudCI6IkJyaWVmbHkgdGhpbmsgdGhyb3VnaCB5b3VyIGFwcHJvYWNoLCB0aGVuIGFuc3dlcjogV2hhdCBpcyAxNSozPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LWZsYXNoIiwic3RyZWFtIjp0cnVlLCJzdHJlYW1fb3B0aW9ucyI6eyJpbmNsdWRlX3VzYWdlIjp0cnVlfSwidGVtcGVyYXR1cmUiOjEuMCwidG9wX3AiOjAuOH0="
+    },
+    "canonical_json": {
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "content": "You are a careful, step-by-step reasoner.",
+          "role": "system"
+        },
+        {
+          "content": "Briefly think through your approach, then answer: What is 15*3?",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-2.5-flash",
+      "stream": true,
+      "stream_options": {
+        "include_usage": true
+      },
+      "temperature": 1.0,
+      "top_p": 0.8
+    },
+    "headers": {
+      "accept": "text/event-stream",
+      "authorization": "[REDACTED:authorization]",
+      "content-type": "application/json"
+    },
+    "method": "POST",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": null,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "cache-control": "no-cache",
+      "cf-ray": "989d4e0bd9650009-ORD",
+      "content-type": "text/event-stream",
+      "date": "Sun, 05 Oct 2025 13:35:55 GMT",
+      "permissions-policy": "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")",
+      "referrer-policy": "no-referrer, strict-origin-when-cross-origin",
+      "server": "cloudflare",
+      "x-content-type-options": "nosniff"
+    },
+    "status": 200
+  }
+}

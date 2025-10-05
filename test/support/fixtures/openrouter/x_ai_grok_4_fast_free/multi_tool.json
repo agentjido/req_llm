@@ -89,16 +89,17 @@
   "response": {
     "body": {
       "error": {
-        "code": 401,
-        "message": "No auth credentials found"
-      }
+        "code": 404,
+        "message": "No endpoints found for x-ai/grok-4-fast:free."
+      },
+      "user_id": "user_2iYQIxKY28QuzANm4mmKBlOxzx2"
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
       "cf-ray": [
-        "9897d5681afc2335-ORD"
+        "989d416d8ef38743-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -107,7 +108,7 @@
         "application/json"
       ],
       "date": [
-        "Sat, 04 Oct 2025 21:39:44 GMT"
+        "Sun, 05 Oct 2025 13:27:17 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -128,6 +129,6 @@
         "nosniff"
       ]
     },
-    "status": 401
+    "status": 404
   }
 }

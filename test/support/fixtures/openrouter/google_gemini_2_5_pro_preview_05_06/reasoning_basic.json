@@ -1,0 +1,115 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LXByby1wcmV2aWV3LTA1LTA2IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MS4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-2.5-pro-preview-05-06",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "**Answer:** 84\n\n**Internal Thinking:**\n\n1.  Break 12 down into easier numbers: 10 and 2.\n2.  Multiply each part by 7:\n    *   10 * 7 = 70\n    *   2 * 7 = 14\n3.  Add the results together: 70 + 14 = 84.",
+            "reasoning": "**Defining the Task**\n\nI'm currently focused on dissecting the user's prompt. It seems I'm being asked to not just solve a multiplication problem, but also to simulate, in a simplified manner, how the calculation would be approached. This is a good, focused constraint, that is critical to ensuring the instructions are properly understood and followed.\n\n\n**Processing the Solution**\n\nI've calculated the final answer: 12 * 7 = 84. Now, I'm structuring the explanation. I've decided to detail a decomposition method, breaking 12 into 10 and 2. From there, I'll explicitly apply the distributive property, and break it down into simpler calculations.\n\n\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "**Defining the Task**\n\nI'm currently focused on dissecting the user's prompt. It seems I'm being asked to not just solve a multiplication problem, but also to simulate, in a simplified manner, how the calculation would be approached. This is a good, focused constraint, that is critical to ensuring the instructions are properly understood and followed.\n\n\n**Processing the Solution**\n\nI've calculated the final answer: 12 * 7 = 84. Now, I'm structuring the explanation. I've decided to detail a decomposition method, breaking 12 into 10 and 2. From there, I'll explicitly apply the distributive property, and break it down into simpler calculations.\n\n\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "STOP"
+        }
+      ],
+      "created": 1759671190,
+      "id": "gen-1759671190-FxVIGuiDW37BZ8u3XIci",
+      "model": "google/gemini-2.5-pro",
+      "object": "chat.completion",
+      "provider": "Google",
+      "usage": {
+        "completion_tokens": 315,
+        "completion_tokens_details": {
+          "image_tokens": 0,
+          "reasoning_tokens": 227
+        },
+        "prompt_tokens": 14,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 329
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "989d4a0f3e023c96-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 05 Oct 2025 13:33:12 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

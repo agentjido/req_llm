@@ -1,0 +1,115 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC01LWNvZGV4IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 200,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-5-codex",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello there! 👋 How can I help you today?",
+            "reasoning": "**Preparing greeting message**",
+            "reasoning_details": [
+              {
+                "format": "openai-responses-v1",
+                "index": 0,
+                "summary": "**Preparing greeting message**",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "gAAAAABo4nfAIgro46gTnTUAi-u9xZhUKh3WBmcaGUgbyNBZ7sYaie9oyAJ42e6rLUnGqfLcwjquNeazsuxeBRd3D1Rx8kY_4O3UN3pdgrB82TshuwiCs8_7iE1w-IfxEqBoF__Hw_DK00SjbApkjAoUlvtlgsUMB6BW7r1mUWZUKqr9tN3tEXwqY2gnnHrUTsvq5GkaTQYUVz2J6pSFMOHNSK4qD4JzlHBjX648mj-iLw9XlQmLj81r0VOoP441FSpbQCUcc6x9BmYrfELR8aEQxViE8eQUXGo9SGdz8Hdn4cmYtPhi_DqI85RISRYwt2NSJgb4hu_vSuAxfWAeVzvYW1T7-toonI2cWBwDFzEU5OaTj1ykWFgciA7x7kgn4IWflIftVVIr1BnP4-0vh-bgqqj2zJHPzeoXFwMET1lliVbTKHQhCyrt4EpB64R9cOaWCdPYS8331JBsDq_7IA2X31PdYxQlYx4QbgvHMqpNkp-aAW6trDQ6IfmHMu0vzh9vHru7qxP1Zk5U--P5au-jtshvGQrC64o-mpxF9MImNs2cWmry4lPdzWbKx7GQ8AIxvgyUS7_X8B-zbzEkqaIwzir1doIob5FS9-_mKd0qIPjPJrzlHDWXNjQM86eKOlfeLPy8IXSm4aGwnroewsIaSV7FyjGYja6QZEFdN6g5nHdmaPqrIOmhPJYm8ipBinDV7KxtA04L_Mr9FRLWdGuOSWxGxw5Vg5HXsTLzKPUPgABLH0ShEElavnDDF2USn0xL9_inihRq8lCkLgggu7hZXq6bSMDaphEEQmAEmrGuepZ30v7FbHLxxYfJx4PsCQxOG6CHverxItshjnQv443MLczIXoMxPA==",
+                "format": "openai-responses-v1",
+                "id": "rs_0c306d8f746377ff0168e277bfee70819682fed21cf433278a",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1759672255,
+      "id": "gen-1759672255-saSD8VMUyPGlC9VI0wiv",
+      "model": "openai/gpt-5-codex",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "usage": {
+        "completion_tokens": 18,
+        "prompt_tokens": 9,
+        "total_tokens": 27
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "989d640c28ef8e5c-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 05 Oct 2025 13:50:55 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC01IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 200,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-5",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! How can I help you today?",
+            "reasoning": "**Greeting the user**\n\nThe user just said \"Hello world!\" which seems like they’re expecting a friendly greeting from me. My plan is to keep it brief and warm. I want to give a friendly response and maybe ask how I can help. I think it's better not to overdo it with questions or formatting; simplicity is key here. Let's keep the vibe light and welcoming!",
+            "reasoning_details": [
+              {
+                "format": "openai-responses-v1",
+                "index": 0,
+                "summary": "**Greeting the user**\n\nThe user just said \"Hello world!\" which seems like they’re expecting a friendly greeting from me. My plan is to keep it brief and warm. I want to give a friendly response and maybe ask how I can help. I think it's better not to overdo it with questions or formatting; simplicity is key here. Let's keep the vibe light and welcoming!",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "gAAAAABo4ne6fVipxtX3I1hHsTp6Y600sLYUP6nsCgYqFyrxvaGJjzbHAJDNrcz5OpkLdqnsAzozSyumCKuUEkvzFG0IHHXGGe9vD2PQRo6nV_HeO5E1IvjGTpt-0NqCfKvGh5DuxwtBytnKYTucr05GScCwltQaooE-iqDZ-evtqYSPNfkq8s_sDCAlYiEZtpLNUP2gxQftAl5iHO5e25c0Zz0Aq6ipODGkrDVFStTnT-EwjO2RmT8XE7ZxFqOPHCio0FuJDrj03QCFUtJeBJCJlFdS0tTvhpeKp1aaXI-BIKKwWtt-tLMlUfe4MOe9LVNzVHyPHtoX8rgUvgg3dU6_J47wHeheaq9qVAsD_36ROptsjcDdi_wCBI7ZlGoXJ1J6WYZarTVgjpp9mO7IRgRSiMXwrzmbgax6IWLbpNsMY6Ugc60jIEic0wP63WbBbB9ibmcATfOejFxDQ2qnSFEDYMTtk8UjytEjjJpYQx9En75gZ9wW_vorxv0Kk1Tn73qUPQejSmxS5R9R5HNHhgREuFyemZiRq-dnp-9CIXWyvBmNlU2TkXVYKYXGjrNF8IsiFfKJ0Se6blWpCiZtLp9VTu8zX9p8-bzA9N9KRWT2xl0vZRuGjP1ailjw_FdKqK5r2Eq1_IakU6lF6MtkCw0oAdqCjeKeDHpYRn8fF1Ig3osjYycyUvteyrHepRYDBpkaFR3bOZ5Ev4gfeele3SIyKemg_gtme-FMxh306HqhzM4CkEnC5I6EwdzLIdwoUz6iMb3QtbwNb_7dqpgkO5lT6neBTtVCFyUAS0U6EcTS6MfvoyHvAfa5SdwATOI7jCu1MRARL0hvqAZOPxjKJ0-pPlTE2PNuXYiOzBmrYB8tlgukLkSQzqhGR6b1V9aqwL_xbf6sX4ubTbQ5kFZedy2sYezmOknLd7aqHTxVSk8vT2cHg3EwmIVvb7N2yAju_T9c78kMZs7vZTPkG-sQtGUdB3kcAkemiPLx1Rn2eHF3kDD4XSsVLJCYSNn5orl7Wsis8FMUlFauyVOMwA-F5S5wn0QDspnek2DuB5gyZGFmrt8LPZuOJlk=",
+                "format": "openai-responses-v1",
+                "id": "rs_0fa6db6d5cd1a7e20168e277b8f2488190b3c36e8aa647a240",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1759672248,
+      "id": "gen-1759672248-nObmhkShn2D1wYcHVmsq",
+      "model": "openai/gpt-5",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "usage": {
+        "completion_tokens": 15,
+        "prompt_tokens": 9,
+        "total_tokens": 24
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "989d63e0ad23eb5c-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 05 Oct 2025 13:50:48 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNSIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC41fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 100,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-5",
+      "n": 1,
+      "reasoning_effort": "low",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "",
+            "reasoning": "**Crafting a dragon adventure story**\n\nThe user wants a very long story about dragons and their adventures, and there are no specific constraints other than that. I’ll make sure to create an engaging narrative with multiple arcs, characters, and some worldbuilding. My goal is to produce a single, coherent story without excessive formatting, aiming for around 1200-1500 words. It will include scenes and character development to bring the adventurous elements to life, while being mindful of token limits.**Writing a dragon adventure story**\n\nThe user is asking for a very long story about dragons and adventures without any constraints. My goal here is to craft a compelling narrative that keeps the reader engaged, focusing on dragons, adventures, character development, and world-building. I’ll aim for a length between 1200 to 1500 words, ensuring the story is coherent and dynamic with multiple arcs. Heavy formatting should be avoided, so I’ll keep it as a single narrative. Let's get creative!",
+            "reasoning_details": [
+              {
+                "format": "openai-responses-v1",
+                "index": 0,
+                "summary": "**Crafting a dragon adventure story**\n\nThe user wants a very long story about dragons and their adventures, and there are no specific constraints other than that. I’ll make sure to create an engaging narrative with multiple arcs, characters, and some worldbuilding. My goal is to produce a single, coherent story without excessive formatting, aiming for around 1200-1500 words. It will include scenes and character development to bring the adventurous elements to life, while being mindful of token limits.**Writing a dragon adventure story**\n\nThe user is asking for a very long story about dragons and adventures without any constraints. My goal here is to craft a compelling narrative that keeps the reader engaged, focusing on dragons, adventures, character development, and world-building. I’ll aim for a length between 1200 to 1500 words, ensuring the story is coherent and dynamic with multiple arcs. Heavy formatting should be avoided, so I’ll keep it as a single narrative. Let's get creative!",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "gAAAAABo4nfGNOHXKgA6uFRW2EJWCOxgbFFILjH5YIha1jN54pAvjFoJOlfpLEtU_pVYaTNIDteXfZ1a9cLqC6rF2ZnmAGK44ptC5sRJ7_SoZqFoCSg-jHiKBQZQIlHZEFKCnfyj2PJNyRFexbNhi2WJbk14g2CjHPW7EdShrbY7Paf001bsXcNlOCsdOlRq5zJEj4qW5Adpo8eWlIXDsD6TzCc34FD6ftv5RIbJwECSO3BazzWFrYtSb4nKg3dcqmJTDAlBJ23FZvRAFKqyPZVUFNUZsnPH_qq818D7AcZ-eNrrgPhqeo9TOc8B0Cj7jfXRTxtPZgUXJGBGJ_Jd4FmoFD4NWx3BhUKPGPulvUDY5bFL6nUmdZf_TXre9sFPpREnhHUZe8fQwG2tpgBws4FuWfOYm6WFeqnICBsSbij8pp8eymFOgPvwSzLcSMJkE_7yl_RKY7XbREKbe_Ho3nstcx1mSKgJU0Z7IrSqjDsgfmVtgGDv6lL7tHrlBIM7z_gIpQSMFdKfmCDyfXkWfcnPTgiX3tYbFY49sctSX3xFWfQphBuuxgE1G8F-FmypHp2quOD4hCD74pCuAYx1EzlPyiFkTzJ7O3Kd7lZWk9Lt3bf7EQPcppba6so6NSPV4TsnkajjnMuWdo_rBVzuBUgj1gGm6IZ_4VFS-Em3yMPFfo4Tf-xZ6LbqtS6TgewmRwU0gEenMkVvg6IU832EsZSH5EUdSXGGlyjoK2pgpJPVblOeGP7x03nlCDms8ZZ1Dji03e_z8Qu27uVzwWmthOiVig9fjRENwDnBNQE_Ywp8KF-9LnovRixHW8FDfLhWqnUYI6lgRAxtNHrbk8kJfLSRh4bV7AiDiIgmE-cjSbe1CvDKhPr7tf5uh40b01Gr4TBUvp2jeKm9MwJvwUcAhhFUS0SelspiuYKeBy3iiIRhomufEaNbIqxoN5Zt_okTPWnGfEjvEbKRDb6s4wrt2tVWm_NPTFDfpdc_RpcwzpBs0JzNFcDHlHtrN3q9fPFmB6NC0YGAGpwJsfkSM8HmOrHqS63viIQAri0v_uo1s7Y0-UuEzyZCqbXMuHRSyFQpehWEXe8sIEW1JjqzYIGVrh3ndSwRZMUS8D2DSP2OUGV_Y5Q2qD4-yQGhKP1XIXpnsn7bQx3hoiUbr-DLjdvYJL1Hp5YWVFCmXQeqmrVq3HgrWhkioZmtNtKuSOQC-DlwgMOwQmP9ugFmjCBV2X2_0fxTvBr0X096ASD9flv5ekTYeHyZb8kLbTFTtldFeZ28wa2pH76IOu8LZzKFqPcvaIAvvidpIMYCDAcsUHoLoSJH0H_T9QGUqv3yLcIwefZPhkUDh-BHMAZ3hQGLjLt-mAWTDiwz2PyZCDbdft9o56e_j1cQZGQWrG8vAYzoOyUtRASj0BYnEQWn2lPR5GOHu8rEqCK67a5kcoGBVJM7DlM_74lmYoLLl4UQp5Ance4XDJPua6VH9rFk",
+                "format": "openai-responses-v1",
+                "id": "rs_0e245944868075f90168e277bef6608195a6c988a68c611310",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "max_output_tokens"
+        }
+      ],
+      "created": 1759672254,
+      "id": "gen-1759672254-TKYTnLLGP28fVF1QysrK",
+      "model": "openai/gpt-5",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "usage": {
+        "completion_tokens": 64,
+        "prompt_tokens": 15,
+        "total_tokens": 79
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "989d64052cb5eb5c-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 05 Oct 2025 13:50:54 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

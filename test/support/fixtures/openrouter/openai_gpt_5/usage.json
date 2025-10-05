@@ -1,0 +1,114 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGkgdGhlcmUhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC01IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Hi there!",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-5",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hi! How can I help you today?",
+            "reasoning": "**Crafting a polite greeting**\n\nThe user just greeted me, so I want to respond warmly and politely while keeping it brief. I think it’s good to ask how I can help and to mention a few examples of what I can assist with, like writing or coding. I should avoid being too verbose, ensuring my response remains friendly and straightforward. I’ll say something like, “Hi! How can I help today?” and offer some examples of tasks.",
+            "reasoning_details": [
+              {
+                "format": "openai-responses-v1",
+                "index": 0,
+                "summary": "**Crafting a polite greeting**\n\nThe user just greeted me, so I want to respond warmly and politely while keeping it brief. I think it’s good to ask how I can help and to mention a few examples of what I can assist with, like writing or coding. I should avoid being too verbose, ensuring my response remains friendly and straightforward. I’ll say something like, “Hi! How can I help today?” and offer some examples of tasks.",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "gAAAAABo4nfLZBRUkl6OGEsH3wqEUu1J2NGIVdeC57ORynWyIy6HaQWmHco50Ik4jF2zwXq1EsWBclwwowhCFlLs_CtogHI1ZWuTw9BPNGKwjZ7ri_eG4rGXxKBNcMG1u-oNZZFp4nMli4IgeVqtEeUbVvv_MOMTrMJdDvWKp5sQ7UFiJovRlQ34Pgdw2ZjO5FbzQIFMhEnF2yX7C-0MNfi6gMLuHbn_HDzFs7RDN36OLOIUxNeDEljI19EPseMXJejIkhUrdoyX_GiPS6euAQxfZSMdfVt0YbiCsBHZTSgOcZo8gaUQM9rLAiAcb3rPcA0ngmanF82_3VlCuAy0DP_Oswf-6LhqxE3YRWoYt_8B2QnIpqAugodnQkPBU_4o9KqsgPZfTL6yI6etYGeJmRDNfksKwQJufcfOQbsUf3tup44IibGQO-io2qPve-6-Ryxad32JgSoBjj7oxBocwj2YwsxLMUASBQELHVOW-N9fAyCkNHe6nynLuj9bqdItL6bu-SdFRauYjpupITB4hvik78FDO12SgUlv4aHTTC0D_tQX1xGqL3gtD697i9Lmh2O_fieJXveSc2CYTvgKgM6NrYBSIyNtp6CoHYVAV5DzOt0f-J-tAsMHdzp-B-Xxd6WYwpl5qkmDM4HyInp-PF6Vvz6eCpisKx-d9RpPUgac8Wv-zcCB5NOz6bTT1NQK6XlyqHn2XQQKgWS81yMPqerSKbySrGqAWdaV8McW8aJKhP-2JtgH1QGVMDZlxtAXl7aFBp89yzaZ6hfYgYwPe0LyvMv03YLLI0g1l0YQVIqxFyXKQJN3HPUwIKm2q2v1y5Ls4zHgKXL18JENFmgzoScyrmOeeTp6Gn5gUvMfDqyNWooKGxbAuSbwj804CTkRT7v0yeStr_HOadtSFIitG0cDiN_75FPmFYbmch98ZZSWj-uyxdsD0lF4K7l9iEHQ2a1a94GP4RCx_OgL1IESxfPpep6g_81tMm61wI2IOf6FaGou9meofM4BYcv8IjMmDfHkMtUeiYdQ1BCh-SYxMXcP4O6p8qSxnbMnSc8d6V3IHGxtJqX9B5wa1ArDnHNqJfjqK2nuEGZYEZR1GkIsRwVT_tPgOy-xpkbAnzRInPOH3j3DAhAkADEcVTJ30tDGoqT7h9pXmgFLcm3H48LTnbatDQk7j-tU831ntRJCAWHy86x3tGrgLObdBcFRbB4eDvpmVNtmQRWS7ndvLU94jw3Oy58nF5LR8RGrwTbflMDYWc5fTUMwTF2H8vPzLdCEBshbAgoO_ST9vv8lRNTlVL2m-StSTCxTdLHH90sATwpJLxoHco9MprLCGRInc_K1Pvs4YSp3pZl5_-DnTUWX7EKZee7cwKgrE5zujwLyvkvSpG0c3UHw6VDyIzWfhU4QNmDuE0dS5QVgmQ0OWOZ_qKQwhImTDy0oxUF_cprdif2RigqyKRUcvn9hAGsEUV9XKEt6QUbvmfYa",
+                "format": "openai-responses-v1",
+                "id": "rs_0e0b2cb80466ea3f0168e277c9086c81979fe9e1aa60d118c3",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1759672264,
+      "id": "gen-1759672264-zVknksiQ4y7XXekC6S5j",
+      "model": "openai/gpt-5",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "usage": {
+        "completion_tokens": 79,
+        "prompt_tokens": 9,
+        "total_tokens": 88
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "989d64454cb2eb5c-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 05 Oct 2025 13:51:04 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

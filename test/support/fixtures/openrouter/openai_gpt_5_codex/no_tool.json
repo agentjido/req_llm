@@ -1,0 +1,135 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1jb2RleCIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+    },
+    "canonical_json": {
+      "max_tokens": 300,
+      "messages": [
+        {
+          "content": "Tell me a joke about cats",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-5-codex",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tools": [
+        {
+          "function": {
+            "description": "Get current weather information for a location",
+            "name": "get_weather",
+            "parameters": {
+              "properties": {
+                "location": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "location"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Why don’t cats play poker in the jungle?  \nToo many cheetahs.",
+            "reasoning": "**Acknowledging compliance requirement**",
+            "reasoning_details": [
+              {
+                "format": "openai-responses-v1",
+                "index": 0,
+                "summary": "**Acknowledging compliance requirement**",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "gAAAAABo4nfFhT1SjxLsVh95DBQEx-LDhJS-N_xklN8Qi333A_0Q2hgUfW-3dWMFfeKE8zm1eka_WP29mce0SpWlCSMMvL3_rzUSMx3gZEB6AcrGyDB20si8peQLJxiugEC3ZmF40sJDG3UTk8f_3n-jmAAVuzJyzR4fiFHbzxWAoNVrne3jC-tCDnrRuj48wMNut75XsCDwKARv3_u6NfllQwER9jTxIQVcOJGvTmzts-6mc7dLcHTSRCUmo6yt1iZKz0HrGP8Ri6iBdbDgWYXnXlRzHw8eBWAFvHbCRueXklyLg6OiNcse7JI7evXbSoU3HxD9uWBJUMzdzP5mak1w88Ea-z9cDV4mX6m6JOfuxptxsQI2Qvyv-qZGMVOCCFcOFTIjrZdLPLtZ4ht1Vczdz-kioYRKaijvKLvMFlS9WxwJ4RT8oAH1ZMxPmgKt1psxTDOOzCzEfx8fQY2wNsIl47oS6koU-wukz6ZLbkOUvj_ezi_2_VlGs7yaZr0o7fHieIkYoyrR6o7T3mV8PAjyOlCWRsjUDzHaOjrHkF_W4Oerjod5NBxorI7F0qisvtlZI0HF5bQWI8qacMwIIN6F_CcyWFg_JTyZDufOKy0R6Km7lTAy9zLM52S3QGXrA76Ln-luOCOj0lT79x7w2xbkx8UJ05jAudiJ_JVXZ2NbrlZZBuHObX-qYWxQ-DlKdtmXG9GOxsQ3U1aNzJxGFaKjNIUl8at6HE5cCgc2kDNBXbQWTkck4kmYuYRpnzMbIYeSBIjsZE6YZLu1uDgOT-JzpL05m7owLOQ-r8q6EdZHgC2JS764YEebk7wcQhDjPq30JsutTAXYAw7OEb1Z8jEWQmpIX-HqMA==",
+                "format": "openai-responses-v1",
+                "id": "rs_04221108b44aefac0168e277c50c548190a0616722d7134e98",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1759672260,
+      "id": "gen-1759672260-Y1mvkSpArvRxXR1mVpw4",
+      "model": "openai/gpt-5-codex",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "usage": {
+        "completion_tokens": 23,
+        "prompt_tokens": 53,
+        "total_tokens": 76
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "989d642c683b8e5c-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 05 Oct 2025 13:51:00 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

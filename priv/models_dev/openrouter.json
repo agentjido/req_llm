@@ -31,67 +31,6 @@
       "tool_call": true
     },
     {
-      "attachment": true,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "openrouter/horizon-alpha",
-      "knowledge": "2025-07",
-      "last_updated": "2025-07-30",
-      "limit": {
-        "context": 256000,
-        "output": 128000
-      },
-      "modalities": {
-        "input": [
-          "text",
-          "image"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Horizon Alpha",
-      "open_weights": false,
-      "provider": "openrouter",
-      "provider_model_id": "openrouter/horizon-alpha",
-      "reasoning": false,
-      "release_date": "2025-07-30",
-      "temperature": false,
-      "tool_call": true
-    },
-    {
-      "attachment": true,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "openrouter/sonoma-sky-alpha",
-      "last_updated": "2024-09-05",
-      "limit": {
-        "context": 2000000,
-        "output": 2000000
-      },
-      "modalities": {
-        "input": [
-          "text",
-          "image"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Sonoma Sky Alpha",
-      "open_weights": false,
-      "provider": "openrouter",
-      "provider_model_id": "openrouter/sonoma-sky-alpha",
-      "reasoning": false,
-      "release_date": "2024-09-05",
-      "temperature": false,
-      "tool_call": true
-    },
-    {
       "attachment": false,
       "cost": {
         "input": 0,
@@ -741,37 +680,6 @@
       "reasoning": true,
       "release_date": "2025-04-28",
       "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": true,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "openrouter/horizon-beta",
-      "knowledge": "2025-07",
-      "last_updated": "2025-08-01",
-      "limit": {
-        "context": 256000,
-        "output": 128000
-      },
-      "modalities": {
-        "input": [
-          "text",
-          "image"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Horizon Beta",
-      "open_weights": false,
-      "provider": "openrouter",
-      "provider_model_id": "openrouter/horizon-beta",
-      "reasoning": false,
-      "release_date": "2025-08-01",
-      "temperature": false,
       "tool_call": true
     },
     {
@@ -1429,36 +1337,6 @@
       "tool_call": true
     },
     {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "openrouter/cypher-alpha:free",
-      "knowledge": "2025-07",
-      "last_updated": "2025-07-01",
-      "limit": {
-        "context": 1000000,
-        "output": 1000000
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Cypher Alpha (free)",
-      "open_weights": false,
-      "provider": "openrouter",
-      "provider_model_id": "openrouter/cypher-alpha:free",
-      "reasoning": false,
-      "release_date": "2025-07-01",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
       "attachment": true,
       "cost": {
         "cache_read": 0.1,
@@ -1800,37 +1678,6 @@
       "provider_model_id": "google/gemini-2.5-pro-preview-05-06",
       "reasoning": true,
       "release_date": "2025-05-06",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": true,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "google/gemma-3-12b-it",
-      "knowledge": "2024-10",
-      "last_updated": "2025-03-13",
-      "limit": {
-        "context": 96000,
-        "output": 8192
-      },
-      "modalities": {
-        "input": [
-          "text",
-          "image"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Gemma 3 12B IT",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "google/gemma-3-12b-it",
-      "reasoning": false,
-      "release_date": "2025-03-13",
       "temperature": true,
       "tool_call": true
     },
@@ -2392,67 +2239,6 @@
         "input": 0,
         "output": 0
       },
-      "id": "google/gemma-2-9b-it:free",
-      "knowledge": "2024-06",
-      "last_updated": "2024-06-28",
-      "limit": {
-        "context": 8192,
-        "output": 8192
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Gemma 2 9B (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "google/gemma-2-9b-it:free",
-      "reasoning": false,
-      "release_date": "2024-06-28",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": true,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "google/gemma-3-27b-it",
-      "knowledge": "2024-10",
-      "last_updated": "2025-03-12",
-      "limit": {
-        "context": 96000,
-        "output": 8192
-      },
-      "modalities": {
-        "input": [
-          "text",
-          "image"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Gemma 3 27B IT",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "google/gemma-3-27b-it",
-      "reasoning": false,
-      "release_date": "2025-03-12",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
       "id": "qwen/qwen3-235b-a22b:free",
       "knowledge": "2025-04",
       "last_updated": "2025-04-28",
@@ -2870,68 +2656,6 @@
       "release_date": "2025-03-29",
       "temperature": true,
       "tool_call": false
-    },
-    {
-      "attachment": true,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "google/gemma-3n-e4b-it:free",
-      "knowledge": "2025-05",
-      "last_updated": "2025-05-20",
-      "limit": {
-        "context": 8192,
-        "output": 8192
-      },
-      "modalities": {
-        "input": [
-          "text",
-          "image",
-          "audio"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Gemma 3n 4B (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "google/gemma-3n-e4b-it:free",
-      "reasoning": false,
-      "release_date": "2025-05-20",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": true,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "openrouter/sonoma-dusk-alpha",
-      "last_updated": "2024-09-05",
-      "limit": {
-        "context": 2000000,
-        "output": 2000000
-      },
-      "modalities": {
-        "input": [
-          "text",
-          "image"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Sonoma Dusk Alpha",
-      "open_weights": false,
-      "provider": "openrouter",
-      "provider_model_id": "openrouter/sonoma-dusk-alpha",
-      "reasoning": false,
-      "release_date": "2024-09-05",
-      "temperature": false,
-      "tool_call": true
     },
     {
       "attachment": false,

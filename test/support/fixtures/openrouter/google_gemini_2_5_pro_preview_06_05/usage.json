@@ -1,0 +1,114 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGkgdGhlcmUhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ29vZ2xlL2dlbWluaS0yLjUtcHJvLXByZXZpZXctMDYtMDUiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Hi there!",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-2.5-pro-preview-06-05",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello there! How can I help you today?",
+            "reasoning": "**Considering User Interaction**\n\nI've just processed the initial greeting and am figuring out the best way to react. I've identified the input and am analyzing its conversational implications. The goal now is a response that is appropriate and inviting.\n\n\n**Choosing a Suitable Response**\n\nI've evaluated various options for replies, factoring in tone and the intention of the greeting. Reciprocation felt insufficient, while adding an offer of assistance felt more in line with the objective. Now, I'm selecting the most appropriate balance of friendliness and functionality to foster a productive exchange.\n\n\n**Crafting the Ideal Greeting**\n\nI've now meticulously weighed the advantages of various greetings, considering how well each one fulfills the objectives of being welcoming, helpful, and encouraging. I'm leaning towards a standard opening with a direct question to clarify the user's needs. It's about achieving a balance between approachability and utility, ensuring a smooth transition into a productive dialogue.\n\n\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "**Considering User Interaction**\n\nI've just processed the initial greeting and am figuring out the best way to react. I've identified the input and am analyzing its conversational implications. The goal now is a response that is appropriate and inviting.\n\n\n**Choosing a Suitable Response**\n\nI've evaluated various options for replies, factoring in tone and the intention of the greeting. Reciprocation felt insufficient, while adding an offer of assistance felt more in line with the objective. Now, I'm selecting the most appropriate balance of friendliness and functionality to foster a productive exchange.\n\n\n**Crafting the Ideal Greeting**\n\nI've now meticulously weighed the advantages of various greetings, considering how well each one fulfills the objectives of being welcoming, helpful, and encouraging. I'm leaning towards a standard opening with a direct question to clarify the user's needs. It's about achieving a balance between approachability and utility, ensuring a smooth transition into a productive dialogue.\n\n\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "STOP"
+        }
+      ],
+      "created": 1759671175,
+      "id": "gen-1759671175-ZZhFxeR44vk0bm9zQmpi",
+      "model": "google/gemini-2.5-pro",
+      "object": "chat.completion",
+      "provider": "Google",
+      "usage": {
+        "completion_tokens": 488,
+        "completion_tokens_details": {
+          "image_tokens": 0,
+          "reasoning_tokens": 478
+        },
+        "prompt_tokens": 3,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 491
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "989d49b04bece826-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 05 Oct 2025 13:32:57 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

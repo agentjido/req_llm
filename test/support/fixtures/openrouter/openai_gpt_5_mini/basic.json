@@ -1,0 +1,115 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC01LW1pbmkiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 200,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-5-mini",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! Nice to meet you. How can I help today?",
+            "reasoning": "**Responding to a greeting**\n\nThe user said \"Hello world!\" which seems like a friendly greeting. I want to respond warmly and ask how I can help them while also offering my capabilities. Keeping it concise is important, so I’ll aim for a brief yet welcoming reply. I’ll make sure to express my readiness to assist with whatever they need in a friendly manner. Alright, let’s put this into action!",
+            "reasoning_details": [
+              {
+                "format": "openai-responses-v1",
+                "index": 0,
+                "summary": "**Responding to a greeting**\n\nThe user said \"Hello world!\" which seems like a friendly greeting. I want to respond warmly and ask how I can help them while also offering my capabilities. Keeping it concise is important, so I’ll aim for a brief yet welcoming reply. I’ll make sure to express my readiness to assist with whatever they need in a friendly manner. Alright, let’s put this into action!",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "gAAAAABo4nfBOFnOfiCGhooT81452nu9hK7A-ilf8yWO22hZ6dKtEahWWT626PqfXhNAhmSniQTeQLknvJotq3qAGVhDXYYIKYFkNKQ1ZRtPsQLByApd0SidwF7CgM7o9uXo06zI8L35TNe4QvzPxSFXaJhyhbYM3K_pJjUmUr09a7is2R6VGpiydkNRKWOdhOhv_odGZm_tcngXOkDUhpNQz-_VtmIrsVfq8j3UZckCGuuwrG8RvmVJiyDXCtSSu9eoWDUFTgZdAiOOAH9hHKlpGAQGQh81jBgn3aWspGinyL1kqK8rfwFdzZBKcABWp71kmtR7DyJWngdrcMxpYtkYUQ3pu2yS1OWLJZDS3mYrpy47CJ0bqD3r2g3PrFddYTSceAD0zAEO2Cvwg8t6XCLLXAEGtS2kpb3qc6dhIit06yW9i-I750CkAdpQjn7vHDTH7GFwiZEGPYeT-3ucZS6WAE7dwYutGP1PiunzC1G8sVWXUQp6y9PgQXioDdAee8-bF3n61xcY57Hy9LMe_FwYiQIe6vEjeVlPJkL6VWH9BqmzrwbIIEHjllFczMleCOmZnSHekLAjxeTSFed_U_CV3jXZWJysyyq_pJnWjnsWe_3dKoHb3-PnZybWyYc2sjhbrTrPZiatxnp-sMX-WdRExudtknbrfiHlb3SX6sTp3SOdRT3y9U1rrE0PQTzoDR1fAMufYvxBlZzgmRHvLGctyFv0tHVycmxOzGpL4luoRbMgCBt2d_OGU2X-siz9nNUuCkUOsjxMysILTdtrMYcyOpOOI7a-Q_Jzs_dK5MsC-t0BH3NcpYrLMck1DE2abjmUzZokZTyp8DarXKlRipuP90fkEuvm2ZXw6Cim2JBIF8Ebc3lSXlJVIiJU0I11Ir6ROsEes9mdMKHQQ7i9DQkI6zfCyHrJgMWPaeXKUqUinz4G7gh07nEphN_C4sGoYNogIRqzjOcbrzpyYXgH-TrYS04ZaCa-0VMD8AQeSp6N0cRERoEYOKaoPNp3IHji57Ustj5JRpHy",
+                "format": "openai-responses-v1",
+                "id": "rs_05354a00decb64a00168e277bf63508190a0e111d79c4cdb22",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1759672254,
+      "id": "gen-1759672254-IDBG4tKDXhImX0MCcaTq",
+      "model": "openai/gpt-5-mini",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "usage": {
+        "completion_tokens": 19,
+        "prompt_tokens": 9,
+        "total_tokens": 28
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "989d6407af09e1f7-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 05 Oct 2025 13:50:55 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

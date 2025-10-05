@@ -1,0 +1,114 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGkgdGhlcmUhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ29vZ2xlL2dlbWluaS0yLjUtcHJvIiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Hi there!",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-2.5-pro",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello there! How can I help you today?",
+            "reasoning": "**Assessing User Input**\n\nI've registered the user's \"Hi there!\" I've parsed the input as a friendly greeting, opening a conversational door. Currently, I'm classifying it as a social pleasantry and will be formulating an appropriate response.\n\n\n**Evaluating Response Strategies**\n\nI'm comparing several potential responses. While echoing the greeting is acceptable, I want something more engaging. I've leaned towards a combination of reciprocation and a proactive offer of assistance. My current frontrunner is a blend of warmth and directness, tailored to maintain my assistant persona.\n\n\n**Choosing the Best Options**\n\nI'm now comparing and contrasting the shortlisted responses. Considering factors like approachability and efficiency. I'm weighing the pros and cons of each approach, while ensuring the final selection matches my intended persona as a helpful and accessible assistant. I'm close to settling on the optimal greeting.\n\n\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "**Assessing User Input**\n\nI've registered the user's \"Hi there!\" I've parsed the input as a friendly greeting, opening a conversational door. Currently, I'm classifying it as a social pleasantry and will be formulating an appropriate response.\n\n\n**Evaluating Response Strategies**\n\nI'm comparing several potential responses. While echoing the greeting is acceptable, I want something more engaging. I've leaned towards a combination of reciprocation and a proactive offer of assistance. My current frontrunner is a blend of warmth and directness, tailored to maintain my assistant persona.\n\n\n**Choosing the Best Options**\n\nI'm now comparing and contrasting the shortlisted responses. Considering factors like approachability and efficiency. I'm weighing the pros and cons of each approach, while ensuring the final selection matches my intended persona as a helpful and accessible assistant. I'm close to settling on the optimal greeting.\n\n\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "STOP"
+        }
+      ],
+      "created": 1759671184,
+      "id": "gen-1759671184-paEquAo5idaFtSOn7HTv",
+      "model": "google/gemini-2.5-pro",
+      "object": "chat.completion",
+      "provider": "Google",
+      "usage": {
+        "completion_tokens": 489,
+        "completion_tokens_details": {
+          "image_tokens": 0,
+          "reasoning_tokens": 479
+        },
+        "prompt_tokens": 3,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 492
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "989d49e48d26ee11-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 05 Oct 2025 13:33:06 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

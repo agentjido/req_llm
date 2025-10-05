@@ -1,0 +1,180 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJvcGVuYWkvZ3B0LTUtbmFubyIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 300,
+      "messages": [
+        {
+          "content": "What's the weather like in Paris, France?",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-5-nano",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tools": [
+        {
+          "function": {
+            "description": "Get current weather information for a location",
+            "name": "get_weather",
+            "parameters": {
+              "properties": {
+                "location": {
+                  "type": "string"
+                },
+                "unit": {
+                  "enum": [
+                    "celsius",
+                    "fahrenheit"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "location"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        },
+        {
+          "function": {
+            "description": "Tell a funny joke",
+            "name": "tell_joke",
+            "parameters": {
+              "properties": {
+                "topic": {
+                  "description": "Topic for the joke",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "function"
+        },
+        {
+          "function": {
+            "description": "Get the current time",
+            "name": "get_time",
+            "parameters": {
+              "properties": {},
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "",
+            "reasoning": "**Fetching Paris weather**\n\nI plan to get the weather for Paris, France. Since the user didn't specify, I think it’s best to default to Celsius, although I could offer Fahrenheit as an option if needed. I'll use the weather tool to make this call. So, I'll go ahead and request the weather with the location set to \"Paris, France\" and the unit set to Celsius. After that, I'll provide a summary with the results! Let's get started!",
+            "reasoning_details": [
+              {
+                "format": "openai-responses-v1",
+                "index": 0,
+                "summary": "**Fetching Paris weather**\n\nI plan to get the weather for Paris, France. Since the user didn't specify, I think it’s best to default to Celsius, although I could offer Fahrenheit as an option if needed. I'll use the weather tool to make this call. So, I'll go ahead and request the weather with the location set to \"Paris, France\" and the unit set to Celsius. After that, I'll provide a summary with the results! Let's get started!",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "gAAAAABo4nfT3yT2gO8YXHjkzb8gpTc32lrYDFFdENXOH7vppOpY2oJ_OcF9OwDUHtqNkS9UgwYbcNLMATr5JxfINfnZnHBZ1QBukitg9_A6ZGX8JOTEv29v4VTjY5HwyJUIGuQp_me8Y-81Q_krpPPxwmNOX0wXWnDgL7Hi6FAqL6VionCcHEFzx8dcij6fdrvnLRhCp6Im9nDdnehVBoMinTixyzYs6CF-V-yoawlqZqkstO7aMEmUJAAUGjf5UylM7vYkkqFhZ0RB_5LVDQlRGWMckH6UrtydDiOzrgTBTV1rEr0WD-ok9cYA-0CXKhuYbg6Bgl_oLlvpXNbSF3d7DOPxLGyQp0qtwcWMfrQcDNLujtgn7d8fqieowBHy1qWxu2Ku9t17D-JOjBaxp7zKGemkWpvhjD7kgCcLnW4RXgOUXoUmcvjNvPLvhrktBJsJ1hSQm6Pl3fQRHsKUg5mFY0kotB3JyyYhtLKOCn-2nRvImn6Iw5HgVKbj-zcmFHYwxoLH-OfxYCfWyo0YPwsiSMH8BdevF_1qFscgmWAeCkVaHFRlqeDkZuvtudC1NGX9Pih_eJPok72gscYTcxieCsMPYvcOEKR8N_Fe-wkBsKQ4MKVHckZs46KIY-5OpOvL2v39w9-jKYi7K5uTuHZYTe6GzaSTMZ5Ymx8oRLh3ndDWacKhsrCCOs-m6c-SIt-I-OzkBd707NAla-W4Kjsxuv-YGRF4HgotCUOxz1imX_J1SpIMJ2T7lChFvDjZpSbQJchuscZlirn0qR3gIRjcZ8d99sC_cu8kSFN7M-Wav3v8XipHorSAfGxHQJmZ2PhKleaw7eKLw8Doyn4DAUqt4zaR1r_MZFDOxr14YglZhGo1rrx9kV4CGrV5iZQXfmSYaOCuFmPT18Q9OYD525PCl8qgnvUOtk2kytLWtC9DGA2at5gJiCVopIFH6R54WzjmFND668U1OZV1Z448CN9xwuA82aX7NiY8Jn120k43AmoslNtn7rg7_qF9zKEKSilEHIDeXTWcoQ2VkKwpzvobltO3X8cD5ccg0EAqv3ilxoHdFk-MTAdDV704OrNn6HIq4rwEbkJDfY70JcXvNTVw1aHaYU7ij3hb2P2Pukss0lWWeUgFhsphtdTYqAwc44MyxpmKbrI48DP3r4Kz4RQU9TBbCdvvI9Zf934vCDdK1s0-hgDINDBie6mAYSnreRFe1o7xyTXDyq7GU6-tzqfC7_QePaJTbdWOC6HzR9CvoSeqj1yNSRTzuFeYIbL_XBLiP_NcnA-50WYtJ4IvWrnZ7NyI2gV33cs-MROz5GGKvw-AC1hKsEJZWsK31EkaWL0iMetciyahngJG1VRtATAxQpzg6yqrVv4BwEt8RteK-yQHXwXG401mSjOGedT77KJ9aQsphk5y",
+                "format": "openai-responses-v1",
+                "id": "rs_09d2715a09cb3bd70168e277d0f2648197842424de3fa8f6bc",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
+                  "name": "get_weather"
+                },
+                "id": "call_yKc9N2vznyfAtMfCsNVevJmy",
+                "index": 0,
+                "type": "function"
+              }
+            ]
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1759672272,
+      "id": "gen-1759672272-1TVt39Rjr82nGW0U9bUe",
+      "model": "openai/gpt-5-nano",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "usage": {
+        "completion_tokens": 91,
+        "prompt_tokens": 104,
+        "total_tokens": 195
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "989d64750f44e7fa-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 05 Oct 2025 13:51:12 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

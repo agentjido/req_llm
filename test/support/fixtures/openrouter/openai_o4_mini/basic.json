@@ -1,0 +1,109 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL280LW1pbmkiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 200,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "openai/o4-mini",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello there! How can I assist you today?",
+            "reasoning": null,
+            "reasoning_details": [
+              {
+                "data": "gAAAAABo4nfUHFtyKOgqGmTumX9huMqxzdv4V10vKvNyHmy7juVzPM6wQo_0qfrZTZ0bKVGHBW_-tt2_q44p-awRTr0zIK6OuKdntEulacHo_oATm49CxYGYFkTsHnPLbWCspQCw9yjHSP5QAN7DXMHBKcCJTzNRJ_PGRYJpce0r4u8t5OAk6bEWl-uk-3m-15eXV6-qxkkenaT_BZBzcHswSLgtP3bgKuOH7jvdf5433FGS1AwRfr946-DVtcjEjkh5Kdp3Bs-hAP34AX-NPhbplwZp7pbSzUlc3IJzj2d12kM7uHuVEBKfYbYEkXrUX6YoNvtVO6ymlem7zfqe1niHBe-S72clwbPnxWmfmu8MsfcFoivW76P3Apd_H0v5iHcH2Hd3SbTPqXzaTnuDFkE5lRkHPLbi66Its4KvlU32HkxhIWG6enFf4IdH88Dkh6sbZi34TbglzuoTVEb9V7vGOI55HG343stQh3jC0ZvYFBX3Yts5-EZhaKcEdpPSgU98NhXrDnVrDQ6zBOrIuRHPscDZUbLf3K2-TYNwnUbEkWz2j2ZrKkxTRHgfNsRXDj2Z-X_GSgkgjNEy8sQ8JWnQlvh-1IiCV8iP06BcDZ8i1xOqeSRl1ztf7XSsYKMqZDkpuZ5PN8fc7HaSPm2T8YlKykCdaKkR-IsfkkmZYOeSLd7Yqemf15DZ3i9_Eqi6OI-Jhlhaq6reuNMiEEYTforXs6q0Vapr9_IpjpuXYFUM4qvtEX5yJJXdPb-S2O3BIgGRKF-iGBWvDBPMUX7-wVtZ1IsqUV7HonV9YfT7AovkhexuYJ3Liz8xsoskBumw1FWmaBOrxodF0mMPjaVcrrQMw1gQOQBrSFgm5ENlOwBkBPxVxBkkzd-PjAGWVQMjJnmfwLPtKMfRb2SBUhugz8cMrDR7FVZHQZQNJfUXCuET7g5cmxqsJQI=",
+                "format": "openai-responses-v1",
+                "id": "rs_03aa75e49a68e2db0168e277d40f948197a54e0f5ceebf5d0d",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1759672275,
+      "id": "gen-1759672275-W7wmtH6bWZj7KXbA9SyN",
+      "model": "openai/o4-mini",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "usage": {
+        "completion_tokens": 16,
+        "prompt_tokens": 9,
+        "total_tokens": 25
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "989d6489cb901048-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 05 Oct 2025 13:51:15 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}
