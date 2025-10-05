@@ -572,6 +572,19 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
           model_part == "*" ->
             pairs_for_provider(registry, provider_atom)
 
+          String.ends_with?(model_part, "*") ->
+            prefix = String.trim_trailing(model_part, "*")
+            
+            case Map.get(registry, provider_atom) do
+              nil ->
+                []
+
+              models ->
+                models
+                |> Enum.filter(fn m -> String.starts_with?(m["id"], prefix) end)
+                |> Enum.map(fn m -> {provider_atom, m["id"]} end)
+            end
+
           true ->
             case find_model(registry, provider_atom, model_part) do
               nil ->
