@@ -574,7 +574,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
           String.ends_with?(model_part, "*") ->
             prefix = String.trim_trailing(model_part, "*")
-            
+
             case Map.get(registry, provider_atom) do
               nil ->
                 []

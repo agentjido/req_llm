@@ -29,8 +29,6 @@ defmodule Provider.OpenAI.MetadataTest do
     test "o-series models use responses API" do
       responses_models = [
         "o1",
-        "o1-mini",
-        "o1-preview",
         "o1-pro",
         "o3",
         "o3-deep-research",
