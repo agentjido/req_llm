@@ -180,7 +180,7 @@ defmodule ReqLLM.Test.ModelMatrix do
   defp expand_pattern("all", registry), do: all_model_specs(registry)
 
   defp expand_pattern(pattern, registry) do
-    case String.split(pattern, ":") do
+    case String.split(pattern, ":", parts: 2) do
       [provider, "*"] ->
         expand_provider_wildcard(String.to_atom(provider), registry)
 
@@ -245,7 +245,7 @@ defmodule ReqLLM.Test.ModelMatrix do
   end
 
   defp extract_provider(spec) do
-    case String.split(spec, ":") do
+    case String.split(spec, ":", parts: 2) do
       [provider, _] -> provider
       _ -> "unknown"
     end

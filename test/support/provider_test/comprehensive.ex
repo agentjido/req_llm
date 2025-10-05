@@ -149,7 +149,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 if truncated?(response) do
                   rt = reasoning_tokens(response)
                   assert is_number(rt) and rt >= 0
-                  
+
                   if content != "" do
                     assert String.length(content) > 0,
                            "Truncated response should have some content or reasoning tokens"
@@ -427,8 +427,9 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
               # They reason internally but only output final text
               # Accept responses with: thinking content, reasoning tokens, or just regular text
               has_any_output = combined != ""
-              
-              assert has_thinking_part? or (is_number(reasoning_tokens) and reasoning_tokens > 0) or has_any_output,
+
+              assert has_thinking_part? or (is_number(reasoning_tokens) and reasoning_tokens > 0) or
+                       has_any_output,
                      "Expected thinking content, reasoning tokens, or text output; got thinking: #{inspect(thinking)} tokens: #{inspect(reasoning_tokens)} text: #{inspect(text)}"
 
               last = List.last(response.context.messages)

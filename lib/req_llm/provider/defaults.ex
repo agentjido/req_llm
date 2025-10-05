@@ -1019,7 +1019,9 @@ defmodule ReqLLM.Provider.Defaults do
           end
 
         model_name when is_binary(model_name) ->
-          provider_id = String.split(model_name, ":") |> List.first() |> String.to_atom()
+          provider_id =
+            String.split(model_name, ":", parts: 2) |> List.first() |> String.to_atom()
+
           model = %ReqLLM.Model{provider: provider_id, model: model_name}
           {provider_id, model}
       end

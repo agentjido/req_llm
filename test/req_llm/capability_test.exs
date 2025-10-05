@@ -87,7 +87,7 @@ defmodule ReqLLM.CapabilityTest do
       if not Enum.empty?(models) do
         first_model = hd(models)
         assert String.contains?(first_model, "anthropic:")
-        assert String.split(first_model, ":") |> length() == 2
+        assert String.split(first_model, ":", parts: 2) |> length() == 2
       end
     end
 
