@@ -32,35 +32,10 @@
   },
   "response": {
     "body": {
-      "choices": [
-        {
-          "finish_reason": "length",
-          "index": 0,
-          "logprobs": null,
-          "message": {
-            "content": "The wind whipped Lyra's crimson hair around her face as she clung to the craggy cliff face. Below, the emerald valley stretched out, a tapestry of rolling hills and sparkling streams, but her gaze was fixed on the sky. There, a magnificent creature, scales the color of burnished gold, soared majestically, its wings eclipsing the sun. A dragon. Not just any dragon, but Ignis, the last of his kind.\n\nLyra, a young cartographer with",
-            "role": "assistant"
-          }
-        }
-      ],
-      "created": 1759513823,
-      "id": "chatcmpl-0fa3cc1f-11e0-454e-8d85-cf6dc9d215e0",
-      "model": "gemma2-9b-it",
-      "object": "chat.completion",
-      "service_tier": "on_demand",
-      "system_fingerprint": "fp_10c08bf97d",
-      "usage": {
-        "completion_time": 0.181818182,
-        "completion_tokens": 100,
-        "prompt_time": 0.00125441,
-        "prompt_tokens": 18,
-        "queue_time": 0.110512485,
-        "total_time": 0.183072592,
-        "total_tokens": 118
-      },
-      "usage_breakdown": null,
-      "x_groq": {
-        "id": "req_01k6nk4hfyfpt8fye2hkex9b32"
+      "error": {
+        "code": "invalid_api_key",
+        "message": "Invalid API Key",
+        "type": "invalid_request_error"
       }
     },
     "headers": {
@@ -74,7 +49,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988e480fd8e402b0-ORD"
+        "9897d5733d0786d2-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -83,16 +58,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 17:50:23 GMT"
+        "Sat, 04 Oct 2025 21:39:45 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=zJgnt.aKkFQEewTg.dX5F_z1II1QlbZ2nTmNPxO8jtg-1759513823-1.0.1.1-QzaYz711Ky6a0IentOUM.vy2EF7kEwNo2C048EcVi5dQEfZ7wVjfPxkhVz9x2_yT.5cOXwm5JgzZ6nQ7dyzHExQdjJj3351v0gCOzAQKz8U; path=/; expires=Fri, 03-Oct-25 18:20:23 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
-      ],
-      "transfer-encoding": [
-        "chunked"
+        "__cf_bm=eaXbCII2bhbXI2qZtkcnKqNXML6ea1X9_3zn_67UrOo-1759613985-1.0.1.1-pRh.J.Jl9YP67daXdjJRu3CUACP9iWm2eAKhcVSeiKM6wbQv3YTKGg.lyDCLYm4WNofwTpwFTJYARM4Z5.4xrWHxiWXMdHFihNHr_kVV8oI; path=/; expires=Sat, 04-Oct-25 22:09:45 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "vary": [
         "Origin"
@@ -103,28 +75,10 @@
       "x-groq-region": [
         "yul"
       ],
-      "x-ratelimit-limit-requests": [
-        "14400"
-      ],
-      "x-ratelimit-limit-tokens": [
-        "15000"
-      ],
-      "x-ratelimit-remaining-requests": [
-        "14394"
-      ],
-      "x-ratelimit-remaining-tokens": [
-        "12886"
-      ],
-      "x-ratelimit-reset-requests": [
-        "35.788s"
-      ],
-      "x-ratelimit-reset-tokens": [
-        "8.455999999s"
-      ],
       "x-request-id": [
-        "req_01k6nk4hfyfpt8fye2hkex9b32"
+        "req_01k6rjn914e8qrxr1fk572te8w"
       ]
     },
-    "status": 200
+    "status": 401
   }
 }

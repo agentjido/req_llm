@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhpIHRoZXJlISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMy1mYXN0Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhpIHRoZXJlISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMy1mYXN0Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
-      "max_completion_tokens": 50,
+      "max_completion_tokens": 10,
       "messages": [
         {
           "content": "Hi there!",
@@ -33,40 +33,8 @@
   },
   "response": {
     "body": {
-      "choices": [
-        {
-          "finish_reason": "stop",
-          "index": 0,
-          "message": {
-            "content": "Hey there! How can I help you today? 😊",
-            "refusal": null,
-            "role": "assistant"
-          }
-        }
-      ],
-      "created": 1759509980,
-      "id": "0b31966d-9c81-263e-f542-738d83e5cb2f_us-east-1",
-      "model": "grok-3",
-      "object": "chat.completion",
-      "system_fingerprint": "fp_f02e6df795",
-      "usage": {
-        "completion_tokens": 12,
-        "completion_tokens_details": {
-          "accepted_prediction_tokens": 0,
-          "audio_tokens": 0,
-          "reasoning_tokens": 0,
-          "rejected_prediction_tokens": 0
-        },
-        "num_sources_used": 0,
-        "prompt_tokens": 9,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 2,
-          "image_tokens": 0,
-          "text_tokens": 9
-        },
-        "total_tokens": 21
-      }
+      "code": "Client specified an invalid argument",
+      "error": "Incorrect API key provided: te***ai. You can obtain an API key from https://console.x.ai."
     },
     "headers": {
       "access-control-allow-origin": [
@@ -79,7 +47,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988dea438ddbe23d-ORD"
+        "9897d57a6b1af862-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -88,30 +56,21 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 16:46:21 GMT"
+        "Sat, 04 Oct 2025 21:39:46 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=pkXZlEfb.Uk7XR7n59O0vSB1TBieFLYlPh9vBFfRUMU-1759509981-1.0.1.1-nom4mgJaBlkIoInn.jW9K5RLCsAJY8naivlaB3dFE4OKHARLC05m03cA6V6rmWm3Vpd86mPfdvCuQmsp4J1F9lcaZPMdatl.YlPpHAUixW4; path=/; expires=Fri, 03-Oct-25 17:16:21 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=aSrDMRc0c5Fr7RDVD.el40bOw.uTe6AqF45.wq1GHUM-1759613986-1.0.1.1-GW6fYD1V7bZ.4Ek7tKcHw8EFW4WkHTQqwrtHtLzjPV.UrpILy4iMzssTlZEjkK9kcKOX4uYA74POHW5oVTcwp5RwdTropupxoBcHZ8oTcXE; path=/; expires=Sat, 04-Oct-25 22:09:46 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
       ],
-      "transfer-encoding": [
-        "chunked"
-      ],
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
-      ],
-      "x-request-id": [
-        "00-a56acef969cc128e8d29e7915b793dad-7152779200053fd5-01"
-      ],
-      "x-zero-data-retention": [
-        "false"
       ]
     },
-    "status": 200
+    "status": 400
   }
 }

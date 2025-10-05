@@ -1,0 +1,189 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoibzEtcHJvIiwicmVhc29uaW5nIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdHJlYW0iOmZhbHNlfQ=="
+    },
+    "canonical_json": {
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Write a very long story about dragons and adventures",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 100,
+      "model": "o1-pro",
+      "reasoning": {
+        "effort": "low"
+      },
+      "stream": false
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "background": false,
+      "billing": {
+        "payer": "developer"
+      },
+      "created_at": 1759613850,
+      "error": null,
+      "id": "resp_085bd6e4f80d217c0068e1939ab6f8819b927e2f9a8f3db908",
+      "incomplete_details": {
+        "reason": "max_output_tokens"
+      },
+      "instructions": null,
+      "max_output_tokens": 100,
+      "max_tool_calls": null,
+      "metadata": {},
+      "model": "o1-pro-2025-03-19",
+      "object": "response",
+      "output": [
+        {
+          "id": "rs_085bd6e4f80d217c0068e193acf68c819b849d6b9561a26040",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Once upon a time in the land of Saramondor, a tapestry of verdant hills, winding rivers, and snow-laden peaks shimmered beneath a radiant sky. Towering clouds billowed like soft mountains in the azure highlands, and though they appeared serene, they often carried the roar of enormous wings. This was a realm of lore, where dragons",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_085bd6e4f80d217c0068e193acf934819b8a17fefd58818d7e",
+          "role": "assistant",
+          "status": "incomplete",
+          "type": "message"
+        }
+      ],
+      "parallel_tool_calls": true,
+      "previous_response_id": null,
+      "prompt_cache_key": null,
+      "reasoning": {
+        "effort": "low",
+        "summary": null
+      },
+      "safety_identifier": null,
+      "service_tier": "default",
+      "status": "incomplete",
+      "store": true,
+      "temperature": 1.0,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "tool_choice": "auto",
+      "tools": [],
+      "top_logprobs": 0,
+      "top_p": 1.0,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 15,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 73,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 88
+      },
+      "user": null
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9897d2268952b947-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 04 Oct 2025 21:37:49 GMT"
+      ],
+      "openai-organization": [
+        "epic-creative-sogybe"
+      ],
+      "openai-processing-ms": [
+        "18630"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=EOukYSRD03RZQSaG78X7F7kpYYvNsNPfMYbn9k5.PRg-1759613869-1.0.1.1-Q1B2n58ncQoZbFrt4GMdqpC4jQBbLU6qJqtKJ.f9U5zoKkiw6J2BuMYltKgQEbZ6Sp4k9Lf5Mj2PDmjyXpZ46HOcyjZZu1DvciNRl.dswck; path=/; expires=Sat, 04-Oct-25 22:07:49 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=Ravnx3hCaR.nafdmDP3T3iVQRzMXmgifKNjalVy_UJk-1759613869356-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-envoy-upstream-service-time": [
+        "18636"
+      ],
+      "x-ratelimit-limit-requests": [
+        "5000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "800000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "4999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "799765"
+      ],
+      "x-ratelimit-reset-requests": [
+        "0s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0s"
+      ],
+      "x-request-id": [
+        "req_13faa9ee8541b1b70f8bb69571299af9"
+      ]
+    },
+    "status": 200
+  }
+}

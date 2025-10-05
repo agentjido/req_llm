@@ -43,9 +43,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759528772,
+      "created_at": 1759613833,
       "error": null,
-      "id": "resp_000826c9d6680e590068e0474402bc8197a5cf0f1fe0e14c5e",
+      "id": "resp_02caf98c0f33236d0068e1938905bc819998aa4ba626e2b246",
       "incomplete_details": {
         "reason": "max_output_tokens"
       },
@@ -57,23 +57,9 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_000826c9d6680e590068e0474528c88197b3ded5470521f104",
+          "id": "rs_02caf98c0f33236d0068e19389cf848199968cd691ad88fbdb",
           "summary": [],
           "type": "reasoning"
-        },
-        {
-          "content": [
-            {
-              "annotations": [],
-              "logprobs": [],
-              "text": "Part I — The Smoke Before Dawn\n\nWhen the first ember fell from the sky the",
-              "type": "output_text"
-            }
-          ],
-          "id": "msg_000826c9d6680e590068e04745dc388197abc876eaae91853d",
-          "role": "assistant",
-          "status": "incomplete",
-          "type": "message"
         }
       ],
       "parallel_tool_calls": true,
@@ -104,11 +90,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 86,
+        "output_tokens": 64,
         "output_tokens_details": {
           "reasoning_tokens": 64
         },
-        "total_tokens": 101
+        "total_tokens": 79
       },
       "user": null
     },
@@ -120,7 +106,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988fb508bfa26167-ORD"
+        "9897d1b81d31e5db-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -129,13 +115,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:59:34 GMT"
+        "Sat, 04 Oct 2025 21:37:15 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "2250"
+        "1956"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -147,8 +133,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=nG0CiULteR1tqPn5mQnZ4emhU7HNmzje2eZP8R9_eSw-1759528774-1.0.1.1-4Hi046ZTeXNbUyaR99DJNdDib5g_BptXvVxK0BjEOBjYgdlwSruhz2d28SQwfETnlwcdENVjGBikI_6F20J2broEkuu3qCD4BBexgC9y9iY; path=/; expires=Fri, 03-Oct-25 22:29:34 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=NFCTvJT6wyKA.n85Id.ybU.LJ9zp2RGJO1pROGS.xsk-1759528774289-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=n1U5WTLANAL9Ei0EwC3lAUKYLiCP5s39O.P0AVAO90E-1759613835-1.0.1.1-q3a_rdAKQixB7P9S3nNX4kc2hUhkQpwsG_DqmFrMNNXbLEMba8cK9cgbvYPvpFaW543.EnElmi2Ujb.6SDrTWU33nNhmQabTGEK2_Wv9gi0; path=/; expires=Sat, 04-Oct-25 22:07:15 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=g0Ia.Vf6heYoI3sxP5OsvoMX5FXWrIZJ2uXPNpHqmQ0-1759613835003-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -160,7 +146,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "2252"
+        "1959"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -181,7 +167,7 @@
         "3ms"
       ],
       "x-request-id": [
-        "req_66928decc4701ecb194bb0beca7cc84a"
+        "req_4ec2e59375fc477a6104aaf75dc32b9f"
       ]
     },
     "status": 200

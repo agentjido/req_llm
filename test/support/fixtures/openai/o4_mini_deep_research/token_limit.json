@@ -1,0 +1,102 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoibzQtbWluaS1kZWVwLXJlc2VhcmNoIiwicmVhc29uaW5nIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdHJlYW0iOmZhbHNlfQ=="
+    },
+    "canonical_json": {
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Write a very long story about dragons and adventures",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 100,
+      "model": "o4-mini-deep-research",
+      "reasoning": {
+        "effort": "low"
+      },
+      "stream": false
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "error": {
+        "code": null,
+        "message": "Deep research models require at least one of 'web_search_preview', 'mcp', or 'file_search' tools.",
+        "param": "tools",
+        "type": "invalid_request_error"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9897d1b30b84e829-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 04 Oct 2025 21:37:12 GMT"
+      ],
+      "openai-organization": [
+        "epic-creative-sogybe"
+      ],
+      "openai-processing-ms": [
+        "35"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=H7ROn6rQ2Ug15SQYlAS13Vbfplv41jv.M7uoAEblKXI-1759613832-1.0.1.1-bUIQ8So4RAbUW44yVCiwiodS84m1_bBri6lQ8V06fSp9vcnitchi.uV3gV0nhte6Upb8b4gLtYDGCURdAKtEFtho2DfOw4e3eVkocRKE7aE; path=/; expires=Sat, 04-Oct-25 22:07:12 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=Vvc16F1N31m2K5ourlQb.4J0YoQo1FaCwvpeZo_KHqg-1759613832275-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-envoy-upstream-service-time": [
+        "40"
+      ],
+      "x-request-id": [
+        "req_b42186b77ce31d104f92ed94f04c9d4d"
+      ]
+    },
+    "status": 400
+  }
+}

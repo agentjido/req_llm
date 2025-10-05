@@ -1,0 +1,187 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjIwNDgsIm1vZGVsIjoibzEtcHJvIiwicmVhc29uaW5nIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdHJlYW0iOmZhbHNlfQ=="
+    },
+    "canonical_json": {
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Solve 12*7 and show your internal thinking (brief).",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 2048,
+      "model": "o1-pro",
+      "reasoning": {
+        "effort": "low"
+      },
+      "stream": false
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "background": false,
+      "billing": {
+        "payer": "developer"
+      },
+      "created_at": 1759613869,
+      "error": null,
+      "id": "resp_02147c0f053235740068e193ad88c4819ab420780d305575b1",
+      "incomplete_details": null,
+      "instructions": null,
+      "max_output_tokens": 2048,
+      "max_tool_calls": null,
+      "metadata": {},
+      "model": "o1-pro-2025-03-19",
+      "object": "response",
+      "output": [
+        {
+          "id": "rs_02147c0f053235740068e193c42c70819a873cbeac2031497e",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Here’s a concise, step-by-step way to see why 12 × 7 = 84 without revealing private reasoning:  \n\n1. Recognize that 12 × 7 means adding 12 a total of 7 times.  \n2. 12 + 12 = 24, 24 + 12 = 36, 36 + 12 = 48, 48 + 12 = 60, 60 + 12 = 72, and finally 72 + 12 = 84.  \n\nSo, 12 × 7 equals 84.",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_02147c0f053235740068e193c42e54819a92ca77118ff06779",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "parallel_tool_calls": true,
+      "previous_response_id": null,
+      "prompt_cache_key": null,
+      "reasoning": {
+        "effort": "low",
+        "summary": null
+      },
+      "safety_identifier": null,
+      "service_tier": "default",
+      "status": "completed",
+      "store": true,
+      "temperature": 1.0,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "tool_choice": "auto",
+      "tools": [],
+      "top_logprobs": 0,
+      "top_p": 1.0,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 19,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 375,
+        "output_tokens_details": {
+          "reasoning_tokens": 256
+        },
+        "total_tokens": 394
+      },
+      "user": null
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9897d29c39d8b947-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 04 Oct 2025 21:38:12 GMT"
+      ],
+      "openai-organization": [
+        "epic-creative-sogybe"
+      ],
+      "openai-processing-ms": [
+        "23024"
+      ],
+      "openai-project": [
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=2DzwFatjgBT4tgP4TQcl6.PFLZ3qP9o64Yd2CZDlWzI-1759613892-1.0.1.1-iQr_0FP.y.hyiPsohCU3bFdcdKrq5XPQF_PPtVSNG6ukakcKs1MDM9YKCANduZ.FgLGW_.kbPjyTtveGrbv_P0I1UdiH_DlMG9RC_WrJjX0; path=/; expires=Sat, 04-Oct-25 22:08:12 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=bryP10s_XqT0xrE3dsb5ZeY6o9Y32J6ZnluDWkNFLsU-1759613892575-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-envoy-upstream-service-time": [
+        "23028"
+      ],
+      "x-ratelimit-limit-requests": [
+        "5000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "800000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "4999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "799541"
+      ],
+      "x-ratelimit-reset-requests": [
+        "0s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0s"
+      ],
+      "x-request-id": [
+        "req_e17b7a5ba42db0c8ea4b62422c10c26e"
+      ]
+    },
+    "status": 200
+  }
+}

@@ -33,40 +33,8 @@
   },
   "response": {
     "body": {
-      "choices": [
-        {
-          "finish_reason": "stop",
-          "index": 0,
-          "message": {
-            "content": "Hello! How can I assist you today?",
-            "refusal": null,
-            "role": "assistant"
-          }
-        }
-      ],
-      "created": 1759513706,
-      "id": "a63ad2db-8caa-fdeb-669c-3e97c1414b10_us-east-1",
-      "model": "grok-2-1212",
-      "object": "chat.completion",
-      "system_fingerprint": "fp_fced99f24f",
-      "usage": {
-        "completion_tokens": 9,
-        "completion_tokens_details": {
-          "accepted_prediction_tokens": 0,
-          "audio_tokens": 0,
-          "reasoning_tokens": 0,
-          "rejected_prediction_tokens": 0
-        },
-        "num_sources_used": 0,
-        "prompt_tokens": 9,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 0,
-          "image_tokens": 0,
-          "text_tokens": 9
-        },
-        "total_tokens": 18
-      }
+      "code": "Client specified an invalid argument",
+      "error": "Incorrect API key provided: te***ai. You can obtain an API key from https://console.x.ai."
     },
     "headers": {
       "access-control-allow-origin": [
@@ -79,7 +47,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988e453a482bdadf-ORD"
+        "9897d57ca8f5f862-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -88,30 +56,21 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 17:48:27 GMT"
+        "Sat, 04 Oct 2025 21:39:47 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=9vXesfPajnyQJxKKslF5Tfb_CXDQl7HnlAjZPNq09Z8-1759513707-1.0.1.1-9_c.QZsb_QM05p0VKWWgm87GMNoLp8cYuxq8AUQ.iGK8hSqqqdZRnq.2BhpDY_xPuSz6GrPPV9A5QqKleee_3x6dcGyBxb_ZMtmQuvvNZxY; path=/; expires=Fri, 03-Oct-25 18:18:27 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=XIYIb1IIbNm.uPk5v0GeE5fgZKn.2RpYwRDFgLmzdHA-1759613987-1.0.1.1-BFkOiGOMSwOkkn5T3t0MGGRSsY23KLWIiUUbvq5nnL.tseOykt15Inj_ZG6EAYAndODJRbqr.8E6S_E2cg4cth.pin1UShn8V1HI91odkvs; path=/; expires=Sat, 04-Oct-25 22:09:47 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
       ],
-      "transfer-encoding": [
-        "chunked"
-      ],
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
-      ],
-      "x-request-id": [
-        "00-c6ce36c9950593c73bce7b9eb540b131-87b3a4de00070d4d-01"
-      ],
-      "x-zero-data-retention": [
-        "false"
       ]
     },
-    "status": 200
+    "status": 400
   }
 }

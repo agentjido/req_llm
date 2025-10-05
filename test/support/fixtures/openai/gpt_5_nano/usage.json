@@ -40,12 +40,10 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759528772,
+      "created_at": 1759613826,
       "error": null,
-      "id": "resp_0f6db933dab190960068e04744ba64819a9fdc13636dafa8a7",
-      "incomplete_details": {
-        "reason": "max_output_tokens"
-      },
+      "id": "resp_0e39ea93ace143ce0068e1938205a4819ba8e4657dd91b078d",
+      "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 500,
       "max_tool_calls": null,
@@ -54,9 +52,23 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_0f6db933dab190960068e047455e34819aa922149f35181995",
+          "id": "rs_0e39ea93ace143ce0068e193828f1c819ba04ced06e5d3800a",
           "summary": [],
           "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Hi! Nice to meet you. How can I help today? You can ask me to explain something, draft or edit text, brainstorm ideas, write or debug code, translate languages, plan a project or trip, and more. Tell me your goal and any details, and I’ll tailor my response.",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0e39ea93ace143ce0068e1938407ec819ba0afafdc84e5028f",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
         }
       ],
       "parallel_tool_calls": true,
@@ -68,7 +80,7 @@
       },
       "safety_identifier": null,
       "service_tier": "default",
-      "status": "incomplete",
+      "status": "completed",
       "store": true,
       "temperature": 1.0,
       "text": {
@@ -87,11 +99,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 448,
+        "output_tokens": 387,
         "output_tokens_details": {
-          "reasoning_tokens": 448
+          "reasoning_tokens": 320
         },
-        "total_tokens": 457
+        "total_tokens": 396
       },
       "user": null
     },
@@ -103,7 +115,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988fb50d1fcc22dc-ORD"
+        "9897d18c29d689ed-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -112,13 +124,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:59:36 GMT"
+        "Sat, 04 Oct 2025 21:37:08 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "3510"
+        "2622"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -130,8 +142,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=Up3O8xQtKlAcW7ym41J3W.V5lb.J_I7Or8CMwKdu6rw-1759528776-1.0.1.1-o.ZTqoP2J3PJ4F4UrUajgh.CBWHdLHPKyDsUhjGUOy8JoPd1J0YN8BEzR7VmtdVhajlAQ3we3ge3DMtVh4dxgMxXyYcpq9a_LonPvYvBuKE; path=/; expires=Fri, 03-Oct-25 22:29:36 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=tF1f6LsBYyRJFdnmo5WZ61sTbZN5MAt4wHdGDofuCEg-1759528776280-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=JM3plRFhBoEjjhJtxQylVCot.pSWD5U5zblZni5mDiY-1759613828-1.0.1.1-2.2jG_.z5IuvEBYC4GDmHNbtIzB2poG8k3saOhe8crWrx8ui_G1Wn6VZNKwnGGZ4z7Qjtl5PpKNVHbh4N37jLs0pVHRstmZA8NNJ7Gh0Xvo; path=/; expires=Sat, 04-Oct-25 22:07:08 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=ePhzzM2AaJvCY.1vzHJU1rlEPqOfC._uanI8pZ2NT9I-1759613828678-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -143,7 +155,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "3513"
+        "2627"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -164,7 +176,7 @@
         "3ms"
       ],
       "x-request-id": [
-        "req_fcdc603fc4bdf7d90840332fcab7cd14"
+        "req_8a601192e398092169713e67642e8e1d"
       ]
     },
     "status": 200

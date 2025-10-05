@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMDAsIm1vZGVsIjoibzEtbWluaSIsInJlYXNvbmluZyI6eyJlZmZvcnQiOiJsb3cifSwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxNTAsIm1vZGVsIjoibzEtbWluaSIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImdldF93ZWF0aGVyIiwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "input": [
@@ -15,11 +15,8 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 300,
+      "max_output_tokens": 150,
       "model": "o1-mini",
-      "reasoning": {
-        "effort": "low"
-      },
       "stream": false,
       "tools": [
         {
@@ -38,6 +35,7 @@
               "type": "object"
             }
           },
+          "name": "get_weather",
           "type": "function"
         }
       ]
@@ -60,9 +58,9 @@
   "response": {
     "body": {
       "error": {
-        "code": "missing_required_parameter",
-        "message": "Missing required parameter: 'tools[0].name'.",
-        "param": "tools[0].name",
+        "code": "model_not_found",
+        "message": "The requested model 'o1-mini' is not supported with the Responses API.",
+        "param": "model",
         "type": "invalid_request_error"
       }
     },
@@ -74,7 +72,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988fad8539c27dd6-ORD"
+        "9897d186cf866206-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -83,13 +81,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:54:25 GMT"
+        "Sat, 04 Oct 2025 21:37:05 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "17"
+        "42"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -101,8 +99,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=ICBvESqM42TDczpNXcnb3N8.pWYHrS4AX8x.X82p9lI-1759528465-1.0.1.1-v6vbsKpGEsjB7vJpr3p.C0LduUTojBSuH_QDZ_u4e_a8.lJ.nN1uY8.YOLO5JjaSU._DbYfye.T_lQTO_d.Ly3b1DOqmo_JLVgJJ62yeeDQ; path=/; expires=Fri, 03-Oct-25 22:24:25 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=cbw7UCmDcegVFUJ5vwej1GMubC_obcNDixsZhQUKlk8-1759528465037-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=urlEzRQ6LYksPuLcT6lrqYe6SOfLV63DuQJMkzbFNJ4-1759613825-1.0.1.1-sFlFq6XcNV1mk4PI7LHlYy0Q.V39ENiPQe5KJM.hFNABcO_SSUeC4fDxYyBWd.fv2G8rZ4Xpahb.9kwdoG0MtAs3ZmA4qbhEt3np.rCYhn4; path=/; expires=Sat, 04-Oct-25 22:07:05 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=v3clAHOv6R9Txq2mQVdCSdZt8Z_MnwVCNu8ekbIJ4k4-1759613825214-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -111,10 +109,10 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "26"
+        "46"
       ],
       "x-request-id": [
-        "req_098a0c0a4d1b70a2c512468d839c424b"
+        "req_7063155717f064f0a1a1fa8499c2ac96"
       ]
     },
     "status": 400

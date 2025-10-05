@@ -1,19 +1,26 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3B0LTUtY29kZXgiLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC41fQ=="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoiZ3B0LTUtY29kZXgiLCJyZWFzb25pbmciOnsiZWZmb3J0IjoibG93In0sInN0cmVhbSI6ZmFsc2V9"
     },
     "canonical_json": {
-      "max_completion_tokens": 100,
-      "messages": [
+      "input": [
         {
-          "content": "Write a very long story about dragons and adventures",
+          "content": [
+            {
+              "text": "Write a very long story about dragons and adventures",
+              "type": "input_text"
+            }
+          ],
           "role": "user"
         }
       ],
+      "max_output_tokens": 100,
       "model": "gpt-5-codex",
-      "stream": false,
-      "temperature": 0.5
+      "reasoning": {
+        "effort": "low"
+      },
+      "stream": false
     },
     "headers": {
       "accept-encoding": [
@@ -28,21 +35,84 @@
       ]
     },
     "method": "post",
-    "url": "https://api.openai.com/v1/chat/completions"
+    "url": "https://api.openai.com/v1/responses"
   },
   "response": {
     "body": {
-      "error": {
-        "code": null,
-        "message": "This model is only supported in v1/responses and not in v1/chat/completions.",
-        "param": "model",
-        "type": "invalid_request_error"
-      }
+      "background": false,
+      "billing": {
+        "payer": "developer"
+      },
+      "created_at": 1759628040,
+      "error": null,
+      "id": "resp_0fe9be8e262403cf0068e1cb08c49081979929d517dbb0db31",
+      "incomplete_details": {
+        "reason": "max_output_tokens"
+      },
+      "instructions": null,
+      "max_output_tokens": 100,
+      "max_tool_calls": null,
+      "metadata": {},
+      "model": "gpt-5-codex",
+      "object": "response",
+      "output": [
+        {
+          "id": "rs_0fe9be8e262403cf0068e1cb0922f8819794c5bc7c10e424b4",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Far beyond the reach of any map or sailor’s tale, there lay a chain of islands veiled by sea mist and rumor, known to only a handful of the boldest navigators as the Dread Serpent Archipelago. Each island in this scattered kingdom held its own wonders: singing caverns, forests of glass, mountains whose peaks were perpetually wreathed in lightning. Yet none were so bewildering or so feared as",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0fe9be8e262403cf0068e1cb093da881979c25f7eeed51a464",
+          "role": "assistant",
+          "status": "incomplete",
+          "type": "message"
+        }
+      ],
+      "parallel_tool_calls": true,
+      "previous_response_id": null,
+      "prompt_cache_key": null,
+      "reasoning": {
+        "effort": "low",
+        "summary": null
+      },
+      "safety_identifier": null,
+      "service_tier": "default",
+      "status": "incomplete",
+      "store": true,
+      "temperature": 1.0,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "tool_choice": "auto",
+      "tools": [],
+      "top_logprobs": 0,
+      "top_p": 1.0,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 15,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 92,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 107
+      },
+      "user": null
     },
     "headers": {
-      "access-control-expose-headers": [
-        "X-Request-ID"
-      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -50,7 +120,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988f2b537c28f92b-ORD"
+        "98992c968e95f5ff-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -59,13 +129,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 20:25:31 GMT"
+        "Sun, 05 Oct 2025 01:34:02 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "40"
+        "1746"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -77,8 +147,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=RwvaJiXsBgAITjU6DExNVjQxn4TeRRA655OvjtaPibQ-1759523131-1.0.1.1-fMFj2uuZOPxf1cGrjzdKu_zWAk9HUh9C.ruq2ST4k2ugGWgIndznraBhKtmpAD3G3F0gb.IASevRawEuJJDpNANjLZhxUUn_0.BvKcUHOVk; path=/; expires=Fri, 03-Oct-25 20:55:31 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=sRRfw76dDVxYsJA6Yk4Lj3Oo0L8SIYoChchnjameSG0-1759523131723-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=ynEfx8TpMgXe9KOJ5p2X7Jra4bxgiVfzW2PLOBquQmM-1759628042-1.0.1.1-1A_9HPSTqKoO33i4YJ2wBj182IoAwfvLHhBa.DgoEDNlWYnmeSy4kDuSnyEBtO9WcywrTZJ1lhlV7bCLBV_9OXDPHhvtWO8acUk9jEdWypA; path=/; expires=Sun, 05-Oct-25 02:04:02 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=cDmMwx1XCRDsiL21Ud4yyv1e9mSiCbKILj0wsqCX8HQ-1759628042526-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -90,33 +160,12 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "226"
-      ],
-      "x-openai-proxy-wasm": [
-        "v0.1"
-      ],
-      "x-ratelimit-limit-requests": [
-        "5000"
-      ],
-      "x-ratelimit-limit-tokens": [
-        "2000000"
-      ],
-      "x-ratelimit-remaining-requests": [
-        "4999"
-      ],
-      "x-ratelimit-remaining-tokens": [
-        "1999985"
-      ],
-      "x-ratelimit-reset-requests": [
-        "12ms"
-      ],
-      "x-ratelimit-reset-tokens": [
-        "0s"
+        "1748"
       ],
       "x-request-id": [
-        "req_0e3628d8024a43ecb0fddf635999247d"
+        "req_105f5fe043995849c41e3ab3129cbf03"
       ]
     },
-    "status": 404
+    "status": 200
   }
 }

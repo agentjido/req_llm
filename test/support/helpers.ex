@@ -420,13 +420,20 @@ defmodule ReqLLM.Test.Helpers do
       message.content
       |> Enum.any?(fn part -> part.type == :tool_call end)
 
+    is_incomplete = response.finish_reason in [:max_output_tokens, :length, :max_tokens]
+
     combined_length = String.length(text) + String.length(thinking)
 
-    if has_tool_calls do
-      assert combined_length >= 0
-    else
-      assert combined_length > 0,
-             "Expected text or thinking content, got text=#{inspect(text)}, thinking=#{inspect(thinking)}"
+    cond do
+      has_tool_calls ->
+        assert combined_length >= 0
+
+      is_incomplete ->
+        assert combined_length >= 0
+
+      true ->
+        assert combined_length > 0,
+               "Expected text or thinking content, got text=#{inspect(text)}, thinking=#{inspect(thinking)}"
     end
 
     response

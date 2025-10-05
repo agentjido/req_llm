@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxNTAsIm1vZGVsIjoiZ3B0LTQuMSIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxNTAsIm1vZGVsIjoiZ3B0LTQuMSIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImdldF93ZWF0aGVyIiwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "input": [
@@ -35,6 +35,7 @@
               "type": "object"
             }
           },
+          "name": "get_weather",
           "type": "function"
         }
       ]
@@ -56,12 +57,84 @@
   },
   "response": {
     "body": {
-      "error": {
-        "code": "missing_required_parameter",
-        "message": "Missing required parameter: 'tools[0].name'.",
-        "param": "tools[0].name",
-        "type": "invalid_request_error"
-      }
+      "background": false,
+      "billing": {
+        "payer": "developer"
+      },
+      "created_at": 1759627336,
+      "error": null,
+      "id": "resp_0e540a6b18237ca50068e1c8488488819981b66811239ad2d3",
+      "incomplete_details": null,
+      "instructions": null,
+      "max_output_tokens": 150,
+      "max_tool_calls": null,
+      "metadata": {},
+      "model": "gpt-4.1-2025-04-14",
+      "object": "response",
+      "output": [
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Sure! Here’s a cat joke for you:\n\nWhy was the cat sitting on the computer?\n\nBecause it wanted to keep an eye on the mouse! 🐱💻🖱️",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0e540a6b18237ca50068e1c848f0408199b205a875f3c24d46",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "parallel_tool_calls": true,
+      "previous_response_id": null,
+      "prompt_cache_key": null,
+      "reasoning": {
+        "effort": null,
+        "summary": null
+      },
+      "safety_identifier": null,
+      "service_tier": "default",
+      "status": "completed",
+      "store": true,
+      "temperature": 1.0,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "tool_choice": "auto",
+      "tools": [
+        {
+          "description": null,
+          "name": "get_weather",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {},
+            "required": [],
+            "type": "object"
+          },
+          "strict": true,
+          "type": "function"
+        }
+      ],
+      "top_logprobs": 0,
+      "top_p": 1.0,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 31,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 41,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 72
+      },
+      "user": null
     },
     "headers": {
       "alt-svc": [
@@ -71,7 +144,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988fb4e68e38eb5c-ORD"
+        "98991b64edaaf50d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -80,13 +153,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:59:26 GMT"
+        "Sun, 05 Oct 2025 01:22:17 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "11"
+        "935"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -98,22 +171,43 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=bySpnmyj4ej1eme.NeFlnu3mm6rBDTmxjlfcZHlW3Dc-1759528766-1.0.1.1-btdy3LA8VDCAvoffJC6S6pK2m1C.0zrYrmIWYTa1fBEwqgl6eb7RRSmpeaFGJNlBsN6v_T8D1qBF0AEcE9PqlsDJ0lqNtqLrjWQMRuPD5ak; path=/; expires=Fri, 03-Oct-25 22:29:26 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=jN4J4RXabSTU58t78.UjTCfQhtIdrTDcfm1A6br0.EU-1759528766570-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=x4ghzQ56Ii3mvdAUQS_Vcql9JFbJAervKX8GLUd3I.0-1759627337-1.0.1.1-1hBB4.njzePwFL6B9Qle6acVZe139H76OsuQ.LpSgGPFgb9qGiLy1TSsj6v2nsBUf.FWAbar_JEWJPjEQuVYoRZ3PiCQWhKR0UMNDkkVur4; path=/; expires=Sun, 05-Oct-25 01:52:17 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=X6X2mLqYxtyhWX5DiE2E77DU9pBK1AG0N5qmMeygOcI-1759627337476-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
       ],
       "x-content-type-options": [
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "14"
+        "938"
+      ],
+      "x-ratelimit-limit-requests": [
+        "5000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "800000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "4999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "799752"
+      ],
+      "x-ratelimit-reset-requests": [
+        "12ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "18ms"
       ],
       "x-request-id": [
-        "req_61052b65faff82fe0cb6b0098d9cd33e"
+        "req_345238255e69d326680626b581b364b3"
       ]
     },
-    "status": 400
+    "status": 200
   }
 }

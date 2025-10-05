@@ -35,75 +35,19 @@
   },
   "response": {
     "body": {
-      "content": [
-        {
-          "text": "Hi there! How can I help you today?",
-          "type": "text"
-        }
-      ],
-      "id": "msg_01RJevBkH5Pt8yDDjF7eU6SV",
-      "model": "claude-3-5-sonnet-20241022",
-      "role": "assistant",
-      "stop_reason": "end_turn",
-      "stop_sequence": null,
-      "type": "message",
-      "usage": {
-        "cache_creation": {
-          "ephemeral_1h_input_tokens": 0,
-          "ephemeral_5m_input_tokens": 0
-        },
-        "cache_creation_input_tokens": 0,
-        "cache_read_input_tokens": 0,
-        "input_tokens": 10,
-        "output_tokens": 13,
-        "service_tier": "standard"
-      }
+      "error": {
+        "message": "invalid x-api-key",
+        "type": "authentication_error"
+      },
+      "request_id": "req_011CTntBeLS1BJU3CNGAQ2pS",
+      "type": "error"
     },
     "headers": {
-      "anthropic-organization-id": [
-        "a71659e7-a922-4ff7-99de-f3ba615face1"
-      ],
-      "anthropic-ratelimit-input-tokens-limit": [
-        "80000"
-      ],
-      "anthropic-ratelimit-input-tokens-remaining": [
-        "80000"
-      ],
-      "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-03T11:33:04Z"
-      ],
-      "anthropic-ratelimit-output-tokens-limit": [
-        "16000"
-      ],
-      "anthropic-ratelimit-output-tokens-remaining": [
-        "16000"
-      ],
-      "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-03T11:33:05Z"
-      ],
-      "anthropic-ratelimit-requests-limit": [
-        "1000"
-      ],
-      "anthropic-ratelimit-requests-remaining": [
-        "999"
-      ],
-      "anthropic-ratelimit-requests-reset": [
-        "2025-10-03T11:33:04Z"
-      ],
-      "anthropic-ratelimit-tokens-limit": [
-        "96000"
-      ],
-      "anthropic-ratelimit-tokens-remaining": [
-        "96000"
-      ],
-      "anthropic-ratelimit-tokens-reset": [
-        "2025-10-03T11:33:04Z"
-      ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988c1f5d88a7d130-ORD"
+        "9897d58e98a8af01-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -112,10 +56,10 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 11:33:05 GMT"
+        "Sat, 04 Oct 2025 21:39:50 GMT"
       ],
       "request-id": [
-        "req_011CTkC76E7izeH2N9naDMVP"
+        "req_011CTntBeLS1BJU3CNGAQ2pS"
       ],
       "server": [
         "cloudflare"
@@ -123,19 +67,19 @@
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
-      "transfer-encoding": [
-        "chunked"
-      ],
       "via": [
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "832"
+        "6"
       ],
       "x-robots-tag": [
         "none"
+      ],
+      "x-should-retry": [
+        "false"
       ]
     },
-    "status": 200
+    "status": 401
   }
 }

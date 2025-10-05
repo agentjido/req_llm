@@ -38,23 +38,38 @@
   "response": {
     "body": {
       "error": {
-        "code": 404,
-        "message": "models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
-        "status": "NOT_FOUND"
+        "code": 400,
+        "details": [
+          {
+            "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+            "domain": "googleapis.com",
+            "metadata": {
+              "service": "generativelanguage.googleapis.com"
+            },
+            "reason": "API_KEY_INVALID"
+          },
+          {
+            "@type": "type.googleapis.com/google.rpc.LocalizedMessage",
+            "locale": "en-US",
+            "message": "API key not valid. Please pass a valid API key."
+          }
+        ],
+        "message": "API key not valid. Please pass a valid API key.",
+        "status": "INVALID_ARGUMENT"
       }
     },
     "headers": {
       "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
-      "content-length": "265",
+      "content-length": "581",
       "content-type": "text/event-stream",
-      "date": "Fri, 03 Oct 2025 23:26:00 GMT",
+      "date": "Sat, 04 Oct 2025 21:39:49 GMT",
       "server": "scaffolding on HTTPServer2",
-      "server-timing": "gfet4t7; dur=42",
+      "server-timing": "gfet4t7; dur=14",
       "vary": "Referer",
       "x-content-type-options": "nosniff",
       "x-frame-options": "SAMEORIGIN",
       "x-xss-protection": "0"
     },
-    "status": 404
+    "status": 400
   }
 }

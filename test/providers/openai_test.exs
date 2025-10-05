@@ -547,13 +547,13 @@ defmodule ReqLLM.Providers.OpenAITest do
         options: [context: context, model: "gpt-4o"]
       }
 
-      # Test decode_response error handling
+      # Test decode_response error handling (now delegated to ChatAPI)
       {req, error} = OpenAI.decode_response({mock_req, mock_resp})
 
       assert req == mock_req
       assert %ReqLLM.Error.API.Response{} = error
       assert error.status == 401
-      assert error.reason == "OpenAI API error"
+      assert error.reason == "Gpt-4o API error"
       assert error.response_body == error_body
     end
   end

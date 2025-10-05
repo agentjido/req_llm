@@ -1,0 +1,71 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IllvdSBhcmUgYSBoZWxwZnVsLCBjcmVhdGl2ZSBhc3Npc3RhbnQuIiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJzeXN0ZW0ifSx7ImNvbnRlbnQiOlt7InRleHQiOiJTYXkgaGVsbG8gaW4gb25lIHNob3J0LCBpbWFnaW5hdGl2ZSBzZW50ZW5jZS4iLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoyMDAsIm1vZGVsIjoibzMtZGVlcC1yZXNlYXJjaCIsInJlYXNvbmluZyI6eyJlZmZvcnQiOiJsb3cifSwic3RyZWFtIjp0cnVlfQ=="
+    },
+    "canonical_json": {
+      "input": [
+        {
+          "content": [
+            {
+              "text": "You are a helpful, creative assistant.",
+              "type": "input_text"
+            }
+          ],
+          "role": "system"
+        },
+        {
+          "content": [
+            {
+              "text": "Say hello in one short, imaginative sentence.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 200,
+      "model": "o3-deep-research",
+      "reasoning": {
+        "effort": "low"
+      },
+      "stream": true
+    },
+    "headers": {
+      "accept": "text/event-stream",
+      "authorization": "[REDACTED:authorization]",
+      "content-type": "application/json"
+    },
+    "method": "POST",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "error": {
+        "code": null,
+        "message": "Deep research models require at least one of 'web_search_preview', 'mcp', or 'file_search' tools.",
+        "param": "tools",
+        "type": "invalid_request_error"
+      }
+    },
+    "headers": {
+      "alt-svc": "h3=\":443\"; ma=86400",
+      "cf-cache-status": "DYNAMIC",
+      "cf-ray": "9897d1a16ddfb4b8-ORD",
+      "content-length": "212",
+      "content-type": "application/json",
+      "date": "Sat, 04 Oct 2025 21:37:09 GMT",
+      "openai-organization": "epic-creative-sogybe",
+      "openai-processing-ms": "35",
+      "openai-project": "proj_j5AhgU4eLMRmsoO9FDg7BRD3",
+      "openai-version": "2020-10-01",
+      "server": "cloudflare",
+      "set-cookie": "_cfuvid=ers3Rj7gfuCA_H5YyWNu9pU54iOvKYD290sAisPDj4A-1759613829460-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+      "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+      "x-content-type-options": "nosniff",
+      "x-envoy-upstream-service-time": "39",
+      "x-request-id": "req_2dcdd29bb3102e883c8d770e2d0d6090"
+    },
+    "status": 400
+  }
+}

@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/IiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MzAwLCJtb2RlbCI6ImdwdC01IiwicmVhc29uaW5nIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/IiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MzAwLCJtb2RlbCI6ImdwdC01IiwicmVhc29uaW5nIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfd2VhdGhlciIsInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoidGVsbF9qb2tlIiwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImdldF90aW1lIiwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "input": [
@@ -45,6 +45,7 @@
               "type": "object"
             }
           },
+          "name": "get_weather",
           "type": "function"
         },
         {
@@ -61,6 +62,7 @@
               "type": "object"
             }
           },
+          "name": "tell_joke",
           "type": "function"
         },
         {
@@ -72,6 +74,7 @@
               "type": "object"
             }
           },
+          "name": "get_time",
           "type": "function"
         }
       ]
@@ -93,12 +96,107 @@
   },
   "response": {
     "body": {
-      "error": {
-        "code": "missing_required_parameter",
-        "message": "Missing required parameter: 'tools[0].name'.",
-        "param": "tools[0].name",
-        "type": "invalid_request_error"
-      }
+      "background": false,
+      "billing": {
+        "payer": "developer"
+      },
+      "created_at": 1759613836,
+      "error": null,
+      "id": "resp_0cc2d75d8bc8b2120068e1938cc8488198b3e6e79cf6a66bec",
+      "incomplete_details": null,
+      "instructions": null,
+      "max_output_tokens": 300,
+      "max_tool_calls": null,
+      "metadata": {},
+      "model": "gpt-5-2025-08-07",
+      "object": "response",
+      "output": [
+        {
+          "id": "rs_0cc2d75d8bc8b2120068e1938d294c8198aae4979e14d0e8df",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "arguments": "{}",
+          "call_id": "call_wM1gT6UdTaUvCi83yzSBGKZU",
+          "id": "fc_0cc2d75d8bc8b2120068e193907ac88198afb52e88729ea113",
+          "name": "get_weather",
+          "status": "completed",
+          "type": "function_call"
+        }
+      ],
+      "parallel_tool_calls": true,
+      "previous_response_id": null,
+      "prompt_cache_key": null,
+      "reasoning": {
+        "effort": "low",
+        "summary": null
+      },
+      "safety_identifier": null,
+      "service_tier": "default",
+      "status": "completed",
+      "store": true,
+      "temperature": 1.0,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "tool_choice": "auto",
+      "tools": [
+        {
+          "description": null,
+          "name": "get_weather",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {},
+            "required": [],
+            "type": "object"
+          },
+          "strict": true,
+          "type": "function"
+        },
+        {
+          "description": null,
+          "name": "tell_joke",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {},
+            "required": [],
+            "type": "object"
+          },
+          "strict": true,
+          "type": "function"
+        },
+        {
+          "description": null,
+          "name": "get_time",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {},
+            "required": [],
+            "type": "object"
+          },
+          "strict": true,
+          "type": "function"
+        }
+      ],
+      "top_logprobs": 0,
+      "top_p": 1.0,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 58,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 272,
+        "output_tokens_details": {
+          "reasoning_tokens": 256
+        },
+        "total_tokens": 330
+      },
+      "user": null
     },
     "headers": {
       "alt-svc": [
@@ -108,7 +206,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988fb505cb6088cd-ORD"
+        "9897d1cf9ca90bf0-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -117,13 +215,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:59:33 GMT"
+        "Sat, 04 Oct 2025 21:37:20 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "141"
+        "4103"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -135,22 +233,25 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=B.3BZvEIkQH4fAeYs8zZdQEWy0FdVyMqKk46bGQInxI-1759528773-1.0.1.1-SYZTLQXTE.PcswHkj.V7rMrnRlQaG3WgIuUR_IHQfNkrjiekWSfBmD.YZDVgOxApTY6ePoDUUzde7IrneF9CYByEB7QsrEeIRni_bypnDbE; path=/; expires=Fri, 03-Oct-25 22:29:33 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=U9Y0iDbWCVZ7WJaeKNgzOgOuzVN2PECWF4AXcBmlXRY-1759528773025-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=Bb3LJc4D5ISP6ch0I1gLVrBO8VexvZ7IhLwAJouY03g-1759613840-1.0.1.1-Kj8VDTyR6peymWCcttfwpV9BVZPKtEweKE6Ta.7wn9V2Go8mT.RPG.V58veS2HDwKXhhHuZD5cwy.oQX9QfyM1dor9tfJYwNm4ziwBJk828; path=/; expires=Sat, 04-Oct-25 22:07:20 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=a_pC3nHWMRXJ8_h2HNw5r0IucYlIZl_oVZU4dUx765o-1759613840918-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
       ],
       "x-content-type-options": [
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "1463"
+        "4106"
       ],
       "x-request-id": [
-        "req_2d60b24a0e1e0050a912fda9051ae9bb"
+        "req_4aa52453fb1bca24fa15ac50c2df696c"
       ]
     },
-    "status": 400
+    "status": 200
   }
 }

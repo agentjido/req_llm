@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhpIHRoZXJlISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjUwMCwibW9kZWwiOiJvMS1taW5pIiwic3RyZWFtIjpmYWxzZX0="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhpIHRoZXJlISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjEwLCJtb2RlbCI6Im8xLW1pbmkiLCJzdHJlYW0iOmZhbHNlfQ=="
     },
     "canonical_json": {
       "input": [
@@ -15,7 +15,7 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 500,
+      "max_output_tokens": 10,
       "model": "o1-mini",
       "stream": false
     },
@@ -37,9 +37,9 @@
   "response": {
     "body": {
       "error": {
-        "code": "model_not_found",
-        "message": "The requested model 'o1-mini' is not supported with the Responses API.",
-        "param": "model",
+        "code": "integer_below_min_value",
+        "message": "Invalid 'max_output_tokens': integer below minimum value. Expected a value >= 16, but got 10 instead.",
+        "param": "max_output_tokens",
         "type": "invalid_request_error"
       }
     },
@@ -51,7 +51,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988fad843e7e7dd6-ORD"
+        "9897d1833c476206-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -60,13 +60,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:54:24 GMT"
+        "Sat, 04 Oct 2025 21:37:04 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "38"
+        "7"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -78,8 +78,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=Ayrtsf_KKnjBORffySPYmVUsgcPixZkakWidDgyC8G0-1759528464-1.0.1.1-gtB_hGys51ThYs9ynmlRYUWIvkh6t5OKcD5i6OsGZGyAI3z1UGXL0Atk8Wi1IRifr0JWncx0zj_fJnpBkq4v6XqbktAEs8TA0JYSCL63998; path=/; expires=Fri, 03-Oct-25 22:24:24 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=EKt_g.B4e0xMvHSY804Mxu.VY6ja7eoycTM1pJqgNZw-1759528464161-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=sA4XNcniwVU8Mi4lKFLCnqsDsiqsrdPdHMJf9oJL8RI-1759613824-1.0.1.1-J8YyQLmaGkAoDyffKXdM5J7j7EPDqAXD6ijPNhXOt4WI5fUsSxgJstU6Pwm72e7dpx3juNjNmAiY7mSr9N9gtJ3XLP3JfMVR8Da0E2wSE3Q; path=/; expires=Sat, 04-Oct-25 22:07:04 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=ZfmblPjO9G2xrqrdyKcqcDTxXt0ihFXsnR5kcWQDde8-1759613824589-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -88,10 +88,10 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "43"
+        "10"
       ],
       "x-request-id": [
-        "req_be9166e19cdc44d2b1860d88028fe8b8"
+        "req_e04c9f77037d785dc5f13481a335db56"
       ]
     },
     "status": 400

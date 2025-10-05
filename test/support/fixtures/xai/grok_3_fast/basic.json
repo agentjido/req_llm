@@ -33,40 +33,8 @@
   },
   "response": {
     "body": {
-      "choices": [
-        {
-          "finish_reason": "stop",
-          "index": 0,
-          "message": {
-            "content": "Hey there! \"Hello world!\"—a classic, are we coding or just saying hi? Either way, I'm happy to chat. What's on your mind? 😊",
-            "refusal": null,
-            "role": "assistant"
-          }
-        }
-      ],
-      "created": 1759509984,
-      "id": "60cbd56f-4272-a848-c786-ca4d5101ca03_us-east-1",
-      "model": "grok-3",
-      "object": "chat.completion",
-      "system_fingerprint": "fp_f02e6df795",
-      "usage": {
-        "completion_tokens": 34,
-        "completion_tokens_details": {
-          "accepted_prediction_tokens": 0,
-          "audio_tokens": 0,
-          "reasoning_tokens": 0,
-          "rejected_prediction_tokens": 0
-        },
-        "num_sources_used": 0,
-        "prompt_tokens": 9,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 3,
-          "image_tokens": 0,
-          "text_tokens": 9
-        },
-        "total_tokens": 43
-      }
+      "code": "Client specified an invalid argument",
+      "error": "Incorrect API key provided: te***ai. You can obtain an API key from https://console.x.ai."
     },
     "headers": {
       "access-control-allow-origin": [
@@ -79,7 +47,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988dea58cc71e23d-ORD"
+        "9897d5787e73f862-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -88,30 +56,21 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 16:46:27 GMT"
+        "Sat, 04 Oct 2025 21:39:46 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=NuNL3IMpm8QOx6asLJckPZG_VGU1cgKfMmJcgJld5XE-1759509987-1.0.1.1-d_IRltqqnNBfB0cBZw3Mr4e.h9t.Y3AiUb25uf1YNyfKJyoaRWMqQfnUzE4oLWI.XpYwE_7ILTFsog9rN.XlCO6q.OZp8fIZp1R1KggEDJY; path=/; expires=Fri, 03-Oct-25 17:16:27 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=rdCJTdapqVT2wgDbDwzH_Rr6XHwKmrPoU5vSUglpUy0-1759613986-1.0.1.1-bTmDJI5TPxvedZC8wqp81_o8N3xHRDeUtztEbNVZrJGk0vtq3PlhJ8bk_Ru5MslYQdyOIJjmXuAJ438r7PIxqsA9Wz9WgISCA9Doc9IA4sU; path=/; expires=Sat, 04-Oct-25 22:09:46 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
       ],
-      "transfer-encoding": [
-        "chunked"
-      ],
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
-      ],
-      "x-request-id": [
-        "00-0d18ce6a7c3e7d05bf01a2bde6fcf41d-ad7e64c60004c25a-01"
-      ],
-      "x-zero-data-retention": [
-        "false"
       ]
     },
-    "status": 200
+    "status": 400
   }
 }

@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJnZW1tYTItOWItaXQiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJnZW1tYTItOWItaXQiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
-      "max_tokens": 50,
+      "max_tokens": 10,
       "messages": [
         {
           "content": "Hi there!",
@@ -33,35 +33,10 @@
   },
   "response": {
     "body": {
-      "choices": [
-        {
-          "finish_reason": "stop",
-          "index": 0,
-          "logprobs": null,
-          "message": {
-            "content": "Hi there! 👋  What can I do for you today?\n",
-            "role": "assistant"
-          }
-        }
-      ],
-      "created": 1759513821,
-      "id": "chatcmpl-82f105af-630c-41db-827f-8b5bb155edc1",
-      "model": "gemma2-9b-it",
-      "object": "chat.completion",
-      "service_tier": "on_demand",
-      "system_fingerprint": "fp_10c08bf97d",
-      "usage": {
-        "completion_time": 0.029090909,
-        "completion_tokens": 16,
-        "prompt_time": 0.00117634,
-        "prompt_tokens": 12,
-        "queue_time": 0.110392096,
-        "total_time": 0.030267249,
-        "total_tokens": 28
-      },
-      "usage_breakdown": null,
-      "x_groq": {
-        "id": "req_01k6nk4g14et290pcprnsy0zcm"
+      "error": {
+        "code": "invalid_api_key",
+        "message": "Invalid API Key",
+        "type": "invalid_request_error"
       }
     },
     "headers": {
@@ -75,7 +50,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988e480669be02b0-ORD"
+        "9897d5705a5186d2-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -84,16 +59,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 17:50:21 GMT"
+        "Sat, 04 Oct 2025 21:39:45 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=kFnO9jtHTByS50xc1YYVQggnSh.uLDNkw.58elc5Zuc-1759513821-1.0.1.1-_z0LRn.M_amdpxya8GwrD_3VXNUH5y6AKyZ8lEoGNKQfHNhdMPMiIkbRaXXpTnKyndTvhicQa1C03U_xoHZesd2cj1FBJ7yDOX8LMI1qCeo; path=/; expires=Fri, 03-Oct-25 18:20:21 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
-      ],
-      "transfer-encoding": [
-        "chunked"
+        "__cf_bm=.bQf1m1zzrmthlowwEVQs0zsiBS0cuTzqHAidLnyA4U-1759613985-1.0.1.1-FIAcnvELy4wNr_ni_zDX.RSZPHP1EEhmTO5i1lB8Z_mPkMFI16Nuy_Vi_1BixlSX7zt37tTHe2qMyLAqQMc36pkJPCQ_YntXuilEvtUoz5I; path=/; expires=Sat, 04-Oct-25 22:09:45 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "vary": [
         "Origin"
@@ -104,28 +76,10 @@
       "x-groq-region": [
         "yul"
       ],
-      "x-ratelimit-limit-requests": [
-        "14400"
-      ],
-      "x-ratelimit-limit-tokens": [
-        "15000"
-      ],
-      "x-ratelimit-remaining-requests": [
-        "14398"
-      ],
-      "x-ratelimit-remaining-tokens": [
-        "14992"
-      ],
-      "x-ratelimit-reset-requests": [
-        "11.669999999s"
-      ],
-      "x-ratelimit-reset-tokens": [
-        "32ms"
-      ],
       "x-request-id": [
-        "req_01k6nk4g14et290pcprnsy0zcm"
+        "req_01k6rjn8jhe8q8bwy2ytzrb0fm"
       ]
     },
-    "status": 200
+    "status": 401
   }
 }

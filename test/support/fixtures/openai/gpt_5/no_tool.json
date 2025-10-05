@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMDAsIm1vZGVsIjoiZ3B0LTUiLCJyZWFzb25pbmciOnsiZWZmb3J0IjoibG93In0sInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMDAsIm1vZGVsIjoiZ3B0LTUiLCJyZWFzb25pbmciOnsiZWZmb3J0IjoibG93In0sInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImdldF93ZWF0aGVyIiwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "input": [
@@ -38,6 +38,7 @@
               "type": "object"
             }
           },
+          "name": "get_weather",
           "type": "function"
         }
       ]
@@ -59,12 +60,89 @@
   },
   "response": {
     "body": {
-      "error": {
-        "code": "missing_required_parameter",
-        "message": "Missing required parameter: 'tools[0].name'.",
-        "param": "tools[0].name",
-        "type": "invalid_request_error"
-      }
+      "background": false,
+      "billing": {
+        "payer": "developer"
+      },
+      "created_at": 1759613832,
+      "error": null,
+      "id": "resp_078e5e88cd1554870068e1938826308190b982b4d71591431d",
+      "incomplete_details": null,
+      "instructions": null,
+      "max_output_tokens": 300,
+      "max_tool_calls": null,
+      "metadata": {},
+      "model": "gpt-5-2025-08-07",
+      "object": "response",
+      "output": [
+        {
+          "id": "rs_078e5e88cd1554870068e19388c814819089c4533496833590",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Why did the cat sit on the computer?  \nIt wanted to keep an eye on the mouse!",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_078e5e88cd1554870068e193890f688190b9095cfbc36d2bfa",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        }
+      ],
+      "parallel_tool_calls": true,
+      "previous_response_id": null,
+      "prompt_cache_key": null,
+      "reasoning": {
+        "effort": "low",
+        "summary": null
+      },
+      "safety_identifier": null,
+      "service_tier": "default",
+      "status": "completed",
+      "store": true,
+      "temperature": 1.0,
+      "text": {
+        "format": {
+          "type": "text"
+        },
+        "verbosity": "medium"
+      },
+      "tool_choice": "auto",
+      "tools": [
+        {
+          "description": null,
+          "name": "get_weather",
+          "parameters": {
+            "additionalProperties": false,
+            "properties": {},
+            "required": [],
+            "type": "object"
+          },
+          "strict": true,
+          "type": "function"
+        }
+      ],
+      "top_logprobs": 0,
+      "top_p": 1.0,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 38,
+        "input_tokens_details": {
+          "cached_tokens": 0
+        },
+        "output_tokens": 26,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 64
+      },
+      "user": null
     },
     "headers": {
       "alt-svc": [
@@ -74,7 +152,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988fb50fceff88cd-ORD"
+        "9897d1b2982b0bf0-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -83,13 +161,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:59:33 GMT"
+        "Sat, 04 Oct 2025 21:37:14 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "10"
+        "2784"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -101,22 +179,25 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=UY7p5z8svdPx8L.Lkd8vo0.VZeB3rR75lGK9AJ6qx_w-1759528773-1.0.1.1-klk7Zhwu7iGJKi7fzAHnXhDOU_LhhEaaWlCtw3x1TmZFc6oxkmBOjTcne6jjyVkxMWzp0joyMum2mOXsCTfeHbx1ztEBdXW.S9v1QTmsTpg; path=/; expires=Fri, 03-Oct-25 22:29:33 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=Xgfw6JzSJF74.IxClI9mL.zrGLNcsm4XQwDay8uPTd0-1759528773186-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=RbAE9jYfDk7EMW6O0aqwo5UV3tejHLs0tlUaqGFy09E-1759613834-1.0.1.1-bQSHBkE4edpniLiBF5VIze.UPhXxcesmIiHnrtHPwjtCAbAy6R1T3chE3MdbEMGLDy7708OzeWhN_nQKIObqtMzJgysQl0thIw7_cwlROpY; path=/; expires=Sat, 04-Oct-25 22:07:14 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=wq.tDA6gqSX8Jbc8kRwlwb4A1o8HWbqT95rOOjIIxJg-1759613834922-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
       ],
       "x-content-type-options": [
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "13"
+        "2791"
       ],
       "x-request-id": [
-        "req_38df18ed6d9e083a69229e39c30e466a"
+        "req_c2f6002db0867d5834e68c98352d4d4d"
       ]
     },
-    "status": 400
+    "status": 200
   }
 }

@@ -1,11 +1,11 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjQwOTYsIm1heF90b2tlbnMiOjIwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTMtZmFzdCIsInNlZWQiOjQyLCJzdHJlYW0iOnRydWUsInRlbXBlcmF0dXJlIjowLjAsInRvb2xfY2hvaWNlIjp7ImZ1bmN0aW9uIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCJ9LCJ0eXBlIjoiZnVuY3Rpb24ifSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2VuZXJhdGUgc3RydWN0dXJlZCBvdXRwdXQgbWF0Y2hpbmcgdGhlIHByb3ZpZGVkIHNjaGVtYSIsIm5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiYWdlIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjQwOTYsIm1heF90b2tlbnMiOjUwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTMtZmFzdCIsInNlZWQiOjQyLCJzdHJlYW0iOnRydWUsInRlbXBlcmF0dXJlIjowLjAsInRvb2xfY2hvaWNlIjp7ImZ1bmN0aW9uIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCJ9LCJ0eXBlIjoiZnVuY3Rpb24ifSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2VuZXJhdGUgc3RydWN0dXJlZCBvdXRwdXQgbWF0Y2hpbmcgdGhlIHByb3ZpZGVkIHNjaGVtYSIsIm5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiYWdlIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
       "max_completion_tokens": 4096,
-      "max_tokens": 200,
+      "max_tokens": 500,
       "messages": [
         {
           "content": "Generate a software engineer profile",
@@ -64,23 +64,22 @@
   },
   "response": {
     "body": {
-      "b64": "ZGF0YTogeyJpZCI6IjhmYWI4Y2M0LTZlNDgtN2Q0MS0yOTVmLTY1YjY3M2RlZWMxN191cy1lYXN0LTEiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5NTA5OTkxLCJtb2RlbCI6Imdyb2stMyIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siaWQiOiJjYWxsXzI4NDA2Mzg0IiwiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwiYXJndW1lbnRzIjoie1wiYWdlXCI6MzAsXCJuYW1lXCI6XCJKb2huIERvZVwiLFwib2NjdXBhdGlvblwiOlwiU29mdHdhcmUgRW5naW5lZXJcIn0ifSwiaW5kZXgiOjAsInR5cGUiOiJmdW5jdGlvbiJ9XX19XSwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfZjAyZTZkZjc5NSJ9CgpkYXRhOiB7ImlkIjoiOGZhYjhjYzQtNmU0OC03ZDQxLTI5NWYtNjViNjczZGVlYzE3X3VzLWVhc3QtMSIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk1MDk5OTEsIm1vZGVsIjoiZ3Jvay0zIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7fSwiZmluaXNoX3JlYXNvbiI6InRvb2xfY2FsbHMifV0sInN5c3RlbV9maW5nZXJwcmludCI6ImZwX2YwMmU2ZGY3OTUifQoKZGF0YTogW0RPTkVdCgo="
+      "code": "Client specified an invalid argument",
+      "error": "Incorrect API key provided: te***ai. You can obtain an API key from https://console.x.ai."
     },
     "headers": {
       "access-control-allow-origin": "*",
       "access-control-expose-headers": "*",
-      "cache-control": "no-cache",
       "cf-cache-status": "DYNAMIC",
-      "cf-ray": "988dea82ee3fcef7-ORD",
-      "content-type": "text/event-stream",
-      "date": "Fri, 03 Oct 2025 16:46:30 GMT",
+      "cf-ray": "9897d579eb0fe287-ORD",
+      "content-length": "147",
+      "content-type": "application/json",
+      "date": "Sat, 04 Oct 2025 21:39:46 GMT",
       "server": "cloudflare",
-      "set-cookie": "__cf_bm=AN6LCT0I23kgQ2VbEEt2Cmloavz9n1W74HwvZfJH2B0-1759509990-1.0.1.1-1iOIJJQBJF4Y4Tcf.uuQnj_NlbMrRB0wTBZgHCfvm4hMF2RDiG2EU0AeKzSsMUhhWWKGOGTsUYtAXIiVpIsTmNBiXOyIQDOMj5DjtpgIOfU; path=/; expires=Fri, 03-Oct-25 17:16:30 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None",
+      "set-cookie": "__cf_bm=AqcyU6IzXaXHKA4YHEsySu1tIBsb5sVgJIdo1AAImoo-1759613986-1.0.1.1-6qhnl4Q1q6pdyvAtdK27tKwbgIwCdg.avnrI9uOY85HwfKuTaB2M03w7UckG6g42VG2_4FoIYVrbTytaeZqn_S78ks0T_E_K6TbPf6kQhXc; path=/; expires=Sat, 04-Oct-25 22:09:46 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None",
       "strict-transport-security": "max-age=31536000",
-      "vary": "origin, access-control-request-method, access-control-request-headers",
-      "x-request-id": "00-f0265ccc7a02acc0c5a34bf39a4b55ab-f313d943000540f7-01",
-      "x-zero-data-retention": "false"
+      "vary": "origin, access-control-request-method, access-control-request-headers"
     },
-    "status": 200
+    "status": 400
   }
 }

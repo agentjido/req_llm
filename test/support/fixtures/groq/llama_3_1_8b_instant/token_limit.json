@@ -32,35 +32,10 @@
   },
   "response": {
     "body": {
-      "choices": [
-        {
-          "finish_reason": "length",
-          "index": 0,
-          "logprobs": null,
-          "message": {
-            "content": "In the land of Eridoria, where the sun dipped into the horizon and painted the sky with hues of crimson and gold, the legend of the dragons lived on. For centuries, these magnificent creatures had ruled the skies, their scales glinting like diamonds in the sunlight, their fiery breath illuminating the darkening landscape. The people of Eridoria lived in awe of these dragons, both fearing and respecting their power.\n\nIn a small village nestled between two great mountains, a young boy named",
-            "role": "assistant"
-          }
-        }
-      ],
-      "created": 1759513829,
-      "id": "chatcmpl-6963a6be-8651-4e0a-b9c8-d34c5a90a77d",
-      "model": "llama-3.1-8b-instant",
-      "object": "chat.completion",
-      "service_tier": "on_demand",
-      "system_fingerprint": "fp_33e8adf159",
-      "usage": {
-        "completion_time": 0.155520376,
-        "completion_tokens": 100,
-        "prompt_time": 0.003502482,
-        "prompt_tokens": 44,
-        "queue_time": 0.204454443,
-        "total_time": 0.159022858,
-        "total_tokens": 144
-      },
-      "usage_breakdown": null,
-      "x_groq": {
-        "id": "req_01k6nk4qx9evzsv89mmx5tf9zx"
+      "error": {
+        "code": "invalid_api_key",
+        "message": "Invalid API Key",
+        "type": "invalid_request_error"
       }
     },
     "headers": {
@@ -74,7 +49,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988e4838d9e8123f-ORD"
+        "9897d571ebdd86d2-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -83,16 +58,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 17:50:29 GMT"
+        "Sat, 04 Oct 2025 21:39:45 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=yjzqpPaGkxBFfULH6F_a.5IvtAdC8OiyL3PvtbmXcv8-1759513829-1.0.1.1-EFhE7UHDVvUJXvlnM3cGTQ9sDcynVxu8an8JHsJZkl4qaoo.V36qb.yxEP2MMharW._mJsDXFxIfa6qlccu2WxTCOLNyl30MJ7NVNiQU2iM; path=/; expires=Fri, 03-Oct-25 18:20:29 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
-      ],
-      "transfer-encoding": [
-        "chunked"
+        "__cf_bm=se7CqLQPyqusA7K7vQEMkdrALlIpjL2gwKmW8rJ0_NE-1759613985-1.0.1.1-UzODu6IC_xK8_w5CV04hd9.0Nr9Vq5IaU0SoM5gQGMpURliuo5h7ezFP83tY2kT.RfQlTE.2vXPZFGpp.umg2aypm8euZb5ouNzDZgJKUis; path=/; expires=Sat, 04-Oct-25 22:09:45 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "vary": [
         "Origin"
@@ -103,28 +75,10 @@
       "x-groq-region": [
         "yul"
       ],
-      "x-ratelimit-limit-requests": [
-        "14400"
-      ],
-      "x-ratelimit-limit-tokens": [
-        "6000"
-      ],
-      "x-ratelimit-remaining-requests": [
-        "14395"
-      ],
-      "x-ratelimit-remaining-tokens": [
-        "5311"
-      ],
-      "x-ratelimit-reset-requests": [
-        "29.679s"
-      ],
-      "x-ratelimit-reset-tokens": [
-        "6.886999999s"
-      ],
       "x-request-id": [
-        "req_01k6nk4qx9evzsv89mmx5tf9zx"
+        "req_01k6rjn8trf5ct92qht2znavna"
       ]
     },
-    "status": 200
+    "status": 401
   }
 }

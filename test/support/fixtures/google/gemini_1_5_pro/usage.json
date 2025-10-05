@@ -37,9 +37,24 @@
   "response": {
     "body": {
       "error": {
-        "code": 404,
-        "message": "models/gemini-1.5-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
-        "status": "NOT_FOUND"
+        "code": 400,
+        "details": [
+          {
+            "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+            "domain": "googleapis.com",
+            "metadata": {
+              "service": "generativelanguage.googleapis.com"
+            },
+            "reason": "API_KEY_INVALID"
+          },
+          {
+            "@type": "type.googleapis.com/google.rpc.LocalizedMessage",
+            "locale": "en-US",
+            "message": "API key not valid. Please pass a valid API key."
+          }
+        ],
+        "message": "API key not valid. Please pass a valid API key.",
+        "status": "INVALID_ARGUMENT"
       }
     },
     "headers": {
@@ -50,13 +65,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 23:25:57 GMT"
+        "Sat, 04 Oct 2025 21:39:49 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=39"
+        "gfet4t7; dur=15"
       ],
       "transfer-encoding": [
         "chunked"
@@ -76,6 +91,6 @@
         "0"
       ]
     },
-    "status": 404
+    "status": 400
   }
 }

@@ -53,40 +53,8 @@
   },
   "response": {
     "body": {
-      "choices": [
-        {
-          "finish_reason": "stop",
-          "index": 0,
-          "message": {
-            "content": "Why don't cats play poker in the jungle? Too many cheetahs!",
-            "refusal": null,
-            "role": "assistant"
-          }
-        }
-      ],
-      "created": 1759513708,
-      "id": "484116f6-0828-fa46-5b08-a0c2be4df8a1_us-east-1",
-      "model": "grok-2-1212",
-      "object": "chat.completion",
-      "system_fingerprint": "fp_fced99f24f",
-      "usage": {
-        "completion_tokens": 16,
-        "completion_tokens_details": {
-          "accepted_prediction_tokens": 0,
-          "audio_tokens": 0,
-          "reasoning_tokens": 0,
-          "rejected_prediction_tokens": 0
-        },
-        "num_sources_used": 0,
-        "prompt_tokens": 120,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 0,
-          "image_tokens": 0,
-          "text_tokens": 120
-        },
-        "total_tokens": 136
-      }
+      "code": "Client specified an invalid argument",
+      "error": "Incorrect API key provided: te***ai. You can obtain an API key from https://console.x.ai."
     },
     "headers": {
       "access-control-allow-origin": [
@@ -99,7 +67,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988e45473957dadf-ORD"
+        "9897d5792825f862-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -108,30 +76,21 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 17:48:29 GMT"
+        "Sat, 04 Oct 2025 21:39:46 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=HlqfbBVHU9fbqBOMJoIoYwK5xZAmrRnmRppghXYQypw-1759513709-1.0.1.1-JipHsXkcD.402ZtnsUEfh63cOj4fB9sOUaskDexnzxPfJOTEY0NL0pUm4wrF2HLyvx2GOOtyeXRdPsqNAy458DTuIIyL014GrzrGQEfNG7A; path=/; expires=Fri, 03-Oct-25 18:18:29 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=cRYpEDC_tVspLIcGEEsgT3nqrCebRP6qQAg6Olv17tk-1759613986-1.0.1.1-H8CX1gwOiBcZUW9pKaxjj1u7.WhYQwzFmftKsldXTyLsOiiyu4wR1jV6QUgs4DaeLrf_pdwlZcURFy8P1onC5sQTQ0BqvJcO2x_nRZEZj2c; path=/; expires=Sat, 04-Oct-25 22:09:46 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
       ],
-      "transfer-encoding": [
-        "chunked"
-      ],
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
-      ],
-      "x-request-id": [
-        "00-aeababfa3d725d0257f3d10853a2b82c-60789fb60006f620-01"
-      ],
-      "x-zero-data-retention": [
-        "false"
       ]
     },
-    "status": 200
+    "status": 400
   }
 }

@@ -848,8 +848,7 @@ defmodule ReqLLM.Provider.Defaults do
          %{"prompt_tokens" => input, "completion_tokens" => output, "total_tokens" => total} =
            usage
        ) do
-    # Extract reasoning tokens from completion_tokens_details if present
-    reasoning_tokens = get_in(usage, ["completion_tokens_details", "reasoning_tokens"]) || 0
+    reasoning_tokens = get_in(usage, ["completion_tokens_details", "reasoning_tokens"])
 
     base_usage = %{
       input_tokens: input,
@@ -857,12 +856,9 @@ defmodule ReqLLM.Provider.Defaults do
       total_tokens: total
     }
 
-    # Only add reasoning_tokens if > 0 to keep the response clean
-    if reasoning_tokens > 0 do
-      Map.put(base_usage, :reasoning_tokens, reasoning_tokens)
-    else
-      base_usage
-    end
+    base_usage
+    |> maybe_put(:reasoning_tokens, reasoning_tokens)
+    |> maybe_put(:reasoning, reasoning_tokens)
   end
 
   defp parse_openai_usage(_), do: %{input_tokens: 0, output_tokens: 0, total_tokens: 0}

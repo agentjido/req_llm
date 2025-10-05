@@ -34,21 +34,20 @@
   "response": {
     "body": {
       "error": {
-        "code": 404,
-        "message": "No endpoints found for x-ai/grok-4-fast:free."
-      },
-      "user_id": "user_2iYQIxKY28QuzANm4mmKBlOxzx2"
+        "code": 401,
+        "message": "No auth credentials found"
+      }
     },
     "headers": {
       "access-control-allow-origin": "*",
-      "cf-ray": "988fd1e52b8b1126-ORD",
+      "cf-ray": "9897d569bedba245-ORD",
       "content-type": "application/json",
-      "date": "Fri, 03 Oct 2025 22:19:14 GMT",
+      "date": "Sat, 04 Oct 2025 21:39:44 GMT",
       "permissions-policy": "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")",
       "referrer-policy": "no-referrer, strict-origin-when-cross-origin",
       "server": "cloudflare",
       "x-content-type-options": "nosniff"
     },
-    "status": 404
+    "status": 401
   }
 }

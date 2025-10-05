@@ -16,7 +16,6 @@ defmodule ReqLLM.Test.ModelMatrix do
     - `"embedding"` - Embedding models only
   - `REQ_LLM_SAMPLE` - Number of models to sample per provider
   - `REQ_LLM_EXCLUDE` - Models to exclude (space or comma separated)
-  - `REQ_LLM_INCLUDE_RESPONSES` - Include OpenAI o1/o3 models that require /v1/responses (default: excluded)
 
   ## Examples
 
@@ -115,12 +114,10 @@ defmodule ReqLLM.Test.ModelMatrix do
     pattern = get_env_value(env, "REQ_LLM_MODELS")
     sample = get_env_value(env, "REQ_LLM_SAMPLE")
     exclude = get_env_value(env, "REQ_LLM_EXCLUDE")
-    include_responses = get_env_value(env, "REQ_LLM_INCLUDE_RESPONSES")
 
     resolve_base_selection(pattern, registry, operation)
     |> maybe_sample(sample)
     |> maybe_exclude(exclude)
-    |> maybe_exclude_responses_only(include_responses)
     |> Enum.sort()
   end
 
@@ -245,20 +242,6 @@ defmodule ReqLLM.Test.ModelMatrix do
       |> MapSet.new()
 
     Enum.reject(specs, &MapSet.member?(exclusions, &1))
-  end
-
-  defp maybe_exclude_responses_only(specs, include_str) when include_str in ["1", "true"] do
-    specs
-  end
-
-  defp maybe_exclude_responses_only(specs, _) do
-    Enum.reject(specs, &responses_only_model?/1)
-  end
-
-  defp responses_only_model?(spec) do
-    String.starts_with?(spec, "openai:o1") or
-      String.starts_with?(spec, "openai:o3") or
-      String.starts_with?(spec, "openai:o4")
   end
 
   defp extract_provider(spec) do

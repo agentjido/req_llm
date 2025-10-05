@@ -1,25 +1,18 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/IiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MzAwLCJtb2RlbCI6ImdwdC01LWNoYXQtbGF0ZXN0IiwicmVhc29uaW5nIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjE1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdwdC01LWNoYXQtbGF0ZXN0Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
-      "input": [
+      "max_completion_tokens": 150,
+      "messages": [
         {
-          "content": [
-            {
-              "text": "What's the weather like in Paris, France?",
-              "type": "input_text"
-            }
-          ],
+          "content": "What's the weather like in Paris, France?",
           "role": "user"
         }
       ],
-      "max_output_tokens": 300,
       "model": "gpt-5-chat-latest",
-      "reasoning": {
-        "effort": "low"
-      },
+      "seed": 42,
       "stream": false,
       "tools": [
         {
@@ -89,18 +82,21 @@
       ]
     },
     "method": "post",
-    "url": "https://api.openai.com/v1/responses"
+    "url": "https://api.openai.com/v1/chat/completions"
   },
   "response": {
     "body": {
       "error": {
-        "code": "missing_required_parameter",
-        "message": "Missing required parameter: 'tools[0].name'.",
-        "param": "tools[0].name",
+        "code": null,
+        "message": "tools is not supported in this model. For a list of supported models, refer to https://platform.openai.com/docs/guides/function-calling#models-supporting-function-calling.",
+        "param": null,
         "type": "invalid_request_error"
       }
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -108,7 +104,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988fb50cd9e22306-ORD"
+        "9899136a6e90872f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -117,13 +113,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:59:32 GMT"
+        "Sun, 05 Oct 2025 01:16:50 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "9"
+        "16"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -135,22 +131,46 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=PCYnjALgvIZc1WPmiQBrYqDfVOFu5OjARBxsLSOo0jk-1759528772-1.0.1.1-GGMdPeBFpp78Po88QSvWdjQy806ZDHOOstoko9.EkIqUjN59cyL9fjXATMrScrSzSQZVfE4M05WWkjVVyBuVIP5aYKPpJDZWJGy_3UhC2Oo; path=/; expires=Fri, 03-Oct-25 22:29:32 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=ylrNqwGP0kOa2gIX97Au_SDXrtApaVQy3xeQ7j4XyCQ-1759528772717-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=vru6oXuMYNF_QbIafF2MLPWum_d8DW5wvMVpSkuKytU-1759627010-1.0.1.1-rXC_Z72nY.exBPOE_joIv_Qlc95SE0lXtPK4i0qmD2BG_ayacJQ_7PBm9awrLYeAhp1Ok_sau0z1sBS7tUNzad9Y.gQOXIWI4Hf1xs48IZA; path=/; expires=Sun, 05-Oct-25 01:46:50 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=Ly_RKuxVAsCR50glUAogOHSWFUE5WVHTZFYj7WLNO4g-1759627010297-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
       ],
       "x-content-type-options": [
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "12"
+        "169"
+      ],
+      "x-openai-proxy-wasm": [
+        "v0.1"
+      ],
+      "x-ratelimit-limit-requests": [
+        "5000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "800000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "4999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "799987"
+      ],
+      "x-ratelimit-reset-requests": [
+        "12ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0s"
       ],
       "x-request-id": [
-        "req_542d230efbe5c83c021c0eb1d8399947"
+        "req_b742c7ea63a34766af8afc4768b7b22a"
       ]
     },
-    "status": 400
+    "status": 404
   }
 }

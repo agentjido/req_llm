@@ -1,25 +1,18 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMDAsIm1vZGVsIjoiZ3B0LTUtY2hhdC1sYXRlc3QiLCJyZWFzb25pbmciOnsiZWZmb3J0IjoibG93In0sInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjE1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3B0LTUtY2hhdC1sYXRlc3QiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
-      "input": [
+      "max_completion_tokens": 150,
+      "messages": [
         {
-          "content": [
-            {
-              "text": "Tell me a joke about cats",
-              "type": "input_text"
-            }
-          ],
+          "content": "Tell me a joke about cats",
           "role": "user"
         }
       ],
-      "max_output_tokens": 300,
       "model": "gpt-5-chat-latest",
-      "reasoning": {
-        "effort": "low"
-      },
+      "seed": 42,
       "stream": false,
       "tools": [
         {
@@ -55,18 +48,21 @@
       ]
     },
     "method": "post",
-    "url": "https://api.openai.com/v1/responses"
+    "url": "https://api.openai.com/v1/chat/completions"
   },
   "response": {
     "body": {
       "error": {
-        "code": "missing_required_parameter",
-        "message": "Missing required parameter: 'tools[0].name'.",
-        "param": "tools[0].name",
+        "code": null,
+        "message": "tools is not supported in this model. For a list of supported models, refer to https://platform.openai.com/docs/guides/function-calling#models-supporting-function-calling.",
+        "param": null,
         "type": "invalid_request_error"
       }
     },
     "headers": {
+      "access-control-expose-headers": [
+        "X-Request-ID"
+      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -74,7 +70,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988fb507ebc82306-ORD"
+        "98991365ba50872f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -83,13 +79,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 21:59:31 GMT"
+        "Sun, 05 Oct 2025 01:16:49 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "61"
+        "27"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -101,22 +97,46 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=Sye5Gzh6pOvbZoR2wnSXIfIo4rmQ.YMqNV.x_HGhUFs-1759528771-1.0.1.1-JDLN2k4EHiG9TWi0Ldft77vcXRiqNNE519ArA5Ap2i086B9DtVFEsmylqNu1kZO849.zXHG5cTbPCA4HPUiq.CGrMHKj4yzkcJb5.8tSyGI; path=/; expires=Fri, 03-Oct-25 22:29:31 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=25UAs1yTNllU48B5g6M6g3y.W4t1EHrUCJvxiv9f2e0-1759528771991-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=n.OStWpoH68LFIp4EWGU80Ard5Xn9vzw1cSPbIIV3FU-1759627009-1.0.1.1-2hgbBQIP8HXYj6QWjRJXXTASGiu3kUlt5_i1D86792qGy1.q1ABsoYfjO2eyhojmi5_NxYLNvwBSo_Qci0W5BnqHz4XwcCTparZD4FHfJxQ; path=/; expires=Sun, 05-Oct-25 01:46:49 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=M9sDf88Efm.ASprpz02W8zxxRv2CglKbsNlhu47p1BE-1759627009594-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
       ],
       "x-content-type-options": [
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "74"
+        "243"
+      ],
+      "x-openai-proxy-wasm": [
+        "v0.1"
+      ],
+      "x-ratelimit-limit-requests": [
+        "5000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "800000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "4999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "799991"
+      ],
+      "x-ratelimit-reset-requests": [
+        "12ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0s"
       ],
       "x-request-id": [
-        "req_8723cfa60706daa08f83ca32459c9b29"
+        "req_f6bfafe250864225a511e04f4ba08487"
       ]
     },
-    "status": 400
+    "status": 404
   }
 }

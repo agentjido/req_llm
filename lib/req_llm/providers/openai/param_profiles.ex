@@ -79,6 +79,7 @@ defmodule ReqLLM.Providers.OpenAI.ParamProfiles do
   defp is_o_series_model?(<<"o4", _::binary>>), do: true
   defp is_o_series_model?(_), do: false
 
+  defp is_gpt5_model?("gpt-5-chat-latest"), do: false
   defp is_gpt5_model?(<<"gpt-5", _::binary>>), do: true
   defp is_gpt5_model?(_), do: false
 
