@@ -510,16 +510,16 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   end
 
   defp default_specs_for_operation(:text) do
-    Application.get_env(:req_llm, :test_models, [])
+    Application.get_env(:req_llm, :sample_text_models, [])
   end
 
   defp default_specs_for_operation(:embedding) do
-    Application.get_env(:req_llm, :test_embedding_models, [])
+    Application.get_env(:req_llm, :sample_embedding_models, [])
   end
 
   defp default_specs_for_operation(:all) do
-    Application.get_env(:req_llm, :test_models, []) ++
-      Application.get_env(:req_llm, :test_embedding_models, [])
+    Application.get_env(:req_llm, :sample_text_models, []) ++
+      Application.get_env(:req_llm, :sample_embedding_models, [])
   end
 
   defp parse_spec_tuple(spec) when is_binary(spec) do
