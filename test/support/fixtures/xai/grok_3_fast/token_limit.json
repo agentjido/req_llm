@@ -32,8 +32,40 @@
   },
   "response": {
     "body": {
-      "code": "Client specified an invalid argument",
-      "error": "Incorrect API key provided: te***ai. You can obtain an API key from https://console.x.ai."
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "message": {
+            "content": "**The Legend of the Dragonspire Chronicles**\n\nIn the ancient realm of Eldergleam, where the sky shimmered with hues of amber and violet, and the earth thrummed with the heartbeat of magic, there stood a mountain so tall it pierced the heavens themselves. It was called Dragonspire, a jagged, obsidian peak wreathed in eternal storm clouds, said to be the cradle of the first dragons. Legends whispered that within its cavernous depths lay the Heart of Flame, a",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759670177,
+      "id": "a22bc49c-e37b-ebc6-0970-e2b72f871292_us-east-1",
+      "model": "grok-3",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_f02e6df795",
+      "usage": {
+        "completion_tokens": 100,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "num_sources_used": 0,
+        "prompt_tokens": 15,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 2,
+          "image_tokens": 0,
+          "text_tokens": 15
+        },
+        "total_tokens": 115
+      }
     },
     "headers": {
       "access-control-allow-origin": [
@@ -46,7 +78,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9897d5781d8df862-ORD"
+        "989d31529ca8eb5c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -55,21 +87,30 @@
         "application/json"
       ],
       "date": [
-        "Sat, 04 Oct 2025 21:39:46 GMT"
+        "Sun, 05 Oct 2025 13:16:22 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=Gk3csE7OlJ1q_43K8W1jOHkapNXIfpPOY3pSedgRlJk-1759613986-1.0.1.1-Nh_m0RUp8aGu7mzHHfQ3F8tUJ1ZeZrsCJXxnBdaFgNSVqc1JcYVS0GYZmuM2HNJuIgJMC_OzD7mXHTOjzEO7McyatfRu6PKdV2RNWIJ1mAg; path=/; expires=Sat, 04-Oct-25 22:09:46 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=1HupIjWIldbmIhtZzqene3WnwkrGDfRZG8lg4hLkaa8-1759670182-1.0.1.1-YlCdisQFxjkB08sDrK6gvBw8SZ63cd6VmUB0BEd.61kErovAxJZwXlJWQBB35FEBhhgkWEw7n0b0hGU52fpEndCirwvaosOXhl2VyNmKzJ4; path=/; expires=Sun, 05-Oct-25 13:46:22 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
       ],
+      "transfer-encoding": [
+        "chunked"
+      ],
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-request-id": [
+        "00-ab21365442f6cbd3074e059a5730fa84-5d4afdf1003a8bf0-01"
+      ],
+      "x-zero-data-retention": [
+        "false"
       ]
     },
-    "status": 400
+    "status": 200
   }
 }

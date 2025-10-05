@@ -33,8 +33,40 @@
   },
   "response": {
     "body": {
-      "code": "Client specified an invalid argument",
-      "error": "Incorrect API key provided: te***ai. You can obtain an API key from https://console.x.ai."
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hey there! \"Hello world!\"—a classic, huh? Whether you're just saying hi or channeling your inner coder, I'm happy to greet you back. What's on your mind today? 😊",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759670175,
+      "id": "3360e319-98cf-3a63-4bcf-88bae02e5bed_us-east-1",
+      "model": "grok-3",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_f02e6df795",
+      "usage": {
+        "completion_tokens": 39,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "num_sources_used": 0,
+        "prompt_tokens": 9,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 3,
+          "image_tokens": 0,
+          "text_tokens": 9
+        },
+        "total_tokens": 48
+      }
     },
     "headers": {
       "access-control-allow-origin": [
@@ -47,7 +79,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9897d5787e73f862-ORD"
+        "989d3143296ceb5c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -56,21 +88,30 @@
         "application/json"
       ],
       "date": [
-        "Sat, 04 Oct 2025 21:39:46 GMT"
+        "Sun, 05 Oct 2025 13:16:17 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=rdCJTdapqVT2wgDbDwzH_Rr6XHwKmrPoU5vSUglpUy0-1759613986-1.0.1.1-bTmDJI5TPxvedZC8wqp81_o8N3xHRDeUtztEbNVZrJGk0vtq3PlhJ8bk_Ru5MslYQdyOIJjmXuAJ438r7PIxqsA9Wz9WgISCA9Doc9IA4sU; path=/; expires=Sat, 04-Oct-25 22:09:46 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=Wnp9rEgEpnShE0i7_N9t4aOHzkKNkEnrHGVagje4BWs-1759670177-1.0.1.1-R_hUSOVOGzH7FQIJdpjHUK4jgog6R7Bkob0aPtPrj116jEPiUolGySQgsGLVxLRoDfh7MYc0gwN77B3XMWTsnOnu_gjOOuG32INLsaWJTfo; path=/; expires=Sun, 05-Oct-25 13:46:17 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
       ],
+      "transfer-encoding": [
+        "chunked"
+      ],
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-request-id": [
+        "00-6a4c5caa63f4fd8d640075ec519a6f12-4169747800445d0a-01"
+      ],
+      "x-zero-data-retention": [
+        "false"
       ]
     },
-    "status": 400
+    "status": 200
   }
 }

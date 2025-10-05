@@ -55,19 +55,75 @@
   },
   "response": {
     "body": {
-      "error": {
-        "message": "invalid x-api-key",
-        "type": "authentication_error"
-      },
-      "request_id": "req_011CTntBgiK3oHmJBCtkKkDf",
-      "type": "error"
+      "content": [
+        {
+          "text": "I apologize, but I don't see any tools or functions available that would help me tell jokes or provide cat-related content. The only tool I have access to is a weather information function. I cannot generate or tell jokes on my own.\n\nIf you'd like to know about the weather somewhere, I'd be happy to help with that instead!",
+          "type": "text"
+        }
+      ],
+      "id": "msg_01PqTLzw6mvkTwSLWRvZHWrx",
+      "model": "claude-3-5-sonnet-20241022",
+      "role": "assistant",
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 381,
+        "output_tokens": 75,
+        "service_tier": "standard"
+      }
     },
     "headers": {
+      "anthropic-organization-id": [
+        "a71659e7-a922-4ff7-99de-f3ba615face1"
+      ],
+      "anthropic-ratelimit-input-tokens-limit": [
+        "80000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "80000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2025-10-05T13:17:48Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "16000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "16000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2025-10-05T13:17:50Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "1000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2025-10-05T13:17:48Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "96000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "96000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2025-10-05T13:17:48Z"
+      ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9897d5920902af01-ORD"
+        "989d3387be7722d0-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -76,10 +132,10 @@
         "application/json"
       ],
       "date": [
-        "Sat, 04 Oct 2025 21:39:50 GMT"
+        "Sun, 05 Oct 2025 13:17:50 GMT"
       ],
       "request-id": [
-        "req_011CTntBgiK3oHmJBCtkKkDf"
+        "req_011CTp7i8grtjKUBbwE1AH2V"
       ],
       "server": [
         "cloudflare"
@@ -87,19 +143,19 @@
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
       ],
+      "transfer-encoding": [
+        "chunked"
+      ],
       "via": [
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "6"
+        "1977"
       ],
       "x-robots-tag": [
         "none"
-      ],
-      "x-should-retry": [
-        "false"
       ]
     },
-    "status": 401
+    "status": 200
   }
 }

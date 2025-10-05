@@ -64,22 +64,23 @@
   },
   "response": {
     "body": {
-      "code": "Client specified an invalid argument",
-      "error": "Incorrect API key provided: te***ai. You can obtain an API key from https://console.x.ai."
+      "b64": "ZGF0YTogeyJpZCI6IjYwMGFiZDZmLWM3ODEtMTFlNS1kZWQ2LWMzOWJhZWNmYzdhNF91cy1lYXN0LTEiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5NjcwMTg2LCJtb2RlbCI6Imdyb2stMyIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siaWQiOiJjYWxsXzg2MDk5ODgyIiwiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwiYXJndW1lbnRzIjoie1wiYWdlXCI6MzAsXCJuYW1lXCI6XCJKb2huIERvZVwiLFwib2NjdXBhdGlvblwiOlwiU29mdHdhcmUgRW5naW5lZXJcIn0ifSwiaW5kZXgiOjAsInR5cGUiOiJmdW5jdGlvbiJ9XX19XSwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfZjAyZTZkZjc5NSJ9CgpkYXRhOiB7ImlkIjoiNjAwYWJkNmYtYzc4MS0xMWU1LWRlZDYtYzM5YmFlY2ZjN2E0X3VzLWVhc3QtMSIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk2NzAxODYsIm1vZGVsIjoiZ3Jvay0zIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7fSwiZmluaXNoX3JlYXNvbiI6InRvb2xfY2FsbHMifV0sInN5c3RlbV9maW5nZXJwcmludCI6ImZwX2YwMmU2ZGY3OTUifQoKZGF0YTogW0RPTkVdCgo="
     },
     "headers": {
       "access-control-allow-origin": "*",
       "access-control-expose-headers": "*",
+      "cache-control": "no-cache",
       "cf-cache-status": "DYNAMIC",
-      "cf-ray": "9897d579eb0fe287-ORD",
-      "content-length": "147",
-      "content-type": "application/json",
-      "date": "Sat, 04 Oct 2025 21:39:46 GMT",
+      "cf-ray": "989d317f9f85e7fa-ORD",
+      "content-type": "text/event-stream",
+      "date": "Sun, 05 Oct 2025 13:16:25 GMT",
       "server": "cloudflare",
-      "set-cookie": "__cf_bm=AqcyU6IzXaXHKA4YHEsySu1tIBsb5sVgJIdo1AAImoo-1759613986-1.0.1.1-6qhnl4Q1q6pdyvAtdK27tKwbgIwCdg.avnrI9uOY85HwfKuTaB2M03w7UckG6g42VG2_4FoIYVrbTytaeZqn_S78ks0T_E_K6TbPf6kQhXc; path=/; expires=Sat, 04-Oct-25 22:09:46 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None",
+      "set-cookie": "__cf_bm=H9r7HQpkj9NrpcRrqhirrAO_FQzNMQ_CkctRHb1Dgw0-1759670185-1.0.1.1-5fWlXoZbafWYGXJgzKc6TANS7a.NFzzgjLCaMTd5zwC52zoSchw2dviLkKnCqOXIURo0Pc3qMz2TVQ7wV9TMyaOyO4GKNYvLQKmI7PSihH4; path=/; expires=Sun, 05-Oct-25 13:46:25 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None",
       "strict-transport-security": "max-age=31536000",
-      "vary": "origin, access-control-request-method, access-control-request-headers"
+      "vary": "origin, access-control-request-method, access-control-request-headers",
+      "x-request-id": "00-c367117e6cc8ae5dcbdb294354391878-d335bc0400456b36-01",
+      "x-zero-data-retention": "false"
     },
-    "status": 400
+    "status": 200
   }
 }

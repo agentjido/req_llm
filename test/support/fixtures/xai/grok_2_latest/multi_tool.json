@@ -87,8 +87,50 @@
   },
   "response": {
     "body": {
-      "code": "Client specified an invalid argument",
-      "error": "Incorrect API key provided: te***ai. You can obtain an API key from https://console.x.ai."
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "message": {
+            "content": "I am retrieving the current weather in Paris, France.",
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
+                  "name": "get_weather"
+                },
+                "id": "call_12089015",
+                "type": "function"
+              }
+            ]
+          }
+        }
+      ],
+      "created": 1759670203,
+      "id": "4bdcbd1a-8bf6-e2d9-541e-fc134b131a0c_us-east-1",
+      "model": "grok-2-1212",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_fced99f24f",
+      "usage": {
+        "completion_tokens": 53,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "num_sources_used": 0,
+        "prompt_tokens": 199,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "image_tokens": 0,
+          "text_tokens": 199
+        },
+        "total_tokens": 252
+      }
     },
     "headers": {
       "access-control-allow-origin": [
@@ -101,7 +143,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9897d57b1cf1f862-ORD"
+        "989d31f378b62268-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -110,21 +152,30 @@
         "application/json"
       ],
       "date": [
-        "Sat, 04 Oct 2025 21:39:47 GMT"
+        "Sun, 05 Oct 2025 13:16:44 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=8axAdT2nGDv0LrgcvL9iV7Vqm5gsbxXn8oc_.RFjZkI-1759613987-1.0.1.1-d2uQUnYLF59D_0rra1HhdBWgwwOE7AJrzVsw4xsfXpMqqymzmJokFjHPxT9d5L.OF5Jiol07ucmK8YQ9ESyPfdrvmTAuet3.bhnC1eYfe8g; path=/; expires=Sat, 04-Oct-25 22:09:47 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=MO.vH0y3hs4xqp5i_.qP3pl3TN64KQojbWYTEVkVtUQ-1759670204-1.0.1.1-qsDR.KrkLz3WXuaSY2QuLhBROkx_HOoARj00wphMdBlmEwknnrKIf.aX9CpyilIIn0.DR0MMurIme4u_Qrj9r3ailGxwHmfn0VlRVUICGfE; path=/; expires=Sun, 05-Oct-25 13:46:44 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
       ],
+      "transfer-encoding": [
+        "chunked"
+      ],
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-request-id": [
+        "00-44acf553ff2ef29b131734d6363bde05-b2bf04be003b2d2a-01"
+      ],
+      "x-zero-data-retention": [
+        "false"
       ]
     },
-    "status": 400
+    "status": 200
   }
 }

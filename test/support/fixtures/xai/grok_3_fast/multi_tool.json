@@ -87,8 +87,50 @@
   },
   "response": {
     "body": {
-      "code": "Client specified an invalid argument",
-      "error": "Incorrect API key provided: te***ai. You can obtain an API key from https://console.x.ai."
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "message": {
+            "content": "",
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
+                  "name": "get_weather"
+                },
+                "id": "call_38729134",
+                "type": "function"
+              }
+            ]
+          }
+        }
+      ],
+      "created": 1759670190,
+      "id": "ad4b9c99-933d-0794-7609-c14877011c49_us-east-1",
+      "model": "grok-3",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_f02e6df795",
+      "usage": {
+        "completion_tokens": 35,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "num_sources_used": 0,
+        "prompt_tokens": 329,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 3,
+          "image_tokens": 0,
+          "text_tokens": 329
+        },
+        "total_tokens": 364
+      }
     },
     "headers": {
       "access-control-allow-origin": [
@@ -101,7 +143,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9897d57b7deaf862-ORD"
+        "989d31a19f23eb5c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -110,21 +152,30 @@
         "application/json"
       ],
       "date": [
-        "Sat, 04 Oct 2025 21:39:47 GMT"
+        "Sun, 05 Oct 2025 13:16:31 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=Yk0jQMkYJDBGKLtXPkId32yJ8lCNHVACO52Pld82JDg-1759613987-1.0.1.1-_LznQ4r0LkWgWPXvLkDSRD0VWwW7O5sdaCgCPTErte4tcuFrJKT2jKYy_rG62Q0LGC6QuQymgQ7AKZRH_ag3VVHBj1C2weaWn52DVyd5k4c; path=/; expires=Sat, 04-Oct-25 22:09:47 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=AS3cw2N2h2j1qWNK4uc27AB9yjWd3YgWjmDCP90NBQo-1759670191-1.0.1.1-reGrJp_h8IirSRGj46tvfcIstKJFKAvgYMBVp0x6OSF7Vf721VDNzHSBsO5OHaPAu4uaUWNbujYyaxx9Dnse4t9RcTm56CJUajTFfgbzw8g; path=/; expires=Sun, 05-Oct-25 13:46:31 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
       ],
+      "transfer-encoding": [
+        "chunked"
+      ],
       "vary": [
         "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-request-id": [
+        "00-77322a69f18fb459b9b60f29bb8029aa-3d19868400463e39-01"
+      ],
+      "x-zero-data-retention": [
+        "false"
       ]
     },
-    "status": 400
+    "status": 200
   }
 }

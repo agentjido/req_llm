@@ -53,10 +53,35 @@
   },
   "response": {
     "body": {
-      "error": {
-        "code": "invalid_api_key",
-        "message": "Invalid API Key",
-        "type": "invalid_request_error"
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Why did the cat join a band? Because it wanted to be the purr-cussionist.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759670231,
+      "id": "chatcmpl-94da2eef-f1f3-484f-8eb7-49f8a9cbde63",
+      "model": "llama-3.1-8b-instant",
+      "object": "chat.completion",
+      "service_tier": "on_demand",
+      "system_fingerprint": "fp_7b3cfae3af",
+      "usage": {
+        "completion_time": 0.02314821,
+        "completion_tokens": 21,
+        "prompt_time": 0.078920025,
+        "prompt_tokens": 220,
+        "queue_time": 0.254284806,
+        "total_time": 0.102068235,
+        "total_tokens": 241
+      },
+      "usage_breakdown": null,
+      "x_groq": {
+        "id": "req_01k6t89r2tfp2sn91z99cx34az"
       }
     },
     "headers": {
@@ -70,7 +95,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9897d5740dae86d2-ORD"
+        "989d32a06a8d72ea-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -79,13 +104,16 @@
         "application/json"
       ],
       "date": [
-        "Sat, 04 Oct 2025 21:39:45 GMT"
+        "Sun, 05 Oct 2025 13:17:11 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=6Kz9e3Jo470zheEDAWXRy5Aj6ztYR.8Fg1GGaOJ_ysY-1759613985-1.0.1.1-H0Y5KzXzBFAJy5Ihhm7cXswLNttETZDafCxm14FCcZ9YxvoeXCuraZW6a.vEFZMHEbY_qB3XQeOaCxC5fDiFoXH1Pj5JEL1xPnmcPANGVFo; path=/; expires=Sat, 04-Oct-25 22:09:45 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=lOxYcecbJGgprzcm7BKn9b7ySZExTMZgQM7Z0QtV7BI-1759670231-1.0.1.1-NMRb9ctIVq6beljghZQEYkSyhSRUVhUeLRCzoqZRiPIBMXallLO7DNCSgkTcoNZ4Q0ej4GYieVoov05m70qijth5FgO9J_pbLmk4hLVnT8M; path=/; expires=Sun, 05-Oct-25 13:47:11 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+      ],
+      "transfer-encoding": [
+        "chunked"
       ],
       "vary": [
         "Origin"
@@ -94,12 +122,30 @@
         "1.1 google"
       ],
       "x-groq-region": [
-        "yul"
+        "msp"
+      ],
+      "x-ratelimit-limit-requests": [
+        "14400"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "6000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "14397"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "5686"
+      ],
+      "x-ratelimit-reset-requests": [
+        "17.675999999s"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "3.135s"
       ],
       "x-request-id": [
-        "req_01k6rjn94ye8qscy15rv8hx541"
+        "req_01k6t89r2tfp2sn91z99cx34az"
       ]
     },
-    "status": 401
+    "status": 200
   }
 }
