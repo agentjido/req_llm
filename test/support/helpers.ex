@@ -149,9 +149,9 @@ defmodule ReqLLM.Test.Helpers do
              "usage.cached_input must be non-negative integer, got: #{inspect(usage.cached_input)}"
     end
 
-    if Map.has_key?(usage, :reasoning) do
-      assert is_integer(usage.reasoning) and usage.reasoning >= 0,
-             "usage.reasoning must be non-negative integer, got: #{inspect(usage.reasoning)}"
+    if Map.has_key?(usage, :reasoning_tokens) do
+      assert is_integer(usage.reasoning_tokens) and usage.reasoning_tokens >= 0,
+             "usage.reasoning_tokens must be non-negative integer, got: #{inspect(usage.reasoning_tokens)}"
     end
 
     if Map.has_key?(usage, :input_cost) do
@@ -242,7 +242,7 @@ defmodule ReqLLM.Test.Helpers do
   end
 
   defp assert_chunk_types(chunks) do
-    valid_types = [:role, :content, :text, :tool_call, :meta, :thinking]
+    valid_types = [:content, :thinking, :tool_call, :meta]
 
     Enum.each(chunks, fn chunk ->
       assert %StreamChunk{} = chunk,
@@ -256,7 +256,7 @@ defmodule ReqLLM.Test.Helpers do
   defp assert_content_presence(chunks) do
     content_chunks =
       Enum.filter(chunks, fn chunk ->
-        chunk.type in [:content, :text] and chunk.text != nil and chunk.text != ""
+        chunk.type == :content and chunk.text != nil and chunk.text != ""
       end)
 
     assert not Enum.empty?(content_chunks),
@@ -266,15 +266,19 @@ defmodule ReqLLM.Test.Helpers do
   @doc """
   Create fixture options by adding the :fixture key with test name only.
 
-  Path is automatically derived from the model. Provider parameter kept for API compatibility.
+  Path is automatically derived from the model.
 
   ## Examples
 
-      iex> fixture_opts(:anthropic, "basic", [temperature: 0.0])
+      iex> fixture_opts("basic", [temperature: 0.0])
       [temperature: 0.0, fixture: "basic"]
   """
-  def fixture_opts(_provider, name, extra_opts \\ []) do
+  def fixture_opts(name, extra_opts \\ []) do
     Keyword.put(extra_opts, :fixture, name)
+  end
+
+  def fixture_opts(_provider, name, extra_opts) do
+    fixture_opts(name, extra_opts)
   end
 
   @doc """
@@ -333,14 +337,16 @@ defmodule ReqLLM.Test.Helpers do
   """
   def tool_budget_for(model_spec) do
     case Model.from(model_spec) do
-      {:ok, %{max_output_tokens: max}} when is_integer(max) and max > 0 ->
-        div(max, 10)
+      {:ok, model} ->
+        cond do
+          is_integer(model.max_tokens) and model.max_tokens > 0 ->
+            max(64, div(model.max_tokens, 10))
 
-      {:ok, %{cost: %{output: output_cost}}} when is_float(output_cost) ->
-        if output_cost < 0.001 do
-          500
-        else
-          150
+          is_map(model.cost) and is_number(model.cost[:output]) and model.cost[:output] < 0.001 ->
+            500
+
+          true ->
+            150
         end
 
       _ ->
@@ -475,40 +481,54 @@ defmodule ReqLLM.Test.Helpers do
   ## Parameters
 
   - `model_spec` - Model specification string (e.g., "openai:gpt-5")
-  - `provider` - Provider atom (e.g., :openai)
   - `base_opts` - Base options keyword list
   - `min_tokens` - Optional minimum token count for reasoning models
 
   ## Examples
 
-      iex> reasoning_overlay("openai:gpt-5", :openai, [temperature: 0.0], 200)
+      iex> reasoning_overlay("openai:gpt-5", [temperature: 0.0], 200)
       [temperature: 0.0, max_tokens: 200, reasoning_effort: :low]
   """
-  def reasoning_overlay(model_spec, _provider, base_opts, min_tokens \\ nil) do
+  def reasoning_overlay(model_spec, base_opts, min_tokens \\ nil) do
     case ReqLLM.Model.from(model_spec) do
       {:ok, %{capabilities: %{reasoning: true}}} ->
         cfg = param_bundles()
-        reasoning_effort = cfg.reasoning[:reasoning_effort] || :medium
-        default_budget = 1024
+        opts = Keyword.put(base_opts, :reasoning_effort, cfg.reasoning[:reasoning_effort] || :low)
 
-        max_tokens = base_opts[:max_tokens]
-
-        if is_integer(max_tokens) and max_tokens <= default_budget do
-          base_opts
+        if is_integer(min_tokens) and (opts[:max_tokens] || 0) < min_tokens do
+          Keyword.put(opts, :max_tokens, min_tokens)
         else
-          opts =
-            base_opts
-            |> Keyword.put(:reasoning_effort, reasoning_effort)
-
-          if is_integer(min_tokens) and (opts[:max_tokens] || 0) < min_tokens do
-            Keyword.put(opts, :max_tokens, min_tokens)
-          else
-            opts
-          end
+          opts
         end
 
       _ ->
         base_opts
     end
   end
+
+  def reasoning_overlay(model_spec, _provider, base_opts, min_tokens) do
+    reasoning_overlay(model_spec, base_opts, min_tokens)
+  end
+
+  @doc """
+  Check if a response was truncated due to length limit.
+  """
+  def truncated?(%ReqLLM.Response{} = response), do: response.finish_reason == :length
+
+  @doc """
+  Get combined text and thinking content from a response.
+  """
+  def combined_content(%ReqLLM.Response{} = response) do
+    (ReqLLM.Response.text(response) || "") <> (ReqLLM.Response.thinking(response) || "")
+  end
+
+  @doc """
+  Materialize a StreamResponse into a regular Response.
+  """
+  def materialize_stream(%ReqLLM.StreamResponse{} = stream_response) do
+    {:ok, response} = ReqLLM.StreamResponse.to_response(stream_response)
+    response
+  end
+
+  def materialize_stream(response), do: response
 end

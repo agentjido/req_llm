@@ -307,10 +307,6 @@ defmodule ReqLLM.Providers.Google do
           opts
       end
 
-    opts =
-      opts
-      |> Keyword.delete(:thinking_visibility)
-
     case Keyword.pop(opts, :stream?) do
       {nil, rest} ->
         {rest, []}
@@ -501,6 +497,10 @@ defmodule ReqLLM.Providers.Google do
       }
     }
   end
+
+  defp build_google_tool_config(:required), do: build_google_tool_config("required")
+  defp build_google_tool_config(:auto), do: build_google_tool_config("auto")
+  defp build_google_tool_config(:none), do: build_google_tool_config("none")
 
   defp build_google_tool_config("required") do
     %{functionCallingConfig: %{mode: "ANY"}}
@@ -823,7 +823,6 @@ defmodule ReqLLM.Providers.Google do
     }
   end
 
-  # TODO: Add support for images, audio, video when multimodal support is added
   defp convert_content_part(part), do: %{text: to_string(part)}
 
   # Google-specific SSE event decoding

@@ -365,7 +365,7 @@ defmodule ReqLLM.Providers.OpenAITest do
           operation: :embedding,
           model: model.model,
           text: text,
-          provider_options: [dimensions: 512]
+          dimensions: 512
         ]
       }
 
@@ -710,7 +710,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     test "prepare_request for embedding with all options" do
       model = ReqLLM.Model.from!("openai:text-embedding-3-large")
       text = "Sample text for embedding"
-      opts = [provider_options: [dimensions: 1024, encoding_format: "float"], user: "test-user"]
+      opts = [dimensions: 1024, encoding_format: "float", user: "test-user"]
 
       {:ok, request} = OpenAI.prepare_request(:embedding, model, text, opts)
 

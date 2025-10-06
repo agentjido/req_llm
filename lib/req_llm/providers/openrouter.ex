@@ -177,10 +177,7 @@ defmodule ReqLLM.Providers.OpenRouter do
         other -> Keyword.put(opts, :reasoning_effort, other)
       end
 
-    opts =
-      opts
-      |> Keyword.delete(:thinking_visibility)
-      |> Keyword.delete(:reasoning_token_budget)
+    opts = Keyword.delete(opts, :reasoning_token_budget)
 
     # Handle legacy parameter names -> OpenRouter prefixed names
     legacy_mappings = [

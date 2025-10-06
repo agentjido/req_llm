@@ -20,7 +20,7 @@ defmodule ReqLLM.Provider.Options do
   - `frequency_penalty`, `presence_penalty` - Repetition control
   - `seed`, `stop` - Deterministic generation and control
   - `tools`, `tool_choice` - Function calling
-  - `reasoning_effort`, `thinking_visibility`, `reasoning_token_budget` - Reasoning controls
+  - `reasoning_effort`, `reasoning_token_budget` - Reasoning controls
   - `n`, `stream` - Output control
   - `user` - Tracking/identification
 
@@ -96,16 +96,11 @@ defmodule ReqLLM.Provider.Options do
                                  doc: "System prompt to set context and instructions"
                                ],
 
-                               # Canonical reasoning/thinking controls
+                               # Canonical reasoning controls
                                reasoning_effort: [
                                  type: {:in, [:low, :medium, :high, :default]},
                                  doc:
                                    "Computational effort for reasoning models (higher = more thinking)"
-                               ],
-                               thinking_visibility: [
-                                 type: {:in, [:auto, :hidden, :visible]},
-                                 doc:
-                                   "Whether to expose internal reasoning/thinking content in response"
                                ],
                                reasoning_token_budget: [
                                  type: :pos_integer,
@@ -228,6 +223,7 @@ defmodule ReqLLM.Provider.Options do
   def process!(provider_mod, operation, model, opts) do
     {internal_opts, user_opts} = Keyword.split(opts, @internal_keys)
     user_opts = handle_stream_alias(user_opts)
+    user_opts = normalize_legacy_options(user_opts)
 
     # Check for key collisions before schema validation
     check_provider_key_collisions!(provider_mod, user_opts)
@@ -392,6 +388,85 @@ defmodule ReqLLM.Provider.Options do
   end
 
   # Private helper functions
+
+  defp normalize_legacy_options(opts) do
+    opts
+    |> normalize_stop_sequences()
+    |> normalize_legacy_reasoning()
+    |> normalize_req_http_options()
+    |> normalize_tools()
+  end
+
+  defp normalize_stop_sequences(opts) do
+    case Keyword.pop(opts, :stop_sequences) do
+      {nil, rest} -> rest
+      {sequences, rest} -> Keyword.put(rest, :stop, sequences)
+    end
+  end
+
+  defp normalize_legacy_reasoning(opts) do
+    opts
+    |> normalize_thinking_flag()
+    |> normalize_reasoning_flag()
+  end
+
+  defp normalize_thinking_flag(opts) do
+    case Keyword.pop(opts, :thinking) do
+      {nil, rest} ->
+        rest
+
+      {false, rest} ->
+        rest
+
+      {true, rest} ->
+        rest
+    end
+  end
+
+  defp normalize_reasoning_flag(opts) do
+    case Keyword.pop(opts, :reasoning) do
+      {nil, rest} ->
+        rest
+
+      {false, rest} ->
+        rest
+
+      {true, rest} ->
+        rest
+        |> Keyword.put_new(:reasoning_effort, :medium)
+
+      {"low", rest} ->
+        rest
+        |> Keyword.put_new(:reasoning_effort, :low)
+
+      {"auto", rest} ->
+        rest
+
+      {"high", rest} ->
+        rest
+        |> Keyword.put_new(:reasoning_effort, :high)
+    end
+  end
+
+  defp normalize_req_http_options(opts) do
+    case Keyword.get(opts, :req_http_options) do
+      map when is_map(map) ->
+        Keyword.put(opts, :req_http_options, Map.to_list(map))
+
+      _ ->
+        opts
+    end
+  end
+
+  defp normalize_tools(opts) do
+    case Keyword.get(opts, :tools) do
+      tools when not is_list(tools) and not is_nil(tools) ->
+        Keyword.put(opts, :tools, [tools])
+
+      _ ->
+        opts
+    end
+  end
 
   defp handle_stream_alias(opts) do
     case Keyword.pop(opts, :stream?) do

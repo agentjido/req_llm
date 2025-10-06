@@ -43,7 +43,6 @@ defmodule ReqLLM.Providers.OpenAI.ParamProfiles do
 
     canonical_steps = [
       {:transform, :reasoning_effort, &translate_reasoning_effort/1, nil},
-      {:drop, :thinking_visibility, nil},
       {:drop, :reasoning_token_budget, nil}
     ]
 

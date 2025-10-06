@@ -72,23 +72,15 @@ defmodule ReqLLM.Providers.XAI do
   """
   @impl ReqLLM.Provider
   def prepare_request(:object, model_spec, prompt, opts) do
-    provider_opts = Keyword.get(opts, :provider_options, [])
+    max_tokens = Keyword.get(opts, :max_tokens) || Keyword.get(opts, :max_completion_tokens)
 
     opts_with_tokens =
-      case Keyword.get(provider_opts, :max_completion_tokens) do
+      case max_tokens do
         nil ->
-          Keyword.put(
-            opts,
-            :provider_options,
-            Keyword.put(provider_opts, :max_completion_tokens, 4096)
-          )
+          Keyword.put(opts, :max_tokens, 4096)
 
         tokens when tokens < 200 ->
-          Keyword.put(
-            opts,
-            :provider_options,
-            Keyword.put(provider_opts, :max_completion_tokens, 200)
-          )
+          Keyword.put(opts, :max_tokens, 200)
 
         _tokens ->
           opts
@@ -154,7 +146,6 @@ defmodule ReqLLM.Providers.XAI do
         other -> Keyword.put(opts, :reasoning_effort, other)
       end
 
-    opts = Keyword.delete(opts, :thinking_visibility)
     opts = Keyword.delete(opts, :reasoning_token_budget)
 
     # Handle max_tokens -> max_completion_tokens translation (xAI preference)

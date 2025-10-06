@@ -94,7 +94,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     end
 
     test "encodes tool_choice auto" do
-      request = build_request(tool_choice: "auto")
+      request = build_request(tool_choice: :auto)
 
       encoded = ResponsesAPI.encode_body(request)
       body = Jason.decode!(encoded.body)
@@ -103,7 +103,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     end
 
     test "encodes tool_choice none" do
-      request = build_request(tool_choice: "none")
+      request = build_request(tool_choice: :none)
 
       encoded = ResponsesAPI.encode_body(request)
       body = Jason.decode!(encoded.body)
@@ -112,7 +112,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     end
 
     test "encodes tool_choice required" do
-      request = build_request(tool_choice: "required")
+      request = build_request(tool_choice: :required)
 
       encoded = ResponsesAPI.encode_body(request)
       body = Jason.decode!(encoded.body)

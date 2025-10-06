@@ -120,11 +120,9 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
   end
 
   defp add_embedding_options(body, request_options) do
-    provider_opts = request_options[:provider_options] || []
-
     body
-    |> maybe_put(:dimensions, provider_opts[:dimensions])
-    |> maybe_put(:encoding_format, provider_opts[:encoding_format])
+    |> maybe_put(:dimensions, request_options[:dimensions])
+    |> maybe_put(:encoding_format, request_options[:encoding_format])
   end
 
   defp add_token_limits(body, model_name, request_options) do

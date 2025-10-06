@@ -45,11 +45,6 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
 
       defp debug?, do: System.get_env("REQ_LLM_DEBUG") in ["1", "true"]
 
-      defp truncated?(response), do: response.finish_reason == :length
-
-      defp combined_content(response),
-        do: (ReqLLM.Response.text(response) || "") <> (ReqLLM.Response.thinking(response) || "")
-
       @provider provider
       @models ModelMatrix.models_for_provider(provider, operation: :text)
 
@@ -68,15 +63,14 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             opts =
               reasoning_overlay(
                 @model_spec,
-                @provider,
-                param_bundles(@provider).deterministic,
+                param_bundles().deterministic,
                 200
               )
 
             ReqLLM.generate_text(
               @model_spec,
               "Hello world!",
-              fixture_opts(@provider, "basic", opts)
+              fixture_opts("basic", opts)
             )
             |> assert_basic_response()
           end
@@ -179,9 +173,8 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 @model_spec,
                 "Hi there!",
                 fixture_opts(
-                  @provider,
                   "usage",
-                  Keyword.put(param_bundles(@provider).deterministic, :max_tokens, max_tokens)
+                  Keyword.put(param_bundles().deterministic, :max_tokens, max_tokens)
                 )
               )
 
@@ -244,12 +237,11 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
               ]
 
               base_opts =
-                param_bundles(@provider).deterministic
+                param_bundles().deterministic
                 |> Keyword.put(:max_tokens, tool_budget_for(@model_spec))
                 |> then(
                   &reasoning_overlay(
                     @model_spec,
-                    @provider,
                     &1,
                     tool_budget_for(@model_spec) * 2
                   )
@@ -259,7 +251,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 ReqLLM.generate_text(
                   @model_spec,
                   "What's the weather like in Paris, France?",
-                  fixture_opts(@provider, "multi_tool", base_opts ++ [tools: tools])
+                  fixture_opts("multi_tool", base_opts ++ [tools: tools])
                 )
 
               case result do
@@ -294,12 +286,11 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
               ]
 
               base_opts =
-                param_bundles(@provider).deterministic
+                param_bundles().deterministic
                 |> Keyword.put(:max_tokens, tool_budget_for(@model_spec))
                 |> then(
                   &reasoning_overlay(
                     @model_spec,
-                    @provider,
                     &1,
                     tool_budget_for(@model_spec) * 2
                   )
@@ -308,7 +299,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
               ReqLLM.generate_text(
                 @model_spec,
                 "Tell me a joke about cats",
-                fixture_opts(@provider, "no_tool", base_opts ++ [tools: tools])
+                fixture_opts("no_tool", base_opts ++ [tools: tools])
               )
               |> assert_basic_response()
             end

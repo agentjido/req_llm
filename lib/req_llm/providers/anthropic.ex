@@ -317,13 +317,6 @@ defmodule ReqLLM.Providers.Anthropic do
         beta_features
       end
 
-    # TODO: Add thinking beta when we know the correct header format
-    # beta_features = if has_thinking?(user_opts) do
-    #   ["thinking-2025-01-19" | beta_features]
-    # else
-    #   beta_features
-    # end
-
     case beta_features do
       [] ->
         request
@@ -486,11 +479,7 @@ defmodule ReqLLM.Providers.Anthropic do
   end
 
   defp translate_unsupported_parameters(opts) do
-    opts
-    |> Keyword.delete(:thinking_visibility)
-    |> then(
-      &Enum.reduce(@unsupported_parameters, &1, fn key, acc -> Keyword.delete(acc, key) end)
-    )
+    Enum.reduce(@unsupported_parameters, opts, fn key, acc -> Keyword.delete(acc, key) end)
   end
 
   defp decode_success_response(req, resp) do

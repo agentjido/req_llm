@@ -15,108 +15,20 @@ defmodule ReqLLM.Generation do
 
   require Logger
 
-  @base_schema NimbleOptions.new!(
-                 temperature: [
-                   type: :float,
-                   doc: "Controls randomness in the output (0.0 to 2.0)"
-                 ],
-                 max_tokens: [
-                   type: :pos_integer,
-                   doc: "Maximum number of tokens to generate"
-                 ],
-                 top_p: [
-                   type: :float,
-                   doc: "Nucleus sampling parameter"
-                 ],
-                 top_k: [
-                   type: :pos_integer,
-                   doc: "Top-k sampling parameter"
-                 ],
-                 presence_penalty: [
-                   type: :float,
-                   doc: "Penalize new tokens based on presence"
-                 ],
-                 frequency_penalty: [
-                   type: :float,
-                   doc: "Penalize new tokens based on frequency"
-                 ],
-                 stop_sequences: [
-                   type: {:list, :string},
-                   doc: "Stop sequences to halt generation"
-                 ],
-                 response_format: [
-                   type: :map,
-                   doc: "Format for the response (e.g., JSON mode)"
-                 ],
-                 thinking: [
-                   type: :boolean,
-                   doc: "Enable thinking/reasoning tokens (beta feature)"
-                 ],
-                 tools: [
-                   type: :any,
-                   doc: "List of tool definitions"
-                 ],
-                 tool_choice: [
-                   type: {:or, [:string, :atom, :map]},
-                   doc: "Tool choice strategy"
-                 ],
-                 system_prompt: [
-                   type: :string,
-                   doc: "System prompt to prepend"
-                 ],
-                 provider_options: [
-                   type: {:or, [:map, {:list, :any}]},
-                   doc: "Provider-specific options (keyword list or map)",
-                   default: []
-                 ],
-                 reasoning: [
-                   type: {:in, [nil, false, true, "low", "auto", "high"]},
-                   doc: "Request reasoning tokens from the model"
-                 ],
-                 reasoning_effort: [
-                   type: {:in, [:low, :medium, :high, :default]},
-                   doc: "Canonical reasoning effort level"
-                 ],
-                 thinking_visibility: [
-                   type: {:in, [:hidden, :visible]},
-                   doc: "Canonical thinking visibility setting"
-                 ],
-                 reasoning_token_budget: [
-                   type: :pos_integer,
-                   doc: "Canonical reasoning token budget"
-                 ],
-                 seed: [
-                   type: :pos_integer,
-                   doc: "Seed for deterministic outputs"
-                 ],
-                 user: [
-                   type: :string,
-                   doc: "User identifier for tracking/abuse detection"
-                 ],
-                 on_unsupported: [
-                   type: {:in, [:warn, :error, :ignore]},
-                   doc: "How to handle unsupported parameter translations",
-                   default: :warn
-                 ],
-                 req_http_options: [
-                   type: {:or, [:map, {:list, :any}]},
-                   doc: "Req-specific HTTP options (keyword list or map)",
-                   default: []
-                 ],
-                 fixture: [
-                   type: {:or, [:string, {:tuple, [:atom, :string]}]},
-                   doc: "HTTP fixture for testing (provider inferred from model if string)"
-                 ]
-               )
-
   @doc """
   Returns the base generation options schema.
 
-  This schema contains only vendor-neutral options. Provider-specific options
-  should be validated separately by each provider.
+  This schema delegates to ReqLLM.Provider.Options.generation_schema/0 which is
+  the canonical runtime options schema. Provider-specific options should be
+  validated separately by each provider via Provider.Options.process/4.
+
+  For the complete schema including provider extensions, use:
+      Provider.Options.compose_schema(Provider.Options.generation_schema(), provider_mod)
   """
   @spec schema :: NimbleOptions.t()
-  def schema, do: @base_schema
+  def schema do
+    ReqLLM.Provider.Options.generation_schema()
+  end
 
   @doc """
   Generates text using an AI model with full response metadata.

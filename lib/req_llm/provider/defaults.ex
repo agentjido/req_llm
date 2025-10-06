@@ -641,7 +641,8 @@ defmodule ReqLLM.Provider.Defaults do
       when finish_reason != nil ->
         # Final chunk with finish reason
         chunks = decode_openai_delta(delta)
-        meta_chunk = ReqLLM.StreamChunk.meta(%{finish_reason: finish_reason, terminal?: true})
+        normalized_reason = parse_openai_finish_reason(finish_reason)
+        meta_chunk = ReqLLM.StreamChunk.meta(%{finish_reason: normalized_reason, terminal?: true})
         chunks ++ [meta_chunk]
 
       %{"choices" => [%{"delta" => delta} | _]} ->

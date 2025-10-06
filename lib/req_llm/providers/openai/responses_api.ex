@@ -278,6 +278,9 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     %{"type" => "function", "name" => name}
   end
 
+  defp encode_tool_choice(:auto), do: "auto"
+  defp encode_tool_choice(:none), do: "none"
+  defp encode_tool_choice(:required), do: "required"
   defp encode_tool_choice("auto"), do: "auto"
   defp encode_tool_choice("none"), do: "none"
   defp encode_tool_choice("required"), do: "required"

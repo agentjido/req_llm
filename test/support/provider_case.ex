@@ -211,9 +211,9 @@ defmodule ReqLLM.ProviderCase do
     case provider do
       :google ->
         %{
-          deterministic: base.deterministic ++ [provider_options: [google_thinking_budget: 0]],
-          creative: base.creative ++ [provider_options: [google_thinking_budget: 0]],
-          minimal: base.minimal ++ [provider_options: [google_thinking_budget: 0]]
+          deterministic: base.deterministic ++ [reasoning_token_budget: 0],
+          creative: base.creative ++ [reasoning_token_budget: 0],
+          minimal: base.minimal ++ [reasoning_token_budget: 0]
         }
 
       _ ->

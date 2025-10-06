@@ -66,7 +66,7 @@ defmodule ReqLLM.Providers.XAITest do
     test "prepare_request creates configured request" do
       model = ReqLLM.Model.from!("xai:grok-3")
       context = context_fixture()
-      opts = [temperature: 0.7, provider_options: [max_completion_tokens: 100]]
+      opts = [temperature: 0.7, max_tokens: 100]
 
       {:ok, request} = XAI.prepare_request(:chat, model, context, opts)
 
@@ -77,7 +77,7 @@ defmodule ReqLLM.Providers.XAITest do
 
     test "attach configures authentication and pipeline" do
       model = ReqLLM.Model.from!("xai:grok-3")
-      opts = [temperature: 0.5, provider_options: [max_completion_tokens: 50]]
+      opts = [temperature: 0.5, max_tokens: 50]
 
       request = Req.new() |> XAI.attach(model, opts)
 
@@ -543,8 +543,8 @@ defmodule ReqLLM.Providers.XAITest do
       context = context_fixture()
       {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string, required: true])
 
-      # Test with max_completion_tokens < 200
-      opts = [provider_options: [max_completion_tokens: 50], compiled_schema: schema]
+      # Test with max_tokens < 200
+      opts = [max_tokens: 50, compiled_schema: schema]
       {:ok, request} = XAI.prepare_request(:object, model, context, opts)
 
       # Should be adjusted to 200
