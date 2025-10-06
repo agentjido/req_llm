@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjE1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMy1taW5pLWZhc3QiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjE2MzgsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTMtbWluaS1mYXN0IiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
-      "max_completion_tokens": 150,
+      "max_completion_tokens": 1638,
       "messages": [
         {
           "content": "What's the weather like in Paris, France?",
@@ -12,6 +12,7 @@
         }
       ],
       "model": "grok-3-mini-fast",
+      "reasoning_effort": "low",
       "seed": 42,
       "stream": false,
       "temperature": 0.0,
@@ -93,7 +94,7 @@
           "index": 0,
           "message": {
             "content": "",
-            "reasoning_content": "First, the user is asking about the weather in Paris, France. I have a function called \"get_weather\" that matches this query. It requires a \"location\" parameter, which is a string.\n\nThe location is clearly \"Paris, France\" from the user's query, so I can infer that parameter. The function also has an optional \"unit\" parameter, which can be \"celsius\" or \"fahrenheit\". The user didn't specify a unit, so I shouldn't assume one. Since it's not required, I can proceed without it.\n\nThe function's parameters are: {\"properties\":{\"location\":{\"type\":\"string\"},\"unit\":{\"enum\":[\"celsius\",\"fahrenheit\"],\"type\":\"string\"}},\"required\":[\"location\"],\"type\":\"object\"}. So, only \"location\" is required, and \"unit\" is optional.\n\nI should call the function with the required parameter. In the function call, I'll include \"action\": \"get_weather\" and \"action_input\": {\"location\": \"Paris, France\"}.\n\nMy response should only contain the function call if I'm deciding to call it, wrapped in <function_call> tags. I shouldn't add any other text unless necessary.\n\nThe instructions say: \"Keep your response to user clear; please do not make your response verbose!\" So, I should not add extra explanations.\n\nThis seems like a direct match, so I'll proceed with the function call.\n\nFinal decision: Call the \"get_weather\" function with the location.",
+            "reasoning_content": "First, the user is asking about the weather in Paris, France. This matches the \"get_weather\" function, which is described as \"Get current weather information for a location\".\n\nThe required parameters for \"get_weather\" are:\n- \"location\": This is required and provided as \"Paris, France\".\n\nThere's an optional parameter \"unit\" which can be \"celsius\" or \"fahrenheit\". The user didn't specify, so I could use a default or ask for clarification, but the instructions say to call the function if all required parameters are provided or obviously inferable. Since \"location\" is provided, I can proceed without the unit, as it's not required.\n\nThe function call should be in the format: <function_call>{\"action\": \"function_name\", \"action_input\": {\"parameter\": \"argument\"}}</function_call>\n\nSo, for this, it would be: <function_call>{\"action\": \"get_weather\", \"action_input\": {\"location\": \"Paris, France\"}}</function_call>\n\nI shouldn't add any other text unless necessary. The instructions emphasize keeping responses clear and not verbose.\n\nThis seems like a direct match, so I should call the function decisively.\n\nFinally, after calling the function, if needed, I can continue in multi-turn conversations, but for now, this fulfills the request.",
             "refusal": null,
             "role": "assistant",
             "tool_calls": [
@@ -102,15 +103,15 @@
                   "arguments": "{\"location\":\"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "call_22301748",
+                "id": "call_41548124",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1759686657,
-      "id": "8a6d51a4-7067-ed00-3c0b-9313d04dff7e_us-east-1",
+      "created": 1759763216,
+      "id": "d94d4cf6-3a31-b39a-2d5b-cd0c4a1d8b67_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
@@ -119,7 +120,7 @@
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 291,
+          "reasoning_tokens": 263,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
@@ -130,7 +131,7 @@
           "image_tokens": 0,
           "text_tokens": 352
         },
-        "total_tokens": 671
+        "total_tokens": 643
       }
     },
     "headers": {
@@ -144,7 +145,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989ec3ac4a6cdadb-ORD"
+        "98a610c849fb233e-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -153,13 +154,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 17:51:01 GMT"
+        "Mon, 06 Oct 2025 15:06:59 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=qUj.wNoUKD78DVhDUAZdunLLIcpWNqKmNpn4AEGxASY-1759686661-1.0.1.1-vB1yBtjQ3sicwnNorkKmOO5dn70jFU1u0xUsUCSl11wL7hUjSFuUJ.7uTFFJUkDMJR_guxfZAVYCvMPktojv13Sg9ygDIjTOUJEYmXzstII; path=/; expires=Sun, 05-Oct-25 18:21:01 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=Dcmvn7Uf9HZZ6i0Dz3vfIT4K.Xtci9VRNij2YpQIo0c-1759763219-1.0.1.1-bfOFMz29vwGVBVheT_OloLL.ab.pGSPAkInKeG3reg.wiKgbFYcJl9HuuvLMSbTaodE6sEuGugCYpCq2bMHvk8_Y9ZI.PpK6MUwcY8lYH5Y; path=/; expires=Mon, 06-Oct-25 15:36:59 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -171,7 +172,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-6660cfc55dcceee2d327f730e6d94e2f-b2bf04be0043b519-01"
+        "00-def4b9d9af5e80b250579e5c5565ba37-b20a974b00638eff-01"
       ],
       "x-zero-data-retention": [
         "false"

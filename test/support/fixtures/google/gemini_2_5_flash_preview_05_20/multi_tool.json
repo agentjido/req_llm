@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyJ9XSwicm9sZSI6InVzZXIifV0sImdlbmVyYXRpb25Db25maWciOnsiY2FuZGlkYXRlQ291bnQiOjEsIm1heE91dHB1dFRva2VucyI6MzAwLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0aGlua2luZ0NvbmZpZyI6eyJpbmNsdWRlVGhvdWdodHMiOnRydWUsInRoaW5raW5nQnVkZ2V0Ijo0MDk2fX0sInRvb2xzIjpbeyJmdW5jdGlvbkRlY2xhcmF0aW9ucyI6W3siZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0seyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifX0seyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fV19XX0="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyJ9XSwicm9sZSI6InVzZXIifV0sImdlbmVyYXRpb25Db25maWciOnsiY2FuZGlkYXRlQ291bnQiOjEsIm1heE91dHB1dFRva2VucyI6MTMxMDYsInRlbXBlcmF0dXJlIjowLjB9LCJ0b29scyI6W3siZnVuY3Rpb25EZWNsYXJhdGlvbnMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LHsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LHsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX1dfV19"
     },
     "canonical_json": {
       "contents": [
@@ -16,12 +16,8 @@
       ],
       "generationConfig": {
         "candidateCount": 1,
-        "maxOutputTokens": 300,
-        "temperature": 0.0,
-        "thinkingConfig": {
-          "includeThoughts": true,
-          "thinkingBudget": 4096
-        }
+        "maxOutputTokens": 13106,
+        "temperature": 0.0
       },
       "tools": [
         {
@@ -94,17 +90,13 @@
           "content": {
             "parts": [
               {
-                "text": "**Getting the Weather for Paris**\n\nOkay, so the user wants the weather for Paris, France. Seems straightforward enough. The `get_weather` tool is the obvious choice here. The important thing is to set the `location` parameter to \"Paris, France\". No specific unit preference was mentioned, so I'll just leave the `unit` parameter as the default. That should give them exactly what they need.\n",
-                "thought": true
-              },
-              {
                 "functionCall": {
                   "args": {
                     "location": "Paris, France"
                   },
                   "name": "get_weather"
                 },
-                "thoughtSignature": "Cq4CAdHtim/I5SWeuwJvg6sT6Lv/9DKxSdmeZVxHKOAnSvoeDrFi6r6KAMvCRzC5DrJxKLCd3IJn0ShXLsuCMdmGctL8nLFlHUnuUV4/0o6FbP0UsKuhNUhuaYZtzeQimU+5I+f5Sh5oYLyk1ZBoLLpue2bII3FOT4Ild3Njq+zaWOc/4Fw1kUgs+E77BJbO+tIHrxdEhhvCXOvZQZ4ZgHSNsWJCkFsrTWIZW4VqebJCuiYFAln5dexyvUMsPR7WkazPE1PmgPJjR1hJFyD7HxPlwODBGvO3zsKflV3NuQc8oHfktisLePtX32GTAOBeLRVp6IK78PVK1yqbZLpst08Shjz6GA0NrSdQRp64W7IXJpeo6aLB4DBlAd8nPKTull8dK3pwcIfKltB9ExZxLqQ="
+                "thoughtSignature": "Cv8BAdHtim/vdBACMMJa1GJodjPCPgWMbG0nkSJYswApNrWmlQ2dQHuc9CtjFmubewVRtmyrx2gxkRHPW9UiwLpZn5dfRew0ViYcTrJi3X872V256r3d+C1qxqjxqccaBM6KJQi50CcsnDkVlIEIHHLYq8vC2n8HcUiUjscvrYXogwxyq2QE7enmZskr4G82bvN1O2ImeewUPHIZqTr8jfIE5NexSo7A58eYruAwztT0PawKvN3LmpENoheqsjPM+cqnS43MUDxInN9Q5Hks0bodI2wLeSChzIhHsVFowJpweNHnic9mqE7EogAjD98FdEzi9q9hYCHbLa5tFSYZBoAV"
               }
             ],
             "role": "model"
@@ -114,7 +106,7 @@
         }
       ],
       "modelVersion": "models/gemini-2.5-flash-preview-05-20",
-      "responseId": "kFvgaIndF8zP_uMPv9fa4Qc",
+      "responseId": "6urjaIGTNZmS_uMP3bC14AY",
       "usageMetadata": {
         "candidatesTokenCount": 17,
         "promptTokenCount": 142,
@@ -124,8 +116,8 @@
             "tokenCount": 142
           }
         ],
-        "thoughtsTokenCount": 68,
-        "totalTokenCount": 227
+        "thoughtsTokenCount": 55,
+        "totalTokenCount": 214
       }
     },
     "headers": {
@@ -136,13 +128,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 23:26:08 GMT"
+        "Mon, 06 Oct 2025 16:14:34 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=1481"
+        "gfet4t7; dur=1162"
       ],
       "transfer-encoding": [
         "chunked"

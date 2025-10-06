@@ -1,406 +1,810 @@
 {
-  "state": {
-    "anthropic:claude-3-5-haiku-20241022": "pass",
-    "anthropic:claude-3-5-sonnet-20240620": "pass",
-    "anthropic:claude-3-5-sonnet-20241022": "pass",
-    "anthropic:claude-3-7-sonnet-20250219": "pass",
-    "anthropic:claude-3-haiku-20240307": "pass",
-    "anthropic:claude-3-opus-20240229": "pass",
-    "anthropic:claude-3-sonnet-20240229": "excluded",
-    "anthropic:claude-opus-4-1-20250805": "pass",
-    "anthropic:claude-opus-4-20250514": "pass",
-    "anthropic:claude-sonnet-4-20250514": "pass",
-    "anthropic:claude-sonnet-4-5-20250929": "pass",
-    "google:gemini-1.5-flash": "excluded",
-    "google:gemini-1.5-flash-8b": "excluded",
-    "google:gemini-1.5-pro": "excluded",
-    "google:gemini-2.0-flash": "pass",
-    "google:gemini-2.0-flash-exp": "pass",
-    "google:gemini-2.0-flash-lite": "pass",
-    "google:gemini-2.5-flash": "pass",
-    "google:gemini-2.5-flash-lite": "excluded",
-    "google:gemini-2.5-flash-lite-preview-06-17": "excluded",
-    "google:gemini-2.5-flash-lite-preview-09-2025": "excluded",
-    "google:gemini-2.5-flash-preview-04-17": "excluded",
-    "google:gemini-2.5-flash-preview-05-20": "pass",
-    "google:gemini-2.5-flash-preview-09-2025": "excluded",
-    "google:gemini-2.5-pro": "pass",
-    "google:gemini-2.5-pro-preview-05-06": "excluded",
-    "google:gemini-2.5-pro-preview-06-05": "excluded",
-    "google:gemini-embedding-001": "pass",
-    "google:gemini-flash-latest": "pass",
-    "google:gemini-flash-lite-latest": "excluded",
-    "google:gemini-live-2.5-flash-preview-native-audio": "excluded",
-    "groq:deepseek-r1-distill-llama-70b": "fail",
-    "groq:gemma2-9b-it": "excluded",
-    "groq:llama-3.1-8b-instant": "pass",
-    "groq:llama-3.3-70b-versatile": "pass",
-    "groq:llama-guard-3-8b": "excluded",
-    "groq:llama3-70b-8192": "excluded",
-    "groq:llama3-8b-8192": "excluded",
-    "groq:meta-llama/llama-4-maverick-17b-128e-instruct": "fail",
-    "groq:meta-llama/llama-4-scout-17b-16e-instruct": "excluded",
-    "groq:meta-llama/llama-guard-4-12b": "excluded",
-    "groq:mistral-saba-24b": "excluded",
-    "groq:moonshotai/kimi-k2-instruct": "excluded",
-    "groq:moonshotai/kimi-k2-instruct-0905": "pass",
-    "groq:openai/gpt-oss-120b": "pass",
-    "groq:openai/gpt-oss-20b": "pass",
-    "groq:qwen-qwq-32b": "excluded",
-    "groq:qwen/qwen3-32b": "fail",
-    "openai:codex-mini-latest": "fail",
-    "openai:gpt-3.5-turbo": "pass",
-    "openai:gpt-4": "pass",
-    "openai:gpt-4-turbo": "pass",
-    "openai:gpt-4.1": "fail",
-    "openai:gpt-4.1-mini": "fail",
-    "openai:gpt-4.1-nano": "fail",
-    "openai:gpt-4o": "pass",
-    "openai:gpt-4o-2024-05-13": "pass",
-    "openai:gpt-4o-2024-08-06": "pass",
-    "openai:gpt-4o-2024-11-20": "pass",
-    "openai:gpt-4o-mini": "pass",
-    "openai:gpt-5": "fail",
-    "openai:gpt-5-chat-latest": "fail",
-    "openai:gpt-5-codex": "fail",
-    "openai:gpt-5-mini": "fail",
-    "openai:gpt-5-nano": "fail",
-    "openai:o1": "fail",
-    "openai:o1-mini": "excluded",
-    "openai:o1-preview": "excluded",
-    "openai:o1-pro": "fail",
-    "openai:o3": "fail",
-    "openai:o3-deep-research": "fail",
-    "openai:o3-mini": "fail",
-    "openai:o3-pro": "fail",
-    "openai:o4-mini": "fail",
-    "openai:o4-mini-deep-research": "fail",
-    "openai:text-embedding-3-large": "pass",
-    "openai:text-embedding-3-small": "pass",
-    "openai:text-embedding-ada-002": "pass",
-    "openrouter:anthropic/claude-3.5-haiku": "pass",
-    "openrouter:anthropic/claude-3.7-sonnet": "pass",
-    "openrouter:anthropic/claude-opus-4": "pass",
-    "openrouter:anthropic/claude-opus-4.1": "pass",
-    "openrouter:anthropic/claude-sonnet-4": "pass",
-    "openrouter:anthropic/claude-sonnet-4.5": "pass",
-    "openrouter:cognitivecomputations/dolphin3.0-mistral-24b": "fail",
-    "openrouter:cognitivecomputations/dolphin3.0-r1-mistral-24b": "fail",
-    "openrouter:deepseek/deepseek-chat-v3-0324": "pass",
-    "openrouter:deepseek/deepseek-chat-v3.1": "fail",
-    "openrouter:deepseek/deepseek-r1-0528-qwen3-8b:free": "fail",
-    "openrouter:deepseek/deepseek-r1-0528:free": "fail",
-    "openrouter:deepseek/deepseek-r1-distill-llama-70b": "pass",
-    "openrouter:deepseek/deepseek-r1-distill-qwen-14b": "pass",
-    "openrouter:deepseek/deepseek-r1:free": "fail",
-    "openrouter:deepseek/deepseek-v3-base:free": "fail",
-    "openrouter:deepseek/deepseek-v3.1-terminus": "fail",
-    "openrouter:featherless/qwerky-72b": "fail",
-    "openrouter:google/gemini-2.0-flash-001": "pass",
-    "openrouter:google/gemini-2.0-flash-exp:free": "fail",
-    "openrouter:google/gemini-2.5-flash": "fail",
-    "openrouter:google/gemini-2.5-pro": "pass",
-    "openrouter:google/gemini-2.5-pro-preview-05-06": "pass",
-    "openrouter:google/gemini-2.5-pro-preview-06-05": "pass",
-    "openrouter:google/gemma-2-9b-it:free": "excluded",
-    "openrouter:google/gemma-3-12b-it": "excluded",
-    "openrouter:google/gemma-3-27b-it": "excluded",
-    "openrouter:google/gemma-3n-e4b-it": "pass",
-    "openrouter:google/gemma-3n-e4b-it:free": "excluded",
-    "openrouter:meta-llama/llama-3.2-11b-vision-instruct": "fail",
-    "openrouter:meta-llama/llama-3.3-70b-instruct:free": "fail",
-    "openrouter:meta-llama/llama-4-scout:free": "fail",
-    "openrouter:microsoft/mai-ds-r1:free": "fail",
-    "openrouter:mistralai/codestral-2508": "pass",
-    "openrouter:mistralai/devstral-medium-2507": "fail",
-    "openrouter:mistralai/devstral-small-2505": "fail",
-    "openrouter:mistralai/devstral-small-2505:free": "fail",
-    "openrouter:mistralai/devstral-small-2507": "pass",
-    "openrouter:mistralai/mistral-7b-instruct:free": "fail",
-    "openrouter:mistralai/mistral-medium-3": "pass",
-    "openrouter:mistralai/mistral-medium-3.1": "pass",
-    "openrouter:mistralai/mistral-nemo:free": "fail",
-    "openrouter:mistralai/mistral-small-3.1-24b-instruct": "fail",
-    "openrouter:mistralai/mistral-small-3.2-24b-instruct": "pass",
-    "openrouter:mistralai/mistral-small-3.2-24b-instruct:free": "fail",
-    "openrouter:moonshotai/kimi-dev-72b:free": "fail",
-    "openrouter:moonshotai/kimi-k2": "fail",
-    "openrouter:moonshotai/kimi-k2-0905": "fail",
-    "openrouter:moonshotai/kimi-k2:free": "fail",
-    "openrouter:nousresearch/deephermes-3-llama-3-8b-preview": "fail",
-    "openrouter:nousresearch/hermes-4-405b": "fail",
-    "openrouter:nousresearch/hermes-4-70b": "fail",
-    "openrouter:openai/gpt-4.1": "fail",
-    "openrouter:openai/gpt-4.1-mini": "fail",
-    "openrouter:openai/gpt-4o-mini": "pass",
-    "openrouter:openai/gpt-5": "fail",
-    "openrouter:openai/gpt-5-chat": "fail",
-    "openrouter:openai/gpt-5-codex": "pass",
-    "openrouter:openai/gpt-5-mini": "fail",
-    "openrouter:openai/gpt-5-nano": "fail",
-    "openrouter:openai/gpt-oss-120b": "pass",
-    "openrouter:openai/gpt-oss-20b": "pass",
-    "openrouter:openai/o4-mini": "fail",
-    "openrouter:openrouter/cypher-alpha:free": "excluded",
-    "openrouter:openrouter/horizon-alpha": "excluded",
-    "openrouter:openrouter/horizon-beta": "excluded",
-    "openrouter:openrouter/sonoma-dusk-alpha": "excluded",
-    "openrouter:openrouter/sonoma-sky-alpha": "excluded",
-    "openrouter:qwen/qwen-2.5-coder-32b-instruct": "fail",
-    "openrouter:qwen/qwen2.5-vl-32b-instruct:free": "fail",
-    "openrouter:qwen/qwen2.5-vl-72b-instruct": "fail",
-    "openrouter:qwen/qwen2.5-vl-72b-instruct:free": "fail",
-    "openrouter:qwen/qwen3-14b:free": "fail",
-    "openrouter:qwen/qwen3-235b-a22b-07-25": "fail",
-    "openrouter:qwen/qwen3-235b-a22b-07-25:free": "fail",
-    "openrouter:qwen/qwen3-235b-a22b-thinking-2507": "fail",
-    "openrouter:qwen/qwen3-235b-a22b:free": "fail",
-    "openrouter:qwen/qwen3-30b-a3b-instruct-2507": "fail",
-    "openrouter:qwen/qwen3-30b-a3b:free": "fail",
-    "openrouter:qwen/qwen3-32b:free": "fail",
-    "openrouter:qwen/qwen3-8b:free": "fail",
-    "openrouter:qwen/qwen3-coder": "fail",
-    "openrouter:qwen/qwen3-coder:free": "fail",
-    "openrouter:qwen/qwen3-max": "fail",
-    "openrouter:qwen/qwen3-next-80b-a3b-instruct": "fail",
-    "openrouter:qwen/qwq-32b:free": "fail",
-    "openrouter:rekaai/reka-flash-3": "fail",
-    "openrouter:sarvamai/sarvam-m:free": "fail",
-    "openrouter:thudm/glm-z1-32b:free": "fail",
-    "openrouter:tngtech/deepseek-r1t2-chimera:free": "fail",
-    "openrouter:x-ai/grok-3": "pass",
-    "openrouter:x-ai/grok-3-beta": "pass",
-    "openrouter:x-ai/grok-3-mini": "pass",
-    "openrouter:x-ai/grok-3-mini-beta": "pass",
-    "openrouter:x-ai/grok-4": "pass",
-    "openrouter:x-ai/grok-4-fast": "pass",
-    "openrouter:x-ai/grok-4-fast:free": "fail",
-    "openrouter:x-ai/grok-code-fast-1": "pass",
-    "openrouter:z-ai/glm-4.5": "fail",
-    "openrouter:z-ai/glm-4.5-air": "fail",
-    "openrouter:z-ai/glm-4.5-air:free": "fail",
-    "openrouter:z-ai/glm-4.5v": "fail",
-    "openrouter:z-ai/glm-4.6": "fail",
-    "xai:grok-2": "pass",
-    "xai:grok-2-1212": "pass",
-    "xai:grok-2-latest": "pass",
-    "xai:grok-2-vision": "pass",
-    "xai:grok-2-vision-1212": "pass",
-    "xai:grok-2-vision-latest": "pass",
-    "xai:grok-3": "pass",
-    "xai:grok-3-fast": "pass",
-    "xai:grok-3-fast-latest": "pass",
-    "xai:grok-3-latest": "pass",
-    "xai:grok-3-mini": "pass",
-    "xai:grok-3-mini-fast": "pass",
-    "xai:grok-3-mini-fast-latest": "pass",
-    "xai:grok-3-mini-latest": "pass",
-    "xai:grok-4": "pass",
-    "xai:grok-4-fast": "pass",
-    "xai:grok-4-fast-non-reasoning": "pass",
-    "xai:grok-4-fast-reasoning": "pass",
-    "xai:grok-beta": "excluded",
-    "xai:grok-code-fast-1": "pass",
-    "xai:grok-vision-beta": "excluded"
+  "anthropic:claude-3-5-haiku-20241022": {
+    "status": "pass",
+    "last_checked": "2025-10-06T18:21:29Z"
   },
-  "last_recorded": {
-    "anthropic:claude-3-5-haiku-20241022": "2025-10-06T13:19:20Z",
-    "anthropic:claude-3-5-sonnet-20240620": "2025-10-06T13:19:20Z",
-    "anthropic:claude-3-5-sonnet-20241022": "2025-10-06T13:19:20Z",
-    "anthropic:claude-3-7-sonnet-20250219": "2025-10-06T13:19:20Z",
-    "anthropic:claude-3-haiku-20240307": "2025-10-06T13:19:20Z",
-    "anthropic:claude-3-opus-20240229": "2025-10-06T13:19:20Z",
-    "anthropic:claude-opus-4-1-20250805": "2025-10-06T13:19:20Z",
-    "anthropic:claude-opus-4-20250514": "2025-10-06T13:19:20Z",
-    "anthropic:claude-sonnet-4-20250514": "2025-10-06T13:19:20Z",
-    "anthropic:claude-sonnet-4-5-20250929": "2025-10-06T13:19:20Z",
-    "google:gemini-1.5-flash": "2025-10-03T23:26:57Z",
-    "google:gemini-1.5-flash-8b": "2025-10-03T23:26:57Z",
-    "google:gemini-1.5-pro": "2025-10-03T23:26:57Z",
-    "google:gemini-2.0-flash": "2025-10-06T13:24:33Z",
-    "google:gemini-2.0-flash-lite": "2025-10-06T13:24:33Z",
-    "google:gemini-2.5-flash": "2025-10-06T13:24:33Z",
-    "google:gemini-2.5-flash-lite": "2025-10-03T23:26:57Z",
-    "google:gemini-2.5-flash-lite-preview-06-17": "2025-10-03T23:26:57Z",
-    "google:gemini-2.5-flash-lite-preview-09-2025": "2025-10-03T23:26:57Z",
-    "google:gemini-2.5-flash-preview-04-17": "2025-10-03T23:26:57Z",
-    "google:gemini-2.5-flash-preview-05-20": "2025-10-06T13:24:33Z",
-    "google:gemini-2.5-flash-preview-09-2025": "2025-10-03T23:26:57Z",
-    "google:gemini-2.5-pro": "2025-10-06T13:24:33Z",
-    "google:gemini-2.5-pro-preview-05-06": "2025-10-03T23:26:57Z",
-    "google:gemini-2.5-pro-preview-06-05": "2025-10-03T23:26:57Z",
-    "google:gemini-embedding-001": "2025-10-04T12:50:52Z",
-    "google:gemini-flash-latest": "2025-10-06T13:24:33Z",
-    "google:gemini-flash-lite-latest": "2025-10-03T23:26:57Z",
-    "google:gemini-live-2.5-flash-preview-native-audio": "2025-10-03T23:26:57Z",
-    "groq:deepseek-r1-distill-llama-70b": "2025-10-06T12:32:31Z",
-    "groq:gemma2-9b-it": "2025-10-03T17:50:32Z",
-    "groq:llama-3.1-8b-instant": "2025-10-06T12:32:31Z",
-    "groq:llama-3.3-70b-versatile": "2025-10-06T12:32:31Z",
-    "groq:llama-guard-3-8b": "2025-10-03T17:50:32Z",
-    "groq:llama3-70b-8192": "2025-10-03T18:07:57Z",
-    "groq:llama3-8b-8192": "2025-10-03T17:50:32Z",
-    "groq:meta-llama/llama-4-maverick-17b-128e-instruct": "2025-10-06T12:32:31Z",
-    "groq:meta-llama/llama-4-scout-17b-16e-instruct": "2025-10-03T18:31:26Z",
-    "groq:meta-llama/llama-guard-4-12b": "2025-10-03T18:31:32Z",
-    "groq:mistral-saba-24b": "2025-10-03T17:50:32Z",
-    "groq:moonshotai/kimi-k2-instruct": "2025-10-03T17:50:32Z",
-    "groq:moonshotai/kimi-k2-instruct-0905": "2025-10-06T12:32:31Z",
-    "groq:openai/gpt-oss-120b": "2025-10-06T12:32:31Z",
-    "groq:openai/gpt-oss-20b": "2025-10-06T12:32:31Z",
-    "groq:qwen-qwq-32b": "2025-10-03T17:50:32Z",
-    "groq:qwen/qwen3-32b": "2025-10-06T12:32:31Z",
-    "openai:codex-mini-latest": "2025-10-05T21:15:59Z",
-    "openai:gpt-3.5-turbo": "2025-10-05T21:15:59Z",
-    "openai:gpt-4": "2025-10-05T21:15:59Z",
-    "openai:gpt-4-turbo": "2025-10-05T21:15:59Z",
-    "openai:gpt-4.1": "2025-10-05T21:15:59Z",
-    "openai:gpt-4.1-mini": "2025-10-05T21:15:59Z",
-    "openai:gpt-4.1-nano": "2025-10-05T21:15:59Z",
-    "openai:gpt-4o": "2025-10-05T21:15:59Z",
-    "openai:gpt-4o-2024-05-13": "2025-10-05T21:15:59Z",
-    "openai:gpt-4o-2024-08-06": "2025-10-05T21:15:59Z",
-    "openai:gpt-4o-2024-11-20": "2025-10-05T21:15:59Z",
-    "openai:gpt-4o-mini": "2025-10-05T21:15:59Z",
-    "openai:gpt-5": "2025-10-05T21:15:59Z",
-    "openai:gpt-5-chat-latest": "2025-10-05T21:15:59Z",
-    "openai:gpt-5-codex": "2025-10-05T21:15:59Z",
-    "openai:gpt-5-mini": "2025-10-05T21:15:59Z",
-    "openai:gpt-5-nano": "2025-10-05T21:15:59Z",
-    "openai:o1": "2025-10-05T21:15:59Z",
-    "openai:o1-mini": "2025-10-05T01:24:56Z",
-    "openai:o1-preview": "2025-10-05T01:24:56Z",
-    "openai:o1-pro": "2025-10-05T21:15:59Z",
-    "openai:o3": "2025-10-05T21:15:59Z",
-    "openai:o3-deep-research": "2025-10-05T21:15:59Z",
-    "openai:o3-mini": "2025-10-05T21:15:59Z",
-    "openai:o3-pro": "2025-10-05T21:15:59Z",
-    "openai:o4-mini": "2025-10-05T21:15:59Z",
-    "openai:o4-mini-deep-research": "2025-10-05T21:15:59Z",
-    "openai:text-embedding-3-large": "2025-10-04T13:01:02Z",
-    "openai:text-embedding-3-small": "2025-10-04T13:01:02Z",
-    "openai:text-embedding-ada-002": "2025-10-04T13:01:02Z",
-    "openrouter:anthropic/claude-3.5-haiku": "2025-10-05T13:38:53Z",
-    "openrouter:anthropic/claude-3.7-sonnet": "2025-10-05T13:38:53Z",
-    "openrouter:anthropic/claude-opus-4": "2025-10-05T13:38:53Z",
-    "openrouter:anthropic/claude-opus-4.1": "2025-10-05T13:38:53Z",
-    "openrouter:anthropic/claude-sonnet-4": "2025-10-05T14:07:32Z",
-    "openrouter:anthropic/claude-sonnet-4.5": "2025-10-05T13:38:53Z",
-    "openrouter:cognitivecomputations/dolphin3.0-mistral-24b": "2025-10-05T13:38:53Z",
-    "openrouter:cognitivecomputations/dolphin3.0-r1-mistral-24b": "2025-10-05T13:38:53Z",
-    "openrouter:deepseek/deepseek-chat-v3-0324": "2025-10-05T13:48:30Z",
-    "openrouter:deepseek/deepseek-chat-v3.1": "2025-10-05T13:48:30Z",
-    "openrouter:deepseek/deepseek-r1-0528-qwen3-8b:free": "2025-10-05T13:48:30Z",
-    "openrouter:deepseek/deepseek-r1-0528:free": "2025-10-05T13:48:30Z",
-    "openrouter:deepseek/deepseek-r1-distill-llama-70b": "2025-10-05T13:48:30Z",
-    "openrouter:deepseek/deepseek-r1-distill-qwen-14b": "2025-10-05T13:48:30Z",
-    "openrouter:deepseek/deepseek-r1:free": "2025-10-05T13:48:30Z",
-    "openrouter:deepseek/deepseek-v3-base:free": "2025-10-05T13:48:30Z",
-    "openrouter:deepseek/deepseek-v3.1-terminus": "2025-10-05T13:48:30Z",
-    "openrouter:featherless/qwerky-72b": "2025-10-05T13:38:53Z",
-    "openrouter:google/gemini-2.0-flash-001": "2025-10-05T13:38:53Z",
-    "openrouter:google/gemini-2.0-flash-exp:free": "2025-10-05T13:38:53Z",
-    "openrouter:google/gemini-2.5-flash": "2025-10-05T13:38:53Z",
-    "openrouter:google/gemini-2.5-pro": "2025-10-05T13:38:53Z",
-    "openrouter:google/gemini-2.5-pro-preview-05-06": "2025-10-05T13:38:53Z",
-    "openrouter:google/gemini-2.5-pro-preview-06-05": "2025-10-05T13:38:53Z",
-    "openrouter:google/gemma-2-9b-it:free": "2025-10-05T13:34:46Z",
-    "openrouter:google/gemma-3-12b-it": "2025-10-05T13:34:46Z",
-    "openrouter:google/gemma-3-27b-it": "2025-10-05T13:34:46Z",
-    "openrouter:google/gemma-3n-e4b-it": "2025-10-05T13:38:53Z",
-    "openrouter:google/gemma-3n-e4b-it:free": "2025-10-05T13:34:46Z",
-    "openrouter:meta-llama/llama-3.2-11b-vision-instruct": "2025-10-05T13:38:53Z",
-    "openrouter:meta-llama/llama-3.3-70b-instruct:free": "2025-10-05T13:38:53Z",
-    "openrouter:meta-llama/llama-4-scout:free": "2025-10-05T13:38:53Z",
-    "openrouter:microsoft/mai-ds-r1:free": "2025-10-05T13:38:53Z",
-    "openrouter:mistralai/codestral-2508": "2025-10-05T13:45:09Z",
-    "openrouter:mistralai/devstral-medium-2507": "2025-10-05T13:45:09Z",
-    "openrouter:mistralai/devstral-small-2505": "2025-10-05T13:45:09Z",
-    "openrouter:mistralai/devstral-small-2505:free": "2025-10-05T13:45:09Z",
-    "openrouter:mistralai/devstral-small-2507": "2025-10-05T13:45:09Z",
-    "openrouter:mistralai/mistral-7b-instruct:free": "2025-10-05T13:45:09Z",
-    "openrouter:mistralai/mistral-medium-3": "2025-10-05T13:45:09Z",
-    "openrouter:mistralai/mistral-medium-3.1": "2025-10-05T13:45:09Z",
-    "openrouter:mistralai/mistral-nemo:free": "2025-10-05T13:45:09Z",
-    "openrouter:mistralai/mistral-small-3.1-24b-instruct": "2025-10-05T13:45:09Z",
-    "openrouter:mistralai/mistral-small-3.2-24b-instruct": "2025-10-05T13:45:09Z",
-    "openrouter:mistralai/mistral-small-3.2-24b-instruct:free": "2025-10-05T13:45:09Z",
-    "openrouter:moonshotai/kimi-dev-72b:free": "2025-10-05T13:38:53Z",
-    "openrouter:moonshotai/kimi-k2": "2025-10-05T13:38:53Z",
-    "openrouter:moonshotai/kimi-k2-0905": "2025-10-05T13:38:53Z",
-    "openrouter:moonshotai/kimi-k2:free": "2025-10-05T13:38:53Z",
-    "openrouter:nousresearch/deephermes-3-llama-3-8b-preview": "2025-10-05T13:38:53Z",
-    "openrouter:nousresearch/hermes-4-405b": "2025-10-05T13:38:53Z",
-    "openrouter:nousresearch/hermes-4-70b": "2025-10-05T13:38:53Z",
-    "openrouter:openai/gpt-4.1": "2025-10-05T13:51:34Z",
-    "openrouter:openai/gpt-4.1-mini": "2025-10-05T13:51:34Z",
-    "openrouter:openai/gpt-4o-mini": "2025-10-05T13:51:34Z",
-    "openrouter:openai/gpt-5": "2025-10-05T13:51:34Z",
-    "openrouter:openai/gpt-5-chat": "2025-10-05T13:51:34Z",
-    "openrouter:openai/gpt-5-codex": "2025-10-05T13:51:34Z",
-    "openrouter:openai/gpt-5-mini": "2025-10-05T13:51:34Z",
-    "openrouter:openai/gpt-5-nano": "2025-10-05T13:51:34Z",
-    "openrouter:openai/gpt-oss-120b": "2025-10-05T13:51:34Z",
-    "openrouter:openai/gpt-oss-20b": "2025-10-05T13:51:34Z",
-    "openrouter:openai/o4-mini": "2025-10-05T13:51:34Z",
-    "openrouter:openrouter/cypher-alpha:free": "2025-10-05T13:38:18Z",
-    "openrouter:openrouter/horizon-alpha": "2025-10-05T13:38:18Z",
-    "openrouter:openrouter/horizon-beta": "2025-10-05T13:38:18Z",
-    "openrouter:openrouter/sonoma-dusk-alpha": "2025-10-05T13:38:18Z",
-    "openrouter:openrouter/sonoma-sky-alpha": "2025-10-05T13:38:18Z",
-    "openrouter:qwen/qwen-2.5-coder-32b-instruct": "2025-10-05T13:38:53Z",
-    "openrouter:qwen/qwen2.5-vl-32b-instruct:free": "2025-10-05T13:38:53Z",
-    "openrouter:qwen/qwen2.5-vl-72b-instruct": "2025-10-05T13:38:53Z",
-    "openrouter:qwen/qwen2.5-vl-72b-instruct:free": "2025-10-05T13:38:53Z",
-    "openrouter:qwen/qwen3-14b:free": "2025-10-05T13:38:53Z",
-    "openrouter:qwen/qwen3-235b-a22b-07-25": "2025-10-05T13:38:53Z",
-    "openrouter:qwen/qwen3-235b-a22b-07-25:free": "2025-10-05T13:38:53Z",
-    "openrouter:qwen/qwen3-235b-a22b-thinking-2507": "2025-10-05T13:38:53Z",
-    "openrouter:qwen/qwen3-235b-a22b:free": "2025-10-05T13:38:53Z",
-    "openrouter:qwen/qwen3-30b-a3b-instruct-2507": "2025-10-05T13:38:53Z",
-    "openrouter:qwen/qwen3-30b-a3b:free": "2025-10-05T13:38:53Z",
-    "openrouter:qwen/qwen3-32b:free": "2025-10-05T13:38:53Z",
-    "openrouter:qwen/qwen3-8b:free": "2025-10-05T13:38:53Z",
-    "openrouter:qwen/qwen3-coder": "2025-10-05T13:38:53Z",
-    "openrouter:qwen/qwen3-coder:free": "2025-10-05T13:38:53Z",
-    "openrouter:qwen/qwen3-max": "2025-10-05T13:38:53Z",
-    "openrouter:qwen/qwen3-next-80b-a3b-instruct": "2025-10-05T13:38:53Z",
-    "openrouter:qwen/qwq-32b:free": "2025-10-05T13:38:53Z",
-    "openrouter:rekaai/reka-flash-3": "2025-10-05T13:38:53Z",
-    "openrouter:sarvamai/sarvam-m:free": "2025-10-05T13:38:53Z",
-    "openrouter:thudm/glm-z1-32b:free": "2025-10-05T13:38:53Z",
-    "openrouter:tngtech/deepseek-r1t2-chimera:free": "2025-10-05T13:38:53Z",
-    "openrouter:x-ai/grok-3": "2025-10-05T13:38:53Z",
-    "openrouter:x-ai/grok-3-beta": "2025-10-05T13:38:53Z",
-    "openrouter:x-ai/grok-3-mini": "2025-10-05T13:38:53Z",
-    "openrouter:x-ai/grok-3-mini-beta": "2025-10-05T13:38:53Z",
-    "openrouter:x-ai/grok-4": "2025-10-05T13:38:53Z",
-    "openrouter:x-ai/grok-4-fast": "2025-10-05T14:07:32Z",
-    "openrouter:x-ai/grok-4-fast:free": "2025-10-05T13:38:53Z",
-    "openrouter:x-ai/grok-code-fast-1": "2025-10-05T13:38:53Z",
-    "openrouter:z-ai/glm-4.5": "2025-10-05T13:38:53Z",
-    "openrouter:z-ai/glm-4.5-air": "2025-10-05T13:38:53Z",
-    "openrouter:z-ai/glm-4.5-air:free": "2025-10-05T13:38:53Z",
-    "openrouter:z-ai/glm-4.5v": "2025-10-05T13:38:53Z",
-    "openrouter:z-ai/glm-4.6": "2025-10-05T13:38:53Z",
-    "xai:grok-2": "2025-10-06T13:19:15Z",
-    "xai:grok-2-1212": "2025-10-06T13:19:15Z",
-    "xai:grok-2-latest": "2025-10-06T13:19:15Z",
-    "xai:grok-2-vision": "2025-10-06T13:19:15Z",
-    "xai:grok-2-vision-1212": "2025-10-06T13:19:15Z",
-    "xai:grok-2-vision-latest": "2025-10-06T13:19:15Z",
-    "xai:grok-3": "2025-10-06T13:19:15Z",
-    "xai:grok-3-fast": "2025-10-06T13:19:15Z",
-    "xai:grok-3-fast-latest": "2025-10-06T13:19:15Z",
-    "xai:grok-3-latest": "2025-10-06T13:19:15Z",
-    "xai:grok-3-mini": "2025-10-06T13:19:15Z",
-    "xai:grok-3-mini-fast": "2025-10-06T13:19:15Z",
-    "xai:grok-3-mini-fast-latest": "2025-10-06T13:19:15Z",
-    "xai:grok-3-mini-latest": "2025-10-06T13:19:15Z",
-    "xai:grok-4": "2025-10-06T13:19:15Z",
-    "xai:grok-4-fast": "2025-10-06T13:19:15Z",
-    "xai:grok-4-fast-non-reasoning": "2025-10-06T13:19:15Z",
-    "xai:grok-4-fast-reasoning": "2025-10-06T13:19:15Z",
-    "xai:grok-code-fast-1": "2025-10-06T13:19:15Z"
+  "anthropic:claude-3-5-sonnet-20240620": {
+    "status": "pass",
+    "last_checked": "2025-10-06T18:21:29Z"
+  },
+  "anthropic:claude-3-5-sonnet-20241022": {
+    "status": "pass",
+    "last_checked": "2025-10-06T18:21:29Z"
+  },
+  "anthropic:claude-3-7-sonnet-20250219": {
+    "status": "fail",
+    "last_checked": "2025-10-06T18:21:29Z"
+  },
+  "anthropic:claude-3-haiku-20240307": {
+    "status": "pass",
+    "last_checked": "2025-10-06T18:21:29Z"
+  },
+  "anthropic:claude-3-opus-20240229": {
+    "status": "pass",
+    "last_checked": "2025-10-06T18:21:29Z"
+  },
+  "anthropic:claude-3-sonnet-20240229": {
+    "status": "excluded",
+    "last_checked": null
+  },
+  "anthropic:claude-opus-4-1-20250805": {
+    "status": "fail",
+    "last_checked": "2025-10-06T18:21:29Z"
+  },
+  "anthropic:claude-opus-4-20250514": {
+    "status": "fail",
+    "last_checked": "2025-10-06T18:21:29Z"
+  },
+  "anthropic:claude-sonnet-4-20250514": {
+    "status": "pass",
+    "last_checked": "2025-10-06T18:21:29Z"
+  },
+  "anthropic:claude-sonnet-4-5-20250929": {
+    "status": "fail",
+    "last_checked": "2025-10-06T18:23:22Z"
+  },
+  "google:gemini-1.5-flash": {
+    "status": "excluded",
+    "last_checked": "2025-10-03T23:26:57Z"
+  },
+  "google:gemini-1.5-flash-8b": {
+    "status": "excluded",
+    "last_checked": "2025-10-03T23:26:57Z"
+  },
+  "google:gemini-1.5-pro": {
+    "status": "excluded",
+    "last_checked": "2025-10-03T23:26:57Z"
+  },
+  "google:gemini-2.0-flash": {
+    "status": "pass",
+    "last_checked": "2025-10-06T17:21:19Z"
+  },
+  "google:gemini-2.0-flash-exp": {
+    "status": "pass",
+    "last_checked": null
+  },
+  "google:gemini-2.0-flash-lite": {
+    "status": "pass",
+    "last_checked": "2025-10-06T17:21:19Z"
+  },
+  "google:gemini-2.5-flash": {
+    "status": "pass",
+    "last_checked": "2025-10-06T17:21:19Z"
+  },
+  "google:gemini-2.5-flash-lite": {
+    "status": "excluded",
+    "last_checked": "2025-10-03T23:26:57Z"
+  },
+  "google:gemini-2.5-flash-lite-preview-06-17": {
+    "status": "excluded",
+    "last_checked": "2025-10-03T23:26:57Z"
+  },
+  "google:gemini-2.5-flash-lite-preview-09-2025": {
+    "status": "excluded",
+    "last_checked": "2025-10-03T23:26:57Z"
+  },
+  "google:gemini-2.5-flash-preview-04-17": {
+    "status": "excluded",
+    "last_checked": "2025-10-03T23:26:57Z"
+  },
+  "google:gemini-2.5-flash-preview-05-20": {
+    "status": "pass",
+    "last_checked": "2025-10-06T17:21:19Z"
+  },
+  "google:gemini-2.5-flash-preview-09-2025": {
+    "status": "excluded",
+    "last_checked": "2025-10-03T23:26:57Z"
+  },
+  "google:gemini-2.5-pro": {
+    "status": "pass",
+    "last_checked": "2025-10-06T17:21:19Z"
+  },
+  "google:gemini-2.5-pro-preview-05-06": {
+    "status": "excluded",
+    "last_checked": "2025-10-03T23:26:57Z"
+  },
+  "google:gemini-2.5-pro-preview-06-05": {
+    "status": "excluded",
+    "last_checked": "2025-10-03T23:26:57Z"
+  },
+  "google:gemini-embedding-001": {
+    "status": "pass",
+    "last_checked": "2025-10-04T12:50:52Z"
+  },
+  "google:gemini-flash-latest": {
+    "status": "pass",
+    "last_checked": "2025-10-06T17:21:19Z"
+  },
+  "google:gemini-flash-lite-latest": {
+    "status": "excluded",
+    "last_checked": "2025-10-03T23:26:57Z"
+  },
+  "google:gemini-live-2.5-flash-preview-native-audio": {
+    "status": "excluded",
+    "last_checked": "2025-10-03T23:26:57Z"
+  },
+  "groq:deepseek-r1-distill-llama-70b": {
+    "status": "fail",
+    "last_checked": "2025-10-06T12:32:31Z"
+  },
+  "groq:gemma2-9b-it": {
+    "status": "excluded",
+    "last_checked": "2025-10-03T17:50:32Z"
+  },
+  "groq:llama-3.1-8b-instant": {
+    "status": "pass",
+    "last_checked": "2025-10-06T12:32:31Z"
+  },
+  "groq:llama-3.3-70b-versatile": {
+    "status": "pass",
+    "last_checked": "2025-10-06T12:32:31Z"
+  },
+  "groq:llama-guard-3-8b": {
+    "status": "excluded",
+    "last_checked": "2025-10-03T17:50:32Z"
+  },
+  "groq:llama3-70b-8192": {
+    "status": "excluded",
+    "last_checked": "2025-10-03T18:07:57Z"
+  },
+  "groq:llama3-8b-8192": {
+    "status": "excluded",
+    "last_checked": "2025-10-03T17:50:32Z"
+  },
+  "groq:meta-llama/llama-4-maverick-17b-128e-instruct": {
+    "status": "fail",
+    "last_checked": "2025-10-06T12:32:31Z"
+  },
+  "groq:meta-llama/llama-4-scout-17b-16e-instruct": {
+    "status": "excluded",
+    "last_checked": "2025-10-03T18:31:26Z"
+  },
+  "groq:meta-llama/llama-guard-4-12b": {
+    "status": "excluded",
+    "last_checked": "2025-10-03T18:31:32Z"
+  },
+  "groq:mistral-saba-24b": {
+    "status": "excluded",
+    "last_checked": "2025-10-03T17:50:32Z"
+  },
+  "groq:moonshotai/kimi-k2-instruct": {
+    "status": "excluded",
+    "last_checked": "2025-10-03T17:50:32Z"
+  },
+  "groq:moonshotai/kimi-k2-instruct-0905": {
+    "status": "pass",
+    "last_checked": "2025-10-06T12:32:31Z"
+  },
+  "groq:openai/gpt-oss-120b": {
+    "status": "pass",
+    "last_checked": "2025-10-06T12:32:31Z"
+  },
+  "groq:openai/gpt-oss-20b": {
+    "status": "pass",
+    "last_checked": "2025-10-06T12:32:31Z"
+  },
+  "groq:qwen-qwq-32b": {
+    "status": "excluded",
+    "last_checked": "2025-10-03T17:50:32Z"
+  },
+  "groq:qwen/qwen3-32b": {
+    "status": "fail",
+    "last_checked": "2025-10-06T12:32:31Z"
+  },
+  "openai:codex-mini-latest": {
+    "status": "fail",
+    "last_checked": "2025-10-06T17:39:08Z"
+  },
+  "openai:gpt-3.5-turbo": {
+    "status": "pass",
+    "last_checked": "2025-10-06T17:39:08Z"
+  },
+  "openai:gpt-4": {
+    "status": "pass",
+    "last_checked": "2025-10-06T17:39:08Z"
+  },
+  "openai:gpt-4-turbo": {
+    "status": "pass",
+    "last_checked": "2025-10-06T17:39:08Z"
+  },
+  "openai:gpt-4.1": {
+    "status": "fail",
+    "last_checked": "2025-10-06T17:39:08Z"
+  },
+  "openai:gpt-4.1-mini": {
+    "status": "fail",
+    "last_checked": "2025-10-06T17:39:08Z"
+  },
+  "openai:gpt-4.1-nano": {
+    "status": "fail",
+    "last_checked": "2025-10-06T17:39:08Z"
+  },
+  "openai:gpt-4o": {
+    "status": "pass",
+    "last_checked": "2025-10-06T17:39:08Z"
+  },
+  "openai:gpt-4o-2024-05-13": {
+    "status": "pass",
+    "last_checked": "2025-10-06T17:39:08Z"
+  },
+  "openai:gpt-4o-2024-08-06": {
+    "status": "pass",
+    "last_checked": "2025-10-06T17:39:08Z"
+  },
+  "openai:gpt-4o-2024-11-20": {
+    "status": "pass",
+    "last_checked": "2025-10-06T17:39:08Z"
+  },
+  "openai:gpt-4o-mini": {
+    "status": "pass",
+    "last_checked": "2025-10-06T17:39:08Z"
+  },
+  "openai:gpt-5": {
+    "status": "fail",
+    "last_checked": "2025-10-06T17:39:08Z"
+  },
+  "openai:gpt-5-chat-latest": {
+    "status": "fail",
+    "last_checked": "2025-10-06T17:39:08Z"
+  },
+  "openai:gpt-5-codex": {
+    "status": "fail",
+    "last_checked": "2025-10-06T17:39:08Z"
+  },
+  "openai:gpt-5-mini": {
+    "status": "fail",
+    "last_checked": "2025-10-06T17:39:08Z"
+  },
+  "openai:gpt-5-nano": {
+    "status": "fail",
+    "last_checked": "2025-10-06T17:39:08Z"
+  },
+  "openai:o1": {
+    "status": "fail",
+    "last_checked": "2025-10-06T17:39:08Z"
+  },
+  "openai:o1-mini": {
+    "status": "excluded",
+    "last_checked": "2025-10-05T01:24:56Z"
+  },
+  "openai:o1-preview": {
+    "status": "excluded",
+    "last_checked": "2025-10-05T01:24:56Z"
+  },
+  "openai:o1-pro": {
+    "status": "fail",
+    "last_checked": "2025-10-06T17:39:08Z"
+  },
+  "openai:o3": {
+    "status": "fail",
+    "last_checked": "2025-10-06T17:39:08Z"
+  },
+  "openai:o3-deep-research": {
+    "status": "fail",
+    "last_checked": "2025-10-06T17:39:08Z"
+  },
+  "openai:o3-mini": {
+    "status": "fail",
+    "last_checked": "2025-10-06T17:39:08Z"
+  },
+  "openai:o3-pro": {
+    "status": "fail",
+    "last_checked": "2025-10-06T17:39:08Z"
+  },
+  "openai:o4-mini": {
+    "status": "fail",
+    "last_checked": "2025-10-06T17:39:08Z"
+  },
+  "openai:o4-mini-deep-research": {
+    "status": "fail",
+    "last_checked": "2025-10-06T17:39:08Z"
+  },
+  "openai:text-embedding-3-large": {
+    "status": "pass",
+    "last_checked": "2025-10-04T13:01:02Z"
+  },
+  "openai:text-embedding-3-small": {
+    "status": "pass",
+    "last_checked": "2025-10-04T13:01:02Z"
+  },
+  "openai:text-embedding-ada-002": {
+    "status": "pass",
+    "last_checked": "2025-10-04T13:01:02Z"
+  },
+  "openrouter:anthropic/claude-3.5-haiku": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:anthropic/claude-3.7-sonnet": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:anthropic/claude-opus-4": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:anthropic/claude-opus-4.1": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:anthropic/claude-sonnet-4": {
+    "status": "pass",
+    "last_checked": "2025-10-05T14:07:32Z"
+  },
+  "openrouter:anthropic/claude-sonnet-4.5": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:cognitivecomputations/dolphin3.0-mistral-24b": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:cognitivecomputations/dolphin3.0-r1-mistral-24b": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:deepseek/deepseek-chat-v3-0324": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:48:30Z"
+  },
+  "openrouter:deepseek/deepseek-chat-v3.1": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:48:30Z"
+  },
+  "openrouter:deepseek/deepseek-r1-0528-qwen3-8b:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:48:30Z"
+  },
+  "openrouter:deepseek/deepseek-r1-0528:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:48:30Z"
+  },
+  "openrouter:deepseek/deepseek-r1-distill-llama-70b": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:48:30Z"
+  },
+  "openrouter:deepseek/deepseek-r1-distill-qwen-14b": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:48:30Z"
+  },
+  "openrouter:deepseek/deepseek-r1:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:48:30Z"
+  },
+  "openrouter:deepseek/deepseek-v3-base:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:48:30Z"
+  },
+  "openrouter:deepseek/deepseek-v3.1-terminus": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:48:30Z"
+  },
+  "openrouter:featherless/qwerky-72b": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:google/gemini-2.0-flash-001": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:google/gemini-2.0-flash-exp:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:google/gemini-2.5-flash": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:google/gemini-2.5-pro": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:google/gemini-2.5-pro-preview-05-06": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:google/gemini-2.5-pro-preview-06-05": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:google/gemma-2-9b-it:free": {
+    "status": "excluded",
+    "last_checked": "2025-10-05T13:34:46Z"
+  },
+  "openrouter:google/gemma-3-12b-it": {
+    "status": "excluded",
+    "last_checked": "2025-10-05T13:34:46Z"
+  },
+  "openrouter:google/gemma-3-27b-it": {
+    "status": "excluded",
+    "last_checked": "2025-10-05T13:34:46Z"
+  },
+  "openrouter:google/gemma-3n-e4b-it": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:google/gemma-3n-e4b-it:free": {
+    "status": "excluded",
+    "last_checked": "2025-10-05T13:34:46Z"
+  },
+  "openrouter:meta-llama/llama-3.2-11b-vision-instruct": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:meta-llama/llama-3.3-70b-instruct:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:meta-llama/llama-4-scout:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:microsoft/mai-ds-r1:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:mistralai/codestral-2508": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:45:09Z"
+  },
+  "openrouter:mistralai/devstral-medium-2507": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:45:09Z"
+  },
+  "openrouter:mistralai/devstral-small-2505": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:45:09Z"
+  },
+  "openrouter:mistralai/devstral-small-2505:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:45:09Z"
+  },
+  "openrouter:mistralai/devstral-small-2507": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:45:09Z"
+  },
+  "openrouter:mistralai/mistral-7b-instruct:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:45:09Z"
+  },
+  "openrouter:mistralai/mistral-medium-3": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:45:09Z"
+  },
+  "openrouter:mistralai/mistral-medium-3.1": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:45:09Z"
+  },
+  "openrouter:mistralai/mistral-nemo:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:45:09Z"
+  },
+  "openrouter:mistralai/mistral-small-3.1-24b-instruct": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:45:09Z"
+  },
+  "openrouter:mistralai/mistral-small-3.2-24b-instruct": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:45:09Z"
+  },
+  "openrouter:mistralai/mistral-small-3.2-24b-instruct:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:45:09Z"
+  },
+  "openrouter:moonshotai/kimi-dev-72b:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:moonshotai/kimi-k2": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:moonshotai/kimi-k2-0905": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:moonshotai/kimi-k2:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:nousresearch/deephermes-3-llama-3-8b-preview": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:nousresearch/hermes-4-405b": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:nousresearch/hermes-4-70b": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:openai/gpt-4.1": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:51:34Z"
+  },
+  "openrouter:openai/gpt-4.1-mini": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:51:34Z"
+  },
+  "openrouter:openai/gpt-4o-mini": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:51:34Z"
+  },
+  "openrouter:openai/gpt-5": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:51:34Z"
+  },
+  "openrouter:openai/gpt-5-chat": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:51:34Z"
+  },
+  "openrouter:openai/gpt-5-codex": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:51:34Z"
+  },
+  "openrouter:openai/gpt-5-mini": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:51:34Z"
+  },
+  "openrouter:openai/gpt-5-nano": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:51:34Z"
+  },
+  "openrouter:openai/gpt-oss-120b": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:51:34Z"
+  },
+  "openrouter:openai/gpt-oss-20b": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:51:34Z"
+  },
+  "openrouter:openai/o4-mini": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:51:34Z"
+  },
+  "openrouter:openrouter/cypher-alpha:free": {
+    "status": "excluded",
+    "last_checked": "2025-10-05T13:38:18Z"
+  },
+  "openrouter:openrouter/horizon-alpha": {
+    "status": "excluded",
+    "last_checked": "2025-10-05T13:38:18Z"
+  },
+  "openrouter:openrouter/horizon-beta": {
+    "status": "excluded",
+    "last_checked": "2025-10-05T13:38:18Z"
+  },
+  "openrouter:openrouter/sonoma-dusk-alpha": {
+    "status": "excluded",
+    "last_checked": "2025-10-05T13:38:18Z"
+  },
+  "openrouter:openrouter/sonoma-sky-alpha": {
+    "status": "excluded",
+    "last_checked": "2025-10-05T13:38:18Z"
+  },
+  "openrouter:qwen/qwen-2.5-coder-32b-instruct": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:qwen/qwen2.5-vl-32b-instruct:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:qwen/qwen2.5-vl-72b-instruct": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:qwen/qwen2.5-vl-72b-instruct:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:qwen/qwen3-14b:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:qwen/qwen3-235b-a22b-07-25": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:qwen/qwen3-235b-a22b-07-25:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:qwen/qwen3-235b-a22b-thinking-2507": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:qwen/qwen3-235b-a22b:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:qwen/qwen3-30b-a3b-instruct-2507": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:qwen/qwen3-30b-a3b:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:qwen/qwen3-32b:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:qwen/qwen3-8b:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:qwen/qwen3-coder": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:qwen/qwen3-coder:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:qwen/qwen3-max": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:qwen/qwen3-next-80b-a3b-instruct": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:qwen/qwq-32b:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:rekaai/reka-flash-3": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:sarvamai/sarvam-m:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:thudm/glm-z1-32b:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:tngtech/deepseek-r1t2-chimera:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:x-ai/grok-3": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:x-ai/grok-3-beta": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:x-ai/grok-3-mini": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:x-ai/grok-3-mini-beta": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:x-ai/grok-4": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:x-ai/grok-4-fast": {
+    "status": "pass",
+    "last_checked": "2025-10-05T14:07:32Z"
+  },
+  "openrouter:x-ai/grok-4-fast:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:x-ai/grok-code-fast-1": {
+    "status": "pass",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:z-ai/glm-4.5": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:z-ai/glm-4.5-air": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:z-ai/glm-4.5-air:free": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:z-ai/glm-4.5v": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "openrouter:z-ai/glm-4.6": {
+    "status": "fail",
+    "last_checked": "2025-10-05T13:38:53Z"
+  },
+  "xai:grok-2": {
+    "status": "pass",
+    "last_checked": "2025-10-06T15:14:28Z"
+  },
+  "xai:grok-2-1212": {
+    "status": "pass",
+    "last_checked": "2025-10-06T15:14:28Z"
+  },
+  "xai:grok-2-latest": {
+    "status": "pass",
+    "last_checked": "2025-10-06T15:14:28Z"
+  },
+  "xai:grok-2-vision": {
+    "status": "pass",
+    "last_checked": "2025-10-06T15:14:28Z"
+  },
+  "xai:grok-2-vision-1212": {
+    "status": "pass",
+    "last_checked": "2025-10-06T15:14:28Z"
+  },
+  "xai:grok-2-vision-latest": {
+    "status": "pass",
+    "last_checked": "2025-10-06T15:14:28Z"
+  },
+  "xai:grok-3": {
+    "status": "pass",
+    "last_checked": "2025-10-06T15:14:28Z"
+  },
+  "xai:grok-3-fast": {
+    "status": "pass",
+    "last_checked": "2025-10-06T15:14:28Z"
+  },
+  "xai:grok-3-fast-latest": {
+    "status": "pass",
+    "last_checked": "2025-10-06T15:14:28Z"
+  },
+  "xai:grok-3-latest": {
+    "status": "pass",
+    "last_checked": "2025-10-06T15:14:28Z"
+  },
+  "xai:grok-3-mini": {
+    "status": "pass",
+    "last_checked": "2025-10-06T15:14:28Z"
+  },
+  "xai:grok-3-mini-fast": {
+    "status": "pass",
+    "last_checked": "2025-10-06T15:14:28Z"
+  },
+  "xai:grok-3-mini-fast-latest": {
+    "status": "pass",
+    "last_checked": "2025-10-06T15:14:28Z"
+  },
+  "xai:grok-3-mini-latest": {
+    "status": "pass",
+    "last_checked": "2025-10-06T15:14:28Z"
+  },
+  "xai:grok-4": {
+    "status": "pass",
+    "last_checked": "2025-10-06T15:14:28Z"
+  },
+  "xai:grok-4-fast": {
+    "status": "pass",
+    "last_checked": "2025-10-06T15:14:28Z"
+  },
+  "xai:grok-4-fast-non-reasoning": {
+    "status": "pass",
+    "last_checked": "2025-10-06T15:14:28Z"
+  },
+  "xai:grok-4-fast-reasoning": {
+    "status": "pass",
+    "last_checked": "2025-10-06T15:14:28Z"
+  },
+  "xai:grok-beta": {
+    "status": "excluded",
+    "last_checked": null
+  },
+  "xai:grok-code-fast-1": {
+    "status": "pass",
+    "last_checked": "2025-10-06T15:14:28Z"
+  },
+  "xai:grok-vision-beta": {
+    "status": "excluded",
+    "last_checked": null
   }
 }

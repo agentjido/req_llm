@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/IiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MTUwLCJtb2RlbCI6Im8xIiwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6InRlbGxfam9rZSIsInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfdGltZSIsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/IiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MjAwMDAsIm1vZGVsIjoibzEiLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfd2VhdGhlciIsInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoidGVsbF9qb2tlIiwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImdldF90aW1lIiwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "input": [
@@ -15,7 +15,7 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 150,
+      "max_output_tokens": 20000,
       "model": "o1",
       "stream": false,
       "tools": [
@@ -97,23 +97,29 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759698837,
+      "created_at": 1759772201,
       "error": null,
-      "id": "resp_0d25169126744be40068e2df94f7c081959e2569f8e59849c0",
-      "incomplete_details": {
-        "reason": "max_output_tokens"
-      },
+      "id": "resp_0c6919454820d5d40068e3fe296bc4819a99d30098be441644",
+      "incomplete_details": null,
       "instructions": null,
-      "max_output_tokens": 150,
+      "max_output_tokens": 20000,
       "max_tool_calls": null,
       "metadata": {},
       "model": "o1-2024-12-17",
       "object": "response",
       "output": [
         {
-          "id": "rs_0d25169126744be40068e2df98d55881959d21a781da82c033",
+          "id": "rs_0c6919454820d5d40068e3fe2d5ef8819a8778b3f5923109f8",
           "summary": [],
           "type": "reasoning"
+        },
+        {
+          "arguments": "{}",
+          "call_id": "call_tsCP6UodMHalNFRVra5Da8lb",
+          "id": "fc_0c6919454820d5d40068e3fe2e4bf0819a81514207997ca4f6",
+          "name": "get_weather",
+          "status": "completed",
+          "type": "function_call"
         }
       ],
       "parallel_tool_calls": true,
@@ -124,8 +130,8 @@
         "summary": null
       },
       "safety_identifier": null,
-      "service_tier": "auto",
-      "status": "incomplete",
+      "service_tier": "default",
+      "status": "completed",
       "store": true,
       "temperature": 1.0,
       "text": {
@@ -181,11 +187,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 278,
+        "output_tokens": 331,
         "output_tokens_details": {
-          "reasoning_tokens": 128
+          "reasoning_tokens": 320
         },
-        "total_tokens": 331
+        "total_tokens": 384
       },
       "user": null
     },
@@ -197,7 +203,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989fed02ada002ab-ORD"
+        "98a6ec2279f8e830-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -206,13 +212,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:14:02 GMT"
+        "Mon, 06 Oct 2025 17:36:46 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "5068"
+        "5215"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -224,8 +230,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=FMQJU8wLo.SC94I7SgYALL.LmlRETA_x2EDo01Zpz70-1759698842-1.0.1.1-5a5zN5rB_uX.0gButSRxxrmadITKdLQFBhMhMScaF16CJExoam645cAcQdUIAgl4ElmDcjmMBM6E4ohvD6zQxf.zBaRVjTP8qDmnaIIMQ2M; path=/; expires=Sun, 05-Oct-25 21:44:02 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=Q9SRflMkBe60s4COiaiySGcv4MXfoaP8n.jrx5myojs-1759698842092-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=07_vvmgMJxebAq7MrojiWqBJb4FPNNw6j3lLquHye0s-1759772206-1.0.1.1-9EFLISt1iL6hEwnzDTjEwhSFJxVQpV1o70NxEOycXDIxH6Wa.JaFRFMtqyK8ZqL0okjEecK6D3LHLnYJIAYSYFHrH1gzg5EbgNq0YjPHv_4; path=/; expires=Mon, 06-Oct-25 18:06:46 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=TDodP0LuWo1ycXSZS_HzLbRHP6TQK2fXVgKcn.Q1wfg-1759772206654-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -237,7 +243,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "5074"
+        "5218"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -249,16 +255,16 @@
         "4999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "799874"
+        "799525"
       ],
       "x-ratelimit-reset-requests": [
         "12ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "9ms"
+        "35ms"
       ],
       "x-request-id": [
-        "req_83a6cdf122c74b229d371b91bb442712"
+        "req_c7777655ed00bfc81a67c0caee4ca418"
       ]
     },
     "status": 200

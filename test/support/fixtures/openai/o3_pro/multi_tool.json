@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/IiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MTUwLCJtb2RlbCI6Im8zLXBybyIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImdldF93ZWF0aGVyIiwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJ0ZWxsX2pva2UiLCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoiZ2V0X3RpbWUiLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/IiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MjAwMDAsIm1vZGVsIjoibzMtcHJvIiwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6InRlbGxfam9rZSIsInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfdGltZSIsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
       "input": [
@@ -15,7 +15,7 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 150,
+      "max_output_tokens": 20000,
       "model": "o3-pro",
       "stream": false,
       "tools": [
@@ -97,26 +97,26 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759698934,
+      "created_at": 1759772277,
       "error": null,
-      "id": "resp_098ad85c401b77c70068e2dff661c881958b4090be08ae8173",
+      "id": "resp_0843b7ace797a0640068e3fe75e57881999c20f4b8d2c06b61",
       "incomplete_details": null,
       "instructions": null,
-      "max_output_tokens": 150,
+      "max_output_tokens": 20000,
       "max_tool_calls": null,
       "metadata": {},
       "model": "o3-pro-2025-06-10",
       "object": "response",
       "output": [
         {
-          "id": "rs_098ad85c401b77c70068e2e0038c9c8195a3dd52a9ec466615",
+          "id": "rs_0843b7ace797a0640068e3fe853bfc81998412615ab48a8fab",
           "summary": [],
           "type": "reasoning"
         },
         {
           "arguments": "{}",
-          "call_id": "call_Pz2uvqrPRt5FTfOLe7w6MIdm",
-          "id": "fc_098ad85c401b77c70068e2e00394f8819585b21ea9cdaceadb",
+          "call_id": "call_wIXfUYu0rs7RtPeDzjVRSBae",
+          "id": "fc_0843b7ace797a0640068e3fe8544008199be543fcafbb29b5d",
           "name": "get_weather",
           "status": "completed",
           "type": "function_call"
@@ -187,11 +187,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 80,
+        "output_tokens": 16,
         "output_tokens_details": {
-          "reasoning_tokens": 64
+          "reasoning_tokens": 0
         },
-        "total_tokens": 133
+        "total_tokens": 69
       },
       "user": null
     },
@@ -203,7 +203,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989fef6369ccf865-ORD"
+        "98a6ee004fd034ad-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -212,13 +212,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:15:47 GMT"
+        "Mon, 06 Oct 2025 17:38:13 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "13545"
+        "15779"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -230,8 +230,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=T_.YYBW6OYT3qmwX0VOscyL5WRRCivcYJS.kIBa1q0k-1759698947-1.0.1.1-4Z7mjFSKO2Pa5O8k3R7e9noTVVtpMpBFVruzP6Bbl.dw3Qp2Z4oLZ4NXi85nESQIo2XAVYX9KpOUBRBI7xcKccL3BpWsj0dx20DbhicCBqA; path=/; expires=Sun, 05-Oct-25 21:45:47 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=V5GPAx9RLdyu8G.89U2E1vTRS9T.WbdbF4vzKlFUeGA-1759698947923-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=RUiqFbizkD3mSB8_rkY8xu2wkwOX3DGr.fdsAgZFbOU-1759772293-1.0.1.1-xxssz5HCFGWRS1qlKRj853eTlxIc0JIysg3OqzhXJCBdo64YT3_juD1es_dm11NV.DhQXyOSp_ZCsfkTJUuCWmHyauNzRdfNcFq65KgsXUg; path=/; expires=Mon, 06-Oct-25 18:08:13 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=oq_JxttKvulfbDipYSkKd9LCb98wHGpxapP9zDhwf4I-1759772293686-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -243,7 +243,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "13551"
+        "15784"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -255,7 +255,7 @@
         "4999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "799533"
+        "799627"
       ],
       "x-ratelimit-reset-requests": [
         "0s"
@@ -264,7 +264,7 @@
         "0s"
       ],
       "x-request-id": [
-        "req_65d83060230b1abec7fb8c4efbde4b22"
+        "req_d7a94d5a95d09f489c92b0ced68b6585"
       ]
     },
     "status": 200

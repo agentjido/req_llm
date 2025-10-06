@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtc29ubmV0LTQtMjAyNTA1MTQiLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1zb25uZXQtNC0yMDI1MDUxNCIsInN0cmVhbSI6ZmFsc2UsInRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19"
     },
     "canonical_json": {
-      "max_tokens": 50,
+      "max_tokens": 2000,
       "messages": [
         {
           "content": "Hello world!",
@@ -13,7 +13,10 @@
       ],
       "model": "claude-sonnet-4-20250514",
       "stream": false,
-      "temperature": 0.0
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
     },
     "headers": {
       "accept-encoding": [
@@ -37,11 +40,16 @@
     "body": {
       "content": [
         {
-          "text": "Hello! It's nice to meet you. How are you doing today? Is there anything I can help you with or would you like to chat about something in particular?",
+          "signature": "EqgDCkYICBgCKkDbicCvA+Lk0X2K0T7sSaQv3kg+/U4YeZSm3w85kSvn6NvVcgyAsIrcsfzQ9h/Qp4MXTT26GORZ64S+JfO5dRvLEgxj1cTTBlLdxxmAwUYaDDoDwlry0/4orCyUeSIw7tX0PZayHsYRQ5i7QAws9tLVANCcZKEcPzsHCkd6mUIyf+kd/nOQo8k9b39r7WFvKo8Ca81i89z3a9PVRvpvHbv8K0VbrvU2zZpVVQxAkaWlolAiW6rMQORq2DZbEhgbtGNloywhhTC/Z6Tm1BY7wluqsjZrzxzmcnGL4KCw26jvkLt1AA3Tl19mNgrVFbJIuCvuaYBShTdrWqKMDFnePmdehHVWqOw0xDd8mCuoUSUeP9aCre0kaKBlH527IXCOv6qQo6Dd1PLEoK3pXaCML6SxB6UpnxOITNfyXpw0tFmVJizylLw+k/TiRUmmjBoDYwEiL6nS1lnjGzoDkCLyTX67SBUTpmwRbHb3TGzZfhaBzGTL/A8e/NfEVF701GTKYKO9UEysu/Pkik2bul1CXs3BJLRGffW+YNQK94+axRCNKxgB",
+          "thinking": "The human has greeted me with \"Hello world!\" - a classic programming phrase that's often the first thing people learn to output when learning a new programming language. This is a friendly, simple greeting, so I should respond in a warm and welcoming way.",
+          "type": "thinking"
+        },
+        {
+          "text": "Hello! It's nice to meet you. How are you doing today? Is there anything I can help you with?",
           "type": "text"
         }
       ],
-      "id": "msg_01UoiGgPdpTMTptEacdG8LnJ",
+      "id": "msg_01475boqhg8kZp4762AbuDEt",
       "model": "claude-sonnet-4-20250514",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -54,8 +62,8 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 10,
-        "output_tokens": 37,
+        "input_tokens": 38,
+        "output_tokens": 89,
         "service_tier": "standard"
       }
     },
@@ -70,7 +78,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-05T15:38:41Z"
+        "2025-10-06T17:10:47Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -79,7 +87,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-05T15:38:42Z"
+        "2025-10-06T17:10:49Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -88,7 +96,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-05T15:38:40Z"
+        "2025-10-06T17:10:47Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -97,13 +105,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-05T15:38:41Z"
+        "2025-10-06T17:10:47Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989e01e59862eada-ORD"
+        "98a6c62f79139bcc-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -112,10 +120,10 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 15:38:42 GMT"
+        "Mon, 06 Oct 2025 17:10:49 GMT"
       ],
       "request-id": [
-        "req_011CTpJTDxUQuHmVjax4CAGF"
+        "req_011CTrKHVZBhQWWfCCC3Mzm2"
       ],
       "server": [
         "cloudflare"
@@ -130,7 +138,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "1246"
+        "2503"
       ],
       "x-robots-tag": [
         "none"

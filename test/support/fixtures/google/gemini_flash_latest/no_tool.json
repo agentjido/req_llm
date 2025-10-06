@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjo2MDAsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fSwidG9vbHMiOlt7ImZ1bmN0aW9uRGVjbGFyYXRpb25zIjpbeyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fV19XX0="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMzEwNiwidGVtcGVyYXR1cmUiOjAuMH0sInRvb2xzIjpbeyJmdW5jdGlvbkRlY2xhcmF0aW9ucyI6W3siZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX1dfV19"
     },
     "canonical_json": {
       "contents": [
@@ -16,12 +16,8 @@
       ],
       "generationConfig": {
         "candidateCount": 1,
-        "maxOutputTokens": 600,
-        "temperature": 0.0,
-        "thinkingConfig": {
-          "includeThoughts": true,
-          "thinkingBudget": 4096
-        }
+        "maxOutputTokens": 13106,
+        "temperature": 0.0
       },
       "tools": [
         {
@@ -66,12 +62,8 @@
           "content": {
             "parts": [
               {
-                "text": "**The Cat Joke Conundrum**\n\nOkay, so the user wants a cat joke, easy enough! First things first, I check what tools I have at my disposal. Hmm, the only thing here is the `weather_api`.  That's a bust. Weather's got nothing to do with comedy. Alright, looks like I'm going to have to conjure up something clever on my own.\n\nTime to brainstorm some cat puns and humor. Let's see...  \"Catfish\" is too obvious, I can do better than that.  \"Letting the cat out of the bag\" is a classic, but perhaps a bit overused.  The knock-knock joke is okay, but I can go for something fresher. Ah-ha! I think something that plays on the cat's inherent nature, perhaps their love for a warm spot, mixed with computer terminology. \n\nI'm liking the image of a cat sprawled across the keyboard, keeping an eye on the \"mouse.\"  That's got potential. It's got that nice blend of silly and relatable. Yep, that's the one. Let's make sure the delivery is on point – gotta keep that light, playful tone. I think I've got it!\n",
-                "thought": true
-              },
-              {
-                "text": "Why did the cat sit on the computer?\n\nTo keep an eye on the mouse!",
-                "thoughtSignature": "CoUJAdHtim+z0kTfyC3jmqA0NpdhbteGQ2Q1iX0ZEbFapGP9AixaI3CKXwPmXy64IiTzXm4o/0UOcYkrclX+rm3xDUsAGBkO4OCOR3U6zs0vbripVB96J0chfDVwhmFz4njiUCM2GsliiUuBCaloqewGiv345z/QUdSw/Ssgltf849hA0NahUf6nX3YFfge6EenKQGf8ut9rkYTbqXa1VvBsroDlE54srQzys/DafM0c/okj/WhnULqamcFL/UcWs1xvGtyyx+1oYWAj3EoK96RMggtuXfeHzro9j2utIu7mT1LOJU2+/YkVG9NU+xfSEJJDriC7YIORp4CkeREe2MNdqXhBpEa/G8+M4DOlr0072fHlrVZE0Ux5weyi1VGkgXPnXGCrCup3xK5duK5jlIgNF25TCvXvUEKKYIzCqOs/AEJwnp9L9dYg/5SbJAyXRQSbcD1/CH+R409GLij2DL4xTg8InDiHtCXonVlRzBlb5AchIUoHP1nrf+6tUz0BKnJR604uzaSnEJYiwDM0pReEMMt+6jTRMr75Moze2mGXD/9072SViqvyndz8U8VWl220LXfFwOCEEyOk3Bg/m+n3YXoFRZI2nsCQxPIF11FvZ0psOpFb+fGsIxALInkZuRVxIfw8yVBptMX91P8Kf3qFKtfaXt5BbP9hl1FZEfuT4XSBt+1ucanT+tSfrghE1wYFnMEm8bJHc3yV+BAXSSfSOgoxVEoarDi/kboLQWHxQ8hKY2wiXzHTGgtCxsmGS6D6AwI61QU1s3PR/YuvOsBNhaAXhmkitOeKBxIyuf2+KM8vLLLxDFmNYpgWl/gRmODUB3S3+lYmB6wq7V942Et7wMfdP9LEl2IALduXpr5Y7GojsrCYPEws52zHmxeoOHQAZLv3SbeevEtoC88avb4MpID29twdy31IYg4qay3uy0GendjHcEYlQYO17IEaP4OOCZaLEFoFyc8l5PTgw/01RUN7U6CIiGr0UVs3+Bjdw75jJTMqm9DEn+YvbXJG0ZSNQRLjum9f/Iyz1V4W8+xmkRU7t2m4tJEzB06quE8u0nP3tD765hs/cstywvD6DoMd3D2ffGHApZYJDrVvhmiMqBLgANZp6CG8d8bjJfsES/loWAnOAwWOAqx2ihx71Pwh2d45Sm40hzpwHiti4dx+0s8WdeFiubPyIosPVwHO96KfL0EEn/jxAeK8KGO5HpcQzhM0jN1mfhSL6uOTY/k/Q7LrV5E9CCWYVceMI9cZb8La6BkcIHxI5yAkS9VGLPJIP1gODtnjYieKgpBA8aK6aBc7mUFKr3GWnhTXD7PTKzwfBPi1BJqDJ1mhUd6zpdwbZu86rhAq7PQPdeTWTb2M1JI+S/hXZ3+omZVviAVks6ZXaoTWdCh0jboT9FBXgcBtT8zYy4cRAU5JHXxB30z6gvP8oG5dK3tIRuhmpDInsMmxyOy6b5lOY/SVT3vPxeRB5/3nOjsAvJt9jEJT99QVl84xxBBcH2a8eL047lGACl1iW19iPTp0mSbUNXZIHB3GG6H8PM8="
+                "text": "Why was the cat sitting on the computer?\n\nBecause it wanted to keep an eye on the mouse!",
+                "thoughtSignature": "CoUKAdHtim8bdA835qXyT6sN1xZfCZ4WrMOBpg4WFJTJixIMKFbrH7kT13q83MhCUV8p5EOlTM4lHgX+3xD43nv8vI8O7E4V+MM2JQhqT93eCIckxSZQUaQ6wX1bjzMnhaEOI+vqPXJYrNvJlMsYyITnXf65y9Sidb8VWKvA4bcFj+K6dMGa6nPTlSYEtVBFbV9gYnOkZB+U0Fmnfarn2BQXor2v/VHQf05zdm7ETF+ZBOTdF0hh+MwuTRw+qLRdJi+utEB/x1dkZ3rvFx1B6d4nBKKiw6Jh2vtfYgOYu60FfILTWFRGBLDLFmi09psgrCkPqUgP+OAhBwDpIYMFwvkpHpScLKv0SMtVD3L68n52XOE6/8DhK9uNOC21LGUXaA3RQNLN+yoZyMQGSeJLFt9D/dju1zPrmPRcvFszXdrkr6gbgl5rEJIOl3Ces60xDAyBFRhWvbtz40ug4xEjyeS811o1zrvYiiU93bJzQtJeu/A4u4332414zETfkIWLBiwgkERBOy9+BQbcMkXWnNVHssRRTgm/pO+zSTN2lYpaM+ELyiRZolrOIwwd0TUChOX5j6eocp7qYVkOKG76BJQZDX4t2m8UZoXh7GrA4SZG+yXmx8jfhgl8YCU+saIlUt5KDjyoBrtYNzia7qXFQfxhB2hwXpS6Gj1CBf6ku8NsHXfM21gupLGMVanS3y2qQD4C05tb33QvIl3rMWD86RB7Mu7tz2WyM9L6mjdWhYXTWejh9azVJ56TwZtW3w/iA0q21PBT6+4V+DPDzNeAGd/Km80g8IqnlhCsJ7ntLOnsI/Fq3jvpVcrYw1e9swqmm+fh8P7qqfD2QRBGQJ17q1eDGQ+q0KWGZqdQWN02ka7nDdcaHPL4j3L32k6FyGUKnmujx0J3Wz6V/PwIMGYI+VTcVdEYXbtqn8yMNp6TlTkI70zeX8bH0Jz+61hANyDq6qzbA84Cd2z96FB0d1a/ny0/sDNtAcxrfzAEJ1HRsAd/4W/ILzgws3vZUzwQ19QP0Bwc+ZQ18AK2q6pceXFHQ1+IWk7LfFJbM4nEZSEqiN3M0m3IT5zRA6k9nED8NZVOpxcaVfe4nDBhIGaRgZloVmnumBDtPk/b2ksjrZn3SddcCPiW9NNoA0FSbNXDrrgDXXxhnpoJqFQjFeD4pQDeep9oJEBFTQyOgTcdaQlgMHpMYJLH07/HWvj8uaTZKGy5mbgGYBPVKvudj3Qvmh4ikOP1f7yWVHfYxwFm4xJM2XgPFnpU675Yn+8+SaOh1+wP18RjrRHRrLep6+xMY3s/fA2E41CN1Iim5ssaeJNQqUmc3DQQGW5V1nnKiO9uG1uutlJB+jnX5DC//nvqpzmwezCq577vcHhime+FxtaLQSO51mJfksTkkSmVfg5W364cQEfbfgMQoQt5JWLVy5igzRqK1b6XcRUBZYI5dZDLzElKMYJ4m8Lq1086/jPFFHZbUId1NZ+92FbB7SN36H3LRg6iUwFv91gtGmAprb2M7GhMrNrkE6nVOnUr4MabxCCW0BR8BZ8u/XuQIDeJWt2wbiBjlvy7qLQEAqfpKZsSs8TPg6C3uP+f5KQO9aU4aU9uQ6dEi5B6ltQdK4xk8W5F6rZidew2eNpyvONSdsjWSSdUlR+OKKrW2NsW5fykhGjy2IlL4Ll/18WwjKOALleaNp3PcpCVEmosha2F034pvNBqgWnifH7fpA=="
               }
             ],
             "role": "model"
@@ -81,9 +73,9 @@
         }
       ],
       "modelVersion": "gemini-2.5-flash-preview-09-2025",
-      "responseId": "UmXgaIH_CoPe_uMPnoyV8Ak",
+      "responseId": "YuDjaLvfMfXyjMcPuZa24AE",
       "usageMetadata": {
-        "candidatesTokenCount": 18,
+        "candidatesTokenCount": 21,
         "promptTokenCount": 46,
         "promptTokensDetails": [
           {
@@ -91,8 +83,8 @@
             "tokenCount": 46
           }
         ],
-        "thoughtsTokenCount": 322,
-        "totalTokenCount": 386
+        "thoughtsTokenCount": 324,
+        "totalTokenCount": 391
       }
     },
     "headers": {
@@ -103,13 +95,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Sat, 04 Oct 2025 00:07:46 GMT"
+        "Mon, 06 Oct 2025 15:29:38 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=3631"
+        "gfet4t7; dur=2515"
       ],
       "transfer-encoding": [
         "chunked"

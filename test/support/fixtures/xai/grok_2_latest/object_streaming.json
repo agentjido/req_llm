@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjQwOTYsIm1heF90b2tlbnMiOjUwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTItbGF0ZXN0Iiwic2VlZCI6NDIsInN0cmVhbSI6dHJ1ZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbF9jaG9pY2UiOnsiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0In0sInR5cGUiOiJmdW5jdGlvbiJ9LCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZW5lcmF0ZSBzdHJ1Y3R1cmVkIG91dHB1dCBtYXRjaGluZyB0aGUgcHJvdmlkZWQgc2NoZW1hIiwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbIm5hbWUiLCJhZ2UiXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMCwibWF4X3Rva2VucyI6NTAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkdlbmVyYXRlIGEgc29mdHdhcmUgZW5naW5lZXIgcHJvZmlsZSIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMi1sYXRlc3QiLCJzZWVkIjo0Miwic3RyZWFtIjp0cnVlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQifSwidHlwZSI6ImZ1bmN0aW9uIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibmFtZSIsImFnZSJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
-      "max_completion_tokens": 4096,
+      "max_completion_tokens": 500,
       "max_tokens": 500,
       "messages": [
         {
@@ -64,21 +64,21 @@
   },
   "response": {
     "body": {
-      "b64": "ZGF0YTogeyJpZCI6IjIyOWNjMTJjLTIwZTMtYjQ0Mi1mNmJjLTEwZGE1YzZiZDc2Zl91cy1lYXN0LTEiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5Njg2NjE0LCJtb2RlbCI6Imdyb2stMi0xMjEyIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJpZCI6ImNhbGxfMTgzNjE2NzgiLCJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJhcmd1bWVudHMiOiJ7XCJhZ2VcIjozMCxcIm5hbWVcIjpcIkpvaG4gRG9lXCIsXCJvY2N1cGF0aW9uXCI6XCJTb2Z0d2FyZSBFbmdpbmVlclwifSJ9LCJpbmRleCI6MCwidHlwZSI6ImZ1bmN0aW9uIn1dfSwiZmluaXNoX3JlYXNvbiI6InRvb2xfY2FsbHMifV0sInN5c3RlbV9maW5nZXJwcmludCI6ImZwX2ZjZWQ5OWYyNGYifQoKZGF0YTogW0RPTkVdCgo="
+      "b64": "ZGF0YTogeyJpZCI6Ijc1NmJiY2RhLWM3OGYtZGMwNS0xMWYwLTc2MzY2M2VhZDQ5MV91cy1lYXN0LTEiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5NzYzMjA0LCJtb2RlbCI6Imdyb2stMi0xMjEyIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJpZCI6ImNhbGxfNzQzMzY2MDQiLCJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJhcmd1bWVudHMiOiJ7XCJhZ2VcIjozMCxcIm5hbWVcIjpcIkpvaG4gRG9lXCIsXCJvY2N1cGF0aW9uXCI6XCJTb2Z0d2FyZSBFbmdpbmVlclwifSJ9LCJpbmRleCI6MCwidHlwZSI6ImZ1bmN0aW9uIn1dfSwiZmluaXNoX3JlYXNvbiI6InRvb2xfY2FsbHMifV0sInN5c3RlbV9maW5nZXJwcmludCI6ImZwX2ZjZWQ5OWYyNGYifQoKZGF0YTogW0RPTkVdCgo="
     },
     "headers": {
       "access-control-allow-origin": "*",
       "access-control-expose-headers": "*",
       "cache-control": "no-cache",
       "cf-cache-status": "DYNAMIC",
-      "cf-ray": "989ec295bae661f0-ORD",
+      "cf-ray": "98a610730edef14d-ORD",
       "content-type": "text/event-stream",
-      "date": "Sun, 05 Oct 2025 17:50:13 GMT",
+      "date": "Mon, 06 Oct 2025 15:06:43 GMT",
       "server": "cloudflare",
-      "set-cookie": "__cf_bm=RIZguGKxQ6.Ang.W.HZqYqLd.97wX9XQOmISlGGcoPQ-1759686613-1.0.1.1-4vLtOnbJdtvJ4iGT9Mf4mum1D72hGJSLmkFelK0edw0tIXaxJmwypDg36jsUykMAnb3AT4JwzxqwIIKqwbZol2WCRs8Wmb9kI9d5SQEJp8w; path=/; expires=Sun, 05-Oct-25 18:20:13 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None",
+      "set-cookie": "__cf_bm=CZNArxbQLYc83o9JhbE_Pn8FLyqUBM0FljVw7BuVeqo-1759763203-1.0.1.1-eVht.JDZAQGuzZ0Sf41uOv79lARcPEpyRQbu58ddJzp7yTxJ0m2jhDP4YASQ9CVvmIgE7WsU7eSVRPwvA8VjUGMkDoFoeNFTRc6TqTReGMQ; path=/; expires=Mon, 06-Oct-25 15:36:43 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None",
       "strict-transport-security": "max-age=31536000",
       "vary": "origin, access-control-request-method, access-control-request-headers",
-      "x-request-id": "00-305acb891534e04b080101ea9f9889c0-cd84afdb004e9e7a-01",
+      "x-request-id": "00-a18d9acfebb212fe426109f613b06da0-334c1d4900762c6d-01",
       "x-zero-data-retention": "false"
     },
     "status": 200

@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1zb25uZXQtNC0yMDI1MDUxNCIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjV9"
+      "b64": "eyJtYXhfdG9rZW5zIjoxMjI1LCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtc29ubmV0LTQtMjAyNTA1MTQiLCJzdHJlYW0iOmZhbHNlLCJ0aGlua2luZyI6eyJidWRnZXRfdG9rZW5zIjoxMDI0LCJ0eXBlIjoiZW5hYmxlZCJ9fQ=="
     },
     "canonical_json": {
-      "max_tokens": 100,
+      "max_tokens": 1225,
       "messages": [
         {
           "content": "Write a very long story about dragons and adventures",
@@ -13,7 +13,10 @@
       ],
       "model": "claude-sonnet-4-20250514",
       "stream": false,
-      "temperature": 0.5
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
     },
     "headers": {
       "accept-encoding": [
@@ -37,11 +40,16 @@
     "body": {
       "content": [
         {
-          "text": "# The Last Dragonheart\n\n## Chapter 1: The Awakening\n\nThe morning mist clung to the ancient peaks of the Thornspire Mountains like ghostly fingers, reluctant to release their hold on the jagged stone. Deep within the heart of Mount Karadun, where the earth's molten blood still pulsed through veins of obsidian, something stirred that had slumbered for a thousand years.\n\nEmber felt",
+          "signature": "EuoGCkYICBgCKkAoFwvDcAbRBKRao/Gq+g5auxA7xxtBOSYw7cZIzRenTYjwRYpxNxhK9eGTQ1+JsXOU+96LA8s04l8ALQ72zkR+EgwSABfVJYG8szlvS4AaDAzkBIws7jPdvE0FHiIwkxY5ou5RJqpI77GbGvGq4pq/PIZpSIsIUSclU0LZvkyDDXzMzbTdDnXjyyGGJ8PTKtEFdhkRWfnj+Jx4jqlD0QAFGF4CYfZboInL4C6QFjJVEeJaqBJ6cRR0LpJXdIfc3c9zTFcw4kTToMc7OEswh3eJE3bSKgJvyxmeOB1Y48xAANXpqrrQ2axX+/8vwTNhMpeV+dqlHo+4DC2gXNROQXYfRfP7a7wE1AUK6FZofxNpG39qkliNoqcc9T/Ag6OexVTA6uICDSYDjoZsWalGVfzSfCkEFrXzLMpMgAMw2Kwxpevcfdn7t0tD+cfkwT7mlVUafe4Jp/Rk3ynEhueAscCuiAav2qncjUN4otwdZPyTrk+fHT/nm1T2RX3VurOq+7bosaBPyPxdE6F8zpUFsz7Gho/sXRb41ZqkvA07pHGpHWeLxAeAqXxTH+VHpaBagffrmAB0gnsMHOrdK6j6PlyiE2UB/M+MB+M2VNRMD8moyeGCgW8tBd4zCg3MMeKHTFeBnzxxI+I+A3STk5VZzOAj4h26i0QqhnGAhjEkXlpqwW5apFlJOX6/qF/IoiWeKSfelOd/GPDH44M3EXMw4mVq9wKj+aKrGxu8HgdfXRA3mJnjCSMJHCZjG8QOWm/2VH8cb9r0lz0ZRiQu5CdpHOBhbjwRTDIUgJKzIiOI08x+oxtWb2fx9TRbtOmPzT+KA0TuvicoibpSc1zOjEiQiCwAsVOp7SkoAQdrfunYXC7j0Uk59glGGso2mms7BjluTBL/jT2pig2yp94hJKZmZhmTNcFsKhaZiVNxJIwOaYoVzaJQMgZDVXt5VBH1hoiRNpqzy2AfgSF33OEXbPuFTGgDe5drMlNlGPf85S4rI46A9ycjiDaek73LjtnYcHC9X7U74YdDtLUSMANYIQ5gOwPlZVDO+YXwJy4i7ke+LfFMh1KRge6q1jbqdL7+/JUaDXUtGM86pe7N75SF8TRDYJtdQxjVwtwWPTdGpHYcd1ImCq4dW3s606Iix1Ok3R62wcXjbBgB",
+          "thinking": "The user is asking for a very long story about dragons and adventures. I should create an engaging fantasy narrative with dragons as central characters, along with adventure elements like quests, battles, magical worlds, and heroic characters. I'll aim to make it substantial in length while maintaining quality storytelling with good pacing, character development, and an interesting plot.\n\nLet me structure this with:\n- An interesting opening that introduces the world and main character\n- Dragon encounters and relationships\n- Adventure elements like quests, challenges, obstacles\n- Character growth and development\n- A satisfying conclusion\n\nI'll write in third person and create a rich fantasy world.",
+          "type": "thinking"
+        },
+        {
+          "text": "# The Last Dragon's Oath\n\n## Chapter 1: The Ember's Call\n\nThe village of Millhaven had always existed in the shadow of the Dragonspire Mountains, where ancient legends spoke of creatures that once ruled the skies with fire and fury. But those were just stories now—tales told by grandmothers to wide-eyed children, nothing more than whispers of a bygone age. Or so Kira Ashworth had always believed.\n\nThat belief shattered on her eighteenth birthday when she discovered the glowing ember buried beneath the floorboards of her late grandmother's cottage.\n\nKira knelt in the dusty attic, her calloused hands trembling as she lifted the perfectly spherical stone from its hiding place. It was no larger than a chicken's egg, yet it pulsed with an inner warmth that seemed to reach directly into her soul. Carved runes spiraled across its surface—ancient symbols that seemed to shift and dance in the dim light filtering through the grimy window.\n\n\"Grandmother,\" she whispered to the empty room, \"what were you hiding from me?\"\n\nThe ember responded to her touch, growing brighter until the entire attic was bathed in golden light. Images flashed through Kira's mind: massive wings blotting out the sun, scales that glittered like precious gems, and eyes—ancient, wise, and terrifyingly intelligent. She gasped and nearly dropped the stone as one final image seared itself into her consciousness: a magnificent dragon, silver as starlight, locked in chains of black iron deep within a mountain cavern.\n\nThe vision faded, leaving Kira breathless and bewildered. But one thing was unmistakably clear—the dragon was calling to her, and it was in terrible danger.\n\n## Chapter 2: The Scholar's Tale\n\nThree days later, Kira found herself in the Great Library of Drakmoor, the kingdom's capital city, clutching the ember in a leather pouch at her side. She had traveled for two days straight, driven by dreams that grew more vivid and urgent each night. The dragon's voice echoed in her sleep, speaking in a language she somehow understood despite never having heard it before.\n\n*Find me, young keeper. Time grows short.*\n\nThe library's towering shelves seemed to stretch endlessly toward the vaulted ceiling, filled with thousands of volumes that held the accumulated knowledge of centuries. Kira approached the main desk where an elderly scholar sat hunched over an illuminated manuscript, his wild white hair seeming to have a mind of its own.\n\n\"Excuse me,\" Kira began hesitantly. \"I'm looking for information about dragons. Particularly about... well, about ones that might still be alive.\"\n\nThe scholar looked up, his pale blue eyes focusing on her with surprising sharpness. \"Ah, another dreamer seeking fairy tales,\" he said with a dismissive wave. \"The dragons are gone, child. They've been extinct for three centuries.\"\n\n\"But what if they're not?\" Kira pressed, pulling the ember from her pouch. \"What if this is real?\"\n\nThe moment the stone appeared, the scholar's demeanor changed completely. He shot to his feet, knocking over his ink well, and stared at the glowing ember with an expression of pure astonishment.\n\n\"Blessed gods,\" he breathed. \"Where did you find this?\"\n\n\"It belonged to my grandmother. Please, I need to know what it means.\"\n\nThe scholar—who introduced himself as Master Aldric—led Kira to a restricted section of the library, past shelves protected by heavy locks and warning signs. He pulled out a massive tome bound in what looked suspiciously like dragon hide.\n\n\"This,\" he said reverently, \"is the Chronicle of the Dragon Wars. It tells of the final battle between humans and dragons three hundred years ago, when King Morvanus the Conqueror sought to eliminate the last of the great wyrms.\" He opened the book to a page filled with detailed illustrations. \"But according to this text, five dragons survived the purge. They were bound in magical prisons, scattered across the realm.\"\n\nKira's heart raced as she recognized the silver dragon from her visions depicted on the page. \"Seraphina,\" she whispered, somehow knowing the creature's name.\n\nMaster Aldric's eyes widened. \"You know of her? Then the bond is true.\" He leaned closer, his voice dropping to barely above a whisper. \"Legend says that each imprisoned dragon chose a bloodline to serve as their keeper—families tasked with eventually freeing them when the time was right. If you carry Seraphina's ember, then you are the last of her keepers.\"\n\n\"But why now? Why after three centuries?\"\n\nThe scholar's expression grew grave. \"Because something has disturbed the magical barriers that hold them. Dark sorcery is spreading across the land, and the",
           "type": "text"
         }
       ],
-      "id": "msg_01Mubh5y33sJCFDsWEB126Mz",
+      "id": "msg_018eFScZbCEWBZhGhqeoEsiU",
       "model": "claude-sonnet-4-20250514",
       "role": "assistant",
       "stop_reason": "max_tokens",
@@ -54,8 +62,8 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 16,
-        "output_tokens": 100,
+        "input_tokens": 44,
+        "output_tokens": 1225,
         "service_tier": "standard"
       }
     },
@@ -70,16 +78,16 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-05T15:38:33Z"
+        "2025-10-06T15:05:37Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "90000"
+        "89000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-05T15:38:35Z"
+        "2025-10-06T15:06:07Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -88,22 +96,22 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-05T15:38:32Z"
+        "2025-10-06T15:05:36Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "540000"
+        "539000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-05T15:38:33Z"
+        "2025-10-06T15:05:37Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989e01b34b03eada-ORD"
+        "98a60ed50dd5eb5d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -112,10 +120,10 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 15:38:35 GMT"
+        "Mon, 06 Oct 2025 15:06:06 GMT"
       ],
       "request-id": [
-        "req_011CTpJSdY2UJP74FFoVmpKr"
+        "req_011CTr9jtFVbyjUfvUGzZBeP"
       ],
       "server": [
         "cloudflare"
@@ -130,7 +138,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "2959"
+        "29489"
       ],
       "x-robots-tag": [
         "none"

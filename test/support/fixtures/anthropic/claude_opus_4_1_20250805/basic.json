@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtb3B1cy00LTEtMjAyNTA4MDUiLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1vcHVzLTQtMS0yMDI1MDgwNSIsInN0cmVhbSI6ZmFsc2UsInRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19"
     },
     "canonical_json": {
-      "max_tokens": 50,
+      "max_tokens": 2000,
       "messages": [
         {
           "content": "Hello world!",
@@ -13,7 +13,10 @@
       ],
       "model": "claude-opus-4-1-20250805",
       "stream": false,
-      "temperature": 0.0
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
     },
     "headers": {
       "accept-encoding": [
@@ -37,11 +40,16 @@
     "body": {
       "content": [
         {
-          "text": "Hello! Welcome! It's great to meet you. How are you doing today? Is there anything I can help you with or would you just like to chat?",
+          "signature": "EpgDCkYICBgCKkCTSqZ2x2IzU2d8XwsUidDQkNfCd+Mm2lQJ0XdUQN+UzXHQD8ucQdWBQ0k+DafBB4fH1KFWlAhxvQqTAGk/hiPIEgyeQrw0xSlK2TdPc7UaDMqFDJxYr6H0P75rFiIwc+Hf1w6AZKIvVKUuTW7bVZ5yODJXyhV1ynPRM8qX+gjE/812NQSnHrMaI/mql1E1Kv8BXHUKkOvJMGGK0zudSCsLrTWUSt4rF07yo8tprSc6TLEG0oqkxhqpzfWkJ5vfqVjgZ8XKDkXPxXDPnN+WdfMydcQ0clTRftv8edOa0JJT2E79Yeelre1adoGfz9R42+3krdvnf30sKohwwXtpsH8HBsgKqU9GW3hTYh0EdGHnZKYwGtWby98oBEO2sparWoAGXG1auP4nTxR//x5xdO3BVsR2YqZsOp2aRsAZELBAGlO0odZC3l8bfcMqbz41hV2IE/RvHW0f7og6J+k82c+u5gs5qFpIAZR9tBzMLNJFnhsJaL992bhjQwVgKM2zgHi4GWP6OKFrGfJPJD2U1Rd/GAE=",
+          "thinking": "The user has greeted me with \"Hello world!\" which is a classic programming phrase often used as the first output when learning a new programming language. But it's also just a friendly greeting. I should respond in a warm and friendly way.",
+          "type": "thinking"
+        },
+        {
+          "text": "Hello! 👋 It's nice to meet you! Whether you're referencing the classic programming phrase or just saying hi, I'm happy to chat. How are you doing today?",
           "type": "text"
         }
       ],
-      "id": "msg_01Dvd9FjQkJyrUKoEp2tS196",
+      "id": "msg_019VrGgfMYwXwkGNjuaYuc6T",
       "model": "claude-opus-4-1-20250805",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -54,8 +62,8 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 10,
-        "output_tokens": 36,
+        "input_tokens": 38,
+        "output_tokens": 100,
         "service_tier": "standard"
       }
     },
@@ -70,7 +78,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-05T15:43:54Z"
+        "2025-10-06T17:10:56Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -79,7 +87,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-05T15:43:55Z"
+        "2025-10-06T17:10:58Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -88,7 +96,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-05T15:43:53Z"
+        "2025-10-06T17:10:54Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -97,13 +105,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-05T15:43:54Z"
+        "2025-10-06T17:10:56Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989e0984387be8d0-ORD"
+        "98a6c65fbc9f1080-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -112,10 +120,10 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 15:43:55 GMT"
+        "Mon, 06 Oct 2025 17:10:58 GMT"
       ],
       "request-id": [
-        "req_011CTpJrELSJpJTkFMUsi8HK"
+        "req_011CTrKJ4U6aYhrKrhBnExfu"
       ],
       "server": [
         "cloudflare"
@@ -130,7 +138,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "2149"
+        "3865"
       ],
       "x-robots-tag": [
         "none"

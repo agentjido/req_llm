@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjE1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay0yLXZpc2lvbi1sYXRlc3QiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjQwOSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay0yLXZpc2lvbi1sYXRlc3QiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
-      "max_completion_tokens": 150,
+      "max_completion_tokens": 409,
       "messages": [
         {
           "content": "Tell me a joke about cats",
@@ -64,8 +64,8 @@
           }
         }
       ],
-      "created": 1759686618,
-      "id": "4a21caed-e20e-628f-a72a-fc2ca372beb2_us-east-1",
+      "created": 1759763209,
+      "id": "f46fb76c-8711-b18a-abc1-886102639304_us-east-1",
       "model": "grok-2-vision-1212",
       "object": "chat.completion",
       "system_fingerprint": "fp_236db45c03",
@@ -99,7 +99,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989ec2b47f9b356f-ORD"
+        "98a6109dbc3ef4e6-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -108,13 +108,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 17:50:19 GMT"
+        "Mon, 06 Oct 2025 15:06:50 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=nY7WRM4mrHiIRSebR2Vuc1b7H0oliG349_mSRQRUBaI-1759686619-1.0.1.1-YMOHpTps3BAZlesssvVg523hyuhSeiCBfW3YTWO55Ex0lR6Sk0VYu0fzsU0omcjPOKjct5kkovKo.nLcPnOwCdBPl81XU0EiPS0awodZwEU; path=/; expires=Sun, 05-Oct-25 18:20:19 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=4yel5uj7T3u9AJpFJQbMh_7lbjN6n3HsQTLrpw.xIww-1759763210-1.0.1.1-A1JVDWU3hBndpyf2cwiTweOnCodw3rO5ub8_E4wp.QCuD97lAOUhFYcz5IqN77Kv5V1lH9rFQiEUweclPcaZ9jG8_lmnXKC4Unl9g5lvWME; path=/; expires=Mon, 06-Oct-25 15:36:50 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -126,7 +126,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-f2ae5bb9df45d960ad2733c0bf9638bb-521c47050042de54-01"
+        "00-e16345734f11fbfdc061bff2542be5be-6187438e00635083-01"
       ],
       "x-zero-data-retention": [
         "false"

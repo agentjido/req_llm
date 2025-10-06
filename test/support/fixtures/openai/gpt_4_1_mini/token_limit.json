@@ -40,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759698838,
+      "created_at": 1759772170,
       "error": null,
-      "id": "resp_0d94d3bd463ca53e0068e2df96370481999760c4b195de713a",
+      "id": "resp_0d733e28091719390068e3fe0a53fc8193a4b4bc36f0621528",
       "incomplete_details": {
         "reason": "max_output_tokens"
       },
@@ -58,11 +58,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Certainly! Here's an epic tale about dragons and adventures:\n\n---\n\n**The Chronicles of Eldoria: The Dragon’s Oath**\n\nIn the ancient land of Eldoria, where towering mountains kissed the skies and sprawling forests whispered secrets, dragons were not mere legends—they were the lifeblood of the realm. For centuries, these majestic creatures lived in harmony with the people, guardians of wisdom, and keepers of balance. Yet, peace is a fragile treasure, and a shadow was rising that threatened to sh",
+              "text": "Certainly! Here’s an epic, very long story about dragons and adventures:\n\n---\n\n### The Chronicles of Eldoria: The Dragon’s Awakening\n\nIn the ancient land of Eldoria, a realm where magic flowed as naturally as rivers through the mountains, dragons were not mere beasts of legend; they were the guardians of the world’s equilibrium, the keepers of ancient wisdom, and the heart of every tale ever sung by minstrels in stone halls.\n\n#### Chapter 1: The Whispering Winds",
               "type": "output_text"
             }
           ],
-          "id": "msg_0d94d3bd463ca53e0068e2df968c4c8199853155b04bbc7499",
+          "id": "msg_0d733e28091719390068e3fe0ab5548193bde96954d4fbfec5",
           "role": "assistant",
           "status": "incomplete",
           "type": "message"
@@ -112,7 +112,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989fed0a593f1142-ORD"
+        "98a6eb602aef0011-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -121,13 +121,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:14:00 GMT"
+        "Mon, 06 Oct 2025 17:36:12 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "1910"
+        "1972"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -139,8 +139,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=8TwREaW8TZ9dF3hLWipsDF9MGXQ8YEBByz1P3kr4QqE-1759698840-1.0.1.1-hL1gq3TipBEwAnU0.ry_5zwYnNWvI4VYXRJxLltK9IQ3i3HChOdR8.JIbydU0WFF5Vx8H5BzjTFlMI34M876dJDAW67DPqteQY.jptMGF3Q; path=/; expires=Sun, 05-Oct-25 21:44:00 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=xKPF_ScxSI.GjRFPIDNDD7FGcm1hzYrx_jtLKRC2XBo-1759698840149-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=GmTIkoMlEXIUMUUlTxlc8NA7SO_iB0MKmy1Z_fxBo08-1759772172-1.0.1.1-lYCjwgQTXcFP4wD386vA8kE.73bAxKfIMlx1RAGTxw35Cdizz.gpFczCkQAQP0HuQeKqDkvJ4rKEKNvt7bRWv6AO6urBHZFHoIG03qUaJlQ; path=/; expires=Mon, 06-Oct-25 18:06:12 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=QBQ7GnDTv4gq131Ct9lfdqQHVYab2dwciRzjUcBm1yg-1759772172331-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -152,7 +152,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "1915"
+        "1975"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -164,7 +164,7 @@
         "4999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "3999964"
+        "3999965"
       ],
       "x-ratelimit-reset-requests": [
         "12ms"
@@ -173,7 +173,7 @@
         "0s"
       ],
       "x-request-id": [
-        "req_ac4afe088e316b31cab7936823c141c2"
+        "req_101925694367dbbd10f5da6a6025b763"
       ]
     },
     "status": 200

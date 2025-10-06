@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhlbGxvIHdvcmxkISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjUwLCJtb2RlbCI6Im8zLXBybyIsInN0cmVhbSI6ZmFsc2V9"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhlbGxvIHdvcmxkISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjIwMDAsIm1vZGVsIjoibzMtcHJvIiwic3RyZWFtIjpmYWxzZX0="
     },
     "canonical_json": {
       "input": [
@@ -15,7 +15,7 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 50,
+      "max_output_tokens": 2000,
       "model": "o3-pro",
       "stream": false
     },
@@ -40,19 +40,19 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759698871,
+      "created_at": 1759772332,
       "error": null,
-      "id": "resp_04dc1ed6d8a911d00068e2dfb756008193b8e22974777a17f3",
+      "id": "resp_0eb9f276818718050068e3feac95848190a7caebc96b805ad0",
       "incomplete_details": null,
       "instructions": null,
-      "max_output_tokens": 50,
+      "max_output_tokens": 2000,
       "max_tool_calls": null,
       "metadata": {},
       "model": "o3-pro-2025-06-10",
       "object": "response",
       "output": [
         {
-          "id": "rs_04dc1ed6d8a911d00068e2dfbd56308193aa4767861dd89560",
+          "id": "rs_0eb9f276818718050068e3feb4b96c81908554ac8cad0a3315",
           "summary": [],
           "type": "reasoning"
         },
@@ -61,11 +61,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Hello! How can I help you today?",
+              "text": "Hello! 👋  \nHow can I help you today?",
               "type": "output_text"
             }
           ],
-          "id": "msg_04dc1ed6d8a911d00068e2dfbd57948193beef9bfac3afa8d8",
+          "id": "msg_0eb9f276818718050068e3feb4bc2481909b44db07ee368c40",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -99,11 +99,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 15,
+        "output_tokens": 18,
         "output_tokens_details": {
           "reasoning_tokens": 0
         },
-        "total_tokens": 24
+        "total_tokens": 27
       },
       "user": null
     },
@@ -115,7 +115,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989fedd97c7bf865-ORD"
+        "98a6ef564ab334ad-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -124,13 +124,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:14:37 GMT"
+        "Mon, 06 Oct 2025 17:39:01 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "6446"
+        "8550"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -142,8 +142,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=wBBS3nNMVZTa4WNud0EeOfUlM1w5kxVmAP9FrgZ87Uc-1759698877-1.0.1.1-wDL_aDF89sBAKFbJm83a9Yp0wjrYpBMLU5vM8d7Mh72e6lAUdIONeVRdzF_JioGzf2IvAnq3E2rhaeLjprYnVH2VOAzG.LWVUxQ9fxDTPM8; path=/; expires=Sun, 05-Oct-25 21:44:37 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=uT4dfeSuyTFCJXhoeA73O7ethyNNNVuCzWTkLVh99wI-1759698877805-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=839xGE6lt2XsJU5GQyRbeDOARJ2snuFvjcuEsk5WgmQ-1759772341-1.0.1.1-p0kP.NnUj.nYUsWwAcvOKjblC5ce74rIzPeSA0X068ZWAubA0z3f54NJpKw_nHLu9BcC59h81dl.BONie_xKrmatI4jo1noPZ65OQE60gfY; path=/; expires=Mon, 06-Oct-25 18:09:01 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=rOiGZPQxcCodgrUTlFUGPEt8ppROol6uojCPp3TA1Ds-1759772341160-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -155,7 +155,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "6449"
+        "8552"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -167,7 +167,7 @@
         "4999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "799108"
+        "799480"
       ],
       "x-ratelimit-reset-requests": [
         "0s"
@@ -176,7 +176,7 @@
         "0s"
       ],
       "x-request-id": [
-        "req_2b7724158d6122c333119fd554b5dfaa"
+        "req_9ef86be54cca60617c15ce800df35ccd"
       ]
     },
     "status": 200

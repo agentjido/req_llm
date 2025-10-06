@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjQwOTYsIm1heF90b2tlbnMiOjUwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTMtZmFzdC1sYXRlc3QiLCJzZWVkIjo0Miwic3RyZWFtIjp0cnVlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQifSwidHlwZSI6ImZ1bmN0aW9uIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibmFtZSIsImFnZSJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMCwibWF4X3Rva2VucyI6NTAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkdlbmVyYXRlIGEgc29mdHdhcmUgZW5naW5lZXIgcHJvZmlsZSIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMy1mYXN0LWxhdGVzdCIsInNlZWQiOjQyLCJzdHJlYW0iOnRydWUsInRlbXBlcmF0dXJlIjowLjAsInRvb2xfY2hvaWNlIjp7ImZ1bmN0aW9uIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCJ9LCJ0eXBlIjoiZnVuY3Rpb24ifSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2VuZXJhdGUgc3RydWN0dXJlZCBvdXRwdXQgbWF0Y2hpbmcgdGhlIHByb3ZpZGVkIHNjaGVtYSIsIm5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiYWdlIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
-      "max_completion_tokens": 4096,
+      "max_completion_tokens": 500,
       "max_tokens": 500,
       "messages": [
         {
@@ -64,23 +64,21 @@
   },
   "response": {
     "body": {
-      "b64": "ZGF0YTogeyJpZCI6ImIxZTg3NzAyLTlhYjEtODYyYS02NWY3LTJlMjBiNGQ0NWM1MV91cy1lYXN0LTEiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5Njg2NjE1LCJtb2RlbCI6Imdyb2stMyIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siaWQiOiJjYWxsXzg1MjQ4OTM4IiwiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwiYXJndW1lbnRzIjoie1wiYWdlXCI6MzAsXCJuYW1lXCI6XCJKb2huIERvZVwiLFwib2NjdXBhdGlvblwiOlwiU29mdHdhcmUgRW5naW5lZXJcIn0ifSwiaW5kZXgiOjAsInR5cGUiOiJmdW5jdGlvbiJ9XX19XSwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfZjAyZTZkZjc5NSJ9CgpkYXRhOiB7ImlkIjoiYjFlODc3MDItOWFiMS04NjJhLTY1ZjctMmUyMGI0ZDQ1YzUxX3VzLWVhc3QtMSIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk2ODY2MTUsIm1vZGVsIjoiZ3Jvay0zIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7fSwiZmluaXNoX3JlYXNvbiI6InRvb2xfY2FsbHMifV0sInN5c3RlbV9maW5nZXJwcmludCI6ImZwX2YwMmU2ZGY3OTUifQoKZGF0YTogW0RPTkVdCgo="
+      "b64": "ZGF0YTogeyJpZCI6IjU3YTU4Yzg4LWFiY2QtZjkxYi05MTNhLWJjMzUzMzQ2NTA4NV91cy1lYXN0LTEiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5NzYzMjE4LCJtb2RlbCI6Imdyb2stMyIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siaWQiOiJjYWxsXzQzMTI2NzA4IiwiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwiYXJndW1lbnRzIjoie1wiYWdlXCI6MzAsXCJuYW1lXCI6XCJKb2huIERvZVwiLFwib2NjdXBhdGlvblwiOlwiU29mdHdhcmUgRW5naW5lZXJcIn0ifSwiaW5kZXgiOjAsInR5cGUiOiJmdW5jdGlvbiJ9XX19XSwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfZjAyZTZkZjc5NSJ9CgpkYXRhOiB7ImlkIjoiNTdhNThjODgtYWJjZC1mOTFiLTkxM2EtYmMzNTMzNDY1MDg1X3VzLWVhc3QtMSIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk3NjMyMTgsIm1vZGVsIjoiZ3Jvay0zIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7fSwiZmluaXNoX3JlYXNvbiI6InRvb2xfY2FsbHMifV0sInN5c3RlbV9maW5nZXJwcmludCI6ImZwX2YwMmU2ZGY3OTUifQoKZGF0YTogW0RPTkVdCgo="
     },
     "headers": {
       "access-control-allow-origin": "*",
       "access-control-expose-headers": "*",
       "cache-control": "no-cache",
       "cf-cache-status": "DYNAMIC",
-      "cf-ray": "989ec29c4f60f862-ORD",
-      "content-security-policy-report-only": "script-src 'none'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=1Q0e8ww4e4hfuve0GAJERlX.3SlA2q5PMceXg_1rHgY-1759686614-1.0.1.1-HgdJsQR93lcxReVvmwljXpkTRGGruLZCE.3kOEYs4wNa49N9Y9ALfpAIoG0SYnG4y.qUJZUmwX9hNnscotIFnl1IrsFGbE6GLK3bNNxbGhTaJ55ElJEtiQKQcto_A94nq4rdd2QNHyWzNytC3LJhAZcMu4ElC76aFdml3muVbFE; report-to cf-csp-endpoint",
+      "cf-ray": "98a610ce0a310ef9-ORD",
       "content-type": "text/event-stream",
-      "date": "Sun, 05 Oct 2025 17:50:14 GMT",
-      "report-to": "{\"endpoints\":[{\"url\":\"https:\\/\\/csp-reporting.cloudflare.com\\/cdn-cgi\\/script_monitor\\/report?m=1Q0e8ww4e4hfuve0GAJERlX.3SlA2q5PMceXg_1rHgY-1759686614-1.0.1.1-HgdJsQR93lcxReVvmwljXpkTRGGruLZCE.3kOEYs4wNa49N9Y9ALfpAIoG0SYnG4y.qUJZUmwX9hNnscotIFnl1IrsFGbE6GLK3bNNxbGhTaJ55ElJEtiQKQcto_A94nq4rdd2QNHyWzNytC3LJhAZcMu4ElC76aFdml3muVbFE\"}],\"group\":\"cf-csp-endpoint\",\"max_age\":86400}",
+      "date": "Mon, 06 Oct 2025 15:06:57 GMT",
       "server": "cloudflare",
-      "set-cookie": "__cf_bm=6NFiwyDsyzX9txW8pUpkC0ILzkEOxjrOHPowz88X9Q4-1759686614-1.0.1.1-sZO7FPi4N_s9rVs07YOC0y8293uuiIg9Kslu9zTypQVnu8w3J1NDb6qlpUVsw99QB4NMq.evfA8JQa15ylgNjq.2EQ2o74JaUUyLXHjRr.Y; path=/; expires=Sun, 05-Oct-25 18:20:14 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None",
+      "set-cookie": "__cf_bm=mgH3DKIBiqbpgwUwD.qKHtLBY.76ZjC2bndTWKhmo6s-1759763217-1.0.1.1-ewNXNBtnwrFqgW1eY42FG2W7Now8Bo43uBeU2fQ9Sab7hassxUBA8bRb2M2lSXNRAsamkaWfQt1_CcZTyexMru3X5H1DK2hVgL2XaH4C89E; path=/; expires=Mon, 06-Oct-25 15:36:57 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None",
       "strict-transport-security": "max-age=31536000",
       "vary": "origin, access-control-request-method, access-control-request-headers",
-      "x-request-id": "00-e36336e97a1bfd285b4965001d024680-fc9014cb00436572-01",
+      "x-request-id": "00-72282dff95d51b8ca22e489283a7415c-097c29d100754364-01",
       "x-zero-data-retention": "false"
     },
     "status": 200

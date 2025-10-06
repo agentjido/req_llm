@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1zb25uZXQtNC0yMDI1MDUxNCIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjoxLjAsInRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19"
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1zb25uZXQtNC0yMDI1MDUxNCIsInN0cmVhbSI6ZmFsc2UsInRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19"
     },
     "canonical_json": {
       "max_tokens": 2048,
@@ -13,7 +13,6 @@
       ],
       "model": "claude-sonnet-4-20250514",
       "stream": false,
-      "temperature": 1.0,
       "thinking": {
         "budget_tokens": 1024,
         "type": "enabled"
@@ -41,16 +40,16 @@
     "body": {
       "content": [
         {
-          "signature": "ErADCkYICBgCKkBI4e0WqLTnEJDdsTb9SlrM2VpH2nyak9pOXexw5aV2f5jLi4w7jP5Uy6g32NrPCtxPGnWKtp0x0JKHy+qQ+DvdEgzU9lpCqhCUmPVfyy0aDIStkNLPrLE6LGmZAiIwWFdsiM+KE8Bs0/pHGz1rFZ2MiQaUpdh710VHyuDMG3E+ouXEkId8OLMxQ9kV16ZvKpcCYZmH9tsdy6Gm1hnjvcQeu6M9wsTkzcEdyzRd11uO04VYun/L2q3sEdcV3EOZNYgFzyWKgG7aTumJ2hQtJlAlDtUBGyGwP1AvveD8oJCSxp1X7sAq6BsgUxDmAO4/Lz3VaZpA1tgueJKZJn7tK2QLif54ASR22Ik9/CpA/Zcfd1ncjwJsFCImqit0iZbagOVCzyWGKtT9EPNQytKBgPxPpp7UMEMMbUIaxnliFT3r443/VQ3DVticCXtBBjk5UklfHTFPrTRdKPEPuCo10fFsjoMgWh5Jv+oeq13IrL9JCM7uUFeIp8crPb7wS7qBDE3et4uVsz9VHmwN5PXVseiS1HjbiLxinvoffc0Qx7Zb5FGQdn9QSL4rGAE=",
-          "thinking": "I need to solve 12 * 7.\n\nI can do this by breaking it down:\n12 * 7 = (10 + 2) * 7 = 10 * 7 + 2 * 7 = 70 + 14 = 84\n\nOr I can think of it as:\n12 * 7 = 12 * (5 + 2) = 12 * 5 + 12 * 2 = 60 + 24 = 84\n\nOr just directly: 12 * 7 = 84 (from memorized multiplication facts)",
+          "signature": "EsMDCkYICBgCKkBw0BJI7ETzQ29b0wC4uLY5ErJdoje9REJz2b0/cnZdMB3A45Lt4E9ok4RgsxocSp2EKmykCaRS0MA/X8N3p8ZsEgyqOgFQSt1VXzKP9scaDFQ40/VQtmiG0vBNUiIwryeP4tulpP86kZO5zvVULfoMGZ0G9aO5ZpiJs9M+AmJPQo3O5s2tW9aWJdBJB1KBKqoCfsSHbEVZ35ix/STf93axpmGY/hoR6gcLq/eiDgkV6XRcDu3e+4KA8eNNBm8z1ZHQtPr/7AHeA47nIrP24bLjaJh2HX/psc1JFUHWyKe5HuPSDWc/gmb+1kgAIFURoCgGYQY3HYLGxXkIlXGpsi8/NOLnwvqYXSZfeBqSvFktfI7DW3sH7uiDU8fbWaOCUojdWJD3hJ7wWY1+cnSpj0E9M28e5m1+9w8j0nSTJ1d1hfsxXFGRX9o1zBjIfynqNyTd14owVJGdW2a7EcWkdsy/iWIstoXXLcdO6kk/eta19xTRNtLqT2IVtfGj8iZIsy4mt/CJBfqUrA6QPpiapvx2e0n9Y/uvRM+6ZWKkgKLcFgMjqFmg6hwc6VahuN5v3i8CrGuFQ5iYfH8fjxgB",
+          "thinking": "I need to calculate 12 × 7.\n\nI can do this in a few ways:\n- 12 × 7 = (10 + 2) × 7 = 10×7 + 2×7 = 70 + 14 = 84\n- Or I can think of it as 12 × 7 = 12 × (5 + 2) = 12×5 + 12×2 = 60 + 24 = 84\n- Or just recall that 12 × 7 = 84 from multiplication tables\n\nAll methods give me 84.",
           "type": "thinking"
         },
         {
-          "text": "**Problem:** 12 × 7\n\n**My thinking:** I can break this down as (10 + 2) × 7 = (10 × 7) + (2 × 7) = 70 + 14\n\n**Answer:** 84",
+          "text": "**Internal thinking:** I can break this down as 12 × 7 = (10 + 2) × 7 = 70 + 14\n\n**Answer:** 12 × 7 = 84",
           "type": "text"
         }
       ],
-      "id": "msg_01GpwtfmPgEk6RLmpKnrHi3N",
+      "id": "msg_01N37oWscV5XHJHH6MNzxRo7",
       "model": "claude-sonnet-4-20250514",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -64,7 +63,7 @@
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
         "input_tokens": 50,
-        "output_tokens": 217,
+        "output_tokens": 206,
         "service_tier": "standard"
       }
     },
@@ -79,7 +78,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-05T15:39:52Z"
+        "2025-10-06T17:10:30Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -88,7 +87,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-05T15:39:54Z"
+        "2025-10-06T17:10:33Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -97,7 +96,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-05T15:39:51Z"
+        "2025-10-06T17:10:29Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -106,13 +105,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-05T15:39:52Z"
+        "2025-10-06T17:10:30Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989e039e0eceeada-ORD"
+        "98a6c5c29abb9bcc-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -121,10 +120,10 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 15:39:54 GMT"
+        "Mon, 06 Oct 2025 17:10:33 GMT"
       ],
       "request-id": [
-        "req_011CTpJYRFX5pZfKHJT28p22"
+        "req_011CTrKGCxGebMzkAVW6er7a"
       ],
       "server": [
         "cloudflare"
@@ -139,7 +138,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "3488"
+        "3617"
       ],
       "x-robots-tag": [
         "none"

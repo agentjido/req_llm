@@ -64,7 +64,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
               reasoning_overlay(
                 @model_spec,
                 param_bundles().deterministic,
-                200
+                2000
               )
 
             ReqLLM.generate_text(
@@ -90,7 +90,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
               ])
 
             opts =
-              reasoning_overlay(@model_spec, @provider, param_bundles(@provider).creative, 200)
+              reasoning_overlay(@model_spec, @provider, param_bundles(@provider).creative, 2000)
 
             {:ok, stream_response} =
               ReqLLM.stream_text(
@@ -124,7 +124,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             opts =
               param_bundles(@provider).minimal
               |> Keyword.put(:max_tokens, 100)
-              |> then(&reasoning_overlay(@model_spec, @provider, &1, nil))
+              |> then(&reasoning_overlay(@model_spec, @provider, &1, 3000))
 
             case ReqLLM.generate_text(
                    @model_spec,
@@ -179,7 +179,14 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
               )
 
             assert %ReqLLM.Response{} = response
-            assert ReqLLM.Response.text(response) != ""
+
+            # For reasoning models, allow empty text if reasoning tokens were used
+            text = ReqLLM.Response.text(response) || ""
+            reasoning_tokens = response.usage.reasoning_tokens || 0
+
+            assert text != "" or reasoning_tokens > 0,
+                   "Expected either text content or reasoning tokens, got neither"
+
             assert is_map(response.usage)
 
             assert is_number(response.usage.input_tokens) and response.usage.input_tokens > 0

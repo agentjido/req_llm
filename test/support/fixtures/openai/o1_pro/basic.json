@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhlbGxvIHdvcmxkISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjUwLCJtb2RlbCI6Im8xLXBybyIsInN0cmVhbSI6ZmFsc2V9"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhlbGxvIHdvcmxkISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjIwMDAsIm1vZGVsIjoibzEtcHJvIiwic3RyZWFtIjpmYWxzZX0="
     },
     "canonical_json": {
       "input": [
@@ -15,7 +15,7 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 50,
+      "max_output_tokens": 2000,
       "model": "o1-pro",
       "stream": false
     },
@@ -40,19 +40,19 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759698927,
+      "created_at": 1759772336,
       "error": null,
-      "id": "resp_0a1cc3dff586d7690068e2dfef03ac8199829da1331fbf8021",
+      "id": "resp_0d2f34dfdb096f850068e3feb0d87c819a9073714f21c36d94",
       "incomplete_details": null,
       "instructions": null,
-      "max_output_tokens": 50,
+      "max_output_tokens": 2000,
       "max_tool_calls": null,
       "metadata": {},
       "model": "o1-pro-2025-03-19",
       "object": "response",
       "output": [
         {
-          "id": "rs_0a1cc3dff586d7690068e2dffa95cc8199938ec001e759ce81",
+          "id": "rs_0d2f34dfdb096f850068e3febc27e4819ab8bccb08555cc712",
           "summary": [],
           "type": "reasoning"
         },
@@ -61,11 +61,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Hello there! How can I help you today?",
+              "text": "Hi there! How can I help you today?",
               "type": "output_text"
             }
           ],
-          "id": "msg_0a1cc3dff586d7690068e2dffa97e48199bb4d83598ce62807",
+          "id": "msg_0d2f34dfdb096f850068e3febc28e8819aa86b8d7c0981c03c",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -99,11 +99,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 11,
+        "output_tokens": 75,
         "output_tokens_details": {
-          "reasoning_tokens": 0
+          "reasoning_tokens": 64
         },
-        "total_tokens": 20
+        "total_tokens": 84
       },
       "user": null
     },
@@ -115,7 +115,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989fef355a62f83d-ORD"
+        "98a6ef70ece31088-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -124,13 +124,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:15:38 GMT"
+        "Mon, 06 Oct 2025 17:39:08 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "11948"
+        "11564"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -142,8 +142,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=Ce20vWU.9QG2jM8fHhlfjX6HXFFDz_TeTDAJKRua8kg-1759698938-1.0.1.1-9cdpABg9rLUt.4dZ3OuQlW0nWka1aDqgusThvc4vDQVzlyJwB3ksKyH8YGQChkJwdbg_ytzi6SyunN3RPA1bmBzqzejvSCcIPE1EhLqs3KI; path=/; expires=Sun, 05-Oct-25 21:45:38 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=rPYf0u_C6OS9xwQ0wWix.3BRVkk8lPiWw6tiW0Nzz.Q-1759698938986-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=YsJguvQ7I29Z1ZjNJ6aAeKD0XmoQ0xBknjDIcrlKm58-1759772348-1.0.1.1-oFeeNh7M0ppo5LAJZ79tCBh71lHhFXUHGBRtYtoW.MG6gPkDHgCAvt56h3mhl4LOpqWvbRwhWXaiE93yTY1U434tnpIGD3xJC8YegsMVV_g; path=/; expires=Mon, 06-Oct-25 18:09:08 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=YpXgDd6ynlCEQncMaf4M1k1pi664Rb2pVPye0oaxlWo-1759772348433-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -155,7 +155,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "11953"
+        "11568"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -167,7 +167,7 @@
         "4999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "799684"
+        "799405"
       ],
       "x-ratelimit-reset-requests": [
         "0s"
@@ -176,7 +176,7 @@
         "0s"
       ],
       "x-request-id": [
-        "req_47bb4578a8b6ff86063494699f472402"
+        "req_d27e97ebf33b43f832ef6be1532e120b"
       ]
     },
     "status": 200

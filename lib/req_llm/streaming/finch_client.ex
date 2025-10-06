@@ -26,6 +26,7 @@ defmodule ReqLLM.Streaming.FinchClient do
   requests with proper authentication, headers, and request body formatting.
   """
 
+  alias ReqLLM.Streaming.Fixtures
   alias ReqLLM.Streaming.Fixtures.HTTPContext
   alias ReqLLM.StreamServer
 
@@ -86,7 +87,8 @@ defmodule ReqLLM.Streaming.FinchClient do
                  stream_server_pid,
                  finch_name,
                  http_context,
-                 maybe_capture_fixture(model, opts)
+                 maybe_capture_fixture(model, opts),
+                 opts
                ) do
           {:ok, task_pid, http_context, canonical_json}
         end
@@ -148,7 +150,8 @@ defmodule ReqLLM.Streaming.FinchClient do
          stream_server_pid,
          finch_name,
          _http_context,
-         _fixture_path
+         _fixture_path,
+         opts
        ) do
     task_pid =
       Task.Supervisor.async_nolink(ReqLLM.TaskSupervisor, fn ->
@@ -170,8 +173,25 @@ defmodule ReqLLM.Streaming.FinchClient do
             acc
         end
 
+        canonical = Fixtures.canonical_json_from_finch_request(finch_request)
+
+        default_timeout =
+          if has_thinking_enabled?(canonical) do
+            Application.get_env(:req_llm, :thinking_timeout, 300_000)
+          else
+            Application.get_env(
+              :req_llm,
+              :stream_receive_timeout,
+              Application.get_env(:req_llm, :receive_timeout, 30_000)
+            )
+          end
+
+        receive_timeout = Keyword.get(opts, :receive_timeout, default_timeout)
+
         try do
-          case Finch.stream(finch_request, finch_name, :ok, finch_stream_callback) do
+          case Finch.stream(finch_request, finch_name, :ok, finch_stream_callback,
+                 receive_timeout: receive_timeout
+               ) do
             {:ok, _} ->
               Logger.debug("Finch streaming completed successfully")
               :ok
@@ -212,6 +232,14 @@ defmodule ReqLLM.Streaming.FinchClient do
     case Code.ensure_loaded(ReqLLM.Test.Fixtures) do
       {:module, mod} -> apply(mod, :capture_path, [model, opts])
       {:error, _} -> nil
+    end
+  end
+
+  defp has_thinking_enabled?(canonical) do
+    case canonical do
+      %{"thinking" => %{"type" => "enabled"}} -> true
+      %{"generationConfig" => %{"thinkingConfig" => _}} -> true
+      _ -> false
     end
   end
 end

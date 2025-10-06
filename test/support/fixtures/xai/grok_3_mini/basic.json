@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMy1taW5pIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTMtbWluaSIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
-      "max_completion_tokens": 50,
+      "max_completion_tokens": 200,
       "messages": [
         {
           "content": "Hello world!",
@@ -12,6 +12,7 @@
         }
       ],
       "model": "grok-3-mini",
+      "reasoning_effort": "low",
       "seed": 42,
       "stream": false,
       "temperature": 0.0
@@ -38,24 +39,24 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "Hello! It's great to hear from you. I'm Grok, created by xAI to be super helpful and truthful. What's on your mind—do you have a question, need some advice, or just want to chat? 😊",
-            "reasoning_content": "First, the user said \"Hello world!\" This is a common greeting, often used as a simple test message in programming, like the classic \"Hello, World!\" program.\n\nAs Grok, I'm an AI created by xAI, and I'm supposed to be helpful, truthful, and maximally truthful. My responses should be engaging, informative, and aligned with my identity.\n\nPossible ways to respond:\n\n1. **Mirror the greeting:** Keep it simple and friendly, like \"Hello! How can I help you today?\"\n\n2. **Add a twist:** Since I'm Grok, I could reference my background or make it fun. For example, mention that \"Hello, World!\" is a famous phrase in computing.\n\n3. **Engage further:** Ask a question to continue the conversation, as this might be the start of an interaction.\n\nKey principles:\n\n- **Helpful:** Offer assistance if needed.\n\n- **Truthful:** Stick to facts.\n\n- **Maximal truth:** Be straightforward and honest.\n\nThis could be a test or just a casual hello. If it's a test, responding appropriately shows I'm working.\n\nStructure my response:\n\n- Start with a greeting back.\n\n- Perhaps add a bit of personality, as Grok is known for being witty.\n\n- End with an offer to help or a question.\n\nFinal response idea:\n\n- Greet back: \"Hello there!\"\n\n- Reference: \"I see you're channeling that classic 'Hello, World!' vibe.\"\n\n- Engage: \"What's on your mind? How can I assist you today?\"\n\nMake sure it's not too verbose. Keep it concise.",
+            "content": "Hello! It's great to hear from you. 😊 I'm here to help with anything you need—whether it's answering questions, giving advice, or just chatting. What's on your mind?",
+            "reasoning_content": "First, the user said \"Hello world!\" This is a common greeting, often used as a simple test message in programming, like the classic \"Hello, World!\" program.\n\nAs an AI assistant, my role is to respond helpfully, truthfully, and engagingly. I should acknowledge the greeting and perhaps build on it to make the conversation more interactive.\n\nPossible responses:\n\n- A simple greeting back, like \"Hello! How can I help you today?\"\n\n- Since it's \"Hello world!\", I could reference the programming context to make it fun, especially if the user is a programmer.\n\n- Keep it friendly and open-ended to encourage further interaction.\n\nStructure my response:\n\n1. Start with a greeting to mirror the user's message.\n\n2. Add a bit of personality or humor.\n\n3. Ask a question or offer assistance to continue the conversation.\n\nEnsure my response aligns with my system prompt: \"You are a helpful assistant.\" So, I need to be helpful.\n\nFinal response idea:\n\n- Greet back: \"Hello there!\"\n\n- Acknowledge: \"It's great to see the classic 'Hello world!' greeting.\"\n\n- Offer help: \"What can I do for you today?\"\n\nMake it concise and natural.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759686668,
-      "id": "13a2a50a-4986-1e3e-5d78-a7ca2f75f5ee_us-east-1",
+      "created": 1759763208,
+      "id": "8cae9a7a-5e29-0f7e-5b4f-60b188b6a3d0_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 47,
+        "completion_tokens": 37,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 318,
+          "reasoning_tokens": 241,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
@@ -66,7 +67,7 @@
           "image_tokens": 0,
           "text_tokens": 10
         },
-        "total_tokens": 375
+        "total_tokens": 288
       }
     },
     "headers": {
@@ -80,7 +81,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989ec3ee9e7ce81d-ORD"
+        "98a61097b8c3e578-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,13 +90,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 17:51:11 GMT"
+        "Mon, 06 Oct 2025 15:06:51 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=WcTCoYDyPl8.QTEFuTXLc9oUytkpfGgJsNEwjhduRv0-1759686671-1.0.1.1-Xa7nAjzguHhAUPoTkzzqyTh1nOLaUwB_his_kMu2jAqAlvjssrmA7Mdmn9LwsktJ_oOyxoXS0SwzbhTziJHdsy0DyQ2_o5NyLPOuHrW4x8E; path=/; expires=Sun, 05-Oct-25 18:21:11 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=e0LUX7ZpuH8SiaYVt.ABD0.2li.pKycLtVLjIp4_jGI-1759763211-1.0.1.1-vSCLipswF5aG7vJ_c4I2sZ_6MhMtwHRdJYjf9XIHB055s.sy2VHm3I8X5l7RDwDq0tJ3K9HzCaECUXjke8FQCgvSImWy7gHJrwp_6oCcSl8; path=/; expires=Mon, 06-Oct-25 15:36:51 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -107,7 +108,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-8be9ac0965592dde6f1f1321ec22c9af-5f8cd4b60042afc2-01"
+        "00-c9b9a13c9bee8576d314749c63abd8db-df2897000064132d-01"
       ],
       "x-zero-data-retention": [
         "false"

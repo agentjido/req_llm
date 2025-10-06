@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyJ9XSwicm9sZSI6InVzZXIifV0sImdlbmVyYXRpb25Db25maWciOnsiY2FuZGlkYXRlQ291bnQiOjEsIm1heE91dHB1dFRva2VucyI6NjAwLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0aGlua2luZ0NvbmZpZyI6eyJpbmNsdWRlVGhvdWdodHMiOnRydWUsInRoaW5raW5nQnVkZ2V0Ijo0MDk2fX0sInRvb2xzIjpbeyJmdW5jdGlvbkRlY2xhcmF0aW9ucyI6W3siZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0seyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifX0seyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fV19XX0="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyJ9XSwicm9sZSI6InVzZXIifV0sImdlbmVyYXRpb25Db25maWciOnsiY2FuZGlkYXRlQ291bnQiOjEsIm1heE91dHB1dFRva2VucyI6MTMxMDYsInRlbXBlcmF0dXJlIjowLjB9LCJ0b29scyI6W3siZnVuY3Rpb25EZWNsYXJhdGlvbnMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LHsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LHsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX1dfV19"
     },
     "canonical_json": {
       "contents": [
@@ -16,12 +16,8 @@
       ],
       "generationConfig": {
         "candidateCount": 1,
-        "maxOutputTokens": 600,
-        "temperature": 0.0,
-        "thinkingConfig": {
-          "includeThoughts": true,
-          "thinkingBudget": 4096
-        }
+        "maxOutputTokens": 13106,
+        "temperature": 0.0
       },
       "tools": [
         {
@@ -94,17 +90,12 @@
           "content": {
             "parts": [
               {
-                "text": "**Paris Weather Inquiry: My Action Plan**\n\nOkay, so the user wants to know the weather in Paris. Simple enough. I have a tool called `default_api:get_weather` that seems like the perfect fit for this. My plan is to use that tool. The location is clearly \"Paris, France,\" so I'll feed that directly into the tool. I won't bother specifying any units right now, let the tool use its default setting; the user can always ask for Fahrenheit or Celsius later if they need to. This should be straightforward.\n",
-                "thought": true
-              },
-              {
                 "functionCall": {
                   "args": {
                     "location": "Paris, France"
                   },
                   "name": "get_weather"
-                },
-                "thoughtSignature": "CsgCAdHtim9r8FXhnw8voDYnaoEig2qQy/IydpAU9+nCoc29DVRQyIiqVXiWhlwzSZ4uRJtIFaZjN2iqt5xrHzBGyo9SUOQ6AHlG73d8rMrJB/TJ5KTmQc1Um1xromR9eUaYkWAHjN8f+1nSG6ai0qi3g3Up6teYjtaDMBJm8A/yUSjY2s+op5wcPVaE+Da45XRGF27wBpBJj014Fu0wXYKlmm27zdPFM1ton5kco/Si5BGCMRpqosWjrLk8+C/cfwSMhlNpjkN+HGNC5Fpmc1yuZYttu8Vwzb1gm8VSLKTOHZOsWSPSDw1GBC2JmVhzN4dVyqgNbr+b5Lylgn2XaCo6ChuzTerxf4b2eOdUWN/fh58fjRcsg/1vfhlN2AEMgCfpD7l/+NfJ4vT73greBneLglgxsA41cuVAXsex3xm3avhTXjsDFqd9KQ=="
+                }
               }
             ],
             "role": "model"
@@ -114,7 +105,7 @@
         }
       ],
       "modelVersion": "gemini-2.5-flash-preview-09-2025",
-      "responseId": "VmXgaNGFILff_uMPo7C9oQc",
+      "responseId": "YODjaJT5EeKxjMcPk77rkAY",
       "usageMetadata": {
         "candidatesTokenCount": 21,
         "promptTokenCount": 142,
@@ -124,8 +115,7 @@
             "tokenCount": 142
           }
         ],
-        "thoughtsTokenCount": 72,
-        "totalTokenCount": 235
+        "totalTokenCount": 163
       }
     },
     "headers": {
@@ -136,13 +126,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Sat, 04 Oct 2025 00:07:50 GMT"
+        "Mon, 06 Oct 2025 15:29:36 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=1631"
+        "gfet4t7; dur=500"
       ],
       "transfer-encoding": [
         "chunked"

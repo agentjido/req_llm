@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjo2MDAsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fSwidG9vbHMiOlt7ImZ1bmN0aW9uRGVjbGFyYXRpb25zIjpbeyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fV19XX0="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMzEwNiwidGVtcGVyYXR1cmUiOjAuMH0sInRvb2xzIjpbeyJmdW5jdGlvbkRlY2xhcmF0aW9ucyI6W3siZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX1dfV19"
     },
     "canonical_json": {
       "contents": [
@@ -16,12 +16,8 @@
       ],
       "generationConfig": {
         "candidateCount": 1,
-        "maxOutputTokens": 600,
-        "temperature": 0.0,
-        "thinkingConfig": {
-          "includeThoughts": true,
-          "thinkingBudget": 4096
-        }
+        "maxOutputTokens": 13106,
+        "temperature": 0.0
       },
       "tools": [
         {
@@ -66,12 +62,8 @@
           "content": {
             "parts": [
               {
-                "text": "**Thinking Through the Cat Joke**\n\nOkay, someone wants a cat joke. Let's see... nothing specific to narrow things down, so it's a blank slate.  No functions I can directly tap into for joke retrieval, which is a bit of a bummer. Guess I'm on my own for this one.\n\nSince I have to come up with it on the fly, let's keep it simple. A classic structure usually works, so something like \"Why did the cat cross the road?\" is a solid foundation. Now, the punchline has to be cat-centric, naturally. \"To get to the other side\" is the chicken joke, so I need to pivot. Ah, I've got it! \"It was chasing the chicken!\" It's short, relatable, and relevant.\n\nNow, to add a little something extra and see if they want more, I'll tack on a follow-up. \"Would you like to hear another one?\" Seems like a good way to keep the ball rolling. Alright, ready to deliver this little nugget of humor!\n",
-                "thought": true
-              },
-              {
-                "text": "Why was the cat sitting on the computer?\nTo keep an eye on the mouse! \n",
-                "thoughtSignature": "CsAGAdHtim/jeKAzrtk47CUT6dIwV7R0ucJo6jM59pOKnEtbK41m3rxZJ8NCyjJrdQ9sHLINiFjfLGMx0tq8QiJ3mFMdVC3HSG0QFGh4zVu6yARfbwHtb4ajroABygl++Xz6Q9L4aWWMWENKTjngFFY6A1dVRYWERMy6G3R8EsaYeFJhz3MgKdE4iseyRuhZrDMLz91kVN8S4T6vzruDAYCAWvJ4Fof+xO6BJJEBw+0EkuwmuP57OMJUX9vTrUJkSkOEjpjyYArnkTi4b0TkxuP9NqHRevufoIFR+XrGZYYKKE3piTMPzIh88bHCuy1wseAc8Z/ZM2im9Z3bPnFyRkpjvpayVrfwW/Q0JM/3FLcvovUJxLzEqqGPR9cmrDrp3q4ML+BmiFiJX6HPaU6Y2cobvaAOLb2sNLHAY5drLGImMPtDz+ZlLaFiEC51iuGO8HAIqNgXx3B6Y6ohFwBOJ27Bcfs3IjTusahMQgqNoUII2E48hL4kcJ92OvQmG9oyACOPinhaMPAPI0HMKu6GyzN4JYv7YEXkpc2R8EOFIcvyV9i7BBbhzPv/pPxLKmSryAjJPlzSaaQBIkhBH8C2AJ469V+YF/QUZ41oc9irTJLmmUKlrq+mUODilT1Xlyi6JeT/MtQmxMyRDhl+u9T3TWwGCZojvwssOW25Pz9IXI0dMePMEw+KaFQCgcgrS0H1WfkHQOocqN81rfgnDRzLNjL2cKXsZoC4Dz5RwbCoDbHEGAK6APpe3GpQbP4hE3P0O5Tu1XqX4/x2ycXsyM5IyCqnjjEkLNz9ybcBMlgrqFXWyw+dUC0s3JX58FjvPYXDJz/O0A+cXpWB1IvWEVCwzlvp7x/ZugNxPuRL101sCCe7eHmH53YDL1IPaMVdPtGtBJCU7TeyUGp72QMVvvuBJRZSn4QXzWgpVyGQvg1L9pHxexL5rTSsPk0o087Ldvfmx6t/PqgaUoDhCeRWEMYMV7O5SnkJQJNzRrF9JMXg9CsN0MI2BBYEbINwPn6j7VfC1YKMEVRWTQ1tbMkXRkI+pEyfSUOvpZJacui6sehBNk6GVsJ0bnNS9BZ771g6skNL/xJXWjvME8Uj4LR6w/7gxSNWVQ=="
+                "text": "Why was the cat sitting on the computer? To keep an eye on the mouse",
+                "thoughtSignature": "CrYEAdHtim/flgg1qoSZHFTzBEaTKojQkhKimPVf6w+c4NhOJ0JbIOlhd9BXlDmvnV8+qJvBVaTOb1ObcIaQM/HYvVqZ3PIRgl4pz3Fr7F+S4FCc8T9M35uZraJ3XJ22E1tdDO3HTTERYodXwsNUUdaAdLB6x1rcsYU+j2eBeCXY4LWLWeQm8hxiSzdJj6QLxluNHpPMzS/QD6bpbpfG0d3pUp4RcMdlZqkG56fLSMyC8HU8LgQRJMibI3Ooe9xucTKXFLaFTOnUDrXjbH/4N8/soMg3bitiC7PrPmGmau9734XDIIk5VflvwP6sbgeeoAwp/ucp/+Z1hSVuIfsN4vPY32MTowqLDXhX+hJtKXKBtDTBrKPXenxK4uI5MrZpSA32rHTSD87zEthXZYJQJWU11IPDK5iIfKSQWIfjMAR+fihqgT/CuOBjHgzGHMkvYozorodzlgNKGwxQHbPMMqZ7ohohvSTZ6ane/TsQvXOZODqPcYKZWuR5wp+JWOazR8RY1jnOboPgArsGKe/u1UKA5DIQQoSyvcX+i19lew2mm3fmCKPf2tpKnwq3xdVzLt8X722uw7nHh2tYBOy2qDFNLjpbo1rmXFD2bnx//yF6iZjz/v0EyeMJFJ0ewHaTNl9ijzIyNCdx1wG3WIbsk/Y61ZlBBHxYTjSxaOzs5kc9aK5BhG0NUpFISR3FunfWN39CGzHAeL2dfcUPGMaYQPw69gYXDOdJ95AMek+YoGKIX9Z2bRJ6m6k="
               }
             ],
             "role": "model"
@@ -81,9 +73,9 @@
         }
       ],
       "modelVersion": "gemini-2.5-pro",
-      "responseId": "EGXgaJvFFOje_uMPjd_FKA",
+      "responseId": "ovbjaMaCPb3njMcPsYPg8AU",
       "usageMetadata": {
-        "candidatesTokenCount": 18,
+        "candidatesTokenCount": 16,
         "promptTokenCount": 46,
         "promptTokensDetails": [
           {
@@ -91,8 +83,8 @@
             "tokenCount": 46
           }
         ],
-        "thoughtsTokenCount": 210,
-        "totalTokenCount": 274
+        "thoughtsTokenCount": 131,
+        "totalTokenCount": 193
       }
     },
     "headers": {
@@ -103,13 +95,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Sat, 04 Oct 2025 00:06:40 GMT"
+        "Mon, 06 Oct 2025 17:04:35 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=4443"
+        "gfet4t7; dur=2401"
       ],
       "transfer-encoding": [
         "chunked"

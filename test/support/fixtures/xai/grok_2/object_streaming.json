@@ -1,21 +1,10 @@
 {
-  "captured_at": "2025-10-05T17:50:16.109335Z",
-  "chunks": [
-    {
-      "b64": "ZGF0YTogeyJpZCI6IjQyMzRhZWMxLTBlNmItZWM3My1lYzBhLWIwNzhmOThlOWI4NV91cy1lYXN0LTEiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5Njg2NjE2LCJtb2RlbCI6Imdyb2stMi0xMjEyIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJpZCI6ImNhbGxfMTgxMDcxODciLCJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJhcmd1bWVudHMiOiJ7XCJhZ2VcIjozMCxcIm5hbWVcIjpcIkpvaG4gRG9lXCIsXCJvY2N1cGF0aW9uXCI6XCJTb2Z0d2FyZSBFbmdpbmVlclwifSJ9LCJpbmRleCI6MCwidHlwZSI6ImZ1bmN0aW9uIn1dfSwiZmluaXNoX3JlYXNvbiI6InRvb2xfY2FsbHMifV0sInN5c3RlbV9maW5nZXJwcmludCI6ImZwX2ZjZWQ5OWYyNGYifQoK",
-      "decoded": "data: {\"id\":\"4234aec1-0e6b-ec73-ec0a-b078f98e9b85_us-east-1\",\"object\":\"chat.completion.chunk\",\"created\":1759686616,\"model\":\"grok-2-1212\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"tool_calls\":[{\"id\":\"call_18107187\",\"function\":{\"name\":\"structured_output\",\"arguments\":\"{\\\"age\\\":30,\\\"name\\\":\\\"John Doe\\\",\\\"occupation\\\":\\\"Software Engineer\\\"}\"},\"index\":0,\"type\":\"function\"}]},\"finish_reason\":\"tool_calls\"}],\"system_fingerprint\":\"fp_fced99f24f\"}\n\n"
-    },
-    {
-      "b64": "ZGF0YTogW0RPTkVdCgo=",
-      "decoded": "data: [DONE]\n\n"
-    }
-  ],
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjQwOTYsIm1heF90b2tlbnMiOjUwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTIiLCJzZWVkIjo0Miwic3RyZWFtIjp0cnVlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQifSwidHlwZSI6ImZ1bmN0aW9uIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibmFtZSIsImFnZSJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMCwibWF4X3Rva2VucyI6NTAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkdlbmVyYXRlIGEgc29mdHdhcmUgZW5naW5lZXIgcHJvZmlsZSIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMiIsInNlZWQiOjQyLCJzdHJlYW0iOnRydWUsInRlbXBlcmF0dXJlIjowLjAsInRvb2xfY2hvaWNlIjp7ImZ1bmN0aW9uIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCJ9LCJ0eXBlIjoiZnVuY3Rpb24ifSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2VuZXJhdGUgc3RydWN0dXJlZCBvdXRwdXQgbWF0Y2hpbmcgdGhlIHByb3ZpZGVkIHNjaGVtYSIsIm5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiYWdlIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
-      "max_completion_tokens": 4096,
+      "max_completion_tokens": 500,
       "max_tokens": 500,
       "messages": [
         {
@@ -74,20 +63,22 @@
     "url": "https://api.x.ai/v1/chat/completions"
   },
   "response": {
-    "body": null,
+    "body": {
+      "b64": "ZGF0YTogeyJpZCI6IjFlZGVkYWQ0LWFkYzgtNTU3Mi0zNmU4LTlhMTJlYzIxZWMxM191cy1lYXN0LTEiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5NzYzMjA1LCJtb2RlbCI6Imdyb2stMi0xMjEyIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJpZCI6ImNhbGxfMTIxNDkwMTEiLCJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJhcmd1bWVudHMiOiJ7XCJhZ2VcIjozMCxcIm5hbWVcIjpcIkpvaG4gRG9lXCIsXCJvY2N1cGF0aW9uXCI6XCJTb2Z0d2FyZSBFbmdpbmVlclwifSJ9LCJpbmRleCI6MCwidHlwZSI6ImZ1bmN0aW9uIn1dfSwiZmluaXNoX3JlYXNvbiI6InRvb2xfY2FsbHMifV0sInN5c3RlbV9maW5nZXJwcmludCI6ImZwX2ZjZWQ5OWYyNGYifQoKZGF0YTogW0RPTkVdCgo="
+    },
     "headers": {
       "access-control-allow-origin": "*",
       "access-control-expose-headers": "*",
       "cache-control": "no-cache",
       "cf-cache-status": "DYNAMIC",
-      "cf-ray": "989ec2a25ed62335-ORD",
+      "cf-ray": "98a6107c4ad5c0a8-ORD",
       "content-type": "text/event-stream",
-      "date": "Sun, 05 Oct 2025 17:50:15 GMT",
+      "date": "Mon, 06 Oct 2025 15:06:44 GMT",
       "server": "cloudflare",
-      "set-cookie": "__cf_bm=Kx5whK_VtbcXLmRFWv813jyd_D5QWqXfWlOxDcfzYyY-1759686615-1.0.1.1-MPx0ByYMdAIlMnX._7P30zW0eVwvroBRp2QoAC_HrwRtSZ0c4aJraUapRT51SU3_We.iilKuj7gcTVNwIMQhsqrLkSSsKy5lGthEF6MvY8o; path=/; expires=Sun, 05-Oct-25 18:20:15 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None",
+      "set-cookie": "__cf_bm=sAatEW.yydzNHV0OjJn8pRvgrefuqW0wRdlE71CMJlg-1759763204-1.0.1.1-J.gBE9C2i6vf05w0KcCOeuDAHKoeoYNNnGAWj_d01XsJ1ug4DBVaZcrEH7VeKPoh8NQz.2x1mQUcXkYJMizr5ETNyAZrXIFcuGH49roSMqU; path=/; expires=Mon, 06-Oct-25 15:36:44 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None",
       "strict-transport-security": "max-age=31536000",
       "vary": "origin, access-control-request-method, access-control-request-headers",
-      "x-request-id": "00-cd5051229dad5d21c338f0c420497bce-9f671d31004ed96b-01",
+      "x-request-id": "00-9bf65ba57d25b8c50d1ebd7301cc4865-989642c8006363c3-01",
       "x-zero-data-retention": "false"
     },
     "status": 200

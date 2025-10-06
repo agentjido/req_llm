@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxNTAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1zb25uZXQtNC0yMDI1MDUxNCIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJpbnB1dF9zY2hlbWEiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJnZXRfd2VhdGhlciJ9XX0="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMjgwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiY2xhdWRlLXNvbm5ldC00LTIwMjUwNTE0Iiwic3RyZWFtIjpmYWxzZSwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifSwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0X3NjaGVtYSI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifSwibmFtZSI6ImdldF93ZWF0aGVyIn1dfQ=="
     },
     "canonical_json": {
-      "max_tokens": 150,
+      "max_tokens": 12800,
       "messages": [
         {
           "content": "Tell me a joke about cats",
@@ -13,7 +13,10 @@
       ],
       "model": "claude-sonnet-4-20250514",
       "stream": false,
-      "temperature": 0.0,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      },
       "tools": [
         {
           "description": "Get current weather information for a location",
@@ -57,11 +60,16 @@
     "body": {
       "content": [
         {
-          "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs! 🐱\n\nAnd here's another one:\n\nWhat do you call a pile of kittens?\n\nA meowtain! \n\nHope those made you purr with laughter! 😸",
+          "signature": "EvcCCkYICBgCKkCe1Bsh28TfqBfdy2jrrPpIaRwSMsBnbjcpMAolyuNktwpZgaC1+LpuCl0SVbAfIKLlwXlBUcVi4grXf5fTck51EgzN5pW6jdtpM73PWysaDD452UNUyEdkG+CntyIwK35V6LgQ2eFRuHzT4o1aGYTIMh1jAzMCG5CeDsFK1Usr7P2x7NFfRXwmk14B+IRQKt4Bt7kpN4cmxN1drotiObKwy5lUAs9vYTQfT3b83z8Z+Be+JDbnKzxheoJN8ySW7sGGr/PWqOh/IwdKT5lvFzAirtrNxLLX7eWq3X4Tw+FS2FZpRMN5pr3BPCNQImJ5LX2ImKSqn32Iz17/gMWaIRuUvhyDvae3elNs3ti/6pdwzQvZFhQQQkzJfqKwfmaDFRfosxFUP4LO52pUqkZCYzV9yMPDMeanQAtMC2bGSnqKsOTOckB3Fs07+Re1h59mXwyfIIKnbHgdTsDPWT82AqOXRPaYDjTI1YNjr32BDuWdGAE=",
+          "thinking": "The user is asking for a joke about cats. This is a simple request that doesn't require any of the available tools (I only have a weather function available). I should just respond with a cat joke directly.",
+          "type": "thinking"
+        },
+        {
+          "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs! 🐱\n\nAnd here's a bonus one:\n\nWhat do you call a pile of cats?\nA meowtain! \n\nHope those made you purr with laughter! 😸",
           "type": "text"
         }
       ],
-      "id": "msg_01WgcBvC11fegbxKgizPmFEL",
+      "id": "msg_017s4ykfFjcHT5QuJU5RShfW",
       "model": "claude-sonnet-4-20250514",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -74,8 +82,8 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 381,
-        "output_tokens": 75,
+        "input_tokens": 410,
+        "output_tokens": 126,
         "service_tier": "standard"
       }
     },
@@ -90,7 +98,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-05T15:38:09Z"
+        "2025-10-06T17:10:38Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -99,7 +107,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-05T15:38:10Z"
+        "2025-10-06T17:10:41Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -108,7 +116,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-05T15:38:08Z"
+        "2025-10-06T17:10:38Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -117,13 +125,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-05T15:38:09Z"
+        "2025-10-06T17:10:38Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989e011b3c40eada-ORD"
+        "98a6c5f758439bcc-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -132,10 +140,10 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 15:38:10 GMT"
+        "Mon, 06 Oct 2025 17:10:40 GMT"
       ],
       "request-id": [
-        "req_011CTpJQqYHdmvQL5RKB4gh4"
+        "req_011CTrKGqELco18NranPH2x9"
       ],
       "server": [
         "cloudflare"
@@ -150,7 +158,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "1823"
+        "2898"
       ],
       "x-robots-tag": [
         "none"

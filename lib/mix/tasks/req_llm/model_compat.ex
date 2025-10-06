@@ -111,7 +111,10 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
           if MapSet.member?(implemented_providers, provider) do
             provider_passing =
               Enum.count(filtered, fn m ->
-                Map.get(state, "#{provider}:#{m["id"]}") == "pass"
+                case Map.get(state, "#{provider}:#{m["id"]}") do
+                  %{"status" => "pass"} -> true
+                  _ -> false
+                end
               end)
 
             IO.ANSI.faint() <>
@@ -143,8 +146,18 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
     total_models = models |> Enum.map(fn {_, ms} -> length(ms) end) |> Enum.sum()
     tested = map_size(state)
-    passing = state |> Enum.count(fn {_, status} -> status == "pass" end)
-    excluded = state |> Enum.count(fn {_, status} -> status == "excluded" end)
+    passing = state |> Enum.count(fn {_, entry} -> 
+      case entry do
+        %{"status" => "pass"} -> true
+        _ -> false
+      end
+    end)
+    excluded = state |> Enum.count(fn {_, entry} -> 
+      case entry do
+        %{"status" => "excluded"} -> true
+        _ -> false
+      end
+    end)
 
     Mix.shell().info(
       IO.ANSI.faint() <>
@@ -189,7 +202,11 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
       statuses =
         Enum.reduce(provider_models, statuses, fn model, acc ->
           spec = "#{provider}:#{model["id"]}"
-          status = Map.get(state, spec, "untested")
+          status = 
+            case Map.get(state, spec) do
+              %{"status" => s} -> s
+              _ -> "untested"
+            end
           print_model_status(model, spec, status)
           Map.update(acc, String.to_atom(status), 1, &(&1 + 1))
         end)
@@ -208,7 +225,12 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     end)
 
     total_models = models |> Enum.map(fn {_, ms} -> length(ms) end) |> Enum.sum()
-    total_pass = state |> Enum.count(fn {_spec, status} -> status == "pass" end)
+    total_pass = state |> Enum.count(fn {_spec, entry} -> 
+      case entry do
+        %{"status" => "pass"} -> true
+        _ -> false
+      end
+    end)
     total_pct = Float.round(total_pass / total_models * 100, 1)
 
     Mix.shell().info(
@@ -428,7 +450,11 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
   defp print_model_with_status(model, provider, state) do
     model_spec = "#{provider}:#{model["id"]}"
-    status = Map.get(state, model_spec)
+    status = 
+      case Map.get(state, model_spec) do
+        %{"status" => s} -> s
+        _ -> nil
+      end
 
     status_icon =
       case status do
@@ -705,8 +731,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
     case File.read(path) do
       {:ok, content} ->
-        data = Jason.decode!(content)
-        Map.get(data, "state", %{})
+        Jason.decode!(content)
 
       {:error, _} ->
         %{}
@@ -723,34 +748,33 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
         _ -> %{}
       end
 
-    existing_state = Map.get(existing, "state", %{})
-    existing_recorded = Map.get(existing, "last_recorded", %{})
-
     excluded_models = load_excluded_models()
+
+    ts = DateTime.to_iso8601(run_ts)
 
     new_state =
       results
       |> Enum.reject(&(&1.status == :skipped))
-      |> Enum.reduce(existing_state, fn result, acc ->
+      |> Enum.reduce(existing, fn result, acc ->
         status = if result.status == :pass, do: "pass", else: "fail"
-        Map.put(acc, result.model_spec, status)
+        
+        Map.put(acc, result.model_spec, %{
+          "status" => status,
+          "last_checked" => ts
+        })
       end)
       |> then(fn state ->
         Enum.reduce(excluded_models, state, fn spec, acc ->
-          Map.put(acc, spec, "excluded")
+          existing_entry = Map.get(existing, spec, %{})
+          
+          Map.put(acc, spec, %{
+            "status" => "excluded",
+            "last_checked" => Map.get(existing_entry, "last_checked")
+          })
         end)
       end)
 
-    ts = DateTime.to_iso8601(run_ts)
-
-    new_recorded =
-      results
-      |> Enum.reject(&(&1.status == :skipped))
-      |> Enum.reduce(existing_recorded, fn result, acc ->
-        Map.put(acc, result.model_spec, ts)
-      end)
-
-    json = build_sorted_json(new_state, new_recorded)
+    json = build_sorted_json(new_state)
 
     case File.read(path) do
       {:ok, prev} when prev == json -> :ok
@@ -758,29 +782,22 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     end
   end
 
-  defp build_sorted_json(state, last_recorded) do
-    state_json =
+  defp build_sorted_json(state) do
+    entries_json =
       state
       |> Enum.sort_by(fn {k, _} -> k end)
-      |> Enum.map_join(",\n    ", fn {k, v} ->
-        ~s("#{k}": "#{v}")
-      end)
-
-    recorded_json =
-      last_recorded
-      |> Enum.sort_by(fn {k, _} -> k end)
-      |> Enum.map_join(",\n    ", fn {k, v} ->
-        ~s("#{k}": "#{v}")
+      |> Enum.map_join(",\n  ", fn {k, v} ->
+        status = Map.get(v, "status")
+        last_checked = Map.get(v, "last_checked")
+        
+        last_checked_json = if last_checked, do: ~s("last_checked": "#{last_checked}"), else: ~s("last_checked": null)
+        
+        ~s("#{k}": {\n    "status": "#{status}",\n    #{last_checked_json}\n  })
       end)
 
     """
     {
-      "state": {
-        #{state_json}
-      },
-      "last_recorded": {
-        #{recorded_json}
-      }
+      #{entries_json}
     }
     """
   end

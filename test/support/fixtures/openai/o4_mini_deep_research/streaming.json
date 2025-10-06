@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IllvdSBhcmUgYSBoZWxwZnVsLCBjcmVhdGl2ZSBhc3Npc3RhbnQuIiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJzeXN0ZW0ifSx7ImNvbnRlbnQiOlt7InRleHQiOiJTYXkgaGVsbG8gaW4gb25lIHNob3J0LCBpbWFnaW5hdGl2ZSBzZW50ZW5jZS4iLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoibzQtbWluaS1kZWVwLXJlc2VhcmNoIiwic3RyZWFtIjp0cnVlfQ=="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IllvdSBhcmUgYSBoZWxwZnVsLCBjcmVhdGl2ZSBhc3Npc3RhbnQuIiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJzeXN0ZW0ifSx7ImNvbnRlbnQiOlt7InRleHQiOiJTYXkgaGVsbG8gaW4gb25lIHNob3J0LCBpbWFnaW5hdGl2ZSBzZW50ZW5jZS4iLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoyMDAwLCJtb2RlbCI6Im80LW1pbmktZGVlcC1yZXNlYXJjaCIsInN0cmVhbSI6dHJ1ZX0="
     },
     "canonical_json": {
       "input": [
@@ -24,7 +24,7 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 100,
+      "max_output_tokens": 2000,
       "model": "o4-mini-deep-research",
       "stream": true
     },
@@ -48,20 +48,20 @@
     "headers": {
       "alt-svc": "h3=\":443\"; ma=86400",
       "cf-cache-status": "DYNAMIC",
-      "cf-ray": "989fecf7c8efcefa-ORD",
+      "cf-ray": "98a6eb6f1da8dc06-ORD",
       "content-length": "212",
       "content-type": "application/json",
-      "date": "Sun, 05 Oct 2025 21:13:55 GMT",
+      "date": "Mon, 06 Oct 2025 17:36:12 GMT",
       "openai-organization": "epic-creative-sogybe",
-      "openai-processing-ms": "29",
+      "openai-processing-ms": "17",
       "openai-project": "proj_j5AhgU4eLMRmsoO9FDg7BRD3",
       "openai-version": "2020-10-01",
       "server": "cloudflare",
-      "set-cookie": "_cfuvid=tv676kheNPSCZ2uaTu.B.mZseWidfIlqUaRveFOaLNM-1759698835258-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+      "set-cookie": "_cfuvid=AZC8QSxlEA.kLJD2xZTBLTGmAAMObkxNpp.rwh2XQS4-1759772172770-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
       "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
       "x-content-type-options": "nosniff",
-      "x-envoy-upstream-service-time": "32",
-      "x-request-id": "req_b6ee4bc57e57f7193a50bb6a1977fe49"
+      "x-envoy-upstream-service-time": "19",
+      "x-request-id": "req_bb7517c1cfe0b5d4fd81ff7762003ae3"
     },
     "status": 400
   }

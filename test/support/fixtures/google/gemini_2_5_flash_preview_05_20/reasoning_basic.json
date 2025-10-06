@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJTb2x2ZSAxMio3IGFuZCBzaG93IHlvdXIgaW50ZXJuYWwgdGhpbmtpbmcgKGJyaWVmKS4ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwNDgsInRlbXBlcmF0dXJlIjoxLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fX0="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJTb2x2ZSAxMio3IGFuZCBzaG93IHlvdXIgaW50ZXJuYWwgdGhpbmtpbmcgKGJyaWVmKS4ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwNDgsInRlbXBlcmF0dXJlIjoxLjB9fQ=="
     },
     "canonical_json": {
       "contents": [
@@ -17,11 +17,7 @@
       "generationConfig": {
         "candidateCount": 1,
         "maxOutputTokens": 2048,
-        "temperature": 1.0,
-        "thinkingConfig": {
-          "includeThoughts": true,
-          "thinkingBudget": 4096
-        }
+        "temperature": 1.0
       }
     },
     "headers": {
@@ -45,11 +41,7 @@
           "content": {
             "parts": [
               {
-                "text": "**Calculating 12 * 7: My Thought Process**\n\nAlright, I need to figure out 12 times 7. My first instinct, of course, is to just do the calculation directly: 12 * 7 = 84. It's a fairly common multiplication, and I *could* just pull that answer out, but let's show how I might arrive at it mentally in more detail.\n\nIf I didn't immediately see the answer, I'd probably break this down. The most natural way to go, for mental math, is to decompose 12 into 10 + 2. Then, it becomes (10 + 2) * 7.  That simplifies to (10 * 7) + (2 * 7), which is 70 + 14, and that equals 84. Perfect.\n",
-                "thought": true
-              },
-              {
-                "text": "To solve 12 * 7:\n\n**Internal Thinking (brief):**\n\n1.  **Decompose 12:** Think of 12 as (10 + 2).\n2.  **Distribute:** Multiply each part by 7.\n    *   10 * 7 = 70\n    *   2 * 7 = 14\n3.  **Combine:** Add the results.\n    *   70 + 14 = 84\n\n**Solution:**\n\n12 * 7 = 84"
+                "text": "Here's how I'd break down 12 * 7:\n\n**Internal Thinking (brief):**\n\n1.  **Recognize:** I need to multiply twelve by seven.\n2.  **Strategy:** I can split 12 into 10 + 2 (distributive property).\n3.  **Calculate (Part 1):** 10 * 7 = 70 (easy, just add a zero).\n4.  **Calculate (Part 2):** 2 * 7 = 14 (basic multiplication fact).\n5.  **Combine:** 70 + 14 = 84.\n\n**Solution:**\n\n12 * 7 = **84**"
               }
             ],
             "role": "model"
@@ -59,9 +51,9 @@
         }
       ],
       "modelVersion": "models/gemini-2.5-flash-preview-05-20",
-      "responseId": "h1vgaONMjc7-4w-H54WoCA",
+      "responseId": "7-rjaOq3DeW__uMPpt3qmAw",
       "usageMetadata": {
-        "candidatesTokenCount": 120,
+        "candidatesTokenCount": 155,
         "promptTokenCount": 15,
         "promptTokensDetails": [
           {
@@ -69,8 +61,8 @@
             "tokenCount": 15
           }
         ],
-        "thoughtsTokenCount": 259,
-        "totalTokenCount": 394
+        "thoughtsTokenCount": 32,
+        "totalTokenCount": 202
       }
     },
     "headers": {
@@ -81,13 +73,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 23:25:59 GMT"
+        "Mon, 06 Oct 2025 16:14:39 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=3477"
+        "gfet4t7; dur=2202"
       ],
       "transfer-encoding": [
         "chunked"

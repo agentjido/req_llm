@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhlbGxvIHdvcmxkISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjUwLCJtb2RlbCI6ImdwdC01LW5hbm8iLCJzdHJlYW0iOmZhbHNlfQ=="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhlbGxvIHdvcmxkISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjIwMDAsIm1vZGVsIjoiZ3B0LTUtbmFubyIsInN0cmVhbSI6ZmFsc2V9"
     },
     "canonical_json": {
       "input": [
@@ -15,7 +15,7 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 50,
+      "max_output_tokens": 2000,
       "model": "gpt-5-nano",
       "stream": false
     },
@@ -40,23 +40,35 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759698847,
+      "created_at": 1759772165,
       "error": null,
-      "id": "resp_01f430b685ae7cc40068e2df9f16d0819aa92ead0e2698f634",
-      "incomplete_details": {
-        "reason": "max_output_tokens"
-      },
+      "id": "resp_081581d1341879f10068e3fe05dd5c819bbc4c74e11822110a",
+      "incomplete_details": null,
       "instructions": null,
-      "max_output_tokens": 50,
+      "max_output_tokens": 2000,
       "max_tool_calls": null,
       "metadata": {},
       "model": "gpt-5-nano-2025-08-07",
       "object": "response",
       "output": [
         {
-          "id": "rs_01f430b685ae7cc40068e2df9fb988819ab871c960aef23df2",
+          "id": "rs_081581d1341879f10068e3fe064b78819bb77120956b776c4e",
           "summary": [],
           "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Hello! Nice to meet you. What would you like to do today?\n\nIf you’re learning programming, here are quick “Hello, World!” examples in a few languages:\n\n- Python: print(\"Hello, World!\")\n- JavaScript: console.log(\"Hello, World!\")\n- C:\n  #include <stdio.h>\n  int main(void) {\n      printf(\"Hello, World!\\n\");\n      return 0;\n  }\n- Java:\n  public class HelloWorld {\n      public static void main(String[] args) {\n          System.out.println(\"Hello, World!\");\n      }\n  }\n- Ruby: puts \"Hello, World!\"\n- Go:\n  package main\n  import \"fmt\"\n  func main() {\n      fmt.Println(\"Hello, World!\")\n  }\n\nWant examples in another language or help with something else?",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_081581d1341879f10068e3fe0a10c0819bbca5459ce0811041",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
         }
       ],
       "parallel_tool_calls": true,
@@ -68,7 +80,7 @@
       },
       "safety_identifier": null,
       "service_tier": "default",
-      "status": "incomplete",
+      "status": "completed",
       "store": true,
       "temperature": 1.0,
       "text": {
@@ -87,11 +99,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 0,
+        "output_tokens": 876,
         "output_tokens_details": {
-          "reasoning_tokens": 0
+          "reasoning_tokens": 704
         },
-        "total_tokens": 9
+        "total_tokens": 885
       },
       "user": null
     },
@@ -103,7 +115,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989fed41e97cbd1f-ORD"
+        "98a6eb444f2e8222-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -112,13 +124,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:14:08 GMT"
+        "Mon, 06 Oct 2025 17:36:12 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "1130"
+        "6757"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -130,8 +142,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=C5KEvzp9mcSz3xlBZftBE8IRi3HpWTKq2Izn4dhfZbo-1759698848-1.0.1.1-fC9um2dnLLND.LCK6tp4mhvSGVkkZv4IVzCL8dzYBnc9AUJ.rn6aQHQTMgBLuIsZnRA5QJWbcNile_RNjccE4akCw6X006DOA1bvwVH0BC8; path=/; expires=Sun, 05-Oct-25 21:44:08 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=GInqSBjlp6rvTVWasDJl0uSWoeO7KaS59IVsY2YREps-1759698848239-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=SQy.s0JYjVa7kRy5hOjvBuMGviLLXQ0x2.d8_U6wXu8-1759772172-1.0.1.1-Gnyb4j2P75bdfm8Ro1R_7YY4KRLYaDPEpdAOKzAXzk0x83itO4sYz6Dlyeg19LeERPNimFc5LlNI2_t_LB0Kvlbh38ngGJoJYdYijmh460M; path=/; expires=Mon, 06-Oct-25 18:06:12 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=xldxG6rgBnQPFWy4u.QIWw5WLUS.e53PrW3GGyMLLXw-1759772172653-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -143,7 +155,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "1136"
+        "6761"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -164,7 +176,7 @@
         "3ms"
       ],
       "x-request-id": [
-        "req_3a33ada627e037924c9ef4afba697dda"
+        "req_67c9314044f909621e896a6b3e163fd2"
       ]
     },
     "status": 200

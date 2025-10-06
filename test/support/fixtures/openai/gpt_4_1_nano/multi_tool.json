@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/IiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MTUwLCJtb2RlbCI6ImdwdC00LjEtbmFubyIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImdldF93ZWF0aGVyIiwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJ0ZWxsX2pva2UiLCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoiZ2V0X3RpbWUiLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/IiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MzI3NiwibW9kZWwiOiJncHQtNC4xLW5hbm8iLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfd2VhdGhlciIsInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoidGVsbF9qb2tlIiwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImdldF90aW1lIiwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "input": [
@@ -15,7 +15,7 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 150,
+      "max_output_tokens": 3276,
       "model": "gpt-4.1-nano",
       "stream": false,
       "tools": [
@@ -97,12 +97,12 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759698830,
+      "created_at": 1759772171,
       "error": null,
-      "id": "resp_09cba907f195c6310068e2df8ed4b4819a8826206de7620ced",
+      "id": "resp_0413f02817bbab200068e3fe0b15a88193aac64f19221513c8",
       "incomplete_details": null,
       "instructions": null,
-      "max_output_tokens": 150,
+      "max_output_tokens": 3276,
       "max_tool_calls": null,
       "metadata": {},
       "model": "gpt-4.1-nano-2025-04-14",
@@ -110,17 +110,9 @@
       "output": [
         {
           "arguments": "{}",
-          "call_id": "call_Czk5rPltx7hENY0c7udbDlQU",
-          "id": "fc_09cba907f195c6310068e2df8fad14819a847325a443d88851",
+          "call_id": "call_736lvDsjauzVEKCl10Gt0L2O",
+          "id": "fc_0413f02817bbab200068e3fe0c843481938c486333b3c90067",
           "name": "get_weather",
-          "status": "completed",
-          "type": "function_call"
-        },
-        {
-          "arguments": "{}",
-          "call_id": "call_PcULztSQbwpBjroCV4Gn6ijG",
-          "id": "fc_09cba907f195c6310068e2df8fc0e4819ab6fb85f16ac43d71",
-          "name": "get_time",
           "status": "completed",
           "type": "function_call"
         }
@@ -186,15 +178,15 @@
       "top_p": 1.0,
       "truncation": "disabled",
       "usage": {
-        "input_tokens": 25,
+        "input_tokens": 51,
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 40,
+        "output_tokens": 11,
         "output_tokens_details": {
           "reasoning_tokens": 0
         },
-        "total_tokens": 65
+        "total_tokens": 62
       },
       "user": null
     },
@@ -206,7 +198,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989fecdc0ae20ffa-ORD"
+        "98a6eb641cc28637-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -215,13 +207,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:13:52 GMT"
+        "Mon, 06 Oct 2025 17:36:12 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "1180"
+        "1734"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -233,8 +225,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=Uy2cMqS8WdGZcCjrGDlJjyElQQayDz42F0w6yS6rkUk-1759698832-1.0.1.1-vzZoR.KzLAIGfTSNi3YrXfIUxAnbIH5XdTMom_rjmGWZ4ab41hWO4qkVhAHV0INzOaE68PbmtU9O0jHAB8Vcm_xfloHbuMSdyOX9gInQZHg; path=/; expires=Sun, 05-Oct-25 21:43:52 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=0gFIriBaR6C4HwCMe04u.PegPonyEOwMoOCyAmV80VQ-1759698832028-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=yIU2mbEizRI5I3Sgt7rxoOW2jHBjrUYja99zWAYuqTc-1759772172-1.0.1.1-ioaMiKRve5bE_UdwTsazW7gNlzAVdlVOJH1qf0XbQm76PI4AtqsyODBhfDpJ7d3aIqvP5kVuxh0OBlMvCF4z_SSywM7YlA0jZOT6qWabLHw; path=/; expires=Mon, 06-Oct-25 18:06:12 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=NV4V5rvSIjepWB1NhQT6hijenpKcI.YaaIt9W94SLT0-1759772172798-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -246,7 +238,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "1188"
+        "1830"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -267,7 +259,7 @@
         "4ms"
       ],
       "x-request-id": [
-        "req_3c32a58be5ed1754bc50873c95ab5116"
+        "req_31207cd78feefc41c9245caaa369f2de"
       ]
     },
     "status": 200

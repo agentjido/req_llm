@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJTb2x2ZSAxMio3IGFuZCBzaG93IHlvdXIgaW50ZXJuYWwgdGhpbmtpbmcgKGJyaWVmKS4ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwNDgsInRlbXBlcmF0dXJlIjoxLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fX0="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJTb2x2ZSAxMio3IGFuZCBzaG93IHlvdXIgaW50ZXJuYWwgdGhpbmtpbmcgKGJyaWVmKS4ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwNDgsInRlbXBlcmF0dXJlIjoxLjB9fQ=="
     },
     "canonical_json": {
       "contents": [
@@ -17,11 +17,7 @@
       "generationConfig": {
         "candidateCount": 1,
         "maxOutputTokens": 2048,
-        "temperature": 1.0,
-        "thinkingConfig": {
-          "includeThoughts": true,
-          "thinkingBudget": 4096
-        }
+        "temperature": 1.0
       }
     },
     "headers": {
@@ -45,11 +41,7 @@
           "content": {
             "parts": [
               {
-                "text": "**Deconstructing a Simple Multiplication**\n\nOkay, here's how I approach calculating 12 * 7, even though it's a relatively straightforward problem. The goal is always to leverage known facts and properties to simplify the mental calculation.\n\nFirst, I immediately recognize it's a multiplication operation. Then, I tap into my core multiplication knowledge. I readily recall that 10 * 7 equals 70, and 2 * 7 equals 14. These are foundational.\n\nTo efficiently solve the problem, I apply the distributive property. I see 12 as the sum of 10 and 2.  Therefore, I reformulate the original problem into (10 + 2) * 7. This is key. The distributive property allows me to break down the multiplication into two manageable parts: (10 * 7) plus (2 * 7).\n\nI perform the simpler multiplications: 10 * 7 equals 70, and 2 * 7 equals 14. Finally, I sum the partial results: 70 + 14, which gives me 84. And there's my answer. It's a method that is readily applicable to a broader range of numerical problems, ensuring accuracy and quick calculations.\n",
-                "thought": true
-              },
-              {
-                "text": "Here's my internal thinking for 12 * 7:\n\n1.  **Break down 12:** I think of 12 as 10 + 2.\n2.  **Multiply each part by 7:**\n    *   10 * 7 = 70\n    *   2 * 7 = 14\n3.  **Add the results:** 70 + 14 = 84\n\nThe answer is **84**."
+                "text": "**Internal Thinking (brief):**\n\n1.  **Decomposition:** I'll break 12 into (10 + 2).\n2.  **Distribute:** Multiply each part by 7: (10 * 7) + (2 * 7).\n3.  **Calculate parts:** 70 + 14.\n4.  **Sum:** 84.\n\n---\n\n**Solution:**\n\n12 * 7 = 84"
               }
             ],
             "role": "model"
@@ -59,9 +51,9 @@
         }
       ],
       "modelVersion": "gemini-2.5-flash",
-      "responseId": "W2XgaNKDIfvO_uMP27n-kA8",
+      "responseId": "4PXjaJLHIaeUjMcPktel0Qk",
       "usageMetadata": {
-        "candidatesTokenCount": 104,
+        "candidatesTokenCount": 102,
         "promptTokenCount": 15,
         "promptTokensDetails": [
           {
@@ -69,8 +61,8 @@
             "tokenCount": 15
           }
         ],
-        "thoughtsTokenCount": 229,
-        "totalTokenCount": 348
+        "thoughtsTokenCount": 224,
+        "totalTokenCount": 341
       }
     },
     "headers": {
@@ -81,13 +73,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Sat, 04 Oct 2025 00:07:55 GMT"
+        "Mon, 06 Oct 2025 17:01:20 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=3265"
+        "gfet4t7; dur=2874"
       ],
       "transfer-encoding": [
         "chunked"

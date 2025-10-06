@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoibzQtbWluaSIsInN0cmVhbSI6ZmFsc2V9"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMDAwLCJtb2RlbCI6Im80LW1pbmkiLCJzdHJlYW0iOmZhbHNlfQ=="
     },
     "canonical_json": {
       "input": [
@@ -15,7 +15,7 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 100,
+      "max_output_tokens": 3000,
       "model": "o4-mini",
       "stream": false
     },
@@ -40,23 +40,35 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759698858,
+      "created_at": 1759772174,
       "error": null,
-      "id": "resp_03a549049a55fc920068e2dfaaa2a48195967f9940fb02ea7c",
-      "incomplete_details": {
-        "reason": "max_output_tokens"
-      },
+      "id": "resp_0e97649b9b555ebe0068e3fe0e8cb4819390bce34ebb2632dc",
+      "incomplete_details": null,
       "instructions": null,
-      "max_output_tokens": 100,
+      "max_output_tokens": 3000,
       "max_tool_calls": null,
       "metadata": {},
       "model": "o4-mini-2025-04-16",
       "object": "response",
       "output": [
         {
-          "id": "rs_03a549049a55fc920068e2dfab02088195b09223274acbff4c",
+          "id": "rs_0e97649b9b555ebe0068e3fe0f561c8193b4522f9407134b9b",
           "summary": [],
           "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Chapter I: The Whisper of Scales  \nIn the kingdom of Aurelia, dragons were more myth than memory. Centuries had passed since the great Dragon Wars, when winged champions and mortals fought side by side against the Voidlords. Now golden spires crowned emerald plains, and the last of the true dragons slept deep beneath the Crystal Mountains. Still, legend persisted that when darkness stirred again, a new dragon would rise to stand with those brave enough to face it.\n\nElysia Tarren, the youngest knight in the royal guard, patrolled the forest road one misty dawn. Her silver armor gleamed like starlight, and her lance bore the crest of a newborn star—a gift from the Queen for her valor in rescue missions. On this morning, she was yet untested by fate. That changed when she found the cavern.  \n\nHidden behind trailing ivy and thorn, the grotto exhaled a breath of warmth. Inside lay an obsidian egg, etched with runes that pulsed like a heartbeat. Elysia’s fingertips trembled as she brushed away moss. A crack shivered across the shell, and a single golden eye opened.\n\nChapter II: Hatching of Azuris  \nThe moment the dragonling emerged, the air thrummed with power. Scales the color of midnight ink shimmered beneath a blue flame, and wings, though too small for flight, held the promise of storms. Elysia knelt as the dragonling—Azuris—snuffled at her gauntleted fingers.  \n\n“By Luna’s light,” she whispered, “you’re the first in a thousand years.”  \n\nWhen she returned to the capital, the guards gasped. The Queen herself stepped forward, pale with wonder. “A prophecy says that when the world must choose its fate, a rider and her dragon will bear the brightest torch.”  \n\nAnd so Elysia became the Dragonward, charged with nurturing Azuris until the bond of souls was sealed.\n\nChapter III: The Shadow in the East  \nFar beyond the kingdom, the warlock Kaelor marshaled forces in the Ruined Vale. He had discovered a fragment of Voidlord magic and bent it to his will: undead wyrms, black bones streaked with necrotic fire. His ambition was simple—overthrow Aurelia, plunge the realm into fear, and unlock the gate to the Voidlords beyond time.\n\nRumors reached the court: villages razed by skeletal dragons, survivors muttering of a sorcerer draped in shadow. Elysia watched map lines, Azuris nestled at her side. The young dragon’s wings flexed, eager.  \n\n“I feel it,” Elysia told her queen. “The drums of war. I must ride out.”  \n\nChapter IV: Allies Gathered  \nElysia set forth at dawn with Azuris coiled on a gilded saddle. Along the winding road she rescued Rowan, a forest ranger whose scouting party had fallen into an ambush. He bore twin blades of yewwood and offered his keen eyes. At the border of the Silver Sands, they met Kai, a desert mage whose ivory staff glowed with hidden runes. He sought to avenge his sister, lost to Kaelor’s undead scourge. In the Stormforged Peaks they recruited Soren, a dwarf warrior whose hammer had broken through a dragon bone gate.  \n\n“We’ll stand or fall together,” Elysia declared around the campfire. Flames danced in Azuris’s throat, casting shifting shadows on determined faces.\n\nChapter V: Trials of Fire and Frost  \nTheir path led through the Whitefire Pass, where snow devils swirled and glaciers creaked. Azuris’s breath melted ice, carving a safe way for the company. Then came the Great Sand Sea, where whirlwinds of glass threatened to consume them. Kai conjured a mirage fortress, and the travelers rested beneath its cool arches.  \n\nFinally, they reached the Labyrinth of Bones—a cathedral of charred ribs and bleached spines, remnants of dragons long dead. Here Kaelor’s magic ran rampant. Undead wyrms slithered through skeletal arches, hissing with rancid hunger. In the gorge of bones, Eagle-eyed Rowan spotted the warlock’s banner: a serpent coiled around a shattered crown.\n\nBattle erupted. Soren’s hammer crushed undead skulls. Kai’s flame wards crackled, melting necrotic flesh. Elysia, astride Azuris, dove between jagged bones. Together they unleashed a torrent of fire and light, scattering Kaelor’s minions. Yet the warlock himself vanished in a swirl of black mist, vowing vengeance.\n\nChapter VI: The Citadel of Shadows  \nAt last, the company stood before the Citadel of Shadows, perched on a crag that tore at thunderclouds. Its towers reared like fangs against a bruised sky. Elysia’s heart pounded. Azuris roared, talons scraping stone.\n\nThey breached the outer gate, fought halls of animated armor, and climbed spiraling stairs slick with dark ichor. At the pinnacle lay Kaelor’s sanctum: a vaulted chamber lit by bleeding red crystals. There the warlock awaited, staff raised, eyes aflame with hatred.\n\n“You think a child's dragon can defeat me?” he hissed. “I command the Voidlords themselves!”  \n\nElysia advanced. “We fight for every life you’ve stolen!” Azuris circled overhead, wings beating up gusts that rattled the crystal pillars.  \n\nKaelor unleashed a gale of shadow bolts. Kai countered with a blaze that turned marble walls to molten slag. Rowan darted in, blades flashing through tendrils of darkness. Soren hurled his hammer, shattering the warlock’s staff. In that instant, Elysia plunged her lance forward.  \n\nAzuris dove through the chamber, their souls singing as one. Flame erupted in a brilliant conflagration, brighter than the noon sun. Kaelor screamed, his form dissolving into shards of smoke and ash. The red crystals shattered, releasing a shockwave that sent heroes sprawling but cleansed the fortress of corruption.\n\nChapter VII: Dawn of a New Era  \nWhen light returned, the Citadel lay silent but free of shadow. Azuris stood by Elysia, wings unfurled in triumph. The company gathered, bruised but unbroken.  \n\n“You have saved more than this kingdom,” Kai said softly. “You’ve saved hope itself.”  \n\nSoren clapped Elysia on the shoulder, Rowan sheathed his blades with a grin. Azuris’s roar echoed down the mountain, a herald of victory.  \n\nThey returned to Aurelia as legends. Azuris matured into a magnificent dragon, scales shimmering in dawn’s first light. Elysia was named Dragonlord of the realm, protector of the skies. Together, rider and dragon patrolled the borders, ensuring that no shadow ever rose again.\n\nEpilogue: Wings Across the World  \nYears passed. Songs were sung of Elysia and Azuris, of the companions who stood against darkness. In distant lands, other eggs stirred, awakened by the bond of that first dragon and her knight.  \n\nOn clear nights, villagers spoke in hushed awe when a distant silhouette passed across the moon. A dragon’s wing, they said, carried the promise that so long as courage lived in mortal hearts, evil would find no hold.\n\nAnd somewhere in the peaks of the Crystal Mountains, the line of ancient dragons awakened from slumber, guided by the call of Azuris, ready once more to stand with those brave enough to ride among the stars.",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0e97649b9b555ebe0068e3fe13cdcc8193abd292136945825d",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
         }
       ],
       "parallel_tool_calls": true,
@@ -68,7 +80,7 @@
       },
       "safety_identifier": null,
       "service_tier": "default",
-      "status": "incomplete",
+      "status": "completed",
       "store": true,
       "temperature": 1.0,
       "text": {
@@ -87,11 +99,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 64,
+        "output_tokens": 1951,
         "output_tokens_details": {
-          "reasoning_tokens": 64
+          "reasoning_tokens": 384
         },
-        "total_tokens": 79
+        "total_tokens": 1966
       },
       "user": null
     },
@@ -103,7 +115,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989fed8a3e5f5d07-ORD"
+        "98a6eb7a9dbb11fd-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -112,13 +124,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:14:19 GMT"
+        "Mon, 06 Oct 2025 17:36:37 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "1242"
+        "22609"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -130,8 +142,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=UTD8NDRoTuolMgzA6i6UXrwEoaEG1NL2T.PR4P0p8cg-1759698859-1.0.1.1-TWbliLW3jdw_3pIDNGCv1X4UBKLgvLv59br7lW_qlJ88NgZ8FVaJ0.XSwxo9hmdJgPdNFGfJFppyvzthl.joKm05CQCdlXfAE8zQEwNQyAo; path=/; expires=Sun, 05-Oct-25 21:44:19 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=2W2loMcaabbFEBHGzAMmW16jtzNpN5NNfRgiKH.bz.Q-1759698859903-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=Yovfa3C1dCQo6Vy.oEroOA1BK_aJpY.tHtiDpVnmxjo-1759772197-1.0.1.1-TP63SwIVqCirVoNkMInH4Y.XY808DmYUhAZnUsTNWaEdpOpertY8Y_wtx86FIQUnqXnaJgSx1IuPAa.GyyJ4r0K7K3OPQ4AWQrBUoEgkDxY; path=/; expires=Mon, 06-Oct-25 18:06:37 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=H6Obdz8K3_Z5qKrrxwds9rpYqJe1TrLsEdnaKxlbM9Q-1759772197179-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -143,7 +155,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "1244"
+        "22613"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -164,7 +176,7 @@
         "3ms"
       ],
       "x-request-id": [
-        "req_f8dd242986dcb2a227cc9a2af10e46f3"
+        "req_3457fdb44969032ee4a1861c9bfbd6de"
       ]
     },
     "status": 200

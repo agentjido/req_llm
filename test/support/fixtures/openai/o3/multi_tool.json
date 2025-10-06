@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/IiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MTUwLCJtb2RlbCI6Im8zIiwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6InRlbGxfam9rZSIsInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfdGltZSIsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/IiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MjAwMDAsIm1vZGVsIjoibzMiLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfd2VhdGhlciIsInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoidGVsbF9qb2tlIiwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImdldF90aW1lIiwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "input": [
@@ -15,7 +15,7 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 150,
+      "max_output_tokens": 20000,
       "model": "o3",
       "stream": false,
       "tools": [
@@ -97,26 +97,26 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759698849,
+      "created_at": 1759772209,
       "error": null,
-      "id": "resp_09bdb594110d25450068e2dfa1b5348190b3091aa7692f8ecd",
+      "id": "resp_0621f7e74523cc830068e3fe31858c81968791c88cef98fd7f",
       "incomplete_details": null,
       "instructions": null,
-      "max_output_tokens": 150,
+      "max_output_tokens": 20000,
       "max_tool_calls": null,
       "metadata": {},
       "model": "o3-2025-04-16",
       "object": "response",
       "output": [
         {
-          "id": "rs_09bdb594110d25450068e2dfa384d8819083a53aa7820425ad",
+          "id": "rs_0621f7e74523cc830068e3fe330f848196803a66db74a512ac",
           "summary": [],
           "type": "reasoning"
         },
         {
           "arguments": "{}",
-          "call_id": "call_9hnoFPPs2wBb0MnERT62R0Au",
-          "id": "fc_09bdb594110d25450068e2dfa475408190a1d2aaf06e709ec9",
+          "call_id": "call_Q9bk7nFORuVyb16wHEzRQ6mR",
+          "id": "fc_0621f7e74523cc830068e3fe34989c81968a4f4eac3db14653",
           "name": "get_weather",
           "status": "completed",
           "type": "function_call"
@@ -203,7 +203,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989fed52587e6087-ORD"
+        "98a6ec54b89b61c9-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -212,13 +212,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:14:12 GMT"
+        "Mon, 06 Oct 2025 17:36:52 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "3111"
+        "3440"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -230,8 +230,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=GTdbOloBO4TuLtVRIcz6hRjTDl.EB7kuwJ.xCnI9USQ-1759698852-1.0.1.1-nDq8CYkVs8yFW8OMazdNvGJ3njCFvebZNQCUiW_YRxA7CSi1Vz32LGU.hYkHDzKFamngOxDc1U6uxvXvmU9RdaewrtLyh_jJEDKK2idcGl8; path=/; expires=Sun, 05-Oct-25 21:44:12 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=qRRlj7oYoBe5NCwhqZKlEWdlgzIQuzAgzl1XyKNRgvk-1759698852838-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=iu..NOq1YBW4KtJFbtlh10pR261Zm9FkmGpIofjbG84-1759772212-1.0.1.1-IhDVuqmsBdDxxIJ2huHOO67ZZbHxui.ngmbW98XylkZzTFbkHM6wTfUtTzZ5Dt6_YDCNibFD4mF9mwmNI05zVseDpK5yw9sBWUalUlu7F2U; path=/; expires=Mon, 06-Oct-25 18:06:52 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=7MsPPawAxpKBZunceF.E8py4keQUjm7vkiNcFj5R1d4-1759772212930-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -243,7 +243,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "3116"
+        "3453"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -264,7 +264,7 @@
         "23ms"
       ],
       "x-request-id": [
-        "req_4a655b142e250254abf25cd4ece24547"
+        "req_7db34c3767cef55d93fb46ae1ccdb34c"
       ]
     },
     "status": 200

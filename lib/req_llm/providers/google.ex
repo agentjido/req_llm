@@ -81,13 +81,20 @@ defmodule ReqLLM.Providers.Google do
       # Add alt=sse parameter for streaming requests
       base_params = if processed_opts[:stream], do: [alt: "sse"], else: []
 
+      timeout =
+        Keyword.get(
+          processed_opts,
+          :receive_timeout,
+          Application.get_env(:req_llm, :receive_timeout, 30_000)
+        )
+
       request =
         Req.new(
           [
             url: "/models/#{model.model}#{endpoint}",
             method: :post,
             params: base_params,
-            receive_timeout: Keyword.get(processed_opts, :receive_timeout, 30_000)
+            receive_timeout: timeout
           ] ++ http_opts
         )
         |> Req.Request.register_options(req_keys)
@@ -159,12 +166,19 @@ defmodule ReqLLM.Providers.Google do
         __MODULE__.supported_provider_options() ++
           [:context, :operation, :text, :stream, :model, :provider_options]
 
+      timeout =
+        Keyword.get(
+          processed_opts,
+          :receive_timeout,
+          Application.get_env(:req_llm, :receive_timeout, 30_000)
+        )
+
       request =
         Req.new(
           [
             url: "/models/#{model.model}#{endpoint}",
             method: :post,
-            receive_timeout: Keyword.get(processed_opts, :receive_timeout, 30_000)
+            receive_timeout: timeout
           ] ++ http_opts
         )
         |> Req.Request.register_options(req_keys)
@@ -231,13 +245,14 @@ defmodule ReqLLM.Providers.Google do
     output = Map.get(usage_metadata, "candidatesTokenCount", 0)
     total = Map.get(usage_metadata, "totalTokenCount", 0)
     cached = Map.get(usage_metadata, "cachedContentTokenCount", 0)
+    reasoning = Map.get(usage_metadata, "thoughtsTokenCount", 0)
 
     %{
       input_tokens: input,
       output_tokens: output,
       total_tokens: total,
       cached_tokens: cached,
-      reasoning_tokens: 0
+      reasoning_tokens: reasoning
     }
   end
 
@@ -557,7 +572,7 @@ defmodule ReqLLM.Providers.Google do
             "finish_reason" => normalize_google_finish_reason(candidate["finishReason"])
           }
 
-        %{"content" => _content, "finishReason" => finish_reason} ->
+        %{"content" => content, "finishReason" => finish_reason} when is_map(content) ->
           %{
             "message" => %{"role" => "assistant", "content" => ""},
             "finish_reason" => normalize_google_finish_reason(finish_reason)
@@ -659,11 +674,10 @@ defmodule ReqLLM.Providers.Google do
 
       body = build_google_streaming_body(model, context, processed_opts)
 
-      url = "#{base_url}/models/#{model.model}:streamGenerateContent?alt=sse&key=#{api_key}"
+      url = "#{base_url}/models/#{model.model}:streamGenerateContent?key=#{api_key}"
 
       headers = [
-        {"Content-Type", "application/json"},
-        {"Accept", "text/event-stream"}
+        {"Content-Type", "application/json"}
       ]
 
       finch_request = Finch.build(:post, url, headers, body)
@@ -702,7 +716,11 @@ defmodule ReqLLM.Providers.Google do
 
   @impl ReqLLM.Provider
   def decode_sse_event(event, model) do
-    decode_google_sse_event(event, model)
+    case event do
+      %{data: data} when is_map(data) -> decode_google_event(data, model)
+      data when is_map(data) -> decode_google_event(data, model)
+      _ -> []
+    end
   end
 
   # Split messages into system instruction and contents for Google Gemini
@@ -825,8 +843,13 @@ defmodule ReqLLM.Providers.Google do
 
   defp convert_content_part(part), do: %{text: to_string(part)}
 
-  # Google-specific SSE event decoding
-  defp decode_google_sse_event(%{data: data}, model) when is_map(data) do
+  # Decode Google streaming events.
+  # 
+  # Google's :streamGenerateContent endpoint returns JSON array format (not SSE) for 2.5 models.
+  # This function handles both formats:
+  # - SSE format: %{data: {...}}
+  # - JSON array element: raw map from parsed JSON array
+  defp decode_google_event(data, model) when is_map(data) do
     case data do
       %{
         "candidates" => [%{"content" => %{"parts" => parts}, "finishReason" => finish_reason} | _],
@@ -886,8 +909,6 @@ defmodule ReqLLM.Providers.Google do
         []
     end
   end
-
-  defp decode_google_sse_event(_, _model), do: []
 
   defp extract_chunks_from_parts(parts) do
     parts

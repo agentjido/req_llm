@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxNTAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS0zLW9wdXMtMjAyNDAyMjkiLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwiaW5wdXRfc2NoZW1hIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoiZ2V0X3dlYXRoZXIifV19"
+      "b64": "eyJtYXhfdG9rZW5zIjo0MDksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS0zLW9wdXMtMjAyNDAyMjkiLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwiaW5wdXRfc2NoZW1hIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoiZ2V0X3dlYXRoZXIifV19"
     },
     "canonical_json": {
-      "max_tokens": 150,
+      "max_tokens": 409,
       "messages": [
         {
           "content": "Tell me a joke about cats",
@@ -61,7 +61,7 @@
           "type": "text"
         }
       ],
-      "id": "msg_017mXjhbBLWzLZrFPaksu6SQ",
+      "id": "msg_017ayL3c6pdKZuPmBbvwbC2Y",
       "model": "claude-3-opus-20240229",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -90,7 +90,7 @@
         "40000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-05T15:16:03Z"
+        "2025-10-06T17:09:33Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "8000"
@@ -99,7 +99,7 @@
         "8000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-05T15:16:07Z"
+        "2025-10-06T17:09:37Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -108,7 +108,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-05T15:16:02Z"
+        "2025-10-06T17:09:32Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "48000"
@@ -117,13 +117,13 @@
         "48000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-05T15:16:03Z"
+        "2025-10-06T17:09:33Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989de0b89bf55c90-ORD"
+        "98a6c45b9880f5fb-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -132,10 +132,10 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 15:16:06 GMT"
+        "Mon, 06 Oct 2025 17:09:36 GMT"
       ],
       "request-id": [
-        "req_011CTpGj4E3pSSSpkPiNBnK7"
+        "req_011CTrKByLMecFQSE56Ywcch"
       ],
       "server": [
         "cloudflare"
@@ -150,7 +150,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "4300"
+        "4688"
       ],
       "x-robots-tag": [
         "none"

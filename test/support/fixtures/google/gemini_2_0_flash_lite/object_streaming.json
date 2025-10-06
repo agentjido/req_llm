@@ -1,7 +1,18 @@
 {
+  "captured_at": "2025-10-06T15:29:34.703797Z",
+  "chunks": [
+    {
+      "b64": "W3sKICAiY2FuZGlkYXRlcyI6IFsKICAgIHsKICAgICAgImNvbnRlbnQiOiB7CiAgICAgICAgInBhcnRzIjogWwogICAgICAgICAgewogICAgICAgICAgICAiZnVuY3Rpb25DYWxsIjogewogICAgICAgICAgICAgICJuYW1lIjogInN0cnVjdHVyZWRfb3V0cHV0IiwKICAgICAgICAgICAgICAiYXJncyI6IHsKICAgICAgICAgICAgICAgICJvY2N1cGF0aW9uIjogIlNvZnR3YXJlIEVuZ2luZWVyIiwKICAgICAgICAgICAgICAgICJuYW1lIjogIkpvaG4gU21pdGgiLAogICAgICAgICAgICAgICAgImFnZSI6IDMwCiAgICAgICAgICAgICAgfQogICAgICAgICAgICB9CiAgICAgICAgICB9CiAgICAgICAgXSwKICAgICAgICAicm9sZSI6ICJtb2RlbCIKICAgICAgfSwKICAgICAgImZpbmlzaFJlYXNvbiI6ICJTVE9QIgogICAgfQogIF0sCiAgInVzYWdlTWV0YWRhdGEiOiB7CiAgICAicHJvbXB0VG9rZW5Db3VudCI6IDQxLAogICAgImNhbmRpZGF0ZXNUb2tlbkNvdW50IjogMTEsCiAgICAidG90YWxUb2tlbkNvdW50IjogNTIsCiAgICAicHJvbXB0VG9rZW5zRGV0YWlscyI6IFsKICAgICAgewogICAgICAgICJtb2RhbGl0eSI6ICJURVhUIiwKICAgICAgICAidG9rZW5Db3VudCI6IDQxCiAgICAgIH0KICAgIF0sCiAgICAiY2FuZGlkYXRlc1Rva2Vuc0RldGFpbHMiOiBbCiAgICAgIHsKICAgICAgICAibW9kYWxpdHkiOiAiVEVYVCIsCiAgICAgICAgInRva2VuQ291bnQiOiAxMQogICAgICB9CiAgICBdCiAgfSwKICAibW9kZWxWZXJzaW9uIjogImdlbWluaS0yLjAtZmxhc2gtbGl0ZSIsCiAgInJlc3BvbnNlSWQiOiAiWHVEamFLcUNDYnJ4Z0xVUHdPMkI0QWMiCn0K",
+      "decoded": "[{\n  \"candidates\": [\n    {\n      \"content\": {\n        \"parts\": [\n          {\n            \"functionCall\": {\n              \"name\": \"structured_output\",\n              \"args\": {\n                \"occupation\": \"Software Engineer\",\n                \"name\": \"John Smith\",\n                \"age\": 30\n              }\n            }\n          }\n        ],\n        \"role\": \"model\"\n      },\n      \"finishReason\": \"STOP\"\n    }\n  ],\n  \"usageMetadata\": {\n    \"promptTokenCount\": 41,\n    \"candidatesTokenCount\": 11,\n    \"totalTokenCount\": 52,\n    \"promptTokensDetails\": [\n      {\n        \"modality\": \"TEXT\",\n        \"tokenCount\": 41\n      }\n    ],\n    \"candidatesTokensDetails\": [\n      {\n        \"modality\": \"TEXT\",\n        \"tokenCount\": 11\n      }\n    ]\n  },\n  \"modelVersion\": \"gemini-2.0-flash-lite\",\n  \"responseId\": \"XuDjaKqCCbrxgLUPwO2B4Ac\"\n}\n"
+    },
+    {
+      "b64": "XQ==",
+      "decoded": "]"
+    }
+  ],
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMCwidGVtcGVyYXR1cmUiOjAuMH0sInRvb2xDb25maWciOnsiZnVuY3Rpb25DYWxsaW5nQ29uZmlnIjp7ImFsbG93ZWRGdW5jdGlvbk5hbWVzIjpbInN0cnVjdHVyZWRfb3V0cHV0Il0sIm1vZGUiOiJBTlkifX0sInRvb2xzIjpbeyJmdW5jdGlvbkRlY2xhcmF0aW9ucyI6W3siZGVzY3JpcHRpb24iOiJHZW5lcmF0ZSBzdHJ1Y3R1cmVkIG91dHB1dCBtYXRjaGluZyB0aGUgcHJvdmlkZWQgc2NoZW1hIiwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbIm5hbWUiLCJhZ2UiXSwidHlwZSI6Im9iamVjdCJ9fV19XX0="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwMCwidGVtcGVyYXR1cmUiOjAuMH0sInRvb2xDb25maWciOnsiZnVuY3Rpb25DYWxsaW5nQ29uZmlnIjp7ImFsbG93ZWRGdW5jdGlvbk5hbWVzIjpbInN0cnVjdHVyZWRfb3V0cHV0Il0sIm1vZGUiOiJBTlkifX0sInRvb2xzIjpbeyJmdW5jdGlvbkRlY2xhcmF0aW9ucyI6W3siZGVzY3JpcHRpb24iOiJHZW5lcmF0ZSBzdHJ1Y3R1cmVkIG91dHB1dCBtYXRjaGluZyB0aGUgcHJvdmlkZWQgc2NoZW1hIiwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbIm5hbWUiLCJhZ2UiXSwidHlwZSI6Im9iamVjdCJ9fV19XX0="
     },
     "canonical_json": {
       "contents": [
@@ -16,7 +27,7 @@
       ],
       "generationConfig": {
         "candidateCount": 1,
-        "maxOutputTokens": 200,
+        "maxOutputTokens": 500,
         "temperature": 0.0
       },
       "toolConfig": {
@@ -61,24 +72,21 @@
       ]
     },
     "headers": {
-      "accept": "text/event-stream",
       "content-type": "application/json"
     },
     "method": "POST",
     "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:streamGenerateContent"
   },
   "response": {
-    "body": {
-      "b64": "ZGF0YTogeyJjYW5kaWRhdGVzIjogW3siY29udGVudCI6IHsicGFydHMiOiBbeyJmdW5jdGlvbkNhbGwiOiB7Im5hbWUiOiAic3RydWN0dXJlZF9vdXRwdXQiLCJhcmdzIjogeyJuYW1lIjogIkpvaG4gU21pdGgiLCJhZ2UiOiAzMCwib2NjdXBhdGlvbiI6ICJTb2Z0d2FyZSBFbmdpbmVlciJ9fX1dLCJyb2xlIjogIm1vZGVsIn0sImZpbmlzaFJlYXNvbiI6ICJTVE9QIn1dLCJ1c2FnZU1ldGFkYXRhIjogeyJwcm9tcHRUb2tlbkNvdW50IjogNDEsImNhbmRpZGF0ZXNUb2tlbkNvdW50IjogMTEsInRvdGFsVG9rZW5Db3VudCI6IDUyLCJwcm9tcHRUb2tlbnNEZXRhaWxzIjogW3sibW9kYWxpdHkiOiAiVEVYVCIsInRva2VuQ291bnQiOiA0MX1dLCJjYW5kaWRhdGVzVG9rZW5zRGV0YWlscyI6IFt7Im1vZGFsaXR5IjogIlRFWFQiLCJ0b2tlbkNvdW50IjogMTF9XX0sIm1vZGVsVmVyc2lvbiI6ICJnZW1pbmktMi4wLWZsYXNoLWxpdGUiLCJyZXNwb25zZUlkIjogImpGdmdhSUNqTTQ2NWdMVVBrcExab1E4In0NCg0K"
-    },
+    "body": null,
     "headers": {
+      "accept-ranges": "none",
       "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
-      "content-disposition": "attachment",
-      "content-type": "text/event-stream",
-      "date": "Fri, 03 Oct 2025 23:26:05 GMT",
+      "content-type": "application/json; charset=UTF-8",
+      "date": "Mon, 06 Oct 2025 15:29:34 GMT",
       "server": "scaffolding on HTTPServer2",
-      "server-timing": "gfet4t7; dur=540",
-      "vary": "Referer",
+      "server-timing": "gfet4t7; dur=643",
+      "vary": "Origin,Accept-Encoding",
       "x-content-type-options": "nosniff",
       "x-frame-options": "SAMEORIGIN",
       "x-xss-protection": "0"

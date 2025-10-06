@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxNTAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncHQtNG8tMjAyNC0wNS0xMyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfdG9rZW5zIjo0MDksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncHQtNG8tMjAyNC0wNS0xMyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
-      "max_tokens": 150,
+      "max_tokens": 409,
       "messages": [
         {
           "content": "What's the weather like in Paris, France?",
@@ -103,15 +103,15 @@
                   "arguments": "{\"location\":\"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "call_OE8DTCoBgisy3kulDwGn1Sa5",
+                "id": "call_OP27blHuPvzPs5eXl9iO6PQH",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1759698833,
-      "id": "chatcmpl-CNQLBwPB5JZlVpkpke2o2hVVGRlMt",
+      "created": 1759772163,
+      "id": "chatcmpl-CNjPvxubFOitUAXY4c8DpNsbhJt0e",
       "model": "gpt-4o-2024-05-13",
       "object": "chat.completion",
       "service_tier": "default",
@@ -143,7 +143,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989fececdf42dada-ORD"
+        "98a6eb374dfbee11-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -152,13 +152,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:13:53 GMT"
+        "Mon, 06 Oct 2025 17:36:04 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "339"
+        "644"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -170,8 +170,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=tE.zzaOqyLPZ7b6B6gruGU3fg6.C.IKFp9PS53F0CYU-1759698833-1.0.1.1-t4GbP1D62gVEjj7PIgzSEv4xvEGu5pUxR3eoV18EYMbFsAS5vaR63YV1VakvFAWCfnDpI9THc5T_qrNAnir8QiTurmE2ceGi1IsvLCRBEc4; path=/; expires=Sun, 05-Oct-25 21:43:53 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=iOivM2EGDuWIy.9Uhh8MOx7ufcxsfYHHcb.Us8ymgeM-1759698833843-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=NU7WVjUO.u3fSq1L741WNd.Yg3zmnE5W37EfAohbNWA-1759772164-1.0.1.1-n0MIDay04k9_4kfQh26hRAMWtIQy3eC0V1cPMqTqHzH.bhlM.PzP.BWI0dv2RW2dJe.cOnNw_USKqw7fArBZyCpiNFUcWQUoslHdO5fZXSU; path=/; expires=Mon, 06-Oct-25 18:06:04 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=6JJAD3Ieig72XmOyGjz9yxDg4RdjUZgc3Q385SxBpfU-1759772164487-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -183,7 +183,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "359"
+        "673"
       ],
       "x-openai-proxy-wasm": [
         "v0.1"
@@ -207,7 +207,7 @@
         "0s"
       ],
       "x-request-id": [
-        "req_37de36f2f8c642a594293ec7d600d9f0"
+        "req_3018d047396c42f5ad31848d95e6e743"
       ]
     },
     "status": 200

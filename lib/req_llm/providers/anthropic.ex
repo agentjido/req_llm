@@ -89,12 +89,19 @@ defmodule ReqLLM.Providers.Anthropic do
 
       req_keys = supported_provider_options() ++ @req_keys
 
+      default_timeout =
+        if Keyword.has_key?(processed_opts, :thinking), do: 300_000, else: 30_000
+
+      timeout = Keyword.get(processed_opts, :receive_timeout, default_timeout)
+
       request =
         Req.new(
           [
             url: "/v1/messages",
             method: :post,
-            receive_timeout: Keyword.get(processed_opts, :receive_timeout, 30_000)
+            receive_timeout: timeout,
+            pool_timeout: timeout,
+            connect_options: [timeout: timeout]
           ] ++ http_opts
         )
         |> Req.Request.register_options(req_keys)
@@ -230,6 +237,13 @@ defmodule ReqLLM.Providers.Anthropic do
     # Translate provider options (including reasoning_effort) before building body
     {translated_opts, _warnings} = translate_options(:chat, model, flattened_opts)
 
+    # Set default timeout for reasoning models
+    default_timeout =
+      if Keyword.has_key?(translated_opts, :thinking), do: 300_000, else: 30_000
+
+    translated_opts =
+      Keyword.put_new(translated_opts, :receive_timeout, default_timeout)
+
     # Build request body using provider's encode logic
     body = build_anthropic_streaming_body(model, context, translated_opts)
 
@@ -294,6 +308,7 @@ defmodule ReqLLM.Providers.Anthropic do
       opts
       |> translate_stop_parameter()
       |> translate_reasoning_effort()
+      |> validate_tool_choice_with_thinking()
       |> remove_conflicting_sampling_params()
       |> translate_unsupported_parameters()
 
@@ -402,6 +417,7 @@ defmodule ReqLLM.Providers.Anthropic do
 
         opts
         |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: budget})
+        |> adjust_max_tokens_for_thinking(budget)
         |> adjust_top_p_for_thinking()
 
       :medium ->
@@ -409,6 +425,7 @@ defmodule ReqLLM.Providers.Anthropic do
 
         opts
         |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: budget})
+        |> adjust_max_tokens_for_thinking(budget)
         |> adjust_top_p_for_thinking()
 
       :high ->
@@ -416,6 +433,7 @@ defmodule ReqLLM.Providers.Anthropic do
 
         opts
         |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: budget})
+        |> adjust_max_tokens_for_thinking(budget)
         |> adjust_top_p_for_thinking()
 
       :default ->
@@ -428,17 +446,44 @@ defmodule ReqLLM.Providers.Anthropic do
     end
   end
 
+  defp adjust_max_tokens_for_thinking(opts, budget_tokens) do
+    max_tokens = Keyword.get(opts, :max_tokens)
+
+    cond do
+      is_nil(max_tokens) ->
+        opts
+
+      max_tokens <= budget_tokens ->
+        Keyword.put(opts, :max_tokens, budget_tokens + 201)
+
+      true ->
+        opts
+    end
+  end
+
+  defp validate_tool_choice_with_thinking(opts) do
+    thinking = Keyword.get(opts, :thinking)
+    tool_choice = Keyword.get(opts, :tool_choice)
+
+    case {thinking, tool_choice} do
+      {%{type: "enabled"}, %{type: type}} when type in ["tool", "any"] ->
+        Keyword.put(opts, :tool_choice, %{type: "auto"})
+
+      _ ->
+        opts
+    end
+  end
+
   defp adjust_top_p_for_thinking(opts) do
     opts
     |> adjust_parameter(:top_p, fn
       nil -> nil
       top_p when top_p < 0.95 -> 0.95
+      top_p when top_p > 1.0 -> 1.0
       top_p -> top_p
     end)
-    |> adjust_parameter(:temperature, fn
-      nil -> nil
-      _ -> 1.0
-    end)
+    |> Keyword.delete(:temperature)
+    |> Keyword.delete(:top_k)
   end
 
   defp adjust_parameter(opts, key, fun) do

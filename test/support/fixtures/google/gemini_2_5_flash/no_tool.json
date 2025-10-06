@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjo2MDAsInRlbXBlcmF0dXJlIjowLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fSwidG9vbHMiOlt7ImZ1bmN0aW9uRGVjbGFyYXRpb25zIjpbeyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fV19XX0="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMzEwNiwidGVtcGVyYXR1cmUiOjAuMH0sInRvb2xzIjpbeyJmdW5jdGlvbkRlY2xhcmF0aW9ucyI6W3siZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX1dfV19"
     },
     "canonical_json": {
       "contents": [
@@ -16,12 +16,8 @@
       ],
       "generationConfig": {
         "candidateCount": 1,
-        "maxOutputTokens": 600,
-        "temperature": 0.0,
-        "thinkingConfig": {
-          "includeThoughts": true,
-          "thinkingBudget": 4096
-        }
+        "maxOutputTokens": 13106,
+        "temperature": 0.0
       },
       "tools": [
         {
@@ -66,7 +62,7 @@
           "content": {
             "parts": [
               {
-                "text": "Why did the cat sit on the computer?\nBecause it wanted to keep an eye on the mouse!"
+                "text": "Why did the cat sit on the computer?\n\nBecause it wanted to keep an eye on the mouse!"
               }
             ],
             "role": "model"
@@ -76,7 +72,7 @@
         }
       ],
       "modelVersion": "gemini-2.5-flash",
-      "responseId": "TmXgaJOSILmp_uMP6Ois6Q4",
+      "responseId": "3PXjaN-3CZLQjMcPxN_RoAE",
       "usageMetadata": {
         "candidatesTokenCount": 21,
         "promptTokenCount": 46,
@@ -97,13 +93,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Sat, 04 Oct 2025 00:07:42 GMT"
+        "Mon, 06 Oct 2025 17:01:16 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=493"
+        "gfet4t7; dur=640"
       ],
       "transfer-encoding": [
         "chunked"

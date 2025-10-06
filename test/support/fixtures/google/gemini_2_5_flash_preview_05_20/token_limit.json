@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjUsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fX0="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoyMDAwLCJ0ZW1wZXJhdHVyZSI6MC41fX0="
     },
     "canonical_json": {
       "contents": [
@@ -16,12 +16,8 @@
       ],
       "generationConfig": {
         "candidateCount": 1,
-        "maxOutputTokens": 100,
-        "temperature": 0.5,
-        "thinkingConfig": {
-          "includeThoughts": true,
-          "thinkingBudget": 4096
-        }
+        "maxOutputTokens": 2000,
+        "temperature": 0.5
       }
     },
     "headers": {
@@ -45,8 +41,7 @@
           "content": {
             "parts": [
               {
-                "text": "**Breaking Down the Dragon's Tale**\n\nOkay, so I got the prompt: \"Very long story about dragons and adventures.\" My first move is always to deconstruct it. \"Very long\" immediately screams \"epic.\" I'm thinking multiple acts, a real character arc, and a chance to build a world that's more than just a backdrop. We're talking significant development, not just a series of events. It needs to be satisfying.\n\nThen there's \"dragons.\" And this is where it gets interesting. I'm not going to just throw in fire-breathers. I need to think about *what* kind of dragons, their role in the world. Are they villains, allies, ancient guardians, something else entirely? The type of dragon is going to fundamentally influence everything else - the plot, the characters, the tone. I'm already envisioning possible types and their relationship to the overall world building. This is going to be good.\n",
-                "thought": true
+                "text": "The wind, a constant, mournful whisper across the jagged peaks of the Dragon's Teeth mountains, carried with it tales as old as the stone itself. Tales of fire and ice, of ancient pacts and forgotten wars, of the majestic, terrifying creatures that had shaped the very world: dragons.\n\nElara, a young woman with eyes the colour of moss after a spring rain and hair like spun moonlight, knew these tales intimately. Not from dusty scrolls, but from the hushed reverence of her grandmother, a village elder who spoke of dragons not as monsters, but as forces of nature, capricious and powerful, yet sometimes, just sometimes, capable of a profound wisdom. Elara lived in Oakhaven, a village nestled in a valley far below the highest peaks, a place where the greatest threat was a harsh winter or a particularly stubborn goat. Or so she thought.\n\nThe first sign of change came not with a roar, but with a silence. The birds, usually raucous at dawn, were mute. The forest, normally alive with rustling leaves and chittering creatures, held its breath. Then came the smoke. Not the thin, grey tendrils of a distant wildfire, but a thick, oily black plume that rose from the direction of the Dragon's Teeth, impossibly dark against the pale morning sky.\n\nPanic rippled through Oakhaven. Old Man Thistle, who claimed to have seen a dragon’s shadow once in his youth, trembled. “The Blight,” he croaked, his voice raspy with fear. “It’s returned.”\n\nThe Blight was a legend, a creeping corruption said to drain the life from the land and drive creatures to madness. It was a dragon’s curse, some whispered, a punishment for ancient transgressions.\n\nElara, driven by a strange mix of fear and an inexplicable pull towards the unknown, found herself following the smoke. Her grandmother’s words echoed"
               }
             ],
             "role": "model"
@@ -56,8 +51,9 @@
         }
       ],
       "modelVersion": "models/gemini-2.5-flash-preview-05-20",
-      "responseId": "k1vgaJKKCtfO_uMPo7zY8Qs",
+      "responseId": "5urjaIiCDdzP_uMPua-z8A0",
       "usageMetadata": {
+        "candidatesTokenCount": 399,
         "promptTokenCount": 10,
         "promptTokensDetails": [
           {
@@ -65,8 +61,8 @@
             "tokenCount": 10
           }
         ],
-        "thoughtsTokenCount": 99,
-        "totalTokenCount": 109
+        "thoughtsTokenCount": 1599,
+        "totalTokenCount": 2008
       }
     },
     "headers": {
@@ -77,13 +73,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Fri, 03 Oct 2025 23:26:11 GMT"
+        "Mon, 06 Oct 2025 16:14:30 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=2042"
+        "gfet4t7; dur=23010"
       ],
       "transfer-encoding": [
         "chunked"

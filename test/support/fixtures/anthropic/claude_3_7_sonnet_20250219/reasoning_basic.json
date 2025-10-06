@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS0zLTctc29ubmV0LTIwMjUwMjE5Iiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjEuMCwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifX0="
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS0zLTctc29ubmV0LTIwMjUwMjE5Iiwic3RyZWFtIjpmYWxzZSwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifX0="
     },
     "canonical_json": {
       "max_tokens": 2048,
@@ -13,7 +13,6 @@
       ],
       "model": "claude-3-7-sonnet-20250219",
       "stream": false,
-      "temperature": 1.0,
       "thinking": {
         "budget_tokens": 1024,
         "type": "enabled"
@@ -41,16 +40,16 @@
     "body": {
       "content": [
         {
-          "signature": "ErUBCkYICBgCIkCHiqMOTsWLDr82nZjZehgUU0xJ/dwB4eL4argLbEDWj+bzM6KUd04mvb0zOrbWuW+s7kMwm8ZM/S0se8B7Vf/tEgygyinvCdJqVUiZ/OIaDFFEU9tVgsDwmVIplCIwiFlUDcs9bb4bslk8aZIYcc1k3EktN91AlA+9UsYqox6Nhp/k0xKUWqSrZq8keqeSKh33SXumIem1dEVXosWqQyws5EOWTTfAMkz68IJ8vRgC",
-          "thinking": "To solve 12 × 7, I'll multiply these numbers:\n\n12 × 7 = ?\n\nI can approach this by breaking it down:\n12 × 7 = 10 × 7 + 2 × 7 = 70 + 14 = 84\n\nAlternatively, I could use the standard multiplication algorithm:\n  12\n×  7\n----\n  84\n\nSo 12 × 7 = 84",
+          "signature": "ErUBCkYICBgCIkD7XWRqjErJVQHvb9jQDZyWlcGfgNSE7VWv/Yamw0sZ2l8aqbYg/g3s2G1KGveDzHOyp1cBvnWvfUpJQzBIp6+3EgxrL9j2hRdY/qafvMYaDKB1KdLLAd6NVx0dhCIw64TKIAYui7Bwcs17v/eBqkDpmOPKIkH+tPVotgARKF3zMwSCxGz8ryvajP5pwQp/Kh3rX+fyhDTk3ZTV/laOFS1ieK0W1PDb58B6xj6rmBgC",
+          "thinking": "To solve 12*7, I need to multiply these two numbers.\n\nI'll use basic multiplication:\n12 * 7 = (10 + 2) * 7\n        = 10*7 + 2*7\n        = 70 + 14\n        = 84\n\nSo 12 multiplied by 7 equals 84.",
           "type": "thinking"
         },
         {
-          "text": "# Solving 12 × 7\n\n## My thinking process:\nI can break this down in a simple way:\n- 12 × 7 = (10 + 2) × 7\n- = 10 × 7 + 2 × 7\n- = 70 + 14\n- = 84\n\nTherefore, 12 × 7 = 84",
+          "text": "# 12 × 7 = 84\n\n## My thinking:\nI can break this down into simpler steps:\n- First, I know 10 × 7 = 70\n- Then 2 × 7 = 14\n- Adding these parts: 70 + 14 = 84\n\nTherefore, 12 × 7 = 84.",
           "type": "text"
         }
       ],
-      "id": "msg_016kw346xQizHTixWLhzfNm6",
+      "id": "msg_01UQevurRqAdhPsKk2cS5mmp",
       "model": "claude-3-7-sonnet-20250219",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -64,7 +63,7 @@
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
         "input_tokens": 50,
-        "output_tokens": 206,
+        "output_tokens": 180,
         "service_tier": "standard"
       }
     },
@@ -79,16 +78,16 @@
         "40000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-05T15:39:11Z"
+        "2025-10-06T17:10:38Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "16000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "16000"
+        "15000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-05T15:39:15Z"
+        "2025-10-06T17:10:46Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -97,22 +96,22 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-05T15:39:11Z"
+        "2025-10-06T17:10:38Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "56000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "56000"
+        "55000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-05T15:39:11Z"
+        "2025-10-06T17:10:38Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989e02a3e995eada-ORD"
+        "98a6c5f89961e249-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -121,10 +120,10 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 15:39:14 GMT"
+        "Mon, 06 Oct 2025 17:10:41 GMT"
       ],
       "request-id": [
-        "req_011CTpJVU7pfcGEPhTKW11bT"
+        "req_011CTrKGr8QrY79jsLLt9Agt"
       ],
       "server": [
         "cloudflare"
@@ -139,7 +138,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "3059"
+        "2849"
       ],
       "x-robots-tag": [
         "none"

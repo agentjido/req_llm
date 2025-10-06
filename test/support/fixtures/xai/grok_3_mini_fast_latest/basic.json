@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMy1taW5pLWZhc3QtbGF0ZXN0Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTMtbWluaS1mYXN0LWxhdGVzdCIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
-      "max_completion_tokens": 50,
+      "max_completion_tokens": 200,
       "messages": [
         {
           "content": "Hello world!",
@@ -12,6 +12,7 @@
         }
       ],
       "model": "grok-3-mini-fast-latest",
+      "reasoning_effort": "low",
       "seed": 42,
       "stream": false,
       "temperature": 0.0
@@ -38,24 +39,24 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "Hello! I'm Grok, an AI created by xAI to be helpful, truthful, and a bit witty. It's great to hear from you—what's on your mind, or how can I assist? 😊",
-            "reasoning_content": "First, the user said \"Hello world!\" This is a common greeting, often used as a simple test message in programming, like the first program many people write.\n\nAs Grok, I'm an AI created by xAI, and I'm supposed to be helpful, truthful, and not based on any other companies' models. My response should align with that.\n\nA standard response to \"Hello world!\" could be a friendly greeting back, perhaps with a bit of personality to make it engaging. Since I'm Grok, I might add a touch of humor or reference my origins to make it more interesting.\n\nPossible responses:\n\n1. Simple: \"Hello! How can I help you today?\"\n\n2. Humorous: \"Hello world! I'm Grok, here to chat or solve problems. What's up?\"\n\n3. Reference to programming: \"Ah, the classic 'Hello world!' Greeting back at you. I'm Grok, your AI assistant.\"\n\nI should keep it truthful. For example, I can mention that I'm built by xAI.\n\nThe user might be testing me or just saying hi, so I should be welcoming and invite further interaction.\n\nStructure the response:\n\n- Start with a greeting back.\n\n- Introduce myself briefly.\n\n- Ask a question to continue the conversation.\n\nFinal response idea: \"Hello! I'm Grok, an AI created by xAI. Nice to meet you. What can I do for you today?\"",
+            "content": "Hello! I'm Grok, your friendly AI assistant built by xAI. What's on your mind today—how can I help? 😊",
+            "reasoning_content": "First, the user said \"Hello world!\" This is a common greeting, often used as a simple test message, like in programming where \"Hello, World!\" is the first program many people write.\n\nAs an AI assistant, my response should be friendly, engaging, and helpful. I need to acknowledge the greeting and perhaps introduce myself or continue the conversation.\n\nMy core instructions are to be helpful, truthful, and maintain a positive interaction. Since this is a casual greeting, I shouldn't overcomplicate it.\n\nPossible responses:\n\n- A simple greeting back: \"Hello! How can I help you today?\"\n\n- Make it more personal: \"Hi there! I'm Grok, created by xAI. What's on your mind?\"\n\n- Reference the \"Hello world\" phrase: \"Hello world right back at you! I'm Grok, your AI assistant from xAI.\"\n\nI should remind the user that I'm Grok, built by xAI, as per my system prompt. This helps in building trust and context.\n\nKeep it concise but welcoming. Avoid being too verbose unless necessary.\n\nFinal response structure:\n\n1. Greet back.\n\n2. Introduce myself briefly.\n\n3. Offer assistance or ask a question to continue the conversation.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759686615,
-      "id": "9e55c926-ea44-4a98-1e1e-f7fe2dc1f0a8_us-east-1",
+      "created": 1759763212,
+      "id": "cc335e40-8850-5336-0c72-b6981e0b3453_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 43,
+        "completion_tokens": 28,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 283,
+          "reasoning_tokens": 243,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
@@ -66,7 +67,7 @@
           "image_tokens": 0,
           "text_tokens": 10
         },
-        "total_tokens": 336
+        "total_tokens": 281
       }
     },
     "headers": {
@@ -80,7 +81,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989ec2a1cbdc863e-ORD"
+        "98a610ac7ebe5074-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,13 +90,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 17:50:18 GMT"
+        "Mon, 06 Oct 2025 15:06:54 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=F7UoDA8BrozKRtbcxnoCsU9rZAOEsMIJePTLdbWfpGk-1759686618-1.0.1.1-n1lrlnRKSxF8iHZnWTQzMgUd8I.plwWMT7DuUQoNqKhWks84cYa682YmJQEx99B29Ym7NfS2sZyOAIz.zfQt2AswMYjJzYBy3Ksfez.LZxA; path=/; expires=Sun, 05-Oct-25 18:20:18 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=PlXJAfY3jOXwFYg56KavsXKj0kQNV7BQxYzrwzK2pEg-1759763214-1.0.1.1-PHupyKU8U1teiTiQgNW2WX41lVY_ILGMTpx_a8LFyr4y.PKkpOOI86IJjbEP4d48EcmKXud_BS99P9uNLKonyb4CiwTdlm_S.vW14D2fVwg; path=/; expires=Mon, 06-Oct-25 15:36:54 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -107,7 +108,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-6571d4f8cd0521682515c7eb0e26c4e8-f853b09700428c15-01"
+        "00-2178b87c563e0c51d79447626e7676ca-6f63801b0076095a-01"
       ],
       "x-zero-data-retention": [
         "false"

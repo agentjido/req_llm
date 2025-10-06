@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/IiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MTUwLCJtb2RlbCI6ImdwdC01LW1pbmkiLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfd2VhdGhlciIsInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoidGVsbF9qb2tlIiwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImdldF90aW1lIiwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/IiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MjU2MDAsIm1vZGVsIjoiZ3B0LTUtbWluaSIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImdldF93ZWF0aGVyIiwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJ0ZWxsX2pva2UiLCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoiZ2V0X3RpbWUiLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
       "input": [
@@ -15,7 +15,7 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 150,
+      "max_output_tokens": 25600,
       "model": "gpt-5-mini",
       "stream": false,
       "tools": [
@@ -97,26 +97,26 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759698855,
+      "created_at": 1759772179,
       "error": null,
-      "id": "resp_0c04cc33440d6b4e0068e2dfa793008190b08a3816661d6316",
+      "id": "resp_038f28c3e86b5ae30068e3fe13b1f4819ba4de744db02f4de1",
       "incomplete_details": null,
       "instructions": null,
-      "max_output_tokens": 150,
+      "max_output_tokens": 25600,
       "max_tool_calls": null,
       "metadata": {},
       "model": "gpt-5-mini-2025-08-07",
       "object": "response",
       "output": [
         {
-          "id": "rs_0c04cc33440d6b4e0068e2dfa845fc81908db3cfeba89754e8",
+          "id": "rs_038f28c3e86b5ae30068e3fe142110819b942fc3e6b6024ec3",
           "summary": [],
           "type": "reasoning"
         },
         {
           "arguments": "{}",
-          "call_id": "call_7T02Qs1USVhRbeSrk8oxvG3t",
-          "id": "fc_0c04cc33440d6b4e0068e2dfa97994819097cc9fbc4e640770",
+          "call_id": "call_JsK8wnOQGCVIM02c6Zig5tEe",
+          "id": "fc_038f28c3e86b5ae30068e3fe152b68819bb0c4f542ed7f9f8a",
           "name": "get_weather",
           "status": "completed",
           "type": "function_call"
@@ -187,11 +187,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 80,
+        "output_tokens": 16,
         "output_tokens_details": {
-          "reasoning_tokens": 64
+          "reasoning_tokens": 0
         },
-        "total_tokens": 135
+        "total_tokens": 71
       },
       "user": null
     },
@@ -203,7 +203,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989fed76feceead8-ORD"
+        "98a6eb9aaf2360ab-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -212,13 +212,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:14:17 GMT"
+        "Mon, 06 Oct 2025 17:36:21 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "2275"
+        "1744"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -230,8 +230,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=CDkksuJ6BXSBChP4RnFJ_Q4mob2epKhoNYeeWkAFIRc-1759698857-1.0.1.1-7MS913jCPEdB8n6c6luamP6hecOg7G1TeTFmXIvCEz0nQIfFkexhfbQmv.ObD0LPjbccaNIcOE4pqLzhX4fpDgPx.B2b_3i0YaXEjAUFe9Q; path=/; expires=Sun, 05-Oct-25 21:44:17 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=MJAPNzLfo25BJ_j72IAxHHBd4ijgib1hCWeMid2Ey8g-1759698857860-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=hhzu5Bf4zcs4qrlO1zt9nuuMnzbk61MDhKpY9YKdLUQ-1759772181-1.0.1.1-SWdrChpi0ZfiybKfVX_ap7MiwlMwtYvAllEjEgaU61cQEepiLwnw5_u.TYg1NYnroh1Me0Qpsdztim1NNmdDEgFXRYrwimXi4NCMFLfgzJM; path=/; expires=Mon, 06-Oct-25 18:06:21 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=jKtjBE3S6Wwr4lUsMoiwy.9KB5_tCj0zjnoS0EDNqa0-1759772181453-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -243,7 +243,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "2280"
+        "1747"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -264,7 +264,7 @@
         "8ms"
       ],
       "x-request-id": [
-        "req_40b0e87b3868b4dbaeffd92af01e3888"
+        "req_883928ac4ab300b8dcb573d08d8568dc"
       ]
     },
     "status": 200

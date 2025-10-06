@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMCwidGVtcGVyYXR1cmUiOjAuMCwidGhpbmtpbmdDb25maWciOnsiaW5jbHVkZVRob3VnaHRzIjp0cnVlLCJ0aGlua2luZ0J1ZGdldCI6NDA5Nn19fQ=="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMCwidGVtcGVyYXR1cmUiOjAuMH19"
     },
     "canonical_json": {
       "contents": [
@@ -17,11 +17,7 @@
       "generationConfig": {
         "candidateCount": 1,
         "maxOutputTokens": 200,
-        "temperature": 0.0,
-        "thinkingConfig": {
-          "includeThoughts": true,
-          "thinkingBudget": 4096
-        }
+        "temperature": 0.0
       }
     },
     "headers": {
@@ -45,19 +41,19 @@
           "content": {
             "parts": [
               {
-                "text": "**Processing the \"Hello World\" Input**\n\nOkay, so I've got \"Hello world!\" as the input. Immediately, the classic programmer in me kicks in. It's such a foundational piece, a test, a greeting, all wrapped into one. I'm assuming the user's either testing the waters, making a sly programming reference, or just saying hello. \n\nTo respond effectively, I need to acknowledge that familiar phrase. A simple \"hello\" won't cut it. I need to make it conversational, maybe a touch playful. I can offer assistance, but maybe it's too early for that. Let's see... I've got a couple of options brewing in my mind: \"Hello! That's the classic way to start. How can I help you today?\" or \"Hello world! I see you're testing the waters. What would you like to discuss?\" I'm leaning towards the second one, it's a bit more engaging and less directive. Yeah, that's the one.\n",
-                "thought": true
+                "text": "Hello! How can I help you today?"
               }
             ],
             "role": "model"
           },
-          "finishReason": "MAX_TOKENS",
+          "finishReason": "STOP",
           "index": 0
         }
       ],
       "modelVersion": "gemini-2.5-flash-preview-09-2025",
-      "responseId": "S2XgaI2MFN3d_uMPlJG54Ac",
+      "responseId": "XuDjaP3ZDP23jMcP87_O2QE",
       "usageMetadata": {
+        "candidatesTokenCount": 9,
         "promptTokenCount": 4,
         "promptTokensDetails": [
           {
@@ -65,8 +61,7 @@
             "tokenCount": 4
           }
         ],
-        "thoughtsTokenCount": 199,
-        "totalTokenCount": 203
+        "totalTokenCount": 13
       }
     },
     "headers": {
@@ -77,13 +72,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Sat, 04 Oct 2025 00:07:39 GMT"
+        "Mon, 06 Oct 2025 15:29:34 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=2520"
+        "gfet4t7; dur=375"
       ],
       "transfer-encoding": [
         "chunked"

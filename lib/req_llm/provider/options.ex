@@ -151,8 +151,8 @@ defmodule ReqLLM.Provider.Options do
                                # HTTP client options
                                receive_timeout: [
                                  type: :pos_integer,
-                                 doc: "Timeout for receiving HTTP responses in milliseconds",
-                                 default: 30_000
+                                 doc:
+                                   "Timeout for receiving HTTP responses in milliseconds (defaults to global config)"
                                ]
                              )
 

@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjUsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fX0="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjV9fQ=="
     },
     "canonical_json": {
       "contents": [
@@ -17,11 +17,7 @@
       "generationConfig": {
         "candidateCount": 1,
         "maxOutputTokens": 100,
-        "temperature": 0.5,
-        "thinkingConfig": {
-          "includeThoughts": true,
-          "thinkingBudget": 4096
-        }
+        "temperature": 0.5
       }
     },
     "headers": {
@@ -45,8 +41,7 @@
           "content": {
             "parts": [
               {
-                "text": "**Breaking Down the Dragon's Lair: Building a Monumental Story**\n\nOkay, so the brief is straightforward: a *long* story about dragons and adventure. My initial thought process? Deconstruct, deconstruct, deconstruct! \"Very long\" means I'm not just stringing together a few scenes; I'm building a world. A sprawling narrative structure, multiple plot arcs intertwining, complex character development, the works. This isn't a sprint; it's an epic marathon.\n\nThen, the dragons. They are absolutely *central*. This isn't just a backdrop; they're the engine. I need to think about different types: fiery, ice-breathing, maybe some with unique elemental affinities. Roles are crucial too. Are they just monstrous antagonists? Allies? Ancient, slumbering forces with the power to tip the balance? This will inform how the adventure unfolds. And I'll need a deep understanding of their biology, culture, and place in the world. This will be the foundation for an unforgettable story.\n",
-                "thought": true
+                "text": "The story you are about to read is a chronicle of the Age of Wyrms, a time when the mountains walked and the sky was ruled by scaled majesty. It is the tale of the last great alliance, the rise of an unexpected hero, and the shadow that sought to consume all of creation.\n\nThis is the story of **Aethelred, the Unburnt**, and the quest for the **Heart of the Sunken Star**.\n\n***\n\n## PART I: THE SCALES OF"
               }
             ],
             "role": "model"
@@ -56,8 +51,9 @@
         }
       ],
       "modelVersion": "gemini-2.5-flash-preview-09-2025",
-      "responseId": "QGXgaLPsN-eu_uMPq5awiA8",
+      "responseId": "X-DjaNrqLtGpjMcPrM_ueQ",
       "usageMetadata": {
+        "candidatesTokenCount": 100,
         "promptTokenCount": 10,
         "promptTokensDetails": [
           {
@@ -65,8 +61,7 @@
             "tokenCount": 10
           }
         ],
-        "thoughtsTokenCount": 99,
-        "totalTokenCount": 109
+        "totalTokenCount": 110
       }
     },
     "headers": {
@@ -77,13 +72,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Sat, 04 Oct 2025 00:07:28 GMT"
+        "Mon, 06 Oct 2025 15:29:35 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=2266"
+        "gfet4t7; dur=1030"
       ],
       "transfer-encoding": [
         "chunked"

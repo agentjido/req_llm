@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMCwidGVtcGVyYXR1cmUiOjAuMCwidGhpbmtpbmdDb25maWciOnsiaW5jbHVkZVRob3VnaHRzIjp0cnVlLCJ0aGlua2luZ0J1ZGdldCI6NDA5Nn19fQ=="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMDAsInRlbXBlcmF0dXJlIjowLjB9fQ=="
     },
     "canonical_json": {
       "contents": [
@@ -16,12 +16,8 @@
       ],
       "generationConfig": {
         "candidateCount": 1,
-        "maxOutputTokens": 200,
-        "temperature": 0.0,
-        "thinkingConfig": {
-          "includeThoughts": true,
-          "thinkingBudget": 4096
-        }
+        "maxOutputTokens": 2000,
+        "temperature": 0.0
       }
     },
     "headers": {
@@ -45,19 +41,19 @@
           "content": {
             "parts": [
               {
-                "text": "**Decoding the \"Hello World!\"**\n\nOkay, so the user types \"Hello world!\". My initial thought is, *classic*. That's the *Hello World* of the digital world! It's practically etched into the DNA of programming. You start with it, it's the rite of passage. So, what's their game?\n\nLet's break it down: \"Hello\" is definitely a friendly greeting, but \"world\"... that takes it beyond a casual \"hi.\" They're not just saying hello, they're making a deliberate statement. They're referencing a fundamental concept, a cornerstone of computer science education. Are they just being friendly? Maybe. Testing my responsiveness? Possibly. But I bet they're also subtly signaling their background, their experience. They're telling me they *get* it. They *know*.\n\nSo, how do I play this? I'll mirror their familiarity. A simple \"Hello there!\" would be fine. But I'll need to figure out the best way to respond, building on what they've already shown.\n",
-                "thought": true
+                "text": "Hello back! The classic programmer's greeting.\n\nHow can I help you today?"
               }
             ],
             "role": "model"
           },
-          "finishReason": "MAX_TOKENS",
+          "finishReason": "STOP",
           "index": 0
         }
       ],
       "modelVersion": "gemini-2.5-pro",
-      "responseId": "-GTgaJCaBZ2p_uMPzPyskAc",
+      "responseId": "ZfbjaOztDfCPjMcPiPeW0Ak",
       "usageMetadata": {
+        "candidatesTokenCount": 18,
         "promptTokenCount": 4,
         "promptTokensDetails": [
           {
@@ -65,8 +61,8 @@
             "tokenCount": 4
           }
         ],
-        "thoughtsTokenCount": 199,
-        "totalTokenCount": 203
+        "thoughtsTokenCount": 1020,
+        "totalTokenCount": 1042
       }
     },
     "headers": {
@@ -77,13 +73,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Sat, 04 Oct 2025 00:06:16 GMT"
+        "Mon, 06 Oct 2025 17:03:33 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=4092"
+        "gfet4t7; dur=13773"
       ],
       "transfer-encoding": [
         "chunked"

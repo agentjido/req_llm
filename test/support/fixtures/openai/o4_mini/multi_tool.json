@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/IiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MTUwLCJtb2RlbCI6Im80LW1pbmkiLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfd2VhdGhlciIsInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoidGVsbF9qb2tlIiwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImdldF90aW1lIiwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/IiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MjAwMDAsIm1vZGVsIjoibzQtbWluaSIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImdldF93ZWF0aGVyIiwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJ0ZWxsX2pva2UiLCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoiZ2V0X3RpbWUiLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
       "input": [
@@ -15,7 +15,7 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 150,
+      "max_output_tokens": 20000,
       "model": "o4-mini",
       "stream": false,
       "tools": [
@@ -97,23 +97,29 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759698841,
+      "created_at": 1759772197,
       "error": null,
-      "id": "resp_0045a211156ad4a40068e2df991dc8819aa209e41fa915637c",
-      "incomplete_details": {
-        "reason": "max_output_tokens"
-      },
+      "id": "resp_0bfbe7be47945c1e0068e3fe254b78819aac00d6f4985dbca8",
+      "incomplete_details": null,
       "instructions": null,
-      "max_output_tokens": 150,
+      "max_output_tokens": 20000,
       "max_tool_calls": null,
       "metadata": {},
       "model": "o4-mini-2025-04-16",
       "object": "response",
       "output": [
         {
-          "id": "rs_0045a211156ad4a40068e2df99a858819aa4c803da3d39ba7a",
+          "id": "rs_0bfbe7be47945c1e0068e3fe25e394819abbd3062de98858c5",
           "summary": [],
           "type": "reasoning"
+        },
+        {
+          "arguments": "{}",
+          "call_id": "call_nNiLPkSHLw3oeUfCEOROKWQb",
+          "id": "fc_0bfbe7be47945c1e0068e3fe28d6d4819a9a774113a13656e1",
+          "name": "get_weather",
+          "status": "completed",
+          "type": "function_call"
         }
       ],
       "parallel_tool_calls": true,
@@ -125,7 +131,7 @@
       },
       "safety_identifier": null,
       "service_tier": "default",
-      "status": "incomplete",
+      "status": "completed",
       "store": true,
       "temperature": 1.0,
       "text": {
@@ -181,11 +187,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 128,
+        "output_tokens": 272,
         "output_tokens_details": {
-          "reasoning_tokens": 128
+          "reasoning_tokens": 256
         },
-        "total_tokens": 181
+        "total_tokens": 325
       },
       "user": null
     },
@@ -197,7 +203,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989fed1c78655d07-ORD"
+        "98a6ec089bd011fd-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -206,13 +212,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:14:03 GMT"
+        "Mon, 06 Oct 2025 17:36:41 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "2131"
+        "3951"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -224,8 +230,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=OaUQ3Ps_DLhRfdxXnhNWOBVsEGKFiF4pJMnjSpBQGwM-1759698843-1.0.1.1-k2V494L14fX7E.x2NOo_weH.69e0xPrG_Na_yXJjBjZpffw92ZB2XjYcXxcJUI4RXypBIjEbeagzn1gSmwkTeYpHC.iMeLYUvGOPj5nZlJQ; path=/; expires=Sun, 05-Oct-25 21:44:03 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=z5qWpVKiXyaYztNs2hux0CtoXX_cqlRSJgo0zvMIls0-1759698843253-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=98LpB9TJbexRnZszNdi17mBgAMbz1u2IT2k5RnZ6sp0-1759772201-1.0.1.1-oBv9yTviF7qt_gbhWpgTTZUQqRryUWN18TeWVw1c0imiQkP1sCqQqk.CxBmO5zluTnsBYswgGGY8roVBTrhs6i47h1J9rMYLBofZ3kZFYdw; path=/; expires=Mon, 06-Oct-25 18:06:41 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=kSssJfOvd4PqgfX4V4e8PsZNA1vO1c1uoq241g9S3OM-1759772201257-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -237,7 +243,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "2135"
+        "3957"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -258,7 +264,7 @@
         "4ms"
       ],
       "x-request-id": [
-        "req_5e25811ef63aac17847679f05817abcd"
+        "req_006d221a1c497d8235a4353a4adfdb31"
       ]
     },
     "status": 200

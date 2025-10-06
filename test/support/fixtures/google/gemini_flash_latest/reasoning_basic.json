@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJTb2x2ZSAxMio3IGFuZCBzaG93IHlvdXIgaW50ZXJuYWwgdGhpbmtpbmcgKGJyaWVmKS4ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwNDgsInRlbXBlcmF0dXJlIjoxLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fX0="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJTb2x2ZSAxMio3IGFuZCBzaG93IHlvdXIgaW50ZXJuYWwgdGhpbmtpbmcgKGJyaWVmKS4ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwNDgsInRlbXBlcmF0dXJlIjoxLjB9fQ=="
     },
     "canonical_json": {
       "contents": [
@@ -17,11 +17,7 @@
       "generationConfig": {
         "candidateCount": 1,
         "maxOutputTokens": 2048,
-        "temperature": 1.0,
-        "thinkingConfig": {
-          "includeThoughts": true,
-          "thinkingBudget": 4096
-        }
+        "temperature": 1.0
       }
     },
     "headers": {
@@ -45,11 +41,7 @@
           "content": {
             "parts": [
               {
-                "text": "**Solving a Simple Multiplication Problem**\n\nOkay, so I need to figure out what 12 times 7 is. No problem. Let's break this down. The most efficient way, in my opinion, is decomposition. I'll split 12 into 10 and 2.  Then, I'll multiply each part by 7 and add the results.\n\nFirst, 10 times 7 is easy: that's 70.  Next, 2 times 7 is 14.  Now I just need to add those together: 70 plus 14 equals 84.\n\nJust to be certain, I'll quickly verify. I'll double-check it the way I'd teach someone else -  7 times 10 is 70, 7 times 2 is 14, and, of course, 70 plus 14 is 84. Looks good. So the final answer is 84.\n",
-                "thought": true
-              },
-              {
-                "text": "**Internal Thinking (Brief):**\n\n1.  Decompose 12 into $10 + 2$.\n2.  Calculate $10 \\times 7 = 70$.\n3.  Calculate $2 \\times 7 = 14$.\n4.  Add the parts: $70 + 14 = 84$.\n\n**Answer:**\n\n84"
+                "text": "**Calculation:** $12 \\times 7$\n\n**Internal Thinking (brief):**\n\n1.  Decompose 12 into $10 + 2$.\n2.  Calculate $(10 \\times 7) + (2 \\times 7)$.\n3.  $70 + 14$.\n4.  Result is 84.\n\n**Answer:** 84"
               }
             ],
             "role": "model"
@@ -59,9 +51,9 @@
         }
       ],
       "modelVersion": "gemini-2.5-flash-preview-09-2025",
-      "responseId": "PGXgaM6eHPi0_uMPqaHL6Ag",
+      "responseId": "aODjaIiVGqrPjMcP5oX-6AI",
       "usageMetadata": {
-        "candidatesTokenCount": 84,
+        "candidatesTokenCount": 86,
         "promptTokenCount": 15,
         "promptTokensDetails": [
           {
@@ -69,8 +61,8 @@
             "tokenCount": 15
           }
         ],
-        "thoughtsTokenCount": 177,
-        "totalTokenCount": 276
+        "thoughtsTokenCount": 145,
+        "totalTokenCount": 246
       }
     },
     "headers": {
@@ -81,13 +73,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Sat, 04 Oct 2025 00:07:24 GMT"
+        "Mon, 06 Oct 2025 15:29:44 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=2828"
+        "gfet4t7; dur=1580"
       ],
       "transfer-encoding": [
         "chunked"

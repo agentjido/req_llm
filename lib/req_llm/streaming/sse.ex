@@ -66,7 +66,86 @@ defmodule ReqLLM.Streaming.SSE do
   @spec accumulate_and_parse(binary(), binary()) :: {[map()], binary()}
   def accumulate_and_parse(chunk, buffer) do
     combined = buffer <> chunk
-    ServerSentEvents.parse(combined)
+
+    # Handle Google's JSON array format (used by gemini-2.5 models without SSE support)
+    # Format: [{...}, {...}] instead of SSE
+    case detect_json_array_format(combined) do
+      {:json_array, events, remaining} ->
+        {Enum.map(events, &%{data: &1}), remaining}
+
+      :not_json_array ->
+        ServerSentEvents.parse(combined)
+    end
+  end
+
+  defp detect_json_array_format(data) do
+    # Try to parse as JSON array
+    trimmed = String.trim_leading(data)
+
+    if String.starts_with?(trimmed, "[") do
+      case Jason.decode(trimmed) do
+        {:ok, events} when is_list(events) ->
+          # Successfully parsed as JSON array - wrap each element as SSE event
+          {:json_array, events, ""}
+
+        {:error, %Jason.DecodeError{position: pos}} when pos > 0 ->
+          # Incomplete JSON - check if we can extract complete objects
+          case extract_complete_json_objects(trimmed) do
+            {objects, remaining} when objects != [] ->
+              {:json_array, objects, remaining}
+
+            _ ->
+              :not_json_array
+          end
+
+        _ ->
+          :not_json_array
+      end
+    else
+      :not_json_array
+    end
+  end
+
+  defp extract_complete_json_objects(data) do
+    # Try to extract complete JSON objects from array
+    # Format: [{"key":"value"},{"key2"...
+    case Regex.run(~r/^\[(.+)\]/, data) do
+      [_, inner] ->
+        # Split by "},{"  to find object boundaries
+        objects =
+          inner
+          |> String.split(~r/\}\s*,\s*\{/)
+          |> Enum.reduce_while({[], ""}, fn part, {acc, leftover} ->
+            # Reconstruct object with braces
+            obj_str =
+              if leftover == "" do
+                add_braces(part)
+              else
+                leftover <> "," <> add_braces(part)
+              end
+
+            case Jason.decode(obj_str) do
+              {:ok, obj} -> {:cont, {acc ++ [obj], ""}}
+              {:error, _} -> {:halt, {acc, obj_str}}
+            end
+          end)
+
+        objects
+
+      nil ->
+        {[], data}
+    end
+  end
+
+  defp add_braces(str) do
+    str = String.trim(str)
+
+    cond do
+      String.starts_with?(str, "{") and String.ends_with?(str, "}") -> str
+      String.starts_with?(str, "{") -> str <> "}"
+      String.ends_with?(str, "}") -> "{" <> str
+      true -> "{" <> str <> "}"
+    end
   end
 
   @doc """

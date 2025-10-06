@@ -600,7 +600,7 @@ defmodule ReqLLM.Provider.Defaults do
     message = build_openai_message_from_chunks(content_chunks)
 
     context = %ReqLLM.Context{
-      messages: if(message, do: [message], else: [])
+      messages: if(is_nil(message), do: [], else: [message])
     }
 
     response = %ReqLLM.Response{
@@ -804,22 +804,20 @@ defmodule ReqLLM.Provider.Defaults do
 
   defp decode_openai_tool_call_delta(_), do: nil
 
-  defp build_openai_message_from_chunks([]), do: nil
-
-  defp build_openai_message_from_chunks(chunks) do
+  defp build_openai_message_from_chunks(chunks) when is_list(chunks) and chunks != [] do
     content_parts =
       chunks
       |> Enum.map(&openai_chunk_to_content_part/1)
       |> Enum.reject(&is_nil/1)
 
-    if content_parts != [] do
-      %ReqLLM.Message{
-        role: :assistant,
-        content: content_parts,
-        metadata: %{}
-      }
-    end
+    %ReqLLM.Message{
+      role: :assistant,
+      content: content_parts,
+      metadata: %{}
+    }
   end
+
+  defp build_openai_message_from_chunks(_), do: nil
 
   defp openai_chunk_to_content_part(%ReqLLM.StreamChunk{type: :content, text: text}) do
     %ReqLLM.Message.ContentPart{type: :text, text: text}

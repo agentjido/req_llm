@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxNTAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtc29ubmV0LTQtNS0yMDI1MDkyOSIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJpbnB1dF9zY2hlbWEiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJnZXRfd2VhdGhlciJ9LHsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsImlucHV0X3NjaGVtYSI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoidGVsbF9qb2tlIn0seyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwiaW5wdXRfc2NoZW1hIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJnZXRfdGltZSJ9XX0="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMjgwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1zb25uZXQtNC01LTIwMjUwOTI5Iiwic3RyZWFtIjpmYWxzZSwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifSwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0X3NjaGVtYSI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifSwibmFtZSI6ImdldF93ZWF0aGVyIn0seyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwiaW5wdXRfc2NoZW1hIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJ0ZWxsX2pva2UifSx7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJpbnB1dF9zY2hlbWEiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifSwibmFtZSI6ImdldF90aW1lIn1dfQ=="
     },
     "canonical_json": {
-      "max_tokens": 150,
+      "max_tokens": 12800,
       "messages": [
         {
           "content": "What's the weather like in Paris, France?",
@@ -13,7 +13,10 @@
       ],
       "model": "claude-sonnet-4-5-20250929",
       "stream": false,
-      "temperature": 0.0,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      },
       "tools": [
         {
           "description": "Get current weather information for a location",
@@ -85,7 +88,12 @@
     "body": {
       "content": [
         {
-          "id": "toolu_01YYbcQKdiVrENcyS6SP7xmy",
+          "signature": "Es8ECkYICBgCKkApG0bijm553voeon++ORIayTJv7cMMr3gLDGxlJa60iiwZYODaM4nmPk7Ac0wRA0rAYgGDSmoqMOt1WILvMREYEgzAYx0yVVzRjVx2c1oaDHI/rXeBKZe56eIT+iIwgD9B5rWe0kwWKCcYqlAnb89IAEfJwKf4920ShmAifcOtniLeI2fBR9DzUAYdfawGKrYD5w2rUcJvdKyMkQ4Sye6wnpcxbQW92UuJY2GO5tB0cUJ73TdWTzxVUy4FbB3MmNO3f3e28dv9Q4us1uSA/VlhVZ3t6BbYUyjH23eqNn1HdNg7f27KWc7ibTGHrWCqJ5sVu2/HN86/jdRlqeMEMtb2+F24u1kSJZGTIIPB55Ef71K/GHDD0nGbqzAi3fctFeCNbDTjBpO+ERDc3s8c373QRf0pxt4bNOaThgN4S3Qer7YeS91nCUp2tLJdQYaLaFmRk8U0/PRgxa4sSmwSxudCA1WeXGDJk5yXTo9EP+hKIRoH50OZyrWz2hb7n+Ff8fGmS6laAEv90J4sDtzVgnnzlVYAe1q3K9Rj+eILR2OZISJaiNiszsKAZ0Gn5NM1tAaaV3tV/1E6Aom217S95de0QrLat2cRmZlXVINNTITjKMv/RHR+vkF2xw+thVFwXoUxP5izFHBY4mOrdYylqvj3sfCZO7KRVGBXCVHrk2hFqxyQv16HlghwdOJgWykOfKJLOYF6btuTCUG6Z+diXTjgIMvrZJu4A2lKOO9+/tWZBPp0tvoT0PaWHCs3sFysF3iQenK/z+AeGAE=",
+          "thinking": "The user is asking about the weather in Paris, France. I have access to the get_weather function which can provide current weather information for a location. \n\nLet me check the parameters:\n- location (required): \"Paris, France\"\n- unit (optional, enum of celsius or fahrenheit): Not specified by the user, so I'll use the default or not specify it\n\nI should call the get_weather function with the location \"Paris, France\".",
+          "type": "thinking"
+        },
+        {
+          "id": "toolu_01Y7NKBMo51Q7ZN86Cwwxfs2",
           "input": {
             "location": "Paris, France"
           },
@@ -93,7 +101,7 @@
           "type": "tool_use"
         }
       ],
-      "id": "msg_01FhkYN11ZYcJtkVvwdE3kB4",
+      "id": "msg_01CYfUm1zLKTw2mcuL3mH2x4",
       "model": "claude-sonnet-4-5-20250929",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -106,8 +114,8 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 681,
-        "output_tokens": 55,
+        "input_tokens": 710,
+        "output_tokens": 160,
         "service_tier": "standard"
       }
     },
@@ -122,7 +130,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-05T15:44:19Z"
+        "2025-10-06T18:21:51Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -131,7 +139,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-05T15:44:19Z"
+        "2025-10-06T18:21:53Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -140,7 +148,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-05T15:44:17Z"
+        "2025-10-06T18:21:49Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -149,13 +157,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-05T15:44:19Z"
+        "2025-10-06T18:21:51Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989e0a1dfee4e8d0-ORD"
+        "98a72e41f81dff5c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -164,10 +172,10 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 15:44:19 GMT"
+        "Mon, 06 Oct 2025 18:21:53 GMT"
       ],
       "request-id": [
-        "req_011CTpJt3UtFsb3eGf4rcCng"
+        "req_011CTrQhiiTHinmTHGDh8bMP"
       ],
       "server": [
         "cloudflare"
@@ -182,7 +190,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "2133"
+        "3914"
       ],
       "x-robots-tag": [
         "none"

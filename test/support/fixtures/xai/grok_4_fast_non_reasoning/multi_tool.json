@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjE1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stNC1mYXN0LW5vbi1yZWFzb25pbmciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjY0MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTQtZmFzdC1ub24tcmVhc29uaW5nIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
-      "max_completion_tokens": 150,
+      "max_completion_tokens": 6400,
       "messages": [
         {
           "content": "What's the weather like in Paris, France?",
@@ -101,15 +101,15 @@
                   "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "call_99998927",
+                "id": "call_34095844",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1759686616,
-      "id": "1357121b-ee63-f67b-dac3-dc6ee6ed6a3a_us-east-1",
+      "created": 1759763203,
+      "id": "529990cc-68f9-1612-8a7f-d0d20070e4b5_us-east-1",
       "model": "grok-4-fast-non-reasoning",
       "object": "chat.completion",
       "system_fingerprint": "fp_e7507192a3",
@@ -125,7 +125,7 @@
         "prompt_tokens": 397,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 275,
+          "cached_tokens": 274,
           "image_tokens": 0,
           "text_tokens": 397
         },
@@ -143,28 +143,22 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989ec2a6283621af-ORD"
+        "98a610775d586081-ORD"
       ],
       "connection": [
         "keep-alive"
-      ],
-      "content-security-policy-report-only": [
-        "script-src 'none'; connect-src 'none'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=aDFbsI5NNIDRbtstN.DMxsyFxZiEc4t52LyZrUZ2sKQ-1759686616-1.0.1.1-vzeWkUcmquF70eQH9tSBosfAT4x0N8ADLW9srwuMHUK6l.zBmH8RyNcO_wtKAvE0R1Ldh_LPHF0nH_CiJr6.H5tCWpyQAYoxcruS5iUlt_8s7vKIB5vghsxVzxdxOO5tlFvAorrniEwdrqjCjKNaQiUteOgQ8gcSJOzUIsAWFmU; report-to cf-csp-endpoint"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 17:50:16 GMT"
-      ],
-      "report-to": [
-        "{\"endpoints\":[{\"url\":\"https:\\/\\/csp-reporting.cloudflare.com\\/cdn-cgi\\/script_monitor\\/report?m=aDFbsI5NNIDRbtstN.DMxsyFxZiEc4t52LyZrUZ2sKQ-1759686616-1.0.1.1-vzeWkUcmquF70eQH9tSBosfAT4x0N8ADLW9srwuMHUK6l.zBmH8RyNcO_wtKAvE0R1Ldh_LPHF0nH_CiJr6.H5tCWpyQAYoxcruS5iUlt_8s7vKIB5vghsxVzxdxOO5tlFvAorrniEwdrqjCjKNaQiUteOgQ8gcSJOzUIsAWFmU\"}],\"group\":\"cf-csp-endpoint\",\"max_age\":86400}"
+        "Mon, 06 Oct 2025 15:06:45 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=zUfqfrcFI7V_RKBvbOPcKKK9m9HdybQgg6Xs1msG9Gg-1759686616-1.0.1.1-oGImiPDQ4AVvNY7HKVZ3EqDnuLcNzQH5xCiOJ3oouZmsRM6Kyh7GJUVLxpnTTMog2ynxg_gUaeYoghFcS55o1QJcj4lXOzQQZ6Q0DPWrACw; path=/; expires=Sun, 05-Oct-25 18:20:16 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=HtfR_mRu.dJjktf44dCgx.BM0ha9HRasfsJiKTxujWY-1759763205-1.0.1.1-N6VBdjgn7CdSp0uflXtxOfFqpx78.Zde044lA0ha0sl2CM3wV67maM3kRdqzyTb80xhZEC1rrxD36Y93vwVFZvqkUbrQuGAsTyC_qqb8WWM; path=/; expires=Mon, 06-Oct-25 15:36:45 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -176,7 +170,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-84e466bac7f9a51fcfe5d1d116b9a612-520dc4f3004ea864-01"
+        "00-f9397c04893d13a037dc08efe3d36094-cd84afdb00757c23-01"
       ],
       "x-zero-data-retention": [
         "false"

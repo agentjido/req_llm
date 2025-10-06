@@ -40,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759698840,
+      "created_at": 1759772172,
       "error": null,
-      "id": "resp_0912ea78283497920068e2df98b83c819b9fd30cfb3702950e",
+      "id": "resp_068cc37b101aede40068e3fe0cc5148199866dc4ba950851d4",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 500,
@@ -52,7 +52,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_0912ea78283497920068e2df9914ec819ba1d94b649b305fd3",
+          "id": "rs_068cc37b101aede40068e3fe0e508081999b1110c4b3a459b6",
           "summary": [],
           "type": "reasoning"
         },
@@ -61,11 +61,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Hi there! How can I help today? I can explain concepts, answer questions, help with writing or coding, brainstorm ideas, plan something, or analyze data. If you have an image or document, you can share it and I’ll take a look. What would you like to do?",
+              "text": "Hi there! 👋 How can I help today? If you’ve got a question, need writing or coding help, want to brainstorm ideas, or anything else, tell me what you’re working on and I’ll dive in.",
               "type": "output_text"
             }
           ],
-          "id": "msg_0912ea78283497920068e2df9b2f64819bb5e2bfc667f479b4",
+          "id": "msg_068cc37b101aede40068e3fe0fa45c819998a58483ddafa938",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -99,11 +99,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 449,
+        "output_tokens": 244,
         "output_tokens_details": {
-          "reasoning_tokens": 384
+          "reasoning_tokens": 192
         },
-        "total_tokens": 458
+        "total_tokens": 253
       },
       "user": null
     },
@@ -115,7 +115,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989fed1a1cc0bd1f-ORD"
+        "98a6eb6f5a998222-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -124,13 +124,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:14:03 GMT"
+        "Mon, 06 Oct 2025 17:36:16 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "3037"
+        "3392"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -142,8 +142,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=rDXC6T5bWWlpoDx61wV1xKGCTvCCnC_Gos.3LTjPuS0-1759698843-1.0.1.1-dPtuBUxzB.WoMkwEWcw6SSzuhXfyYZ1sjMCbRm9tGxFGfeW800_or1Vpyo4n7ME9O7JItiPmPd69sG1SAH1a3YQyosfa04vEPlxzp5..JEk; path=/; expires=Sun, 05-Oct-25 21:44:03 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=6la_xps9nrXLcZp87AKyS2i1QmC3U6MNc8gUYlYgndw-1759698843783-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=Qd2HHrcNVRhDPh1Gz_I6aXcyOVRlXSy_pN.UBoyd58E-1759772176-1.0.1.1-EPIwYBpUEoFuSM.HfyW5UrES4qSznaRm1fvx9UuoxWnk9wP4Kg3PqoCtc49XiUVmac3GZcl_n_.bj6P0w7.q0htLJeC4d1aoRY9QmCJdZSk; path=/; expires=Mon, 06-Oct-25 18:06:16 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=9JkoVioFvnFDL32Zr2.OItwxcsrbACpRWVxYSudb880-1759772176183-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -155,7 +155,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "3039"
+        "3398"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -176,7 +176,7 @@
         "3ms"
       ],
       "x-request-id": [
-        "req_cbd484ce88bf51eb5767ff701b358d0b"
+        "req_c7affb8f355624cd4efba0468e2e55ba"
       ]
     },
     "status": 200

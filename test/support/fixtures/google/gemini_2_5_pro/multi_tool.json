@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyJ9XSwicm9sZSI6InVzZXIifV0sImdlbmVyYXRpb25Db25maWciOnsiY2FuZGlkYXRlQ291bnQiOjEsIm1heE91dHB1dFRva2VucyI6NjAwLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0aGlua2luZ0NvbmZpZyI6eyJpbmNsdWRlVGhvdWdodHMiOnRydWUsInRoaW5raW5nQnVkZ2V0Ijo0MDk2fX0sInRvb2xzIjpbeyJmdW5jdGlvbkRlY2xhcmF0aW9ucyI6W3siZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0seyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifX0seyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fV19XX0="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyJ9XSwicm9sZSI6InVzZXIifV0sImdlbmVyYXRpb25Db25maWciOnsiY2FuZGlkYXRlQ291bnQiOjEsIm1heE91dHB1dFRva2VucyI6MTMxMDYsInRlbXBlcmF0dXJlIjowLjB9LCJ0b29scyI6W3siZnVuY3Rpb25EZWNsYXJhdGlvbnMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LHsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LHsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX1dfV19"
     },
     "canonical_json": {
       "contents": [
@@ -16,12 +16,8 @@
       ],
       "generationConfig": {
         "candidateCount": 1,
-        "maxOutputTokens": 600,
-        "temperature": 0.0,
-        "thinkingConfig": {
-          "includeThoughts": true,
-          "thinkingBudget": 4096
-        }
+        "maxOutputTokens": 13106,
+        "temperature": 0.0
       },
       "tools": [
         {
@@ -94,17 +90,13 @@
           "content": {
             "parts": [
               {
-                "text": "**Thinking Through the Weather Query**\n\nOkay, the user wants the weather, and the `get_weather` function looks like the right tool for the job.  Let me quickly check the required parameters. It needs a `location` and an optional `unit`.\n\nThe user gave me \"Paris, France\" - perfect! That goes straight into the `location` parameter.  They didn't mention Celsius or Fahrenheit, but the function's got a default. I'll stick with that and not explicitly set the `unit`. It's cleaner that way.\n\nSo, the plan is to call `get_weather` with `location=\"Paris, France\"`. Easy peasy.\n",
-                "thought": true
-              },
-              {
                 "functionCall": {
                   "args": {
                     "location": "Paris, France"
                   },
                   "name": "get_weather"
                 },
-                "thoughtSignature": "CvoJAdHtim8XEJWaancJcs1FIN23duTrMU/+ZA3yD9YH95Uvu6xb4vyvjmY4TlbZE0l0qjtft3CiqK9t0GaT96c3DKW573ACFtXMH6Su8jyKyhuOnOnD23Y+5W7aGvqBedm/UeBIgFsM+AkQvBFlieVQy24YLiC1ZclPETNo89XmoCK1Fu4opVAuJ9lrhAbtQ4rspA1lZkOEWIZ4VqExWjlgwHznKO1J2KGNBuoxUflJwkUqPZtrXwu1HWgQxVKaLSLVJUE/GRyIkklkRzsGY4gtUPkhmb2JNldANNO+dK8TSqTqKlatL894OlVxySyKRZFwiZcww77WQxLFBgb+DkxA2RHsudJA/Tei9fsUlDIRtI9qj12Mm9/iGWibfpCwznozKG52UM3jzhZae9i3x/SGOCPUddmsMBZ0weOFDXyBlnbHcnXSjxXWzHLk47C1hcGAUId+eMa8eC0H9dtqPykhlcYaOV8Cgzls3/GQf+BweOc0k2tZp50U1vdxqtscyOA9TqkhpzHz1f+BYvXhkezLuL3UYnHb4EdFejeQS6JiDYgamS6XoNgBZa7egeu3bWq/3Uzy2AFi694QbSRROYukdyZlWu481857OFNYtmeFSLUBvHKcBgVvumPWqqtVmeVgUDjRiEQ4UhERFIuRGZkofisFtch7jod5+csuEP8GqtZkKBRhiAeGYw8soe1DUZYSnFudtwwytUQ5i4rkc56OKRzsGBstZO4ptmXfcTspNrB2MYrO0TMO3JspiAfy7dcU+Fgz8f/j477PO7Pc7WrOrhuniVoOutbBExYzcRzU2PpkYNM/vQxY9OacFagWMUbpqMG1fgA0eV+eVJs5WsQeytL3jkyrEwuJ5ca1uCLqe4gblti+L7clsTErPhZG9+wpNZOOcrXdJevLvy6XjF/rjbgShK2qXLGP7ooKtaGlvS3t1gzNRRAzzJUpz9pwZogi63VkA/v0Bscq4N02z8oGCx5ai54cO15Bp+I8HMgTUMDDXzMqq0Uibo4ItZ8qfzNexsdrN5/6SG79EKKQ4zY/I7nrcKeIVVJ8kjcWe7r7AADq42+/UttHePmjhJv66qdgBwQ4JhW3epxnVjzZrKwPPSqoABSJRcF/PsWBcRWJsOolzFalifA5tRqg7f1i+fM0UexfzeXZcluSXYE+KAi+JKp50fEliuz5E079kAj+SvVt8nfg81UulHCfuLXXM9jZYAYQLjrDTgaeng3EGRwl2SCjlqWvEstbU+zcb7M4yrJwhanhVRRtXc6kkLmqdvXtEvhwMvbM64jqMDLyWTXP9CquLq4wU1LSMTdcivjbtP3XrL2yKWjQHQ2rKCMOB3e4zAthnqj1zGiZyuI32bBVQjtbwZqJD/YCpcA27b2ZsWZ7n45lA/4WFU0xGClbtktkiPSNQQAhey2ycKDTnClg4I76sUj/Opgezknk4si0NSvoIMFAsqEwFXy+GP6WGH00UuJHbvIHpkHKCu/+frWsve3vZbo89mDIsRmnKChTpSzNOe/cQXEfJXZaEu2tfzghzW3rEjGhwgoP4Wfx1/2PjxAuUg021cXstWCQiU24GbCa1LWeLDFvNpTYW5Xg+6ktFJmV6VTd7cWYjtkQBxOFaN2yBeXr4ffMkUfi/HWsHnBFIeicV1uNx/Fw3HrMNi3bKT3EsIZanf9uUzl6CMXAeikSxYZjPEoGaIk="
+                "thoughtSignature": "CscFAdHtim+5PXtRW/KWqR3rzIT3kGfo8nn4krA46umvvxhPrFUmm96YeQO1fWmMtKFQUVlae34a4pLTDqAcC6DKubKHQ3H6MzqyCo+wVZzTHrkvsD2Xc9KLaXfz/XdIabkGwU1F0ZcFrQRKLn6RyEquDNBd1Ns9YHyHu02SlA0sqgEb3UuwT67CDZSKK8BEmnd0oT7EjvEuccE57cjfAT6mcFbsdUml81NIdoglGciHvIT2kFVvNmLh85vuDFEGlVhozW1GuxePTneydczUzYd3yp2VhNJClxUOIumkOyFWE7uKBf5ogm5UvPV9qzcHcMgeF7V56ZqxKRCAvaXGAgbS8tJ/JzNZgWo67WncZNOltOpBLJaafAzlxLdHI6fR1gE907cxJdsyBUQ93quiaVBpy8qub0CYmrpMm2nmiuTRZO6kN9gua8ycKapSE9y5anQtSTC/uvARryfNGrsS8tv5KWEIDqpoL2160o8i+aYQO+bemM00P+P5js6MlLOx5FtTC2rQUNtSR8Sc19F5IIIuB7YVhCNpVrNjBHM8ITOz3E2S3gfwXPQZOmrdKJB66fO9DWT9MPrgRLwvS9gDUU/FrNoYmcaKjXOt5w7D2W3TPsXDBWkG9U9Mf0aaqtTHBsOI5eJtxhJDBNwUSh3Vnv2OZ3+rECoRmx9GVvpiimi/WjvPbxA95mC2VSQxJ+KdvRLieBHV/Sya9NU5tFOtYlZ3iwVnyLGoqeEkKx2oPfoTLUI3Y3WKuGN6Dre3iwtLcaeVwo7yLkH1W8udgfKv0FqZ154Cx++eNDUr34qbLAz0Cfz7j/298ejob0e0+D3qlhhx5BQ6+XBp3ss9cgWZn1Bqu2XdhUAVJRF8mTaiZ0WHjMcI05RV4Q2Yejb2y9NxCAydVZB6XrlxfnI7/k4wWwqWnoXOiVFbDjb6zBikW/AdtxNUGNvImvAK"
               }
             ],
             "role": "model"
@@ -114,7 +106,7 @@
         }
       ],
       "modelVersion": "gemini-2.5-pro",
-      "responseId": "_GTgaKriI4KO_PUPlsmo4QM",
+      "responseId": "oPbjaKb_Ic6PjMcPl6CBuQE",
       "usageMetadata": {
         "candidatesTokenCount": 17,
         "promptTokenCount": 142,
@@ -124,8 +116,8 @@
             "tokenCount": 142
           }
         ],
-        "thoughtsTokenCount": 302,
-        "totalTokenCount": 461
+        "thoughtsTokenCount": 172,
+        "totalTokenCount": 331
       }
     },
     "headers": {
@@ -136,13 +128,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Sat, 04 Oct 2025 00:06:20 GMT"
+        "Mon, 06 Oct 2025 17:04:32 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=4356"
+        "gfet4t7; dur=3353"
       ],
       "transfer-encoding": [
         "chunked"

@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjE1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMy1taW5pLWxhdGVzdCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjE2MzgsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTMtbWluaS1sYXRlc3QiLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
-      "max_completion_tokens": 150,
+      "max_completion_tokens": 1638,
       "messages": [
         {
           "content": "What's the weather like in Paris, France?",
@@ -12,6 +12,7 @@
         }
       ],
       "model": "grok-3-mini-latest",
+      "reasoning_effort": "low",
       "seed": 42,
       "stream": false,
       "temperature": 0.0,
@@ -93,7 +94,7 @@
           "index": 0,
           "message": {
             "content": "",
-            "reasoning_content": "First, the user is asking about the weather in Paris, France. This matches the \"get_weather\" function, which retrieves current weather information for a location.\n\nThe required parameters for \"get_weather\" are:\n- \"location\": This is required. The user specified \"Paris, France\", which is a clear location.\n- \"unit\": This is optional, as it's not listed as required. The function description has it as a property with enum values [\"celsius\", \"fahrenheit\"], but since it's not required, I can call the function without it if not specified.\n\nThe user didn't specify a unit, so I should proceed with the default or whatever the function uses. I don't need to ask for clarification because the location is provided and clear.\n\nI need to format the function call in JSON within <function_call> tags, like this:\n<function_call>{\"action\": \"function_name\", \"action_input\": {\"parameter\": \"argument\"}}</function_call>\n\nFor this, it would be:\n<function_call>{\"action\": \"get_weather\", \"action_input\": {\"location\": \"Paris, France\"}}</function_call>\n\nI shouldn't add any other response text unless necessary. The instructions say: \"Keep your response to user clear; please do not make your response verbose!\" So, if I'm calling a function, that should be the entire response.\n\nThis seems to be a single-step action, so I'll just make this one function call.\n\nFinally, confirm: Is there any reason not to call the function? No, it's a direct match.",
+            "reasoning_content": "First, the user is asking about the weather in Paris, France. I have a function called \"get_weather\" that matches this query. It requires a \"location\" parameter, which is a string.\n\nThe location is clearly \"Paris, France\", so I can infer that directly from the query. The function also has an optional \"unit\" parameter, which can be \"celsius\" or \"fahrenheit\". The user didn't specify a unit, so I don't need to include it if it's not required. Looking at the function definition, \"unit\" is not in the \"required\" list; only \"location\" is required. So, I can proceed without it.\n\nI should call the function if it advances the user's request. This directly matches, so I'll trigger a function call.\n\nThe format for the function call is: <function_call>{\"action\": \"function_name\", \"action_input\": {\"parameter\": \"argument\"}}</function_call>\n\nFor this, it would be: <function_call>{\"action\": \"get_weather\", \"action_input\": {\"location\": \"Paris, France\"}}</function_call>\n\nI shouldn't add any other text unless necessary. The instructions say: \"Keep your response to user clear; please do not make your response verbose!\" So, my response should just be the function call tag.\n\nThis is a single-turn action for now, but if needed, I can continue in subsequent turns.\n\nFinally, confirm: No unclear parts, so no need to ask for clarification.",
             "refusal": null,
             "role": "assistant",
             "tool_calls": [
@@ -102,15 +103,15 @@
                   "arguments": "{\"location\":\"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "call_33262081",
+                "id": "call_19866328",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1759686625,
-      "id": "5168934a-3d4d-2c60-0b2c-b291ba84a75b_us-east-1",
+      "created": 1759763236,
+      "id": "78988b23-dd12-0113-b414-4d10439dcce9_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
@@ -119,7 +120,7 @@
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 310,
+          "reasoning_tokens": 300,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
@@ -130,7 +131,7 @@
           "image_tokens": 0,
           "text_tokens": 352
         },
-        "total_tokens": 690
+        "total_tokens": 680
       }
     },
     "headers": {
@@ -144,7 +145,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989ec2e3aa4be800-ORD"
+        "98a611447bc0a679-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -153,13 +154,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 17:50:29 GMT"
+        "Mon, 06 Oct 2025 15:07:19 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=dfpX_qA1mj2CuwhLjKS.9Mau98bOkVZMiL1Sx5ngOrg-1759686629-1.0.1.1-OTspspFqqXeR_hmB6N0varbt892yssuggOwOLIEAVrCIuCkVShV7ODHaV6HVnKDEjK.yvPaWmniu34oGaHEyNmoCRiTbtBb_BAd3F_a5qT8; path=/; expires=Sun, 05-Oct-25 18:20:29 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=ZjAfTKMlLFSDQJh1wkk_8HlTD2L687VIfvLSXc46or8-1759763239-1.0.1.1-Oqyg3ElDNWNVT.0eV93jYpFaF9EXR0xKzYX8fKiggxV0DjBwnGoDSZ0CcrAYw.uc3uHXk6YhiEwNNYAMzdAtWVRw0TCSBkvh5XML7R_Nvq8; path=/; expires=Mon, 06-Oct-25 15:37:19 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -171,7 +172,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-1ae85a29daa66f704a2c4bf5d7585bab-97620e05004f6dae-01"
+        "00-dd90aed12df0ae3644f63fef410d8044-a9f9c89f006391ce-01"
       ],
       "x-zero-data-retention": [
         "false"

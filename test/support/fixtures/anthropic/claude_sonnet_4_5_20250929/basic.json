@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtc29ubmV0LTQtNS0yMDI1MDkyOSIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1zb25uZXQtNC01LTIwMjUwOTI5Iiwic3RyZWFtIjpmYWxzZSwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifX0="
     },
     "canonical_json": {
-      "max_tokens": 50,
+      "max_tokens": 2000,
       "messages": [
         {
           "content": "Hello world!",
@@ -13,7 +13,10 @@
       ],
       "model": "claude-sonnet-4-5-20250929",
       "stream": false,
-      "temperature": 0.0
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
     },
     "headers": {
       "accept-encoding": [
@@ -37,11 +40,16 @@
     "body": {
       "content": [
         {
-          "text": "Hello! 👋 How can I help you today?",
+          "signature": "EtICCkYICBgCKkAC2gFDDqONuxPI3LH+rK4cRs61O0VORrKuhHwHD18JUxQeA72QfsGkzQ91A+fJDQCRWk/uE3NXJxRvJlcDyvN9Egx99Dj8BtoTBXoAJbsaDBh7CkfWzEIqg5X1FCIwNGEEZ0pGNWL1gYYJzBSFz1NfjcsexF3X90FDHHFg+O88J9Lj1ZK+z/sLCWrOBvtVKrkB8H25cF0+TiJ9PSV+zutr7+Grpj++BXIv3w2xcPmZPWiI/e9nOxga78OWUagjKWdD6XnEbzhHx+VW8TWfEGnogYc6WHbmFBbaYtv8p2wX1qEJWA/TUem2jnyiBEB74FioGVujW75LDrhwX3SvEyr1SJpYTyqXkCLoTuLWlJPSPQt6h/9tkwOSl+RXzK5q9AyVBQrXjiPXErys+R3Mqdosq8rECOiddtYvxFwnKMLSZEDwFTz8IUmBa9kYAQ==",
+          "thinking": "The user has sent a simple greeting \"Hello world!\" This is a classic first message, often used as a test or friendly introduction. I should respond warmly and helpfully.",
+          "type": "thinking"
+        },
+        {
+          "text": "Hello! How can I help you today?",
           "type": "text"
         }
       ],
-      "id": "msg_01EQvHQZnxuc8iVFoYQo9yTW",
+      "id": "msg_01R535XfmAZ6ehSkYZaAcQXM",
       "model": "claude-sonnet-4-5-20250929",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -54,8 +62,8 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 10,
-        "output_tokens": 16,
+        "input_tokens": 38,
+        "output_tokens": 57,
         "service_tier": "standard"
       }
     },
@@ -70,7 +78,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-05T15:43:59Z"
+        "2025-10-06T18:22:46Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -79,7 +87,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-05T15:43:59Z"
+        "2025-10-06T18:22:47Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -88,7 +96,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-05T15:43:57Z"
+        "2025-10-06T18:22:44Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -97,13 +105,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-05T15:43:59Z"
+        "2025-10-06T18:22:46Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989e09a07927e8d0-ORD"
+        "98a72f99ef67ff5c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -112,10 +120,10 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 15:43:59 GMT"
+        "Mon, 06 Oct 2025 18:22:47 GMT"
       ],
       "request-id": [
-        "req_011CTpJrZdJSouu5TKsF16bF"
+        "req_011CTrQmmxXVEYdWiNdUzEgs"
       ],
       "server": [
         "cloudflare"
@@ -130,7 +138,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "1888"
+        "2767"
       ],
       "x-robots-tag": [
         "none"

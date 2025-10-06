@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxNTAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdwdC00by0yMDI0LTA1LTEzIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjo0MDksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdwdC00by0yMDI0LTA1LTEzIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
-      "max_tokens": 150,
+      "max_tokens": 409,
       "messages": [
         {
           "content": "Tell me a joke about cats",
@@ -60,20 +60,20 @@
           "logprobs": null,
           "message": {
             "annotations": [],
-            "content": "Why was the cat sitting on the computer?\n\nBecause it wanted to keep an eye on the mouse! 🐱💻🐭",
+            "content": "Sure, here's a cat joke for you:\n\nWhy was the cat sitting on the computer?\n\nBecause it wanted to keep an eye on the mouse! 🐱💻🐭",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759698832,
-      "id": "chatcmpl-CNQLAD9PesfyfbTC0XnaP8RqG2YFT",
+      "created": 1759772169,
+      "id": "chatcmpl-CNjQ1f06ruI62h6IAV6ikPGPSh8Gz",
       "model": "gpt-4o-2024-05-13",
       "object": "chat.completion",
       "service_tier": "default",
       "system_fingerprint": "fp_72044bbe43",
       "usage": {
-        "completion_tokens": 28,
+        "completion_tokens": 37,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
@@ -85,7 +85,7 @@
           "audio_tokens": 0,
           "cached_tokens": 0
         },
-        "total_tokens": 79
+        "total_tokens": 88
       }
     },
     "headers": {
@@ -99,7 +99,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989fece599c3dada-ORD"
+        "98a6eb5a8b99ee11-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -108,13 +108,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:13:52 GMT"
+        "Mon, 06 Oct 2025 17:36:10 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "311"
+        "1082"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -126,8 +126,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=CFubQ2VZa1gYZeZFMpi36POyt.JpNyq9.zDHu9imRv4-1759698832-1.0.1.1-.Ibx0vmvbjCQ6uxdTz_CZ.S22S4uH2ygC8VvfTunEJxBA5XYwVvNt1EzMwlLSbUq8rRrUrZqIkTUdZkMGEqErhVn.4jndP7tmNjM0F3AT8U; path=/; expires=Sun, 05-Oct-25 21:43:52 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=iko_ZfvPrPncFynMSaH585K3SoEsd9M4eWF.yG1bv7c-1759698832635-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=vmx8ubqGLuw6.3BXv9n9ZGO1zuReZ0zWtA59Z8gQr.M-1759772170-1.0.1.1-Ur2fGbvvzA_RK6eBDQxUG4aijfiu3mamtspQpxwnTOULRq97MljIPhxxc8a.VA0HPj8HtjqHsOq1z85KYC9niFx.lgRjOti6RMjxnx4Epak; path=/; expires=Mon, 06-Oct-25 18:06:10 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=BZzkgkvqEewN1DXXZDKP9Pny1MSK5tQeBekArE8GA8Y-1759772170532-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -139,7 +139,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "329"
+        "1114"
       ],
       "x-openai-proxy-wasm": [
         "v0.1"
@@ -163,7 +163,7 @@
         "0s"
       ],
       "x-request-id": [
-        "req_967216d59d92443e967e452b8dbe9ac5"
+        "req_a53939fccdfa4a79add85af99aaec524"
       ]
     },
     "status": 200

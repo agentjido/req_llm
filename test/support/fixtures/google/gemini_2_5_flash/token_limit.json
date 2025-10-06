@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjUsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9fX0="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjozMDAwLCJ0ZW1wZXJhdHVyZSI6MC41fX0="
     },
     "canonical_json": {
       "contents": [
@@ -16,12 +16,8 @@
       ],
       "generationConfig": {
         "candidateCount": 1,
-        "maxOutputTokens": 100,
-        "temperature": 0.5,
-        "thinkingConfig": {
-          "includeThoughts": true,
-          "thinkingBudget": 4096
-        }
+        "maxOutputTokens": 3000,
+        "temperature": 0.5
       }
     },
     "headers": {
@@ -45,8 +41,7 @@
           "content": {
             "parts": [
               {
-                "text": "**Initial Brainstorm: Dragons, Adventure, and Length**\n\nOkay, so I've got this prompt, \"Very long story about dragons and adventures.\" Right away, the \"very long\" part is key. That screams scope - multiple acts, character development, a rich world, subplots weaving in and out, and likely a good chunk of time passing. The sheer length gives me a lot of freedom, but it also means I need to carefully consider the pacing and ensure the narrative's sustained interest.\n\nThen, there are the dragons. Ah, dragons! The possibilities are endless. Am I going for the classic fire-breathing beasts, or something more nuanced? Intelligent, perhaps? Maybe elemental? Good dragons, evil dragons, or something in between? How do they interact with the human characters? Are they antagonists, allies, both, or something more complex? I need to figure out the nature of the dragons and their role in this world – that's the foundation of the story.\n",
-                "thought": true
+                "text": "The world of Aerthos was ancient, its mountains carved by the breath of creation, its rivers fed by primordial springs, and its skies once dominated by the colossal wings of dragons. For millennia, humanity had lived in the shadow of their legends, their history intertwined with the scaled behemoths – sometimes as allies, often as prey, and eventually, as uneasy cohabitants of a fracturing world.\n\nOur story begins in the secluded village of Oakhaven, nestled at the foot of the Whispering Peaks. Elara, a young woman with eyes the colour of moss after a spring rain and hair the shade of rich earth, felt the ancient world more keenly than most. She was an apprentice cartographer, her days spent meticulously mapping the ever-changing landscape, but her nights were filled with dreams of soaring shadows and guttural roars that vibrated in her very bones.\n\nOne crisp autumn morning, the dreams bled into reality. A tremor, unlike any earthquake, shook Oakhaven. Not from the earth, but from the sky. A shadow, vast and ragged, passed over the sun, plunging the village into an unnatural twilight. Panic erupted. Elara, clutching her charcoal stick, looked up. It wasn't a cloud. It was a dragon, but not one of the majestic, vibrant creatures of lore. This one was a skeletal silhouette, its scales dull and flaking, its eyes burning with a sickly green light. It shrieked – a sound like grinding stone – and swept down, snatching a terrified sheep before vanishing as quickly as it had appeared.\n\nThe village elder, a man named Brennus who spoke of forgotten histories, declared it an ill omen. \"The Blight,\" he whispered, his voice hoarse with fear. \"It stirs again. The Shadow Dragons return.\"\n\nElara, driven by a primal curiosity and a burgeoning sense of dread, sought answers in the forbidden texts of the village’s small, dusty library. There, she found fragmented accounts of the Great Sundering, an age when Aerthos was nearly consumed by a creeping darkness, a force known as the Void Weaver, which corrupted all life it touched. It spoke of dragons, not as mere beasts, but as guardians, elemental forces embodying the very essence of Aerthos. And it spoke of the Dragon Speakers – humans gifted with the ability to bridge the gap between species.\n\nDays turned into weeks. More shadow creatures appeared – gaunt wolves with glowing eyes, ravens with wings of smoke, and whispers of a growing darkness in the northern lands. Elara knew she couldn't stay. She packed a small bag, her maps, and a worn copy of the ancient texts. Her destination: the Dragon’s Tooth Mountains, where legends claimed the last of the true dragons slept.\n\nHer journey was arduous. The Whispering Peaks lived up to their name, their winds carrying phantom voices, their paths treacherous. She encountered a lone, grizzled ranger named Gareth, who, after much suspicion, agreed to guide her. Gareth had seen the Blight’s advance firsthand, his village razed, his family lost. He carried a deep-seated hatred for the shadow creatures but a healthy skepticism for dragons.\n\nTogether, they navigated forgotten passes and ancient forests, their bond slowly forging in the crucible of shared danger. One frigid night, huddled by a meagre fire, a monstrous shadow descended. It was a Shadow Drake, smaller than the one that attacked Oakhaven, but its claws were razor-sharp, its breath a chilling mist. Gareth fought with grim determination, his axe a blur, but they were outmatched. Just as the drake lunged for Elara, a roar ripped through the night sky – a sound of pure power, of ancient earth and burning fire.\n\nA colossal dragon, its scales the colour of polished obsidian, streaked with veins of molten gold, descended like a meteor. Its eyes, twin suns, fixated on the drake. With a single, devastating blast of emerald flame, it incinerated the shadow creature, leaving only a lingering stench of ozone and ash.\n\nElara and Gareth stared, awestruck and terrified. The dragon landed, its immense form dwarfing the trees. It was magnificent, terrifying, and utterly alien. Then, a voice, deep and resonant, like stones shifting in a riverbed, echoed in Elara’s mind. *“You carry the Echo. You seek answers.”*\n\nElara, trembling but resolute, found her voice. \"We seek aid. The Blight returns. The Shadow Dragons…\"\n\nThe dragon lowered its massive head, its golden eyes studying her. *“I am Kaelen, of the Earth-Heart Clan. The Blight is indeed stirring. It is the Void Weaver, a hunger from beyond the stars, seeking to consume Aerthos. And you, little human, are a Dragon Speaker, though your gift is nascent.”*\n\nKaelen explained the ancient pact: how, eons ago, dragons and humans had stood together against the Void Weaver, sealing it away behind a magical barrier known as the Veil. But the Veil was weakening, and the Weaver’s corrupted tendrils, the Shadow Dragons and their minions, were seeping back into Aerthos. El"
               }
             ],
             "role": "model"
@@ -56,8 +51,9 @@
         }
       ],
       "modelVersion": "gemini-2.5-flash",
-      "responseId": "VGXgaPj3MtHi_uMPiKz2GA",
+      "responseId": "1fXjaLrBJaLyjMcP44qBEQ",
       "usageMetadata": {
+        "candidatesTokenCount": 1079,
         "promptTokenCount": 10,
         "promptTokensDetails": [
           {
@@ -65,8 +61,8 @@
             "tokenCount": 10
           }
         ],
-        "thoughtsTokenCount": 99,
-        "totalTokenCount": 109
+        "thoughtsTokenCount": 1919,
+        "totalTokenCount": 3008
       }
     },
     "headers": {
@@ -77,13 +73,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Sat, 04 Oct 2025 00:07:48 GMT"
+        "Mon, 06 Oct 2025 17:01:09 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=2598"
+        "gfet4t7; dur=31189"
       ],
       "transfer-encoding": [
         "chunked"

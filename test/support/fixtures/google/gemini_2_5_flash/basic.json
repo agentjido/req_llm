@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMCwidGVtcGVyYXR1cmUiOjAuMCwidGhpbmtpbmdDb25maWciOnsiaW5jbHVkZVRob3VnaHRzIjp0cnVlLCJ0aGlua2luZ0J1ZGdldCI6NDA5Nn19fQ=="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMDAsInRlbXBlcmF0dXJlIjowLjB9fQ=="
     },
     "canonical_json": {
       "contents": [
@@ -16,12 +16,8 @@
       ],
       "generationConfig": {
         "candidateCount": 1,
-        "maxOutputTokens": 200,
-        "temperature": 0.0,
-        "thinkingConfig": {
-          "includeThoughts": true,
-          "thinkingBudget": 4096
-        }
+        "maxOutputTokens": 2000,
+        "temperature": 0.0
       }
     },
     "headers": {
@@ -45,10 +41,6 @@
           "content": {
             "parts": [
               {
-                "text": "**Responding to a Simple Start**\n\nOkay, so the user said \"Hello world!\". Ah, the classic! That's how we all begin, isn't it? A simple, almost ritualistic declaration. It signifies a beginning, a willingness to engage. I need to reciprocate that welcoming gesture. I should respond in kind, maybe with a friendly acknowledgment of their greeting. It's important to make them feel comfortable and encourage further interaction, especially at this early stage. This is about building a rapport, starting with a shared understanding of this very basic, universal starting point.\n",
-                "thought": true
-              },
-              {
                 "text": "Hello there! Welcome! How can I help you today?"
               }
             ],
@@ -59,7 +51,7 @@
         }
       ],
       "modelVersion": "gemini-2.5-flash",
-      "responseId": "QmXgaJGuKZTO_uMPrNakgQI",
+      "responseId": "rvXjaLa7EdbSjMcPmKDN-Qg",
       "usageMetadata": {
         "candidatesTokenCount": 12,
         "promptTokenCount": 4,
@@ -69,8 +61,8 @@
             "tokenCount": 4
           }
         ],
-        "thoughtsTokenCount": 33,
-        "totalTokenCount": 49
+        "thoughtsTokenCount": 31,
+        "totalTokenCount": 47
       }
     },
     "headers": {
@@ -81,13 +73,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Sat, 04 Oct 2025 00:07:30 GMT"
+        "Mon, 06 Oct 2025 17:00:30 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=1650"
+        "gfet4t7; dur=527"
       ],
       "transfer-encoding": [
         "chunked"

@@ -1,22 +1,18 @@
 {
-  "captured_at": "2025-10-04T00:07:58.570138Z",
+  "captured_at": "2025-10-06T17:01:21.538856Z",
   "chunks": [
     {
-      "b64": "ZGF0YTogeyJjYW5kaWRhdGVzIjogW3siY29udGVudCI6IHsicGFydHMiOiBbeyJ0ZXh0IjogIioqUmV2aWV3aW5nIE11bHRpcGxpY2F0aW9uIFJlcXVlc3QqKlxuXG5JJ20gY3VycmVudGx5IGZvY3VzZWQgb24gdGhlIHVzZXIncyByZXF1ZXN0LiBJdCdzIGEgc2ltcGxlIG11bHRpcGxpY2F0aW9uIHByb2JsZW06IGZpbmRpbmcgdGhlIHByb2R1Y3Qgb2YgMSwgNSwgYW5kIDMuIE15IGFwcHJvYWNoIGlzIHN0cmFpZ2h0Zm9yd2FyZDsgaXQncyBiYXNpYyBtdWx0aXBsaWNhdGlvbi5cblxuXG4iLCJ0aG91Z2h0IjogdHJ1ZX1dLCJyb2xlIjogIm1vZGVsIn0sImluZGV4IjogMH1dLCJ1c2FnZU1ldGFkYXRhIjogeyJwcm9tcHRUb2tlbkNvdW50IjogMzIsInRvdGFsVG9rZW5Db3VudCI6IDEwMSwicHJvbXB0VG9rZW5zRGV0YWlscyI6IFt7Im1vZGFsaXR5IjogIlRFWFQiLCJ0b2tlbkNvdW50IjogMzJ9XSwidGhvdWdodHNUb2tlbkNvdW50IjogNjl9LCJtb2RlbFZlcnNpb24iOiAiZ2VtaW5pLTIuNS1mbGFzaCIsInJlc3BvbnNlSWQiOiAiWEdYZ2FMWGFDdlNVX3VNUDVkLXk2QTgifQ0KDQo=",
-      "decoded": "data: {\"candidates\": [{\"content\": {\"parts\": [{\"text\": \"**Reviewing Multiplication Request**\\n\\nI'm currently focused on the user's request. It's a simple multiplication problem: finding the product of 1, 5, and 3. My approach is straightforward; it's basic multiplication.\\n\\n\\n\",\"thought\": true}],\"role\": \"model\"},\"index\": 0}],\"usageMetadata\": {\"promptTokenCount\": 32,\"totalTokenCount\": 101,\"promptTokensDetails\": [{\"modality\": \"TEXT\",\"tokenCount\": 32}],\"thoughtsTokenCount\": 69},\"modelVersion\": \"gemini-2.5-flash\",\"responseId\": \"XGXgaLXaCvSU_uMP5d-y6A8\"}\r\n\r\n"
+      "b64": "W3sKICAiY2FuZGlkYXRlcyI6IFsKICAgIHsKICAgICAgImNvbnRlbnQiOiB7CiAgICAgICAgInBhcnRzIjogWwogICAgICAgICAgewogICAgICAgICAgICAidGV4dCI6ICIxNSAqIDMgPSA0NSIKICAgICAgICAgIH0KICAgICAgICBdLAogICAgICAgICJyb2xlIjogIm1vZGVsIgogICAgICB9LAogICAgICAiZmluaXNoUmVhc29uIjogIlNUT1AiLAogICAgICAiaW5kZXgiOiAwCiAgICB9CiAgXSwKICAidXNhZ2VNZXRhZGF0YSI6IHsKICAgICJwcm9tcHRUb2tlbkNvdW50IjogMzIsCiAgICAiY2FuZGlkYXRlc1Rva2VuQ291bnQiOiA5LAogICAgInRvdGFsVG9rZW5Db3VudCI6IDcxLAogICAgInByb21wdFRva2Vuc0RldGFpbHMiOiBbCiAgICAgIHsKICAgICAgICAibW9kYWxpdHkiOiAiVEVYVCIsCiAgICAgICAgInRva2VuQ291bnQiOiAzMgogICAgICB9CiAgICBdLAogICAgInRob3VnaHRzVG9rZW5Db3VudCI6IDMwCiAgfSwKICAibW9kZWxWZXJzaW9uIjogImdlbWluaS0yLjUtZmxhc2giLAogICJyZXNwb25zZUlkIjogIjRmWGphSzJCRE95TmpNY1BnTEs1bUE0Igp9Cg==",
+      "decoded": "[{\n  \"candidates\": [\n    {\n      \"content\": {\n        \"parts\": [\n          {\n            \"text\": \"15 * 3 = 45\"\n          }\n        ],\n        \"role\": \"model\"\n      },\n      \"finishReason\": \"STOP\",\n      \"index\": 0\n    }\n  ],\n  \"usageMetadata\": {\n    \"promptTokenCount\": 32,\n    \"candidatesTokenCount\": 9,\n    \"totalTokenCount\": 71,\n    \"promptTokensDetails\": [\n      {\n        \"modality\": \"TEXT\",\n        \"tokenCount\": 32\n      }\n    ],\n    \"thoughtsTokenCount\": 30\n  },\n  \"modelVersion\": \"gemini-2.5-flash\",\n  \"responseId\": \"4fXjaK2BDOyNjMcPgLK5mA4\"\n}\n"
     },
     {
-      "b64": "ZGF0YTogeyJjYW5kaWRhdGVzIjogW3siY29udGVudCI6IHsicGFydHMiOiBbeyJ0ZXh0IjogIioqUmV2aXNpdGluZyBTdHJhdGVneSBEZXZlbG9wbWVudCoqXG5cbkkndmUgcmVmaW5lZCBteSBzdHJhdGVneSBub3cuIEknbSBwcmlvcml0aXppbmcgb3V0bGluaW5nIHRoZSBcInRoaW5raW5nIHRocm91Z2hcIiBhc3BlY3QgYmVmb3JlIHN0YXRpbmcgdGhlIGFuc3dlci4gVGhlIGNvcmUgbWV0aG9kIHV0aWxpemVzIGEgYnJlYWtkb3duIG9mIHRoZSBudW1iZXJzIGZvciBjbGFyaXR5LCBzcGVjaWZpY2FsbHkgKDEwKzUpICogMyA9ICgxMCozKSArICg1KjMpLCByYXRoZXIgdGhhbiByZXBlYXRlZCBhZGRpdGlvbi4gVGhpcyBlbnN1cmVzIGEgY29tcHJlaGVuc2l2ZSBleHBsYW5hdGlvbiBvZiBteSBhcHByb2FjaCB0byB0aGlzIG11bHRpcGxpY2F0aW9uIHByb2JsZW0uXG5cblxuIiwidGhvdWdodCI6IHRydWV9XSwicm9sZSI6ICJtb2RlbCJ9LCJpbmRleCI6IDB9XSwidXNhZ2VNZXRhZGF0YSI6IHsicHJvbXB0VG9rZW5Db3VudCI6IDMyLCJ0b3RhbFRva2VuQ291bnQiOiAyNjUsInByb21wdFRva2Vuc0RldGFpbHMiOiBbeyJtb2RhbGl0eSI6ICJURVhUIiwidG9rZW5Db3VudCI6IDMyfV0sInRob3VnaHRzVG9rZW5Db3VudCI6IDIzM30sIm1vZGVsVmVyc2lvbiI6ICJnZW1pbmktMi41LWZsYXNoIiwicmVzcG9uc2VJZCI6ICJYR1hnYUxYYUN2U1VfdU1QNWQteTZBOCJ9DQoNCg==",
-      "decoded": "data: {\"candidates\": [{\"content\": {\"parts\": [{\"text\": \"**Revisiting Strategy Development**\\n\\nI've refined my strategy now. I'm prioritizing outlining the \\\"thinking through\\\" aspect before stating the answer. The core method utilizes a breakdown of the numbers for clarity, specifically (10+5) * 3 = (10*3) + (5*3), rather than repeated addition. This ensures a comprehensive explanation of my approach to this multiplication problem.\\n\\n\\n\",\"thought\": true}],\"role\": \"model\"},\"index\": 0}],\"usageMetadata\": {\"promptTokenCount\": 32,\"totalTokenCount\": 265,\"promptTokensDetails\": [{\"modality\": \"TEXT\",\"tokenCount\": 32}],\"thoughtsTokenCount\": 233},\"modelVersion\": \"gemini-2.5-flash\",\"responseId\": \"XGXgaLXaCvSU_uMP5d-y6A8\"}\r\n\r\n"
-    },
-    {
-      "b64": "ZGF0YTogeyJjYW5kaWRhdGVzIjogW3siY29udGVudCI6IHsicGFydHMiOiBbeyJ0ZXh0IjogIk15IGFwcHJvYWNoIGlzIHRvIHBlcmZvcm0gdGhlIG11bHRpcGxpY2F0aW9uIG9mIDE1IGJ5IDMuIEkgY2FuIGRvIHRoaXMgYnkgYnJlYWtpbmcgaXQgZG93bjogKDEwICogMykgKyAoNSAqIDMpLlxuXG4xNSAqIDMgPSA0NSJ9XSwicm9sZSI6ICJtb2RlbCJ9LCJmaW5pc2hSZWFzb24iOiAiU1RPUCIsImluZGV4IjogMH1dLCJ1c2FnZU1ldGFkYXRhIjogeyJwcm9tcHRUb2tlbkNvdW50IjogMzIsImNhbmRpZGF0ZXNUb2tlbkNvdW50IjogNDYsInRvdGFsVG9rZW5Db3VudCI6IDMxMSwicHJvbXB0VG9rZW5zRGV0YWlscyI6IFt7Im1vZGFsaXR5IjogIlRFWFQiLCJ0b2tlbkNvdW50IjogMzJ9XSwidGhvdWdodHNUb2tlbkNvdW50IjogMjMzfSwibW9kZWxWZXJzaW9uIjogImdlbWluaS0yLjUtZmxhc2giLCJyZXNwb25zZUlkIjogIlhHWGdhTFhhQ3ZTVV91TVA1ZC15NkE4In0NCg0K",
-      "decoded": "data: {\"candidates\": [{\"content\": {\"parts\": [{\"text\": \"My approach is to perform the multiplication of 15 by 3. I can do this by breaking it down: (10 * 3) + (5 * 3).\\n\\n15 * 3 = 45\"}],\"role\": \"model\"},\"finishReason\": \"STOP\",\"index\": 0}],\"usageMetadata\": {\"promptTokenCount\": 32,\"candidatesTokenCount\": 46,\"totalTokenCount\": 311,\"promptTokensDetails\": [{\"modality\": \"TEXT\",\"tokenCount\": 32}],\"thoughtsTokenCount\": 233},\"modelVersion\": \"gemini-2.5-flash\",\"responseId\": \"XGXgaLXaCvSU_uMP5d-y6A8\"}\r\n\r\n"
+      "b64": "XQ==",
+      "decoded": "]"
     }
   ],
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJCcmllZmx5IHRoaW5rIHRocm91Z2ggeW91ciBhcHByb2FjaCwgdGhlbiBhbnN3ZXI6IFdoYXQgaXMgMTUqMz8ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwNDgsInRlbXBlcmF0dXJlIjoxLjAsInRoaW5raW5nQ29uZmlnIjp7ImluY2x1ZGVUaG91Z2h0cyI6dHJ1ZSwidGhpbmtpbmdCdWRnZXQiOjQwOTZ9LCJ0b3BQIjowLjh9LCJzeXN0ZW1JbnN0cnVjdGlvbiI6eyJwYXJ0cyI6W3sidGV4dCI6IllvdSBhcmUgYSBjYXJlZnVsLCBzdGVwLWJ5LXN0ZXAgcmVhc29uZXIuIn1dfX0="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJCcmllZmx5IHRoaW5rIHRocm91Z2ggeW91ciBhcHByb2FjaCwgdGhlbiBhbnN3ZXI6IFdoYXQgaXMgMTUqMz8ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwNDgsInRlbXBlcmF0dXJlIjoxLjAsInRvcFAiOjAuOH0sInN5c3RlbUluc3RydWN0aW9uIjp7InBhcnRzIjpbeyJ0ZXh0IjoiWW91IGFyZSBhIGNhcmVmdWwsIHN0ZXAtYnktc3RlcCByZWFzb25lci4ifV19fQ=="
     },
     "canonical_json": {
       "contents": [
@@ -33,10 +29,6 @@
         "candidateCount": 1,
         "maxOutputTokens": 2048,
         "temperature": 1.0,
-        "thinkingConfig": {
-          "includeThoughts": true,
-          "thinkingBudget": 4096
-        },
         "topP": 0.8
       },
       "systemInstruction": {
@@ -48,7 +40,6 @@
       }
     },
     "headers": {
-      "accept": "text/event-stream",
       "content-type": "application/json"
     },
     "method": "POST",
@@ -57,13 +48,13 @@
   "response": {
     "body": null,
     "headers": {
+      "accept-ranges": "none",
       "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
-      "content-disposition": "attachment",
-      "content-type": "text/event-stream",
-      "date": "Sat, 04 Oct 2025 00:07:57 GMT",
+      "content-type": "application/json; charset=UTF-8",
+      "date": "Mon, 06 Oct 2025 17:01:21 GMT",
       "server": "scaffolding on HTTPServer2",
-      "server-timing": "gfet4t7; dur=1569",
-      "vary": "Referer",
+      "server-timing": "gfet4t7; dur=804",
+      "vary": "Origin,Accept-Encoding",
       "x-content-type-options": "nosniff",
       "x-frame-options": "SAMEORIGIN",
       "x-xss-protection": "0"

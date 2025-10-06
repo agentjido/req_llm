@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IllvdSBhcmUgYSBoZWxwZnVsLCBjcmVhdGl2ZSBhc3Npc3RhbnQuIiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJzeXN0ZW0ifSx7ImNvbnRlbnQiOlt7InRleHQiOiJTYXkgaGVsbG8gaW4gb25lIHNob3J0LCBpbWFnaW5hdGl2ZSBzZW50ZW5jZS4iLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoibzMtZGVlcC1yZXNlYXJjaCIsInN0cmVhbSI6dHJ1ZX0="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IllvdSBhcmUgYSBoZWxwZnVsLCBjcmVhdGl2ZSBhc3Npc3RhbnQuIiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJzeXN0ZW0ifSx7ImNvbnRlbnQiOlt7InRleHQiOiJTYXkgaGVsbG8gaW4gb25lIHNob3J0LCBpbWFnaW5hdGl2ZSBzZW50ZW5jZS4iLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoyMDAwLCJtb2RlbCI6Im8zLWRlZXAtcmVzZWFyY2giLCJzdHJlYW0iOnRydWV9"
     },
     "canonical_json": {
       "input": [
@@ -24,7 +24,7 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 100,
+      "max_output_tokens": 2000,
       "model": "o3-deep-research",
       "stream": true
     },
@@ -48,20 +48,20 @@
     "headers": {
       "alt-svc": "h3=\":443\"; ma=86400",
       "cf-cache-status": "DYNAMIC",
-      "cf-ray": "989fecede8632911-ORD",
+      "cf-ray": "98a6eb52fa93f5ff-ORD",
       "content-length": "212",
       "content-type": "application/json",
-      "date": "Sun, 05 Oct 2025 21:13:53 GMT",
+      "date": "Mon, 06 Oct 2025 17:36:08 GMT",
       "openai-organization": "epic-creative-sogybe",
-      "openai-processing-ms": "12",
+      "openai-processing-ms": "24",
       "openai-project": "proj_j5AhgU4eLMRmsoO9FDg7BRD3",
       "openai-version": "2020-10-01",
       "server": "cloudflare",
-      "set-cookie": "_cfuvid=Pk4Ssy6YjYhsJU9Qtd5F0VmYz5giv9uuVLsdh.5wSh8-1759698833666-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+      "set-cookie": "_cfuvid=UDoUJE8rwmyaQqoLc.JWLC1D23dYwSZ1ljrDGRNgwhI-1759772168263-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
       "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
       "x-content-type-options": "nosniff",
-      "x-envoy-upstream-service-time": "14",
-      "x-request-id": "req_3f8fb4f4c3311097a57b290400bb1af7"
+      "x-envoy-upstream-service-time": "28",
+      "x-request-id": "req_31391abb7e7507dfc6b17be2032abad8"
     },
     "status": 400
   }

@@ -40,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759698832,
+      "created_at": 1759772166,
       "error": null,
-      "id": "resp_0d1e9f8ce9362ca60068e2df901ff4819b961a48a70d6291c9",
+      "id": "resp_06e0d718063cbff00068e3fe06a6648195a2b59fa043137381",
       "incomplete_details": {
         "reason": "max_output_tokens"
       },
@@ -58,11 +58,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Certainly! Here's a lengthy, detailed story about dragons and adventures:\n\n---\n\n**The Legend of Eldara’s Flame**\n\nIn a land where mountains kissed the clouds and forests stretched as far as the eye could see, there was a kingdom known as Eldara. It was a realm of harmony, where humans, elves, dwarves, and mythical creatures coexisted. Yet, Eldara’s true wonder lay hidden deep within its heart—a ancient legacy of dragons, majestic beings whose flames once protected the land",
+              "text": "Once upon a time, in a vast land called Eldoria, where the mountains touched the sky and the forests stretched beyond the horizon, there was an ancient legend about dragons—beings of fire and flight, guardians of secrets and wielders of incredible power. For centuries, dragons had been thought to be nothing more than myth, creatures of stories woven around campfires. But beneath the misty peaks of the Dragonspine Mountains, the truth lingered, waiting for a brave soul to uncover it",
               "type": "output_text"
             }
           ],
-          "id": "msg_0d1e9f8ce9362ca60068e2df90b378819b8a3f7e99a71c0d5e",
+          "id": "msg_06e0d718063cbff00068e3fe071a588195b780f4ea1f3f0594",
           "role": "assistant",
           "status": "incomplete",
           "type": "message"
@@ -112,7 +112,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989fece46a1e0ffa-ORD"
+        "98a6eb493a208637-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -121,13 +121,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:13:53 GMT"
+        "Mon, 06 Oct 2025 17:36:08 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "1329"
+        "1706"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -139,8 +139,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=thCRjBy0GVyAxuR2dhRte4pvRUQk9dCRDzl5xs9snCU-1759698833-1.0.1.1-1uJfS23PXlllwhyvoHmntT9Q8l8yjsr998XZ0Imi5NikpOQWhBmwzt1V4eXZ.WeAnOjYXLTuTxkSelWM_60iJCnknIX0PZQoaa3eiBnhfkQ; path=/; expires=Sun, 05-Oct-25 21:43:53 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=9X3eRVwZhTxqil4q.jSmKAddBXlctBK_pySafrwD58E-1759698833479-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=bzqGuyxH5cP25O9o6DrSSqyDqi_KCHgfibAL57ZX3bw-1759772168-1.0.1.1-LDNKfoQMUH9qR3.sBRXORk.9BljXlrBNixblWV73BqulzCxeoK6lUczwZL70RKLLGg_.GzDX0qAKoIgQaEIeOb7oGp66tb073Hz.CEBpDck; path=/; expires=Mon, 06-Oct-25 18:06:08 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=FiV9ITb4YUsFx5pOjZ5.eh5kmY.wc4U18IHmqvm92YA-1759772168421-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -152,7 +152,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "1334"
+        "1709"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -173,7 +173,7 @@
         "0s"
       ],
       "x-request-id": [
-        "req_753bd1a95c0a77a3b3fca6406e8179f4"
+        "req_6d3fb0cfab8938b7c14d5c766ecac187"
       ]
     },
     "status": 200

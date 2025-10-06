@@ -44,8 +44,8 @@
           }
         }
       ],
-      "created": 1759686621,
-      "id": "4a92dcf6-62f8-adc0-54a9-947425c74997_us-east-1",
+      "created": 1759763205,
+      "id": "53d35b17-7e73-c736-3f43-ac1f463d5972_us-east-1",
       "model": "grok-4-fast-reasoning",
       "object": "chat.completion",
       "system_fingerprint": "fp_9362061f30",
@@ -54,7 +54,7 @@
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 106,
+          "reasoning_tokens": 114,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
@@ -65,7 +65,7 @@
           "image_tokens": 0,
           "text_tokens": 120
         },
-        "total_tokens": 235
+        "total_tokens": 243
       }
     },
     "headers": {
@@ -79,7 +79,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989ec2ca2a7deae0-ORD"
+        "98a610803e0e6208-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -88,13 +88,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 17:50:22 GMT"
+        "Mon, 06 Oct 2025 15:06:46 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=6z7.EDxWGt7wU02UVVptDQbxUBjnwg1fyD1oKd7ePEI-1759686622-1.0.1.1-vSNLwAtdkfO_7JsJ__Ftmastj29lisnQhhwAjWf_4u2bYQie4Z1x0i.xFpZ7kyLXZ6JLQzOpHghzvRF3s.v0Cb9.SGYVbfQ9Ipk1b4_YtSw; path=/; expires=Sun, 05-Oct-25 18:20:22 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=BBBt8_BaQShJyAC.MZka_EXlzf2tL_hODg8ZF3V.TpE-1759763206-1.0.1.1-8BJ685rZPPU4xJMG.JW95ov3JMsrZVUtHwdtRz2Fx7poOwSFV4m5.Vd1Ba9ZjW.EIBEpvjOKBUFPrgUWidtxaeVhb3SkrZ35mAxOKX7SLDE; path=/; expires=Mon, 06-Oct-25 15:36:46 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -106,7 +106,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-d6f4a4d8a96839e6a0cb724ec98e46ee-192908670042ba97-01"
+        "00-dae5e0f5bae805821645ebd722b51a9b-a57d89800063a054-01"
       ],
       "x-zero-data-retention": [
         "false"
