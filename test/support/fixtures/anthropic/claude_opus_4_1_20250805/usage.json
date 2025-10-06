@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtb3B1cy00LTEtMjAyNTA4MDUiLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGkgdGhlcmUhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiY2xhdWRlLW9wdXMtNC0xLTIwMjUwODA1Iiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
-      "max_tokens": 50,
+      "max_tokens": 500,
       "messages": [
         {
           "content": "Hi there!",
@@ -41,7 +41,7 @@
           "type": "text"
         }
       ],
-      "id": "msg_01CXHwbnGm3ZJVLzydFoekUH",
+      "id": "msg_01MSE7X35wfJ5KYqL4kHUasz",
       "model": "claude-opus-4-1-20250805",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -70,7 +70,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-03T11:33:10Z"
+        "2025-10-05T15:44:01Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -79,7 +79,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-03T11:33:10Z"
+        "2025-10-05T15:44:01Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -88,7 +88,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-03T11:33:09Z"
+        "2025-10-05T15:43:59Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -97,13 +97,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-03T11:33:10Z"
+        "2025-10-05T15:44:01Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988c1f7baf90b838-ORD"
+        "989e09acad8be8d0-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -112,10 +112,10 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 11:33:10 GMT"
+        "Sun, 05 Oct 2025 15:44:01 GMT"
       ],
       "request-id": [
-        "req_011CTkC7SqMbrQvjBL89tqBH"
+        "req_011CTpJrhxbpCSVWH3tReDmh"
       ],
       "server": [
         "cloudflare"
@@ -130,7 +130,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "1485"
+        "2419"
       ],
       "x-robots-tag": [
         "none"

@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhpIHRoZXJlISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stNC1mYXN0LW5vbi1yZWFzb25pbmciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhpIHRoZXJlISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stNC1mYXN0LW5vbi1yZWFzb25pbmciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
-      "max_completion_tokens": 50,
+      "max_completion_tokens": 10,
       "messages": [
         {
           "content": "Hi there!",
@@ -35,7 +35,7 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "length",
           "index": 0,
           "message": {
             "content": "Hi! How can I help you today?",
@@ -44,8 +44,8 @@
           }
         }
       ],
-      "created": 1759509985,
-      "id": "48350a9d-ff45-4bfa-afcd-0532eea96d33_us-east-1",
+      "created": 1759686611,
+      "id": "3aef23b7-e1f1-b234-57bf-24f8675a508c_us-east-1",
       "model": "grok-4-fast-non-reasoning",
       "object": "chat.completion",
       "system_fingerprint": "fp_e7507192a3",
@@ -79,7 +79,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988dea61be049129-ORD"
+        "989ec289fffc21af-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -88,13 +88,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 16:46:25 GMT"
+        "Sun, 05 Oct 2025 17:50:11 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=zV_5x8cOQA6RpjU2eFifAxoxoVaGdcOR94ySsHK.EOs-1759509985-1.0.1.1-1114A5TYHbU9502Vrr78MFTlwONcTWm.nDKprGoi9KtpJGpwwGUB.IdxsQNZQKnh_V._7dHPhpQj.3Rw6VmX7x0ikwEzBJddWEPVbmbWg2g; path=/; expires=Fri, 03-Oct-25 17:16:25 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=uptOQabuFU4tHRVh7A4ZmL2ycXftO9.9YRT3McEe7sc-1759686611-1.0.1.1-5Xjdwnc_3Q2gWCH.KLNnDM1ZKMRxEz2qtOtklw9wJN53I2tMRUW0byd.q3ECn1swvbkc6OtVf7ZQIlsRpBUzPPN2FdEBU62Ls_3HN8qwg.g; path=/; expires=Sun, 05-Oct-25 18:20:11 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -106,7 +106,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-3c21c7f1d28b1d99fe41654f22bc78f4-7e802ade00054e88-01"
+        "00-6dc9c946e759f87286d3edea42caa009-51429e7800426038-01"
       ],
       "x-zero-data-retention": [
         "false"

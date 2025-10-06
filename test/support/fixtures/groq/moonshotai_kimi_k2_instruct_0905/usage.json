@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJtb29uc2hvdGFpL2tpbWktazItaW5zdHJ1Y3QtMDkwNSIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJtb29uc2hvdGFpL2tpbWktazItaW5zdHJ1Y3QtMDkwNSIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
-      "max_tokens": 50,
+      "max_tokens": 10,
       "messages": [
         {
           "content": "Hi there!",
@@ -35,7 +35,7 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "length",
           "index": 0,
           "logprobs": null,
           "message": {
@@ -44,24 +44,24 @@
           }
         }
       ],
-      "created": 1759513826,
-      "id": "chatcmpl-9e54e96b-5b0c-4c93-b0f3-e3880eafbc50",
+      "created": 1759698666,
+      "id": "chatcmpl-00d10a67-7713-49dc-8846-6cf2358fdb69",
       "model": "moonshotai/kimi-k2-instruct-0905",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_b8565bb333",
+      "system_fingerprint": "fp_5fe129dff6",
       "usage": {
-        "completion_time": 0.021788898,
-        "completion_tokens": 11,
-        "prompt_time": 0.009373054,
+        "completion_time": 0.021922973,
+        "completion_tokens": 10,
+        "prompt_time": 0.009442196,
         "prompt_tokens": 28,
-        "queue_time": 0.07229435,
-        "total_time": 0.031161952,
-        "total_tokens": 39
+        "queue_time": 0.078331586,
+        "total_time": 0.031365169,
+        "total_tokens": 38
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6nk4n95evcvtrj8344k3b1h"
+        "id": "req_01k6v3dgy1f0fsp1r0k4sjt8cw"
       }
     },
     "headers": {
@@ -75,7 +75,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988e4828087aeb56-ORD"
+        "989fe8d909511253-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -84,13 +84,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 17:50:26 GMT"
+        "Sun, 05 Oct 2025 21:11:06 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=qx86I.Pgw7LZ8EhUwTHPcYZfk5NLfX74z3pFus.ATWM-1759513826-1.0.1.1-n3OQ0QGIKVZxAjCCequmReeBFk4hpdlvnF32vF3VUkMVLT75Q8l6PHkg.i1r9IzsdIVFVbwUbDZ6dErLAhsIPfcqf1KUdHuw3eLBOr.0w4g; path=/; expires=Fri, 03-Oct-25 18:20:26 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=OQW.nBsxCVPEzbgOe4Eb3NkrVaJ7X7_eE6txyqVzr6A-1759698666-1.0.1.1-zUKjriJZQOcVDtBt09WumpS3aeg__mgCjfWDJtg5JeS9y70auPQFLmICvbbqzTAeE4Gm8ADdgtcwKTAVUOYYfArE2OGhDBDd16fdzWWQ83o; path=/; expires=Sun, 05-Oct-25 21:41:06 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -111,19 +111,19 @@
         "10000"
       ],
       "x-ratelimit-remaining-requests": [
-        "993"
+        "997"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9552"
+        "9619"
       ],
       "x-ratelimit-reset-requests": [
-        "10m4.487s"
+        "4m18.922999999s"
       ],
       "x-ratelimit-reset-tokens": [
-        "2.685s"
+        "2.283s"
       ],
       "x-request-id": [
-        "req_01k6nk4n95evcvtrj8344k3b1h"
+        "req_01k6v3dgy1f0fsp1r0k4sjt8cw"
       ]
     },
     "status": 200

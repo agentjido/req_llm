@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtb3NzLTEyMGIiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjEuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtb3NzLTEyMGIiLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjoxLjB9"
     },
     "canonical_json": {
       "max_tokens": 2048,
@@ -12,6 +12,7 @@
         }
       ],
       "model": "openai/gpt-oss-120b",
+      "reasoning_effort": "low",
       "seed": 42,
       "stream": false,
       "temperature": 1.0
@@ -39,30 +40,30 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "**Internal thinking (brief):**  \n- Multiply 12 by 7.  \n- \\(12 \\times 7 = (10 \\times 7) + (2 \\times 7) = 70 + 14 = 84\\).\n\n**Result:**  \n\\(12 \\times 7 = 84\\).",
-            "reasoning": "We need to solve 12*7 = 84. Show internal thinking brief. Provide answer.",
+            "content": "**Internal thinking (brief):**  \n- Multiply 12 by 7.  \n- 10 × 7 = 70 and 2 × 7 = 14.  \n- Add the partial results: 70 + 14 = 84.\n\n**Answer:** 12 × 7 = 84.",
+            "reasoning": "We just compute 12*7=84. Show brief internal thinking.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759516067,
-      "id": "chatcmpl-565a4a14-227c-4196-a1e3-a665f84d8af7",
+      "created": 1759698668,
+      "id": "chatcmpl-36552de6-520c-41ec-8854-f00a004d7c42",
       "model": "openai/gpt-oss-120b",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_213abb2467",
+      "system_fingerprint": "fp_82669fd91d",
       "usage": {
-        "completion_time": 0.204125723,
-        "completion_tokens": 96,
-        "prompt_time": 0.004282774,
+        "completion_time": 0.192558629,
+        "completion_tokens": 97,
+        "prompt_time": 0.003530712,
         "prompt_tokens": 84,
-        "queue_time": 0.708915452,
-        "total_time": 0.208408497,
-        "total_tokens": 180
+        "queue_time": 0.196065711,
+        "total_time": 0.196089341,
+        "total_tokens": 181
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6nn90avfchsh3h59xrmbntc"
+        "id": "req_01k6v3djrrf0nttd1j7vtbnb6d"
       }
     },
     "headers": {
@@ -76,7 +77,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988e7ed53e33116f-ORD"
+        "989fe8e4ca4f1497-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -85,13 +86,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 18:27:47 GMT"
+        "Sun, 05 Oct 2025 21:11:08 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=6iAVINjsc0GmcRq3afWeaSzlk1UKGwyZmHHW6dqASik-1759516067-1.0.1.1-REYncG4ypqt.OY89OZN2GGb1rSPeKyuYPEvPTrNIbOKGBGqZCPZ00yqT6ktVI5KLFWF5PgWmTRcGU8a1_evoyZSXo9nuvjat1Bq6lRPufDE; path=/; expires=Fri, 03-Oct-25 18:57:47 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=Y5B9ikB0PY.NlwI33Q.buJ2Zrr8Idl64AO6lPk00UF8-1759698668-1.0.1.1-Ac0W17jQ_HztQSXFQJym_aIK0ilao3v9wdlKeJJlB2AkTNUowBg14xp1elExjOVWiqNg9HASa4HLPVotoJQQoDiFisXOhNtczfQAayePERg; path=/; expires=Sun, 05-Oct-25 21:41:08 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -112,19 +113,19 @@
         "8000"
       ],
       "x-ratelimit-remaining-requests": [
-        "977"
+        "994"
       ],
       "x-ratelimit-remaining-tokens": [
-        "7397"
+        "7299"
       ],
       "x-ratelimit-reset-requests": [
-        "33m6.843999999s"
+        "8m38.027999999s"
       ],
       "x-ratelimit-reset-tokens": [
-        "4.5215s"
+        "5.251999999s"
       ],
       "x-request-id": [
-        "req_01k6nn90avfchsh3h59xrmbntc"
+        "req_01k6v3djrrf0nttd1j7vtbnb6d"
       ]
     },
     "status": 200

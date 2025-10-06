@@ -40,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759627312,
+      "created_at": 1759698832,
       "error": null,
-      "id": "resp_0760bdd2ed43791b0068e1c830b08881988ba62460f0f191d5",
+      "id": "resp_0d1e9f8ce9362ca60068e2df901ff4819b961a48a70d6291c9",
       "incomplete_details": {
         "reason": "max_output_tokens"
       },
@@ -58,11 +58,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Once upon a time, in a land where the sky brushed the peaks of ancient mountains and the forests whispered secrets to the wind, there was a realm known as Eldoria. This realm was legendary for its majestic dragons—creatures of fire and fury, grace and wisdom. Among all the dragons, one stood out: a young, curious dragon named Ember.\n\nEmber was born into the clan of the Crimson Flame, a proud lineage revered for their fiery breath and unyielding spirit. His scales",
+              "text": "Certainly! Here's a lengthy, detailed story about dragons and adventures:\n\n---\n\n**The Legend of Eldara’s Flame**\n\nIn a land where mountains kissed the clouds and forests stretched as far as the eye could see, there was a kingdom known as Eldara. It was a realm of harmony, where humans, elves, dwarves, and mythical creatures coexisted. Yet, Eldara’s true wonder lay hidden deep within its heart—a ancient legacy of dragons, majestic beings whose flames once protected the land",
               "type": "output_text"
             }
           ],
-          "id": "msg_0760bdd2ed43791b0068e1c830e0408198a2beba926abc07e9",
+          "id": "msg_0d1e9f8ce9362ca60068e2df90b378819b8a3f7e99a71c0d5e",
           "role": "assistant",
           "status": "incomplete",
           "type": "message"
@@ -112,7 +112,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98991acffabe618a-ORD"
+        "989fece46a1e0ffa-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -121,13 +121,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 01:21:53 GMT"
+        "Sun, 05 Oct 2025 21:13:53 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "827"
+        "1329"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -139,8 +139,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=n2AYw_7Ui9MwdoxUmEYiPoGRsKqEaH1ECCsDKilYHVM-1759627313-1.0.1.1-YPN_z_I48q27kg2QyPYoBjzEWbmrrq5AhhAP7ewCcPotWN1R36q929RDNBgFGzgZVCdpzDcJuwnUxuw54X1e56kBHtfEEvFiumvWnSl1amA; path=/; expires=Sun, 05-Oct-25 01:51:53 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=aTlpbxUxb4cGRitb9zawpOwxGoxs2NvLL4UPf2g3N6U-1759627313543-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=thCRjBy0GVyAxuR2dhRte4pvRUQk9dCRDzl5xs9snCU-1759698833-1.0.1.1-1uJfS23PXlllwhyvoHmntT9Q8l8yjsr998XZ0Imi5NikpOQWhBmwzt1V4eXZ.WeAnOjYXLTuTxkSelWM_60iJCnknIX0PZQoaa3eiBnhfkQ; path=/; expires=Sun, 05-Oct-25 21:43:53 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=9X3eRVwZhTxqil4q.jSmKAddBXlctBK_pySafrwD58E-1759698833479-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -152,7 +152,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "830"
+        "1334"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -173,7 +173,7 @@
         "0s"
       ],
       "x-request-id": [
-        "req_da8fedd06ca77b49e5f0becab2f535d0"
+        "req_753bd1a95c0a77a3b3fca6406e8179f4"
       ]
     },
     "status": 200

@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/IiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MzAwLCJtb2RlbCI6ImdwdC01IiwicmVhc29uaW5nIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfd2VhdGhlciIsInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoidGVsbF9qb2tlIiwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImdldF90aW1lIiwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/IiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MTUwLCJtb2RlbCI6ImdwdC01Iiwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6InRlbGxfam9rZSIsInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfdGltZSIsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
       "input": [
@@ -15,11 +15,8 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 300,
+      "max_output_tokens": 150,
       "model": "gpt-5",
-      "reasoning": {
-        "effort": "low"
-      },
       "stream": false,
       "tools": [
         {
@@ -100,26 +97,26 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759613836,
+      "created_at": 1759698847,
       "error": null,
-      "id": "resp_0cc2d75d8bc8b2120068e1938cc8488198b3e6e79cf6a66bec",
+      "id": "resp_0d653defe54f235a0068e2df9fc6e88197888d7c4dae70f3bf",
       "incomplete_details": null,
       "instructions": null,
-      "max_output_tokens": 300,
+      "max_output_tokens": 150,
       "max_tool_calls": null,
       "metadata": {},
       "model": "gpt-5-2025-08-07",
       "object": "response",
       "output": [
         {
-          "id": "rs_0cc2d75d8bc8b2120068e1938d294c8198aae4979e14d0e8df",
+          "id": "rs_0d653defe54f235a0068e2dfa04a9c8197a4544417c8196846",
           "summary": [],
           "type": "reasoning"
         },
         {
           "arguments": "{}",
-          "call_id": "call_wM1gT6UdTaUvCi83yzSBGKZU",
-          "id": "fc_0cc2d75d8bc8b2120068e193907ac88198afb52e88729ea113",
+          "call_id": "call_ScmNPRRlTC27mEnQNHbcGmSw",
+          "id": "fc_0d653defe54f235a0068e2dfa21f908197825b88823ab5f6bc",
           "name": "get_weather",
           "status": "completed",
           "type": "function_call"
@@ -129,7 +126,7 @@
       "previous_response_id": null,
       "prompt_cache_key": null,
       "reasoning": {
-        "effort": "low",
+        "effort": "medium",
         "summary": null
       },
       "safety_identifier": null,
@@ -190,11 +187,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 272,
+        "output_tokens": 80,
         "output_tokens_details": {
-          "reasoning_tokens": 256
+          "reasoning_tokens": 64
         },
-        "total_tokens": 330
+        "total_tokens": 138
       },
       "user": null
     },
@@ -206,7 +203,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9897d1cf9ca90bf0-ORD"
+        "989fed461ce710b7-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -215,13 +212,13 @@
         "application/json"
       ],
       "date": [
-        "Sat, 04 Oct 2025 21:37:20 GMT"
+        "Sun, 05 Oct 2025 21:14:10 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "4103"
+        "2717"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -233,8 +230,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=Bb3LJc4D5ISP6ch0I1gLVrBO8VexvZ7IhLwAJouY03g-1759613840-1.0.1.1-Kj8VDTyR6peymWCcttfwpV9BVZPKtEweKE6Ta.7wn9V2Go8mT.RPG.V58veS2HDwKXhhHuZD5cwy.oQX9QfyM1dor9tfJYwNm4ziwBJk828; path=/; expires=Sat, 04-Oct-25 22:07:20 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=a_pC3nHWMRXJ8_h2HNw5r0IucYlIZl_oVZU4dUx765o-1759613840918-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=zkCyGavI5iHemItk0f2h8yQ5FRDqxEcrrNwpbgbO6Ds-1759698850-1.0.1.1-Z1VKVdf1agTnnss5qp8Q9nKyjqCdSU513KQQ0oU.EMZJSTH7M4w4jBrF5f8DJfdE2QoVstEu5oXFbcS6MvaKXwjR8NILwDwjF14MYRKf10E; path=/; expires=Sun, 05-Oct-25 21:44:10 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=6PyRBnrWgmlls05_n133ETFDyjjvdXi5g1PAnqKFGe4-1759698850506-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -246,10 +243,10 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "4106"
+        "2722"
       ],
       "x-request-id": [
-        "req_4aa52453fb1bca24fa15ac50c2df696c"
+        "req_ab06dc6a19fd1bac9880e5efb3e3c55d"
       ]
     },
     "status": 200

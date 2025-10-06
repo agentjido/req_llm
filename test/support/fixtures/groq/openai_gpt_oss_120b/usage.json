@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJvcGVuYWkvZ3B0LW9zcy0xMjBiIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGkgdGhlcmUhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC1vc3MtMTIwYiIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
-      "max_tokens": 50,
+      "max_tokens": 500,
       "messages": [
         {
           "content": "Hi there!",
@@ -45,24 +45,24 @@
           }
         }
       ],
-      "created": 1759516068,
-      "id": "chatcmpl-04a5d5cb-8e4a-4991-9644-a44ea05758d7",
+      "created": 1759698667,
+      "id": "chatcmpl-ac4a7d97-0695-4882-966e-99f20a3d9a16",
       "model": "openai/gpt-oss-120b",
       "object": "chat.completion",
       "service_tier": "on_demand",
       "system_fingerprint": "fp_3a688838c3",
       "usage": {
-        "completion_time": 0.069465028,
+        "completion_time": 0.069617346,
         "completion_tokens": 35,
-        "prompt_time": 0.003322605,
+        "prompt_time": 0.003204457,
         "prompt_tokens": 74,
-        "queue_time": 0.200848915,
-        "total_time": 0.072787633,
+        "queue_time": 0.195868134,
+        "total_time": 0.072821803,
         "total_tokens": 109
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6nn92fmfctr2z9p05t2vyg6"
+        "id": "req_01k6v3dj0qf0msbtmrt46m5mcw"
       }
     },
     "headers": {
@@ -76,7 +76,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988e7ee2eeae116f-ORD"
+        "989fe8e00c4c1497-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -85,13 +85,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 18:27:48 GMT"
+        "Sun, 05 Oct 2025 21:11:07 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=OyS5TjU7rePdZcN8unBGN7JTgB71gB36xeNEPZfWSZg-1759516068-1.0.1.1-.RwAY6bByOCHpVl7akItwkKqAjabktEu4CQuGyW8itQm7xOEly8Es9cGVQv5tIkPW3na3yc1YP.0OGJNL_Khy8hKt97qxvLczhv9cAJd.q0; path=/; expires=Fri, 03-Oct-25 18:57:48 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=0JZ6jthtffDQqRIz2kmw87Ss56lxwF5yJTppOfamFjI-1759698667-1.0.1.1-aNtxj.9J4U7QO1Y8E7DhqBjXx.vhClsd4alqFMnpczBwGqUmWmCVE0.Idl5t1JAgTzplwDqGzvRzZBhnpa9KeT6CRG1yGannBKEJsLw4dxg; path=/; expires=Sun, 05-Oct-25 21:41:07 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -112,19 +112,19 @@
         "8000"
       ],
       "x-ratelimit-remaining-requests": [
-        "974"
+        "996"
       ],
       "x-ratelimit-remaining-tokens": [
-        "7154"
+        "7459"
       ],
       "x-ratelimit-reset-requests": [
-        "37m25.860999999s"
+        "5m44.810999999s"
       ],
       "x-ratelimit-reset-tokens": [
-        "6.3445s"
+        "4.0555s"
       ],
       "x-request-id": [
-        "req_01k6nn92fmfctr2z9p05t2vyg6"
+        "req_01k6v3dj0qf0msbtmrt46m5mcw"
       ]
     },
     "status": 200

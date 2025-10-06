@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhlbGxvIHdvcmxkISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjIwMCwibW9kZWwiOiJvMS1wcm8iLCJyZWFzb25pbmciOnsiZWZmb3J0IjoibG93In0sInN0cmVhbSI6ZmFsc2V9"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhlbGxvIHdvcmxkISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjUwLCJtb2RlbCI6Im8xLXBybyIsInN0cmVhbSI6ZmFsc2V9"
     },
     "canonical_json": {
       "input": [
@@ -15,11 +15,8 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 200,
+      "max_output_tokens": 50,
       "model": "o1-pro",
-      "reasoning": {
-        "effort": "low"
-      },
       "stream": false
     },
     "headers": {
@@ -43,19 +40,19 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759613842,
+      "created_at": 1759698927,
       "error": null,
-      "id": "resp_03520f5d190b92eb0068e193922d6081999f3817e01e69bb84",
+      "id": "resp_0a1cc3dff586d7690068e2dfef03ac8199829da1331fbf8021",
       "incomplete_details": null,
       "instructions": null,
-      "max_output_tokens": 200,
+      "max_output_tokens": 50,
       "max_tool_calls": null,
       "metadata": {},
       "model": "o1-pro-2025-03-19",
       "object": "response",
       "output": [
         {
-          "id": "rs_03520f5d190b92eb0068e1939a344c819999142522e9082c5d",
+          "id": "rs_0a1cc3dff586d7690068e2dffa95cc8199938ec001e759ce81",
           "summary": [],
           "type": "reasoning"
         },
@@ -68,7 +65,7 @@
               "type": "output_text"
             }
           ],
-          "id": "msg_03520f5d190b92eb0068e1939a35888199a4222e19a549679f",
+          "id": "msg_0a1cc3dff586d7690068e2dffa97e48199bb4d83598ce62807",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -78,7 +75,7 @@
       "previous_response_id": null,
       "prompt_cache_key": null,
       "reasoning": {
-        "effort": "low",
+        "effort": "medium",
         "summary": null
       },
       "safety_identifier": null,
@@ -118,7 +115,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9897d1f1396db947-ORD"
+        "989fef355a62f83d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -127,13 +124,13 @@
         "application/json"
       ],
       "date": [
-        "Sat, 04 Oct 2025 21:37:30 GMT"
+        "Sun, 05 Oct 2025 21:15:38 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "8298"
+        "11948"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -145,8 +142,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=Or7yRDk6UD1IMxrMZmH_s3TxzHBn6p74QQLDv.Ct0wg-1759613850-1.0.1.1-0QsCGsiyS0lS9B4_GTgntl0BejVKpusG2FWh0uHrDmuWx9oPUUnOeL2C9XwkLSI0WLEQ0Xn_nAuivqMUxwz_qY5Kyn6W.5BN7JcBg5pHbUo; path=/; expires=Sat, 04-Oct-25 22:07:30 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=C54SlIlNKEo9re8bhb0qkxSMGuHFVYq.kJJBXjgqyQo-1759613850493-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=Ce20vWU.9QG2jM8fHhlfjX6HXFFDz_TeTDAJKRua8kg-1759698938-1.0.1.1-9cdpABg9rLUt.4dZ3OuQlW0nWka1aDqgusThvc4vDQVzlyJwB3ksKyH8YGQChkJwdbg_ytzi6SyunN3RPA1bmBzqzejvSCcIPE1EhLqs3KI; path=/; expires=Sun, 05-Oct-25 21:45:38 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=rPYf0u_C6OS9xwQ0wWix.3BRVkk8lPiWw6tiW0Nzz.Q-1759698938986-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -158,7 +155,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "8301"
+        "11953"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -170,7 +167,7 @@
         "4999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "799915"
+        "799684"
       ],
       "x-ratelimit-reset-requests": [
         "0s"
@@ -179,7 +176,7 @@
         "0s"
       ],
       "x-request-id": [
-        "req_a91786e16c065edb47b617cf17fabd5c"
+        "req_47bb4578a8b6ff86063494699f472402"
       ]
     },
     "status": 200

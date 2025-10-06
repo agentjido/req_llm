@@ -97,9 +97,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759627341,
+      "created_at": 1759698841,
       "error": null,
-      "id": "resp_0f1e5427232f422f0068e1c84deae8819891040948db33b15a",
+      "id": "resp_05e5719ae0e36df10068e2df991c108195a249488b30b61e68",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 150,
@@ -110,8 +110,8 @@
       "output": [
         {
           "arguments": "{}",
-          "call_id": "call_BrZV964jTXR0mleqqgMz9wcH",
-          "id": "fc_0f1e5427232f422f0068e1c84e75548198a14a666345c898d4",
+          "call_id": "call_twTsxLSdIPt2AzbOm2gI3nBO",
+          "id": "fc_05e5719ae0e36df10068e2df99dfd48195be4cf29df20cb7c5",
           "name": "get_weather",
           "status": "completed",
           "type": "function_call"
@@ -198,7 +198,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98991b868b6fb471-ORD"
+        "989fed1c9e421142-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -207,13 +207,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 01:22:22 GMT"
+        "Sun, 05 Oct 2025 21:14:02 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "761"
+        "1036"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -225,8 +225,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=ohBcKKrAi7_ddNqNo2.c1BPy42Lt3XDDNY4veJ65xII-1759627342-1.0.1.1-X6m6uOD0ftJ2rTagbPIUIg_yz_wzZfNbQE3zhJ1I1m0j8mrQ8Vq8h8D4UCxvTE3ZmfxRoE6Cmd6g7m67HFrRIuntdCl3QoeILti0Niw6kzw; path=/; expires=Sun, 05-Oct-25 01:52:22 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=3RmkbvH9Ua8IlAfdV3lJ2.sbKsvZFHn9MgH6VLaVtAw-1759627342685-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=tdHjbYri_8Y.ayy5g69JFWowpn2XIll3aaYj5g1liPs-1759698842-1.0.1.1-DwEolE3ljs.ji2fTWAHKgUIKFUkCrKt6mb_bbDD9l7wsQJjJUwCj1fCqLgzFJdIMYOmFW2EgMKZ_PGTrs8ZzSV78j2Vec2zcK7KlEiTpvhA; path=/; expires=Sun, 05-Oct-25 21:44:02 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=9px8zdVTIIpr.0diQDfDngSycOSECTPY2yM2gaZUzls-1759698842155-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -238,7 +238,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "765"
+        "1041"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -259,7 +259,7 @@
         "4ms"
       ],
       "x-request-id": [
-        "req_373e1645518273d8f47ccd253bfb4f59"
+        "req_1e13578db9b7035eb78ef86c673b243c"
       ]
     },
     "status": 200

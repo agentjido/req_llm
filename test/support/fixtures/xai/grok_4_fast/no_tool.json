@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay00LWZhc3QiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjE1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay00LWZhc3QiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
-      "max_completion_tokens": 500,
+      "max_completion_tokens": 150,
       "messages": [
         {
           "content": "Tell me a joke about cats",
@@ -58,34 +58,34 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "Why did the cat go to school?  \n\nTo improve its purr-sonal skills! 😺",
+            "content": "Why did the cat go to school? To improve its purr-sonal skills!",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759510007,
-      "id": "69434220-2e72-a9cf-3a61-1ec9cdee1147_us-east-1",
+      "created": 1759686622,
+      "id": "9e6d766d-c44b-75a9-ba60-c192d52960a6_us-east-1",
       "model": "grok-4-fast-reasoning",
       "object": "chat.completion",
       "system_fingerprint": "fp_9362061f30",
       "usage": {
-        "completion_tokens": 19,
+        "completion_tokens": 16,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 80,
+          "reasoning_tokens": 81,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
         "prompt_tokens": 311,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 265,
+          "cached_tokens": 310,
           "image_tokens": 0,
           "text_tokens": 311
         },
-        "total_tokens": 410
+        "total_tokens": 408
       }
     },
     "headers": {
@@ -99,7 +99,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988deae78c1fff5b-ORD"
+        "989ec2cdae69338f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -108,13 +108,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 16:46:50 GMT"
+        "Sun, 05 Oct 2025 17:50:23 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=LcpnEPx55AlEG.lkEk1kfF1pXcF.rSOqXpmbQ4ugFu4-1759510010-1.0.1.1-UvijZ7ZladayQhgEtH1kKRT0ZHem.5tmycISGRMe.PD8vWY4Wo6QL40afH8OzHxhu8d2Rh_wNM2maLnyadcXI6GBuzuGODczJOVqphKx7zg; path=/; expires=Fri, 03-Oct-25 17:16:50 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=8thf_teJDuafgFNNDf8_uOLQadLCZJMaHQk0qf0rMEw-1759686623-1.0.1.1-tztAaIMQ6VZFcik8o_qT0Nlnf.r4AoSMgzrLdZh67iSkPAahHL5oGITEoZUKImY8tPNey64vFck4DTimKdY2RS7RR1DPZvIpRJ0qMT.aaEU; path=/; expires=Sun, 05-Oct-25 18:20:23 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -126,7 +126,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-ddec521e685b431496f931c984b73850-7b29dbf00004ae59-01"
+        "00-151fefd723166db4b17f1907898b2095-55acb3780042d933-01"
       ],
       "x-zero-data-retention": [
         "false"

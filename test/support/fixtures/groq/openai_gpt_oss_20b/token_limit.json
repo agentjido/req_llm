@@ -39,29 +39,29 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "The user requests: \"Write a very long story about dragons and adventures\". They want a long story. There's no disallowed content. It's a creative writing request. We can comply. We need to produce a long story about dragons and adventures. We should ensure it's engaging, with multiple characters, plot, etc. The user didn't specify length, but \"very long\" suggests a substantial piece. We can produce maybe 2000+ words? But we need to consider token limits.",
+            "reasoning": "The user wants a very long story about dragons and adventures. They didn't specify any constraints like length, but \"very long\" suggests a fairly detailed narrative. We can produce a long story, maybe a few thousand words. But we need to be mindful of the platform's token limit. We can produce a lengthy story, but not too long. We can aim for maybe 2000-3000 words. That should be \"very long\" enough. We should include dragons, adventures",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759516059,
-      "id": "chatcmpl-fd301bd6-7db4-4b19-ac77-4ae40885694f",
+      "created": 1759753723,
+      "id": "chatcmpl-a6953579-0c16-4779-b91a-6550c87596f9",
       "model": "openai/gpt-oss-20b",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_3d587a02fb",
+      "system_fingerprint": "fp_c5a89987dc",
       "usage": {
-        "completion_time": 0.098940841,
+        "completion_time": 0.098419157,
         "completion_tokens": 100,
-        "prompt_time": 0.003915495,
+        "prompt_time": 0.003785344,
         "prompt_tokens": 80,
-        "queue_time": 0.201425233,
-        "total_time": 0.102856336,
+        "queue_time": 0.197455276,
+        "total_time": 0.102204501,
         "total_tokens": 180
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6nn8sa5fc9azgqr058wm89t"
+        "id": "req_01k6wqxqjvf33aa1ds2yyry6er"
       }
     },
     "headers": {
@@ -75,7 +75,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988e7ea83cf502c0-ORD"
+        "98a529039856e1e7-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -84,13 +84,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 18:27:39 GMT"
+        "Mon, 06 Oct 2025 12:28:43 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=QAQbwKvMLRUliTjPWjUJBsU0niEluJT_ZtVLZtWRq3k-1759516059-1.0.1.1-Cav.gxr0PBkh2lUPI9pOLUiJ0vwzy4v5lOO25LgcPM2qyYFGzFPx07Y1m1kqHdHuxm5r5Spir6BPColXkOjYLWTwvt6yevbsqTCXQ1XKgbA; path=/; expires=Fri, 03-Oct-25 18:57:39 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=6p0E_pteEMVSZLMxmeqpMuJ3H9bSPu34zKOdQ.XAX8E-1759753723-1.0.1.1-kZVrvDfYUajLh5KWDONmRHha1awa24g3zUzlC3slxn9JMvcmNtIRlWbV05i3mATQV5fw9t4k8.q1RqaIKfrh3QfEpBLDiJkosq3fijmXAPE; path=/; expires=Mon, 06-Oct-25 12:58:43 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -111,19 +111,19 @@
         "8000"
       ],
       "x-ratelimit-remaining-requests": [
-        "969"
+        "995"
       ],
       "x-ratelimit-remaining-tokens": [
-        "7554"
+        "7435"
       ],
       "x-ratelimit-reset-requests": [
-        "44m38.047s"
+        "7m11.677999999s"
       ],
       "x-ratelimit-reset-tokens": [
-        "3.3425s"
+        "4.233499999s"
       ],
       "x-request-id": [
-        "req_01k6nn8sa5fc9azgqr058wm89t"
+        "req_01k6wqxqjvf33aa1ds2yyry6er"
       ]
     },
     "status": 200

@@ -64,24 +64,24 @@
           }
         }
       ],
-      "created": 1759513826,
-      "id": "chatcmpl-a6681ed1-f5a7-4e52-be87-d03682109f05",
+      "created": 1759698666,
+      "id": "chatcmpl-17f8f1bd-c253-49c9-bef3-7fb9f58d22ca",
       "model": "meta-llama/llama-4-maverick-17b-128e-instruct",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_c527aa4474",
+      "system_fingerprint": "fp_d2c1f7e199",
       "usage": {
-        "completion_time": 0.039736624,
+        "completion_time": 0.038339956,
         "completion_tokens": 21,
-        "prompt_time": 0.013345409,
+        "prompt_time": 0.013770183,
         "prompt_tokens": 675,
-        "queue_time": 0.201957347,
-        "total_time": 0.053082033,
+        "queue_time": 0.19766349,
+        "total_time": 0.052110139,
         "total_tokens": 696
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6nk4mh7ea5bgmpp16cjn58g"
+        "id": "req_01k6v3dgtefkrv5esjm03gbjpd"
       }
     },
     "headers": {
@@ -95,7 +95,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988e4823495a72e2-ORD"
+        "989fe8d84bc7e804-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -104,13 +104,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 17:50:26 GMT"
+        "Sun, 05 Oct 2025 21:11:06 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=bGHLIZzzIEB_69Op5p4BoP5G3t_INl3cRiW8llO220w-1759513826-1.0.1.1-gQsw2IN.vQbWaxfv49NCMAZMUdHdVZa9y6lZCJjYEM_JtC2uB9iTzb.7OsHQypaVMj8LhtLQgortBuydP8GE4cUfxOjGunvyGegv4tNuJD0; path=/; expires=Fri, 03-Oct-25 18:20:26 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=MfSZ6ati1lSKr61iAxPXwmDPVRR3q2vVLhMufwgcRpY-1759698666-1.0.1.1-ZzpeWkJaITsNwkNGQFIQpPmWK8hlM07O.PjOhFE2KQ27KY8nZHf7i3HGUzVl8MUfemAamV604e27OoyFxqrMY5v4SqqhXEPIpEiF98Q6zbI; path=/; expires=Sun, 05-Oct-25 21:41:06 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -134,16 +134,16 @@
         "997"
       ],
       "x-ratelimit-remaining-tokens": [
-        "5951"
+        "5321"
       ],
       "x-ratelimit-reset-requests": [
-        "4m18.804999999s"
+        "4m18.872s"
       ],
       "x-ratelimit-reset-tokens": [
-        "481ms"
+        "6.788999999s"
       ],
       "x-request-id": [
-        "req_01k6nk4mh7ea5bgmpp16cjn58g"
+        "req_01k6v3dgtefkrv5esjm03gbjpd"
       ]
     },
     "status": 200

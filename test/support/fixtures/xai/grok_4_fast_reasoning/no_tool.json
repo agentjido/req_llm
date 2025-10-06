@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay00LWZhc3QtcmVhc29uaW5nIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjE1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay00LWZhc3QtcmVhc29uaW5nIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
-      "max_completion_tokens": 500,
+      "max_completion_tokens": 150,
       "messages": [
         {
           "content": "Tell me a joke about cats",
@@ -58,34 +58,34 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "Why was the cat afraid of the tree? Because of its bark! 🐱",
+            "content": "Why did the cat go to school? To improve its purr-sonal skills!",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759509998,
-      "id": "ea1d9c70-0e86-ca6a-1055-2ecf05b83140_us-east-1",
+      "created": 1759686620,
+      "id": "2059d2ed-4216-1528-81de-d5c7636d9215_us-east-1",
       "model": "grok-4-fast-reasoning",
       "object": "chat.completion",
       "system_fingerprint": "fp_9362061f30",
       "usage": {
-        "completion_tokens": 17,
+        "completion_tokens": 16,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 169,
+          "reasoning_tokens": 80,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
         "prompt_tokens": 311,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 266,
+          "cached_tokens": 265,
           "image_tokens": 0,
           "text_tokens": 311
         },
-        "total_tokens": 497
+        "total_tokens": 407
       }
     },
     "headers": {
@@ -99,7 +99,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988deaaf5b8dbd1f-ORD"
+        "989ec2c01cb0eae0-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -108,13 +108,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 16:46:44 GMT"
+        "Sun, 05 Oct 2025 17:50:21 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=mT4lqRRdthu3p2swwpNXJ3v40rUDNJvlYEdF8_c1dIo-1759510004-1.0.1.1-P65zraEClxhe4qvcmKXaAkgoRoMA19xkMwmaAyjCm6WQvitF0SrBo1muMbBhkiza3aHAXCuJZNuiQKjTbm5PWssKDqWYk4PMj3pN_8HPbnA; path=/; expires=Fri, 03-Oct-25 17:16:44 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=ivam3qXGj_SureZKXCT2gwWxpkB830KopUBh8JfvBj8-1759686621-1.0.1.1-Ton98.lobkGJuxnJ7Pfpjd6ZnmXnaoMRC1SKBWrdbxz4XyBq70Ar7hhD1iKwOJh48lHNDdnnMOhN2o0.X_OrlebuPEB4KpBWbiebzkMiHkQ; path=/; expires=Sun, 05-Oct-25 18:20:21 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -126,7 +126,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-d6dc97febc5b3bde891d06d80103d29c-d1c512080004b699-01"
+        "00-d6d1f948e0321b480d7682145333d3ec-74e3b6df004f068a-01"
       ],
       "x-zero-data-retention": [
         "false"

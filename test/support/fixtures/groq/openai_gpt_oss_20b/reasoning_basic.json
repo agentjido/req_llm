@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtb3NzLTIwYiIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MS4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtb3NzLTIwYiIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjEuMH0="
     },
     "canonical_json": {
       "max_tokens": 2048,
@@ -12,6 +12,7 @@
         }
       ],
       "model": "openai/gpt-oss-20b",
+      "reasoning_effort": "low",
       "seed": 42,
       "stream": false,
       "temperature": 1.0
@@ -39,30 +40,30 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Sure!  \n- **Computation**: \\(12 \\times 7\\)  \n- **Break it down**:  \n  \\(12 \\times 7 = 12 \\times (5 + 2) = (12 \\times 5) + (12 \\times 2) = 60 + 24 = 84\\)  \n- **Answer**: \\(84\\)",
-            "reasoning": "The user says: Solve 12*7 and show your internal thinking (brief). So they want multiplication result and brief explanation. It's trivial: 12*7 = 84. So respond with result and maybe \"12*7 = 12*5 + 12*2 = 60 + 24 = 84\". That's internal thinking.\n\nThus answer.",
+            "content": "**Internal thinking (brief):**  \n- Recognize 12 × 7 = 12 × (5 + 2)  \n- 12 × 5 = 60  \n- 12 × 2 = 24  \n- 60 + 24 = 84  \n\n**Answer:** 84",
+            "reasoning": "Need to show internal thinking briefly. Compute 12*7=84.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759516059,
-      "id": "chatcmpl-e4bf9423-3217-4d19-a140-215aabf23e79",
+      "created": 1759753722,
+      "id": "chatcmpl-01f0dd13-61f9-4a0a-a919-9ffb528e6f69",
       "model": "openai/gpt-oss-20b",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_3d587a02fb",
+      "system_fingerprint": "fp_77f8660d1d",
       "usage": {
-        "completion_time": 0.162906544,
-        "completion_tokens": 165,
-        "prompt_time": 0.003953744,
+        "completion_time": 0.086239708,
+        "completion_tokens": 88,
+        "prompt_time": 0.004521204,
         "prompt_tokens": 84,
-        "queue_time": 0.199918743,
-        "total_time": 0.166860288,
-        "total_tokens": 249
+        "queue_time": 0.197789635,
+        "total_time": 0.090760912,
+        "total_tokens": 172
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6nn8snsfbxascteh381ngpf"
+        "id": "req_01k6wqxpg3eweb3ga22ddfbh3c"
       }
     },
     "headers": {
@@ -76,7 +77,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988e7eaa9eec02c0-ORD"
+        "98a528fc78afe1e7-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -85,13 +86,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 18:27:39 GMT"
+        "Mon, 06 Oct 2025 12:28:42 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=yuUXNuT6R1nVBNzioWnRfg5hrucQKThV8_z_OX0pmD4-1759516059-1.0.1.1-.i14fH1RKeTqvZhuqq3YCiMl3sD8UcWFaT3cNXng7TnwCGyPTp9DzwRxP17pMaPQfZFHGG7.OEQmrawbMxW.fDBW35AzgO4ukx6epgPHG1Q; path=/; expires=Fri, 03-Oct-25 18:57:39 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=atux5AvBIhnvbbDCOYIgEhWPbUG2v0Z6A3WK6au7yf8-1759753722-1.0.1.1-qx6kaPS0wkorY0HsipOkogrdQqTzx6Ah3HWZ5LsDAgT7VNNBjY3IDMY6OsLjArQk_EPNOX1tzRWqbTMjT_UlVEdHRjI9.AD1pU76JaLcyLQ; path=/; expires=Mon, 06-Oct-25 12:58:42 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -112,19 +113,19 @@
         "8000"
       ],
       "x-ratelimit-remaining-requests": [
-        "968"
+        "998"
       ],
       "x-ratelimit-remaining-tokens": [
-        "7419"
+        "7737"
       ],
       "x-ratelimit-reset-requests": [
-        "46m4.428999999s"
+        "2m52.334999999s"
       ],
       "x-ratelimit-reset-tokens": [
-        "4.357s"
+        "1.972s"
       ],
       "x-request-id": [
-        "req_01k6nn8snsfbxascteh381ngpf"
+        "req_01k6wqxpg3eweb3ga22ddfbh3c"
       ]
     },
     "status": 200

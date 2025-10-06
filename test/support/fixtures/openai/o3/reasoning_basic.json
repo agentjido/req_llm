@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjIwNDgsIm1vZGVsIjoibzMiLCJyZWFzb25pbmciOnsiZWZmb3J0IjoibG93In0sInN0cmVhbSI6ZmFsc2V9"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjIwNDgsIm1vZGVsIjoibzMiLCJzdHJlYW0iOmZhbHNlfQ=="
     },
     "canonical_json": {
       "input": [
@@ -17,9 +17,6 @@
       ],
       "max_output_tokens": 2048,
       "model": "o3",
-      "reasoning": {
-        "effort": "low"
-      },
       "stream": false
     },
     "headers": {
@@ -43,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759613836,
+      "created_at": 1759698844,
       "error": null,
-      "id": "resp_0398faeeacef73710068e1938c41a4819bb6d6da58760a0e41",
+      "id": "resp_048c41491d9381b10068e2df9cbd3881988bba98f4ff3448e0",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 2048,
@@ -55,7 +52,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_0398faeeacef73710068e1938cbd30819ba24fc76b3a4725f1",
+          "id": "rs_048c41491d9381b10068e2df9d6c788198bc94bb8e39198575",
           "summary": [],
           "type": "reasoning"
         },
@@ -68,7 +65,7 @@
               "type": "output_text"
             }
           ],
-          "id": "msg_0398faeeacef73710068e1938eedc4819ba9bd547e7aae2aa9",
+          "id": "msg_048c41491d9381b10068e2df9e21008198aa525e6997f36993",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -78,7 +75,7 @@
       "previous_response_id": null,
       "prompt_cache_key": null,
       "reasoning": {
-        "effort": "low",
+        "effort": "medium",
         "summary": null
       },
       "safety_identifier": null,
@@ -102,11 +99,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 142,
+        "output_tokens": 77,
         "output_tokens_details": {
-          "reasoning_tokens": 128
+          "reasoning_tokens": 64
         },
-        "total_tokens": 161
+        "total_tokens": 96
       },
       "user": null
     },
@@ -118,7 +115,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9897d1cbc9e1ab95-ORD"
+        "989fed332f676087-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -127,13 +124,13 @@
         "application/json"
       ],
       "date": [
-        "Sat, 04 Oct 2025 21:37:19 GMT"
+        "Sun, 05 Oct 2025 21:14:06 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "2961"
+        "1914"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -145,8 +142,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=KMxZPefTvCO_A1AcuOpCTfqsz8F_bYc8shWkjMhtYMs-1759613839-1.0.1.1-FgCMSO8_EE0qp.s0f1Fufsex4Q4b3LD57nGSQ4ZF9VlXcEcZM2MYmRlwmEf.xizds2qWQWYyC2sdQNpvacV3I5XuCV_7.zjO6KtkviO51Q0; path=/; expires=Sat, 04-Oct-25 22:07:19 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=4zZet7aOyP8z6106TTikxYSO6b1FmcQ8nLWQ6kskulI-1759613839237-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=bsJM7g9bk88Hzfzlvb5CcVeLAAELyrNyRA2pweN_RnM-1759698846-1.0.1.1-BTOh6mqL5vJqlHlJ2NSks_pi_48I7GN55VCS30pJHBhIWVBvRveHJGgHk7fhzeeJzG7I0qxFg6QJ_3cqfNhVgTcjGgc8kueasguRNraG7EE; path=/; expires=Sun, 05-Oct-25 21:44:06 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=pA_OU6vSxZPnhNjloFgJNQ.U38B8y5jCqOGH.IinB5s-1759698846676-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -158,7 +155,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "2964"
+        "1921"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -179,7 +176,7 @@
         "16ms"
       ],
       "x-request-id": [
-        "req_a874f7a9d91c763021c3abc95f296fdd"
+        "req_fbffb5b82948b746a64cd55e673718f0"
       ]
     },
     "status": 200

@@ -40,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759627340,
+      "created_at": 1759698838,
       "error": null,
-      "id": "resp_052aa34bdd8433b40068e1c84bf638819aa890d88cfb93e138",
+      "id": "resp_0d94d3bd463ca53e0068e2df96370481999760c4b195de713a",
       "incomplete_details": {
         "reason": "max_output_tokens"
       },
@@ -58,11 +58,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Once upon a time, in a world where magic flowed like rivers through the land and towering peaks pierced the heavens, there existed a realm called Eldoria. Eldoria was renowned for its breathtaking landscapes, from emerald forests that whispered ancient secrets to vast deserts shimmering with golden sands. However, the most extraordinary feature of this realm was its dragons — majestic, powerful creatures whose scales glistened with iridescent hues and whose breath could either scorch the earth or bring life-giving rains.\n\n### The Age",
+              "text": "Certainly! Here's an epic tale about dragons and adventures:\n\n---\n\n**The Chronicles of Eldoria: The Dragon’s Oath**\n\nIn the ancient land of Eldoria, where towering mountains kissed the skies and sprawling forests whispered secrets, dragons were not mere legends—they were the lifeblood of the realm. For centuries, these majestic creatures lived in harmony with the people, guardians of wisdom, and keepers of balance. Yet, peace is a fragile treasure, and a shadow was rising that threatened to sh",
               "type": "output_text"
             }
           ],
-          "id": "msg_052aa34bdd8433b40068e1c84c6458819a886534e9dd683a24",
+          "id": "msg_0d94d3bd463ca53e0068e2df968c4c8199853155b04bbc7499",
           "role": "assistant",
           "status": "incomplete",
           "type": "message"
@@ -112,7 +112,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98991b7a6821b471-ORD"
+        "989fed0a593f1142-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -121,13 +121,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 01:22:21 GMT"
+        "Sun, 05 Oct 2025 21:14:00 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "1734"
+        "1910"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -139,8 +139,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=GNqzDeWciO41ZIR4I15mwMOwZgqnXzC2l31vJ1HYIck-1759627341-1.0.1.1-0VlLinGMcCxvLgR2492_Gk6X40BTCgRkMupZPNTj9utIszkrj4xzWd_NlwCxOSA6soRxdTMXFbeb0cgDObFe5NupykQzlfKtaQyH8.uJdQc; path=/; expires=Sun, 05-Oct-25 01:52:21 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=y8WqGuBaMxm8hLBPi38kimhUXGyGEVdjdrRLFIbIF7k-1759627341717-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=8TwREaW8TZ9dF3hLWipsDF9MGXQ8YEBByz1P3kr4QqE-1759698840-1.0.1.1-hL1gq3TipBEwAnU0.ry_5zwYnNWvI4VYXRJxLltK9IQ3i3HChOdR8.JIbydU0WFF5Vx8H5BzjTFlMI34M876dJDAW67DPqteQY.jptMGF3Q; path=/; expires=Sun, 05-Oct-25 21:44:00 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=xKPF_ScxSI.GjRFPIDNDD7FGcm1hzYrx_jtLKRC2XBo-1759698840149-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -152,7 +152,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "1736"
+        "1915"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -164,7 +164,7 @@
         "4999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "3999965"
+        "3999964"
       ],
       "x-ratelimit-reset-requests": [
         "12ms"
@@ -173,7 +173,7 @@
         "0s"
       ],
       "x-request-id": [
-        "req_5b7a5ccb91c20d45723d6b79e3e739da"
+        "req_ac4afe088e316b31cab7936823c141c2"
       ]
     },
     "status": 200

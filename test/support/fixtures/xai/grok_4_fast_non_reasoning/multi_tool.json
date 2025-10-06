@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stNC1mYXN0LW5vbi1yZWFzb25pbmciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjE1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stNC1mYXN0LW5vbi1yZWFzb25pbmciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
-      "max_completion_tokens": 500,
+      "max_completion_tokens": 150,
       "messages": [
         {
           "content": "What's the weather like in Paris, France?",
@@ -101,15 +101,15 @@
                   "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "call_91192809",
+                "id": "call_99998927",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1759509981,
-      "id": "73272229-c7d9-9bff-58c9-784655d26761_us-east-1",
+      "created": 1759686616,
+      "id": "1357121b-ee63-f67b-dac3-dc6ee6ed6a3a_us-east-1",
       "model": "grok-4-fast-non-reasoning",
       "object": "chat.completion",
       "system_fingerprint": "fp_e7507192a3",
@@ -125,7 +125,7 @@
         "prompt_tokens": 397,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 274,
+          "cached_tokens": 275,
           "image_tokens": 0,
           "text_tokens": 397
         },
@@ -143,28 +143,28 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988dea47afca9129-ORD"
+        "989ec2a6283621af-ORD"
       ],
       "connection": [
         "keep-alive"
       ],
       "content-security-policy-report-only": [
-        "script-src 'none'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=yGybBzKD7S0G35AF4EKaH9Y7sU1BYEsUKc36.YaI9B8-1759509982-1.0.1.1-ZgO6FJgfBfxFLB0bhTldAnn1gNsb3YmWP_TbJT8Ec3QRTAVoTU_Hho2Xnc9iCrn6h1zd2kJ8zmxLlNJdaGuxtFki9cXcWx3McaFOBy_OfzppW12IFu8lMSEsfFjDS7cfg3eKMx.l501Nf71qSRB76nIw9Yf4_Iiyg7P_ppSi.rs; report-to cf-csp-endpoint"
+        "script-src 'none'; connect-src 'none'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=aDFbsI5NNIDRbtstN.DMxsyFxZiEc4t52LyZrUZ2sKQ-1759686616-1.0.1.1-vzeWkUcmquF70eQH9tSBosfAT4x0N8ADLW9srwuMHUK6l.zBmH8RyNcO_wtKAvE0R1Ldh_LPHF0nH_CiJr6.H5tCWpyQAYoxcruS5iUlt_8s7vKIB5vghsxVzxdxOO5tlFvAorrniEwdrqjCjKNaQiUteOgQ8gcSJOzUIsAWFmU; report-to cf-csp-endpoint"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 16:46:22 GMT"
+        "Sun, 05 Oct 2025 17:50:16 GMT"
       ],
       "report-to": [
-        "{\"endpoints\":[{\"url\":\"https:\\/\\/csp-reporting.cloudflare.com\\/cdn-cgi\\/script_monitor\\/report?m=yGybBzKD7S0G35AF4EKaH9Y7sU1BYEsUKc36.YaI9B8-1759509982-1.0.1.1-ZgO6FJgfBfxFLB0bhTldAnn1gNsb3YmWP_TbJT8Ec3QRTAVoTU_Hho2Xnc9iCrn6h1zd2kJ8zmxLlNJdaGuxtFki9cXcWx3McaFOBy_OfzppW12IFu8lMSEsfFjDS7cfg3eKMx.l501Nf71qSRB76nIw9Yf4_Iiyg7P_ppSi.rs\"}],\"group\":\"cf-csp-endpoint\",\"max_age\":86400}"
+        "{\"endpoints\":[{\"url\":\"https:\\/\\/csp-reporting.cloudflare.com\\/cdn-cgi\\/script_monitor\\/report?m=aDFbsI5NNIDRbtstN.DMxsyFxZiEc4t52LyZrUZ2sKQ-1759686616-1.0.1.1-vzeWkUcmquF70eQH9tSBosfAT4x0N8ADLW9srwuMHUK6l.zBmH8RyNcO_wtKAvE0R1Ldh_LPHF0nH_CiJr6.H5tCWpyQAYoxcruS5iUlt_8s7vKIB5vghsxVzxdxOO5tlFvAorrniEwdrqjCjKNaQiUteOgQ8gcSJOzUIsAWFmU\"}],\"group\":\"cf-csp-endpoint\",\"max_age\":86400}"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=ZS0M.UIyavHNWg33xjMWMT95MMGBkBtKBF.FTF1jCxg-1759509982-1.0.1.1-BNkU5QOWQxwJd6poIIwzcJwQmmcMzQnh_ndoFSGdO9akSMxM_seY0QjR8m8Uhq3wBpcJeKEnCCr8q.ZMEl3D6oeJlbuqej7L2zKPCbmekJU; path=/; expires=Fri, 03-Oct-25 17:16:22 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=zUfqfrcFI7V_RKBvbOPcKKK9m9HdybQgg6Xs1msG9Gg-1759686616-1.0.1.1-oGImiPDQ4AVvNY7HKVZ3EqDnuLcNzQH5xCiOJ3oouZmsRM6Kyh7GJUVLxpnTTMog2ynxg_gUaeYoghFcS55o1QJcj4lXOzQQZ6Q0DPWrACw; path=/; expires=Sun, 05-Oct-25 18:20:16 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -176,7 +176,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-9171292be0f9b9753b529852c74b0433-c678689a0004c71a-01"
+        "00-84e466bac7f9a51fcfe5d1d116b9a612-520dc4f3004ea864-01"
       ],
       "x-zero-data-retention": [
         "false"

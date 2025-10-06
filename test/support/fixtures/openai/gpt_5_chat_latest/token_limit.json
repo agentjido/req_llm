@@ -1,19 +1,23 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdwdC01LWNoYXQtbGF0ZXN0Iiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuNX0="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoiZ3B0LTUtY2hhdC1sYXRlc3QiLCJzdHJlYW0iOmZhbHNlfQ=="
     },
     "canonical_json": {
-      "max_tokens": 100,
-      "messages": [
+      "input": [
         {
-          "content": "Write a very long story about dragons and adventures",
+          "content": [
+            {
+              "text": "Write a very long story about dragons and adventures",
+              "type": "input_text"
+            }
+          ],
           "role": "user"
         }
       ],
+      "max_output_tokens": 100,
       "model": "gpt-5-chat-latest",
-      "stream": false,
-      "temperature": 0.5
+      "stream": false
     },
     "headers": {
       "accept-encoding": [
@@ -28,49 +32,79 @@
       ]
     },
     "method": "post",
-    "url": "https://api.openai.com/v1/chat/completions"
+    "url": "https://api.openai.com/v1/responses"
   },
   "response": {
     "body": {
-      "choices": [
+      "background": false,
+      "billing": {
+        "payer": "developer"
+      },
+      "created_at": 1759698831,
+      "error": null,
+      "id": "resp_0190ba3b4af26bc90068e2df8fb0dc81989aa89d28ffb096dd",
+      "incomplete_details": {
+        "reason": "max_output_tokens"
+      },
+      "instructions": null,
+      "max_output_tokens": 100,
+      "max_tool_calls": null,
+      "metadata": {},
+      "model": "gpt-5-chat-latest",
+      "object": "response",
+      "output": [
         {
-          "finish_reason": "length",
-          "index": 0,
-          "logprobs": null,
-          "message": {
-            "annotations": [],
-            "content": "Sure! Here’s a long, original fantasy story about dragons and adventure:  \n\n---\n\n### **The Ember Crown**\n\n#### **Prologue: The Ashen Sky**\n\nThe world had once been ruled by dragons. Their wings darkened the heavens, their fire forged mountains, and their roars shaped the storms. But that was before the Great Binding—a pact between humankind and dragonkind that sealed away the mightiest of their kind beneath the world’s crust. Centuries passed, and dragons became myths",
-            "refusal": null,
-            "role": "assistant"
-          }
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Sure! Here’s a long original fantasy story about dragons and adventure:  \n\n---\n\n### **The Ember of Aeldryn**\n\n#### **I. The Village of Windmere**\n\nNestled in the fertile valleys below the jagged slopes of the Firefell Mountains lay Windmere, a quiet village of shepherds, blacksmiths, and storytellers. On mornings when the fog was thin, the villagers claimed you could see the ruins of Aeldryn — the fabled city of dragons — glittering",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0190ba3b4af26bc90068e2df903494819881d747a4d936e19c",
+          "role": "assistant",
+          "status": "incomplete",
+          "type": "message"
         }
       ],
-      "created": 1759628311,
-      "id": "chatcmpl-CN7zj762VsNV7h9yNRfW5hZu6Fipc",
-      "model": "gpt-5-chat-latest",
-      "object": "chat.completion",
+      "parallel_tool_calls": true,
+      "previous_response_id": null,
+      "prompt_cache_key": null,
+      "reasoning": {
+        "effort": null,
+        "summary": null
+      },
+      "safety_identifier": null,
       "service_tier": "default",
-      "system_fingerprint": "fp_33918c0ec7",
-      "usage": {
-        "completion_tokens": 100,
-        "completion_tokens_details": {
-          "accepted_prediction_tokens": 0,
-          "audio_tokens": 0,
-          "reasoning_tokens": 0,
-          "rejected_prediction_tokens": 0
+      "status": "incomplete",
+      "store": true,
+      "temperature": 1.0,
+      "text": {
+        "format": {
+          "type": "text"
         },
-        "prompt_tokens": 16,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
+        "verbosity": "medium"
+      },
+      "tool_choice": "auto",
+      "tools": [],
+      "top_logprobs": 0,
+      "top_p": 1.0,
+      "truncation": "disabled",
+      "usage": {
+        "input_tokens": 16,
+        "input_tokens_details": {
           "cached_tokens": 0
         },
+        "output_tokens": 100,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
         "total_tokens": 116
-      }
+      },
+      "user": null
     },
     "headers": {
-      "access-control-expose-headers": [
-        "X-Request-ID"
-      ],
       "alt-svc": [
         "h3=\":443\"; ma=86400"
       ],
@@ -78,7 +112,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989933318d1a72e5-ORD"
+        "989fece1ab378726-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -87,13 +121,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 01:38:32 GMT"
+        "Sun, 05 Oct 2025 21:13:53 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "1291"
+        "1671"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -105,8 +139,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=MmHuJymFCjDQ9JzbEiE8Uf9oaJkaeSUtEq6qGKuKYZM-1759628312-1.0.1.1-k5Cu6Z8LD9qXrPHMnKEqt6ByWGSwemU.b6c1CNnZqYgmRj..mOWf7zhvMcTm4c6h6L81qxQGNsaZKCqTH0IbHJkpDQJm_aJI.sPDME0yoVQ; path=/; expires=Sun, 05-Oct-25 02:08:32 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=IYc1yDy.DP8G7MZAGvtAArt_NphXo3Z3IEg_KJgLx0k-1759628312749-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=NkIke8GbsT3mWV1tphQ1AebBnZg75XlGiiChUhFRTCo-1759698833-1.0.1.1-8Jj.KVKYDKE2.zult_pu0ZB2l66tBXTsAP1tkaqKEn5yvvwxoq7ddLg9gbvzabskiaxflSdmlw_8J0mimmBTBdnCYTeyPLQ.3Bgqi3BShMM; path=/; expires=Sun, 05-Oct-25 21:43:53 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=f4kAUDyQlagfX_kMFHX_YbH2Kw5Gs55DrbbTtWKtABY-1759698833377-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -118,10 +152,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "1441"
-      ],
-      "x-openai-proxy-wasm": [
-        "v0.1"
+        "1678"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -133,16 +164,16 @@
         "4999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "799985"
+        "799950"
       ],
       "x-ratelimit-reset-requests": [
         "12ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "1ms"
+        "3ms"
       ],
       "x-request-id": [
-        "req_b5c794ca6467469db2586164bd8d2fcd"
+        "req_a4f9d883d624b2496ad1435696aedc72"
       ]
     },
     "status": 200

@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhpIHRoZXJlISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMy1sYXRlc3QiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhpIHRoZXJlISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMy1sYXRlc3QiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
-      "max_completion_tokens": 50,
+      "max_completion_tokens": 10,
       "messages": [
         {
           "content": "Hi there!",
@@ -35,7 +35,7 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "length",
           "index": 0,
           "message": {
             "content": "Hey there! How can I help you today?",
@@ -44,8 +44,8 @@
           }
         }
       ],
-      "created": 1759509985,
-      "id": "d26e508a-4d17-77c6-251a-9fbdcc80dd05_us-east-1",
+      "created": 1759686613,
+      "id": "de8c33ab-682f-4d30-ca33-6e92f2def803_us-east-1",
       "model": "grok-3",
       "object": "chat.completion",
       "system_fingerprint": "fp_f02e6df795",
@@ -61,7 +61,7 @@
         "prompt_tokens": 9,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 8,
+          "cached_tokens": 2,
           "image_tokens": 0,
           "text_tokens": 9
         },
@@ -79,7 +79,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988dea606ad310b3-ORD"
+        "989ec297af2fe0fc-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -88,13 +88,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 16:46:26 GMT"
+        "Sun, 05 Oct 2025 17:50:14 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=aMoxfzvtup3k36Bo_19zGd8_u8.m39F5axkVNnUcAq0-1759509986-1.0.1.1-92f33fgIbh96.bBT6DQdNS3fyVqKKQtNA8xXYYhaXuwQZC4Zh_FE_mZlEfRVwpSu36TjL_Vg.TAVHPfZa9dSW_vfNdgn5w8yoY2KpHRU4X0; path=/; expires=Fri, 03-Oct-25 17:16:26 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=RXkVxYYCVWWHXRpL4AkW0.zHH64udmW5d5yb2yJDiiU-1759686614-1.0.1.1-BIJ5S91wLJMEMTVIE8rvkke3RXARJohhY2GrGin8nm4FPMSh2nXCob51SqOAk8xAEdTd0P0C1pf4Jn6fYBpnj_7o6FSPcoVzrJ9GuDLKP4Q; path=/; expires=Sun, 05-Oct-25 18:20:14 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -106,7 +106,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-459bd32a92ca45d2756264556ee05619-48fb49d30004cfe3-01"
+        "00-b7aff15d5ea5110560f89488fb8477fa-a098b3a30042bcbf-01"
       ],
       "x-zero-data-retention": [
         "false"

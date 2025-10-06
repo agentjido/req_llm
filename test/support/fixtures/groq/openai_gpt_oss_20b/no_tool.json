@@ -59,30 +59,30 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Why don’t cats play poker on the jungle’s Wi‑Fi?\n\nBecause the **\"purr\"** is too strong and the network always gets a **\"cat‑astrophe\"**! 🐱💻😹",
-            "reasoning": "User wants a joke about cats. Just a joke. No special request. Provide a cat joke.",
+            "content": "Why don’t cats play poker in the jungle?\n\nBecause there are too many cheetahs! 😺😂",
+            "reasoning": "User wants a joke about cats. Just a joke. No special tool needed.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759516058,
-      "id": "chatcmpl-3e786f31-da89-456c-a64a-1229e88a83e6",
+      "created": 1759753725,
+      "id": "chatcmpl-77de4e3a-7224-4801-8caf-5ee42cb5e769",
       "model": "openai/gpt-oss-20b",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_80501ff3a1",
+      "system_fingerprint": "fp_c5a89987dc",
       "usage": {
-        "completion_time": 0.076615305,
-        "completion_tokens": 77,
-        "prompt_time": 0.006316081,
+        "completion_time": 0.047518994,
+        "completion_tokens": 48,
+        "prompt_time": 0.006180705,
         "prompt_tokens": 127,
-        "queue_time": 0.200868335,
-        "total_time": 0.082931386,
-        "total_tokens": 204
+        "queue_time": 0.834240884,
+        "total_time": 0.053699699,
+        "total_tokens": 175
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6nn8rz3fbwbngcgexe87hw5"
+        "id": "req_01k6wqxr92f35bc0mtmffks32g"
       }
     },
     "headers": {
@@ -96,7 +96,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988e7ea61ac702c0-ORD"
+        "98a52907fcd6e1e7-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -105,13 +105,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 18:27:38 GMT"
+        "Mon, 06 Oct 2025 12:28:45 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=YmgA9mgzYyEfJaiQH9ZRh2IxO0PMVWyBqanm42C93bU-1759516058-1.0.1.1-xdWpIwhWQZA53QoG9Y8KQX7QrZ750F2dzyI2_ebjutCui1bb1u_1gl44wKVwFgbeUDX.ZHHc5ZNVcjlLUUJ9r6lv6vbVUuyFqNzvRI.qeig; path=/; expires=Fri, 03-Oct-25 18:57:38 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=YunTB4XBw.Pw8OVf7iVI48YgJQygd963q38xS3Plyjo-1759753725-1.0.1.1-O19XKU0DQgNfV_5PSfWWmVd2nQP52m5pnzqpa9M5HjKFFZv1.ZdG0_w3TUMfk080ATOiPN.xLAOaLKgANlrvZKVP6NqANHdA.hYRsxMouyw; path=/; expires=Mon, 06-Oct-25 12:58:45 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -132,19 +132,19 @@
         "8000"
       ],
       "x-ratelimit-remaining-requests": [
-        "970"
+        "993"
       ],
       "x-ratelimit-remaining-tokens": [
-        "7665"
+        "7176"
       ],
       "x-ratelimit-reset-requests": [
-        "43m11.616s"
+        "10m4.471s"
       ],
       "x-ratelimit-reset-tokens": [
-        "2.506499999s"
+        "6.174999999s"
       ],
       "x-request-id": [
-        "req_01k6nn8rz3fbwbngcgexe87hw5"
+        "req_01k6wqxr92f35bc0mtmffks32g"
       ]
     },
     "status": 200

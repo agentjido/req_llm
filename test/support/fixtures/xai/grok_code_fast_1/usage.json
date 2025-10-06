@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhpIHRoZXJlISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stY29kZS1mYXN0LTEiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhpIHRoZXJlISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stY29kZS1mYXN0LTEiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
-      "max_completion_tokens": 50,
+      "max_completion_tokens": 10,
       "messages": [
         {
           "content": "Hi there!",
@@ -35,26 +35,26 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "Hi! How's it going? What can I help you with today? 😊",
+            "content": "Hi! How's it going? What can I",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759509975,
-      "id": "ccf12b0e-678d-e69b-ed5d-ff70612b64b8_us-east-1",
+      "created": 1759686626,
+      "id": "fb21a7f1-1d4b-d94f-3585-de92d751cb74_us-east-1",
       "model": "grok-code-fast-1",
       "object": "chat.completion",
       "system_fingerprint": "fp_10f00c862d",
       "usage": {
-        "completion_tokens": 17,
+        "completion_tokens": 10,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 130,
+          "reasoning_tokens": 128,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
@@ -65,7 +65,7 @@
           "image_tokens": 0,
           "text_tokens": 207
         },
-        "total_tokens": 354
+        "total_tokens": 345
       }
     },
     "headers": {
@@ -79,28 +79,22 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988dea231fd561a6-ORD"
+        "989ec2e83f7472d1-ORD"
       ],
       "connection": [
         "keep-alive"
-      ],
-      "content-security-policy-report-only": [
-        "script-src 'none'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=xqttWxwEuiR0Ix5IqaPvaTPNs_BsKAY.OEINAkbSMCo-1759509977-1.0.1.1-.9DjyBiyhkRyshzs82X2UeEzv_gkwzG19BNkm8tYxj96RfYcv68QOX.Y.g3ZIHG3OVq6U3Rhb5jmiBKyNvunz8r.VLekpUMUfU3KBj0uuO1x6KQfVcoKUgFmFfGPOsJQ7oAZ9GvIfYi0MqfCrnAw3_4JK6mhVlHGImd0WX9LSkY; report-to cf-csp-endpoint"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 16:46:17 GMT"
-      ],
-      "report-to": [
-        "{\"endpoints\":[{\"url\":\"https:\\/\\/csp-reporting.cloudflare.com\\/cdn-cgi\\/script_monitor\\/report?m=xqttWxwEuiR0Ix5IqaPvaTPNs_BsKAY.OEINAkbSMCo-1759509977-1.0.1.1-.9DjyBiyhkRyshzs82X2UeEzv_gkwzG19BNkm8tYxj96RfYcv68QOX.Y.g3ZIHG3OVq6U3Rhb5jmiBKyNvunz8r.VLekpUMUfU3KBj0uuO1x6KQfVcoKUgFmFfGPOsJQ7oAZ9GvIfYi0MqfCrnAw3_4JK6mhVlHGImd0WX9LSkY\"}],\"group\":\"cf-csp-endpoint\",\"max_age\":86400}"
+        "Sun, 05 Oct 2025 17:50:28 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=.kFyvK.xqkDU437oUSdbu.r1qfxCe2VYMX1ELi.6H_E-1759509977-1.0.1.1-bFkvuh7cyhgd9BcSx91QU5tne2EV0qEbWkT0r7NjZGdctNHXkg0n16qk4pIUStAn0b8PNDYcS05C7ooTYP.IRb26.yh1F5o1uyMsiVPx3m8; path=/; expires=Fri, 03-Oct-25 17:16:17 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=XZU1BCrbWqiwzHowws5pQ6_._HLRU3.HsSGP2.9hzsw-1759686628-1.0.1.1-uDdbDpP_PvKYTFqTTVmRuN2HMbbygRzpG_VhRBbpS0CPV6_dj1qy1jAw7VsXyuDDWMvZ7a9V6z33.Qhn.nJNBQs0x3t63fZDCjL3FrX9KTI; path=/; expires=Sun, 05-Oct-25 18:20:28 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -112,7 +106,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-c8d61e757ad5165a28e5badf97a96d0e-ad7e64c60004c0bb-01"
+        "00-54f84138c4e7fcfbd13953bc2116b1a3-33427fef0042d20f-01"
       ],
       "x-zero-data-retention": [
         "false"

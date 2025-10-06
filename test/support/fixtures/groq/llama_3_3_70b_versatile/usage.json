@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJsbGFtYS0zLjMtNzBiLXZlcnNhdGlsZSIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJsbGFtYS0zLjMtNzBiLXZlcnNhdGlsZSIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
-      "max_tokens": 50,
+      "max_tokens": 10,
       "messages": [
         {
           "content": "Hi there!",
@@ -35,33 +35,33 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "length",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "It's nice to meet you. Is there something I can help you with or would you like to chat?",
+            "content": "It's nice to meet you. Is there something",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759513820,
-      "id": "chatcmpl-e1b1ad8f-2ecb-4603-8f96-fdbd5b86958a",
+      "created": 1759698665,
+      "id": "chatcmpl-e40b385a-da70-45da-87fc-ce5b620d37b6",
       "model": "llama-3.3-70b-versatile",
       "object": "chat.completion",
       "service_tier": "on_demand",
       "system_fingerprint": "fp_155ab82e98",
       "usage": {
-        "completion_time": 0.039923763,
-        "completion_tokens": 23,
-        "prompt_time": 0.001833806,
+        "completion_time": 0.028357523,
+        "completion_tokens": 10,
+        "prompt_time": 0.001819006,
         "prompt_tokens": 38,
-        "queue_time": 0.215889303,
-        "total_time": 0.041757569,
-        "total_tokens": 61
+        "queue_time": 0.214050281,
+        "total_time": 0.030176529,
+        "total_tokens": 48
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6nk4erbe8xvfbc8hm0mk39s"
+        "id": "req_01k6v3dg5jf0dsy996w265qpra"
       }
     },
     "headers": {
@@ -75,7 +75,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988e47fe5e33e821-ORD"
+        "989fe8d3f9970007-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -84,13 +84,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 17:50:20 GMT"
+        "Sun, 05 Oct 2025 21:11:05 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=3mTLhFnKKL_iDpAnhzcAVXqLQbmR0H8gm7UWhNtNsEI-1759513820-1.0.1.1-3ALhh6ThifiWGB.il9zcLjbUB.fM.KXlH4kJYKxEyy8I.8V0_SyBfyZyWDqn_Q6LnJ1Hfssbard7lWJD4qtuCiB_62Jcw4CwzRdWorXkksE; path=/; expires=Fri, 03-Oct-25 18:20:20 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=BRLK4G.4YCOfv9z_X_lNeAOLDOdeazsggiVGMOGpDeA-1759698665-1.0.1.1-7MY0HVg66NBEDC1rHNuz1n.djUGM5SpjB_kl3FeX2aIqQDaVJl79ZTrxAAnZtLYQlvZXmcNPYEicc2410kVXxbS_350JWmsZQ.lfbskaoEQ; path=/; expires=Sun, 05-Oct-25 21:41:05 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -111,19 +111,19 @@
         "12000"
       ],
       "x-ratelimit-remaining-requests": [
-        "998"
+        "999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "11956"
+        "11992"
       ],
       "x-ratelimit-reset-requests": [
-        "2m52.412999999s"
+        "1m26.4s"
       ],
       "x-ratelimit-reset-tokens": [
-        "220ms"
+        "40ms"
       ],
       "x-request-id": [
-        "req_01k6nk4erbe8xvfbc8hm0mk39s"
+        "req_01k6v3dg5jf0dsy996w265qpra"
       ]
     },
     "status": 200

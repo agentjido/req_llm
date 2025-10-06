@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoiZ3B0LTUtbmFubyIsInJlYXNvbmluZyI6eyJlZmZvcnQiOiJsb3cifSwic3RyZWFtIjpmYWxzZX0="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoiZ3B0LTUtbmFubyIsInN0cmVhbSI6ZmFsc2V9"
     },
     "canonical_json": {
       "input": [
@@ -17,9 +17,6 @@
       ],
       "max_output_tokens": 100,
       "model": "gpt-5-nano",
-      "reasoning": {
-        "effort": "low"
-      },
       "stream": false
     },
     "headers": {
@@ -43,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759613832,
+      "created_at": 1759698845,
       "error": null,
-      "id": "resp_0372249a8cb6c7190068e19388a4508194b3a57bbac16ac4bb",
+      "id": "resp_031bb7a981ee56c60068e2df9d9bd0819b81d922fe61eea4fd",
       "incomplete_details": {
         "reason": "max_output_tokens"
       },
@@ -57,7 +54,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_0372249a8cb6c7190068e1938905688194ab8b4a42eb9467e6",
+          "id": "rs_031bb7a981ee56c60068e2df9e1be0819bab7172694ec2e61f",
           "summary": [],
           "type": "reasoning"
         }
@@ -66,7 +63,7 @@
       "previous_response_id": null,
       "prompt_cache_key": null,
       "reasoning": {
-        "effort": "low",
+        "effort": "medium",
         "summary": null
       },
       "safety_identifier": null,
@@ -106,7 +103,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9897d1b5bfc389ed-ORD"
+        "989fed38af54bd1f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -115,13 +112,13 @@
         "application/json"
       ],
       "date": [
-        "Sat, 04 Oct 2025 21:37:13 GMT"
+        "Sun, 05 Oct 2025 21:14:06 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "1156"
+        "1311"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -133,8 +130,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=fqNHAj5VAzYpdZFiinj7B8MfdV_T7c_EkvEYOezJk0E-1759613833-1.0.1.1-mmo2Xg.Lzew95gv6ClrbwSCZHS8kNMTaYBTseBHYy4NYCAFbIdFw81iCrMKGKycIxQfhnygGpxvrEUQmlbemSditotrrcRgbSj5IDaU6xzg; path=/; expires=Sat, 04-Oct-25 22:07:13 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=e9s7PvLipjvkyfqVdHEImlKTJ9nhXvKGGz5tQHoXvMg-1759613833813-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=mff40M4KhHoqDCBe58lBhheoCViWOZr5lG_Bi_OIF7s-1759698846-1.0.1.1-0hkn9QE.ivO81p0.zzdurMgk_FerfSya0ZbKCsD_YE.oluvh0spmwCYkRHpioB.TJ09.MKStQZxKnAOVnqJquCC9Rr1QSSI7T7TkkEe6V0U; path=/; expires=Sun, 05-Oct-25 21:44:06 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=P2vclS5t9FvvnWy7mhRyfNkxQ8yxHXeD_2KBIEbNFZI-1759698846936-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -146,7 +143,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "1158"
+        "1317"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -167,7 +164,7 @@
         "3ms"
       ],
       "x-request-id": [
-        "req_b8a96023530b6774ffb979c7e0409118"
+        "req_fd5d7fc68078a120dedc5a9bf2e124a8"
       ]
     },
     "status": 200

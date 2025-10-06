@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/IiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MzAwLCJtb2RlbCI6Im8zIiwicmVhc29uaW5nIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfd2VhdGhlciIsInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoidGVsbF9qb2tlIiwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImdldF90aW1lIiwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/IiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MTUwLCJtb2RlbCI6Im8zIiwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6InRlbGxfam9rZSIsInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfdGltZSIsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
       "input": [
@@ -15,11 +15,8 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 300,
+      "max_output_tokens": 150,
       "model": "o3",
-      "reasoning": {
-        "effort": "low"
-      },
       "stream": false,
       "tools": [
         {
@@ -100,26 +97,26 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759613831,
+      "created_at": 1759698849,
       "error": null,
-      "id": "resp_0f1b2714d29288550068e1938708ec8199a3e13ae1f0ad6ef5",
+      "id": "resp_09bdb594110d25450068e2dfa1b5348190b3091aa7692f8ecd",
       "incomplete_details": null,
       "instructions": null,
-      "max_output_tokens": 300,
+      "max_output_tokens": 150,
       "max_tool_calls": null,
       "metadata": {},
       "model": "o3-2025-04-16",
       "object": "response",
       "output": [
         {
-          "id": "rs_0f1b2714d29288550068e19387b9948199a6130f1c9a1c4c92",
+          "id": "rs_09bdb594110d25450068e2dfa384d8819083a53aa7820425ad",
           "summary": [],
           "type": "reasoning"
         },
         {
           "arguments": "{}",
-          "call_id": "call_0Z00lM2quismsrmjBXzPQD6D",
-          "id": "fc_0f1b2714d29288550068e1938896048199ad505c22b7d1d682",
+          "call_id": "call_9hnoFPPs2wBb0MnERT62R0Au",
+          "id": "fc_09bdb594110d25450068e2dfa475408190a1d2aaf06e709ec9",
           "name": "get_weather",
           "status": "completed",
           "type": "function_call"
@@ -129,7 +126,7 @@
       "previous_response_id": null,
       "prompt_cache_key": null,
       "reasoning": {
-        "effort": "low",
+        "effort": "medium",
         "summary": null
       },
       "safety_identifier": null,
@@ -206,7 +203,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9897d1ab7bc2ab95-ORD"
+        "989fed52587e6087-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -215,13 +212,13 @@
         "application/json"
       ],
       "date": [
-        "Sat, 04 Oct 2025 21:37:13 GMT"
+        "Sun, 05 Oct 2025 21:14:12 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "1978"
+        "3111"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -233,8 +230,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=u3Pf0mJCszfC5HDS_.oJkO1IfB.Ty9hfLa4J0CKXYy0-1759613833-1.0.1.1-YpbPDHz448qc7.UyfEQJnZqEfdhMoGTiaF5S3y_7KS48AdHSm8xsSc7QW0Kt5TBFehQHoc1SehpvVTo7Bi.cdEjy_zEgy4EtnYebiUomQWc; path=/; expires=Sat, 04-Oct-25 22:07:13 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=mlvmP5iVY8u6kAXuw2S.BuQJmdJjHypPXsUBhvvXmMo-1759613833021-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=GTdbOloBO4TuLtVRIcz6hRjTDl.EB7kuwJ.xCnI9USQ-1759698852-1.0.1.1-nDq8CYkVs8yFW8OMazdNvGJ3njCFvebZNQCUiW_YRxA7CSi1Vz32LGU.hYkHDzKFamngOxDc1U6uxvXvmU9RdaewrtLyh_jJEDKK2idcGl8; path=/; expires=Sun, 05-Oct-25 21:44:12 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=qRRlj7oYoBe5NCwhqZKlEWdlgzIQuzAgzl1XyKNRgvk-1759698852838-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -246,7 +243,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "1984"
+        "3116"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -267,7 +264,7 @@
         "23ms"
       ],
       "x-request-id": [
-        "req_83cb8d65ae7629f390afbee5972d4fc6"
+        "req_4a655b142e250254abf25cd4ece24547"
       ]
     },
     "status": 200

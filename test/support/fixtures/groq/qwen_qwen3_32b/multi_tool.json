@@ -93,7 +93,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "reasoning": "Okay, the user is asking about the weather in Paris, France. Let me check which tool I can use here. The available functions are get_weather, tell_joke, and get_time. The get_weather function seems appropriate here. The parameters required are location and unit. The user didn't specify the unit, so I should probably default to celsius since France uses it. I'll call get_weather with location as Paris, France and unit as celsius.\n",
+            "reasoning": "Okay, the user is asking about the weather in Paris, France. Let me check which tool I can use here. The available functions are get_weather, tell_joke, and get_time. The get_weather function seems appropriate here. The parameters required are location and unit. The user didn't specify the unit, so I should probably default to celsius since France uses it. Let me make sure to include the location as \"Paris, France\" and set the unit to celsius. I'll call the get_weather function with these parameters.\n",
             "role": "assistant",
             "tool_calls": [
               {
@@ -101,31 +101,31 @@
                   "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "kt3kchcjf",
+                "id": "nmy5xm71j",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1759520305,
-      "id": "chatcmpl-42e15b99-9150-4253-bb4e-742bbf372589",
+      "created": 1759753883,
+      "id": "chatcmpl-7dacb11a-4d1f-4eb8-b8b0-61bde5c9f01a",
       "model": "qwen/qwen3-32b",
       "object": "chat.completion",
       "service_tier": "on_demand",
       "system_fingerprint": "fp_5cf921caa2",
       "usage": {
-        "completion_time": 0.205760103,
-        "completion_tokens": 126,
-        "prompt_time": 0.013519674,
+        "completion_time": 0.243386737,
+        "completion_tokens": 142,
+        "prompt_time": 0.012416872,
         "prompt_tokens": 274,
-        "queue_time": 0.20432454,
-        "total_time": 0.219279777,
-        "total_tokens": 400
+        "queue_time": 0.209761093,
+        "total_time": 0.255803609,
+        "total_tokens": 416
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6nsabqqf0tvkbx3mqxe29bs"
+        "id": "req_01k6wr2karfb69dyzqdzjh39sh"
       }
     },
     "headers": {
@@ -139,7 +139,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988ee6515eaaa2a1-ORD"
+        "98a52ce85e3a72d1-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -148,13 +148,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 19:38:25 GMT"
+        "Mon, 06 Oct 2025 12:31:23 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=cb._F7ge.o50NF_UGvx3CC7KuaOKA1_QCQyiZTow7hU-1759520305-1.0.1.1-xFrsUvSsVonmG8gcwR_JUG8T0fwjUOEDv7rnZikVL6hNnACFlKBGKOWFFaNqqUBATN8EHB645ug_2nre971B.vpSXe78R7Qa9LfNvzsPnLc; path=/; expires=Fri, 03-Oct-25 20:08:25 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=zVj_X2nzx88kfz7nY9KMuSd89h54dxlwjrb5ZJtPjHw-1759753883-1.0.1.1-3QRipjkV2mQUS4.LqGaN6RSN.abQVo653Wjq0mPKnHPd4VzmXMtQZuFGuzsi9uHuc7UtdAhTW0Le3sBrNEDLkfFvRVnJLVW_wCa4exZ59RM; path=/; expires=Mon, 06-Oct-25 13:01:23 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -175,19 +175,19 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "902"
+        "984"
       ],
       "x-ratelimit-remaining-tokens": [
-        "5404"
+        "4617"
       ],
       "x-ratelimit-reset-requests": [
-        "2h21m6.523s"
+        "23m1.199999999s"
       ],
       "x-ratelimit-reset-tokens": [
-        "5.96s"
+        "13.828999999s"
       ],
       "x-request-id": [
-        "req_01k6nsabqqf0tvkbx3mqxe29bs"
+        "req_01k6wr2karfb69dyzqdzjh39sh"
       ]
     },
     "status": 200

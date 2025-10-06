@@ -39,30 +39,30 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "",
-            "reasoning": "The user says \"Hello world!\" Probably expecting a response. This is a simple greeting. We should respond with a friendly greeting. Maybe ask how can help. No special instructions. We'll keep it short.",
+            "content": "Hello there! 👋 How can I assist you today?",
+            "reasoning": "User says \"Hello world!\" Probably wants a greeting or a simple response. We can respond with a friendly hello. Maybe mention what can do.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759516060,
-      "id": "chatcmpl-5d604a43-2967-490b-8727-228baac3498f",
+      "created": 1759753724,
+      "id": "chatcmpl-49cbd426-7706-44c8-8dd4-84bb108283f6",
       "model": "openai/gpt-oss-20b",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_3d587a02fb",
+      "system_fingerprint": "fp_c5a89987dc",
       "usage": {
-        "completion_time": 0.050113224,
+        "completion_time": 0.049292662,
         "completion_tokens": 50,
-        "prompt_time": 0.003527822,
+        "prompt_time": 0.003510098,
         "prompt_tokens": 74,
-        "queue_time": 0.20111219,
-        "total_time": 0.053641046,
+        "queue_time": 0.196994497,
+        "total_time": 0.05280276,
         "total_tokens": 124
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6nn8ttsfc0aqc7zfpf394xq"
+        "id": "req_01k6wqxqyrf33s334h1jtjvhjb"
       }
     },
     "headers": {
@@ -76,7 +76,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988e7eb1fe0f02c0-ORD"
+        "98a52905facfe1e7-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -85,13 +85,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 18:27:40 GMT"
+        "Mon, 06 Oct 2025 12:28:44 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=2klIjUiqSX0cSMeYCapq3aWnN.QAUL9Ew0cITXSXUxc-1759516060-1.0.1.1-_.BdjEEgTZmGyYUb9IVh0QQLWCD3J3o.Xm6RMGZzKwJ6.uLVY7qYq8nc5XREs2._OZILdZpWpOJJnd8skdTiL4Bbsa429oLK7ZQpBQkRbbQ; path=/; expires=Fri, 03-Oct-25 18:57:40 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=FtMhMm_GM3n2hA5RJjo.kj_CgOnJ6zCQOPLRIIqLMUU-1759753724-1.0.1.1-JyEED_qE6U5SAeaqPirs5DCDcyPIhD2q7iBoTJ6AXpbEGe_SrryiS38eohtZMy6qAyYa1hoke0Rc.sojrSBIWbaBvO385g8Kn6ai8KkP6dY; path=/; expires=Mon, 06-Oct-25 12:58:44 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -112,19 +112,19 @@
         "8000"
       ],
       "x-ratelimit-remaining-requests": [
-        "965"
+        "994"
       ],
       "x-ratelimit-remaining-tokens": [
-        "6908"
+        "7310"
       ],
       "x-ratelimit-reset-requests": [
-        "50m23.682s"
+        "8m38.021s"
       ],
       "x-ratelimit-reset-tokens": [
-        "8.1865s"
+        "5.169999999s"
       ],
       "x-request-id": [
-        "req_01k6nn8ttsfc0aqc7zfpf394xq"
+        "req_01k6wqxqyrf33s334h1jtjvhjb"
       ]
     },
     "status": 200

@@ -1,21 +1,21 @@
 {
-  "captured_at": "2025-10-03T17:50:24.705567Z",
+  "captured_at": "2025-10-05T21:11:06.348526Z",
   "chunks": [
     {
-      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLTEzMDI2ZTEzLTU3YzgtNDU5ZC1iZjAzLWFkYThjYTY1YmY0ZCIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk1MTM4MjQsIm1vZGVsIjoibW9vbnNob3RhaS9raW1pLWsyLWluc3RydWN0LTA5MDUiLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF82ZTZmZjM2ODhiIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQiLCJjb250ZW50IjpudWxsfSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOm51bGx9XSwieF9ncm9xIjp7ImlkIjoicmVxXzAxazZuazRrMm1lOXo4ZW0yMnhodnZxemV5In19CgpkYXRhOiB7ImlkIjoiY2hhdGNtcGwtMTMwMjZlMTMtNTdjOC00NTlkLWJmMDMtYWRhOGNhNjViZjRkIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc1OTUxMzgyNCwibW9kZWwiOiJtb29uc2hvdGFpL2tpbWktazItaW5zdHJ1Y3QtMDkwNSIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwXzZlNmZmMzY4OGIiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsidG9vbF9jYWxscyI6W3siaWQiOiJmdW5jdGlvbnMuc3RydWN0dXJlZF9vdXRwdXQ6MCIsInR5cGUiOiJmdW5jdGlvbiIsImZ1bmN0aW9uIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsImFyZ3VtZW50cyI6IntcImFnZVwiOjI5LFwibmFtZVwiOlwiQWxpY2UgSm9obnNvblwiLFwib2NjdXBhdGlvblwiOlwiU29mdHdhcmUgRW5naW5lZXJcIn0ifSwiaW5kZXgiOjB9XX0sImxvZ3Byb2JzIjpudWxsLCJmaW5pc2hfcmVhc29uIjpudWxsfV19Cgo=",
-      "decoded": "data: {\"id\":\"chatcmpl-13026e13-57c8-459d-bf03-ada8ca65bf4d\",\"object\":\"chat.completion.chunk\",\"created\":1759513824,\"model\":\"moonshotai/kimi-k2-instruct-0905\",\"system_fingerprint\":\"fp_6e6ff3688b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":null},\"logprobs\":null,\"finish_reason\":null}],\"x_groq\":{\"id\":\"req_01k6nk4k2me9z8em22xhvvqzey\"}}\n\ndata: {\"id\":\"chatcmpl-13026e13-57c8-459d-bf03-ada8ca65bf4d\",\"object\":\"chat.completion.chunk\",\"created\":1759513824,\"model\":\"moonshotai/kimi-k2-instruct-0905\",\"system_fingerprint\":\"fp_6e6ff3688b\",\"choices\":[{\"index\":0,\"delta\":{\"tool_calls\":[{\"id\":\"functions.structured_output:0\",\"type\":\"function\",\"function\":{\"name\":\"structured_output\",\"arguments\":\"{\\\"age\\\":29,\\\"name\\\":\\\"Alice Johnson\\\",\\\"occupation\\\":\\\"Software Engineer\\\"}\"},\"index\":0}]},\"logprobs\":null,\"finish_reason\":null}]}\n\n"
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLWNhNmIxMDUxLWRmMmUtNDU3NC05YzE0LTRmMjI1MjAwODFkYyIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk2OTg2NjYsIm1vZGVsIjoibW9vbnNob3RhaS9raW1pLWsyLWluc3RydWN0LTA5MDUiLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF81ZmUxMjlkZmY2IiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQiLCJjb250ZW50IjpudWxsfSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOm51bGx9XSwieF9ncm9xIjp7ImlkIjoicmVxXzAxazZ2M2RnbmJlMXlzajYxbjNxeTlid3Z5In19CgpkYXRhOiB7ImlkIjoiY2hhdGNtcGwtY2E2YjEwNTEtZGYyZS00NTc0LTljMTQtNGYyMjUyMDA4MWRjIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc1OTY5ODY2NiwibW9kZWwiOiJtb29uc2hvdGFpL2tpbWktazItaW5zdHJ1Y3QtMDkwNSIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwXzVmZTEyOWRmZjYiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsidG9vbF9jYWxscyI6W3siaWQiOiJmdW5jdGlvbnMuc3RydWN0dXJlZF9vdXRwdXQ6MCIsInR5cGUiOiJmdW5jdGlvbiIsImZ1bmN0aW9uIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsImFyZ3VtZW50cyI6IntcImFnZVwiOjMyLFwibmFtZVwiOlwiQWxleCBKb2huc29uXCIsXCJvY2N1cGF0aW9uXCI6XCJzb2Z0d2FyZSBlbmdpbmVlclwifSJ9LCJpbmRleCI6MH1dfSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOm51bGx9XX0KCg==",
+      "decoded": "data: {\"id\":\"chatcmpl-ca6b1051-df2e-4574-9c14-4f22520081dc\",\"object\":\"chat.completion.chunk\",\"created\":1759698666,\"model\":\"moonshotai/kimi-k2-instruct-0905\",\"system_fingerprint\":\"fp_5fe129dff6\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":null},\"logprobs\":null,\"finish_reason\":null}],\"x_groq\":{\"id\":\"req_01k6v3dgnbe1ysj61n3qy9bwvy\"}}\n\ndata: {\"id\":\"chatcmpl-ca6b1051-df2e-4574-9c14-4f22520081dc\",\"object\":\"chat.completion.chunk\",\"created\":1759698666,\"model\":\"moonshotai/kimi-k2-instruct-0905\",\"system_fingerprint\":\"fp_5fe129dff6\",\"choices\":[{\"index\":0,\"delta\":{\"tool_calls\":[{\"id\":\"functions.structured_output:0\",\"type\":\"function\",\"function\":{\"name\":\"structured_output\",\"arguments\":\"{\\\"age\\\":32,\\\"name\\\":\\\"Alex Johnson\\\",\\\"occupation\\\":\\\"software engineer\\\"}\"},\"index\":0}]},\"logprobs\":null,\"finish_reason\":null}]}\n\n"
     },
     {
-      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLTEzMDI2ZTEzLTU3YzgtNDU5ZC1iZjAzLWFkYThjYTY1YmY0ZCIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk1MTM4MjQsIm1vZGVsIjoibW9vbnNob3RhaS9raW1pLWsyLWluc3RydWN0LTA5MDUiLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF82ZTZmZjM2ODhiIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7fSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOiJ0b29sX2NhbGxzIn1dLCJ4X2dyb3EiOnsiaWQiOiJyZXFfMDFrNm5rNGsybWU5ejhlbTIyeGh2dnF6ZXkiLCJ1c2FnZSI6eyJxdWV1ZV90aW1lIjowLjE0MjAwNDUzLCJwcm9tcHRfdG9rZW5zIjoxNjgsInByb21wdF90aW1lIjowLjAzNjc2Mzk1OCwiY29tcGxldGlvbl90b2tlbnMiOjMzLCJjb21wbGV0aW9uX3RpbWUiOjAuMDkyOTAwMTAxLCJ0b3RhbF90b2tlbnMiOjIwMSwidG90YWxfdGltZSI6MC4xMjk2NjQwNTl9fSwidXNhZ2UiOnsicXVldWVfdGltZSI6MC4xNDIwMDQ1MywicHJvbXB0X3Rva2VucyI6MTY4LCJwcm9tcHRfdGltZSI6MC4wMzY3NjM5NTgsImNvbXBsZXRpb25fdG9rZW5zIjozMywiY29tcGxldGlvbl90aW1lIjowLjA5MjkwMDEwMSwidG90YWxfdG9rZW5zIjoyMDEsInRvdGFsX3RpbWUiOjAuMTI5NjY0MDU5fX0KCmRhdGE6IFtET05FXQoK",
-      "decoded": "data: {\"id\":\"chatcmpl-13026e13-57c8-459d-bf03-ada8ca65bf4d\",\"object\":\"chat.completion.chunk\",\"created\":1759513824,\"model\":\"moonshotai/kimi-k2-instruct-0905\",\"system_fingerprint\":\"fp_6e6ff3688b\",\"choices\":[{\"index\":0,\"delta\":{},\"logprobs\":null,\"finish_reason\":\"tool_calls\"}],\"x_groq\":{\"id\":\"req_01k6nk4k2me9z8em22xhvvqzey\",\"usage\":{\"queue_time\":0.14200453,\"prompt_tokens\":168,\"prompt_time\":0.036763958,\"completion_tokens\":33,\"completion_time\":0.092900101,\"total_tokens\":201,\"total_time\":0.129664059}},\"usage\":{\"queue_time\":0.14200453,\"prompt_tokens\":168,\"prompt_time\":0.036763958,\"completion_tokens\":33,\"completion_time\":0.092900101,\"total_tokens\":201,\"total_time\":0.129664059}}\n\ndata: [DONE]\n\n"
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLWNhNmIxMDUxLWRmMmUtNDU3NC05YzE0LTRmMjI1MjAwODFkYyIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk2OTg2NjYsIm1vZGVsIjoibW9vbnNob3RhaS9raW1pLWsyLWluc3RydWN0LTA5MDUiLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF81ZmUxMjlkZmY2IiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7fSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOiJ0b29sX2NhbGxzIn1dLCJ4X2dyb3EiOnsiaWQiOiJyZXFfMDFrNnYzZGduYmUxeXNqNjFuM3F5OWJ3dnkiLCJ1c2FnZSI6eyJxdWV1ZV90aW1lIjowLjA3ODMyMzExOCwicHJvbXB0X3Rva2VucyI6MTY4LCJwcm9tcHRfdGltZSI6MC4wMjMxODY4MjcsImNvbXBsZXRpb25fdG9rZW5zIjozMywiY29tcGxldGlvbl90aW1lIjowLjExMjE0MDU4NSwidG90YWxfdG9rZW5zIjoyMDEsInRvdGFsX3RpbWUiOjAuMTM1MzI3NDEyfX0sInVzYWdlIjp7InF1ZXVlX3RpbWUiOjAuMDc4MzIzMTE4LCJwcm9tcHRfdG9rZW5zIjoxNjgsInByb21wdF90aW1lIjowLjAyMzE4NjgyNywiY29tcGxldGlvbl90b2tlbnMiOjMzLCJjb21wbGV0aW9uX3RpbWUiOjAuMTEyMTQwNTg1LCJ0b3RhbF90b2tlbnMiOjIwMSwidG90YWxfdGltZSI6MC4xMzUzMjc0MTJ9fQoKZGF0YTogW0RPTkVdCgo=",
+      "decoded": "data: {\"id\":\"chatcmpl-ca6b1051-df2e-4574-9c14-4f22520081dc\",\"object\":\"chat.completion.chunk\",\"created\":1759698666,\"model\":\"moonshotai/kimi-k2-instruct-0905\",\"system_fingerprint\":\"fp_5fe129dff6\",\"choices\":[{\"index\":0,\"delta\":{},\"logprobs\":null,\"finish_reason\":\"tool_calls\"}],\"x_groq\":{\"id\":\"req_01k6v3dgnbe1ysj61n3qy9bwvy\",\"usage\":{\"queue_time\":0.078323118,\"prompt_tokens\":168,\"prompt_time\":0.023186827,\"completion_tokens\":33,\"completion_time\":0.112140585,\"total_tokens\":201,\"total_time\":0.135327412}},\"usage\":{\"queue_time\":0.078323118,\"prompt_tokens\":168,\"prompt_time\":0.023186827,\"completion_tokens\":33,\"completion_time\":0.112140585,\"total_tokens\":201,\"total_time\":0.135327412}}\n\ndata: [DONE]\n\n"
     }
   ],
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibW9vbnNob3RhaS9raW1pLWsyLWluc3RydWN0LTA5MDUiLCJzZWVkIjo0Miwic3RyZWFtIjp0cnVlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQifSwidHlwZSI6ImZ1bmN0aW9uIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibmFtZSIsImFnZSJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibW9vbnNob3RhaS9raW1pLWsyLWluc3RydWN0LTA5MDUiLCJzZWVkIjo0Miwic3RyZWFtIjp0cnVlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQifSwidHlwZSI6ImZ1bmN0aW9uIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibmFtZSIsImFnZSJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
-      "max_tokens": 200,
+      "max_tokens": 500,
       "messages": [
         {
           "content": "Generate a software engineer profile",
@@ -78,21 +78,21 @@
       "alt-svc": "h3=\":443\"; ma=86400",
       "cache-control": "no-cache",
       "cf-cache-status": "DYNAMIC",
-      "cf-ray": "988e4819ff64eb0b-ORD",
+      "cf-ray": "989fe8d74df5338f-ORD",
       "content-type": "text/event-stream",
-      "date": "Fri, 03 Oct 2025 17:50:24 GMT",
+      "date": "Sun, 05 Oct 2025 21:11:06 GMT",
       "server": "cloudflare",
-      "set-cookie": "__cf_bm=tH8WJL4C85ubOHkHsSQpFHbexWCNALnUa6B6a__IiJs-1759513824-1.0.1.1-TjoHOFyay6I.NeyIZhIgvzfF97fR_GHwyACQzeg19oNmMoRGesk6eOSz45fqEaEUza56.hLBmjm0mXx0Nv2A6F36cptix2uPybTHfdDrlrQ; path=/; expires=Fri, 03-Oct-25 18:20:24 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None",
+      "set-cookie": "__cf_bm=snsN7hCeMcyST7cjPXtoRHMu1QRYkiySeAaUGr.O41U-1759698666-1.0.1.1-OsL3kydb61RBsHgcBC78pgwDoyRAGbTp0nQaAVBEAFTlQhCgQwnzVhd36aJ6.w9goEIC8Ii4lIBge3I93q67uPiC97eIddrGIQh1oJM21pc; path=/; expires=Sun, 05-Oct-25 21:41:06 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None",
       "vary": "Origin",
       "via": "1.1 google",
       "x-groq-region": "yul",
       "x-ratelimit-limit-requests": "1000",
       "x-ratelimit-limit-tokens": "10000",
-      "x-ratelimit-remaining-requests": "999",
-      "x-ratelimit-remaining-tokens": "9831",
-      "x-ratelimit-reset-requests": "1m26.4s",
-      "x-ratelimit-reset-tokens": "1.014s",
-      "x-request-id": "req_01k6nk4k2me9z8em22xhvvqzey"
+      "x-ratelimit-remaining-requests": "998",
+      "x-ratelimit-remaining-tokens": "9635",
+      "x-ratelimit-reset-requests": "2m52.461s",
+      "x-ratelimit-reset-tokens": "2.187999999s",
+      "x-request-id": "req_01k6v3dgnbe1ysj61n3qy9bwvy"
     },
     "status": 200
   }

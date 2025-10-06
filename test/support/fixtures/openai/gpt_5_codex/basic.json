@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhlbGxvIHdvcmxkISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjIwMCwibW9kZWwiOiJncHQtNS1jb2RleCIsInJlYXNvbmluZyI6eyJlZmZvcnQiOiJsb3cifSwic3RyZWFtIjpmYWxzZX0="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhlbGxvIHdvcmxkISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjUwLCJtb2RlbCI6ImdwdC01LWNvZGV4Iiwic3RyZWFtIjpmYWxzZX0="
     },
     "canonical_json": {
       "input": [
@@ -15,11 +15,8 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 200,
+      "max_output_tokens": 50,
       "model": "gpt-5-codex",
-      "reasoning": {
-        "effort": "low"
-      },
       "stream": false
     },
     "headers": {
@@ -43,19 +40,19 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759628038,
+      "created_at": 1759698836,
       "error": null,
-      "id": "resp_01a1f3831f274b270068e1cb0645f48190a8f7d8e89c4928f1",
+      "id": "resp_0a2024194b5999880068e2df9491d0819aa3c2ff10e17243d0",
       "incomplete_details": null,
       "instructions": null,
-      "max_output_tokens": 200,
+      "max_output_tokens": 50,
       "max_tool_calls": null,
       "metadata": {},
       "model": "gpt-5-codex",
       "object": "response",
       "output": [
         {
-          "id": "rs_01a1f3831f274b270068e1cb06a1c0819087c71768e1d8d96c",
+          "id": "rs_0a2024194b5999880068e2df94e444819aa1a6f21813fd6c62",
           "summary": [],
           "type": "reasoning"
         },
@@ -68,7 +65,7 @@
               "type": "output_text"
             }
           ],
-          "id": "msg_01a1f3831f274b270068e1cb06b6c88190b6626d6254e03634",
+          "id": "msg_0a2024194b5999880068e2df952680819aae314810b4d66231",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -78,7 +75,7 @@
       "previous_response_id": null,
       "prompt_cache_key": null,
       "reasoning": {
-        "effort": "low",
+        "effort": "medium",
         "summary": null
       },
       "safety_identifier": null,
@@ -118,7 +115,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98992c86eb58f5ff-ORD"
+        "989fed001a8122d4-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -127,13 +124,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 01:33:58 GMT"
+        "Sun, 05 Oct 2025 21:13:57 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "688"
+        "1123"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -145,8 +142,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=WMI4PE2n4_qL_cJgn.turIzqIXtbrmjB4BPFa6AJUWo-1759628038-1.0.1.1-HwL69cdPknIod8__HDs2S4DK5yKj1UcySRmNpaQC0kh97bPHOyFF.r8gUF0lSNixqMufjkDb2nuaL5x_Oqp2o4A9tlSYwWG2qmPqoxB5dDQ; path=/; expires=Sun, 05-Oct-25 02:03:58 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=TsvT.QK88xXbk6karQtOUTNHlXQj.EAMfyf00BqFoQo-1759628038974-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=hVWlpbC6z0X6QjlWho0cqvWUvyO275NVM7wTF.DhGjY-1759698837-1.0.1.1-TVMkJckjzTK.QEVQ_MH3elxpiu8hJoVVkMNldZkwSkX6bG229ibZFheFPqjS1bBpk6yFWI3o7Ew0oZXooELeaE7g0eZjmvHt558RqYH_2N8; path=/; expires=Sun, 05-Oct-25 21:43:57 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=Y2PKncmSLPUCUXlXWa9PU4K..nyMGxUT8TUUbFMNzEM-1759698837755-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -158,10 +155,10 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "690"
+        "1128"
       ],
       "x-request-id": [
-        "req_6f5b2595dedb1ad5a283f2eb45b3650d"
+        "req_e1c13ed327bfba8740e9800c145a3bb0"
       ]
     },
     "status": 200

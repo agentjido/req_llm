@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoiZ3B0LTUtY29kZXgiLCJyZWFzb25pbmciOnsiZWZmb3J0IjoibG93In0sInN0cmVhbSI6ZmFsc2V9"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoiZ3B0LTUtY29kZXgiLCJzdHJlYW0iOmZhbHNlfQ=="
     },
     "canonical_json": {
       "input": [
@@ -17,9 +17,6 @@
       ],
       "max_output_tokens": 100,
       "model": "gpt-5-codex",
-      "reasoning": {
-        "effort": "low"
-      },
       "stream": false
     },
     "headers": {
@@ -43,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759628040,
+      "created_at": 1759698829,
       "error": null,
-      "id": "resp_0fe9be8e262403cf0068e1cb08c49081979929d517dbb0db31",
+      "id": "resp_02f746e9da0317350068e2df8dc97481988ea46f5a34290116",
       "incomplete_details": {
         "reason": "max_output_tokens"
       },
@@ -57,7 +54,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_0fe9be8e262403cf0068e1cb0922f8819794c5bc7c10e424b4",
+          "id": "rs_02f746e9da0317350068e2df8e83448198b8f0a9f3e66f4855",
           "summary": [],
           "type": "reasoning"
         },
@@ -66,11 +63,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Far beyond the reach of any map or sailor’s tale, there lay a chain of islands veiled by sea mist and rumor, known to only a handful of the boldest navigators as the Dread Serpent Archipelago. Each island in this scattered kingdom held its own wonders: singing caverns, forests of glass, mountains whose peaks were perpetually wreathed in lightning. Yet none were so bewildering or so feared as",
+              "text": "### The Chronicle of Emberwind: A Tale of Dragons and Adventures\n\n#### Prologue: The Song of Old Flames\n\nIn the heart of the ancient world of Aelyndor, where mountains whispered to the stars and rivers sang the secrets of ages past, dragons soared beneath silver moons. They were not mere beasts of fire and fury, but the living embodiment of magic,",
               "type": "output_text"
             }
           ],
-          "id": "msg_0fe9be8e262403cf0068e1cb093da881979c25f7eeed51a464",
+          "id": "msg_02f746e9da0317350068e2df8ebac481988691d8898ae1c5c9",
           "role": "assistant",
           "status": "incomplete",
           "type": "message"
@@ -80,7 +77,7 @@
       "previous_response_id": null,
       "prompt_cache_key": null,
       "reasoning": {
-        "effort": "low",
+        "effort": "medium",
         "summary": null
       },
       "safety_identifier": null,
@@ -104,11 +101,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 92,
+        "output_tokens": 80,
         "output_tokens_details": {
           "reasoning_tokens": 0
         },
-        "total_tokens": 107
+        "total_tokens": 95
       },
       "user": null
     },
@@ -120,7 +117,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98992c968e95f5ff-ORD"
+        "989fecd38aec22d4-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -129,13 +126,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 01:34:02 GMT"
+        "Sun, 05 Oct 2025 21:13:51 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "1746"
+        "2104"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -147,8 +144,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=ynEfx8TpMgXe9KOJ5p2X7Jra4bxgiVfzW2PLOBquQmM-1759628042-1.0.1.1-1A_9HPSTqKoO33i4YJ2wBj182IoAwfvLHhBa.DgoEDNlWYnmeSy4kDuSnyEBtO9WcywrTZJ1lhlV7bCLBV_9OXDPHhvtWO8acUk9jEdWypA; path=/; expires=Sun, 05-Oct-25 02:04:02 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=cDmMwx1XCRDsiL21Ud4yyv1e9mSiCbKILj0wsqCX8HQ-1759628042526-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=ABCsZ.B4aTfMGdRijxnN9MkJaugX9yrR9v6HvKEXT7g-1759698831-1.0.1.1-C9GOiVbPB2ztUeJjJYnh_xK0gq3kHhE9gFcyvNQhsoI9nzyIZax5Fvi0.Xjxsu9SMfJpS8Tq0KHKRV0CI3zQ9NQm_GPuomzJ4GFQwZGQzYg; path=/; expires=Sun, 05-Oct-25 21:43:51 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=GRgzZfusyAT2GNamfJ2CiIbDsEBNIj3B686GmMXowZU-1759698831916-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -160,10 +157,10 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "1748"
+        "2107"
       ],
       "x-request-id": [
-        "req_105f5fe043995849c41e3ab3129cbf03"
+        "req_7e0c7d7bd92cc7cc44ac83a55f22192b"
       ]
     },
     "status": 200

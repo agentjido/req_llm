@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoibzEtcHJvIiwicmVhc29uaW5nIjp7ImVmZm9ydCI6ImxvdyJ9LCJzdHJlYW0iOmZhbHNlfQ=="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoibzEtcHJvIiwic3RyZWFtIjpmYWxzZX0="
     },
     "canonical_json": {
       "input": [
@@ -17,9 +17,6 @@
       ],
       "max_output_tokens": 100,
       "model": "o1-pro",
-      "reasoning": {
-        "effort": "low"
-      },
       "stream": false
     },
     "headers": {
@@ -43,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759613850,
+      "created_at": 1759698915,
       "error": null,
-      "id": "resp_085bd6e4f80d217c0068e1939ab6f8819b927e2f9a8f3db908",
+      "id": "resp_038bd7627f6d383f0068e2dfe370f481948dd767eccde8f407",
       "incomplete_details": {
         "reason": "max_output_tokens"
       },
@@ -57,34 +54,20 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_085bd6e4f80d217c0068e193acf68c819b849d6b9561a26040",
+          "id": "rs_038bd7627f6d383f0068e2dfee8fe48194a697873d7dd84eed",
           "summary": [],
           "type": "reasoning"
-        },
-        {
-          "content": [
-            {
-              "annotations": [],
-              "logprobs": [],
-              "text": "Once upon a time in the land of Saramondor, a tapestry of verdant hills, winding rivers, and snow-laden peaks shimmered beneath a radiant sky. Towering clouds billowed like soft mountains in the azure highlands, and though they appeared serene, they often carried the roar of enormous wings. This was a realm of lore, where dragons",
-              "type": "output_text"
-            }
-          ],
-          "id": "msg_085bd6e4f80d217c0068e193acf934819b8a17fefd58818d7e",
-          "role": "assistant",
-          "status": "incomplete",
-          "type": "message"
         }
       ],
       "parallel_tool_calls": true,
       "previous_response_id": null,
       "prompt_cache_key": null,
       "reasoning": {
-        "effort": "low",
+        "effort": "medium",
         "summary": null
       },
       "safety_identifier": null,
-      "service_tier": "default",
+      "service_tier": "auto",
       "status": "incomplete",
       "store": true,
       "temperature": 1.0,
@@ -104,11 +87,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 73,
+        "output_tokens": 164,
         "output_tokens_details": {
-          "reasoning_tokens": 0
+          "reasoning_tokens": 64
         },
-        "total_tokens": 88
+        "total_tokens": 179
       },
       "user": null
     },
@@ -120,7 +103,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9897d2268952b947-ORD"
+        "989feeed2df5f83d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -129,13 +112,13 @@
         "application/json"
       ],
       "date": [
-        "Sat, 04 Oct 2025 21:37:49 GMT"
+        "Sun, 05 Oct 2025 21:15:26 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "18630"
+        "11450"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -147,8 +130,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=EOukYSRD03RZQSaG78X7F7kpYYvNsNPfMYbn9k5.PRg-1759613869-1.0.1.1-Q1B2n58ncQoZbFrt4GMdqpC4jQBbLU6qJqtKJ.f9U5zoKkiw6J2BuMYltKgQEbZ6Sp4k9Lf5Mj2PDmjyXpZ46HOcyjZZu1DvciNRl.dswck; path=/; expires=Sat, 04-Oct-25 22:07:49 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=Ravnx3hCaR.nafdmDP3T3iVQRzMXmgifKNjalVy_UJk-1759613869356-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=2Dj3h_YGS_oX0lVnlvpGCmjLSLiB7gJL0St.vj8w4sU-1759698926-1.0.1.1-fHXa4WderFAntw3y40GWpNRdEZ30gHAFbXJIt72iZr5NwLZ3YuYcaiGsGp_ghDgi5lQnsotS9fTiCVVoza7QYj_r9wF2q3lyieungf2cn8Q; path=/; expires=Sun, 05-Oct-25 21:45:26 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=i7hFffYR0p8kleKD2BTwCTx3MY6eYTq4zcGt9j6oRNA-1759698926910-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -160,7 +143,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "18636"
+        "11455"
       ],
       "x-ratelimit-limit-requests": [
         "5000"
@@ -172,7 +155,7 @@
         "4999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "799765"
+        "799363"
       ],
       "x-ratelimit-reset-requests": [
         "0s"
@@ -181,7 +164,7 @@
         "0s"
       ],
       "x-request-id": [
-        "req_13faa9ee8541b1b70f8bb69571299af9"
+        "req_0977787bce469e3ec300fb17f71e441c"
       ]
     },
     "status": 200
