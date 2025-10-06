@@ -40,8 +40,21 @@ defmodule ReqLLM.Providers.OpenAI.ParamProfiles do
   """
   def steps_for(operation, %ReqLLM.Model{} = model) do
     profiles = profiles_for(operation, model)
-    Enum.flat_map(profiles, &Map.get(@profiles, &1, []))
+
+    canonical_steps = [
+      {:transform, :reasoning_effort, &translate_reasoning_effort/1, nil},
+      {:drop, :thinking_visibility, nil},
+      {:drop, :reasoning_token_budget, nil}
+    ]
+
+    canonical_steps ++ Enum.flat_map(profiles, &Map.get(@profiles, &1, []))
   end
+
+  defp translate_reasoning_effort(:low), do: "low"
+  defp translate_reasoning_effort(:medium), do: "medium"
+  defp translate_reasoning_effort(:high), do: "high"
+  defp translate_reasoning_effort(:default), do: nil
+  defp translate_reasoning_effort(other), do: other
 
   defp profiles_for(:chat, %ReqLLM.Model{} = model) do
     []

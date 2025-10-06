@@ -56,8 +56,6 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   """
   @behaviour ReqLLM.Providers.OpenAI.API
 
-  import ReqLLM.Provider.Utils, only: [maybe_put: 3]
-
   @impl true
   def path, do: "/responses"
 
@@ -178,7 +176,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
       "response.incomplete" ->
         reason = data["reason"] || "incomplete"
-        [ReqLLM.StreamChunk.meta(%{terminal?: true, finish_reason: String.to_atom(reason)})]
+
+        [
+          ReqLLM.StreamChunk.meta(%{
+            terminal?: true,
+            finish_reason: normalize_finish_reason(reason)
+          })
+        ]
 
       _ ->
         []
@@ -449,11 +453,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp normalize_responses_usage(usage, response_data) do
     reasoning_tokens =
-      get_in(response_data, ["usage", "output_tokens_details", "reasoning_tokens"])
+      get_in(response_data, ["usage", "output_tokens_details", "reasoning_tokens"]) || 0
+
+    cached_tokens = get_in(response_data, ["usage", "input_tokens_details", "cached_tokens"]) || 0
 
     usage
-    |> maybe_put(:reasoning_tokens, reasoning_tokens)
-    |> maybe_put(:reasoning, reasoning_tokens)
+    |> Map.put(:cached_tokens, cached_tokens)
+    |> Map.put(:reasoning_tokens, reasoning_tokens)
   end
 
   defp determine_finish_reason(body) do
@@ -463,10 +469,18 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
       "incomplete" ->
         reason = get_in(body, ["incomplete_details", "reason"]) || "length"
-        String.to_atom(reason)
+        normalize_finish_reason(reason)
 
       _ ->
         :stop
     end
   end
+
+  defp normalize_finish_reason("stop"), do: :stop
+  defp normalize_finish_reason("length"), do: :length
+  defp normalize_finish_reason("max_tokens"), do: :length
+  defp normalize_finish_reason("max_output_tokens"), do: :length
+  defp normalize_finish_reason("tool_calls"), do: :tool_calls
+  defp normalize_finish_reason("content_filter"), do: :content_filter
+  defp normalize_finish_reason(_), do: :error
 end

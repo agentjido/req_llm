@@ -239,20 +239,33 @@ defmodule ReqLLM.Providers.Anthropic.Response do
 
   defp chunk_to_content_part(_), do: nil
 
-  defp parse_usage(%{"input_tokens" => input, "output_tokens" => output}) do
+  defp parse_usage(%{"input_tokens" => input, "output_tokens" => output} = usage) do
+    cached_tokens = Map.get(usage, "cache_read_input_tokens", 0)
+    reasoning_tokens = Map.get(usage, "reasoning_output_tokens", 0)
+
     %{
       input_tokens: input,
       output_tokens: output,
-      total_tokens: input + output
+      total_tokens: input + output,
+      cached_tokens: cached_tokens,
+      reasoning_tokens: reasoning_tokens
     }
   end
 
-  defp parse_usage(_), do: %{input_tokens: 0, output_tokens: 0, total_tokens: 0}
+  defp parse_usage(_),
+    do: %{
+      input_tokens: 0,
+      output_tokens: 0,
+      total_tokens: 0,
+      cached_tokens: 0,
+      reasoning_tokens: 0
+    }
 
   defp parse_finish_reason("stop"), do: :stop
   defp parse_finish_reason("max_tokens"), do: :length
   defp parse_finish_reason("tool_use"), do: :tool_calls
   defp parse_finish_reason("end_turn"), do: :stop
-  defp parse_finish_reason(reason) when is_binary(reason), do: reason
+  defp parse_finish_reason("content_filter"), do: :content_filter
+  defp parse_finish_reason(reason) when is_binary(reason), do: :error
   defp parse_finish_reason(_), do: nil
 end

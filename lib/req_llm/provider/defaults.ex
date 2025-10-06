@@ -867,7 +867,9 @@ defmodule ReqLLM.Provider.Defaults do
   defp parse_openai_finish_reason("length"), do: :length
   defp parse_openai_finish_reason("tool_calls"), do: :tool_calls
   defp parse_openai_finish_reason("content_filter"), do: :content_filter
-  defp parse_openai_finish_reason(reason) when is_binary(reason), do: reason
+  defp parse_openai_finish_reason("max_tokens"), do: :length
+  defp parse_openai_finish_reason("max_output_tokens"), do: :length
+  defp parse_openai_finish_reason(reason) when is_binary(reason), do: :error
   defp parse_openai_finish_reason(_), do: nil
 
   @doc """
@@ -1059,7 +1061,13 @@ defmodule ReqLLM.Provider.Defaults do
       message: nil,
       stream?: true,
       stream: stream,
-      usage: %{input_tokens: 0, output_tokens: 0, total_tokens: 0},
+      usage: %{
+        input_tokens: 0,
+        output_tokens: 0,
+        total_tokens: 0,
+        cached_tokens: 0,
+        reasoning_tokens: 0
+      },
       finish_reason: nil,
       provider_meta: provider_meta
     }

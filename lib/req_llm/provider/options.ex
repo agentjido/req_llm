@@ -20,6 +20,7 @@ defmodule ReqLLM.Provider.Options do
   - `frequency_penalty`, `presence_penalty` - Repetition control
   - `seed`, `stop` - Deterministic generation and control
   - `tools`, `tool_choice` - Function calling
+  - `reasoning_effort`, `thinking_visibility`, `reasoning_token_budget` - Reasoning controls
   - `n`, `stream` - Output control
   - `user` - Tracking/identification
 
@@ -95,10 +96,21 @@ defmodule ReqLLM.Provider.Options do
                                  doc: "System prompt to set context and instructions"
                                ],
 
-                               # Reasoning for advanced models
-                               reasoning: [
-                                 type: {:in, [nil, false, true, "low", "auto", "high"]},
-                                 doc: "Request reasoning/thinking tokens from the model"
+                               # Canonical reasoning/thinking controls
+                               reasoning_effort: [
+                                 type: {:in, [:low, :medium, :high, :default]},
+                                 doc:
+                                   "Computational effort for reasoning models (higher = more thinking)"
+                               ],
+                               thinking_visibility: [
+                                 type: {:in, [:auto, :hidden, :visible]},
+                                 doc:
+                                   "Whether to expose internal reasoning/thinking content in response"
+                               ],
+                               reasoning_token_budget: [
+                                 type: :pos_integer,
+                                 doc:
+                                   "Maximum tokens allocated for internal reasoning/thinking processes"
                                ],
 
                                # Function/tool calling (widely supported)

@@ -52,10 +52,6 @@ defmodule ReqLLM.Providers.Anthropic do
         type: :map,
         doc:
           "Enable thinking/reasoning for supported models (e.g. %{type: \"enabled\", budget_tokens: 4096})"
-      ],
-      reasoning_effort: [
-        type: :atom,
-        doc: "Reasoning effort level (low, medium, high) - converted to thinking parameter"
       ]
     ]
 
@@ -298,6 +294,7 @@ defmodule ReqLLM.Providers.Anthropic do
       opts
       |> translate_stop_parameter()
       |> translate_reasoning_effort()
+      |> remove_conflicting_sampling_params()
       |> translate_unsupported_parameters()
 
     {translated_opts, []}
@@ -403,43 +400,75 @@ defmodule ReqLLM.Providers.Anthropic do
   end
 
   defp translate_reasoning_effort(opts) do
-    case Keyword.get(opts, :reasoning_effort) do
+    {reasoning_effort, opts} = Keyword.pop(opts, :reasoning_effort)
+    {reasoning_budget, opts} = Keyword.pop(opts, :reasoning_token_budget)
+
+    case reasoning_effort do
+      :low ->
+        budget = reasoning_budget || 1024
+
+        opts
+        |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: budget})
+        |> adjust_top_p_for_thinking()
+
+      :medium ->
+        budget = reasoning_budget || 2048
+
+        opts
+        |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: budget})
+        |> adjust_top_p_for_thinking()
+
+      :high ->
+        budget = reasoning_budget || 4096
+
+        opts
+        |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: budget})
+        |> adjust_top_p_for_thinking()
+
+      :default ->
+        opts
+        |> Keyword.put(:thinking, %{type: "enabled"})
+        |> adjust_top_p_for_thinking()
+
+      nil ->
+        opts
+    end
+  end
+
+  defp adjust_top_p_for_thinking(opts) do
+    opts
+    |> adjust_parameter(:top_p, fn
+      nil -> nil
+      top_p when top_p < 0.95 -> 0.95
+      top_p -> top_p
+    end)
+    |> adjust_parameter(:temperature, fn
+      nil -> nil
+      _ -> 1.0
+    end)
+  end
+
+  defp adjust_parameter(opts, key, fun) do
+    case Keyword.get(opts, key) do
       nil ->
         opts
 
-      :low ->
-        opts
-        |> Keyword.delete(:reasoning_effort)
-        |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: 1024})
+      value ->
+        case fun.(value) do
+          nil -> opts
+          new_value -> Keyword.put(opts, key, new_value)
+        end
+    end
+  end
 
-      :medium ->
-        opts
-        |> Keyword.delete(:reasoning_effort)
-        |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: 2048})
+  defp remove_conflicting_sampling_params(opts) do
+    has_temperature = Keyword.has_key?(opts, :temperature)
+    has_top_p = Keyword.has_key?(opts, :top_p)
 
-      :high ->
-        opts
-        |> Keyword.delete(:reasoning_effort)
-        |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: 4096})
-
-      # Handle string values too (for CLI compatibility)
-      "low" ->
-        opts
-        |> Keyword.delete(:reasoning_effort)
-        |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: 1024})
-
-      "medium" ->
-        opts
-        |> Keyword.delete(:reasoning_effort)
-        |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: 2048})
-
-      "high" ->
-        opts
-        |> Keyword.delete(:reasoning_effort)
-        |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: 4096})
-
-      _ ->
-        opts
+    if has_temperature and has_top_p do
+      Keyword.delete(opts, :top_p)
+    else
+      opts
     end
   end
 
@@ -457,8 +486,11 @@ defmodule ReqLLM.Providers.Anthropic do
   end
 
   defp translate_unsupported_parameters(opts) do
-    # Remove parameters not supported by Anthropic
-    Enum.reduce(@unsupported_parameters, opts, &Keyword.delete(&2, &1))
+    opts
+    |> Keyword.delete(:thinking_visibility)
+    |> then(
+      &Enum.reduce(@unsupported_parameters, &1, fn key, acc -> Keyword.delete(acc, key) end)
+    )
   end
 
   defp decode_success_response(req, resp) do
@@ -540,7 +572,13 @@ defmodule ReqLLM.Providers.Anthropic do
       message: nil,
       stream?: true,
       stream: stream,
-      usage: %{input_tokens: 0, output_tokens: 0, total_tokens: 0},
+      usage: %{
+        input_tokens: 0,
+        output_tokens: 0,
+        total_tokens: 0,
+        cached_tokens: 0,
+        reasoning_tokens: 0
+      },
       finish_reason: nil,
       provider_meta: provider_meta
     }

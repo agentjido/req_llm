@@ -522,8 +522,11 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       }
 
       assert [chunk] = ResponsesAPI.decode_sse_event(event, model)
+      assert chunk.metadata.usage.input_tokens == 10
+      assert chunk.metadata.usage.output_tokens == 20
+      assert chunk.metadata.usage.total_tokens == 30
+      assert chunk.metadata.usage.cached_tokens == 0
       assert chunk.metadata.usage.reasoning_tokens == 5
-      assert chunk.metadata.usage.reasoning == 5
     end
 
     test "ignores output_text done event", %{model: model} do

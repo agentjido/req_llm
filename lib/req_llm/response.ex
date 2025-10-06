@@ -50,7 +50,7 @@ defmodule ReqLLM.Response do
 
     # ---------- Metadata ----------
     field(:usage, map() | nil)
-    field(:finish_reason, atom() | String.t() | nil)
+    field(:finish_reason, :stop | :length | :tool_calls | :content_filter | :error | nil)
     # Raw provider extras
     field(:provider_meta, map(), default: %{})
 
@@ -144,7 +144,7 @@ defmodule ReqLLM.Response do
       :stop
 
   """
-  @spec finish_reason(t()) :: atom() | String.t() | nil
+  @spec finish_reason(t()) :: :stop | :length | :tool_calls | :content_filter | :error | nil
   def finish_reason(%__MODULE__{finish_reason: reason}), do: reason
 
   @doc """

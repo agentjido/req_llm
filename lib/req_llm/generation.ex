@@ -73,6 +73,18 @@ defmodule ReqLLM.Generation do
                    type: {:in, [nil, false, true, "low", "auto", "high"]},
                    doc: "Request reasoning tokens from the model"
                  ],
+                 reasoning_effort: [
+                   type: {:in, [:low, :medium, :high, :default]},
+                   doc: "Canonical reasoning effort level"
+                 ],
+                 thinking_visibility: [
+                   type: {:in, [:hidden, :visible]},
+                   doc: "Canonical thinking visibility setting"
+                 ],
+                 reasoning_token_budget: [
+                   type: :pos_integer,
+                   doc: "Canonical reasoning token budget"
+                 ],
                  seed: [
                    type: :pos_integer,
                    doc: "Seed for deterministic outputs"

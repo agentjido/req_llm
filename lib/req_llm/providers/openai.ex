@@ -99,12 +99,6 @@ defmodule ReqLLM.Providers.OpenAI do
       max_completion_tokens: [
         type: :integer,
         doc: "Maximum completion tokens (required for reasoning models like o1, o3, gpt-5)"
-      ],
-      reasoning_effort: [
-        type:
-          {:or,
-           [{:in, [:minimal, :low, :medium, :high]}, {:in, ["minimal", "low", "medium", "high"]}]},
-        doc: "Reasoning effort level for GPT-5 models (minimal, low, medium, high)"
       ]
     ]
 

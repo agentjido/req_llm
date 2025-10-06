@@ -80,10 +80,6 @@ defmodule ReqLLM.Providers.OpenRouter do
         type: :integer,
         doc: "Number of top log probabilities to return"
       ],
-      reasoning_effort: [
-        type: :string,
-        doc: "Reasoning effort level for extended thinking models (e.g., 'low', 'medium', 'high')"
-      ],
       app_referer: [
         type: :string,
         doc: "HTTP-Referer header for app identification on OpenRouter"
@@ -168,6 +164,23 @@ defmodule ReqLLM.Providers.OpenRouter do
   @impl ReqLLM.Provider
   def translate_options(_operation, model, opts) do
     warnings = []
+
+    {reasoning_effort, opts} = Keyword.pop(opts, :reasoning_effort)
+
+    opts =
+      case reasoning_effort do
+        :low -> Keyword.put(opts, :reasoning_effort, "low")
+        :medium -> Keyword.put(opts, :reasoning_effort, "medium")
+        :high -> Keyword.put(opts, :reasoning_effort, "high")
+        :default -> opts
+        nil -> opts
+        other -> Keyword.put(opts, :reasoning_effort, other)
+      end
+
+    opts =
+      opts
+      |> Keyword.delete(:thinking_visibility)
+      |> Keyword.delete(:reasoning_token_budget)
 
     # Handle legacy parameter names -> OpenRouter prefixed names
     legacy_mappings = [

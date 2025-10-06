@@ -432,7 +432,7 @@ defmodule ReqLLM.Providers.OpenAITest do
       text = ReqLLM.Response.text(response)
       assert is_binary(text)
       assert String.length(text) > 0
-      assert response.finish_reason in [:stop, :length, "stop", "length"]
+      assert response.finish_reason in [:stop, :length]
 
       # Verify usage normalization
       assert is_integer(response.usage.input_tokens)
@@ -485,7 +485,14 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert length(response.context.messages) == 2
 
       # Verify stream structure and processing
-      assert response.usage == %{input_tokens: 0, output_tokens: 0, total_tokens: 0}
+      assert response.usage == %{
+               input_tokens: 0,
+               output_tokens: 0,
+               total_tokens: 0,
+               cached_tokens: 0,
+               reasoning_tokens: 0
+             }
+
       assert response.finish_reason == nil
       # http_task removed after fix for issue #42 (no duplicate request execution)
       assert response.provider_meta == %{}

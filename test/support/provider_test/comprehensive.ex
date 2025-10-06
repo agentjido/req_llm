@@ -45,14 +45,10 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
 
       defp debug?, do: System.get_env("REQ_LLM_DEBUG") in ["1", "true"]
 
-      defp truncated?(response),
-        do: response.finish_reason in [:max_output_tokens, :length, :max_tokens]
+      defp truncated?(response), do: response.finish_reason == :length
 
       defp combined_content(response),
         do: (ReqLLM.Response.text(response) || "") <> (ReqLLM.Response.thinking(response) || "")
-
-      defp reasoning_tokens(response),
-        do: response.usage[:reasoning_tokens] || response.usage[:reasoning] || 0
 
       @provider provider
       @models ModelMatrix.models_for_provider(provider, operation: :text)
@@ -147,7 +143,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 content = combined_content(response)
 
                 if truncated?(response) do
-                  rt = reasoning_tokens(response)
+                  rt = ReqLLM.Response.reasoning_tokens(response)
                   assert is_number(rt) and rt >= 0
 
                   if content != "" do
@@ -193,11 +189,13 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             assert ReqLLM.Response.text(response) != ""
             assert is_map(response.usage)
 
-            input_tokens = response.usage[:input_tokens] || response.usage[:input]
-            output_tokens = response.usage[:output_tokens] || response.usage[:output]
+            assert is_number(response.usage.input_tokens) and response.usage.input_tokens > 0
+            assert is_number(response.usage.output_tokens) and response.usage.output_tokens >= 0
+            assert is_number(response.usage.total_tokens) and response.usage.total_tokens > 0
+            assert is_number(response.usage.cached_tokens) and response.usage.cached_tokens >= 0
 
-            assert is_number(input_tokens) and input_tokens > 0
-            assert is_number(output_tokens) and output_tokens >= 0
+            assert is_number(response.usage.reasoning_tokens) and
+                     response.usage.reasoning_tokens >= 0
 
             case ReqLLM.Model.from(@model_spec) do
               {:ok, %ReqLLM.Model{cost: cost_map}} when is_map(cost_map) ->
@@ -213,11 +211,6 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
 
               _ ->
                 refute Map.has_key?(response.usage, :input_cost)
-            end
-
-            if param_bundles(@provider).validate_cached_tokens do
-              cached_tokens = response.usage[:cached_tokens] || 0
-              assert is_number(cached_tokens) and cached_tokens >= 0
             end
           end
 
@@ -252,13 +245,13 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
 
               base_opts =
                 param_bundles(@provider).deterministic
-                |> Keyword.put(:max_tokens, param_bundles(@provider).tool_test_tokens)
+                |> Keyword.put(:max_tokens, tool_budget_for(@model_spec))
                 |> then(
                   &reasoning_overlay(
                     @model_spec,
                     @provider,
                     &1,
-                    param_bundles(@provider).tool_test_tokens * 2
+                    tool_budget_for(@model_spec) * 2
                   )
                 )
 
@@ -276,7 +269,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                   tool_calls = ReqLLM.Response.tool_calls(response) || []
 
                   if Enum.empty?(tool_calls) and truncated?(response) do
-                    rt = reasoning_tokens(response)
+                    rt = ReqLLM.Response.reasoning_tokens(response)
                     assert is_number(rt) and rt >= 0
                   else
                     assert_has_tool_call(response)
@@ -302,13 +295,13 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
 
               base_opts =
                 param_bundles(@provider).deterministic
-                |> Keyword.put(:max_tokens, param_bundles(@provider).tool_test_tokens)
+                |> Keyword.put(:max_tokens, tool_budget_for(@model_spec))
                 |> then(
                   &reasoning_overlay(
                     @model_spec,
                     @provider,
                     &1,
-                    param_bundles(@provider).tool_test_tokens * 2
+                    tool_budget_for(@model_spec) * 2
                   )
                 )
 
@@ -324,55 +317,50 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
           if :tool_call in ReqLLM.capabilities(model_spec) do
             @tag category: :object_generation
             test "object generation (streaming)" do
-              {:ok, model} = ReqLLM.Model.from(@model_spec)
+              schema = [
+                name: [type: :string, required: true, doc: "Person's full name"],
+                age: [type: :pos_integer, required: true, doc: "Person's age in years"],
+                occupation: [type: :string, doc: "Person's job or profession"]
+              ]
 
-              # Streaming fixtures not yet working for Responses API
-              if model._metadata["api"] != "responses" do
-                schema = [
-                  name: [type: :string, required: true, doc: "Person's full name"],
-                  age: [type: :pos_integer, required: true, doc: "Person's age in years"],
-                  occupation: [type: :string, doc: "Person's job or profession"]
-                ]
+              opts =
+                param_bundles(@provider).deterministic
+                |> Keyword.put(:max_tokens, 500)
+                |> then(&reasoning_overlay(@model_spec, @provider, &1, 500))
 
-                opts =
-                  param_bundles(@provider).deterministic
-                  |> Keyword.put(:max_tokens, 500)
-                  |> then(&reasoning_overlay(@model_spec, @provider, &1, 500))
+              {:ok, response} =
+                ReqLLM.stream_object(
+                  @model_spec,
+                  "Generate a software engineer profile",
+                  schema,
+                  fixture_opts(@provider, "object_streaming", opts)
+                )
 
-                {:ok, response} =
-                  ReqLLM.stream_object(
-                    @model_spec,
-                    "Generate a software engineer profile",
-                    schema,
-                    fixture_opts(@provider, "object_streaming", opts)
-                  )
-
-                response =
-                  if match?(%ReqLLM.StreamResponse{}, response) do
-                    {:ok, resp} = ReqLLM.StreamResponse.to_response(response)
-                    resp
-                  else
-                    response
-                  end
-
-                object = ReqLLM.Response.object(response)
-
-                cond do
-                  is_map(object) and map_size(object) > 0 ->
-                    assert Map.has_key?(object, "name")
-                    assert Map.has_key?(object, "age")
-                    assert is_binary(object["name"])
-                    assert object["name"] != ""
-                    assert is_integer(object["age"])
-                    assert object["age"] > 0
-
-                  truncated?(response) ->
-                    rt = reasoning_tokens(response)
-                    assert is_number(rt) and rt >= 0
-
-                  true ->
-                    flunk("Expected non-empty object but got: #{inspect(object)}")
+              response =
+                if match?(%ReqLLM.StreamResponse{}, response) do
+                  {:ok, resp} = ReqLLM.StreamResponse.to_response(response)
+                  resp
+                else
+                  response
                 end
+
+              object = ReqLLM.Response.object(response)
+
+              cond do
+                is_map(object) and map_size(object) > 0 ->
+                  assert Map.has_key?(object, "name")
+                  assert Map.has_key?(object, "age")
+                  assert is_binary(object["name"])
+                  assert object["name"] != ""
+                  assert is_integer(object["age"])
+                  assert object["age"] > 0
+
+                truncated?(response) ->
+                  rt = ReqLLM.Response.reasoning_tokens(response)
+                  assert is_number(rt) and rt >= 0
+
+                true ->
+                  flunk("Expected non-empty object but got: #{inspect(object)}")
               end
             end
           end
@@ -394,7 +382,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 |> Keyword.merge(
                   max_tokens: 2048,
                   temperature: 1.0,
-                  provider_options: [reasoning_effort: provider_config.reasoning_effort]
+                  reasoning_effort: provider_config.reasoning[:reasoning_effort]
                 )
 
               prompt = provider_config.reasoning_prompts.basic
@@ -420,8 +408,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                   &(&1.type == :thinking and is_binary(&1.text) and &1.text != "")
                 )
 
-              reasoning_tokens =
-                response.usage[:reasoning_tokens] || response.usage[:reasoning] || 0
+              reasoning_tokens = ReqLLM.Response.reasoning_tokens(response)
 
               # Some reasoning models (like gpt-5-codex) don't expose thinking content
               # They reason internally but only output final text
@@ -435,60 +422,57 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
               last = List.last(response.context.messages)
               assert last == response.message
 
-              # Streaming fixtures not yet working for Responses API
-              if model._metadata["api"] != "responses" do
-                context =
-                  ReqLLM.Context.new([
-                    system(provider_config.reasoning_prompts.streaming_system),
-                    user(provider_config.reasoning_prompts.streaming_user)
-                  ])
+              context =
+                ReqLLM.Context.new([
+                  system(provider_config.reasoning_prompts.streaming_system),
+                  user(provider_config.reasoning_prompts.streaming_user)
+                ])
 
-                stream_opts =
-                  provider_config.creative
-                  |> Keyword.delete(:temperature)
-                  |> Keyword.merge(
-                    max_tokens: 2048,
-                    temperature: 1.0,
-                    provider_options: [reasoning_effort: provider_config.reasoning_effort]
-                  )
+              stream_opts =
+                provider_config.creative
+                |> Keyword.delete(:temperature)
+                |> Keyword.merge(
+                  max_tokens: 2048,
+                  temperature: 1.0,
+                  reasoning_effort: provider_config.reasoning[:reasoning_effort]
+                )
 
-                {:ok, stream_response} =
-                  ReqLLM.stream_text(
-                    @model_spec,
-                    context,
-                    fixture_opts(@provider, "reasoning_streaming", stream_opts)
-                  )
+              {:ok, stream_response} =
+                ReqLLM.stream_text(
+                  @model_spec,
+                  context,
+                  fixture_opts(@provider, "reasoning_streaming", stream_opts)
+                )
 
-                assert %ReqLLM.StreamResponse{} = stream_response
-                assert stream_response.stream
-                assert stream_response.metadata_task
+              assert %ReqLLM.StreamResponse{} = stream_response
+              assert stream_response.stream
+              assert stream_response.metadata_task
 
-                {thinking_count, reasoning_tokens_stream} =
-                  stream_response.stream
-                  |> Enum.reduce({0, 0}, fn chunk, {tc, rt} ->
-                    case chunk.type do
-                      :thinking ->
-                        {tc + 1, rt}
+              {thinking_count, reasoning_tokens_stream} =
+                stream_response.stream
+                |> Enum.reduce({0, 0}, fn chunk, {tc, rt} ->
+                  case chunk.type do
+                    :thinking ->
+                      {tc + 1, rt}
 
-                      :meta ->
-                        usage = chunk.metadata[:usage] || %{}
-                        rt2 = usage[:reasoning_tokens] || usage[:reasoning] || 0
-                        {tc, max(rt, (is_number(rt2) && rt2) || 0)}
+                    :meta ->
+                      usage = chunk.metadata[:usage] || %{}
+                      rt2 = Map.get(usage, :reasoning_tokens, 0)
+                      {tc, max(rt, (is_number(rt2) && rt2) || 0)}
 
-                      _ ->
-                        {tc, rt}
-                    end
-                  end)
+                    _ ->
+                      {tc, rt}
+                  end
+                end)
 
-                {:ok, response} = ReqLLM.StreamResponse.to_response(stream_response)
-                rt_final = reasoning_tokens(response)
+              {:ok, response} = ReqLLM.StreamResponse.to_response(stream_response)
+              rt_final = ReqLLM.Response.reasoning_tokens(response)
 
-                assert thinking_count > 0 or reasoning_tokens_stream > 0 or rt_final > 0,
-                       "Expected at least one :thinking chunk or positive reasoning_tokens; got tc=#{thinking_count} rt_stream=#{reasoning_tokens_stream} rt_final=#{rt_final}"
+              assert thinking_count > 0 or reasoning_tokens_stream > 0 or rt_final > 0,
+                     "Expected at least one :thinking chunk or positive reasoning_tokens; got tc=#{thinking_count} rt_stream=#{reasoning_tokens_stream} rt_final=#{rt_final}"
 
-                assert %ReqLLM.Response{} = response
-                assert response.message.role == :assistant
-              end
+              assert %ReqLLM.Response{} = response
+              assert response.message.role == :assistant
             end
           end
         end

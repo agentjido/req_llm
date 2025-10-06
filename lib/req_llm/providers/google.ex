@@ -215,9 +215,9 @@ defmodule ReqLLM.Providers.Google do
   @impl ReqLLM.Provider
   def extract_usage(body, _model) when is_map(body) do
     case body do
-      %{"usageMetadata" => usage} ->
-        usage_with_cached = add_cached_tokens(usage)
-        {:ok, usage_with_cached}
+      %{"usageMetadata" => usage_metadata} ->
+        usage = normalize_google_usage(usage_metadata)
+        {:ok, usage}
 
       _ ->
         {:error, :no_usage_found}
@@ -226,14 +226,19 @@ defmodule ReqLLM.Providers.Google do
 
   def extract_usage(_, _), do: {:error, :invalid_body}
 
-  defp add_cached_tokens(usage) do
-    cached_tokens = get_in(usage, ["promptFeedback", "cachedContentTokenCount"]) || 0
+  defp normalize_google_usage(usage_metadata) do
+    input = Map.get(usage_metadata, "promptTokenCount", 0)
+    output = Map.get(usage_metadata, "candidatesTokenCount", 0)
+    total = Map.get(usage_metadata, "totalTokenCount", 0)
+    cached = Map.get(usage_metadata, "cachedContentTokenCount", 0)
 
-    if cached_tokens > 0 do
-      Map.put(usage, "cached_input", cached_tokens)
-    else
-      usage
-    end
+    %{
+      input_tokens: input,
+      output_tokens: output,
+      total_tokens: total,
+      cached_tokens: cached,
+      reasoning_tokens: 0
+    }
   end
 
   def pre_validate_options(_operation, model, opts) do
@@ -282,6 +287,30 @@ defmodule ReqLLM.Providers.Google do
 
   @impl ReqLLM.Provider
   def translate_options(_operation, _model, opts) do
+    {reasoning_budget, opts} = Keyword.pop(opts, :reasoning_token_budget)
+    {reasoning_effort, opts} = Keyword.pop(opts, :reasoning_effort)
+
+    opts =
+      cond do
+        reasoning_budget ->
+          provider_opts = Keyword.get(opts, :provider_options, [])
+          provider_opts = Keyword.put(provider_opts, :google_thinking_budget, reasoning_budget)
+          Keyword.put(opts, :provider_options, provider_opts)
+
+        reasoning_effort ->
+          budget = translate_reasoning_effort_to_budget(reasoning_effort, nil)
+          provider_opts = Keyword.get(opts, :provider_options, [])
+          provider_opts = Keyword.put(provider_opts, :google_thinking_budget, budget)
+          Keyword.put(opts, :provider_options, provider_opts)
+
+        true ->
+          opts
+      end
+
+    opts =
+      opts
+      |> Keyword.delete(:thinking_visibility)
+
     case Keyword.pop(opts, :stream?) do
       {nil, rest} ->
         {rest, []}
@@ -590,7 +619,8 @@ defmodule ReqLLM.Providers.Google do
   defp normalize_google_finish_reason("MAX_TOKENS"), do: "length"
   defp normalize_google_finish_reason("SAFETY"), do: "content_filter"
   defp normalize_google_finish_reason("RECITATION"), do: "content_filter"
-  defp normalize_google_finish_reason(_), do: "stop"
+  defp normalize_google_finish_reason("OTHER"), do: "error"
+  defp normalize_google_finish_reason(_), do: "error"
 
   defp convert_google_usage(%{"promptTokenCount" => prompt, "totalTokenCount" => total} = usage) do
     thoughts = usage["thoughtsTokenCount"] || 0
@@ -890,22 +920,16 @@ defmodule ReqLLM.Providers.Google do
     end)
   end
 
-  defp convert_google_usage_for_streaming(usage) do
-    prompt = Map.get(usage, "promptTokenCount", 0)
-    completion = Map.get(usage, "candidatesTokenCount", 0)
-    total = Map.get(usage, "totalTokenCount", prompt + completion)
-    thoughts = Map.get(usage, "thoughtsTokenCount", 0)
-
-    base = %{
-      "prompt_tokens" => prompt,
-      "completion_tokens" => completion,
-      "total_tokens" => total
+  defp convert_google_usage_for_streaming(nil),
+    do: %{
+      input_tokens: 0,
+      output_tokens: 0,
+      total_tokens: 0,
+      cached_tokens: 0,
+      reasoning_tokens: 0
     }
 
-    if thoughts > 0 do
-      Map.put(base, "completion_tokens_details", %{"reasoning_tokens" => thoughts})
-    else
-      base
-    end
+  defp convert_google_usage_for_streaming(usage_metadata) do
+    normalize_google_usage(usage_metadata)
   end
 end

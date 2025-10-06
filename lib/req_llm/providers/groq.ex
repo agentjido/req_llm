@@ -38,10 +38,6 @@ defmodule ReqLLM.Providers.Groq do
         type: {:in, ~w(auto on_demand flex performance)},
         doc: "Performance tier for Groq requests"
       ],
-      reasoning_effort: [
-        type: {:in, ~w(none default low medium high)},
-        doc: "Reasoning effort level"
-      ],
       reasoning_format: [
         type: :string,
         doc: "Format for reasoning output"
@@ -102,6 +98,44 @@ defmodule ReqLLM.Providers.Groq do
   # Delegate all other operations to defaults
   def prepare_request(operation, model_spec, input, opts) do
     ReqLLM.Provider.Defaults.prepare_request(__MODULE__, operation, model_spec, input, opts)
+  end
+
+  @impl ReqLLM.Provider
+  def translate_options(_operation, model, opts) do
+    warnings = []
+
+    {reasoning_effort, opts} = Keyword.pop(opts, :reasoning_effort)
+
+    {opts, warnings} =
+      if reasoning_effort && !supports_reasoning_effort?(model) do
+        warning =
+          "reasoning_effort is not supported for #{model.model} (uses <think> tags instead)"
+
+        {opts, [warning | warnings]}
+      else
+        opts =
+          case reasoning_effort do
+            :low -> Keyword.put(opts, :reasoning_effort, "low")
+            :medium -> Keyword.put(opts, :reasoning_effort, "medium")
+            :high -> Keyword.put(opts, :reasoning_effort, "high")
+            :default -> Keyword.put(opts, :reasoning_effort, "default")
+            nil -> opts
+            other -> Keyword.put(opts, :reasoning_effort, other)
+          end
+
+        {opts, warnings}
+      end
+
+    opts =
+      opts
+      |> Keyword.delete(:thinking_visibility)
+      |> Keyword.delete(:reasoning_token_budget)
+
+    {opts, Enum.reverse(warnings)}
+  end
+
+  defp supports_reasoning_effort?(%{model: model_name}) do
+    !String.contains?(model_name, ["deepseek", "qwen"])
   end
 
   @doc """

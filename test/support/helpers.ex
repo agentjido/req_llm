@@ -279,9 +279,15 @@ defmodule ReqLLM.Test.Helpers do
 
   @doc """
   Standard parameter bundles for consistent testing across providers.
+
+  Returns the same configuration for all providers, enabling a unified
+  prompt strategy. Previously, different providers used different reasoning
+  prompts (e.g., xAI used "Calculate 15 times 3" while others used "Solve 12*7"),
+  but testing showed that a single unified prompt works consistently across
+  all providers.
   """
-  def param_bundles(provider \\ :default) do
-    base = %{
+  def param_bundles(_provider \\ :default) do
+    %{
       deterministic: [
         temperature: 0.0,
         max_tokens: 50,
@@ -296,78 +302,49 @@ defmodule ReqLLM.Test.Helpers do
         temperature: 0.5,
         max_tokens: 50
       ],
-      tool_test_tokens: 150,
-      reasoning_effort: "low",
+      reasoning: [
+        reasoning_effort: :low,
+        reasoning_token_budget: 1000,
+        temperature: 1.0
+      ],
       reasoning_prompts: %{
         basic: "Solve 12*7 and show your internal thinking (brief).",
         streaming_system: "You are a careful, step-by-step reasoner.",
         streaming_user: "Briefly think through your approach, then answer: What is 15*3?"
-      },
-      validate_cached_tokens: false
+      }
     }
+  end
 
-    case provider do
-      :google ->
-        %{
-          deterministic: base.deterministic ++ [provider_options: [google_thinking_budget: 0]],
-          creative: base.creative ++ [provider_options: [google_thinking_budget: 0]],
-          minimal: base.minimal ++ [provider_options: [google_thinking_budget: 0]],
-          tool_test_tokens: 300,
-          reasoning_effort: base.reasoning_effort,
-          reasoning_prompts: base.reasoning_prompts,
-          validate_cached_tokens: false
-        }
+  @doc """
+  Calculate dynamic token budget for tool testing based on model metadata.
 
-      :anthropic ->
-        %{
-          deterministic: base.deterministic,
-          creative: [temperature: 0.9, max_tokens: 100],
-          minimal: base.minimal,
-          tool_test_tokens: base.tool_test_tokens,
-          reasoning_effort: :low,
-          reasoning_prompts: base.reasoning_prompts,
-          validate_cached_tokens: false
-        }
+  Derives budget from:
+  1. `max_output_tokens` - Uses 10% of maximum
+  2. Cost data - Higher budgets for cheaper models
+  3. Default fallback - 150 tokens
 
-      :xai ->
-        %{
-          deterministic: base.deterministic,
-          creative: base.creative,
-          minimal: base.minimal,
-          tool_test_tokens: 500,
-          reasoning_effort: "low",
-          reasoning_prompts: %{
-            basic: "Calculate 15 times 3. Think step-by-step.",
-            streaming_system: "You are a helpful math tutor.",
-            streaming_user: "What is 8 plus 7? Show your reasoning."
-          },
-          validate_cached_tokens: false
-        }
+  ## Examples
 
-      :openai ->
-        %{
-          deterministic: base.deterministic,
-          creative: base.creative,
-          minimal: base.minimal,
-          tool_test_tokens: base.tool_test_tokens,
-          reasoning_effort: base.reasoning_effort,
-          reasoning_prompts: base.reasoning_prompts,
-          validate_cached_tokens: true
-        }
+      iex> tool_budget_for("openai:gpt-4o")
+      409
 
-      :groq ->
-        %{
-          deterministic: base.deterministic,
-          creative: base.creative,
-          minimal: base.minimal,
-          tool_test_tokens: base.tool_test_tokens,
-          reasoning_effort: "default",
-          reasoning_prompts: base.reasoning_prompts,
-          validate_cached_tokens: false
-        }
+      iex> tool_budget_for("google:gemini-2.0-flash")
+      819
+  """
+  def tool_budget_for(model_spec) do
+    case Model.from(model_spec) do
+      {:ok, %{max_output_tokens: max}} when is_integer(max) and max > 0 ->
+        div(max, 10)
+
+      {:ok, %{cost: %{output: output_cost}}} when is_float(output_cost) ->
+        if output_cost < 0.001 do
+          500
+        else
+          150
+        end
 
       _ ->
-        base
+        150
     end
   end
 
@@ -420,7 +397,7 @@ defmodule ReqLLM.Test.Helpers do
       message.content
       |> Enum.any?(fn part -> part.type == :tool_call end)
 
-    is_incomplete = response.finish_reason in [:max_output_tokens, :length, :max_tokens]
+    is_incomplete = response.finish_reason == :length
 
     combined_length = String.length(text) + String.length(thinking)
 
@@ -492,7 +469,7 @@ defmodule ReqLLM.Test.Helpers do
   Apply reasoning model overlay to test options.
 
   For models with :reasoning capability, this helper:
-  - Adds reasoning_effort to :provider_options
+  - Adds reasoning_effort as a top-level option
   - Ensures sufficient max_tokens for reasoning models
 
   ## Parameters
@@ -505,22 +482,29 @@ defmodule ReqLLM.Test.Helpers do
   ## Examples
 
       iex> reasoning_overlay("openai:gpt-5", :openai, [temperature: 0.0], 200)
-      [temperature: 0.0, max_tokens: 200, provider_options: [reasoning_effort: "low"]]
+      [temperature: 0.0, max_tokens: 200, reasoning_effort: :low]
   """
-  def reasoning_overlay(model_spec, provider, base_opts, min_tokens \\ nil) do
+  def reasoning_overlay(model_spec, _provider, base_opts, min_tokens \\ nil) do
     case ReqLLM.Model.from(model_spec) do
       {:ok, %{capabilities: %{reasoning: true}}} ->
-        cfg = param_bundles(provider)
-        reasoning_effort = cfg[:reasoning_effort] || :medium
+        cfg = param_bundles()
+        reasoning_effort = cfg.reasoning[:reasoning_effort] || :medium
+        default_budget = 1024
 
-        opts =
+        max_tokens = base_opts[:max_tokens]
+
+        if is_integer(max_tokens) and max_tokens <= default_budget do
           base_opts
-          |> merge_provider_options(reasoning_effort: reasoning_effort)
-
-        if is_integer(min_tokens) and (opts[:max_tokens] || 0) < min_tokens do
-          Keyword.put(opts, :max_tokens, min_tokens)
         else
-          opts
+          opts =
+            base_opts
+            |> Keyword.put(:reasoning_effort, reasoning_effort)
+
+          if is_integer(min_tokens) and (opts[:max_tokens] || 0) < min_tokens do
+            Keyword.put(opts, :max_tokens, min_tokens)
+          else
+            opts
+          end
         end
 
       _ ->

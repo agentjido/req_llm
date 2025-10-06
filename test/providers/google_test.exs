@@ -406,7 +406,14 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert length(response.context.messages) == 2
 
       # Verify stream structure and processing
-      assert response.usage == %{input_tokens: 0, output_tokens: 0, total_tokens: 0}
+      assert response.usage == %{
+               input_tokens: 0,
+               output_tokens: 0,
+               total_tokens: 0,
+               cached_tokens: 0,
+               reasoning_tokens: 0
+             }
+
       assert response.finish_reason == nil
       assert response.provider_meta == %{}
     end
@@ -513,9 +520,9 @@ defmodule ReqLLM.Providers.GoogleTest do
       }
 
       {:ok, usage} = Google.extract_usage(body_with_usage, model)
-      assert usage["promptTokenCount"] == 10
-      assert usage["candidatesTokenCount"] == 20
-      assert usage["totalTokenCount"] == 30
+      assert usage.input_tokens == 10
+      assert usage.output_tokens == 20
+      assert usage.total_tokens == 30
     end
 
     test "extract_usage with missing usage data" do
@@ -541,17 +548,15 @@ defmodule ReqLLM.Providers.GoogleTest do
           "promptTokenCount" => 500,
           "candidatesTokenCount" => 200,
           "totalTokenCount" => 700,
-          "promptFeedback" => %{
-            "cachedContentTokenCount" => 120
-          }
+          "cachedContentTokenCount" => 120
         }
       }
 
       {:ok, usage} = Google.extract_usage(body_with_cached_tokens, model)
-      assert usage["promptTokenCount"] == 500
-      assert usage["candidatesTokenCount"] == 200
-      assert usage["totalTokenCount"] == 700
-      assert usage["cached_input"] == 120
+      assert usage.input_tokens == 500
+      assert usage.output_tokens == 200
+      assert usage.total_tokens == 700
+      assert usage.cached_tokens == 120
     end
 
     test "extract_usage without cached content tokens" do
@@ -566,10 +571,10 @@ defmodule ReqLLM.Providers.GoogleTest do
       }
 
       {:ok, usage} = Google.extract_usage(body_without_cached_tokens, model)
-      assert usage["promptTokenCount"] == 10
-      assert usage["candidatesTokenCount"] == 20
-      assert usage["totalTokenCount"] == 30
-      refute Map.has_key?(usage, "cached_input")
+      assert usage.input_tokens == 10
+      assert usage.output_tokens == 20
+      assert usage.total_tokens == 30
+      assert usage.cached_tokens == 0
     end
   end
 
