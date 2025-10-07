@@ -85,7 +85,7 @@ defmodule ReqLLM.MixProject do
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:quokka, "~> 2.11", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.18", only: [:dev, :test], runtime: false},
-      {:plug, "~> 1.0", only: [:test], runtime: false}
+      {:plug, "~> 1.0", only: [:dev, :test], runtime: false}
     ]
   end
 
