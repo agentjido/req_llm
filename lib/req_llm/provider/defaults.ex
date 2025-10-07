@@ -860,7 +860,13 @@ defmodule ReqLLM.Provider.Defaults do
   end
 
   defp parse_openai_usage(_),
-    do: %{input_tokens: 0, output_tokens: 0, total_tokens: 0, cached_tokens: 0, reasoning_tokens: 0}
+    do: %{
+      input_tokens: 0,
+      output_tokens: 0,
+      total_tokens: 0,
+      cached_tokens: 0,
+      reasoning_tokens: 0
+    }
 
   defp parse_openai_finish_reason("stop"), do: :stop
   defp parse_openai_finish_reason("length"), do: :length

@@ -118,7 +118,15 @@ defmodule ReqLLM.Provider.DefaultsTest do
          fn result ->
            assert result.id == "chatcmpl-123"
            assert result.finish_reason == :stop
-           assert result.usage == %{input_tokens: 10, output_tokens: 5, total_tokens: 15}
+
+           assert result.usage == %{
+                    input_tokens: 10,
+                    output_tokens: 5,
+                    total_tokens: 15,
+                    reasoning_tokens: 0,
+                    cached_tokens: 0
+                  }
+
            assert result.message.content == [%ContentPart{type: :text, text: "Hello there!"}]
          end},
 
@@ -157,7 +165,15 @@ defmodule ReqLLM.Provider.DefaultsTest do
          fn result ->
            assert result.id == "unknown"
            assert result.model == "gpt-4"
-           assert result.usage == %{input_tokens: 0, output_tokens: 0, total_tokens: 0}
+
+           assert result.usage == %{
+                    input_tokens: 0,
+                    output_tokens: 0,
+                    total_tokens: 0,
+                    reasoning_tokens: 0,
+                    cached_tokens: 0
+                  }
+
            assert result.finish_reason == nil
          end}
       ]

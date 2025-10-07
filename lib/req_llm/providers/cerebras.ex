@@ -50,7 +50,7 @@ defmodule ReqLLM.Providers.Cerebras do
       end
 
     {req, result} = ReqLLM.Provider.Defaults.default_decode_response(request_response)
-    
+
     case result do
       %Req.Response{body: %ReqLLM.Response{} = llm_response} = req_resp ->
         adjusted_response =
@@ -61,7 +61,7 @@ defmodule ReqLLM.Providers.Cerebras do
           end
 
         {req, %{req_resp | body: adjusted_response}}
-      
+
       _ ->
         {req, result}
     end
@@ -69,18 +69,22 @@ defmodule ReqLLM.Providers.Cerebras do
 
   defp adjust_reasoning_tokens(%ReqLLM.Response{} = response, body) when is_map(body) do
     message = get_in(body, ["choices", Access.at(0), "message"]) || %{}
-    
-    has_reasoning = Map.has_key?(message, "reasoning") and message["reasoning"] != nil and message["reasoning"] != ""
-    has_content = Map.has_key?(message, "content") and message["content"] != nil and message["content"] != ""
-    
-    reasoning_tokens = cond do
-      has_reasoning and not has_content ->
+
+    has_reasoning =
+      Map.has_key?(message, "reasoning") and message["reasoning"] != nil and
+        message["reasoning"] != ""
+
+    has_content =
+      Map.has_key?(message, "content") and message["content"] != nil and message["content"] != ""
+
+    reasoning_tokens =
+      if has_reasoning and not has_content do
         get_in(body, ["usage", "completion_tokens"]) ||
           response.usage.output_tokens || 0
-      true ->
+      else
         response.usage.reasoning_tokens || 0
-    end
-    
+      end
+
     updated_usage =
       response.usage
       |> Map.put(:reasoning_tokens, reasoning_tokens)
@@ -136,19 +140,17 @@ defmodule ReqLLM.Providers.Cerebras do
 
   defp strip_constraints_recursive(schema) when is_map(schema) do
     schema
-    |> Map.delete("minimum")
-    |> Map.delete("maximum")
-    |> Map.delete("minLength")
-    |> Map.delete("maxLength")
-    |> Enum.map(fn
+    |> Map.drop(["minimum", "maximum", "minLength", "maxLength"])
+    |> Map.new(fn
       {"properties", props} when is_map(props) ->
         {"properties", Map.new(props, fn {k, v} -> {k, strip_constraints_recursive(v)} end)}
+
       {k, v} when is_map(v) ->
         {k, strip_constraints_recursive(v)}
+
       {k, v} ->
         {k, v}
     end)
-    |> Map.new()
   end
 
   defp strip_constraints_recursive(value), do: value
