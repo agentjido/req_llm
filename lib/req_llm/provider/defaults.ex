@@ -847,20 +847,20 @@ defmodule ReqLLM.Provider.Defaults do
          %{"prompt_tokens" => input, "completion_tokens" => output, "total_tokens" => total} =
            usage
        ) do
-    reasoning_tokens = get_in(usage, ["completion_tokens_details", "reasoning_tokens"])
+    reasoning_tokens = get_in(usage, ["completion_tokens_details", "reasoning_tokens"]) || 0
+    cached_tokens = get_in(usage, ["prompt_tokens_details", "cached_tokens"]) || 0
 
-    base_usage = %{
+    %{
       input_tokens: input,
       output_tokens: output,
-      total_tokens: total
+      total_tokens: total,
+      cached_tokens: cached_tokens,
+      reasoning_tokens: reasoning_tokens
     }
-
-    base_usage
-    |> maybe_put(:reasoning_tokens, reasoning_tokens)
-    |> maybe_put(:reasoning, reasoning_tokens)
   end
 
-  defp parse_openai_usage(_), do: %{input_tokens: 0, output_tokens: 0, total_tokens: 0}
+  defp parse_openai_usage(_),
+    do: %{input_tokens: 0, output_tokens: 0, total_tokens: 0, cached_tokens: 0, reasoning_tokens: 0}
 
   defp parse_openai_finish_reason("stop"), do: :stop
   defp parse_openai_finish_reason("length"), do: :length

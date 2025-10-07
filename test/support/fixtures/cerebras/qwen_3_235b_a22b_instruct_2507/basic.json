@@ -1,0 +1,131 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJxd2VuLTMtMjM1Yi1hMjJiLWluc3RydWN0LTI1MDciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 50,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "qwen-3-235b-a22b-instruct-2507",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.cerebras.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello! How can I assist you today? 😊",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759869916,
+      "id": "chatcmpl-c8a89040-b3ba-4c0c-888d-672c001d1815",
+      "model": "qwen-3-235b-a22b-instruct-2507",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_c7f612779ed4ae92496f",
+      "time_info": {
+        "completion_time": 0.012950218,
+        "created": 1759869916,
+        "prompt_time": 0.004567572,
+        "queue_time": 0.3399244,
+        "total_time": 0.3590657711029053
+      },
+      "usage": {
+        "completion_tokens": 12,
+        "prompt_tokens": 11,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 23
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "98b03dcdcf3bf14f-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 07 Oct 2025 20:45:18 GMT"
+      ],
+      "inference-id": [
+        "chatcmpl-c8a89040-b3ba-4c0c-888d-672c001d1815"
+      ],
+      "referrer-policy": [
+        "strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=rS3i1Ije3REA7nQ9mlhyAhG1h0kwPbQm6cAF8EFV5Kg-1759869918-1.0.1.1-DNMhw3B09QKTmZlLsNP9S0urQ2M4XnrFdAsLw5eq.KPZPy1XAJfvHAulFV_AWW0biCgfXwiYLuzGE9e0842Z_m58CeoZE14Z.JQ2_nZYIpc; path=/; expires=Tue, 07-Oct-25 21:15:18 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=3600; includeSubDomains"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests-day": [
+        "1440000"
+      ],
+      "x-ratelimit-limit-tokens-minute": [
+        "1000000"
+      ],
+      "x-ratelimit-remaining-requests-day": [
+        "1439944"
+      ],
+      "x-ratelimit-remaining-tokens-minute": [
+        "999701"
+      ],
+      "x-ratelimit-reset-requests-day": [
+        "11681.160810232162"
+      ],
+      "x-ratelimit-reset-tokens-minute": [
+        "41.160810232162476"
+      ],
+      "x-request-id": [
+        "98b03dcdcf3bf14f-ORD"
+      ]
+    },
+    "status": 200
+  }
+}

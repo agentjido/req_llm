@@ -1,0 +1,130 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4tMy0yMzViLWEyMmItaW5zdHJ1Y3QtMjUwNyIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjV9"
+    },
+    "canonical_json": {
+      "max_tokens": 100,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "qwen-3-235b-a22b-instruct-2507",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.cerebras.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "message": {
+            "content": "### The Ancient Prophecy and the Forgotten Realm  \n\nIn the forgotten corners of the world, where mountains pierced the heavens and forests sprawled like endless emerald seas, there existed a legend whispered by elders and etched into crumbling stone tablets. It spoke of a time when dragons ruled the skies, their wings casting shadows over empires and their voices shaping the fate of nations. These were not mere beasts of fire and fury, but ancient beings of immense wisdom, guardians of balance between the realms of earth",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759869917,
+      "id": "chatcmpl-1033d9df-b375-4162-948b-4f3fcfa494e9",
+      "model": "qwen-3-235b-a22b-instruct-2507",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_c7f612779ed4ae92496f",
+      "time_info": {
+        "completion_time": 0.162975378,
+        "created": 1759869917,
+        "prompt_time": 0.003299829,
+        "queue_time": 0.10521549,
+        "total_time": 0.2730262279510498
+      },
+      "usage": {
+        "completion_tokens": 100,
+        "prompt_tokens": 17,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 117
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "98b03dcb1e54f14f-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 07 Oct 2025 20:45:18 GMT"
+      ],
+      "inference-id": [
+        "chatcmpl-1033d9df-b375-4162-948b-4f3fcfa494e9"
+      ],
+      "referrer-policy": [
+        "strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=wPeS8xJ2qs.Gvc9Cb3q7_kCAkmF._rShXY01assdB0o-1759869918-1.0.1.1-bJHLjrsQhh_.Aid6QYPCcMynyV4lcK0QTcXrgigv7ijK3jY68NCMhsPoSnOYGNQuXN0rxGy18PPR7QulFY.TCsCNZhaXGF6F.Z9ml_bA9EA; path=/; expires=Tue, 07-Oct-25 21:15:18 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=3600; includeSubDomains"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests-day": [
+        "1440000"
+      ],
+      "x-ratelimit-limit-tokens-minute": [
+        "1000000"
+      ],
+      "x-ratelimit-remaining-requests-day": [
+        "1439945"
+      ],
+      "x-ratelimit-remaining-tokens-minute": [
+        "999818"
+      ],
+      "x-ratelimit-reset-requests-day": [
+        "11681.71872496605"
+      ],
+      "x-ratelimit-reset-tokens-minute": [
+        "41.718724966049194"
+      ],
+      "x-request-id": [
+        "98b03dcb1e54f14f-ORD"
+      ]
+    },
+    "status": 200
+  }
+}

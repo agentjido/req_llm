@@ -1,0 +1,130 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdwdC1vc3MtMTIwYiIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjV9"
+    },
+    "canonical_json": {
+      "max_tokens": 100,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "gpt-oss-120b",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.cerebras.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "message": {
+            "reasoning": "The user asks: \"Write a very long story about dragons and adventures\". They want a very long story. We need to produce a lengthy narrative, likely with multiple chapters, characters, world building, dragons, adventures. Must be appropriate. No disallowed content. So we can write a fantasy epic. Provide a long story, maybe with sections. We can make it a narrative with a protagonist, dragons, quests, etc.\n\nWe need to ensure it's \"very long\". But we",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759870793,
+      "id": "chatcmpl-bbc6b8ab-8125-41c1-90fa-a395049c4811",
+      "model": "gpt-oss-120b",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_8a8c0bd8448557718491",
+      "time_info": {
+        "completion_time": 0.057247288,
+        "created": 1759870793,
+        "prompt_time": 0.001521936,
+        "queue_time": 1.19459e-4,
+        "total_time": 0.06051754951477051
+      },
+      "usage": {
+        "completion_tokens": 100,
+        "prompt_tokens": 76,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 176
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "98b053387af42262-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 07 Oct 2025 20:59:55 GMT"
+      ],
+      "inference-id": [
+        "chatcmpl-bbc6b8ab-8125-41c1-90fa-a395049c4811"
+      ],
+      "referrer-policy": [
+        "strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=uQx7bf5Iizhreykum7CTHNJfG.IZR8948EDGMJgNX18-1759870795-1.0.1.1-Ljs99kiqsZMG1NH0HQx1oj17HvGvQkeaaZc4D_4ufA8ZENAEDeDErD71BB8qt04q.NLtKPxPdzdEQ.AWQA2WGCKkIZ5dJ4ZT4zG5XoVC0mI; path=/; expires=Tue, 07-Oct-25 21:29:55 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=3600; includeSubDomains"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests-day": [
+        "1440000"
+      ],
+      "x-ratelimit-limit-tokens-minute": [
+        "1000000"
+      ],
+      "x-ratelimit-remaining-requests-day": [
+        "1439873"
+      ],
+      "x-ratelimit-remaining-tokens-minute": [
+        "996648"
+      ],
+      "x-ratelimit-reset-requests-day": [
+        "10804.225367307663"
+      ],
+      "x-ratelimit-reset-tokens-minute": [
+        "4.225367307662964"
+      ],
+      "x-request-id": [
+        "98b053387af42262-ORD"
+      ]
+    },
+    "status": 200
+  }
+}

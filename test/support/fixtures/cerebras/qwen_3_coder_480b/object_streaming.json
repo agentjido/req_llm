@@ -1,0 +1,94 @@
+{
+  "captured_at": "2025-10-07T20:41:17.138162Z",
+  "chunks": [
+    {
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLTZkNzE4MzEwLTAxNmUtNDZiNi1hNTJiLTRmNTM4NzVmYWM5YSIsImNob2ljZXMiOlt7ImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQifSwiaW5kZXgiOjB9XSwiY3JlYXRlZCI6MTc1OTg2OTY3NywibW9kZWwiOiJxd2VuLTMtY29kZXItNDgwYiIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwX2IxMzdkZTVjZGVhNWVmZmMyOTNjIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIn0KCg==",
+      "decoded": "data: {\"id\":\"chatcmpl-6d718310-016e-46b6-a52b-4f53875fac9a\",\"choices\":[{\"delta\":{\"role\":\"assistant\"},\"index\":0}],\"created\":1759869677,\"model\":\"qwen-3-coder-480b\",\"system_fingerprint\":\"fp_b137de5cdea5effc293c\",\"object\":\"chat.completion.chunk\"}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLTZkNzE4MzEwLTAxNmUtNDZiNi1hNTJiLTRmNTM4NzVmYWM5YSIsImNob2ljZXMiOlt7ImRlbHRhIjp7InRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsImFyZ3VtZW50cyI6IntcIm5hbWVcIjogXCJKb2huIERvZVwiLCBcImFnZVwiOiAzMCwgXCJvY2N1cGF0aW9uXCI6IFwiU29mdHdhcmUgRW5naW5lZXJcIn0ifSwidHlwZSI6ImZ1bmN0aW9uIiwiaWQiOiI5YWIxODA5OWMiLCJpbmRleCI6MH1dfSwiaW5kZXgiOjB9XSwiY3JlYXRlZCI6MTc1OTg2OTY3NywibW9kZWwiOiJxd2VuLTMtY29kZXItNDgwYiIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwX2IxMzdkZTVjZGVhNWVmZmMyOTNjIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIn0KCmRhdGE6IHsiaWQiOiJjaGF0Y21wbC02ZDcxODMxMC0wMTZlLTQ2YjYtYTUyYi00ZjUzODc1ZmFjOWEiLCJjaG9pY2VzIjpbeyJkZWx0YSI6e30sImZpbmlzaF9yZWFzb24iOiJ0b29sX2NhbGxzIiwiaW5kZXgiOjB9XSwiY3JlYXRlZCI6MTc1OTg2OTY3NywibW9kZWwiOiJxd2VuLTMtY29kZXItNDgwYiIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwX2IxMzdkZTVjZGVhNWVmZmMyOTNjIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwidXNhZ2UiOnsicHJvbXB0X3Rva2VucyI6MzYyLCJjb21wbGV0aW9uX3Rva2VucyI6NDUsInRvdGFsX3Rva2VucyI6NDA3LCJwcm9tcHRfdG9rZW5zX2RldGFpbHMiOnsiY2FjaGVkX3Rva2VucyI6MH19LCJ0aW1lX2luZm8iOnsicXVldWVfdGltZSI6MC4wMDAzODMzMiwicHJvbXB0X3RpbWUiOjAuMDEzNDkwNDAxLCJjb21wbGV0aW9uX3RpbWUiOjAuMDQ2NjA4NDksInRvdGFsX3RpbWUiOjAuMDYyMTk2NDkzMTQ4ODAzNzEsImNyZWF0ZWQiOjE3NTk4Njk2Nzd9fQoK",
+      "decoded": "data: {\"id\":\"chatcmpl-6d718310-016e-46b6-a52b-4f53875fac9a\",\"choices\":[{\"delta\":{\"tool_calls\":[{\"function\":{\"name\":\"structured_output\",\"arguments\":\"{\\\"name\\\": \\\"John Doe\\\", \\\"age\\\": 30, \\\"occupation\\\": \\\"Software Engineer\\\"}\"},\"type\":\"function\",\"id\":\"9ab18099c\",\"index\":0}]},\"index\":0}],\"created\":1759869677,\"model\":\"qwen-3-coder-480b\",\"system_fingerprint\":\"fp_b137de5cdea5effc293c\",\"object\":\"chat.completion.chunk\"}\n\ndata: {\"id\":\"chatcmpl-6d718310-016e-46b6-a52b-4f53875fac9a\",\"choices\":[{\"delta\":{},\"finish_reason\":\"tool_calls\",\"index\":0}],\"created\":1759869677,\"model\":\"qwen-3-coder-480b\",\"system_fingerprint\":\"fp_b137de5cdea5effc293c\",\"object\":\"chat.completion.chunk\",\"usage\":{\"prompt_tokens\":362,\"completion_tokens\":45,\"total_tokens\":407,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"time_info\":{\"queue_time\":0.00038332,\"prompt_time\":0.013490401,\"completion_time\":0.04660849,\"total_time\":0.06219649314880371,\"created\":1759869677}}\n\n"
+    }
+  ],
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoicXdlbi0zLWNvZGVyLTQ4MGIiLCJzZWVkIjo0Miwic3RyZWFtIjp0cnVlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6ImF1dG8iLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZW5lcmF0ZSBzdHJ1Y3R1cmVkIG91dHB1dCBtYXRjaGluZyB0aGUgcHJvdmlkZWQgc2NoZW1hIiwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbIm5hbWUiLCJhZ2UiXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Generate a software engineer profile",
+          "role": "user"
+        }
+      ],
+      "model": "qwen-3-coder-480b",
+      "seed": 42,
+      "stream": true,
+      "temperature": 0.0,
+      "tool_choice": "auto",
+      "tools": [
+        {
+          "function": {
+            "description": "Generate structured output matching the provided schema",
+            "name": "structured_output",
+            "parameters": {
+              "properties": {
+                "age": {
+                  "description": "Person's age in years",
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "name": {
+                  "description": "Person's full name",
+                  "type": "string"
+                },
+                "occupation": {
+                  "description": "Person's job or profession",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "age"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept": "text/event-stream",
+      "authorization": "[REDACTED:authorization]",
+      "content-type": "application/json"
+    },
+    "method": "POST",
+    "url": "https://api.cerebras.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": null,
+    "headers": {
+      "alt-svc": "h3=\":443\"; ma=86400",
+      "cf-cache-status": "DYNAMIC",
+      "cf-ray": "98b037e94b5df163-ORD",
+      "content-type": "text/event-stream; charset=utf-8",
+      "date": "Tue, 07 Oct 2025 20:41:17 GMT",
+      "inference-id": "chatcmpl-6d718310-016e-46b6-a52b-4f53875fac9a",
+      "referrer-policy": "strict-origin-when-cross-origin",
+      "server": "cloudflare",
+      "set-cookie": "__cf_bm=VlJWqMBwFwwpoIJdAoUWAZk4d9uoXZGvnSSC78uGf2E-1759869677-1.0.1.1-5JQJTh31ASYxIYqIP4LdAHpppi3dmtesC0xk2MXbu2WK62hnm20.7stFnpnqMyqUKdkLxNdppnRN2k8DhRYfy_upiQ42nEyXtdxoBxAlvMI; path=/; expires=Tue, 07-Oct-25 21:11:17 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None",
+      "strict-transport-security": "max-age=3600; includeSubDomains",
+      "x-content-type-options": "nosniff",
+      "x-ratelimit-limit-requests-day": "1440000",
+      "x-ratelimit-limit-tokens-minute": "1000000",
+      "x-ratelimit-remaining-requests-day": "1439976",
+      "x-ratelimit-remaining-tokens-minute": "999351",
+      "x-ratelimit-reset-requests-day": "11922.896250486374",
+      "x-ratelimit-reset-tokens-minute": "42.8962504863739",
+      "x-request-id": "98b037e94b5df163-ORD"
+    },
+    "status": 200
+  }
+}

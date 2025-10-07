@@ -1,0 +1,130 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4tMy1jb2Rlci00ODBiIiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuNX0="
+    },
+    "canonical_json": {
+      "max_tokens": 100,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "qwen-3-coder-480b",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.cerebras.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "message": {
+            "content": "# The Dragon's Covenant\n\n## Chapter 1: The Last Dragon Scholar\n\nThe morning mist clung to the ancient stones of the Dragon Library like the breath of forgotten gods. Elara Thorne pressed her palm against the weathered door, feeling the faint pulse of magic that had kept the building standing for over three centuries. As the last certified Dragon Scholar in the realm of Aethermoor, she bore the weight of an entire civilization's knowledge about the great beasts that once ruled the skies",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1759869673,
+      "id": "chatcmpl-2b686d81-34fa-4210-89d6-f73893820d7c",
+      "model": "qwen-3-coder-480b",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_b137de5cdea5effc293c",
+      "time_info": {
+        "completion_time": 0.139380278,
+        "created": 1759869673,
+        "prompt_time": 0.00181934,
+        "queue_time": 1.0843e-4,
+        "total_time": 0.1427304744720459
+      },
+      "usage": {
+        "completion_tokens": 100,
+        "prompt_tokens": 17,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 117
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "98b037e3bc8d6096-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 07 Oct 2025 20:41:16 GMT"
+      ],
+      "inference-id": [
+        "chatcmpl-2b686d81-34fa-4210-89d6-f73893820d7c"
+      ],
+      "referrer-policy": [
+        "strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=hGTG3dSfrEEUudblZODOTgWoPXockcqNFLDXqB6Byu0-1759869676-1.0.1.1-HkhAhTEnAJQpRthnrgDoOSRyIvF8WLZgms7qq0bzeDbt8I42w3vfbMYmI9uTOdeuuRhE6Tr51Hn_V2mKg6xROSb3BrDmY6D1ZLXgLFc0mkM; path=/; expires=Tue, 07-Oct-25 21:11:16 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=3600; includeSubDomains"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests-day": [
+        "1440000"
+      ],
+      "x-ratelimit-limit-tokens-minute": [
+        "1000000"
+      ],
+      "x-ratelimit-remaining-requests-day": [
+        "1439978"
+      ],
+      "x-ratelimit-remaining-tokens-minute": [
+        "999468"
+      ],
+      "x-ratelimit-reset-requests-day": [
+        "11923.622520923615"
+      ],
+      "x-ratelimit-reset-tokens-minute": [
+        "43.6225209236145"
+      ],
+      "x-request-id": [
+        "98b037e3bc8d6096-ORD"
+      ]
+    },
+    "status": 200
+  }
+}

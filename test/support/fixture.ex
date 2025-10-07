@@ -286,6 +286,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
   end
 
   defp provider_module(:anthropic), do: ReqLLM.Providers.Anthropic
+  defp provider_module(:cerebras), do: ReqLLM.Providers.Cerebras
   defp provider_module(:openai), do: ReqLLM.Providers.OpenAI
   defp provider_module(:google), do: ReqLLM.Providers.Google
   defp provider_module(:groq), do: ReqLLM.Providers.Groq
