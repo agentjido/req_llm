@@ -77,6 +77,7 @@ defmodule ReqLLM.Tool do
     field(:parameter_schema, keyword(), default: [])
     field(:compiled, term() | nil, default: nil)
     field(:callback, callback(), enforce: true)
+    field(:strict, boolean(), default: false)
   end
 
   @type tool_opts :: [
@@ -107,6 +108,11 @@ defmodule ReqLLM.Tool do
                    type: :any,
                    required: true,
                    doc: "Callback function or MFA tuple"
+                 ],
+                 strict: [
+                   type: :boolean,
+                   default: false,
+                   doc: "Enable strict mode for OpenAI structured outputs"
                  ]
                )
 
@@ -147,7 +153,8 @@ defmodule ReqLLM.Tool do
         description: validated_opts[:description],
         parameter_schema: validated_opts[:parameter_schema],
         compiled: compiled_schema,
-        callback: validated_opts[:callback]
+        callback: validated_opts[:callback],
+        strict: validated_opts[:strict] || false
       }
 
       {:ok, tool}

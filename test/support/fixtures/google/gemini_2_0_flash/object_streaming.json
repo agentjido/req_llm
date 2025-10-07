@@ -1,9 +1,21 @@
 {
-  "captured_at": "2025-10-07T13:46:12.889014Z",
+  "captured_at": "2025-10-07T19:07:50.980733Z",
   "chunks": [
     {
-      "b64": "W3sKICAiY2FuZGlkYXRlcyI6IFsKICAgIHsKICAgICAgImNvbnRlbnQiOiB7CiAgICAgICAgInBhcnRzIjogWwogICAgICAgICAgewogICAgICAgICAgICAiZnVuY3Rpb25DYWxsIjogewogICAgICAgICAgICAgICJuYW1lIjogInN0cnVjdHVyZWRfb3V0cHV0IiwKICAgICAgICAgICAgICAiYXJncyI6IHsKICAgICAgICAgICAgICAgICJvY2N1cGF0aW9uIjogIlNvZnR3YXJlIEVuZ2luZWVyIiwKICAgICAgICAgICAgICAgICJhZ2UiOiAzMCwKICAgICAgICAgICAgICAgICJuYW1lIjogIkpvaG4gU21pdGgiCiAgICAgICAgICAgICAgfQogICAgICAgICAgICB9CiAgICAgICAgICB9CiAgICAgICAgXSwKICAgICAgICAicm9sZSI6ICJtb2RlbCIKICAgICAgfSwKICAgICAgImZpbmlzaFJlYXNvbiI6ICJTVE9QIgogICAgfQogIF0sCiAgInVzYWdlTWV0YWRhdGEiOiB7CiAgICAicHJvbXB0VG9rZW5Db3VudCI6IDQxLAogICAgImNhbmRpZGF0ZXNUb2tlbkNvdW50IjogMTEsCiAgICAidG90YWxUb2tlbkNvdW50IjogNTIsCiAgICAicHJvbXB0VG9rZW5zRGV0YWlscyI6IFsKICAgICAgewogICAgICAgICJtb2RhbGl0eSI6ICJURVhUIiwKICAgICAgICAidG9rZW5Db3VudCI6IDQxCiAgICAgIH0KICAgIF0sCiAgICAiY2FuZGlkYXRlc1Rva2Vuc0RldGFpbHMiOiBbCiAgICAgIHsKICAgICAgICAibW9kYWxpdHkiOiAiVEVYVCIsCiAgICAgICAgInRva2VuQ291bnQiOiAxMQogICAgICB9CiAgICBdCiAgfSwKICAibW9kZWxWZXJzaW9uIjogImdlbWluaS0yLjAtZmxhc2giLAogICJyZXNwb25zZUlkIjogInBCbmxhSl9DQ2JyeGdMVVB3TzJCNEFjIgp9Cg==",
-      "decoded": "[{\n  \"candidates\": [\n    {\n      \"content\": {\n        \"parts\": [\n          {\n            \"functionCall\": {\n              \"name\": \"structured_output\",\n              \"args\": {\n                \"occupation\": \"Software Engineer\",\n                \"age\": 30,\n                \"name\": \"John Smith\"\n              }\n            }\n          }\n        ],\n        \"role\": \"model\"\n      },\n      \"finishReason\": \"STOP\"\n    }\n  ],\n  \"usageMetadata\": {\n    \"promptTokenCount\": 41,\n    \"candidatesTokenCount\": 11,\n    \"totalTokenCount\": 52,\n    \"promptTokensDetails\": [\n      {\n        \"modality\": \"TEXT\",\n        \"tokenCount\": 41\n      }\n    ],\n    \"candidatesTokensDetails\": [\n      {\n        \"modality\": \"TEXT\",\n        \"tokenCount\": 11\n      }\n    ]\n  },\n  \"modelVersion\": \"gemini-2.0-flash\",\n  \"responseId\": \"pBnlaJ_CCbrxgLUPwO2B4Ac\"\n}\n"
+      "b64": "W3sKICAiY2FuZGlkYXRlcyI6IFsKICAgIHsKICAgICAgImNvbnRlbnQiOiB7CiAgICAgICAgInBhcnRzIjogWwogICAgICAgICAgewogICAgICAgICAgICAidGV4dCI6ICJ7IgogICAgICAgICAgfQogICAgICAgIF0sCiAgICAgICAgInJvbGUiOiAibW9kZWwiCiAgICAgIH0KICAgIH0KICBdLAogICJ1c2FnZU1ldGFkYXRhIjogewogICAgInByb21wdFRva2VuQ291bnQiOiA2LAogICAgInRvdGFsVG9rZW5Db3VudCI6IDYsCiAgICAicHJvbXB0VG9rZW5zRGV0YWlscyI6IFsKICAgICAgewogICAgICAgICJtb2RhbGl0eSI6ICJURVhUIiwKICAgICAgICAidG9rZW5Db3VudCI6IDYKICAgICAgfQogICAgXQogIH0sCiAgIm1vZGVsVmVyc2lvbiI6ICJnZW1pbmktMi4wLWZsYXNoIiwKICAicmVzcG9uc2VJZCI6ICJCbVhsYUpfUEVKU3pnTFVQM296Ry1BNCIKfQo=",
+      "decoded": "[{\n  \"candidates\": [\n    {\n      \"content\": {\n        \"parts\": [\n          {\n            \"text\": \"{\"\n          }\n        ],\n        \"role\": \"model\"\n      }\n    }\n  ],\n  \"usageMetadata\": {\n    \"promptTokenCount\": 6,\n    \"totalTokenCount\": 6,\n    \"promptTokensDetails\": [\n      {\n        \"modality\": \"TEXT\",\n        \"tokenCount\": 6\n      }\n    ]\n  },\n  \"modelVersion\": \"gemini-2.0-flash\",\n  \"responseId\": \"BmXlaJ_PEJSzgLUP3ozG-A4\"\n}\n"
+    },
+    {
+      "b64": "LA0KewogICJjYW5kaWRhdGVzIjogWwogICAgewogICAgICAiY29udGVudCI6IHsKICAgICAgICAicGFydHMiOiBbCiAgICAgICAgICB7CiAgICAgICAgICAgICJ0ZXh0IjogIlxuICBcIiIKICAgICAgICAgIH0KICAgICAgICBdLAogICAgICAgICJyb2xlIjogIm1vZGVsIgogICAgICB9CiAgICB9CiAgXSwKICAidXNhZ2VNZXRhZGF0YSI6IHsKICAgICJwcm9tcHRUb2tlbkNvdW50IjogNiwKICAgICJ0b3RhbFRva2VuQ291bnQiOiA2LAogICAgInByb21wdFRva2Vuc0RldGFpbHMiOiBbCiAgICAgIHsKICAgICAgICAibW9kYWxpdHkiOiAiVEVYVCIsCiAgICAgICAgInRva2VuQ291bnQiOiA2CiAgICAgIH0KICAgIF0KICB9LAogICJtb2RlbFZlcnNpb24iOiAiZ2VtaW5pLTIuMC1mbGFzaCIsCiAgInJlc3BvbnNlSWQiOiAiQm1YbGFKX1BFSlN6Z0xVUDNvekctQTQiCn0K",
+      "decoded": ",\r\n{\n  \"candidates\": [\n    {\n      \"content\": {\n        \"parts\": [\n          {\n            \"text\": \"\\n  \\\"\"\n          }\n        ],\n        \"role\": \"model\"\n      }\n    }\n  ],\n  \"usageMetadata\": {\n    \"promptTokenCount\": 6,\n    \"totalTokenCount\": 6,\n    \"promptTokensDetails\": [\n      {\n        \"modality\": \"TEXT\",\n        \"tokenCount\": 6\n      }\n    ]\n  },\n  \"modelVersion\": \"gemini-2.0-flash\",\n  \"responseId\": \"BmXlaJ_PEJSzgLUP3ozG-A4\"\n}\n"
+    },
+    {
+      "b64": "LA0KewogICJjYW5kaWRhdGVzIjogWwogICAgewogICAgICAiY29udGVudCI6IHsKICAgICAgICAicGFydHMiOiBbCiAgICAgICAgICB7CiAgICAgICAgICAgICJ0ZXh0IjogImFnZVwiOiAzMCxcbiAgXCJuYW1lXCI6IFwiQWxpY2UgU21pdGhcIixcbiAgXCIiCiAgICAgICAgICB9CiAgICAgICAgXSwKICAgICAgICAicm9sZSI6ICJtb2RlbCIKICAgICAgfQogICAgfQogIF0sCiAgInVzYWdlTWV0YWRhdGEiOiB7CiAgICAicHJvbXB0VG9rZW5Db3VudCI6IDYsCiAgICAidG90YWxUb2tlbkNvdW50IjogNiwKICAgICJwcm9tcHRUb2tlbnNEZXRhaWxzIjogWwogICAgICB7CiAgICAgICAgIm1vZGFsaXR5IjogIlRFWFQiLAogICAgICAgICJ0b2tlbkNvdW50IjogNgogICAgICB9CiAgICBdCiAgfSwKICAibW9kZWxWZXJzaW9uIjogImdlbWluaS0yLjAtZmxhc2giLAogICJyZXNwb25zZUlkIjogIkJtWGxhSl9QRUpTemdMVVAzb3pHLUE0Igp9Cg==",
+      "decoded": ",\r\n{\n  \"candidates\": [\n    {\n      \"content\": {\n        \"parts\": [\n          {\n            \"text\": \"age\\\": 30,\\n  \\\"name\\\": \\\"Alice Smith\\\",\\n  \\\"\"\n          }\n        ],\n        \"role\": \"model\"\n      }\n    }\n  ],\n  \"usageMetadata\": {\n    \"promptTokenCount\": 6,\n    \"totalTokenCount\": 6,\n    \"promptTokensDetails\": [\n      {\n        \"modality\": \"TEXT\",\n        \"tokenCount\": 6\n      }\n    ]\n  },\n  \"modelVersion\": \"gemini-2.0-flash\",\n  \"responseId\": \"BmXlaJ_PEJSzgLUP3ozG-A4\"\n}\n"
+    },
+    {
+      "b64": "LA0KewogICJjYW5kaWRhdGVzIjogWwogICAgewogICAgICAiY29udGVudCI6IHsKICAgICAgICAicGFydHMiOiBbCiAgICAgICAgICB7CiAgICAgICAgICAgICJ0ZXh0IjogIm9jY3VwYXRpb25cIjogXCJTb2Z0d2FyZSBFbmdpbmVlclwiXG59IgogICAgICAgICAgfQogICAgICAgIF0sCiAgICAgICAgInJvbGUiOiAibW9kZWwiCiAgICAgIH0sCiAgICAgICJmaW5pc2hSZWFzb24iOiAiU1RPUCIKICAgIH0KICBdLAogICJ1c2FnZU1ldGFkYXRhIjogewogICAgInByb21wdFRva2VuQ291bnQiOiAzNSwKICAgICJjYW5kaWRhdGVzVG9rZW5Db3VudCI6IDMwLAogICAgInRvdGFsVG9rZW5Db3VudCI6IDY1LAogICAgInByb21wdFRva2Vuc0RldGFpbHMiOiBbCiAgICAgIHsKICAgICAgICAibW9kYWxpdHkiOiAiVEVYVCIsCiAgICAgICAgInRva2VuQ291bnQiOiAzNQogICAgICB9CiAgICBdLAogICAgImNhbmRpZGF0ZXNUb2tlbnNEZXRhaWxzIjogWwogICAgICB7CiAgICAgICAgIm1vZGFsaXR5IjogIlRFWFQiLAogICAgICAgICJ0b2tlbkNvdW50IjogMzAKICAgICAgfQogICAgXQogIH0sCiAgIm1vZGVsVmVyc2lvbiI6ICJnZW1pbmktMi4wLWZsYXNoIiwKICAicmVzcG9uc2VJZCI6ICJCbVhsYUpfUEVKU3pnTFVQM296Ry1BNCIKfQo=",
+      "decoded": ",\r\n{\n  \"candidates\": [\n    {\n      \"content\": {\n        \"parts\": [\n          {\n            \"text\": \"occupation\\\": \\\"Software Engineer\\\"\\n}\"\n          }\n        ],\n        \"role\": \"model\"\n      },\n      \"finishReason\": \"STOP\"\n    }\n  ],\n  \"usageMetadata\": {\n    \"promptTokenCount\": 35,\n    \"candidatesTokenCount\": 30,\n    \"totalTokenCount\": 65,\n    \"promptTokensDetails\": [\n      {\n        \"modality\": \"TEXT\",\n        \"tokenCount\": 35\n      }\n    ],\n    \"candidatesTokensDetails\": [\n      {\n        \"modality\": \"TEXT\",\n        \"tokenCount\": 30\n      }\n    ]\n  },\n  \"modelVersion\": \"gemini-2.0-flash\",\n  \"responseId\": \"BmXlaJ_PEJSzgLUP3ozG-A4\"\n}\n"
     },
     {
       "b64": "XQ==",
@@ -12,7 +24,7 @@
   ],
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwMCwidGVtcGVyYXR1cmUiOjAuMH0sInRvb2xDb25maWciOnsiZnVuY3Rpb25DYWxsaW5nQ29uZmlnIjp7ImFsbG93ZWRGdW5jdGlvbk5hbWVzIjpbInN0cnVjdHVyZWRfb3V0cHV0Il0sIm1vZGUiOiJBTlkifX0sInRvb2xzIjpbeyJmdW5jdGlvbkRlY2xhcmF0aW9ucyI6W3siZGVzY3JpcHRpb24iOiJHZW5lcmF0ZSBzdHJ1Y3R1cmVkIG91dHB1dCBtYXRjaGluZyB0aGUgcHJvdmlkZWQgc2NoZW1hIiwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbIm5hbWUiLCJhZ2UiXSwidHlwZSI6Im9iamVjdCJ9fV19XX0="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwMCwicmVzcG9uc2VNaW1lVHlwZSI6ImFwcGxpY2F0aW9uL2pzb24iLCJyZXNwb25zZVNjaGVtYSI6eyJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJJTlRFR0VSIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoiU1RSSU5HIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJTVFJJTkcifX0sInByb3BlcnR5T3JkZXJpbmciOlsiYWdlIiwibmFtZSIsIm9jY3VwYXRpb24iXSwicmVxdWlyZWQiOlsibmFtZSIsImFnZSJdLCJ0eXBlIjoiT0JKRUNUIn0sInRlbXBlcmF0dXJlIjowLjB9fQ=="
     },
     "canonical_json": {
       "contents": [
@@ -28,48 +40,36 @@
       "generationConfig": {
         "candidateCount": 1,
         "maxOutputTokens": 500,
-        "temperature": 0.0
-      },
-      "toolConfig": {
-        "functionCallingConfig": {
-          "allowedFunctionNames": [
-            "structured_output"
-          ],
-          "mode": "ANY"
-        }
-      },
-      "tools": [
-        {
-          "functionDeclarations": [
-            {
-              "description": "Generate structured output matching the provided schema",
-              "name": "structured_output",
-              "parameters": {
-                "properties": {
-                  "age": {
-                    "description": "Person's age in years",
-                    "minimum": 1,
-                    "type": "integer"
-                  },
-                  "name": {
-                    "description": "Person's full name",
-                    "type": "string"
-                  },
-                  "occupation": {
-                    "description": "Person's job or profession",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "name",
-                  "age"
-                ],
-                "type": "object"
-              }
+        "responseMimeType": "application/json",
+        "responseSchema": {
+          "properties": {
+            "age": {
+              "description": "Person's age in years",
+              "minimum": 1,
+              "type": "INTEGER"
+            },
+            "name": {
+              "description": "Person's full name",
+              "type": "STRING"
+            },
+            "occupation": {
+              "description": "Person's job or profession",
+              "type": "STRING"
             }
-          ]
-        }
-      ]
+          },
+          "propertyOrdering": [
+            "age",
+            "name",
+            "occupation"
+          ],
+          "required": [
+            "name",
+            "age"
+          ],
+          "type": "OBJECT"
+        },
+        "temperature": 0.0
+      }
     },
     "headers": {
       "content-type": "application/json"
@@ -83,9 +83,9 @@
       "accept-ranges": "none",
       "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
       "content-type": "application/json; charset=UTF-8",
-      "date": "Tue, 07 Oct 2025 13:46:12 GMT",
+      "date": "Tue, 07 Oct 2025 19:07:50 GMT",
       "server": "scaffolding on HTTPServer2",
-      "server-timing": "gfet4t7; dur=833",
+      "server-timing": "gfet4t7; dur=689",
       "vary": "Origin,Accept-Encoding",
       "x-content-type-options": "nosniff",
       "x-frame-options": "SAMEORIGIN",

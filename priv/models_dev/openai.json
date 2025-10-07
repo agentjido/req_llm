@@ -92,6 +92,7 @@
       "provider_model_id": "gpt-4",
       "reasoning": false,
       "release_date": "2023-11-06",
+      "supports_strict_tools": true,
       "temperature": true,
       "tool_call": true
     },
@@ -124,6 +125,7 @@
       "provider_model_id": "gpt-4-turbo",
       "reasoning": false,
       "release_date": "2023-11-06",
+      "supports_strict_tools": true,
       "temperature": true,
       "tool_call": true
     },
@@ -256,6 +258,7 @@
       "provider_model_id": "gpt-4o",
       "reasoning": false,
       "release_date": "2024-05-13",
+      "supports_strict_tools": true,
       "temperature": true,
       "tool_call": true
     },
@@ -288,6 +291,7 @@
       "provider_model_id": "gpt-4o-2024-05-13",
       "reasoning": false,
       "release_date": "2024-05-13",
+      "supports_strict_tools": true,
       "temperature": true,
       "tool_call": true
     },
@@ -321,6 +325,8 @@
       "provider_model_id": "gpt-4o-2024-08-06",
       "reasoning": false,
       "release_date": "2024-08-06",
+      "supports_json_schema_response_format": true,
+      "supports_strict_tools": true,
       "temperature": true,
       "tool_call": true
     },
@@ -354,6 +360,8 @@
       "provider_model_id": "gpt-4o-2024-11-20",
       "reasoning": false,
       "release_date": "2024-11-20",
+      "supports_json_schema_response_format": true,
+      "supports_strict_tools": true,
       "temperature": true,
       "tool_call": true
     },
@@ -387,6 +395,8 @@
       "provider_model_id": "gpt-4o-mini",
       "reasoning": false,
       "release_date": "2024-07-18",
+      "supports_json_schema_response_format": true,
+      "supports_strict_tools": true,
       "temperature": true,
       "tool_call": true
     },
@@ -478,7 +488,7 @@
       "open_weights": false,
       "provider": "openai",
       "provider_model_id": "gpt-5-codex",
-      "reasoning": true,
+      "reasoning": false,
       "release_date": "2025-09-15",
       "temperature": false,
       "tool_call": false
@@ -650,6 +660,7 @@
     {
       "api": "responses",
       "attachment": true,
+      "category": "deep_research",
       "cost": {
         "cache_read": 2.5,
         "input": 10,
@@ -780,6 +791,7 @@
     {
       "api": "responses",
       "attachment": true,
+      "category": "deep_research",
       "cost": {
         "cache_read": 0.5,
         "input": 2,

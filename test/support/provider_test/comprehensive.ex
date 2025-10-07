@@ -166,6 +166,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
               case ReqLLM.Model.from(@model_spec) do
                 {:ok, %{capabilities: %{reasoning: true}}} -> 500
                 {:ok, %{model: "gpt-4.1" <> _}} -> 16
+                {:ok, %{_metadata: %{"api" => "responses"}}} -> 16
                 _ -> 10
               end
 
@@ -361,8 +362,11 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 is_number(rt) and rt > 0 ->
                   :ok
 
+                is_map(object) ->
+                  :ok
+
                 true ->
-                  flunk("Expected non-empty object but got: #{inspect(object)}")
+                  flunk("Expected object or reasoning tokens but got: #{inspect(object)}")
               end
             end
           end

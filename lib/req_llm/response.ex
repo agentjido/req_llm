@@ -406,4 +406,57 @@ defmodule ReqLLM.Response do
   def object(%__MODULE__{object: object}) do
     object
   end
+
+  @doc """
+  Unwraps the object from a structured output response, regardless of mode used.
+
+  Handles extraction from:
+  - json_schema mode: parses from content
+  - tool modes: extracts from tool call arguments
+
+  ## Examples
+
+      {:ok, object} = ReqLLM.Response.unwrap_object(response)
+      #=> {:ok, %{"name" => "John", "age" => 30}}
+
+  """
+  @spec unwrap_object(t()) :: {:ok, map()} | {:error, term()}
+  def unwrap_object(%__MODULE__{object: object}) when not is_nil(object) do
+    {:ok, object}
+  end
+
+  def unwrap_object(%__MODULE__{message: nil}) do
+    {:error, %ReqLLM.Error.API.Response{reason: "No message in response"}}
+  end
+
+  def unwrap_object(%__MODULE__{message: %Message{content: content}}) do
+    text_content =
+      content
+      |> Enum.filter(&(&1.type == :text))
+      |> Enum.map_join("", & &1.text)
+
+    tool_call_content =
+      content
+      |> Enum.find(&(&1.type == :tool_call && &1.tool_name == "structured_output"))
+
+    cond do
+      tool_call_content != nil ->
+        {:ok, tool_call_content.input}
+
+      text_content != "" ->
+        case Jason.decode(text_content) do
+          {:ok, object} when is_map(object) ->
+            {:ok, object}
+
+          {:ok, _other} ->
+            {:error, %ReqLLM.Error.API.Response{reason: "Decoded JSON is not an object"}}
+
+          {:error, _} ->
+            {:error, %ReqLLM.Error.API.Response{reason: "Failed to parse JSON from text content"}}
+        end
+
+      true ->
+        {:error, %ReqLLM.Error.API.Response{reason: "No structured output found in response"}}
+    end
+  end
 end

@@ -131,7 +131,7 @@ defmodule ReqLLM.Providers.GoogleTest do
       model = ReqLLM.Model.from!("google:gemini-1.5-flash")
       context = context_fixture()
 
-      # Create a mock request with the expected structure  
+      # Create a mock request with the expected structure
       mock_request = %Req.Request{
         options: [
           context: context,
@@ -391,7 +391,7 @@ defmodule ReqLLM.Providers.GoogleTest do
         options: [context: context, stream: true, model: model]
       }
 
-      # Test decode_response directly  
+      # Test decode_response directly
       {req, resp} = Google.decode_response({mock_req, mock_resp})
 
       assert req == mock_req
@@ -658,7 +658,6 @@ defmodule ReqLLM.Providers.GoogleTest do
     end
 
     test "encode_object_body uses responseSchema for non-2.5 models" do
-      model = ReqLLM.Model.from!("google:gemini-1.5-flash")
       context = context_fixture()
 
       {:ok, schema} =
@@ -739,7 +738,7 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert %ReqLLM.Error.Invalid.Parameter{} = error
       assert error.parameter =~ "operation: :unsupported_operation not supported"
 
-      # Test unsupported operation for object with schema  
+      # Test unsupported operation for object with schema
       {:ok, schema} = ReqLLM.Schema.compile([])
 
       {:error, error} =

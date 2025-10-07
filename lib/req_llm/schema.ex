@@ -403,13 +403,22 @@ defmodule ReqLLM.Schema do
   """
   @spec to_openai_format(ReqLLM.Tool.t()) :: map()
   def to_openai_format(%ReqLLM.Tool{} = tool) do
+    function_def = %{
+      "name" => tool.name,
+      "description" => tool.description,
+      "parameters" => to_json(tool.parameter_schema)
+    }
+
+    function_def =
+      if tool.strict do
+        Map.put(function_def, "strict", true)
+      else
+        function_def
+      end
+
     %{
       "type" => "function",
-      "function" => %{
-        "name" => tool.name,
-        "description" => tool.description,
-        "parameters" => to_json(tool.parameter_schema)
-      }
+      "function" => function_def
     }
   end
 

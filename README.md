@@ -81,7 +81,8 @@ usage = ReqLLM.StreamResponse.usage(response)
 
 - **Structured object generation**  
   - `generate_object/4` renders JSON-compatible Elixir maps validated by a NimbleOptions-compiled schema  
-  - Zero-copy mapping to provider JSON-schema / function-calling endpoints  
+  - Zero-copy mapping to provider JSON-schema / function-calling endpoints
+  - OpenAI native structured outputs with three modes (`:auto` (default), `:json_schema`, `:tool_strict`)  
 
 - **Embedding generation**  
   - Single or batch embeddings via `Embedding.generate/3` (Not all providers support this)

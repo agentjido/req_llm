@@ -1,9 +1,9 @@
 {
-  "captured_at": "2025-10-07T13:46:16.762939Z",
+  "captured_at": "2025-10-07T15:23:10.633638Z",
   "chunks": [
     {
-      "b64": "W3sKICAiY2FuZGlkYXRlcyI6IFsKICAgIHsKICAgICAgImNvbnRlbnQiOiB7CiAgICAgICAgInBhcnRzIjogWwogICAgICAgICAgewogICAgICAgICAgICAidGV4dCI6ICJUaGUgY3VydGFpbiBvZiB0aGUgcHJlc2VudCBtb21lbnQgcmlzZXMuIgogICAgICAgICAgfQogICAgICAgIF0sCiAgICAgICAgInJvbGUiOiAibW9kZWwiCiAgICAgIH0sCiAgICAgICJmaW5pc2hSZWFzb24iOiAiU1RPUCIsCiAgICAgICJpbmRleCI6IDAKICAgIH0KICBdLAogICJ1c2FnZU1ldGFkYXRhIjogewogICAgInByb21wdFRva2VuQ291bnQiOiAxOCwKICAgICJjYW5kaWRhdGVzVG9rZW5Db3VudCI6IDgsCiAgICAidG90YWxUb2tlbkNvdW50IjogMzA4LAogICAgInByb21wdFRva2Vuc0RldGFpbHMiOiBbCiAgICAgIHsKICAgICAgICAibW9kYWxpdHkiOiAiVEVYVCIsCiAgICAgICAgInRva2VuQ291bnQiOiAxOAogICAgICB9CiAgICBdLAogICAgInRob3VnaHRzVG9rZW5Db3VudCI6IDI4MgogIH0sCiAgIm1vZGVsVmVyc2lvbiI6ICJnZW1pbmktMi41LWZsYXNoLXByZXZpZXctMDktMjAyNSIsCiAgInJlc3BvbnNlSWQiOiAicGhubGFNLXJNcmZyak1jUHk3cTE0QWMiCn0K",
-      "decoded": "[{\n  \"candidates\": [\n    {\n      \"content\": {\n        \"parts\": [\n          {\n            \"text\": \"The curtain of the present moment rises.\"\n          }\n        ],\n        \"role\": \"model\"\n      },\n      \"finishReason\": \"STOP\",\n      \"index\": 0\n    }\n  ],\n  \"usageMetadata\": {\n    \"promptTokenCount\": 18,\n    \"candidatesTokenCount\": 8,\n    \"totalTokenCount\": 308,\n    \"promptTokensDetails\": [\n      {\n        \"modality\": \"TEXT\",\n        \"tokenCount\": 18\n      }\n    ],\n    \"thoughtsTokenCount\": 282\n  },\n  \"modelVersion\": \"gemini-2.5-flash-preview-09-2025\",\n  \"responseId\": \"phnlaM-rMrfrjMcPy7q14Ac\"\n}\n"
+      "b64": "W3sKICAiY2FuZGlkYXRlcyI6IFsKICAgIHsKICAgICAgImNvbnRlbnQiOiB7CiAgICAgICAgInBhcnRzIjogWwogICAgICAgICAgewogICAgICAgICAgICAidGV4dCI6ICJBIGZyaWVuZGx5IGJlYWNvbiBqdXN0IGZsYXNoZWQgeW91ciB3YXkuIgogICAgICAgICAgfQogICAgICAgIF0sCiAgICAgICAgInJvbGUiOiAibW9kZWwiCiAgICAgIH0sCiAgICAgICJmaW5pc2hSZWFzb24iOiAiU1RPUCIsCiAgICAgICJpbmRleCI6IDAKICAgIH0KICBdLAogICJ1c2FnZU1ldGFkYXRhIjogewogICAgInByb21wdFRva2VuQ291bnQiOiAxOCwKICAgICJjYW5kaWRhdGVzVG9rZW5Db3VudCI6IDgsCiAgICAidG90YWxUb2tlbkNvdW50IjogNDQwLAogICAgInByb21wdFRva2Vuc0RldGFpbHMiOiBbCiAgICAgIHsKICAgICAgICAibW9kYWxpdHkiOiAiVEVYVCIsCiAgICAgICAgInRva2VuQ291bnQiOiAxOAogICAgICB9CiAgICBdLAogICAgInRob3VnaHRzVG9rZW5Db3VudCI6IDQxNAogIH0sCiAgIm1vZGVsVmVyc2lvbiI6ICJnZW1pbmktMi41LWZsYXNoLXByZXZpZXctMDktMjAyNSIsCiAgInJlc3BvbnNlSWQiOiAiWEREbGFJR19ESktQak1jUDc1YW9pQWsiCn0K",
+      "decoded": "[{\n  \"candidates\": [\n    {\n      \"content\": {\n        \"parts\": [\n          {\n            \"text\": \"A friendly beacon just flashed your way.\"\n          }\n        ],\n        \"role\": \"model\"\n      },\n      \"finishReason\": \"STOP\",\n      \"index\": 0\n    }\n  ],\n  \"usageMetadata\": {\n    \"promptTokenCount\": 18,\n    \"candidatesTokenCount\": 8,\n    \"totalTokenCount\": 440,\n    \"promptTokensDetails\": [\n      {\n        \"modality\": \"TEXT\",\n        \"tokenCount\": 18\n      }\n    ],\n    \"thoughtsTokenCount\": 414\n  },\n  \"modelVersion\": \"gemini-2.5-flash-preview-09-2025\",\n  \"responseId\": \"XDDlaIG_DJKPjMcP75aoiAk\"\n}\n"
     },
     {
       "b64": "XQ==",
@@ -51,9 +51,9 @@
       "accept-ranges": "none",
       "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
       "content-type": "application/json; charset=UTF-8",
-      "date": "Tue, 07 Oct 2025 13:46:16 GMT",
+      "date": "Tue, 07 Oct 2025 15:23:10 GMT",
       "server": "scaffolding on HTTPServer2",
-      "server-timing": "gfet4t7; dur=2414",
+      "server-timing": "gfet4t7; dur=2727",
       "vary": "Origin,Accept-Encoding",
       "x-content-type-options": "nosniff",
       "x-frame-options": "SAMEORIGIN",

@@ -82,7 +82,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         request.options[:max_completion_tokens] ||
         request.options[:max_tokens]
 
-    tools = encode_tools_if_any(request)
+    tools = encode_tools_if_any(request) |> ensure_deep_research_tools(request)
     tool_choice = encode_tool_choice(request.options[:tool_choice])
     reasoning = encode_reasoning_effort(provider_opts[:reasoning_effort])
 
@@ -351,6 +351,57 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     end
   end
 
+  defp ensure_deep_research_tools(tools, request) do
+    model_name = request.options[:model]
+
+    case ReqLLM.Model.from("openai:#{model_name}") do
+      {:ok, model} ->
+        category = get_in(model, [Access.key(:_metadata, %{}), "category"])
+
+        case category do
+          "deep_research" ->
+            ensure_deep_research_tool_present(tools)
+
+          _ ->
+            tools
+        end
+
+      _ ->
+        tools
+    end
+  end
+
+  defp ensure_deep_research_tool_present(nil) do
+    require Logger
+
+    Logger.info(
+      "Auto-injecting web_search_preview tool for deep research model (no tools provided)"
+    )
+
+    [%{"type" => "web_search_preview"}]
+  end
+
+  defp ensure_deep_research_tool_present(tools) when is_list(tools) do
+    deep_tools = ["web_search_preview", "mcp", "file_search"]
+
+    has_deep_tool? =
+      Enum.any?(tools, fn t ->
+        t["type"] in deep_tools or (is_map(t) and Map.get(t, :type) in deep_tools)
+      end)
+
+    if has_deep_tool? do
+      tools
+    else
+      require Logger
+
+      Logger.info(
+        "Auto-injecting web_search_preview tool for deep research model (tools: #{inspect(Enum.map(tools, & &1["type"]))})"
+      )
+
+      [%{"type" => "web_search_preview"} | tools]
+    end
+  end
+
   defp encode_tool_for_responses_api(%ReqLLM.Tool{} = tool) do
     schema = ReqLLM.Tool.to_schema(tool)
     function_def = schema["function"]
@@ -461,8 +512,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     |> Enum.filter(&(&1["type"] == "message"))
     |> Enum.flat_map(fn seg ->
       (seg["content"] || [])
-      |> Enum.filter(&(&1["type"] == "output_text"))
-      |> Enum.map(& &1["text"])
+      |> Enum.filter(&(&1["type"] in ["output_text", "text"]))
+      |> Enum.map(&extract_text_field/1)
     end)
     |> Enum.join("")
     |> case do
@@ -474,12 +525,16 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp extract_direct_output_text(segments) do
     segments
     |> Enum.filter(&(&1["type"] == "output_text"))
-    |> Enum.map_join("", & &1["text"])
+    |> Enum.map_join("", &extract_text_field/1)
     |> case do
       "" -> nil
       text -> text
     end
   end
+
+  defp extract_text_field(%{"text" => text}) when is_binary(text), do: text
+  defp extract_text_field(%{"content" => content}) when is_binary(content), do: content
+  defp extract_text_field(_), do: ""
 
   defp aggregate_reasoning_segments(segments) do
     reasoning_parts = [
@@ -560,9 +615,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp normalize_responses_usage(usage, response_data) do
     reasoning_tokens =
-      get_in(response_data, ["usage", "output_tokens_details", "reasoning_tokens"]) || 0
+      get_in(response_data, ["usage", "reasoning_tokens"]) ||
+        get_in(response_data, ["usage", "output_tokens_details", "reasoning_tokens"]) ||
+        get_in(response_data, ["usage", "completion_tokens_details", "reasoning_tokens"]) || 0
 
-    cached_tokens = get_in(response_data, ["usage", "input_tokens_details", "cached_tokens"]) || 0
+    cached_tokens =
+      get_in(response_data, ["usage", "input_tokens_details", "cached_tokens"]) ||
+        get_in(response_data, ["usage", "prompt_tokens_details", "cached_tokens"]) || 0
 
     usage
     |> Map.put(:cached_tokens, cached_tokens)

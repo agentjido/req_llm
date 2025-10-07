@@ -925,7 +925,10 @@ defmodule ReqLLM.Provider.Defaults do
           body
       end
 
-    case request.options[:response_format] do
+    provider_opts = request.options[:provider_options] || []
+    response_format = request.options[:response_format] || provider_opts[:response_format]
+
+    case response_format do
       format when is_map(format) -> Map.put(body, :response_format, format)
       _ -> body
     end

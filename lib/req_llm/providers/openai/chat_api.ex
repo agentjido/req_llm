@@ -59,7 +59,10 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
           |> add_token_limits(request.options[:model], request.options)
           |> add_stream_options(request.options)
           |> add_reasoning_effort(request.options)
+          |> add_response_format(request.options)
+          |> add_parallel_tool_calls(request.options)
           |> translate_tool_choice_format()
+          |> add_strict_to_tools()
       end
 
     Map.put(request, :body, Jason.encode!(enhanced_body))
@@ -180,6 +183,51 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
         end
 
       Map.put(body, body_key, replacement)
+    else
+      body
+    end
+  end
+
+  defp add_response_format(body, request_options) do
+    provider_opts = request_options[:provider_options] || []
+    maybe_put(body, :response_format, provider_opts[:response_format])
+  end
+
+  defp add_parallel_tool_calls(body, request_options) do
+    maybe_put(body, :parallel_tool_calls, request_options[:parallel_tool_calls])
+  end
+
+  defp add_strict_to_tools(body) do
+    tools = body[:tools] || body["tools"]
+
+    if tools && is_list(tools) do
+      updated_tools =
+        Enum.map(tools, fn tool ->
+          function = tool[:function] || tool["function"]
+
+          if function && (function[:strict] || function["strict"]) do
+            function_with_strict =
+              if is_map_key(tool, :function) do
+                Map.put(function, :strict, true)
+              else
+                Map.put(function, "strict", true)
+              end
+
+            if is_map_key(tool, :function) do
+              Map.put(tool, :function, function_with_strict)
+            else
+              Map.put(tool, "function", function_with_strict)
+            end
+          else
+            tool
+          end
+        end)
+
+      if is_map_key(body, :tools) do
+        Map.put(body, :tools, updated_tools)
+      else
+        Map.put(body, "tools", updated_tools)
+      end
     else
       body
     end

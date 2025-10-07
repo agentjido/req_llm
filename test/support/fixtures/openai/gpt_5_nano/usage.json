@@ -40,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759795773,
+      "created_at": 1759853198,
       "error": null,
-      "id": "resp_0a1f07633a6508a00068e45a3cfa44819bb711a7c20f08d83a",
+      "id": "resp_03b9f66d4874f23f0068e53a8ece6c81989ab91b807b0b8967",
       "incomplete_details": {
         "reason": "max_output_tokens"
       },
@@ -54,9 +54,23 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_0a1f07633a6508a00068e45a3d6a04819b87ce787e7fb0ce41",
+          "id": "rs_03b9f66d4874f23f0068e53a8f81ac8198b71ffa21c4ac01c4",
           "summary": [],
           "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Hi! How can I help today?\n\nI can:\n- Explain concepts or answer questions\n- Draft or edit emails,文档, or essays\n- Help with math, coding, or data analysis\n- Plan trips, meals, study schedules, or projects\n",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_03b9f66d4874f23f0068e53a935078819887047aa5198062df",
+          "role": "assistant",
+          "status": "incomplete",
+          "type": "message"
         }
       ],
       "parallel_tool_calls": true,
@@ -87,11 +101,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 448,
+        "output_tokens": 442,
         "output_tokens_details": {
-          "reasoning_tokens": 448
+          "reasoning_tokens": 384
         },
-        "total_tokens": 457
+        "total_tokens": 451
       },
       "user": null
     },
@@ -103,7 +117,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a92b9cb89ee264-ORD"
+        "98aea59bf9486199-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -112,13 +126,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 00:09:35 GMT"
+        "Tue, 07 Oct 2025 16:06:44 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "2722"
+        "5269"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -130,8 +144,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=P0jhnWACqvnGmQDLtBVH5TFKqk27P4fuYAj.nLanUSI-1759795775-1.0.1.1-tR_ZQmO3itdsycEOJJHI1q4GYfuj_H1trG_M..i22u3PbfSQTskQ.DC2PsuU.L1603eXO3TARWqhMlCAvepf8t5eybxI2r0EsRC9xNwZjAw; path=/; expires=Tue, 07-Oct-25 00:39:35 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=n8NKoRDSj6z6ICCRA8JwT0sJIyd7ji5lshiJAaNFOf8-1759795775721-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=3JuaO__gMSB6mgKK3mNNO6EHHogyqWzKxkdOavq3Kow-1759853204-1.0.1.1-gCf1OXyclDFcQWMXTU5wp3fuBP2232zfQoxLZ.ckDyVaVieetGMaAVEPkPTh0AJ8kRSF2TQRzkd99phBPNXidA9ds0CjdmxI9sN6OxUr8Sc; path=/; expires=Tue, 07-Oct-25 16:36:44 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=.9ExGmZWL483IG_Rri3kLlFsknsxgDnKJoox5BPw8fc-1759853204096-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -143,7 +157,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "2726"
+        "5275"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -164,7 +178,7 @@
         "1ms"
       ],
       "x-request-id": [
-        "req_e2ab80fe1eed915fe47ce8f341af1ab2"
+        "req_fb0ca7319ea755a05fc1321cf06fb6e7"
       ]
     },
     "status": 200

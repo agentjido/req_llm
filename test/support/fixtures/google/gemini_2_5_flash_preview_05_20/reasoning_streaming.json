@@ -1,13 +1,9 @@
 {
-  "captured_at": "2025-10-07T13:46:25.767784Z",
+  "captured_at": "2025-10-07T15:23:22.435621Z",
   "chunks": [
     {
-      "b64": "W3sKICAiY2FuZGlkYXRlcyI6IFsKICAgIHsKICAgICAgImNvbnRlbnQiOiB7CiAgICAgICAgInBhcnRzIjogWwogICAgICAgICAgewogICAgICAgICAgICAidGV4dCI6ICJUbyBjYWxjdWxhdGUgMTUgKiAzLCB5b3UgY2FuIHRoaW5rIG9mIGl0IGFzOlxuMS4gICgxMCAqIDMpICsgKDUgKiAzKVxuMi4gIDMwICsgMTVcbjMuICA0NVxuXG4iCiAgICAgICAgICB9CiAgICAgICAgXSwKICAgICAgICAicm9sZSI6ICJtb2RlbCIKICAgICAgfSwKICAgICAgImluZGV4IjogMAogICAgfQogIF0sCiAgInVzYWdlTWV0YWRhdGEiOiB7CiAgICAicHJvbXB0VG9rZW5Db3VudCI6IDMyLAogICAgImNhbmRpZGF0ZXNUb2tlbkNvdW50IjogNTAsCiAgICAidG90YWxUb2tlbkNvdW50IjogMTA1LAogICAgInByb21wdFRva2Vuc0RldGFpbHMiOiBbCiAgICAgIHsKICAgICAgICAibW9kYWxpdHkiOiAiVEVYVCIsCiAgICAgICAgInRva2VuQ291bnQiOiAzMgogICAgICB9CiAgICBdLAogICAgInRob3VnaHRzVG9rZW5Db3VudCI6IDIzCiAgfSwKICAibW9kZWxWZXJzaW9uIjogIm1vZGVscy9nZW1pbmktMi41LWZsYXNoLXByZXZpZXctMDUtMjAiLAogICJyZXNwb25zZUlkIjogInNCbmxhT0MxTzhIUWpNY1BwZUh2NEFjIgp9Cg==",
-      "decoded": "[{\n  \"candidates\": [\n    {\n      \"content\": {\n        \"parts\": [\n          {\n            \"text\": \"To calculate 15 * 3, you can think of it as:\\n1.  (10 * 3) + (5 * 3)\\n2.  30 + 15\\n3.  45\\n\\n\"\n          }\n        ],\n        \"role\": \"model\"\n      },\n      \"index\": 0\n    }\n  ],\n  \"usageMetadata\": {\n    \"promptTokenCount\": 32,\n    \"candidatesTokenCount\": 50,\n    \"totalTokenCount\": 105,\n    \"promptTokensDetails\": [\n      {\n        \"modality\": \"TEXT\",\n        \"tokenCount\": 32\n      }\n    ],\n    \"thoughtsTokenCount\": 23\n  },\n  \"modelVersion\": \"models/gemini-2.5-flash-preview-05-20\",\n  \"responseId\": \"sBnlaOC1O8HQjMcPpeHv4Ac\"\n}\n"
-    },
-    {
-      "b64": "LA0KewogICJjYW5kaWRhdGVzIjogWwogICAgewogICAgICAiY29udGVudCI6IHsKICAgICAgICAicGFydHMiOiBbCiAgICAgICAgICB7CiAgICAgICAgICAgICJ0ZXh0IjogIlNvLCAxNSAqIDMgPSA0NS4iCiAgICAgICAgICB9CiAgICAgICAgXSwKICAgICAgICAicm9sZSI6ICJtb2RlbCIKICAgICAgfSwKICAgICAgImZpbmlzaFJlYXNvbiI6ICJTVE9QIiwKICAgICAgImluZGV4IjogMAogICAgfQogIF0sCiAgInVzYWdlTWV0YWRhdGEiOiB7CiAgICAicHJvbXB0VG9rZW5Db3VudCI6IDMyLAogICAgImNhbmRpZGF0ZXNUb2tlbkNvdW50IjogNjMsCiAgICAidG90YWxUb2tlbkNvdW50IjogMTE4LAogICAgInByb21wdFRva2Vuc0RldGFpbHMiOiBbCiAgICAgIHsKICAgICAgICAibW9kYWxpdHkiOiAiVEVYVCIsCiAgICAgICAgInRva2VuQ291bnQiOiAzMgogICAgICB9CiAgICBdLAogICAgInRob3VnaHRzVG9rZW5Db3VudCI6IDIzCiAgfSwKICAibW9kZWxWZXJzaW9uIjogIm1vZGVscy9nZW1pbmktMi41LWZsYXNoLXByZXZpZXctMDUtMjAiLAogICJyZXNwb25zZUlkIjogInNCbmxhT0MxTzhIUWpNY1BwZUh2NEFjIgp9Cg==",
-      "decoded": ",\r\n{\n  \"candidates\": [\n    {\n      \"content\": {\n        \"parts\": [\n          {\n            \"text\": \"So, 15 * 3 = 45.\"\n          }\n        ],\n        \"role\": \"model\"\n      },\n      \"finishReason\": \"STOP\",\n      \"index\": 0\n    }\n  ],\n  \"usageMetadata\": {\n    \"promptTokenCount\": 32,\n    \"candidatesTokenCount\": 63,\n    \"totalTokenCount\": 118,\n    \"promptTokensDetails\": [\n      {\n        \"modality\": \"TEXT\",\n        \"tokenCount\": 32\n      }\n    ],\n    \"thoughtsTokenCount\": 23\n  },\n  \"modelVersion\": \"models/gemini-2.5-flash-preview-05-20\",\n  \"responseId\": \"sBnlaOC1O8HQjMcPpeHv4Ac\"\n}\n"
+      "b64": "W3sKICAiY2FuZGlkYXRlcyI6IFsKICAgIHsKICAgICAgImNvbnRlbnQiOiB7CiAgICAgICAgInBhcnRzIjogWwogICAgICAgICAgewogICAgICAgICAgICAidGV4dCI6ICJUbyBmaW5kIDE1KjMsIEkgY2FuIG11bHRpcGx5IDE1IGJ5IDMuXG4xNSAqIDMgPSA0NS5cblxuVGhlIGFuc3dlciBpcyA0NS4iCiAgICAgICAgICB9CiAgICAgICAgXSwKICAgICAgICAicm9sZSI6ICJtb2RlbCIKICAgICAgfSwKICAgICAgImZpbmlzaFJlYXNvbiI6ICJTVE9QIiwKICAgICAgImluZGV4IjogMAogICAgfQogIF0sCiAgInVzYWdlTWV0YWRhdGEiOiB7CiAgICAicHJvbXB0VG9rZW5Db3VudCI6IDMyLAogICAgImNhbmRpZGF0ZXNUb2tlbkNvdW50IjogMzcsCiAgICAidG90YWxUb2tlbkNvdW50IjogMTUxLAogICAgInByb21wdFRva2Vuc0RldGFpbHMiOiBbCiAgICAgIHsKICAgICAgICAibW9kYWxpdHkiOiAiVEVYVCIsCiAgICAgICAgInRva2VuQ291bnQiOiAzMgogICAgICB9CiAgICBdLAogICAgInRob3VnaHRzVG9rZW5Db3VudCI6IDgyCiAgfSwKICAibW9kZWxWZXJzaW9uIjogIm1vZGVscy9nZW1pbmktMi41LWZsYXNoLXByZXZpZXctMDUtMjAiLAogICJyZXNwb25zZUlkIjogImFURGxhTGlPTExHTC1zQVB5ZVBDMFFnIgp9Cg==",
+      "decoded": "[{\n  \"candidates\": [\n    {\n      \"content\": {\n        \"parts\": [\n          {\n            \"text\": \"To find 15*3, I can multiply 15 by 3.\\n15 * 3 = 45.\\n\\nThe answer is 45.\"\n          }\n        ],\n        \"role\": \"model\"\n      },\n      \"finishReason\": \"STOP\",\n      \"index\": 0\n    }\n  ],\n  \"usageMetadata\": {\n    \"promptTokenCount\": 32,\n    \"candidatesTokenCount\": 37,\n    \"totalTokenCount\": 151,\n    \"promptTokensDetails\": [\n      {\n        \"modality\": \"TEXT\",\n        \"tokenCount\": 32\n      }\n    ],\n    \"thoughtsTokenCount\": 82\n  },\n  \"modelVersion\": \"models/gemini-2.5-flash-preview-05-20\",\n  \"responseId\": \"aTDlaLiOLLGL-sAPyePC0Qg\"\n}\n"
     },
     {
       "b64": "XQ==",
@@ -55,9 +51,9 @@
       "accept-ranges": "none",
       "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
       "content-type": "application/json; charset=UTF-8",
-      "date": "Tue, 07 Oct 2025 13:46:25 GMT",
+      "date": "Tue, 07 Oct 2025 15:23:22 GMT",
       "server": "scaffolding on HTTPServer2",
-      "server-timing": "gfet4t7; dur=965",
+      "server-timing": "gfet4t7; dur=1047",
       "vary": "Origin,Accept-Encoding",
       "x-content-type-options": "nosniff",
       "x-frame-options": "SAMEORIGIN",

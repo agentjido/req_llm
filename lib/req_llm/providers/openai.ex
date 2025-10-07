@@ -99,6 +99,21 @@ defmodule ReqLLM.Providers.OpenAI do
       max_completion_tokens: [
         type: :integer,
         doc: "Maximum completion tokens (required for reasoning models like o1, o3, gpt-5)"
+      ],
+      openai_structured_output_mode: [
+        type: {:in, [:auto, :json_schema, :tool_strict]},
+        default: :auto,
+        doc: """
+        Strategy for structured output generation:
+        - `:auto` - Use json_schema when supported, else strict tools (default)
+        - `:json_schema` - Force response_format with json_schema (requires model support)
+        - `:tool_strict` - Force strict: true on function tools
+        """
+      ],
+      openai_parallel_tool_calls: [
+        type: {:or, [:boolean, nil]},
+        default: nil,
+        doc: "Override parallel_tool_calls setting. Required false for json_schema mode."
       ]
     ]
 
@@ -170,26 +185,17 @@ defmodule ReqLLM.Providers.OpenAI do
 
   def prepare_request(:object, model_spec, prompt, opts) do
     compiled_schema = Keyword.fetch!(opts, :compiled_schema)
+    {:ok, model} = ReqLLM.Model.from(model_spec)
 
-    structured_output_tool =
-      ReqLLM.Tool.new!(
-        name: "structured_output",
-        description: "Generate structured output matching the provided schema",
-        parameter_schema: compiled_schema.schema,
-        callback: fn _args -> {:ok, "structured output generated"} end
-      )
+    mode = determine_output_mode(model, opts)
 
-    opts_with_tool =
-      opts
-      |> Keyword.update(:tools, [structured_output_tool], &[structured_output_tool | &1])
-      |> Keyword.put(:tool_choice, %{
-        type: "function",
-        function: %{name: "structured_output"}
-      })
-      |> put_default_max_tokens_for_model(model_spec)
-      |> Keyword.put(:operation, :object)
+    case mode do
+      :json_schema ->
+        prepare_json_schema_request(model_spec, prompt, compiled_schema, opts)
 
-    prepare_request(:chat, model_spec, prompt, opts_with_tool)
+      :tool_strict ->
+        prepare_strict_tool_request(model_spec, prompt, compiled_schema, opts)
+    end
   end
 
   def prepare_request(operation, model_spec, input, opts) do
@@ -201,6 +207,72 @@ defmodule ReqLLM.Providers.OpenAI do
       result ->
         result
     end
+  end
+
+  defp prepare_json_schema_request(model_spec, prompt, compiled_schema, opts) do
+    schema_name = Map.get(compiled_schema, :name, "output_schema")
+
+    opts_with_format =
+      opts
+      |> Keyword.update(
+        :provider_options,
+        [
+          response_format: %{
+            type: "json_schema",
+            json_schema: %{
+              name: schema_name,
+              strict: true,
+              schema: compiled_schema.schema
+            }
+          },
+          openai_parallel_tool_calls: false
+        ],
+        fn provider_opts ->
+          provider_opts
+          |> Keyword.put(:response_format, %{
+            type: "json_schema",
+            json_schema: %{
+              name: schema_name,
+              strict: true,
+              schema: compiled_schema.schema
+            }
+          })
+          |> Keyword.put(:openai_parallel_tool_calls, false)
+        end
+      )
+      |> put_default_max_tokens_for_model(model_spec)
+      |> Keyword.put(:operation, :object)
+
+    prepare_request(:chat, model_spec, prompt, opts_with_format)
+  end
+
+  @dialyzer {:nowarn_function, prepare_strict_tool_request: 4}
+  defp prepare_strict_tool_request(model_spec, prompt, compiled_schema, opts) do
+    structured_output_tool =
+      ReqLLM.Tool.new!(
+        name: "structured_output",
+        description: "Generate structured output matching the provided schema",
+        parameter_schema: compiled_schema.schema,
+        strict: true,
+        callback: fn _args -> {:ok, "structured output generated"} end
+      )
+
+    opts_with_tool =
+      opts
+      |> Keyword.update(:tools, [structured_output_tool], &[structured_output_tool | &1])
+      |> Keyword.put(:tool_choice, %{
+        type: "function",
+        function: %{name: "structured_output"}
+      })
+      |> Keyword.update(
+        :provider_options,
+        [],
+        &Keyword.put(&1, :openai_parallel_tool_calls, false)
+      )
+      |> put_default_max_tokens_for_model(model_spec)
+      |> Keyword.put(:operation, :object)
+
+    prepare_request(:chat, model_spec, prompt, opts_with_tool)
   end
 
   @doc """
@@ -221,9 +293,24 @@ defmodule ReqLLM.Providers.OpenAI do
   `{translated_opts, warnings}` where warnings is a list of transformation messages.
   """
   @impl ReqLLM.Provider
-  def translate_options(operation, %ReqLLM.Model{} = model, opts) do
-    steps = ReqLLM.Providers.OpenAI.ParamProfiles.steps_for(operation, model)
-    ReqLLM.ParamTransform.apply(opts, steps)
+  def translate_options(op, %ReqLLM.Model{} = model, opts) do
+    steps = ReqLLM.Providers.OpenAI.ParamProfiles.steps_for(op, model)
+    {opts1, warns} = ReqLLM.ParamTransform.apply(opts, steps)
+
+    api_type = get_in(model, [Access.key(:_metadata, %{}), "api"])
+
+    if api_type == "responses" do
+      mot = Keyword.get(opts1, :max_output_tokens) || Keyword.get(opts1, :max_completion_tokens)
+
+      if is_integer(mot) and mot < 16 do
+        {Keyword.put(opts1, :max_output_tokens, 16),
+         ["Raised :max_output_tokens to API minimum (16)" | warns]}
+      else
+        {opts1, warns}
+      end
+    else
+      {opts1, warns}
+    end
   end
 
   def translate_options(_operation, _model, opts) do
@@ -289,11 +376,15 @@ defmodule ReqLLM.Providers.OpenAI do
 
   defp put_default_max_tokens_for_model(opts, model_spec) do
     case ReqLLM.Model.from(model_spec) do
-      {:ok, %{model: model_name}} when is_binary(model_name) ->
-        if is_reasoning_model_name?(model_name) do
-          Keyword.put_new(opts, :max_completion_tokens, 4096)
-        else
-          Keyword.put_new(opts, :max_tokens, 4096)
+      {:ok, model} ->
+        api = get_in(model, [Access.key(:_metadata, %{}), "api"])
+
+        case api do
+          "responses" ->
+            Keyword.put_new(opts, :max_completion_tokens, 4096)
+
+          _ ->
+            Keyword.put_new(opts, :max_tokens, 4096)
         end
 
       _ ->
@@ -301,10 +392,36 @@ defmodule ReqLLM.Providers.OpenAI do
     end
   end
 
-  defp is_reasoning_model_name?(<<"gpt-5", _::binary>>), do: true
-  defp is_reasoning_model_name?(<<"gpt-4.1", _::binary>>), do: true
-  defp is_reasoning_model_name?(<<"o1", _::binary>>), do: true
-  defp is_reasoning_model_name?(<<"o3", _::binary>>), do: true
-  defp is_reasoning_model_name?(<<"o4", _::binary>>), do: true
-  defp is_reasoning_model_name?(_), do: false
+  @doc false
+  def supports_json_schema?(%ReqLLM.Model{} = model) do
+    get_in(model, [Access.key(:_metadata, %{}), "supports_json_schema_response_format"]) == true
+  end
+
+  @doc false
+  def supports_strict_tools?(%ReqLLM.Model{} = model) do
+    get_in(model, [Access.key(:_metadata, %{}), "supports_strict_tools"]) == true
+  end
+
+  @doc false
+  def has_other_tools?(opts) do
+    tools = Keyword.get(opts, :tools, [])
+    Enum.any?(tools, fn tool -> tool.name != "structured_output" end)
+  end
+
+  @doc false
+  def determine_output_mode(model, opts) do
+    explicit_mode = Keyword.get(opts, :openai_structured_output_mode, :auto)
+
+    case explicit_mode do
+      :auto ->
+        cond do
+          supports_json_schema?(model) and not has_other_tools?(opts) -> :json_schema
+          supports_strict_tools?(model) -> :tool_strict
+          true -> :tool_strict
+        end
+
+      mode ->
+        mode
+    end
+  end
 end

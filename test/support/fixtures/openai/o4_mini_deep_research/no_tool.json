@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoyMDAwMCwibW9kZWwiOiJvNC1taW5pLWRlZXAtcmVzZWFyY2giLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfd2VhdGhlciIsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoyMDAwMCwibW9kZWwiOiJvNC1taW5pLWRlZXAtcmVzZWFyY2giLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3sidHlwZSI6IndlYl9zZWFyY2hfcHJldmlldyJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfd2VhdGhlciIsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
       "input": [
@@ -19,6 +19,9 @@
       "model": "o4-mini-deep-research",
       "stream": false,
       "tools": [
+        {
+          "type": "web_search_preview"
+        },
         {
           "function": {
             "description": "Get current weather information for a location",
@@ -59,7 +62,7 @@
     "body": {
       "error": {
         "code": null,
-        "message": "Deep research models require at least one of 'web_search_preview', 'mcp', or 'file_search' tools.",
+        "message": "Deep research models only support the 'web_search_preview', 'code_interpreter', 'mcp', and 'file_search' tools.",
         "param": "tools",
         "type": "invalid_request_error"
       }
@@ -72,7 +75,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a92b7c5fe36af6-ORD"
+        "98aed0f41e142331-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -81,13 +84,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 00:09:27 GMT"
+        "Tue, 07 Oct 2025 16:36:14 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "41"
+        "19"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -99,8 +102,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=rSemKDkmj2tBETqEJr9Gdtvikk4vRTh6mVmc8wF5kWY-1759795767-1.0.1.1-8YIpDYQotDjWBKfSm34F9n2pIYnO9vd7hmjMvMcRAxPMV1TfViUxZH7MEDkwiy0HoP.4DCb87UW.nIh6Z4fGPVUgsmQ3unuvvulrQYkAN_k; path=/; expires=Tue, 07-Oct-25 00:39:27 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=rch1vrV8sQeRq6C4LSnku96o7WkTilV51igzSHoIs4c-1759795767870-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=S8cKUFctq5WWYRDZSuyMBDc2gT.WV18EMDcg6kMnI8o-1759854974-1.0.1.1-_OFlQcnJ6ZLW6EnWg3YNsQNci2CXGazlGHwhvCYZUsiTxRrX0kadj6.hsyNrvWylGkv69A_fREqVwn7PrEgbU2cNAaBq4OUPlfcb5Cbs0Ng; path=/; expires=Tue, 07-Oct-25 17:06:14 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=_jB0BIPpLsBU1E7Nlh_eTDpvMPsuXZ_XhwNqY.2POdA-1759854974191-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -109,10 +112,10 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "46"
+        "21"
       ],
       "x-request-id": [
-        "req_68dcf69402c83ae069d11677ac3cfbaa"
+        "req_1f6434c08c62994fb4ab9fd12c9ebc97"
       ]
     },
     "status": 400

@@ -38,11 +38,11 @@
     "body": {
       "candidates": [
         {
-          "avgLogprobs": -0.6163066482543945,
+          "avgLogprobs": -0.4269699713196417,
           "content": {
             "parts": [
               {
-                "text": "The wind, a razor blade of ice and granite, whipped across the jagged peaks of the Dragon's Tooth Mountains. Here, in the heart of the world, nestled amongst the obsidian crags and echoing canyons, lived Ignis, a young dragon barely a century old. He was emerald green, his scales still catching the sunlight with a youthful shimmer, his wings, vast and leathery, yet untried in the grand flights of his elders.\n\nIgnis wasn't like the other dragons"
+                "text": "The crimson sun bled across the jagged peaks of the Dragon’s Tooth Mountains, painting the snow-capped summits in hues of fire and blood. Below, nestled in a valley carved by ancient glaciers, lay the village of Oakhaven, a place where the air crackled with the scent of pine and the distant roar of mountain streams. But today, the usual tranquility was shattered. A shadow, vast and terrible, had fallen across the village.\n\nFrom the heart of the mountains, a dragon"
               }
             ],
             "role": "model"
@@ -51,13 +51,13 @@
         }
       ],
       "modelVersion": "gemini-2.0-flash-lite",
-      "responseId": "oxnlaL6NOcHQjMcPpeHv4Ac",
+      "responseId": "QDDlaKWnJtmkjMcPvPLSwA8",
       "usageMetadata": {
-        "candidatesTokenCount": 100,
+        "candidatesTokenCount": 99,
         "candidatesTokensDetails": [
           {
             "modality": "TEXT",
-            "tokenCount": 100
+            "tokenCount": 99
           }
         ],
         "promptTokenCount": 9,
@@ -67,7 +67,7 @@
             "tokenCount": 9
           }
         ],
-        "totalTokenCount": 109
+        "totalTokenCount": 108
       }
     },
     "headers": {
@@ -78,13 +78,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:46:13 GMT"
+        "Tue, 07 Oct 2025 15:22:41 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=1618"
+        "gfet4t7; dur=1084"
       ],
       "transfer-encoding": [
         "chunked"
