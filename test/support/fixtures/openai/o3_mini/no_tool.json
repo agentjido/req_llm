@@ -61,9 +61,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759772172,
+      "created_at": 1759795821,
       "error": null,
-      "id": "resp_0c96bca9d6073ade0068e3fe0ce3e08198ad178b59654fb4e4",
+      "id": "resp_0bd031ce160d64a10068e45a6d263c8190b9e71cbd58d1734a",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 20000,
@@ -73,7 +73,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_0c96bca9d6073ade0068e3fe109ef08198b93c582e83d134b5",
+          "id": "rs_0bd031ce160d64a10068e45a6ebbb881908d20a6884c6e2a06",
           "summary": [],
           "type": "reasoning"
         },
@@ -82,11 +82,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Why did the cat sit on the computer? Because it wanted to keep an eye on the mouse!",
+              "text": "Why was the cat sitting on the computer? Because it wanted to keep an eye on the mouse!",
               "type": "output_text"
             }
           ],
-          "id": "msg_0c96bca9d6073ade0068e3fe1165608198b12ce9dcc21fe119",
+          "id": "msg_0bd031ce160d64a10068e45a6f4ad481909a2c99c495eb26a5",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -133,11 +133,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 342,
+        "output_tokens": 150,
         "output_tokens_details": {
-          "reasoning_tokens": 320
+          "reasoning_tokens": 128
         },
-        "total_tokens": 375
+        "total_tokens": 183
       },
       "user": null
     },
@@ -149,7 +149,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a6eb7028b3c4e5-ORD"
+        "98a92cc9b8b8fa19-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -158,13 +158,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 17:36:17 GMT"
+        "Tue, 07 Oct 2025 00:10:23 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "4901"
+        "2562"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -176,8 +176,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=5vy9sjIyDqVT1INGtMw7RB8XCigO8RSjv0dWwRbnZvw-1759772177-1.0.1.1-W0HUcQ8p4M9IWAYYAzbyPnRTPDSv1iX870BVtAd8p4TtrwWU4h.Xk1z8fjzkQ7Soof6KnJmJdbFdz91nYPNrM2EWqNp0o.oGparw5q_lN2M; path=/; expires=Mon, 06-Oct-25 18:06:17 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=uQJlzSwuR9MRUMmAGfBtb0sMA9iX7D_kDKwZ3U2p3dw-1759772177809-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=CW2qpoM782mUC_Fq7M1R9T2KwXxH.yKOR7AS0ln6vNQ-1759795823-1.0.1.1-mNzQYUknZX1XycXehVG2N5bDO4_DrAgghjkAWP6pPER_9M0.4ZkR.MVDL6s2NANBfCSw67uABABE9OUBj4MqFvUl446giyx4w_flKq_Rf9c; path=/; expires=Tue, 07-Oct-25 00:40:23 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=ytlOeF9.JlsR6w4loeokfzc9t_GBUtDoBOqoW5FK9Bo-1759795823718-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -189,28 +189,28 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "4903"
+        "2567"
       ],
       "x-ratelimit-limit-requests": [
-        "5000"
+        "10000"
       ],
       "x-ratelimit-limit-tokens": [
-        "4000000"
+        "10000000"
       ],
       "x-ratelimit-remaining-requests": [
-        "4999"
+        "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "3999510"
+        "9999760"
       ],
       "x-ratelimit-reset-requests": [
-        "12ms"
+        "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "7ms"
+        "1ms"
       ],
       "x-request-id": [
-        "req_42ee4a0f8e3644d70aca2ba8f3346109"
+        "req_c36c82b48a459b00640777219e448e18"
       ]
     },
     "status": 200

@@ -34,38 +34,26 @@
   },
   "response": {
     "body": {
-      "choices": [
-        {
-          "finish_reason": "length",
-          "index": 0,
-          "logprobs": null,
-          "message": {
-            "content": "Hello! How can I assist you today?",
-            "reasoning": null,
-            "refusal": null,
-            "role": "assistant"
+      "error": {
+        "code": 429,
+        "message": "Rate limit exceeded: free-models-per-min. ",
+        "metadata": {
+          "headers": {
+            "X-RateLimit-Limit": "16",
+            "X-RateLimit-Remaining": "0",
+            "X-RateLimit-Reset": "1759845420000"
           },
-          "native_finish_reason": "length"
+          "provider_name": null
         }
-      ],
-      "created": 1759671858,
-      "id": "gen-1759671858-0Ln65INHKkLtM9ayj0LZ",
-      "model": "mistralai/devstral-small-2505:free",
-      "object": "chat.completion",
-      "provider": "Chutes",
-      "usage": {
-        "completion_tokens": 10,
-        "prompt_tokens": 1228,
-        "prompt_tokens_details": null,
-        "total_tokens": 1238
-      }
+      },
+      "user_id": "user_2iYQIxKY28QuzANm4mmKBlOxzx2"
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
       "cf-ray": [
-        "989d5a5c5c2b2225-ORD"
+        "98ade6a22fdfe819-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -74,7 +62,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:44:19 GMT"
+        "Tue, 07 Oct 2025 13:56:16 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -93,8 +81,17 @@
       ],
       "x-content-type-options": [
         "nosniff"
+      ],
+      "x-ratelimit-limit": [
+        "16"
+      ],
+      "x-ratelimit-remaining": [
+        "0"
+      ],
+      "x-ratelimit-reset": [
+        "1759845420000"
       ]
     },
-    "status": 200
+    "status": 429
   }
 }

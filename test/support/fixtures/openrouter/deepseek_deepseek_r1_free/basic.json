@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZGVlcHNlZWsvZGVlcHNlZWstcjE6ZnJlZSIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImRlZXBzZWVrL2RlZXBzZWVrLXIxOmZyZWUiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
-      "max_tokens": 200,
+      "max_tokens": 2000,
       "messages": [
         {
           "content": "Hello world!",
@@ -35,22 +35,37 @@
   },
   "response": {
     "body": {
-      "error": {
-        "code": 429,
-        "message": "Provider returned error",
-        "metadata": {
-          "provider_name": "Chutes",
-          "raw": "deepseek/deepseek-r1:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations"
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! Welcome to the world of coding or maybe just a friendly greeting. 😊 How can I assist you today?",
+            "reasoning": "Okay, the user wrote \"Hello world!\" That's a classic first program when learning to code. Maybe they're just testing the chat or starting out. I should respond warmly. Let me say hello back and ask how I can help them today. Keep it friendly and open-ended.\n",
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
         }
-      },
-      "user_id": "user_2iYQIxKY28QuzANm4mmKBlOxzx2"
+      ],
+      "created": 1759845359,
+      "id": "gen-1759845359-ZeyILESh5XUgXEgIZUAZ",
+      "model": "deepseek/deepseek-r1:free",
+      "object": "chat.completion",
+      "provider": "Chutes",
+      "usage": {
+        "completion_tokens": 85,
+        "prompt_tokens": 9,
+        "total_tokens": 94
+      }
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
       "cf-ray": [
-        "989d5f13c9cc0044-ORD"
+        "98ade6367a7ef155-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -59,7 +74,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:47:32 GMT"
+        "Tue, 07 Oct 2025 13:56:00 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -80,6 +95,6 @@
         "nosniff"
       ]
     },
-    "status": 429
+    "status": 200
   }
 }

@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjozMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1uYW5vIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJtYXhfdG9rZW5zIjoyNTYwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC01LW5hbm8iLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
-      "max_tokens": 300,
+      "max_tokens": 25600,
       "messages": [
         {
           "content": "Tell me a joke about cats",
@@ -61,19 +61,19 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Why did the cat sit on the computer?\n\nBecause it wanted to keep an eye on the mouse!",
-            "reasoning": "**Crafting a cat joke**\n\nI need to come up with a joke about cats, and I'm thinking it should be short and playful. The user specifically asked for just one joke, so maybe I'll consider a couple of options and then choose the best one. It's essential to keep it light-hearted and fun since jokes are all about bringing a smile! Alright, let's see what I can come up with!",
+            "content": "Why did the cat sit on the computer?\n\nIt wanted to keep an eye on the mouse!",
+            "reasoning": "**Delivering a cat joke**\n\nI think I should respond with a light-hearted cat joke. There's no need for any tools here; it should be simple! I want to provide just one good one-liner since the user asked for a joke. Keeping it short and sweet will be best! Let’s go with something cute and fun. I can’t wait to see if it brings a smile!",
             "reasoning_details": [
               {
                 "format": "openai-responses-v1",
                 "index": 0,
-                "summary": "**Crafting a cat joke**\n\nI need to come up with a joke about cats, and I'm thinking it should be short and playful. The user specifically asked for just one joke, so maybe I'll consider a couple of options and then choose the best one. It's essential to keep it light-hearted and fun since jokes are all about bringing a smile! Alright, let's see what I can come up with!",
+                "summary": "**Delivering a cat joke**\n\nI think I should respond with a light-hearted cat joke. There's no need for any tools here; it should be simple! I want to provide just one good one-liner since the user asked for a joke. Keeping it short and sweet will be best! Let’s go with something cute and fun. I can’t wait to see if it brings a smile!",
                 "type": "reasoning.summary"
               },
               {
-                "data": "gAAAAABo4nfHCkKKlYkvIJRe6YDPmMCpImsyN7x5HlPoTZCf7JudADSpU0OtlbYzuB50u54Aya44TGYTwdSYImkCj6xNCQU31G_Z1UVaQ7cLJsAmzmQHtPgP5ObeiUFByi-03kO64pTxIIDEUZGta7SzKiQkhlXBczmLMWSGLs93lPPVqWk7fI0aECJ0R41PK8Jzeo0xnX0A78loeai8LA63vd_PxkxzFGxs7NH13g9nfJJs1ZkDrYyH8evZN_R7ZkJs2F7K6cEKwZBm64ICE0s7gMJ5b_KBZN7Rzet0K612-5-wDzZOZXinCdGzg5pwzC_ki63VV_RAL9DoBPQ0R2ORZkKNFotDdr6P_EGUBzErz2JPdiZtt-po9wNqQdFSf5lp9gc8qG0YSv7M28gW9FPEA2Bk0QHWY2gUu1TkRdbJLHrC7-GJm6-mxnspDf3KBQTVPaPTktj-4IpoDAmb3WltBnzgadB4tIjHYvAvFL0vpg4XxbLME7os7ne1FBmmWYcF3joSDEWYzfuQAq-xRnRrUtaIOtOUFHOD8ZKuzgYr3LJSywLLOpQQkGYV34Cxy5fuWXgTOCwXbiDKtbYA_t1v5jAn83BIB-WPaidfOb2extsycHziMD2yWuwHUxCnigotYizcNw6OCcZGmaiwDG6-YH-H5SjbKqlMfWcf97tFeb6Vxb1LGy-TXlGpCpQTyEp1H1wYmD9Ndfjau1TKZs2_ymH7tjodrN2UXKJv7pP-CVqb7SB_BdCF5rGT0uU2LsjyBZSwEs3jsi5bHMpJwrrUbQn1y8S_E0Rtan90KxrDTOvvXFJ3m9nm-OQJVzgHIRZRIO8yPMWV8kwMmjFQ-fJKxIr8NEL3q1pUrDPwpYg9noJwRYPLa6tqoqtz17F5cM6eDCoyrwyMg9pCFM0X3MB-A-wbJRTPUOks-z3McLF-YPoFaMQAo4_1fII1P8G0_KY9qMRW93bIBgYqkboO2oJVH2YnCW84tVu6HDAHOQVABiWg2Xd69JeOp1atOE2fNZvI0bGUm4VizfWw0Y28lIs3c1xjUmogIqwtUAxdkgfxNjAlAGmlwl_zNXoK2KhfHSbiBkxJ0yOkhZ4V6qGulSKdThkjYDeiC3CSskHycfdftgEFDdwgydI=",
+                "data": "gAAAAABo5RxYr7waPAGTsGeaoTxMWOvIukX3xT7iVD6U8MMk5QAkB1MH75UDPeFZh68Jgmw-ke2Q70ANL6ezCrfcrGCQWXcwQmXnMVsh_R0penvoMbWqBW-OHDr5br8ulp56ouO3z92njNtm3-16jpPfNUaNpkbJuIjd37VWxFruaXOiyGBaE7RpCHRQqiA8GVFZmaGoxnnztXlT9Nn2BRtOdVP7RgyDGM8DViU29okOjthBLTuSkLVgv9mAlFVuSnml3HP4hr44562fvuchHcTexzdeF0l3KIhR_oUVn3YhpBqS6JpoeetZKlOFKXvwWL1NlizDeTM0crxSwAXNp1w61_7XGPngrm_Bf9gwkfVNxvLv11pZZRD1hBw6-U7A-ZGIGIqz7n8QKvI_q_ugZYHZgEx3l23BhrX-226W32JiFYPPJukvvwbYfa1w6Z13TYVj0RMVGyWdmtsYFeDzBgabgx5jHEkDK736-aCs3E6rUT8atCA_a9NKnkqoZaHvt2_a7B5LEdrGh4vc0fdkAPXXYWJBGEVR8kvO9b4njuuGjvhbdumiavkrcfNLMUk5w0fuyHAfGZ9Bxmc_nH_xR-j6DXWMTsshNdAz5_ofNdGyjmLbK-7a41CQrtx9dbsF8rgs8dyI-dJnLWS6Bt8bq3eXEdSoYVfKEy0qZfTTslw3ygkV2yKQFvYXQ-oIMI_46T8JNpi5KUzirnD_WjNgDt-_wzdATPeKfpO_gVkdvz04bDZHHdlL6-Br2IBNa-8eOIhWVDu5FQS4PFFJf_IfB6yCRocdtmypeOEfI6IQd_esVy9oO7enlP7HKHW-HjGtm3B8w0Qanb23qVeM4FR6M1D1RaWnEDaCKe3-1IvC9ObGc5eafxcOt5Sucv8vprldziFpEaBduFtNy9TBsu3D87VvrZbM4FKKv84cA2slm3mGI5IFlH9SrUHmJDab7U6nDy0qXGFes7dlwp50NpOHUVuybYZYgsjA0mVkvfTagOZHAXOTR-9I14k0xjRut72FArr49izpOKIDLOeEL55LTh63WK0UCwBBJF1eB0s6alQEstB3VBAim2U0gKbkzm_SVU_RpimePG9pQIbPygsPRCXFuzmJ1cYNkANnnEOkGPv_2A8Lar6FnI4QeLl5ulPvY_0ANIWdlBRZ",
                 "format": "openai-responses-v1",
-                "id": "rs_020e1b192f57b2cd0168e277c526408190a6b82683078763f9",
+                "id": "rs_0ecabc11ac095b4d0168e51c55187081909c79366a06333c63",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -84,15 +84,15 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1759672260,
-      "id": "gen-1759672260-jRDaQeliepI0llEKMCpc",
+      "created": 1759845460,
+      "id": "gen-1759845460-O5EXiSjmGzLw7Im3fVvP",
       "model": "openai/gpt-5-nano",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
-        "completion_tokens": 26,
+        "completion_tokens": 25,
         "prompt_tokens": 50,
-        "total_tokens": 76
+        "total_tokens": 75
       }
     },
     "headers": {
@@ -100,7 +100,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d64288ab4e7fa-ORD"
+        "98ade8ad296eeae4-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -109,7 +109,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:51:00 GMT"
+        "Tue, 07 Oct 2025 13:57:40 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZGVlcHNlZWsvZGVlcHNlZWstY2hhdC12My4xIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImRlZXBzZWVrL2RlZXBzZWVrLWNoYXQtdjMuMSIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
-      "max_tokens": 200,
+      "max_tokens": 2000,
       "messages": [
         {
           "content": "Hello world!",
@@ -39,35 +39,26 @@
         {
           "finish_reason": "stop",
           "index": 0,
-          "logprobs": {
-            "content": [],
-            "refusal": []
-          },
+          "logprobs": null,
           "message": {
-            "content": "Here's a simple \"Hello, World!\" program in Python:\n\n```python\nprint(\"Hello, World!\")\n```\n\nWhen you run this code, it will output:  \n`Hello, World!`\n\nThis is often the first program beginners write to learn a new programming language. Let me know if you'd like to see it in another language!",
-            "reasoning": "We are going to write a simple \"Hello, World!\" program in Python.\n Since the user's message is \"Hello world!\", we can assume they want a program that prints this.\n However, note that the user's input is in English, but the instruction says to use the same language as the user's message.\n The user's message is in English, so we will respond in English.\n\n Let's write the code accordingly.",
+            "content": "Hello world! 😊 How can I assist you today?",
+            "reasoning": "Hmm, the user just said \"Hello world!\" which is a classic programming greeting. They might be testing the system or just being friendly. \n\nSince it's a simple greeting, I should respond in a warm and engaging way. No need for complex analysis here. \n\nI can mirror their enthusiasm with an exclamation mark and offer assistance to encourage further interaction. Keeping it light and positive seems appropriate.",
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759672066,
-      "id": "gen-1759672066-1KTmjiFFvyx5ij0L12zg",
+      "created": 1759845435,
+      "id": "gen-1759845435-QnaG7M0uSkpBGLQi3ZtB",
       "model": "deepseek/deepseek-chat-v3.1",
       "object": "chat.completion",
-      "provider": "Novita",
+      "provider": "DeepInfra",
       "usage": {
-        "completion_tokens": 156,
-        "completion_tokens_details": {
-          "reasoning_tokens": 0
-        },
-        "prompt_tokens": 8,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 0
-        },
-        "total_tokens": 164
+        "completion_tokens": 95,
+        "prompt_tokens": 7,
+        "prompt_tokens_details": null,
+        "total_tokens": 102
       }
     },
     "headers": {
@@ -75,7 +66,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d5f6c7d04eafd-ORD"
+        "98ade8158b83d84c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -84,7 +75,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:47:46 GMT"
+        "Tue, 07 Oct 2025 13:57:16 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

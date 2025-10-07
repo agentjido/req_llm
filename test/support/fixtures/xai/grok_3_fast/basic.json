@@ -38,19 +38,19 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "Hey there! \"Hello world!\"—starting with the classics, I see! How can I help you today? 😊",
+            "content": "Hello there! \"Hello world!\" is a classic, isn't it? Whether you're just saying hi or channeling your inner coder, I'm happy to greet you back—welcome to the conversation! What's on your mind today? 😊",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759763203,
-      "id": "9aa8058c-770e-4192-ddb9-21db435b5d68_us-east-1",
+      "created": 1759844594,
+      "id": "0f1547dd-85ef-9d20-bcbd-ccb18c44ce42_us-east-1",
       "model": "grok-3",
       "object": "chat.completion",
       "system_fingerprint": "fp_f02e6df795",
       "usage": {
-        "completion_tokens": 25,
+        "completion_tokens": 45,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
@@ -65,7 +65,7 @@
           "image_tokens": 0,
           "text_tokens": 9
         },
-        "total_tokens": 34
+        "total_tokens": 54
       }
     },
     "headers": {
@@ -79,22 +79,28 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a610738d6161ad-ORD"
+        "98add38a8922eac2-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy-report-only": [
+        "script-src 'none'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=2LKQfueoKN_nN39TrHwrnsoBIxGwaRfsnSC9vRsQ5xs-1759844596-1.0.1.1-BosHLcPMLIO1XRZRmoQEok.BL.XY0mOUurOHAcN5C8y9uavDVE7fmImgj6zodZfPUXe.XD62JTcXJ1VEp51tC41aGyfQ5oRn9uKs1.zw__XKvLPOJkvtwuJvfePXCcOLP7L_KAODBZIiX2inqewxPbET3CStv8cE7Rbue.x2Q2Q; report-to cf-csp-endpoint"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 15:06:44 GMT"
+        "Tue, 07 Oct 2025 13:43:16 GMT"
+      ],
+      "report-to": [
+        "{\"endpoints\":[{\"url\":\"https:\\/\\/csp-reporting.cloudflare.com\\/cdn-cgi\\/script_monitor\\/report?m=2LKQfueoKN_nN39TrHwrnsoBIxGwaRfsnSC9vRsQ5xs-1759844596-1.0.1.1-BosHLcPMLIO1XRZRmoQEok.BL.XY0mOUurOHAcN5C8y9uavDVE7fmImgj6zodZfPUXe.XD62JTcXJ1VEp51tC41aGyfQ5oRn9uKs1.zw__XKvLPOJkvtwuJvfePXCcOLP7L_KAODBZIiX2inqewxPbET3CStv8cE7Rbue.x2Q2Q\"}],\"group\":\"cf-csp-endpoint\",\"max_age\":86400}"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=pFKz5tP_hcMtaIK.33VEtQPskfA7wA1wIlro7xLBAeg-1759763204-1.0.1.1-npmARaMxKft8o6xKCyiXAWO19fbkP_zu2q_L9elp8G8QDJJTGeZQXMoE6F_UEwr5IHUn5GUb519ktBcurrw4eJjxw9H_Lxk1R1DMYXSavzA; path=/; expires=Mon, 06-Oct-25 15:36:44 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=94Fa9WVZ8nMa0AuvBdwKvndZWTZxplfscz5MnL0.Q6I-1759844596-1.0.1.1-9nlFytFi619_ZDDCkWut5eG2zr16XbunKQAHtrdigpVrG99F6l5uM41b60eQycQTGlbFRu7DA4nEUVKkF3QsVP6vRuzeHybgMPkF0gc2Tco; path=/; expires=Tue, 07-Oct-25 14:13:16 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -106,7 +112,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-1c7a1f9223df2dab8c30a25871f5e08f-a025779700750c87-01"
+        "00-d527d8dfa9f9b5276771c435dfca544e-25af5223001964ef-01"
       ],
       "x-zero-data-retention": [
         "false"

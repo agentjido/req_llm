@@ -22,6 +22,9 @@
       "accept-encoding": [
         "gzip"
       ],
+      "anthropic-beta": [
+        "interleaved-thinking-2025-05-14"
+      ],
       "anthropic-version": [
         "2023-06-01"
       ],
@@ -40,16 +43,16 @@
     "body": {
       "content": [
         {
-          "signature": "ErUBCkYICBgCIkD7XWRqjErJVQHvb9jQDZyWlcGfgNSE7VWv/Yamw0sZ2l8aqbYg/g3s2G1KGveDzHOyp1cBvnWvfUpJQzBIp6+3EgxrL9j2hRdY/qafvMYaDKB1KdLLAd6NVx0dhCIw64TKIAYui7Bwcs17v/eBqkDpmOPKIkH+tPVotgARKF3zMwSCxGz8ryvajP5pwQp/Kh3rX+fyhDTk3ZTV/laOFS1ieK0W1PDb58B6xj6rmBgC",
-          "thinking": "To solve 12*7, I need to multiply these two numbers.\n\nI'll use basic multiplication:\n12 * 7 = (10 + 2) * 7\n        = 10*7 + 2*7\n        = 70 + 14\n        = 84\n\nSo 12 multiplied by 7 equals 84.",
+          "signature": "ErUBCkYICBgCIkAArz5DhRgUJNFBohqAn9tQeXK74FnwSa3iAeYrJwWA+zU0dyC2Ybto57zPiSw10QnYaX0f/cMDKjQWhkahwYNWEgzcP3Ph7v8PCxFsnQsaDH842wcDZ9SgGziaGSIwHfmTHGR0Sb+Ocw2U1+unemtMEC+4vL4UnLkCc9PpY3fuH7hYdGD8wWqWrZK4p1r+Kh0e58OKhTCWFSYGn4qO4m9ZTRAVatSbdCAys7pwFBgC",
+          "thinking": "To solve 12*7, I'll multiply these numbers.\n\n12 * 7 = (10 + 2) * 7\n        = 10 * 7 + 2 * 7\n        = 70 + 14\n        = 84\n\nSo 12 * 7 = 84.",
           "type": "thinking"
         },
         {
-          "text": "# 12 × 7 = 84\n\n## My thinking:\nI can break this down into simpler steps:\n- First, I know 10 × 7 = 70\n- Then 2 × 7 = 14\n- Adding these parts: 70 + 14 = 84\n\nTherefore, 12 × 7 = 84.",
+          "text": "# 12 × 7 = 84\n\n## My thinking:\n1) I can break this down as: 12 × 7 = (10 + 2) × 7\n2) Using the distributive property: = (10 × 7) + (2 × 7)\n3) = 70 + 14\n4) = 84\n\nTherefore, 12 multiplied by 7 equals 84.",
           "type": "text"
         }
       ],
-      "id": "msg_01UQevurRqAdhPsKk2cS5mmp",
+      "id": "msg_013bEDu7ph8op2ZpYWrTkCnS",
       "model": "claude-3-7-sonnet-20250219",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -63,7 +66,7 @@
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
         "input_tokens": 50,
-        "output_tokens": 180,
+        "output_tokens": 188,
         "service_tier": "standard"
       }
     },
@@ -78,16 +81,16 @@
         "40000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-06T17:10:38Z"
+        "2025-10-07T13:52:47Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "16000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "15000"
+        "16000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-06T17:10:46Z"
+        "2025-10-07T13:52:50Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -96,22 +99,22 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-06T17:10:38Z"
+        "2025-10-07T13:52:47Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "56000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "55000"
+        "56000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-06T17:10:38Z"
+        "2025-10-07T13:52:47Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a6c5f89961e249-ORD"
+        "98ade1884b3272e2-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -120,10 +123,10 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 17:10:41 GMT"
+        "Tue, 07 Oct 2025 13:52:50 GMT"
       ],
       "request-id": [
-        "req_011CTrKGr8QrY79jsLLt9Agt"
+        "req_011CTswziGFUsc9hEXVgocwu"
       ],
       "server": [
         "cloudflare"
@@ -138,7 +141,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "2849"
+        "2827"
       ],
       "x-robots-tag": [
         "none"

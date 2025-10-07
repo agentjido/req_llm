@@ -34,22 +34,37 @@
   },
   "response": {
     "body": {
-      "error": {
-        "code": 429,
-        "message": "Provider returned error",
-        "metadata": {
-          "provider_name": "Chutes",
-          "raw": "deepseek/deepseek-r1:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations"
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! How can I assist you today? 😊",
+            "reasoning": "Okay, the user said \"Hi there!\" That's a friendly greeting. I should respond in a warm and welcoming manner. Maybe say hello back and ask how I can assist them today. Keep it open-ended to encourage them to share what they need help with. Let me make sure the tone is approachable and not too formal.\n\nHmm, maybe start with \"Hello! How can I assist you today?\" That's simple and to the point. Alternatively, \"Hi! What can I help you with?\" But the first one sounds a bit more professional. Yeah, go with the first one. Also, add a smiley emoji to keep it friendly. Wait, the previous response used a smiley, so maybe follow that style. Alright, finalize the response.\n",
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
         }
-      },
-      "user_id": "user_2iYQIxKY28QuzANm4mmKBlOxzx2"
+      ],
+      "created": 1759845364,
+      "id": "gen-1759845364-JkgXkG9gfjwqnOpViTFp",
+      "model": "deepseek/deepseek-r1:free",
+      "object": "chat.completion",
+      "provider": "Chutes",
+      "usage": {
+        "completion_tokens": 173,
+        "prompt_tokens": 9,
+        "total_tokens": 182
+      }
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
       "cf-ray": [
-        "989d5f0ebe850044-ORD"
+        "98ade655eb1cf155-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -58,7 +73,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:47:31 GMT"
+        "Tue, 07 Oct 2025 13:56:05 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -79,6 +94,6 @@
         "nosniff"
       ]
     },
-    "status": 429
+    "status": 200
   }
 }

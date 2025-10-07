@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxNTAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJ4LWFpL2dyb2stMy1taW5pLWJldGEiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJ4LWFpL2dyb2stMy1taW5pLWJldGEiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
-      "max_tokens": 150,
+      "max_tokens": 819,
       "messages": [
         {
           "content": "What's the weather like in Paris, France?",
@@ -95,12 +95,12 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "First, the user is asking about the weather in Paris, France. This matches the \"get_weather\" function, which retrieves current weather information for a location.\n\nThe required parameters for \"get_weather\" are:\n- \"location\": This is required. The user specified \"Paris, France\", which is a clear location.\n- \"unit\": This is optional, as it's not listed as required. It can be \"celsius\" or \"fahrenheit\". The user didn't specify a unit, so I can either use a default or ask for clarification. But the instructions say to call the function if all required parameters are provided or obviously inferable. Since \"location\" is provided, I can proceed without the unit.\n\nThe function description doesn't specify a default unit, but I don't need to ask for clarification unless I can't advance the request. I can call the function with just the location.\n\nSo, I should trigger the function call for \"get_weather\" with the location as \"Paris, France\".\n\nMy response should be in the exact format: <function_call>{\"action\": \"function_name\", \"action_input\": {\"parameter\": \"argument\"}}</function_call>\n\nFor this, it would be: <function_call>{\"action\": \"get_weather\", \"action_input\": {\"location\": \"Paris, France\"}}</function_call>\n\nI shouldn't add any other text unless necessary, as per the instructions: \"Keep your response to user clear; please do not make your response verbose!\"\n\nThis seems to fully address the user's query, so no need for additional conversation.",
+            "reasoning": "First, the user is asking about the weather in Paris, France. I have a function called \"get_weather\" that matches this perfectly. It requires a \"location\" parameter, which is a string.\n\nThe required parameters for \"get_weather\" are:\n\n- location: This is provided as \"Paris, France\", which is straightforward.\n\n- unit: This is optional since it's not in the \"required\" list, but it's an enum with \"celsius\" or \"fahrenheit\". The user didn't specify a unit, so I could either assume a default or ask for clarification. However, the instructions say to call the function if all required parameters are provided or obviously inferable. \"Location\" is required and inferable, so I can proceed.\n\nThe function description: It has \"required\": [\"location\"], so only location is mandatory. Unit is not required, so I can call the function without it.\n\nIn multi-turn conversations, I should continue if needed, but this seems straightforward.\n\nMy response should be clear and not verbose. If I'm calling a function, I use the exact format: <function_call>{\"action\": \"function_name\", \"action_input\": {\"parameter\": \"argument\"}}</function_call>\n\nSo, for this, I should output:\n\n<function_call>{\"action\": \"get_weather\", \"action_input\": {\"location\": \"Paris, France\"}}</function_call>\n\nI don't need to add any other text unless necessary.\n\nIs there any ambiguity? The location is clear: Paris, France. No need to ask for more info.\n\nFinally, ensure the format is precise.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "First, the user is asking about the weather in Paris, France. This matches the \"get_weather\" function, which retrieves current weather information for a location.\n\nThe required parameters for \"get_weather\" are:\n- \"location\": This is required. The user specified \"Paris, France\", which is a clear location.\n- \"unit\": This is optional, as it's not listed as required. It can be \"celsius\" or \"fahrenheit\". The user didn't specify a unit, so I can either use a default or ask for clarification. But the instructions say to call the function if all required parameters are provided or obviously inferable. Since \"location\" is provided, I can proceed without the unit.\n\nThe function description doesn't specify a default unit, but I don't need to ask for clarification unless I can't advance the request. I can call the function with just the location.\n\nSo, I should trigger the function call for \"get_weather\" with the location as \"Paris, France\".\n\nMy response should be in the exact format: <function_call>{\"action\": \"function_name\", \"action_input\": {\"parameter\": \"argument\"}}</function_call>\n\nFor this, it would be: <function_call>{\"action\": \"get_weather\", \"action_input\": {\"location\": \"Paris, France\"}}</function_call>\n\nI shouldn't add any other text unless necessary, as per the instructions: \"Keep your response to user clear; please do not make your response verbose!\"\n\nThis seems to fully address the user's query, so no need for additional conversation.",
+                "text": "First, the user is asking about the weather in Paris, France. I have a function called \"get_weather\" that matches this perfectly. It requires a \"location\" parameter, which is a string.\n\nThe required parameters for \"get_weather\" are:\n\n- location: This is provided as \"Paris, France\", which is straightforward.\n\n- unit: This is optional since it's not in the \"required\" list, but it's an enum with \"celsius\" or \"fahrenheit\". The user didn't specify a unit, so I could either assume a default or ask for clarification. However, the instructions say to call the function if all required parameters are provided or obviously inferable. \"Location\" is required and inferable, so I can proceed.\n\nThe function description: It has \"required\": [\"location\"], so only location is mandatory. Unit is not required, so I can call the function without it.\n\nIn multi-turn conversations, I should continue if needed, but this seems straightforward.\n\nMy response should be clear and not verbose. If I'm calling a function, I use the exact format: <function_call>{\"action\": \"function_name\", \"action_input\": {\"parameter\": \"argument\"}}</function_call>\n\nSo, for this, I should output:\n\n<function_call>{\"action\": \"get_weather\", \"action_input\": {\"location\": \"Paris, France\"}}</function_call>\n\nI don't need to add any other text unless necessary.\n\nIs there any ambiguity? The location is clear: Paris, France. No need to ask for more info.\n\nFinally, ensure the format is precise.",
                 "type": "reasoning.text"
               }
             ],
@@ -112,7 +112,7 @@
                   "arguments": "{\"location\":\"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "call_72139552",
+                "id": "call_23585349",
                 "index": 0,
                 "type": "function"
               }
@@ -121,23 +121,23 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1759529902,
-      "id": "gen-1759529902-RfmdhRiAFef0u21d3AsQ",
+      "created": 1759845474,
+      "id": "gen-1759845474-8kAxHP0lIszQypEb0QEu",
       "model": "x-ai/grok-3-mini",
       "object": "chat.completion",
       "provider": "xAI",
       "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 339,
+        "completion_tokens": 347,
         "completion_tokens_details": {
-          "reasoning_tokens": 311
+          "reasoning_tokens": 319
         },
         "prompt_tokens": 352,
         "prompt_tokens_details": {
           "audio_tokens": 0,
           "cached_tokens": 351
         },
-        "total_tokens": 691
+        "total_tokens": 699
       }
     },
     "headers": {
@@ -145,7 +145,7 @@
         "*"
       ],
       "cf-ray": [
-        "988fd0a4cb469121-ORD"
+        "98ade9090f46e1cb-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -154,7 +154,7 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 22:18:23 GMT"
+        "Tue, 07 Oct 2025 13:57:54 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -69,30 +69,23 @@
     "body": {
       "error": {
         "code": 429,
-        "message": "Rate limit exceeded: free-models-per-min. ",
+        "message": "Provider returned error",
         "metadata": {
-          "headers": {
-            "X-RateLimit-Limit": "20",
-            "X-RateLimit-Remaining": "0",
-            "X-RateLimit-Reset": "1759671420000"
-          },
-          "provider_name": null
+          "provider_name": "Google",
+          "raw": "google/gemini-2.0-flash-exp:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations"
         }
       },
       "user_id": "user_2iYQIxKY28QuzANm4mmKBlOxzx2"
     },
     "headers": {
       "access-control-allow-origin": "*",
-      "cf-ray": "989d4ee21a8913ce-ORD",
+      "cf-ray": "98ade62c0c3ee26b-ORD",
       "content-type": "application/json",
-      "date": "Sun, 05 Oct 2025 13:36:28 GMT",
+      "date": "Tue, 07 Oct 2025 13:55:57 GMT",
       "permissions-policy": "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")",
       "referrer-policy": "no-referrer, strict-origin-when-cross-origin",
       "server": "cloudflare",
-      "x-content-type-options": "nosniff",
-      "x-ratelimit-limit": "20",
-      "x-ratelimit-remaining": "0",
-      "x-ratelimit-reset": "1759671420000"
+      "x-content-type-options": "nosniff"
     },
     "status": 429
   }

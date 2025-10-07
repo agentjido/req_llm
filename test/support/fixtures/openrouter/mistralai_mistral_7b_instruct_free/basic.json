@@ -34,38 +34,26 @@
   },
   "response": {
     "body": {
-      "choices": [
-        {
-          "finish_reason": "stop",
-          "index": 0,
-          "logprobs": null,
-          "message": {
-            "content": " ",
-            "reasoning": null,
-            "refusal": null,
-            "role": "assistant"
+      "error": {
+        "code": 429,
+        "message": "Rate limit exceeded: free-models-per-min. ",
+        "metadata": {
+          "headers": {
+            "X-RateLimit-Limit": "20",
+            "X-RateLimit-Remaining": "0",
+            "X-RateLimit-Reset": "1759845420000"
           },
-          "native_finish_reason": "stop"
+          "provider_name": null
         }
-      ],
-      "created": 1759671902,
-      "id": "gen-1759671902-VRrn24PGOUF8SWYAEAjH",
-      "model": "mistralai/mistral-7b-instruct:free",
-      "object": "chat.completion",
-      "provider": "DeepInfra",
-      "usage": {
-        "completion_tokens": 3,
-        "prompt_tokens": 16,
-        "prompt_tokens_details": null,
-        "total_tokens": 19
-      }
+      },
+      "user_id": "user_2iYQIxKY28QuzANm4mmKBlOxzx2"
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
       "cf-ray": [
-        "989d5b707a730044-ORD"
+        "98ade6a4ad41eacf-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -74,7 +62,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:45:03 GMT"
+        "Tue, 07 Oct 2025 13:56:17 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -93,8 +81,17 @@
       ],
       "x-content-type-options": [
         "nosniff"
+      ],
+      "x-ratelimit-limit": [
+        "20"
+      ],
+      "x-ratelimit-remaining": [
+        "0"
+      ],
+      "x-ratelimit-reset": [
+        "1759845420000"
       ]
     },
-    "status": 200
+    "status": 429
   }
 }

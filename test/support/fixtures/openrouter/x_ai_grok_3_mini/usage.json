@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGkgdGhlcmUhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoieC1haS9ncm9rLTMtbWluaSIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJ4LWFpL2dyb2stMy1taW5pIiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
-      "max_tokens": 500,
+      "max_tokens": 10,
       "messages": [
         {
           "content": "Hi there!",
@@ -36,43 +36,43 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "length",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hi! I'm Grok, your helpful AI assistant built by xAI. How can I assist you today? 😊",
-            "reasoning": "First, the user said, \"Hi there!\" which is a casual greeting. As an AI assistant, I should respond in a friendly and engaging manner to build rapport.\n\nMy role is to be helpful, truthful, and engaging. I need to keep responses clear and not verbose, as per the system prompt.\n\nA good response to a greeting could be:\n- A simple acknowledgment like \"Hi!\" or \"Hello!\"\n- Followed by a question to continue the conversation, making it interactive.\n- Since this is the start, I should introduce myself or remind them of my purpose if appropriate.\n\nThe system prompt says: \"You are Grok, a helpful and maximally truthful AI built by xAI, not based on any other companies and their models.\" So, I should incorporate that if it fits naturally.\n\nPossible response structure:\n1. Greet back.\n2. Introduce myself briefly.\n3. Ask how I can help or what they want to talk about.\n\nKeep it concise: Avoid verbosity. So, aim for 1-3 sentences at most.\n\nExample response:\n\"Hi! I'm Grok, created by xAI to assist with questions and conversations. How can I help you today?\"\n\nThis is friendly, informative, and invites further interaction.\n\nIf I want to be more casual:\n\"Hey there! What's up?\"\n\nBut that might be too informal without establishing my identity. Since the prompt emphasizes being Grok from xAI, I should include that.\n\nThe user might be starting a conversation, so ending with a question is good.\n\nFinalizing:\n- Start with a greeting.\n- State who I am.\n- Offer assistance.",
+            "content": "Hi! How can I assist you today? ",
+            "reasoning": "First, the user said, \"Hi there!\" which is a casual greeting. As an AI assistant, I should respond in a friendly and engaging way to build rapport.\n\nMy role is to be helpful, truthful, and engaging, based on the system prompt. I need to keep responses clear and not verbose, so I'll aim for concise yet polite.\n\nPossible responses:\n- A simple greeting back, like \"Hi! How can I help you today?\"\n- This invites further interaction, which is good since this might be the start of a conversation.\n\nIf this is the beginning, I should confirm if they have a specific question or just want to chat. But the prompt says to make responses clear and not verbose, so I'll keep it straightforward.\n\nStructure my response:\n1. Greet back to match their friendliness.\n2. Offer assistance to guide the conversation.\n3. Keep it short.\n\nFinal response idea: \"Hi! I'm here to help. What's on your mind?\"\n\nThat sounds welcoming and prompts for more details.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "First, the user said, \"Hi there!\" which is a casual greeting. As an AI assistant, I should respond in a friendly and engaging manner to build rapport.\n\nMy role is to be helpful, truthful, and engaging. I need to keep responses clear and not verbose, as per the system prompt.\n\nA good response to a greeting could be:\n- A simple acknowledgment like \"Hi!\" or \"Hello!\"\n- Followed by a question to continue the conversation, making it interactive.\n- Since this is the start, I should introduce myself or remind them of my purpose if appropriate.\n\nThe system prompt says: \"You are Grok, a helpful and maximally truthful AI built by xAI, not based on any other companies and their models.\" So, I should incorporate that if it fits naturally.\n\nPossible response structure:\n1. Greet back.\n2. Introduce myself briefly.\n3. Ask how I can help or what they want to talk about.\n\nKeep it concise: Avoid verbosity. So, aim for 1-3 sentences at most.\n\nExample response:\n\"Hi! I'm Grok, created by xAI to assist with questions and conversations. How can I help you today?\"\n\nThis is friendly, informative, and invites further interaction.\n\nIf I want to be more casual:\n\"Hey there! What's up?\"\n\nBut that might be too informal without establishing my identity. Since the prompt emphasizes being Grok from xAI, I should include that.\n\nThe user might be starting a conversation, so ending with a question is good.\n\nFinalizing:\n- Start with a greeting.\n- State who I am.\n- Offer assistance.",
+                "text": "First, the user said, \"Hi there!\" which is a casual greeting. As an AI assistant, I should respond in a friendly and engaging way to build rapport.\n\nMy role is to be helpful, truthful, and engaging, based on the system prompt. I need to keep responses clear and not verbose, so I'll aim for concise yet polite.\n\nPossible responses:\n- A simple greeting back, like \"Hi! How can I help you today?\"\n- This invites further interaction, which is good since this might be the start of a conversation.\n\nIf this is the beginning, I should confirm if they have a specific question or just want to chat. But the prompt says to make responses clear and not verbose, so I'll keep it straightforward.\n\nStructure my response:\n1. Greet back to match their friendliness.\n2. Offer assistance to guide the conversation.\n3. Keep it short.\n\nFinal response idea: \"Hi! I'm here to help. What's on your mind?\"\n\nThat sounds welcoming and prompts for more details.",
                 "type": "reasoning.text"
               }
             ],
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "stop"
+          "native_finish_reason": "length"
         }
       ],
-      "created": 1759529852,
-      "id": "gen-1759529852-llKYOzuMRH9k1S6vgQVN",
+      "created": 1759846691,
+      "id": "gen-1759846691-IA41PvWm9UhrK2UAC1ZW",
       "model": "x-ai/grok-3-mini",
       "object": "chat.completion",
       "provider": "xAI",
       "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 350,
+        "completion_tokens": 213,
         "completion_tokens_details": {
-          "reasoning_tokens": 326
+          "reasoning_tokens": 203
         },
         "prompt_tokens": 10,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 2
+          "cached_tokens": 3
         },
-        "total_tokens": 360
+        "total_tokens": 223
       }
     },
     "headers": {
@@ -80,7 +80,7 @@
         "*"
       ],
       "cf-ray": [
-        "988fcf67183ee417-ORD"
+        "98ae06c00b1a0013-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,7 +89,7 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 22:17:32 GMT"
+        "Tue, 07 Oct 2025 14:18:12 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

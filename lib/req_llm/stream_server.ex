@@ -451,14 +451,10 @@ defmodule ReqLLM.StreamServer do
       events
       |> Enum.map(&SSE.process_sse_event/1)
       |> Enum.reduce({[], state.provider_state}, fn event, {chunks_acc, prov_state} ->
-        if termination_event?(event) do
-          {chunks_acc, prov_state}
-        else
-          {new_chunks, updated_prov_state} =
-            decode_provider_event(event, state.provider_mod, state.model, prov_state)
+        {new_chunks, updated_prov_state} =
+          decode_provider_event(event, state.provider_mod, state.model, prov_state)
 
-          {chunks_acc ++ new_chunks, updated_prov_state}
-        end
+        {chunks_acc ++ new_chunks, updated_prov_state}
       end)
 
     # Enqueue chunks and check for completion
@@ -696,8 +692,11 @@ defmodule ReqLLM.StreamServer do
         |> calculate_cost_if_model_available(model)
 
       %{input_tokens: input, output_tokens: output} ->
-        # Already normalized format  
-        %{input: input, output: output, reasoning: 0, cached_input: 0}
+        # Already normalized format
+        cached_input = Map.get(usage, :cached_tokens, 0)
+        reasoning = Map.get(usage, :reasoning_tokens, 0)
+
+        %{input: input, output: output, reasoning: reasoning, cached_input: cached_input}
         |> add_cost_calculation_if_available(usage)
         |> calculate_cost_if_model_available(model)
 

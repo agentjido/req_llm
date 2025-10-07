@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC01LWNoYXQiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1jaGF0IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
-      "max_tokens": 200,
+      "max_tokens": 2000,
       "messages": [
         {
           "content": "Hello world!",
@@ -49,8 +49,8 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1759672252,
-      "id": "gen-1759672252-PRoJNeS8NN9zzKxooIVe",
+      "created": 1759845417,
+      "id": "gen-1759845417-JdqJ5vCuANW50XoRp0Bf",
       "model": "openai/gpt-5-chat",
       "object": "chat.completion",
       "provider": "OpenAI",
@@ -65,7 +65,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d63f82c020ffa-ORD"
+        "98ade7a2c98b608a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -74,7 +74,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:50:52 GMT"
+        "Tue, 07 Oct 2025 13:56:57 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

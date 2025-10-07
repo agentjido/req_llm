@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxNTAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6IngtYWkvZ3Jvay1jb2RlLWZhc3QtMSIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJ4LWFpL2dyb2stY29kZS1mYXN0LTEiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
-      "max_tokens": 150,
+      "max_tokens": 1000,
       "messages": [
         {
           "content": "Tell me a joke about cats",
@@ -60,13 +60,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Why don't cats play poker in the jungle? Too many cheetahs! 🐱",
-            "reasoning": "First, the user asked for a joke about cats. This is a simple request, not involving any disallowed activities. I can respond directly.\n\n\n## Handling User Request  \n- The user requested a joke about cats, a straightforward and permissible task.",
+            "content": "Why did the cat join the Red Cross? Because she wanted to be a first-aid kit-ten! 🐱",
+            "reasoning": "First, the user asked for a joke about cats. This is a simple request, not involving any disallowed activities. I can respond directly.\n\n\n## Handling User Request  \n- The user asked for a simple cat joke, which fits within the allowed activities.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "First, the user asked for a joke about cats. This is a simple request, not involving any disallowed activities. I can respond directly.\n\n\n## Handling User Request  \n- The user requested a joke about cats, a straightforward and permissible task.",
+                "text": "First, the user asked for a joke about cats. This is a simple request, not involving any disallowed activities. I can respond directly.\n\n\n## Handling User Request  \n- The user asked for a simple cat joke, which fits within the allowed activities.",
                 "type": "reasoning.text"
               }
             ],
@@ -76,14 +76,14 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759529865,
-      "id": "gen-1759529865-E7UG38epxMeJjf42RHQd",
+      "created": 1759845464,
+      "id": "gen-1759845464-flsDtt0qyxpBBlngFkSt",
       "model": "x-ai/grok-code-fast-1",
       "object": "chat.completion",
       "provider": "xAI",
       "system_fingerprint": "fp_10f00c862d",
       "usage": {
-        "completion_tokens": 136,
+        "completion_tokens": 141,
         "completion_tokens_details": {
           "reasoning_tokens": 118
         },
@@ -92,7 +92,7 @@
           "audio_tokens": 0,
           "cached_tokens": 320
         },
-        "total_tokens": 516
+        "total_tokens": 521
       }
     },
     "headers": {
@@ -100,7 +100,7 @@
         "*"
       ],
       "cf-ray": [
-        "988fcfbbc89b1d00-ORD"
+        "98ade8c9890a60ac-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -109,7 +109,7 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 22:17:45 GMT"
+        "Tue, 07 Oct 2025 13:57:44 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

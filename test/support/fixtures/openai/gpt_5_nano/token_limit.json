@@ -40,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759772176,
+      "created_at": 1759795791,
       "error": null,
-      "id": "resp_04010e4437644b230068e3fe1048d08199841d0fb4c1beef9a",
+      "id": "resp_0ad6edaf4d7043de0068e45a4f46b0819bab01f467303dcfbe",
       "incomplete_details": {
         "reason": "max_output_tokens"
       },
@@ -54,23 +54,9 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_04010e4437644b230068e3fe10af3c81998a0557e8d399ba54",
+          "id": "rs_0ad6edaf4d7043de0068e45a4fa0f0819b8792def0bd8ef508",
           "summary": [],
           "type": "reasoning"
-        },
-        {
-          "content": [
-            {
-              "annotations": [],
-              "logprobs": [],
-              "text": "Prologue: The Promise of Ember\n\nIn the oldest days, when the wind sang in tongues no human could decipher, the dragons walked the earth as if they were cities made of flame and muscle. They could turn the weather with a glance, cradle a storm in their jaws, and build houses from ember-melted rock with a breath. Then came the quiet years, when the sky learned to listen less, and the maps grew brittle where dragons once wandered. There are places the old maps still remember—the Gate of Ember, the Sea of Glass, the Spine that Clutches the Sky—and in those places, dragons still dream in the language of heat and wind.\n\nThis is a story of one such dragon and one girl who learned to listen to the sky again.\n\nChapter 1: The Sky of Skydara\n\nThe city of Skydara hung above the world on towers of glass and wind, a place where stairs curled like smoke and markets hissed with the laughter of creatures no map could quite pin down. The people who lived there rode the currents as easily as a horseman rides a horse, and their coat of arms was a skillet of copper and blue lacquer—the symbol of a dragon curled around a compass.\n\nLyra Waverly was sixteen and the apprentice mapmaker to Master Joren, the old man who could bend a road onto a line on parchment and insist, with a stubborn gleam in his eye, that “the world is more precise than your fear.” Lyra believed him in the way that a child believes the rain will come again if you wait long enough—yet she did not believe him enough to stop eyes from seeking other truths: the truth of wind-lines in the air, the truth of a voice that no one else could hear.\n\nHer room was stacked with rolled maps and water-stained atlases of sea-tracts and mountains that rose higher than Skydara’s own spires. On the desk sat a dented brass compasses and a single, stubborn belief: the world could be remapped if one listened to the whispers that carried on the air.\n\nOn a day when the sunset bled gold across the glass towers, a rumor went fluttering through the market: a storm dragon, something the city had not heard in a decade, circling the outer spires like a slow comet. People gaped, then hurried away as if storms were the kind of rumor you could swallow and forget. Lyra, who had an ear for wind-tongues and a heart for impossible journeys, felt the tremor in the air before the tremor happened.\n\nThat evening, as she practiced the hullabaloo of her chalk on parchment—the careful lines that would be the spine of a road through a city that hadn’t yet learned to walk there—the door to her studio opened with a sigh. Master Joren himself stood there, the lines on his face softening, the way a cliff does when the sea is gentle.\n\n“Lyra,” he said, not unkindly, “you hear the language of wind better than most. Perhaps you hear the other language too—the language of dragons.”\n\nLyra looked up, a spark of rebellion lighting in her eyes. “Dragons are stories, Master. We map the world so that people won’t fear the stories.”\n\n“All the fear you’ve ever had,” Joren said, “is carried in your maps. You’ll need courage to draw the truth you cannot yet see.”\n\nHe handed her a rolled parchment, sealed with wax bearing the mark of a dragon in flight. The seal was old—one Lyra had only seen in the margins of a long-forgotten atlas, a seal that meant either fortune or trouble. The wax bore a single word: Ember.\n\n“This is not for the desk,” Master Joren warned. “This is for the wind.”\n\nThat night, under a ceiling of inky blue and wind-chimes that rattled like tiny bells in a storm, Lyra stared at the parchment. It was not a map as she knew maps to be. It shimmered, like a heat-haze, and as she leaned closer, the lines moved of their own accord. The map was not a map at",
-              "type": "output_text"
-            }
-          ],
-          "id": "msg_04010e4437644b230068e3fe1b33148199876e848fd632c38d",
-          "role": "assistant",
-          "status": "incomplete",
-          "type": "message"
         }
       ],
       "parallel_tool_calls": true,
@@ -101,11 +87,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 2969,
+        "output_tokens": 2944,
         "output_tokens_details": {
-          "reasoning_tokens": 2112
+          "reasoning_tokens": 2944
         },
-        "total_tokens": 2984
+        "total_tokens": 2959
       },
       "user": null
     },
@@ -117,7 +103,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a6eb855d038222-ORD"
+        "98a92c0f29abe264-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -126,13 +112,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 17:36:32 GMT"
+        "Tue, 07 Oct 2025 00:10:06 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "16221"
+        "14889"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -144,8 +130,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=RBYuMkxK0Ax.tXaACv.ytlwVN3uC08tnRwGCh6oCPdA-1759772192-1.0.1.1-pKMUwjdn2drKGvwsFi.AS9cUVZjK0.0P4oeDLMMbCrWHVbt12qKAy2e67NUzVl1pn4.0TCs6F60s.7r3e.0Z_lRqt.nVJYdHH2BVE6a_Ejg; path=/; expires=Mon, 06-Oct-25 18:06:32 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=MgrnVePNP9pax4ZR4qcXdflI0pAkNCJqkhrFBd3A0bo-1759772192521-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=uuFtd1uljHM4ySBJ5hSED3mZgNCV.9GSQt_Jrq5L7rc-1759795806-1.0.1.1-SFOSHJt_wR.wB22uWvD_e2D9NhM9uNSYQbtCogaCV3BYPfJv8GvSy9n..5Vtu7NNRxKzWaqMt22ucbfBWffh2XXaCkBo3rge6jNlas0qElU; path=/; expires=Tue, 07-Oct-25 00:40:06 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=GCwQvot_e0PJBSaz1qvexhCVsiFx88nHZJhwh.u6V08-1759795806224-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -157,28 +143,28 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "16226"
+        "14892"
       ],
       "x-ratelimit-limit-requests": [
-        "5000"
+        "10000"
       ],
       "x-ratelimit-limit-tokens": [
-        "4000000"
+        "10000000"
       ],
       "x-ratelimit-remaining-requests": [
-        "4999"
+        "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "3999768"
+        "9999768"
       ],
       "x-ratelimit-reset-requests": [
-        "12ms"
+        "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "3ms"
+        "1ms"
       ],
       "x-request-id": [
-        "req_dd9d8761d5aa067c7478c9d90b0541f0"
+        "req_f1fcdadecb82635d67865cf44cda6303"
       ]
     },
     "status": 200

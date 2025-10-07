@@ -38,11 +38,11 @@
     "body": {
       "candidates": [
         {
-          "avgLogprobs": -0.43126328137456155,
+          "avgLogprobs": -0.426351142652107,
           "content": {
             "parts": [
               {
-                "text": "The wind howled a mournful dirge through the jagged peaks of the Dragon's Tooth Mountains, a range so named for the sharp, obsidian-like rock formations that jutted skyward. Elara, a young woman with eyes the color of storm clouds and hair like spun moonlight, shivered despite the thick furs she wore. She was a Dragon Whisperer, a rare and almost mythical breed, and her destiny, as she understood it, lay within these perilous mountains.\n\nElara"
+                "text": "The wind, a biting, teeth-chattering wind, whipped through Elara’s threadbare cloak as she crested the ridge. Below, nestled in the valley like a slumbering beast, lay the village of Oakhaven. Or, what was left of it. Smoke still curled lazily from charred timbers, a grim testament to the dragon's wrath.\n\nElara, barely seventeen with eyes the color of storm clouds and hair the shade of raven's wings, had arrived too"
               }
             ],
             "role": "model"
@@ -51,13 +51,13 @@
         }
       ],
       "modelVersion": "gemini-2.0-flash",
-      "responseId": "B-njaKOgIrbjjMcP1O-I2Ag",
+      "responseId": "pRnlaMNT4piMxw_FpOnxCA",
       "usageMetadata": {
-        "candidatesTokenCount": 98,
+        "candidatesTokenCount": 99,
         "candidatesTokensDetails": [
           {
             "modality": "TEXT",
-            "tokenCount": 98
+            "tokenCount": 99
           }
         ],
         "promptTokenCount": 9,
@@ -67,7 +67,7 @@
             "tokenCount": 9
           }
         ],
-        "totalTokenCount": 107
+        "totalTokenCount": 108
       }
     },
     "headers": {
@@ -78,13 +78,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Mon, 06 Oct 2025 16:06:33 GMT"
+        "Tue, 07 Oct 2025 13:46:14 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=1507"
+        "gfet4t7; dur=1488"
       ],
       "transfer-encoding": [
         "chunked"

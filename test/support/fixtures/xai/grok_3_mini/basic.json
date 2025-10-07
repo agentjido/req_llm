@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTMtbWluaSIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay0zLW1pbmkiLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
-      "max_completion_tokens": 200,
+      "max_completion_tokens": 2000,
       "messages": [
         {
           "content": "Hello world!",
@@ -39,24 +39,24 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "Hello! It's great to hear from you. 😊 I'm here to help with anything you need—whether it's answering questions, giving advice, or just chatting. What's on your mind?",
-            "reasoning_content": "First, the user said \"Hello world!\" This is a common greeting, often used as a simple test message in programming, like the classic \"Hello, World!\" program.\n\nAs an AI assistant, my role is to respond helpfully, truthfully, and engagingly. I should acknowledge the greeting and perhaps build on it to make the conversation more interactive.\n\nPossible responses:\n\n- A simple greeting back, like \"Hello! How can I help you today?\"\n\n- Since it's \"Hello world!\", I could reference the programming context to make it fun, especially if the user is a programmer.\n\n- Keep it friendly and open-ended to encourage further interaction.\n\nStructure my response:\n\n1. Start with a greeting to mirror the user's message.\n\n2. Add a bit of personality or humor.\n\n3. Ask a question or offer assistance to continue the conversation.\n\nEnsure my response aligns with my system prompt: \"You are a helpful assistant.\" So, I need to be helpful.\n\nFinal response idea:\n\n- Greet back: \"Hello there!\"\n\n- Acknowledge: \"It's great to see the classic 'Hello world!' greeting.\"\n\n- Offer help: \"What can I do for you today?\"\n\nMake it concise and natural.",
+            "content": "Hello! It's great to hear from you. 😊 How can I assist you today? Whether you have a question, need some advice, or just want to chat, I'm here to help!",
+            "reasoning_content": "First, the user said \"Hello world!\" This is a common greeting, often used as a simple test message in programming, like the classic \"Hello, World!\" program.\n\nAs an AI assistant, my role is to respond helpfully, truthfully, and engagingly. I should acknowledge the greeting and perhaps build on it to make the conversation natural.\n\nPossible responses:\n\n- A simple greeting back, like \"Hello! How can I help you today?\"\n\n- Since it's \"Hello world!\", I could reference the programming context if it seems relevant, but I shouldn't assume that's what they mean.\n\n- Keep it friendly and open-ended to encourage further interaction.\n\nStructure my response:\n\n1. Greet back to match their energy.\n\n2. Ask a question or offer assistance to continue the conversation.\n\n3. Be concise and positive.\n\nFinal response idea: \"Hello! It's great to hear from you. What can I do for you today?\"\n\nThat sounds professional and inviting.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759763208,
-      "id": "8cae9a7a-5e29-0f7e-5b4f-60b188b6a3d0_us-east-1",
+      "created": 1759844442,
+      "id": "94b62652-5acd-ad86-eb55-53f508e6fe77_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 37,
+        "completion_tokens": 39,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 241,
+          "reasoning_tokens": 191,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
@@ -67,7 +67,7 @@
           "image_tokens": 0,
           "text_tokens": 10
         },
-        "total_tokens": 288
+        "total_tokens": 240
       }
     },
     "headers": {
@@ -81,7 +81,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a61097b8c3e578-ORD"
+        "98adcfd83f582256-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -90,13 +90,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 15:06:51 GMT"
+        "Tue, 07 Oct 2025 13:40:44 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=e0LUX7ZpuH8SiaYVt.ABD0.2li.pKycLtVLjIp4_jGI-1759763211-1.0.1.1-vSCLipswF5aG7vJ_c4I2sZ_6MhMtwHRdJYjf9XIHB055s.sy2VHm3I8X5l7RDwDq0tJ3K9HzCaECUXjke8FQCgvSImWy7gHJrwp_6oCcSl8; path=/; expires=Mon, 06-Oct-25 15:36:51 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=xpXaUYl1V22aNbwEqbHgMdlT0k0wAZcUdCCv1Cz81AU-1759844444-1.0.1.1-vpPfdHEHQsAiIhG6NkV2qHRbsHpj1xAIIOiL.OCHU.Pn2Otgxvfh3MccfCoqvoHWWbGSZrhKq5lWjMHBH7dusTxw0kAcWm7jppmj9uByuIY; path=/; expires=Tue, 07-Oct-25 14:10:44 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -108,7 +108,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-c9b9a13c9bee8576d314749c63abd8db-df2897000064132d-01"
+        "00-a7740ba24b716da8f3c5398b7e015436-53eae004001915f1-01"
       ],
       "x-zero-data-retention": [
         "false"

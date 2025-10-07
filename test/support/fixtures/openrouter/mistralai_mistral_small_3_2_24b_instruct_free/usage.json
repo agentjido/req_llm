@@ -35,11 +35,15 @@
   "response": {
     "body": {
       "error": {
-        "code": 503,
-        "message": "Provider returned error",
+        "code": 429,
+        "message": "Rate limit exceeded: free-models-per-min. ",
         "metadata": {
-          "provider_name": "Chutes",
-          "raw": "{\"detail\":\"No instances available (yet) for chute_id='8cac9bf4-d7e2-55eb-b4bb-1416b7f57131'\"}"
+          "headers": {
+            "X-RateLimit-Limit": "16",
+            "X-RateLimit-Remaining": "0",
+            "X-RateLimit-Reset": "1759845420000"
+          },
+          "provider_name": null
         }
       },
       "user_id": "user_2iYQIxKY28QuzANm4mmKBlOxzx2"
@@ -49,7 +53,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d5a4a7bcd1249-ORD"
+        "98ade6b66dbe22dc-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -58,7 +62,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:44:16 GMT"
+        "Tue, 07 Oct 2025 13:56:19 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -77,8 +81,17 @@
       ],
       "x-content-type-options": [
         "nosniff"
+      ],
+      "x-ratelimit-limit": [
+        "16"
+      ],
+      "x-ratelimit-remaining": [
+        "0"
+      ],
+      "x-ratelimit-reset": [
+        "1759845420000"
       ]
     },
-    "status": 503
+    "status": 429
   }
 }

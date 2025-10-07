@@ -59,24 +59,24 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "I don't have the capability to tell jokes, as my tools are limited to functions like getting weather information. If you'd like weather details or something related, let me know!",
-            "reasoning_content": "First, the user asked: \"Tell me a joke about cats.\" This is a request for a joke, which is not related to any of the available functions. The only available function is \"get_weather\", which is for getting weather information based on a location.\n\nI need to check if this query can be addressed using the available functions. The available functions are limited to getting weather, so no, this doesn't match.\n\nThe instructions say: \"If the user's query can be addressed using an available function, and all required parameters are provided or obviously inferable, trigger a function call.\" In this case, it cannot be addressed with the available functions.\n\nFurther, it says: \"Do not call a function if no matching functions apply or if parameters are missing/unclear. Ask for clarification only if none of the provided functions are able to advance the user's request.\"\n\nSince none of the functions can advance this request, I should not call a function. Instead, I should respond directly or ask for clarification if needed. But the query is clear; it's just not something I can handle with the tools I have.\n\nThe instructions emphasize: \"Keep your response to user clear; please do not make your response verbose!\" So, I should be concise.\n\nPossible responses: I could just say I don't have the capability to tell jokes, or politely decline and suggest sticking to weather queries.\n\nSince the system prompt is about using functions for available actions, and this isn't one, I should respond without any function call.\n\nFinal decision: Respond directly without calling a function, keeping it clear and non-verbose.",
+            "content": "I don't have the capability to tell jokes, as my tools are limited to things like getting weather information. If you have a question about the weather or something related, let me know!",
+            "reasoning_content": "First, the user asked: \"Tell me a joke about cats.\" This is a request for a joke, which is not related to any of the available functions. The only available function is \"get_weather\", which is for getting weather information based on a location.\n\nI need to check if this query can be addressed using the available functions. The available functions are limited to getting weather, so no, this doesn't match.\n\nThe instructions say: \"If the user's query can be addressed using an available function, and all required parameters are provided or obviously inferable, trigger a function call.\" In this case, it cannot be addressed using any available function.\n\nFurther, it says: \"Do not call a function if no matching functions apply or if parameters are missing/unclear. Ask for clarification only if none of the provided functions are able to advance the user's request.\"\n\nSince none of the functions can advance this request, I should not call a function. Instead, I should respond directly or ask for clarification if needed. But the query is clear; it's just not something I can handle with the tools I have.\n\nThe instructions emphasize: \"Keep your response to user clear; please do not make your response verbose!\" So, I should be concise.\n\nPossible responses: I could just say I don't have the capability to tell jokes, or politely decline and suggest sticking to weather queries.\n\nSince the system prompt says: \"If there is anything unclear, ask the user for clarification,\" but in this case, the query is clear, just not actionable with my tools.\n\nI think the best response is to inform the user that I can't help with that and perhaps redirect or end the conversation politely.\n\nFinal decision: Do not use <function_call> tags. Respond directly.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759763217,
-      "id": "2aad0922-f1a9-96df-f61d-b7a145011d44_us-east-1",
+      "created": 1759844442,
+      "id": "33ee4636-6353-1be3-9ef2-0ed757d4f357_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 34,
+        "completion_tokens": 37,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 318,
+          "reasoning_tokens": 351,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
@@ -87,7 +87,7 @@
           "image_tokens": 0,
           "text_tokens": 277
         },
-        "total_tokens": 629
+        "total_tokens": 665
       }
     },
     "headers": {
@@ -101,7 +101,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a610cd9d805074-ORD"
+        "98adcfd3ac3d2264-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -110,13 +110,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 15:07:01 GMT"
+        "Tue, 07 Oct 2025 13:40:45 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=lUxS6Macfqixq2rxFFROuHk.QTDy2uZrOyWT.hzYrpM-1759763221-1.0.1.1-WSFbrYKViOtjPfF3fCuHeJSwk60.gPQMkZxfjWDtyOEJyMNk_LJGJf1cqwUnoE.q8AdwkNmCsGmJkBJj1I5DWUbZj805pt4ORVChrmDXG8s; path=/; expires=Mon, 06-Oct-25 15:37:01 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=RFY9utjXMLNAjLWVS2E5OAn5EaP9q8DJJhZ6p0HbsPw-1759844445-1.0.1.1-dnCSLi2FCbXVdfspa_CGfqVi9_IKV_Z.Usd5sRban8bZ7i5k6spQzOSbF1uhUw3TgQrri_yvg2EXXpDjVrRn0ACRZNJCkZBc5K0X.QvJjGo; path=/; expires=Tue, 07-Oct-25 14:10:45 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -128,7 +128,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-350eff261bc8213c6e57e42ee0eedfa2-448a80e50063b800-01"
+        "00-c66c9c37761a7b29e3cab4bac1f72c97-0af9d2c2001d7b3d-01"
       ],
       "x-zero-data-retention": [
         "false"

@@ -40,7 +40,7 @@
         "gzip"
       ],
       "anthropic-beta": [
-        "tools-2024-05-16"
+        "interleaved-thinking-2025-05-14,tools-2024-05-16"
       ],
       "anthropic-version": [
         "2023-06-01"
@@ -60,16 +60,16 @@
     "body": {
       "content": [
         {
-          "signature": "ErkCCkYICBgCKkAqhHuWRxhQUHyt0yYy9dqxhPhi4b20+1WvsgRnLk5Dkd1mNtaOKsVJ/auFUQMOfYlVLNJI+XIm8YazttSI8ABNEgzFVEpAdFHdwUo7uMIaDN4bnqcB1vavFh95KyIwn7QApll8TdJwbrWIE4ieO3tvemFamhXVqFioEZQPpxs2aAwRQmyXlAH41CfE/YdvKqAB0FVEOJswHJS/R4PvbCOkonwXu4iTnar3fkQFHEKL38vCkP/x2L2WAaBYtKLpCDDP4dw7229sqpdhhUwV+VuIDpwyGq0ozUNhneXqHEre9D4LXMw2B/pFz8Yz4VCY9/2nxP2A+R+eup/sGuVoIBapHd5yQ4kKFfVuYbVJVlpFKk5Z+ZUTBPYoviRwd4u7EPJIvxbcyv9r0afoMBuztSNquRgB",
-          "thinking": "The user is asking me to tell a joke about cats. This is a simple request that doesn't require any tools. I should just respond with a cat joke.",
+          "signature": "EuICCkYICBgCKkAiqE3piIrcmorYlILN1+gszpKGdXrl1YBWl1iO9ObwR/tKLEmGkE/glpfuUG5uGUg1uXFum48e6tc++YQzEaEoEgwMQwebPguTvvx48oUaDCMBjgRtRSaqkC+BECIwuCTfTI5EMPd5X3HEMWGQfIep5Cb6DnxIE3/i34ZgzrEej/SFwYkI453Pv8+oo+1cKskBSgIey43/kRX9n42dmj7QF28INvHQrKBPl+ST4sxO4ny0RJBn8vv6w3bgrZo5TU6dcde+dsdN80ydj8LwpdqbTpAxuCAvkgcv6ZAs8rGtu02AYSsnJZIpkbLeE28OBbZkTxAxaDqyHoTjhc+LyuHCeFjM9EYHo0vBthn6mXE3tC37l2lJP9Mqp2i5dQUPeyEWoeBE2Yd/KhXA0y3GCkPjCftanvxFT7Ve6ANZG0ZxK/NffV0f4oSiKBMThImWvel+iypJ6J10iK8mGAE=",
+          "thinking": "The user is asking for a joke about cats. This is a simple request that doesn't require any function calls - they just want to hear a cat joke. I should just tell them a funny cat joke.",
           "type": "thinking"
         },
         {
-          "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs! 🐱\n\nWould you like to hear another one?",
+          "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs! 🐱\n\nWant to hear another one? 😄",
           "type": "text"
         }
       ],
-      "id": "msg_018VbU23Tw7DRtm716D3z9r5",
+      "id": "msg_0135wsyVfFcZ5XQTNjVtwgDs",
       "model": "claude-sonnet-4-5-20250929",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -82,8 +82,8 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 593,
-        "output_tokens": 85,
+        "input_tokens": 741,
+        "output_tokens": 95,
         "service_tier": "standard"
       }
     },
@@ -98,7 +98,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-06T18:22:41Z"
+        "2025-10-07T13:54:15Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -107,7 +107,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-06T18:22:42Z"
+        "2025-10-07T13:54:16Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -116,7 +116,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-06T18:22:40Z"
+        "2025-10-07T13:54:13Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -125,13 +125,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-06T18:22:41Z"
+        "2025-10-07T13:54:15Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a72f7bce91ff5c-ORD"
+        "98ade3a31b1fe802-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -140,10 +140,10 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 18:22:42 GMT"
+        "Tue, 07 Oct 2025 13:54:16 GMT"
       ],
       "request-id": [
-        "req_011CTrQmRHZqaP7YYAXfut4e"
+        "req_011CTsx74sfBcUGuYGyuyqnT"
       ],
       "server": [
         "cloudflare"
@@ -158,7 +158,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "2858"
+        "3148"
       ],
       "x-robots-tag": [
         "none"

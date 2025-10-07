@@ -35,10 +35,14 @@
     "body": {
       "error": {
         "code": 429,
-        "message": "Provider returned error",
+        "message": "Rate limit exceeded: free-models-per-min. ",
         "metadata": {
-          "provider_name": "Chutes",
-          "raw": "mistralai/mistral-small-3.2-24b-instruct:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations"
+          "headers": {
+            "X-RateLimit-Limit": "16",
+            "X-RateLimit-Remaining": "0",
+            "X-RateLimit-Reset": "1759845420000"
+          },
+          "provider_name": null
         }
       },
       "user_id": "user_2iYQIxKY28QuzANm4mmKBlOxzx2"
@@ -48,7 +52,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d5a5289ca1249-ORD"
+        "98ade6b88f8422dc-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -57,7 +61,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:44:17 GMT"
+        "Tue, 07 Oct 2025 13:56:20 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -76,6 +80,15 @@
       ],
       "x-content-type-options": [
         "nosniff"
+      ],
+      "x-ratelimit-limit": [
+        "16"
+      ],
+      "x-ratelimit-remaining": [
+        "0"
+      ],
+      "x-ratelimit-reset": [
+        "1759845420000"
       ]
     },
     "status": 429

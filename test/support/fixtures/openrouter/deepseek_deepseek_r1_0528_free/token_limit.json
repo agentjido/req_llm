@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImRlZXBzZWVrL2RlZXBzZWVrLXIxLTA1Mjg6ZnJlZSIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC41fQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJkZWVwc2Vlay9kZWVwc2Vlay1yMS0wNTI4OmZyZWUiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuNX0="
     },
     "canonical_json": {
-      "max_tokens": 100,
+      "max_tokens": 3000,
       "messages": [
         {
           "content": "Write a very long story about dragons and adventures",
@@ -49,7 +49,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d5f0d382602a7-ORD"
+        "98adfd010a8e9a2e-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -58,7 +58,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:47:30 GMT"
+        "Tue, 07 Oct 2025 14:11:33 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

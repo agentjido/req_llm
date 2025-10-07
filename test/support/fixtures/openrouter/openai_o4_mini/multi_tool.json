@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjozMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJvcGVuYWkvbzQtbWluaSIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9vNC1taW5pIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
-      "max_tokens": 300,
+      "max_tokens": 20000,
       "messages": [
         {
           "content": "What's the weather like in Paris, France?",
@@ -99,9 +99,9 @@
             "reasoning": null,
             "reasoning_details": [
               {
-                "data": "gAAAAABo4ne2SlGCGFIh01JXO10bWOjtR2VHWXMZLrFSvoQvfa251qtF_lD7wxX8RYNV7VfOXE-E6THYY-SrfHyEAKwDcqlkB2NqwChrqDnujzcqwG-X0h96uF4daDCmkB1Y4dSZzd_9RDNW9vDbH6tvyZqvKuxKD3KvA5fTxNtvEL81A_HgFVTWcVKw-ESGgcxd5zj0p-fReHY7nEYFOeDeFATNGL8CL7VmQTTn1fgoYHKN-UT2BduM5sSIhQv7bHcfTLZKl3fNmFHDZbbh98aJP_b_ukKj8SQZEL9a2FwRA50kBRsOr53GEi3ITPNjqUA9YXpIizjfau75Ftr1ckNkbsdWTHNTPbqofJLROsVOka_-Zm_-UKsUTg5Y-R3OWnWkbMakHANTEVJRquzTbujKzitM59TzIpxn7M8rGO-N5sj834cL6xJRneqrH0_FnsfqquS8bhFvEIYDddG4oizCbgLzi8Ne1Bssdtq3EoukgjFEKpL2otyY7SFzBIXQoR7ErKkz6xZgOxhSB74HbNOazVTnO-gS2eAJpwlf20pSdiQvH7pzFOwpnVm_KJiewj0UI4Di4Sy3qBY_DFrnDBqxpeZ2i1Sw_HqUDnXtXimHKz5s-J3-5CL2CK02dtr-OXb8R_iS3kPPuibRP-37n5odkRae4-EPk479qqj37ouvoQQJSUU95PfkNC0k2aAY7S31NYirP82L_LXpg3odHIlu65wPY_SKltyjfeZUUT9ZzKKQE7v3mz-rpcaposzrdY_-R8A-sGz4hhxNqqcgpJOypBTqw2EzpUOsgDariw4aeHqgzMJcyFG-D3--oH-oLun082B6UANWZ3ruZ-K8IQb3MYhmw_IIWdjhjXDcXwfho7vobIgsLayCWMiyVPHdvjOa4H3tDkgd7IWifmVXZrizHHXqThUP-DZSP8VJbZVIoNf-TKZzj-pufbv0N2hWUE-RY9LyRJcb",
+                "data": "gAAAAABo5Rw1iQJO_WDWLNqzoTKIEPmTxWpwo0qFm4RAgRD5ZDFO1GANUJ1alM1c02KDIsEQRemAyJ0EvlUCIDRHqed1hZwkM6sxjHrESwOBo9psqboI9z1pF3CPFS0XEwbFERa_Uex4H2WcrbZEM48R3kCNKMjfoRHRivZAzZWrztsOnBLKybSUD8feTvPlQvesZlqgP8ad6lB-UeUHijz10c5X1a_ncg46l6cQcjEtuSkwne0TJQaXDIZxxU-yLMkZz7kcAXsXAZ_g4rOI2ToB1mKtTPwt1vFbbiLeIIyRgbCJl_eqi8EB57guw4dADvwfAegNb3v8zRnxYUqKsGHlXZFqlfkgA1-0xcl0sFrJqeRva1G6Wm_AhcevCLcLt3dxXGJ3iihrWGe5E06uW2EBbxmYT4oUuONmj66rudGWQvW5C9jRSAPHxJdXPBUoQnh67oJYCGGtei-gRecwcXmO0ROJQQUTR796WMRtvl5JIzAtr1NZnjssCt7iwWa71YiVCQq8pxZVOGPiXsD2K446gpiV9l0bSYnJgn-5r_z2X-hmXeXnvYYnO5vXEEHVEa2gaR55cFsGmB9nP-iNknBCP-6MwIZ8h-pqHWl-7-AyJkyEjykDB43a7mcauYwGMygP5URAcX32PruTstiQ7wpRBYeR8ovKumZ7yEXsZNtRjKyV3HcEAC2Z1tu4-r-3ND9_7HIWZ5qghofRIE8bALP45C7H9AuhsmVT8YOKf3wrx9fmKUw0aifOVoeyY9c9nHcAtx14uBzghWcWCIV45c1p2oQ11k87xCrQNHYcaz6xTFYSeLH-OQp62lQNv5JvckLumjNLjDYJzvevpK7ts_5TENJTVMLZCsH3nuxI4IAiSRG8Dv9dWA4bTkt82kFEI1NH7Ns8PXZ7XarD4AInyn67DtEmEPhNpOHbit4gw-rN_ARzDJGUzYg=",
                 "format": "openai-responses-v1",
-                "id": "rs_0732000fa3d763740168e277b6038881979cfb823541fb1bb0",
+                "id": "rs_067c1c6e9e3b39ee0168e51c3566fc8195ad981c9c7dfd8ae1",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -114,7 +114,7 @@
                   "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "call_vn9y0FyUAklYLND7lfeayw2r",
+                "id": "call_9jRkXRh6PFloAFWA8j5PKzVR",
                 "index": 0,
                 "type": "function"
               }
@@ -123,8 +123,8 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1759672245,
-      "id": "gen-1759672245-IZRBkv5vTC11KWsSx9Na",
+      "created": 1759845428,
+      "id": "gen-1759845428-P44DeV0gEBlyAeQ3yX7u",
       "model": "openai/o4-mini",
       "object": "chat.completion",
       "provider": "OpenAI",
@@ -139,7 +139,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d63cca8eb1048-ORD"
+        "98ade7e71b938714-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -148,7 +148,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:50:45 GMT"
+        "Tue, 07 Oct 2025 13:57:08 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

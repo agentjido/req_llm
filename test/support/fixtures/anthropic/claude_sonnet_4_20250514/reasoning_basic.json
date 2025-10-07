@@ -22,6 +22,9 @@
       "accept-encoding": [
         "gzip"
       ],
+      "anthropic-beta": [
+        "interleaved-thinking-2025-05-14"
+      ],
       "anthropic-version": [
         "2023-06-01"
       ],
@@ -40,16 +43,16 @@
     "body": {
       "content": [
         {
-          "signature": "EsMDCkYICBgCKkBw0BJI7ETzQ29b0wC4uLY5ErJdoje9REJz2b0/cnZdMB3A45Lt4E9ok4RgsxocSp2EKmykCaRS0MA/X8N3p8ZsEgyqOgFQSt1VXzKP9scaDFQ40/VQtmiG0vBNUiIwryeP4tulpP86kZO5zvVULfoMGZ0G9aO5ZpiJs9M+AmJPQo3O5s2tW9aWJdBJB1KBKqoCfsSHbEVZ35ix/STf93axpmGY/hoR6gcLq/eiDgkV6XRcDu3e+4KA8eNNBm8z1ZHQtPr/7AHeA47nIrP24bLjaJh2HX/psc1JFUHWyKe5HuPSDWc/gmb+1kgAIFURoCgGYQY3HYLGxXkIlXGpsi8/NOLnwvqYXSZfeBqSvFktfI7DW3sH7uiDU8fbWaOCUojdWJD3hJ7wWY1+cnSpj0E9M28e5m1+9w8j0nSTJ1d1hfsxXFGRX9o1zBjIfynqNyTd14owVJGdW2a7EcWkdsy/iWIstoXXLcdO6kk/eta19xTRNtLqT2IVtfGj8iZIsy4mt/CJBfqUrA6QPpiapvx2e0n9Y/uvRM+6ZWKkgKLcFgMjqFmg6hwc6VahuN5v3i8CrGuFQ5iYfH8fjxgB",
-          "thinking": "I need to calculate 12 × 7.\n\nI can do this in a few ways:\n- 12 × 7 = (10 + 2) × 7 = 10×7 + 2×7 = 70 + 14 = 84\n- Or I can think of it as 12 × 7 = 12 × (5 + 2) = 12×5 + 12×2 = 60 + 24 = 84\n- Or just recall that 12 × 7 = 84 from multiplication tables\n\nAll methods give me 84.",
+          "signature": "EpUDCkYICBgCKkB4U90Ze840JViL2Tln5gT2Ty1R1OXb6vxm4M5l8fC0ocexQin1Qgzz4jdkOyDbdWKAh8J13UQ6Heai1bp+LZHVEgyT8S/6hHMWM0cAZKgaDHfm714IvNG0SYBuDiIwa4HGDbY8vQTi7eDnx0m5Dqs965teEABZ2e0ISCkvJS1WSbm0zLnRLrk1dLti2gySKvwBAawkNj/fSRkv1oy0kC0DdetillAQ77Cy7hd/triuDITfZ18w2xu7aZ1ndTc4diovfxJu3IkDQGCit+ldgxWyMOH4m8ctLdYOrMjoqhYHku/4fGFbtbQVz/pW/cEI+mTWVU1w3ttSeR0sATDjUyi9xf5lg4u9Di8KlF07zYZMy9eMmRvh5S8wKlkw3iL65R5tumtC1F6+/cvZAh8g3wmKq/3S4vAW/pClYgoYtzMvSU7NX8Cc6V1RE9XkRekBjXZ+pWsXY+QI0F4EI11ptL6cDSN5jrEfyOHEmGy4vomP2lTrLmLfYoT3LEpALGsuhijwtMer77fuSM5G8a5+GAE=",
+          "thinking": "I need to solve 12 * 7.\n\nI can do this a few ways:\n- 12 * 7 = (10 + 2) * 7 = 10 * 7 + 2 * 7 = 70 + 14 = 84\n- Or I can think of it as 7 * 12 = 7 * 10 + 7 * 2 = 70 + 14 = 84\n- Or just recall that 12 * 7 = 84 from memory\n\nThe answer is 84.",
           "type": "thinking"
         },
         {
-          "text": "**Internal thinking:** I can break this down as 12 × 7 = (10 + 2) × 7 = 70 + 14\n\n**Answer:** 12 × 7 = 84",
+          "text": "**Internal thinking:** I can break this down as 12 × 7 = (10 + 2) × 7 = 70 + 14 = 84\n\n**Answer:** 12 × 7 = 84",
           "type": "text"
         }
       ],
-      "id": "msg_01N37oWscV5XHJHH6MNzxRo7",
+      "id": "msg_017xCRxSnLW2k9kS9LqvcDgd",
       "model": "claude-sonnet-4-20250514",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -63,7 +66,7 @@
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
         "input_tokens": 50,
-        "output_tokens": 206,
+        "output_tokens": 203,
         "service_tier": "standard"
       }
     },
@@ -78,7 +81,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-06T17:10:30Z"
+        "2025-10-07T13:52:37Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -87,7 +90,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-06T17:10:33Z"
+        "2025-10-07T13:52:39Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -96,7 +99,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-06T17:10:29Z"
+        "2025-10-07T13:52:36Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -105,13 +108,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-06T17:10:30Z"
+        "2025-10-07T13:52:37Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a6c5c29abb9bcc-ORD"
+        "98ade1415a7f118f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -120,10 +123,10 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 17:10:33 GMT"
+        "Tue, 07 Oct 2025 13:52:39 GMT"
       ],
       "request-id": [
-        "req_011CTrKGCxGebMzkAVW6er7a"
+        "req_011CTswysni4yg6LL462b8rH"
       ],
       "server": [
         "cloudflare"
@@ -138,7 +141,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "3617"
+        "3459"
       ],
       "x-robots-tag": [
         "none"

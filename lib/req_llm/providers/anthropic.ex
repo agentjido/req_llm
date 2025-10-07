@@ -90,7 +90,11 @@ defmodule ReqLLM.Providers.Anthropic do
       req_keys = supported_provider_options() ++ @req_keys
 
       default_timeout =
-        if Keyword.has_key?(processed_opts, :thinking), do: 300_000, else: 30_000
+        if Keyword.has_key?(processed_opts, :thinking) do
+          Application.get_env(:req_llm, :thinking_timeout, 300_000)
+        else
+          Application.get_env(:req_llm, :receive_timeout, 120_000)
+        end
 
       timeout = Keyword.get(processed_opts, :receive_timeout, default_timeout)
 
@@ -239,7 +243,11 @@ defmodule ReqLLM.Providers.Anthropic do
 
     # Set default timeout for reasoning models
     default_timeout =
-      if Keyword.has_key?(translated_opts, :thinking), do: 300_000, else: 30_000
+      if Keyword.has_key?(translated_opts, :thinking) do
+        Application.get_env(:req_llm, :thinking_timeout, 300_000)
+      else
+        Application.get_env(:req_llm, :receive_timeout, 120_000)
+      end
 
     translated_opts =
       Keyword.put_new(translated_opts, :receive_timeout, default_timeout)
@@ -269,12 +277,12 @@ defmodule ReqLLM.Providers.Anthropic do
         beta_features
       end
 
-    # TODO: Add thinking beta when we know the correct header format
-    # beta_features = if has_thinking?(opts) do
-    #   ["thinking-2025-01-19" | beta_features]
-    # else
-    #   beta_features
-    # end
+    beta_features =
+      if has_thinking?(opts) do
+        ["interleaved-thinking-2025-05-14" | beta_features]
+      else
+        beta_features
+      end
 
     headers =
       case beta_features do
@@ -302,13 +310,13 @@ defmodule ReqLLM.Providers.Anthropic do
   end
 
   @impl ReqLLM.Provider
-  def translate_options(_operation, _model, opts) do
+  def translate_options(operation, _model, opts) do
     # Anthropic-specific parameter translation
     translated_opts =
       opts
       |> translate_stop_parameter()
       |> translate_reasoning_effort()
-      |> validate_tool_choice_with_thinking()
+      |> disable_thinking_for_forced_tool_choice(operation)
       |> remove_conflicting_sampling_params()
       |> translate_unsupported_parameters()
 
@@ -332,6 +340,14 @@ defmodule ReqLLM.Providers.Anthropic do
         beta_features
       end
 
+    # Add interleaved thinking beta if thinking is enabled
+    beta_features =
+      if has_thinking?(user_opts) do
+        ["interleaved-thinking-2025-05-14" | beta_features]
+      else
+        beta_features
+      end
+
     case beta_features do
       [] ->
         request
@@ -347,15 +363,14 @@ defmodule ReqLLM.Providers.Anthropic do
     is_list(tools) and tools != []
   end
 
-  # defp has_thinking?(user_opts) do
-  #   # Check if thinking parameter is present or reasoning_effort is set
-  #   thinking = Keyword.get(user_opts, :thinking)
-  #   reasoning_effort = Keyword.get(user_opts, :reasoning_effort)
-  #   provider_options = Keyword.get(user_opts, :provider_options, [])
-  #   provider_reasoning_effort = Keyword.get(provider_options, :reasoning_effort)
+  defp has_thinking?(user_opts) do
+    thinking = Keyword.get(user_opts, :thinking)
+    reasoning_effort = Keyword.get(user_opts, :reasoning_effort)
+    provider_options = Keyword.get(user_opts, :provider_options, [])
+    provider_reasoning_effort = Keyword.get(provider_options, :reasoning_effort)
 
-  #   not is_nil(thinking) or not is_nil(reasoning_effort) or not is_nil(provider_reasoning_effort)
-  # end
+    not is_nil(thinking) or not is_nil(reasoning_effort) or not is_nil(provider_reasoning_effort)
+  end
 
   defp add_basic_options(body, request_options) do
     body =
@@ -461,15 +476,24 @@ defmodule ReqLLM.Providers.Anthropic do
     end
   end
 
-  defp validate_tool_choice_with_thinking(opts) do
+  defp disable_thinking_for_forced_tool_choice(opts, operation) do
     thinking = Keyword.get(opts, :thinking)
     tool_choice = Keyword.get(opts, :tool_choice)
 
-    case {thinking, tool_choice} do
-      {%{type: "enabled"}, %{type: type}} when type in ["tool", "any"] ->
+    cond do
+      is_nil(thinking) ->
+        opts
+
+      operation == :object and match?(%{type: "tool"}, tool_choice) ->
+        Keyword.delete(opts, :thinking)
+
+      match?(%{type: "tool"}, tool_choice) ->
+        Keyword.delete(opts, :thinking)
+
+      match?(%{type: "any"}, tool_choice) ->
         Keyword.put(opts, :tool_choice, %{type: "auto"})
 
-      _ ->
+      true ->
         opts
     end
   end

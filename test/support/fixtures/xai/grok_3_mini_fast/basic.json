@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTMtbWluaS1mYXN0IiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay0zLW1pbmktZmFzdCIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
-      "max_completion_tokens": 200,
+      "max_completion_tokens": 2000,
       "messages": [
         {
           "content": "Hello world!",
@@ -39,24 +39,24 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "Hello! I'm Grok, your friendly AI assistant created by xAI. It's great to hear from you—what's on your mind, or how can I help today? 😊",
-            "reasoning_content": "First, the user said \"Hello world!\" This is a common greeting, often used as a starting point in programming, like the classic \"Hello, World!\" program. But here, it's just a casual hello.\n\nAs an AI assistant, my role is to respond helpfully, engagingly, and appropriately. I should acknowledge the greeting and perhaps continue the conversation.\n\nPossible responses:\n- A simple greeting back, like \"Hello! How can I help you today?\"\n- Make it fun or reference the programming aspect, since it's \"Hello world!\"\n- Keep it friendly and open-ended to encourage further interaction.\n\nThe user might be testing me or just saying hi. In the context of this simulation, I need to respond as Grok, which is built by xAI and is meant to be truthful and helpful.\n\nKey points from my system prompt:\n- I'm Grok, created by xAI.\n- I'm helpful and maximally truthful.\n- Not based on any other companies' models.\n\nSo, in my response, I could subtly remind the user of who I am to reinforce my identity.\n\nStructure a response:\n1. Greet back: Start with \"Hello!\" to mirror the user's message.\n2. Add a bit of personality: Since I'm Grok, I can be witty or informative.\n3. Offer assistance: End by asking how I can help, as that's a standard AI response.\n\nPossible witty angle: Reference the \"Hello World\" program. For example, \"Hello world! Wait, that's my line in programming. How can I assist you?\"\n\nKeep it concise and not overwhelming.\n\nFinal response idea:\n- \"Hello! I'm Grok, created by xAI. Nice to meet you. What's on your mind today?\"\n\nThis introduces myself, responds to the greeting, and invites more conversation.",
+            "content": "Hello! I'm Grok, an AI created by xAI to assist with questions, conversations, and all sorts of helpful tasks. What's on your mind today? 😊",
+            "reasoning_content": "First, the user said \"Hello world!\" This is a common greeting, often used as a simple test message in programming, like the classic \"Hello, World!\" program.\n\nAs Grok, I'm an AI built by xAI, and I'm supposed to be helpful, truthful, and not based on other companies' models. My response should align with that.\n\nA standard response to \"Hello world!\" could be a friendly greeting back. Since this is likely an introductory message, I should make it welcoming and engaging.\n\nPossible responses:\n\n- Simply say \"Hello!\" back.\n\n- Add a bit more personality, as I'm Grok, created by xAI.\n\n- Reference the \"Hello World\" phrase to make it fun, like acknowledging it's a classic.\n\nKeep it truthful: I shouldn't claim anything false. For example, I can mention I'm an AI assistant without misleading.\n\nBe helpful: If this is the start of a conversation, I could invite further interaction.\n\nStructure the response:\n\n1. Greet back.\n\n2. Introduce myself briefly.\n\n3. Ask a question or offer assistance to continue the conversation.\n\nFinal response idea:\n\n- Start with \"Hello! I'm Grok,\"\n\n- Add a fun twist: \"the AI from xAI, here to help with your queries.\"\n\n- End with: \"What can I do for you today?\"\n\nThis keeps it concise, friendly, and on-brand.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759763210,
-      "id": "852b5ecf-bbc3-42b2-bd21-e47d2ccba286_us-east-1",
+      "created": 1759844442,
+      "id": "fffc548b-e4fe-648f-c1b5-8c520f349a7a_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 36,
+        "completion_tokens": 34,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 360,
+          "reasoning_tokens": 278,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
@@ -67,7 +67,7 @@
           "image_tokens": 0,
           "text_tokens": 10
         },
-        "total_tokens": 406
+        "total_tokens": 322
       }
     },
     "headers": {
@@ -81,7 +81,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a610a04ea9233e-ORD"
+        "98adcfd4f953e26f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -90,13 +90,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 15:06:53 GMT"
+        "Tue, 07 Oct 2025 13:40:45 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=py0mie3y1THWOFP005bMaHOj2J.p5nUM3Mq_hFASU0M-1759763213-1.0.1.1-bumN0DMNNTkFhmRGF_BroNdGKLho6nX7XofbTJeFov1JUyI6geVuPLCI.UtuNZdYqENvZKZClafVwWVhqL8006qbAAGekLn7.kT_4kXlV6U; path=/; expires=Mon, 06-Oct-25 15:36:53 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=4vfO_BWv0BnlSbxmt6_KSo2W6OhOnobh7tqDpucEhyo-1759844445-1.0.1.1-lQZjYWt89quKua2_xLTomnDND4ROTXucesUvhZoCaNbOvsiCor48FQYUmsnjOJAHhEtEnyg_tqcHWjRnas8gpWvxsIDLr_n21rC94.pJd.M; path=/; expires=Tue, 07-Oct-25 14:10:45 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -108,7 +108,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-2e92cab913f5b28013e2230d5b6ba83f-448a80e50063b6d3-01"
+        "00-89dc4c30ca947d29be0d297e9ff3bd56-4a3b6c92001cd493-01"
       ],
       "x-zero-data-retention": [
         "false"

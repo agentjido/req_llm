@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC01IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNSIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
-      "max_tokens": 200,
+      "max_tokens": 2000,
       "messages": [
         {
           "content": "Hello world!",
@@ -42,18 +42,18 @@
           "logprobs": null,
           "message": {
             "content": "Hello! How can I help you today?",
-            "reasoning": "**Greeting the user**\n\nThe user just said \"Hello world!\" which seems like they’re expecting a friendly greeting from me. My plan is to keep it brief and warm. I want to give a friendly response and maybe ask how I can help. I think it's better not to overdo it with questions or formatting; simplicity is key here. Let's keep the vibe light and welcoming!",
+            "reasoning": "**Formulating a greeting**\n\nI'm starting with a simple, polite greeting. I want to respond in a friendly manner and show that I'm ready to assist. It's important to keep things concise, so I’ll get straight to the point. Maybe I’ll ask the user how I can help or if they have any preferences for the information they need. This makes it more engaging and encourages a conversation!",
             "reasoning_details": [
               {
                 "format": "openai-responses-v1",
                 "index": 0,
-                "summary": "**Greeting the user**\n\nThe user just said \"Hello world!\" which seems like they’re expecting a friendly greeting from me. My plan is to keep it brief and warm. I want to give a friendly response and maybe ask how I can help. I think it's better not to overdo it with questions or formatting; simplicity is key here. Let's keep the vibe light and welcoming!",
+                "summary": "**Formulating a greeting**\n\nI'm starting with a simple, polite greeting. I want to respond in a friendly manner and show that I'm ready to assist. It's important to keep things concise, so I’ll get straight to the point. Maybe I’ll ask the user how I can help or if they have any preferences for the information they need. This makes it more engaging and encourages a conversation!",
                 "type": "reasoning.summary"
               },
               {
-                "data": "gAAAAABo4ne6fVipxtX3I1hHsTp6Y600sLYUP6nsCgYqFyrxvaGJjzbHAJDNrcz5OpkLdqnsAzozSyumCKuUEkvzFG0IHHXGGe9vD2PQRo6nV_HeO5E1IvjGTpt-0NqCfKvGh5DuxwtBytnKYTucr05GScCwltQaooE-iqDZ-evtqYSPNfkq8s_sDCAlYiEZtpLNUP2gxQftAl5iHO5e25c0Zz0Aq6ipODGkrDVFStTnT-EwjO2RmT8XE7ZxFqOPHCio0FuJDrj03QCFUtJeBJCJlFdS0tTvhpeKp1aaXI-BIKKwWtt-tLMlUfe4MOe9LVNzVHyPHtoX8rgUvgg3dU6_J47wHeheaq9qVAsD_36ROptsjcDdi_wCBI7ZlGoXJ1J6WYZarTVgjpp9mO7IRgRSiMXwrzmbgax6IWLbpNsMY6Ugc60jIEic0wP63WbBbB9ibmcATfOejFxDQ2qnSFEDYMTtk8UjytEjjJpYQx9En75gZ9wW_vorxv0Kk1Tn73qUPQejSmxS5R9R5HNHhgREuFyemZiRq-dnp-9CIXWyvBmNlU2TkXVYKYXGjrNF8IsiFfKJ0Se6blWpCiZtLp9VTu8zX9p8-bzA9N9KRWT2xl0vZRuGjP1ailjw_FdKqK5r2Eq1_IakU6lF6MtkCw0oAdqCjeKeDHpYRn8fF1Ig3osjYycyUvteyrHepRYDBpkaFR3bOZ5Ev4gfeele3SIyKemg_gtme-FMxh306HqhzM4CkEnC5I6EwdzLIdwoUz6iMb3QtbwNb_7dqpgkO5lT6neBTtVCFyUAS0U6EcTS6MfvoyHvAfa5SdwATOI7jCu1MRARL0hvqAZOPxjKJ0-pPlTE2PNuXYiOzBmrYB8tlgukLkSQzqhGR6b1V9aqwL_xbf6sX4ubTbQ5kFZedy2sYezmOknLd7aqHTxVSk8vT2cHg3EwmIVvb7N2yAju_T9c78kMZs7vZTPkG-sQtGUdB3kcAkemiPLx1Rn2eHF3kDD4XSsVLJCYSNn5orl7Wsis8FMUlFauyVOMwA-F5S5wn0QDspnek2DuB5gyZGFmrt8LPZuOJlk=",
+                "data": "gAAAAABo5RwRRnOnW2vr9uhggVBYXPjSPq6sCeROB8hWJhMALtkXEVPMHldnHAfyVd7UX6yFlmzEKcF3Qvp4hWNyL2Zb0oXb7tdwb9kXL5TqZgulQp4cEiJ7UxEpiqSRhQI7rGkeRx23fj1Il20sy4uM3-w42zHcmHhf6Qy8f0fyWv_PVujQf_n-vAmRUqJlMoVT6BTL5vLatm-ZjAPWx5oq7fWtMw13Nndcv12_uwd7c6t8EMRkqZtjWuAzDdjmEE0JfBGTD2_bVL6ahDgzpQBnxXfnA4bwbFUYN5oT6tG5WMu9lRIGJuQQ73jNEpvY02BKHqsPGGpcclV6KNZMw51RG3M_qSMxeMvkwk6KjVrxLjnIRRALir128kHcWBXlHuo3RREqCy1EMVlX9XBITywzsFHU-jzAZm3wVbrTkbii0HT3MTXICB-jy5Rnh69_y06t5v6aL7MfBK2xkTKWqpmDaVT8L8EUs4TU_ur6JjMNEtRj1Qrvw2StFl-DnUaZpolQM7f2UQiAgjgDo4mmtbD0PjVreLdjhdLX2nzwjATXk4Xvvacrp5yFIU0TbdXwna04J-sktjRA81lr8AH_QzMiJB6nR1xx4iyylY8Iad-AnQduengthgRnAkY3YRKlGzjAnAsH0M6HP3UxI836izwWF0miH07c8cETA2BBBXd4hq_iFcbEuhliR2-J_6z36ZREczUcN_Z11qodo9cGxC37Nu2MlA84DPxD0h4aRY8eEds3rBkIos-xWTJKYamDU85yaEtQGebLVkcCnr0MHJxtFLfS3C7kgA66EK0YjDyBLIupoK-jGiBcO9AukWgm9P1oEUYthiUCKb24eizdUOKEZots6oADiMefxl5Q7cP6--fjINNFxCGx9ZeKpEbgGqTesjVluqfhgp6rDG_XCjo0IsYzPuUWhdz0cH9VMmkoCeVMK6tW_3W7s3i1CpSoHMCvBB7R-zFU",
                 "format": "openai-responses-v1",
-                "id": "rs_0fa6db6d5cd1a7e20168e277b8f2488190b3c36e8aa647a240",
+                "id": "rs_0e1d415eb59e416a0168e51c0ebfc081958589083010832f1e",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -64,8 +64,8 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1759672248,
-      "id": "gen-1759672248-nObmhkShn2D1wYcHVmsq",
+      "created": 1759845388,
+      "id": "gen-1759845388-uS3hy4yBmDPIUzOqjEUA",
       "model": "openai/gpt-5",
       "object": "chat.completion",
       "provider": "OpenAI",
@@ -80,7 +80,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d63e0ad23eb5c-ORD"
+        "98ade6f08e9319b0-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,7 +89,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:50:48 GMT"
+        "Tue, 07 Oct 2025 13:56:29 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

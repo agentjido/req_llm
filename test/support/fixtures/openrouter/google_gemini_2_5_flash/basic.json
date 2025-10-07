@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ29vZ2xlL2dlbWluaS0yLjUtZmxhc2giLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LWZsYXNoIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
-      "max_tokens": 200,
+      "max_tokens": 2000,
       "messages": [
         {
           "content": "Hello world!",
@@ -42,12 +42,12 @@
           "logprobs": null,
           "message": {
             "content": "Hello there! How can I help you today?",
-            "reasoning": "**Composing a Response**\n\nI'm currently crafting a suitable reply. Considering the simple prompt, I believe a warm and inclusive greeting is best. \"Hello to you too!\" seems appropriate, mirroring the initial sentiment while maintaining a positive tone. The goal is to be friendly and accommodating.\n\n\n",
+            "reasoning": "**Formulating a Reply**\n\nI've processed the initial greeting, \"Hello world!\" It's clear I need a simple, friendly response. My current focus is on finding the most appropriate and equally concise way to reply. The goal is to match the tone and brevity of the initial statement.\n\n\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "**Composing a Response**\n\nI'm currently crafting a suitable reply. Considering the simple prompt, I believe a warm and inclusive greeting is best. \"Hello to you too!\" seems appropriate, mirroring the initial sentiment while maintaining a positive tone. The goal is to be friendly and accommodating.\n\n\n",
+                "text": "**Formulating a Reply**\n\nI've processed the initial greeting, \"Hello world!\" It's clear I need a simple, friendly response. My current focus is on finding the most appropriate and equally concise way to reply. The goal is to match the tone and brevity of the initial statement.\n\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -57,22 +57,22 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1759671344,
-      "id": "gen-1759671344-HbbVpq3Y58JNnvOFjcs5",
+      "created": 1759845366,
+      "id": "gen-1759845366-FVhhD9rMyDjLvXFBoAy1",
       "model": "google/gemini-2.5-flash",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
-        "completion_tokens": 36,
+        "completion_tokens": 40,
         "completion_tokens_details": {
           "image_tokens": 0,
-          "reasoning_tokens": 26
+          "reasoning_tokens": 30
         },
         "prompt_tokens": 3,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 39
+        "total_tokens": 43
       }
     },
     "headers": {
@@ -80,7 +80,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d4dcedbc198b9-ORD"
+        "98ade6661b39112f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,7 +89,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:35:45 GMT"
+        "Tue, 07 Oct 2025 13:56:08 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

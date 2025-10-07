@@ -111,8 +111,11 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
           if MapSet.member?(implemented_providers, provider) do
             provider_passing =
               Enum.count(filtered, fn m ->
-                case Map.get(state, "#{provider}:#{m["id"]}") do
-                  %{"status" => "pass"} -> true
+                model_id = m["id"]
+                has_fixtures = has_fixtures?(provider, model_id)
+
+                case Map.get(state, "#{provider}:#{model_id}") do
+                  %{"status" => "pass"} when has_fixtures -> true
                   _ -> false
                 end
               end)
@@ -146,18 +149,28 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
     total_models = models |> Enum.map(fn {_, ms} -> length(ms) end) |> Enum.sum()
     tested = map_size(state)
-    passing = state |> Enum.count(fn {_, entry} -> 
-      case entry do
-        %{"status" => "pass"} -> true
-        _ -> false
-      end
-    end)
-    excluded = state |> Enum.count(fn {_, entry} -> 
-      case entry do
-        %{"status" => "excluded"} -> true
-        _ -> false
-      end
-    end)
+
+    passing =
+      state
+      |> Enum.count(fn {spec, entry} ->
+        case entry do
+          %{"status" => "pass"} ->
+            [provider, model_id] = String.split(spec, ":", parts: 2)
+            has_fixtures?(String.to_atom(provider), model_id)
+
+          _ ->
+            false
+        end
+      end)
+
+    excluded =
+      state
+      |> Enum.count(fn {_, entry} ->
+        case entry do
+          %{"status" => "excluded"} -> true
+          _ -> false
+        end
+      end)
 
     Mix.shell().info(
       IO.ANSI.faint() <>
@@ -200,13 +213,19 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
       statuses = %{pass: 0, fail: 0, excluded: 0, untested: 0}
 
       statuses =
-        Enum.reduce(provider_models, statuses, fn model, acc ->
+        provider_models
+        |> Enum.sort_by(fn model -> model["id"] end)
+        |> Enum.reduce(statuses, fn model, acc ->
           spec = "#{provider}:#{model["id"]}"
-          status = 
+          model_id = model["id"]
+          has_fixtures = has_fixtures?(provider, model_id)
+
+          status =
             case Map.get(state, spec) do
-              %{"status" => s} -> s
+              %{"status" => s} when has_fixtures -> s
               _ -> "untested"
             end
+
           print_model_status(model, spec, status)
           Map.update(acc, String.to_atom(status), 1, &(&1 + 1))
         end)
@@ -225,12 +244,20 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     end)
 
     total_models = models |> Enum.map(fn {_, ms} -> length(ms) end) |> Enum.sum()
-    total_pass = state |> Enum.count(fn {_spec, entry} -> 
-      case entry do
-        %{"status" => "pass"} -> true
-        _ -> false
-      end
-    end)
+
+    total_pass =
+      state
+      |> Enum.count(fn {spec, entry} ->
+        case entry do
+          %{"status" => "pass"} ->
+            [provider, model_id] = String.split(spec, ":", parts: 2)
+            has_fixtures?(String.to_atom(provider), model_id)
+
+          _ ->
+            false
+        end
+      end)
+
     total_pct = Float.round(total_pass / total_models * 100, 1)
 
     Mix.shell().info(
@@ -450,9 +477,12 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
   defp print_model_with_status(model, provider, state) do
     model_spec = "#{provider}:#{model["id"]}"
-    status = 
+    model_id = model["id"]
+    has_fixtures = has_fixtures?(provider, model_id)
+
+    status =
       case Map.get(state, model_spec) do
-        %{"status" => s} -> s
+        %{"status" => s} when has_fixtures -> s
         _ -> nil
       end
 
@@ -757,7 +787,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
       |> Enum.reject(&(&1.status == :skipped))
       |> Enum.reduce(existing, fn result, acc ->
         status = if result.status == :pass, do: "pass", else: "fail"
-        
+
         Map.put(acc, result.model_spec, %{
           "status" => status,
           "last_checked" => ts
@@ -766,7 +796,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
       |> then(fn state ->
         Enum.reduce(excluded_models, state, fn spec, acc ->
           existing_entry = Map.get(existing, spec, %{})
-          
+
           Map.put(acc, spec, %{
             "status" => "excluded",
             "last_checked" => Map.get(existing_entry, "last_checked")
@@ -789,9 +819,12 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
       |> Enum.map_join(",\n  ", fn {k, v} ->
         status = Map.get(v, "status")
         last_checked = Map.get(v, "last_checked")
-        
-        last_checked_json = if last_checked, do: ~s("last_checked": "#{last_checked}"), else: ~s("last_checked": null)
-        
+
+        last_checked_json =
+          if last_checked,
+            do: ~s("last_checked": "#{last_checked}"),
+            else: ~s("last_checked": null)
+
         ~s("#{k}": {\n    "status": "#{status}",\n    #{last_checked_json}\n  })
       end)
 
@@ -870,4 +903,31 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   defp operation_to_category(:text), do: "core"
   defp operation_to_category(:embedding), do: "embedding"
   defp operation_to_category(_), do: "core"
+
+  defp has_fixtures?(provider, model_id) do
+    model_dir = model_id_to_fixture_dir(model_id)
+    fixture_path = Path.join(["test", "support", "fixtures", to_string(provider), model_dir])
+
+    if File.dir?(fixture_path) do
+      case File.ls(fixture_path) do
+        {:ok, files} ->
+          files
+          |> Enum.filter(&String.ends_with?(&1, ".json"))
+          |> Enum.any?()
+
+        {:error, _} ->
+          false
+      end
+    else
+      false
+    end
+  end
+
+  defp model_id_to_fixture_dir(model_id) do
+    model_id
+    |> String.replace("-", "_")
+    |> String.replace(".", "_")
+    |> String.replace(":", "_")
+    |> String.replace("/", "_")
+  end
 end

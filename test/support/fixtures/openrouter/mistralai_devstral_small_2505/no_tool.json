@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxNTAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im1pc3RyYWxhaS9kZXZzdHJhbC1zbWFsbC0yNTA1IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMjgwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibWlzdHJhbGFpL2RldnN0cmFsLXNtYWxsLTI1MDUiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
-      "max_tokens": 150,
+      "max_tokens": 12800,
       "messages": [
         {
           "content": "Tell me a joke about cats",
@@ -68,16 +68,15 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759671855,
-      "id": "gen-1759671855-goAT97WNoWyuwLq13oto",
+      "created": 1759848186,
+      "id": "gen-1759848186-HIgZ0tVz1GrrV7yycMdC",
       "model": "mistralai/devstral-small-2505",
       "object": "chat.completion",
-      "provider": "Chutes",
+      "provider": "Mistral",
       "usage": {
         "completion_tokens": 12,
-        "prompt_tokens": 1231,
-        "prompt_tokens_details": null,
-        "total_tokens": 1243
+        "prompt_tokens": 70,
+        "total_tokens": 82
       }
     },
     "headers": {
@@ -85,7 +84,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d5a4918ad3ef3-ORD"
+        "98ae2b3c2b38e100-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -94,7 +93,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:44:16 GMT"
+        "Tue, 07 Oct 2025 14:43:06 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

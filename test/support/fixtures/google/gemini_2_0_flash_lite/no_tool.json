@@ -59,11 +59,11 @@
     "body": {
       "candidates": [
         {
-          "avgLogprobs": -0.10468536264756147,
+          "avgLogprobs": -0.01842610616432993,
           "content": {
             "parts": [
               {
-                "text": "Why did the cat cross the playground?\n\nTo get to the other slide!\n"
+                "text": "Why don't cats play poker in the jungle?\n\nToo many cheetahs!\n"
               }
             ],
             "role": "model"
@@ -72,13 +72,13 @@
         }
       ],
       "modelVersion": "gemini-2.0-flash-lite",
-      "responseId": "YeDjaMuOLfmK-sAP8_KToQk",
+      "responseId": "phnlaLDtB7aYjMcPpfDuoAg",
       "usageMetadata": {
-        "candidatesTokenCount": 17,
+        "candidatesTokenCount": 19,
         "candidatesTokensDetails": [
           {
             "modality": "TEXT",
-            "tokenCount": 17
+            "tokenCount": 19
           }
         ],
         "promptTokenCount": 20,
@@ -88,7 +88,7 @@
             "tokenCount": 20
           }
         ],
-        "totalTokenCount": 37
+        "totalTokenCount": 39
       }
     },
     "headers": {
@@ -99,13 +99,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Mon, 06 Oct 2025 15:29:38 GMT"
+        "Tue, 07 Oct 2025 13:46:14 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=487"
+        "gfet4t7; dur=464"
       ],
       "transfer-encoding": [
         "chunked"

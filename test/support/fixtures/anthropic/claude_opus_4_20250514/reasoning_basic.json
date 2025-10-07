@@ -22,6 +22,9 @@
       "accept-encoding": [
         "gzip"
       ],
+      "anthropic-beta": [
+        "interleaved-thinking-2025-05-14"
+      ],
       "anthropic-version": [
         "2023-06-01"
       ],
@@ -40,16 +43,16 @@
     "body": {
       "content": [
         {
-          "signature": "EoQDCkYICBgCKkCce0+NRyKCVHICkyG2cCA8x6fn/49W/hlKocbMTbN7vEJdxHNIcPg0gpiHvLtg9PkhDzERpWoiGdoD0+2so54QEgxp81C6/BR24FRv3gMaDELdBqPFAyKBg72vZCIwxzSFAuXWUZoH8z7vgQfB8vkjArYahKbq/i+MZfUAu/GHBcX8asC8AmXlP0FZ1gEQKusBtIrpiOswvli7L4Io2h0ZN6YB6yKKZWV3U5b4b9lNHHB89FZTIy0a+Km/q3GxtmuDTsb2xzlrG9LXSAshMJgL1Jh+Bg4ZQ/n2RNvZrvwZdTjG9GqQO7+yv+iPezCZJkzFk9+u//vI5LDaZnbRjKkhNKGJGn22PBYKERwWWdnMJsUvWKZllBrSByNkrzuLq/WkmVC565TMpTxNJaGhlf4Bl9N7PrhQISC61ZsvGSxhEUrMcIa5CTo98rRuEPawrppUrtRKCVQJ37UI4/KO67t8+QQe18HD/g2e/ZZBTPz2P1AHwrEXpIjLiZEcIBgB",
-          "thinking": "I need to solve 12 × 7.\n\nI can break this down:\n12 × 7 = (10 + 2) × 7\n= 10 × 7 + 2 × 7\n= 70 + 14\n= 84\n\nOr I could think of it as:\n12 × 7 = 12 × (5 + 2)\n= 12 × 5 + 12 × 2\n= 60 + 24\n= 84\n\nBoth methods give me 84.",
+          "signature": "EscDCkYICBgCKkD9EOPklKy2X5L1tSWFVf14Swlwjcm4ziac1wos3GH+tIRu39tKMmtBbLkLMIAiyfB3vCEr2gFMhh2SaqVRrPYAEgyO/rV36imaMY9wrPUaDCcRl9bO0J1drlYaMiIw9CuPP26FIoy++mjjI6wDuoLclUO5HcPqg4Ckl2Pnj0ryJH622qzgT1EnDLatWTwCKq4CND7do5e+dg0h9QY45nDAgDPvAibwwEDkNb6xk3i087tjiRvxp4EgcygFUW00AOLGIk0UYg+IzT3toxokNWKcCUEt/5PPk2JaLdEHwjCxeS/2fieHCosf8gauihC6A47tMo+ciEFRRDhNBB0ce+ATvfd7GQgmvToaBECDTt4TNWYM0qafS2KnUmN6sVY44X8q+VcWktzj73mJQ1GeAenC+Aqv7TkWyl5CxRCDlFhwzoHMP1vuTWtSM9277EgetBsC0tA5l8PMSXh4TieFPpubRRikTsp8xTqoZxW4TXm01jUxcd4K6aJ7xnSV3anE5re/cbAxUwjxj1K8OHMswfq2oxYV57DLO16TrACUAlYs3bzuyPtG3OMpis6q/rqqoX5vbXXddolle4pnpcfidF0YAQ==",
+          "thinking": "I need to calculate 12 × 7.\n\nMethod 1: Breaking it down\n12 × 7 = (10 + 2) × 7\n= 10 × 7 + 2 × 7\n= 70 + 14\n= 84\n\nMethod 2: Using known facts\n12 × 7 = 12 × 7\nI know 12 × 6 = 72\nSo 12 × 7 = 72 + 12 = 84\n\nLet me verify: 7 × 12\n= 7 × 10 + 7 × 2\n= 70 + 14\n= 84\n\nYes, 84 is correct.",
           "type": "thinking"
         },
         {
-          "text": "Let me solve 12 × 7:\n\nI'll break 12 down into 10 + 2:\n- 10 × 7 = 70\n- 2 × 7 = 14\n- 70 + 14 = 84\n\nTherefore, 12 × 7 = 84",
+          "text": "**Internal thinking:**\n- Break down 12 × 7 as (10 + 2) × 7\n- Calculate: 10 × 7 = 70 and 2 × 7 = 14\n- Add: 70 + 14 = 84\n\n**Answer: 84**",
           "type": "text"
         }
       ],
-      "id": "msg_01NBfakGm8bmjVNR3CkU6gHC",
+      "id": "msg_01CquUAhro4pYH3tAyZb8p3N",
       "model": "claude-opus-4-20250514",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -63,7 +66,7 @@
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
         "input_tokens": 50,
-        "output_tokens": 215,
+        "output_tokens": 253,
         "service_tier": "standard"
       }
     },
@@ -78,7 +81,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-06T17:09:39Z"
+        "2025-10-07T13:54:24Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -87,7 +90,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-06T17:09:43Z"
+        "2025-10-07T13:54:28Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -96,7 +99,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-06T17:09:38Z"
+        "2025-10-07T13:54:23Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -105,13 +108,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-06T17:09:39Z"
+        "2025-10-07T13:54:24Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a6c483da430046-ORD"
+        "98ade3de5a749d03-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -120,10 +123,10 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 17:09:43 GMT"
+        "Tue, 07 Oct 2025 13:54:28 GMT"
       ],
       "request-id": [
-        "req_011CTrKCSu487NiBs9av8d63"
+        "req_011CTsx7mQTfWb1EapdNxabm"
       ],
       "server": [
         "cloudflare"
@@ -138,7 +141,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "4539"
+        "5557"
       ],
       "x-robots-tag": [
         "none"

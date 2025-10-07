@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjozMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImRlZXBzZWVrL2RlZXBzZWVrLWNoYXQtdjMuMSIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfdG9rZW5zIjozMjc2OCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZGVlcHNlZWsvZGVlcHNlZWstY2hhdC12My4xIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
-      "max_tokens": 300,
+      "max_tokens": 32768,
       "messages": [
         {
           "content": "Tell me a joke about cats",
@@ -61,31 +61,22 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "",
-            "reasoning": "I'd be happy to tell you a cat joke! Here's one for you:\n\nWhy don't cats play poker in the jungle?\nBecause there are too many cheetahs!\n\n🐱 Hope that gave you a chuckle! Would you like to hear another one?",
-            "reasoning_details": [
-              {
-                "format": "unknown",
-                "index": 0,
-                "text": "I'd be happy to tell you a cat joke! Here's one for you:\n\nWhy don't cats play poker in the jungle?\nBecause there are too many cheetahs!\n\n🐱 Hope that gave you a chuckle! Would you like to hear another one?",
-                "type": "reasoning.text"
-              }
-            ],
+            "content": "I'd be happy to tell you a cat joke! Here's one for you:\n\nWhy don't cats play poker in the jungle?\nBecause there are too many cheetahs!\n\n🐱 Hope that gave you a smile! Would you like to hear another one?",
+            "reasoning": null,
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759672051,
-      "id": "gen-1759672051-aixxqLDNF2bX7kYelAoU",
+      "created": 1759845375,
+      "id": "gen-1759845375-OLlIMM5vKhUtYTIIEhtK",
       "model": "deepseek/deepseek-chat-v3.1",
       "object": "chat.completion",
-      "provider": "Chutes",
+      "provider": "WandB",
       "usage": {
         "completion_tokens": 54,
         "prompt_tokens": 158,
-        "prompt_tokens_details": null,
         "total_tokens": 212
       }
     },
@@ -94,7 +85,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d5f136d30eafd-ORD"
+        "98ade69d4baed84c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -103,7 +94,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:47:32 GMT"
+        "Tue, 07 Oct 2025 13:56:16 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

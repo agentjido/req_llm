@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibGxhbWEtMy4zLTcwYi12ZXJzYXRpbGUiLCJzZWVkIjo0Miwic3RyZWFtIjp0cnVlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQifSwidHlwZSI6ImZ1bmN0aW9uIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibmFtZSIsImFnZSJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibGxhbWEtMy4zLTcwYi12ZXJzYXRpbGUiLCJzZWVkIjo0Miwic3RyZWFtIjp0cnVlLCJzdHJlYW1fb3B0aW9ucyI6eyJpbmNsdWRlX3VzYWdlIjp0cnVlfSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbF9jaG9pY2UiOnsiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0In0sInR5cGUiOiJmdW5jdGlvbiJ9LCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZW5lcmF0ZSBzdHJ1Y3R1cmVkIG91dHB1dCBtYXRjaGluZyB0aGUgcHJvdmlkZWQgc2NoZW1hIiwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbIm5hbWUiLCJhZ2UiXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "max_tokens": 500,
@@ -14,6 +14,9 @@
       "model": "llama-3.3-70b-versatile",
       "seed": 42,
       "stream": true,
+      "stream_options": {
+        "include_usage": true
+      },
       "temperature": 0.0,
       "tool_choice": {
         "function": {
@@ -63,27 +66,27 @@
   },
   "response": {
     "body": {
-      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLWYwMDk5MDAzLWRhMjQtNDQwMC1iMTI3LTdiNDZjMjE5YTgwZiIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk2OTg2NjcsIm1vZGVsIjoibGxhbWEtMy4zLTcwYi12ZXJzYXRpbGUiLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF8xNTVhYjgyZTk4IiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQiLCJjb250ZW50IjpudWxsfSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOm51bGx9XSwieF9ncm9xIjp7ImlkIjoicmVxXzAxazZ2M2RodDFmMGtic2dieDhmbm41NWMzIn19CgpkYXRhOiB7ImlkIjoiY2hhdGNtcGwtZjAwOTkwMDMtZGEyNC00NDAwLWIxMjctN2I0NmMyMTlhODBmIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc1OTY5ODY2NywibW9kZWwiOiJsbGFtYS0zLjMtNzBiLXZlcnNhdGlsZSIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwXzE1NWFiODJlOTgiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsidG9vbF9jYWxscyI6W3siaWQiOiIyd2hmdzk2a2MiLCJ0eXBlIjoiZnVuY3Rpb24iLCJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJhcmd1bWVudHMiOiJ7XCJhZ2VcIjozMCxcIm5hbWVcIjpcIkpvaG4gRG9lXCIsXCJvY2N1cGF0aW9uXCI6XCJTb2Z0d2FyZSBFbmdpbmVlclwifSJ9LCJpbmRleCI6MH1dfSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOm51bGx9XX0KCmRhdGE6IHsiaWQiOiJjaGF0Y21wbC1mMDA5OTAwMy1kYTI0LTQ0MDAtYjEyNy03YjQ2YzIxOWE4MGYiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5Njk4NjY3LCJtb2RlbCI6ImxsYW1hLTMuMy03MGItdmVyc2F0aWxlIiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfMTU1YWI4MmU5OCIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6e30sImxvZ3Byb2JzIjpudWxsLCJmaW5pc2hfcmVhc29uIjoidG9vbF9jYWxscyJ9XSwieF9ncm9xIjp7ImlkIjoicmVxXzAxazZ2M2RodDFmMGtic2dieDhmbm41NWMzIiwidXNhZ2UiOnsicXVldWVfdGltZSI6MC4yNzgwNjcxNTUsInByb21wdF90b2tlbnMiOjI3OSwicHJvbXB0X3RpbWUiOjAuMDI0NzI0MjgsImNvbXBsZXRpb25fdG9rZW5zIjoyNCwiY29tcGxldGlvbl90aW1lIjowLjA1MjM1NzQwMSwidG90YWxfdG9rZW5zIjozMDMsInRvdGFsX3RpbWUiOjAuMDc3MDgxNjgxfX0sInVzYWdlIjp7InF1ZXVlX3RpbWUiOjAuMjc4MDY3MTU1LCJwcm9tcHRfdG9rZW5zIjoyNzksInByb21wdF90aW1lIjowLjAyNDcyNDI4LCJjb21wbGV0aW9uX3Rva2VucyI6MjQsImNvbXBsZXRpb25fdGltZSI6MC4wNTIzNTc0MDEsInRvdGFsX3Rva2VucyI6MzAzLCJ0b3RhbF90aW1lIjowLjA3NzA4MTY4MX19CgpkYXRhOiBbRE9ORV0KCg=="
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLWE2NjQ2YTAyLTY0ZDQtNDg1OC1iYTAzLTgxZmIxZDU1NjcxOCIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk4NDQ2OTcsIm1vZGVsIjoibGxhbWEtMy4zLTcwYi12ZXJzYXRpbGUiLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF85ZTFlOGY4NDM1IiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQiLCJjb250ZW50IjpudWxsfSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOm51bGx9XSwieF9ncm9xIjp7ImlkIjoicmVxXzAxazZ6ZXAweGZleHp2NGs2OHQ5eGtrM2VqIn19CgpkYXRhOiB7ImlkIjoiY2hhdGNtcGwtYTY2NDZhMDItNjRkNC00ODU4LWJhMDMtODFmYjFkNTU2NzE4Iiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc1OTg0NDY5NywibW9kZWwiOiJsbGFtYS0zLjMtNzBiLXZlcnNhdGlsZSIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwXzllMWU4Zjg0MzUiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsidG9vbF9jYWxscyI6W3siaWQiOiJjM3JiNzlnd20iLCJ0eXBlIjoiZnVuY3Rpb24iLCJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJhcmd1bWVudHMiOiJ7XCJhZ2VcIjozMCxcIm5hbWVcIjpcIkpvaG4gRG9lXCIsXCJvY2N1cGF0aW9uXCI6XCJTb2Z0d2FyZSBFbmdpbmVlclwifSJ9LCJpbmRleCI6MH1dfSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOm51bGx9XX0KCmRhdGE6IHsiaWQiOiJjaGF0Y21wbC1hNjY0NmEwMi02NGQ0LTQ4NTgtYmEwMy04MWZiMWQ1NTY3MTgiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5ODQ0Njk3LCJtb2RlbCI6ImxsYW1hLTMuMy03MGItdmVyc2F0aWxlIiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfOWUxZThmODQzNSIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6e30sImxvZ3Byb2JzIjpudWxsLCJmaW5pc2hfcmVhc29uIjoidG9vbF9jYWxscyJ9XSwieF9ncm9xIjp7ImlkIjoicmVxXzAxazZ6ZXAweGZleHp2NGs2OHQ5eGtrM2VqIiwidXNhZ2UiOnsicXVldWVfdGltZSI6MC4yMDc5MDI2MDIsInByb21wdF90b2tlbnMiOjI3OSwicHJvbXB0X3RpbWUiOjAuMDM1MzgwNTA1LCJjb21wbGV0aW9uX3Rva2VucyI6MjQsImNvbXBsZXRpb25fdGltZSI6MC4wNTM3MzMxMTgsInRvdGFsX3Rva2VucyI6MzAzLCJ0b3RhbF90aW1lIjowLjA4OTExMzYyM319LCJ1c2FnZSI6eyJxdWV1ZV90aW1lIjowLjIwNzkwMjYwMiwicHJvbXB0X3Rva2VucyI6Mjc5LCJwcm9tcHRfdGltZSI6MC4wMzUzODA1MDUsImNvbXBsZXRpb25fdG9rZW5zIjoyNCwiY29tcGxldGlvbl90aW1lIjowLjA1MzczMzExOCwidG90YWxfdG9rZW5zIjozMDMsInRvdGFsX3RpbWUiOjAuMDg5MTEzNjIzfX0KCmRhdGE6IHsiaWQiOiJjaGF0Y21wbC1hNjY0NmEwMi02NGQ0LTQ4NTgtYmEwMy04MWZiMWQ1NTY3MTgiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5ODQ0Njk3LCJtb2RlbCI6ImxsYW1hLTMuMy03MGItdmVyc2F0aWxlIiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfOWUxZThmODQzNSIsImNob2ljZXMiOltdLCJ1c2FnZSI6eyJxdWV1ZV90aW1lIjowLjIwNzkwMjYwMiwicHJvbXB0X3Rva2VucyI6Mjc5LCJwcm9tcHRfdGltZSI6MC4wMzUzODA1MDUsImNvbXBsZXRpb25fdG9rZW5zIjoyNCwiY29tcGxldGlvbl90aW1lIjowLjA1MzczMzExOCwidG90YWxfdG9rZW5zIjozMDMsInRvdGFsX3RpbWUiOjAuMDg5MTEzNjIzfSwic2VydmljZV90aWVyIjoib25fZGVtYW5kIn0KCmRhdGE6IFtET05FXQoK"
     },
     "headers": {
       "alt-svc": "h3=\":443\"; ma=86400",
       "cache-control": "no-cache",
       "cf-cache-status": "DYNAMIC",
-      "cf-ray": "989fe8deac1ff4e8-ORD",
+      "cf-ray": "98add60c0f5a78af-ORD",
       "content-type": "text/event-stream",
-      "date": "Sun, 05 Oct 2025 21:11:07 GMT",
+      "date": "Tue, 07 Oct 2025 13:44:57 GMT",
       "server": "cloudflare",
-      "set-cookie": "__cf_bm=ozve1XdgP8ThI26ZeKsG61xDEtcvzqeL68UvPFNIVkw-1759698667-1.0.1.1-bDtkOWiCuq5Cxi_NoV.S5qI0M9Pk2i0K0yFIj00ln7q0yXArqJUAB_.H5Rc99SoPfoAu6hjeXuEswtk0weqZnUZtN0_N7d0kId4Eyd_QhNA; path=/; expires=Sun, 05-Oct-25 21:41:07 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None",
+      "set-cookie": "__cf_bm=mijOIyT3YlcLF.nFLNxgmxWXfG6eE7YnOoAwW3bo3cI-1759844697-1.0.1.1-i2YLqD3kbdKfatZZ925cufYutcY3mbs..unmL1dD2Y2Qsx5v8Jyl04e.UwbL_vYjbvqrLvHriZKHXE_dYxLj3sYNOZpq7k_IUsf_sts9POg; path=/; expires=Tue, 07-Oct-25 14:14:57 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None",
       "vary": "Origin",
       "via": "1.1 google",
       "x-groq-region": "yul",
       "x-ratelimit-limit-requests": "1000",
       "x-ratelimit-limit-tokens": "12000",
       "x-ratelimit-remaining-requests": "996",
-      "x-ratelimit-remaining-tokens": "11819",
-      "x-ratelimit-reset-requests": "5m44.563999999s",
-      "x-ratelimit-reset-tokens": "903ms",
-      "x-request-id": "req_01k6v3dht1f0kbsgbx8fnn55c3"
+      "x-ratelimit-remaining-tokens": "11615",
+      "x-ratelimit-reset-requests": "5m45.127s",
+      "x-ratelimit-reset-tokens": "1.925s",
+      "x-request-id": "req_01k6zep0xfexzv4k68t9xkk3ej"
     },
     "status": 200
   }

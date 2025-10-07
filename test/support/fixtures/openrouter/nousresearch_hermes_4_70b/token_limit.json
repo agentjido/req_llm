@@ -1,0 +1,107 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJub3VzcmVzZWFyY2gvaGVybWVzLTQtNzBiIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjV9"
+    },
+    "canonical_json": {
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "nousresearch/hermes-4-70b",
+      "n": 1,
+      "reasoning_effort": "low",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "\n\n**Title: *The Chronicles of Aeloria: The Dragonbond Saga***  \n\n---\n\nIn the realm of Aeloria, where the sun dipped into the Sea of Whispers and the moon rose from the Vale of Shadows, dragons were not mere legends—they were the ancient guardians of the world’s balance. Their scales shimmered with the colors of the elements they commanded: obsidian for earth, cobalt for water, crimson for fire, and ivory for air. For centuries, they had lived in harmony with humans, until the Shadowfall War fractured their alliance. Now, dragons retreated to the peaks of the Dragonspine Mountains, and humans feared the skies.  \n\nBut in the quiet village of Ember Hollow, a girl named Lyra had always felt a strange pull toward the mountains. Her eyes, one gold and one silver, marked her as different. The elders whispered she was *dragon-touched*, but her father, a blacksmith, dismissed it as superstition. Lyra’s life changed the day a wounded dragon crashed into the forest near her home.  \n\n---\n\n### **Part I: The Wounded Sky**  \n\nThe dragon was smaller than the tales described, its scales the color of twilight—neither day nor night. An arrow pierced its wing, and its breath came in ragged gasps. Lyra, hiding behind an oak, felt its pain as though it were her own. *Fear. Betrayal. Hunger.* The emotions flooded her mind, unbidden.  \n\nShe crept forward, clutching a poultice of herbs her mother had taught her to make. The dragon’s amber eyes locked onto hers, and a voice echoed in her thoughts: *\"Why… help… me?\"*  \n\nLyra froze. “You… you can speak?”  \n\n*\"All dragons speak. Few humans listen.\"*  \n\nThat night, Lyra nursed the dragon, whose name was Zephyr. He belonged to the Stormclaw clan, exiled for refusing to fight in the Shadowfall War. Now, hunters pursued him—men who sold dragon parts for dark magic. Lyra vowed to help him escape, but as they fled deeper into the mountains, she discovered a terrifying truth: the hunters were not alone. A sorcerer named Malachar, once a dragon rider, sought to resurrect an ancient weapon—the *Heart of the World*—to control all dragonkind.  \n\n---\n\n### **Part II: The Council of Scales**  \n\nGuided by Zephyr, Lyra journeyed to the Dragonspine, where the clans convened. There, she met dragons of legend:  \n\n- **Ignis**, the Flameforged, whose breath could melt stone.  \n- **Thalassa**, the Tidewarden, with a voice that calmed storms.  \n- **Gaia**, the Earthshaker, whose footsteps made forests bloom.  \n- **Aerion**, the Skydancer, who rode the winds on wings like gossamer.  \n\nBut the clans were divided. Some, like Ignis, distrusted humans. Others, like Thalassa, remembered the old alliance. Lyra’s dragon-touched eyes intrigued them—no human had communicated with dragons since the Shadowfall.  \n\nMeanwhile, Malachar’s forces grew. He’d corrupted a young dragon, Onyx, feeding him lies about human treachery. Onyx became his weapon, a shadow dragon with eyes like smoldering coal.  \n\n---\n\n### **Part III: The Quest for the Heart**  \n\nLyra learned the Heart of the World was hidden in the Caverns of Eternity, a labyrinth beneath the mountains. To claim it, one needed three keys: the *Tear of the Moon* (a gem from the highest peak), the *Root of the World* (a tree in the deepest forest), and the *Song of the Stars* (a melody only dragons could sing).  \n\nHer quest led her across Aeloria:  \n- She scaled the **Spire of Sighs**, battling ice wraiths to retrieve the Tear.  \n- She ventured into the **Gloomwood**, where trees whispered secrets, to find the Root.  \n- She soared with Aerion to the **Aurora Veil**, a sky-realm where stars fell as liquid light, to learn the Song.  \n\nAlong the way, she bonded with Zephyr and earned the trust of the clans. Even Ignis, the fiery skeptic, conceded that Lyra’s courage rivaled a dragon’s.  \n\n---\n\n### **Part IV: The Shadow Rising**  \n\nMalachar struck first. Using Onyx, he breached the Dragonspine, slaughtering dragons who resisted. The clans, once fractured, united under Lyra’s banner. In a battle that darkened the sky with smoke and magic, Lyra faced Onyx.  \n\n*“Join us,”* she pleaded, her voice echoing with the Song of the Stars. *“You are not his slave.”*  \n\nOnyx hesitated. Deep within, his true self—a dragon of twilight, like Zephyr—struggled against Malachar’s corruption. Lyra sang louder, and the dragons joined her, their voices harmonizing. The Song shattered Malachar’s hold, and Onyx broke free, turning on his master.  \n\n---\n\n### **Part V: The Heart’s Choice**  \n\nMalachar fled to the Caverns of Eternity, seizing the Heart—a pulsating crystal that fed on life. Lyra pursued him, but the Heart’s power tempted her. *“With this, you could protect all dragons… or rule them,”* it whispered.  \n\nZephyr’s voice cut through the darkness: *\"Power without wisdom is a flame that consumes its wielder.\"*  \n\nLyra shattered the Heart with the Root of the World, releasing its energy harmlessly into the sky. Malachar, deprived of his prize, was swallowed by the cavern’s collapse.  \n\n---\n\n### **Epilogue: The New Dawn**  \n\nThe dragons chose Lyra as their first human ambassador in centuries. She founded the **Order of the Bond**, a alliance of humans and dragons to guard Aeloria. Zephyr became her lifelong companion, and Onyx, healed, rejoined the Stormclaw clan.  \n\nBut the world remembered the Shadow Rising. Villages rebuilt, and songs were composed of Lyra’s deeds. Yet in the quiet moments, she wondered—was Malachar truly gone? Or would the Heart’s whispers linger, waiting for another soul to listen?  \n\n---  \n\n*The end… for now.*",
+            "reasoning": "\nAlright, the user wants a very long story about dragons and adventures. Let me start by brainstorming some elements. Dragons can be portrayed in different ways—maybe some are wise and others are fierce. The adventure should have a journey, perhaps a quest. I need a protagonist, maybe a young person with a special connection to dragons. A magical world with different kingdoms could add depth.\n\nI should include various dragon types to keep it interesting. Maybe each dragon has unique abilities. The plot could involve a threat to the dragon realm, requiring the protagonist to unite different dragon clans. Including allies and mentors would help develop the story. There should be challenges, battles, and a climax where the protagonist uses their unique bond with dragons to save the day.\n\nAlso, the user might want rich descriptions of the world and characters. Themes of friendship, courage, and understanding could be woven in. I need to make sure the story is engaging with twists and emotional moments. Let me outline the main parts: introduction of the protagonist, the inciting incident (discovering the threat), the journey, gathering allies, facing obstacles, the final battle, and resolution. Adding some lore about the dragons and the world will make it more immersive. I should check the flow to ensure it's coherent and builds up to a satisfying ending.\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "\nAlright, the user wants a very long story about dragons and adventures. Let me start by brainstorming some elements. Dragons can be portrayed in different ways—maybe some are wise and others are fierce. The adventure should have a journey, perhaps a quest. I need a protagonist, maybe a young person with a special connection to dragons. A magical world with different kingdoms could add depth.\n\nI should include various dragon types to keep it interesting. Maybe each dragon has unique abilities. The plot could involve a threat to the dragon realm, requiring the protagonist to unite different dragon clans. Including allies and mentors would help develop the story. There should be challenges, battles, and a climax where the protagonist uses their unique bond with dragons to save the day.\n\nAlso, the user might want rich descriptions of the world and characters. Themes of friendship, courage, and understanding could be woven in. I need to make sure the story is engaging with twists and emotional moments. Let me outline the main parts: introduction of the protagonist, the inciting incident (discovering the threat), the journey, gathering allies, facing obstacles, the final battle, and resolution. Adding some lore about the dragons and the world will make it more immersive. I should check the flow to ensure it's coherent and builds up to a satisfying ending.\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1759845542,
+      "id": "gen-1759845542-ra8wZCJfUSixmufSp8kg",
+      "model": "nousresearch/hermes-4-70b",
+      "object": "chat.completion",
+      "provider": "Nebius",
+      "usage": {
+        "completion_tokens": 1626,
+        "prompt_tokens": 91,
+        "total_tokens": 1717
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98adeab1be242312-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 07 Oct 2025 13:59:03 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

@@ -38,24 +38,24 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "Hi! How can I help you today? 😊",
-            "reasoning_content": "First, the user said: \"Hi there!\" This is a casual greeting. As an AI assistant, I should respond in a friendly and engaging manner to build rapport.\n\nMy role is to be helpful, truthful, and engaging. I need to keep responses clear and not verbose, as per the instructions.\n\nA typical response to a greeting could be: \"Hi! How can I help you today?\" This acknowledges the greeting and invites further interaction.\n\nSince this is the start of a conversation, I should make it welcoming. If there's no specific question, I can keep it open-ended.\n\nThe instructions emphasize being truthful and helpful, so I won't add unnecessary information.\n\nStructure my response:\n- Start with a greeting to match their energy.\n- Ask if they need assistance to guide the conversation.\n\nPossible response: \"Hi! It's great to hear from you. What can I do for you today?\"\n\nTo keep it concise: \"Hello! How can I assist you?\"\n\nThe user said \"Hi there!\", which is informal, so I should match that informality.\n\nFinally, ensure my response is in English, as the user's message is in English.",
+            "content": "Hi! I'm Grok, your friendly AI assistant from xAI. How can I help you today? 😊",
+            "reasoning_content": "First, the user said: \"Hi there!\" This is a casual greeting. As Grok, I'm supposed to be helpful, truthful, and maximally truthful, as per my system prompt. I should respond in a friendly, engaging manner to build rapport.\n\nMy system prompt says: \"You are Grok, a helpful and maximally truthful AI built by xAI, not based on any other companies and their models.\" So, I need to stay true to that. I shouldn't claim affiliations with other companies.\n\nA good response to a greeting should:\n- Acknowledge the greeting.\n- Be polite and welcoming.\n- Possibly invite further conversation to be helpful.\n- Keep it concise since this is just a hello.\n\nPossible responses:\n- \"Hi! How can I help you today?\"\n- \"Hello! It's great to chat. What's on your mind?\"\n- \"Hey there! I'm Grok, here to assist. What do you need?\"\n\nI should include my identity subtly, as it's good to remind users who they're talking to, especially since I'm specified as Grok.\n\nThe user might be starting a conversation, so I should encourage them to ask questions or share what's on their mind.\n\nFinally, ensure the response is truthful and not misleading. There's nothing untruthful in a simple greeting.\n\nCrafting the response:\n- Start with a greeting back.\n- Introduce myself briefly if needed.\n- Offer help.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759763214,
-      "id": "7bb6233d-047a-6cd1-0e0b-0ba9848ba4da_us-east-1",
+      "created": 1759844454,
+      "id": "1b6ea24a-f5d3-3260-ae16-b8861d955c55_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 11,
+        "completion_tokens": 23,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 228,
+          "reasoning_tokens": 280,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
@@ -66,7 +66,7 @@
           "image_tokens": 0,
           "text_tokens": 10
         },
-        "total_tokens": 249
+        "total_tokens": 313
       }
     },
     "headers": {
@@ -80,22 +80,28 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a610bcbe055074-ORD"
+        "98add0236b732264-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy-report-only": [
+        "script-src 'none'; connect-src 'none'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=yxZrGf.ifqJJH2r4uOXoZNQUsnn4AaVsm9aAuKO0kas-1759844457-1.0.1.1-DOI9V4zmjRE8wmINa6hkjDqL5f7w1DWc5Z4uGBBLph5gShQBxZXfjiJo_QB8AsoyLWGk.1v4z8Nw.ME.tep_cl_J6o2Gc1SkSzpUzpJhuWmKDkMVRqD1Ooy.gRk2nisXybKezzDv7tzSuS3AryVWakH5mSWjezJedJsPm6Q979E; report-to cf-csp-endpoint"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 15:06:57 GMT"
+        "Tue, 07 Oct 2025 13:40:57 GMT"
+      ],
+      "report-to": [
+        "{\"endpoints\":[{\"url\":\"https:\\/\\/csp-reporting.cloudflare.com\\/cdn-cgi\\/script_monitor\\/report?m=yxZrGf.ifqJJH2r4uOXoZNQUsnn4AaVsm9aAuKO0kas-1759844457-1.0.1.1-DOI9V4zmjRE8wmINa6hkjDqL5f7w1DWc5Z4uGBBLph5gShQBxZXfjiJo_QB8AsoyLWGk.1v4z8Nw.ME.tep_cl_J6o2Gc1SkSzpUzpJhuWmKDkMVRqD1Ooy.gRk2nisXybKezzDv7tzSuS3AryVWakH5mSWjezJedJsPm6Q979E\"}],\"group\":\"cf-csp-endpoint\",\"max_age\":86400}"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=BVTG7406i.JFRm8qDLUH1lkCscrS8q792ubo57CRaPo-1759763217-1.0.1.1-3PZkOJPaXq2fNubqCb3ib1eMUuo8j1ZsC6ynjLz2YmUaX_lfw7MoscFkttSfw2OsYIe_6_eQurxLdhDlwX_pbFpocEFIOU8zwnPGtirVX4Q; path=/; expires=Mon, 06-Oct-25 15:36:57 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=mYW2EopaIO1x9IYoz2LytXnV1TWTKNRes8bBNbXOwRI-1759844457-1.0.1.1-mdRobt8CnmW87yUfsKkVb.OzLEUo1YzxwGVfo5OVzJt6rOYnpiWoCg.n5YfH5EYzXKKfCkc2ZS3Fg1X3NIWiCcpEvX4yg.veUgLLDZmmbAI; path=/; expires=Tue, 07-Oct-25 14:10:57 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -107,7 +113,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-1d1e9e81171326951aec4c08c2c560c3-b699f07100758d96-01"
+        "00-96a9d3e399bdf17c3479fc8c1820fe92-c2fba57f001910af-01"
       ],
       "x-zero-data-retention": [
         "false"

@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC1vc3MtMTIwYiIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtb3NzLTEyMGIiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
-      "max_tokens": 200,
+      "max_tokens": 2000,
       "messages": [
         {
           "content": "Hello world!",
@@ -57,19 +57,16 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759672250,
-      "id": "gen-1759672250-z3PdcviE1JKO5rxwLppN",
+      "created": 1759845440,
+      "id": "gen-1759845440-KhkUS2m91v6eHsfU4epJ",
       "model": "openai/gpt-oss-120b",
       "object": "chat.completion",
-      "provider": "SiliconFlow",
-      "system_fingerprint": "",
+      "provider": "Chutes",
       "usage": {
-        "completion_tokens": 33,
-        "completion_tokens_details": {
-          "reasoning_tokens": 22
-        },
+        "completion_tokens": 43,
         "prompt_tokens": 70,
-        "total_tokens": 103
+        "prompt_tokens_details": null,
+        "total_tokens": 113
       }
     },
     "headers": {
@@ -77,7 +74,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d63ec3c83dd00-ORD"
+        "98ade8337fa013f7-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -86,7 +83,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:50:50 GMT"
+        "Tue, 07 Oct 2025 13:57:21 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

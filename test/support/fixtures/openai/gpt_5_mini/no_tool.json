@@ -61,9 +61,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759772194,
+      "created_at": 1759795761,
       "error": null,
-      "id": "resp_0dd5df619b20ed440068e3fe22614881949f9b7bb3bef284db",
+      "id": "resp_00ffe1442202dfcf0068e45a310444819ba4890e4f0e45789c",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 25600,
@@ -73,7 +73,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_0dd5df619b20ed440068e3fe22fe5c81949f2d4c449a9a73f0",
+          "id": "rs_00ffe1442202dfcf0068e45a318e90819b8b34d620bea8ed6f",
           "summary": [],
           "type": "reasoning"
         },
@@ -82,11 +82,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Sure — here are a few cat jokes:\n\n1) Why did the cat sit on the computer? It wanted to keep an eye on the mouse.\n\n2) What do you call a pile of kittens? A meow-tain.\n\n3) Why was the cat so good at video games? It had nine lives to practice with.",
+              "text": "Why did the cat sit on the computer?\n\nBecause it wanted to keep an eye on the mouse.",
               "type": "output_text"
             }
           ],
-          "id": "msg_0dd5df619b20ed440068e3fe241438819485aee1766d080579",
+          "id": "msg_00ffe1442202dfcf0068e45a32454c819bad9b396f6449756f",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -133,11 +133,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 137,
+        "output_tokens": 26,
         "output_tokens_details": {
-          "reasoning_tokens": 64
+          "reasoning_tokens": 0
         },
-        "total_tokens": 172
+        "total_tokens": 61
       },
       "user": null
     },
@@ -149,7 +149,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a6ebf66a7960ab-ORD"
+        "98a92b51ff31ead8-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -158,13 +158,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 17:36:37 GMT"
+        "Tue, 07 Oct 2025 00:09:22 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "2838"
+        "1787"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -176,8 +176,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=to5oOTghNihZVOgxJiglZW9WFLzHJLImG2j7kG0upjw-1759772197-1.0.1.1-U0s9GZ8v9Z6vA_o5pUE0m82uRGMtYzod9C6t7jFCnXeKFKjztv.noJvpVDNY2iR6mKbKsdI9a6WiNgwwA_QoTqaxHD20gD1CmTPg7t8HDME; path=/; expires=Mon, 06-Oct-25 18:06:37 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=fyK1rX3.XkKlbb.fSgrJTCzn2kkivrICEvNWzETB9GI-1759772197218-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=iXxjb3H9kW3DlIs_DJt7PNN5PRRzGGuilkq_PmvL8sQ-1759795762-1.0.1.1-n6KElbvco2XeGaDpvlLAl26q3dg88KAIn5knKT8P9kYQVhvv5WnUFZZO.0ShR0u3MHGyDGwtoZOnlwjILltpFqWj0I02J9_X0xjkgOQMyBU; path=/; expires=Tue, 07-Oct-25 00:39:22 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=f3ClP3Qex3JnnbyBGDPcsduVR1M54RZ3g5Mkha51xwY-1759795762830-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -189,28 +189,28 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "2842"
+        "1790"
       ],
       "x-ratelimit-limit-requests": [
-        "5000"
+        "10000"
       ],
       "x-ratelimit-limit-tokens": [
-        "4000000"
+        "10000000"
       ],
       "x-ratelimit-remaining-requests": [
-        "4999"
+        "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "3999475"
+        "9999475"
       ],
       "x-ratelimit-reset-requests": [
-        "12ms"
+        "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "7ms"
+        "3ms"
       ],
       "x-request-id": [
-        "req_068bc2c8a56bea5c8d535484c9984b4d"
+        "req_3c75e3024dbaad16c81d39988433b94d"
       ]
     },
     "status": 200

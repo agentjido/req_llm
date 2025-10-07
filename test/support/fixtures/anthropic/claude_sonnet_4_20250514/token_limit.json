@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMjI1LCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtc29ubmV0LTQtMjAyNTA1MTQiLCJzdHJlYW0iOmZhbHNlLCJ0aGlua2luZyI6eyJidWRnZXRfdG9rZW5zIjoxMDI0LCJ0eXBlIjoiZW5hYmxlZCJ9fQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtc29ubmV0LTQtMjAyNTA1MTQiLCJzdHJlYW0iOmZhbHNlLCJ0aGlua2luZyI6eyJidWRnZXRfdG9rZW5zIjoxMDI0LCJ0eXBlIjoiZW5hYmxlZCJ9fQ=="
     },
     "canonical_json": {
-      "max_tokens": 1225,
+      "max_tokens": 3000,
       "messages": [
         {
           "content": "Write a very long story about dragons and adventures",
@@ -21,6 +21,9 @@
     "headers": {
       "accept-encoding": [
         "gzip"
+      ],
+      "anthropic-beta": [
+        "interleaved-thinking-2025-05-14"
       ],
       "anthropic-version": [
         "2023-06-01"
@@ -40,16 +43,16 @@
     "body": {
       "content": [
         {
-          "signature": "EuoGCkYICBgCKkAoFwvDcAbRBKRao/Gq+g5auxA7xxtBOSYw7cZIzRenTYjwRYpxNxhK9eGTQ1+JsXOU+96LA8s04l8ALQ72zkR+EgwSABfVJYG8szlvS4AaDAzkBIws7jPdvE0FHiIwkxY5ou5RJqpI77GbGvGq4pq/PIZpSIsIUSclU0LZvkyDDXzMzbTdDnXjyyGGJ8PTKtEFdhkRWfnj+Jx4jqlD0QAFGF4CYfZboInL4C6QFjJVEeJaqBJ6cRR0LpJXdIfc3c9zTFcw4kTToMc7OEswh3eJE3bSKgJvyxmeOB1Y48xAANXpqrrQ2axX+/8vwTNhMpeV+dqlHo+4DC2gXNROQXYfRfP7a7wE1AUK6FZofxNpG39qkliNoqcc9T/Ag6OexVTA6uICDSYDjoZsWalGVfzSfCkEFrXzLMpMgAMw2Kwxpevcfdn7t0tD+cfkwT7mlVUafe4Jp/Rk3ynEhueAscCuiAav2qncjUN4otwdZPyTrk+fHT/nm1T2RX3VurOq+7bosaBPyPxdE6F8zpUFsz7Gho/sXRb41ZqkvA07pHGpHWeLxAeAqXxTH+VHpaBagffrmAB0gnsMHOrdK6j6PlyiE2UB/M+MB+M2VNRMD8moyeGCgW8tBd4zCg3MMeKHTFeBnzxxI+I+A3STk5VZzOAj4h26i0QqhnGAhjEkXlpqwW5apFlJOX6/qF/IoiWeKSfelOd/GPDH44M3EXMw4mVq9wKj+aKrGxu8HgdfXRA3mJnjCSMJHCZjG8QOWm/2VH8cb9r0lz0ZRiQu5CdpHOBhbjwRTDIUgJKzIiOI08x+oxtWb2fx9TRbtOmPzT+KA0TuvicoibpSc1zOjEiQiCwAsVOp7SkoAQdrfunYXC7j0Uk59glGGso2mms7BjluTBL/jT2pig2yp94hJKZmZhmTNcFsKhaZiVNxJIwOaYoVzaJQMgZDVXt5VBH1hoiRNpqzy2AfgSF33OEXbPuFTGgDe5drMlNlGPf85S4rI46A9ycjiDaek73LjtnYcHC9X7U74YdDtLUSMANYIQ5gOwPlZVDO+YXwJy4i7ke+LfFMh1KRge6q1jbqdL7+/JUaDXUtGM86pe7N75SF8TRDYJtdQxjVwtwWPTdGpHYcd1ImCq4dW3s606Iix1Ok3R62wcXjbBgB",
-          "thinking": "The user is asking for a very long story about dragons and adventures. I should create an engaging fantasy narrative with dragons as central characters, along with adventure elements like quests, battles, magical worlds, and heroic characters. I'll aim to make it substantial in length while maintaining quality storytelling with good pacing, character development, and an interesting plot.\n\nLet me structure this with:\n- An interesting opening that introduces the world and main character\n- Dragon encounters and relationships\n- Adventure elements like quests, challenges, obstacles\n- Character growth and development\n- A satisfying conclusion\n\nI'll write in third person and create a rich fantasy world.",
+          "signature": "EqkGCkYICBgCKkAe5mD11lPlwgl6aVabdN939pVaMu849J6m7PX/z08nlyuVa66vc9NEMkbTJ0IjGkEDQ/IplSVipfUi1NGAT/NZEgxPxMlQvP5luSywvBUaDMIxfyyGI+DlFmKpeSIwawpRD5nFhAL3UAM9t49eHdth+/d3WHas9c/FP0DllRCuU+xa/JatKDlZ5D94n2XcKpAFJkcwaEQU8n4Vloe3z8/i6OsNz8RfzK4Bbd4p7BRVahFVFjx0dP5cvpoWUiiPqVHBD7TznZ49uQFDfO8guXixWVnFk8rom9Phyt68vW1kpcO0wc1hRVJ27q1cH45CjFXMDBGNnsHkKYd3XUeOWiYwc09FPfsAMNxQorkj/AeGMWOf1XJ6ZBpxB+MI1/+NstTSogBer+GgydC5N/WBxtG6UjflAgfEdDo9Nm+Yb7twFnC9Plmf1XuMUrEdA18pfHffrxOBPc3jQXuH0Ft5BRJ5b8LESA+noTv2tqaId+EurSsiyssMlx7o8ADiL/nq5YpK7yugJnrq4EL26XWFJD4YMWUg2xqtA6xV0kqwcqRih8jh49F1tlypxT9hyCI1KMeJcBIZrpMA5mP66rBZQ8WM96gN9OJdC24UqSDzPYWtTel4/5u+9zoqr0moVnM5j0x7LokHJy9dYPj/UNEuzDedKitk8cWWv9aRfQ/1oQm63CdIXQ4DztQeFEu1lHivYFY1oIY9OTH3ANf15ulDbJut6M1WWYMHdpDyj9eMm0PWM9Zgb6gCeh+ForOko+T38Ez69AodDN3s1TTITi68mEJN9M1QXBWhbKSo7QVDCpMunsnoQ2SJmbxS/z4KtOKaPB28XK4OF2e4VW3rm2Nf6hL3gNcP55KhoxTdgCoOBLNIkr3vnKIX7ZP6l5VQ8KMlID07874xpkyFjbN913kn876OzrefxAKY0ee+jk2Gy9YI+UNxwmzaBauJJDWdex3H/ZQTG4guD4fA1Bamjb1sgqTCMUQUeAkl5Brt+U6ecSiHL4cFEpjxEIUBQevQG30CJNf7eTZuRyKWtyunpxN2TqjCvQogObIMpEIXlYLvw0ilXdYYAQ==",
+          "thinking": "The user wants a very long story about dragons and adventures. I should create an engaging fantasy tale with multiple characters, a compelling plot, detailed world-building, and plenty of adventure elements. I'll aim for a substantial length while maintaining quality storytelling throughout.\n\nKey elements to include:\n- Dragons (multiple types/characters)\n- Adventure and quest elements\n- Rich fantasy world-building\n- Character development\n- Conflict and resolution\n- Descriptive writing to bring scenes to life\n\nI'll structure this as a complete story with a beginning, middle, and end, featuring a hero's journey with dragon encounters.",
           "type": "thinking"
         },
         {
-          "text": "# The Last Dragon's Oath\n\n## Chapter 1: The Ember's Call\n\nThe village of Millhaven had always existed in the shadow of the Dragonspire Mountains, where ancient legends spoke of creatures that once ruled the skies with fire and fury. But those were just stories now—tales told by grandmothers to wide-eyed children, nothing more than whispers of a bygone age. Or so Kira Ashworth had always believed.\n\nThat belief shattered on her eighteenth birthday when she discovered the glowing ember buried beneath the floorboards of her late grandmother's cottage.\n\nKira knelt in the dusty attic, her calloused hands trembling as she lifted the perfectly spherical stone from its hiding place. It was no larger than a chicken's egg, yet it pulsed with an inner warmth that seemed to reach directly into her soul. Carved runes spiraled across its surface—ancient symbols that seemed to shift and dance in the dim light filtering through the grimy window.\n\n\"Grandmother,\" she whispered to the empty room, \"what were you hiding from me?\"\n\nThe ember responded to her touch, growing brighter until the entire attic was bathed in golden light. Images flashed through Kira's mind: massive wings blotting out the sun, scales that glittered like precious gems, and eyes—ancient, wise, and terrifyingly intelligent. She gasped and nearly dropped the stone as one final image seared itself into her consciousness: a magnificent dragon, silver as starlight, locked in chains of black iron deep within a mountain cavern.\n\nThe vision faded, leaving Kira breathless and bewildered. But one thing was unmistakably clear—the dragon was calling to her, and it was in terrible danger.\n\n## Chapter 2: The Scholar's Tale\n\nThree days later, Kira found herself in the Great Library of Drakmoor, the kingdom's capital city, clutching the ember in a leather pouch at her side. She had traveled for two days straight, driven by dreams that grew more vivid and urgent each night. The dragon's voice echoed in her sleep, speaking in a language she somehow understood despite never having heard it before.\n\n*Find me, young keeper. Time grows short.*\n\nThe library's towering shelves seemed to stretch endlessly toward the vaulted ceiling, filled with thousands of volumes that held the accumulated knowledge of centuries. Kira approached the main desk where an elderly scholar sat hunched over an illuminated manuscript, his wild white hair seeming to have a mind of its own.\n\n\"Excuse me,\" Kira began hesitantly. \"I'm looking for information about dragons. Particularly about... well, about ones that might still be alive.\"\n\nThe scholar looked up, his pale blue eyes focusing on her with surprising sharpness. \"Ah, another dreamer seeking fairy tales,\" he said with a dismissive wave. \"The dragons are gone, child. They've been extinct for three centuries.\"\n\n\"But what if they're not?\" Kira pressed, pulling the ember from her pouch. \"What if this is real?\"\n\nThe moment the stone appeared, the scholar's demeanor changed completely. He shot to his feet, knocking over his ink well, and stared at the glowing ember with an expression of pure astonishment.\n\n\"Blessed gods,\" he breathed. \"Where did you find this?\"\n\n\"It belonged to my grandmother. Please, I need to know what it means.\"\n\nThe scholar—who introduced himself as Master Aldric—led Kira to a restricted section of the library, past shelves protected by heavy locks and warning signs. He pulled out a massive tome bound in what looked suspiciously like dragon hide.\n\n\"This,\" he said reverently, \"is the Chronicle of the Dragon Wars. It tells of the final battle between humans and dragons three hundred years ago, when King Morvanus the Conqueror sought to eliminate the last of the great wyrms.\" He opened the book to a page filled with detailed illustrations. \"But according to this text, five dragons survived the purge. They were bound in magical prisons, scattered across the realm.\"\n\nKira's heart raced as she recognized the silver dragon from her visions depicted on the page. \"Seraphina,\" she whispered, somehow knowing the creature's name.\n\nMaster Aldric's eyes widened. \"You know of her? Then the bond is true.\" He leaned closer, his voice dropping to barely above a whisper. \"Legend says that each imprisoned dragon chose a bloodline to serve as their keeper—families tasked with eventually freeing them when the time was right. If you carry Seraphina's ember, then you are the last of her keepers.\"\n\n\"But why now? Why after three centuries?\"\n\nThe scholar's expression grew grave. \"Because something has disturbed the magical barriers that hold them. Dark sorcery is spreading across the land, and the",
+          "text": "# The Chronicles of Valdris: The Song of Ancient Wings\n\n## Chapter 1: The Ember's Call\n\nThe morning mist clung to the cobblestones of Thornwick like ghostly fingers, reluctant to yield to the pale sun that struggled through the canopy of ancient oaks. Kira Ashworth pulled her woolen cloak tighter as she made her way through the village square, her leather boots echoing against the worn stones. At seventeen, she possessed the kind of restless energy that seemed to radiate from her very core—auburn hair that refused to stay properly braided, green eyes that held flecks of gold like captured sunlight, and calloused hands that spoke of countless hours spent wielding sword and bow.\n\nThe village of Thornwick nestled in the shadow of the Dragonspine Mountains, their peaks shrouded in perpetual clouds that local legends claimed were the breath of sleeping dragons. For three centuries, no dragon had been seen in the kingdom of Valdris, not since the Great Binding when the last Dragon Lord, Theron the Wise, had supposedly sealed them away to prevent another devastating war. Yet the old stories persisted, whispered around hearth fires and sung by traveling bards who claimed to know the truth of what lay beyond the mist-veiled peaks.\n\nKira had grown up on these tales, nursed on them like mother's milk. Her grandmother, Mira, had been a keeper of the old ways, a woman who remembered when magic flowed as freely as water through the land. She had taught Kira that the world was far more mysterious and dangerous than the simple farming life of Thornwick would suggest. More importantly, she had taught her to listen—to the wind, to the earth, to the subtle vibrations that ran through all living things.\n\nThis morning, something was different. Kira paused beside the village well, her hand instinctively moving to the pendant that hung around her neck—a piece of what her grandmother had called dragonstone, smooth and warm to the touch, with veins of deep red that seemed to pulse with inner fire. The stone had been growing warmer over the past few days, and now it felt almost hot against her skin.\n\n\"Kira!\" The voice belonged to Jorik, the blacksmith's apprentice, a boy her own age with arms like tree trunks and a perpetually sooty face. He jogged across the square toward her, his expression troubled. \"Did you feel it? That tremor in the ground?\"\n\nShe had felt it—a deep, resonant vibration that seemed to come from the very bones of the earth. \"When did it start?\"\n\n\"Just before dawn. Old Henrik says his chickens won't come out of their coop, and the Widow Marley's cat has been yowling since midnight.\" Jorik wiped his hands on his leather apron, leaving dark smears. \"My master sent me to find you. Says if anyone would know what it means, it'd be Mira's granddaughter.\"\n\nKira's heart clenched. Her grandmother had passed two summers ago, taking with her a vast repository of knowledge that Kira was still struggling to fully understand. The old woman had left behind journals filled with cryptic notes, maps of places that supposedly didn't exist, and warnings about signs and portents that Kira had hoped never to see.\n\nAnother tremor ran through the ground, stronger this time. In the distance, she could hear the lowing of cattle and the nervous whickering of horses. The dragonstone pendant grew almost unbearably hot.\n\n\"I need to get home,\" Kira said, already turning toward the narrow lane that led to her cottage. \"If this is what I think it is—\"\n\nHer words were cut off by a sound that made every person in the square freeze in terror. It started low, like the rumble of distant thunder, then rose in pitch until it became a roar that seemed to shake the very foundations of the world. It was a sound no living person in Valdris had heard for three centuries, yet every soul recognized it with instinctive dread.\n\nA dragon's roar.\n\nThe sound came again, closer now, and with it came the smell of sulfur and ancient fire. People began screaming, running for their homes, slamming shutters and barricading doors as if wood and iron could protect them from the legends come to life.\n\nBut Kira stood transfixed, her pendant now burning against her chest like a brand. Because woven through that terrible roar, she could hear something else—something that made her blood sing and her heart race with equal parts fear and exhilaration.\n\nShe could hear her name being called.\n\n## Chapter 2: The Awakening\n\nKira burst through the door of her cottage, her hands shaking as she rifled through her grandmother's study. The small room was crammed with ancient books, rolled parchments, dried herbs hanging from the rafters, and curious artifacts that Mira had collected over her long lifetime. Somewhere in this controlled chaos had to be the answers Kira desperately needed.\n\nShe found what she was looking for in a leather-bound journal hidden beneath a false bottom in an old wooden chest. The pages were yellowed with age, covered in her grandmother's careful script, but the words seemed to leap off the page as if lit by inner fire:\n\n*When the earth trembles and the old songs wake,  \nWhen stone sings hot and the bonds break,  \nThe Ember-Born shall hear the call  \nTo stand before the ancient hall.  \nThe blood of dragons, long concealed,  \nIn mortal flesh shall be revealed.*\n\nKira's hands trembled as she read the passage again. The blood of dragons. She had always known she was different—her unusual strength, her ability to sense things others couldn't, the way animals seemed drawn to her, and most telling of all, her complete immunity to fire. As a child, she had reached into hearth flames without thought, pulling out burning logs with her bare hands while her mother screamed in terror. They had thought it a miracle then. Now, Kira wondered if it might be something else entirely.\n\nAnother roar split the air, and through her window, she could see something that made her heart stop. A shadow was passing over Thornwick, vast and impossible, blotting out the morning sun. The shadow had wings.\n\nKira grabbed her sword—a blade her grandmother had given her on her sixteenth birthday, claiming it had been forged in dragon-fire—and slung her bow across her back. Whatever was happening, whatever she was, she couldn't cower in her cottage while her village was threatened.\n\nShe stepped outside to find the world transformed. The sky had taken on an odd, greenish cast, and the air shimmered with heat distortions despite the cool morning temperature. Villagers who had been fleeing moments before now stood motionless, their faces turned skyward with expressions of awe rather than terror.\n\nFollowing their gaze, Kira saw it.\n\nThe dragon was enormous, easily the length of three houses, with scales that shifted color like oil on water—deep blue-black in the shadows, brilliant emerald where the sun touched them, shot through with veins of gold that pulsed with inner light. Its wings were membranous and translucent, casting rainbow patterns on the ground below as they caught the light. But it was the creature's eyes that took Kira's breath away—ancient, intelligent, and fixed directly on her.\n\nThe dragon descended slowly, gracefully, landing in the village square with surprising delicacy for something of its size. Up close, Kira could see that its scales bore intricate patterns, like writing in some long-forgotten language. When it spoke, its voice resonated not just in the air but through the ground itself, a sound felt as much as heard.\n\n\"Ember-Born,\" the dragon said, and the words carried the weight of centuries. \"I am Ashraneth, Guardian of the Eastern Reaches, Keeper of the Old Covenant. I have slept for three hundred years, waiting for the blood to wake.\"\n\nKira stepped forward, ignoring the gasps and whispered prayers of the villagers around her. The pendant at her throat was now so hot she was surprised it hadn't burned through the chain, yet she felt no pain from it. Instead, it filled her with a strange, fierce joy.\n\n\"You're here for me,\" she said. It wasn't a question.\n\n\"The Binding weakens,\" Ashraneth replied. \"The barriers that have held us in the Deep Lands grow thin. Soon, all the ancient powers will wake—not just dragons, but things far older and more terrible. The world will need those who can stand between the light and the dark, between order and chaos.\" The great head lowered until the dragon's eyes were level with Kira's. \"Your grandmother understood this. She was the last of the Keepers, charged with maintaining the balance. Now that duty falls to you.\"\n\n\"But I don't know anything,\" Kira protested. \"I'm just a village girl. I can't—\"\n\n\"You can withstand dragon-fire,\" Ashraneth interrupted. \"You can hear the earth-song. The stone of your ancestors burns at your throat, recognizing the power that flows in your veins. You are no ordinary village girl, Ember-Born. You are the last daughter of the Dragon Lords.\"\n\nThe words hit Kira like a physical blow. Dragon Lords—the legendary rulers who had once bonded with dragons, who had wielded magic that could reshape the very landscape. According to the stories, they had all died out centuries ago, their bloodlines lost to time and war.\n\n\"It's impossible,\" she whispered.\n\n\"Is it?\" Ashraneth's voice carried a note of gentle humor. \"Look around you, child. Does the impossible not walk among you even now?\"\n\nKira looked, and indeed, the impossible was everywhere. The dragon's presence seemed to have awakened something in the village itself. Flowers that had been mere buds moments before were now in full bloom, their colors more vivid than any she had ever seen. The air sparkled with tiny motes of light that danced like fireflies in daylight. Even the people looked different—younger somehow, as if the dragon's magic had touched them all.\n\nBut there was something else, too. A darkness at the edge of perception, like storm clouds gathering just beyond the horizon. Kira could feel it pressing against her mind, cold and hungry and utterly alien.\n\n\"You feel it,\" Ashraneth said, noticing her expression. \"The Shadow That Waits. It stirs in the Deep Dark, beyond the mountains, beyond the reach of sun and star. The Binding that contained it weakens as well, and unlike dragons, it knows no restraint, no mercy. If it breaks free before you are ready...\"\n\n\"Then teach me,\" Kira said, surprising herself with the firmness in her voice. \"If this is my destiny, if I truly am what you say I am, then teach me to be worthy of it.\"\n\nThe dragon's massive head nodded slowly. \"The path will be hard, Ember-Born. You will face trials that will test not just your courage but your very soul. You will walk in places where the light has never shone, and you will stand against enemies that have forgotten what it means to fear. Are you certain this is what you choose?\"\n\nKira thought of her grandmother, of the stories that had filled her childhood, of the strange dreams that had plagued her sleep for months—dreams of vast caverns lit by rivers of lava, of battles fought in skies heavy with storm clouds, of voices calling to her from places that existed only in legend. She thought of the villagers around her, simple people who deserved to live their lives in peace, and of all the other simple people throughout Valdris who had no idea that their world balanced on the edge of a knife.\n\n\"I choose,\" she said.\n\nAshraneth smiled, an expression that looked strange on a dragon's face but somehow conveyed more warmth than any human smile ever had. \"Then come, daughter of fire and wind. Let us begin your education.\"\n\n## Chapter 3: The Deep Lands\n\nThe journey to the Dragonspine Mountains took three days, though Kira quickly discovered that traveling with a dragon made conventional notions of time and distance largely irrelevant. On the first day, Ashraneth taught her to ride the wind currents, carrying her aloft on wings that seemed to bend the very air to their will. The sensation was unlike anything she had ever experienced—not the stomach-dropping fear she had expected, but a feeling of coming home, as if she had been born to soar above the clouds.\n\nFrom that height, Valdris spread out below them like a living map. Kira could see the kingdom's borders clearly marked by natural",
           "type": "text"
         }
       ],
-      "id": "msg_018eFScZbCEWBZhGhqeoEsiU",
+      "id": "msg_01Jqk1Vp2ScXtGaeT21oy4cX",
       "model": "claude-sonnet-4-20250514",
       "role": "assistant",
       "stop_reason": "max_tokens",
@@ -63,7 +66,7 @@
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
         "input_tokens": 44,
-        "output_tokens": 1225,
+        "output_tokens": 3000,
         "service_tier": "standard"
       }
     },
@@ -78,16 +81,16 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-06T15:05:37Z"
+        "2025-10-07T13:52:54Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "89000"
+        "87000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-06T15:06:07Z"
+        "2025-10-07T13:54:05Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -96,22 +99,22 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-06T15:05:36Z"
+        "2025-10-07T13:52:52Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "539000"
+        "537000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-06T15:05:37Z"
+        "2025-10-07T13:52:54Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a60ed50dd5eb5d-ORD"
+        "98ade1a81b0f118f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -120,10 +123,10 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 15:06:06 GMT"
+        "Tue, 07 Oct 2025 13:54:03 GMT"
       ],
       "request-id": [
-        "req_011CTr9jtFVbyjUfvUGzZBeP"
+        "req_011CTsx162Sb6iAn2pLHzuFX"
       ],
       "server": [
         "cloudflare"
@@ -138,7 +141,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "29489"
+        "71362"
       ],
       "x-robots-tag": [
         "none"

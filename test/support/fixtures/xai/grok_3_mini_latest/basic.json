@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTMtbWluaS1sYXRlc3QiLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay0zLW1pbmktbGF0ZXN0IiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
-      "max_completion_tokens": 200,
+      "max_completion_tokens": 2000,
       "messages": [
         {
           "content": "Hello world!",
@@ -39,35 +39,35 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "Hello! I'm Grok, here to help with whatever's on your mind. What's up? 😊",
-            "reasoning_content": "First, the user said \"Hello world!\" This is a common greeting, often used as a simple test message in programming, like the classic \"Hello, World!\" program.\n\nAs an AI assistant, my response should be friendly, engaging, and helpful. I need to acknowledge the greeting and perhaps continue the conversation.\n\nKey principles from my system prompt:\n- Be helpful and honest.\n- Use the provided tools if necessary, but this doesn't seem to require any tools.\n- Keep responses clear and not verbose.\n\nA simple response might be: \"Hello! How can I help you today?\"\n\nTo make it more conversational, I could reference the \"Hello world\" phrase, especially if it's a nod to programming.\n\nPossible responses:\n1. Direct: \"Hi there! What can I do for you?\"\n2. Playful: \"Hello world! It's great to see you. What's on your mind?\"\n3. Reference programming: \"Hello world! I'm Grok, here to assist with anything from coding to casual chats.\"\n\nSince I'm Grok, built by xAI, I should incorporate that identity subtly.\n\nEnsure the response is not verbose: Keep it concise.\n\nFinal response structure:\n- Greet back.\n- Offer assistance.\n- Keep it short.",
+            "content": "Hello! It's great to hear from you. I'm here to help with any questions, conversations, or tasks you have in mind. What's on your mind today? 😊",
+            "reasoning_content": "First, the user said \"Hello world!\" This is a common greeting, often used as a simple test message in programming, like the classic \"Hello, World!\" program.\n\nAs an AI assistant, my role is to respond helpfully, truthfully, and engagingly. I should acknowledge the greeting and perhaps build on it to make the conversation natural.\n\nPossible responses:\n\n- A simple greeting back, like \"Hello! How can I help you today?\"\n\n- Since it's \"Hello world!\", I could reference the programming context if it seems relevant, but I shouldn't assume that's what they mean.\n\n- Keep it friendly and open-ended to encourage further interaction.\n\nStructure my response:\n\n1. Greet back to match their energy.\n\n2. Ask a question or offer assistance to continue the conversation.\n\n3. Be concise and positive.\n\nFinal response idea: \"Hello! It's great to hear from you. What can I do for you today?\"\n\nThat sounds professional and inviting.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759763217,
-      "id": "ad8c5ec3-7720-7d7b-594b-3334cd30e654_us-east-1",
+      "created": 1759844450,
+      "id": "27d99dae-1cb3-4382-bd37-3d4e252e4923_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 21,
+        "completion_tokens": 34,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 249,
+          "reasoning_tokens": 191,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
         "prompt_tokens": 10,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 9,
+          "cached_tokens": 3,
           "image_tokens": 0,
           "text_tokens": 10
         },
-        "total_tokens": 280
+        "total_tokens": 235
       }
     },
     "headers": {
@@ -81,7 +81,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a610d00912a679-ORD"
+        "98add008da94f14d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -90,13 +90,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 15:07:00 GMT"
+        "Tue, 07 Oct 2025 13:40:52 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=Pm3iOfpwqWukWquUukAsjVRuoq6j.cAYzICub_kAe0M-1759763220-1.0.1.1-w3aJ0SuC6zelzHF7un7F.ZhN5zNeRZkjvpRDg2klnnt.4jIXTd.Nsyr4wdOL6H0YhyIvOj3.7WitnbYYzuOgSFShIc7UL0dQX69qf7sBKj0; path=/; expires=Mon, 06-Oct-25 15:37:00 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=BPH7oNExqMag8zbRUSTkzkNLJ79.oBFXkduqY.7nNQc-1759844452-1.0.1.1-Vd3kg7wzXYu3xyOvHckOe.qpYQ3y88h53UOzZ59N1cjgqnUyaOUIAmUG3Itcu7sVJ3h4j38nxqdwyTswtAUAnWtSGo_VGYElTWmm.TWrjR8; path=/; expires=Tue, 07-Oct-25 14:10:52 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -108,7 +108,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-06c846278c2803a8e92acfd623ddee5e-448a80e50063b826-01"
+        "00-e706009100e41dbf02366566c9ee3b36-84c63aab00193391-01"
       ],
       "x-zero-data-retention": [
         "false"

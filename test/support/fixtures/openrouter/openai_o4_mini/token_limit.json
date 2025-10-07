@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9vNC1taW5pIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjV9"
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJvcGVuYWkvbzQtbWluaSIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC41fQ=="
     },
     "canonical_json": {
-      "max_tokens": 100,
+      "max_tokens": 3000,
       "messages": [
         {
           "content": "Write a very long story about dragons and adventures",
@@ -36,23 +36,23 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": "stop",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "",
-            "reasoning": "**Planning a dragon adventure**\n\nThe user is looking for a very long story about dragons and adventures. They didn't specify an exact length, but I'll aim for something between 1500 to 2000 words to meet the request for \"very long.\" \n\nI think I can create a multi-chapter epic with characters, using headings for clarity but avoiding markdown or bullet points for the main story. I want to be cautious about how I format it, ensuring it’s engaging!",
+            "content": "Chapter 1: The Whisper in the Winds\n\nHigh atop the craggy peaks of the Serenvale Mountains, in a hidden hollow carved by ancient glaciers, lay the village of Emberfall. Its roofs were built from black slate, its streets cobbled with stones smooth as river pebbles, and its people lived simple lives—tilling their gardens, herding goats, and singing fireside tales of the wyrms that once soared above these heights. Yet, over the years, those great beasts had vanished, and only memory remained.\n\nOn a dawn bathed in rose and gold, Aserin, the village’s youngest blacksmith, stood at the forge, hammering steel into a horse’s horseshoe. Sparks danced like fireflies around him until his hammer struck true. The echo rolled through the hollow, and for a moment the wind carried a low, throaty rumble—as if some distant leviathan stirred in its slumber. Aserin paused, heart hammering. The wind tugged at his dark hair, carrying a whisper: “Return… Return…”\n\nHe shook his head, half-laughing at himself. “Old superstitions,” he muttered, picking up the hot iron with tongs. Yet that evening, as he walked home along a starlit path, the whisper came again, this time louder, urgent. He halted by the blackberry bushes, breath visible in the chill air, and listened. The voice was ancient, deep as the mountain’s bedrock: “Aserin… the world is out of balance.”\n\nChapter 2: The Gathering Storm\n\nWord of the strange rumble and whisper spread through Emberfall by dawn. Some villagers claimed they heard it too; others scoffed. But all agreed on one thing: the old tales of dragons might not be mere bedtime stories. The village council convened in the stone hall. At its head sat Elder Maradon, his beard white as mountain snow, his eyes bright with concern.\n\n“We cannot ignore these signs,” he intoned. “The dragons of legend shaped our world. When they left, the balance of fire and stone, sky and shadow, shifted. If they return—or if something else stirs in their place—we must be prepared.”\n\nAserin, uncertain but compelled, found himself volunteering. He would journey beyond the peaks, to where the old dragon-gods once nested. Alongside him, the council appointed two others: Lyssa, a ranger with unmatched skill in archery and knowledge of the wilds; and Torvald, a scholar who had spent his life studying ancient runes and dragon lore. Thus, at dawn’s first light, the trio set forth, stepping beyond the safety of steep cliffs and into the unknown.\n\nChapter 3: Trails of Ash and Flame\n\nFor days they trekked. The mountain air grew thinner, the paths steeper. At night, they camped beneath skies so close they felt one could pluck a star from the firmament. Torvald pored over battered scrolls by lantern-light, hunting clues to dragon resting places. Lyssa scouted ahead, noting nests of gryphons and tracks of beasts long thought extinct.\n\nOn the seventh day, they came upon a valley choked with gray ash. The trees stood like charred skeletons, and rivers ran red as molten iron. In the center lay a massive crater, its walls scorched, its depths ringed with great black stones etched in glowing runes. Torvald traced them with trembling fingers. “Ancient Glyphs of Awakening,” he whispered. “These stones form the Seal of Fyr-Kharos, the First Flame.”\n\nSuddenly, the ground trembled. From the crater’s depths rose a plume of smoke and embers. A voice like rolling thunder spoke: “The seal weakens. The Firewyrm stirs. Retrievers of the old covenant, heed this warning: The realm of men is frail. Its hearts must not crack with fear.” Then the voice faded, and the ash settled once more.\n\nAserin’s knuckles whitened on his hammer’s haft. “The Firewyrm? The dragons… they were many, but only a few are named in these songs.”\n\nLyssa, standing poised with bow at the ready, scanned the ash-fall. “We must return to Emberfall. The village must prepare. If Fyr-Kharos is waking, the skies may rain fire.”\n\nChapter 4: Allies and Omens\n\nTheir journey back was urgent. When they reached Emberfall, smoke curled from chimneys as villagers paused their work to greet them. In the council hall, Elder Maradon listened gravely to their tale. “We must send word across the lands,” he decreed. “To the Stoneclaw dwarves in the Ironfist Hills, to the Sylvari wood-elf enclaves, to the distant mages of Stormreach Keep. Only united can we hope to stem the old powers.”\n\nAserin volunteered to carry the message to the dwarves. Lyssa would ride east to the elves, while Torvald took the path south to the mages. But that night, in Aserin’s dreams, fire-danced and wings beat overhead. He awoke to find a small, charred scale on his pillow—no bigger than his thumbnail, yet glowing faintly with ember-light. He touched it, and a surge of warmth pulsed up his arm. A single word echoed in his mind: “Guard.”\n\nChapter 5: The Dwarves of Ironfist Hills\n\nAserin’s trip to the Ironfist Hills led him through narrow gorges and shimmering hot springs. The Stoneclaw dwarves welcomed him with hearty ale and roasted boar. Their king, Prince Bragor Stonefist, was a broad-shouldered warrior with a hammer the size of a small cartwheel. He examined the scale, his face darkening.\n\n“Young blacksmith,” he rumbled, “this is no mere relic. It is a scale of Fyr-Kharos himself. If the Firewyrm rises, he will demand tribute in molten gold—and blood.” Bragor joined Aserin’s cause. The dwarves would muster their forges, crafting weapons imbued with runic might.\n\nChapter 6: The Expedition’s Toll\n\nMonths passed as the alliances formed. Messages flew, armies mustered, and enchantments woven. Yet every day, the earth trembled, ash-fall darkened skies, and fires blinded remote villages. In Emberfall, Aserin returned to find the old forge cold, the villagers praying for deliverance. He lit the furnace and worked through long nights, shaping steel and embedding it with silver runes taught by Torvald’s scrolls.\n\nLyssa and Torvald returned exhausted but determined. The elves brought gifts of enchanted arrows; the mages offered wards of storm and mist. Together, at Emberfall’s edge, they stood before a host of dwarves, elves, men, and a handful of sorcerers. Beneath a sky smeared with blood-red clouds, they braced for war.\n\nChapter 7: Battle of the Shattered Crater\n\nOn the eve of battle, the ground shivered as a great roar split the heavens. Fyr-Kharos, the Firewyrm, descended in a hurricane of flame and fury. His scales were molten metal, his eyes burning with ancient wrath. He landed at the rim of the shattered crater, each step turning earth to glass.\n\nPrince Bragor’s dwarves held the front line, their runic hammers striking sparks against draconic hide. The elves loosed arrow volleys that sizzled through the heat, finding joints between scales. Mages chanted, calling storms to snatch at the wyrm’s wings. Aserin, Lyssa, Torvald, and Elder Maradon advanced beneath a shield of woven enchantment, carrying the Heartfire Chalice—an artifact said to bind dragonflame.\n\nFyr-Kharos lunged, a wave of fire sweeping over them. Aserin raised the chalice, and with a cry that echoed across the battlefield, he poured its glowing contents into the wyrm’s mouth. Light blazed, and the dragon shrieked—a sound of tearing skies and broken mountains. The chalice’s magic wove itself around Fyr-Kharos’s heart, quelling his rage, turning flame to gentle ember.\n\nChapter 8: Dawn of a New Covenant\n\nWhen dawn broke, the valley lay silent. The crater’s rim was cool once more. Fyr-Kharos, now calm, lowered his great head and spoke—no longer in thunder, but in tones soft as twilight. “You have bound me with more than magic,” he said. “You have shown courage, unity, and respect for the old ways. I pledge myself to the covenant of guardians. Let the balance hold.”\n\nWith that, he spread immense wings and rose, carrying a promise upon the morning breeze. One by one, other dragons answered—some of ice, some of storm, some of verdant wood. They gathered above the assembled peoples, circling in salute. The old powers had returned, but not as conquerors. They came as allies, as custodians of the world’s ancient harmony.\n\nEpilogue: Embers of Hope\n\nBack in Emberfall, life resumed its quiet rhythms, but changed forever. Dwarven runes gleamed in the smithy, elf-song drifted on the breeze, and mages studied alongside farmers beneath the same flag. Aserin remained at his anvil, forging not just tools and horseshoes, but symbols of unity: brooches shaped like dragon’s wings, jewelry set with fragments of scales, charms to keep the covenant alive.\n\nAnd sometimes, when the sun dipped low, he would hear a distant roar, gentle and far-off, and look to the sky. There, among drifting clouds, glimmered wings of flame and shadow—a promise that whenever darkness threatened, dragons and mortals alike would stand together, guardians of the ancient balance, companions in endless adventure.",
+            "reasoning": "**Planning a dragon adventure story**\n\nThe user has asked for a very long story about dragons and adventures. Aiming for something around 1000+ words sounds right! I’ll avoid heavy formatting and instead focus on creating engaging narrative chapters that flow well. I'll make sure to use descriptive language to draw the reader in. It's important that the story captures the essence of adventure while keeping it accessible and enjoyable. Let’s get started on crafting this epic tale!",
             "reasoning_details": [
               {
                 "format": "openai-responses-v1",
                 "index": 0,
-                "summary": "**Planning a dragon adventure**\n\nThe user is looking for a very long story about dragons and adventures. They didn't specify an exact length, but I'll aim for something between 1500 to 2000 words to meet the request for \"very long.\" \n\nI think I can create a multi-chapter epic with characters, using headings for clarity but avoiding markdown or bullet points for the main story. I want to be cautious about how I format it, ensuring it’s engaging!",
+                "summary": "**Planning a dragon adventure story**\n\nThe user has asked for a very long story about dragons and adventures. Aiming for something around 1000+ words sounds right! I’ll avoid heavy formatting and instead focus on creating engaging narrative chapters that flow well. I'll make sure to use descriptive language to draw the reader in. It's important that the story captures the essence of adventure while keeping it accessible and enjoyable. Let’s get started on crafting this epic tale!",
                 "type": "reasoning.summary"
               },
               {
-                "data": "gAAAAABo4nfBxdf0jBTMl5adXPZNQ6IrnkA-qCcxjQxaF8vAXGArffOzNRVpy0AHj65nBUR419lqp6vmQIuDugH7vkQqwsvJP-eOXtVuOF9H0FA2Dl6YHoEsVmcLTmhVfIJy0o5sv3-gFqvTUtzcuwyOK1D7Fdo-9Dn59x1WZSoiLjmCRfT-Izt_oORCjVNmhxzeFPUvbvZddY3Ch_yIftwCsXVPtX8NI4KWG-M6NXrswc2KkjrFbRqGz7VZw7we9TPc_ldAmN5v6Dq37dDf9YaoQpEBzYQAZXbQlmqSy9ht5Ieyz4fIL_0mjJciZWMPJBaPZIlvITrXL8J_6Tjl5NoPDUuBEhNHLUxn7CPxyhrK2MeZCYpyfvArMBTLkVFGQPzBcHy7jDQZHhQMfZG_rpTMZ7hpIQXhbU32KLK-d1JQjKxgeCrkZgQzI8cpp9naA6kjhIP2X026rdJhC92td4FvDgecbF6UJzf1k84R4WVyW63pii_IYNYTSfYZ5jqP_B5seA4o351ixQO2UoqnQsq1hcwsrPA4L3umRJ97wIbQ-RYABbcqra6xNZ3roknB1VS0NKJkwPB6NK6BS0ZYBJ4wwb-q5mM-4EM8u7OI8PonH2RvTHsYKCtwSu1v5skaUZP7NWftLVD8uJmOwVrBXeEq9pNWeR9rFBE05Ec-D0rs2IwXf-r0Ykmk91muBhCPysVl0AQzxZKJFQ8jjHBdugoHQD_YQbS17eU2h4oKNy_TZ969T6E4nPwWCAEGKf9WoDUxdagWC2XTyX_k06xZG3oI-By5t_SQuUP2iYNRKBgERDnbSJPRDHXKlhXOkEBEyTU9fWwP4-a4OEhbrCnNFJEyho53Ty0UPFPT5dOhlsnEN_s7GGzk-irpxJ38HRV39fTSqtSB6lZ7xtspfcYyTDe_dr907ycX6hADQeLaY8qsWprjCx4EIvi1Hlc_mpyVJXDkaP_HquDjfVYTNYrqCQkX2wVSP1Q_WXz9I2Dz1KS2BEmWZW7p6lBRAKxOkUYO-bD5PQB3Aqjb3DOa78nwkQMYpvKWl6FGaDv7eeljEn0F0qmFpwzPEWXU4q7ziw19qkVVFnFGtPDEYKw7_-dyBLjGYLWDm7_EexUazeRyqfWtsCKirMB6DMNW-dY2x37K5SVx5xOByME1XQeZpg_XsEXKgpKGZyMChAautqtf2KEqSQZr_MyfRx-p0uPIJ2Vq5476OvjWPTgCWi-KBwwLRTNCVnq5nZn_2MmA5I-3ILmlrhk25qhrglsnabPlAZAp8s-VoIb6bUqSHPCX5w5v6yyxbXUTfXH-diJLcvgjC2iVlRtr0VoenV3AQS2lWTF94wQ0h8V0vcQZ1iFwq5zP5GFlWyWiOoaswEkli7U-_qehuei6YwYvlHgDRgK93MeqsBD1sPqJeR7HE9YjNnbLMLGGWXxXls71fw==",
+                "data": "gAAAAABo5RwcZRSx_pYkdYbJAApiX_iQ7UekseUMdP1Pv9HcU4Xb2yW8bed-ZZIM07hnnjs6ROrj6NaH_XUNG2KkHZxHOcZkjA85H0WY9fVLoVWaiOsfr7hVZm7AxDzSBi2jRLHoBDHROB6Lsd5Eigyq3rtvDWXx4-OUDOfbPLqM72pQnwqFW5idReaWZ1Uma7umoT3VGxgm_Tzt7SyDUjLpD0BjRvyEhPmI2oekvJJJAr3fyXzO2RPmXy1ZQOZE0ZJe_v1l85L2gTS8-KbqT6kDLfFRg9dcEc2xsMyLiNwf6OOdZ4mh6WzUs1nGL9DcmDdY9P8WpXqQtAf-iANnRpRb7nk_7Wo7dMrDKG2HxRcK0Wh1i_58HSLhIY9yIAlh1jBjo60n1qTnv_VzuoGVzxUFp6aFVtKfTiuVdwqbeXOkIvpAVEPaxK_UkUP1X0Fe_t0D9ixUE8xxRd667OHWDzowW-wI-azIa1MwWu7y1JTlhpeCrblbBQ5zICj_--oZhPr5NGX4WY_kK8KYoikFTd4IYsCRKKK6QYMzOE5wrtfdmBSSrrpHL2tkeZvoy4pc4vhgkHMEAK3a4cvKDyuN8FclTGxPNNT-qGpslMed0kAiG7xIiKlWDE3lj1OcoudzxhAZWfGp7qVj6hma9dmPnykz1W10Ot594MRHAxzn9jRoaiF5yHGGAQkp9aK8PVk4I5kWg3pUtTRG30dacz5PVJbssDBcg8AWdHentKEm1nf_F_5SiDDRYFzmH_tG1iVqXzXsS5AxPB68zn55SI6HSU9P0C0I5oJ6SgZy8vvMhrVsaQo4r2W_tD4onPKz9bc4tl4XFIv3vm9bG2XIKIwAqS3JEyhqD7EnKsCDYKv8Y8yw0Wsyhp63aSQ4Dbw5L0OE1bpKeyKTLHL8uGfWkGJX4dk_9dc9SEWZQx9c02lAUm3gvwQsq-mmRAvt6m-2V3ab5Ym4ZvhIE00dIY6p11FKiNyJqX5TcDHl-SRcIRlv6daFdb8gF7dwqqwQSbKfmu_ou8M12sGFfjNY52k7kS7YVMERgtaW0givnfbpMC7nEpv7q4WphiTgFBs_rHe_mWqkQBuk4GeMcWX3Kob72Y0go62Gasn1GmF4hOPiLbHURTJLuYFL_MZ_FcWDw4NIa3N6vwVEJU8FIKreRsxuMxgE6oPxcz0u6g3dDWkKzjKXerUoGk0nQZK_TaX2OgBRqqmkOU2HLUsRHEDnRT8zL0yX86Mx6WtpjOFd1Wz6HOWdYfyji_3FkteHRgY=",
                 "format": "openai-responses-v1",
-                "id": "rs_0f8bd9918c05d1490168e277bdabfc819380f7b992d4fdc4a0",
+                "id": "rs_0dddea2a84369ee50168e51c18b210819784f06f7b78ae7c47",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -60,18 +60,18 @@
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "max_output_tokens"
+          "native_finish_reason": "completed"
         }
       ],
-      "created": 1759672253,
-      "id": "gen-1759672253-YpL9TjiMQAzasTr1XP7w",
+      "created": 1759845399,
+      "id": "gen-1759845399-0KuikFm7tGMC7FSj4Qt3",
       "model": "openai/o4-mini",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
-        "completion_tokens": 64,
+        "completion_tokens": 2143,
         "prompt_tokens": 15,
-        "total_tokens": 79
+        "total_tokens": 2158
       }
     },
     "headers": {
@@ -79,7 +79,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d63fd9e881048-ORD"
+        "98ade7342d6d8714-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -88,7 +88,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:50:53 GMT"
+        "Tue, 07 Oct 2025 13:56:40 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

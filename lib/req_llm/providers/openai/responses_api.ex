@@ -122,8 +122,14 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     [ReqLLM.StreamChunk.meta(%{terminal?: true})]
   end
 
-  def decode_sse_event(%{data: data}, model) when is_map(data) do
-    event_type = data["event"] || data["type"]
+  def decode_sse_event(%{data: data} = event, model) when is_map(data) do
+    event_type =
+      Map.get(event, :event) || Map.get(event, "event") || data["event"] || data["type"]
+
+    if System.get_env("REQ_LLM_DEBUG") do
+      require Logger
+      Logger.debug("ResponsesAPI decode_sse_event: event=#{inspect(Map.keys(event))}, event_type=#{inspect(event_type)}")
+    end
 
     case event_type do
       "response.output_text.delta" ->
@@ -148,6 +154,24 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         [ReqLLM.StreamChunk.meta(%{usage: usage, model: model.model})]
 
       "response.output_text.done" ->
+        []
+
+      "response.function_call.delta" ->
+        handle_function_call_delta(data)
+
+      "response.function_call_arguments.delta" ->
+        handle_function_call_arguments_delta(data)
+
+      "response.function_call_arguments.done" ->
+        []
+
+      "response.function_call.name.delta" ->
+        handle_function_call_name_delta(data)
+
+      "response.output_item.added" ->
+        handle_output_item_added(data)
+
+      "response.output_item.done" ->
         []
 
       "response.completed" ->
@@ -235,6 +259,83 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
          details: Exception.message(error)
        )}
   end
+
+  defp handle_function_call_delta(%{"delta" => delta} = data) when is_map(delta) do
+    index = data["index"] || 0
+    call_id = data["call_id"] || data["id"] || "call_#{:erlang.unique_integer([:positive])}"
+
+    chunks = []
+
+    chunks =
+      case delta["name"] do
+        name when is_binary(name) and name != "" ->
+          [ReqLLM.StreamChunk.tool_call(name, %{}, %{id: call_id, index: index})]
+
+        _ ->
+          chunks
+      end
+
+    chunks =
+      case delta["arguments"] do
+        fragment when is_binary(fragment) and fragment != "" ->
+          chunks ++
+            [
+              ReqLLM.StreamChunk.meta(%{
+                tool_call_args: %{index: index, fragment: fragment}
+              })
+            ]
+
+        _ ->
+          chunks
+      end
+
+    chunks
+  end
+
+  defp handle_function_call_delta(_), do: []
+
+  defp handle_function_call_arguments_delta(%{"delta" => fragment} = data)
+       when is_binary(fragment) and fragment != "" do
+    index = data["index"] || 0
+
+    [
+      ReqLLM.StreamChunk.meta(%{
+        tool_call_args: %{index: index, fragment: fragment}
+      })
+    ]
+  end
+
+  defp handle_function_call_arguments_delta(_), do: []
+
+  defp handle_function_call_name_delta(%{"delta" => name} = data)
+       when is_binary(name) and name != "" do
+    index = data["index"] || 0
+    call_id = data["call_id"] || data["id"] || "call_#{:erlang.unique_integer([:positive])}"
+
+    [ReqLLM.StreamChunk.tool_call(name, %{}, %{id: call_id, index: index})]
+  end
+
+  defp handle_function_call_name_delta(_), do: []
+
+  defp handle_output_item_added(%{"item" => item} = data) when is_map(item) do
+    case item["type"] do
+      "function_call" ->
+        index = data["output_index"] || 0
+        call_id = item["call_id"] || item["id"] || "call_#{:erlang.unique_integer([:positive])}"
+        name = item["name"]
+
+        if name && name != "" do
+          [ReqLLM.StreamChunk.tool_call(name, %{}, %{id: call_id, index: index})]
+        else
+          []
+        end
+
+      _ ->
+        []
+    end
+  end
+
+  defp handle_output_item_added(_), do: []
 
   defp maybe_put_string(map, _key, nil), do: map
   defp maybe_put_string(map, key, value), do: Map.put(map, key, value)

@@ -40,7 +40,7 @@
         "gzip"
       ],
       "anthropic-beta": [
-        "tools-2024-05-16"
+        "interleaved-thinking-2025-05-14,tools-2024-05-16"
       ],
       "anthropic-version": [
         "2023-06-01"
@@ -60,8 +60,8 @@
     "body": {
       "content": [
         {
-          "signature": "EtkCCkYICBgCKkBOTnHmExIb6PjSNoq/b13AT5gB42gEoLtgX66mx7wHmxHBfB+KD9FgpLY7acZs4tZxNyg8tROGIElXrZ09jGvlEgwVt8Puga3qLP2H4XoaDHfDFF8SLdpVGXl0NyIwt0EWeJ0WaQ8FMh/sKubJBHPSuvXGyrMJ99heMhtkr4SfQZBqltUz0NwLz1q+5eY0KsABbR3MPaWx6wnnJc3I6iWhCXj2aZqlhmnID0PsT7VvMYySjVA7wisRZSBScHE8H0fmrqseJuwCqcoM/avRo37R4c7VJAaPSK8nRIidgpQ2YeO4rqTUOyoyExfikcl20lVXLuP//a7M03xzRhWsb+gpwDkk46VM2GQBVzxGN2J7GinmQDbqdCjEMAHLS6M/F2lyx/98hpYKaH32SjKq3SZjUWqVNdRPKYrLOuxS5fwWDjZU1WNn5xKCTNGTRTkYw/tOGAE=",
-          "thinking": "The user is asking for a joke about cats. This is not related to weather information, so I don't need to use the get_weather function. I can simply provide a cat joke directly.",
+          "signature": "Ep8DCkYICBgCKkBlA6fipRsyg4TEh4CIcjfcN9FROC3Wwz+v/TdRTOZ7XZlkMWWH+9egGUijUspPKYbNZ+dI7jDMX7ageD6h7GreEgyOHajmO6RgNsqOewsaDP3ZmWPm8/iyqWgtgCIwBeLl9W/7JjodxJYfn4sQreSHXNIuBmuQGEO8zJY7+zXdzQx2oA/ceGaWQl43z2XJKoYCqXv02fCnPtTedM0zRQfFQWyXl5xkh/HlzC+BAMxJ2Z0t05U1RuwpBV6SENEpv7FnZhT0Fe1exmQPqgR4bantJkFajCK+mVRHgn0WChcVjcR88FRMN3RtIs85dFEYOcEYWmDrm9XCCz/uC7HF/2vIEiTrNRR9OHshnAb/t1V/JY0nPJF+gd7VXYcrfpQOq3oGDL8WR4TLA60BYQAZk4QyKBz7Ru7WVqHXJE5JZ6l9XfIkX+kOpO5BRrKtD9FR27Gj6tT3pSG4zmhfBehwJspaKyaIj1DNc3+Wnd6k5xxJYb1nHQAhTXHLpv5lo5N5dJB90jsgaauR/ryNrrAFCGtxiwOBeKriKBgB",
+          "thinking": "The user is asking for a joke about cats. This is a simple request for entertainment/humor that doesn't require any tools or function calls. I don't need to check the weather or use any other tools for this. I'll just provide a cat joke directly.",
           "type": "thinking"
         },
         {
@@ -69,7 +69,7 @@
           "type": "text"
         }
       ],
-      "id": "msg_017VHCNadTRf1yvfWujcMhWk",
+      "id": "msg_01Jcr1BDQAko7aMFYzFa3t7u",
       "model": "claude-opus-4-1-20250805",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -82,8 +82,8 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 410,
-        "output_tokens": 82,
+        "input_tokens": 558,
+        "output_tokens": 96,
         "service_tier": "standard"
       }
     },
@@ -98,7 +98,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-06T17:10:53Z"
+        "2025-10-07T13:52:41Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -107,7 +107,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-06T17:10:54Z"
+        "2025-10-07T13:52:42Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -116,7 +116,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-06T17:10:52Z"
+        "2025-10-07T13:52:35Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -125,13 +125,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-06T17:10:53Z"
+        "2025-10-07T13:52:41Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a6c64e3ed11080-ORD"
+        "98ade13db9005da7-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -140,10 +140,10 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 17:10:54 GMT"
+        "Tue, 07 Oct 2025 13:52:42 GMT"
       ],
       "request-id": [
-        "req_011CTrKHrmduCLAGfebzkzLR"
+        "req_011CTswyqH9XNuDyfgEZh6K6"
       ],
       "server": [
         "cloudflare"
@@ -158,7 +158,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "2635"
+        "7221"
       ],
       "x-robots-tag": [
         "none"

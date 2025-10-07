@@ -1,0 +1,111 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InotYWkvZ2xtLTQuNXYiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "z-ai/glm-4.5v",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "\nHello! It's great to connect with you. I'm here to help answer questions, provide information, or assist with various tasks. How can I support you today?",
+            "reasoning": "I'm being greeted with \"Hello world!\" and need to respond appropriately. This is a classic introductory phrase, so I should acknowledge it warmly while maintaining my professional tone.\n\nThe user might be testing if I'm functioning correctly or simply initiating a conversation. Either way, I should provide a friendly yet informative response that invites further interaction.\n\nI'll craft a reply that acknowledges their greeting, introduces myself briefly, and offers assistance - this sets the right tone for future exchanges without overwhelming them with too much information upfront.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "I'm being greeted with \"Hello world!\" and need to respond appropriately. This is a classic introductory phrase, so I should acknowledge it warmly while maintaining my professional tone.\n\nThe user might be testing if I'm functioning correctly or simply initiating a conversation. Either way, I should provide a friendly yet informative response that invites further interaction.\n\nI'll craft a reply that acknowledges their greeting, introduces myself briefly, and offers assistance - this sets the right tone for future exchanges without overwhelming them with too much information upfront.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1759845467,
+      "id": "gen-1759845467-srBkTYgvbymgCQmuwY64",
+      "model": "z-ai/glm-4.5v",
+      "object": "chat.completion",
+      "provider": "Z.AI",
+      "usage": {
+        "completion_tokens": 138,
+        "prompt_tokens": 10,
+        "prompt_tokens_details": {
+          "cached_tokens": 5
+        },
+        "total_tokens": 148
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ade8dd8aa9ab95-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 07 Oct 2025 13:57:48 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

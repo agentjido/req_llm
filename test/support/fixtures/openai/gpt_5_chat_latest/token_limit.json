@@ -40,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759772163,
+      "created_at": 1759795763,
       "error": null,
-      "id": "resp_0e793100298a88750068e3fe03d0cc81989fd6cd29854bfe31",
+      "id": "resp_0747aed6cb54a7260068e45a330a948193b236c8fc362c32b8",
       "incomplete_details": {
         "reason": "max_output_tokens"
       },
@@ -58,11 +58,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Sure! Here’s a long, original fantasy story featuring dragons, quests, and plenty of adventure.  \n\n---\n\n## **The Ember Crown**\n\n### **Part I – The Whispering Peaks**\n\nThe wind screamed through the jagged canyons of the Whispering Peaks, carrying with it the scent of smoke and the distant echo of wings. Lyra leaned on her staff, her breath misting in the thin mountain air. The path before her curled upward into the clouds like the spine of a sleeping",
+              "text": "Sure! Here’s a long, original fantasy story full of dragons, quests, and adventure:  \n\n---\n\n### **The Emberstone Chronicles: Rise of the Dragonbound**\n\n#### **Prologue: Whispers of Smoke**\n\nLong before the kingdoms of men rose from the mist, the world was shaped by fire and air — by dragonkind. Their flames forged mountains, and their wings divided the sky. It was said that every storm was a dragon’s breath, every earthquake a beat of their heart beneath",
               "type": "output_text"
             }
           ],
-          "id": "msg_0e793100298a88750068e3fe04b758819894dc28fb2e23540f",
+          "id": "msg_0747aed6cb54a7260068e45a33b21481938ef4d1c1ebf5b2cd",
           "role": "assistant",
           "status": "incomplete",
           "type": "message"
@@ -112,7 +112,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a6eb374806b0fc-ORD"
+        "98a92b5ea9fdf939-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -121,13 +121,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 17:36:06 GMT"
+        "Tue, 07 Oct 2025 00:09:24 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "2819"
+        "1867"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -139,8 +139,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=INB8XlsqGj1JfffSFXO.wpSCLjmS7BVatwZiiXOYZ4M-1759772166-1.0.1.1-xPdSMCC.AlvZF7nemDn65oADzd6wiQ9lu1lCjPrR3L28At5wt2IKxTdj7J193HD48VCuccOo_fEaLpu8_Eahgc.yEmiXeWGCZSoSpp_BNKI; path=/; expires=Mon, 06-Oct-25 18:06:06 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=zKP2bckz5e8vtZ8bWBz9C0du2dpvvRX0m5H1qaZ0EZQ-1759772166657-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=MFfTMSKxPz9Dpc20sJAXjrqMoOehMyWrKsHL1c1dQRg-1759795764-1.0.1.1-_uKWXOk6ZO7bvONNg_2_FVNwBkfsTVYJuVKt17BtpVIE1PlRZmT03suLYhb6IGNRWL0hqPPtS2Iau6x3c9kSDlOBlvqT47MS3_IOSveRDFM; path=/; expires=Tue, 07-Oct-25 00:39:24 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=uNtnHHfuVMmldPCa6FnZ17E2qu5uXILfG.82uuUcMfM-1759795764932-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -152,28 +152,28 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "2824"
+        "1869"
       ],
       "x-ratelimit-limit-requests": [
-        "5000"
+        "10000"
       ],
       "x-ratelimit-limit-tokens": [
-        "800000"
+        "2000000"
       ],
       "x-ratelimit-remaining-requests": [
-        "4999"
+        "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "799950"
+        "1999950"
       ],
       "x-ratelimit-reset-requests": [
-        "12ms"
+        "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "3ms"
+        "1ms"
       ],
       "x-request-id": [
-        "req_9c5ba1040afdb78d07c1299084600209"
+        "req_b97f0c9626dfc83607c9ae7591892f02"
       ]
     },
     "status": 200

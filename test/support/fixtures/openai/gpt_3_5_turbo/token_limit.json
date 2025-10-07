@@ -39,14 +39,14 @@
           "logprobs": null,
           "message": {
             "annotations": [],
-            "content": "Once upon a time in a far-off land, dragons roamed freely, their majestic wings casting shadows over the land below. These creatures were powerful and feared by many, but they were also wise and noble beings who protected the land from evil forces.\n\nOne such dragon was named Drakon, a mighty red dragon with scales as hard as steel and eyes that glowed like fire. Drakon was known throughout the land for his bravery and his sense of justice, and many sought his counsel in",
+            "content": "In the mystical land of Aveloria, dragons roamed freely, their majestic wings casting shadows over the rolling hills and deep valleys. The people of Aveloria lived in harmony with these powerful creatures, for they knew that the dragons were protectors of the land, guardians of the ancient forests and keepers of the balance between light and darkness.\n\nOne such dragon was named Drakar, a mighty beast with scales as black as the night sky and eyes that glowed like embers. Dr",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759772163,
-      "id": "chatcmpl-CNjPvKALF3Lu1OCVbp71NrIZOx2yU",
+      "created": 1759795762,
+      "id": "chatcmpl-CNpYY7w3pQFo8DmaXOJtdfz4A1i1v",
       "model": "gpt-3.5-turbo-0125",
       "object": "chat.completion",
       "service_tier": "default",
@@ -78,7 +78,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a6eb366899338f-ORD"
+        "98a92b5d1ab5f14b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -87,13 +87,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 17:36:04 GMT"
+        "Tue, 07 Oct 2025 00:09:24 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "841"
+        "1378"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -105,8 +105,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=lFT0uYXK_PD_GHocHo8OA4Yzh5JzT_8pshN4islROVU-1759772164-1.0.1.1-_oNQDx9heKRfaNTFe85jrJGt.kUdPLDV6L7otLo2KbsSIFCDHr5S19wXBlvMggbqePnA4CHAOwkkUxdgIbC.NdmTIncN6u0Y9fqDKZ53t90; path=/; expires=Mon, 06-Oct-25 18:06:04 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=TSAMLpaUBor4WTgoMSMOPBU_foTSdJB7G0uoAHe4yRc-1759772164795-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=OAXTE5H9CbRZuQgjysb8vppedaONnjyO8D.2VRJ833w-1759795764-1.0.1.1-15kMuZdZ9sdCCRji4w_SJUgzGWvoYkaqSu4nSNFgMyWALwTzjeV6ZhjU81MruASZhQIQi3Ccz45rTkRWEuNrBWdJVsgqj61whunR62E9LvM; path=/; expires=Tue, 07-Oct-25 00:39:24 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=MKl.p93cSSNW_RfqvO1jdV0XD.9wX.lp0FRU7SrExv8-1759795764189-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -118,31 +118,31 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "1021"
+        "1404"
       ],
       "x-openai-proxy-wasm": [
         "v0.1"
       ],
       "x-ratelimit-limit-requests": [
-        "5000"
+        "10000"
       ],
       "x-ratelimit-limit-tokens": [
-        "4000000"
+        "10000000"
       ],
       "x-ratelimit-remaining-requests": [
-        "4999"
+        "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "3999985"
+        "9999985"
       ],
       "x-ratelimit-reset-requests": [
-        "12ms"
+        "6ms"
       ],
       "x-ratelimit-reset-tokens": [
         "0s"
       ],
       "x-request-id": [
-        "req_a2dce57aafe44f828db3cdf192c38ff8"
+        "req_f3d9d5d865bf47768717c0c935b84a11"
       ]
     },
     "status": 200

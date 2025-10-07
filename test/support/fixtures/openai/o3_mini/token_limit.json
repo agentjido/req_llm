@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoibzMtbWluaSIsInN0cmVhbSI6ZmFsc2V9"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMDAwLCJtb2RlbCI6Im8zLW1pbmkiLCJzdHJlYW0iOmZhbHNlfQ=="
     },
     "canonical_json": {
       "input": [
@@ -15,7 +15,7 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 100,
+      "max_output_tokens": 3000,
       "model": "o3-mini",
       "stream": false
     },
@@ -40,23 +40,37 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759698853,
+      "created_at": 1759795794,
       "error": null,
-      "id": "resp_0736cdf0999746760068e2dfa50aec819ba4a7083e88343ae0",
+      "id": "resp_0f1ee877c734b7e00068e45a525bac819a9421bb07f5742e0b",
       "incomplete_details": {
         "reason": "max_output_tokens"
       },
       "instructions": null,
-      "max_output_tokens": 100,
+      "max_output_tokens": 3000,
       "max_tool_calls": null,
       "metadata": {},
       "model": "o3-mini-2025-01-31",
       "object": "response",
       "output": [
         {
-          "id": "rs_0736cdf0999746760068e2dfa5cff4819bb890970cb2673e54",
+          "id": "rs_0f1ee877c734b7e00068e45a5820fc819a9f4d2d8cc6f02cb4",
           "summary": [],
           "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "In a realm where ancient legends wove themselves into the fabric of everyday life, there lay a land known as Ardellion—a place of rolling emerald hills, misty forests, and towering mountains whose peaks were said to pierce the heavens. In this enchanted realm, dragons were not mere fables whispered in taverns or scribbled in dusty tomes; they were creatures of fire and wisdom, mystery and might. This is the story of one such dragon and the adventures that forever altered the destiny of Ardellion.\n\nPART I: THE WHISPER OF DESTINY\n\nIn the humble village of Sunvale, nestled against the shimmering banks of a winding silver river, lived a young dreamer named Alaric. With eyes as wide as the endless sky and a heart that beat for adventure, he spent his days wandering the rustic lanes, listening to the elders recount tales of the great dragons of yore. Every evening, as twilight painted the clouds in hues of violet and gold, Alaric would climb the ancient oak near the village square, his thoughts soaring as high as the legendary creatures themselves. Little did he know, fate was already in motion.\n\nOne crisp autumn night, as a gentle wind stirred the fallen leaves and the stars blinked in silent rhythm overhead, Alaric discovered an intricately carved stone half-buried beneath the gnarled roots of the oak. Etched upon its surface were symbols that pulsed with a mysterious inner light, and in the faint glow a message seemed to emerge: “When the flame of courage meets the breath of destiny, dragons shall rise to guide the chosen.” Trembling with equal parts awe and trepidation, Alaric tucked the stone into his satchel, unaware that its discovery was the spark that would ignite the flames of a long-forgotten prophecy.\n\nPART II: THE CALL OF THE DRAGON’S HEART\n\nWord of the mysterious stone spread quickly beyond Sunvale, reaching the ears of an eccentric sage named Master Varric. In his secluded tower on the edge of the Elderwood, Varric had spent decades studying the ancient lore of dragons. When he caught wind of the stone’s reactivation, his heart leapt with hope and urgency. “At last, the age of awakening is upon us,” he murmured, eyes glistening behind round spectacles. Without any delay, Master Varric set off for Sunvale, his gnarled walking stick tapping a steady, rhythmic beat on the cobblestones.\n\nUpon his arrival in Sunvale, Varric found Alaric at the old oak, cradling the stone as though it were a precious relic. “You have been chosen by forces older than time,” Varric declared in a voice both gentle and commanding. “The dragon realm is calling, and the peace we have known for centuries now trembles before a gathering storm.” Unsure of what destiny lay before him but emboldened by the sage’s words, Alaric agreed to venture forth on a quest that would lead him far beyond the familiar fields of his youth.\n\nAlong the way, Alaric was joined by companions as remarkable as the journey itself. There was Mira, a cunning huntress from the forest clans whose arrows never missed their mark, and Brom, a jovial blacksmith whose strength was matched only by his kind heart and insatiable curiosity about the world. Together, they embarked on a path that twisted through dense, enchanted forests, across vast, barren plains, and over rugged mountains whose peaks were veiled by perpetual clouds.\n\nPART III: THE FORGOTTEN MOUNTAINS AND A RIVAL AWAKENING\n\nTheir journey eventually led them to the Forgotten Mountains, a range as ancient as the stories of old. Here, the winds carried whispers of bygone eras, and the very stones seemed to pulse with legend. It was in this forbidding wilderness that the trio encountered an unexpected companion: Aetheryn, a silver-scaled dragon with eyes that shone like molten silver, exuding both a regal aura and an air of quiet sorrow.\n\nAetheryn, unlike any dragon of myth, was both guardian and wanderer. For centuries, she had roamed the wild landscapes, protecting sacred groves and unspoken secrets of the land. When she came upon the company of Alaric and his friends, she recognized in them the stirring of an ancient magic—the very magic that her kin had long guarded. With a deep, resonant voice that vibrated like distant thunder, she questioned their purpose. When Alaric held up the glowing stone, Aetheryn’s eyes filled with bittersweet understanding. “The ancient covenant is once again unbound,” she intoned. “Dark forces now conspire to upset the delicate balance between realms. Our destinies are intertwined. I shall be your guide.”\n\nIt was then revealed that the stone was one of several relics left by an age when dragons and men walked side by side as allies, united against the creeping shadows that would one day threaten the world with eternal darkness. The relic had been safeguarded until the time had come when its bearer would prove worthy—a time now upon them.\n\nPART IV: THE REALM OF EMBER AND THE GATHERING OF ALLIES\n\nUnder Aetheryn’s guidance, the newfound band journeyed toward the fabled Ember Kingdom—a hidden valley lit by the eternal glow of a dormant volcano, where dragonkind had long held council. The path was fraught with peril. Jagged ravines, treacherous marshlands, and misbegotten creatures lurked at every turn. Yet, through every trial, the companions found strength in unity and in the burning fire of determination that each carried within.\n\nAt last, upon reaching the Ember Kingdom, they discovered not a barren realm of ruin but an oasis of harmony suspended in time. Here, dragons soared amid molten skies, and ancient trees whispered secrets to those who dared to listen. The once-dwindling clan of dragons had gathered in somber council, their eyes serious with the weight of the ages. It was in this sacred enclave that Alaric learned of an impending calamity—a malignant sorcerer named Malcerion who had harnessed the darkest of magics to enslave the spirit of chaos. With the relic as a key, Malcerion sought to open a rift into a netherworld from which unspeakable nightmares would pour forth and consume all hope.\n\nThe council of dragons, with Aetheryn as their voice, revealed that the relics—of which the stone was one—held the dormant power of ancient draconic lore. When united in a ritual of fire and sacrifice, these relics could restore the balance between mortal realms and the mystical domains of the dragons. But time was against them, for the sorcerer’s minions were already seeping into the borders of the Ember Kingdom, sowing discord among those who had once pledged loyalty to the ancient ways.\n\nRealizing that they could not stand idle, Alaric and his companions resolved to rally not only the scattered tribes of dragons but also the kingdoms of men, elves, and dwarves. They embarked on a new odyssey—a race against time to assemble the remaining relics and unite the diverse peoples of Ardellion under one banner of hope.\n\nPART V: THE TRIALS OF FIRE AND THE EPIC BATTLE\n\nIn the days that followed, Alaric’s band split into smaller groups to traverse lands riddled with danger and despair. Mira led a contingent deep into the treacherous forests, seeking the Heartstone of Verdure, a relic believed to be entwined with the lifeblood of nature itself. Brom journeyed to the rugged caverns beneath the Iron Peaks, where the molten veins of the earth held the Ember Shard—a relic pulsing with the raw energy of the planet’s core. Meanwhile, Alaric, guided by Aetheryn’s wisdom, ventured into the crumbling ruins of an ancient tower where the last relic, the Celestial Scale, was said to be hidden among the remnants of a long-lost dragon sanctuary.\n\nEach trial was marked by struggle and sacrifice. Mira’s group battled not only monstrous guardians of the forest but also internal doubts that threatened to shatter their resolve. Brom’s expedition was beset by tremors and eruptions that tested the mettle of his indomitable spirit, forcing him to forge alliances with mountain folk who had once held grudges against outsiders. Alaric, in the haunted corridors of the ruined tower, faced illusions of his own fears—a darkness that sought to consume his dreams even as the light of destiny beckoned him onward.\n\nIn the midst of these challenges, Malcerion’s forces stirred. The sorcerer, cloaked in shadows and wielding forbidden magic, launched his first assault upon the Ember Kingdom. A night of unnatural storms and searing lightning marked the beginning of an epic confrontation. Dragons roared in defiance as they took to the skies, their scales glimmering like living embers, while warriors from every corner of Ardellion rallied behind the banners of hope. The clash of steel and magic echoed across the twilight, a furious symphony of resistance against the encroaching darkness.\n\nOn the eve of the battle, as the forces of good gathered in a circle of light around the central pyre of the Ember Kingdom, Alaric himself stepped forward. With trembling resolve, he placed the glowing relic upon the ancient altar. In that moment, memories of the old alliance between man and dragon flooded back. Aetheryn descended from the heavens with a grace that belied the urgency of the hour, her mighty wings fanning the flames as she breathed life into the magical relic. Together, the combined power of the relics awakened a radiant force—a bridge of incandescent fire linking the hearts of every creature present.\n\nThe battle that ensued was one for the ages—a fierce and furious clash where hope and despair warred in equal measure. Amid the chaotic dance of flaming arrows and crackling spells, Alaric and his companions fought with a valor born of destiny. Mira’s swift arrows sang through the night air, targeting the dark sorcery of Malcerion’s minions, while Brom swung his hammer with such ferocity that the very earth trembled beneath his might. And Aetheryn, a living embodiment of the dragon’s heart, soared above the fray, unleashing torrents of brilliant flames that incinerated the sinister shadowspawn.\n\nIn the midst of the tumult, Alaric found himself face-to-face with Malcerion atop the ruined tower—now a scar upon the battlefield. The sorcerer, eyes burning with unholy fire, sneered as he unleashed waves of corrupt energies. But Alaric, remembering the ancient words inscribed on the stone and the hope of all who had fought alongside him, summoned a power that transcended mortal limits. Channeling the combined energies of the relics and the unwavering trust of dragons and allies alike, he confronted the darkness head-on. In a climactic moment of blinding light and resounding thunder, the sorcerer’s power shattered like brittle glass, casting him into the void from which he had drawn his malevolence.\n\nPART VI: A NEW DAWN\n\n",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0f1ee877c734b7e00068e45a595d24819a855eaa4844b516fe",
+          "role": "assistant",
+          "status": "incomplete",
+          "type": "message"
         }
       ],
       "parallel_tool_calls": true,
@@ -67,7 +81,7 @@
         "summary": null
       },
       "safety_identifier": null,
-      "service_tier": "auto",
+      "service_tier": "default",
       "status": "incomplete",
       "store": true,
       "temperature": 1.0,
@@ -87,11 +101,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 164,
+        "output_tokens": 2944,
         "output_tokens_details": {
-          "reasoning_tokens": 64
+          "reasoning_tokens": 640
         },
-        "total_tokens": 179
+        "total_tokens": 2959
       },
       "user": null
     },
@@ -103,7 +117,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989fed673930fa15-ORD"
+        "98a92c226fc3fa19-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -112,13 +126,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:14:14 GMT"
+        "Tue, 07 Oct 2025 00:10:21 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "1046"
+        "26666"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -130,8 +144,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=_8l0nSS2fBhA7NVn5dt8DPBu3P2eijGWbXuTmvYvs2c-1759698854-1.0.1.1-yfsNPngMonQeRbc5aDp3GEJbhtY9qLCEINiQVF_H0BnLNUo7PaL4iPZHRQx8ErmtAE13n0Yi22.KezYziWINunUWfX5XXIuVqvtVAMddy5g; path=/; expires=Sun, 05-Oct-25 21:44:14 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=PRcG0LDD9WLVdPryY06cuOzlUVofavYWeCUYymwdcV8-1759698854110-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=ZfHLnEUCUEaLIS39_jG4VotaWfPL0c9EvbQcuI39aBU-1759795821-1.0.1.1-IwEn_hOgsM0Y1o5oVCZqRsFPGrzmWHUf0EdaK8tOFNZvHczisKxFlnAdaj_MsA7SnM0Wv.FDxK8MWH6rlEONCHVidGUTiNCf1tsOaIkSTC0; path=/; expires=Tue, 07-Oct-25 00:40:21 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=IdwLG_7zDUhV4bs7bYBxj8vgtpQNYJMux1rHFxXQ49Q-1759795821043-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -143,28 +157,28 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "1049"
+        "26670"
       ],
       "x-ratelimit-limit-requests": [
-        "5000"
+        "10000"
       ],
       "x-ratelimit-limit-tokens": [
-        "4000000"
+        "10000000"
       ],
       "x-ratelimit-remaining-requests": [
-        "4999"
+        "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "3999925"
+        "9999226"
       ],
       "x-ratelimit-reset-requests": [
-        "12ms"
+        "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "1ms"
+        "4ms"
       ],
       "x-request-id": [
-        "req_7d47c4e369e564e6077e69cb6f0e2bee"
+        "req_de87285a90ed56c91f395974e9fd71ee"
       ]
     },
     "status": 200

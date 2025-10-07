@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC01LW1pbmkiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1taW5pIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
-      "max_tokens": 200,
+      "max_tokens": 2000,
       "messages": [
         {
           "content": "Hello world!",
@@ -41,19 +41,19 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! Nice to meet you. How can I help today?",
-            "reasoning": "**Responding to a greeting**\n\nThe user said \"Hello world!\" which seems like a friendly greeting. I want to respond warmly and ask how I can help them while also offering my capabilities. Keeping it concise is important, so I’ll aim for a brief yet welcoming reply. I’ll make sure to express my readiness to assist with whatever they need in a friendly manner. Alright, let’s put this into action!",
+            "content": "Hello! 👋 How can I help you today — chat, code, answer questions, or something else?",
+            "reasoning": "I'm noticing that the user is greeting me with \"Hello world!\" so it seems like they want to start a friendly conversation. I think it would be nice to match their enthusiasm and respond warmly. I want to keep it brief but also let them know I'm here to help. Offering options like coding help or just a general chat seems like a good move. Let’s make it engaging and approachable!",
             "reasoning_details": [
               {
                 "format": "openai-responses-v1",
                 "index": 0,
-                "summary": "**Responding to a greeting**\n\nThe user said \"Hello world!\" which seems like a friendly greeting. I want to respond warmly and ask how I can help them while also offering my capabilities. Keeping it concise is important, so I’ll aim for a brief yet welcoming reply. I’ll make sure to express my readiness to assist with whatever they need in a friendly manner. Alright, let’s put this into action!",
+                "summary": "I'm noticing that the user is greeting me with \"Hello world!\" so it seems like they want to start a friendly conversation. I think it would be nice to match their enthusiasm and respond warmly. I want to keep it brief but also let them know I'm here to help. Offering options like coding help or just a general chat seems like a good move. Let’s make it engaging and approachable!",
                 "type": "reasoning.summary"
               },
               {
-                "data": "gAAAAABo4nfBOFnOfiCGhooT81452nu9hK7A-ilf8yWO22hZ6dKtEahWWT626PqfXhNAhmSniQTeQLknvJotq3qAGVhDXYYIKYFkNKQ1ZRtPsQLByApd0SidwF7CgM7o9uXo06zI8L35TNe4QvzPxSFXaJhyhbYM3K_pJjUmUr09a7is2R6VGpiydkNRKWOdhOhv_odGZm_tcngXOkDUhpNQz-_VtmIrsVfq8j3UZckCGuuwrG8RvmVJiyDXCtSSu9eoWDUFTgZdAiOOAH9hHKlpGAQGQh81jBgn3aWspGinyL1kqK8rfwFdzZBKcABWp71kmtR7DyJWngdrcMxpYtkYUQ3pu2yS1OWLJZDS3mYrpy47CJ0bqD3r2g3PrFddYTSceAD0zAEO2Cvwg8t6XCLLXAEGtS2kpb3qc6dhIit06yW9i-I750CkAdpQjn7vHDTH7GFwiZEGPYeT-3ucZS6WAE7dwYutGP1PiunzC1G8sVWXUQp6y9PgQXioDdAee8-bF3n61xcY57Hy9LMe_FwYiQIe6vEjeVlPJkL6VWH9BqmzrwbIIEHjllFczMleCOmZnSHekLAjxeTSFed_U_CV3jXZWJysyyq_pJnWjnsWe_3dKoHb3-PnZybWyYc2sjhbrTrPZiatxnp-sMX-WdRExudtknbrfiHlb3SX6sTp3SOdRT3y9U1rrE0PQTzoDR1fAMufYvxBlZzgmRHvLGctyFv0tHVycmxOzGpL4luoRbMgCBt2d_OGU2X-siz9nNUuCkUOsjxMysILTdtrMYcyOpOOI7a-Q_Jzs_dK5MsC-t0BH3NcpYrLMck1DE2abjmUzZokZTyp8DarXKlRipuP90fkEuvm2ZXw6Cim2JBIF8Ebc3lSXlJVIiJU0I11Ir6ROsEes9mdMKHQQ7i9DQkI6zfCyHrJgMWPaeXKUqUinz4G7gh07nEphN_C4sGoYNogIRqzjOcbrzpyYXgH-TrYS04ZaCa-0VMD8AQeSp6N0cRERoEYOKaoPNp3IHji57Ustj5JRpHy",
+                "data": "gAAAAABo5RxjaAvyG4vBOdSeqsm3fWs0Q1XCMoajHriioK4Jur0zoMWiFy5Jb0-JPZmEddkdVNx6SDoSV8xTFOHswI7QkBx2tBkSCSdVfjihjAhhwRRXy9FHKAM13dSxXxR9codN5IKdvG_IDhsmI8ObZY_CF5Oad9_Wmsxb2rSHDHBPwxwD-uTQjS_jA5K0ihaA11pUtS-HaAqRXGNd2Vjyp-J-kIWByhG04oDJaRRs-W3Ld3gL4ptAFv27u-4d4MwsShOyjA51yfjiLbIBFtTgFfblLLNixSml_BVWI4fNzkjehfd9gwKFafd0wNQOyh3KPmQRmWIl2kIaafIdhia-FGniCqSrmapcJJbP8u45lrF9PW379wxw8IPNFtncV77IJmCdGfI76Ccy9lsoXyU6LSVnsuQdIG82GfrdkEsEqV2auhNfQwcTU5AivssMh6EFkfxrfdKseB4ia_l4ZsrR-3eg8tUNuxgY_VpMxdh6D8KYv6IIxMGKTmSvTTLcxopH6Uaa9CASqSC-W2AH_0Dlu5S7P2bq9f8prO-LXw246LFUiP24GHnWQ7gqMvMMW6pKF-6wUDn52gbbHF2O92xw0B22kbClm7O_J9WINhFudnTP-JgVUnqO9iJDaqRhv8zr2Rz6IxGmGI7KTG0vjoANU3xBlAlOeHVoJZ6CqUXdR-x_MFedzt7fVEDoI3uZ19p1YSTbO0MlmYl8__ZB-Rs8L6iPkNpNz4Q2DupdA_ROE4X9mDAKOdVnZXs7IUVznbOWURwngCuTrMz4ZtZYa-kT8znM5VHtQolGs3FRNUHQAkFxr7SgwN66r-1eg_XCBWj3fKtCvLYS-7dSxJ75BwAOYIS1QyAiV6mEuMs1O0EfvyC-24pjQwuFhONlTF4B8i5vIcYPMNeM6KV-7GsJJ-Kq9ckVz4od_NtUuemTF3wXNYIUik392nEQ3opuJWxlkkKDw7jmlff_DN7N-Zkk06yV8Tx43pIq2xzeZCLpF8yZoTS958gUCrxrzgzxiJHYg9M_3tini-okV_4qwm00T-lemjhVFilOjJx82xrC9DMgSIe3NldcItqqj2rHocev53ZEZYycWYry",
                 "format": "openai-responses-v1",
-                "id": "rs_05354a00decb64a00168e277bf63508190a0e111d79c4cdb22",
+                "id": "rs_0203699336dded2d0168e51c60356081949645f7873473f464",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -64,15 +64,15 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1759672254,
-      "id": "gen-1759672254-IDBG4tKDXhImX0MCcaTq",
+      "created": 1759845471,
+      "id": "gen-1759845471-TFY3ciEpUSih3Ge7TkXz",
       "model": "openai/gpt-5-mini",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
-        "completion_tokens": 19,
+        "completion_tokens": 28,
         "prompt_tokens": 9,
-        "total_tokens": 28
+        "total_tokens": 37
       }
     },
     "headers": {
@@ -80,7 +80,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d6407af09e1f7-ORD"
+        "98ade8f43f0f4848-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,7 +89,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:50:55 GMT"
+        "Tue, 07 Oct 2025 13:57:51 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

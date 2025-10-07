@@ -40,7 +40,7 @@
         "gzip"
       ],
       "anthropic-beta": [
-        "tools-2024-05-16"
+        "interleaved-thinking-2025-05-14,tools-2024-05-16"
       ],
       "anthropic-version": [
         "2023-06-01"
@@ -60,16 +60,16 @@
     "body": {
       "content": [
         {
-          "signature": "EvcCCkYICBgCKkCe1Bsh28TfqBfdy2jrrPpIaRwSMsBnbjcpMAolyuNktwpZgaC1+LpuCl0SVbAfIKLlwXlBUcVi4grXf5fTck51EgzN5pW6jdtpM73PWysaDD452UNUyEdkG+CntyIwK35V6LgQ2eFRuHzT4o1aGYTIMh1jAzMCG5CeDsFK1Usr7P2x7NFfRXwmk14B+IRQKt4Bt7kpN4cmxN1drotiObKwy5lUAs9vYTQfT3b83z8Z+Be+JDbnKzxheoJN8ySW7sGGr/PWqOh/IwdKT5lvFzAirtrNxLLX7eWq3X4Tw+FS2FZpRMN5pr3BPCNQImJ5LX2ImKSqn32Iz17/gMWaIRuUvhyDvae3elNs3ti/6pdwzQvZFhQQQkzJfqKwfmaDFRfosxFUP4LO52pUqkZCYzV9yMPDMeanQAtMC2bGSnqKsOTOckB3Fs07+Re1h59mXwyfIIKnbHgdTsDPWT82AqOXRPaYDjTI1YNjr32BDuWdGAE=",
-          "thinking": "The user is asking for a joke about cats. This is a simple request that doesn't require any of the available tools (I only have a weather function available). I should just respond with a cat joke directly.",
+          "signature": "Eo8DCkYICBgCKkARswA7Lj4jHJ57epyKKgsf+kmshJeCHuoklVdQ14LuFHy1lAVcFvFn/Lz8KkamHrN9O0fGjizI1TLVtS+9pBS6EgwtAqrJKzrs9zrJaVcaDFA0f3DpazP0qc48eiIwQOSagMt+QcWYoj9RbTGkgLjGHMWQW1iypHbvSfkXFFkgHLrcMIW70y2a9teBH1cyKvYBRYy+MS1jud6a6FK7AgJKmKwJzaXryIAWRl+AS4gEOzv22rwwq1QqHb9PXDNAg8usQOqCDaA6G6iGEVsECTdVsLdCtVMqo7D082C3oOerBRUplw+cQAKIiJ4Jv9Pweu8sVHGhScQETVIpeH3uUebNyg+gNSUYHQVvQQlTxdrJKaQu7kqMfGJT53wkkPwxzmm15RLA1zJFVoRoiwONHnfKC4Xmf/P3b4IY+YXPnuaf9tpeyhHEJ6LIfvqZXMyh4EwBTAr2RB5TSOwTfrRMOk7ZEk8GyE01unTz2eSl0Il7/l3EHuInjPaWOs4OCyciJMUms7Qy7+9xGAE=",
+          "thinking": "The user is asking for a joke about cats. This doesn't require any function calls - they're not asking for weather information or anything that would need the tools I have available. I should just respond with a cat joke directly.",
           "type": "thinking"
         },
         {
-          "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs! 🐱\n\nAnd here's a bonus one:\n\nWhat do you call a pile of cats?\nA meowtain! \n\nHope those made you purr with laughter! 😸",
+          "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs! 🐱\n\nAnd here's another one:\n\nWhat do you call a pile of kittens?\n\nA meowtain! \n\nHope those made you purr with laughter! 😸",
           "type": "text"
         }
       ],
-      "id": "msg_017s4ykfFjcHT5QuJU5RShfW",
+      "id": "msg_01ABQHHzWFDpTkFZSBd4LK74",
       "model": "claude-sonnet-4-20250514",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -82,8 +82,8 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 410,
-        "output_tokens": 126,
+        "input_tokens": 558,
+        "output_tokens": 130,
         "service_tier": "standard"
       }
     },
@@ -98,7 +98,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-06T17:10:38Z"
+        "2025-10-07T13:52:50Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -107,7 +107,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-06T17:10:41Z"
+        "2025-10-07T13:52:52Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -116,7 +116,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-06T17:10:38Z"
+        "2025-10-07T13:52:49Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -125,13 +125,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-06T17:10:38Z"
+        "2025-10-07T13:52:50Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a6c5f758439bcc-ORD"
+        "98ade1940e29118f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -140,10 +140,10 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 17:10:40 GMT"
+        "Tue, 07 Oct 2025 13:52:52 GMT"
       ],
       "request-id": [
-        "req_011CTrKGqELco18NranPH2x9"
+        "req_011CTswzrHxD28jnwfc3xv4J"
       ],
       "server": [
         "cloudflare"
@@ -158,7 +158,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "2898"
+        "3165"
       ],
       "x-robots-tag": [
         "none"

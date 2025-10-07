@@ -38,29 +38,29 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Title: The Ember-Tide Chronicles  \nSubtitle: A Tale of Five Dragons, Three Worlds, and One Cartographer Who Forgot Her Own Name  \n\n––––––––––––––––––––––––––––––––––  \nPART I – THE MAP THAT BREATHED  \n––––––––––––––––––––––––––––––––––  \n\n1  \nThe parchment arrived on the tide.  \nIt was rolled inside the hollowed-out heart of a driftwood log",
+            "content": "Title: The Emberveil Codex  \nSubtitle: A Chronicle of Five Dragons, Three Kingdoms, and One Sky-Splitting Secret  \n\n––––––––––––––––––––––––––––––––––  \nPROLOGUE – THE SKY THAT FORGOT HOW TO BURN  \n––––––––––––––––––––––––––––––––––  \nIn the age when stars were still molten and the world had only three oceans, the first",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759698667,
-      "id": "chatcmpl-f7cd56c7-6a80-4831-85d1-d6649a793681",
+      "created": 1759844697,
+      "id": "chatcmpl-49e8a182-fea6-45d1-b623-739b9a9b819a",
       "model": "moonshotai/kimi-k2-instruct-0905",
       "object": "chat.completion",
       "service_tier": "on_demand",
       "system_fingerprint": "fp_5fe129dff6",
       "usage": {
-        "completion_time": 0.43861364,
+        "completion_time": 0.39654655,
         "completion_tokens": 100,
-        "prompt_time": 0.010502566,
+        "prompt_time": 0.016994173,
         "prompt_tokens": 34,
-        "queue_time": 0.078181401,
-        "total_time": 0.449116206,
+        "queue_time": 0.077922103,
+        "total_time": 0.413540723,
         "total_tokens": 134
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6v3dhspe24b74h8hcsgepvz"
+        "id": "req_01k6zep0n1e1jb5syhfcmyq4s5"
       }
     },
     "headers": {
@@ -74,7 +74,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989fe8de9eb11253-ORD"
+        "98add60a7a04f151-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -83,13 +83,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:11:07 GMT"
+        "Tue, 07 Oct 2025 13:44:57 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=Gesa4Z_1a1R2LcXf.cRwjXkX7Na73bGXKEVQ3ohtFYA-1759698667-1.0.1.1-Rmp7sTeK5SzzAHK06CINoPd4NSbwBvIzs0YX05KKv95xfj8UfJctBHSZbMPPCBW49qAeF9QcPtY9lAyKozD4pDBuQihATj.7q2bcViBtBgM; path=/; expires=Sun, 05-Oct-25 21:41:07 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=uNp.y6uxvp1dpX13WKsjP.XAx9U.qnLiss.rXKsAZiI-1759844697-1.0.1.1-KITIoO3mEYgBg8HJUnI1_uCB54NMeQ.tbjjkVs3sHqV0As_9gvF1Z65u.YxMPSzYL2u2Fo9.l2KO4fyvfDGYGcvmYYbW6m9ncbV1JdaFmNI; path=/; expires=Tue, 07-Oct-25 14:14:57 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -113,16 +113,16 @@
         "993"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9515"
+        "9516"
       ],
       "x-ratelimit-reset-requests": [
-        "10m4.556s"
+        "10m4.61s"
       ],
       "x-ratelimit-reset-tokens": [
-        "2.91s"
+        "2.903s"
       ],
       "x-request-id": [
-        "req_01k6v3dhspe24b74h8hcsgepvz"
+        "req_01k6zep0n1e1jb5syhfcmyq4s5"
       ]
     },
     "status": 200

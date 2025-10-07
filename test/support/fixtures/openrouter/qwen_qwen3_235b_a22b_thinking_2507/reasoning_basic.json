@@ -1,0 +1,105 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMtMjM1Yi1hMjJiLXRoaW5raW5nLTI1MDciLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjoxLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "qwen/qwen3-235b-a22b-thinking-2507",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": {
+            "content": [],
+            "refusal": []
+          },
+          "message": {
+            "content": "To solve **12 × 7**:  \n- Break it down using the distributive property: **12 × 7 = (10 × 7) + (2 × 7)**.  \n- Calculate: **10 × 7 = 70** and **2 × 7 = 14**.  \n- Add the results: **70 + 14 = 84**.  \n\n**Answer: 84**",
+            "reasoning": "\nOkay, the user asked me to solve 12 times 7 and show my internal thinking briefly. Hmm, this seems like a straightforward multiplication problem, but they specifically want to see the thought process—not just the answer. \n\nFirst, I wonder why they're asking. Maybe they're a student learning basic math, or perhaps someone testing how I approach simple calculations. Since they said \"brief,\" I should keep it concise but still meaningful. \n\nI recall that 12×7 is a common multiplication fact. One way to break it down is using distributive property: 10×7 + 2×7. That's 70 + 14 = 84. Alternatively, doubling 6×7 (which is 42) would also give 84. But the first method feels more intuitive for mental math. \n\nWait—should I mention other methods? Nah, they said \"brief,\" so I'll stick to the clearest approach. Also, no need to overcomplicate; this is likely for foundational understanding. \n\n*Double-checking*: 7+7+7... twelve times? Too tedious. Yep, distributive is best. And 84 is correct—I know 12×6=72, so 72+12=84. Solid. \n\nUser didn't specify context, but since it's basic arithmetic, I'll assume clarity > depth. No signs of frustration or urgency in the query, so neutral tone is fine. Just deliver the logic cleanly. \n\nFinal plan: State method, show steps, give answer. Keep it under 3 lines.\n",
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1759846797,
+      "id": "gen-1759846797-LN1hBWSc4ad1ARJG87Al",
+      "model": "qwen/qwen3-235b-a22b-thinking-2507",
+      "object": "chat.completion",
+      "provider": "Novita",
+      "usage": {
+        "completion_tokens": 433,
+        "completion_tokens_details": null,
+        "prompt_tokens": 24,
+        "prompt_tokens_details": null,
+        "total_tokens": 457
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ae09565c27874f-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 07 Oct 2025 14:19:58 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

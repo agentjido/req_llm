@@ -1,0 +1,93 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoicXdlbi9xd2VuMy0zMmIiLCJzZWVkIjo0Miwic3RyZWFtIjp0cnVlLCJzdHJlYW1fb3B0aW9ucyI6eyJpbmNsdWRlX3VzYWdlIjp0cnVlfSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbF9jaG9pY2UiOnsiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0In0sInR5cGUiOiJmdW5jdGlvbiJ9LCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZW5lcmF0ZSBzdHJ1Y3R1cmVkIG91dHB1dCBtYXRjaGluZyB0aGUgcHJvdmlkZWQgc2NoZW1hIiwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbIm5hbWUiLCJhZ2UiXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Generate a software engineer profile",
+          "role": "user"
+        }
+      ],
+      "model": "qwen/qwen3-32b",
+      "seed": 42,
+      "stream": true,
+      "stream_options": {
+        "include_usage": true
+      },
+      "temperature": 0.0,
+      "tool_choice": {
+        "function": {
+          "name": "structured_output"
+        },
+        "type": "function"
+      },
+      "tools": [
+        {
+          "function": {
+            "description": "Generate structured output matching the provided schema",
+            "name": "structured_output",
+            "parameters": {
+              "properties": {
+                "age": {
+                  "description": "Person's age in years",
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "name": {
+                  "description": "Person's full name",
+                  "type": "string"
+                },
+                "occupation": {
+                  "description": "Person's job or profession",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "age"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept": "text/event-stream",
+      "authorization": "[REDACTED:authorization]",
+      "content-type": "application/json"
+    },
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLTdjODZhNWRlLWY4ODktNDU4YS1iM2IzLTA2MTEwNTQ1ZTc1MSIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk4NDQ3MDcsIm1vZGVsIjoicXdlbi9xd2VuMy0zMmIiLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF81Y2Y5MjFjYWEyIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQiLCJjb250ZW50IjpudWxsfSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOm51bGx9XSwieF9ncm9xIjp7ImlkIjoicmVxXzAxazZ6ZXBhcWplM3lia3MwbmNyeHRleHNzIn19CgpkYXRhOiB7ImlkIjoiY2hhdGNtcGwtN2M4NmE1ZGUtZjg4OS00NThhLWIzYjMtMDYxMTA1NDVlNzUxIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc1OTg0NDcwNywibW9kZWwiOiJxd2VuL3F3ZW4zLTMyYiIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwXzVjZjkyMWNhYTIiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsidG9vbF9jYWxscyI6W3siaWQiOiJzNTZ6dngxMDgiLCJ0eXBlIjoiZnVuY3Rpb24iLCJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJhcmd1bWVudHMiOiJ7XCJhZ2VcIjozMCxcIm5hbWVcIjpcIkpvaG4gRG9lXCIsXCJvY2N1cGF0aW9uXCI6XCJTb2Z0d2FyZSBFbmdpbmVlclwifSJ9LCJpbmRleCI6MH1dfSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOm51bGx9XX0KCmRhdGE6IHsiaWQiOiJjaGF0Y21wbC03Yzg2YTVkZS1mODg5LTQ1OGEtYjNiMy0wNjExMDU0NWU3NTEiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5ODQ0NzA3LCJtb2RlbCI6InF3ZW4vcXdlbjMtMzJiIiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfNWNmOTIxY2FhMiIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6e30sImxvZ3Byb2JzIjpudWxsLCJmaW5pc2hfcmVhc29uIjoidG9vbF9jYWxscyJ9XSwieF9ncm9xIjp7ImlkIjoicmVxXzAxazZ6ZXBhcWplM3lia3MwbmNyeHRleHNzIiwidXNhZ2UiOnsicXVldWVfdGltZSI6MC4xOTk3NDAzMjIsInByb21wdF90b2tlbnMiOjIyNSwicHJvbXB0X3RpbWUiOjAuMDA5NzM0NzgyLCJjb21wbGV0aW9uX3Rva2VucyI6MTU5LCJjb21wbGV0aW9uX3RpbWUiOjAuMjg5MjAxMDQ2LCJ0b3RhbF90b2tlbnMiOjM4NCwidG90YWxfdGltZSI6MC4yOTg5MzU4Mjh9fSwidXNhZ2UiOnsicXVldWVfdGltZSI6MC4xOTk3NDAzMjIsInByb21wdF90b2tlbnMiOjIyNSwicHJvbXB0X3RpbWUiOjAuMDA5NzM0NzgyLCJjb21wbGV0aW9uX3Rva2VucyI6MTU5LCJjb21wbGV0aW9uX3RpbWUiOjAuMjg5MjAxMDQ2LCJ0b3RhbF90b2tlbnMiOjM4NCwidG90YWxfdGltZSI6MC4yOTg5MzU4Mjh9fQoKZGF0YTogeyJpZCI6ImNoYXRjbXBsLTdjODZhNWRlLWY4ODktNDU4YS1iM2IzLTA2MTEwNTQ1ZTc1MSIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk4NDQ3MDcsIm1vZGVsIjoicXdlbi9xd2VuMy0zMmIiLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF81Y2Y5MjFjYWEyIiwiY2hvaWNlcyI6W10sInVzYWdlIjp7InF1ZXVlX3RpbWUiOjAuMTk5NzQwMzIyLCJwcm9tcHRfdG9rZW5zIjoyMjUsInByb21wdF90aW1lIjowLjAwOTczNDc4MiwiY29tcGxldGlvbl90b2tlbnMiOjE1OSwiY29tcGxldGlvbl90aW1lIjowLjI4OTIwMTA0NiwidG90YWxfdG9rZW5zIjozODQsInRvdGFsX3RpbWUiOjAuMjk4OTM1ODI4fSwic2VydmljZV90aWVyIjoib25fZGVtYW5kIn0KCmRhdGE6IFtET05FXQoK"
+    },
+    "headers": {
+      "alt-svc": "h3=\":443\"; ma=86400",
+      "cache-control": "no-cache",
+      "cf-cache-status": "DYNAMIC",
+      "cf-ray": "98add64a987222f8-ORD",
+      "content-type": "text/event-stream",
+      "date": "Tue, 07 Oct 2025 13:45:07 GMT",
+      "server": "cloudflare",
+      "set-cookie": "__cf_bm=Mh_xAHByBh2gx1L0lYdiY98Qwygy45_nsc9Ux_LPpBE-1759844707-1.0.1.1-.U_RlGbqOBu8500lNKeQhr1fqDTIVfl34lgQ6onraizHv9NhF0jzvkbDiVXi3oHbQfwNXXc4wJVcD4TuXLeeXkgIMCWpUChITnKRfoBagfQ; path=/; expires=Tue, 07-Oct-25 14:15:07 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None",
+      "vary": "Origin",
+      "via": "1.1 google",
+      "x-groq-region": "yul",
+      "x-ratelimit-limit-requests": "1000",
+      "x-ratelimit-limit-tokens": "6000",
+      "x-ratelimit-remaining-requests": "996",
+      "x-ratelimit-remaining-tokens": "3712",
+      "x-ratelimit-reset-requests": "5m45.049s",
+      "x-ratelimit-reset-tokens": "22.877s",
+      "x-request-id": "req_01k6zepaqje3ybks0ncrxtexss"
+    },
+    "status": 200
+  }
+}

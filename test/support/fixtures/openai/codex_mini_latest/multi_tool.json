@@ -97,9 +97,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759772183,
+      "created_at": 1759795785,
       "error": null,
-      "id": "resp_05dc3ec275e563a60068e3fe17cd188199992aad5dfc5afed3",
+      "id": "resp_0505ce5b90a863850068e45a494fd08196a3632c984d753659",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 20000,
@@ -109,34 +109,14 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_05dc3ec275e563a60068e3fe18137c8199aabc1db1204f1e0f",
-          "summary": [],
-          "type": "reasoning"
-        },
-        {
-          "id": "rs_05dc3ec275e563a60068e3fe1a73d48199b1d3a2bb225cc76b",
-          "summary": [],
-          "type": "reasoning"
-        },
-        {
-          "id": "rs_05dc3ec275e563a60068e3fe1aa0f88199b93c6bb2ebf6f3ad",
-          "summary": [],
-          "type": "reasoning"
-        },
-        {
-          "id": "rs_05dc3ec275e563a60068e3fe1ac0e88199b8ebd6453077a04d",
-          "summary": [],
-          "type": "reasoning"
-        },
-        {
-          "id": "rs_05dc3ec275e563a60068e3fe1aced08199a4aad25bc26c0082",
+          "id": "rs_0505ce5b90a863850068e45a49acd88196bec838843688bd50",
           "summary": [],
           "type": "reasoning"
         },
         {
           "arguments": "{}",
-          "call_id": "call_QZj2L2szLFQzug36ioQeKbiI",
-          "id": "fc_05dc3ec275e563a60068e3fe1ae9008199bbef9e28d2e3a7b7",
+          "call_id": "call_GLkFoEyt8y23RJfqr6w3fE0j",
+          "id": "fc_0505ce5b90a863850068e45a4a89b881969ec4e6860c0109a3",
           "name": "get_weather",
           "status": "completed",
           "type": "function_call"
@@ -207,11 +187,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 400,
+        "output_tokens": 144,
         "output_tokens_details": {
-          "reasoning_tokens": 384
+          "reasoning_tokens": 128
         },
-        "total_tokens": 454
+        "total_tokens": 198
       },
       "user": null
     },
@@ -223,7 +203,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a6ebb46a50f167-ORD"
+        "98a92be9ceb921af-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -232,13 +212,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 17:36:27 GMT"
+        "Tue, 07 Oct 2025 00:09:46 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "3424"
+        "1583"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -250,8 +230,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=jJ0XZgKyMOOcclmM9KhEnu_HaH1gCrvqFRaZ_Qk1pq8-1759772187-1.0.1.1-IMmBrinRp6nl6gdE7x_EzLI9O8IA2yxEEDmqr9VCuDWJidTTdJeMyyEk46YzRzmJytq0VwvDupuECm339AAR5K7MGZJWRk7Grik9lYa7.VM; path=/; expires=Mon, 06-Oct-25 18:06:27 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=c25d8vx9GkJvEaXKEJ2DqQDqOsY8dhkucnT8n2oF.ng-1759772187255-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=..5Kg5n.uyOTuAcMxX78K0k1yDz26VycPoqJIC.Gbjs-1759795786-1.0.1.1-LIrtKrJqgviaCfToorWe8LgE_1OlSFDgvY4ocuQYwC6LArsRmT0q5Gboa5Z.zJhgZ5agv_azH5i8Gd7GuLZH.8KvouRs2FzIs1oKqMDJb9o; path=/; expires=Tue, 07-Oct-25 00:39:46 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=FFqBUgV6UprVRzKAz.pfmvRVbnyFb1V9BPNRAZiYbDQ-1759795786911-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -263,10 +243,10 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "3428"
+        "1585"
       ],
       "x-request-id": [
-        "req_15b9a5c174eb3914bbe1e9c87a86bdf6"
+        "req_7f09ff9a94e7ba6a83016dd93397e804"
       ]
     },
     "status": 200

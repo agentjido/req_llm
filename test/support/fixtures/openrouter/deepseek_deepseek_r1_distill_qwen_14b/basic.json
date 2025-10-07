@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZGVlcHNlZWsvZGVlcHNlZWstcjEtZGlzdGlsbC1xd2VuLTE0YiIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImRlZXBzZWVrL2RlZXBzZWVrLXIxLWRpc3RpbGwtcXdlbi0xNGIiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
-      "max_tokens": 200,
+      "max_tokens": 2000,
       "messages": [
         {
           "content": "Hello world!",
@@ -52,8 +52,8 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759672070,
-      "id": "gen-1759672070-PtJcrLwbYyIrwjOGo1KP",
+      "created": 1759845356,
+      "id": "gen-1759845356-9gZNYEMGL1BBc0EjwI3d",
       "model": "deepseek/deepseek-r1-distill-qwen-14b",
       "object": "chat.completion",
       "provider": "Novita",
@@ -70,7 +70,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d5f864e2f0ed2-ORD"
+        "98ade6238ecc123a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -79,7 +79,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:47:50 GMT"
+        "Tue, 07 Oct 2025 13:55:56 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

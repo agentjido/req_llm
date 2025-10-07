@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC01LWNvZGV4IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1jb2RleCIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
-      "max_tokens": 200,
+      "max_tokens": 2000,
       "messages": [
         {
           "content": "Hello world!",
@@ -41,19 +41,19 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello there! 👋 How can I help you today?",
-            "reasoning": "**Preparing greeting message**",
+            "content": "Hello! 👋 How can I assist you today?",
+            "reasoning": "**Testing response readiness**",
             "reasoning_details": [
               {
                 "format": "openai-responses-v1",
                 "index": 0,
-                "summary": "**Preparing greeting message**",
+                "summary": "**Testing response readiness**",
                 "type": "reasoning.summary"
               },
               {
-                "data": "gAAAAABo4nfAIgro46gTnTUAi-u9xZhUKh3WBmcaGUgbyNBZ7sYaie9oyAJ42e6rLUnGqfLcwjquNeazsuxeBRd3D1Rx8kY_4O3UN3pdgrB82TshuwiCs8_7iE1w-IfxEqBoF__Hw_DK00SjbApkjAoUlvtlgsUMB6BW7r1mUWZUKqr9tN3tEXwqY2gnnHrUTsvq5GkaTQYUVz2J6pSFMOHNSK4qD4JzlHBjX648mj-iLw9XlQmLj81r0VOoP441FSpbQCUcc6x9BmYrfELR8aEQxViE8eQUXGo9SGdz8Hdn4cmYtPhi_DqI85RISRYwt2NSJgb4hu_vSuAxfWAeVzvYW1T7-toonI2cWBwDFzEU5OaTj1ykWFgciA7x7kgn4IWflIftVVIr1BnP4-0vh-bgqqj2zJHPzeoXFwMET1lliVbTKHQhCyrt4EpB64R9cOaWCdPYS8331JBsDq_7IA2X31PdYxQlYx4QbgvHMqpNkp-aAW6trDQ6IfmHMu0vzh9vHru7qxP1Zk5U--P5au-jtshvGQrC64o-mpxF9MImNs2cWmry4lPdzWbKx7GQ8AIxvgyUS7_X8B-zbzEkqaIwzir1doIob5FS9-_mKd0qIPjPJrzlHDWXNjQM86eKOlfeLPy8IXSm4aGwnroewsIaSV7FyjGYja6QZEFdN6g5nHdmaPqrIOmhPJYm8ipBinDV7KxtA04L_Mr9FRLWdGuOSWxGxw5Vg5HXsTLzKPUPgABLH0ShEElavnDDF2USn0xL9_inihRq8lCkLgggu7hZXq6bSMDaphEEQmAEmrGuepZ30v7FbHLxxYfJx4PsCQxOG6CHverxItshjnQv443MLczIXoMxPA==",
+                "data": "gAAAAABo5RwfOJO8rf2L7M00FpknpTrdqA1DEw36uK6EAkti0RUOZjrzZ1nsSDfzzzc-MwR8xFJwd9l0MeINgBlzUnQeYuM_HFCqgMyiN-szsrRxiRfEmw311RRitjtW0K5rFOYrYhqhQLXQTrkh5s61Sra15YqZpMtDGvvqqrCykTRPLmGgL-aca3P-tG9KifUUH37vOQ3G_RNybPUIEM4R8FHaHHOmqAlkfvnniwVV2F8Xd_yxduixFrXkmAWtzfnWEWD8G_QYU3vmIYDa5m1VLXCzd4jehqNgDItr82LE4oikYKMuPS_K3KypDfHznzlHEAZwYpa8rgg7Phok-muBWPZBGqpIpC--CxQxX2zxeIZvdx1HTu_3uFCG0tASzh48_yStjcNo4qyiTH4l-w1I5KJQXbVZC1XYANRpvQRq2H7-W63pRqvVmC1VyReqv3IECqx6iXzOUQ_9kgHMltl4Sb8mulgJkOIunRvxlvB_jHmxS5AsknD28FAhjCNZKles8qzVW_SxhkZxuo96CgcVr0Yi80hg_wd_5SOnsj8DLBqBvBwAu3b0GepGGo_Fy43nABO7MDnf_rrfjZG1S6ARyxa6ftu4g_LxjzKWSc-i2-G6HS0PhUnjtcKtL-IHMRsmQVSe2tmefHftZe7aoGtDQjjBOm8pV3MABgRSWADWJc_47_yIliGwxiF8TPmVIvd4_vZvSMgdjujXSNY92XYDr9ILpwloM26IV2HGOMKp3QKwIKVT43wJpNfelDtToDn-6tCUwlUkAGapkV7M4CI0d1azL-7vEpGd1WIyCs4LedDD574ub5KntXEUjsucCDk_SGnMgqXKyOD3AxxQmfARWpNATZXmUtGFI6MlmEPgw0696q0MhEk=",
                 "format": "openai-responses-v1",
-                "id": "rs_0c306d8f746377ff0168e277bfee70819682fed21cf433278a",
+                "id": "rs_093a4702162277600168e51c1eb2f481979e37bbbef040cf31",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -64,15 +64,15 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1759672255,
-      "id": "gen-1759672255-saSD8VMUyPGlC9VI0wiv",
+      "created": 1759845406,
+      "id": "gen-1759845406-4RRTFmSJgzu8aO6qT07L",
       "model": "openai/gpt-5-codex",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
-        "completion_tokens": 18,
+        "completion_tokens": 17,
         "prompt_tokens": 9,
-        "total_tokens": 27
+        "total_tokens": 26
       }
     },
     "headers": {
@@ -80,7 +80,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d640c28ef8e5c-ORD"
+        "98ade75c1a6f000e-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,7 +89,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:50:55 GMT"
+        "Tue, 07 Oct 2025 13:56:46 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

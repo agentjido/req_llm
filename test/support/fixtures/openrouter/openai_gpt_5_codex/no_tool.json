@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjozMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1jb2RleCIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfdG9rZW5zIjoyNTYwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC01LWNvZGV4IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
-      "max_tokens": 300,
+      "max_tokens": 25600,
       "messages": [
         {
           "content": "Tell me a joke about cats",
@@ -61,19 +61,19 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Why don’t cats play poker in the jungle?  \nToo many cheetahs.",
-            "reasoning": "**Acknowledging compliance requirement**",
+            "content": "Why did the cat sit on the computer?  \nBecause it wanted to keep an eye on the mouse!",
+            "reasoning": "**Preparing to produce joke**",
             "reasoning_details": [
               {
                 "format": "openai-responses-v1",
                 "index": 0,
-                "summary": "**Acknowledging compliance requirement**",
+                "summary": "**Preparing to produce joke**",
                 "type": "reasoning.summary"
               },
               {
-                "data": "gAAAAABo4nfFhT1SjxLsVh95DBQEx-LDhJS-N_xklN8Qi333A_0Q2hgUfW-3dWMFfeKE8zm1eka_WP29mce0SpWlCSMMvL3_rzUSMx3gZEB6AcrGyDB20si8peQLJxiugEC3ZmF40sJDG3UTk8f_3n-jmAAVuzJyzR4fiFHbzxWAoNVrne3jC-tCDnrRuj48wMNut75XsCDwKARv3_u6NfllQwER9jTxIQVcOJGvTmzts-6mc7dLcHTSRCUmo6yt1iZKz0HrGP8Ri6iBdbDgWYXnXlRzHw8eBWAFvHbCRueXklyLg6OiNcse7JI7evXbSoU3HxD9uWBJUMzdzP5mak1w88Ea-z9cDV4mX6m6JOfuxptxsQI2Qvyv-qZGMVOCCFcOFTIjrZdLPLtZ4ht1Vczdz-kioYRKaijvKLvMFlS9WxwJ4RT8oAH1ZMxPmgKt1psxTDOOzCzEfx8fQY2wNsIl47oS6koU-wukz6ZLbkOUvj_ezi_2_VlGs7yaZr0o7fHieIkYoyrR6o7T3mV8PAjyOlCWRsjUDzHaOjrHkF_W4Oerjod5NBxorI7F0qisvtlZI0HF5bQWI8qacMwIIN6F_CcyWFg_JTyZDufOKy0R6Km7lTAy9zLM52S3QGXrA76Ln-luOCOj0lT79x7w2xbkx8UJ05jAudiJ_JVXZ2NbrlZZBuHObX-qYWxQ-DlKdtmXG9GOxsQ3U1aNzJxGFaKjNIUl8at6HE5cCgc2kDNBXbQWTkck4kmYuYRpnzMbIYeSBIjsZE6YZLu1uDgOT-JzpL05m7owLOQ-r8q6EdZHgC2JS764YEebk7wcQhDjPq30JsutTAXYAw7OEb1Z8jEWQmpIX-HqMA==",
+                "data": "gAAAAABo5RxYfXS7yas0hFWQfhpXv3AIVlgyNsuYb2Zc8tcDZ1HOSsBrF_-3wc3OnY0NZpnDj9CQUW1npLcqB78xO_9hSc0-2LJ_y_UZd8tdiMO1hc2zeoirrM5zw2IvBw6mzxWowWOsIGjbbkmTb9MSammWoUzXMhQSiWlssR7ZowATS9EyCObJW-oQH-CXB_bji63IcZFG0OqGshxfS1nLIQeHVwoZkO9cDt6H28TyL_YSXKX-3rQK-V5phRe8-Na5KynCO38nTmX6qFKNmlBlo_SHucfzU-zKjNSxWPqXUZvOfT_njMx3zMokXJv4VvWTPvIXYeLthXKKVqLjn1Ee2mlT5fHLyisyJTd8zvZpLZCOfVmGnsNgcrqaRiRxcVQ8ARIICqKixjVUlg8ofSS5m3G1TmkljxDolfLCYO23_UGYoLc96tFYYnh3x_-jqxm_hwMpXNSc87JUk36kyoOpIt-ShU_J7lXgYAh4hyptDRGBcjyVkb4WlpFqGELAChdMR8SlddEHsfyDb7H9jAhK2oArRTvNHHKplKMhJE1bmgBZ23HJTqQwbTF7QoEiJX5TwKh-iPZblU6Sgpew7AfKanRO2NQyKf_OmOP4CkSm3wKlPTaJrwckU8JflojaOBb-X8UOJHmQQdti35EVjYoLq77Xr8HhUVPhWVKthAQxqM5Ibge9LNPH4nEh0pDct2n2llD4Lf1-qOOSv81jMapiVUHURSaFWWWkPtgWGPAYxrbS4axgNXTPn51AXeR9_OmatKYcaVHe80HGtDpt2qnRvuBw_WN0bgcArpfSmU1Mnf-jEK1_qs04KBac8Mb1ESQZ_nkKqTmtzmPRvidhv5BuEJUYNtSg8Q==",
                 "format": "openai-responses-v1",
-                "id": "rs_04221108b44aefac0168e277c50c548190a0616722d7134e98",
+                "id": "rs_015c8c924e4292210168e51c57d1d88197ac6003b67529cf84",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -84,15 +84,15 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1759672260,
-      "id": "gen-1759672260-Y1mvkSpArvRxXR1mVpw4",
+      "created": 1759845462,
+      "id": "gen-1759845462-IBmOtYYzTQoFb2rswj0Q",
       "model": "openai/gpt-5-codex",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
-        "completion_tokens": 23,
+        "completion_tokens": 27,
         "prompt_tokens": 53,
-        "total_tokens": 76
+        "total_tokens": 80
       }
     },
     "headers": {
@@ -100,7 +100,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d642c683b8e5c-ORD"
+        "98ade8bcac83000e-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -109,7 +109,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:51:00 GMT"
+        "Tue, 07 Oct 2025 13:57:43 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

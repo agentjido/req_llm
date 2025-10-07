@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjozMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJvcGVuYWkvZ3B0LTUtbmFubyIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoyNTYwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1uYW5vIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
-      "max_tokens": 300,
+      "max_tokens": 25600,
       "messages": [
         {
           "content": "What's the weather like in Paris, France?",
@@ -96,18 +96,18 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "**Fetching Paris weather**\n\nI plan to get the weather for Paris, France. Since the user didn't specify, I think it’s best to default to Celsius, although I could offer Fahrenheit as an option if needed. I'll use the weather tool to make this call. So, I'll go ahead and request the weather with the location set to \"Paris, France\" and the unit set to Celsius. After that, I'll provide a summary with the results! Let's get started!",
+            "reasoning": "**Fetching weather info**\n\nI need to get the current weather for Paris, France. Since the tool specifies a unit, I'll choose Celsius, which seems like the default. I want to make sure I call the right function to retrieve this data accurately. Once I have the weather information, I'll present it neatly to the user. So, I'll go ahead and use functions.get_weather!",
             "reasoning_details": [
               {
                 "format": "openai-responses-v1",
                 "index": 0,
-                "summary": "**Fetching Paris weather**\n\nI plan to get the weather for Paris, France. Since the user didn't specify, I think it’s best to default to Celsius, although I could offer Fahrenheit as an option if needed. I'll use the weather tool to make this call. So, I'll go ahead and request the weather with the location set to \"Paris, France\" and the unit set to Celsius. After that, I'll provide a summary with the results! Let's get started!",
+                "summary": "**Fetching weather info**\n\nI need to get the current weather for Paris, France. Since the tool specifies a unit, I'll choose Celsius, which seems like the default. I want to make sure I call the right function to retrieve this data accurately. Once I have the weather information, I'll present it neatly to the user. So, I'll go ahead and use functions.get_weather!",
                 "type": "reasoning.summary"
               },
               {
-                "data": "gAAAAABo4nfT3yT2gO8YXHjkzb8gpTc32lrYDFFdENXOH7vppOpY2oJ_OcF9OwDUHtqNkS9UgwYbcNLMATr5JxfINfnZnHBZ1QBukitg9_A6ZGX8JOTEv29v4VTjY5HwyJUIGuQp_me8Y-81Q_krpPPxwmNOX0wXWnDgL7Hi6FAqL6VionCcHEFzx8dcij6fdrvnLRhCp6Im9nDdnehVBoMinTixyzYs6CF-V-yoawlqZqkstO7aMEmUJAAUGjf5UylM7vYkkqFhZ0RB_5LVDQlRGWMckH6UrtydDiOzrgTBTV1rEr0WD-ok9cYA-0CXKhuYbg6Bgl_oLlvpXNbSF3d7DOPxLGyQp0qtwcWMfrQcDNLujtgn7d8fqieowBHy1qWxu2Ku9t17D-JOjBaxp7zKGemkWpvhjD7kgCcLnW4RXgOUXoUmcvjNvPLvhrktBJsJ1hSQm6Pl3fQRHsKUg5mFY0kotB3JyyYhtLKOCn-2nRvImn6Iw5HgVKbj-zcmFHYwxoLH-OfxYCfWyo0YPwsiSMH8BdevF_1qFscgmWAeCkVaHFRlqeDkZuvtudC1NGX9Pih_eJPok72gscYTcxieCsMPYvcOEKR8N_Fe-wkBsKQ4MKVHckZs46KIY-5OpOvL2v39w9-jKYi7K5uTuHZYTe6GzaSTMZ5Ymx8oRLh3ndDWacKhsrCCOs-m6c-SIt-I-OzkBd707NAla-W4Kjsxuv-YGRF4HgotCUOxz1imX_J1SpIMJ2T7lChFvDjZpSbQJchuscZlirn0qR3gIRjcZ8d99sC_cu8kSFN7M-Wav3v8XipHorSAfGxHQJmZ2PhKleaw7eKLw8Doyn4DAUqt4zaR1r_MZFDOxr14YglZhGo1rrx9kV4CGrV5iZQXfmSYaOCuFmPT18Q9OYD525PCl8qgnvUOtk2kytLWtC9DGA2at5gJiCVopIFH6R54WzjmFND668U1OZV1Z448CN9xwuA82aX7NiY8Jn120k43AmoslNtn7rg7_qF9zKEKSilEHIDeXTWcoQ2VkKwpzvobltO3X8cD5ccg0EAqv3ilxoHdFk-MTAdDV704OrNn6HIq4rwEbkJDfY70JcXvNTVw1aHaYU7ij3hb2P2Pukss0lWWeUgFhsphtdTYqAwc44MyxpmKbrI48DP3r4Kz4RQU9TBbCdvvI9Zf934vCDdK1s0-hgDINDBie6mAYSnreRFe1o7xyTXDyq7GU6-tzqfC7_QePaJTbdWOC6HzR9CvoSeqj1yNSRTzuFeYIbL_XBLiP_NcnA-50WYtJ4IvWrnZ7NyI2gV33cs-MROz5GGKvw-AC1hKsEJZWsK31EkaWL0iMetciyahngJG1VRtATAxQpzg6yqrVv4BwEt8RteK-yQHXwXG401mSjOGedT77KJ9aQsphk5y",
+                "data": "gAAAAABo5RwwOQ4QDdcYGvQNBxGdCkzfRm3c2wT3ApVHThIK5iUNK4ajt0z0-1xh_yVG29nixD-p4hrJYncgYsKTQhdH_XUbJI6MhZvmGkO9eK-S3fGGx0cz__LefmF_ouhVKk2M-qcPCZV9vyjz_MBTSC-juf6DePRoiEf4vjDmb5wmOeM9nZCEnbaSYoBcSs7WDMsgen-U7L5GOPLWl3sZ-OJ4nSVcV-aTClIv4ZXcrmQJD5IjiQdt-H7gtCBP__PaRVy1I-gLwFvFO1zkMP92H4nPCPP2r8cbwZJunSVg47fu0e8GITaB1jDM8zgClJKNautkPtfAHmf4QNgT-osppEWbNjnF5hkUGNFur3-YkuCf5PzaSFM2a573vfShrDPKXZTOUDu21cmO5gSI4HQUGalRbCnsXrX4-MuXjOZXdqRd0x9NNjxhbLdT3C_5_9tii1NakuRKkHRTgeM8S3S7ucfomRendGfN_1NA3oS-cRfGsvC4NREdSCW_jDACvkxuZGTfkHEM_rG9Jda1jC-Afhi5EiTiD9HBbCa8T0lWjlGJKvgiqvxxRydf2I75cYIUcir_R5RDxqG6AC5sHHvPwgJmCTf7nMoy1wjXD5eGbB5TB4pxQl2WzHOMzn7PuuFMtyzXNQr3Jlm8u14ZGbyzuiPCzRgKEbspsYZ18z6QAmFRoIx4acQdJk07rtG9iAZZ1gOgoS5Cy57SuW8cMX-8fD2klJdr-aUXnpgB5LoPVMidtX3ar61ws7WwnaItxj23EGZ6fsXQqkoPvrS7OLTSfM5zepyXNuSrRvcc-yOALahviJm6tqXRZszU562VVliKTooU0p4_lKmIH88AcYFJgCBc-iEYr-S1kvcoynpF42uHqJGJpBLJSuPHlM0w-Q4jtX6UJnOwu3nsr04qfx8DAj6RPOctXQ4zUCJECna_qqwG_IMMMVmjqUvHoB7sHDi7RZgvO0An-B05vSw2DCFgKT-ano1VGS25A18Wm-b01OBS-kcb1EpDVy2IgaZOW0LYRY7Rks1fdRUkspO_SajaPw6prw0PDeIbhqWUE8JT20-Icuoi6SDX9DUuM4CiFoCB-2WxXVIrsQQiZhsCn7MUwHFtPeGJjHmOa8SpxyEAJzPc27_Os25FAsqgViln0VyOD88ix7JcwYMbhXRSq50xe_lbdyYyOUcaCY4v1QR7z-pLJvBHJ1r8znMFNk4Bjj54H7n_BLWB",
                 "format": "openai-responses-v1",
-                "id": "rs_09d2715a09cb3bd70168e277d0f2648197842424de3fa8f6bc",
+                "id": "rs_0df490c6bfbc79950168e51c2db918819496aca3e5bbf1cfb7",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -120,7 +120,7 @@
                   "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "call_yKc9N2vznyfAtMfCsNVevJmy",
+                "id": "call_goySM7XKp9WpNd61ZMrIG6xZ",
                 "index": 0,
                 "type": "function"
               }
@@ -129,15 +129,15 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1759672272,
-      "id": "gen-1759672272-1TVt39Rjr82nGW0U9bUe",
+      "created": 1759845421,
+      "id": "gen-1759845421-9f9PTMcEyXuuU2QcJCh0",
       "model": "openai/gpt-5-nano",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
-        "completion_tokens": 91,
+        "completion_tokens": 27,
         "prompt_tokens": 104,
-        "total_tokens": 195
+        "total_tokens": 131
       }
     },
     "headers": {
@@ -145,7 +145,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d64750f44e7fa-ORD"
+        "98ade7b92979eae4-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -154,7 +154,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:51:12 GMT"
+        "Tue, 07 Oct 2025 13:57:01 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

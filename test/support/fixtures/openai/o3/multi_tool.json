@@ -97,9 +97,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759772209,
+      "created_at": 1759795760,
       "error": null,
-      "id": "resp_0621f7e74523cc830068e3fe31858c81968791c88cef98fd7f",
+      "id": "resp_0b3c8f0e7d271de30068e45a3091f8819a8c78fbe7be124fe6",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 20000,
@@ -109,14 +109,14 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_0621f7e74523cc830068e3fe330f848196803a66db74a512ac",
+          "id": "rs_0b3c8f0e7d271de30068e45a31197c819aad28e7f1d1721a65",
           "summary": [],
           "type": "reasoning"
         },
         {
           "arguments": "{}",
-          "call_id": "call_Q9bk7nFORuVyb16wHEzRQ6mR",
-          "id": "fc_0621f7e74523cc830068e3fe34989c81968a4f4eac3db14653",
+          "call_id": "call_d0pkuewgt8uxYtoxJuHzPXex",
+          "id": "fc_0b3c8f0e7d271de30068e45a317be4819aaae5f9999554baff",
           "name": "get_weather",
           "status": "completed",
           "type": "function_call"
@@ -203,7 +203,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a6ec54b89b61c9-ORD"
+        "98a92b4f1d781393-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -212,13 +212,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 17:36:52 GMT"
+        "Tue, 07 Oct 2025 00:09:21 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "3440"
+        "1373"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -230,8 +230,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=iu..NOq1YBW4KtJFbtlh10pR261Zm9FkmGpIofjbG84-1759772212-1.0.1.1-IhDVuqmsBdDxxIJ2huHOO67ZZbHxui.ngmbW98XylkZzTFbkHM6wTfUtTzZ5Dt6_YDCNibFD4mF9mwmNI05zVseDpK5yw9sBWUalUlu7F2U; path=/; expires=Mon, 06-Oct-25 18:06:52 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=7MsPPawAxpKBZunceF.E8py4keQUjm7vkiNcFj5R1d4-1759772212930-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=H.J4PJolYoetR5KASHsdiC5LNVXp.fKb9v9iJfP.apc-1759795761-1.0.1.1-ltDIUcKTxZ8H70GCUccNnLnZfemjPgY1kEd18.HR1fQzoq43zl8NZyA978vpV9BwF3C4TVGJoKecmADgugGQ931udVQ3ko00zwjg4aWEqm4; path=/; expires=Tue, 07-Oct-25 00:39:21 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=yOMOIHiUiF1CKbGIJokCu70CiFt0sYzOq7XSETvIrw0-1759795761964-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -243,28 +243,28 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "3453"
+        "1376"
       ],
       "x-ratelimit-limit-requests": [
-        "5000"
+        "10000"
       ],
       "x-ratelimit-limit-tokens": [
-        "800000"
+        "2000000"
       ],
       "x-ratelimit-remaining-requests": [
-        "4999"
+        "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "799684"
+        "1999684"
       ],
       "x-ratelimit-reset-requests": [
-        "12ms"
+        "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "23ms"
+        "9ms"
       ],
       "x-request-id": [
-        "req_7db34c3767cef55d93fb46ae1ccdb34c"
+        "req_558424de3631a30ad7463edbd38b53a7"
       ]
     },
     "status": 200

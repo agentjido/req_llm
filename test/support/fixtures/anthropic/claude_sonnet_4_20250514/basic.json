@@ -22,6 +22,9 @@
       "accept-encoding": [
         "gzip"
       ],
+      "anthropic-beta": [
+        "interleaved-thinking-2025-05-14"
+      ],
       "anthropic-version": [
         "2023-06-01"
       ],
@@ -40,8 +43,8 @@
     "body": {
       "content": [
         {
-          "signature": "EqgDCkYICBgCKkDbicCvA+Lk0X2K0T7sSaQv3kg+/U4YeZSm3w85kSvn6NvVcgyAsIrcsfzQ9h/Qp4MXTT26GORZ64S+JfO5dRvLEgxj1cTTBlLdxxmAwUYaDDoDwlry0/4orCyUeSIw7tX0PZayHsYRQ5i7QAws9tLVANCcZKEcPzsHCkd6mUIyf+kd/nOQo8k9b39r7WFvKo8Ca81i89z3a9PVRvpvHbv8K0VbrvU2zZpVVQxAkaWlolAiW6rMQORq2DZbEhgbtGNloywhhTC/Z6Tm1BY7wluqsjZrzxzmcnGL4KCw26jvkLt1AA3Tl19mNgrVFbJIuCvuaYBShTdrWqKMDFnePmdehHVWqOw0xDd8mCuoUSUeP9aCre0kaKBlH527IXCOv6qQo6Dd1PLEoK3pXaCML6SxB6UpnxOITNfyXpw0tFmVJizylLw+k/TiRUmmjBoDYwEiL6nS1lnjGzoDkCLyTX67SBUTpmwRbHb3TGzZfhaBzGTL/A8e/NfEVF701GTKYKO9UEysu/Pkik2bul1CXs3BJLRGffW+YNQK94+axRCNKxgB",
-          "thinking": "The human has greeted me with \"Hello world!\" - a classic programming phrase that's often the first thing people learn to output when learning a new programming language. This is a friendly, simple greeting, so I should respond in a warm and welcoming way.",
+          "signature": "EqMDCkYICBgCKkDJzpufkqRRQujUQOwy72d23nR/bb4VLP7DNaIGyk4FCowjHTb9dPsitV7GPkiCyBg9XUBsgq6+tY4unl6y9njsEgwAb3J5EEoT721I6PcaDCFCYOi0k6jYVuSzUiIwD4DznX1VXJiUFsHcyENwiPZ89X53sCDniNSsJbJT9x2+tcP3xeg72sR4YuJ0izB7KooCTerNL2D3K8CH+8r2zire/kDmQmIFcXbZCLEdbjHjInVZS8+wOqFu3QphKlbjI8E1gDGHYfo0qHFsEr6ar1byNncC0pn0svgNnOvKVwH9N0d0gxc7w9z9DQoW6B/wOxwBYopyZOe9QeZJVtxThH2y/rwmxRyl+OiupBup6o4sDRVtoNxEWJKlQROeQZVe+r4sqfzYdlDECNxCDND/1YhAkbtQIJFareGqhtAqloAGB5/qBr4yTT7R3gcy+dIxJQd1G9RaW73XWlFmfyAujD5u35NKNjhN0Q8PtoYnSFjLh8bTGG6BKjtHSb1f5UuJ46AdPjb9AmPojmHf5HyM1zeiqgRlP5zKxX1pqiYYAQ==",
+          "thinking": "The user has greeted me with \"Hello world!\" which is a classic programming phrase often used as the first program someone writes when learning a new programming language. It's a simple, friendly greeting. I should respond in a warm and welcoming way.",
           "type": "thinking"
         },
         {
@@ -49,7 +52,7 @@
           "type": "text"
         }
       ],
-      "id": "msg_01475boqhg8kZp4762AbuDEt",
+      "id": "msg_01Jf781AKiw8EiyEePivM4is",
       "model": "claude-sonnet-4-20250514",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -63,7 +66,7 @@
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
         "input_tokens": 38,
-        "output_tokens": 89,
+        "output_tokens": 87,
         "service_tier": "standard"
       }
     },
@@ -78,7 +81,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-06T17:10:47Z"
+        "2025-10-07T13:52:34Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -87,7 +90,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-06T17:10:49Z"
+        "2025-10-07T13:52:36Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -96,7 +99,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-06T17:10:47Z"
+        "2025-10-07T13:52:33Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -105,13 +108,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-06T17:10:47Z"
+        "2025-10-07T13:52:34Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a6c62f79139bcc-ORD"
+        "98ade12fffd6118f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -120,10 +123,10 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 17:10:49 GMT"
+        "Tue, 07 Oct 2025 13:52:36 GMT"
       ],
       "request-id": [
-        "req_011CTrKHVZBhQWWfCCC3Mzm2"
+        "req_011CTswyftMTUwsKqFBy5NJx"
       ],
       "server": [
         "cloudflare"
@@ -138,7 +141,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "2503"
+        "2698"
       ],
       "x-robots-tag": [
         "none"

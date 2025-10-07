@@ -101,15 +101,15 @@
                   "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "call_91913915",
+                "id": "call_54147500",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1759763211,
-      "id": "4b3e431f-2f81-948d-80a4-aab1deed6d32_us-east-1",
+      "created": 1759844441,
+      "id": "84409723-28f4-6641-1db7-8bb4a96498db_us-east-1",
       "model": "grok-4-fast-reasoning",
       "object": "chat.completion",
       "system_fingerprint": "fp_9362061f30",
@@ -118,18 +118,18 @@
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 217,
+          "reasoning_tokens": 184,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
         "prompt_tokens": 386,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 385,
+          "cached_tokens": 266,
           "image_tokens": 0,
           "text_tokens": 386
         },
-        "total_tokens": 641
+        "total_tokens": 608
       }
     },
     "headers": {
@@ -143,7 +143,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a610a7eea36214-ORD"
+        "98adcfce0ad3e8ea-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -152,13 +152,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 15:06:53 GMT"
+        "Tue, 07 Oct 2025 13:40:43 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=ibaeOG7ySRGLDznGdbsUt7VT_3XiixJ.cgiSY70IVmA-1759763213-1.0.1.1-VBWmqZBMuR7G.VpxvckFeUx4VYqGSWXKCNx7b0H4auA5t6AMJQFsmg8knGMAR.M45LBrCMGl2rSz8_fWGSuVwVKmrY0Bgyq67UEsdtN14Y0; path=/; expires=Mon, 06-Oct-25 15:36:53 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=nFae5fqty92.0.hjCPOhdEuKdwBRfh59fYrnujk72wA-1759844443-1.0.1.1-x3Hf.yCjF3m6KgYn32N9QviKptz3kxs_LzB4D85zwhUFRhTBUCdjp7keL1o3XIqV04v8yjS077p4I8gfaaj.PFGd9QS0fa9Mz0e7XgZsh9s; path=/; expires=Tue, 07-Oct-25 14:10:43 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -170,7 +170,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-0a815054ec5774a314deb7d209d9e2b2-c2bf040f00763427-01"
+        "00-b2fa2c0c3ad1e2f34da85a34cda202a1-b8ad790d00191341-01"
       ],
       "x-zero-data-retention": [
         "false"

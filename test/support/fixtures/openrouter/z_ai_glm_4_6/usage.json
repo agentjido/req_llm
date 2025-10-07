@@ -1,0 +1,108 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGkgdGhlcmUhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiei1haS9nbG0tNC42IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Hi there!",
+          "role": "user"
+        }
+      ],
+      "model": "z-ai/glm-4.6",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "\n\nHello! I'm the GLM language model trained by Zhipuai. How can I assist you today? Whether you have questions, need information, or just want to chat, I'm here to help. What would you like to discuss?",
+            "reasoning": "Let me consider how to respond to this friendly greeting.\n\nThe user has initiated contact with a simple \"Hi there!\" - this is a common and casual way to start a conversation. I should respond in a way that's equally warm and inviting.\n\nA good response should:\n1. Return the greeting warmly\n2. Express willingness to help\n3. Keep the door open for further conversation\n\nI could go with something like \"Hello! How can I assist you today?\" or \"Hi there! I'm here to help - what would you like to talk about?\" Both options maintain a friendly tone while clearly indicating my purpose.\n\nThe first option is concise and professional, while the second is slightly more conversational. Given the casual nature of the greeting, the second option might be more appropriate as it matches the user's tone better.\n\nLet me make sure my response is natural and welcoming, without being too formal or too casual. The goal is to make the user feel comfortable continuing the conversation.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Let me consider how to respond to this friendly greeting.\n\nThe user has initiated contact with a simple \"Hi there!\" - this is a common and casual way to start a conversation. I should respond in a way that's equally warm and inviting.\n\nA good response should:\n1. Return the greeting warmly\n2. Express willingness to help\n3. Keep the door open for further conversation\n\nI could go with something like \"Hello! How can I assist you today?\" or \"Hi there! I'm here to help - what would you like to talk about?\" Both options maintain a friendly tone while clearly indicating my purpose.\n\nThe first option is concise and professional, while the second is slightly more conversational. Given the casual nature of the greeting, the second option might be more appropriate as it matches the user's tone better.\n\nLet me make sure my response is natural and welcoming, without being too formal or too casual. The goal is to make the user feel comfortable continuing the conversation.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1759845637,
+      "id": "gen-1759845637-jr3KZsBH875JIHIn1rZx",
+      "model": "z-ai/glm-4.6",
+      "object": "chat.completion",
+      "provider": "GMICloud",
+      "usage": {
+        "completion_tokens": 252,
+        "prompt_tokens": 8,
+        "prompt_tokens_details": null,
+        "total_tokens": 260
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98adecfe6dd26200-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 07 Oct 2025 14:00:37 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

@@ -31,36 +31,6 @@
       "tool_call": true
     },
     {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "thudm/glm-z1-32b:free",
-      "knowledge": "2025-04",
-      "last_updated": "2025-04-17",
-      "limit": {
-        "context": 32768,
-        "output": 32768
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "GLM Z1 32B (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "thudm/glm-z1-32b:free",
-      "reasoning": true,
-      "release_date": "2025-04-17",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
       "attachment": true,
       "cost": {
         "input": 0.6,
@@ -187,36 +157,6 @@
       "tool_call": true
     },
     {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "tngtech/deepseek-r1t2-chimera:free",
-      "knowledge": "2025-07",
-      "last_updated": "2025-07-08",
-      "limit": {
-        "context": 163840,
-        "output": 163840
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "DeepSeek R1T2 Chimera (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "tngtech/deepseek-r1t2-chimera:free",
-      "reasoning": true,
-      "release_date": "2025-07-08",
-      "temperature": true,
-      "tool_call": false
-    },
-    {
       "attachment": true,
       "cost": {
         "input": 0.25,
@@ -309,36 +249,6 @@
       "tool_call": true
     },
     {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "cognitivecomputations/dolphin3.0-r1-mistral-24b",
-      "knowledge": "2024-10",
-      "last_updated": "2025-02-13",
-      "limit": {
-        "context": 32768,
-        "output": 8192
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Dolphin3.0 R1 Mistral 24B",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "cognitivecomputations/dolphin3.0-r1-mistral-24b",
-      "reasoning": true,
-      "release_date": "2025-02-13",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
       "attachment": true,
       "cost": {
         "cache_read": 0.31,
@@ -370,98 +280,6 @@
       "provider_model_id": "google/gemini-2.5-pro",
       "reasoning": true,
       "release_date": "2025-03-20",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "moonshotai/kimi-dev-72b:free",
-      "knowledge": "2025-06",
-      "last_updated": "2025-06-16",
-      "limit": {
-        "context": 131072,
-        "output": 131072
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Kimi Dev 72b (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "moonshotai/kimi-dev-72b:free",
-      "reasoning": false,
-      "release_date": "2025-06-16",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": true,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "qwen/qwen2.5-vl-72b-instruct:free",
-      "knowledge": "2025-02",
-      "last_updated": "2025-02-01",
-      "limit": {
-        "context": 32768,
-        "output": 32768
-      },
-      "modalities": {
-        "input": [
-          "text",
-          "image"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Qwen2.5 VL 72B Instruct (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "qwen/qwen2.5-vl-72b-instruct:free",
-      "reasoning": false,
-      "release_date": "2025-02-01",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": true,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "google/gemini-2.0-flash-exp:free",
-      "knowledge": "2024-12",
-      "last_updated": "2024-12-11",
-      "limit": {
-        "context": 1048576,
-        "output": 1048576
-      },
-      "modalities": {
-        "input": [
-          "text",
-          "image"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Gemini 2.0 Flash Experimental (free)",
-      "open_weights": false,
-      "provider": "openrouter",
-      "provider_model_id": "google/gemini-2.0-flash-exp:free",
-      "reasoning": false,
-      "release_date": "2024-12-11",
       "temperature": true,
       "tool_call": true
     },
@@ -563,126 +381,6 @@
       "tool_call": true
     },
     {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "mistralai/devstral-small-2505:free",
-      "knowledge": "2025-05",
-      "last_updated": "2025-05-21",
-      "limit": {
-        "context": 32768,
-        "output": 32768
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Devstral Small 2505 (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "mistralai/devstral-small-2505:free",
-      "reasoning": false,
-      "release_date": "2025-05-21",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "cognitivecomputations/dolphin3.0-mistral-24b",
-      "knowledge": "2024-10",
-      "last_updated": "2025-02-13",
-      "limit": {
-        "context": 32768,
-        "output": 8192
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Dolphin3.0 Mistral 24B",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "cognitivecomputations/dolphin3.0-mistral-24b",
-      "reasoning": false,
-      "release_date": "2025-02-13",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "moonshotai/kimi-k2:free",
-      "knowledge": "2025-04",
-      "last_updated": "2025-07-11",
-      "limit": {
-        "context": 32800,
-        "output": 32800
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Kimi K2 (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "moonshotai/kimi-k2:free",
-      "reasoning": false,
-      "release_date": "2025-07-11",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "qwen/qwen3-30b-a3b:free",
-      "knowledge": "2025-04",
-      "last_updated": "2025-04-28",
-      "limit": {
-        "context": 40960,
-        "output": 40960
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Qwen3 30B A3B (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "qwen/qwen3-30b-a3b:free",
-      "reasoning": true,
-      "release_date": "2025-04-28",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
       "attachment": true,
       "cost": {
         "cache_read": 0.025,
@@ -775,36 +473,6 @@
       "provider_model_id": "mistralai/devstral-small-2505",
       "reasoning": false,
       "release_date": "2025-05-07",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "deepseek/deepseek-r1-0528:free",
-      "knowledge": "2025-05",
-      "last_updated": "2025-05-28",
-      "limit": {
-        "context": 163840,
-        "output": 163840
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "R1 0528 (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "deepseek/deepseek-r1-0528:free",
-      "reasoning": true,
-      "release_date": "2025-05-28",
       "temperature": true,
       "tool_call": true
     },
@@ -910,36 +578,6 @@
         "input": 0,
         "output": 0
       },
-      "id": "microsoft/mai-ds-r1:free",
-      "knowledge": "2025-04",
-      "last_updated": "2025-04-21",
-      "limit": {
-        "context": 163840,
-        "output": 163840
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "MAI DS R1 (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "microsoft/mai-ds-r1:free",
-      "reasoning": true,
-      "release_date": "2025-04-21",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
       "id": "deepseek/deepseek-r1-distill-llama-70b",
       "knowledge": "2024-10",
       "last_updated": "2025-01-23",
@@ -1029,36 +667,6 @@
     {
       "attachment": false,
       "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "sarvamai/sarvam-m:free",
-      "knowledge": "2025-05",
-      "last_updated": "2025-05-25",
-      "limit": {
-        "context": 32768,
-        "output": 32768
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Sarvam-M (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "sarvamai/sarvam-m:free",
-      "reasoning": true,
-      "release_date": "2025-05-25",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
         "input": 0.05,
         "output": 0.2
       },
@@ -1112,7 +720,7 @@
       "open_weights": false,
       "provider": "openrouter",
       "provider_model_id": "x-ai/grok-3-mini",
-      "reasoning": true,
+      "reasoning": false,
       "release_date": "2025-02-17",
       "temperature": true,
       "tool_call": true
@@ -1403,36 +1011,6 @@
     {
       "attachment": false,
       "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "qwen/qwen3-32b:free",
-      "knowledge": "2025-04",
-      "last_updated": "2025-04-28",
-      "limit": {
-        "context": 40960,
-        "output": 40960
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Qwen3 32B (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "qwen/qwen3-32b:free",
-      "reasoning": true,
-      "release_date": "2025-04-28",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
         "input": 0.4,
         "output": 2
       },
@@ -1617,36 +1195,6 @@
       "tool_call": true
     },
     {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "z-ai/glm-4.5-air:free",
-      "knowledge": "2025-04",
-      "last_updated": "2025-07-28",
-      "limit": {
-        "context": 128000,
-        "output": 96000
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "GLM 4.5 Air (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "z-ai/glm-4.5-air:free",
-      "reasoning": true,
-      "release_date": "2025-07-28",
-      "temperature": true,
-      "tool_call": false
-    },
-    {
       "attachment": true,
       "cost": {
         "cache_read": 0.31,
@@ -1682,36 +1230,6 @@
       "tool_call": true
     },
     {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "qwen/qwen3-235b-a22b-07-25:free",
-      "knowledge": "2025-04",
-      "last_updated": "2025-07-21",
-      "limit": {
-        "context": 262144,
-        "output": 131072
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Qwen3 235B A22B Instruct 2507 (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "qwen/qwen3-235b-a22b-07-25:free",
-      "reasoning": false,
-      "release_date": "2025-04-28",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
       "attachment": true,
       "cost": {
         "cache_read": 1.5,
@@ -1741,37 +1259,6 @@
       "provider_model_id": "anthropic/claude-3.7-sonnet",
       "reasoning": false,
       "release_date": "2025-02-19",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": true,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "meta-llama/llama-4-scout:free",
-      "knowledge": "2024-08",
-      "last_updated": "2025-04-05",
-      "limit": {
-        "context": 64000,
-        "output": 64000
-      },
-      "modalities": {
-        "input": [
-          "text",
-          "image"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Llama 4 Scout (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "meta-llama/llama-4-scout:free",
-      "reasoning": false,
-      "release_date": "2025-04-05",
       "temperature": true,
       "tool_call": true
     },
@@ -1872,66 +1359,6 @@
     {
       "attachment": false,
       "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "meta-llama/llama-3.3-70b-instruct:free",
-      "knowledge": "2024-12",
-      "last_updated": "2024-12-06",
-      "limit": {
-        "context": 65536,
-        "output": 65536
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Llama 3.3 70B Instruct (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "meta-llama/llama-3.3-70b-instruct:free",
-      "reasoning": false,
-      "release_date": "2024-12-06",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "nousresearch/deephermes-3-llama-3-8b-preview",
-      "knowledge": "2024-04",
-      "last_updated": "2025-02-28",
-      "limit": {
-        "context": 131072,
-        "output": 8192
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "DeepHermes 3 Llama 3 8B Preview",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "nousresearch/deephermes-3-llama-3-8b-preview",
-      "reasoning": true,
-      "release_date": "2025-02-28",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
         "input": 1,
         "output": 3
       },
@@ -2018,67 +1445,6 @@
       "release_date": "2025-01-29",
       "temperature": true,
       "tool_call": false
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "mistralai/mistral-7b-instruct:free",
-      "knowledge": "2024-05",
-      "last_updated": "2024-05-27",
-      "limit": {
-        "context": 32768,
-        "output": 32768
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Mistral 7B Instruct (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "mistralai/mistral-7b-instruct:free",
-      "reasoning": false,
-      "release_date": "2024-05-27",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": true,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "mistralai/mistral-small-3.2-24b-instruct:free",
-      "knowledge": "2025-06",
-      "last_updated": "2025-06-20",
-      "limit": {
-        "context": 96000,
-        "output": 96000
-      },
-      "modalities": {
-        "input": [
-          "text",
-          "image"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Mistral Small 3.2 24B (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "mistralai/mistral-small-3.2-24b-instruct:free",
-      "reasoning": false,
-      "release_date": "2025-06-20",
-      "temperature": true,
-      "tool_call": true
     },
     {
       "attachment": false,
@@ -2239,66 +1605,6 @@
         "input": 0,
         "output": 0
       },
-      "id": "qwen/qwen3-235b-a22b:free",
-      "knowledge": "2025-04",
-      "last_updated": "2025-04-28",
-      "limit": {
-        "context": 131072,
-        "output": 131072
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Qwen3 235B A22B (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "qwen/qwen3-235b-a22b:free",
-      "reasoning": true,
-      "release_date": "2025-04-28",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "qwen/qwen3-14b:free",
-      "knowledge": "2025-04",
-      "last_updated": "2025-04-28",
-      "limit": {
-        "context": 40960,
-        "output": 40960
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Qwen3 14B (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "qwen/qwen3-14b:free",
-      "reasoning": true,
-      "release_date": "2025-04-28",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
       "id": "qwen/qwen-2.5-coder-32b-instruct",
       "knowledge": "2024-10",
       "last_updated": "2024-11-11",
@@ -2322,158 +1628,6 @@
       "release_date": "2024-11-11",
       "temperature": true,
       "tool_call": false
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "deepseek/deepseek-r1:free",
-      "knowledge": "2025-01",
-      "last_updated": "2025-01-20",
-      "limit": {
-        "context": 163840,
-        "output": 163840
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "R1 (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "deepseek/deepseek-r1:free",
-      "reasoning": true,
-      "release_date": "2025-01-20",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": true,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "qwen/qwen2.5-vl-32b-instruct:free",
-      "knowledge": "2025-03",
-      "last_updated": "2025-03-24",
-      "limit": {
-        "context": 8192,
-        "output": 8192
-      },
-      "modalities": {
-        "input": [
-          "text",
-          "image",
-          "video"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Qwen2.5 VL 32B Instruct (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "qwen/qwen2.5-vl-32b-instruct:free",
-      "reasoning": false,
-      "release_date": "2025-03-24",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "deepseek/deepseek-r1-0528-qwen3-8b:free",
-      "knowledge": "2025-05",
-      "last_updated": "2025-05-29",
-      "limit": {
-        "context": 131072,
-        "output": 131072
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Deepseek R1 0528 Qwen3 8B (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "deepseek/deepseek-r1-0528-qwen3-8b:free",
-      "reasoning": true,
-      "release_date": "2025-05-29",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "qwen/qwen3-8b:free",
-      "knowledge": "2025-04",
-      "last_updated": "2025-04-28",
-      "limit": {
-        "context": 40960,
-        "output": 40960
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Qwen3 8B (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "qwen/qwen3-8b:free",
-      "reasoning": true,
-      "release_date": "2025-04-28",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "qwen/qwq-32b:free",
-      "knowledge": "2025-03",
-      "last_updated": "2025-03-05",
-      "limit": {
-        "context": 32768,
-        "output": 32768
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "QwQ 32B (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "qwen/qwq-32b:free",
-      "reasoning": true,
-      "release_date": "2025-03-05",
-      "temperature": true,
-      "tool_call": true
     },
     {
       "attachment": true,
@@ -2507,96 +1661,6 @@
       "tool_call": true
     },
     {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "qwen/qwen3-coder:free",
-      "knowledge": "2025-04",
-      "last_updated": "2025-07-23",
-      "limit": {
-        "context": 262144,
-        "output": 66536
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Qwen3 Coder 480B A35B Instruct (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "qwen/qwen3-coder:free",
-      "reasoning": false,
-      "release_date": "2025-07-23",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "mistralai/mistral-nemo:free",
-      "knowledge": "2024-07",
-      "last_updated": "2024-07-19",
-      "limit": {
-        "context": 131072,
-        "output": 131072
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Mistral Nemo (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "mistralai/mistral-nemo:free",
-      "reasoning": false,
-      "release_date": "2024-07-19",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "featherless/qwerky-72b",
-      "knowledge": "2024-10",
-      "last_updated": "2025-03-20",
-      "limit": {
-        "context": 32768,
-        "output": 8192
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Qwerky 72B",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "featherless/qwerky-72b",
-      "reasoning": false,
-      "release_date": "2025-03-20",
-      "temperature": true,
-      "tool_call": false
-    },
-    {
       "attachment": true,
       "cost": {
         "input": 0,
@@ -2624,69 +1688,6 @@
       "provider_model_id": "mistralai/mistral-small-3.2-24b-instruct",
       "reasoning": false,
       "release_date": "2025-06-20",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "deepseek/deepseek-v3-base:free",
-      "knowledge": "2025-03",
-      "last_updated": "2025-03-29",
-      "limit": {
-        "context": 163840,
-        "output": 163840
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "DeepSeek V3 Base (free)",
-      "open_weights": true,
-      "provider": "openrouter",
-      "provider_model_id": "deepseek/deepseek-v3-base:free",
-      "reasoning": false,
-      "release_date": "2025-03-29",
-      "temperature": true,
-      "tool_call": false
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "cache_read": 0,
-        "cache_write": 0,
-        "input": 0,
-        "output": 0
-      },
-      "id": "x-ai/grok-4-fast:free",
-      "knowledge": "2024-11",
-      "last_updated": "2025-08-19",
-      "limit": {
-        "context": 2000000,
-        "output": 2000000
-      },
-      "modalities": {
-        "input": [
-          "text",
-          "image"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Grok 4 Fast (free)",
-      "open_weights": false,
-      "provider": "openrouter",
-      "provider_model_id": "x-ai/grok-4-fast:free",
-      "reasoning": false,
-      "release_date": "2025-08-19",
       "temperature": true,
       "tool_call": true
     },

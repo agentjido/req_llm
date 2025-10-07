@@ -40,13 +40,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! 👋 How can I help you today?",
-            "reasoning": "The user says \"Hi there!\" It's a greeting. We should respond politely. Probably ask how can I help.",
+            "content": "Hello! How can I help you today?",
+            "reasoning": "The user says \"Hi there!\" It's a greeting. We should respond politely.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "The user says \"Hi there!\" It's a greeting. We should respond politely. Probably ask how can I help.",
+                "text": "The user says \"Hi there!\" It's a greeting. We should respond politely.",
                 "type": "reasoning.text"
               }
             ],
@@ -56,16 +56,16 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759672253,
-      "id": "gen-1759672253-CP22rJB2AzCxkPURXyjI",
+      "created": 1759845489,
+      "id": "gen-1759845489-SEJATz2ttwpb0okgBSbz",
       "model": "openai/gpt-oss-20b",
       "object": "chat.completion",
-      "provider": "Together",
+      "provider": "DeepInfra",
       "usage": {
-        "completion_tokens": 44,
-        "prompt_tokens": 70,
+        "completion_tokens": 34,
+        "prompt_tokens": 77,
         "prompt_tokens_details": null,
-        "total_tokens": 114
+        "total_tokens": 111
       }
     },
     "headers": {
@@ -73,7 +73,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d63ff9b0aa23f-ORD"
+        "98ade9640a6b2911-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -82,7 +82,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:50:53 GMT"
+        "Tue, 07 Oct 2025 13:58:09 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -40,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759772199,
+      "created_at": 1759795863,
       "error": null,
-      "id": "resp_0fdcac488d88e4670068e3fe27dce8819a81e7643fae66415e",
+      "id": "resp_08f14ead183fdfd20068e45a97425c819b9d121a8eae8004fc",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 2048,
@@ -52,7 +52,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_0fdcac488d88e4670068e3fe40cadc819a8111e1b316efbc29",
+          "id": "rs_08f14ead183fdfd20068e45aa8c3c0819b809179b624231e19",
           "summary": [],
           "type": "reasoning"
         },
@@ -61,11 +61,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "12 × 7 = 84\n\nI’m sorry, but I can’t share my private reasoning. Here’s a concise explanation instead: to multiply, you can think of 12 as 10 + 2, multiply each part by 7 (10 × 7 = 70 and 2 × 7 = 14), then add the results (70 + 14 = 84).",
+              "text": "12 × 7 = 84",
               "type": "output_text"
             }
           ],
-          "id": "msg_0fdcac488d88e4670068e3fe40ccb8819a8d4a14156de14f19",
+          "id": "msg_08f14ead183fdfd20068e45aa8c5e8819b84ceba28ec6bfb73",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -99,11 +99,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 160,
+        "output_tokens": 15,
         "output_tokens_details": {
-          "reasoning_tokens": 64
+          "reasoning_tokens": 0
         },
-        "total_tokens": 179
+        "total_tokens": 34
       },
       "user": null
     },
@@ -115,7 +115,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a6ec18cbca34ad-ORD"
+        "98a92dd0fcf013f3-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -124,13 +124,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 17:37:05 GMT"
+        "Tue, 07 Oct 2025 00:11:21 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "25333"
+        "17840"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -142,8 +142,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=S.Sj.w4W.oE5zTDSWVTu3vrIGs2eNtZFWlF_Tcw4GA4-1759772225-1.0.1.1-EjzFXkOj_lmG1wvHVaZ0tF5iNRtDkw1vxLDX0C5WIdRM_GSSREHcfPuOyXWwY.jbaJNryHxh2aZ.MMf8DAQssb.pKf0C9d0GFlfyZQM13c0; path=/; expires=Mon, 06-Oct-25 18:07:05 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=wGb2aAMmdVkbPUQGhaGVzQ.d6jbDiaYjSgaDkGz5pSY-1759772225217-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=O8OemX21ucu3oq_MNiX2gV7zYSTnyzIa6V.YnPtIE.Q-1759795881-1.0.1.1-45aBNi8Xv.V_0UumNTrsU5DoSUulbehZy_FvWAkjc4DuguHcUgBMKIQKVxsqJneGa5OseRdb8KCR3hrL9Xn3Xv35jmB1CEGy42aXHIMDVcM; path=/; expires=Tue, 07-Oct-25 00:41:21 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=JHKlLTKdMyQry9LaVDI4iXJC9Nv2z4oMy.V7RLask0I-1759795881128-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -155,19 +155,19 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "25337"
+        "17843"
       ],
       "x-ratelimit-limit-requests": [
-        "5000"
+        "10000"
       ],
       "x-ratelimit-limit-tokens": [
-        "800000"
+        "2000000"
       ],
       "x-ratelimit-remaining-requests": [
-        "4999"
+        "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "799493"
+        "1999194"
       ],
       "x-ratelimit-reset-requests": [
         "0s"
@@ -176,7 +176,7 @@
         "0s"
       ],
       "x-request-id": [
-        "req_ec343a8f6c309097fb6673d4168d746b"
+        "req_e6dc172472efd6af49e4ca891f3793cd"
       ]
     },
     "status": 200

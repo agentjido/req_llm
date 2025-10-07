@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJvcGVuYWkvZ3B0LW9zcy0yMGIiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtb3NzLTIwYiIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
-      "max_tokens": 50,
+      "max_tokens": 2000,
       "messages": [
         {
           "content": "Hello world!",
@@ -12,6 +12,7 @@
         }
       ],
       "model": "openai/gpt-oss-20b",
+      "reasoning_effort": "low",
       "seed": 42,
       "stream": false,
       "temperature": 0.0
@@ -35,34 +36,34 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": "stop",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello there! 👋 How can I assist you today?",
-            "reasoning": "User says \"Hello world!\" Probably wants a greeting or a simple response. We can respond with a friendly hello. Maybe mention what can do.",
+            "content": "Hello, world! 🌍 How can I help you today?",
+            "reasoning": "Need to greet.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759753724,
-      "id": "chatcmpl-49cbd426-7706-44c8-8dd4-84bb108283f6",
+      "created": 1759844696,
+      "id": "chatcmpl-96a25b2c-dbd1-45b6-a266-2ca5e91f299d",
       "model": "openai/gpt-oss-20b",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_c5a89987dc",
+      "system_fingerprint": "fp_3d587a02fb",
       "usage": {
-        "completion_time": 0.049292662,
-        "completion_tokens": 50,
-        "prompt_time": 0.003510098,
+        "completion_time": 0.026832378,
+        "completion_tokens": 27,
+        "prompt_time": 0.004089923,
         "prompt_tokens": 74,
-        "queue_time": 0.196994497,
-        "total_time": 0.05280276,
-        "total_tokens": 124
+        "queue_time": 0.194703731,
+        "total_time": 0.030922301,
+        "total_tokens": 101
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6wqxqyrf33s334h1jtjvhjb"
+        "id": "req_01k6zep0p5e1jasgkvn7wrge5g"
       }
     },
     "headers": {
@@ -76,7 +77,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a52905facfe1e7-ORD"
+        "98add60a9cceda16-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -85,13 +86,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 12:28:44 GMT"
+        "Tue, 07 Oct 2025 13:44:57 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=FtMhMm_GM3n2hA5RJjo.kj_CgOnJ6zCQOPLRIIqLMUU-1759753724-1.0.1.1-JyEED_qE6U5SAeaqPirs5DCDcyPIhD2q7iBoTJ6AXpbEGe_SrryiS38eohtZMy6qAyYa1hoke0Rc.sojrSBIWbaBvO385g8Kn6ai8KkP6dY; path=/; expires=Mon, 06-Oct-25 12:58:44 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=IS0VRO8dedHVeJ51Ck3Z5P7TPEUJmy5o.0kBHY2ZD8A-1759844697-1.0.1.1-b3XAdyYs9nEntfmA_WdeBiYQjvIVOQ_pqlXoWcMAFmF8G6NedY4yZEhRhx04B3zuD60vUsPVDwqAHS44A9NI4mesPjm3tAf9CUcLAOyFMno; path=/; expires=Tue, 07-Oct-25 14:14:57 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -112,19 +113,19 @@
         "8000"
       ],
       "x-ratelimit-remaining-requests": [
-        "994"
+        "997"
       ],
       "x-ratelimit-remaining-tokens": [
-        "7310"
+        "7569"
       ],
       "x-ratelimit-reset-requests": [
-        "8m38.021s"
+        "4m18.684999999s"
       ],
       "x-ratelimit-reset-tokens": [
-        "5.169999999s"
+        "3.2305s"
       ],
       "x-request-id": [
-        "req_01k6wqxqyrf33s334h1jtjvhjb"
+        "req_01k6zep0p5e1jasgkvn7wrge5g"
       ]
     },
     "status": 200

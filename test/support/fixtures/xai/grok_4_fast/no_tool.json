@@ -58,34 +58,34 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "Why did the cat go to school? To improve its purr-sonal skills!",
+            "content": "Why was the cat afraid of the tree? Because of its bark! 🐱",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759763206,
-      "id": "d8b4a57b-7dfa-9b09-8c84-febd6d14ffe2_us-east-1",
+      "created": 1759844443,
+      "id": "61ce0b60-3ffe-b684-4966-46958631fe41_us-east-1",
       "model": "grok-4-fast-reasoning",
       "object": "chat.completion",
       "system_fingerprint": "fp_9362061f30",
       "usage": {
-        "completion_tokens": 16,
+        "completion_tokens": 17,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 80,
+          "reasoning_tokens": 170,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
         "prompt_tokens": 311,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 265,
+          "cached_tokens": 266,
           "image_tokens": 0,
           "text_tokens": 311
         },
-        "total_tokens": 407
+        "total_tokens": 498
       }
     },
     "headers": {
@@ -99,7 +99,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a610870b1c6214-ORD"
+        "98adcfdb8c8ce8ea-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -108,13 +108,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 15:06:48 GMT"
+        "Tue, 07 Oct 2025 13:40:45 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=VY5WasjcMDfHX_ECLFbYNSxS8htIVefqRFes5_IvIc8-1759763208-1.0.1.1-gltRHsVhV.QlIVPI1LbQmIfgup_y5wqv3JREuc64bQMz0qoMLeGDtrDLJKEWZjGSM448oyNutbCgmkzvWUBY5Xa.TKPQ2pWHShI_UVjXQAU; path=/; expires=Mon, 06-Oct-25 15:36:48 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=nJWK1UYpMgRlfvTyZiV88Y7G0p83s1fVjS.ZdUo.dME-1759844445-1.0.1.1-j3XttpASE9ZvDY5chtiXc4g.LZ1u7vO9VLzcmmYQM29mRmISABTkv7Z3_O6kVNbWKhCoAKsuNfXsBqsoa3LW3mzRrc.YUysPWCSp9IFo2yM; path=/; expires=Tue, 07-Oct-25 14:10:45 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -126,7 +126,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-088ff9bb55de55ebe375f0a87c1fd124-74f6b5700063e620-01"
+        "00-891ddf1120c5863c5eee19999a68b8e4-bf5c42250018a70f-01"
       ],
       "x-zero-data-retention": [
         "false"

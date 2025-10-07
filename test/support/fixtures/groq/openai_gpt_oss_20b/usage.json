@@ -39,30 +39,30 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hi there! 👋 How can I assist you today?",
-            "reasoning": "We need to respond with a friendly greeting. Probably something like \"Hello! How can I help you today?\"",
+            "content": "Hello! 👋 How can I help you today?",
+            "reasoning": "The user says \"Hi there!\" This is a greeting. The system message says we are ChatGPT, large language model, etc. We need to respond politely and maybe ask what they'd like to talk about. According to policy, we can respond with a friendly greeting and ask how can we help. No policy conflict. Just a normal response.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759753723,
-      "id": "chatcmpl-09aa6fd1-bbb2-4ccd-ba99-1db9f225def0",
+      "created": 1759844702,
+      "id": "chatcmpl-0f39d64a-7bfb-4e85-b884-72454ce5627c",
       "model": "openai/gpt-oss-20b",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_77f8660d1d",
+      "system_fingerprint": "fp_3d587a02fb",
       "usage": {
-        "completion_time": 0.043105955,
-        "completion_tokens": 44,
-        "prompt_time": 0.00408949,
+        "completion_time": 0.09644448,
+        "completion_tokens": 90,
+        "prompt_time": 0.003505122,
         "prompt_tokens": 74,
-        "queue_time": 0.197015744,
-        "total_time": 0.047195445,
-        "total_tokens": 118
+        "queue_time": 0.195288827,
+        "total_time": 0.099949602,
+        "total_tokens": 164
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6wqxq8re0nr40r8w8xd8j6y"
+        "id": "req_01k6zep5zteyzsx36m3rs3z2nx"
       }
     },
     "headers": {
@@ -76,7 +76,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a529018e19e1e7-ORD"
+        "98add62c8d6cda16-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -85,13 +85,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 12:28:43 GMT"
+        "Tue, 07 Oct 2025 13:45:02 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=Oe2ciqvlYBDywZu_Ee8PDilBwWTxiU07ViKcwOaLtds-1759753723-1.0.1.1-cQ4yPhHzJCdfPblPxyg8axi2YREwqGzEiWMNY0ajDIjrawpViTTb.DkjdODP2M5lD_8DCJfb4EW5ZOE.kGfqyyNngm9zANNx3dp6M.10h4s; path=/; expires=Mon, 06-Oct-25 12:58:43 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=0KUUWuXKDsuIxo.Ynt3e8Qyzk7RXkljOt3D6Ozpf6Iw-1759844702-1.0.1.1-y.kf6qY6nQ3MCfli5BKFOIJhy3C2Vw8XOY6arlvKzgd6GW40rC3IO0NT8D3PwFm1ajimEBZFE91sbz1ncy39GN0J3uU3WrlqvcC_J8oxNGw; path=/; expires=Tue, 07-Oct-25 14:15:02 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -112,19 +112,19 @@
         "8000"
       ],
       "x-ratelimit-remaining-requests": [
-        "996"
+        "991"
       ],
       "x-ratelimit-remaining-tokens": [
-        "7517"
+        "4843"
       ],
       "x-ratelimit-reset-requests": [
-        "5m45.232s"
+        "12m57.217s"
       ],
       "x-ratelimit-reset-tokens": [
-        "3.622499999s"
+        "23.6745s"
       ],
       "x-request-id": [
-        "req_01k6wqxq8re0nr40r8w8xd8j6y"
+        "req_01k6zep5zteyzsx36m3rs3z2nx"
       ]
     },
     "status": 200

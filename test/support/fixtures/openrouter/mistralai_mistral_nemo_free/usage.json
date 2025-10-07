@@ -34,37 +34,26 @@
   },
   "response": {
     "body": {
-      "choices": [
-        {
-          "finish_reason": "length",
-          "index": 0,
-          "logprobs": null,
-          "message": {
-            "content": " Hello! How can I assist you today? Let",
-            "reasoning": null,
-            "refusal": null,
-            "role": "assistant"
+      "error": {
+        "code": 429,
+        "message": "Rate limit exceeded: free-models-per-min. ",
+        "metadata": {
+          "headers": {
+            "X-RateLimit-Limit": "20",
+            "X-RateLimit-Remaining": "0",
+            "X-RateLimit-Reset": "1759845420000"
           },
-          "native_finish_reason": "length"
+          "provider_name": null
         }
-      ],
-      "created": 1759671857,
-      "id": "gen-1759671857-CqPTQJvDRL6LTRDPkz7l",
-      "model": "mistralai/mistral-nemo:free",
-      "object": "chat.completion",
-      "provider": "Chutes",
-      "usage": {
-        "completion_tokens": 10,
-        "prompt_tokens": 9,
-        "total_tokens": 19
-      }
+      },
+      "user_id": "user_2iYQIxKY28QuzANm4mmKBlOxzx2"
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
       "cf-ray": [
-        "989d5a53785beaed-ORD"
+        "98ade6b14a52b648-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -73,7 +62,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:44:18 GMT"
+        "Tue, 07 Oct 2025 13:56:19 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -92,8 +81,17 @@
       ],
       "x-content-type-options": [
         "nosniff"
+      ],
+      "x-ratelimit-limit": [
+        "20"
+      ],
+      "x-ratelimit-remaining": [
+        "0"
+      ],
+      "x-ratelimit-reset": [
+        "1759845420000"
       ]
     },
-    "status": 200
+    "status": 429
   }
 }

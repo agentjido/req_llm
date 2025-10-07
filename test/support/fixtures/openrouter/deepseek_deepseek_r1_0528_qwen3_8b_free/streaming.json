@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiWW91IGFyZSBhIGhlbHBmdWwsIGNyZWF0aXZlIGFzc2lzdGFudC4iLCJyb2xlIjoic3lzdGVtIn0seyJjb250ZW50IjoiU2F5IGhlbGxvIGluIG9uZSBzaG9ydCwgaW1hZ2luYXRpdmUgc2VudGVuY2UuIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZGVlcHNlZWsvZGVlcHNlZWstcjEtMDUyOC1xd2VuMy04YjpmcmVlIiwic3RyZWFtIjp0cnVlLCJzdHJlYW1fb3B0aW9ucyI6eyJpbmNsdWRlX3VzYWdlIjp0cnVlfSwidGVtcGVyYXR1cmUiOjAuOSwidG9wX3AiOjAuOH0="
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IllvdSBhcmUgYSBoZWxwZnVsLCBjcmVhdGl2ZSBhc3Npc3RhbnQuIiwicm9sZSI6InN5c3RlbSJ9LHsiY29udGVudCI6IlNheSBoZWxsbyBpbiBvbmUgc2hvcnQsIGltYWdpbmF0aXZlIHNlbnRlbmNlLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImRlZXBzZWVrL2RlZXBzZWVrLXIxLTA1MjgtcXdlbjMtOGI6ZnJlZSIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzdHJlYW0iOnRydWUsInN0cmVhbV9vcHRpb25zIjp7ImluY2x1ZGVfdXNhZ2UiOnRydWV9LCJ0ZW1wZXJhdHVyZSI6MC45LCJ0b3BfcCI6MC44fQ=="
     },
     "canonical_json": {
-      "max_tokens": 200,
+      "max_tokens": 2000,
       "messages": [
         {
           "content": "You are a helpful, creative assistant.",
@@ -16,6 +16,7 @@
         }
       ],
       "model": "deepseek/deepseek-r1-0528-qwen3-8b:free",
+      "reasoning_effort": "low",
       "stream": true,
       "stream_options": {
         "include_usage": true
@@ -34,25 +35,32 @@
   "response": {
     "body": {
       "error": {
-        "code": 503,
-        "message": "Provider returned error",
+        "code": 429,
+        "message": "Rate limit exceeded: free-models-per-min. ",
         "metadata": {
-          "provider_name": "Chutes",
-          "raw": "{\"detail\":\"No instances available (yet) for chute_id='aa5ff190-f995-5edf-9331-ea8fc5734f3e'\"}"
+          "headers": {
+            "X-RateLimit-Limit": "20",
+            "X-RateLimit-Remaining": "0",
+            "X-RateLimit-Reset": "1759845420000"
+          },
+          "provider_name": null
         }
       },
       "user_id": "user_2iYQIxKY28QuzANm4mmKBlOxzx2"
     },
     "headers": {
       "access-control-allow-origin": "*",
-      "cf-ray": "989d5f0f08bc61d2-ORD",
+      "cf-ray": "98ade6a09c9fe15f-ORD",
       "content-type": "application/json",
-      "date": "Sun, 05 Oct 2025 13:47:31 GMT",
+      "date": "Tue, 07 Oct 2025 13:56:16 GMT",
       "permissions-policy": "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")",
       "referrer-policy": "no-referrer, strict-origin-when-cross-origin",
       "server": "cloudflare",
-      "x-content-type-options": "nosniff"
+      "x-content-type-options": "nosniff",
+      "x-ratelimit-limit": "20",
+      "x-ratelimit-remaining": "0",
+      "x-ratelimit-reset": "1759845420000"
     },
-    "status": 503
+    "status": 429
   }
 }

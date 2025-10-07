@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxNTAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJsbGFtYS0zLjMtNzBiLXZlcnNhdGlsZSIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfdG9rZW5zIjozMjc2LCJtZXNzYWdlcyI6W3siY29udGVudCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/Iiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibGxhbWEtMy4zLTcwYi12ZXJzYXRpbGUiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
-      "max_tokens": 150,
+      "max_tokens": 3276,
       "messages": [
         {
           "content": "What's the weather like in Paris, France?",
@@ -100,31 +100,31 @@
                   "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "wh3h9pk6m",
+                "id": "6fxw5p0n9",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1759698668,
-      "id": "chatcmpl-70b5a589-8e75-43e1-89e8-19b3853f8ccc",
+      "created": 1759844696,
+      "id": "chatcmpl-516f0ea5-8586-45a0-80a2-253b1993b7cf",
       "model": "llama-3.3-70b-versatile",
       "object": "chat.completion",
       "service_tier": "on_demand",
       "system_fingerprint": "fp_155ab82e98",
       "usage": {
-        "completion_time": 0.068211633,
+        "completion_time": 0.068392279,
         "completion_tokens": 23,
-        "prompt_time": 0.028206646,
+        "prompt_time": 0.028339732,
         "prompt_tokens": 328,
-        "queue_time": 0.194101712,
-        "total_time": 0.096418279,
+        "queue_time": 0.250713838,
+        "total_time": 0.096732011,
         "total_tokens": 351
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6v3dj7ge2585z56mnc8xhnr"
+        "id": "req_01k6zep0ene1h9835vtebc92z5"
       }
     },
     "headers": {
@@ -138,7 +138,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989fe8e159c50007-ORD"
+        "98add6092e10feda-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -147,13 +147,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:11:08 GMT"
+        "Tue, 07 Oct 2025 13:44:56 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=nM58lGVDCr6BtB.k5zEvGiBcuyXk76MnAZAUV68_DBo-1759698668-1.0.1.1-sp_6n9dShYTBeY00Vztq20w6orojBLmpUqUW3.iESsPQgDE_f.jkRTBzbB25xC0cbtn5tUaYT3oEEGWkEkXKn32SYZvIMwLr13zOkozKo_0; path=/; expires=Sun, 05-Oct-25 21:41:08 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=03axxZzZqD6ejTnQbypGkH1KEQekNI0d8GGb3.A13rg-1759844696-1.0.1.1-Y.VUMLoA4MffQN2k6BJHIPCTE97t844qwggwJXEU_Jnx3yRbCKwixaPFP_smHOZC7S_N78RdkqAJgvioTfDCDRYRp5YOjUApSbJXDSEcSf4; path=/; expires=Tue, 07-Oct-25 14:14:56 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -174,19 +174,19 @@
         "12000"
       ],
       "x-ratelimit-remaining-requests": [
-        "995"
+        "997"
       ],
       "x-ratelimit-remaining-tokens": [
-        "11601"
+        "11871"
       ],
       "x-ratelimit-reset-requests": [
-        "7m11.568999999s"
+        "4m18.813999999s"
       ],
       "x-ratelimit-reset-tokens": [
-        "1.995s"
+        "645ms"
       ],
       "x-request-id": [
-        "req_01k6v3dj7ge2585z56mnc8xhnr"
+        "req_01k6zep0ene1h9835vtebc92z5"
       ]
     },
     "status": 200

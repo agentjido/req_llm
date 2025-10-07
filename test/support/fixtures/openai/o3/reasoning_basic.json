@@ -40,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759772170,
+      "created_at": 1759795792,
       "error": null,
-      "id": "resp_0f5c8e2727dbbef90068e3fe09ea9881948fca8ad71d2222ea",
+      "id": "resp_0404d669aaadf2be0068e45a5029e4819882ec4ec5a2ef7cc4",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 2048,
@@ -52,7 +52,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_0f5c8e2727dbbef90068e3fe0afea4819484fc47879d163308",
+          "id": "rs_0404d669aaadf2be0068e45a50b84c81989910725c7cd3864f",
           "summary": [],
           "type": "reasoning"
         },
@@ -61,11 +61,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "12 × 7 = 84",
+              "text": "12 × 7 = 84\n\nExplanation (concise):\nBreak 12 into 10 + 2.  \n7 × 10 = 70 and 7 × 2 = 14.  \nAdd the partial products: 70 + 14 = 84.",
               "type": "output_text"
             }
           ],
-          "id": "msg_0f5c8e2727dbbef90068e3fe0e17f881948e628eb108ae2456",
+          "id": "msg_0404d669aaadf2be0068e45a52410c81989d694cf873e61199",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -99,11 +99,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 141,
+        "output_tokens": 199,
         "output_tokens_details": {
           "reasoning_tokens": 128
         },
-        "total_tokens": 160
+        "total_tokens": 218
       },
       "user": null
     },
@@ -115,7 +115,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a6eb5dba18f790-ORD"
+        "98a92c149d687815-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -124,13 +124,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 17:36:14 GMT"
+        "Tue, 07 Oct 2025 00:09:54 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "4515"
+        "2813"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -142,8 +142,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=hGSLNDOsILnXWFfNUMWPqXr3i0SfXRakGCDhOVwqyno-1759772174-1.0.1.1-v4RkQM8.rhzIBEXM0bMhlOeM5y6kIK9lPXgXXRY91VLKaR8eOgisj2FWyNinr1T2mtlu8nAE2u5u2dhiK_AwLUElIlZxctrMc09dP9xRiAM; path=/; expires=Mon, 06-Oct-25 18:06:14 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=HZNTeiASNHOlO2Pj9sAlkplI8XdSE.kQyEwSl0eoxQY-1759772174457-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=7qn1mfpfuKr5qXmtaUsOM4im9plkrOr529dHvy4NiYw-1759795794-1.0.1.1-ojW9sFddM_sEqGDVcfTZE3VfetqFWjteKj8Q.B.T0lipi4fbYXkraN.9ESxxEhwh6QiCzyVw4nwq5A6WYIpCHpawFCanFucW5.BSIjb0JpU; path=/; expires=Tue, 07-Oct-25 00:39:54 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=qyHvjzLKqNlCyKvYM2sjG15cwcqFkLlnTNm4K_N9nRc-1759795794999-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -155,28 +155,28 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "4518"
+        "2816"
       ],
       "x-ratelimit-limit-requests": [
-        "5000"
+        "10000"
       ],
       "x-ratelimit-limit-tokens": [
-        "800000"
+        "2000000"
       ],
       "x-ratelimit-remaining-requests": [
-        "4999"
+        "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "799774"
+        "1999774"
       ],
       "x-ratelimit-reset-requests": [
-        "12ms"
+        "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "16ms"
+        "6ms"
       ],
       "x-request-id": [
-        "req_8627f3700881cd5edffeba714735db04"
+        "req_70bdb5b64f8db372e2d9f35a497b19e3"
       ]
     },
     "status": 200

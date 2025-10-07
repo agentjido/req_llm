@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMtMzJiIiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuNX0="
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJxd2VuL3F3ZW4zLTMyYiIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjV9"
     },
     "canonical_json": {
-      "max_tokens": 100,
+      "max_tokens": 3000,
       "messages": [
         {
           "content": "Write a very long story about dragons and adventures",
@@ -34,33 +34,33 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": "stop",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "<think>\nOkay, the user wants a very long story about dragons and adventures. Let me start by brainstorming some elements. Dragons are classic fantasy creatures, so I need to create a world where they play a significant role. Maybe a medieval setting with different dragon species? I should include various types of dragons, like fire, ice, maybe even some with unique abilities. \n\nThe main character could be someone on a quest. Maybe a young person with a special connection to dragons. Perhaps they’re from",
+            "content": "<think>\nOkay, the user wants a very long story about dragons and adventures. Let me start by brainstorming some key elements. Dragons are a classic fantasy element, so I need to create a compelling world around them. Maybe set it in a medieval-like setting with kingdoms and ancient prophecies.\n\nFirst, I should establish the main characters. A young protagonist could work, maybe someone from a humble background who discovers a connection to dragons. Perhaps a blacksmith's apprentice? That gives a relatable starting point. Let's name him Kael. He could have a mentor figure, like the blacksmith, who knows more than he lets on.\n\nDragons need to be more than just beasts. Maybe they're guardians of ancient knowledge or tied to the world's balance. A conflict arises when a dark force threatens both dragons and humans. The prophecy could mention a dragonborn or someone with a bond to dragons. Kael might be that person, which adds a personal stake.\n\nI need a journey structure. Kael could set out to find dragons, facing challenges along the way. Other characters could join him—maybe a rogue with a mysterious past, a scholar seeking knowledge, and a warrior with a vendetta. Each companion brings different skills and backstory.\n\nThe story should have several acts. Start with Kael's ordinary life, then the inciting incident—maybe a dragon attack or a vision. He leaves his village, meets companions, faces obstacles like dark creatures, ancient ruins, and political intrigue. The climax could involve a battle against the main antagonist, perhaps a sorcerer who wants to control dragons. The resolution would tie up the prophecy and show the new balance between humans and dragons.\n\nI should include themes of friendship, courage, and the bond between different species. Maybe the dragons have a hidden sanctuary that's under threat. The adventure could take them through various environments—forests, mountains, deserts, and ancient temples.\n\nNeed to make sure the story is long enough, so multiple chapters or sections with rising action. Each chapter can introduce a new challenge or reveal more about the world. Maybe include subplots, like the companion's personal quests or political issues in the kingdoms.\n\nAlso, think about the tone. It should be epic and adventurous, with moments of danger and wonder. Descriptions of the dragons should be vivid—different species with unique abilities. Maybe some are fire-breathers, others have ice or lightning. The main dragon could be a wise elder who guides Kael.\n\nPotential plot twists: the mentor might have a hidden connection to dragons, or a companion could betray the group. The prophecy might not be what it seems, adding a layer of complexity. In the end, Kael might have to make a sacrifice or a tough choice to save both worlds.\n\nMake sure the ending is satisfying, showing the aftermath of their journey and how the world has changed. Maybe leave room for sequels if the user wants more stories, but wrap up the main conflict.\n</think>\n\n**Title: The Ember of Ages**\n\n**Chapter 1: The Blacksmith's Apprentice**  \nIn the village of Ironhollow, nestled between the misty peaks of the Stormspire Mountains, lived a young blacksmith's apprentice named Kael. Orphaned at ten, he had been taken in by Master Garek, a gruff but kind-hearted smith whose hands bore the scars of a thousand forge sessions. Kael’s days were filled with the clang of hammer on anvil, crafting tools and weapons for travelers and soldiers alike. Yet, his nights were consumed by stories of dragons—beasts of legend said to guard the ancient Heartfire, a mystical flame that sustained the balance of the world.\n\nUnbeknownst to Kael, Garek was no ordinary blacksmith. He was a member of the Veilwardens, a secret order tasked with protecting the last dragon sanctuaries. The Heartfire, Garek had once learned, was fading, and with it, the dragons’ strength. Dark forces, led by the sorcerer-king Malakar, sought to extinguish the flame and enslave the dragons for their own ends. But Garek had a secret: Kael was the prophesied Dragonborn, the only one with the blood to reignite the Heartfire.\n\n**Chapter 2: The Shattered Sky**  \nOne fateful evening, the tranquility of Ironhollow was shattered by the roar of a dragon. A shadowy leviathan, its scales blackened by corruption, descended upon the village. Malakar’s dragons, twisted by dark magic, had come to destroy the Veilwardens’ strongholds. Garek sacrificed himself to hold back the beast, entrusting Kael with a dragon-egg pendant—a key to the Heartfire’s location.\n\nWith the village in ruins, Kael fled into the wilderness, guided by Garek’s final words: “Find the Eldertree, where the three rivers meet. There, the first dragon awaits.” His journey began under the cover of night, a lone figure with only a sword, a satchel of provisions, and the weight of destiny on his shoulders.\n\n**Chapter 3: The Companions of the Flame**  \nKael’s path crossed with three unlikely allies in the weeks that followed. First was Lyra, a rogue with a silver tongue and a past shrouded in mystery. She had once been a thief in Malakar’s court but had fled after discovering his plot to enslave the dragons. Next was Thaddeus, a scholar from the Ivory Spire, whose obsession with dragons had led him to decode ancient texts about the Heartfire. Lastly, there was Borin, a hulking warrior from the northern clans, whose family had been slain by Malakar’s corrupted beasts.\n\nTogether, they traversed treacherous lands: the Glimmerfen, a bog haunted by spectral wraiths; the Ashen Peaks, where avalanches threatened to bury them; and the Sunscorch Desert, where mirages led travelers to madness. Along the way, Kael’s bond with the dragons deepened. The pendant allowed him to commune with them, sensing their pain as the Heartfire dimmed.\n\n**Chapter 4: The Betrayal at Duskreach**  \nIn the port city of Duskreach, the group sought passage across the Shattered Sea to the fabled island of Eldoria, where the Eldertree was said to grow. But Malakar’s spies were everywhere. The captain of their ship, Captain Vex, was revealed to be a servant of the sorcerer-king. The crew turned on them, forcing the companions to battle through a storm conjured by dark magic. Borin fell in the fray, his last act shielding Kael from a blast of shadowfire.\n\nThe survivors barely escaped in a rowboat, adrift on the stormy sea. It was Lyra who found the silver lining—a hidden cove where a wounded dragon, its scales shimmering with residual Heartfire, awaited them. The beast, named Aeloria, revealed that the Eldertree was a myth; the true Heartfire lay beneath the ruins of the First Kingdom, a civilization destroyed millennia ago for defying the dragons.\n\n**Chapter 5: The Labyrinth of Shadows**  \nThe First Kingdom’s ruins were guarded by Malakar’s most feared general, Varys the Hollow, a man turned monstrous by dark magic. The labyrinthine city was a maze of traps and spectral guardians, its corridors echoing with the whispers of the dead. Thaddeus’s knowledge proved vital as they deciphered ancient puzzles, while Kael’s growing power allowed him to calm the restless spirits.\n\nIn the heart of the labyrinth, they faced Varys in a battle that shook the foundations of the city. Kael, guided by Aeloria’s wisdom, channeled the Heartfire through the dragon-egg pendant, purging the corruption from the chamber. The Heartfire flared anew, its light banishing the darkness. But victory came at a cost—Thaddeus, mortally wounded by Varys’s curse, sacrificed himself to stabilize the Heartfire’s return.\n\n**Chapter 6: The Final Ascent**  \nWith the Heartfire restored, the dragons began to recover, their once-dim eyes blazing with renewed purpose. Malakar, sensing his grip slipping, launched a final assault on the Veilwardens’ last stronghold. Kael and his companions led a desperate defense, but the tide turned when the dragons, led by Aeloria, descended upon the battlefield. The sky blazed with fire and fury as the armies clashed.\n\nIn the climax, Kael confronted Malakar atop the Obsidian Spire. The sorcerer-king, a being of pure shadow, taunted him with visions of failure and loss. But Kael, drawing on the Heartfire’s light, unleashed a torrent of energy that shattered Malakar’s form, banishing him to the void.\n\n**Epilogue: The Dawn of a New Era**  \nWith Malakar defeated, the world began to heal. The dragons, no longer bound by fear, emerged from their hidden sanctuaries, forging alliances with humanity. Kael, now a legend, chose to live among the dragons in the Skyreach Mountains, a bridge between two worlds. Lyra returned to Duskreach, using her skills to protect the seas, while Aeloria remained Kael’s companion, their bond a symbol of hope.\n\nThe Heartfire burned bright once more, a reminder that even in the darkest times, courage and unity could reignite the light. And though Kael’s journey had ended, the tales of his adventures would echo through generations, whispered around fires and etched into the annals of history.\n\n**The End... or Perhaps, a New Beginning.**",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759753879,
-      "id": "chatcmpl-436e412a-57c4-453e-8269-06964169e36a",
+      "created": 1759844706,
+      "id": "chatcmpl-cef9f4b5-8858-4b9d-af6e-edba56987a61",
       "model": "qwen/qwen3-32b",
       "object": "chat.completion",
       "service_tier": "on_demand",
       "system_fingerprint": "fp_5cf921caa2",
       "usage": {
-        "completion_time": 0.234935735,
-        "completion_tokens": 100,
-        "prompt_time": 9.27796e-4,
+        "completion_time": 10.243766428,
+        "completion_tokens": 2026,
+        "prompt_time": 7.1355e-4,
         "prompt_tokens": 17,
-        "queue_time": 0.21132038,
-        "total_time": 0.235863531,
-        "total_tokens": 117
+        "queue_time": 0.199093891,
+        "total_time": 10.244479978,
+        "total_tokens": 2043
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6wr2fy3ef39vey0zrdvn6t5"
+        "id": "req_01k6zenzxae48977e2saf0nwna"
       }
     },
     "headers": {
@@ -74,7 +74,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a52cd2ad2c72d1-ORD"
+        "98add605abe35624-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -83,13 +83,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 12:31:19 GMT"
+        "Tue, 07 Oct 2025 13:45:06 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=SWbIgX4HqiWjHeoC8ULvFK3YRrc8GZIpfiVRs_UzB6s-1759753879-1.0.1.1-UchQKrNQPF.icNlB9DAHG6T6mLHblLCcUuhRC8vCRr9SS72bcAf0gOkDcnvU4ZUu.IyykoKlibtebcMrcSpAKIlitdRp7lKitDIyXJqOLJU; path=/; expires=Mon, 06-Oct-25 13:01:19 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=MxWcS7xFgwUuvk1VlwWhxN_.bzilsV4j9ILhBIQyMS4-1759844706-1.0.1.1-IyxGy2IGlRDohxSe.IcWqexyG.ypu4ypShZQLX_tb1qR_TVJMaJlQAQnuW3Gnwp9ZR9Ar8N5iQb0YW57ZmO7OkEilzGC5NV4gMODaVJ2sxw; path=/; expires=Tue, 07-Oct-25 14:15:06 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -110,19 +110,19 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "989"
+        "998"
       ],
       "x-ratelimit-remaining-tokens": [
-        "5609"
+        "5725"
       ],
       "x-ratelimit-reset-requests": [
-        "15m50.027s"
+        "2m52.089s"
       ],
       "x-ratelimit-reset-tokens": [
-        "3.91s"
+        "2.745s"
       ],
       "x-request-id": [
-        "req_01k6wr2fy3ef39vey0zrdvn6t5"
+        "req_01k6zenzxae48977e2saf0nwna"
       ]
     },
     "status": 200

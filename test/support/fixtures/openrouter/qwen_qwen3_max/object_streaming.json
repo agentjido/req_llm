@@ -1,0 +1,135 @@
+{
+  "captured_at": "2025-10-07T14:25:52.644459Z",
+  "chunks": [
+    {
+      "b64": "OiBPUEVOUk9VVEVSIFBST0NFU1NJTkcKCjogT1BFTlJPVVRFUiBQUk9DRVNTSU5HCgpkYXRhOiB7ImlkIjoiZ2VuLTE3NTk4NDcxNTAtUGRHSnRQOTFIWVN1N05CY0RkTE4iLCJwcm92aWRlciI6IkFsaWJhYmEiLCJtb2RlbCI6InF3ZW4vcXdlbjMtbWF4Iiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc1OTg0NzE1MCwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQiLCJjb250ZW50IjpudWxsLCJ0b29sX2NhbGxzIjpbeyJpbmRleCI6MCwiaWQiOiJjYWxsXzc3Yjc0YzM4NzJiYjQ3NDhiMjNiYTRjYiIsInR5cGUiOiJmdW5jdGlvbiIsImZ1bmN0aW9uIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsImFyZ3VtZW50cyI6IiJ9fV19LCJmaW5pc2hfcmVhc29uIjpudWxsLCJuYXRpdmVfZmluaXNoX3JlYXNvbiI6bnVsbCwibG9ncHJvYnMiOm51bGx9XSwic3lzdGVtX2ZpbmdlcnByaW50IjpudWxsfQoK",
+      "decoded": ": OPENROUTER PROCESSING\n\n: OPENROUTER PROCESSING\n\ndata: {\"id\":\"gen-1759847150-PdGJtP91HYSu7NBcDdLN\",\"provider\":\"Alibaba\",\"model\":\"qwen/qwen3-max\",\"object\":\"chat.completion.chunk\",\"created\":1759847150,\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":null,\"tool_calls\":[{\"index\":0,\"id\":\"call_77b74c3872bb4748b23ba4cb\",\"type\":\"function\",\"function\":{\"name\":\"structured_output\",\"arguments\":\"\"}}]},\"finish_reason\":null,\"native_finish_reason\":null,\"logprobs\":null}],\"system_fingerprint\":null}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6Imdlbi0xNzU5ODQ3MTUwLVBkR0p0UDkxSFlTdTdOQmNEZExOIiwicHJvdmlkZXIiOiJBbGliYWJhIiwibW9kZWwiOiJxd2VuL3F3ZW4zLW1heCIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk4NDcxNTAsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJyb2xlIjoiYXNzaXN0YW50IiwiY29udGVudCI6bnVsbCwidG9vbF9jYWxscyI6W3siaW5kZXgiOjAsImlkIjoiIiwidHlwZSI6ImZ1bmN0aW9uIiwiZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wibmFtZVwiOiBcIkFsZXggSm9obnNvbiJ9fV19LCJmaW5pc2hfcmVhc29uIjpudWxsLCJuYXRpdmVfZmluaXNoX3JlYXNvbiI6bnVsbCwibG9ncHJvYnMiOm51bGx9XSwic3lzdGVtX2ZpbmdlcnByaW50IjpudWxsfQoK",
+      "decoded": "data: {\"id\":\"gen-1759847150-PdGJtP91HYSu7NBcDdLN\",\"provider\":\"Alibaba\",\"model\":\"qwen/qwen3-max\",\"object\":\"chat.completion.chunk\",\"created\":1759847150,\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":null,\"tool_calls\":[{\"index\":0,\"id\":\"\",\"type\":\"function\",\"function\":{\"arguments\":\"{\\\"name\\\": \\\"Alex Johnson\"}}]},\"finish_reason\":null,\"native_finish_reason\":null,\"logprobs\":null}],\"system_fingerprint\":null}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6Imdlbi0xNzU5ODQ3MTUwLVBkR0p0UDkxSFlTdTdOQmNEZExOIiwicHJvdmlkZXIiOiJBbGliYWJhIiwibW9kZWwiOiJxd2VuL3F3ZW4zLW1heCIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk4NDcxNTAsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJyb2xlIjoiYXNzaXN0YW50IiwiY29udGVudCI6bnVsbCwidG9vbF9jYWxscyI6W3siaW5kZXgiOjAsImlkIjoiIiwidHlwZSI6ImZ1bmN0aW9uIiwiZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoiXCIifX1dfSwiZmluaXNoX3JlYXNvbiI6bnVsbCwibmF0aXZlX2ZpbmlzaF9yZWFzb24iOm51bGwsImxvZ3Byb2JzIjpudWxsfV0sInN5c3RlbV9maW5nZXJwcmludCI6bnVsbH0KCg==",
+      "decoded": "data: {\"id\":\"gen-1759847150-PdGJtP91HYSu7NBcDdLN\",\"provider\":\"Alibaba\",\"model\":\"qwen/qwen3-max\",\"object\":\"chat.completion.chunk\",\"created\":1759847150,\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":null,\"tool_calls\":[{\"index\":0,\"id\":\"\",\"type\":\"function\",\"function\":{\"arguments\":\"\\\"\"}}]},\"finish_reason\":null,\"native_finish_reason\":null,\"logprobs\":null}],\"system_fingerprint\":null}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6Imdlbi0xNzU5ODQ3MTUwLVBkR0p0UDkxSFlTdTdOQmNEZExOIiwicHJvdmlkZXIiOiJBbGliYWJhIiwibW9kZWwiOiJxd2VuL3F3ZW4zLW1heCIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk4NDcxNTAsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJyb2xlIjoiYXNzaXN0YW50IiwiY29udGVudCI6bnVsbCwidG9vbF9jYWxscyI6W3siaW5kZXgiOjAsImlkIjoiIiwidHlwZSI6ImZ1bmN0aW9uIiwiZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoiLCBcImFnZVwiOiAifX1dfSwiZmluaXNoX3JlYXNvbiI6bnVsbCwibmF0aXZlX2ZpbmlzaF9yZWFzb24iOm51bGwsImxvZ3Byb2JzIjpudWxsfV0sInN5c3RlbV9maW5nZXJwcmludCI6bnVsbH0KCg==",
+      "decoded": "data: {\"id\":\"gen-1759847150-PdGJtP91HYSu7NBcDdLN\",\"provider\":\"Alibaba\",\"model\":\"qwen/qwen3-max\",\"object\":\"chat.completion.chunk\",\"created\":1759847150,\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":null,\"tool_calls\":[{\"index\":0,\"id\":\"\",\"type\":\"function\",\"function\":{\"arguments\":\", \\\"age\\\": \"}}]},\"finish_reason\":null,\"native_finish_reason\":null,\"logprobs\":null}],\"system_fingerprint\":null}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6Imdlbi0xNzU5ODQ3MTUwLVBkR0p0UDkxSFlTdTdOQmNEZExOIiwicHJvdmlkZXIiOiJBbGliYWJhIiwibW9kZWwiOiJxd2VuL3F3ZW4zLW1heCIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk4NDcxNTAsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJyb2xlIjoiYXNzaXN0YW50IiwiY29udGVudCI6bnVsbCwidG9vbF9jYWxscyI6W3siaW5kZXgiOjAsImlkIjoiIiwidHlwZSI6ImZ1bmN0aW9uIiwiZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoiMjgifX1dfSwiZmluaXNoX3JlYXNvbiI6bnVsbCwibmF0aXZlX2ZpbmlzaF9yZWFzb24iOm51bGwsImxvZ3Byb2JzIjpudWxsfV0sInN5c3RlbV9maW5nZXJwcmludCI6bnVsbH0KCg==",
+      "decoded": "data: {\"id\":\"gen-1759847150-PdGJtP91HYSu7NBcDdLN\",\"provider\":\"Alibaba\",\"model\":\"qwen/qwen3-max\",\"object\":\"chat.completion.chunk\",\"created\":1759847150,\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":null,\"tool_calls\":[{\"index\":0,\"id\":\"\",\"type\":\"function\",\"function\":{\"arguments\":\"28\"}}]},\"finish_reason\":null,\"native_finish_reason\":null,\"logprobs\":null}],\"system_fingerprint\":null}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6Imdlbi0xNzU5ODQ3MTUwLVBkR0p0UDkxSFlTdTdOQmNEZExOIiwicHJvdmlkZXIiOiJBbGliYWJhIiwibW9kZWwiOiJxd2VuL3F3ZW4zLW1heCIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk4NDcxNTAsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJyb2xlIjoiYXNzaXN0YW50IiwiY29udGVudCI6bnVsbCwidG9vbF9jYWxscyI6W3siaW5kZXgiOjAsImlkIjoiIiwidHlwZSI6ImZ1bmN0aW9uIiwiZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoiLCBcIm9jY3VwYXRpb25cIjogXCJTb2Z0d2FyZSJ9fV19LCJmaW5pc2hfcmVhc29uIjpudWxsLCJuYXRpdmVfZmluaXNoX3JlYXNvbiI6bnVsbCwibG9ncHJvYnMiOm51bGx9XSwic3lzdGVtX2ZpbmdlcnByaW50IjpudWxsfQoK",
+      "decoded": "data: {\"id\":\"gen-1759847150-PdGJtP91HYSu7NBcDdLN\",\"provider\":\"Alibaba\",\"model\":\"qwen/qwen3-max\",\"object\":\"chat.completion.chunk\",\"created\":1759847150,\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":null,\"tool_calls\":[{\"index\":0,\"id\":\"\",\"type\":\"function\",\"function\":{\"arguments\":\", \\\"occupation\\\": \\\"Software\"}}]},\"finish_reason\":null,\"native_finish_reason\":null,\"logprobs\":null}],\"system_fingerprint\":null}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6Imdlbi0xNzU5ODQ3MTUwLVBkR0p0UDkxSFlTdTdOQmNEZExOIiwicHJvdmlkZXIiOiJBbGliYWJhIiwibW9kZWwiOiJxd2VuL3F3ZW4zLW1heCIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk4NDcxNTAsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJyb2xlIjoiYXNzaXN0YW50IiwiY29udGVudCI6bnVsbCwidG9vbF9jYWxscyI6W3siaW5kZXgiOjAsImlkIjoiIiwidHlwZSI6ImZ1bmN0aW9uIiwiZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoiIEVuZ2luZWVyXCIifX1dfSwiZmluaXNoX3JlYXNvbiI6bnVsbCwibmF0aXZlX2ZpbmlzaF9yZWFzb24iOm51bGwsImxvZ3Byb2JzIjpudWxsfV0sInN5c3RlbV9maW5nZXJwcmludCI6bnVsbH0KCg==",
+      "decoded": "data: {\"id\":\"gen-1759847150-PdGJtP91HYSu7NBcDdLN\",\"provider\":\"Alibaba\",\"model\":\"qwen/qwen3-max\",\"object\":\"chat.completion.chunk\",\"created\":1759847150,\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":null,\"tool_calls\":[{\"index\":0,\"id\":\"\",\"type\":\"function\",\"function\":{\"arguments\":\" Engineer\\\"\"}}]},\"finish_reason\":null,\"native_finish_reason\":null,\"logprobs\":null}],\"system_fingerprint\":null}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6Imdlbi0xNzU5ODQ3MTUwLVBkR0p0UDkxSFlTdTdOQmNEZExOIiwicHJvdmlkZXIiOiJBbGliYWJhIiwibW9kZWwiOiJxd2VuL3F3ZW4zLW1heCIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk4NDcxNTAsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJyb2xlIjoiYXNzaXN0YW50IiwiY29udGVudCI6bnVsbCwidG9vbF9jYWxscyI6W3siaW5kZXgiOjAsImlkIjoiIiwidHlwZSI6ImZ1bmN0aW9uIiwiZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoifSJ9fV19LCJmaW5pc2hfcmVhc29uIjpudWxsLCJuYXRpdmVfZmluaXNoX3JlYXNvbiI6bnVsbCwibG9ncHJvYnMiOm51bGx9XSwic3lzdGVtX2ZpbmdlcnByaW50IjpudWxsfQoK",
+      "decoded": "data: {\"id\":\"gen-1759847150-PdGJtP91HYSu7NBcDdLN\",\"provider\":\"Alibaba\",\"model\":\"qwen/qwen3-max\",\"object\":\"chat.completion.chunk\",\"created\":1759847150,\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":null,\"tool_calls\":[{\"index\":0,\"id\":\"\",\"type\":\"function\",\"function\":{\"arguments\":\"}\"}}]},\"finish_reason\":null,\"native_finish_reason\":null,\"logprobs\":null}],\"system_fingerprint\":null}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6Imdlbi0xNzU5ODQ3MTUwLVBkR0p0UDkxSFlTdTdOQmNEZExOIiwicHJvdmlkZXIiOiJBbGliYWJhIiwibW9kZWwiOiJxd2VuL3F3ZW4zLW1heCIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk4NDcxNTAsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJyb2xlIjoiYXNzaXN0YW50IiwiY29udGVudCI6bnVsbCwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjpudWxsfSwiaW5kZXgiOjAsImlkIjoiIiwidHlwZSI6ImZ1bmN0aW9uIn1dfSwiZmluaXNoX3JlYXNvbiI6bnVsbCwibmF0aXZlX2ZpbmlzaF9yZWFzb24iOm51bGwsImxvZ3Byb2JzIjpudWxsfV0sInN5c3RlbV9maW5nZXJwcmludCI6bnVsbH0KCg==",
+      "decoded": "data: {\"id\":\"gen-1759847150-PdGJtP91HYSu7NBcDdLN\",\"provider\":\"Alibaba\",\"model\":\"qwen/qwen3-max\",\"object\":\"chat.completion.chunk\",\"created\":1759847150,\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":null,\"tool_calls\":[{\"function\":{\"arguments\":null},\"index\":0,\"id\":\"\",\"type\":\"function\"}]},\"finish_reason\":null,\"native_finish_reason\":null,\"logprobs\":null}],\"system_fingerprint\":null}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6Imdlbi0xNzU5ODQ3MTUwLVBkR0p0UDkxSFlTdTdOQmNEZExOIiwicHJvdmlkZXIiOiJBbGliYWJhIiwibW9kZWwiOiJxd2VuL3F3ZW4zLW1heCIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk4NDcxNTAsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJyb2xlIjoiYXNzaXN0YW50IiwiY29udGVudCI6IiJ9LCJmaW5pc2hfcmVhc29uIjoidG9vbF9jYWxscyIsIm5hdGl2ZV9maW5pc2hfcmVhc29uIjoic3RvcCIsImxvZ3Byb2JzIjpudWxsfV0sInN5c3RlbV9maW5nZXJwcmludCI6bnVsbH0KCg==",
+      "decoded": "data: {\"id\":\"gen-1759847150-PdGJtP91HYSu7NBcDdLN\",\"provider\":\"Alibaba\",\"model\":\"qwen/qwen3-max\",\"object\":\"chat.completion.chunk\",\"created\":1759847150,\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\"},\"finish_reason\":\"tool_calls\",\"native_finish_reason\":\"stop\",\"logprobs\":null}],\"system_fingerprint\":null}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6Imdlbi0xNzU5ODQ3MTUwLVBkR0p0UDkxSFlTdTdOQmNEZExOIiwicHJvdmlkZXIiOiJBbGliYWJhIiwibW9kZWwiOiJxd2VuL3F3ZW4zLW1heCIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk4NDcxNTAsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJyb2xlIjoiYXNzaXN0YW50IiwiY29udGVudCI6IiJ9LCJmaW5pc2hfcmVhc29uIjpudWxsLCJuYXRpdmVfZmluaXNoX3JlYXNvbiI6bnVsbCwibG9ncHJvYnMiOm51bGx9XSwidXNhZ2UiOnsicHJvbXB0X3Rva2VucyI6MzE1LCJjb21wbGV0aW9uX3Rva2VucyI6NDQsInRvdGFsX3Rva2VucyI6MzU5LCJjb3N0IjowLjAwMDY0MiwiaXNfYnlvayI6ZmFsc2UsInByb21wdF90b2tlbnNfZGV0YWlscyI6eyJjYWNoZWRfdG9rZW5zIjowLCJhdWRpb190b2tlbnMiOjB9LCJjb3N0X2RldGFpbHMiOnsidXBzdHJlYW1faW5mZXJlbmNlX2Nvc3QiOm51bGwsInVwc3RyZWFtX2luZmVyZW5jZV9wcm9tcHRfY29zdCI6MC4wMDAzNzgsInVwc3RyZWFtX2luZmVyZW5jZV9jb21wbGV0aW9uc19jb3N0IjowLjAwMDI2NH0sImNvbXBsZXRpb25fdG9rZW5zX2RldGFpbHMiOnsicmVhc29uaW5nX3Rva2VucyI6MCwiaW1hZ2VfdG9rZW5zIjowfX19Cgo=",
+      "decoded": "data: {\"id\":\"gen-1759847150-PdGJtP91HYSu7NBcDdLN\",\"provider\":\"Alibaba\",\"model\":\"qwen/qwen3-max\",\"object\":\"chat.completion.chunk\",\"created\":1759847150,\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\"},\"finish_reason\":null,\"native_finish_reason\":null,\"logprobs\":null}],\"usage\":{\"prompt_tokens\":315,\"completion_tokens\":44,\"total_tokens\":359,\"cost\":0.000642,\"is_byok\":false,\"prompt_tokens_details\":{\"cached_tokens\":0,\"audio_tokens\":0},\"cost_details\":{\"upstream_inference_cost\":null,\"upstream_inference_prompt_cost\":0.000378,\"upstream_inference_completions_cost\":0.000264},\"completion_tokens_details\":{\"reasoning_tokens\":0,\"image_tokens\":0}}}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogW0RPTkVdCgo=",
+      "decoded": "data: [DONE]\n\n"
+    }
+  ],
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoicXdlbi9xd2VuMy1tYXgiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6dHJ1ZSwic3RyZWFtX29wdGlvbnMiOnsiaW5jbHVkZV91c2FnZSI6dHJ1ZX0sInRlbXBlcmF0dXJlIjowLjAsInRvb2xfY2hvaWNlIjp7ImZ1bmN0aW9uIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCJ9LCJ0eXBlIjoiZnVuY3Rpb24ifSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2VuZXJhdGUgc3RydWN0dXJlZCBvdXRwdXQgbWF0Y2hpbmcgdGhlIHByb3ZpZGVkIHNjaGVtYSIsIm5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiYWdlIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Generate a software engineer profile",
+          "role": "user"
+        }
+      ],
+      "model": "qwen/qwen3-max",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": true,
+      "stream_options": {
+        "include_usage": true
+      },
+      "temperature": 0.0,
+      "tool_choice": {
+        "function": {
+          "name": "structured_output"
+        },
+        "type": "function"
+      },
+      "tools": [
+        {
+          "function": {
+            "description": "Generate structured output matching the provided schema",
+            "name": "structured_output",
+            "parameters": {
+              "properties": {
+                "age": {
+                  "description": "Person's age in years",
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "name": {
+                  "description": "Person's full name",
+                  "type": "string"
+                },
+                "occupation": {
+                  "description": "Person's job or profession",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "age"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept": "text/event-stream",
+      "authorization": "[REDACTED:authorization]",
+      "content-type": "application/json"
+    },
+    "method": "POST",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": null,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "cache-control": "no-cache",
+      "cf-ray": "98ae11f3dd696164-ORD",
+      "content-type": "text/event-stream",
+      "date": "Tue, 07 Oct 2025 14:25:51 GMT",
+      "permissions-policy": "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")",
+      "referrer-policy": "no-referrer, strict-origin-when-cross-origin",
+      "server": "cloudflare",
+      "x-content-type-options": "nosniff"
+    },
+    "status": 200
+  }
+}

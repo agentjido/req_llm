@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibWV0YS1sbGFtYS9sbGFtYS00LW1hdmVyaWNrLTE3Yi0xMjhlLWluc3RydWN0Iiwic2VlZCI6NDIsInN0cmVhbSI6dHJ1ZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbF9jaG9pY2UiOnsiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0In0sInR5cGUiOiJmdW5jdGlvbiJ9LCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZW5lcmF0ZSBzdHJ1Y3R1cmVkIG91dHB1dCBtYXRjaGluZyB0aGUgcHJvdmlkZWQgc2NoZW1hIiwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbIm5hbWUiLCJhZ2UiXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibWV0YS1sbGFtYS9sbGFtYS00LW1hdmVyaWNrLTE3Yi0xMjhlLWluc3RydWN0Iiwic2VlZCI6NDIsInN0cmVhbSI6dHJ1ZSwic3RyZWFtX29wdGlvbnMiOnsiaW5jbHVkZV91c2FnZSI6dHJ1ZX0sInRlbXBlcmF0dXJlIjowLjAsInRvb2xfY2hvaWNlIjp7ImZ1bmN0aW9uIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCJ9LCJ0eXBlIjoiZnVuY3Rpb24ifSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2VuZXJhdGUgc3RydWN0dXJlZCBvdXRwdXQgbWF0Y2hpbmcgdGhlIHByb3ZpZGVkIHNjaGVtYSIsIm5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiYWdlIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
       "max_tokens": 500,
@@ -14,6 +14,9 @@
       "model": "meta-llama/llama-4-maverick-17b-128e-instruct",
       "seed": 42,
       "stream": true,
+      "stream_options": {
+        "include_usage": true
+      },
       "temperature": 0.0,
       "tool_choice": {
         "function": {
@@ -63,27 +66,27 @@
   },
   "response": {
     "body": {
-      "b64": ""
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLWE0M2ZiNzYyLWE2MmEtNGNhNi1iMWJlLTRiOGQ1MTU4YjY2YSIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk4NDQ2OTYsIm1vZGVsIjoibWV0YS1sbGFtYS9sbGFtYS00LW1hdmVyaWNrLTE3Yi0xMjhlLWluc3RydWN0Iiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfZDJjMWY3ZTE5OSIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJyb2xlIjoiYXNzaXN0YW50IiwiY29udGVudCI6bnVsbH0sImxvZ3Byb2JzIjpudWxsLCJmaW5pc2hfcmVhc29uIjpudWxsfV0sInhfZ3JvcSI6eyJpZCI6InJlcV8wMWs2emVwMDhlZTFmdDRmY2phM3RhNjZzMCJ9fQoKZGF0YTogeyJpZCI6ImNoYXRjbXBsLWE0M2ZiNzYyLWE2MmEtNGNhNi1iMWJlLTRiOGQ1MTU4YjY2YSIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk4NDQ2OTYsIm1vZGVsIjoibWV0YS1sbGFtYS9sbGFtYS00LW1hdmVyaWNrLTE3Yi0xMjhlLWluc3RydWN0Iiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfZDJjMWY3ZTE5OSIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJ0b29sX2NhbGxzIjpbeyJpZCI6ImF0ZTg1ZWZuZiIsInR5cGUiOiJmdW5jdGlvbiIsImZ1bmN0aW9uIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsImFyZ3VtZW50cyI6IntcImFnZVwiOjMwLFwibmFtZVwiOlwiSm9obiBEb2VcIixcIm9jY3VwYXRpb25cIjpcIlNvZnR3YXJlIEVuZ2luZWVyXCJ9In0sImluZGV4IjowfV19LCJsb2dwcm9icyI6bnVsbCwiZmluaXNoX3JlYXNvbiI6bnVsbH1dfQoKZGF0YTogeyJpZCI6ImNoYXRjbXBsLWE0M2ZiNzYyLWE2MmEtNGNhNi1iMWJlLTRiOGQ1MTU4YjY2YSIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk4NDQ2OTYsIm1vZGVsIjoibWV0YS1sbGFtYS9sbGFtYS00LW1hdmVyaWNrLTE3Yi0xMjhlLWluc3RydWN0Iiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfZDJjMWY3ZTE5OSIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6e30sImxvZ3Byb2JzIjpudWxsLCJmaW5pc2hfcmVhc29uIjoidG9vbF9jYWxscyJ9XSwieF9ncm9xIjp7ImlkIjoicmVxXzAxazZ6ZXAwOGVlMWZ0NGZjamEzdGE2NnMwIiwidXNhZ2UiOnsicXVldWVfdGltZSI6MC40NDg4MTUyMjEsInByb21wdF90b2tlbnMiOjc2NSwicHJvbXB0X3RpbWUiOjAuMDE1NzIzODUsImNvbXBsZXRpb25fdG9rZW5zIjo0NSwiY29tcGxldGlvbl90aW1lIjowLjA1NzgxMDU3NywidG90YWxfdG9rZW5zIjo4MTAsInRvdGFsX3RpbWUiOjAuMDczNTM0NDI3fX0sInVzYWdlIjp7InF1ZXVlX3RpbWUiOjAuNDQ4ODE1MjIxLCJwcm9tcHRfdG9rZW5zIjo3NjUsInByb21wdF90aW1lIjowLjAxNTcyMzg1LCJjb21wbGV0aW9uX3Rva2VucyI6NDUsImNvbXBsZXRpb25fdGltZSI6MC4wNTc4MTA1NzcsInRvdGFsX3Rva2VucyI6ODEwLCJ0b3RhbF90aW1lIjowLjA3MzUzNDQyN319CgpkYXRhOiB7ImlkIjoiY2hhdGNtcGwtYTQzZmI3NjItYTYyYS00Y2E2LWIxYmUtNGI4ZDUxNThiNjZhIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc1OTg0NDY5NiwibW9kZWwiOiJtZXRhLWxsYW1hL2xsYW1hLTQtbWF2ZXJpY2stMTdiLTEyOGUtaW5zdHJ1Y3QiLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF9kMmMxZjdlMTk5IiwiY2hvaWNlcyI6W10sInVzYWdlIjp7InF1ZXVlX3RpbWUiOjAuNDQ4ODE1MjIxLCJwcm9tcHRfdG9rZW5zIjo3NjUsInByb21wdF90aW1lIjowLjAxNTcyMzg1LCJjb21wbGV0aW9uX3Rva2VucyI6NDUsImNvbXBsZXRpb25fdGltZSI6MC4wNTc4MTA1NzcsInRvdGFsX3Rva2VucyI6ODEwLCJ0b3RhbF90aW1lIjowLjA3MzUzNDQyN30sInNlcnZpY2VfdGllciI6Im9uX2RlbWFuZCJ9CgpkYXRhOiBbRE9ORV0KCg=="
     },
     "headers": {
       "alt-svc": "h3=\":443\"; ma=86400",
       "cache-control": "no-cache",
       "cf-cache-status": "DYNAMIC",
-      "cf-ray": "989fe8e2db0b10d1-ORD",
+      "cf-ray": "98add607ce0710f9-ORD",
       "content-type": "text/event-stream",
-      "date": "Sun, 05 Oct 2025 21:11:08 GMT",
+      "date": "Tue, 07 Oct 2025 13:44:56 GMT",
       "server": "cloudflare",
-      "set-cookie": "__cf_bm=WuQhbGM8x7pu9DVxhDFuwS5dGGoMCRKXBGEzI68dXDY-1759698668-1.0.1.1-DCQ82rjCF91LX0tOCpjFtK4p9J7yNjyNhg99mp3H2DnqEV04Gpg0FgjHc49Kml5bKx_QMO4iVYdqrjUJWAfpX9eQDQg_nrPEIEBQ57YC6M8; path=/; expires=Sun, 05-Oct-25 21:41:08 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None",
+      "set-cookie": "__cf_bm=R2q0A8V8ngLzlyQd1Ej.ziF8VUQmiFEfZjXw.GE5WeQ-1759844696-1.0.1.1-FOjNXBnmYrsCIh87Afxi2zZ9pjD7NAnzRHUsDh6eZgdQXaHboRgRKm6HAy1PLO6lPNDEBKqmaRSCz3Jx9UxMHS5LfTuLTw4lHhMGvBrevAg; path=/; expires=Tue, 07-Oct-25 14:14:56 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None",
       "vary": "Origin",
       "via": "1.1 google",
       "x-groq-region": "yul",
       "x-ratelimit-limit-requests": "1000",
       "x-ratelimit-limit-tokens": "6000",
-      "x-ratelimit-remaining-requests": "993",
-      "x-ratelimit-remaining-tokens": "3822",
-      "x-ratelimit-reset-requests": "10m4.131999999s",
-      "x-ratelimit-reset-tokens": "21.776s",
-      "x-request-id": "req_01k6v3djfmf0n9tamy4gt2bn6t"
+      "x-ratelimit-remaining-requests": "998",
+      "x-ratelimit-remaining-tokens": "4520",
+      "x-ratelimit-reset-requests": "2m51.736s",
+      "x-ratelimit-reset-tokens": "14.798999999s",
+      "x-request-id": "req_01k6zep08ee1ft4fcja3ta66s0"
     },
     "status": 200
   }

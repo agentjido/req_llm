@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxNTAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtb3NzLTIwYiIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJtYXhfdG9rZW5zIjo2NTUyLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJvcGVuYWkvZ3B0LW9zcy0yMGIiLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
-      "max_tokens": 150,
+      "max_tokens": 6552,
       "messages": [
         {
           "content": "Tell me a joke about cats",
@@ -12,6 +12,7 @@
         }
       ],
       "model": "openai/gpt-oss-20b",
+      "reasoning_effort": "low",
       "seed": 42,
       "stream": false,
       "temperature": 0.0,
@@ -59,30 +60,30 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Why don’t cats play poker in the jungle?\n\nBecause there are too many cheetahs! 😺😂",
-            "reasoning": "User wants a joke about cats. Just a joke. No special tool needed.",
+            "content": "Why don’t cats play poker in the jungle?\n\nBecause there are too many cheetahs! 😸",
+            "reasoning": "Need to produce a cat joke.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759753725,
-      "id": "chatcmpl-77de4e3a-7224-4801-8caf-5ee42cb5e769",
+      "created": 1759844696,
+      "id": "chatcmpl-c1131823-761d-4dd1-a963-897cd9e31359",
       "model": "openai/gpt-oss-20b",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_c5a89987dc",
+      "system_fingerprint": "fp_e99e93f2ac",
       "usage": {
-        "completion_time": 0.047518994,
-        "completion_tokens": 48,
-        "prompt_time": 0.006180705,
+        "completion_time": 0.041006127,
+        "completion_tokens": 38,
+        "prompt_time": 0.007526378,
         "prompt_tokens": 127,
-        "queue_time": 0.834240884,
-        "total_time": 0.053699699,
-        "total_tokens": 175
+        "queue_time": 0.195608795,
+        "total_time": 0.048532505,
+        "total_tokens": 165
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6wqxr92f35bc0mtmffks32g"
+        "id": "req_01k6zenzr7exrtvh86cghew8f1"
       }
     },
     "headers": {
@@ -96,7 +97,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a52907fcd6e1e7-ORD"
+        "98add6048abdda16-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -105,13 +106,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 12:28:45 GMT"
+        "Tue, 07 Oct 2025 13:44:56 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=YunTB4XBw.Pw8OVf7iVI48YgJQygd963q38xS3Plyjo-1759753725-1.0.1.1-O19XKU0DQgNfV_5PSfWWmVd2nQP52m5pnzqpa9M5HjKFFZv1.ZdG0_w3TUMfk080ATOiPN.xLAOaLKgANlrvZKVP6NqANHdA.hYRsxMouyw; path=/; expires=Mon, 06-Oct-25 12:58:45 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=fuROHqdnFmH8sqtYHKwBPbwy5W6l5X2MxV7twfOsE94-1759844696-1.0.1.1-iR7uj8mhaLFVsLqXSvD45Efyd71B70U.U1M8hSmY1J0fJGKtBWkshk1tS21ClP3I5SxsReIBwNcO18WcYKxh5pxRrgmMIbEcSUjnICG9n_E; path=/; expires=Tue, 07-Oct-25 14:14:56 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -132,19 +133,19 @@
         "8000"
       ],
       "x-ratelimit-remaining-requests": [
-        "993"
+        "999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "7176"
+        "7872"
       ],
       "x-ratelimit-reset-requests": [
-        "10m4.471s"
+        "1m26.4s"
       ],
       "x-ratelimit-reset-tokens": [
-        "6.174999999s"
+        "960ms"
       ],
       "x-request-id": [
-        "req_01k6wqxr92f35bc0mtmffks32g"
+        "req_01k6zenzr7exrtvh86cghew8f1"
       ]
     },
     "status": 200

@@ -40,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759772166,
+      "created_at": 1759795761,
       "error": null,
-      "id": "resp_06e0d718063cbff00068e3fe06a6648195a2b59fa043137381",
+      "id": "resp_0d3cbd8a9e3fb0d10068e45a31b62c819babbbe88cb5267279",
       "incomplete_details": {
         "reason": "max_output_tokens"
       },
@@ -58,11 +58,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Once upon a time, in a vast land called Eldoria, where the mountains touched the sky and the forests stretched beyond the horizon, there was an ancient legend about dragons—beings of fire and flight, guardians of secrets and wielders of incredible power. For centuries, dragons had been thought to be nothing more than myth, creatures of stories woven around campfires. But beneath the misty peaks of the Dragonspine Mountains, the truth lingered, waiting for a brave soul to uncover it",
+              "text": "Certainly! Here's a long, adventurous story about dragons:\n\n---\n\n**The Dragon's Heart: A Tale of Fire and Courage**\n\nOnce upon a time, in the ancient land of Eldoria, where mountains pierced the sky and forests teemed with mystical creatures, there lived a young girl named Lyra. She was known throughout her village for her insatiable curiosity and unyielding spirit. Her greatest dream was to discover the legendary Dragon’s Heart, a mystical gem said to possess the power to bring",
               "type": "output_text"
             }
           ],
-          "id": "msg_06e0d718063cbff00068e3fe071a588195b780f4ea1f3f0594",
+          "id": "msg_0d3cbd8a9e3fb0d10068e45a321ae8819b9e2e8668cfa6a1a3",
           "role": "assistant",
           "status": "incomplete",
           "type": "message"
@@ -112,7 +112,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a6eb493a208637-ORD"
+        "98a92b563db961fa-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -121,13 +121,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 17:36:08 GMT"
+        "Tue, 07 Oct 2025 00:09:23 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "1706"
+        "1548"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -139,8 +139,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=bzqGuyxH5cP25O9o6DrSSqyDqi_KCHgfibAL57ZX3bw-1759772168-1.0.1.1-LDNKfoQMUH9qR3.sBRXORk.9BljXlrBNixblWV73BqulzCxeoK6lUczwZL70RKLLGg_.GzDX0qAKoIgQaEIeOb7oGp66tb073Hz.CEBpDck; path=/; expires=Mon, 06-Oct-25 18:06:08 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=FiV9ITb4YUsFx5pOjZ5.eh5kmY.wc4U18IHmqvm92YA-1759772168421-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=liMMMMcFJhAFjNG1xk5ptaLCeAGZGEHO9Meb3sBi6zE-1759795763-1.0.1.1-6yrsShWllw3m7ZlsV_zog2VnducUiK51oEjwD7l7ML29W7fUvZ2Q.0tzcuC.MSrG95TDT53SL93HcoX_9ibusizvylcpbLF_OGDyUkY3Y80; path=/; expires=Tue, 07-Oct-25 00:39:23 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=MxJh3r1fuYjuPws7r471.t88L1zEbNCO1W.y4X68d8Q-1759795763284-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -152,28 +152,28 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "1709"
+        "1550"
       ],
       "x-ratelimit-limit-requests": [
-        "5000"
+        "10000"
       ],
       "x-ratelimit-limit-tokens": [
-        "4000000"
+        "10000000"
       ],
       "x-ratelimit-remaining-requests": [
-        "4999"
+        "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "3999965"
+        "9999965"
       ],
       "x-ratelimit-reset-requests": [
-        "12ms"
+        "6ms"
       ],
       "x-ratelimit-reset-tokens": [
         "0s"
       ],
       "x-request-id": [
-        "req_6d3fb0cfab8938b7c14d5c766ecac187"
+        "req_a9e39b1776d67f3de214b290260f4502"
       ]
     },
     "status": 200

@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjozMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJvcGVuYWkvZ3B0LTUtY29kZXgiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJtYXhfdG9rZW5zIjoyNTYwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1jb2RleCIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
-      "max_tokens": 300,
+      "max_tokens": 25600,
       "messages": [
         {
           "content": "What's the weather like in Paris, France?",
@@ -96,18 +96,18 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "**Identifying get_weather function**",
+            "reasoning": "**Selecting weather tool**",
             "reasoning_details": [
               {
                 "format": "openai-responses-v1",
                 "index": 0,
-                "summary": "**Identifying get_weather function**",
+                "summary": "**Selecting weather tool**",
                 "type": "reasoning.summary"
               },
               {
-                "data": "gAAAAABo4ne1bOxgMd0rTLv87gHa8Ri_00XtjsVDT1VnzQhxlbaAC1HLj3BgWskn73MlGWCayaEIa1GQnsQwle_26cz2jQGZzznskA-Z-fm47CWsdXLXdxi2gw44SWSTmZ71sNY1j8kfhoina2ilIhfnAfjtJCW9DcUilsIerElRDsn1_gtb3z0urS9dHVM_I1KFEJm2ogIxy-ps3HIvM08a34iamTHo_x3D17tWWNwfOOJYemZh-3ojmAeM3Qse3tOA3HDHvOrcMfKC181ErPc2fBMLKiMLJIA1H0VNYbrrm4U-0y2BCNXZWJnaLEz6ux5QB6emz7e61ZgyAoTeq4CsVIc1muGGqObhMM6Q7kP1xcPYaIcBAxPJLdObJbwKg_Rx9uSPwlDOQ_62SSnGmPXnaYEfwUeEBBvrz4xWH53I6Xb8OjO_kWPbp2r4JVof1VhjH1X3P3emRXFAXVS6Jd83Lx1GxcqNxSSljDLx5eOv95hs4X7o6komkXuVq1Yw3oxGx_jDP1lMTDn45LB0qlmrHZcsxcA9xVUfLOOx1-7a2X0IfAw7XZMd0DcFsTGhEcENKAx6NCjc4PD5RnYWi78_0TZrAXyNqp9nLjraxyq1lHSTyB_RXxmhJxHp6gBWi5kJcqyaA6JKk6nV-aeRost4D6sa-BoYj9KqvUl2DnLBrKtGMbR85A-Y_2ONdbWjfoIxl4GULJ6z0yYiFst-mkQW_baO2kJE0maeGR8H_ZYPTsFJ4K9u7kFvTg1t2mmCcscmqS2ABhoi42nsnTinUVdt_f2YlECfctcLkR3bK_OsvkTvS8vcyXqH2VIWkrdvhfH1C89KV1_Q7ogdyCynek6kPWU4VMrOag==",
+                "data": "gAAAAABo5Rxery4wc4a7B433ikgxFJHJqDg_e4x5DcOc9n7-Ur_J6pcX1P3MoxMUw2qxusww5UTg02omY6BTmgoJzn_T6UI1VJYa3SLu1u6qGdRUTl9AmLlqxPIYh9Pjtbns73FI5PCTizRYL-A-VmM7Of6AV3tTFbjfpURS3B2SKLYUfW1CHVGKOQw-vuhSOv0ijVpTk_32Hy-I1TBF_s8-8YdBFVeUYIiX6jYwMkzPfDbfT2MT2EM4MqV-f8DceIPv9QIP1XKggsT78uWdqd6XsSBTLfF9hvfrkU8GC0pBptwnAG8pjS4OzvgSSEckWI3qeAvw0nGNzpOY7KM4qof6uvi46QrtUGkncapYtnUmuo51Oz4C5qYbXzQxdgTfjD6habB-iuEkJBlO8LBoURZVDJ1dzKn-eYF8jorE9luI-g78HJxp6if9j76apZmMQjic7Hc8WSOSW_X65Nbvgy-quunu0CnDdXPWkAR09hO80lzxJBNIbQMJDz2hV41zsLqcM-LvSnvP5ojz-FkxHXPzJmvXiESrHSr1FN6f0XOlGsw5K9G9BCrwBZaX4BIoe3VZnpeEnxXs7hixWTiv_p27MTbNIJ7t_AMyv8zdjzXYlPgmxBT-jbaxXr_St-BFCi8rO6Y38aacDehDtPnhuxZuKLomhBmd6vyJbbvYzdeQ-RuEk7_w8QaxKtu2EHCODIzEgMusWnyKWussG_ofH7aRUNivWIMYsVgwm4nuMMPZMb76KkkikfyiCzKgt_Wm77sNz_F4rcuLr8BOMYTZGFXqRo6WJSHMggSe2rkmcGxl36Xh29sltjlgOwH9NUGDUloSeDTPcA30Ik3qMyJyrsXy341zWeOG0ZxxwqaBhxRE9A5JbNy6fIE=",
                 "format": "openai-responses-v1",
-                "id": "rs_0d7421c6135fd0a10168e277b5ab3c81939027dac56d80ae94",
+                "id": "rs_08908cdd0fcfe26b0168e51c5e46c0819689b8dd0e534c9832",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -120,7 +120,7 @@
                   "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "call_oWk5hZT4hLQWYQNmvs4iD5vo",
+                "id": "call_G320HFWUTDFF07sbhyM4aXK4",
                 "index": 0,
                 "type": "function"
               }
@@ -129,8 +129,8 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1759672244,
-      "id": "gen-1759672244-sKWWaV1vm43Sj0hrjn7L",
+      "created": 1759845469,
+      "id": "gen-1759845469-TLXKrjtxKAnBSXKOuipE",
       "model": "openai/gpt-5-codex",
       "object": "chat.completion",
       "provider": "OpenAI",
@@ -145,7 +145,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d63ca8ac28e5c-ORD"
+        "98ade8e69b8d000e-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -154,7 +154,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:50:45 GMT"
+        "Tue, 07 Oct 2025 13:57:49 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

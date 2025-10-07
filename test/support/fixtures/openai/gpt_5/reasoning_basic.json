@@ -40,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759772219,
+      "created_at": 1759795768,
       "error": null,
-      "id": "resp_0c4a8476d45b63ff0068e3fe3b66888199be15bd0fe06409cb",
+      "id": "resp_0841ad663089a90a0068e45a3868ac819b95219d26e4d10704",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 2048,
@@ -52,7 +52,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_0c4a8476d45b63ff0068e3fe3bb9f08199aeec115b5ed182d8",
+          "id": "rs_0841ad663089a90a0068e45a38df58819bbcc9f9b72fe95b99",
           "summary": [],
           "type": "reasoning"
         },
@@ -61,11 +61,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "I can’t share my internal chain-of-thought, but here’s the result:\n12 × 7 = 84.",
+              "text": "I can’t share my internal chain-of-thought, but the result of 12 × 7 is 84.",
               "type": "output_text"
             }
           ],
-          "id": "msg_0c4a8476d45b63ff0068e3fe444d7c8199931f7cc74dc19aab",
+          "id": "msg_0841ad663089a90a0068e45a442f58819ba9062eacff206d1b",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -99,11 +99,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 671,
+        "output_tokens": 798,
         "output_tokens_details": {
-          "reasoning_tokens": 640
+          "reasoning_tokens": 768
         },
-        "total_tokens": 690
+        "total_tokens": 817
       },
       "user": null
     },
@@ -115,7 +115,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a6ec92eb66e7f4-ORD"
+        "98a92b802ef9eada-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -124,13 +124,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 17:37:08 GMT"
+        "Tue, 07 Oct 2025 00:09:40 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "9435"
+        "12493"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -142,8 +142,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=XBZydg45n8nTHfXptN.Jmt2jp3h2yimPgl2fLXVVGu4-1759772228-1.0.1.1-P0qNAGmwZnOOQ4fpcU0VM9nUKTrbDaSYgv177XGAR4OZc2MnKEUB1F.NFaXR68odr1cBKmZeUeXn5jNoPS2Jz5dZIE7ark6t2FXeYWxkR5s; path=/; expires=Mon, 06-Oct-25 18:07:08 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=NQY_bE2HTHrREYh_xKa9VHrtQlrXSIrIhlL6Ivk1fjc-1759772228859-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=xOCwyMiXMrIxgqvfKvEaOog.vp7.OzXKG0F9Y.9L.LE-1759795780-1.0.1.1-i6ng45K3SgL6xkS8AJ.d1W9h3YNunOw.wU2IaWUWZHkTicqGfV4e5xot.b8.X0bPCIXV1IzWXWHxHjzEyVxK3ixKzEKMmGO9fegRRnXvogQ; path=/; expires=Tue, 07-Oct-25 00:39:40 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=aYckpQvt52V2TduEIwZ.UFpRRXQP_c3a4j19BC5pCnA-1759795780932-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -155,10 +155,10 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "9440"
+        "12498"
       ],
       "x-request-id": [
-        "req_b5092adcfd803a1ffb52a1f174664fa9"
+        "req_30ea103ce9876c9d2d7ffd0037b99326"
       ]
     },
     "status": 200

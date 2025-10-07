@@ -1,0 +1,109 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InotYWkvZ2xtLTQuNS1haXIiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "z-ai/glm-4.5-air",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Here's a simple \"Hello World!\" program in Python:\n\n```python\nprint(\"Hello World!\")\n```\n\n**Explanation:**\n- `print()` is a built-in Python function that outputs text to the console.\n- `\"Hello World!\"` is a string literal containing the text to display.\n- The exclamation mark is included as part of the string.\n\n**Output:**\n```\nHello World!\n```\n\n**Alternative versions in other languages:**\n\n1. **JavaScript:**\n   ```javascript\n   console.log(\"Hello World!\");\n   ```\n\n2. **Java:**\n   ```java\n   public class HelloWorld {\n       public static void main(String[] args) {\n           System.out.println(\"Hello World!\");\n       }\n   }\n   ```\n\n3. **C++:**\n   ```cpp\n   #include <iostream>\n   int main() {\n       std::cout << \"Hello World!\" << std::endl;\n       return 0;\n   }\n   ```\n\n4. **C#:**\n   ```csharp\n   using System;\n   class Program {\n       static void Main() {\n           Console.WriteLine(\"Hello World!\");\n       }\n   }\n   ```\n\n5. **Ruby:**\n   ```ruby\n   puts \"Hello World!\"\n   ```\n\nThe Python version is the most concise for this simple task. Just copy the code into a `.py` file (e.g., `hello.py`) and run it with `python hello.py` in your terminal.",
+            "reasoning": "\nWe are going to create a simple \"Hello World!\" program in Python.\n Since the user just said \"Hello world!\", we can assume they want a program that outputs \"Hello World!\".\n However, note that the exclamation mark is part of the string.\n Let's write the code accordingly.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "\nWe are going to create a simple \"Hello World!\" program in Python.\n Since the user just said \"Hello world!\", we can assume they want a program that outputs \"Hello World!\".\n However, note that the exclamation mark is part of the string.\n Let's write the code accordingly.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1759845500,
+      "id": "gen-1759845500-t5uFnZQVf2l2BfPo1fqF",
+      "model": "z-ai/glm-4.5-air",
+      "object": "chat.completion",
+      "provider": "AtlasCloud",
+      "usage": {
+        "completion_tokens": 361,
+        "prompt_tokens": 8,
+        "prompt_tokens_details": null,
+        "total_tokens": 369
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ade9abbe9822b9-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 07 Oct 2025 13:58:21 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

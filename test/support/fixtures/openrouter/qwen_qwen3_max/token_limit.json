@@ -1,0 +1,100 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJxd2VuL3F3ZW4zLW1heCIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC41fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "qwen/qwen3-max",
+      "n": 1,
+      "reasoning_effort": "low",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "## The Song of Ash and Ember\n\nThe world of Aethelgard was woven from fire and frost, stone and sky, and the enduring, ancient presence of dragons. They were not mere beasts, but living landscapes, embodiments of elemental forces given scale and sentience. For centuries, the great Drakon Concord had maintained a fragile peace between the scaled sovereigns and the scattered realms of humankind. But peace, like dragonhide, grows brittle with time.\n\nKaelen of Emberhold knew this truth in his bones, long before the sky turned the color of a fresh bruise. He was a Dragon-Singer, one of the last, trained not to slay dragons but to *listen*. His village, nestled in the volcanic foothills of the Ashen Peaks, owed its existence to the slumbering leviathan beneath the mountains – Ignis, the Ember Heart. Kaelen’s duty was to sing the lullabies that kept Ignis calm, ensuring the geysers remained predictable and the fertile ash fields replenished. His voice, clear and resonant, carried the weight of generations.\n\nOne twilight, as Kaelen sang the \"Hymn of Slumbering Stone,\" the ground didn’t just tremble; it *screamed*. A deep, guttural roar, unlike Ignis’s familiar rumble, tore through the mountains. The sky above the highest peak, Mount Cinder, erupted not with ash, but with jagged shards of obsidian and a chilling, unnatural violet light. Ignis’s answering bellow was laced with pain and fury. Kaelen felt the discordant note vibrate in his own chest – a song of wrongness, of violation.\n\nThe next morning, riders from the capital, Veridia, arrived. Not the usual emissaries bearing tribute, but grim-faced soldiers led by Lady Elara Vance, Captain of the King’s Dragonwardens. Her armor, polished steel etched with protective runes, seemed incongruous against the soot-stained stone of Emberhold.\n\n\"Dragon-Singer,\" she announced, her voice clipped, \"Ignis stirs with unnatural rage. The King fears the Concord is broken. We require your aid.\" Her eyes, the color of storm clouds, held no warmth, only the sharp edge of command. \"A shadow falls over Aethelgard. The Obsidian Maw stirs.\"\n\nKaelen knew the tales. The Obsidian Maw was not a dragon of flesh and scale, but a place – a cursed volcanic rift in the Blasted Wastes, said to be the prison of something ancient and malevolent, sealed away by the first Concord. If it was stirring... \"Ignis feels it,\" Kaelen said, his voice rough with dread. \"It’s like a thorn in his mind, twisting his dreams.\"\n\n\"Then you will come with us,\" Elara stated. \"Your song may be the only thing that can calm him long enough for the Wardens to investigate Mount Cinder. Or,\" she added, her gaze hardening, \"to prepare for war.\"\n\nThus began Kaelen’s journey, not as a warrior, but as a reluctant diplomat of sound. He rode beside Elara, his simple tunic and lute a stark contrast to her gleaming armor and the hardened soldiers. Their path led through the Whispering Woods, where ancient trees groaned secrets on the wind, and across the Glass Plains, where the ground shimmered like frozen lightning. Kaelen sang constantly – songs of safe passage, songs to soothe skittish horses, songs to calm the agitated spirits of the land itself, which seemed to recoil from the growing shadow emanating from the Wastes.\n\nTheir first true test came at the River Serpent’s Coil. The bridge was guarded by a territorial River Drake, scales like polished jade, its eyes intelligent and wary. The soldiers reached for their weapons, but Kaelen stepped forward, lute in hand. He didn’t sing a lullaby, but a \"Song of Shared Waters,\" an old melody acknowledging the drake’s dominion and requesting safe passage. The drake tilted its head, a low hum vibrating in its chest. It dipped its snout, allowing them to cross. Elara watched, her expression unreadable, but Kaelen saw a flicker of something – perhaps respect, perhaps just surprise – in her storm-grey eyes.\n\nDays later, deep in the Blasted Wastes, the true horror revealed itself. The land was dead, not just barren, but *consumed*. The violet light pulsed from Mount Cinder like a diseased heart. And the air… it carried a sound that wasn’t sound – a psychic shriek of hunger and malice that made Kaelen’s teeth ache and his vision blur. Ignis’s distant roars were now constant, pained counterpoints to this invasive cacophony.\n\nThey found the source near the base of Mount Cinder: a tear in reality itself, a jagged wound leaking that sickly violet energy. And coiled around it, feeding on the corruption, was a creature that defied nature. It had the basic form of a dragon – vast, serpentine, wings like tattered sails of shadow – but its scales were jagged obsidian shards, its eyes pits of swirling void, and its breath wasn’t fire, but a chilling entropy that withered stone and drained warmth. This was Malakor, the Devourer, the entity the Obsidian Maw had imprisoned. The seal was failing.\n\nMalakor sensed them. A wave of pure dread washed over the party. Soldiers screamed, clutching their heads as the psychic assault intensified. Elara roared orders, her sword flashing, but her runes flickered and died under the entity’s gaze. Kaelen felt his own song falter, choked by the overwhelming wrongness.\n\n\"Sing, Dragon-Singer!\" Elara bellowed, parrying a lash of shadowy energy that cracked the ground where she stood. \"Sing like your world depends on it!\"\n\nIt did. Kaelen closed his eyes, blocking out the terror, the despair, the gnawing hunger of Malakor. He reached deep, past his own fear, into the core of his being, into the ancient lineage of Singers. He didn’t sing to Ignis. He sang *to* the land itself, to the wounded spirit of Aethelgard. He sang the \"First Song,\" the melody whispered to be the foundation of the Concord, a song of balance, of fire tempered by earth, of sky embracing sea, of life persisting even in shadow.\n\nHis voice, raw and powerful, cut through the psychic shriek. It wasn’t loud, but it was *true*. The violet energy recoiled, as if scalded. Malakor shrieked, a sound of pure rage and frustration. For a moment, the oppressive weight lifted.\n\nBut it wasn’t enough. Malakor was too strong, too deeply rooted in the corrupted rift. Kaelen’s song was a shield, not a sword. He needed more. He needed Ignis.\n\n\"Elara!\" Kaelen gasped, his voice strained. \"We need Ignis! Not to fight… to *anchor*! His presence, his fire… it’s the only counter to this cold!\"\n\nElara understood instantly. \"The beacon! On Cinder’s peak! It’s keyed to Ignis’s resonance! If we can light it…\"\n\nIt was a suicide mission. The peak was swarming with Malakor’s shadow-tainted minions – twisted creatures of ash and malice. But it was the only hope. Leaving most of the soldiers to hold the line against the encroaching horde, Kaelen, Elara, and two of her bravest Wardens began the treacherous ascent.\n\nThe climb was a nightmare. Jagged obsidian tore at their clothes and skin. The air grew thin and poisonous. Shadow-beasts lunged from crevices, their touch leaching warmth and will. One Warden fell, consumed by swirling darkness. The other bought them time with a desperate, rune-fueled explosion, clearing a path but sacrificing himself.\n\nFinally, gasping and bleeding, they reached the summit. The ancient beacon – a massive crystal prism set in a stone dais – was cracked and dark. Malakor, sensing their intent, unleashed a torrent of entropic breath. Elara threw herself in front of Kaelen, her shield flaring with the last of its stored magic before shattering. She was thrown back, her armor blackened, her breath ragged.\n\nKaelen stumbled to the beacon. He placed his hands on the cold crystal. He couldn’t just sing *to* Ignis; he had to become a conduit. He poured every ounce of his will, his connection to the Ember Heart, his love for his home, his fear for the world, into the \"Song of Binding.\" He sang not just notes, but *intent* – the intent to call, to connect, to offer a lifeline of pure, untainted fire.\n\nMiles away, beneath the Ashen Peaks, Ignis, writhing in agony from Malakor’s psychic assault, felt the thread. It was faint, fragile, but it was *his* Singer. It was the song of his mountain, his people, his purpose. With a roar that shook the foundations of the world, Ignis *answered*. Not with destructive fury, but with focused, purifying fire. A beam of incandescent, golden-orange energy, visible even in the corrupted sky, lanced from the heart of the Ashen Peaks, streaking across the wastes, striking the beacon on Mount Cinder.\n\nThe crystal flared with blinding light. The song Kaelen sang was amplified a thousandfold, becoming a physical wave of resonant energy. It washed over Malakor. The Devourer shrieked, not in rage, but in *pain*. The violet energy sputtered. The obsidian scales cracked, revealing glimpses of something raw and wounded beneath the corruption. The rift itself seemed to flinch.\n\nBut Malakor was ancient, and cunning. It gathered its remaining strength, focusing its entropic breath not on Kaelen, but on the beacon itself. The crystal began to fracture under the assault.\n\nElara, pushing herself up on trembling arms, saw the danger. She saw Kaelen, pouring his life force into the song, oblivious to the crumbling stone beneath him. With a final, defiant cry, she charged. Not at Malakor, but at the base of the beacon. She slammed her broken sword, still glowing faintly with residual warding energy, into a critical fissure in the dais. \"HOLD, SINGER!\" she roared.\n\nThe sword flared one last time, a desperate surge of protective magic reinforcing the stone just as the entropic blast hit. The beacon held. Kaelen’s song, amplified by Ignis’s fire and anchored by Elara’s sacrifice, reached its crescendo. It wasn’t a song of destruction, but of *reclamation*. It spoke of the land before the corruption, of the balance that was meant to be.\n\nMalakor didn’t explode. It *unraveled*. The obsidian shards dissolved like smoke. The void-like eyes dimmed. The entity let out a final, mournful sigh that sounded almost… relieved… before collapsing in on itself, drawn back into the rift. The violet light winked out. The tear in reality began to seal, slowly, painfully, knitting itself closed with threads of golden light from Ignis’s beam and the fading resonance of Kaelen’s song.\n\nSilence descended, heavy and profound, broken only by the crackle of cooling stone and Kaelen’s ragged sobs. He stumbled to Elara’s side. She was alive, but barely, her armor fused to her skin in places, her face pale as ash. Her storm-grey eyes met his, and a faint, almost imperceptible smile touched her lips before they closed.\n\nThe journey back was a somber procession. Kaelen carried Elara, tended by the few surviving Wardens. Ignis’s roars had subsided into a deep, contented rumble that vibrated through the earth, a lullaby for the healing land. The Blasted Wastes began to show the first, tentative signs of life – hardy mosses pushing through the ash, a single, resilient flower blooming near the sealed rift.\n\nKaelen returned to Emberhold not just as a Dragon-Singer, but as a hero. Yet, the victory felt hollow without Elara’s sharp wit and unwavering presence. She survived, but bore the scars of the entropy deep in her bones, a constant reminder of the cost.\n\nThe Drakon Concord was reforged, stronger than before. Kaelen’s song became legend, the \"Song of Ash and Ember,\" taught to new generations of Singers. He visited Elara often in Veridia, where she served as an advisor to the King, her understanding of dragons forever changed. They spoke little of the battle, but much of the future – of building bridges, not just between humans and dragons, but between all the fractured parts of Aethelgard.\n\nYears later, Kaelen stood again on the slopes of the Ashen Peaks, not singing a lullaby, but a song of renewal. Beside him, perched on a newly formed outcrop of warm stone, was a young dragonet, scales the color of dawn-kissed copper – Ignis’s first offspring in centuries, a symbol of hope. And watching from a distance, leaning on a staff of blackened wood that hummed faintly with residual warding energy, stood Elara, her storm-grey eyes reflecting the dragonet’s fiery glow.\n\nThe adventure had ended, but the song continued. It was a song of fire that warmed, not burned; of stone that endured; of sky that embraced; and of the fragile, vital harmony between scales and skin, between ancient power and human courage. The world of Aethelgard breathed easier, its heart – both the Ember Heart beneath the mountains and the resilient spirit of its people – beating strong once more. And Kaelen knew, as he felt the young dragonet nudge his hand with a surprisingly gentle snout, that his true adventure, the adventure of healing and connection, had only just begun. The dragons were not just",
+            "reasoning": null,
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "length"
+        }
+      ],
+      "created": 1759847061,
+      "id": "gen-1759847061-J89jWuCWkQEdQ55FzeER",
+      "model": "qwen/qwen3-max",
+      "object": "chat.completion",
+      "provider": "Alibaba",
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 3000,
+        "prompt_tokens": 17,
+        "total_tokens": 3017
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ae0fc5ef3feade-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 07 Oct 2025 14:24:22 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

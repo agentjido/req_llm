@@ -40,7 +40,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello, world! 🌍✨ How can I assist you today? 😊",
+            "content": "Hello, world! 🌍 It's great to see you here. How can I assist you today? 😊",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -48,15 +48,23 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759672050,
-      "id": "gen-1759672050-zt9ELnlg1YkHsQVo7PvH",
+      "created": 1759845366,
+      "id": "gen-1759845366-yrFFQiRhmxQ1fSX8OQ9F",
       "model": "deepseek/deepseek-chat-v3-0324",
       "object": "chat.completion",
-      "provider": "Phala",
+      "provider": "Novita",
+      "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 17,
-        "prompt_tokens": 9,
-        "total_tokens": 26
+        "completion_tokens": 23,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 6,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "total_tokens": 29
       }
     },
     "headers": {
@@ -64,7 +72,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d5f095e67222b-ORD"
+        "98ade661ad3df84a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -73,7 +81,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:47:31 GMT"
+        "Tue, 07 Oct 2025 13:56:06 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

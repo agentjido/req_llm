@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ29vZ2xlL2dlbWluaS0yLjUtcHJvLXByZXZpZXctMDYtMDUiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LXByby1wcmV2aWV3LTA2LTA1IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
-      "max_tokens": 200,
+      "max_tokens": 2000,
       "messages": [
         {
           "content": "Hello world!",
@@ -41,13 +41,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello there! \"Hello, world!\" to you too.\n\nThat's the classic first step in so many programming journeys. How can I help you today?",
-            "reasoning": "**Recognizing the Phrase**\n\nI've identified the user's input as \"Hello world!\". My thoughts now recognize this phrase as a programming tradition, a starting point for many. It feels iconic, a sign of beginning in code.\n\n\n",
+            "content": "Hello there! That's the traditional greeting for a new program, and in a way, for every new conversation.\n\nHow can I help you today?",
+            "reasoning": "**Decoding the Greeting**\n\nI've processed the user's \"Hello world!\" and immediately recognized its significance in programming. Further analysis reveals its nature as a simple greeting, suggesting a universally understandable message. The structure's straightforward nature is also quite notable.\n\n\n**Responding with Precision**\n\nI've reviewed the possible responses, prioritizing helpfulness and friendliness. The brainstorming yielded several options, ranging from simple to more engaging. The \"Hello back at you! That's a classic...\" approach seems promising for establishing a connection. I'm leaning towards the code-themed response for its cleverness, while ensuring it's also useful.\n\n\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "**Recognizing the Phrase**\n\nI've identified the user's input as \"Hello world!\". My thoughts now recognize this phrase as a programming tradition, a starting point for many. It feels iconic, a sign of beginning in code.\n\n\n",
+                "text": "**Decoding the Greeting**\n\nI've processed the user's \"Hello world!\" and immediately recognized its significance in programming. Further analysis reveals its nature as a simple greeting, suggesting a universally understandable message. The structure's straightforward nature is also quite notable.\n\n\n**Responding with Precision**\n\nI've reviewed the possible responses, prioritizing helpfulness and friendliness. The brainstorming yielded several options, ranging from simple to more engaging. The \"Hello back at you! That's a classic...\" approach seems promising for establishing a connection. I'm leaning towards the code-themed response for its cleverness, while ensuring it's also useful.\n\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -57,22 +57,22 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1759671184,
-      "id": "gen-1759671184-YnCIK6j4ZOnMXuxppIXj",
+      "created": 1759845423,
+      "id": "gen-1759845423-L0PFFCdUzvz3CYGH8WCX",
       "model": "google/gemini-2.5-pro",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
-        "completion_tokens": 98,
+        "completion_tokens": 353,
         "completion_tokens_details": {
           "image_tokens": 0,
-          "reasoning_tokens": 65
+          "reasoning_tokens": 321
         },
         "prompt_tokens": 3,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 101
+        "total_tokens": 356
       }
     },
     "headers": {
@@ -80,7 +80,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d49e50f1de826-ORD"
+        "98ade7c5cc22f5ff-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,7 +89,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:33:06 GMT"
+        "Tue, 07 Oct 2025 13:57:06 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

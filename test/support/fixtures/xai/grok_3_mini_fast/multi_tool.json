@@ -94,7 +94,7 @@
           "index": 0,
           "message": {
             "content": "",
-            "reasoning_content": "First, the user is asking about the weather in Paris, France. This matches the \"get_weather\" function, which is described as \"Get current weather information for a location\".\n\nThe required parameters for \"get_weather\" are:\n- \"location\": This is required and provided as \"Paris, France\".\n\nThere's an optional parameter \"unit\" which can be \"celsius\" or \"fahrenheit\". The user didn't specify, so I could use a default or ask for clarification, but the instructions say to call the function if all required parameters are provided or obviously inferable. Since \"location\" is provided, I can proceed without the unit, as it's not required.\n\nThe function call should be in the format: <function_call>{\"action\": \"function_name\", \"action_input\": {\"parameter\": \"argument\"}}</function_call>\n\nSo, for this, it would be: <function_call>{\"action\": \"get_weather\", \"action_input\": {\"location\": \"Paris, France\"}}</function_call>\n\nI shouldn't add any other text unless necessary. The instructions emphasize keeping responses clear and not verbose.\n\nThis seems like a direct match, so I should call the function decisively.\n\nFinally, after calling the function, if needed, I can continue in multi-turn conversations, but for now, this fulfills the request.",
+            "reasoning_content": "First, the user is asking about the weather in Paris, France. I have a function called \"get_weather\" that matches this request. It requires a \"location\" parameter, which is a string.\n\nThe location is clearly \"Paris, France\", so I can infer that as the parameter. The function also has an optional \"unit\" parameter, which can be \"celsius\" or \"fahrenheit\", but it's not required. The user didn't specify a unit, so I don't need to include it.\n\nSince all required parameters are provided or inferable, I should call the function.\n\nMy response should be a function call in the exact format: within <function_call> tags, as a JSON object.\n\nFormat: <function_call>{\"action\": \"function_name\", \"action_input\": {\"parameter\": \"argument\"}}</function_call>\n\nFor this, it would be: <function_call>{\"action\": \"get_weather\", \"action_input\": {\"location\": \"Paris, France\"}}</function_call>\n\nI shouldn't add any other text unless necessary. The instructions say: \"Keep your response to user clear; please do not make your response verbose!\" So, just the function call.\n\nThis advances the user's request directly. Once I get the weather data, I can respond with it in a future turn if needed.\n\nI'm ready to call the function.",
             "refusal": null,
             "role": "assistant",
             "tool_calls": [
@@ -103,15 +103,15 @@
                   "arguments": "{\"location\":\"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "call_41548124",
+                "id": "call_25454501",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1759763216,
-      "id": "d94d4cf6-3a31-b39a-2d5b-cd0c4a1d8b67_us-east-1",
+      "created": 1759844456,
+      "id": "c1a918ad-89f4-df0e-d02f-b5141a003637_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
@@ -120,7 +120,7 @@
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 263,
+          "reasoning_tokens": 270,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
@@ -131,7 +131,7 @@
           "image_tokens": 0,
           "text_tokens": 352
         },
-        "total_tokens": 643
+        "total_tokens": 650
       }
     },
     "headers": {
@@ -145,7 +145,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a610c849fb233e-ORD"
+        "98add02ddbd9e26f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -154,13 +154,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 15:06:59 GMT"
+        "Tue, 07 Oct 2025 13:40:59 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=Dcmvn7Uf9HZZ6i0Dz3vfIT4K.Xtci9VRNij2YpQIo0c-1759763219-1.0.1.1-bfOFMz29vwGVBVheT_OloLL.ab.pGSPAkInKeG3reg.wiKgbFYcJl9HuuvLMSbTaodE6sEuGugCYpCq2bMHvk8_Y9ZI.PpK6MUwcY8lYH5Y; path=/; expires=Mon, 06-Oct-25 15:36:59 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=Hsao4uP2XOq3obirap1l__GTDpx5DU7gJ6C9Py8nDgU-1759844459-1.0.1.1-ftnSNds5b.IUgD9zET.SWv_Zqo1PmP2KwU4maoa.U8fMwZYk8RHwzg73DyPsrZQJfI5mAMuvIUAaZiy_rD_T2D1bfGG3wl91KzmlLtBpBPs; path=/; expires=Tue, 07-Oct-25 14:10:59 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -172,7 +172,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-def4b9d9af5e80b250579e5c5565ba37-b20a974b00638eff-01"
+        "00-d5a54d633f3ec5bf5044175a45c73b12-ef1895c100194316-01"
       ],
       "x-zero-data-retention": [
         "false"

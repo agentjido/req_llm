@@ -318,4 +318,82 @@ defmodule ReqLLM.Providers.OpenRouter do
         request
     end
   end
+
+  @impl ReqLLM.Provider
+  def decode_response({req, resp} = args) do
+    case resp.status do
+      200 ->
+        body = ensure_parsed_body(resp.body)
+
+        case extract_deepseek_tool_calls(body) do
+          {:ok, updated_body} ->
+            ReqLLM.Provider.Defaults.default_decode_response({req, %{resp | body: updated_body}})
+
+          :no_tool_calls ->
+            ReqLLM.Provider.Defaults.default_decode_response(args)
+        end
+
+      _ ->
+        ReqLLM.Provider.Defaults.default_decode_response(args)
+    end
+  end
+
+  defp extract_deepseek_tool_calls(body) when is_map(body) do
+    with %{"choices" => [first_choice | _]} <- body,
+         %{"message" => %{"reasoning" => reasoning}} when is_binary(reasoning) <- first_choice do
+      case parse_deepseek_tool_calls(reasoning) do
+        [] ->
+          :no_tool_calls
+
+        tool_calls ->
+          updated_message =
+            first_choice["message"]
+            |> Map.put("tool_calls", tool_calls)
+            |> Map.update("content", "", fn content ->
+              if content == "", do: clean_reasoning_text(reasoning), else: content
+            end)
+
+          updated_choice = Map.put(first_choice, "message", updated_message)
+          updated_choices = [updated_choice | tl(body["choices"])]
+          updated_body = Map.put(body, "choices", updated_choices)
+
+          {:ok, updated_body}
+      end
+    else
+      _ -> :no_tool_calls
+    end
+  end
+
+  defp extract_deepseek_tool_calls(_), do: :no_tool_calls
+
+  defp parse_deepseek_tool_calls(reasoning) do
+    ~r/<｜tool▁call▁begin｜>([^<]+)<｜tool▁sep｜>({[^}]+})<｜tool▁call▁end｜>/
+    |> Regex.scan(reasoning, capture: :all_but_first)
+    |> Enum.with_index()
+    |> Enum.map(fn {[name, args_json], index} ->
+      %{
+        "id" => "call_#{index}",
+        "type" => "function",
+        "function" => %{
+          "name" => name,
+          "arguments" => args_json
+        }
+      }
+    end)
+  end
+
+  defp clean_reasoning_text(reasoning) do
+    reasoning
+    |> String.replace(~r/<｜tool▁calls▁begin｜>.*<｜tool▁calls▁end｜>/s, "")
+    |> String.trim()
+  end
+
+  defp ensure_parsed_body(body) when is_binary(body) do
+    case Jason.decode(body) do
+      {:ok, parsed} -> parsed
+      {:error, _} -> body
+    end
+  end
+
+  defp ensure_parsed_body(body), do: body
 end

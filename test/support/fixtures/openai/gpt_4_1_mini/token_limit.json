@@ -40,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759772170,
+      "created_at": 1759795762,
       "error": null,
-      "id": "resp_0d733e28091719390068e3fe0a53fc8193a4b4bc36f0621528",
+      "id": "resp_074c8080a6a3c2340068e45a32e5c4819989349795f2e27aaa",
       "incomplete_details": {
         "reason": "max_output_tokens"
       },
@@ -58,11 +58,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Certainly! Here’s an epic, very long story about dragons and adventures:\n\n---\n\n### The Chronicles of Eldoria: The Dragon’s Awakening\n\nIn the ancient land of Eldoria, a realm where magic flowed as naturally as rivers through the mountains, dragons were not mere beasts of legend; they were the guardians of the world’s equilibrium, the keepers of ancient wisdom, and the heart of every tale ever sung by minstrels in stone halls.\n\n#### Chapter 1: The Whispering Winds",
+              "text": "Certainly! Here is a very long story about dragons and adventures:\n\n---\n\n**The Chronicles of Emberfall: The Dragon's Legacy**\n\nIn the ancient land of Emberfall, where towering mountains kissed the skies and lush emerald forests whispered secrets of old, there lived a race both feared and revered—dragons. These majestic beings ruled the skies with their awe-inspiring presence, their scales shimmering like gemstones under the sun. Among them, the most legendary was a dragon named Aelion, keeper of the",
               "type": "output_text"
             }
           ],
-          "id": "msg_0d733e28091719390068e3fe0ab5548193bde96954d4fbfec5",
+          "id": "msg_074c8080a6a3c2340068e45a3346dc819991198f8ea8031f6e",
           "role": "assistant",
           "status": "incomplete",
           "type": "message"
@@ -112,7 +112,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a6eb602aef0011-ORD"
+        "98a92b5dbd6eeae6-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -121,13 +121,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 17:36:12 GMT"
+        "Tue, 07 Oct 2025 00:09:24 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "1972"
+        "1876"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -139,8 +139,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=GmTIkoMlEXIUMUUlTxlc8NA7SO_iB0MKmy1Z_fxBo08-1759772172-1.0.1.1-lYCjwgQTXcFP4wD386vA8kE.73bAxKfIMlx1RAGTxw35Cdizz.gpFczCkQAQP0HuQeKqDkvJ4rKEKNvt7bRWv6AO6urBHZFHoIG03qUaJlQ; path=/; expires=Mon, 06-Oct-25 18:06:12 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=QBQ7GnDTv4gq131Ct9lfdqQHVYab2dwciRzjUcBm1yg-1759772172331-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=k8Pt4ykS5fEQy4fci_CREHvRa42oPkUf8UHxOY3qDZg-1759795764-1.0.1.1-6tb.r3aKVGyvtx4wjSo1CAPZUtJp3lV4wfusfoiQ2kvCuT7v1InF8NudO5w0Wein1EGk4QKRtBMmCp.W5W8QyqR83H86iPedwuvFNbfdiAk; path=/; expires=Tue, 07-Oct-25 00:39:24 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=Mrtp7dqkH.xWxtJb1iSmRjzDuttXg23AxJmpcT1NbFg-1759795764797-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -152,28 +152,28 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "1975"
+        "1879"
       ],
       "x-ratelimit-limit-requests": [
-        "5000"
+        "10000"
       ],
       "x-ratelimit-limit-tokens": [
-        "4000000"
+        "10000000"
       ],
       "x-ratelimit-remaining-requests": [
-        "4999"
+        "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "3999965"
+        "9999965"
       ],
       "x-ratelimit-reset-requests": [
-        "12ms"
+        "6ms"
       ],
       "x-ratelimit-reset-tokens": [
         "0s"
       ],
       "x-request-id": [
-        "req_101925694367dbbd10f5da6a6025b763"
+        "req_181d15757fff6f9f4b5bb03df9c46b54"
       ]
     },
     "status": 200

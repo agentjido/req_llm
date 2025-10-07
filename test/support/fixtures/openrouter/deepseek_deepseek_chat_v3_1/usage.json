@@ -40,7 +40,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! 👋 How are you doing today? Is there anything I can help you with?",
+            "content": "Hi! How can I help you today? 😊",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -48,21 +48,15 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759672065,
-      "id": "gen-1759672054-0nHH1lsccTe84TaJkjn7",
+      "created": 1759845443,
+      "id": "gen-1759845443-xGdqeMi1Nlp49sNy5Z0J",
       "model": "deepseek/deepseek-chat-v3.1",
       "object": "chat.completion",
-      "provider": "AtlasCloud",
+      "provider": "Chutes",
       "usage": {
-        "completion_tokens": 19,
-        "completion_tokens_details": {
-          "reasoning_tokens": 0
-        },
+        "completion_tokens": 12,
         "prompt_tokens": 8,
-        "prompt_tokens_details": {
-          "cached_tokens": 0
-        },
-        "total_tokens": 27
+        "total_tokens": 20
       }
     },
     "headers": {
@@ -70,7 +64,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d5f2759a7eafd-ORD"
+        "98ade8484b7fd84c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -79,7 +73,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:47:45 GMT"
+        "Tue, 07 Oct 2025 13:57:24 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

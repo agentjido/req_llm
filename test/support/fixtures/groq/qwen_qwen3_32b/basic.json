@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJxd2VuL3F3ZW4zLTMyYiIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMtMzJiIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
-      "max_tokens": 50,
+      "max_tokens": 2000,
       "messages": [
         {
           "content": "Hello world!",
@@ -35,33 +35,33 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": "stop",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "<think>\nOkay, the user said \"Hello world!\" so I need to respond appropriately. Let me start by acknowledging their greeting. Maybe say hello back and offer help. Keep it friendly and open-ended. Let them know I'm here to assist with",
+            "content": "<think>\nOkay, the user said \"Hello world!\" so I need to respond appropriately. Let me start by acknowledging their greeting. Maybe say hello back and offer help. Keep it friendly and open-ended. Let them know I'm here to assist with any questions or tasks they have. Make sure the response is concise but welcoming. Alright, that should cover it.\n</think>\n\nHello! How can I assist you today? 😊",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759753879,
-      "id": "chatcmpl-4e745308-51bf-4ebc-a4ec-65e62b39146b",
+      "created": 1759844706,
+      "id": "chatcmpl-d27ec80f-eecd-4dee-836c-e19a10aaac0e",
       "model": "qwen/qwen3-32b",
       "object": "chat.completion",
       "service_tier": "on_demand",
       "system_fingerprint": "fp_5cf921caa2",
       "usage": {
-        "completion_time": 0.089479133,
-        "completion_tokens": 50,
-        "prompt_time": 2.87285e-4,
+        "completion_time": 0.161289271,
+        "completion_tokens": 87,
+        "prompt_time": 4.58493e-4,
         "prompt_tokens": 11,
-        "queue_time": 0.217078538,
-        "total_time": 0.089766418,
-        "total_tokens": 61
+        "queue_time": 0.202189388,
+        "total_time": 0.161747764,
+        "total_tokens": 98
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6wr2fjefavaqcjynzp2petz"
+        "id": "req_01k6zepa6ae3v9aqqgv1ywrdhg"
       }
     },
     "headers": {
@@ -75,7 +75,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a52cd03c7172d1-ORD"
+        "98add647697d5624-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -84,13 +84,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 12:31:19 GMT"
+        "Tue, 07 Oct 2025 13:45:06 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=Hcm_xuOKXvQnpHIAXpcgN.AQKPlu2DvAC6xiTEYJWQc-1759753879-1.0.1.1-ZTzUaPKE0XRZApmffbeDY8_u0IXQv5b4Qj3rfsvAyqVId1j6VhxGfvTXhHVtsheOnLDYglK6ddWSbsmvmM_jXg5ptE6GY72OVRJoywVr7Rg; path=/; expires=Mon, 06-Oct-25 13:01:19 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=NqqeWmI8EwQBQLGEEONSlHmco5t4sMCYEfebGISIhlk-1759844706-1.0.1.1-_uG6h8ghNEJtr90jR7_1mJ8VuKpHi144LItJo7Tj0XJcp7tIM2lCNM80noSFwjOdKw02YqI_jicqNp2VlXgv2KuvYwtHNjwbFur4oVfLe64; path=/; expires=Tue, 07-Oct-25 14:15:06 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -111,19 +111,19 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "990"
+        "997"
       ],
       "x-ratelimit-remaining-tokens": [
-        "5639"
+        "3970"
       ],
       "x-ratelimit-reset-requests": [
-        "14m23.254s"
+        "4m8.672999999s"
       ],
       "x-ratelimit-reset-tokens": [
-        "3.606s"
+        "20.291999999s"
       ],
       "x-request-id": [
-        "req_01k6wr2fjefavaqcjynzp2petz"
+        "req_01k6zepa6ae3v9aqqgv1ywrdhg"
       ]
     },
     "status": 200

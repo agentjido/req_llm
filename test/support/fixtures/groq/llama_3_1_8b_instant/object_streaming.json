@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibGxhbWEtMy4xLThiLWluc3RhbnQiLCJzZWVkIjo0Miwic3RyZWFtIjp0cnVlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQifSwidHlwZSI6ImZ1bmN0aW9uIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibmFtZSIsImFnZSJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibGxhbWEtMy4xLThiLWluc3RhbnQiLCJzZWVkIjo0Miwic3RyZWFtIjp0cnVlLCJzdHJlYW1fb3B0aW9ucyI6eyJpbmNsdWRlX3VzYWdlIjp0cnVlfSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbF9jaG9pY2UiOnsiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0In0sInR5cGUiOiJmdW5jdGlvbiJ9LCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZW5lcmF0ZSBzdHJ1Y3R1cmVkIG91dHB1dCBtYXRjaGluZyB0aGUgcHJvdmlkZWQgc2NoZW1hIiwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbIm5hbWUiLCJhZ2UiXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "max_tokens": 500,
@@ -14,6 +14,9 @@
       "model": "llama-3.1-8b-instant",
       "seed": 42,
       "stream": true,
+      "stream_options": {
+        "include_usage": true
+      },
       "temperature": 0.0,
       "tool_choice": {
         "function": {
@@ -63,27 +66,27 @@
   },
   "response": {
     "body": {
-      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLTQzNWRlMDZkLTE0ODQtNDIwMy05MzMwLTg3ODgyMDFhOGEzZCIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk2OTg2NjcsIm1vZGVsIjoibGxhbWEtMy4xLThiLWluc3RhbnQiLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF83YjNjZmFlM2FmIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQiLCJjb250ZW50IjpudWxsfSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOm51bGx9XSwieF9ncm9xIjp7ImlkIjoicmVxXzAxazZ2M2RoYmFlMjNyZHJhNXZ5OHRrZDNoIn19CgpkYXRhOiB7ImlkIjoiY2hhdGNtcGwtNDM1ZGUwNmQtMTQ4NC00MjAzLTkzMzAtODc4ODIwMWE4YTNkIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc1OTY5ODY2NywibW9kZWwiOiJsbGFtYS0zLjEtOGItaW5zdGFudCIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwXzdiM2NmYWUzYWYiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsidG9vbF9jYWxscyI6W3siaWQiOiJqbTVqOTMzYTYiLCJ0eXBlIjoiZnVuY3Rpb24iLCJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJhcmd1bWVudHMiOiJ7XCJhZ2VcIjozMCxcIm5hbWVcIjpcIkpvaG4gRG9lXCIsXCJvY2N1cGF0aW9uXCI6XCJTb2Z0d2FyZSBFbmdpbmVlclwifSJ9LCJpbmRleCI6MH1dfSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOm51bGx9XX0KCmRhdGE6IHsiaWQiOiJjaGF0Y21wbC00MzVkZTA2ZC0xNDg0LTQyMDMtOTMzMC04Nzg4MjAxYThhM2QiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5Njk4NjY3LCJtb2RlbCI6ImxsYW1hLTMuMS04Yi1pbnN0YW50Iiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfN2IzY2ZhZTNhZiIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6e30sImxvZ3Byb2JzIjpudWxsLCJmaW5pc2hfcmVhc29uIjoidG9vbF9jYWxscyJ9XSwieF9ncm9xIjp7ImlkIjoicmVxXzAxazZ2M2RoYmFlMjNyZHJhNXZ5OHRrZDNoIiwidXNhZ2UiOnsicXVldWVfdGltZSI6MC4xOTc5MDYzOTgsInByb21wdF90b2tlbnMiOjI3OSwicHJvbXB0X3RpbWUiOjAuMDE1OTU3MTg0LCJjb21wbGV0aW9uX3Rva2VucyI6MjQsImNvbXBsZXRpb25fdGltZSI6MC4wMzIwNTk4NjYsInRvdGFsX3Rva2VucyI6MzAzLCJ0b3RhbF90aW1lIjowLjA0ODAxNzA1fX0sInVzYWdlIjp7InF1ZXVlX3RpbWUiOjAuMTk3OTA2Mzk4LCJwcm9tcHRfdG9rZW5zIjoyNzksInByb21wdF90aW1lIjowLjAxNTk1NzE4NCwiY29tcGxldGlvbl90b2tlbnMiOjI0LCJjb21wbGV0aW9uX3RpbWUiOjAuMDMyMDU5ODY2LCJ0b3RhbF90b2tlbnMiOjMwMywidG90YWxfdGltZSI6MC4wNDgwMTcwNX19CgpkYXRhOiBbRE9ORV0KCg=="
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLTQxYjc3NmYwLTZiMzEtNGE5ZS1iYWVlLWNmOGI5YWMwYWZhZiIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk4NDQ2OTUsIm1vZGVsIjoibGxhbWEtMy4xLThiLWluc3RhbnQiLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF9lMzI5NzRlZmVlIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQiLCJjb250ZW50IjpudWxsfSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOm51bGx9XSwieF9ncm9xIjp7ImlkIjoicmVxXzAxazZ6ZW56Z3FleHB2ZGI0ejFrc250Mm5kIn19CgpkYXRhOiB7ImlkIjoiY2hhdGNtcGwtNDFiNzc2ZjAtNmIzMS00YTllLWJhZWUtY2Y4YjlhYzBhZmFmIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc1OTg0NDY5NSwibW9kZWwiOiJsbGFtYS0zLjEtOGItaW5zdGFudCIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwX2UzMjk3NGVmZWUiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsidG9vbF9jYWxscyI6W3siaWQiOiJnN2ZzZnRhMTMiLCJ0eXBlIjoiZnVuY3Rpb24iLCJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJhcmd1bWVudHMiOiJ7XCJhZ2VcIjozMCxcIm5hbWVcIjpcIkpvaG4gRG9lXCIsXCJvY2N1cGF0aW9uXCI6XCJTb2Z0d2FyZSBFbmdpbmVlclwifSJ9LCJpbmRleCI6MH1dfSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOm51bGx9XX0KCmRhdGE6IHsiaWQiOiJjaGF0Y21wbC00MWI3NzZmMC02YjMxLTRhOWUtYmFlZS1jZjhiOWFjMGFmYWYiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5ODQ0Njk1LCJtb2RlbCI6ImxsYW1hLTMuMS04Yi1pbnN0YW50Iiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfZTMyOTc0ZWZlZSIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6e30sImxvZ3Byb2JzIjpudWxsLCJmaW5pc2hfcmVhc29uIjoidG9vbF9jYWxscyJ9XSwieF9ncm9xIjp7ImlkIjoicmVxXzAxazZ6ZW56Z3FleHB2ZGI0ejFrc250Mm5kIiwidXNhZ2UiOnsicXVldWVfdGltZSI6MC4xOTgzMzY5OSwicHJvbXB0X3Rva2VucyI6Mjc5LCJwcm9tcHRfdGltZSI6MC4wMjczOTQ0NTMsImNvbXBsZXRpb25fdG9rZW5zIjoyNCwiY29tcGxldGlvbl90aW1lIjowLjAzNTExODc0LCJ0b3RhbF90b2tlbnMiOjMwMywidG90YWxfdGltZSI6MC4wNjI1MTMxOTN9fSwidXNhZ2UiOnsicXVldWVfdGltZSI6MC4xOTgzMzY5OSwicHJvbXB0X3Rva2VucyI6Mjc5LCJwcm9tcHRfdGltZSI6MC4wMjczOTQ0NTMsImNvbXBsZXRpb25fdG9rZW5zIjoyNCwiY29tcGxldGlvbl90aW1lIjowLjAzNTExODc0LCJ0b3RhbF90b2tlbnMiOjMwMywidG90YWxfdGltZSI6MC4wNjI1MTMxOTN9fQoKZGF0YTogeyJpZCI6ImNoYXRjbXBsLTQxYjc3NmYwLTZiMzEtNGE5ZS1iYWVlLWNmOGI5YWMwYWZhZiIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk4NDQ2OTUsIm1vZGVsIjoibGxhbWEtMy4xLThiLWluc3RhbnQiLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF9lMzI5NzRlZmVlIiwiY2hvaWNlcyI6W10sInVzYWdlIjp7InF1ZXVlX3RpbWUiOjAuMTk4MzM2OTksInByb21wdF90b2tlbnMiOjI3OSwicHJvbXB0X3RpbWUiOjAuMDI3Mzk0NDUzLCJjb21wbGV0aW9uX3Rva2VucyI6MjQsImNvbXBsZXRpb25fdGltZSI6MC4wMzUxMTg3NCwidG90YWxfdG9rZW5zIjozMDMsInRvdGFsX3RpbWUiOjAuMDYyNTEzMTkzfSwic2VydmljZV90aWVyIjoib25fZGVtYW5kIn0KCmRhdGE6IFtET05FXQoK"
     },
     "headers": {
       "alt-svc": "h3=\":443\"; ma=86400",
       "cache-control": "no-cache",
       "cf-cache-status": "DYNAMIC",
-      "cf-ray": "989fe8dbad6a8f49-ORD",
+      "cf-ray": "98add602f91ee133-ORD",
       "content-type": "text/event-stream",
-      "date": "Sun, 05 Oct 2025 21:11:07 GMT",
+      "date": "Tue, 07 Oct 2025 13:44:55 GMT",
       "server": "cloudflare",
-      "set-cookie": "__cf_bm=ZV6Hp04JxDiYYUeK0eMseX1vQ8h20.VWgYn5ryFTQDM-1759698667-1.0.1.1-aMN34kb9fAfWrH3n4mr1UiTJArBHfeNhjhRRNxUtdKeIwji6R1PhbncDMwUnc3OEdKN5CCJ701NcnkMLnbWDeJtwDchlGoPWcV1V2mf_gik; path=/; expires=Sun, 05-Oct-25 21:41:07 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None",
+      "set-cookie": "__cf_bm=P9MjA26LTNRoipKVBj_q0kZqyHfzimndYwgpX5CzUI0-1759844695-1.0.1.1-34UDB7Sh_ikXb0K0e0ZIVaykdatxzgMVXKUbXmmCFlGY7YVhQDpaFBxtyAkt3.0A3CM04oDZQzuehmU9HTK_aFEr5mrz6b9nVDH47tB8ciM; path=/; expires=Tue, 07-Oct-25 14:14:55 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None",
       "vary": "Origin",
       "via": "1.1 google",
       "x-groq-region": "yul",
       "x-ratelimit-limit-requests": "14400",
       "x-ratelimit-limit-tokens": "6000",
-      "x-ratelimit-remaining-requests": "14396",
-      "x-ratelimit-remaining-tokens": "5882",
-      "x-ratelimit-reset-requests": "23.609999999s",
-      "x-ratelimit-reset-tokens": "1.176999999s",
-      "x-request-id": "req_01k6v3dhbae23rdra5vy8tkd3h"
+      "x-ratelimit-remaining-requests": "14399",
+      "x-ratelimit-remaining-tokens": "5985",
+      "x-ratelimit-reset-requests": "6s",
+      "x-ratelimit-reset-tokens": "150ms",
+      "x-request-id": "req_01k6zenzgqexpvdb4z1ksnt2nd"
     },
     "status": 200
   }

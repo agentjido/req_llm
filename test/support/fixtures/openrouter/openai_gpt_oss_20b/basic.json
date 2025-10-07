@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC1vc3MtMjBiIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtb3NzLTIwYiIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
-      "max_tokens": 200,
+      "max_tokens": 2000,
       "messages": [
         {
           "content": "Hello world!",
@@ -41,13 +41,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! 👋 How can I help you today?",
-            "reasoning": "User says \"Hello world!\" Probably wants a response. We can respond with a friendly greeting.",
+            "content": "Hello! How can I help you today?",
+            "reasoning": "User says \"Hello world!\" Probably greeting.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "User says \"Hello world!\" Probably wants a response. We can respond with a friendly greeting.",
+                "text": "User says \"Hello world!\" Probably greeting.",
                 "type": "reasoning.text"
               }
             ],
@@ -57,18 +57,16 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759672249,
-      "id": "gen-1759672249-w00q7mDT0CDzVYTEojUz",
+      "created": 1759845489,
+      "id": "gen-1759845489-6O9ss7PqU0ooigW6WBR2",
       "model": "openai/gpt-oss-20b",
       "object": "chat.completion",
-      "provider": "NCompass",
+      "provider": "DeepInfra",
       "usage": {
-        "completion_tokens": 40,
-        "completion_tokens_details": {
-          "reasoning_tokens": 19
-        },
-        "prompt_tokens": 72,
-        "total_tokens": 112
+        "completion_tokens": 27,
+        "prompt_tokens": 77,
+        "prompt_tokens_details": null,
+        "total_tokens": 104
       }
     },
     "headers": {
@@ -76,7 +74,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d63e96d3da23f-ORD"
+        "98ade966fff72911-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -85,7 +83,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:50:51 GMT"
+        "Tue, 07 Oct 2025 13:58:09 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

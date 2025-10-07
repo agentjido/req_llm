@@ -1,13 +1,9 @@
 {
-  "captured_at": "2025-10-06T15:07:00.587962Z",
+  "captured_at": "2025-10-07T13:43:07.662097Z",
   "chunks": [
     {
-      "b64": "ZGF0YTogeyJpZCI6Ijk4ZGVhMjdiLWU1OWUtZjBiMy02OTg1LWMxNjNiMTU4YTU1N191cy1lYXN0LTEiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5NzYzMjIwLCJtb2RlbCI6Imdyb2stMyIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siaWQiOiJjYWxsXzcxMTUwMTc3IiwiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwiYXJndW1lbnRzIjoie1wiYWdlXCI6MzAsXCJuYW1lXCI6XCJKb2huIERvZVwiLFwib2NjdXBhdGlvblwiOlwiU29mdHdhcmUgRW5naW5lZXJcIn0ifSwiaW5kZXgiOjAsInR5cGUiOiJmdW5jdGlvbiJ9XX19XSwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfZjAyZTZkZjc5NSJ9Cgo=",
-      "decoded": "data: {\"id\":\"98dea27b-e59e-f0b3-6985-c163b158a557_us-east-1\",\"object\":\"chat.completion.chunk\",\"created\":1759763220,\"model\":\"grok-3\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"tool_calls\":[{\"id\":\"call_71150177\",\"function\":{\"name\":\"structured_output\",\"arguments\":\"{\\\"age\\\":30,\\\"name\\\":\\\"John Doe\\\",\\\"occupation\\\":\\\"Software Engineer\\\"}\"},\"index\":0,\"type\":\"function\"}]}}],\"system_fingerprint\":\"fp_f02e6df795\"}\n\n"
-    },
-    {
-      "b64": "ZGF0YTogeyJpZCI6Ijk4ZGVhMjdiLWU1OWUtZjBiMy02OTg1LWMxNjNiMTU4YTU1N191cy1lYXN0LTEiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5NzYzMjIwLCJtb2RlbCI6Imdyb2stMyIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6e30sImZpbmlzaF9yZWFzb24iOiJ0b29sX2NhbGxzIn1dLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF9mMDJlNmRmNzk1In0KCg==",
-      "decoded": "data: {\"id\":\"98dea27b-e59e-f0b3-6985-c163b158a557_us-east-1\",\"object\":\"chat.completion.chunk\",\"created\":1759763220,\"model\":\"grok-3\",\"choices\":[{\"index\":0,\"delta\":{},\"finish_reason\":\"tool_calls\"}],\"system_fingerprint\":\"fp_f02e6df795\"}\n\n"
+      "b64": "ZGF0YTogeyJpZCI6ImQ0OGQzNzI0LWJlMWYtZjcyZS02ZjE0LWJiYmM2OWVmMDQwOF91cy1lYXN0LTEiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5ODQ0NTg3LCJtb2RlbCI6Imdyb2stMyIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siaWQiOiJjYWxsXzgwNDA1MzAxIiwiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwiYXJndW1lbnRzIjoie1wiYWdlXCI6MzAsXCJuYW1lXCI6XCJKb2huIERvZVwiLFwib2NjdXBhdGlvblwiOlwiU29mdHdhcmUgRW5naW5lZXJcIn0ifSwiaW5kZXgiOjAsInR5cGUiOiJmdW5jdGlvbiJ9XX19XSwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfZjAyZTZkZjc5NSJ9CgpkYXRhOiB7ImlkIjoiZDQ4ZDM3MjQtYmUxZi1mNzJlLTZmMTQtYmJiYzY5ZWYwNDA4X3VzLWVhc3QtMSIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NTk4NDQ1ODcsIm1vZGVsIjoiZ3Jvay0zIiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7fSwiZmluaXNoX3JlYXNvbiI6InRvb2xfY2FsbHMifV0sInN5c3RlbV9maW5nZXJwcmludCI6ImZwX2YwMmU2ZGY3OTUifQoK",
+      "decoded": "data: {\"id\":\"d48d3724-be1f-f72e-6f14-bbbc69ef0408_us-east-1\",\"object\":\"chat.completion.chunk\",\"created\":1759844587,\"model\":\"grok-3\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"tool_calls\":[{\"id\":\"call_80405301\",\"function\":{\"name\":\"structured_output\",\"arguments\":\"{\\\"age\\\":30,\\\"name\\\":\\\"John Doe\\\",\\\"occupation\\\":\\\"Software Engineer\\\"}\"},\"index\":0,\"type\":\"function\"}]}}],\"system_fingerprint\":\"fp_f02e6df795\"}\n\ndata: {\"id\":\"d48d3724-be1f-f72e-6f14-bbbc69ef0408_us-east-1\",\"object\":\"chat.completion.chunk\",\"created\":1759844587,\"model\":\"grok-3\",\"choices\":[{\"index\":0,\"delta\":{},\"finish_reason\":\"tool_calls\"}],\"system_fingerprint\":\"fp_f02e6df795\"}\n\n"
     },
     {
       "b64": "ZGF0YTogW0RPTkVdCgo=",
@@ -84,14 +80,14 @@
       "access-control-expose-headers": "*",
       "cache-control": "no-cache",
       "cf-cache-status": "DYNAMIC",
-      "cf-ray": "98a610d298cc22c2-ORD",
+      "cf-ray": "98add34e6f5aeae6-ORD",
       "content-type": "text/event-stream",
-      "date": "Mon, 06 Oct 2025 15:06:58 GMT",
+      "date": "Tue, 07 Oct 2025 13:43:04 GMT",
       "server": "cloudflare",
-      "set-cookie": "__cf_bm=kXB_P9ylf9Z6h_wTrNCAdQP3j2z1WMWvjw6wQSTBPDI-1759763218-1.0.1.1-0TWr2blJcJwosvnsR6COvM61JQI168nj4xeNXc8eQuVKKLKwWXXctBKP1XmURghNyI7uh1T7XN2izF7C1PqZkzRzwVrj_k4wxkHBITxf1n8; path=/; expires=Mon, 06-Oct-25 15:36:58 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None",
+      "set-cookie": "__cf_bm=hirAxML1mDlVbq1dvk0qdZf1aof6HVYz0RVLY24OveE-1759844584-1.0.1.1-Mqh4UgeQf3YnfTt8QqfJgq0epZF92MSd.E9tRX5.r881ZDh5D8BylH5CVwKYA9fVW3GHAI26b_VSO3rfILWNiHTrfYGLepOoLoE5xwIYh5U; path=/; expires=Tue, 07-Oct-25 14:13:04 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None",
       "strict-transport-security": "max-age=31536000",
       "vary": "origin, access-control-request-method, access-control-request-headers",
-      "x-request-id": "00-dbc60c2f7e0626bd35e1abcdcc0ca1b9-cb1784340062fa2d-01",
+      "x-request-id": "00-b19db7b900fab3c25d8206a07c6565ea-d30dcc6f00192a74-01",
       "x-zero-data-retention": "false"
     },
     "status": 200

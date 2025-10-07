@@ -40,19 +40,19 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! How can I help you today?",
-            "reasoning": "I'm thinking about how to start a friendly greeting. I want to respond warmly and ask how I can help the user with their needs. It might be a good idea to briefly mention my capabilities, so that the user knows what I can assist them with. Keeping it concise seems important too, as I want to make sure my message is clear and direct. Overall, I want to set a welcoming tone!",
+            "content": "Hi! How can I help you today? (You can ask a question, request help with writing, coding, math, planning, or anything else.)",
+            "reasoning": "**Greeting and offering help**\n\nThe user says \"Hi there!\" which makes me think they probably want a friendly greeting. I should respond in a warm way and ask how I can assist them. I want to keep it concise, maybe offering options like asking a question or help with tasks. So, my reply could be: \"Hi! How can I help you today?\" I’ll also think about including examples of what I can do but keeping it brief.",
             "reasoning_details": [
               {
                 "format": "openai-responses-v1",
                 "index": 0,
-                "summary": "I'm thinking about how to start a friendly greeting. I want to respond warmly and ask how I can help the user with their needs. It might be a good idea to briefly mention my capabilities, so that the user knows what I can assist them with. Keeping it concise seems important too, as I want to make sure my message is clear and direct. Overall, I want to set a welcoming tone!",
+                "summary": "**Greeting and offering help**\n\nThe user says \"Hi there!\" which makes me think they probably want a friendly greeting. I should respond in a warm way and ask how I can assist them. I want to keep it concise, maybe offering options like asking a question or help with tasks. So, my reply could be: \"Hi! How can I help you today?\" I’ll also think about including examples of what I can do but keeping it brief.",
                 "type": "reasoning.summary"
               },
               {
-                "data": "gAAAAABo4nfGfwo_hot1rgAjH_ZV7KQ_D96G642MCDmQvNC-IuT71wF37q0ptbRe9OJljgRRlP2AL-suNYPoTqvETjwmKJPdkZUfgTf62lP8195_3KeGg5zI8GsY9TWZ-RbZtt8x7xtsbvHsKGB7RsEqf5HdSvd6hJMrNtyX2o_5admPuIQeyC1Wyo7IMVIc1SiKdy_QKmbMeTp3H7xogcqFPgv7Wh1WfrfVUZiWBmPRnNgQB8YtYIDsrF9Y-BmJ27nr5CSZ3su9GeFw0M6eszkHfh3vZrIUqX41p1yEkXno1pi0HpmDlQhx0_CpMkMZwu3gnoCdpvaZTOTkDgDXB5SPf3mqXnU27FEKlEOvFdvtcRtDFiDdnckDM5pcuXC3Gl3DVCnKHQV0Vl8NHadxiaoBAICsz2qnbyXxG0qv-YOBbIyXV5lVRiGaQPYvi_r_4NKtYmNRWi_4szsAhjyR75XvnOFx08ILdBekj_MQ_8sitZ-3RpKqnfQNLI1IbYhvtlT0Nr4VYtUWlEsQIyEPFIdaf6BrVyqDE437o6kY_U7Xsx6fZLvdAQcLpSc4rqr7NE-RKikT3JvGaoaTdkq3dhldhUAToIdKheur-xvpQ2DZOtLAHpZlu5-0gn3jNA5aPgeVJiF3AWsoVGXXlsszd1qNycdure4hRiZMh8nICsZ5n3_YscMwgrtzeJ1IZMavyoTYQsQg7gAHmC-eVS7LdB_Nz-GMMCPviFpHmINuKmHTk9eVNGg_6H6g_JsopXXHBjCVGbiQpWnJ6h5hLHqI4vrtg5AZNCM3qRE7-ePmTY037z36F_nIh6L6OoAEtMLmaVmfAWriXXCZf8vlvx6AlMnLQprUlb8XJlU8dAqz4hiXwy20oisIFLn-UE9rGS8Wnke3-f3QjS7Poq8F2C4P6mALbexZ526mHV--ULwnFfXSNZOgkeTFVBDu2ixLInoHnMs8RX60-k4f",
+                "data": "gAAAAABo5RxeegsCI4az8Ufg5Qfn3Okfrgb9SWmAJKV3vpV0agHnsiDSd4VSzefkBgMY1dhbW7uAgcw_LjXnoZuE30_rC9dFJ_sLc2vtcMNKcVjG5CesX_KrPF5VYvwa6wAfznE8OXCegpeXsjSTstxxwjlbvB2Nc_lm_2-7s0fF4H8lQ-_f_pltlYzUo0RzIWopUYd_ImnlplxVuU2AnXw-YJk9jSjBz2DlVJexHpF5j7CeFzslr2dvN_VoDnsrOdYQra8MVp6Rm0vLeFUiDgJJ5pex2HC9cFi3jmmX4mzSWpZc1Oz-6Q7IBPbYChQd-ap1QYTE11lMA8ExfTstsNTnU_wYZul8w88H5dm0VCJ8wwWuVIoGdKRwvw1Jj2woxAcIIpaewpRzx-0S_w5riOH3rIhr60y8iVvhbh0y2CT4OW5xs0eFWn8nqweI7IIIzMKrTFUtIztFnlQfOeWPWtugvCeH4XYS9uPkRC4fwSvsMUU9mVi8msrmv-o0ZtLOGI_wJOQDcxu_lXPFAPAKC8CaaCrMTaLuZzVk_vLHTeHLKI9KfC6csZ9BL7-LIs6xgKniyOckfUlbXywkZZ7lENXaPu8t-g69aSweE7O7-OWeaGejzkOvSf5d1hT42TX8AOnSc8wiTp_nWyXJomtHDp241L3u7NePKDUylFx5b8lGK-tn4SwCyFfWDUXHkO0jZoljtq9QWrrHIPeiAitddgiAqJcdV8RvHRkoLdOLFXvceeG0VFQ_Eg64dP7kRiNaS_Lr2RwQvnBYgwewOmiq05m0Xc5Y3RtMp24iI9Ekgi6XhAfGgItnkfK5jG4kgd5MFdrnHtSVrMjNbJwkX6jmQr8C9sDI0gGJcZ9WcMUOcCbYFvrZEKN30L-T2sSqr9VOQL7P2ZjJNVKCFfKcWVrKi5QuxbxyxaGxlVFDHG33Uir3_RO6mbgFdwWOaZxSf-6NUwSZNCaKi6zVSQ-u552VIevZ_P2HLF9CD5JebWLUrbqtw1P9aBt2YRXDGVA0LN2NdcvWP8twQagzPbnXT5RVoOqsLV4lpJTc8MX2QeiqDDaWAWZRqaZF5uikZrQON1YxLzUkJJQV13ucAJiyNH8p3mKL0wmqFU247yBolrd5X4vyQFU_cyWMeQs9r8ohW1Q3rsdYVhHXXJgfUDwldrjbWQvT7dGX-7zrDGCTL-FTZzBZxBiPyfY00cU=",
                 "format": "openai-responses-v1",
-                "id": "rs_0e3e12f1d045655d0168e277c2d2548190a601c965a401f466",
+                "id": "rs_084bde48918d25a10168e51c5b159c8196862265ad823522d4",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -63,15 +63,15 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1759672258,
-      "id": "gen-1759672258-LDnoWfCz5XSTHTJ8bR8e",
+      "created": 1759845466,
+      "id": "gen-1759845466-Oqg29JGRnapDjyZlTArC",
       "model": "openai/gpt-5-mini",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
-        "completion_tokens": 15,
+        "completion_tokens": 101,
         "prompt_tokens": 9,
-        "total_tokens": 24
+        "total_tokens": 110
       }
     },
     "headers": {
@@ -79,7 +79,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d641d8e87e1f7-ORD"
+        "98ade8d38fef4848-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -88,7 +88,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:50:58 GMT"
+        "Tue, 07 Oct 2025 13:57:46 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

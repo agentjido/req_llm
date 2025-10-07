@@ -1,0 +1,110 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJ6LWFpL2dsbS00LjV2IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjV9"
+    },
+    "canonical_json": {
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "z-ai/glm-4.5v",
+      "n": 1,
+      "reasoning_effort": "low",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "\n## The Ashes of Eldoria: A Tale of Scales and Stars\n\nThe world was young when the First Dragons soared above the primordial seas, their breath kindling life and their wisdom shaping mountains. For millennia, they were the stewards of Eldoria, guiding civilizations, tending ancient forests, and guarding secrets older than memory. Then came the Great Sundering – a cataclysm born from fear and greed – shattering the Dragon Council and scattering their kind. Centuries later, only whispers remained: tales of winged titans, hoarded treasures, and prophecies of a chosen one destined to bridge the gap between humans and dragons once more.\n\nIn the humble village of Willow Creek, nestled at the foot of the Whispering Woods, lived Alistair Thorne. He wasn’t particularly remarkable – a blacksmith’s apprentice with calloused hands, perpetually dusty clothes, and dreams bigger than his small world. His only inheritance was a strange pendant, an obsidian tear carved with runes he couldn’t decipher, left by his mother on her deathbed. She’d spoken of distant lands and a destiny woven with fire and shadow, words dismissed as grief-induced ramblings.\n\nEverything changed on the eve of the Harvest Moon Festival. Alistair, sent to gather firewood deep in the woods, stumbled upon a clearing bathed in unnatural silver light. There, pinned beneath a fallen oak, lay a creature unlike anything he’d ever seen: scales of molten copper and gold, wings folded like broken stained glass, eyes the color of storm clouds. It was a dragon – young, injured, and dying.\n\nFear warred with compassion within him. Ignoring the primal urge to flee, Alistair approached cautiously. The dragon’s gaze locked onto his, filled with pain and a flicker of recognition. As if drawn by an invisible thread, he reached out, fingers brushing the cool, scaled hide. The dragon flinched, then relaxed. A low, rumbling purr vibrated through its chest – a sound of trust, impossibly soft for such a massive beast.\n\nHe named her Ember. Over weeks, hidden in a cave behind the waterfall, Alistair tended her wounds with poultices and spring water, sharing scraps of bread and stories of Willow Creek. Ember, in turn, taught him silence – the language of wind through pines, the rhythm of the earth, the weight of unspoken thoughts. She spoke of the Old Ways, of harmony, and of a darkness rising in the east, festering in the ruins of Drakkenheim, the ancient dragon city. She spoke of Vesper, a once-noble dragon corrupted by the void, gathering an army of twisted creatures to claim dominion over all.\n\nTheir bond forged in secrecy became unbreakable. One night, Ember revealed the truth of Alistair’s pendant: it was a shard of Starfire, the heartstone of the First Dragons, capable of immense power… and immense danger. It had chosen him, she said, because his heart was pure, untainted by ambition. Together, they were the key to stopping Vesper.\n\nThus began their odyssey. Leaving Willow Creek under cover of dawn, they ventured into the unknown. Their first trial came in the treacherous Whispering Woods, where paths shifted like mist, and ancient spirits tested their resolve. Alistair learned to listen to Ember’s instincts, to read the land as she did. They faced giant spiders weaving webs of shadow, wargs hunting in packs, and a treacherous bog spirit demanding tribute. Only through teamwork – Ember’s fire scorching webs, Alistair’s quick thinking luring wargs into traps, and Ember’s sheer power breaking the spirit’s hold – did they emerge victorious.\n\nFrom the woods, they traveled north to the towering Ironspire Mountains, home to the proud dwarven clans. The dwarves, initially wary of a dragon, were won over by Ember’s respect for their craft and Alistair’s humility. King Grimgor, a gruff but wise ruler, revealed fragments of an ancient map pointing towards the Sea of Mist, where the last surviving members of the Dragon Council supposedly slumbered in crystal coffins. He gifted Alistair a enchanted hammer, capable of channeling starlight, and Ember a scale armor crafted from fallen stars, offering protection against dark magic.\n\nThe journey south proved perilous. They crossed the vast, sun-baked plains of the Barren Steppe, where sandstorms devoured travelers whole. Here, they encountered the nomadic Sandwalkers, a people bound to the desert winds. Their leader, Zara, possessed a fragment of prophecy: “The Tear and the Flame shall unite the fractured sky.” Recognizing the pendant and Ember, she guided them safely through the dunes and gifted Alistair a vial of condensed sunlight, potent against shadow creatures.\n\nTheir path led them to the treacherous Sea of Mist, a realm of perpetual twilight where islands floated amidst swirling fog. Guided by the map and Zara’s guidance, they found the Isle of Luminaria, guarded by ancient, tree-like beings called the Sylvaneth. These guardians, repositories of forgotten knowledge, confirmed Ember’s story: the Dragon Council members slept, waiting for the Starfire’s return to awaken them and rally against Vesper. However, the isle was under threat from Vesper’s minions – shadow-wraiths draining the island’s life force.\n\nIn a desperate battle, Alistair used the enchanted hammer, channeling the sunlight and the Starfire’s latent energy. With Ember’s fire and the Sylvaneth’s roots, they drove off the wraiths. In gratitude, the Sylvaneth awakened three elders of the Council: Solara, a radiant gold dragon; Obsidius, a stoic obsidian dragon; and Tempest, a mercurial silver dragon. They recognized Alistair as the Bearer and Ember as the Chosen Kin, the two halves of the prophecy.\n\nUnited, the small group sailed westward, towards the decaying fortress of Drakkenheim, looming over the jagged Spine of the World mountains. Vesper’s lair was a nightmare: obsidian spires dripping with corruption, skies choked with ash, and legions of goblins, trolls, and worse creatures marching to his banner. Inside, they confronted Vesper himself – a colossal dragon, scales black as tar, eyes burning with void-light, his form twisted and wrong.\n\nThe final battle raged across Drakkenheim’s halls and rooftops. Vesper unleashed torrents of dark flame and psychic agony. Ember fought valiantly, but Vesper’s power was overwhelming, fueled by centuries of hatred and stolen magic. Alistair, seeing Ember falter, remembered the Starfire. Drawing on the pendant’s power, he channeled not destruction, but unity – weaving threads of light, connecting Ember’s fire, Solara’s radiance, Obsidius’s strength, and Tempest’s speed. He offered it not as a weapon, but as a bridge.\n\nVesper recoiled, shrieking as the pure light of connection seared his corrupted essence. For a moment, the ancient dragon glimpsed the noble being he once was. Overwhelmed by the unfamiliar sensation of belonging, he let out a final, anguished roar and plummeted from the tallest tower, crashing into the abyss below.\n\nSilence fell. The remaining dragons, now free from Vesper’s influence, looked upon Alistair and Ember with newfound understanding. The war was far from over – Vesper’s army still roamed, and the damage to Eldoria was immense – but the greatest threat was vanquished. The Dragon Council vowed to work alongside humans, dwarves, elves, and all peoples to rebuild and safeguard the world. Alistair, no longer just a blacksmith’s apprentice, became the Bearer, a symbol of hope and unity.\n\nYears later, standing atop the rebuilt walls of Drakkenheim, now a beacon of peace, Alistair watched as Ember, fully healed and magnificent, soared alongside Solara, Obsidius, and Tempest. Below, the nations worked together, fields blooming, cities thriving. The pendant glowed softly around his neck, a constant reminder of the journey, the bond, and the enduring power of choosing light over shadow.\n\nAnd so, the legend of Alistair Thorne and Ember, the dragon who chose a boy, spread across Eldoria. It became a tale told by firesides, sung by bards, and etched into the annals of history – proof that even in the ashes of destruction, the spark of connection could ignite a new era, where dragons and humans, once sundered, would fly side-by-side towards a brighter future.",
+            "reasoning": "Okay, the user wants a very long story about dragons and adventures. Hmm, they didn't specify any particular themes or characters, so I have creative freedom here. But \"very long\" suggests they want something epic with depth—maybe multiple arcs, character development, world-building. \n\nFirst, I should consider what makes dragon stories compelling. Dragons are often symbols of power, wisdom, or destruction, but to make it fresh, maybe subvert expectations? Like a dragon that's not just a monster but has layers. The user might enjoy a coming-of-age tale where a human protagonist bonds with a dragon, exploring themes of friendship, courage, and legacy.\n\nWait, the user said \"adventures,\" plural. So multiple quests, challenges across different lands. That means building a rich world with diverse cultures, magical elements, and conflicts beyond just fighting dragons. Maybe include political intrigue, ancient magic, and personal struggles. \n\nI need to create memorable characters. Let's name the protagonist something relatable yet unique—Alistair feels classic but not overused. For the dragon, Ember is warm and fiery, fitting for a red dragon. Giving them a shared trauma (the village burning) adds emotional weight. Their bond can be the heart of the story. \n\nThe setting: a continent divided by magic, with distinct regions like the Whispering Woods (mystical), Ironspire Mountains (dwarven), and the Sea of Mist (elven). Each area offers unique challenges—forests with shifting paths, mountain fortresses, sea creatures. This variety keeps the adventure engaging. \n\nThemes: Legacy vs. choice, trust between species, environmental consequences. The old dragons' extinction could mirror real-world issues like climate change or loss of wisdom. The antagonist, Vesper, as a corrupted dragon, shows how fear and greed corrupt even great beings. \n\nPacing is crucial for \"very long.\" Start slow with setup, build momentum through trials, escalate to epic battles. Include quiet moments too—Ember teaching Alistair to fly, conversations about purpose—to balance action with emotion. \n\nPotential pitfalls: info-dumping world details. Need to weave lore into dialogue and action. Also, avoid making the dragon too human; keep some alien traits while showing growth. The ending should feel earned—sacrifice, hope, new beginnings. \n\nUser’s deeper needs: They might crave escapism, inspiration, or a sense of wonder. By emphasizing friendship, resilience, and healing, the story can resonate emotionally. Including diverse allies (dwarves, elves, mages) promotes inclusivity, which modern readers appreciate. \n\nFinally, structure the story in parts for readability, each with a mini-arc. Ensure the climax ties back to earlier themes—like using the Starfire to restore balance, not destroy. Leave room for sequels if desired, but resolve this arc satisfyingly. Alright, time to draft this epic journey!",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Okay, the user wants a very long story about dragons and adventures. Hmm, they didn't specify any particular themes or characters, so I have creative freedom here. But \"very long\" suggests they want something epic with depth—maybe multiple arcs, character development, world-building. \n\nFirst, I should consider what makes dragon stories compelling. Dragons are often symbols of power, wisdom, or destruction, but to make it fresh, maybe subvert expectations? Like a dragon that's not just a monster but has layers. The user might enjoy a coming-of-age tale where a human protagonist bonds with a dragon, exploring themes of friendship, courage, and legacy.\n\nWait, the user said \"adventures,\" plural. So multiple quests, challenges across different lands. That means building a rich world with diverse cultures, magical elements, and conflicts beyond just fighting dragons. Maybe include political intrigue, ancient magic, and personal struggles. \n\nI need to create memorable characters. Let's name the protagonist something relatable yet unique—Alistair feels classic but not overused. For the dragon, Ember is warm and fiery, fitting for a red dragon. Giving them a shared trauma (the village burning) adds emotional weight. Their bond can be the heart of the story. \n\nThe setting: a continent divided by magic, with distinct regions like the Whispering Woods (mystical), Ironspire Mountains (dwarven), and the Sea of Mist (elven). Each area offers unique challenges—forests with shifting paths, mountain fortresses, sea creatures. This variety keeps the adventure engaging. \n\nThemes: Legacy vs. choice, trust between species, environmental consequences. The old dragons' extinction could mirror real-world issues like climate change or loss of wisdom. The antagonist, Vesper, as a corrupted dragon, shows how fear and greed corrupt even great beings. \n\nPacing is crucial for \"very long.\" Start slow with setup, build momentum through trials, escalate to epic battles. Include quiet moments too—Ember teaching Alistair to fly, conversations about purpose—to balance action with emotion. \n\nPotential pitfalls: info-dumping world details. Need to weave lore into dialogue and action. Also, avoid making the dragon too human; keep some alien traits while showing growth. The ending should feel earned—sacrifice, hope, new beginnings. \n\nUser’s deeper needs: They might crave escapism, inspiration, or a sense of wonder. By emphasizing friendship, resilience, and healing, the story can resonate emotionally. Including diverse allies (dwarves, elves, mages) promotes inclusivity, which modern readers appreciate. \n\nFinally, structure the story in parts for readability, each with a mini-arc. Ensure the climax ties back to earlier themes—like using the Starfire to restore balance, not destroy. Leave room for sequels if desired, but resolve this arc satisfyingly. Alright, time to draft this epic journey!",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1759845496,
+      "id": "gen-1759845496-GcPNPabUeHHPccGo1rRK",
+      "model": "z-ai/glm-4.5v",
+      "object": "chat.completion",
+      "provider": "Z.AI",
+      "usage": {
+        "completion_tokens": 2405,
+        "prompt_tokens": 16,
+        "prompt_tokens_details": {
+          "cached_tokens": 4
+        },
+        "total_tokens": 2421
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ade9931e9d356a-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 07 Oct 2025 13:58:17 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

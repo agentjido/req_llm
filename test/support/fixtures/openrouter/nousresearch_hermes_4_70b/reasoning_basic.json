@@ -1,0 +1,108 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im5vdXNyZXNlYXJjaC9oZXJtZXMtNC03MGIiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjoxLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "nousresearch/hermes-4-70b",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "\n\nThe result of 12 multiplied by 7 is **84**.\n\n**Brief Steps:**  \n1. Break down 12 into 10 + 2.  \n2. Calculate \\(10 \\times 7 = 70\\) and \\(2 \\times 7 = 14\\).  \n3. Add the results: \\(70 + 14 = 84\\).  \n\nThis method uses the distributive property for efficiency.",
+            "reasoning": "\nOkay, so I need to solve 12 multiplied by 7. Let me think. Hmm, I remember that multiplication is just repeated addition, right? So 12 times 7 is like adding 12 seven times. Let me try that approach. Let's see, 12 added to itself once is 12. Then adding another 12 would be 24. Wait, but that's only two times. If I keep adding 12 each time, seven times total, that would be 12, 24, 36, 48, 60, 72, 84. So the seventh addition would be 84. But wait, maybe there's a quicker way than adding seven times. I think breaking the numbers down might help. Let me try breaking 12 into 10 and 2. So 10 times 7 is 70, and 2 times 7 is 14. Then adding those together, 70 plus 14 is 84. Yeah, that works. Another way could be using the distributive property. 12 is 3 times 4, so maybe 3 times 4 times 7. But that might complicate things. Wait, 4 times 7 is 28, and then 3 times 28 is 84. Oh, that also gives the same result. So no matter which method I use, I end up with 84. Let me double-check with another method just to be sure. Maybe using the times tables. I know that 10 times 7 is 70, and 2 times 7 is 14, so adding them gives 84. Yep, same answer. Alternatively, I can think of 7 times 12 as (5 + 2) times 12, which is 5*12 plus 2*12. 5*12 is 60, and 2*12 is 24, so 60 + 24 is 84. All these different methods lead to the same answer, so I'm confident that 12 multiplied by 7 equals 84.\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "\nOkay, so I need to solve 12 multiplied by 7. Let me think. Hmm, I remember that multiplication is just repeated addition, right? So 12 times 7 is like adding 12 seven times. Let me try that approach. Let's see, 12 added to itself once is 12. Then adding another 12 would be 24. Wait, but that's only two times. If I keep adding 12 each time, seven times total, that would be 12, 24, 36, 48, 60, 72, 84. So the seventh addition would be 84. But wait, maybe there's a quicker way than adding seven times. I think breaking the numbers down might help. Let me try breaking 12 into 10 and 2. So 10 times 7 is 70, and 2 times 7 is 14. Then adding those together, 70 plus 14 is 84. Yeah, that works. Another way could be using the distributive property. 12 is 3 times 4, so maybe 3 times 4 times 7. But that might complicate things. Wait, 4 times 7 is 28, and then 3 times 28 is 84. Oh, that also gives the same result. So no matter which method I use, I end up with 84. Let me double-check with another method just to be sure. Maybe using the times tables. I know that 10 times 7 is 70, and 2 times 7 is 14, so adding them gives 84. Yep, same answer. Alternatively, I can think of 7 times 12 as (5 + 2) times 12, which is 5*12 plus 2*12. 5*12 is 60, and 2*12 is 24, so 60 + 24 is 84. All these different methods lead to the same answer, so I'm confident that 12 multiplied by 7 equals 84.\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1759845385,
+      "id": "gen-1759845385-SK1qGQzJpHO0ZAAfC6r0",
+      "model": "nousresearch/hermes-4-70b",
+      "object": "chat.completion",
+      "provider": "Nebius",
+      "usage": {
+        "completion_tokens": 517,
+        "prompt_tokens": 96,
+        "total_tokens": 613
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ade6d9af252312-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 07 Oct 2025 13:56:25 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

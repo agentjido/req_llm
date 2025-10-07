@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1jaGF0IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjV9"
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJvcGVuYWkvZ3B0LTUtY2hhdCIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC41fQ=="
     },
     "canonical_json": {
-      "max_tokens": 100,
+      "max_tokens": 3000,
       "messages": [
         {
           "content": "Write a very long story about dragons and adventures",
@@ -36,27 +36,27 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": "stop",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "**The Song of the Ember Isles**  \n\n---\n\nLong before maps were drawn and kingdoms carved from wilderness, the world was ruled by flame and wind. High above the shifting seas, an archipelago of volcanic mountains floated among the clouds—known in legends as the **Ember Isles**. There, dragons soared freely, vast as storms and radiant as the dawn.  \n\nThe first humans to ever glimpse the isles came not by intent, but by misfortune. A ship bound from the southern provinces",
+            "content": "**Title: The Emberstone Quest**\n\n---\n\n### Chapter 1: The Call of the Mountain\n\nThe first light of dawn gilded the peaks of the Emberfang Range, painting the snow in shades of gold and crimson. At its heart rose Mount Rhyzath—a volcano long thought dormant. Yet the mountain seemed alive that morning, groaning deep within as if stirring from sleep. Travelers on the distant roads spoke of strange tremors, and shepherds whispered of the old legends being true again—that the dragons of Emberfang were waking.\n\nIn the modest village of Cloudmere, nestled in the valley below, a young woman named Kaelira felt the tremors shake her bones. She was a blacksmith’s apprentice with hands calloused from hammering iron and a mind that dreamt of adventure beyond the flame-lit forge. Her master often said her eyes had the gleam of something untamed—like dragonfire misunderstood.\n\nThat morning, as she quenched a blade in the trough, an elderly wanderer entered the forge. His cloak was tattered, his staff carved with strange runes that shimmered faintly when the mountain rumbled.\n\n“You’ve felt it, haven’t you?” he rasped. His voice was like gravel twisted with wind.\n\nKaelira hesitated. “The tremors? Everyone has.”\n\n“The dragons,” the old man corrected, tapping his staff against the stone floor. “They stir because the Emberstone stirs, and with it comes the end—or the beginning—of our age.”\n\nThat night, he told her the tale of the Emberstone: a gem born from dragonfire and the world’s heartbeat, forged at the dawn of time. It was said to bind the dragons to their ancient pact—to keep their power in balance with the world of mortals. And now, it was cracking.\n\n---\n\n### Chapter 2: The Broken Pact\n\nDays later, the sky split open.\n\nA roar—mighty and hollow—rolled down from Mount Rhyzath, scattering flocks of birds and shaking the village to its foundations. From the shroud of clouds above the volcano, a figure emerged: a massive dragon, scales like molten glass, wings stretching wider than the valley itself. Its fire glowed a shade of deep amber—the color of blood in sunlight.\n\nThe old man’s words echoed in Kaelira’s mind. The Emberstone was failing, and the dragons were breaking free from their ancient sleep. But why? And why now?\n\nBefore she could decide what to believe, the old man placed a leather pouch in her hands. Inside shimmered a single shard of fiery crystal.\n\n“This is a fragment of the Emberstone,” he said. “Long ago, the Stone was shattered to bind each dragon’s soul to the world itself. If the fragments lose their harmony, the balance fails. You must restore it.”\n\nKaelira protested that she was no knight nor sorceress. But the man only smiled.\n\n“Every hero begins as something ordinary,” he said. “And greatness often finds those who least seek it.”\n\nBy dawn the next day, Kaelira left her home behind. She carried the shard, her trusty hammer, and a heart filled with fear and fire.\n\n---\n\n### Chapter 3: Companions Bound by Fate\n\nOn the long road north, Kaelira encountered others drawn by rumor and prophecy.\n\nFirst was **Thorn**, a mercenary with a sardonic wit and a sword etched with scales. He claimed to have fought a dragon once—though his story always changed with each retelling. Beneath the bravado, Kaelira sensed loss and guilt, like ash smoldering beneath armor.\n\nThen came **Aeris**, a scholar from the Aurelian Spire, who sought truth rather than treasure. She carried scrolls detailing the dragons’ ancient language and a crystal lens that could decipher their runic fire. Her sharp mind often clashed with Thorn’s cynicism, but her insight saved them more than once.\n\nFinally, in the misty Fen of Mourn, they met **Ryn**, a silent boy who could sense the dragons’ dreams. He rarely spoke, but when he did, it was often in riddles. “The dragon within the mountain is not the true enemy,” he once whispered to Kaelira. “But the shadow that woke it.”\n\nTogether, they traveled through lands scorched by dragonfire and haunted by forgotten gods. Each step forward revealed more of the truth—that the dragons were not mere beasts of flame, but guardians of balance. And something ancient was unraveling the harmony they had kept for ages.\n\n---\n\n### Chapter 4: The City of Scales\n\nIt was in the ruins of Volarath, the City of Scales, that they found the first great dragon. Her name was **Vhaeryn**, and she was dying.\n\nWings torn, her breath shallow, she lay upon a bed of obsidian glass. The Emberstone fragment embedded in her chest flickered like a failing star. She gazed at them with eyes older than mountains.\n\n“You bear my heart’s twin,” Vhaeryn murmured to Kaelira, seeing the shard she carried. “The balance wanes. The Darkfire stirs beneath the world. If it rises, it will burn both dragon and mortal alike.”\n\nThorn asked why the dragons could not end the threat themselves.\n\n“Because we are bound,” she whispered. “Bound by our own fire, sealed by the Stone that once united us. It shatters now because the hearts of mortals burn too bright—for greed, for power, for conquest. Our fates are entwined.”\n\nBefore Vhaeryn faded, she exhaled a small flame—gentle as autumn sunlight—and infused Kaelira’s shard with new life.\n\n“You will find my kin in the Four Quarters,” she said. “Restore the Stone, or all will fall to shadow.”\n\n---\n\n### Chapter 5: The Four Quarters\n\nTheir journey took them beyond the known lands.\n\nTo the **Frozen Reach**, where a dragon of ice named Kareth slumbered beneath a glacier so vast it sang when the wind touched it.\n\nTo the **Verdant Abyss**, where vines reached the clouds and an emerald wyrm ruled over the whispering forest spirits.\n\nTo the **Crimson Desert**, where molten rivers hid a dragon made of flame and fury, chained by the sins of humankind.\n\nAnd finally, to the **Obsidian Isles**, where the sea boiled and the last dragon waited—broken by centuries of solitude.\n\nIn each place, Kaelira had to prove something not only to the dragons but to herself: courage, compassion, understanding, sacrifice. Slowly, the fragments of the Emberstone began to resonate, glowing in harmony once more.\n\nBut with each victory came shadow. Something followed them—a whisper that filled their dreams, a shape that moved where light failed. The shadow spoke with many voices, promising power, immortality, and peace.\n\nIt was the mark of **Varynax**, the first dragon ever born—and the one who had tried to devour the sun.\n\n---\n\n### Chapter 6: The Dragon Below\n\nWhen they returned to Mount Rhyzath, the volcano no longer slept. Rivers of fire coiled down its slopes, and the air smelled of iron and ash. Kaelira could feel the shards vibrating wildly, pulling toward the mountain’s heart.\n\nIn the caverns below, they found a vast chasm filled with liquid light. The Emberstone’s core hung suspended above it, cracked and pulsing like a dying heart. Around it coiled Varynax, his form wreathed in darkness and flame.\n\n“You’ve come far,” he thundered. “But what you seek to restore will doom you all. The balance is a lie—a cage forged to bind our greatness.”\n\nKaelira stood her ground. “You would burn the world to free yourself.”\n\n“And remake it,” Varynax hissed. “Free of weakness. Free of mortals. Free of *chains*.”\n\nThe battle that followed shook the mountain. Thorn’s blade met fire; Aeris unleashed runes that shattered stone; Ryn stood amidst the chaos, channeling the dragons’ ancient dreams into the Emberstone itself.\n\nIn the final moment, Kaelira plunged her hammer—now glowing with every flame she had kindled—into the heart of the Stone. The shards fused together in a burst of light that blinded gods and monsters alike.\n\n---\n\n### Chapter 7: Fire Reborn\n\nWhen the light faded, Varynax was gone. The volcano quieted once more.\n\nKaelira awoke in the ruins of the cavern, the Emberstone pulsing faintly beside her. The air was warm—not with destruction, but with renewal.\n\nVhaeryn’s voice, gentle as wind on mountain peaks, echoed in her mind.  \n“The balance is restored—for now. But each age must find its own harmony. Remember, child of flame, the dragons sleep within you too.”\n\nKaelira returned to Cloudmere to find it untouched, save for a single mark in the sky: a constellation shaped like a dragon’s wing.\n\nShe never became a queen or a legend sung in courts. Instead, she rebuilt the forge. But sometimes, when her hammer struck metal, sparks would flare like golden scales—dancing for a heartbeat before fading into night.\n\n---\n\n### Epilogue: The Whisper of Wings\n\nYears later, travelers passing through Cloudmere told of a blacksmith who carried a scar glowing faintly with firelight. They said she could shape blades that never broke, and that on still nights, she could hear dragons in the wind.\n\nAnd when the mountains trembled once more, she would stand at her door, lift her eyes to the stars, and whisper:\n\n“Let the world be forged anew.”\n\n---\n\n**The End.**",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "max_output_tokens"
+          "native_finish_reason": "completed"
         }
       ],
-      "created": 1759672250,
-      "id": "gen-1759672250-If9ehl1Ei7jxzESDWkuw",
+      "created": 1759845389,
+      "id": "gen-1759845389-koMdGepLGXfxYbKJzuAg",
       "model": "openai/gpt-5-chat",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
-        "completion_tokens": 100,
+        "completion_tokens": 2018,
         "prompt_tokens": 16,
-        "total_tokens": 116
+        "total_tokens": 2034
       }
     },
     "headers": {
@@ -64,7 +64,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d63ebbeb80ffa-ORD"
+        "98ade6f23e9e608a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -73,7 +73,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:50:50 GMT"
+        "Tue, 07 Oct 2025 13:56:29 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

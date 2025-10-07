@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxNTAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6IngtYWkvZ3Jvay00IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjo2NDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJ4LWFpL2dyb2stNCIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
-      "max_tokens": 150,
+      "max_tokens": 6400,
       "messages": [
         {
           "content": "Tell me a joke about cats",
@@ -68,23 +68,23 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759529887,
-      "id": "gen-1759529887-9CZIAKunC9cRbhms0PNE",
+      "created": 1759845480,
+      "id": "gen-1759845480-lchUg9DK3HZf7k23gPEM",
       "model": "x-ai/grok-4",
       "object": "chat.completion",
       "provider": "xAI",
       "system_fingerprint": "fp_19e21a36c0",
       "usage": {
-        "completion_tokens": 198,
+        "completion_tokens": 156,
         "completion_tokens_details": {
-          "reasoning_tokens": 179
+          "reasoning_tokens": 137
         },
         "prompt_tokens": 879,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 878
+          "cached_tokens": 834
         },
-        "total_tokens": 1077
+        "total_tokens": 1035
       }
     },
     "headers": {
@@ -92,7 +92,7 @@
         "*"
       ],
       "cf-ray": [
-        "988fd045aedce264-ORD"
+        "98ade92e5e19acac-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -101,7 +101,7 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 22:18:07 GMT"
+        "Tue, 07 Oct 2025 13:58:00 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

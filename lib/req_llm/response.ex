@@ -177,8 +177,8 @@ defmodule ReqLLM.Response do
 
   def reasoning_tokens(%__MODULE__{usage: usage}) when is_map(usage) do
     # Try various possible keys for reasoning tokens
-    usage[:reasoning_tokens] || usage["reasoning_tokens"] ||
-      get_in(usage, [:completion_tokens_details, :reasoning_tokens]) ||
+    usage[:reasoning_tokens] || usage["reasoning_tokens"] || usage[:reasoning] ||
+      usage["reasoning"] || get_in(usage, [:completion_tokens_details, :reasoning_tokens]) ||
       get_in(usage, ["completion_tokens_details", "reasoning_tokens"]) || 0
   end
 

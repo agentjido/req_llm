@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZGVlcHNlZWsvZGVlcHNlZWstcjEtMDUyODpmcmVlIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImRlZXBzZWVrL2RlZXBzZWVrLXIxLTA1Mjg6ZnJlZSIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
-      "max_tokens": 200,
+      "max_tokens": 2000,
       "messages": [
         {
           "content": "Hello world!",
@@ -35,22 +35,37 @@
   },
   "response": {
     "body": {
-      "error": {
-        "code": 429,
-        "message": "Provider returned error",
-        "metadata": {
-          "provider_name": "Chutes",
-          "raw": "deepseek/deepseek-r1-0528:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations"
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "To reverse the string \"Hello world!\", we can use Python's slicing feature. Here's the solution:\n\n```python\ndef reverse_string(s):\n    return s[::-1]\n\n# Example usage:\ninput_str = \"Hello world!\"\noutput_str = reverse_string(input_str)\nprint(output_str)  # Output: \"!dlrow olleH\"\n```\n\n### Explanation:\n- **Slicing with `[::-1]`**: The slice notation `[::-1]` reverses the string by stepping backward through each character.\n- **Efficiency**: This approach runs in O(n) time complexity, where n is the length of the string, making it efficient.\n- **Simplicity**: It leverages Python's built-in features for concise and readable code.\n\nThis solution directly returns the reversed string as required.",
+            "reasoning": "We are given the input \"Hello world!\" and we are to output a reversed version of it.\n However, note that the problem says: \"Given a string, return a new string with the reversed order of characters.\"\n Example: \n   Input: \"Hello world!\" \n   Output: \"!dlrow olleH\"\n\n We can achieve this by using slicing in Python: [::-1] which reverses the string.\n\n Let's write the code accordingly.\n",
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
         }
-      },
-      "user_id": "user_2iYQIxKY28QuzANm4mmKBlOxzx2"
+      ],
+      "created": 1759846293,
+      "id": "gen-1759846293-DR92ADC2rlaWsBkV6ztA",
+      "model": "deepseek/deepseek-r1-0528:free",
+      "object": "chat.completion",
+      "provider": "Chutes",
+      "usage": {
+        "completion_tokens": 255,
+        "prompt_tokens": 9,
+        "total_tokens": 264
+      }
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
       "cf-ray": [
-        "989d5f11ec6102a7-ORD"
+        "98adfd06cd969a2e-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -59,7 +74,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:47:31 GMT"
+        "Tue, 07 Oct 2025 14:11:34 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -80,6 +95,6 @@
         "nosniff"
       ]
     },
-    "status": 429
+    "status": 200
   }
 }

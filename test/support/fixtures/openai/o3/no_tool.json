@@ -61,9 +61,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759772163,
+      "created_at": 1759795797,
       "error": null,
-      "id": "resp_0cd19677ee27979a0068e3fe03116c819a91e86a651e3bcc35",
+      "id": "resp_024cbcddc94e01890068e45a55b3f88198b181825a6b5c41e5",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 20000,
@@ -73,7 +73,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_0cd19677ee27979a0068e3fe03d9c0819a9673242efbe85405",
+          "id": "rs_024cbcddc94e01890068e45a565d7881989761a7c1372b4136",
           "summary": [],
           "type": "reasoning"
         },
@@ -82,11 +82,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Why don’t cats play poker in the jungle?\n\nToo many cheetahs!",
+              "text": "Why did the cat sit on the computer?\n\nBecause it wanted to keep an eye on the mouse!",
               "type": "output_text"
             }
           ],
-          "id": "msg_0cd19677ee27979a0068e3fe048280819a84cbe9c4e712f77e",
+          "id": "msg_024cbcddc94e01890068e45a56f3ec81989a65b745f06a629a",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -133,11 +133,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 22,
+        "output_tokens": 26,
         "output_tokens_details": {
           "reasoning_tokens": 0
         },
-        "total_tokens": 55
+        "total_tokens": 59
       },
       "user": null
     },
@@ -149,7 +149,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a6eb320f26f790-ORD"
+        "98a92c373e017815-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -158,13 +158,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 17:36:04 GMT"
+        "Tue, 07 Oct 2025 00:09:59 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "1898"
+        "1714"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -176,8 +176,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=ry6SUiyly24OIq0asT7alc3TpfgAqSsRTCRR8DiSWhE-1759772164-1.0.1.1-6VcsbMHjCVZaQ4EaDoEqjy09C9pfw8AdP8_aM60DhxeBG0BbZ62Syz9EpTiq7FZaZQdxWNJq5YXlLtMvLWjACHv35Yls9Z7yVIi1AzGrvPw; path=/; expires=Mon, 06-Oct-25 18:06:04 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=Klq586RSnnZ6pFCJDBuWZQk3tZjRLIYX279uc4jzDL0-1759772164994-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=6ZZg4W0gJaYOpg1PFD2aVYQaGpmF5XNR6Q2ToIZYgCY-1759795799-1.0.1.1-.cL7ORke.OMRj9id1V1Nqp3RtqXpaFGJ_shH.c3BWLx25C84vXNHJwp8l37dexBHr2rn117YAmyPLwTqcY3vlOnQ0swQ9fevIdihwR.rniE; path=/; expires=Tue, 07-Oct-25 00:39:59 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=ogOq4tkT_kytYDxLQOqkFSgUzUV2KDTzz0W48E4aLbo-1759795799429-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -189,28 +189,28 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "1900"
+        "1719"
       ],
       "x-ratelimit-limit-requests": [
-        "5000"
+        "10000"
       ],
       "x-ratelimit-limit-tokens": [
-        "800000"
+        "2000000"
       ],
       "x-ratelimit-remaining-requests": [
-        "4999"
+        "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "799704"
+        "1999704"
       ],
       "x-ratelimit-reset-requests": [
-        "12ms"
+        "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "22ms"
+        "8ms"
       ],
       "x-request-id": [
-        "req_6ed08d9f8c43c9a9f06cc82e39e59d9a"
+        "req_ceac82e1ffaede91155d3f6dfdb36bae"
       ]
     },
     "status": 200

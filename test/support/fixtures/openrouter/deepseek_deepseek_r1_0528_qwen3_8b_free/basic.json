@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZGVlcHNlZWsvZGVlcHNlZWstcjEtMDUyOC1xd2VuMy04YjpmcmVlIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImRlZXBzZWVrL2RlZXBzZWVrLXIxLTA1MjgtcXdlbjMtOGI6ZnJlZSIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
-      "max_tokens": 200,
+      "max_tokens": 2000,
       "messages": [
         {
           "content": "Hello world!",
@@ -36,11 +36,15 @@
   "response": {
     "body": {
       "error": {
-        "code": 503,
-        "message": "Provider returned error",
+        "code": 429,
+        "message": "Rate limit exceeded: free-models-per-min. ",
         "metadata": {
-          "provider_name": "Chutes",
-          "raw": "{\"detail\":\"No instances available (yet) for chute_id='aa5ff190-f995-5edf-9331-ea8fc5734f3e'\"}"
+          "headers": {
+            "X-RateLimit-Limit": "20",
+            "X-RateLimit-Remaining": "0",
+            "X-RateLimit-Reset": "1759845420000"
+          },
+          "provider_name": null
         }
       },
       "user_id": "user_2iYQIxKY28QuzANm4mmKBlOxzx2"
@@ -50,7 +54,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d5f143801619c-ORD"
+        "98ade69e8aa27b1b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -59,7 +63,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:47:32 GMT"
+        "Tue, 07 Oct 2025 13:56:16 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -78,8 +82,17 @@
       ],
       "x-content-type-options": [
         "nosniff"
+      ],
+      "x-ratelimit-limit": [
+        "20"
+      ],
+      "x-ratelimit-remaining": [
+        "0"
+      ],
+      "x-ratelimit-reset": [
+        "1759845420000"
       ]
     },
-    "status": 503
+    "status": 429
   }
 }

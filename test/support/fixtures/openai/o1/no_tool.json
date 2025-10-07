@@ -61,9 +61,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759772163,
+      "created_at": 1759795807,
       "error": null,
-      "id": "resp_094bba4c97600ee50068e3fe0384c8819383837b8a96e0cbe5",
+      "id": "resp_083c94a8a72da2940068e45a5f6aac8194a0118a49a124a877",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 20000,
@@ -73,7 +73,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_094bba4c97600ee50068e3fe064b808193814044be39b07714",
+          "id": "rs_083c94a8a72da2940068e45a61e0288194af2bdf8542c2dee4",
           "summary": [],
           "type": "reasoning"
         },
@@ -82,11 +82,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Here's one:\n\nWhy do cats always get their way?  \nBecause they’re so purr-suasive!",
+              "text": "Sure! Here's one:\n\nWhy did the cat join the Red Cross?  \nBecause it wanted to be a first-aid “kit-ty.”\n\nHope it made you smile!",
               "type": "output_text"
             }
           ],
-          "id": "msg_094bba4c97600ee50068e3fe06bb188193837d0fbc7517aa67",
+          "id": "msg_083c94a8a72da2940068e45a6350d08194b579973e155169a9",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -133,11 +133,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 151,
+        "output_tokens": 165,
         "output_tokens_details": {
           "reasoning_tokens": 128
         },
-        "total_tokens": 184
+        "total_tokens": 198
       },
       "user": null
     },
@@ -149,7 +149,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a6eb32af3a1cd6-ORD"
+        "98a92c73fce461c9-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -158,13 +158,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 17:36:07 GMT"
+        "Tue, 07 Oct 2025 00:10:11 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "3618"
+        "4516"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -176,8 +176,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=IwOEm0Ob_HPXDogXRc0Lky_okxVaop3mmRR.Mkhn3fE-1759772167-1.0.1.1-czfdnugoxv_wMaEgfL3dPHKuj7IDhluvYLssYoChLKPnLKgO6F3y8zedlxqTJ5df1M2qQKPWncapI.Y14bKa327eCy3hEj7eZAJ9.9MNeM8; path=/; expires=Mon, 06-Oct-25 18:06:07 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=QlCCvPd4aPeT0dDdtb2Yn6416PMtEG7wl9RzMn.X_wY-1759772167161-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=19DrpXanqTgMUlBgOHNmKVfT2fkvtUAQ0DyhQAeh1Fc-1759795811-1.0.1.1-QQZIhjppFp4kEXbeJgSsq7RMwTSqQ_meZINoBftKuoisk2qpCcZNaSPbhwdfOEXSxhZEhA_tXelKTCNYoEnSUGTyObIYMDO5421MLsIEwHk; path=/; expires=Tue, 07-Oct-25 00:40:11 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=dv211bucskdO_fSBEESTfyFwiCoNoKg1kA5iJFF0pKk-1759795811921-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -189,28 +189,28 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "3620"
+        "4521"
       ],
       "x-ratelimit-limit-requests": [
-        "5000"
+        "10000"
       ],
       "x-ratelimit-limit-tokens": [
-        "800000"
+        "2000000"
       ],
       "x-ratelimit-remaining-requests": [
-        "4999"
+        "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "799732"
+        "1999725"
       ],
       "x-ratelimit-reset-requests": [
-        "12ms"
+        "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "20ms"
+        "8ms"
       ],
       "x-request-id": [
-        "req_35ba8b476256cbe90bd75c473b98ed45"
+        "req_b9c478cdee44ea358601d1b2433ce754"
       ]
     },
     "status": 200

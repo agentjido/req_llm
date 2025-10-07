@@ -40,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759772165,
+      "created_at": 1759795783,
       "error": null,
-      "id": "resp_081581d1341879f10068e3fe05dd5c819bbc4c74e11822110a",
+      "id": "resp_0acdfab66e509ca90068e45a472af8819bad8d34c14a834259",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 2000,
@@ -52,7 +52,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_081581d1341879f10068e3fe064b78819bb77120956b776c4e",
+          "id": "rs_0acdfab66e509ca90068e45a479c0c819bae2bf7cd9cc527cc",
           "summary": [],
           "type": "reasoning"
         },
@@ -61,11 +61,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Hello! Nice to meet you. What would you like to do today?\n\nIf you’re learning programming, here are quick “Hello, World!” examples in a few languages:\n\n- Python: print(\"Hello, World!\")\n- JavaScript: console.log(\"Hello, World!\")\n- C:\n  #include <stdio.h>\n  int main(void) {\n      printf(\"Hello, World!\\n\");\n      return 0;\n  }\n- Java:\n  public class HelloWorld {\n      public static void main(String[] args) {\n          System.out.println(\"Hello, World!\");\n      }\n  }\n- Ruby: puts \"Hello, World!\"\n- Go:\n  package main\n  import \"fmt\"\n  func main() {\n      fmt.Println(\"Hello, World!\")\n  }\n\nWant examples in another language or help with something else?",
+              "text": "Hi there! Nice to meet you. If you’re practicing coding, here are a few ways to print “Hello, world!” in different languages:\n\n- Python: print(\"Hello, world!\")\n- JavaScript: console.log(\"Hello, world!\");\n- C: #include <stdio.h> int main() { printf(\"Hello, world!\\n\"); return 0; }\n- Java: public class Hello { public static void main(String[] args) { System.out.println(\"Hello, world!\"); } }\n- Bash: echo \"Hello, world!\"\n\nWant to see another language or need help with something else?",
               "type": "output_text"
             }
           ],
-          "id": "msg_081581d1341879f10068e3fe0a10c0819bbca5459ce0811041",
+          "id": "msg_0acdfab66e509ca90068e45a4b81bc819baaa9b508cd51e359",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -99,11 +99,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 876,
+        "output_tokens": 898,
         "output_tokens_details": {
-          "reasoning_tokens": 704
+          "reasoning_tokens": 768
         },
-        "total_tokens": 885
+        "total_tokens": 907
       },
       "user": null
     },
@@ -115,7 +115,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a6eb444f2e8222-ORD"
+        "98a92bdc6a3de264-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -124,13 +124,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 17:36:12 GMT"
+        "Tue, 07 Oct 2025 00:09:48 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "6757"
+        "5273"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -142,8 +142,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=SQy.s0JYjVa7kRy5hOjvBuMGviLLXQ0x2.d8_U6wXu8-1759772172-1.0.1.1-Gnyb4j2P75bdfm8Ro1R_7YY4KRLYaDPEpdAOKzAXzk0x83itO4sYz6Dlyeg19LeERPNimFc5LlNI2_t_LB0Kvlbh38ngGJoJYdYijmh460M; path=/; expires=Mon, 06-Oct-25 18:06:12 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=xldxG6rgBnQPFWy4u.QIWw5WLUS.e53PrW3GGyMLLXw-1759772172653-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=Llav0Fv6S.LJijxmKTrZVm1JKIrdQsevLGU8NXVAVug-1759795788-1.0.1.1-zWIUJctzi4SXRj9lg9O6PMiZfUrjEC63qSAt2gYxY5YXMzn0_U0k8ZxeXTuROH45KUL_Ip2Cl74d4zIWtj1nXpSwh3Z4BiavVW1yfnimz78; path=/; expires=Tue, 07-Oct-25 00:39:48 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=u3fDNhH4BE_7Ua4gIDgJWRQLy4U8d2jslSiJYzy4Iws-1759795788462-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -155,28 +155,28 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "6761"
+        "5276"
       ],
       "x-ratelimit-limit-requests": [
-        "5000"
+        "10000"
       ],
       "x-ratelimit-limit-tokens": [
-        "4000000"
+        "10000000"
       ],
       "x-ratelimit-remaining-requests": [
-        "4999"
+        "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "3999774"
+        "9999774"
       ],
       "x-ratelimit-reset-requests": [
-        "12ms"
+        "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "3ms"
+        "1ms"
       ],
       "x-request-id": [
-        "req_67c9314044f909621e896a6b3e163fd2"
+        "req_10f03da0be09359acd9c572cefd307be"
       ]
     },
     "status": 200

@@ -101,15 +101,15 @@
                   "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "call_32204714",
+                "id": "call_47303769",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1759763206,
-      "id": "6d4a980d-ff92-ade5-1998-cb51f87b652f_us-east-1",
+      "created": 1759844447,
+      "id": "ebf9b505-284f-fd00-238a-f89d717f9f2d_us-east-1",
       "model": "grok-4-fast-reasoning",
       "object": "chat.completion",
       "system_fingerprint": "fp_9362061f30",
@@ -118,18 +118,18 @@
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 149,
+          "reasoning_tokens": 189,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
         "prompt_tokens": 386,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 266,
+          "cached_tokens": 385,
           "image_tokens": 0,
           "text_tokens": 386
         },
-        "total_tokens": 573
+        "total_tokens": 613
       }
     },
     "headers": {
@@ -143,7 +143,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a610880f4c6208-ORD"
+        "98adcff72bdbe26d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -152,13 +152,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 15:06:47 GMT"
+        "Tue, 07 Oct 2025 13:40:49 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=x.xEeE3nKVhx7UUxB1NzajB0Al8IB2SWhcHo4tIUM_Y-1759763207-1.0.1.1-CUegJmwVUmQyAFwD0Uo0PM97tFbETFM.y7NpEFqft.UxA4dKDwioh7KPDW6dkF9NB1nBF6oVec99jJJx3IKLGU5.HK.KL_tSPx5NOx2sKgY; path=/; expires=Mon, 06-Oct-25 15:36:47 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=CBeJMvQ1JRLXnyh02BQZ26fzZKBYTLlq.DzQOXXK.xI-1759844449-1.0.1.1-Ri03cvydSPVokCsWvomy4nHszw3RPi759gexov2NFdV1Z8rgknwoAC9jETx_8_Ch5eiWjAwEk5r5hCARoFx69hVo4YoJwmeeay_zua49evc; path=/; expires=Tue, 07-Oct-25 14:10:49 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -170,7 +170,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-63125d81663883c5875029c1c3393990-9bee92480063b981-01"
+        "00-78498b2e77714fa3e436cd9fb339562e-4eae8fc9001927a1-01"
       ],
       "x-zero-data-retention": [
         "false"

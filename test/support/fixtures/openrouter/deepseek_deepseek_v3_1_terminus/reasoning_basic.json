@@ -39,26 +39,33 @@
         {
           "finish_reason": "stop",
           "index": 0,
-          "logprobs": null,
+          "logprobs": {
+            "content": [],
+            "refusal": []
+          },
           "message": {
-            "content": "To solve 12 × 7, I can break it down into simpler parts. First, 10 × 7 = 70, and 2 × 7 = 14. Then, adding 70 and 14 gives 70 + 14 = 84. Therefore, 12 × 7 = 84.",
-            "reasoning": "First, I need to solve 12 multiplied by 7. Multiplication is basically repeated addition. So, 12 times 7 means adding 12 seven times.\n\nI can break it down: 10 times 7 is 70, and 2 times 7 is 14. Then, adding 70 and 14 gives me 84.\n\nI know that 12 times 7 is a basic multiplication fact. I remember that 12 x 7 = 84.\n\nSo, the answer should be 84.",
+            "content": "To solve 12 * 7, I break it down mentally:  \n- 10 * 7 = 70  \n- 2 * 7 = 14  \nThen, add them together: 70 + 14 = 84.  \n\nThus, 12 * 7 = 84.",
+            "reasoning": "First, I need to solve 12 multiplied by 7. Multiplication is basically repeated addition. So, 12 times 7 means adding 12 seven times.\n\nI can break it down: 10 times 7 is 70, and 2 times 7 is 14. Then, adding 70 and 14 gives me 84.\n\nSo, 12 * 7 = 84.\n\nI should double-check. I know that 12 * 6 = 72, and then adding another 12 gives 72 + 12 = 84. That confirms it.\n\nTherefore, the answer is 84.",
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759672050,
-      "id": "gen-1759672050-n3AtIsFyvXc84WCYzmmB",
+      "created": 1759847832,
+      "id": "gen-1759847832-NXP5DcYWpElG0bKKvNKG",
       "model": "deepseek/deepseek-v3.1-terminus",
       "object": "chat.completion",
-      "provider": "DeepInfra",
+      "provider": "Novita",
       "usage": {
-        "completion_tokens": 175,
+        "completion_tokens": 192,
+        "completion_tokens_details": null,
         "prompt_tokens": 17,
-        "prompt_tokens_details": null,
-        "total_tokens": 192
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 17
+        },
+        "total_tokens": 209
       }
     },
     "headers": {
@@ -66,7 +73,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d5f08dae013f3-ORD"
+        "98ae2298082a34ad-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -75,7 +82,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:47:30 GMT"
+        "Tue, 07 Oct 2025 14:37:13 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

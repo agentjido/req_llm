@@ -38,29 +38,29 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "In the land of Eridoria, where the sun dipped into the horizon and painted the sky with hues of crimson and gold, the village of Brindlemark lay nestled in a valley surrounded by towering mountains. The villagers lived simple lives, tending to their crops and livestock, and trading with neighboring towns. But amidst the mundane routine, a sense of wonder and magic lingered, for it was said that dragons roamed the skies and mountains, watching over the land and its",
+            "content": "In a land far, far away, where the skies were perpetually painted with hues of crimson and gold, and the earth trembled beneath the feet of the mighty, there existed a realm where dragons roamed free. For centuries, these magnificent creatures had ruled the skies, their scales glinting like diamonds in the sunlight, their roars thundering through the valleys and mountains.\n\nIn a small village nestled in the heart of a valley, a young apprentice named Eira lived a",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759698667,
-      "id": "chatcmpl-5c7911e3-6de8-4f49-9364-50d63e0b6275",
+      "created": 1759844698,
+      "id": "chatcmpl-fdc0e09d-398d-4de4-a2fd-30acbc211415",
       "model": "meta-llama/llama-4-maverick-17b-128e-instruct",
       "object": "chat.completion",
       "service_tier": "on_demand",
       "system_fingerprint": "fp_d2c1f7e199",
       "usage": {
-        "completion_time": 0.299325166,
+        "completion_time": 0.160660916,
         "completion_tokens": 100,
-        "prompt_time": 0.039437103,
+        "prompt_time": 5.65664e-4,
         "prompt_tokens": 19,
-        "queue_time": 0.196977372,
-        "total_time": 0.338762269,
+        "queue_time": 0.19671259,
+        "total_time": 0.16122658,
         "total_tokens": 119
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6v3dhtsf0k851w0mpn3wkp0"
+        "id": "req_01k6zep25te4q91sx1tawst8q1"
       }
     },
     "headers": {
@@ -74,7 +74,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989fe8dede4fe804-ORD"
+        "98add614298b47a1-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -83,13 +83,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:11:07 GMT"
+        "Tue, 07 Oct 2025 13:44:58 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=ypVXg5yULrMztvgWaC3Inem.nMrm4KCHQETumE9VQRY-1759698667-1.0.1.1-uvPbPeRNdBZNfK65KNfFXMMvVp37sGIfoG1ohwHpnuOiJlUX.0_a3LgZd5r8eX4p8bEDsNlZ7DmYUQOYdEna67_Y_VgkSiHuoAiHAlgqoAc; path=/; expires=Sun, 05-Oct-25 21:41:07 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=CeDwYQZ_sPsh1Bfk3P4LT7og5BwCLxsX4ODiBZIUKb4-1759844698-1.0.1.1-pE0u2OLt7WFtcNrl7FW8qA5WW6vaxS9kWjWzJQlHcvd8YUAb9O0plYtE2YWlHHGrmyINj8j5npH5YxvVUhGWyfPrMwxOMiWNEKZWlOw6KkI; path=/; expires=Tue, 07-Oct-25 14:14:58 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -110,19 +110,19 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "994"
+        "993"
       ],
       "x-ratelimit-remaining-tokens": [
-        "4584"
+        "3798"
       ],
       "x-ratelimit-reset-requests": [
-        "8m38.078999999s"
+        "10m4.5s"
       ],
       "x-ratelimit-reset-tokens": [
-        "14.158999999s"
+        "22.02s"
       ],
       "x-request-id": [
-        "req_01k6v3dhtsf0k851w0mpn3wkp0"
+        "req_01k6zep25te4q91sx1tawst8q1"
       ]
     },
     "status": 200

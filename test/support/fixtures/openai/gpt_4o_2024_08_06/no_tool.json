@@ -66,8 +66,8 @@
           }
         }
       ],
-      "created": 1759772165,
-      "id": "chatcmpl-CNjPxN7Otlbp0DD6r92z5765fQT86",
+      "created": 1759795762,
+      "id": "chatcmpl-CNpYYXxCWrGcc3QzhyeLNCcDPHDjn",
       "model": "gpt-4o-2024-08-06",
       "object": "chat.completion",
       "service_tier": "default",
@@ -99,7 +99,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a6eb425af9c474-ORD"
+        "98a92b59ae32eb61-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -108,13 +108,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 06 Oct 2025 17:36:06 GMT"
+        "Tue, 07 Oct 2025 00:09:22 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "408"
+        "697"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -126,8 +126,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=gseWdSyqhOWxqT55LbrBEHMNZcptLLy3ZaztUv7i7XA-1759772166-1.0.1.1-af8KiT5HunpGBUBErWyZS6aUHpGlBIqGYGnWitffzknMHhyZkqjCnSIIoOp786vuEi4igRoYlXJiwQlMCYlbcswHfIDTW_GVjKstegkyNRk; path=/; expires=Mon, 06-Oct-25 18:06:06 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=1b7CxncG2F9ec_rs9ZO7ayyzEG9MTrAPQ2qb60m_WTM-1759772166012-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=KBTdbNEjO0sU9HTjcMDXGOPHTmy9iX10mt19ZEOBe1I-1759795762-1.0.1.1-dDTVZuCmN1NNOooaqRH.rh0mqHsVPFq1Qv8KnYeRjegUnLRHEY1o8lSxZp5c6P4pWBrdxGXs0Tr6BnHX3ZDcoW.EHCD1jNBCSagOa3wgBLs; path=/; expires=Tue, 07-Oct-25 00:39:22 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=7XSej2fEUDDPBxnFkq5e0sA4jQ5xz2TSOfzNWbeNp_0-1759795762966-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -139,31 +139,31 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "430"
+        "716"
       ],
       "x-openai-proxy-wasm": [
         "v0.1"
       ],
       "x-ratelimit-limit-requests": [
-        "5000"
+        "10000"
       ],
       "x-ratelimit-limit-tokens": [
-        "800000"
+        "2000000"
       ],
       "x-ratelimit-remaining-requests": [
-        "4999"
+        "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "799991"
+        "1999991"
       ],
       "x-ratelimit-reset-requests": [
-        "12ms"
+        "6ms"
       ],
       "x-ratelimit-reset-tokens": [
         "0s"
       ],
       "x-request-id": [
-        "req_049b3541197e4aeea7f116f11b3ec912"
+        "req_5100412b18f944a28697970661433381"
       ]
     },
     "status": 200

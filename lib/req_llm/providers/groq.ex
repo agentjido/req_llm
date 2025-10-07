@@ -118,7 +118,7 @@ defmodule ReqLLM.Providers.Groq do
             :low -> Keyword.put(opts, :reasoning_effort, "low")
             :medium -> Keyword.put(opts, :reasoning_effort, "medium")
             :high -> Keyword.put(opts, :reasoning_effort, "high")
-            :default -> Keyword.put(opts, :reasoning_effort, "default")
+            :default -> opts
             nil -> opts
             other -> Keyword.put(opts, :reasoning_effort, other)
           end
@@ -162,6 +162,20 @@ defmodule ReqLLM.Providers.Groq do
 
     encoded_body = Jason.encode!(enhanced_body)
     Map.put(request, :body, encoded_body)
+  end
+
+  @doc """
+  Custom attach_stream that ensures translate_options is called for streaming requests.
+
+  This is necessary because the default streaming path doesn't call translate_options,
+  which means model-specific option normalization (like omitting reasoning_effort for qwen models)
+  wouldn't be applied to streaming requests.
+  """
+  @impl ReqLLM.Provider
+  def attach_stream(model, context, opts, finch_name) do
+    {translated_opts, _warnings} = translate_options(:chat, model, opts)
+    opts_with_base_url = Keyword.put_new(translated_opts, :base_url, default_base_url())
+    ReqLLM.Providers.OpenAI.ChatAPI.attach_stream(model, context, opts_with_base_url, finch_name)
   end
 
   @doc """

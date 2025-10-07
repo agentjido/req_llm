@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjozMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJnb29nbGUvZ2VtaW5pLTIuNS1wcm8tcHJldmlldy0wNi0wNSIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMzEwNiwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LXByby1wcmV2aWV3LTA2LTA1IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
-      "max_tokens": 300,
+      "max_tokens": 13106,
       "messages": [
         {
           "content": "What's the weather like in Paris, France?",
@@ -96,12 +96,12 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "**Investigating Weather Queries**\n\nI'm looking at the user's request for the weather in Paris, France. My immediate thought is that the `get_weather` tool is the best fit. I'll have to make sure to use the location \"Paris, France\" as the argument and determine if a temperature unit is specified, and if not, default to celsius.\n\n\n",
+            "reasoning": "**Querying the Weather**\n\nI'm currently focusing on the weather query for \"Paris, France.\" My primary task involves determining the appropriate tool. The `get_weather` tool looks suitable. I'm also evaluating the required parameters, namely \"location\" and the optional \"unit\". My plan is to invoke the tool with \"Paris, France\" and no unit specified, defaulting to Celsius if necessary.\n\n\n**Finalizing the Tool Call**\n\nI've now zeroed in on the specifics. The location input for the tool is confirmed as \"Paris, France\". Since the user hasn't indicated a unit, I'm opting to omit it entirely, relying on the default, whatever it may be. The complete function call will be wrapped within a `print()` statement for output. The ultimate code snippet is now set.\n\n\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "**Investigating Weather Queries**\n\nI'm looking at the user's request for the weather in Paris, France. My immediate thought is that the `get_weather` tool is the best fit. I'll have to make sure to use the location \"Paris, France\" as the argument and determine if a temperature unit is specified, and if not, default to celsius.\n\n\n",
+                "text": "**Querying the Weather**\n\nI'm currently focusing on the weather query for \"Paris, France.\" My primary task involves determining the appropriate tool. The `get_weather` tool looks suitable. I'm also evaluating the required parameters, namely \"location\" and the optional \"unit\". My plan is to invoke the tool with \"Paris, France\" and no unit specified, defaulting to Celsius if necessary.\n\n\n**Finalizing the Tool Call**\n\nI've now zeroed in on the specifics. The location input for the tool is confirmed as \"Paris, France\". Since the user hasn't indicated a unit, I'm opting to omit it entirely, relying on the default, whatever it may be. The complete function call will be wrapped within a `print()` statement for output. The ultimate code snippet is now set.\n\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -113,7 +113,7 @@
                   "arguments": "{\"location\":\"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "tool_0_get_weather_cKWHXmSuKFfSIfER1BoC",
+                "id": "tool_0_get_weather_m4K5IRk0Wdwnpug6y2KW",
                 "index": 0,
                 "type": "function"
               }
@@ -122,22 +122,22 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1759671182,
-      "id": "gen-1759671182-0geED9PjeK1TWcQEUNmz",
+      "created": 1759845441,
+      "id": "gen-1759845441-GgGKBUYBvwPWwMDZdX0T",
       "model": "google/gemini-2.5-pro",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
-        "completion_tokens": 64,
+        "completion_tokens": 228,
         "completion_tokens_details": {
           "image_tokens": 0,
-          "reasoning_tokens": 57
+          "reasoning_tokens": 221
         },
         "prompt_tokens": 53,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 117
+        "total_tokens": 281
       }
     },
     "headers": {
@@ -145,7 +145,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d49d779e1e826-ORD"
+        "98ade83af870f5ff-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -154,7 +154,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:33:04 GMT"
+        "Tue, 07 Oct 2025 13:57:24 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

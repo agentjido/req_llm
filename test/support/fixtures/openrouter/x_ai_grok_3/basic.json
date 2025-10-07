@@ -36,26 +36,26 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": "stop",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hey there! \"Hello world!\"—a classic. Are you just saying hi, or are you diving into coding and testing the waters with your first program? Let me know, I’m all ears (or, well, all text)! 😊",
+            "content": "Hey there! \"Hello world!\"—a classic, are we coding or just saying hi? Either way, I'm happy to chat. What's on your mind? 😊",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "length"
+          "native_finish_reason": "stop"
         }
       ],
-      "created": 1759529826,
-      "id": "gen-1759529826-O24altAgVRXD96uQjrY3",
+      "created": 1759845447,
+      "id": "gen-1759845447-HMfAdEJ5fpsOyKNT7hQU",
       "model": "x-ai/grok-3",
       "object": "chat.completion",
       "provider": "xAI",
       "system_fingerprint": "fp_f02e6df795",
       "usage": {
-        "completion_tokens": 50,
+        "completion_tokens": 34,
         "completion_tokens_details": {
           "reasoning_tokens": 0
         },
@@ -64,7 +64,7 @@
           "audio_tokens": 0,
           "cached_tokens": 2
         },
-        "total_tokens": 59
+        "total_tokens": 43
       }
     },
     "headers": {
@@ -72,7 +72,7 @@
         "*"
       ],
       "cf-ray": [
-        "988fcec58f0a4d2c-ORD"
+        "98ade85c6c7c0046-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -81,7 +81,7 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 22:17:06 GMT"
+        "Tue, 07 Oct 2025 13:57:27 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

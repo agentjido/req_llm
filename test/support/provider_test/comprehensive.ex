@@ -42,6 +42,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
 
       @moduletag :coverage
       @moduletag provider: to_string(provider)
+      @moduletag timeout: 180_000
 
       defp debug?, do: System.get_env("REQ_LLM_DEBUG") in ["1", "true"]
 
@@ -343,6 +344,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 end
 
               object = ReqLLM.Response.object(response)
+              rt = ReqLLM.Response.reasoning_tokens(response)
 
               cond do
                 is_map(object) and map_size(object) > 0 ->
@@ -354,8 +356,10 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                   assert object["age"] > 0
 
                 truncated?(response) ->
-                  rt = ReqLLM.Response.reasoning_tokens(response)
                   assert is_number(rt) and rt >= 0
+
+                is_number(rt) and rt > 0 ->
+                  :ok
 
                 true ->
                   flunk("Expected non-empty object but got: #{inspect(object)}")

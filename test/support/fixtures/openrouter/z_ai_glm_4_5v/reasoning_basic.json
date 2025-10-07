@@ -1,0 +1,111 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InotYWkvZ2xtLTQuNXYiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjoxLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "z-ai/glm-4.5v",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "\nTo solve \\(12 \\times 7\\), break down 12 into \\(10 + 2\\). Multiply each part by 7:  \n\\(10 \\times 7 = 70\\) and \\(2 \\times 7 = 14\\). Add the results: \\(70 + 14 = 84\\).  \n\n<|begin_of_box|>84<|end_of_box|>",
+            "reasoning": "Got it, let's see. The problem is to solve 12 multiplied by 7. First, I need to remember how multiplication works. Maybe break down 12 into 10 and 2, since those are easier to multiply by 7. So 10 times 7 is 70, and 2 times 7 is 14. Then add those two results together: 70 + 14 = 84. That makes sense. Alternatively, I could think of 12 as 6 times 2, so 6 times 2 times 7. But that might be more complicated. No, the first method is simpler. Let me check again: 12*7. 10*7=70, 2*7=14, 70+14=84. Yep, that's right.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Got it, let's see. The problem is to solve 12 multiplied by 7. First, I need to remember how multiplication works. Maybe break down 12 into 10 and 2, since those are easier to multiply by 7. So 10 times 7 is 70, and 2 times 7 is 14. Then add those two results together: 70 + 14 = 84. That makes sense. Alternatively, I could think of 12 as 6 times 2, so 6 times 2 times 7. But that might be more complicated. No, the first method is simpler. Let me check again: 12*7. 10*7=70, 2*7=14, 70+14=84. Yep, that's right.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1759845337,
+      "id": "gen-1759845337-XpU84Fju6nSo59aHazJr",
+      "model": "z-ai/glm-4.5v",
+      "object": "chat.completion",
+      "provider": "Z.AI",
+      "usage": {
+        "completion_tokens": 241,
+        "prompt_tokens": 21,
+        "prompt_tokens_details": {
+          "cached_tokens": 4
+        },
+        "total_tokens": 262
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ade5afd96072d1-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 07 Oct 2025 13:55:38 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

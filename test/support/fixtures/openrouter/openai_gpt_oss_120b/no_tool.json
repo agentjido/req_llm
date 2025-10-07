@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjozMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtb3NzLTEyMGIiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjo2NTUyLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJvcGVuYWkvZ3B0LW9zcy0xMjBiIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
-      "max_tokens": 300,
+      "max_tokens": 6552,
       "messages": [
         {
           "content": "Tell me a joke about cats",
@@ -59,25 +59,36 @@
         {
           "finish_reason": "stop",
           "index": 0,
-          "logprobs": -1.7881393e-6,
+          "logprobs": null,
           "message": {
-            "content": "",
-            "reasoning": "<|channel|>analysis<|message|>The user wants a joke about cats. Simple. Provide a joke.<|end|><|start|>assistant<|channel|>final<|message|>Why did the cat sit on the computer?\n\nBecause it wanted to keep an eye on the mouse! 🐱💻",
+            "content": "Why did the cat sit on the computer?\n\nBecause it wanted to keep an eye on the mouse! 😸",
+            "reasoning": "The user wants a joke about cats. It's a simple request. Provide a cat joke. Ensure it's appropriate.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "The user wants a joke about cats. It's a simple request. Provide a cat joke. Ensure it's appropriate.",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759672252,
-      "id": "gen-1759672252-WnJiY3AZLEulA6A5iAlc",
+      "created": 1759845440,
+      "id": "gen-1759845439-x8vUgIiu7N1XdMCDBqDB",
       "model": "openai/gpt-oss-120b",
       "object": "chat.completion",
-      "provider": "Together",
+      "provider": "WandB",
       "usage": {
-        "completion_tokens": 49,
-        "prompt_tokens": 129,
-        "total_tokens": 178
+        "completion_tokens": 54,
+        "prompt_tokens": 77,
+        "prompt_tokens_details": {
+          "cached_tokens": 64
+        },
+        "total_tokens": 131
       }
     },
     "headers": {
@@ -85,7 +96,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d63f7cc9ddd00-ORD"
+        "98ade82f2c4913f7-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -94,7 +105,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:50:52 GMT"
+        "Tue, 07 Oct 2025 13:57:20 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ29vZ2xlL2dlbWluaS0yLjUtcHJvLXByZXZpZXctMDUtMDYiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LXByby1wcmV2aWV3LTA1LTA2IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
-      "max_tokens": 200,
+      "max_tokens": 2000,
       "messages": [
         {
           "content": "Hello world!",
@@ -41,13 +41,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello there! \"Hello, world!\" to you too.\n\nThat's the classic first step in so many programming journeys. How can I help you today?",
-            "reasoning": "**Recognizing the Phrase**\n\n\\n\\n\n\nI've zeroed in on the user's \"Hello world!\" input. My analysis immediately flagged it as a quintessential programming phrase, a rite of passage for every coding beginner. It's a truly iconic starting point, a fundamental expression of code.\n\n\n",
+            "content": "Hello there! That's the traditional first greeting for any new program.\n\nIt's nice to meet you. What can I help you with today?",
+            "reasoning": "**Recognizing User Input**\n\nI've identified the user's input: \"Hello world!\". This triggered recognition of the phrase as a programming archetype. It immediately brings to mind the simplicity and significance of this particular string. I see it as a point of origin, a declaration of intent.\n\n\n**Assessing User Motivation**\n\nI'm now examining the user's underlying reasons for using \"Hello world!\". I'm considering how to determine the user's expectations and what type of interaction they are hoping for, based on the phrase itself. I'm trying to pinpoint the most fitting tone for the upcoming response.\n\n\n**Deciding Response Strategy**\n\nI'm now selecting a response strategy. I'm leaning towards acknowledging the programming reference. I'm evaluating options like a direct acknowledgment (\"Hello back!\"), a slightly more involved, friendly, approach (\"Hello back! That's a classic first line for any program. What can I help you with today?\"), and perhaps even a playful, tech-oriented response using programming syntax (Java or Python).\n\n\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "**Recognizing the Phrase**\n\n\\n\\n\n\nI've zeroed in on the user's \"Hello world!\" input. My analysis immediately flagged it as a quintessential programming phrase, a rite of passage for every coding beginner. It's a truly iconic starting point, a fundamental expression of code.\n\n\n",
+                "text": "**Recognizing User Input**\n\nI've identified the user's input: \"Hello world!\". This triggered recognition of the phrase as a programming archetype. It immediately brings to mind the simplicity and significance of this particular string. I see it as a point of origin, a declaration of intent.\n\n\n**Assessing User Motivation**\n\nI'm now examining the user's underlying reasons for using \"Hello world!\". I'm considering how to determine the user's expectations and what type of interaction they are hoping for, based on the phrase itself. I'm trying to pinpoint the most fitting tone for the upcoming response.\n\n\n**Deciding Response Strategy**\n\nI'm now selecting a response strategy. I'm leaning towards acknowledging the programming reference. I'm evaluating options like a direct acknowledgment (\"Hello back!\"), a slightly more involved, friendly, approach (\"Hello back! That's a classic first line for any program. What can I help you with today?\"), and perhaps even a playful, tech-oriented response using programming syntax (Java or Python).\n\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -57,22 +57,22 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1759671185,
-      "id": "gen-1759671185-5eDJT0pKAde5YymwZxBV",
+      "created": 1759845359,
+      "id": "gen-1759845359-ketyPeTsPHPXC6CcXyfN",
       "model": "google/gemini-2.5-pro",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
-        "completion_tokens": 98,
+        "completion_tokens": 382,
         "completion_tokens_details": {
           "image_tokens": 0,
-          "reasoning_tokens": 65
+          "reasoning_tokens": 350
         },
         "prompt_tokens": 3,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 101
+        "total_tokens": 385
       }
     },
     "headers": {
@@ -80,7 +80,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d49ee5fb63c96-ORD"
+        "98ade63738d0e80c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,7 +89,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:33:08 GMT"
+        "Tue, 07 Oct 2025 13:56:01 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

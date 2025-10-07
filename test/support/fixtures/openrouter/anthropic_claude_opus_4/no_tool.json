@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxNTAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImFudGhyb3BpYy9jbGF1ZGUtb3B1cy00IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjozMjAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJhbnRocm9waWMvY2xhdWRlLW9wdXMtNCIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
-      "max_tokens": 150,
+      "max_tokens": 3200,
       "messages": [
         {
           "content": "Tell me a joke about cats",
@@ -60,7 +60,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "I don't have a joke-telling function available, but I'd be happy to share a cat joke with you anyway!\n\nHere's one:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs!\n\n😸\n\nWould you like to hear another one, or is there something else I can help you with?",
+            "content": "I don't need to use the weather tool for this request, so here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs!\n\n😸\n\nWould you like to hear another one?",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -68,15 +68,15 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759529586,
-      "id": "gen-1759529586-RDN9qiAAWcB7J0xNoBG1",
+      "created": 1759845360,
+      "id": "gen-1759845360-YUF5L890qZ0335L1GTUr",
       "model": "anthropic/claude-opus-4",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
-        "completion_tokens": 75,
+        "completion_tokens": 56,
         "prompt_tokens": 381,
-        "total_tokens": 456
+        "total_tokens": 437
       }
     },
     "headers": {
@@ -84,7 +84,7 @@
         "*"
       ],
       "cf-ray": [
-        "988fc8ea9e640ea2-ORD"
+        "98ade63f9fc6e450-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -93,7 +93,7 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 22:13:08 GMT"
+        "Tue, 07 Oct 2025 13:56:01 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

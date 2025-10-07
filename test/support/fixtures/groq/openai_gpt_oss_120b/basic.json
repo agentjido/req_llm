@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJvcGVuYWkvZ3B0LW9zcy0xMjBiIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtb3NzLTEyMGIiLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
-      "max_tokens": 50,
+      "max_tokens": 2000,
       "messages": [
         {
           "content": "Hello world!",
@@ -12,6 +12,7 @@
         }
       ],
       "model": "openai/gpt-oss-120b",
+      "reasoning_effort": "low",
       "seed": 42,
       "stream": false,
       "temperature": 0.0
@@ -39,30 +40,30 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! How can I assist you today?",
-            "reasoning": "The user says \"Hello world!\". Likely they just want a greeting. We respond politely.",
+            "content": "Hello, world! 🌍 How can I assist you today?",
+            "reasoning": "We just respond.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759698669,
-      "id": "chatcmpl-e3a92c01-7c6c-44fb-a1e6-a7eff65c3f15",
+      "created": 1759844706,
+      "id": "chatcmpl-dff6c582-c38f-4589-8e01-cf6ad4ee97a5",
       "model": "openai/gpt-oss-120b",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_213abb2467",
+      "system_fingerprint": "fp_3a688838c3",
       "usage": {
-        "completion_time": 0.07564302,
-        "completion_tokens": 38,
-        "prompt_time": 0.002871147,
+        "completion_time": 0.054685207,
+        "completion_tokens": 27,
+        "prompt_time": 0.004358049,
         "prompt_tokens": 74,
-        "queue_time": 0.195907393,
-        "total_time": 0.078514167,
-        "total_tokens": 112
+        "queue_time": 0.196229794,
+        "total_time": 0.059043256,
+        "total_tokens": 101
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6v3dm42fm5snvk5xgwrampc"
+        "id": "req_01k6zep9fse60bczvnchx9zrxa"
       }
     },
     "headers": {
@@ -76,7 +77,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989fe8ed7dda1497-ORD"
+        "98add642fd1cf161-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -85,13 +86,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:11:09 GMT"
+        "Tue, 07 Oct 2025 13:45:06 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=o2PWkV788y19_XQdaT0Pv2A5r2sd82DGbfXuthxqGto-1759698669-1.0.1.1-KZ2FcUk_qBnOStZCpSAfOCIbnyBco7VV5sZi2ialFUd2aUN.BSxh8XQRuc9Svrq47PmPvGV46uvEyLQJcC0V5YklfX.Llxqhw8jmB4I3MA0; path=/; expires=Sun, 05-Oct-25 21:41:09 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=11G9frNVdP68cSv7h5LU1O3lZlRCNEpWTHKb5oHw8iQ-1759844706-1.0.1.1-eHflcocSTyouForyvgmyt2Dj8nn3DGpHTG0m3JrN5eojRYm15lz54FFAVmZoMS3TdzpPLoUdBkrbiFTW4sfCfW4IiVKMjbXuuCGSjWlPmro; path=/; expires=Tue, 07-Oct-25 14:15:06 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -112,19 +113,19 @@
         "8000"
       ],
       "x-ratelimit-remaining-requests": [
-        "991"
+        "994"
       ],
       "x-ratelimit-remaining-tokens": [
-        "6965"
+        "4783"
       ],
       "x-ratelimit-reset-requests": [
-        "12m57.133999999s"
+        "8m37.837s"
       ],
       "x-ratelimit-reset-tokens": [
-        "7.76s"
+        "24.124s"
       ],
       "x-request-id": [
-        "req_01k6v3dm42fm5snvk5xgwrampc"
+        "req_01k6zep9fse60bczvnchx9zrxa"
       ]
     },
     "status": 200

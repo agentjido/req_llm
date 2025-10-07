@@ -39,7 +39,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "The wind, a biting, snow-laden gale, howled through the jagged peaks of the Dragon's Tooth Mountains, a range so named for the sharp, obsidian-like formations that pierced the sky. Elara, a young woman with hair the color of sun-bleached wheat and eyes like the glacial meltwater, braced herself against the onslaught. She was a Dragon Whisperer, a rare and dwindling breed, tasked with protecting the delicate balance between humans and the magnificent, terrifying creatures that",
+            "content": "The wind, a biting whip of ice and snow, howled across the Spine of the World, a mountain range that clawed at the heavens like a petrified titan. Elara, a wisp of a girl with eyes the color of glacial ice and hair like spun moonlight, huddled deeper into the meager shelter of a snow-laden pine. She was a scavenger, a child of the mountains, and survival was etched into her bones. But tonight, survival felt impossibly distant.\n\nFor",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -47,13 +47,13 @@
           "native_finish_reason": "MAX_TOKENS"
         }
       ],
-      "created": 1759671176,
-      "id": "gen-1759671176-0IEpWhaK9dJmszwIggym",
+      "created": 1759845358,
+      "id": "gen-1759845358-brjZFArkRchw7ewTJQpc",
       "model": "google/gemini-2.0-flash-001",
       "object": "chat.completion",
       "provider": "Google AI Studio",
       "usage": {
-        "completion_tokens": 100,
+        "completion_tokens": 99,
         "completion_tokens_details": {
           "image_tokens": 0,
           "reasoning_tokens": 0
@@ -62,7 +62,7 @@
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 109
+        "total_tokens": 108
       }
     },
     "headers": {
@@ -70,7 +70,7 @@
         "*"
       ],
       "cf-ray": [
-        "989d49b57b0eeb01-ORD"
+        "98ade63559a8f4e8-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -79,7 +79,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 13:32:57 GMT"
+        "Tue, 07 Oct 2025 13:55:59 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

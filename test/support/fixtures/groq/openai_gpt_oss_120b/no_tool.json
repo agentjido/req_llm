@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxNTAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtb3NzLTEyMGIiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfdG9rZW5zIjo2NTUyLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJvcGVuYWkvZ3B0LW9zcy0xMjBiIiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
-      "max_tokens": 150,
+      "max_tokens": 6552,
       "messages": [
         {
           "content": "Tell me a joke about cats",
@@ -12,6 +12,7 @@
         }
       ],
       "model": "openai/gpt-oss-120b",
+      "reasoning_effort": "low",
       "seed": 42,
       "stream": false,
       "temperature": 0.0,
@@ -59,30 +60,30 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Why did the cat sit on the computer?\n\nBecause it wanted to keep an eye on the mouse! 😺",
-            "reasoning": "User wants a joke about cats. Simple. Provide a joke.",
+            "content": "Why did the cat sit on the computer?  \n\nBecause it wanted to keep an eye on the mouse! 🐱💻",
+            "reasoning": "Need to respond with a joke.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759698666,
-      "id": "chatcmpl-b2547605-7497-4254-b031-ef69144c4660",
+      "created": 1759844706,
+      "id": "chatcmpl-6e1968b1-8bc1-4b3f-ac4e-578701339e67",
       "model": "openai/gpt-oss-120b",
       "object": "chat.completion",
       "service_tier": "on_demand",
       "system_fingerprint": "fp_ed9190d8b7",
       "usage": {
-        "completion_time": 0.0895145,
-        "completion_tokens": 45,
-        "prompt_time": 0.00649554,
+        "completion_time": 0.090004226,
+        "completion_tokens": 43,
+        "prompt_time": 0.009655429,
         "prompt_tokens": 127,
-        "queue_time": 0.196195692,
-        "total_time": 0.09601004,
-        "total_tokens": 172
+        "queue_time": 0.449814723,
+        "total_time": 0.099659655,
+        "total_tokens": 170
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6v3dgv0f0frbys5j7pzbs8z"
+        "id": "req_01k6zep9tke61a5e4w29vk45fz"
       }
     },
     "headers": {
@@ -96,7 +97,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989fe8d86ca91497-ORD"
+        "98add6451b6ef161-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -105,13 +106,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:11:06 GMT"
+        "Tue, 07 Oct 2025 13:45:06 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=zLddKeR1Ax8RhlttB1vW4O5RjX1oYQLrg.sFPR6E.pY-1759698666-1.0.1.1-Co6iABurq8ARKDgyM44UwBkdTCKz00xXXmSCdDXBoSi8tLQeSpz0U_XLhZfF3wsvo8tJ.0l5OAjlGWxhInr.UQiWmsknA2q_Zhgt8cEwocQ; path=/; expires=Sun, 05-Oct-25 21:41:06 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=yFxuWTikNb3INN7xLuv4yzRIKXCz1dcU.1AEYyFWWL0-1759844706-1.0.1.1-raPuRWdi1u_tQhk6x236nI2jrgqvfpThEwITRRBYLVeVSwI4cV6WL_Q1_zoUaP3E0Qfq_lpQ2qJaQSuZtaHYaGHAlnvjbzqBRHkkxmKACpA; path=/; expires=Tue, 07-Oct-25 14:15:06 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -132,19 +133,19 @@
         "8000"
       ],
       "x-ratelimit-remaining-requests": [
-        "998"
+        "993"
       ],
       "x-ratelimit-remaining-tokens": [
-        "7687"
+        "4674"
       ],
       "x-ratelimit-reset-requests": [
-        "2m52.418999999s"
+        "10m4.454999999s"
       ],
       "x-ratelimit-reset-tokens": [
-        "2.341999999s"
+        "24.944s"
       ],
       "x-request-id": [
-        "req_01k6v3dgv0f0frbys5j7pzbs8z"
+        "req_01k6zep9tke61a5e4w29vk45fz"
       ]
     },
     "status": 200
