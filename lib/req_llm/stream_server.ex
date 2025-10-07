@@ -85,7 +85,9 @@ defmodule ReqLLM.StreamServer do
     high_watermark: 500,
     headers: [],
     http_status: nil,
-    waiting_callers: []
+    waiting_callers: [],
+    object_json_mode?: false,
+    object_acc: []
   ]
 
   @doc """
@@ -334,10 +336,18 @@ defmodule ReqLLM.StreamServer do
 
   @impl GenServer
   def handle_call({:set_fixture_context, http_context, canonical_json}, _from, state) do
+    is_google = state.model.provider == :google
+
+    json_mode? =
+      is_google and
+        get_in(canonical_json, ["generationConfig", "responseMimeType"]) == "application/json"
+
     new_state = %{
       state
       | http_context: http_context,
-        canonical_json: canonical_json
+        canonical_json: canonical_json,
+        object_json_mode?: json_mode?,
+        object_acc: []
     }
 
     {:reply, :ok, new_state}
@@ -500,21 +510,19 @@ defmodule ReqLLM.StreamServer do
   defp termination_event?(_), do: false
 
   defp enqueue_chunks(chunks, state) do
-    {new_queue, updated_metadata} =
-      Enum.reduce(chunks, {state.queue, state.metadata}, fn chunk, {queue, metadata} ->
-        # Enqueue the chunk
+    {new_queue, updated_metadata, new_obj_acc} =
+      Enum.reduce(chunks, {state.queue, state.metadata, state.object_acc}, fn chunk,
+                                                                              {queue, metadata,
+                                                                               obj_acc} ->
         new_queue = :queue.in(chunk, queue)
 
-        # Accumulate metadata from meta chunks
         updated_metadata =
           case chunk.type do
             :meta ->
-              # Extract usage data from the chunk's metadata
               usage =
                 Map.get(chunk.metadata || %{}, :usage) || Map.get(chunk.metadata || %{}, "usage")
 
               if usage do
-                # Normalize usage data from provider format to ReqLLM format
                 normalized_usage = normalize_streaming_usage(usage, state.model)
                 Map.update(metadata, :usage, normalized_usage, &Map.merge(&1, normalized_usage))
               else
@@ -525,10 +533,17 @@ defmodule ReqLLM.StreamServer do
               metadata
           end
 
-        {new_queue, updated_metadata}
+        obj_acc =
+          if state.object_json_mode? and chunk.type == :content and is_binary(chunk.text) do
+            [obj_acc, chunk.text]
+          else
+            obj_acc
+          end
+
+        {new_queue, updated_metadata, obj_acc}
       end)
 
-    %{state | queue: new_queue, metadata: updated_metadata}
+    %{state | queue: new_queue, metadata: updated_metadata, object_acc: new_obj_acc}
   end
 
   defp dequeue_chunk(state) do
@@ -543,17 +558,44 @@ defmodule ReqLLM.StreamServer do
   end
 
   defp finalize_stream(state) do
-    state =
+    {flush_chunks, new_provider_state} =
       if function_exported?(state.provider_mod, :flush_stream_state, 2) do
-        {flush_chunks, new_provider_state} =
-          state.provider_mod.flush_stream_state(state.model, state.provider_state)
-
-        state
-        |> Map.put(:provider_state, new_provider_state)
-        |> then(&enqueue_chunks(flush_chunks, &1))
+        state.provider_mod.flush_stream_state(state.model, state.provider_state)
       else
-        state
+        {[], state.provider_state}
       end
+
+    extra_flush_chunks =
+      if state.object_json_mode? do
+        full = state.object_acc |> IO.iodata_to_binary() |> String.trim()
+
+        if System.get_env("REQ_LLM_DEBUG") in ["1", "true"] do
+          IO.puts("[StreamServer] JSON mode finalize: accumulated=#{inspect(full)}")
+        end
+
+        case Jason.decode(full) do
+          {:ok, obj} ->
+            if System.get_env("REQ_LLM_DEBUG") in ["1", "true"] do
+              IO.puts("[StreamServer] Parsed object: #{inspect(obj)}")
+            end
+
+            [ReqLLM.StreamChunk.tool_call("structured_output", obj)]
+
+          {:error, reason} ->
+            if System.get_env("REQ_LLM_DEBUG") in ["1", "true"] do
+              IO.puts("[StreamServer] Failed to parse JSON: #{inspect(reason)}")
+            end
+
+            []
+        end
+      else
+        []
+      end
+
+    state =
+      state
+      |> Map.put(:provider_state, new_provider_state)
+      |> then(&enqueue_chunks(flush_chunks ++ extra_flush_chunks, &1))
 
     metadata = extract_final_metadata(state)
     %{state | status: :done, metadata: metadata}

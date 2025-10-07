@@ -128,7 +128,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     if System.get_env("REQ_LLM_DEBUG") do
       require Logger
-      Logger.debug("ResponsesAPI decode_sse_event: event=#{inspect(Map.keys(event))}, event_type=#{inspect(event_type)}")
+
+      Logger.debug(
+        "ResponsesAPI decode_sse_event: event=#{inspect(Map.keys(event))}, event_type=#{inspect(event_type)}"
+      )
     end
 
     case event_type do

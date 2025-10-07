@@ -185,7 +185,8 @@ defmodule ReqLLM.Providers.GoogleTest do
           context: context,
           model: model.model,
           stream: false,
-          tools: [tool]
+          tools: [tool],
+          operation: :chat
         ]
       }
 
@@ -195,7 +196,6 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert is_list(decoded["tools"])
       assert length(decoded["tools"]) == 1
 
-      # Google uses functionDeclarations
       [tool_def] = decoded["tools"]
       assert Map.has_key?(tool_def, "functionDeclarations")
       assert is_list(tool_def["functionDeclarations"])
@@ -578,17 +578,15 @@ defmodule ReqLLM.Providers.GoogleTest do
     end
   end
 
-  describe "object generation edge cases" do
+  describe "object generation with native JSON mode" do
     test "prepare_request for :object with low max_tokens gets adjusted" do
       model = ReqLLM.Model.from!("google:gemini-1.5-flash")
       context = context_fixture()
       {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string, required: true])
 
-      # Test with max_tokens < 200
       opts = [max_tokens: 50, compiled_schema: schema]
       {:ok, request} = Google.prepare_request(:object, model, context, opts)
 
-      # Should be adjusted to 200
       assert request.options[:max_tokens] == 200
     end
 
@@ -597,11 +595,9 @@ defmodule ReqLLM.Providers.GoogleTest do
       context = context_fixture()
       {:ok, schema} = ReqLLM.Schema.compile([])
 
-      # No max_tokens specified
       opts = [compiled_schema: schema]
       {:ok, request} = Google.prepare_request(:object, model, context, opts)
 
-      # Should get default of 4096
       assert request.options[:max_tokens] == 4096
     end
 
@@ -613,8 +609,109 @@ defmodule ReqLLM.Providers.GoogleTest do
       opts = [max_tokens: 1000, compiled_schema: schema]
       {:ok, request} = Google.prepare_request(:object, model, context, opts)
 
-      # Should remain unchanged
       assert request.options[:max_tokens] == 1000
+    end
+
+    test "prepare_request for :object rejects tools" do
+      model = ReqLLM.Model.from!("google:gemini-1.5-flash")
+      context = context_fixture()
+      {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string])
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "test_tool",
+          description: "A test",
+          parameter_schema: [],
+          callback: fn _ -> {:ok, "ok"} end
+        )
+
+      opts = [compiled_schema: schema, tools: [tool]]
+      {:error, error} = Google.prepare_request(:object, model, context, opts)
+
+      assert %ReqLLM.Error.Invalid.Parameter{} = error
+      assert error.parameter =~ "tools are not supported"
+    end
+
+    test "encode_object_body creates JSON mode request" do
+      model = ReqLLM.Model.from!("google:gemini-1.5-flash")
+      context = context_fixture()
+      {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string, required: true])
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          operation: :object,
+          compiled_schema: schema,
+          max_tokens: 500
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      assert decoded["generationConfig"]["responseMimeType"] == "application/json"
+      assert decoded["generationConfig"]["candidateCount"] == 1
+      assert Map.has_key?(decoded["generationConfig"], "responseSchema")
+      refute Map.has_key?(decoded, "tools")
+      refute Map.has_key?(decoded, "toolConfig")
+    end
+
+    test "encode_object_body uses responseSchema for non-2.5 models" do
+      model = ReqLLM.Model.from!("google:gemini-1.5-flash")
+      context = context_fixture()
+
+      {:ok, schema} =
+        ReqLLM.Schema.compile(
+          name: [type: :string, required: true],
+          age: [type: :pos_integer]
+        )
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: "gemini-1.5-flash",
+          operation: :object,
+          compiled_schema: schema
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      response_schema = decoded["generationConfig"]["responseSchema"]
+      assert response_schema["type"] == "OBJECT"
+      assert Map.has_key?(response_schema, "properties")
+      assert Map.has_key?(response_schema["properties"], "name")
+      assert response_schema["properties"]["name"]["type"] == "STRING"
+      refute Map.has_key?(decoded["generationConfig"], "responseJsonSchema")
+    end
+
+    test "encode_object_body uses responseJsonSchema for Gemini 2.5" do
+      context = context_fixture()
+
+      {:ok, schema} =
+        ReqLLM.Schema.compile(
+          name: [type: :string, required: true],
+          age: [type: :pos_integer]
+        )
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: "gemini-2.5-flash",
+          operation: :object,
+          compiled_schema: schema
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      response_json_schema = decoded["generationConfig"]["responseJsonSchema"]
+      assert response_json_schema["type"] == "object"
+      assert Map.has_key?(response_json_schema, "properties")
+      refute Map.has_key?(decoded["generationConfig"], "responseSchema")
     end
 
     test "prepare_request creates configured embedding request" do
