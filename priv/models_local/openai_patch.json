@@ -13,31 +13,41 @@
     },
     {
       "id": "gpt-4",
-      "api": "chat"
+      "api": "chat",
+      "supports_strict_tools": true
     },
     {
       "id": "gpt-4-turbo",
-      "api": "chat"
+      "api": "chat",
+      "supports_strict_tools": true
     },
     {
       "id": "gpt-4o",
-      "api": "chat"
+      "api": "chat",
+      "supports_strict_tools": true
     },
     {
       "id": "gpt-4o-2024-05-13",
-      "api": "chat"
+      "api": "chat",
+      "supports_strict_tools": true
     },
     {
       "id": "gpt-4o-2024-08-06",
-      "api": "chat"
+      "api": "chat",
+      "supports_json_schema_response_format": true,
+      "supports_strict_tools": true
     },
     {
       "id": "gpt-4o-2024-11-20",
-      "api": "chat"
+      "api": "chat",
+      "supports_json_schema_response_format": true,
+      "supports_strict_tools": true
     },
     {
       "id": "gpt-4o-mini",
-      "api": "chat"
+      "api": "chat",
+      "supports_json_schema_response_format": true,
+      "supports_strict_tools": true
     },
     {
       "id": "o1",
@@ -53,7 +63,8 @@
     },
     {
       "id": "o3-deep-research",
-      "api": "responses"
+      "api": "responses",
+      "category": "deep_research"
     },
     {
       "id": "o3-mini",
@@ -69,7 +80,8 @@
     },
     {
       "id": "o4-mini-deep-research",
-      "api": "responses"
+      "api": "responses",
+      "category": "deep_research"
     },
     {
       "id": "gpt-4.1",
@@ -97,6 +109,7 @@
     {
       "id": "gpt-5-codex",
       "api": "responses",
+      "reasoning": false,
       "tool_call": false
     },
     {
