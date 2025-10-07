@@ -13,14 +13,18 @@
         "output": 32768
       },
       "modalities": {
-        "input": ["text"],
-        "output": ["text"]
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
       },
       "name": "GPT OSS 120B",
       "open_weights": true,
       "provider": "cerebras",
       "provider_model_id": "gpt-oss-120b",
-      "reasoning": false,
+      "reasoning": true,
       "release_date": "2025-08-05",
       "temperature": true,
       "tool_call": true
@@ -39,8 +43,12 @@
         "output": 32000
       },
       "modalities": {
-        "input": ["text"],
-        "output": ["text"]
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
       },
       "name": "Qwen 3 235B Instruct",
       "open_weights": true,
@@ -50,6 +58,12 @@
       "release_date": "2025-07-22",
       "temperature": true,
       "tool_call": true
+    },
+    {
+      "id": "qwen-3-235b-a22b-thinking-2507",
+      "provider": "cerebras",
+      "provider_model_id": "qwen-3-235b-a22b-thinking-2507",
+      "reasoning": false
     },
     {
       "attachment": false,
@@ -65,8 +79,12 @@
         "output": 32000
       },
       "modalities": {
-        "input": ["text"],
-        "output": ["text"]
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
       },
       "name": "Qwen 3 Coder 480B",
       "open_weights": true,

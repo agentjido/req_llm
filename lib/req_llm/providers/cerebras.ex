@@ -41,61 +41,6 @@ defmodule ReqLLM.Providers.Cerebras do
   use ReqLLM.Provider.Defaults
 
   @impl ReqLLM.Provider
-  def decode_response({_req, resp} = request_response) do
-    raw_body =
-      cond do
-        is_map(resp.body) -> resp.body
-        is_binary(resp.body) -> Jason.decode!(resp.body)
-        true -> nil
-      end
-
-    {req, result} = ReqLLM.Provider.Defaults.default_decode_response(request_response)
-
-    case result do
-      %Req.Response{body: %ReqLLM.Response{} = llm_response} = req_resp ->
-        adjusted_response =
-          if is_map(raw_body) do
-            adjust_reasoning_tokens(llm_response, raw_body)
-          else
-            llm_response
-          end
-
-        {req, %{req_resp | body: adjusted_response}}
-
-      _ ->
-        {req, result}
-    end
-  end
-
-  defp adjust_reasoning_tokens(%ReqLLM.Response{} = response, body) when is_map(body) do
-    message = get_in(body, ["choices", Access.at(0), "message"]) || %{}
-
-    has_reasoning =
-      Map.has_key?(message, "reasoning") and message["reasoning"] != nil and
-        message["reasoning"] != ""
-
-    has_content =
-      Map.has_key?(message, "content") and message["content"] != nil and message["content"] != ""
-
-    reasoning_tokens =
-      if has_reasoning and not has_content do
-        get_in(body, ["usage", "completion_tokens"]) ||
-          response.usage.output_tokens || 0
-      else
-        response.usage.reasoning_tokens || 0
-      end
-
-    updated_usage =
-      response.usage
-      |> Map.put(:reasoning_tokens, reasoning_tokens)
-      |> Map.put(:reasoning, reasoning_tokens)
-
-    %{response | usage: updated_usage}
-  end
-
-  defp adjust_reasoning_tokens(response, _body), do: response
-
-  @impl ReqLLM.Provider
   def encode_body(request) do
     request = ReqLLM.Provider.Defaults.default_encode_body(request)
     body = Jason.decode!(request.body)
