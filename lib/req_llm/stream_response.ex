@@ -458,11 +458,8 @@ defmodule ReqLLM.StreamResponse do
         }
       end)
 
-    # Create content parts
-    content_parts =
-      []
-      |> maybe_add_text_part(text_content)
-      |> maybe_add_thinking_part(thinking_content)
+    # Create content parts - if text is valid JSON and no tool calls, create object part
+    content_parts = build_content_parts(text_content, thinking_content, tool_calls)
 
     %ReqLLM.Message{
       role: :assistant,
@@ -472,23 +469,60 @@ defmodule ReqLLM.StreamResponse do
     }
   end
 
+  defp build_content_parts(text_content, thinking_content, tool_calls) do
+    parts =
+      if tool_calls == [] and text_content != "" and looks_like_json?(text_content) do
+        case Jason.decode(text_content) do
+          {:ok, parsed_json} when is_map(parsed_json) ->
+            [%{type: :object, object: parsed_json}]
+
+          _ ->
+            []
+            |> maybe_add_text_part(text_content)
+            |> maybe_add_thinking_part(thinking_content)
+        end
+      else
+        []
+        |> maybe_add_text_part(text_content)
+        |> maybe_add_thinking_part(thinking_content)
+      end
+
+    parts
+  end
+
+  defp looks_like_json?(text) do
+    trimmed = String.trim(text)
+    String.starts_with?(trimmed, "{") and String.ends_with?(trimmed, "}")
+  end
+
   defp maybe_add_text_part(parts, ""), do: parts
   defp maybe_add_text_part(parts, text), do: parts ++ [%{type: :text, text: text}]
 
   defp maybe_add_thinking_part(parts, ""), do: parts
   defp maybe_add_thinking_part(parts, thinking), do: parts ++ [%{type: :thinking, text: thinking}]
 
-  # Extract object from message tool calls (for structured output)
-  defp extract_object_from_message(%ReqLLM.Message{tool_calls: tool_calls})
-       when is_list(tool_calls) and tool_calls != [] do
-    # Look for structured_output tool call
+  # Extract object from message (for structured output)
+  defp extract_object_from_message(%ReqLLM.Message{content: content, tool_calls: tool_calls}) do
+    with nil <- extract_from_tool_calls(tool_calls) do
+      extract_from_content(content)
+    end
+  end
+
+  defp extract_from_tool_calls(tool_calls) when is_list(tool_calls) do
     case Enum.find(tool_calls, fn tc -> tc.name == "structured_output" end) do
       %{arguments: args} when is_map(args) -> args
       _ -> nil
     end
   end
 
-  defp extract_object_from_message(_message), do: nil
+  defp extract_from_tool_calls(_), do: nil
+
+  defp extract_from_content(content) do
+    case Enum.find(content, fn part -> is_map(part) and part[:type] == :object end) do
+      %{object: obj} when is_map(obj) -> obj
+      _ -> nil
+    end
+  end
 
   # Generate a unique response ID
   defp generate_response_id do

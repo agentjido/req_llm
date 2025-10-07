@@ -110,6 +110,10 @@ defmodule ReqLLM.Providers.OpenAI do
         - `:tool_strict` - Force strict: true on function tools
         """
       ],
+      response_format: [
+        type: :map,
+        doc: "Response format configuration (e.g., json_schema for structured output)"
+      ],
       openai_parallel_tool_calls: [
         type: {:or, [:boolean, nil]},
         default: nil,

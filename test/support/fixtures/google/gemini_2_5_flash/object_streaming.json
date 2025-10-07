@@ -1,9 +1,9 @@
 {
-  "captured_at": "2025-10-07T15:23:27.391916Z",
+  "captured_at": "2025-10-07T19:56:34.342608Z",
   "chunks": [
     {
-      "b64": "W3sKICAiY2FuZGlkYXRlcyI6IFsKICAgIHsKICAgICAgImNvbnRlbnQiOiB7CiAgICAgICAgInBhcnRzIjogWwogICAgICAgICAgewogICAgICAgICAgICAidGV4dCI6ICJ7XCJuYW1lXCI6XCJBbGljZSBTbWl0aFwiLFwiYWdlXCI6MzAsXCJvY2N1cGF0aW9uXCI6XCJTb2Z0d2FyZSBFbmdpbmVlclwifSIKICAgICAgICAgIH0KICAgICAgICBdLAogICAgICAgICJyb2xlIjogIm1vZGVsIgogICAgICB9LAogICAgICAiZmluaXNoUmVhc29uIjogIlNUT1AiLAogICAgICAiaW5kZXgiOiAwCiAgICB9CiAgXSwKICAidXNhZ2VNZXRhZGF0YSI6IHsKICAgICJwcm9tcHRUb2tlbkNvdW50IjogNiwKICAgICJjYW5kaWRhdGVzVG9rZW5Db3VudCI6IDE2LAogICAgInRvdGFsVG9rZW5Db3VudCI6IDEzNiwKICAgICJwcm9tcHRUb2tlbnNEZXRhaWxzIjogWwogICAgICB7CiAgICAgICAgIm1vZGFsaXR5IjogIlRFWFQiLAogICAgICAgICJ0b2tlbkNvdW50IjogNgogICAgICB9CiAgICBdLAogICAgInRob3VnaHRzVG9rZW5Db3VudCI6IDExNAogIH0sCiAgIm1vZGVsVmVyc2lvbiI6ICJnZW1pbmktMi41LWZsYXNoIiwKICAicmVzcG9uc2VJZCI6ICJiakRsYUtpbEtaS1BqTWNQN3Bhb2lBayIKfQo=",
-      "decoded": "[{\n  \"candidates\": [\n    {\n      \"content\": {\n        \"parts\": [\n          {\n            \"text\": \"{\\\"name\\\":\\\"Alice Smith\\\",\\\"age\\\":30,\\\"occupation\\\":\\\"Software Engineer\\\"}\"\n          }\n        ],\n        \"role\": \"model\"\n      },\n      \"finishReason\": \"STOP\",\n      \"index\": 0\n    }\n  ],\n  \"usageMetadata\": {\n    \"promptTokenCount\": 6,\n    \"candidatesTokenCount\": 16,\n    \"totalTokenCount\": 136,\n    \"promptTokensDetails\": [\n      {\n        \"modality\": \"TEXT\",\n        \"tokenCount\": 6\n      }\n    ],\n    \"thoughtsTokenCount\": 114\n  },\n  \"modelVersion\": \"gemini-2.5-flash\",\n  \"responseId\": \"bjDlaKilKZKPjMcP7paoiAk\"\n}\n"
+      "b64": "W3sKICAiY2FuZGlkYXRlcyI6IFsKICAgIHsKICAgICAgImNvbnRlbnQiOiB7CiAgICAgICAgInBhcnRzIjogWwogICAgICAgICAgewogICAgICAgICAgICAidGV4dCI6ICJ7XCJuYW1lXCI6XCJBbGljZSBTbWl0aFwiLFwiYWdlXCI6MzAsXCJvY2N1cGF0aW9uXCI6XCJTb2Z0d2FyZSBFbmdpbmVlclwifSIKICAgICAgICAgIH0KICAgICAgICBdLAogICAgICAgICJyb2xlIjogIm1vZGVsIgogICAgICB9LAogICAgICAiZmluaXNoUmVhc29uIjogIlNUT1AiLAogICAgICAiaW5kZXgiOiAwCiAgICB9CiAgXSwKICAidXNhZ2VNZXRhZGF0YSI6IHsKICAgICJwcm9tcHRUb2tlbkNvdW50IjogNiwKICAgICJjYW5kaWRhdGVzVG9rZW5Db3VudCI6IDE2LAogICAgInRvdGFsVG9rZW5Db3VudCI6IDE1NCwKICAgICJwcm9tcHRUb2tlbnNEZXRhaWxzIjogWwogICAgICB7CiAgICAgICAgIm1vZGFsaXR5IjogIlRFWFQiLAogICAgICAgICJ0b2tlbkNvdW50IjogNgogICAgICB9CiAgICBdLAogICAgInRob3VnaHRzVG9rZW5Db3VudCI6IDEzMgogIH0sCiAgIm1vZGVsVmVyc2lvbiI6ICJnZW1pbmktMi41LWZsYXNoIiwKICAicmVzcG9uc2VJZCI6ICJjWERsYU4wMnA1TC00d180X2JUb0J3Igp9Cg==",
+      "decoded": "[{\n  \"candidates\": [\n    {\n      \"content\": {\n        \"parts\": [\n          {\n            \"text\": \"{\\\"name\\\":\\\"Alice Smith\\\",\\\"age\\\":30,\\\"occupation\\\":\\\"Software Engineer\\\"}\"\n          }\n        ],\n        \"role\": \"model\"\n      },\n      \"finishReason\": \"STOP\",\n      \"index\": 0\n    }\n  ],\n  \"usageMetadata\": {\n    \"promptTokenCount\": 6,\n    \"candidatesTokenCount\": 16,\n    \"totalTokenCount\": 154,\n    \"promptTokensDetails\": [\n      {\n        \"modality\": \"TEXT\",\n        \"tokenCount\": 6\n      }\n    ],\n    \"thoughtsTokenCount\": 132\n  },\n  \"modelVersion\": \"gemini-2.5-flash\",\n  \"responseId\": \"cXDlaN02p5L-4w_4_bToBw\"\n}\n"
     },
     {
       "b64": "XQ==",
@@ -66,9 +66,9 @@
       "accept-ranges": "none",
       "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
       "content-type": "application/json; charset=UTF-8",
-      "date": "Tue, 07 Oct 2025 15:23:27 GMT",
+      "date": "Tue, 07 Oct 2025 19:56:34 GMT",
       "server": "scaffolding on HTTPServer2",
-      "server-timing": "gfet4t7; dur=1261",
+      "server-timing": "gfet4t7; dur=1907",
       "vary": "Origin,Accept-Encoding",
       "x-content-type-options": "nosniff",
       "x-frame-options": "SAMEORIGIN",

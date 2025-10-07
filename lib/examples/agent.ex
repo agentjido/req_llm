@@ -9,10 +9,10 @@ defmodule ReqLLM.Examples.Agent do
 
       # Start the agent
       {:ok, agent} = ReqLLM.Examples.Agent.start_link()
-      
-      # Send a prompt  
+
+      # Send a prompt
       ReqLLM.Examples.Agent.prompt(agent, "What's 15 * 7?")
-      
+
       # Agent streams response to stdout and returns final text
       #=> {:ok, "15 * 7 = 105"}
 
@@ -52,7 +52,7 @@ defmodule ReqLLM.Examples.Agent do
       You are a helpful AI assistant with access to tools.
 
       When you need to compute math, use the calculator tool with the expression parameter.
-      Example: calculator({"expression":"15 * 7 + 23"}) 
+
       Do not wrap arguments in code fences. Do not include extra text in arguments.
 
       When you need to search for information, use the web_search tool with a relevant query.

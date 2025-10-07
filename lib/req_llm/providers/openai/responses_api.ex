@@ -234,20 +234,39 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         base_url -> "#{base_url}#{path()}"
       end
 
+    provider_opts = opts |> Keyword.get(:provider_options, []) |> Map.new()
+
+    cleaned_opts =
+      opts
+      |> Keyword.delete(:finch_name)
+      |> Keyword.delete(:compiled_schema)
+      |> Keyword.delete(:provider_options)
+
     req_opts =
       [
         model: model.model,
         context: context,
         stream: true,
-        responses_api: true
-      ] ++ Keyword.delete(opts, :finch_name)
+        responses_api: true,
+        provider_options: provider_opts
+      ] ++ cleaned_opts
+
+    options =
+      req_opts
+      |> Enum.reduce(%{}, fn
+        {key, value}, acc when is_list(value) ->
+          Map.put(acc, key, Map.new(value))
+
+        {key, value}, acc ->
+          Map.put(acc, key, value)
+      end)
 
     temp_request = %Req.Request{
       method: :post,
       url: URI.parse("https://example.com/temp"),
       headers: %{},
       body: {:json, %{}},
-      options: Map.new(req_opts)
+      options: options
     }
 
     encoded_request = encode_body(temp_request)
@@ -258,8 +277,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     error ->
       {:error,
        ReqLLM.Error.API.Request.exception(
-         reason: "Failed to build Responses API streaming request",
-         details: Exception.message(error)
+         reason: "Failed to build Responses API streaming request: #{Exception.message(error)}"
        )}
   end
 
