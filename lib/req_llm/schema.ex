@@ -170,7 +170,8 @@ defmodule ReqLLM.Schema do
 
     schema_object = %{
       "type" => "object",
-      "properties" => properties
+      "properties" => properties,
+      "additionalProperties" => false
     }
 
     if required == [] do

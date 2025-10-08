@@ -76,7 +76,7 @@ defmodule ReqLLM.ProviderTest.Embedding do
             texts = ["Hello world", "How are you?", "Testing embeddings"]
 
             result =
-              ReqLLM.embed_many(
+              ReqLLM.embed(
                 @model_spec,
                 texts,
                 fixture_opts(@provider, "embed_batch", [])

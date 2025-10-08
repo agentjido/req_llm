@@ -142,12 +142,15 @@ defmodule ReqLLM.Embedding do
   def schema, do: @base_schema
 
   @doc """
-  Generates embeddings for a single text input.
+  Generates embeddings for single or multiple text inputs.
+
+  Accepts either a single string or a list of strings, automatically handling
+  both cases using pattern matching.
 
   ## Parameters
 
     * `model_spec` - Model specification in various formats
-    * `text` - Text to generate embeddings for
+    * `input` - Text string or list of text strings to generate embeddings for
     * `opts` - Additional options (keyword list)
 
   ## Options
@@ -159,18 +162,28 @@ defmodule ReqLLM.Embedding do
 
   ## Examples
 
+      # Single text input
       {:ok, embedding} = ReqLLM.Embedding.embed("openai:text-embedding-3-small", "Hello world")
       #=> {:ok, [0.1, -0.2, 0.3, ...]}
+
+      # Multiple text inputs
+      {:ok, embeddings} = ReqLLM.Embedding.embed(
+        "openai:text-embedding-3-small",
+        ["Hello", "World"]
+      )
+      #=> {:ok, [[0.1, -0.2, ...], [0.3, 0.4, ...]]}
 
   """
   @spec embed(
           String.t() | {atom(), keyword()} | struct(),
-          String.t(),
+          String.t() | [String.t()],
           keyword()
-        ) :: {:ok, [float()]} | {:error, term()}
-  def embed(model_spec, text, opts \\ []) do
+        ) :: {:ok, [float()] | [[float()]]} | {:error, term()}
+  def embed(model_spec, input, opts \\ [])
+
+  def embed(model_spec, text, opts) when is_binary(text) do
     with {:ok, model} <- validate_model(model_spec),
-         :ok <- validate_text(text),
+         :ok <- validate_input(text),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, request} <- provider_module.prepare_request(:embedding, model, text, opts),
          {:ok, %Req.Response{status: status, body: decoded_response}} when status in 200..299 <-
@@ -190,36 +203,9 @@ defmodule ReqLLM.Embedding do
     end
   end
 
-  @doc """
-  Generates embeddings for multiple text inputs.
-
-  ## Parameters
-
-    * `model_spec` - Model specification in various formats
-    * `texts` - List of texts to generate embeddings for
-    * `opts` - Additional options (keyword list)
-
-  ## Options
-
-  Same as `embed/3`.
-
-  ## Examples
-
-      {:ok, embeddings} = ReqLLM.Embedding.embed_many(
-        "openai:text-embedding-3-small",
-        ["Hello", "World"]
-      )
-      #=> {:ok, [[0.1, -0.2, ...], [0.3, 0.4, ...]]}
-
-  """
-  @spec embed_many(
-          String.t() | {atom(), keyword()} | struct(),
-          [String.t()],
-          keyword()
-        ) :: {:ok, [[float()]]} | {:error, term()}
-  def embed_many(model_spec, texts, opts \\ []) when is_list(texts) do
+  def embed(model_spec, texts, opts) when is_list(texts) do
     with {:ok, model} <- validate_model(model_spec),
-         :ok <- validate_texts(texts),
+         :ok <- validate_input(texts),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, request} <- provider_module.prepare_request(:embedding, model, texts, opts),
          {:ok, %Req.Response{status: status, body: decoded_response}} when status in 200..299 <-
@@ -239,19 +225,19 @@ defmodule ReqLLM.Embedding do
     end
   end
 
-  defp validate_text("") do
+  defp validate_input("") do
     {:error, ReqLLM.Error.Invalid.Parameter.exception(parameter: "text: cannot be empty")}
   end
 
-  defp validate_text(text) when is_binary(text) do
+  defp validate_input(text) when is_binary(text) do
     :ok
   end
 
-  defp validate_texts([]) do
+  defp validate_input([]) do
     {:error, ReqLLM.Error.Invalid.Parameter.exception(parameter: "texts: cannot be empty")}
   end
 
-  defp validate_texts(texts) when is_list(texts) do
+  defp validate_input(texts) when is_list(texts) do
     :ok
   end
 

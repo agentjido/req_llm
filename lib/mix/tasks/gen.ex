@@ -343,7 +343,6 @@ defmodule Mix.Tasks.ReqLlm.Gen do
   defp show_text_stats(_text, start_time, _model_spec, _prompt, response_data, :info) do
     response_time = System.monotonic_time(:millisecond) - start_time
 
-    # Try to extract usage from different response types
     usage =
       case response_data do
         %{usage: usage} -> usage
@@ -351,8 +350,8 @@ defmodule Mix.Tasks.ReqLlm.Gen do
         _ -> nil
       end
 
-    case {usage, response_data} do
-      {%{input_tokens: input, output_tokens: output, total_cost: cost} = usage, _} ->
+    case usage do
+      %{input_tokens: input, output_tokens: output, total_cost: cost} = usage ->
         cost_str = :erlang.float_to_binary(cost, decimals: 6)
 
         reasoning_info =
@@ -366,11 +365,18 @@ defmodule Mix.Tasks.ReqLlm.Gen do
           "\n#{response_time}ms • #{input}→#{output} tokens#{reasoning_info} • ~$#{cost_str}"
         )
 
-      {_, %ReqLLM.StreamResponse{}} ->
-        IO.puts("\n#{response_time}ms • streaming")
+      %{input_tokens: input, output_tokens: output} = usage ->
+        reasoning_info =
+          if Map.get(usage, :reasoning_tokens, 0) > 0 do
+            " (#{usage.reasoning_tokens} reasoning)"
+          else
+            ""
+          end
+
+        IO.puts("\n#{response_time}ms • #{input}→#{output} tokens#{reasoning_info}")
 
       _ ->
-        IO.puts("\n#{response_time}ms")
+        IO.puts("\n#{response_time}ms • streaming")
     end
   end
 

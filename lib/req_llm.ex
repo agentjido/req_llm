@@ -503,12 +503,15 @@ defmodule ReqLLM do
   # ===========================================================================
 
   @doc """
-  Generates embeddings for a single text input.
+  Generates embeddings for single or multiple text inputs.
+
+  Accepts either a single string or a list of strings, automatically handling
+  both cases using pattern matching.
 
   ## Parameters
 
     * `model_spec` - Model specification in various formats
-    * `text` - Text to generate embeddings for
+    * `input` - Text string or list of text strings to generate embeddings for
     * `opts` - Additional options (keyword list)
 
   ## Options
@@ -518,35 +521,19 @@ defmodule ReqLLM do
 
   ## Examples
 
+      # Single text input
       {:ok, embedding} = ReqLLM.embed("openai:text-embedding-3-small", "Hello world")
       #=> {:ok, [0.1, -0.2, 0.3, ...]}
 
-  """
-  defdelegate embed(model_spec, text, opts \\ []), to: Embedding
-
-  @doc """
-  Generates embeddings for multiple text inputs.
-
-  ## Parameters
-
-    * `model_spec` - Model specification in various formats
-    * `texts` - List of texts to generate embeddings for
-    * `opts` - Additional options (keyword list)
-
-  ## Options
-
-  Same as `embed/3`.
-
-  ## Examples
-
-      {:ok, embeddings} = ReqLLM.embed_many(
+      # Multiple text inputs
+      {:ok, embeddings} = ReqLLM.embed(
         "openai:text-embedding-3-small",
         ["Hello", "World"]
       )
       #=> {:ok, [[0.1, -0.2, ...], [0.3, 0.4, ...]]}
 
   """
-  defdelegate embed_many(model_spec, texts, opts \\ []), to: Embedding
+  defdelegate embed(model_spec, input, opts \\ []), to: Embedding
 
   # ===========================================================================
   # Vercel AI SDK Utility API - Delegated to ReqLLM.Utils

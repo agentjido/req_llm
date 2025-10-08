@@ -215,6 +215,9 @@ defmodule ReqLLM.Providers.OpenAI do
 
   defp prepare_json_schema_request(model_spec, prompt, compiled_schema, opts) do
     schema_name = Map.get(compiled_schema, :name, "output_schema")
+    json_schema = ReqLLM.Schema.to_json(compiled_schema.schema)
+
+    json_schema = enforce_strict_schema_requirements(json_schema)
 
     opts_with_format =
       opts
@@ -226,7 +229,7 @@ defmodule ReqLLM.Providers.OpenAI do
             json_schema: %{
               name: schema_name,
               strict: true,
-              schema: compiled_schema.schema
+              schema: json_schema
             }
           },
           openai_parallel_tool_calls: false
@@ -238,7 +241,7 @@ defmodule ReqLLM.Providers.OpenAI do
             json_schema: %{
               name: schema_name,
               strict: true,
-              schema: compiled_schema.schema
+              schema: json_schema
             }
           })
           |> Keyword.put(:openai_parallel_tool_calls, false)
@@ -428,4 +431,16 @@ defmodule ReqLLM.Providers.OpenAI do
         mode
     end
   end
+
+  defp enforce_strict_schema_requirements(
+         %{"type" => "object", "properties" => properties} = schema
+       ) do
+    all_property_names = Map.keys(properties)
+
+    schema
+    |> Map.put("required", all_property_names)
+    |> Map.put("additionalProperties", false)
+  end
+
+  defp enforce_strict_schema_requirements(schema), do: schema
 end

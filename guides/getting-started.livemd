@@ -1,82 +1,301 @@
-# ReqLLM • OpenAI Quickstart (gpt-4o-mini)
-
-Minimal, practical examples for text generation, streaming, and structured outputs using the inexpensive OpenAI gpt-4o-mini model.
-
-Tip: In Livebook, add a secret named OPENAI_API_KEY (preferred), or paste your key in the setup cell below.
-
-## Install
+# ReqLLM • Getting Started
 
 ```elixir
 Mix.install([
-  {:req_llm, "~> 1.0.0"}
+  {:req_llm, github: "agentjido/req_llm"},
+  {:kino, "~> 0.14.2"}
 ])
 ```
 
-## Configure OpenAI key
+## Setup
+
+### API Key Configuration
+
+Enter your API keys for the providers you want to use. At least one provider key is required.
+
+**Tip:** You can also add keys to Livebook secrets as `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or `GROQ_API_KEY` to avoid re-entering them each time.
 
 ```elixir
-# Uses OPENAI_API_KEY from env/secrets if present, otherwise prompts you to paste one.
-model = "openai:gpt-4o-mini"
+openai_key_input = Kino.Input.password("OpenAI API Key")
+anthropic_key_input = Kino.Input.password("Anthropic API Key (optional)")
+groq_key_input = Kino.Input.password("Groq API Key (optional)")
 
-key = System.get_env("LB_OPENAI_API_KEY") || System.get_env("OPENAI_API_KEY")
+Kino.Layout.grid([openai_key_input, anthropic_key_input, groq_key_input], columns: 1)
+```
 
-if key in [nil, "", "sk-..."] do
-  raise """
-  Missing OpenAI key.
-  - Add a Livebook secret named OPENAI_API_KEY, or
-  - Replace the placeholder in this cell with your real key.
-  """
+```elixir
+available_models = [
+  {"openai:gpt-4o", "OpenAI GPT-4o"},
+  {"openai:gpt-4o-mini", "OpenAI GPT-4o Mini"},
+  {"anthropic:claude-3-5-sonnet-20241022", "Anthropic Claude 3.5 Sonnet"},
+  {"anthropic:claude-3-5-haiku-20241022", "Anthropic Claude 3.5 Haiku"},
+  {"groq:llama-3.3-70b-versatile", "Groq Llama 3.3 70B"},
+  {"groq:llama-3.1-8b-instant", "Groq Llama 3.1 8B"}
+]
+
+model_input = Kino.Input.select("Select Model", available_models)
+```
+
+```elixir
+# Try to get keys from Livebook secrets first, then fall back to inputs
+openai_key = 
+  case ReqLLM.get_key(:openai_api_key) do
+    {:ok, key} when is_binary(key) and key != "" -> key
+    _ -> 
+      input_key = Kino.Input.read(openai_key_input)
+      if input_key != "" and input_key != nil do
+        ReqLLM.put_key(:openai_api_key, input_key)
+        input_key
+      else
+        nil
+      end
+  end
+
+anthropic_key = 
+  case ReqLLM.get_key(:anthropic_api_key) do
+    {:ok, key} when is_binary(key) and key != "" -> key
+    _ -> 
+      input_key = Kino.Input.read(anthropic_key_input)
+      if input_key != "" and input_key != nil do
+        ReqLLM.put_key(:anthropic_api_key, input_key)
+        input_key
+      else
+        nil
+      end
+  end
+
+groq_key = 
+  case ReqLLM.get_key(:groq_api_key) do
+    {:ok, key} when is_binary(key) and key != "" -> key
+    _ -> 
+      input_key = Kino.Input.read(groq_key_input)
+      if input_key != "" and input_key != nil do
+        ReqLLM.put_key(:groq_api_key, input_key)
+        input_key
+      else
+        nil
+      end
+  end
+
+selected_model = Kino.Input.read(model_input)
+provider = selected_model |> String.split(":") |> List.first()
+
+has_key? =
+  case provider do
+    "openai" -> openai_key != nil
+    "anthropic" -> anthropic_key != nil
+    "groq" -> groq_key != nil
+    _ -> false
+  end
+
+key_source =
+  case provider do
+    "openai" -> 
+      case ReqLLM.get_key(:openai_api_key) do
+        {:ok, _} -> "✨ Livebook secrets"
+        _ -> "manual input"
+      end
+    "anthropic" -> 
+      case ReqLLM.get_key(:anthropic_api_key) do
+        {:ok, _} -> "✨ Livebook secrets"
+        _ -> "manual input"
+      end
+    "groq" -> 
+      case ReqLLM.get_key(:groq_api_key) do
+        {:ok, _} -> "✨ Livebook secrets"
+        _ -> "manual input"
+      end
+    _ -> "unknown"
+  end
+
+if has_key? do
+  Kino.Markdown.new("""
+  ✅ **Configuration Complete**
+
+  Provider: `#{provider}`  
+  Model: `#{selected_model}`  
+  Key source: #{key_source}
+  """)
 else
-  ReqLLM.put_key(:openai_api_key, key)
-  :ok
+  Kino.Markdown.new("""
+  ⚠️  **Missing API Key**
+
+  Please enter the API key for **#{provider}** above, or add it to Livebook secrets as `#{String.upcase(provider)}_API_KEY`.
+  """)
 end
 ```
 
-## 1) Basic text generation
+## 1) Basic Text Generation
 
-Change the prompt and re-run.
+Simple, synchronous text generation. The model returns complete text after processing.
 
 ```elixir
-prompt = "In one sentence, explain what Elixir Livebook is."
-
-text = ReqLLM.generate_text!(model, prompt)
-
-text
+prompt_input = Kino.Input.textarea("Enter your prompt", default: "Explain functional programming in one sentence.")
 ```
 
-## 2) Streaming tokens as they arrive
-
 ```elixir
-ReqLLM.stream_text!(model, "Write a 3–4 sentence upbeat intro to functional programming.")
-|> Enum.each(&IO.write/1)
+prompt = Kino.Input.read(prompt_input)
 
-IO.puts("") # newline at the end
+text = ReqLLM.generate_text!(selected_model, prompt)
+
+Kino.Markdown.new("""
+**Response:**
+
+#{text}
+""")
 ```
 
-## 3) Structured data (JSON-like object)
+## 2) Streaming Text
 
-Provide a simple schema; the model returns a validated Elixir map.
+Tokens arrive in real-time as the model generates them. Perfect for chat interfaces.
 
 ```elixir
+stream_prompt_input = Kino.Input.textarea("Enter your streaming prompt", default: "Write a 3-4 sentence upbeat intro to Elixir.")
+```
+
+```elixir
+stream_prompt = Kino.Input.read(stream_prompt_input)
+
+{:ok, response} = ReqLLM.stream_text(selected_model, stream_prompt)
+
+response.stream
+|> Stream.filter(&(&1.type == :content))
+|> Enum.each(fn chunk ->
+  IO.write(chunk.text)
+end)
+
+:ok
+```
+
+## 3) Structured Object Generation
+
+Generate validated, type-safe data structures from prompts using schemas.
+
+```elixir
+object_prompt_input = Kino.Input.textarea("Enter prompt for object generation", default: "Create a profile for a software engineer named Alice who is 32 years old")
+```
+
+```elixir
+object_prompt = Kino.Input.read(object_prompt_input)
+
 schema = [
-  idea: [type: :string, required: true],
-  steps: [type: {:list, :string}, required: true]
+  name: [type: :string, required: true, doc: "Person's name"],
+  age: [type: :pos_integer, required: true, doc: "Person's age"],
+  occupation: [type: :string, doc: "Person's occupation"],
+  location: [type: :string, doc: "Person's location"]
 ]
 
-object =
-  ReqLLM.generate_object!(
-    model,
-    "Return a very short DIY idea and 3 concise steps as JSON matching the schema.",
-    schema
-  )
+{:ok, response} = ReqLLM.generate_object(selected_model, object_prompt, schema)
 
-object
+object = ReqLLM.Response.object(response)
+
+json_output = Jason.encode!(object, pretty: true)
+
+Kino.Markdown.new("""
+**Generated Object:**
+
+   `#{json_output}`
+
+**Fields:**
+- **Name:** #{object["name"]}
+- **Age:** #{object["age"]}
+- **Occupation:** #{object["occupation"] || "Not specified"}
+- **Location:** #{object["location"] || "Not specified"}
+""")
 ```
 
-That's it—three essentials to get you productive:
+## 4) Function Calling / Tools
 
-* `generate_text!/3` for simple output
-* `stream_text!/3` for streaming  
-* `generate_object!/4` for structured results
+Enable models to call functions and use tools to perform actions.
 
-<!-- livebook:{"offset":1803,"stamp":{"token":"XCP.s8_TN-7BAigP7xW9A9HBmbSHce-x_P10dSp0Z1p5c8b8tbEVjGoS9gwmB6LtfJwnOqMpAwG9Z5aJYlwufuFOwufY9zeFdIuKij3w3suRBhFL_H7aBD_FM6c","version":2}} -->
+```elixir
+tools_prompt_input = Kino.Input.textarea("Enter prompt for tool calling", default: "What's the weather in Paris in Celsius? What time is it?")
+```
+
+```elixir
+tools_prompt = Kino.Input.read(tools_prompt_input)
+
+weather_tool = ReqLLM.tool(
+  name: "get_weather",
+  description: "Get the current weather for a location",
+  parameter_schema: [
+    location: [type: :string, required: true, doc: "City name or location"],
+    unit: [type: :string, default: "fahrenheit", doc: "Temperature unit (celsius or fahrenheit)"]
+  ],
+  callback: fn args ->
+    location = args["location"] || args[:location]
+    unit = args["unit"] || args[:unit] || "fahrenheit"
+    temp = if unit == "celsius", do: "22°C", else: "72°F"
+    {:ok, "The weather in #{location} is #{temp}, sunny with clear skies."}
+  end
+)
+
+time_tool = ReqLLM.tool(
+  name: "get_time",
+  description: "Get the current time",
+  parameter_schema: [],
+  callback: fn _args ->
+    time = DateTime.utc_now() |> DateTime.to_string()
+    {:ok, "The current UTC time is #{time}"}
+  end
+)
+
+tools = [weather_tool, time_tool]
+
+{:ok, response} = ReqLLM.generate_text(selected_model, tools_prompt, tools: tools)
+
+last_message = List.last(response.context.messages)
+tool_calls = Enum.filter(last_message.content, fn part -> part.type == :tool_call end)
+
+output = if tool_calls != [] do
+  results = Enum.map(tool_calls, fn tc ->
+    tool = Enum.find(tools, fn t -> t.name == tc.tool_name end)
+    {:ok, result} = ReqLLM.Tool.execute(tool, tc.input)
+    "**#{tc.tool_name}** (#{inspect(tc.input)})\n→ #{result}"
+  end)
+  Enum.join(results, "\n\n")
+else
+  ReqLLM.Response.text(response)
+end
+
+Kino.Markdown.new("""
+**Tool Calls:**
+
+#{output}
+""")
+```
+
+## 5) Embeddings
+
+Convert text into vector representations for similarity search and semantic analysis.
+
+```elixir
+embedding_text_input = Kino.Input.textarea("Enter text to embed", default: "Elixir is a dynamic, functional programming language")
+```
+
+```elixir
+embedding_text = Kino.Input.read(embedding_text_input)
+
+embedding_model = "openai:text-embedding-3-small"
+
+{:ok, embedding} = ReqLLM.Embedding.embed(embedding_model, embedding_text)
+
+dimensions = length(embedding)
+preview = Enum.take(embedding, 8)
+
+Kino.Markdown.new("""
+**Embedding Generated:**
+
+- **Dimensions:** #{dimensions}
+- **First 8 values:** `#{inspect(preview)}`
+- **Total values:** #{dimensions} floating point numbers
+
+Embeddings can be used for:
+- Semantic similarity comparisons
+- Document search and retrieval
+- Clustering related content
+- Recommendation systems
+""")
+```
+
+<!-- livebook:{"offset":9130,"stamp":{"token":"XCP.VlbEPeXcpGOVOkKwlL51N3JmxW178MKDAHVsEAVE6EVPiH--5Vm-p5yRlMjIMonLkmK1-SvD4bfer64DuZCDyN01TipjRkNuHj--g93kIZdzoX75eOVzvnh_m-WkKGCjrkwUL7ds582uVnSFbuRwFgmcdfLupoWdVkbr919wi30","version":2}} -->

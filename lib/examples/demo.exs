@@ -32,9 +32,13 @@ IO.puts("")
 # Demo 2: Calculator tool usage
 IO.puts("Calculator Tool")
 IO.puts("──────────────────")
-IO.puts("User: What's 15 * 7 + 23?")
+num1 = Enum.random(1..999)
+num2 = Enum.random(1..999)
+num3 = Enum.random(1..999)
+question = "What's #{num1} * #{num2} + #{num3}?"
+IO.puts("User: #{question}")
 IO.write("Assistant: ")
-{:ok, _response} = ReqLLM.Examples.Agent.prompt(agent, "What's 15 * 7 + 23?")
+{:ok, _response} = ReqLLM.Examples.Agent.prompt(agent, question)
 IO.puts("")
 IO.puts("")
 

@@ -113,9 +113,52 @@ defmodule ReqLLM.Providers.Anthropic.Context do
          tool_call_id: _id,
          output: _output
        }) do
-    # Tool results become separate messages in Anthropic format
-    # This will be handled at the message level, not content part level
     nil
+  end
+
+  defp encode_content_part(%ReqLLM.Message.ContentPart{
+         type: :image,
+         data: data,
+         media_type: media_type
+       }) do
+    base64 = Base.encode64(data)
+
+    %{
+      type: "image",
+      source: %{
+        type: "base64",
+        media_type: media_type,
+        data: base64
+      }
+    }
+  end
+
+  defp encode_content_part(%ReqLLM.Message.ContentPart{type: :image_url, url: url}) do
+    %{
+      type: "image",
+      source: %{
+        type: "url",
+        url: url
+      }
+    }
+  end
+
+  defp encode_content_part(%ReqLLM.Message.ContentPart{
+         type: :file,
+         data: data,
+         media_type: media_type,
+         filename: _filename
+       }) do
+    base64 = Base.encode64(data)
+
+    %{
+      type: "document",
+      source: %{
+        type: "base64",
+        media_type: media_type,
+        data: base64
+      }
+    }
   end
 
   defp encode_content_part(_), do: nil

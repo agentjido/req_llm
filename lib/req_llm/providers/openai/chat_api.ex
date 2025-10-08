@@ -65,6 +65,12 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
           |> add_strict_to_tools()
       end
 
+    if System.get_env("REQ_LLM_DEBUG") in ["1", "true"] do
+      require Logger
+
+      Logger.debug("OpenAI ChatAPI request body: #{Jason.encode!(enhanced_body, pretty: true)}")
+    end
+
     Map.put(request, :body, Jason.encode!(enhanced_body))
   end
 
@@ -147,6 +153,8 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
   end
 
   defp add_token_limits(body, model_name, request_options) do
+    body = Map.delete(body, "max_tokens") |> Map.delete("max_completion_tokens")
+
     if is_reasoning_model_name?(model_name) do
       maybe_put(
         body,
@@ -208,11 +216,36 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
 
   defp add_response_format(body, request_options) do
     provider_opts = request_options[:provider_options] || []
-    maybe_put(body, :response_format, provider_opts[:response_format])
+    rf = provider_opts[:response_format]
+
+    normalized =
+      case rf do
+        %{type: "json_schema", json_schema: %{schema: schema}} = m when is_list(schema) ->
+          put_in(m, [:json_schema, :schema], ReqLLM.Schema.to_json(schema))
+
+        %{"type" => "json_schema", "json_schema" => %{"schema" => schema}} = m
+        when is_list(schema) ->
+          js = ReqLLM.Schema.to_json(schema)
+          %{m | "json_schema" => Map.put(m["json_schema"], "schema", js)}
+
+        _ ->
+          rf
+      end
+
+    body
+    |> Map.drop(["response_format", :response_format])
+    |> maybe_put(:response_format, normalized)
   end
 
   defp add_parallel_tool_calls(body, request_options) do
-    maybe_put(body, :parallel_tool_calls, request_options[:parallel_tool_calls])
+    provider_opts = request_options[:provider_options] || []
+
+    ptc =
+      request_options[:parallel_tool_calls] ||
+        provider_opts[:openai_parallel_tool_calls] ||
+        provider_opts[:parallel_tool_calls]
+
+    maybe_put(body, :parallel_tool_calls, ptc)
   end
 
   defp add_strict_to_tools(body) do

@@ -720,35 +720,41 @@ defmodule ReqLLM.StreamServer do
   defp normalize_streaming_usage(usage, model) when is_map(usage) do
     case usage do
       %{"prompt_tokens" => input, "completion_tokens" => output} ->
-        # OpenAI format
         %{input: input, output: output, reasoning: 0, cached_input: 0}
+        |> add_token_aliases()
         |> add_cost_calculation_if_available(usage)
         |> calculate_cost_if_model_available(model)
 
       %{"input_tokens" => input, "output_tokens" => output} ->
-        # Anthropic format (string keys)
         cached_input = Map.get(usage, "cache_read_input_tokens", 0)
 
         %{input: input, output: output, reasoning: 0, cached_input: cached_input}
+        |> add_token_aliases()
         |> add_cost_calculation_if_available(usage)
         |> calculate_cost_if_model_available(model)
 
       %{input_tokens: input, output_tokens: output} ->
-        # Already normalized format
         cached_input = Map.get(usage, :cached_tokens, 0)
         reasoning = Map.get(usage, :reasoning_tokens, 0)
 
         %{input: input, output: output, reasoning: reasoning, cached_input: cached_input}
+        |> add_token_aliases()
         |> add_cost_calculation_if_available(usage)
         |> calculate_cost_if_model_available(model)
 
       _ ->
-        # Unknown format, pass through
         usage
     end
   end
 
   defp normalize_streaming_usage(usage, _model), do: usage
+
+  defp add_token_aliases(usage) do
+    usage
+    |> Map.put(:input_tokens, usage.input)
+    |> Map.put(:output_tokens, usage.output)
+    |> Map.put(:total_tokens, usage.input + usage.output)
+  end
 
   defp add_cost_calculation_if_available(normalized_usage, original_usage) do
     # If the original usage had cost information, preserve it
@@ -776,31 +782,30 @@ defmodule ReqLLM.StreamServer do
         cost_map[:cache_read] || cost_map["cache_read"] ||
         input_rate
 
-    with %{input: input_tokens, output: output_tokens} <- usage,
-         true <- is_number(input_tokens) and is_number(output_tokens),
-         true <- input_rate != nil and output_rate != nil do
-      cached_tokens = max(0, Map.get(usage, :cached_input, 0))
-      uncached_tokens = max(input_tokens - cached_tokens, 0)
+    case usage do
+      %{input: input_tokens, output: output_tokens}
+      when is_number(input_tokens) and is_number(output_tokens) and not is_nil(input_rate) and
+             not is_nil(output_rate) ->
+        cached_tokens = max(0, Map.get(usage, :cached_input, 0))
+        uncached_tokens = max(input_tokens - cached_tokens, 0)
 
-      # Calculate costs (rates are per million tokens)
-      input_cost =
-        Float.round(
-          uncached_tokens / 1_000_000 * input_rate + cached_tokens / 1_000_000 * cached_rate,
-          6
-        )
+        # Calculate costs (rates are per million tokens)
+        input_cost =
+          Float.round(
+            uncached_tokens / 1_000_000 * input_rate + cached_tokens / 1_000_000 * cached_rate,
+            6
+          )
 
-      output_cost = Float.round(output_tokens / 1_000_000 * output_rate, 6)
-      total_cost = Float.round(input_cost + output_cost, 6)
+        output_cost = Float.round(output_tokens / 1_000_000 * output_rate, 6)
+        total_cost = Float.round(input_cost + output_cost, 6)
 
-      usage
-      |> Map.put(:input_cost, input_cost)
-      |> Map.put(:output_cost, output_cost)
-      |> Map.put(:total_cost, total_cost)
-      |> Map.put(:input_tokens, input_tokens)
-      |> Map.put(:output_tokens, output_tokens)
-      |> Map.put(:total_tokens, input_tokens + output_tokens)
-    else
-      _ -> usage
+        usage
+        |> Map.put(:input_cost, input_cost)
+        |> Map.put(:output_cost, output_cost)
+        |> Map.put(:total_cost, total_cost)
+
+      _ ->
+        usage
     end
   end
 

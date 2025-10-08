@@ -280,7 +280,8 @@ defmodule ReqLLM.SchemaTest do
                      "description" => "Maximum results"
                    }
                  },
-                 "required" => ["query"]
+                 "required" => ["query"],
+                 "additionalProperties" => false
                }
              }
     end
@@ -404,7 +405,8 @@ defmodule ReqLLM.SchemaTest do
                      "description" => "Maximum results"
                    }
                  },
-                 "required" => ["query"]
+                 "required" => ["query"],
+                 "additionalProperties" => false
                }
              }
 

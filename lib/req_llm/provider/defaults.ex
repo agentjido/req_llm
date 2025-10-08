@@ -570,6 +570,30 @@ defmodule ReqLLM.Provider.Defaults do
     }
   end
 
+  defp encode_openai_content_part(%ReqLLM.Message.ContentPart{
+         type: :image,
+         data: data,
+         media_type: media_type
+       }) do
+    base64 = Base.encode64(data)
+
+    %{
+      type: "image_url",
+      image_url: %{
+        url: "data:#{media_type};base64,#{base64}"
+      }
+    }
+  end
+
+  defp encode_openai_content_part(%ReqLLM.Message.ContentPart{type: :image_url, url: url}) do
+    %{
+      type: "image_url",
+      image_url: %{
+        url: url
+      }
+    }
+  end
+
   defp encode_openai_content_part(_), do: nil
 
   @doc """
@@ -915,6 +939,11 @@ defmodule ReqLLM.Provider.Defaults do
       |> Map.merge(context_data)
       |> add_basic_options(request.options)
       |> maybe_put(:stream, request.options[:stream])
+      |> then(fn body ->
+        if request.options[:stream],
+          do: Map.put(body, :stream_options, %{include_usage: true}),
+          else: body
+      end)
       |> maybe_put(:max_tokens, request.options[:max_tokens])
 
     body =
@@ -1090,7 +1119,7 @@ defmodule ReqLLM.Provider.Defaults do
     final_response =
       case operation do
         :object ->
-          extract_and_set_object(response)
+          extract_and_set_object(response, req)
 
         _ ->
           response
@@ -1100,20 +1129,62 @@ defmodule ReqLLM.Provider.Defaults do
     {req, %{resp | body: merged_response}}
   end
 
-  defp extract_and_set_object(response) do
-    extracted_object =
-      case ReqLLM.Response.tool_calls(response) do
-        [] ->
-          nil
+  defp extract_and_set_object(response, req) do
+    provider_opts = req.options[:provider_options] || []
+    response_format = provider_opts[:response_format]
 
-        tool_calls ->
-          case Enum.find(tool_calls, &(&1.name == "structured_output")) do
-            nil -> nil
-            %{arguments: object} -> object
-          end
+    extracted_object =
+      case response_format do
+        %{type: "json_schema"} ->
+          extract_from_json_schema_content(response)
+
+        %{"type" => "json_schema"} ->
+          extract_from_json_schema_content(response)
+
+        _ ->
+          extract_from_tool_calls(response)
       end
 
     %{response | object: extracted_object}
+  end
+
+  defp extract_from_json_schema_content(response) do
+    case response.message do
+      %ReqLLM.Message{content: content_parts} when is_list(content_parts) ->
+        text_content =
+          content_parts
+          |> Enum.find_value(fn
+            %ReqLLM.Message.ContentPart{type: :text, text: text} when is_binary(text) -> text
+            _ -> nil
+          end)
+
+        case text_content do
+          nil ->
+            nil
+
+          json_string ->
+            case Jason.decode(json_string) do
+              {:ok, parsed_object} -> parsed_object
+              {:error, _} -> nil
+            end
+        end
+
+      _ ->
+        nil
+    end
+  end
+
+  defp extract_from_tool_calls(response) do
+    case ReqLLM.Response.tool_calls(response) do
+      [] ->
+        nil
+
+      tool_calls ->
+        case Enum.find(tool_calls, &(&1.name == "structured_output")) do
+          nil -> nil
+          %{arguments: object} -> object
+        end
+    end
   end
 
   defp merge_response_with_context(req, response) do

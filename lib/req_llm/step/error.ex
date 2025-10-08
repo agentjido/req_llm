@@ -76,6 +76,37 @@ defmodule ReqLLM.Step.Error do
   end
 
   @spec convert_exception_to_error(Req.Request.t(), Exception.t()) :: api_error()
+  defp convert_exception_to_error(request, %ReqLLM.Error.API.Response{} = exception) do
+    api_message =
+      case exception.response_body do
+        nil -> nil
+        body -> extract_api_error_message(body)
+      end
+
+    reason =
+      if is_binary(api_message) and api_message != "" do
+        "#{Exception.message(exception)}: #{api_message}"
+      else
+        Exception.message(exception)
+      end
+
+    if System.get_env("REQ_LLM_DEBUG") in ["1", "true"] do
+      require Logger
+
+      Logger.debug(
+        "OpenAI error response (#{exception.status}): #{inspect(exception.response_body)}"
+      )
+    end
+
+    ReqLLM.Error.API.Request.exception(
+      reason: reason,
+      status: exception.status,
+      response_body: exception.response_body,
+      request_body: request.body,
+      cause: exception
+    )
+  end
+
   defp convert_exception_to_error(request, exception) do
     reason = Exception.message(exception)
 

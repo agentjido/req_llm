@@ -131,11 +131,11 @@ defmodule ReqLLM.EmbeddingTest do
 
     test "handles empty list" do
       # This should fail at validation stage due to model validation
-      assert {:error, _error} = Embedding.embed_many("openai:text-embedding-3-small", [])
+      assert {:error, _error} = Embedding.embed("openai:text-embedding-3-small", [])
     end
 
     test "rejects non-embedding models" do
-      assert {:error, error} = Embedding.embed_many("openai:gpt-4", ["Hello"])
+      assert {:error, error} = Embedding.embed("openai:gpt-4", ["Hello"])
       assert Exception.message(error) =~ "does not support embedding operations"
     end
   end
@@ -143,12 +143,11 @@ defmodule ReqLLM.EmbeddingTest do
   describe "error handling" do
     test "validates input parameters" do
       assert {:error, _} = Embedding.embed("invalid:model", "text")
-      assert {:error, _} = Embedding.embed_many("invalid:model", ["text"])
+      assert {:error, _} = Embedding.embed("invalid:model", ["text"])
     end
 
     test "ensures function exists with correct arity" do
       assert function_exported?(Embedding, :embed, 3)
-      assert function_exported?(Embedding, :embed_many, 3)
       assert function_exported?(Embedding, :validate_model, 1)
       assert function_exported?(Embedding, :supported_models, 0)
       assert function_exported?(Embedding, :schema, 0)
