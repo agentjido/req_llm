@@ -8,8 +8,6 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
 
   use ReqLLM.ProviderCase, provider: ReqLLM.Providers.AmazonBedrock
 
-  import ReqLLM.ProviderTestHelpers
-
   alias ReqLLM.Provider.Options
   alias ReqLLM.Providers.AmazonBedrock
 
