@@ -245,7 +245,7 @@ defmodule ReqLLM.Tool do
   ## Parameters
 
     * `tool` - Tool struct
-    * `provider` - Provider atom (`:anthropic`)
+    * `provider` - Provider atom (`:anthropic`, `:openai`, `:google`, `:amazon_bedrock_converse`)
 
   ## Examples
 
@@ -257,6 +257,16 @@ defmodule ReqLLM.Tool do
       #     "input_schema" => %{...}
       #   }
 
+      # Bedrock Converse tool format
+      bedrock_schema = ReqLLM.Tool.to_schema(tool, :amazon_bedrock_converse)
+      #=> %{
+      #     "toolSpec" => %{
+      #       "name" => "get_weather",
+      #       "description" => "Get current weather",
+      #       "inputSchema" => %{"json" => %{...}}
+      #     }
+      #   }
+
   """
   @spec to_schema(t(), atom()) :: map()
   def to_schema(%__MODULE__{} = tool, provider \\ :openai) do
@@ -264,6 +274,7 @@ defmodule ReqLLM.Tool do
       :anthropic -> ReqLLM.Schema.to_anthropic_format(tool)
       :openai -> ReqLLM.Schema.to_openai_format(tool)
       :google -> ReqLLM.Schema.to_google_format(tool)
+      :amazon_bedrock_converse -> ReqLLM.Schema.to_bedrock_converse_format(tool)
       other -> raise ArgumentError, "Unknown provider #{inspect(other)}"
     end
   end

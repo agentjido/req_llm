@@ -159,24 +159,40 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
     model_id = model.model
 
-    endpoint_base =
-      if opts[:stream],
-        do: "/model/#{model_id}/invoke-with-response-stream",
-        else: "/model/#{model_id}/invoke"
+    # Check if tools are present - if so, use Converse API
+    use_converse = opts[:tools] != nil and opts[:tools] != []
+
+    {endpoint_base, formatter, model_family} =
+      if use_converse do
+        # Use Converse API for unified tool calling
+        endpoint =
+          if opts[:stream],
+            do: "/model/#{model_id}/converse-stream",
+            else: "/model/#{model_id}/converse"
+
+        {endpoint, ReqLLM.Providers.AmazonBedrock.Converse, :converse}
+      else
+        # Use native model-specific endpoint
+        endpoint =
+          if opts[:stream],
+            do: "/model/#{model_id}/invoke-with-response-stream",
+            else: "/model/#{model_id}/invoke"
+
+        family = get_model_family(model_id)
+        {endpoint, get_formatter_module(family), family}
+      end
 
     updated_request =
       request
       |> Map.put(:url, URI.parse(base_url <> endpoint_base))
-      |> Req.Request.register_options([:model, :context, :model_family])
+      |> Req.Request.register_options([:model, :context, :model_family, :use_converse])
       |> Req.Request.merge_options(
         base_url: base_url,
         model: model_id,
-        model_family: get_model_family(model_id),
-        context: opts[:context]
+        model_family: model_family,
+        context: opts[:context],
+        use_converse: use_converse
       )
-
-    model_family = get_model_family(model_id)
-    formatter = get_formatter_module(model_family)
 
     model_body =
       formatter.format_request(
@@ -206,10 +222,20 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     # Validate we have necessary AWS credentials
     validate_aws_credentials!(aws_creds)
 
-    # Get model-specific formatter
+    # Check if tools are present - if so, use Converse API
+    use_converse = other_opts[:tools] != nil and other_opts[:tools] != []
+
+    # Get model-specific or Converse formatter
     model_id = model.model
-    model_family = get_model_family(model_id)
-    formatter = get_formatter_module(model_family)
+
+    {formatter, path} =
+      if use_converse do
+        {ReqLLM.Providers.AmazonBedrock.Converse, "/model/#{model_id}/converse-stream"}
+      else
+        model_family = get_model_family(model_id)
+        formatter = get_formatter_module(model_family)
+        {formatter, "/model/#{model_id}/invoke-with-response-stream"}
+      end
 
     # Build request body
     body = formatter.format_request(model_id, context, other_opts)
@@ -223,7 +249,6 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     # Construct streaming URL
     region = aws_creds[:region] || "us-east-1"
     host = "bedrock-runtime.#{region}.amazonaws.com"
-    path = "/model/#{model_id}/invoke-with-response-stream"
     url = "https://#{host}#{path}"
 
     # Create base headers for AWS signature
@@ -548,8 +573,14 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   # Response decoding
   @impl ReqLLM.Provider
   def decode_response({req, %{status: 200} = resp}) do
-    model_family = req.options[:model_family]
-    formatter = get_formatter_module(model_family)
+    # Check if we're using Converse API
+    formatter =
+      if req.options[:use_converse] do
+        ReqLLM.Providers.AmazonBedrock.Converse
+      else
+        model_family = req.options[:model_family]
+        get_formatter_module(model_family)
+      end
 
     parsed_body = ensure_parsed_body(resp.body)
 

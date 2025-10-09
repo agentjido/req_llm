@@ -471,6 +471,58 @@ defmodule ReqLLM.Schema do
   end
 
   @doc """
+  Format a tool into AWS Bedrock Converse API tool schema format.
+
+  ## Parameters
+
+    * `tool` - A `ReqLLM.Tool.t()` struct
+
+  ## Returns
+
+  A map containing the Bedrock Converse tool schema format.
+
+  ## Examples
+
+      iex> tool = %ReqLLM.Tool{
+      ...>   name: "get_weather",
+      ...>   description: "Get current weather",
+      ...>   parameter_schema: [
+      ...>     location: [type: :string, required: true, doc: "City name"]
+      ...>   ],
+      ...>   callback: fn _ -> {:ok, %{}} end
+      ...> }
+      iex> ReqLLM.Schema.to_bedrock_converse_format(tool)
+      %{
+        "toolSpec" => %{
+          "name" => "get_weather",
+          "description" => "Get current weather",
+          "inputSchema" => %{
+            "json" => %{
+              "type" => "object",
+              "properties" => %{
+                "location" => %{"type" => "string", "description" => "City name"}
+              },
+              "required" => ["location"]
+            }
+          }
+        }
+      }
+
+  """
+  @spec to_bedrock_converse_format(ReqLLM.Tool.t()) :: map()
+  def to_bedrock_converse_format(%ReqLLM.Tool{} = tool) do
+    %{
+      "toolSpec" => %{
+        "name" => tool.name,
+        "description" => tool.description,
+        "inputSchema" => %{
+          "json" => to_json(tool.parameter_schema)
+        }
+      }
+    }
+  end
+
+  @doc """
   Validate data against a keyword schema.
 
   Takes a data map and validates it against a NimbleOptions-style keyword schema.
