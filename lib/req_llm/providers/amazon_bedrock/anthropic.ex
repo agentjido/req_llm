@@ -9,8 +9,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
   modules for all format conversion.
   """
 
-  alias ReqLLM.Providers.Anthropic
   alias ReqLLM.Providers.AmazonBedrock
+  alias ReqLLM.Providers.Anthropic
 
   @doc """
   Formats a ReqLLM context into Anthropic request format for Bedrock.

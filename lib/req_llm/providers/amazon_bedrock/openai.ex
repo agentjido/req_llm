@@ -10,8 +10,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
   to Provider.Defaults.
   """
 
-  alias ReqLLM.Providers.AmazonBedrock
   alias ReqLLM.Provider.Defaults
+  alias ReqLLM.Providers.AmazonBedrock
 
   @doc """
   Formats a ReqLLM context into OpenAI request format for Bedrock.
@@ -55,12 +55,13 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
   def parse_response(body, opts) when is_map(body) do
     # Create a minimal request with required options for decoder
     fake_req = %Req.Request{
-      options: Map.new([
-        model: opts[:model] || "openai.gpt-oss-20b-1:0",
-        context: opts[:context] || %ReqLLM.Context{messages: []},
-        stream: false,
-        operation: :chat
-      ])
+      options:
+        Map.new(
+          model: opts[:model] || "openai.gpt-oss-20b-1:0",
+          context: opts[:context] || %ReqLLM.Context{messages: []},
+          stream: false,
+          operation: :chat
+        )
     }
 
     # Create a fake response struct for default decoder

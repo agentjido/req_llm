@@ -85,6 +85,10 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       session_token: [
         type: :string,
         doc: "AWS Session Token for temporary credentials"
+      ],
+      use_converse: [
+        type: :boolean,
+        doc: "Force use of Bedrock Converse API (default: auto-detect based on tools presence)"
       ]
     ]
 
@@ -159,8 +163,14 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
     model_id = model.model
 
-    # Check if tools are present - if so, use Converse API
-    use_converse = opts[:tools] != nil and opts[:tools] != []
+    # Check if we should use Converse API
+    # Priority: explicit use_converse option > auto-detect from tools presence
+    use_converse =
+      case opts[:use_converse] do
+        true -> true
+        false -> false
+        nil -> opts[:tools] != nil and opts[:tools] != []
+      end
 
     {endpoint_base, formatter, model_family} =
       if use_converse do
@@ -222,8 +232,14 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     # Validate we have necessary AWS credentials
     validate_aws_credentials!(aws_creds)
 
-    # Check if tools are present - if so, use Converse API
-    use_converse = other_opts[:tools] != nil and other_opts[:tools] != []
+    # Check if we should use Converse API
+    # Priority: explicit use_converse option > auto-detect from tools presence
+    use_converse =
+      case other_opts[:use_converse] do
+        true -> true
+        false -> false
+        nil -> other_opts[:tools] != nil and other_opts[:tools] != []
+      end
 
     # Get model-specific or Converse formatter
     model_id = model.model

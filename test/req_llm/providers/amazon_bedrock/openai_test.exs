@@ -140,7 +140,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAITest do
                   "type" => "function",
                   "function" => %{
                     "name" => "get_weather",
-                    "arguments" => "{\"location\":\"Paris\"}"
+                    "arguments" => ~s({"location":"Paris"})
                   }
                 }
               ]
@@ -191,7 +191,9 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAITest do
         }
       }
 
-      assert {:ok, stream_chunk} = OpenAI.parse_stream_chunk(chunk, model: "openai.gpt-oss-20b-1:0")
+      assert {:ok, stream_chunk} =
+               OpenAI.parse_stream_chunk(chunk, model: "openai.gpt-oss-20b-1:0")
+
       assert stream_chunk.type == :content
       assert stream_chunk.text == "Hello"
     end
@@ -217,7 +219,9 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAITest do
         }
       }
 
-      assert {:ok, stream_chunk} = OpenAI.parse_stream_chunk(chunk, model: "openai.gpt-oss-20b-1:0")
+      assert {:ok, stream_chunk} =
+               OpenAI.parse_stream_chunk(chunk, model: "openai.gpt-oss-20b-1:0")
+
       assert stream_chunk.type == :meta
       assert stream_chunk.metadata[:finish_reason] == :stop
     end

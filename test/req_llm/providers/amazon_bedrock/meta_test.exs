@@ -19,7 +19,11 @@ defmodule ReqLLM.Providers.AmazonBedrock.MetaTest do
       assert String.contains?(formatted["prompt"], "<|start_header_id|>user<|end_header_id|>")
       assert String.contains?(formatted["prompt"], "Hello")
       assert String.contains?(formatted["prompt"], "<|eot_id|>")
-      assert String.contains?(formatted["prompt"], "<|start_header_id|>assistant<|end_header_id|>")
+
+      assert String.contains?(
+               formatted["prompt"],
+               "<|start_header_id|>assistant<|end_header_id|>"
+             )
     end
 
     test "includes system message when present" do
@@ -160,7 +164,9 @@ defmodule ReqLLM.Providers.AmazonBedrock.MetaTest do
         "stop_reason" => "stop"
       }
 
-      assert {:ok, parsed} = Meta.parse_response(response_body, model: "meta.llama3-8b-instruct-v1:0")
+      assert {:ok, parsed} =
+               Meta.parse_response(response_body, model: "meta.llama3-8b-instruct-v1:0")
+
       assert %ReqLLM.Response{} = parsed
       assert parsed.model == "meta.llama3-8b-instruct-v1:0"
       assert parsed.finish_reason == :stop
@@ -180,7 +186,9 @@ defmodule ReqLLM.Providers.AmazonBedrock.MetaTest do
         "stop_reason" => "length"
       }
 
-      assert {:ok, parsed} = Meta.parse_response(response_body, model: "meta.llama3-70b-instruct-v1:0")
+      assert {:ok, parsed} =
+               Meta.parse_response(response_body, model: "meta.llama3-70b-instruct-v1:0")
+
       assert parsed.finish_reason == :length
     end
 

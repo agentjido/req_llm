@@ -42,8 +42,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Meta do
   def format_llama_prompt(messages) do
     formatted =
       messages
-      |> Enum.map(&format_message/1)
-      |> Enum.join("")
+      |> Enum.map_join("", &format_message/1)
 
     # Start with begin token and end with assistant header
     "<|begin_of_text|>#{formatted}<|start_header_id|>assistant<|end_header_id|>\n\n"
@@ -58,8 +57,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Meta do
     text =
       content
       |> Enum.filter(&(&1.type == :text))
-      |> Enum.map(& &1.text)
-      |> Enum.join("\n")
+      |> Enum.map_join("\n", & &1.text)
 
     "<|start_header_id|>#{role}<|end_header_id|>\n\n#{text}<|eot_id|>"
   end
@@ -95,7 +93,13 @@ defmodule ReqLLM.Providers.AmazonBedrock.Meta do
         stream: nil,
         usage: usage,
         finish_reason: parse_stop_reason(body["stop_reason"]),
-        provider_meta: Map.drop(body, ["generation", "prompt_token_count", "generation_token_count", "stop_reason"])
+        provider_meta:
+          Map.drop(body, [
+            "generation",
+            "prompt_token_count",
+            "generation_token_count",
+            "stop_reason"
+          ])
       }
 
       {:ok, response}
