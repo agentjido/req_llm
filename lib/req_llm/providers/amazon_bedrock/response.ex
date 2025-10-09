@@ -14,9 +14,10 @@ defmodule ReqLLM.Providers.AmazonBedrock.Response do
   Unwraps a Bedrock streaming chunk into the underlying provider event format.
 
   Bedrock can wrap events in several formats:
-  - `%{"chunk" => %{"bytes" => base64}}` - AWS SDK format
+  - `%{"chunk" => %{"bytes" => base64}}` - AWS SDK format (Anthropic)
   - `%{"bytes" => base64}` - Direct bytes format
-  - `%{"type" => ...}` - Already decoded JSON event
+  - `%{"type" => ...}` - Anthropic JSON event (already decoded)
+  - `%{"object" => ...}` - OpenAI JSON event (already decoded)
 
   Returns the unwrapped event as a map, or an error tuple.
   """
@@ -24,7 +25,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Response do
   def unwrap_stream_chunk(chunk) when is_map(chunk) do
     case chunk do
       %{"chunk" => %{"bytes" => encoded}} ->
-        # AWS SDK format: chunk wrapper with base64-encoded content
+        # AWS SDK format: chunk wrapper with base64-encoded content (Anthropic)
         decoded = Base.decode64!(encoded)
         {:ok, Jason.decode!(decoded)}
 
@@ -34,7 +35,11 @@ defmodule ReqLLM.Providers.AmazonBedrock.Response do
         {:ok, Jason.decode!(decoded)}
 
       %{"type" => _} = event ->
-        # Direct JSON event (already decoded by AWS event stream parser)
+        # Anthropic JSON event (already decoded by AWS event stream parser)
+        {:ok, event}
+
+      %{"object" => _} = event ->
+        # OpenAI JSON event (already decoded, native format)
         {:ok, event}
 
       _ ->
