@@ -52,6 +52,55 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
     end
   end
 
+  describe "unwrap_stream_chunk/1" do
+    alias ReqLLM.Providers.AmazonBedrock.Response
+
+    test "unwraps AWS SDK format with chunk wrapper" do
+      event = %{"type" => "content_block_delta", "delta" => %{"text" => "hello"}}
+      encoded = Base.encode64(Jason.encode!(event))
+      chunk = %{"chunk" => %{"bytes" => encoded}}
+
+      assert {:ok, unwrapped} = Response.unwrap_stream_chunk(chunk)
+      assert unwrapped == event
+    end
+
+    test "unwraps direct bytes format" do
+      event = %{"type" => "message_start", "message" => %{"id" => "msg_123"}}
+      encoded = Base.encode64(Jason.encode!(event))
+      chunk = %{"bytes" => encoded}
+
+      assert {:ok, unwrapped} = Response.unwrap_stream_chunk(chunk)
+      assert unwrapped == event
+    end
+
+    test "passes through already decoded events" do
+      event = %{"type" => "message_stop"}
+      chunk = event
+
+      assert {:ok, unwrapped} = Response.unwrap_stream_chunk(chunk)
+      assert unwrapped == event
+    end
+
+    test "returns error for unknown format" do
+      chunk = %{"unknown" => "format"}
+
+      assert {:error, :unknown_chunk_format} = Response.unwrap_stream_chunk(chunk)
+    end
+
+    test "returns error for invalid base64" do
+      chunk = %{"bytes" => "invalid-base64!!!"}
+
+      assert {:error, {:unwrap_failed, _}} = Response.unwrap_stream_chunk(chunk)
+    end
+
+    test "returns error for invalid JSON" do
+      encoded = Base.encode64("not valid json")
+      chunk = %{"bytes" => encoded}
+
+      assert {:error, {:unwrap_failed, _}} = Response.unwrap_stream_chunk(chunk)
+    end
+  end
+
   describe "attach_stream/4" do
     setup do
       model = Model.from!("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")

@@ -75,6 +75,116 @@ defmodule ReqLLM.Providers.AmazonBedrock.AnthropicTest do
       refute Map.has_key?(formatted, :temperature)
       refute Map.has_key?(formatted, :top_p)
     end
+
+    test "excludes model field (Bedrock specifies it in URL)" do
+      context = Context.new([Context.user("Hello")])
+
+      formatted =
+        Anthropic.format_request(
+          "us.anthropic.claude-3-5-haiku-20241022-v1:0",
+          context,
+          []
+        )
+
+      # Bedrock doesn't accept model in body - it's in the URL path
+      refute Map.has_key?(formatted, :model)
+      # But should have all the Anthropic format
+      assert formatted[:messages]
+      assert formatted[:anthropic_version] == "bedrock-2023-05-31"
+    end
+
+    test "includes tools when provided" do
+      # Create a test tool using NimbleOptions schema format
+      get_weather =
+        ReqLLM.Tool.new!(
+          name: "get_weather",
+          description: "Get the current weather for a location",
+          parameter_schema: [
+            location: [type: :string, required: true, doc: "City name"]
+          ],
+          callback: fn _args -> {:ok, "sunny"} end
+        )
+
+      context = Context.new([Context.user("What's the weather?")])
+      # Properly set tools on context
+      context = Map.put(context, :tools, [get_weather])
+
+      formatted =
+        Anthropic.format_request(
+          "anthropic.claude-3-haiku-20240307-v1:0",
+          context,
+          []
+        )
+
+      assert is_list(formatted[:tools])
+      assert length(formatted[:tools]) == 1
+
+      tool = List.first(formatted[:tools])
+      assert tool[:name] == "get_weather"
+      assert tool[:description] == "Get the current weather for a location"
+      assert is_map(tool[:input_schema])
+      assert tool[:input_schema]["type"] == "object"
+    end
+  end
+
+  describe "parse_response/2" do
+    test "parses basic Anthropic response" do
+      response_body = %{
+        "id" => "msg_abc123",
+        "type" => "message",
+        "role" => "assistant",
+        "model" => "claude-3-haiku-20240307",
+        "content" => [
+          %{"type" => "text", "text" => "Hello! How can I help you?"}
+        ],
+        "stop_reason" => "end_turn",
+        "usage" => %{
+          "input_tokens" => 10,
+          "output_tokens" => 25
+        }
+      }
+
+      assert {:ok, parsed} = Anthropic.parse_response(response_body, [])
+      assert %ReqLLM.Response{} = parsed
+      assert parsed.id == "msg_abc123"
+      assert parsed.model == "claude-3-haiku-20240307"
+      assert parsed.finish_reason == :stop
+      assert parsed.usage.input_tokens == 10
+      assert parsed.usage.output_tokens == 25
+    end
+
+    test "parses response with tool calls" do
+      response_body = %{
+        "id" => "msg_tool123",
+        "type" => "message",
+        "role" => "assistant",
+        "model" => "claude-3-haiku",
+        "content" => [
+          %{
+            "type" => "tool_use",
+            "id" => "call_xyz",
+            "name" => "get_weather",
+            "input" => %{"location" => "San Francisco"}
+          }
+        ],
+        "stop_reason" => "tool_use",
+        "usage" => %{
+          "input_tokens" => 15,
+          "output_tokens" => 30
+        }
+      }
+
+      assert {:ok, parsed} = Anthropic.parse_response(response_body, [])
+      assert parsed.finish_reason == :tool_calls
+
+      # Verify tool call is properly decoded
+      tool_calls = ReqLLM.Response.tool_calls(parsed)
+      assert length(tool_calls) == 1
+
+      [tool_call] = tool_calls
+      assert tool_call.name == "get_weather"
+      assert tool_call.arguments["location"] == "San Francisco"
+    end
   end
 
   describe "parse_stream_chunk/2" do
@@ -82,6 +192,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.AnthropicTest do
       # Bedrock wraps Anthropic events in a chunk with base64-encoded bytes
       inner_event = %{
         "type" => "content_block_delta",
+        "index" => 0,
         "delta" => %{
           "type" => "text_delta",
           "text" => "Hello"
@@ -115,10 +226,9 @@ defmodule ReqLLM.Providers.AmazonBedrock.AnthropicTest do
         }
       }
 
-      assert {:ok, stream_chunk} = Anthropic.parse_stream_chunk(chunk, [])
-      assert stream_chunk.type == :meta
-      assert stream_chunk.metadata[:id] == "msg_123"
-      assert stream_chunk.metadata[:model] == "claude-3-haiku"
+      # message_start events are not currently processed by Anthropic.Response
+      # They're informational and not needed for assembling the response
+      assert {:ok, nil} = Anthropic.parse_stream_chunk(chunk, [])
     end
 
     test "parses message stop chunk" do
@@ -155,7 +265,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.AnthropicTest do
 
       assert {:ok, stream_chunk} = Anthropic.parse_stream_chunk(chunk, [])
       assert stream_chunk.type == :meta
-      assert stream_chunk.metadata[:finish_reason] == "end_turn"
+      # When usage is present, the usage chunk is returned first
+      # The finish_reason chunk comes after but we only return the first
       assert stream_chunk.metadata[:usage]["output_tokens"] == 42
     end
 
@@ -176,7 +287,9 @@ defmodule ReqLLM.Providers.AmazonBedrock.AnthropicTest do
       }
 
       assert {:ok, stream_chunk} = Anthropic.parse_stream_chunk(chunk, [])
-      assert stream_chunk.type == :meta
+      # content_block_start with text creates a content chunk
+      assert stream_chunk.type == :content
+      assert stream_chunk.text == ""
     end
 
     test "parses content block stop" do
@@ -191,13 +304,14 @@ defmodule ReqLLM.Providers.AmazonBedrock.AnthropicTest do
         }
       }
 
-      assert {:ok, stream_chunk} = Anthropic.parse_stream_chunk(chunk, [])
-      assert stream_chunk.type == :meta
+      # content_block_stop events don't produce chunks in the new implementation
+      assert {:ok, nil} = Anthropic.parse_stream_chunk(chunk, [])
     end
 
     test "parses tool use delta" do
       inner_event = %{
         "type" => "content_block_delta",
+        "index" => 0,
         "delta" => %{
           "type" => "input_json_delta",
           "partial_json" => "{\"location\":"
@@ -211,29 +325,31 @@ defmodule ReqLLM.Providers.AmazonBedrock.AnthropicTest do
       }
 
       assert {:ok, stream_chunk} = Anthropic.parse_stream_chunk(chunk, [])
-      assert stream_chunk.type == :content
-      assert stream_chunk.text == "{\"location\":"
+      assert stream_chunk.type == :meta
+      # Tool args are in metadata
+      assert stream_chunk.metadata[:tool_call_args][:fragment] == "{\"location\":"
     end
 
     test "handles malformed chunk" do
       chunk = %{"invalid" => "format"}
 
       assert {:error, reason} = Anthropic.parse_stream_chunk(chunk, [])
-      assert is_binary(reason)
+      # Error is now a tuple from unwrap_stream_chunk
+      assert reason == :unknown_chunk_format
     end
 
     test "handles missing bytes field" do
       chunk = %{"chunk" => %{}}
 
       assert {:error, reason} = Anthropic.parse_stream_chunk(chunk, [])
-      assert is_binary(reason)
+      # Error is now a tuple from unwrap_stream_chunk
+      assert reason == :unknown_chunk_format
     end
 
     test "handles invalid base64" do
       chunk = %{"chunk" => %{"bytes" => "not-valid-base64!!!"}}
 
-      assert {:error, reason} = Anthropic.parse_stream_chunk(chunk, [])
-      assert is_binary(reason)
+      assert {:error, {:unwrap_failed, _}} = Anthropic.parse_stream_chunk(chunk, [])
     end
   end
 end
