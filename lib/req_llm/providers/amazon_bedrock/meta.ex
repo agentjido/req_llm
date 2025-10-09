@@ -105,6 +105,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Meta do
       {:ok, response}
     else
       :error -> {:error, "Invalid response format"}
+      {:error, _} -> {:error, "Invalid response format"}
     end
   end
 

@@ -5,9 +5,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
   Handles OpenAI's OSS models (gpt-oss-120b, gpt-oss-20b) on AWS Bedrock.
 
   This module acts as a thin adapter between Bedrock's AWS-specific wrapping
-  and OpenAI's native Chat Completions format. Unlike Anthropic, OpenAI on
-  Bedrock uses the exact same format as native OpenAI, so this mostly delegates
-  to Provider.Defaults.
+  and OpenAI's native Chat Completions format.
   """
 
   alias ReqLLM.Provider.Defaults
@@ -50,33 +48,76 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
   @doc """
   Parses OpenAI response from Bedrock into ReqLLM format.
 
-  Delegates to the standard OpenAI response decoder.
+  Manually decodes the OpenAI Chat Completions format.
   """
   def parse_response(body, opts) when is_map(body) do
-    # Create a minimal request with required options for decoder
-    fake_req = %Req.Request{
-      options:
-        Map.new(
-          model: opts[:model] || "openai.gpt-oss-20b-1:0",
-          context: opts[:context] || %ReqLLM.Context{messages: []},
-          stream: false,
-          operation: :chat
-        )
-    }
+    # OpenAI response format has choices array with message object
+    with {:ok, choices} <- Map.fetch(body, "choices"),
+         [choice | _] <- choices,
+         {:ok, message_data} <- Map.fetch(choice, "message") do
 
-    # Create a fake response struct for default decoder
-    fake_resp = %{
-      status: 200,
-      body: body
-    }
+      # Parse the message content
+      message = parse_message(message_data)
 
-    # Use standard OpenAI response decoding
-    # Returns {req, %{resp | body: merged_response}} where merged_response is the ReqLLM.Response
-    case Defaults.default_decode_response({fake_req, fake_resp}) do
-      {_req, %{body: %ReqLLM.Response{} = response}} -> {:ok, response}
-      {_req, other} -> {:error, other}
+      # Extract usage if present
+      usage = Map.get(body, "usage", %{})
+
+      # Extract finish reason
+      finish_reason = parse_finish_reason(Map.get(choice, "finish_reason"))
+
+      response = %ReqLLM.Response{
+        id: Map.get(body, "id", "unknown"),
+        model: Map.get(body, "model", opts[:model] || "openai.gpt-oss-20b-1:0"),
+        context: %ReqLLM.Context{messages: [message]},
+        message: message,
+        stream?: false,
+        stream: nil,
+        usage: parse_usage(usage),
+        finish_reason: finish_reason,
+        provider_meta: Map.drop(body, ["choices", "usage", "id", "model"])
+      }
+
+      {:ok, response}
+    else
+      :error -> {:error, "Invalid OpenAI response format"}
+      [] -> {:error, "Empty choices array"}
     end
   end
+
+  defp parse_message(%{"role" => role, "content" => content} = data) do
+    # Handle tool calls if present
+    content_parts = if tool_calls = Map.get(data, "tool_calls") do
+      Enum.map(tool_calls, fn tc ->
+        %ReqLLM.Message.ContentPart{
+          type: :tool_call,
+          tool_call_id: tc["id"],
+          tool_name: get_in(tc, ["function", "name"]),
+          input: Jason.decode!(get_in(tc, ["function", "arguments"]) || "{}")
+        }
+      end)
+    else
+      [%ReqLLM.Message.ContentPart{type: :text, text: content || ""}]
+    end
+
+    %ReqLLM.Message{
+      role: String.to_existing_atom(role),
+      content: content_parts
+    }
+  end
+
+  defp parse_usage(%{"prompt_tokens" => input, "completion_tokens" => output}) do
+    %{
+      input_tokens: input,
+      output_tokens: output,
+      total_tokens: input + output
+    }
+  end
+  defp parse_usage(_), do: nil
+
+  defp parse_finish_reason("stop"), do: :stop
+  defp parse_finish_reason("length"), do: :length
+  defp parse_finish_reason("tool_calls"), do: :tool_calls
+  defp parse_finish_reason(_), do: :stop
 
   @doc """
   Parses a streaming chunk for OpenAI models.
