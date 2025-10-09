@@ -100,10 +100,11 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   # Base URL will be constructed with region
   @model_families %{
     "anthropic" => ReqLLM.Providers.AmazonBedrock.Anthropic,
-    "openai" => ReqLLM.Providers.AmazonBedrock.OpenAI
+    "openai" => ReqLLM.Providers.AmazonBedrock.OpenAI,
+    "meta" => ReqLLM.Providers.AmazonBedrock.Meta
   }
 
-  @known_but_unsupported ~w(meta amazon cohere ai21 mistral deepseek)
+  @known_but_unsupported ~w(amazon cohere ai21 mistral deepseek)
 
   def default_base_url do
     # Override to handle region template

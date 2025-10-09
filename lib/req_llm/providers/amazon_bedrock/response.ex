@@ -18,6 +18,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Response do
   - `%{"bytes" => base64}` - Direct bytes format
   - `%{"type" => ...}` - Anthropic JSON event (already decoded)
   - `%{"object" => ...}` - OpenAI JSON event (already decoded)
+  - `%{"generation" => ...}` - Meta Llama JSON event (already decoded)
 
   Returns the unwrapped event as a map, or an error tuple.
   """
@@ -40,6 +41,10 @@ defmodule ReqLLM.Providers.AmazonBedrock.Response do
 
       %{"object" => _} = event ->
         # OpenAI JSON event (already decoded, native format)
+        {:ok, event}
+
+      %{"generation" => _} = event ->
+        # Meta Llama JSON event (already decoded, native format)
         {:ok, event}
 
       _ ->

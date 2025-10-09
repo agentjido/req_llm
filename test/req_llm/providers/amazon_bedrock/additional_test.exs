@@ -74,9 +74,9 @@ defmodule ReqLLM.Providers.AmazonBedrock.AdditionalTest do
 
     test "returns error for unsupported models" do
       unsupported = [
-        "meta.llama2-70b-v1",
         "amazon.titan-text-express-v1",
-        "cohere.command-text-v14"
+        "cohere.command-text-v14",
+        "ai21.jamba-1-5-large-v1:0"
       ]
 
       for model_id <- unsupported do
