@@ -490,8 +490,11 @@ defmodule ReqLLM.Provider do
   @spec get!(atom()) :: module()
   def get!(provider_id) do
     case ReqLLM.Provider.Registry.get_provider(provider_id) do
-      {:ok, module} -> module
-      {:error, _reason} -> raise ReqLLM.Error.Invalid.Provider.exception(provider: provider_id)
+      {:ok, module} ->
+        module
+
+      {:error, error} ->
+        raise error
     end
   end
 end

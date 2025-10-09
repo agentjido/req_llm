@@ -122,8 +122,8 @@ defmodule ReqLLM.Provider.Registry do
   ## Returns
 
     * `{:ok, module}` - Provider module found
-    * `{:error, :not_found}` - Provider not registered
-    * `{:error, :not_implemented}` - Provider exists but has no implementation (metadata-only)
+    * `{:error, %ReqLLM.Error.Invalid.Provider{}}` - Provider not registered
+    * `{:error, %ReqLLM.Error.Invalid.Provider.NotImplemented{}}` - Provider exists but has no implementation (metadata-only)
 
   ## Examples
 
@@ -131,22 +131,33 @@ defmodule ReqLLM.Provider.Registry do
       module #=> ReqLLM.Providers.Anthropic
 
       ReqLLM.Provider.Registry.get_provider(:unknown)
-      #=> {:error, :not_found}
+      #=> {:error, %ReqLLM.Error.Invalid.Provider{provider: :unknown}}
 
   """
-  @spec get_provider(atom()) :: {:ok, module()} | {:error, :not_found | :not_implemented}
+  @spec get_provider(atom()) ::
+          {:ok, module()}
+          | {:error,
+             ReqLLM.Error.Invalid.Provider.t() | ReqLLM.Error.Invalid.Provider.NotImplemented.t()}
   def get_provider(provider_id) when is_atom(provider_id) do
     case get_registry() do
-      %{^provider_id => %{module: nil}} -> {:error, :not_implemented}
-      %{^provider_id => %{module: module}} -> {:ok, module}
-      _ -> {:error, :not_found}
+      %{^provider_id => %{module: nil}} ->
+        {:error, ReqLLM.Error.Invalid.Provider.NotImplemented.exception(provider: provider_id)}
+
+      %{^provider_id => %{module: module}} ->
+        {:ok, module}
+
+      _ ->
+        {:error, ReqLLM.Error.Invalid.Provider.exception(provider: provider_id)}
     end
   end
 
   @doc """
   Alias for get_provider/1 to match legacy API expectations.
   """
-  @spec fetch(atom()) :: {:ok, module()} | {:error, :not_found | :not_implemented}
+  @spec fetch(atom()) ::
+          {:ok, module()}
+          | {:error,
+             ReqLLM.Error.Invalid.Provider.t() | ReqLLM.Error.Invalid.Provider.NotImplemented.t()}
   def fetch(provider_id), do: get_provider(provider_id)
 
   @doc """

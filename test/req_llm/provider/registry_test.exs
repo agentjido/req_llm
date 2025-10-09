@@ -96,12 +96,31 @@ defmodule ReqLLM.Provider.RegistryTest do
     end
 
     test "returns error when provider not found" do
-      assert {:error, :not_found} = Registry.get_provider(:nonexistent)
+      assert {:error, %ReqLLM.Error.Invalid.Provider{provider: :nonexistent}} =
+               Registry.get_provider(:nonexistent)
+    end
+
+    test "returns NotImplemented error for metadata-only providers" do
+      Registry.clear()
+      registry = %{metadata_only: %{module: nil, metadata: %{models: []}, implemented: false}}
+      :persistent_term.put(:req_llm_providers, registry)
+
+      assert {:error, %ReqLLM.Error.Invalid.Provider.NotImplemented{provider: :metadata_only}} =
+               Registry.get_provider(:metadata_only)
     end
 
     test "fetch/1 aliases get_provider/1" do
       assert Registry.fetch(:existing_provider) == Registry.get_provider(:existing_provider)
       assert Registry.fetch(:nonexistent) == Registry.get_provider(:nonexistent)
+    end
+
+    test "fetch/1 returns NotImplemented error for metadata-only providers" do
+      Registry.clear()
+      registry = %{metadata_only: %{module: nil, metadata: %{models: []}, implemented: false}}
+      :persistent_term.put(:req_llm_providers, registry)
+
+      assert {:error, %ReqLLM.Error.Invalid.Provider.NotImplemented{provider: :metadata_only}} =
+               Registry.fetch(:metadata_only)
     end
   end
 
@@ -500,7 +519,9 @@ defmodule ReqLLM.Provider.RegistryTest do
       assert {:ok, TestProvider} = Registry.get_provider(:test_clear)
 
       Registry.clear()
-      assert {:error, :not_found} = Registry.get_provider(:test_clear)
+
+      assert {:error, %ReqLLM.Error.Invalid.Provider{provider: :test_clear}} =
+               Registry.get_provider(:test_clear)
     end
 
     test "initialize/0 and reload/0 work" do

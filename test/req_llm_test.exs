@@ -27,7 +27,8 @@ defmodule ReqLLMTest do
     end
 
     test "returns error for invalid provider" do
-      assert {:error, :not_found} = ReqLLM.provider(:nonexistent)
+      assert {:error, %ReqLLM.Error.Invalid.Provider{provider: :nonexistent}} =
+               ReqLLM.provider(:nonexistent)
     end
   end
 end

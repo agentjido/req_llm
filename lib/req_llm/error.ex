@@ -119,9 +119,29 @@ defmodule ReqLLM.Error do
     @moduledoc "Error for unknown or unsupported providers."
     use Splode.Error, fields: [:provider], class: :invalid
 
+    @typedoc "Error for unknown provider"
+    @type t() :: %__MODULE__{
+            provider: atom()
+          }
+
     @spec message(map()) :: String.t()
     def message(%{provider: provider}) do
       "Unknown provider: #{provider}"
+    end
+  end
+
+  defmodule Invalid.Provider.NotImplemented do
+    @moduledoc "Error for providers that exist but have no implementation (metadata-only)."
+    use Splode.Error, fields: [:provider], class: :invalid
+
+    @typedoc "Error for metadata-only providers"
+    @type t() :: %__MODULE__{
+            provider: atom()
+          }
+
+    @spec message(map()) :: String.t()
+    def message(%{provider: provider}) do
+      "Provider not implemented (metadata-only): #{provider}"
     end
   end
 

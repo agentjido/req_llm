@@ -154,10 +154,13 @@ defmodule ReqLLM do
       #=> {:ok, ReqLLM.Providers.Anthropic}
 
       ReqLLM.provider(:unknown)
-      #=> {:error, :not_found}
+      #=> {:error, %ReqLLM.Error.Invalid.Provider{provider: :unknown}}
 
   """
-  @spec provider(atom()) :: {:ok, module()} | {:error, :not_found}
+  @spec provider(atom()) ::
+          {:ok, module()}
+          | {:error,
+             ReqLLM.Error.Invalid.Provider.t() | ReqLLM.Error.Invalid.Provider.NotImplemented.t()}
   def provider(provider) when is_atom(provider) do
     ReqLLM.Provider.Registry.fetch(provider)
   end
