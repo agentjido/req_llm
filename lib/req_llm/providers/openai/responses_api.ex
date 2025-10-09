@@ -61,40 +61,11 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   @impl true
   def encode_body(request) do
-    ctx = request.options[:context] || %ReqLLM.Context{messages: []}
-    provider_opts = request.options[:provider_options] || []
+    context = request.options[:context] || %ReqLLM.Context{messages: []}
+    model_name = request.options[:model]
+    opts = request.options
 
-    input =
-      Enum.map(ctx.messages, fn msg ->
-        content =
-          Enum.flat_map(msg.content, fn part ->
-            case part.type do
-              :text -> [%{"type" => "input_text", "text" => part.text}]
-              _ -> []
-            end
-          end)
-
-        %{"role" => Atom.to_string(msg.role), "content" => content}
-      end)
-
-    max_output_tokens =
-      request.options[:max_output_tokens] ||
-        request.options[:max_completion_tokens] ||
-        request.options[:max_tokens]
-
-    tools = encode_tools_if_any(request) |> ensure_deep_research_tools(request)
-    tool_choice = encode_tool_choice(request.options[:tool_choice])
-    reasoning = encode_reasoning_effort(provider_opts[:reasoning_effort])
-
-    body =
-      Map.new()
-      |> Map.put("model", request.options[:model])
-      |> Map.put("input", input)
-      |> maybe_put_string("stream", request.options[:stream])
-      |> maybe_put_string("max_output_tokens", max_output_tokens)
-      |> maybe_put_string("tools", tools)
-      |> maybe_put_string("tool_choice", tool_choice)
-      |> maybe_put_string("reasoning", reasoning)
+    body = build_request_body(context, model_name, opts, request)
 
     Map.put(request, :body, Jason.encode!(body))
   end
@@ -218,61 +189,86 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   def decode_sse_event(_event, _model), do: []
 
-  @impl true
-  def attach_stream(model, context, opts, _finch_name) do
+  # ========================================================================
+  # Shared Request Building Helpers (used by both encode_body and attach_stream)
+  # ========================================================================
+
+  defp build_request_headers(model, opts) do
     api_key = ReqLLM.Keys.get!(model, opts)
 
-    headers = [
+    [
       {"Authorization", "Bearer " <> api_key},
-      {"Content-Type", "application/json"},
-      {"Accept", "text/event-stream"}
+      {"Content-Type", "application/json"}
     ]
+  end
 
-    url =
-      case Keyword.get(opts, :base_url) do
-        nil -> ReqLLM.Providers.OpenAI.default_base_url() <> path()
-        base_url -> "#{base_url}#{path()}"
-      end
+  defp build_request_url(opts) do
+    case Keyword.get(opts, :base_url) do
+      nil -> ReqLLM.Providers.OpenAI.default_base_url() <> path()
+      base_url -> "#{base_url}#{path()}"
+    end
+  end
 
-    provider_opts = opts |> Keyword.get(:provider_options, []) |> Map.new()
+  defp build_request_body(context, model_name, opts, request) do
+    opts_map = if is_map(opts), do: opts, else: Map.new(opts)
+    provider_opts = opts_map[:provider_options] || []
+
+    input =
+      Enum.map(context.messages, fn msg ->
+        content =
+          Enum.flat_map(msg.content, fn part ->
+            case part.type do
+              :text -> [%{"type" => "input_text", "text" => part.text}]
+              _ -> []
+            end
+          end)
+
+        %{"role" => Atom.to_string(msg.role), "content" => content}
+      end)
+
+    max_output_tokens =
+      opts_map[:max_output_tokens] ||
+        opts_map[:max_completion_tokens] ||
+        opts_map[:max_tokens]
+
+    temp_request = request || %{options: opts_map}
+    tools = encode_tools_if_any(temp_request) |> ensure_deep_research_tools(temp_request)
+
+    tool_choice = encode_tool_choice(opts_map[:tool_choice])
+    reasoning = encode_reasoning_effort(provider_opts[:reasoning_effort])
+
+    Map.new()
+    |> Map.put("model", model_name)
+    |> Map.put("input", input)
+    |> maybe_put_string("stream", opts_map[:stream])
+    |> maybe_put_string("max_output_tokens", max_output_tokens)
+    |> maybe_put_string("tools", tools)
+    |> maybe_put_string("tool_choice", tool_choice)
+    |> maybe_put_string("reasoning", reasoning)
+  end
+
+  # ========================================================================
+
+  @impl true
+  def attach_stream(model, context, opts, _finch_name) do
+    headers = build_request_headers(model, opts) ++ [{"Accept", "text/event-stream"}]
+
+    provider_opts = opts |> Keyword.get(:provider_options, []) |> Map.new() |> Map.to_list()
 
     cleaned_opts =
       opts
       |> Keyword.delete(:finch_name)
       |> Keyword.delete(:compiled_schema)
       |> Keyword.delete(:provider_options)
+      |> Keyword.merge(provider_opts)
+      |> Keyword.put(:stream, true)
+      |> Keyword.put(:model, model.model)
+      |> Keyword.put(:context, context)
 
-    req_opts =
-      [
-        model: model.model,
-        context: context,
-        stream: true,
-        responses_api: true,
-        provider_options: provider_opts
-      ] ++ cleaned_opts
+    body = build_request_body(context, model.model, cleaned_opts, nil)
+    url = build_request_url(opts)
 
-    options =
-      req_opts
-      |> Enum.reduce(%{}, fn
-        {key, value}, acc when is_list(value) ->
-          Map.put(acc, key, Map.new(value))
-
-        {key, value}, acc ->
-          Map.put(acc, key, value)
-      end)
-
-    temp_request = %Req.Request{
-      method: :post,
-      url: URI.parse("https://example.com/temp"),
-      headers: %{},
-      body: {:json, %{}},
-      options: options
-    }
-
-    encoded_request = encode_body(temp_request)
-    body = encoded_request.body
-
-    {:ok, Finch.build(:post, url, headers, body)}
+    {:ok, Finch.build(:post, url, headers, Jason.encode!(body))}
   rescue
     error ->
       {:error,

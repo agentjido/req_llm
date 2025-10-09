@@ -21,7 +21,9 @@ defmodule ReqLLM.MixProject do
         "coveralls.detail": :test,
         "coveralls.post": :test,
         "coveralls.html": :test,
-        "coveralls.github": :test
+        "coveralls.github": :test,
+        "req_llm.model_compat": :test,
+        mc: :test
       ],
 
       # Dialyzer configuration

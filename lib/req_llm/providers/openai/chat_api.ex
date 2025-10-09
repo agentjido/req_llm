@@ -46,24 +46,12 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
 
   @impl true
   def encode_body(request) do
-    request = ReqLLM.Provider.Defaults.default_encode_body(request)
-    body = Jason.decode!(request.body)
+    context = request.options[:context]
+    model_name = request.options[:model]
+    operation = request.options[:operation] || :chat
+    opts = if is_map(request.options), do: Map.to_list(request.options), else: request.options
 
-    enhanced_body =
-      case request.options[:operation] do
-        :embedding ->
-          add_embedding_options(body, request.options)
-
-        _ ->
-          body
-          |> add_token_limits(request.options[:model], request.options)
-          |> add_stream_options(request.options)
-          |> add_reasoning_effort(request.options)
-          |> add_response_format(request.options)
-          |> add_parallel_tool_calls(request.options)
-          |> translate_tool_choice_format()
-          |> add_strict_to_tools()
-      end
+    enhanced_body = build_request_body(context, model_name, opts, operation)
 
     if System.get_env("REQ_LLM_DEBUG") in ["1", "true"] do
       require Logger
@@ -84,60 +72,84 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
     ReqLLM.Provider.Defaults.default_decode_sse_event(event, model)
   end
 
-  @impl true
-  def attach_stream(model, context, opts, _finch_name) do
+  # ========================================================================
+  # Shared Request Building Helpers (used by both Req and Finch paths)
+  # ========================================================================
+
+  defp build_request_headers(model, opts) do
     api_key = ReqLLM.Keys.get!(model, opts)
 
-    headers = [
+    [
       {"Authorization", "Bearer " <> api_key},
-      {"Content-Type", "application/json"},
-      {"Accept", "text/event-stream"}
+      {"Content-Type", "application/json"}
     ]
+  end
 
-    url =
-      case Keyword.get(opts, :base_url) do
-        nil -> ReqLLM.Providers.OpenAI.default_base_url() <> path()
-        base_url -> "#{base_url}#{path()}"
+  defp build_request_body(context, model_name, opts, operation \\ :chat) do
+    # Use default encoding first
+    temp_request = %Req.Request{
+      method: :post,
+      url: URI.parse("https://example.com/temp"),
+      headers: %{},
+      body: {:json, %{}},
+      options: Map.new([model: model_name, context: context, operation: operation] ++ opts)
+    }
+
+    request = ReqLLM.Provider.Defaults.default_encode_body(temp_request)
+
+    body =
+      case request.body do
+        "" -> %{}
+        json_string when is_binary(json_string) -> Jason.decode!(json_string)
       end
 
-    provider_opts = opts |> Keyword.get(:provider_options, []) |> Map.new()
+    # Convert opts to map for helper functions that expect request.options
+    opts_map = if is_list(opts), do: Map.new(opts), else: opts
+
+    # Apply ChatAPI-specific enhancements
+    case operation do
+      :embedding ->
+        add_embedding_options(body, opts_map)
+
+      _ ->
+        body
+        |> add_token_limits(model_name, opts_map)
+        |> add_stream_options(opts_map)
+        |> add_reasoning_effort(opts_map)
+        |> add_response_format(opts_map)
+        |> add_parallel_tool_calls(opts_map)
+        |> translate_tool_choice_format()
+        |> add_strict_to_tools()
+    end
+  end
+
+  defp build_request_url(opts) do
+    case Keyword.get(opts, :base_url) do
+      nil -> ReqLLM.Providers.OpenAI.default_base_url() <> path()
+      base_url -> "#{base_url}#{path()}"
+    end
+  end
+
+  # ========================================================================
+
+  @impl true
+  def attach_stream(model, context, opts, _finch_name) do
+    headers = build_request_headers(model, opts) ++ [{"Accept", "text/event-stream"}]
+
+    provider_opts = opts |> Keyword.get(:provider_options, []) |> Map.new() |> Map.to_list()
 
     cleaned_opts =
       opts
       |> Keyword.delete(:finch_name)
       |> Keyword.delete(:compiled_schema)
       |> Keyword.delete(:provider_options)
+      |> Keyword.merge(provider_opts)
+      |> Keyword.put(:stream, true)
 
-    req_opts =
-      [
-        model: model.model,
-        context: context,
-        stream: true,
-        provider_options: provider_opts
-      ] ++ cleaned_opts
+    body = build_request_body(context, model.model, cleaned_opts)
+    url = build_request_url(opts)
 
-    options =
-      req_opts
-      |> Enum.reduce(%{}, fn
-        {key, value}, acc when is_list(value) ->
-          Map.put(acc, key, Map.new(value))
-
-        {key, value}, acc ->
-          Map.put(acc, key, value)
-      end)
-
-    temp_request = %Req.Request{
-      method: :post,
-      url: URI.parse("https://example.com/temp"),
-      headers: %{},
-      body: {:json, %{}},
-      options: options
-    }
-
-    encoded_request = encode_body(temp_request)
-    body = encoded_request.body
-
-    {:ok, Finch.build(:post, url, headers, body)}
+    {:ok, Finch.build(:post, url, headers, Jason.encode!(body))}
   rescue
     error ->
       {:error,

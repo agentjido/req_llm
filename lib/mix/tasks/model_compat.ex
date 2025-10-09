@@ -20,7 +20,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   - **sample** (optional): Further reduces using `:sample_text_models` or `:sample_embedding_models`.
     If not configured, falls back to one model per provider.
 
-  **Important**: 
+  **Important**:
   - Only **implemented providers** are included (registry models without implementation are skipped)
   - Config lists (`:test_models`, `:test_embedding_models`) are defaults only, not hard filters
   - Explicit specs like `"anthropic:*"` test ALL registry models for that provider
@@ -81,15 +81,23 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
           type: :string,
           record: :boolean,
           record_all: :boolean,
-          debug: :boolean
+          debug: :boolean,
+          failed_only: :boolean,
+          record_failed: :boolean,
+          migrate: :boolean
         ]
       )
 
-    if opts[:available] do
-      list_models(opts)
-    else
-      model_spec = List.first(positional)
-      run_coverage(model_spec, opts)
+    cond do
+      opts[:migrate] ->
+        migrate_state()
+
+      opts[:available] ->
+        list_models(opts)
+
+      true ->
+        model_spec = List.first(positional)
+        run_coverage(model_spec, opts)
     end
   end
 
@@ -271,6 +279,9 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     Mix.shell().info("----------------------------------------------------\n")
 
     models = load_registry()
+
+    opts = apply_implied_flags(opts)
+
     specs = select_models(models, model_spec, opts)
 
     if Enum.empty?(specs) do
@@ -278,9 +289,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     end
 
     total_specs = length(specs)
-
     recording = opts[:record_all] || opts[:record]
-
     mode_text = if recording, do: "#{total_specs} to record", else: "replay mode"
 
     Mix.shell().info("Testing #{total_specs} model(s) (#{mode_text})...\n")
@@ -304,27 +313,26 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     run_ts = DateTime.utc_now() |> DateTime.truncate(:second)
     save_state(results, run_ts)
 
-    print_summary(results, elapsed)
+    print_summary_new(results, elapsed)
   end
 
   defp test_model(provider, model_id, opts) do
     spec = "#{provider}:#{model_id}"
     mode = if opts[:record_all] || opts[:record], do: "record", else: "replay"
     operation = parse_operation_type(opts[:type])
-    category = operation_to_category(operation)
 
     env = [
+      {"MIX_ENV", "test"},
       {"REQ_LLM_MODELS", spec},
       {"REQ_LLM_OPERATION", Atom.to_string(operation)},
-      {"REQ_LLM_FIXTURES_MODE", mode},
-      {"REQ_LLM_DEBUG", "1"},
-      {"REQ_LLM_INCLUDE_RESPONSES", "1"}
+      {"REQ_LLM_FIXTURES_MODE", mode}
     ]
+
+    env = if opts[:debug], do: [{"REQ_LLM_DEBUG", "1"} | env], else: env
 
     Mix.shell().info("  Testing #{spec} (#{operation})...")
 
-    test_args =
-      build_test_args(provider, category, operation)
+    test_args = build_test_args(provider, operation)
 
     {output, exit_code} =
       System.cmd(
@@ -343,20 +351,29 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     parse_test_result(provider, model_id, output, exit_code)
   end
 
-  defp build_test_args(provider, _category, operation) do
+  defp build_test_args(provider, operation) do
     case operation do
       :all ->
-        ["test", "--only", "provider:#{provider}"]
+        ["test", "--only", "provider:#{provider}", "--only", "coverage"]
 
       :embedding ->
-        ["test", "test/coverage/#{provider}/embedding_test.exs", "--only", "provider:#{provider}"]
+        [
+          "test",
+          "test/coverage/#{provider}/embedding_test.exs",
+          "--only",
+          "provider:#{provider}",
+          "--only",
+          "coverage"
+        ]
 
       :text ->
         [
           "test",
           "test/coverage/#{provider}/comprehensive_test.exs",
           "--only",
-          "provider:#{provider}"
+          "provider:#{provider}",
+          "--only",
+          "coverage"
         ]
     end
   end
@@ -378,7 +395,6 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
       end
 
     status = if exit_code == 0 && failed == 0, do: :pass, else: :fail
-    fixtures = extract_fixtures(output)
 
     %{
       provider: provider,
@@ -388,8 +404,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
       passed: passed,
       failed: failed,
       total: total,
-      error: if(failed > 0, do: extract_error(output)),
-      fixtures: fixtures
+      error: if(failed > 0, do: extract_error(output))
     }
   end
 
@@ -402,21 +417,48 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     |> String.slice(0..120)
   end
 
-  defp extract_fixtures(output) do
-    output
-    |> String.split("\n")
-    |> Enum.filter(&String.contains?(&1, "[Fixture] step:"))
-    |> Enum.map(fn line ->
-      case Regex.run(~r/name=(\w+)/, line) do
-        [_, name] -> name
-        _ -> nil
-      end
-    end)
-    |> Enum.reject(&is_nil/1)
-    |> Enum.uniq()
+  defp save_state(results, run_ts) do
+    existing_state = load_state()
+    excluded_models = load_excluded_models()
+
+    ts = DateTime.to_iso8601(run_ts)
+
+    new_state =
+      results
+      |> Enum.reject(&(&1.status == :skipped))
+      |> Enum.reduce(existing_state, fn result, acc ->
+        status = if result.status == :pass, do: "pass", else: "fail"
+
+        Map.put(acc, result.model_spec, %{
+          "status" => status,
+          "last_checked" => ts
+        })
+      end)
+      |> then(fn state ->
+        Enum.reduce(excluded_models, state, fn spec, acc ->
+          existing_entry = Map.get(existing_state, spec, %{})
+
+          Map.put(acc, spec, %{
+            "status" => "excluded",
+            "last_checked" => Map.get(existing_entry, "last_checked")
+          })
+        end)
+      end)
+
+    write_state(new_state)
   end
 
-  defp print_summary(results, elapsed_ms) do
+  defp apply_implied_flags(opts) do
+    if opts[:record_failed] do
+      opts
+      |> Keyword.put(:failed_only, true)
+      |> Keyword.put(:record, true)
+    else
+      opts
+    end
+  end
+
+  defp print_summary_new(results, elapsed_ms) do
     Mix.shell().info("\n----------------------------------------------------")
     Mix.shell().info("  Summary")
     Mix.shell().info("----------------------------------------------------\n")
@@ -465,14 +507,16 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
     Mix.shell().info("  #{icon} #{result.model_id}#{IO.ANSI.reset()}")
 
-    if result.fixtures && !Enum.empty?(result.fixtures) do
-      fixtures_text = Enum.join(result.fixtures, ", ")
-      Mix.shell().info("       #{IO.ANSI.faint()}fixtures: #{fixtures_text}#{IO.ANSI.reset()}")
-    end
-
     if result.error do
       Mix.shell().info("       #{IO.ANSI.faint()}#{result.error}#{IO.ANSI.reset()}")
     end
+  end
+
+  defp migrate_state do
+    Mix.shell().info("Migrating supported_models.json to new schema...")
+    state = load_state()
+    write_state(state)
+    Mix.shell().info("Migration complete!")
   end
 
   defp print_model_with_status(model, provider, state) do
@@ -722,6 +766,52 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     end)
   end
 
+  defp load_state do
+    priv_dir = :code.priv_dir(:req_llm)
+    path = Path.join(priv_dir, "supported_models.json")
+
+    case File.read(path) do
+      {:ok, content} -> Jason.decode!(content)
+      {:error, _} -> %{}
+    end
+  end
+
+  defp write_state(state) do
+    priv_dir = :code.priv_dir(:req_llm)
+    path = Path.join(priv_dir, "supported_models.json")
+    File.mkdir_p!(Path.dirname(path))
+
+    json = build_sorted_json(state)
+
+    case File.read(path) do
+      {:ok, prev} when prev == json -> :ok
+      _ -> File.write!(path, json)
+    end
+  end
+
+  defp build_sorted_json(state) do
+    entries_json =
+      state
+      |> Enum.sort_by(fn {k, _} -> k end)
+      |> Enum.map_join(",\n  ", fn {k, v} ->
+        status = Map.get(v, "status")
+        last_checked = Map.get(v, "last_checked")
+
+        last_checked_json =
+          if last_checked,
+            do: ~s("last_checked": "#{last_checked}"),
+            else: ~s("last_checked": null)
+
+        ~s("#{k}": {\n    "status": "#{status}",\n    #{last_checked_json}\n  })
+      end)
+
+    """
+    {
+      #{entries_json}
+    }
+    """
+  end
+
   defp load_registry do
     priv_dir = :code.priv_dir(:req_llm)
     models_dir = Path.join(priv_dir, "models_dev")
@@ -753,86 +843,6 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     end)
     |> Enum.reject(fn {_, models} -> Enum.empty?(models) end)
     |> Map.new()
-  end
-
-  defp load_state do
-    priv_dir = :code.priv_dir(:req_llm)
-    path = Path.join(priv_dir, "supported_models.json")
-
-    case File.read(path) do
-      {:ok, content} ->
-        Jason.decode!(content)
-
-      {:error, _} ->
-        %{}
-    end
-  end
-
-  defp save_state(results, run_ts) do
-    priv_dir = :code.priv_dir(:req_llm)
-    path = Path.join(priv_dir, "supported_models.json")
-
-    existing =
-      case File.read(path) do
-        {:ok, content} -> Jason.decode!(content)
-        _ -> %{}
-      end
-
-    excluded_models = load_excluded_models()
-
-    ts = DateTime.to_iso8601(run_ts)
-
-    new_state =
-      results
-      |> Enum.reject(&(&1.status == :skipped))
-      |> Enum.reduce(existing, fn result, acc ->
-        status = if result.status == :pass, do: "pass", else: "fail"
-
-        Map.put(acc, result.model_spec, %{
-          "status" => status,
-          "last_checked" => ts
-        })
-      end)
-      |> then(fn state ->
-        Enum.reduce(excluded_models, state, fn spec, acc ->
-          existing_entry = Map.get(existing, spec, %{})
-
-          Map.put(acc, spec, %{
-            "status" => "excluded",
-            "last_checked" => Map.get(existing_entry, "last_checked")
-          })
-        end)
-      end)
-
-    json = build_sorted_json(new_state)
-
-    case File.read(path) do
-      {:ok, prev} when prev == json -> :ok
-      _ -> File.write!(path, json)
-    end
-  end
-
-  defp build_sorted_json(state) do
-    entries_json =
-      state
-      |> Enum.sort_by(fn {k, _} -> k end)
-      |> Enum.map_join(",\n  ", fn {k, v} ->
-        status = Map.get(v, "status")
-        last_checked = Map.get(v, "last_checked")
-
-        last_checked_json =
-          if last_checked,
-            do: ~s("last_checked": "#{last_checked}"),
-            else: ~s("last_checked": null)
-
-        ~s("#{k}": {\n    "status": "#{status}",\n    #{last_checked_json}\n  })
-      end)
-
-    """
-    {
-      #{entries_json}
-    }
-    """
   end
 
   defp find_model(registry, provider, model_id) do
@@ -899,10 +909,6 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   defp parse_operation_type("text"), do: :text
   defp parse_operation_type("embedding"), do: :embedding
   defp parse_operation_type(type), do: String.to_atom(type)
-
-  defp operation_to_category(:text), do: "core"
-  defp operation_to_category(:embedding), do: "embedding"
-  defp operation_to_category(_), do: "core"
 
   defp has_fixtures?(provider, model_id) do
     model_dir = model_id_to_fixture_dir(model_id)

@@ -187,25 +187,11 @@ defmodule ReqLLM.Providers.Anthropic do
   def encode_body(request) do
     context = request.options[:context]
     model_name = request.options[:model]
+    opts = request.options
 
-    # Use Anthropic-specific context encoding
-    body_data = ReqLLM.Providers.Anthropic.Context.encode_request(context, %{model: model_name})
-
-    # Ensure max_tokens is always present (required by Anthropic)
-    max_tokens =
-      case request.options[:max_tokens] do
-        nil -> default_max_tokens(model_name)
-        v -> v
-      end
-
-    body =
-      body_data
-      |> add_basic_options(request.options)
-      |> maybe_put(:stream, request.options[:stream])
-      |> Map.put(:max_tokens, max_tokens)
-      |> maybe_add_tools(request.options)
-
+    body = build_request_body(context, model_name, opts)
     json_body = Jason.encode!(body)
+
     %{request | body: json_body}
   end
 
@@ -230,44 +216,44 @@ defmodule ReqLLM.Providers.Anthropic do
 
   def extract_usage(_, _), do: {:error, :invalid_body}
 
-  @impl ReqLLM.Provider
-  def attach_stream(model, context, opts, _finch_name) do
+  # ========================================================================
+  # Shared Request Building Helpers (used by both Req and Finch paths)
+  # ========================================================================
+
+  defp build_request_headers(model, opts) do
     api_key = ReqLLM.Keys.get!(model, opts)
 
-    # Extract and merge provider_options for translation
-    {provider_options, standard_opts} = Keyword.pop(opts, :provider_options, [])
-    flattened_opts = Keyword.merge(standard_opts, provider_options)
-
-    # Translate provider options (including reasoning_effort) before building body
-    {translated_opts, _warnings} = translate_options(:chat, model, flattened_opts)
-
-    # Set default timeout for reasoning models
-    default_timeout =
-      if Keyword.has_key?(translated_opts, :thinking) do
-        Application.get_env(:req_llm, :thinking_timeout, 300_000)
-      else
-        Application.get_env(:req_llm, :receive_timeout, 120_000)
-      end
-
-    translated_opts =
-      Keyword.put_new(translated_opts, :receive_timeout, default_timeout)
-
-    # Build request body using provider's encode logic
-    body = build_anthropic_streaming_body(model, context, translated_opts)
-
-    # Build the URL with Anthropic's specific endpoint
-    base_url = Keyword.get(opts, :base_url, default_base_url())
-    url = "#{base_url}/v1/messages"
-
-    # Create Finch request with Anthropic's specific headers
-    headers = [
-      {"Content-Type", "application/json"},
-      {"Accept", "text/event-stream"},
+    [
+      {"content-type", "application/json"},
       {"x-api-key", api_key},
       {"anthropic-version", get_anthropic_version(opts)}
     ]
+  end
 
-    # Add beta headers for features being used
+  defp build_request_body(context, model_name, opts) do
+    # Use Anthropic-specific context encoding
+    body_data = ReqLLM.Providers.Anthropic.Context.encode_request(context, %{model: model_name})
+
+    # Ensure max_tokens is always present (required by Anthropic)
+    max_tokens =
+      case get_option(opts, :max_tokens) do
+        nil -> default_max_tokens(model_name)
+        v -> v
+      end
+
+    body_data
+    |> add_basic_options(opts)
+    |> maybe_put(:stream, get_option(opts, :stream))
+    |> Map.put(:max_tokens, max_tokens)
+    |> maybe_add_tools(opts)
+  end
+
+  defp build_request_url(opts) do
+    base_url = get_option(opts, :base_url, default_base_url())
+    "#{base_url}/v1/messages"
+  end
+
+  defp build_beta_headers(opts) do
     beta_features = []
 
     beta_features =
@@ -284,17 +270,43 @@ defmodule ReqLLM.Providers.Anthropic do
         beta_features
       end
 
-    headers =
-      case beta_features do
-        [] ->
-          headers
+    case beta_features do
+      [] -> []
+      features -> [{"anthropic-beta", Enum.join(features, ",")}]
+    end
+  end
 
-        features ->
-          beta_header = Enum.join(features, ",")
-          [{"anthropic-beta", beta_header} | headers]
+  # ========================================================================
+
+  @impl ReqLLM.Provider
+  def attach_stream(model, context, opts, _finch_name) do
+    # Extract and merge provider_options for translation
+    {provider_options, standard_opts} = Keyword.pop(opts, :provider_options, [])
+    flattened_opts = Keyword.merge(standard_opts, provider_options)
+
+    # Translate provider options (including reasoning_effort) before building body
+    {translated_opts, _warnings} = translate_options(:chat, model, flattened_opts)
+
+    # Set default timeout for reasoning models
+    default_timeout =
+      if Keyword.has_key?(translated_opts, :thinking) do
+        Application.get_env(:req_llm, :thinking_timeout, 300_000)
+      else
+        Application.get_env(:req_llm, :receive_timeout, 120_000)
       end
 
-    finch_request = Finch.build(:post, url, headers, body)
+    translated_opts = Keyword.put_new(translated_opts, :receive_timeout, default_timeout)
+
+    # Build request using shared helpers
+    headers = build_request_headers(model, translated_opts)
+    streaming_headers = [{"Accept", "text/event-stream"} | headers]
+    beta_headers = build_beta_headers(translated_opts)
+    all_headers = streaming_headers ++ beta_headers
+
+    body = build_request_body(context, model.model, translated_opts ++ [stream: true])
+    url = build_request_url(translated_opts)
+
+    finch_request = Finch.build(:post, url, all_headers, Jason.encode!(body))
     {:ok, finch_request}
   rescue
     error ->
@@ -401,15 +413,14 @@ defmodule ReqLLM.Providers.Anthropic do
     end
   end
 
-  # Handle both map and keyword list options (for tests vs real requests)
   defp get_option(options, key, default \\ nil)
-
-  defp get_option(options, key, default) when is_map(options) do
-    Map.get(options, key, default)
-  end
 
   defp get_option(options, key, default) when is_list(options) do
     Keyword.get(options, key, default)
+  end
+
+  defp get_option(options, key, default) when is_map(options) do
+    Map.get(options, key, default)
   end
 
   defp tool_to_anthropic_format(tool) do
@@ -683,26 +694,4 @@ defmodule ReqLLM.Providers.Anthropic do
   end
 
   defp default_max_tokens(_model_name), do: 1024
-
-  defp build_anthropic_streaming_body(model, context, opts) do
-    # Create a minimal request struct to reuse the existing encode_body logic
-    temp_request = %Req.Request{
-      method: :post,
-      url: URI.parse("https://example.com/temp"),
-      headers: %{},
-      body: {:json, %{}},
-      options:
-        Map.new(
-          [
-            model: model.model,
-            context: context,
-            stream: true,
-            operation: :chat
-          ] ++ opts
-        )
-    }
-
-    %{body: json_body} = encode_body(temp_request)
-    json_body
-  end
 end

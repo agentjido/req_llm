@@ -39,6 +39,49 @@ defmodule ReqLLM.Capability do
   end
 
   @doc """
+  Check if model supports object generation (structured output).
+
+  Different providers implement this via different mechanisms:
+  - Google: Native JSON mode via responseMimeType
+  - OpenAI: response_format with json_schema OR strict tools
+  - Anthropic/Groq/OpenRouter/XAI: Function calling with structured tool
+
+  ## Examples
+
+      iex> ReqLLM.Capability.supports_object_generation?("openai:gpt-4o")
+      true
+
+      iex> ReqLLM.Capability.supports_object_generation?("anthropic:claude-3-haiku")
+      true
+  """
+  @spec supports_object_generation?(ReqLLM.Model.t() | binary()) :: boolean()
+  def supports_object_generation?(model_input) do
+    case normalize_model(model_input) do
+      {:ok, %ReqLLM.Model{} = model} ->
+        case model.provider do
+          :google ->
+            true
+
+          :openai ->
+            json_schema_support =
+              get_in(model, [Access.key(:_metadata, %{}), "supports_json_schema_response_format"]) ==
+                true
+
+            strict_tools_support =
+              get_in(model, [Access.key(:_metadata, %{}), "supports_strict_tools"]) == true
+
+            json_schema_support or strict_tools_support
+
+          _ ->
+            supports?(model, :tool_call)
+        end
+
+      _ ->
+        false
+    end
+  end
+
+  @doc """
   Get all models from a provider that support a specific capability.
 
   ## Examples
