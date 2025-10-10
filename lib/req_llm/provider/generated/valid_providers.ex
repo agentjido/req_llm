@@ -55,6 +55,7 @@ defmodule ReqLLM.Provider.Generated.ValidProviders do
     :wandb,
     :xai,
     :zai,
+    :zai_coder,
     :zai_coding_plan,
     :zhipuai,
     :zhipuai_coding_plan
