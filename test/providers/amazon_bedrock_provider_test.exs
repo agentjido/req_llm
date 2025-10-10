@@ -127,7 +127,7 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
     end
 
     test "error handling for unsupported model families" do
-      model = ReqLLM.Model.from!("amazon-bedrock:meta.llama2-70b-v1")
+      model = ReqLLM.Model.from!("amazon-bedrock:cohere.command-text-v14")
       context = context_fixture()
 
       opts = [
@@ -136,7 +136,7 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
       ]
 
       # Should error for unsupported model family
-      assert_raise ArgumentError, ~r/not yet supported/, fn ->
+      assert_raise ArgumentError, ~r/Unsupported model family/, fn ->
         AmazonBedrock.prepare_request(:chat, model, context, opts)
       end
     end
@@ -260,8 +260,8 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
       }
 
       assert {:ok, usage} = AmazonBedrock.extract_usage(body, model)
-      assert usage.input_tokens == 42
-      assert usage.output_tokens == 100
+      assert usage["input_tokens"] == 42
+      assert usage["output_tokens"] == 100
     end
 
     # extract_content is not a public function in the provider

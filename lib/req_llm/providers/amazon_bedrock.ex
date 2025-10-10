@@ -108,8 +108,6 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     "meta" => ReqLLM.Providers.AmazonBedrock.Meta
   }
 
-  @known_but_unsupported ~w(amazon cohere ai21 mistral deepseek)
-
   def default_base_url do
     # Override to handle region template
     "https://bedrock-runtime.{region}.amazonaws.com"
@@ -548,24 +546,11 @@ defmodule ReqLLM.Providers.AmazonBedrock do
         if String.starts_with?(normalized_id, prefix <> "."), do: prefix
       end)
 
-    if found_family do
-      found_family
-    else
-      unsupported =
-        Enum.find(@known_but_unsupported, &String.starts_with?(normalized_id, &1 <> "."))
-
-      if unsupported do
-        raise ArgumentError, """
-        Model family '#{unsupported}' is not yet supported in the Bedrock provider.
-        Currently supported: #{Map.keys(@model_families) |> Enum.join(", ")}
-
-        To add support, implement ReqLLM.Providers.Bedrock.#{String.capitalize(unsupported)}
-        with format_request/3, parse_response/2, and parse_stream_chunk/2 functions.
-        """
-      else
-        raise ArgumentError, "Unknown model family for: #{model_id}"
-      end
-    end
+    found_family ||
+      raise ArgumentError, """
+      Unsupported model family for: #{model_id}
+      Currently supported: #{Map.keys(@model_families) |> Enum.join(", ")}
+      """
   end
 
   @impl ReqLLM.Provider

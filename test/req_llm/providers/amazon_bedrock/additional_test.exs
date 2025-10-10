@@ -97,7 +97,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.AdditionalTest do
         assert {:error, {:bedrock_stream_build_failed, %ArgumentError{message: message}}} =
                  AmazonBedrock.attach_stream(model, context, opts, __MODULE__.TestFinch)
 
-        assert message =~ "not yet supported"
+        assert message =~ "Unsupported model family"
       end
     end
   end
