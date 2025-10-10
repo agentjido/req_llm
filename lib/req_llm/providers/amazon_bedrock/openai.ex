@@ -55,7 +55,6 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
     with {:ok, choices} <- Map.fetch(body, "choices"),
          [choice | _] <- choices,
          {:ok, message_data} <- Map.fetch(choice, "message") do
-
       # Parse the message content
       message = parse_message(message_data)
 
@@ -86,18 +85,19 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
 
   defp parse_message(%{"role" => role, "content" => content} = data) do
     # Handle tool calls if present
-    content_parts = if tool_calls = Map.get(data, "tool_calls") do
-      Enum.map(tool_calls, fn tc ->
-        %ReqLLM.Message.ContentPart{
-          type: :tool_call,
-          tool_call_id: tc["id"],
-          tool_name: get_in(tc, ["function", "name"]),
-          input: Jason.decode!(get_in(tc, ["function", "arguments"]) || "{}")
-        }
-      end)
-    else
-      [%ReqLLM.Message.ContentPart{type: :text, text: content || ""}]
-    end
+    content_parts =
+      if tool_calls = Map.get(data, "tool_calls") do
+        Enum.map(tool_calls, fn tc ->
+          %ReqLLM.Message.ContentPart{
+            type: :tool_call,
+            tool_call_id: tc["id"],
+            tool_name: get_in(tc, ["function", "name"]),
+            input: Jason.decode!(get_in(tc, ["function", "arguments"]) || "{}")
+          }
+        end)
+      else
+        [%ReqLLM.Message.ContentPart{type: :text, text: content || ""}]
+      end
 
     %ReqLLM.Message{
       role: String.to_existing_atom(role),
@@ -112,6 +112,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
       total_tokens: input + output
     }
   end
+
   defp parse_usage(_), do: nil
 
   defp parse_finish_reason("stop"), do: :stop
