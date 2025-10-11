@@ -283,6 +283,79 @@ defmodule ReqLLM.Providers.AnthropicTest do
     end
   end
 
+  describe "multi-turn tool calling" do
+    test "encodes complete multi-turn conversation with tool results" do
+      # Simulate a complete tool calling flow:
+      # 1. User asks a question
+      # 2. Assistant decides to call a tool
+      # 3. Tool result is added to conversation
+      # This verifies both bugs are fixed:
+      #   - Bug #1: Tool role transformed to "user"
+      #   - Bug #2: Tool result content properly encoded
+
+      alias ReqLLM.Message.ContentPart
+
+      model = ReqLLM.Model.from!("anthropic:claude-3-5-sonnet-20241022")
+
+      messages = [
+        ReqLLM.Context.system("You are a calculator"),
+        ReqLLM.Context.user("What is 5 + 3?"),
+        ReqLLM.Context.assistant([
+          ContentPart.text("I'll calculate that for you."),
+          ContentPart.tool_call("toolu_add_123", "add", %{a: 5, b: 3})
+        ]),
+        ReqLLM.Context.tool_result_message("add", "toolu_add_123", 8)
+      ]
+
+      context = ReqLLM.Context.new(messages)
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false
+        ]
+      }
+
+      updated_request = Anthropic.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      # Verify structure
+      assert decoded["system"] == "You are a calculator"
+      assert is_list(decoded["messages"])
+      assert length(decoded["messages"]) == 3
+
+      [user_msg, assistant_msg, tool_result_msg] = decoded["messages"]
+
+      # User message
+      assert user_msg["role"] == "user"
+      assert user_msg["content"] == "What is 5 + 3?"
+
+      # Assistant message with tool call
+      assert assistant_msg["role"] == "assistant"
+      assert is_list(assistant_msg["content"])
+      assert length(assistant_msg["content"]) == 2
+
+      [text_block, tool_use_block] = assistant_msg["content"]
+      assert text_block["type"] == "text"
+      assert text_block["text"] == "I'll calculate that for you."
+      assert tool_use_block["type"] == "tool_use"
+      assert tool_use_block["id"] == "toolu_add_123"
+      assert tool_use_block["name"] == "add"
+      assert tool_use_block["input"] == %{"a" => 5, "b" => 3}
+
+      assert tool_result_msg["role"] == "user",
+             "Tool results must use 'user' role per Anthropic API requirements"
+
+      assert is_list(tool_result_msg["content"])
+      [tool_result_block] = tool_result_msg["content"]
+
+      assert tool_result_block["type"] == "tool_result"
+      assert tool_result_block["tool_use_id"] == "toolu_add_123"
+      assert tool_result_block["content"] == "8"
+    end
+  end
+
   describe "usage extraction" do
     test "extract_usage with valid usage data" do
       model = ReqLLM.Model.from!("anthropic:claude-3-5-sonnet-20241022")

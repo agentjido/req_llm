@@ -7,22 +7,25 @@ defmodule ReqLLM.Providers.Anthropic.Context do
   ## Key Differences from OpenAI
 
   - Uses content blocks instead of simple strings
-  - System messages are included in the messages array
-  - Tool calls are represented as content blocks with type "tool"
+  - System messages are extracted to top-level `system` parameter
+  - Tool calls are represented as content blocks with type "tool_use"
+  - Tool results must be in "user" role messages (Anthropic only accepts "user" or "assistant" roles)
   - Different parameter names (stop_sequences vs stop)
 
   ## Message Format
 
       %{
         model: "claude-3-5-sonnet-20241022",
+        system: "You are a helpful assistant",
         messages: [
-          %{role: "system", content: "You are a helpful assistant"},
-          %{role: "user", content: "Hello"},
+          %{role: "user", content: "What's the weather?"},
           %{role: "assistant", content: [
-            %{type: "text", text: "Hello!"},
-            %{type: "tool", id: "call_123", name: "weather", arguments: %{}}
+            %{type: "text", text: "I'll check that for you."},
+            %{type: "tool_use", id: "toolu_123", name: "get_weather", input: %{location: "SF"}}
           ]},
-          %{role: "tool", id: "call_123", content: "sunny"}
+          %{role: "user", content: [
+            %{type: "tool_result", tool_use_id: "toolu_123", content: "72°F and sunny"}
+          ]}
         ],
         max_tokens: 1000,
         temperature: 0.7
@@ -65,8 +68,13 @@ defmodule ReqLLM.Providers.Anthropic.Context do
   end
 
   defp encode_message(%ReqLLM.Message{role: role, content: content}) do
+    # Anthropic API only accepts "user" or "assistant" roles
+    # Tool results must be wrapped in a "user" message
+    # See: https://docs.anthropic.com/en/docs/build-with-claude/tool-use
+    normalized_role = if role == :tool, do: :user, else: role
+
     %{
-      role: to_string(role),
+      role: to_string(normalized_role),
       content: encode_content(content)
     }
   end
@@ -109,10 +117,16 @@ defmodule ReqLLM.Providers.Anthropic.Context do
 
   defp encode_content_part(%ReqLLM.Message.ContentPart{
          type: :tool_result,
-         tool_call_id: _id,
-         output: _output
+         tool_call_id: id,
+         output: output
        }) do
-    nil
+    # Anthropic tool_result format requires string content
+    # See: https://docs.anthropic.com/en/docs/build-with-claude/tool-use
+    %{
+      type: "tool_result",
+      tool_use_id: id,
+      content: serialize_tool_output(output)
+    }
   end
 
   defp encode_content_part(%ReqLLM.Message.ContentPart{
@@ -161,6 +175,10 @@ defmodule ReqLLM.Providers.Anthropic.Context do
   end
 
   defp encode_content_part(_), do: nil
+
+  # Serialize tool output to string format required by Anthropic
+  defp serialize_tool_output(output) when is_binary(output), do: output
+  defp serialize_tool_output(output), do: Jason.encode!(output)
 
   defp add_tools(request, []), do: request
 
