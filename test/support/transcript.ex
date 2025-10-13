@@ -85,7 +85,31 @@ defmodule ReqLLM.Test.Transcript do
   @doc "Read transcript from JSON file"
   @spec read!(Path.t()) :: t()
   def read!(path) do
-    path |> File.read!() |> from_json!()
+    if !File.exists?(path) do
+      raise ArgumentError, """
+      Fixture file not found: #{path}
+
+      To generate this fixture, run:
+        REQ_LLM_FIXTURES_MODE=record mix test --only "provider:#{extract_provider_from_path(path)}"
+      """
+    end
+
+    content = File.read!(path)
+
+    if content == "" do
+      raise ArgumentError, """
+      Fixture file is empty: #{path}
+
+      This file exists but contains no data. To regenerate this fixture, run:
+        REQ_LLM_FIXTURES_MODE=record mix test --only "provider:#{extract_provider_from_path(path)}"
+      """
+    end
+
+    from_json!(content)
+  end
+
+  defp extract_provider_from_path(path) do
+    path |> Path.split() |> Enum.find(&(&1 in ~w[openai anthropic google groq xai openrouter]))
   end
 
   @spec to_map(t()) :: map()

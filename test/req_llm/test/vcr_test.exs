@@ -175,7 +175,7 @@ defmodule ReqLLM.Test.VCRTest do
     end
 
     test "raises for missing file with load!" do
-      assert_raise File.Error, fn ->
+      assert_raise ArgumentError, ~r/Fixture file not found/, fn ->
         VCR.load!("nonexistent.json")
       end
     end

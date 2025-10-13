@@ -125,6 +125,27 @@ defmodule ReqLLM.Providers.XAI do
 
   def extract_usage(_, _), do: {:error, :invalid_body}
 
+  @doc """
+  Custom attach_stream that ensures translate_options is called for streaming requests.
+
+  This is necessary because the default streaming path doesn't call translate_options,
+  which means xAI-specific option normalization (max_tokens -> max_completion_tokens,
+  reasoning_effort translation, etc.) wouldn't be applied to streaming requests.
+  """
+  @impl ReqLLM.Provider
+  def attach_stream(model, context, opts, finch_name) do
+    {translated_opts, _warnings} = translate_options(:chat, model, opts)
+    opts_with_base_url = Keyword.put_new(translated_opts, :base_url, default_base_url())
+
+    ReqLLM.Provider.Defaults.default_attach_stream(
+      __MODULE__,
+      model,
+      context,
+      opts_with_base_url,
+      finch_name
+    )
+  end
+
   @impl ReqLLM.Provider
   def translate_options(_operation, model, opts) do
     warnings = []
@@ -154,7 +175,7 @@ defmodule ReqLLM.Providers.XAI do
     {opts, warnings} =
       if max_tokens_value && !Keyword.has_key?(opts, :max_completion_tokens) do
         warning =
-          "xAI prefers max_completion_tokens over max_tokens. Consider updating your code."
+          "xAI prefers max_completion_tokens over max_tokens. Translated max_tokens to max_completion_tokens."
 
         {Keyword.put(opts, :max_completion_tokens, max_tokens_value), [warning | warnings]}
       else

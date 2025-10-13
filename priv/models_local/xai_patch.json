@@ -9,19 +9,19 @@
   "models": [
     {
       "id": "grok-3-mini",
-      "reasoning": true
+      "reasoning": false
     },
     {
       "id": "grok-3-mini-fast",
-      "reasoning": true
+      "reasoning": false
     },
     {
       "id": "grok-3-mini-fast-latest",
-      "reasoning": true
+      "reasoning": false
     },
     {
       "id": "grok-3-mini-latest",
-      "reasoning": true
+      "reasoning": false
     },
     {
       "id": "grok-4",
@@ -50,12 +50,8 @@
         "output": 64000
       },
       "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
+        "input": ["text"],
+        "output": ["text"]
       },
       "name": "Grok 4 Fast Reasoning",
       "open_weights": false,
@@ -81,12 +77,8 @@
         "output": 64000
       },
       "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
+        "input": ["text"],
+        "output": ["text"]
       },
       "name": "Grok 4 Fast Non-Reasoning",
       "open_weights": false,

@@ -3,36 +3,6 @@
     {
       "attachment": false,
       "cost": {
-        "input": 0.75,
-        "output": 0.99
-      },
-      "id": "deepseek-r1-distill-llama-70b",
-      "knowledge": "2024-07",
-      "last_updated": "2025-01-20",
-      "limit": {
-        "context": 131072,
-        "output": 8192
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "DeepSeek R1 Distill Llama 70B",
-      "open_weights": true,
-      "provider": "groq",
-      "provider_model_id": "deepseek-r1-distill-llama-70b",
-      "reasoning": true,
-      "release_date": "2025-01-20",
-      "temperature": true,
-      "tool_call": false
-    },
-    {
-      "attachment": false,
-      "cost": {
         "input": 0.05,
         "output": 0.08
       },

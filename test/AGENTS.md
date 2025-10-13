@@ -38,13 +38,23 @@ mix test test/coverage/
 # All coverage tests globally
 mix test --only coverage
 
-# By category
-mix test --only "category:core"
-mix test --only "category:streaming"
-
 # By provider
 mix test --only "provider:anthropic"
 mix test --only "provider:openai"
+
+# By scenario (test type)
+mix test --only "scenario:basic"
+mix test --only "scenario:streaming"
+mix test --only "scenario:usage"
+mix test --only "scenario:tool_multi"
+
+# By model (without provider prefix)
+mix test --only "model:claude-3-5-haiku-20241022"
+mix test --only "model:gpt-4o-mini"
+
+# Combine filters for precise targeting
+mix test --only "provider:anthropic" --only "scenario:basic"
+mix test --only "model:claude-3-5-haiku-20241022" --only "scenario:streaming"
 ```
 
 ### Fixture Recording (Live API Testing)
@@ -55,12 +65,15 @@ REQ_LLM_FIXTURES_MODE=record mix test
 # Re-record specific provider fixtures
 REQ_LLM_FIXTURES_MODE=record mix test --only "provider:anthropic"
 
-# Re-record specific category
-REQ_LLM_FIXTURES_MODE=record mix test --only "category:core"
-REQ_LLM_FIXTURES_MODE=record mix test --only "category:streaming"
+# Re-record specific scenario
+REQ_LLM_FIXTURES_MODE=record mix test --only "scenario:basic"
+REQ_LLM_FIXTURES_MODE=record mix test --only "scenario:streaming"
 
 # Re-record for specific models only
 REQ_LLM_FIXTURES_MODE=record REQ_LLM_MODELS="anthropic:claude-3-5-haiku-20241022" mix test --only "provider:anthropic"
+
+# Re-record specific model + scenario combination
+REQ_LLM_FIXTURES_MODE=record mix test --only "model:claude-3-5-haiku-20241022" --only "scenario:basic"
 ```
 
 ## Fixture System
@@ -128,9 +141,21 @@ REQ_LLM_SAMPLE=1 mix test --only coverage
 
 ## Semantic Tags
 
+Tests are organized by Provider → Model → Scenario hierarchy.
+
 **Tag Dimensions:**
-- `category` - `:core`, `:streaming`, `:tools`, `:embedding`
 - `provider` - `:anthropic`, `:openai`, `:google`, `:groq`, `:openrouter`, `:xai`
+- `model` - Model identifier without provider prefix (e.g., `claude-3-5-haiku-20241022`, `gpt-4o-mini`)
+- `scenario` - Test scenario type:
+  - `:basic` - Basic generate_text (non-streaming)
+  - `:streaming` - Streaming with system context
+  - `:token_limit` - Token limit constraints
+  - `:usage` - Usage metrics and costs
+  - `:tool_multi` - Tool calling with multiple tools
+  - `:tool_none` - Tool avoidance
+  - `:object_basic` - Object generation (non-streaming)
+  - `:object_streaming` - Object generation (streaming)
+  - `:reasoning` - Reasoning/thinking tokens
 - `coverage` - Mark coverage tests with `coverage: true`
 
 ## HTTP Mocking

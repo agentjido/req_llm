@@ -87,7 +87,10 @@ defmodule ReqLLM.StreamServer do
     http_status: nil,
     waiting_callers: [],
     object_json_mode?: false,
-    object_acc: []
+    object_acc: [],
+    fixture_saved?: false,
+    raw_iodata: [],
+    raw_bytes: 0
   ]
 
   @doc """
@@ -427,31 +430,22 @@ defmodule ReqLLM.StreamServer do
   end
 
   defp process_data_chunk(chunk, state) do
-    # Capture raw chunk for fixture system BEFORE processing
-    if state.fixture_path && is_binary(chunk) do
-      if System.get_env("REQ_LLM_DEBUG") == "1" do
-        Logger.debug("""
-        StreamServer fixture capture:
-          path: #{state.fixture_path}
-          chunk_size: #{byte_size(chunk)}
-          first_bytes: #{inspect(binary_part(chunk, 0, min(64, byte_size(chunk))))}
-        """)
-      end
+    # Capture raw chunk for fixture - accumulate in state
+    state =
+      if state.fixture_path && is_binary(chunk) do
+        new_bytes = state.raw_bytes + byte_size(chunk)
 
-      try do
-        case Code.ensure_loaded(ReqLLM.Step.Fixture.Backend) do
-          {:module, ReqLLM.Step.Fixture.Backend} ->
-            apply(ReqLLM.Step.Fixture.Backend, :capture_raw_chunk, [state.fixture_path, chunk])
-
-          {:error, _} ->
-            :ok
+        # Warn if fixture is growing unexpectedly large (>100MB)
+        if new_bytes > 100_000_000 and state.raw_bytes <= 100_000_000 do
+          Logger.warning(
+            "Streaming fixture exceeded 100MB at #{state.fixture_path} - consider reviewing test data size"
+          )
         end
-      rescue
-        # Ignore fixture errors to avoid breaking streaming
-        error ->
-          Logger.debug("Fixture capture error (ignored): #{inspect(error)}")
+
+        %{state | raw_iodata: [chunk | state.raw_iodata], raw_bytes: new_bytes}
+      else
+        state
       end
-    end
 
     # Accumulate and parse SSE events
     {events, new_buffer} = SSE.accumulate_and_parse(chunk, state.sse_buffer)
@@ -606,10 +600,11 @@ defmodule ReqLLM.StreamServer do
 
     debug? &&
       IO.puts(
-        "[StreamServer] finalize_stream_with_fixture: fixture_path=#{inspect(state.fixture_path)}, has_http_context=#{inspect(state.http_context != nil)}, has_canonical_json=#{inspect(state.canonical_json != nil)}"
+        "[StreamServer] finalize_stream_with_fixture: fixture_path=#{inspect(state.fixture_path)}, has_http_context=#{inspect(state.http_context != nil)}, has_canonical_json=#{inspect(state.canonical_json != nil)}, already_saved=#{state.fixture_saved?}"
       )
 
-    if state.fixture_path && state.http_context && state.canonical_json do
+    # Only save once - guard against multiple finalization calls
+    if state.fixture_path && state.http_context && state.canonical_json && !state.fixture_saved? do
       debug? &&
         IO.puts(
           "[StreamServer] Attempting to save streaming fixture to #{Path.relative_to_cwd(state.fixture_path)}"
@@ -618,13 +613,20 @@ defmodule ReqLLM.StreamServer do
       try do
         case Code.ensure_loaded(ReqLLM.Step.Fixture.Backend) do
           {:module, ReqLLM.Step.Fixture.Backend} ->
-            debug? && IO.puts("[StreamServer] Calling save_streaming_fixture...")
+            debug? &&
+              IO.puts(
+                "[StreamServer] Calling save_streaming_fixture with #{state.raw_bytes} bytes..."
+              )
+
+            # Pass iodata directly - reversed because we prepended
+            iodata = Enum.reverse(state.raw_iodata)
 
             apply(ReqLLM.Step.Fixture.Backend, :save_streaming_fixture, [
               state.http_context,
               state.fixture_path,
               state.canonical_json,
-              state.model
+              state.model,
+              iodata
             ])
 
             debug? && IO.puts("[StreamServer] save_streaming_fixture completed")
@@ -638,12 +640,19 @@ defmodule ReqLLM.StreamServer do
           debug? && IO.puts("[StreamServer] Error saving fixture: #{inspect(error)}")
           Logger.warning("Failed to save streaming fixture: #{inspect(error)}")
       end
-    else
-      debug? && IO.puts("[StreamServer] Skipping fixture save - missing requirements")
-    end
 
-    # Continue with normal finalization
-    finalize_stream(state)
+      # Mark as saved to prevent duplicate saves
+      state = %{state | fixture_saved?: true}
+      debug? && IO.puts("[StreamServer] Fixture marked as saved")
+      # Continue with normal finalization
+      finalize_stream(state)
+    else
+      debug? &&
+        IO.puts("[StreamServer] Skipping fixture save - missing requirements or already saved")
+
+      # Continue with normal finalization
+      finalize_stream(state)
+    end
   end
 
   defp extract_final_metadata(state) do

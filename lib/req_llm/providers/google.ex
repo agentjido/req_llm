@@ -885,39 +885,16 @@ defmodule ReqLLM.Providers.Google do
   defp convert_google_usage(_),
     do: %{"prompt_tokens" => 0, "completion_tokens" => 0, "total_tokens" => 0}
 
-  @impl ReqLLM.Provider
-  def attach_stream(model, context, opts, _finch_name) do
-    req_only_keys = [:params, :model, :base_url, :finch_name, :fixture]
-    {req_opts, user_opts} = Keyword.split(opts, req_only_keys)
+  defp build_request_headers(_model, _opts), do: [{"Content-Type", "application/json"}]
 
-    operation = Keyword.get(user_opts, :operation, :chat)
-    opts_to_process = Keyword.merge(user_opts, context: context, stream: true)
+  defp build_request_url(model_name, opts) do
+    api_key = ReqLLM.Keys.get!(opts[:model_struct] || opts[:model], opts)
+    base_url = Keyword.get(opts, :base_url, default_base_url())
 
-    with {:ok, processed_opts} <-
-           ReqLLM.Provider.Options.process(__MODULE__, operation, model, opts_to_process) do
-      api_key = ReqLLM.Keys.get!(model, opts)
-      base_url = Keyword.get(req_opts, :base_url, default_base_url())
-
-      body = build_google_streaming_body(model, context, processed_opts)
-
-      url = "#{base_url}/models/#{model.model}:streamGenerateContent?key=#{api_key}"
-
-      headers = [
-        {"Content-Type", "application/json"}
-      ]
-
-      finch_request = Finch.build(:post, url, headers, body)
-      {:ok, finch_request}
-    end
-  rescue
-    error ->
-      {:error,
-       ReqLLM.Error.API.Request.exception(
-         reason: "Failed to build Google stream request: #{inspect(error)}"
-       )}
+    "#{base_url}/models/#{model_name}:streamGenerateContent?key=#{api_key}&alt=sse"
   end
 
-  defp build_google_streaming_body(model, context, opts) do
+  defp build_request_body(model, context, opts) do
     operation = Keyword.get(opts, :operation, :chat)
 
     temp_request = %Req.Request{
@@ -938,6 +915,35 @@ defmodule ReqLLM.Providers.Google do
 
     encoded_request = encode_body(temp_request)
     encoded_request.body
+  end
+
+  @impl ReqLLM.Provider
+  def attach_stream(model, context, opts, _finch_name) do
+    req_only_keys = [:params, :model, :base_url, :finch_name, :fixture]
+    {req_opts, user_opts} = Keyword.split(opts, req_only_keys)
+
+    operation = Keyword.get(user_opts, :operation, :chat)
+    opts_to_process = Keyword.merge(user_opts, context: context, stream: true)
+
+    with {:ok, processed_opts} <-
+           ReqLLM.Provider.Options.process(__MODULE__, operation, model, opts_to_process) do
+      base_url = Keyword.get(req_opts, :base_url, default_base_url())
+
+      opts_with_base = Keyword.merge(processed_opts, base_url: base_url, model_struct: model)
+
+      headers = build_request_headers(model, opts_with_base) ++ [{"Accept", "text/event-stream"}]
+      url = build_request_url(model.model, opts_with_base)
+      body = build_request_body(model, context, processed_opts)
+
+      finch_request = Finch.build(:post, url, headers, body)
+      {:ok, finch_request}
+    end
+  rescue
+    error ->
+      {:error,
+       ReqLLM.Error.API.Request.exception(
+         reason: "Failed to build Google stream request: #{inspect(error)}"
+       )}
   end
 
   @impl ReqLLM.Provider
