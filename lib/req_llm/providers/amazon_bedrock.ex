@@ -89,6 +89,11 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       use_converse: [
         type: :boolean,
         doc: "Force use of Bedrock Converse API (default: auto-detect based on tools presence)"
+      ],
+      additional_model_request_fields: [
+        type: :map,
+        doc:
+          "Additional model-specific request fields (e.g., reasoning_config for Claude extended thinking)"
       ]
     ]
 
@@ -329,6 +334,66 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   def decode_sse_event(_data, _model) do
     []
   end
+
+  # Note: pre_validate_options is not yet a formal Provider callback
+  # It's called by Options.process/4 if the provider exports it
+  def pre_validate_options(_operation, model, opts) do
+    # Handle reasoning parameters for Claude models on Bedrock
+    # Claude Sonnet 3.7, 4.x support extended thinking via additionalModelRequestFields
+    opts = maybe_translate_reasoning_params(model, opts)
+    {opts, []}
+  end
+
+  # Translate reasoning_effort/reasoning_token_budget to Bedrock additionalModelRequestFields
+  # Only for Claude models that support extended thinking
+  defp maybe_translate_reasoning_params(model, opts) do
+    model_id = model.model
+
+    # Check if this is a Claude model with reasoning support
+    is_claude_reasoning =
+      String.contains?(model_id, "anthropic.claude") and
+        (String.contains?(model_id, "sonnet-3-7") or
+           String.contains?(model_id, "sonnet-4") or
+           String.contains?(model_id, "opus-4"))
+
+    if is_claude_reasoning do
+      {reasoning_effort, opts} = Keyword.pop(opts, :reasoning_effort)
+      {reasoning_budget, opts} = Keyword.pop(opts, :reasoning_token_budget)
+
+      cond do
+        reasoning_budget && is_integer(reasoning_budget) ->
+          # Explicit budget_tokens provided
+          add_reasoning_to_additional_fields(opts, reasoning_budget)
+
+        reasoning_effort ->
+          # Map effort to budget
+          budget = map_reasoning_effort_to_budget(reasoning_effort)
+          add_reasoning_to_additional_fields(opts, budget)
+
+        true ->
+          opts
+      end
+    else
+      # Not a Claude reasoning model, pass through
+      opts
+    end
+  end
+
+  defp add_reasoning_to_additional_fields(opts, budget_tokens) do
+    additional_fields =
+      Keyword.get(opts, :additional_model_request_fields, %{})
+      |> Map.put(:reasoning_config, %{type: "enabled", budget_tokens: budget_tokens})
+
+    Keyword.put(opts, :additional_model_request_fields, additional_fields)
+  end
+
+  defp map_reasoning_effort_to_budget(:low), do: 4_000
+  defp map_reasoning_effort_to_budget(:medium), do: 8_000
+  defp map_reasoning_effort_to_budget(:high), do: 16_000
+  defp map_reasoning_effort_to_budget("low"), do: 4_000
+  defp map_reasoning_effort_to_budget("medium"), do: 8_000
+  defp map_reasoning_effort_to_budget("high"), do: 16_000
+  defp map_reasoning_effort_to_budget(_), do: 8_000
 
   @impl ReqLLM.Provider
   def extract_usage(body, model) when is_map(body) do

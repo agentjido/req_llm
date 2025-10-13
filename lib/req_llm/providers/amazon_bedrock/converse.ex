@@ -103,6 +103,9 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
     # Add inference config
     request = add_inference_config(request, opts)
 
+    # Add additionalModelRequestFields for model-specific features (e.g., Claude extended thinking)
+    request = add_additional_fields(request, opts)
+
     request
   end
 
@@ -117,7 +120,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
     stop_reason = response_body["stopReason"]
     usage = response_body["usage"]
 
-    # Parse message
+    # Parse message (includes reasoning content if present)
     message = parse_message(message_data)
 
     # Build context with message
@@ -151,11 +154,17 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
         {:ok, nil}
 
       %{"contentBlockDelta" => delta_data} ->
-        # Text delta
-        if delta = get_in(delta_data, ["delta", "text"]) do
-          {:ok, %{type: :text, text: delta}}
-        else
-          {:ok, nil}
+        # Handle both text and reasoning deltas
+        cond do
+          delta = get_in(delta_data, ["delta", "text"]) ->
+            {:ok, %{type: :text, text: delta}}
+
+          reasoning_delta = get_in(delta_data, ["delta", "reasoningContent"]) ->
+            # Claude extended thinking reasoning delta
+            {:ok, %{type: :thinking, text: reasoning_delta}}
+
+          true ->
+            {:ok, nil}
         end
 
       %{"contentBlockStop" => _data} ->
@@ -255,9 +264,21 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
     end
   end
 
+  defp add_additional_fields(request, opts) do
+    case opts[:additional_model_request_fields] do
+      nil -> request
+      fields when is_map(fields) -> Map.put(request, "additionalModelRequestFields", fields)
+      _ -> request
+    end
+  end
+
   defp encode_message(%Message{role: role, content: content}) do
+    # Converse API only accepts "user" or "assistant" roles
+    # Tool results must be wrapped in a "user" message
+    normalized_role = if role == :tool, do: :user, else: role
+
     %{
-      "role" => Atom.to_string(role),
+      "role" => Atom.to_string(normalized_role),
       "content" => encode_content(content)
     }
   end
@@ -344,6 +365,12 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
 
   defp parse_content_block(%{"text" => text}) do
     ContentPart.text(text)
+  end
+
+  defp parse_content_block(%{"reasoningText" => reasoning_text}) do
+    # Claude extended thinking reasoning content
+    # Map to thinking content part type (uses text field, not thinking)
+    %ContentPart{type: :thinking, text: reasoning_text}
   end
 
   defp parse_content_block(%{"toolUse" => tool_use}) do

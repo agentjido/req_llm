@@ -36,10 +36,25 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
     |> maybe_add_param(:top_p, opts[:top_p])
     |> maybe_add_param(:top_k, opts[:top_k])
     |> maybe_add_param(:stop_sequences, opts[:stop_sequences])
+    |> maybe_add_thinking(opts)
   end
 
   defp maybe_add_param(body, _key, nil), do: body
   defp maybe_add_param(body, key, value), do: Map.put(body, key, value)
+
+  # Add extended thinking configuration for native Anthropic endpoint
+  # Note: pre_validate_options already extracted reasoning params and added to additional_model_request_fields
+  # For Converse API, but native endpoint uses different format
+  defp maybe_add_thinking(body, opts) do
+    # Check if additional_model_request_fields has reasoning_config (from pre_validate_options)
+    case get_in(opts, [:additional_model_request_fields, :reasoning_config]) do
+      %{type: "enabled", budget_tokens: budget} ->
+        Map.put(body, :thinking, %{type: "enabled", budget_tokens: budget})
+
+      _ ->
+        body
+    end
+  end
 
   @doc """
   Parses Anthropic response from Bedrock into ReqLLM format.
