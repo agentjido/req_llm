@@ -120,6 +120,8 @@ defmodule ReqLLM.Providers.Anthropic.Context do
     end
   end
 
+  defp encode_content_part(%ReqLLM.Message.ContentPart{type: :text, text: ""}), do: nil
+  
   defp encode_content_part(%ReqLLM.Message.ContentPart{type: :text, text: text}) do
     %{type: "text", text: text}
   end
@@ -178,6 +180,8 @@ defmodule ReqLLM.Providers.Anthropic.Context do
   defp combine_content_blocks(text_blocks, tool_blocks) when is_list(text_blocks) do
     text_blocks ++ tool_blocks
   end
+
+  defp combine_content_blocks("", tool_blocks), do: tool_blocks
 
   defp combine_content_blocks(text_string, tool_blocks) when is_binary(text_string) do
     [%{type: "text", text: text_string}] ++ tool_blocks

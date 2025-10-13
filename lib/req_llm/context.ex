@@ -206,7 +206,12 @@ defmodule ReqLLM.Context do
   @doc "Create an assistant message with tool calls."
   @spec assistant_with_tools([ToolCall.t()], String.t() | nil) :: Message.t()
   def assistant_with_tools(tool_calls, text \\ nil) when is_list(tool_calls) do
-    content = if text, do: [ContentPart.text(text)], else: []
+    content =
+      if is_binary(text) and String.trim(text) != "" do
+        [ContentPart.text(text)]
+      else
+        []
+      end
 
     %Message{
       role: :assistant,
@@ -309,22 +314,34 @@ defmodule ReqLLM.Context do
   @spec execute_and_append_tools(t(), [map()], [ReqLLM.Tool.t()]) :: t()
   def execute_and_append_tools(context, tool_calls, available_tools) do
     Enum.reduce(tool_calls, context, fn tool_call, ctx ->
+      {name, id} = extract_tool_call_info(tool_call)
+
       case find_and_execute_tool(tool_call, available_tools) do
         {:ok, result} ->
-          tool_result_msg = tool_result_message(tool_call.name, tool_call.id, result)
+          tool_result_msg = tool_result_message(name, id, result)
           append(ctx, tool_result_msg)
 
         {:error, _error} ->
-          # Still append an error message for transparency
           error_result = %{error: "Tool execution failed"}
-          tool_result_msg = tool_result_message(tool_call.name, tool_call.id, error_result)
+          tool_result_msg = tool_result_message(name, id, error_result)
           append(ctx, tool_result_msg)
       end
     end)
   end
 
-  # Private helper to find and execute a tool by name
+  defp extract_tool_call_info(%ReqLLM.ToolCall{id: id, function: %{name: name}}), do: {name, id}
+  defp extract_tool_call_info(%{name: name, id: id}), do: {name, id}
+
+  defp find_and_execute_tool(%ReqLLM.ToolCall{function: %{name: name, arguments: args_json}}, available_tools) do
+    args = Jason.decode!(args_json)
+    execute_tool_by_name(name, args, available_tools)
+  end
+
   defp find_and_execute_tool(%{name: name, arguments: args}, available_tools) do
+    execute_tool_by_name(name, args, available_tools)
+  end
+
+  defp execute_tool_by_name(name, args, available_tools) do
     case Enum.find(available_tools, fn tool -> tool.name == name end) do
       nil ->
         {:error, "Tool #{name} not found"}

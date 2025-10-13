@@ -122,6 +122,14 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                    "Expected text or thinking content, got empty (text: #{inspect(text)}, thinking: #{inspect(thinking)})"
 
             assert response.message.role == :assistant
+
+            usage = response.usage
+            assert is_map(usage)
+            assert is_number(usage.input_tokens) and usage.input_tokens > 0
+            assert is_number(usage.output_tokens) and usage.output_tokens >= 0
+            assert is_number(usage.total_tokens) and usage.total_tokens > 0
+            assert is_number(usage.cached_input) and usage.cached_input >= 0
+            assert is_number(usage.reasoning) and usage.reasoning >= 0
           end
 
           @tag scenario: :token_limit
@@ -284,6 +292,56 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 {:error, _} ->
                   flunk("Expected successful response with tool call")
               end
+            end
+
+            @tag scenario: :tool_round_trip
+            test "tool calling - round trip execution" do
+              tools = [
+                ReqLLM.tool(
+                  name: "add",
+                  description: "Add two integers",
+                  parameter_schema: [
+                    a: [type: :integer, required: true],
+                    b: [type: :integer, required: true]
+                  ],
+                  callback: fn %{a: a, b: b} -> {:ok, a + b} end
+                )
+              ]
+
+              base_opts =
+                param_bundles().deterministic
+                |> Keyword.put(:max_tokens, tool_budget_for(@model_spec))
+
+              {:ok, resp1} =
+                ReqLLM.generate_text(
+                  @model_spec,
+                  "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+                  fixture_opts(
+                    "tool_round_trip_1",
+                    base_opts ++
+                      [
+                        tools: tools,
+                        tool_choice: %{type: "tool", name: "add"}
+                      ]
+                  )
+                )
+
+              tool_calls = ReqLLM.Response.tool_calls(resp1)
+              assert length(tool_calls) >= 1
+
+              ctx2 = ReqLLM.Context.execute_and_append_tools(resp1.context, tool_calls, tools)
+
+              {:ok, resp2} =
+                ReqLLM.generate_text(
+                  @model_spec,
+                  ctx2,
+                  fixture_opts("tool_round_trip_2", base_opts)
+                )
+
+              text = ReqLLM.Response.text(resp2) || ""
+              assert text != ""
+              assert String.contains?(text, "5")
+              assert Enum.empty?(ReqLLM.Response.tool_calls(resp2))
             end
 
             @tag scenario: :tool_none

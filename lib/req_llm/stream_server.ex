@@ -734,15 +734,19 @@ defmodule ReqLLM.StreamServer do
   defp normalize_streaming_usage(usage, model) when is_map(usage) do
     case usage do
       %{"prompt_tokens" => input, "completion_tokens" => output} ->
-        %{input: input, output: output, reasoning: 0, cached_input: 0}
+        reasoning = reasoning_from_usage(usage)
+        cached_input = cached_from_usage(usage)
+
+        %{input: input, output: output, reasoning: reasoning, cached_input: cached_input}
         |> add_token_aliases()
         |> add_cost_calculation_if_available(usage)
         |> calculate_cost_if_model_available(model)
 
       %{"input_tokens" => input, "output_tokens" => output} ->
-        cached_input = Map.get(usage, "cache_read_input_tokens", 0)
+        reasoning = reasoning_from_usage(usage)
+        cached_input = cached_from_usage(usage)
 
-        %{input: input, output: output, reasoning: 0, cached_input: cached_input}
+        %{input: input, output: output, reasoning: reasoning, cached_input: cached_input}
         |> add_token_aliases()
         |> add_cost_calculation_if_available(usage)
         |> calculate_cost_if_model_available(model)
@@ -762,6 +766,20 @@ defmodule ReqLLM.StreamServer do
   end
 
   defp normalize_streaming_usage(usage, _model), do: usage
+
+  defp reasoning_from_usage(usage) do
+    get_in(usage, ["completion_tokens_details", "reasoning_tokens"]) ||
+      get_in(usage, ["output_tokens_details", "reasoning_tokens"]) ||
+      Map.get(usage, "reasoning_tokens", 0) ||
+      Map.get(usage, "reasoning_output_tokens", 0)
+  end
+
+  defp cached_from_usage(usage) do
+    get_in(usage, ["prompt_tokens_details", "cached_tokens"]) ||
+      get_in(usage, ["input_tokens_details", "cached_tokens"]) ||
+      Map.get(usage, "cache_read_input_tokens", 0) ||
+      Map.get(usage, "cached_tokens", 0)
+  end
 
   defp add_token_aliases(usage) do
     usage
