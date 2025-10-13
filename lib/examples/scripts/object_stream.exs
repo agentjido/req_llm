@@ -1,6 +1,37 @@
 alias ReqLLM.Scripts.Helpers
 
 defmodule ObjectStream do
+  @moduledoc """
+  Demonstrates streaming structured object generation with ReqLLM.
+
+  This script showcases the `ReqLLM.stream_object/4` function, which extracts
+  structured data from LLM responses using a schema definition. The example
+  extracts person information (name, age, occupation, location) from natural
+  language prompts.
+
+  ## Usage
+
+      mix run lib/examples/scripts/object_stream.exs "Your prompt here" [options]
+
+  ## Options
+
+    * `--model`, `-m` - Model to use (default: openai:gpt-4o)
+    * `--log-level`, `-l` - Logging level: debug, info, warning, error (default: warning)
+    * `--max-tokens` - Maximum tokens to generate
+    * `--temperature` - Temperature for generation (0.0-2.0)
+
+  ## Examples
+
+      # Extract person information from text
+      mix run lib/examples/scripts/object_stream.exs "Extract person info: Jane Smith, 32, architect in Berlin"
+
+      # Use a different model
+      mix run lib/examples/scripts/object_stream.exs "Generate a person profile" --model anthropic:claude-3-5-sonnet-20241022
+
+      # Control generation parameters
+      mix run lib/examples/scripts/object_stream.exs "Person: Alice, 28" --temperature 0.7 --max-tokens 500
+  """
+
   @script_name "object_stream.exs"
 
   def run(argv) do
@@ -23,7 +54,7 @@ defmodule ObjectStream do
 
     model = opts[:model] || Helpers.default_text_model()
 
-    Logger.configure(level: parse_log_level(opts[:log_level] || "warning"))
+    Logger.configure(level: Helpers.log_level(opts[:log_level] || "warning"))
 
     Helpers.banner!(@script_name, "Demonstrates streaming structured object generation",
       model: model,
@@ -66,8 +97,8 @@ defmodule ObjectStream do
     [
       name: [type: :string, required: true, doc: "Person's name"],
       age: [type: :pos_integer, required: true, doc: "Person's age"],
-      occupation: [type: :string, doc: "Person's occupation"],
-      location: [type: :string, doc: "Person's location"]
+      occupation: [type: :string, required: true, doc: "Person's occupation"],
+      location: [type: :string, required: true, doc: "Person's location"]
     ]
   end
 
@@ -80,40 +111,15 @@ defmodule ObjectStream do
         List.first(remaining_args)
 
       true ->
-        IO.puts(:stderr, "Error: Prompt is required\n")
-        IO.puts("Usage: mix run #{@script_name} \"Your prompt here\" [options]")
-        IO.puts("\nExample:")
-
-        IO.puts(
-          "  mix run #{@script_name} \"Extract person info: Jane Smith, 32, architect in Berlin\""
-        )
-
-        IO.puts(
-          "  mix run #{@script_name} \"Generate a person profile\" --model anthropic:claude-3-5-sonnet-20241022"
-        )
-
-        System.halt(1)
-    end
-  end
-
-  defp parse_log_level(level_str) do
-    case level_str do
-      "debug" -> :debug
-      "info" -> :info
-      "warning" -> :warning
-      "error" -> :error
-      _ -> :warning
+        "Create a profile for a designer named Jordan who is 32 years old."
     end
   end
 
   defp build_generation_opts(opts) do
     []
-    |> maybe_put(:max_tokens, opts[:max_tokens])
-    |> maybe_put(:temperature, opts[:temperature])
+    |> Helpers.maybe_put(:max_tokens, opts[:max_tokens])
+    |> Helpers.maybe_put(:temperature, opts[:temperature])
   end
-
-  defp maybe_put(opts, _key, nil), do: opts
-  defp maybe_put(opts, key, value), do: Keyword.put(opts, key, value)
 end
 
 ObjectStream.run(System.argv())

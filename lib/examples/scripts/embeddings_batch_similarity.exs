@@ -1,6 +1,33 @@
 alias ReqLLM.Scripts.Helpers
 
 defmodule EmbeddingsBatchSimilarity do
+  @moduledoc """
+  Demonstrates batch embedding and cosine similarity analysis using ReqLLM.
+
+  Generates embeddings for multiple texts in a single API call and calculates
+  pairwise cosine similarities to identify the most and least similar text pairs.
+
+  ## Usage
+
+      mix run lib/examples/scripts/embeddings_batch_similarity.exs [options]
+
+  ## Options
+
+    * `--model, -m` - Model to use (default: openai:text-embedding-3-small)
+    * `--log-level, -l` - Log level: debug, info, warning, error (default: warning)
+
+  ## Examples
+
+      # Run similarity analysis with default texts
+      mix run lib/examples/scripts/embeddings_batch_similarity.exs
+
+      # Use specific model
+      mix run lib/examples/scripts/embeddings_batch_similarity.exs --model openai:text-embedding-3-large
+
+      # Enable debug logging
+      mix run lib/examples/scripts/embeddings_batch_similarity.exs --log-level debug
+  """
+
   @script_name "embeddings_batch_similarity.exs"
 
   @texts [
@@ -25,7 +52,7 @@ defmodule EmbeddingsBatchSimilarity do
 
     model = parsed_opts[:model] || Helpers.default_embedding_model()
 
-    Logger.configure(level: parse_log_level(parsed_opts[:log_level] || "warning"))
+    Logger.configure(level: Helpers.log_level(parsed_opts[:log_level] || "warning"))
 
     Helpers.banner!(@script_name, "Demonstrates batch embedding and similarity analysis",
       model: model,
@@ -43,16 +70,6 @@ defmodule EmbeddingsBatchSimilarity do
     end
   rescue
     error -> Helpers.handle_error!(error, @script_name, [])
-  end
-
-  defp parse_log_level(level_str) do
-    case level_str do
-      "debug" -> :debug
-      "info" -> :info
-      "warning" -> :warning
-      "error" -> :error
-      _ -> :warning
-    end
   end
 
   defp print_similarity_analysis(embeddings, duration_ms) do

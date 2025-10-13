@@ -515,19 +515,27 @@ defmodule ReqLLM.Provider.Defaults do
     Enum.map(messages, &encode_openai_message/1)
   end
 
-  defp encode_openai_message(%ReqLLM.Message{role: r, content: c, tool_calls: tc}) do
+  defp encode_openai_message(%ReqLLM.Message{
+         role: r,
+         content: c,
+         tool_calls: tc,
+         tool_call_id: tcid,
+         name: name
+       }) do
     base_message = %{
       role: to_string(r),
       content: encode_openai_content(c)
     }
 
-    # Add tool_calls if present and not nil
-    case tc do
-      nil -> base_message
-      [] -> base_message
-      calls -> Map.put(base_message, :tool_calls, calls)
-    end
+    base_message
+    |> maybe_add_field(:tool_calls, tc)
+    |> maybe_add_field(:tool_call_id, tcid)
+    |> maybe_add_field(:name, name)
   end
+
+  defp maybe_add_field(message, _key, nil), do: message
+  defp maybe_add_field(message, _key, []), do: message
+  defp maybe_add_field(message, key, value), do: Map.put(message, key, value)
 
   defp encode_openai_content(content) when is_binary(content), do: content
 
@@ -1171,9 +1179,9 @@ defmodule ReqLLM.Provider.Defaults do
         nil
 
       tool_calls ->
-        case Enum.find(tool_calls, &(&1.name == "structured_output")) do
+        case Enum.find(tool_calls, &(&1.function.name == "structured_output")) do
           nil -> nil
-          %{arguments: object} -> object
+          %{function: %{arguments: object}} -> object
         end
     end
   end

@@ -6,16 +6,16 @@ Standalone, runnable examples demonstrating ReqLLM's main API methods. All scrip
 
 ```bash
 # Text generation
-mix run lib/scripts/text_generate.exs "Explain functional programming"
+mix run lib/examples/scripts/text_generate.exs "Explain functional programming"
 
 # Streaming text
-mix run lib/scripts/text_stream.exs "Write a haiku about code"
+mix run lib/examples/scripts/text_stream.exs "Write a haiku about code"
 
 # Object generation (use Anthropic for best results)
-mix run lib/scripts/object_generate.exs "Create a profile for Alice" -m anthropic:claude-3-5-haiku-20241022
+mix run lib/examples/scripts/object_generate.exs "Create a profile for Alice" -m anthropic:claude-3-5-haiku-20241022
 
 # Image analysis
-mix run lib/scripts/multimodal_image_analysis.exs "What's in this image?" --file priv/examples/test.jpg
+mix run lib/examples/scripts/multimodal_image_analysis.exs "What's in this image?" --file priv/examples/test.jpg
 ```
 
 ## Scripts Overview
@@ -26,7 +26,7 @@ mix run lib/scripts/multimodal_image_analysis.exs "What's in this image?" --file
 Non-streaming text generation with full response metadata.
 
 ```bash
-mix run lib/scripts/text_generate.exs "Your prompt here" [options]
+mix run lib/examples/scripts/text_generate.exs "Your prompt here" [options]
 
 Options:
   --model, -m MODEL       Model spec (default: openai:gpt-4o-mini)
@@ -37,13 +37,13 @@ Options:
 
 Examples:
   # Basic usage
-  mix run lib/scripts/text_generate.exs "Explain neural networks"
+  mix run lib/examples/scripts/text_generate.exs "Explain neural networks"
   
   # With system message
-  mix run lib/scripts/text_generate.exs "Hello" -s "You are a pirate"
+  mix run lib/examples/scripts/text_generate.exs "Hello" -s "You are a pirate"
   
   # Different model with parameters
-  mix run lib/scripts/text_generate.exs "Tell a joke" \
+  mix run lib/examples/scripts/text_generate.exs "Tell a joke" \
     -m anthropic:claude-3-5-haiku-20241022 \
     --temperature 0.9 \
     --max-tokens 100
@@ -53,19 +53,51 @@ Examples:
 Real-time token streaming as the model generates.
 
 ```bash
-mix run lib/scripts/text_stream.exs "Your prompt here" [options]
+mix run lib/examples/scripts/text_stream.exs "Your prompt here" [options]
 
 Options:
   Same as text_generate.exs
 
 Examples:
   # Watch tokens appear in real-time
-  mix run lib/scripts/text_stream.exs "Write a story about a robot"
+  mix run lib/examples/scripts/text_stream.exs "Write a story about a robot"
   
   # With creative parameters
-  mix run lib/scripts/text_stream.exs "Compose a poem" \
+  mix run lib/examples/scripts/text_stream.exs "Compose a poem" \
     --temperature 1.2 \
     -s "You are a romantic poet"
+```
+
+#### `reasoning_tokens.exs` - Reasoning token usage
+Demonstrates extended thinking with reasoning-capable models.
+
+```bash
+mix run lib/examples/scripts/reasoning_tokens.exs "Your prompt here" [options]
+
+Options:
+  --model, -m MODEL                 Model spec (default: openai:o1-mini)
+  --max-tokens TOKENS               Maximum tokens to generate
+  --temperature TEMP                Sampling temperature
+  --reasoning-effort EFFORT         Reasoning effort: low, medium, high
+  --reasoning-token-budget BUDGET   Maximum reasoning tokens
+  --thinking-visibility VIS         Thinking visibility: final, hidden
+  --log-level, -l LEVEL             Output verbosity
+
+Examples:
+  # Basic reasoning
+  mix run lib/examples/scripts/reasoning_tokens.exs \
+    "Explain quantum entanglement"
+  
+  # High effort with token budget
+  mix run lib/examples/scripts/reasoning_tokens.exs \
+    "Solve this complex logic puzzle" \
+    --reasoning-effort high \
+    --reasoning-token-budget 1000
+  
+  # Control thinking visibility
+  mix run lib/examples/scripts/reasoning_tokens.exs \
+    "Analyze this algorithm" \
+    --thinking-visibility hidden
 ```
 
 ### Object Generation
@@ -76,7 +108,7 @@ Generate validated JSON objects matching a schema.
 **Note:** Works with both OpenAI and Anthropic. Ensure all schema fields have `required: true` for OpenAI strict mode.
 
 ```bash
-mix run lib/scripts/object_generate.exs "Your prompt here" [options]
+mix run lib/examples/scripts/object_generate.exs "Your prompt here" [options]
 
 Options:
   --model, -m MODEL       Model spec (default: anthropic:claude-3-5-haiku-20241022)
@@ -88,12 +120,12 @@ Schema: Person (name, age, occupation, location)
 
 Examples:
   # Generate person profile
-  mix run lib/scripts/object_generate.exs \
+  mix run lib/examples/scripts/object_generate.exs \
     "Create a profile for a software engineer named Alice" \
     -m anthropic:claude-3-5-haiku-20241022
   
   # Extract structured data from text
-  mix run lib/scripts/object_generate.exs \
+  mix run lib/examples/scripts/object_generate.exs \
     "Extract info: John Smith, 35, lawyer in Boston" \
     -m anthropic:claude-3-5-sonnet-20241022
 ```
@@ -102,7 +134,7 @@ Examples:
 Generate objects with real-time updates.
 
 ```bash
-mix run lib/scripts/object_stream.exs "Your prompt here" [options]
+mix run lib/examples/scripts/object_stream.exs "Your prompt here" [options]
 
 Options:
   Same as object_generate.exs
@@ -110,7 +142,7 @@ Options:
 Schema: Person (name, age, occupation, location)
 
 Examples:
-  mix run lib/scripts/object_stream.exs \
+  mix run lib/examples/scripts/object_stream.exs \
     "Create a character profile" \
     -m anthropic:claude-3-5-haiku-20241022
 ```
@@ -121,7 +153,7 @@ Examples:
 Generate embedding vector for a single text.
 
 ```bash
-mix run lib/scripts/embeddings_single.exs "Your text here" [options]
+mix run lib/examples/scripts/embeddings_single.exs "Your text here" [options]
 
 Options:
   --model, -m MODEL       Embedding model (default: openai:text-embedding-3-small)
@@ -129,10 +161,10 @@ Options:
 
 Examples:
   # Generate embedding
-  mix run lib/scripts/embeddings_single.exs "Elixir is a functional language"
+  mix run lib/examples/scripts/embeddings_single.exs "Elixir is a functional language"
   
   # Use large model
-  mix run lib/scripts/embeddings_single.exs "Deep learning" \
+  mix run lib/examples/scripts/embeddings_single.exs "Deep learning" \
     -m openai:text-embedding-3-large
 ```
 
@@ -140,7 +172,7 @@ Examples:
 Generate embeddings for multiple texts and compute similarities.
 
 ```bash
-mix run lib/scripts/embeddings_batch_similarity.exs [options]
+mix run lib/examples/scripts/embeddings_batch_similarity.exs [options]
 
 Options:
   --model, -m MODEL       Embedding model (default: openai:text-embedding-3-small)
@@ -148,10 +180,10 @@ Options:
 
 Examples:
   # Compute similarities (uses built-in text list)
-  mix run lib/scripts/embeddings_batch_similarity.exs
+  mix run lib/examples/scripts/embeddings_batch_similarity.exs
   
   # With different model
-  mix run lib/scripts/embeddings_batch_similarity.exs \
+  mix run lib/examples/scripts/embeddings_batch_similarity.exs \
     -m google:text-embedding-004
 ```
 
@@ -161,7 +193,7 @@ Examples:
 Demonstrate tool/function calling capabilities.
 
 ```bash
-mix run lib/scripts/tools_function_calling.exs "Your prompt here" [options]
+mix run lib/examples/scripts/tools_function_calling.exs "Your prompt here" [options]
 
 Options:
   --model, -m MODEL       Model spec (default: openai:gpt-4o-mini)
@@ -173,14 +205,14 @@ Tools: get_weather, tell_joke, get_time
 
 Examples:
   # Single tool call
-  mix run lib/scripts/tools_function_calling.exs \
+  mix run lib/examples/scripts/tools_function_calling.exs \
     "What's the weather in Paris in Celsius?"
   
   # Multi-tool call (uses default prompt)
-  mix run lib/scripts/tools_function_calling.exs
+  mix run lib/examples/scripts/tools_function_calling.exs
   
   # With Anthropic
-  mix run lib/scripts/tools_function_calling.exs \
+  mix run lib/examples/scripts/tools_function_calling.exs \
     "Tell me a joke about programming" \
     -m anthropic:claude-3-5-haiku-20241022
 ```
@@ -189,7 +221,7 @@ Examples:
 Demonstrate various schema patterns and object generation.
 
 ```bash
-mix run lib/scripts/json_schema_examples.exs [options]
+mix run lib/examples/scripts/json_schema_examples.exs [options]
 
 Options:
   --model, -m MODEL       Model spec (default: openai:gpt-4o-mini)
@@ -202,10 +234,10 @@ Demonstrates:
 
 Examples:
   # Run all three examples with OpenAI
-  mix run lib/scripts/json_schema_examples.exs
+  mix run lib/examples/scripts/json_schema_examples.exs
   
   # Or with Anthropic
-  mix run lib/scripts/json_schema_examples.exs \
+  mix run lib/examples/scripts/json_schema_examples.exs \
     -m anthropic:claude-3-5-haiku-20241022
 ```
 
@@ -215,7 +247,7 @@ Examples:
 Analyze images with vision-capable models.
 
 ```bash
-mix run lib/scripts/multimodal_image_analysis.exs "Your prompt" --file PATH [options]
+mix run lib/examples/scripts/multimodal_image_analysis.exs "Your prompt" --file PATH [options]
 
 Options:
   --file FILE             Image file path (REQUIRED)
@@ -228,18 +260,18 @@ Supported formats: PNG, JPEG, JPG, WEBP, GIF
 
 Examples:
   # Analyze image
-  mix run lib/scripts/multimodal_image_analysis.exs \
+  mix run lib/examples/scripts/multimodal_image_analysis.exs \
     "Describe this image in detail" \
     --file priv/examples/test.jpg
   
   # With Anthropic
-  mix run lib/scripts/multimodal_image_analysis.exs \
+  mix run lib/examples/scripts/multimodal_image_analysis.exs \
     "What objects are visible?" \
     --file photo.png \
     -m anthropic:claude-3-5-haiku-20241022
   
   # Quiet mode (content only)
-  mix run lib/scripts/multimodal_image_analysis.exs \
+  mix run lib/examples/scripts/multimodal_image_analysis.exs \
     "What do you see?" \
     --file image.jpg \
     -l warning
@@ -249,7 +281,7 @@ Examples:
 Analyze and query PDF documents (Anthropic Claude only).
 
 ```bash
-mix run lib/scripts/multimodal_pdf_qa.exs "Your prompt" --file PATH [options]
+mix run lib/examples/scripts/multimodal_pdf_qa.exs "Your prompt" --file PATH [options]
 
 Options:
   --file FILE             PDF file path (REQUIRED)
@@ -262,18 +294,18 @@ Provider support: Anthropic Claude only
 
 Examples:
   # Summarize PDF
-  mix run lib/scripts/multimodal_pdf_qa.exs \
+  mix run lib/examples/scripts/multimodal_pdf_qa.exs \
     "Summarize the key points" \
     --file document.pdf
   
   # Ask specific question
-  mix run lib/scripts/multimodal_pdf_qa.exs \
+  mix run lib/examples/scripts/multimodal_pdf_qa.exs \
     "What are the main conclusions?" \
     --file research_paper.pdf \
     -m anthropic:claude-3-5-sonnet-20241022
   
   # Extract specific info
-  mix run lib/scripts/multimodal_pdf_qa.exs \
+  mix run lib/examples/scripts/multimodal_pdf_qa.exs \
     "List all mentioned dates" \
     --file report.pdf \
     --max-tokens 500
@@ -394,7 +426,7 @@ Example for docs:
 Generate a person profile:
 
 \`\`\`bash
-mix run lib/scripts/object_generate.exs \
+mix run lib/examples/scripts/object_generate.exs \
   "Create a software engineer profile" \
   -m anthropic:claude-3-5-haiku-20241022 \
   -l warning

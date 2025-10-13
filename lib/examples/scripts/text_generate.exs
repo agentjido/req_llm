@@ -1,6 +1,41 @@
 alias ReqLLM.Scripts.Helpers
 
 defmodule TextGenerate do
+  @moduledoc """
+  Demonstrates basic text generation using ReqLLM.
+
+  This script shows how to use the ReqLLM.generate_text/3 API to generate
+  text responses from various LLM providers. It supports customization of
+  models, system prompts, and generation parameters.
+
+  ## Usage
+
+      mix run lib/examples/scripts/text_generate.exs "Your prompt here" [options]
+
+  ## Options
+
+    * `--model`, `-m` - Model to use (default: openai:gpt-4o-mini)
+    * `--system`, `-s` - System prompt to set context
+    * `--max-tokens` - Maximum tokens to generate
+    * `--temperature` - Sampling temperature (0.0-2.0)
+    * `--log-level`, `-l` - Log level (debug, info, warning, error)
+
+  ## Examples
+
+      # Basic usage with default model
+      mix run lib/examples/scripts/text_generate.exs "Explain functional programming in one sentence"
+
+      # Using a specific model with system prompt
+      mix run lib/examples/scripts/text_generate.exs "Write a haiku" \\
+        --model anthropic:claude-3-5-sonnet-20241022 \\
+        --system "You are a creative poet"
+
+      # With generation parameters
+      mix run lib/examples/scripts/text_generate.exs "Tell me a story" \\
+        --max-tokens 500 \\
+        --temperature 0.7
+  """
+
   @script_name "text_generate.exs"
 
   def run(argv) do
@@ -24,7 +59,7 @@ defmodule TextGenerate do
 
     model = opts[:model] || Helpers.default_text_model()
 
-    Logger.configure(level: parse_log_level(opts[:log_level] || "warning"))
+    Logger.configure(level: Helpers.log_level(opts[:log_level] || "warning"))
 
     Helpers.banner!(@script_name, "Demonstrates basic text generation",
       model: model,
@@ -40,7 +75,7 @@ defmodule TextGenerate do
 
     {response, duration_ms} =
       Helpers.time(fn ->
-        ReqLLM.Generation.generate_text(model, ctx, generation_opts)
+        ReqLLM.generate_text(model, ctx, generation_opts)
       end)
 
     case response do
@@ -60,37 +95,15 @@ defmodule TextGenerate do
         List.first(remaining_args)
 
       true ->
-        IO.puts(:stderr, "Error: Prompt is required\n")
-        IO.puts("Usage: mix run #{@script_name} \"Your prompt here\" [options]")
-        IO.puts("\nExample:")
-        IO.puts("  mix run #{@script_name} \"Explain functional programming in one sentence\"")
-
-        IO.puts(
-          "  mix run #{@script_name} \"Write a haiku\" --model anthropic:claude-3-5-sonnet-20241022"
-        )
-
-        System.halt(1)
-    end
-  end
-
-  defp parse_log_level(level_str) do
-    case level_str do
-      "debug" -> :debug
-      "info" -> :info
-      "warning" -> :warning
-      "error" -> :error
-      _ -> :warning
+        "Explain functional programming in one sentence."
     end
   end
 
   defp build_generation_opts(opts) do
     []
-    |> maybe_put(:max_tokens, opts[:max_tokens])
-    |> maybe_put(:temperature, opts[:temperature])
+    |> Helpers.maybe_put(:max_tokens, opts[:max_tokens])
+    |> Helpers.maybe_put(:temperature, opts[:temperature])
   end
-
-  defp maybe_put(opts, _key, nil), do: opts
-  defp maybe_put(opts, key, value), do: Keyword.put(opts, key, value)
 end
 
 TextGenerate.run(System.argv())
