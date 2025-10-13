@@ -1180,20 +1180,8 @@ defmodule ReqLLM.Provider.Defaults do
 
       tool_calls ->
         case Enum.find(tool_calls, &(&1.function.name == "structured_output")) do
-          nil ->
-            nil
-
-          %{function: %{arguments: object}} when is_map(object) ->
-            object
-
-          %{function: %{arguments: json_string}} when is_binary(json_string) ->
-            case Jason.decode(json_string) do
-              {:ok, object} -> object
-              {:error, _} -> nil
-            end
-
-          _ ->
-            nil
+          nil -> nil
+          %{function: %{arguments: object}} -> object
         end
     end
   end
