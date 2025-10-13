@@ -9,15 +9,15 @@ defmodule ReqLLM.Message do
   use TypedStruct
 
   alias ReqLLM.Message.ContentPart
+  alias ReqLLM.ToolCall
 
   @derive Jason.Encoder
-
   typedstruct enforce: true do
     field(:role, :user | :assistant | :system | :tool, enforce: true)
     field(:content, [ContentPart.t()], default: [])
     field(:name, String.t() | nil, default: nil)
     field(:tool_call_id, String.t() | nil, default: nil)
-    field(:tool_calls, [term()] | nil, default: nil)
+    field(:tool_calls, [ToolCall.t()] | nil, default: nil)
     field(:metadata, map(), default: %{})
   end
 

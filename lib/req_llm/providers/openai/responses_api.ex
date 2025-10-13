@@ -485,17 +485,20 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     finish_reason = determine_finish_reason(body)
 
-    content_parts = build_content_parts(text, thinking, tool_calls)
+    content_parts = build_content_parts(text, thinking)
 
     msg = %ReqLLM.Message{
       role: :assistant,
-      content: content_parts
+      content: content_parts,
+      tool_calls: if(tool_calls != [], do: tool_calls)
     }
 
     response = %ReqLLM.Response{
       id: body["id"] || "unknown",
       model: body["model"] || req.options[:model],
-      context: %ReqLLM.Context{messages: if(content_parts == [], do: [], else: [msg])},
+      context: %ReqLLM.Context{
+        messages: if(content_parts == [] and is_nil(msg.tool_calls), do: [], else: [msg])
+      },
       message: msg,
       stream?: false,
       stream: nil,
@@ -593,22 +596,14 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     segments
     |> Enum.filter(&(&1["type"] == "function_call"))
     |> Enum.map(fn seg ->
-      args =
-        case Jason.decode(seg["arguments"] || "{}") do
-          {:ok, decoded} -> decoded
-          {:error, _} -> %{}
-        end
-
-      %ReqLLM.Message.ContentPart{
-        type: :tool_call,
-        tool_call_id: seg["call_id"] || "unknown",
-        tool_name: seg["name"] || "unknown",
-        input: args
-      }
+      args_json = seg["arguments"] || "{}"
+      id = seg["call_id"]
+      name = seg["name"] || "unknown"
+      ReqLLM.ToolCall.new(id, name, args_json)
     end)
   end
 
-  defp build_content_parts(text, thinking, tool_calls) do
+  defp build_content_parts(text, thinking) do
     parts = []
 
     parts =
@@ -625,7 +620,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         [%ReqLLM.Message.ContentPart{type: :text, text: text} | parts]
       end
 
-    Enum.reverse(parts, tool_calls)
+    Enum.reverse(parts)
   end
 
   defp normalize_responses_usage(usage, response_data) do

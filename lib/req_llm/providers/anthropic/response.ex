@@ -203,13 +203,21 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   defp build_message_from_chunks(chunks) do
     content_parts =
       chunks
+      |> Enum.filter(&(&1.type in [:content, :thinking]))
       |> Enum.map(&chunk_to_content_part/1)
       |> Enum.reject(&is_nil/1)
 
-    if content_parts != [] do
+    tool_calls =
+      chunks
+      |> Enum.filter(&(&1.type == :tool_call))
+      |> Enum.map(&chunk_to_tool_call/1)
+      |> Enum.reject(&is_nil/1)
+
+    if content_parts != [] or tool_calls != [] do
       %ReqLLM.Message{
         role: :assistant,
         content: content_parts,
+        tool_calls: if(tool_calls != [], do: tool_calls),
         metadata: %{}
       }
     end
@@ -223,21 +231,20 @@ defmodule ReqLLM.Providers.Anthropic.Response do
     %ReqLLM.Message.ContentPart{type: :thinking, text: text}
   end
 
-  defp chunk_to_content_part(%ReqLLM.StreamChunk{
+  defp chunk_to_content_part(_), do: nil
+
+  defp chunk_to_tool_call(%ReqLLM.StreamChunk{
          type: :tool_call,
          name: name,
          arguments: args,
          metadata: meta
        }) do
-    %ReqLLM.Message.ContentPart{
-      type: :tool_call,
-      tool_name: name,
-      input: args,
-      tool_call_id: Map.get(meta, :id)
-    }
+    args_json = if is_binary(args), do: args, else: Jason.encode!(args)
+    id = Map.get(meta, :id)
+    ReqLLM.ToolCall.new(id, name, args_json)
   end
 
-  defp chunk_to_content_part(_), do: nil
+  defp chunk_to_tool_call(_), do: nil
 
   defp parse_usage(%{"input_tokens" => input, "output_tokens" => output} = usage) do
     cached_tokens = Map.get(usage, "cache_read_input_tokens", 0)

@@ -359,10 +359,9 @@ defmodule ReqLLM.Providers.GoogleTest do
 
       tool_calls = ReqLLM.Response.tool_calls(response)
 
-      assert [%{name: "demo_tool", arguments: %{"payload" => "value"}, id: tool_call_id}] =
-               tool_calls
-
-      assert tool_call_id == "call-1"
+      assert [tool_call] = tool_calls
+      assert tool_call.function.name == "demo_tool"
+      assert tool_call.id == "call-1"
       assert ReqLLM.Response.finish_reason(response) == :stop
     end
 

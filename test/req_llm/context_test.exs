@@ -530,8 +530,7 @@ defmodule ReqLLM.ContextTest do
   end
 
   describe "JSON serialization" do
-    test "serializes and deserializes context with all message types" do
-      # Create a context with various message types
+    test "serializes context with all message types" do
       original_context =
         Context.new([
           Context.system("You are a helpful assistant"),
@@ -540,20 +539,15 @@ defmodule ReqLLM.ContextTest do
           Context.text(:user, "What's the weather like?", %{timestamp: "2023-01-01"})
         ])
 
-      # Serialize to JSON
       json_string = Jason.encode!(original_context)
       assert is_binary(json_string)
 
-      # Deserialize back to a map (Jason doesn't automatically convert back to structs)
       decoded_map = Jason.decode!(json_string)
 
       assert is_map(decoded_map)
       assert Map.has_key?(decoded_map, "messages")
-
-      # Verify the structure is preserved
       assert length(decoded_map["messages"]) == 4
 
-      # Check first message (system) - verify core fields are preserved
       system_msg = Enum.at(decoded_map["messages"], 0)
       assert system_msg["role"] == "system"
       assert length(system_msg["content"]) == 1
@@ -563,75 +557,18 @@ defmodule ReqLLM.ContextTest do
       assert content_part["text"] == "You are a helpful assistant"
       assert content_part["metadata"] == %{}
 
-      # Check last message with metadata
       user_msg = Enum.at(decoded_map["messages"], 3)
       assert user_msg["role"] == "user"
       assert user_msg["metadata"] == %{"timestamp" => "2023-01-01"}
-
-      # Test 1: Deserialize from JSON string directly
-      {:ok, recreated_from_string} = Context.from_json(json_string)
-      assert %Context{} = recreated_from_string
-      assert length(recreated_from_string.messages) == 4
-
-      # Test 2: Deserialize from decoded map
-      {:ok, recreated_from_map} = Context.from_json(decoded_map)
-      assert %Context{} = recreated_from_map
-      assert length(recreated_from_map.messages) == 4
-
-      # Both deserialization methods should produce identical results
-      assert recreated_from_string == recreated_from_map
-
-      # Verify the recreated context has the same structure as original
-      assert length(original_context.messages) == length(recreated_from_map.messages)
-
-      # Check that the first message (system) is properly recreated
-      original_system = Enum.at(original_context.messages, 0)
-      recreated_system = Enum.at(recreated_from_map.messages, 0)
-      assert original_system.role == recreated_system.role
-      assert original_system.content == recreated_system.content
-
-      # Check that the last message with metadata is properly recreated
-      original_last = Enum.at(original_context.messages, 3)
-      recreated_last = Enum.at(recreated_from_map.messages, 3)
-      assert original_last.role == recreated_last.role
-      assert original_last.metadata == recreated_last.metadata
-
-      # Verify that the recreated context can be serialized again
-      reserialized_json = Jason.encode!(recreated_from_map)
-      assert is_binary(reserialized_json)
     end
 
-    test "serializes and deserializes empty context" do
+    test "serializes empty context" do
       original_context = Context.new()
 
       json_string = Jason.encode!(original_context)
-
-      # Test both JSON string and map deserialization
-      {:ok, recreated_from_string} = Context.from_json(json_string)
-
       decoded_map = Jason.decode!(json_string)
-      {:ok, recreated_from_map} = Context.from_json(decoded_map)
 
-      # Both should be identical
-      assert recreated_from_string == recreated_from_map
-      assert recreated_from_string == original_context
-
-      assert %Context{} = recreated_from_string
-      assert recreated_from_string.messages == []
-
-      # Verify that the recreated context can be serialized again
-      reserialized_json = Jason.encode!(recreated_from_string)
-      assert is_binary(reserialized_json)
-    end
-
-    test "handles invalid JSON gracefully" do
-      # Test invalid JSON string
-      assert {:error, {:json_decode_error, _}} = Context.from_json("{invalid json")
-
-      # Test invalid map structure (all invalid inputs map to this error)
-      assert {:error, :invalid_json_structure} = Context.from_json(%{"not" => "messages"})
-      assert {:error, :invalid_json_structure} = Context.from_json(123)
-      assert {:error, :invalid_json_structure} = Context.from_json([:not, :a, :map])
+      assert %{"messages" => []} = decoded_map
     end
   end
 

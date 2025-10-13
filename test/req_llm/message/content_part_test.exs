@@ -25,7 +25,6 @@ defmodule ReqLLM.Message.ContentPartTest do
       part = ContentPart.thinking("thinking step")
 
       assert %ContentPart{type: :thinking, text: "thinking step", metadata: %{}} = part
-      assert part.tool_call_id == nil
     end
 
     test "creates thinking with metadata" do
@@ -101,40 +100,6 @@ defmodule ReqLLM.Message.ContentPartTest do
     end
   end
 
-  describe "tool_call/3" do
-    test "creates tool call content part" do
-      id = "call_123"
-      name = "calculator"
-      input = %{operation: "add", a: 1, b: 2}
-      part = ContentPart.tool_call(id, name, input)
-
-      assert %ContentPart{
-               type: :tool_call,
-               tool_call_id: ^id,
-               tool_name: ^name,
-               input: ^input
-             } = part
-
-      assert part.output == nil
-    end
-  end
-
-  describe "tool_result/2" do
-    test "creates tool result content part" do
-      id = "call_123"
-      output = %{result: "success", value: 42}
-      part = ContentPart.tool_result(id, output)
-
-      assert %ContentPart{
-               type: :tool_result,
-               tool_call_id: ^id,
-               output: ^output
-             } = part
-
-      assert part.input == nil
-    end
-  end
-
   describe "struct validation and edge cases" do
     test "requires type field" do
       assert_raise ArgumentError, fn ->
@@ -143,7 +108,7 @@ defmodule ReqLLM.Message.ContentPartTest do
     end
 
     test "accepts valid content types" do
-      valid_types = [:text, :image_url, :image, :file, :tool_call, :tool_result, :thinking]
+      valid_types = [:text, :image_url, :image, :file, :thinking]
 
       for type <- valid_types do
         part = struct!(ContentPart, %{type: type})
@@ -175,10 +140,6 @@ defmodule ReqLLM.Message.ContentPartTest do
       assert part.data == nil
       assert part.media_type == nil
       assert part.filename == nil
-      assert part.tool_call_id == nil
-      assert part.tool_name == nil
-      assert part.input == nil
-      assert part.output == nil
       assert part.metadata == %{}
     end
   end
@@ -249,25 +210,6 @@ defmodule ReqLLM.Message.ContentPartTest do
       assert output =~ "text/plain (0 bytes)"
     end
 
-    test "inspects tool_call content part" do
-      part = ContentPart.tool_call("call_123", "calculator", %{op: "add"})
-      output = inspect(part)
-
-      assert output =~ "#ContentPart<"
-      assert output =~ "tool_call"
-      assert output =~ "call_123 calculator"
-      assert output =~ "%{op: \"add\"}"
-    end
-
-    test "inspects tool_result content part" do
-      part = ContentPart.tool_result("call_123", {:ok, 42})
-      output = inspect(part)
-
-      assert output =~ "#ContentPart<"
-      assert output =~ "tool_result"
-      assert output =~ "call_123 -> {:ok, 42}"
-    end
-
     test "handles nil text in inspect" do
       part = struct!(ContentPart, %{type: :text, text: nil})
       output = inspect(part)
@@ -283,9 +225,7 @@ defmodule ReqLLM.Message.ContentPartTest do
         ContentPart.thinking("thinking"),
         ContentPart.image_url("https://example.com/pic.jpg"),
         ContentPart.image(<<1, 2, 3>>, "image/png"),
-        ContentPart.file("data", "file.txt", "text/plain"),
-        ContentPart.tool_call("id", "tool", %{arg: "value"}),
-        ContentPart.tool_result("id", %{result: "ok"})
+        ContentPart.file("data", "file.txt", "text/plain")
       ]
 
       for part <- parts do

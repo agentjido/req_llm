@@ -158,10 +158,10 @@ defmodule ReqLLM.Scripts.Helpers do
     ctx =
       case Keyword.get(opts, :system) do
         nil -> ctx
-        sys -> ReqLLM.Context.push_system(ctx, sys)
+        sys -> ReqLLM.Context.prepend(ctx, ReqLLM.Context.system(sys))
       end
 
-    ReqLLM.Context.push_user(ctx, prompt)
+    ReqLLM.Context.append(ctx, ReqLLM.Context.user(prompt))
   end
 
   @doc """

@@ -985,10 +985,8 @@ defmodule ReqLLM.Providers.Google do
     {system_instruction, contents}
   end
 
-  # Helper to convert OpenAI-style messages to Gemini format (non-system messages only)
   defp convert_messages_to_gemini(messages) do
     Enum.map(messages, fn message ->
-      # Extract role from either map with string keys or struct
       raw_role =
         case message do
           %{role: role} -> role
@@ -996,20 +994,20 @@ defmodule ReqLLM.Providers.Google do
           _ -> "user"
         end
 
-      # Convert role to Gemini format
       role =
         case raw_role do
           :user -> "user"
           "user" -> "user"
           :assistant -> "model"
           "assistant" -> "model"
+          :tool -> "user"
+          "tool" -> "user"
           :system -> "user"
           "system" -> "user"
           other when is_binary(other) -> other
           other -> to_string(other)
         end
 
-      # Extract content from either map with string keys or struct
       raw_content =
         case message do
           %{content: content} -> content
@@ -1017,15 +1015,87 @@ defmodule ReqLLM.Providers.Google do
           _ -> ""
         end
 
-      parts =
+      content_parts =
         case raw_content do
           content when is_binary(content) -> [%{text: content}]
           parts when is_list(parts) -> Enum.map(parts, &convert_content_part/1)
         end
 
+      tool_call_parts =
+        case message do
+          %{"tool_calls" => tool_calls} when is_list(tool_calls) ->
+            Enum.map(tool_calls, &convert_tool_call_to_function_call/1)
+
+          %{tool_calls: tool_calls} when is_list(tool_calls) ->
+            Enum.map(tool_calls, &convert_tool_call_to_function_call/1)
+
+          _ ->
+            []
+        end
+
+      tool_result_parts =
+        case message do
+          %{"tool_call_id" => _call_id, "role" => "tool"} ->
+            [
+              %{
+                functionResponse: %{
+                  name: "unknown",
+                  response: %{content: extract_content_text(raw_content)}
+                }
+              }
+            ]
+
+          %{tool_call_id: _call_id, role: :tool} ->
+            [
+              %{
+                functionResponse: %{
+                  name: "unknown",
+                  response: %{content: extract_content_text(raw_content)}
+                }
+              }
+            ]
+
+          _ ->
+            []
+        end
+
+      parts = content_parts ++ tool_call_parts ++ tool_result_parts
+
       %{role: role, parts: parts}
     end)
   end
+
+  defp convert_tool_call_to_function_call(%{
+         "type" => "function",
+         "function" => %{"name" => name, "arguments" => args},
+         "id" => id
+       }) do
+    %{functionCall: %{name: name, args: Jason.decode!(args), id: id}}
+  end
+
+  defp convert_tool_call_to_function_call(%{
+         type: "function",
+         function: %{name: name, arguments: args},
+         id: id
+       }) do
+    %{functionCall: %{name: name, args: Jason.decode!(args), id: id}}
+  end
+
+  defp convert_tool_call_to_function_call(_), do: nil
+
+  defp extract_content_text(content) when is_binary(content), do: content
+
+  defp extract_content_text(parts) when is_list(parts) do
+    parts
+    |> Enum.map_join("", fn
+      %{"type" => "text", "text" => text} -> text
+      %{type: :text, text: text} -> text
+      text when is_binary(text) -> text
+      _ -> ""
+    end)
+  end
+
+  defp extract_content_text(_), do: ""
 
   # Extract text content from a message for system instruction
   defp extract_text_content(%{content: content}) when is_binary(content), do: content

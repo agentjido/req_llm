@@ -52,7 +52,7 @@ defmodule MultimodalImageAnalysis do
     ]
 
     ctx = ReqLLM.Context.new()
-    ctx = ReqLLM.Context.push_user(ctx, parts)
+    ctx = ReqLLM.Context.append(ctx, ReqLLM.Context.user(parts))
 
     generation_opts = build_generation_opts(opts)
 

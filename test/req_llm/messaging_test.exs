@@ -19,16 +19,6 @@ defmodule ReqLLM.MessagingTest do
 
       assert %ContentPart{type: :file, data: ^data, filename: "doc.txt", media_type: "text/plain"} =
                ContentPart.file(data, "doc.txt", "text/plain")
-
-      assert %ContentPart{
-               type: :tool_call,
-               tool_call_id: "123",
-               tool_name: "get_weather",
-               input: %{city: "NYC"}
-             } = ContentPart.tool_call("123", "get_weather", %{city: "NYC"})
-
-      assert %ContentPart{type: :tool_result, tool_call_id: "123", output: "Sunny"} =
-               ContentPart.tool_result("123", "Sunny")
     end
 
     test "inspect protocol shows compact representation" do
@@ -39,9 +29,6 @@ defmodule ReqLLM.MessagingTest do
 
       assert inspect(ContentPart.image(<<1, 2, 3>>, "image/png")) =~
                "#ContentPart<:image image/png (3 bytes)>"
-
-      assert inspect(ContentPart.tool_call("123", "get_weather", %{})) =~
-               "#ContentPart<:tool_call 123 get_weather(%{})>"
     end
 
     test "supports metadata" do
