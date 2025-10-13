@@ -56,6 +56,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   """
   @behaviour ReqLLM.Providers.OpenAI.API
 
+  require ReqLLM.Debug, as: Debug
+
   @impl true
   def path, do: "/responses"
 
@@ -97,13 +99,12 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     event_type =
       Map.get(event, :event) || Map.get(event, "event") || data["event"] || data["type"]
 
-    if System.get_env("REQ_LLM_DEBUG") do
-      require Logger
-
-      Logger.debug(
+    Debug.dbug(
+      fn ->
         "ResponsesAPI decode_sse_event: event=#{inspect(Map.keys(event))}, event_type=#{inspect(event_type)}"
-      )
-    end
+      end,
+      component: :provider
+    )
 
     case event_type do
       "response.output_text.delta" ->

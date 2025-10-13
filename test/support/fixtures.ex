@@ -6,6 +6,8 @@ defmodule ReqLLM.Test.Fixtures do
   delegating path construction to ReqLLM.Test.FixturePath.
   """
 
+  import ReqLLM.Debug, only: [dbug: 2]
+
   @doc "Current fixture mode (:record or :replay)"
   @spec mode() :: :record | :replay
   def mode do
@@ -58,9 +60,7 @@ defmodule ReqLLM.Test.Fixtures do
           :no_fixture
       end
 
-    if match?({:fixture, _}, result) && System.get_env("REQ_LLM_DEBUG") == "1" do
-      require Logger
-
+    if match?({:fixture, _}, result) do
       {:fixture, path} = result
 
       model =
@@ -71,7 +71,10 @@ defmodule ReqLLM.Test.Fixtures do
 
       test_name = Keyword.get(opts, :fixture, Path.basename(path, ".json"))
 
-      Logger.debug("[Fixture] step: model=#{model.provider}:#{model.model}, name=#{test_name}")
+      dbug(
+        fn -> "[Fixture] step: model=#{model.provider}:#{model.model}, name=#{test_name}" end,
+        component: :fixtures
+      )
     end
 
     result
@@ -110,9 +113,7 @@ defmodule ReqLLM.Test.Fixtures do
           Path.expand(explicit_path)
       end
 
-    if result && System.get_env("REQ_LLM_DEBUG") == "1" do
-      require Logger
-
+    if result do
       model =
         case model_or_spec do
           %ReqLLM.Model{} = m -> m
@@ -121,7 +122,10 @@ defmodule ReqLLM.Test.Fixtures do
 
       test_name = Keyword.get(opts, :fixture, Path.basename(result, ".json"))
 
-      Logger.debug("[Fixture] step: model=#{model.provider}:#{model.model}, name=#{test_name}")
+      dbug(
+        fn -> "[Fixture] step: model=#{model.provider}:#{model.model}, name=#{test_name}" end,
+        component: :fixtures
+      )
     end
 
     result

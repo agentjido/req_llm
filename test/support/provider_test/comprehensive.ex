@@ -37,6 +37,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
 
       import ExUnit.Case
       import ReqLLM.Context
+      import ReqLLM.Debug, only: [dbug: 2]
       import ReqLLM.Test.Helpers
 
       alias ReqLLM.Test.ModelMatrix
@@ -45,8 +46,6 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
       @moduletag provider: to_string(provider)
       @moduletag timeout: 180_000
 
-      defp debug?, do: System.get_env("REQ_LLM_DEBUG") in ["1", "true"]
-
       @provider provider
       @models ModelMatrix.models_for_provider(provider, operation: :text)
 
@@ -54,15 +53,16 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
         @model_spec model_spec
 
         describe "#{model_spec}" do
-          @describetag model: (model_spec |> String.split(":", parts: 2) |> List.last())
+          @describetag model: model_spec |> String.split(":", parts: 2) |> List.last()
 
           @tag scenario: :basic
           test "basic generate_text (non-streaming)" do
             require Logger
 
-            if debug?() do
-              IO.puts("\n[Comprehensive] model_spec=#{@model_spec}, test=basic_generate")
-            end
+            dbug(
+              fn -> "\n[Comprehensive] model_spec=#{@model_spec}, test=basic_generate" end,
+              component: :test
+            )
 
             opts =
               reasoning_overlay(
@@ -83,9 +83,10 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
           test "stream_text with system context and creative params" do
             require Logger
 
-            if debug?() do
-              IO.puts("\n[Comprehensive] model_spec=#{@model_spec}, test=streaming")
-            end
+            dbug(
+              fn -> "\n[Comprehensive] model_spec=#{@model_spec}, test=streaming" end,
+              component: :test
+            )
 
             context =
               ReqLLM.Context.new([
@@ -161,9 +162,10 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
           test "usage metrics and cost calculations" do
             require Logger
 
-            if debug?() do
-              IO.puts("\n[Comprehensive] model_spec=#{@model_spec}, test=usage")
-            end
+            dbug(
+              fn -> "\n[Comprehensive] model_spec=#{@model_spec}, test=usage" end,
+              component: :test
+            )
 
             max_tokens =
               case ReqLLM.Model.from(@model_spec) do
@@ -425,9 +427,10 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
           if :reasoning in ReqLLM.capabilities(model_spec) do
             @tag scenario: :reasoning
             test "reasoning/thinking tokens (non-streaming + streaming)" do
-              if debug?() do
-                IO.puts("\n[Comprehensive] model_spec=#{@model_spec}, test=reasoning")
-              end
+              dbug(
+                fn -> "\n[Comprehensive] model_spec=#{@model_spec}, test=reasoning" end,
+                component: :test
+              )
 
               {:ok, model} = ReqLLM.Model.from(@model_spec)
 

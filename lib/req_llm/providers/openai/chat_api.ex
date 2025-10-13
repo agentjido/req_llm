@@ -41,6 +41,8 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
 
   import ReqLLM.Provider.Utils, only: [maybe_put: 3]
 
+  require ReqLLM.Debug, as: Debug
+
   @impl true
   def path, do: "/chat/completions"
 
@@ -53,11 +55,10 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
 
     enhanced_body = build_request_body(context, model_name, opts, operation)
 
-    if System.get_env("REQ_LLM_DEBUG") in ["1", "true"] do
-      require Logger
-
-      Logger.debug("OpenAI ChatAPI request body: #{Jason.encode!(enhanced_body, pretty: true)}")
-    end
+    Debug.dbug(
+      fn -> "OpenAI ChatAPI request body: #{Jason.encode!(enhanced_body, pretty: true)}" end,
+      component: :provider
+    )
 
     Map.put(request, :body, Jason.encode!(enhanced_body))
   end

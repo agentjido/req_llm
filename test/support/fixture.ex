@@ -6,6 +6,8 @@ defmodule ReqLLM.Step.Fixture.Backend do
   Use via the fixture: option in ReqLLM.generate_text/3 and related functions.
   """
 
+  import ReqLLM.Debug, only: [dbug: 2]
+
   require Logger
 
   @doc """
@@ -56,14 +58,19 @@ defmodule ReqLLM.Step.Fixture.Backend do
       path = ReqLLM.Test.FixturePath.file(model, safe_fixture_name)
       mode = ReqLLM.Test.Fixtures.mode()
 
-      if debug?() do
-        IO.puts(
+      dbug(
+        fn ->
           "[Fixture] step: model=#{model.provider}:#{model.model}, name=#{safe_fixture_name}"
-        )
+        end,
+        component: :fixtures
+      )
 
-        IO.puts("[Fixture] path: #{Path.relative_to_cwd(path)}")
-        IO.puts("[Fixture] mode: #{mode}, exists: #{File.exists?(path)}")
-      end
+      dbug(fn -> "[Fixture] path: #{Path.relative_to_cwd(path)}" end, component: :fixtures)
+
+      dbug(
+        fn -> "[Fixture] mode: #{mode}, exists: #{File.exists?(path)}" end,
+        component: :fixtures
+      )
 
       Logger.debug(
         "Fixture step: model=#{model.provider}:#{model.model}, name=#{safe_fixture_name}"
@@ -74,7 +81,11 @@ defmodule ReqLLM.Step.Fixture.Backend do
       Logger.debug("Fixture exists: #{File.exists?(path)}")
 
       if live?() do
-        debug?() && IO.puts("[Fixture] RECORD mode - will save to #{Path.relative_to_cwd(path)}")
+        dbug(
+          fn -> "[Fixture] RECORD mode - will save to #{Path.relative_to_cwd(path)}" end,
+          component: :fixtures
+        )
+
         Logger.debug("Fixture RECORD mode - will save to #{Path.relative_to_cwd(path)}")
         # Tag the request and add response steps to capture the response
         request =
@@ -107,8 +118,6 @@ defmodule ReqLLM.Step.Fixture.Backend do
   # Mode helpers
   # ---------------------------------------------------------------------------
   defp live?, do: ReqLLM.Test.Env.fixtures_mode() == :record
-
-  defp debug?, do: System.get_env("REQ_LLM_DEBUG") in ["1", "true"]
 
   defp is_real_time_streaming?(%Req.Request{} = request) do
     request.private[:real_time_stream] != nil
@@ -227,13 +236,13 @@ defmodule ReqLLM.Step.Fixture.Backend do
   # Record branch - Use VCR/Transcript format (non-streaming only)
   # ---------------------------------------------------------------------------
   defp save_fixture(path, encode_info, %Req.Request{} = req, %Req.Response{} = resp) do
-    debug?() && IO.puts("[Fixture] Saving to #{Path.relative_to_cwd(path)}")
+    dbug(fn -> "[Fixture] Saving to #{Path.relative_to_cwd(path)}" end, component: :fixtures)
     Logger.debug("Fixture saving: path=#{Path.relative_to_cwd(path)}")
 
     model = req.private[:req_llm_model]
     model_spec = "#{model.provider}:#{model.model}"
 
-    debug?() && IO.puts("[Fixture] Model: #{model_spec}")
+    dbug(fn -> "[Fixture] Model: #{model_spec}" end, component: :fixtures)
     Logger.debug("Fixture model_spec: #{model_spec}")
 
     if streaming_response?(resp) and req.private[:real_time_stream] == nil do
@@ -272,13 +281,21 @@ defmodule ReqLLM.Step.Fixture.Backend do
            body: body
          ) do
       :ok ->
-        debug?() &&
-          IO.puts("[Fixture] Saved successfully (non-streaming) → #{Path.relative_to_cwd(path)}")
+        dbug(
+          fn ->
+            "[Fixture] Saved successfully (non-streaming) → #{Path.relative_to_cwd(path)}"
+          end,
+          component: :fixtures
+        )
 
         Logger.debug("Fixture saved successfully → #{Path.relative_to_cwd(path)}")
 
       {:error, reason} ->
-        debug?() && IO.puts("[Fixture] ERROR saving (non-streaming): #{inspect(reason)}")
+        dbug(
+          fn -> "[Fixture] ERROR saving (non-streaming): #{inspect(reason)}" end,
+          component: :fixtures
+        )
+
         Logger.error("Fixture save failed: #{inspect(reason)}")
     end
   end
@@ -334,13 +351,15 @@ defmodule ReqLLM.Step.Fixture.Backend do
              collector: collector
            ) do
         :ok ->
-          debug?() &&
-            IO.puts("[Fixture] Saved successfully (streaming) → #{Path.relative_to_cwd(path)}")
+          dbug(
+            fn -> "[Fixture] Saved successfully (streaming) → #{Path.relative_to_cwd(path)}" end,
+            component: :fixtures
+          )
 
           Logger.debug("Saved Transcript fixture (chunks) → #{Path.relative_to_cwd(path)}")
 
         {:error, reason} ->
-          debug?() && IO.puts("[Fixture] ERROR saving: #{inspect(reason)}")
+          dbug(fn -> "[Fixture] ERROR saving: #{inspect(reason)}" end, component: :fixtures)
           Logger.error("Fixture save failed: #{inspect(reason)}")
       end
     end

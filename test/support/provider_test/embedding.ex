@@ -26,6 +26,7 @@ defmodule ReqLLM.ProviderTest.Embedding do
       use ExUnit.Case, async: false
 
       import ExUnit.Case
+      import ReqLLM.Debug, only: [dbug: 2]
       import ReqLLM.Test.Helpers
 
       alias ReqLLM.Test.ModelMatrix
@@ -33,8 +34,6 @@ defmodule ReqLLM.ProviderTest.Embedding do
       @moduletag :coverage
       @moduletag category: :embedding
       @moduletag provider: provider
-
-      defp debug?, do: System.get_env("REQ_LLM_DEBUG") in ["1", "true"]
 
       @provider provider
       @models ModelMatrix.models_for_provider(provider, operation: :embedding)
@@ -45,9 +44,10 @@ defmodule ReqLLM.ProviderTest.Embedding do
         describe "#{model_spec}" do
           @tag category: :embedding
           test "basic embedding generation" do
-            if debug?() do
-              IO.puts("\n[Embedding] model_spec=#{@model_spec}, test=basic_embed")
-            end
+            dbug(
+              fn -> "\n[Embedding] model_spec=#{@model_spec}, test=basic_embed" end,
+              component: :test
+            )
 
             result =
               ReqLLM.embed(
@@ -69,9 +69,10 @@ defmodule ReqLLM.ProviderTest.Embedding do
 
           @tag category: :embedding
           test "batch embedding generation" do
-            if debug?() do
-              IO.puts("\n[Embedding] model_spec=#{@model_spec}, test=batch_embed")
-            end
+            dbug(
+              fn -> "\n[Embedding] model_spec=#{@model_spec}, test=batch_embed" end,
+              component: :test
+            )
 
             texts = ["Hello world", "How are you?", "Testing embeddings"]
 

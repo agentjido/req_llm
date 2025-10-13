@@ -32,6 +32,8 @@ defmodule ReqLLM.Step.Error do
 
   """
 
+  require ReqLLM.Debug, as: Debug
+
   @type api_error :: %ReqLLM.Error.API.Request{}
 
   @doc """
@@ -90,13 +92,12 @@ defmodule ReqLLM.Step.Error do
         Exception.message(exception)
       end
 
-    if System.get_env("REQ_LLM_DEBUG") in ["1", "true"] do
-      require Logger
-
-      Logger.debug(
+    Debug.dbug(
+      fn ->
         "OpenAI error response (#{exception.status}): #{inspect(exception.response_body)}"
-      )
-    end
+      end,
+      component: :error
+    )
 
     ReqLLM.Error.API.Request.exception(
       reason: reason,
