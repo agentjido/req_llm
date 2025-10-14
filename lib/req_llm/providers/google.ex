@@ -292,10 +292,15 @@ defmodule ReqLLM.Providers.Google do
 
   defp normalize_google_usage(usage_metadata) do
     input = Map.get(usage_metadata, "promptTokenCount", 0)
-    output = Map.get(usage_metadata, "candidatesTokenCount", 0)
     total = Map.get(usage_metadata, "totalTokenCount", 0)
     cached = Map.get(usage_metadata, "cachedContentTokenCount", 0)
     reasoning = Map.get(usage_metadata, "thoughtsTokenCount", 0)
+
+    output =
+      case Map.get(usage_metadata, "candidatesTokenCount") do
+        nil -> max(0, total - input - reasoning)
+        count -> count
+      end
 
     %{
       input_tokens: input,
@@ -494,9 +499,13 @@ defmodule ReqLLM.Providers.Google do
 
     compiled_schema =
       case request.options do
-        opts when is_map(opts) -> Map.fetch!(opts, :compiled_schema)
-        opts when is_list(opts) -> Keyword.fetch!(opts, :compiled_schema)
+        opts when is_map(opts) -> Map.get(opts, :compiled_schema)
+        opts when is_list(opts) -> Keyword.get(opts, :compiled_schema)
       end
+
+    if !compiled_schema do
+      raise ArgumentError, "Missing :compiled_schema in request options for :object operation"
+    end
 
     model_name = request.options[:model]
 
@@ -895,21 +904,27 @@ defmodule ReqLLM.Providers.Google do
 
   defp build_request_body(model, context, opts) do
     operation = Keyword.get(opts, :operation, :chat)
+    compiled_schema = Keyword.get(opts, :compiled_schema)
+
+    base_options =
+      [
+        model: model.model,
+        context: context,
+        stream: true,
+        operation: operation
+      ]
+      |> then(fn opts ->
+        if compiled_schema, do: Keyword.put(opts, :compiled_schema, compiled_schema), else: opts
+      end)
+
+    all_options = Keyword.merge(base_options, Keyword.delete(opts, :finch_name))
 
     temp_request = %Req.Request{
       method: :post,
       url: URI.parse("https://example.com/temp"),
       headers: %{},
       body: {:json, %{}},
-      options:
-        Map.new(
-          [
-            model: model.model,
-            context: context,
-            stream: true,
-            operation: operation
-          ] ++ Keyword.delete(opts, :finch_name)
-        )
+      options: Map.new(all_options)
     }
 
     encoded_request = encode_body(temp_request)

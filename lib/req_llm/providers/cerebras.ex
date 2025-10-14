@@ -47,11 +47,38 @@ defmodule ReqLLM.Providers.Cerebras do
 
     enhanced_body =
       body
+      |> translate_tool_choice_format()
       |> add_strict_to_tools()
       |> normalize_tool_choice()
+      |> normalize_assistant_content()
 
     encoded_body = Jason.encode!(enhanced_body)
     Map.put(request, :body, encoded_body)
+  end
+
+  defp translate_tool_choice_format(body) do
+    {tool_choice, body_key} =
+      cond do
+        Map.has_key?(body, :tool_choice) -> {Map.get(body, :tool_choice), :tool_choice}
+        Map.has_key?(body, "tool_choice") -> {Map.get(body, "tool_choice"), "tool_choice"}
+        true -> {nil, nil}
+      end
+
+    type = tool_choice && (Map.get(tool_choice, :type) || Map.get(tool_choice, "type"))
+    name = tool_choice && (Map.get(tool_choice, :name) || Map.get(tool_choice, "name"))
+
+    if type == "tool" && name do
+      replacement =
+        if is_map_key(tool_choice, :type) do
+          %{type: "function", function: %{name: name}}
+        else
+          %{"type" => "function", "function" => %{"name" => name}}
+        end
+
+      Map.put(body, body_key, replacement)
+    else
+      body
+    end
   end
 
   defp add_strict_to_tools(%{"tools" => tools, "model" => model} = body) when is_list(tools) do
@@ -105,4 +132,21 @@ defmodule ReqLLM.Providers.Cerebras do
   end
 
   defp normalize_tool_choice(body), do: body
+
+  defp normalize_assistant_content(%{"messages" => messages} = body) do
+    normalized_messages =
+      Enum.map(messages, fn message ->
+        case message do
+          %{"role" => "assistant", "content" => []} ->
+            Map.put(message, "content", "")
+
+          _ ->
+            message
+        end
+      end)
+
+    Map.put(body, "messages", normalized_messages)
+  end
+
+  defp normalize_assistant_content(body), do: body
 end

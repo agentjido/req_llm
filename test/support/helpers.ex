@@ -399,9 +399,7 @@ defmodule ReqLLM.Test.Helpers do
     assert is_binary(text)
     assert is_binary(thinking)
 
-    has_tool_calls =
-      message.content
-      |> Enum.any?(fn part -> part.type == :tool_call end)
+    has_tool_calls = is_list(message.tool_calls) and not Enum.empty?(message.tool_calls)
 
     is_incomplete = response.finish_reason == :length
 
@@ -448,7 +446,7 @@ defmodule ReqLLM.Test.Helpers do
   def assert_has_tool_call(response) do
     tool_calls = response.message.tool_calls || []
 
-    assert length(tool_calls) > 0,
+    assert not Enum.empty?(tool_calls),
            "Expected at least one tool_call in message.tool_calls, got: #{inspect(tool_calls)}"
 
     Enum.each(tool_calls, fn tool_call ->

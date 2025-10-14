@@ -80,9 +80,9 @@ defmodule ReqLLM.ContextConversationalTest do
     end
   end
 
-  describe "assistant_tool_call/3" do
+  describe "assistant with tool_calls option" do
     test "creates assistant message with single tool call" do
-      message = Context.assistant_tool_call("get_weather", %{location: "SF"})
+      message = Context.assistant("", tool_calls: [{"get_weather", %{location: "SF"}}])
 
       assert %Message{role: :assistant} = message
       assert [tool_call] = message.tool_calls
@@ -92,23 +92,26 @@ defmodule ReqLLM.ContextConversationalTest do
     end
 
     test "accepts custom ID and metadata" do
-      opts = [id: "custom_id", meta: %{source: "test"}]
-      message = Context.assistant_tool_call("get_weather", %{location: "NYC"}, opts)
+      message =
+        Context.assistant("",
+          tool_calls: [{"get_weather", %{location: "NYC"}, id: "custom_id"}],
+          metadata: %{source: "test"}
+        )
 
       assert message.metadata == %{source: "test"}
       assert [tool_call] = message.tool_calls
       assert tool_call.id == "custom_id"
     end
-  end
 
-  describe "assistant_tool_calls/2" do
     test "creates assistant message with multiple tool calls" do
-      calls = [
-        %{id: "call_1", name: "get_weather", input: %{location: "SF"}},
-        %{id: "call_2", name: "get_time", input: %{timezone: "UTC"}}
-      ]
-
-      message = Context.assistant_tool_calls(calls, %{batch: true})
+      message =
+        Context.assistant("",
+          tool_calls: [
+            {"get_weather", %{location: "SF"}, id: "call_1"},
+            {"get_time", %{timezone: "UTC"}, id: "call_2"}
+          ],
+          metadata: %{batch: true}
+        )
 
       assert %Message{role: :assistant, metadata: %{batch: true}} = message
       assert length(message.tool_calls) == 2

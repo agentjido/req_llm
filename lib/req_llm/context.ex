@@ -176,48 +176,139 @@ defmodule ReqLLM.Context do
 
   # Role helpers
 
-  @doc "Shortcut for a user message; accepts a string or content parts list."
-  @spec user([ContentPart.t()] | String.t(), map()) :: Message.t()
-  def user(content, meta \\ %{})
-  def user(content, meta) when is_binary(content), do: text(:user, content, meta)
+  @doc """
+  Create a user message with optional metadata.
 
-  def user(content, meta) when is_list(content) do
+  Accepts a string or content parts list. Second argument can be a map (legacy)
+  or keyword list with options.
+
+  ## Options
+
+    * `:metadata` - Map of metadata to attach to the message (default: %{})
+
+  ## Examples
+
+      user("Hello")
+      user("Hello", %{source: "api"})
+      user("Hello", metadata: %{source: "api"})
+      user([ContentPart.text("Hello")], metadata: %{})
+
+  """
+  @spec user([ContentPart.t()] | String.t(), map() | keyword()) :: Message.t()
+  def user(content, meta_or_opts \\ %{})
+
+  def user(content, meta) when is_binary(content) and is_map(meta), do: text(:user, content, meta)
+
+  def user(content, opts) when is_binary(content) and is_list(opts) do
+    meta = Keyword.get(opts, :metadata, %{})
+    text(:user, content, meta)
+  end
+
+  def user(content, meta) when is_list(content) and is_map(meta) do
     %Message{role: :user, content: content, metadata: meta}
   end
 
-  @doc "Shortcut for an assistant message; accepts a string or content parts list."
-  @spec assistant([ContentPart.t()] | String.t(), map()) :: Message.t()
-  def assistant(content, meta \\ %{})
-  def assistant(content, meta) when is_binary(content), do: text(:assistant, content, meta)
+  def user(content, opts) when is_list(content) and is_list(opts) do
+    meta = Keyword.get(opts, :metadata, %{})
+    %Message{role: :user, content: content, metadata: meta}
+  end
 
-  def assistant(content, meta) when is_list(content) do
+  @doc """
+  Create an assistant message with optional tool calls and metadata.
+
+  Accepts a string or content parts list. Second argument can be a map (legacy)
+  or keyword list with options including tool_calls.
+
+  ## Options
+
+    * `:tool_calls` - List of tool calls (ToolCall structs, tuples, or maps)
+    * `:metadata` - Map of metadata to attach to the message (default: %{})
+
+  ## Examples
+
+      assistant("Hello")
+      assistant("", tool_calls: [ToolCall.new("id", "get_weather", ~s({"location":"SF"}))])
+      assistant("Let me check", tool_calls: [{"get_weather", %{location: "SF"}}])
+      assistant([ContentPart.text("Hi")], metadata: %{})
+
+  """
+  @spec assistant([ContentPart.t()] | String.t(), map() | keyword()) :: Message.t()
+  def assistant(content \\ "", meta_or_opts \\ %{})
+
+  def assistant(content, meta) when is_binary(content) and is_map(meta),
+    do: text(:assistant, content, meta)
+
+  def assistant(content, opts) when is_binary(content) and is_list(opts) do
+    meta = Keyword.get(opts, :metadata, %{})
+    tool_calls = opts |> Keyword.get(:tool_calls) |> normalize_tool_calls()
+    parts = to_parts(content)
+
+    %Message{
+      role: :assistant,
+      content: parts,
+      metadata: meta,
+      tool_calls: tool_calls
+    }
+  end
+
+  def assistant(content, meta) when is_list(content) and is_map(meta) do
     %Message{role: :assistant, content: content, metadata: meta}
   end
 
-  @doc "Shortcut for a system message; accepts a string or content parts list."
-  @spec system([ContentPart.t()] | String.t(), map()) :: Message.t()
-  def system(content, meta \\ %{})
-  def system(content, meta) when is_binary(content), do: text(:system, content, meta)
-
-  def system(content, meta) when is_list(content) do
-    %Message{role: :system, content: content, metadata: meta}
-  end
-
-  @doc "Create an assistant message with tool calls."
-  @spec assistant_with_tools([ToolCall.t()], String.t() | nil) :: Message.t()
-  def assistant_with_tools(tool_calls, text \\ nil) when is_list(tool_calls) do
-    content =
-      if is_binary(text) and String.trim(text) != "" do
-        [ContentPart.text(text)]
-      else
-        []
-      end
+  def assistant(content, opts) when is_list(content) and is_list(opts) do
+    meta = Keyword.get(opts, :metadata, %{})
+    tool_calls = opts |> Keyword.get(:tool_calls) |> normalize_tool_calls()
 
     %Message{
       role: :assistant,
       content: content,
+      metadata: meta,
       tool_calls: tool_calls
     }
+  end
+
+  @doc """
+  Create a system message with optional metadata.
+
+  Accepts a string or content parts list. Second argument can be a map (legacy)
+  or keyword list with options.
+
+  ## Options
+
+    * `:metadata` - Map of metadata to attach to the message (default: %{})
+
+  ## Examples
+
+      system("You are helpful")
+      system("You are helpful", %{version: 1})
+      system("You are helpful", metadata: %{version: 1})
+
+  """
+  @spec system([ContentPart.t()] | String.t(), map() | keyword()) :: Message.t()
+  def system(content, meta_or_opts \\ %{})
+
+  def system(content, meta) when is_binary(content) and is_map(meta),
+    do: text(:system, content, meta)
+
+  def system(content, opts) when is_binary(content) and is_list(opts) do
+    meta = Keyword.get(opts, :metadata, %{})
+    text(:system, content, meta)
+  end
+
+  def system(content, meta) when is_list(content) and is_map(meta) do
+    %Message{role: :system, content: content, metadata: meta}
+  end
+
+  def system(content, opts) when is_list(content) and is_list(opts) do
+    meta = Keyword.get(opts, :metadata, %{})
+    %Message{role: :system, content: content, metadata: meta}
+  end
+
+  @deprecated "Use assistant(content, tool_calls: [...]) instead"
+  @doc "Create an assistant message with tool calls."
+  @spec assistant_with_tools([ToolCall.t()], String.t() | nil) :: Message.t()
+  def assistant_with_tools(tool_calls, text \\ nil) when is_list(tool_calls) do
+    assistant(text || "", tool_calls: tool_calls)
   end
 
   @doc "Create a tool result message with tool_call_id and content."
@@ -241,38 +332,22 @@ defmodule ReqLLM.Context do
     }
   end
 
+  @deprecated "Use assistant(\"\", tool_calls: [{name, input}]) instead"
   @doc "Build an assistant message with a tool call."
   @spec assistant_tool_call(String.t(), term(), keyword()) :: Message.t()
   def assistant_tool_call(name, input, opts \\ []) do
-    id = opts[:id] || generate_id()
+    id = opts[:id]
     meta = Keyword.get(opts, :meta, %{})
-    input_json = if is_binary(input), do: input, else: Jason.encode!(input)
-    tool_call = ToolCall.new(id, name, input_json)
-
-    %Message{
-      role: :assistant,
-      content: [],
-      tool_calls: [tool_call],
-      metadata: meta
-    }
+    assistant("", tool_calls: [{name, input, id: id}], metadata: meta)
   end
 
+  @deprecated "Use assistant(\"\", tool_calls: [...]) instead"
   @doc "Build an assistant message with multiple tool calls."
   @spec assistant_tool_calls([%{id: String.t(), name: String.t(), input: term()}], map()) ::
           Message.t()
   def assistant_tool_calls(calls, meta \\ %{}) do
-    tool_calls =
-      Enum.map(calls, fn call ->
-        input_json = if is_binary(call.input), do: call.input, else: Jason.encode!(call.input)
-        ToolCall.new(call.id, call.name, input_json)
-      end)
-
-    %Message{
-      role: :assistant,
-      content: [],
-      tool_calls: tool_calls,
-      metadata: meta
-    }
+    tool_calls = Enum.map(calls, fn call -> {call.name, call.input, id: call.id} end)
+    assistant("", tool_calls: tool_calls, metadata: meta)
   end
 
   @doc "Build a tool result message."
@@ -332,7 +407,10 @@ defmodule ReqLLM.Context do
   defp extract_tool_call_info(%ReqLLM.ToolCall{id: id, function: %{name: name}}), do: {name, id}
   defp extract_tool_call_info(%{name: name, id: id}), do: {name, id}
 
-  defp find_and_execute_tool(%ReqLLM.ToolCall{function: %{name: name, arguments: args_json}}, available_tools) do
+  defp find_and_execute_tool(
+         %ReqLLM.ToolCall{function: %{name: name, arguments: args_json}},
+         available_tools
+       ) do
     args = Jason.decode!(args_json)
     execute_tool_by_name(name, args, available_tools)
   end
@@ -537,6 +615,63 @@ defmodule ReqLLM.Context do
   defp generate_id do
     Uniq.UUID.uuid7()
   end
+
+  defp to_parts(s) when is_binary(s) do
+    if String.trim(s) == "" do
+      []
+    else
+      [ContentPart.text(s)]
+    end
+  end
+
+  defp normalize_tool_calls(nil), do: nil
+  defp normalize_tool_calls([]), do: nil
+
+  defp normalize_tool_calls(%ToolCall{} = tc), do: [tc]
+
+  defp normalize_tool_calls(list) when is_list(list) do
+    Enum.map(list, &normalize_tool_call/1)
+  end
+
+  defp normalize_tool_calls(other), do: [normalize_tool_call(other)]
+
+  defp normalize_tool_call(%ToolCall{} = tc), do: tc
+
+  defp normalize_tool_call({name, input}) when is_binary(name) do
+    ToolCall.new(generate_id(), name, json(input))
+  end
+
+  defp normalize_tool_call({name, input, opts}) when is_binary(name) and is_list(opts) do
+    id = opts[:id] || generate_id()
+    ToolCall.new(id, name, json(input))
+  end
+
+  defp normalize_tool_call(%{name: name, arguments: input} = m) do
+    id = Map.get(m, :id, generate_id())
+    ToolCall.new(id, name, json(input))
+  end
+
+  defp normalize_tool_call(%{name: name, input: input} = m) do
+    id = Map.get(m, :id, generate_id())
+    ToolCall.new(id, name, json(input))
+  end
+
+  defp normalize_tool_call(%{"name" => name, "arguments" => input} = m) do
+    id = Map.get(m, "id") || generate_id()
+    ToolCall.new(id, name, json(input))
+  end
+
+  defp normalize_tool_call(%{"name" => name, "input" => input} = m) do
+    id = Map.get(m, "id") || generate_id()
+    ToolCall.new(id, name, json(input))
+  end
+
+  defp normalize_tool_call(other) do
+    raise ArgumentError, "invalid tool_call: #{inspect(other)}"
+  end
+
+  defp json(v) when is_binary(v), do: v
+  defp json(v), do: Jason.encode!(v)
 
   defp to_context(%__MODULE__{} = context, _convert_loose?), do: {:ok, context}
 

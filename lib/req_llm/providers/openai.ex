@@ -118,6 +118,15 @@ defmodule ReqLLM.Providers.OpenAI do
         type: {:or, [:boolean, nil]},
         default: nil,
         doc: "Override parallel_tool_calls setting. Required false for json_schema mode."
+      ],
+      previous_response_id: [
+        type: :string,
+        doc: "Previous response ID for Responses API tool resume flow"
+      ],
+      tool_outputs: [
+        type: {:list, :any},
+        doc:
+          "Tool execution results for Responses API tool resume flow (list of %{call_id, output})"
       ]
     ]
 

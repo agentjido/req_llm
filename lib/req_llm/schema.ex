@@ -460,10 +460,13 @@ defmodule ReqLLM.Schema do
   """
   @spec to_google_format(ReqLLM.Tool.t()) :: map()
   def to_google_format(%ReqLLM.Tool{} = tool) do
+    json_schema = to_json(tool.parameter_schema)
+    parameters = Map.delete(json_schema, "additionalProperties")
+
     %{
       "name" => tool.name,
       "description" => tool.description,
-      "parameters" => to_json(tool.parameter_schema)
+      "parameters" => parameters
     }
   end
 

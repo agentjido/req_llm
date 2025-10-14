@@ -121,7 +121,7 @@ defmodule ReqLLM.Providers.Anthropic.Context do
   end
 
   defp encode_content_part(%ReqLLM.Message.ContentPart{type: :text, text: ""}), do: nil
-  
+
   defp encode_content_part(%ReqLLM.Message.ContentPart{type: :text, text: text}) do
     %{type: "text", text: text}
   end
