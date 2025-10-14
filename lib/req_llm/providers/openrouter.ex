@@ -135,13 +135,16 @@ defmodule ReqLLM.Providers.OpenRouter do
         _tokens -> opts_with_tool
       end
 
+    # Preserve the :object operation for response decoding
+    opts_with_operation = Keyword.put(opts_with_tokens, :operation, :object)
+
     # Use the default chat preparation with structured output tools
     ReqLLM.Provider.Defaults.prepare_request(
       __MODULE__,
       :chat,
       model_spec,
       prompt,
-      opts_with_tokens
+      opts_with_operation
     )
   end
 
@@ -247,6 +250,7 @@ defmodule ReqLLM.Providers.OpenRouter do
 
     enhanced_body =
       body
+      |> translate_tool_choice_format()
       |> maybe_put(:models, request.options[:openrouter_models])
       |> maybe_put(:route, request.options[:openrouter_route])
       |> maybe_put(:provider, request.options[:openrouter_provider])
@@ -290,6 +294,31 @@ defmodule ReqLLM.Providers.OpenRouter do
     # Automatically include usage data when streaming for better user experience
     if request_options[:stream] do
       maybe_put(body, :stream_options, %{include_usage: true})
+    else
+      body
+    end
+  end
+
+  defp translate_tool_choice_format(body) do
+    {tool_choice, body_key} =
+      cond do
+        Map.has_key?(body, :tool_choice) -> {Map.get(body, :tool_choice), :tool_choice}
+        Map.has_key?(body, "tool_choice") -> {Map.get(body, "tool_choice"), "tool_choice"}
+        true -> {nil, nil}
+      end
+
+    type = tool_choice && (Map.get(tool_choice, :type) || Map.get(tool_choice, "type"))
+    name = tool_choice && (Map.get(tool_choice, :name) || Map.get(tool_choice, "name"))
+
+    if type == "tool" && name do
+      replacement =
+        if is_map_key(tool_choice, :type) do
+          %{type: "function", function: %{name: name}}
+        else
+          %{"type" => "function", "function" => %{"name" => name}}
+        end
+
+      Map.put(body, body_key, replacement)
     else
       body
     end

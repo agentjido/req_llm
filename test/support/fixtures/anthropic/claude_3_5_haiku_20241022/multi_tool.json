@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtMy01LWhhaWt1LTIwMjQxMDIyIiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0X3NjaGVtYSI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifSwibmFtZSI6ImdldF93ZWF0aGVyIn0seyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwiaW5wdXRfc2NoZW1hIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJ0ZWxsX2pva2UifSx7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJpbnB1dF9zY2hlbWEiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifSwibmFtZSI6ImdldF90aW1lIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtMy01LWhhaWt1LTIwMjQxMDIyIiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0X3NjaGVtYSI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoiZ2V0X3dlYXRoZXIifSx7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJpbnB1dF9zY2hlbWEiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoidGVsbF9qb2tlIn0seyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwiaW5wdXRfc2NoZW1hIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJnZXRfdGltZSJ9XX0="
     },
     "canonical_json": {
       "max_tokens": 819,
@@ -18,6 +18,7 @@
         {
           "description": "Get current weather information for a location",
           "input_schema": {
+            "additionalProperties": false,
             "properties": {
               "location": {
                 "type": "string"
@@ -40,6 +41,7 @@
         {
           "description": "Tell a funny joke",
           "input_schema": {
+            "additionalProperties": false,
             "properties": {
               "topic": {
                 "description": "Topic for the joke",
@@ -89,7 +91,7 @@
           "type": "text"
         },
         {
-          "id": "toolu_014TSWHxNJnjSY8a6S9ETbAE",
+          "id": "toolu_01JoZwsFKrM9YLiqhGq3EcAf",
           "input": {
             "location": "Paris, France",
             "unit": "celsius"
@@ -98,7 +100,7 @@
           "type": "tool_use"
         }
       ],
-      "id": "msg_018wJf5PULocQRvBaf6pD7gg",
+      "id": "msg_0118fyL6PcQC1BpkMp61ZVga",
       "model": "claude-3-5-haiku-20241022",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -111,7 +113,7 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 449,
+        "input_tokens": 463,
         "output_tokens": 86,
         "service_tier": "standard"
       }
@@ -127,7 +129,7 @@
         "100000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-07T13:52:39Z"
+        "2025-10-14T19:38:51Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "20000"
@@ -136,7 +138,7 @@
         "20000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-07T13:52:41Z"
+        "2025-10-14T19:38:53Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -145,7 +147,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-07T13:52:39Z"
+        "2025-10-14T19:38:51Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "120000"
@@ -154,13 +156,13 @@
         "120000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-07T13:52:39Z"
+        "2025-10-14T19:38:51Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98ade154ef071855-ORD"
+        "98e98a1639c9870e-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -169,10 +171,10 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:52:40 GMT"
+        "Tue, 14 Oct 2025 19:38:53 GMT"
       ],
       "request-id": [
-        "req_011CTswz77eoj8tqBS59Cmit"
+        "req_011CU7f3iNcCgMQ44ZEofEJ1"
       ],
       "server": [
         "cloudflare"
@@ -187,7 +189,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "1562"
+        "1864"
       ],
       "x-robots-tag": [
         "none"

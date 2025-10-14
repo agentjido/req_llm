@@ -69,24 +69,24 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "{\"age\":30,\"name\":\"John Doe\",\"occupation\":\"Software Engineer\"}",
-            "reasoning_content": "First, the user input is: \"Generate a software engineer profile\". But I have to respond based on the provided schema. The schema defines an object with properties: \"name\", \"age\", and \"occupation\". It's required to include \"name\" and \"age\", and \"occupation\" is optional but fits here.\n\nThe schema is:\n{\n  \"additionalProperties\": false,\n  \"properties\": {\n    \"age\": {\"description\": \"Person's age in years\", \"minimum\": 1, \"type\": \"integer\"},\n    \"name\": {\"description\": \"Person's full name\", \"type\": \"string\"},\n    \"occupation\": {\"description\": \"Person's job or profession\", \"type\": \"string\"}\n  },\n  \"required\": [\"name\", \"age\"],\n  \"type\": \"object\"\n}\n\nSo, my response must be a single JSON string that matches this schema exactly. That means I need to output something like: {\"name\": \"Some Name\", \"age\": Some Number, \"occupation\": \"Some Occupation\"}\n\nThe user is asking for a software engineer profile, so I should make up a profile that fits. For example:\n- Name: Something like \"John Doe\"\n- Age: A reasonable age for a software engineer, say 30\n- Occupation: \"Software Engineer\"\n\nI need to ensure that my output is a valid JSON object with only these properties. No extra stuff.\n\nThe instructions say: \"Your output MUST be a single JSON string. You MUST use <user_json_schema> to format the JSON string.\"\n\nSo, I should output: {\"name\": \"John Doe\", \"age\": 30, \"occupation\": \"Software Engineer\"}\n\nMake sure it's a string, but in the context of this response, I just need to write it as a JSON object, and the system will handle it as a string.\n\nFinally, remember: \"Keep your response to user clear; please do not make your response verbose!\" So, just the JSON, nothing else.",
+            "content": "{\n  \"age\": 28,\n  \"name\": \"Alice Smith\",\n  \"occupation\": \"Software Engineer\"\n}",
+            "reasoning_content": "First, the user input is: \"Generate a software engineer profile\". But I have to respond based on the provided schema. The schema defines a JSON object with properties: \"name\", \"age\", and \"occupation\". It's required to include \"name\" and \"age\", and \"occupation\" is optional but fits here.\n\nThe schema is:\n\n{\n  \"additionalProperties\": false,\n  \"properties\": {\n    \"age\": {\"description\": \"Person's age in years\", \"minimum\": 1, \"type\": \"integer\"},\n    \"name\": {\"description\": \"Person's full name\", \"type\": \"string\"},\n    \"occupation\": {\"description\": \"Person's job or profession\", \"type\": \"string\"}\n  },\n  \"required\": [\"name\", \"age\"],\n  \"type\": \"object\"\n}\n\nSo, my response must be a single JSON string that matches this schema exactly. That means I need to output something like:\n\n{\n  \"name\": \"Some Name\",\n  \"age\": Some Number,\n  \"occupation\": \"Some Occupation\"\n}\n\nThe user asked for a \"software engineer profile\", so I should make up a profile that fits. For example:\n\n- Name: Something like \"John Doe\"\n\n- Age: A reasonable age for a software engineer, say 30\n\n- Occupation: \"Software Engineer\"\n\nI need to ensure that my output is a valid JSON string and adheres to the schema. No additional properties, and the types must match.\n\nThe system prompt says: \"Your output MUST be a single JSON string. You MUST use <user_json_schema> to format the JSON string.\"\n\nSo, I should output only the JSON object, nothing else.\n\nLet me think of appropriate values:\n\n- Name: \"Alice Smith\" (a full name)\n\n- Age: 28 (an integer greater than or equal to 1)\n\n- Occupation: \"Software Engineer\" (since that's what the user asked for)\n\nThat seems perfect.\n\nFinal output should be:\n\n{\n  \"name\": \"Alice Smith\",\n  \"age\": 28,\n  \"occupation\": \"Software Engineer\"\n}\n\nMake sure it's a string, but in the context, it means the response should be a JSON-formatted string. In practice, for this exercise, I'll just write it as a JSON object.\n\nIn the code, I need to output it as is.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1760458005,
-      "id": "8fb69e44-5aec-8c87-4c31-1bb727a098db_us-east-1",
+      "created": 1760471284,
+      "id": "f30b70ab-e6b7-4351-fa32-1e37e06e7921_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 15,
+        "completion_tokens": 25,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 404,
+          "reasoning_tokens": 477,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
@@ -97,7 +97,7 @@
           "image_tokens": 0,
           "text_tokens": 112
         },
-        "total_tokens": 531
+        "total_tokens": 614
       }
     },
     "headers": {
@@ -111,7 +111,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e85367be8e231c-ORD"
+        "98e99796687fa3d4-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -120,13 +120,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 16:06:51 GMT"
+        "Tue, 14 Oct 2025 19:48:10 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=psdqQzJyxcIw0ADzzTL5KD1V83H4vuewAJLXqpV4wCA-1760458011-1.0.1.1-Fhh2MHMgWo4wl24T1XRbM2F3q2.M7rpQnJJkoVA3XRuq4fwGxLxLunnFTHw9r2RE_VntqAIlDzX7vPzIbhmGmkMIwmhBI5T_YKxkcj.LrWs; path=/; expires=Tue, 14-Oct-25 16:36:51 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=2xXNzaCDP86kQrFzIY0maW5FYjs0WQv4YQT7Zoi1FIw-1760471290-1.0.1.1-fZYMS8Or9.fzVkmt2gtLgH8DM8TfEBcGCBbdmCuKigIyoNNiErTTQ9UrCKusTp4jmVyBOL8bAY6gT4y2hJhcJwKcguHZtfRCpA1x0R7xPD0; path=/; expires=Tue, 14-Oct-25 20:18:10 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -138,7 +138,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-92413db95121aa110d0977782e811467-e4ce5ef6005fcd2e-01"
+        "00-a2b07b5ed97bb3820146c45b75b5abeb-e25f5c150068ac78-01"
       ],
       "x-zero-data-retention": [
         "false"

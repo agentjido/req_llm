@@ -87,15 +87,15 @@
                   "arguments": "{\"age\":30,\"name\":\"John Doe\",\"occupation\":\"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "call_14971552",
+                "id": "call_25791366",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1760458005,
-      "id": "877218ba-c174-9cd3-0040-533579af31eb_us-east-1",
+      "created": 1760471273,
+      "id": "3c1e72d2-887a-d25b-3c29-cf6bec8883ae_us-east-1",
       "model": "grok-2-1212",
       "object": "chat.completion",
       "system_fingerprint": "fp_fced99f24f",
@@ -129,7 +129,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e853681bfc0012-ORD"
+        "98e997552d9261cf-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -138,13 +138,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 16:06:46 GMT"
+        "Tue, 14 Oct 2025 19:47:54 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=9pUl4lggOjc7wxQhi6LWWTz8Yvdfo5EM6eokXwqHokE-1760458006-1.0.1.1-AecyydFhqbK0rDcHntEhv7X7zzFiUSVCV4OmRwh2wZFK6YqIeF3ECEXUEerXJ9IOvVcVAOSPacg12e9xeFCDQk0cNWq2TuhbAs5FpZDjfYM; path=/; expires=Tue, 14-Oct-25 16:36:46 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=seP5vWAZaUxUhMPCHRw0Q38qwRCeLeS7swesla7ljrc-1760471274-1.0.1.1-Zb1vcSPllrcAAqrT71zE_5UM13YufUO1ZqhatUP3J8zQRk0Ni8JrW5bcrAHp0eyZln_PHOea6vQWqWQ46lhG2QFyKFmrmVdKJ96kse6YG9s; path=/; expires=Tue, 14-Oct-25 20:17:54 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -156,7 +156,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-23f05648004ace41e8c4a7e1fe4e6c28-6e9a5f3f00525eb3-01"
+        "00-51c9eed061b1b4d944c351484d355041-9bf0641f0068f520-01"
       ],
       "x-zero-data-retention": [
         "false"

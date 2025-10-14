@@ -39,7 +39,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "**The Dragonborn Chronicles: A Tale of Fire and Destiny**\n\n### **Prologue: The Last Egg**\n\nLong ago, when the world was young and magic flowed like rivers, the great dragons ruled the skies. They were wise, powerful, and feared by all. But as time passed, their numbers dwindled, hunted by greedy kings and sorcerers who sought their power. By the time the last dragon egg was laid, the world had nearly forgotten their existence.\n\nThe egg was",
+            "content": "**The Last Dragonborn and the Shattered Crown**\n\n### **Prologue: The Fall of the Dragon Lords**\n\nLong ago, when the world was young, dragons ruled the skies and men bowed before their might. The Dragon Lords, ancient and wise, maintained the balance between order and chaos. But pride and ambition festered in the hearts of men, and war came to the land of Eldros.\n\nThe last great battle was fought beneath the crimson skies of the Black Spire Mountains",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -47,14 +47,15 @@
           "native_finish_reason": "length"
         }
       ],
-      "created": 1759848190,
-      "id": "gen-1759848190-G13gAPBb9vItu4NQyxRq",
+      "created": 1760473382,
+      "id": "gen-1760473382-rQUuYE1tIefeMJNuWEUs",
       "model": "mistralai/mistral-small-3.2-24b-instruct",
       "object": "chat.completion",
-      "provider": "Mistral",
+      "provider": "DeepInfra",
       "usage": {
         "completion_tokens": 100,
         "prompt_tokens": 12,
+        "prompt_tokens_details": null,
         "total_tokens": 112
       }
     },
@@ -63,7 +64,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ae2b563d12f859-ORD"
+        "98e9cad2ff1f6215-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -72,7 +73,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 14:43:14 GMT"
+        "Tue, 14 Oct 2025 20:23:03 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

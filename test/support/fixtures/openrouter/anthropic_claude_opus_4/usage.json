@@ -40,7 +40,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! How are you doing today? Is there",
+            "content": "Hello! How can I help you today?",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -48,11 +48,11 @@
           "native_finish_reason": "length"
         }
       ],
-      "created": 1759845369,
-      "id": "gen-1759845369-Qp5bRQpsr6rn8s9bhPLT",
+      "created": 1760473598,
+      "id": "gen-1760473588-dd67SIbNdk1Rrdasv9zb",
       "model": "anthropic/claude-opus-4",
       "object": "chat.completion",
-      "provider": "Google",
+      "provider": "Anthropic",
       "usage": {
         "completion_tokens": 10,
         "prompt_tokens": 10,
@@ -64,7 +64,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade676eb4ce450-ORD"
+        "98e9cfd71cc410db-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -73,7 +73,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:56:11 GMT"
+        "Tue, 14 Oct 2025 20:26:38 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

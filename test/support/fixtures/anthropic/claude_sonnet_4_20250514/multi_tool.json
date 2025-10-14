@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMjgwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1zb25uZXQtNC0yMDI1MDUxNCIsInN0cmVhbSI6ZmFsc2UsInRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn0sInRvb2xzIjpbeyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJpbnB1dF9zY2hlbWEiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJnZXRfd2VhdGhlciJ9LHsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsImlucHV0X3NjaGVtYSI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoidGVsbF9qb2tlIn0seyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwiaW5wdXRfc2NoZW1hIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJnZXRfdGltZSJ9XX0="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMjgwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1zb25uZXQtNC0yMDI1MDUxNCIsInN0cmVhbSI6ZmFsc2UsInRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn0sInRvb2xzIjpbeyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJpbnB1dF9zY2hlbWEiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifSwibmFtZSI6ImdldF93ZWF0aGVyIn0seyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwiaW5wdXRfc2NoZW1hIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifSwibmFtZSI6InRlbGxfam9rZSJ9LHsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsImlucHV0X3NjaGVtYSI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoiZ2V0X3RpbWUifV19"
     },
     "canonical_json": {
       "max_tokens": 12800,
@@ -21,6 +21,7 @@
         {
           "description": "Get current weather information for a location",
           "input_schema": {
+            "additionalProperties": false,
             "properties": {
               "location": {
                 "type": "string"
@@ -43,6 +44,7 @@
         {
           "description": "Tell a funny joke",
           "input_schema": {
+            "additionalProperties": false,
             "properties": {
               "topic": {
                 "description": "Topic for the joke",
@@ -88,8 +90,8 @@
     "body": {
       "content": [
         {
-          "signature": "EsAFCkYICBgCKkCXvAOHzskvFkuO6kntArNH/Nf2AVflRzc7GEnwv3HxHf90kstNX47KjexJOwXY+xhzRCXS27BETHGzDmhcBUj8EgyFsaISJOIJUjxdw3waDL+grBUWyOI4A31PpSIw+66AipUpp4nav0r/19LWDfwzniHPludhMyYw0266gA9J58cTsa3oE6C59bbxpwB7KqcErn/9/E5a01XCYv4icGBvbxgf46ysh4ThkBH+f0pEtpu0rZOuJGSTbLVjZ+DqYRRpFWiICmXzc8QWHvHfLPfKu3ka27rBDAzW1rPYCOoiyLx82SseZAu8pBeoroo2lA86ILvGvkAh6BOSJ3NRYfOaAofOKcnHjIRvjPduRAsWzlkyYocjSNfXCDuqzDLsN3s7JanFPiONQoHBMfLUFLVIET7g6U1j/UxBsnSPOf8iuloSm4WDNmnTBomM52thlYFPY1h/6eF4yYvOg7QCY5x1/mD+neZK3QdvhLAP3S7HXy8Nno8qPav3CodNlZUgLQHubf/LuzlvNArUEiiXFliHGeqnwzL+1Q/mMbyRu4umIXAh5fm0FU7KQwgMmaLTF3TvDMNIS94onK53avHpSbExRgGWE7JIR4eEPg77CWlghZfUsDCgTbHD0hCjIQljVegSqdGGZvSBNkdU/JL3bhCqL4iEQpuD0CSyxqHFpbdtpW+queZfal/UDTx3dBuhO/K32P2J+cCofT/lzHuHyJtHcFkpl58aphDuBQAGJu2nEF4xbYF4t4aR96+ID4Safx7+K5GyosZ8W9LLnVKK0e5dFkVPlcBsUezzVji2LkCr9v7Rl7qIAFp8+WZwjCjyw8Hfi6BVBe66pdThkG2GNVRsS1VEGRjjuAmcd4PFC1xoUKfBsrnLd2a8hW1LYQQnNj+Zi8Si/6AN8tzo/aHGaK8VmFRRi84CDeQYAQ==",
-          "thinking": "The user is asking about the weather in Paris, France. I have the get_weather function available that can provide current weather information for a location. \n\nLooking at the function parameters:\n- location (required): \"Paris, France\" - this is provided by the user\n- unit (optional, enum: celsius/fahrenheit): This is not specified by the user, and the instructions say not to make up values for or ask about optional parameters, so I'll just use the required parameter.\n\nI have all the required parameters to make this function call.",
+          "signature": "EtIFCkYICBgCKkBPt2xoT/7emooS+zPHl/aPb40EqD05CkwaZRAh4FHTxOlnaSZMTdK2/zcYRuuj+tsdXsz7K71Duz+eur2s/T5DEgzlMgh3qxORTItEK4QaDEBpfQz1OsLtV5CoRCIwmnlbEsVZH8NtAKz+4Im+S9uMwexABrYZtlydsNsuCW7jobmoHb8QsHRC7/DFa9zJKrkEwWCqQSPrGVpnIeMtK1z67pLxGT+GeIEaIUAFYr+5hzcKt3jx8Z2m5SawHHJGm7A7ym/o7OZ9WY9LRQF9hXBGq2IXdVvyod7bpvPGZHQGC1AP9oO8Iyv8hOA8P3II27vtUXwVIYvZgpmm5PKSQ1pBA5Rtupehaw48IJk3hnYiz23K/2cXqpRjhn+6zoq0qZpggyeYgLAXTyhTx6+nGSJt3+7jNoWl71R75/f7UAweSBheAiWm8Z1Rh8d4L/XeD2vawCZgaQqthPJ2B5fnCyWv3PQytcNC686ftPh/LAYoKPvWesTxtGlwfZbnJdaweOB4hEzyCyu0/4fPyrYgWa2c459rnNcV28PK3ggqp7jtx9Zb60rre+emv800GjUEYb0oqRIMaJYfh0wVi2r/fkhU7qTHNkmV+4kX3Wkc2PeF/2WqnBfk7WctRQ9+hkWcyvpsoq/SrIk30HVjt1iqmWapLjfA2B5M7wb/biymovRzfUW6MWyDHrhJebxdoKU2iod4N0cdFWDMI93jV+kT7+ZhOuUDIwLZZBBQVlIpEge8bRqrZml9VnnlUqtV/atpEI9iY5iMc/VS06yDu/vtgkWQUH+tuqsk1K5vgHONU4nkKAjFPo3yKLss5eSRUN55TPw/bH16Nt67Cfl4G8jCxVp1EvDbzvoDYa73geDNHEkK0rN2dlAmLKt9SkDt8lBN+u4VVCnC+R8sIRBFojyEa9VtiAVTWZLFE+k7HUoCK9HhmQaTw8SLlE4g4YAYAQ==",
+          "thinking": "The user is asking about the weather in Paris, France. I have the get_weather function available that can provide current weather information for a location. \n\nLooking at the function parameters:\n- location (required): The user provided \"Paris, France\" which is a clear location\n- unit (optional): The user didn't specify whether they want celsius or fahrenheit, and since this is optional, I should not ask about it or make up a value. I'll let the function use its default.\n\nI have all the required parameters, so I can proceed with the function call.",
           "type": "thinking"
         },
         {
@@ -97,7 +99,7 @@
           "type": "text"
         },
         {
-          "id": "toolu_018ay7UEySRMyD7tpJiiXAfE",
+          "id": "toolu_01Qfymkdx63GbTUbLzsikCh3",
           "input": {
             "location": "Paris, France"
           },
@@ -105,7 +107,7 @@
           "type": "tool_use"
         }
       ],
-      "id": "msg_01AJopE5AT7B8iNQ4akqCbbZ",
+      "id": "msg_01Spxd59VnA1FodcByAJwUvW",
       "model": "claude-sonnet-4-20250514",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -118,8 +120,8 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 675,
-        "output_tokens": 193,
+        "input_tokens": 689,
+        "output_tokens": 198,
         "service_tier": "standard"
       }
     },
@@ -134,7 +136,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-07T13:52:44Z"
+        "2025-10-14T19:39:14Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -143,7 +145,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-07T13:52:46Z"
+        "2025-10-14T19:39:17Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -152,7 +154,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-07T13:52:42Z"
+        "2025-10-14T19:39:13Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -161,13 +163,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-07T13:52:44Z"
+        "2025-10-14T19:39:14Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98ade16bb9bd118f-ORD"
+        "98e98aa078df116b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -176,10 +178,10 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:52:46 GMT"
+        "Tue, 14 Oct 2025 19:39:17 GMT"
       ],
       "request-id": [
-        "req_011CTswzNjFu34M9MeVDkeVf"
+        "req_011CU7f5LyJEZdZv7Xbj7ftC"
       ],
       "server": [
         "cloudflare"
@@ -194,7 +196,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "3834"
+        "4229"
       ],
       "x-robots-tag": [
         "none"

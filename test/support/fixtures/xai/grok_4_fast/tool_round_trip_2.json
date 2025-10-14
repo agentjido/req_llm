@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjMwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzLiBBZnRlciB0aGUgdG9vbCByZXN1bHQgYXJyaXZlcywgcmVzcG9uZCB3aXRoICdzdW09PHZhbHVlPicuIiwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOltdLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF8yOTUwMzcxMiIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfMjk1MDM3MTIifV0sIm1vZGVsIjoiZ3Jvay00LWZhc3QiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjMwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzLiBBZnRlciB0aGUgdG9vbCByZXN1bHQgYXJyaXZlcywgcmVzcG9uZCB3aXRoICdzdW09PHZhbHVlPicuIiwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOltdLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF82NzU0MTUzNiIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfNjc1NDE1MzYifV0sIm1vZGVsIjoiZ3Jvay00LWZhc3QiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
       "max_completion_tokens": 3000,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_29503712",
+              "id": "call_67541536",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "call_29503712"
+          "tool_call_id": "call_67541536"
         }
       ],
       "model": "grok-4-fast",
@@ -64,8 +64,8 @@
           }
         }
       ],
-      "created": 1760391833,
-      "id": "0e59b4fd-f3cb-4d26-d25b-6492d6de98cf_us-east-1",
+      "created": 1760471277,
+      "id": "94a79b1f-236c-e008-f621-e147ce852e5a_us-east-1",
       "model": "grok-4-fast-reasoning",
       "object": "chat.completion",
       "system_fingerprint": "fp_9362061f30",
@@ -78,14 +78,14 @@
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
-        "prompt_tokens": 492,
+        "prompt_tokens": 622,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 447,
+          "cached_tokens": 577,
           "image_tokens": 0,
-          "text_tokens": 492
+          "text_tokens": 622
         },
-        "total_tokens": 517
+        "total_tokens": 647
       }
     },
     "headers": {
@@ -99,7 +99,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e203e16c1ff161-ORD"
+        "98e9976abee5253a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -108,13 +108,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 13 Oct 2025 21:43:54 GMT"
+        "Tue, 14 Oct 2025 19:47:57 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=iyTjGW5rKzQdDK7Ab2vo8_G4LuvB4dkeLvLJYgND37w-1760391834-1.0.1.1-hhgxPvNOMm5XYemuIxunuJ7xCx2QVACPi5wzCAJqd5c.aKYgF0hAajEyoaWlBHJ.AGZ5bQVnaxZ.GzHhEsOT4gUqwhpABqXvGue2NDQoFcA; path=/; expires=Mon, 13-Oct-25 22:13:54 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=tJ54D.zmNGaLnOWC3.1LEVmuSEhDGFYtW0ZB2P89y9k-1760471277-1.0.1.1-d_YK30oU4fzX7.KWsE_0yiWDm9Vgn1U1yS3V4bufEneIOWJgX_UcodzkicmKiN8d.L.dx4xyRFRV2BgBVFdVMtD9KOXSs1Z6QtFK2qCeq3k; path=/; expires=Tue, 14-Oct-25 20:17:57 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -126,7 +126,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-dd067295cf5e325efea6a94ee6084e15-706fd04f00308b00-01"
+        "00-eadf753bfbd39e28e361dbc35b89cc14-6e445ef000689d1d-01"
       ],
       "x-zero-data-retention": [
         "false"

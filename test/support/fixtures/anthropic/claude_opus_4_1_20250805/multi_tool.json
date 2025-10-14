@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo2NDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/Iiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiY2xhdWRlLW9wdXMtNC0xLTIwMjUwODA1Iiwic3RyZWFtIjpmYWxzZSwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifSwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0X3NjaGVtYSI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifSwibmFtZSI6ImdldF93ZWF0aGVyIn0seyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwiaW5wdXRfc2NoZW1hIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJ0ZWxsX2pva2UifSx7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJpbnB1dF9zY2hlbWEiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifSwibmFtZSI6ImdldF90aW1lIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjo2NDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/Iiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiY2xhdWRlLW9wdXMtNC0xLTIwMjUwODA1Iiwic3RyZWFtIjpmYWxzZSwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifSwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0X3NjaGVtYSI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoiZ2V0X3dlYXRoZXIifSx7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJpbnB1dF9zY2hlbWEiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoidGVsbF9qb2tlIn0seyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwiaW5wdXRfc2NoZW1hIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJnZXRfdGltZSJ9XX0="
     },
     "canonical_json": {
       "max_tokens": 6400,
@@ -21,6 +21,7 @@
         {
           "description": "Get current weather information for a location",
           "input_schema": {
+            "additionalProperties": false,
             "properties": {
               "location": {
                 "type": "string"
@@ -43,6 +44,7 @@
         {
           "description": "Tell a funny joke",
           "input_schema": {
+            "additionalProperties": false,
             "properties": {
               "topic": {
                 "description": "Topic for the joke",
@@ -88,8 +90,8 @@
     "body": {
       "content": [
         {
-          "signature": "EoIECkYICBgCKkAFvWJ4JujAwLfqw4ifutdRPq6Nee3d3MdhuawSBEymPEAK522vIO8RRB4aCm7M7KvFCCy0j30jf83SDBJArKV4Egy+7aw+E7wl0sNKaU4aDDqkxvcbb+wZNtA/ACIw88x7YFHiDilrAMo4Kh0s07RmPsMpe/arHprjcFDcytBczNUbx5WMkd+Xx+JF12rzKukCo/YsbByJOVHn6ADO/uLSRJoVq4LUU2yVsVBADrbJdSu3sQq02mQsR07Vcj9S841DPgv6MMbJWwMCHOQ6wvzXUhs2Qy//3qDuXt7Zy2fqAW/dAXqgKhpjNS6inFU8Dl82Aglab4Gb6upjLOm2be4Cc3Csq0JIDNewChBwVWi/Xht1B89Kl5IIkeb+Ga1zu0IA/dFS3IrREnPSoZAWGUNLOheXixNR7PJdk7dj1qawwb2YCi7+Hcx8tYqJZmXxbP5Zqlu9OnVw9WhOgrptlKK8nmRSSPNPngsr1VmohmYXKZ6Ya21uQk+CBsMn983T4oFvCleQXnIB0+JUtzeVSnDf+R8OFPylPTM4QMmnoC8pj+WrsQScIUeeHtZdtkdxh11KzOJVoQqYdRbaK7290+OM5XJX7H4pEhGxBeqUBnafFsTcH4khv1/8JlqB8uz1cbP5EHRlSgjRKUHriVlL9G+HbHN0Bv6eF6uDmhgB",
-          "thinking": "The user is asking for the weather in Paris, France. I have access to the get_weather function which requires a location parameter and has an optional unit parameter. The user has provided the location \"Paris, France\" so I have all the required information to make the function call. Since no unit preference was specified, I'll use the default.",
+          "signature": "EsUDCkYICBgCKkCyvQi4QMJBglfl76rUkC2X5QJB+4fC/PZQKP9WPTQ0X+g2+Ok2+KR5RfXGaybtrx5ztfn6iNeNii4c1sNEPHDGEgzYe/Bucf44cIZpRsIaDJTiIPdG19uvK7NUzCIwfPmdHQ0chQaKAt3KzM27Lxr4R2zcDztEews6WjrMC2jbApRQj8R9jufasO4uhlzYKqwCpd2FXbgt3fNlvv5KWIHakjLFV606ffB9Td3j+5t1QKLfoDJ0oQTXm6CZSM191UvCWYou/4EJNd7BkeZZg5yb1xqntqkdiILARS8Tellllzs6b9Qa64OiDi2nHZgImzMkTmERmZmrn/HYE85uf/9ytdEkP42CNxxkEakN4nxRQL2BWCskDdZsuK1vsqznoOyiMOw2Ldtg8/1TuhxVTeOJI49cehdpL6iVgPgginivv0IFaGeS9msirWUP+d9kqbhLDDQFh43d79KdExPm2VZBuW1JmEX2Bc13/OUEyJNXrQE/rmjrzqx+hu+n++/rx7PQDsw31+EviYcvPzNE0hUSme34jNDnQI0f19/J58WmVmonEVzmc6mpOWsMPdT8nfvbpKbQgzKK9dQd7St1GAE=",
+          "thinking": "The user is asking about the weather in Paris, France. I need to use the get_weather function to get this information. The required parameter is \"location\" which should be \"Paris, France\". The unit parameter is optional, so I won't specify it unless the user asks for a specific unit.",
           "type": "thinking"
         },
         {
@@ -97,7 +99,7 @@
           "type": "text"
         },
         {
-          "id": "toolu_01FcraCB2q85N7B5s4PLXQ4p",
+          "id": "toolu_01UBYRKanYfQ5tVZsZRiCJj5",
           "input": {
             "location": "Paris, France"
           },
@@ -105,7 +107,7 @@
           "type": "tool_use"
         }
       ],
-      "id": "msg_01JUkPUUWg6zLqpEjpqA3gSF",
+      "id": "msg_015noY1Suurty6x1XWQ7QTHq",
       "model": "claude-opus-4-1-20250805",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -118,8 +120,8 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 675,
-        "output_tokens": 148,
+        "input_tokens": 689,
+        "output_tokens": 140,
         "service_tier": "standard"
       }
     },
@@ -134,7 +136,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-07T13:54:25Z"
+        "2025-10-14T19:38:49Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -143,7 +145,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-07T13:54:28Z"
+        "2025-10-14T19:38:49Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -152,7 +154,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-07T13:54:24Z"
+        "2025-10-14T19:38:41Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -161,13 +163,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-07T13:54:25Z"
+        "2025-10-14T19:38:49Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98ade3e71fd85da7-ORD"
+        "98e989da7fdcdadf-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -176,10 +178,10 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:54:28 GMT"
+        "Tue, 14 Oct 2025 19:38:49 GMT"
       ],
       "request-id": [
-        "req_011CTsx7sQs9Sn4D8nb8KQvR"
+        "req_011CU7f31ZSKUcskPX3AkHxs"
       ],
       "server": [
         "cloudflare"
@@ -194,7 +196,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "4037"
+        "8008"
       ],
       "x-robots-tag": [
         "none"

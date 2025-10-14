@@ -677,7 +677,10 @@ defmodule ReqLLM.Providers.Anthropic do
       response
       |> ReqLLM.Response.tool_calls()
       |> Enum.find_value(fn
-        %{function: %{name: "structured_output", arguments: args}} ->
+        %{name: "structured_output", arguments: args} when is_map(args) ->
+          args
+
+        %{name: "structured_output", arguments: args} when is_binary(args) ->
           case Jason.decode(args) do
             {:ok, obj} -> obj
             _ -> nil

@@ -36,27 +36,27 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": "stop",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello there! 🌍✨ It's great to meet you. How can I assist you today? Whether you need help with coding, learning a new language, or just need a friendly chat, I'm here for you! What's",
+            "content": "Hello there! 🌍 It's great to meet you. How can I assist you today? 😊",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "length"
+          "native_finish_reason": "stop"
         }
       ],
-      "created": 1759848188,
-      "id": "gen-1759848188-FTYwO0lD0RK9NrpE7By7",
+      "created": 1760473381,
+      "id": "gen-1760473381-nI9tQu5eXmeZLy9HXHzc",
       "model": "mistralai/codestral-2508",
       "object": "chat.completion",
       "provider": "Mistral",
       "usage": {
-        "completion_tokens": 50,
+        "completion_tokens": 24,
         "prompt_tokens": 6,
-        "total_tokens": 56
+        "total_tokens": 30
       }
     },
     "headers": {
@@ -64,7 +64,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ae2b4b0e91eaf5-ORD"
+        "98e9caccaf58e254-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -73,7 +73,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 14:43:08 GMT"
+        "Tue, 14 Oct 2025 20:23:02 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
