@@ -283,7 +283,6 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
       case text_content do
         [] -> tool_blocks
         blocks when is_list(blocks) -> blocks ++ tool_blocks
-        text when is_binary(text) -> [%{"text" => text}] ++ tool_blocks
       end
 
     %{
