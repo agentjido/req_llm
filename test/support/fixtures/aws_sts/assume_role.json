@@ -1,0 +1,15 @@
+{
+  "request": {
+    "action": "AssumeRole",
+    "region": "us-east-1",
+    "secret_access_key": "[REDACTED]",
+    "access_key_id": "[REDACTED]",
+    "role_arn": "arn:aws:iam::020275857710:role/BedrockAssumeRole",
+    "role_session_name": "fixture-recording"
+  },
+  "response": {
+    "status": 200,
+    "body": "<AssumeRoleResponse xmlns=\"https://sts.amazonaws.com/doc/2011-06-15/\">\n  <AssumeRoleResult>\n    <AssumedRoleUser>\n      <AssumedRoleId>AROAREDACTED:session-name</AssumedRoleId>\n      <Arn>arn:aws:sts::020275857710:assumed-role/BedrockAssumeRole/fixture-recording</Arn>\n    </AssumedRoleUser>\n    <Credentials>\n      <AccessKeyId>ASIAREDACTEDREDACTED</AccessKeyId>\n      <SecretAccessKey>RedactedSecretAccessKey0123456789ABCDEF</SecretAccessKey>\n      <SessionToken>RedactedSessionTokenXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</SessionToken>\n      <Expiration>2025-10-14T18:33:24Z</Expiration>\n    </Credentials>\n  </AssumeRoleResult>\n  <ResponseMetadata>\n    <RequestId>81e86d54-d6a9-407f-bd61-7c0ddeb621c9</RequestId>\n  </ResponseMetadata>\n</AssumeRoleResponse>\n"
+  },
+  "captured_at": "2025-10-14T17:33:24.868037Z"
+}

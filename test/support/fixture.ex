@@ -187,6 +187,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
     end
   end
 
+  defp provider_module(:amazon_bedrock), do: ReqLLM.Providers.AmazonBedrock
   defp provider_module(:anthropic), do: ReqLLM.Providers.Anthropic
   defp provider_module(:cerebras), do: ReqLLM.Providers.Cerebras
   defp provider_module(:openai), do: ReqLLM.Providers.OpenAI
@@ -380,6 +381,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
     sensitive_keys = [
       "authorization",
       "x-api-key",
+      "x-amz-security-token",
       "anthropic-api-key",
       "openai-api-key",
       "x-auth-token",
