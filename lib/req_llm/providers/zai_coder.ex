@@ -40,6 +40,85 @@ defmodule ReqLLM.Providers.ZaiCoder do
   end
 
   @impl ReqLLM.Provider
+  def attach(request, model_input, user_opts) do
+    context = Map.get(request.options, :context)
+
+    default_timeout =
+      if context && Map.get(context, :__thinking_mode__, false) do
+        Application.get_env(:req_llm, :thinking_timeout, 300_000)
+      else
+        Application.get_env(:req_llm, :receive_timeout, 120_000)
+      end
+
+    timeout = Keyword.get(user_opts, :receive_timeout, default_timeout)
+
+    updated_request =
+      request
+      |> Map.update!(:options, fn opts ->
+        opts
+        |> Map.put(:receive_timeout, timeout)
+        |> Map.put(:pool_timeout, timeout)
+        |> Map.put(:connect_options, timeout: timeout)
+      end)
+
+    ReqLLM.Provider.Defaults.default_attach(__MODULE__, updated_request, model_input, user_opts)
+  end
+
+  @impl ReqLLM.Provider
+  def translate_options(_operation, _model, opts) do
+    opts
+    |> translate_tool_choice()
+  end
+
+  defp translate_tool_choice(opts) do
+    case Keyword.get(opts, :tool_choice) do
+      %{name: _name, type: _type} ->
+        Keyword.put(opts, :tool_choice, "auto")
+
+      %{type: "function", function: %{name: _name}} ->
+        Keyword.put(opts, :tool_choice, "auto")
+
+      _ ->
+        opts
+    end
+  end
+
+  @impl ReqLLM.Provider
+  def decode_response({req, %{status: 200} = resp}) do
+    model =
+      req.private[:req_llm_model] || %ReqLLM.Model{provider: :zai_coder, model: req.options[:model]}
+
+    body = ensure_parsed_body(resp.body)
+
+    {:ok, response} = ReqLLM.Provider.Defaults.decode_response_body_openai_format(body, model)
+
+    case extract_usage(body, model) do
+      {:ok, normalized_usage} ->
+        updated_response = %{response | usage: normalized_usage}
+
+        final_response =
+          case req.options[:operation] do
+            :object ->
+              extract_and_set_object(updated_response, req)
+
+            _ ->
+              updated_response
+          end
+
+        merged_response = merge_response_with_context(req, final_response)
+        {req, %{resp | body: merged_response}}
+
+      {:error, _} ->
+        merged_response = merge_response_with_context(req, response)
+        {req, %{resp | body: merged_response}}
+    end
+  end
+
+  def decode_response(request_response) do
+    ReqLLM.Provider.Defaults.default_decode_response(request_response)
+  end
+
+  @impl ReqLLM.Provider
   def encode_body(request) do
     # Use default encoding but with ZAI-specific content part encoding
     body =
@@ -64,10 +143,126 @@ defmodule ReqLLM.Providers.ZaiCoder do
   end
 
   @impl ReqLLM.Provider
+  def extract_usage(%{"usage" => usage, "choices" => choices}, _) do
+    has_reasoning_content =
+      Enum.any?(choices, fn choice ->
+        case get_in(choice, ["message", "reasoning_content"]) do
+          content when is_binary(content) and content != "" -> true
+          _ -> false
+        end
+      end)
+
+    completion_tokens = Map.get(usage, "completion_tokens", 0)
+    prompt_tokens = Map.get(usage, "prompt_tokens", 0)
+    total_tokens = Map.get(usage, "total_tokens", 0)
+
+    cached_tokens =
+      get_in(usage, ["prompt_tokens_details", "cached_tokens"]) ||
+        Map.get(usage, "cached_tokens", 0)
+
+    normalized_usage = %{
+      input_tokens: prompt_tokens,
+      output_tokens: completion_tokens,
+      total_tokens: total_tokens,
+      cached_tokens: cached_tokens,
+      reasoning_tokens: if(has_reasoning_content, do: completion_tokens, else: 0)
+    }
+
+    {:ok, normalized_usage}
+  end
+
   def extract_usage(%{"usage" => u}, _), do: {:ok, u}
   def extract_usage(_, _), do: {:error, :no_usage}
 
   # Private helper functions
+
+  defp ensure_parsed_body(body) when is_binary(body) do
+    case Jason.decode(body) do
+      {:ok, parsed} -> parsed
+      {:error, _} -> %{}
+    end
+  end
+
+  defp ensure_parsed_body(body) when is_map(body), do: body
+  defp ensure_parsed_body(_), do: %{}
+
+  defp merge_response_with_context(req, response) do
+    case req.options[:context] do
+      %ReqLLM.Context{messages: existing_messages} = ctx when is_list(existing_messages) ->
+        new_message = response.message
+
+        updated_context =
+          if new_message do
+            %{ctx | messages: existing_messages ++ [new_message]}
+          else
+            ctx
+          end
+
+        %{response | context: updated_context}
+
+      _ ->
+        response
+    end
+  end
+
+  defp extract_and_set_object(response, req) do
+    provider_opts = req.options[:provider_options] || []
+    response_format = provider_opts[:response_format]
+
+    extracted_object =
+      case response_format do
+        %{type: "json_schema"} ->
+          extract_from_json_schema_content(response)
+
+        %{"type" => "json_schema"} ->
+          extract_from_json_schema_content(response)
+
+        _ ->
+          extract_from_tool_calls(response)
+      end
+
+    %{response | object: extracted_object}
+  end
+
+  defp extract_from_json_schema_content(response) do
+    case response.message do
+      %ReqLLM.Message{content: content_parts} when is_list(content_parts) ->
+        text_content =
+          content_parts
+          |> Enum.find_value(fn
+            %ReqLLM.Message.ContentPart{type: :text, text: text} when is_binary(text) -> text
+            _ -> nil
+          end)
+
+        case text_content do
+          nil ->
+            nil
+
+          json_string ->
+            case Jason.decode(json_string) do
+              {:ok, parsed_object} -> parsed_object
+              {:error, _} -> nil
+            end
+        end
+
+      _ ->
+        nil
+    end
+  end
+
+  defp extract_from_tool_calls(response) do
+    case response.message do
+      %ReqLLM.Message{tool_calls: [%ReqLLM.ToolCall{function: %{arguments: args_json}} | _]}
+      when is_binary(args_json) ->
+        case Jason.decode(args_json) do
+          {:ok, args} -> args
+          {:error, _} -> nil
+        end
+
+      _ ->
+        nil
+    end
+  end
 
   defp encode_zai_chat_body(request) do
     context_data =
@@ -139,7 +334,9 @@ defmodule ReqLLM.Providers.ZaiCoder do
 
     # Add tool_calls array if we have tool call ContentParts
     base_message =
-      if tool_call_parts != [] do
+      if tool_call_parts == [] do
+        base_message
+      else
         zai_tool_calls =
           Enum.map(tool_call_parts, fn part ->
             %{
@@ -153,8 +350,6 @@ defmodule ReqLLM.Providers.ZaiCoder do
           end)
 
         Map.put(base_message, :tool_calls, zai_tool_calls)
-      else
-        base_message
       end
 
     # Also add tool_calls field from Message if present (though usually tool calls are in content)

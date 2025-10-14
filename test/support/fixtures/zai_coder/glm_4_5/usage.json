@@ -1,0 +1,96 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGkgdGhlcmUhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ2xtLTQuNSIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Hi there!",
+          "role": "user"
+        }
+      ],
+      "model": "glm-4.5",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.z.ai/api/coding/paas/v4/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hello! How can I assist you today? 😊",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1760463881,
+      "id": "20251015014440fd7d83c2d6ac4751",
+      "model": "glm-4.5",
+      "request_id": "20251015014440fd7d83c2d6ac4751",
+      "usage": {
+        "completion_tokens": 15,
+        "prompt_tokens": 8,
+        "prompt_tokens_details": {
+          "cached_tokens": 4
+        },
+        "total_tokens": 23
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Tue, 14 Oct 2025 17:44:41 GMT"
+      ],
+      "server": [
+        "ZenZGA/2.4"
+      ],
+      "set-cookie": [
+        "acw_tc=ac11000117604638802037033e25e5b1d9771238a817a5d1394ed8de74d55c;path=/;HttpOnly;Max-Age=1800"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+      ],
+      "x-log-id": [
+        "20251015014440fd7d83c2d6ac4751"
+      ]
+    },
+    "status": 200
+  }
+}

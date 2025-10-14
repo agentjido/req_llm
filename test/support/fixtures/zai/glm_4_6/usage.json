@@ -1,0 +1,97 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGkgdGhlcmUhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ2xtLTQuNiIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Hi there!",
+          "role": "user"
+        }
+      ],
+      "model": "glm-4.6",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "message": {
+            "content": "",
+            "reasoning_content": "1.  **Analyze the user's input:** The user said \"Hi there!\".\n\n2.  **Identify the nature of the input:** This is a very common, simple, and friendly greeting. It's an opening line.\n\n3.  **Determine the user's intent:**\n    *   They are starting a conversation.\n    *   They are testing the system to see if it's responsive.\n    *   They are just being polite.\n    *   They might be a new user.\n    *   They might not have a specific question yet, but are just \"saying hello\" to get the ball rolling.\n\n4.  **Brainstorm possible responses:** The goal is to be helpful, friendly, and encouraging, while also opening the door for the *real* conversation to begin.\n\n    *   **Simple and direct:**\n        *   \"Hello!\" (A bit too simple, maybe?)\n        *   \"Hi!\" (Same, a bit robotic.)\n        *   \"Hello there!\" (Mirrors their greeting, friendly.)\n\n    *   **Slightly more engaging/friendly:**\n        *   \"Hi! How can I help you today?\" (Classic, effective, gets straight to the point.)\n        *   \"Hello! It's great to hear from you. What's on your mind?\" (A bit more conversational and less transactional.)\n        *   \"Hey there! I'm ready to help. What can I do for you?\" (Uses \"Hey\" which is slightly more casual, but still professional.)\n\n    *   **More elaborate/enthusiastic (might be overkill for a simple \"hi\"):**\n        *   \"Greetings and salutations! Welcome! How may I be of service?\" (A bit theatrical, could be fun but might not be what the user is looking for.)\n        *   \"Hello! It's a pleasure to connect. I'm all ears. What fascinating topic are we going to explore today?\" (Very high-energy, might be a bit much.)\n\n    *   **Combining friendliness with a call to action:**\n        *   \"Hello there! Thanks for stopping by. How can I assist you?\" (Polite, welcoming, and direct.)\n        *   \"Hi! I'm glad you're here. What can I help you with?\" (Expresses pleasure, which is a nice touch.)\n        *   \"Hey! Ready for a chat",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1760462046,
+      "id": "202510150113596956930618a34267",
+      "model": "glm-4.6",
+      "request_id": "202510150113596956930618a34267",
+      "usage": {
+        "completion_tokens": 500,
+        "prompt_tokens": 10,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 510
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Tue, 14 Oct 2025 17:14:06 GMT"
+      ],
+      "server": [
+        "ZenZGA/2.4"
+      ],
+      "set-cookie": [
+        "acw_tc=0bc1a98117604620390506046e5f3eb2c9c0386957194a1858171be96c2d44;path=/;HttpOnly;Max-Age=1800"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+      ],
+      "x-log-id": [
+        "202510150113596956930618a34267"
+      ]
+    },
+    "status": 200
+  }
+}

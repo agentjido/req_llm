@@ -156,36 +156,6 @@
         "input": 0,
         "output": 0
       },
-      "id": "Qwen/Qwen3-Coder-480B-A35B-Instruct",
-      "knowledge": "2025-04",
-      "last_updated": "2025-07-23",
-      "limit": {
-        "context": 262144,
-        "output": 66536
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Qwen3-Coder-480B-A35B-Instruct",
-      "open_weights": true,
-      "provider": "modelscope",
-      "provider_model_id": "Qwen/Qwen3-Coder-480B-A35B-Instruct",
-      "reasoning": false,
-      "release_date": "2025-07-23",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
       "id": "ZhipuAI/GLM-4.5",
       "knowledge": "2025-04",
       "last_updated": "2025-07-28",

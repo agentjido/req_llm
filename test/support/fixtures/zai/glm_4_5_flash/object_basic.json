@@ -1,0 +1,141 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ2xtLTQuNS1mbGFzaCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6ImF1dG8iLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZW5lcmF0ZSBzdHJ1Y3R1cmVkIG91dHB1dCBtYXRjaGluZyB0aGUgcHJvdmlkZWQgc2NoZW1hIiwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibmFtZSIsImFnZSJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Generate a software engineer profile",
+          "role": "user"
+        }
+      ],
+      "model": "glm-4.5-flash",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tool_choice": "auto",
+      "tools": [
+        {
+          "function": {
+            "description": "Generate structured output matching the provided schema",
+            "name": "structured_output",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "age": {
+                  "description": "Person's age in years",
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "name": {
+                  "description": "Person's full name",
+                  "type": "string"
+                },
+                "occupation": {
+                  "description": "Person's job or profession",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "age"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "message": {
+            "content": "\nI'll generate a software engineer profile for you using the structured output function.\n",
+            "reasoning_content": "\nThe user is asking me to generate a software engineer profile. Looking at the available function, I have a \"structured_output\" function that can generate structured output with the following parameters:\n- name (required): Person's full name\n- age (required): Person's age in years  \n- occupation (optional): Person's job or profession\n\nSince the user wants a software engineer profile, I should use this function. I need to provide a name and age (required), and I can optionally provide the occupation as \"Software Engineer\" since that's what they're asking for.\n\nHowever, the user hasn't specified a particular name or age, so I'll need to make reasonable assumptions for these required parameters. For a software engineer profile, I'll use a common name and a reasonable age range for someone in that profession.",
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"name\": \"Alex Johnson\", \"age\": 28, \"occupation\": \"Software Engineer\"}",
+                  "name": "structured_output"
+                },
+                "id": "call_-8253052439321305723",
+                "index": 0,
+                "type": "function"
+              }
+            ]
+          }
+        }
+      ],
+      "created": 1760463197,
+      "id": "202510150133107bdccb2483514e4f",
+      "model": "glm-4.5-flash",
+      "request_id": "202510150133107bdccb2483514e4f",
+      "usage": {
+        "completion_tokens": 215,
+        "prompt_tokens": 219,
+        "prompt_tokens_details": {
+          "cached_tokens": 218
+        },
+        "total_tokens": 434
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Tue, 14 Oct 2025 17:33:17 GMT"
+      ],
+      "server": [
+        "ZenZGA/2.4"
+      ],
+      "set-cookie": [
+        "acw_tc=ac11000117604631901563758e25b191a6dcf1a224b4d27a798a41bece8860;path=/;HttpOnly;Max-Age=1800"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+      ],
+      "x-log-id": [
+        "202510150133107bdccb2483514e4f"
+      ]
+    },
+    "status": 200
+  }
+}

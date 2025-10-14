@@ -167,13 +167,11 @@
     },
     {
       "attachment": false,
+      "beta": true,
       "cost": {
-        "cache_read": 0.11,
-        "cache_write": 0,
         "input": 0.6,
-        "output": 2.2
+        "output": 1.9
       },
-      "experimental": true,
       "id": "glm-4.6",
       "knowledge": "2025-04",
       "last_updated": "2025-09-30",
@@ -189,7 +187,7 @@
           "text"
         ]
       },
-      "name": "GLM-4.6",
+      "name": "GLM-4.6 (beta)",
       "open_weights": true,
       "provider": "opencode",
       "provider_model_id": "glm-4.6",
@@ -353,37 +351,6 @@
       "provider_model_id": "qwen3-coder",
       "reasoning": false,
       "release_date": "2025-07-23",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 1.6,
-        "output": 6.4
-      },
-      "experimental": true,
-      "id": "qwen3-max",
-      "knowledge": "2025-04",
-      "last_updated": "2025-09-05",
-      "limit": {
-        "context": 262144,
-        "output": 65536
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Qwen3 Max",
-      "open_weights": true,
-      "provider": "opencode",
-      "provider_model_id": "qwen3-max",
-      "reasoning": true,
-      "release_date": "2025-09-05",
       "temperature": true,
       "tool_call": true
     }

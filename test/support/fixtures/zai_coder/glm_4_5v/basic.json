@@ -1,0 +1,97 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdsbS00LjV2Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "glm-4.5v",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.z.ai/api/coding/paas/v4/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "\nHello there! 😊 It looks like you've started with the classic \"Hello World!\" greeting – a great way to begin any conversation or programming journey! How can I assist you today? Whether you have questions, need help with something, or just want to chat, I'm here for you!",
+            "reasoning_content": "I see the user just said \"Hello world!\". That's a classic first program greeting. I should respond in a friendly and welcoming way, maybe acknowledge it as a common programming tradition while keeping it natural.\n\nThe user might be testing if I'm working properly, or they could be new to programming. Either way, I'll keep my response warm and inviting without overcomplicating things. A simple hello back with a smile emoji would work well here - it's approachable but not too formal.\n\nI wonder if they're expecting something more technical? But since they didn't ask any specific questions, sticking with a basic greeting seems appropriate for now. If they follow up with coding questions, I can adjust my response accordingly.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1760463866,
+      "id": "2025101501442363add13ff06d4342",
+      "model": "glm-4.5v",
+      "request_id": "2025101501442363add13ff06d4342",
+      "usage": {
+        "completion_tokens": 208,
+        "prompt_tokens": 10,
+        "prompt_tokens_details": {
+          "cached_tokens": 4
+        },
+        "total_tokens": 218
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Tue, 14 Oct 2025 17:44:26 GMT"
+      ],
+      "server": [
+        "ZenZGA/2.4"
+      ],
+      "set-cookie": [
+        "acw_tc=ac11000117604638629993262e03c0ea329a6547a4539a43aea76b532096b3;path=/;HttpOnly;Max-Age=1800"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+      ],
+      "x-log-id": [
+        "2025101501442363add13ff06d4342"
+      ]
+    },
+    "status": 200
+  }
+}

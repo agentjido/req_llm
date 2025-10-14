@@ -3,14 +3,13 @@
     {
       "attachment": false,
       "cost": {
-        "input": 0.078,
-        "output": 0.312
+        "input": 0.06664,
+        "output": 0.266688
       },
-      "id": "Qwen/Qwen3-235B-A22B-Instruct-2507",
-      "knowledge": "2025-04",
-      "last_updated": "2025-07-21",
+      "id": "moonshotai/Kimi-Dev-72B",
+      "last_updated": "2024-12-01",
       "limit": {
-        "context": 262144,
+        "context": 131072,
         "output": 131072
       },
       "modalities": {
@@ -21,132 +20,12 @@
           "text"
         ]
       },
-      "name": "Qwen3 235B A22B Instruct 2507",
-      "open_weights": true,
+      "name": "Kimi Dev 72B",
+      "open_weights": false,
       "provider": "chutes",
-      "provider_model_id": "Qwen/Qwen3-235B-A22B-Instruct-2507",
+      "provider_model_id": "moonshotai/Kimi-Dev-72B",
       "reasoning": false,
-      "release_date": "2025-04-28",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0.078,
-        "output": 0.312
-      },
-      "id": "Qwen/Qwen3-235B-A22B-Thinking-2507",
-      "knowledge": "2025-04",
-      "last_updated": "2025-07-25",
-      "limit": {
-        "context": 262144,
-        "output": 262144
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Qwen3-235B-A22B-Thinking-2507",
-      "open_weights": true,
-      "provider": "chutes",
-      "provider_model_id": "Qwen/Qwen3-235B-A22B-Thinking-2507",
-      "reasoning": true,
-      "release_date": "2025-07-25",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0.02,
-        "output": 0.08
-      },
-      "id": "Qwen/Qwen3-30B-A3B",
-      "knowledge": "2025-04",
-      "last_updated": "2025-04-28",
-      "limit": {
-        "context": 40960,
-        "output": 40960
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Qwen3 30B A3B",
-      "open_weights": true,
-      "provider": "chutes",
-      "provider_model_id": "Qwen/Qwen3-30B-A3B",
-      "reasoning": true,
-      "release_date": "2025-04-28",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0.05,
-        "output": 0.2
-      },
-      "id": "Qwen/Qwen3-30B-A3B-Instruct-2507",
-      "knowledge": "2025-04",
-      "last_updated": "2025-07-25",
-      "limit": {
-        "context": 262144,
-        "output": 262144
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Qwen3 30B A3B Instruct 2507",
-      "open_weights": true,
-      "provider": "chutes",
-      "provider_model_id": "Qwen/Qwen3-30B-A3B-Instruct-2507",
-      "reasoning": false,
-      "release_date": "2025-07-25",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0.08,
-        "output": 0.29
-      },
-      "id": "Qwen/Qwen3-30B-A3B-Thinking-2507",
-      "knowledge": "2025-04",
-      "last_updated": "2025-07-30",
-      "limit": {
-        "context": 262144,
-        "output": 262144
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Qwen3 30B A3B Thinking 2507",
-      "open_weights": true,
-      "provider": "chutes",
-      "provider_model_id": "Qwen/Qwen3-30B-A3B-Thinking-2507",
-      "reasoning": true,
-      "release_date": "2025-07-30",
+      "release_date": "2024-12-01",
       "temperature": true,
       "tool_call": true
     },
@@ -183,421 +62,10 @@
     {
       "attachment": false,
       "cost": {
-        "input": 0.2,
-        "output": 0.8
+        "input": 0.02499,
+        "output": 0.100008
       },
-      "id": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8",
-      "last_updated": "2025-08-01",
-      "limit": {
-        "context": 262144,
-        "output": 262144
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Qwen3 Coder 480B A35B Instruct (FP8)",
-      "open_weights": false,
-      "provider": "chutes",
-      "provider_model_id": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8",
-      "reasoning": false,
-      "release_date": "2025-08-01",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0.1,
-        "output": 0.8
-      },
-      "id": "Qwen/Qwen3-Next-80B-A3B-Instruct",
-      "knowledge": "2025-04",
-      "last_updated": "2025-09-11",
-      "limit": {
-        "context": 262144,
-        "output": 262144
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Qwen3 Next 80B A3B Instruct",
-      "open_weights": true,
-      "provider": "chutes",
-      "provider_model_id": "Qwen/Qwen3-Next-80B-A3B-Instruct",
-      "reasoning": false,
-      "release_date": "2025-09-11",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0.1,
-        "output": 0.8
-      },
-      "id": "Qwen/Qwen3-Next-80B-A3B-Thinking",
-      "knowledge": "2025-04",
-      "last_updated": "2025-09-11",
-      "limit": {
-        "context": 262144,
-        "output": 262144
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Qwen3 Next 80B A3B Thinking",
-      "open_weights": true,
-      "provider": "chutes",
-      "provider_model_id": "Qwen/Qwen3-Next-80B-A3B-Thinking",
-      "reasoning": true,
-      "release_date": "2025-09-11",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0.02,
-        "output": 0.08
-      },
-      "id": "chutesai/Devstral-Small-2505",
-      "last_updated": "2025-05-21",
-      "limit": {
-        "context": 32768,
-        "output": 32768
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Devstral Small (2505)",
-      "open_weights": true,
-      "provider": "chutes",
-      "provider_model_id": "chutesai/Devstral-Small-2505",
-      "reasoning": false,
-      "release_date": "2025-05-21",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0.02,
-        "output": 0.08
-      },
-      "id": "chutesai/Mistral-Small-3.2-24B-Instruct-2506",
-      "last_updated": "2025-06-20",
-      "limit": {
-        "context": 131072,
-        "output": 131072
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Mistral Small 3.2 24B Instruct (2506)",
-      "open_weights": true,
-      "provider": "chutes",
-      "provider_model_id": "chutesai/Mistral-Small-3.2-24B-Instruct-2506",
-      "reasoning": false,
-      "release_date": "2025-06-20",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0.18,
-        "output": 0.72
-      },
-      "id": "deepseek-ai/DeepSeek-R1-0528",
-      "last_updated": "2025-08-01",
-      "limit": {
-        "context": 75000,
-        "output": 163840
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "DeepSeek R1 (0528)",
-      "open_weights": false,
-      "provider": "chutes",
-      "provider_model_id": "deepseek-ai/DeepSeek-R1-0528",
-      "reasoning": true,
-      "release_date": "2025-08-01",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0.02,
-        "output": 0.07
-      },
-      "id": "deepseek-ai/DeepSeek-R1-0528-Qwen3-8B",
-      "knowledge": "2025-05",
-      "last_updated": "2025-05-29",
-      "limit": {
-        "context": 131072,
-        "output": 131072
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "DeepSeek R1 0528 Qwen3 8B",
-      "open_weights": true,
-      "provider": "chutes",
-      "provider_model_id": "deepseek-ai/DeepSeek-R1-0528-Qwen3-8B",
-      "reasoning": true,
-      "release_date": "2025-05-29",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0.03,
-        "output": 0.14
-      },
-      "id": "deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
-      "knowledge": "2024-10",
-      "last_updated": "2025-01-23",
-      "limit": {
-        "context": 131072,
-        "output": 131072
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "DeepSeek R1 Distill Llama 70B",
-      "open_weights": true,
-      "provider": "chutes",
-      "provider_model_id": "deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
-      "reasoning": true,
-      "release_date": "2025-01-23",
-      "temperature": true,
-      "tool_call": false
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0.18,
-        "output": 0.72
-      },
-      "id": "deepseek-ai/DeepSeek-V3-0324",
-      "last_updated": "2025-08-01",
-      "limit": {
-        "context": 75000,
-        "output": 163840
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "DeepSeek V3 (0324)",
-      "open_weights": false,
-      "provider": "chutes",
-      "provider_model_id": "deepseek-ai/DeepSeek-V3-0324",
-      "reasoning": false,
-      "release_date": "2025-08-01",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0.2,
-        "output": 0.8
-      },
-      "id": "deepseek-ai/DeepSeek-V3.1",
-      "last_updated": "2025-08-21",
-      "limit": {
-        "context": 163840,
-        "output": 163840
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "DeepSeek V3.1",
-      "open_weights": false,
-      "provider": "chutes",
-      "provider_model_id": "deepseek-ai/DeepSeek-V3.1",
-      "reasoning": false,
-      "release_date": "2025-08-21",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0.25,
-        "output": 1
-      },
-      "id": "deepseek-ai/DeepSeek-V3.1-Terminus",
-      "knowledge": "2025-07",
-      "last_updated": "2025-09-22",
-      "limit": {
-        "context": 131072,
-        "output": 65536
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "DeepSeek V3.1 Terminus",
-      "open_weights": true,
-      "provider": "chutes",
-      "provider_model_id": "deepseek-ai/DeepSeek-V3.1-Terminus",
-      "reasoning": true,
-      "release_date": "2025-09-22",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 1,
-        "output": 3
-      },
-      "id": "deepseek-ai/DeepSeek-V3.1-turbo",
-      "last_updated": "2025-08-21",
-      "limit": {
-        "context": 128000,
-        "output": 128000
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "DeepSeek V3.1 Turbo",
-      "open_weights": false,
-      "provider": "chutes",
-      "provider_model_id": "deepseek-ai/DeepSeek-V3.1-turbo",
-      "reasoning": false,
-      "release_date": "2025-08-21",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0.2,
-        "output": 0.8
-      },
-      "id": "deepseek-ai/DeepSeek-V3.1:THINKING",
-      "last_updated": "2025-08-21",
-      "limit": {
-        "context": 163840,
-        "output": 163840
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "DeepSeek V3.1 Reasoning",
-      "open_weights": false,
-      "provider": "chutes",
-      "provider_model_id": "deepseek-ai/DeepSeek-V3.1:THINKING",
-      "reasoning": true,
-      "release_date": "2025-08-21",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0.25,
-        "output": 1
-      },
-      "id": "meituan-longcat/LongCat-Flash-Chat-FP8",
-      "last_updated": "2025-09-10",
-      "limit": {
-        "context": 131072,
-        "output": 131072
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "LongCat Flash Chat FP8",
-      "open_weights": true,
-      "provider": "chutes",
-      "provider_model_id": "meituan-longcat/LongCat-Flash-Chat-FP8",
-      "reasoning": false,
-      "release_date": "2025-09-10",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0.06664,
-        "output": 0.266688
-      },
-      "id": "moonshotai/Kimi-Dev-72B",
+      "id": "moonshotai/Kimi-VL-A3B-Thinking",
       "last_updated": "2024-12-01",
       "limit": {
         "context": 131072,
@@ -605,47 +73,19 @@
       },
       "modalities": {
         "input": [
-          "text"
+          "text",
+          "image"
         ],
         "output": [
           "text"
         ]
       },
-      "name": "Kimi Dev 72B",
+      "name": "Kimi VL A3B Thinking",
       "open_weights": false,
       "provider": "chutes",
-      "provider_model_id": "moonshotai/Kimi-Dev-72B",
-      "reasoning": false,
+      "provider_model_id": "moonshotai/Kimi-VL-A3B-Thinking",
+      "reasoning": true,
       "release_date": "2024-12-01",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0.296176,
-        "output": 1.18528
-      },
-      "id": "moonshotai/Kimi-K2-Instruct-0905",
-      "last_updated": "2024-09-05",
-      "limit": {
-        "context": 262144,
-        "output": 262144
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Kimi K2 Instruct 0905",
-      "open_weights": false,
-      "provider": "chutes",
-      "provider_model_id": "moonshotai/Kimi-K2-Instruct-0905",
-      "reasoning": false,
-      "release_date": "2024-09-05",
       "temperature": true,
       "tool_call": true
     },
@@ -681,30 +121,29 @@
     {
       "attachment": false,
       "cost": {
-        "input": 0.02499,
-        "output": 0.100008
+        "input": 0.18,
+        "output": 0.72
       },
-      "id": "moonshotai/Kimi-VL-A3B-Thinking",
-      "last_updated": "2024-12-01",
+      "id": "deepseek-ai/DeepSeek-R1-0528",
+      "last_updated": "2025-08-01",
       "limit": {
-        "context": 131072,
-        "output": 131072
+        "context": 75000,
+        "output": 163840
       },
       "modalities": {
         "input": [
-          "text",
-          "image"
+          "text"
         ],
         "output": [
           "text"
         ]
       },
-      "name": "Kimi VL A3B Thinking",
+      "name": "DeepSeek R1 (0528)",
       "open_weights": false,
       "provider": "chutes",
-      "provider_model_id": "moonshotai/Kimi-VL-A3B-Thinking",
+      "provider_model_id": "deepseek-ai/DeepSeek-R1-0528",
       "reasoning": true,
-      "release_date": "2024-12-01",
+      "release_date": "2025-08-01",
       "temperature": true,
       "tool_call": true
     },
@@ -740,15 +179,14 @@
     {
       "attachment": false,
       "cost": {
-        "input": 0.18,
-        "output": 0.72
+        "input": 0.02,
+        "output": 0.08
       },
-      "id": "tngtech/DeepSeek-R1T-Chimera",
-      "knowledge": "2025-04",
-      "last_updated": "2025-04-26",
+      "id": "chutesai/Devstral-Small-2505",
+      "last_updated": "2025-05-21",
       "limit": {
-        "context": 163840,
-        "output": 163840
+        "context": 32768,
+        "output": 32768
       },
       "modalities": {
         "input": [
@@ -758,72 +196,12 @@
           "text"
         ]
       },
-      "name": "DeepSeek R1T Chimera",
+      "name": "Devstral Small (2505)",
       "open_weights": true,
       "provider": "chutes",
-      "provider_model_id": "tngtech/DeepSeek-R1T-Chimera",
-      "reasoning": true,
-      "release_date": "2025-04-26",
-      "temperature": true,
-      "tool_call": false
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0.2,
-        "output": 0.8
-      },
-      "id": "tngtech/DeepSeek-TNG-R1T2-Chimera",
-      "knowledge": "2025-07",
-      "last_updated": "2025-07-08",
-      "limit": {
-        "context": 163840,
-        "output": 163840
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "DeepSeek TNG R1T2 Chimera",
-      "open_weights": true,
-      "provider": "chutes",
-      "provider_model_id": "tngtech/DeepSeek-TNG-R1T2-Chimera",
-      "reasoning": true,
-      "release_date": "2025-07-08",
-      "temperature": true,
-      "tool_call": false
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0,
-        "output": 0
-      },
-      "id": "zai-org/GLM-4.5-Air",
-      "knowledge": "2025-04",
-      "last_updated": "2025-07-28",
-      "limit": {
-        "context": 131072,
-        "output": 98304
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "GLM 4.5 Air",
-      "open_weights": true,
-      "provider": "chutes",
-      "provider_model_id": "zai-org/GLM-4.5-Air",
-      "reasoning": true,
-      "release_date": "2025-07-28",
+      "provider_model_id": "chutesai/Devstral-Small-2505",
+      "reasoning": false,
+      "release_date": "2025-05-21",
       "temperature": true,
       "tool_call": true
     },
@@ -860,6 +238,214 @@
     {
       "attachment": false,
       "cost": {
+        "input": 0.2,
+        "output": 0.8
+      },
+      "id": "deepseek-ai/DeepSeek-V3.1:THINKING",
+      "last_updated": "2025-08-21",
+      "limit": {
+        "context": 163840,
+        "output": 163840
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "DeepSeek V3.1 Reasoning",
+      "open_weights": false,
+      "provider": "chutes",
+      "provider_model_id": "deepseek-ai/DeepSeek-V3.1:THINKING",
+      "reasoning": true,
+      "release_date": "2025-08-21",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0,
+        "output": 0
+      },
+      "id": "zai-org/GLM-4.5-Air",
+      "knowledge": "2025-04",
+      "last_updated": "2025-07-28",
+      "limit": {
+        "context": 131072,
+        "output": 98304
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "GLM 4.5 Air",
+      "open_weights": true,
+      "provider": "chutes",
+      "provider_model_id": "zai-org/GLM-4.5-Air",
+      "reasoning": true,
+      "release_date": "2025-07-28",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 1.15,
+        "output": 3.25
+      },
+      "id": "zai-org/GLM-4.6-turbo",
+      "knowledge": "2025-04",
+      "last_updated": "2025-10-03",
+      "limit": {
+        "context": 204800,
+        "output": 131072
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "GLM 4.6 Turbo",
+      "open_weights": true,
+      "provider": "chutes",
+      "provider_model_id": "zai-org/GLM-4.6-turbo",
+      "reasoning": true,
+      "release_date": "2025-10-03",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.078,
+        "output": 0.312
+      },
+      "id": "Qwen/Qwen3-235B-A22B-Instruct-2507",
+      "knowledge": "2025-04",
+      "last_updated": "2025-07-21",
+      "limit": {
+        "context": 262144,
+        "output": 131072
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Qwen3 235B A22B Instruct 2507",
+      "open_weights": true,
+      "provider": "chutes",
+      "provider_model_id": "Qwen/Qwen3-235B-A22B-Instruct-2507",
+      "reasoning": false,
+      "release_date": "2025-04-28",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.2,
+        "output": 0.8
+      },
+      "id": "tngtech/DeepSeek-TNG-R1T2-Chimera",
+      "knowledge": "2025-07",
+      "last_updated": "2025-07-08",
+      "limit": {
+        "context": 163840,
+        "output": 163840
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "DeepSeek TNG R1T2 Chimera",
+      "open_weights": true,
+      "provider": "chutes",
+      "provider_model_id": "tngtech/DeepSeek-TNG-R1T2-Chimera",
+      "reasoning": true,
+      "release_date": "2025-07-08",
+      "temperature": true,
+      "tool_call": false
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.25,
+        "output": 0.35
+      },
+      "id": "deepseek-ai/DeepSeek-V3.2-Exp",
+      "last_updated": "2025-09-29",
+      "limit": {
+        "context": 128000,
+        "output": 64000
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "DeepSeek V3.2 Exp",
+      "open_weights": true,
+      "provider": "chutes",
+      "provider_model_id": "deepseek-ai/DeepSeek-V3.2-Exp",
+      "reasoning": true,
+      "release_date": "2025-09-29",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.08,
+        "output": 0.29
+      },
+      "id": "Qwen/Qwen3-30B-A3B-Thinking-2507",
+      "knowledge": "2025-04",
+      "last_updated": "2025-07-30",
+      "limit": {
+        "context": 262144,
+        "output": 262144
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Qwen3 30B A3B Thinking 2507",
+      "open_weights": true,
+      "provider": "chutes",
+      "provider_model_id": "Qwen/Qwen3-30B-A3B-Thinking-2507",
+      "reasoning": true,
+      "release_date": "2025-07-30",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
         "input": 1,
         "output": 3
       },
@@ -890,6 +476,449 @@
     {
       "attachment": false,
       "cost": {
+        "input": 0.18,
+        "output": 0.72
+      },
+      "id": "deepseek-ai/DeepSeek-V3-0324",
+      "last_updated": "2025-08-01",
+      "limit": {
+        "context": 75000,
+        "output": 163840
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "DeepSeek V3 (0324)",
+      "open_weights": false,
+      "provider": "chutes",
+      "provider_model_id": "deepseek-ai/DeepSeek-V3-0324",
+      "reasoning": false,
+      "release_date": "2025-08-01",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.18,
+        "output": 0.72
+      },
+      "id": "tngtech/DeepSeek-R1T-Chimera",
+      "knowledge": "2025-04",
+      "last_updated": "2025-04-26",
+      "limit": {
+        "context": 163840,
+        "output": 163840
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "DeepSeek R1T Chimera",
+      "open_weights": true,
+      "provider": "chutes",
+      "provider_model_id": "tngtech/DeepSeek-R1T-Chimera",
+      "reasoning": true,
+      "release_date": "2025-04-26",
+      "temperature": true,
+      "tool_call": false
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.25,
+        "output": 1
+      },
+      "id": "meituan-longcat/LongCat-Flash-Chat-FP8",
+      "last_updated": "2025-09-10",
+      "limit": {
+        "context": 131072,
+        "output": 131072
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "LongCat Flash Chat FP8",
+      "open_weights": true,
+      "provider": "chutes",
+      "provider_model_id": "meituan-longcat/LongCat-Flash-Chat-FP8",
+      "reasoning": false,
+      "release_date": "2025-09-10",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.1,
+        "output": 0.8
+      },
+      "id": "Qwen/Qwen3-Next-80B-A3B-Thinking",
+      "knowledge": "2025-04",
+      "last_updated": "2025-09-11",
+      "limit": {
+        "context": 262144,
+        "output": 262144
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Qwen3 Next 80B A3B Thinking",
+      "open_weights": true,
+      "provider": "chutes",
+      "provider_model_id": "Qwen/Qwen3-Next-80B-A3B-Thinking",
+      "reasoning": true,
+      "release_date": "2025-09-11",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.078,
+        "output": 0.312
+      },
+      "id": "Qwen/Qwen3-235B-A22B-Thinking-2507",
+      "knowledge": "2025-04",
+      "last_updated": "2025-07-25",
+      "limit": {
+        "context": 262144,
+        "output": 262144
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Qwen3-235B-A22B-Thinking-2507",
+      "open_weights": true,
+      "provider": "chutes",
+      "provider_model_id": "Qwen/Qwen3-235B-A22B-Thinking-2507",
+      "reasoning": true,
+      "release_date": "2025-07-25",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.25,
+        "output": 1
+      },
+      "id": "deepseek-ai/DeepSeek-V3.1-Terminus",
+      "knowledge": "2025-07",
+      "last_updated": "2025-09-22",
+      "limit": {
+        "context": 131072,
+        "output": 65536
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "DeepSeek V3.1 Terminus",
+      "open_weights": true,
+      "provider": "chutes",
+      "provider_model_id": "deepseek-ai/DeepSeek-V3.1-Terminus",
+      "reasoning": true,
+      "release_date": "2025-09-22",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.03,
+        "output": 0.14
+      },
+      "id": "deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
+      "knowledge": "2024-10",
+      "last_updated": "2025-01-23",
+      "limit": {
+        "context": 131072,
+        "output": 131072
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "DeepSeek R1 Distill Llama 70B",
+      "open_weights": true,
+      "provider": "chutes",
+      "provider_model_id": "deepseek-ai/DeepSeek-R1-Distill-Llama-70B",
+      "reasoning": true,
+      "release_date": "2025-01-23",
+      "temperature": true,
+      "tool_call": false
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.02,
+        "output": 0.07
+      },
+      "id": "deepseek-ai/DeepSeek-R1-0528-Qwen3-8B",
+      "knowledge": "2025-05",
+      "last_updated": "2025-05-29",
+      "limit": {
+        "context": 131072,
+        "output": 131072
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "DeepSeek R1 0528 Qwen3 8B",
+      "open_weights": true,
+      "provider": "chutes",
+      "provider_model_id": "deepseek-ai/DeepSeek-R1-0528-Qwen3-8B",
+      "reasoning": true,
+      "release_date": "2025-05-29",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.2,
+        "output": 0.8
+      },
+      "id": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8",
+      "last_updated": "2025-08-01",
+      "limit": {
+        "context": 262144,
+        "output": 262144
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Qwen3 Coder 480B A35B Instruct (FP8)",
+      "open_weights": false,
+      "provider": "chutes",
+      "provider_model_id": "Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8",
+      "reasoning": false,
+      "release_date": "2025-08-01",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 1,
+        "output": 3
+      },
+      "id": "deepseek-ai/DeepSeek-V3.1-turbo",
+      "last_updated": "2025-08-21",
+      "limit": {
+        "context": 128000,
+        "output": 128000
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "DeepSeek V3.1 Turbo",
+      "open_weights": false,
+      "provider": "chutes",
+      "provider_model_id": "deepseek-ai/DeepSeek-V3.1-turbo",
+      "reasoning": false,
+      "release_date": "2025-08-21",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.296176,
+        "output": 1.18528
+      },
+      "id": "moonshotai/Kimi-K2-Instruct-0905",
+      "last_updated": "2024-09-05",
+      "limit": {
+        "context": 262144,
+        "output": 262144
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Kimi K2 Instruct 0905",
+      "open_weights": false,
+      "provider": "chutes",
+      "provider_model_id": "moonshotai/Kimi-K2-Instruct-0905",
+      "reasoning": false,
+      "release_date": "2024-09-05",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.1,
+        "output": 0.8
+      },
+      "id": "Qwen/Qwen3-Next-80B-A3B-Instruct",
+      "knowledge": "2025-04",
+      "last_updated": "2025-09-11",
+      "limit": {
+        "context": 262144,
+        "output": 262144
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Qwen3 Next 80B A3B Instruct",
+      "open_weights": true,
+      "provider": "chutes",
+      "provider_model_id": "Qwen/Qwen3-Next-80B-A3B-Instruct",
+      "reasoning": false,
+      "release_date": "2025-09-11",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.02,
+        "output": 0.08
+      },
+      "id": "chutesai/Mistral-Small-3.2-24B-Instruct-2506",
+      "last_updated": "2025-06-20",
+      "limit": {
+        "context": 131072,
+        "output": 131072
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Mistral Small 3.2 24B Instruct (2506)",
+      "open_weights": true,
+      "provider": "chutes",
+      "provider_model_id": "chutesai/Mistral-Small-3.2-24B-Instruct-2506",
+      "reasoning": false,
+      "release_date": "2025-06-20",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.2,
+        "output": 0.8
+      },
+      "id": "deepseek-ai/DeepSeek-V3.1",
+      "last_updated": "2025-08-21",
+      "limit": {
+        "context": 163840,
+        "output": 163840
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "DeepSeek V3.1",
+      "open_weights": false,
+      "provider": "chutes",
+      "provider_model_id": "deepseek-ai/DeepSeek-V3.1",
+      "reasoning": false,
+      "release_date": "2025-08-21",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.05,
+        "output": 0.2
+      },
+      "id": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+      "knowledge": "2025-04",
+      "last_updated": "2025-07-25",
+      "limit": {
+        "context": 262144,
+        "output": 262144
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Qwen3 30B A3B Instruct 2507",
+      "open_weights": true,
+      "provider": "chutes",
+      "provider_model_id": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+      "reasoning": false,
+      "release_date": "2025-07-25",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
         "input": 0.39,
         "output": 1.55
       },
@@ -914,6 +943,36 @@
       "provider_model_id": "zai-org/GLM-4.6-FP8",
       "reasoning": true,
       "release_date": "2025-09-30",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.02,
+        "output": 0.08
+      },
+      "id": "Qwen/Qwen3-30B-A3B",
+      "knowledge": "2025-04",
+      "last_updated": "2025-04-28",
+      "limit": {
+        "context": 40960,
+        "output": 40960
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Qwen3 30B A3B",
+      "open_weights": true,
+      "provider": "chutes",
+      "provider_model_id": "Qwen/Qwen3-30B-A3B",
+      "reasoning": true,
+      "release_date": "2025-04-28",
       "temperature": true,
       "tool_call": true
     }

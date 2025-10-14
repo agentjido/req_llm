@@ -1,0 +1,115 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo5ODMwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiXG5cbkknbGwgdXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzIGZvciB5b3UuXG4iLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF8tODI1MzA5Njc5Nzc0NDQyNDc4MiIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsInJvbGUiOiJ0b29sIn1dLCJtb2RlbCI6ImdsbS00LjUtZmxhc2giLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 9830,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        },
+        {
+          "content": "\n\nI'll use the add tool to compute 2 + 3 for you.\n",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"a\":2,\"b\":3}",
+                "name": "add"
+              },
+              "id": "call_-8253096797744424782",
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "content": "5",
+          "role": "tool"
+        }
+      ],
+      "model": "glm-4.5-flash",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.z.ai/api/coding/paas/v4/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "\nsum=5",
+            "reasoning_content": "\nThe add tool returned the result 5 for 2 + 3. Now I need to respond with 'sum=<value>' as requested.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1760464040,
+      "id": "20251015014717e31cebba9eb94792",
+      "model": "glm-4.5-flash",
+      "request_id": "20251015014717e31cebba9eb94792",
+      "usage": {
+        "completion_tokens": 37,
+        "prompt_tokens": 78,
+        "prompt_tokens_details": {
+          "cached_tokens": 77
+        },
+        "total_tokens": 115
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Tue, 14 Oct 2025 17:47:20 GMT"
+      ],
+      "server": [
+        "ZenZGA/2.4"
+      ],
+      "set-cookie": [
+        "acw_tc=ac11000117604640375521549e03f532f28a7bc45e243002376a14bfcddd24;path=/;HttpOnly;Max-Age=1800"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+      ],
+      "x-log-id": [
+        "20251015014717e31cebba9eb94792"
+      ]
+    },
+    "status": 200
+  }
+}

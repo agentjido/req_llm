@@ -1,0 +1,97 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdsbS00LjUtYWlyIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "glm-4.5-air",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "\nHere's a simple \"Hello World!\" program in Python:\n\n```python\nprint(\"Hello World!\")\n```\n\n### Explanation:\n- `print()` is a built-in Python function that outputs text to the console.\n- `\"Hello World!\"` is a string literal (text enclosed in quotes) that gets printed.\n\n### How to run it:\n1. Save the code in a file named `hello.py`.\n2. Run it from your terminal:\n   ```bash\n   python hello.py\n   ```\n\n### Output:\n```\nHello World!\n```\n\n### Alternative versions in other languages:\n**JavaScript:**\n```javascript\nconsole.log(\"Hello World!\");\n```\n\n**Java:**\n```java\npublic class HelloWorld {\n    public static void main(String[] args) {\n        System.out.println(\"Hello World!\");\n    }\n}\n```\n\n**C++:**\n```cpp\n#include <iostream>\nint main() {\n    std::cout << \"Hello World!\" << std::endl;\n    return 0;\n}\n```\n\n**HTML:**\n```html\n<!DOCTYPE html>\n<html>\n<body>\n  <h1>Hello World!</h1>\n</body>\n</html>\n```\n\nLet me know if you'd like this in another language or need further explanation! 😊",
+            "reasoning_content": "We are going to create a simple \"Hello World!\" program in Python.\n Since the user just said \"Hello world!\", we can assume they want a classic \"Hello World!\" program.\n We'll write a program that prints \"Hello World!\" to the console.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1760461733,
+      "id": "20251015010849b258fe306fb7416d",
+      "model": "glm-4.5-air",
+      "request_id": "20251015010849b258fe306fb7416d",
+      "usage": {
+        "completion_tokens": 312,
+        "prompt_tokens": 8,
+        "prompt_tokens_details": {
+          "cached_tokens": 4
+        },
+        "total_tokens": 320
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Tue, 14 Oct 2025 17:08:53 GMT"
+      ],
+      "server": [
+        "ZenZGA/2.4"
+      ],
+      "set-cookie": [
+        "acw_tc=0bc1a9c917604617291211973e0897dbd19b9614d763e57a3ee4c52af9d88a;path=/;HttpOnly;Max-Age=1800"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+      ],
+      "x-log-id": [
+        "20251015010849b258fe306fb7416d"
+      ]
+    },
+    "status": 200
+  }
+}

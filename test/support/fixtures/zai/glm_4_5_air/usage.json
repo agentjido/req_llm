@@ -1,0 +1,97 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGkgdGhlcmUhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ2xtLTQuNS1haXIiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Hi there!",
+          "role": "user"
+        }
+      ],
+      "model": "glm-4.5-air",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "\nHello! 👋 How can I help you today? Feel free to ask anything or just chat! 😊",
+            "reasoning_content": "Okay, the user just said \"Hi there!\" which is a very simple greeting. Hmm, they might be testing if I'm responsive or just starting a casual conversation. \n\nI should keep it warm and friendly since they didn't specify any topic. Maybe they're new here or just in a chatty mood. The exclamation mark suggests they're upbeat, so I'll match that energy. \n\nI wonder if they need help with something specific or just want to chat. Since they didn't ask a question, I'll leave the door open for them to steer the conversation. Adding a smiley feels appropriate for a light greeting. \n\nBetter keep it simple but inviting - no need to overcomplicate a hello. If they have a real question, they'll follow up.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1760461665,
+      "id": "20251015010744791631e5c99a4234",
+      "model": "glm-4.5-air",
+      "request_id": "20251015010744791631e5c99a4234",
+      "usage": {
+        "completion_tokens": 182,
+        "prompt_tokens": 8,
+        "prompt_tokens_details": {
+          "cached_tokens": 4
+        },
+        "total_tokens": 190
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Tue, 14 Oct 2025 17:07:46 GMT"
+      ],
+      "server": [
+        "ZenZGA/2.4"
+      ],
+      "set-cookie": [
+        "acw_tc=0bc1a9c917604616640026651e08973a9604981a25c83980a572c10089878f;path=/;HttpOnly;Max-Age=1800"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+      ],
+      "x-log-id": [
+        "20251015010744791631e5c99a4234"
+      ]
+    },
+    "status": 200
+  }
+}

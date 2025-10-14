@@ -1,0 +1,97 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGkgdGhlcmUhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ2xtLTQuNS1mbGFzaCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Hi there!",
+          "role": "user"
+        }
+      ],
+      "model": "glm-4.5-flash",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.z.ai/api/coding/paas/v4/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "Hi! How can I assist you today? 😊",
+            "reasoning_content": "\nThe user initiated the conversation with a simple greeting, \"Hi there!\" This is a friendly and informal opening, so I should respond in a warm and welcoming manner to establish a positive tone. \n\nConsidering the user's message is brief and lacks specific context, they might be testing the interaction or simply starting a casual chat. To encourage engagement, I'll keep my response light and open-ended, inviting them to share what's on their mind. \n\nI'll craft a reply that's cheerful and approachable, using an exclamation mark to match their energy. Phrases like \"How can I assist you today?\" will show willingness to help without being overly formal. \n\nThis approach aligns with promoting a helpful and user-friendly interaction, ensuring the response feels natural and inviting.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1760464103,
+      "id": "202510150147397b4ffdd81e6441e8",
+      "model": "glm-4.5-flash",
+      "request_id": "202510150147397b4ffdd81e6441e8",
+      "usage": {
+        "completion_tokens": 169,
+        "prompt_tokens": 8,
+        "prompt_tokens_details": {
+          "cached_tokens": 7
+        },
+        "total_tokens": 177
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Tue, 14 Oct 2025 17:48:23 GMT"
+      ],
+      "server": [
+        "ZenZGA/2.4"
+      ],
+      "set-cookie": [
+        "acw_tc=ac11000117604640598231703e03f5a4defa839c95a5bf9196b8b317eb6bdf;path=/;HttpOnly;Max-Age=1800"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+      ],
+      "x-log-id": [
+        "202510150147397b4ffdd81e6441e8"
+      ]
+    },
+    "status": 200
+  }
+}

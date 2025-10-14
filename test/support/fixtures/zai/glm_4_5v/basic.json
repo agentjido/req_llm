@@ -1,0 +1,97 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdsbS00LjV2Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "glm-4.5v",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.z.ai/api/paas/v4/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "\nHello! It's great to connect with you. 😊 How can I assist you today? Whether you have questions, need information, or just want to chat, I'm here to help!",
+            "reasoning_content": "I'm being greeted with \"Hello world!\" and need to respond appropriately. This is a classic introductory phrase, so I should acknowledge it warmly while maintaining my professional tone.\n\nThe user might be testing if I'm functioning correctly or just saying hello casually. Either way, I should provide a friendly yet helpful response that invites further interaction.\n\nI'll craft a response that welcomes the user, expresses enthusiasm for helping them, and keeps the door open for more specific questions or requests.",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1760461675,
+      "id": "202510150107537b17f9d9b15d4804",
+      "model": "glm-4.5v",
+      "request_id": "202510150107537b17f9d9b15d4804",
+      "usage": {
+        "completion_tokens": 136,
+        "prompt_tokens": 10,
+        "prompt_tokens_details": {
+          "cached_tokens": 4
+        },
+        "total_tokens": 146
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Tue, 14 Oct 2025 17:07:55 GMT"
+      ],
+      "server": [
+        "ZenZGA/2.4"
+      ],
+      "set-cookie": [
+        "acw_tc=0bc1a98117604616733748907e5f4a3d998a9cfbb112dac11ea5fe559aac0a;path=/;HttpOnly;Max-Age=1800"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers",
+        "Origin",
+        "Access-Control-Request-Method",
+        "Access-Control-Request-Headers"
+      ],
+      "x-log-id": [
+        "202510150107537b17f9d9b15d4804"
+      ]
+    },
+    "status": 200
+  }
+}
