@@ -30,7 +30,6 @@ defmodule ReqLLM.Provider.DefaultsTest do
     end
 
     test "encodes tool calls correctly" do
-      # Test message-level tool_calls
       message_tool_calls = %Message{
         role: :assistant,
         content: [],
@@ -39,19 +38,6 @@ defmodule ReqLLM.Provider.DefaultsTest do
             id: "call_123",
             type: "function",
             function: %{name: "get_weather", arguments: ~s({"city":"New York"})}
-          }
-        ]
-      }
-
-      # Test content-part level tool calls
-      content_tool_calls = %Message{
-        role: :assistant,
-        content: [
-          %ContentPart{
-            type: :tool_call,
-            tool_name: "get_weather",
-            input: %{city: "New York"},
-            tool_call_id: "call_123"
           }
         ]
       }
@@ -72,30 +58,10 @@ defmodule ReqLLM.Provider.DefaultsTest do
         ]
       }
 
-      expected_content_result = %{
-        messages: [
-          %{
-            role: "assistant",
-            content: [
-              %{
-                id: "call_123",
-                type: "function",
-                function: %{name: "get_weather", arguments: ~s({"city":"New York"})}
-              }
-            ]
-          }
-        ]
-      }
-
       assert Defaults.encode_context_to_openai_format(
                %Context{messages: [message_tool_calls]},
                "gpt-4"
              ) == expected_message_result
-
-      assert Defaults.encode_context_to_openai_format(
-               %Context{messages: [content_tool_calls]},
-               "gpt-4"
-             ) == expected_content_result
     end
   end
 
@@ -153,11 +119,10 @@ defmodule ReqLLM.Provider.DefaultsTest do
          },
          fn result ->
            assert result.finish_reason == :tool_calls
-           assert [tool_call_part] = result.message.content
-           assert tool_call_part.type == :tool_call
-           assert tool_call_part.tool_name == "get_weather"
-           assert tool_call_part.input == %{"city" => "New York"}
-           assert tool_call_part.tool_call_id == "call_123"
+           assert [tool_call] = result.message.tool_calls
+           assert tool_call.function.name == "get_weather"
+           assert Jason.decode!(tool_call.function.arguments) == %{"city" => "New York"}
+           assert tool_call.id == "call_123"
          end},
 
         # Missing fields handled gracefully  

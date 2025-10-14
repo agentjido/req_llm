@@ -40,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759698829,
+      "created_at": 1760405670,
       "error": null,
-      "id": "resp_02f746e9da0317350068e2df8dc97481988ea46f5a34290116",
+      "id": "resp_00035acb799046e50068eda8a61bd48194909bc128ad7fcda3",
       "incomplete_details": {
         "reason": "max_output_tokens"
       },
@@ -54,23 +54,9 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_02f746e9da0317350068e2df8e83448198b8f0a9f3e66f4855",
+          "id": "rs_00035acb799046e50068eda8a6da1c819481c298f8b9555e41",
           "summary": [],
           "type": "reasoning"
-        },
-        {
-          "content": [
-            {
-              "annotations": [],
-              "logprobs": [],
-              "text": "### The Chronicle of Emberwind: A Tale of Dragons and Adventures\n\n#### Prologue: The Song of Old Flames\n\nIn the heart of the ancient world of Aelyndor, where mountains whispered to the stars and rivers sang the secrets of ages past, dragons soared beneath silver moons. They were not mere beasts of fire and fury, but the living embodiment of magic,",
-              "type": "output_text"
-            }
-          ],
-          "id": "msg_02f746e9da0317350068e2df8ebac481988691d8898ae1c5c9",
-          "role": "assistant",
-          "status": "incomplete",
-          "type": "message"
         }
       ],
       "parallel_tool_calls": true,
@@ -101,11 +87,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 80,
+        "output_tokens": 64,
         "output_tokens_details": {
-          "reasoning_tokens": 0
+          "reasoning_tokens": 64
         },
-        "total_tokens": 95
+        "total_tokens": 79
       },
       "user": null
     },
@@ -117,7 +103,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989fecd38aec22d4-ORD"
+        "98e355ac3b622304-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -126,13 +112,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:13:51 GMT"
+        "Tue, 14 Oct 2025 01:34:32 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "2104"
+        "2333"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -144,8 +130,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=ABCsZ.B4aTfMGdRijxnN9MkJaugX9yrR9v6HvKEXT7g-1759698831-1.0.1.1-C9GOiVbPB2ztUeJjJYnh_xK0gq3kHhE9gFcyvNQhsoI9nzyIZax5Fvi0.Xjxsu9SMfJpS8Tq0KHKRV0CI3zQ9NQm_GPuomzJ4GFQwZGQzYg; path=/; expires=Sun, 05-Oct-25 21:43:51 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=GRgzZfusyAT2GNamfJ2CiIbDsEBNIj3B686GmMXowZU-1759698831916-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=DCdBy20sHxvbwkzRbYMrux.a8O1REUSNmoDmGyO0XeM-1760405672-1.0.1.1-lGemWvzDOkAGMfRLwXeLDmXnFs1oI4wdBVAIuLdJHzxuxCZ95VDkd1SAyzCHJ.dY8sWj4DbrqwJ3_2t19SorbiQpGuB44o1s1LgZRov.WjE; path=/; expires=Tue, 14-Oct-25 02:04:32 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=kcfq9bU78i0IQBK8mRMDMGZxCbAd4meb8Jir1gA.XUA-1760405672424-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -157,10 +143,10 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "2107"
+        "2556"
       ],
       "x-request-id": [
-        "req_7e0c7d7bd92cc7cc44ac83a55f22192b"
+        "req_8d0802a83b284efa97618661edd1989c"
       ]
     },
     "status": 200

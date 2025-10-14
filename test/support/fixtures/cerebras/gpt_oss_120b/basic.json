@@ -44,17 +44,17 @@
           }
         }
       ],
-      "created": 1759873415,
-      "id": "chatcmpl-9643e4f7-b8bf-4bd3-9d34-ba70b38d8544",
+      "created": 1760396433,
+      "id": "chatcmpl-49864a57-73bc-4d46-8458-c931b7f27388",
       "model": "gpt-oss-120b",
       "object": "chat.completion",
       "system_fingerprint": "fp_8a8c0bd8448557718491",
       "time_info": {
-        "completion_time": 0.029322041,
-        "created": 1759873415,
-        "prompt_time": 0.001295229,
-        "queue_time": 2.28031e-4,
-        "total_time": 0.03239250183105469
+        "completion_time": 0.035351726,
+        "created": 1760396433,
+        "prompt_time": 0.168366938,
+        "queue_time": 0.360097987,
+        "total_time": 0.5652375221252441
       },
       "usage": {
         "completion_tokens": 36,
@@ -73,7 +73,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98b0932c7f480008-ORD"
+        "98e2743b3f2bf32d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -82,10 +82,10 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 21:43:35 GMT"
+        "Mon, 13 Oct 2025 23:00:36 GMT"
       ],
       "inference-id": [
-        "chatcmpl-9643e4f7-b8bf-4bd3-9d34-ba70b38d8544"
+        "chatcmpl-49864a57-73bc-4d46-8458-c931b7f27388"
       ],
       "referrer-policy": [
         "strict-origin-when-cross-origin"
@@ -94,7 +94,7 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=p8LV56RlZpXVFOeZAHG1Pr0GC27WQGDBXEH6awF23lY-1759873415-1.0.1.1-z6D692rux4wc9V6GX1vnWKNZ4wLXtbi5sAiddGWAQds5D0jExWe0unDI.tYhrmYFFUxdnWzs8yZC7QObBLgHpp5O6I7VUGJr8iFfXdY2P_M; path=/; expires=Tue, 07-Oct-25 22:13:35 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=vVZPMVShMCRomz9khDenGjLMEtmTO7lx1sr6ESPz7hQ-1760396436-1.0.1.1-5Ir6aNUzT.2uLSVz8rxaE2dUCUV.Xru6J_e8SlMo.W6Bx7ZCevYuVTSisA2SKWksa79ZC6zc2I7HutaMRAeleoJh5OijrFMrz2pFTMoYSwc; path=/; expires=Mon, 13-Oct-25 23:30:36 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=3600; includeSubDomains"
@@ -112,19 +112,19 @@
         "1000000"
       ],
       "x-ratelimit-remaining-requests-day": [
-        "1439844"
+        "1439990"
       ],
       "x-ratelimit-remaining-tokens-minute": [
         "1000000"
       ],
       "x-ratelimit-reset-requests-day": [
-        "8184.740077972412"
+        "3563.6066987514496"
       ],
       "x-ratelimit-reset-tokens-minute": [
-        "24.74007797241211"
+        "23.606698751449585"
       ],
       "x-request-id": [
-        "98b0932c7f480008-ORD"
+        "98e2743b3f2bf32d-ORD"
       ]
     },
     "status": 200

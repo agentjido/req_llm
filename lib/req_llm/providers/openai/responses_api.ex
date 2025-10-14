@@ -214,17 +214,33 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     opts_map = if is_map(opts), do: opts, else: Map.new(opts)
     provider_opts = opts_map[:provider_options] || []
 
-    input =
-      Enum.map(context.messages, fn msg ->
-        content =
-          Enum.flat_map(msg.content, fn part ->
-            case part.type do
-              :text -> [%{"type" => "input_text", "text" => part.text}]
-              _ -> []
-            end
-          end)
+    previous_response_id = provider_opts[:previous_response_id]
 
-        %{"role" => Atom.to_string(msg.role), "content" => content}
+    input =
+      Enum.flat_map(context.messages, fn msg ->
+        case msg.role do
+          :tool ->
+            []
+
+          _ ->
+            content =
+              Enum.flat_map(msg.content, fn part ->
+                case part.type do
+                  :text -> [%{"type" => "input_text", "text" => part.text}]
+                  _ -> []
+                end
+              end)
+
+            if content == [] and msg.tool_calls == nil do
+              []
+            else
+              if msg.role == :assistant and msg.tool_calls != nil and msg.tool_calls != [] do
+                []
+              else
+                [%{"role" => Atom.to_string(msg.role), "content" => content}]
+              end
+            end
+        end
       end)
 
     max_output_tokens =
@@ -238,14 +254,21 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     tool_choice = encode_tool_choice(opts_map[:tool_choice])
     reasoning = encode_reasoning_effort(provider_opts[:reasoning_effort])
 
-    Map.new()
-    |> Map.put("model", model_name)
-    |> Map.put("input", input)
-    |> maybe_put_string("stream", opts_map[:stream])
-    |> maybe_put_string("max_output_tokens", max_output_tokens)
-    |> maybe_put_string("tools", tools)
-    |> maybe_put_string("tool_choice", tool_choice)
-    |> maybe_put_string("reasoning", reasoning)
+    body =
+      Map.new()
+      |> Map.put("model", model_name)
+      |> Map.put("input", input)
+      |> maybe_put_string("stream", opts_map[:stream])
+      |> maybe_put_string("max_output_tokens", max_output_tokens)
+      |> maybe_put_string("reasoning", reasoning)
+      |> maybe_put_string("tools", tools)
+      |> maybe_put_string("tool_choice", tool_choice)
+
+    if previous_response_id do
+      Map.put(body, "previous_response_id", previous_response_id)
+    else
+      body
+    end
   end
 
   # ========================================================================
@@ -421,6 +444,11 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     schema = ReqLLM.Tool.to_schema(tool)
     function_def = schema["function"]
 
+    function_def =
+      function_def
+      |> Map.put("strict", true)
+      |> ensure_all_properties_required()
+
     %{
       "name" => function_def["name"],
       "type" => "function",
@@ -431,11 +459,57 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp encode_tool_for_responses_api(tool_schema) when is_map(tool_schema) do
     function_def = tool_schema["function"] || tool_schema[:function]
 
+    function_def =
+      if is_map_key(tool_schema, "function") do
+        function_def
+        |> Map.put("strict", true)
+        |> ensure_all_properties_required()
+      else
+        function_def
+        |> Map.put(:strict, true)
+        |> ensure_all_properties_required()
+      end
+
+    name = function_def["name"] || function_def[:name]
+
     %{
-      "name" => function_def["name"] || function_def[:name],
+      "name" => name,
       "type" => "function",
       "function" => function_def
     }
+  end
+
+  defp ensure_all_properties_required(function) do
+    params = function[:parameters] || function["parameters"]
+
+    if params do
+      properties = params[:properties] || params["properties"]
+
+      if properties && is_map(properties) do
+        all_property_names = Map.keys(properties)
+
+        updated_params =
+          if is_map_key(params, :properties) do
+            params
+            |> Map.put(:required, all_property_names)
+            |> Map.delete(:additionalProperties)
+          else
+            params
+            |> Map.put("required", Enum.map(all_property_names, &to_string/1))
+            |> Map.delete("additionalProperties")
+          end
+
+        if is_map_key(function, :parameters) do
+          Map.put(function, :parameters, updated_params)
+        else
+          Map.put(function, "parameters", updated_params)
+        end
+      else
+        function
+      end
+    else
+      function
+    end
   end
 
   defp encode_tool_choice(nil), do: nil
@@ -485,17 +559,20 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     finish_reason = determine_finish_reason(body)
 
-    content_parts = build_content_parts(text, thinking, tool_calls)
+    content_parts = build_content_parts(text, thinking)
 
     msg = %ReqLLM.Message{
       role: :assistant,
-      content: content_parts
+      content: content_parts,
+      tool_calls: if(tool_calls != [], do: tool_calls)
     }
 
     response = %ReqLLM.Response{
       id: body["id"] || "unknown",
       model: body["model"] || req.options[:model],
-      context: %ReqLLM.Context{messages: if(content_parts == [], do: [], else: [msg])},
+      context: %ReqLLM.Context{
+        messages: if(content_parts == [] and is_nil(msg.tool_calls), do: [], else: [msg])
+      },
       message: msg,
       stream?: false,
       stream: nil,
@@ -593,22 +670,14 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     segments
     |> Enum.filter(&(&1["type"] == "function_call"))
     |> Enum.map(fn seg ->
-      args =
-        case Jason.decode(seg["arguments"] || "{}") do
-          {:ok, decoded} -> decoded
-          {:error, _} -> %{}
-        end
-
-      %ReqLLM.Message.ContentPart{
-        type: :tool_call,
-        tool_call_id: seg["call_id"] || "unknown",
-        tool_name: seg["name"] || "unknown",
-        input: args
-      }
+      args_json = seg["arguments"] || "{}"
+      id = seg["call_id"]
+      name = seg["name"] || "unknown"
+      ReqLLM.ToolCall.new(id, name, args_json)
     end)
   end
 
-  defp build_content_parts(text, thinking, tool_calls) do
+  defp build_content_parts(text, thinking) do
     parts = []
 
     parts =
@@ -625,7 +694,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         [%ReqLLM.Message.ContentPart{type: :text, text: text} | parts]
       end
 
-    Enum.reverse(parts, tool_calls)
+    Enum.reverse(parts)
   end
 
   defp normalize_responses_usage(usage, response_data) do

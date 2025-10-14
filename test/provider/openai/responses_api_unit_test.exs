@@ -358,11 +358,10 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
 
       {_req, resp} = ResponsesAPI.decode_response(build_response(200, response_body))
 
-      assert [tool_part] = resp.body.message.content
-      assert tool_part.type == :tool_call
-      assert tool_part.tool_call_id == "call_abc"
-      assert tool_part.tool_name == "get_weather"
-      assert tool_part.input == %{"location" => "NYC"}
+      assert [tool_call] = resp.body.message.tool_calls
+      assert tool_call.id == "call_abc"
+      assert tool_call.function.name == "get_weather"
+      assert Jason.decode!(tool_call.function.arguments) == %{"location" => "NYC"}
     end
 
     test "handles malformed tool call arguments" do
@@ -382,9 +381,10 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
 
       {_req, resp} = ResponsesAPI.decode_response(build_response(200, response_body))
 
-      assert [tool_part] = resp.body.message.content
-      assert tool_part.type == :tool_call
-      assert tool_part.input == %{}
+      assert [tool_call] = resp.body.message.tool_calls
+      assert tool_call.id == "call_abc"
+      assert tool_call.function.name == "get_weather"
+      assert tool_call.function.arguments == "invalid json"
     end
 
     test "normalizes usage with reasoning_tokens" do

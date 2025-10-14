@@ -1,0 +1,163 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjgxOSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTMtbWluaS1mYXN0Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xfY2hvaWNlIjp7Im5hbWUiOiJhZGQiLCJ0eXBlIjoidG9vbCJ9LCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJBZGQgdHdvIGludGVnZXJzIiwibmFtZSI6ImFkZCIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImEiOnsidHlwZSI6ImludGVnZXIifSwiYiI6eyJ0eXBlIjoiaW50ZWdlciJ9fSwicmVxdWlyZWQiOlsiYSIsImIiXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 819,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        }
+      ],
+      "model": "grok-3-mini-fast",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tool_choice": {
+        "name": "add",
+        "type": "tool"
+      },
+      "tools": [
+        {
+          "function": {
+            "description": "Add two integers",
+            "name": "add",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "a": {
+                  "type": "integer"
+                },
+                "b": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "a",
+                "b"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.x.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "message": {
+            "content": " ",
+            "reasoning_content": "First, the user says: \"Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.\"\n\nI need to understand what the \"add tool\" is. In this context, I'm an AI assistant, and I have access to tools. The \"add tool\" is likely a way to perform addition, probably by calling an external function or just simulating it.\n\nThe instructions say: \"Use the add tool to compute 2 + 3.\" So, I should invoke this tool.\n\nAfter that, it says: \"After the tool result arrives, respond with 'sum=<value>'.\"\n\nMy response should only happen once I have the result from the tool. Then, I need to format my response as 'sum=<value>', where <value> is the result of the addition.\n\nWhat is the add tool? In this simulation, I don't have a real external tool, but I can assume it's a simple addition. For example, adding 2 and 3 gives 5.\n\nIn the context of this exercise, I might need to pretend to use a tool. But since this is a text-based interaction, I'll just compute it directly.\n\nThe user specifies: \"Use the add tool\", so I should indicate that I'm using it.\n\nPerhaps in the system prompt or previous context, there's a way to call tools. For instance, in some AI setups, you use a specific syntax like \"Action: add(2, 3)\".\n\nLooking back at the initial system prompt, it might not be specified, but I need to follow the user's instruction.\n\nA possible way to structure this is:\n\n1. Call the tool: Something like \"I am using the add tool with arguments 2 and 3.\"\n\n2. Get the result: Assume it's 5.\n\n3. Then respond: \"sum=5\"\n\nThe user said: \"After the tool result arrives, respond with 'sum=<value>'.\" So, my final output should be just that string.\n\nIn practice, for this response, I need to output the final answer.\n\nPerhaps I should output something like:\n\nFirst, indicate the action, then the result.\n\nTo keep it simple, since the instruction is clear, I'll compute it and respond as specified.\n\nSo, 2 + 3 = 5.\n\nTherefore, my response should be: \"sum=5\"\n\nIs that all? The user said \"After the tool result arrives\", implying there might be a step where I wait for the tool.\n\nIn this text-based format, I can just do it directly.\n\nPerhaps I need to format it as per tool usage.\n\nAnother thought: In some AI frameworks, like LangChain or similar, you might have to output in a specific way, like:\n\nThought: I need to use the add tool.\n\nAction: add 2 3\n\nObservation: 5\n\nThen, final response.\n\nThe user didn't specify that level of detail. They just said to use the tool and then respond with 'sum=<value>'.\n\nTo be precise, I'll assume I need to perform the action and then respond.\n\nSo, my final output should be: sum=5",
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"a\":2,\"b\":3}",
+                  "name": "add"
+                },
+                "id": "call_93070822",
+                "type": "function"
+              }
+            ]
+          }
+        }
+      ],
+      "created": 1760391829,
+      "id": "a2f6fef5-3bb6-bc17-5778-085c7dacc8cc_us-east-1",
+      "model": "grok-3-mini",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_4fae27f477",
+      "usage": {
+        "completion_tokens": 31,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 639,
+          "rejected_prediction_tokens": 0
+        },
+        "num_sources_used": 0,
+        "prompt_tokens": 32,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 2,
+          "image_tokens": 0,
+          "text_tokens": 32
+        },
+        "total_tokens": 702
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "98e203c658e5e256-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy-report-only": [
+        "script-src 'none'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=Wr_A2SC38qhD6MxLdqFDC31NXdPbqaph80Yh6KWfvpw-1760391836-1.0.1.1-5U7YnDTHB6U2SLnMlixHnVo7weKCtO0ObMTz8sZ3UuH0zc35GO7hNjp0NiV3_P8ZCLH9gSJOswzGW_2RNZ2.KSr9wzLm.oeITz4O3kVSEIr9PdpYaHZJsDYnGK_AZJZDg3jtBtEqVW0EtG44kaJh_BxMWCMHSB207Jmylq66g54; report-to cf-csp-endpoint"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 13 Oct 2025 21:43:56 GMT"
+      ],
+      "report-to": [
+        "{\"endpoints\":[{\"url\":\"https:\\/\\/csp-reporting.cloudflare.com\\/cdn-cgi\\/script_monitor\\/report?m=Wr_A2SC38qhD6MxLdqFDC31NXdPbqaph80Yh6KWfvpw-1760391836-1.0.1.1-5U7YnDTHB6U2SLnMlixHnVo7weKCtO0ObMTz8sZ3UuH0zc35GO7hNjp0NiV3_P8ZCLH9gSJOswzGW_2RNZ2.KSr9wzLm.oeITz4O3kVSEIr9PdpYaHZJsDYnGK_AZJZDg3jtBtEqVW0EtG44kaJh_BxMWCMHSB207Jmylq66g54\"}],\"group\":\"cf-csp-endpoint\",\"max_age\":86400}"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=IKvaw02CMJdq0K31ueP1BwRnHIblt3YpqeEs6YQtJJU-1760391836-1.0.1.1-kV4ROIKa5Y.vkQrsPlNVqb8HwlDJfBJ2RIxbVSX0wV9X0mokfEJs1n7XroOBi6V5gc.dCGuP4S.6lb.erxie9zSps4R2YUyzePoNSDkySXo; path=/; expires=Mon, 13-Oct-25 22:13:56 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-request-id": [
+        "00-ab60515d315469f69ca6c9a7c75dbe2a-b83fb39b0030de1b-01"
+      ],
+      "x-zero-data-retention": [
+        "false"
+      ]
+    },
+    "status": 200
+  }
+}

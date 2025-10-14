@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxNjM4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/Iiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibW9vbnNob3RhaS9raW1pLWsyLWluc3RydWN0LTA5MDUiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoxNjM4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/Iiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibW9vbnNob3RhaS9raW1pLWsyLWluc3RydWN0LTA5MDUiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
       "max_tokens": 1638,
@@ -21,6 +21,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -46,6 +47,7 @@
             "description": "Tell a funny joke",
             "name": "tell_joke",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "topic": {
                   "description": "Topic for the joke",
@@ -108,24 +110,24 @@
           }
         }
       ],
-      "created": 1759844696,
-      "id": "chatcmpl-2bb5610a-5aa8-4026-8e40-dcaa2691e64b",
+      "created": 1760389839,
+      "id": "chatcmpl-1d2b8efd-a272-490f-8164-688949a347af",
       "model": "moonshotai/kimi-k2-instruct-0905",
       "object": "chat.completion",
       "service_tier": "on_demand",
       "system_fingerprint": "fp_05df423bab",
       "usage": {
-        "completion_time": 0.116707281,
+        "completion_time": 0.102441504,
         "completion_tokens": 30,
-        "prompt_time": 0.022385954,
-        "prompt_tokens": 222,
-        "queue_time": 0.070309672,
-        "total_time": 0.139093235,
-        "total_tokens": 252
+        "prompt_time": 0.030626406,
+        "prompt_tokens": 234,
+        "queue_time": 0.07134614,
+        "total_time": 0.13306791,
+        "total_tokens": 264
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6zep06de1f83vjjt1y8s0xz"
+        "id": "req_01k7fpje1derv8h241ntva928m"
       }
     },
     "headers": {
@@ -139,7 +141,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98add60779f2f151-ORD"
+        "98e1d32ceb711409-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -148,13 +150,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:44:56 GMT"
+        "Mon, 13 Oct 2025 21:10:39 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=WVk_ZSmzrTtEsPH3UlmKSFaESkciRwMo3gjdB5ASQMM-1759844696-1.0.1.1-BHUu6fHMW8gEXk1ZbGRtC9pfb.vKAO.KC5m8AqpPuXyyNDmc9VKuaPYs_ZZmhY6LuWbq.esfaLqGqqnvFGe.OPLDqEYSMILAKw6zLhN_Vj4; path=/; expires=Tue, 07-Oct-25 14:14:56 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=KIvHrEbbmBZJxxJ0iEkxN2_MweJNlsNzLJc9ENmOrZU-1760389839-1.0.1.1-ay4n.40KxGxDZYIx6KkpY4fcUAf5rjSEBOY0_XUZnn4iaZU2oE1Tu8_R5dMLMSP01kP87SSFjK0aEqqs0QGbzL2bBEeSonf_p9_Saw7FwSk; path=/; expires=Mon, 13-Oct-25 21:40:39 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -175,19 +177,19 @@
         "10000"
       ],
       "x-ratelimit-remaining-requests": [
-        "995"
+        "996"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9541"
+        "9572"
       ],
       "x-ratelimit-reset-requests": [
-        "7m11.806s"
+        "5m45.6s"
       ],
       "x-ratelimit-reset-tokens": [
-        "2.75s"
+        "2.568s"
       ],
       "x-request-id": [
-        "req_01k6zep06de1f83vjjt1y8s0xz"
+        "req_01k7fpje1derv8h241ntva928m"
       ]
     },
     "status": 200

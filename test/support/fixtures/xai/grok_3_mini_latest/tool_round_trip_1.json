@@ -1,0 +1,157 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjgxOSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTMtbWluaS1sYXRlc3QiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbF9jaG9pY2UiOnsibmFtZSI6ImFkZCIsInR5cGUiOiJ0b29sIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkFkZCB0d28gaW50ZWdlcnMiLCJuYW1lIjoiYWRkIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYSI6eyJ0eXBlIjoiaW50ZWdlciJ9LCJiIjp7InR5cGUiOiJpbnRlZ2VyIn19LCJyZXF1aXJlZCI6WyJhIiwiYiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+    },
+    "canonical_json": {
+      "max_completion_tokens": 819,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        }
+      ],
+      "model": "grok-3-mini-latest",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tool_choice": {
+        "name": "add",
+        "type": "tool"
+      },
+      "tools": [
+        {
+          "function": {
+            "description": "Add two integers",
+            "name": "add",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "a": {
+                  "type": "integer"
+                },
+                "b": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "a",
+                "b"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.x.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "message": {
+            "content": " ",
+            "reasoning_content": "First, the user says: \"Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.\"\n\nI need to understand what the \"add tool\" is. In this context, I'm an AI assistant, and I might have access to tools. The \"add tool\" probably means I should use a function or a method to perform addition.\n\nThe instruction is to use the add tool to compute 2 + 3. Then, once I have the result, I should respond with 'sum=<value>', where <value> is the result of the addition.\n\nIn my setup, I don't have an actual external tool; I'm simulating this. But based on the prompt, I need to act as if I'm using a tool.\n\nThe user specifies: \"After the tool result arrives, respond with 'sum=<value>'.\" So, my response should only be that string once I have the result.\n\nTo compute 2 + 3, that's straightforward: 2 + 3 equals 5.\n\nSo, the value is 5.\n\nTherefore, my final response should be: 'sum=5'\n\nI need to make sure I'm following the instructions precisely. The user said: \"Use the add tool to compute 2 + 3.\" I should indicate that I'm using the tool, but the response is only after the result.\n\nIn this text-based interaction, I'll assume that I've used the tool and now I'm responding.\n\nMy thought process:\n\n1. Receive the command: Use add tool for 2 + 3.\n\n2. Simulate or perform the addition: 2 + 3 = 5.\n\n3. Once the result is available, respond with 'sum=5'.\n\nFinal output: sum=5\n\nThe user said: \"respond with 'sum=<value>'\", so it should be exactly that format, probably as a string.\n\nIn the prompt, it's 'sum=<value>', with single quotes, but I think that's just to denote the string. So, my response should be: sum=5\n\nI shouldn't add extra text unless specified.",
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"a\":2,\"b\":3}",
+                  "name": "add"
+                },
+                "id": "call_60132697",
+                "type": "function"
+              }
+            ]
+          }
+        }
+      ],
+      "created": 1760391850,
+      "id": "1f85e35a-67fc-2c2c-6384-5d84e926690e_us-east-1",
+      "model": "grok-3-mini",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_4fae27f477",
+      "usage": {
+        "completion_tokens": 40,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 425,
+          "rejected_prediction_tokens": 0
+        },
+        "num_sources_used": 0,
+        "prompt_tokens": 32,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 2,
+          "image_tokens": 0,
+          "text_tokens": 32
+        },
+        "total_tokens": 497
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "98e204477dca1393-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 13 Oct 2025 21:44:14 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=492SFfWNbaqtQdbnnW0b0QQBFO2Yw9A3h3knSgAH6.A-1760391854-1.0.1.1-D92gXSlB7FKasnMLAbMuC1WcksjSwIjHrV6VUDEH5XGRGKlRIWi9B5cH6rR0oW4XmaonS.wai1NMlorA7LjIfBK7A6HDyRtdnskQi4N0gM4; path=/; expires=Mon, 13-Oct-25 22:14:14 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-request-id": [
+        "00-0128dac7d8b428141d793ee71687acf2-4ce58f3b0038b503-01"
+      ],
+      "x-zero-data-retention": [
+        "false"
+      ]
+    },
+    "status": 200
+  }
+}

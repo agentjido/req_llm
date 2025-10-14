@@ -36,43 +36,42 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": null,
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hi! How can I help you today? ",
-            "reasoning": "First, the user said \"Hi there!\" This is a casual greeting. As Grok, I'm supposed to be helpful and maximally truthful, built by xAI.\n\n\n## Responding to greeting  \n- The user started with a casual \"Hi there!\" greeting, setting a friendly tone.",
+            "content": "Hi! How's it going? What can I",
+            "reasoning": "First, the user said \"Hi there!\" This is a casual greeting. As Grok, I'm supposed to be helpful and maximally truthful, built by xAI.\n",
             "reasoning_details": [
               {
-                "format": "unknown",
+                "format": "xai-responses-v1",
                 "index": 0,
-                "text": "First, the user said \"Hi there!\" This is a casual greeting. As Grok, I'm supposed to be helpful and maximally truthful, built by xAI.\n\n\n## Responding to greeting  \n- The user started with a casual \"Hi there!\" greeting, setting a friendly tone.",
-                "type": "reasoning.text"
+                "summary": "First, the user said \"Hi there!\" This is a casual greeting. As Grok, I'm supposed to be helpful and maximally truthful, built by xAI.\n",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "VZ9bad0Sy5pTNvHu91iixhQiQUSqKhOV94AxxmhiVNA+SJRk56U9TDq++zTHN7y6cyeImfz+4b0TRja6H70umgWiSaZDQ2hLpgZjCbDNHl/drs4T11zgu/vtmafnykITQIa9TWE//GXUe5TMze6NMZsItX0u6haAdTjaIOzlaDVreSROueaaRV375fz++zbSEFIrG2GEjp9kSCv2NMGX7WlcpvUQ4PiUcuVdGwZPbhy8wRYTtLlhI20ZQfhiwkQkErC2EsmnkJ5S+sBuk6HQenPAKijIhexp/Iv1pJ3qD0lOc0hOhf8EUNnYL85Ul/NZvxRbAIsFpHk750lwGtFRIvvIno07lIzb4wgqFhVfUNHel77Tkin6eb7XIJZ7uJvNW2dBm6EgsS2vhrDobO7S1nK6RJelrGfpky6JrcqPZsa3MAeS+dfSFgPT2kaSayZgb6Y7ujvyj8dHistLL4omoxwOtuj0TeNdbc9hO7cEkgYYOm0ie3u3USWDa8dfZn39yXNwnGbICaXNXXl+olgbVSRVHRuB+uRrfhvt+ljKFNqbZ4RjSLjV7Wvlp+cyVls2alqBctF14gQ0CdffDTP8/+PfuUXn1ax4Y98ekABrM74pf+KJqRdkNoADiu0hngJPRM1B0U6k/w6vWOSTTM235isL0TZyuGxHtN6Eh5PsTWhGCAqE",
+                "format": "xai-responses-v1",
+                "id": "rs_c783ec8a-291a-ce21-547b-13ac1d5c5856_us-east-1",
+                "index": 0,
+                "type": "reasoning.encrypted"
               }
             ],
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "length"
+          "native_finish_reason": null
         }
       ],
-      "created": 1759845474,
-      "id": "gen-1759845474-aYkgtNXk26mzmbVJED2J",
+      "created": 1760442665,
+      "id": "gen-1760442665-j5obSTJljhDfza0tLGR8",
       "model": "x-ai/grok-code-fast-1",
       "object": "chat.completion",
       "provider": "xAI",
-      "system_fingerprint": "fp_10f00c862d",
       "usage": {
-        "completion_tokens": 135,
-        "completion_tokens_details": {
-          "reasoning_tokens": 125
-        },
-        "prompt_tokens": 207,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 192
-        },
-        "total_tokens": 342
+        "completion_tokens": 10,
+        "prompt_tokens": 10,
+        "total_tokens": 20
       }
     },
     "headers": {
@@ -80,7 +79,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade9088e8e60ac-ORD"
+        "98e6dce2dbf51259-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,7 +88,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:57:55 GMT"
+        "Tue, 14 Oct 2025 11:51:05 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

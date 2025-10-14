@@ -35,43 +35,42 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": null,
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "### Chapter 1: The Hidden Egg\n\nIn the mist-shrouded valleys of Eldoria, where ancient forests whispered secrets to the wind, lived a young orphan named Thorne. Raised by the stern but kind blacksmith of the village of Rivermoor, Thorne spent his days forging tools and dreaming of the legends his grandmother had told him before she passed. Dragons, she said, were not mere beasts of fire and fury, but guardians of balance, bound to riders who proved worthy. But dragons had",
-            "reasoning": "First, the user asked for a \"very long story about dragons and adventures.\" This is an open-ended, creative request. According to the guidelines, for open-ended questions, I should ensure the response is maximally informative, structure it easily parsable, perhaps with sections and headers if appropriate, but since it's a story, it might be narrative.\n\n\n## Interpreting user request  \n- The user requested a \"very long story about dragons and adventures,\" which is an open-ended, creative task.  \n- This suggests the response should be narrative, engaging, and structured for easy reading, possibly with sections or headers.  \n- The guidelines indicate aiming for maximum informativeness while ensuring the story is parsable and imaginative.  \n- Given the nature, the focus will be on crafting a detailed, adventurous tale centered around dragons.",
+            "content": "### The Dragon's Legacy\n\nIn the ancient realm of Eldoria, where towering mountains pierced the sky and enchanted forests whispered secrets to the wind, dragons were not mere beasts of legend but guardians of forgotten powers. For centuries, they had slumbered in their cavernous lairs, hoarding treasures and wielding magic that could reshape the world. But peace was fragile, and the arrival of a young orphan named Elara would shatter it, igniting a saga of adventure, betrayal, and destiny.\n\n####",
+            "reasoning": "First, the user asked for a \"very long story about dragons and adventures.\" This is an open-ended, creative request. According to the guidelines, I should make my response maximally informative and structure it easily parsable. For open-ended questions, ensure it's comprehensive but not yapping – be economical.\n\n\n## Interpreting User Request  \n- The user asked for a \"very long story about dragons and adventures,\" which is an open-ended creative task.  \n- The goal is to provide a comprehensive, structured narrative while keeping it informative and concise.",
             "reasoning_details": [
               {
-                "format": "unknown",
+                "format": "xai-responses-v1",
                 "index": 0,
-                "text": "First, the user asked for a \"very long story about dragons and adventures.\" This is an open-ended, creative request. According to the guidelines, for open-ended questions, I should ensure the response is maximally informative, structure it easily parsable, perhaps with sections and headers if appropriate, but since it's a story, it might be narrative.\n\n\n## Interpreting user request  \n- The user requested a \"very long story about dragons and adventures,\" which is an open-ended, creative task.  \n- This suggests the response should be narrative, engaging, and structured for easy reading, possibly with sections or headers.  \n- The guidelines indicate aiming for maximum informativeness while ensuring the story is parsable and imaginative.  \n- Given the nature, the focus will be on crafting a detailed, adventurous tale centered around dragons.",
-                "type": "reasoning.text"
+                "summary": "First, the user asked for a \"very long story about dragons and adventures.\" This is an open-ended, creative request. According to the guidelines, I should make my response maximally informative and structure it easily parsable. For open-ended questions, ensure it's comprehensive but not yapping – be economical.\n\n\n## Interpreting User Request  \n- The user asked for a \"very long story about dragons and adventures,\" which is an open-ended creative task.  \n- The goal is to provide a comprehensive, structured narrative while keeping it informative and concise.",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "WVadeijBnQH326NYF7JzOJb3jCE9ROWPWUu9I6iO4k0N0w9PuQ69r08zvSllpA5S/gUYCb8BmDfMbhy8x6OkezDtGHT3JWHu93Yna+/jOqnUbhxZ9eeTZtmAS3ZMLfLS1E+n+/IIDGeLtnpmtfBN/p4pdeampnWkgcsEMhagb3o1A9oIakj6baVXzb9omRS+elqQxSWX0xrC0JNjZqvKAu3e0wfkyvEMF0QPLLD95hNLX995O6kVHZFPzbGfWjJu8obMQQFSxOHB3ppVyKJmzotOTdJ5A70Pkxg7/NQ8QBK5GN0U6aS+zPCikFmLwnwjNFJNpE+d33diY2V9q8WozmSyXHXPpjboPEpHzLLrhnLI368j70IytPvqv+ZKgdi1ViurtPjA4FLk5g9AWBqeUmbEjRBETNYsgYVwZF2rrvLKRoBUDm8BKSRZLhMJQ4SodW3drrgWosOft2nD1Gox1y7F1CPBhVDJV/KLHQiUg6xCUZIG0ylhRbhg1QJX41653BwFd+Fb3gYpdqHlampLQ35HZknPHFLr2sak6VLPdxIStNtdklzcRnqCerxXO0PwI7Jq5hv36nw4LVtOtU1eIywVPRp/iGOzDkNFYl0NRV8LSCgCxySDY/uRlu+9CVciw3ryQTni/j+fo76881CsMRWXLJhmLxQoqIbHDFMTlPLE4pT2IeWQlAOd3gmsSqLtb6mELkrBOtYZVuM5vzL757Mj+ECy8mJ4NV3AG/go/MC+FANDKWpl/5jNwHfD0vTU6QFStTEdKGNXLhOZjuRvzIyi7+lJJ9veuyCZ1LuF6y9rJLSZfg5KNI3yeO6oNEThtKcYafAzTknLS9soGyQr0BzYuGbWgIIEy86Ww/I9FzrW0gGHJDSYumfCNyC0jeTG40BGyaOqg1qizXuwlX7ypJOxQ0ds1yIYsKAFXGqPMZeL46xKaYKWsI4zceI3fpz7Ds+dCZCbNL/fXPxx+xQ5cDKCjuMi8lwtnnvHL7TniZiV1tTUSKARvxzSl5UhgxRJAgpSbJX6Ehw4OWhTWu2FwlOvav6KSR4lh18KDTr9B/2BadjVW1PBYDRkRyMohhKhh1+mVU3fXRTPVK+T8vN/NWsglt1TYe+gZ+Ia1qHes8TtUyLA8a6cGNDfC6Z//1AomaJDE8JmButXyJx3zECKEMxIwl0GtdXe5VdaqkNZkN8AtycI/DfL/SW4JVmcbbc/T9ji6XNiB9W7lQcyEvCaCOZtP9AH3LADiteb221xaz6SyFQ5UnoKreur6jeF9R93e8GDwR7s+MKUSBBk7GAeEf+o5Fy7sxXfp3P3x4xPrVEB6Wuy3XWA72WBG9lAYyioqFGbKXZpx4fdBEL33gQgpVq68oHsqmOYiuGiU29eFqtuw0e3jWl+iF/wwb0cUaTeq9WSRpjBRFM4+29DBEpEOxWwfwK7R5emXbO7mq3JLpwbexKnivCWSKPJfWocW8i2+pBeUsVMp9JRYZBAQodWszE3+0/MrPIUDQR+70khWlA58Jz/G4WryUTt31RkBPhEKjcBToDef1jGWQKlzLMfWejehMaw74nb2NuhDgOh/A3PAazNRcRdafKi9dc/FJCPC5wopxyAyrv0RERvCw7tF5ZVacWpzVS5W+QP04TLP5VcXj2hE+HD0RG9ORUzOhsFQzf46K3a2jq/gQ2i+20V6rYSajTBhPxkV65F0zB8h8B9UboaQ/33h8LnIz6pI81xPnSvIBEGJ6z82Ultb/Kr3kMF8Lasztj0CO3l/g4bnMI4JehEpPSdJxMs46St",
+                "format": "xai-responses-v1",
+                "id": "rs_d1e7ff2f-5e1d-cce6-fa73-82bf8443ba94_us-east-1",
+                "index": 0,
+                "type": "reasoning.encrypted"
               }
             ],
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "length"
+          "native_finish_reason": null
         }
       ],
-      "created": 1759845457,
-      "id": "gen-1759845457-UEWjTjG0pT0Lf2eOOK8o",
+      "created": 1760442671,
+      "id": "gen-1760442671-KYeAMQXkv7X3pXRYKPXn",
       "model": "x-ai/grok-code-fast-1",
       "object": "chat.completion",
       "provider": "xAI",
-      "system_fingerprint": "fp_10f00c862d",
       "usage": {
-        "completion_tokens": 434,
-        "completion_tokens_details": {
-          "reasoning_tokens": 334
-        },
-        "prompt_tokens": 213,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 192
-        },
-        "total_tokens": 647
+        "completion_tokens": 103,
+        "prompt_tokens": 16,
+        "total_tokens": 119
       }
     },
     "headers": {
@@ -79,7 +78,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade89fcd8d60ac-ORD"
+        "98e6dd073b861259-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -88,7 +87,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:57:39 GMT"
+        "Tue, 14 Oct 2025 11:51:11 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

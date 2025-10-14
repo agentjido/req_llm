@@ -40,39 +40,38 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello, world! Nice to meet you. If you're testing code or just saying hi, I'm Grok, ready to assist with anything from cosmic queries to coding conundrums. What's on your mind? 🚀",
-            "reasoning": "First, the user said \"Hello world!\" This is a simple greeting, often used in programming as the first program output.\n\n\n## Greeting the User  \n- The user started with \"Hello world!\"—a classic greeting often used as the first output in programming.",
+            "content": "Hello! Ah, the classic \"Hello, World!\" – the first words of countless programmers. What's on your mind today? Ready to dive into some code, questions, or just chat? 🚀",
+            "reasoning": "First, the user said \"Hello world!\" This is a simple greeting, likely a reference to the classic programming phrase.\n\n\n## Greeting the User  \n- The user started with \"Hello world!\"—a classic programming greeting.  \n- This suggests familiarity with tech, setting a casual tone for the interaction.",
             "reasoning_details": [
               {
-                "format": "unknown",
+                "format": "xai-responses-v1",
                 "index": 0,
-                "text": "First, the user said \"Hello world!\" This is a simple greeting, often used in programming as the first program output.\n\n\n## Greeting the User  \n- The user started with \"Hello world!\"—a classic greeting often used as the first output in programming.",
-                "type": "reasoning.text"
+                "summary": "First, the user said \"Hello world!\" This is a simple greeting, likely a reference to the classic programming phrase.\n\n\n## Greeting the User  \n- The user started with \"Hello world!\"—a classic programming greeting.  \n- This suggests familiarity with tech, setting a casual tone for the interaction.",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "/ZP7lbRMX0/WwFsLVO5Y8m/oeozITMcasc43K1Kyt5Df0RCbjX2rhiGwgaddl1LpCsEShE1SWnzTazXuDZHnmJ4lpo9cFtUBy1DNLT1cPnB9XcqFB473j+pSVRaI8gJQrPVxRTi0zNPgY44Zn8YkXl7fxoqtL7G7WvV6oOBzrdAJEl5TEPBv/3TOD7bXRxAYRoiQO6X1p73JjpHGfan6VeHLNMcFiynrdEzLbtF1OyVIJXSJGykKW1R92rx8/IC3+J4DauV30RJ6njvKx/z9uPPeiQ9e78pVUJXW2xmTRIXex4Wbx37U2/DfRQGfSKmaWnt+5yanuHRgxVCYzC/iy0clMAnCxtPVI1j2UAWLr/2XJED6h/9PSXVVLWx64SvKaQRC4LeM8TrzS5Iifz9LJKisN5HEZpHxjTcUlQ+msaso3XJL8Oyio4Ek5EBXfDCs+1VVZ1mDSSeWIsz1qEuNl1l5Fbr+B8xmUWzca7EuNjA35ZzKuOA+l3uQag6lZE/Knd4e1TCEz26zxeed1h8FiLSSrmro58kZML0Y89EqYK4UHk9/bc2/somiA1Z5Sc+XKAaIid9N+GMYcJigb7MDPBzznfxXEqv2LdgSedVtN2rofT8Y1SR38wL6QSJgksaaMWVNH521sMOQRYeXAr8Pr17cICx9FWP7vkm7BSWUrb3WfmwIi5AArR4+paR95vl1PaXBBOq5JCNM8Hb+rBw4A/nItUTki8R/IV/oWS+xzI+rn0qfOHe8otooFC/Pdr//YSVV+jt3QcmrwezJ67hGyySfDSaMquAjZf2lHSTvvndJrAcB7MX8NKc0ilgjXa8Z0TDpladg/JiBAQgP59qdkr9m85MDievGpg+snpBvApocNS4w/pAGfr6UKwtI6lqk16a+deCXyCyfwU9bzaRlUPrvHKfhNwaGrFAZMxUjLZO7eIUWAGP2QY97mLxzSzWR3+53IwtIkuNHIn/F1pZEuvKveJy5wbBZ7+4M5vpwPE6sR+9lsE52b16+I7OZHqOaPxo",
+                "format": "xai-responses-v1",
+                "id": "rs_7444c4cb-3b63-2483-5ae9-bb501fc4942b_us-east-1",
+                "index": 0,
+                "type": "reasoning.encrypted"
               }
             ],
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "stop"
+          "native_finish_reason": "completed"
         }
       ],
-      "created": 1759845467,
-      "id": "gen-1759845467-3v8ZnQ5Bg36J5eupnwS2",
+      "created": 1760442666,
+      "id": "gen-1760442666-QH1mgPlujCLGaPIizcN0",
       "model": "x-ai/grok-code-fast-1",
       "object": "chat.completion",
       "provider": "xAI",
-      "system_fingerprint": "fp_10f00c862d",
       "usage": {
-        "completion_tokens": 183,
-        "completion_tokens_details": {
-          "reasoning_tokens": 140
-        },
+        "completion_tokens": 198,
         "prompt_tokens": 207,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 192
-        },
-        "total_tokens": 390
+        "total_tokens": 405
       }
     },
     "headers": {
@@ -80,7 +79,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade8de7abf60ac-ORD"
+        "98e6dcec19fa1259-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,7 +88,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:57:49 GMT"
+        "Tue, 14 Oct 2025 11:51:07 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

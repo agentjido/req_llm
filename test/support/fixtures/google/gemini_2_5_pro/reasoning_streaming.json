@@ -1,29 +1,21 @@
 {
-  "captured_at": "2025-10-07T15:24:18.960028Z",
+  "captured_at": "2025-10-13T23:54:54.658516Z",
   "chunks": [
     {
-      "b64": "W3sKICAiY2FuZGlkYXRlcyI6IFsKICAgIHsKICAgICAgImNvbnRlbnQiOiB7CiAgICAgICAgInBhcnRzIjogWwogICAgICAgICAgewogICAgICAgICAgICAidGV4dCI6ICIqKkFwcHJvYWNoOioqXG5cbjEuICBSZWNvZ25pemUgdGhlIG9wZXJhdGlvbiBpcyBtdWx0aXBsaWNhdGlvbi5cbjIuICBCcmVhayBkb3duIHRoZSBudW1iZXIgMSIKICAgICAgICAgIH0KICAgICAgICBdLAogICAgICAgICJyb2xlIjogIm1vZGVsIgogICAgICB9LAogICAgICAiaW5kZXgiOiAwCiAgICB9CiAgXSwKICAidXNhZ2VNZXRhZGF0YSI6IHsKICAgICJwcm9tcHRUb2tlbkNvdW50IjogMzIsCiAgICAiY2FuZGlkYXRlc1Rva2VuQ291bnQiOiAyNCwKICAgICJ0b3RhbFRva2VuQ291bnQiOiA3NTEsCiAgICAicHJvbXB0VG9rZW5zRGV0YWlscyI6IFsKICAgICAgewogICAgICAgICJtb2RhbGl0eSI6ICJURVhUIiwKICAgICAgICAidG9rZW5Db3VudCI6IDMyCiAgICAgIH0KICAgIF0sCiAgICAidGhvdWdodHNUb2tlbkNvdW50IjogNjk1CiAgfSwKICAibW9kZWxWZXJzaW9uIjogImdlbWluaS0yLjUtcHJvIiwKICAicmVzcG9uc2VJZCI6ICJuRERsYUxpRUY2elVqTWNQczVIRTRBayIKfQo=",
-      "decoded": "[{\n  \"candidates\": [\n    {\n      \"content\": {\n        \"parts\": [\n          {\n            \"text\": \"**Approach:**\\n\\n1.  Recognize the operation is multiplication.\\n2.  Break down the number 1\"\n          }\n        ],\n        \"role\": \"model\"\n      },\n      \"index\": 0\n    }\n  ],\n  \"usageMetadata\": {\n    \"promptTokenCount\": 32,\n    \"candidatesTokenCount\": 24,\n    \"totalTokenCount\": 751,\n    \"promptTokensDetails\": [\n      {\n        \"modality\": \"TEXT\",\n        \"tokenCount\": 32\n      }\n    ],\n    \"thoughtsTokenCount\": 695\n  },\n  \"modelVersion\": \"gemini-2.5-pro\",\n  \"responseId\": \"nDDlaLiEF6zUjMcPs5HE4Ak\"\n}\n"
+      "b64": "ZGF0YTogeyJjYW5kaWRhdGVzIjogW3siY29udGVudCI6IHsicGFydHMiOiBbeyJ0ZXh0IjogIioqTXkgQXBwcm9hY2g6KipcblxuMS4gIEJyZWFrIHRoZSBudW1iZXIgMTUgaW50byBpdHMgc2ltcGxlciBjb21wb25lbnRzOiAxMCBhbmQgNS4ifV0sInJvbGUiOiAibW9kZWwifSwiaW5kZXgiOiAwfV0sInVzYWdlTWV0YWRhdGEiOiB7InByb21wdFRva2VuQ291bnQiOiAzMiwiY2FuZGlkYXRlc1Rva2VuQ291bnQiOiAyNiwidG90YWxUb2tlbkNvdW50IjogMTAxMSwicHJvbXB0VG9rZW5zRGV0YWlscyI6IFt7Im1vZGFsaXR5IjogIlRFWFQiLCJ0b2tlbkNvdW50IjogMzJ9XSwidGhvdWdodHNUb2tlbkNvdW50IjogOTUzfSwibW9kZWxWZXJzaW9uIjogImdlbWluaS0yLjUtcHJvIiwicmVzcG9uc2VJZCI6ICJSNUh0YUk2NUFiV3FqTWNQa00yT2dRdyJ9DQoNCg==",
+      "decoded": "data: {\"candidates\": [{\"content\": {\"parts\": [{\"text\": \"**My Approach:**\\n\\n1.  Break the number 15 into its simpler components: 10 and 5.\"}],\"role\": \"model\"},\"index\": 0}],\"usageMetadata\": {\"promptTokenCount\": 32,\"candidatesTokenCount\": 26,\"totalTokenCount\": 1011,\"promptTokensDetails\": [{\"modality\": \"TEXT\",\"tokenCount\": 32}],\"thoughtsTokenCount\": 953},\"modelVersion\": \"gemini-2.5-pro\",\"responseId\": \"R5HtaI65AbWqjMcPkM2OgQw\"}\r\n\r\n"
     },
     {
-      "b64": "LA0KewogICJjYW5kaWRhdGVzIjogWwogICAgewogICAgICAiY29udGVudCI6IHsKICAgICAgICAicGFydHMiOiBbCiAgICAgICAgICB7CiAgICAgICAgICAgICJ0ZXh0IjogIjUgaW50byBtb3JlIG1hbmFnZWFibGUgcGFydHMsIGxpa2UgMTAgYW5kIDUuXG4zLiAgTXVsdGlwbHkgZWFjaCBwYXJ0IGJ5IDMuIgogICAgICAgICAgfQogICAgICAgIF0sCiAgICAgICAgInJvbGUiOiAibW9kZWwiCiAgICAgIH0sCiAgICAgICJpbmRleCI6IDAKICAgIH0KICBdLAogICJ1c2FnZU1ldGFkYXRhIjogewogICAgInByb21wdFRva2VuQ291bnQiOiAzMiwKICAgICJjYW5kaWRhdGVzVG9rZW5Db3VudCI6IDQ5LAogICAgInRvdGFsVG9rZW5Db3VudCI6IDc3NiwKICAgICJwcm9tcHRUb2tlbnNEZXRhaWxzIjogWwogICAgICB7CiAgICAgICAgIm1vZGFsaXR5IjogIlRFWFQiLAogICAgICAgICJ0b2tlbkNvdW50IjogMzIKICAgICAgfQogICAgXSwKICAgICJ0aG91Z2h0c1Rva2VuQ291bnQiOiA2OTUKICB9LAogICJtb2RlbFZlcnNpb24iOiAiZ2VtaW5pLTIuNS1wcm8iLAogICJyZXNwb25zZUlkIjogIm5ERGxhTGlFRjZ6VWpNY1BzNUhFNEFrIgp9Cg==",
-      "decoded": ",\r\n{\n  \"candidates\": [\n    {\n      \"content\": {\n        \"parts\": [\n          {\n            \"text\": \"5 into more manageable parts, like 10 and 5.\\n3.  Multiply each part by 3.\"\n          }\n        ],\n        \"role\": \"model\"\n      },\n      \"index\": 0\n    }\n  ],\n  \"usageMetadata\": {\n    \"promptTokenCount\": 32,\n    \"candidatesTokenCount\": 49,\n    \"totalTokenCount\": 776,\n    \"promptTokensDetails\": [\n      {\n        \"modality\": \"TEXT\",\n        \"tokenCount\": 32\n      }\n    ],\n    \"thoughtsTokenCount\": 695\n  },\n  \"modelVersion\": \"gemini-2.5-pro\",\n  \"responseId\": \"nDDlaLiEF6zUjMcPs5HE4Ak\"\n}\n"
+      "b64": "ZGF0YTogeyJjYW5kaWRhdGVzIjogW3siY29udGVudCI6IHsicGFydHMiOiBbeyJ0ZXh0IjogIlxuMi4gIE11bHRpcGx5IGVhY2ggY29tcG9uZW50IGJ5IDM6XG4gICAgKiAgIDEwICogMyA9IDMwXG4gICAgKiJ9XSwicm9sZSI6ICJtb2RlbCJ9LCJpbmRleCI6IDB9XSwidXNhZ2VNZXRhZGF0YSI6IHsicHJvbXB0VG9rZW5Db3VudCI6IDMyLCJjYW5kaWRhdGVzVG9rZW5Db3VudCI6IDUyLCJ0b3RhbFRva2VuQ291bnQiOiAxMDM3LCJwcm9tcHRUb2tlbnNEZXRhaWxzIjogW3sibW9kYWxpdHkiOiAiVEVYVCIsInRva2VuQ291bnQiOiAzMn1dLCJ0aG91Z2h0c1Rva2VuQ291bnQiOiA5NTN9LCJtb2RlbFZlcnNpb24iOiAiZ2VtaW5pLTIuNS1wcm8iLCJyZXNwb25zZUlkIjogIlI1SHRhSTY1QWJXcWpNY1BrTTJPZ1F3In0NCg0K",
+      "decoded": "data: {\"candidates\": [{\"content\": {\"parts\": [{\"text\": \"\\n2.  Multiply each component by 3:\\n    *   10 * 3 = 30\\n    *\"}],\"role\": \"model\"},\"index\": 0}],\"usageMetadata\": {\"promptTokenCount\": 32,\"candidatesTokenCount\": 52,\"totalTokenCount\": 1037,\"promptTokensDetails\": [{\"modality\": \"TEXT\",\"tokenCount\": 32}],\"thoughtsTokenCount\": 953},\"modelVersion\": \"gemini-2.5-pro\",\"responseId\": \"R5HtaI65AbWqjMcPkM2OgQw\"}\r\n\r\n"
     },
     {
-      "b64": "LA0KewogICJjYW5kaWRhdGVzIjogWwogICAgewogICAgICAiY29udGVudCI6IHsKICAgICAgICAicGFydHMiOiBbCiAgICAgICAgICB7CiAgICAgICAgICAgICJ0ZXh0IjogIlxuNC4gIEFkZCB0aGUgcmVzdWx0cyB0b2dldGhlci5cblxuKipDYWxjdWxhdGlvbjoqKlxuXG4qICAgMTAgKiAzID0gMzBcbiIKICAgICAgICAgIH0KICAgICAgICBdLAogICAgICAgICJyb2xlIjogIm1vZGVsIgogICAgICB9LAogICAgICAiaW5kZXgiOiAwCiAgICB9CiAgXSwKICAidXNhZ2VNZXRhZGF0YSI6IHsKICAgICJwcm9tcHRUb2tlbkNvdW50IjogMzIsCiAgICAiY2FuZGlkYXRlc1Rva2VuQ291bnQiOiA3MywKICAgICJ0b3RhbFRva2VuQ291bnQiOiA4MDAsCiAgICAicHJvbXB0VG9rZW5zRGV0YWlscyI6IFsKICAgICAgewogICAgICAgICJtb2RhbGl0eSI6ICJURVhUIiwKICAgICAgICAidG9rZW5Db3VudCI6IDMyCiAgICAgIH0KICAgIF0sCiAgICAidGhvdWdodHNUb2tlbkNvdW50IjogNjk1CiAgfSwKICAibW9kZWxWZXJzaW9uIjogImdlbWluaS0yLjUtcHJvIiwKICAicmVzcG9uc2VJZCI6ICJuRERsYUxpRUY2elVqTWNQczVIRTRBayIKfQo=",
-      "decoded": ",\r\n{\n  \"candidates\": [\n    {\n      \"content\": {\n        \"parts\": [\n          {\n            \"text\": \"\\n4.  Add the results together.\\n\\n**Calculation:**\\n\\n*   10 * 3 = 30\\n\"\n          }\n        ],\n        \"role\": \"model\"\n      },\n      \"index\": 0\n    }\n  ],\n  \"usageMetadata\": {\n    \"promptTokenCount\": 32,\n    \"candidatesTokenCount\": 73,\n    \"totalTokenCount\": 800,\n    \"promptTokensDetails\": [\n      {\n        \"modality\": \"TEXT\",\n        \"tokenCount\": 32\n      }\n    ],\n    \"thoughtsTokenCount\": 695\n  },\n  \"modelVersion\": \"gemini-2.5-pro\",\n  \"responseId\": \"nDDlaLiEF6zUjMcPs5HE4Ak\"\n}\n"
+      "b64": "ZGF0YTogeyJjYW5kaWRhdGVzIjogW3siY29udGVudCI6IHsicGFydHMiOiBbeyJ0ZXh0IjogIiAgIDUgKiAzID0gMTVcbjMuICBBZGQgdGhlIHR3byByZXN1bHRzIHRvZ2V0aGVyOiAzMCArICJ9XSwicm9sZSI6ICJtb2RlbCJ9LCJpbmRleCI6IDB9XSwidXNhZ2VNZXRhZGF0YSI6IHsicHJvbXB0VG9rZW5Db3VudCI6IDMyLCJjYW5kaWRhdGVzVG9rZW5Db3VudCI6IDc0LCJ0b3RhbFRva2VuQ291bnQiOiAxMDU5LCJwcm9tcHRUb2tlbnNEZXRhaWxzIjogW3sibW9kYWxpdHkiOiAiVEVYVCIsInRva2VuQ291bnQiOiAzMn1dLCJ0aG91Z2h0c1Rva2VuQ291bnQiOiA5NTN9LCJtb2RlbFZlcnNpb24iOiAiZ2VtaW5pLTIuNS1wcm8iLCJyZXNwb25zZUlkIjogIlI1SHRhSTY1QWJXcWpNY1BrTTJPZ1F3In0NCg0K",
+      "decoded": "data: {\"candidates\": [{\"content\": {\"parts\": [{\"text\": \"   5 * 3 = 15\\n3.  Add the two results together: 30 + \"}],\"role\": \"model\"},\"index\": 0}],\"usageMetadata\": {\"promptTokenCount\": 32,\"candidatesTokenCount\": 74,\"totalTokenCount\": 1059,\"promptTokensDetails\": [{\"modality\": \"TEXT\",\"tokenCount\": 32}],\"thoughtsTokenCount\": 953},\"modelVersion\": \"gemini-2.5-pro\",\"responseId\": \"R5HtaI65AbWqjMcPkM2OgQw\"}\r\n\r\n"
     },
     {
-      "b64": "LA0KewogICJjYW5kaWRhdGVzIjogWwogICAgewogICAgICAiY29udGVudCI6IHsKICAgICAgICAicGFydHMiOiBbCiAgICAgICAgICB7CiAgICAgICAgICAgICJ0ZXh0IjogIiogICA1ICogMyA9IDE1XG4qICAgMzAgKyAxNSA9IDQ1XG5cbiIKICAgICAgICAgIH0KICAgICAgICBdLAogICAgICAgICJyb2xlIjogIm1vZGVsIgogICAgICB9LAogICAgICAiaW5kZXgiOiAwCiAgICB9CiAgXSwKICAidXNhZ2VNZXRhZGF0YSI6IHsKICAgICJwcm9tcHRUb2tlbkNvdW50IjogMzIsCiAgICAiY2FuZGlkYXRlc1Rva2VuQ291bnQiOiA5NiwKICAgICJ0b3RhbFRva2VuQ291bnQiOiA4MjMsCiAgICAicHJvbXB0VG9rZW5zRGV0YWlscyI6IFsKICAgICAgewogICAgICAgICJtb2RhbGl0eSI6ICJURVhUIiwKICAgICAgICAidG9rZW5Db3VudCI6IDMyCiAgICAgIH0KICAgIF0sCiAgICAidGhvdWdodHNUb2tlbkNvdW50IjogNjk1CiAgfSwKICAibW9kZWxWZXJzaW9uIjogImdlbWluaS0yLjUtcHJvIiwKICAicmVzcG9uc2VJZCI6ICJuRERsYUxpRUY2elVqTWNQczVIRTRBayIKfQo=",
-      "decoded": ",\r\n{\n  \"candidates\": [\n    {\n      \"content\": {\n        \"parts\": [\n          {\n            \"text\": \"*   5 * 3 = 15\\n*   30 + 15 = 45\\n\\n\"\n          }\n        ],\n        \"role\": \"model\"\n      },\n      \"index\": 0\n    }\n  ],\n  \"usageMetadata\": {\n    \"promptTokenCount\": 32,\n    \"candidatesTokenCount\": 96,\n    \"totalTokenCount\": 823,\n    \"promptTokensDetails\": [\n      {\n        \"modality\": \"TEXT\",\n        \"tokenCount\": 32\n      }\n    ],\n    \"thoughtsTokenCount\": 695\n  },\n  \"modelVersion\": \"gemini-2.5-pro\",\n  \"responseId\": \"nDDlaLiEF6zUjMcPs5HE4Ak\"\n}\n"
-    },
-    {
-      "b64": "LA0KewogICJjYW5kaWRhdGVzIjogWwogICAgewogICAgICAiY29udGVudCI6IHsKICAgICAgICAicGFydHMiOiBbCiAgICAgICAgICB7CiAgICAgICAgICAgICJ0ZXh0IjogIioqQW5zd2VyOioqXG5cbjE1ICogMyA9IDQ1IgogICAgICAgICAgfQogICAgICAgIF0sCiAgICAgICAgInJvbGUiOiAibW9kZWwiCiAgICAgIH0sCiAgICAgICJmaW5pc2hSZWFzb24iOiAiU1RPUCIsCiAgICAgICJpbmRleCI6IDAKICAgIH0KICBdLAogICJ1c2FnZU1ldGFkYXRhIjogewogICAgInByb21wdFRva2VuQ291bnQiOiAzMiwKICAgICJjYW5kaWRhdGVzVG9rZW5Db3VudCI6IDEwOSwKICAgICJ0b3RhbFRva2VuQ291bnQiOiA4MzYsCiAgICAicHJvbXB0VG9rZW5zRGV0YWlscyI6IFsKICAgICAgewogICAgICAgICJtb2RhbGl0eSI6ICJURVhUIiwKICAgICAgICAidG9rZW5Db3VudCI6IDMyCiAgICAgIH0KICAgIF0sCiAgICAidGhvdWdodHNUb2tlbkNvdW50IjogNjk1CiAgfSwKICAibW9kZWxWZXJzaW9uIjogImdlbWluaS0yLjUtcHJvIiwKICAicmVzcG9uc2VJZCI6ICJuRERsYUxpRUY2elVqTWNQczVIRTRBayIKfQo=",
-      "decoded": ",\r\n{\n  \"candidates\": [\n    {\n      \"content\": {\n        \"parts\": [\n          {\n            \"text\": \"**Answer:**\\n\\n15 * 3 = 45\"\n          }\n        ],\n        \"role\": \"model\"\n      },\n      \"finishReason\": \"STOP\",\n      \"index\": 0\n    }\n  ],\n  \"usageMetadata\": {\n    \"promptTokenCount\": 32,\n    \"candidatesTokenCount\": 109,\n    \"totalTokenCount\": 836,\n    \"promptTokensDetails\": [\n      {\n        \"modality\": \"TEXT\",\n        \"tokenCount\": 32\n      }\n    ],\n    \"thoughtsTokenCount\": 695\n  },\n  \"modelVersion\": \"gemini-2.5-pro\",\n  \"responseId\": \"nDDlaLiEF6zUjMcPs5HE4Ak\"\n}\n"
-    },
-    {
-      "b64": "XQ==",
-      "decoded": "]"
+      "b64": "ZGF0YTogeyJjYW5kaWRhdGVzIjogW3siY29udGVudCI6IHsicGFydHMiOiBbeyJ0ZXh0IjogIjE1ID0gNDUuXG5cbioqQW5zd2VyOioqXG4xNSAqIDMgPSA0NSJ9XSwicm9sZSI6ICJtb2RlbCJ9LCJmaW5pc2hSZWFzb24iOiAiU1RPUCIsImluZGV4IjogMH1dLCJ1c2FnZU1ldGFkYXRhIjogeyJwcm9tcHRUb2tlbkNvdW50IjogMzIsImNhbmRpZGF0ZXNUb2tlbkNvdW50IjogOTUsInRvdGFsVG9rZW5Db3VudCI6IDEwODAsInByb21wdFRva2Vuc0RldGFpbHMiOiBbeyJtb2RhbGl0eSI6ICJURVhUIiwidG9rZW5Db3VudCI6IDMyfV0sInRob3VnaHRzVG9rZW5Db3VudCI6IDk1M30sIm1vZGVsVmVyc2lvbiI6ICJnZW1pbmktMi41LXBybyIsInJlc3BvbnNlSWQiOiAiUjVIdGFJNjVBYldxak1jUGtNMk9nUXcifQ0KDQo=",
+      "decoded": "data: {\"candidates\": [{\"content\": {\"parts\": [{\"text\": \"15 = 45.\\n\\n**Answer:**\\n15 * 3 = 45\"}],\"role\": \"model\"},\"finishReason\": \"STOP\",\"index\": 0}],\"usageMetadata\": {\"promptTokenCount\": 32,\"candidatesTokenCount\": 95,\"totalTokenCount\": 1080,\"promptTokensDetails\": [{\"modality\": \"TEXT\",\"tokenCount\": 32}],\"thoughtsTokenCount\": 953},\"modelVersion\": \"gemini-2.5-pro\",\"responseId\": \"R5HtaI65AbWqjMcPkM2OgQw\"}\r\n\r\n"
     }
   ],
   "request": {
@@ -56,6 +48,7 @@
       }
     },
     "headers": {
+      "accept": "text/event-stream",
       "content-type": "application/json"
     },
     "method": "POST",
@@ -64,13 +57,13 @@
   "response": {
     "body": null,
     "headers": {
-      "accept-ranges": "none",
       "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
-      "content-type": "application/json; charset=UTF-8",
-      "date": "Tue, 07 Oct 2025 15:24:18 GMT",
+      "content-disposition": "attachment",
+      "content-type": "text/event-stream",
+      "date": "Mon, 13 Oct 2025 23:54:54 GMT",
       "server": "scaffolding on HTTPServer2",
-      "server-timing": "gfet4t7; dur=7346",
-      "vary": "Origin,Accept-Encoding",
+      "server-timing": "gfet4t7; dur=8007",
+      "vary": "Referer",
       "x-content-type-options": "nosniff",
       "x-frame-options": "SAMEORIGIN",
       "x-xss-protection": "0"

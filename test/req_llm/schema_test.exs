@@ -405,8 +405,7 @@ defmodule ReqLLM.SchemaTest do
                      "description" => "Maximum results"
                    }
                  },
-                 "required" => ["query"],
-                 "additionalProperties" => false
+                 "required" => ["query"]
                }
              }
 
@@ -437,7 +436,12 @@ defmodule ReqLLM.SchemaTest do
       google_schema = google["parameters"]
 
       assert anthropic_schema == openai_schema
-      assert openai_schema == google_schema
+
+      assert anthropic_schema["additionalProperties"] == false
+      assert openai_schema["additionalProperties"] == false
+      refute Map.has_key?(google_schema, "additionalProperties")
+
+      assert Map.delete(openai_schema, "additionalProperties") == google_schema
     end
   end
 

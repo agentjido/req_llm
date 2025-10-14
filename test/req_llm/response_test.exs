@@ -113,14 +113,9 @@ defmodule ReqLLM.ResponseTest do
       {"mixed content filtering",
        [
          %ContentPart{type: :text, text: "Hello"},
-         %ContentPart{type: :tool_call, tool_name: "test", input: %{}, tool_call_id: "123"},
          %ContentPart{type: :text, text: " world"}
        ], "Hello world"},
-      {"empty content", [], ""},
-      {"no text parts",
-       [
-         %ContentPart{type: :tool_call, tool_name: "test", input: %{}, tool_call_id: "123"}
-       ], ""}
+      {"empty content", [], ""}
     ]
 
     for {desc, content_parts, expected} <- test_cases do
@@ -157,71 +152,6 @@ defmodule ReqLLM.ResponseTest do
 
       response = create_response(message: tool_message(tool_calls))
       assert Response.tool_calls(response) == tool_calls
-    end
-
-    test "extracts from content parts when tool_calls is nil" do
-      content = [
-        %ContentPart{type: :text, text: "I'll help you."},
-        %ContentPart{
-          type: :tool_call,
-          tool_name: "get_weather",
-          input: %{location: "SF"},
-          tool_call_id: "call-789"
-        }
-      ]
-
-      response = create_response(message: mixed_content_message(content))
-
-      assert Response.tool_calls(response) == [
-               %{
-                 name: "get_weather",
-                 arguments: %{location: "SF"},
-                 id: "call-789"
-               }
-             ]
-    end
-
-    test "handles multiple tool calls from content parts" do
-      content = [
-        %ContentPart{
-          type: :tool_call,
-          tool_name: "weather",
-          input: %{location: "NYC"},
-          tool_call_id: "c1"
-        },
-        %ContentPart{
-          type: :tool_call,
-          tool_name: "calc",
-          input: %{expr: "5*5"},
-          tool_call_id: "c2"
-        }
-      ]
-
-      response = create_response(message: mixed_content_message(content))
-
-      expected = [
-        %{name: "weather", arguments: %{location: "NYC"}, id: "c1"},
-        %{name: "calc", arguments: %{expr: "5*5"}, id: "c2"}
-      ]
-
-      assert Response.tool_calls(response) == expected
-    end
-
-    test "handles missing tool_call_id" do
-      content = [
-        %ContentPart{
-          type: :tool_call,
-          tool_name: "test",
-          input: %{param: "value"},
-          tool_call_id: nil
-        }
-      ]
-
-      response = create_response(message: mixed_content_message(content))
-
-      assert Response.tool_calls(response) == [
-               %{name: "test", arguments: %{param: "value"}, id: nil}
-             ]
     end
   end
 
@@ -467,20 +397,6 @@ defmodule ReqLLM.ResponseTest do
   end
 
   describe "edge cases and complex scenarios" do
-    test "handles malformed tool calls gracefully" do
-      content = [
-        %ContentPart{
-          type: :tool_call,
-          tool_name: nil,
-          input: nil,
-          tool_call_id: "call-123"
-        }
-      ]
-
-      response = create_response(message: mixed_content_message(content))
-      assert Response.tool_calls(response) == [%{name: nil, arguments: nil, id: "call-123"}]
-    end
-
     test "handles large text content efficiently" do
       large_text = String.duplicate("a", 100_000)
       response = create_response(message: text_message(large_text))
@@ -506,23 +422,15 @@ defmodule ReqLLM.ResponseTest do
       content = [
         %ContentPart{type: :text, text: "Image: "},
         %ContentPart{type: :image_url, url: "http://example.com/img.jpg"},
-        %ContentPart{type: :text, text: " calc:"},
-        %ContentPart{
-          type: :tool_call,
-          tool_name: "calc",
-          input: %{expr: "2+2"},
-          tool_call_id: "c1"
-        },
         %ContentPart{type: :text, text: " Done!"}
       ]
 
       response = create_response(message: mixed_content_message(content))
 
-      assert Response.text(response) == "Image:  calc: Done!"
+      assert Response.text(response) == "Image:  Done!"
 
       tool_calls = Response.tool_calls(response)
-      assert length(tool_calls) == 1
-      assert hd(tool_calls).name == "calc"
+      assert tool_calls == []
     end
   end
 end

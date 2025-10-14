@@ -1,6 +1,40 @@
 alias ReqLLM.Scripts.Helpers
 
 defmodule MultimodalPdfQA do
+  @moduledoc """
+  Demonstrates PDF document analysis using Anthropic's vision models.
+
+  Analyzes PDF documents by sending them to Claude models along with a text prompt.
+  Note that PDF analysis is currently only supported by Anthropic models with
+  vision capabilities.
+
+  ## Usage
+
+      mix run lib/examples/scripts/multimodal_pdf_qa.exs [prompt] --file <pdf_path> [options]
+
+  ## Options
+
+    * `--file` - Path to PDF file (required)
+    * `--model`, `-m` - Anthropic model to use (default: anthropic:claude-3-5-haiku-20241022)
+    * `--log-level`, `-l` - Log level: debug, info, warning, error (default: warning)
+    * `--max-tokens` - Maximum tokens to generate
+    * `--temperature` - Sampling temperature (0.0-1.0)
+
+  ## Examples
+
+      # Summarize a PDF document
+      mix run lib/examples/scripts/multimodal_pdf_qa.exs --file priv/examples/test.pdf
+
+      # Ask a specific question about the document
+      mix run lib/examples/scripts/multimodal_pdf_qa.exs "What is the main conclusion?" --file report.pdf
+
+      # Use a different Claude model
+      mix run lib/examples/scripts/multimodal_pdf_qa.exs --file document.pdf --model anthropic:claude-3-5-sonnet-20241022
+
+      # Extract specific information
+      mix run lib/examples/scripts/multimodal_pdf_qa.exs "List all financial figures" --file report.pdf --max-tokens 1000
+  """
+
   @script_name "multimodal_pdf_qa.exs"
   @default_model "anthropic:claude-3-5-haiku-20241022"
 
@@ -36,7 +70,7 @@ defmodule MultimodalPdfQA do
 
     validate_provider!(provider)
 
-    Logger.configure(level: parse_log_level(opts[:log_level] || "warning"))
+    Logger.configure(level: Helpers.log_level(opts[:log_level] || "warning"))
 
     Helpers.banner!(@script_name, "Demonstrates PDF document analysis",
       model: model,
@@ -55,7 +89,7 @@ defmodule MultimodalPdfQA do
     ]
 
     ctx = ReqLLM.Context.new()
-    ctx = ReqLLM.Context.push_user(ctx, parts)
+    ctx = ReqLLM.Context.append(ctx, ReqLLM.Context.user(parts))
 
     generation_opts = build_generation_opts(opts)
 
@@ -145,24 +179,11 @@ defmodule MultimodalPdfQA do
     )
   end
 
-  defp parse_log_level(level_str) do
-    case level_str do
-      "debug" -> :debug
-      "info" -> :info
-      "warning" -> :warning
-      "error" -> :error
-      _ -> :warning
-    end
-  end
-
   defp build_generation_opts(opts) do
     []
-    |> maybe_put(:max_tokens, opts[:max_tokens])
-    |> maybe_put(:temperature, opts[:temperature])
+    |> Helpers.maybe_put(:max_tokens, opts[:max_tokens])
+    |> Helpers.maybe_put(:temperature, opts[:temperature])
   end
-
-  defp maybe_put(opts, _key, nil), do: opts
-  defp maybe_put(opts, key, value), do: Keyword.put(opts, key, value)
 end
 
 MultimodalPdfQA.run(System.argv())

@@ -110,7 +110,7 @@ defmodule ReqLLM.Examples.Agent do
           tool_calls ->
             initial_text = chunks |> Enum.map_join("", & &1.text)
 
-            assistant_message = Context.assistant_with_tools(initial_text, tool_calls)
+            assistant_message = Context.assistant(initial_text, tool_calls: tool_calls)
             history_with_tool_call = Context.append(history, assistant_message)
 
             # Execute tools and show results

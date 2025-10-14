@@ -39,30 +39,30 @@
           "index": 0,
           "message": {
             "content": "Hello! 👋 How can I assist you today?",
-            "reasoning": "The user says \"Hi there!\" It's a greeting. We should respond politely, ask how we can help. Probably a friendly greeting.",
+            "reasoning": "The user just says \"Hi there!\" Likely a greeting. We should respond friendly. Ask how can help.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759873415,
-      "id": "chatcmpl-7e44cf09-547f-4933-93b1-48d1f02fe69b",
+      "created": 1760396434,
+      "id": "chatcmpl-a159d039-9495-43ff-a21e-98cea00be549",
       "model": "gpt-oss-120b",
       "object": "chat.completion",
       "system_fingerprint": "fp_8a8c0bd8448557718491",
       "time_info": {
-        "completion_time": 0.034115006,
-        "created": 1759873415,
-        "prompt_time": 0.001401427,
-        "queue_time": 4.25571e-4,
-        "total_time": 0.0516819953918457
+        "completion_time": 0.041433882,
+        "created": 1760396434,
+        "prompt_time": 0.003038718,
+        "queue_time": 1.904996965,
+        "total_time": 1.9507827758789062
       },
       "usage": {
-        "completion_tokens": 48,
+        "completion_tokens": 44,
         "prompt_tokens": 70,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 118
+        "total_tokens": 114
       }
     },
     "headers": {
@@ -73,7 +73,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98b0932dcc070008-ORD"
+        "98e2744008b7f32d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -82,10 +82,10 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 21:43:35 GMT"
+        "Mon, 13 Oct 2025 23:00:38 GMT"
       ],
       "inference-id": [
-        "chatcmpl-7e44cf09-547f-4933-93b1-48d1f02fe69b"
+        "chatcmpl-a159d039-9495-43ff-a21e-98cea00be549"
       ],
       "referrer-policy": [
         "strict-origin-when-cross-origin"
@@ -94,7 +94,7 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=Dp3bN8MkZuUA2EuWSy9ogupwyIBecFanXI6GA2ELxus-1759873415-1.0.1.1-xcTFd7K6vojvBni1Qw2JcSmB2XNl_4aYTv0XnRev7Rx2FM0XextZ6b5ThLV053CXtaK4W598T6_pDPPNJqm0XxH4Ex9Lww03pfwVirj8F3U; path=/; expires=Tue, 07-Oct-25 22:13:35 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=2Pn1E.SEGBXhBTJBoY3vEZoWh2vzHzNfk7bxB0TNiEc-1760396438-1.0.1.1-4GWvncRd6NqJ0fTbq0VRJiaPBwCHpCl3NjJWWmtq8mus5Z_GvOj5hNa0bgTnTYnQfMvyxumW3s4JPkLq6Fwleyp0OMnigN3Nf4I2FfcWKx8; path=/; expires=Mon, 13-Oct-25 23:30:38 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=3600; includeSubDomains"
@@ -112,19 +112,19 @@
         "1000000"
       ],
       "x-ratelimit-remaining-requests-day": [
-        "1439843"
+        "1439989"
       ],
       "x-ratelimit-remaining-tokens-minute": [
         "999894"
       ],
       "x-ratelimit-reset-requests-day": [
-        "8184.520168542862"
+        "3561.452652692795"
       ],
       "x-ratelimit-reset-tokens-minute": [
-        "24.52016854286194"
+        "21.4526526927948"
       ],
       "x-request-id": [
-        "98b0932dcc070008-ORD"
+        "98e2744008b7f32d-ORD"
       ]
     },
     "status": 200

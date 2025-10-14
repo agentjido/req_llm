@@ -1,15 +1,4 @@
 {
-  "captured_at": "2025-10-07T15:22:48.573244Z",
-  "chunks": [
-    {
-      "b64": "W3sKICAiY2FuZGlkYXRlcyI6IFsKICAgIHsKICAgICAgImNvbnRlbnQiOiB7CiAgICAgICAgInBhcnRzIjogWwogICAgICAgICAgewogICAgICAgICAgICAidGV4dCI6ICJBIG5ldyBjb25uZWN0aW9uIGp1c3Qgc3BhcmtlZCB0byBsaWZlLiIKICAgICAgICAgIH0KICAgICAgICBdLAogICAgICAgICJyb2xlIjogIm1vZGVsIgogICAgICB9LAogICAgICAiZmluaXNoUmVhc29uIjogIlNUT1AiLAogICAgICAiaW5kZXgiOiAwCiAgICB9CiAgXSwKICAidXNhZ2VNZXRhZGF0YSI6IHsKICAgICJwcm9tcHRUb2tlbkNvdW50IjogMTgsCiAgICAiY2FuZGlkYXRlc1Rva2VuQ291bnQiOiA4LAogICAgInRvdGFsVG9rZW5Db3VudCI6IDg4NywKICAgICJwcm9tcHRUb2tlbnNEZXRhaWxzIjogWwogICAgICB7CiAgICAgICAgIm1vZGFsaXR5IjogIlRFWFQiLAogICAgICAgICJ0b2tlbkNvdW50IjogMTgKICAgICAgfQogICAgXSwKICAgICJ0aG91Z2h0c1Rva2VuQ291bnQiOiA4NjEKICB9LAogICJtb2RlbFZlcnNpb24iOiAibW9kZWxzL2dlbWluaS0yLjUtZmxhc2gtcHJldmlldy0wNS0yMCIsCiAgInJlc3BvbnNlSWQiOiAiUVREbGFJcVdCUDJQak1jUHFQalBrQWMiCn0K",
-      "decoded": "[{\n  \"candidates\": [\n    {\n      \"content\": {\n        \"parts\": [\n          {\n            \"text\": \"A new connection just sparked to life.\"\n          }\n        ],\n        \"role\": \"model\"\n      },\n      \"finishReason\": \"STOP\",\n      \"index\": 0\n    }\n  ],\n  \"usageMetadata\": {\n    \"promptTokenCount\": 18,\n    \"candidatesTokenCount\": 8,\n    \"totalTokenCount\": 887,\n    \"promptTokensDetails\": [\n      {\n        \"modality\": \"TEXT\",\n        \"tokenCount\": 18\n      }\n    ],\n    \"thoughtsTokenCount\": 861\n  },\n  \"modelVersion\": \"models/gemini-2.5-flash-preview-05-20\",\n  \"responseId\": \"QTDlaIqWBP2PjMcPqPjPkAc\"\n}\n"
-    },
-    {
-      "b64": "XQ==",
-      "decoded": "]"
-    }
-  ],
   "request": {
     "body": {
       "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJTYXkgaGVsbG8gaW4gb25lIHNob3J0LCBpbWFnaW5hdGl2ZSBzZW50ZW5jZS4ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjIwMDAsInRlbXBlcmF0dXJlIjowLjksInRvcFAiOjAuOH0sInN5c3RlbUluc3RydWN0aW9uIjp7InBhcnRzIjpbeyJ0ZXh0IjoiWW91IGFyZSBhIGhlbHBmdWwsIGNyZWF0aXZlIGFzc2lzdGFudC4ifV19fQ=="
@@ -40,21 +29,24 @@
       }
     },
     "headers": {
+      "accept": "text/event-stream",
       "content-type": "application/json"
     },
     "method": "POST",
     "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:streamGenerateContent"
   },
   "response": {
-    "body": null,
+    "body": {
+      "b64": "ZGF0YTogeyJjYW5kaWRhdGVzIjogW3siY29udGVudCI6IHsicGFydHMiOiBbeyJ0ZXh0IjogIkEgZnJlc2ggYnJlZXplIG9mIHBvc3NpYmlsaXR5IHdoaXNwZXJzIGhlbGxvISJ9XSwicm9sZSI6ICJtb2RlbCJ9LCJmaW5pc2hSZWFzb24iOiAiU1RPUCIsImluZGV4IjogMH1dLCJ1c2FnZU1ldGFkYXRhIjogeyJwcm9tcHRUb2tlbkNvdW50IjogMTgsImNhbmRpZGF0ZXNUb2tlbkNvdW50IjogOCwidG90YWxUb2tlbkNvdW50IjogOTEyLCJwcm9tcHRUb2tlbnNEZXRhaWxzIjogW3sibW9kYWxpdHkiOiAiVEVYVCIsInRva2VuQ291bnQiOiAxOH1dLCJ0aG91Z2h0c1Rva2VuQ291bnQiOiA4ODZ9LCJtb2RlbFZlcnNpb24iOiAibW9kZWxzL2dlbWluaS0yLjUtZmxhc2gtcHJldmlldy0wNS0yMCIsInJlc3BvbnNlSWQiOiAiZTR6dGFJWHhNb0czak1jUDRhX2FJUSJ9DQoNCg=="
+    },
     "headers": {
-      "accept-ranges": "none",
       "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
-      "content-type": "application/json; charset=UTF-8",
-      "date": "Tue, 07 Oct 2025 15:22:48 GMT",
+      "content-disposition": "attachment",
+      "content-type": "text/event-stream",
+      "date": "Mon, 13 Oct 2025 23:34:25 GMT",
       "server": "scaffolding on HTTPServer2",
-      "server-timing": "gfet4t7; dur=8066",
-      "vary": "Origin,Accept-Encoding",
+      "server-timing": "gfet4t7; dur=6014",
+      "vary": "Referer",
       "x-content-type-options": "nosniff",
       "x-frame-options": "SAMEORIGIN",
       "x-xss-protection": "0"

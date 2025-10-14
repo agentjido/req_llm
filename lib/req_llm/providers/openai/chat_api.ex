@@ -137,14 +137,10 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
   def attach_stream(model, context, opts, _finch_name) do
     headers = build_request_headers(model, opts) ++ [{"Accept", "text/event-stream"}]
 
-    provider_opts = opts |> Keyword.get(:provider_options, []) |> Map.new() |> Map.to_list()
-
     cleaned_opts =
       opts
       |> Keyword.delete(:finch_name)
       |> Keyword.delete(:compiled_schema)
-      |> Keyword.delete(:provider_options)
-      |> Keyword.merge(provider_opts)
       |> Keyword.put(:stream, true)
 
     body = build_request_body(context, model.model, cleaned_opts)
@@ -272,9 +268,13 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
           if function && (function[:strict] || function["strict"]) do
             function_with_strict =
               if is_map_key(tool, :function) do
-                Map.put(function, :strict, true)
+                function
+                |> Map.put(:strict, true)
+                |> ensure_all_properties_required()
               else
-                Map.put(function, "strict", true)
+                function
+                |> Map.put("strict", true)
+                |> ensure_all_properties_required()
               end
 
             if is_map_key(tool, :function) do
@@ -294,6 +294,35 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
       end
     else
       body
+    end
+  end
+
+  defp ensure_all_properties_required(function) do
+    params = function[:parameters] || function["parameters"]
+
+    if params do
+      properties = params[:properties] || params["properties"]
+
+      if properties && is_map(properties) do
+        all_property_names = Map.keys(properties)
+
+        updated_params =
+          if is_map_key(params, :properties) do
+            Map.put(params, :required, all_property_names)
+          else
+            Map.put(params, "required", Enum.map(all_property_names, &to_string/1))
+          end
+
+        if is_map_key(function, :parameters) do
+          Map.put(function, :parameters, updated_params)
+        else
+          Map.put(function, "parameters", updated_params)
+        end
+      else
+        function
+      end
+    else
+      function
     end
   end
 end

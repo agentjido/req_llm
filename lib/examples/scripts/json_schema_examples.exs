@@ -1,13 +1,43 @@
 alias ReqLLM.Scripts.Helpers
 
 defmodule JSONSchemaExamples do
+  @moduledoc """
+  Demonstrates structured object generation using JSON schemas.
+
+  Shows how to use `ReqLLM.generate_object/4` with various schema definitions
+  to generate structured data conforming to specified types and constraints.
+
+  ## Usage
+
+      elixir lib/examples/scripts/json_schema_examples.exs [options]
+
+  ## Options
+
+    * `-m, --model` - Model identifier (default: "openai:gpt-4o")
+    * `-l, --log-level` - Log level: debug, info, warning, error (default: "warning")
+
+  ## Examples
+
+  Run with default model:
+
+      elixir lib/examples/scripts/json_schema_examples.exs
+
+  Use a specific model:
+
+      elixir lib/examples/scripts/json_schema_examples.exs -m anthropic:claude-3-5-sonnet-20241022
+
+  Enable debug logging:
+
+      elixir lib/examples/scripts/json_schema_examples.exs -l debug
+  """
+
   @script_name "json_schema_examples.exs"
 
   def run(args) do
     Helpers.ensure_app!()
 
     opts = parse_args(args)
-    Logger.configure(level: parse_log_level(opts[:log_level]))
+    Logger.configure(level: Helpers.log_level(opts[:log_level]))
 
     model = opts[:model]
 
@@ -43,10 +73,11 @@ defmodule JSONSchemaExamples do
     ]
 
     prompt = "Generate information for a software engineer named Alice who is 28 years old"
+    context = Helpers.context(prompt)
 
     {result, time} =
       Helpers.time(fn ->
-        ReqLLM.Generation.generate_object(model, prompt, schema)
+        ReqLLM.generate_object(model, context, schema)
       end)
 
     case result do
@@ -72,10 +103,11 @@ defmodule JSONSchemaExamples do
     ]
 
     prompt = "Generate a product listing for a wireless mechanical keyboard priced at $129.99"
+    context = Helpers.context(prompt)
 
     {result, time} =
       Helpers.time(fn ->
-        ReqLLM.Generation.generate_object(model, prompt, schema)
+        ReqLLM.generate_object(model, context, schema)
       end)
 
     case result do
@@ -101,10 +133,11 @@ defmodule JSONSchemaExamples do
     ]
 
     prompt = "Generate a tech meetup event for next Friday with 5 attendees, max 50 people"
+    context = Helpers.context(prompt)
 
     {result, time} =
       Helpers.time(fn ->
-        ReqLLM.Generation.generate_object(model, prompt, schema)
+        ReqLLM.generate_object(model, context, schema)
       end)
 
     case result do
@@ -115,16 +148,6 @@ defmodule JSONSchemaExamples do
 
       {:error, error} ->
         IO.puts("Error: #{inspect(error)}")
-    end
-  end
-
-  defp parse_log_level(level_str) do
-    case level_str do
-      "debug" -> :debug
-      "info" -> :info
-      "warning" -> :warning
-      "error" -> :error
-      _ -> :warning
     end
   end
 end

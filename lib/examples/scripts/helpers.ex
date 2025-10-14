@@ -58,11 +58,11 @@ defmodule ReqLLM.Scripts.Helpers do
   end
 
   @doc """
-  Returns the log level based on verbosity flags.
+  Returns the log level based on verbosity flags or string level.
 
   ## Parameters
 
-    * `verbose` - Boolean or integer verbosity level
+    * `verbose` - Boolean or integer verbosity level or string ("debug", "info", "warning", "error")
 
   ## Examples
 
@@ -71,8 +71,11 @@ defmodule ReqLLM.Scripts.Helpers do
 
       iex> log_level(false)
       :warning
+
+      iex> log_level("debug")
+      :debug
   """
-  @spec log_level(boolean() | integer()) :: Logger.level()
+  @spec log_level(boolean() | integer() | String.t()) :: Logger.level()
   def log_level(verbose) when is_boolean(verbose) do
     if verbose, do: :info, else: :warning
   end
@@ -82,6 +85,16 @@ defmodule ReqLLM.Scripts.Helpers do
       0 -> :warning
       1 -> :info
       _ -> :debug
+    end
+  end
+
+  def log_level(level_str) when is_binary(level_str) do
+    case level_str do
+      "debug" -> :debug
+      "info" -> :info
+      "warning" -> :warning
+      "error" -> :error
+      _ -> :warning
     end
   end
 
@@ -96,6 +109,42 @@ defmodule ReqLLM.Scripts.Helpers do
   """
   @spec default_embedding_model() :: String.t()
   def default_embedding_model, do: "openai:text-embedding-3-small"
+
+  @doc """
+  Conditionally puts a key-value pair into a keyword list.
+
+  If the value is `nil`, returns the original list unchanged.
+  Otherwise, puts the key-value pair into the list.
+
+  ## Examples
+
+      iex> maybe_put([], :max_tokens, 100)
+      [max_tokens: 100]
+
+      iex> maybe_put([], :max_tokens, nil)
+      []
+  """
+  @spec maybe_put(keyword(), atom(), any()) :: keyword()
+  def maybe_put(opts, _key, nil), do: opts
+  def maybe_put(opts, key, value), do: Keyword.put(opts, key, value)
+
+  @doc """
+  Conditionally adds a key-value pair to a keyword list.
+
+  If the value is `nil`, returns the original list unchanged.
+  Otherwise, appends the key-value pair to the list (allows duplicates).
+
+  ## Examples
+
+      iex> maybe_add([], :stop, "END")
+      [stop: "END"]
+
+      iex> maybe_add([], :stop, nil)
+      []
+  """
+  @spec maybe_add(keyword(), atom(), any()) :: keyword()
+  def maybe_add(opts, _key, nil), do: opts
+  def maybe_add(opts, key, value), do: opts ++ [{key, value}]
 
   @doc """
   Prints a banner for a script.
@@ -158,48 +207,10 @@ defmodule ReqLLM.Scripts.Helpers do
     ctx =
       case Keyword.get(opts, :system) do
         nil -> ctx
-        sys -> ReqLLM.Context.push_system(ctx, sys)
+        sys -> ReqLLM.Context.prepend(ctx, ReqLLM.Context.system(sys))
       end
 
-    ReqLLM.Context.push_user(ctx, prompt)
-  end
-
-  @doc """
-  Prints streamed text chunks to stdout.
-
-  Returns `:ok` on success or `{:error, reason}` on failure.
-  """
-  @spec print_stream_text(String.t(), keyword()) :: :ok | {:error, any()}
-  def print_stream_text(model, opts) do
-    IO.write(IO.ANSI.green() <> "Assistant: " <> IO.ANSI.reset())
-
-    context = Keyword.fetch!(opts, :context)
-    stream_opts = Keyword.delete(opts, :context)
-
-    case ReqLLM.stream_text(model, context, stream_opts) do
-      {:ok, response} ->
-        response.stream
-        |> Enum.each(fn chunk ->
-          case chunk do
-            %ReqLLM.StreamChunk{type: :content, text: text} when is_binary(text) ->
-              IO.write(text)
-
-            %ReqLLM.StreamChunk{type: :meta, metadata: metadata} ->
-              if metadata[:finish_reason] do
-                IO.write("\n\n")
-                if metadata[:usage], do: print_usage(metadata[:usage])
-              end
-
-            _ ->
-              :ok
-          end
-        end)
-
-        :ok
-
-      {:error, reason} ->
-        {:error, reason}
-    end
+    ReqLLM.Context.append(ctx, ReqLLM.Context.user(prompt))
   end
 
   @doc """
@@ -252,6 +263,13 @@ defmodule ReqLLM.Scripts.Helpers do
     lines = [
       "📊 Tokens: #{input} in / #{output} out / #{total} total"
     ]
+
+    lines =
+      if usage[:reasoning_tokens] && usage[:reasoning_tokens] > 0 do
+        lines ++ ["🧠 Reasoning: #{usage[:reasoning_tokens]} tokens"]
+      else
+        lines
+      end
 
     lines =
       if usage[:cache_read_tokens] && usage[:cache_read_tokens] > 0 do
@@ -339,42 +357,25 @@ defmodule ReqLLM.Scripts.Helpers do
   end
 
   @doc """
-  Creates multimodal content parts for a message.
-
-  Handles provider-specific formatting for images and PDFs.
-
-  ## Parameters
-
-    * `prompt` - The text prompt
-    * `opts` - Options including :image_path, :pdf_path
-    * `provider` - The provider atom (:openai, :anthropic, etc.)
+  Determines the MIME type of a media file based on its file extension.
 
   ## Examples
 
-      multimodal_parts!("Describe this", [image_path: "cat.png"], :openai)
+      iex> media_type("image.png")
+      "image/png"
+
+      iex> media_type("photo.jpg")
+      "image/jpeg"
   """
-  @spec multimodal_parts!(String.t(), keyword(), atom()) :: [map()]
-  def multimodal_parts!(prompt, opts, provider) do
-    parts = [%{type: "text", text: prompt}]
-
-    parts =
-      case Keyword.get(opts, :image_path) do
-        nil ->
-          parts
-
-        path ->
-          media_type = media_type_from_path(path)
-          base64 = load_image_base64!(path)
-          parts ++ [format_image_part(base64, media_type, provider)]
-      end
-
-    case Keyword.get(opts, :pdf_path) do
-      nil ->
-        parts
-
-      path ->
-        base64 = load_pdf_base64!(path)
-        parts ++ [format_pdf_part(base64, provider)]
+  @spec media_type(String.t()) :: String.t()
+  def media_type(path) do
+    case Path.extname(path) |> String.downcase() do
+      ".jpg" -> "image/jpeg"
+      ".jpeg" -> "image/jpeg"
+      ".png" -> "image/png"
+      ".gif" -> "image/gif"
+      ".webp" -> "image/webp"
+      _ -> "image/jpeg"
     end
   end
 
@@ -406,12 +407,6 @@ defmodule ReqLLM.Scripts.Helpers do
     end)
   end
 
-  defp print_usage(usage) when is_map(usage) do
-    usage
-    |> usage_lines()
-    |> Enum.each(&IO.puts(IO.ANSI.faint() <> &1 <> IO.ANSI.reset()))
-  end
-
   defp missing_api_key?(error) do
     message =
       case error do
@@ -423,62 +418,5 @@ defmodule ReqLLM.Scripts.Helpers do
       String.contains?(message, "api_key") or
       String.contains?(message, "authentication") or
       String.contains?(message, "unauthorized")
-  end
-
-  defp media_type_from_path(path) do
-    case Path.extname(path) |> String.downcase() do
-      ".jpg" -> "image/jpeg"
-      ".jpeg" -> "image/jpeg"
-      ".png" -> "image/png"
-      ".gif" -> "image/gif"
-      ".webp" -> "image/webp"
-      _ -> "image/jpeg"
-    end
-  end
-
-  defp format_image_part(base64, media_type, :openai) do
-    %{
-      type: "image_url",
-      image_url: %{
-        url: "data:#{media_type};base64,#{base64}"
-      }
-    }
-  end
-
-  defp format_image_part(base64, media_type, :anthropic) do
-    %{
-      type: "image",
-      source: %{
-        type: "base64",
-        media_type: media_type,
-        data: base64
-      }
-    }
-  end
-
-  defp format_image_part(base64, media_type, _provider) do
-    format_image_part(base64, media_type, :openai)
-  end
-
-  defp format_pdf_part(base64, :anthropic) do
-    %{
-      type: "document",
-      source: %{
-        type: "base64",
-        media_type: "application/pdf",
-        data: base64
-      }
-    }
-  end
-
-  defp format_pdf_part(base64, _provider) do
-    %{
-      type: "document",
-      document: %{
-        type: "base64",
-        media_type: "application/pdf",
-        data: base64
-      }
-    }
   end
 end

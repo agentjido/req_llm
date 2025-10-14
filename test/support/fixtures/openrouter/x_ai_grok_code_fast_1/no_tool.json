@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJ4LWFpL2dyb2stY29kZS1mYXN0LTEiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJ4LWFpL2dyb2stY29kZS1mYXN0LTEiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
       "max_tokens": 1000,
@@ -22,6 +22,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -61,38 +62,37 @@
           "logprobs": null,
           "message": {
             "content": "Why did the cat join the Red Cross? Because she wanted to be a first-aid kit-ten! 🐱",
-            "reasoning": "First, the user asked for a joke about cats. This is a simple request, not involving any disallowed activities. I can respond directly.\n\n\n## Handling User Request  \n- The user asked for a simple cat joke, which fits within the allowed activities.",
+            "reasoning": "First, the user asked for a joke about cats. This is a simple request, not involving any disallowed activities. I can respond directly.\n",
             "reasoning_details": [
               {
-                "format": "unknown",
+                "format": "xai-responses-v1",
                 "index": 0,
-                "text": "First, the user asked for a joke about cats. This is a simple request, not involving any disallowed activities. I can respond directly.\n\n\n## Handling User Request  \n- The user asked for a simple cat joke, which fits within the allowed activities.",
-                "type": "reasoning.text"
+                "summary": "First, the user asked for a joke about cats. This is a simple request, not involving any disallowed activities. I can respond directly.\n",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "w8nLVrpiOaP6rj3LUh/xSpAcvef3dPNL2poBbAI9QBAhjpXOc//XXTNTLqGzNOVA1zxPGWkRRwix6oUm090qR1d0pBP7Yf27LvKvhy+Kgpr4nA4lqLl4ccnRxQU61IA6aRQin1CPh+dPB+s12tZQV5NiR7GvEEF7gOaRgkBd333fSxWt2Y6tZZohcsqNKJ+58ED/u95KrX+yGT+szeA3xxluFcNUNRm6dJLrG5ZATa8ccMVtrI2zw31TEOJjHyF+uEX0iCG9OxZRqvHk15sn7E0mpU5tKiLs0GTkkvoC4h0rCeDNh9ZXoVuKYikOHxl2K2TD/7cmC6AEs+q3/l2u5TpeDHudwrZz3B1n6FxiqB7vrWIOA6dqKvtftfORT2myWNHKxCZliTBOqe4UW0ZMzL4vXRysVjvR5MwbFW2ld7wfG8pqy5jbf1wQwrAjzuR42paVD/Y2BwY65gfOuzl0x8zVwdJDgliZFcK0STEaHWV8vzCUlGKzjEFUfRede+rtuu6wyPH3NyuemM8sIAHzB0uZ0j+dvdcB7RokMa3GldpxdxDuwMwNwHDfT2V86i6QhR9b+FJk4VVtlcPol0J2QbXiKQ/gZI/mGwCJp0dm7rTMns1SyRo0NoppeUxHxRMeQYqfVYQWLIJ16HlYtjiAw0KXqy8w3InSmOB4nIc77TLY7C+uPL/eW8LDKOFh8psRENd8UOWa/BZj5EQO25SeGw8fzcOV6R03aIYnSlxKEUUsj1A6vWvNW5d430TmTCXMPg",
+                "format": "xai-responses-v1",
+                "id": "rs_6fd5326e-29d2-d064-094e-10699f450c5b_us-east-1",
+                "index": 0,
+                "type": "reasoning.encrypted"
               }
             ],
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "stop"
+          "native_finish_reason": "completed"
         }
       ],
-      "created": 1759845464,
-      "id": "gen-1759845464-flsDtt0qyxpBBlngFkSt",
+      "created": 1760442677,
+      "id": "gen-1760442677-ZG11dj9FY36Znbm1xT9F",
       "model": "x-ai/grok-code-fast-1",
       "object": "chat.completion",
       "provider": "xAI",
-      "system_fingerprint": "fp_10f00c862d",
       "usage": {
         "completion_tokens": 141,
-        "completion_tokens_details": {
-          "reasoning_tokens": 118
-        },
-        "prompt_tokens": 380,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 320
-        },
-        "total_tokens": 521
+        "prompt_tokens": 385,
+        "total_tokens": 526
       }
     },
     "headers": {
@@ -100,7 +100,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade8c9890a60ac-ORD"
+        "98e6dd2cfbfc1259-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -109,7 +109,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:57:44 GMT"
+        "Tue, 14 Oct 2025 11:51:18 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

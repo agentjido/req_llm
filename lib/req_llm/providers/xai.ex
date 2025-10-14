@@ -683,9 +683,15 @@ defmodule ReqLLM.Providers.XAI do
           extract_from_content(response)
 
         tool_calls ->
-          case Enum.find(tool_calls, &(&1.name == "structured_output")) do
-            nil -> nil
-            %{arguments: object} -> object
+          case Enum.find(tool_calls, &(&1.function.name == "structured_output")) do
+            nil ->
+              nil
+
+            %{function: %{arguments: json_string}} ->
+              case Jason.decode(json_string) do
+                {:ok, parsed} -> parsed
+                {:error, _} -> nil
+              end
           end
       end
 

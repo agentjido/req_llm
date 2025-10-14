@@ -515,19 +515,27 @@ defmodule ReqLLM.Provider.Defaults do
     Enum.map(messages, &encode_openai_message/1)
   end
 
-  defp encode_openai_message(%ReqLLM.Message{role: r, content: c, tool_calls: tc}) do
+  defp encode_openai_message(%ReqLLM.Message{
+         role: r,
+         content: c,
+         tool_calls: tc,
+         tool_call_id: tcid,
+         name: name
+       }) do
     base_message = %{
       role: to_string(r),
       content: encode_openai_content(c)
     }
 
-    # Add tool_calls if present and not nil
-    case tc do
-      nil -> base_message
-      [] -> base_message
-      calls -> Map.put(base_message, :tool_calls, calls)
-    end
+    base_message
+    |> maybe_add_field(:tool_calls, tc)
+    |> maybe_add_field(:tool_call_id, tcid)
+    |> maybe_add_field(:name, name)
   end
+
+  defp maybe_add_field(message, _key, nil), do: message
+  defp maybe_add_field(message, _key, []), do: message
+  defp maybe_add_field(message, key, value), do: Map.put(message, key, value)
 
   defp encode_openai_content(content) when is_binary(content), do: content
 
@@ -552,22 +560,6 @@ defmodule ReqLLM.Provider.Defaults do
 
   defp encode_openai_content_part(%ReqLLM.Message.ContentPart{type: :text, text: text}) do
     %{type: "text", text: text}
-  end
-
-  defp encode_openai_content_part(%ReqLLM.Message.ContentPart{
-         type: :tool_call,
-         tool_name: name,
-         input: input,
-         tool_call_id: id
-       }) do
-    %{
-      id: id,
-      type: "function",
-      function: %{
-        name: name,
-        arguments: Jason.encode!(input)
-      }
-    }
   end
 
   defp encode_openai_content_part(%ReqLLM.Message.ContentPart{
@@ -831,12 +823,20 @@ defmodule ReqLLM.Provider.Defaults do
   defp build_openai_message_from_chunks(chunks) when is_list(chunks) and chunks != [] do
     content_parts =
       chunks
+      |> Enum.filter(&(&1.type in [:content, :thinking]))
       |> Enum.map(&openai_chunk_to_content_part/1)
+      |> Enum.reject(&is_nil/1)
+
+    tool_calls =
+      chunks
+      |> Enum.filter(&(&1.type == :tool_call))
+      |> Enum.map(&openai_chunk_to_tool_call/1)
       |> Enum.reject(&is_nil/1)
 
     %ReqLLM.Message{
       role: :assistant,
       content: content_parts,
+      tool_calls: if(tool_calls != [], do: tool_calls),
       metadata: %{}
     }
   end
@@ -851,21 +851,20 @@ defmodule ReqLLM.Provider.Defaults do
     %ReqLLM.Message.ContentPart{type: :thinking, text: text}
   end
 
-  defp openai_chunk_to_content_part(%ReqLLM.StreamChunk{
+  defp openai_chunk_to_content_part(_), do: nil
+
+  defp openai_chunk_to_tool_call(%ReqLLM.StreamChunk{
          type: :tool_call,
          name: name,
          arguments: args,
          metadata: meta
        }) do
-    %ReqLLM.Message.ContentPart{
-      type: :tool_call,
-      tool_name: name,
-      input: args,
-      tool_call_id: Map.get(meta, :id)
-    }
+    args_json = if is_binary(args), do: args, else: Jason.encode!(args)
+    id = Map.get(meta, :id)
+    ReqLLM.ToolCall.new(id, name, args_json)
   end
 
-  defp openai_chunk_to_content_part(_), do: nil
+  defp openai_chunk_to_tool_call(_), do: nil
 
   defp parse_openai_usage(
          %{"prompt_tokens" => input, "completion_tokens" => output, "total_tokens" => total} =
@@ -1180,9 +1179,21 @@ defmodule ReqLLM.Provider.Defaults do
         nil
 
       tool_calls ->
-        case Enum.find(tool_calls, &(&1.name == "structured_output")) do
-          nil -> nil
-          %{arguments: object} -> object
+        case Enum.find(tool_calls, &(&1.function.name == "structured_output")) do
+          nil ->
+            nil
+
+          %{function: %{arguments: object}} when is_map(object) ->
+            object
+
+          %{function: %{arguments: json_string}} when is_binary(json_string) ->
+            case Jason.decode(json_string) do
+              {:ok, object} -> object
+              {:error, _} -> nil
+            end
+
+          _ ->
+            nil
         end
     end
   end

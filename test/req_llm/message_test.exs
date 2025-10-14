@@ -84,8 +84,8 @@ defmodule ReqLLM.MessageTest do
       assert Message.valid?(message)
     end
 
-    test "tool message with tool result" do
-      content = [ContentPart.tool_result("call_123", %{result: "success"})]
+    test "tool message with text content" do
+      content = [ContentPart.text("success")]
 
       message = %Message{
         role: :tool,
@@ -115,7 +115,7 @@ defmodule ReqLLM.MessageTest do
       message = %Message{
         role: :tool,
         tool_call_id: "call_456",
-        content: [ContentPart.tool_result("call_456", "output")]
+        content: [ContentPart.text("output")]
       }
 
       assert message.tool_call_id == "call_456"
@@ -253,19 +253,18 @@ defmodule ReqLLM.MessageTest do
       assert output =~ " >"
     end
 
-    test "inspects message with tool content" do
+    test "inspects message with text content" do
       message = %Message{
         role: :tool,
         content: [
-          ContentPart.tool_result("call_1", "success"),
-          ContentPart.tool_call("call_2", "calc", %{op: "add"})
+          ContentPart.text("result")
         ]
       }
 
       output = inspect(message)
       assert output =~ "#Message<"
       assert output =~ "tool"
-      assert output =~ "tool_result,tool_call"
+      assert output =~ "text"
     end
 
     test "inspect handles all content part types" do
@@ -274,15 +273,13 @@ defmodule ReqLLM.MessageTest do
         ContentPart.image_url("http://example.com/img.jpg"),
         ContentPart.image(<<1, 2, 3>>, "image/png"),
         ContentPart.file("data", "file.txt", "text/plain"),
-        ContentPart.tool_call("id1", "tool", %{}),
-        ContentPart.tool_result("id2", "result"),
         ContentPart.thinking("thinking")
       ]
 
       message = %Message{role: :user, content: content_types}
       output = inspect(message)
 
-      assert output =~ "text,image_url,image,file,tool_call,tool_result,thinking"
+      assert output =~ "text,image_url,image,file,thinking"
     end
   end
 

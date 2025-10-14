@@ -1,18 +1,42 @@
 #!/usr/bin/env elixir
 
-# Tools/Function Calling Demonstration
-#
-# Shows how to use ReqLLM.tool/1 to define tools and enable function calling.
-# Demonstrates basic tool calling where the model decides which tools to invoke
-# and the script executes them, displaying arguments and results.
-#
-# Note: This demonstrates single-round tool calling. For multi-turn conversations
-# where tool results are fed back to the model for a final response, see the
-# ReqLLM.Examples.Agent module which handles the full tool calling loop.
-
 alias ReqLLM.Scripts.Helpers
 
 defmodule ToolsFunctionCalling do
+  @moduledoc """
+  Tools/Function Calling Demonstration
+
+  Shows how to use ReqLLM.tool/1 to define tools and enable function calling.
+  Demonstrates basic tool calling where the model decides which tools to invoke
+  and the script executes them, displaying arguments and results.
+
+  Note: This demonstrates single-round tool calling. For multi-turn conversations
+  where tool results are fed back to the model for a final response, see
+  tools_round_trip.exs which handles the full tool calling loop.
+
+  ## Usage
+
+      mix run lib/examples/scripts/tools_function_calling.exs [PROMPT]
+      mix run lib/examples/scripts/tools_function_calling.exs --model anthropic:claude-3-5-sonnet-20241022 [PROMPT]
+
+  ## Options
+
+    * `--model`, `-m` - Model to use (default: openai:gpt-4o)
+    * `--log-level`, `-l` - Log level: debug, info, warning, error (default: warning)
+    * `--max-tokens` - Maximum tokens in response
+    * `--temperature` - Temperature for sampling
+
+  ## Examples
+
+      # Default prompt with multiple tool calls
+      mix run lib/examples/scripts/tools_function_calling.exs
+
+      # Custom prompt
+      mix run lib/examples/scripts/tools_function_calling.exs "What's the weather in Tokyo?"
+
+      # Specific model
+      mix run lib/examples/scripts/tools_function_calling.exs --model anthropic:claude-3-5-sonnet-20241022 "Get current time"
+  """
   @script_name "tools_function_calling.exs"
 
   def run(argv) do
@@ -35,7 +59,7 @@ defmodule ToolsFunctionCalling do
 
     model = opts[:model] || Helpers.default_text_model()
 
-    Logger.configure(level: parse_log_level(opts[:log_level] || "warning"))
+    Logger.configure(level: Helpers.log_level(opts[:log_level] || "warning"))
 
     Helpers.banner!(@script_name, "Demonstrates tool/function calling",
       model: model,
@@ -82,16 +106,6 @@ defmodule ToolsFunctionCalling do
 
       true ->
         "What's the weather in Paris in Celsius? What time is it? Tell me a joke about programming."
-    end
-  end
-
-  defp parse_log_level(level_str) do
-    case level_str do
-      "debug" -> :debug
-      "info" -> :info
-      "warning" -> :warning
-      "error" -> :error
-      _ -> :warning
     end
   end
 
@@ -152,13 +166,10 @@ defmodule ToolsFunctionCalling do
 
   defp build_generation_opts(opts, tools) do
     []
-    |> maybe_put(:max_tokens, opts[:max_tokens])
-    |> maybe_put(:temperature, opts[:temperature])
+    |> Helpers.maybe_put(:max_tokens, opts[:max_tokens])
+    |> Helpers.maybe_put(:temperature, opts[:temperature])
     |> Keyword.put(:tools, tools)
   end
-
-  defp maybe_put(opts, _key, nil), do: opts
-  defp maybe_put(opts, key, value), do: Keyword.put(opts, key, value)
 
   defp handle_tool_calls(_model, response, tools, _opts) do
     last_message = List.last(response.context.messages)

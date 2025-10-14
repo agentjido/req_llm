@@ -1,6 +1,33 @@
 alias ReqLLM.Scripts.Helpers
 
 defmodule EmbeddingsSingle do
+  @moduledoc """
+  Demonstrates single text embedding using ReqLLM.
+
+  Generates an embedding vector for a single text input, showing the dimensionality
+  and a preview of the vector values.
+
+  ## Usage
+
+      mix run lib/examples/scripts/embeddings_single.exs "Your text here" [options]
+
+  ## Options
+
+    * `--model, -m` - Model to use (default: openai:text-embedding-3-small)
+    * `--log-level, -l` - Log level: debug, info, warning, error (default: warning)
+
+  ## Examples
+
+      # Basic embedding
+      mix run lib/examples/scripts/embeddings_single.exs "Elixir is a dynamic, functional language"
+
+      # With specific model
+      mix run lib/examples/scripts/embeddings_single.exs "Machine learning" --model openai:text-embedding-3-large
+
+      # With debug logging
+      mix run lib/examples/scripts/embeddings_single.exs "Hello world" --log-level debug
+  """
+
   @script_name "embeddings_single.exs"
 
   def run(argv) do
@@ -21,7 +48,7 @@ defmodule EmbeddingsSingle do
 
     model = opts[:model] || Helpers.default_embedding_model()
 
-    Logger.configure(level: parse_log_level(opts[:log_level] || "warning"))
+    Logger.configure(level: Helpers.log_level(opts[:log_level] || "warning"))
 
     Helpers.banner!(@script_name, "Demonstrates single text embedding",
       model: model,
@@ -30,7 +57,7 @@ defmodule EmbeddingsSingle do
 
     {result, duration_ms} =
       Helpers.time(fn ->
-        ReqLLM.Embedding.embed(model, text, [])
+        ReqLLM.embed(model, text, [])
       end)
 
     case result do
@@ -63,16 +90,6 @@ defmodule EmbeddingsSingle do
         )
 
         System.halt(1)
-    end
-  end
-
-  defp parse_log_level(level_str) do
-    case level_str do
-      "debug" -> :debug
-      "info" -> :info
-      "warning" -> :warning
-      "error" -> :error
-      _ -> :warning
     end
   end
 

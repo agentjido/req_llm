@@ -1,6 +1,38 @@
 alias ReqLLM.Scripts.Helpers
 
 defmodule ObjectGenerate do
+  @moduledoc """
+  Demonstrates structured object generation using JSON schemas.
+
+  Generates a structured object (Person profile) from a natural language prompt
+  using `ReqLLM.generate_object/4` with a NimbleOptions schema definition.
+
+  ## Usage
+
+      mix run lib/examples/scripts/object_generate.exs "Your prompt" [options]
+
+  ## Options
+
+    * `--model` (`-m`) - Model identifier (default: openai:gpt-4o)
+    * `--log-level` (`-l`) - Log level: debug, info, warning, error (default: warning)
+    * `--max-tokens` - Maximum tokens to generate
+    * `--temperature` - Sampling temperature (0.0-2.0)
+
+  ## Examples
+
+      # Basic usage
+      mix run lib/examples/scripts/object_generate.exs "Create a profile for Alice, a 30 year old software engineer"
+
+      # With specific model
+      mix run lib/examples/scripts/object_generate.exs "Generate a person profile" --model anthropic:claude-3-5-sonnet-20241022
+
+      # With generation parameters
+      mix run lib/examples/scripts/object_generate.exs "Create a person" --temperature 0.5 --max-tokens 150
+
+      # With debug logging
+      mix run lib/examples/scripts/object_generate.exs "Generate profile" --log-level debug
+  """
+
   @script_name "object_generate.exs"
 
   def run(argv) do
@@ -23,7 +55,7 @@ defmodule ObjectGenerate do
 
     model = opts[:model] || Helpers.default_text_model()
 
-    Logger.configure(level: parse_log_level(opts[:log_level] || "warning"))
+    Logger.configure(level: Helpers.log_level(opts[:log_level] || "warning"))
 
     Helpers.banner!(@script_name, "Demonstrates structured object generation",
       model: model,
@@ -60,8 +92,8 @@ defmodule ObjectGenerate do
     [
       name: [type: :string, required: true, doc: "Person's name"],
       age: [type: :pos_integer, required: true, doc: "Person's age"],
-      occupation: [type: :string, doc: "Person's occupation"],
-      location: [type: :string, doc: "Person's location"]
+      occupation: [type: :string, required: true, doc: "Person's occupation"],
+      location: [type: :string, required: true, doc: "Person's location"]
     ]
   end
 
@@ -74,40 +106,15 @@ defmodule ObjectGenerate do
         List.first(remaining_args)
 
       true ->
-        IO.puts(:stderr, "Error: Prompt is required\n")
-        IO.puts("Usage: mix run #{@script_name} \"Your prompt here\" [options]")
-        IO.puts("\nExample:")
-
-        IO.puts(
-          "  mix run #{@script_name} \"Create a profile for a software engineer named Alice\""
-        )
-
-        IO.puts(
-          "  mix run #{@script_name} \"Generate a person profile\" --model anthropic:claude-3-5-sonnet-20241022"
-        )
-
-        System.halt(1)
-    end
-  end
-
-  defp parse_log_level(level_str) do
-    case level_str do
-      "debug" -> :debug
-      "info" -> :info
-      "warning" -> :warning
-      "error" -> :error
-      _ -> :warning
+        "Create a profile for a software developer named Alex who is 28 years old."
     end
   end
 
   defp build_generation_opts(opts) do
     []
-    |> maybe_put(:max_tokens, opts[:max_tokens])
-    |> maybe_put(:temperature, opts[:temperature])
+    |> Helpers.maybe_put(:max_tokens, opts[:max_tokens])
+    |> Helpers.maybe_put(:temperature, opts[:temperature])
   end
-
-  defp maybe_put(opts, _key, nil), do: opts
-  defp maybe_put(opts, key, value), do: Keyword.put(opts, key, value)
 end
 
 ObjectGenerate.run(System.argv())

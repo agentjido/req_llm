@@ -175,7 +175,9 @@ defmodule ReqLLM.Step.Usage do
       output:
         usage[:output] || usage["output"] || usage["completion_tokens"] ||
           usage[:completion_tokens] || usage["output_tokens"] || usage[:output_tokens] || 0,
-      reasoning: usage[:reasoning] || usage["reasoning"] || get_reasoning_tokens(usage) || 0,
+      reasoning:
+        usage[:reasoning] || usage["reasoning"] || usage[:reasoning_tokens] ||
+          usage["reasoning_tokens"] || get_reasoning_tokens(usage) || 0,
       cached_input: get_cached_input_tokens(usage)
     }
   end

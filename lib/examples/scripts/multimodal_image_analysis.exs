@@ -1,6 +1,40 @@
 alias ReqLLM.Scripts.Helpers
 
 defmodule MultimodalImageAnalysis do
+  @moduledoc """
+  Demonstrates vision/image analysis using multimodal AI models.
+
+  Analyzes images by sending them to vision-capable models along with a text prompt.
+  Supports common image formats (JPG, PNG, GIF, WebP) and can be used with any
+  vision-capable model.
+
+  ## Usage
+
+      mix run lib/examples/scripts/multimodal_image_analysis.exs [prompt] --file <image_path> [options]
+
+  ## Options
+
+    * `--file` - Path to image file (required)
+    * `--model`, `-m` - Model to use (default: openai:gpt-4o-mini)
+    * `--log-level`, `-l` - Log level: debug, info, warning, error (default: warning)
+    * `--max-tokens` - Maximum tokens to generate
+    * `--temperature` - Sampling temperature (0.0-2.0)
+
+  ## Examples
+
+      # Analyze an image with default prompt
+      mix run lib/examples/scripts/multimodal_image_analysis.exs --file priv/examples/test.jpg
+
+      # Ask a specific question about the image
+      mix run lib/examples/scripts/multimodal_image_analysis.exs "What colors are prominent?" --file image.png
+
+      # Use a different model
+      mix run lib/examples/scripts/multimodal_image_analysis.exs --file photo.jpg --model anthropic:claude-3-5-haiku-20241022
+
+      # Control generation parameters
+      mix run lib/examples/scripts/multimodal_image_analysis.exs --file image.png --max-tokens 500 --temperature 0.7
+  """
+
   @script_name "multimodal_image_analysis.exs"
   @default_model "openai:gpt-4o-mini"
 
@@ -33,7 +67,7 @@ defmodule MultimodalImageAnalysis do
 
     model = opts[:model] || @default_model
 
-    Logger.configure(level: parse_log_level(opts[:log_level] || "warning"))
+    Logger.configure(level: Helpers.log_level(opts[:log_level] || "warning"))
 
     Helpers.banner!(@script_name, "Demonstrates vision/image analysis",
       model: model,
@@ -43,7 +77,7 @@ defmodule MultimodalImageAnalysis do
       temperature: opts[:temperature]
     )
 
-    media_type = detect_media_type(file_path)
+    media_type = Helpers.media_type(file_path)
     binary_data = File.read!(file_path)
 
     parts = [
@@ -52,7 +86,7 @@ defmodule MultimodalImageAnalysis do
     ]
 
     ctx = ReqLLM.Context.new()
-    ctx = ReqLLM.Context.push_user(ctx, parts)
+    ctx = ReqLLM.Context.append(ctx, ReqLLM.Context.user(parts))
 
     generation_opts = build_generation_opts(opts)
 
@@ -115,35 +149,11 @@ defmodule MultimodalImageAnalysis do
     )
   end
 
-  defp detect_media_type(path) do
-    case Path.extname(path) |> String.downcase() do
-      ".jpg" -> "image/jpeg"
-      ".jpeg" -> "image/jpeg"
-      ".png" -> "image/png"
-      ".gif" -> "image/gif"
-      ".webp" -> "image/webp"
-      _ -> "image/jpeg"
-    end
-  end
-
-  defp parse_log_level(level_str) do
-    case level_str do
-      "debug" -> :debug
-      "info" -> :info
-      "warning" -> :warning
-      "error" -> :error
-      _ -> :warning
-    end
-  end
-
   defp build_generation_opts(opts) do
     []
-    |> maybe_put(:max_tokens, opts[:max_tokens])
-    |> maybe_put(:temperature, opts[:temperature])
+    |> Helpers.maybe_put(:max_tokens, opts[:max_tokens])
+    |> Helpers.maybe_put(:temperature, opts[:temperature])
   end
-
-  defp maybe_put(opts, _key, nil), do: opts
-  defp maybe_put(opts, key, value), do: Keyword.put(opts, key, value)
 end
 
 MultimodalImageAnalysis.run(System.argv())

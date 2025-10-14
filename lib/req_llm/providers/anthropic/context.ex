@@ -32,6 +32,8 @@ defmodule ReqLLM.Providers.Anthropic.Context do
       }
   """
 
+  alias ReqLLM.ToolCall
+
   @doc """
   Encode context and model to Anthropic Messages API format.
   """
@@ -67,10 +69,31 @@ defmodule ReqLLM.Providers.Anthropic.Context do
     Map.put(request, :messages, encoded_messages)
   end
 
+  defp encode_message(%ReqLLM.Message{role: :assistant, tool_calls: tool_calls, content: content})
+       when is_list(tool_calls) and tool_calls != [] do
+    text_blocks = encode_content(content)
+    tool_blocks = Enum.map(tool_calls, &encode_tool_call_to_tool_use/1)
+
+    %{
+      role: "assistant",
+      content: combine_content_blocks(text_blocks, tool_blocks)
+    }
+  end
+
+  defp encode_message(%ReqLLM.Message{role: :tool, tool_call_id: id, content: content}) do
+    %{
+      role: "user",
+      content: [
+        %{
+          type: "tool_result",
+          tool_use_id: id,
+          content: extract_text_content(content)
+        }
+      ]
+    }
+  end
+
   defp encode_message(%ReqLLM.Message{role: role, content: content}) do
-    # Anthropic API only accepts "user" or "assistant" roles
-    # Tool results must be wrapped in a "user" message
-    # See: https://docs.anthropic.com/en/docs/build-with-claude/tool-use
     normalized_role = if role == :tool, do: :user, else: role
 
     %{
@@ -97,36 +120,10 @@ defmodule ReqLLM.Providers.Anthropic.Context do
     end
   end
 
+  defp encode_content_part(%ReqLLM.Message.ContentPart{type: :text, text: ""}), do: nil
+
   defp encode_content_part(%ReqLLM.Message.ContentPart{type: :text, text: text}) do
     %{type: "text", text: text}
-  end
-
-  defp encode_content_part(%ReqLLM.Message.ContentPart{
-         type: :tool_call,
-         tool_name: name,
-         input: input,
-         tool_call_id: id
-       }) do
-    %{
-      type: "tool_use",
-      id: id,
-      name: name,
-      input: input
-    }
-  end
-
-  defp encode_content_part(%ReqLLM.Message.ContentPart{
-         type: :tool_result,
-         tool_call_id: id,
-         output: output
-       }) do
-    # Anthropic tool_result format requires string content
-    # See: https://docs.anthropic.com/en/docs/build-with-claude/tool-use
-    %{
-      type: "tool_result",
-      tool_use_id: id,
-      content: serialize_tool_output(output)
-    }
   end
 
   defp encode_content_part(%ReqLLM.Message.ContentPart{
@@ -176,9 +173,31 @@ defmodule ReqLLM.Providers.Anthropic.Context do
 
   defp encode_content_part(_), do: nil
 
-  # Serialize tool output to string format required by Anthropic
-  defp serialize_tool_output(output) when is_binary(output), do: output
-  defp serialize_tool_output(output), do: Jason.encode!(output)
+  defp encode_tool_call_to_tool_use(%ToolCall{id: id, function: %{name: name, arguments: args}}) do
+    %{type: "tool_use", id: id, name: name, input: Jason.decode!(args)}
+  end
+
+  defp combine_content_blocks(text_blocks, tool_blocks) when is_list(text_blocks) do
+    text_blocks ++ tool_blocks
+  end
+
+  defp combine_content_blocks("", tool_blocks), do: tool_blocks
+
+  defp combine_content_blocks(text_string, tool_blocks) when is_binary(text_string) do
+    [%{type: "text", text: text_string}] ++ tool_blocks
+  end
+
+  defp extract_text_content(content_parts) when is_list(content_parts) do
+    content_parts
+    |> Enum.find_value(fn
+      %ReqLLM.Message.ContentPart{type: :text, text: text} -> text
+      _ -> nil
+    end)
+    |> case do
+      nil -> ""
+      text -> text
+    end
+  end
 
   defp add_tools(request, []), do: request
 

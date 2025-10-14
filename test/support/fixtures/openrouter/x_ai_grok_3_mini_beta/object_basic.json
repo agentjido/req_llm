@@ -1,0 +1,164 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoieC1haS9ncm9rLTMtbWluaS1iZXRhIiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xfY2hvaWNlIjp7ImZ1bmN0aW9uIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCJ9LCJ0eXBlIjoiZnVuY3Rpb24ifSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2VuZXJhdGUgc3RydWN0dXJlZCBvdXRwdXQgbWF0Y2hpbmcgdGhlIHByb3ZpZGVkIHNjaGVtYSIsIm5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbIm5hbWUiLCJhZ2UiXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Generate a software engineer profile",
+          "role": "user"
+        }
+      ],
+      "model": "x-ai/grok-3-mini-beta",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tool_choice": {
+        "function": {
+          "name": "structured_output"
+        },
+        "type": "function"
+      },
+      "tools": [
+        {
+          "function": {
+            "description": "Generate structured output matching the provided schema",
+            "name": "structured_output",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "age": {
+                  "description": "Person's age in years",
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "name": {
+                  "description": "Person's full name",
+                  "type": "string"
+                },
+                "occupation": {
+                  "description": "Person's job or profession",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "age"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": " ",
+            "reasoning": "First, the user says: \"Generate a software engineer profile.\" This seems to be asking for a profile of a software engineer, which might include details like name, age, and occupation.\n\nLooking at the available functions, there's only one: \"structured_output\". This function is designed to generate structured output based on a schema. The schema requires \"name\", \"age\", and \"occupation\".\n\nThe schema is:\n\n- name: a string for the person's full name\n\n- age: an integer greater than or equal to 1\n\n- occupation: a string for the person's job or profession\n\nSince the user is asking for a \"software engineer profile\", I can map this to the schema by setting occupation to \"Software Engineer\".\n\nThe function call needs to be in a specific JSON format within <function_call> tags.\n\nMy response must include the function call, and it should be exact.\n\nI need to provide values for the required fields: name and age, and optionally occupation, but since it's required in the schema, I must include it.\n\nThe schema's required fields are [\"name\", \"age\"], and occupation is also in properties, so I think all three are needed based on the description.\n\nIn the function parameters, it says \"required\": [\"name\", \"age\"], so occupation is not strictly required, but for a profile, it makes sense to include it.\n\nTo generate a profile, I need to decide on values. The function is for generating structured output, so I should call it with the appropriate input.\n\nThe function \"structured_output\" is described as: \"Generate structured output matching the provided schema\". But in the available actions, it's defined with a fixed schema, so when I call it, I need to provide the input that matches that schema.\n\nLooking closely: The function is \"structured_output\", and its parameters are the schema itself. But in the function call example, it's <function_call>{\"action\": \"function_name\", \"action_input\": {\"parameter\": \"argument\"}}</function_call>\n\nFor \"structured_output\", the action_input should match its parameters, which is an object with properties: age, name, occupation.\n\nThe parameters for \"structured_output\" are:\n\n{\n\n\"additionalProperties\": false,\n\n\"properties\": {\n\n\"age\": { ... },\n\n\"name\": { ... },\n\n\"occupation\": { ... }\n\n},\n\n\"required\": [\"name\", \"age\"],\n\n\"type\": \"object\"\n\n}\n\nSo, when I call \"structured_output\", I need to provide an action_input that is an object with at least \"name\" and \"age\", and optionally \"occupation\".\n\nThat doesn't make sense. Typically, for a function like this, you might provide the data, but the description says \"Generate structured output matching the provided schema\", which implies that the function will generate the output based on the schema.\n\nPerhaps I need to call it without additional input, but looking at the format, action_input should be an object that matches the schema.\n\nThe example is: {\"action\": \"function_name\", \"action_input\": {\"parameter\": \"argument\"}}\n\nFor this function, action_input should be the object that conforms to the schema.\n\nIf I'm calling \"structured_output\", and its parameters are the schema, then action_input should be something like {\"name\": \"Some Name\", \"age\": 30, \"occupation\": \"Software Engineer\"}\n\nThat seems odd because the function is to generate structured output, so maybe I'm supposed to provide the data to structure it.\n\nPerhaps the system is designed such that I call this function with the data, and it outputs it structured.\n\nThe description: \"Generate structured output matching the provided schema\" – and the schema is fixed in the function definition.\n\nThis is a bit confusing. In the context of this setup, I think the intention is for me to use this function to output data in that structure.\n\nFor the user's request, I need to generate a profile, so I should call the function with sample data for a software engineer.\n\nTo advance the request, I should call the function with appropriate values.\n\nLet me assume that I need to provide the values in the action_input.\n\nFor example: <function_call>{\"action\": \"structured_output\", \"action_input\": {\"name\": \"John Doe\", \"age\": 30, \"occupation\": \"Software Engineer\"}}</function_call>\n\nThat way, it generates the structured output for that profile.\n\nIf I don't provide it, the function might not know what to generate.\n\nI think that's the way to go.\n\nMy response should just be the function call, as per the instructions: \"Keep your response to user clear; please do not make your response verbose!\"\n\nSo, I'll prepare that.\n\nFinally, output it within the tags.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "First, the user says: \"Generate a software engineer profile.\" This seems to be asking for a profile of a software engineer, which might include details like name, age, and occupation.\n\nLooking at the available functions, there's only one: \"structured_output\". This function is designed to generate structured output based on a schema. The schema requires \"name\", \"age\", and \"occupation\".\n\nThe schema is:\n\n- name: a string for the person's full name\n\n- age: an integer greater than or equal to 1\n\n- occupation: a string for the person's job or profession\n\nSince the user is asking for a \"software engineer profile\", I can map this to the schema by setting occupation to \"Software Engineer\".\n\nThe function call needs to be in a specific JSON format within <function_call> tags.\n\nMy response must include the function call, and it should be exact.\n\nI need to provide values for the required fields: name and age, and optionally occupation, but since it's required in the schema, I must include it.\n\nThe schema's required fields are [\"name\", \"age\"], and occupation is also in properties, so I think all three are needed based on the description.\n\nIn the function parameters, it says \"required\": [\"name\", \"age\"], so occupation is not strictly required, but for a profile, it makes sense to include it.\n\nTo generate a profile, I need to decide on values. The function is for generating structured output, so I should call it with the appropriate input.\n\nThe function \"structured_output\" is described as: \"Generate structured output matching the provided schema\". But in the available actions, it's defined with a fixed schema, so when I call it, I need to provide the input that matches that schema.\n\nLooking closely: The function is \"structured_output\", and its parameters are the schema itself. But in the function call example, it's <function_call>{\"action\": \"function_name\", \"action_input\": {\"parameter\": \"argument\"}}</function_call>\n\nFor \"structured_output\", the action_input should match its parameters, which is an object with properties: age, name, occupation.\n\nThe parameters for \"structured_output\" are:\n\n{\n\n\"additionalProperties\": false,\n\n\"properties\": {\n\n\"age\": { ... },\n\n\"name\": { ... },\n\n\"occupation\": { ... }\n\n},\n\n\"required\": [\"name\", \"age\"],\n\n\"type\": \"object\"\n\n}\n\nSo, when I call \"structured_output\", I need to provide an action_input that is an object with at least \"name\" and \"age\", and optionally \"occupation\".\n\nThat doesn't make sense. Typically, for a function like this, you might provide the data, but the description says \"Generate structured output matching the provided schema\", which implies that the function will generate the output based on the schema.\n\nPerhaps I need to call it without additional input, but looking at the format, action_input should be an object that matches the schema.\n\nThe example is: {\"action\": \"function_name\", \"action_input\": {\"parameter\": \"argument\"}}\n\nFor this function, action_input should be the object that conforms to the schema.\n\nIf I'm calling \"structured_output\", and its parameters are the schema, then action_input should be something like {\"name\": \"Some Name\", \"age\": 30, \"occupation\": \"Software Engineer\"}\n\nThat seems odd because the function is to generate structured output, so maybe I'm supposed to provide the data to structure it.\n\nPerhaps the system is designed such that I call this function with the data, and it outputs it structured.\n\nThe description: \"Generate structured output matching the provided schema\" – and the schema is fixed in the function definition.\n\nThis is a bit confusing. In the context of this setup, I think the intention is for me to use this function to output data in that structure.\n\nFor the user's request, I need to generate a profile, so I should call the function with sample data for a software engineer.\n\nTo advance the request, I should call the function with appropriate values.\n\nLet me assume that I need to provide the values in the action_input.\n\nFor example: <function_call>{\"action\": \"structured_output\", \"action_input\": {\"name\": \"John Doe\", \"age\": 30, \"occupation\": \"Software Engineer\"}}</function_call>\n\nThat way, it generates the structured output for that profile.\n\nIf I don't provide it, the function might not know what to generate.\n\nI think that's the way to go.\n\nMy response should just be the function call, as per the instructions: \"Keep your response to user clear; please do not make your response verbose!\"\n\nSo, I'll prepare that.\n\nFinally, output it within the tags.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"age\":30,\"name\":\"John Doe\",\"occupation\":\"Software Engineer\"}",
+                  "name": "structured_output"
+                },
+                "id": "call_74536334",
+                "index": 0,
+                "type": "function"
+              }
+            ]
+          },
+          "native_finish_reason": "tool_calls"
+        }
+      ],
+      "created": 1760442718,
+      "id": "gen-1760442718-2nDmW5Znlq6OmYWT9D00",
+      "model": "x-ai/grok-3-mini",
+      "object": "chat.completion",
+      "provider": "xAI",
+      "system_fingerprint": "fp_4fae27f477",
+      "usage": {
+        "completion_tokens": 984,
+        "completion_tokens_details": {
+          "reasoning_tokens": 944
+        },
+        "prompt_tokens": 205,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 4
+        },
+        "total_tokens": 1189
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98e6de2b7a4ecc1a-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 14 Oct 2025 11:51:58 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

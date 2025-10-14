@@ -674,16 +674,18 @@ defmodule ReqLLM.Providers.Anthropic do
 
   defp extract_and_set_object(response) do
     extracted_object =
-      case ReqLLM.Response.tool_calls(response) do
-        [] ->
-          nil
-
-        tool_calls ->
-          case Enum.find(tool_calls, &(&1.name == "structured_output")) do
-            nil -> nil
-            %{arguments: object} -> object
+      response
+      |> ReqLLM.Response.tool_calls()
+      |> Enum.find_value(fn
+        %{function: %{name: "structured_output", arguments: args}} ->
+          case Jason.decode(args) do
+            {:ok, obj} -> obj
+            _ -> nil
           end
-      end
+
+        _ ->
+          nil
+      end)
 
     %{response | object: extracted_object}
   end

@@ -1,0 +1,94 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibGxhbWEtMy4zLTcwYi12ZXJzYXRpbGUiLCJzZWVkIjo0Miwic3RyZWFtIjp0cnVlLCJzdHJlYW1fb3B0aW9ucyI6eyJpbmNsdWRlX3VzYWdlIjp0cnVlfSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbF9jaG9pY2UiOnsiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0In0sInR5cGUiOiJmdW5jdGlvbiJ9LCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZW5lcmF0ZSBzdHJ1Y3R1cmVkIG91dHB1dCBtYXRjaGluZyB0aGUgcHJvdmlkZWQgc2NoZW1hIiwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibmFtZSIsImFnZSJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Generate a software engineer profile",
+          "role": "user"
+        }
+      ],
+      "model": "llama-3.3-70b-versatile",
+      "seed": 42,
+      "stream": true,
+      "stream_options": {
+        "include_usage": true
+      },
+      "temperature": 0.0,
+      "tool_choice": {
+        "function": {
+          "name": "structured_output"
+        },
+        "type": "function"
+      },
+      "tools": [
+        {
+          "function": {
+            "description": "Generate structured output matching the provided schema",
+            "name": "structured_output",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "age": {
+                  "description": "Person's age in years",
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "name": {
+                  "description": "Person's full name",
+                  "type": "string"
+                },
+                "occupation": {
+                  "description": "Person's job or profession",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "age"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept": "text/event-stream",
+      "authorization": "[REDACTED:authorization]",
+      "content-type": "application/json"
+    },
+    "method": "POST",
+    "url": "https://api.groq.com/openai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLWQxZDM2ODFlLWZiZTQtNDhkZi1iOGFhLWQyYTU5OWMxN2ZkYiIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NjAzODk4NDAsIm1vZGVsIjoibGxhbWEtMy4zLTcwYi12ZXJzYXRpbGUiLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF8zNGQ0MTZlZTM5IiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQiLCJjb250ZW50IjpudWxsfSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOm51bGx9XSwieF9ncm9xIjp7ImlkIjoicmVxXzAxazdmcGpmNzVmZXA5OThzNWttMDR4YnFiIn19CgpkYXRhOiB7ImlkIjoiY2hhdGNtcGwtZDFkMzY4MWUtZmJlNC00OGRmLWI4YWEtZDJhNTk5YzE3ZmRiIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc2MDM4OTg0MCwibW9kZWwiOiJsbGFtYS0zLjMtNzBiLXZlcnNhdGlsZSIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwXzM0ZDQxNmVlMzkiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsidG9vbF9jYWxscyI6W3siaWQiOiIyYjN3OW5uZnMiLCJ0eXBlIjoiZnVuY3Rpb24iLCJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJhcmd1bWVudHMiOiJ7XCJhZ2VcIjozMCxcIm5hbWVcIjpcIkpvaG4gRG9lXCIsXCJvY2N1cGF0aW9uXCI6XCJTb2Z0d2FyZSBFbmdpbmVlclwifSJ9LCJpbmRleCI6MH1dfSwibG9ncHJvYnMiOm51bGwsImZpbmlzaF9yZWFzb24iOm51bGx9XX0KCmRhdGE6IHsiaWQiOiJjaGF0Y21wbC1kMWQzNjgxZS1mYmU0LTQ4ZGYtYjhhYS1kMmE1OTljMTdmZGIiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzYwMzg5ODQwLCJtb2RlbCI6ImxsYW1hLTMuMy03MGItdmVyc2F0aWxlIiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfMzRkNDE2ZWUzOSIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6e30sImxvZ3Byb2JzIjpudWxsLCJmaW5pc2hfcmVhc29uIjoidG9vbF9jYWxscyJ9XSwieF9ncm9xIjp7ImlkIjoicmVxXzAxazdmcGpmNzVmZXA5OThzNWttMDR4YnFiIiwidXNhZ2UiOnsicXVldWVfdGltZSI6MC4xOTg2MDExODUsInByb21wdF90b2tlbnMiOjI4NCwicHJvbXB0X3RpbWUiOjAuMDI0ODU0Mzg2LCJjb21wbGV0aW9uX3Rva2VucyI6MjQsImNvbXBsZXRpb25fdGltZSI6MC4wNTQ1NjQ0NjksInRvdGFsX3Rva2VucyI6MzA4LCJ0b3RhbF90aW1lIjowLjA3OTQxODg1NX19LCJ1c2FnZSI6eyJxdWV1ZV90aW1lIjowLjE5ODYwMTE4NSwicHJvbXB0X3Rva2VucyI6Mjg0LCJwcm9tcHRfdGltZSI6MC4wMjQ4NTQzODYsImNvbXBsZXRpb25fdG9rZW5zIjoyNCwiY29tcGxldGlvbl90aW1lIjowLjA1NDU2NDQ2OSwidG90YWxfdG9rZW5zIjozMDgsInRvdGFsX3RpbWUiOjAuMDc5NDE4ODU1fX0KCmRhdGE6IHsiaWQiOiJjaGF0Y21wbC1kMWQzNjgxZS1mYmU0LTQ4ZGYtYjhhYS1kMmE1OTljMTdmZGIiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzYwMzg5ODQwLCJtb2RlbCI6ImxsYW1hLTMuMy03MGItdmVyc2F0aWxlIiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfMzRkNDE2ZWUzOSIsImNob2ljZXMiOltdLCJ1c2FnZSI6eyJxdWV1ZV90aW1lIjowLjE5ODYwMTE4NSwicHJvbXB0X3Rva2VucyI6Mjg0LCJwcm9tcHRfdGltZSI6MC4wMjQ4NTQzODYsImNvbXBsZXRpb25fdG9rZW5zIjoyNCwiY29tcGxldGlvbl90aW1lIjowLjA1NDU2NDQ2OSwidG90YWxfdG9rZW5zIjozMDgsInRvdGFsX3RpbWUiOjAuMDc5NDE4ODU1fSwic2VydmljZV90aWVyIjoib25fZGVtYW5kIn0KCmRhdGE6IFtET05FXQoK"
+    },
+    "headers": {
+      "alt-svc": "h3=\":443\"; ma=86400",
+      "cache-control": "no-cache",
+      "cf-cache-status": "DYNAMIC",
+      "cf-ray": "98e1d3347e0afa06-ORD",
+      "content-type": "text/event-stream",
+      "date": "Mon, 13 Oct 2025 21:10:40 GMT",
+      "server": "cloudflare",
+      "set-cookie": "__cf_bm=6RELNCJBVLLEKAGYj4zADZlQcDbtrd6nn33IuK1hIn8-1760389840-1.0.1.1-7NpuxFZWAHkvKxWyRV6Nb96ai0TKP4gIPMLFFctWnBKn3kGCHK4XfqbOjwq3BF6LEbvSWtTOoIYK61gLp08vYhWch0o74ZMfouAwVmQw7Oc; path=/; expires=Mon, 13-Oct-25 21:40:40 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None",
+      "vary": "Origin",
+      "via": "1.1 google",
+      "x-groq-region": "yul",
+      "x-ratelimit-limit-requests": "1000",
+      "x-ratelimit-limit-tokens": "12000",
+      "x-ratelimit-remaining-requests": "996",
+      "x-ratelimit-remaining-tokens": "11411",
+      "x-ratelimit-reset-requests": "5m45.6s",
+      "x-ratelimit-reset-tokens": "2.945s",
+      "x-request-id": "req_01k7fpjf75fep998s5km04xbqb"
+    },
+    "status": 200
+  }
+}

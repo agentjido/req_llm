@@ -102,9 +102,7 @@ defmodule ReqLLM.Streaming.FinchClient do
   defp build_stream_request(provider_mod, model, context, opts, finch_name) do
     alias ReqLLM.Streaming.Fixtures
 
-    cleaned_opts = Keyword.delete(opts, :compiled_schema)
-
-    case provider_mod.attach_stream(model, context, cleaned_opts, finch_name) do
+    case provider_mod.attach_stream(model, context, opts, finch_name) do
       {:ok, finch_request} ->
         http_context = Fixtures.HTTPContext.from_finch_request(finch_request)
         canonical_json = Fixtures.canonical_json_from_finch_request(finch_request)

@@ -1,0 +1,151 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMjAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiIiwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6IjE0OWVkOTMzMyIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6IjE0OWVkOTMzMyJ9XSwibW9kZWwiOiJxd2VuLTMtY29kZXItNDgwYiIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 3200,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        },
+        {
+          "content": "",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"a\":2,\"b\":3}",
+                "name": "add"
+              },
+              "id": "149ed9333",
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "content": "5",
+          "name": "add",
+          "role": "tool",
+          "tool_call_id": "149ed9333"
+        }
+      ],
+      "model": "qwen-3-coder-480b",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.cerebras.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "sum=5",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1760396496,
+      "id": "chatcmpl-1002351a-8402-4239-8984-8481350f5570",
+      "model": "qwen-3-coder-480b",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_b137de5cdea5effc293c",
+      "time_info": {
+        "completion_time": 0.005916924,
+        "created": 1760396496,
+        "prompt_time": 0.003034233,
+        "queue_time": 1.4688e-4,
+        "total_time": 0.010920286178588867
+      },
+      "usage": {
+        "completion_tokens": 4,
+        "prompt_tokens": 77,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 81
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "98e275b79b1efa17-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 13 Oct 2025 23:01:36 GMT"
+      ],
+      "inference-id": [
+        "chatcmpl-1002351a-8402-4239-8984-8481350f5570"
+      ],
+      "referrer-policy": [
+        "strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=PbyDqxMjnOGa6WdjDr88LJbc8SOW9DlgbOc6LawN_oc-1760396496-1.0.1.1-Uh_KKLCBF4yiy..IefjVwFBbMMALecEgpJ6of9urCsYxoVvmZ2lvCer76myreK1wyWQ_JE5FCLg7A_zk2TNa1lJVTzCEf9.DmXHqOUAbUkw; path=/; expires=Mon, 13-Oct-25 23:31:36 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=3600; includeSubDomains"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ratelimit-limit-requests-day": [
+        "1440000"
+      ],
+      "x-ratelimit-limit-tokens-minute": [
+        "1000000"
+      ],
+      "x-ratelimit-remaining-requests-day": [
+        "1439972"
+      ],
+      "x-ratelimit-remaining-tokens-minute": [
+        "999296"
+      ],
+      "x-ratelimit-reset-requests-day": [
+        "3503.3056972026825"
+      ],
+      "x-ratelimit-reset-tokens-minute": [
+        "23.305697202682495"
+      ],
+      "x-request-id": [
+        "98e275b79b1efa17-ORD"
+      ]
+    },
+    "status": 200
+  }
+}

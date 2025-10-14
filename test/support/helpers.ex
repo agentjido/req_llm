@@ -399,9 +399,7 @@ defmodule ReqLLM.Test.Helpers do
     assert is_binary(text)
     assert is_binary(thinking)
 
-    has_tool_calls =
-      message.content
-      |> Enum.any?(fn part -> part.type == :tool_call end)
+    has_tool_calls = is_list(message.tool_calls) and not Enum.empty?(message.tool_calls)
 
     is_incomplete = response.finish_reason == :length
 
@@ -439,23 +437,24 @@ defmodule ReqLLM.Test.Helpers do
   end
 
   @doc """
-  Assert that a response contains at least one tool call in the message content.
+  Assert that a response contains at least one tool call.
 
   Verifies:
-  - At least one content part has type :tool_call
-  - Tool call has tool_name
-  - Tool call has input (arguments map)
+  - At least one tool call in message.tool_calls
+  - Tool call has valid structure (id, function with name and arguments)
   """
   def assert_has_tool_call(response) do
-    tool_call_content =
-      Enum.find(response.message.content, fn content ->
-        content.type == :tool_call
-      end)
+    tool_calls = response.message.tool_calls || []
 
-    assert tool_call_content, "Expected to find at least one tool_call in message content"
-    assert tool_call_content.tool_name
-    assert tool_call_content.input
-    assert is_map(tool_call_content.input)
+    assert not Enum.empty?(tool_calls),
+           "Expected at least one tool_call in message.tool_calls, got: #{inspect(tool_calls)}"
+
+    Enum.each(tool_calls, fn tool_call ->
+      assert tool_call.id
+      assert tool_call.function
+      assert tool_call.function.name
+      assert tool_call.function.arguments
+    end)
 
     response
   end

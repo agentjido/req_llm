@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMjc2LCJtb2RlbCI6ImdwdC00LjEtbmFubyIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImdldF93ZWF0aGVyIiwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMjc2LCJtb2RlbCI6ImdwdC00LjEtbmFubyIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
       "input": [
@@ -24,6 +24,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -61,9 +62,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759795768,
+      "created_at": 1760405668,
       "error": null,
-      "id": "resp_07968925f017931c0068e45a382f948199b3903af164f319f2",
+      "id": "resp_0304808fcf915ae60068eda8a4add481968e0dcf0fb3bd308e",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 3276,
@@ -81,7 +82,7 @@
               "type": "output_text"
             }
           ],
-          "id": "msg_07968925f017931c0068e45a38a1408199be87c508940c8bd9",
+          "id": "msg_0304808fcf915ae60068eda8a5aa4c8196bffdd0fa9862370e",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -144,7 +145,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a92b7ea8b161fa-ORD"
+        "98e355a4d92b7b21-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -153,13 +154,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 00:09:29 GMT"
+        "Tue, 14 Oct 2025 01:34:30 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "836"
+        "1519"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -171,8 +172,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=yuwUxiHJVZO2z0Zr6mXJw.4w8ikQN9I1Xq8QICFfOok-1759795769-1.0.1.1-Em83R8m5aRM8Eb7Pu7Gn26b143Pop0grfnqxXlXsSPG3yGMCgzAUTrdlO.uCUpn8Jn2buWNwBydBdZmREtC67P7WM4GwK4LU5LmnBZ59riI; path=/; expires=Tue, 07-Oct-25 00:39:29 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=N3jjZ8pO2QDekkZRKJxL88B8qdKqD6xHkGegcVnj7Y8-1759795769036-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=r8tTZeGBPkhKDbMCudhcBbouuDAB3l8H3u1AXdN49UA-1760405670-1.0.1.1-yiXza72PB9ORmePJEjAn400O5qAlJWewVGZIQrZmWVk25OclA0FJelC2lA66qFGikd3MupPNVhndnxkzD0N9xcga6AlOAaT0DlL9BXfFLtg; path=/; expires=Tue, 14-Oct-25 02:04:30 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=3PWl5KtoN.GCb89FplZv1t7JgqI0XZ3yzO8bG2Mpkjs-1760405670217-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -184,7 +185,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "842"
+        "1524"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -205,7 +206,7 @@
         "1ms"
       ],
       "x-request-id": [
-        "req_e329a396106adfa846d36d79c21885b1"
+        "req_e7a4b4902b504d6baf67f90129ec2b2c"
       ]
     },
     "status": 200

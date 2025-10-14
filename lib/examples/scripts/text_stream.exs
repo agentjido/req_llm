@@ -1,6 +1,41 @@
 alias ReqLLM.Scripts.Helpers
 
 defmodule TextStream do
+  @moduledoc """
+  Demonstrates streaming text generation from an LLM.
+
+  This script shows how to use `ReqLLM.stream_text/3` to generate text with
+  real-time streaming output. Content chunks are printed as they arrive,
+  and usage statistics are displayed when the stream completes.
+
+  ## Usage
+
+      mix run lib/examples/scripts/text_stream.exs "Your prompt here" [options]
+
+  ## Options
+
+    * `--model` (`-m`) - Model identifier (default: "openai:gpt-4o")
+    * `--system` (`-s`) - System message to set context
+    * `--max_tokens` - Maximum tokens to generate
+    * `--temperature` - Sampling temperature (0.0-2.0)
+    * `--log_level` (`-l`) - Logging level: debug, info, warning, error (default: warning)
+
+  ## Examples
+
+      # Basic streaming generation
+      mix run lib/examples/scripts/text_stream.exs "Write a haiku about rivers"
+
+      # With specific model and parameters
+      mix run lib/examples/scripts/text_stream.exs "Explain quantum physics" \\
+        --model anthropic:claude-3-5-sonnet-20241022 \\
+        --max_tokens 500 \\
+        --temperature 0.7
+
+      # With system message
+      mix run lib/examples/scripts/text_stream.exs "What is 2+2?" \\
+        --system "You are a helpful math tutor"
+  """
+
   @script_name "text_stream.exs"
 
   def run(argv) do
@@ -24,7 +59,7 @@ defmodule TextStream do
 
     model = opts[:model] || Helpers.default_text_model()
 
-    Logger.configure(level: parse_log_level(opts[:log_level] || "warning"))
+    Logger.configure(level: Helpers.log_level(opts[:log_level] || "warning"))
 
     Helpers.banner!(@script_name, "Demonstrates streaming text generation",
       model: model,
@@ -40,12 +75,41 @@ defmodule TextStream do
 
     {result, duration_ms} =
       Helpers.time(fn ->
-        Helpers.print_stream_text(model, stream_opts)
+        case ReqLLM.stream_text(model, ctx, stream_opts) do
+          {:ok, response} ->
+            IO.write(IO.ANSI.green() <> "Assistant: " <> IO.ANSI.reset())
+
+            response.stream
+            |> Enum.each(fn chunk ->
+              case chunk do
+                %{type: :content, text: text} when is_binary(text) ->
+                  IO.write(text)
+
+                _ ->
+                  :ok
+              end
+            end)
+
+            IO.puts("\n")
+
+            usage = ReqLLM.StreamResponse.usage(response)
+            {:ok, usage}
+
+          {:error, error} ->
+            {:error, error}
+        end
       end)
 
     case result do
-      :ok ->
+      {:ok, usage} ->
         IO.puts(IO.ANSI.faint() <> "⏱  #{duration_ms}ms" <> IO.ANSI.reset())
+
+        if usage do
+          usage
+          |> Helpers.usage_lines()
+          |> Enum.each(&IO.puts(IO.ANSI.faint() <> &1 <> IO.ANSI.reset()))
+        end
+
         :ok
 
       {:error, error} ->
@@ -64,37 +128,15 @@ defmodule TextStream do
         List.first(remaining_args)
 
       true ->
-        IO.puts(:stderr, "Error: Prompt is required\n")
-        IO.puts("Usage: mix run #{@script_name} \"Your prompt here\" [options]")
-        IO.puts("\nExample:")
-        IO.puts("  mix run #{@script_name} \"Write a haiku about rivers\"")
-
-        IO.puts(
-          "  mix run #{@script_name} \"Explain quantum physics\" --model anthropic:claude-3-5-sonnet-20241022"
-        )
-
-        System.halt(1)
+        "Write a haiku about coding."
     end
   end
 
-  defp parse_log_level(level_str) do
-    case level_str do
-      "debug" -> :debug
-      "info" -> :info
-      "warning" -> :warning
-      "error" -> :error
-      _ -> :warning
-    end
+  defp build_stream_opts(opts, _ctx) do
+    []
+    |> Helpers.maybe_put(:max_tokens, opts[:max_tokens])
+    |> Helpers.maybe_put(:temperature, opts[:temperature])
   end
-
-  defp build_stream_opts(opts, ctx) do
-    [context: ctx]
-    |> maybe_put(:max_tokens, opts[:max_tokens])
-    |> maybe_put(:temperature, opts[:temperature])
-  end
-
-  defp maybe_put(opts, _key, nil), do: opts
-  defp maybe_put(opts, key, value), do: Keyword.put(opts, key, value)
 end
 
 TextStream.run(System.argv())

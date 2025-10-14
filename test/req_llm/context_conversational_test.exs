@@ -57,125 +57,70 @@ defmodule ReqLLM.ContextConversationalTest do
     end
   end
 
-  describe "push_user/2" do
-    test "appends user message with string content" do
-      context = Context.new([Context.system("Start")])
-
-      result = Context.push_user(context, "Hello")
-
-      assert %Context{messages: messages} = result
-      assert length(messages) == 2
-      user_message = List.last(messages)
-      assert user_message.role == :user
-      assert [%ContentPart{type: :text, text: "Hello"}] = user_message.content
-    end
-
-    test "appends user message with content parts" do
-      context = Context.new()
-      parts = [ContentPart.text("Hello"), ContentPart.image_url("https://example.com/image.jpg")]
-
-      result = Context.push_user(context, parts, %{source: "test"})
-
-      assert %Context{messages: [message]} = result
-      assert message.role == :user
-      assert message.content == parts
-      assert message.metadata == %{source: "test"}
-    end
-  end
-
-  describe "push_assistant/2" do
-    test "appends assistant message" do
-      context = Context.new([Context.user("Hello")])
-
-      result = Context.push_assistant(context, "Hi there!")
-
-      assert %Context{messages: messages} = result
-      assert length(messages) == 2
-      assistant_message = List.last(messages)
-      assert assistant_message.role == :assistant
-      assert [%ContentPart{type: :text, text: "Hi there!"}] = assistant_message.content
-    end
-  end
-
-  describe "push_system/2" do
-    test "prepends system message" do
-      context = Context.new([Context.user("Hello")])
-
-      result = Context.push_system(context, "You are helpful")
-
-      assert %Context{messages: messages} = result
-      assert length(messages) == 2
-      system_message = List.first(messages)
-      assert system_message.role == :system
-      assert [%ContentPart{type: :text, text: "You are helpful"}] = system_message.content
-    end
-  end
-
-  describe "tool/2" do
-    test "creates tool message with string content" do
-      message = Context.tool("Tool result", %{execution_id: "123"})
+  describe "tool_result/2" do
+    test "creates tool result message with string content" do
+      message = Context.tool_result("call_123", "Tool result")
 
       assert %Message{
                role: :tool,
                content: [%ContentPart{type: :text, text: "Tool result"}],
-               metadata: %{execution_id: "123"}
+               tool_call_id: "call_123"
              } = message
     end
 
-    test "creates tool message with content parts" do
-      parts = [ContentPart.tool_result("call_123", %{result: "success"})]
-      message = Context.tool(parts)
+    test "creates tool result message with JSON output" do
+      message = Context.tool_result_message("my_tool", "call_123", "success")
 
       assert %Message{
                role: :tool,
-               content: ^parts,
-               metadata: %{}
+               content: [%ContentPart{type: :text, text: "success"}],
+               tool_call_id: "call_123",
+               name: "my_tool"
              } = message
     end
   end
 
-  describe "assistant_tool_call/3" do
+  describe "assistant with tool_calls option" do
     test "creates assistant message with single tool call" do
-      message = Context.assistant_tool_call("get_weather", %{location: "SF"})
+      message = Context.assistant("", tool_calls: [{"get_weather", %{location: "SF"}}])
 
       assert %Message{role: :assistant} = message
-
-      assert [%ContentPart{type: :tool_call, tool_name: "get_weather", input: %{location: "SF"}}] =
-               message.content
-
-      # Check that ID is generated
-      [tool_call] = message.content
-      assert is_binary(tool_call.tool_call_id)
-      assert String.length(tool_call.tool_call_id) > 0
+      assert [tool_call] = message.tool_calls
+      assert tool_call.function.name == "get_weather"
+      assert is_binary(tool_call.id)
+      assert String.length(tool_call.id) > 0
     end
 
     test "accepts custom ID and metadata" do
-      opts = [id: "custom_id", meta: %{source: "test"}]
-      message = Context.assistant_tool_call("get_weather", %{location: "NYC"}, opts)
+      message =
+        Context.assistant("",
+          tool_calls: [{"get_weather", %{location: "NYC"}, id: "custom_id"}],
+          metadata: %{source: "test"}
+        )
 
       assert message.metadata == %{source: "test"}
-      assert [%ContentPart{tool_call_id: "custom_id"}] = message.content
+      assert [tool_call] = message.tool_calls
+      assert tool_call.id == "custom_id"
     end
-  end
 
-  describe "assistant_tool_calls/2" do
     test "creates assistant message with multiple tool calls" do
-      calls = [
-        %{id: "call_1", name: "get_weather", input: %{location: "SF"}},
-        %{id: "call_2", name: "get_time", input: %{timezone: "UTC"}}
-      ]
-
-      message = Context.assistant_tool_calls(calls, %{batch: true})
+      message =
+        Context.assistant("",
+          tool_calls: [
+            {"get_weather", %{location: "SF"}, id: "call_1"},
+            {"get_time", %{timezone: "UTC"}, id: "call_2"}
+          ],
+          metadata: %{batch: true}
+        )
 
       assert %Message{role: :assistant, metadata: %{batch: true}} = message
-      assert length(message.content) == 2
+      assert length(message.tool_calls) == 2
 
-      [call1, call2] = message.content
-      assert call1.type == :tool_call
-      assert call1.tool_call_id == "call_1"
-      assert call1.tool_name == "get_weather"
-      assert call2.tool_call_id == "call_2"
-      assert call2.tool_name == "get_time"
+      [call1, call2] = message.tool_calls
+      assert call1.id == "call_1"
+      assert call1.function.name == "get_weather"
+      assert call2.id == "call_2"
+      assert call2.function.name == "get_time"
     end
   end
 
@@ -190,13 +135,8 @@ defmodule ReqLLM.ContextConversationalTest do
                metadata: %{units: "F"}
              } = message
 
-      assert [
-               %ContentPart{
-                 type: :tool_result,
-                 tool_call_id: "call_123",
-                 output: %{temp: 72}
-               }
-             ] = message.content
+      assert [part] = message.content
+      assert part.type == :text
     end
 
     test "defaults to empty metadata" do

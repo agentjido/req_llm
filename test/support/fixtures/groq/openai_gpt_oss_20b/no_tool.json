@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo2NTUyLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJvcGVuYWkvZ3B0LW9zcy0yMGIiLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjo2NTUyLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJvcGVuYWkvZ3B0LW9zcy0yMGIiLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
       "max_tokens": 6552,
@@ -22,6 +22,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -66,24 +67,24 @@
           }
         }
       ],
-      "created": 1759844696,
-      "id": "chatcmpl-c1131823-761d-4dd1-a963-897cd9e31359",
+      "created": 1760389839,
+      "id": "chatcmpl-302f968e-f2b3-492e-b698-950965e71bd9",
       "model": "openai/gpt-oss-20b",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_e99e93f2ac",
+      "system_fingerprint": "fp_c5a89987dc",
       "usage": {
-        "completion_time": 0.041006127,
+        "completion_time": 0.037870478,
         "completion_tokens": 38,
-        "prompt_time": 0.007526378,
+        "prompt_time": 0.006157284,
         "prompt_tokens": 127,
-        "queue_time": 0.195608795,
-        "total_time": 0.048532505,
+        "queue_time": 0.201553495,
+        "total_time": 0.044027762,
         "total_tokens": 165
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6zenzr7exrtvh86cghew8f1"
+        "id": "req_01k7fpjevees5tqverwnx56a4t"
       }
     },
     "headers": {
@@ -97,7 +98,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98add6048abdda16-ORD"
+        "98e1d3322bd49d4a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -106,13 +107,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:44:56 GMT"
+        "Mon, 13 Oct 2025 21:10:39 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=fuROHqdnFmH8sqtYHKwBPbwy5W6l5X2MxV7twfOsE94-1759844696-1.0.1.1-iR7uj8mhaLFVsLqXSvD45Efyd71B70U.U1M8hSmY1J0fJGKtBWkshk1tS21ClP3I5SxsReIBwNcO18WcYKxh5pxRrgmMIbEcSUjnICG9n_E; path=/; expires=Tue, 07-Oct-25 14:14:56 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=Hy9NhCv9O_qqUjonwZOr4vpBAZLnhy1XlGMy5TaAoQM-1760389839-1.0.1.1-kOTYwDiSQnAPjoIKVuHPg_akPhJt6c77Vy_ec2sWzxTWHGvaCtPAGjvJEKsEUnuBaLYRQ8KEnOjJutwW5IojU5TGR0xEijTt8.v9be75PU4; path=/; expires=Mon, 13-Oct-25 21:40:39 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -133,19 +134,19 @@
         "8000"
       ],
       "x-ratelimit-remaining-requests": [
-        "999"
+        "936"
       ],
       "x-ratelimit-remaining-tokens": [
-        "7872"
+        "6641"
       ],
       "x-ratelimit-reset-requests": [
-        "1m26.4s"
+        "1h32m9.6s"
       ],
       "x-ratelimit-reset-tokens": [
-        "960ms"
+        "10.192499999s"
       ],
       "x-request-id": [
-        "req_01k6zenzr7exrtvh86cghew8f1"
+        "req_01k7fpjevees5tqverwnx56a4t"
       ]
     },
     "status": 200

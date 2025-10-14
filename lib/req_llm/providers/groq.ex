@@ -153,6 +153,7 @@ defmodule ReqLLM.Providers.Groq do
 
     enhanced_body =
       body
+      |> translate_tool_choice_format()
       |> maybe_put_skip(:service_tier, request.options[:service_tier], ["auto"])
       |> maybe_put_skip(:reasoning_effort, request.options[:reasoning_effort], ["default"])
       |> maybe_put(:reasoning_format, request.options[:reasoning_format])
@@ -162,6 +163,31 @@ defmodule ReqLLM.Providers.Groq do
 
     encoded_body = Jason.encode!(enhanced_body)
     Map.put(request, :body, encoded_body)
+  end
+
+  defp translate_tool_choice_format(body) do
+    {tool_choice, body_key} =
+      cond do
+        Map.has_key?(body, :tool_choice) -> {Map.get(body, :tool_choice), :tool_choice}
+        Map.has_key?(body, "tool_choice") -> {Map.get(body, "tool_choice"), "tool_choice"}
+        true -> {nil, nil}
+      end
+
+    type = tool_choice && (Map.get(tool_choice, :type) || Map.get(tool_choice, "type"))
+    name = tool_choice && (Map.get(tool_choice, :name) || Map.get(tool_choice, "name"))
+
+    if type == "tool" && name do
+      replacement =
+        if is_map_key(tool_choice, :type) do
+          %{type: "function", function: %{name: name}}
+        else
+          %{"type" => "function", "function" => %{"name" => name}}
+        end
+
+      Map.put(body, body_key, replacement)
+    else
+      body
+    end
   end
 
   @doc """

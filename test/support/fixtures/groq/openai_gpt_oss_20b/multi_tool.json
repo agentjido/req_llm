@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo2NTUyLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/Iiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC1vc3MtMjBiIiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfdG9rZW5zIjo2NTUyLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/Iiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC1vc3MtMjBiIiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "max_tokens": 6552,
@@ -22,6 +22,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -47,6 +48,7 @@
             "description": "Tell a funny joke",
             "name": "tell_joke",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "topic": {
                   "description": "Topic for the joke",
@@ -102,31 +104,31 @@
                   "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "fc_a539a6ce-ec27-42a5-829f-019a8446372a",
+                "id": "fc_a6a6f1fa-9800-464d-a5a5-fa4085c424ea",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1759844700,
-      "id": "chatcmpl-db658f94-bdcc-4ffc-86ab-aa75d4299e5b",
+      "created": 1760389843,
+      "id": "chatcmpl-0b2a25f2-1e36-4388-94e9-d0bbdd0ab578",
       "model": "openai/gpt-oss-20b",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_77f8660d1d",
+      "system_fingerprint": "fp_e99e93f2ac",
       "usage": {
-        "completion_time": 0.036287666,
+        "completion_time": 0.037049424,
         "completion_tokens": 37,
-        "prompt_time": 0.008775433,
+        "prompt_time": 0.008819479,
         "prompt_tokens": 183,
-        "queue_time": 0.195273945,
-        "total_time": 0.045063099,
+        "queue_time": 0.201658389,
+        "total_time": 0.045868903,
         "total_tokens": 220
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6zep3nje2g9dd253zwm6pyg"
+        "id": "req_01k7fpjjree0y8zfyz3yyc5aza"
       }
     },
     "headers": {
@@ -140,7 +142,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98add61db90cda16-ORD"
+        "98e1d34b0ca19d4a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -149,13 +151,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:45:00 GMT"
+        "Mon, 13 Oct 2025 21:10:43 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=4fSttZv2zL3IqMFqzOBBxa5SMdnRb0B_djz.29bQctg-1759844700-1.0.1.1-gDav4fPqU2SEahRlZRahR6z0MwMFUwnLcQdTLewNjCVtgbakn3ugl4_I5.nvPbm7NIiN49QIV2v5VnpmEU2Q40sF8..l_go.H4L5_fTkgqc; path=/; expires=Tue, 07-Oct-25 14:15:00 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=2dOTpB0fPhKLsgYGsorCd.XPTW2Pyw7hzkY.DDxKeIQ-1760389843-1.0.1.1-Hh8W5sCqOliDFPxUcBP5ueArOwGLBDjH8CF9ogyHA4bbdfxNk_KxUiOLvR3oNlsrCrq1QaMJEyEogfnnLI.4R6yI84R8_mxYlB1XklizVCo; path=/; expires=Mon, 13-Oct-25 21:40:43 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -176,19 +178,19 @@
         "8000"
       ],
       "x-ratelimit-remaining-requests": [
-        "995"
+        "933"
       ],
       "x-ratelimit-remaining-tokens": [
-        "5388"
+        "3680"
       ],
       "x-ratelimit-reset-requests": [
-        "7m9.336999999s"
+        "1h36m28.8s"
       ],
       "x-ratelimit-reset-tokens": [
-        "19.587s"
+        "32.4s"
       ],
       "x-request-id": [
-        "req_01k6zep3nje2g9dd253zwm6pyg"
+        "req_01k7fpjjree0y8zfyz3yyc5aza"
       ]
     },
     "status": 200

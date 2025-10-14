@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoibzEiLCJzdHJlYW0iOmZhbHNlfQ=="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMDAwLCJtb2RlbCI6Im8xIiwic3RyZWFtIjpmYWxzZX0="
     },
     "canonical_json": {
       "input": [
@@ -15,7 +15,7 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 100,
+      "max_output_tokens": 3000,
       "model": "o1",
       "stream": false
     },
@@ -40,23 +40,37 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759698829,
+      "created_at": 1760405699,
       "error": null,
-      "id": "resp_0c3630a13557bbc50068e2df8d0d2881958f9df38d2341cf04",
+      "id": "resp_051aef80446effab0068eda8c346c081968655ea6736faaa24",
       "incomplete_details": {
         "reason": "max_output_tokens"
       },
       "instructions": null,
-      "max_output_tokens": 100,
+      "max_output_tokens": 3000,
       "max_tool_calls": null,
       "metadata": {},
       "model": "o1-2024-12-17",
       "object": "response",
       "output": [
         {
-          "id": "rs_0c3630a13557bbc50068e2df8f0fa88195b37d6f6014895550",
+          "id": "rs_051aef80446effab0068eda8c67a2c8196b8e7ff47e891deb2",
           "summary": [],
           "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "In the far reaches of a realm known as Aurathen, soaring peaks pierced the sky like jagged teeth. Long ago, ancient dragons nested atop those rugged summits, keeping watch over the lands below. Their scales shimmered in hues of gold, emerald, and deepest obsidian; their roars echoed across valleys, carrying ages of wisdom and power. Through centuries, a fragile peace endured between dragons and mortal folk, a tenuous bond woven from mutual respect. Yet as decades piled upon decades, misunderstanding and discord seeded dangerous rifts. Eventually, the magnificent beasts withdrew into isolation, leaving humans, elves, and dwarves alike to wonder if they had ever truly existed.\n\nCHAPTER 1: HINTS OF A CALLING  \nNear the heart of Aurathen lay the humble village of Everwood, a place where thick pines brushed against the wind and where fields of wildflowers shimmered like a colorful carpet each spring. In this village lived a young woman named Eliana. She possessed a curious spirit that never settled. Even as a child, tales of dragons and lost treasures had captivated her imagination. At night, while the rest of Everwood rested, Eliana would sneak out to the tree line with an old spyglass, gazing at the distant mountain peaks. Sometimes, if she closed her eyes just right, she could almost hear the rumble of a great dragon’s roar carried on the wind.  \n   \nHer parents often warned her not to dream beyond the meadows. Dreaming too high, they said, only led to ruin and heartbreak—perhaps a caution traced to the old days when strangers would vanish into the mountains, never to return. Nevertheless, Eliana held onto her midnight vigil. Little did she know, fate was gently nudging her along pathways she could barely conceive.  \n\nCHAPTER 2: THE UNEXPECTED ARRIVAL  \nOne crisp autumn morning, a traveling bard named Malchor visited Everwood, his wagons overflowing with stories, riddles, and artifacts from distant lands. Along with him came a mysterious old scroll, the edges browned by time, its vellum covered in dragonic runes. The villagers craned their necks to hear of lost wonders and hidden spells. But when Malchor reached the part of his tale that involved dragons, Eliana felt her heart thumping like stampeding horses.  \n   \n“Far to the north,” Malchor began, his voice low, “the Dragons’ Gate stands sealed, entombing powers that could set the skies ablaze. It is said that once every century, the Gate calls out to those who bear the mark of destiny.” At this, the bard removed his wide-brimmed hat, revealing a deep scar slanting over one eyebrow. “I’ve been to the edges of that place. The wind sounds different there. As if it is… alive, whispering songs of might and ruin.”  \n   \nEliana could barely breathe. She felt as though the old scroll in Malchor’s pack were glowing, trying to guide her. She didn’t know why, but she desperately wanted to see it for herself—it tugged at her very soul.  \n\nCHAPTER 3: A TOKEN FROM THE PAST  \nAfter the bard’s performance, Eliana politely but firmly cornered Malchor behind the tavern. Bathed in lantern light, his face held a worn kindness, and he immediately recognized her intense curiosity. Without too much fanfare, he showed Eliana the scroll. Painted onto the vellum were swirling dragonic letters, accompanied by peculiar symbols: a dragon’s claw, a soaring peak, an eclipse of the moon.  \n   \nMalchor admitted he couldn’t read most of it, only a few scattered words. But he had one clue: the symbols pointed to an ancient stronghold, known among certain circles as the Citadel of Zarthuun. Legend held that the Citadel was once a sanctuary where dragons and humans studied magic together. Over time, it fell into ruin, reclaimed by hungry vines and creeping moss. Very few travelers ventured there, fearing curses that plagued the place.  \n   \nIntrigued, Eliana offered to purchase the scroll, but Malchor refused her coin. Instead, he gently pressed the parchment into her hands. “I sense you’ll need this,” he said. “Destiny is rarely a matter of chance; sometimes, we can feel the call in our bones.”  \n\nCHAPTER 4: THE JOURNEY BEGINS  \nSetting out before dawn, Eliana left Everwood behind, carrying nothing more than her travel pack, the scroll, and high hopes. She followed the ancient trade road leading north. As she ventured farther from home, the air grew cooler, the wind sharper. The wide fields gave way to thicker forests; tall oaks and pines lined the roads like silent guardians—watchful, but giving no clues about what lay ahead.  \n   \nAfter many days of walking, she encountered a dwarven caravan traveling to the famed underground city of Stonebeard Hold. Over the fragrant warmth of an evening campfire, she spoke with a gruff smith named Torvald, who told wondrous tales of dragons forging alliances with dwarves back when the mountains were brand new. He explained that dwarves once learned forging techniques from fire-breathing drakes, fusing steel with dragonflame to craft unbreakable swords. Though these pacts had faded out of living memory, Torvald still believed the echoes of that kinship lived on in dwarven hearts.  \n   \nEliana felt her spirits lift. If dwarves remembered and still cherished old ties with dragons, perhaps forging a new accord would be possible. Just maybe, her quest held hope for more than just personal fulfillment.  \n\nCHAPTER 5: THE CITADEL’S SHADOW  \nMany leagues later, Eliana found herself at the edge of a vast canyon, overlooked by a crumbling fortress—the long-lost Citadel of Zarthuun. Its towers, now broken, rose like the blackened bones of a giant. The massive gates were shattered. Creeping vines wove through cracks in the stone, while chipped gargoyles peered down with blind, weathered eyes.  \n   \nEliana stepped cautiously over the threshold. In the courtyard, faded murals depicted dragons and humans standing side by side, forging bright weapons in enormous forges. She brushed away a layer of moss from a tablet to reveal a passage of dragonic script, different from that on her scroll. Though incomprehensible, something about it felt… comforting, even protective.  \n   \nAs darkness fell, she made camp in what once might have been a great hall. To her amazement, she felt a low, resonant hum in the walls. It seemed like the building itself wanted to speak. Sleep came fitfully that night. It was as though the Citadel reached into her dreams, gently tugging at her, pulling her toward an unseen presence.  \n\nCHAPTER 6: ECHOES IN THE WESTERN TOWER  \nDaybreak brought a soft haze. Eliana wandered among broken corridors in search of clues. She found that part of the Citadel was still stable—particularly the Western Tower, which remained mostly intact. Once inside, she discovered a spiral stair. Ascending carefully, with each step stirring ancient dust, she felt as though she was trekking back in time.  \n   \nReaching the top, she entered a chamber lined with shelves of crumbling tomes. At its center stood a stone pedestal carved with swirling dragons. There, she noticed a faint glow emanating from the pedestal’s surface. Holding her breath, she unrolled the old scroll. The runes on the parchment seemed to align with the pedestal’s carvings. When she set the scroll down, a gentle light pulsed from the ring of symbols, as if awakened from centuries of slumber.  \n   \nThe entire tower seemed to vibrate for a heartbeat, and Eliana glimpsed a vision: a wide plain under stormy skies, and a massive silhouette of a dragon, wings outstretched. Then it was gone. As the glow faded, she realized that her quest was bigger than she had imagined—she was meant to find these dragons.  \n\nCHAPTER 7: A FRIEND IN NEED  \nLeaving the Citadel, Eliana continued deeper into Aurathen’s wild north. She ascended treacherous mountain paths where avalanches had carved rocky chutes and old bones littered hidden hollows. The terrain was harsh, but the pull of an unseen force drove her forward.  \n   \nOn the third day of this arduous climb, she encountered a battered knight lying near a collapsed hut. His armor bore the crest of the northern kingdom, but it was spattered with mud and blood. Though gaunt and weary, he was still conscious. Eliana helped him drink from her canteen and dressed his wounds. He introduced himself as Sir Damon, once a royal guard on a mission to explore the northern frontier, now pursued by vicious troll marauders.  \n   \nSir Damon was suspicious at first, but upon seeing Eliana’s earnest nature and hearing the faint story of her quest, his suspicion softened. In gratitude for saving his life, he offered to accompany her for as long as he could. Though still weak, his sword arm remained steady. Eliana felt relief at not being alone anymore.  \n\nCHAPTER 8: THE TUNNELS BENEATH THE MOUNTAIN  \nDesperate to avoid the roving troll packs combing the peaks for victims, Eliana and Sir Damon discovered a narrow crevice that led into a system of caverns. Drifting deeper into the cold darkness, their torches revealed ancient carvings of dragonic shapes, swirling up and around the tunnel walls. The air smelled of damp stone and something else that was almost… electric.  \n   \nAt length, they reached a hidden chamber. Within it, an old mosaic covered the floor, portraying a council of dragons each perched at the cardinal directions, symbolizing guardianship over the world’s corners. Yet near the center lay a shattered portion of the mosaic, leaving a jagged hole in the artwork. Sir Damon guessed it might represent a lost dragon—the one who had abandoned its duties centuries ago.  \n   \nThe faintest rumble echoed through the darkness, a sound neither purely natural nor entirely magical. Eliana and Sir Damon exchanged tense glances, unsure if this signaled friend or foe. Whatever lurked beyond those cavern walls, it carried immensity and mystery.  \n\nCHAPTER 9: CRACKS IN THE ICE  \nEmerging from the labyrinth of tunnels, the two travelers found themselves on a ledge overlooking a vast glacial field. Towering walls of ice and snow stretched to the horizon like a frozen sea. The wind whipped across them, howling with an eerie persistence. Sir Damon shivered, while Eliana’s heart thudded in quick, nervous beats.  \n   \nTraversing the glacier took days, each step precarious on the slippery terrain. Sunlight bounced off the bright ice, dazzling their eyes. Yet the scroll provided small hints—whenever they veered off the correct path, the markings dulled, and that insightful shimmer faded away. When they readjusted their course, it returned, guiding them like an unwavering compass.  \n\nCHAPTER 10: THE FIRST ENCOUNTER  \nAt last, they reached the base of a mountain shaped like a dragon’s claw, its jagged ridges looming like talons. A long, winding path led to a plateau near the peak. There, beneath starlight and swirling auroras, they discovered a mammoth entrance carved into the mountainside. Huge pillars lined the doorway, each etched with intricate images of dragons breathing fire, lightning, and icy gusts.  \n   \nInside was a grand corridor that widened into a cavernous hall with an elevated dais at the far end. Massive torches on the walls flared to life of their own accord, as if the mountain itself sensed their arrival. Atop the dais lay an enormous shape, curled like a sleeping cat… except this “cat” had obsidian scales and a wingspan that might have covered a small village.  \n   \nSir Damon’s hand reflexively clutched his sword, but Eliana placed a staying hand on his wrist. She felt no hostility in the air—only a silent, ancient expectation. Gradually, the beast stirred. Rising to its full height, the dragon’s sleek neck arched gracefully. Twin orbs of near-smoldering amber watched them intently.  \n\nCHAPTER 11: VOICES OF THE ANCIENT  \nA hush fell over the hall. For a long moment, the dragon and the humans simply gazed at each other. Then, a low, rumbling voice, akin to thunder rolling across a distant plain, spoke in their minds. “Why do you come here, mortal ones?”  \n   \nEliana swallowed hard. “We come seeking alliance… knowledge… We carry a scroll that points us to lost truths, a path that might",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_051aef80446effab0068eda8c7c0c4819687c9979d14bef3c0",
+          "role": "assistant",
+          "status": "incomplete",
+          "type": "message"
         }
       ],
       "parallel_tool_calls": true,
@@ -67,7 +81,7 @@
         "summary": null
       },
       "safety_identifier": null,
-      "service_tier": "auto",
+      "service_tier": "default",
       "status": "incomplete",
       "store": true,
       "temperature": 1.0,
@@ -87,11 +101,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 164,
+        "output_tokens": 2934,
         "output_tokens_details": {
-          "reasoning_tokens": 64
+          "reasoning_tokens": 256
         },
-        "total_tokens": 179
+        "total_tokens": 2949
       },
       "user": null
     },
@@ -103,7 +117,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989feccfeceb02ab-ORD"
+        "98e356641ab75c91-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -112,13 +126,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:13:51 GMT"
+        "Tue, 14 Oct 2025 01:35:26 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "2280"
+        "27091"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -130,8 +144,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=fUTL8YijCPGNdmiXvU9e4_uhvZ6Gc5s8fcKx_4l_cAs-1759698831-1.0.1.1-x2o.DdFlMzv43CWbB1S8pt8vuL8rMwPxVdrbIVWMUzfjnmOE8PJvCNEN7wLlfSTNqlH6FKFFRXZymwMqDsVI.18aFba6ue9yLy1c3wxoWrQ; path=/; expires=Sun, 05-Oct-25 21:43:51 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=S7mgc6QNPKNxJ90UqkCU1i2QJdr1UmDo4m4kuFZiWEI-1759698831356-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=zt.hhYcWnEufXAW_gqw1TQDdmMnv3MfoVJxac55I7i8-1760405726-1.0.1.1-ZuLxTVtKIrcb6Uf26XNkDxXarkiWcI.zS2uvL6AylLiokqEV3Ty7omrdl0EWf4XsVGOsyZbD4VmAxdMKhdIOcKxIy0LBtHl0i1gBIz4_Ccg; path=/; expires=Tue, 14-Oct-25 02:05:26 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=G9ZRUcfNiEIrUVoVq6UBwcwanw7ebhI6Luu.jfVa1uI-1760405726385-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -143,28 +157,28 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "2282"
+        "27095"
       ],
       "x-ratelimit-limit-requests": [
-        "5000"
+        "10000"
       ],
       "x-ratelimit-limit-tokens": [
-        "800000"
+        "2000000"
       ],
       "x-ratelimit-remaining-requests": [
-        "4999"
+        "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "799919"
+        "1999594"
       ],
       "x-ratelimit-reset-requests": [
-        "12ms"
-      ],
-      "x-ratelimit-reset-tokens": [
         "6ms"
       ],
+      "x-ratelimit-reset-tokens": [
+        "12ms"
+      ],
       "x-request-id": [
-        "req_afe8b725265b83dabd49f03b3c0a5fd4"
+        "req_97d02ad3d0b14d6eac2b0136cfd25e5a"
       ]
     },
     "status": 200
