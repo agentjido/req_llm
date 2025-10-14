@@ -86,7 +86,8 @@ defmodule ReqLLM.Providers.ZaiCoder do
   @impl ReqLLM.Provider
   def decode_response({req, %{status: 200} = resp}) do
     model =
-      req.private[:req_llm_model] || %ReqLLM.Model{provider: :zai_coder, model: req.options[:model]}
+      req.private[:req_llm_model] ||
+        %ReqLLM.Model{provider: :zai_coder, model: req.options[:model]}
 
     body = ensure_parsed_body(resp.body)
 
