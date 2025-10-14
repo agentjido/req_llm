@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTMtbWluaS1mYXN0Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhpIHRoZXJlISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMy1taW5pLWZhc3QiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
-      "max_completion_tokens": 500,
+      "max_completion_tokens": 10,
       "messages": [
         {
           "content": "Hi there!",
@@ -35,38 +35,38 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "Hi! I'm Grok, your friendly AI assistant built by xAI. What's on your mind today—how can I help? 😊",
-            "reasoning_content": "First, the user said: \"Hi there!\" This is a casual greeting. As Grok, I'm supposed to be helpful, truthful, and maximally truthful, built by xAI. My responses should align with that.\n\nMy role is to assist and engage in conversation. Since this is a greeting, I should respond in a friendly, welcoming manner to continue the conversation or encourage the user to ask questions.\n\nPossible responses:\n- A simple greeting back, like \"Hi! How can I help you today?\"\n- Something more engaging, referencing my identity, e.g., \"Hello! I'm Grok, here to assist you.\"\n- Keep it light and fun, as Grok is known for being witty.\n\nI need to ensure I'm truthful. There's no misinformation here; it's just a greeting.\n\nStructure the response:\n1. Acknowledge the greeting.\n2. Introduce myself briefly if it's the first interaction.\n3. Offer help to make it useful.\n\nSince the user might be starting a conversation, I should be prepared for follow-ups. But for now, respond directly.\n\nFinal response idea:\n- Start with \"Hi!\" to mirror the user's greeting.\n- Add a bit about myself: \"I'm Grok, created by xAI.\"\n- End with an offer: \"What can I do for you?\"\n\nMake it concise and natural.",
+            "content": "Hi! I'm Grok, your AI assistant from",
+            "reasoning_content": "First, the user said, \"Hi there!\" which is a casual greeting. As an AI assistant, I should respond in a friendly and engaging manner to build rapport.\n\nMy role is to be helpful, truthful, and engaging. I need to keep my responses clear and not verbose, as per the instructions.\n\nA good response to a greeting could be:\n- A simple acknowledgment like \"Hi!\" or \"Hello!\"\n- Followed by something to continue the conversation, like asking how I can help or what they're interested in.\n- Since this is the start, I should introduce myself briefly if needed.\n\nThe system prompt says: \"You are Grok, a helpful and maximally truthful AI built by xAI, not based on any other companies and their models.\" So, I should incorporate that into my identity if it fits naturally.\n\nPossible response structure:\n1. Greet back.\n2. Introduce myself briefly.\n3. Offer assistance.\n\nKeep it concise: Avoid being verbose. So, aim for 1-2 sentences.\n\nExample response:\n\"Hi! I'm Grok, created by xAI to assist with questions and conversations. How can I help you today?\"\n\nThis is friendly, informative, and invites further interaction.\n\nIf I want to keep it even shorter:\n\"Hi there! I'm Grok from xAI. What's on your mind?\"\n\nThat works too.\n\nEnsure I'm truthful: Everything I say should be accurate. I'm not based on other companies' models, as per the prompt.\n\nFinally, end on a positive note to encourage more dialogue.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759844487,
-      "id": "80897c5b-e3f0-9e43-2e77-f45dd8507aa2_us-east-1",
+      "created": 1760458021,
+      "id": "1497151f-d2d6-7aed-7af0-533dc281cb1c_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 28,
+        "completion_tokens": 10,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 266,
+          "reasoning_tokens": 310,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
         "prompt_tokens": 10,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 9,
+          "cached_tokens": 2,
           "image_tokens": 0,
           "text_tokens": 10
         },
-        "total_tokens": 304
+        "total_tokens": 330
       }
     },
     "headers": {
@@ -80,7 +80,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98add0edcd37e26f-ORD"
+        "98e853ca187b123f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,13 +89,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:41:29 GMT"
+        "Tue, 14 Oct 2025 16:07:06 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=veFg.yNYjg8MOXQk_nspDoEjGhRdzTYlvefatlurgpg-1759844489-1.0.1.1-A1jPghX_PH0fSX7sqNF4UvRMQRROI_aF9zbomo4eIYLUqLHNJ_N9OTbnXVvueQ8pPFzEh_lIZ2bZV0aJ6Hn29Fw_LHcJRUWYjTfzBbicVv4; path=/; expires=Tue, 07-Oct-25 14:11:29 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=DJnC9oCZlGAj520cEjPMR522D2pXNhNL.ntIpylOG2Q-1760458026-1.0.1.1-dGk9k6Q7QEsVrRso35NDPsY0zd6y7GpKyKJ1h6RBAQoxmaHPHrtKr6kB3.D8OeOIMGziTximy9fxjOxwLvW_x.iOvggSMCyhIw_7YsarZMc; path=/; expires=Tue, 14-Oct-25 16:37:06 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -107,7 +107,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-44e43eac75a683e77deead193c230b2d-93610c6d0018c9dd-01"
+        "00-de87e373a10a508403ea6b54266466f7-d4c72a7a005feaee-01"
       ],
       "x-zero-data-retention": [
         "false"

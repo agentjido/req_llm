@@ -37,14 +37,14 @@
           "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "In the ancient land of Eldoria, where the mountains touched the sky and the forests whispered ancient secrets, dragons ruled the skies. These majestic creatures, with scales that shimmered like a thousand suns, were both revered and feared. The most legendary of these dragons was Aurion, the Golden Dragon, whose wisdom was as vast as the oceans and whose power could shake the very foundations of the world.\n\nOur story begins with a young adventurer named Elara, who dreamed of uncovering the secrets of the",
+            "content": "In the ancient land of Eldoria, where the mountains kissed the sky and the forests whispered secrets of old, dragons ruled the skies and the hearts of the people. These majestic creatures, with scales that shimmered like a thousand suns and eyes that held the wisdom of the ages, were both revered and feared. Among them, the most legendary was the Dragon of the Dawn, Azura, whose scales were said to be the color of the first light of day.\n\nOur tale begins with a young",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759864824,
-      "id": "38b7aeb8-84b7-0d00-2ce6-b2092a723b83_us-east-1",
+      "created": 1760458007,
+      "id": "d3f050d4-4973-dc1e-6df4-374f0cfdf178_us-east-1",
       "model": "grok-2-1212",
       "object": "chat.completion",
       "system_fingerprint": "fp_fced99f24f",
@@ -78,28 +78,22 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98afc172bf4cd250-ORD"
+        "98e853706899a465-ORD"
       ],
       "connection": [
         "keep-alive"
-      ],
-      "content-security-policy-report-only": [
-        "script-src 'none'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=iTqjCsYsFvFUqy488inDZuFFTnREUaLzv_Jh4yJT7Bg-1759864826-1.0.1.1-AT9SIATro8SwpqfkVMVXWD0cadwnxWMBVGvDJK0XB1aAeYeh2dtlNEQ0aBzLqfICzgavET_v7s8thRLVuEdD.xMR7lmxdInpQ4WpNDB_1LLwPFlfk.yVeYUxHR4SioEWVoul3lMp4IkN7jM.fJzgYIYsHHaicTNz8zelm7XcmJM; report-to cf-csp-endpoint"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 19:20:26 GMT"
-      ],
-      "report-to": [
-        "{\"endpoints\":[{\"url\":\"https:\\/\\/csp-reporting.cloudflare.com\\/cdn-cgi\\/script_monitor\\/report?m=iTqjCsYsFvFUqy488inDZuFFTnREUaLzv_Jh4yJT7Bg-1759864826-1.0.1.1-AT9SIATro8SwpqfkVMVXWD0cadwnxWMBVGvDJK0XB1aAeYeh2dtlNEQ0aBzLqfICzgavET_v7s8thRLVuEdD.xMR7lmxdInpQ4WpNDB_1LLwPFlfk.yVeYUxHR4SioEWVoul3lMp4IkN7jM.fJzgYIYsHHaicTNz8zelm7XcmJM\"}],\"group\":\"cf-csp-endpoint\",\"max_age\":86400}"
+        "Tue, 14 Oct 2025 16:06:48 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=_B4djXk6foWuWNxBxlbnY.ZyYpslsAqY7LHqKGD0pxc-1759864826-1.0.1.1-R3Woii6RtDppdhDz5LrTk3VPPXUmwQm9omsGYqH4.wF3zdpNLzPpUhgFE_i.eXkWhszQDEQlkSDy3l8miyV9bG_OU9vWvkP45wsoX81RdMI; path=/; expires=Tue, 07-Oct-25 19:50:26 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=GtGGxSKMeU.CLJfue31kMwgZtjHZrE._6_65LF9.BB4-1760458008-1.0.1.1-h0.dxDlehP9TOhxaTfh6uj28z_GzJmPqd.oWmyx82CDXb5kbIk8eBhlmvkArKNK628kQf4LEWDcOqRPWR9Bym8OaH_zN0Yw4b6JapCfNJkE; path=/; expires=Tue, 14-Oct-25 16:36:48 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -111,7 +105,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-e9ad3d5c46fd35460e04933457a21021-9589339500001eac-01"
+        "00-1c4ca06a5566d142076e8858bfc47f06-28f6daf000522302-01"
       ],
       "x-zero-data-retention": [
         "false"

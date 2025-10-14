@@ -1,0 +1,149 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTMtbWluaS1mYXN0IiwicGFyYWxsZWxfdG9vbF9jYWxscyI6ZmFsc2UsInJlc3BvbnNlX2Zvcm1hdCI6eyJqc29uX3NjaGVtYSI6eyJuYW1lIjoib3V0cHV0X3NjaGVtYSIsInNjaGVtYSI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibmFtZSIsImFnZSJdLCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6dHJ1ZX0sInR5cGUiOiJqc29uX3NjaGVtYSJ9LCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 500,
+      "messages": [
+        {
+          "content": "Generate a software engineer profile",
+          "role": "user"
+        }
+      ],
+      "model": "grok-3-mini-fast",
+      "parallel_tool_calls": false,
+      "response_format": {
+        "json_schema": {
+          "name": "output_schema",
+          "schema": {
+            "additionalProperties": false,
+            "properties": {
+              "age": {
+                "description": "Person's age in years",
+                "minimum": 1,
+                "type": "integer"
+              },
+              "name": {
+                "description": "Person's full name",
+                "type": "string"
+              },
+              "occupation": {
+                "description": "Person's job or profession",
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "age"
+            ],
+            "type": "object"
+          },
+          "strict": true
+        },
+        "type": "json_schema"
+      },
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.x.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "{\"age\":30,\"name\":\"John Doe\",\"occupation\":\"Software Engineer\"}",
+            "reasoning_content": "First, the user input is: \"Generate a software engineer profile\". But I have to respond based on the provided schema. The schema defines an object with properties: \"name\", \"age\", and \"occupation\". It's required to include \"name\" and \"age\", and \"occupation\" is optional but fits here.\n\nThe schema is:\n{\n  \"additionalProperties\": false,\n  \"properties\": {\n    \"age\": {\"description\": \"Person's age in years\", \"minimum\": 1, \"type\": \"integer\"},\n    \"name\": {\"description\": \"Person's full name\", \"type\": \"string\"},\n    \"occupation\": {\"description\": \"Person's job or profession\", \"type\": \"string\"}\n  },\n  \"required\": [\"name\", \"age\"],\n  \"type\": \"object\"\n}\n\nSo, my response must be a single JSON string that matches this schema exactly. That means I need to output something like: {\"name\": \"Some Name\", \"age\": Some Number, \"occupation\": \"Some Occupation\"}\n\nThe user asked for a \"software engineer profile\", so I should make the occupation related to that. For example, occupation could be \"Software Engineer\".\n\nI need to provide values for name and age as well. Since the user didn't specify, I can make up reasonable values. Let's say, name: \"John Doe\", age: 30, occupation: \"Software Engineer\".\n\nRemember, the output MUST be a single JSON string, and it has to conform to the schema. No additional text or explanations.\n\nFinally, structure it as: {\"name\": \"John Doe\", \"age\": 30, \"occupation\": \"Software Engineer\"}\n\nThat seems straightforward.",
+            "refusal": null,
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1760458016,
+      "id": "398db518-f05f-b3dc-42a6-ce4c75e3acd6_us-east-1",
+      "model": "grok-3-mini",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_4fae27f477",
+      "usage": {
+        "completion_tokens": 15,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 342,
+          "rejected_prediction_tokens": 0
+        },
+        "num_sources_used": 0,
+        "prompt_tokens": 112,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 111,
+          "image_tokens": 0,
+          "text_tokens": 112
+        },
+        "total_tokens": 469
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "98e853a8ddce123f-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 14 Oct 2025 16:07:01 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=CxNaO4C3tBYBv8ZrYs43OKARHVTB8m2Ii2EpEz_D4dk-1760458021-1.0.1.1-Pc.yu33BAurjgyw8j6smWeXdMRhnllKtYxWZjBGO.dDncwtBCDHOXyJrEpUsvf2QJLXyUsCiTu_dAcEMbG4b2Ltz8er.c7HozipUjmuGW_M; path=/; expires=Tue, 14-Oct-25 16:37:01 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-request-id": [
+        "00-2fc7486122f808e132bbcd4589caf487-a10ad2cc0052e510-01"
+      ],
+      "x-zero-data-retention": [
+        "false"
+      ]
+    },
+    "status": 200
+  }
+}

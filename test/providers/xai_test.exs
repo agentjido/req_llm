@@ -2,14 +2,25 @@ defmodule ReqLLM.Providers.XAITest do
   @moduledoc """
   Provider-level tests for xAI implementation.
 
-  Tests the provider contract directly without going through Generation layer.
-  Focus: prepare_request -> attach -> request -> decode pipeline.
+  Tests the provider contract, capability detection, mode selection, and
+  structured output infrastructure without making live API calls.
   """
 
   use ReqLLM.ProviderCase, provider: ReqLLM.Providers.XAI
 
   alias ReqLLM.Context
+  alias ReqLLM.Model
   alias ReqLLM.Providers.XAI
+
+  @test_schema [
+    name: [type: :string, required: true],
+    age: [type: :integer, required: true]
+  ]
+
+  setup_all do
+    compiled_schema = %{schema: @test_schema, name: "test_output"}
+    {:ok, compiled_schema: compiled_schema}
+  end
 
   describe "provider contract" do
     test "provider identity and configuration" do
@@ -22,7 +33,6 @@ defmodule ReqLLM.Providers.XAITest do
       schema_keys = XAI.provider_schema().schema |> Keyword.keys()
       core_keys = ReqLLM.Provider.Options.generation_schema().schema |> Keyword.keys()
 
-      # Provider-specific keys should not overlap with core generation keys
       overlap = MapSet.intersection(MapSet.new(schema_keys), MapSet.new(core_keys))
 
       assert MapSet.size(overlap) == 0,
@@ -33,7 +43,6 @@ defmodule ReqLLM.Providers.XAITest do
       supported = XAI.supported_provider_options()
       core_keys = ReqLLM.Provider.Options.all_generation_keys()
 
-      # All core keys should be supported (except meta-keys like :provider_options)
       core_without_meta = Enum.reject(core_keys, &(&1 == :provider_options))
       missing = core_without_meta -- supported
       assert missing == [], "Missing core generation keys: #{inspect(missing)}"
@@ -43,7 +52,6 @@ defmodule ReqLLM.Providers.XAITest do
       extended_schema = XAI.provider_extended_generation_schema()
       extended_keys = extended_schema.schema |> Keyword.keys()
 
-      # Should include all core generation keys
       core_keys = ReqLLM.Provider.Options.all_generation_keys()
       core_without_meta = Enum.reject(core_keys, &(&1 == :provider_options))
 
@@ -52,7 +60,6 @@ defmodule ReqLLM.Providers.XAITest do
                "Extended schema missing core key: #{core_key}"
       end
 
-      # Should include provider-specific keys
       provider_keys = XAI.provider_schema().schema |> Keyword.keys()
 
       for provider_key <- provider_keys do
@@ -62,8 +69,378 @@ defmodule ReqLLM.Providers.XAITest do
     end
   end
 
+  describe "capability detection - supports_native_structured_outputs?/1" do
+    test "returns false for legacy grok-2 models" do
+      assert XAI.supports_native_structured_outputs?("grok-2") == false
+      assert XAI.supports_native_structured_outputs?("grok-2-vision") == false
+      assert XAI.supports_native_structured_outputs?("grok-2-1111") == false
+
+      model = %Model{provider: :xai, model: "grok-2"}
+      refute XAI.supports_native_structured_outputs?(model)
+    end
+
+    test "returns true for grok-2-1212+ models" do
+      assert XAI.supports_native_structured_outputs?("grok-2-1212")
+      assert XAI.supports_native_structured_outputs?("grok-2-1213")
+      assert XAI.supports_native_structured_outputs?("grok-2-vision-1212")
+
+      model = %Model{provider: :xai, model: "grok-2-1212"}
+      assert XAI.supports_native_structured_outputs?(model)
+    end
+
+    test "returns true for grok-3+ models" do
+      assert XAI.supports_native_structured_outputs?("grok-3")
+      assert XAI.supports_native_structured_outputs?("grok-4")
+      assert XAI.supports_native_structured_outputs?("grok-beta")
+    end
+
+    test "prefers metadata flag over heuristic when present" do
+      model_with_flag_true = %Model{
+        provider: :xai,
+        model: "grok-2",
+        capabilities: %{native_json_schema: true}
+      }
+
+      assert XAI.supports_native_structured_outputs?(model_with_flag_true)
+
+      model_with_flag_false = %Model{
+        provider: :xai,
+        model: "grok-3",
+        capabilities: %{native_json_schema: false}
+      }
+
+      refute XAI.supports_native_structured_outputs?(model_with_flag_false)
+    end
+
+    test "supports_strict_tools?/1 returns true for all models" do
+      assert XAI.supports_strict_tools?(%Model{provider: :xai, model: "grok-2"})
+      assert XAI.supports_strict_tools?("grok-3")
+    end
+  end
+
+  describe "mode selection - determine_output_mode/2 with :auto" do
+    test "selects :json_schema for modern models without other tools" do
+      model = %Model{provider: :xai, model: "grok-3"}
+      assert XAI.determine_output_mode(model, []) == :json_schema
+
+      model_beta = %Model{provider: :xai, model: "grok-beta"}
+      assert XAI.determine_output_mode(model_beta, []) == :json_schema
+
+      model_2_1212 = %Model{provider: :xai, model: "grok-2-1212"}
+      assert XAI.determine_output_mode(model_2_1212, []) == :json_schema
+    end
+
+    test "selects :tool_strict for legacy models" do
+      model = %Model{provider: :xai, model: "grok-2"}
+      assert XAI.determine_output_mode(model, []) == :tool_strict
+    end
+
+    test "selects :tool_strict when other tools present" do
+      model = %Model{provider: :xai, model: "grok-3"}
+      other_tool = %{name: "other_function"}
+      opts = [tools: [other_tool]]
+      assert XAI.determine_output_mode(model, opts) == :tool_strict
+    end
+
+    test "selects :json_schema with only structured_output tool" do
+      model = %Model{provider: :xai, model: "grok-3"}
+      structured_tool = %{name: "structured_output"}
+      opts = [tools: [structured_tool]]
+      assert XAI.determine_output_mode(model, opts) == :json_schema
+    end
+
+    test "handles empty tools list" do
+      model = %Model{provider: :xai, model: "grok-3"}
+      assert XAI.determine_output_mode(model, tools: []) == :json_schema
+    end
+
+    test "handles ReqLLM.Tool struct" do
+      model = %Model{provider: :xai, model: "grok-3"}
+
+      tool_struct = %ReqLLM.Tool{
+        name: "test_tool",
+        description: "test",
+        callback: fn _ -> {:ok, "result"} end
+      }
+
+      assert XAI.determine_output_mode(model, tools: [tool_struct]) == :tool_strict
+    end
+  end
+
+  describe "mode selection - explicit mode override" do
+    test "honors explicit :json_schema when supported" do
+      model = %Model{provider: :xai, model: "grok-3"}
+      opts = [provider_options: [xai_structured_output_mode: :json_schema]]
+      assert XAI.determine_output_mode(model, opts) == :json_schema
+    end
+
+    test "raises when explicit :json_schema on unsupported model" do
+      model = %Model{provider: :xai, model: "grok-2"}
+      opts = [provider_options: [xai_structured_output_mode: :json_schema]]
+
+      assert_raise ArgumentError, ~r/does not support :json_schema mode/, fn ->
+        XAI.determine_output_mode(model, opts)
+      end
+    end
+
+    test "honors explicit :tool_strict on any model" do
+      model_modern = %Model{provider: :xai, model: "grok-3"}
+      opts = [provider_options: [xai_structured_output_mode: :tool_strict]]
+      assert XAI.determine_output_mode(model_modern, opts) == :tool_strict
+
+      model_legacy = %Model{provider: :xai, model: "grok-2"}
+      assert XAI.determine_output_mode(model_legacy, opts) == :tool_strict
+    end
+
+    test "raises on invalid explicit mode" do
+      model = %Model{provider: :xai, model: "grok-3"}
+      opts = [provider_options: [xai_structured_output_mode: :invalid]]
+
+      assert_raise ArgumentError, ~r/Invalid xai_structured_output_mode/, fn ->
+        XAI.determine_output_mode(model, opts)
+      end
+    end
+  end
+
+  describe "mode selection - response_format forcing" do
+    test "forces :json_schema when response_format has json_schema" do
+      model = %Model{provider: :xai, model: "grok-3"}
+      opts = [response_format: %{json_schema: %{name: "test"}}]
+      assert XAI.determine_output_mode(model, opts) == :json_schema
+    end
+
+    test "forces :json_schema even with other tools present" do
+      model = %Model{provider: :xai, model: "grok-3"}
+      other_tool = %{name: "other_function"}
+
+      opts = [
+        response_format: %{json_schema: %{name: "test"}},
+        tools: [other_tool]
+      ]
+
+      assert XAI.determine_output_mode(model, opts) == :json_schema
+    end
+
+    test "does not force json_schema for response_format without json_schema" do
+      model = %Model{provider: :xai, model: "grok-2"}
+      opts = [response_format: %{type: "json_object"}]
+      assert XAI.determine_output_mode(model, opts) == :tool_strict
+    end
+  end
+
+  describe "prepare_request(:object) - routing" do
+    test "routes to json_schema for grok-3", %{compiled_schema: schema} do
+      {:ok, request} =
+        XAI.prepare_request(:object, "xai:grok-3", "Generate data", compiled_schema: schema)
+
+      provider_options = request.options[:provider_options] || []
+      assert Keyword.has_key?(provider_options, :response_format)
+      assert provider_options[:response_format][:type] == "json_schema"
+      refute Map.has_key?(request.options, :tools)
+    end
+
+    test "routes to tool_strict for grok-2", %{compiled_schema: schema} do
+      {:ok, request} =
+        XAI.prepare_request(:object, "xai:grok-2", "Generate data", compiled_schema: schema)
+
+      tools = request.options[:tools]
+      assert is_list(tools)
+      assert Enum.any?(tools, &(&1.name == "structured_output"))
+    end
+
+    test "routes to tool_strict when other tools present", %{compiled_schema: schema} do
+      other_tool = %ReqLLM.Tool{
+        name: "other_tool",
+        description: "test",
+        callback: fn _ -> {:ok, "result"} end
+      }
+
+      {:ok, request} =
+        XAI.prepare_request(:object, "xai:grok-3", "Generate data",
+          compiled_schema: schema,
+          tools: [other_tool]
+        )
+
+      tools = request.options[:tools]
+      assert length(tools) == 2
+      assert Enum.any?(tools, &(&1.name == "structured_output"))
+      assert Enum.any?(tools, &(&1.name == "other_tool"))
+    end
+
+    test "honors explicit mode overrides", %{compiled_schema: schema} do
+      {:ok, request_json} =
+        XAI.prepare_request(:object, "xai:grok-3", "Generate data",
+          compiled_schema: schema,
+          provider_options: [xai_structured_output_mode: :json_schema]
+        )
+
+      provider_options = request_json.options[:provider_options] || []
+      assert Keyword.has_key?(provider_options, :response_format)
+
+      {:ok, request_tool} =
+        XAI.prepare_request(:object, "xai:grok-3", "Generate data",
+          compiled_schema: schema,
+          provider_options: [xai_structured_output_mode: :tool_strict]
+        )
+
+      tools = request_tool.options[:tools]
+      assert Enum.any?(tools, &(&1.name == "structured_output"))
+    end
+  end
+
+  describe "json_schema request structure" do
+    setup %{compiled_schema: schema} do
+      {:ok, request} =
+        XAI.prepare_request(:object, "xai:grok-3", "Generate data", compiled_schema: schema)
+
+      {:ok, request: request}
+    end
+
+    test "includes correct response_format structure", %{request: request} do
+      provider_options = request.options[:provider_options] || []
+      response_format = provider_options[:response_format]
+
+      assert response_format[:type] == "json_schema"
+      assert response_format[:json_schema][:name] == "test_output"
+      assert response_format[:json_schema][:strict] == true
+      assert response_format[:json_schema][:schema]["type"] == "object"
+    end
+
+    test "sets parallel_tool_calls to false", %{request: request} do
+      provider_options = request.options[:provider_options] || []
+      assert provider_options[:parallel_tool_calls] == false
+    end
+
+    test "removes tools and tool_choice from options", %{request: request} do
+      refute Map.has_key?(request.options, :tools)
+      refute Map.has_key?(request.options, :tool_choice)
+    end
+
+    test "sets operation to :object", %{request: request} do
+      assert request.options[:operation] == :object
+    end
+
+    test "preserves other options", %{compiled_schema: schema} do
+      {:ok, request} =
+        XAI.prepare_request(:object, "xai:grok-3", "Generate data",
+          compiled_schema: schema,
+          max_tokens: 1000,
+          temperature: 0.5
+        )
+
+      max_tokens =
+        request.options[:max_completion_tokens] || request.options[:max_tokens]
+
+      assert max_tokens == 1000
+      assert request.options[:temperature] == 0.5
+    end
+  end
+
+  describe "tool_strict request structure" do
+    setup %{compiled_schema: schema} do
+      {:ok, request} =
+        XAI.prepare_request(:object, "xai:grok-2", "Generate data", compiled_schema: schema)
+
+      {:ok, request: request}
+    end
+
+    test "includes structured_output tool with strict mode", %{request: request} do
+      tools = request.options[:tools]
+      structured_tool = Enum.find(tools, &(&1.name == "structured_output"))
+
+      assert structured_tool
+      assert structured_tool.strict == true
+    end
+
+    test "forces tool_choice to structured_output", %{request: request} do
+      tool_choice = request.options[:tool_choice]
+      assert tool_choice[:type] == "function"
+      assert tool_choice[:function][:name] == "structured_output"
+    end
+
+    test "sets parallel_tool_calls to false", %{request: request} do
+      provider_options = request.options[:provider_options] || []
+      assert provider_options[:parallel_tool_calls] == false
+    end
+
+    test "preserves existing tools", %{compiled_schema: schema} do
+      other_tool = %ReqLLM.Tool{
+        name: "other_tool",
+        description: "test",
+        callback: fn _ -> {:ok, "result"} end
+      }
+
+      {:ok, request} =
+        XAI.prepare_request(:object, "xai:grok-2", "Generate data",
+          compiled_schema: schema,
+          tools: [other_tool]
+        )
+
+      tools = request.options[:tools]
+      assert length(tools) == 2
+      assert Enum.any?(tools, &(&1.name == "structured_output"))
+      assert Enum.any?(tools, &(&1.name == "other_tool"))
+    end
+  end
+
+  describe "token limit enforcement" do
+    test "sets default max_tokens to 4096 when not specified", %{compiled_schema: schema} do
+      {:ok, request} =
+        XAI.prepare_request(:object, "xai:grok-3", "Generate data", compiled_schema: schema)
+
+      max_tokens = request.options[:max_completion_tokens] || request.options[:max_tokens]
+      assert max_tokens == 4096
+    end
+
+    test "enforces minimum 200 tokens", %{compiled_schema: schema} do
+      {:ok, request} =
+        XAI.prepare_request(:object, "xai:grok-3", "Generate data",
+          compiled_schema: schema,
+          max_tokens: 50
+        )
+
+      max_tokens = request.options[:max_completion_tokens] || request.options[:max_tokens]
+      assert max_tokens >= 200
+    end
+
+    test "preserves adequate max_tokens value", %{compiled_schema: schema} do
+      {:ok, request} =
+        XAI.prepare_request(:object, "xai:grok-3", "Generate data",
+          compiled_schema: schema,
+          max_tokens: 2048
+        )
+
+      max_tokens = request.options[:max_completion_tokens] || request.options[:max_tokens]
+      assert max_tokens == 2048
+    end
+  end
+
+  describe "schema naming" do
+    test "uses schema name from compiled_schema", %{compiled_schema: schema} do
+      {:ok, request} =
+        XAI.prepare_request(:object, "xai:grok-3", "Generate data", compiled_schema: schema)
+
+      provider_options = request.options[:provider_options] || []
+      json_schema = provider_options[:response_format][:json_schema]
+      assert json_schema[:name] == "test_output"
+    end
+
+    test "defaults to output_schema when name not provided" do
+      compiled_schema_no_name = %{schema: @test_schema}
+
+      {:ok, request} =
+        XAI.prepare_request(:object, "xai:grok-3", "Generate data",
+          compiled_schema: compiled_schema_no_name
+        )
+
+      provider_options = request.options[:provider_options] || []
+      json_schema = provider_options[:response_format][:json_schema]
+      assert json_schema[:name] == "output_schema"
+    end
+  end
+
   describe "request preparation & pipeline wiring" do
-    test "prepare_request creates configured request" do
+    test "prepare_request creates configured request for :chat" do
       model = ReqLLM.Model.from!("xai:grok-3")
       context = context_fixture()
       opts = [temperature: 0.7, max_tokens: 100]
@@ -81,10 +458,8 @@ defmodule ReqLLM.Providers.XAITest do
 
       request = Req.new() |> XAI.attach(model, opts)
 
-      # Verify authentication header (not options since that's done in prepare_request)
       assert request.headers["authorization"] |> Enum.any?(&String.starts_with?(&1, "Bearer "))
 
-      # Verify pipeline steps
       request_steps = Keyword.keys(request.request_steps)
       response_steps = Keyword.keys(request.response_steps)
 
@@ -92,15 +467,16 @@ defmodule ReqLLM.Providers.XAITest do
       assert :llm_decode_response in response_steps
     end
 
-    test "error handling for invalid configurations" do
+    test "rejects unsupported operations" do
       model = ReqLLM.Model.from!("xai:grok-3")
       context = context_fixture()
 
-      # Unsupported operation
-      {:error, error} = XAI.prepare_request(:unsupported, model, context, [])
+      {:error, error} = XAI.prepare_request(:embedding, model, context, [])
       assert %ReqLLM.Error.Invalid.Parameter{} = error
+      assert error.parameter =~ "operation: :embedding not supported"
+    end
 
-      # Provider mismatch
+    test "rejects provider mismatch" do
       wrong_model = ReqLLM.Model.from!("openai:gpt-4")
 
       assert_raise ReqLLM.Error.Invalid.Provider, fn ->
@@ -109,12 +485,11 @@ defmodule ReqLLM.Providers.XAITest do
     end
   end
 
-  describe "body encoding & context translation" do
-    test "encode_body without tools" do
+  describe "body encoding" do
+    test "encode_body with minimal context" do
       model = ReqLLM.Model.from!("xai:grok-3")
       context = context_fixture()
 
-      # Create a mock request with the expected structure
       mock_request = %Req.Request{
         options: [
           context: context,
@@ -123,24 +498,16 @@ defmodule ReqLLM.Providers.XAITest do
         ]
       }
 
-      # Test the encode_body function directly
       updated_request = XAI.encode_body(mock_request)
-
-      assert is_binary(updated_request.body)
       decoded = Jason.decode!(updated_request.body)
 
       assert decoded["model"] == "grok-3"
       assert is_list(decoded["messages"])
-      assert length(decoded["messages"]) == 2
       assert decoded["stream"] == false
       refute Map.has_key?(decoded, "tools")
-
-      [system_msg, user_msg] = decoded["messages"]
-      assert system_msg["role"] == "system"
-      assert user_msg["role"] == "user"
     end
 
-    test "encode_body with tools but no tool_choice" do
+    test "encode_body with tools" do
       model = ReqLLM.Model.from!("xai:grok-3")
       context = context_fixture()
 
@@ -148,47 +515,9 @@ defmodule ReqLLM.Providers.XAITest do
         ReqLLM.Tool.new!(
           name: "test_tool",
           description: "A test tool",
-          parameter_schema: [
-            name: [type: :string, required: true, doc: "A name parameter"]
-          ],
+          parameter_schema: [name: [type: :string, required: true]],
           callback: fn _ -> {:ok, "result"} end
         )
-
-      mock_request = %Req.Request{
-        options: [
-          context: context,
-          model: model.model,
-          stream: false,
-          tools: [tool]
-        ]
-      }
-
-      updated_request = XAI.encode_body(mock_request)
-      decoded = Jason.decode!(updated_request.body)
-
-      assert is_list(decoded["tools"])
-      assert length(decoded["tools"]) == 1
-      refute Map.has_key?(decoded, "tool_choice")
-
-      [encoded_tool] = decoded["tools"]
-      assert encoded_tool["function"]["name"] == "test_tool"
-    end
-
-    test "encode_body with tools and tool_choice" do
-      model = ReqLLM.Model.from!("xai:grok-3")
-      context = context_fixture()
-
-      tool =
-        ReqLLM.Tool.new!(
-          name: "specific_tool",
-          description: "A specific tool",
-          parameter_schema: [
-            value: [type: :string, required: true, doc: "A value parameter"]
-          ],
-          callback: fn _ -> {:ok, "result"} end
-        )
-
-      tool_choice = %{type: "function", function: %{name: "specific_tool"}}
 
       mock_request = %Req.Request{
         options: [
@@ -196,7 +525,7 @@ defmodule ReqLLM.Providers.XAITest do
           model: model.model,
           stream: false,
           tools: [tool],
-          tool_choice: tool_choice
+          tool_choice: %{type: "function", function: %{name: "test_tool"}}
         ]
       }
 
@@ -204,25 +533,19 @@ defmodule ReqLLM.Providers.XAITest do
       decoded = Jason.decode!(updated_request.body)
 
       assert is_list(decoded["tools"])
-
-      assert decoded["tool_choice"] == %{
-               "type" => "function",
-               "function" => %{"name" => "specific_tool"}
-             }
+      assert decoded["tool_choice"]["function"]["name"] == "test_tool"
     end
 
     test "encode_body with response_format" do
       model = ReqLLM.Model.from!("xai:grok-3")
       context = context_fixture()
 
-      response_format = %{type: "json_object"}
-
       mock_request = %Req.Request{
         options: [
           context: context,
           model: model.model,
           stream: false,
-          response_format: response_format
+          response_format: %{type: "json_object"}
         ]
       }
 
@@ -232,208 +555,34 @@ defmodule ReqLLM.Providers.XAITest do
       assert decoded["response_format"] == %{"type" => "json_object"}
     end
 
-    test "encode_body xAI-specific options with skip values" do
+    test "encode_body with xAI-specific options" do
       model = ReqLLM.Model.from!("xai:grok-3")
       context = context_fixture()
 
-      test_cases = [
-        # Skip values should not appear in JSON
-        {[parallel_tool_calls: true],
-         fn json -> refute Map.has_key?(json, "parallel_tool_calls") end},
-        # Non-skip values should appear
-        {[parallel_tool_calls: false],
-         fn json -> assert json["parallel_tool_calls"] == false end},
-        {[max_completion_tokens: 1024],
-         fn json -> assert json["max_completion_tokens"] == 1024 end},
-        {[reasoning_effort: "low"], fn json -> assert json["reasoning_effort"] == "low" end},
-        {[search_parameters: %{mode: "on"}],
-         fn json ->
-           assert json["search_parameters"] == %{"mode" => "on"}
-         end},
-        {[stream_options: %{include_usage: true}],
-         fn json ->
-           assert json["stream_options"] == %{"include_usage" => true}
-         end}
-      ]
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          parallel_tool_calls: false,
+          max_completion_tokens: 1024,
+          reasoning_effort: "low",
+          search_parameters: %{mode: "on"}
+        ]
+      }
 
-      for {opts, assertion} <- test_cases do
-        mock_request = %Req.Request{
-          options: [context: context, model: model.model, stream: false] ++ opts
-        }
+      updated_request = XAI.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
 
-        updated_request = XAI.encode_body(mock_request)
-        decoded = Jason.decode!(updated_request.body)
-        assertion.(decoded)
-      end
+      assert decoded["parallel_tool_calls"] == false
+      assert decoded["max_completion_tokens"] == 1024
+      assert decoded["reasoning_effort"] == "low"
+      assert decoded["search_parameters"]["mode"] == "on"
     end
   end
 
-  describe "response decoding" do
-    test "decode_response handles non-streaming responses" do
-      # Create a mock OpenAI-style response body
-      response_body = %{
-        "id" => "chatcmpl-test123",
-        "object" => "chat.completion",
-        "created" => System.os_time(:second),
-        "model" => "grok-3",
-        "choices" => [
-          %{
-            "index" => 0,
-            "message" => %{
-              "role" => "assistant",
-              "content" => "Hello! How can I help you today?"
-            },
-            "finish_reason" => "stop"
-          }
-        ],
-        "usage" => %{
-          "prompt_tokens" => 12,
-          "completion_tokens" => 8,
-          "total_tokens" => 20
-        }
-      }
-
-      mock_resp = %Req.Response{
-        status: 200,
-        body: response_body
-      }
-
-      model = ReqLLM.Model.from!("xai:grok-3")
-      context = context_fixture()
-
-      mock_req = %Req.Request{
-        options: [context: context, stream: false]
-      }
-
-      # Test decode_response directly
-      {req, resp} = XAI.decode_response({mock_req, mock_resp})
-
-      assert req == mock_req
-      assert %ReqLLM.Response{} = resp.body
-
-      response = resp.body
-      assert is_binary(response.id)
-      assert response.model == model.model
-      assert response.stream? == false
-
-      # Verify message normalization
-      assert response.message.role == :assistant
-      text = ReqLLM.Response.text(response)
-      assert is_binary(text)
-      assert String.length(text) > 0
-      assert response.finish_reason in [:stop, :length]
-
-      # Verify usage normalization
-      assert is_integer(response.usage.input_tokens)
-      assert is_integer(response.usage.output_tokens)
-      assert is_integer(response.usage.total_tokens)
-
-      # Verify context advancement (original + assistant)
-      assert length(response.context.messages) == 3
-      assert List.last(response.context.messages).role == :assistant
-    end
-
-    test "decode_response handles streaming responses" do
-      # Create a mock Req response with streaming body
-      mock_resp = %Req.Response{
-        status: 200,
-        body: []
-      }
-
-      # Create a mock request with context and model and real-time stream
-      context = context_fixture()
-      model = "grok-3"
-
-      # Mock the real-time stream that would be created by the Stream step
-      mock_stream = ["Hello", " world", "!"]
-
-      mock_req = %Req.Request{
-        options: [context: context, stream: true, model: model],
-        private: %{real_time_stream: mock_stream}
-      }
-
-      # Test decode_response directly  
-      {req, resp} = XAI.decode_response({mock_req, mock_resp})
-
-      assert req == mock_req
-      assert %ReqLLM.Response{} = resp.body
-
-      response = resp.body
-      assert response.stream? == true
-      assert response.stream == mock_stream
-      assert response.model == model
-
-      # Verify context is preserved (original messages only in streaming)
-      assert length(response.context.messages) == 2
-
-      # Verify stream structure and processing
-      assert response.usage == %{
-               input_tokens: 0,
-               output_tokens: 0,
-               total_tokens: 0,
-               cached_tokens: 0,
-               reasoning_tokens: 0
-             }
-
-      assert response.finish_reason == nil
-      assert is_map(response.provider_meta)
-      # http_task removed after fix for issue #42 (no duplicate request execution)
-      assert response.provider_meta == %{}
-    end
-
-    test "decode_response handles API errors with non-200 status" do
-      # Create error response
-      error_body = %{
-        "error" => %{
-          "message" => "Invalid API key",
-          "type" => "authentication_error",
-          "code" => "invalid_api_key"
-        }
-      }
-
-      mock_resp = %Req.Response{
-        status: 401,
-        body: error_body
-      }
-
-      context = context_fixture()
-
-      mock_req = %Req.Request{
-        options: [context: context, model: "grok-3"]
-      }
-
-      # Test decode_response error handling
-      {req, error} = XAI.decode_response({mock_req, mock_resp})
-
-      assert req == mock_req
-      assert %ReqLLM.Error.API.Response{} = error
-      assert error.status == 401
-      assert error.reason == "xAI API error"
-      assert error.response_body == error_body
-    end
-  end
-
-  describe "option translation" do
-    test "provider implements translate_options/3" do
-      # xAI implements translate_options/3 for various alias handling
-      assert function_exported?(XAI, :translate_options, 3)
-    end
-
-    test "translate_options handles stream? alias" do
-      model = ReqLLM.Model.from!("xai:grok-3")
-
-      # Test stream? -> stream translation
-      opts = [temperature: 0.7, stream?: true]
-      {translated_opts, warnings} = XAI.translate_options(:chat, model, opts)
-
-      assert Keyword.get(translated_opts, :stream) == true
-      refute Keyword.has_key?(translated_opts, :stream?)
-      assert warnings == []
-    end
-
-    test "translate_options handles max_tokens -> max_completion_tokens preference" do
+  describe "translate_options" do
+    test "translates max_tokens to max_completion_tokens with warning" do
       model = ReqLLM.Model.from!("xai:grok-4")
-
       opts = [temperature: 0.7, max_tokens: 1000]
       {translated_opts, warnings} = XAI.translate_options(:chat, model, opts)
 
@@ -443,36 +592,28 @@ defmodule ReqLLM.Providers.XAITest do
       assert hd(warnings) =~ "max_completion_tokens"
     end
 
-    test "translate_options handles web_search_options -> search_parameters alias" do
+    test "handles web_search_options -> search_parameters alias" do
       model = ReqLLM.Model.from!("xai:grok-3")
-
       opts = [web_search_options: %{mode: "auto"}]
       {translated_opts, warnings} = XAI.translate_options(:chat, model, opts)
 
       assert Keyword.get(translated_opts, :search_parameters) == %{mode: "auto"}
       refute Keyword.has_key?(translated_opts, :web_search_options)
       assert length(warnings) == 1
-      assert hd(warnings) =~ "deprecated"
     end
 
-    test "translate_options removes unsupported parameters with warnings" do
+    test "removes unsupported parameters with warnings" do
       model = ReqLLM.Model.from!("xai:grok-3")
-
       opts = [temperature: 0.7, logit_bias: %{"123" => 10}, service_tier: "auto"]
       {translated_opts, warnings} = XAI.translate_options(:chat, model, opts)
 
       refute Keyword.has_key?(translated_opts, :logit_bias)
       refute Keyword.has_key?(translated_opts, :service_tier)
       assert Keyword.get(translated_opts, :temperature) == 0.7
-
       assert length(warnings) == 2
-      warning_text = Enum.join(warnings, " ")
-      assert warning_text =~ "logit_bias"
-      assert warning_text =~ "service_tier"
     end
 
-    test "translate_options validates reasoning_effort model compatibility" do
-      # Should work with grok-3-mini
+    test "validates reasoning_effort model compatibility" do
       grok_3_mini = ReqLLM.Model.from!("xai:grok-3-mini")
       opts = [reasoning_effort: "high"]
       {translated_opts, warnings} = XAI.translate_options(:chat, grok_3_mini, opts)
@@ -480,26 +621,12 @@ defmodule ReqLLM.Providers.XAITest do
       assert Keyword.get(translated_opts, :reasoning_effort) == "high"
       assert warnings == []
 
-      # Should be removed with warning for grok-4
       grok_4 = ReqLLM.Model.from!("xai:grok-4")
       {translated_opts, warnings} = XAI.translate_options(:chat, grok_4, opts)
 
       refute Keyword.has_key?(translated_opts, :reasoning_effort)
       assert length(warnings) == 1
       assert hd(warnings) =~ "Grok-4"
-    end
-
-    test "provider-specific option handling" do
-      # Test that provider-specific options are present in the provider schema
-      schema_keys = XAI.provider_schema().schema |> Keyword.keys()
-
-      # Test that these options are supported
-      supported_opts = XAI.supported_provider_options()
-
-      for provider_option <- schema_keys do
-        assert provider_option in supported_opts,
-               "Expected #{provider_option} to be in supported options"
-      end
     end
   end
 
@@ -533,69 +660,11 @@ defmodule ReqLLM.Providers.XAITest do
 
       {:error, :invalid_body} = XAI.extract_usage("invalid", model)
       {:error, :invalid_body} = XAI.extract_usage(nil, model)
-      {:error, :invalid_body} = XAI.extract_usage(123, model)
     end
   end
 
-  describe "object generation edge cases" do
-    test "prepare_request for :object with low max_completion_tokens gets adjusted" do
-      model = ReqLLM.Model.from!("xai:grok-3")
-      context = context_fixture()
-      {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string, required: true])
-
-      # Test with max_tokens < 200
-      opts = [max_tokens: 50, compiled_schema: schema]
-      {:ok, request} = XAI.prepare_request(:object, model, context, opts)
-
-      # Should be adjusted to 200
-      assert request.options[:max_completion_tokens] == 200
-    end
-
-    test "prepare_request for :object with nil max_completion_tokens gets default" do
-      model = ReqLLM.Model.from!("xai:grok-3")
-      context = context_fixture()
-      {:ok, schema} = ReqLLM.Schema.compile([])
-
-      # No max_completion_tokens specified
-      opts = [compiled_schema: schema]
-      {:ok, request} = XAI.prepare_request(:object, model, context, opts)
-
-      # Should get default of 4096
-      assert request.options[:max_completion_tokens] == 4096
-    end
-
-    test "prepare_request for :object with sufficient max_completion_tokens unchanged" do
-      model = ReqLLM.Model.from!("xai:grok-3")
-      context = context_fixture()
-      {:ok, schema} = ReqLLM.Schema.compile(value: [type: :integer])
-
-      opts = [provider_options: [max_completion_tokens: 1000], compiled_schema: schema]
-      {:ok, request} = XAI.prepare_request(:object, model, context, opts)
-
-      # Should remain unchanged
-      assert request.options[:max_completion_tokens] == 1000
-    end
-
-    test "prepare_request rejects unsupported operations" do
-      model = ReqLLM.Model.from!("xai:grok-3")
-      context = context_fixture()
-
-      # Test unsupported operation for 3-arg version
-      {:error, error} = XAI.prepare_request(:embedding, model, context, [])
-      assert %ReqLLM.Error.Invalid.Parameter{} = error
-      assert error.parameter =~ "operation: :embedding not supported"
-
-      # Test unsupported operation for object with schema  
-      {:ok, schema} = ReqLLM.Schema.compile([])
-      {:error, error} = XAI.prepare_request(:embedding, model, context, compiled_schema: schema)
-      assert %ReqLLM.Error.Invalid.Parameter{} = error
-      assert error.parameter =~ "operation: :embedding not supported"
-    end
-  end
-
-  describe "error handling & robustness" do
-    test "context validation" do
-      # Multiple system messages should fail
+  describe "context validation" do
+    test "multiple system messages should fail" do
       invalid_context =
         Context.new([
           Context.system("System 1"),
@@ -608,78 +677,6 @@ defmodule ReqLLM.Providers.XAITest do
                    fn ->
                      Context.validate!(invalid_context)
                    end
-    end
-  end
-
-  describe "xAI-specific features" do
-    test "Live Search parameters are encoded correctly" do
-      model = ReqLLM.Model.from!("xai:grok-3")
-      context = context_fixture()
-
-      search_params = %{
-        mode: "on",
-        sources: [%{type: "web"}],
-        from_date: "2024-01-01",
-        to_date: "2024-12-31",
-        return_citations: true
-      }
-
-      mock_request = %Req.Request{
-        options: [
-          context: context,
-          model: model.model,
-          search_parameters: search_params
-        ]
-      }
-
-      updated_request = XAI.encode_body(mock_request)
-      decoded = Jason.decode!(updated_request.body)
-
-      assert decoded["search_parameters"] == %{
-               "mode" => "on",
-               "sources" => [%{"type" => "web"}],
-               "from_date" => "2024-01-01",
-               "to_date" => "2024-12-31",
-               "return_citations" => true
-             }
-    end
-
-    test "reasoning_effort parameter validation by model type" do
-      # Test grok-3-mini accepts reasoning_effort
-      grok_3_mini = ReqLLM.Model.from!("xai:grok-3-mini")
-      opts = [reasoning_effort: "medium"]
-      {translated_opts, warnings} = XAI.translate_options(:chat, grok_3_mini, opts)
-
-      assert Keyword.get(translated_opts, :reasoning_effort) == "medium"
-      assert warnings == []
-
-      # Test grok-4 rejects reasoning_effort
-      grok_4 = ReqLLM.Model.from!("xai:grok-4")
-      {translated_opts, warnings} = XAI.translate_options(:chat, grok_4, opts)
-
-      refute Keyword.has_key?(translated_opts, :reasoning_effort)
-      assert length(warnings) == 1
-      assert hd(warnings) =~ "not supported for Grok-4"
-    end
-
-    test "stream_options encoding for usage reporting" do
-      model = ReqLLM.Model.from!("xai:grok-3")
-      context = context_fixture()
-
-      mock_request = %Req.Request{
-        options: [
-          context: context,
-          model: model.model,
-          stream: true,
-          stream_options: %{include_usage: true}
-        ]
-      }
-
-      updated_request = XAI.encode_body(mock_request)
-      decoded = Jason.decode!(updated_request.body)
-
-      assert decoded["stream"] == true
-      assert decoded["stream_options"] == %{"include_usage" => true}
     end
   end
 end

@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stY29kZS1mYXN0LTEiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stY29kZS1mYXN0LTEiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
       "max_completion_tokens": 1000,
@@ -21,6 +21,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -58,34 +59,34 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "Why did the cat join the Red Cross? Because she wanted to be a first-aid kit-ten! 🐱",
+            "content": "Why did the cat join the Red Cross? Because she wanted to be a first-aid kit-ten!",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759844462,
-      "id": "f9e34c82-4edf-58aa-fba6-068f48555285_us-east-1",
+      "created": 1760458008,
+      "id": "9c5875af-7412-9397-4e5c-6669b2bdbdd4_us-east-1",
       "model": "grok-code-fast-1",
       "object": "chat.completion",
       "system_fingerprint": "fp_10f00c862d",
       "usage": {
-        "completion_tokens": 23,
+        "completion_tokens": 20,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 118,
+          "reasoning_tokens": 69,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
-        "prompt_tokens": 380,
+        "prompt_tokens": 385,
         "prompt_tokens_details": {
           "audio_tokens": 0,
           "cached_tokens": 320,
           "image_tokens": 0,
-          "text_tokens": 380
+          "text_tokens": 385
         },
-        "total_tokens": 521
+        "total_tokens": 474
       }
     },
     "headers": {
@@ -99,7 +100,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98add0511cd2acb2-ORD"
+        "98e8537bafdffa19-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -108,13 +109,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:41:03 GMT"
+        "Tue, 14 Oct 2025 16:06:50 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=km8Bwuk2OyHj1o3SnD79IoZEcgLwzBtomQWU4AGH1_c-1759844463-1.0.1.1-SQmuhmyx9K5k169Xd847Cjxa4IYVo8Ch9zc8PY3qNI1i3A9Pkglg3z.a8K6q_xrU7l.IkHvZcQqZXj3NNZHs33Zmi3nz3VUtl6FSEh5GVB4; path=/; expires=Tue, 07-Oct-25 14:11:03 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=PvxekqOy1w1WHcOK_cfrkVkhNi0lEl6EL5uWqmBspMo-1760458010-1.0.1.1-c4k1uqgf1KhAvBKibK.iIoGCDxDA75Y9vu75QK_M4cRvHag8j02YwAZaRQeYnQE_1eaTfJqSgMdrplhCXXaAtwf2Bxqo16DFiylxeFflL70; path=/; expires=Tue, 14-Oct-25 16:36:50 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -126,7 +127,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-39ca4fb326fe7a9de25d6fae39a01256-854a32c90018fcff-01"
+        "00-3dd616fd81e6b3cc3c48f9f0e437374d-5b7aef71005200a2-01"
       ],
       "x-zero-data-retention": [
         "false"

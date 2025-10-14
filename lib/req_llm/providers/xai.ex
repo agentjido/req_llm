@@ -4,8 +4,34 @@ defmodule ReqLLM.Providers.XAI do
 
   ## Implementation
 
-  Uses built-in OpenAI-style encoding/decoding defaults.
-  No custom wrapper modules – leverages the standard OpenAI-compatible implementations.
+  Uses built-in OpenAI-style encoding/decoding defaults with xAI-specific enhancements.
+
+  ## Structured Outputs
+
+  The provider supports two modes for structured outputs via `ReqLLM.generate_object/4`:
+
+  ### Native Structured Outputs (Recommended)
+
+  For models >= grok-2-1212, uses xAI's native `response_format` with `json_schema`:
+  - **Guaranteed schema compliance** enforced at generation time
+  - Lower token overhead (no tool definitions in prompt)
+  - More reliable than tool calling approach
+
+  Supported models:
+  - `grok-2-1212` and `grok-2-vision-1212`
+  - `grok-beta`
+  - All grok-3 and grok-4 variants
+  - All future models
+
+  ### Tool Calling Fallback
+
+  For legacy models or when other tools are present:
+  - Uses a synthetic `structured_output` tool with forced `tool_choice`
+  - Works on all models as fallback
+  - Automatically used for `grok-2` and `grok-2-vision` (pre-1212 versions)
+
+  The mode is automatically selected based on model capabilities, or can be explicitly
+  controlled via `:xai_structured_output_mode` option.
 
   ## xAI-Specific Extensions
 
@@ -15,12 +41,26 @@ defmodule ReqLLM.Providers.XAI do
   - `search_parameters` - Live Search configuration with web search capabilities
   - `parallel_tool_calls` - Allow parallel function calls (default: true)
   - `stream_options` - Streaming configuration (include_usage)
+  - `xai_structured_output_mode` - Control structured output implementation (:auto, :json_schema, :tool_strict)
 
   ## Model Compatibility Notes
 
+  - Native structured outputs supported on models >= `grok-2-1212` and `grok-2-vision-1212`
   - `reasoning_effort` is only supported for grok-3-mini and grok-3-mini-fast models
   - Grok-4 models do not support `stop`, `presence_penalty`, or `frequency_penalty`
   - Live Search via `search_parameters` incurs additional costs per source
+
+  ## Schema Constraints (Native Mode)
+
+  xAI's native structured outputs have these JSON Schema limitations:
+  - No `minLength`/`maxLength` for strings
+  - No `minItems`/`maxItems`/`minContains`/`maxContains` for arrays
+  - No `pattern` constraints
+  - No `allOf` (must be expanded/flattened)
+  - `anyOf` is supported
+
+  The provider automatically sanitizes schemas by removing unsupported constraints
+  and enforcing `additionalProperties: false` on root objects.
 
   See `provider_schema/0` for the complete xAI-specific schema and
   `ReqLLM.Provider.Options` for inherited OpenAI parameters.
@@ -29,6 +69,31 @@ defmodule ReqLLM.Providers.XAI do
 
       # Add to .env file (automatically loaded)
       XAI_API_KEY=xai-...
+
+  ## Examples
+
+      # Automatic mode selection (recommended)
+      {:ok, response} =
+        ReqLLM.generate_object(
+          "xai:grok-4",
+          "Generate a person profile",
+          %{
+            type: :object,
+            properties: %{
+              name: %{type: :string},
+              age: %{type: :integer}
+            }
+          }
+        )
+
+      # Explicit mode control
+      {:ok, response} =
+        ReqLLM.generate_object(
+          "xai:grok-4",
+          "Generate a person profile",
+          schema,
+          provider_options: [xai_structured_output_mode: :json_schema]
+        )
   """
 
   @behaviour ReqLLM.Provider
@@ -54,6 +119,20 @@ defmodule ReqLLM.Providers.XAI do
       stream_options: [
         type: :map,
         doc: "Streaming options including usage reporting"
+      ],
+      xai_structured_output_mode: [
+        type: {:in, [:auto, :json_schema, :tool_strict]},
+        default: :auto,
+        doc: """
+        Structured output mode for xAI models:
+        - `:auto` - Automatic selection based on model capabilities and context
+        - `:json_schema` - Use native response_format with json_schema (requires support)
+        - `:tool_strict` - Use strict tool calling with synthetic structured_output tool
+        """
+      ],
+      response_format: [
+        type: :map,
+        doc: "Response format configuration (e.g., json_schema for structured output)"
       ]
     ]
 
@@ -65,37 +144,29 @@ defmodule ReqLLM.Providers.XAI do
   require Logger
 
   @doc """
-  Custom prepare_request for :object operations to maintain xAI-specific max_completion_tokens handling.
+  Custom prepare_request for :object operations using xAI native structured outputs.
 
-  Ensures that structured output requests have adequate token limits while delegating
-  other operations to the default implementation.
+  Determines the appropriate mode (:json_schema or :tool_strict) and delegates to
+  the corresponding preparation function. Ensures adequate token limits for structured outputs.
   """
   @impl ReqLLM.Provider
   def prepare_request(:object, model_spec, prompt, opts) do
-    max_tokens = Keyword.get(opts, :max_tokens) || Keyword.get(opts, :max_completion_tokens)
+    compiled_schema = Keyword.fetch!(opts, :compiled_schema)
+    {:ok, model} = ReqLLM.Model.from(model_spec)
 
-    opts_with_tokens =
-      case max_tokens do
-        nil ->
-          Keyword.put(opts, :max_tokens, 4096)
+    opts_with_tokens = ensure_min_tokens(opts)
+    mode = determine_output_mode(model, opts_with_tokens)
 
-        tokens when tokens < 200 ->
-          Keyword.put(opts, :max_tokens, 200)
+    case mode do
+      :json_schema ->
+        prepare_json_schema_request(model_spec, prompt, compiled_schema, opts_with_tokens)
 
-        _tokens ->
-          opts
-      end
-
-    ReqLLM.Provider.Defaults.prepare_request(
-      __MODULE__,
-      :object,
-      model_spec,
-      prompt,
-      opts_with_tokens
-    )
+      :tool_strict ->
+        prepare_tool_strict_request(model_spec, prompt, compiled_schema, opts_with_tokens)
+    end
   end
 
-  # Override to reject unsupported operations
+  @impl ReqLLM.Provider
   def prepare_request(:embedding, _model_spec, _input, _opts) do
     supported_operations = [:chat, :object]
 
@@ -106,9 +177,102 @@ defmodule ReqLLM.Providers.XAI do
      )}
   end
 
-  # Delegate other operations to default implementation
+  @impl ReqLLM.Provider
   def prepare_request(operation, model_spec, input, opts) do
     ReqLLM.Provider.Defaults.prepare_request(__MODULE__, operation, model_spec, input, opts)
+  end
+
+  defp ensure_min_tokens(opts) do
+    max_tokens = Keyword.get(opts, :max_tokens) || Keyword.get(opts, :max_completion_tokens)
+
+    case max_tokens do
+      nil ->
+        Keyword.put(opts, :max_tokens, 4096)
+
+      tokens when tokens < 200 ->
+        Keyword.put(opts, :max_tokens, 200)
+
+      _tokens ->
+        opts
+    end
+  end
+
+  @dialyzer {:nowarn_function, prepare_json_schema_request: 4}
+  @spec prepare_json_schema_request(term(), term(), map(), keyword()) ::
+          {:ok, Req.Request.t()} | {:error, ReqLLM.Error.t()}
+  defp prepare_json_schema_request(model_spec, prompt, compiled_schema, opts) do
+    schema_name = Map.get(compiled_schema, :name, "output_schema")
+    json_schema = ReqLLM.Schema.to_json(compiled_schema.schema)
+
+    case sanitize_schema_for_xai(json_schema) do
+      {:ok, sanitized_schema} ->
+        opts_with_format =
+          opts
+          |> Keyword.update(
+            :provider_options,
+            [
+              response_format: %{
+                type: "json_schema",
+                json_schema: %{
+                  name: schema_name,
+                  strict: true,
+                  schema: sanitized_schema
+                }
+              },
+              parallel_tool_calls: false
+            ],
+            fn provider_opts ->
+              provider_opts
+              |> Keyword.put(:response_format, %{
+                type: "json_schema",
+                json_schema: %{
+                  name: schema_name,
+                  strict: true,
+                  schema: sanitized_schema
+                }
+              })
+              |> Keyword.put(:parallel_tool_calls, false)
+            end
+          )
+          |> Keyword.delete(:tools)
+          |> Keyword.delete(:tool_choice)
+          |> Keyword.put(:operation, :object)
+
+        prepare_request(:chat, model_spec, prompt, opts_with_format)
+
+      {:error, error} ->
+        {:error, error}
+    end
+  end
+
+  @dialyzer {:nowarn_function, prepare_tool_strict_request: 4}
+  @spec prepare_tool_strict_request(term(), term(), map(), keyword()) ::
+          {:ok, Req.Request.t()} | {:error, ReqLLM.Error.t()}
+  defp prepare_tool_strict_request(model_spec, prompt, compiled_schema, opts) do
+    structured_output_tool =
+      ReqLLM.Tool.new!(
+        name: "structured_output",
+        description: "Generate structured output matching the provided schema",
+        parameter_schema: compiled_schema.schema,
+        strict: true,
+        callback: fn _args -> {:ok, "structured output generated"} end
+      )
+
+    opts_with_tool =
+      opts
+      |> Keyword.update(:tools, [structured_output_tool], &[structured_output_tool | &1])
+      |> Keyword.put(:tool_choice, %{
+        type: "function",
+        function: %{name: "structured_output"}
+      })
+      |> Keyword.update(
+        :provider_options,
+        [parallel_tool_calls: false],
+        &Keyword.put(&1, :parallel_tool_calls, false)
+      )
+      |> Keyword.put(:operation, :object)
+
+    prepare_request(:chat, model_spec, prompt, opts_with_tool)
   end
 
   @impl ReqLLM.Provider
@@ -124,6 +288,161 @@ defmodule ReqLLM.Providers.XAI do
   end
 
   def extract_usage(_, _), do: {:error, :invalid_body}
+
+  @doc """
+  Check if a model supports native structured outputs via response_format with json_schema.
+
+  Prefers metadata flags when available, with heuristic fallback for models without metadata.
+
+  ## Heuristic Rules
+  - Exact "grok-2" or "grok-2-vision" → false (legacy models)
+  - Model starting with "grok-2-" or "grok-2-vision-" with suffix < "1212" → false
+  - Everything else → true (grok-3+, grok-4+, grok-beta, grok-2-1212+)
+
+  ## Examples
+
+      iex> supports_native_structured_outputs?(%ReqLLM.Model{model: "grok-2"})
+      false
+
+      iex> supports_native_structured_outputs?(%ReqLLM.Model{model: "grok-2-1212"})
+      true
+
+      iex> supports_native_structured_outputs?("grok-3")
+      true
+  """
+  @spec supports_native_structured_outputs?(ReqLLM.Model.t() | binary()) :: boolean()
+  def supports_native_structured_outputs?(%ReqLLM.Model{} = model) do
+    case get_in(model, [Access.key(:capabilities, %{}), :native_json_schema]) do
+      nil -> supports_native_structured_outputs?(model.model)
+      value -> value
+    end
+  end
+
+  def supports_native_structured_outputs?(model_name) when is_binary(model_name) do
+    cond do
+      model_name in ["grok-2", "grok-2-vision"] ->
+        false
+
+      String.starts_with?(model_name, "grok-2-") or
+          String.starts_with?(model_name, "grok-2-vision-") ->
+        suffix =
+          cond do
+            String.starts_with?(model_name, "grok-2-vision-") ->
+              String.replace_prefix(model_name, "grok-2-vision-", "")
+
+            String.starts_with?(model_name, "grok-2-") ->
+              String.replace_prefix(model_name, "grok-2-", "")
+
+            true ->
+              ""
+          end
+
+        suffix >= "1212"
+
+      true ->
+        true
+    end
+  end
+
+  @doc """
+  Check if a model supports strict tool calling.
+
+  All xAI models support strict tools.
+  """
+  @spec supports_strict_tools?(ReqLLM.Model.t() | binary()) :: boolean()
+  def supports_strict_tools?(_model), do: true
+
+  @doc """
+  Determine the structured output mode for a model and options.
+
+  ## Mode Selection Logic
+  1. If explicit `xai_structured_output_mode` is set, validate and use it
+  2. If `response_format` with `json_schema` is present in options, force `:json_schema`
+  3. If `:auto`:
+     - Use `:json_schema` when model supports it AND no other tools present
+     - Otherwise use `:tool_strict`
+
+  ## Examples
+
+      iex> determine_output_mode(%ReqLLM.Model{model: "grok-3"}, [])
+      :json_schema
+
+      iex> determine_output_mode(%ReqLLM.Model{model: "grok-2"}, [])
+      :tool_strict
+
+      iex> determine_output_mode(%ReqLLM.Model{model: "grok-3"}, tools: [%{name: "other"}])
+      :tool_strict
+  """
+  @spec determine_output_mode(ReqLLM.Model.t(), keyword()) :: :json_schema | :tool_strict
+  def determine_output_mode(model, opts) do
+    explicit_mode =
+      opts
+      |> Keyword.get(:provider_options, [])
+      |> Keyword.get(:xai_structured_output_mode)
+
+    has_response_format_json_schema =
+      opts
+      |> Keyword.get(:response_format)
+      |> case do
+        %{json_schema: _} -> true
+        _ -> false
+      end
+
+    cond do
+      explicit_mode && explicit_mode != :auto ->
+        validate_output_mode!(model, explicit_mode)
+        explicit_mode
+
+      has_response_format_json_schema ->
+        :json_schema
+
+      true ->
+        auto_select_mode(model, opts)
+    end
+  end
+
+  defp auto_select_mode(model, opts) do
+    has_native_support = supports_native_structured_outputs?(model)
+    has_other_tools = has_other_tools?(opts)
+
+    if has_native_support and not has_other_tools do
+      :json_schema
+    else
+      :tool_strict
+    end
+  end
+
+  defp has_other_tools?(opts) do
+    tools = Keyword.get(opts, :tools, [])
+
+    Enum.any?(tools, fn tool ->
+      name =
+        case tool do
+          %{name: n} -> n
+          %ReqLLM.Tool{name: n} -> n
+          _ -> nil
+        end
+
+      name != "structured_output"
+    end)
+  end
+
+  defp validate_output_mode!(model, mode) do
+    case mode do
+      :json_schema ->
+        if !supports_native_structured_outputs?(model) do
+          raise ArgumentError,
+                "Model #{model.model} does not support :json_schema mode. Use :tool_strict or :auto instead."
+        end
+
+      :tool_strict ->
+        :ok
+
+      _ ->
+        raise ArgumentError,
+              "Invalid xai_structured_output_mode: #{inspect(mode)}. Must be :auto, :json_schema, or :tool_strict"
+    end
+  end
 
   @doc """
   Custom attach_stream that ensures translate_options is called for streaming requests.
@@ -361,7 +680,7 @@ defmodule ReqLLM.Providers.XAI do
     extracted_object =
       case ReqLLM.Response.tool_calls(response) do
         [] ->
-          nil
+          extract_from_content(response)
 
         tool_calls ->
           case Enum.find(tool_calls, &(&1.name == "structured_output")) do
@@ -373,8 +692,80 @@ defmodule ReqLLM.Providers.XAI do
     %{response | object: extracted_object}
   end
 
+  defp extract_from_content(response) do
+    case response.message do
+      %ReqLLM.Message{content: content_parts} when is_list(content_parts) ->
+        content_parts
+        |> Enum.find_value(fn
+          %ReqLLM.Message.ContentPart{type: :text, text: text} when is_binary(text) ->
+            parse_json_defensively(text)
+
+          _ ->
+            nil
+        end)
+
+      _ ->
+        nil
+    end
+  end
+
+  @dialyzer {:nowarn_function, parse_json_defensively: 1}
+  @spec parse_json_defensively(term()) :: map() | nil
+  defp parse_json_defensively(text) when is_binary(text) do
+    case Jason.decode(text) do
+      {:ok, parsed_object} when is_map(parsed_object) -> parsed_object
+      _ -> nil
+    end
+  end
+
+  defp parse_json_defensively(_), do: nil
+
   defp merge_response_with_context(req, response) do
     context = req.options[:context] || %ReqLLM.Context{messages: []}
     ReqLLM.Context.merge_response(context, response)
   end
+
+  @spec sanitize_schema_for_xai(map()) ::
+          {:ok, map()} | {:error, ReqLLM.Error.t()}
+  defp sanitize_schema_for_xai(schema) when is_map(schema) do
+    if Map.has_key?(schema, "allOf") do
+      {:error,
+       ReqLLM.Error.Invalid.Schema.exception(
+         reason:
+           "xAI does not support allOf in JSON schemas. Please use a simpler schema structure without schema composition."
+       )}
+    else
+      sanitized = do_sanitize_schema(schema, _is_root = true)
+      {:ok, sanitized}
+    end
+  end
+
+  @unsupported_constraints ~w(minLength maxLength minItems maxItems minContains maxContains pattern)
+
+  defp do_sanitize_schema(schema, is_root) when is_map(schema) do
+    schema
+    |> Map.drop(@unsupported_constraints)
+    |> Map.new(fn {key, value} -> {key, sanitize_value(value)} end)
+    |> maybe_add_additional_properties(is_root)
+  end
+
+  defp sanitize_value(value) when is_map(value) do
+    do_sanitize_schema(value, _is_root = false)
+  end
+
+  defp sanitize_value(value) when is_list(value) do
+    Enum.map(value, &sanitize_value/1)
+  end
+
+  defp sanitize_value(value), do: value
+
+  defp maybe_add_additional_properties(schema, true) do
+    if schema["type"] == "object" and not Map.has_key?(schema, "additionalProperties") do
+      Map.put(schema, "additionalProperties", false)
+    else
+      schema
+    end
+  end
+
+  defp maybe_add_additional_properties(schema, false), do: schema
 end
