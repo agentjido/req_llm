@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoyMDAwMCwibW9kZWwiOiJvNC1taW5pIiwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoyMDAwMCwibW9kZWwiOiJvNC1taW5pIiwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfd2VhdGhlciIsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
       "input": [
@@ -24,6 +24,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -61,9 +62,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759795772,
+      "created_at": 1760405728,
       "error": null,
-      "id": "resp_01db8a9a2f85a9b90068e45a3c8200819993d0a7cb599d3330",
+      "id": "resp_0e92fca85f6c22be0068eda8e09e808190844887f995f8538d",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 20000,
@@ -73,7 +74,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_01db8a9a2f85a9b90068e45a3ced588199b56f5e3418f7ffae",
+          "id": "rs_0e92fca85f6c22be0068eda8e13df48190bc631a3d5af87821",
           "summary": [],
           "type": "reasoning"
         },
@@ -82,11 +83,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Why don’t cats play poker in the jungle?  \n\nBecause there are way too many cheetahs! 😸",
+              "text": "Why don’t cats play poker in the jungle?  \n\nBecause there are just too many cheetahs! 😹",
               "type": "output_text"
             }
           ],
-          "id": "msg_01db8a9a2f85a9b90068e45a3f62288199962bfc69132c2b89",
+          "id": "msg_0e92fca85f6c22be0068eda8e2fe68819090feb30df8a2fa9a",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -149,7 +150,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a92b99d94e1497-ORD"
+        "98e3571b8ec34d2c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -158,13 +159,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 00:09:35 GMT"
+        "Tue, 14 Oct 2025 01:35:31 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "3421"
+        "3311"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -176,8 +177,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=uZN_U9sojDpgtgl0VrJ13tiD0omKhbrWEXhjiFIAgBE-1759795775-1.0.1.1-2USzqb9TdIuZTty0TiU_8CwG9xQK2SWANRphxJq957SsdoWhOF33dhrJS8qLRHgJ3ByTLnbsRTm..SH3Q88okSy8J3FpejYDl4Gmu8F_2PA; path=/; expires=Tue, 07-Oct-25 00:39:35 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=ATXOLGvHvelQa8iMg1x.IvfcM26wkE.MzTn.vXpHRIs-1759795775960-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=Wtsk1JGg7Fd660_2OYnJggc4t9PlOAkNrErZzNU11G4-1760405731-1.0.1.1-mJPJmdAT6nrkBoRdbwQ8kalGCO7NGcEKQfy3CG6QV6DnREIa3mqNfjKmNImfM6UdF0xYqgd5xcRXUAH_U0q49ObQWVyi1MM2PkOtkTYymn8; path=/; expires=Tue, 14-Oct-25 02:05:31 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=K4LM4uvyM4l.VUaSdrIgN1xzjF48q2VptgYuN4v7dSs-1760405731952-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -189,7 +190,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "3423"
+        "3314"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -210,7 +211,7 @@
         "1ms"
       ],
       "x-request-id": [
-        "req_070415d4b8a7df7c01e90edadb949fd7"
+        "req_f559327c43314da9883c3609d535aa5d"
       ]
     },
     "status": 200

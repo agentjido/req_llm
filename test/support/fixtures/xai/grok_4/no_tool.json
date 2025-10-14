@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjY0MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stNCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjY0MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stNCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "max_completion_tokens": 6400,
@@ -21,6 +21,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -58,34 +59,34 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "Why did the cat go to school? To improve its purr-sonal skills! 😺",
+            "content": "Why was the cat afraid of the tree? Because of its bark! 😺",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759844539,
-      "id": "c8fe12a5-a7ef-419a-a415-6b5bc38a129f_us-east-1",
+      "created": 1760391874,
+      "id": "a8290ef4-148d-9b65-5e54-e86da8b4c7b0_us-east-1",
       "model": "grok-4-0709",
       "object": "chat.completion",
       "system_fingerprint": "fp_19e21a36c0",
       "usage": {
-        "completion_tokens": 18,
+        "completion_tokens": 16,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 134,
+          "reasoning_tokens": 176,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
-        "prompt_tokens": 879,
+        "prompt_tokens": 884,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 878,
+          "cached_tokens": 883,
           "image_tokens": 0,
-          "text_tokens": 879
+          "text_tokens": 884
         },
-        "total_tokens": 1031
+        "total_tokens": 1076
       }
     },
     "headers": {
@@ -99,7 +100,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98add234fda42b4b-ORD"
+        "98e204dfa9c8e1db-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -108,13 +109,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:42:25 GMT"
+        "Mon, 13 Oct 2025 21:44:40 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=lhamkXRYP6_7ihykdatqVBoZIZ8utSr2Fs_Mrwtf2go-1759844545-1.0.1.1-.BossGhZLfOLwVDa7X3pqhdn2olvnsV3k6CNheHsUQQ7uTwCCjD821HypFqu1AXgFLAbLPH.z3G_5u2Wde4Md.K8WM_uMXjv2JZgseVpEy8; path=/; expires=Tue, 07-Oct-25 14:12:25 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=fJq5PaoleO4MylS5wmtjVZfswkItvvyMimywahA2.90-1760391880-1.0.1.1-9IHERlGSuzKZsKvljY_ox6sN6JnAQqk.uv58XGjjB2iquxORXHxBb76sLbeNntvB9wrIQwiQoioGHjMeho7jcKmKlfojI9YGIDvy98EEO6w; path=/; expires=Mon, 13-Oct-25 22:14:40 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -126,7 +127,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-d481e110e9bcf9409017d8c273b86345-a5b2d5c800191e34-01"
+        "00-408ffee6aeffcc1c40d326e689494672-afa893530030f536-01"
       ],
       "x-zero-data-retention": [
         "false"

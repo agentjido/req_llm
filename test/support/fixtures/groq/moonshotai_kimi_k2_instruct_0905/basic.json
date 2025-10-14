@@ -39,29 +39,29 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello world! 😊  \nHow can I assist you today?",
+            "content": "Hello! How can I help you today?",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759844696,
-      "id": "chatcmpl-ca34a481-e057-47b4-8cee-dbb5e72518fa",
+      "created": 1760389838,
+      "id": "chatcmpl-85998812-aa44-4973-91e3-eb6636c6f14e",
       "model": "moonshotai/kimi-k2-instruct-0905",
       "object": "chat.completion",
       "service_tier": "on_demand",
       "system_fingerprint": "fp_05df423bab",
       "usage": {
-        "completion_time": 0.030932807,
-        "completion_tokens": 14,
-        "prompt_time": 0.009721605,
+        "completion_time": 0.019433817,
+        "completion_tokens": 10,
+        "prompt_time": 0.009726652,
         "prompt_tokens": 28,
-        "queue_time": 0.070734983,
-        "total_time": 0.040654412,
-        "total_tokens": 42
+        "queue_time": 0.070467045,
+        "total_time": 0.029160469,
+        "total_tokens": 38
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6zep00be1er81a6nay8hwrh"
+        "id": "req_01k7fpjdw7fe3r3jn3kzx2w6k5"
       }
     },
     "headers": {
@@ -75,7 +75,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98add6063e52f151-ORD"
+        "98e1d32b9a281409-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -84,13 +84,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:44:56 GMT"
+        "Mon, 13 Oct 2025 21:10:38 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=DKdRLgabkwcD.KrZBX2BQWq.RoFTgBl7CCSxmKAAW7E-1759844696-1.0.1.1-LxXl5OViwMvK7ED0dxq.86RIMZwytRBDmXc7poW0ljxwp9CoxVNMpcGNY4c_JF3KHXgNQP6qqmRccSurvGXaJqj_N3dOqTcVJ4t9qcZZhcQ; path=/; expires=Tue, 07-Oct-25 14:14:56 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=ZbEiyGZh96rN9tddZZ8yVT9ojBKw1kfNUeGHcTMOrHY-1760389838-1.0.1.1-F0qBY_xrUYK4.XAP2jxbbWjkwSMhMpgGpYwNWw17UffN0QXSlQrWKhH_NkLXyFQ7wFFqn15HKX4LjVBcEVfoy4T9Rv7TPHjJMNX_uqfxe.8; path=/; expires=Mon, 13-Oct-25 21:40:38 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -111,19 +111,19 @@
         "10000"
       ],
       "x-ratelimit-remaining-requests": [
-        "996"
+        "997"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9746"
+        "9789"
       ],
       "x-ratelimit-reset-requests": [
-        "5m45.371999999s"
+        "4m19.2s"
       ],
       "x-ratelimit-reset-tokens": [
-        "1.518999999s"
+        "1.266s"
       ],
       "x-request-id": [
-        "req_01k6zep00be1er81a6nay8hwrh"
+        "req_01k7fpjdw7fe3r3jn3kzx2w6k5"
       ]
     },
     "status": 200

@@ -1,0 +1,166 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTMtbWluaSIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQifSwidHlwZSI6ImZ1bmN0aW9uIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiYWdlIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 500,
+      "messages": [
+        {
+          "content": "Generate a software engineer profile",
+          "role": "user"
+        }
+      ],
+      "model": "grok-3-mini",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tool_choice": {
+        "function": {
+          "name": "structured_output"
+        },
+        "type": "function"
+      },
+      "tools": [
+        {
+          "function": {
+            "description": "Generate structured output matching the provided schema",
+            "name": "structured_output",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "age": {
+                  "description": "Person's age in years",
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "name": {
+                  "description": "Person's full name",
+                  "type": "string"
+                },
+                "occupation": {
+                  "description": "Person's job or profession",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "age"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.x.ai/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "message": {
+            "content": " ",
+            "reasoning_content": "First, the user asked to \"Generate a software engineer profile.\" This seems to be asking for a profile of a software engineer, which might include details like name, age, and occupation.\n\nLooking at the available functions, there's only one: \"structured_output\". This function is designed to generate structured output based on a schema. The schema requires \"name\", \"age\", and \"occupation\".\n\nThe schema is:\n\n- name: a string for the person's full name\n\n- age: an integer greater than or equal to 1\n\n- occupation: a string for the person's job or profession\n\nSince the user is asking for a software engineer profile, I can use this function to output a profile where the occupation is \"Software Engineer\".\n\nThe function call needs to be in a specific format: enclosed in <function_call> tags, with JSON containing \"action\" and \"action_input\".\n\nFor this, the action should be \"structured_output\", and action_input should provide the required parameters: name, age, and occupation.\n\nThe description of the function is: \"Generate structured output matching the provided schema\". So, when I call this function, I need to provide the data that matches the schema.\n\nIn the function parameters, it's an object with properties: name, age, occupation.\n\nThe user didn't specify any particular details, like a name or age. I need to make something up or ask for clarification?\n\nThe system prompt says: \"If there is anything unclear, ask the user for clarification.\" The user's request is vague; they didn't specify whose profile or any details.\n\nHowever, since the function requires name and age, I could either ask for clarification or assume some values. But to proceed, I should use the function as is.\n\nThe function is for generating structured output, so perhaps I need to call it with sample data.\n\nRe-reading the function: \"Generate structured output matching the provided schema\". In the available actions, it's defined with parameters that I have to provide.\n\nIn the example: <function_call>{\"action\": \"function_name\", \"action_input\": {\"parameter\": \"argument\"}}</function_call>\n\nFor \"structured_output\", action_input should be an object with name, age, and occupation.\n\nI think I need to provide values for these in the action_input.\n\nSince the user said \"Generate a software engineer profile\", I can create a fictional one.\n\nFor example:\n\n- name: \"John Doe\"\n\n- age: 30\n\n- occupation: \"Software Engineer\"\n\nThat seems reasonable.\n\nMy response should only include the function call, as per the system prompt: \"Keep your response to user clear; please do not make your response verbose!\"\n\nSo, I shouldn't add any extra text; just the function call.\n\nFinally, output it in the specified format.\n\nMultiple function calls are allowed, but I only need one here.\n\nSo, plan: Call the \"structured_output\" function with sample data for a software engineer.",
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"age\":30,\"name\":\"John Doe\",\"occupation\":\"Software Engineer\"}",
+                  "name": "structured_output"
+                },
+                "id": "call_55736865",
+                "type": "function"
+              }
+            ]
+          }
+        }
+      ],
+      "created": 1760391842,
+      "id": "fbd36449-d852-611e-61a0-50229756a2f0_us-east-1",
+      "model": "grok-3-mini",
+      "object": "chat.completion",
+      "system_fingerprint": "fp_4fae27f477",
+      "usage": {
+        "completion_tokens": 40,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 586,
+          "rejected_prediction_tokens": 0
+        },
+        "num_sources_used": 0,
+        "prompt_tokens": 205,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 204,
+          "image_tokens": 0,
+          "text_tokens": 205
+        },
+        "total_tokens": 831
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "access-control-expose-headers": [
+        "*"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "98e204146c8e9123-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 13 Oct 2025 21:44:07 GMT"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=k6_aMacuP08QHjKsC_cvieaK5C.XO5Ue8kTLgBDs7mU-1760391847-1.0.1.1-oc9UJWnnaqON8DfziiEIkm_ZPio8Ux8rznUUoCqhjEpzhJv0UaSP6SJUm9LCnwtLbGH5Mx28SvvHwSvlVfbez_uNcIgKVdaKoF22VBMQZ5o; path=/; expires=Mon, 13-Oct-25 22:14:07 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "origin, access-control-request-method, access-control-request-headers"
+      ],
+      "x-request-id": [
+        "00-549f4f4fce22e7e9dcbf8f9ca95fc417-b4884b5e0038aa77-01"
+      ],
+      "x-zero-data-retention": [
+        "false"
+      ]
+    },
+    "status": 200
+  }
+}

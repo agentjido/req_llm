@@ -39,30 +39,30 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! 👋 How can I help you today?",
-            "reasoning": "The user says \"Hi there!\" This is a greeting. The system message says we are ChatGPT, large language model, etc. We need to respond politely and maybe ask what they'd like to talk about. According to policy, we can respond with a friendly greeting and ask how can we help. No policy conflict. Just a normal response.",
+            "content": "Hey! 👋 How can I help you today?",
+            "reasoning": "The user says \"Hi there!\" This is a greeting. The system message says we are ChatGPT, large language model, etc. We need to respond politely and maybe ask what they'd like to talk about. Probably we should respond in a friendly tone. The user is greeting. There's no specific request. We can respond with a friendly greeting and ask if they need assistance. The conversation style guidelines: Use friendly tone. No instructions. No mention of policy. So just respond.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759844702,
-      "id": "chatcmpl-0f39d64a-7bfb-4e85-b884-72454ce5627c",
+      "created": 1760389843,
+      "id": "chatcmpl-7dea5d5d-6bb0-4fa0-a639-7ceae2bd1d7b",
       "model": "openai/gpt-oss-20b",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_3d587a02fb",
+      "system_fingerprint": "fp_e99e93f2ac",
       "usage": {
-        "completion_time": 0.09644448,
-        "completion_tokens": 90,
-        "prompt_time": 0.003505122,
+        "completion_time": 0.117097711,
+        "completion_tokens": 117,
+        "prompt_time": 0.00352441,
         "prompt_tokens": 74,
-        "queue_time": 0.195288827,
-        "total_time": 0.099949602,
-        "total_tokens": 164
+        "queue_time": 0.201609052,
+        "total_time": 0.120622121,
+        "total_tokens": 191
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6zep5zteyzsx36m3rs3z2nx"
+        "id": "req_01k7fpjjare0tas3b9gdnskbah"
       }
     },
     "headers": {
@@ -76,7 +76,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98add62c8d6cda16-ORD"
+        "98e1d3486cfc9d4a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -85,13 +85,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:45:02 GMT"
+        "Mon, 13 Oct 2025 21:10:43 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=0KUUWuXKDsuIxo.Ynt3e8Qyzk7RXkljOt3D6Ozpf6Iw-1759844702-1.0.1.1-y.kf6qY6nQ3MCfli5BKFOIJhy3C2Vw8XOY6arlvKzgd6GW40rC3IO0NT8D3PwFm1ajimEBZFE91sbz1ncy39GN0J3uU3WrlqvcC_J8oxNGw; path=/; expires=Tue, 07-Oct-25 14:15:02 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=ANgsn24fKOUrkIrwOHWlK7zGkc8JP_lWckH8Yz7NyBM-1760389843-1.0.1.1-vDAYLK3bOB3AbykoH_oLThLRIuc3FMy8aCztFUOzddj.jjQ0gf7skDjMb9nbweLL7oX3RN1MCw4pXFuZvd5oSteIe_13ZgKw7.G_Y29QPaU; path=/; expires=Mon, 13-Oct-25 21:40:43 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -112,19 +112,19 @@
         "8000"
       ],
       "x-ratelimit-remaining-requests": [
-        "991"
+        "934"
       ],
       "x-ratelimit-remaining-tokens": [
-        "4843"
+        "3922"
       ],
       "x-ratelimit-reset-requests": [
-        "12m57.217s"
+        "1h35m2.4s"
       ],
       "x-ratelimit-reset-tokens": [
-        "23.6745s"
+        "30.585s"
       ],
       "x-request-id": [
-        "req_01k6zep5zteyzsx36m3rs3z2nx"
+        "req_01k7fpjjare0tas3b9gdnskbah"
       ]
     },
     "status": 200

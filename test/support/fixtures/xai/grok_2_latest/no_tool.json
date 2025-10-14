@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjgxOSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay0yLWxhdGVzdCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjgxOSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay0yLWxhdGVzdCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "max_completion_tokens": 819,
@@ -21,6 +21,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -64,8 +65,8 @@
           }
         }
       ],
-      "created": 1759864823,
-      "id": "04516124-13f7-d098-d594-e9f351579b51_us-east-1",
+      "created": 1760391831,
+      "id": "649be02d-603b-559f-ca0d-22019f237e55_us-east-1",
       "model": "grok-2-1212",
       "object": "chat.completion",
       "system_fingerprint": "fp_fced99f24f",
@@ -78,14 +79,14 @@
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
-        "prompt_tokens": 120,
+        "prompt_tokens": 125,
         "prompt_tokens_details": {
           "audio_tokens": 0,
           "cached_tokens": 0,
           "image_tokens": 0,
-          "text_tokens": 120
+          "text_tokens": 125
         },
-        "total_tokens": 136
+        "total_tokens": 141
       }
     },
     "headers": {
@@ -99,7 +100,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98afc168a902d250-ORD"
+        "98e203d218e1eaf5-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -108,13 +109,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 19:20:23 GMT"
+        "Mon, 13 Oct 2025 21:43:51 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=XZTL2mcosESNXahP0KRsflAr.ON6uwGmQVdAvp_qPQ4-1759864823-1.0.1.1-WnqVmcf3XDVcymN__6NyeGC7W7CvbTtTcWBb1kmRyctNtW9x1ipwSSwliDRkeyyq17hqVEND6dtDuX_QDyPI0wkXMJm10BJPu6aEg4dpTE0; path=/; expires=Tue, 07-Oct-25 19:50:23 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=SwUD81f09lj3uDtbgKhxdrWYThvl2r33ScV61yG.3jY-1760391831-1.0.1.1-rdQElip761nLuud9FCZ.BXgWzYIc.pFgrOpfJYOxhu57Mw0_Gk963Amz_gUFRoZITwNw2ovmUFRGnsA2kxpZkFl94xNdqtwfGpHfSatsgvI; path=/; expires=Mon, 13-Oct-25 22:13:51 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -126,7 +127,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-fb99ebae366dc728be50b3486f535f58-04d5c18d00000dc1-01"
+        "00-90025ca7a957ca703de945a9178fb404-ee5cbe670030f577-01"
       ],
       "x-zero-data-retention": [
         "false"

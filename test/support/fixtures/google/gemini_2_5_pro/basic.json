@@ -41,7 +41,7 @@
           "content": {
             "parts": [
               {
-                "text": "Hello there! The classic \"Hello, world!\" — it's great to hear from you.\n\nHow can I help you today?"
+                "text": "Hello there! The classic programmer's greeting.\n\nHow can I help you today?"
               }
             ],
             "role": "model"
@@ -51,9 +51,9 @@
         }
       ],
       "modelVersion": "gemini-2.5-pro",
-      "responseId": "bDDlaP6qI_u_jMcP0_mJiAg",
+      "responseId": "NpHtaIzFOrWqjMcPkM2OgQw",
       "usageMetadata": {
-        "candidatesTokenCount": 28,
+        "candidatesTokenCount": 18,
         "promptTokenCount": 4,
         "promptTokensDetails": [
           {
@@ -61,8 +61,8 @@
             "tokenCount": 4
           }
         ],
-        "thoughtsTokenCount": 1282,
-        "totalTokenCount": 1314
+        "thoughtsTokenCount": 932,
+        "totalTokenCount": 954
       }
     },
     "headers": {
@@ -73,13 +73,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 07 Oct 2025 15:23:24 GMT"
+        "Mon, 13 Oct 2025 23:54:30 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=14505"
+        "gfet4t7; dur=9117"
       ],
       "transfer-encoding": [
         "chunked"

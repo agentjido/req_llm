@@ -40,7 +40,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! What's on your mind today? 🚀",
+            "content": "Hello! What's on your mind today?",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -48,23 +48,23 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759845455,
-      "id": "gen-1759845455-FsJXFZpr6TjJNkzltSQi",
+      "created": 1760442665,
+      "id": "gen-1760442665-1n97Wsq3g4LvB3WO15iY",
       "model": "x-ai/grok-4-fast",
       "object": "chat.completion",
       "provider": "xAI",
       "system_fingerprint": "fp_9362061f30",
       "usage": {
-        "completion_tokens": 110,
+        "completion_tokens": 105,
         "completion_tokens_details": {
-          "reasoning_tokens": 100
+          "reasoning_tokens": 97
         },
-        "prompt_tokens": 120,
+        "prompt_tokens": 159,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 112
+          "cached_tokens": 151
         },
-        "total_tokens": 230
+        "total_tokens": 264
       }
     },
     "headers": {
@@ -72,7 +72,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade88f8a6949a7-ORD"
+        "98e6dce3a8b188cd-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -81,7 +81,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:57:35 GMT"
+        "Tue, 14 Oct 2025 11:51:05 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

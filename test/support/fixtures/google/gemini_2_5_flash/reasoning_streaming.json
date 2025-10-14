@@ -1,13 +1,13 @@
 {
-  "captured_at": "2025-10-07T15:23:12.295542Z",
+  "captured_at": "2025-10-13T23:34:51.624065Z",
   "chunks": [
     {
-      "b64": "W3sKICAiY2FuZGlkYXRlcyI6IFsKICAgIHsKICAgICAgImNvbnRlbnQiOiB7CiAgICAgICAgInBhcnRzIjogWwogICAgICAgICAgewogICAgICAgICAgICAidGV4dCI6ICJUbyBmaW5kIDE1KjMsIEkgd2lsbCBtdWx0aXBseSAxNSBieSAzLlxuXG4xNSAqIDMgPSA0NSIKICAgICAgICAgIH0KICAgICAgICBdLAogICAgICAgICJyb2xlIjogIm1vZGVsIgogICAgICB9LAogICAgICAiZmluaXNoUmVhc29uIjogIlNUT1AiLAogICAgICAiaW5kZXgiOiAwCiAgICB9CiAgXSwKICAidXNhZ2VNZXRhZGF0YSI6IHsKICAgICJwcm9tcHRUb2tlbkNvdW50IjogMzIsCiAgICAiY2FuZGlkYXRlc1Rva2VuQ291bnQiOiAyOCwKICAgICJ0b3RhbFRva2VuQ291bnQiOiAxNzQsCiAgICAicHJvbXB0VG9rZW5zRGV0YWlscyI6IFsKICAgICAgewogICAgICAgICJtb2RhbGl0eSI6ICJURVhUIiwKICAgICAgICAidG9rZW5Db3VudCI6IDMyCiAgICAgIH0KICAgIF0sCiAgICAidGhvdWdodHNUb2tlbkNvdW50IjogMTE0CiAgfSwKICAibW9kZWxWZXJzaW9uIjogImdlbWluaS0yLjUtZmxhc2giLAogICJyZXNwb25zZUlkIjogIlh6RGxhUGFmRFBXX2pNY1AwWm0tMkFjIgp9Cg==",
-      "decoded": "[{\n  \"candidates\": [\n    {\n      \"content\": {\n        \"parts\": [\n          {\n            \"text\": \"To find 15*3, I will multiply 15 by 3.\\n\\n15 * 3 = 45\"\n          }\n        ],\n        \"role\": \"model\"\n      },\n      \"finishReason\": \"STOP\",\n      \"index\": 0\n    }\n  ],\n  \"usageMetadata\": {\n    \"promptTokenCount\": 32,\n    \"candidatesTokenCount\": 28,\n    \"totalTokenCount\": 174,\n    \"promptTokensDetails\": [\n      {\n        \"modality\": \"TEXT\",\n        \"tokenCount\": 32\n      }\n    ],\n    \"thoughtsTokenCount\": 114\n  },\n  \"modelVersion\": \"gemini-2.5-flash\",\n  \"responseId\": \"XzDlaPafDPW_jMcP0Zm-2Ac\"\n}\n"
+      "b64": "ZGF0YTogeyJjYW5kaWRhdGVzIjogW3siY29udGVudCI6IHsicGFydHMiOiBbeyJ0ZXh0IjogIlRvIGNhbGN1bGF0ZSAxNSAqIDMsIHlvdSBjYW4gdGhpbmsgb2YgaXQgYXM6XG4xLiAgMTAgKiAzID0gMzBcbjIuICA1ICogMyA9IDE1XG4zLiAgQWRkIHRoZSByZXN1bHRzOiAifV0sInJvbGUiOiAibW9kZWwifSwiaW5kZXgiOiAwfV0sInVzYWdlTWV0YWRhdGEiOiB7InByb21wdFRva2VuQ291bnQiOiAzMiwiY2FuZGlkYXRlc1Rva2VuQ291bnQiOiA0OSwidG90YWxUb2tlbkNvdW50IjogMTA0LCJwcm9tcHRUb2tlbnNEZXRhaWxzIjogW3sibW9kYWxpdHkiOiAiVEVYVCIsInRva2VuQ291bnQiOiAzMn1dLCJ0aG91Z2h0c1Rva2VuQ291bnQiOiAyM30sIm1vZGVsVmVyc2lvbiI6ICJnZW1pbmktMi41LWZsYXNoIiwicmVzcG9uc2VJZCI6ICJtNHp0YVBfS0NxSFJqTWNQNXVXbS1BSSJ9DQoNCg==",
+      "decoded": "data: {\"candidates\": [{\"content\": {\"parts\": [{\"text\": \"To calculate 15 * 3, you can think of it as:\\n1.  10 * 3 = 30\\n2.  5 * 3 = 15\\n3.  Add the results: \"}],\"role\": \"model\"},\"index\": 0}],\"usageMetadata\": {\"promptTokenCount\": 32,\"candidatesTokenCount\": 49,\"totalTokenCount\": 104,\"promptTokensDetails\": [{\"modality\": \"TEXT\",\"tokenCount\": 32}],\"thoughtsTokenCount\": 23},\"modelVersion\": \"gemini-2.5-flash\",\"responseId\": \"m4ztaP_KCqHRjMcP5uWm-AI\"}\r\n\r\n"
     },
     {
-      "b64": "XQ==",
-      "decoded": "]"
+      "b64": "ZGF0YTogeyJjYW5kaWRhdGVzIjogW3siY29udGVudCI6IHsicGFydHMiOiBbeyJ0ZXh0IjogIjMwICsgMTUgPSA0NVxuXG5TbywgMTUgKiAzID0gNDUuIn1dLCJyb2xlIjogIm1vZGVsIn0sImZpbmlzaFJlYXNvbiI6ICJTVE9QIiwiaW5kZXgiOiAwfV0sInVzYWdlTWV0YWRhdGEiOiB7InByb21wdFRva2VuQ291bnQiOiAzMiwiY2FuZGlkYXRlc1Rva2VuQ291bnQiOiA3MywidG90YWxUb2tlbkNvdW50IjogMTI4LCJwcm9tcHRUb2tlbnNEZXRhaWxzIjogW3sibW9kYWxpdHkiOiAiVEVYVCIsInRva2VuQ291bnQiOiAzMn1dLCJ0aG91Z2h0c1Rva2VuQ291bnQiOiAyM30sIm1vZGVsVmVyc2lvbiI6ICJnZW1pbmktMi41LWZsYXNoIiwicmVzcG9uc2VJZCI6ICJtNHp0YVBfS0NxSFJqTWNQNXVXbS1BSSJ9DQoNCg==",
+      "decoded": "data: {\"candidates\": [{\"content\": {\"parts\": [{\"text\": \"30 + 15 = 45\\n\\nSo, 15 * 3 = 45.\"}],\"role\": \"model\"},\"finishReason\": \"STOP\",\"index\": 0}],\"usageMetadata\": {\"promptTokenCount\": 32,\"candidatesTokenCount\": 73,\"totalTokenCount\": 128,\"promptTokensDetails\": [{\"modality\": \"TEXT\",\"tokenCount\": 32}],\"thoughtsTokenCount\": 23},\"modelVersion\": \"gemini-2.5-flash\",\"responseId\": \"m4ztaP_KCqHRjMcP5uWm-AI\"}\r\n\r\n"
     }
   ],
   "request": {
@@ -40,6 +40,7 @@
       }
     },
     "headers": {
+      "accept": "text/event-stream",
       "content-type": "application/json"
     },
     "method": "POST",
@@ -48,13 +49,13 @@
   "response": {
     "body": null,
     "headers": {
-      "accept-ranges": "none",
       "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
-      "content-type": "application/json; charset=UTF-8",
-      "date": "Tue, 07 Oct 2025 15:23:12 GMT",
+      "content-disposition": "attachment",
+      "content-type": "text/event-stream",
+      "date": "Mon, 13 Oct 2025 23:34:51 GMT",
       "server": "scaffolding on HTTPServer2",
-      "server-timing": "gfet4t7; dur=1443",
-      "vary": "Origin,Accept-Encoding",
+      "server-timing": "gfet4t7; dur=508",
+      "vary": "Referer",
       "x-content-type-options": "nosniff",
       "x-frame-options": "SAMEORIGIN",
       "x-xss-protection": "0"

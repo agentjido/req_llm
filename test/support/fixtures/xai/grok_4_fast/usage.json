@@ -35,37 +35,37 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "Hi! How can I help you today?",
+            "content": "Hi! What's on your mind today?",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759844449,
-      "id": "0717214e-1b65-ad74-8b0a-c6b3c375a438_us-east-1",
+      "created": 1760391845,
+      "id": "d6df5e4b-cecf-be36-29e5-d0901061d41c_us-east-1",
       "model": "grok-4-fast-reasoning",
       "object": "chat.completion",
       "system_fingerprint": "fp_9362061f30",
       "usage": {
-        "completion_tokens": 9,
+        "completion_tokens": 8,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 106,
+          "reasoning_tokens": 160,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
-        "prompt_tokens": 120,
+        "prompt_tokens": 159,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 119,
+          "cached_tokens": 151,
           "image_tokens": 0,
-          "text_tokens": 120
+          "text_tokens": 159
         },
-        "total_tokens": 235
+        "total_tokens": 327
       }
     },
     "headers": {
@@ -79,7 +79,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98add0014bcae8ea-ORD"
+        "98e2042b0dbdf161-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -88,13 +88,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:40:50 GMT"
+        "Mon, 13 Oct 2025 21:44:07 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=XkE1r6pd03eNuNHYd4aRQu3R8td0dAQjfWBHEhs7OG8-1759844450-1.0.1.1-iuxh3J8OlyrXv0gCxSWJP2jkUiSWCj12cYUz4v_F282uBb89oKe7VRdpUpEXsPQuC_TUKmt7L3QSqRiM3RWdpC.doqCQLkxHhOjyD2BB1W4; path=/; expires=Tue, 07-Oct-25 14:10:50 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=Ybqdyqf9jVkao82FHA4nrl97iH6GVy1lTNOzO47tUho-1760391847-1.0.1.1-nWOGRxc53fQRNzCTrbmxju0D4HfwlNvSg7EeCpbYrMlAc4vaFHtG4WCL8RGOIxePaI6qVx48anwLr6niQgKZazSj8km5pih06.Ix3.RUqPQ; path=/; expires=Mon, 13-Oct-25 22:14:07 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -106,7 +106,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-61d9df058a99ce32f3a51302aaa980be-6c6aaad300191106-01"
+        "00-2778aea9197481ac0ffe0e16bbde036d-c3dcfff3003170b8-01"
       ],
       "x-zero-data-retention": [
         "false"

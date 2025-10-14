@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdwdC00Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImdwdC00Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
       "max_tokens": 819,
@@ -21,6 +21,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -60,14 +61,14 @@
           "logprobs": null,
           "message": {
             "annotations": [],
-            "content": "Why don't cats play poker in the jungle?\n\nBecause there's too many cheetahs!",
+            "content": "Why don't cats play poker in the jungle? Because there's too many cheetahs!",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759795763,
-      "id": "chatcmpl-CNpYZ8T0ILutAhaCIxymRt4NPFUjU",
+      "created": 1760405678,
+      "id": "chatcmpl-CQODuY8m7mGFNGjI6YhNgBa5WIaTo",
       "model": "gpt-4-0613",
       "object": "chat.completion",
       "service_tier": "default",
@@ -99,7 +100,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a92b5ceb6feae7-ORD"
+        "98e355df8961e82a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -108,13 +109,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 00:09:23 GMT"
+        "Tue, 14 Oct 2025 01:34:38 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "1175"
+        "715"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -126,8 +127,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=e1yuT2yxlz0QqojdeO2acpIspNJu0i4WB46Q7s78BiM-1759795763-1.0.1.1-4sh4OfF4vQHBp0z5LUxAY_pNxC8L_W3MyccCiOJPcciukcrCMUsg23LOfql9Ayc8ba9jw7ttqbySBym_UE1h_.AIEtvDpglrpXWv7YfV6jI; path=/; expires=Tue, 07-Oct-25 00:39:23 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=JxK4sMjNe4diA644Pp35Hv8RR0oHajKIGV.KvAsDtjg-1759795763974-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=sGsh7DF8jSdVHf9FpOtTrV749GdsmbhEIlgMXyYL7xg-1760405678-1.0.1.1-GXdiM3KdXF_lo4oV6l1PIOk6joh.6eNnFhWa.j5_3UJGo852L8J4QsFtdOPpNGBLlSeEvF0b.nOnSLHXCPXKTnBIvfquUlZmy82GbnX71FM; path=/; expires=Tue, 14-Oct-25 02:04:38 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=yCVH3GNTdWDI_JqYZkjkFmZhc_GgKj_kToMlPKZYcMg-1760405678795-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -139,7 +140,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "1223"
+        "736"
       ],
       "x-openai-proxy-wasm": [
         "v0.1"
@@ -163,7 +164,7 @@
         "1ms"
       ],
       "x-request-id": [
-        "req_7378fa1ebd0840a7805ee3bb25b5cfdc"
+        "req_f089087329514d2f8df4a6f152b55ea0"
       ]
     },
     "status": 200

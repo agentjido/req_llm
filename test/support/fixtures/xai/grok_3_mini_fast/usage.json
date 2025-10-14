@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTMtbWluaS1mYXN0Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhpIHRoZXJlISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMy1taW5pLWZhc3QiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
-      "max_completion_tokens": 500,
+      "max_completion_tokens": 10,
       "messages": [
         {
           "content": "Hi there!",
@@ -35,38 +35,38 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "Hi! I'm Grok, your friendly AI assistant built by xAI. What's on your mind today—how can I help? 😊",
-            "reasoning_content": "First, the user said: \"Hi there!\" This is a casual greeting. As Grok, I'm supposed to be helpful, truthful, and maximally truthful, built by xAI. My responses should align with that.\n\nMy role is to assist and engage in conversation. Since this is a greeting, I should respond in a friendly, welcoming manner to continue the conversation or encourage the user to ask questions.\n\nPossible responses:\n- A simple greeting back, like \"Hi! How can I help you today?\"\n- Something more engaging, referencing my identity, e.g., \"Hello! I'm Grok, here to assist you.\"\n- Keep it light and fun, as Grok is known for being witty.\n\nI need to ensure I'm truthful. There's no misinformation here; it's just a greeting.\n\nStructure the response:\n1. Acknowledge the greeting.\n2. Introduce myself briefly if it's the first interaction.\n3. Offer help to make it useful.\n\nSince the user might be starting a conversation, I should be prepared for follow-ups. But for now, respond directly.\n\nFinal response idea:\n- Start with \"Hi!\" to mirror the user's greeting.\n- Add a bit about myself: \"I'm Grok, created by xAI.\"\n- End with an offer: \"What can I do for you?\"\n\nMake it concise and natural.",
+            "content": "Hi! I'm Grok, your friendly AI assistant",
+            "reasoning_content": "First, the user said, \"Hi there!\" which is a casual greeting. As an AI assistant, I should respond in a friendly, engaging, and helpful manner to build rapport.\n\nMy role is to be Grok, created by xAI, so I need to incorporate that into my response if appropriate. The system prompt says: \"You are Grok, a helpful and maximally truthful AI built by xAI, not based on any other companies and their models.\" So, I should identify myself as Grok.\n\nA typical response to a greeting would be to greet back and perhaps ask how I can help. Since this is the start of a conversation, I should keep it light and inviting.\n\nPossible structure:\n1. Greet back: Something like \"Hi!\" or \"Hello!\"\n2. Introduce myself: Mention that I'm Grok from xAI.\n3. Ask a question: To continue the conversation, like \"How can I assist you today?\" or \"What's on your mind?\"\n\nMake it fun and unique, as Grok is known for being witty and helpful. The system prompt emphasizes being helpful and truthful, so I should stay true to that.\n\nEnsure the response is not verbose; keep it concise unless more detail is needed.\n\nFinal response idea:\n- Start with a greeting.\n- Identify as Grok.\n- Offer assistance.\n\nSomething like: \"Hi! I'm Grok, your AI assistant from xAI. How can I help you today?\"\n\nThat sounds good. It's friendly, informative, and opens the door for further interaction.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759844487,
-      "id": "80897c5b-e3f0-9e43-2e77-f45dd8507aa2_us-east-1",
+      "created": 1760391847,
+      "id": "c9d31ae9-0df5-7878-3263-19fdc21e6ac6_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 28,
+        "completion_tokens": 10,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 266,
+          "reasoning_tokens": 310,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
         "prompt_tokens": 10,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 9,
+          "cached_tokens": 2,
           "image_tokens": 0,
           "text_tokens": 10
         },
-        "total_tokens": 304
+        "total_tokens": 330
       }
     },
     "headers": {
@@ -80,7 +80,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98add0edcd37e26f-ORD"
+        "98e204371fe2e256-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,13 +89,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:41:29 GMT"
+        "Mon, 13 Oct 2025 21:44:10 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=veFg.yNYjg8MOXQk_nspDoEjGhRdzTYlvefatlurgpg-1759844489-1.0.1.1-A1jPghX_PH0fSX7sqNF4UvRMQRROI_aF9zbomo4eIYLUqLHNJ_N9OTbnXVvueQ8pPFzEh_lIZ2bZV0aJ6Hn29Fw_LHcJRUWYjTfzBbicVv4; path=/; expires=Tue, 07-Oct-25 14:11:29 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=XTGuu7ZZsVMZekRYk5_8HBYjpyXddrzVoMzrA5C7fsk-1760391850-1.0.1.1-edDIdnNoDlOHWvIoGbhfrizo_u7fKBsp1MSH7..t85dmb8F7oqAn0InJZIx83.xMcManC6x72VCa_pIYdpOVGsh_LQ0Dl5lSDNZ7yaH16TA; path=/; expires=Mon, 13-Oct-25 22:14:10 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -107,7 +107,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-44e43eac75a683e77deead193c230b2d-93610c6d0018c9dd-01"
+        "00-d42dc7046a9ae1fd8883327d3c39fbce-95783e2d0030e4de-01"
       ],
       "x-zero-data-retention": [
         "false"

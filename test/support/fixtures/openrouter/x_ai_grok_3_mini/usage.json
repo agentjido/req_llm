@@ -41,12 +41,12 @@
           "logprobs": null,
           "message": {
             "content": "Hi! How can I assist you today? ",
-            "reasoning": "First, the user said, \"Hi there!\" which is a casual greeting. As an AI assistant, I should respond in a friendly and engaging way to build rapport.\n\nMy role is to be helpful, truthful, and engaging, based on the system prompt. I need to keep responses clear and not verbose, so I'll aim for concise yet polite.\n\nPossible responses:\n- A simple greeting back, like \"Hi! How can I help you today?\"\n- This invites further interaction, which is good since this might be the start of a conversation.\n\nIf this is the beginning, I should confirm if they have a specific question or just want to chat. But the prompt says to make responses clear and not verbose, so I'll keep it straightforward.\n\nStructure my response:\n1. Greet back to match their friendliness.\n2. Offer assistance to guide the conversation.\n3. Keep it short.\n\nFinal response idea: \"Hi! I'm here to help. What's on your mind?\"\n\nThat sounds welcoming and prompts for more details.",
+            "reasoning": "First, the user said, \"Hi there!\" which is a casual greeting. As an AI assistant, I should respond in a friendly, helpful, and engaging manner to build rapport.\n\nMy role is to be helpful, truthful, and engaging, as per my system prompt. I need to keep responses clear and not verbose, so I'll aim for concise yet warm replies.\n\nPossible responses:\n- A simple greeting back, like \"Hi! How can I help you today?\"\n- This invites further interaction and shows I'm ready to assist.\n\nSince this is the start of a conversation, I shouldn't assume what they want. Just respond to the greeting and open the door for more.\n\nMake it personalized if possible, but there's no prior context here.\n\nFinally, end my response in a way that encourages the user to continue, as per the prompt to be engaging.\n\nResponse structure:\n1. Greet back.\n2. Offer help or ask a question to continue the conversation.\n3. Keep it short.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "First, the user said, \"Hi there!\" which is a casual greeting. As an AI assistant, I should respond in a friendly and engaging way to build rapport.\n\nMy role is to be helpful, truthful, and engaging, based on the system prompt. I need to keep responses clear and not verbose, so I'll aim for concise yet polite.\n\nPossible responses:\n- A simple greeting back, like \"Hi! How can I help you today?\"\n- This invites further interaction, which is good since this might be the start of a conversation.\n\nIf this is the beginning, I should confirm if they have a specific question or just want to chat. But the prompt says to make responses clear and not verbose, so I'll keep it straightforward.\n\nStructure my response:\n1. Greet back to match their friendliness.\n2. Offer assistance to guide the conversation.\n3. Keep it short.\n\nFinal response idea: \"Hi! I'm here to help. What's on your mind?\"\n\nThat sounds welcoming and prompts for more details.",
+                "text": "First, the user said, \"Hi there!\" which is a casual greeting. As an AI assistant, I should respond in a friendly, helpful, and engaging manner to build rapport.\n\nMy role is to be helpful, truthful, and engaging, as per my system prompt. I need to keep responses clear and not verbose, so I'll aim for concise yet warm replies.\n\nPossible responses:\n- A simple greeting back, like \"Hi! How can I help you today?\"\n- This invites further interaction and shows I'm ready to assist.\n\nSince this is the start of a conversation, I shouldn't assume what they want. Just respond to the greeting and open the door for more.\n\nMake it personalized if possible, but there's no prior context here.\n\nFinally, end my response in a way that encourages the user to continue, as per the prompt to be engaging.\n\nResponse structure:\n1. Greet back.\n2. Offer help or ask a question to continue the conversation.\n3. Keep it short.",
                 "type": "reasoning.text"
               }
             ],
@@ -56,23 +56,23 @@
           "native_finish_reason": "length"
         }
       ],
-      "created": 1759846691,
-      "id": "gen-1759846691-IA41PvWm9UhrK2UAC1ZW",
+      "created": 1760442708,
+      "id": "gen-1760442708-2rriuZlj9IbldsaicSJJ",
       "model": "x-ai/grok-3-mini",
       "object": "chat.completion",
       "provider": "xAI",
       "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 213,
+        "completion_tokens": 208,
         "completion_tokens_details": {
-          "reasoning_tokens": 203
+          "reasoning_tokens": 198
         },
         "prompt_tokens": 10,
         "prompt_tokens_details": {
           "audio_tokens": 0,
           "cached_tokens": 3
         },
-        "total_tokens": 223
+        "total_tokens": 218
       }
     },
     "headers": {
@@ -80,7 +80,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ae06c00b1a0013-ORD"
+        "98e6ddef9cb22c1d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,7 +89,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 14:18:12 GMT"
+        "Tue, 14 Oct 2025 11:51:48 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

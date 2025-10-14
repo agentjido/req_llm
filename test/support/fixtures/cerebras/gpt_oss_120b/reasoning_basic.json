@@ -38,31 +38,31 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "**Internal thinking (brief):**  \n- Multiply 12 by 7.  \n- 10 × 7 = 70 and 2 × 7 = 14.  \n- Add the partial products: 70 + 14 = 84.  \n\n**Answer:** 84.",
-            "reasoning": "We need to compute 12*7 = 84. Show internal thinking brief.",
+            "content": "**Internal thinking (brief):**  \n- Multiply 12 by 7.  \n- 10 × 7 = 70 and 2 × 7 = 14.  \n- Add the partial products: 70 + 14 = 84.\n\n**Answer:** 12 × 7 = 84.",
+            "reasoning": "We need to compute 12*7 = 84. Provide internal thinking briefly.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759873418,
-      "id": "chatcmpl-ffc30f81-5510-4fdc-b9cb-17585dab3d51",
+      "created": 1760396439,
+      "id": "chatcmpl-49c89568-be1d-49bf-b50f-908835145b36",
       "model": "gpt-oss-120b",
       "object": "chat.completion",
       "system_fingerprint": "fp_8a8c0bd8448557718491",
       "time_info": {
-        "completion_time": 0.050819481,
-        "created": 1759873418,
-        "prompt_time": 0.002466419,
-        "queue_time": 0.07806429,
-        "total_time": 0.1328117847442627
+        "completion_time": 0.055960642,
+        "created": 1760396439,
+        "prompt_time": 0.013140741,
+        "queue_time": 1.216302976,
+        "total_time": 1.286773443222046
       },
       "usage": {
-        "completion_tokens": 92,
+        "completion_tokens": 99,
         "prompt_tokens": 80,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 172
+        "total_tokens": 179
       }
     },
     "headers": {
@@ -73,7 +73,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98b0933f3c8a0008-ORD"
+        "98e27453fe3af32d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -82,10 +82,10 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 21:43:38 GMT"
+        "Mon, 13 Oct 2025 23:00:41 GMT"
       ],
       "inference-id": [
-        "chatcmpl-ffc30f81-5510-4fdc-b9cb-17585dab3d51"
+        "chatcmpl-49c89568-be1d-49bf-b50f-908835145b36"
       ],
       "referrer-policy": [
         "strict-origin-when-cross-origin"
@@ -94,7 +94,7 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=eU83NHVfQwjnK.WUfnjNnYIGqQ9f4KAYNwSXMlgvH9Q-1759873418-1.0.1.1-wLDqrqyhi9XDz7ZHxFkKFg721d570ObWF2tWkQOpzDq6euMHpkxQmDoDU.aM59OqrqMrPyOD7qDKaSPgxqMpPGVt8H1dzNFIicdVd_emF0Q; path=/; expires=Tue, 07-Oct-25 22:13:38 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=8A4X0fLEDL1oagIA95HQm027AiBg93LVmm2GMwzLueY-1760396441-1.0.1.1-1Vael.PwUD5c3P9k20SyqFx68gssxn_gF4z7.5NYKukBwc3QnPspCHN9gfpUwc3fNqZxfbXlnElOKmTdUISW6roYdonXsEWUvTGo6xQrsRY; path=/; expires=Mon, 13-Oct-25 23:30:41 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=3600; includeSubDomains"
@@ -112,19 +112,19 @@
         "1000000"
       ],
       "x-ratelimit-remaining-requests-day": [
-        "1439839"
+        "1439987"
       ],
       "x-ratelimit-remaining-tokens-minute": [
-        "996287"
+        "999540"
       ],
       "x-ratelimit-reset-requests-day": [
-        "8181.650762319565"
+        "3558.9399979114532"
       ],
       "x-ratelimit-reset-tokens-minute": [
-        "21.65076231956482"
+        "18.939997911453247"
       ],
       "x-request-id": [
-        "98b0933f3c8a0008-ORD"
+        "98e27453fe3af32d-ORD"
       ]
     },
     "status": 200

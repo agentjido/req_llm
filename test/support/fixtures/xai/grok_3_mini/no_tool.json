@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjE2MzgsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMy1taW5pIiwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjgxOSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay0zLW1pbmkiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
-      "max_completion_tokens": 1638,
+      "max_completion_tokens": 819,
       "messages": [
         {
           "content": "Tell me a joke about cats",
@@ -12,7 +12,6 @@
         }
       ],
       "model": "grok-3-mini",
-      "reasoning_effort": "low",
       "seed": 42,
       "stream": false,
       "temperature": 0.0,
@@ -22,6 +21,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -59,35 +59,35 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "I'm sorry, but I don't have the capability to tell jokes. My available tools are limited to things like getting weather information. If you'd like, I can help with that instead! For example, what's your location for weather details?",
-            "reasoning_content": "First, the user asked: \"Tell me a joke about cats.\" This is a request for a joke, which is not related to any of the available functions. The only available function is \"get_weather\", which is for getting weather information based on a location.\n\nI need to check if this query can be addressed using the available functions. The available functions are limited to getting weather, so no, this doesn't match.\n\nThe instructions say: \"If the user's query can be addressed using an available function, and all required parameters are provided or obviously inferable, trigger a function call.\" In this case, it cannot be addressed using any available function.\n\nFurther, it says: \"Do not call a function if no matching functions apply or if parameters are missing/unclear. Ask for clarification only if none of the provided functions are able to advance the user's request.\"\n\nSince none of the functions can advance this request, I should not call a function. Instead, I should respond directly or ask for clarification if needed. But the query is clear; it's just not something I can handle with the tools I have.\n\nThe instructions emphasize keeping responses clear and not verbose. So, I should simply respond that I can't help with that or redirect if possible.\n\nThe system prompt says: \"Ask for clarification only if none of the provided functions are able to advance the user's request.\" This fits, but it doesn't specify to ask for clarification in this case; it's more about when to ask. Here, the request is unrelated, so I should just inform the user.\n\nPossible response: I could say something like, \"I'm sorry, I don't have the capability to tell jokes. I can help with weather information if you'd like.\"\n\nThat keeps it clear and non-verbose.\n\nFinally, ensure I don't use the <function_call> tag unless I'm actually calling a function. In this case, I'm not.",
+            "content": "I'm sorry, but I can only assist with weather-related queries using the available tools. If you have a question about the weather, feel free to ask!",
+            "reasoning_content": "First, the user asked: \"Tell me a joke about cats.\" This is a request for a joke, which is not related to any of the available functions. The only available function is \"get_weather\", which is for getting weather information based on a location.\n\nI need to check if this query can be addressed using the available functions. The available functions are limited to getting weather, so no, this doesn't match.\n\nThe instructions say: \"If the user's query can be addressed using an available function, and all required parameters are provided or obviously inferable, trigger a function call.\"\n\nIn this case, it cannot be addressed using any available function, so I should not call a function.\n\nAdditionally: \"Ask for clarification only if none of the provided functions are able to advance the user's request.\"\n\nSince none of the functions can advance this request, I shouldn't ask for clarification unless it's unclear. But this request is clear; it's just not something I can handle with the tools I have.\n\nMy response should be kept clear and not verbose. So, I need to politely inform the user that I can't help with that.\n\nFinally, the system prompt emphasizes: \"You are only permitted to use the <function_call> tag in your response only if you have made the decision to call a function.\"\n\nSince I'm not calling a function, I won't use that tag.\n\nResponse idea: Keep it simple, like \"I'm sorry, but I can only provide information on weather. If you have a weather-related question, let me know!\"\n\nThat sounds good.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759844466,
-      "id": "3dd1febd-b7ad-a5e9-ad9e-38e7825c1a46_us-east-1",
+      "created": 1760391837,
+      "id": "67c2af75-6927-2bdd-5dac-30d75701a535_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 46,
+        "completion_tokens": 31,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 377,
+          "reasoning_tokens": 308,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
-        "prompt_tokens": 277,
+        "prompt_tokens": 282,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 276,
+          "cached_tokens": 232,
           "image_tokens": 0,
-          "text_tokens": 277
+          "text_tokens": 282
         },
-        "total_tokens": 700
+        "total_tokens": 621
       }
     },
     "headers": {
@@ -101,7 +101,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98add06c28af2256-ORD"
+        "98e203f75dde9123-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -110,13 +110,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:41:10 GMT"
+        "Mon, 13 Oct 2025 21:44:01 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=TmpYz1bDuO_vsOrn0YEPHjWFjIxvPrh301.KzqO0_RE-1759844470-1.0.1.1-1foQBI.TOHWxX7XNyKZSxt411caduN9vbzHF9uaRiWNF5co.TMP2QOv8COG6IofAT8CfiUyW7DyR1RdIVApcOJ2FFu2I5F2N84WU5dDlIIk; path=/; expires=Tue, 07-Oct-25 14:11:10 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=FLo_HDb6l6sHCQlWXdvv9T7JhvoLpi6RwXZalHgDikY-1760391841-1.0.1.1-penGkpELbF6cULIGBocWCAm0RkiwBzQruU9dV2N4.xyc9sRQCAq.Vnh.9MmH.C4sjnqNYRo21_clSVbKJBW18K0T53g8pg60qXGCeKGO2qE; path=/; expires=Mon, 13-Oct-25 22:14:01 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -128,7 +128,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-27a71304c9be384e0de8b2665612e45e-3915973700193219-01"
+        "00-354ac61e71853c4550341b1c4d37d52f-893c9bea0030c4ce-01"
       ],
       "x-zero-data-retention": [
         "false"

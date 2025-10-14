@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoyNTYwMCwibW9kZWwiOiJncHQtNS1uYW5vIiwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoyNTYwMCwibW9kZWwiOiJncHQtNS1uYW5vIiwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfd2VhdGhlciIsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
       "input": [
@@ -24,6 +24,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -61,9 +62,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759853154,
+      "created_at": 1760405669,
       "error": null,
-      "id": "resp_0730794b15025cde0068e53a62d6b48198bed3f6b123ae4195",
+      "id": "resp_0793c3cbd69167400068eda8a539288196b8c678e8fded3dd8",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 25600,
@@ -73,7 +74,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_0730794b15025cde0068e53a64620c819882647a3f73b8bf45",
+          "id": "rs_0793c3cbd69167400068eda8a5c2948196949655bf09b941e8",
           "summary": [],
           "type": "reasoning"
         },
@@ -82,11 +83,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Why don't cats play poker in the jungle? Too many cheetahs. \n\nWant another cat joke?",
+              "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle? Too many cheetahs.\n\nWant another cat joke?",
               "type": "output_text"
             }
           ],
-          "id": "msg_0730794b15025cde0068e53a67afd48198a2150a648e6d34ae",
+          "id": "msg_0793c3cbd69167400068eda8a886108196a28832dcee7fe3ae",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -133,11 +134,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 539,
+        "output_tokens": 417,
         "output_tokens_details": {
-          "reasoning_tokens": 512
+          "reasoning_tokens": 384
         },
-        "total_tokens": 574
+        "total_tokens": 452
       },
       "user": null
     },
@@ -149,7 +150,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98aea4892ae66199-ORD"
+        "98e355a82e6a6159-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -158,13 +159,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 16:06:00 GMT"
+        "Tue, 14 Oct 2025 01:34:33 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "5509"
+        "4003"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -176,8 +177,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=UE17xCWSAzdv1hlOu9ImdUaahZyDBB2hR4i79SKUrZA-1759853160-1.0.1.1-DDYiAD_tksqnfPN46LIVw4fhliKbin5PfxqULDUwgJWlSMdToxpEiIWpCgiGOc702Xzo4bRhEHMxzP84r0S.lMTNPL5Y6UtyNmdy0StkrsQ; path=/; expires=Tue, 07-Oct-25 16:36:00 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=OPmYQ.sFkvXiFD8F6HNVU7xFc832U_MwAmrUIuitur8-1759853160362-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=FDr.Qi4PZxRBjnSfbfQg2ng6gtXuZWZao68hesm.7xc-1760405673-1.0.1.1-y0cScpavmm8Wkph2PFptGxzIu3k10bw3vTsohKgDrvZG5ZZOW_uZ15WXUstLGHFep9SWAfwsXAKkn50RagrX1XdmYrQOYB70BputPMpTfc0; path=/; expires=Tue, 14-Oct-25 02:04:33 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=JWu4GNeQMEiwaUckWXvSOqLWCc0fs4NIqEYlbp1l4fA-1760405673239-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -189,7 +190,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "5517"
+        "4013"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -210,7 +211,7 @@
         "3ms"
       ],
       "x-request-id": [
-        "req_c4bc6bc1873d1603c10ba6766cb36b55"
+        "req_e8afa89fb5dd46f8b534080ace198e0a"
       ]
     },
     "status": 200

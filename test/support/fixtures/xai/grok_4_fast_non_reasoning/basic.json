@@ -44,8 +44,8 @@
           }
         }
       ],
-      "created": 1759844445,
-      "id": "96ed48d6-bbe2-0652-5453-a003769dc7b7_us-east-1",
+      "created": 1760391831,
+      "id": "7df260fc-f860-e1c7-ad84-82f0fa6091cc_us-east-1",
       "model": "grok-4-fast-non-reasoning",
       "object": "chat.completion",
       "system_fingerprint": "fp_e7507192a3",
@@ -58,14 +58,14 @@
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
-        "prompt_tokens": 132,
+        "prompt_tokens": 171,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 122,
+          "cached_tokens": 161,
           "image_tokens": 0,
-          "text_tokens": 132
+          "text_tokens": 171
         },
-        "total_tokens": 140
+        "total_tokens": 179
       }
     },
     "headers": {
@@ -79,7 +79,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98adcfe6eb63803a-ORD"
+        "98e203cfbb30c77f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -88,13 +88,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:40:45 GMT"
+        "Mon, 13 Oct 2025 21:43:51 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=hfJxH18GGdo2nn53Ek5nn909ouZANYbONK77fI2nlWI-1759844445-1.0.1.1-6gKNmfhr3bSUAf3WIDPiiLqC5T.uxeEaNpY29irZyoc8akwiuc9C6wqOraLB8cO00VJTZqvumaX2Bay42jen3xUs.QYBJc2ta3gDgk40zGc; path=/; expires=Tue, 07-Oct-25 14:10:45 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=XXCeG3QkjZWO627p9v8TkEeGio6Hhxbz4s.nycl4ACU-1760391831-1.0.1.1-kfVmoDlEys4v_9FlseDvRIp0Ivx1PDLVE5EmgAdUepaKvmo4qToSxHX_4fTK9MHCpTNUoVs..Rwgae2HDn5M2.k1NNAP2aWXwKzoe.X26fA; path=/; expires=Mon, 13-Oct-25 22:13:51 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -106,7 +106,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-59cb648da493172f2cfc1d2fb5a7e0e2-eee492ba001db349-01"
+        "00-582a9bec6670b054f729384ff02f2ef8-a091024f0030a1d9-01"
       ],
       "x-zero-data-retention": [
         "false"

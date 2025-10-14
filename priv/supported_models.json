@@ -1,15 +1,15 @@
 {
   "anthropic:claude-3-5-haiku-20241022": {
-    "status": "pass",
-    "last_checked": "2025-10-07T19:52:19Z"
+    "status": "fail",
+    "last_checked": "2025-10-14T13:38:55Z"
   },
   "anthropic:claude-3-5-sonnet-20240620": {
     "status": "pass",
     "last_checked": "2025-10-07T19:52:19Z"
   },
   "anthropic:claude-3-5-sonnet-20241022": {
-    "status": "pass",
-    "last_checked": "2025-10-07T19:52:19Z"
+    "status": "fail",
+    "last_checked": "2025-10-14T13:38:55Z"
   },
   "anthropic:claude-3-7-sonnet-20250219": {
     "status": "pass",
@@ -45,19 +45,19 @@
   },
   "cerebras:gpt-oss-120b": {
     "status": "pass",
-    "last_checked": "2025-10-07T21:45:03Z"
+    "last_checked": "2025-10-13T23:05:36Z"
   },
   "cerebras:qwen-3-235b-a22b-instruct-2507": {
     "status": "pass",
-    "last_checked": "2025-10-07T21:17:48Z"
+    "last_checked": "2025-10-13T23:05:36Z"
   },
   "cerebras:qwen-3-235b-a22b-thinking-2507": {
     "status": "pass",
-    "last_checked": "2025-10-07T20:33:20Z"
+    "last_checked": "2025-10-13T23:05:36Z"
   },
   "cerebras:qwen-3-coder-480b": {
     "status": "pass",
-    "last_checked": "2025-10-07T21:17:48Z"
+    "last_checked": "2025-10-13T23:05:36Z"
   },
   "google:gemini-1.5-flash": {
     "status": "excluded",
@@ -73,7 +73,7 @@
   },
   "google:gemini-2.0-flash": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:25Z"
+    "last_checked": "2025-10-14T13:38:55Z"
   },
   "google:gemini-2.0-flash-exp": {
     "status": "pass",
@@ -81,11 +81,11 @@
   },
   "google:gemini-2.0-flash-lite": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:25Z"
+    "last_checked": "2025-10-14T00:41:57Z"
   },
   "google:gemini-2.5-flash": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:25Z"
+    "last_checked": "2025-10-14T13:38:55Z"
   },
   "google:gemini-2.5-flash-lite": {
     "status": "excluded",
@@ -105,7 +105,7 @@
   },
   "google:gemini-2.5-flash-preview-05-20": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:25Z"
+    "last_checked": "2025-10-14T00:41:57Z"
   },
   "google:gemini-2.5-flash-preview-09-2025": {
     "status": "excluded",
@@ -113,7 +113,7 @@
   },
   "google:gemini-2.5-pro": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:25Z"
+    "last_checked": "2025-10-14T00:41:57Z"
   },
   "google:gemini-2.5-pro-preview-05-06": {
     "status": "excluded",
@@ -129,7 +129,7 @@
   },
   "google:gemini-flash-latest": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:25Z"
+    "last_checked": "2025-10-14T00:41:57Z"
   },
   "google:gemini-flash-lite-latest": {
     "status": "excluded",
@@ -140,7 +140,7 @@
     "last_checked": "2025-10-03T23:26:57Z"
   },
   "groq:deepseek-r1-distill-llama-70b": {
-    "status": "pass",
+    "status": "excluded",
     "last_checked": "2025-10-07T19:52:39Z"
   },
   "groq:gemma2-9b-it": {
@@ -149,11 +149,11 @@
   },
   "groq:llama-3.1-8b-instant": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:39Z"
+    "last_checked": "2025-10-13T21:22:20Z"
   },
   "groq:llama-3.3-70b-versatile": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:39Z"
+    "last_checked": "2025-10-14T13:38:55Z"
   },
   "groq:llama-guard-3-8b": {
     "status": "excluded",
@@ -169,7 +169,7 @@
   },
   "groq:meta-llama/llama-4-maverick-17b-128e-instruct": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:39Z"
+    "last_checked": "2025-10-13T21:22:20Z"
   },
   "groq:meta-llama/llama-4-scout-17b-16e-instruct": {
     "status": "excluded",
@@ -189,15 +189,15 @@
   },
   "groq:moonshotai/kimi-k2-instruct-0905": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:39Z"
+    "last_checked": "2025-10-13T21:22:20Z"
   },
   "groq:openai/gpt-oss-120b": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:39Z"
+    "last_checked": "2025-10-13T21:22:20Z"
   },
   "groq:openai/gpt-oss-20b": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:39Z"
+    "last_checked": "2025-10-13T21:22:20Z"
   },
   "groq:qwen-qwq-32b": {
     "status": "excluded",
@@ -205,79 +205,79 @@
   },
   "groq:qwen/qwen3-32b": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:39Z"
+    "last_checked": "2025-10-13T21:22:20Z"
   },
   "openai:codex-mini-latest": {
-    "status": "pass",
-    "last_checked": "2025-10-07T19:52:56Z"
+    "status": "fail",
+    "last_checked": "2025-10-14T12:14:31Z"
   },
   "openai:gpt-3.5-turbo": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:56Z"
+    "last_checked": "2025-10-14T11:34:45Z"
   },
   "openai:gpt-4": {
-    "status": "pass",
-    "last_checked": "2025-10-07T19:52:56Z"
+    "status": "fail",
+    "last_checked": "2025-10-14T11:34:45Z"
   },
   "openai:gpt-4-turbo": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:56Z"
+    "last_checked": "2025-10-14T13:38:55Z"
   },
   "openai:gpt-4.1": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:56Z"
+    "last_checked": "2025-10-14T11:34:45Z"
   },
   "openai:gpt-4.1-mini": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:56Z"
+    "last_checked": "2025-10-14T11:34:45Z"
   },
   "openai:gpt-4.1-nano": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:56Z"
+    "last_checked": "2025-10-14T11:34:45Z"
   },
   "openai:gpt-4o": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:56Z"
+    "last_checked": "2025-10-14T11:34:45Z"
   },
   "openai:gpt-4o-2024-05-13": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:56Z"
+    "last_checked": "2025-10-14T11:34:45Z"
   },
   "openai:gpt-4o-2024-08-06": {
-    "status": "fail",
-    "last_checked": "2025-10-07T20:04:49Z"
+    "status": "pass",
+    "last_checked": "2025-10-14T11:34:45Z"
   },
   "openai:gpt-4o-2024-11-20": {
     "status": "fail",
-    "last_checked": "2025-10-07T19:52:56Z"
+    "last_checked": "2025-10-14T11:34:45Z"
   },
   "openai:gpt-4o-mini": {
-    "status": "fail",
-    "last_checked": "2025-10-07T19:52:56Z"
+    "status": "pass",
+    "last_checked": "2025-10-14T13:38:55Z"
   },
   "openai:gpt-5": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:56Z"
+    "last_checked": "2025-10-14T11:34:45Z"
   },
   "openai:gpt-5-chat-latest": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:56Z"
+    "last_checked": "2025-10-14T11:34:45Z"
   },
   "openai:gpt-5-codex": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:56Z"
+    "last_checked": "2025-10-14T11:34:45Z"
   },
   "openai:gpt-5-mini": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:56Z"
+    "last_checked": "2025-10-14T11:34:45Z"
   },
   "openai:gpt-5-nano": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:56Z"
+    "last_checked": "2025-10-14T11:34:45Z"
   },
   "openai:o1": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:56Z"
+    "last_checked": "2025-10-14T11:34:45Z"
   },
   "openai:o1-mini": {
     "status": "excluded",
@@ -289,31 +289,31 @@
   },
   "openai:o1-pro": {
     "status": "fail",
-    "last_checked": "2025-10-07T19:52:56Z"
+    "last_checked": "2025-10-14T11:34:45Z"
   },
   "openai:o3": {
-    "status": "pass",
-    "last_checked": "2025-10-07T19:52:56Z"
+    "status": "fail",
+    "last_checked": "2025-10-14T11:34:45Z"
   },
   "openai:o3-deep-research": {
     "status": "fail",
-    "last_checked": "2025-10-07T19:52:56Z"
+    "last_checked": "2025-10-14T11:34:45Z"
   },
   "openai:o3-mini": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:56Z"
+    "last_checked": "2025-10-14T11:34:45Z"
   },
   "openai:o3-pro": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:56Z"
+    "last_checked": "2025-10-14T11:34:45Z"
   },
   "openai:o4-mini": {
-    "status": "pass",
-    "last_checked": "2025-10-07T19:52:56Z"
+    "status": "fail",
+    "last_checked": "2025-10-14T11:34:45Z"
   },
   "openai:o4-mini-deep-research": {
     "status": "fail",
-    "last_checked": "2025-10-07T19:52:56Z"
+    "last_checked": "2025-10-14T11:34:45Z"
   },
   "openai:text-embedding-3-large": {
     "status": "pass",
@@ -344,8 +344,8 @@
     "last_checked": "2025-10-07T14:19:05Z"
   },
   "openrouter:anthropic/claude-sonnet-4": {
-    "status": "pass",
-    "last_checked": "2025-10-07T17:04:17Z"
+    "status": "fail",
+    "last_checked": "2025-10-14T13:38:55Z"
   },
   "openrouter:anthropic/claude-sonnet-4.5": {
     "status": "pass",
@@ -688,36 +688,36 @@
     "last_checked": "2025-10-07T14:19:05Z"
   },
   "openrouter:x-ai/grok-3": {
-    "status": "pass",
-    "last_checked": "2025-10-07T14:19:05Z"
+    "status": "fail",
+    "last_checked": "2025-10-14T13:35:17Z"
   },
   "openrouter:x-ai/grok-3-beta": {
-    "status": "pass",
-    "last_checked": "2025-10-07T14:19:05Z"
+    "status": "fail",
+    "last_checked": "2025-10-14T13:35:17Z"
   },
   "openrouter:x-ai/grok-3-mini": {
     "status": "pass",
-    "last_checked": "2025-10-07T14:19:05Z"
+    "last_checked": "2025-10-14T13:35:17Z"
   },
   "openrouter:x-ai/grok-3-mini-beta": {
     "status": "pass",
-    "last_checked": "2025-10-07T14:19:05Z"
+    "last_checked": "2025-10-14T13:35:17Z"
   },
   "openrouter:x-ai/grok-4": {
     "status": "pass",
-    "last_checked": "2025-10-07T14:19:05Z"
+    "last_checked": "2025-10-14T13:35:17Z"
   },
   "openrouter:x-ai/grok-4-fast": {
     "status": "pass",
-    "last_checked": "2025-10-07T17:04:17Z"
+    "last_checked": "2025-10-14T13:38:55Z"
   },
   "openrouter:x-ai/grok-4-fast:free": {
     "status": "excluded",
     "last_checked": "2025-10-07T14:01:22Z"
   },
   "openrouter:x-ai/grok-code-fast-1": {
-    "status": "pass",
-    "last_checked": "2025-10-07T14:19:05Z"
+    "status": "fail",
+    "last_checked": "2025-10-14T13:35:17Z"
   },
   "openrouter:z-ai/glm-4.5": {
     "status": "fail",
@@ -741,75 +741,75 @@
   },
   "xai:grok-2": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:46Z"
+    "last_checked": "2025-10-13T21:45:10Z"
   },
   "xai:grok-2-1212": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:46Z"
+    "last_checked": "2025-10-13T21:45:10Z"
   },
   "xai:grok-2-latest": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:46Z"
+    "last_checked": "2025-10-14T13:38:55Z"
   },
   "xai:grok-2-vision": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:46Z"
+    "last_checked": "2025-10-13T21:45:10Z"
   },
   "xai:grok-2-vision-1212": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:46Z"
+    "last_checked": "2025-10-13T21:45:10Z"
   },
   "xai:grok-2-vision-latest": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:46Z"
+    "last_checked": "2025-10-13T21:45:10Z"
   },
   "xai:grok-3": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:46Z"
+    "last_checked": "2025-10-13T21:45:10Z"
   },
   "xai:grok-3-fast": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:46Z"
+    "last_checked": "2025-10-13T21:45:10Z"
   },
   "xai:grok-3-fast-latest": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:46Z"
+    "last_checked": "2025-10-13T21:45:10Z"
   },
   "xai:grok-3-latest": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:46Z"
+    "last_checked": "2025-10-13T21:45:10Z"
   },
   "xai:grok-3-mini": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:46Z"
+    "last_checked": "2025-10-14T13:38:55Z"
   },
   "xai:grok-3-mini-fast": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:46Z"
+    "last_checked": "2025-10-13T21:45:10Z"
   },
   "xai:grok-3-mini-fast-latest": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:46Z"
+    "last_checked": "2025-10-13T21:45:10Z"
   },
   "xai:grok-3-mini-latest": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:46Z"
+    "last_checked": "2025-10-13T21:45:10Z"
   },
   "xai:grok-4": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:46Z"
+    "last_checked": "2025-10-13T21:45:10Z"
   },
   "xai:grok-4-fast": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:46Z"
+    "last_checked": "2025-10-13T21:45:10Z"
   },
   "xai:grok-4-fast-non-reasoning": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:46Z"
+    "last_checked": "2025-10-13T21:45:10Z"
   },
   "xai:grok-4-fast-reasoning": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:46Z"
+    "last_checked": "2025-10-13T21:45:10Z"
   },
   "xai:grok-beta": {
     "status": "excluded",
@@ -817,7 +817,7 @@
   },
   "xai:grok-code-fast-1": {
     "status": "pass",
-    "last_checked": "2025-10-07T19:52:46Z"
+    "last_checked": "2025-10-13T21:45:10Z"
   },
   "xai:grok-vision-beta": {
     "status": "excluded",

@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjozMjAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJxd2VuLTMtY29kZXItNDgwYiIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJtYXhfdG9rZW5zIjozMjAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJxd2VuLTMtY29kZXItNDgwYiIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "max_tokens": 3200,
@@ -21,6 +21,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -63,17 +64,17 @@
           }
         }
       ],
-      "created": 1759869676,
-      "id": "chatcmpl-fed9be47-ce9f-4e8f-a467-cdbdab1cf74a",
+      "created": 1760396495,
+      "id": "chatcmpl-f3d8b2f2-055f-4314-9a43-19143f26c2b9",
       "model": "qwen-3-coder-480b",
       "object": "chat.completion",
       "system_fingerprint": "fp_b137de5cdea5effc293c",
       "time_info": {
-        "completion_time": 0.036251615,
-        "created": 1759869676,
-        "prompt_time": 0.01050679,
-        "queue_time": 2.75709e-4,
-        "total_time": 0.04971766471862793
+        "completion_time": 0.03648153,
+        "created": 1760396495,
+        "prompt_time": 0.008995515,
+        "queue_time": 9.493e-5,
+        "total_time": 0.04808855056762695
       },
       "usage": {
         "completion_tokens": 23,
@@ -92,7 +93,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98b037e7e8a36096-ORD"
+        "98e275b30c9afa17-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -101,10 +102,10 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 20:41:16 GMT"
+        "Mon, 13 Oct 2025 23:01:36 GMT"
       ],
       "inference-id": [
-        "chatcmpl-fed9be47-ce9f-4e8f-a467-cdbdab1cf74a"
+        "chatcmpl-f3d8b2f2-055f-4314-9a43-19143f26c2b9"
       ],
       "referrer-policy": [
         "strict-origin-when-cross-origin"
@@ -113,7 +114,7 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=OW3nCKxAU.Kh62FtVYh7jEPkizgwbb18dJnWLFl_QJw-1759869676-1.0.1.1-NqYvAUUL8q5n9Y45UK..1JZW48WjZoFXmKBHx_WJ.diKeP9xDfST3xjf2Bg2KNuINNK0s1HdQ3sJF6KmGdVpzQqno0pXydfVm0hInD3ShOw; path=/; expires=Tue, 07-Oct-25 21:11:16 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=CoGYJrd6VRRzKdTvguZpX2DO8zppmAre2zNcUcx5xO0-1760396496-1.0.1.1-cZ_g_d0P7Fb9Pe7MJ4at9YtwDiJJio.JI8DNIqH8vzE2ifDjKijbRExMwkmuq1NekGbVEcggAuQqUCDhR4fxDzOkKP6Af9xJGNZcEZnnFmo; path=/; expires=Mon, 13-Oct-25 23:31:36 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=3600; includeSubDomains"
@@ -131,19 +132,19 @@
         "1000000"
       ],
       "x-ratelimit-remaining-requests-day": [
-        "1439977"
+        "1439974"
       ],
       "x-ratelimit-remaining-tokens-minute": [
-        "999351"
+        "1000000"
       ],
       "x-ratelimit-reset-requests-day": [
-        "11923.065094709396"
+        "3503.9942774772644"
       ],
       "x-ratelimit-reset-tokens-minute": [
-        "43.06509470939636"
+        "23.994277477264404"
       ],
       "x-request-id": [
-        "98b037e7e8a36096-ORD"
+        "98e275b30c9afa17-ORD"
       ]
     },
     "status": 200

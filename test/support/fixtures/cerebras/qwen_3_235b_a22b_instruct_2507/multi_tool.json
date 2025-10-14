@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjozMjAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/Iiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoicXdlbi0zLTIzNWItYTIyYi1pbnN0cnVjdC0yNTA3Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJtYXhfdG9rZW5zIjozMjAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/Iiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoicXdlbi0zLTIzNWItYTIyYi1pbnN0cnVjdC0yNTA3Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
       "max_tokens": 3200,
@@ -21,6 +21,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -46,6 +47,7 @@
             "description": "Tell a funny joke",
             "name": "tell_joke",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "topic": {
                   "description": "Topic for the joke",
@@ -99,32 +101,32 @@
                   "arguments": "{\"location\": \"Paris, France\", \"unit\": \"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "d1a5a3d56",
+                "id": "469ae06d4",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1759869925,
-      "id": "chatcmpl-423bd1fd-9e74-47a5-8889-7ec57948996d",
+      "created": 1760396435,
+      "id": "chatcmpl-78c88e3e-88bc-4d8b-b0a1-212183177e29",
       "model": "qwen-3-235b-a22b-instruct-2507",
       "object": "chat.completion",
       "system_fingerprint": "fp_c7f612779ed4ae92496f",
       "time_info": {
-        "completion_time": 0.016939888,
-        "created": 1759869925,
-        "prompt_time": 0.014391176,
-        "queue_time": 0.002546642,
-        "total_time": 0.03635764122009277
+        "completion_time": 0.015762515,
+        "created": 1760396435,
+        "prompt_time": 0.020160018,
+        "queue_time": 0.178851406,
+        "total_time": 0.21605563163757324
       },
       "usage": {
         "completion_tokens": 27,
-        "prompt_tokens": 322,
+        "prompt_tokens": 334,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 349
+        "total_tokens": 361
       }
     },
     "headers": {
@@ -135,7 +137,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98b03df79d7cf14f-ORD"
+        "98e27446c9f8223a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -144,10 +146,10 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 20:45:25 GMT"
+        "Mon, 13 Oct 2025 23:00:37 GMT"
       ],
       "inference-id": [
-        "chatcmpl-423bd1fd-9e74-47a5-8889-7ec57948996d"
+        "chatcmpl-78c88e3e-88bc-4d8b-b0a1-212183177e29"
       ],
       "referrer-policy": [
         "strict-origin-when-cross-origin"
@@ -156,7 +158,7 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=rVVwUFU4TXLjKDLQ5K73oUbV8iIKMwJMODNuLXVGC0k-1759869925-1.0.1.1-C6Rcrn_ep1EbqHKkugg88ts5e1BpOOYFAobfGirA6ErGuTlDrjST5gee8j60W0XCzoDC8XOa8FXcSl37FIyHoNQ1uFWQn53uG2G6GmIJAJc; path=/; expires=Tue, 07-Oct-25 21:15:25 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=uxO3VRXc6D..Hq9oySyOKtlKxndrko1YXe0buprdajE-1760396437-1.0.1.1-7fNr9OFzJs3vyGOGLKip52JLO2snKLB3xkCh10uj7xK8csPvX1vDKAlIhczEdVQ4rW_EoUCA42yomh0vq1vXSgkKNNESsB8Vlh32zgYy4xY; path=/; expires=Mon, 13-Oct-25 23:30:37 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=3600; includeSubDomains"
@@ -174,19 +176,19 @@
         "1000000"
       ],
       "x-ratelimit-remaining-requests-day": [
-        "1439940"
+        "1439988"
       ],
       "x-ratelimit-remaining-tokens-minute": [
-        "999353"
+        "999648"
       ],
       "x-ratelimit-reset-requests-day": [
-        "11674.821011781693"
+        "3562.1044421195984"
       ],
       "x-ratelimit-reset-tokens-minute": [
-        "34.821011781692505"
+        "22.10444211959839"
       ],
       "x-request-id": [
-        "98b03df79d7cf14f-ORD"
+        "98e27446c9f8223a-ORD"
       ]
     },
     "status": 200

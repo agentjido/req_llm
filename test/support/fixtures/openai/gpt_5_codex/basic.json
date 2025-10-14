@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhlbGxvIHdvcmxkISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjIwMDAsIm1vZGVsIjoiZ3B0LTUtY29kZXgiLCJzdHJlYW0iOmZhbHNlfQ=="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkhlbGxvIHdvcmxkISIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjUwLCJtb2RlbCI6ImdwdC01LWNvZGV4Iiwic3RyZWFtIjpmYWxzZX0="
     },
     "canonical_json": {
       "input": [
@@ -15,7 +15,7 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 2000,
+      "max_output_tokens": 50,
       "model": "gpt-5-codex",
       "stream": false
     },
@@ -40,19 +40,19 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759795760,
+      "created_at": 1760405672,
       "error": null,
-      "id": "resp_03481ebcb545e31a0068e45a3007808198bfc4a463078155ca",
+      "id": "resp_0620d5cd63efbeff0068eda8a88d5c81969ce0893f2ddcd836",
       "incomplete_details": null,
       "instructions": null,
-      "max_output_tokens": 2000,
+      "max_output_tokens": 50,
       "max_tool_calls": null,
       "metadata": {},
       "model": "gpt-5-codex",
       "object": "response",
       "output": [
         {
-          "id": "rs_03481ebcb545e31a0068e45a3060388198861688bece8eadb1",
+          "id": "rs_0620d5cd63efbeff0068eda8a901c48196a6b30a90e2bf9104",
           "summary": [],
           "type": "reasoning"
         },
@@ -61,11 +61,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Hello there! 👋 How can I assist you today?",
+              "text": "Hello! 👋 How can I help you today?",
               "type": "output_text"
             }
           ],
-          "id": "msg_03481ebcb545e31a0068e45a3089048198928fdd4cb1b6158e",
+          "id": "msg_0620d5cd63efbeff0068eda8a92ee081968ca57c7cc747e09a",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -99,11 +99,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 18,
+        "output_tokens": 17,
         "output_tokens_details": {
           "reasoning_tokens": 0
         },
-        "total_tokens": 27
+        "total_tokens": 26
       },
       "user": null
     },
@@ -115,7 +115,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98a92b4bbcb9fa1b-ORD"
+        "98e355bcdcbf2304-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -124,13 +124,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 00:09:21 GMT"
+        "Tue, 14 Oct 2025 01:34:33 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "988"
+        "1155"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -142,8 +142,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=u2DsXqbU.y4gjjxUGuOEel5yK1DCIyOjQSP.6veQIi8-1759795761-1.0.1.1-YU7CNWxkPVn72CqNjfL_a.xIJxuwqfZY0lneVFDs9ah8r_ujoM2e8jr5WL_uwzXOHZVGOqB4H02AQDRs0WDzYq64FCmi2rc78Heh0GF0zAM; path=/; expires=Tue, 07-Oct-25 00:39:21 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=uTQz92YibqGptxQQSr9TK.plXrioPnhV1uXsyktNflo-1759795761034-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=ktn7EVehOeRj9om206Omncn0MM97SGHT8bBZiLasdk4-1760405673-1.0.1.1-eRhQ7wzcEl69FOJ2TklarNppduHZJfh27Y1lASNIrSN4rw12YjnF9Sc7nUcIGKJ.NzAZQxqHh0E_Qg2PyDL3v5jpUEwMukg1ka3OEUMctCA; path=/; expires=Tue, 14-Oct-25 02:04:33 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=bqcJHgffE76vTwrmV6AVoPUm6pPLhkiA07.yaYmIH0s-1760405673714-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -155,10 +155,10 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "993"
+        "1162"
       ],
       "x-request-id": [
-        "req_5e4c147ca02bbc594b8d51ca11643a31"
+        "req_7d67e85aaa0e4a2f90d17c654100a917"
       ]
     },
     "status": 200

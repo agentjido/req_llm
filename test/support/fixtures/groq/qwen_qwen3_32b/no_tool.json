@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjozMjc2LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJxd2VuL3F3ZW4zLTMyYiIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJtYXhfdG9rZW5zIjozMjc2LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJxd2VuL3F3ZW4zLTMyYiIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "max_tokens": 3276,
@@ -21,6 +21,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -59,30 +60,30 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "The available tools can't help with jokes, but here's one: Why did the cat join a band? Because it wanted to be a *meow*ster! 😸",
-            "reasoning": "Okay, the user asked for a joke about cats. Let me think. The tools provided include a function to get weather information, but that's not related to jokes. Since there's no function for telling jokes or retrieving cat jokes specifically, I can't use any of the provided tools here. I need to respond by either telling a joke directly or explaining that I can't use the tools for this request. The correct approach is to inform the user that none of the available functions can help with their query and then provide a cat joke as a regular response. So, I'll point out that I can't use the tools and then share a joke about cats.\n",
+            "content": "Here's a cat joke for you:\n\n\"Why did the cat cross the road? To get to the mouse party on the other side!\" 😸\n\nLet me know if you'd like another!",
+            "reasoning": "Okay, the user asked for a joke about cats. Let me think. The tools provided include a function to get weather information, but that's not related to jokes. Since there's no function for telling jokes or retrieving cat jokes specifically, I can't use any of the provided tools here. I need to respond directly with a joke. Let me come up with a simple one. Maybe something like, \"Why did the cat cross the road? To get to the mouse party on the other side!\" That's a classic structure. I'll make sure it's friendly and fits the request.\n",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759844695,
-      "id": "chatcmpl-d4724521-57d9-40ea-b8ff-f018339f7436",
+      "created": 1760389839,
+      "id": "chatcmpl-c0a06778-668c-4edb-a146-67aaf79636ff",
       "model": "qwen/qwen3-32b",
       "object": "chat.completion",
       "service_tier": "on_demand",
       "system_fingerprint": "fp_5cf921caa2",
       "usage": {
-        "completion_time": 0.424123887,
-        "completion_tokens": 174,
-        "prompt_time": 0.007131238,
-        "prompt_tokens": 153,
-        "queue_time": 0.199772104,
-        "total_time": 0.431255125,
-        "total_tokens": 327
+        "completion_time": 0.350017615,
+        "completion_tokens": 163,
+        "prompt_time": 0.00677416,
+        "prompt_tokens": 159,
+        "queue_time": 0.205861292,
+        "total_time": 0.356791775,
+        "total_tokens": 322
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6zenz70e18bs60991qgwk9x"
+        "id": "req_01k7fpjdwdfe3t1j60dqrqm490"
       }
     },
     "headers": {
@@ -96,7 +97,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98add600edd75624-ORD"
+        "98e1d32bde18eb07-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -105,13 +106,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:44:55 GMT"
+        "Mon, 13 Oct 2025 21:10:39 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=oIHn9FEqzxl3FvvaCf82sXzyoQaC5Y3U2MkoOSDYQVU-1759844695-1.0.1.1-QRAtMGlr8B5EOaFhrrU6PIJSPndGX6JUV49Li9zv_584DgKe4o5fz3Lf4XhXxgoa1GYWiU0Qd6dhIF2jtDiJOPOMN7PytYJ7o8sqzDK.rNA; path=/; expires=Tue, 07-Oct-25 14:14:55 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=wHJpd1aDsKyultlKidWSmDLizYRWb_ksx5Gz8uqGpSQ-1760389839-1.0.1.1-807GoBC2qYld5DKMMm60vfGU1aBzRlq9x2JMRUHtYNfAwVGlwZr2ZRcw3j2z7SGFsyehz9btzHR1EoYtKib3.GFWstTaqAosyaQ8K7lOnRE; path=/; expires=Mon, 13-Oct-25 21:40:39 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -132,19 +133,19 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "999"
+        "998"
       ],
       "x-ratelimit-remaining-tokens": [
-        "5846"
+        "5840"
       ],
       "x-ratelimit-reset-requests": [
-        "1m26.4s"
+        "2m52.8s"
       ],
       "x-ratelimit-reset-tokens": [
-        "1.54s"
+        "1.6s"
       ],
       "x-request-id": [
-        "req_01k6zenz70e18bs60991qgwk9x"
+        "req_01k7fpjdwdfe3t1j60dqrqm490"
       ]
     },
     "status": 200

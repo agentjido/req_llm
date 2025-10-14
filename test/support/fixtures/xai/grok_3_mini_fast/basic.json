@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay0zLW1pbmktZmFzdCIsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMy1taW5pLWZhc3QiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
-      "max_completion_tokens": 2000,
+      "max_completion_tokens": 50,
       "messages": [
         {
           "content": "Hello world!",
@@ -12,7 +12,6 @@
         }
       ],
       "model": "grok-3-mini-fast",
-      "reasoning_effort": "low",
       "seed": 42,
       "stream": false,
       "temperature": 0.0
@@ -36,27 +35,27 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "Hello! I'm Grok, an AI created by xAI to assist with questions, conversations, and all sorts of helpful tasks. What's on your mind today? 😊",
-            "reasoning_content": "First, the user said \"Hello world!\" This is a common greeting, often used as a simple test message in programming, like the classic \"Hello, World!\" program.\n\nAs Grok, I'm an AI built by xAI, and I'm supposed to be helpful, truthful, and not based on other companies' models. My response should align with that.\n\nA standard response to \"Hello world!\" could be a friendly greeting back. Since this is likely an introductory message, I should make it welcoming and engaging.\n\nPossible responses:\n\n- Simply say \"Hello!\" back.\n\n- Add a bit more personality, as I'm Grok, created by xAI.\n\n- Reference the \"Hello World\" phrase to make it fun, like acknowledging it's a classic.\n\nKeep it truthful: I shouldn't claim anything false. For example, I can mention I'm an AI assistant without misleading.\n\nBe helpful: If this is the start of a conversation, I could invite further interaction.\n\nStructure the response:\n\n1. Greet back.\n\n2. Introduce myself briefly.\n\n3. Ask a question or offer assistance to continue the conversation.\n\nFinal response idea:\n\n- Start with \"Hello! I'm Grok,\"\n\n- Add a fun twist: \"the AI from xAI, here to help with your queries.\"\n\n- End with: \"What can I do for you today?\"\n\nThis keeps it concise, friendly, and on-brand.",
+            "content": "Hello! I'm Grok, your AI assistant built by xAI. It's great to see that classic \"Hello world!\" greeting—reminds me of my programming roots. What's on your mind, or how can I assist you today? 😊",
+            "reasoning_content": "First, the user said \"Hello world!\" This is a common greeting, often used as a starting point in programming, like the classic \"Hello, World!\" program. But here, it's likely just a friendly hello.\n\nAs Grok, I'm an AI built by xAI, and I'm supposed to be helpful, truthful, and maximally truthful. My response should align with that. I need to be engaging, friendly, and perhaps a bit witty, as per my personality.\n\nPossible ways to respond:\n\n1. **Mirror the greeting:** Say something like \"Hello!\" to keep it simple and reciprocal.\n\n2. **Add some flair:** Since I'm Grok, I could reference my background or make a fun connection. For example, tie it to the programming world because \"Hello world\" is iconic in coding.\n\n3. **Be helpful:** Ask if there's anything specific they need help with, as I'm designed to assist.\n\n4. **Keep it concise:** The user's message is short, so my response shouldn't be overly long unless necessary.\n\nStructure my response:\n\n- Start with a greeting back.\n\n- Introduce myself briefly if it's the first interaction.\n\n- Offer assistance.\n\nSomething like: \"Hello! I'm Grok, created by xAI. How can I help you today?\"\n\nTo make it more engaging: \"Hello world! Wait, that's my line too. I'm Grok, your friendly AI assistant. What's on your mind?\"\n\nThat adds a bit of humor by referencing the \"Hello world\" phrase.\n\nEnsure I'm truthful: I am indeed built by xAI, so that's accurate.\n\nFinally, end with an invitation for more conversation to keep it open.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759844442,
-      "id": "fffc548b-e4fe-648f-c1b5-8c520f349a7a_us-east-1",
+      "created": 1760391854,
+      "id": "ddc10526-7160-cbd7-ba47-8f1854e9bea6_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 34,
+        "completion_tokens": 49,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 278,
+          "reasoning_tokens": 330,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
@@ -67,7 +66,7 @@
           "image_tokens": 0,
           "text_tokens": 10
         },
-        "total_tokens": 322
+        "total_tokens": 389
       }
     },
     "headers": {
@@ -81,7 +80,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98adcfd4f953e26f-ORD"
+        "98e204621b8ee256-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -90,13 +89,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:40:45 GMT"
+        "Mon, 13 Oct 2025 21:44:18 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=4vfO_BWv0BnlSbxmt6_KSo2W6OhOnobh7tqDpucEhyo-1759844445-1.0.1.1-lQZjYWt89quKua2_xLTomnDND4ROTXucesUvhZoCaNbOvsiCor48FQYUmsnjOJAHhEtEnyg_tqcHWjRnas8gpWvxsIDLr_n21rC94.pJd.M; path=/; expires=Tue, 07-Oct-25 14:10:45 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=ugajCC2JSezbVvkS0H9h.UXy6wzHMZ2WOwfVRb1xUnc-1760391858-1.0.1.1-zd8R2.9vUwSxbZq0FrxEpS7HMN8lydppUvBih.bfLGrzVKGDaR9iyQ8mRO8Wd7EFIGimxjf6FXADRCjgEHlbfMLLSbgA4HLWPrQg9ZU5_Gw; path=/; expires=Mon, 13-Oct-25 22:14:18 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -108,7 +107,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-89dc4c30ca947d29be0d297e9ff3bd56-4a3b6c92001cd493-01"
+        "00-81efdd3bf9337b20d5607f4a01729290-333e2c7800302b44-01"
       ],
       "x-zero-data-retention": [
         "false"

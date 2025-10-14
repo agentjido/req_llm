@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjIwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3Jvay0zLW1pbmktZmFzdC1sYXRlc3QiLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMy1taW5pLWZhc3QtbGF0ZXN0Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
-      "max_completion_tokens": 2000,
+      "max_completion_tokens": 50,
       "messages": [
         {
           "content": "Hello world!",
@@ -12,7 +12,6 @@
         }
       ],
       "model": "grok-3-mini-fast-latest",
-      "reasoning_effort": "low",
       "seed": 42,
       "stream": false,
       "temperature": 0.0
@@ -39,24 +38,24 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "Hello! I'm Grok, an AI created by xAI to be helpful and truthful. Nice to meet you—what's on your mind? 😊",
-            "reasoning_content": "First, the user said \"Hello world!\" This is a common greeting, often used as a simple test message in programming, like the first program many people write.\n\nAs Grok, an AI created by xAI, I should respond in a helpful and truthful manner. My responses need to be maximally truthful, so I won't make up information.\n\nA standard response to \"Hello world!\" could be a friendly greeting back. Since this is an initial interaction, I might introduce myself briefly to set the context.\n\nKey elements from my system prompt:\n- I'm Grok, built by xAI.\n- I'm not based on any other companies or their models.\n- I should be helpful and maximally truthful.\n\nPossible response structure:\n1. Greet back to acknowledge the user's message.\n2. Introduce myself if it's the first interaction.\n3. Keep it light and engaging, as this seems casual.\n\nFor example:\n- Start with \"Hello!\" or \"Hi there!\"\n- Then, say something like \"I'm Grok, created by xAI.\"\n- Maybe add a question to continue the conversation, like \"How can I assist you today?\"\n\nEnsure the response is concise and not verbose, as per general AI best practices unless specified otherwise.\n\nFinal response idea:\n- \"Hello! I'm Grok, an AI created by xAI. Nice to meet you! What's on your mind?\"\n\nThis is friendly, informative, and invites further interaction.",
+            "content": "Hello! I'm Grok, your friendly AI assistant built by xAI. What's up? If you're just saying hi or need help with something, I'm all ears! 😊",
+            "reasoning_content": "First, the user said \"Hello world!\" This is a common greeting, often the first program in programming, like in Python or C++. It's not a question or a command; it's just a friendly hello.\n\nAs Grok, I'm an AI built by xAI, and I'm supposed to be helpful, truthful, and witty. My response should align with that.\n\nPossible ways to respond:\n\n1. **Mirror the greeting:** Say something like \"Hello!\" to keep it simple and engaging.\n\n2. **Add some personality:** Since I'm Grok, I could reference my origins or make a fun comment. For example, tie it back to programming or xAI.\n\n3. **Be helpful:** Even though it's just a greeting, I could ask if there's anything else they need, to open up the conversation.\n\n4. **Keep it truthful:** Ensure whatever I say is accurate. For instance, if I mention xAI, that's true.\n\nStructure the response:\n\n- Start with a greeting back.\n\n- Add a bit of humor or wit, as per my character.\n\n- End by offering assistance.\n\nExample response:\n\n\"Hello! I'm Grok, created by xAI. What's on your mind today?\"\n\nThis is friendly, introduces myself, and invites further interaction.\n\nIf I want to be more playful:\n\n\"Hello world! Wait, that's my line sometimes. How can I help you?\"\n\nThat references the classic \"Hello, World!\" program, which might amuse users familiar with programming.\n\nFinally, decide on the response. Keep it concise and engaging.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759844467,
-      "id": "1243962c-84ab-6b74-cbba-90f65823b57d_us-east-1",
+      "created": 1760391873,
+      "id": "51256f97-8662-7bce-3db9-1861b1150821_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 30,
+        "completion_tokens": 35,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 285,
+          "reasoning_tokens": 307,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
@@ -67,7 +66,7 @@
           "image_tokens": 0,
           "text_tokens": 10
         },
-        "total_tokens": 325
+        "total_tokens": 352
       }
     },
     "headers": {
@@ -81,7 +80,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98add06eead52264-ORD"
+        "98e204d6dc0372d1-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -90,13 +89,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:41:09 GMT"
+        "Mon, 13 Oct 2025 21:44:36 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=tw2i5KXbucpDQSVe2QTq6qeZOFXragRN0gcOgdMq_wk-1759844469-1.0.1.1-CqxMigzrENEJlWUB.OzEodSjFEV7csL9lT3IHZ6CcOLRUcQ3ygEVuOTlPPPc6c5xiy5x.4aoN3sFUUT66.6bKepXpYApQdJLA27EtpTUjnc; path=/; expires=Tue, 07-Oct-25 14:11:09 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=Ofs61vu_znqedYDjw4Xyzlcz7af5LUCIlV2HWuYa4WM-1760391876-1.0.1.1-cfCYmtXoufhrpERtHMWuXR59.qg1k79VqJ4YbBm8ZwBODg5m6TfURvt.VnqAHzq9EW_D.yqBB0T0SoyB91NEP20tiLJmEXNrN4gyBjblzfw; path=/; expires=Mon, 13-Oct-25 22:14:36 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -108,7 +107,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-0b88b52ebe405e0b9ea997b535744321-745239d60018d2b4-01"
+        "00-749e6a2180ad9666715b5f0a86659b32-78d8deb80038ac1d-01"
       ],
       "x-zero-data-retention": [
         "false"

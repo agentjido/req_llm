@@ -37,17 +37,17 @@
           "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "**The Chronicles of Aetharion: The Dragon's Legacy**\n\nIn the ancient realm of Aetharion, where jagged mountains pierced the heavens and vast, untamed forests whispered secrets of old, dragons were more than mere myth—they were the guardians of the world's balance. Their scales shimmered like molten gold and sapphire, their eyes burned with the wisdom of millennia, and their roars could shake the very earth. But as the ages passed, the bond between dragons and mortals frayed,",
+            "content": "**The Chronicles of Aetherflame: A Dragon's Legacy**\n\nIn the ancient realm of Eldoria, where jagged mountains pierced the heavens and vast, untamed forests whispered secrets of old, dragons were not mere myths but living legends. They were the guardians of the skies, the keepers of arcane knowledge, and the arbiters of balance between the mortal races and the primal forces of nature. Among these majestic creatures, none were as revered—or as feared—as the Aetherflame Clan, a",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759844457,
-      "id": "43e857b6-a623-896d-bc8b-e6736cf06e6d_us-east-1",
+      "created": 1760391856,
+      "id": "78c0cef1-6521-5818-d9ab-f2be9b0c06a3_us-east-1",
       "model": "grok-3",
       "object": "chat.completion",
-      "system_fingerprint": "fp_f02e6df795",
+      "system_fingerprint": "fp_301fb74d4b",
       "usage": {
         "completion_tokens": 100,
         "completion_tokens_details": {
@@ -60,7 +60,7 @@
         "prompt_tokens": 15,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 14,
+          "cached_tokens": 2,
           "image_tokens": 0,
           "text_tokens": 15
         },
@@ -78,22 +78,28 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98add035ad72cca3-ORD"
+        "98e20470ee82eb00-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy-report-only": [
+        "script-src 'none'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=kpIJH3pLbGeEM9uZlUCUMzsSm1zuWqcvHL6ZzfKoVio-1760391865-1.0.1.1-l9YCH83ejVdLDnHMQIj5ti_9b8y5fQp4zyT6.p.Gkm72dPDCW7ljbj_f3zDhUK2V24j5pV9NMr7mPRNUz.ig4dz.8ZX.bvDqNF71lzDg271GwtrMyee18fH2F51wVIyLQQgfFtUbrTYGRB3ta2hY676bm_YhPJeAw1eux3cC3_w; report-to cf-csp-endpoint"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:41:04 GMT"
+        "Mon, 13 Oct 2025 21:44:25 GMT"
+      ],
+      "report-to": [
+        "{\"endpoints\":[{\"url\":\"https:\\/\\/csp-reporting.cloudflare.com\\/cdn-cgi\\/script_monitor\\/report?m=kpIJH3pLbGeEM9uZlUCUMzsSm1zuWqcvHL6ZzfKoVio-1760391865-1.0.1.1-l9YCH83ejVdLDnHMQIj5ti_9b8y5fQp4zyT6.p.Gkm72dPDCW7ljbj_f3zDhUK2V24j5pV9NMr7mPRNUz.ig4dz.8ZX.bvDqNF71lzDg271GwtrMyee18fH2F51wVIyLQQgfFtUbrTYGRB3ta2hY676bm_YhPJeAw1eux3cC3_w\"}],\"group\":\"cf-csp-endpoint\",\"max_age\":86400}"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=hDgG_GHFTp29i4QJt6PSkD0LsTDqANduanENDCrKMT0-1759844464-1.0.1.1-eWN8tOtirWOI70iGJbZV6H.KReNm4yHP5LC4CyO9X9WZtsGkvL8iaz57CHQH9sj6NpyqcGnlCCteptNlsMBtAI2zZKYI6iQ7t0dXOGpDKl4; path=/; expires=Tue, 07-Oct-25 14:11:04 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=e4lOO2FDvqAODq9GaMT5FAKEDm_mi3.ypJxTayVtbIM-1760391865-1.0.1.1-mxWAg7SMwSuHAkwhm0Eoa7zTin.HvYuHMCvwHBTuDnF3zR4SrDHLT8rgF2oTrzguZYm4HoarXm4s2kriF.gZJYe5CODL91KomSztS.hHnB4; path=/; expires=Mon, 13-Oct-25 22:14:25 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -105,7 +111,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-9561610394b360ddbe47d02361553476-771b6b2a0019906e-01"
+        "00-0373258ca0027501a5116e7e511b0069-f15db74900307fd6-01"
       ],
       "x-zero-data-retention": [
         "false"

@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTMtbWluaS1sYXRlc3QiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhpIHRoZXJlISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMy1taW5pLWxhdGVzdCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
-      "max_completion_tokens": 500,
+      "max_completion_tokens": 10,
       "messages": [
         {
           "content": "Hi there!",
@@ -35,27 +35,27 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "Hi! I'm Grok, an AI built by xAI to be helpful and truthful. What's on your mind—how can I assist? 😊",
-            "reasoning_content": "First, the user said, \"Hi there!\" which is a casual greeting. As an AI assistant, I should respond in a friendly and engaging manner to build rapport.\n\nMy role is to be helpful, truthful, and engaging. I need to keep my responses clear and not verbose, as per the instructions.\n\nA good response to a greeting could be:\n- A simple acknowledgment like \"Hi!\" or \"Hello!\"\n- Followed by something to continue the conversation, like asking how I can help or what they're interested in.\n- Since this is the start, I should introduce myself briefly if needed.\n\nThe system prompt says: \"You are Grok, a helpful and maximally truthful AI built by xAI, not based on any other companies and their models.\" So, I should incorporate that into my identity if it fits naturally.\n\nPossible response structure:\n1. Greet back.\n2. Introduce myself briefly.\n3. Offer assistance.\n\nKeep it concise: Avoid verbosity. So, aim for a short, friendly reply.\n\nExample:\n\"Hi! I'm Grok, created by xAI. How can I assist you today?\"\n\nThis covers the greeting, introduces me, and opens the door for further interaction.\n\nIf I want to be more casual: \"Hey there! What's up?\"\n\nBut since I'm an AI assistant, it's better to lean towards helpfulness.\n\nThe user might be testing or just saying hi, so I should be prepared for anything.\n\nFinal response idea:\n- Start with \"Hi!\"\n- Add a bit about myself.\n- End with an offer to help.",
+            "content": "Hi there! I'm Grok, your helpful and",
+            "reasoning_content": "First, the user said, \"Hi there!\" which is a casual greeting. As an AI assistant, I should respond in a friendly, helpful, and engaging manner to build rapport.\n\nMy role is to be Grok, created by xAI, so I need to incorporate that into my response if appropriate. The system prompt says: \"You are Grok, a helpful and maximally truthful AI built by xAI, not based on any other companies and their models.\" So, I should identify myself as Grok.\n\nA typical response to a greeting would be to greet back and perhaps ask how I can help. Since this is the start of a conversation, I should keep it light and inviting.\n\nPossible structure:\n1. Greet back: Match the casual tone with something like \"Hi!\" or \"Hello!\"\n2. Introduce myself: Mention that I'm Grok to reinforce my identity.\n3. Offer assistance: Ask if there's anything specific they need help with, as per my helpful nature.\n4. Keep it concise: Don't overwhelm with a long response.\n\nEnsure I'm truthful: Everything I say should be accurate. For example, I'm built by xAI, so that's fine.\n\nFinal response idea:\n- Start with \"Hi there!\"\n- Add \"I'm Grok, your AI assistant from xAI.\"\n- End with \"How can I assist you today?\"\n\nThis makes it friendly, informative, and proactive.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759844460,
-      "id": "c59c6739-77c4-c8b0-c691-6649df3a8c48_us-east-1",
+      "created": 1760391875,
+      "id": "a05c2f15-27ee-339d-de22-7026ad0e1730_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 30,
+        "completion_tokens": 10,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 314,
+          "reasoning_tokens": 282,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
@@ -66,7 +66,7 @@
           "image_tokens": 0,
           "text_tokens": 10
         },
-        "total_tokens": 354
+        "total_tokens": 302
       }
     },
     "headers": {
@@ -80,7 +80,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98add0472ef1f14d-ORD"
+        "98e204e488381393-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,13 +89,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:41:03 GMT"
+        "Mon, 13 Oct 2025 21:44:38 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=G12VBs5dz39AvJGpahBnUToLq1jJ5MvhDfcqT3tXz20-1759844463-1.0.1.1-z0MgVBeL2BvPa9IPQ_9cyG5LpXcqKBCTw1OB640nEPE8lYT1EZp7Veb0SyIKGoeFwhFMG8n.awg7NR3iJ6Mc7qAM8_wY4UrE7DxUz1MrNZI; path=/; expires=Tue, 07-Oct-25 14:11:03 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=C0mKR6wetNjjVo7aFBR3tiqR0COA2_U59p5_VCa0vkM-1760391878-1.0.1.1-.NfYQn5h_x6UPe.GRmOCo9mv7pUuaB2g2RXMg1YFa5OHejmamBH6d9fGkTyrZ0wOTS6iKwmXXxpqhRyTFBN9zRjOfNmqsHt7JOIYEBgnP7k; path=/; expires=Mon, 13-Oct-25 22:14:38 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -107,7 +107,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-0a2f548c218858e6c66c99f7017923f8-72054eda001963e0-01"
+        "00-618f8240441e1d539319cf6b312053f2-afa893530030f565-01"
       ],
       "x-zero-data-retention": [
         "false"

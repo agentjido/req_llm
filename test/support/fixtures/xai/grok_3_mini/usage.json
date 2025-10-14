@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJncm9rLTMtbWluaSIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhpIHRoZXJlISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdyb2stMy1taW5pIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
-      "max_completion_tokens": 500,
+      "max_completion_tokens": 10,
       "messages": [
         {
           "content": "Hi there!",
@@ -35,27 +35,27 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "Hi! How can I help you today? 😊",
-            "reasoning_content": "First, the user said: \"Hi there!\" This is a casual greeting. As an AI assistant, I should respond in a friendly and engaging manner to build rapport.\n\nMy role is to be helpful, truthful, and engaging. I need to keep responses clear and not verbose, as per the instructions.\n\nA typical response to a greeting could be: \"Hi! How can I help you today?\" This acknowledges the greeting and invites further interaction.\n\nSince this is the start of a conversation, I should make it welcoming. If there's no specific question, I can keep it open-ended.\n\nThe instructions emphasize being truthful and helpful, so I won't add unnecessary information.\n\nStructure my response:\n1. Greet back: Match the casual tone with something like \"Hi!\" or \"Hello!\"\n2. Ask a question or offer help: To continue the conversation, say \"How can I assist you?\" or \"What can I do for you?\"\n\nKeep it concise: Avoid verbosity. Aim for a short, direct response.\n\nFinal response idea: \"Hi! I'm here to help. What's on your mind?\"\n\nThat sounds good. It's friendly, acknowledges the greeting, and prompts for more details.",
+            "content": "Hi! I'm Grok, your friendly AI assistant",
+            "reasoning_content": "First, the user said, \"Hi there!\" which is a casual greeting. As an AI assistant, I should respond in a friendly, helpful, and engaging manner to build rapport.\n\nMy role is to be Grok, created by xAI, so I need to incorporate that into my response if appropriate. The system prompt says: \"You are Grok, a helpful and maximally truthful AI built by xAI, not based on any other companies and their models.\" So, I should remind the user of my identity subtly if it fits.\n\nA typical response to a greeting could be something like \"Hello!\" or \"Hi! How can I help you?\" Since this is the start of a conversation, I should invite further interaction.\n\nKey elements:\n- Be helpful: Ask if they need assistance.\n- Be truthful: Stick to facts; no need to fabricate here.\n- Be engaging: Keep it light and fun.\n\nPossible response structure:\n1. Greet back.\n2. Introduce myself briefly if needed.\n3. Ask a question to continue the conversation.\n\nFor example:\n- \"Hi! I'm Grok, created by xAI. How can I assist you today?\"\n\nThis reinforces my identity and opens the door for more dialogue.\n\nIf the user is just saying hi, they might not want anything specific yet, so I shouldn't assume. Keep it open-ended.\n\nFinally, ensure the response is concise and not overwhelming.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1759844491,
-      "id": "72c77942-b3e3-cd0c-1e67-efd88adf5b48_us-east-1",
+      "created": 1760391872,
+      "id": "bbebd899-7e57-5634-e8ce-3c4a063f50e5_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 11,
+        "completion_tokens": 10,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 236,
+          "reasoning_tokens": 284,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
@@ -66,7 +66,7 @@
           "image_tokens": 0,
           "text_tokens": 10
         },
-        "total_tokens": 257
+        "total_tokens": 304
       }
     },
     "headers": {
@@ -80,7 +80,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98add10a9ce22256-ORD"
+        "98e204d538ca9123-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,13 +89,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:41:34 GMT"
+        "Mon, 13 Oct 2025 21:44:35 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=vrZmqFz3huBKMdQz1KyYH_rw8EdpGcrwq85DpVOGApM-1759844494-1.0.1.1-egQQFHh.RFtail.hodOTxelx3pYO5MEzFwhlhZ1BbaPEhWDtFlxNKz6kYi0sG3Eb.Mz6Bdh04JB47BTydYxMxlan5xCYLthi8fOSrlkxsrQ; path=/; expires=Tue, 07-Oct-25 14:11:34 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=DynBteKgXx0YfjKBwp8b1LCupBL83ERQoSAQQOIgswY-1760391875-1.0.1.1-bBhtY90oiW_Hd2yHPSk3T6w57eO0l0lebnDgw7jFvj0WhGCc0om_TQBGOm6U3B6LVTVJx3ut9ZdmZKmWOpQwFB8RyW8.GecgySECRNo1V7g; path=/; expires=Mon, 13-Oct-25 22:14:35 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -107,7 +107,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-e5e19736473b20bf38a37f9f8bdb5a49-bbec6a1c001969e9-01"
+        "00-2c5e2c8520ca5abcea66a10bb7dc6e26-e8ff18290030d0d4-01"
       ],
       "x-zero-data-retention": [
         "false"

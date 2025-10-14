@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImxsYW1hLTMuMS04Yi1pbnN0YW50Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImxsYW1hLTMuMS04Yi1pbnN0YW50Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
       "max_tokens": 819,
@@ -21,6 +21,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -64,24 +65,24 @@
           }
         }
       ],
-      "created": 1759844696,
-      "id": "chatcmpl-aa754106-6fd2-4c39-9a2f-f5f70e76aa68",
+      "created": 1760389838,
+      "id": "chatcmpl-ba69ca2e-4132-47cd-bcc9-ff04a867e7f2",
       "model": "llama-3.1-8b-instant",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_e32974efee",
+      "system_fingerprint": "fp_33e8adf159",
       "usage": {
-        "completion_time": 0.015278719,
+        "completion_time": 0.016676629,
         "completion_tokens": 21,
-        "prompt_time": 0.012079084,
-        "prompt_tokens": 220,
-        "queue_time": 0.198453985,
-        "total_time": 0.027357803,
-        "total_tokens": 241
+        "prompt_time": 0.012639904,
+        "prompt_tokens": 225,
+        "queue_time": 0.40188731,
+        "total_time": 0.029316533,
+        "total_tokens": 246
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6zenzxte1eby807t9sfw990"
+        "id": "req_01k7fpjdp3fdzbcqgmw5zwvaqn"
       }
     },
     "headers": {
@@ -95,7 +96,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98add6059d1a1d04-ORD"
+        "98e1d32aa81cf85e-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -104,13 +105,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:44:56 GMT"
+        "Mon, 13 Oct 2025 21:10:38 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=DP1iUPWgsrIm_B.tvK71293SbIXl2iagRG5_F_Y4Gv4-1759844696-1.0.1.1-J0Bu3qYEjm9MVHRzaNHd1L7fMHqDTF6.9z2RkIKUzsbK9x4jQPKvYceWm0RW9qm7YhW2fPwYUIkZE4Lv.Cp03yEAkWI.GXSoMKOMG_4efSA; path=/; expires=Tue, 07-Oct-25 14:14:56 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=Z5vsIUjzp5zAgnlKf2EYFOgvHNFh_hZy3q_z1rJ6aHI-1760389838-1.0.1.1-u1nhomuSCt_f8rmI9rf8uSRyxZ0lWD_Jk4RhJOfqcrx5Dasmi44Qmm1s4dhvEu1juqkhzjc8ECJ3tvufK81daowq5Ag8cEV.3SxbaOKbbIM; path=/; expires=Mon, 13-Oct-25 21:40:38 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
       ],
       "transfer-encoding": [
         "chunked"
@@ -134,16 +135,16 @@
         "14398"
       ],
       "x-ratelimit-remaining-tokens": [
-        "5701"
+        "5503"
       ],
       "x-ratelimit-reset-requests": [
-        "11.582s"
+        "12s"
       ],
       "x-ratelimit-reset-tokens": [
-        "2.988999999s"
+        "4.97s"
       ],
       "x-request-id": [
-        "req_01k6zenzxte1eby807t9sfw990"
+        "req_01k7fpjdp3fdzbcqgmw5zwvaqn"
       ]
     },
     "status": 200
