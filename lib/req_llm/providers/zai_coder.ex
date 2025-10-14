@@ -66,8 +66,7 @@ defmodule ReqLLM.Providers.ZaiCoder do
 
   @impl ReqLLM.Provider
   def translate_options(_operation, _model, opts) do
-    opts
-    |> translate_tool_choice()
+    {translate_tool_choice(opts), []}
   end
 
   defp translate_tool_choice(opts) do
@@ -360,8 +359,6 @@ defmodule ReqLLM.Providers.ZaiCoder do
       calls -> Map.put(base_message, :tool_calls, calls)
     end
   end
-
-  defp encode_zai_content(content) when is_binary(content), do: content
 
   defp encode_zai_content(content) when is_list(content) do
     content
