@@ -182,8 +182,9 @@ defmodule ReqLLM.Providers.AmazonBedrock.AnthropicTest do
       assert length(tool_calls) == 1
 
       [tool_call] = tool_calls
-      assert tool_call.name == "get_weather"
-      assert tool_call.arguments["location"] == "San Francisco"
+      assert tool_call.function.name == "get_weather"
+      arguments = Jason.decode!(tool_call.function.arguments)
+      assert arguments["location"] == "San Francisco"
     end
   end
 

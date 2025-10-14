@@ -84,25 +84,37 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
   end
 
   defp parse_message(%{"role" => role, "content" => content} = data) do
-    # Handle tool calls if present
-    content_parts =
-      if tool_calls = Map.get(data, "tool_calls") do
-        Enum.map(tool_calls, fn tc ->
-          %ReqLLM.Message.ContentPart{
-            type: :tool_call,
-            tool_call_id: tc["id"],
-            tool_name: get_in(tc, ["function", "name"]),
-            input: Jason.decode!(get_in(tc, ["function", "arguments"]) || "{}")
-          }
+    # Handle tool calls if present (new ToolCall pattern)
+    tool_calls =
+      if tc_data = Map.get(data, "tool_calls") do
+        Enum.map(tc_data, fn tc ->
+          ReqLLM.ToolCall.new(
+            tc["id"],
+            get_in(tc, ["function", "name"]),
+            get_in(tc, ["function", "arguments"]) || "{}"
+          )
         end)
-      else
-        [%ReqLLM.Message.ContentPart{type: :text, text: content || ""}]
       end
 
-    %ReqLLM.Message{
+    # Build content parts
+    content_parts =
+      if content && content != "" do
+        [%ReqLLM.Message.ContentPart{type: :text, text: content}]
+      else
+        []
+      end
+
+    # Build message with tool_calls if present
+    message = %ReqLLM.Message{
       role: String.to_existing_atom(role),
       content: content_parts
     }
+
+    if tool_calls do
+      %{message | tool_calls: tool_calls}
+    else
+      message
+    end
   end
 
   defp parse_usage(%{"prompt_tokens" => input, "completion_tokens" => output}) do

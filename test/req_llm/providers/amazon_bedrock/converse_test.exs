@@ -110,13 +110,14 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
     end
 
     test "formats request with tool_call content" do
+      tool_call = ReqLLM.ToolCall.new("call_123", "get_weather", Jason.encode!(%{location: "SF"}))
+
       context = %ReqLLM.Context{
         messages: [
           %Message{
             role: :assistant,
-            content: [
-              ContentPart.tool_call("call_123", "get_weather", %{location: "SF"})
-            ]
+            content: [],
+            tool_calls: [tool_call]
           }
         ]
       }
@@ -131,7 +132,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
                      "toolUse" => %{
                        "toolUseId" => "call_123",
                        "name" => "get_weather",
-                       "input" => %{location: "SF"}
+                       "input" => %{"location" => "SF"}
                      }
                    }
                  ]
@@ -143,10 +144,9 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
       context = %ReqLLM.Context{
         messages: [
           %Message{
-            role: :user,
-            content: [
-              ContentPart.tool_result("call_123", "Weather is sunny")
-            ]
+            role: :tool,
+            tool_call_id: "call_123",
+            content: [ContentPart.text("Weather is sunny")]
           }
         ]
       }
@@ -223,14 +223,18 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
       assert result.finish_reason == :tool_calls
       assert result.message.role == :assistant
 
-      [text_part, tool_part] = result.message.content
+      # Text should be in content
+      [text_part] = result.message.content
       assert text_part.type == :text
       assert text_part.text == "Let me check"
 
-      assert tool_part.type == :tool_call
-      assert tool_part.tool_call_id == "call_123"
-      assert tool_part.tool_name == "get_weather"
-      assert tool_part.input == %{"location" => "SF"}
+      # Tool calls should be in tool_calls field
+      assert length(result.message.tool_calls) == 1
+      [tool_call] = result.message.tool_calls
+      assert tool_call.id == "call_123"
+      assert tool_call.function.name == "get_weather"
+      arguments = Jason.decode!(tool_call.function.arguments)
+      assert arguments == %{"location" => "SF"}
     end
 
     test "maps stop reasons correctly" do

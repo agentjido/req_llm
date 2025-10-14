@@ -103,7 +103,7 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
 
   describe "multi-turn tool calling with Converse API" do
     test "encodes complete multi-turn conversation with tool results" do
-      alias ReqLLM.Message.ContentPart
+      alias ReqLLM.ToolCall
       # Set up AWS credentials for test
       System.put_env("AWS_ACCESS_KEY_ID", "AKIATEST")
       System.put_env("AWS_SECRET_ACCESS_KEY", "secretTEST")
@@ -112,14 +112,14 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
       # Simulate a complete tool calling flow using Converse API
       model = Model.from!("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
 
+      # Create tool call using new ToolCall API
+      tool_call = ToolCall.new("toolu_add_123", "add", Jason.encode!(%{a: 5, b: 3}))
+
       messages = [
         Context.system("You are a calculator"),
         Context.user("What is 5 + 3?"),
-        Context.assistant([
-          ContentPart.text("I'll calculate that for you."),
-          ContentPart.tool_call("toolu_add_123", "add", %{a: 5, b: 3})
-        ]),
-        Context.tool_result_message("add", "toolu_add_123", 8)
+        Context.assistant("I'll calculate that for you.", tool_calls: [tool_call]),
+        Context.tool_result("toolu_add_123", "8")
       ]
 
       context = Context.new(messages)
@@ -198,21 +198,21 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
     end
 
     test "encodes multi-turn tool calling with native Anthropic endpoint" do
-      alias ReqLLM.Message.ContentPart
+      alias ReqLLM.ToolCall
       # Test with native Anthropic endpoint (not Converse API)
       System.put_env("AWS_ACCESS_KEY_ID", "AKIATEST")
       System.put_env("AWS_SECRET_ACCESS_KEY", "secretTEST")
 
       model = Model.from!("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
 
+      # Create tool call using new ToolCall API
+      tool_call = ToolCall.new("toolu_add_123", "add", Jason.encode!(%{a: 5, b: 3}))
+
       messages = [
         Context.system("You are a calculator"),
         Context.user("What is 5 + 3?"),
-        Context.assistant([
-          ContentPart.text("I'll calculate that for you."),
-          ContentPart.tool_call("toolu_add_123", "add", %{a: 5, b: 3})
-        ]),
-        Context.tool_result_message("add", "toolu_add_123", 8)
+        Context.assistant("I'll calculate that for you.", tool_calls: [tool_call]),
+        Context.tool_result("toolu_add_123", "8")
       ]
 
       context = Context.new(messages)
@@ -239,7 +239,7 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
 
       # Check messages are encoded with role transformation
       assert is_list(body["messages"])
-      [user_msg, assistant_msg, tool_result_msg] = body["messages"]
+      [_user_msg, _assistant_msg, tool_result_msg] = body["messages"]
 
       # Tool result should use "user" role (Anthropic only accepts user/assistant)
       assert tool_result_msg["role"] == "user",

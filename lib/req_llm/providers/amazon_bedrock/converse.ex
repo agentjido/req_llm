@@ -80,6 +80,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
 
   alias ReqLLM.Message
   alias ReqLLM.Message.ContentPart
+  alias ReqLLM.ToolCall
 
   @doc """
   Format a ReqLLM context into Bedrock Converse API format.
@@ -272,6 +273,41 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
     end
   end
 
+  # Assistant message with tool calls (new ToolCall pattern)
+  defp encode_message(%Message{role: :assistant, tool_calls: tool_calls, content: content})
+       when is_list(tool_calls) and tool_calls != [] do
+    text_content = encode_content(content)
+    tool_blocks = Enum.map(tool_calls, &encode_tool_call_to_tool_use/1)
+
+    content_blocks =
+      case text_content do
+        [] -> tool_blocks
+        blocks when is_list(blocks) -> blocks ++ tool_blocks
+        text when is_binary(text) -> [%{"text" => text}] ++ tool_blocks
+      end
+
+    %{
+      "role" => "assistant",
+      "content" => content_blocks
+    }
+  end
+
+  # Tool result message (new ToolCall pattern)
+  defp encode_message(%Message{role: :tool, tool_call_id: id, content: content}) do
+    %{
+      "role" => "user",
+      "content" => [
+        %{
+          "toolResult" => %{
+            "toolUseId" => id,
+            "content" => [%{"text" => extract_text_content(content)}]
+          }
+        }
+      ]
+    }
+  end
+
+  # Regular message (user, assistant, system)
   defp encode_message(%Message{role: role, content: content}) do
     # Converse API only accepts "user" or "assistant" roles
     # Tool results must be wrapped in a "user" message
@@ -314,29 +350,35 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
     }
   end
 
-  defp encode_content_part(%ContentPart{type: :tool_call} = part) do
-    %{
-      "toolUse" => %{
-        "toolUseId" => part.tool_call_id,
-        "name" => part.tool_name,
-        "input" => part.input
-      }
-    }
-  end
-
-  defp encode_content_part(%ContentPart{type: :tool_result} = part) do
-    %{
-      "toolResult" => %{
-        "toolUseId" => part.tool_call_id,
-        "content" => [%{"text" => encode_tool_output(part.output)}]
-      }
-    }
-  end
-
   defp encode_content_part(_), do: nil
 
-  defp encode_tool_output(output) when is_binary(output), do: output
-  defp encode_tool_output(output), do: Jason.encode!(output)
+  # Helper to encode ToolCall struct to Converse API toolUse format
+  defp encode_tool_call_to_tool_use(%ToolCall{id: id, function: %{name: name, arguments: args}}) do
+    %{
+      "toolUse" => %{
+        "toolUseId" => id,
+        "name" => name,
+        "input" => Jason.decode!(args)
+      }
+    }
+  end
+
+  # Helper to extract text content from content parts
+  defp extract_text_content(content) when is_binary(content), do: content
+
+  defp extract_text_content(content) when is_list(content) do
+    content
+    |> Enum.find_value(fn
+      %ContentPart{type: :text, text: text} -> text
+      _ -> nil
+    end)
+    |> case do
+      nil -> ""
+      text -> text
+    end
+  end
+
+  defp extract_text_content(_), do: ""
 
   defp image_format_from_media_type("image/png"), do: "png"
   defp image_format_from_media_type("image/jpeg"), do: "jpeg"
@@ -349,47 +391,60 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
 
   defp parse_message(message_data) do
     role = String.to_atom(message_data["role"])
-    content = parse_content(message_data["content"])
+    content_blocks = message_data["content"] || []
 
-    %Message{role: role, content: content}
+    # Separate tool calls from regular content
+    {tool_calls, content_parts} = parse_content_with_tool_calls(content_blocks)
+
+    # Build message with tool_calls field if present
+    message = %Message{role: role, content: content_parts}
+
+    if tool_calls == [] do
+      message
+    else
+      %{message | tool_calls: tool_calls}
+    end
   end
 
-  defp parse_content(nil), do: []
-  defp parse_content([]), do: []
+  # Parse content and separate tool calls from regular content
+  defp parse_content_with_tool_calls(content_blocks) when is_list(content_blocks) do
+    Enum.reduce(content_blocks, {[], []}, fn block, {tool_calls, content_parts} ->
+      case block do
+        %{"toolUse" => tool_use} ->
+          # Convert to ToolCall struct
+          tool_call =
+            ToolCall.new(
+              tool_use["toolUseId"],
+              tool_use["name"],
+              Jason.encode!(tool_use["input"])
+            )
 
-  defp parse_content(content_blocks) when is_list(content_blocks) do
-    content_blocks
-    |> Enum.map(&parse_content_block/1)
-    |> Enum.reject(&is_nil/1)
+          {[tool_call | tool_calls], content_parts}
+
+        _ ->
+          # Parse as regular content part
+          if part = parse_content_block(block) do
+            {tool_calls, [part | content_parts]}
+          else
+            {tool_calls, content_parts}
+          end
+      end
+    end)
+    |> then(fn {tool_calls, content_parts} ->
+      {Enum.reverse(tool_calls), Enum.reverse(content_parts)}
+    end)
   end
 
+  defp parse_content_with_tool_calls(_), do: {[], []}
+
+  # Parse individual content blocks (excluding tool calls which are handled separately)
   defp parse_content_block(%{"text" => text}) do
     ContentPart.text(text)
   end
 
   defp parse_content_block(%{"reasoningText" => reasoning_text}) do
     # Claude extended thinking reasoning content
-    # Map to thinking content part type (uses text field, not thinking)
     %ContentPart{type: :thinking, text: reasoning_text}
-  end
-
-  defp parse_content_block(%{"toolUse" => tool_use}) do
-    ContentPart.tool_call(
-      tool_use["toolUseId"],
-      tool_use["name"],
-      tool_use["input"]
-    )
-  end
-
-  defp parse_content_block(%{"toolResult" => tool_result}) do
-    # Extract text from content array
-    output =
-      case tool_result["content"] do
-        [%{"text" => text} | _] -> text
-        _ -> nil
-      end
-
-    ContentPart.tool_result(tool_result["toolUseId"], output)
   end
 
   defp parse_content_block(%{"image" => _image}) do
