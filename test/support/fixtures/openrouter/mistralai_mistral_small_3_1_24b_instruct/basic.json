@@ -40,7 +40,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! How can I assist you today?",
+            "content": "Hello! 😊 Welcome to the world of AI. How can I assist you today?",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -48,16 +48,16 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760473379,
-      "id": "gen-1760473379-jXJUuv491SiWgbFyAtIZ",
+      "created": 1760547419,
+      "id": "gen-1760547419-IOWC1Val2QSNigRtn9UK",
       "model": "mistralai/mistral-small-3.1-24b-instruct",
       "object": "chat.completion",
-      "provider": "Chutes",
+      "provider": "DeepInfra",
       "usage": {
-        "completion_tokens": 10,
-        "prompt_tokens": 181,
+        "completion_tokens": 20,
+        "prompt_tokens": 6,
         "prompt_tokens_details": null,
-        "total_tokens": 191
+        "total_tokens": 26
       }
     },
     "headers": {
@@ -65,7 +65,7 @@
         "*"
       ],
       "cf-ray": [
-        "98e9cabe0e9af159-ORD"
+        "98f0da593da310cb-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -74,7 +74,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 20:23:00 GMT"
+        "Wed, 15 Oct 2025 16:56:59 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

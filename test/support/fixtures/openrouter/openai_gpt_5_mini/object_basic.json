@@ -1,0 +1,158 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC01LW1pbmkiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xfY2hvaWNlIjp7ImZ1bmN0aW9uIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCJ9LCJ0eXBlIjoiZnVuY3Rpb24ifSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2VuZXJhdGUgc3RydWN0dXJlZCBvdXRwdXQgbWF0Y2hpbmcgdGhlIHByb3ZpZGVkIHNjaGVtYSIsIm5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbIm5hbWUiLCJhZ2UiXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Generate a software engineer profile",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-5-mini",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tool_choice": {
+        "function": {
+          "name": "structured_output"
+        },
+        "type": "function"
+      },
+      "tools": [
+        {
+          "function": {
+            "description": "Generate structured output matching the provided schema",
+            "name": "structured_output",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "age": {
+                  "description": "Person's age in years",
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "name": {
+                  "description": "Person's full name",
+                  "type": "string"
+                },
+                "occupation": {
+                  "description": "Person's job or profession",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "age"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "",
+            "reasoning": null,
+            "reasoning_details": [
+              {
+                "data": "gAAAAABo75jAmMnALqncfilAYxnTQ_ZRaA15XnNbSyJvEAStJoBUCNGbAy4jB2VQ4BPXjgtO84HLd4DuG2rE1pGKB6ZuArLdVAWXRGJMsili3FOHZNgDTODq_MoRVBrgnjG2fUnnYRGSeUKrJUTWWxkjvrbEf4c6lH8kcX1EcM0t-IBqJ9KaW6jp0_CsmFAkPBaExUGEla_0-qtVHeXqQ-mRcmGm5_pkorTwfud1UHTB833LU5Y1JUIIxxjeoiTP5eEl8kcmeiln4AMXr-zDyvisZbwsajvghdTtfv_6IiqgEcOLlR5LtmY5UuresxzZJgGw-pjNMVxzDQOkMfxbxurJE5Q24bUFWjyK7i5swwRgQKT-ZiqATOP6bdN8msRWrNl3UiH5lZJ24q2ZJbtX_RduTiAT0SD9KNraBYA3iEJBPUe4twfJL2q8oYV3ikoqt5vzZNQ1pYDDU66XjfjXMBvQGk9OEj-K9wAMvpomgjjvwTEDp8WFaqaPRUn9COo-x8L6uCJesPYHtzYjJ1IxigYtle2U4Pum_kkHkNNy2lJbXQ6bChLabP77f1njQRdAAhHkHSd8nqmXCWSJiIeBuGjVa_OntqwTJ7kTJWiSvgh1l30iIqXqa5X6OjcSf2D-YP2T6qm8s2dKj6AbsWKAauj5Qsl3V5AMchEqq364n7E9ck_gAYASN5k4vnZJfoqupYRRYmMn5d0WnsVINvQ3-ClNZ816va6zaOD6GTLRWL7gU0xvDcWITbjwi6Omq8cIBM8djpEsAhJvN9R2VN_ZR0bCCTayy5yIcOt8gBq-P6mX_Zws9N-YyDp53z6oPXUd2NDbfZZsuHBW9PcnXEVQ-NCxywjQx1h-oCzK5nRuDbbPIax7KKPk4LOxIz28Ff6fjYFXCz1-1g2MhDKVPuPOVi6rjfJhrhmCXgXxoe_jwcjBSKHY1Nf1eAvwLj7414hC2H7NpK05QUYVcASXz9LH3ZMfbfnI0sXb8WKb3csc_3dFHUjH7E9nE1itZqOMIOgB7zBVGnMshWr-Dg6KqKzwMfB-Ko1VfUUGbQ7U-70uhG-d1J3eYy0UwchK_Mx0eP_ww9NV7z4NNBDmUsogzxU3JUz6H3inyvliNuAWjreKE5GfrJZImy4rKeBeYXAsAkq8iGPkXmNPPWVHKg11pdV6n6wlanMalpi9F2EWizhxllFvtW_0uqBt6XmLB8A2EUZozimh5TctJKNnlkK7FFwBib1sswCnauDzRv0LOzI_HiONCBlZdHhahUYEx9UuNmIb0G_6noDwcNWW7YwJoTOiVgOfNovKqO6d08SyOlh2yQI1oThCEE8RAOk4c3YhwZe7RmFbWTaHK6At",
+                "format": "openai-responses-v1",
+                "id": "rs_0129a6ab616167df0168ef98bf8c908190a6a6fde9bc3a1312",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"age\":29,\"name\":\"Alex Morgan\",\"occupation\":\"Software Engineer\"}",
+                  "name": "structured_output"
+                },
+                "id": "call_txPWCHRAUbZPc1XACGckmczt",
+                "index": 0,
+                "type": "function"
+              }
+            ]
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1760532670,
+      "id": "gen-1760532670-ykktwlcJN1hMXqXS3hSC",
+      "model": "openai/gpt-5-mini",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "usage": {
+        "completion_tokens": 95,
+        "prompt_tokens": 82,
+        "total_tokens": 177
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ef7247baf0f92b-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 12:51:11 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

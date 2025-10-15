@@ -1,13 +1,13 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkNhbGwgdGhlIGFkZCB0b29sIHdpdGggYT0yIGFuZCBiPTMuIEFmdGVyIHJlY2VpdmluZyB0aGUgdG9vbCByZXN1bHQsIHJlcGx5IGV4YWN0bHkgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6IngtYWkvZ3Jvay1jb2RlLWZhc3QtMSIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJuYW1lIjoiYWRkIiwidHlwZSI6InRvb2wifSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiQWRkIHR3byBpbnRlZ2VycyIsIm5hbWUiOiJhZGQiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhIjp7InR5cGUiOiJpbnRlZ2VyIn0sImIiOnsidHlwZSI6ImludGVnZXIifX0sInJlcXVpcmVkIjpbImEiLCJiIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6IngtYWkvZ3Jvay1jb2RlLWZhc3QtMSIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoiYWRkIn0sInR5cGUiOiJmdW5jdGlvbiJ9LCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJBZGQgdHdvIGludGVnZXJzIiwibmFtZSI6ImFkZCIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImEiOnsidHlwZSI6ImludGVnZXIifSwiYiI6eyJ0eXBlIjoiaW50ZWdlciJ9fSwicmVxdWlyZWQiOlsiYSIsImIiXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "max_tokens": 1000,
       "messages": [
         {
-          "content": "Call the add tool with a=2 and b=3. After receiving the tool result, reply exactly with 'sum=<value>'.",
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
           "role": "user"
         }
       ],
@@ -17,8 +17,10 @@
       "stream": false,
       "temperature": 0.0,
       "tool_choice": {
-        "name": "add",
-        "type": "tool"
+        "function": {
+          "name": "add"
+        },
+        "type": "function"
       },
       "tools": [
         {
@@ -63,63 +65,22 @@
   },
   "response": {
     "body": {
-      "choices": [
-        {
-          "finish_reason": "tool_calls",
-          "index": 0,
-          "logprobs": null,
-          "message": {
-            "content": "",
-            "reasoning": "First, the user says: \"Call the add tool with a=2 and b=3. After receiving the tool result, reply exactly with 'sum=<value>'.\"\n",
-            "reasoning_details": [
-              {
-                "format": "xai-responses-v1",
-                "index": 0,
-                "summary": "First, the user says: \"Call the add tool with a=2 and b=3. After receiving the tool result, reply exactly with 'sum=<value>'.\"\n",
-                "type": "reasoning.summary"
-              },
-              {
-                "data": "TeEp6eIyjgy01VRaxAVy8u3aTWEr24h7LRap/w+9TFlQThc2Ywg9IRAlgbJK2Wp25hBS2+necyd5Dl7gT4g8TJUAns2/XQbd/nfIaSvr7ultlZSzb/GLUXQsc2+wvzkNxcoP2D6mA+1YoSUe8bgtCLKiCP3YHGXR8FpH4ZVRqtEknWHDYcRH5bIAC8x/78dZvBxPOs/XgqohcooQezI8b3lLfa8cWhn2hnshi5On7CIfLCW4SBkMckcYGNdSvWB351KExQCTaIQcoXFSIcolqOIs88Pow0+GM69m1ChcA3nnIwLbxS7LKjiByYawDMguSypeHqDrGNGbDvrpGjAqPJU1v9BbcYAG8up7CEOvxFjlJlYpofykvYf2V370ABJTIq4Ta2sWv9IkfZ8eIwg30yT6Y8lZHB7igedWF6RJg2BuSHngN05VQ59zp4n5d6wp77evy3eXJ1NpE60uXxVT+Td33RKWGDv/WEvZwqO7ZHhS2vZ+BOYdBRqH2lO95mrZb/2+9fYxV++rhCXw+9U6TRGXxlkYjJw09V6XolAOI9xrm/VJuuoGxOWoV79/N9t7OGeA1p1aglRRf94fEbnp3bzn7AtyiU1KEkS3vFxVAnO1celK7BU/SdbueE3qu6fEL3RGBHIkhauVCv9qY2JqTkV9mfdGnjRHqUfSnYpypCmx771Cwv5UXNAKHjCI7alCaPmFh6a6XXknx9McT1xjH1uTP5Wgh6YSzg0w4b+h0PKNlnrGZ3Ij9DMxjXKvXAqLlJLiWK3AYwHIgBXBzgWfT+oM1rRFd/SDb4D5YGRSzBEGHepvK195M8fY9Pxs/rGsbkQMykE5m/+KETtSWd6+aQMQKVIV9zAVZeML/CypAQap5ARWosEg9d4TEZSFLP/6FYEfLPI77iFRjXlI9zYYeCAG9/EM8/IlnabrWvAfyAFeVtm17oLOvrM8LGtvSxzLqGO1Gob/OUM01yiOtpdYcfVRTCn4pN+pTbKKZDRXpECS4lPcU4QR9z4IfM7R10wQvucIfJbFtrzABCE4P+3TO7e+sX5Kl9xIuj32gJA1FRQQxJiv1api0Qqt4YXQRaukVuSCN+4EhnCoZEt28ZgVq0x+ebAXRC7S6Fp0R3zvhSGYN7o2WM11vfyGKSjt+WsA5gejSsHcjBrCkxu4BTSKRIq6jrV6KxYIH3ELCdmeendXEVWP/JaPocpDTB7v2PUMfJq85lL6foO5qjDo8v4WPINv+5G6tehoAhfnAlA/9Nq6w3SBzWVYJ7cXDUSm862I1z1H8VASnUYG0g8CHftvbNcbEAwiIumEGaYcVqSJkx2CgFG35NZg7OI2kEmkyGm6tcRM7n9U8ZdlXR6PnNwJwCAFAeQDxXaJJMdCe/In5qnBmg",
-                "format": "xai-responses-v1",
-                "id": "rs_35900d88-1dc8-80da-6ca0-b04bbc04f72c_us-east-1",
-                "index": 0,
-                "type": "reasoning.encrypted"
-              }
-            ],
-            "refusal": null,
-            "role": "assistant",
-            "tool_calls": [
-              {
-                "function": {
-                  "arguments": "{\"a\":2,\"b\":3}",
-                  "name": "add"
-                },
-                "id": "call_10001469",
-                "index": 0,
-                "type": "function"
-              }
-            ]
-          },
-          "native_finish_reason": "completed"
+      "error": {
+        "code": 400,
+        "message": "Provider returned error",
+        "metadata": {
+          "provider_name": "xAI",
+          "raw": "{\"code\":\"Client specified an invalid argument\",\"error\":\"Invalid request content: Required function  is not present in the provided tools.\"}"
         }
-      ],
-      "created": 1760442682,
-      "id": "gen-1760442682-hSyl3DNFWqWWw00xI6Ue",
-      "model": "x-ai/grok-code-fast-1",
-      "object": "chat.completion",
-      "provider": "xAI",
-      "usage": {
-        "completion_tokens": 275,
-        "prompt_tokens": 408,
-        "total_tokens": 683
-      }
+      },
+      "user_id": "user_2iYQIxKY28QuzANm4mmKBlOxzx2"
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
       "cf-ray": [
-        "98e6dd4a88851259-ORD"
+        "98ef701ecf59d836-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -128,7 +89,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 11:51:22 GMT"
+        "Wed, 15 Oct 2025 12:49:42 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -149,6 +110,6 @@
         "nosniff"
       ]
     },
-    "status": 200
+    "status": 400
   }
 }

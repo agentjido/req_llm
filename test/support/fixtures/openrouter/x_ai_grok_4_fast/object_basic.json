@@ -72,56 +72,22 @@
   },
   "response": {
     "body": {
-      "choices": [
-        {
-          "finish_reason": "tool_calls",
-          "index": 0,
-          "logprobs": null,
-          "message": {
-            "content": "",
-            "reasoning": null,
-            "refusal": null,
-            "role": "assistant",
-            "tool_calls": [
-              {
-                "function": {
-                  "arguments": "{\"age\":32,\"name\":\"Alex Rivera\",\"occupation\":\"Software Engineer\"}",
-                  "name": "structured_output"
-                },
-                "id": "call_25722397",
-                "index": 0,
-                "type": "function"
-              }
-            ]
-          },
-          "native_finish_reason": "tool_calls"
+      "error": {
+        "code": 400,
+        "message": "Provider returned error",
+        "metadata": {
+          "provider_name": "xAI",
+          "raw": "{\"code\":\"Client specified an invalid argument\",\"error\":\"Invalid request content: Required function  is not present in the provided tools.\"}"
         }
-      ],
-      "created": 1760442709,
-      "id": "gen-1760442709-uL9oC37ZDuism80qdK6K",
-      "model": "x-ai/grok-4-fast",
-      "object": "chat.completion",
-      "provider": "xAI",
-      "system_fingerprint": "fp_9362061f30",
-      "usage": {
-        "completion_tokens": 442,
-        "completion_tokens_details": {
-          "reasoning_tokens": 393
-        },
-        "prompt_tokens": 396,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 395
-        },
-        "total_tokens": 838
-      }
+      },
+      "user_id": "user_2iYQIxKY28QuzANm4mmKBlOxzx2"
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
       "cf-ray": [
-        "98e6ddf54fe188cd-ORD"
+        "98ef700e284ff85a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -130,7 +96,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 11:51:49 GMT"
+        "Wed, 15 Oct 2025 12:49:39 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -151,6 +117,6 @@
         "nosniff"
       ]
     },
-    "status": 200
+    "status": 400
   }
 }

@@ -40,19 +40,19 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hi there! How can I help today? I can answer questions, explain concepts, brainstorm ideas, write or edit text, help with coding, plan something, or summarize a document. If you have an image, I can describe or analyze it as well. What would you like to do?",
-            "reasoning": "**Crafting a friendly greeting**\n\nI need to respond to the user with a friendly greeting like, \"Hi there!\" It’s important to ask how I can help—maybe offer examples of what I can do. I should keep it concise yet engaging. I could propose options like writing, explaining topics, planning, debugging code, or translating. Since image input is enabled, I could also mention analyzing an uploaded image. It’s all about keeping it simple, so I'll say, \"Hi! How can I help today?\"**Responding with an invitation to help**\n\nI can answer questions, explain concepts, help write or edit, brainstorm ideas, code, summarize texts, plan trips, or assist with data. If the user has an image, I can describe or analyze it. I should provide a couple of example prompts like, \"Tell me about the French Revolution in 5 bullet points\" or \"Help me draft an email.\" Then I can ask, \"What would you like to do first?\" to keep it interactive while keeping the greeting concise.**Offering image analysis**\n\nIf you have an image, I can describe or analyze it! That sounds like a fun task to explore. So, what would you like to do? I’m ready to help with whatever you need, whether it’s analyzing an image, answering questions, or anything else on your mind. Just let me know how I can assist you!",
+            "content": "Hi there! Nice to meet you. How can I help today? I can answer questions, explain concepts, brainstorm ideas, draft or edit text, assist with planning or coding, or just chat. What would you like to do?",
+            "reasoning": "**Responding to greetings**\n\nThe user greeted me with \"Hi there!\" so I need to respond politely. I'll say something like, \"Hello! How can I assist you today?\" It's important to offer help with questions or tasks, and I could provide options like information, ideas, planning, coding, writing, or explanations. Since I can handle images but the user has not provided one, I’ll also invite them to share what they’d like to discuss. I want to be friendly and concise!**Offering assistance options**\n\nI can help with a variety of tasks like answering questions, explaining concepts, brainstorming ideas, drafting or editing text, planning, coding, learning a topic, or even just chatting. Next, I'll ask a couple of prompts: \"What would you like to do?\" For example, I could say, \"If you have a question, feel free to ask. If you're stuck on a project, let me know what you're trying to achieve.\" I want to keep it friendly and concise!",
             "reasoning_details": [
               {
                 "format": "openai-responses-v1",
                 "index": 0,
-                "summary": "**Crafting a friendly greeting**\n\nI need to respond to the user with a friendly greeting like, \"Hi there!\" It’s important to ask how I can help—maybe offer examples of what I can do. I should keep it concise yet engaging. I could propose options like writing, explaining topics, planning, debugging code, or translating. Since image input is enabled, I could also mention analyzing an uploaded image. It’s all about keeping it simple, so I'll say, \"Hi! How can I help today?\"**Responding with an invitation to help**\n\nI can answer questions, explain concepts, help write or edit, brainstorm ideas, code, summarize texts, plan trips, or assist with data. If the user has an image, I can describe or analyze it. I should provide a couple of example prompts like, \"Tell me about the French Revolution in 5 bullet points\" or \"Help me draft an email.\" Then I can ask, \"What would you like to do first?\" to keep it interactive while keeping the greeting concise.**Offering image analysis**\n\nIf you have an image, I can describe or analyze it! That sounds like a fun task to explore. So, what would you like to do? I’m ready to help with whatever you need, whether it’s analyzing an image, answering questions, or anything else on your mind. Just let me know how I can assist you!",
+                "summary": "**Responding to greetings**\n\nThe user greeted me with \"Hi there!\" so I need to respond politely. I'll say something like, \"Hello! How can I assist you today?\" It's important to offer help with questions or tasks, and I could provide options like information, ideas, planning, coding, writing, or explanations. Since I can handle images but the user has not provided one, I’ll also invite them to share what they’d like to discuss. I want to be friendly and concise!**Offering assistance options**\n\nI can help with a variety of tasks like answering questions, explaining concepts, brainstorming ideas, drafting or editing text, planning, coding, learning a topic, or even just chatting. Next, I'll ask a couple of prompts: \"What would you like to do?\" For example, I could say, \"If you have a question, feel free to ask. If you're stuck on a project, let me know what you're trying to achieve.\" I want to keep it friendly and concise!",
                 "type": "reasoning.summary"
               },
               {
-                "data": "gAAAAABo5RwhRzGDioEIfGjpkTjWGYkzgLEn6dmC0Ga0wUp6vM0Tjx6iYm6kgqTe-oQE3sBxpgLdn7rbrqs73ytGG3cZ4I5cSBNyH6tjwlfoegNpMxjJHn0lBoWKUn5Tsp0YN4sGoZ-dFD5kn12PyM9nOMHdPEL9uqQQrPg7K9s9n5iybg621QiNfjC0n5tsd2J4F5ff3vZUewPrajkU0qrwNZKl6bIjo-EazBlMh1giL8rOrBFz-S4kQrto218twqZI7N98xWlZ-le8eEZeqirdHDWU59hQ7xH0Q7EyxS74KtYKnK_UlG7W8-XDxNgljRd6vjSvre85vqLUfRjsSz7GAa7A4ymr1mxo7GOJQXDWeN7d7D5eo3bnV11CaYAhPug7-dqq2UdJnwgmJqsLmuuiipYzjEznFiy7neDp8wpQjyLwNEVn5qTKgNaybA_effWJywceoZpvrGNeClLo9eqg3y7rSaVk12R8msE9A5FTE9LGlWl9NbyipoEixj15PgcV_yJMQRSwWx09oMsA3dOirdK17rU6nKOggRmyRddklD_m7C2LA7ASvFTva-pcctzA2QAaqbq5Y4wNtoYwvcQbVQkhuwkW0DH3MeW0CQZNWyhp73J3fFO7SryX7KNXcOeNvoeE7pj7Jo1y6b_7lGj9AnCqModsaThAcKFY8Ho-R9NfPpSVX_Fw2Ia0oefDoDlb689X682d6yop26MiU-iaWuwAFjZhPHMli0IVelAlfdKPHL20ZpOzYL56p2p0aN9LBNGZhWJFV5dVpL8JKXdXut9k69axQvUo50UHCpuJwbGXwdbAlsqPLKGFZg52UgvVXcicKCYK2zQhiEMDrckCPnRjhTMsPZBk2ExHdGTfzBkR8-wLNC0jEvU0A7J7mck3jYjBG76Tga-GhPFp_RXF7S2_1Nf_xEVoZKsflZs_ntVFy0mLBQEGmXnboF1z3_lQ4FlkiThJAT5B0Az6Y98JyzH3maRkOOnFDZR3NC88g9B9wVP0fcq_DkDNfDU55ZbwVKG6NcV7HnWnQOGaHCioVefC0ZQt-v8Z-l6FcaRM0Ub1_oh3_gQK1HKWfP__k7EW9_kUL450-u154i3SqFMFS879PU6PKL-vVAgs4M61QvPsgKAachECfJZVjm2LXud9JRG_ZyqrWcTRFgtVwPg2L_8TYTptE96nC9-wvTwrhxxn3F2p0PEko0jZIr-yjtsoB7EI7xhK9Jt9s044c0vqJ4cfQT4sRL0zaXqZOjL2NVK3hxZFylTKyIxoMJ4dN1rWK8bkzk55kIgy7uXDzbPF1xhG0FzCSqSmVdJlwepd_mVB1D7lhZ6CBHY5FYIhPEOWepdfpHcmb2JvcnKAWpdZD09Q3WoOAMchw04jF24tQ8uN3Odle8-ze-bUHtBzE6YK33DOtq0S0E6q9cr1Ld2hlDO_yLOnfhVXEHneQdsmpmPgAYL-9baDeznUSl2z-qvAewdWWkjxEFQqI5EHsT56dV6Nku5lWL2-PBymwiTxcbXgONq8qZSjIJ4MXbojCLg5X-2UJPFsdOv6XcPubC1oMVMThXScH7BdnfJl65c2Qs0-U-hHnHgSCVxpPjMK5vVl5KKBx3AFFRm_607Mww0Un3pICrMi305EMXMTYZFLXTwM8j_du70CPO6V03HHd4u7bE0XqonI2KIdp99zX5uJJ3wRROJa_8oz31T9OyE3cC8WLFj8hVbym7ofWNKT5e7i_RD9rNz32XdN6GaUTVerlmIQiZdGi9xUaPuL_9hBCgur679iQm_z1Axt6RNH5PMzvJQjk4mEwAIplooruQ-u5G-VTF5Kp21ci7ox_-R7WX2YAphSB8c66Pru6G3yA4Lht3rxsBaPsIdBVtjHJlMscovWWYdgn0aYnMlycza6iwBabp4Mgg0WBArk-jb43R1orYmBvgpOIzEgymxmEUa6znqZIYDz1VVKXLwxV8v4f32IdPRXxiflDd9uXwiCs8uYyM4tZbZLPPU77yXrpoZaqyW-JyUJlsk6ZQewMvDdxmUk7Yl83fSxx7MIkn_SEp_Hy8Id21u618xhcuTiNPnkVEkdLQoGVEV2xKW4XKNbnXdY1nFHMMrghNCaB0x0mmj88knmbjHYQN56FyFDBtGtomd0RMbyAKwioFX368N-0xggJhkqaJxJeOZo60WgqxTPgy1b_5FsTqBNh96YK3g1wOSur_JcqnP7RiBwOWkIHcQ_f9n-b5-fb_6QRkon0TWYmf1mn9S6gj8aLzc6k5vgSACzWxATPM6fv9YMQExqsaAwFINg9pMM1m-pbDKksV_jt_LgHxEQrYCaC2ir6-x0F915i6jqfz4HPKzBARvJwPhSznIP4JV0AIBH0rcWgUSxsxDkxJ85gj5TD9dr3eDrGo0S_xw2RIa80lORyTjioXwriW_QKXs_OLBk7Z2VmR-FIT5ZpILZ7uVBo49bwd8Mz_KYPsREZFbyqbXjMm4h2WlnPhxxScLCpKVEr9K4HFvQlDSLSSZw18Tk_ZwThRmMM5TXiGxM0ECFgNn3VgrVVUU-FuDspIRefuBlz5L8DRPmdRpDpts1ClQCGSf7pFhbNbKBREi7S2rjEFhOPHQWRV42-2CHzsxf_2URTWMId1vWNIWlQ3MKX3TkpUqSJWZDc6XxAr0_Ye4HQq_har-H8nmX1R4L8Oc9cBKUTPt_RsRwkgJCMblFU-z2t3Jiml6unMNsSh5el6J8S2BKiGgOMw-mniZpVXIXQ-C0Q4Ilq2RFMtFog6X7oyWJ9OYrjLLWTdO8lZvjRg0i42ESPMUZNad8Qu-UweFhKdAYhi5x0uVZw9Fq4ic41kGjZWQ5L_rQTzGJlx6Bpd9DpuBStndYDcJRJhW-0o4c13BZ9mTasN9oCQRS9AfJYDRBoe8qE7zNT3lKdedQ0Dk29-IP3RWLFaA7xbdVjepF4q8RqSb0q7eFfsDogMemCGg9r2MJKb079WYrOlfOQOnPoXP8bII67ejNZVw2XLNGcXWxL893cxQ7nEPO7XpRx55ON9JnH7HJSMakfyBych92FHyQUqRyw5ITYGSAga5L_Nqx10715V8mia0zcVpE-TFy2mXeUYkVergECtV0gyaSW8mJf9J1brUH2GLvhk98XV7P-PZKzUiJoXlvoxqImwiv7ZuKclBjfq-5QF3-cqUo_r_Er5Czp4vPb23SOp4=",
+                "data": "gAAAAABo75g1Kg1-iAwG5bd9QNFzU24Q1uxW31M62ClxtoenBKsLSp2XZ6DzJwdA-2Mn99cYSU7qXmcJh8qrB4_3DXdzMuEI5_koW2jIHJnlHnAMm3f1qaUCDWH26lBvWEiO4TnmyihOopnWX3SJSd20M0TxUnIHqSYYSdDiJQkCyglG-0Phglmeh_2p3u6abqMtKo_GBcC7BsyVtYZsZyePYXZIDsjaKbBAV40iEx-BNdDDcKetTB5N3Zvso1_HzaNOe7pkHfgugXaxWqoFVIyoPg3IlWTAY1u2VRvoXGLwcBfFKep4NEvi0lpHBURQGCG0f6OTALm9obgQRN5zKyGS-kapWavJRNwb8-JjLBP_yC7Q9VkVv20UuRzwGbMvMDy53qFkhkHm5ckpJAKWK1Wp-nbioZ-NDOZI_KMrvnoUHjpYauR-6VMgWZgk7CVPNOzxO_f_Nr9xvKvXxGe3XwbUCa5a2ohdfWi5o3z2ZFd61cQhsdSrOw7TeGSFmZVLDR5tBkv5G7fVLm4Kwbm8pBGdE86BOaV56RNizP2B3YhZtcswTbO_Rn6X_bMuaK8A-wjQ_pv6hBqFl2I9nsD-ie7RnndehxWcr-wUWyk-TQtIuMXKPqx9_26OXZSP_rWM34cUcuM0wQPbxFF5tn0xJ0cKeHAR5eOWh0mXaMv4SVPpXUpDWcSM0GigM_vfe3UoUyYsLwEqmSF8AsBaZLYY9HNmRB4bsTWsQicY0B8C5-90Yt1fJ2DI8bbXxNASJqRWKQ99dOE_0gHXcdwQTy2bcYA__1lWaHmdz7eO5RELcB-zH0GXLtPkPMkX2fhLbtMe0CAJW6asxJZFCIHU9uaGmgbD_RodOVhSpGe6RyMmoGtnvRrn8KXQ_hcqyyznhcMiA_1dD9E2MPqBMbrOeR--oAow5h_AQBIIhTuRMN6kqm-7p2Y3JPPilQavTqtyo1fu0hG4_OySSSOPq6-4acemZ1CdPMomOm8itV1zJb_ndWT1hS2ndo1TcE0rMW4h0vM6FMEQ0_f0Wyef-h06obV4ieBRhUTpDvYgQI68-zQ--t4IVcRDyG7Dahdg1W9gtqSKXOifZ9h6ItcvQWo1uPg2i3WAJmd_Y3Y5KXSRqhior-DrLDVGCcIXj5Dh51y1pv-s1a2GZGNrpgX6UJclXXVXGXHsluOOsSjisNY-bmMEgjWJVC0iauC3ihbR_64lt-GvDGqjV-Mu99Wct7DTpThqUnB6g8ztoJb9IikaGLz8NnaskP06iRAKS51eQ1CX0rqTFxTEtvwx2GBK_qF-Jkjmi97oRjmJ_uGVcRYVq6J35qJd_QEoKEgu0MFFhAY7PkY7iLQdyErm6BkT4e3ZLO55tI8E5dYLiVZKMImxKBs6EaY-O3dkPisyUmjePBtCLOji_BLlQc8VbrwhgqTloz73mXaQhyII3nqar6ioJCHNg0uvOF3x2zisXE8O8zYPXErxjJdgt0SqmZRCetFoWrIdeGFCx44odjUZsN50Oymr3ctySSM-n5ut2Q-Kzsp1R6aBMStZehvIl8xRkoaHLaXbJ5qbXOqeNPBmx1Ku5K_pGaP7XAjXvOdcSyJfWRxcPB6TQI98IrU_KO6_H5GVfnQ9vgJ5SH44egcDVFBAmimpuLrX4h8x8hXzK4Q5uH_B5-NU5MhZxIoGaU2TT4mTSBDMJ2iVW9T4GvKBWNQDYGJ_T_iHWJ_9b1UzswGXDtdCsVf5r8Y_gT5gbNVj5vVeCJsfi2VGTtRcHl3WcDdoxxVG9IAu-6ywu6z1u9NNY8iZ9ribFGBtDCsDQS8bmVfwx266hzuCYn9-o5b-8VZiNcJIfnahG05KWyBtk2DWR4wHOyp0cJDEdB72ybp--2SE5z-LzaILIOKIErXBT4ngPASmjNlvVeYgbK-TzamH9b2T1AoaqNOlQ7QOtZu13cPPbVrCttPnBEjPPTybPEZRNERQPgW0ew4P6QtYbesY4ecAcWbLrxjRtbrvATRA5x5bngyuIAu3C36BKMVd_Fh41Viq66fwDaKTOEQ9d36ucmB3zfWWfD-2FcBovmemgXvk2pp9DzLAjFObASjJeUzq-Ree2ilT5wqdp0eMrs9pxDuLiHJz2Gf_FJB0qwffCFn61DugjqTpaou__baGPKxvQzOxWzyOxuP4Rg3GNBhBeNwVX8W7WK1mx4mZt0LXQEosXyGgQ0jq_5edoI8JqJsnhzjFwBWl9XMqcCmUc2WeAlpI0OppPfzlv7n9IoN8ovzjvn3eqKWCBTTHMgWtnoQLWhV9F1DT-w9eQTUhcEe4DuBSS8QH257Ui5nw3Vh3ZKpuHLFmMT3CmyB7K2rGRmPUfgpjkG6dwxWj9HLjreXhjHYBeFsDCslztqTqdJwnIsFjHMTZEufXNT9xm6_ksw==",
                 "format": "openai-responses-v1",
-                "id": "rs_0db47b00e7d1658a0168e51c14b1088193bc229da147701432",
+                "id": "rs_03c13e8e040412f30168ef982e49708195b51c637d8b6bad7b",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -63,15 +63,15 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1759845396,
-      "id": "gen-1759845396-YeAN04TyljaH2AlqFGlq",
+      "created": 1760532525,
+      "id": "gen-1760532525-5XezOutlGV5MTYYKTPEL",
       "model": "openai/gpt-5-nano",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
-        "completion_tokens": 385,
+        "completion_tokens": 309,
         "prompt_tokens": 9,
-        "total_tokens": 394
+        "total_tokens": 318
       }
     },
     "headers": {
@@ -79,7 +79,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade71c99f8eae4-ORD"
+        "98ef6ebd990461c9-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -88,7 +88,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:56:36 GMT"
+        "Wed, 15 Oct 2025 12:48:46 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

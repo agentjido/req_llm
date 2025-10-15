@@ -818,6 +818,15 @@ defmodule ReqLLM.Provider.Defaults do
     end
   end
 
+  # Handle malformed tool call deltas (some APIs send incomplete structures)
+  defp decode_openai_tool_call_delta(%{"type" => "function", "function" => %{"name" => nil}}) do
+    nil
+  end
+
+  defp decode_openai_tool_call_delta(%{"type" => "function", "function" => %{}}) do
+    nil
+  end
+
   defp decode_openai_tool_call_delta(_), do: nil
 
   defp build_openai_message_from_chunks(chunks) when is_list(chunks) and chunks != [] do

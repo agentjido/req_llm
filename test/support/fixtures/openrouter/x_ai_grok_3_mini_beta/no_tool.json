@@ -61,13 +61,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "I'm sorry, I don't have the ability to tell jokes. My capabilities are limited to things like getting weather information. If you'd like, I can help with that! For example, what's your location for weather details?",
-            "reasoning": "First, the user asked: \"Tell me a joke about cats.\" This is a request for a joke, which is not related to any of the available functions. The only available function is \"get_weather\", which is for getting weather information based on a location.\n\nI need to check if this query can be addressed using the available functions. Clearly, it cannot. There's no function for telling jokes or anything similar.\n\nThe instructions say: \"If the user's query can be addressed using an available function, and all required parameters are provided or obviously inferable, trigger a function call.\" In this case, no available function matches.\n\nFurther, it says: \"Do not call a function if no matching functions apply or if parameters are missing/unclear. Ask for clarification only if none of the provided functions are able to advance the user's request.\"\n\nSince none of the functions can advance this request, I should not call any function. Instead, I need to respond directly or ask for clarification if needed. But the query is clear; it's just not something I can handle with the tools I have.\n\nThe instructions emphasize: \"Keep your response to user clear; please do not make your response verbose!\" So, I should be concise.\n\nPossible responses: I could just say I don't have the capability to tell jokes, or politely redirect or inform the user.\n\nSince the system prompt is about using functions for available actions, and this isn't one, I should respond that I can't help with that.\n\nFinally, ensure that I only use the <function_call> tag if I'm actually calling a function, which I'm not.\n\nResponse: Something simple like, \"I'm sorry, I don't have the ability to tell jokes. I can help with weather information if you'd like.\"\n\nThat keeps it clear and not verbose.",
+            "content": "I'm sorry, but I don't have the capability to tell jokes. I'm here to help with weather information. If you have a question about the weather, let me know!",
+            "reasoning": "First, the user asked: \"Tell me a joke about cats.\" This is a request for a joke, which is not related to any of the available functions. The only available function is \"get_weather\", which is for getting weather information based on a location.\n\nI need to check if this query can be addressed using the available functions. The available functions are limited to getting weather, so no, this doesn't match.\n\nThe instructions say: \"If the user's query can be addressed using an available function, and all required parameters are provided or obviously inferable, trigger a function call.\"\n\nIn this case, it cannot be addressed using an available function, so I should not call any function.\n\nAdditionally: \"Ask for clarification only if none of the provided functions are able to advance the user's request.\"\n\nSince none of the functions can advance this request, I shouldn't ask for clarification unless it's unclear. But this request is clear; it's just not something I can handle with the tools I have.\n\nMy response should be kept clear and not verbose. So, I need to politely inform the user that I can't help with that.\n\nFinally, the system prompt emphasizes: \"You are only permitted to use the <function_call> tag in your response only if you have made the decision to call a function.\"\n\nSince I'm not calling a function, I won't use that tag.\n\nResponse idea: Keep it simple, like \"I'm sorry, but I can only provide information on weather. If you have a weather-related question, let me know!\"\n\nThat sounds good.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "First, the user asked: \"Tell me a joke about cats.\" This is a request for a joke, which is not related to any of the available functions. The only available function is \"get_weather\", which is for getting weather information based on a location.\n\nI need to check if this query can be addressed using the available functions. Clearly, it cannot. There's no function for telling jokes or anything similar.\n\nThe instructions say: \"If the user's query can be addressed using an available function, and all required parameters are provided or obviously inferable, trigger a function call.\" In this case, no available function matches.\n\nFurther, it says: \"Do not call a function if no matching functions apply or if parameters are missing/unclear. Ask for clarification only if none of the provided functions are able to advance the user's request.\"\n\nSince none of the functions can advance this request, I should not call any function. Instead, I need to respond directly or ask for clarification if needed. But the query is clear; it's just not something I can handle with the tools I have.\n\nThe instructions emphasize: \"Keep your response to user clear; please do not make your response verbose!\" So, I should be concise.\n\nPossible responses: I could just say I don't have the capability to tell jokes, or politely redirect or inform the user.\n\nSince the system prompt is about using functions for available actions, and this isn't one, I should respond that I can't help with that.\n\nFinally, ensure that I only use the <function_call> tag if I'm actually calling a function, which I'm not.\n\nResponse: Something simple like, \"I'm sorry, I don't have the ability to tell jokes. I can help with weather information if you'd like.\"\n\nThat keeps it clear and not verbose.",
+                "text": "First, the user asked: \"Tell me a joke about cats.\" This is a request for a joke, which is not related to any of the available functions. The only available function is \"get_weather\", which is for getting weather information based on a location.\n\nI need to check if this query can be addressed using the available functions. The available functions are limited to getting weather, so no, this doesn't match.\n\nThe instructions say: \"If the user's query can be addressed using an available function, and all required parameters are provided or obviously inferable, trigger a function call.\"\n\nIn this case, it cannot be addressed using an available function, so I should not call any function.\n\nAdditionally: \"Ask for clarification only if none of the provided functions are able to advance the user's request.\"\n\nSince none of the functions can advance this request, I shouldn't ask for clarification unless it's unclear. But this request is clear; it's just not something I can handle with the tools I have.\n\nMy response should be kept clear and not verbose. So, I need to politely inform the user that I can't help with that.\n\nFinally, the system prompt emphasizes: \"You are only permitted to use the <function_call> tag in your response only if you have made the decision to call a function.\"\n\nSince I'm not calling a function, I won't use that tag.\n\nResponse idea: Keep it simple, like \"I'm sorry, but I can only provide information on weather. If you have a weather-related question, let me know!\"\n\nThat sounds good.",
                 "type": "reasoning.text"
               }
             ],
@@ -77,23 +77,23 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760442737,
-      "id": "gen-1760442737-9VKr5NQsPkbwhT8fZbaI",
+      "created": 1760532578,
+      "id": "gen-1760532578-TYM12hO4rsHOEiX5lgnn",
       "model": "x-ai/grok-3-mini",
       "object": "chat.completion",
       "provider": "xAI",
       "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 400,
+        "completion_tokens": 342,
         "completion_tokens_details": {
-          "reasoning_tokens": 357
+          "reasoning_tokens": 308
         },
         "prompt_tokens": 282,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 281
+          "cached_tokens": 231
         },
-        "total_tokens": 682
+        "total_tokens": 624
       }
     },
     "headers": {
@@ -101,7 +101,7 @@
         "*"
       ],
       "cf-ray": [
-        "98e6dea51d84cc1a-ORD"
+        "98ef70061b641923-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -110,7 +110,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 11:52:17 GMT"
+        "Wed, 15 Oct 2025 12:49:38 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

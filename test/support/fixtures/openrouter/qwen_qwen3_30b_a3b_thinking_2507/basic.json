@@ -1,0 +1,112 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMtMzBiLWEzYi10aGlua2luZy0yNTA3IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "qwen/qwen3-30b-a3b-thinking-2507",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "\n\nHello! 😊 How can I assist you today?",
+            "reasoning": "Okay, the user said \"Hello world!\" which is a classic first program in programming. But since they're talking to me, maybe they're testing if I respond correctly. I should keep it friendly and simple.\n\nFirst, I need to acknowledge their greeting. \"Hello world!\" is a common phrase, so I'll respond with a friendly hello. Maybe add a smiley to keep it warm.\n\nWait, they might be new to interacting with AI, so I should make sure my response is clear and not too technical. Just a simple, cheerful reply.\n\nAlso, check if they need help with anything specific. Since they said \"Hello world!\", maybe they're just starting out, so offering assistance would be good.\n\nLet me make sure the response is in English, as the query is in English. No need for any complex terms. Keep it short and approachable.\n\nSo, something like: \"Hello! 😊 How can I assist you today?\"\n\nWait, the user's message is \"Hello world!\" so maybe they're referencing the programming term. But since they're talking to me, I should treat it as a greeting. Maybe they're a beginner in programming, but I shouldn't assume. Just respond as a greeting.\n\nDouble-checking: the user's message is \"Hello world!\" so the correct response is to say hello back. No need to overcomplicate it. Keep it simple and friendly.\n\nYes, \"Hello! 😊 How can I assist you today?\" That's good. It's welcoming and offers help. The emoji adds a friendly touch. Alright, that should work.\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Okay, the user said \"Hello world!\" which is a classic first program in programming. But since they're talking to me, maybe they're testing if I respond correctly. I should keep it friendly and simple.\n\nFirst, I need to acknowledge their greeting. \"Hello world!\" is a common phrase, so I'll respond with a friendly hello. Maybe add a smiley to keep it warm.\n\nWait, they might be new to interacting with AI, so I should make sure my response is clear and not too technical. Just a simple, cheerful reply.\n\nAlso, check if they need help with anything specific. Since they said \"Hello world!\", maybe they're just starting out, so offering assistance would be good.\n\nLet me make sure the response is in English, as the query is in English. No need for any complex terms. Keep it short and approachable.\n\nSo, something like: \"Hello! 😊 How can I assist you today?\"\n\nWait, the user's message is \"Hello world!\" so maybe they're referencing the programming term. But since they're talking to me, I should treat it as a greeting. Maybe they're a beginner in programming, but I shouldn't assume. Just respond as a greeting.\n\nDouble-checking: the user's message is \"Hello world!\" so the correct response is to say hello back. No need to overcomplicate it. Keep it simple and friendly.\n\nYes, \"Hello! 😊 How can I assist you today?\" That's good. It's welcoming and offers help. The emoji adds a friendly touch. Alright, that should work.\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1760532544,
+      "id": "gen-1760532544-c9LXg488MfCyhp7bCeK7",
+      "model": "qwen/qwen3-30b-a3b-thinking-2507",
+      "object": "chat.completion",
+      "provider": "SiliconFlow",
+      "system_fingerprint": "",
+      "usage": {
+        "completion_tokens": 335,
+        "completion_tokens_details": {
+          "reasoning_tokens": 323
+        },
+        "prompt_tokens": 13,
+        "total_tokens": 348
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ef6f3209b160a1-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 12:49:05 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

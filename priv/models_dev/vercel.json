@@ -218,6 +218,41 @@
     {
       "attachment": true,
       "cost": {
+        "cache_read": 0.025,
+        "input": 0.1,
+        "output": 0.4
+      },
+      "id": "google/gemini-2.5-flash-lite",
+      "knowledge": "2025-01",
+      "last_updated": "2025-06-17",
+      "limit": {
+        "context": 1048576,
+        "output": 65536
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image",
+          "audio",
+          "video",
+          "pdf"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Gemini 2.5 Flash Lite",
+      "open_weights": false,
+      "provider": "vercel",
+      "provider_model_id": "google/gemini-2.5-flash-lite",
+      "reasoning": true,
+      "release_date": "2025-06-17",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": true,
+      "cost": {
         "cache_read": 0.01,
         "input": 0.05,
         "output": 0.4
@@ -380,6 +415,37 @@
     {
       "attachment": true,
       "cost": {
+        "input": 0.7,
+        "output": 2.8
+      },
+      "id": "alibaba/qwen3-vl-instruct",
+      "knowledge": "2025-04",
+      "last_updated": "2025-09-24",
+      "limit": {
+        "context": 131072,
+        "output": 129024
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Qwen3 VL Instruct",
+      "open_weights": true,
+      "provider": "vercel",
+      "provider_model_id": "alibaba/qwen3-vl-instruct",
+      "reasoning": false,
+      "release_date": "2025-09-24",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": true,
+      "cost": {
         "cache_read": 0.05,
         "input": 0.2,
         "output": 0.5
@@ -533,6 +599,36 @@
     {
       "attachment": false,
       "cost": {
+        "input": 0.5,
+        "output": 2
+      },
+      "id": "alibaba/qwen3-next-80b-a3b-instruct",
+      "knowledge": "2025-04",
+      "last_updated": "2025-09-12",
+      "limit": {
+        "context": 131072,
+        "output": 32768
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Qwen3 Next 80B A3B Instruct",
+      "open_weights": true,
+      "provider": "vercel",
+      "provider_model_id": "alibaba/qwen3-next-80b-a3b-instruct",
+      "reasoning": false,
+      "release_date": "2025-09-12",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
         "cache_read": 2,
         "input": 2,
         "output": 10
@@ -591,6 +687,36 @@
       "release_date": "2024-12-03",
       "temperature": true,
       "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 1,
+        "output": 5
+      },
+      "id": "perplexity/sonar-reasoning",
+      "knowledge": "2025-09",
+      "last_updated": "2025-02-19",
+      "limit": {
+        "context": 127000,
+        "output": 8000
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Sonar Reasoning",
+      "open_weights": false,
+      "provider": "vercel",
+      "provider_model_id": "perplexity/sonar-reasoning",
+      "reasoning": true,
+      "release_date": "2025-02-19",
+      "temperature": true,
+      "tool_call": false
     },
     {
       "attachment": true,
@@ -751,6 +877,36 @@
     {
       "attachment": false,
       "cost": {
+        "input": 0.2,
+        "output": 1.1
+      },
+      "id": "zai/glm-4.5-air",
+      "knowledge": "2025-04",
+      "last_updated": "2025-07-28",
+      "limit": {
+        "context": 128000,
+        "output": 96000
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "GLM 4.5 Air",
+      "open_weights": true,
+      "provider": "vercel",
+      "provider_model_id": "zai/glm-4.5-air",
+      "reasoning": true,
+      "release_date": "2025-07-28",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
         "input": 0.07,
         "output": 0.3
       },
@@ -774,6 +930,67 @@
       "provider_model_id": "openai/gpt-oss-20b",
       "reasoning": true,
       "release_date": "2025-08-05",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": true,
+      "cost": {
+        "input": 0.6,
+        "output": 1.8
+      },
+      "id": "zai/glm-4.5v",
+      "knowledge": "2025-08",
+      "last_updated": "2025-08-11",
+      "limit": {
+        "context": 66000,
+        "output": 16000
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "GLM 4.5V",
+      "open_weights": true,
+      "provider": "vercel",
+      "provider_model_id": "zai/glm-4.5v",
+      "reasoning": true,
+      "release_date": "2025-08-11",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.28,
+        "output": 0.42
+      },
+      "id": "deepseek/deepseek-v3.2-exp-thinking",
+      "knowledge": "2025-09",
+      "last_updated": "2025-09-29",
+      "limit": {
+        "context": 163840,
+        "output": 8192
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "DeepSeek V3.2 Exp Thinking",
+      "open_weights": false,
+      "provider": "vercel",
+      "provider_model_id": "deepseek/deepseek-v3.2-exp-thinking",
+      "reasoning": true,
+      "release_date": "2025-09-29",
       "temperature": true,
       "tool_call": true
     },
@@ -807,6 +1024,36 @@
       "provider_model_id": "amazon/nova-lite",
       "reasoning": false,
       "release_date": "2024-12-03",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 1.2,
+        "output": 6
+      },
+      "id": "alibaba/qwen3-max",
+      "knowledge": "2025-04",
+      "last_updated": "2025-09-23",
+      "limit": {
+        "context": 262144,
+        "output": 32768
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Qwen3 Max",
+      "open_weights": false,
+      "provider": "vercel",
+      "provider_model_id": "alibaba/qwen3-max",
+      "reasoning": false,
+      "release_date": "2025-09-23",
       "temperature": true,
       "tool_call": true
     },
@@ -905,6 +1152,37 @@
     {
       "attachment": false,
       "cost": {
+        "input": 3,
+        "output": 15
+      },
+      "id": "perplexity/sonar-pro",
+      "knowledge": "2025-09",
+      "last_updated": "2025-02-19",
+      "limit": {
+        "context": 200000,
+        "output": 8000
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Sonar Pro",
+      "open_weights": false,
+      "provider": "vercel",
+      "provider_model_id": "perplexity/sonar-pro",
+      "reasoning": false,
+      "release_date": "2025-02-19",
+      "temperature": true,
+      "tool_call": false
+    },
+    {
+      "attachment": false,
+      "cost": {
         "input": 0.8,
         "output": 1.2
       },
@@ -964,6 +1242,37 @@
       "provider_model_id": "google/gemini-2.5-flash",
       "reasoning": true,
       "release_date": "2025-03-20",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": true,
+      "cost": {
+        "input": 0.7,
+        "output": 8.4
+      },
+      "id": "alibaba/qwen3-vl-thinking",
+      "knowledge": "2025-09",
+      "last_updated": "2025-09-24",
+      "limit": {
+        "context": 131072,
+        "output": 129024
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Qwen3 VL Thinking",
+      "open_weights": true,
+      "provider": "vercel",
+      "provider_model_id": "alibaba/qwen3-vl-thinking",
+      "reasoning": true,
+      "release_date": "2025-09-24",
       "temperature": true,
       "tool_call": true
     },
@@ -1064,6 +1373,36 @@
       "tool_call": true
     },
     {
+      "attachment": false,
+      "cost": {
+        "input": 0.6,
+        "output": 2.2
+      },
+      "id": "zai/glm-4.5",
+      "knowledge": "2025-07",
+      "last_updated": "2025-07-28",
+      "limit": {
+        "context": 128000,
+        "output": 96000
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "GLM 4.5",
+      "open_weights": true,
+      "provider": "vercel",
+      "provider_model_id": "zai/glm-4.5",
+      "reasoning": true,
+      "release_date": "2025-07-28",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
       "attachment": true,
       "cost": {
         "input": 3,
@@ -1157,6 +1496,37 @@
       "release_date": "2025-09-19",
       "temperature": true,
       "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 1,
+        "output": 1
+      },
+      "id": "perplexity/sonar",
+      "knowledge": "2025-02",
+      "last_updated": "2025-02-19",
+      "limit": {
+        "context": 127000,
+        "output": 8000
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Sonar",
+      "open_weights": false,
+      "provider": "vercel",
+      "provider_model_id": "perplexity/sonar",
+      "reasoning": false,
+      "release_date": "2025-02-19",
+      "temperature": true,
+      "tool_call": false
     },
     {
       "attachment": true,
@@ -1319,6 +1689,132 @@
       "tool_call": true
     },
     {
+      "attachment": false,
+      "cost": {
+        "input": 0.6,
+        "output": 2.2
+      },
+      "id": "zai/glm-4.6",
+      "knowledge": "2025-04",
+      "last_updated": "2025-09-30",
+      "limit": {
+        "context": 200000,
+        "output": 96000
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "GLM 4.6",
+      "open_weights": true,
+      "provider": "vercel",
+      "provider_model_id": "zai/glm-4.6",
+      "reasoning": true,
+      "release_date": "2025-09-30",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": true,
+      "cost": {
+        "cache_read": 0.075,
+        "cache_write": 0.383,
+        "input": 0.3,
+        "output": 2.5
+      },
+      "id": "google/gemini-2.5-flash-preview-09-2025",
+      "knowledge": "2025-01",
+      "last_updated": "2025-09-25",
+      "limit": {
+        "context": 1048576,
+        "output": 65536
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image",
+          "audio",
+          "video",
+          "pdf"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Gemini 2.5 Flash Preview 09-25",
+      "open_weights": false,
+      "provider": "vercel",
+      "provider_model_id": "google/gemini-2.5-flash-preview-09-2025",
+      "reasoning": true,
+      "release_date": "2025-09-25",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 2,
+        "output": 8
+      },
+      "id": "perplexity/sonar-reasoning-pro",
+      "knowledge": "2025-09",
+      "last_updated": "2025-02-19",
+      "limit": {
+        "context": 127000,
+        "output": 8000
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Sonar Reasoning Pro",
+      "open_weights": false,
+      "provider": "vercel",
+      "provider_model_id": "perplexity/sonar-reasoning-pro",
+      "reasoning": true,
+      "release_date": "2025-02-19",
+      "temperature": true,
+      "tool_call": false
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.27,
+        "output": 1
+      },
+      "id": "deepseek/deepseek-v3.1-terminus",
+      "knowledge": "2025-07",
+      "last_updated": "2025-09-22",
+      "limit": {
+        "context": 128000,
+        "output": 8192
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "DeepSeek V3.1 Terminus",
+      "open_weights": true,
+      "provider": "vercel",
+      "provider_model_id": "deepseek/deepseek-v3.1-terminus",
+      "reasoning": true,
+      "release_date": "2025-09-22",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
       "attachment": true,
       "cost": {
         "cache_read": 0.03,
@@ -1347,6 +1843,36 @@
       "provider_model_id": "openai/gpt-4.1-nano",
       "reasoning": false,
       "release_date": "2025-04-14",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.28,
+        "output": 0.42
+      },
+      "id": "deepseek/deepseek-v3.2-exp",
+      "knowledge": "2025-09",
+      "last_updated": "2025-09-29",
+      "limit": {
+        "context": 163840,
+        "output": 8192
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "DeepSeek V3.2 Exp",
+      "open_weights": false,
+      "provider": "vercel",
+      "provider_model_id": "deepseek/deepseek-v3.2-exp",
+      "reasoning": false,
+      "release_date": "2025-09-29",
       "temperature": true,
       "tool_call": true
     },
@@ -1385,6 +1911,11 @@
     },
     {
       "attachment": false,
+      "cost": {
+        "cache_read": 0.125,
+        "input": 1.25,
+        "output": 10
+      },
       "id": "openai/gpt-5-codex",
       "knowledge": "2024-09-30",
       "last_updated": "2025-09-15",
@@ -1440,6 +1971,41 @@
       "reasoning": true,
       "release_date": "2025-04-16",
       "temperature": false,
+      "tool_call": true
+    },
+    {
+      "attachment": true,
+      "cost": {
+        "cache_read": 0.025,
+        "input": 0.1,
+        "output": 0.4
+      },
+      "id": "google/gemini-2.5-flash-lite-preview-09-2025",
+      "knowledge": "2025-01",
+      "last_updated": "2025-09-25",
+      "limit": {
+        "context": 1048576,
+        "output": 65536
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image",
+          "audio",
+          "video",
+          "pdf"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Gemini 2.5 Flash Lite Preview 09-25",
+      "open_weights": false,
+      "provider": "vercel",
+      "provider_model_id": "google/gemini-2.5-flash-lite-preview-09-2025",
+      "reasoning": true,
+      "release_date": "2025-09-25",
+      "temperature": true,
       "tool_call": true
     },
     {
@@ -1670,6 +2236,36 @@
       "tool_call": true
     },
     {
+      "attachment": false,
+      "cost": {
+        "input": 0.5,
+        "output": 6
+      },
+      "id": "alibaba/qwen3-next-80b-a3b-thinking",
+      "knowledge": "2025-09",
+      "last_updated": "2025-09-12",
+      "limit": {
+        "context": 131072,
+        "output": 32768
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Qwen3 Next 80B A3B Thinking",
+      "open_weights": true,
+      "provider": "vercel",
+      "provider_model_id": "alibaba/qwen3-next-80b-a3b-thinking",
+      "reasoning": true,
+      "release_date": "2025-09-12",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
       "attachment": true,
       "cost": {
         "input": 0.075,
@@ -1854,6 +2450,36 @@
       "provider_model_id": "openai/gpt-4o",
       "reasoning": false,
       "release_date": "2024-05-13",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 1,
+        "output": 5
+      },
+      "id": "alibaba/qwen3-coder-plus",
+      "knowledge": "2025-04",
+      "last_updated": "2025-07-23",
+      "limit": {
+        "context": 1000000,
+        "output": 1000000
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Qwen3 Coder Plus",
+      "open_weights": true,
+      "provider": "vercel",
+      "provider_model_id": "alibaba/qwen3-coder-plus",
+      "reasoning": false,
+      "release_date": "2025-07-23",
       "temperature": true,
       "tool_call": true
     },

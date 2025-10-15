@@ -48,14 +48,15 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759845389,
-      "id": "gen-1759845389-yPZO8blB5sNUvUXHTcrL",
+      "created": 1760547092,
+      "id": "gen-1760547092-7Q6dcQhq3XbmIwDXHqEd",
       "model": "nousresearch/hermes-4-405b",
       "object": "chat.completion",
-      "provider": "Nebius",
+      "provider": "Chutes",
       "usage": {
         "completion_tokens": 17,
         "prompt_tokens": 27,
+        "prompt_tokens_details": null,
         "total_tokens": 44
       }
     },
@@ -64,7 +65,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade6f67c09b947-ORD"
+        "98f0d25ed9e1c8d4-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -73,7 +74,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:56:30 GMT"
+        "Wed, 15 Oct 2025 16:51:34 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

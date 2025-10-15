@@ -1,0 +1,109 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMtbmV4dC04MGItYTNiLXRoaW5raW5nIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MS4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "qwen/qwen3-next-80b-a3b-thinking",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "\n\nTo solve $12 \\times 7$:\n\n1. Break 12 into $10 + 2$.\n2. Multiply each part by 7:  \n   $10 \\times 7 = 70$  \n   $2 \\times 7 = 14$\n3. Add the results: $70 + 14 = 84$.\n\n**Answer:** 84",
+            "reasoning": "Okay, the user asked me to solve 12 times 7 and show my internal thinking briefly. Let me start by recalling multiplication basics. 12 times 7... I know that multiplication is repeated addition, so 12 added seven times. But that might take too long. Maybe breaking it down is better.\n\nHmm, 10 times 7 is 70, right? And 2 times 7 is 14. Then adding those together: 70 + 14. Let me check that. 70 plus 10 is 80, plus 4 more is 84. Yeah, that makes sense. Alternatively, I could think of 12 as 6 times 2, so 6 times 7 is 42, then double it to 84. But the first method seems more straightforward.\n\nWait, maybe another way: 7 times 10 is 70, 7 times 2 is 14, sum is 84. Yep, same result. Should I consider using the distributive property? Yes, exactly. 12*7 = (10+2)*7 = 10*7 + 2*7 = 70 +14 =84. That's correct.\n\nLet me verify once more. 12*7. If I add 12 seven times: 12+12=24, +12=36, +12=48, +12=60, +12=72, +12=84. Yep, same answer. So all methods confirm 84. The user just wants a brief explanation, so focusing on the distributive approach might be the quickest. So, splitting 12 into 10 and 2, multiplying each by 7, adding the results. That's efficient.\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Okay, the user asked me to solve 12 times 7 and show my internal thinking briefly. Let me start by recalling multiplication basics. 12 times 7... I know that multiplication is repeated addition, so 12 added seven times. But that might take too long. Maybe breaking it down is better.\n\nHmm, 10 times 7 is 70, right? And 2 times 7 is 14. Then adding those together: 70 + 14. Let me check that. 70 plus 10 is 80, plus 4 more is 84. Yeah, that makes sense. Alternatively, I could think of 12 as 6 times 2, so 6 times 7 is 42, then double it to 84. But the first method seems more straightforward.\n\nWait, maybe another way: 7 times 10 is 70, 7 times 2 is 14, sum is 84. Yep, same result. Should I consider using the distributive property? Yes, exactly. 12*7 = (10+2)*7 = 10*7 + 2*7 = 70 +14 =84. That's correct.\n\nLet me verify once more. 12*7. If I add 12 seven times: 12+12=24, +12=36, +12=48, +12=60, +12=72, +12=84. Yep, same answer. So all methods confirm 84. The user just wants a brief explanation, so focusing on the distributive approach might be the quickest. So, splitting 12 into 10 and 2, multiplying each by 7, adding the results. That's efficient.\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1760532594,
+      "id": "gen-1760532594-OMbswRp6DaYpbd3x3xsZ",
+      "model": "qwen/qwen3-next-80b-a3b-thinking",
+      "object": "chat.completion",
+      "provider": "Google",
+      "usage": {
+        "completion_tokens": 487,
+        "prompt_tokens": 25,
+        "prompt_tokens_details": null,
+        "total_tokens": 512
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ef706bdf1061f2-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 12:49:54 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

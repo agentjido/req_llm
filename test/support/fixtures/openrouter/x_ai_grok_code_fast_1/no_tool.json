@@ -61,19 +61,19 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Why did the cat join the Red Cross? Because she wanted to be a first-aid kit-ten! 🐱",
-            "reasoning": "First, the user asked for a joke about cats. This is a simple request, not involving any disallowed activities. I can respond directly.\n",
+            "content": "Why did the cat join the Red Cross? Because she wanted to be a first-aid kit-ten!",
+            "reasoning": "The user asked for a joke about cats. This is a simple request, not involving any disallowed activities. I can respond directly.\n",
             "reasoning_details": [
               {
                 "format": "xai-responses-v1",
                 "index": 0,
-                "summary": "First, the user asked for a joke about cats. This is a simple request, not involving any disallowed activities. I can respond directly.\n",
+                "summary": "The user asked for a joke about cats. This is a simple request, not involving any disallowed activities. I can respond directly.\n",
                 "type": "reasoning.summary"
               },
               {
-                "data": "w8nLVrpiOaP6rj3LUh/xSpAcvef3dPNL2poBbAI9QBAhjpXOc//XXTNTLqGzNOVA1zxPGWkRRwix6oUm090qR1d0pBP7Yf27LvKvhy+Kgpr4nA4lqLl4ccnRxQU61IA6aRQin1CPh+dPB+s12tZQV5NiR7GvEEF7gOaRgkBd333fSxWt2Y6tZZohcsqNKJ+58ED/u95KrX+yGT+szeA3xxluFcNUNRm6dJLrG5ZATa8ccMVtrI2zw31TEOJjHyF+uEX0iCG9OxZRqvHk15sn7E0mpU5tKiLs0GTkkvoC4h0rCeDNh9ZXoVuKYikOHxl2K2TD/7cmC6AEs+q3/l2u5TpeDHudwrZz3B1n6FxiqB7vrWIOA6dqKvtftfORT2myWNHKxCZliTBOqe4UW0ZMzL4vXRysVjvR5MwbFW2ld7wfG8pqy5jbf1wQwrAjzuR42paVD/Y2BwY65gfOuzl0x8zVwdJDgliZFcK0STEaHWV8vzCUlGKzjEFUfRede+rtuu6wyPH3NyuemM8sIAHzB0uZ0j+dvdcB7RokMa3GldpxdxDuwMwNwHDfT2V86i6QhR9b+FJk4VVtlcPol0J2QbXiKQ/gZI/mGwCJp0dm7rTMns1SyRo0NoppeUxHxRMeQYqfVYQWLIJ16HlYtjiAw0KXqy8w3InSmOB4nIc77TLY7C+uPL/eW8LDKOFh8psRENd8UOWa/BZj5EQO25SeGw8fzcOV6R03aIYnSlxKEUUsj1A6vWvNW5d430TmTCXMPg",
+                "data": "3kCkEWkZIatG/ITftqQ3S9AF8W0WOyFPoLx4MNzx1FGk5SzHe6NqzceiR2KSlfTq1OOOx8dgcr8iQo3eZ+PqwTQH6WhrEYttphyrktWzu0lQC/oNx1P+LBqPauEzRPxRZGT09PLmaBmBZONMS3LL3gQgp25D1T1Rrz3n5gMvsnrouFu3qOS+KlwB85+ufv8cUW34NILsepFjUCP0flf/aa+3nqXKPMvbgAjHrFEfj71QOE2sdL2BweYGaQBvhjJD0obtvkfN3OIESWRHRBJW7QTxmqYW8PesolN9kuhBw7WPrxt6CGzuEJvJ7Ok9eNEYBFqtwVRwlg9lC85EqQTAO06+xR0DQlpSsCGCEW79yNo+o44m+C6Ctv9tqXfrWQg7OkULkQcxXCVGdhAS9R1GiHP6hc/fhnK8AsK+JoWHGpHj02POndVO168r0JKWGOpeTb2lOP10ErWW",
                 "format": "xai-responses-v1",
-                "id": "rs_6fd5326e-29d2-d064-094e-10699f450c5b_us-east-1",
+                "id": "rs_25657930-19a9-352c-d891-e3053c97ee69_us-east-1",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -84,15 +84,15 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1760442677,
-      "id": "gen-1760442677-ZG11dj9FY36Znbm1xT9F",
+      "created": 1760532582,
+      "id": "gen-1760532582-Nz86Al8EnzjK5ikKdrzM",
       "model": "x-ai/grok-code-fast-1",
       "object": "chat.completion",
       "provider": "xAI",
       "usage": {
-        "completion_tokens": 141,
+        "completion_tokens": 89,
         "prompt_tokens": 385,
-        "total_tokens": 526
+        "total_tokens": 474
       }
     },
     "headers": {
@@ -100,7 +100,7 @@
         "*"
       ],
       "cf-ray": [
-        "98e6dd2cfbfc1259-ORD"
+        "98ef70203b7ed836-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -109,7 +109,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 11:51:18 GMT"
+        "Wed, 15 Oct 2025 12:49:42 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

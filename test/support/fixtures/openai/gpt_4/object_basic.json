@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3B0LTQiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbF9jaG9pY2UiOnsiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0In0sInR5cGUiOiJmdW5jdGlvbiJ9LCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZW5lcmF0ZSBzdHJ1Y3R1cmVkIG91dHB1dCBtYXRjaGluZyB0aGUgcHJvdmlkZWQgc2NoZW1hIiwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibmFtZSIsImFnZSJdLCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6dHJ1ZX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ3B0LTQiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbF9jaG9pY2UiOnsiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0In0sInR5cGUiOiJmdW5jdGlvbiJ9LCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZW5lcmF0ZSBzdHJ1Y3R1cmVkIG91dHB1dCBtYXRjaGluZyB0aGUgcHJvdmlkZWQgc2NoZW1hIiwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsiYWdlIiwibmFtZSIsIm9jY3VwYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOnRydWV9LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
       "max_tokens": 500,
@@ -44,8 +44,9 @@
                 }
               },
               "required": [
+                "age",
                 "name",
-                "age"
+                "occupation"
               ],
               "type": "object"
             },
@@ -72,11 +73,49 @@
   },
   "response": {
     "body": {
-      "error": {
-        "code": "invalid_function_parameters",
-        "message": "Invalid schema for function 'structured_output': In context=(), 'required' is required to be supplied and to be an array including every key in properties. Missing 'occupation'.",
-        "param": "tools[0].function.parameters",
-        "type": "invalid_request_error"
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "annotations": [],
+            "content": null,
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\n  \"age\": 32,\n  \"name\": \"John Doe\",\n  \"occupation\": \"Software Engineer\"\n}",
+                  "name": "structured_output"
+                },
+                "id": "call_sfEOCEUbBXfVHa6wCcxFzQfD",
+                "type": "function"
+              }
+            ]
+          }
+        }
+      ],
+      "created": 1760529689,
+      "id": "chatcmpl-CQuU5q2P30tLzKgmIxTqYj1cn2C6u",
+      "model": "gpt-4-0613",
+      "object": "chat.completion",
+      "service_tier": "default",
+      "system_fingerprint": null,
+      "usage": {
+        "completion_tokens": 25,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "prompt_tokens": 87,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "total_tokens": 112
       }
     },
     "headers": {
@@ -90,7 +129,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e355dab948e82a-ORD"
+        "98ef297e2916e830-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -99,13 +138,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 01:34:37 GMT"
+        "Wed, 15 Oct 2025 12:01:31 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "33"
+        "1878"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -117,17 +156,20 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=5K4dOyV5ikadAPkaZSCgSXUhw4veOThVqW0SbE5tF40-1760405677-1.0.1.1-1PYrqO3K29YS5XjGDRsIouDoO2YoMAeCBquGcK0t0XTkQODU6g28deTb85MfwzGlLffjVzqeCs_BSC9oJQzuasUw08.64KtyogwTdQjr_qA; path=/; expires=Tue, 14-Oct-25 02:04:37 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=3_5ppm1f118kH1BwlTXnfISvQ7wvvuuYbBPASu5Z89U-1760405677362-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=u2C6O2U3S.3DWlbJMcEEnBWAIrRpa2o3ko9KBGU1hv8-1760529691-1.0.1.1-BgidATHinPQxi.R.8hjXJ5pxYJBY6SReJJ_cUkUqfac1gwZSNV6Ngqa3R6rg0zI4hVaQ3KRf1f6kfzzhZOSIrJgidoAuzfB9RijeSgedCUQ; path=/; expires=Wed, 15-Oct-25 12:31:31 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=0bmiD6SMglUnJvTIR4.aCXzzc1aQFvjzZUI4duD2uWM-1760529691295-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
       ],
       "x-content-type-options": [
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "68"
+        "1940"
       ],
       "x-openai-proxy-wasm": [
         "v0.1"
@@ -151,9 +193,9 @@
         "2ms"
       ],
       "x-request-id": [
-        "req_9e4c4d57e814490580e065974e0cca86"
+        "req_9db5597d9880493fa73ee8b1687d70f6"
       ]
     },
-    "status": 400
+    "status": 200
   }
 }

@@ -1,0 +1,107 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGkgdGhlcmUhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoicXdlbi9xd2VuMy0zMGItYTNiLXRoaW5raW5nLTI1MDciLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Hi there!",
+          "role": "user"
+        }
+      ],
+      "model": "qwen/qwen3-30b-a3b-thinking-2507",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "\n\nHello! 😊 How can I assist you today?",
+            "reasoning": "Okay, the user said, Hi there! Let me think about how to respond. First, I need to be friendly and welcoming. Maybe say something like, Hello! How can I assist you today? But wait, the user might be testing if I'm a real person or just a bot. I should make sure my response is natural and not too robotic.\n\nHmm, the user's message is very short, so they might be new to chatting with me. I should keep it simple and open-ended. Let me check the guidelines again. The user wants a helpful and engaging response. Maybe add an emoji to make it friendly. Like, Hello! 😊 How can I assist you today?\n\nWait, the user said \"Hi there!\" so maybe they're in a good mood. I should match that energy. Let me make sure not to overcomplicate it. Just a simple greeting and an offer to help. Yeah, that's good. Let me go with Hello! 😊 How can I assist you today?\n\nWait, but the user might have a specific question. But since they just said hi, I shouldn't assume. Just keep it open. Let me confirm the response. Yep, that's standard. Alright, that should work.\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Okay, the user said, Hi there! Let me think about how to respond. First, I need to be friendly and welcoming. Maybe say something like, Hello! How can I assist you today? But wait, the user might be testing if I'm a real person or just a bot. I should make sure my response is natural and not too robotic.\n\nHmm, the user's message is very short, so they might be new to chatting with me. I should keep it simple and open-ended. Let me check the guidelines again. The user wants a helpful and engaging response. Maybe add an emoji to make it friendly. Like, Hello! 😊 How can I assist you today?\n\nWait, the user said \"Hi there!\" so maybe they're in a good mood. I should match that energy. Let me make sure not to overcomplicate it. Just a simple greeting and an offer to help. Yeah, that's good. Let me go with Hello! 😊 How can I assist you today?\n\nWait, but the user might have a specific question. But since they just said hi, I shouldn't assume. Just keep it open. Let me confirm the response. Yep, that's standard. Alright, that should work.\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1760532553,
+      "id": "gen-1760532553-A6PZbZorBPv43VJld1KX",
+      "model": "qwen/qwen3-30b-a3b-thinking-2507",
+      "object": "chat.completion",
+      "provider": "Nebius",
+      "usage": {
+        "completion_tokens": 266,
+        "prompt_tokens": 13,
+        "total_tokens": 279
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ef6f6cdfd460a1-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 12:49:14 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

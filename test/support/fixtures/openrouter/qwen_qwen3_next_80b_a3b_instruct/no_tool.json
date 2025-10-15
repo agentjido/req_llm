@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyNjIxNCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoicXdlbi9xd2VuMy1uZXh0LTgwYi1hM2ItaW5zdHJ1Y3QiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfdG9rZW5zIjoyNjIxNCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoicXdlbi9xd2VuMy1uZXh0LTgwYi1hM2ItaW5zdHJ1Y3QiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
       "max_tokens": 26214,
@@ -22,6 +22,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -60,7 +61,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Why don't cats play poker in the wild?  \nToo many cheetahs! 😸🃏",
+            "content": "Sure! Here's a purr-fect one for you:\n\nWhy don’t cats play poker in the wild?\n\nBecause there’s too many cheetahs! 🐱🃏\n\n*(Bonus groan: They’d also get kicked out for using tails as bluffing tools.)*",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -68,18 +69,16 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759847295,
-      "id": "gen-1759847295-siP6t637L7vlbSn8xfwC",
+      "created": 1760545140,
+      "id": "gen-1760545140-Meq55vrM1V21oN14rPxO",
       "model": "qwen/qwen3-next-80b-a3b-instruct",
       "object": "chat.completion",
-      "provider": "Novita",
-      "system_fingerprint": "",
+      "provider": "Hyperbolic",
       "usage": {
-        "completion_tokens": 21,
-        "completion_tokens_details": null,
-        "prompt_tokens": 153,
+        "completion_tokens": 59,
+        "prompt_tokens": 14,
         "prompt_tokens_details": null,
-        "total_tokens": 174
+        "total_tokens": 73
       }
     },
     "headers": {
@@ -87,7 +86,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ae157bac89c543-ORD"
+        "98f0a2b97d9e72e8-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -96,7 +95,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 14:28:16 GMT"
+        "Wed, 15 Oct 2025 16:19:01 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

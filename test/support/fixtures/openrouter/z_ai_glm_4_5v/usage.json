@@ -40,13 +40,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "\nHi there! 👋 How can I assist you today? Feel free to ask me anything or let me know what you're looking for help with. 😊",
-            "reasoning": "I'm being addressed by the user with a simple greeting. The user hasn't provided any specific question or context yet, so I should respond in a friendly and open manner to encourage them to share what they need help with.",
+            "content": "\nHello! How can I assist you today?",
+            "reasoning": "I'm being addressed by the user with a simple greeting. The user hasn't provided any specific question or request yet, so I should respond in a friendly and open manner to encourage them to share what they need help with.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "I'm being addressed by the user with a simple greeting. The user hasn't provided any specific question or context yet, so I should respond in a friendly and open manner to encourage them to share what they need help with.",
+                "text": "I'm being addressed by the user with a simple greeting. The user hasn't provided any specific question or request yet, so I should respond in a friendly and open manner to encourage them to share what they need help with.",
                 "type": "reasoning.text"
               }
             ],
@@ -56,18 +56,18 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759845476,
-      "id": "gen-1759845476-9kcwvBMuvS8Oh5rINChV",
+      "created": 1760532659,
+      "id": "gen-1760532659-iFM1h5nBSXxgKhVUETqC",
       "model": "z-ai/glm-4.5v",
       "object": "chat.completion",
       "provider": "Z.AI",
       "usage": {
-        "completion_tokens": 80,
+        "completion_tokens": 57,
         "prompt_tokens": 10,
         "prompt_tokens_details": {
-          "cached_tokens": 9
+          "cached_tokens": 4
         },
-        "total_tokens": 90
+        "total_tokens": 67
       }
     },
     "headers": {
@@ -75,7 +75,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade9111cf1356a-ORD"
+        "98ef72039bc8e207-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -84,7 +84,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:57:56 GMT"
+        "Wed, 15 Oct 2025 12:51:00 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

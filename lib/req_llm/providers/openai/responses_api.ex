@@ -151,8 +151,16 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
       "response.completed" ->
         usage_data = get_in(data, ["response", "usage"])
+        response_id = get_in(data, ["response", "id"])
 
         meta = %{terminal?: true, finish_reason: :stop}
+
+        meta =
+          if response_id do
+            Map.put(meta, :response_id, response_id)
+          else
+            meta
+          end
 
         meta =
           if usage_data do
@@ -214,13 +222,15 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     opts_map = if is_map(opts), do: opts, else: Map.new(opts)
     provider_opts = opts_map[:provider_options] || []
 
-    previous_response_id = provider_opts[:previous_response_id]
+    previous_response_id =
+      provider_opts[:previous_response_id] ||
+        extract_previous_response_id_from_context(context)
 
-    input =
-      Enum.flat_map(context.messages, fn msg ->
+    {input, tool_messages} =
+      Enum.reduce(context.messages, {[], []}, fn msg, {input_acc, tool_acc} ->
         case msg.role do
           :tool ->
-            []
+            {input_acc, [msg | tool_acc]}
 
           _ ->
             content =
@@ -232,16 +242,32 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
               end)
 
             if content == [] and msg.tool_calls == nil do
-              []
+              {input_acc, tool_acc}
             else
               if msg.role == :assistant and msg.tool_calls != nil and msg.tool_calls != [] do
-                []
+                {input_acc, tool_acc}
               else
-                [%{"role" => Atom.to_string(msg.role), "content" => content}]
+                {input_acc ++ [%{"role" => Atom.to_string(msg.role), "content" => content}],
+                 tool_acc}
               end
             end
         end
       end)
+
+    tool_outputs_from_context = extract_tool_outputs_from_messages(Enum.reverse(tool_messages))
+
+    tool_outputs =
+      case provider_opts[:tool_outputs] do
+        nil -> tool_outputs_from_context
+        [] -> tool_outputs_from_context
+        explicit_outputs -> explicit_outputs
+      end
+
+    input =
+      case tool_outputs do
+        [] -> input
+        outputs -> input ++ encode_tool_outputs(outputs)
+      end
 
     max_output_tokens =
       opts_map[:max_output_tokens] ||
@@ -380,6 +406,58 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp maybe_put_string(map, _key, nil), do: map
   defp maybe_put_string(map, key, value), do: Map.put(map, key, value)
+
+  defp extract_previous_response_id_from_context(context) do
+    context.messages
+    |> Enum.reverse()
+    |> Enum.find_value(fn msg ->
+      case msg do
+        %{role: :assistant, tool_calls: tool_calls, metadata: %{response_id: id}}
+        when not is_nil(tool_calls) and tool_calls != [] ->
+          id
+
+        _ ->
+          nil
+      end
+    end)
+  end
+
+  defp extract_tool_outputs_from_messages(tool_messages) do
+    Enum.map(tool_messages, fn msg ->
+      output_text =
+        msg.content
+        |> Enum.find_value(fn part ->
+          if part.type == :text, do: part.text
+        end) || ""
+
+      %{
+        call_id: msg.tool_call_id,
+        output: output_text
+      }
+    end)
+  end
+
+  defp encode_tool_outputs(outputs) when is_list(outputs) do
+    Enum.map(outputs, fn output ->
+      call_id = output[:call_id] || output["call_id"]
+      raw_output = output[:output] || output["output"]
+
+      output_string =
+        cond do
+          is_binary(raw_output) -> raw_output
+          is_map(raw_output) or is_list(raw_output) -> Jason.encode!(raw_output)
+          true -> to_string(raw_output)
+        end
+
+      %{
+        "type" => "function_call_output",
+        "call_id" => call_id,
+        "output" => output_string
+      }
+    end)
+  end
+
+  defp encode_tool_outputs(_), do: []
 
   defp encode_tools_if_any(request) do
     case request.options[:tools] do
@@ -564,7 +642,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     msg = %ReqLLM.Message{
       role: :assistant,
       content: content_parts,
-      tool_calls: if(tool_calls != [], do: tool_calls)
+      tool_calls: if(tool_calls != [], do: tool_calls),
+      metadata: %{response_id: body["id"]}
     }
 
     response = %ReqLLM.Response{
@@ -670,12 +749,26 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     segments
     |> Enum.filter(&(&1["type"] == "function_call"))
     |> Enum.map(fn seg ->
-      args_json = seg["arguments"] || "{}"
-      id = seg["call_id"]
+      args_json = normalize_arguments_json(seg["arguments"])
+      id = seg["call_id"] || seg["id"]
       name = seg["name"] || "unknown"
       ReqLLM.ToolCall.new(id, name, args_json)
     end)
   end
+
+  defp normalize_arguments_json(nil), do: "{}"
+  defp normalize_arguments_json(""), do: "{}"
+
+  defp normalize_arguments_json(json) when is_binary(json) do
+    trimmed = String.trim(json)
+
+    case Jason.decode(trimmed) do
+      {:ok, _} -> trimmed
+      {:error, _} -> trimmed
+    end
+  end
+
+  defp normalize_arguments_json(_), do: "{}"
 
   defp build_content_parts(text, thinking) do
     parts = []
@@ -733,4 +826,147 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp normalize_finish_reason("tool_calls"), do: :tool_calls
   defp normalize_finish_reason("content_filter"), do: :content_filter
   defp normalize_finish_reason(_), do: :error
+
+  @doc false
+  def build_responses_body_from_chunks(chunks, model) do
+    state =
+      Enum.reduce(
+        chunks,
+        %{
+          text: "",
+          reasoning: "",
+          tool_calls: %{},
+          tool_call_order: [],
+          usage: nil,
+          finish_reason: nil,
+          response_id: nil
+        },
+        &accumulate_chunk_to_state/2
+      )
+
+    output_segments = []
+
+    output_segments =
+      if state.reasoning == "" do
+        output_segments
+      else
+        [
+          %{
+            "type" => "reasoning",
+            "content" => [%{"type" => "text", "text" => state.reasoning}]
+          }
+          | output_segments
+        ]
+      end
+
+    tool_segments =
+      Enum.map(state.tool_call_order, fn key ->
+        tc = state.tool_calls[key]
+
+        %{
+          "type" => "function_call",
+          "id" => tc.id || "call_#{key}",
+          "name" => tc.name || "unknown",
+          "arguments" => tc.arguments || "{}"
+        }
+      end)
+
+    output_segments = output_segments ++ tool_segments
+
+    response_id = state.response_id || "resp_stream_#{System.unique_integer([:positive])}"
+
+    body = %{
+      "id" => response_id,
+      "model" => model,
+      "status" => if(state.finish_reason == :stop, do: "completed", else: "incomplete"),
+      "output" => output_segments
+    }
+
+    body =
+      if state.text == "" do
+        body
+      else
+        Map.put(body, "output_text", state.text)
+      end
+
+    body =
+      if state.usage do
+        Map.put(body, "usage", state.usage)
+      else
+        body
+      end
+
+    body
+  end
+
+  defp accumulate_chunk_to_state(%ReqLLM.StreamChunk{type: :content, text: text}, state) do
+    %{state | text: state.text <> text}
+  end
+
+  defp accumulate_chunk_to_state(%ReqLLM.StreamChunk{type: :thinking, text: text}, state) do
+    %{state | reasoning: state.reasoning <> text}
+  end
+
+  defp accumulate_chunk_to_state(%ReqLLM.StreamChunk{type: :tool_call} = chunk, state) do
+    # Get tool call ID from metadata
+    tool_id = chunk.metadata[:id] || chunk.metadata[:call_id]
+    key = chunk.metadata[:index] || tool_id || 0
+
+    existing = Map.get(state.tool_calls, key, %{})
+
+    updated = %{
+      id: tool_id || existing[:id],
+      name: chunk.name || existing[:name],
+      arguments: merge_tool_arguments(existing[:arguments], chunk.arguments)
+    }
+
+    order =
+      if key in state.tool_call_order,
+        do: state.tool_call_order,
+        else: state.tool_call_order ++ [key]
+
+    %{state | tool_calls: Map.put(state.tool_calls, key, updated), tool_call_order: order}
+  end
+
+  defp accumulate_chunk_to_state(%ReqLLM.StreamChunk{type: :meta, metadata: meta}, state) do
+    state
+    |> maybe_put_usage(meta[:usage])
+    |> maybe_put_finish(meta[:finish_reason])
+    |> maybe_put_response_id(meta[:response_id])
+  end
+
+  defp accumulate_chunk_to_state(_chunk, state), do: state
+
+  defp merge_tool_arguments(nil, new), do: new
+  defp merge_tool_arguments(existing, nil), do: existing
+
+  defp merge_tool_arguments(existing, new) when is_binary(existing) and is_binary(new) do
+    existing <> new
+  end
+
+  defp merge_tool_arguments(existing, new) when is_map(new) do
+    merge_tool_arguments(existing, Jason.encode!(new))
+  end
+
+  defp merge_tool_arguments(existing, _new), do: existing
+
+  defp maybe_put_usage(state, nil), do: state
+
+  defp maybe_put_usage(state, usage) do
+    normalized =
+      Map.update(
+        usage,
+        :reasoning_tokens,
+        usage[:reasoning] || usage[:thinking_tokens] || 0,
+        & &1
+      )
+
+    %{state | usage: normalized}
+  end
+
+  defp maybe_put_finish(state, nil), do: state
+  defp maybe_put_finish(state, reason), do: %{state | finish_reason: reason}
+
+  defp maybe_put_response_id(state, nil), do: state
+  defp maybe_put_response_id(state, id), do: %{state | response_id: id}
 end

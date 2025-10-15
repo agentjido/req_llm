@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMzEwNiwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ29vZ2xlL2dlbWluaS0yLjUtcHJvIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMzEwNiwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ29vZ2xlL2dlbWluaS0yLjUtcHJvIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "max_tokens": 13106,
@@ -23,6 +23,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -61,13 +62,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Why don't cats play poker in the jungle?\nToo many cheetahs",
-            "reasoning": "**Processing a Query**\n\nI've initiated a search within my knowledge base, specifically looking for a suitable cat joke to fulfill the user's request. The analysis of the prompt revealed no need to extract parameters or leverage external functions for this task. I'm now focused on formulating the perfect pun!\n\n\n**Identifying Parameters & Functions**\n\nI've reviewed the request and confirmed, as before, that no parameters require identification. Function calls are also unnecessary. Instead, the focus is firmly on generating the optimal response. I've selected my joke and will deliver it.\n\n\n",
+            "content": "Why was the cat sitting on the computer? To keep an eye on the mouse!",
+            "reasoning": "**Analyzing User Request**\n\nI've assessed the user's desire for a cat joke. My tools include only a weather retrieval function, making this a non-starter. There's zero overlap between the request and available functionalities; I'm dead in the water.\n\n\n**Formulating a Response**\n\nI've moved past the initial frustration and, recognizing the tool's inadequacy, I'm now focused on a direct response strategy. I've decided that since I cannot use any tools, a simple cat joke will suffice. I've come up with a straightforward joke: \"Why was the cat sitting on the computer? To keep an eye on the mouse!\" I am ready to respond.\n\n\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "**Processing a Query**\n\nI've initiated a search within my knowledge base, specifically looking for a suitable cat joke to fulfill the user's request. The analysis of the prompt revealed no need to extract parameters or leverage external functions for this task. I'm now focused on formulating the perfect pun!\n\n\n**Identifying Parameters & Functions**\n\nI've reviewed the request and confirmed, as before, that no parameters require identification. Function calls are also unnecessary. Instead, the focus is firmly on generating the optimal response. I've selected my joke and will deliver it.\n\n\n",
+                "text": "**Analyzing User Request**\n\nI've assessed the user's desire for a cat joke. My tools include only a weather retrieval function, making this a non-starter. There's zero overlap between the request and available functionalities; I'm dead in the water.\n\n\n**Formulating a Response**\n\nI've moved past the initial frustration and, recognizing the tool's inadequacy, I'm now focused on a direct response strategy. I've decided that since I cannot use any tools, a simple cat joke will suffice. I've come up with a straightforward joke: \"Why was the cat sitting on the computer? To keep an eye on the mouse!\" I am ready to respond.\n\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -77,22 +78,22 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1759845394,
-      "id": "gen-1759845394-uAEIMXD5B3MBYqrL5QMC",
+      "created": 1760532489,
+      "id": "gen-1760532489-ONgKbTwms7loqFmYdBoa",
       "model": "google/gemini-2.5-pro",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
-        "completion_tokens": 140,
+        "completion_tokens": 218,
         "completion_tokens_details": {
           "image_tokens": 0,
-          "reasoning_tokens": 123
+          "reasoning_tokens": 201
         },
         "prompt_tokens": 20,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 160
+        "total_tokens": 238
       }
     },
     "headers": {
@@ -100,7 +101,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade711abd2eadb-ORD"
+        "98ef6ddb4a05114e-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -109,7 +110,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:56:37 GMT"
+        "Wed, 15 Oct 2025 12:48:12 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

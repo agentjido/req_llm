@@ -41,13 +41,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "**Internal thinking (brief):**  \n- Multiply 12 by 7.  \n- 10 × 7 = 70.  \n- 2 × 7 = 14.  \n- Add the partial results: 70 + 14 = 84.\n\n**Answer:** 12 × 7 = 84.",
-            "reasoning": "The user asks: \"Solve 12*7 and show your internal thinking (brief).\" This is a simple multiplication. The answer is 84. The user wants internal thinking shown briefly. This is allowed. So we can comply. Provide the result and brief reasoning.",
+            "content": "**Internal thinking (brief)**  \n- Multiply 12 by 7.  \n- 10 × 7 = 70 and 2 × 7 = 14.  \n- Add the partial results: 70 + 14 = 84.  \n\n**Answer:** 12 × 7 = 84.",
+            "reasoning": "We need to compute 12*7 = 84. Show internal thinking briefly.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "The user asks: \"Solve 12*7 and show your internal thinking (brief).\" This is a simple multiplication. The answer is 84. The user wants internal thinking shown briefly. This is allowed. So we can comply. Provide the result and brief reasoning.",
+                "text": "We need to compute 12*7 = 84. Show internal thinking briefly.",
                 "type": "reasoning.text"
               }
             ],
@@ -57,16 +57,19 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759845399,
-      "id": "gen-1759845399-5RhPKDIS9lNgsEgH7Eqv",
+      "created": 1760532509,
+      "id": "gen-1760532509-ejFWhAjDkPyUd3VCDe3D",
       "model": "openai/gpt-oss-120b",
       "object": "chat.completion",
-      "provider": "InferenceNet",
+      "provider": "SiliconFlow",
       "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 138,
-        "prompt_tokens": 84,
-        "total_tokens": 222
+        "completion_tokens": 89,
+        "completion_tokens_details": {
+          "reasoning_tokens": 17
+        },
+        "prompt_tokens": 80,
+        "total_tokens": 169
       }
     },
     "headers": {
@@ -74,7 +77,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade731bf9013f7-ORD"
+        "98ef6e57dc81b838-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -83,7 +86,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:56:39 GMT"
+        "Wed, 15 Oct 2025 12:48:29 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -1,14 +1,14 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkNhbGwgdGhlIGFkZCB0b29sIHdpdGggYT0yIGFuZCBiPTMuIEFmdGVyIHJlY2VpdmluZyB0aGUgdG9vbCByZXN1bHQsIHJlcGx5IGV4YWN0bHkgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjEwMDAwLCJtb2RlbCI6Im80LW1pbmkiLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJBZGQgdHdvIGludGVnZXJzIiwibmFtZSI6ImFkZCIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImEiOnsidHlwZSI6ImludGVnZXIifSwiYiI6eyJ0eXBlIjoiaW50ZWdlciJ9fSwicmVxdWlyZWQiOlsiYSIsImIiXSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImFkZCIsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjEwMDAwLCJtb2RlbCI6Im80LW1pbmkiLCJzdHJlYW0iOmZhbHNlLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJBZGQgdHdvIGludGVnZXJzIiwibmFtZSI6ImFkZCIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJhIjp7InR5cGUiOiJpbnRlZ2VyIn0sImIiOnsidHlwZSI6ImludGVnZXIifX0sInJlcXVpcmVkIjpbImEiLCJiIl0sInR5cGUiOiJvYmplY3QifSwic3RyaWN0Ijp0cnVlfSwibmFtZSI6ImFkZCIsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
       "input": [
         {
           "content": [
             {
-              "text": "Call the add tool with a=2 and b=3. After receiving the tool result, reply exactly with 'sum=<value>'.",
+              "text": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
               "type": "input_text"
             }
           ],
@@ -24,7 +24,6 @@
             "description": "Add two integers",
             "name": "add",
             "parameters": {
-              "additionalProperties": false,
               "properties": {
                 "a": {
                   "type": "integer"
@@ -38,7 +37,8 @@
                 "b"
               ],
               "type": "object"
-            }
+            },
+            "strict": true
           },
           "name": "add",
           "type": "function"
@@ -66,9 +66,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760405714,
+      "created_at": 1760542336,
       "error": null,
-      "id": "resp_0497c85cf22600170068eda8d2622881908c0272c8a1afd27c",
+      "id": "resp_0b6f253559b385800068efbe805d148190a127258ea01ff27d",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 10000,
@@ -78,14 +78,14 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_0497c85cf22600170068eda8d2d7d08190add844e59fb1c377",
+          "id": "rs_0b6f253559b385800068efbe80cf448190a9d58a53c651575b",
           "summary": [],
           "type": "reasoning"
         },
         {
-          "arguments": "{\n  }",
-          "call_id": "call_6mqJYiAlhDTR5iQ7Eb8DHEfV",
-          "id": "fc_0497c85cf22600170068eda8d6b7c481909b52eb55a7959359",
+          "arguments": "{}",
+          "call_id": "call_PHsF6p8fqvNsYxfngCm0gF0F",
+          "id": "fc_0b6f253559b385800068efbe8319508190ae581065ccb33c10",
           "name": "add",
           "status": "completed",
           "type": "function_call"
@@ -128,15 +128,15 @@
       "top_p": 1.0,
       "truncation": "disabled",
       "usage": {
-        "input_tokens": 53,
+        "input_tokens": 51,
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 465,
+        "output_tokens": 207,
         "output_tokens_details": {
-          "reasoning_tokens": 448
+          "reasoning_tokens": 192
         },
-        "total_tokens": 518
+        "total_tokens": 258
       },
       "user": null
     },
@@ -148,7 +148,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e356c29b0d4d2c-ORD"
+        "98f05e41ede9507c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -157,13 +157,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 01:35:18 GMT"
+        "Wed, 15 Oct 2025 15:32:19 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "4516"
+        "3080"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -175,8 +175,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=62VAf3ACjHjChaWSfHXsA4NhAm1GR8.AE3wd5Nb4kKA-1760405718-1.0.1.1-0yeNR0Z.Iyou9u8dsFwKphNZtEt2QXbZudZqK85vgbuTh_XFGkElGexC8ct7eFdZhpMwzg0Yz3ZKcmpBHe75H6lhtNUGsgrvw5iWbupYb6Y; path=/; expires=Tue, 14-Oct-25 02:05:18 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=Q46thC8NB9Vd0xNhiykatqqIeVlgCcWGFs51IlU6wjg-1760405718918-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=pxDeWuLbyR7iBRsyjdt3cP4V9HCNIMXVbbaJMz_8Ypc-1760542339-1.0.1.1-MQhBOmOgHtumRKlu3JMb_pjIFa_n1DLwIo7lEdXBYmTOPQjxnjASQlTtXn1pY.PikjtbpOkk89orCaeoNPVemlzIMlcGg5xFhtRPG_w549k; path=/; expires=Wed, 15-Oct-25 16:02:19 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=e6MixcBKGXQ1BmvVjgSl8Mic1f08wwwZXI3kD4qfmDo-1760542339460-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -188,7 +188,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "4521"
+        "3086"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -200,7 +200,7 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9999684"
+        "9999686"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
@@ -209,7 +209,7 @@
         "1ms"
       ],
       "x-request-id": [
-        "req_2fed106b3ccb41ab9933016ee3beb6c2"
+        "req_a08b4059640040fea6190de42903d4c7"
       ]
     },
     "status": 200

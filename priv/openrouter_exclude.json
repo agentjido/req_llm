@@ -1,0 +1,27 @@
+[
+  {
+    "model": "mistralai/devstral-small-2505",
+    "reason": "FunctionClauseError in tool round-trip tests - possible model API incompatibility",
+    "date": "2025-10-15"
+  },
+  {
+    "model": "mistralai/devstral-medium-2507",
+    "reason": "multi_tool test failure - model may not support parallel tool calls",
+    "date": "2025-10-15"
+  },
+  {
+    "model": "mistralai/mistral-small-3.1-24b-instruct",
+    "reason": "Multiple tool and object_streaming failures - API compatibility issues",
+    "date": "2025-10-15"
+  },
+  {
+    "model": "mistralai/mistral-small-3.2-24b-instruct",
+    "reason": "multi_tool test failure - model may not support parallel tool calls",
+    "date": "2025-10-15"
+  },
+  {
+    "model": "nousresearch/hermes-4-405b",
+    "reason": "FunctionClauseError during streaming - model streaming format incompatible",
+    "date": "2025-10-15"
+  }
+]

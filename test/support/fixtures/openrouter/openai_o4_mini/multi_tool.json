@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9vNC1taW5pIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9vNC1taW5pIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "max_tokens": 20000,
@@ -23,6 +23,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -48,6 +49,7 @@
             "description": "Tell a funny joke",
             "name": "tell_joke",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "topic": {
                   "description": "Topic for the joke",
@@ -99,9 +101,9 @@
             "reasoning": null,
             "reasoning_details": [
               {
-                "data": "gAAAAABo5Rw1iQJO_WDWLNqzoTKIEPmTxWpwo0qFm4RAgRD5ZDFO1GANUJ1alM1c02KDIsEQRemAyJ0EvlUCIDRHqed1hZwkM6sxjHrESwOBo9psqboI9z1pF3CPFS0XEwbFERa_Uex4H2WcrbZEM48R3kCNKMjfoRHRivZAzZWrztsOnBLKybSUD8feTvPlQvesZlqgP8ad6lB-UeUHijz10c5X1a_ncg46l6cQcjEtuSkwne0TJQaXDIZxxU-yLMkZz7kcAXsXAZ_g4rOI2ToB1mKtTPwt1vFbbiLeIIyRgbCJl_eqi8EB57guw4dADvwfAegNb3v8zRnxYUqKsGHlXZFqlfkgA1-0xcl0sFrJqeRva1G6Wm_AhcevCLcLt3dxXGJ3iihrWGe5E06uW2EBbxmYT4oUuONmj66rudGWQvW5C9jRSAPHxJdXPBUoQnh67oJYCGGtei-gRecwcXmO0ROJQQUTR796WMRtvl5JIzAtr1NZnjssCt7iwWa71YiVCQq8pxZVOGPiXsD2K446gpiV9l0bSYnJgn-5r_z2X-hmXeXnvYYnO5vXEEHVEa2gaR55cFsGmB9nP-iNknBCP-6MwIZ8h-pqHWl-7-AyJkyEjykDB43a7mcauYwGMygP5URAcX32PruTstiQ7wpRBYeR8ovKumZ7yEXsZNtRjKyV3HcEAC2Z1tu4-r-3ND9_7HIWZ5qghofRIE8bALP45C7H9AuhsmVT8YOKf3wrx9fmKUw0aifOVoeyY9c9nHcAtx14uBzghWcWCIV45c1p2oQ11k87xCrQNHYcaz6xTFYSeLH-OQp62lQNv5JvckLumjNLjDYJzvevpK7ts_5TENJTVMLZCsH3nuxI4IAiSRG8Dv9dWA4bTkt82kFEI1NH7Ns8PXZ7XarD4AInyn67DtEmEPhNpOHbit4gw-rN_ARzDJGUzYg=",
+                "data": "gAAAAABo75hj1rjsGU_BxisxWHpbXMo8Dyb_JgFdW3ghHac-_SBq896VzDTrnjo4HZpoxUrnDEx0TZy4O4E3LHq48tl8k5aK4BVDLPf7uQS8WvSmvVkr1dBzNN8TU_ia0Ib6Ento4yeFZZ05aPm4_moG2m4nH77Koh35wAe1WYqruOib12hTHKE8bR-9U8hPGK59rJwajQMLvLgPo2LZSkHEDzdKW-XJLHnF11gClUxxMrlcx7PbMrMh1srOPARXEdcE2dDFicBVVQ73yjfFUbwPO6HPVN7pVoQoghR5SAUl1Oexu4R8RD0ngBpa4JEuMVcveYd4W8ralBrzIUfULVoBgBHwYZXKeJF7DPuWZNLgp9yZvo89vi2SZ4Wc89kK-nYjLkHkhf3B5BNndR7vopdZavb-fR4JZTo5NEJueVQ4RkbdCkbNN_aJ29AdMWkhwB1fdQBMvFcpkZe9Jd47a2jaG7Tso0NNR3zIjZBBNb1d32nFfYirq7do8PxqTjJVOMs5QshppjXMyP-M8zdtEERVpRkrHUYqMjrH3ahY3zX1WaEQi_RgbztQjFv4xteBTNcykibFwpUErzsgiLDw5KBg1Ou9VVRYw5oqPzWUUg6RgNU0bzOParzoaZGDKL4ABqdcsV8lkPwk7DFixDH8g17n4gj99yEyfYxP9PovUR-37hVlnSoRgzf60QIPvHTRvd_KDPDdW369DiHAUb0zmm4pihoDEKE36xwbH5tgFwxwoK2XiqIZOCaGVx4LdgD3_Zpr0URbF0dELqh9q5Iu0g3DXgsBueRjZqnl9ZFHp0zAOg035i1SXSkNL8zhNecCbnCXz_tsWqeaPwhf-NBjsPjyCYlq_fTguNvwX6BcZUkxSHAWkLFgFpiqBFqc46p7bPtxTDcgYPi4gD6xIgriE3HwZyTr8sqjxcC8sYB8IY4zAx_dmPOI9J6cg6OFmM8H7_TrBdxhIbzl",
                 "format": "openai-responses-v1",
-                "id": "rs_067c1c6e9e3b39ee0168e51c3566fc8195ad981c9c7dfd8ae1",
+                "id": "rs_04e86934d39ee8d60168ef9862dff48196838ae7b0f5652e9e",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -114,7 +116,7 @@
                   "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "call_9jRkXRh6PFloAFWA8j5PKzVR",
+                "id": "call_0LcPkkeW6DRG6rIz5mXoZ5Po",
                 "index": 0,
                 "type": "function"
               }
@@ -123,8 +125,8 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1759845428,
-      "id": "gen-1759845428-P44DeV0gEBlyAeQ3yX7u",
+      "created": 1760532577,
+      "id": "gen-1760532577-iiWICEsnaXif1BxJcA8v",
       "model": "openai/o4-mini",
       "object": "chat.completion",
       "provider": "OpenAI",
@@ -139,7 +141,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade7e71b938714-ORD"
+        "98ef7001789ef790-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -148,7 +150,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:57:08 GMT"
+        "Wed, 15 Oct 2025 12:49:37 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -1,0 +1,128 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMjgwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiJjYWxsX2Y3dHY3ekFSWUhqQ241czBHSDJWdEszSSIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfZjd0djd6QVJZSGpDbjVzMEdIMlZ0SzNJIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1uYW5vIiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 12800,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        },
+        {
+          "content": [],
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"a\":2,\"b\":3}",
+                "name": "add"
+              },
+              "id": "call_f7tv7zARYHjCn5s0GH2VtK3I",
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "content": "5",
+          "name": "add",
+          "role": "tool",
+          "tool_call_id": "call_f7tv7zARYHjCn5s0GH2VtK3I"
+        }
+      ],
+      "model": "openai/gpt-5-nano",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "sum=5",
+            "reasoning": null,
+            "reasoning_details": [
+              {
+                "data": "gAAAAABo75iPpArlTiXkRIX6bz6-QFjbctTGy1ILcSc_qlzuH74CVxKW2aufvIGJGFIvtJnQMHmH-Gu8o8wRQyoUigp9Ctn7j494z9i0STH8sigDegBZvYa1zvv_P_XwQDLeBarGaCQTAjjVanVUcE-KI620VtTb4QYXpK6_yRSXKW8Dt5tymN-DWV744hMuujmenQztIe_rwJ-PCQ36NHbrT5eKaVefH7gQB1wJx5HVjpnsHVqDccZadtii0n7NoIG-9XAwhzCSlwKsNfzNG3HneFbIqEvKYOrCY68b8gH6CGraK68k4zFIyDOmU_UGaW3OQbDwL9rWBZQdeita3fj8JcX7ICm3uPbEBq_cHejZ3QYVN_Tf1rEcoLEjE4eZ_wE_zUMUhcgEO33smrtVVMGON31eRJz7UeTNsInrzLLoBMAkAaGbsJL4Sg7Re4e92zBCSeIM24sE98sQO_VbOIztZ5kDNJlC8HDhuE_f8k27VKW2gsdRnrLwUo3yNNd8HZzc565b4-gMV6JNUKykHPA3WFJU-_rkCS-HkOskqJlOkavI2huoYjNbcxxCGzxjvMlT1hL83ixJ9jbZjaBeP5WXgedt51XEy_x_VYwlFl7iICdZXQQLd78xSzSVN3yLx_RQ7HicI9GgsoB5P-Rf6N1-ZjIm7kq7P123sf4ISTHekNzoIax85yHOB4I1RWCsX-9TrR3oK5j0et_KD1As6VPMTWmIHbGduH4APd_Rt6C8FrXDZ4rDUo-Fa9tNbh77CPIpuHfxxC4mfZ4y_aeVCJe6LbBvZPDuxO3h30hPeUeyHoYZaSz2lr7Sv4ucC6Ht1DJ16Gz_lv_X_5n_gPS-aD94sFMGK99t_uEA6U1ZZX-cbGDNwYmCqVEp-pw-hIvN6ivC-9I_mo3BE5bYtFks_CYWFNqMAKm1eDz1qrLrmuCfyf5QeyYAAadfcGPBpslDxZ8vrCaLVF7cQC1pbIj6MAD7o7V82KzKGASb0QwoWWnlW9uMHK8HFxMHQA_POJ45g2K5UU9hOAJdU8F5m0ZWCHWDapu4RJluWwc4I_dS1boxhAq3JTCDhUqjqufz8T8UPxDxWnasvjEKcf3Xs1KRPscoklab18A0sAXpVzM076cB5IXiam_w7SjOvKUwKN3fpBsweHyi_zjaWe69VcOjby3wi5s-BXkZEa38G9fZZLfQ1rgmHdXMFqerebwST2A4urpoLjWmZ3lvOfDtNDRFe1lXn_8sRsCZV93kYxBxf6upksXdX00m9dk9cpPvHaBxbBSMVsRyn1Be26yq-cet-L-n3nyAuBoCqQ==",
+                "format": "openai-responses-v1",
+                "id": "rs_68ef988e76b08190a92e5d8ef595a3a2",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1760532621,
+      "id": "gen-1760532621-r9K4o3p3VcMfeYL5OjQ9",
+      "model": "openai/gpt-5-nano",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "usage": {
+        "completion_tokens": 73,
+        "prompt_tokens": 60,
+        "total_tokens": 133
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ef71169ce161c9-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 12:50:22 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

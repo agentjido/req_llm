@@ -39,7 +39,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "# The Dragon's Legacy\n\n## Chapter 1: The Forgotten Prophecy\n\nThe morning mist clung to the ancient stones of Elderglen like the breath of sleeping giants. In the village of Millbrook, seventeen-year-old Kael Thorne stirred the embers of his small hearth, watching orange flames dance to life beneath the kindling. The cottage was quiet except for the gentle snoring of his grandfather, Aldric, in the adjacent room.\n\nKael had been an orphan for",
+            "content": "# The Last Dragon's Legacy\n\n## Chapter 1: The Awakening\n\nThe morning mist clung to the Whispering Peaks like the breath of ancient gods, and young Kaelen Stormwind could feel something stirring in the air—a presence that made the hairs on his neck stand on end. At seventeen, he had spent his entire life in the mountain village of Thornhaven, listening to his grandmother's tales of dragons and magic, stories that most dismissed as mere folklore. But today, the stories",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -47,13 +47,15 @@
           "native_finish_reason": "length"
         }
       ],
-      "created": 1759847024,
-      "id": "gen-1759847024-GCCAGLb430H8td1Klz3k",
+      "created": 1760547270,
+      "id": "gen-1760547270-ZO9RF7bSBUtCbwyOKyWu",
       "model": "qwen/qwen3-coder",
       "object": "chat.completion",
-      "provider": "DeepInfra",
+      "provider": "BaseTen",
+      "system_fingerprint": null,
       "usage": {
         "completion_tokens": 100,
+        "completion_tokens_details": null,
         "prompt_tokens": 17,
         "prompt_tokens_details": null,
         "total_tokens": 117
@@ -64,7 +66,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ae0ee029fe6194-ORD"
+        "98f0d6b93dfc6183-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -73,7 +75,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 14:23:44 GMT"
+        "Wed, 15 Oct 2025 16:54:30 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

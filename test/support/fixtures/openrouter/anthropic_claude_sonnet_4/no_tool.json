@@ -61,7 +61,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs! 🐱\n\nAnd here's another one:\n\nWhat do you call a pile of cats?\n\nA meowtain! 🏔️\n\nHope those made you purr with laughter! 😸",
+            "content": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs! 🐱\n\nAnd here's another one:\n\nWhat do you call a pile of cats?\nA meowtain! \n\nHope those made you purr with laughter! 😸",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -69,15 +69,15 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760473571,
-      "id": "gen-1760473571-pWnTy8nHDz5Q0Xl8KkjC",
+      "created": 1760532472,
+      "id": "gen-1760532472-N2bowSujtyfuPtRjGN1n",
       "model": "anthropic/claude-sonnet-4",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
-        "completion_tokens": 77,
+        "completion_tokens": 73,
         "prompt_tokens": 388,
-        "total_tokens": 465
+        "total_tokens": 461
       }
     },
     "headers": {
@@ -85,7 +85,7 @@
         "*"
       ],
       "cf-ray": [
-        "98e9cf6b48141923-ORD"
+        "98ef6d6f9a5258ee-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -94,7 +94,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 20:26:12 GMT"
+        "Wed, 15 Oct 2025 12:47:53 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

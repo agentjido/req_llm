@@ -35,35 +35,36 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": null,
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "### The Whispering Flames: A Tale of Dragons and Eternal Quests\n\nIn the ancient realm of Eldoria, where mountains pierced the clouds like jagged teeth and rivers of molten silver wound through emerald valleys, dragons were not mere beasts of legend. They were the guardians of the world's heartbeat, ancient beings born from the earth's fiery core. Their scales shimmered like polished obsidian or gleamed like forged gold, and their wings spanned the distance of a village square. But peace in Eldoria was fragile",
+            "content": "### The Whispering Flames: A Tale of Dragons and Destined Paths\n\nIn the ancient realm of Eldoria, where mountains pierced the clouds like jagged teeth and rivers of molten silver wound through emerald valleys, dragons were not mere legends. They were the guardians of the skies, their scales shimmering like forged jewels under the twin suns. But peace in Eldoria was fragile, woven from the threads of ancient pacts between humans, elves, and the draconic kin. For centuries, these pacts",
             "reasoning": null,
+            "reasoning_details": [
+              {
+                "data": "7VKUQNd5j+Ol/QAjRhmcP2L1fZrZ7PMorBxwTMKAJfVw25hbCJZ+NdshudiYULzpJG+lV3ofl69PMyXG9RCNDenjRq55NwAGOoSFRJoeZZWmrd7APcMJOijkJJgNF6UnAS5k9MdMwg3AxMerzIVBCxOK5vwHpC2+/kiRiq9npZkvZXnLVvzpn6URYOw3pq8vokrn6nYXG8+cxgjThiYvI0l4nIBWCLc1ZwNJMLkvD2ORzkadhGdc4gc05G+X+UmANi+ObRhr1i1BOfyopOaIP8xiLhcqv6BAR7fSU8c6yvQ9O1QehNHv4c5RnuNh7C5zx/ZuZ3T0ddo6ITCorAytvw84AiLTkQ6Vku/VpvAkh4sWHA7TmQ91rS2PUsOSSCC+KSro1WDrBYK7zjV66AuxEwwt+w4zHzoqbCkPNQOfpRm7dCI71bOkq0EXOZM1EJuKEZpNOVidfVR5BUKpeyUJtQhtaJtYgpy3MxqgM4SO5ic0zxnAhwd3vngUHvNcQc73umTfKFdwYwY++fPWfBKHr+ePbHAEVcORjnP9kaGnuzvj0415sha0+KArMCPuLklEm/B1rmZGjjnbNWOh/Q6jwW5hG94W881fOXeojWX3s/xRfDhgAgPwqnqdF/Q6y4e9Eaqo5BQE5+RZ42nMRYBLz6ikuB5V/6aMcadfYjFiJIN6Y/CY7pQdlScylos1Nsn5ke7C0eK0oKIcMnJDZ1vXQk3+Iu9rNmmZtIGJ9fb24khN02g3+0keCqIREUTivp1WSppYVHcgNGI0rHPKeEzWJIBRSubzjal+zIKbJ08QYmbsbmCId7CHIqQhTnMqNl2lOIztZfFB+QNuVSj/5+DlLdRATyvq01CJ9v1WvveJnn5QquQG+oZ93r9DD+hP6eXa9LZdFLTrTX4euMbD1VZ1tF4yGn3CmsTmpo7aOsmqzrI5vjRdzkKr6gqL3IIdfb7DFn1ErdpH9W9i2jNcaDyKwAVx4jE40ZggU8esyisakAYynIJX2EHI4eB3xGP6ERlMRa+xtpPGZb+DdsXBHFYYY0BDivg39hFzW6lMSxts3VmjBMXN7g62KJlm/sKz+Si2efm992eln6lA1jGYVACuQmHD+Ggs/tGR1DqL7oWHDMP/+YX7CcGH2Jxu5Pr7IiJz69eK1vwRkhqdnVtTeecSQqnUIRkfRD4o/IG38kOFESmHKODMl3rOglw4D9JzJxb4qhXoAX1yAMBAd5pkcks",
+                "format": "xai-responses-v1",
+                "id": "rs_948c8ee1-ba71-82a6-8d14-db0991a561c6_us-east-1",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "length"
+          "native_finish_reason": null
         }
       ],
-      "created": 1760442689,
-      "id": "gen-1760442689-QccCNGNwbcsg6jDUybIb",
+      "created": 1760532583,
+      "id": "gen-1760532583-TWdqLrHKCdF8jWGDLWjb",
       "model": "x-ai/grok-4-fast",
       "object": "chat.completion",
       "provider": "xAI",
-      "system_fingerprint": "fp_9362061f30",
       "usage": {
-        "completion_tokens": 330,
-        "completion_tokens_details": {
-          "reasoning_tokens": 230
-        },
-        "prompt_tokens": 165,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 153
-        },
-        "total_tokens": 495
+        "completion_tokens": 101,
+        "prompt_tokens": 16,
+        "total_tokens": 117
       }
     },
     "headers": {
@@ -71,7 +72,7 @@
         "*"
       ],
       "cf-ray": [
-        "98e6dd79ed3288cd-ORD"
+        "98ef70274826f85a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -80,7 +81,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 11:51:29 GMT"
+        "Wed, 15 Oct 2025 12:49:43 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

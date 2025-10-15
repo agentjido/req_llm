@@ -1,0 +1,150 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJvcGVuYWkvbzQtbWluaSIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoiYWRkIn0sInR5cGUiOiJmdW5jdGlvbiJ9LCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJBZGQgdHdvIGludGVnZXJzIiwibmFtZSI6ImFkZCIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImEiOnsidHlwZSI6ImludGVnZXIifSwiYiI6eyJ0eXBlIjoiaW50ZWdlciJ9fSwicmVxdWlyZWQiOlsiYSIsImIiXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 10000,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        }
+      ],
+      "model": "openai/o4-mini",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tool_choice": {
+        "function": {
+          "name": "add"
+        },
+        "type": "function"
+      },
+      "tools": [
+        {
+          "function": {
+            "description": "Add two integers",
+            "name": "add",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "a": {
+                  "type": "integer"
+                },
+                "b": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "a",
+                "b"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "",
+            "reasoning": null,
+            "reasoning_details": [
+              {
+                "data": "gAAAAABo75hYj75EEHqWA3MzjtxFbfY481Zjmu5bpTliUqhJfbfUaewEKlnNb1f87l5KytGVf905hgrSL0a5ygJ8m-Gu2PPRvmKmM2d1jj-HVue0dsmnkC4_LyqZo4U5CTEMkNPLIb_iBzdG-4frA288GfMHd1PsfKTVCmkleDULJdxHNY-C566a4V_s9gczrlvfkOkm4rzuzz-OpLJLl4ruCnty6PHMrIBVZcxXeuV_6ip-D3d4KVzWl2CDfvI8_ch6f1yDZyoVEpf1Kdb7dZtWyKByulaqaNUh5SOryjJb1slQbLlM5KzKAuCP0LbjbqbxE-vDQ_LF2uqFByUVvezLimt_lKxgYQxDwcmpVxxDjtpOTs1Tj3nwnNqBRgNo7peFged1jItO3GWj9WFqnji0T5yhswEBvXrNHTdV3BMk6AoX7kCxVXpZ6UP19iPoZoNCx2l4TUmsXqCb26mBdBvWWO5aDAIhJC-8PYehgQ1tQf7W_9rlcO-66NEzenN5RrxU6mj-Eaix2T8yAIsoPUAsZAab-tpF7U6vnM4omyODGmKWZeLtS-L-9n9-xFP0RN2serxKMuv3KNakar4zTo-1m1c-uW2CGhM-ZNsU4UZdw0qvggHYr5kSjnOswFs6UDZG5L-N-WqY1a3qLqM2xWCml9Ip-pOkUBsKog0A2A0gDqfxyxJSQhCiJSHs4FveMXEXlPR6_LKL1H7pxux5CeJjtDtNED5JAi5IdWJbAK5FvY-FOIEuu8FljLu2UJbsyOP-lv9Sr9lhNGN8xbKQ88TrSHl4wcSfBT2grNKm7tRFI9mvMzRv4THq1i7LK5NflBJmRKZT7Ff4ywr9V6e397N8cHJV9vXjWbTCCIjVTA-3zhUEguLHXYkHKJUzTSnbmfmxihq_EOadG2RnVypiTYhcu_pxnKbVwNYY1SFP9ZjyTrfUkTGUxrCaT1l8BRHx6LYe-xesIHmH8Qdqv3Yal03iS27_BgS6IoHy3MagTEAVYwdTD4lwUD00qpPib8zQdAIN0W_LtfzZsU5aU56z4JlcgJoU0TywM_uCTCi7GAJHm-xfgPcBpw64tHRIMvyKzX0CmCK7Inoq4aRoPnQA3v8J71jU4dpWTcrfQJ7wkrjKl9nHTOssSGHaKIe-RjLfZ_8i2DUvEmSNHD5rN8ItK34mtwJ4acYqi0m4ih1MH8inP9t6BHJdtYVXCu8O15VJ03dgkHwwP-F11OVMBxKDrJmM0PiqTC9vS6EFCQfqMArmDhQUTJ5Fovqvw7O8LqTegBBY0Z9Z-JelcK0YBF8XHq7-7fMgbj7ETodl7uIrzyaedK-4OGko-HtMVzHXvveiXQlDzUSZafLtLuC96t1sBpjvOAzdtnJVdVZeE668954zl0n5rlicpLIULQlTVmwvBqckkdqR-6KLO8WSxNe64hmH2WnNSqvlYzrqbH4cCNvr_pmL6MiD8fqNPiF8xvruSqme-s75W3uY3wbqF8XxlHhGPYgcbdH49mqiC-8Nk_aWamPOWducU1a0bHXywO6XILZrlEMu-3FdxDipI6wKh9MVDxt3KG8TAAHCY96mqv0t9lQjipnefBWZImVEkv2tXLm7jQtPiVmtyhuJfH8cTM6Z7Yy1LjHGpIlwH_7fS9eEsXBGjIiR_YUUj3biXj86bNWIZ-cp-sUObE84nXYkScRIiXjRUgdq0IJN8lxXJ1FgnirgFE9edO6T8Q6K17wDKRDQxWFjRidf83_A8n1czz9EbwIGb0dzrzBaE2M0_KKFcRpUbwdYKsWaV0Q93QFpduZmIr9cyWe0DwSF7dIBgM2-ihwasbikzSzUcCw3_n_hNfqxdCxFaReULJhHQLZ5F7PHwtDlNh5WmmySOFknHRIJzMdDcOztvrvVMKNOXMp1jQVTEiseOlK22cw4CIH3OH4kpnugOvdWtYK8Q1lkZmhDlVb_zTjwpvE56d4mHZeAMXhGTbkhpfnCnY5KEBukOvJvpGJfY2TNCykRKo_X8nzz1oQjYNyPfeMLiFD2XF9sNm-Xl1fCAAEoY4N5jbA8zHzqeNb3dFkiYR1OZJ0mFL_DeeZ83HrhOm4NaiAWkQujDhekQXCCRomEGOiwlCXQMr1otDVzHt5S",
+                "format": "openai-responses-v1",
+                "id": "rs_01040185e2452ead0168ef98565be08193b69aa1c5cf14c662",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"a\":2,\"b\":3}",
+                  "name": "add"
+                },
+                "id": "call_TvNmyDFE1P2Ej4qtXBtDSa3Y",
+                "index": 0,
+                "type": "function"
+              }
+            ]
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1760532565,
+      "id": "gen-1760532565-ddu7iP6aobaEfIx134oa",
+      "model": "openai/o4-mini",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "usage": {
+        "completion_tokens": 215,
+        "prompt_tokens": 65,
+        "total_tokens": 280
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ef6fb8bcfff790-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 12:49:26 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

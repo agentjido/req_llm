@@ -48,13 +48,15 @@
           "native_finish_reason": "length"
         }
       ],
-      "created": 1759847028,
-      "id": "gen-1759847028-NnBozuNXGdrbyeAz4vTu",
+      "created": 1760547281,
+      "id": "gen-1760547281-udlorZdp6OPYaXke8x2M",
       "model": "qwen/qwen3-coder",
       "object": "chat.completion",
-      "provider": "Chutes",
+      "provider": "Novita",
+      "system_fingerprint": "",
       "usage": {
         "completion_tokens": 10,
+        "completion_tokens_details": null,
         "prompt_tokens": 11,
         "prompt_tokens_details": null,
         "total_tokens": 21
@@ -65,7 +67,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ae0efacf676194-ORD"
+        "98f0d6fe7f0b6183-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -74,7 +76,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 14:23:51 GMT"
+        "Wed, 15 Oct 2025 16:54:42 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

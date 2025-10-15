@@ -74,38 +74,28 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "tool_calls",
+          "finish_reason": "length",
           "index": 0,
           "logprobs": null,
           "message": {
             "content": "",
             "reasoning": null,
             "refusal": null,
-            "role": "assistant",
-            "tool_calls": [
-              {
-                "function": {
-                  "arguments": "{\"name\": \"John Doe\", \"age\": 30, \"occupation\": \"Software Engineer\"}",
-                  "name": "structured_output"
-                },
-                "id": "hEi1s4Bxi",
-                "index": 0,
-                "type": "function"
-              }
-            ]
+            "role": "assistant"
           },
-          "native_finish_reason": "tool_calls"
+          "native_finish_reason": "length"
         }
       ],
-      "created": 1760473393,
-      "id": "gen-1760473393-e0jEsEyQcfHH3ObBdrT1",
+      "created": 1760547419,
+      "id": "gen-1760547419-WfluGvbAb0MOfvdSyStZ",
       "model": "mistralai/mistral-small-3.1-24b-instruct",
       "object": "chat.completion",
-      "provider": "Mistral",
+      "provider": "Chutes",
       "usage": {
-        "completion_tokens": 36,
-        "prompt_tokens": 139,
-        "total_tokens": 175
+        "completion_tokens": 500,
+        "prompt_tokens": 183,
+        "prompt_tokens_details": null,
+        "total_tokens": 683
       }
     },
     "headers": {
@@ -113,7 +103,7 @@
         "*"
       ],
       "cf-ray": [
-        "98e9cb17291bf159-ORD"
+        "98f0da5e1a6710cb-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -122,7 +112,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 20:23:14 GMT"
+        "Wed, 15 Oct 2025 16:57:01 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

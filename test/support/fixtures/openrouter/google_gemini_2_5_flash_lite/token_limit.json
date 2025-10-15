@@ -1,0 +1,114 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJnb29nbGUvZ2VtaW5pLTIuNS1mbGFzaC1saXRlIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjV9"
+    },
+    "canonical_json": {
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-2.5-flash-lite",
+      "n": 1,
+      "reasoning_effort": "low",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "The wind, sharp as a dragon’s claw, whipped across the jagged peaks of the Dragon’s Tooth mountains, carrying with it the scent of pine, frost, and something far older, something primal. In the shadowed valleys below, nestled beside the whispering Silverwood, lay the village of Oakhaven. It was a place of sturdy timber homes, smoke curling lazily from chimneys, and a life dictated by the seasons. But lately, the seasons themselves seemed to hold a new, unsettling chill.\n\nElara, a young woman with eyes the colour of a storm-tossed sea and a spirit as untamed as the mountain winds, felt it most keenly. She was not like the other villagers, content with tending fields and mending nets. Her heart yearned for the horizon, for the stories whispered by travelling merchants of lands beyond the familiar forests. She spent her days apprenticing under Master Borin, the village’s aging lore-keeper, poring over dusty scrolls and deciphering faded runes. It was in these ancient texts that she first encountered the legend of the Sky-Serpents, the Great Wyrms, the dragons that had, according to myth, shaped the very mountains and rivers of Atheria.\n\nLately, the myths had begun to bleed into reality. Strange sightings were reported from the northern settlements: a shadow larger than any eagle crossing the sun, a guttural roar that shook the earth, a flash of emerald scales against the twilight sky. Fear, a cold serpent itself, began to coil around Oakhaven. The elders spoke of the Dragon’s Ire, a time when the great beasts, angered by some forgotten transgression, had scourged the land. Now, it seemed, the Ire was returning.\n\nOne frigid evening, a rider, his horse lathered and wild-eyed, burst into Oakhaven. He bore news from the distant city of Veridia: the King’s own dragon riders, the esteemed Order of the Azure Wing, had been decimated. A colossal, black-scaled dragon, wreathed in shadow and fire, had descended upon their mountain aerie, leaving only ruin and ash. The creature, dubbed the Shadow Drake, was now reportedly heading south, its path of destruction seemingly aimed towards the heart of Atheria.\n\nPanic rippled through the village. The King’s knights were few, his armies too far. Oakhaven, like countless other settlements, was left to fend for itself. Master Borin, his face etched with a deeper weariness than usual, called Elara to his study.\n\n“The legends speak of a time before the Ire,” he rasped, his voice thin. “A time when dragons and men coexisted, when the Great Wyrms were guardians, not destroyers. This Shadow Drake… it is not natural. It is a perversion, a manifestation of a deep sickness in the world.”\n\nHe unrolled a brittle parchment, its edges crumbling like ancient bone. “The texts speak of the Sunstone, a relic of immense power, forged in the heart of the first volcano and blessed by the eldest dragons. It is said to hold the key to calming the Wyrms, to restoring the balance. But its location… it is lost to all but the most obscure lore.”\n\nElara’s heart hammered against her ribs. This was it. The adventure she had always craved, woven into the fabric of her village’s survival. “Where is it, Master Borin?”\n\nThe old man’s gaze was heavy. “The fragments of lore point to the Whispering Peaks, beyond the Serpent’s Pass, a place where the veil between worlds is thin. It is a journey fraught with peril, Elara. Many have sought the Sunstone before, and none have returned.”\n\nBut Elara was resolute. “Then I will be the one to return. I will find the Sunstone and save our home.”\n\nBorin nodded, a flicker of pride in his weary eyes. “You have the spirit, child. Take this.” He handed her a small, intricately carved wooden bird. “It is enchanted. It will sing when danger is near, and its song can guide you through shadowed lands. And this,” he pressed a worn leather pouch into her hand, “contains a few coins and a map of the known territories. It is all I can give.”\n\nThus, under the cloak of a moonless night, Elara left Oakhaven. Her only companion was a sturdy mountain pony named Flint, and her only guide, the cryptic words of an ancient lore-keeper.\n\nHer journey began through the familiar Silverwood, but the forest felt different now. The usual rustling of leaves seemed to hold a hidden menace, the shadows deeper and more watchful. She encountered her first true test near the foothills of the Serpent’s Pass. A pack of spectral wolves, their eyes burning with an unnatural blue light, emerged from the mist, their howls echoing with a chilling hunger. Elara’s wooden bird pulsed warmly in her pouch, then let out a soft, clear chime. Remembering Borin’s tales, she drew her small, sharp hunting knife. She fought not with brute strength, but with agility, dodging their spectral bites, using the terrain to her advantage. The wolves, creatures of shadow, recoiled from the faint light emanating from the bird, and Elara managed to escape, bruised but unbroken.\n\nThe Serpent’s Pass itself was a treacherous, winding trail clinging to the side of a colossal mountain. The air grew thin, and the wind howled like a banshee. Here, she met Kael, a grizzled ranger with eyes that had seen too much and a bow that never missed its mark. He was tracking a wounded griffin, a noble beast that had been attacked by a corrupted wyvern, its scales the colour of diseased moss. Kael, initially wary of the lone girl, saw the determination in her gaze and the faint glow of her enchanted bird. He, too, had heard of the Shadow Drake and the growing darkness.\n\n“The Whispering Peaks are no place for a lone traveler, girl,” Kael said, his voice a low rumble. “Especially not now. The very air there hums with ancient, untamed magic. And the dragons… they are not what they once were.”\n\nElara explained her quest for the Sunstone. Kael, a man who respected the old ways and the balance of nature, felt a kinship with her goal. “My path lies north, hunting the corrupted beasts that plague the foothills. But the Serpent’s Pass is my home. I will guide you through it, and perhaps beyond, to the edge of the Whispering Peaks. What happens after that… is your burden.”\n\nTogether, they navigated the perilous pass. Kael’s knowledge of the terrain and his keen senses saved them from rockslides and hidden pitfalls. Elara’s courage and her growing understanding of the enchanted bird’s warnings proved invaluable. They learned to trust each other, two solitary souls united by a common threat.\n\nAs they neared the Whispering Peaks, the landscape transformed. The trees grew gnarled and twisted, their branches reaching like skeletal fingers. Strange, bioluminescent fungi pulsed in the perpetual twilight. The air thrummed with an unseen energy, and the constant, faint whisper that gave the peaks their name seemed to carry fragments of forgotten languages.\n\nIt was here they encountered the first true dragon. Not the monstrous Shadow Drake, but a creature of breathtaking, albeit dangerous, beauty. A young emerald dragon, its scales shimmering like a thousand jewels, perched on a high cliff. It was not inherently malevolent, but its eyes burned with a wild, territorial fury. It lunged, its roar a thunderclap that shook the very stones.\n\nKael drew his bow, but Elara held up a hand. “Wait!” She remembered Borin’s words about the dragons’ ancient nature. She stepped forward, holding her hands open, her voice steady. “Great Wyrm, we mean no harm. We seek only passage, and a way to heal the land.”\n\nThe dragon tilted its head, its immense golden eyes studying her. It let out a low growl, a sound that vibrated through Elara’s bones. Then, to Kael’s astonishment, it spoke, its voice like the grinding of mountains. *\"The balance is broken. The old magic stirs, and not all of it is kind. You seek the Stone of Light? It is guarded. The path is perilous. The whispers… they lie as much as they tell truth.”*\n\nWith a powerful beat of its wings, the emerald dragon soared into the sky, disappearing into the swirling mists. It had not attacked, but it had offered a cryptic warning.\n\n“Remarkable,” Kael breathed, lowering his bow. “I’ve never seen a dragon speak so… reasonably. But it is right. The whispers here… they can drive men mad.”\n\nThe Whispering Peaks were a labyrinth of treacherous valleys, hidden caves, and illusions that played on the mind. The whispers intensified, weaving tales of lost loves, ancient betrayals, and promises of power. Elara’s enchanted bird chimed almost constantly, a small beacon of clarity in the psychic storm. Kael, grounded by his years of experience, kept them on course, his sharp eyes spotting the subtle signs of the true path.\n\nDeep within the peaks, they found a hidden valley, untouched by the twisted flora of the outer reaches. At its center stood a colossal, ancient tree, its bark like obsidian, its leaves shimmering with starlight. And nestled amongst its roots, pulsing with a gentle, warm light, was the Sunstone. It was not a gem, but a smooth, fist-sized orb of pure, condensed light, radiating an aura of peace and power.\n\nBut it was not unguarded. As Elara reached for it, a shadow fell over them. A creature of nightmare, a corrupted griffin with eyes like burning coals and wings tattered like ancient sails, descended from the sky. This was no natural beast; it was a victim of the same darkness that had spawned the Shadow Drake.\n\nKael and Elara fought back-to-back. Kael’s arrows found their mark, but the corrupted griffin seemed impervious to pain, driven by pure malice. Elara, seeing Kael falter, knew she had to act. She lunged for the Sunstone. As her fingers closed around its warm surface, a wave of pure, radiant energy surged through her. The whispers in the peaks fell silent. The corrupted griffin shrieked as the light washed over it, its form flickering, its eyes dimming. It turned and fled, a broken echo of its former self.\n\nThe Sunstone pulsed in Elara’s hand, its light a soothing balm. She felt a profound connection to the ancient magic of Atheria, a sense of understanding that transcended words. Kael looked at her, awe in his eyes. “You have done it. You have found the Stone of Light.”\n\nTheir journey back was swifter, though no less perilous. The corrupted creatures seemed to sense the Sunstone’s power, keeping their distance, or perhaps, the Sunstone itself repelled them. As they descended from the Whispering Peaks, the emerald dragon from before reappeared, circling them.\n\n*\"You have proven worthy,\"* its voice echoed, softer now. *\"The Stone holds the ancient song. It can soothe the Wyrm’s rage, but it cannot erase the cause of its pain. The Shadow Drake… it is a symptom of a deeper wound. A wound inflicted long ago, when men forgot their reverence for the old magic.”*\n\nThe dragon then revealed a truth that chilled Elara to the bone. The Shadow Drake was not merely a beast; it was a manifestation of a forgotten sorcerer, Malakor, who had sought to enslave the dragons centuries ago. His spirit, twisted by his own dark magic and the dragons’ fury, had been sealed away, but the growing imbalance in the world had allowed him to coalesce, to corrupt the very essence of dragonkind, creating the Shadow Drake as his avatar. The Sunstone could calm the beast, but to truly end the threat, Malakor’s spirit had to be confronted.\n\nThe emerald dragon, whose name was Viridian, offered to guide them. “The Shadow Drake makes its lair in the Obsidian",
+            "reasoning": "**Generating Story Ideas**\n\nI'm currently focusing on brainstorming and outlining various narrative arcs and thematic elements for a sprawling dragon and adventure tale. The initial phase involves exploring potential conflicts, character archetypes, and the intricacies of world-building to ensure a rich and engaging narrative.\n\n**Expanding Narrative Scope**\n\nI'm delving deeper into the world-building for Atheria, specifically how the ancient dragons' corruption manifests and impacts the younger, volatile dragon populations. This will drive the central conflict and influence character motivations significantly.\n\n**Defining Dragon Roles**\n\nI'm exploring the dynamic between ancient, benevolent dragons and younger, volatile ones. This duality is key to establishing conflict and the narrative's core problem.\n\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "**Generating Story Ideas**\n\nI'm currently focusing on brainstorming and outlining various narrative arcs and thematic elements for a sprawling dragon and adventure tale. The initial phase involves exploring potential conflicts, character archetypes, and the intricacies of world-building to ensure a rich and engaging narrative.\n\n**Expanding Narrative Scope**\n\nI'm delving deeper into the world-building for Atheria, specifically how the ancient dragons' corruption manifests and impacts the younger, volatile dragon populations. This will drive the central conflict and influence character motivations significantly.\n\n**Defining Dragon Roles**\n\nI'm exploring the dynamic between ancient, benevolent dragons and younger, volatile ones. This duality is key to establishing conflict and the narrative's core problem.\n\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "MAX_TOKENS"
+        }
+      ],
+      "created": 1760546964,
+      "id": "gen-1760546964-QFFO54nkFb69GP3o5mHJ",
+      "model": "google/gemini-2.5-flash-lite",
+      "object": "chat.completion",
+      "provider": "Google",
+      "usage": {
+        "completion_tokens": 2989,
+        "completion_tokens_details": {
+          "image_tokens": 0,
+          "reasoning_tokens": 421
+        },
+        "prompt_tokens": 9,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 2998
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98f0cf407885ff5b-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 16:49:25 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

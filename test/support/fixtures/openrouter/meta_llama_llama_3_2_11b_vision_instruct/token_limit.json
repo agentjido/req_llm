@@ -35,28 +35,27 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": "stop",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "In the land of Eridoria, where the sun dipped into the horizon and painted the sky with hues of crimson and gold, the legend of the dragons lived on. For as long as anyone could remember, these magnificent creatures had ruled the skies, their scales glinting like polished jewels in the sunlight. They were the guardians of the land, the bringers of prosperity, and the keepers of ancient secrets.\n\nIn the kingdom of Silvermist, a young apprentice named Eira Shadowglow",
+            "content": "In the land of Eridoria, where the sun dipped into the horizon and painted the sky with hues of crimson and gold, the legend of the dragons lived on. For centuries, these magnificent creatures had ruled the skies, their scales glinting like diamonds in the sunlight, their roar thundering through the valleys and mountains. The people of Eridoria lived in awe of the dragons, respecting their power and wisdom.\n\nIn a small village nestled between two great mountains, a young boy named E",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "length"
+          "native_finish_reason": "stop"
         }
       ],
-      "created": 1759845368,
-      "id": "gen-1759845368-pRuDCakquLHDu5gQ9SNU",
+      "created": 1760532476,
+      "id": "gen-1760532476-0HVMzutS4PoZsidFMM1p",
       "model": "meta-llama/llama-3.2-11b-vision-instruct",
       "object": "chat.completion",
-      "provider": "InferenceNet",
-      "system_fingerprint": "",
+      "provider": "Cloudflare",
       "usage": {
         "completion_tokens": 100,
-        "prompt_tokens": 20,
-        "total_tokens": 120
+        "prompt_tokens": 19,
+        "total_tokens": 119
       }
     },
     "headers": {
@@ -64,7 +63,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade66eeea6eada-ORD"
+        "98ef6d8a1f991409-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -73,7 +72,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:56:09 GMT"
+        "Wed, 15 Oct 2025 12:47:56 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

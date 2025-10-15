@@ -41,34 +41,26 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "\nHello! It's great to connect with you. I'm here to help answer questions, provide information, or assist with various tasks. How can I support you today?",
-            "reasoning": "I'm being greeted with \"Hello world!\" and need to respond appropriately. This is a classic introductory phrase, so I should acknowledge it warmly while maintaining my professional tone.\n\nThe user might be testing if I'm functioning correctly or simply initiating a conversation. Either way, I should provide a friendly yet informative response that invites further interaction.\n\nI'll craft a reply that acknowledges their greeting, introduces myself briefly, and offers assistance - this sets the right tone for future exchanges without overwhelming them with too much information upfront.",
-            "reasoning_details": [
-              {
-                "format": "unknown",
-                "index": 0,
-                "text": "I'm being greeted with \"Hello world!\" and need to respond appropriately. This is a classic introductory phrase, so I should acknowledge it warmly while maintaining my professional tone.\n\nThe user might be testing if I'm functioning correctly or simply initiating a conversation. Either way, I should provide a friendly yet informative response that invites further interaction.\n\nI'll craft a reply that acknowledges their greeting, introduces myself briefly, and offers assistance - this sets the right tone for future exchanges without overwhelming them with too much information upfront.",
-                "type": "reasoning.text"
-              }
-            ],
+            "content": "Hello! It's nice to meet you. I'm here to help with any questions or tasks you might have. How can I assist you today? 😊",
+            "reasoning": "I need to respond to the user's greeting \"Hello world!\". This is a common introductory phrase, so I should respond in a friendly and welcoming manner. I'll start by acknowledging their greeting and then introduce myself briefly. I should keep it simple and positive.",
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759845467,
-      "id": "gen-1759845467-srBkTYgvbymgCQmuwY64",
+      "created": 1760532604,
+      "id": "gen-1760532604-KNOOAb096BMwmWLIFkze",
       "model": "z-ai/glm-4.5v",
       "object": "chat.completion",
-      "provider": "Z.AI",
+      "provider": "Parasail",
       "usage": {
-        "completion_tokens": 138,
-        "prompt_tokens": 10,
+        "completion_tokens": 88,
+        "prompt_tokens": 9,
         "prompt_tokens_details": {
-          "cached_tokens": 5
+          "cached_tokens": 0
         },
-        "total_tokens": 148
+        "total_tokens": 97
       }
     },
     "headers": {
@@ -76,7 +68,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade8dd8aa9ab95-ORD"
+        "98ef70a96ee7e207-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -85,7 +77,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:57:48 GMT"
+        "Wed, 15 Oct 2025 12:50:04 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

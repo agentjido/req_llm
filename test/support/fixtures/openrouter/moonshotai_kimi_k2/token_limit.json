@@ -39,7 +39,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "The Chronicles of Aetherra:  \nThe Sevenfold Flight of the Sky-Forge Dragons  \n\nPrologue – The World That Breathes  \n\nLong before the first cartographer inked a coastline, Aetherra was already singing.  \nIts mountains were not stone but living vertebrae; its oceans were lungs that inhaled moonlight and exhaled tides; its forests were capillaries through which starlight pulsed like blood.  \nAnd above it all, the sky was not empty but crowded",
+            "content": "Title: The Ember-Bound Atlas  \nA Dragon-Saga in Seven Cantos  \n(≈ 32 000 words)\n\n––––––––––––––––––––––––––––––––––  \nCANTO I  \nThe Cartographer’s Apprentice  \n––––––––––––––––––––––––––––––––––\n\n1  \nOn the island of Vey, where the wind smells of crushed peppercorns and the tide clinks like glass beads",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -47,15 +47,16 @@
           "native_finish_reason": "length"
         }
       ],
-      "created": 1759845383,
-      "id": "gen-1759845383-lYFvJz7S7kAZa6Ayxufa",
+      "created": 1760532501,
+      "id": "gen-1760532501-DTtaSOiOOeZdFXc4p1p5",
       "model": "moonshotai/kimi-k2",
       "object": "chat.completion",
-      "provider": "Fireworks",
+      "provider": "DeepInfra",
       "usage": {
         "completion_tokens": 100,
-        "prompt_tokens": 25,
-        "total_tokens": 125
+        "prompt_tokens": 37,
+        "prompt_tokens_details": null,
+        "total_tokens": 137
       }
     },
     "headers": {
@@ -63,7 +64,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade6d0ee1a8737-ORD"
+        "98ef6e294bd189e9-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -72,7 +73,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:56:24 GMT"
+        "Wed, 15 Oct 2025 12:48:22 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

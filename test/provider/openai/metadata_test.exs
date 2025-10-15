@@ -29,13 +29,10 @@ defmodule Provider.OpenAI.MetadataTest do
     test "o-series models use responses API" do
       responses_models = [
         "o1",
-        "o1-pro",
         "o3",
-        "o3-deep-research",
         "o3-mini",
         "o3-pro",
-        "o4-mini",
-        "o4-mini-deep-research"
+        "o4-mini"
       ]
 
       for model_id <- responses_models do

@@ -308,9 +308,13 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
 
         updated_params =
           if is_map_key(params, :properties) do
-            Map.put(params, :required, all_property_names)
+            params
+            |> Map.put(:required, all_property_names)
+            |> Map.put(:additionalProperties, false)
           else
-            Map.put(params, "required", Enum.map(all_property_names, &to_string/1))
+            params
+            |> Map.put("required", Enum.map(all_property_names, &to_string/1))
+            |> Map.put("additionalProperties", false)
           end
 
         if is_map_key(function, :parameters) do

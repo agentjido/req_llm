@@ -39,7 +39,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Title: The Chronicles of the Dragon's Heart\n\nOnce upon a time, in a world called Elderglen, dragons were not mere creatures of myth and legend, but living, breathing entities that shared the world with humans. They were not the fire-breathing beasts of folklore, but intelligent, majestic creatures that lived in harmony with nature. The humans of Elderglen respected the dragons, and in return, the dragons protected the humans from the darker forces that sought to harm them.\n\nIn",
+            "content": "**The Chronicles of the Dragonflame: A Tale of Fire and Destiny**\n\n---\n\n### **Prologue: The Forgotten Prophecy**\n\nLong ago, when the world was young and the skies were filled with the roar of dragons, a great prophecy was whispered by the seers of the ancient order of the Starborn. It spoke of a time when the last of the dragonkin would rise, not in fire and fury, but in wisdom and balance. The prophecy foretold",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -47,14 +47,15 @@
           "native_finish_reason": "length"
         }
       ],
-      "created": 1760473380,
-      "id": "gen-1760473380-hfkQB6TDRqB0tHHx47fF",
+      "created": 1760532483,
+      "id": "gen-1760532483-6UWRUWXyDXZsg8p9Zb2c",
       "model": "mistralai/devstral-small",
       "object": "chat.completion",
-      "provider": "Mistral",
+      "provider": "DeepInfra",
       "usage": {
         "completion_tokens": 100,
         "prompt_tokens": 12,
+        "prompt_tokens_details": null,
         "total_tokens": 112
       }
     },
@@ -63,7 +64,7 @@
         "*"
       ],
       "cf-ray": [
-        "98e9cac6bfc7f7fc-ORD"
+        "98ef6db89e9ce824-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -72,7 +73,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 20:23:01 GMT"
+        "Wed, 15 Oct 2025 12:48:04 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

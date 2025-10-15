@@ -1,0 +1,158 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC01IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQifSwidHlwZSI6ImZ1bmN0aW9uIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiYWdlIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Generate a software engineer profile",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-5",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tool_choice": {
+        "function": {
+          "name": "structured_output"
+        },
+        "type": "function"
+      },
+      "tools": [
+        {
+          "function": {
+            "description": "Generate structured output matching the provided schema",
+            "name": "structured_output",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "age": {
+                  "description": "Person's age in years",
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "name": {
+                  "description": "Person's full name",
+                  "type": "string"
+                },
+                "occupation": {
+                  "description": "Person's job or profession",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "age"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "",
+            "reasoning": null,
+            "reasoning_details": [
+              {
+                "data": "gAAAAABo75iNRyLAxjxzQXh-P6jtu7L3j14kjXmpUXuxAvLAPMGNOmnzYHfEw26CtBLdOr2qnUhozlymBUMyHvAZ3loXqdyGXgzKfnQQcKA5Iyhooxz_vApuzytQgoeXpJZi2WkecHyZXy5PNz6g2T_afODreEz-0yA18Tjax1Tx0jO7Ta1NS3GmIv1eGCKCx0G0ory-m-6ZQ8zLYPgK2MLKxPUPQIVGTmHtRqdPF1heNcCtEBzcGmsB9PFo_yzivUU8Gca8b-VfYPYYx2hkI5igC8MSQZB0YZzHq9jNEv3STL2LVh8AtCQ6JIaJne3YrYbFiRqjup7vnW1djCoY61-acElQuGqh93qHA_GTNe4ZLQIpLPeQDYthKV_G0gx2iI7MlIOLJ50v4YwneeNrXgHo_GVViLmn5Qg1l2yYbAk7F7LZv_oKZoD2ZVjjpyRmDethb3j0fZpxFB7oSDuV0w-1kzRLPm2iYw8Z7nPFj-aEPppSyceSfasUBsmeySr2T5iBKGj6LAXJgTjMsl9dZmoccXLXMarbVO-4j4xyIXlcMv-BsyBzoFh-AcF1qg7Qau-0w0zX3c0NnJD0X41PI_auJEpjZ1f9SBRjdRwyZE9CkvtwatITDTTDMFeB3RzP7n3POT8S4yr4v8425C-XhfsiTB_iX2Zus33b2vrKKGYRQjzmOKCKV1X0fdp3FOgABC8ALnXB8fw5O-qow-ENvHL9H80T9Z0Zn8xc-q-dfXplSJ00c3RI2lWJ2czuFGmbNI9r8AS3NlwtgjHWSjctsiL9iLGY2rhsbX70ZzAmWyS2jC1ARQbkygo3E0VZDC8Buwus0tEGcAkOZJMtgfKFEsB7Qj9hS2M5REdzI_fJwocatiAbDhZmkPjQkzsObtJf_9rPgT_skZ8XDQ4-2yey9UQOjUBsHchHpoK106qas4Kgsa2_hq1NKUKHlVidUYIdjn3kiuR9g-jy8wiuoeaFzVfHNKq5hIF-nr7O9OUnyy0xtIvETNfCDdpJOCKVxtT_VDwGZnho8cHWxDLpBY5tfpTV72r2SKCbzPL46_p3gDPEvvYr9pueYLkIZVmjTmapcGhfke8jHLhxaudEmLgPWatuErtujRl6UyGRfBY1Wrqn8DgyG3TfmC6U4_jyPSBJyY-Ld7FWZuQvMNSsKKP-OyKO8PonTk9BN8H66q_ykeDkRtrk-EuQwPnrabmBO79NlAqqz-TzTxRKnvjXvBeekcN7sWCZKX3nNnSgRtbs0ILm1ZztPk1t9KkAnKjDW4zKLVTIcWI25ItAl5GmCHms3HBkDUAS6PWAyVRhSl1TL-mWo-hZw6QKpAA_vOJ0ijd4I9BnqvpgeK4Jd2sAgna8SF3YBQahTzKN_pj0qV2CZQEBC7ofM6mxuN2qsO6811Ajeqv71qO3us7FRXnWhkVd-GgYS19SLXl2J7oW45XG6bwy9D1RgmHhDavX-RMFvTAJobd5uTWyiJbYXA2oHuWyy2_SISPC6068RLWFV4n8hXBts5hrKErghkXJLVX3OS4n6Cn4NB2FKL4_T_rC_cxo6mm1q5m8jixDJ6FsjtirAQgFPgLicl0LRkB4I_7T1JmG4WD1X-Fs643xm8J6fqDE0D30pSolTXawr3L5lsO_7GlmCOF18WsacfZU82cWMfPeOLYJAINRY9K3Jp83CBu1VahysI5va_DX8qpuV-3sr0fFpjS3zd39NsPBVZUFz9V9bSdVOdue8rg73hBICyVchJZfw-uA9Uvjxw==",
+                "format": "openai-responses-v1",
+                "id": "rs_058e48e388bb360e0168ef988b8f7c8197a62f72bc37577f99",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"age\":29,\"name\":\"Alex Johnson\",\"occupation\":\"Software Engineer\"}",
+                  "name": "structured_output"
+                },
+                "id": "call_mrMpEeSLlIIIrKOssOHo1Cnb",
+                "index": 0,
+                "type": "function"
+              }
+            ]
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1760532618,
+      "id": "gen-1760532618-6X9mISGqzGza0krLopEB",
+      "model": "openai/gpt-5",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "usage": {
+        "completion_tokens": 159,
+        "prompt_tokens": 85,
+        "total_tokens": 244
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ef7103dbe6f163-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 12:50:19 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

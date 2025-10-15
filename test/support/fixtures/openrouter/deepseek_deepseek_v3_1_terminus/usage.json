@@ -38,9 +38,12 @@
         {
           "finish_reason": "stop",
           "index": 0,
-          "logprobs": null,
+          "logprobs": {
+            "content": [],
+            "refusal": []
+          },
           "message": {
-            "content": "Hello! How can I help you today? 😊",
+            "content": "Hello! 👋 How are you doing today? Is there anything I can help you with?",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -48,21 +51,20 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759847810,
-      "id": "gen-1759847810-rWP1vbe2k0nhCOevq2nP",
+      "created": 1760546589,
+      "id": "gen-1760546589-Sjsm0bpT1tCQKrslAnc2",
       "model": "deepseek/deepseek-v3.1-terminus",
       "object": "chat.completion",
-      "provider": "AtlasCloud",
+      "provider": "Novita",
       "usage": {
-        "completion_tokens": 11,
-        "completion_tokens_details": {
-          "reasoning_tokens": 0
-        },
-        "prompt_tokens": 8,
+        "completion_tokens": 20,
+        "completion_tokens_details": null,
+        "prompt_tokens": 7,
         "prompt_tokens_details": {
-          "cached_tokens": 0
+          "audio_tokens": 0,
+          "cached_tokens": 7
         },
-        "total_tokens": 19
+        "total_tokens": 27
       }
     },
     "headers": {
@@ -70,7 +72,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ae220fa80c34ad-ORD"
+        "98f0c6197a9e124c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -79,7 +81,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 14:36:53 GMT"
+        "Wed, 15 Oct 2025 16:43:10 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzLiBBZnRlciB0aGUgdG9vbCByZXN1bHQgYXJyaXZlcywgcmVzcG9uZCB3aXRoICdzdW09PHZhbHVlPicuIiwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOltdLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF8xNGZhOThhYmFkM2E0ZTE0ODgwMmQ5OTAiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJjYWxsXzE0ZmE5OGFiYWQzYTRlMTQ4ODAyZDk5MCJ9XSwibW9kZWwiOiJtaXN0cmFsYWkvbWlzdHJhbC1zbWFsbC0zLjEtMjRiLWluc3RydWN0IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzLiBBZnRlciB0aGUgdG9vbCByZXN1bHQgYXJyaXZlcywgcmVzcG9uZCB3aXRoICdzdW09PHZhbHVlPicuIiwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOltdLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF8xYzUwYTEzNGRkMDU0NTA2OGUzYjZhNmYiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJjYWxsXzFjNTBhMTM0ZGQwNTQ1MDY4ZTNiNmE2ZiJ9XSwibW9kZWwiOiJtaXN0cmFsYWkvbWlzdHJhbC1zbWFsbC0zLjEtMjRiLWluc3RydWN0IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
       "max_tokens": 819,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_14fa98abad3a4e148802d990",
+              "id": "call_1c50a134dd0545068e3b6a6f",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "call_14fa98abad3a4e148802d990"
+          "tool_call_id": "call_1c50a134dd0545068e3b6a6f"
         }
       ],
       "model": "mistralai/mistral-small-3.1-24b-instruct",
@@ -59,7 +59,7 @@
         "message": "Provider returned error",
         "metadata": {
           "provider_name": "Cloudflare",
-          "raw": "{\"errors\":[{\"message\":\"AiError: AiError: Internal server error (fab152db-dfde-4ab2-8cfe-329e75396298)\",\"code\":3043}],\"success\":false,\"result\":{},\"messages\":[]}"
+          "raw": "{\"errors\":[{\"message\":\"AiError: AiError: Internal server error (37af79ff-d317-436b-a3e9-80eede49ef50)\",\"code\":3043}],\"success\":false,\"result\":{},\"messages\":[]}"
         }
       },
       "user_id": "user_2iYQIxKY28QuzANm4mmKBlOxzx2"
@@ -69,7 +69,7 @@
         "*"
       ],
       "cf-ray": [
-        "98e9cae4af43f159-ORD"
+        "98f0dad83d1d10cb-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -78,7 +78,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 20:23:05 GMT"
+        "Wed, 15 Oct 2025 16:57:20 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

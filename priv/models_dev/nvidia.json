@@ -159,6 +159,36 @@
         "input": 0,
         "output": 0
       },
+      "id": "moonshotai/kimi-k2-instruct-0905",
+      "knowledge": "2024-10",
+      "last_updated": "2025-09-05",
+      "limit": {
+        "context": 262144,
+        "output": 262144
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Kimi K2 0905",
+      "open_weights": true,
+      "provider": "nvidia",
+      "provider_model_id": "moonshotai/kimi-k2-instruct-0905",
+      "reasoning": false,
+      "release_date": "2025-09-05",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0,
+        "output": 0
+      },
       "id": "nvidia/cosmos-nemotron-34b",
       "knowledge": "2024-01",
       "last_updated": "2025-09-05",

@@ -106,7 +106,7 @@
                   "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "call_55644029",
+                "id": "call_98579882",
                 "index": 0,
                 "type": "function"
               }
@@ -115,8 +115,8 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760442675,
-      "id": "gen-1760442675-1B3xgm7bSiNDtO6TiRmf",
+      "created": 1760532564,
+      "id": "gen-1760532564-YYoCdSIv8DYkr09o1Fb8",
       "model": "x-ai/grok-3",
       "object": "chat.completion",
       "provider": "xAI",
@@ -129,7 +129,7 @@
         "prompt_tokens": 339,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 338
+          "cached_tokens": 3
         },
         "total_tokens": 374
       }
@@ -139,7 +139,7 @@
         "*"
       ],
       "cf-ray": [
-        "98e6dd1f5edff5fc-ORD"
+        "98ef6fb0f8c775e4-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -148,7 +148,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 11:51:15 GMT"
+        "Wed, 15 Oct 2025 12:49:24 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

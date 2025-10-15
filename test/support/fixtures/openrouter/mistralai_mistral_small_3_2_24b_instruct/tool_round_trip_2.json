@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzLiBBZnRlciB0aGUgdG9vbCByZXN1bHQgYXJyaXZlcywgcmVzcG9uZCB3aXRoICdzdW09PHZhbHVlPicuIiwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOltdLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiYlZLS3hBS2hoIiwidHlwZSI6ImZ1bmN0aW9uIn1dfSx7ImNvbnRlbnQiOiI1IiwibmFtZSI6ImFkZCIsInJvbGUiOiJ0b29sIiwidG9vbF9jYWxsX2lkIjoiYlZLS3hBS2hoIn1dLCJtb2RlbCI6Im1pc3RyYWxhaS9taXN0cmFsLXNtYWxsLTMuMi0yNGItaW5zdHJ1Y3QiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzLiBBZnRlciB0aGUgdG9vbCByZXN1bHQgYXJyaXZlcywgcmVzcG9uZCB3aXRoICdzdW09PHZhbHVlPicuIiwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOltdLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiQWR3WWwzTGhGIiwidHlwZSI6ImZ1bmN0aW9uIn1dfSx7ImNvbnRlbnQiOiI1IiwibmFtZSI6ImFkZCIsInJvbGUiOiJ0b29sIiwidG9vbF9jYWxsX2lkIjoiQWR3WWwzTGhGIn1dLCJtb2RlbCI6Im1pc3RyYWxhaS9taXN0cmFsLXNtYWxsLTMuMi0yNGItaW5zdHJ1Y3QiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
       "max_tokens": 819,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "bVKKxAKhh",
+              "id": "AdwYl3LhF",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "bVKKxAKhh"
+          "tool_call_id": "AdwYl3LhF"
         }
       ],
       "model": "mistralai/mistral-small-3.2-24b-instruct",
@@ -68,15 +68,15 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760473395,
-      "id": "gen-1760473394-283sqCOLrIM0rDgAEe3W",
+      "created": 1760547280,
+      "id": "gen-1760547278-EoE3uglcwaHDH9VhS8cw",
       "model": "mistralai/mistral-small-3.2-24b-instruct",
       "object": "chat.completion",
       "provider": "Mistral",
       "usage": {
         "completion_tokens": 4,
-        "prompt_tokens": 64,
-        "total_tokens": 68
+        "prompt_tokens": 66,
+        "total_tokens": 70
       }
     },
     "headers": {
@@ -84,7 +84,7 @@
         "*"
       ],
       "cf-ray": [
-        "98e9cb195ea46215-ORD"
+        "98f0d6ec79e7029d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -93,7 +93,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 20:23:14 GMT"
+        "Wed, 15 Oct 2025 16:54:40 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

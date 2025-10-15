@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMzEwNiwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ29vZ2xlL2dlbWluaS0yLjUtcHJvLXByZXZpZXctMDYtMDUiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMzEwNiwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ29vZ2xlL2dlbWluaS0yLjUtcHJvLXByZXZpZXctMDYtMDUiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
       "max_tokens": 13106,
@@ -23,6 +23,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -61,13 +62,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Why was the cat sitting on the computer? To keep an eye on the mouse!",
-            "reasoning": "**Analyzing the Options**\n\nI've zeroed in on the user's request for a cat joke. My next move was to sift through the tool options, but there's only `get_weather`, which, alas, is completely irrelevant. The task is proving challenging given the tool constraints.\n\n\n**Considering Available Tools**\n\nI've confirmed the irrelevance of the `get_weather` tool. I am now certain that I must deliver the joke directly. The challenge now is to choose the best joke, keeping it simple, and appropriate, and easy to understand.\n\n\n",
+            "content": "Why don't cats play poker in the jungle?\nToo many cheetahs",
+            "reasoning": "**Delivering Cat Humor**\n\n\\n\\n\n\nI've zeroed in on the cat joke! The search yielded a winner: \"Why don't cats play poker in the jungle? Too many cheetahs!\" Time to share this comedic gold with the user. It's joke delivery time!\n\n\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "**Analyzing the Options**\n\nI've zeroed in on the user's request for a cat joke. My next move was to sift through the tool options, but there's only `get_weather`, which, alas, is completely irrelevant. The task is proving challenging given the tool constraints.\n\n\n**Considering Available Tools**\n\nI've confirmed the irrelevance of the `get_weather` tool. I am now certain that I must deliver the joke directly. The challenge now is to choose the best joke, keeping it simple, and appropriate, and easy to understand.\n\n\n",
+                "text": "**Delivering Cat Humor**\n\n\\n\\n\n\nI've zeroed in on the cat joke! The search yielded a winner: \"Why don't cats play poker in the jungle? Too many cheetahs!\" Time to share this comedic gold with the user. It's joke delivery time!\n\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -77,22 +78,22 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1759845411,
-      "id": "gen-1759845411-MGQtp8VE6k0utXdHhlYY",
+      "created": 1760532548,
+      "id": "gen-1760532548-5uOtDxjwa7baWBh3Yjuu",
       "model": "google/gemini-2.5-pro",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
-        "completion_tokens": 218,
+        "completion_tokens": 90,
         "completion_tokens_details": {
           "image_tokens": 0,
-          "reasoning_tokens": 201
+          "reasoning_tokens": 73
         },
         "prompt_tokens": 20,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 238
+        "total_tokens": 110
       }
     },
     "headers": {
@@ -100,7 +101,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade77d6eccf5ff-ORD"
+        "98ef6f4e0edefa17-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -109,7 +110,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:56:54 GMT"
+        "Wed, 15 Oct 2025 12:49:11 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

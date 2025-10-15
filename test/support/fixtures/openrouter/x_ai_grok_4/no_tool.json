@@ -63,29 +63,30 @@
           "message": {
             "content": "Why did the cat go to school?  \n\nTo improve its purr-sonal skills! 😺",
             "reasoning": null,
+            "reasoning_details": [
+              {
+                "data": "cTARt8H3TyWnQcT1p+p6EEcl1S8T+7T9FS5S/WrOA/TivxQ6AvAKvHUQwoSv6/73m7Fy8bagfcW4hhhXvoM0yvNQLytAVXg/8sRFxODFZ85fTeVzzh+foMuofDafK5O4WVNjS/sS6URBlR+dBRJQS+xo4rZdCqXayNzmxlv2tvwQYpHh6qERE1IHv4iWQ3VrFdUpfrBARSRZbmo8yCugePbUe38e/4c8lGmbd0RXOIraaYe0+GpGA81LykOBupLmaHPQtD3v9FU/aVfsPKjMpxxEa+FCgBRa+YlhW15P9DKTukhNEKNRSnNkwjOPhZwHers15cdZ6IGil7BmOwOiMclXgxq++s7TOK9gutBFu+oPDDLp6X27FZ/X7pTa4f9LpVZ6LhfKknMep/U0eOweYM/gco0vhbsUuWZxyDn61HLjEFd6Y28Swg8vs3OBXSg0/JrgFYbA0aFaJkyHlPni41fNc+Fdqieichk3H6xyGyJuA88L3t/7ZC3AB2UEVxQPe2AkhWHahk4R0014g3kBxJp+r7PfVI8H0JRLABJ8kT3pBjqVnSNFKYQEbLWykL1Zkpu02aqOKQCFtkEUb9zFwoZynJAHKPrevvcAbuP3CnHNDmnWHidsJbzrQluZuTtl9+BL4lmxePFXLe0nteR8x1/GD84QXRFqx9HI/KxRCLZ8MlCtRM2Tw6SoIYh3V/WXt1+BYlCdNr94AoowEZSx4DW2/40WUvZ1yG+X/LPUrsTeQWjM3YtJmfeb27KmVPgZluedfftBbKMTjkyWl3ZvnIrihI34yJZW21IIxubVErWDH61ycIrGI92JR7PQYuC4l0A3bOAXXRIPtPtc22903eWcPazWIPeboFrNcbeX7CZx6+Ezk5XO7nuhN5CVOA+ZbFBxEQYVuImeRq6468sj",
+                "format": "xai-responses-v1",
+                "id": "rs_5769570c-e121-6ce1-4b55-a199b9c36d14_us-east-1",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "stop"
+          "native_finish_reason": "completed"
         }
       ],
-      "created": 1760442934,
-      "id": "gen-1760442934-wQ3niElKoYjjoNZE7Gcb",
+      "created": 1760533229,
+      "id": "gen-1760533229-6B3D7OX8Y6uLw3Nt0mPf",
       "model": "x-ai/grok-4",
       "object": "chat.completion",
       "provider": "xAI",
-      "system_fingerprint": "fp_19e21a36c0",
       "usage": {
-        "completion_tokens": 170,
-        "completion_tokens_details": {
-          "reasoning_tokens": 151
-        },
+        "completion_tokens": 163,
         "prompt_tokens": 884,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 883
-        },
-        "total_tokens": 1054
+        "total_tokens": 1047
       }
     },
     "headers": {
@@ -93,7 +94,7 @@
         "*"
       ],
       "cf-ray": [
-        "98e6e3718e4875e4-ORD"
+        "98ef7fed2dfae811-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -102,7 +103,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 11:55:34 GMT"
+        "Wed, 15 Oct 2025 13:00:30 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

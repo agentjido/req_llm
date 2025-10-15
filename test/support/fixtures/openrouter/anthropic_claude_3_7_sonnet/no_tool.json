@@ -61,7 +61,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "I'd be happy to tell you a joke about cats! Here's one for you:\n\nWhy don't cats like online shopping?\nThey prefer a cat-alogue!\n\nWould you like to hear another cat joke, or perhaps something else I can help you with?",
+            "content": "I'd be happy to tell you a joke about cats! Here's one for you:\n\nWhy don't cats like online shopping?\nThey prefer a cat-alogue!\n\nWould you like to hear another cat joke?",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -69,15 +69,15 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760473578,
-      "id": "gen-1760473578-RXOXpKLqGWjTrhplAqel",
+      "created": 1760532484,
+      "id": "gen-1760532484-hnjVkwjHKtYCeQIeSg64",
       "model": "anthropic/claude-3.7-sonnet",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
-        "completion_tokens": 59,
+        "completion_tokens": 49,
         "prompt_tokens": 388,
-        "total_tokens": 447
+        "total_tokens": 437
       }
     },
     "headers": {
@@ -85,7 +85,7 @@
         "*"
       ],
       "cf-ray": [
-        "98e9cf9afbd2141c-ORD"
+        "98ef6dbe5bdb7dda-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -94,7 +94,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 20:26:20 GMT"
+        "Wed, 15 Oct 2025 12:48:05 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
