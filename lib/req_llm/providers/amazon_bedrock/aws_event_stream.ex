@@ -72,8 +72,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.AWSEventStream do
         end
 
       {:error, _reason} ->
-        # Try to skip this chunk and continue
-        # In production, might want to be more strict
+        # Skip corrupted event and attempt recovery
         skip_to_next_event(data, acc)
     end
   end
@@ -169,14 +168,14 @@ defmodule ReqLLM.Providers.AmazonBedrock.AWSEventStream do
   end
 
   defp skip_to_next_event(data, acc) do
-    # Try to find the next valid event by looking for plausible message lengths
-    # This is a recovery mechanism for corrupted streams
+    # Scan for next valid event boundary to recover from corrupted data
     case find_next_event_boundary(data) do
       {:ok, next_data} ->
         parse_events(next_data, acc)
 
       :not_found ->
         if acc == [] do
+          # If we couldn't recover and have no valid events
           {:error, :no_valid_events}
         else
           {:ok, Enum.reverse(acc), <<>>}
@@ -186,10 +185,12 @@ defmodule ReqLLM.Providers.AmazonBedrock.AWSEventStream do
 
   defp find_next_event_boundary(<<_::8, rest::binary>>) do
     # Skip one byte at a time looking for valid event header
-    # Look for reasonable message length (minimum @min_message_length bytes for valid message)
+    # Look for reasonable message length and verify we have enough data
     case rest do
-      <<length::big-32, _::binary>> when length >= @min_message_length and length <= 100_000 ->
-        {:ok, rest}
+      <<length::big-32, _::binary>> = data
+      when length >= @min_message_length and length <= 100_000 and byte_size(data) >= length ->
+        # We have a plausible message length AND enough bytes for a complete message
+        {:ok, data}
 
       _ ->
         find_next_event_boundary(rest)
@@ -237,42 +238,11 @@ defmodule ReqLLM.Providers.AmazonBedrock.AWSEventStream do
         {buffer, pid} ->
           receive do
             {_ref, {:data, chunk}} when is_binary(chunk) ->
-              # Parse the chunk with buffered data
-              data = buffer <> chunk
-
-              case parse_binary(data) do
-                {:ok, events, rest} ->
-                  # Process and emit events
-                  processed = Enum.map(events, process_event)
-                  {processed, {rest, pid}}
-
-                {:incomplete, data} ->
-                  # Need more data, buffer it
-                  {[], {data, pid}}
-
-                {:error, _reason} ->
-                  # Skip bad data, reset buffer
-                  {[], {"", pid}}
-              end
+              handle_chunk(buffer, chunk, pid, process_event)
 
             {{_pool, _pid}, {:data, chunk}} when is_binary(chunk) ->
               # Finch format when using :into :self
-              data = buffer <> chunk
-
-              case parse_binary(data) do
-                {:ok, events, rest} ->
-                  # Process and emit events
-                  processed = Enum.map(events, process_event)
-                  {processed, {rest, pid}}
-
-                {:incomplete, data} ->
-                  # Need more data, buffer it
-                  {[], {data, pid}}
-
-                {:error, _reason} ->
-                  # Skip bad data, reset buffer
-                  {[], {"", pid}}
-              end
+              handle_chunk(buffer, chunk, pid, process_event)
 
             {_ref, :done} ->
               # Stream is done
@@ -296,5 +266,25 @@ defmodule ReqLLM.Providers.AmazonBedrock.AWSEventStream do
       end,
       fn _ -> :ok end
     )
+  end
+
+  # Handle incoming data chunks
+  defp handle_chunk(buffer, chunk, pid, process_event_fun) when is_binary(chunk) do
+    data = buffer <> chunk
+
+    case parse_binary(data) do
+      {:ok, events, rest} ->
+        # Process and emit events
+        processed = Enum.map(events, process_event_fun)
+        {processed, {rest, pid}}
+
+      {:incomplete, data} ->
+        # Need more data, buffer it
+        {[], {data, pid}}
+
+      {:error, _reason} ->
+        # Skip bad data, reset buffer
+        {[], {"", pid}}
+    end
   end
 end

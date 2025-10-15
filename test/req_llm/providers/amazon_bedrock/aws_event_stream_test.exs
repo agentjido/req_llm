@@ -46,15 +46,19 @@ defmodule ReqLLM.Providers.AmazonBedrock.AWSEventStreamTest do
     end
 
     test "handles Bedrock chunk format with base64 bytes" do
-      # Bedrock wraps JSON in a chunk with base64 encoded bytes
+      # Bedrock wraps JSON in base64 encoded bytes
       inner_data = Jason.encode!(%{"type" => "content_block_delta", "delta" => %{"text" => "Hi"}})
       encoded = Base.encode64(inner_data)
-      payload = Jason.encode!(%{"chunk" => %{"bytes" => encoded}})
+
+      # Build the payload that contains base64 encoded inner data
+      payload = Jason.encode!(%{"bytes" => encoded})
 
       binary = build_test_message(payload)
 
+      # Parser should decode the base64 and parse the inner JSON
       assert {:ok, [event], <<>>} = AWSEventStream.parse_binary(binary)
-      assert event["chunk"]["bytes"] == encoded
+      assert event["type"] == "content_block_delta"
+      assert event["delta"]["text"] == "Hi"
     end
 
     test "returns incomplete for message split across chunks" do
@@ -68,6 +72,138 @@ defmodule ReqLLM.Providers.AmazonBedrock.AWSEventStreamTest do
 
       result = AWSEventStream.parse_binary(partial)
       assert match?({:incomplete, _}, result)
+    end
+
+    test "returns error for invalid prelude CRC" do
+      payload = Jason.encode!(%{"data" => "test"})
+      headers = <<>>
+      headers_length = byte_size(headers)
+      payload_length = byte_size(payload)
+
+      # Use same formula as helper: 16 = prelude(12) + message_crc(4)
+      message_length = 16 + headers_length + payload_length
+
+      prelude = <<message_length::32-big, headers_length::32-big>>
+      bad_prelude_crc = 0xDEADBEEF
+
+      message_without_crc = <<
+        prelude::binary,
+        bad_prelude_crc::32,
+        headers::binary,
+        payload::binary
+      >>
+
+      message_crc = :erlang.crc32(message_without_crc)
+
+      binary = <<
+        message_length::32-big,
+        headers_length::32-big,
+        bad_prelude_crc::32,
+        headers::binary,
+        payload::binary,
+        message_crc::32
+      >>
+
+      # When a single message has a bad CRC, recovery attempts but finds no valid events
+      assert {:error, :no_valid_events} = AWSEventStream.parse_binary(binary)
+    end
+
+    test "returns error for invalid message CRC" do
+      payload = Jason.encode!(%{"data" => "test"})
+      headers = <<>>
+      headers_length = byte_size(headers)
+      payload_length = byte_size(payload)
+
+      message_length = 16 + headers_length + payload_length
+
+      prelude = <<message_length::32-big, headers_length::32-big>>
+      prelude_crc = :erlang.crc32(prelude)
+
+      bad_message_crc = 0xCAFEBABE
+
+      binary = <<
+        message_length::32-big,
+        headers_length::32-big,
+        prelude_crc::32,
+        headers::binary,
+        payload::binary,
+        bad_message_crc::32
+      >>
+
+      # When a single message has a bad CRC, recovery attempts but finds no valid events
+      assert {:error, :no_valid_events} = AWSEventStream.parse_binary(binary)
+    end
+
+    test "recovers from corrupted data by finding next valid event" do
+      # Create a message with bad prelude CRC that will trigger recovery
+      payload1 = Jason.encode!(%{"data" => "bad"})
+      headers = <<>>
+      headers_length = byte_size(headers)
+      payload_length = byte_size(payload1)
+      message_length = 16 + headers_length + payload_length
+
+      prelude = <<message_length::32-big, headers_length::32-big>>
+      bad_prelude_crc = 0xDEADBEEF
+
+      message_without_crc = <<
+        prelude::binary,
+        bad_prelude_crc::32,
+        headers::binary,
+        payload1::binary
+      >>
+
+      message_crc = :erlang.crc32(message_without_crc)
+
+      bad_message = <<
+        message_length::32-big,
+        headers_length::32-big,
+        bad_prelude_crc::32,
+        headers::binary,
+        payload1::binary,
+        message_crc::32
+      >>
+
+      # Followed by a valid message
+      payload2 = Jason.encode!(%{"data" => "recovered"})
+      valid_message = build_test_message(payload2)
+
+      binary = bad_message <> valid_message
+
+      # Should skip bad message and find the valid one
+      assert {:ok, [event], <<>>} = AWSEventStream.parse_binary(binary)
+      assert event["data"] == "recovered"
+    end
+
+    test "returns error when no valid events found in corrupted stream" do
+      # Create a message with bad CRC and no valid messages after
+      payload = Jason.encode!(%{"data" => "bad"})
+      headers = <<>>
+      headers_length = byte_size(headers)
+      payload_length = byte_size(payload)
+      message_length = 16 + headers_length + payload_length
+
+      prelude = <<message_length::32-big, headers_length::32-big>>
+      bad_prelude_crc = 0xDEADBEEF
+
+      message_without_crc = <<
+        prelude::binary,
+        bad_prelude_crc::32,
+        headers::binary,
+        payload::binary
+      >>
+
+      message_crc = :erlang.crc32(message_without_crc)
+
+      bad_message = <<
+        message_length::32-big,
+        headers_length::32-big,
+        bad_prelude_crc::32,
+        headers::binary,
+        payload::binary,
+        message_crc::32
+      >>
+
+      assert {:error, :no_valid_events} = AWSEventStream.parse_binary(bad_message)
     end
   end
 
