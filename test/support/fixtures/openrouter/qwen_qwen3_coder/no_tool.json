@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo2NjUzLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJxd2VuL3F3ZW4zLWNvZGVyIiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjo2NjUzLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJxd2VuL3F3ZW4zLWNvZGVyIiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
       "max_tokens": 6653,
@@ -22,6 +22,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -68,18 +69,15 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759847032,
-      "id": "gen-1759847032-wezQxpcp3gkQSSLYJWls",
+      "created": 1760547267,
+      "id": "gen-1760547267-EJClM8gANX4VpUIkaXuZ",
       "model": "qwen/qwen3-coder",
       "object": "chat.completion",
-      "provider": "BaseTen",
-      "system_fingerprint": null,
+      "provider": "AtlasCloud",
       "usage": {
         "completion_tokens": 22,
-        "completion_tokens_details": null,
-        "prompt_tokens": 291,
-        "prompt_tokens_details": null,
-        "total_tokens": 313
+        "prompt_tokens": 293,
+        "total_tokens": 315
       }
     },
     "headers": {
@@ -87,7 +85,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ae0f0e9e136194-ORD"
+        "98f0d6a4a8556183-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -96,7 +94,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 14:23:52 GMT"
+        "Wed, 15 Oct 2025 16:54:28 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

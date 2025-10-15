@@ -104,6 +104,7 @@ defmodule ReqLLM.Response do
   Extract tool calls from the response message.
 
   Returns a list of tool calls if the message contains them, empty list otherwise.
+  Always returns normalized maps with `.name` and `.arguments` fields.
 
   ## Examples
 
@@ -116,12 +117,11 @@ defmodule ReqLLM.Response do
 
   def tool_calls(%__MODULE__{message: %Message{tool_calls: tool_calls}})
       when is_list(tool_calls) do
-    tool_calls
+    Enum.map(tool_calls, &normalize_tool_call/1)
   end
 
   def tool_calls(%__MODULE__{message: %Message{tool_calls: nil, content: content}})
       when is_list(content) do
-    # Extract tool calls from content parts (e.g., for Anthropic)
     content
     |> Enum.filter(&(&1.type == :tool_call))
     |> Enum.map(fn part ->
@@ -134,6 +134,30 @@ defmodule ReqLLM.Response do
   end
 
   def tool_calls(%__MODULE__{message: %Message{tool_calls: nil}}), do: []
+
+  defp normalize_tool_call(%ReqLLM.ToolCall{} = tool_call) do
+    arguments =
+      case tool_call.function.arguments do
+        args when is_binary(args) ->
+          case Jason.decode(args) do
+            {:ok, decoded} -> decoded
+            _ -> args
+          end
+
+        args ->
+          args
+      end
+
+    %{
+      name: tool_call.function.name,
+      arguments: arguments,
+      id: tool_call.id
+    }
+  end
+
+  defp normalize_tool_call(tool_call) when is_map(tool_call) do
+    tool_call
+  end
 
   @doc """
   Get the finish reason for this response.

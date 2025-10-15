@@ -377,32 +377,74 @@ defmodule ReqLLM.StreamResponse do
     stream_chunks = Enum.to_list(stream_response.stream)
     metadata = Task.await(stream_response.metadata_task)
 
-    # Build message from stream chunks
-    message = build_message_from_chunks(stream_chunks)
+    # Check if this is a Responses API model
+    if responses_api_model?(stream_response.model) do
+      # Reconstruct JSON and decode using Responses API logic
+      reconstruct_responses_api_response(stream_chunks, stream_response, metadata)
+    else
+      # Original logic for Chat API models
+      # Build message from stream chunks
+      message = build_message_from_chunks(stream_chunks)
 
-    # Extract object from tool calls if present (for structured output)
-    object = extract_object_from_message(message)
+      # Extract object from tool calls if present (for structured output)
+      object = extract_object_from_message(message)
 
-    # Create Response struct
-    response = %Response{
-      id: generate_response_id(),
-      model: stream_response.model.model,
-      context: stream_response.context,
-      message: message,
-      object: object,
-      stream?: false,
-      stream: nil,
-      usage: Map.get(metadata, :usage),
-      finish_reason: Map.get(metadata, :finish_reason),
-      provider_meta: Map.get(metadata, :provider_meta, %{}),
-      error: nil
-    }
+      # Create Response struct
+      response = %Response{
+        id: generate_response_id(),
+        model: stream_response.model.model,
+        context: stream_response.context,
+        message: message,
+        object: object,
+        stream?: false,
+        stream: nil,
+        usage: Map.get(metadata, :usage),
+        finish_reason: Map.get(metadata, :finish_reason),
+        provider_meta: Map.get(metadata, :provider_meta, %{}),
+        error: nil
+      }
 
-    {:ok, response}
+      {:ok, response}
+    end
   rescue
     error -> {:error, error}
   catch
     :exit, reason -> {:error, reason}
+  end
+
+  defp responses_api_model?(%ReqLLM.Model{} = model) do
+    get_in(model, [Access.key(:_metadata, %{}), "api"]) == "responses"
+  end
+
+  defp responses_api_model?(_), do: false
+
+  defp reconstruct_responses_api_response(chunks, stream_response, metadata) do
+    # Build canonical OpenAI JSON from chunks
+    body =
+      ReqLLM.Providers.OpenAI.ResponsesAPI.build_responses_body_from_chunks(
+        chunks,
+        stream_response.model.model
+      )
+
+    # Create fake req/resp to pass through existing decode logic
+    req = %{options: %{model: stream_response.model.model, context: stream_response.context}}
+    resp = %{status: 200, body: body}
+
+    # Reuse Responses API decode logic - guarantees format parity!
+    case ReqLLM.Providers.OpenAI.ResponsesAPI.decode_response({req, resp}) do
+      {_req, %{body: %ReqLLM.Response{} = response}} ->
+        # Merge in metadata from stream
+        response = %{
+          response
+          | usage: Map.get(metadata, :usage, response.usage),
+            finish_reason: Map.get(metadata, :finish_reason, response.finish_reason)
+        }
+
+        {:ok, response}
+
+      {_req, error} when is_exception(error) ->
+        {:error, error}
+    end
   end
 
   # Private helper to build a Message from StreamChunk list

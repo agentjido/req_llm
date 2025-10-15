@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJtaXN0cmFsYWkvbWlzdHJhbC1zbWFsbC0zLjItMjRiLWluc3RydWN0IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJtaXN0cmFsYWkvbWlzdHJhbC1zbWFsbC0zLjItMjRiLWluc3RydWN0IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
       "max_tokens": 819,
@@ -22,6 +22,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -47,6 +48,7 @@
             "description": "Tell a funny joke",
             "name": "tell_joke",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "topic": {
                   "description": "Topic for the joke",
@@ -102,16 +104,16 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759848186,
-      "id": "gen-1759848186-BMV2Xl9Y8p9IqFgTuYJB",
+      "created": 1760547290,
+      "id": "gen-1760547290-0T5G3qLpX6RIoYe2jB5V",
       "model": "mistralai/mistral-small-3.2-24b-instruct",
       "object": "chat.completion",
       "provider": "Chutes",
       "usage": {
         "completion_tokens": 14,
-        "prompt_tokens": 732,
+        "prompt_tokens": 744,
         "prompt_tokens_details": null,
-        "total_tokens": 746
+        "total_tokens": 758
       }
     },
     "headers": {
@@ -119,7 +121,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ae2b3c9cd7f859-ORD"
+        "98f0d734ebe8029d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -128,7 +130,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 14:43:07 GMT"
+        "Wed, 15 Oct 2025 16:54:51 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

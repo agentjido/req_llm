@@ -40,7 +40,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! 👋 Welcome! How can I help you today?",
+            "content": "Hello! 👋 How can I help you today?",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -48,15 +48,15 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759845356,
-      "id": "gen-1759845356-Ls03p7hXAS8TXwc7V70b",
+      "created": 1760532491,
+      "id": "gen-1760532491-WMxGdPhaDris1fHCGwC6",
       "model": "anthropic/claude-sonnet-4.5",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
-        "completion_tokens": 18,
+        "completion_tokens": 16,
         "prompt_tokens": 10,
-        "total_tokens": 28
+        "total_tokens": 26
       }
     },
     "headers": {
@@ -64,7 +64,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade6275a28eb01-ORD"
+        "98ef6de67eb2e80e-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -73,7 +73,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:55:58 GMT"
+        "Wed, 15 Oct 2025 12:48:12 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

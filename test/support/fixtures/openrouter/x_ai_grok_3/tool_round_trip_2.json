@@ -1,13 +1,13 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiQ2FsbCB0aGUgYWRkIHRvb2wgd2l0aCBhPTIgYW5kIGI9My4gQWZ0ZXIgcmVjZWl2aW5nIHRoZSB0b29sIHJlc3VsdCwgcmVwbHkgZXhhY3RseSB3aXRoICdzdW09PHZhbHVlPicuIiwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOltdLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF8yNzI5NzUwNiIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfMjcyOTc1MDYifV0sIm1vZGVsIjoieC1haS9ncm9rLTMiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzLiBBZnRlciB0aGUgdG9vbCByZXN1bHQgYXJyaXZlcywgcmVzcG9uZCB3aXRoICdzdW09PHZhbHVlPicuIiwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOltdLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF85MDgzMjc3MCIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfOTA4MzI3NzAifV0sIm1vZGVsIjoieC1haS9ncm9rLTMiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
       "max_tokens": 819,
       "messages": [
         {
-          "content": "Call the add tool with a=2 and b=3. After receiving the tool result, reply exactly with 'sum=<value>'.",
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
           "role": "user"
         },
         {
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_27297506",
+              "id": "call_90832770",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "call_27297506"
+          "tool_call_id": "call_90832770"
         }
       ],
       "model": "x-ai/grok-3",
@@ -68,8 +68,8 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760442684,
-      "id": "gen-1760442684-vHpoHUPaz8hejyOac7hm",
+      "created": 1760532574,
+      "id": "gen-1760532574-K9kEo8Li2TBC8xYpEEHu",
       "model": "x-ai/grok-3",
       "object": "chat.completion",
       "provider": "xAI",
@@ -79,12 +79,12 @@
         "completion_tokens_details": {
           "reasoning_tokens": 0
         },
-        "prompt_tokens": 80,
+        "prompt_tokens": 78,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 2
+          "cached_tokens": 77
         },
-        "total_tokens": 83
+        "total_tokens": 81
       }
     },
     "headers": {
@@ -92,7 +92,7 @@
         "*"
       ],
       "cf-ray": [
-        "98e6dd5b9c5a35b5-ORD"
+        "98ef6fee7f5b0042-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -101,7 +101,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 11:51:24 GMT"
+        "Wed, 15 Oct 2025 12:49:34 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

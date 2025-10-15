@@ -1,0 +1,119 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMzEwNywibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiJyblRMeW5vWTAiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJyblRMeW5vWTAifV0sIm1vZGVsIjoibWlzdHJhbGFpL2RldnN0cmFsLXNtYWxsLTI1MDciLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 13107,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        },
+        {
+          "content": [],
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"a\":2,\"b\":3}",
+                "name": "add"
+              },
+              "id": "rnTLynoY0",
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "content": "5",
+          "name": "add",
+          "role": "tool",
+          "tool_call_id": "rnTLynoY0"
+        }
+      ],
+      "model": "mistralai/devstral-small-2507",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "sum=5",
+            "reasoning": null,
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1760532481,
+      "id": "gen-1760532480-16bMyVZPCVnjkybKq4BZ",
+      "model": "mistralai/devstral-small",
+      "object": "chat.completion",
+      "provider": "Mistral",
+      "usage": {
+        "completion_tokens": 4,
+        "prompt_tokens": 48,
+        "total_tokens": 52
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ef6da5bc7ce824-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 12:48:01 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

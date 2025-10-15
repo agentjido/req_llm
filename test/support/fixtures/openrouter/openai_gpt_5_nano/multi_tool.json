@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyNTYwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1uYW5vIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfdG9rZW5zIjoyNTYwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1uYW5vIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "max_tokens": 25600,
@@ -23,6 +23,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -48,6 +49,7 @@
             "description": "Tell a funny joke",
             "name": "tell_joke",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "topic": {
                   "description": "Topic for the joke",
@@ -96,18 +98,18 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "**Fetching weather info**\n\nI need to get the current weather for Paris, France. Since the tool specifies a unit, I'll choose Celsius, which seems like the default. I want to make sure I call the right function to retrieve this data accurately. Once I have the weather information, I'll present it neatly to the user. So, I'll go ahead and use functions.get_weather!",
+            "reasoning": "**Fetching weather info**\n\nI need to get the weather for Paris, France. I’ll use the get_weather tool and choose Celsius as the unit since that's probably the default. The tool requires a specific unit, so I have to make sure I set it to \"Celsius.\" After that, I’ll just return the result. It should be a straightforward single tool call, making this process simpler and more efficient!",
             "reasoning_details": [
               {
                 "format": "openai-responses-v1",
                 "index": 0,
-                "summary": "**Fetching weather info**\n\nI need to get the current weather for Paris, France. Since the tool specifies a unit, I'll choose Celsius, which seems like the default. I want to make sure I call the right function to retrieve this data accurately. Once I have the weather information, I'll present it neatly to the user. So, I'll go ahead and use functions.get_weather!",
+                "summary": "**Fetching weather info**\n\nI need to get the weather for Paris, France. I’ll use the get_weather tool and choose Celsius as the unit since that's probably the default. The tool requires a specific unit, so I have to make sure I set it to \"Celsius.\" After that, I’ll just return the result. It should be a straightforward single tool call, making this process simpler and more efficient!",
                 "type": "reasoning.summary"
               },
               {
-                "data": "gAAAAABo5RwwOQ4QDdcYGvQNBxGdCkzfRm3c2wT3ApVHThIK5iUNK4ajt0z0-1xh_yVG29nixD-p4hrJYncgYsKTQhdH_XUbJI6MhZvmGkO9eK-S3fGGx0cz__LefmF_ouhVKk2M-qcPCZV9vyjz_MBTSC-juf6DePRoiEf4vjDmb5wmOeM9nZCEnbaSYoBcSs7WDMsgen-U7L5GOPLWl3sZ-OJ4nSVcV-aTClIv4ZXcrmQJD5IjiQdt-H7gtCBP__PaRVy1I-gLwFvFO1zkMP92H4nPCPP2r8cbwZJunSVg47fu0e8GITaB1jDM8zgClJKNautkPtfAHmf4QNgT-osppEWbNjnF5hkUGNFur3-YkuCf5PzaSFM2a573vfShrDPKXZTOUDu21cmO5gSI4HQUGalRbCnsXrX4-MuXjOZXdqRd0x9NNjxhbLdT3C_5_9tii1NakuRKkHRTgeM8S3S7ucfomRendGfN_1NA3oS-cRfGsvC4NREdSCW_jDACvkxuZGTfkHEM_rG9Jda1jC-Afhi5EiTiD9HBbCa8T0lWjlGJKvgiqvxxRydf2I75cYIUcir_R5RDxqG6AC5sHHvPwgJmCTf7nMoy1wjXD5eGbB5TB4pxQl2WzHOMzn7PuuFMtyzXNQr3Jlm8u14ZGbyzuiPCzRgKEbspsYZ18z6QAmFRoIx4acQdJk07rtG9iAZZ1gOgoS5Cy57SuW8cMX-8fD2klJdr-aUXnpgB5LoPVMidtX3ar61ws7WwnaItxj23EGZ6fsXQqkoPvrS7OLTSfM5zepyXNuSrRvcc-yOALahviJm6tqXRZszU562VVliKTooU0p4_lKmIH88AcYFJgCBc-iEYr-S1kvcoynpF42uHqJGJpBLJSuPHlM0w-Q4jtX6UJnOwu3nsr04qfx8DAj6RPOctXQ4zUCJECna_qqwG_IMMMVmjqUvHoB7sHDi7RZgvO0An-B05vSw2DCFgKT-ano1VGS25A18Wm-b01OBS-kcb1EpDVy2IgaZOW0LYRY7Rks1fdRUkspO_SajaPw6prw0PDeIbhqWUE8JT20-Icuoi6SDX9DUuM4CiFoCB-2WxXVIrsQQiZhsCn7MUwHFtPeGJjHmOa8SpxyEAJzPc27_Os25FAsqgViln0VyOD88ix7JcwYMbhXRSq50xe_lbdyYyOUcaCY4v1QR7z-pLJvBHJ1r8znMFNk4Bjj54H7n_BLWB",
+                "data": "gAAAAABo75iZo2X2dN-gyIy_k2VNoDTLF13Yc7CAbn0T7CVoOQiNlKx8WRl4JOO-fqaxsQWXChqzH-ONPm4i-ofE9rBV2JrbALGXtKYNmecNB-EpMIICqb7XION7iY7E5t51NfOYLZf0fhrCRz1LYotuOyN2bh_VLFQTz96NobkrmcwFWWcZW4oAsaowQWcJu5WEHPI68zerjjIwlW3NbiMF8c6tx780EDHBa7Z73hBpXw0GfOJDkU0GNumfPoRc-bj4IB86mnsn1t6Xv5o9iNBQc8kLoD69grlU4ZtxXWipQp8E8P8_REBXuPIbCg7mIxt404_Tchw0jag59lZNqCyG055kfJwNuYhPXgC-l-n0o_neZEVC3tePRN5FcruCLsrdwF4gakhJEA0BU9hD6lb4eCRx8lq-TbUM0KblkNzsnJGtB86I61TcBvXKmKh5V75dqLuK5prxUiS2hiXGY6vb74YLmXB_J7SGp21aDuXmziybdNhsO0jia9buhUMbQ7ZA14S3xMVEsTOiPVz8wCZ4sf8FfLfgQj_nc9oR0KA9fQwTCODsJNeyu9NYe2JTnIoEn27GtTAsb2pnoHtIclnd56Kh-_QQeo4ZXdhNWxeg0crvr-E8L903SWaHXjpMNQfdwwwcy2DT5mI81mAaZcp88gU_gA3WuSUKdifb4KKJvnYTdYED8DeLTDQ42wGgMD-Gztmv6qpavs1rXaWV_WF4KbK5XSfT3QLGOlkcPaIQgBGpv4nfv7k-eQlj-mY1vx5MFR-iu5FjXarpePiTZV1y8OvH5KUhBxH6WIzjhkda3p0MufOciXPzLyZqcTbZZcii2E0CldGV46h2sc06Jld_uEsRVEoLV0kYfgEI2MhkW1VYxGp1248lgeKNqcGyd8zw0u4rzKc2VAJmBevkcLcS7KQHI5kE-_cLiznZamePDTWrUA1bMOVOi362h-G2B1CbrmnfoMzfmroAeIWEFAd-eje0zQFbpCSSiCzt2QkAddW1LDW12M8SM-MlqeKouwKbOR4N8ueetnisMYJL73VmNXpEckzvVu1BGh9hEKHnQcKchIGduarhoQeMVsC0Eg_rWeao8VNjTmFGIwX7JQehBaOSBKBdO2bRLe3soEZOlh4q2lZOiHFxtWnqhcgp84cyrvKnDxPO",
                 "format": "openai-responses-v1",
-                "id": "rs_0df490c6bfbc79950168e51c2db918819496aca3e5bbf1cfb7",
+                "id": "rs_0972da9f8e01b64e0168ef9894b7a481948b8479bb8462be59",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -120,7 +122,7 @@
                   "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "call_goySM7XKp9WpNd61ZMrIG6xZ",
+                "id": "call_4oMLh3C4SwjwpPQLrOZNtHjv",
                 "index": 0,
                 "type": "function"
               }
@@ -129,8 +131,8 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1759845421,
-      "id": "gen-1759845421-9f9PTMcEyXuuU2QcJCh0",
+      "created": 1760532628,
+      "id": "gen-1760532628-N61IHTgx4MpaJrPSJZAt",
       "model": "openai/gpt-5-nano",
       "object": "chat.completion",
       "provider": "OpenAI",
@@ -145,7 +147,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade7b92979eae4-ORD"
+        "98ef713cfeda61c9-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -154,7 +156,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:57:01 GMT"
+        "Wed, 15 Oct 2025 12:50:28 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

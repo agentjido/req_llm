@@ -1,0 +1,101 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMtbmV4dC04MGItYTNiLXRoaW5raW5nIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "qwen/qwen3-next-80b-a3b-thinking",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": -1.7881393e-6,
+          "message": {
+            "content": "Hello! 😊 How can I assist you today?",
+            "reasoning": "Okay, the user said \"Hello world!\" That's a common greeting, maybe even a classic first program in many programming languages. Let me think about how to respond.\n\nFirst, I should acknowledge their greeting. Maybe say something like \"Hello!\" back. But I should keep it friendly and open-ended. They might just be testing if I'm working, or maybe they want to start a conversation.\n\nWait, the user might be a beginner in programming, since \"Hello world\" is often the first example. But they could also just be saying hello in a casual way. I shouldn't assume too much.\n\nI should respond warmly. Maybe add an emoji to keep it friendly. Like a smiley face. Let me check common responses. Usually, people say \"Hello!\" or \"Hi there!\" with a smile.\n\nAlso, maybe ask how I can help them today. That opens the door for them to ask questions or continue the conversation. Let me make sure the response is simple and not too technical unless they indicate otherwise.\n\nSo possible response: \"Hello! 😊 How can I assist you today?\" That seems good. It's friendly, acknowledges their greeting, and offers help.\n\nWait, but maybe they just wanted to see if I respond to \"Hello world\". But regardless, the standard response is to greet back and offer assistance. Yeah, that's safe.\n\nAlternatively, maybe mention the \"Hello World\" reference. Like \"Hello! 😊 Did you just say 'Hello World' as a programming reference, or just a friendly greeting?\" But that might be overcomplicating. If they're a programmer, they might appreciate that, but if not, it could be confusing. Better to keep it simple unless they specify.\n\nSo better to just say \"Hello! 😊 How can I assist you today?\" That's universally appropriate. Yeah, that's the way to go.\n",
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1760532571,
+      "id": "gen-1760532571-OGMD3ta5ebbQoU7qVPpi",
+      "model": "qwen/qwen3-next-80b-a3b-thinking",
+      "object": "chat.completion",
+      "provider": "Together",
+      "usage": {
+        "completion_tokens": 394,
+        "prompt_tokens": 13,
+        "prompt_tokens_details": null,
+        "total_tokens": 407
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ef6fdc3d3761f2-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 12:49:32 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

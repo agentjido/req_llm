@@ -1,0 +1,115 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LWZsYXNoLWxpdGUtcHJldmlldy0wOS0yMDI1IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MS4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-2.5-flash-lite-preview-09-2025",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "**Internal Thinking:**\n\n1.  **Decomposition:** I will break down 12 into $10 + 2$.\n2.  **Distributive Property:** Calculate $(10 \\times 7) + (2 \\times 7)$.\n3.  **Multiplication:** $10 \\times 7 = 70$ and $2 \\times 7 = 14$.\n4.  **Addition:** $70 + 14 = 84$.\n\n**Solution:**\n\n$12 \\times 7 = 84$",
+            "reasoning": "**Solving Multiplication Problems**\n\nI'm currently exploring strategies to break down multiplication problems. My focus is on leveraging the distributive property, specifically by decomposing the larger number, to simplify the calculation. This approach aims to make the process more manageable.\n\n**Decomposing Numbers for Multiplication**\n\nI'm working on a thought process for solving multiplication. My current focus is on employing the distributive property by breaking down one of the numbers. I've outlined the steps for $12 \\times 7$, decomposing 12 into $10 + 2$ to simplify the multiplication and addition.\n\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "**Solving Multiplication Problems**\n\nI'm currently exploring strategies to break down multiplication problems. My focus is on leveraging the distributive property, specifically by decomposing the larger number, to simplify the calculation. This approach aims to make the process more manageable.\n\n**Decomposing Numbers for Multiplication**\n\nI'm working on a thought process for solving multiplication. My current focus is on employing the distributive property by breaking down one of the numbers. I've outlined the steps for $12 \\times 7$, decomposing 12 into $10 + 2$ to simplify the multiplication and addition.\n\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "STOP"
+        }
+      ],
+      "created": 1760546966,
+      "id": "gen-1760546966-FbdupIJrx3CfGgJ21LEX",
+      "model": "google/gemini-2.5-flash-lite-preview-09-2025",
+      "object": "chat.completion",
+      "provider": "Google",
+      "usage": {
+        "completion_tokens": 410,
+        "completion_tokens_details": {
+          "image_tokens": 0,
+          "reasoning_tokens": 291
+        },
+        "prompt_tokens": 14,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 424
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98f0cf498c49e26d-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 16:49:26 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

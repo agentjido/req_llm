@@ -1,0 +1,115 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LWZsYXNoLWxpdGUiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjoxLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-2.5-flash-lite",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "**Internal Thinking (brief):**\n\n1.  **Break down 12:** I'll think of 12 as 10 + 2.\n2.  **Distribute the multiplication:** I'll multiply 7 by each part: (10 * 7) + (2 * 7).\n3.  **Calculate:** 10 * 7 = 70, and 2 * 7 = 14.\n4.  **Add:** 70 + 14 = 84.\n\n**Solution:**\n\n12 * 7 = **84**",
+            "reasoning": "**Deconstructing Multiplication Problems**\n\nI'm currently working on the 12 * 7 multiplication. My approach involves breaking down the number 12 into more manageable components for calculation.\n\n**Breaking Down Twelve by Seven**\n\nI'm focusing on the breakdown of 12 * 7. My current thought is to apply the distributive property, splitting 12 into 10 and 2, then multiplying each by 7 and summing the results.\n\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "**Deconstructing Multiplication Problems**\n\nI'm currently working on the 12 * 7 multiplication. My approach involves breaking down the number 12 into more manageable components for calculation.\n\n**Breaking Down Twelve by Seven**\n\nI'm focusing on the breakdown of 12 * 7. My current thought is to apply the distributive property, splitting 12 into 10 and 2, then multiplying each by 7 and summing the results.\n\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "STOP"
+        }
+      ],
+      "created": 1760546984,
+      "id": "gen-1760546984-dbVq32r9ggWLS6OVo6lM",
+      "model": "google/gemini-2.5-flash-lite",
+      "object": "chat.completion",
+      "provider": "Google",
+      "usage": {
+        "completion_tokens": 418,
+        "completion_tokens_details": {
+          "image_tokens": 0,
+          "reasoning_tokens": 287
+        },
+        "prompt_tokens": 14,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 432
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98f0cfbb6c32ff5b-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 16:49:44 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

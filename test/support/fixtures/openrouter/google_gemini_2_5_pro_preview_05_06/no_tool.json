@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMzEwNiwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ29vZ2xlL2dlbWluaS0yLjUtcHJvLXByZXZpZXctMDUtMDYiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMzEwNiwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ29vZ2xlL2dlbWluaS0yLjUtcHJvLXByZXZpZXctMDUtMDYiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
       "max_tokens": 13106,
@@ -23,6 +23,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -62,12 +63,12 @@
           "logprobs": null,
           "message": {
             "content": "Why was the cat sitting on the computer? To keep an eye on the mouse",
-            "reasoning": "**Composing A Response**\n\nI've identified the requested joke within my knowledge base and have formulated a succinct response. It's a well-known cat-related pun that I believe fits the prompt's intent perfectly. My next step is to deliver the joke.\n\n\n**Delivering The Punchline**\n\nI've successfully located and now plan to share the selected cat joke: \"Why was the cat sitting on the computer? To keep an eye on the mouse!\" I am in the final stages and will deliver it immediately.\n\n\n",
+            "reasoning": "**Processing a Query**\n\nI've initiated a search within my knowledge base, specifically looking for a suitable cat joke to fulfill the user's request. The query appears straightforward; I'm not identifying any particular parameters or the need for any function calls at this stage. It's a simple retrieval task.\n\n\n**Analyzing the Request**\n\nI've advanced to a response strategy. I am now preparing the chosen joke. The plan is to directly deliver it to the user. I've already chosen the joke: \"Why was the cat sitting on the computer? To keep an eye on the mouse!\"\n\n\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "**Composing A Response**\n\nI've identified the requested joke within my knowledge base and have formulated a succinct response. It's a well-known cat-related pun that I believe fits the prompt's intent perfectly. My next step is to deliver the joke.\n\n\n**Delivering The Punchline**\n\nI've successfully located and now plan to share the selected cat joke: \"Why was the cat sitting on the computer? To keep an eye on the mouse!\" I am in the final stages and will deliver it immediately.\n\n\n",
+                "text": "**Processing a Query**\n\nI've initiated a search within my knowledge base, specifically looking for a suitable cat joke to fulfill the user's request. The query appears straightforward; I'm not identifying any particular parameters or the need for any function calls at this stage. It's a simple retrieval task.\n\n\n**Analyzing the Request**\n\nI've advanced to a response strategy. I am now preparing the chosen joke. The plan is to directly deliver it to the user. I've already chosen the joke: \"Why was the cat sitting on the computer? To keep an eye on the mouse!\"\n\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -77,22 +78,22 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1759845374,
-      "id": "gen-1759845374-L1rw8SEXCQbCj5iY0ZPv",
+      "created": 1760532571,
+      "id": "gen-1760532571-fC6d2WSoG16JEIHpC5aO",
       "model": "google/gemini-2.5-pro",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
-        "completion_tokens": 91,
+        "completion_tokens": 140,
         "completion_tokens_details": {
           "image_tokens": 0,
-          "reasoning_tokens": 75
+          "reasoning_tokens": 124
         },
         "prompt_tokens": 20,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 111
+        "total_tokens": 160
       }
     },
     "headers": {
@@ -100,7 +101,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade6976cbee80c-ORD"
+        "98ef6fdb79d1e1b4-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -109,7 +110,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:56:17 GMT"
+        "Wed, 15 Oct 2025 12:49:34 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

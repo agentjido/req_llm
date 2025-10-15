@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMjgwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImFudGhyb3BpYy9jbGF1ZGUtMy43LXNvbm5ldCIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfdG9rZW5zIjoxMjgwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImFudGhyb3BpYy9jbGF1ZGUtMy43LXNvbm5ldCIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "max_tokens": 12800,
@@ -22,6 +22,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -47,6 +48,7 @@
             "description": "Tell a funny joke",
             "name": "tell_joke",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "topic": {
                   "description": "Topic for the joke",
@@ -104,7 +106,7 @@
                   "arguments": "{\"location\": \"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "toolu_vrtx_01PiMcKj9sZyhSvCs2ontNBU",
+                "id": "toolu_vrtx_01EhRD6cHaHAmZfr1SxDvawe",
                 "index": 0,
                 "type": "function"
               }
@@ -113,15 +115,15 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1759845363,
-      "id": "gen-1759845363-qsrBLcXo7rDEBbvHbD01",
+      "created": 1760532483,
+      "id": "gen-1760532483-vUJsUlcadyKZLeWXis09",
       "model": "anthropic/claude-3.7-sonnet",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
         "completion_tokens": 77,
-        "prompt_tokens": 498,
-        "total_tokens": 575
+        "prompt_tokens": 512,
+        "total_tokens": 589
       }
     },
     "headers": {
@@ -129,7 +131,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade650fea335b5-ORD"
+        "98ef6db40f747dda-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -138,7 +140,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:56:04 GMT"
+        "Wed, 15 Oct 2025 12:48:03 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

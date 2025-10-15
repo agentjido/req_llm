@@ -41,19 +41,19 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "12 × 7 = 84.",
-            "reasoning": "**Providing final answer only**",
+            "content": "12 × 7 = 84",
+            "reasoning": "**Rejecting internal thoughts and computing product**",
             "reasoning_details": [
               {
                 "format": "openai-responses-v1",
                 "index": 0,
-                "summary": "**Providing final answer only**",
+                "summary": "**Rejecting internal thoughts and computing product**",
                 "type": "reasoning.summary"
               },
               {
-                "data": "gAAAAABo5RxlaocbgxU4X4MDWX2zWFPatYliudsOyxeSQQNuKiVdsSk2buXveNAJxzZknIbonfAfMcw9X26g7evCDPap3GaWkVmXevGxoeycFvqNm8mZ7u_VpILxpcqILPzYcWLEjYJbHqg1LZynDcMwZDBGDdvZp02-yZB7j1OuSmlBaWKtGZDwBfs1Nv-gPhxd2pSbH6jOVz3NeFB_JXRqi6_6qeKOJhiQXG9MJqPyRMRH48umtMs7wlz-YfafVvunfgDZFNIVu3qXNWNsQJlXGaBXhp2X8OEaCDUZlPr9gF_nhHpYO9QJ_yPWCN11jGzGnBhwn7Q4MVEuUUjgVz-ULfE0FdZ1dx2OlH6h3JgmgFSwx0SzvN-RuyBtuHw9pVb_KlLRsn5EYxPI6SPyetfxt-0ajTN8ABEiCSjscvK15lqA-bAIMSFFN2ZsNmTdJzr3eduOqSOPwEZg8Uq5xBJ4hKMVrvPD2f0FjZsM2Fo3UOVVObfu0UqTXfmmXr_FcNEj9wnpqN0kVIYBlXxpSBVNxMJ-1pfvow_6ycQ3Ie9btHRqJgNLMjKD53jRJ4O4eDBW0UYfWYLwGH253SsVlwyf27wud-4LlAAOKm2Y2Sw8PJsCdaqHJm-7dV0J56m5RVhYJSTswF3GgIhVWhWjbWvnI2HcMk-QWTKladcq7Ou8jAVk9lPpj2VAgJFUc4WvFJ8E-E-5fc6WfJipMqW0Uiy0O9jF8Dh0sIz4WYE89CI5uJt90CbcIpgJhD1-BLBxG6Pk5IehnJ5vjtewg1xCRMYmMoFxTzP_K5bREaiCoLrxFTjNAhb1H1oeBD5OvSFbjgTKFLH6mQzXC3Ha1yNAqNdYKmQpkj4jfNHwxmUFaSggkdGbza2ibdj9Ocm6DGtTgLqnU09jQ0tE6adu6FVDA_PYmCzGtuirePG1rYiEpLtsv_qxJMxa3d3Dvf7gpsspewlUcxXMVt0Bg5wIKtrYB-85cuOocVpUKtmc7JV4u2_BgFMM7UDxBb40cl_JulMUzPv-ES882A8cHFguQyu555FW6bwiw7J7o4ImMUFVnz5lb0H1Gl_iJr2GUxxppp3XLM6ozkMawH0JKGCKAa3wtagrB5K0DjAr3MiRJjOxMAAxpe5x3FUn5WC_R6Ic2qfbQvorJN-F2mvKgOwQXBUPPI3jhrexqwz9L14zmlpnkDUE52iEdH7f3r0=",
+                "data": "gAAAAABo75ggGiWXL04G4g3tukxMbAIVvPvsUhwZdO-MShjcfUEJAmlM6LzgVo2jgwqFKgurgn9QDeOdMEsNotSTBCdUdvQFPuSP9bHMQaSBbuBu_wQYxQhxvmI7y1KmyLcHUuNS0KJ1Enymr7MdP_Nbc4huHuLGtUTuO9e7pPQG4C_NxkDyYPFdmxW_-dizRyA6Nugm2ougtSMbG-aHx6B5eNjJ0lew0XQe_CUUGXJaI4hjU1uSs1UoeXcTTOHdqX6D4COASOXq2rL43BFXDacLS8-xj1B6CwXazb2gNc4zEREJO2tIUcRy1K6vdeARwUcKGpxVqPDZXPzndKM1YJ_YIerV304KxfLxJeeH3bCkCiRtFOsGcA7DdXETxJ0gMx_KXEzxmV9LNE9RGxpUIq4f10ADT0c0Wher87fP8_E9ha1Uo8sQhVZYngV7HrCCCYcysjhRpB21hi07YnMkabC9JUymxzBg28uoeo3JXo8x0WFs3e8DWCT_8amZc5STCTVADSJKseekBQru-CXVyCYRzlWizXVnY9ihiaVSDDc8yHPNniIRED4aDCdT_lzeQATDSORbKNWDG3vN_a2uLGXgNcgnqeYkYUXItPzM6FQchcCoGGe66eTdmvZRfPdXZR1GyKBAp_WsXBsPB-tNhgrk13UAyV0RCqRngZ-JckEpD5fI899cku2c6H8cy5MYQ7WEsBmK0iMQRXLu6zeOzozjxv2iZiUrJWGDXrvrzlfdXfsj6W1cqAkMctCC6uF6fCzeFNfr2S-oSpvb-i3O2YgDrVeZ-3JvV0joZ0mJj3GuFiv_aE5oWUP3BasZkdwL5ERYkxOCePKowtbLb3tLKb1b7D_XHBZ6qqvN4f9MyGblNDu7J3bIfBBboJFtnqkBPzTdAZTQLXx8ZL6VZxmZtjE8v9FH75O43g==",
                 "format": "openai-responses-v1",
-                "id": "rs_0a6fb03cca40ffd20168e51c61e70c8190b5e07ba8fa7999b7",
+                "id": "rs_0c34a3b57ac02a320168ef981fa2208195a51d5625f2836866",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -64,15 +64,15 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1759845472,
-      "id": "gen-1759845472-RPeMYJSuVtjqlAOXemW8",
+      "created": 1760532511,
+      "id": "gen-1760532511-V6beR5Fg6dSAPSDDvE7g",
       "model": "openai/gpt-5-codex",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
-        "completion_tokens": 14,
+        "completion_tokens": 13,
         "prompt_tokens": 19,
-        "total_tokens": 33
+        "total_tokens": 32
       }
     },
     "headers": {
@@ -80,7 +80,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade8fbdb84000e-ORD"
+        "98ef6e6208c7e248-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,7 +89,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:57:53 GMT"
+        "Wed, 15 Oct 2025 12:48:31 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

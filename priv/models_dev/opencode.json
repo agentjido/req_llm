@@ -1,6 +1,37 @@
 {
   "models": [
     {
+      "alpha": true,
+      "attachment": false,
+      "cost": {
+        "input": 0.5,
+        "output": 2
+      },
+      "id": "an-g8x",
+      "knowledge": "2025-01",
+      "last_updated": "2025-07-30",
+      "limit": {
+        "context": 200000,
+        "output": 128000
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Code G8X (alpha)",
+      "open_weights": true,
+      "provider": "opencode",
+      "provider_model_id": "an-g8x",
+      "reasoning": true,
+      "release_date": "2025-07-30",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
       "attachment": true,
       "cost": {
         "cache_read": 0.08,

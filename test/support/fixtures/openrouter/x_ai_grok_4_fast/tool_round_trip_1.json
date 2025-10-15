@@ -1,13 +1,13 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkNhbGwgdGhlIGFkZCB0b29sIHdpdGggYT0yIGFuZCBiPTMuIEFmdGVyIHJlY2VpdmluZyB0aGUgdG9vbCByZXN1bHQsIHJlcGx5IGV4YWN0bHkgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6IngtYWkvZ3Jvay00LWZhc3QiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbF9jaG9pY2UiOnsibmFtZSI6ImFkZCIsInR5cGUiOiJ0b29sIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkFkZCB0d28gaW50ZWdlcnMiLCJuYW1lIjoiYWRkIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYSI6eyJ0eXBlIjoiaW50ZWdlciJ9LCJiIjp7InR5cGUiOiJpbnRlZ2VyIn19LCJyZXF1aXJlZCI6WyJhIiwiYiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6IngtYWkvZ3Jvay00LWZhc3QiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbF9jaG9pY2UiOnsiZnVuY3Rpb24iOnsibmFtZSI6ImFkZCJ9LCJ0eXBlIjoiZnVuY3Rpb24ifSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiQWRkIHR3byBpbnRlZ2VycyIsIm5hbWUiOiJhZGQiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhIjp7InR5cGUiOiJpbnRlZ2VyIn0sImIiOnsidHlwZSI6ImludGVnZXIifX0sInJlcXVpcmVkIjpbImEiLCJiIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
       "max_tokens": 3000,
       "messages": [
         {
-          "content": "Call the add tool with a=2 and b=3. After receiving the tool result, reply exactly with 'sum=<value>'.",
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
           "role": "user"
         }
       ],
@@ -17,8 +17,10 @@
       "stream": false,
       "temperature": 0.0,
       "tool_choice": {
-        "name": "add",
-        "type": "tool"
+        "function": {
+          "name": "add"
+        },
+        "type": "function"
       },
       "tools": [
         {
@@ -63,56 +65,22 @@
   },
   "response": {
     "body": {
-      "choices": [
-        {
-          "finish_reason": "tool_calls",
-          "index": 0,
-          "logprobs": null,
-          "message": {
-            "content": "",
-            "reasoning": null,
-            "refusal": null,
-            "role": "assistant",
-            "tool_calls": [
-              {
-                "function": {
-                  "arguments": "{\"a\":2,\"b\":3}",
-                  "name": "add"
-                },
-                "id": "call_33717658",
-                "index": 0,
-                "type": "function"
-              }
-            ]
-          },
-          "native_finish_reason": "tool_calls"
+      "error": {
+        "code": 400,
+        "message": "Provider returned error",
+        "metadata": {
+          "provider_name": "xAI",
+          "raw": "{\"code\":\"Client specified an invalid argument\",\"error\":\"Invalid request content: Required function  is not present in the provided tools.\"}"
         }
-      ],
-      "created": 1760442696,
-      "id": "gen-1760442696-73uAV60Sfexs8k4xII2n",
-      "model": "x-ai/grok-4-fast",
-      "object": "chat.completion",
-      "provider": "xAI",
-      "system_fingerprint": "fp_9362061f30",
-      "usage": {
-        "completion_tokens": 236,
-        "completion_tokens_details": {
-          "reasoning_tokens": 198
-        },
-        "prompt_tokens": 183,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 151
-        },
-        "total_tokens": 419
-      }
+      },
+      "user_id": "user_2iYQIxKY28QuzANm4mmKBlOxzx2"
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
       "cf-ray": [
-        "98e6dda348dc88cd-ORD"
+        "98ef700fabfdf85a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -121,7 +89,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 11:51:36 GMT"
+        "Wed, 15 Oct 2025 12:49:39 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -142,6 +110,6 @@
         "nosniff"
       ]
     },
-    "status": 200
+    "status": 400
   }
 }

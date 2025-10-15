@@ -59,24 +59,24 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "I don't have the ability to tell jokes, as my tools are limited to things like getting weather information. If you have a question about the weather or something else I can help with, let me know!",
-            "reasoning_content": "First, the user asked: \"Tell me a joke about cats.\" This is a request for a joke, which is not related to any of the available functions. The only available function is \"get_weather\", which is for getting weather information based on a location.\n\nI need to check if this query can be addressed using the available functions. Clearly, it cannot. There's no function for telling jokes or anything related to humor.\n\nThe instructions say: \"If the user's query can be addressed using an available function, and all required parameters are provided or obviously inferable, trigger a function call.\" In this case, no available function applies.\n\nFurther, it says: \"Do not call a function if no matching functions apply or if parameters are missing/unclear. Ask for clarification only if none of the provided functions are able to advance the user's request.\"\n\nSince none of the functions can advance this request, I should not call any function. Instead, I should respond directly or ask for clarification if needed. But the query is clear; it's just not something I can handle with the tools I have.\n\nThe instructions emphasize: \"Keep your response to user clear; please do not make your response verbose!\" So, I should be concise.\n\nPossible responses: I could just say I don't have the capability to tell jokes, or politely redirect or ask if they meant something else. But the instructions don't specify exactly what to say in this case, just to not call a function and to ask for clarification if needed.\n\nAsking for clarification might not be necessary here because the request is straightforward, but it's not related. I could say something like: \"I can't tell jokes, but I can help with weather information. Did you have another question?\"\n\nTo keep it simple, I should just inform them that I can't fulfill this request.\n\nFinal decision: Respond clearly and concisely that I cannot tell jokes, as it's outside my capabilities.",
+            "content": "I don't have the capability to tell jokes, as my tools are limited to things like getting weather information. If you'd like the weather for a specific location, let me know!",
+            "reasoning_content": "First, the user asked: \"Tell me a joke about cats.\" This is a request for a joke, which is not related to any of the available functions. The only available function is \"get_weather\", which is for getting weather information based on a location.\n\nI need to check if this query can be addressed using the available functions. Clearly, it cannot. There's no function for telling jokes or anything related to humor.\n\nThe instructions say: \"If the user's query can be addressed using an available function, and all required parameters are provided or obviously inferable, trigger a function call.\" In this case, it doesn't match any function.\n\nFurther, it says: \"Do not call a function if no matching functions apply or if parameters are missing/unclear. Ask for clarification only if none of the provided functions are able to advance the user's request.\"\n\nSince none of the functions can advance this request, I should not call a function. Instead, I should respond directly or ask for clarification if needed. But the query is clear; it's just not something I can handle with the tools I have.\n\nThe instructions emphasize: \"Keep your response to user clear; please do not make your response verbose!\" So, I should be concise.\n\nPossible responses:\n\n- I could just say I don't have that capability.\n\n- Or, politely inform the user that I'm not designed for that and suggest sticking to weather queries.\n\nSince the system prompt is about using functions for relevant tasks, and this isn't, I should respond without any function call.\n\nFinal decision: Respond clearly and concisely that I can't help with that, and perhaps redirect to what I can do.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1760458032,
-      "id": "1663cb8a-31a7-c3d9-29e7-5e03f5beb465_us-east-1",
+      "created": 1760471322,
+      "id": "c55faa5a-2717-fa85-2c2a-1dc445f89c0c_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 41,
+        "completion_tokens": 35,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 383,
+          "reasoning_tokens": 329,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
@@ -87,7 +87,7 @@
           "image_tokens": 0,
           "text_tokens": 282
         },
-        "total_tokens": 706
+        "total_tokens": 646
       }
     },
     "headers": {
@@ -101,22 +101,28 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e8540ebef1fa27-ORD"
+        "98e998870a4ce239-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy-report-only": [
+        "script-src 'none'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=Xmb2I6iOc4QEsclmF0LuVJIySGCdbtQec9W553HOG6U-1760471328-1.0.1.1-WDun5CHC_Q3DvLj1vVGyke0RkjFEYaRo6u2HbQgdEu2QKytxJIbY6rcA_fJGhcYra1go9vQQafUqWYV74kuLN2wcWKT4JAETT7UREDjTydqDUo_k5YYI0uKCqU_qfMzvfmzTm3E0PNWYkmaTbJdlQLQHd7a0J4oz.tEpKvztdlA; report-to cf-csp-endpoint"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 16:07:18 GMT"
+        "Tue, 14 Oct 2025 19:48:48 GMT"
+      ],
+      "report-to": [
+        "{\"endpoints\":[{\"url\":\"https:\\/\\/csp-reporting.cloudflare.com\\/cdn-cgi\\/script_monitor\\/report?m=Xmb2I6iOc4QEsclmF0LuVJIySGCdbtQec9W553HOG6U-1760471328-1.0.1.1-WDun5CHC_Q3DvLj1vVGyke0RkjFEYaRo6u2HbQgdEu2QKytxJIbY6rcA_fJGhcYra1go9vQQafUqWYV74kuLN2wcWKT4JAETT7UREDjTydqDUo_k5YYI0uKCqU_qfMzvfmzTm3E0PNWYkmaTbJdlQLQHd7a0J4oz.tEpKvztdlA\"}],\"group\":\"cf-csp-endpoint\",\"max_age\":86400}"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=1l1w2sgHfskeQgCOrp1MGE_l42sOfP2W.yWMXYl13zs-1760458038-1.0.1.1-T8COzEZ.FYVq2LRdTmQ43vwjdbuYWKkrNyTnJjTHVkJvAQHLiwirLBKYnGRXK3njVLmyV5ZPfDtA.Kuo0.r0cKAFJciByEjX5cOw9FSBwis; path=/; expires=Tue, 14-Oct-25 16:37:18 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=ANZnyg33GDJiL5RYMeakzD4kHC3EprsAdCerIXhGygg-1760471328-1.0.1.1-xrHd3b.vqG17Zm_64qKiNiuNXYo0BjZdn_Hudi5d0JwPldpsIJ1RzSFwZ1cJAhkg9Jn3CBhJmDDeWkFyoYuPiGXUY_W5cW_FgGGwj9UC2Tw; path=/; expires=Tue, 14-Oct-25 20:18:48 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -128,7 +134,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-65f44d7a198afde14a0f8fc11aacfa9d-b0b799770052fb7b-01"
+        "00-4de69e5cead4ca8075f9ecc0ff6588b5-c10d9d770068b3a7-01"
       ],
       "x-zero-data-retention": [
         "false"

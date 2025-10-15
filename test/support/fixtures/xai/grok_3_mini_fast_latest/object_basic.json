@@ -69,15 +69,15 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "{\"age\":30,\"name\":\"John Doe\",\"occupation\":\"Software Engineer\"}",
-            "reasoning_content": "First, the user input is: \"Generate a software engineer profile\". But I have to respond based on the provided schema. The schema defines an object with properties: \"name\", \"age\", and \"occupation\". It's required to include \"name\" and \"age\", and \"occupation\" is optional but I can include it.\n\nThe schema is:\n\n{\n  \"additionalProperties\": false,\n  \"properties\": {\n    \"age\": {\"description\": \"Person's age in years\", \"minimum\": 1, \"type\": \"integer\"},\n    \"name\": {\"description\": \"Person's full name\", \"type\": \"string\"},\n    \"occupation\": {\"description\": \"Person's job or profession\", \"type\": \"string\"}\n  },\n  \"required\": [\"name\", \"age\"],\n  \"type\": \"object\"\n}\n\nSo, my response must be a single JSON string that matches this schema exactly. That means I need to output something like: {\"name\": \"Some Name\", \"age\": Some Number, \"occupation\": \"Some Job\"}\n\nThe user is asking for a \"software engineer profile\", so I should make the occupation related to that. For example, set \"occupation\" to \"Software Engineer\".\n\nI need to invent a name and an age since no specific details are provided. Let's pick something generic: name could be \"John Doe\", age could be 30, and occupation \"Software Engineer\".\n\nRemember, the output MUST be a single JSON string, and it has to conform to the schema. No additional text, just the JSON.\n\nFinal output should look like: {\"name\": \"John Doe\", \"age\": 30, \"occupation\": \"Software Engineer\"}\n\nThat includes all properties. The required ones are \"name\" and \"age\", so I could omit \"occupation\", but since the query is about a software engineer, it's better to include it.\n\nThe schema allows \"occupation\", and it fits, so I'll include it.\n\nEnsure that \"age\" is an integer greater than or equal to 1.\n\nSo, my plan: Create a JSON object with:\n\n- \"name\": \"John Doe\"\n\n- \"age\": 30\n\n- \"occupation\": \"Software Engineer\"\n\nThen, output it as a string.",
+            "content": "{\"age\":30,\"name\":\"Alice Johnson\",\"occupation\":\"Software Engineer\"}",
+            "reasoning_content": "First, the user input is: \"Generate a software engineer profile\". But I have to respond based on the provided schema. The schema defines a JSON object with properties: \"name\", \"age\", and \"occupation\". It's required to include \"name\" and \"age\", and \"occupation\" is optional but fits here.\n\nThe schema is:\n{\n  \"additionalProperties\": false,\n  \"properties\": {\n    \"age\": {\"description\": \"Person's age in years\", \"minimum\": 1, \"type\": \"integer\"},\n    \"name\": {\"description\": \"Person's full name\", \"type\": \"string\"},\n    \"occupation\": {\"description\": \"Person's job or profession\", \"type\": \"string\"}\n  },\n  \"required\": [\"name\", \"age\"],\n  \"type\": \"object\"\n}\n\nSo, my response must be a single JSON string that matches this schema exactly. That means I need to output something like: {\"name\": \"Some Name\", \"age\": Some Number, \"occupation\": \"Some Occupation\"}\n\nThe user is asking for a software engineer profile, so I should fill in the fields accordingly. For example:\n- Occupation: \"Software Engineer\"\n- Name: I need to make one up, since it's not specified.\n- Age: Also make one up, but it has to be an integer greater than or equal to 1.\n\nI must ensure that my output is only the JSON string, nothing else. The instructions say: \"Your output MUST be a single JSON string. You MUST use <user_json_schema> to format the JSON string.\"\n\nSo, I shouldn't add any extra text; just the JSON.\n\nLet me think of sample values:\n- Name: \"Alice Johnson\" (a full name)\n- Age: 30 (an integer, minimum 1)\n- Occupation: \"Software Engineer\" (based on the user's request)\n\nThis fits perfectly.\n\nFinal output should be: {\"name\": \"Alice Johnson\", \"age\": 30, \"occupation\": \"Software Engineer\"}\n\nMake sure it's a valid JSON string.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1760458028,
-      "id": "4dbeae4a-a906-793f-9615-51574ce4df16_us-east-1",
+      "created": 1760471297,
+      "id": "7a9e869e-bdb7-74a6-438c-20f8ae46d465_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
@@ -86,7 +86,7 @@
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 452,
+          "reasoning_tokens": 418,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
@@ -97,7 +97,7 @@
           "image_tokens": 0,
           "text_tokens": 112
         },
-        "total_tokens": 579
+        "total_tokens": 545
       }
     },
     "headers": {
@@ -111,7 +111,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e853f6f8120044-ORD"
+        "98e997e88b9f338f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -120,13 +120,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 16:07:16 GMT"
+        "Tue, 14 Oct 2025 19:48:22 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=t.TPut7qhTIKK_6jkTj.Dowflh3MoOIg0Kf2qg0zkFw-1760458036-1.0.1.1-iKnM6T6rzt6kIQBM.aqoj_9nou_Rcwlf7MKHPsmDD6rP5yANPnYN36aNeZgrv2eR1fIvI4KhIOwG4RKdkCur2gpc3WZVennuIuD.MFnb4co; path=/; expires=Tue, 14-Oct-25 16:37:16 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=Z5NTmPTbhB7gKKy6Ma6EPMlqaR_Q55gf8XgJfo5EktM-1760471302-1.0.1.1-TMSAduJU_l9WQ8.nv5K9g.RDCCFdiggK9tfIcTpbqQ5702HkSa9zuJeLN8PZEfJkhRk.E1nLQbCPlnb6QvwGQVHvLoJk2hZsj0je8tQPw_g; path=/; expires=Tue, 14-Oct-25 20:18:22 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -138,7 +138,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-f6e664e037b98ef9ea13e6e4aa69a0c1-e255fc2200532568-01"
+        "00-2133fa3c35849f40a035640f8423ed21-cf45cf62005a9c88-01"
       ],
       "x-zero-data-retention": [
         "false"

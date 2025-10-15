@@ -1,0 +1,114 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJnb29nbGUvZ2VtaW5pLTIuNS1mbGFzaC1saXRlLXByZXZpZXctMDktMjAyNSIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC41fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-2.5-flash-lite-preview-09-2025",
+      "n": 1,
+      "reasoning_effort": "low",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "The world of Aerthos was a tapestry woven from mountain peaks that scraped the heavens and valleys steeped in mist so thick it seemed to hold the memories of forgotten gods. For millennia, the balance of Aerthos was maintained by the Sky-Weavers, the great dragons whose scales shimmered with the colors of the aurora, and whose breath kept the elemental fires of the world in check.\n\nBut the Age of Harmony was long past. Now, the great peaks of the Wyrmfang Range were silent, and the whispers of dragon fire were replaced by the cold, methodical machinery of ambition.\n\n### Part I: The Fading Light of Oakhaven\n\nKaelen was not a hero. He was a cartographer’s apprentice in the quiet, moss-covered village of Oakhaven, nestled deep in the foothills bordering the shadowed Wyrmfang mountains. His life was measured in ink pots, parchment scrolls, and the precise measurement of distances that no one ever truly traveled.\n\nThe trouble began not with fire, but with silence. The seasonal migration of the Sun-Drakes—small, iridescent dragons whose passage signaled the start of the harvest—failed to materialize. Then, the rivers began to run sluggishly, their waters tasting faintly of ash.\n\nOne evening, while charting a newly discovered ravine, Kaelen stumbled upon something that shattered his ordered world. It was a cavern, hidden behind a waterfall, its entrance sealed by a shimmering, heat-warped barrier. Pushing through, he found not gold, but despair.\n\nLying curled in the center of the cavern was a dragon unlike any in the old tapestries. Its scales were the color of aged bronze and emerald moss, but they were dull, cracked, and weeping a thin, smoky residue. This was **Veridian**, a Sky-Weaver of immense age, now reduced to a shadow of his former glory.\n\n\"You carry the scent of the Old Blood,\" Veridian rasped, his voice like grinding stone. \"A flicker of the bond that once tied us to your kind.\"\n\nKaelen, trembling, could only stare. He had always dismissed the dragon lore as fanciful myth.\n\nVeridian explained the encroaching blight: **Lord Malakor**, a sorcerer whose domain lay in the industrialized, smog-choked lowlands of the Iron March, was not merely hunting dragons; he was *harvesting* them. Malakor had discovered a way to siphon the raw elemental essence—the *Aether-Fire*—from living dragons, using it to power terrifying siege engines and grant himself terrifying longevity.\n\n\"He seeks the **Heartstone of Aethel**,\" Veridian whispered, his great eye focusing on Kaelen. \"It is the anchor of our world’s magic, hidden deep within the Obsidian Spire. If he drains it, Aerthos will freeze, then shatter.\"\n\nVeridian was too weak to fly, too bound by the draining magic to fight. He needed an emissary—someone unnoticed, someone with the latent connection to the Old Blood—to retrieve the Heartstone before Malakor could corrupt it. Kaelen, the mapmaker, was tasked with charting a path through a world that had forgotten how to be magical.\n\n### Part II: The Journey Through the Shattered Lands\n\nKaelen’s first adventure was simply escaping Oakhaven, armed only with his surveying tools, a sturdy climbing rope, and Veridian’s cryptic instructions.\n\nHis initial journey took him through the Whispering Marshes, a place where the remnants of Malakor’s failed experiments—grotesque, half-formed elemental creatures—lurked. Here, he met his first true companion: **Lyra**, a rogue scholar and former alchemist who had fled Malakor’s service after witnessing his cruelty. Lyra was sharp, cynical, and possessed a terrifying knowledge of volatile compounds.\n\n\"Dragons are not gods, Kaelen,\" Lyra warned him as they navigated a treacherous bog, dodging blasts of raw, unstable energy. \"They are nature’s engine. And Malakor is overloading the system.\"\n\nTheir path led them next to the Free City of Silverport, a chaotic hub of trade and espionage. To gain passage into the heavily guarded Iron March, they needed allies. They found them in the form of the **Crimson Corsairs**, a band of sky-pirates who still flew salvaged, non-magical airships, fiercely independent of Malakor’s rule.\n\nTheir captain, **Roric the Scarred**, agreed to transport them, not for gold, but for the promise of seeing the Iron March burn.\n\nThe flight over the Iron March was a harrowing experience. The sky was choked with soot, and the landscape below was a grid of smoking factories and fortified towers. They saw the evidence of Malakor’s power: captured dragons, suspended in massive, humming cages, their auras visibly being siphoned into monstrous war machines.\n\nKaelen felt a deep, primal rage at the sight—a feeling he recognized as the stirring of the Old Blood within him.\n\n### Part III: The Obsidian Spire and the Betrayal\n\nThe Obsidian Spire was not a mountain; it was a colossal, jagged shard of black crystal thrusting miles into the stratosphere, humming with contained power. It was the nexus point of Aerthos’s ley lines, and the resting place of the Heartstone.\n\nMalakor knew they were coming. He had anticipated a frontal assault from the remaining dragon clans, but not a subtle infiltration by a mapmaker and an alchemist.\n\nKaelen and Lyra, aided by a daring diversion staged by Roric and the Corsairs, managed to breach the Spire’s lower defenses. Inside, the architecture was alien—smooth, cold obsidian carved by forces that predated human memory.\n\nThey fought their way upward, encountering Malakor’s elite guard: armored soldiers powered by stolen dragon essence, moving with unnatural speed and strength. Lyra proved invaluable, using her knowledge of chemical reactions to create blinding smokescreens and corrosive acids that ate through the enchanted armor.\n\nAs they neared the summit chamber, they were intercepted by Malakor himself. He was tall, gaunt, and wrapped in robes that seemed to absorb the light.\n\n\"The cartographer,\" Malakor sneered, his voice echoing with borrowed power. \"You seek to preserve a dying age. Magic must be controlled, harnessed, *mastered*.\"\n\nThe confrontation was not a physical fight, but a battle of wills and stolen power. Malakor unleashed bolts of raw, chaotic energy—the essence of three captured Ice-Drakes. Kaelen found himself instinctively reacting, not with magic he didn't possess, but with *understanding*. He saw the flow of the energy, the weakness in its structure, the way Malakor was forcing disparate powers together.\n\nHe didn't fight the magic; he *mapped* it. He shouted directions to Lyra, who hurled a specialized alchemical sphere that disrupted the energy flow, causing Malakor’s power surge to backfire violently.\n\nMalakor staggered, momentarily stunned. Kaelen rushed past him into the final chamber.\n\nThere, suspended in a field of pure, blinding white light, was the Heartstone—a massive, multifaceted gem pulsing with the rhythm of the world. But Malakor was faster than he looked. He lunged, his hand outstretched, ready to claim the final prize.\n\nSuddenly, the chamber doors burst inward. It was not Roric, but **Ignis**, the last of the great Fire-Drakes, who had been held captive in the Spire’s highest level. Ignis was massive, his scales glowing like cooling lava, but his eyes burned with desperate fury.\n\nHe had broken free, fueled by the sheer proximity of the Heartstone.\n\nIgnis did not attack Malakor directly. Instead, he unleashed a roar that was less sound and more physical force, slamming his wing against the central support column of the chamber. The Spire groaned, and the containment field around the Heartstone flickered.\n\nMalakor shrieked in frustration, turning his attention to the dragon. \"You fool! You will destroy us all!\"\n\nKaelen realized the truth: Malakor hadn't just wanted the Heartstone; he needed the Spire intact to channel its power.\n\n### Part IV: The Cartographer’s True Calling\n\nKaelen didn't hesitate. He didn't have a sword or a spell. He had his knowledge of structure and flow. He sprinted toward the Heartstone, ignoring the chaotic battle raging behind him—Ignis battling Malakor’s corrupted guards, Lyra frantically trying to stabilize the collapsing chamber floor.\n\nHe reached the pedestal. The Heartstone was vibrating violently, on the verge of overloading. Kaelen placed both hands on the cool, smooth surface.\n\nHe didn't try to take it. He didn't try to command it. He did what he did best: he *mapped* it.\n\nHe visualized the ley lines flowing into the stone, charting the corrupted pathways Malakor had forced upon them. He poured his own latent Old Blood—the connection Veridian had sensed—into the stone, not as power, but as *correction*. He was forcing the system back to its original blueprint.\n\nA wave of pure, warm energy exploded outward. It wasn't destructive; it was restorative. The light washed over the chamber, stripping away the corruption like soot from glass.\n\nMalakor screamed as the stolen Aether-Fire violently rejected him. The power he had hoarded, the essence of the captured dragons, rushed out of him, leaving him withered and frail, his ambition burned away. He collapsed, a powerless old man amidst the ruins of his fortress.\n\nIgnis, momentarily freed from the psychic drain, roared again, this time a sound of triumph and relief. The energy surge stabilized the Spire, but the battle had taken its toll.\n\n### Part V: The Dawn of the Sky-Weavers\n\nThe aftermath was long and arduous. The Obsidian Spire, though saved, was scarred. Malakor was imprisoned, his influence broken across the Iron March.\n\nKaelen, Lyra, and Ignis descended from the Spire, carrying the now-stable Heartstone, which pulsed gently, its light returning to the world.\n\nThey brought the stone to the Wyrmfang Range, where Veridian, sensing the shift in the world’s balance, had managed to rise weakly from his cavern. When the Heartstone’s pure light touched him, the bronze scales regained their luster, and the smoky residue vanished.\n\n\"You did not conquer the darkness, Kaelen,\" Veridian said, stretching his vast wings for the first time in decades. \"You *corrected* it. You understood the map.\"\n\nThe healing of Aerthos began immediately. The rivers cleared, the air grew crisp, and across the world, the remaining captive dragons, sensing the Heartstone’s freedom, broke their bonds and returned to the skies.\n\nKaelen did not become a king, nor a sorcerer. He returned to Oakhaven, but his maps were different now. They were no longer just lines on parchment; they were conduits of knowledge. He worked with Veridian and the newly awakened Sky-Weavers, charting the restored ley lines, ensuring that the balance—the delicate, necessary connection between the soaring majesty of the dragons and the grounded reality of humankind—would never again be forgotten or exploited.\n\nLyra, finding a new purpose, dedicated herself to studying the Heartstone’s residual energy, hoping to find ways to heal the scars left on the land without resorting to destructive power.\n\nThe age of fear was over, replaced by the Age of Reclamation. And sometimes, when the sun hit the Wyrmfang peaks just right, the villagers of Oakhaven would look up and see not just clouds, but the magnificent, sweeping shadows of the Sky-Weavers, soaring high above the world that Kaelen, the humble cartographer, had saved by learning how to read its deepest terrain. His greatest adventure had not been finding a hidden treasure, but discovering the hidden structure of reality itself.",
+            "reasoning": "**Drafting Epic Narratives**\n\nI'm currently focused on fleshing out the core elements of the story, specifically the intricate plot and detailed world-building necessary for an epic dragon adventure. My thoughts are coalescing around developing a compelling conflict and a cast of memorable characters.\n\n**Building Aerthos Lore**\n\nI'm delving into the specifics of Aerthos, focusing on how its distinct regions, the human kingdom and dragon territories, interact. My mind is also occupied with the fundamental conflict: the imbalance of elemental magic tied to the Heartstone of Aethel.\n\n**Defining World Elements**\n\nI'm concentrating on establishing the foundational elements of Aerthos, including its varied landscapes and the distinct societies of humans and dragons. The central conflict surrounding the Heartstone of Aethel and the imbalance of elemental magic is taking shape.\n\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "**Drafting Epic Narratives**\n\nI'm currently focused on fleshing out the core elements of the story, specifically the intricate plot and detailed world-building necessary for an epic dragon adventure. My thoughts are coalescing around developing a compelling conflict and a cast of memorable characters.\n\n**Building Aerthos Lore**\n\nI'm delving into the specifics of Aerthos, focusing on how its distinct regions, the human kingdom and dragon territories, interact. My mind is also occupied with the fundamental conflict: the imbalance of elemental magic tied to the Heartstone of Aethel.\n\n**Defining World Elements**\n\nI'm concentrating on establishing the foundational elements of Aerthos, including its varied landscapes and the distinct societies of humans and dragons. The central conflict surrounding the Heartstone of Aethel and the imbalance of elemental magic is taking shape.\n\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "STOP"
+        }
+      ],
+      "created": 1760546979,
+      "id": "gen-1760546979-yT5bcJ3Us8hLvvtWbqdq",
+      "model": "google/gemini-2.5-flash-lite-preview-09-2025",
+      "object": "chat.completion",
+      "provider": "Google",
+      "usage": {
+        "completion_tokens": 2833,
+        "completion_tokens_details": {
+          "image_tokens": 0,
+          "reasoning_tokens": 355
+        },
+        "prompt_tokens": 9,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 2842
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98f0cf9fcd75e26d-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 16:49:40 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

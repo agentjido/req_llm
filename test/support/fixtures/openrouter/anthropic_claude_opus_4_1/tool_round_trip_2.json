@@ -1,0 +1,119 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMjAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6InRvb2x1XzAxSkFwS3ZoRVRaTmRjdjZTTVdjenF3TiIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6InRvb2x1XzAxSkFwS3ZoRVRaTmRjdjZTTVdjenF3TiJ9XSwibW9kZWwiOiJhbnRocm9waWMvY2xhdWRlLW9wdXMtNC4xIiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 3200,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        },
+        {
+          "content": [],
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"a\":2,\"b\":3}",
+                "name": "add"
+              },
+              "id": "toolu_01JApKvhETZNdcv6SMWczqwN",
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "content": "5",
+          "name": "add",
+          "role": "tool",
+          "tool_call_id": "toolu_01JApKvhETZNdcv6SMWczqwN"
+        }
+      ],
+      "model": "anthropic/claude-opus-4.1",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "sum=5",
+            "reasoning": null,
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1760532503,
+      "id": "gen-1760532503-r6fr451WKVjLe1WI9wb7",
+      "model": "anthropic/claude-opus-4.1",
+      "object": "chat.completion",
+      "provider": "Google",
+      "usage": {
+        "completion_tokens": 6,
+        "prompt_tokens": 118,
+        "total_tokens": 124
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ef6e31abe37b1b-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 12:48:24 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

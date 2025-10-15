@@ -1,0 +1,100 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGkgdGhlcmUhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoicXdlbi9xd2VuMy1uZXh0LTgwYi1hM2ItdGhpbmtpbmciLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Hi there!",
+          "role": "user"
+        }
+      ],
+      "model": "qwen/qwen3-next-80b-a3b-thinking",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": -1.7881393e-6,
+          "message": {
+            "content": "Hello! 😊 How can I assist you today?",
+            "reasoning": "Okay, the user said \"Hi there!\" so I need to respond appropriately. Let me think about how to greet them back.\n\nFirst, I should be friendly and welcoming. Maybe say something like \"Hello!\" or \"Hi!\" to match their tone. Since they used \"Hi there!\", which is a bit casual and cheerful, I can respond in a similar way.\n\nI should also consider if there's anything else they might need. But since they just said hi, probably just a simple greeting is enough. Maybe add a smiley emoji to keep it warm. Like 😊\n\nWait, but sometimes people might have a follow-up question. So after greeting, I can ask how I can help them today. That way, it's open-ended and invites them to share what they need.\n\nSo possible response: \"Hello! 😊 How can I assist you today?\" That sounds good. Let me check if that's appropriate. Yes, it's friendly, professional, and offers assistance.\n\nAlternatively, maybe \"Hi there! 👋 What can I do for you today?\" But the first one is fine. Let's go with \"Hello! 😊 How can I assist you today?\" That's standard and helpful.\n",
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1760532579,
+      "id": "gen-1760532579-sTquhX3MxIDb6X4rzJ2O",
+      "model": "qwen/qwen3-next-80b-a3b-thinking",
+      "object": "chat.completion",
+      "provider": "Together",
+      "usage": {
+        "completion_tokens": 259,
+        "prompt_tokens": 13,
+        "prompt_tokens_details": null,
+        "total_tokens": 272
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ef700f8e2361f2-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 12:49:40 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

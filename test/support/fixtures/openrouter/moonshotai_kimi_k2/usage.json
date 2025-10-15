@@ -36,23 +36,23 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "length",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! How can I help you today?",
+            "content": "Hi! How can I help you today?",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "stop"
+          "native_finish_reason": "length"
         }
       ],
-      "created": 1759845386,
-      "id": "gen-1759845386-Sqxnv5ecOoswt3JFYfNd",
+      "created": 1760532501,
+      "id": "gen-1760532501-QSE0sOBzP7Ppmx6lEeQY",
       "model": "moonshotai/kimi-k2",
       "object": "chat.completion",
-      "provider": "Fireworks",
+      "provider": "Nebius",
       "usage": {
         "completion_tokens": 10,
         "prompt_tokens": 19,
@@ -64,7 +64,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade6debb168737-ORD"
+        "98ef6e240dad89e9-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -73,7 +73,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:56:26 GMT"
+        "Wed, 15 Oct 2025 12:48:21 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

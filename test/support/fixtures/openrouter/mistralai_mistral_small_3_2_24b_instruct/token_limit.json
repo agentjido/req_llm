@@ -39,7 +39,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "**The Dragonborn Chronicles: A Tale of Fire and Destiny**\n\n### **Prologue: The Last Egg**\n\nLong ago, when the world was young and magic flowed like rivers, the great dragons ruled the skies. They were wise, powerful, and feared by all. But as time passed, their numbers dwindled, hunted by greedy kings and sorcerers who sought their power. By the time the last dragon egg was laid, the world had nearly forgotten their existence.\n\nThe egg was",
+            "content": "**The Chronicles of the Skyborn: A Tale of Dragons and Adventures**\n\n### **Prologue: The Forgotten Prophecy**\n\nLong ago, in the realm of Eldoria, where the skies were painted with hues of gold and twilight, dragons ruled the heavens. They were not mere beasts of fire and fury, but ancient beings of wisdom, bound by an unbreakable pact with the first kings of men. The dragons had sworn to protect the land from darkness, and in",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -47,15 +47,16 @@
           "native_finish_reason": "length"
         }
       ],
-      "created": 1759848190,
-      "id": "gen-1759848190-G13gAPBb9vItu4NQyxRq",
+      "created": 1760547268,
+      "id": "gen-1760547268-mXexLfIGmn06SSQ3aawf",
       "model": "mistralai/mistral-small-3.2-24b-instruct",
       "object": "chat.completion",
-      "provider": "Mistral",
+      "provider": "Chutes",
       "usage": {
         "completion_tokens": 100,
-        "prompt_tokens": 12,
-        "total_tokens": 112
+        "prompt_tokens": 567,
+        "prompt_tokens_details": null,
+        "total_tokens": 667
       }
     },
     "headers": {
@@ -63,7 +64,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ae2b563d12f859-ORD"
+        "98f0d6ac8b41029d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -72,7 +73,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 14:43:14 GMT"
+        "Wed, 15 Oct 2025 16:54:30 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

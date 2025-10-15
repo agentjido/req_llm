@@ -1,0 +1,152 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1oYWlrdS00LTUtMjAyNTEwMDEiLCJzdHJlYW0iOmZhbHNlLCJ0aGlua2luZyI6eyJidWRnZXRfdG9rZW5zIjoxMDI0LCJ0eXBlIjoiZW5hYmxlZCJ9fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "claude-haiku-4-5-20251001",
+      "stream": false,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-beta": [
+        "interleaved-thinking-2025-05-14"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "Eu4CCkYICBgCKkCFcWNuuLvhxvibM/cbmDsY7FKgyZBz7FovOZwxN4bdnsKVSa8Xue3xopeYX1+5PCaE/zu0sHR4wecahlZkbXCPEgyn9UtGmzGd21A84/MaDJkt/G9lyeZnXjDB3iIwO2DE7DazCbQrWn4w37enDb/gd1n+qD7SE/zHiiXjHq5Zv7kIHCtKRNpwHEqrZetbKtUBgOKoVhRtd2pMP/4vUnaoeZQaogwM7Vdi4/VY7AVbqpNN1O10UPaL2rrlQaCOp2v/TE2D4AiwOh6SDdhtrHgXBKD7GkOdsGaNJhf/cNrrjXw2V7exG81ulBZC/LOhZVjFFqrdOVsTS0Z5aldYjf0fKec491F7qyio6DCEkkSUwSe/RIPxmZ0BiHNw+gd9+4W0eleFaqm8uU/v4uT8p97p6K8NWkkcU0Q7kP3s7y2s6nIenTRU7uJlnnHmYXdj9oSw3CQyQLou1Q0l8vSxYR07qtasiKeIGAE=",
+          "thinking": "I need to solve 12 × 7.\n\nLet me think about this:\n- 12 × 7 = (10 + 2) × 7\n- = 10 × 7 + 2 × 7\n- = 70 + 14\n- = 84\n\nAlternatively:\n- 12 × 7 = 12 × (5 + 2)\n- = 60 + 24\n- = 84\n\nBoth ways give 84.",
+          "type": "thinking"
+        },
+        {
+          "text": "# 12 × 7\n\n**Internal thinking:**\n- Break down: 12 × 7 = (10 + 2) × 7\n- Distribute: (10 × 7) + (2 × 7) = 70 + 14\n- Add: 70 + 14 = 84\n\n**Answer: 84**",
+          "type": "text"
+        }
+      ],
+      "id": "msg_01NgfyE4MTCj635i8GjhKQ5s",
+      "model": "claude-haiku-4-5-20251001",
+      "role": "assistant",
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 50,
+        "output_tokens": 210,
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": [
+        "a71659e7-a922-4ff7-99de-f3ba615face1"
+      ],
+      "anthropic-ratelimit-input-tokens-limit": [
+        "450000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "450000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2025-10-15T17:29:11Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "90000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "90000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2025-10-15T17:29:12Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "1000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2025-10-15T17:29:10Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "540000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "540000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2025-10-15T17:29:11Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "98f109823d45f60c-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 17:29:12 GMT"
+      ],
+      "request-id": [
+        "req_011CU9Ny6abR7u1Wh4LpVQCZ"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "2066"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  }
+}

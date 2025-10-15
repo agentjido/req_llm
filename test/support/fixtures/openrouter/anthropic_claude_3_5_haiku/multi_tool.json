@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJhbnRocm9waWMvY2xhdWRlLTMuNS1oYWlrdSIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJhbnRocm9waWMvY2xhdWRlLTMuNS1oYWlrdSIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "max_tokens": 819,
@@ -22,6 +22,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -47,6 +48,7 @@
             "description": "Tell a funny joke",
             "name": "tell_joke",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "topic": {
                   "description": "Topic for the joke",
@@ -94,7 +96,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Let me check the current weather in Paris for you.",
+            "content": "I'll check the current weather in Paris for you right now.",
             "reasoning": null,
             "refusal": null,
             "role": "assistant",
@@ -104,7 +106,7 @@
                   "arguments": "{\"location\": \"Paris, France\", \"unit\": \"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "toolu_vrtx_01VFHFZ3k1vRHdSAkhZZot8e",
+                "id": "toolu_01WnHnU1Tc1gx3A8ABYj4S7q",
                 "index": 0,
                 "type": "function"
               }
@@ -113,15 +115,15 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1759845367,
-      "id": "gen-1759845367-BHigq550MR3AmBZbuESj",
+      "created": 1760532483,
+      "id": "gen-1760532483-Vv0I61sNcI4nrC4NNZ3k",
       "model": "anthropic/claude-3.5-haiku",
       "object": "chat.completion",
-      "provider": "Google",
+      "provider": "Anthropic",
       "usage": {
-        "completion_tokens": 84,
-        "prompt_tokens": 449,
-        "total_tokens": 533
+        "completion_tokens": 86,
+        "prompt_tokens": 463,
+        "total_tokens": 549
       }
     },
     "headers": {
@@ -129,7 +131,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade6684f69b680-ORD"
+        "98ef6db7fb7af849-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -138,7 +140,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:56:07 GMT"
+        "Wed, 15 Oct 2025 12:48:04 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjY0MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzLiBBZnRlciB0aGUgdG9vbCByZXN1bHQgYXJyaXZlcywgcmVzcG9uZCB3aXRoICdzdW09PHZhbHVlPicuIiwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOltdLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF8yNjMwMDEyMiIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfMjYzMDAxMjIifV0sIm1vZGVsIjoiZ3Jvay00LWZhc3QtcmVhc29uaW5nIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjY0MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzLiBBZnRlciB0aGUgdG9vbCByZXN1bHQgYXJyaXZlcywgcmVzcG9uZCB3aXRoICdzdW09PHZhbHVlPicuIiwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOltdLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF82NDQ5MDE0MiIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfNjQ0OTAxNDIifV0sIm1vZGVsIjoiZ3Jvay00LWZhc3QtcmVhc29uaW5nIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
       "max_completion_tokens": 6400,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_26300122",
+              "id": "call_64490142",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "call_26300122"
+          "tool_call_id": "call_64490142"
         }
       ],
       "model": "grok-4-fast-reasoning",
@@ -64,8 +64,8 @@
           }
         }
       ],
-      "created": 1760391851,
-      "id": "fe49b1c9-f6eb-c2c8-17ea-dae007846f6c_us-east-1",
+      "created": 1760471287,
+      "id": "f37729be-60fa-0274-a1eb-40187eef0ea9_us-east-1",
       "model": "grok-4-fast-reasoning",
       "object": "chat.completion",
       "system_fingerprint": "fp_9362061f30",
@@ -78,14 +78,14 @@
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
-        "prompt_tokens": 640,
+        "prompt_tokens": 585,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 595,
+          "cached_tokens": 540,
           "image_tokens": 0,
-          "text_tokens": 640
+          "text_tokens": 585
         },
-        "total_tokens": 665
+        "total_tokens": 610
       }
     },
     "headers": {
@@ -99,7 +99,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e2044d9f5889f4-ORD"
+        "98e997abbdca22b9-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -108,13 +108,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 13 Oct 2025 21:44:11 GMT"
+        "Tue, 14 Oct 2025 19:48:08 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=nVMa6L4T6.LZVPLt1t0aswbQWpMc0IMWjdki_aAf2WE-1760391851-1.0.1.1-jJ2hikig0RJjpavi_.JP.TWP4ddg9o90BWiusQnFC8E16HaTvb6q0aE8.RpExH7HLU3k6zL6vov7rhOo7EszjcAQXiWjHclBdGeE8QsqDrs; path=/; expires=Mon, 13-Oct-25 22:14:11 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=WzgDOahUhoDVknE4pSxCwGYUbQ4Wh.uSHw__0gOcAnM-1760471288-1.0.1.1-uS2co.rSxbcQhABX..lCp1YLRzoDu0jPj_3_FlkH6B4.1kk1a1Bf_fzMDRW9SfQpayHEgu2hKoorKjc.I5Pgyhx7iqVf6RcICF9Y.YPZTPQ; path=/; expires=Tue, 14-Oct-25 20:18:08 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -126,7 +126,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-6a72f8080ed9199497605a62d7c4d02a-2ac9d23d0030d955-01"
+        "00-df43ca07a7cef9b25344ce1f08569616-f20d32c3005aa1bf-01"
       ],
       "x-zero-data-retention": [
         "false"

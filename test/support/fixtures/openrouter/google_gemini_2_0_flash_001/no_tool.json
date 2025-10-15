@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi4wLWZsYXNoLTAwMSIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi4wLWZsYXNoLTAwMSIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "max_tokens": 819,
@@ -22,6 +22,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -68,11 +69,11 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1759845360,
-      "id": "gen-1759845360-yR0PzyPu71xSpKiQnkoj",
+      "created": 1760532476,
+      "id": "gen-1760532476-HlSI7HOIcGNZSgPLc9Pb",
       "model": "google/gemini-2.0-flash-001",
       "object": "chat.completion",
-      "provider": "Google",
+      "provider": "Google AI Studio",
       "usage": {
         "completion_tokens": 18,
         "completion_tokens_details": {
@@ -91,7 +92,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade63deb35f4e8-ORD"
+        "98ef6d89cda15f24-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -100,7 +101,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:56:00 GMT"
+        "Wed, 15 Oct 2025 12:47:57 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -44,8 +44,8 @@
           }
         }
       ],
-      "created": 1760458014,
-      "id": "2f6cf89e-c966-14db-30a1-4fbc9accab4b_us-east-1",
+      "created": 1760471272,
+      "id": "51f2631c-4748-c9ee-cc44-77967dcaa1e3_us-east-1",
       "model": "grok-3",
       "object": "chat.completion",
       "system_fingerprint": "fp_301fb74d4b",
@@ -61,7 +61,7 @@
         "prompt_tokens": 9,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 2,
+          "cached_tokens": 3,
           "image_tokens": 0,
           "text_tokens": 9
         },
@@ -79,7 +79,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e853a17c2b89ec-ORD"
+        "98e9974bbd0b6078-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -88,13 +88,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 16:06:57 GMT"
+        "Tue, 14 Oct 2025 19:47:53 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=FlgQLZnLxnv_rPV_5VJ6c5QUgg5LAtnFrAN_C4MEw4c-1760458017-1.0.1.1-bflcYJfa3Z7HUIMzhR9IVKu3QYsgwmtVqSQ9hM2Pr2l7YvYaZnDYaMfhxfbMWzVonKnZcUIO1PZxVB0BvBCovih4eTsfo8OGdIUrCSrflmA; path=/; expires=Tue, 14-Oct-25 16:36:57 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=Oy.lpGUCa1bBwjaG8iJTH7TYXGKnVqKtVOTpljMldIw-1760471273-1.0.1.1-Ng35myEAPQMJ4SGGll0.7zUq45HBixuQROgbKw1e8W7wv597tE_D2jSfkQw_e8Hh31PVIP78QRKJfbFTccULZfG0W.p_5Il2tSnqmrAjkKw; path=/; expires=Tue, 14-Oct-25 20:17:53 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -106,7 +106,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-28a33890402d7d7d48b50bf1676bbc81-543bda3e005348d7-01"
+        "00-6a8bc2f27c085cae0a53cc9fc123f157-5dee4b44005a67f6-01"
       ],
       "x-zero-data-retention": [
         "false"

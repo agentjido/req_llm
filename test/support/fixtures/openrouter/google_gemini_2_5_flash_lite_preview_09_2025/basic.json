@@ -1,0 +1,115 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LWZsYXNoLWxpdGUtcHJldmlldy0wOS0yMDI1IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-2.5-flash-lite-preview-09-2025",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello there! How can I help you today?",
+            "reasoning": "**Responding to Greetings**\n\nI'm processing the simple \"Hello world!\" input. My current focus is on recognizing this as a standard, friendly greeting, a foundational element often seen in introductory programming contexts. I'm considering how best to acknowledge and reciprocate this initial communication.\n\n**Crafting Welcoming Phrases**\n\nI've refined my understanding of basic greetings. Now, I'm focusing on generating a friendly and helpful response, aiming for a balance of politeness and readiness to assist.\n\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "**Responding to Greetings**\n\nI'm processing the simple \"Hello world!\" input. My current focus is on recognizing this as a standard, friendly greeting, a foundational element often seen in introductory programming contexts. I'm considering how best to acknowledge and reciprocate this initial communication.\n\n**Crafting Welcoming Phrases**\n\nI've refined my understanding of basic greetings. Now, I'm focusing on generating a friendly and helpful response, aiming for a balance of politeness and readiness to assist.\n\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "STOP"
+        }
+      ],
+      "created": 1760546969,
+      "id": "gen-1760546969-960k7Y4vTvMWCBzemBLa",
+      "model": "google/gemini-2.5-flash-lite-preview-09-2025",
+      "object": "chat.completion",
+      "provider": "Google",
+      "usage": {
+        "completion_tokens": 294,
+        "completion_tokens_details": {
+          "image_tokens": 0,
+          "reasoning_tokens": 284
+        },
+        "prompt_tokens": 3,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 297
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98f0cf5c6e5be26d-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 16:49:30 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

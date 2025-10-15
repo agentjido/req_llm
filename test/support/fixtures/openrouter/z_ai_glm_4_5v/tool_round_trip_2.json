@@ -1,0 +1,125 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxNjM4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiSSB3aWxsIGhlbHAgeW91IHRvIGNvbXB1dGUgMiArIDMgdXNpbmcgdGhlIGFkZCB0b29sLlxuIiwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6ImNhbGxfMjAyNTEwMTUyMDUwMDBiNWIwNmI5YzA0ODA0MGUyXzAiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJjYWxsXzIwMjUxMDE1MjA1MDAwYjViMDZiOWMwNDgwNDBlMl8wIn1dLCJtb2RlbCI6InotYWkvZ2xtLTQuNXYiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 1638,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        },
+        {
+          "content": "I will help you to compute 2 + 3 using the add tool.\n",
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"a\":2,\"b\":3}",
+                "name": "add"
+              },
+              "id": "call_20251015205000b5b06b9c048040e2_0",
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "content": "5",
+          "name": "add",
+          "role": "tool",
+          "tool_call_id": "call_20251015205000b5b06b9c048040e2_0"
+        }
+      ],
+      "model": "z-ai/glm-4.5v",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "sum=5",
+            "reasoning": null,
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1760532600,
+      "id": "gen-1760532600-N7G72sJ22UoHsi8Ii6Wy",
+      "model": "z-ai/glm-4.5v",
+      "object": "chat.completion",
+      "provider": "Novita",
+      "system_fingerprint": "",
+      "usage": {
+        "completion_tokens": 4,
+        "completion_tokens_details": null,
+        "prompt_tokens": 83,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 4
+        },
+        "total_tokens": 87
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ef7093ba0ae207-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 12:50:01 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

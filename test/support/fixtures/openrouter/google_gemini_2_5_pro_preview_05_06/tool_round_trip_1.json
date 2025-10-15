@@ -1,0 +1,156 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo2NTUzLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LXByby1wcmV2aWV3LTA1LTA2IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xfY2hvaWNlIjp7ImZ1bmN0aW9uIjp7Im5hbWUiOiJhZGQifSwidHlwZSI6ImZ1bmN0aW9uIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkFkZCB0d28gaW50ZWdlcnMiLCJuYW1lIjoiYWRkIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYSI6eyJ0eXBlIjoiaW50ZWdlciJ9LCJiIjp7InR5cGUiOiJpbnRlZ2VyIn19LCJyZXF1aXJlZCI6WyJhIiwiYiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+    },
+    "canonical_json": {
+      "max_tokens": 6553,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-2.5-pro-preview-05-06",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tool_choice": {
+        "function": {
+          "name": "add"
+        },
+        "type": "function"
+      },
+      "tools": [
+        {
+          "function": {
+            "description": "Add two integers",
+            "name": "add",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "a": {
+                  "type": "integer"
+                },
+                "b": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "a",
+                "b"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "",
+            "reasoning": "**Processing Addition Requests**\n\nI've received the user's request to add two numbers. The numbers are 2 and 3. My plan is to utilize the `add` tool with the specified inputs, a=2 and b=3. The final step will be to formulate a response in the format 'sum=<value>', after receiving the tool's output.\n\n\n**Refining Tool Code**\n\nI'm now refining the tool code, with the latest being `print(default_api.add(a=2, b=3))`. I am anticipating the tool's response to determine the final response formatting. I'm expecting a dictionary to be returned, so I'll need to parse it to extract the sum.\n\n\n**Mapping User Intent**\n\nI've assessed the user's prompt as a request for an addition operation. I've identified the `add` tool as suitable, and have mapped the inputs \"2\" and \"3\" to the tool's parameters `a` and `b`.  The tool's output will require formatting into the \"sum=<value>\" format. The dictionary return value will be parsed, and the sum extracted.\n\n\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "**Processing Addition Requests**\n\nI've received the user's request to add two numbers. The numbers are 2 and 3. My plan is to utilize the `add` tool with the specified inputs, a=2 and b=3. The final step will be to formulate a response in the format 'sum=<value>', after receiving the tool's output.\n\n\n**Refining Tool Code**\n\nI'm now refining the tool code, with the latest being `print(default_api.add(a=2, b=3))`. I am anticipating the tool's response to determine the final response formatting. I'm expecting a dictionary to be returned, so I'll need to parse it to extract the sum.\n\n\n**Mapping User Intent**\n\nI've assessed the user's prompt as a request for an addition operation. I've identified the `add` tool as suitable, and have mapped the inputs \"2\" and \"3\" to the tool's parameters `a` and `b`.  The tool's output will require formatting into the \"sum=<value>\" format. The dictionary return value will be parsed, and the sum extracted.\n\n\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"a\":2,\"b\":3}",
+                  "name": "add"
+                },
+                "id": "tool_0_add_nkdwvJ22SSzzhdfK1hpu",
+                "index": 0,
+                "type": "function"
+              }
+            ]
+          },
+          "native_finish_reason": "STOP"
+        }
+      ],
+      "created": 1760532513,
+      "id": "gen-1760532513-SKvGR92dJ15taKKWdRgp",
+      "model": "google/gemini-2.5-pro",
+      "object": "chat.completion",
+      "provider": "Google",
+      "usage": {
+        "completion_tokens": 388,
+        "completion_tokens_details": {
+          "image_tokens": 0,
+          "reasoning_tokens": 383
+        },
+        "prompt_tokens": 37,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 425
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ef6e718d28e1b4-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 12:48:38 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxNjM4NCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiJjYWxsXzEzMjAiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJjYWxsXzEzMjAifV0sIm1vZGVsIjoiZGVlcHNlZWsvZGVlcHNlZWstY2hhdC12My4xIiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 16384,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        },
+        {
+          "content": [],
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"a\":2,\"b\":3}",
+                "name": "add"
+              },
+              "id": "call_1320",
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "content": "5",
+          "name": "add",
+          "role": "tool",
+          "tool_call_id": "call_1320"
+        }
+      ],
+      "model": "deepseek/deepseek-chat-v3.1",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "sum=5",
+            "reasoning": null,
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1760547306,
+      "id": "gen-1760547306-zhMkPXOsO6Ey1W75krN2",
+      "model": "deepseek/deepseek-chat-v3.1",
+      "object": "chat.completion",
+      "provider": "DeepInfra",
+      "usage": {
+        "completion_tokens": 4,
+        "prompt_tokens": 49,
+        "prompt_tokens_details": null,
+        "total_tokens": 53
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98f0d79bfa5be810-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 16:55:07 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

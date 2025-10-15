@@ -1,0 +1,150 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMjgwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJvcGVuYWkvZ3B0LTUtbWluaSIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoiYWRkIn0sInR5cGUiOiJmdW5jdGlvbiJ9LCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJBZGQgdHdvIGludGVnZXJzIiwibmFtZSI6ImFkZCIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImEiOnsidHlwZSI6ImludGVnZXIifSwiYiI6eyJ0eXBlIjoiaW50ZWdlciJ9fSwicmVxdWlyZWQiOlsiYSIsImIiXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 12800,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-5-mini",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tool_choice": {
+        "function": {
+          "name": "add"
+        },
+        "type": "function"
+      },
+      "tools": [
+        {
+          "function": {
+            "description": "Add two integers",
+            "name": "add",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "a": {
+                  "type": "integer"
+                },
+                "b": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "a",
+                "b"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "",
+            "reasoning": null,
+            "reasoning_details": [
+              {
+                "data": "gAAAAABo75hOCnzrAIS9es0QjZ4Mok55k_LNUo_lZLEzKhXoOxrI9P_0xGgB-C78KdNGjCR4RIJksnDZgdhl4zY24qSApLe-05nZzwNCa6QPPX4iODLaLShk502T4vJPdm-jlsu7f0Kt3zBYpvfP8d3RkSsyleKa02dgWL9tz9RwdA_rWGtsWh3sOthY0HaBZsyRuBB5VF9apOIPvJgu0TdqzJ-hEWnpokgIxWaNj3Hjt-EqBGwA9FSCWwTH80p2GdY7BQcRrvl5ebcFhQAS8UbpaYUiH7QuGxlLOjZnb7Ii8lYJocX23yQsYCcRA5BypB45KYkM9vBje8XWuEnyjldCIh6w8clzp0Itr9sFK4xr-1wOUPtdTqeJe-PGXIPV5s1t7BNz6z27uk7Rz7viB0RjuD8__OfJLi5u6JFBE7CBk0Lbr6_uMyczjOkxRvfyp2eVjf8VNosQYW51ZNW4CF7JcwrkhpnhI6tA6HbyTDjR77WAQ3l4mhI_S-MTEIljvZlFwdfSr3q1vBOMPk9pEk9m6oDeo2f9k7hJHjX4m63rAfFWx1Tnj-MibeWLfWZZQmE2Q60bfCiNAq43_g7rUoDK2wPTw6EC9WVYQDH4WfmT2oG1iV2V3q9ej2LowNiVSLOweWyEqOzM5DxTawSukIBz3E32TpqjzgJLILqwiGtHyZGkgUUXR79rYdE18h7fZFLzKXeTLN7uQ2YHnkFOe_tSIlx3cuolJ0ZlDtjyarHLwn2zPitvCWK9csvFlKi5lanY6GBfuVi4mTmPd_DjPisxbqmdNHgy6D8-kfjsy00uLFknvpDaswfrkaVWqjhTHxpMle2EZ0C4KgU1VJQgE58ECtMfmSCK9n679ELPta0u0MxWTJYg6muuDyyW5wwWEZpYml-VK5aBmInGvH00hRdxZ6VzUnMT2r8A0T3Ez6XBCb-ZC51sTn3iCcyS15OzHBs8pxPK-Jd-Sg6zaSyLa78HPisGOJ4yZQZyX9Jg4jraJDm1mvIImHLAWgr2rdEHaEA00yIBA1bSY3OGsf8hC8IkB85bMH3XCVzNduM3hgjJt6Ac5iJy5aE40zkRUQ2lG2a2F1hBtwKZsl1iJrypzNIRr7cozxUVaw3-oVvDfKjsrtJGa_VCsPvP_2c8iNNkCvOqOSnjmzFof_RxpnVbfZFeRIf-i3F9FZYWhvYn75jwf16t6skCCbi6qXgT1MN0nTt79CEXzlsg2l31zAMxmP3vHN57BneQUlLTfEQ6QRhman0lgaRWDCWH5kTxR2jIlFlbgJwUGC1v",
+                "format": "openai-responses-v1",
+                "id": "rs_0f13ae6e06c062f20168ef984dd85c8196a2eb52ced52d6a64",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"a\":2,\"b\":3}",
+                  "name": "add"
+                },
+                "id": "call_7k0wzqEvMtZiEVCzxNfb7NMX",
+                "index": 0,
+                "type": "function"
+              }
+            ]
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1760532557,
+      "id": "gen-1760532557-Ey6dLlmZYW5z8WiP0YD0",
+      "model": "openai/gpt-5-mini",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "usage": {
+        "completion_tokens": 87,
+        "prompt_tokens": 68,
+        "total_tokens": 155
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ef6f81e87ef92b-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 12:49:17 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

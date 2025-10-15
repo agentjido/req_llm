@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMzEwNiwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZGVlcHNlZWsvZGVlcHNlZWstdjMuMS10ZXJtaW51cyIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfdG9rZW5zIjoxMzEwNiwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZGVlcHNlZWsvZGVlcHNlZWstdjMuMS10ZXJtaW51cyIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
       "max_tokens": 13106,
@@ -23,6 +23,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -61,13 +62,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Why don't cats play poker in the jungle?\n\nToo many cheetahs! 😸\n\nHere's another one: What's a cat's favorite website?\nPurr-ogle!",
-            "reasoning": "Hmm, the user asked for a cat joke, which is a simple request that doesn't require any tools. The weather function I have access to wouldn't be relevant here. \n\nI should just respond with a lighthearted cat joke to fulfill the request. Maybe something about cats being lazy or having attitude would work well. \n\nI recall a classic joke about cats and laptops that usually gets a chuckle. It's short, relatable, and fits the cat theme perfectly.",
+            "content": "Sure, here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\nBecause there are too many cheetahs! 😸\n\nHope that gave you a chuckle!",
+            "reasoning": "Hmm, the user asked for a cat joke, which is a simple request that doesn't require any tool usage. The weather function I have access to wouldn't be relevant here. \n\nI should just respond with a lighthearted cat joke to fulfill the request. Since it's a straightforward humor request, I can pull from common cat joke patterns - maybe something about their quirky behaviors or the classic laser pointer trope.\n\nThe joke should be short, cat-themed, and hopefully amusing. I'll go with a simple one about cats and laser pointers since it's relatable to cat owners and captures feline curiosity in a humorous way.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "Hmm, the user asked for a cat joke, which is a simple request that doesn't require any tools. The weather function I have access to wouldn't be relevant here. \n\nI should just respond with a lighthearted cat joke to fulfill the request. Maybe something about cats being lazy or having attitude would work well. \n\nI recall a classic joke about cats and laptops that usually gets a chuckle. It's short, relatable, and fits the cat theme perfectly.",
+                "text": "Hmm, the user asked for a cat joke, which is a simple request that doesn't require any tool usage. The weather function I have access to wouldn't be relevant here. \n\nI should just respond with a lighthearted cat joke to fulfill the request. Since it's a straightforward humor request, I can pull from common cat joke patterns - maybe something about their quirky behaviors or the classic laser pointer trope.\n\nThe joke should be short, cat-themed, and hopefully amusing. I'll go with a simple one about cats and laser pointers since it's relatable to cat owners and captures feline curiosity in a humorous way.",
                 "type": "reasoning.text"
               }
             ],
@@ -77,23 +78,23 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759847909,
-      "id": "gen-1759847909-vv8pybfgnK9U7P74XAVx",
+      "created": 1760546578,
+      "id": "gen-1760546578-ZBshzdbv6rWzaeqj2fO1",
       "model": "deepseek/deepseek-v3.1-terminus",
       "object": "chat.completion",
       "provider": "Novita",
       "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 133,
+        "completion_tokens": 165,
         "completion_tokens_details": {
-          "reasoning_tokens": 95
+          "reasoning_tokens": 126
         },
-        "prompt_tokens": 155,
+        "prompt_tokens": 161,
         "prompt_tokens_details": {
           "audio_tokens": 0,
           "cached_tokens": 0
         },
-        "total_tokens": 288
+        "total_tokens": 326
       }
     },
     "headers": {
@@ -101,7 +102,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ae247a390b34ad-ORD"
+        "98f0c5d19c77124c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -110,7 +111,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 14:38:30 GMT"
+        "Wed, 15 Oct 2025 16:42:59 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyNTYwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1taW5pIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfdG9rZW5zIjoyNTYwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1taW5pIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "max_tokens": 25600,
@@ -23,6 +23,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -48,6 +49,7 @@
             "description": "Tell a funny joke",
             "name": "tell_joke",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "topic": {
                   "description": "Topic for the joke",
@@ -96,18 +98,18 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "**Fetching weather information**\n\nI need to use the weather tool to get the latest weather for Paris, France. It seems I can use functions.get_weather directly for this. I wonder if the temperature unit should be Celsius since that's the default? I should make sure I get this call right. It’s just one tool I need, so I’ll skip the multi-tool option. Alright, let’s proceed with fetching the weather!",
+            "reasoning": "**Getting weather information**\n\nI need to call the get_weather function with the location set to \"Paris, France,\" and I'm considering Celsius for the unit. Should I use multi_tool_use.parallel? It seems a bit extra for this task. I really should just stick to using the functions namespace by calling functions.get_weather directly. Simplicity is key here! So, I'll go ahead and call functions.get_weather now.",
             "reasoning_details": [
               {
                 "format": "openai-responses-v1",
                 "index": 0,
-                "summary": "**Fetching weather information**\n\nI need to use the weather tool to get the latest weather for Paris, France. It seems I can use functions.get_weather directly for this. I wonder if the temperature unit should be Celsius since that's the default? I should make sure I get this call right. It’s just one tool I need, so I’ll skip the multi-tool option. Alright, let’s proceed with fetching the weather!",
+                "summary": "**Getting weather information**\n\nI need to call the get_weather function with the location set to \"Paris, France,\" and I'm considering Celsius for the unit. Should I use multi_tool_use.parallel? It seems a bit extra for this task. I really should just stick to using the functions namespace by calling functions.get_weather directly. Simplicity is key here! So, I'll go ahead and call functions.get_weather now.",
                 "type": "reasoning.summary"
               },
               {
-                "data": "gAAAAABo5RwXBe6mx7cAEUX4_A5STvjMvsUOsAAI8dcxpcP1r9f9MhutmJICYWd_yYM-NnAN1hCDJiomHZABltJCeyKD2G-_d4Rz-AR9dH03VG9utxQ2D1HTqqlPlGdC0eqgk7dQ0oOdlU5dGjVpaD0xKCTapoU5M7a5c0sbJrBHCpESVIRcEYM7Mwp1_9mht1kZYVzE6q3uGfEKDXJwV0EC3xx6sqb3groycGYDOSC3w_nfIowB4W82ooLvNUwU8VjvIq6IKoLMXnkLdDOOW4NQwgXNpcJNZddrXt8-KCTNEk0A9CI2LwSUniYZsDP6UgC3pohjvkiBaSp22Wc74VaiTjJOWwuffTZHxLl_ltV0wC8mkFVX7LxEhah45QEGvqf4mdOCjw6fCo1KTMS8tosh1y8iBVXBh_xjlbV-W2FuVS2wyECu3NoXg0l-uhwP4pJk12264WBIWzBMJHNK18i9ll6TFi5sCr2unKDx56MBUZ3uRpcRHSyGdhTQ9QmsVR5Rvk9Ih16k_iJiczVapl7Oi7c1ItoUeDhgSBjVT6DebThrpIqsKpzdWh3ZvI9GWPDq_LcVEOczPFqVX62XyHc6UxBx9ghsXRtHkSjhkNycrh1UI_q-syvESWwtQXMLaAdkGhXT5LVg-dCevw8yJyNu7Vv2IxAaMLk84HjpzfoGVLjNdzBULIz50Fm9LK-vTNq9mFm4_7md9wjHhMFv5FEkAbq4u6ZlcLiFxbmepK334pl_c-JKr2UHV33LOXq7VARrt-EYgcmI1KYWsp8sygGebJxGeRGlOI_8MMbSOX4A9U3PGFsvrZLM7fj8f2vhwEIq1WoBcgIqYj4bHU2JRJSsS7fjzYOe-P8tl9NTWc_CuWT4So7LKP8hKL84l-VupF4zkLeo5ictWYPPeQ4kZdUih_xWo7f_1E3mu_CAhJNLTKLANLIRMvzgeLyuspAM8lL5-AXd0lSC_CmleFNY4A87klBxgyQGXmeM5sgl2zzCb2aqsUK5lKCHOBUILJTdwt9j5A5NiKCbn4xvw177U9EjAMLg1xvxC53sCBvBh8R-S6WwC2YSuzQdo_x44XIZ0w6J9LDVfytTIalgMjtrJyJr4NWupAzRx-rk1gjBZH8LpOvAQIfvTS6HNk-vuqmyWCVVk9CAF6FG",
+                "data": "gAAAAABo75gd-JLxQJUL8Bk6tZOjFbhjYpIvHJgxHEkRg-udeJtmUPCOiENf_gCqu3oChSo0fPBXYvwSRbcnEAEn4Jf7SN6mf0YVVWSVv9bcgAL6OgzZ-fhhs7ky3puyW9iiJQvnOUxkMEek4mNBrQv4G0948bkjcOdohZDn965p3a3pIEUS9ZxNvtHm4ZmgdLMFEZBlCgn9XEIw3UH1rLMQPULHLz4ADlWjJiJ_lV4dNTOsKvQ_mq0CYqzilowtXvhuSYuCSROMmLZM5h1HhDybuZFSZLMy7HqwF8MYJRCOKHk4HNIGwsYrpwNtBI3hzZ0t_F-B0GBbgrZ7PaYqb8g9i9UjjkofBJfbs073f4ogtn5QJPDxNC3_noyizYp1TWasM0s13ssh0GhZtkUaoRyVAeqDDb5UYjXErYH62FA38rBTfIfnBGl8mI5WItk-3R8I7OVamk6AHgXWpJSS8oQY3QrQNJNvFbksSTBOfWN2o6AxCNZErN2a2viBV1mZyiBFlkT8HfolUj-Xp2woGBG6TdVYBHoplBp48QJttmgNgsvx90-AtrIH_-eDWgEMrUcO57qStu_miGjOoPRKtS0Abc0dnA8UO4_UPHBt1O1evNvRt8F535wTym235P7pnwMgPphQsBJOdDSsw87CgMGpmk1YJWTjwSebQOS7atipvUJeSke5SbIPBAbjoxsYzhgSrlZJX57CCvwKVDDsGqxaqS9HZlVt4ws0Rm_QLsJd3dA0fBx9sIQsjQI8lE4QgUOS4z_x1fwxTlKoOmXYFd8qMTthl3cULhVmB4I-kYGFqL6jsKg70lke-zhtsHLvF_6nUwqVzGt9XnvFCbzDEbVyyEehAMMPDFQSUfvYfe8jM_EIywkuqAj7wjpNk4lchPODRIEzl2MVOo73zx-QpndlFRMKknOUjYqU2gLcctq_4sl2Hf-WhXQh9x2VU6yzr_J1bzEje9j4yV5xpS3dVB44ac7dW4bQPGiPSUHWFT-rLMRAJptDl6KFCSg61qYm0Bpi8zqboOkpAk-JzdrUiXWK1x2f6_H5lfFP-ENIhcZAxCgYhupCKTpYmV3lreq2Zesgh5ivpUAw91ZgEP4qZQcNYCIlCXMI4dN6f1jqxkD3El-T4r_RMBdDbBLuM17JI0lklVK_422TSq1nL_N3d5R-vEZBtOzCX_7kFjg0Pduuzze0DQ8uY0_8UjhzwaqJcSkXta-qZWow6PaONNL43nAssESWZ6_a_pfHP4TH_hesRwEROj0Bc8K622XJ-2L5yOjyWaNxz6OUSnVgNEfVHWwWJ83OmmKswsbdGKTqgVCWqh69YxNuzjNmzeFRUqTsd7htNKwZQnOgJ7SmsmeHspbXn1c0yh30Lg==",
                 "format": "openai-responses-v1",
-                "id": "rs_038765017afbc2d10168e51c13eb08819387879b3242aeb186",
+                "id": "rs_025459a26afbfada0168ef981ac374819786639b0beff41441",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -120,7 +122,7 @@
                   "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "call_QIcNMVZAYacy8w4ndUB1Sb4n",
+                "id": "call_D13QcQ3cWzUx9fO7JHx0pqna",
                 "index": 0,
                 "type": "function"
               }
@@ -129,15 +131,15 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1759845394,
-      "id": "gen-1759845394-bspRq9DdDoSNzSmyYtg6",
+      "created": 1760532506,
+      "id": "gen-1760532506-jo3d8qieTj9qQj0Eix66",
       "model": "openai/gpt-5-mini",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
-        "completion_tokens": 27,
+        "completion_tokens": 91,
         "prompt_tokens": 104,
-        "total_tokens": 131
+        "total_tokens": 195
       }
     },
     "headers": {
@@ -145,7 +147,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade7160f1a4848-ORD"
+        "98ef6e42bc10f92b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -154,7 +156,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:56:35 GMT"
+        "Wed, 15 Oct 2025 12:48:26 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

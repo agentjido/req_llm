@@ -1,0 +1,114 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJnb29nbGUvZ2VtaW5pLTIuNS1mbGFzaC1wcmV2aWV3LTA5LTIwMjUiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuNX0="
+    },
+    "canonical_json": {
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-2.5-flash-preview-09-2025",
+      "n": 1,
+      "reasoning_effort": "low",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "The wind, a bitter, high-altitude shriek, was the only sound that pierced the silence of the Dragon’s Teeth peaks. Below them, the world of Aethelgard stretched out—a tapestry of emerald forests, silver rivers, and the creeping, rust-colored stain of the Whispering Wastes.\n\nThis was the domain of the Great Wyrms, a realm mortals only spoke of in hushed, terrified prayers.\n\n### Part I: The Shadow-Wing and the Scholar\n\nKaelen was an anomaly. Not merely because he was a Shadow-Wing, a breed of dragon rumored to possess an affinity for the void between worlds, but because he was *young*. In a society where status was measured in centuries, Kaelen was a mere fledgling, his scales still the deep, matte black of cooled obsidian, lacking the iridescent sheen of true maturity.\n\nHe lived under the heavy shadow of his sire, Veridian, the Earth-Shaker, a colossal bronze dragon whose roar could splinter mountains. Veridian ruled the Northern Clutch with an iron claw, adhering strictly to the ancient Draconic Code: *Isolation. Supremacy. Silence.*\n\nKaelen, however, was restless. His curiosity was a constant, painful itch. He flew lower than he should, often circling the edge of the civilized lands, watching the tiny, frantic lives of the *mortals*.\n\nIt was during one such forbidden reconnaissance that he found the anomaly: a library, or what remained of one, nestled in the ruins of the forgotten city of Eldoria. And within it, a mortal.\n\nElara was a scholar, small and wiry, with hair the color of dry straw and eyes that missed nothing. She wasn't seeking treasure; she was seeking *knowledge*. She was meticulously copying faded scrolls, charting celestial movements, and, most dangerously, attempting to translate the fragmented runes of the Old Tongue—the language of the Wyrms.\n\nKaelen watched her for weeks, fascinated by her dedication. He learned her routine: the careful lighting of her oil lamp, the way she chewed the end of her quill when stumped, the quiet, melodic humming she used to ward off loneliness.\n\nOne twilight, driven by an impulse he couldn't explain, Kaelen landed twenty yards from the ruin, the impact shaking the ground and sending a cloud of dust into the air.\n\nElara didn't scream. She didn't flee. She simply looked up, her face pale but her gaze steady, and said, \"I suppose you’ve come for the book on the migratory patterns of the Sky-Serpents. It’s on the third shelf, beneath the treatise on dwarven metallurgy.\"\n\nKaelen blinked his massive, amber eyes. *She spoke the Old Tongue.* Not fluently, but enough to be understood.\n\n\"You are not afraid,\" Kaelen rumbled, his voice a low vibration that cracked the nearby stones.\n\n\"Fear is a distraction,\" Elara replied, dusting off her hands. \"You could have incinerated me from the air. You chose to land. You are curious, Shadow-Wing. And I am a repository of inconvenient facts. Perhaps we can negotiate.\"\n\nThus began the impossible alliance. Elara taught Kaelen the history of Aethelgard from the mortal perspective—the rise and fall of kingdoms, the poetry, the folly. Kaelen, in turn, shared the Draconic view: the cycles of the world, the deep magic inherent in the stone, and the true meaning of the runes.\n\nTheir secret meetings were dangerous. If Veridian discovered Kaelen's betrayal of the Code, the punishment would be swift and final.\n\n### Part II: The Serpent’s Whisper\n\nThe peace of Aethelgard was a fragile illusion. For centuries, the dragons had maintained a cold truce with the human kingdoms, enforced by mutual terror. But a new power was rising in the south: the Obsidian Keep, ruled by the sorcerer-king, Malakor.\n\nMalakor was not interested in peace. He was interested in *control*. He had discovered a method of binding lesser elementals and, more alarmingly, was experimenting with Dragonfire residue, attempting to synthesize a weapon capable of piercing dragon scales.\n\nThe first sign of trouble came not from Malakor’s armies, but from within the Dragon’s Teeth.\n\nVeridian called a Convocation—a rare gathering of the four Great Wyrms: Veridian (Bronze, North), Ignis (Crimson, East), Thalassa (Azure, West), and the mysterious, reclusive Umbra (Void, South).\n\nKaelen attended as Veridian’s attendant, forced to stand silent and observe.\n\nThe debate was fierce. Ignis demanded immediate, overwhelming retaliation against the encroaching mortals. Thalassa argued for caution, fearing a coordinated mortal response.\n\nIt was Umbra, a dragon whose scales seemed to absorb the light around him, who introduced the serpent’s whisper.\n\n\"Malakor is a symptom, not the disease,\" Umbra hissed, his voice like grinding ice. \"He seeks the *Heartstone*.\"\n\nThe Heartstone was a myth, even to many dragons—the solidified core of primal magic, said to be hidden deep beneath the roots of the world, granting absolute control over Aethelgard to whoever held it.\n\n\"Nonsense,\" Veridian scoffed. \"A mortal legend.\"\n\n\"A mortal legend that Malakor believes,\" Umbra countered. \"And his armies are digging. They are close to the ancient nexus point in the Whispering Wastes.\"\n\nThe Convocation ended in deadlock. Veridian refused to act on a myth. But Kaelen, armed with Elara’s mortal maps and historical texts, knew Umbra was right. Elara had found references to the Heartstone in Eldorian prophecies—prophecies that spoke of a Shadow-Wing who would either save or doom the world.\n\nKaelen sought out Elara, meeting her on a wind-swept plateau.\n\n\"Malakor is digging for the Heartstone,\" Kaelen explained, sketching the nexus point onto the dust with a claw the size of a shield. \"If he gets it, he will not just rule Aethelgard; he will enslave the magic itself. He could bind us.\"\n\nElara’s eyes widened. \"The prophecies... they spoke of the 'Void-Binder.' Malakor is using specialized runes to channel the earth's static energy. He's not just digging; he's *preparing* the ground for the ritual.\"\n\nThey devised a desperate plan: Kaelen would fly to the Whispering Wastes, scouting Malakor's defenses. Elara would infiltrate the human city of Veridian’s Gate, seeking a legendary artifact—the *Sun-Mirror*—a relic rumored to disrupt deep magical bindings.\n\n### Part III: The Trial of the Wastes\n\nThe Whispering Wastes were a place of perpetual twilight, choked by toxic dust storms and haunted by the ghosts of a forgotten war.\n\nKaelen flew low, cloaking himself in the shadows of the dust clouds. He found the excavation site: a massive, tiered pit surrounded by thousands of armored soldiers and siege engines powered by bound elementals. At the center, Malakor himself, a figure cloaked in midnight velvet, directing the work.\n\nMalakor was protected by a shimmering, invisible shield—a barrier Kaelen knew his fire could not penetrate.\n\nAs Kaelen circled, observing the patterns of the guard shifts, he was ambushed. Not by mortals, but by a dragon—a massive, scarred Wyrm named Zarthus, a lieutenant of Veridian, sent to spy on Kaelen.\n\n\"Traitor!\" Zarthus roared, diving from the clouds. \"You consort with the soft-skins! Veridian’s judgment awaits!\"\n\nThe battle was brutal. Zarthus was older, stronger, and fought with the cold fury of a zealot. Kaelen, driven by desperation, fought with speed and cunning. He used his Shadow-Wing affinity, momentarily dissolving into the twilight, confusing Zarthus before striking at the older dragon's wing joint.\n\nZarthus crashed into the Wastes, roaring in pain. Kaelen, unwilling to kill a member of his own Clutch, simply pinned him.\n\n\"I am not a traitor, Zarthus,\" Kaelen growled. \"I am saving us from extinction. Go back to Veridian. Tell him I have gone to war, and he can either follow or watch the world burn.\"\n\nKaelen left Zarthus stunned and flew toward the nexus point, ignoring the shouts of the mortal soldiers who were now scrambling to arm their ballistae.\n\nHe landed near the edge of the excavation, unleashing a torrent of black fire—Shadowfire—a colder, more corrosive flame that ate away at the stone and the morale of the soldiers.\n\nMalakor, seeing the attack, smiled—a chilling, predatory expression. \"The bait is taken,\" he murmured, raising a staff topped with a pulsating crystal.\n\nThe ground shuddered. Massive runic circles carved into the Wastes suddenly flared with blinding violet light. Kaelen felt a crushing weight descend upon him—not physical, but magical. The energy of the earth was being weaponized.\n\nKaelen fought against the binding magic, but it was too strong. He was trapped, immobilized by the sheer force of the ritual, his scales tingling with agonizing pain as the energy sought to penetrate his defenses.\n\n\"You are a magnificent specimen, Shadow-Wing,\" Malakor called out, his voice amplified by the magic. \"You will be the cornerstone of my new world order. The first Dragon to serve the Obsidian Throne.\"\n\n### Part IV: The Sun-Mirror and the Betrayal\n\nMeanwhile, Elara had successfully infiltrated Veridian’s Gate, a sprawling, paranoid city built on the border of the dragon territories. She located the Sun-Mirror in the heavily guarded Royal Archives, disguised as a mundane astronomical device.\n\nThe Mirror was not a weapon, but a focus—a polished disc of ancient gold that could absorb and redirect ambient magical energy.\n\nAs she prepared to steal it, she was intercepted by Captain Valerius, the commander of the city guard and a man she had once trusted.\n\n\"Elara,\" Valerius said, his face a mask of disappointment. \"I knew you were reckless, but treason? Stealing the King's most prized relic?\"\n\n\"Valerius, you don't understand,\" Elara pleaded. \"Malakor is binding a great dragon. He intends to use the Heartstone to control all of Aethelgard. We must stop him.\"\n\nValerius stepped closer, his hand resting on the hilt of his sword. \"And you believe the word of a Wyrm? The dragons are our enemies, Elara. Malakor offers us a chance to finally subjugate them, to end the terror.\"\n\nElara realized the terrible truth: Valerius and many in the human leadership were not fighting Malakor; they were secretly *allies*, hoping to use the sorcerer-king’s power to finally rid themselves of the dragon threat.\n\n\"You are fools,\" Elara whispered, tears stinging her eyes. \"He will enslave you all.\"\n\nA fight ensued. Elara, though small, was quick and resourceful. She used her knowledge of the archives, triggering a booby trap that released a cloud of ancient, paralyzing dust. Valerius stumbled, giving Elara the chance to grab the Sun-Mirror and escape through the hidden tunnels she had mapped years ago.\n\nShe raced toward the Whispering Wastes, the Sun-Mirror heavy in her arms, praying she wasn't too late.\n\n### Part V: The Reckoning of the Wyrms\n\nKaelen was weakening. The binding runes were drawing his strength, siphoning his inner fire. Malakor was preparing the final stage of the ritual, chanting in a language that scraped against the soul.\n\nSuddenly, the sky darkened, not with dust, but with wings.\n\nVeridian had arrived. Zarthus, despite his injuries, had delivered Kaelen's defiant message. The Earth-Shaker had finally understood the depth of the threat.\n\nVeridian was not alone. Ignis, the Fire-Heart, and Thalassa, the Sea-Wyrm, were with him. The three Great Wyrms descended upon the Wastes, their combined roar shattering the air.\n\n\"Malakor!\" Veridian bellowed, his voice laced with the fury of a thousand years. \"Release the Shadow-Wing, or face the end of your kingdom!\"\n\nMalakor merely laughed, a high, manic sound. \"Too late, old Wyrm! Your son has served his purpose!\"\n\nThe battle was epic. Veridian, Ignis, and Thalassa unleashed a storm of elemental fury. Bronze fire, crimson magma, and torrents of pressurized water slammed into Malakor’s defenses.\n\nBut Malakor was prepared. He activated specialized wards, turning the battlefield into a magical grinder. Ignis was caught in a field of anti-magic, his fire sputtering uselessly. Thalassa was pinned by massive, magically animated earth golems.\n\nVeridian fought with terrifying strength, tearing apart siege engines and smashing the runic circles. But the binding on",
+            "reasoning": "**Beginning Conceptualization**\n\nI've started by dissecting the request. \"Very long story,\" \"dragons,\" and \"adventures\" are the key terms. This points toward epic scope, world-building, and character-driven plotlines. My mind is already buzzing with possible settings and dragon types.\n\n\n**Expanding Worldbuilding Elements**\n\nI'm now fully immersed in Aethelgard. I've begun to flesh out the dragon hierarchy. The Ancients, like Veridian, provide wisdom, while young Kaelen's potential as a Shadow-Wing dragon introduces conflict. I’m focusing on giving them unique roles. The geographical elements—Azure Spires, Whispering Wastes, Obsidian Keep—are ready to support the epic scale.\n\n\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "**Beginning Conceptualization**\n\nI've started by dissecting the request. \"Very long story,\" \"dragons,\" and \"adventures\" are the key terms. This points toward epic scope, world-building, and character-driven plotlines. My mind is already buzzing with possible settings and dragon types.\n\n\n**Expanding Worldbuilding Elements**\n\nI'm now fully immersed in Aethelgard. I've begun to flesh out the dragon hierarchy. The Ancients, like Veridian, provide wisdom, while young Kaelen's potential as a Shadow-Wing dragon introduces conflict. I’m focusing on giving them unique roles. The geographical elements—Azure Spires, Whispering Wastes, Obsidian Keep—are ready to support the epic scale.\n\n\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "MAX_TOKENS"
+        }
+      ],
+      "created": 1760546986,
+      "id": "gen-1760546986-CqEVIdoIWhtvAgy0xI6Y",
+      "model": "google/gemini-2.5-flash-preview-09-2025",
+      "object": "chat.completion",
+      "provider": "Google AI Studio",
+      "usage": {
+        "completion_tokens": 3000,
+        "completion_tokens_details": {
+          "image_tokens": 0,
+          "reasoning_tokens": 195
+        },
+        "prompt_tokens": 10,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 3010
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98f0cfca8d55c77f-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 16:49:48 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

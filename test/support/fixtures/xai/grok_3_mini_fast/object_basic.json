@@ -69,15 +69,15 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "{\"age\":30,\"name\":\"John Doe\",\"occupation\":\"Software Engineer\"}",
-            "reasoning_content": "First, the user input is: \"Generate a software engineer profile\". But I have to respond based on the provided schema. The schema defines an object with properties: \"name\", \"age\", and \"occupation\". It's required to include \"name\" and \"age\", and \"occupation\" is optional but fits here.\n\nThe schema is:\n{\n  \"additionalProperties\": false,\n  \"properties\": {\n    \"age\": {\"description\": \"Person's age in years\", \"minimum\": 1, \"type\": \"integer\"},\n    \"name\": {\"description\": \"Person's full name\", \"type\": \"string\"},\n    \"occupation\": {\"description\": \"Person's job or profession\", \"type\": \"string\"}\n  },\n  \"required\": [\"name\", \"age\"],\n  \"type\": \"object\"\n}\n\nSo, my response must be a single JSON string that matches this schema exactly. That means I need to output something like: {\"name\": \"Some Name\", \"age\": Some Number, \"occupation\": \"Some Occupation\"}\n\nThe user asked for a \"software engineer profile\", so I should make the occupation related to that. For example, occupation could be \"Software Engineer\".\n\nI need to provide values for name and age as well. Since the user didn't specify, I can make up reasonable values. Let's say, name: \"John Doe\", age: 30, occupation: \"Software Engineer\".\n\nRemember, the output MUST be a single JSON string, and it has to conform to the schema. No additional text or explanations.\n\nFinally, structure it as: {\"name\": \"John Doe\", \"age\": 30, \"occupation\": \"Software Engineer\"}\n\nThat seems straightforward.",
+            "content": "{\"age\":28,\"name\":\"Alice Smith\",\"occupation\":\"Software Engineer\"}",
+            "reasoning_content": "First, the user input is: \"Generate a software engineer profile\". But I have to respond based on the provided schema. The schema defines a JSON object with properties: \"name\", \"age\", and \"occupation\". It's required to include \"name\" and \"age\", and \"occupation\" is optional but fits here.\n\nThe schema is:\n{\n  \"additionalProperties\": false,\n  \"properties\": {\n    \"age\": {\"description\": \"Person's age in years\", \"minimum\": 1, \"type\": \"integer\"},\n    \"name\": {\"description\": \"Person's full name\", \"type\": \"string\"},\n    \"occupation\": {\"description\": \"Person's job or profession\", \"type\": \"string\"}\n  },\n  \"required\": [\"name\", \"age\"],\n  \"type\": \"object\"\n}\n\nSo, my response must be a single JSON string that matches this schema exactly. That means I need to output something like: {\"name\": \"Some Name\", \"age\": Some Number, \"occupation\": \"Some Occupation\"}\n\nThe user asked for a \"software engineer profile\", so I should make up a profile that fits. For example:\n- Name: Something like \"John Doe\"\n- Age: A reasonable age for a software engineer, say 30\n- Occupation: \"Software Engineer\"\n\nI have to ensure that my output is only the JSON string, nothing else. The instructions say: \"Your output MUST be a single JSON string. You MUST use <user_json_schema> to format the JSON string.\"\n\nAlso, it says: \"Make sure to use the exact format as specified in the schema.\"\n\nSince \"occupation\" is not required, I could omit it, but including it makes sense for this context.\n\nLet me think of values:\n- Name: \"Alice Smith\" (a full name)\n- Age: 28 (an integer greater than or equal to 1)\n- Occupation: \"Software Engineer\"\n\nThat seems appropriate.\n\nFinally, output it as a single JSON string. So, something like: {\"name\": \"Alice Smith\", \"age\": 28, \"occupation\": \"Software Engineer\"}\n\nI need to make sure it's valid JSON.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1760458016,
-      "id": "398db518-f05f-b3dc-42a6-ce4c75e3acd6_us-east-1",
+      "created": 1760471302,
+      "id": "7303dac6-c5a3-0f2b-112b-797707ce85a0_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
@@ -86,7 +86,7 @@
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 342,
+          "reasoning_tokens": 440,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
@@ -97,7 +97,7 @@
           "image_tokens": 0,
           "text_tokens": 112
         },
-        "total_tokens": 469
+        "total_tokens": 567
       }
     },
     "headers": {
@@ -111,7 +111,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e853a8ddce123f-ORD"
+        "98e99805bd570009-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -120,13 +120,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 16:07:01 GMT"
+        "Tue, 14 Oct 2025 19:48:27 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=CxNaO4C3tBYBv8ZrYs43OKARHVTB8m2Ii2EpEz_D4dk-1760458021-1.0.1.1-Pc.yu33BAurjgyw8j6smWeXdMRhnllKtYxWZjBGO.dDncwtBCDHOXyJrEpUsvf2QJLXyUsCiTu_dAcEMbG4b2Ltz8er.c7HozipUjmuGW_M; path=/; expires=Tue, 14-Oct-25 16:37:01 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=RelC6wetRA68SgpintiGmeGMmqJrNcddgc4kKTwqw.s-1760471307-1.0.1.1-bN9BZOpqMM53owZglITGIvoZV8c0AHk9qxAWhENTwp_3QINwMWeLABXkYSu6m0W5DDQbbXw4WMeSV.l0WVxcd2hwrJ93dkD0XdHwpwefRt0; path=/; expires=Tue, 14-Oct-25 20:18:27 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -138,7 +138,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-2fc7486122f808e132bbcd4589caf487-a10ad2cc0052e510-01"
+        "00-5bbf14a05a3cae6a76e0003dd96e841c-333e2c780059ce7a-01"
       ],
       "x-zero-data-retention": [
         "false"

@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyNTYwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC01LWNvZGV4IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJtYXhfdG9rZW5zIjoyNTYwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC01LWNvZGV4IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "max_tokens": 25600,
@@ -23,6 +23,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -61,19 +62,19 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Why did the cat sit on the computer?  \nBecause it wanted to keep an eye on the mouse!",
-            "reasoning": "**Preparing to produce joke**",
+            "content": "Sure! Here’s a cat joke for you:\n\nWhy don’t cats play poker in the savannah?\n\nToo many cheetahs! 🐱😸",
+            "reasoning": "**Acknowledging compliance requirement**",
             "reasoning_details": [
               {
                 "format": "openai-responses-v1",
                 "index": 0,
-                "summary": "**Preparing to produce joke**",
+                "summary": "**Acknowledging compliance requirement**",
                 "type": "reasoning.summary"
               },
               {
-                "data": "gAAAAABo5RxYfXS7yas0hFWQfhpXv3AIVlgyNsuYb2Zc8tcDZ1HOSsBrF_-3wc3OnY0NZpnDj9CQUW1npLcqB78xO_9hSc0-2LJ_y_UZd8tdiMO1hc2zeoirrM5zw2IvBw6mzxWowWOsIGjbbkmTb9MSammWoUzXMhQSiWlssR7ZowATS9EyCObJW-oQH-CXB_bji63IcZFG0OqGshxfS1nLIQeHVwoZkO9cDt6H28TyL_YSXKX-3rQK-V5phRe8-Na5KynCO38nTmX6qFKNmlBlo_SHucfzU-zKjNSxWPqXUZvOfT_njMx3zMokXJv4VvWTPvIXYeLthXKKVqLjn1Ee2mlT5fHLyisyJTd8zvZpLZCOfVmGnsNgcrqaRiRxcVQ8ARIICqKixjVUlg8ofSS5m3G1TmkljxDolfLCYO23_UGYoLc96tFYYnh3x_-jqxm_hwMpXNSc87JUk36kyoOpIt-ShU_J7lXgYAh4hyptDRGBcjyVkb4WlpFqGELAChdMR8SlddEHsfyDb7H9jAhK2oArRTvNHHKplKMhJE1bmgBZ23HJTqQwbTF7QoEiJX5TwKh-iPZblU6Sgpew7AfKanRO2NQyKf_OmOP4CkSm3wKlPTaJrwckU8JflojaOBb-X8UOJHmQQdti35EVjYoLq77Xr8HhUVPhWVKthAQxqM5Ibge9LNPH4nEh0pDct2n2llD4Lf1-qOOSv81jMapiVUHURSaFWWWkPtgWGPAYxrbS4axgNXTPn51AXeR9_OmatKYcaVHe80HGtDpt2qnRvuBw_WN0bgcArpfSmU1Mnf-jEK1_qs04KBac8Mb1ESQZ_nkKqTmtzmPRvidhv5BuEJUYNtSg8Q==",
+                "data": "gAAAAABo75huVAwCTqmUC57QFe9l6NQD1uLwft_zhPnsvk_W2gUp454a_aftUdb9SKTRR7gy7VPqxV8uKygNu55GekmHmn5aMDWRNZI3tfEszjcaR8fgNuYysUPih2IKfI302JH6t3v48cVkq3xibG_eKuIPibh1E9b4DlAMlyXcsz8UQrU3ENKUpS3tvY6lJO_p0HTA_XPhFA-SKAOAGFEQq-iJHNTvNo6J3txdMwfA3LtwDhS_dVrHYbGPmAg_fxAMqywpIAv3F3BwNAeQprEPfGJiPAEbUlckqlK0MI8a8MsUENHP3IW4qg7q15LvjikjUMyVYoX-xQGx46Xu-N-payKiMmbFYLOkG4P_mAtlz3WpNFI3MWDswBh-24FCq8k_C5XVq3l43gk3wlrZdVE3iFJ46JpJOudyneMQ6isHxqeCAzv0w4xDhfvRjmW44hnsRwdz2y3ZcD4lp8AzqkCBOmRBuXSIlctF-mN7roEeHSXe4cOP-YRk8xMA9-PoaZPU_tV5aNLPlACscn7IWgF9JYd7CEqIbocA0l3rG2m4V5FpZo86J0aQVigsNM0Rsqyw5sL85uz-O_g2KKKpR04Q28SAQgALFCvxJPOklDRrvV5sTzLHxw2zT76aNmvNI6V0f4StaSv4YzvviiZj1gxmNPbgQOqOxeD5V400b-gv9eCNDYL-u5Kn7CHJvYa5YG-7L-tV3emMLuv9yt0PSpLnAbteKlkyiNf0vZGkVOYNLsfR6yut1jKP1sLqq56n2OnCHaRT7J7v4DQ7VRmMtgRiBnT5KRk3bJUzQTvOl_G6e6vfSfZI10IHIwLF49HDzvGlLMUOQjwQbu96wAuXeFlyAc3PoB3OpncOfMLbfvYbjB8GNoyVUH8=",
                 "format": "openai-responses-v1",
-                "id": "rs_015c8c924e4292210168e51c57d1d88197ac6003b67529cf84",
+                "id": "rs_05435a809eb9459e0168ef986dc28c8193a22d3a791d7a261c",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -84,15 +85,15 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1759845462,
-      "id": "gen-1759845462-IBmOtYYzTQoFb2rswj0Q",
+      "created": 1760532588,
+      "id": "gen-1760532588-MzDsO6fi5nanEKSPmAO6",
       "model": "openai/gpt-5-codex",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
-        "completion_tokens": 27,
+        "completion_tokens": 38,
         "prompt_tokens": 53,
-        "total_tokens": 80
+        "total_tokens": 91
       }
     },
     "headers": {
@@ -100,7 +101,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade8bcac83000e-ORD"
+        "98ef70466c14e248-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -109,7 +110,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:57:43 GMT"
+        "Wed, 15 Oct 2025 12:49:49 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -48,16 +48,16 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759845385,
-      "id": "gen-1759845385-hSyTr00IeOjOKwTATMXk",
+      "created": 1760532504,
+      "id": "gen-1760532504-WWC7YjFgyyPgHyjWPMtF",
       "model": "moonshotai/kimi-k2-0905",
       "object": "chat.completion",
-      "provider": "Moonshot AI",
-      "system_fingerprint": "fpv0_ef28f882",
+      "provider": "SiliconFlow",
+      "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 10,
-        "prompt_tokens": 10,
-        "total_tokens": 20
+        "completion_tokens": 9,
+        "prompt_tokens": 28,
+        "total_tokens": 37
       }
     },
     "headers": {
@@ -65,7 +65,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade6d93ee3615a-ORD"
+        "98ef6e38bebfcc1a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -74,7 +74,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:56:27 GMT"
+        "Wed, 15 Oct 2025 12:48:25 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

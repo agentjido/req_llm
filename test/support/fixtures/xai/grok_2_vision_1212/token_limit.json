@@ -37,14 +37,14 @@
           "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "In the ancient realm of Eldoria, where the mountains kissed the sky and forests whispered secrets of old, dragons were not merely creatures of myth but sovereigns of the land, sky, and sea. This story begins in the heart of the Verdant Vale, a lush expanse where the first rays of dawn painted the dew-kissed leaves in golden hues.\n\nOur tale centers around a young adventurer named Arlo, whose lineage was as mysterious as the runes etched upon the ancient stones of Eldoria. Or",
+            "content": "Once upon a time, in a realm far beyond the reach of ordinary maps, there existed a land known as Draconia, where the sky was often painted with the silhouettes of majestic dragons. This land was a tapestry of towering mountains, deep forests, and vast plains, each teeming with its own mysteries and adventures. The inhabitants of Draconia, a mix of humans, elves, dwarves, and other mystical beings, lived in harmony with these powerful creatures, understanding that dragons were not merely",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1760458001,
-      "id": "b06665f8-3599-902e-aef6-5e7a819423ed_us-east-1",
+      "created": 1760471274,
+      "id": "d620ab59-1f7d-9630-8c1f-a1a1677768a0_us-east-1",
       "model": "grok-2-vision-1212",
       "object": "chat.completion",
       "system_fingerprint": "fp_236db45c03",
@@ -78,22 +78,28 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e8534b6a08f606-ORD"
+        "98e9975abe00eaf9-ORD"
       ],
       "connection": [
         "keep-alive"
+      ],
+      "content-security-policy-report-only": [
+        "script-src 'none'; connect-src 'none'; report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report?m=pAJ5Jh62S0Ow1XySyR_jniJgbPVBAHeb7t4DgAglBsY-1760471277-1.0.1.1-gpCevAG0tCb89o1Fyj_DdAXEWB6q4RtmA1j0UW3L_umAR_6QzX5YjloJ7fIuPKXIdKZSpF0Fr29b1oEiQ6qE7ec80QSMJ3fyUcb.Wye4aiI_woO6oSMKQbBJQ_jnOxLlqX6ISFw084I.7USqIduiYUPS2cUVVXQwyuuWFnUnUzc; report-to cf-csp-endpoint"
       ],
       "content-type": [
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 16:06:43 GMT"
+        "Tue, 14 Oct 2025 19:47:57 GMT"
+      ],
+      "report-to": [
+        "{\"endpoints\":[{\"url\":\"https:\\/\\/csp-reporting.cloudflare.com\\/cdn-cgi\\/script_monitor\\/report?m=pAJ5Jh62S0Ow1XySyR_jniJgbPVBAHeb7t4DgAglBsY-1760471277-1.0.1.1-gpCevAG0tCb89o1Fyj_DdAXEWB6q4RtmA1j0UW3L_umAR_6QzX5YjloJ7fIuPKXIdKZSpF0Fr29b1oEiQ6qE7ec80QSMJ3fyUcb.Wye4aiI_woO6oSMKQbBJQ_jnOxLlqX6ISFw084I.7USqIduiYUPS2cUVVXQwyuuWFnUnUzc\"}],\"group\":\"cf-csp-endpoint\",\"max_age\":86400}"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=2hNpbh5ohfkLzxov4bE1rvjAw0RTO8BYW2QrgYNKOiM-1760458003-1.0.1.1-156REbLfVaeJFs.l_wTQBwe0ILZ3Myb_8lvxL2650MiJp43FU6cMT_esi2d5q_jmMfa41kDBFs2aH7jkocaNU7u4oe5519mlMKZiNo_RkMc; path=/; expires=Tue, 14-Oct-25 16:36:43 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=Dm0FM0DSpvtOfK6VH5tMKfFBe1h1.qdVUVLYC.OgrUc-1760471277-1.0.1.1-szq6.FCcej96AKiE6lwTG1YTp.HYja4TO93XYk0i1zsK7.1VtIhO1ooD3c6YPF.buaqBll09BVcV0b3kYNm.8jfwTrNqn6qSeKpRl_v6WZg; path=/; expires=Tue, 14-Oct-25 20:17:57 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -105,7 +111,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-701a4314eca1ca10a28397372e3bd130-308cc48f0052d647-01"
+        "00-b3dc445b0a779b906de8fa875258c34b-ec01deb30068df17-01"
       ],
       "x-zero-data-retention": [
         "false"

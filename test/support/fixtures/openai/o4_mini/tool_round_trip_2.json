@@ -1,26 +1,28 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkNhbGwgdGhlIGFkZCB0b29sIHdpdGggYT0yIGFuZCBiPTMuIEFmdGVyIHJlY2VpdmluZyB0aGUgdG9vbCByZXN1bHQsIHJlcGx5IGV4YWN0bHkgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAwMCwibW9kZWwiOiJvNC1taW5pIiwic3RyZWFtIjpmYWxzZX0="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9LHsiY2FsbF9pZCI6ImNhbGxfUEhzRjZwOGZxdk5zWXhmbmdDbTBnRjBGIiwib3V0cHV0Ijoie1wiZXJyb3JcIjpcIlRvb2wgZXhlY3V0aW9uIGZhaWxlZFwifSIsInR5cGUiOiJmdW5jdGlvbl9jYWxsX291dHB1dCJ9XSwibWF4X291dHB1dF90b2tlbnMiOjEwMDAwLCJtb2RlbCI6Im80LW1pbmkiLCJwcmV2aW91c19yZXNwb25zZV9pZCI6InJlc3BfMGI2ZjI1MzU1OWIzODU4MDAwNjhlZmJlODA1ZDE0ODE5MGExMjcyNThlYTAxZmYyN2QiLCJzdHJlYW0iOmZhbHNlfQ=="
     },
     "canonical_json": {
       "input": [
         {
           "content": [
             {
-              "text": "Call the add tool with a=2 and b=3. After receiving the tool result, reply exactly with 'sum=<value>'.",
+              "text": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
               "type": "input_text"
             }
           ],
           "role": "user"
         },
         {
-          "content": [],
-          "role": "assistant"
+          "call_id": "call_PHsF6p8fqvNsYxfngCm0gF0F",
+          "output": "{\"error\":\"Tool execution failed\"}",
+          "type": "function_call_output"
         }
       ],
       "max_output_tokens": 10000,
       "model": "o4-mini",
+      "previous_response_id": "resp_0b6f253559b385800068efbe805d148190a127258ea01ff27d",
       "stream": false
     },
     "headers": {
@@ -44,9 +46,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760405719,
+      "created_at": 1760542339,
       "error": null,
-      "id": "resp_0a3e00bb237bc8d50068eda8d71a9c8194bd4f8fe31c683ddf",
+      "id": "resp_0b6f253559b385800068efbe8391cc8190baa0fa04505925ac",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 10000,
@@ -56,17 +58,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_0a3e00bb237bc8d50068eda8d784188194be47777c4a4d0856",
-          "summary": [],
-          "type": "reasoning"
-        },
-        {
-          "id": "rs_0a3e00bb237bc8d50068eda8dc61388194a627baabff8534bb",
-          "summary": [],
-          "type": "reasoning"
-        },
-        {
-          "id": "rs_0a3e00bb237bc8d50068eda8dc7c4c8194a05a06edf8aca543",
+          "id": "rs_0b6f253559b385800068efbe8433988190acfa9904b5fe78a5",
           "summary": [],
           "type": "reasoning"
         },
@@ -75,18 +67,18 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "{\"name\":\"add\",\"arguments\":{\"a\":2,\"b\":3}}",
+              "text": "sum=5",
               "type": "output_text"
             }
           ],
-          "id": "msg_0a3e00bb237bc8d50068eda8dcb3bc81949466a40823bec6ab",
+          "id": "msg_0b6f253559b385800068efbe8884208190bdb168e68f7ad660",
           "role": "assistant",
           "status": "completed",
           "type": "message"
         }
       ],
       "parallel_tool_calls": true,
-      "previous_response_id": null,
+      "previous_response_id": "resp_0b6f253559b385800068efbe805d148190a127258ea01ff27d",
       "prompt_cache_key": null,
       "reasoning": {
         "effort": "medium",
@@ -109,15 +101,15 @@
       "top_p": 1.0,
       "truncation": "disabled",
       "usage": {
-        "input_tokens": 33,
+        "input_tokens": 328,
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 469,
+        "output_tokens": 457,
         "output_tokens_details": {
           "reasoning_tokens": 448
         },
-        "total_tokens": 502
+        "total_tokens": 785
       },
       "user": null
     },
@@ -129,7 +121,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e356df7f7f4d2c-ORD"
+        "98f05e55ec7c507c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -138,13 +130,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 01:35:25 GMT"
+        "Wed, 15 Oct 2025 15:32:24 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "6108"
+        "5332"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -156,8 +148,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=xfnIWTbHaLzCvfUmbjW6KzYOOD9akQMf55rP.2q8YnU-1760405725-1.0.1.1-TWZFB9AnyTNLg7M.ex9k2TyYOH_g0G4Nq98GzDJRucs8kK2OhIynP6nb_kiNvEVQ84wn4S8vpD2A7A11fsQpDrAUp4whW_nu9J3kuui70ws; path=/; expires=Tue, 14-Oct-25 02:05:25 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=ew0zXS.8UxdqM4o_K23CFKi6vavwMkUP5IYgM5bZxs4-1760405725238-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=1pEfGp.4vC9bF3tClIv29VmdYwqTq2IwGel6.qhZMkA-1760542344-1.0.1.1-Rtwfxi6r.qPuZjJQEkAssSaOGfe7P2Kn3xOYRh9zaH0A.mwsP0SsSUJJQK.SywgII4.TK_Kq_7hb3VPu5D2QIW.e1RsnW7ODvpYGpyjwFks; path=/; expires=Wed, 15-Oct-25 16:02:24 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=_1HsRCDazAfHPRObh2Hn2cHzWiPPi6m4vJODnNEs5OY-1760542344920-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -169,7 +161,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "6176"
+        "5338"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -181,16 +173,16 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9999760"
+        "9999465"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "1ms"
+        "3ms"
       ],
       "x-request-id": [
-        "req_3f789461198a4c7b9b1fc7545c879d18"
+        "req_38c9ef5a852a42bb82e2784834ef34a7"
       ]
     },
     "status": 200

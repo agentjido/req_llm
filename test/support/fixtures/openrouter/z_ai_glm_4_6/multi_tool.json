@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyNTYwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InotYWkvZ2xtLTQuNiIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoyNTYwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InotYWkvZ2xtLTQuNiIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
       "max_tokens": 25600,
@@ -23,6 +23,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -48,6 +49,7 @@
             "description": "Tell a funny joke",
             "name": "tell_joke",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "topic": {
                   "description": "Topic for the joke",
@@ -95,17 +97,25 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "\nI'll check the current weather in Paris, France for you.\n",
-            "reasoning": "The user is asking about the weather in Paris, France. I have access to a get_weather function that can provide weather information for a location. Let me check the parameters:\n\n- location: required parameter - the user specified \"Paris, France\"\n- unit: optional parameter - the user didn't specify, so I won't include it (the instructions say not to make up values for optional parameters)\n\nI have all the required parameters, so I can proceed with the function call.",
+            "content": "\n\nI'll check the current weather in Paris, France for you.\n",
+            "reasoning": "The user is asking about the weather in Paris, France. I have access to a get_weather function that can provide weather information for a location. Let me check the parameters:\n\n- location: required parameter - the user specified \"Paris, France\"\n- unit: optional parameter - the user didn't specify a unit, and the instructions say not to make up values for optional parameters\n\nI have all the required parameters, so I can proceed with the function call.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "The user is asking about the weather in Paris, France. I have access to a get_weather function that can provide weather information for a location. Let me check the parameters:\n\n- location: required parameter - the user specified \"Paris, France\"\n- unit: optional parameter - the user didn't specify a unit, and the instructions say not to make up values for optional parameters\n\nI have all the required parameters, so I can proceed with the function call.",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant",
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"location\": \"Paris, France\"}",
+                  "arguments": "{\"location\":\"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "call_2daf970bd3dd4a48a564a167",
+                "id": "call_7087b30fbd4248b5badbb462",
                 "index": 0,
                 "type": "function"
               }
@@ -114,16 +124,21 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1759845680,
-      "id": "gen-1759845680-EAXoILf8dPoDLLpzmEkS",
+      "created": 1760532806,
+      "id": "gen-1760532806-We9SPbQLxdbYCb5w52uw",
       "model": "z-ai/glm-4.6",
       "object": "chat.completion",
-      "provider": "Parasail",
+      "provider": "Novita",
+      "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 129,
-        "prompt_tokens": 274,
-        "prompt_tokens_details": null,
-        "total_tokens": 403
+        "completion_tokens": 125,
+        "completion_tokens_details": null,
+        "prompt_tokens": 271,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 43
+        },
+        "total_tokens": 396
       }
     },
     "headers": {
@@ -131,7 +146,7 @@
         "*"
       ],
       "cf-ray": [
-        "98adee0c1e0e6200-ORD"
+        "98ef759b7b7b7317-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -140,7 +155,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 14:01:20 GMT"
+        "Wed, 15 Oct 2025 12:53:27 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

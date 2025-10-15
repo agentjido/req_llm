@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMzEwNiwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LXBybyIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMzEwNiwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LXBybyIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsIm5hbWUiOiJ0ZWxsX2pva2UiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9LHsiZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsIm5hbWUiOiJnZXRfdGltZSIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
       "max_tokens": 13106,
@@ -23,6 +23,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -48,6 +49,7 @@
             "description": "Tell a funny joke",
             "name": "tell_joke",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "topic": {
                   "description": "Topic for the joke",
@@ -96,12 +98,12 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "**Querying the Weather**\n\nI'm currently focusing on the weather query for \"Paris, France.\" My primary task involves determining the appropriate tool. The `get_weather` tool looks suitable. I'm also evaluating the required parameters, namely \"location\" and the optional \"unit\". My plan is to invoke the tool with \"Paris, France\" and no unit specified, defaulting to Celsius if necessary.\n\n\n**Defining the Call**\n\nI've moved from parameter identification to crafting the function call itself. The location is straightforward, \"Paris, France.\" Since the unit isn't specified, I'm defaulting to none. I'm now ready to formulate the exact tool call; the current plan is to call `get_weather` using those values.\n\n\n",
+            "reasoning": "**Evaluating Tool Relevance**\n\nI've zeroed in on the `get_weather` tool. The query for \"Paris, France\" is a clear match for the location parameter. Now I'm assessing if temperature units need to be specified; I'll default to Celsius if not explicitly stated.\n\n\n**Defining the Function Call**\n\nI've confirmed the relevance of the weather tool and mapped the user's query to its parameters. The \"Paris, France\" location is straightforward. Since a temperature unit wasn't given, it's clear to default to Celsius. Now I'm ready to construct the API call: `default_api.get_weather(location='Paris, France')`, and am satisfied that my logic for the function call looks solid.\n\n\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "**Querying the Weather**\n\nI'm currently focusing on the weather query for \"Paris, France.\" My primary task involves determining the appropriate tool. The `get_weather` tool looks suitable. I'm also evaluating the required parameters, namely \"location\" and the optional \"unit\". My plan is to invoke the tool with \"Paris, France\" and no unit specified, defaulting to Celsius if necessary.\n\n\n**Defining the Call**\n\nI've moved from parameter identification to crafting the function call itself. The location is straightforward, \"Paris, France.\" Since the unit isn't specified, I'm defaulting to none. I'm now ready to formulate the exact tool call; the current plan is to call `get_weather` using those values.\n\n\n",
+                "text": "**Evaluating Tool Relevance**\n\nI've zeroed in on the `get_weather` tool. The query for \"Paris, France\" is a clear match for the location parameter. Now I'm assessing if temperature units need to be specified; I'll default to Celsius if not explicitly stated.\n\n\n**Defining the Function Call**\n\nI've confirmed the relevance of the weather tool and mapped the user's query to its parameters. The \"Paris, France\" location is straightforward. Since a temperature unit wasn't given, it's clear to default to Celsius. Now I'm ready to construct the API call: `default_api.get_weather(location='Paris, France')`, and am satisfied that my logic for the function call looks solid.\n\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -113,7 +115,7 @@
                   "arguments": "{\"location\":\"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "tool_0_get_weather_SX1tlKsEyby6whlkgE2b",
+                "id": "tool_0_get_weather_ZDGSxXu8NuAERpTHrVaV",
                 "index": 0,
                 "type": "function"
               }
@@ -122,8 +124,8 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1759845377,
-      "id": "gen-1759845377-bfKO0b2iR64ZoMA99xOa",
+      "created": 1760532506,
+      "id": "gen-1760532506-5taQxNGI3bAuzwL4Ybim",
       "model": "google/gemini-2.5-pro",
       "object": "chat.completion",
       "provider": "Google",
@@ -145,7 +147,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade6abb9ddeadb-ORD"
+        "98ef6e42bb55114e-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -154,7 +156,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:56:20 GMT"
+        "Wed, 15 Oct 2025 12:48:28 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

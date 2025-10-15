@@ -683,20 +683,39 @@ defmodule ReqLLM.Providers.XAI do
           extract_from_content(response)
 
         tool_calls ->
-          case Enum.find(tool_calls, &(&1.function.name == "structured_output")) do
-            nil ->
-              nil
-
-            %{function: %{arguments: json_string}} ->
-              case Jason.decode(json_string) do
-                {:ok, parsed} -> parsed
-                {:error, _} -> nil
-              end
+          case find_structured_output(tool_calls) do
+            nil -> nil
+            arguments -> ensure_decoded(arguments)
           end
       end
 
     %{response | object: extracted_object}
   end
+
+  defp find_structured_output(tool_calls) do
+    Enum.find_value(tool_calls, fn tool_call ->
+      cond do
+        get_in(tool_call, [:function, :name]) == "structured_output" ->
+          get_in(tool_call, [:function, :arguments])
+
+        Map.get(tool_call, :name) == "structured_output" ->
+          Map.get(tool_call, :arguments)
+
+        true ->
+          nil
+      end
+    end)
+  end
+
+  defp ensure_decoded(arguments) when is_binary(arguments) do
+    case Jason.decode(arguments) do
+      {:ok, parsed} -> parsed
+      {:error, _} -> nil
+    end
+  end
+
+  defp ensure_decoded(arguments) when is_map(arguments), do: arguments
+  defp ensure_decoded(_), do: nil
 
   defp extract_from_content(response) do
     case response.message do

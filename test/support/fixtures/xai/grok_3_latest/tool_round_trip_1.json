@@ -76,15 +76,15 @@
                   "arguments": "{\"a\":2,\"b\":3}",
                   "name": "add"
                 },
-                "id": "call_56836349",
+                "id": "call_26342126",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1760391829,
-      "id": "ff92a2a0-97fd-02cc-ef7f-e64b26e0adaf_us-east-1",
+      "created": 1760471269,
+      "id": "7d912e38-37c0-6670-b708-d82c3b9d6e48_us-east-1",
       "model": "grok-3",
       "object": "chat.completion",
       "system_fingerprint": "fp_301fb74d4b",
@@ -100,7 +100,7 @@
         "prompt_tokens": 31,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 2,
+          "cached_tokens": 30,
           "image_tokens": 0,
           "text_tokens": 31
         },
@@ -118,7 +118,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e203c878e60002-ORD"
+        "98e997393dcda679-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -127,13 +127,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 13 Oct 2025 21:43:52 GMT"
+        "Tue, 14 Oct 2025 19:47:51 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=7AIyEZW98M6VOOGNF_fdeOPrRSN4GwZYBSlk0miKtvo-1760391832-1.0.1.1-07zdWz2XxEkTJQwnf3wrUxY_bgHID9c_bwQ0_XTKu11DPw7ba5AGgZPB1oyl.g96UBRSfBw8Bt08sRSLT3FeN3B7VLWESdGOCz08xyDeaSM; path=/; expires=Mon, 13-Oct-25 22:13:52 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=6Q5qzlAORS.HYGdgeKzHoF0M4KWTCNCUYLo79v3l4W8-1760471271-1.0.1.1-hCt8yg7JwdopZb2HFB2eKJUVWAMt8GXv.e6a9EVjdQjoMK.7ulgld_vh.nIqE787eg1o9lM3ZO9XWeegA_ED1A1gnFRJRdaJBXvnJ5kQSWk; path=/; expires=Tue, 14-Oct-25 20:17:51 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -145,7 +145,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-e6dcf0afaf5b13d548f9d5b44ab20155-9fac03b10030b613-01"
+        "00-6b2e87f4317e2fdfcc4032271cf6d00d-a3ce46c700680175-01"
       ],
       "x-zero-data-retention": [
         "false"

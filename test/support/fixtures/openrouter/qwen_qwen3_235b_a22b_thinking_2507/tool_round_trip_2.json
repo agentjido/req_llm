@@ -1,0 +1,124 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo4MTkyLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6ImM4NThmODRjOCIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImM4NThmODRjOCJ9XSwibW9kZWwiOiJxd2VuL3F3ZW4zLTIzNWItYTIyYi10aGlua2luZy0yNTA3IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 8192,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        },
+        {
+          "content": [],
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"a\":2,\"b\":3}",
+                "name": "add"
+              },
+              "id": "c858f84c8",
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "content": "5",
+          "name": "add",
+          "role": "tool",
+          "tool_call_id": "c858f84c8"
+        }
+      ],
+      "model": "qwen/qwen3-235b-a22b-thinking-2507",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": {
+            "content": [],
+            "refusal": []
+          },
+          "message": {
+            "content": "sum=5",
+            "reasoning": "\nOkay, the user asked me to use the add tool to compute 2 + 3. I called the add tool with a=2 and b=3. The tool responded with 5. Now I need to respond with 'sum=5'. Let me check if there's anything else. No, the instructions say after the tool result arrives, respond with 'sum=<value>'. So I just need to output sum=5. Let me make sure I didn't miss any steps. Yep, that's it.\n",
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1760532734,
+      "id": "gen-1760532734-RqmCnXLbh80JuqGI08FO",
+      "model": "qwen/qwen3-235b-a22b-thinking-2507",
+      "object": "chat.completion",
+      "provider": "Novita",
+      "usage": {
+        "completion_tokens": 111,
+        "completion_tokens_details": null,
+        "prompt_tokens": 70,
+        "prompt_tokens_details": null,
+        "total_tokens": 181
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ef73d82ab1cca3-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 12:52:15 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

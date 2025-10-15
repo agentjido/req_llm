@@ -48,15 +48,16 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759848187,
-      "id": "gen-1759848187-Oc6B3KZUssRDVyt7esb8",
+      "created": 1760547285,
+      "id": "gen-1760547285-dhwVuxQnpkLQkEK1BUBD",
       "model": "mistralai/mistral-small-3.2-24b-instruct",
       "object": "chat.completion",
-      "provider": "Mistral",
+      "provider": "Chutes",
       "usage": {
         "completion_tokens": 13,
-        "prompt_tokens": 6,
-        "total_tokens": 19
+        "prompt_tokens": 561,
+        "prompt_tokens_details": null,
+        "total_tokens": 574
       }
     },
     "headers": {
@@ -64,7 +65,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ae2b44fbf6f859-ORD"
+        "98f0d715f82f029d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -73,7 +74,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 14:43:08 GMT"
+        "Wed, 15 Oct 2025 16:54:48 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

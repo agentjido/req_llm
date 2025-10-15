@@ -61,13 +61,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "I'm sorry, but I don't have the capability to tell jokes. I can only help with weather information. If you have a weather-related question, feel free to ask!",
-            "reasoning": "First, the user asked: \"Tell me a joke about cats.\" This is a request for a joke, which is not related to any of the available functions. The only available function is \"get_weather\", which is for getting weather information based on a location.\n\nI need to check if this query can be addressed using the available functions. The available functions are limited to getting weather, so no, this doesn't match.\n\nThe instructions say: \"If the user's query can be addressed using an available function, and all required parameters are provided or obviously inferable, trigger a function call.\"\n\nIn this case, it cannot be addressed using any available function, so I should not call a function.\n\nAdditionally: \"Ask for clarification only if none of the provided functions are able to advance the user's request.\"\n\nSince none of the functions can advance this request, I shouldn't ask for clarification unless it's unclear. But this request is clear; it's just not something I can handle with the tools I have.\n\nMy response should be clear and not verbose. So, I need to politely inform the user that I can't help with that or suggest what I can do.\n\nThe system prompt emphasizes keeping responses clear and not verbose, and only using the <function_call> tag when deciding to call a function.\n\nTherefore, for this query, I should just respond directly without calling any function.\n\nPossible response: \"I'm sorry, but I can only provide information on weather. If you have a question about the weather, let me know!\"\n\nThat keeps it concise.",
+            "content": "I'm sorry, I can't tell jokes. I'm here to help with weather information. If you'd like, I can check the weather for a specific location—just let me know!",
+            "reasoning": "First, the user asked: \"Tell me a joke about cats.\" This is a request for a joke, which is not related to any of the available functions. The only available function is \"get_weather\", which is for getting weather information based on a location.\n\nI need to check if this query can be addressed using the available functions. The available functions are limited to getting weather, so no, this doesn't match.\n\nThe instructions say: \"If the user's query can be addressed using an available function, and all required parameters are provided or obviously inferable, trigger a function call.\" In this case, it cannot be addressed using any available function.\n\nFurther, it says: \"Ask for clarification only if none of the provided functions are able to advance the user's request.\" Since no functions can advance this request, I shouldn't ask for clarification unless it's unclear, but this is clear—it's just not something I can handle.\n\nThe instructions also emphasize: \"Keep your response to user clear; please do not make your response verbose!\" So, I should be direct.\n\nMy response should not include any function calls because there's no relevant function. I need to inform the user that I can't help with that or suggest what I can do, but without being verbose.\n\nPossible response: I could say something like, \"I'm sorry, I can't tell jokes, but I can help with weather information. What location would you like the weather for?\"\n\nHowever, the instructions don't specify to promote other functions, but since that's all I have, it might be appropriate to steer the conversation.\n\nTo keep it simple: Just respond that I can't assist with that.\n\nRe-reading the instructions: \"If there is anything unclear, ask the user for clarification.\" But here, it's clear what they want, it's just not something I can do.\n\nThe best action is to politely decline and perhaps mention what I can do.\n\nFinal decision: Do not use <function_call> tags. Respond clearly and concisely.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "First, the user asked: \"Tell me a joke about cats.\" This is a request for a joke, which is not related to any of the available functions. The only available function is \"get_weather\", which is for getting weather information based on a location.\n\nI need to check if this query can be addressed using the available functions. The available functions are limited to getting weather, so no, this doesn't match.\n\nThe instructions say: \"If the user's query can be addressed using an available function, and all required parameters are provided or obviously inferable, trigger a function call.\"\n\nIn this case, it cannot be addressed using any available function, so I should not call a function.\n\nAdditionally: \"Ask for clarification only if none of the provided functions are able to advance the user's request.\"\n\nSince none of the functions can advance this request, I shouldn't ask for clarification unless it's unclear. But this request is clear; it's just not something I can handle with the tools I have.\n\nMy response should be clear and not verbose. So, I need to politely inform the user that I can't help with that or suggest what I can do.\n\nThe system prompt emphasizes keeping responses clear and not verbose, and only using the <function_call> tag when deciding to call a function.\n\nTherefore, for this query, I should just respond directly without calling any function.\n\nPossible response: \"I'm sorry, but I can only provide information on weather. If you have a question about the weather, let me know!\"\n\nThat keeps it concise.",
+                "text": "First, the user asked: \"Tell me a joke about cats.\" This is a request for a joke, which is not related to any of the available functions. The only available function is \"get_weather\", which is for getting weather information based on a location.\n\nI need to check if this query can be addressed using the available functions. The available functions are limited to getting weather, so no, this doesn't match.\n\nThe instructions say: \"If the user's query can be addressed using an available function, and all required parameters are provided or obviously inferable, trigger a function call.\" In this case, it cannot be addressed using any available function.\n\nFurther, it says: \"Ask for clarification only if none of the provided functions are able to advance the user's request.\" Since no functions can advance this request, I shouldn't ask for clarification unless it's unclear, but this is clear—it's just not something I can handle.\n\nThe instructions also emphasize: \"Keep your response to user clear; please do not make your response verbose!\" So, I should be direct.\n\nMy response should not include any function calls because there's no relevant function. I need to inform the user that I can't help with that or suggest what I can do, but without being verbose.\n\nPossible response: I could say something like, \"I'm sorry, I can't tell jokes, but I can help with weather information. What location would you like the weather for?\"\n\nHowever, the instructions don't specify to promote other functions, but since that's all I have, it might be appropriate to steer the conversation.\n\nTo keep it simple: Just respond that I can't assist with that.\n\nRe-reading the instructions: \"If there is anything unclear, ask the user for clarification.\" But here, it's clear what they want, it's just not something I can do.\n\nThe best action is to politely decline and perhaps mention what I can do.\n\nFinal decision: Do not use <function_call> tags. Respond clearly and concisely.",
                 "type": "reasoning.text"
               }
             ],
@@ -77,23 +77,23 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760442715,
-      "id": "gen-1760442715-hsLRygiiZxvuvGUyxDn4",
+      "created": 1760532617,
+      "id": "gen-1760532617-Ax7DOfiAcBUfKxphp7Ch",
       "model": "x-ai/grok-3-mini",
       "object": "chat.completion",
       "provider": "xAI",
       "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 339,
+        "completion_tokens": 428,
         "completion_tokens_details": {
-          "reasoning_tokens": 305
+          "reasoning_tokens": 394
         },
         "prompt_tokens": 282,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 3
+          "cached_tokens": 281
         },
-        "total_tokens": 621
+        "total_tokens": 710
       }
     },
     "headers": {
@@ -101,7 +101,7 @@
         "*"
       ],
       "cf-ray": [
-        "98e6de1d08712c1d-ORD"
+        "98ef70f91be9eb5d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -110,7 +110,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 11:51:55 GMT"
+        "Wed, 15 Oct 2025 12:50:17 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

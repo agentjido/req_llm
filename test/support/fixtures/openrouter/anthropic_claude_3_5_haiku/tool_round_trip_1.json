@@ -1,0 +1,141 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzLiBBZnRlciB0aGUgdG9vbCByZXN1bHQgYXJyaXZlcywgcmVzcG9uZCB3aXRoICdzdW09PHZhbHVlPicuIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiYW50aHJvcGljL2NsYXVkZS0zLjUtaGFpa3UiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbF9jaG9pY2UiOnsiZnVuY3Rpb24iOnsibmFtZSI6ImFkZCJ9LCJ0eXBlIjoiZnVuY3Rpb24ifSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiQWRkIHR3byBpbnRlZ2VycyIsIm5hbWUiOiJhZGQiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhIjp7InR5cGUiOiJpbnRlZ2VyIn0sImIiOnsidHlwZSI6ImludGVnZXIifX0sInJlcXVpcmVkIjpbImEiLCJiIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+    },
+    "canonical_json": {
+      "max_tokens": 819,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        }
+      ],
+      "model": "anthropic/claude-3.5-haiku",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tool_choice": {
+        "function": {
+          "name": "add"
+        },
+        "type": "function"
+      },
+      "tools": [
+        {
+          "function": {
+            "description": "Add two integers",
+            "name": "add",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "a": {
+                  "type": "integer"
+                },
+                "b": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "a",
+                "b"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "",
+            "reasoning": null,
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"a\": 2, \"b\": 3}",
+                  "name": "add"
+                },
+                "id": "toolu_01XuCnFaVunSksaUBuWfjs65",
+                "index": 0,
+                "type": "function"
+              }
+            ]
+          },
+          "native_finish_reason": "tool_calls"
+        }
+      ],
+      "created": 1760532474,
+      "id": "gen-1760532474-mrxiCXnlKzZ4ccs42703",
+      "model": "anthropic/claude-3.5-haiku",
+      "object": "chat.completion",
+      "provider": "Anthropic",
+      "usage": {
+        "completion_tokens": 50,
+        "prompt_tokens": 463,
+        "total_tokens": 513
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ef6d7beef3f849-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 12:47:54 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

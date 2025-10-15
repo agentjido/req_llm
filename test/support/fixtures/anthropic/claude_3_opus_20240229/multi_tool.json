@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo0MDksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtMy1vcHVzLTIwMjQwMjI5Iiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0X3NjaGVtYSI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifSwibmFtZSI6ImdldF93ZWF0aGVyIn0seyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwiaW5wdXRfc2NoZW1hIjp7InByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJ0ZWxsX2pva2UifSx7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJpbnB1dF9zY2hlbWEiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifSwibmFtZSI6ImdldF90aW1lIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjo0MDksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtMy1vcHVzLTIwMjQwMjI5Iiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0X3NjaGVtYSI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoiZ2V0X3dlYXRoZXIifSx7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJpbnB1dF9zY2hlbWEiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoidGVsbF9qb2tlIn0seyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwiaW5wdXRfc2NoZW1hIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJnZXRfdGltZSJ9XX0="
     },
     "canonical_json": {
       "max_tokens": 409,
@@ -18,6 +18,7 @@
         {
           "description": "Get current weather information for a location",
           "input_schema": {
+            "additionalProperties": false,
             "properties": {
               "location": {
                 "type": "string"
@@ -40,6 +41,7 @@
         {
           "description": "Tell a funny joke",
           "input_schema": {
+            "additionalProperties": false,
             "properties": {
               "topic": {
                 "description": "Topic for the joke",
@@ -85,20 +87,19 @@
     "body": {
       "content": [
         {
-          "text": "<thinking>\nThe get_weather tool is relevant for answering this question about the weather in a specific location. \n\nThe required parameters for get_weather are:\nlocation (string): This is provided by the user as \"Paris, France\"\nunit (string): This is not provided by the user. However, since the Assistant is likely being used by someone in the US, it's reasonable to infer they would want the temperature in Fahrenheit by default.\n\nNo other tools are needed to answer this question. The user has provided enough information to make the get_weather tool call.\n</thinking>",
+          "text": "<thinking>\nTo answer the question about the weather in Paris, France, the relevant tool is get_weather. It requires a location parameter, which is provided by the user as \"Paris, France\". The unit parameter is optional, so we can proceed without it being specified.\n</thinking>",
           "type": "text"
         },
         {
-          "id": "toolu_01J6usUiqDXkcMUCM9e75mcm",
+          "id": "toolu_01QZPNvC76k9Wmk62UzErKAg",
           "input": {
-            "location": "Paris, France",
-            "unit": "fahrenheit"
+            "location": "Paris, France"
           },
           "name": "get_weather",
           "type": "tool_use"
         }
       ],
-      "id": "msg_01YWgfwTvHjvaJwKYTvxdHii",
+      "id": "msg_01NAQs6pE2SB2WDxwoH4YLCv",
       "model": "claude-3-opus-20240229",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -111,8 +112,8 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 718,
-        "output_tokens": 199,
+        "input_tokens": 732,
+        "output_tokens": 114,
         "service_tier": "standard"
       }
     },
@@ -127,7 +128,7 @@
         "40000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-07T13:52:47Z"
+        "2025-10-14T19:38:43Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "8000"
@@ -136,7 +137,7 @@
         "8000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-07T13:52:56Z"
+        "2025-10-14T19:38:47Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -145,7 +146,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-07T13:52:46Z"
+        "2025-10-14T19:38:42Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "48000"
@@ -154,13 +155,13 @@
         "48000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-07T13:52:47Z"
+        "2025-10-14T19:38:43Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98ade183db5feae4-ORD"
+        "98e989db8fac011d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -169,10 +170,10 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:52:54 GMT"
+        "Tue, 14 Oct 2025 19:38:46 GMT"
       ],
       "request-id": [
-        "req_011CTswzfEC93F4J24z9gXRk"
+        "req_011CU7f32DP52GqW5rcCm8nL"
       ],
       "server": [
         "cloudflare"
@@ -187,7 +188,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "7890"
+        "4917"
       ],
       "x-robots-tag": [
         "none"

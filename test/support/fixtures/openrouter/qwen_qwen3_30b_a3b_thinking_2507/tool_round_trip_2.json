@@ -1,0 +1,131 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyNjIwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiIwMTk5ZTdlYjY1ZmM5NmUyYzUwOTIxZjg0NjRiOGFlYSIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6IjAxOTllN2ViNjVmYzk2ZTJjNTA5MjFmODQ2NGI4YWVhIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMtMzBiLWEzYi10aGlua2luZy0yNTA3IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 26200,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        },
+        {
+          "content": [],
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"a\":2,\"b\":3}",
+                "name": "add"
+              },
+              "id": "0199e7eb65fc96e2c50921f8464b8aea",
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "content": "5",
+          "name": "add",
+          "role": "tool",
+          "tool_call_id": "0199e7eb65fc96e2c50921f8464b8aea"
+        }
+      ],
+      "model": "qwen/qwen3-30b-a3b-thinking-2507",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "\n\nsum=5",
+            "reasoning": "Okay, the user asked to compute 2 + 3 using the add tool. I called the tool with a=2 and b=3. The response came back as 5. Now I need to format the answer as 'sum=<value>'. So the value is 5. Let me make sure I didn't make any mistakes. 2 plus 3 is definitely 5. The tool returned 5, so the correct response should be sum=5. I'll just write that out.\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Okay, the user asked to compute 2 + 3 using the add tool. I called the tool with a=2 and b=3. The response came back as 5. Now I need to format the answer as 'sum=<value>'. So the value is 5. Let me make sure I didn't make any mistakes. 2 plus 3 is definitely 5. The tool returned 5, so the correct response should be sum=5. I'll just write that out.\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1760532588,
+      "id": "gen-1760532588-vQWa3cJrT5BOMmHiW5si",
+      "model": "qwen/qwen3-30b-a3b-thinking-2507",
+      "object": "chat.completion",
+      "provider": "SiliconFlow",
+      "system_fingerprint": "",
+      "usage": {
+        "completion_tokens": 106,
+        "completion_tokens_details": {
+          "reasoning_tokens": 102
+        },
+        "prompt_tokens": 74,
+        "total_tokens": 180
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ef70457b3a60a1-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 12:49:49 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

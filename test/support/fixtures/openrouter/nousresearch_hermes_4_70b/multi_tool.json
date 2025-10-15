@@ -1,0 +1,176 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyNjIxNCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im5vdXNyZXNlYXJjaC9oZXJtZXMtNC03MGIiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+    },
+    "canonical_json": {
+      "max_tokens": 26214,
+      "messages": [
+        {
+          "content": "What's the weather like in Paris, France?",
+          "role": "user"
+        }
+      ],
+      "model": "nousresearch/hermes-4-70b",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tools": [
+        {
+          "function": {
+            "description": "Get current weather information for a location",
+            "name": "get_weather",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "location": {
+                  "type": "string"
+                },
+                "unit": {
+                  "enum": [
+                    "celsius",
+                    "fahrenheit"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "location"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        },
+        {
+          "function": {
+            "description": "Tell a funny joke",
+            "name": "tell_joke",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "topic": {
+                  "description": "Topic for the joke",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "function"
+        },
+        {
+          "function": {
+            "description": "Get the current time",
+            "name": "get_time",
+            "parameters": {
+              "properties": {},
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "\n\n",
+            "reasoning": "\nOkay, the user is asking about the weather in Paris, France. I need to figure out which function to use here. The available functions are get_weather, tell_joke, and get_time. The question is about weather, so get_weather is the right choice.\n\nNow, the get_weather function requires a location parameter. The user specified Paris, France, so that's straightforward. The unit parameter is optional, but since it's not provided, I should check if the default is Celsius or Fahrenheit. Looking at the function description, the unit can be either celsius or fahrenheit. The default might be celsius, but maybe I should include it to be safe. Wait, the parameters for get_weather are location (required) and unit (optional). The user didn't specify the unit, so maybe I should include it as celsius by default. Alternatively, maybe the function uses the default if not provided. Let me check the function signature again. The parameters are location (required) and unit (optional). So if the user doesn't provide unit, the function might default to celsius. But to be thorough, perhaps I should include it. Wait, the function's parameters are listed as required: [\"location\"], so unit is optional. So the user didn't specify, so maybe the function uses the default. But the function's description says unit is optional. So perhaps the function will use the default if not provided. But the user might want to know the temperature in a specific unit. Since the user didn't specify, maybe I should include the unit as celsius. Alternatively, maybe the function uses the default. Wait, the function's parameters are optional, so if not provided, the default is celsius. So I can proceed with location: \"Paris, France\" and unit: \"celsius\". So the function call would be get_weather with location \"Paris, France\" and unit \"celsius\". So the JSON would be {\"name\": \"get_weather\", \"arguments\": {\"location\": \"Paris, France\", \"unit\": \"celsius\"}}. That should do it.\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "\nOkay, the user is asking about the weather in Paris, France. I need to figure out which function to use here. The available functions are get_weather, tell_joke, and get_time. The question is about weather, so get_weather is the right choice.\n\nNow, the get_weather function requires a location parameter. The user specified Paris, France, so that's straightforward. The unit parameter is optional, but since it's not provided, I should check if the default is Celsius or Fahrenheit. Looking at the function description, the unit can be either celsius or fahrenheit. The default might be celsius, but maybe I should include it to be safe. Wait, the parameters for get_weather are location (required) and unit (optional). The user didn't specify the unit, so maybe I should include it as celsius by default. Alternatively, maybe the function uses the default if not provided. Let me check the function signature again. The parameters are location (required) and unit (optional). So if the user doesn't provide unit, the function might default to celsius. But to be thorough, perhaps I should include it. Wait, the function's parameters are listed as required: [\"location\"], so unit is optional. So the user didn't specify, so maybe the function uses the default. But the function's description says unit is optional. So perhaps the function will use the default if not provided. But the user might want to know the temperature in a specific unit. Since the user didn't specify, maybe I should include the unit as celsius. Alternatively, maybe the function uses the default. Wait, the function's parameters are optional, so if not provided, the default is celsius. So I can proceed with location: \"Paris, France\" and unit: \"celsius\". So the function call would be get_weather with location \"Paris, France\" and unit \"celsius\". So the JSON would be {\"name\": \"get_weather\", \"arguments\": {\"location\": \"Paris, France\", \"unit\": \"celsius\"}}. That should do it.\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"location\": \"Paris, France\", \"unit\": \"celsius\"}",
+                  "name": "get_weather"
+                },
+                "id": "call_9d5ef9ea1f3142ee965d5369",
+                "index": 0,
+                "type": "function"
+              }
+            ]
+          },
+          "native_finish_reason": "tool_calls"
+        }
+      ],
+      "created": 1760532527,
+      "id": "gen-1760532527-bQcjABnM6XOSd2iRZj4p",
+      "model": "nousresearch/hermes-4-70b",
+      "object": "chat.completion",
+      "provider": "Chutes",
+      "usage": {
+        "completion_tokens": 458,
+        "prompt_tokens": 348,
+        "prompt_tokens_details": null,
+        "total_tokens": 806
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ef6eca7ec572ea-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 12:48:48 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

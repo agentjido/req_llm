@@ -41,26 +41,22 @@
           "logprobs": null,
           "message": {
             "content": "Hello! How can I assist you today?",
-            "reasoning": "Alright, the user greeted me with \"Hi there!\" and I responded in a friendly manner. I should keep the conversation going by asking how I can assist them today. That way, I can understand their needs better and provide the right help.\n",
+            "reasoning": "Alright, the user greeted me with \"Hi there!\" and I responded in a friendly manner. I should keep the conversation going by asking how I can assist them today. That should encourage them to share what they need help with.\n",
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759845380,
-      "id": "gen-1759845370-TXSByyDjWq2Ru5XgTcGG",
+      "created": 1760532515,
+      "id": "gen-1760532515-wL1lRpqmqujFWckDRdyh",
       "model": "deepseek/deepseek-r1-distill-llama-70b",
       "object": "chat.completion",
-      "provider": "SambaNova",
-      "system_fingerprint": "fastcoe",
+      "provider": "Chutes",
       "usage": {
-        "completion_tokens": 60,
-        "prompt_tokens": 8,
-        "prompt_tokens_details": {
-          "cached_tokens": 0
-        },
-        "total_tokens": 68
+        "completion_tokens": 58,
+        "prompt_tokens": 9,
+        "total_tokens": 67
       }
     },
     "headers": {
@@ -68,7 +64,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade6801aeea2a1-ORD"
+        "98ef6e7c3e67eb09-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -77,7 +73,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:56:20 GMT"
+        "Wed, 15 Oct 2025 12:48:36 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

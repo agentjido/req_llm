@@ -1,0 +1,156 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMjgwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJvcGVuYWkvZ3B0LTUiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbF9jaG9pY2UiOnsiZnVuY3Rpb24iOnsibmFtZSI6ImFkZCJ9LCJ0eXBlIjoiZnVuY3Rpb24ifSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiQWRkIHR3byBpbnRlZ2VycyIsIm5hbWUiOiJhZGQiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhIjp7InR5cGUiOiJpbnRlZ2VyIn0sImIiOnsidHlwZSI6ImludGVnZXIifX0sInJlcXVpcmVkIjpbImEiLCJiIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+    },
+    "canonical_json": {
+      "max_tokens": 12800,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-5",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tool_choice": {
+        "function": {
+          "name": "add"
+        },
+        "type": "function"
+      },
+      "tools": [
+        {
+          "function": {
+            "description": "Add two integers",
+            "name": "add",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "a": {
+                  "type": "integer"
+                },
+                "b": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "a",
+                "b"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "",
+            "reasoning": "**Planning the computation task**\n\nI need to respond to the user's request by calculating 2 + 3. According to the developer's instructions, I must call the add function immediately when processing the request. I can include a preamble message if needed, but I shouldn’t mention the exact tool name to the user unless instructed. So, I'll make sure to call the add function directly and then respond with the result formatted as 'sum=<value>'.**Executing the addition task**\n\nThe user specifically requested to use the add tool for computing 2 + 3 and to respond with 'sum=<value>' after getting the result. So, I need to call the functions.add with a=2 and b=3. I must ensure no extra content is included in the response. The final output will simply be 'sum=5' after the tool call. I'll be sure to send the tool call in the commentary channel, and then I'll respond accordingly.",
+            "reasoning_details": [
+              {
+                "format": "openai-responses-v1",
+                "index": 0,
+                "summary": "**Planning the computation task**\n\nI need to respond to the user's request by calculating 2 + 3. According to the developer's instructions, I must call the add function immediately when processing the request. I can include a preamble message if needed, but I shouldn’t mention the exact tool name to the user unless instructed. So, I'll make sure to call the add function directly and then respond with the result formatted as 'sum=<value>'.**Executing the addition task**\n\nThe user specifically requested to use the add tool for computing 2 + 3 and to respond with 'sum=<value>' after getting the result. So, I need to call the functions.add with a=2 and b=3. I must ensure no extra content is included in the response. The final output will simply be 'sum=5' after the tool call. I'll be sure to send the tool call in the commentary channel, and then I'll respond accordingly.",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "gAAAAABo75grUcmDT3rdLc1FS8Y3ZE5pvqTTXsQW1II9XfFQZ_EvQs5WoGPJ8Clc3u00Ravrm1iU1GkSapd0OhDo8P6kVLxu9qu0a84PP-q0epL6TtvFq_lLzsgYX1SP-CnBMzNLeusuV13-qZjSQxaEKHTSr7YF15ndlmCFiZIb5z5rqgDUCmTMG33QbDWAulLZ5y_0-B9DOZgYSqFUkTRva5b-ZkCSAvtha0UVB4Ko-lnyNKS1upzuNxpvWmEJel5nQ1eom5NqUSze1kFzxNG1xlPtObOK8jwhHI-8eH4KRAy7vvPErjX66DTUYpLGgsLHzByr-EQzPZZo2Ih5LgSQ1J6eJVKI5Bfzbd3oRfgZ46v1Pfr6t26xZyo3HpIcO3cSMVdihjNTEdh0aVhv2zpR6UXrgiAMpsMDjziv7JnY0hS6kxWczGZr8eRPvvuehF5nhlA5n-0pgu6ljppUKut5_8LpycFuZvfjIL-ZMqRNtBUVBHF0tKfTmfMJ00eIkrp0H7EbcCsMwi6w9m0AVPdNj7AEvcYYIClpCdm-Qw5nfWE-iXDKr9n1YTFAwKGw6R_fE4N66v_ycM9KfsNvTJafTvKkxG2j_CN-Mj5ziw_tkwFzijuwwyAzPeihnAFe9GfdChlYe4vtOFzh_UBPL1_WiOSBTrfvsT-oyj5HsNeXPa5wIjmpMV3lLdNrd1zUN3Xb2fHJom037u5vp9VekoTWEYgkiDJPhXCPCFVzbrgrlzBtJ3VNTCANMTBKQr1MlMcWMT1oiwtuvpBrSPvtgbWG16JVQmHuie2wi_zYjuJlG5z9o-K0rIfo1RKSxe42JIDdUvQ7kk_wA_f0K6unLj02jIedu0yEkwETYYONps8BQEBn95AeX2verxexnA99nKQWsxwzcne2JyEW-nX4higS0YUPptYXYQqpFO-IaD78bcp8gw__Ym6PdUc0LkRPxV-jjQ1qOgMvi-MlBrvJJ4mORAE83Rg9qXFr7V7INnxt1GovHyXo_hppKjCOFKiw6n7Fyya5b-EZDFcC1gb1uNv6flOawGZwVH_iUGxvpj3w8CavHzQVcgSt3zlc-7LVdiJed-fDjUvDWc84amye1ogoU9M3PoYpv-bLfBCjfkJcVWrGVi8mOsEquh-SlLcXryjin2vSX3L2rwn6-KFpxEEfgfLpVJ2GF3HUhKepowfh4cmx-XauGvLgEQdbVb9hDMR7M9wCUPo3U2Z2cAKyn1_eK_utxsvFL9MDjGb65z55cvhVLdm8DhYbHokzCoxw2aMRMgyKXOf7udfRONygTFzGwXwLczBBTBuIaK56bIxCdvnu75YR4uP0x-ocyqsK2PEZ7yJVws2I57wBQSM28jKcOraHWtbZxxao8ZQ17nbZxmp8JmNU8PmE3Vv5XoUu9g77J5TgBwC_ai2JopfbhjF9tcBLZqpYJAtf2RkNZta8utB_bqw1nIau0kwLBIo2kecSC-5zA5_lzNWRUhmRKOb39Aoz9T9_uYc0PWPG5Xd0xj-XmMHQ_0BJvlrBGVz43tUEglxnIKxLGVM8J42g0YRVILVqqui8-TAaxkFIZi-eOsZ219pA_YMKsCJtFBPLWiIf-BSPwH5DX_tGpWvGqfcRNKUEMeualfKEFeLRZD0TVZwugisEzSjZG_7x2-X4WERf1t6jBv_stoHehy5Px3_Rim-I4KG4HaT_02Odum1gkBuzsX5mn4ZcCUJRViRkbZQfi8FDEpFj4SeN9E_6KaceWzWlglvNyBNyHxtYFk78J7yXOS5Kcs6iuWY_SN46FAyXPzF9TSsNvPnvuuCYkY8i57yb1Y1BQZHPA_-uJT2IYLjnVaPFPG77_rP7_vtKNclnhLN683WyleOjidtUFLAeHIxqSuHRF8kCAuriWbnubXAfmy_XzGSNCOTE-mwzhHvuuo8V5J_0qG98VC7SL4t1JxTHxS-8MoNzRlBj-g-nl3GHZ1lgPq6Ow_znyRnyMxkqu14DOGgoU1TaXd1q97ns-lL1a1iEuOf26XMV-z6_K7II-Ob0_Kv9tXbCxT5UPSwnNUCE8sWu4y0oUyo-s7KCeHtzX3MVnaSHerTGRPe-8cJGd8lz4aquYK9UePdaJa42KDwcLm9-J3X5TgAFyuYuLuKzfyJKALP_a_h-ShJ_DJ-camQx7jgdZ0aLyEkcDCd7ijBRyjHLtVKHQWAtHuZzvkh_sSZdqCKqc6LX503inoZv8ZdrA1_OdI6dKgM40hnB1Jc4_CbF61fpddeJL9kWSdPf09SF0fjVx5Fa_frYQWN8LfGs-Ndc-DZ3BnE70XmXVZn89NV7YSFvobZt5HkWTKbHKjIDBKHEaNr3r8kPPXcexEHEJP_w5wOgBeCG03InimoEwrCTQdw5ZcZLffBrpelZL6LfZxxuEBbVd6Tij5pbgpqkGnSL0zs0OX84-9BffcgohYYAqAmbHpgSocZuC0VyR3wjvSAi0At51vqvzKFC-2C-MjMapn9KYk_jtvPvENFTQzt8JNtyH6UzHL1afhmPcRu_9ZojICP6_fWPygzlnx2z_guv-SCLMXAY6ITp_SVpAtNwUk5zPd7YFYjavrvvXhq3DDiVii_bXiGMYAtOT6C0-MydLRkR6Cbsgnxksawkw0uckIBVXZqzr7pyUtyc6_mg78Fcak2PwoXT9nPBicgILrc=",
+                "format": "openai-responses-v1",
+                "id": "rs_03dca65deec34b060168ef9825f47c81909976293a1d43dee1",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"a\":2,\"b\":3}",
+                  "name": "add"
+                },
+                "id": "call_KPlwXU9oxwAWvPxLcQqvMVvL",
+                "index": 0,
+                "type": "function"
+              }
+            ]
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1760532516,
+      "id": "gen-1760532516-kzuIYhaWffU1GIS2wR7B",
+      "model": "openai/gpt-5",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "usage": {
+        "completion_tokens": 279,
+        "prompt_tokens": 71,
+        "total_tokens": 350
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ef6e85d896f163-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 12:48:37 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

@@ -1,22 +1,26 @@
 {
-  "captured_at": "2025-10-07T14:43:13.273917Z",
+  "captured_at": "2025-10-15T12:48:06.306493Z",
   "chunks": [
     {
-      "b64": "OiBPUEVOUk9VVEVSIFBST0NFU1NJTkcKCg==",
-      "decoded": ": OPENROUTER PROCESSING\n\n"
+      "b64": "ZGF0YTogeyJpZCI6Imdlbi0xNzYwNTMyNDg1LU8yOU83ZzVjbW1udVlwT0g3cnNHIiwicHJvdmlkZXIiOiJNaXN0cmFsIiwibW9kZWwiOiJtaXN0cmFsYWkvZGV2c3RyYWwtc21hbGwiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzYwNTMyNDg1LCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsicm9sZSI6ImFzc2lzdGFudCIsImNvbnRlbnQiOiIifSwiZmluaXNoX3JlYXNvbiI6bnVsbCwibmF0aXZlX2ZpbmlzaF9yZWFzb24iOm51bGwsImxvZ3Byb2JzIjpudWxsfV19Cgo=",
+      "decoded": "data: {\"id\":\"gen-1760532485-O29O7g5cmmnuYpOH7rsG\",\"provider\":\"Mistral\",\"model\":\"mistralai/devstral-small\",\"object\":\"chat.completion.chunk\",\"created\":1760532485,\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\"},\"finish_reason\":null,\"native_finish_reason\":null,\"logprobs\":null}]}\n\n"
     },
     {
-      "b64": "ZGF0YTogeyJpZCI6Imdlbi0xNzU5ODQ4MTkyLVlQMVpub1BDYVBENjV6TjdzdVdQIiwicHJvdmlkZXIiOiJNaXN0cmFsIiwibW9kZWwiOiJtaXN0cmFsYWkvZGV2c3RyYWwtc21hbGwiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5ODQ4MTkyLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsicm9sZSI6ImFzc2lzdGFudCIsImNvbnRlbnQiOiIifSwiZmluaXNoX3JlYXNvbiI6bnVsbCwibmF0aXZlX2ZpbmlzaF9yZWFzb24iOm51bGwsImxvZ3Byb2JzIjpudWxsfV19Cgo=",
-      "decoded": "data: {\"id\":\"gen-1759848192-YP1ZnoPCaPD65zN7suWP\",\"provider\":\"Mistral\",\"model\":\"mistralai/devstral-small\",\"object\":\"chat.completion.chunk\",\"created\":1759848192,\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\"},\"finish_reason\":null,\"native_finish_reason\":null,\"logprobs\":null}]}\n\n"
+      "b64": "ZGF0YTogeyJpZCI6Imdlbi0xNzYwNTMyNDg1LU8yOU83ZzVjbW1udVlwT0g3cnNHIiwicHJvdmlkZXIiOiJNaXN0cmFsIiwibW9kZWwiOiJtaXN0cmFsYWkvZGV2c3RyYWwtc21hbGwiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzYwNTMyNDg1LCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsicm9sZSI6ImFzc2lzdGFudCIsImNvbnRlbnQiOm51bGwsInRvb2xfY2FsbHMiOlt7ImlkIjoic1pGTmN6WTFVIiwiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwiYXJndW1lbnRzIjoie1wibmFtZVwiOiBcIkFsZXggSm9obnNvblwiLCBcImFnZVwiOiAzMCwgXCJvY2N1cGF0aW9uXCI6IFwiU29mdHdhcmUgRW5naW5lZXJcIn0ifSwiaW5kZXgiOjAsInR5cGUiOiJmdW5jdGlvbiJ9XX0sImZpbmlzaF9yZWFzb24iOiJ0b29sX2NhbGxzIiwibmF0aXZlX2ZpbmlzaF9yZWFzb24iOiJ0b29sX2NhbGxzIiwibG9ncHJvYnMiOm51bGx9XX0KCg==",
+      "decoded": "data: {\"id\":\"gen-1760532485-O29O7g5cmmnuYpOH7rsG\",\"provider\":\"Mistral\",\"model\":\"mistralai/devstral-small\",\"object\":\"chat.completion.chunk\",\"created\":1760532485,\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":null,\"tool_calls\":[{\"id\":\"sZFNczY1U\",\"function\":{\"name\":\"structured_output\",\"arguments\":\"{\\\"name\\\": \\\"Alex Johnson\\\", \\\"age\\\": 30, \\\"occupation\\\": \\\"Software Engineer\\\"}\"},\"index\":0,\"type\":\"function\"}]},\"finish_reason\":\"tool_calls\",\"native_finish_reason\":\"tool_calls\",\"logprobs\":null}]}\n\n"
     },
     {
-      "b64": "ZGF0YTogeyJpZCI6Imdlbi0xNzU5ODQ4MTkyLVlQMVpub1BDYVBENjV6TjdzdVdQIiwicHJvdmlkZXIiOiJNaXN0cmFsIiwibW9kZWwiOiJtaXN0cmFsYWkvZGV2c3RyYWwtc21hbGwiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzU5ODQ4MTkyLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsicm9sZSI6ImFzc2lzdGFudCIsImNvbnRlbnQiOm51bGwsInRvb2xfY2FsbHMiOlt7ImlkIjoiYU5Gc1VSOGZoIiwiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwiYXJndW1lbnRzIjoie1wibmFtZVwiOiBcIkFsZXggSm9obnNvblwiLCBcImFnZVwiOiAzMCwgXCJvY2N1cGF0aW9uXCI6IFwiU29mdHdhcmUgRW5naW5lZXJcIn0ifSwiaW5kZXgiOjAsInR5cGUiOiJmdW5jdGlvbiJ9XX0sImZpbmlzaF9yZWFzb24iOiJ0b29sX2NhbGxzIiwibmF0aXZlX2ZpbmlzaF9yZWFzb24iOiJ0b29sX2NhbGxzIiwibG9ncHJvYnMiOm51bGx9XX0KCmRhdGE6IHsiaWQiOiJnZW4tMTc1OTg0ODE5Mi1ZUDFabm9QQ2FQRDY1ek43c3VXUCIsInByb3ZpZGVyIjoiTWlzdHJhbCIsIm1vZGVsIjoibWlzdHJhbGFpL2RldnN0cmFsLXNtYWxsIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc1OTg0ODE5MiwiY2hvaWNlcyI6W3siaW5kZXgiOjAsImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQiLCJjb250ZW50IjoiIn0sImZpbmlzaF9yZWFzb24iOm51bGwsIm5hdGl2ZV9maW5pc2hfcmVhc29uIjpudWxsLCJsb2dwcm9icyI6bnVsbH1dLCJ1c2FnZSI6eyJwcm9tcHRfdG9rZW5zIjoxMjgsImNvbXBsZXRpb25fdG9rZW5zIjoyNiwidG90YWxfdG9rZW5zIjoxNTQsImNvc3QiOjAuMDAwMDIwNiwiaXNfYnlvayI6ZmFsc2UsInByb21wdF90b2tlbnNfZGV0YWlscyI6eyJjYWNoZWRfdG9rZW5zIjowLCJhdWRpb190b2tlbnMiOjB9LCJjb3N0X2RldGFpbHMiOnsidXBzdHJlYW1faW5mZXJlbmNlX2Nvc3QiOm51bGwsInVwc3RyZWFtX2luZmVyZW5jZV9wcm9tcHRfY29zdCI6MC4wMDAwMTI4LCJ1cHN0cmVhbV9pbmZlcmVuY2VfY29tcGxldGlvbnNfY29zdCI6MC4wMDAwMDc4fSwiY29tcGxldGlvbl90b2tlbnNfZGV0YWlscyI6eyJyZWFzb25pbmdfdG9rZW5zIjowLCJpbWFnZV90b2tlbnMiOjB9fX0KCmRhdGE6IFtET05FXQoK",
-      "decoded": "data: {\"id\":\"gen-1759848192-YP1ZnoPCaPD65zN7suWP\",\"provider\":\"Mistral\",\"model\":\"mistralai/devstral-small\",\"object\":\"chat.completion.chunk\",\"created\":1759848192,\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":null,\"tool_calls\":[{\"id\":\"aNFsUR8fh\",\"function\":{\"name\":\"structured_output\",\"arguments\":\"{\\\"name\\\": \\\"Alex Johnson\\\", \\\"age\\\": 30, \\\"occupation\\\": \\\"Software Engineer\\\"}\"},\"index\":0,\"type\":\"function\"}]},\"finish_reason\":\"tool_calls\",\"native_finish_reason\":\"tool_calls\",\"logprobs\":null}]}\n\ndata: {\"id\":\"gen-1759848192-YP1ZnoPCaPD65zN7suWP\",\"provider\":\"Mistral\",\"model\":\"mistralai/devstral-small\",\"object\":\"chat.completion.chunk\",\"created\":1759848192,\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\"},\"finish_reason\":null,\"native_finish_reason\":null,\"logprobs\":null}],\"usage\":{\"prompt_tokens\":128,\"completion_tokens\":26,\"total_tokens\":154,\"cost\":0.0000206,\"is_byok\":false,\"prompt_tokens_details\":{\"cached_tokens\":0,\"audio_tokens\":0},\"cost_details\":{\"upstream_inference_cost\":null,\"upstream_inference_prompt_cost\":0.0000128,\"upstream_inference_completions_cost\":0.0000078},\"completion_tokens_details\":{\"reasoning_tokens\":0,\"image_tokens\":0}}}\n\ndata: [DONE]\n\n"
+      "b64": "ZGF0YTogeyJpZCI6Imdlbi0xNzYwNTMyNDg1LU8yOU83ZzVjbW1udVlwT0g3cnNHIiwicHJvdmlkZXIiOiJNaXN0cmFsIiwibW9kZWwiOiJtaXN0cmFsYWkvZGV2c3RyYWwtc21hbGwiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzYwNTMyNDg1LCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsicm9sZSI6ImFzc2lzdGFudCIsImNvbnRlbnQiOiIifSwiZmluaXNoX3JlYXNvbiI6bnVsbCwibmF0aXZlX2ZpbmlzaF9yZWFzb24iOm51bGwsImxvZ3Byb2JzIjpudWxsfV0sInVzYWdlIjp7InByb21wdF90b2tlbnMiOjEzNCwiY29tcGxldGlvbl90b2tlbnMiOjI2LCJ0b3RhbF90b2tlbnMiOjE2MCwiY29zdCI6MC4wMDAwMjEyLCJpc19ieW9rIjpmYWxzZSwicHJvbXB0X3Rva2Vuc19kZXRhaWxzIjp7ImNhY2hlZF90b2tlbnMiOjAsImF1ZGlvX3Rva2VucyI6MH0sImNvc3RfZGV0YWlscyI6eyJ1cHN0cmVhbV9pbmZlcmVuY2VfY29zdCI6bnVsbCwidXBzdHJlYW1faW5mZXJlbmNlX3Byb21wdF9jb3N0IjowLjAwMDAxMzQsInVwc3RyZWFtX2luZmVyZW5jZV9jb21wbGV0aW9uc19jb3N0IjowLjAwMDAwNzh9LCJjb21wbGV0aW9uX3Rva2Vuc19kZXRhaWxzIjp7InJlYXNvbmluZ190b2tlbnMiOjAsImltYWdlX3Rva2VucyI6MH19fQoK",
+      "decoded": "data: {\"id\":\"gen-1760532485-O29O7g5cmmnuYpOH7rsG\",\"provider\":\"Mistral\",\"model\":\"mistralai/devstral-small\",\"object\":\"chat.completion.chunk\",\"created\":1760532485,\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\"},\"finish_reason\":null,\"native_finish_reason\":null,\"logprobs\":null}],\"usage\":{\"prompt_tokens\":134,\"completion_tokens\":26,\"total_tokens\":160,\"cost\":0.0000212,\"is_byok\":false,\"prompt_tokens_details\":{\"cached_tokens\":0,\"audio_tokens\":0},\"cost_details\":{\"upstream_inference_cost\":null,\"upstream_inference_prompt_cost\":0.0000134,\"upstream_inference_completions_cost\":0.0000078},\"completion_tokens_details\":{\"reasoning_tokens\":0,\"image_tokens\":0}}}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogW0RPTkVdCgo=",
+      "decoded": "data: [DONE]\n\n"
     }
   ],
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibWlzdHJhbGFpL2RldnN0cmFsLXNtYWxsLTI1MDciLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjp0cnVlLCJzdHJlYW1fb3B0aW9ucyI6eyJpbmNsdWRlX3VzYWdlIjp0cnVlfSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbF9jaG9pY2UiOnsiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0In0sInR5cGUiOiJmdW5jdGlvbiJ9LCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZW5lcmF0ZSBzdHJ1Y3R1cmVkIG91dHB1dCBtYXRjaGluZyB0aGUgcHJvdmlkZWQgc2NoZW1hIiwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbIm5hbWUiLCJhZ2UiXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibWlzdHJhbGFpL2RldnN0cmFsLXNtYWxsLTI1MDciLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjp0cnVlLCJzdHJlYW1fb3B0aW9ucyI6eyJpbmNsdWRlX3VzYWdlIjp0cnVlfSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbF9jaG9pY2UiOnsiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0In0sInR5cGUiOiJmdW5jdGlvbiJ9LCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZW5lcmF0ZSBzdHJ1Y3R1cmVkIG91dHB1dCBtYXRjaGluZyB0aGUgcHJvdmlkZWQgc2NoZW1hIiwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibmFtZSIsImFnZSJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
       "max_tokens": 500,
@@ -46,6 +50,7 @@
             "description": "Generate structured output matching the provided schema",
             "name": "structured_output",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "age": {
                   "description": "Person's age in years",
@@ -85,9 +90,9 @@
     "headers": {
       "access-control-allow-origin": "*",
       "cache-control": "no-cache",
-      "cf-ray": "98ae2b63bc838637-ORD",
+      "cf-ray": "98ef6dc53921ead3-ORD",
       "content-type": "text/event-stream",
-      "date": "Tue, 07 Oct 2025 14:43:13 GMT",
+      "date": "Wed, 15 Oct 2025 12:48:06 GMT",
       "permissions-policy": "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")",
       "referrer-policy": "no-referrer, strict-origin-when-cross-origin",
       "server": "cloudflare",

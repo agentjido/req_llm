@@ -135,13 +135,16 @@ defmodule ReqLLM.Providers.OpenRouter do
         _tokens -> opts_with_tool
       end
 
+    # Preserve the :object operation for response decoding
+    opts_with_operation = Keyword.put(opts_with_tokens, :operation, :object)
+
     # Use the default chat preparation with structured output tools
     ReqLLM.Provider.Defaults.prepare_request(
       __MODULE__,
       :chat,
       model_spec,
       prompt,
-      opts_with_tokens
+      opts_with_operation
     )
   end
 
@@ -247,6 +250,7 @@ defmodule ReqLLM.Providers.OpenRouter do
 
     enhanced_body =
       body
+      |> translate_tool_choice_format()
       |> maybe_put(:models, request.options[:openrouter_models])
       |> maybe_put(:route, request.options[:openrouter_route])
       |> maybe_put(:provider, request.options[:openrouter_provider])
@@ -295,6 +299,31 @@ defmodule ReqLLM.Providers.OpenRouter do
     end
   end
 
+  defp translate_tool_choice_format(body) do
+    {tool_choice, body_key} =
+      cond do
+        Map.has_key?(body, :tool_choice) -> {Map.get(body, :tool_choice), :tool_choice}
+        Map.has_key?(body, "tool_choice") -> {Map.get(body, "tool_choice"), "tool_choice"}
+        true -> {nil, nil}
+      end
+
+    type = tool_choice && (Map.get(tool_choice, :type) || Map.get(tool_choice, "type"))
+    name = tool_choice && (Map.get(tool_choice, :name) || Map.get(tool_choice, "name"))
+
+    if type == "tool" && name do
+      replacement =
+        if is_map_key(tool_choice, :type) do
+          %{type: "function", function: %{name: name}}
+        else
+          %{"type" => "function", "function" => %{"name" => name}}
+        end
+
+      Map.put(body, body_key, replacement)
+    else
+      body
+    end
+  end
+
   # Helper function for adding OpenRouter app attribution headers
   defp maybe_add_attribution_headers(request, opts) do
     # Get referer from either request options or passed opts
@@ -325,12 +354,18 @@ defmodule ReqLLM.Providers.OpenRouter do
       200 ->
         body = ensure_parsed_body(resp.body)
 
-        case extract_deepseek_tool_calls(body) do
-          {:ok, updated_body} ->
-            ReqLLM.Provider.Defaults.default_decode_response({req, %{resp | body: updated_body}})
+        if is_deepseek_model?(req) do
+          case extract_deepseek_tool_calls(body) do
+            {:ok, updated_body} ->
+              ReqLLM.Provider.Defaults.default_decode_response(
+                {req, %{resp | body: updated_body}}
+              )
 
-          :no_tool_calls ->
-            ReqLLM.Provider.Defaults.default_decode_response(args)
+            :no_tool_calls ->
+              ReqLLM.Provider.Defaults.default_decode_response(args)
+          end
+        else
+          ReqLLM.Provider.Defaults.default_decode_response(args)
         end
 
       _ ->
@@ -365,6 +400,13 @@ defmodule ReqLLM.Providers.OpenRouter do
   end
 
   defp extract_deepseek_tool_calls(_), do: :no_tool_calls
+
+  defp is_deepseek_model?(req) do
+    case req.private[:req_llm_model] do
+      %ReqLLM.Model{model: model} -> String.starts_with?(model, "deepseek/")
+      _ -> false
+    end
+  end
 
   defp parse_deepseek_tool_calls(reasoning) do
     ~r/<｜tool▁call▁begin｜>([^<]+)<｜tool▁sep｜>({[^}]+})<｜tool▁call▁end｜>/

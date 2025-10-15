@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMzEwNywibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibWlzdHJhbGFpL2RldnN0cmFsLW1lZGl1bS0yNTA3IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMzEwNywibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibWlzdHJhbGFpL2RldnN0cmFsLW1lZGl1bS0yNTA3IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
       "max_tokens": 13107,
@@ -22,6 +22,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -60,7 +61,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "What's a cat's favorite color? Purrple",
+            "content": "What is a cat's favorite color? Purrple",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -68,15 +69,15 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759848216,
-      "id": "gen-1759848216-hs2OBqhGPfaxSDvdOVVD",
+      "created": 1760547418,
+      "id": "gen-1760547418-CYjSJeKADGJiL0MNTMXG",
       "model": "mistralai/devstral-medium",
       "object": "chat.completion",
       "provider": "Mistral",
       "usage": {
         "completion_tokens": 12,
-        "prompt_tokens": 70,
-        "total_tokens": 82
+        "prompt_tokens": 76,
+        "total_tokens": 88
       }
     },
     "headers": {
@@ -84,7 +85,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ae2bf92c66e80d-ORD"
+        "98f0da530d72f60a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -93,7 +94,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 14:43:36 GMT"
+        "Wed, 15 Oct 2025 16:56:58 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

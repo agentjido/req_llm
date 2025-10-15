@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxOTIwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiei1haS9nbG0tNC41IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJtYXhfdG9rZW5zIjoxOTIwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiei1haS9nbG0tNC41IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "max_tokens": 19200,
@@ -23,6 +23,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -61,13 +62,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "\n\nHere's a cat joke for you:\n\nWhy don't cats play poker in the wild?\n\nBecause there are too many cheetahs! 🐱\n\nHope that gave you a chuckle!",
-            "reasoning": "The user is asking for a joke about cats. This doesn't require any weather information or function calls - it's just a request for humor. I should provide a cat joke directly without using any tools.",
+            "content": "\nHere's a cat joke for you:\n\nWhy don't cats play poker in the wild?\n\nBecause there are too many cheetahs! 🐱\n\nHope that gave you a chuckle!",
+            "reasoning": "\nThe user is asking for a joke about cats. This doesn't require any weather information or any of the available tools. I should just provide a cat joke directly without using any functions.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "The user is asking for a joke about cats. This doesn't require any weather information or function calls - it's just a request for humor. I should provide a cat joke directly without using any tools.",
+                "text": "\nThe user is asking for a joke about cats. This doesn't require any weather information or any of the available tools. I should just provide a cat joke directly without using any functions.",
                 "type": "reasoning.text"
               }
             ],
@@ -77,15 +78,21 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759848347,
-      "id": "gen-1759848347-7eiNHxa4SyvkCrpj65fS",
+      "created": 1760545967,
+      "id": "gen-1760545967-SvmEFFzUAfqYTwDrWbOs",
       "model": "z-ai/glm-4.5",
       "object": "chat.completion",
-      "provider": "AtlasCloud",
+      "provider": "Novita",
+      "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 86,
-        "prompt_tokens": 172,
-        "total_tokens": 258
+        "completion_tokens": 82,
+        "completion_tokens_details": null,
+        "prompt_tokens": 164,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 43
+        },
+        "total_tokens": 246
       }
     },
     "headers": {
@@ -93,7 +100,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ae2f2d4f6986e4-ORD"
+        "98f0b6e71e97eac0-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -102,7 +109,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 14:45:48 GMT"
+        "Wed, 15 Oct 2025 16:32:48 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

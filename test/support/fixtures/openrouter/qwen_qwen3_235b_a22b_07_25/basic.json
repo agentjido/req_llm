@@ -48,17 +48,15 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759847288,
-      "id": "gen-1759847288-Qz1JeLwoNeulNNqm4ZfV",
+      "created": 1760532536,
+      "id": "gen-1760532535-ukXdoPwb4uwHVe3YHIje",
       "model": "qwen/qwen3-235b-a22b-2507",
       "object": "chat.completion",
-      "provider": "Parasail",
+      "provider": "Google",
       "usage": {
         "completion_tokens": 12,
         "prompt_tokens": 11,
-        "prompt_tokens_details": {
-          "cached_tokens": 0
-        },
+        "prompt_tokens_details": null,
         "total_tokens": 23
       }
     },
@@ -67,7 +65,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ae154d4a74e81e-ORD"
+        "98ef6efdbdc45074-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -76,7 +74,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 14:28:08 GMT"
+        "Wed, 15 Oct 2025 12:48:56 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

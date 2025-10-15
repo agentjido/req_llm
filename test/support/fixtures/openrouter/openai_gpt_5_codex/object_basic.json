@@ -1,0 +1,164 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC01LWNvZGV4IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQifSwidHlwZSI6ImZ1bmN0aW9uIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiYWdlIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Generate a software engineer profile",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-5-codex",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tool_choice": {
+        "function": {
+          "name": "structured_output"
+        },
+        "type": "function"
+      },
+      "tools": [
+        {
+          "function": {
+            "description": "Generate structured output matching the provided schema",
+            "name": "structured_output",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "age": {
+                  "description": "Person's age in years",
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "name": {
+                  "description": "Person's full name",
+                  "type": "string"
+                },
+                "occupation": {
+                  "description": "Person's job or profession",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "age"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "",
+            "reasoning": "**Planning mandatory structured_output call**\n\nI need to call functions.structured_output immediately with placeholder data before any other response, following the instructions strictly. I'll use default values like name \"Unknown\" and age 30 since no user data is given, then provide the actual answer afterward.",
+            "reasoning_details": [
+              {
+                "format": "openai-responses-v1",
+                "index": 0,
+                "summary": "**Planning mandatory structured_output call**\n\nI need to call functions.structured_output immediately with placeholder data before any other response, following the instructions strictly. I'll use default values like name \"Unknown\" and age 30 since no user data is given, then provide the actual answer afterward.",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "gAAAAABo75hXRFGUN_3wklyNYNQNt0BxC90buEZENQPYjMx0RxWOFDLhLRmfSBUMx3wjZBxhgBBO6w_ClM0NpmLwb-qqlPmibbrviDFsBXImK1EozChV4uN2cN9kG16-b6f4ZbfBVizvOUpA-MhQYa9JRRelXaCRBKxwd2NjwoCfMoVplDxSNhx4pgUFTOmX5xGzYyYnWGcUvFNMQEUxZ2VGuOvnPKyyKwzcv5BUt54DyCZRrWVECME_BFCNp9CWDoSG-G4I9CV55AMCeznQH_HPp9SPn86KkPCbDjeaYJaJHm_qp4MHu0y-BqlzrocNcO40N4Piu3IoI_hpif6OfxRSIhBo20qRFEIbu1cMHMBoEiDczVFOb1aUN8mTUQPQEVBDPVtE9_ePmPUsy2mnOUgzw23NoW_1VOfVSwoEpvrRFYD6FUB6cc5laqgr_8zi7jPOJ7nHL0ZSKXBfqYZdKA7By280LFGTKkaQb8PYoAT5pUgsO7gyAkdrcE2lXDSjSNUpJCcshGGhdigh_sOxMugC9Azstfiu7dcr-AQIOTXXwjziYgWobyQNdraITF4kg3zjTPdgBes6qJahrSoe5vpq3pyZN6clSCVHu52bUbnU9y1cR7BbAw4AUsOWOu10Fn869rVnB75jAJpu9G4NEwIXQpZnXb9bxCVi1opXlo8frx2ioiAMBcWfAPR6aoFerc2RTqjGZHFuIYAn_fDcV-wAK0aIWii0fylZSZsOV8FnKodG2Dur3ow7jPQ3SiUAPMmRXhR6obKRs00PFjlhXK6CeoPDOYlYuTFwPRrO0eW-GI8IDwvxRFEwWcTcnfIlRjm9bUSAROTc68yBoKZykVDw9oNqD8eOz5P0ezDjGSdwkWQSYDZN5M4d_nWC-ostSNpUMZNX9aaNdkTIKwQCvGD2TIbr2k_RFwHLuLiBnVIlXqPkKCk85r82jdIKZWmDUCyJOdPBf3EyadFyACSSEfGdXooLeBa6ISjRfuNYdGtRQhj2RzTGx2Np7arnAgiLAs4FwpmONBpXkFX3L01nQ_-Je-eI3aFzz_MeLESercURJ5Mgm4NlQmeRlMcrck6sbZFoG08oEOL8BffRH8Y9z6OhMtqGF2dk0KixzHQNUhHrVXOlVuqQjQ71_bYbAdjSADgne0Gt2NclR6fx0Xv1WgdVaG1rMLEdNAp1MVxlNezn07Bb6Y_N0b4vRIyqqRHh7cUMxDdzI6XfUGDFTehzmvt57X2r5k-O0KRXNpjv01qV3rGeV655tWq6FtQDGqbvjRexo6AP8TGtikIhOvglVwGudeVturb0VvQhbc_icMWBRkTbEOutTkrvk8FA0oSK5fxe0uVIByPcaWj1WKPNWtbj6WVXWcSfClF0_aahloWaD2Kht5lKF0gvc3uaUJwavIZSMvZ-VvIxu4W26uhoxo7_tyPQ8BDF7XyECSJWZIqkRlvGkz-a8L9W14zoxrbq7UESb7Ti4sNSU6XnvT22H3YcgaUV_0gW3hI9ym-cWEIx2Yl1sj-LzMOJESLUXQ7PFDAhNGlkdoEyeTYUbeA3VmE51waTbTzX7G4JOGqRS3m6LilnBKEFfFvUpSos_3D6RLMV9RKhdaYapQfzsBvKkgGsnX9tr97Nwlvz14nGZMylKNIHvVF8xoEir44H0-KUZs77lzrQYvC8LMRGUjpnpfmjBdHayf47po1koY9sU07EWtOigYWobsWePNNFcOLac_mTyEwjsuvFmCMEq4iWMecIrPJvxEPDjdk2w1H2vIskG2hP6dXi_o7zr4IraFM2WdB-9a3tWiejQBnjTYeNhyFc5Wx3lUrxsX0piwTYSWAnXjCJUr8_xJfZCuTLAPSzAOU9F7kbWhi3uLSjyyH9RzA4BnHBy0N84lJsMXfGgGlNQ1JugUfXzuEkzEWuMsJvVFyuRX52mVQYnacd45HV2_BOR_V3R5dweS_71nTMXCH9UbGK7dqMol_YwbHU-nILbrUe5EeIUftbY09qV4iXKCwuD5TokCBw0htPxIJKEY9aC6UYemxwtIPz4ezbauV7ApfjuA3cll14JmW-xhew6B2WMFoffBm3ZBXeb074Cs9T2HEhHUMDYx-TDn3yRrrq_vLeWCYj54FySU66UbPeY-lglaCDEssAhSDEYzG0ht8kpGA1wP70wR5pRVDtIj_mh4ZSq-K-oLB0D4yE_h-Ty9lXIHWw5zYFoo_NRPiwlPHfZY8-cmHpO892sluh8UTGHWliCR36mUIYIIc3nmjXUTPd5afk61lceTvD_-kB2fUwKmtoGrjbySE9SFVH25FYxGdPGrLU7Ll0x3pJLC8BkW1xcli0Q-ukFemByIFdHqlM4zx2JQpPBTK4tf0dIHHMqNXkqKtvsYb0G_CAzCbW1gWLDvGgYSgIdAUBZEFAQ9Qe0AJ56JHjgUE=",
+                "format": "openai-responses-v1",
+                "id": "rs_00f0eafd0b6a7a110168ef985310e08193a2be863fedf4a20f",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"age\":30,\"name\":\"N/A\",\"occupation\":\"Software Engineer\"}",
+                  "name": "structured_output"
+                },
+                "id": "call_hGDcRkcuqkXJaAwtfO3JTFmn",
+                "index": 0,
+                "type": "function"
+              }
+            ]
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1760532562,
+      "id": "gen-1760532562-JQSSaNuvd5Paq98GDm0e",
+      "model": "openai/gpt-5-codex",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "usage": {
+        "completion_tokens": 223,
+        "prompt_tokens": 85,
+        "total_tokens": 308
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ef6fa24fb9e248-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 12:49:22 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

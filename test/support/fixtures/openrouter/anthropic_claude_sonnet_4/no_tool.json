@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo2NDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJhbnRocm9waWMvY2xhdWRlLXNvbm5ldC00IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjo2NDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJhbnRocm9waWMvY2xhdWRlLXNvbm5ldC00IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
       "max_tokens": 6400,
@@ -22,6 +22,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -60,7 +61,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs! 🐱\n\nAnd here's another one:\n\nWhat do you call a pile of cats?\n\nA meowtain! 🏔️\n\nHope those made you purr with laughter! 😸",
+            "content": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs! 🐱\n\nAnd here's another one:\n\nWhat do you call a pile of cats?\nA meowtain! \n\nHope those made you purr with laughter! 😸",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -68,15 +69,15 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759845357,
-      "id": "gen-1759845357-cv7lWsinCI06jaKIJnWj",
+      "created": 1760532472,
+      "id": "gen-1760532472-N2bowSujtyfuPtRjGN1n",
       "model": "anthropic/claude-sonnet-4",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
-        "completion_tokens": 77,
-        "prompt_tokens": 381,
-        "total_tokens": 458
+        "completion_tokens": 73,
+        "prompt_tokens": 388,
+        "total_tokens": 461
       }
     },
     "headers": {
@@ -84,7 +85,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade62b1cf8eace-ORD"
+        "98ef6d6f9a5258ee-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -93,7 +94,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:55:58 GMT"
+        "Wed, 15 Oct 2025 12:47:53 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

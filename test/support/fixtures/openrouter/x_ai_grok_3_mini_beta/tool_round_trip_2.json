@@ -1,13 +1,13 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiQ2FsbCB0aGUgYWRkIHRvb2wgd2l0aCBhPTIgYW5kIGI9My4gQWZ0ZXIgcmVjZWl2aW5nIHRoZSB0b29sIHJlc3VsdCwgcmVwbHkgZXhhY3RseSB3aXRoICdzdW09PHZhbHVlPicuIiwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOiIgIiwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6ImNhbGxfMjEzMTM1NDkiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJjYWxsXzIxMzEzNTQ5In1dLCJtb2RlbCI6IngtYWkvZ3Jvay0zLW1pbmktYmV0YSIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzLiBBZnRlciB0aGUgdG9vbCByZXN1bHQgYXJyaXZlcywgcmVzcG9uZCB3aXRoICdzdW09PHZhbHVlPicuIiwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOiIgIiwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6ImNhbGxfNTUzNzIwNzMiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJjYWxsXzU1MzcyMDczIn1dLCJtb2RlbCI6IngtYWkvZ3Jvay0zLW1pbmktYmV0YSIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
       "max_tokens": 819,
       "messages": [
         {
-          "content": "Call the add tool with a=2 and b=3. After receiving the tool result, reply exactly with 'sum=<value>'.",
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
           "role": "user"
         },
         {
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_21313549",
+              "id": "call_55372073",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "call_21313549"
+          "tool_call_id": "call_55372073"
         }
       ],
       "model": "x-ai/grok-3-mini-beta",
@@ -61,12 +61,12 @@
           "logprobs": null,
           "message": {
             "content": "sum=5",
-            "reasoning": "First, the user instructed me to call the add tool with a=2 and b=3. I did that by outputting the function call in the specified format.\n\nNow, I've received the result from the tool, which is 5.\n\nThe user said: \"After receiving the tool result, reply exactly with 'sum=<value>'.\"\n\nSo, I need to reply exactly as specified. That means my response should be precisely 'sum=5'.\n\nI should not add any extra text, explanations, or anything else. Keep it clear and concise.\n\nMy previous output was the function call: <function_call>{...}</function_call>\n\nNow, for this response, it's just the final reply based on the result.\n\nTherefore, the exact response should be: sum=5",
+            "reasoning": "First, the user asked me to use the \"add\" tool to compute 2 + 3. Then, after the tool result arrives, I need to respond with 'sum=<value>'.\n\nIn my previous response, I already made a function call to the \"add\" tool with a=2 and b=3. Now, the system or the simulation has provided the result as \"Function: 5\".\n\nSo, my next step is to process this result and respond accordingly. The instruction was: \"After the tool result arrives, respond with 'sum=<value>'.\"\n\nThe value from the tool is 5, so I should respond with 'sum=5'.\n\nI need to ensure my response is clear and not verbose, as per the general guidelines.\n\nFinally, structure my response: It should just be the string 'sum=5', but since this is a conversation, I might need to output it directly.\n\nIn the context of this simulation, my response should be the final answer.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "First, the user instructed me to call the add tool with a=2 and b=3. I did that by outputting the function call in the specified format.\n\nNow, I've received the result from the tool, which is 5.\n\nThe user said: \"After receiving the tool result, reply exactly with 'sum=<value>'.\"\n\nSo, I need to reply exactly as specified. That means my response should be precisely 'sum=5'.\n\nI should not add any extra text, explanations, or anything else. Keep it clear and concise.\n\nMy previous output was the function call: <function_call>{...}</function_call>\n\nNow, for this response, it's just the final reply based on the result.\n\nTherefore, the exact response should be: sum=5",
+                "text": "First, the user asked me to use the \"add\" tool to compute 2 + 3. Then, after the tool result arrives, I need to respond with 'sum=<value>'.\n\nIn my previous response, I already made a function call to the \"add\" tool with a=2 and b=3. Now, the system or the simulation has provided the result as \"Function: 5\".\n\nSo, my next step is to process this result and respond accordingly. The instruction was: \"After the tool result arrives, respond with 'sum=<value>'.\"\n\nThe value from the tool is 5, so I should respond with 'sum=5'.\n\nI need to ensure my response is clear and not verbose, as per the general guidelines.\n\nFinally, structure my response: It should just be the string 'sum=5', but since this is a conversation, I might need to output it directly.\n\nIn the context of this simulation, my response should be the final answer.",
                 "type": "reasoning.text"
               }
             ],
@@ -76,23 +76,23 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760442701,
-      "id": "gen-1760442701-GD2SJjmWbKfq6AeY86Kt",
+      "created": 1760532596,
+      "id": "gen-1760532596-GK9uIJN6PM1PrmwWq8sg",
       "model": "x-ai/grok-3-mini",
       "object": "chat.completion",
       "provider": "xAI",
       "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 157,
+        "completion_tokens": 204,
         "completion_tokens_details": {
-          "reasoning_tokens": 154
+          "reasoning_tokens": 201
         },
-        "prompt_tokens": 82,
+        "prompt_tokens": 80,
         "prompt_tokens_details": {
           "audio_tokens": 0,
           "cached_tokens": 2
         },
-        "total_tokens": 239
+        "total_tokens": 284
       }
     },
     "headers": {
@@ -100,7 +100,7 @@
         "*"
       ],
       "cf-ray": [
-        "98e6ddc4ef53cc1a-ORD"
+        "98ef70787fca1923-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -109,7 +109,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 11:51:42 GMT"
+        "Wed, 15 Oct 2025 12:49:56 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

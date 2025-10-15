@@ -1,0 +1,164 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiZ29vZ2xlL2dlbWluaS0yLjUtZmxhc2gtcHJldmlldy0wOS0yMDI1IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQifSwidHlwZSI6ImZ1bmN0aW9uIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiYWdlIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Generate a software engineer profile",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-2.5-flash-preview-09-2025",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tool_choice": {
+        "function": {
+          "name": "structured_output"
+        },
+        "type": "function"
+      },
+      "tools": [
+        {
+          "function": {
+            "description": "Generate structured output matching the provided schema",
+            "name": "structured_output",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "age": {
+                  "description": "Person's age in years",
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "name": {
+                  "description": "Person's full name",
+                  "type": "string"
+                },
+                "occupation": {
+                  "description": "Person's job or profession",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "age"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "",
+            "reasoning": "**Begin Structuring the Profile**\n\nI've started to map out the structure for the software engineer profile. The `default_api:structured_output` tool is a constraint, which forces me to work within a specific JSON schema. I'm focusing on \"name\" and \"age\" fields first, before the more complex elements. Now I'm considering what other fields are essential for this profile, for example, \"skills\".\n\n\n**Expanding Field Considerations**\n\nThe JSON schema presents limitations with its structure. While \"name,\" \"age,\" and \"occupation\" are straightforward, I am now thinking about how best to reflect the skills of a software engineer. \"Skills\" feels like an important, complex field. Should I consider an array of strings, or a more structured nested object to detail each skill? I'm considering using skills like \"Python\" as a start.\n\n\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "**Begin Structuring the Profile**\n\nI've started to map out the structure for the software engineer profile. The `default_api:structured_output` tool is a constraint, which forces me to work within a specific JSON schema. I'm focusing on \"name\" and \"age\" fields first, before the more complex elements. Now I'm considering what other fields are essential for this profile, for example, \"skills\".\n\n\n**Expanding Field Considerations**\n\nThe JSON schema presents limitations with its structure. While \"name,\" \"age,\" and \"occupation\" are straightforward, I am now thinking about how best to reflect the skills of a software engineer. \"Skills\" feels like an important, complex field. Should I consider an array of strings, or a more structured nested object to detail each skill? I'm considering using skills like \"Python\" as a start.\n\n\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"occupation\":\"Software Engineer\",\"name\":\"Alice Johnson\",\"age\":32}",
+                  "name": "structured_output"
+                },
+                "id": "tool_0_structured_output_5hUDx1lJ4sqJf7ROhUfY",
+                "index": 0,
+                "type": "function"
+              }
+            ]
+          },
+          "native_finish_reason": "STOP"
+        }
+      ],
+      "created": 1760546978,
+      "id": "gen-1760546978-Z1yOLhZgFbYGzMTpgMI1",
+      "model": "google/gemini-2.5-flash-preview-09-2025",
+      "object": "chat.completion",
+      "provider": "Google",
+      "usage": {
+        "completion_tokens": 113,
+        "completion_tokens_details": {
+          "image_tokens": 0,
+          "reasoning_tokens": 98
+        },
+        "prompt_tokens": 41,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 154
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98f0cf96ee55c77f-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 16:49:40 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

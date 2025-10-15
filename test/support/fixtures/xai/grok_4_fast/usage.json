@@ -44,8 +44,8 @@
           }
         }
       ],
-      "created": 1760458002,
-      "id": "d65d364a-0a24-8824-0a09-4b839c7d6822_us-east-1",
+      "created": 1760471290,
+      "id": "26516eec-d7bb-d4a8-253c-d95deeff3060_us-east-1",
       "model": "grok-4-fast-reasoning",
       "object": "chat.completion",
       "system_fingerprint": "fp_9362061f30",
@@ -54,18 +54,18 @@
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 148,
+          "reasoning_tokens": 145,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
         "prompt_tokens": 159,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 151,
+          "cached_tokens": 158,
           "image_tokens": 0,
           "text_tokens": 159
         },
-        "total_tokens": 316
+        "total_tokens": 313
       }
     },
     "headers": {
@@ -79,7 +79,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e85353cddf52ca-ORD"
+        "98e997bebae1253a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -88,13 +88,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 16:06:45 GMT"
+        "Tue, 14 Oct 2025 19:48:11 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=IWkrBiZgMzvtG2PaD2ASt6ExHDduTLWhNRBo0mIfn.Q-1760458005-1.0.1.1-p5C1baaRDqII1uu9z_brp5S0fRrm1AdssHYVPGvXOskWg_NB9e6IIwp88eW4sqG4R0YMxQHUT9W6XgBnMVl4olBsPHuawOYDzAEoQ2pj4oE; path=/; expires=Tue, 14-Oct-25 16:36:45 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=FTxK0nmVmVQA5q2H_.WJzjqTVCAIwmlPtagWeIwINVU-1760471291-1.0.1.1-ahfLb1B5gHuAg3veBAcRpFcCuvqpYMsosxWDU4y72SH50qKvtezcY7GDLIVTNfiFapctYoTG2nJ1MuLyHn4YjGl8fsmhbV61_skaqrBWmeo; path=/; expires=Tue, 14-Oct-25 20:18:11 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -106,7 +106,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-4c94f2e1dcd0b29e61077fd221d22b01-0d45a85c005239c6-01"
+        "00-138b7ba03cc49e7c6b3335d7cfbe48a0-ba6d5ed4005ab337-01"
       ],
       "x-zero-data-retention": [
         "false"

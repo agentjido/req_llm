@@ -48,15 +48,14 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759847289,
-      "id": "gen-1759847289-sCrKpwHeB9O9uOBxVlv5",
+      "created": 1760545131,
+      "id": "gen-1760545131-emQBEfpJy2ysBGK0XMCs",
       "model": "qwen/qwen3-next-80b-a3b-instruct",
       "object": "chat.completion",
-      "provider": "Chutes",
+      "provider": "AtlasCloud",
       "usage": {
         "completion_tokens": 31,
         "prompt_tokens": 11,
-        "prompt_tokens_details": null,
         "total_tokens": 42
       }
     },
@@ -65,7 +64,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ae1557ba85c543-ORD"
+        "98f0a2804c3672e8-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -74,7 +73,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 14:28:10 GMT"
+        "Wed, 15 Oct 2025 16:18:52 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

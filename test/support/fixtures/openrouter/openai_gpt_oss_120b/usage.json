@@ -40,13 +40,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! How can I assist you today?",
-            "reasoning": "The user says \"Hi there!\" It's a greeting. We should respond politely. Probably ask how can help.",
+            "content": "Hello! How can I help you today?",
+            "reasoning": "The user says \"Hi there!\" It's a greeting. We should respond politely. No special instructions. So just a friendly greeting.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "The user says \"Hi there!\" It's a greeting. We should respond politely. Probably ask how can help.",
+                "text": "The user says \"Hi there!\" It's a greeting. We should respond politely. No special instructions. So just a friendly greeting.",
                 "type": "reasoning.text"
               }
             ],
@@ -56,16 +56,15 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759845438,
-      "id": "gen-1759845438-7v7hnR2mRcxsH9WhGjoj",
+      "created": 1760532507,
+      "id": "gen-1760532507-wu6p5UsFsw6EbLvkp9cl",
       "model": "openai/gpt-oss-120b",
       "object": "chat.completion",
-      "provider": "DeepInfra",
+      "provider": "Fireworks",
       "usage": {
-        "completion_tokens": 40,
-        "prompt_tokens": 77,
-        "prompt_tokens_details": null,
-        "total_tokens": 117
+        "completion_tokens": 45,
+        "prompt_tokens": 75,
+        "total_tokens": 120
       }
     },
     "headers": {
@@ -73,7 +72,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade825dc1c13f7-ORD"
+        "98ef6e4d7bebb838-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -82,7 +81,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:57:18 GMT"
+        "Wed, 15 Oct 2025 12:48:28 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

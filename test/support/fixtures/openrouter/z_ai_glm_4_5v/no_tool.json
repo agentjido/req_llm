@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjozMjc2LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJ6LWFpL2dsbS00LjV2IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJtYXhfdG9rZW5zIjozMjc2LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJ6LWFpL2dsbS00LjV2IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "max_tokens": 3276,
@@ -23,6 +23,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -57,38 +58,49 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "tool_calls",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "\nWhy was the cat thrown out of the card game? Because he was a Cheetah! 😹",
-            "reasoning": "The user is asking for a joke about cats. I should provide a humorous response related to cats. Since the user didn't ask for weather information, I don't need to call the `get_weather` tool.",
+            "content": "\nWhy don't cats play poker in the jungle? Too many cheetahs!\n",
+            "reasoning": "The user is asking for a joke about cats. I should respond with a cat-related joke.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "The user is asking for a joke about cats. I should provide a humorous response related to cats. Since the user didn't ask for weather information, I don't need to call the `get_weather` tool.",
+                "text": "The user is asking for a joke about cats. I should respond with a cat-related joke.",
                 "type": "reasoning.text"
               }
             ],
             "refusal": null,
-            "role": "assistant"
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"location\": \"New York City\"}",
+                  "name": "get_weather"
+                },
+                "id": "call_2025101520500639f5bb23ba26435e_0",
+                "index": 0,
+                "type": "function"
+              }
+            ]
           },
-          "native_finish_reason": "stop"
+          "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1759845474,
-      "id": "gen-1759845474-nFGmPiZOJ4opF8xOZG87",
+      "created": 1760532605,
+      "id": "gen-1760532605-2Q3eUltL5STkRthZp4Nw",
       "model": "z-ai/glm-4.5v",
       "object": "chat.completion",
       "provider": "Z.AI",
       "usage": {
-        "completion_tokens": 67,
+        "completion_tokens": 54,
         "prompt_tokens": 171,
         "prompt_tokens_details": {
-          "cached_tokens": 170
+          "cached_tokens": 52
         },
-        "total_tokens": 238
+        "total_tokens": 225
       }
     },
     "headers": {
@@ -96,7 +108,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade9064b9e356a-ORD"
+        "98ef70b12e82e207-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -105,7 +117,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:57:55 GMT"
+        "Wed, 15 Oct 2025 12:50:06 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

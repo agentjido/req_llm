@@ -1,0 +1,150 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMjgwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJvcGVuYWkvZ3B0LTUtbmFubyIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoiYWRkIn0sInR5cGUiOiJmdW5jdGlvbiJ9LCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJBZGQgdHdvIGludGVnZXJzIiwibmFtZSI6ImFkZCIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImEiOnsidHlwZSI6ImludGVnZXIifSwiYiI6eyJ0eXBlIjoiaW50ZWdlciJ9fSwicmVxdWlyZWQiOlsiYSIsImIiXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 12800,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-5-nano",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tool_choice": {
+        "function": {
+          "name": "add"
+        },
+        "type": "function"
+      },
+      "tools": [
+        {
+          "function": {
+            "description": "Add two integers",
+            "name": "add",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "a": {
+                  "type": "integer"
+                },
+                "b": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "a",
+                "b"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "",
+            "reasoning": null,
+            "reasoning_details": [
+              {
+                "data": "gAAAAABo75h9JeI3YfwrOhq0izsdTHk1bVTOKtGE4biUBzpZjc8g7kU5m_GR_6e_xSVS6OxGcSsmaIlwRpoXgmvqBsxK4sh4GfwwPcEn8XE-h7TtsUGltZM0Q3Z-l52qegfZQgxux0S47P2B_GXTAdsMiWaYFdMOptJLmSG883K0J96TvBOsGNdRnyAo6zCVO70qw00CAcL_TYAdoZdUZ1ernC7jx6i5_JW4KCqvlDoOQ1_bYk84jxbqv_mGAW-PUzOPycShprsta-pSp3Tu7QzGcXZJeUKKr7AYP1fiSg3D0ba8PbZHJaxawotFjByjwEiR4Nr0WeIZmrl2hAB7O6-aNy2kPc9e2FKh_3EcTprbXExHVn9OWYAhD95o9NMvMGMv6MTUCguS9unh7sQCP4oFC__1TUZV8ZWWpzG82zT7twp4q-hs1WdLfayK3b6hLGMJLS8_3qtl6Kx0NDEAhJh8F2N-0Tf2TVybJI7G4ykO6_NjmJuU-v1Zg_qmAKFuAeuX8hO0NcXYnotfxuKYdKkhmdMMiOwPCjDS4MNKNi1WaV61XW0wA-mXyz9ak3jNIVp1s-40l62zjqQ0JakryrDsLaLq6DSiZlG5PTpRXtn3N1Dv2QS81JYtXcRv0O91v3Bp1rvNRdD71CG0OQe1vL0RI7LFNeS-xxOOeS8MYRLiHd_ZDO6FMM_peGH2DkfLlkUrlnYlmmIIAEwQapWVfHjUW6jb0RftcUE-dYby66oS-qCAoxwcdQbtoldLXFgO1KmgaD2qWZZXHhl8mvD0y_wKoq3vo8je_efW1kiy5ILHWSnWua4JlR1VuvfbIl1yaCge-iYnjNbk_bFsTemsDu_TmEGEKqpl6ZuLgavA783wgR43VCmvHYyo9DEUmVSY2Jx8zUQ34wTp_ijywbpviGwFsHS4gnXZKPUMGHKwNghqI9-ZmVvoCWp0OQdX-h8mtqXgoR9mscFs1xpEjHXwetMeIkVMBFYUE6nGEqTwyc51HjFey7yLtJvDyqt6h9o0chfbJcNwT3NnAfMLPw-R7OAbqfkm6qVllUEJqVQqe2DxA5ua_3WQ2jxnRXGHnDTfCcxUUeauSJHwhxdmRHiBJ2QppN6HYf_CQauY1Thar4RpdfDn-FksVK6CdBBUlVsWLQnzs9rvujGK8phIltKkNTLzQe6rGprGdC3jZti1_qsSFJziB89wkmSahu4oAExEojvohsmMofbax93u2Z9gcj9rxGR8PkG8zPggq1Voa0I4aO6cUZSVU2WyRXVXaC95Jw_R4ez11xzdOWmPY7LVAvRf9vgfgiAWd2PXExqaS3u-pk4o1zy06v4GNA5ODnNi5-1YL5xhrlTkClfM2tSOsBdVGtpG7dl8nFS29g16x6XHixPb5xEnHlDg-70pw4OmVgKX5VZFSebbe0PW6C5ybnowyknxqVfZ2Su12PH3ttuvq5PT1jnimYCX_7AnLgJUP1klFlp-WOlsPGjPN-WKy-Xepis35URnavA4U4VitFxlP6OTI_rqYm-P2USrkS50mNcT2kDbnOXpQ1UePYfjXrXevkJdYUPXx_NYzAXPCZpEANpJLK0kkoq7y3Y0KNesusTiIl-uNOHr_w8_fVG_gGjsfA766GuLK7gj37IAlqL1twkdGle3NscdaVtDceDbvlK3oDYMnsmLBagJchdjEwiyg0rd4t_btbexGPRttbhj7r1XQw36mOIOWYCBopzUUtiyoELvwz5rKwfoBVARuJ74ZLXMEugNgErIOXczFhdvg_VHSCT3VacjeNG-UHpMiEkoqJdw-S5118THj562qHrd_0oa02FTCOItFIO7z8zcpZ6Mqz7Y-rMr7mpR5qoPrd30JaXOXvt-tNGwHPtwgu5PnqRaaatch8jWErpPHV-PmmqZXK7paQr2mO4_KTWDPyk_5gEPG9jLTUEFcejUQfPGiAh3blZhjlkv9QStZajNB-dJNDmHuM-8_qzRqic-JJnEvjvulQXX0wJtY0piN4VxbVno_jCyGYhMXeDpjeH2GozniKzGmfI2NY8q_zrZDSUfII71OAw_3Yw0s2WO6BQ5hpR2Hht0AAEzQtwgb4LFuNIbewGFP8_WMBsBvT6bNge9NRzQEM-AaHvGFycFteSq2CP-lIs6aYblHDk9zjELPyhzfnlZ7OA6kFJ-U7RvKkUlH9h-qw8H2Xg3X50G1-GD2CHPjI7CB5DuaRXKdmgkg4p-uP6cegq2adewXr_FYjH6jWBAojLUD9VlaFZoCLaBDX1uTv2fHOjBRMAsY2ScA9XCnHsLg7cMPhG7VNuSluTNrwfeGQIBXKCSV3KFExRwK2IU5smUr99EpcEMSuBtVW62HwJCYCQVgFnyxI88REQXCyJlHftrZnYDAIk3Z55nbgjpBECadhD0d9Lp10q97w65dc5f3d52099rPNMVMeax-KO6XQSRqR2IbQp9R-U1fhu3ZIHAvnVaCKg2dVZN9HFfikQgzKMJBEyZCp8tlQTx6svn7_4dvNXLt7-A9Sx0NeHal1qMaQJhteaZxE2Qnthc-ytC2vQy_sMvk8cNzIEq0yvnZwe-bdRaRCc4AVshQn_P5jdb9KHnU_TW1Z6oSyDHPffZXVAu4d6XiszylQEnePITRJWehwgXZGN5wxPvNSKw2fuAeumHwX1C2HOg3Y5OkOxDBn_ZcoJ1Ohrxq4cqwknUFIVKrYvjxuhrSwAuFgV3WRHKkfVwJGNFm5Hy_VxBVGlM4hym6wLus-UP9VDTiV6Gm3umoJ4ojLcXjYwTszfLl_xKXCisSs7PVbrjJkCx7gvWBU3YLBf4v7p8dDbw43Ay8Ox7UjFttDPEKgXPetVam8DP48wTPUQl9kYWARU_XlO4z5tn0MbQ4nNXTUj718ejcsevWfz7VPRvFf8aBsotFVNgDrj704qmzIQNr8sTJaHcyIdtfLLXXq8VOzhFau1s3DAXg3jEI6iJ1GGFodto0CZjRkrkQ9tiEe4Cjc7vbL7liRvM9e6qnZu98VXcmzi_e-8JLUxKuqXomtyU7be-xU4ymERiVPF2N9fn90to8K0JQG8Ei6AHxuhEhIyFs8Dgo-VEhlOMZT8Z9HckuvCS9SGuPOHtZt0rqo3CkI1NmqP-uQ-h3MXi5-blBCjVlQf5b5ci5NxQQNwxnS6Gq7J6qVvWx-NlfCziqLKh_mNKD4YsY4WKOgDQuUmHlQ-ACz8nyVTq6UCrDdnQkQu4emEc__e0NjRfq1N_Cmyr06DDgO0lSGFK3EklpkXm3FhlTGHlPFuLkWqhhe0_Ax40hBs3cgNJxsjo9IUPcUfVyfpwppSWZNAO64qzzhFNFzfbhv-BQ6-HPejIiVi9b2GK2AsdrJlVCCx2I5B0vXV3aHNR2KCwLgUKMGD_sIWkgoV8Dkix4i35p9GvyMiY0v-VIooxUKQdYI_bZwQMzKGAI7qAne0e9VJQLoDGm_PQB9Y77Z2Vn9AsiDgNuQ5Wy8bqNzUV3FFeXc2bElKnXEal8TXHFBDst1dTUXv6JIbaE8qsAMe4THldfst_zTn9Twu7hvONtbJa4PD3bXHUv72cuhOfshpA1X5tbN9R8jzBfpj9bQErd9EeVXdFpKmn2pZxUp98itSffrxlj0mX46FX-Ad_9KQf2pSeEjoeiYr-HCCPVrtvPQBFpY9vCk-k6-RR_n5RI0hPGrpK1VZGx42HeDhhK1UaUrFDRCDEFclk9usaficKtO8rKexFSVZcw5ixu_vTEYQbN91DAD8x4286zYhhZGDXGN6sNnDZLX_-ytCM2hPGTuzm",
+                "format": "openai-responses-v1",
+                "id": "rs_03171d9945ab87750168ef987a3d7081939fcf667f99d86d2b",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"a\": 2, \"b\": 3}",
+                  "name": "add"
+                },
+                "id": "call_f7tv7zARYHjCn5s0GH2VtK3I",
+                "index": 0,
+                "type": "function"
+              }
+            ]
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1760532601,
+      "id": "gen-1760532601-1heORRlBVIg1VDJIjYkp",
+      "model": "openai/gpt-5-nano",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "usage": {
+        "completion_tokens": 538,
+        "prompt_tokens": 68,
+        "total_tokens": 606
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ef70989cb261c9-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 12:50:02 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

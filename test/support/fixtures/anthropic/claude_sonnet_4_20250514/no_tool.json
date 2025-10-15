@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMjgwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiY2xhdWRlLXNvbm5ldC00LTIwMjUwNTE0Iiwic3RyZWFtIjpmYWxzZSwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifSwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0X3NjaGVtYSI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifSwibmFtZSI6ImdldF93ZWF0aGVyIn1dfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMjgwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiY2xhdWRlLXNvbm5ldC00LTIwMjUwNTE0Iiwic3RyZWFtIjpmYWxzZSwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifSwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0X3NjaGVtYSI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoiZ2V0X3dlYXRoZXIifV19"
     },
     "canonical_json": {
       "max_tokens": 12800,
@@ -21,6 +21,7 @@
         {
           "description": "Get current weather information for a location",
           "input_schema": {
+            "additionalProperties": false,
             "properties": {
               "location": {
                 "type": "string"
@@ -60,16 +61,16 @@
     "body": {
       "content": [
         {
-          "signature": "Eo8DCkYICBgCKkARswA7Lj4jHJ57epyKKgsf+kmshJeCHuoklVdQ14LuFHy1lAVcFvFn/Lz8KkamHrN9O0fGjizI1TLVtS+9pBS6EgwtAqrJKzrs9zrJaVcaDFA0f3DpazP0qc48eiIwQOSagMt+QcWYoj9RbTGkgLjGHMWQW1iypHbvSfkXFFkgHLrcMIW70y2a9teBH1cyKvYBRYy+MS1jud6a6FK7AgJKmKwJzaXryIAWRl+AS4gEOzv22rwwq1QqHb9PXDNAg8usQOqCDaA6G6iGEVsECTdVsLdCtVMqo7D082C3oOerBRUplw+cQAKIiJ4Jv9Pweu8sVHGhScQETVIpeH3uUebNyg+gNSUYHQVvQQlTxdrJKaQu7kqMfGJT53wkkPwxzmm15RLA1zJFVoRoiwONHnfKC4Xmf/P3b4IY+YXPnuaf9tpeyhHEJ6LIfvqZXMyh4EwBTAr2RB5TSOwTfrRMOk7ZEk8GyE01unTz2eSl0Il7/l3EHuInjPaWOs4OCyciJMUms7Qy7+9xGAE=",
-          "thinking": "The user is asking for a joke about cats. This doesn't require any function calls - they're not asking for weather information or anything that would need the tools I have available. I should just respond with a cat joke directly.",
+          "signature": "EtkCCkYICBgCKkANLA7cHEFr8sY0QIjl5PF5uI05bqCkOv/TAvXDAjSSWBAuUb13XPDrW6qJYbKep/PJ6ORszfziQY/vL9SF6FvoEgzl2I+jrwl8dcLNSRoaDDlCXEVCxVo6nPN5MCIwF6e6h9CTKSJzC75NxMVHwhg7N2DOrNk0yj5Tq/cWrfT5LVCzHMc2ESB5xx3G9Ww3KsABfqAmUraj0X4d0U/zxeal7TLFzw1/m5AQQN13pWqfaupTPtCKn2VpBJPOBdbrnd6EhQkfjHc8N9zMrbm33zYiWEaS+72e/FLGkklfO7BbyGoqgrvrA4voLjs6nOvVMMBSRUM8/MorF2SgsT8hUYPr+2L9Z9fvLc7dwfmkfRFrn7tvnX2uWTEaQMCb36r6WPLjCESSnlQav9TuLMhrKq/S6L4iuZHG/VO/T2yx1jWaVo3AWKCjruWLKr35wLJ9ynQsGAE=",
+          "thinking": "The user is asking for a joke about cats. This doesn't require using any of the available tools (which is just a weather function). I should just tell them a cat joke directly.",
           "type": "thinking"
         },
         {
-          "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs! 🐱\n\nAnd here's another one:\n\nWhat do you call a pile of kittens?\n\nA meowtain! \n\nHope those made you purr with laughter! 😸",
+          "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs! 🐱\n\nAnd here's a bonus one:\n\nWhat do you call a cat that works for the Red Cross?\n\nA first-aid kit! 😸",
           "type": "text"
         }
       ],
-      "id": "msg_01ABQHHzWFDpTkFZSBd4LK74",
+      "id": "msg_01WWnbkwYhCpb1XMMhjRrh99",
       "model": "claude-sonnet-4-20250514",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -82,8 +83,8 @@
         },
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 558,
-        "output_tokens": 130,
+        "input_tokens": 565,
+        "output_tokens": 113,
         "service_tier": "standard"
       }
     },
@@ -98,7 +99,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-07T13:52:50Z"
+        "2025-10-14T19:38:43Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -107,7 +108,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-07T13:52:52Z"
+        "2025-10-14T19:38:45Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -116,7 +117,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-07T13:52:49Z"
+        "2025-10-14T19:38:42Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -125,13 +126,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-07T13:52:50Z"
+        "2025-10-14T19:38:43Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98ade1940e29118f-ORD"
+        "98e989de4a10116b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -140,10 +141,10 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:52:52 GMT"
+        "Tue, 14 Oct 2025 19:38:45 GMT"
       ],
       "request-id": [
-        "req_011CTswzrHxD28jnwfc3xv4J"
+        "req_011CU7f34Ax9y4QweLF5pjWA"
       ],
       "server": [
         "cloudflare"
@@ -158,7 +159,7 @@
         "1.1 google"
       ],
       "x-envoy-upstream-service-time": [
-        "3165"
+        "3458"
       ],
       "x-robots-tag": [
         "none"

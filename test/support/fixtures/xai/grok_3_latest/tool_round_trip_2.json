@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjgxOSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiJjYWxsXzU2ODM2MzQ5IiwidHlwZSI6ImZ1bmN0aW9uIn1dfSx7ImNvbnRlbnQiOiI1IiwibmFtZSI6ImFkZCIsInJvbGUiOiJ0b29sIiwidG9vbF9jYWxsX2lkIjoiY2FsbF81NjgzNjM0OSJ9XSwibW9kZWwiOiJncm9rLTMtbGF0ZXN0Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjgxOSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiJjYWxsXzI2MzQyMTI2IiwidHlwZSI6ImZ1bmN0aW9uIn1dfSx7ImNvbnRlbnQiOiI1IiwibmFtZSI6ImFkZCIsInJvbGUiOiJ0b29sIiwidG9vbF9jYWxsX2lkIjoiY2FsbF8yNjM0MjEyNiJ9XSwibW9kZWwiOiJncm9rLTMtbGF0ZXN0Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
       "max_completion_tokens": 819,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_56836349",
+              "id": "call_26342126",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "call_56836349"
+          "tool_call_id": "call_26342126"
         }
       ],
       "model": "grok-3-latest",
@@ -64,8 +64,8 @@
           }
         }
       ],
-      "created": 1760391832,
-      "id": "7804c8d3-51f3-64d7-d7ea-33d48f576add_us-east-1",
+      "created": 1760471271,
+      "id": "bf3c652f-51fa-2158-6b79-abb959ae28da_us-east-1",
       "model": "grok-3",
       "object": "chat.completion",
       "system_fingerprint": "fp_301fb74d4b",
@@ -81,7 +81,7 @@
         "prompt_tokens": 78,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 31,
+          "cached_tokens": 2,
           "image_tokens": 0,
           "text_tokens": 78
         },
@@ -99,7 +99,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e203db7a800002-ORD"
+        "98e997479cb9a679-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -108,13 +108,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 13 Oct 2025 21:43:53 GMT"
+        "Tue, 14 Oct 2025 19:47:52 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=NHGP7BMCLsIDGdXuy.COl8kTKyhUfaLjX7kbcWWbuwo-1760391833-1.0.1.1-sizu5WeCcVXKwdQcZLYMffBC7lmPEZQff18nY4qVcp8xSd6eojmGL1FjS2jW5vl0WfZs68xa4cYDv59ZtjUQtGFoW0S1khRIdTm_7OHjhfg; path=/; expires=Mon, 13-Oct-25 22:13:53 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=kI4N67TfYK.M83N4vFg.xjTYGH3p6bcFtQNjn_wUqpI-1760471272-1.0.1.1-418p82xS_SUdxS50g63maorMrmvvJOKrpk1TdgPjpThEphNmVKQgrZAJwkfnQdGiAST.8j_LD1Sp5LU4olCy3gSjx_VcVtr8xZbU.ZrkIBo; path=/; expires=Tue, 14-Oct-25 20:17:52 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -126,7 +126,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-1da2c83fe1da5e5eb32fcfabdf1e2495-d87779ae00380abe-01"
+        "00-5234d4b1b3b15f00383e474447f03d2b-ffb6872700683ff2-01"
       ],
       "x-zero-data-retention": [
         "false"

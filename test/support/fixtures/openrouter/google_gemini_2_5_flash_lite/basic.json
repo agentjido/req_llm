@@ -1,0 +1,115 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LWZsYXNoLWxpdGUiLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-2.5-flash-lite",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello there! How can I help you today?",
+            "reasoning": "**Greeting Appropriately**\n\nI'm focusing on a friendly acknowledgment of the \"Hello world!\" input. My primary thought is to return a similar greeting, keeping the interaction simple and welcoming.\n\n**Returning Appropriate Greeting**\n\nI'm focusing on crafting a friendly and helpful response to the \"Hello world!\" input. My current thought is to offer a warm acknowledgment and express readiness to assist further.\n\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "**Greeting Appropriately**\n\nI'm focusing on a friendly acknowledgment of the \"Hello world!\" input. My primary thought is to return a similar greeting, keeping the interaction simple and welcoming.\n\n**Returning Appropriate Greeting**\n\nI'm focusing on crafting a friendly and helpful response to the \"Hello world!\" input. My current thought is to offer a warm acknowledgment and express readiness to assist further.\n\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "STOP"
+        }
+      ],
+      "created": 1760546975,
+      "id": "gen-1760546975-xSqShbM2LtlImwqHcVxk",
+      "model": "google/gemini-2.5-flash-lite",
+      "object": "chat.completion",
+      "provider": "Google",
+      "usage": {
+        "completion_tokens": 301,
+        "completion_tokens_details": {
+          "image_tokens": 0,
+          "reasoning_tokens": 291
+        },
+        "prompt_tokens": 3,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 304
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98f0cf859927ff5b-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 16:49:36 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

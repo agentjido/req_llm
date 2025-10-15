@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjozMjAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJhbnRocm9waWMvY2xhdWRlLW9wdXMtNCIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJtYXhfdG9rZW5zIjozMjAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJhbnRocm9waWMvY2xhdWRlLW9wdXMtNCIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
     },
     "canonical_json": {
       "max_tokens": 3200,
@@ -22,6 +22,7 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -60,7 +61,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "I don't need to use the weather tool for this request, so here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs!\n\n😸\n\nWould you like to hear another one?",
+            "content": "I don't have access to a joke-telling function, but I'd be happy to share a cat joke with you anyway!\n\nHere's one:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs!\n\n😸\n\nWould you like to hear another one, or is there something else I can help you with?",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -68,15 +69,15 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1759845360,
-      "id": "gen-1759845360-YUF5L890qZ0335L1GTUr",
+      "created": 1760532485,
+      "id": "gen-1760532485-EcRj9CZB6bCi1Iqt4bYS",
       "model": "anthropic/claude-opus-4",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
-        "completion_tokens": 56,
-        "prompt_tokens": 381,
-        "total_tokens": 437
+        "completion_tokens": 76,
+        "prompt_tokens": 388,
+        "total_tokens": 464
       }
     },
     "headers": {
@@ -84,7 +85,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ade63f9fc6e450-ORD"
+        "98ef6dbfecb82911-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -93,7 +94,7 @@
         "application/json"
       ],
       "date": [
-        "Tue, 07 Oct 2025 13:56:01 GMT"
+        "Wed, 15 Oct 2025 12:48:06 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -1,26 +1,28 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkNhbGwgdGhlIGFkZCB0b29sIHdpdGggYT0yIGFuZCBiPTMuIEFmdGVyIHJlY2VpdmluZyB0aGUgdG9vbCByZXN1bHQsIHJlcGx5IGV4YWN0bHkgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAwMCwibW9kZWwiOiJvMyIsInN0cmVhbSI6ZmFsc2V9"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9LHsiY2FsbF9pZCI6ImNhbGxfNXVncllzcmlEUHgxZnlnQllkd29teWg2Iiwib3V0cHV0Ijoie1wiZXJyb3JcIjpcIlRvb2wgZXhlY3V0aW9uIGZhaWxlZFwifSIsInR5cGUiOiJmdW5jdGlvbl9jYWxsX291dHB1dCJ9XSwibWF4X291dHB1dF90b2tlbnMiOjEwMDAwLCJtb2RlbCI6Im8zIiwicHJldmlvdXNfcmVzcG9uc2VfaWQiOiJyZXNwXzA3Njc5MzQ2NWNlNjYwNjYwMDY4ZWZjMjA0NTgwNDgxOTVhMDdhODRkNjMwOWMzYWM1Iiwic3RyZWFtIjpmYWxzZX0="
     },
     "canonical_json": {
       "input": [
         {
           "content": [
             {
-              "text": "Call the add tool with a=2 and b=3. After receiving the tool result, reply exactly with 'sum=<value>'.",
+              "text": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
               "type": "input_text"
             }
           ],
           "role": "user"
         },
         {
-          "content": [],
-          "role": "assistant"
+          "call_id": "call_5ugrYsriDPx1fygBYdwomyh6",
+          "output": "{\"error\":\"Tool execution failed\"}",
+          "type": "function_call_output"
         }
       ],
       "max_output_tokens": 10000,
       "model": "o3",
+      "previous_response_id": "resp_076793465ce660660068efc20458048195a07a84d6309c3ac5",
       "stream": false
     },
     "headers": {
@@ -44,9 +46,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760409560,
+      "created_at": 1760543241,
       "error": null,
-      "id": "resp_0719ed1cf60a697c0068edb7d8dbfc8196a6a1d111194c34ca",
+      "id": "resp_076793465ce660660068efc208af2c8195b782df0faac38ae3",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 10000,
@@ -56,7 +58,27 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_0719ed1cf60a697c0068edb7d9663c8196ac6602d0fb8b259e",
+          "id": "rs_076793465ce660660068efc209d9388195b3d186c9316fbe23",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "id": "rs_076793465ce660660068efc20a40cc8195b9c611ff545b0bb8",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "id": "rs_076793465ce660660068efc20a5b788195a8d3bc87a4cdd7a9",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "id": "rs_076793465ce660660068efc20ab53c8195bf8dd69eb2a2720c",
+          "summary": [],
+          "type": "reasoning"
+        },
+        {
+          "id": "rs_076793465ce660660068efc20ac7a48195a79d4bbc76a36604",
           "summary": [],
           "type": "reasoning"
         },
@@ -65,18 +87,18 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "{\n  \"name\": \"add\",\n  \"arguments\": {\n    \"a\": 2,\n    \"b\": 3\n  }\n}",
+              "text": "sum=5",
               "type": "output_text"
             }
           ],
-          "id": "msg_0719ed1cf60a697c0068edb7db7b3c8196bc4021a69030dfd9",
+          "id": "msg_076793465ce660660068efc20adea08195ad6b4e6e11e4182f",
           "role": "assistant",
           "status": "completed",
           "type": "message"
         }
       ],
       "parallel_tool_calls": true,
-      "previous_response_id": null,
+      "previous_response_id": "resp_076793465ce660660068efc20458048195a07a84d6309c3ac5",
       "prompt_cache_key": null,
       "reasoning": {
         "effort": "medium",
@@ -99,15 +121,15 @@
       "top_p": 1.0,
       "truncation": "disabled",
       "usage": {
-        "input_tokens": 33,
+        "input_tokens": 401,
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 228,
+        "output_tokens": 9,
         "output_tokens_details": {
-          "reasoning_tokens": 192
+          "reasoning_tokens": 0
         },
-        "total_tokens": 261
+        "total_tokens": 410
       },
       "user": null
     },
@@ -119,7 +141,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e3b4aafc02e1bd-ORD"
+        "98f07455cf0b117b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -128,13 +150,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 02:39:24 GMT"
+        "Wed, 15 Oct 2025 15:47:23 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "3142"
+        "2484"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -146,8 +168,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=bgHFBl.mr2Pb7jKP4Tw7fYy4FQBzIGbyrrpjEUtTdvA-1760409564-1.0.1.1-lpLfv3jkCsCrXSXDDR0vFCq93XjrJi8Erudx9ZJw8o7B0p3ZhfjJnnIEeGNn4X9ksge3QHHNB9d4vixE3eqs2CoBgMSZSl5cSDk5_XOg3YA; path=/; expires=Tue, 14-Oct-25 03:09:24 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=piBk7cGZc.Sjh80M43hJvK4DCdzTnp347hAh6TrfBaI-1760409564009-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=dTDMkPU9XQOLF5YlfnmhqbzBBSHAWffwd_ClpW14clI-1760543243-1.0.1.1-TLDkjc8GwE9VKL3hkL5NIyjQLjKy8ZaZbi7A16zv636fVs4Hwa_B8DO1HMH_ACBKbG.pRBz9FCzffyjKPLbfN23PqbDSPr4t0vxJilOoEpU; path=/; expires=Wed, 15-Oct-25 16:17:23 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=RZheiTHUJrix_BmlFR7075qBxiVRQEAH9cdblBtgZS0-1760543243189-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -159,7 +181,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "3147"
+        "2498"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -171,16 +193,16 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "1999760"
+        "1999392"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "7ms"
+        "18ms"
       ],
       "x-request-id": [
-        "req_c0aaf2321d9e438b9161a502ed56cb5b"
+        "req_9f35c76431fc45399bba904d3f055924"
       ]
     },
     "status": 200

@@ -1,0 +1,115 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LWZsYXNoLXByZXZpZXctMDktMjAyNSIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjEuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-2.5-flash-preview-09-2025",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "$12 \\times 7 = 84$\n\n**Internal Thinking (Brief):**\n\n1.  **Decomposition:** Break 12 into $10 + 2$.\n2.  **First Multiplication:** $10 \\times 7 = 70$.\n3.  **Second Multiplication:** $2 \\times 7 = 14$.\n4.  **Addition:** $70 + 14 = 84$.",
+            "reasoning": "**Breaking Down the Math**\n\nI've successfully solved the multiplication problem: 12 multiplied by 7 equals 84. My next step involves outlining the mental calculations I used to reach this solution, breaking down each step for clarity.\n\n\n**Analyzing the Process**\n\nI've determined the initial solution is correct: 12 times 7 equals 84. My current focus is dissecting the mental pathway. I'm decomposing 12 into 10 and 2 to simplify the multiplication process and outline the individual steps to demonstrate how I computed the solution.\n\n\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "**Breaking Down the Math**\n\nI've successfully solved the multiplication problem: 12 multiplied by 7 equals 84. My next step involves outlining the mental calculations I used to reach this solution, breaking down each step for clarity.\n\n\n**Analyzing the Process**\n\nI've determined the initial solution is correct: 12 times 7 equals 84. My current focus is dissecting the mental pathway. I'm decomposing 12 into 10 and 2 to simplify the multiplication process and outline the individual steps to demonstrate how I computed the solution.\n\n\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "STOP"
+        }
+      ],
+      "created": 1760546964,
+      "id": "gen-1760546964-uNOWbyCIkoItqAvht4rK",
+      "model": "google/gemini-2.5-flash-preview-09-2025",
+      "object": "chat.completion",
+      "provider": "Google",
+      "usage": {
+        "completion_tokens": 217,
+        "completion_tokens_details": {
+          "image_tokens": 0,
+          "reasoning_tokens": 120
+        },
+        "prompt_tokens": 14,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 231
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98f0cf3d8ae0c77f-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 16:49:25 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

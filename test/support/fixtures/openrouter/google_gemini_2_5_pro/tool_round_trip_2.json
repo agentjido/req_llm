@@ -1,0 +1,134 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo2NTUzLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6InRvb2xfMF9hZGRfbUdMTktRVjFjTDZWekJaY01icWYiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJ0b29sXzBfYWRkX21HTE5LUVYxY0w2VnpCWmNNYnFmIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LXBybyIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 6553,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        },
+        {
+          "content": [],
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"a\":2,\"b\":3}",
+                "name": "add"
+              },
+              "id": "tool_0_add_mGLNKQV1cL6VzBZcMbqf",
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "content": "5",
+          "name": "add",
+          "role": "tool",
+          "tool_call_id": "tool_0_add_mGLNKQV1cL6VzBZcMbqf"
+        }
+      ],
+      "model": "google/gemini-2.5-pro",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "sum=5",
+            "reasoning": "**Calculating Addition**\n\nI'm zeroing in on using the `add` tool within the `default_api`. It appears perfect for the \"2 + 3\" request. The next step is matching the user input to the tool's expected parameters, `a` and `b`.\n\n\n**Refining Response Construction**\n\nI've successfully extracted the result \"5\" from the tool's output, which is key. Now the focus is on constructing the final response. Based on the instructions, the format must be \"sum=5\". I'm ready to craft the response using a string concatenation that follows the format requirements, ensuring the correct \"sum=\" prefix is used.\n\n\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "**Calculating Addition**\n\nI'm zeroing in on using the `add` tool within the `default_api`. It appears perfect for the \"2 + 3\" request. The next step is matching the user input to the tool's expected parameters, `a` and `b`.\n\n\n**Refining Response Construction**\n\nI've successfully extracted the result \"5\" from the tool's output, which is key. Now the focus is on constructing the final response. Based on the instructions, the format must be \"sum=5\". I'm ready to craft the response using a string concatenation that follows the format requirements, ensuring the correct \"sum=\" prefix is used.\n\n\n",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "STOP"
+        }
+      ],
+      "created": 1760532562,
+      "id": "gen-1760532562-yW8B9oYg0LJBLO34xRqO",
+      "model": "google/gemini-2.5-pro",
+      "object": "chat.completion",
+      "provider": "Google",
+      "usage": {
+        "completion_tokens": 210,
+        "completion_tokens_details": {
+          "image_tokens": 0,
+          "reasoning_tokens": 207
+        },
+        "prompt_tokens": 34,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 244
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "98ef6fa17915114e-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 15 Oct 2025 12:49:24 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}
