@@ -50,7 +50,7 @@ jobs:
         run: mix deps.get
 
       - name: Check formatting
-        run: mix format --check-formatted
+        run: MIX_ENV=test mix format --check-formatted
 
       - name: Compile with warnings as errors
         run: mix compile --warnings-as-errors
