@@ -573,7 +573,8 @@ defmodule ReqLLM.Provider.Options do
           opts
 
         :error ->
-          raise ReqLLM.Error.Validation.Error.exception(errors: warnings)
+          reason = Enum.join(warnings, "; ")
+          raise ReqLLM.Error.Validation.Error.exception(reason: reason)
 
         :ignore ->
           opts
