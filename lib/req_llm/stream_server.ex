@@ -326,7 +326,7 @@ defmodule ReqLLM.StreamServer do
             # Queue is empty but stream is still active - wait for more data
             new_state = %{
               new_state
-              | waiting_callers: [{from, :next} | new_state.waiting_callers]
+              | waiting_callers: new_state.waiting_callers ++ [{from, :next}]
             }
 
             {:noreply, new_state}
@@ -377,7 +377,7 @@ defmodule ReqLLM.StreamServer do
 
       _ ->
         # Not done yet, add caller to waiting list
-        new_state = %{state | waiting_callers: [{from, :metadata} | state.waiting_callers]}
+        new_state = %{state | waiting_callers: state.waiting_callers ++ [{from, :metadata}]}
         {:noreply, new_state}
     end
   end
