@@ -13,7 +13,7 @@ defmodule ReqLLM.TestSupport.FakeKeys do
   1. Fixture mode is not set to :record
   2. No real key exists in environment variables or application config
 
-  Keys are installed via JidoKeys if available, otherwise as environment variables.
+  Keys are installed as system environment variables.
   """
   def install! do
     if ReqLLM.Test.Env.fixtures_mode() != :record do
@@ -23,14 +23,9 @@ defmodule ReqLLM.TestSupport.FakeKeys do
         env_var = ReqLLM.Keys.env_var_name(provider)
         config_key = ReqLLM.Keys.config_key(provider)
 
-        # Only inject if no real key exists
         if System.get_env(env_var) in [nil, ""] and
              Application.get_env(:req_llm, config_key) in [nil, ""] do
-          if Code.ensure_loaded?(JidoKeys) do
-            JidoKeys.put(env_var, "test-key-#{provider}")
-          else
-            System.put_env(env_var, "test-key-#{provider}")
-          end
+          System.put_env(env_var, "test-key-#{provider}")
         end
       end
     end

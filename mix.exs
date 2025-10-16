@@ -78,7 +78,7 @@ defmodule ReqLLM.MixProject do
   defp deps do
     [
       {:jason, "~> 1.4"},
-      {:jido_keys, "~> 1.0"},
+      {:dotenvy, "~> 1.1"},
       {:nimble_options, "~> 1.1"},
       {:req, "~> 0.5"},
       {:ex_aws_auth, "~> 1.0", optional: true},

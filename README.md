@@ -109,7 +109,7 @@ usage = ReqLLM.StreamResponse.usage(response)
   - Helper functions for parsing, introspection and default-merging  
 
 - **Secure, layered key management** (`ReqLLM.Keys`)  
-  - Per-request override → in-memory keyring (JidoKeys) → application config → env vars /.env files  
+  - Per-request override → application config → env vars / .env files  
 
 - **Extensive reliability tooling**  
   - Fixture-backed test matrix (`LiveFixture`) supports cached, live, or provider-filtered runs  

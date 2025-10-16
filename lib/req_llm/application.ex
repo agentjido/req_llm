@@ -11,6 +11,7 @@ defmodule ReqLLM.Application do
 
   @impl true
   def start(_type, _args) do
+    load_dotenv()
     ReqLLM.Provider.Registry.initialize()
 
     finch_config = get_finch_config()
@@ -95,6 +96,24 @@ defmodule ReqLLM.Application do
     case Application.ensure_all_started(:tidewave) do
       {:ok, _} -> :ok
       {:error, _} -> :ok
+    end
+  end
+
+  defp load_dotenv do
+    env_file = Path.join(File.cwd!(), ".env")
+
+    if File.exists?(env_file) do
+      case Dotenvy.source(env_file) do
+        {:ok, env_map} ->
+          Enum.each(env_map, fn {key, value} ->
+            System.put_env(key, value)
+          end)
+
+        {:error, _reason} ->
+          :ok
+      end
+    else
+      :ok
     end
   end
 end
