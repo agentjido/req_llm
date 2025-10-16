@@ -72,12 +72,13 @@ defmodule ReqLLM.StreamServer.ErrorHandlingTest do
       assert :ok = GenServer.call(server, {:http_event, {:status, 401}})
 
       # Send error JSON response body
-      error_json = Jason.encode!(%{
-        "error" => %{
-          "type" => "authentication_error",
-          "message" => "invalid x-api-key"
-        }
-      })
+      error_json =
+        Jason.encode!(%{
+          "error" => %{
+            "type" => "authentication_error",
+            "message" => "invalid x-api-key"
+          }
+        })
 
       assert :ok = GenServer.call(server, {:http_event, {:data, error_json}})
 
