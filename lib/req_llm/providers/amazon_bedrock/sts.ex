@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.STS do
   AWS Security Token Service (STS) integration for AssumeRole.
 
   Provides temporary credentials via AssumeRole without requiring ex_aws.
-  Uses built-in :xmerl for XML parsing and existing aws_auth for signing.
+  Uses built-in :xmerl for XML parsing and existing ex_aws_auth for signing.
 
   ## Usage
 
@@ -141,7 +141,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.STS do
   defp maybe_add_param(params, _key, nil), do: params
   defp maybe_add_param(params, key, value), do: params ++ [{key, to_string(value)}]
 
-  # Sign STS request using aws_auth
+  # Sign STS request using ex_aws_auth
   defp sign_sts_request(access_key_id, secret_access_key, region, url, headers, body) do
     case Code.ensure_loaded(AWSAuth) do
       {:module, _} ->
@@ -149,15 +149,15 @@ defmodule ReqLLM.Providers.AmazonBedrock.STS do
 
       {:error, _} ->
         raise """
-        AWS STS AssumeRole requires the aws_auth dependency.
-        Please add {:aws_auth, github: "rzcastilho/aws_auth", branch: "master", optional: true} to your mix.exs dependencies.
+        AWS STS AssumeRole requires the ex_aws_auth dependency.
+        Please add {:ex_aws_auth, "~> 1.0", optional: true} to your mix.exs dependencies.
         """
     end
 
     # Convert headers to map
     headers_map = Map.new(headers, fn {k, v} -> {String.downcase(k), v} end)
 
-    # Sign using aws_auth
+    # Sign using ex_aws_auth
     AWSAuth.sign_authorization_header(
       access_key_id,
       secret_access_key,

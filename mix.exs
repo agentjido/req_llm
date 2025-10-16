@@ -75,7 +75,7 @@ defmodule ReqLLM.MixProject do
       {:jido_keys, "~> 1.0"},
       {:nimble_options, "~> 1.1"},
       {:req, "~> 0.5"},
-      {:aws_auth, github: "rzcastilho/aws_auth", branch: "master", optional: true},
+      {:ex_aws_auth, "~> 1.0", optional: true},
       {:server_sent_events, "~> 0.2"},
       {:splode, "~> 0.2.3"},
       {:typed_struct, "~> 0.3.0"},

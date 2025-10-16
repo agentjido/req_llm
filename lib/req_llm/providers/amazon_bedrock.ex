@@ -485,8 +485,8 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
       {:error, _} ->
         raise """
-        AWS Bedrock support requires the aws_auth dependency.
-        Please add {:aws_auth, github: "rzcastilho/aws_auth", branch: "master", optional: true} to your mix.exs dependencies.
+        AWS Bedrock support requires the ex_aws_auth dependency.
+        Please add {:ex_aws_auth, "~> 1.0", optional: true} to your mix.exs dependencies.
         """
     end
 
@@ -494,7 +494,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     request
     |> Req.Request.prepend_request_steps(
       aws_sigv4: fn req ->
-        # Sign the request using aws_auth
+        # Sign the request using ex_aws_auth
         method = String.upcase(to_string(req.method))
         url = URI.to_string(req.url)
         # Normalize headers - ensure values are strings, not lists
@@ -533,7 +533,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     )
   end
 
-  # Sign a Finch request with AWS Signature V4 using aws_auth library
+  # Sign a Finch request with AWS Signature V4 using ex_aws_auth library
   defp sign_aws_request(finch_request, aws_creds, region, service) do
     case Code.ensure_loaded(AWSAuth) do
       {:module, _} ->
@@ -541,8 +541,8 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
       {:error, _} ->
         raise """
-        AWS Bedrock streaming requires the aws_auth dependency.
-        Please add {:aws_auth, github: "rzcastilho/aws_auth", branch: "master", optional: true} to your mix.exs dependencies.
+        AWS Bedrock streaming requires the ex_aws_auth dependency.
+        Please add {:ex_aws_auth, "~> 1.0", optional: true} to your mix.exs dependencies.
         """
     end
 
@@ -567,7 +567,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     url = if query && query != "", do: "#{url}?#{query}", else: url
 
     # Convert headers to map with lowercase keys (AWS SigV4 requirement)
-    # aws_auth expects map with lowercase header names
+    # ex_aws_auth expects map with lowercase header names
     headers_map = Map.new(headers, fn {k, v} -> {String.downcase(k), v} end)
 
     # Add session token if provided
@@ -578,7 +578,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
         headers_map
       end
 
-    # Sign using aws_auth - returns list of header tuples
+    # Sign using ex_aws_auth - returns list of header tuples
     signed_headers =
       AWSAuth.sign_authorization_header(
         aws_creds[:access_key_id],
