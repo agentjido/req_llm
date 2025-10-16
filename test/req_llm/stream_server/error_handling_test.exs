@@ -63,5 +63,62 @@ defmodule ReqLLM.StreamServer.ErrorHandlingTest do
 
       StreamServer.cancel(server)
     end
+
+    test "detects HTTP error status codes and returns error instead of parsing as SSE" do
+      server = start_server()
+      _task = mock_http_task(server)
+
+      # Send 401 status
+      assert :ok = GenServer.call(server, {:http_event, {:status, 401}})
+
+      # Send error JSON response body
+      error_json = Jason.encode!(%{
+        "error" => %{
+          "type" => "authentication_error",
+          "message" => "invalid x-api-key"
+        }
+      })
+
+      assert :ok = GenServer.call(server, {:http_event, {:data, error_json}})
+
+      # Should get error, not attempt to parse as SSE
+      assert {:error, %ReqLLM.Error.API.Request{} = error} = StreamServer.next(server, 100)
+      assert error.status == 401
+      assert error.reason == "invalid x-api-key"
+      assert error.response_body["type"] == "authentication_error"
+
+      StreamServer.cancel(server)
+    end
+
+    test "detects 5xx server errors" do
+      server = start_server()
+      _task = mock_http_task(server)
+
+      assert :ok = GenServer.call(server, {:http_event, {:status, 500}})
+
+      error_json = Jason.encode!(%{"error" => %{"message" => "Internal server error"}})
+      assert :ok = GenServer.call(server, {:http_event, {:data, error_json}})
+
+      assert {:error, %ReqLLM.Error.API.Request{} = error} = StreamServer.next(server, 100)
+      assert error.status == 500
+      assert error.reason == "Internal server error"
+
+      StreamServer.cancel(server)
+    end
+
+    test "handles non-JSON error responses" do
+      server = start_server()
+      _task = mock_http_task(server)
+
+      assert :ok = GenServer.call(server, {:http_event, {:status, 404}})
+      assert :ok = GenServer.call(server, {:http_event, {:data, "Not Found"}})
+
+      assert {:error, %ReqLLM.Error.API.Request{} = error} = StreamServer.next(server, 100)
+      assert error.status == 404
+      assert error.reason == "HTTP 404"
+      assert error.response_body == "Not Found"
+
+      StreamServer.cancel(server)
+    end
   end
 end
