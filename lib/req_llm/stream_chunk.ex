@@ -28,7 +28,7 @@ defmodule ReqLLM.StreamChunk do
       # Tool call chunk
       chunk = ReqLLM.StreamChunk.tool_call("get_weather", %{location: "NYC"})
       chunk.type      #=> :tool_call
-      chunk.name      #=> "get_weather"  
+      chunk.name      #=> "get_weather"
       chunk.arguments #=> %{location: "NYC"}
 
       # Metadata chunk
@@ -41,7 +41,7 @@ defmodule ReqLLM.StreamChunk do
   StreamChunk is designed to work with Elixir's Stream module:
 
       {:ok, stream} = ReqLLM.stream_text("anthropic:claude-3-sonnet", "Tell a story")
-      
+
       stream
       |> Stream.filter(&(&1.type == :content))
       |> Stream.map(&(&1.text))
@@ -56,13 +56,13 @@ defmodule ReqLLM.StreamChunk do
       case event_type do
         "content_block_delta" ->
           ReqLLM.StreamChunk.text(event_data["text"])
-          
+
         "content_block_start" when event_data["type"] == "tool_use" ->
           ReqLLM.StreamChunk.tool_call(event_data["name"], %{})
-          
+
         "thinking_block_delta" ->
           ReqLLM.StreamChunk.thinking(event_data["text"])
-          
+
         "message_stop" ->
           ReqLLM.StreamChunk.meta(%{finish_reason: "stop"})
       end
@@ -238,7 +238,7 @@ defmodule ReqLLM.StreamChunk do
       #=> {:ok, %ReqLLM.StreamChunk{...}}
 
       invalid_chunk = %ReqLLM.StreamChunk{type: :content, text: nil}
-      ReqLLM.StreamChunk.validate(invalid_chunk) 
+      ReqLLM.StreamChunk.validate(invalid_chunk)
       #=> {:error, "Content chunks must have non-nil text"}
 
   """
@@ -292,7 +292,9 @@ defmodule ReqLLM.StreamChunk do
     do: {:error, "Thinking chunks must have non-nil text"}
 
   defp validate_by_type(%{type: :tool_call, name: name, arguments: args})
-       when is_binary(name) and is_map(args), do: :ok
+       when is_binary(name) and is_map(args) do
+    :ok
+  end
 
   defp validate_by_type(%{type: :tool_call}),
     do: {:error, "Tool call chunks must have non-nil name and arguments"}

@@ -241,7 +241,9 @@ defmodule Mix.Tasks.ReqLlm.Gen do
 
   # Unified banner display
   defp show_banner({_content_type, _stream_type}, _model_spec, _prompt, log_level)
-       when log_level == :warning, do: :ok
+       when log_level == :warning do
+    :ok
+  end
 
   defp show_banner({content_type, _stream_type}, model_spec, prompt, log_level) do
     prompt_preview = String.slice(prompt, 0, 50)
@@ -437,7 +439,9 @@ defmodule Mix.Tasks.ReqLlm.Gen do
   end
 
   defp show_object_stats(_object, _start_time, _model_spec, _prompt, _response, log_level)
-       when log_level not in [:debug], do: :ok
+       when log_level not in [:debug] do
+    :ok
+  end
 
   defp show_object_stats(object, start_time, model_spec, _prompt, response, log_level) do
     response_time = System.monotonic_time(:millisecond) - start_time

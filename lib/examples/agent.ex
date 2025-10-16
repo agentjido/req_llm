@@ -292,7 +292,9 @@ defmodule ReqLLM.Examples.Agent do
   end
 
   defp validate_operation(op)
-       when op in ["add", "subtract", "multiply", "divide", "power", "sqrt"], do: :ok
+       when op in ["add", "subtract", "multiply", "divide", "power", "sqrt"] do
+    :ok
+  end
 
   defp validate_operation(op),
     do: {:error, "Invalid operation: #{op}. Valid: add, subtract, multiply, divide, power, sqrt"}
