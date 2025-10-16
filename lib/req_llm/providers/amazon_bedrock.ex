@@ -623,6 +623,19 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     request
   end
 
+  @impl ReqLLM.Provider
+  def normalize_model_id(model_id) when is_binary(model_id) do
+    # Strip region prefix from inference profile IDs for metadata lookup
+    # e.g., "us.anthropic.claude-3-sonnet" -> "anthropic.claude-3-sonnet"
+    case String.split(model_id, ".", parts: 2) do
+      [possible_region, rest] when possible_region in ["us", "eu", "ap", "ca", "global"] ->
+        rest
+
+      _ ->
+        model_id
+    end
+  end
+
   defp get_formatter_module(model_family) do
     case Map.fetch(@model_families, model_family) do
       {:ok, module} ->

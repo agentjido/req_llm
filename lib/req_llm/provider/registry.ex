@@ -189,7 +189,21 @@ defmodule ReqLLM.Provider.Registry do
   def get_model(provider_id, model_name) when is_atom(provider_id) and is_binary(model_name) do
     case get_provider_info(provider_id) do
       {:ok, provider_info} ->
-        case find_model_metadata(provider_info, model_name) do
+        # Normalize model name if provider implements normalize_model_id/1
+        normalized_model_name =
+          case provider_info.module do
+            nil ->
+              model_name
+
+            provider_module ->
+              if function_exported?(provider_module, :normalize_model_id, 1) do
+                provider_module.normalize_model_id(model_name)
+              else
+                model_name
+              end
+          end
+
+        case find_model_metadata(provider_info, normalized_model_name) do
           {:ok, model_metadata} ->
             # Create enhanced model with structured fields populated from metadata
             limit =

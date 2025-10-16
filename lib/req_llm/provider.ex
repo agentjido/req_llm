@@ -208,6 +208,31 @@ defmodule ReqLLM.Provider do
               {:ok, map()} | {:error, term()}
 
   @doc """
+  Normalizes a model ID for metadata lookup (optional).
+
+  This callback allows providers to normalize model identifiers before looking up
+  metadata in the provider's model registry. Useful when providers have multiple
+  aliases or formats for the same underlying model (e.g., regional inference profiles).
+
+  ## Parameters
+
+    * `model_id` - The model identifier string to normalize
+
+  ## Returns
+
+    * `String.t()` - The normalized model ID for metadata lookup
+
+  ## Examples
+
+      # AWS Bedrock inference profiles - strip region prefix for metadata lookup
+      def normalize_model_id("us.anthropic.claude-3-sonnet"), do: "anthropic.claude-3-sonnet"
+      def normalize_model_id("eu.meta.llama-3"), do: "meta.llama-3"
+      def normalize_model_id(model_id), do: model_id
+
+  If this callback is not implemented, the model ID is used as-is for metadata lookup.
+  """
+  @callback normalize_model_id(String.t()) :: String.t()
+  @doc """
   Translates canonical options to provider-specific parameters (optional).
 
   This callback allows providers to modify option keys and values before
@@ -514,6 +539,7 @@ defmodule ReqLLM.Provider do
             ) :: {:ok, Finch.Request.t()} | {:error, Exception.t()}
 
   @optional_callbacks [
+    normalize_model_id: 1,
     extract_usage: 2,
     default_env_key: 0,
     translate_options: 3,
