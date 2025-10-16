@@ -425,8 +425,13 @@ defmodule ReqLLM.StreamServer do
   end
 
   defp process_http_event({:data, chunk}, state) do
-    # Always process data chunks immediately - backpressure handled by GenServer mailbox
-    process_data_chunk(chunk, state)
+    if state.http_status && state.http_status >= 400 do
+      error = build_http_error(state.http_status, chunk)
+      new_state = %{state | status: {:error, error}} |> reply_to_waiting_callers()
+      {:reply, :ok, new_state}
+    else
+      process_data_chunk(chunk, state)
+    end
   end
 
   defp process_http_event(:done, state) do
@@ -751,6 +756,33 @@ defmodule ReqLLM.StreamServer do
     end
 
     state
+  end
+
+  defp build_http_error(status, chunk) do
+    case Jason.decode(chunk) do
+      {:ok, %{"error" => error_data}} when is_map(error_data) ->
+        message = Map.get(error_data, "message", "HTTP #{status}")
+
+        ReqLLM.Error.API.Request.exception(
+          reason: message,
+          status: status,
+          response_body: error_data
+        )
+
+      {:ok, decoded} ->
+        ReqLLM.Error.API.Request.exception(
+          reason: "HTTP #{status}",
+          status: status,
+          response_body: decoded
+        )
+
+      {:error, _} ->
+        ReqLLM.Error.API.Request.exception(
+          reason: "HTTP #{status}",
+          status: status,
+          response_body: chunk
+        )
+    end
   end
 
   # Normalize streaming usage data from provider format to ReqLLM format
