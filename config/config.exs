@@ -1,5 +1,11 @@
 import Config
 
+config :req_llm, :catalog,
+  allow: %{},
+  overrides: [],
+  custom: []
+
+config :req_llm, :catalog_enabled?, false
 config :req_llm, :sample_embedding_models, ~w(
     openai:text-embedding-3-small
     google:text-embedding-004
