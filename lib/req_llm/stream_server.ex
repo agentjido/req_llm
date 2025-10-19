@@ -293,7 +293,7 @@ defmodule ReqLLM.StreamServer do
     # Inject protocol parser function
     protocol_parser =
       if function_exported?(state.provider_mod, :parse_stream_protocol, 2) do
-        state.provider_mod.parse_stream_protocol
+        fn chunk, buffer -> state.provider_mod.parse_stream_protocol(chunk, buffer) end
       else
         &ReqLLM.Provider.parse_stream_protocol/2
       end

@@ -69,9 +69,10 @@ defmodule ReqLLM.Application do
   defp get_default_pools do
     %{
       # Single default pool that handles all providers efficiently
-      # HTTP/2 first for modern APIs, HTTP/1 fallback for compatibility
+      # HTTP/1 only to avoid Finch issue #265 (HTTP/2 flow control bug with large bodies)
+      # Once https://github.com/sneako/finch/issues/265 is fixed, we can use [:http2, :http1]
       :default => [
-        protocols: [:http2, :http1],
+        protocols: [:http1],
         # Single persistent connection per pool
         size: 1,
         # 8 pools for good concurrency
