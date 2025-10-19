@@ -81,7 +81,7 @@ defmodule ReqLLM.MixProject do
       {:dotenvy, "~> 1.1"},
       {:nimble_options, "~> 1.1"},
       {:req, "~> 0.5"},
-      {:ex_aws_auth, "~> 1.3", optional: true},
+      {:ex_aws_auth, "~> 1.3"},
       {:server_sent_events, "~> 0.2"},
       {:splode, "~> 0.2.3"},
       {:typed_struct, "~> 0.3.0"},
