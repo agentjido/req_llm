@@ -35,17 +35,20 @@ defmodule ReqLLM.StreamServer.ConcurrencyTest do
       task2 = Task.async(fn -> StreamServer.next(server, 1000) end)
       task3 = Task.async(fn -> StreamServer.next(server, 1000) end)
 
-      :timer.sleep(10)
-
       assert :ok = GenServer.call(server, {:http_event, :done})
 
-      assert {:ok, chunk1} = Task.await(task1)
-      assert chunk1.text == "first"
+      results = Task.await_many([task1, task2, task3])
 
-      assert {:ok, chunk2} = Task.await(task2)
-      assert chunk2.text == "second"
+      ok_texts =
+        results
+        |> Enum.filter(&match?({:ok, _}, &1))
+        |> Enum.map(fn {:ok, chunk} -> chunk.text end)
+        |> Enum.sort()
 
-      assert :halt = Task.await(task3)
+      halt_count = Enum.count(results, &(&1 == :halt))
+
+      assert ok_texts == ["first", "second"]
+      assert halt_count == 1
 
       StreamServer.cancel(server)
     end

@@ -1,20 +1,12 @@
 defmodule ReqLLM.Streaming.HTTP2ValidationTest do
-  use ExUnit.Case, async: false
+  use ReqLLM.StreamingCase
 
   alias ReqLLM.Streaming.FinchClient
   alias ReqLLM.{Model, Context}
 
   describe "HTTP/2 body size validation" do
-    setup do
-      on_exit(fn ->
-        Application.put_env(:req_llm, :finch, get_original_config())
-      end)
-
-      :ok
-    end
-
     test "allows small request bodies with HTTP/2 pools" do
-      configure_http2_pools()
+      configure_http2_pools!()
 
       {:ok, model} = Model.from("openai:gpt-4o")
       small_prompt = "Hello, this is a small prompt"
@@ -26,7 +18,7 @@ defmodule ReqLLM.Streaming.HTTP2ValidationTest do
     end
 
     test "blocks large request bodies (>64KB) with HTTP/2 pools" do
-      configure_http2_pools()
+      configure_http2_pools!()
 
       {:ok, model} = Model.from("openai:gpt-4o")
       large_prompt = String.duplicate("This is a large prompt. ", 3000)
@@ -42,7 +34,7 @@ defmodule ReqLLM.Streaming.HTTP2ValidationTest do
     end
 
     test "allows large request bodies with HTTP/1-only pools (default)" do
-      configure_http1_pools()
+      configure_http1_pools!()
 
       {:ok, model} = Model.from("openai:gpt-4o")
       large_prompt = String.duplicate("This is a large prompt. ", 3000)
@@ -54,7 +46,7 @@ defmodule ReqLLM.Streaming.HTTP2ValidationTest do
     end
 
     test "error is caught by streaming module and logged" do
-      configure_http2_pools()
+      configure_http2_pools!()
 
       {:ok, model} = Model.from("openai:gpt-4o")
       large_prompt = String.duplicate("Large content ", 5000)
@@ -91,27 +83,5 @@ defmodule ReqLLM.Streaming.HTTP2ValidationTest do
       [],
       stream_server
     )
-  end
-
-  defp configure_http2_pools do
-    Application.put_env(:req_llm, :finch,
-      name: ReqLLM.Finch,
-      pools: %{
-        default: [protocols: [:http2, :http1], size: 1, count: 8]
-      }
-    )
-  end
-
-  defp configure_http1_pools do
-    Application.put_env(:req_llm, :finch,
-      name: ReqLLM.Finch,
-      pools: %{
-        default: [protocols: [:http1], size: 1, count: 8]
-      }
-    )
-  end
-
-  defp get_original_config do
-    Application.get_env(:req_llm, :finch, [])
   end
 end
