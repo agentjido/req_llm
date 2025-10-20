@@ -161,7 +161,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     opts = other_opts
 
     # Construct the base URL with region
-    region = aws_creds[:region] || "us-east-1"
+    region = aws_creds.region || "us-east-1"
     base_url = "https://bedrock-runtime.#{region}.amazonaws.com"
 
     model_id = model.model
@@ -266,7 +266,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     end
 
     # Construct streaming URL
-    region = aws_creds[:region] || "us-east-1"
+    region = aws_creds.region || "us-east-1"
     host = "bedrock-runtime.#{region}.amazonaws.com"
     url = "https://#{host}#{path}"
 
@@ -425,116 +425,90 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   defp extract_aws_credentials(opts) do
     aws_keys = [:access_key_id, :secret_access_key, :session_token, :region]
 
-    # First check environment variables
-    env_creds = get_aws_env_credentials()
-
-    # Then overlay with any passed options
+    # Split AWS credentials from other options
     {passed_creds, other_opts} = Keyword.split(opts, aws_keys)
 
-    # Merge with passed credentials taking precedence
-    aws_creds = Keyword.merge(env_creds, passed_creds)
+    # Try to get credentials from environment first, then overlay passed options
+    creds =
+      case AWSAuth.Credentials.from_env() do
+        nil ->
+          # No env credentials, use passed credentials directly
+          if passed_creds[:access_key_id] && passed_creds[:secret_access_key] do
+            AWSAuth.Credentials.from_map(passed_creds)
+          end
 
-    {aws_creds, other_opts}
+        %AWSAuth.Credentials{} = env_creds ->
+          # Merge passed credentials over environment credentials
+          merged =
+            env_creds
+            |> Map.from_struct()
+            |> Map.merge(Map.new(passed_creds))
+
+          struct(AWSAuth.Credentials, merged)
+      end
+
+    {creds, other_opts}
   end
 
-  defp get_aws_env_credentials do
-    [
-      access_key_id: System.get_env("AWS_ACCESS_KEY_ID"),
-      secret_access_key: System.get_env("AWS_SECRET_ACCESS_KEY"),
-      session_token: System.get_env("AWS_SESSION_TOKEN"),
-      region: System.get_env("AWS_REGION") || System.get_env("AWS_DEFAULT_REGION")
-    ]
-    |> Enum.reject(fn {_k, v} -> is_nil(v) end)
+  defp validate_aws_credentials!(nil) do
+    raise ArgumentError, """
+    AWS credentials required for Bedrock. Please provide either:
+
+    1. Environment variables:
+       AWS_ACCESS_KEY_ID=...
+       AWS_SECRET_ACCESS_KEY=...
+
+    2. Options:
+       access_key_id: "...", secret_access_key: "..."
+    """
   end
 
-  defp validate_aws_credentials!(creds) do
-    case {creds[:access_key_id], creds[:secret_access_key]} do
-      {nil, _} ->
-        raise ArgumentError, """
-        AWS credentials required for Bedrock. Please provide either:
+  defp validate_aws_credentials!(%AWSAuth.Credentials{access_key_id: nil}) do
+    raise ArgumentError, """
+    AWS credentials required for Bedrock. Please provide either:
 
-        1. Environment variables:
-           AWS_ACCESS_KEY_ID=...
-           AWS_SECRET_ACCESS_KEY=...
+    1. Environment variables:
+       AWS_ACCESS_KEY_ID=...
+       AWS_SECRET_ACCESS_KEY=...
 
-        2. Options:
-           access_key_id: "...", secret_access_key: "..."
-        """
-
-      {_, nil} ->
-        raise ArgumentError, """
-        AWS credentials required for Bedrock. Please provide either:
-
-        1. Environment variables:
-           AWS_ACCESS_KEY_ID=...
-           AWS_SECRET_ACCESS_KEY=...
-
-        2. Options:
-           access_key_id: "...", secret_access_key: "..."
-        """
-
-      {_, _} ->
-        :ok
-    end
+    2. Options:
+       access_key_id: "...", secret_access_key: "..."
+    """
   end
 
-  defp put_aws_sigv4(request, aws_creds) do
-    case Code.ensure_loaded(AWSAuth) do
+  defp validate_aws_credentials!(%AWSAuth.Credentials{secret_access_key: nil}) do
+    raise ArgumentError, """
+    AWS credentials required for Bedrock. Please provide either:
+
+    1. Environment variables:
+       AWS_ACCESS_KEY_ID=...
+       AWS_SECRET_ACCESS_KEY=...
+
+    2. Options:
+       access_key_id: "...", secret_access_key: "..."
+    """
+  end
+
+  defp validate_aws_credentials!(%AWSAuth.Credentials{}), do: :ok
+
+  defp put_aws_sigv4(request, %AWSAuth.Credentials{} = aws_creds) do
+    case Code.ensure_loaded(AWSAuth.Req) do
       {:module, _} ->
         :ok
 
       {:error, _} ->
         raise """
         AWS Bedrock support requires the ex_aws_auth dependency.
-        Please add {:ex_aws_auth, "~> 1.0", optional: true} to your mix.exs dependencies.
+        Please add {:ex_aws_auth, "~> 1.3", optional: true} to your mix.exs dependencies.
         """
     end
 
-    # Add AWS SigV4 signing step to Req pipeline
-    request
-    |> Req.Request.prepend_request_steps(
-      aws_sigv4: fn req ->
-        # Sign the request using ex_aws_auth
-        method = String.upcase(to_string(req.method))
-        url = URI.to_string(req.url)
-        # Normalize headers - ensure values are strings, not lists
-        headers =
-          Map.new(req.headers, fn {k, v} ->
-            {k, if(is_list(v), do: List.first(v), else: v)}
-          end)
-
-        # Add session token if provided
-        headers =
-          if aws_creds[:session_token] do
-            Map.put(headers, "x-amz-security-token", aws_creds[:session_token])
-          else
-            headers
-          end
-
-        body = req.body || ""
-
-        signed_headers_list =
-          AWSAuth.sign_authorization_header(
-            aws_creds[:access_key_id],
-            aws_creds[:secret_access_key],
-            method,
-            url,
-            aws_creds[:region] || "us-east-1",
-            "bedrock",
-            headers,
-            body
-          )
-
-        # Req normalizes headers to %{key => [value]}, so convert the signed headers
-        signed_headers_map = Map.new(signed_headers_list, fn {k, v} -> {k, [v]} end)
-
-        %{req | headers: signed_headers_map}
-      end
-    )
+    # Use the AWSAuth.Req plugin for automatic signing
+    AWSAuth.Req.attach(request, credentials: aws_creds, service: "bedrock")
   end
 
   # Sign a Finch request with AWS Signature V4 using ex_aws_auth library
-  defp sign_aws_request(finch_request, aws_creds, region, service) do
+  defp sign_aws_request(finch_request, %AWSAuth.Credentials{} = aws_creds, _region, service) do
     case Code.ensure_loaded(AWSAuth) do
       {:module, _} ->
         :ok
@@ -542,7 +516,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       {:error, _} ->
         raise """
         AWS Bedrock streaming requires the ex_aws_auth dependency.
-        Please add {:ex_aws_auth, "~> 1.0", optional: true} to your mix.exs dependencies.
+        Please add {:ex_aws_auth, "~> 1.3", optional: true} to your mix.exs dependencies.
         """
     end
 
@@ -563,32 +537,22 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       end
 
     # Build URL
+    region = aws_creds.region || "us-east-1"
     url = "https://bedrock-runtime.#{region}.amazonaws.com#{path}"
     url = if query && query != "", do: "#{url}?#{query}", else: url
 
-    # Convert headers to map with lowercase keys (AWS SigV4 requirement)
-    # ex_aws_auth expects map with lowercase header names
+    # Convert headers to map for signing
     headers_map = Map.new(headers, fn {k, v} -> {String.downcase(k), v} end)
 
-    # Add session token if provided
-    headers_map =
-      if aws_creds[:session_token] do
-        Map.put(headers_map, "x-amz-security-token", aws_creds[:session_token])
-      else
-        headers_map
-      end
-
-    # Sign using ex_aws_auth - returns list of header tuples
+    # Sign using credential-based API - returns list of header tuples
     signed_headers =
       AWSAuth.sign_authorization_header(
-        aws_creds[:access_key_id],
-        aws_creds[:secret_access_key],
+        aws_creds,
         String.upcase(to_string(method)),
         url,
-        region,
         service,
-        headers_map,
-        body_binary
+        headers: headers_map,
+        payload: body_binary
       )
 
     # Return signed request

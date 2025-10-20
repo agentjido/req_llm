@@ -69,7 +69,7 @@ System.put_env("ANTHROPIC_API_KEY", "sk-ant-...")
 # Alternative: Application configuration
 Application.put_env(:req_llm, :anthropic_api_key, "sk-ant-...")
 
-# Keys from .env are automatically loaded via JidoKeys
+# Keys from .env are automatically loaded via dotenvy at startup
 # Just add to your .env file and they're picked up automatically:
 # ANTHROPIC_API_KEY=sk-ant-...
 # OPENAI_API_KEY=sk-...

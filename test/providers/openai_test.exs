@@ -470,7 +470,7 @@ defmodule ReqLLM.Providers.OpenAITest do
         private: %{real_time_stream: mock_real_time_stream}
       }
 
-      # Test decode_response directly  
+      # Test decode_response directly
       {req, resp} = OpenAI.decode_response({mock_req, mock_resp})
 
       assert req == mock_req
@@ -777,6 +777,169 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert_raise ReqLLM.Error.Invalid.Provider, fn ->
         Req.new() |> OpenAI.attach(wrong_model, [])
       end
+    end
+  end
+
+  describe "ResponsesAPI json_schema support" do
+    test "ResponsesAPI encode_text_format transforms response_format to flattened text.format" do
+      schema = [
+        name: [type: :string, required: true],
+        title: [type: :string, required: true]
+      ]
+
+      json_schema = ReqLLM.Schema.to_json(schema)
+
+      # Enforce strict schema requirements
+      json_schema =
+        json_schema
+        |> Map.put("required", Map.keys(json_schema["properties"]))
+        |> Map.put("additionalProperties", false)
+
+      response_format = %{
+        type: "json_schema",
+        json_schema: %{
+          name: "output_schema",
+          strict: true,
+          schema: json_schema
+        }
+      }
+
+      # Test the encode_text_format function
+      text_format = ReqLLM.Providers.OpenAI.ResponsesAPI.encode_text_format(response_format)
+
+      # ResponsesAPI expects flattened structure: text.format.{name, strict, schema}
+      # not text.format.json_schema.{name, strict, schema}
+      assert text_format["format"]["type"] == "json_schema"
+      assert text_format["format"]["name"] == "output_schema"
+      assert text_format["format"]["strict"] == true
+      assert text_format["format"]["schema"] != nil
+      refute Map.has_key?(text_format["format"], "json_schema")
+    end
+
+    test "ResponsesAPI includes text parameter in request body with name at format level" do
+      model = ReqLLM.Model.from!("openai:gpt-5-nano")
+
+      schema = [
+        name: [type: :string, required: true],
+        title: [type: :string, required: true]
+      ]
+
+      json_schema = ReqLLM.Schema.to_json(schema)
+
+      # Enforce strict schema requirements
+      json_schema =
+        json_schema
+        |> Map.put("required", Map.keys(json_schema["properties"]))
+        |> Map.put("additionalProperties", false)
+
+      response_format = %{
+        type: "json_schema",
+        json_schema: %{
+          name: "output_schema",
+          strict: true,
+          schema: json_schema
+        }
+      }
+
+      context = %ReqLLM.Context{
+        messages: [
+          %ReqLLM.Message{
+            role: :user,
+            content: [%ReqLLM.Message.ContentPart{type: :text, text: "Generate a person"}]
+          }
+        ]
+      }
+
+      opts = [
+        provider_options: [response_format: response_format],
+        context: context,
+        model: model.model
+      ]
+
+      # Create a mock request
+      request = %Req.Request{
+        url: URI.parse("https://api.openai.com/v1/responses"),
+        method: :post,
+        options: opts
+      }
+
+      # Test encode_body
+      encoded_request = ReqLLM.Providers.OpenAI.ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded_request.body)
+
+      # Verify text parameter exists with correct structure
+      # OpenAI ResponsesAPI expects name at text.format.name level, not text.format.json_schema.name
+      assert Map.has_key?(body, "text")
+      assert body["text"]["format"]["type"] == "json_schema"
+      assert body["text"]["format"]["name"] == "output_schema"
+      assert body["text"]["format"]["strict"] == true
+      assert body["text"]["format"]["schema"] != nil
+      assert body["text"]["format"]["schema"]["type"] == "object"
+      assert Map.has_key?(body["text"]["format"]["schema"], "properties")
+    end
+
+    test "ResponsesAPI decode_response extracts and validates object from json_schema response" do
+      model = ReqLLM.Model.from!("openai:gpt-5-nano")
+
+      schema = [
+        name: [type: :string, required: true]
+      ]
+
+      {:ok, compiled_schema} = ReqLLM.Schema.compile(schema)
+
+      # Mock a ResponsesAPI response with JSON in output_text
+      mock_response_body = %{
+        "id" => "resp_test123",
+        "model" => "gpt-5-nano-2025-08-07",
+        "object" => "response",
+        "status" => "completed",
+        "output" => [],
+        "output_text" => ~s({"name":"Mara Ellington"}),
+        "usage" => %{
+          "input_tokens" => 31,
+          "output_tokens" => 594,
+          "reasoning_tokens" => 576
+        }
+      }
+
+      mock_resp = %Req.Response{
+        status: 200,
+        body: mock_response_body
+      }
+
+      context = %ReqLLM.Context{
+        messages: [
+          %ReqLLM.Message{
+            role: :user,
+            content: [%ReqLLM.Message.ContentPart{type: :text, text: "Generate a person"}]
+          }
+        ]
+      }
+
+      mock_req = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          operation: :object,
+          compiled_schema: compiled_schema
+        ]
+      }
+
+      # Test decode_response
+      {req, resp} = ReqLLM.Providers.OpenAI.ResponsesAPI.decode_response({mock_req, mock_resp})
+
+      assert req == mock_req
+      assert %ReqLLM.Response{} = resp.body
+
+      response = resp.body
+
+      # The object field should be populated with the parsed and validated JSON
+      assert response.object != nil
+      assert response.object["name"] == "Mara Ellington"
+
+      # The message should still contain the original JSON text
+      text = ReqLLM.Response.text(response)
+      assert text == ~s({"name":"Mara Ellington"})
     end
   end
 end

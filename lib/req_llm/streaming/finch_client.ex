@@ -102,13 +102,13 @@ defmodule ReqLLM.Streaming.FinchClient do
   defp build_stream_request(provider_mod, model, context, opts, finch_name) do
     alias ReqLLM.Streaming.Fixtures
 
-    case provider_mod.attach_stream(model, context, opts, finch_name) do
-      {:ok, finch_request} ->
-        http_context = Fixtures.HTTPContext.from_finch_request(finch_request)
-        canonical_json = Fixtures.canonical_json_from_finch_request(finch_request)
+    with {:ok, finch_request} <- provider_mod.attach_stream(model, context, opts, finch_name),
+         :ok <- validate_http2_body_size(finch_request, finch_name) do
+      http_context = Fixtures.HTTPContext.from_finch_request(finch_request)
+      canonical_json = Fixtures.canonical_json_from_finch_request(finch_request)
 
-        {:ok, finch_request, http_context, canonical_json}
-
+      {:ok, finch_request, http_context, canonical_json}
+    else
       {:error, reason} ->
         Logger.error("Provider failed to build streaming request: #{inspect(reason)}")
         {:error, {:provider_build_failed, reason}}
@@ -244,5 +244,44 @@ defmodule ReqLLM.Streaming.FinchClient do
       %{"generationConfig" => %{"thinkingConfig" => _}} -> true
       _ -> false
     end
+  end
+
+  # Validate that HTTP/2 pools won't fail with large request bodies
+  # See: https://github.com/sneako/finch/issues/265
+  defp validate_http2_body_size(finch_request, finch_name) do
+    body_size = byte_size(finch_request.body || "")
+
+    # Only check if body is potentially problematic (>64KB threshold from Finch #265)
+    if body_size > 65_535 do
+      case get_pool_protocols(finch_name) do
+        {:ok, protocols} ->
+          if :http2 in protocols do
+            {:error, {:http2_body_too_large, body_size, protocols}}
+          else
+            :ok
+          end
+
+        {:error, _} ->
+          # Can't determine pool config, assume it's safe
+          :ok
+      end
+    else
+      :ok
+    end
+  end
+
+  # Get the protocols configured for the Finch pool
+  defp get_pool_protocols(_finch_name) do
+    # Get Finch configuration from application env
+    finch_config = Application.get_env(:req_llm, :finch, [])
+    pools = Keyword.get(finch_config, :pools, %{})
+
+    # Get default pool config
+    case Map.get(pools, :default) do
+      nil -> {:error, :no_pool_config}
+      pool_config -> {:ok, Keyword.get(pool_config, :protocols, [:http1])}
+    end
+  rescue
+    _ -> {:error, :config_error}
   end
 end

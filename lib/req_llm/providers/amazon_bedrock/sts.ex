@@ -150,23 +150,28 @@ defmodule ReqLLM.Providers.AmazonBedrock.STS do
       {:error, _} ->
         raise """
         AWS STS AssumeRole requires the ex_aws_auth dependency.
-        Please add {:ex_aws_auth, "~> 1.0", optional: true} to your mix.exs dependencies.
+        Please add {:ex_aws_auth, "~> 1.3", optional: true} to your mix.exs dependencies.
         """
     end
+
+    # Create credentials struct
+    creds = %AWSAuth.Credentials{
+      access_key_id: access_key_id,
+      secret_access_key: secret_access_key,
+      region: region
+    }
 
     # Convert headers to map
     headers_map = Map.new(headers, fn {k, v} -> {String.downcase(k), v} end)
 
-    # Sign using ex_aws_auth
+    # Sign using new credential-based API
     AWSAuth.sign_authorization_header(
-      access_key_id,
-      secret_access_key,
+      creds,
       "POST",
       url,
-      region,
       "sts",
-      headers_map,
-      body
+      headers: headers_map,
+      payload: body
     )
   end
 

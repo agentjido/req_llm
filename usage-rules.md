@@ -77,11 +77,11 @@ ReqLLM.generate_text(model, "Hello")
 ### Key Management
 
 ```elixir
-# Keys auto-loaded from .env files via JidoKeys
+# Keys auto-loaded from .env files via dotenvy at startup
 # ANTHROPIC_API_KEY=sk-ant-...
 # OPENAI_API_KEY=sk-...
 
-# Optional manual storage
+# Optional: Store in application config
 ReqLLM.put_key(:anthropic_api_key, "sk-ant-...")
 ReqLLM.get_key(:openai_api_key)
 

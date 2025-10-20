@@ -35,6 +35,7 @@ defmodule ReqLLM.MixProject do
         main: "readme",
         extras: [
           "README.md",
+          "CHANGELOG.md",
           "CONTRIBUTING.md",
           "guides/getting-started.md",
           "guides/core-concepts.md",
@@ -45,7 +46,46 @@ defmodule ReqLLM.MixProject do
           "guides/adding_a_provider.md"
         ],
         groups_for_extras: [
-          Guides: ~r/guides\/.*/
+          Guides: ~r/guides\/.*/,
+          Changelog: ~r/CHANGELOG\.md/
+        ],
+        groups_for_modules: [
+          Providers: ~r/ReqLLM\.Providers\..*/,
+          Steps: ~r/ReqLLM\.Step\..*/,
+          Streaming: ~r/ReqLLM\.Streaming.*/,
+          "Data Structures": [
+            ReqLLM.Message,
+            ReqLLM.Message.ContentPart,
+            ReqLLM.Response,
+            ReqLLM.Response.Stream,
+            ReqLLM.StreamResponse,
+            ReqLLM.StreamChunk,
+            ReqLLM.Tool,
+            ReqLLM.ToolCall,
+            ReqLLM.Generation,
+            ReqLLM.Embedding,
+            ReqLLM.Context,
+            ReqLLM.Schema
+          ],
+          "Provider API": [
+            ReqLLM.Provider,
+            ReqLLM.Provider.DSL,
+            ReqLLM.Provider.Registry,
+            ReqLLM.Provider.Options,
+            ReqLLM.Provider.Utils,
+            ReqLLM.Provider.Defaults
+          ],
+          Core: [
+            ReqLLM,
+            ReqLLM.Model,
+            ReqLLM.Model.Metadata,
+            ReqLLM.Metadata,
+            ReqLLM.Capability,
+            ReqLLM.Keys,
+            ReqLLM.Error,
+            ReqLLM.Debug,
+            ReqLLM.ParamTransform
+          ]
         ]
       ]
     ]
@@ -78,10 +118,10 @@ defmodule ReqLLM.MixProject do
   defp deps do
     [
       {:jason, "~> 1.4"},
-      {:jido_keys, "~> 1.0"},
+      {:dotenvy, "~> 1.1"},
       {:nimble_options, "~> 1.1"},
       {:req, "~> 0.5"},
-      {:ex_aws_auth, "~> 1.0", optional: true},
+      {:ex_aws_auth, "~> 1.3"},
       {:server_sent_events, "~> 0.2"},
       {:splode, "~> 0.2.3"},
       {:typed_struct, "~> 0.3.0"},
@@ -104,9 +144,13 @@ defmodule ReqLLM.MixProject do
       description: "Composable Elixir library for LLM interactions built on Req & Finch",
       licenses: ["Apache-2.0"],
       maintainers: ["Mike Hostetler"],
-      links: %{"GitHub" => @source_url, "Agent Jido" => "https://agentjido.xyz"},
+      links: %{
+        "Changelog" => "https://hexdocs.pm/req_llm/changelog.html",
+        "GitHub" => @source_url,
+        "Agent Jido" => "https://agentjido.xyz"
+      },
       files:
-        ~w(lib priv mix.exs LICENSE README.md CONTRIBUTING.md AGENTS.md usage-rules.md guides .formatter.exs)
+        ~w(lib priv mix.exs LICENSE README.md CHANGELOG.md CONTRIBUTING.md AGENTS.md usage-rules.md guides .formatter.exs)
     ]
   end
 

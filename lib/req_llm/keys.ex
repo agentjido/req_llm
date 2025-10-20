@@ -1,48 +1,38 @@
 defmodule ReqLLM.Keys do
   @moduledoc """
-  Simple API key lookup with configurable precedence.
+  Handles API key lookup with the following precedence:
 
-  Precedence (first match wins):
-    1. `:api_key` option (per request)
-    2. `Application.get_env/2`
-    3. `System.get_env/1`
-    4. `JidoKeys.get/1` (includes ReqLLM.put_key)
+  1. `:api_key` option (per-request override)
+  2. `Application.get_env(:req_llm, config_key)`
+  3. `System.get_env(env_var)` (dotenvy loads .env at startup)
 
   Happy path: works with ReqLLM.Model structs and provider atoms.
   Uses each provider's `default_env_key/0` callback when available.
 
   ## Examples
 
-      # Recommended: Use ReqLLM.put_key
-      ReqLLM.put_key(:anthropic_api_key, "sk-ant-...")
+      # From .env file (recommended)
+      # ANTHROPIC_API_KEY=sk-ant-...
+      ReqLLM.Keys.get(:anthropic, [])
       
+      # From application config
+      Application.put_env(:req_llm, :anthropic_api_key, "sk-ant-...")
+      ReqLLM.Keys.get(:anthropic, [])
+      
+      # Per-request override
+      ReqLLM.Keys.get(:anthropic, api_key: "sk-ant-...")
+
       # Works with models (extracts provider automatically)
       model = ReqLLM.Model.from("anthropic:claude-3-sonnet")
       key = ReqLLM.Keys.get!(model)
-
-      # Per-request override (highest priority)
-      key = ReqLLM.Keys.get!(model, api_key: "sk-override-...")
 
       # Debug key source
       {:ok, key, source} = ReqLLM.Keys.get(model)
       Logger.debug("Using key from \#{source}")
 
-  ## Configuration Options
-
-      # Recommended: ReqLLM.put_key (secure in-memory)
-      ReqLLM.put_key(:anthropic_api_key, "sk-ant-...")
-
-      # Alternative: Application config
-      Application.put_env(:req_llm, :anthropic_api_key, "sk-ant-...")
-
-      # Alternative: Environment variable
-      System.put_env("ANTHROPIC_API_KEY", "sk-ant-...")
-
-      # .env files are auto-loaded via JidoKeys
-
   """
 
-  @type key_source :: :option | :application | :system | :jido
+  @type key_source :: :option | :application | :system
 
   @doc """
   Retrieves API key for a provider/model, raising on failure.
@@ -68,9 +58,9 @@ defmodule ReqLLM.Keys do
 
     with nil <- Keyword.get(opts, :api_key),
          nil <- Application.get_env(:req_llm, config_key),
-         nil <- System.get_env(env_var),
-         nil <- jidokeys_get(env_var) do
-      {:error, ":api_key option or #{env_var} env var (optionally via JidoKeys.put/2)"}
+         nil <- System.get_env(env_var) do
+      {:error,
+       ":api_key option, config :req_llm, #{config_key}, or #{env_var} env var (.env via dotenvy)"}
     else
       key when key in [nil, ""] ->
         {:error, "#{env_var} was found but is empty"}
@@ -138,11 +128,7 @@ defmodule ReqLLM.Keys do
       Keyword.get(opts, :api_key) == key -> :option
       Application.get_env(:req_llm, config_key) == key -> :application
       System.get_env(env_var) == key -> :system
-      true -> :jido
+      true -> :system
     end
-  end
-
-  defp jidokeys_get(env_key) do
-    if Code.ensure_loaded?(JidoKeys), do: JidoKeys.get(env_key)
   end
 end

@@ -46,12 +46,12 @@ defmodule ReqLLM.Providers.OpenAI do
 
   ## Configuration
 
-  Set your OpenAI API key via environment variable or JidoKeys:
+  Set your OpenAI API key via environment variable or application config:
 
-      # Option 1: Environment variable (automatically loaded)
+      # Option 1: Environment variable (automatically loaded from .env via dotenvy)
       OPENAI_API_KEY=sk-...
 
-      # Option 2: Set directly in JidoKeys
+      # Option 2: Store in application config
       ReqLLM.put_key(:openai_api_key, "sk-...")
 
   ## Examples

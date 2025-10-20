@@ -36,14 +36,28 @@ defmodule ReqLLM do
 
   ## Configuration
 
-  ReqLLM uses the JidoKeys keyring for API key storage:
+  ReqLLM loads API keys from standard sources in order of precedence:
 
-      # Store API keys in session keyring
+  1. Per-request `:api_key` option
+  2. Application config: `config :req_llm, :anthropic_api_key, "..."`
+  3. System environment: `ANTHROPIC_API_KEY` (loaded from .env via dotenvy)
+
+  The recommended approach is to use a .env file:
+
+      # .env
+      ANTHROPIC_API_KEY=sk-ant-...
+      OPENAI_API_KEY=sk-...
+
+  Keys are automatically loaded at startup via dotenvy.
+
+  For programmatic key management:
+
+      # Store keys (uses Application config)
       ReqLLM.put_key(:anthropic_api_key, "sk-ant-...")
-      ReqLLM.put_key(:openai_api_key, "sk-...")
 
-      # Retrieve API keys
+      # Retrieve keys
       ReqLLM.get_key(:anthropic_api_key)
+      ReqLLM.get_key("ANTHROPIC_API_KEY")
 
   ## Providers
 
@@ -59,39 +73,43 @@ defmodule ReqLLM do
   alias ReqLLM.{Embedding, Generation, Schema, Tool}
 
   # ===========================================================================
-  # Configuration API - Direct JidoKeys integration
+  # Configuration API
   # ===========================================================================
 
   @doc """
-  Stores an API key in the session keyring.
+  Stores an API key in application configuration.
 
-  Keys from .env files are automatically loaded via JidoKeys+Dotenvy integration,
-  so you typically don't need to call this manually. Just add keys to your .env file.
+  Keys from .env files are automatically loaded via dotenvy at startup.
+  This function is useful for programmatic key management in tests or at runtime.
 
   ## Parameters
 
-    * `key` - The configuration key (atom or string)
+    * `key` - The configuration key (atom)
     * `value` - The value to store
 
   ## Examples
 
-      # Manual key setting (optional - .env keys are auto-loaded)
       ReqLLM.put_key(:anthropic_api_key, "sk-ant-...")
 
   """
-  @spec put_key(atom() | String.t(), term()) :: :ok
-  def put_key(key, value) do
-    JidoKeys.put(key, value)
+  @spec put_key(atom(), term()) :: :ok
+  def put_key(key, value) when is_atom(key) do
+    Application.put_env(:req_llm, key, value)
+    :ok
+  end
+
+  def put_key(_key, _value) do
+    raise ArgumentError, "put_key/2 expects an atom key like :anthropic_api_key"
   end
 
   @doc """
-  Gets an API key from the keyring.
+  Gets an API key from application config or system environment.
 
-  Keys from .env files are automatically loaded via JidoKeys+Dotenvy integration.
+  Keys from .env files are automatically loaded via dotenvy at startup.
 
   ## Parameters
 
-    * `key` - The configuration key (atom or string, case-insensitive)
+    * `key` - The configuration key (atom or string)
 
   ## Examples
 
@@ -100,9 +118,8 @@ defmodule ReqLLM do
 
   """
   @spec get_key(atom() | String.t()) :: String.t() | nil
-  def get_key(key) do
-    JidoKeys.get(key, nil)
-  end
+  def get_key(key) when is_atom(key), do: Application.get_env(:req_llm, key)
+  def get_key(key) when is_binary(key), do: System.get_env(key)
 
   @doc """
   Creates a context from a list of messages, a single message struct, or a string.

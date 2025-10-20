@@ -83,28 +83,33 @@
     },
     {
       "id": "gpt-5",
-      "api": "responses"
+      "api": "responses",
+      "supports_json_schema_response_format": true
     },
     {
       "id": "gpt-5-chat-latest",
       "api": "responses",
       "reasoning": false,
       "tool_call": false,
-      "temperature": true
+      "temperature": true,
+      "supports_json_schema_response_format": true
     },
     {
       "id": "gpt-5-codex",
       "api": "responses",
       "reasoning": false,
-      "tool_call": false
+      "tool_call": false,
+      "supports_json_schema_response_format": true
     },
     {
       "id": "gpt-5-mini",
-      "api": "responses"
+      "api": "responses",
+      "supports_json_schema_response_format": true
     },
     {
       "id": "gpt-5-nano",
-      "api": "responses"
+      "api": "responses",
+      "supports_json_schema_response_format": true
     },
     {
       "id": "codex-mini-latest",
