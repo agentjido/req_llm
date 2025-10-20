@@ -317,6 +317,101 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
   # Helper functions for Anthropic-specific fixtures
 
+  describe "map-based parameter schemas (JSON Schema pass-through)" do
+    test "tool with map parameter_schema serializes to Anthropic format correctly" do
+      json_schema = %{
+        "type" => "object",
+        "properties" => %{
+          "location" => %{"type" => "string", "description" => "City name"},
+          "units" => %{"type" => "string", "enum" => ["celsius", "fahrenheit"]}
+        },
+        "required" => ["location"],
+        "additionalProperties" => false
+      }
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "get_weather",
+          description: "Get weather information",
+          parameter_schema: json_schema,
+          callback: fn _ -> {:ok, %{}} end
+        )
+
+      schema = ReqLLM.Schema.to_anthropic_format(tool)
+
+      # Verify Anthropic format
+      assert schema["name"] == "get_weather"
+      assert schema["description"] == "Get weather information"
+      # The JSON schema should pass through unchanged
+      assert schema["input_schema"] == json_schema
+    end
+
+    test "map-based schema works with Anthropic prepare_request pipeline" do
+      model = ReqLLM.Model.from!("anthropic:claude-3-5-sonnet-20241022")
+
+      json_schema = %{
+        "type" => "object",
+        "properties" => %{
+          "city" => %{"type" => "string"}
+        },
+        "required" => ["city"]
+      }
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "weather_lookup",
+          description: "Look up weather",
+          parameter_schema: json_schema,
+          callback: fn _ -> {:ok, %{}} end
+        )
+
+      # Should successfully prepare request with map-based tool
+      {:ok, request} =
+        Anthropic.prepare_request(
+          :chat,
+          model,
+          "What's the weather?",
+          tools: [tool]
+        )
+
+      assert %Req.Request{} = request
+      assert request.options[:tools] == [tool]
+    end
+
+    test "complex JSON Schema features preserved in Anthropic format" do
+      complex_schema = %{
+        "type" => "object",
+        "properties" => %{
+          "filter" => %{
+            "oneOf" => [
+              %{"type" => "string"},
+              %{
+                "type" => "object",
+                "properties" => %{
+                  "field" => %{"type" => "string"}
+                }
+              }
+            ]
+          }
+        }
+      }
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "search",
+          description: "Search",
+          parameter_schema: complex_schema,
+          callback: fn _ -> {:ok, []} end
+        )
+
+      schema = ReqLLM.Schema.to_anthropic_format(tool)
+
+      # Complex schema should pass through unchanged
+      assert schema["input_schema"] == complex_schema
+      assert schema["input_schema"]["properties"]["filter"]["oneOf"]
+    end
+  end
+
   defp anthropic_format_json_fixture(opts \\ []) do
     %{
       "id" => Keyword.get(opts, :id, "msg_01XFDUDYJgAACzvnptvVoYEL"),

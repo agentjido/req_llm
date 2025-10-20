@@ -329,7 +329,16 @@ defmodule ReqLLM.Provider.Defaults do
 
     # Register options that might be passed by users but aren't standard Req options
     extra_option_keys =
-      [:model, :compiled_schema, :temperature, :max_tokens, :app_referer, :app_title, :fixture] ++
+      [
+        :model,
+        :compiled_schema,
+        :temperature,
+        :max_tokens,
+        :app_referer,
+        :app_title,
+        :fixture,
+        :api_key
+      ] ++
         provider_mod.supported_provider_options()
 
     request

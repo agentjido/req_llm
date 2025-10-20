@@ -6,10 +6,12 @@ defmodule ReqLLM.Schema do
   for converting keyword schemas to both NimbleOptions compiled schemas and JSON Schema format.
   Supports all common NimbleOptions types and handles nested schemas.
 
+  Also supports direct JSON Schema pass-through when a map is provided instead of a keyword list.
+
   ## Core Functions
 
-  - `compile/1` - Convert keyword schema to NimbleOptions compiled schema
-  - `to_json/1` - Convert keyword schema to JSON Schema format  
+  - `compile/1` - Convert keyword schema to NimbleOptions compiled schema, or pass through maps
+  - `to_json/1` - Convert keyword schema to JSON Schema format, or pass through maps
 
 
   ## Basic Usage
@@ -22,7 +24,7 @@ defmodule ReqLLM.Schema do
 
       # Convert keyword schema to JSON Schema
       json_schema = ReqLLM.Schema.to_json([
-        name: [type: :string, required: true, doc: "User name"], 
+        name: [type: :string, required: true, doc: "User name"],
         age: [type: :pos_integer, doc: "User age"]
       ])
       # => %{
@@ -33,6 +35,17 @@ defmodule ReqLLM.Schema do
       #      },
       #      "required" => ["name"]
       #    }
+
+      # Use raw JSON Schema directly (map pass-through)
+      json_schema = ReqLLM.Schema.to_json(%{
+        "type" => "object",
+        "properties" => %{
+          "location" => %{"type" => "string"},
+          "units" => %{"type" => "string", "enum" => ["celsius", "fahrenheit"]}
+        },
+        "required" => ["location"]
+      })
+      # => Returns the map unchanged
 
 
 
@@ -73,30 +86,45 @@ defmodule ReqLLM.Schema do
   Takes a keyword list representing a NimbleOptions schema and compiles it
   into a validated NimbleOptions schema that can be used for validation.
 
+  When a map is provided (raw JSON Schema), returns a wrapper with the original schema
+  and no compiled version (pass-through mode).
+
   ## Parameters
 
-  - `schema` - A keyword list representing a NimbleOptions schema
+  - `schema` - A keyword list representing a NimbleOptions schema, or a map for raw JSON Schema
 
   ## Returns
 
-  - `{:ok, compiled_schema}` - Successfully compiled NimbleOptions schema
+  - `{:ok, compiled_result}` - Compiled schema wrapper with `:schema` and `:compiled` fields
   - `{:error, error}` - Compilation error with details
 
   ## Examples
 
-      iex> ReqLLM.Schema.compile([
+      iex> {:ok, result} = ReqLLM.Schema.compile([
       ...>   name: [type: :string, required: true],
       ...>   age: [type: :pos_integer, default: 0]
       ...> ])
-      {:ok, compiled_schema}
+      iex> is_map(result) and Map.has_key?(result, :schema)
+      true
+
+      iex> {:ok, result} = ReqLLM.Schema.compile(%{"type" => "object", "properties" => %{}})
+      iex> result.schema
+      %{"type" => "object", "properties" => %{}}
 
       iex> ReqLLM.Schema.compile("invalid")
       {:error, %ReqLLM.Error.Invalid.Parameter{}}
 
   """
-  @spec compile(keyword() | any()) :: {:ok, NimbleOptions.t()} | {:error, ReqLLM.Error.t()}
+  @spec compile(keyword() | map() | any()) ::
+          {:ok, %{schema: keyword() | map(), compiled: NimbleOptions.t() | nil}}
+          | {:error, ReqLLM.Error.t()}
+  def compile(schema) when is_map(schema) do
+    {:ok, %{schema: schema, compiled: nil}}
+  end
+
   def compile(schema) when is_list(schema) do
-    {:ok, NimbleOptions.new!(schema)}
+    compiled = NimbleOptions.new!(schema)
+    {:ok, %{schema: schema, compiled: compiled}}
   rescue
     e ->
       {:error,
@@ -110,7 +138,7 @@ defmodule ReqLLM.Schema do
   def compile(schema) do
     {:error,
      ReqLLM.Error.Invalid.Parameter.exception(
-       parameter: "Schema must be a keyword list, got: #{inspect(schema)}"
+       parameter: "Schema must be a keyword list or map, got: #{inspect(schema)}"
      )}
   end
 
@@ -120,9 +148,11 @@ defmodule ReqLLM.Schema do
   Takes a keyword list of parameter definitions and converts them to
   a JSON Schema object suitable for LLM tool definitions or structured data schemas.
 
+  When a map is provided (raw JSON Schema), returns it unchanged (pass-through mode).
+
   ## Parameters
 
-  - `schema` - Keyword list of parameter definitions
+  - `schema` - Keyword list of parameter definitions, or a map for raw JSON Schema
 
   ## Returns
 
@@ -141,8 +171,8 @@ defmodule ReqLLM.Schema do
           "name" => %{"type" => "string", "description" => "User name"},
           "age" => %{"type" => "integer", "description" => "User age"},
           "tags" => %{
-            "type" => "array", 
-            "items" => %{"type" => "string"}, 
+            "type" => "array",
+            "items" => %{"type" => "string"},
             "description" => "User tags"
           }
         },
@@ -152,8 +182,13 @@ defmodule ReqLLM.Schema do
       iex> ReqLLM.Schema.to_json([])
       %{"type" => "object", "properties" => %{}}
 
+      iex> ReqLLM.Schema.to_json(%{"type" => "object", "properties" => %{"foo" => %{"type" => "string"}}})
+      %{"type" => "object", "properties" => %{"foo" => %{"type" => "string"}}}
+
   """
-  @spec to_json(keyword()) :: map()
+  @spec to_json(keyword() | map()) :: map()
+  def to_json(schema) when is_map(schema), do: schema
+
   def to_json([]), do: %{"type" => "object", "properties" => %{}}
 
   def to_json(schema) when is_list(schema) do
@@ -553,7 +588,7 @@ defmodule ReqLLM.Schema do
   """
   @spec validate(map(), keyword()) :: {:ok, keyword()} | {:error, ReqLLM.Error.t()}
   def validate(data, schema) when is_map(data) and is_list(schema) do
-    with {:ok, compiled_schema} <- compile(schema) do
+    with {:ok, compiled_result} <- compile(schema) do
       # Convert string keys to atoms for NimbleOptions validation
       keyword_data =
         data
@@ -562,7 +597,7 @@ defmodule ReqLLM.Schema do
           {key, v}
         end)
 
-      case NimbleOptions.validate(keyword_data, compiled_schema) do
+      case NimbleOptions.validate(keyword_data, compiled_result.compiled) do
         {:ok, validated_data} ->
           {:ok, validated_data}
 

@@ -7,18 +7,19 @@ defmodule ReqLLM.SchemaTest do
   describe "compile/1" do
     test "compiles valid keyword schemas" do
       schema = [name: [type: :string, required: true], age: [type: :pos_integer, default: 0]]
-      assert {:ok, compiled} = Schema.compile(schema)
-      assert %NimbleOptions{} = compiled
+      assert {:ok, result} = Schema.compile(schema)
+      assert result.schema == schema
+      assert %NimbleOptions{} = result.compiled
     end
 
     test "compiles empty schema" do
-      assert {:ok, compiled} = Schema.compile([])
-      assert %NimbleOptions{} = compiled
+      assert {:ok, result} = Schema.compile([])
+      assert result.schema == []
+      assert %NimbleOptions{} = result.compiled
     end
 
     test "returns error for invalid input types" do
       assert {:error, %ReqLLM.Error.Invalid.Parameter{}} = Schema.compile("invalid")
-      assert {:error, %ReqLLM.Error.Invalid.Parameter{}} = Schema.compile(%{})
       assert {:error, %ReqLLM.Error.Invalid.Parameter{}} = Schema.compile(123)
     end
 
@@ -635,6 +636,126 @@ defmodule ReqLLM.SchemaTest do
 
       assert {:error, %ReqLLM.Error.Validation.Error{tag: :invalid_schema}} =
                Schema.validate(data, schema)
+    end
+  end
+
+  describe "map pass-through support" do
+    test "compile/1 with map returns wrapped schema with nil compiled" do
+      json_schema = %{
+        "type" => "object",
+        "properties" => %{
+          "location" => %{"type" => "string"},
+          "units" => %{"type" => "string", "enum" => ["celsius", "fahrenheit"]}
+        },
+        "required" => ["location"]
+      }
+
+      assert {:ok, result} = Schema.compile(json_schema)
+      assert result.schema == json_schema
+      assert result.compiled == nil
+    end
+
+    test "to_json/1 with map returns map unchanged" do
+      json_schema = %{
+        "type" => "object",
+        "properties" => %{
+          "location" => %{"type" => "string"},
+          "units" => %{"type" => "string", "enum" => ["celsius", "fahrenheit"]}
+        },
+        "required" => ["location"],
+        "additionalProperties" => false
+      }
+
+      assert Schema.to_json(json_schema) == json_schema
+    end
+
+    test "equivalent keyword list and map produce compatible output" do
+      keyword_schema = [
+        location: [type: :string, required: true, doc: "City name"],
+        units: [type: :string, doc: "Temperature units"]
+      ]
+
+      json_schema = %{
+        "type" => "object",
+        "properties" => %{
+          "location" => %{"type" => "string", "description" => "City name"},
+          "units" => %{"type" => "string", "description" => "Temperature units"}
+        },
+        "required" => ["location"],
+        "additionalProperties" => false
+      }
+
+      keyword_result = Schema.to_json(keyword_schema)
+      map_result = Schema.to_json(json_schema)
+
+      assert keyword_result == json_schema
+      assert map_result == json_schema
+    end
+
+    test "provider format functions work with map parameter schemas" do
+      json_schema = %{
+        "type" => "object",
+        "properties" => %{
+          "query" => %{"type" => "string", "description" => "Search query"}
+        },
+        "required" => ["query"],
+        "additionalProperties" => false
+      }
+
+      tool = %Tool{
+        name: "search",
+        description: "Search for items",
+        parameter_schema: json_schema,
+        callback: fn _ -> {:ok, %{}} end
+      }
+
+      # Test Anthropic format
+      anthropic = Schema.to_anthropic_format(tool)
+      assert anthropic["input_schema"] == json_schema
+
+      # Test OpenAI format
+      openai = Schema.to_openai_format(tool)
+      assert openai["function"]["parameters"] == json_schema
+
+      # Test Google format (strips additionalProperties)
+      google = Schema.to_google_format(tool)
+      assert google["parameters"] == Map.delete(json_schema, "additionalProperties")
+
+      # Test Bedrock Converse format
+      bedrock = Schema.to_bedrock_converse_format(tool)
+      assert bedrock["toolSpec"]["inputSchema"]["json"] == json_schema
+    end
+
+    test "map with complex JSON Schema features" do
+      complex_schema = %{
+        "type" => "object",
+        "properties" => %{
+          "filter" => %{
+            "oneOf" => [
+              %{"type" => "string"},
+              %{
+                "type" => "object",
+                "properties" => %{
+                  "field" => %{"type" => "string"},
+                  "operator" => %{"type" => "string", "enum" => ["eq", "ne", "gt", "lt"]},
+                  "value" => %{"type" => "string"}
+                },
+                "required" => ["field", "operator", "value"]
+              }
+            ]
+          },
+          "timestamp" => %{
+            "type" => "string",
+            "format" => "date-time"
+          }
+        }
+      }
+
+      # Should pass through unchanged
+      assert Schema.to_json(complex_schema) == complex_schema
+      assert {:ok, result} = Schema.compile(complex_schema)
+      assert result.schema == complex_schema
+      assert result.compiled == nil
     end
   end
 end

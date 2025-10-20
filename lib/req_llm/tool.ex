@@ -74,7 +74,7 @@ defmodule ReqLLM.Tool do
 
     field(:name, String.t(), enforce: true)
     field(:description, String.t(), enforce: true)
-    field(:parameter_schema, keyword(), default: [])
+    field(:parameter_schema, keyword() | map(), default: [])
     field(:compiled, term() | nil, default: nil)
     field(:callback, callback(), enforce: true)
     field(:strict, boolean(), default: false)
@@ -83,7 +83,7 @@ defmodule ReqLLM.Tool do
   @type tool_opts :: [
           name: String.t(),
           description: String.t(),
-          parameter_schema: keyword(),
+          parameter_schema: keyword() | map(),
           callback: callback()
         ]
 
@@ -100,9 +100,9 @@ defmodule ReqLLM.Tool do
                    doc: "Tool description for AI model"
                  ],
                  parameter_schema: [
-                   type: :keyword_list,
+                   type: :any,
                    default: [],
-                   doc: "Parameter schema as keyword list"
+                   doc: "Parameter schema as keyword list (NimbleOptions) or map (JSON Schema)"
                  ],
                  callback: [
                    type: :any,
@@ -127,11 +127,12 @@ defmodule ReqLLM.Tool do
 
     * `:name` - Tool name (required, must be valid identifier)
     * `:description` - Tool description for AI model (required)
-    * `:parameter_schema` - Parameter schema as NimbleOptions keyword list (optional)
+    * `:parameter_schema` - Parameter schema as NimbleOptions keyword list or JSON Schema map (optional)
     * `:callback` - Callback function or MFA tuple (required)
 
   ## Examples
 
+      # Using NimbleOptions keyword list
       {:ok, tool} = ReqLLM.Tool.new(
         name: "get_weather",
         description: "Get current weather",
@@ -141,11 +142,26 @@ defmodule ReqLLM.Tool do
         callback: {WeatherService, :get_weather}
       )
 
+      # Using raw JSON Schema map
+      {:ok, tool} = ReqLLM.Tool.new(
+        name: "get_weather",
+        description: "Get current weather",
+        parameter_schema: %{
+          "type" => "object",
+          "properties" => %{
+            "location" => %{"type" => "string"}
+          },
+          "required" => ["location"]
+        },
+        callback: {WeatherService, :get_weather}
+      )
+
   """
   @spec new(tool_opts()) :: {:ok, t()} | {:error, term()}
   def new(opts) when is_list(opts) do
     with {:ok, validated_opts} <- NimbleOptions.validate(opts, @tool_schema),
          :ok <- validate_name(validated_opts[:name]),
+         :ok <- validate_parameter_schema(validated_opts[:parameter_schema]),
          :ok <- validate_callback(validated_opts[:callback]),
          {:ok, compiled_schema} <- compile_parameter_schema(validated_opts[:parameter_schema]) do
       tool = %__MODULE__{
@@ -328,6 +344,13 @@ defmodule ReqLLM.Tool do
     end
   end
 
+  defp validate_parameter_schema(schema) when is_list(schema) or is_map(schema), do: :ok
+
+  defp validate_parameter_schema(schema) do
+    {:error,
+     "Invalid parameter_schema: #{inspect(schema)}. Must be a keyword list (NimbleOptions) or map (JSON Schema)"}
+  end
+
   defp validate_callback({module, function}) when is_atom(module) and is_atom(function) do
     if function_exported?(module, function, 1) do
       :ok
@@ -356,8 +379,11 @@ defmodule ReqLLM.Tool do
 
   defp compile_parameter_schema([]), do: {:ok, nil}
 
-  defp compile_parameter_schema(parameter_schema) when is_list(parameter_schema) do
-    ReqLLM.Schema.compile(parameter_schema)
+  defp compile_parameter_schema(parameter_schema) do
+    with {:ok, compiled_result} <- ReqLLM.Schema.compile(parameter_schema) do
+      # Return just the compiled NimbleOptions schema (or nil for maps)
+      {:ok, compiled_result.compiled}
+    end
   end
 
   defp validate_input(%__MODULE__{compiled: nil}, input), do: {:ok, input}

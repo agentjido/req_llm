@@ -622,17 +622,30 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   @doc false
   def encode_text_format(nil), do: nil
 
-  def encode_text_format(%{type: "json_schema", json_schema: json_schema}) do
-    # ResponsesAPI expects a flattened structure:
-    # text.format.{type, name, strict, schema} instead of text.format.json_schema.{name, strict, schema}
-    %{
-      "format" => %{
-        "type" => "json_schema",
-        "name" => json_schema[:name],
-        "strict" => json_schema[:strict],
-        "schema" => json_schema[:schema]
-      }
-    }
+  def encode_text_format(response_format) when is_map(response_format) do
+    # Extract type - could be atom or string key
+    type = response_format[:type] || response_format["type"]
+
+    case type do
+      "json_schema" ->
+        json_schema = response_format[:json_schema] || response_format["json_schema"]
+        # Schema.to_json handles both keyword lists (converts) and maps (pass-through)
+        schema = ReqLLM.Schema.to_json(json_schema[:schema] || json_schema["schema"])
+
+        # ResponsesAPI expects a flattened structure:
+        # text.format.{type, name, strict, schema} instead of text.format.json_schema.{name, strict, schema}
+        %{
+          "format" => %{
+            "type" => "json_schema",
+            "name" => json_schema[:name] || json_schema["name"],
+            "strict" => json_schema[:strict] || json_schema["strict"],
+            "schema" => schema
+          }
+        }
+
+      _ ->
+        nil
+    end
   end
 
   defp decode_responses_success({req, resp}) do
@@ -719,19 +732,30 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     end
   end
 
-  defp validate_object(object, compiled_schema) when not is_nil(compiled_schema) do
-    # compiled_schema is a NimbleOptions schema, validate directly
-    # Convert string keys to atoms for validation
-    keyword_data =
-      object
-      |> Enum.map(fn {k, v} ->
-        key = if is_binary(k), do: String.to_existing_atom(k), else: k
-        {key, v}
-      end)
+  defp validate_object(object, compiled_schema_result) when not is_nil(compiled_schema_result) do
+    # compiled_schema_result is from Schema.compile/1 which returns %{schema: ..., compiled: ...}
+    # Extract the actual compiled NimbleOptions schema, or handle map pass-through (compiled: nil)
+    case compiled_schema_result do
+      %{compiled: nil} ->
+        # Map-based schema (JSON Schema pass-through), no validation
+        {:ok, object}
 
-    case NimbleOptions.validate(keyword_data, compiled_schema) do
-      {:ok, _validated} -> {:ok, object}
-      {:error, _} -> {:error, :validation_failed}
+      %{compiled: compiled} when not is_nil(compiled) ->
+        # Convert string keys to atoms for validation
+        keyword_data =
+          object
+          |> Enum.map(fn {k, v} ->
+            key = if is_binary(k), do: String.to_existing_atom(k), else: k
+            {key, v}
+          end)
+
+        case NimbleOptions.validate(keyword_data, compiled) do
+          {:ok, _validated} -> {:ok, object}
+          {:error, _} -> {:error, :validation_failed}
+        end
+
+      _ ->
+        {:ok, object}
     end
   rescue
     ArgumentError ->

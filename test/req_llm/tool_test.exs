@@ -335,4 +335,169 @@ defmodule ReqLLM.ToolTest do
       end
     end
   end
+
+  describe "map-based parameter schemas (JSON Schema pass-through)" do
+    test "creates tool with map parameter_schema" do
+      json_schema = %{
+        "type" => "object",
+        "properties" => %{
+          "location" => %{"type" => "string"},
+          "units" => %{"type" => "string", "enum" => ["celsius", "fahrenheit"]}
+        },
+        "required" => ["location"]
+      }
+
+      {:ok, tool} =
+        Tool.new(
+          name: "get_weather",
+          description: "Get weather information",
+          parameter_schema: json_schema,
+          callback: fn _args -> {:ok, "sunny"} end
+        )
+
+      assert tool.parameter_schema == json_schema
+      assert tool.compiled == nil
+    end
+
+    test "executes tool with map parameter_schema (validation skipped)" do
+      json_schema = %{
+        "type" => "object",
+        "properties" => %{
+          "query" => %{"type" => "string"}
+        },
+        "required" => ["query"]
+      }
+
+      {:ok, tool} =
+        Tool.new(
+          name: "search",
+          description: "Search for items",
+          parameter_schema: json_schema,
+          callback: fn args ->
+            # Handle both string and atom keys
+            query = args["query"] || args[:query]
+            {:ok, "Found: #{query}"}
+          end
+        )
+
+      # Should execute successfully without NimbleOptions validation
+      {:ok, result} = Tool.execute(tool, %{"query" => "test"})
+      assert result == "Found: test"
+
+      # Should also work with atom keys since validation is skipped
+      {:ok, result} = Tool.execute(tool, %{query: "test2"})
+      assert result == "Found: test2"
+    end
+
+    test "tool with map schema converts to provider formats" do
+      json_schema = %{
+        "type" => "object",
+        "properties" => %{
+          "value" => %{"type" => "integer"}
+        },
+        "required" => ["value"]
+      }
+
+      {:ok, tool} =
+        Tool.new(
+          name: "process",
+          description: "Process value",
+          parameter_schema: json_schema,
+          callback: fn _ -> {:ok, 42} end
+        )
+
+      # Test all provider formats
+      anthropic = Tool.to_schema(tool, :anthropic)
+      assert anthropic["input_schema"] == json_schema
+
+      openai = Tool.to_schema(tool, :openai)
+      assert openai["function"]["parameters"] == json_schema
+
+      google = Tool.to_schema(tool, :google)
+      # Google format strips additionalProperties
+      assert Map.has_key?(google, "parameters")
+
+      bedrock = Tool.to_schema(tool, :amazon_bedrock_converse)
+      assert bedrock["toolSpec"]["inputSchema"]["json"] == json_schema
+    end
+
+    test "rejects invalid parameter_schema types" do
+      invalid_schemas = [
+        "string",
+        123,
+        :atom,
+        {:tuple, "value"}
+      ]
+
+      for invalid <- invalid_schemas do
+        {:error, error} =
+          Tool.new(
+            name: "invalid_tool",
+            description: "Test",
+            parameter_schema: invalid,
+            callback: fn _ -> {:ok, nil} end
+          )
+
+        assert %ReqLLM.Error.Invalid.Parameter{} = error
+        assert error.parameter =~ "Invalid parameter_schema"
+      end
+    end
+
+    test "supports empty map schema" do
+      {:ok, tool} =
+        Tool.new(
+          name: "no_params",
+          description: "Tool with no parameters",
+          parameter_schema: %{},
+          callback: fn _ -> {:ok, "done"} end
+        )
+
+      assert tool.parameter_schema == %{}
+      assert tool.compiled == nil
+
+      {:ok, result} = Tool.execute(tool, %{})
+      assert result == "done"
+    end
+
+    test "complex JSON Schema with advanced features" do
+      complex_schema = %{
+        "type" => "object",
+        "properties" => %{
+          "filter" => %{
+            "oneOf" => [
+              %{"type" => "string"},
+              %{
+                "type" => "object",
+                "properties" => %{
+                  "field" => %{"type" => "string"},
+                  "operator" => %{"type" => "string", "enum" => ["eq", "ne"]},
+                  "value" => %{}
+                },
+                "required" => ["field", "operator", "value"]
+              }
+            ]
+          },
+          "timestamp" => %{
+            "type" => "string",
+            "format" => "date-time"
+          }
+        },
+        "additionalProperties" => false
+      }
+
+      {:ok, tool} =
+        Tool.new(
+          name: "advanced_search",
+          description: "Search with complex filters",
+          parameter_schema: complex_schema,
+          callback: fn _ -> {:ok, []} end
+        )
+
+      assert tool.parameter_schema == complex_schema
+
+      # Should pass through to providers unchanged
+      anthropic = Tool.to_schema(tool, :anthropic)
+      assert anthropic["input_schema"] == complex_schema
+    end
+  end
 end

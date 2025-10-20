@@ -190,6 +190,95 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert input2["role"] == "assistant"
       assert input2["content"] == [%{"type" => "input_text", "text" => "Hi there"}]
     end
+
+    test "encodes response_format with keyword list schema (converts to JSON schema)" do
+      keyword_schema = [
+        name: [type: :string, required: true, doc: "Person name"],
+        age: [type: :pos_integer, doc: "Person age"]
+      ]
+
+      response_format = %{
+        type: "json_schema",
+        json_schema: %{
+          name: "person_schema",
+          strict: true,
+          schema: keyword_schema
+        }
+      }
+
+      request = build_request(provider_options: [response_format: response_format])
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded.body)
+
+      assert body["text"]["format"]["type"] == "json_schema"
+      assert body["text"]["format"]["name"] == "person_schema"
+      assert body["text"]["format"]["strict"] == true
+      assert body["text"]["format"]["schema"]["type"] == "object"
+      assert body["text"]["format"]["schema"]["properties"]["name"]["type"] == "string"
+      assert body["text"]["format"]["schema"]["properties"]["age"]["type"] == "integer"
+      assert body["text"]["format"]["schema"]["properties"]["age"]["minimum"] == 1
+      assert body["text"]["format"]["schema"]["required"] == ["name"]
+    end
+
+    test "encodes response_format with direct JSON schema (pass-through)" do
+      json_schema = %{
+        "type" => "object",
+        "properties" => %{
+          "location" => %{"type" => "string", "description" => "City name"},
+          "units" => %{"type" => "string", "enum" => ["celsius", "fahrenheit"]}
+        },
+        "required" => ["location"],
+        "additionalProperties" => false
+      }
+
+      response_format = %{
+        type: "json_schema",
+        json_schema: %{
+          name: "weather_schema",
+          strict: true,
+          schema: json_schema
+        }
+      }
+
+      request = build_request(provider_options: [response_format: response_format])
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded.body)
+
+      assert body["text"]["format"]["type"] == "json_schema"
+      assert body["text"]["format"]["name"] == "weather_schema"
+      assert body["text"]["format"]["strict"] == true
+      # Schema should pass through unchanged
+      assert body["text"]["format"]["schema"] == json_schema
+    end
+
+    test "encodes response_format with string keys" do
+      json_schema = %{
+        "type" => "object",
+        "properties" => %{"query" => %{"type" => "string"}},
+        "required" => ["query"]
+      }
+
+      response_format = %{
+        "type" => "json_schema",
+        "json_schema" => %{
+          "name" => "search_schema",
+          "strict" => true,
+          "schema" => json_schema
+        }
+      }
+
+      request = build_request(provider_options: [response_format: response_format])
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded.body)
+
+      assert body["text"]["format"]["type"] == "json_schema"
+      assert body["text"]["format"]["name"] == "search_schema"
+      assert body["text"]["format"]["strict"] == true
+      assert body["text"]["format"]["schema"] == json_schema
+    end
   end
 
   describe "decode_response/1" do
