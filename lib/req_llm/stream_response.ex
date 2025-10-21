@@ -389,6 +389,9 @@ defmodule ReqLLM.StreamResponse do
       # Extract object from tool calls if present (for structured output)
       object = extract_object_from_message(message)
 
+      # Normalize usage to match non-streaming format
+      usage = normalize_usage_fields(Map.get(metadata, :usage))
+
       # Create Response struct
       response = %Response{
         id: generate_response_id(),
@@ -398,7 +401,7 @@ defmodule ReqLLM.StreamResponse do
         object: object,
         stream?: false,
         stream: nil,
-        usage: Map.get(metadata, :usage),
+        usage: usage,
         finish_reason: Map.get(metadata, :finish_reason),
         provider_meta: Map.get(metadata, :provider_meta, %{}),
         error: nil
@@ -569,5 +572,14 @@ defmodule ReqLLM.StreamResponse do
   # Generate a unique response ID
   defp generate_response_id do
     "stream_response_" <> (:crypto.strong_rand_bytes(8) |> Base.encode16(case: :lower))
+  end
+
+  # Normalize streaming usage field names to match non-streaming format
+  defp normalize_usage_fields(nil), do: nil
+
+  defp normalize_usage_fields(usage) when is_map(usage) do
+    usage
+    |> Map.put_new(:cached_tokens, Map.get(usage, :cached_input, 0))
+    |> Map.put_new(:reasoning_tokens, Map.get(usage, :reasoning, 0))
   end
 end

@@ -217,9 +217,7 @@ defmodule ReqLLM.Step.Usage do
 
   @spec compute_cost_breakdown(map(), ReqLLM.Model.t()) ::
           {:ok, %{input_cost: float(), output_cost: float(), total_cost: float()} | nil}
-  defp compute_cost_breakdown(%{input: _input_tokens, output: _output_tokens}, %ReqLLM.Model{
-         cost: nil
-       }) do
+  defp compute_cost_breakdown(_usage, %ReqLLM.Model{cost: nil}) do
     {:ok, nil}
   end
 

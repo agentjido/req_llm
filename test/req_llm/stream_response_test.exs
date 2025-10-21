@@ -300,7 +300,11 @@ defmodule ReqLLM.StreamResponseTest do
       assert %Response{} = response
       assert response.stream? == false
       assert response.stream == nil
-      assert response.usage == usage
+
+      # Usage may have normalized fields added (reasoning_tokens, cached_tokens)
+      assert response.usage.input_tokens == 8
+      assert response.usage.output_tokens == 12
+      assert response.usage.total_cost == 0.024
       assert response.finish_reason == :stop
       assert response.model == "test-model"
       assert response.error == nil

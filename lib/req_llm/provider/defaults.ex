@@ -1082,27 +1082,33 @@ defmodule ReqLLM.Provider.Defaults do
     model_name = req.options[:model]
 
     # Handle case where model_name might be nil (for tests or edge cases)
-    {_provider_id, model} =
+    {_provider_id, model, model_string} =
       case model_name do
         nil ->
           # Fallback to private req_llm_model or extract from stored model
           case req.private[:req_llm_model] do
-            %ReqLLM.Model{} = stored_model -> {stored_model.provider, stored_model}
-            _ -> {:unknown, %ReqLLM.Model{provider: :unknown, model: "unknown"}}
+            %ReqLLM.Model{} = stored_model ->
+              {stored_model.provider, stored_model, stored_model.model}
+
+            _ ->
+              {:unknown, %ReqLLM.Model{provider: :unknown, model: "unknown"}, "unknown"}
           end
+
+        %ReqLLM.Model{} = model_struct ->
+          {model_struct.provider, model_struct, model_struct.model}
 
         model_name when is_binary(model_name) ->
           provider_id =
             String.split(model_name, ":", parts: 2) |> List.first() |> String.to_atom()
 
           model = %ReqLLM.Model{provider: provider_id, model: model_name}
-          {provider_id, model}
+          {provider_id, model, model_name}
       end
 
     is_streaming = req.options[:stream] == true
 
     if is_streaming do
-      decode_streaming_response(req, resp, model_name)
+      decode_streaming_response(req, resp, model_string)
     else
       decode_non_streaming_response(req, resp, model, operation)
     end

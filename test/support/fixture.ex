@@ -106,10 +106,11 @@ defmodule ReqLLM.Step.Fixture.Backend do
         end
       else
         Logger.debug("Fixture REPLAY mode - loading from #{Path.relative_to_cwd(path)}")
-        # Short-circuit the pipeline with stubbed response
         {:ok, response} = handle_replay(path, model)
         Logger.debug("Fixture loaded successfully, status=#{response.status}")
-        {request, response}
+
+        request = Req.Request.put_private(request, :llm_fixture_replay, true)
+        run_response_steps(request, response)
       end
     end
   end
@@ -195,6 +196,13 @@ defmodule ReqLLM.Step.Fixture.Backend do
   defp provider_module(:groq), do: ReqLLM.Providers.Groq
   defp provider_module(:openrouter), do: ReqLLM.Providers.OpenRouter
   defp provider_module(:xai), do: ReqLLM.Providers.XAI
+
+  # Run response steps manually for fixture replay to ensure Usage step calculates costs
+  defp run_response_steps(%Req.Request{} = request, %Req.Response{} = response) do
+    Enum.reduce(request.response_steps, {request, response}, fn {_name, step}, acc ->
+      step.(acc)
+    end)
+  end
 
   # ---------------------------------------------------------------------------
   # Response step for saving fixtures in LIVE mode
