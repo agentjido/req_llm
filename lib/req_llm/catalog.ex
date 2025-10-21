@@ -103,15 +103,10 @@ defmodule ReqLLM.Catalog do
   defp check_allow_not_empty(config) do
     allow = config[:allow]
 
-    cond do
-      not is_map(allow) ->
-        {:error, "allow must be a map"}
-
-      map_size(allow) == 0 and Mix.env() != :test ->
-        {:error, "catalog.allow cannot be empty in #{Mix.env()} environment"}
-
-      true ->
-        :ok
+    if is_map(allow) do
+      :ok
+    else
+      {:error, "allow must be a map"}
     end
   end
 
