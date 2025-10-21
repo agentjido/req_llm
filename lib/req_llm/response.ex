@@ -280,6 +280,7 @@ defmodule ReqLLM.Response do
 
   """
   @spec decode_response(term(), Model.t() | String.t()) :: {:ok, t()} | {:error, term()}
+  @dialyzer {:nowarn_function, decode_response: 2}
   def decode_response(raw_data, model_input) do
     model = if is_binary(model_input), do: Model.from!(model_input), else: model_input
 
@@ -294,7 +295,7 @@ defmodule ReqLLM.Response do
 
         fixture_request = %Req.Request{
           private: %{req_llm_model: model},
-          options: %{model: model}
+          options: %{model: model.model}
         }
 
         fixture_response = %Req.Response{body: wrapped_data, status: 200}
