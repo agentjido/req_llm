@@ -292,15 +292,21 @@ defmodule ReqLLM.Response do
             raw_data
           end
 
-        # Construct minimal request/response structs to invoke provider's decode_response callback
-        # without an actual HTTP request (for manual decoding of saved/raw API responses)
-        fixture_request = %Req.Request{private: %{req_llm_model: model}}
+        fixture_request = %Req.Request{
+          private: %{req_llm_model: model},
+          options: %{model: model}
+        }
+
         fixture_response = %Req.Response{body: wrapped_data, status: 200}
         {_req, result} = provider_mod.decode_response({fixture_request, fixture_response})
 
         case result do
-          %Req.Response{body: %ReqLLM.Response{} = response} -> {:ok, response}
-          error -> {:error, error}
+          %Req.Response{body: %ReqLLM.Response{}} = resp ->
+            {_req, final_resp} = ReqLLM.Step.Usage.handle({fixture_request, resp})
+            {:ok, final_resp.body}
+
+          error ->
+            {:error, error}
         end
 
       {:error, error} ->

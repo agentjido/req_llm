@@ -1091,6 +1091,9 @@ defmodule ReqLLM.Provider.Defaults do
             _ -> {:unknown, %ReqLLM.Model{provider: :unknown, model: "unknown"}}
           end
 
+        %ReqLLM.Model{} = model_struct ->
+          {model_struct.provider, model_struct}
+
         model_name when is_binary(model_name) ->
           provider_id =
             String.split(model_name, ":", parts: 2) |> List.first() |> String.to_atom()
