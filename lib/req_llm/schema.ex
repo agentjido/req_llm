@@ -765,28 +765,13 @@ defmodule ReqLLM.Schema do
   defp convert_from_zoi_format(data), do: data
 
   @doc false
-  @spec format_zoi_errors(list()) :: String.t()
-  defp format_zoi_errors(errors) when is_list(errors) do
-    errors
-    |> Enum.map_join(", ", fn error ->
-      case error do
-        %{path: path, message: message} when is_list(path) and path != [] ->
-          "#{Enum.join(path, ".")}: #{message}"
-
-        %{path: path, message: message} when is_binary(path) and path != "" ->
-          "#{path}: #{message}"
-
-        %{message: message} ->
-          message
-
-        error when is_binary(error) ->
-          error
-
-        _ ->
-          inspect(error)
+  @spec format_zoi_errors([Zoi.Error.t()]) :: String.t()
+  defp format_zoi_errors(errors) do
+    Enum.map_join(errors, ", ", fn %Zoi.Error{path: path, message: message} ->
+      case path do
+        [] -> message
+        _ -> "#{Enum.map_join(path, ".", &to_string/1)}: #{message}"
       end
     end)
   end
-
-  defp format_zoi_errors(error), do: inspect(error)
 end
