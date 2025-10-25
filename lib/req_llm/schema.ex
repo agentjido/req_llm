@@ -7,7 +7,7 @@ defmodule ReqLLM.Schema do
   Supports all common NimbleOptions types and handles nested schemas.
 
   Also supports direct JSON Schema pass-through when a map is provided instead of a keyword list,
-  and Zoi schema structs when the Zoi library is available.
+  and Zoi schema structs for advanced schema definitions.
 
   ## Core Functions
 
@@ -151,7 +151,7 @@ defmodule ReqLLM.Schema do
 
   When a map is provided (raw JSON Schema), returns it unchanged (pass-through mode).
 
-  When a Zoi schema struct is provided and Zoi is available, converts it to JSON Schema.
+  When a Zoi schema struct is provided, converts it to JSON Schema.
 
   ## Parameters
 
@@ -220,24 +220,11 @@ defmodule ReqLLM.Schema do
   end
 
   def to_json(%_{} = schema) when is_struct(schema) do
-    if zoi_available?() do
-      apply(Zoi, :to_json_schema, [schema])
-      |> normalize_json_schema()
-    else
-      raise ArgumentError, """
-      Zoi schema provided but Zoi library is not available.
-      Add {:zoi, "~> 0.7"} to your mix.exs dependencies to use Zoi schemas.
-      """
-    end
+    Zoi.to_json_schema(schema)
+    |> normalize_json_schema()
   end
 
   # Private helper functions
-
-  @doc false
-  @spec zoi_available?() :: boolean()
-  defp zoi_available? do
-    Code.ensure_loaded?(Zoi) and function_exported?(Zoi, :__info__, 1)
-  end
 
   @doc false
   @spec zoi_schema?(any()) :: boolean()
@@ -626,7 +613,7 @@ defmodule ReqLLM.Schema do
 
   Takes data and validates it against a schema. Supports multiple schema types:
   - NimbleOptions keyword schemas (expects maps)
-  - Zoi schema structs (when Zoi is available, can handle maps, arrays, etc.)
+  - Zoi schema structs (can handle maps, arrays, etc.)
   - Raw JSON Schemas (pass-through, no server-side validation)
 
   ## Parameters
@@ -718,29 +705,19 @@ defmodule ReqLLM.Schema do
   @spec validate_with_zoi(any(), struct()) ::
           {:ok, map() | list() | any()} | {:error, ReqLLM.Error.t()}
   defp validate_with_zoi(data, schema) do
-    if zoi_available?() do
-      zoi_input = convert_to_zoi_format(data)
+    zoi_input = convert_to_zoi_format(data)
 
-      case apply(Zoi, :parse, [schema, zoi_input]) do
-        {:ok, parsed} ->
-          {:ok, convert_from_zoi_format(parsed)}
+    case Zoi.parse(schema, zoi_input) do
+      {:ok, parsed} ->
+        {:ok, convert_from_zoi_format(parsed)}
 
-        {:error, errors} ->
-          {:error,
-           ReqLLM.Error.Validation.Error.exception(
-             tag: :schema_validation_failed,
-             reason: format_zoi_errors(errors),
-             context: [data: data, schema: schema]
-           )}
-      end
-    else
-      {:error,
-       ReqLLM.Error.Invalid.Parameter.exception(
-         parameter: """
-         Zoi schema provided but Zoi library is not available.
-         Add {:zoi, "~> 0.7"} to your mix.exs dependencies to use Zoi schemas.
-         """
-       )}
+      {:error, errors} ->
+        {:error,
+         ReqLLM.Error.Validation.Error.exception(
+           tag: :schema_validation_failed,
+           reason: format_zoi_errors(errors),
+           context: [data: data, schema: schema]
+         )}
     end
   end
 
