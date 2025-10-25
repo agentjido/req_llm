@@ -330,7 +330,7 @@ defmodule ReqLLM.StreamResponse do
         finish_reason
 
       %{finish_reason: finish_reason} when is_binary(finish_reason) ->
-        String.to_atom(finish_reason)
+        String.to_existing_atom(finish_reason)
 
       %{} ->
         nil

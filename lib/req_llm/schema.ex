@@ -6,12 +6,13 @@ defmodule ReqLLM.Schema do
   for converting keyword schemas to both NimbleOptions compiled schemas and JSON Schema format.
   Supports all common NimbleOptions types and handles nested schemas.
 
-  Also supports direct JSON Schema pass-through when a map is provided instead of a keyword list.
+  Also supports direct JSON Schema pass-through when a map is provided instead of a keyword list,
+  and Zoi schema structs when the Zoi library is available.
 
   ## Core Functions
 
   - `compile/1` - Convert keyword schema to NimbleOptions compiled schema, or pass through maps
-  - `to_json/1` - Convert keyword schema to JSON Schema format, or pass through maps
+  - `to_json/1` - Convert keyword schema to JSON Schema format, pass through maps, or convert Zoi schemas
 
 
   ## Basic Usage
@@ -150,9 +151,11 @@ defmodule ReqLLM.Schema do
 
   When a map is provided (raw JSON Schema), returns it unchanged (pass-through mode).
 
+  When a Zoi schema struct is provided and Zoi is available, converts it to JSON Schema.
+
   ## Parameters
 
-  - `schema` - Keyword list of parameter definitions, or a map for raw JSON Schema
+  - `schema` - Keyword list of parameter definitions, a map for raw JSON Schema, or a Zoi schema struct
 
   ## Returns
 
@@ -186,8 +189,8 @@ defmodule ReqLLM.Schema do
       %{"type" => "object", "properties" => %{"foo" => %{"type" => "string"}}}
 
   """
-  @spec to_json(keyword() | map()) :: map()
-  def to_json(schema) when is_map(schema), do: schema
+  @spec to_json(keyword() | map() | struct()) :: map()
+  def to_json(schema) when is_map(schema) and not is_struct(schema), do: schema
 
   def to_json([]), do: %{"type" => "object", "properties" => %{}}
 
@@ -216,7 +219,68 @@ defmodule ReqLLM.Schema do
     end
   end
 
+  def to_json(%_{} = schema) when is_struct(schema) do
+    if zoi_available?() do
+      apply(Zoi, :to_json_schema, [schema])
+      |> normalize_json_schema()
+    else
+      raise ArgumentError, """
+      Zoi schema provided but Zoi library is not available.
+      Add {:zoi, "~> 0.7"} to your mix.exs dependencies to use Zoi schemas.
+      """
+    end
+  end
+
   # Private helper functions
+
+  @doc false
+  @spec zoi_available?() :: boolean()
+  defp zoi_available? do
+    Code.ensure_loaded?(Zoi) and function_exported?(Zoi, :__info__, 1)
+  end
+
+  @doc false
+  @spec zoi_schema?(any()) :: boolean()
+  defp zoi_schema?(value) when is_struct(value) do
+    module_name = value.__struct__ |> Module.split() |> List.first()
+    module_name == "Zoi"
+  end
+
+  defp zoi_schema?(_), do: false
+
+  @doc false
+  @spec schema_kind(any()) :: :nimble | :json | :zoi | :unknown
+  defp schema_kind(schema) when is_list(schema), do: :nimble
+
+  defp schema_kind(schema) when is_map(schema) and not is_struct(schema) do
+    :json
+  end
+
+  defp schema_kind(schema) when is_struct(schema) do
+    if zoi_schema?(schema), do: :zoi, else: :unknown
+  end
+
+  defp schema_kind(_), do: :unknown
+
+  @doc false
+  @spec normalize_json_schema(any()) :: any()
+  defp normalize_json_schema(value) when is_map(value) and not is_struct(value) do
+    value
+    |> Map.new(fn {k, v} ->
+      key = if is_atom(k), do: Atom.to_string(k), else: k
+      {key, normalize_json_schema(v)}
+    end)
+  end
+
+  defp normalize_json_schema(value) when is_list(value) do
+    Enum.map(value, &normalize_json_schema/1)
+  end
+
+  defp normalize_json_schema(value) when is_atom(value) do
+    Atom.to_string(value)
+  end
+
+  defp normalize_json_schema(value), do: value
 
   @doc """
   Converts a NimbleOptions type to JSON Schema property definition.
@@ -558,15 +622,17 @@ defmodule ReqLLM.Schema do
   end
 
   @doc """
-  Validate data against a keyword schema.
+  Validate data against a schema.
 
-  Takes a data map and validates it against a NimbleOptions-style keyword schema.
-  The data is first converted to keyword format for NimbleOptions validation.
+  Takes data and validates it against a schema. Supports multiple schema types:
+  - NimbleOptions keyword schemas (expects maps)
+  - Zoi schema structs (when Zoi is available, can handle maps, arrays, etc.)
+  - Raw JSON Schemas (pass-through, no server-side validation)
 
   ## Parameters
 
-    * `data` - Map of data to validate
-    * `schema` - Keyword schema definition
+    * `data` - Data to validate (map, list, or other type depending on schema)
+    * `schema` - Schema definition (keyword list, Zoi struct, or map)
 
   ## Returns
 
@@ -586,10 +652,38 @@ defmodule ReqLLM.Schema do
       {:error, %ReqLLM.Error.Validation.Error{...}}
 
   """
-  @spec validate(map(), keyword()) :: {:ok, keyword()} | {:error, ReqLLM.Error.t()}
-  def validate(data, schema) when is_map(data) and is_list(schema) do
+  @spec validate(any(), keyword() | map() | struct()) ::
+          {:ok, keyword() | map() | list() | any()} | {:error, ReqLLM.Error.t()}
+  def validate(data, schema) do
+    case schema_kind(schema) do
+      :nimble ->
+        if is_map(data) do
+          validate_with_nimble(data, schema)
+        else
+          {:error,
+           ReqLLM.Error.Invalid.Parameter.exception(
+             parameter: "NimbleOptions schemas require map data, got: #{inspect(data)}"
+           )}
+        end
+
+      :json ->
+        {:ok, data}
+
+      :zoi ->
+        validate_with_zoi(data, schema)
+
+      :unknown ->
+        {:error,
+         ReqLLM.Error.Invalid.Parameter.exception(
+           parameter: "Unsupported schema type: #{inspect(schema)}"
+         )}
+    end
+  end
+
+  @doc false
+  @spec validate_with_nimble(map(), keyword()) :: {:ok, keyword()} | {:error, ReqLLM.Error.t()}
+  defp validate_with_nimble(data, schema) do
     with {:ok, compiled_result} <- compile(schema) do
-      # Convert string keys to atoms for NimbleOptions validation
       keyword_data =
         data
         |> Enum.map(fn {k, v} ->
@@ -612,7 +706,6 @@ defmodule ReqLLM.Schema do
     end
   rescue
     ArgumentError ->
-      # Handle the case where string keys don't exist as atoms
       {:error,
        ReqLLM.Error.Validation.Error.exception(
          tag: :invalid_keys,
@@ -621,10 +714,102 @@ defmodule ReqLLM.Schema do
        )}
   end
 
-  def validate(data, _schema) do
-    {:error,
-     ReqLLM.Error.Invalid.Parameter.exception(
-       parameter: "Data must be a map, got: #{inspect(data)}"
-     )}
+  @doc false
+  @spec validate_with_zoi(any(), struct()) ::
+          {:ok, map() | list() | any()} | {:error, ReqLLM.Error.t()}
+  defp validate_with_zoi(data, schema) do
+    if zoi_available?() do
+      zoi_input = convert_to_zoi_format(data)
+
+      case apply(Zoi, :parse, [schema, zoi_input]) do
+        {:ok, parsed} ->
+          {:ok, convert_from_zoi_format(parsed)}
+
+        {:error, errors} ->
+          {:error,
+           ReqLLM.Error.Validation.Error.exception(
+             tag: :schema_validation_failed,
+             reason: format_zoi_errors(errors),
+             context: [data: data, schema: schema]
+           )}
+      end
+    else
+      {:error,
+       ReqLLM.Error.Invalid.Parameter.exception(
+         parameter: """
+         Zoi schema provided but Zoi library is not available.
+         Add {:zoi, "~> 0.7"} to your mix.exs dependencies to use Zoi schemas.
+         """
+       )}
+    end
   end
+
+  @doc false
+  @spec convert_to_zoi_format(any()) :: any()
+  defp convert_to_zoi_format(data) when is_map(data) and not is_struct(data) do
+    data
+    |> Map.new(fn {k, v} ->
+      key = if is_binary(k), do: String.to_existing_atom(k), else: k
+      {key, convert_to_zoi_format(v)}
+    end)
+  rescue
+    ArgumentError ->
+      data
+  end
+
+  defp convert_to_zoi_format(data) when is_list(data) do
+    if Keyword.keyword?(data) do
+      data
+    else
+      Enum.map(data, &convert_to_zoi_format/1)
+    end
+  end
+
+  defp convert_to_zoi_format(data), do: data
+
+  @doc false
+  @spec convert_from_zoi_format(any()) :: any()
+  defp convert_from_zoi_format(data) when is_map(data) and not is_struct(data) do
+    data
+    |> Map.new(fn {k, v} ->
+      key = if is_atom(k), do: Atom.to_string(k), else: k
+      {key, convert_from_zoi_format(v)}
+    end)
+  end
+
+  defp convert_from_zoi_format(data) when is_list(data) do
+    if Keyword.keyword?(data) do
+      data
+    else
+      Enum.map(data, &convert_from_zoi_format/1)
+    end
+  end
+
+  defp convert_from_zoi_format(data), do: data
+
+  @doc false
+  @spec format_zoi_errors(list()) :: String.t()
+  defp format_zoi_errors(errors) when is_list(errors) do
+    errors
+    |> Enum.map_join(", ", fn error ->
+      case error do
+        %{path: path, message: message} when is_list(path) and path != [] ->
+          "#{Enum.join(path, ".")}: #{message}"
+
+        %{path: path, message: message} when is_binary(path) and path != "" ->
+          "#{path}: #{message}"
+
+        %{message: message} ->
+          message
+
+        error when is_binary(error) ->
+          error
+
+        _ ->
+          inspect(error)
+      end
+    end)
+  end
+
+  defp format_zoi_errors(error), do: inspect(error)
 end
