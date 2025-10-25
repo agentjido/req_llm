@@ -16,10 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Metadata collection timeout errors on large documents with long processing times
-
-### Fixed
-
 - Bedrock streaming now works correctly (fixed deprecated function capture syntax)
+- Tool.Inspect protocol crash when inspecting tools with JSON Schema (map) parameter schemas
 
 ### Changed
 

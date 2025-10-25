@@ -451,8 +451,27 @@ defmodule ReqLLM.Tool do
 
   defimpl Inspect do
     def inspect(%{name: name, parameter_schema: schema}, opts) do
-      param_count = length(schema)
-      param_desc = if param_count == 0, do: "no params", else: "#{param_count} params"
+      param_desc =
+        cond do
+          # NimbleOptions format (list of keyword tuples)
+          is_list(schema) ->
+            param_count = length(schema)
+            if param_count == 0, do: "no params", else: "#{param_count} params"
+
+          # JSON Schema format (map)
+          is_map(schema) ->
+            prop_count = map_size(Map.get(schema, "properties", %{}))
+
+            if prop_count == 0 do
+              "no params (JSON Schema)"
+            else
+              "#{prop_count} params (JSON Schema)"
+            end
+
+          # Unknown format
+          true ->
+            "unknown schema format"
+        end
 
       Inspect.Algebra.concat([
         "#Tool<",

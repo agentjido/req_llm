@@ -108,7 +108,7 @@ defmodule ReqLLM.ToolTest do
         assert {:error, _} = Tool.new(params)
       end
 
-      # Valid names  
+      # Valid names
       valid_names = ["valid_name", "CamelCase", "_underscore", "a1b2c3", "get_weather_info"]
 
       for name <- valid_names do
@@ -498,6 +498,79 @@ defmodule ReqLLM.ToolTest do
       # Should pass through to providers unchanged
       anthropic = Tool.to_schema(tool, :anthropic)
       assert anthropic["input_schema"] == complex_schema
+    end
+  end
+
+  describe "Inspect protocol" do
+    test "handles NimbleOptions parameter schema (list)" do
+      {:ok, tool} =
+        Tool.new(
+          name: "nimble_tool",
+          description: "Tool with NimbleOptions schema",
+          parameter_schema: [
+            location: [type: :string, required: true],
+            units: [type: :string]
+          ],
+          callback: fn _ -> {:ok, "result"} end
+        )
+
+      inspected = inspect(tool)
+      assert inspected =~ "#Tool<\"nimble_tool\""
+      assert inspected =~ "2 params>"
+    end
+
+    test "handles JSON Schema parameter schema (map)" do
+      json_schema = %{
+        "type" => "object",
+        "properties" => %{
+          "location" => %{"type" => "string"},
+          "units" => %{"type" => "string"}
+        },
+        "required" => ["location"]
+      }
+
+      {:ok, tool} =
+        Tool.new(
+          name: "json_tool",
+          description: "Tool with JSON Schema",
+          parameter_schema: json_schema,
+          callback: fn _ -> {:ok, "result"} end
+        )
+
+      inspected = inspect(tool)
+      assert inspected =~ "#Tool<\"json_tool\""
+      assert inspected =~ "2 params (JSON Schema)>"
+    end
+
+    test "handles empty NimbleOptions schema" do
+      {:ok, tool} =
+        Tool.new(
+          name: "no_params_tool",
+          description: "Tool without params",
+          parameter_schema: [],
+          callback: fn _ -> {:ok, "result"} end
+        )
+
+      inspected = inspect(tool)
+      assert inspected =~ "#Tool<\"no_params_tool\""
+      assert inspected =~ "no params>"
+    end
+
+    test "handles empty JSON Schema" do
+      {:ok, tool} =
+        Tool.new(
+          name: "empty_json_tool",
+          description: "Tool with empty JSON Schema",
+          parameter_schema: %{
+            "type" => "object",
+            "properties" => %{}
+          },
+          callback: fn _ -> {:ok, "result"} end
+        )
+
+      inspected = inspect(tool)
+      assert inspected =~ "#Tool<\"empty_json_tool\""
+      assert inspected =~ "no params (JSON Schema)>"
     end
   end
 end
