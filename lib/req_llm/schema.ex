@@ -90,9 +90,11 @@ defmodule ReqLLM.Schema do
   When a map is provided (raw JSON Schema), returns a wrapper with the original schema
   and no compiled version (pass-through mode).
 
+  When a Zoi schema struct is provided, converts it to JSON Schema format.
+
   ## Parameters
 
-  - `schema` - A keyword list representing a NimbleOptions schema, or a map for raw JSON Schema
+  - `schema` - A keyword list representing a NimbleOptions schema, a map for raw JSON Schema, or a Zoi schema struct
 
   ## Returns
 
@@ -116,11 +118,23 @@ defmodule ReqLLM.Schema do
       {:error, %ReqLLM.Error.Invalid.Parameter{}}
 
   """
-  @spec compile(keyword() | map() | any()) ::
+  @spec compile(keyword() | map() | struct() | any()) ::
           {:ok, %{schema: keyword() | map(), compiled: NimbleOptions.t() | nil}}
           | {:error, ReqLLM.Error.t()}
-  def compile(schema) when is_map(schema) do
+  def compile(schema) when is_map(schema) and not is_struct(schema) do
     {:ok, %{schema: schema, compiled: nil}}
+  end
+
+  def compile(%_{} = schema) when is_struct(schema) do
+    if zoi_schema?(schema) do
+      json_schema = to_json(schema)
+      {:ok, %{schema: json_schema, compiled: nil}}
+    else
+      {:error,
+       ReqLLM.Error.Invalid.Parameter.exception(
+         parameter: "Schema must be a keyword list, map, or Zoi schema, got: #{inspect(schema)}"
+       )}
+    end
   end
 
   def compile(schema) when is_list(schema) do
@@ -139,7 +153,7 @@ defmodule ReqLLM.Schema do
   def compile(schema) do
     {:error,
      ReqLLM.Error.Invalid.Parameter.exception(
-       parameter: "Schema must be a keyword list or map, got: #{inspect(schema)}"
+       parameter: "Schema must be a keyword list, map, or Zoi schema, got: #{inspect(schema)}"
      )}
   end
 

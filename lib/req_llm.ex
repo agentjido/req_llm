@@ -391,16 +391,11 @@ defmodule ReqLLM do
 
     * `model_spec` - Model specification in various formats
     * `messages` - Text prompt or list of messages
-    * `schema` - Schema definition for structured output
+    * `schema` - Schema definition for structured output (NimbleOptions schema or JSON Schema map)
     * `opts` - Additional options (keyword list)
 
   ## Options
 
-    * `:output` - Output type: `:object`, `:array`, `:enum`, or `:no_schema`
-    * `:mode` - Generation mode: `:auto`, `:json`, or `:tool`
-    * `:schema_name` - Optional name for the schema
-    * `:schema_description` - Optional description for the schema
-    * `:enum` - List of possible values (for enum output)
     * `:temperature` - Control randomness in responses (0.0 to 2.0)
     * `:max_tokens` - Limit the length of the response
     * `:provider_options` - Provider-specific options
@@ -415,13 +410,39 @@ defmodule ReqLLM do
       {:ok, object} = ReqLLM.generate_object("anthropic:claude-3-sonnet", "Generate a person", schema)
       #=> {:ok, %{name: "John Doe", age: 30}}
 
-      # Generate an array of objects
-      {:ok, objects} = ReqLLM.generate_object(
-        "anthropic:claude-3-sonnet",
+      # Generate an array of objects (requires JSON Schema-capable provider like OpenAI)
+      person_schema = ReqLLM.Schema.to_json([
+        name: [type: :string, required: true],
+        age: [type: :pos_integer, required: true]
+      ])
+
+      array_schema = %{"type" => "array", "items" => person_schema}
+
+      {:ok, response} = ReqLLM.generate_object(
+        "openai:gpt-4o",
         "Generate 3 heroes",
-        schema,
-        output: :array
+        array_schema
       )
+      # Note: Array outputs currently require manual extraction from the response
+
+      # Recommended: Use Zoi for cleaner array schema definition
+      person = Zoi.object(%{
+        name: Zoi.string(),
+        age: Zoi.number()
+      })
+      
+      array_schema = Zoi.array(person) |> ReqLLM.Schema.to_json()
+      
+      {:ok, response} = ReqLLM.generate_object(
+        "openai:gpt-4o",
+        "Generate 3 heroes",
+        array_schema
+      )
+
+  > **Note**: Top-level non-object outputs (arrays, enums) require raw JSON Schema
+  > and are only supported by providers with native JSON Schema capabilities (e.g., OpenAI).
+  > Most providers only support object-type schemas. For cleaner array schema definitions,
+  > consider using the Zoi library as shown above.
 
   """
   defdelegate generate_object(model_spec, messages, schema, opts \\ []), to: Generation
