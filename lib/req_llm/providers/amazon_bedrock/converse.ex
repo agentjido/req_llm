@@ -86,8 +86,21 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
   Format a ReqLLM context into Bedrock Converse API format.
 
   Converts ReqLLM messages and tools into the Converse API request structure.
+
+  For :object operations, creates a synthetic "structured_output" tool to
+  leverage unified tool calling for structured JSON output across all models.
   """
   def format_request(_model_id, context, opts) do
+    operation = opts[:operation]
+
+    # For :object operation, inject the structured_output tool
+    {context, opts} =
+      if operation == :object do
+        prepare_structured_output_context(context, opts)
+      else
+        {context, opts}
+      end
+
     request = %{}
 
     # Add messages
@@ -101,6 +114,14 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
         request
       end
 
+    # Add tool choice if specified
+    request =
+      if tool_choice = opts[:tool_choice] do
+        add_tool_choice(request, tool_choice)
+      else
+        request
+      end
+
     # Add inference config
     request = add_inference_config(request, opts)
 
@@ -110,11 +131,39 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
     request
   end
 
+  # Create the synthetic structured_output tool for :object operations
+  defp prepare_structured_output_context(context, opts) do
+    compiled_schema = Keyword.fetch!(opts, :compiled_schema)
+
+    # Create the structured_output tool (same as native Anthropic provider)
+    structured_output_tool =
+      ReqLLM.Tool.new!(
+        name: "structured_output",
+        description: "Generate structured output matching the provided schema",
+        parameter_schema: compiled_schema.schema,
+        callback: fn _args -> {:ok, "structured output generated"} end
+      )
+
+    # Add tool to context - Context may or may not have a tools field
+    existing_tools = Map.get(context, :tools, [])
+    updated_context = Map.put(context, :tools, [structured_output_tool | existing_tools])
+
+    # Update opts to force tool choice
+    updated_opts =
+      opts
+      |> Keyword.put(:tools, [structured_output_tool | Keyword.get(opts, :tools, [])])
+      |> Keyword.put(:tool_choice, %{type: "tool", name: "structured_output"})
+
+    {updated_context, updated_opts}
+  end
+
   @doc """
   Parse a Converse API response into ReqLLM format.
 
   Converts Converse API response structure back to ReqLLM.Response with
   proper Message and ContentPart structures.
+
+  For :object operations, extracts the structured output from the tool call.
   """
   def parse_response(response_body, opts) do
     message_data = get_in(response_body, ["output", "message"])
@@ -140,7 +189,25 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
       stream?: false
     }
 
-    {:ok, response}
+    # For :object operation, extract structured output from tool call
+    final_response =
+      if opts[:operation] == :object do
+        extract_and_set_object(response)
+      else
+        response
+      end
+
+    {:ok, final_response}
+  end
+
+  # Extract structured output from tool call (same logic as native Anthropic provider)
+  defp extract_and_set_object(response) do
+    extracted_object =
+      response
+      |> ReqLLM.Response.tool_calls()
+      |> ReqLLM.ToolCall.find_args("structured_output")
+
+    %{response | object: extracted_object}
   end
 
   @doc """
@@ -225,6 +292,35 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
     Map.put(request, "toolConfig", %{
       "tools" => tool_specs
     })
+  end
+
+  # Add tool choice configuration to force specific tool usage
+  defp add_tool_choice(request, tool_choice) do
+    # Converse API uses toolChoice in toolConfig
+    existing_tool_config = Map.get(request, "toolConfig", %{})
+
+    # Convert from Anthropic format to Converse format
+    tool_choice_config =
+      case tool_choice do
+        %{type: "tool", name: name} ->
+          # Force specific tool
+          %{"tool" => %{"name" => name}}
+
+        %{type: "any"} ->
+          # Force any tool (must use a tool)
+          %{"any" => %{}}
+
+        %{type: "auto"} ->
+          # Auto decide (default)
+          %{"auto" => %{}}
+
+        _ ->
+          # Unknown format, use auto
+          %{"auto" => %{}}
+      end
+
+    updated_tool_config = Map.put(existing_tool_config, "toolChoice", tool_choice_config)
+    Map.put(request, "toolConfig", updated_tool_config)
   end
 
   defp add_inference_config(request, opts) do

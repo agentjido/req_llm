@@ -7,9 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-
 ### Added
 
+- Structured output (`:object` operation) support for AWS Bedrock provider
+  - Bedrock Anthropic sub-provider using tool-calling approach
+  - Bedrock Converse API for unified structured output across all models
+  - Bedrock OpenAI sub-provider (gpt-oss models)
 - Configurable metadata timeout for streaming operations with `:metadata_timeout` option (default: 300,000ms)
 - Application-level configuration support for `:metadata_timeout`
 
@@ -28,7 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Updated Finch streaming to use credential-based signing API
   - Session tokens now handled automatically by ex_aws_auth
 - Simplified STS AssumeRole implementation using credential-based API
-
 
 ## [1.0.0-rc.7] - 2025-10-16
 

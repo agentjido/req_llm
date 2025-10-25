@@ -193,6 +193,7 @@ defmodule Mix.Tasks.ReqLlm.ModelSync do
 
     case execute_sync(verbose?) do
       :ok ->
+        IO.puts("✓ Updated catalog manifest (will trigger recompilation)")
         IO.puts("Model synchronization completed successfully")
         :ok
 
@@ -212,6 +213,7 @@ defmodule Mix.Tasks.ReqLlm.ModelSync do
     with {:ok, models_data} <- fetch_models_dev_data(verbose?) do
       merged_data = merge_local_patches(models_data, verbose?)
       save_provider_files(merged_data, verbose?)
+      write_manifest(verbose?)
     end
   end
 
@@ -560,5 +562,36 @@ defmodule Mix.Tasks.ReqLlm.ModelSync do
     if verbose? do
       IO.puts("  Generated #{module_path}")
     end
+  end
+
+  defp write_manifest(verbose?) do
+    provider_files =
+      Path.wildcard(Path.join(@providers_dir, "*.json"))
+      |> Enum.sort()
+
+    concatenated_content =
+      provider_files
+      |> Enum.map_join(&File.read!/1)
+
+    hash =
+      :crypto.hash(:sha256, concatenated_content)
+      |> Base.encode16(case: :lower)
+
+    manifest = %{
+      "files" => provider_files,
+      "hash" => hash,
+      "generated_at" => DateTime.utc_now() |> DateTime.to_iso8601()
+    }
+
+    manifest_path = Path.join(@providers_dir, ".catalog_manifest.json")
+    File.write!(manifest_path, Jason.encode!(manifest, pretty: true))
+
+    if verbose? do
+      IO.puts(
+        "  Generated manifest with #{length(provider_files)} files (hash: #{String.slice(hash, 0..7)})"
+      )
+    end
+
+    :ok
   end
 end

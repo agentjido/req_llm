@@ -531,4 +531,136 @@ defmodule ReqLLM.Provider.RegistryTest do
       assert Registry.reload() == :ok
     end
   end
+
+  describe "initialize/1 with catalog" do
+    test "initializes registry from effective catalog" do
+      Registry.clear()
+
+      catalog = %{
+        "test_catalog_provider" => %{
+          "id" => "test_catalog_provider",
+          "models" => %{
+            "model-1" => %{
+              "id" => "model-1",
+              "context_length" => 4096,
+              "cost" => %{"input" => 0.001, "output" => 0.002}
+            },
+            "model-2" => %{
+              "id" => "model-2",
+              "context_length" => 8192,
+              "cost" => %{"input" => 0.002, "output" => 0.004}
+            }
+          },
+          "provider" => %{
+            "env" => ["TEST_API_KEY"]
+          }
+        }
+      }
+
+      assert Registry.initialize(catalog) == :ok
+
+      providers = Registry.list_providers()
+      assert :test_catalog_provider in providers
+
+      {:ok, models} = Registry.list_models(:test_catalog_provider)
+      assert "model-1" in models
+      assert "model-2" in models
+
+      {:ok, model} = Registry.get_model(:test_catalog_provider, "model-1")
+      assert model.provider == :test_catalog_provider
+      assert model.model == "model-1"
+    end
+
+    test "combines DSL-registered providers with catalog providers" do
+      Registry.clear()
+
+      Registry.register(:dsl_provider, TestProvider, %{
+        models: [%{"id" => "dsl-model"}]
+      })
+
+      catalog = %{
+        "dsl_provider" => %{
+          "id" => "dsl_provider",
+          "models" => %{
+            "catalog-model" => %{"id" => "catalog-model"}
+          }
+        },
+        "catalog_only_provider" => %{
+          "id" => "catalog_only_provider",
+          "models" => %{
+            "catalog-only-model" => %{"id" => "catalog-only-model"}
+          }
+        }
+      }
+
+      assert Registry.initialize(catalog) == :ok
+
+      providers = Registry.list_providers()
+      assert :dsl_provider in providers
+      assert :catalog_only_provider in providers
+
+      assert {:ok, TestProvider} = Registry.get_provider(:dsl_provider)
+      assert Registry.implemented?(:dsl_provider)
+
+      assert {:error, %ReqLLM.Error.Invalid.Provider.NotImplemented{}} =
+               Registry.get_provider(:catalog_only_provider)
+
+      refute Registry.implemented?(:catalog_only_provider)
+    end
+
+    test "converts catalog models map to list format" do
+      Registry.clear()
+
+      catalog = %{
+        "converter_provider" => %{
+          "id" => "converter_provider",
+          "models" => %{
+            "model-b" => %{"id" => "model-b"},
+            "model-a" => %{"id" => "model-a"},
+            "model-c" => %{"id" => "model-c"}
+          }
+        }
+      }
+
+      assert Registry.initialize(catalog) == :ok
+
+      {:ok, models} = Registry.list_models(:converter_provider)
+      assert models == ["model-a", "model-b", "model-c"]
+    end
+
+    test "handles empty catalog gracefully" do
+      Registry.clear()
+      assert Registry.initialize(%{}) == :ok
+      assert Registry.list_providers() == []
+    end
+
+    test "works with get_model/2 for catalog-initialized providers" do
+      Registry.clear()
+
+      catalog = %{
+        "catalog_test" => %{
+          "id" => "catalog_test",
+          "models" => %{
+            "test-model" => %{
+              "id" => "test-model",
+              "cost" => %{"input" => 0.005, "output" => 0.010},
+              "modalities" => %{"input" => ["text"], "output" => ["text"]},
+              "reasoning" => false,
+              "tool_call" => true
+            }
+          }
+        }
+      }
+
+      assert Registry.initialize(catalog) == :ok
+
+      {:ok, model} = Registry.get_model(:catalog_test, "test-model")
+      assert model.provider == :catalog_test
+      assert model.model == "test-model"
+      assert model.cost.input == 0.005
+      assert model.cost.output == 0.010
+      assert model.capabilities.reasoning == false
+      assert model.capabilities.tool_call == true
+    end
+  end
 end

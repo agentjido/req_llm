@@ -260,4 +260,128 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAITest do
       assert {:error, :no_usage} = OpenAI.extract_usage(body, nil)
     end
   end
+
+  describe "structured output (:object operation)" do
+    test "format_request creates structured_output tool for :object operation" do
+      schema = [
+        name: [type: :string, required: true, doc: "Person's full name"],
+        age: [type: :pos_integer, required: true, doc: "Person's age in years"],
+        occupation: [type: :string, doc: "Person's job or profession"]
+      ]
+
+      {:ok, compiled_schema} = ReqLLM.Schema.compile(schema)
+
+      context = Context.new([Context.user("Generate a software engineer profile")])
+
+      formatted =
+        OpenAI.format_request(
+          "openai.gpt-oss-120b-1:0",
+          context,
+          operation: :object,
+          compiled_schema: compiled_schema,
+          max_tokens: 500
+        )
+
+      # Should include tools array with structured_output tool
+      assert is_list(formatted["tools"])
+      assert length(formatted["tools"]) == 1
+
+      tool = List.first(formatted["tools"])
+      assert tool["type"] == "function"
+      assert tool["function"]["name"] == "structured_output"
+
+      assert tool["function"]["description"] ==
+               "Generate structured output matching the provided schema"
+
+      # Should have parameters with the user's schema
+      assert is_map(tool["function"]["parameters"])
+      assert tool["function"]["parameters"]["type"] == "object"
+      assert tool["function"]["parameters"]["properties"]["name"]["type"] == "string"
+      assert tool["function"]["parameters"]["properties"]["age"]["type"] == "integer"
+      assert tool["function"]["parameters"]["properties"]["age"]["minimum"] == 1
+      assert tool["function"]["parameters"]["required"] == ["name", "age"]
+
+      # Should force tool choice
+      assert formatted["tool_choice"]["type"] == "function"
+      assert formatted["tool_choice"]["function"]["name"] == "structured_output"
+    end
+
+    test "parse_response extracts object from tool call for :object operation" do
+      response_body = %{
+        "id" => "chatcmpl-abc",
+        "model" => "openai.gpt-oss-120b-1:0",
+        "choices" => [
+          %{
+            "message" => %{
+              "role" => "assistant",
+              "content" => nil,
+              "tool_calls" => [
+                %{
+                  "id" => "call_xyz",
+                  "type" => "function",
+                  "function" => %{
+                    "name" => "structured_output",
+                    "arguments" =>
+                      Jason.encode!(%{
+                        "name" => "Bob Smith",
+                        "age" => 35,
+                        "occupation" => "DevOps Engineer"
+                      })
+                  }
+                }
+              ]
+            },
+            "finish_reason" => "tool_calls"
+          }
+        ],
+        "usage" => %{
+          "prompt_tokens" => 451,
+          "completion_tokens" => 69
+        }
+      }
+
+      assert {:ok, parsed} =
+               OpenAI.parse_response(response_body, operation: :object)
+
+      assert %ReqLLM.Response{} = parsed
+      assert parsed.id == "chatcmpl-abc"
+      assert parsed.model == "openai.gpt-oss-120b-1:0"
+      assert parsed.finish_reason == :tool_calls
+
+      # For :object operation, should extract and set the object field
+      assert parsed.object == %{
+               "name" => "Bob Smith",
+               "age" => 35,
+               "occupation" => "DevOps Engineer"
+             }
+    end
+
+    test "parse_response returns response without object extraction for :chat operation" do
+      response_body = %{
+        "id" => "chatcmpl-xyz",
+        "model" => "openai.gpt-oss-120b-1:0",
+        "choices" => [
+          %{
+            "message" => %{
+              "role" => "assistant",
+              "content" => "Hello there!"
+            },
+            "finish_reason" => "stop"
+          }
+        ],
+        "usage" => %{
+          "prompt_tokens" => 10,
+          "completion_tokens" => 5
+        }
+      }
+
+      assert {:ok, parsed} =
+               OpenAI.parse_response(response_body, operation: :chat)
+
+      assert %ReqLLM.Response{} = parsed
+      assert parsed.finish_reason == :stop
+      # Should not have object field for :chat operation
+      assert is_nil(parsed.object)
+    end
+  end
 end

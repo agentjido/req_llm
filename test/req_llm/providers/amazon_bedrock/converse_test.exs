@@ -310,4 +310,135 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
       assert is_nil(result)
     end
   end
+
+  describe "structured output (:object operation)" do
+    test "format_request creates structured_output tool for :object operation" do
+      schema = [
+        name: [type: :string, required: true, doc: "Person's full name"],
+        age: [type: :pos_integer, required: true, doc: "Person's age in years"],
+        occupation: [type: :string, doc: "Person's job or profession"]
+      ]
+
+      {:ok, compiled_schema} = ReqLLM.Schema.compile(schema)
+
+      context = %ReqLLM.Context{
+        messages: [%Message{role: :user, content: "Generate a software engineer profile"}]
+      }
+
+      result =
+        Converse.format_request(
+          "test-model",
+          context,
+          operation: :object,
+          compiled_schema: compiled_schema,
+          max_tokens: 500
+        )
+
+      # Should include toolConfig with structured_output tool
+      assert result["toolConfig"]["tools"]
+      assert length(result["toolConfig"]["tools"]) == 1
+
+      tool = List.first(result["toolConfig"]["tools"])
+      assert tool["toolSpec"]["name"] == "structured_output"
+
+      assert tool["toolSpec"]["description"] ==
+               "Generate structured output matching the provided schema"
+
+      # Should have inputSchema with the user's schema
+      assert tool["toolSpec"]["inputSchema"]["json"]["type"] == "object"
+      assert tool["toolSpec"]["inputSchema"]["json"]["properties"]["name"]["type"] == "string"
+      assert tool["toolSpec"]["inputSchema"]["json"]["properties"]["age"]["type"] == "integer"
+      assert tool["toolSpec"]["inputSchema"]["json"]["properties"]["age"]["minimum"] == 1
+      assert tool["toolSpec"]["inputSchema"]["json"]["required"] == ["name", "age"]
+
+      # Should have tool choice forcing structured_output
+      assert result["toolConfig"]["toolChoice"]["tool"]["name"] == "structured_output"
+    end
+
+    test "parse_response extracts object from tool call for :object operation" do
+      response_body = %{
+        "output" => %{
+          "message" => %{
+            "role" => "assistant",
+            "content" => [
+              %{
+                "toolUse" => %{
+                  "toolUseId" => "call_abc",
+                  "name" => "structured_output",
+                  "input" => %{
+                    "name" => "Alice Johnson",
+                    "age" => 29,
+                    "occupation" => "Software Engineer"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "stopReason" => "tool_use",
+        "usage" => %{
+          "inputTokens" => 451,
+          "outputTokens" => 69
+        }
+      }
+
+      {:ok, result} = Converse.parse_response(response_body, operation: :object, model: "test")
+
+      assert result.finish_reason == :tool_calls
+
+      # For :object operation, should extract and set the object field
+      assert result.object == %{
+               "name" => "Alice Johnson",
+               "age" => 29,
+               "occupation" => "Software Engineer"
+             }
+    end
+
+    test "parse_response returns response without object extraction for :chat operation" do
+      response_body = %{
+        "output" => %{
+          "message" => %{
+            "role" => "assistant",
+            "content" => [%{"text" => "Hello!"}]
+          }
+        },
+        "stopReason" => "end_turn",
+        "usage" => %{
+          "inputTokens" => 10,
+          "outputTokens" => 5
+        }
+      }
+
+      {:ok, result} = Converse.parse_response(response_body, operation: :chat, model: "test")
+
+      assert result.finish_reason == :stop
+      # Should not have object field for :chat operation
+      assert is_nil(result.object)
+    end
+
+    test "add_tool_choice converts Anthropic format to Converse format" do
+      context = %ReqLLM.Context{
+        messages: [%Message{role: :user, content: "Test"}]
+      }
+
+      {:ok, tool} =
+        ReqLLM.Tool.new(
+          name: "test_tool",
+          description: "Test",
+          parameter_schema: [location: [type: :string]],
+          callback: fn _ -> {:ok, "result"} end
+        )
+
+      result =
+        Converse.format_request(
+          "test-model",
+          context,
+          tools: [tool],
+          tool_choice: %{type: "tool", name: "test_tool"}
+        )
+
+      # Should convert to Converse format
+      assert result["toolConfig"]["toolChoice"]["tool"]["name"] == "test_tool"
+    end
+  end
 end

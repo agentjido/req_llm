@@ -481,6 +481,105 @@ defmodule ReqLLM.Provider.Registry do
   end
 
   @doc """
+  Initializes the provider registry from an effective catalog map.
+
+  This function accepts a catalog in the format produced by `ReqLLM.Catalog.load/1`:
+
+      %{
+        provider_id_string => %{
+          "id" => provider_id,
+          "models" => %{model_id => model_map, ...},
+          ...other provider metadata...
+        }
+      }
+
+  For each provider in the catalog:
+  1. Checks if a DSL module already registered it (via `discover_providers/0`)
+  2. Converts provider ID string to atom
+  3. Builds registry entry with module (if found) and metadata from catalog
+  4. Stores the complete registry in `:persistent_term`
+
+  This enables the registry to work with both:
+  - Implemented providers (have modules)
+  - Metadata-only providers (from catalog only)
+
+  ## Parameters
+
+    * `effective_catalog` - Map of provider_id (string) => provider metadata
+
+  ## Returns
+
+    * `:ok` - Registry successfully initialized
+
+  ## Examples
+
+      catalog = %{
+        "anthropic" => %{
+          "id" => "anthropic",
+          "models" => %{"claude-3-sonnet" => %{"id" => "claude-3-sonnet", ...}}
+        }
+      }
+      
+      ReqLLM.Provider.Registry.initialize(catalog)
+      #=> :ok
+
+  """
+  @spec initialize(map()) :: :ok
+  def initialize(effective_catalog) when is_map(effective_catalog) do
+    require Logger
+
+    existing_registry = get_registry()
+    discovered_providers = discover_providers()
+
+    provider_modules_map =
+      discovered_providers
+      |> Task.async_stream(&extract_provider_info/1, ordered: false, timeout: 5000)
+      |> Enum.reduce(%{}, fn
+        {:ok, {:ok, {id, module, _metadata}}}, acc ->
+          Map.put(acc, id, module)
+
+        _, acc ->
+          acc
+      end)
+
+    registry_map =
+      Enum.reduce(effective_catalog, %{}, fn {provider_id_string, provider_metadata}, acc ->
+        provider_id = string_to_atom_safe(provider_id_string)
+
+        if provider_id do
+          module =
+            Map.get(provider_modules_map, provider_id) ||
+              get_in(existing_registry, [provider_id, :module])
+
+          implemented = !is_nil(module)
+
+          converted_metadata = convert_catalog_metadata_to_registry_format(provider_metadata)
+
+          entry = %{
+            module: module,
+            metadata: converted_metadata,
+            implemented: implemented
+          }
+
+          Map.put(acc, provider_id, entry)
+        else
+          acc
+        end
+      end)
+
+    :persistent_term.put(@registry_key, registry_map)
+
+    implemented_count = Enum.count(registry_map, fn {_id, info} -> info.implemented end)
+    metadata_only_count = map_size(registry_map) - implemented_count
+
+    Logger.debug(
+      "ReqLLM provider registry initialized from catalog with #{map_size(registry_map)} providers (#{implemented_count} implemented, #{metadata_only_count} metadata-only)"
+    )
+
+    :ok
+  end
+
+  @doc """
   Initializes the provider registry by discovering and registering all provider modules.
 
   This function scans for modules that implement the `ReqLLM.Provider` behaviour
@@ -529,7 +628,16 @@ defmodule ReqLLM.Provider.Registry do
   end
 
   @spec reload() :: :ok
-  def reload, do: initialize()
+  def reload do
+    if Application.get_env(:req_llm, :catalog_enabled?, false) do
+      case ReqLLM.Catalog.load() do
+        {:ok, catalog} -> initialize(catalog)
+        _ -> initialize()
+      end
+    else
+      initialize()
+    end
+  end
 
   @doc """
   Clears the provider registry.
@@ -925,6 +1033,33 @@ defmodule ReqLLM.Provider.Registry do
   end
 
   defp normalize_keys_for_validation(data), do: data
+
+  defp string_to_atom_safe(string) when is_binary(string) do
+    String.to_existing_atom(string)
+  rescue
+    ArgumentError ->
+      String.to_atom(string)
+  end
+
+  defp string_to_atom_safe(_), do: nil
+
+  defp convert_catalog_metadata_to_registry_format(catalog_provider)
+       when is_map(catalog_provider) do
+    models_map = Map.get(catalog_provider, "models", %{})
+
+    models_list =
+      if is_map(models_map) do
+        models_map
+        |> Enum.map(fn {_model_id, model_data} -> model_data end)
+        |> Enum.sort_by(fn model -> Map.get(model, "id", "") end)
+      else
+        models_map
+      end
+
+    catalog_provider
+    |> Map.put("models", models_list)
+    |> atomize_json_keys()
+  end
 
   @doc """
   Gets the environment variable key for a provider's API authentication.

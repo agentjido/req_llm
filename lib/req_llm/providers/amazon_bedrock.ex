@@ -135,11 +135,33 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     end
   end
 
+  @impl ReqLLM.Provider
+  def prepare_request(:object, model_input, input, opts) do
+    # Structured output is implemented via tool calling for Claude models
+    # We leverage the existing Anthropic tool-based approach
+    with {:ok, model} <- ReqLLM.Model.from(model_input),
+         {:ok, context} <- ReqLLM.Context.normalize(input, opts) do
+      http_opts = Keyword.get(opts, :req_http_options, [])
+
+      # Bedrock endpoints vary by streaming
+      endpoint = if opts[:stream], do: "/invoke-with-response-stream", else: "/invoke"
+
+      # Mark operation as :object so the formatter can handle it appropriately
+      opts_with_operation = Keyword.put(opts, :operation, :object)
+
+      request =
+        Req.new([url: endpoint, method: :post, receive_timeout: 30_000] ++ http_opts)
+        |> attach(model, Keyword.put(opts_with_operation, :context, context))
+
+      {:ok, request}
+    end
+  end
+
   def prepare_request(operation, _model, _input, _opts) do
     {:error,
      InvalidParameter.exception(
        parameter:
-         "operation: #{inspect(operation)} not supported by Bedrock provider. Supported operations: [:chat]"
+         "operation: #{inspect(operation)} not supported by Bedrock provider. Supported operations: [:chat, :object]"
      )}
   end
 
@@ -198,13 +220,20 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     updated_request =
       request
       |> Map.put(:url, URI.parse(base_url <> endpoint_base))
-      |> Req.Request.register_options([:model, :context, :model_family, :use_converse])
+      |> Req.Request.register_options([
+        :model,
+        :context,
+        :model_family,
+        :use_converse,
+        :operation
+      ])
       |> Req.Request.merge_options(
         base_url: base_url,
         model: model_id,
         model_family: model_family,
         context: opts[:context],
-        use_converse: use_converse
+        use_converse: use_converse,
+        operation: opts[:operation]
       )
 
     model_body =

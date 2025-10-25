@@ -16,6 +16,7 @@ defmodule ReqLLM.ModelParsingTest do
     models_dir
     |> File.ls!()
     |> Enum.filter(&String.ends_with?(&1, ".json"))
+    |> Enum.reject(&String.starts_with?(&1, "."))
     |> Enum.flat_map(&load_models_from_file(models_dir, &1))
   end
 

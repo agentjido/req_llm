@@ -12,7 +12,7 @@ defmodule ReqLLM.Application do
   @impl true
   def start(_type, _args) do
     load_dotenv()
-    ReqLLM.Provider.Registry.initialize()
+    initialize_registry()
 
     finch_config = get_finch_config()
 
@@ -97,6 +97,28 @@ defmodule ReqLLM.Application do
     case Application.ensure_all_started(:tidewave) do
       {:ok, _} -> :ok
       {:error, _} -> :ok
+    end
+  end
+
+  defp initialize_registry do
+    case Application.get_env(:req_llm, :catalog_enabled?, false) do
+      true ->
+        case ReqLLM.Catalog.load() do
+          {:ok, catalog} ->
+            ReqLLM.Provider.Registry.initialize(catalog)
+
+          {:error, reason} ->
+            require Logger
+
+            Logger.warning(
+              "Catalog load failed: #{inspect(reason)}; falling back to provider discovery"
+            )
+
+            ReqLLM.Provider.Registry.initialize()
+        end
+
+      _ ->
+        ReqLLM.Provider.Registry.initialize()
     end
   end
 

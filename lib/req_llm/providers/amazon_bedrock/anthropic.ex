@@ -17,8 +17,21 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
 
   Delegates to the native Anthropic.Context module and adds Bedrock-specific
   version parameter.
+
+  For :object operations, creates a synthetic "structured_output" tool to
+  leverage Claude's tool-calling for structured JSON output.
   """
   def format_request(_model_id, context, opts) do
+    operation = opts[:operation]
+
+    # For :object operation, we need to inject the structured_output tool
+    {context, opts} =
+      if operation == :object do
+        prepare_structured_output_context(context, opts)
+      else
+        {context, opts}
+      end
+
     # Create a fake model struct for Anthropic.Context.encode_request
     model = %{model: opts[:model] || "claude-3-sonnet"}
 
@@ -29,14 +42,43 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
     body = Map.delete(body, :model)
 
     # Add Bedrock-specific parameters
+    # Use 4096 for :object operations (need more tokens for structured output), 1024 otherwise
+    default_max_tokens = if operation == :object, do: 4096, else: 1024
+
     body
     |> Map.put(:anthropic_version, "bedrock-2023-05-31")
-    |> maybe_add_param(:max_tokens, opts[:max_tokens] || 1024)
+    |> maybe_add_param(:max_tokens, opts[:max_tokens] || default_max_tokens)
     |> maybe_add_param(:temperature, opts[:temperature])
     |> maybe_add_param(:top_p, opts[:top_p])
     |> maybe_add_param(:top_k, opts[:top_k])
     |> maybe_add_param(:stop_sequences, opts[:stop_sequences])
     |> maybe_add_thinking(opts)
+  end
+
+  # Create the synthetic structured_output tool for :object operations
+  defp prepare_structured_output_context(context, opts) do
+    compiled_schema = Keyword.fetch!(opts, :compiled_schema)
+
+    # Create the structured_output tool (same as native Anthropic provider)
+    structured_output_tool =
+      ReqLLM.Tool.new!(
+        name: "structured_output",
+        description: "Generate structured output matching the provided schema",
+        parameter_schema: compiled_schema.schema,
+        callback: fn _args -> {:ok, "structured output generated"} end
+      )
+
+    # Add tool to context - Context may or may not have a tools field
+    existing_tools = Map.get(context, :tools, [])
+    updated_context = Map.put(context, :tools, [structured_output_tool | existing_tools])
+
+    # Update opts to force tool choice
+    updated_opts =
+      opts
+      |> Keyword.put(:tools, [structured_output_tool | Keyword.get(opts, :tools, [])])
+      |> Keyword.put(:tool_choice, %{type: "tool", name: "structured_output"})
+
+    {updated_context, updated_opts}
   end
 
   defp maybe_add_param(body, _key, nil), do: body
@@ -60,6 +102,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
   Parses Anthropic response from Bedrock into ReqLLM format.
 
   Delegates to the native Anthropic.Response module.
+
+  For :object operations, extracts the structured output from the tool call.
   """
   def parse_response(body, opts) when is_map(body) do
     # Create a model struct for Anthropic.Response.decode_response
@@ -69,7 +113,31 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
     }
 
     # Delegate to native Anthropic response decoding
-    Anthropic.Response.decode_response(body, model)
+    case Anthropic.Response.decode_response(body, model) do
+      {:ok, response} ->
+        # For :object operation, extract structured output from tool call
+        final_response =
+          if opts[:operation] == :object do
+            extract_and_set_object(response)
+          else
+            response
+          end
+
+        {:ok, final_response}
+
+      error ->
+        error
+    end
+  end
+
+  # Extract structured output from tool call (same logic as native Anthropic provider)
+  defp extract_and_set_object(response) do
+    extracted_object =
+      response
+      |> ReqLLM.Response.tool_calls()
+      |> ReqLLM.ToolCall.find_args("structured_output")
+
+    %{response | object: extracted_object}
   end
 
   @doc """

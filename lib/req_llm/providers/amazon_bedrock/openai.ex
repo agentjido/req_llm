@@ -16,8 +16,21 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
 
   Uses standard OpenAI Chat Completions format - no modifications needed
   unlike Anthropic which rejects the model field.
+
+  For :object operations, creates a synthetic "structured_output" tool to
+  leverage tool calling for structured JSON output.
   """
   def format_request(model_id, context, opts) do
+    operation = opts[:operation]
+
+    # For :object operation, inject the structured_output tool
+    {context, opts} =
+      if operation == :object do
+        prepare_structured_output_context(context, opts)
+      else
+        {context, opts}
+      end
+
     # Get tools from context if available
     tools = Map.get(context, :tools, [])
 
@@ -31,9 +44,9 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
           [
             model: model_id,
             context: context,
-            operation: :chat,
+            operation: operation || :chat,
             tools: tools
-          ] ++ Keyword.drop(opts, [:model, :tools])
+          ] ++ Keyword.drop(opts, [:model, :tools, :operation])
         )
       )
 
@@ -43,10 +56,41 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
     Jason.decode!(encoded_request.body)
   end
 
+  # Create the synthetic structured_output tool for :object operations
+  defp prepare_structured_output_context(context, opts) do
+    compiled_schema = Keyword.fetch!(opts, :compiled_schema)
+
+    # Create the structured_output tool (same as native Anthropic provider)
+    structured_output_tool =
+      ReqLLM.Tool.new!(
+        name: "structured_output",
+        description: "Generate structured output matching the provided schema",
+        parameter_schema: compiled_schema.schema,
+        callback: fn _args -> {:ok, "structured output generated"} end
+      )
+
+    # Add tool to context - Context may or may not have a tools field
+    existing_tools = Map.get(context, :tools, [])
+    updated_context = Map.put(context, :tools, [structured_output_tool | existing_tools])
+
+    # Update opts to force tool choice (OpenAI format)
+    updated_opts =
+      opts
+      |> Keyword.put(:tools, [structured_output_tool | Keyword.get(opts, :tools, [])])
+      |> Keyword.put(
+        :tool_choice,
+        %{type: "function", function: %{name: "structured_output"}}
+      )
+
+    {updated_context, updated_opts}
+  end
+
   @doc """
   Parses OpenAI response from Bedrock into ReqLLM format.
 
   Manually decodes the OpenAI Chat Completions format.
+
+  For :object operations, extracts the structured output from the tool call.
   """
   def parse_response(body, opts) when is_map(body) do
     # OpenAI response format has choices array with message object
@@ -74,11 +118,29 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
         provider_meta: Map.drop(body, ["choices", "usage", "id", "model"])
       }
 
-      {:ok, response}
+      # For :object operation, extract structured output from tool call
+      final_response =
+        if opts[:operation] == :object do
+          extract_and_set_object(response)
+        else
+          response
+        end
+
+      {:ok, final_response}
     else
       :error -> {:error, "Invalid OpenAI response format"}
       [] -> {:error, "Empty choices array"}
     end
+  end
+
+  # Extract structured output from tool call (same logic as native Anthropic provider)
+  defp extract_and_set_object(response) do
+    extracted_object =
+      response
+      |> ReqLLM.Response.tool_calls()
+      |> ReqLLM.ToolCall.find_args("structured_output")
+
+    %{response | object: extracted_object}
   end
 
   defp parse_message(%{"role" => role, "content" => content} = data) do
