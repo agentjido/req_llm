@@ -337,7 +337,7 @@ defmodule Mix.Tasks.ReqLlm.ModelSync do
 
   defp get_provider_config("anthropic") do
     %{
-      "base_url" => "https://api.anthropic.com/v1",
+      "base_url" => "https://api.anthropic.com",
       "env" => ["ANTHROPIC_API_KEY"]
     }
   end
@@ -511,7 +511,14 @@ defmodule Mix.Tasks.ReqLlm.ModelSync do
           )
         end
 
-        updated_provider_data = Map.put(existing_provider_data, "models", merged_models)
+        existing_provider_config = existing_provider_data["provider"] || %{}
+        merged_provider_config = Map.merge(existing_provider_config, provider_data)
+
+        updated_provider_data =
+          existing_provider_data
+          |> Map.put("models", merged_models)
+          |> Map.put("provider", merged_provider_config)
+
         Map.put(models_data, provider_id, updated_provider_data)
     end
   end

@@ -77,6 +77,16 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   @spec decode_sse_event(map(), ReqLLM.Model.t()) :: [ReqLLM.StreamChunk.t()]
   def decode_sse_event(%{data: data}, _model) when is_map(data) do
     case data do
+      %{"type" => "message_start", "message" => message} ->
+        usage_data = Map.get(message, "usage", %{})
+
+        if usage_data == %{} do
+          []
+        else
+          usage = parse_usage(usage_data)
+          [ReqLLM.StreamChunk.meta(%{usage: usage})]
+        end
+
       %{"type" => "content_block_delta", "index" => index, "delta" => delta} ->
         decode_content_block_delta(delta, index)
 
@@ -247,14 +257,17 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   defp chunk_to_tool_call(_), do: nil
 
   defp parse_usage(%{"input_tokens" => input, "output_tokens" => output} = usage) do
-    cached_tokens = Map.get(usage, "cache_read_input_tokens", 0)
+    cache_read = Map.get(usage, "cache_read_input_tokens", 0)
+    cache_creation = Map.get(usage, "cache_creation_input_tokens", 0)
     reasoning_tokens = Map.get(usage, "reasoning_output_tokens", 0)
 
     %{
       input_tokens: input,
       output_tokens: output,
       total_tokens: input + output,
-      cached_tokens: cached_tokens,
+      cached_tokens: cache_read,
+      cache_read_input_tokens: cache_read,
+      cache_creation_input_tokens: cache_creation,
       reasoning_tokens: reasoning_tokens
     }
   end

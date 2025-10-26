@@ -810,8 +810,12 @@ defmodule ReqLLM.StreamServer do
       %{input_tokens: input, output_tokens: output} ->
         cached_input = Map.get(usage, :cached_tokens, 0)
         reasoning = Map.get(usage, :reasoning_tokens, 0)
+        cache_read = Map.get(usage, :cache_read_input_tokens, 0)
+        cache_creation = Map.get(usage, :cache_creation_input_tokens, 0)
 
         %{input: input, output: output, reasoning: reasoning, cached_input: cached_input}
+        |> Map.put(:cache_read_input_tokens, cache_read)
+        |> Map.put(:cache_creation_input_tokens, cache_creation)
         |> add_token_aliases()
         |> add_cost_calculation_if_available(usage)
         |> calculate_cost_if_model_available(model)

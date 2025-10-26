@@ -52,6 +52,14 @@ defmodule ReqLLM.Providers.Anthropic do
         type: :map,
         doc:
           "Enable thinking/reasoning for supported models (e.g. %{type: \"enabled\", budget_tokens: 4096})"
+      ],
+      anthropic_prompt_cache: [
+        type: :boolean,
+        doc: "Enable Anthropic prompt caching"
+      ],
+      anthropic_prompt_cache_ttl: [
+        type: :string,
+        doc: "TTL for cache (\"1h\" for one hour; omit for default ~5m)"
       ]
     ]
 
@@ -77,6 +85,7 @@ defmodule ReqLLM.Providers.Anthropic do
 
   @default_anthropic_version "2023-06-01"
   @anthropic_beta_tools "tools-2024-05-16"
+  @anthropic_beta_prompt_caching "prompt-caching-2024-07-31"
 
   @impl ReqLLM.Provider
   def prepare_request(:chat, model_spec, prompt, opts) do
@@ -98,9 +107,12 @@ defmodule ReqLLM.Providers.Anthropic do
 
       timeout = Keyword.get(processed_opts, :receive_timeout, default_timeout)
 
+      base_url = Keyword.get(processed_opts, :base_url, default_base_url())
+
       request =
         Req.new(
           [
+            base_url: base_url,
             url: "/v1/messages",
             method: :post,
             receive_timeout: timeout,
@@ -110,11 +122,7 @@ defmodule ReqLLM.Providers.Anthropic do
         )
         |> Req.Request.register_options(req_keys)
         |> Req.Request.merge_options(
-          Keyword.take(processed_opts, req_keys) ++
-            [
-              model: model.model,
-              base_url: Keyword.get(processed_opts, :base_url, default_base_url())
-            ]
+          Keyword.take(processed_opts, req_keys) ++ [model: model.model]
         )
         |> attach(model, processed_opts)
 
@@ -247,6 +255,7 @@ defmodule ReqLLM.Providers.Anthropic do
     |> maybe_put(:stream, get_option(opts, :stream))
     |> Map.put(:max_tokens, max_tokens)
     |> maybe_add_tools(opts)
+    |> maybe_apply_prompt_caching(opts)
   end
 
   defp build_request_url(opts) do
@@ -271,9 +280,24 @@ defmodule ReqLLM.Providers.Anthropic do
         beta_features
       end
 
+    beta_features =
+      if has_prompt_caching?(opts) do
+        [@anthropic_beta_prompt_caching | beta_features]
+      else
+        beta_features
+      end
+
     case beta_features do
-      [] -> []
-      features -> [{"anthropic-beta", Enum.join(features, ",")}]
+      [] ->
+        []
+
+      features ->
+        beta_header =
+          features
+          |> Enum.uniq()
+          |> Enum.join(",")
+
+        [{"anthropic-beta", beta_header}]
     end
   end
 
@@ -345,7 +369,6 @@ defmodule ReqLLM.Providers.Anthropic do
   defp maybe_add_beta_header(request, user_opts) do
     beta_features = []
 
-    # Add tools beta if tools are being used
     beta_features =
       if has_tools?(user_opts) do
         [@anthropic_beta_tools | beta_features]
@@ -353,10 +376,16 @@ defmodule ReqLLM.Providers.Anthropic do
         beta_features
       end
 
-    # Add interleaved thinking beta if thinking is enabled
     beta_features =
       if has_thinking?(user_opts) do
         ["interleaved-thinking-2025-05-14" | beta_features]
+      else
+        beta_features
+      end
+
+    beta_features =
+      if has_prompt_caching?(user_opts) do
+        [@anthropic_beta_prompt_caching | beta_features]
       else
         beta_features
       end
@@ -366,7 +395,11 @@ defmodule ReqLLM.Providers.Anthropic do
         request
 
       features ->
-        beta_header = Enum.join(features, ",")
+        beta_header =
+          features
+          |> Enum.uniq()
+          |> Enum.join(",")
+
         Req.Request.put_header(request, "anthropic-beta", beta_header)
     end
   end
@@ -383,6 +416,85 @@ defmodule ReqLLM.Providers.Anthropic do
     provider_reasoning_effort = Keyword.get(provider_options, :reasoning_effort)
 
     not is_nil(thinking) or not is_nil(reasoning_effort) or not is_nil(provider_reasoning_effort)
+  end
+
+  defp has_prompt_caching?(opts) do
+    get_option(opts, :anthropic_prompt_cache, false) == true
+  end
+
+  defp cache_control_meta(opts) do
+    case get_option(opts, :anthropic_prompt_cache_ttl) do
+      nil -> %{type: "ephemeral"}
+      ttl -> %{type: "ephemeral", ttl: ttl}
+    end
+  end
+
+  defp maybe_apply_prompt_caching(body, opts) do
+    if has_prompt_caching?(opts) do
+      cache_meta = cache_control_meta(opts)
+
+      body
+      |> maybe_cache_tools(cache_meta)
+      |> maybe_cache_system(cache_meta)
+    else
+      body
+    end
+  end
+
+  defp maybe_cache_tools(body, cache_meta) do
+    case Map.get(body, :tools) do
+      tools when is_list(tools) and tools != [] ->
+        updated_tools =
+          Enum.map(tools, fn tool ->
+            if Map.has_key?(tool, :cache_control) or Map.has_key?(tool, "cache_control") do
+              tool
+            else
+              Map.put(tool, :cache_control, cache_meta)
+            end
+          end)
+
+        Map.put(body, :tools, updated_tools)
+
+      _ ->
+        body
+    end
+  end
+
+  defp maybe_cache_system(body, cache_meta) do
+    case Map.get(body, :system) do
+      system when is_binary(system) ->
+        content_block = %{
+          type: "text",
+          text: system,
+          cache_control: cache_meta
+        }
+
+        Map.put(body, :system, [content_block])
+
+      system when is_list(system) and system != [] ->
+        updated_system =
+          system
+          |> Enum.reverse()
+          |> case do
+            [last | rest] ->
+              updated_last =
+                if Map.has_key?(last, :cache_control) or Map.has_key?(last, "cache_control") do
+                  last
+                else
+                  Map.put(last, :cache_control, cache_meta)
+                end
+
+              Enum.reverse([updated_last | rest])
+
+            [] ->
+              []
+          end
+
+        Map.put(body, :system, updated_system)
+
+      _ ->
+        body
+    end
   end
 
   defp add_basic_options(body, request_options) do
