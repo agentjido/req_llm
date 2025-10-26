@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Prompt caching support for Bedrock Anthropic models (Claude on AWS Bedrock)
+  - Auto-switches to native API when caching enabled with tools for full cache control
+  - Supports caching of system prompts and tools
+  - Provides warning when auto-switching (silenceable with explicit `use_converse` setting)
 - Structured output (`:object` operation) support for AWS Bedrock provider
   - Bedrock Anthropic sub-provider using tool-calling approach
   - Bedrock Converse API for unified structured output across all models

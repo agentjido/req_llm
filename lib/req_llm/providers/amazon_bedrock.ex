@@ -189,13 +189,8 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     model_id = model.model
 
     # Check if we should use Converse API
-    # Priority: explicit use_converse option > auto-detect from tools presence
-    use_converse =
-      case opts[:use_converse] do
-        true -> true
-        false -> false
-        nil -> opts[:tools] != nil and opts[:tools] != []
-      end
+    # Priority: explicit use_converse option > prompt caching optimization > auto-detect from tools presence
+    use_converse = determine_use_converse(opts)
 
     {endpoint_base, formatter, model_family} =
       if use_converse do
@@ -266,13 +261,8 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     validate_aws_credentials!(aws_creds)
 
     # Check if we should use Converse API
-    # Priority: explicit use_converse option > auto-detect from tools presence
-    use_converse =
-      case other_opts[:use_converse] do
-        true -> true
-        false -> false
-        nil -> other_opts[:tools] != nil and other_opts[:tools] != []
-      end
+    # Priority: explicit use_converse option > prompt caching optimization > auto-detect from tools presence
+    use_converse = determine_use_converse(other_opts)
 
     # Get model-specific or Converse formatter
     model_id = model.model
@@ -681,5 +671,41 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       )
 
     {req, err}
+  end
+
+  # Private helper: Determine whether to use Converse API with caching optimization
+  defp determine_use_converse(opts) do
+    case opts[:use_converse] do
+      true ->
+        true
+
+      false ->
+        false
+
+      nil ->
+        has_tools = opts[:tools] != nil and opts[:tools] != []
+        has_caching = ReqLLM.Providers.Anthropic.has_prompt_caching?(opts)
+
+        cond do
+          # If caching is enabled with tools, force native API for full caching support
+          has_caching and has_tools ->
+            require Logger
+
+            Logger.warning("""
+            Bedrock prompt caching enabled with tools present. Auto-switching to native API
+            (use_converse: false) for full cache control. Converse API only caches system prompts.
+            To silence this warning, explicitly set use_converse: true or use_converse: false.
+            """)
+
+            false
+
+          # Default: use Converse for tools, native otherwise
+          has_tools ->
+            true
+
+          true ->
+            false
+        end
+    end
   end
 end

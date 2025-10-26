@@ -7,6 +7,16 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
   This module acts as a thin adapter between Bedrock's AWS-specific wrapping
   and Anthropic's native message format. It delegates to the native Anthropic
   modules for all format conversion.
+
+  ## Prompt Caching Support
+
+  Full Anthropic prompt caching is supported when using the native Bedrock API.
+  Enable with `anthropic_prompt_cache: true` option.
+
+  **Note**: Bedrock auto-switches to Converse API when tools are present (including
+  `:object` operations which use a synthetic tool). Converse API has limited caching
+  (only entire system prompts, no granular cache control). For full caching support,
+  set `use_converse: false` to force native API with tools/structured output.
   """
 
   alias ReqLLM.Providers.AmazonBedrock
@@ -53,6 +63,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
     |> maybe_add_param(:top_k, opts[:top_k])
     |> maybe_add_param(:stop_sequences, opts[:stop_sequences])
     |> maybe_add_thinking(opts)
+    |> maybe_add_tools(opts)
+    |> Anthropic.maybe_apply_prompt_caching(opts)
   end
 
   # Create the synthetic structured_output tool for :object operations
@@ -83,6 +95,37 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
 
   defp maybe_add_param(body, _key, nil), do: body
   defp maybe_add_param(body, key, value), do: Map.put(body, key, value)
+
+  # Add tools from opts to request body (same as native Anthropic provider)
+  defp maybe_add_tools(body, opts) do
+    tools = Keyword.get(opts, :tools, [])
+
+    case tools do
+      [] ->
+        body
+
+      tools when is_list(tools) ->
+        # Convert ReqLLM.Tool structs to Anthropic format
+        body = Map.put(body, :tools, Enum.map(tools, &tool_to_anthropic_format/1))
+
+        # Add tool_choice if specified
+        case Keyword.get(opts, :tool_choice) do
+          nil -> body
+          choice -> Map.put(body, :tool_choice, choice)
+        end
+    end
+  end
+
+  # Convert ReqLLM.Tool to Anthropic tool format
+  defp tool_to_anthropic_format(tool) do
+    schema = ReqLLM.Tool.to_schema(tool, :openai)
+
+    %{
+      name: schema["function"]["name"],
+      description: schema["function"]["description"],
+      input_schema: schema["function"]["parameters"]
+    }
+  end
 
   # Add extended thinking configuration for native Anthropic endpoint
   # Note: pre_validate_options already extracted reasoning params and added to additional_model_request_fields
