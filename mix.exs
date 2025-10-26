@@ -127,6 +127,7 @@ defmodule ReqLLM.MixProject do
       {:typed_struct, "~> 0.3.0"},
       {:uniq, "~> 0.6"},
       {:zoi, "~> 0.7"},
+      {:jsv, "~> 0.11"},
 
       # Dev/test dependencies
       {:bandit, "~> 1.8", only: :dev, runtime: false},

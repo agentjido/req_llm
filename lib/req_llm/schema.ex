@@ -614,7 +614,7 @@ defmodule ReqLLM.Schema do
   Takes data and validates it against a schema. Supports multiple schema types:
   - NimbleOptions keyword schemas (expects maps)
   - Zoi schema structs (can handle maps, arrays, etc.)
-  - Raw JSON Schemas (pass-through, no server-side validation)
+  - Raw JSON Schemas (validated using JSV for JSON Schema draft 2020-12 compliance)
 
   ## Parameters
 
@@ -633,7 +633,7 @@ defmodule ReqLLM.Schema do
       iex> ReqLLM.Schema.validate(data, schema)
       {:ok, [name: "Alice", age: 30]}
 
-      iex> schema = [name: [type: :string, required: true]]  
+      iex> schema = [name: [type: :string, required: true]]
       iex> data = %{"age" => 30}
       iex> ReqLLM.Schema.validate(data, schema)
       {:error, %ReqLLM.Error.Validation.Error{...}}
@@ -654,7 +654,7 @@ defmodule ReqLLM.Schema do
         end
 
       :json ->
-        {:ok, data}
+        validate_with_jsv(data, schema)
 
       :zoi ->
         validate_with_zoi(data, schema)
@@ -698,6 +698,37 @@ defmodule ReqLLM.Schema do
          tag: :invalid_keys,
          reason: "Data contains keys that don't match schema field names",
          context: [data: data, schema: schema]
+       )}
+  end
+
+  @doc false
+  @spec validate_with_jsv(any(), map()) :: {:ok, any()} | {:error, ReqLLM.Error.t()}
+  defp validate_with_jsv(data, schema) do
+    # Build the schema validator
+    root = JSV.build!(schema)
+
+    # Validate the data against the schema
+    case JSV.validate(data, root) do
+      {:ok, validated_data} ->
+        {:ok, validated_data}
+
+      {:error, validation_error} ->
+        normalized_error = JSV.normalize_error(validation_error)
+
+        {:error,
+         ReqLLM.Error.Validation.Error.exception(
+           tag: :json_schema_validation_failed,
+           reason: format_jsv_errors(normalized_error),
+           context: [data: data, schema: schema]
+         )}
+    end
+  rescue
+    e in ArgumentError ->
+      {:error,
+       ReqLLM.Error.Validation.Error.exception(
+         tag: :invalid_json_schema,
+         reason: "Invalid JSON Schema: #{Exception.message(e)}",
+         context: [schema: schema]
        )}
   end
 
@@ -774,4 +805,24 @@ defmodule ReqLLM.Schema do
       end
     end)
   end
+
+  @doc false
+  @spec format_jsv_errors(map()) :: String.t()
+  defp format_jsv_errors(%{details: details}) when is_list(details) do
+    Enum.map_join(details, ", ", &format_jsv_error/1)
+  end
+
+  defp format_jsv_errors(error), do: inspect(error)
+
+  @doc false
+  @spec format_jsv_error(map()) :: String.t()
+  defp format_jsv_error(%{"instanceLocation" => location, "error" => error}) do
+    case location do
+      "" -> error
+      _ -> "#{location}: #{error}"
+    end
+  end
+
+  defp format_jsv_error(%{"error" => error}), do: error
+  defp format_jsv_error(error), do: inspect(error)
 end

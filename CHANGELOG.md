@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Bedrock OpenAI sub-provider (gpt-oss models)
 - Configurable metadata timeout for streaming operations with `:metadata_timeout` option (default: 300,000ms)
 - Application-level configuration support for `:metadata_timeout`
+- JSON Schema validation for raw JSON schemas using JSV library
+  - `ReqLLM.Schema.validate/2` now validates JSON schemas before sending to providers
+  - Catches invalid schemas early with detailed error messages
+  - Supports draft 2020-12 (required by Bedrock/Anthropic) and draft 7
 
 ### Fixed
 
