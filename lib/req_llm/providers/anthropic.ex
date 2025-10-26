@@ -418,18 +418,21 @@ defmodule ReqLLM.Providers.Anthropic do
     not is_nil(thinking) or not is_nil(reasoning_effort) or not is_nil(provider_reasoning_effort)
   end
 
-  defp has_prompt_caching?(opts) do
+  @doc false
+  def has_prompt_caching?(opts) do
     get_option(opts, :anthropic_prompt_cache, false) == true
   end
 
-  defp cache_control_meta(opts) do
+  @doc false
+  def cache_control_meta(opts) do
     case get_option(opts, :anthropic_prompt_cache_ttl) do
       nil -> %{type: "ephemeral"}
       ttl -> %{type: "ephemeral", ttl: ttl}
     end
   end
 
-  defp maybe_apply_prompt_caching(body, opts) do
+  @doc false
+  def maybe_apply_prompt_caching(body, opts) do
     if has_prompt_caching?(opts) do
       cache_meta = cache_control_meta(opts)
 
