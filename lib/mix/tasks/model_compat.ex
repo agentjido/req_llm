@@ -838,9 +838,24 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   defp find_model(registry, provider, model_id) do
     provider_atom = if is_binary(provider), do: String.to_atom(provider), else: provider
 
+    # Normalize model_id using provider's callback if available
+    # This allows providers to handle model ID aliases (e.g., Bedrock inference profiles)
+    normalized_model_id =
+      case ReqLLM.Provider.Registry.get_provider(provider_atom) do
+        {:ok, provider_module} when not is_nil(provider_module) ->
+          if function_exported?(provider_module, :normalize_model_id, 1) do
+            provider_module.normalize_model_id(model_id)
+          else
+            model_id
+          end
+
+        _ ->
+          model_id
+      end
+
     case Map.get(registry, provider_atom) do
       nil -> nil
-      models -> Enum.find(models, fn m -> m["id"] == model_id end)
+      models -> Enum.find(models, fn m -> m["id"] == normalized_model_id end)
     end
   end
 

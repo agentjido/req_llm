@@ -603,6 +603,23 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   end
 
   @impl ReqLLM.Provider
+  def translate_options(operation, model, opts) do
+    # Delegate to native Anthropic option translation for Anthropic models
+    # This ensures we get all Anthropic-specific handling (temperature/top_p conflicts,
+    # reasoning effort, etc.) for free
+    model_family = get_model_family(model.model)
+
+    case model_family do
+      "anthropic" ->
+        ReqLLM.Providers.Anthropic.translate_options(operation, model, opts)
+
+      _ ->
+        # Other model families: no translation needed yet
+        {opts, []}
+    end
+  end
+
+  @impl ReqLLM.Provider
   def encode_body(request) do
     request
   end

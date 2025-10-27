@@ -30,6 +30,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Metadata collection timeout errors on large documents with long processing times
 - Bedrock streaming now works correctly (fixed deprecated function capture syntax)
 - Tool.Inspect protocol crash when inspecting tools with JSON Schema (map) parameter schemas
+- Model compatibility task now uses `normalize_model_id` callback for registry lookups (fixes inference profile ID recognition)
+- Missing `:compiled_schema` in object streaming options causing KeyError across all providers with structured output
+- Bedrock Anthropic temperature/top_p conflicts - now delegates to native Anthropic option translation
 
 ### Changed
 

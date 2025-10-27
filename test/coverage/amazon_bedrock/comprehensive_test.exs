@@ -1,4 +1,4 @@
-defmodule ReqLLM.Coverage.Bedrock.ComprehensiveTest do
+defmodule ReqLLM.Coverage.AmazonBedrock.ComprehensiveTest do
   @moduledoc """
   Comprehensive AWS Bedrock API feature coverage tests.
 
