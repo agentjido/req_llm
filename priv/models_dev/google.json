@@ -177,7 +177,7 @@
     },
     {
       "cost": {
-        "input": 1.0e-5
+        "input": 0.000010
       },
       "dimensions": 3072,
       "id": "gemini-embedding-001",
@@ -241,7 +241,7 @@
     }
   ],
   "provider": {
-    "base_url": "https://generativelanguage.googleapis.com/v1",
+    "base_url": "https://generativelanguage.googleapis.com/v1beta",
     "doc": "AI model provider",
     "env": [
       "GOOGLE_API_KEY"

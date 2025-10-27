@@ -154,7 +154,7 @@ defmodule ReqLLM.Streaming.FinchClientTest do
       providers_and_expected_urls = [
         {ReqLLM.Providers.OpenAI, "https://api.openai.com/v1", "/chat/completions"},
         {ReqLLM.Providers.Anthropic, "https://api.anthropic.com", "/v1/messages"},
-        {ReqLLM.Providers.Google, "https://generativelanguage.googleapis.com/v1",
+        {ReqLLM.Providers.Google, "https://generativelanguage.googleapis.com/v1beta",
          "/chat/completions"},
         {ReqLLM.Providers.Groq, "https://api.groq.com/openai/v1", "/chat/completions"},
         {ReqLLM.Providers.OpenRouter, "https://openrouter.ai/api/v1", "/chat/completions"},

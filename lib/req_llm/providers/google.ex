@@ -11,6 +11,7 @@ defmodule ReqLLM.Providers.Google do
   Beyond standard OpenAI parameters, Google supports:
   - `google_safety_settings` - List of safety filter configurations
   - `google_candidate_count` - Number of response candidates to generate (default: 1)
+  - `google_grounding` - Enable Google Search grounding (built-in web search)
   - `dimensions` - Number of dimensions for embedding vectors
 
   See `provider_schema/0` for the complete Google-specific schema and
@@ -42,6 +43,11 @@ defmodule ReqLLM.Providers.Google do
       google_thinking_budget: [
         type: :non_neg_integer,
         doc: "Thinking token budget for Gemini 2.5 models (0 disables thinking, omit for dynamic)"
+      ],
+      google_grounding: [
+        type: :map,
+        doc:
+          "Enable Google Search grounding - allows model to search the web. Set to %{enable: true} for modern models, or %{dynamic_retrieval: %{mode: \"MODE_DYNAMIC\", dynamic_threshold: 0.7}} for Gemini 1.5 legacy support"
       ],
       dimensions: [
         type: :pos_integer,
@@ -432,14 +438,22 @@ defmodule ReqLLM.Providers.Google do
       case request.options[:tools] do
         tools when is_list(tools) and tools != [] ->
           tool_config = build_google_tool_config(request.options[:tool_choice])
+          grounding_tools = build_grounding_tools(request.options[:google_grounding])
 
-          %{
-            tools: [%{functionDeclarations: Enum.map(tools, &ReqLLM.Tool.to_schema(&1, :google))}]
-          }
+          user_tools = [
+            %{functionDeclarations: Enum.map(tools, &ReqLLM.Tool.to_schema(&1, :google))}
+          ]
+
+          all_tools = grounding_tools ++ user_tools
+
+          %{tools: all_tools}
           |> maybe_put(:toolConfig, tool_config)
 
         _ ->
-          %{}
+          case build_grounding_tools(request.options[:google_grounding]) do
+            [] -> %{}
+            grounding_tools -> %{tools: grounding_tools}
+          end
       end
 
     # Build generationConfig with Gemini-specific parameter names
@@ -679,10 +693,22 @@ defmodule ReqLLM.Providers.Google do
             {:ok, response} =
               ReqLLM.Provider.Defaults.decode_response_body_openai_format(openai_format, model)
 
+            response_with_grounding =
+              case openai_format["grounding_metadata"] do
+                nil ->
+                  response
+
+                grounding_data ->
+                  %{
+                    response
+                    | provider_meta: Map.put(response.provider_meta, "google", grounding_data)
+                  }
+              end
+
             merged_response =
               ReqLLM.Context.merge_response(
                 req.options[:context] || %ReqLLM.Context{messages: []},
-                response
+                response_with_grounding
               )
 
             {req, %{resp | body: merged_response}}
@@ -723,6 +749,51 @@ defmodule ReqLLM.Providers.Google do
   defp build_google_tool_config("auto"), do: %{functionCallingConfig: %{mode: "AUTO"}}
   defp build_google_tool_config("none"), do: %{functionCallingConfig: %{mode: "NONE"}}
   defp build_google_tool_config(_), do: nil
+
+  defp build_grounding_tools(nil), do: []
+  defp build_grounding_tools(%{enable: true}), do: [%{google_search: %{}}]
+
+  defp build_grounding_tools(%{dynamic_retrieval: config}) when is_map(config) do
+    [%{google_search_retrieval: %{dynamic_retrieval_config: config}}]
+  end
+
+  defp build_grounding_tools(_), do: []
+
+  defp extract_grounding_metadata(%{"candidates" => [candidate | _]}) do
+    case candidate do
+      %{"groundingMetadata" => metadata} when is_map(metadata) ->
+        sources =
+          case metadata["groundingChunks"] do
+            chunks when is_list(chunks) ->
+              Enum.map(chunks, fn chunk ->
+                case chunk do
+                  %{"web" => %{"uri" => uri, "title" => title}} ->
+                    %{"uri" => uri, "title" => title}
+
+                  %{"web" => %{"uri" => uri}} ->
+                    %{"uri" => uri}
+
+                  _ ->
+                    nil
+                end
+              end)
+              |> Enum.reject(&is_nil/1)
+
+            _ ->
+              []
+          end
+
+        %{
+          "grounding_metadata" => metadata,
+          "sources" => sources
+        }
+
+      _ ->
+        nil
+    end
+  end
+
+  defp extract_grounding_metadata(_), do: nil
 
   # Helper to add thinking configuration if specified
   defp maybe_add_thinking_config(config, nil), do: config
@@ -784,11 +855,19 @@ defmodule ReqLLM.Providers.Google do
           }
       end
 
-    %{
+    grounding_metadata = extract_grounding_metadata(body)
+
+    base_response = %{
       "id" => body["id"] || "google-#{System.unique_integer([:positive])}",
       "choices" => [choice],
       "usage" => convert_google_usage(body["usageMetadata"])
     }
+
+    if grounding_metadata do
+      Map.put(base_response, "grounding_metadata", grounding_metadata)
+    else
+      base_response
+    end
   end
 
   defp convert_google_to_openai_format(body), do: body

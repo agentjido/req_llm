@@ -351,7 +351,7 @@ defmodule Mix.Tasks.ReqLlm.ModelSync do
 
   defp get_provider_config("google") do
     %{
-      "base_url" => "https://generativelanguage.googleapis.com/v1",
+      "base_url" => "https://generativelanguage.googleapis.com/v1beta",
       "env" => ["GOOGLE_API_KEY"]
     }
   end
