@@ -639,6 +639,195 @@ defmodule ReqLLM.SchemaTest do
     end
   end
 
+  describe "validate/2 with JSON Schema (JSV)" do
+    test "validates simple object with valid data" do
+      schema = %{
+        "type" => "object",
+        "properties" => %{
+          "name" => %{"type" => "string"},
+          "age" => %{"type" => "integer", "minimum" => 1}
+        },
+        "required" => ["name"],
+        "additionalProperties" => false
+      }
+
+      data = %{"name" => "Alice", "age" => 30}
+
+      assert {:ok, validated} = Schema.validate(data, schema)
+      assert validated == data
+    end
+
+    test "validates non-object root (array)" do
+      schema = %{"type" => "array", "items" => %{"type" => "string"}}
+      data = ["a", "b"]
+
+      assert {:ok, validated} = Schema.validate(data, schema)
+      assert validated == ["a", "b"]
+    end
+
+    test "catches embedded JSON string instead of parsed map for property" do
+      schema = %{
+        "type" => "object",
+        "properties" => %{"name" => ~s({"type":"string"})}
+      }
+
+      result = Schema.validate(%{}, schema)
+
+      assert match?(
+               {:error, %ReqLLM.Error.Validation.Error{tag: :invalid_json_schema}},
+               result
+             )
+    end
+
+    test "returns error for entire schema given as JSON string" do
+      schema = ~s({"type":"object"})
+
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{}} = Schema.validate(%{}, schema)
+    end
+
+    test "validation error for missing required field" do
+      schema = %{
+        "type" => "object",
+        "properties" => %{"name" => %{"type" => "string"}},
+        "required" => ["name"]
+      }
+
+      data = %{"age" => 10}
+
+      assert {:error,
+              %ReqLLM.Error.Validation.Error{tag: :json_schema_validation_failed, reason: reason}} =
+               Schema.validate(data, schema)
+
+      assert reason =~ "required"
+    end
+
+    test "validation error for additionalProperties violation" do
+      schema = %{
+        "type" => "object",
+        "properties" => %{"name" => %{"type" => "string"}},
+        "additionalProperties" => false
+      }
+
+      data = %{"name" => "Alice", "extra" => 1}
+
+      assert {:error,
+              %ReqLLM.Error.Validation.Error{tag: :json_schema_validation_failed, reason: reason}} =
+               Schema.validate(data, schema)
+
+      assert reason =~ "extra"
+    end
+
+    test "validation error for type mismatch in array items" do
+      schema = %{"type" => "array", "items" => %{"type" => "string"}}
+      data = ["ok", 1]
+
+      assert {:error,
+              %ReqLLM.Error.Validation.Error{tag: :json_schema_validation_failed, reason: reason}} =
+               Schema.validate(data, schema)
+
+      assert reason =~ "/1"
+    end
+
+    test "validation error for enum violation" do
+      schema = %{
+        "type" => "object",
+        "properties" => %{"color" => %{"type" => "string", "enum" => ["red", "green"]}},
+        "required" => ["color"]
+      }
+
+      data = %{"color" => "blue"}
+
+      assert {:error,
+              %ReqLLM.Error.Validation.Error{tag: :json_schema_validation_failed, reason: reason}} =
+               Schema.validate(data, schema)
+
+      assert reason =~ "enum" or reason =~ "blue"
+    end
+
+    test "validation error for nested object with multiple errors" do
+      schema = %{
+        "type" => "object",
+        "properties" => %{
+          "user" => %{
+            "type" => "object",
+            "properties" => %{"id" => %{"type" => "integer"}, "name" => %{"type" => "string"}},
+            "required" => ["id", "name"],
+            "additionalProperties" => false
+          }
+        },
+        "required" => ["user"],
+        "additionalProperties" => false
+      }
+
+      data = %{"user" => %{"id" => "bad", "extra" => 1}}
+
+      assert {:error,
+              %ReqLLM.Error.Validation.Error{tag: :json_schema_validation_failed, reason: reason}} =
+               Schema.validate(data, schema)
+
+      assert reason =~ "/user"
+      assert reason =~ ", "
+    end
+
+    test "validation error for type mismatch at root (non-object root)" do
+      schema = %{"type" => "array", "items" => %{"type" => "string"}}
+      data = %{"not" => "an array"}
+
+      assert {:error,
+              %ReqLLM.Error.Validation.Error{tag: :json_schema_validation_failed, reason: reason}} =
+               Schema.validate(data, schema)
+
+      assert reason =~ "array" or reason =~ "type"
+    end
+
+    test "validates complex nested structures" do
+      schema = %{
+        "type" => "object",
+        "properties" => %{
+          "users" => %{
+            "type" => "array",
+            "items" => %{
+              "type" => "object",
+              "properties" => %{
+                "id" => %{"type" => "integer"},
+                "name" => %{"type" => "string"}
+              },
+              "required" => ["id", "name"]
+            }
+          }
+        },
+        "required" => ["users"]
+      }
+
+      data = %{
+        "users" => [
+          %{"id" => 1, "name" => "Alice"},
+          %{"id" => 2, "name" => "Bob"}
+        ]
+      }
+
+      assert {:ok, validated} = Schema.validate(data, schema)
+      assert validated == data
+    end
+
+    test "validates data with minimum and maximum constraints" do
+      schema = %{
+        "type" => "object",
+        "properties" => %{
+          "age" => %{"type" => "integer", "minimum" => 0, "maximum" => 120}
+        }
+      }
+
+      assert {:ok, _} = Schema.validate(%{"age" => 25}, schema)
+
+      assert {:error, %ReqLLM.Error.Validation.Error{tag: :json_schema_validation_failed}} =
+               Schema.validate(%{"age" => 150}, schema)
+
+      assert {:error, %ReqLLM.Error.Validation.Error{tag: :json_schema_validation_failed}} =
+               Schema.validate(%{"age" => -5}, schema)
+    end
+  end
+
   describe "map pass-through support" do
     test "compile/1 with map returns wrapped schema with nil compiled" do
       json_schema = %{

@@ -704,10 +704,8 @@ defmodule ReqLLM.Schema do
   @doc false
   @spec validate_with_jsv(any(), map()) :: {:ok, any()} | {:error, ReqLLM.Error.t()}
   defp validate_with_jsv(data, schema) do
-    # Build the schema validator
     root = JSV.build!(schema)
 
-    # Validate the data against the schema
     case JSV.validate(data, root) do
       {:ok, validated_data} ->
         {:ok, validated_data}
@@ -723,7 +721,7 @@ defmodule ReqLLM.Schema do
          )}
     end
   rescue
-    e in ArgumentError ->
+    e in [ArgumentError, RuntimeError, JSV.BuildError] ->
       {:error,
        ReqLLM.Error.Validation.Error.exception(
          tag: :invalid_json_schema,
