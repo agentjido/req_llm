@@ -191,6 +191,49 @@ defmodule ReqLLM.StreamServer do
   end
 
   @doc """
+  Start HTTP streaming from within the StreamServer.
+
+  This method ensures proper lifecycle coupling by having the StreamServer
+  own and link to the HTTP streaming task. When the server exits, the task
+  automatically terminates, preventing orphaned callbacks.
+
+  ## Parameters
+
+    * `server` - StreamServer process
+    * `provider_mod` - Provider module (e.g., ReqLLM.Providers.OpenAI)
+    * `model` - ReqLLM.Model struct
+    * `context` - ReqLLM.Context with messages to stream
+    * `opts` - Additional options for the request
+    * `finch_name` - Finch process name (default: ReqLLM.Finch)
+
+  ## Returns
+
+    * `{:ok, task_pid, http_context, canonical_json}` - Successfully started
+    * `{:error, reason}` - Failed to start
+
+  ## Examples
+
+      {:ok, _task_pid, _http_context, _canonical_json} =
+        StreamServer.start_http(
+          server,
+          ReqLLM.Providers.OpenAI,
+          model,
+          context,
+          opts
+        )
+
+  """
+  @spec start_http(server(), module(), ReqLLM.Model.t(), ReqLLM.Context.t(), keyword(), atom()) ::
+          {:ok, pid(), any(), any()} | {:error, term()}
+  def start_http(server, provider_mod, model, context, opts, finch_name \\ ReqLLM.Finch) do
+    GenServer.call(
+      server,
+      {:start_http, provider_mod, model, context, opts, finch_name},
+      :infinity
+    )
+  end
+
+  @doc """
   Attach an HTTP task to the server for monitoring.
 
   The server will monitor the task and handle cleanup if it crashes.
@@ -290,7 +333,8 @@ defmodule ReqLLM.StreamServer do
 
   @impl GenServer
   def init(state) do
-    # Inject protocol parser function
+    Process.flag(:trap_exit, true)
+
     protocol_parser =
       if function_exported?(state.provider_mod, :parse_stream_protocol, 2) do
         fn chunk, buffer -> state.provider_mod.parse_stream_protocol(chunk, buffer) end
@@ -302,10 +346,9 @@ defmodule ReqLLM.StreamServer do
   end
 
   @impl GenServer
-  def handle_call({:http_event, event}, from, state) do
+  def handle_call({:http_event, event}, _from, state) do
     {:reply, reply, new_state} = process_http_event(event, state)
-    GenServer.reply(from, reply)
-    {:noreply, new_state}
+    {:reply, reply, new_state}
   end
 
   @impl GenServer
@@ -338,6 +381,43 @@ defmodule ReqLLM.StreamServer do
   def handle_call(:cancel, _from, state) do
     new_state = cleanup_resources(state)
     {:stop, :normal, :ok, new_state}
+  end
+
+  @impl GenServer
+  def handle_call({:start_http, provider_mod, model, context, opts, finch_name}, _from, state) do
+    case ReqLLM.Streaming.FinchClient.start_stream(
+           provider_mod,
+           model,
+           context,
+           opts,
+           self(),
+           finch_name
+         ) do
+      {:ok, task_pid, http_context, canonical_json} ->
+        Process.monitor(task_pid)
+
+        is_google = model.provider == :google
+
+        json_mode? =
+          is_google and
+            get_in(canonical_json, ["generationConfig", "responseMimeType"]) ==
+              "application/json"
+
+        new_state = %{
+          state
+          | http_task: task_pid,
+            status: :streaming,
+            http_context: http_context,
+            canonical_json: canonical_json,
+            object_json_mode?: json_mode?,
+            object_acc: []
+        }
+
+        {:reply, {:ok, task_pid, http_context, canonical_json}, new_state}
+
+      {:error, reason} ->
+        {:reply, {:error, reason}, state}
+    end
   end
 
   @impl GenServer
@@ -383,6 +463,33 @@ defmodule ReqLLM.StreamServer do
   end
 
   @impl GenServer
+  def handle_info({ref, result}, state) when is_reference(ref) do
+    Logger.debug("HTTP task completed with result: #{inspect(result)}")
+    {:noreply, state}
+  end
+
+  @impl GenServer
+  def handle_info({:EXIT, pid, reason}, %{http_task: pid} = state) do
+    Logger.debug("HTTP task #{inspect(pid)} exited: #{inspect(reason)}")
+
+    new_state =
+      case reason do
+        :normal -> finalize_stream_with_fixture(state)
+        :shutdown -> finalize_stream_with_fixture(state)
+        {:shutdown, _} -> finalize_stream_with_fixture(state)
+        _ -> %{state | status: {:error, {:http_task_failed, reason}}}
+      end
+
+    new_state = reply_to_waiting_callers(new_state)
+    {:noreply, new_state}
+  end
+
+  @impl GenServer
+  def handle_info({:EXIT, _pid, _reason}, state) do
+    {:noreply, state}
+  end
+
+  @impl GenServer
   def handle_info({:DOWN, _ref, :process, pid, reason}, %{http_task: pid} = state) do
     Logger.debug("HTTP task #{inspect(pid)} terminated: #{inspect(reason)}")
 
@@ -398,7 +505,6 @@ defmodule ReqLLM.StreamServer do
 
   @impl GenServer
   def handle_info({:DOWN, _ref, :process, _pid, _reason}, state) do
-    # Other monitored process died, ignore
     {:noreply, state}
   end
 

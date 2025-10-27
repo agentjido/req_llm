@@ -43,7 +43,6 @@ defmodule ReqLLM.Streaming do
 
   """
 
-  alias ReqLLM.Streaming.FinchClient
   alias ReqLLM.StreamServer
   alias ReqLLM.{Context, Model, StreamResponse}
 
@@ -108,10 +107,8 @@ defmodule ReqLLM.Streaming do
           {:ok, StreamResponse.t()} | {:error, term()}
   def start_stream(provider_mod, model, context, opts \\ []) do
     with {:ok, server_pid} <- start_stream_server(provider_mod, model, opts),
-         {:ok, http_task_pid, http_context, canonical_json} <-
-           start_http_streaming(provider_mod, model, context, opts, server_pid),
-         :ok <- StreamServer.attach_http_task(server_pid, http_task_pid),
-         :ok <- set_fixture_context_if_needed(server_pid, http_context, canonical_json) do
+         {:ok, _http_task_pid, _http_context, _canonical_json} <-
+           start_http_streaming(provider_mod, model, context, opts, server_pid) do
       # Create lazy stream using Stream.resource
       default_timeout =
         Application.get_env(
@@ -168,16 +165,16 @@ defmodule ReqLLM.Streaming do
     end
   end
 
-  # Start HTTP streaming using FinchClient
+  # Start HTTP streaming through StreamServer
   defp start_http_streaming(provider_mod, model, context, opts, stream_server_pid) do
     finch_name = Keyword.get(opts, :finch_name, ReqLLM.Finch)
 
-    case FinchClient.start_stream(
+    case StreamServer.start_http(
+           stream_server_pid,
            provider_mod,
            model,
            context,
            opts,
-           stream_server_pid,
            finch_name
          ) do
       {:ok, task_pid, http_context, canonical_json} ->
@@ -218,22 +215,6 @@ defmodule ReqLLM.Streaming do
     See the ReqLLM README section "HTTP/2 Configuration (Advanced)" for more details:
     https://github.com/agentjido/req_llm#http2-configuration-advanced
     """
-  end
-
-  # Set fixture context if fixture capture is enabled
-  defp set_fixture_context_if_needed(server_pid, http_context, canonical_json) do
-    if fixture_mode() == :record do
-      StreamServer.set_fixture_context(server_pid, http_context, canonical_json)
-    else
-      :ok
-    end
-  end
-
-  defp fixture_mode do
-    case Code.ensure_loaded(ReqLLM.Test.Fixtures) do
-      {:module, mod} -> apply(mod, :mode, [])
-      {:error, _} -> :replay
-    end
   end
 
   defp maybe_capture_fixture(model, opts) do
