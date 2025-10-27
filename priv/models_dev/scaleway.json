@@ -1,0 +1,398 @@
+{
+  "models": [
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.13,
+        "output": 0
+      },
+      "id": "bge-multilingual-gemma2",
+      "last_updated": "2025-06-15",
+      "limit": {
+        "context": 8191,
+        "output": 3072
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "BGE Multilingual Gemma2",
+      "open_weights": false,
+      "provider": "scaleway",
+      "provider_model_id": "bge-multilingual-gemma2",
+      "reasoning": false,
+      "release_date": "2024-07-26",
+      "temperature": false,
+      "tool_call": false
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.9,
+        "output": 0.9
+      },
+      "id": "deepseek-r1-distill-llama-70b",
+      "knowledge": "2024-07",
+      "last_updated": "2025-01-20",
+      "limit": {
+        "context": 32000,
+        "output": 4096
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "DeepSeek R1 Distill Llama 70B",
+      "open_weights": true,
+      "provider": "scaleway",
+      "provider_model_id": "deepseek-r1-distill-llama-70b",
+      "reasoning": true,
+      "release_date": "2025-01-20",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": true,
+      "cost": {
+        "input": 0.25,
+        "output": 0.5
+      },
+      "id": "gemma-3-27b-it",
+      "knowledge": "2024-12",
+      "last_updated": "2025-09-05",
+      "limit": {
+        "context": 40000,
+        "output": 8192
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Gemma-3-27B-IT",
+      "open_weights": false,
+      "provider": "scaleway",
+      "provider_model_id": "gemma-3-27b-it",
+      "reasoning": true,
+      "release_date": "2024-12-01",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": true,
+      "cost": {
+        "input": 0.15,
+        "output": 0.6
+      },
+      "id": "gpt-oss-120b",
+      "last_updated": "2024-01-01",
+      "limit": {
+        "context": 128000,
+        "output": 8192
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "GPT-OSS 120B",
+      "open_weights": true,
+      "provider": "scaleway",
+      "provider_model_id": "gpt-oss-120b",
+      "reasoning": false,
+      "release_date": "2024-01-01",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.2,
+        "output": 0.2
+      },
+      "id": "llama-3.1-8b-instruct",
+      "knowledge": "2023-12",
+      "last_updated": "2025-01-01",
+      "limit": {
+        "context": 128000,
+        "output": 16384
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Llama 3.1 8B Instruct",
+      "open_weights": true,
+      "provider": "scaleway",
+      "provider_model_id": "llama-3.1-8b-instruct",
+      "reasoning": false,
+      "release_date": "2025-01-01",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": true,
+      "cost": {
+        "input": 0.9,
+        "output": 0.9
+      },
+      "id": "llama-3.3-70b-instruct",
+      "knowledge": "2023-12",
+      "last_updated": "2024-12-06",
+      "limit": {
+        "context": 100000,
+        "output": 4096
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Llama-3.3-70B-Instruct",
+      "open_weights": true,
+      "provider": "scaleway",
+      "provider_model_id": "llama-3.3-70b-instruct",
+      "reasoning": false,
+      "release_date": "2024-12-06",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": true,
+      "cost": {
+        "input": 0.2,
+        "output": 0.2
+      },
+      "id": "mistral-nemo-instruct-2407",
+      "last_updated": "2024-07-25",
+      "limit": {
+        "context": 128000,
+        "output": 8192
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Mistral Nemo Instruct 2407",
+      "open_weights": true,
+      "provider": "scaleway",
+      "provider_model_id": "mistral-nemo-instruct-2407",
+      "reasoning": false,
+      "release_date": "2024-07-25",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.15,
+        "output": 0.35
+      },
+      "id": "mistral-small-3.2-24b-instruct-2506",
+      "last_updated": "2025-06-20",
+      "limit": {
+        "context": 128000,
+        "output": 8192
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Mistral Small 3.2 24B Instruct (2506)",
+      "open_weights": true,
+      "provider": "scaleway",
+      "provider_model_id": "mistral-small-3.2-24b-instruct-2506",
+      "reasoning": false,
+      "release_date": "2025-06-20",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": true,
+      "cost": {
+        "input": 0.2,
+        "output": 0.2
+      },
+      "id": "pixtral-12b-2409",
+      "last_updated": "2024-09-25",
+      "limit": {
+        "context": 128000,
+        "output": 4096
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Pixtral 12B 2409",
+      "open_weights": true,
+      "provider": "scaleway",
+      "provider_model_id": "pixtral-12b-2409",
+      "reasoning": false,
+      "release_date": "2024-09-25",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": true,
+      "cost": {
+        "input": 0.75,
+        "output": 2.25
+      },
+      "id": "qwen3-235b-a22b-instruct-2507",
+      "last_updated": "2025-07-01",
+      "limit": {
+        "context": 260000,
+        "output": 8192
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Qwen3 235B A22B Instruct 2507",
+      "open_weights": true,
+      "provider": "scaleway",
+      "provider_model_id": "qwen3-235b-a22b-instruct-2507",
+      "reasoning": false,
+      "release_date": "2025-07-01",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.2,
+        "output": 0.8
+      },
+      "id": "qwen3-coder-30b-a3b-instruct",
+      "knowledge": "2025-04",
+      "last_updated": "2025-04",
+      "limit": {
+        "context": 128000,
+        "output": 8192
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Qwen3-Coder 30B-A3B Instruct",
+      "open_weights": true,
+      "provider": "scaleway",
+      "provider_model_id": "qwen3-coder-30b-a3b-instruct",
+      "reasoning": false,
+      "release_date": "2025-04",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": true,
+      "cost": {
+        "input": 0.15,
+        "output": 0.35
+      },
+      "id": "voxtral-small-24b-2507",
+      "last_updated": "2025-07-01",
+      "limit": {
+        "context": 32000,
+        "output": 8192
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "audio"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Voxtral Small 24B 2507",
+      "open_weights": true,
+      "provider": "scaleway",
+      "provider_model_id": "voxtral-small-24b-2507",
+      "reasoning": false,
+      "release_date": "2025-07-01",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.003,
+        "output": 0
+      },
+      "id": "whisper-large-v3",
+      "knowledge": "2023-09",
+      "last_updated": "2025-09-05",
+      "limit": {
+        "context": 0,
+        "output": 4096
+      },
+      "modalities": {
+        "input": [
+          "audio"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Whisper Large v3",
+      "open_weights": true,
+      "provider": "scaleway",
+      "provider_model_id": "whisper-large-v3",
+      "reasoning": false,
+      "release_date": "2023-09-01",
+      "temperature": false,
+      "tool_call": false
+    }
+  ],
+  "provider": {
+    "base_url": null,
+    "doc": "AI model provider",
+    "env": [],
+    "id": "scaleway",
+    "name": "Scaleway"
+  }
+}

@@ -83,6 +83,33 @@
     },
     {
       "attachment": true,
+      "id": "claude-haiku-4.5",
+      "knowledge": "2025-02-31",
+      "last_updated": "2025-10-15",
+      "limit": {
+        "context": 144000,
+        "output": 16000
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Claude Haiku 4.5",
+      "open_weights": false,
+      "provider": "github_copilot",
+      "provider_model_id": "claude-haiku-4.5",
+      "reasoning": true,
+      "release_date": "2025-10-15",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": true,
       "id": "claude-opus-4",
       "knowledge": "2025-03-31",
       "last_updated": "2025-05-22",
@@ -180,7 +207,7 @@
           "text"
         ]
       },
-      "name": "Claude Sonnet 4.5 (Preview)",
+      "name": "Claude Sonnet 4.5",
       "open_weights": false,
       "provider": "github_copilot",
       "provider_model_id": "claude-sonnet-4.5",

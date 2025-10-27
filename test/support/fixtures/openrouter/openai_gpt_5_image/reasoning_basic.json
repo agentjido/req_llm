@@ -1,0 +1,118 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1pbWFnZSIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjEuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-5-image",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Sorry, I can’t share my internal thinking. But the result is:\n12 × 7 = 84",
+            "reasoning": "**Considering explanation options**\n\nIf the user wants to see the steps, I can offer to show how to use a standard algorithm. That could be helpful! I think it’s okay to present structured steps as a summary, rather than just an internal monologue. However, I’ll need to ensure that everything stays concise and clear for the user. It's all about making the information digestible, right? Let's keep that focus in mind!",
+            "reasoning_details": [
+              {
+                "format": "openai-responses-v1",
+                "index": 0,
+                "summary": "**Considering explanation options**\n\nIf the user wants to see the steps, I can offer to show how to use a standard algorithm. That could be helpful! I think it’s okay to present structured steps as a summary, rather than just an internal monologue. However, I’ll need to ensure that everything stays concise and clear for the user. It's all about making the information digestible, right? Let's keep that focus in mind!",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "gAAAAABo__s0tHdNxER0aA8MR3xDnWF0vfRmpLwiydYSiUwMIGUxDZGJREBk1bN60g04fKTZBC8rIDu4tHVrwJLROH-d498xXP7llfYORRm9ccHaHUzbSHPg3XoLz9Dls3zPi_JpnWQeCBpF1cDsFBWyn4ADwJyCuw1Fidu57_RoWk9BaiFLjFGIP99G4IaM0E-yBuQh1bpq1dWd8pWqDlRCVygvyMNgQGJrOaHulRmzAV48oCovw-VAk0DP0xady5_aUI13Uz2lcn8ucJYdI-0eZ2T_z_wvio9N7jEsn3i4Oag_lq3moVIk5O4N2MYN4G1symqxAu4vRhrr47XD21Y42OZxt-bayKvcVja40N5SFi8sbtZa1lzcw8O9Hk9MHkyDEmMYbK-eOmJ-TfPuUs1UrLravIapJg81A6ZkgxrCZICr34pUAJQ8DbqzwjU5_so5s42olu9NIP-fGpR-psIC3f1AJtHZMPFb8nzTz1XW6g0GcGk2VugV8hWW9f5Kg_K1oJ2e5KLgEwm6k2uL8uQYuqwFPmkYwdFfyGATueDIiNvA3ccbDKgn6FDIhFp3PO_oc4TON5UsfT59NdC_5_OmK-WrOW-Gr8TEA3PVccMK10NksEzVGAavlQ9FcX3cKBgKh8uHzAVsyagX313NQXyXZ-IDFQe49MQNEq2WZQhvy_ny2Joud8wKmRO5svR0EUfR0CaiMr8WXBpjmDUv0CLI4r1cFKZf_UdjvMY-05bwtsH5PhM6biML23sO1VLCBNQIgn_GEc7D2Pq5BYH_kXrpDpfOXPBlUr52T4A7-Txcx9Q_o7rJ6YHzNBbbvBP8APIUV7G_AEVc1E_EPqVwRQlzCDMhPHruW7GzpFyhgnRuxCye9kG_XiYtIDISuED5LyJajCINfAyuNvJ_zp6KSdMM8g6xkn0pOjUKw5QUZRmu9jfdXnLYHzo1zpZJd3ZtQ6hm1w1Tvy2QphrwgBnSLkDmCO2BkdYLiHcLd5Ss8qOg2IbyrSo5HSrY7bZcediCcI6_1-uZWPaszsF6sPBfhp_ySCcOiQpmedWrBh4lSLSZsGqeQKuJcGIcZJxCKEa0V2JfvYqdBxRaStXJH08co8vfY0MbD3MlYqWam_JPQIw5wRExXqg3bxtYYmaMloVVZ31AzB1KGzR455qDL8Hb3fe4Nx2-b55siM_ZbfoYdKEIKuyiqh3x3ufL4oL4MkzFUUNvHoDZrZVQwSeoGnmuE7d0JMAzpT7oQv_R2bAcRvInYbu3wm5QRbIvC_tRk72S9tXlbfUa9mDUksZN9qUDY_cIGX2hnF_MLRGcICEDq4mGldabaXVFhapf07LRT834GxQlgQ9S-rXDktty50PUWjdd39jv0mvTpbvd1HG0X4qW31wPQpnQ9S0U2tF1zzpfJ4t7748v-C7ODG_gGGJ9U38WuPUfFvORukcs7OANmAwe_sEb1oovsqzUwwRzJ6qxJRKJTFHFplhYMFcavgQmGlG6S1o7RE2nGmA5RI5xftqrNd9P4X_kz8M_1vG0qdVR-hWv6vO0uR_It76yCPqCLYIaaQPP6cik8FcrDLG6Wb33DiRNYyrsicTdXx3XLvF7IrveFWGAZQVuh7lAxOe43wkzayJulDnHgPCe6dyYG5T2KIGjJsey_iGdN3iREgbHuXma_kG47po7ONu2e3S6DRghkiRGxc19ndlcMXeInbyYAGYHw02yS5XXAlggjKtpkUGL76rbIaWekfwZsZ9xmtO3M6dp2e8_rgBdHb4G4_dcnmBSqhbdcQQVE8k9sawfEmYHZMiulPnz94OCYz4VJmodWmsHESdLicL2ONMwHFgPnAPlCJA4MVz1lsN4C9urvJQtnxEsrLn83c9khHB4i7u-rdagTAx8e2-eoos526z7-zKtKfhikUR1tZPtrml9CMx2A8mALOAu--6LJdQCiswhf7DXYOsuXzSb3lVzM4pOqKAGkIfR0rFUNUNkcnlsoF2zDBvgDyskQn088M5V9vFC9dqZHPZArw-7ckiP6LT_ie-2E25tN8Z7z1BV12t59A-kRUN98lfScll4046SH6WdcN2ILysZYgowhOZYwUS8pQiHGJtQhnpvQYSA7_FgfEhlKyTL6TTTL3EELm5rDnuYnUKFLRr6BQsmMTWYjBY6AtJv64oKg13IOvxTYz2A4S-aGlFGqDi3F08InTsgclHJ_axPy3HCIacYzjSEaYuoFpySefqrylT1dYSputGBlTDmrXjzdfpjJx5f4_vhodPR8_YB3ckzLFOtiNAglSeFsXk926KrfLdWEpwU9U9uWZeLGFtl76xjzr6hvV4agdw9U50VW6NuKn0jOuLnQxj8VSNyD_TH8tbHLs-WnUrklX95UzaHA9p3_DUqT9s_zUKEug4mcP0P92DROM8evuD39bOA2VmJUUtdjtJXBQ3VJNO-ox9cqpTxIszp5wCItJtMZEvEf6638emxiDpN8wVzT6usSQ_AM7lGGAe84M367Q9KAVXHwjsqVijQNrjolG7u9diKDBQlUicsHwCPqbmA-f2oG411mIOxUV6FRrlcarFyIXwnzLpy",
+                "format": "openai-responses-v1",
+                "id": "rs_0036a5cf763af89b0168fffb2e05f881909b048fa2ce371722",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1761606445,
+      "id": "gen-1761606445-1tbJUMb2oVHF55D8Xf5W",
+      "model": "openai/gpt-5-image",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "usage": {
+        "completion_tokens": 284,
+        "completion_tokens_details": {
+          "reasoning_tokens": 256
+        },
+        "prompt_tokens": 361,
+        "total_tokens": 645
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "9955d97adffde810-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 27 Oct 2025 23:07:25 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

@@ -176,11 +176,13 @@
       "tool_call": true
     },
     {
+      "attachment": false,
       "cost": {
         "input": 1.0e-5
       },
       "dimensions": 3072,
       "id": "gemini-embedding-001",
+      "knowledge": "2025-05",
       "last_updated": "2024-03-07",
       "limit": {
         "context": 2048

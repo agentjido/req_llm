@@ -1,0 +1,109 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImFudGhyb3BpYy9jbGF1ZGUtaGFpa3UtNC41IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "anthropic/claude-haiku-4.5",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! 👋 Nice to meet you. How can I help you today?",
+            "reasoning": "The user has greeted me with \"Hello world!\" - a classic first message. This is a friendly greeting. I should respond warmly and helpfully.",
+            "reasoning_details": [
+              {
+                "format": "anthropic-claude-v1",
+                "index": 0,
+                "signature": "ErQCCkYICRgCKkBCNFXmryfYQp4TPdAz4FJHHC9QmMNelA50Nb/lgovZYZfLoioxyFadUjNOlZ6eB8mgvYzKfe7F3rDaIx8KoBMVEgzi7n3bK0JOCjQPbXoaDFl4RUlgvVUfkKaFYCIwJcjktvg3lndnF/DVZKHvTOF7VATV/g+fqeB8ga8zNxKnFBsmDNbCEHBt5PdKBzGMKpsBQD4xoE5BKcg1X4U1TaRGNSB809FBrHU9xPdQqKyx+hrhj6ujsb40YfK3F/KtnVBPUibRTR/H+ojpTrG0NJgUP7miNWAfGEySX5PPE/ghZj37UUUaamrEGuGsW+Piw8m9T9y9jHU9sc6mRaIohmejfaerswYAfAf83MskVlkc/FF9NdIDmOZgwP+04bLwjOeo2eOiCusuiwijgVcYAQ==",
+                "text": "The user has greeted me with \"Hello world!\" - a classic first message. This is a friendly greeting. I should respond warmly and helpfully.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1761606490,
+      "id": "gen-1761606490-souhGwCDepivJrDp8ULt",
+      "model": "anthropic/claude-haiku-4.5",
+      "object": "chat.completion",
+      "provider": "Anthropic",
+      "usage": {
+        "completion_tokens": 62,
+        "prompt_tokens": 38,
+        "total_tokens": 100
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "9955da946dda7fb0-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 27 Oct 2025 23:08:10 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

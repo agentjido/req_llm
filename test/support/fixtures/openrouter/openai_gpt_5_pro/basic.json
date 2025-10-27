@@ -1,0 +1,118 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1wcm8iLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-5-pro",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! How can I help you today?",
+            "reasoning": "**Responding to greetings**\n\nI need to respond appropriately to the user's \"Hello world!\" Since that's a greeting, I should greet back and maybe ask how I can help. I want to keep it concise, so a response like \"Hello! How can I help you today?\" feels good. I could add a clarifying question, like \"What would you like to work on or explore?\" but sticking to the minimal instruction is fine. I’ll ensure the reply is polite. Done!",
+            "reasoning_details": [
+              {
+                "format": "openai-responses-v1",
+                "index": 0,
+                "summary": "**Responding to greetings**\n\nI need to respond appropriately to the user's \"Hello world!\" Since that's a greeting, I should greet back and maybe ask how I can help. I want to keep it concise, so a response like \"Hello! How can I help you today?\" feels good. I could add a clarifying question, like \"What would you like to work on or explore?\" but sticking to the minimal instruction is fine. I’ll ensure the reply is polite. Done!",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "gAAAAABo__w0ImmXawab1mtnvyFcC54FkmSYtKFLR4bnJvG5eHvDNP0puALrNF_MFP1P2lzmZd7P0EcstnzdZvkT9kDQP1pI_DWswpOOwJEQav7ZvNEH5N5GnnCxS0F8hgUG0MaLNLzMA9mAw7U1msK-Q5QiQ74CEPR2THhgg-2YOatyIsYkW3U0AwyDPwD67_8pQARlMdY1I9Z7HTdtzC1yptekB_TjdXHLdDJ4AGez_ZJfH79d7oaLkhEWfccKeTiiaCgfLIX3iY0BeP4bevP-SaIAGBMx1oIKxv7W1e7gmVPfk4z27t9auCW44wUhZU_GOs-8K8xKUAD_ld7KrZn_-GMrFFWflIkj8MYmkkG3lAYRB-8oj93YMi5TlKF1Iqe3mO31MlQkvanF9Ioa4keF7nEKWQceuIiZNl6dXg94VI7ifHoliyqRBfxjBySnL1H1vfFPZx-nOLBXTjJGFAcs9NcneRkhhVppXLXD1TqFc6ShZ_oKuWUi4Z_9sE_DRFONBc14IMy_T7ReRDIqyGYsEI-J06LQw_kCqc1XXCSH57lToej6x1vWY_FkhDzkk5rX2teSjsxtESNCBZ79RStSdOhci3YFTf97INEeFyyWp9T8TTHksLSU6UEkInGJT8lKtpUHdB4osRaQ-tvydVuSeZFkLknCHj4EoEvRI0c-5u0TQv0RDushJdQ5TYW2IeRsWJCUVaKWan_yFBl95i7EypnfyDuKWAm6n1gAbNFTG0tQJYIfyc2wJqe5EgD6ZRM_bwEiW4hpKgig4pfG8oT7uXQ1GTUUByyOpr3Xq9hrWytM0Yl-5cNVEE998TANY0LkGA5x--EMnwWnJLb_JRG79opd5ZQupL-axfk8RQ38pYc37Il1yzYIgeR5Axu03B5sbx8NUh5ib0P2sSLEkh_DzqE0RAE1fmLYKh335BOVyz2onKgRytKHicJglqQXFlSTl9B0xl2JKJXm-Q6g3nO-XH1JPKu7EDnZKVOfAUx134JparZylPySRYuzbOY0UEdzysu06kx0D1LEJ3_Pi_C5FfTM_W1q2s6LzGDhWL_R0GQXyyB4MqxYaY_iOmWFKwO59lPFjPjRQ8ohfe4ozI-isdXoH5ACv74L9biLPZEOENLrgv8dZNKs66t7B3XwDSyXu2WZm1r8YvTrZukOOPR_Uci5M8Q70YO7qW_UxfLO4-LD3GyOmup6SKXOaTgc91KJbU8Al3UfZbtCTsnw6j5Ozmvejd1h3qOfyKWJn1Wgzs5Y59wpiIQhZ3pQ3Qy_oXxQh3H_87Vv9QAGWKyK2K5pHM3s_GpyfLXfbdpqg8z-SGe8FbMwblzBDls85yjNXBXbFQ26aXLGdyPWjbHNgnmtmuGWHRQrG2Wk4uF7I5u4zuCTcyvrVlN0Xkd0y-53bflc4NfWnX7TpcbryndZobF50qgy2B2zeXmAZ613cL07E5WHnNmhCNRcUkrHrrVqkjouFhfaAxVg",
+                "format": "openai-responses-v1",
+                "id": "rs_04f44b19bd4c5fd60168fffc3259388190a0bfd33c774922c4",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1761606682,
+      "id": "gen-1761606682-lFamrC7aCIaFblRw7lpg",
+      "model": "openai/gpt-5-pro",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "usage": {
+        "completion_tokens": 79,
+        "completion_tokens_details": {
+          "reasoning_tokens": 64
+        },
+        "prompt_tokens": 9,
+        "total_tokens": 88
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "9955df4638c1dd6d-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 27 Oct 2025 23:11:23 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

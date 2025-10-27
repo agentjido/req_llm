@@ -63,6 +63,66 @@
     {
       "attachment": false,
       "cost": {
+        "input": 0.01,
+        "output": 0
+      },
+      "id": "Qwen/Qwen3-Embedding-4B",
+      "knowledge": "2024-12",
+      "last_updated": "2025-01-01",
+      "limit": {
+        "context": 32000,
+        "output": 2048
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Qwen 3 Embedding 4B",
+      "open_weights": true,
+      "provider": "huggingface",
+      "provider_model_id": "Qwen/Qwen3-Embedding-4B",
+      "reasoning": false,
+      "release_date": "2025-01-01",
+      "temperature": false,
+      "tool_call": false
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.01,
+        "output": 0
+      },
+      "id": "Qwen/Qwen3-Embedding-8B",
+      "knowledge": "2024-12",
+      "last_updated": "2025-01-01",
+      "limit": {
+        "context": 32000,
+        "output": 4096
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Qwen 3 Embedding 4B",
+      "open_weights": true,
+      "provider": "huggingface",
+      "provider_model_id": "Qwen/Qwen3-Embedding-8B",
+      "reasoning": false,
+      "release_date": "2025-01-01",
+      "temperature": false,
+      "tool_call": false
+    },
+    {
+      "attachment": false,
+      "cost": {
         "input": 0.25,
         "output": 1
       },

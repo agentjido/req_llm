@@ -1,0 +1,169 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo2NTUyLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/Iiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoib3BlbmFpL2dwdC1vc3MtMTIwYjpleGFjdG8iLCJuIjoxLCJyZWFzb25pbmdfZWZmb3J0IjoibG93Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJuYW1lIjoidGVsbF9qb2tlIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifSx7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJuYW1lIjoiZ2V0X3RpbWUiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+    },
+    "canonical_json": {
+      "max_tokens": 6552,
+      "messages": [
+        {
+          "content": "What's the weather like in Paris, France?",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-oss-120b:exacto",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tools": [
+        {
+          "function": {
+            "description": "Get current weather information for a location",
+            "name": "get_weather",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "location": {
+                  "type": "string"
+                },
+                "unit": {
+                  "enum": [
+                    "celsius",
+                    "fahrenheit"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "location"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        },
+        {
+          "function": {
+            "description": "Tell a funny joke",
+            "name": "tell_joke",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "topic": {
+                  "description": "Topic for the joke",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "function"
+        },
+        {
+          "function": {
+            "description": "Get the current time",
+            "name": "get_time",
+            "parameters": {
+              "properties": {},
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "I’m not able to pull live weather data, so I can’t tell you the exact conditions in Paris right this moment. However, here are a few ways you can get an up‑to‑date forecast, plus a quick overview of what Paris’s weather is usually like throughout the year.\n\n---\n\n## 1. Quick ways to check the current weather\n\n| Method | How to use it | Typical update frequency |\n|--------|---------------|--------------------------|\n| **Weather websites** | Go to sites like [Météo France](https://www.meteofrance.com/), [Weather.com](https://weather.com/), or [AccuWeather](https://www.accuweather.com/). Type “Paris, France” in the search bar. | Every 5–15 minutes |\n| **Mobile apps** | Install a weather app (Météo France, Weather Underground, Dark Sky, etc.) and enable location services. | Real‑time push notifications |\n| **Voice assistants** | Ask Siri, Google Assistant, or Alexa: “What’s the weather in Paris right now?” | Instant |\n| **Command‑line / programming** | Use a free API (e.g., OpenWeatherMap, WeatherAPI.com, or the French government’s **Météo‑France API**) to fetch JSON data. Example (Python):<br>```python<br>import requests<br>API_KEY = \"YOUR_KEY\"<br>url = f\"https://api.openweathermap.org/data/2.5/weather?q=Paris,FR&appid={API_KEY}&units=metric\"<br>print(requests.get(url).json())<br>``` | As often as you call the endpoint (subject to rate limits) |\n| **Smartwatch / widget** | Add a weather widget to your watch face or phone home screen. | Auto‑refresh (usually every 30 min–1 h) |\n\n---\n\n## 2. Typical climate in Paris (what to expect)\n\n| Season | Avg. High / Low (°C) | Common Conditions | What to Pack |\n|--------|----------------------|-------------------|--------------|\n| **Winter** (Dec‑Feb) | 6 °C / 1 °C | Cloudy, occasional rain, rare snow; daylight ~8 h | Warm coat, scarf, waterproof shoes |\n| **Spring** (Mar‑May) | 13 °C / 5 °C | Variable: sunny days mixed with showers; blossoms in parks | Light jacket, umbrella, layers |\n| **Summer** (Jun‑Aug) | 25 °C / 15 °C | Mostly sunny, occasional thunderstorms; heatwaves can push temps >30 °C | T‑shirt, hat, sunscreen; light raincoat for sudden showers |\n| **Autumn** (Sep‑Nov) | 17 °C / 9 °C | Mild, more rain than summer; beautiful foliage | Light sweater, rain jacket, comfortable shoes |\n\n*All temperatures are city‑center averages; suburbs can be a degree or two cooler or warmer.*\n\n---\n\n## 3. If you need a **one‑off snapshot** right now\n\n1. **Open a browser** and go to https://wttr.in/Paris?0 (a minimalist, terminal‑style forecast).  \n2. Or type `weather Paris` into Google; the top‑right card shows temperature, humidity, wind, and a short‑term forecast.  \n3. For a more detailed 7‑day outlook, visit the **Météo‑France** page for Paris: https://www.meteofrance.com/previsions-meteo-france/paris/75000\n\n---\n\n### Example of a quick API call (OpenWeatherMap)\n\n```bash\ncurl \"https://api.openweathermap.org/data/2.5/weather?q=Paris,FR&units=metric&appid=YOUR_API_KEY\"\n```\n\nTypical JSON response (truncated):\n\n```json\n{\n  \"weather\": [{ \"description\": \"light rain\", \"icon\": \"10d\" }],\n  \"main\": {\n    \"temp\": 12.4,\n    \"feels_like\": 11.8,\n    \"humidity\": 78\n  },\n  \"wind\": { \"speed\": 3.6, \"deg\": 210 },\n  \"dt\": 1730186400,\n  \"name\": \"Paris\"\n}\n```\n\nReplace `YOUR_API_KEY` with a free key you can obtain by signing up at https://openweathermap.org/api.\n\n---\n\n## 4. A quick tip for travelers\n\n- **Air quality:** Paris can have elevated PM2.5 levels in winter. Check the Airparif website (https://www.airparif.asso.fr/) if you have respiratory sensitivities.  \n- **Rain:** Even in summer, a brief shower is common. Carry a compact, fold‑up umbrella (≈ 10 cm when packed).  \n- **Heatwaves:** When temperatures exceed 30 °C, the city may issue “vigilance” alerts. Look for the orange or red warning symbols on French weather sites.\n\n---\n\n### TL;DR\n\n- I can’t give you the exact current temperature, but you can get it instantly via Google, a weather app, or a quick API call (e.g., OpenWeatherMap).  \n- Paris’s climate is mild overall: cool winters, pleasant springs, warm summers, and a bit rainy autumn.  \n- For a real‑time snapshot right now, try https://wttr.in/Paris?0 or ask a voice assistant.\n\nIf you let me know the specific date/time you’re interested in (e.g., “today’s afternoon” or “next Saturday”), I can walk you through how to pull that forecast from an API or interpret the typical seasonal patterns for that period. Happy planning!",
+            "reasoning": "The user asks: \"What's the weather like in Paris, France?\" As an AI without real-time data, we need to explain we don't have live data, suggest checking reliable sources, maybe give typical climate info. Could ask for date/time. Provide general info. Also can suggest using APIs. Provide guidance.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "The user asks: \"What's the weather like in Paris, France?\" As an AI without real-time data, we need to explain we don't have live data, suggest checking reliable sources, maybe give typical climate info. Could ask for date/time. Provide general info. Also can suggest using APIs. Provide guidance.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1761606474,
+      "id": "gen-1761606474-APXESYNJFWCD17KhFGwy",
+      "model": "openai/gpt-oss-120b:exacto",
+      "object": "chat.completion",
+      "provider": "Novita",
+      "system_fingerprint": "",
+      "usage": {
+        "completion_tokens": 1270,
+        "completion_tokens_details": {
+          "reasoning_tokens": 62
+        },
+        "prompt_tokens": 76,
+        "prompt_tokens_details": null,
+        "total_tokens": 1346
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "9955da33fa9beaf0-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 27 Oct 2025 23:07:55 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

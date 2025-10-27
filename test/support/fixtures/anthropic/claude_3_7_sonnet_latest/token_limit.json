@@ -1,0 +1,152 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtMy03LXNvbm5ldC1sYXRlc3QiLCJzdHJlYW0iOmZhbHNlLCJ0aGlua2luZyI6eyJidWRnZXRfdG9rZW5zIjoxMDI0LCJ0eXBlIjoiZW5hYmxlZCJ9fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "claude-3-7-sonnet-latest",
+      "stream": false,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-beta": [
+        "interleaved-thinking-2025-05-14"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "ErUBCkYICRgCIkDvqJRgLErnVjr0a6BgIncVZVxWdSbIDBdy1WNXDSaU0VfX+Nz3ReSv4MaOHQ+SY5wKpWB4l12vCEuSc0WEQgKYEgyKv729YZ2+bL66coAaDD+59DBeOBbDXsPMyiIwMOTb04Kp+drOwOR+pRkNpsGEvjNOryU2XaYsW59pOUAK/QZvUYMASAXmg7Fx+XAXKh09pAYe7ICKu7yXDRGS7SIbX8EtxlR4Xf17bZXqixgC",
+          "thinking": "The request asks for a very long story about dragons and adventures. I'll create an engaging fantasy story that involves dragons and adventures with multiple characters, plot lines, and world-building elements. Since they want a \"very long\" story, I'll make it substantial but still reasonable for this format - breaking it into clear sections with a beginning, middle, and end, while developing characters and an immersive world.\n\nI'll include:\n- A main protagonist who encounters dragons\n- A fantasy world with its own geography and history\n- Supporting characters with their own motivations\n- Multiple adventures and challenges\n- Different types of dragons with unique personalities\n- Themes of bravery, friendship, and discovery\n- A satisfying conclusion that ties the narrative together\n\nI'll make sure the story has a clear structure despite its length, with chapter-like sections to help organize the narrative flow.",
+          "type": "thinking"
+        },
+        {
+          "text": "# The Dragon Chronicler's Legacy\n\n## Part I: Embers of Destiny\n\nIn the realm of Aethoria, where the skies were vast and the mountains reached toward stars that told ancient stories, dragons were not myth but reality. They soared through cloud-laden skies, their scales catching sunlight in prismatic arrays, their wingbeats creating winds that could topple trees. Yet, for all their majesty, they remained distant from the affairs of humans, elves, and dwarves who populated the lands below.\n\nLyra Windwhisper had grown up in the small village of Elmbrook, nestled at the foot of the Mistspine Mountains. The village was unremarkable except for one thing: it lay along the annual migration path of the Azure Sky dragons. Each spring, these magnificent creatures would pass overhead, their blue-silver scales shimmering like rippling water against the sun. For three days, the villagers would celebrate the Dragon Passing, a tradition that had continued for generations.\n\nBut this year was different. The dragons did not come.\n\nLyra, with her wild auburn hair and eyes the color of summer leaves, stood on the village's observation tower for three days straight, searching the skies. She was the village's apprentice chronicler, tasked with recording the dragons' passage in the great leather-bound tome that held centuries of observations.\n\n\"Perhaps they've changed their route,\" suggested Elder Thorne, his weathered face creased with concern as he climbed the tower steps on the third evening. \"It wouldn't be the first time.\"\n\n\"No,\" Lyra replied, her fingers tracing the empty page where this year's account should be written. \"The last time they changed their path was three hundred years ago, during the Great Drought. The skies are clear, the winds favorable. Something is wrong.\"\n\nThat night, as Lyra slept, she dreamed of a dragon with scales like midnight, its eyes burning like distant stars. \"Seek,\" it whispered in a voice that rumbled like distant thunder. \"The balance is broken. The ancient pact forgotten.\"\n\nShe woke with a start, the dream still vivid. Outside her window, dawn was breaking over the mountains, painting the sky in hues of pink and gold. Without hesitation, she packed her chronicler's tools—quills, ink, parchment—along with provisions for a journey. She added the village's dragon lore book, a compendium of knowledge passed down through generations of chroniclers.\n\n\"You cannot be serious,\" her mother protested when Lyra announced her intention to discover what had happened to the dragons. \"The mountains are treacherous, and beyond them lies the Wildlands. No one from Elmbrook has ventured there in living memory.\"\n\n\"I'm a chronicler,\" Lyra replied, securing her pack. \"Our duty is to record, but also to investigate when there are gaps in our knowledge. This is more than a missing passage—it could signify a shift in the natural order.\"\n\nHer father, a quiet man who crafted musical instruments from the wood of the surrounding forests, placed a small carved flute in her hand. \"Legend says dragons are drawn to music,\" he said softly. \"It may serve you better than a sword.\"\n\nBy midday, with reluctant blessings from the village council and tearful goodbyes from her family, Lyra set out toward the Mistspine Mountains. The path was initially clear, winding through pine forests that grew denser as the elevation increased. By nightfall, she had reached the first waystone, an ancient marker carved with symbols that glowed faintly in the darkness.\n\nShe made camp, building a small fire and consulting her maps. If the Azure Sky dragons had followed their usual route, they would have crossed the Mistspine at Dragon's Passage, a high mountain corridor named for its frequent visitors. That would be her destination.\n\nAs flames cast dancing shadows on the surrounding trees, Lyra opened the dragon lore book. Its pages contained illustrations of different dragon species, notes on their behaviors, and transcriptions of the few conversations humans had managed to have with these intelligent creatures over the centuries.\n\nOne passage caught her eye: \"Dragons are bound by ancient magic to the leylines of the world. Where these lines of power cross, dragons gather. Should these nexus points be disturbed, the dragons' very nature may be affected.\"\n\nThe text was accompanied by a map showing the major leylines of Aethoria. One such nexus point lay beyond the mountains, in the heart of the Wildlands. Could there be a connection?\n\nLyra's contemplation was interrupted by a rustling in the underbrush. She reached for her father's flute, ready to use it as a meager weapon if necessary, when a figure emerged from the darkness.\n\nHe was tall and lean, with hair the color of burnished copper and eyes that seemed to shift between gray and blue. A longbow was strapped to his back, and a curved knife hung at his belt.\n\n\"It's not wise to travel these paths alone,\" he said, keeping a respectful distance from her fire. \"Especially not with the wilderness growing more treacherous by the day.\"\n\n\"Who are you?\" Lyra demanded, not lowering the flute.\n\nA smile quirked at the corner of his mouth. \"My name is Kieran. I'm a ranger from the western forests. And you, I'm guessing, are from Elmbrook. The red clay on your boots is distinctive.\"\n\n\"I'm Lyra, apprentice chronicler,\" she replied cautiously. \"What do you mean by 'more treacherous'?\"\n\nKieran's expression grew serious. \"May I?\" he gestured to the fire. When Lyra nodded, he sat across from her, the flames highlighting the concern on his face.\n\n\"The natural order is disturbed,\" he explained. \"Creatures are behaving strangely. The wise beasts flee, the predators grow bold. The forest speaks of fear.\" He nodded toward her pack. \"I saw you consulting a book about dragons. Have they not passed over your village this year?\"\n\nSurprise flickered across Lyra's face. \"How did you know about that?\"\n\n\"The Azure Sky dragons' migration affects more than just Elmbrook. Many settlements mark their passing. When they didn't appear in the western skies last week, my people grew concerned. I was sent to investigate.\"\n\nLyra considered him for a long moment before making a decision. She showed him the dragon lore book, open to the page about leylines. \"I think something may have happened at this nexus point in the Wildlands.\"\n\nKieran studied the map, his brow furrowing. \"The Heart of Thorns,\" he murmured. \"A dangerous place, even in peaceful times. If something has disturbed the magic there...\" He looked up at Lyra. \"Your journey leads beyond the mountains, then?\"\n\n\"Yes. I need to discover what's happened to the dragons.\"\n\n\"Then it seems our paths align,\" Kieran said. \"I wouldn't recommend traveling the Wildlands alone. With your knowledge and my tracking skills, we stand a better chance of finding answers.\"\n\nLyra hesitated, weighing the wisdom of trusting this stranger against the dangers of traveling alone. Finally, she nodded. \"We'll continue together tomorrow. But I warn you—I'm completing my mission, with or without you.\"\n\nKieran's smile returned. \"I would expect nothing less from a chronicler of Elmbrook.\"\n\nThat night, as Kieran took the first watch and Lyra tried to sleep, the midnight dragon visited her dreams again. This time, it showed her visions of a tower of black crystal, rising from a tangled landscape of thorns. At its peak, a pulsing red light throbbed like a heartbeat, and with each pulse, the leylines visible in the dream grew dimmer.\n\n\"Hurry,\" the dragon's voice echoed. \"Before the song of magic falls silent forever.\"\n\nDawn broke with a heavy mist clinging to the mountainside. Lyra shared her dream with Kieran as they broke camp.\n\n\"A black tower in the Heart of Thorns,\" he mused. \"There are ruins there, remnants of the Old Kingdom, but I've never heard of such a tower.\"\n\n\"It might be new,\" Lyra suggested. \"Or recently uncovered.\"\n\n\"Either way, it reinforces our destination.\" Kieran shouldered his pack. \"We should reach Dragon's Passage by tomorrow if we maintain a good pace.\"\n\nThe day's journey took them higher into the mountains. The path grew steeper, winding between towering pines and across rocky outcroppings. Kieran proved to be an experienced guide, pointing out edible plants and warning of treacherous footing. By midafternoon, they had climbed above the treeline, and the full majesty of the Mistspine range was revealed.\n\nPeaks of gray-white stone stretched in both directions, their tops wreathed in clouds. Valleys cut between them, some lush with vegetation, others barren rock. In the distance, Lyra could see the distinctive shape of Dragon's Passage—a natural corridor between two mountains, its walls polished smooth by centuries of dragon wings brushing against them.\n\n\"We'll camp at the high meadow tonight,\" Kieran said, pointing to a relatively flat area ahead. \"It'll give us shelter from the wind.\"\n\nAs they set up camp, Lyra noticed something unusual—a series of deep gouges in the rocky ground near their site. Kieran examined them with concern.\n\n\"Dragon claw marks,\" he confirmed. \"Recent too. But they're erratic, not the usual landing patterns. It's as if the dragon was injured or disoriented.\"\n\nLyra traced the marks with her fingers, feeling the sharp edges where stone had been cleaved. \"Can you tell what type of dragon?\"\n\nKieran measured the distance between the claw marks with his hands. \"From the span, I'd say one of the larger species. Perhaps a Cindercrest or a Storm Herald. Not an Azure Sky—their talons are more slender.\"\n\nThat night, they built their fire near the claw marks, hoping that if the injured dragon returned, it might be drawn to the warmth and light. As darkness fell, Kieran taught Lyra to identify constellations used for navigation, while she shared stories from the dragon lore book.\n\n\"There's one account,\" she said, turning to an ancient page written in faded ink, \"of a chronicler named Elyndra who lived four centuries ago. She nursed an injured Earthshaker dragon back to health after it was wounded in a territorial dispute. In gratitude, it taught her the rudiments of draconic language and granted her a scale, which she fashioned into a pendant that allegedly allowed her to understand all dragon speech.\"\n\n\"What happened to this pendant?\" Kieran asked, poking at the fire with a stick.\n\n\"Unknown. The account says she wore it until her death, but there's no record of its whereabouts afterward.\"\n\nTheir conversation was interrupted by a sound—a low, keening wail that echoed between the mountain peaks. Both of them stood, scanning the night sky.\n\n\"There!\" Kieran pointed to a shadow moving against the stars, larger than any bird.\n\nThe dragon circled twice before descending toward their camp. As it neared, Lyra could see its scales were the deep crimson of a Cindercrest, though in the moonlight they appeared almost black. It landed heavily some distance from their fire, its wings folding with visible effort.\n\n\"Stay behind me,\" Kieran whispered, reaching for his bow.\n\n\"No,\" Lyra countered. \"It's injured. It might perceive that as a threat.\"\n\nInstead, she took out her father's flute and, with trembling fingers, played a simple melody—a lullaby from Elmbrook, traditionally sung during the Dragon Passing festival.\n\nThe dragon's head swung toward her, eyes like molten gold fixing on the small human with the flute. It dragged itself closer, and Lyra could now see the problem—a deep wound in its side, the scales around it blackened as if burned, though fire should not harm a Cindercrest.\n\n\"Something's very wrong,\" Lyra whispered as she lowered the flute. \"Cindercrests are immune to fire.\"\n\nThe dragon was close enough now that its hot breath ruffled Lyra's hair. It lowered its massive head, bringing one golden eye level with the humans",
+          "type": "text"
+        }
+      ],
+      "id": "msg_019mxM5RFpLazz4YvdxywuSw",
+      "model": "claude-3-7-sonnet-20250219",
+      "role": "assistant",
+      "stop_reason": "max_tokens",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 44,
+        "output_tokens": 3000,
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": [
+        "a71659e7-a922-4ff7-99de-f3ba615face1"
+      ],
+      "anthropic-ratelimit-input-tokens-limit": [
+        "40000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "40000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2025-10-27T22:47:55Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "16000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "13000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2025-10-27T22:49:05Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "1000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2025-10-27T22:47:55Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "56000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "53000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2025-10-27T22:47:55Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9955bce9ac6baca8-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 27 Oct 2025 22:48:54 GMT"
+      ],
+      "request-id": [
+        "req_011CUYWyprqTTit1K1nkQeWj"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "59233"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  }
+}

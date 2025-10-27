@@ -1,0 +1,152 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtb3B1cy00LTEiLCJzdHJlYW0iOmZhbHNlLCJ0aGlua2luZyI6eyJidWRnZXRfdG9rZW5zIjoxMDI0LCJ0eXBlIjoiZW5hYmxlZCJ9fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "claude-opus-4-1",
+      "stream": false,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-beta": [
+        "interleaved-thinking-2025-05-14"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "Er0DCkYICRgCKkDGuGAyy4FpH0uTXqkVbj3Oh8GNsIoli/HDFH4zGEfVJrZO75O5kxVezcwxb338nfGW1bu8S+ho454XQBlKivvHEgz5in4FxSnPi+Kre1AaDD2MIB40rdZ1/gvFCCIwzZmX4hRWoH5910L/xkWObUJCRTIxdu+0K/d7jQsrRnOzUK+DUD15NEYEeVw23Om9KqQCkQJ1l15M6fD2Y6jemHsBhi5FOoQvfxVatadscN0PRVCxju3JF5OVAxm0haM6krlVzw47f0Ayn7fNRaSn2d4SHrwqjJZc9NWRxFNvP+kE26wFlq1f4lXcW2KQtHjWvy6toJRoTzSnCSyxN0b7FjKeyx+DNXHl478qJBO7uQn18FlRTrYK/U54an5OdDPevIEzJLT7zRKiAIRHL0+RqGSmrr3/c0MyDklah1MLnvsTlND3d1sIR5Yz4hO9KwYq2yJy3PQyjnMw+Q+fGdon6//WuktOKOKos17Fusz7ARYHiTucROb6oGm1s7VtK/ddjMT93081HJ65aoM0jEXcCjSSDiwYcKc8zynF9n3metmAnBFZkI3fH3AcJ+Nc1JgNWzh3ogc3OxgB",
+          "thinking": "The user is asking for a very long story about dragons and adventures. I'll create an epic fantasy tale with multiple chapters, rich world-building, interesting characters, and exciting plot developments. I'll aim for a substantial length while keeping it engaging throughout.",
+          "type": "thinking"
+        },
+        {
+          "text": "# The Chronicles of the Crimson Wing\n\n## Part One: The Prophecy Awakens\n\nThe morning mist clung to the mountainside like a silken shroud as Kira made her way up the treacherous path toward the ancient monastery of Windholm. Her leather boots, worn thin from years of travel, found purchase on the frost-slicked stones with practiced ease. She had been climbing since before dawn, driven by a dream that had haunted her for the past seven nights—a dream of golden eyes watching her from the darkness, and a voice like distant thunder calling her name.\n\nKira was no stranger to strange dreams. As a cartographer's apprentice in the coastal city of Saltmere, she had spent her youth mapping the known world, tracing the boundaries between the human kingdoms and the wild lands beyond. But these dreams were different. They felt less like visions and more like memories of something she had never experienced, echoes of a life she had never lived.\n\nThe monastery appeared through the mist like a ghost ship emerging from fog. Its stone walls, carved directly from the mountain itself, had stood for over a thousand years. According to legend, it had been built in the age when dragons still soared freely through the skies, before the Great Betrayal that had driven them into hiding. Now, only the monks remained, keepers of the old knowledge, guardians of secrets that most of the world had forgotten.\n\nBrother Marcus was waiting for her at the gates, his weathered face creased with concern. \"Kira Thornwood,\" he said, his voice carrying the weight of prophecy. \"We have been expecting you.\"\n\n\"Expecting me?\" Kira pulled back her hood, revealing auburn hair that caught the morning light like copper. \"I've told no one of my journey.\"\n\n\"The dragons told us,\" Marcus replied simply, as if such a statement were perfectly ordinary. \"Come. There is much to discuss, and time grows short.\"\n\nThe interior of the monastery was a maze of corridors and chambers, each one filled with artifacts from the age of dragons. Scales the size of dinner plates adorned the walls, their surfaces still shimmering with an inner fire despite the centuries that had passed. Ancient texts bound in hide that Kira didn't recognize lined endless shelves, their pages filled with script that seemed to shift and dance when she wasn't looking directly at it.\n\nMarcus led her to a circular chamber at the heart of the monastery. In its center stood a pool of water so still it might have been polished obsidian. Around its edges, seven monks sat in meditation, their breathing synchronized in a rhythm that made the air itself seem to pulse with life.\n\n\"Tell me about your dreams,\" Marcus said.\n\nKira hesitated, then began to speak. She told him of the golden eyes, of the voice calling her name. She told him of the visions that came after—cities of crystal spires where dragons and humans lived as equals, great battles fought in skies that burned with magical fire, and always, always, the sense that she was searching for something vital that she had lost.\n\nAs she spoke, the water in the pool began to ripple. Images formed on its surface—a great red dragon with wings that blotted out the sun, a warrior in armor that gleamed like starlight, a sword that burned with cold fire. And then, clear as day, Kira saw herself, but different. In the vision, she stood upon a mountaintop, her hand resting on the snout of a magnificent dragon whose scales were the deep crimson of rubies. Power radiated from her, not the power of magic, but something deeper, older—the power of understanding, of connection.\n\n\"The Dragonbond,\" Marcus whispered, and the other monks stirred from their meditation. \"It has awakened in you.\"\n\n\"The what?\" Kira stepped back from the pool, her heart racing.\n\n\"Long ago, before the kingdoms of men were even dreams in the minds of gods, there were those who could bond with dragons. Not as masters and servants, but as equals, as two halves of a single whole. The bonded pairs were the guardians of the world, keeping the balance between order and chaos, between the wild magic of the dragons and the structured civilization of humanity.\"\n\nMarcus moved to one of the walls and pressed his hand against what appeared to be a simple stone. The wall swung inward, revealing a hidden chamber. \"The gift was thought lost when the dragons went into hiding. But the prophecies spoke of its return, of one who would reawaken the bond when the world's need was greatest.\"\n\nInside the chamber, resting on a pedestal of black stone, was an egg. But this was no ordinary egg—it was the size of a wine barrel, its surface a deep crimson shot through with veins of gold that pulsed with their own inner light.\n\n\"A dragon egg,\" Kira breathed, approaching it with a mixture of awe and terror. \"But I thought—everyone knows the dragons are gone. The last one was seen over two hundred years ago.\"\n\n\"The dragons are not gone,\" Marcus corrected. \"They hide, waiting. This egg has been here for three centuries, kept in stasis by our magic, waiting for the one who could awaken it. Waiting for you.\"\n\nAs if responding to her presence, the egg began to glow brighter. Heat radiated from it, not the burning heat of fire, but the gentle warmth of spring sunshine. Kira found herself reaching out, her hand moving without conscious thought. The moment her fingers touched the shell, the world exploded into light and sensation.\n\nShe was flying, soaring through clouds with wings that were both hers and not hers. She felt the wind beneath those wings, felt the power of muscle and bone that could carry her beyond the reach of the earth. But more than that, she felt a presence, a consciousness touching hers with curiosity and something that might have been joy. \n\n*Finally,* a voice said in her mind, young and ancient at once. *I have waited so long for you.*\n\nThe vision faded, and Kira found herself back in the chamber, but everything had changed. The egg was cracking, hairline fractures spreading across its surface like a spider's web. The monks had formed a circle around her, their voices raised in a chant that made the very air shimmer.\n\n\"It's hatching,\" Marcus said, wonder clear in his voice. \"After all this time, it's finally hatching.\"\n\n## Part Two: The Shadow Rising\n\nThe dragon that emerged from the egg was nothing like the illustrations Kira had seen in ancient texts. Those dragons had been portrayed as terrible and magnificent, creatures of immense size and power. This dragon was... small. No larger than a house cat, with wings that seemed too large for its body and eyes that were pools of liquid gold. Its scales were the same deep crimson as the egg, but they were soft, almost fuzzy, like the down of a newborn bird.\n\n*I am Emberheart,* the dragon's voice echoed in Kira's mind as it—she, Kira somehow knew—crawled into her arms. *And you are mine, as I am yours.*\n\n\"Emberheart,\" Kira whispered, and the dragon made a sound that was part purr, part trill of pleasure.\n\nMarcus and the other monks watched with expressions of awe and concern in equal measure. \"The bonding is complete,\" the old monk said. \"But I fear this is only the beginning of your trials, Kira Thornwood. The awakening of a new Dragonbond will not go unnoticed.\"\n\nHe was right to be concerned. Three days later, as Kira was learning to navigate the mental link she now shared with Emberheart, a messenger arrived at the monastery. The man was half-dead from exhaustion, his horse foam-flecked and trembling. The message he carried bore the seal of King Aldric of Westmarch, and its contents made Marcus go pale.\n\n\"The Shadow Cult,\" he said, passing the letter to Kira. \"They've emerged from hiding. They're marching on Saltmere.\"\n\nKira read the message with growing dread. The Shadow Cult was a name from legend, a group of sorcerers who had caused the Great Betrayal, turning humans against dragons in a bid for power. They had been defeated, their leaders executed, their followers scattered. Or so history claimed.\n\n\"They sense the Dragonbond,\" Marcus explained. \"They know what it means—that the dragons will return, that the old ways will be restored. They cannot allow that to happen.\"\n\n\"But why Saltmere?\" Kira asked, though she suspected she already knew the answer.\n\n\"Because that's where you're from. They're trying to draw you out.\" Marcus stood, his decision made. \"You must not go. You and Emberheart are too important, and she is far too young to face such danger.\"\n\n*We go,* Emberheart said firmly in Kira's mind. The little dragon had grown in the three days since her hatching, now the size of a large dog, her wings strong enough to carry her short distances. *They threaten our people. We protect.*\n\nKira felt the dragon's determination through their bond, a fierce protectiveness that mirrored her own feelings. \"We have to go,\" she told Marcus. \"I can't let Saltmere suffer because of me.\"\n\nThe old monk sighed deeply. \"I feared you would say that. Very well. But you will not go alone.\" He turned to the other monks. \"Send word to the Order of the Silver Shield. Tell them the Dragonbond has returned, and we have need of their swords.\"\n\nThe Order of the Silver Shield arrived two days later—a company of fifty knights, their armor bearing the ancient symbol of a dragon and human hand clasped in friendship. Their leader, Sir Garrett Blackstone, was a mountain of a man with iron-grey hair and scars that told of countless battles.\n\n\"I had thought to live my whole life without seeing a true dragon,\" he said, kneeling before Emberheart with reverence. \"I am honored to serve the Dragonbond.\"\n\nThe journey to Saltmere took five days of hard riding. Emberheart flew above them, her crimson form a beacon of hope to the villages they passed. Word spread quickly—a dragon flew again, the Dragonbond had returned. Some fled in terror, remembering only the tales of dragons as destroyers. But others came out to see, to wave, to offer food and shelter to the company.\n\nOn the fourth night, as they camped near the Thornwood (the forest for which Kira's family had been named), Emberheart suddenly stiffened, her mental voice urgent in Kira's mind. *Danger. They come.*\n\nThe attack came from the shadows themselves. Figures in black robes seemed to materialize from the darkness, their hands weaving patterns that made reality twist and bend. The knights responded instantly, their training taking over, but their swords passed harmlessly through their attackers as if they were made of smoke.\n\n*Shadow wraiths,* Emberheart said. *Not fully real. But their magic is.*\n\nDark bolts of energy flew from the wraiths' hands, and three knights fell before they could raise their shields. Kira felt rage build in her chest—no, not just her rage, but Emberheart's as well, their emotions blending and amplifying through their bond.\n\nThe dragon landed beside her, no longer the size of a dog but somehow larger, her growth accelerated by the immediate danger. *Together,* Emberheart said.\n\nKira didn't understand what the dragon meant until she felt it—power flowing from Emberheart into her, and from her back into Emberheart. It was like a circuit completing, energy building between them until it had to be released. Kira raised her hand, and fire erupted from her palm—not ordinary fire, but dragonfire, white-hot and tinged with gold. It struck the nearest wraith, and unlike the knights' swords, it found its mark. The creature screamed and dissolved into nothingness.\n\n*Yes!* Emberheart roared—actually roared, the sound far too large for her still-small body. The dragon breathed her own stream of fire, and more wraiths fell.\n\nThe battle was brief but vicious. When it ended, seven knights lay dead, and twice that number were wounded. But all the shadow wraiths had been destroyed, and in the flickering light of the campfires, Kira noticed something extraordinary—Emberheart had grown again. She was now the size of a horse, her wings capable of true flight.\n\n\"The bond accelerates her growth,\" Sir Garrett observed, cleaning blood from his sword. \"In times of great need, the dragon becomes what her bonded requires.\"\n\n\"How do you know that?\" Kira asked.\n\nThe knight smiled grimly. \"My grandmother was bonded to a dragon, long ago. She told me stories, though I only half-believed them. She said the bond was both a gift and a burden—",
+          "type": "text"
+        }
+      ],
+      "id": "msg_01LDhZekpPujcwkaB2AxFjSu",
+      "model": "claude-opus-4-1-20250805",
+      "role": "assistant",
+      "stop_reason": "max_tokens",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 44,
+        "output_tokens": 3000,
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": [
+        "a71659e7-a922-4ff7-99de-f3ba615face1"
+      ],
+      "anthropic-ratelimit-input-tokens-limit": [
+        "450000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "450000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2025-10-27T22:44:08Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "90000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "87000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2025-10-27T22:46:02Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "1000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2025-10-27T22:44:05Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "540000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "537000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2025-10-27T22:44:08Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9955b74f9f2cc77f-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 27 Oct 2025 22:46:00 GMT"
+      ],
+      "request-id": [
+        "req_011CUYWgupmFd1g9xgCN3A6S"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "115140"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  }
+}

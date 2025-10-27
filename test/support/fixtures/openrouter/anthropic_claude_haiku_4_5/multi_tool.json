@@ -1,0 +1,176 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMjgwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImFudGhyb3BpYy9jbGF1ZGUtaGFpa3UtNC41IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwibmFtZSI6InRlbGxfam9rZSIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn0seyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwibmFtZSI6ImdldF90aW1lIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 12800,
+      "messages": [
+        {
+          "content": "What's the weather like in Paris, France?",
+          "role": "user"
+        }
+      ],
+      "model": "anthropic/claude-haiku-4.5",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tools": [
+        {
+          "function": {
+            "description": "Get current weather information for a location",
+            "name": "get_weather",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "location": {
+                  "type": "string"
+                },
+                "unit": {
+                  "enum": [
+                    "celsius",
+                    "fahrenheit"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "location"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        },
+        {
+          "function": {
+            "description": "Tell a funny joke",
+            "name": "tell_joke",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "topic": {
+                  "description": "Topic for the joke",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "function"
+        },
+        {
+          "function": {
+            "description": "Get the current time",
+            "name": "get_time",
+            "parameters": {
+              "properties": {},
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "",
+            "reasoning": "The user is asking for the weather in Paris, France. I have the `get_weather` function available which takes a location parameter (required) and an optional unit parameter.\n\nThe user has provided the location: \"Paris, France\"\n\nThe unit parameter is optional, and the user didn't specify whether they want Celsius or Fahrenheit. Since Paris is in France and they use Celsius there, I could default to Celsius, but I should probably just use Celsius as a reasonable default for a European city. Actually, let me check - the unit parameter is optional based on the function definition, so I can make the call without specifying it. However, it might be better to provide Celsius since France uses that system.\n\nLet me make the call with \"Paris, France\" as the location and I'll use \"celsius\" as the unit since that's standard in France.",
+            "reasoning_details": [
+              {
+                "format": "anthropic-claude-v1",
+                "index": 0,
+                "signature": "Eu0HCkgICRACGAIqQFe9RFz2LmfQOattfLRN/SbmSCPlOiT8FTkzoCVtNU98ZvDol4IxbAyq+I/cJ0an9hR1x0VqgNWJ4MWmfNQnIrISDC9Zozl40eBxHTExDBoM+P/imT1uj8nSuH8yIjAmhF4HAW6rq4Uu28XjeoXp8g/9PtxunV6I10QIHekYtlnW/kw1mHxvJ5VQskfQwHQq0gYd/l9/OybUKzvw1pe81C+wSyL40S7ntNdEhMp5ne5RNVNDV8SsZbrO+BsQXXwej8WhTWturuPMdy/zAe3Isr0ar4qDb8tcDXOY51282oDYpmpbQoM3GwlfCwrG0QWUhFiIqaqLDO609hI3HGPAiiLzS00R/IV7htJAgLRMW2Y9d+HrKtoIe8iD1GOkeYG5Plzi2Z3XudksskGMKPpNXvUW802w5khQXaaRczNlUcIm2x5jjgXp/hNdFmevvPtZsqqOIC5M8reWbEbmHO1rSygEc5yjwd32WqL7aBNkbn0t+LC5y/1t1dIYy8UUjC5/j2gVi3zhQq1cjW9JvzgbaGiUceT3n/JzzD6OAR1ccvHnFsKI2LufIbe8PVbDfObGFLdTEml6DPvcLTOB9Nr5q6PuDKVx0gwgIrH4k47Hh0+MTRoEChH7JDHEGwUOy35dHzKfiBYcbwbkllcHeszvelAn1WeL+8XnrdzMIeZcz+Y029nJBT39C4vg6F3vdrA/nbxrqQJxY0j4ysfP+Bmu4ZI3uN2nG1f94JRKiMBp9jMbQ/yF3pYz6bHpxxwU/irTfZJguN0hW/UTh56/rnwPcPuySKcRhgK/ouD0bdJGwlT79wWyxvSpuq5YrL0mNB/NQQot7U7hEorSF168+ODncY91qip9nvrUX5ur8bJ48YC2RXIMuyYMcLQD0/dM8difQdwHSpDO0VR1BtIvs0v7d6ApM/q0QKHvkl0uO6izLkvGEzXhFTQad7mnvkkc69Gyobkn+Cd3PpTSEwx58FcBgsi4RHsoaGQy89sXS0D9Mb2t0K56uBaav2rbZLhLBnlTaKfDkEYGOOgxA5HoHGP8PRQrn4VQ/2fbHh5jE0AWCSU8TDUnlPvmq3L5EA0iPRhhmhjYt3UjIIDZsVaDvaIUHMTGHeuGP7LmczCDNjIfgOzJaOr4133ZovriWp3gIhkt15Xbx4y2Y2F3fZtr4gmR/cY/3b36/7jOTZ0oVvf+Z4FPpvUEdwSEuEuoAwcuPaGf2eGW1W74hevJ//6eMBVozL3Xyn7TkT9ZwbRmVhV713TWh3uWAjTHYodgH6c3ikEE/3NN9ufixay3CmwgjMX7Y1fTOaGbEeoWKu5FOejDMyrpxd8rGAE=",
+                "text": "The user is asking for the weather in Paris, France. I have the `get_weather` function available which takes a location parameter (required) and an optional unit parameter.\n\nThe user has provided the location: \"Paris, France\"\n\nThe unit parameter is optional, and the user didn't specify whether they want Celsius or Fahrenheit. Since Paris is in France and they use Celsius there, I could default to Celsius, but I should probably just use Celsius as a reasonable default for a European city. Actually, let me check - the unit parameter is optional based on the function definition, so I can make the call without specifying it. However, it might be better to provide Celsius since France uses that system.\n\nLet me make the call with \"Paris, France\" as the location and I'll use \"celsius\" as the unit since that's standard in France.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"location\": \"Paris, France\", \"unit\": \"celsius\"}",
+                  "name": "get_weather"
+                },
+                "id": "toolu_vrtx_01NutpoMtzs6yYRpSnGDv4yh",
+                "index": 0,
+                "type": "function"
+              }
+            ]
+          },
+          "native_finish_reason": "tool_calls"
+        }
+      ],
+      "created": 1761606443,
+      "id": "gen-1761606443-q4oliEOtOarQkVFSDyfi",
+      "model": "anthropic/claude-haiku-4.5",
+      "object": "chat.completion",
+      "provider": "Google",
+      "usage": {
+        "completion_tokens": 265,
+        "prompt_tokens": 724,
+        "total_tokens": 989
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "9955d9714c117fb0-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 27 Oct 2025 23:07:24 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

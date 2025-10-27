@@ -3,6 +3,35 @@
     {
       "attachment": false,
       "cost": {
+        "input": 0.55,
+        "output": 2.19
+      },
+      "id": "hf:MiniMaxAI/MiniMax-M2",
+      "last_updated": "2025-10-27",
+      "limit": {
+        "context": 196608,
+        "output": 64000
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Minimax-M2",
+      "open_weights": true,
+      "provider": "synthetic",
+      "provider_model_id": "hf:MiniMaxAI/MiniMax-M2",
+      "reasoning": true,
+      "release_date": "2025-10-27",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
         "input": 0.8,
         "output": 0.8
       },
@@ -608,7 +637,7 @@
       "last_updated": "2025-09-30",
       "limit": {
         "context": 200000,
-        "output": 96000
+        "output": 64000
       },
       "modalities": {
         "input": [

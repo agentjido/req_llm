@@ -422,6 +422,36 @@
       "tool_call": true
     },
     {
+      "attachment": false,
+      "cost": {
+        "input": 0.15,
+        "output": 0
+      },
+      "id": "gemini-embedding-001",
+      "knowledge": "2025-05",
+      "last_updated": "2025-05-20",
+      "limit": {
+        "context": 2048,
+        "output": 3072
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Gemini Embedding 001",
+      "open_weights": false,
+      "provider": "google_vertex",
+      "provider_model_id": "gemini-embedding-001",
+      "reasoning": false,
+      "release_date": "2025-05-20",
+      "temperature": false,
+      "tool_call": false
+    },
+    {
       "attachment": true,
       "cost": {
         "cache_read": 0.075,
