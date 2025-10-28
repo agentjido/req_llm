@@ -249,11 +249,17 @@ defmodule ReqLLM.Providers.AmazonBedrock do
         operation: opts[:operation]
       )
 
+    # Add model_family and formatter_module to opts for formatter
+    opts_with_context =
+      opts
+      |> Keyword.put(:model_family, model_family)
+      |> Keyword.put(:formatter_module, formatter)
+
     model_body =
       formatter.format_request(
         model_id,
         opts[:context],
-        opts
+        opts_with_context
       )
 
     request_with_body =
@@ -278,12 +284,34 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     # Validate we have necessary AWS credentials
     validate_aws_credentials!(aws_creds)
 
-    # Apply pre-validation (reasoning params, etc.) - streaming bypasses Options.process
-    {pre_validated_opts, _warnings} = pre_validate_options(:chat, model, other_opts)
+    # Extract internal options that Options.process doesn't accept
+    {internal_opts, user_opts} =
+      Keyword.split(other_opts, [
+        :retry,
+        :model,
+        :max_retries,
+        :model_family,
+        :retry_log_level,
+        :context,
+        :operation
+      ])
 
-    # Apply option translation (temperature/top_p conflicts, etc.)
-    # This is critical for streaming requests which bypass the normal Options.process pipeline
-    {translated_opts, _warnings} = translate_options(:chat, model, pre_validated_opts)
+    # Process options through the same pipeline as non-streaming (validates, normalizes, translates)
+    operation = internal_opts[:operation] || :chat
+
+    translated_opts =
+      case ReqLLM.Provider.Options.process(__MODULE__, operation, model, user_opts) do
+        {:ok, processed_opts} -> Keyword.merge(processed_opts, internal_opts)
+        {:error, error} -> raise error
+      end
+
+    # Apply post-Options.process fixes for Anthropic models (same as in attach/3)
+    model_family = get_model_family(model.model)
+
+    translated_opts =
+      maybe_clean_thinking_after_translation(translated_opts, model_family, operation)
+
+    translated_opts = maybe_remove_temperature_for_thinking(translated_opts, model_family)
 
     # Check if we should use Converse API
     # Priority: explicit use_converse option > prompt caching optimization > auto-detect from tools presence
@@ -389,19 +417,23 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   end
 
   # Translate reasoning_effort/reasoning_token_budget to Bedrock additionalModelRequestFields
-  # Only for Claude models that support extended thinking
-  defp maybe_translate_reasoning_params(model, opts) do
-    model_id = model.model
+  # Only for models that support extended thinking
+  defp maybe_translate_reasoning_params(%{capabilities: %{reasoning: true}} = _model, opts) do
+    {reasoning_effort, opts} = Keyword.pop(opts, :reasoning_effort)
+    {reasoning_budget, opts} = Keyword.pop(opts, :reasoning_token_budget)
 
-    # Check if this is a Claude model with reasoning capability
-    # Use model.capabilities.reasoning instead of hardcoding model IDs
-    is_claude = String.contains?(model_id, "anthropic.claude")
-    has_reasoning = get_in(model, [Access.key(:capabilities), Access.key(:reasoning)]) == true
+    cond do
+      reasoning_budget && is_integer(reasoning_budget) ->
+        # Explicit budget_tokens provided
+        opts
+        |> add_reasoning_to_additional_fields(reasoning_budget)
+        |> ensure_max_tokens_for_reasoning(reasoning_budget)
 
-    if is_claude and has_reasoning do
-      {reasoning_effort, opts} = Keyword.pop(opts, :reasoning_effort)
-      {reasoning_budget, opts} = Keyword.pop(opts, :reasoning_token_budget)
+      reasoning_effort ->
+        # Map effort to budget
+        budget = map_reasoning_effort_to_budget(reasoning_effort)
 
+<<<<<<< HEAD
       cond do
         reasoning_budget && is_integer(reasoning_budget) ->
           # Explicit budget_tokens provided
@@ -418,8 +450,19 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     else
       # Not a Claude reasoning model, pass through
       opts
+=======
+        opts
+        |> add_reasoning_to_additional_fields(budget)
+        |> ensure_max_tokens_for_reasoning(budget)
+
+      true ->
+        opts
+>>>>>>> 6664c60 (Fix Bedrock streaming to use Options.process pipeline)
     end
   end
+
+  # Models without reasoning capability - pass through
+  defp maybe_translate_reasoning_params(_model, opts), do: opts
 
   defp add_reasoning_to_additional_fields(opts, budget_tokens) do
     # Get existing additional_model_request_fields from provider_options (if any)
