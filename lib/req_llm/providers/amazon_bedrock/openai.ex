@@ -12,6 +12,11 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
   alias ReqLLM.Providers.AmazonBedrock
 
   @doc """
+  Returns whether this model family supports toolChoice in Bedrock Converse API.
+  """
+  def supports_converse_tool_choice?, do: false
+
+  @doc """
   Formats a ReqLLM context into OpenAI request format for Bedrock.
 
   Uses standard OpenAI Chat Completions format - no modifications needed
@@ -177,11 +182,15 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
     end
   end
 
-  defp parse_usage(%{"prompt_tokens" => input, "completion_tokens" => output}) do
+  defp parse_usage(%{"prompt_tokens" => input, "completion_tokens" => output} = usage) do
+    cached = get_in(usage, ["prompt_tokens_details", "cached_tokens"]) || 0
+
     %{
       input_tokens: input,
       output_tokens: output,
-      total_tokens: input + output
+      total_tokens: input + output,
+      cached_tokens: cached,
+      reasoning_tokens: 0
     }
   end
 
@@ -196,27 +205,41 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
   Parses a streaming chunk for OpenAI models.
 
   Unwraps the Bedrock-specific encoding then delegates to standard OpenAI
-  SSE event parsing.
+  SSE event parsing. Handles Bedrock-specific usage metrics.
   """
   def parse_stream_chunk(chunk, opts) when is_map(chunk) do
     # First, unwrap the Bedrock AWS event stream encoding
     with {:ok, event} <- AmazonBedrock.Response.unwrap_stream_chunk(chunk) do
-      # Create a model struct for SSE decoding
-      model = %ReqLLM.Model{
-        provider: :openai,
-        model: opts[:model] || "bedrock-openai"
-      }
+      # Check for Bedrock-specific usage metrics first
+      case event do
+        %{"amazon-bedrock-invocationMetrics" => metrics} ->
+          usage = %{
+            input_tokens: Map.get(metrics, "inputTokenCount", 0),
+            output_tokens: Map.get(metrics, "outputTokenCount", 0),
+            cached_tokens: 0,
+            reasoning_tokens: 0
+          }
 
-      # Delegate to standard OpenAI SSE event parsing
-      # Event is already parsed JSON, wrap in SSE format expected by decoder
-      sse_event = %{data: event}
+          {:ok, ReqLLM.StreamChunk.meta(%{usage: usage})}
 
-      chunks = Defaults.default_decode_sse_event(sse_event, model)
+        _ ->
+          # Create a model struct for SSE decoding
+          model = %ReqLLM.Model{
+            provider: :openai,
+            model: opts[:model] || "bedrock-openai"
+          }
 
-      # Return first chunk if any, or nil
-      case chunks do
-        [chunk | _] -> {:ok, chunk}
-        [] -> {:ok, nil}
+          # Delegate to standard OpenAI SSE event parsing
+          # Event is already parsed JSON, wrap in SSE format expected by decoder
+          sse_event = %{data: event}
+
+          chunks = Defaults.default_decode_sse_event(sse_event, model)
+
+          # Return first chunk if any, or nil
+          case chunks do
+            [chunk | _] -> {:ok, chunk}
+            [] -> {:ok, nil}
+          end
       end
     end
   rescue
@@ -231,11 +254,15 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
   def extract_usage(body, _model) when is_map(body) do
     case Map.get(body, "usage") do
       %{"prompt_tokens" => input, "completion_tokens" => output} = usage ->
+        cached = get_in(usage, ["prompt_tokens_details", "cached_tokens"]) || 0
+
         {:ok,
          %{
            input_tokens: input,
            output_tokens: output,
-           total_tokens: Map.get(usage, "total_tokens", input + output)
+           total_tokens: Map.get(usage, "total_tokens", input + output),
+           cached_tokens: cached,
+           reasoning_tokens: 0
          }}
 
       _ ->

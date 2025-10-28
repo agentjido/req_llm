@@ -12,6 +12,11 @@ defmodule ReqLLM.Providers.AmazonBedrock.Meta do
   alias ReqLLM.Providers.AmazonBedrock
 
   @doc """
+  Returns whether this model family supports toolChoice in Bedrock Converse API.
+  """
+  def supports_converse_tool_choice?, do: false
+
+  @doc """
   Formats a ReqLLM context into Meta Llama request format for Bedrock.
 
   Converts structured messages into Llama 3's prompt format:
@@ -134,9 +139,15 @@ defmodule ReqLLM.Providers.AmazonBedrock.Meta do
           {:ok, ReqLLM.StreamChunk.meta(%{finish_reason: normalized_reason, terminal?: true})}
 
         %{"amazon-bedrock-invocationMetrics" => metrics} ->
+          input = Map.get(metrics, "inputTokenCount", 0)
+          output = Map.get(metrics, "outputTokenCount", 0)
+
           usage = %{
-            input_tokens: Map.get(metrics, "inputTokenCount", 0),
-            output_tokens: Map.get(metrics, "outputTokenCount", 0)
+            input_tokens: input,
+            output_tokens: output,
+            total_tokens: input + output,
+            cached_tokens: 0,
+            reasoning_tokens: 0
           }
 
           {:ok, ReqLLM.StreamChunk.meta(%{usage: usage})}
@@ -159,7 +170,9 @@ defmodule ReqLLM.Providers.AmazonBedrock.Meta do
          %{
            input_tokens: input,
            output_tokens: output,
-           total_tokens: input + output
+           total_tokens: input + output,
+           cached_tokens: 0,
+           reasoning_tokens: 0
          }}
 
       _ ->
