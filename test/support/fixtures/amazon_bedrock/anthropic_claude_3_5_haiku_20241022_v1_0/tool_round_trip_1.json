@@ -1,0 +1,97 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo4MTksInRlbXBlcmF0dXJlIjowLjB9LCJtZXNzYWdlcyI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiJ9XSwicm9sZSI6InVzZXIifV0sInRvb2xDb25maWciOnsidG9vbHMiOlt7InRvb2xTcGVjIjp7ImRlc2NyaXB0aW9uIjoiQWRkIHR3byBpbnRlZ2VycyIsImlucHV0U2NoZW1hIjp7Impzb24iOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImEiOnsidHlwZSI6ImludGVnZXIifSwiYiI6eyJ0eXBlIjoiaW50ZWdlciJ9fSwicmVxdWlyZWQiOlsiYSIsImIiXSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImFkZCJ9fV19fQ=="
+    },
+    "canonical_json": {
+      "inferenceConfig": {
+        "maxTokens": 819,
+        "temperature": 0.0
+      },
+      "messages": [
+        {
+          "content": [
+            {
+              "text": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'."
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "toolConfig": {
+        "tools": [
+          {
+            "toolSpec": {
+              "description": "Add two integers",
+              "inputSchema": {
+                "json": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "a": {
+                      "type": "integer"
+                    },
+                    "b": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "a",
+                    "b"
+                  ],
+                  "type": "object"
+                }
+              },
+              "name": "add"
+            }
+          }
+        ]
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "8600da297f32ba64ed8cc95ef7eeb902257e5f3607bd26b1ab7061a97e26636f"
+      ],
+      "x-amz-date": [
+        "20251028T084230Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/anthropic.claude-3-5-haiku-20241022-v1:0/converse"
+  },
+  "response": {
+    "body": {
+      "message": "Invocation of model ID anthropic.claude-3-5-haiku-20241022-v1:0 with on-demand throughput isn’t supported. Retry your request with the ID or ARN of an inference profile that contains this model."
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 28 Oct 2025 08:42:30 GMT"
+      ],
+      "x-amzn-errortype": [
+        "ValidationException:http://internal.amazon.com/coral/com.amazon.bedrock/"
+      ],
+      "x-amzn-requestid": [
+        "362c8c5b-03c2-4c70-aaa2-f015d5ecff7b"
+      ]
+    },
+    "status": 400
+  }
+}

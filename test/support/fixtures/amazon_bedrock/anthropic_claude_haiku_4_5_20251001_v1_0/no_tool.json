@@ -1,0 +1,98 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjQwMDAsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjoxMjgwMH0sIm1lc3NhZ2VzIjpbeyJjb250ZW50IjpbeyJ0ZXh0IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyJ9XSwicm9sZSI6InVzZXIifV0sInRvb2xDb25maWciOnsidG9vbHMiOlt7InRvb2xTcGVjIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0U2NoZW1hIjp7Impzb24iOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfd2VhdGhlciJ9fV19fQ=="
+    },
+    "canonical_json": {
+      "additionalModelRequestFields": {
+        "thinking": {
+          "budget_tokens": 4000,
+          "type": "enabled"
+        }
+      },
+      "inferenceConfig": {
+        "maxTokens": 12800
+      },
+      "messages": [
+        {
+          "content": [
+            {
+              "text": "Tell me a joke about cats"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "toolConfig": {
+        "tools": [
+          {
+            "toolSpec": {
+              "description": "Get current weather information for a location",
+              "inputSchema": {
+                "json": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "location": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "location"
+                  ],
+                  "type": "object"
+                }
+              },
+              "name": "get_weather"
+            }
+          }
+        ]
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "c33f352f0cd25801e097a6e87c3d96eb9c8c215a5621ecc2e840a1dad10f3930"
+      ],
+      "x-amz-date": [
+        "20251028T084221Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/anthropic.claude-haiku-4-5-20251001-v1:0/converse"
+  },
+  "response": {
+    "body": {
+      "message": "Invocation of model ID anthropic.claude-haiku-4-5-20251001-v1:0 with on-demand throughput isn’t supported. Retry your request with the ID or ARN of an inference profile that contains this model."
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 28 Oct 2025 08:42:21 GMT"
+      ],
+      "x-amzn-errortype": [
+        "ValidationException:http://internal.amazon.com/coral/com.amazon.bedrock/"
+      ],
+      "x-amzn-requestid": [
+        "2e796791-525e-4837-a52e-b0874c5c09c5"
+      ]
+    },
+    "status": 400
+  }
+}

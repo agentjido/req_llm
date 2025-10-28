@@ -1,0 +1,123 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6ImJlZHJvY2stMjAyMy0wNS0zMSIsIm1heF90b2tlbnMiOjgxOSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W3sidGV4dCI6IkNlcnRhaW5seSEgSSdsbCB1c2UgdGhlIFwiYWRkXCIgdG9vbCB0byBjb21wdXRlIDIgKyAzIGZvciB5b3UuIEhlcmUncyB0aGUgZnVuY3Rpb24gY2FsbDoiLCJ0eXBlIjoidGV4dCJ9LHsiaWQiOiJ0b29sdXNlX21nVmt2MTg3U29tLVNuMmw1YzhIV0EiLCJpbnB1dCI6eyJhIjoyLCJiIjozfSwibmFtZSI6ImFkZCIsInR5cGUiOiJ0b29sX3VzZSJ9XSwicm9sZSI6ImFzc2lzdGFudCJ9LHsiY29udGVudCI6W3siY29udGVudCI6IjUiLCJ0b29sX3VzZV9pZCI6InRvb2x1c2VfbWdWa3YxODdTb20tU24ybDVjOEhXQSIsInR5cGUiOiJ0b29sX3Jlc3VsdCJ9XSwicm9sZSI6InVzZXIifV0sInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJkZXNjcmlwdGlvbiI6IlRvb2wgc3R1YiBmb3IgbXVsdGktdHVybiBjb252ZXJzYXRpb24iLCJpbnB1dF9zY2hlbWEiOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifSwibmFtZSI6ImFkZCJ9XX0="
+    },
+    "canonical_json": {
+      "anthropic_version": "bedrock-2023-05-31",
+      "max_tokens": 819,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        },
+        {
+          "content": [
+            {
+              "text": "Certainly! I'll use the \"add\" tool to compute 2 + 3 for you. Here's the function call:",
+              "type": "text"
+            },
+            {
+              "id": "tooluse_mgVkv187Som-Sn2l5c8HWA",
+              "input": {
+                "a": 2,
+                "b": 3
+              },
+              "name": "add",
+              "type": "tool_use"
+            }
+          ],
+          "role": "assistant"
+        },
+        {
+          "content": [
+            {
+              "content": "5",
+              "tool_use_id": "tooluse_mgVkv187Som-Sn2l5c8HWA",
+              "type": "tool_result"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "temperature": 0.0,
+      "tools": [
+        {
+          "description": "Tool stub for multi-turn conversation",
+          "input_schema": {
+            "properties": {},
+            "type": "object"
+          },
+          "name": "add"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "8819e39a34525fb391d40cfffaae69a7b3e62ad897a3dabbd16a289357bd86ae"
+      ],
+      "x-amz-date": [
+        "20251028T084148Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/anthropic.claude-3-5-sonnet-20240620-v1:0/invoke"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "text": "Now that we have the result, I can respond as requested:\n\nsum=5",
+          "type": "text"
+        }
+      ],
+      "id": "msg_bdrk_01HMJdtLWEbLvVpdd9qWZ6QT",
+      "model": "claude-3-5-sonnet-20240620",
+      "role": "assistant",
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "input_tokens": 479,
+        "output_tokens": 21
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 28 Oct 2025 08:41:49 GMT"
+      ],
+      "x-amzn-bedrock-input-token-count": [
+        "479"
+      ],
+      "x-amzn-bedrock-invocation-latency": [
+        "1135"
+      ],
+      "x-amzn-bedrock-output-token-count": [
+        "21"
+      ],
+      "x-amzn-requestid": [
+        "ba797885-0d60-497b-b747-e31d8cb24fb7"
+      ]
+    },
+    "status": 200
+  }
+}

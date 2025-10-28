@@ -1,0 +1,67 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfZ2VuX2xlbiI6MTAwLCJwcm9tcHQiOiI8fGJlZ2luX29mX3RleHR8Pjx8c3RhcnRfaGVhZGVyX2lkfD51c2VyPHxlbmRfaGVhZGVyX2lkfD5cblxuV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlczx8ZW90X2lkfD48fHN0YXJ0X2hlYWRlcl9pZHw+YXNzaXN0YW50PHxlbmRfaGVhZGVyX2lkfD5cblxuIiwidGVtcGVyYXR1cmUiOjAuNX0="
+    },
+    "canonical_json": {
+      "max_gen_len": 100,
+      "prompt": "<|begin_of_text|><|start_header_id|>user<|end_header_id|>\n\nWrite a very long story about dragons and adventures<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n",
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "edc5daf904704c753c4b2e6a515d8fc690014dd60b327d0383ea7d44fcf0d68e"
+      ],
+      "x-amz-date": [
+        "20251028T084154Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/meta.llama3-70b-instruct-v1:0/invoke"
+  },
+  "response": {
+    "body": {
+      "generation": "In the land of Eridoria, where the sun dipped into the horizon and painted the sky with hues of crimson and gold, the dragons ruled supreme. For centuries, these magnificent creatures had roamed the skies, their scales glinting like diamonds in the fading light. They were the guardians of the realm, protectors of the land and its inhabitants.\n\nIn a small village nestled in the heart of the Whispering Woods, a young boy named Eryndor Thorne grew up with a",
+      "generation_token_count": 100,
+      "prompt_token_count": 19,
+      "stop_reason": "length"
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 28 Oct 2025 08:41:56 GMT"
+      ],
+      "x-amzn-bedrock-input-token-count": [
+        "19"
+      ],
+      "x-amzn-bedrock-invocation-latency": [
+        "2303"
+      ],
+      "x-amzn-bedrock-output-token-count": [
+        "100"
+      ],
+      "x-amzn-requestid": [
+        "cce6060b-8fa7-4900-850d-5ea4a67ea9fc"
+      ]
+    },
+    "status": 200
+  }
+}

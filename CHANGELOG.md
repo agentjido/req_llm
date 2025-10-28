@@ -44,6 +44,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Reasoning parameters properly translated to Bedrock's `thinking` parameter format
   - Uses model capabilities instead of hardcoded model IDs for reasoning support detection
   - Thinking parameter correctly removed when incompatible with forced tool_choice (object generation)
+- Bedrock streaming unified with non-streaming to use Options.process pipeline
+  - Fixes nil access error in object streaming operations
+  - Ensures consistent option translation across streaming and non-streaming
+  - Post-processing fixes for thinking/temperature applied after translation
+- Bedrock tool round-trip conversations now work correctly
+  - Extracts stub tools from messages when tools required but not provided
+  - Bedrock requires tools definition even for multi-turn tool conversations
+  - Supports both ReqLLM.Tool structs and minimal stub tools for validation
+- Bedrock usage metrics now include all required fields (cached_tokens, reasoning_tokens)
+  - Meta Llama models provide complete usage data
+  - OpenAI OSS models provide complete usage data
+- Comprehensive test timeout increased from 180s to 300s for slow models
+- Claude Opus 4.1 (us.anthropic.claude-opus-4-1-20250805-v1:0) added to ModelMatrix
 
 ### Changed
 

@@ -1,0 +1,85 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6ImJlZHJvY2stMjAyMy0wNS0zMSIsIm1heF90b2tlbnMiOjEwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIiwicm9sZSI6InVzZXIifV0sInRlbXBlcmF0dXJlIjowLjV9"
+    },
+    "canonical_json": {
+      "anthropic_version": "bedrock-2023-05-31",
+      "max_tokens": 100,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "02205d8feac83eaac46a02f54804ecfc36863ea5830e10af8daa67fd8e993585"
+      ],
+      "x-amz-date": [
+        "20251028T084151Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/anthropic.claude-3-sonnet-20240229-v1:0/invoke"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "text": "Here is a very long story about dragons and adventures:\n\nThe Dragon Riders\n\nIn a world where dragons once ruled the skies, a young woman named Arya was about to embark on the adventure of a lifetime. She had been raised in a small village, hearing tales of the mighty dragon riders who could soar through the clouds on the backs of their scaled companions. Though the dragons had long been thought extinct, Arya had always dreamed of one day finding a dragon",
+          "type": "text"
+        }
+      ],
+      "id": "msg_bdrk_0157QbdnNAWQTSfXgsbtTnvR",
+      "model": "claude-3-sonnet-20240229",
+      "role": "assistant",
+      "stop_reason": "max_tokens",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "input_tokens": 16,
+        "output_tokens": 100
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 28 Oct 2025 08:41:54 GMT"
+      ],
+      "x-amzn-bedrock-input-token-count": [
+        "16"
+      ],
+      "x-amzn-bedrock-invocation-latency": [
+        "2205"
+      ],
+      "x-amzn-bedrock-output-token-count": [
+        "100"
+      ],
+      "x-amzn-requestid": [
+        "cb06fda3-c44f-45c9-8298-6a19d7d5c01b"
+      ]
+    },
+    "status": 200
+  }
+}

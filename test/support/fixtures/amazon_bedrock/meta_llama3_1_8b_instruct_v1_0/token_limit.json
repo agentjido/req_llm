@@ -1,0 +1,58 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfZ2VuX2xlbiI6MTAwLCJwcm9tcHQiOiI8fGJlZ2luX29mX3RleHR8Pjx8c3RhcnRfaGVhZGVyX2lkfD51c2VyPHxlbmRfaGVhZGVyX2lkfD5cblxuV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlczx8ZW90X2lkfD48fHN0YXJ0X2hlYWRlcl9pZHw+YXNzaXN0YW50PHxlbmRfaGVhZGVyX2lkfD5cblxuIiwidGVtcGVyYXR1cmUiOjAuNX0="
+    },
+    "canonical_json": {
+      "max_gen_len": 100,
+      "prompt": "<|begin_of_text|><|start_header_id|>user<|end_header_id|>\n\nWrite a very long story about dragons and adventures<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n",
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "edc5daf904704c753c4b2e6a515d8fc690014dd60b327d0383ea7d44fcf0d68e"
+      ],
+      "x-amz-date": [
+        "20251028T084131Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/meta.llama3-1-8b-instruct-v1:0/invoke"
+  },
+  "response": {
+    "body": {
+      "message": "Invocation of model ID meta.llama3-1-8b-instruct-v1:0 with on-demand throughput isn’t supported. Retry your request with the ID or ARN of an inference profile that contains this model."
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 28 Oct 2025 08:41:31 GMT"
+      ],
+      "x-amzn-errortype": [
+        "ValidationException:http://internal.amazon.com/coral/com.amazon.bedrock/"
+      ],
+      "x-amzn-requestid": [
+        "79e8c559-6945-4083-b116-74044c14f931"
+      ]
+    },
+    "status": 400
+  }
+}

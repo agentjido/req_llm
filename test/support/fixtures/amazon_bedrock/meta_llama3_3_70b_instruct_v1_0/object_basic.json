@@ -1,0 +1,58 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfZ2VuX2xlbiI6NTAwLCJwcm9tcHQiOiI8fGJlZ2luX29mX3RleHR8Pjx8c3RhcnRfaGVhZGVyX2lkfD51c2VyPHxlbmRfaGVhZGVyX2lkfD5cblxuR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlPHxlb3RfaWR8Pjx8c3RhcnRfaGVhZGVyX2lkfD5hc3Npc3RhbnQ8fGVuZF9oZWFkZXJfaWR8PlxuXG4iLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_gen_len": 500,
+      "prompt": "<|begin_of_text|><|start_header_id|>user<|end_header_id|>\n\nGenerate a software engineer profile<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n",
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "e5dc87c2edab715781f514b5b1f356eea8ea00f1202abbf086c3cf43fc0b9413"
+      ],
+      "x-amz-date": [
+        "20251028T084138Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/meta.llama3-3-70b-instruct-v1:0/invoke"
+  },
+  "response": {
+    "body": {
+      "message": "Invocation of model ID meta.llama3-3-70b-instruct-v1:0 with on-demand throughput isn’t supported. Retry your request with the ID or ARN of an inference profile that contains this model."
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 28 Oct 2025 08:41:38 GMT"
+      ],
+      "x-amzn-errortype": [
+        "ValidationException:http://internal.amazon.com/coral/com.amazon.bedrock/"
+      ],
+      "x-amzn-requestid": [
+        "fa85a89c-e127-47bd-8d94-bd73849be766"
+      ]
+    },
+    "status": 400
+  }
+}

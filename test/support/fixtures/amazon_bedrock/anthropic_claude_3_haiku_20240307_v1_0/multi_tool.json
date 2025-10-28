@@ -1,0 +1,156 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo0MDksInRlbXBlcmF0dXJlIjowLjB9LCJtZXNzYWdlcyI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/In1dLCJyb2xlIjoidXNlciJ9XSwidG9vbENvbmZpZyI6eyJ0b29scyI6W3sidG9vbFNwZWMiOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwiaW5wdXRTY2hlbWEiOnsianNvbiI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImdldF93ZWF0aGVyIn19LHsidG9vbFNwZWMiOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsImlucHV0U2NoZW1hIjp7Impzb24iOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6InRlbGxfam9rZSJ9fSx7InRvb2xTcGVjIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJpbnB1dFNjaGVtYSI6eyJqc29uIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoiZ2V0X3RpbWUifX1dfX0="
+    },
+    "canonical_json": {
+      "inferenceConfig": {
+        "maxTokens": 409,
+        "temperature": 0.0
+      },
+      "messages": [
+        {
+          "content": [
+            {
+              "text": "What's the weather like in Paris, France?"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "toolConfig": {
+        "tools": [
+          {
+            "toolSpec": {
+              "description": "Get current weather information for a location",
+              "inputSchema": {
+                "json": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "location": {
+                      "type": "string"
+                    },
+                    "unit": {
+                      "enum": [
+                        "celsius",
+                        "fahrenheit"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "location"
+                  ],
+                  "type": "object"
+                }
+              },
+              "name": "get_weather"
+            }
+          },
+          {
+            "toolSpec": {
+              "description": "Tell a funny joke",
+              "inputSchema": {
+                "json": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "topic": {
+                      "description": "Topic for the joke",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "name": "tell_joke"
+            }
+          },
+          {
+            "toolSpec": {
+              "description": "Get the current time",
+              "inputSchema": {
+                "json": {
+                  "properties": {},
+                  "type": "object"
+                }
+              },
+              "name": "get_time"
+            }
+          }
+        ]
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "2cd73e7f112fb8c174a296e30431b7bcc1da697375f951277001832a4916556f"
+      ],
+      "x-amz-date": [
+        "20251028T084133Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/anthropic.claude-3-haiku-20240307-v1:0/converse"
+  },
+  "response": {
+    "body": {
+      "metrics": {
+        "latencyMs": 1201
+      },
+      "output": {
+        "message": {
+          "content": [
+            {
+              "text": "Okay, let's check the weather in Paris, France:"
+            },
+            {
+              "toolUse": {
+                "input": {
+                  "location": "Paris, France",
+                  "unit": "celsius"
+                },
+                "name": "get_weather",
+                "toolUseId": "tooluse_lwnv12TEQQe76ksCrZ6gaw"
+              }
+            }
+          ],
+          "role": "assistant"
+        }
+      },
+      "stopReason": "tool_use",
+      "usage": {
+        "inputTokens": 463,
+        "outputTokens": 86,
+        "serverToolUsage": {},
+        "totalTokens": 549
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 28 Oct 2025 08:41:34 GMT"
+      ],
+      "x-amzn-requestid": [
+        "512e6258-150b-4bb8-a320-26220ec48d54"
+      ]
+    },
+    "status": 200
+  }
+}

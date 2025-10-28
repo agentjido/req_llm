@@ -1,0 +1,123 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo4MTksInRlbXBlcmF0dXJlIjowLjB9LCJtZXNzYWdlcyI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiJ9XSwicm9sZSI6InVzZXIifV0sInRvb2xDb25maWciOnsidG9vbHMiOlt7InRvb2xTcGVjIjp7ImRlc2NyaXB0aW9uIjoiQWRkIHR3byBpbnRlZ2VycyIsImlucHV0U2NoZW1hIjp7Impzb24iOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImEiOnsidHlwZSI6ImludGVnZXIifSwiYiI6eyJ0eXBlIjoiaW50ZWdlciJ9fSwicmVxdWlyZWQiOlsiYSIsImIiXSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImFkZCJ9fV19fQ=="
+    },
+    "canonical_json": {
+      "inferenceConfig": {
+        "maxTokens": 819,
+        "temperature": 0.0
+      },
+      "messages": [
+        {
+          "content": [
+            {
+              "text": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'."
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "toolConfig": {
+        "tools": [
+          {
+            "toolSpec": {
+              "description": "Add two integers",
+              "inputSchema": {
+                "json": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "a": {
+                      "type": "integer"
+                    },
+                    "b": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "a",
+                    "b"
+                  ],
+                  "type": "object"
+                }
+              },
+              "name": "add"
+            }
+          }
+        ]
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "8600da297f32ba64ed8cc95ef7eeb902257e5f3607bd26b1ab7061a97e26636f"
+      ],
+      "x-amz-date": [
+        "20251028T084146Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/anthropic.claude-3-5-sonnet-20240620-v1:0/converse"
+  },
+  "response": {
+    "body": {
+      "metrics": {
+        "latencyMs": 1947
+      },
+      "output": {
+        "message": {
+          "content": [
+            {
+              "text": "Certainly! I'll use the \"add\" tool to compute 2 + 3 for you. Here's the function call:"
+            },
+            {
+              "toolUse": {
+                "input": {
+                  "a": 2,
+                  "b": 3
+                },
+                "name": "add",
+                "toolUseId": "tooluse_mgVkv187Som-Sn2l5c8HWA"
+              }
+            }
+          ],
+          "role": "assistant"
+        }
+      },
+      "stopReason": "tool_use",
+      "usage": {
+        "inputTokens": 399,
+        "outputTokens": 98,
+        "serverToolUsage": {},
+        "totalTokens": 497
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 28 Oct 2025 08:41:48 GMT"
+      ],
+      "x-amzn-requestid": [
+        "83091ab6-cb55-4457-99f4-f75c319721fd"
+      ]
+    },
+    "status": 200
+  }
+}

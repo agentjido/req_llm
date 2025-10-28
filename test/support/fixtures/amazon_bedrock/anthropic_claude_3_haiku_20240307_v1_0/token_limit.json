@@ -1,0 +1,85 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6ImJlZHJvY2stMjAyMy0wNS0zMSIsIm1heF90b2tlbnMiOjEwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIiwicm9sZSI6InVzZXIifV0sInRlbXBlcmF0dXJlIjowLjV9"
+    },
+    "canonical_json": {
+      "anthropic_version": "bedrock-2023-05-31",
+      "max_tokens": 100,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "02205d8feac83eaac46a02f54804ecfc36863ea5830e10af8daa67fd8e993585"
+      ],
+      "x-amz-date": [
+        "20251028T084204Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/anthropic.claude-3-haiku-20240307-v1:0/invoke"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "text": "Here is a very long story about dragons and adventures:\n\nIn a land far beyond the reach of mortal eyes, where the skies were painted with hues of gold and crimson, a realm of majestic dragons thrived. These magnificent creatures, with scales that shimmered like precious gems and wings that could carry them on the winds of legend, were the guardians of a world unlike any other.\n\nAt the heart of this enchanted domain stood the Citadel",
+          "type": "text"
+        }
+      ],
+      "id": "msg_bdrk_01C14oCUXFmHXyNLPUrv8n85",
+      "model": "claude-3-haiku-20240307",
+      "role": "assistant",
+      "stop_reason": "max_tokens",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "input_tokens": 16,
+        "output_tokens": 100
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 28 Oct 2025 08:42:06 GMT"
+      ],
+      "x-amzn-bedrock-input-token-count": [
+        "16"
+      ],
+      "x-amzn-bedrock-invocation-latency": [
+        "1826"
+      ],
+      "x-amzn-bedrock-output-token-count": [
+        "100"
+      ],
+      "x-amzn-requestid": [
+        "d9ebab09-03db-40f6-bba8-b6627b31b147"
+      ]
+    },
+    "status": 200
+  }
+}

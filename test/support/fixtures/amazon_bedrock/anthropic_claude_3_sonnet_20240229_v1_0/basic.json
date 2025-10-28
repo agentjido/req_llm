@@ -1,0 +1,85 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6ImJlZHJvY2stMjAyMy0wNS0zMSIsIm1heF90b2tlbnMiOjUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "anthropic_version": "bedrock-2023-05-31",
+      "max_tokens": 50,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "053e6d1b7312ddacde46547ea65a2202b6aad77bf6521d83fa019e8f5ffb3265"
+      ],
+      "x-amz-date": [
+        "20251028T084211Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/anthropic.claude-3-sonnet-20240229-v1:0/invoke"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "text": "Hello! I'm Claude, an AI assistant created by Anthropic.",
+          "type": "text"
+        }
+      ],
+      "id": "msg_bdrk_01KmxEtW37ZmWJZGF5wSbQdL",
+      "model": "claude-3-sonnet-20240229",
+      "role": "assistant",
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "input_tokens": 10,
+        "output_tokens": 18
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 28 Oct 2025 08:42:11 GMT"
+      ],
+      "x-amzn-bedrock-input-token-count": [
+        "10"
+      ],
+      "x-amzn-bedrock-invocation-latency": [
+        "470"
+      ],
+      "x-amzn-bedrock-output-token-count": [
+        "18"
+      ],
+      "x-amzn-requestid": [
+        "1088c156-2e74-43db-bcad-469335749abf"
+      ]
+    },
+    "status": 200
+  }
+}
