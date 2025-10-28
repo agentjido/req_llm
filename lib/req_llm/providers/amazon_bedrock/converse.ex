@@ -115,9 +115,10 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
       end
 
     # Add tool choice if specified
+    # Note: Only some model families support toolChoice in Converse API
     request =
       if tool_choice = opts[:tool_choice] do
-        add_tool_choice(request, tool_choice)
+        add_tool_choice(request, tool_choice, opts[:model_family], opts[:formatter_module])
       else
         request
       end
@@ -295,32 +296,44 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
   end
 
   # Add tool choice configuration to force specific tool usage
-  defp add_tool_choice(request, tool_choice) do
-    # Converse API uses toolChoice in toolConfig
-    existing_tool_config = Map.get(request, "toolConfig", %{})
+  # Only supported by some model families - check with the formatter module
+  defp add_tool_choice(request, tool_choice, _model_family, formatter_module) do
+    # Ask the model family formatter if it supports toolChoice in Converse API
+    supports_tool_choice =
+      formatter_module &&
+        function_exported?(formatter_module, :supports_converse_tool_choice?, 0) &&
+        formatter_module.supports_converse_tool_choice?()
 
-    # Convert from Anthropic format to Converse format
-    tool_choice_config =
-      case tool_choice do
-        %{type: "tool", name: name} ->
-          # Force specific tool
-          %{"tool" => %{"name" => name}}
+    if supports_tool_choice do
+      # Converse API uses toolChoice in toolConfig
+      existing_tool_config = Map.get(request, "toolConfig", %{})
 
-        %{type: "any"} ->
-          # Force any tool (must use a tool)
-          %{"any" => %{}}
+      # Convert from Anthropic format to Converse format
+      tool_choice_config =
+        case tool_choice do
+          %{type: "tool", name: name} ->
+            # Force specific tool
+            %{"tool" => %{"name" => name}}
 
-        %{type: "auto"} ->
-          # Auto decide (default)
-          %{"auto" => %{}}
+          %{type: "any"} ->
+            # Force any tool (must use a tool)
+            %{"any" => %{}}
 
-        _ ->
-          # Unknown format, use auto
-          %{"auto" => %{}}
-      end
+          %{type: "auto"} ->
+            # Auto decide (default)
+            %{"auto" => %{}}
 
-    updated_tool_config = Map.put(existing_tool_config, "toolChoice", tool_choice_config)
-    Map.put(request, "toolConfig", updated_tool_config)
+          _ ->
+            # Unknown format, use auto
+            %{"auto" => %{}}
+        end
+
+      updated_tool_config = Map.put(existing_tool_config, "toolChoice", tool_choice_config)
+      Map.put(request, "toolConfig", updated_tool_config)
+    else
+      # For non-Anthropic models, skip toolChoice entirely
+      request
+    end
   end
 
   defp add_inference_config(request, opts) do
