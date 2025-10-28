@@ -41,6 +41,7 @@ defmodule ReqLLM.Test.ModelMatrix do
   @default_models Application.compile_env(:req_llm, :sample_text_models, ~w(
     anthropic:claude-3-5-haiku-20241022
     anthropic:claude-3-5-sonnet-20241022
+    amazon_bedrock:us.anthropic.claude-opus-4-1-20250805-v1:0
     openai:gpt-4o-mini
     openai:gpt-4-turbo
     google:gemini-2.0-flash
