@@ -544,6 +544,7 @@
       "tool_call": true
     },
     {
+      "api": "responses",
       "attachment": true,
       "cost": {
         "input": 15,
@@ -571,6 +572,7 @@
       "provider_model_id": "gpt-5-pro",
       "reasoning": true,
       "release_date": "2025-10-06",
+      "supports_json_schema_response_format": true,
       "temperature": false,
       "tool_call": true
     },

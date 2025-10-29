@@ -253,7 +253,8 @@ defmodule ReqLLM.ModelMetadataTest do
 
           expected_value != nil and parsed_value != expected_value ->
             [
-              {model_spec, "Limit.#{key} mismatch: expected #{expected_value}, got #{parsed_value}"}
+              {model_spec,
+               "Limit.#{key} mismatch: expected #{expected_value}, got #{parsed_value}"}
               | acc
             ]
 
@@ -326,12 +327,10 @@ defmodule ReqLLM.ModelMetadataTest do
       expected_value = Map.get(model_data, json_key, false)
       parsed_value = Map.get(parsed_capabilities, struct_key, false)
 
-      cond do
-        expected_value == true and parsed_value != true ->
-          [{model_spec, "Capability #{struct_key} missing (expected true)"} | acc]
-
-        true ->
-          acc
+      if expected_value == true and parsed_value != true do
+        [{model_spec, "Capability #{struct_key} missing (expected true)"} | acc]
+      else
+        acc
       end
     end)
   end
