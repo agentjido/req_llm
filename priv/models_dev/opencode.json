@@ -102,7 +102,7 @@
         "cache_read": 0.1,
         "cache_write": 1.25,
         "input": 1,
-        "output": 1.25
+        "output": 5
       },
       "id": "claude-haiku-4-5",
       "knowledge": "2025-02-31",
@@ -385,6 +385,37 @@
       "provider_model_id": "kimi-k2",
       "reasoning": false,
       "release_date": "2025-09-05",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 1.2,
+        "output": 1.2
+      },
+      "id": "minimax-m2",
+      "knowledge": "2024-10",
+      "last_updated": "2025-10-27",
+      "limit": {
+        "context": 200000,
+        "output": 128000
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "MiniMax M2 (alpha)",
+      "open_weights": true,
+      "provider": "opencode",
+      "provider_model_id": "minimax-m2",
+      "reasoning": true,
+      "release_date": "2025-10-27",
+      "status": "alpha",
       "temperature": true,
       "tool_call": true
     },

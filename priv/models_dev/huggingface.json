@@ -4,6 +4,36 @@
       "attachment": false,
       "cost": {
         "input": 0.3,
+        "output": 1.2
+      },
+      "id": "MiniMaxAI/MiniMax-M2",
+      "knowledge": "2025-10",
+      "last_updated": "2025-10-27",
+      "limit": {
+        "context": 204800,
+        "output": 204800
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "MiniMax-M2",
+      "open_weights": true,
+      "provider": "huggingface",
+      "provider_model_id": "MiniMaxAI/MiniMax-M2",
+      "reasoning": true,
+      "release_date": "2025-10-27",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.3,
         "output": 3
       },
       "id": "Qwen/Qwen3-235B-A22B-Thinking-2507",

@@ -33,6 +33,35 @@
       "tool_call": true
     },
     {
+      "attachment": false,
+      "cost": {
+        "input": 0.4,
+        "output": 2.2
+      },
+      "id": "minimax/minimax-m1",
+      "last_updated": "2025-06-17",
+      "limit": {
+        "context": 1000000,
+        "output": 40000
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "MiniMax M1",
+      "open_weights": true,
+      "provider": "openrouter",
+      "provider_model_id": "minimax/minimax-m1",
+      "reasoning": true,
+      "release_date": "2025-06-17",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
       "id": "x-ai/grok-4-fast",
       "provider": "openrouter",
       "provider_model_id": "x-ai/grok-4-fast",
@@ -260,6 +289,37 @@
       "provider_model_id": "google/gemini-2.5-pro",
       "reasoning": true,
       "release_date": "2025-03-20",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "cache_read": 0,
+        "cache_write": 0,
+        "input": 0,
+        "output": 0
+      },
+      "id": "minimax/minimax-m2:free",
+      "last_updated": "2025-10-23",
+      "limit": {
+        "context": 204800,
+        "output": 131100
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "MiniMax M2 (free)",
+      "open_weights": true,
+      "provider": "openrouter",
+      "provider_model_id": "minimax/minimax-m2:free",
+      "reasoning": true,
+      "release_date": "2025-10-23",
       "temperature": true,
       "tool_call": true
     },
@@ -1099,6 +1159,36 @@
       "provider_model_id": "anthropic/claude-3.7-sonnet",
       "reasoning": false,
       "release_date": "2025-02-19",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": true,
+      "cost": {
+        "input": 0.2,
+        "output": 1.1
+      },
+      "id": "minimax/minimax-01",
+      "last_updated": "2025-01-15",
+      "limit": {
+        "context": 1000000,
+        "output": 1000000
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "MiniMax-01",
+      "open_weights": true,
+      "provider": "openrouter",
+      "provider_model_id": "minimax/minimax-01",
+      "reasoning": true,
+      "release_date": "2025-01-15",
       "temperature": true,
       "tool_call": true
     },
