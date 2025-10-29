@@ -94,6 +94,67 @@
     {
       "attachment": false,
       "cost": {
+        "input": 0.11,
+        "output": 0.34
+      },
+      "id": "meta-llama/llama-4-scout-17b-16e-instruct",
+      "knowledge": "2024-08",
+      "last_updated": "2025-04-05",
+      "limit": {
+        "context": 131072,
+        "output": 8192
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Llama 4 Scout 17B",
+      "open_weights": true,
+      "provider": "groq",
+      "provider_model_id": "meta-llama/llama-4-scout-17b-16e-instruct",
+      "reasoning": false,
+      "release_date": "2025-04-05",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.2,
+        "output": 0.2
+      },
+      "id": "meta-llama/llama-guard-4-12b",
+      "last_updated": "2025-04-05",
+      "limit": {
+        "context": 131072,
+        "output": 128
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Llama Guard 4 12B",
+      "open_weights": true,
+      "provider": "groq",
+      "provider_model_id": "meta-llama/llama-guard-4-12b",
+      "reasoning": false,
+      "release_date": "2025-04-05",
+      "temperature": true,
+      "tool_call": false
+    },
+    {
+      "attachment": false,
+      "cost": {
         "input": 1,
         "output": 3
       },
