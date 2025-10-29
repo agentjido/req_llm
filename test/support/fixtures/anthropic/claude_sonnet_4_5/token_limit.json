@@ -1,0 +1,152 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtc29ubmV0LTQtNSIsInN0cmVhbSI6ZmFsc2UsInRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19"
+    },
+    "canonical_json": {
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "claude-sonnet-4-5",
+      "stream": false,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-beta": [
+        "interleaved-thinking-2025-05-14"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "ErcDCkYICRgCKkCmTHKM69pDyCLWwvrjOUvr1U4viIys4oBkFjFBYEl7xMwJTjymGhgbvkl8HV0t41LTenj57+/Rzivs+8HZPklNEgwEI9EgkOFT9yu2M9QaDDEvnwF6PvyeHG9TZCIwAlOU/3Qsozk5Fe/WvEQuDQ+szAzOhiUcbVtMwK8rFULbYM0iCjuhJrozM08/2/kfKp4Chqp9UT+8rPMLkIGU5ENx0N5PHll/p4FD+gh+ZeB0rtdhEr6wmuJGC3cmeR4l2M6ccY0gEgPiHmBiKbpNdkmnlbUb8zL374gA2G2Iev72Uh6FBp2HjO8uO0oenZ3xypDPKNwpSau8aJFXYhs/g76pjBKQtnipl4dGyPImRiVoOIhVOl1czfiEu6ErntGZ7IsgYsVd71RtWZjVUDlycSMlbAdUUjYySAsozDIUtTs95Li7v8NLmcCSd9ldWq3iSHiFxA725dS9yF9O9qV4msd+oZwmHsj1/PSTh54dpLFeZfNno0VLgsvLzqRjBsszb8uSkkI/Q+oVuuig9OyUWq+L22uCkz/QJ3p3O0yYrL1vG6/+Z6HTLpujUnzCFWdVmxgB",
+          "thinking": "The user wants a very long story about dragons and adventures. I'll create an epic fantasy adventure story with multiple chapters, interesting characters, dragons with distinct personalities, world-building, and an engaging plot. I'll make it quite lengthy as requested.",
+          "type": "thinking"
+        },
+        {
+          "text": "# The Dragon's Crown: A Tale of Fire and Destiny\n\n## Part I: The Awakening\n\nThe village of Thornhaven had known peace for three generations. Nestled in the verdant valley between the Whisperwind Mountains and the Emerald Forest, it was a place where farmers tended their fields, blacksmiths hammered iron, and children played in cobblestone streets without fear. The old stories of dragons were just that—stories, tales told by firelight to make children shiver with delicious fear before tucking them safely into bed.\n\nKira Stormwind had heard all those stories. Her grandmother had been the village's keeper of tales, and many evenings had been spent at the old woman's knee, listening to accounts of the great Dragon Wars, of riders who bonded with the magnificent beasts, of treasures beyond imagination and battles that shook the very foundations of the earth.\n\nBut Kira had never expected to live one of those stories herself.\n\nShe was seventeen summers old on the morning everything changed, with dark hair that fell in waves past her shoulders and grey eyes that her grandmother had always said could \"see beyond the moment.\" She worked at the village inn, serving travelers and listening to their tales of distant lands—places she'd always dreamed of seeing but never truly believed she would.\n\nThe first sign came at dawn.\n\nKira was drawing water from the village well when the birds suddenly stopped singing. The forest, normally alive with the sound of waking creatures, fell silent. Even the wind seemed to hold its breath. She paused, bucket suspended over the well's opening, and felt a strange tingling sensation race down her spine.\n\nThe sky was clear, painted in shades of pink and gold by the rising sun, but something felt profoundly wrong.\n\n\"Kira!\" Old Marcus, the baker, came running from his shop, his face flour-white and not from his trade. \"Did you feel that?\"\n\n\"Feel what?\" she asked, though she knew. Everyone in the village square had stopped what they were doing. They all felt it—a presence, vast and ancient, pressing down on the world like an invisible hand.\n\nThen they heard it.\n\nA sound like distant thunder, but rhythmic. Purposeful. Growing louder with each passing moment.\n\n\"Wings,\" Marcus whispered, his eyes widening. \"By the ancient gods, those are wings.\"\n\nThe dragon appeared over the eastern peaks of the Whisperwind Mountains like a rising second sun. Its scales gleamed crimson and gold, each one the size of a warrior's shield. Its wingspan cast a shadow that darkened half the village as it passed overhead, and its eyes—those enormous amber eyes—seemed to hold the wisdom and fury of ages.\n\nPeople screamed. Some ran for their homes, others simply fell to their knees in terror. Kira stood frozen, unable to move, unable to breathe, as the magnificent creature circled once overhead. She could feel the heat radiating from its body, could see the smoke curling from its nostrils.\n\nBut the dragon didn't attack. It didn't breathe fire or snatch up livestock. Instead, it landed in the great meadow just beyond the village limits with surprising grace for something so massive, its talons sinking deep into the earth.\n\nAnd then it looked directly at Kira.\n\nShe felt the dragon's gaze like a physical touch, and something deep within her chest responded—a warmth, a recognition, as if a part of her she'd never known existed suddenly woke up and sang out in answer.\n\nThe dragon's voice filled her mind, not in words but in feelings and images. **Come.**\n\n\"No,\" Kira breathed. \"This isn't real. This can't be real.\"\n\nBut her feet were already moving, carrying her forward even as her rational mind screamed at her to run the other way. She heard Marcus calling her name, heard her mother's voice joining his, but they sounded distant, as if coming from another world.\n\nThe dragon waited patiently as she crossed the village square and stepped into the meadow. Up close, it was even more magnificent—and terrifying. Each breath it took sounded like a forge's bellows. Each slight movement of its massive head could crush her without effort.\n\n\"What do you want?\" Kira asked, her voice trembling.\n\nImages flooded her mind. She saw other dragons, dozens of them, sleeping in vast caverns deep beneath the mountains. She saw darkness spreading across the land like spilled ink, corrupting everything it touched. She saw armies of twisted creatures marching under crimson banners. And she saw herself, standing on a mountain peak with lightning crackling around her hands and dragon wings casting shadows in the storm light.\n\n\"I don't understand,\" she said.\n\nThe dragon lowered its massive head until one amber eye was level with her face. When it spoke again, the meaning was clearer: **The world is changing. The ancient evil returns. You are needed. You are chosen.**\n\n\"Chosen for what?\"\n\n**To be a Dragon Rider. As your ancestors were, before the forgetting.**\n\nKira's grandmother had told stories of the Dragon Riders, the legendary warriors who had bonded with dragons and protected the realm in ages past. But they were myths, weren't they? Children's tales?\n\nThe dragon's presence in front of her suggested otherwise.\n\n\"Why me?\" she asked. \"I'm nobody. Just an innkeeper's daughter from a village no one's ever heard of.\"\n\n**You are the last daughter of the Stormwind line. The blood of riders flows in your veins. And you have the gift—I can see it burning within you like a flame waiting to ignite.**\n\nBefore Kira could respond, before she could even process what was happening, the dragon extended one massive claw. Hanging from it was something that glittered in the morning light—a pendant, wrought in silver and shaped like a dragon in flight, with a crystal at its center that seemed to contain swirling flame.\n\n**Your grandmother wore this once. She was a rider, before the dragons chose to sleep, before the world forgot us. She hid what she was to protect your family, to give you a chance at a normal life. But normal is no longer an option. The choice before you is simple: rise to your destiny or watch the world fall into shadow.**\n\nKira's hand trembled as she reached for the pendant. The moment her fingers touched the crystal, warmth surged through her body. Memories that weren't her own flooded her mind—flying through storm clouds, breathing fire alongside her dragon companion, battling creatures of nightmare and shadow, loving and losing and fighting for every precious moment of peace.\n\nHer grandmother's memories.\n\n\"She never told me,\" Kira whispered, tears streaming down her cheeks. \"She never said anything.\"\n\n**She hoped you would never need to know. She hoped the world would remain safe, that the old evils would stay buried. She was wrong.**\n\nKira fastened the pendant around her neck and felt it settle against her chest like it had always belonged there. The warmth spread through her body, and suddenly she could sense things she'd never felt before—the life force of every creature in the village, the deep magic that ran through the earth like underground rivers, and the vast consciousness of the dragon before her.\n\n\"What's your name?\" she asked.\n\n**I am Aurelius, First of the Sun Court, Guardian of the Eastern Realm. And you, Kira Stormwind, are my rider—if you choose to be.**\n\n\"What happens if I say no?\"\n\nThe dragon's thoughts filled with a sadness as deep as the ocean. **Then I will seek another, though time is short and those with the gift grow fewer with each passing generation. The darkness will come regardless of your choice. But you, at least, would live a few more years in peace before the end.**\n\nKira turned to look back at her village. She could see her mother standing in the doorway of the inn, hand pressed to her mouth. Could see Marcus and the other villagers watching from a safe distance. Could see the only life she'd ever known, small and safe and ordinary.\n\nShe thought of her grandmother, who had sacrificed her extraordinary life for the sake of her family. She thought of all the stories she'd heard, of heroes who rose when they were needed most.\n\nAnd she made her choice.\n\n\"Tell me what I need to do.\"\n\n## Part II: The Flight to Skyhold\n\nAurelius's joy flooded through their nascent bond like warm sunshine. **First, you must trust. Step closer and place your hand upon my foreleg. The bonding requires physical contact and an open heart.**\n\nKira moved forward, her fear slowly giving way to wonder. She placed her palm against the dragon's scales and gasped. They were warm, almost hot, and surprisingly smooth. Through the contact, she felt Aurelius's heartbeat, powerful and steady, and beneath that, something deeper—his essence, his very soul, reaching out to intertwine with hers.\n\nThe world exploded into light and sensation.\n\nShe was flying through ancient skies, hunting in packs with other dragons, breathing fire to forge the mountains themselves. She was sleeping through centuries, dreaming of the stars. She was young and old simultaneously, mortal and eternal, human and dragon.\n\nWhen the visions faded, Kira found herself on her knees in the grass, gasping for breath. Aurelius's presence in her mind was no longer foreign—it felt as natural as her own thoughts.\n\n**It is done,** he said, and she could hear his voice clearly now, resonant and warm with an accent that suggested ages past. **We are bonded, you and I. Rider and dragon. One soul in two bodies.**\n\n\"I can feel you,\" Kira said in wonder. \"Your thoughts, your feelings. It's incredible.\"\n\n**And I can feel your courage, your doubt, your determination. You will make a fine rider, Kira Stormwind. But there is much you must learn, and we have little time. The darkness I showed you gathers in the Shadowlands to the north. We must reach Skyhold before it spreads.**\n\n\"Skyhold?\"\n\n**The ancient fortress where the Dragon Riders made their home, hidden high in the Stormcrest Mountains. Other dragons are waking there, and those who hear the call are gathering. You will train there, learn to fight alongside me, unlock the magic that sleeps in your blood.**\n\n\"But my mother—the village—I can't just leave!\"\n\n**You must. And quickly. The darkness knows when a new rider is bonded. Even now, scouts will be turning their attention this way. Your presence here puts everyone in danger.**\n\nAs if to emphasize his words, a chill wind suddenly swept through the valley, carrying with it a scent of decay and wrongness. The villagers felt it too; Kira could see them turning toward the north, fear written on their faces.\n\nHer mother broke away from the crowd and ran toward her. \"Kira! Get away from that beast!\"\n\n\"Mother, wait—\" Kira stood, placing herself between her mother and Aurelius. \"It's all right. He won't hurt anyone.\"\n\n\"Won't hurt—Kira, it's a dragon! They're monsters from the ancient wars!\"\n\n\"No,\" Kira said firmly, surprised by the conviction in her own voice. \"They were protectors. Grandmother knew that. She was one of them—a Dragon Rider.\"\n\nHer mother stopped short, her face going pale. \"How did you—she told you?\"\n\n\"You knew?\" Kira felt a wave of betrayal. \"You knew what she was and you never said anything?\"\n\n\"She made me promise,\" her mother said, tears streaming down her face. \"Made me swear I'd never tell you, never let you know. She said the age of dragons was over, that you deserved a normal life.\" She looked up at Aurelius with fear and anger. \"Why couldn't you leave her alone? Why did you have to come here?\"\n\n**Because the age of dragons is not over,** Aurelius said, and Kira realized with shock that her mother could hear him too. **It merely slept. And now the world needs protectors again. Your daughter has the gift, the strongest I have sensed in centuries. She is meant for this.**\n\n\"She's meant to serve ale and marry and have children!\" her mother cried. \"She's meant to be safe!\"\n\n\"I'll never be safe, Mother,\" Kira said softly, understanding settling over her like a cloak. \"None of us will, if the darkness Aurelius showed me is real. But maybe I can help keep others safe. Maybe that's what I'm meant for.\"\n\nHer mother looked at her for a long moment, really looked at her, and something shifted in her expression. \"You have your grandmother's eyes,\" she said finally. \"I always knew you did, but I tried not to see it. Tried not to see the way you'd stare at the mountains like you were longing for something you couldn't name.\" She pulled Kira into a fierce embrace. \"If you must do this, then do it. But you come back to me, do you hear?",
+          "type": "text"
+        }
+      ],
+      "id": "msg_017Yksjf838GJVSiEHLeCPqj",
+      "model": "claude-sonnet-4-5-20250929",
+      "role": "assistant",
+      "stop_reason": "max_tokens",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 44,
+        "output_tokens": 3000,
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": [
+        "a71659e7-a922-4ff7-99de-f3ba615face1"
+      ],
+      "anthropic-ratelimit-input-tokens-limit": [
+        "450000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "450000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2025-10-27T22:47:46Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "90000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "87000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2025-10-27T22:49:04Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "1000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2025-10-27T22:47:44Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "540000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "537000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2025-10-27T22:47:46Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9955bca90b75e812-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 27 Oct 2025 22:49:02 GMT"
+      ],
+      "request-id": [
+        "req_011CUYWy4eXUFXn4QBoxQfY6"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "77260"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  }
+}

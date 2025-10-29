@@ -1,0 +1,85 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6ImJlZHJvY2stMjAyMy0wNS0zMSIsIm1heF90b2tlbnMiOjEwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhpIHRoZXJlISIsInJvbGUiOiJ1c2VyIn1dLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "anthropic_version": "bedrock-2023-05-31",
+      "max_tokens": 10,
+      "messages": [
+        {
+          "content": "Hi there!",
+          "role": "user"
+        }
+      ],
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "411f0479c7fd6f9549dec6caa79c8c8713631bde580970ae64336c0969d9bb51"
+      ],
+      "x-amz-date": [
+        "20251028T084132Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/anthropic.claude-3-5-sonnet-20240620-v1:0/invoke"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "text": "Hello! How can I assist you today? Feel",
+          "type": "text"
+        }
+      ],
+      "id": "msg_bdrk_018yyUxvezsudyVGHWNaEoZd",
+      "model": "claude-3-5-sonnet-20240620",
+      "role": "assistant",
+      "stop_reason": "max_tokens",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "input_tokens": 10,
+        "output_tokens": 10
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 28 Oct 2025 08:41:33 GMT"
+      ],
+      "x-amzn-bedrock-input-token-count": [
+        "10"
+      ],
+      "x-amzn-bedrock-invocation-latency": [
+        "941"
+      ],
+      "x-amzn-bedrock-output-token-count": [
+        "10"
+      ],
+      "x-amzn-requestid": [
+        "dd7fec5a-e847-46a9-a605-852b5317e455"
+      ]
+    },
+    "status": 200
+  }
+}

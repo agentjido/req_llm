@@ -1,0 +1,170 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMjgwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiY2xhdWRlLWhhaWt1LTQtNSIsInN0cmVhbSI6ZmFsc2UsInRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn0sInRvb2xzIjpbeyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJpbnB1dF9zY2hlbWEiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifSwibmFtZSI6ImdldF93ZWF0aGVyIn1dfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 12800,
+      "messages": [
+        {
+          "content": "Tell me a joke about cats",
+          "role": "user"
+        }
+      ],
+      "model": "claude-haiku-4-5",
+      "stream": false,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      },
+      "tools": [
+        {
+          "description": "Get current weather information for a location",
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "location": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "location"
+            ],
+            "type": "object"
+          },
+          "name": "get_weather"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-beta": [
+        "interleaved-thinking-2025-05-14,tools-2024-05-16"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "EvsCCkYICRgCKkD1Hxa3k5BhqYYLZQhQZbuxnO98F7DwTOIX0FjRkWQj4BqW7EF6aQjp05ntWWA2fU1ihyHkMdI542jJEwNIMGZCEgxzRaxVq7TmdM0KLesaDIFSiuo+NmiuLiwIXCIwvAkCcn5fpcoZgz1dT9iw6gY0eDY2NZoZJwb5u9ftIvHPLHau3I3ITvCGl8VlMVbmKuIBz1II1G5TiwbMN1h07NKvKy2mdI9hGQSVQRtT5FHChIQ6HhMwXoGyKftAwPWbWxcooxyhhUMGXOBzxlC+afMLfoThUO/F9ij/ksFomg5Ztp8u+t7RKUk8OTMkMGRtuSNdeCI2xVXJVLQGltfL3dE1c5GLG9vZzVpZFCQO6wGruOs4EqU0zy2m59gh/DOhMrMXNhevf72n2C2F5x8Ub6bSigj+sBM65rwjj/VFoCrmwKX2orCFdEv2AHq/gMigqEc/MzAbd3wJes2VpQdF9B4lA/qWfqdJub9SVKPwwaYxGpO7GRgB",
+          "thinking": "The user is asking me to tell a joke about cats. This doesn't require me to use any of the available tools (which is just a weather tool). I can simply provide a joke directly.\n\nLet me think of a good cat joke:",
+          "type": "thinking"
+        },
+        {
+          "text": "Here's a joke for you:\n\nWhy don't cats play poker in the jungle?\n\nBecause there are too many cheetahs! 🐱\n\n---\n\nOr if you'd like another one:\n\nWhat do cats eat for breakfast?\n\nMice krispies! 😄",
+          "type": "text"
+        }
+      ],
+      "id": "msg_01QYvfc45jvSZYRJ4ZJast7U",
+      "model": "claude-haiku-4-5-20251001",
+      "role": "assistant",
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 748,
+        "output_tokens": 124,
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": [
+        "a71659e7-a922-4ff7-99de-f3ba615face1"
+      ],
+      "anthropic-ratelimit-input-tokens-limit": [
+        "450000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "450000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2025-10-27T22:42:16Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "90000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "90000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2025-10-27T22:42:17Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "1000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2025-10-27T22:42:15Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "540000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "540000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2025-10-27T22:42:16Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9955b49d79bfeafd-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 27 Oct 2025 22:42:17 GMT"
+      ],
+      "request-id": [
+        "req_011CUYWYmkNFM2spn5jHbNwM"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "2333"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  }
+}

@@ -121,13 +121,13 @@ defmodule ReqLLM.Streaming.FinchClient do
 
   # Start fixture replay task
   defp start_fixture_replay(fixture_path, stream_server_pid, _model) do
-    # Use VCR to replay fixture into stream server
     case Code.ensure_loaded(ReqLLM.Test.VCR) do
       {:module, ReqLLM.Test.VCR} ->
         {:ok, task_pid} =
           apply(ReqLLM.Test.VCR, :replay_into_stream_server, [fixture_path, stream_server_pid])
 
-        # Create minimal http_context for compatibility
+        Process.link(task_pid)
+
         http_context = %HTTPContext{
           url: "fixture://#{fixture_path}",
           method: :post,
@@ -136,7 +136,6 @@ defmodule ReqLLM.Streaming.FinchClient do
           resp_headers: %{}
         }
 
-        # Extract canonical_json from fixture for compatibility
         transcript = apply(ReqLLM.Test.VCR, :load!, [fixture_path])
         canonical_json = Map.get(transcript.request, :canonical_json, %{})
 
@@ -157,7 +156,7 @@ defmodule ReqLLM.Streaming.FinchClient do
          opts
        ) do
     task_pid =
-      Task.Supervisor.async_nolink(ReqLLM.TaskSupervisor, fn ->
+      Task.Supervisor.async(ReqLLM.TaskSupervisor, fn ->
         finch_stream_callback = fn
           {:status, status}, acc ->
             StreamServer.http_event(stream_server_pid, {:status, status})

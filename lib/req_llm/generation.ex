@@ -356,6 +356,7 @@ defmodule ReqLLM.Generation do
         |> Keyword.merge(Map.to_list(prepared_req.options))
         |> Keyword.put(:stream, true)
         |> Keyword.put_new(:operation, :object)
+        |> Keyword.put(:compiled_schema, compiled_schema)
 
       ReqLLM.Streaming.start_stream(provider_module, model, prepared_context, stream_opts)
     end

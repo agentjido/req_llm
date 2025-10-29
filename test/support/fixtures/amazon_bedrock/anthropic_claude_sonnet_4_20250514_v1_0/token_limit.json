@@ -1,0 +1,67 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6ImJlZHJvY2stMjAyMy0wNS0zMSIsIm1heF90b2tlbnMiOjQwMDEsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJ0aGlua2luZyI6eyJidWRnZXRfdG9rZW5zIjo0MDAwLCJ0eXBlIjoiZW5hYmxlZCJ9fQ=="
+    },
+    "canonical_json": {
+      "anthropic_version": "bedrock-2023-05-31",
+      "max_tokens": 4001,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "thinking": {
+        "budget_tokens": 4000,
+        "type": "enabled"
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "eccb973759ad6346db0bcc8efe808d9dfe22d762bcb202014aadaa70fa15b2f6"
+      ],
+      "x-amz-date": [
+        "20251028T084144Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/anthropic.claude-sonnet-4-20250514-v1:0/invoke"
+  },
+  "response": {
+    "body": {
+      "message": "Invocation of model ID anthropic.claude-sonnet-4-20250514-v1:0 with on-demand throughput isn’t supported. Retry your request with the ID or ARN of an inference profile that contains this model."
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 28 Oct 2025 08:41:44 GMT"
+      ],
+      "x-amzn-errortype": [
+        "ValidationException:http://internal.amazon.com/coral/com.amazon.bedrock/"
+      ],
+      "x-amzn-requestid": [
+        "05e59a8a-503f-447d-81a6-7f456e7e9b0b"
+      ]
+    },
+    "status": 400
+  }
+}

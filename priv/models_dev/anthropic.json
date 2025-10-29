@@ -36,46 +36,13 @@
     {
       "attachment": true,
       "cost": {
-        "cache_read": 0.3,
-        "cache_write": 3.75,
-        "input": 3,
-        "output": 15
+        "cache_read": 0.08,
+        "cache_write": 1,
+        "input": 0.8,
+        "output": 4
       },
-      "id": "claude-3-5-sonnet-20240620",
-      "knowledge": "2024-04-30",
-      "last_updated": "2024-06-20",
-      "limit": {
-        "context": 200000,
-        "output": 8192
-      },
-      "modalities": {
-        "input": [
-          "text",
-          "image"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Claude Sonnet 3.5",
-      "open_weights": false,
-      "provider": "anthropic",
-      "provider_model_id": "claude-3-5-sonnet-20240620",
-      "reasoning": false,
-      "release_date": "2024-06-20",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": true,
-      "cost": {
-        "cache_read": 0.3,
-        "cache_write": 3.75,
-        "input": 3,
-        "output": 15
-      },
-      "id": "claude-3-5-sonnet-20241022",
-      "knowledge": "2024-04-30",
+      "id": "claude-3-5-haiku-latest",
+      "knowledge": "2024-07-31",
       "last_updated": "2024-10-22",
       "limit": {
         "context": 200000,
@@ -90,10 +57,10 @@
           "text"
         ]
       },
-      "name": "Claude Sonnet 3.5 v2",
+      "name": "Claude Haiku 3.5 (latest)",
       "open_weights": false,
       "provider": "anthropic",
-      "provider_model_id": "claude-3-5-sonnet-20241022",
+      "provider_model_id": "claude-3-5-haiku-latest",
       "reasoning": false,
       "release_date": "2024-10-22",
       "temperature": true,
@@ -107,7 +74,7 @@
         "input": 3,
         "output": 15
       },
-      "id": "claude-3-7-sonnet-20250219",
+      "id": "claude-3-7-sonnet-latest",
       "knowledge": "2024-10-31",
       "last_updated": "2025-02-19",
       "limit": {
@@ -123,10 +90,10 @@
           "text"
         ]
       },
-      "name": "Claude Sonnet 3.7",
+      "name": "Claude Sonnet 3.7 (latest)",
       "open_weights": false,
       "provider": "anthropic",
-      "provider_model_id": "claude-3-7-sonnet-20250219",
+      "provider_model_id": "claude-3-7-sonnet-latest",
       "reasoning": true,
       "release_date": "2025-02-19",
       "temperature": true,
@@ -168,17 +135,17 @@
     {
       "attachment": true,
       "cost": {
-        "cache_read": 1.5,
-        "cache_write": 18.75,
-        "input": 15,
-        "output": 75
+        "cache_read": 0.1,
+        "cache_write": 1.25,
+        "input": 1,
+        "output": 5
       },
-      "id": "claude-3-opus-20240229",
-      "knowledge": "2023-08-31",
-      "last_updated": "2024-02-29",
+      "id": "claude-haiku-4-5",
+      "knowledge": "2025-02-31",
+      "last_updated": "2025-10-15",
       "limit": {
         "context": 200000,
-        "output": 4096
+        "output": 64000
       },
       "modalities": {
         "input": [
@@ -189,12 +156,12 @@
           "text"
         ]
       },
-      "name": "Claude Opus 3",
+      "name": "Claude Haiku 4.5 (latest)",
       "open_weights": false,
       "provider": "anthropic",
-      "provider_model_id": "claude-3-opus-20240229",
-      "reasoning": false,
-      "release_date": "2024-02-29",
+      "provider_model_id": "claude-haiku-4-5",
+      "reasoning": true,
+      "release_date": "2025-10-15",
       "temperature": true,
       "tool_call": true
     },
@@ -228,6 +195,72 @@
       "provider_model_id": "claude-haiku-4-5-20251001",
       "reasoning": true,
       "release_date": "2025-10-15",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": true,
+      "cost": {
+        "cache_read": 1.5,
+        "cache_write": 18.75,
+        "input": 15,
+        "output": 75
+      },
+      "id": "claude-opus-4-0",
+      "knowledge": "2025-03-31",
+      "last_updated": "2025-05-22",
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Claude Opus 4 (latest)",
+      "open_weights": false,
+      "provider": "anthropic",
+      "provider_model_id": "claude-opus-4-0",
+      "reasoning": true,
+      "release_date": "2025-05-22",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": true,
+      "cost": {
+        "cache_read": 1.5,
+        "cache_write": 18.75,
+        "input": 15,
+        "output": 75
+      },
+      "id": "claude-opus-4-1",
+      "knowledge": "2025-03-31",
+      "last_updated": "2025-08-05",
+      "limit": {
+        "context": 200000,
+        "output": 32000
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Claude Opus 4.1 (latest)",
+      "open_weights": false,
+      "provider": "anthropic",
+      "provider_model_id": "claude-opus-4-1",
+      "reasoning": true,
+      "release_date": "2025-08-05",
       "temperature": true,
       "tool_call": true
     },
@@ -305,6 +338,39 @@
         "input": 3,
         "output": 15
       },
+      "id": "claude-sonnet-4-0",
+      "knowledge": "2025-03-31",
+      "last_updated": "2025-05-22",
+      "limit": {
+        "context": 200000,
+        "output": 64000
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Claude Sonnet 4 (latest)",
+      "open_weights": false,
+      "provider": "anthropic",
+      "provider_model_id": "claude-sonnet-4-0",
+      "reasoning": true,
+      "release_date": "2025-05-22",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": true,
+      "cost": {
+        "cache_read": 0.3,
+        "cache_write": 3.75,
+        "input": 3,
+        "output": 15
+      },
       "id": "claude-sonnet-4-20250514",
       "knowledge": "2025-03-31",
       "last_updated": "2025-05-22",
@@ -327,6 +393,39 @@
       "provider_model_id": "claude-sonnet-4-20250514",
       "reasoning": true,
       "release_date": "2025-05-22",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": true,
+      "cost": {
+        "cache_read": 0.3,
+        "cache_write": 3.75,
+        "input": 3,
+        "output": 15
+      },
+      "id": "claude-sonnet-4-5",
+      "knowledge": "2025-07-31",
+      "last_updated": "2025-09-29",
+      "limit": {
+        "context": 200000,
+        "output": 64000
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Claude Sonnet 4.5 (latest)",
+      "open_weights": false,
+      "provider": "anthropic",
+      "provider_model_id": "claude-sonnet-4-5",
+      "reasoning": true,
+      "release_date": "2025-09-29",
       "temperature": true,
       "tool_call": true
     },
@@ -365,7 +464,7 @@
     }
   ],
   "provider": {
-    "base_url": "https://api.anthropic.com/v1",
+    "base_url": "https://api.anthropic.com",
     "doc": "AI model provider",
     "env": [
       "ANTHROPIC_API_KEY"

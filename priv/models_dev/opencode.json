@@ -1,15 +1,14 @@
 {
   "models": [
     {
-      "alpha": true,
       "attachment": false,
       "cost": {
-        "input": 0.5,
-        "output": 2
+        "input": 1,
+        "output": 3
       },
-      "id": "an-g8x",
+      "id": "an-gbt",
       "knowledge": "2025-01",
-      "last_updated": "2025-07-30",
+      "last_updated": "2025-01-01",
       "limit": {
         "context": 200000,
         "output": 128000
@@ -22,12 +21,45 @@
           "text"
         ]
       },
-      "name": "Code G8X (alpha)",
+      "name": "Code GBT (alpha)",
       "open_weights": true,
       "provider": "opencode",
-      "provider_model_id": "an-g8x",
+      "provider_model_id": "an-gbt",
       "reasoning": true,
-      "release_date": "2025-07-30",
+      "release_date": "2025-01-01",
+      "status": "alpha",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "cache_read": 0,
+        "cache_write": 0,
+        "input": 0,
+        "output": 0
+      },
+      "id": "big-pickle",
+      "knowledge": "2025-01",
+      "last_updated": "2025-10-17",
+      "limit": {
+        "context": 200000,
+        "output": 128000
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Big Pickle",
+      "open_weights": false,
+      "provider": "opencode",
+      "provider_model_id": "big-pickle",
+      "reasoning": true,
+      "release_date": "2025-10-17",
       "temperature": true,
       "tool_call": true
     },
@@ -70,7 +102,7 @@
         "cache_read": 0.1,
         "cache_write": 1.25,
         "input": 1,
-        "output": 1.25
+        "output": 5
       },
       "id": "claude-haiku-4-5",
       "knowledge": "2025-02-31",
@@ -198,40 +230,7 @@
       "tool_call": true
     },
     {
-      "attachment": true,
-      "cost": {
-        "cache_read": 0,
-        "cache_write": 0,
-        "input": 0,
-        "output": 0
-      },
-      "id": "code-supernova",
-      "last_updated": "2025-09-19",
-      "limit": {
-        "context": 1000000,
-        "output": 1000000
-      },
-      "modalities": {
-        "input": [
-          "text",
-          "image"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Code Supernova 1M",
-      "open_weights": false,
-      "provider": "opencode",
-      "provider_model_id": "code-supernova",
-      "reasoning": true,
-      "release_date": "2025-09-19",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
       "attachment": false,
-      "beta": true,
       "cost": {
         "input": 0.6,
         "output": 1.9
@@ -257,6 +256,7 @@
       "provider_model_id": "glm-4.6",
       "reasoning": true,
       "release_date": "2025-09-30",
+      "status": "beta",
       "temperature": true,
       "tool_call": true
     },
@@ -385,6 +385,37 @@
       "provider_model_id": "kimi-k2",
       "reasoning": false,
       "release_date": "2025-09-05",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 1.2,
+        "output": 1.2
+      },
+      "id": "minimax-m2",
+      "knowledge": "2024-10",
+      "last_updated": "2025-10-27",
+      "limit": {
+        "context": 200000,
+        "output": 128000
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "MiniMax M2 (alpha)",
+      "open_weights": true,
+      "provider": "opencode",
+      "provider_model_id": "minimax-m2",
+      "reasoning": true,
+      "release_date": "2025-10-27",
+      "status": "alpha",
       "temperature": true,
       "tool_call": true
     },

@@ -532,6 +532,36 @@
       "tool_call": true
     },
     {
+      "attachment": false,
+      "cost": {
+        "input": 0.22,
+        "output": 1.8
+      },
+      "id": "qwen.qwen3-coder-480b-a35b-v1:0",
+      "knowledge": "2024-04",
+      "last_updated": "2025-09-18",
+      "limit": {
+        "context": 131072,
+        "output": 65536
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Qwen3 Coder 480B A35B Instruct",
+      "open_weights": true,
+      "provider": "amazon_bedrock",
+      "provider_model_id": "qwen.qwen3-coder-480b-a35b-v1:0",
+      "reasoning": false,
+      "release_date": "2025-09-18",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
       "attachment": true,
       "cost": {
         "input": 0.24,
@@ -810,6 +840,36 @@
       "tool_call": false
     },
     {
+      "attachment": false,
+      "cost": {
+        "input": 0.15,
+        "output": 0.6
+      },
+      "id": "qwen.qwen3-32b-v1:0",
+      "knowledge": "2024-04",
+      "last_updated": "2025-09-18",
+      "limit": {
+        "context": 16384,
+        "output": 16384
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Qwen3 32B (dense)",
+      "open_weights": true,
+      "provider": "amazon_bedrock",
+      "provider_model_id": "qwen.qwen3-32b-v1:0",
+      "reasoning": true,
+      "release_date": "2025-09-18",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
       "attachment": true,
       "cost": {
         "cache_read": 1.5,
@@ -999,6 +1059,36 @@
       "tool_call": true
     },
     {
+      "attachment": false,
+      "cost": {
+        "input": 0.22,
+        "output": 0.88
+      },
+      "id": "qwen.qwen3-235b-a22b-2507-v1:0",
+      "knowledge": "2024-04",
+      "last_updated": "2025-09-18",
+      "limit": {
+        "context": 262144,
+        "output": 131072
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Qwen3 235B A22B 2507",
+      "open_weights": true,
+      "provider": "amazon_bedrock",
+      "provider_model_id": "qwen.qwen3-235b-a22b-2507-v1:0",
+      "reasoning": false,
+      "release_date": "2025-09-18",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
       "attachment": true,
       "cost": {
         "input": 0.25,
@@ -1125,6 +1215,36 @@
     {
       "attachment": false,
       "cost": {
+        "input": 0.58,
+        "output": 1.68
+      },
+      "id": "deepseek.v3-v1:0",
+      "knowledge": "2024-07",
+      "last_updated": "2025-09-18",
+      "limit": {
+        "context": 163840,
+        "output": 81920
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "DeepSeek-V3.1",
+      "open_weights": true,
+      "provider": "amazon_bedrock",
+      "provider_model_id": "deepseek.v3-v1:0",
+      "reasoning": true,
+      "release_date": "2025-09-18",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
         "input": 0.22,
         "output": 0.22
       },
@@ -1149,6 +1269,36 @@
       "provider_model_id": "meta.llama3-1-8b-instruct-v1:0",
       "reasoning": false,
       "release_date": "2024-07-23",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.15,
+        "output": 0.6
+      },
+      "id": "qwen.qwen3-coder-30b-a3b-v1:0",
+      "knowledge": "2024-04",
+      "last_updated": "2025-09-18",
+      "limit": {
+        "context": 262144,
+        "output": 131072
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Qwen3 Coder 30B A3B Instruct",
+      "open_weights": false,
+      "provider": "amazon_bedrock",
+      "provider_model_id": "qwen.qwen3-coder-30b-a3b-v1:0",
+      "reasoning": false,
+      "release_date": "2025-09-18",
       "temperature": true,
       "tool_call": true
     }

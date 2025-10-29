@@ -210,7 +210,7 @@ defmodule ReqLLM.ModelTest do
     end
 
     test "handles successful metadata loading with all field transformations" do
-      {:ok, model} = Model.with_metadata("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = Model.with_metadata("anthropic:claude-3-5-haiku-20241022")
 
       # Verify metadata fields are properly populated and transformed
       assert is_map(model.limit)

@@ -3,39 +3,6 @@
     {
       "attachment": true,
       "cost": {
-        "cache_read": 0.1,
-        "cache_write": 1.25,
-        "input": 1,
-        "output": 5
-      },
-      "id": "anthropic/claude-4.5-haiku",
-      "knowledge": "2025-02-31",
-      "last_updated": "2025-10-15",
-      "limit": {
-        "context": 200000,
-        "output": 64000
-      },
-      "modalities": {
-        "input": [
-          "text",
-          "image"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Claude Haiku 4.5",
-      "open_weights": false,
-      "provider": "openrouter",
-      "provider_model_id": "anthropic/claude-4.5-haiku",
-      "reasoning": true,
-      "release_date": "2025-10-15",
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": true,
-      "cost": {
         "input": 0.6,
         "output": 1.8
       },
@@ -62,6 +29,35 @@
       "provider_model_id": "z-ai/glm-4.5v",
       "reasoning": true,
       "release_date": "2025-08-11",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.4,
+        "output": 2.2
+      },
+      "id": "minimax/minimax-m1",
+      "last_updated": "2025-06-17",
+      "limit": {
+        "context": 1000000,
+        "output": 40000
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "MiniMax M1",
+      "open_weights": true,
+      "provider": "openrouter",
+      "provider_model_id": "minimax/minimax-m1",
+      "reasoning": true,
+      "release_date": "2025-06-17",
       "temperature": true,
       "tool_call": true
     },
@@ -129,6 +125,39 @@
       "provider_model_id": "openai/gpt-5-mini",
       "reasoning": true,
       "release_date": "2025-08-07",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": true,
+      "cost": {
+        "cache_read": 0.1,
+        "cache_write": 1.25,
+        "input": 1,
+        "output": 5
+      },
+      "id": "anthropic/claude-haiku-4.5",
+      "knowledge": "2025-02-31",
+      "last_updated": "2025-10-15",
+      "limit": {
+        "context": 200000,
+        "output": 64000
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Claude Haiku 4.5",
+      "open_weights": false,
+      "provider": "openrouter",
+      "provider_model_id": "anthropic/claude-haiku-4.5",
+      "reasoning": true,
+      "release_date": "2025-10-15",
       "temperature": true,
       "tool_call": true
     },
@@ -260,6 +289,37 @@
       "provider_model_id": "google/gemini-2.5-pro",
       "reasoning": true,
       "release_date": "2025-03-20",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "cache_read": 0,
+        "cache_write": 0,
+        "input": 0,
+        "output": 0
+      },
+      "id": "minimax/minimax-m2:free",
+      "last_updated": "2025-10-23",
+      "limit": {
+        "context": 204800,
+        "output": 131100
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "MiniMax M2 (free)",
+      "open_weights": true,
+      "provider": "openrouter",
+      "provider_model_id": "minimax/minimax-m2:free",
+      "reasoning": true,
+      "release_date": "2025-10-23",
       "temperature": true,
       "tool_call": true
     },
@@ -1105,6 +1165,67 @@
     {
       "attachment": true,
       "cost": {
+        "input": 0.2,
+        "output": 1.1
+      },
+      "id": "minimax/minimax-01",
+      "last_updated": "2025-01-15",
+      "limit": {
+        "context": 1000000,
+        "output": 1000000
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "MiniMax-01",
+      "open_weights": true,
+      "provider": "openrouter",
+      "provider_model_id": "minimax/minimax-01",
+      "reasoning": true,
+      "release_date": "2025-01-15",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "cache_read": 0.11,
+        "input": 0.6,
+        "output": 1.9
+      },
+      "id": "z-ai/glm-4.6:exacto",
+      "knowledge": "2025-09",
+      "last_updated": "2025-09-30",
+      "limit": {
+        "context": 200000,
+        "output": 128000
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "GLM 4.6 (exacto)",
+      "open_weights": true,
+      "provider": "openrouter",
+      "provider_model_id": "z-ai/glm-4.6:exacto",
+      "reasoning": true,
+      "release_date": "2025-09-30",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": true,
+      "cost": {
         "input": 0,
         "output": 0
       },
@@ -1226,6 +1347,35 @@
       "provider_model_id": "deepseek/deepseek-v3.1-terminus",
       "reasoning": true,
       "release_date": "2025-09-22",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.05,
+        "output": 0.24
+      },
+      "id": "openai/gpt-oss-120b:exacto",
+      "last_updated": "2025-08-05",
+      "limit": {
+        "context": 131072,
+        "output": 32768
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "GPT OSS 120B (exacto)",
+      "open_weights": true,
+      "provider": "openrouter",
+      "provider_model_id": "openai/gpt-oss-120b:exacto",
+      "reasoning": true,
+      "release_date": "2025-08-05",
       "temperature": true,
       "tool_call": true
     },
@@ -1479,6 +1629,66 @@
       "tool_call": false
     },
     {
+      "attachment": false,
+      "cost": {
+        "input": 0.27,
+        "output": 1
+      },
+      "id": "deepseek/deepseek-v3.1-terminus:exacto",
+      "knowledge": "2025-07",
+      "last_updated": "2025-09-22",
+      "limit": {
+        "context": 131072,
+        "output": 65536
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "DeepSeek V3.1 Terminus (exacto)",
+      "open_weights": true,
+      "provider": "openrouter",
+      "provider_model_id": "deepseek/deepseek-v3.1-terminus:exacto",
+      "reasoning": true,
+      "release_date": "2025-09-22",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.6,
+        "output": 2.5
+      },
+      "id": "moonshotai/kimi-k2-0905:exacto",
+      "knowledge": "2024-10",
+      "last_updated": "2025-09-05",
+      "limit": {
+        "context": 262144,
+        "output": 16384
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Kimi K2 Instruct 0905 (exacto)",
+      "open_weights": true,
+      "provider": "openrouter",
+      "provider_model_id": "moonshotai/kimi-k2-0905:exacto",
+      "reasoning": false,
+      "release_date": "2025-09-05",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
       "attachment": true,
       "cost": {
         "input": 1.25,
@@ -1542,6 +1752,37 @@
       "tool_call": true
     },
     {
+      "attachment": true,
+      "cost": {
+        "input": 15,
+        "output": 120
+      },
+      "id": "openai/gpt-5-pro",
+      "knowledge": "2024-09-30",
+      "last_updated": "2025-10-06",
+      "limit": {
+        "context": 400000,
+        "output": 272000
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "GPT-5 Pro",
+      "open_weights": false,
+      "provider": "openrouter",
+      "provider_model_id": "openai/gpt-5-pro",
+      "reasoning": true,
+      "release_date": "2025-10-06",
+      "temperature": false,
+      "tool_call": true
+    },
+    {
       "attachment": false,
       "cost": {
         "cache_read": 0.75,
@@ -1570,6 +1811,36 @@
       "provider_model_id": "x-ai/grok-3",
       "reasoning": false,
       "release_date": "2025-02-17",
+      "temperature": true,
+      "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0.38,
+        "output": 1.53
+      },
+      "id": "qwen/qwen3-coder:exacto",
+      "knowledge": "2025-04",
+      "last_updated": "2025-07-23",
+      "limit": {
+        "context": 131072,
+        "output": 32768
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "Qwen3 Coder (exacto)",
+      "open_weights": true,
+      "provider": "openrouter",
+      "provider_model_id": "qwen/qwen3-coder:exacto",
+      "reasoning": false,
+      "release_date": "2025-07-23",
       "temperature": true,
       "tool_call": true
     },

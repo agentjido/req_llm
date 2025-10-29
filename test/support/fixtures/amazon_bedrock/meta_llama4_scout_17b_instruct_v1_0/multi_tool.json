@@ -1,0 +1,130 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjoxNjM4LCJ0ZW1wZXJhdHVyZSI6MC4wfSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJXaGF0J3MgdGhlIHdlYXRoZXIgbGlrZSBpbiBQYXJpcywgRnJhbmNlPyJ9XSwicm9sZSI6InVzZXIifV0sInRvb2xDb25maWciOnsidG9vbHMiOlt7InRvb2xTcGVjIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0U2NoZW1hIjp7Impzb24iOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfd2VhdGhlciJ9fSx7InRvb2xTcGVjIjp7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJpbnB1dFNjaGVtYSI6eyJqc29uIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJ0ZWxsX2pva2UifX0seyJ0b29sU3BlYyI6eyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwiaW5wdXRTY2hlbWEiOnsianNvbiI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImdldF90aW1lIn19XX19"
+    },
+    "canonical_json": {
+      "inferenceConfig": {
+        "maxTokens": 1638,
+        "temperature": 0.0
+      },
+      "messages": [
+        {
+          "content": [
+            {
+              "text": "What's the weather like in Paris, France?"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "toolConfig": {
+        "tools": [
+          {
+            "toolSpec": {
+              "description": "Get current weather information for a location",
+              "inputSchema": {
+                "json": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "location": {
+                      "type": "string"
+                    },
+                    "unit": {
+                      "enum": [
+                        "celsius",
+                        "fahrenheit"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "location"
+                  ],
+                  "type": "object"
+                }
+              },
+              "name": "get_weather"
+            }
+          },
+          {
+            "toolSpec": {
+              "description": "Tell a funny joke",
+              "inputSchema": {
+                "json": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "topic": {
+                      "description": "Topic for the joke",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "name": "tell_joke"
+            }
+          },
+          {
+            "toolSpec": {
+              "description": "Get the current time",
+              "inputSchema": {
+                "json": {
+                  "properties": {},
+                  "type": "object"
+                }
+              },
+              "name": "get_time"
+            }
+          }
+        ]
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "b53a442a364ef880979cdf462501ed9b6015b2c6844fac451ee3d8ee39624b20"
+      ],
+      "x-amz-date": [
+        "20251028T084200Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/meta.llama4-scout-17b-instruct-v1:0/converse"
+  },
+  "response": {
+    "body": {
+      "message": "Invocation of model ID meta.llama4-scout-17b-instruct-v1:0 with on-demand throughput isn’t supported. Retry your request with the ID or ARN of an inference profile that contains this model."
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 28 Oct 2025 08:42:00 GMT"
+      ],
+      "x-amzn-errortype": [
+        "ValidationException:http://internal.amazon.com/coral/com.amazon.bedrock/"
+      ],
+      "x-amzn-requestid": [
+        "59fd5e0e-4f66-4804-ad98-16281c1941cd"
+      ]
+    },
+    "status": 400
+  }
+}

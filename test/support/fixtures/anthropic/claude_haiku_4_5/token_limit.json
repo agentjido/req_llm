@@ -1,0 +1,152 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtaGFpa3UtNC01Iiwic3RyZWFtIjpmYWxzZSwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifX0="
+    },
+    "canonical_json": {
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "claude-haiku-4-5",
+      "stream": false,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-beta": [
+        "interleaved-thinking-2025-05-14"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "EqUECkYICRgCKkDoI/aWHq+jcyf8fURVot5LygoWKXnj44BCvgr49oNcoRMbhXS1XGQumS9AepoSRhnwGP8uRK8i0jqPW8Czc9EWEgzJNxDrmDup4g5Qa9YaDD/rXNDbXtxORqATPCIwI7lCJ6pu6XHIIrbOyVNGAY8WH48yo05AwVrv5f6krRJIXOHB185/ofMouy+7LyabKowDznqafiZqJvqw5i6Zes+PQlctYHymKWjSl7Z+tPkI5/UtejyBr2+iIkEFvL/Mdbd0NbUOo7HBZXhl6wVbzVgPOrHmwe4Vm8PHMA/pj3/6/3FKopMTRGESaIdTrEzgEbreZ+uCMdUiSCO998uigxCoBqyQEDlOeEKa8cnMCp/1mh39xjDD6GT+T2PjqJdf7fwYJPwLs19G9+lpOLHQOBqi7U0JyVfm6JrMM9PAr5GFgQihBo5Yf/QUGJulzupu+qpIMNataZP4SS4T5O2gqy0klzREBhlOCiPQ5TYxL5vKZ97U3n4SBIbJ8NkrUQNUUwaKr3PpDfKT19P4If87i5233nvGgkOy5nFkXLvilykLj2VI+b+1p2iCJo9jHCJ1jFCn2OJ9q2K5sLrx3+6J0Bozf9tcsYDB7tlEzWE6UrZgs134OqmGAkfFY46xisWcASkO3+i+60rNYD/RMiBuvST4Zj+noLKrCwcHMXIZvPZYvWvFuo8A3MQSZEJtlp8x+wLvWIAjcvNG46cPMS75GAE=",
+          "thinking": "The user wants a very long story about dragons and adventures. I should create an engaging, detailed narrative with compelling characters, a solid plot structure, and various adventure elements. I'll aim for a substantial story with multiple chapters or sections, character development, and a satisfying arc. Let me create something fantasy-based with dragons as central elements.",
+          "type": "thinking"
+        },
+        {
+          "text": "# The Last Dragon Riders of Valdoria\n\n## Part One: The Awakening\n\nThe morning mist clung to the Shattered Peaks like a burial shroud, and Kael knew that today would change everything.\n\nHe stood at the mouth of the ancient cave, his seventeen-year-old frame silhouetted against the gray dawn, wondering if this was madness or destiny. The leather-bound journal his grandmother had left him was heavy in his satchel—heavier than paper and ink had any right to be. Every word on its pages spoke of dragons, of a legacy he'd thought was nothing but myth and bedtime stories.\n\n\"You're really doing this,\" came a voice from behind him.\n\nKael turned to see Mira emerging from the forest, her fiery red hair catching the first rays of sunlight. She'd been his best friend since childhood, back when they were both young enough to believe that the world held magic. Unlike Kael, Mira had never stopped believing.\n\n\"You should have stayed in the village,\" Kael said, though he'd known she wouldn't. Mira had a particular gift for doing the opposite of what was sensible.\n\n\"Where you go, I go,\" she replied simply. \"Besides, someone needs to keep you from dying in there. These mountains are treacherous, and if there actually are dragons...\" She trailed off, leaving the implications hanging in the air between them.\n\nIf there actually are dragons. Three words that contained both miracle and terror in equal measure.\n\nKael's parents had died under mysterious circumstances when he was five years old. They'd been scholars, obsessed with the ancient history of Valdoria before the Great Silence—that period, three centuries past, when dragons had vanished from the world. The official story was that dragons were never real, merely metaphors in old texts. But Kael's grandmother, Lady Castellina, had whispered different stories into his childhood ears. She'd told him that dragons hadn't disappeared—they had hidden. And she'd told him that in his bloodline ran the power to find them again.\n\n\"My grandmother was dragon-touched,\" Kael said quietly, looking at the cave entrance. \"She said there was a cave in the Shattered Peaks where the last dragons waited. She said they chose us. The riders. That blood calls to blood across centuries.\"\n\n\"Your grandmother also swore she'd seen a flying city,\" Mira pointed out, though her teasing tone was gentle. \"Doesn't mean she wasn't brilliant, but—\"\n\n\"There are records, Mira. In the restricted archives of the Grand Library. I've read them. The genealogies of the old rider families, the accounts of the last great battles. It's all real.\"\n\nMira stepped closer, studying his face. \"And if it is? If we go in there and find dragons, what then? We can't exactly bring them back to the village. We can't exactly keep them secret. Half the kingdom thinks dragons are monsters, the other half thinks they're fairy tales. Neither side will be happy to meet the real thing.\"\n\nKael didn't have an answer. He'd been so focused on finding proof, on discovering whether his grandmother's gift had any truth to it, that he hadn't thought much beyond the cave. But that was the nature of adventure, wasn't it? You stepped forward into the unknown and figured out the details once you got there.\n\n\"We go in,\" he said. \"We look. We'll decide what to do if—when—we find something.\"\n\nThe cave was deeper than any cavern had a right to be. Their torches cast dancing shadows on walls of black stone that seemed to drink the light. They descended for what felt like hours, the air growing warmer with each step, until Kael's shirt was sticky with sweat and his lungs burned with breathing the thick, sulfurous air.\n\n\"Do you smell that?\" Mira whispered, her earlier bravado depleted by the oppressive darkness.\n\n\"Sulfur. And... something else.\" Something ancient. Something alive.\n\nThen the tunnel opened into an enormous cavern, and both of them froze.\n\nThe space was vast beyond comprehension, a cathedral of stone that disappeared into shadows where their torchlight couldn't reach. But it was what lay below them that stole their breath away.\n\nDragons.\n\nThere were at least twenty of them, arranged in a great spiral across the cavern floor, their enormous bodies coiled peacefully as if they were merely sleeping. But as Kael stared, he realized they weren't really sleeping—they were waiting. Their eyes, massive as wagon wheels, were open and glowing with an inner luminescence that ranged from deep amber to brilliant emerald to a white that hurt to look at directly.\n\nAnd those eyes were looking at him.\n\n\"Kael,\" Mira breathed, gripping his arm so hard it hurt. \"What do we do?\"\n\nThe largest dragon, a creature of impossible size with scales the color of burnished bronze, raised its head. Its movement was deliberate, ancient, unhurried. When it spoke, the sound wasn't words exactly—it was more like meaning manifesting directly in Kael's mind, bypassing his ears entirely.\n\n*A rider returns. After so long. After the long silence. A rider comes seeking.*\n\nKael opened his mouth, closed it, opened it again. No sound came out. His entire body had locked up in a mixture of terror and wonder that he had no framework for understanding.\n\nThe bronze dragon's enormous mouth curved in what might have been a smile. *Do not be afraid, child. You have your grandmother's scent—the bloodline is faint but present. This is good. This is very good. For the silence must end. The balance grows broken. The shadow spreads across the land, and without riders, we cannot answer the call.*\n\n\"What shadow?\" Kael managed to ask, his voice sounding impossibly young and small. \"What call?\"\n\nThe dragon lowered its great head, and somehow the gesture conveyed infinite weariness. *Come closer, young one. Let me see you clearly. Let me know if you have the strength for what must come.*\n\nEvery instinct screamed at Kael to run, but his feet were already moving him forward, toward that enormous creature. Mira made a sound of protest and tried to hold him back, but he shook her off gently.\n\n\"It's all right,\" he said, with far more confidence than he felt.\n\nHe descended the stone steps carved into the cavern walls, steps that he realized must have been made for dragon riders centuries past, and walked toward the bronze dragon. As he drew near, he could see that the creature was even more magnificent than he'd first thought—its scales were intricately layered like armor, its eyes held depths of intelligence that seemed to contain whole libraries of knowledge.\n\nThe dragon lowered one great eye until it was on level with Kael's face. In that moment, he felt something happening inside him—a sensation like a door opening in his mind, a connection forming that bypassed words entirely. Memories that weren't his own flooded his consciousness: images of dragons in flight against storm clouds, of cities of crystal and stone, of a great catastrophe that had shattered the world and forced the dragons into hiding.\n\nAnd underneath it all, a thread of connection to his bloodline—his grandmother standing in a similar cavern, a younger man beside her with his father's eyes—his parents here too, before whatever had taken them, pledging their lives to the dragons' cause.\n\nWhen the connection faded, Kael gasped and stumbled backward. Tears were streaming down his face, though he didn't remember starting to cry.\n\n\"What happened?\" Mira called from the cavern edge. \"Are you hurt? Kael!\"\n\n\"I'm all right,\" Kael said, his voice rough. He looked back at the bronze dragon. \"You showed me... that was...\"\n\n*The inheritance of your blood. The memories of your family's pact.* The dragon's voice filled his mind again, but now it was gentle, almost sad. *Your parents tried to warn the kingdoms of the darkness coming. They were silenced for it. But now the silence must end, for the darkness grows bolder.*\n\nThe other dragons were stirring now, raising their massive heads, turning to look at Kael with eyes that held a mixture of hope and ancient sorrow.\n\n\"I don't understand,\" Kael said. \"Silenced? You mean they were killed? And what darkness? What's coming?\"\n\n*Come, young rider. We have much to teach you, and the time for teaching is short. But you must eat and rest first. Then we will speak of the past and what must be done. Your companion as well—she has the gift too, though different from yours. We can both be used in the trials ahead.*\n\nOver the next three days, Kael and Mira lived in a dream that felt more real than reality.\n\nThe dragons kept vast stores of food and fresh water in chambers off the main cavern. They learned that the dragons were not the mindless, savage beasts of legend—they were philosophical, thoughtful, with personalities as varied as those of humans. The bronze dragon, who was called Valdris in the ancient tongue, took particular interest in Kael, teaching him about the bonds between dragons and riders.\n\nA silver dragon named Lyessa, smaller than Valdris but no less magnificent, took Mira under her wing after determining that she had the gift of magic running through her veins. Mira took to it naturally, her fingers tingling with power as Lyessa taught her to sense and channel the dragon-fire that lay dormant in the earth itself.\n\nIt was on the evening of the third day that Valdris finally told them what was really happening in the world they'd left behind—and why their arrival in the cave was no accident.\n\n\"In the far north, beyond the Spine of the World mountains, there is a place that was sealed long ago,\" Valdris explained, his enormous form casting flickering shadows across the cavern wall as he moved. \"It was called the Prison of Khor'dann, and it held something that should never have been released.\"\n\nKael listened, sitting with his back against Valdris's warm flank, finding the position oddly comforting. \"What was in it?\"\n\n\"An ancient evil. A creature of shadow and hunger that existed before the first dragons took flight. It was sealed away by the unified effort of dragon riders and human mages of old. But power fades, seals weaken, and mortals forget why they are bound. Three months ago, the seal broke.\"\n\n\"And no one noticed?\" Mira asked, sitting with Lyessa. The silver dragon was absently breathing gentle flame, and Mira was playing with it, learning to shape it with her magic.\n\n\"Oh, they noticed,\" said another voice—a gray dragon with scales like moonlight, who had introduced herself as Kestian. \"Villages on the northern borders have been disappearing. Entire towns. The blight spreads across the land like a shadow consuming everything. But the kingdoms don't know what it is. They think it's a natural plague or an invasion. They're unprepared. Unprepared and divided, for the kingdoms have quarreled among themselves for so long that they've forgotten how to stand united.\"\n\n\"We sent your parents north, centuries ago in the reckoning of dragon years,\" Valdris continued. \"We sent them to investigate the seal, to see if it could be reinforced. They found proof of its weakening and went to the capital to warn the High King. But the court dismissed them. Called them mad. And then they died—officially in a riding accident, but we know the truth. They were silenced.\"\n\nKael felt something hard and cold crystallize in his chest. \"Murdered. The High King had them murdered.\"\n\n\"Not the current High King—his grandmother,\" Kestian clarified. \"But the court remains, and courts have long memories for secrets they wish to keep. Your family was made into non-persons. Your grandmother was confined to her estates. And the warning went unheeded.\"\n\n\"Until now,\" Mira said quietly. \"The blight is growing anyway. Even without anyone believing in it.\"\n\n\"Precisely,\" Lyessa confirmed. \"Which is why we brought you here. Kael, your grandmother sent word through channels long dormant—ancient ways of communication known only to us and the few dragon-touched families who remember. She told us you had come of age and were asking questions. She told us that when you were ready, you would come to the cave. She was right.\"\n\nKael stood up, pacing in the cavern, his mind racing. \"So what am I supposed to do? I'm seventeen. I know nothing about fighting creatures or preventing plagues or anything else that might be useful here.\"\n\n\"You are to become a dragon rider,\" Valdris said simply. \"As your forebears were. And then you are to unite the kingdoms and prepare them for what comes.\"\n\n\"I... what? Have you met people? Kingdoms don't unite because some kid shows up with a dragon",
+          "type": "text"
+        }
+      ],
+      "id": "msg_01KwHP72rWepontzvZEUq5Ct",
+      "model": "claude-haiku-4-5-20251001",
+      "role": "assistant",
+      "stop_reason": "max_tokens",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 44,
+        "output_tokens": 3000,
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": [
+        "a71659e7-a922-4ff7-99de-f3ba615face1"
+      ],
+      "anthropic-ratelimit-input-tokens-limit": [
+        "450000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "450000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2025-10-27T22:42:25Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "90000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "87000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2025-10-27T22:43:05Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "1000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2025-10-27T22:42:24Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "540000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "537000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2025-10-27T22:42:25Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9955b4d96f15eafd-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 27 Oct 2025 22:43:03 GMT"
+      ],
+      "request-id": [
+        "req_011CUYWZUkwRaPnpuu3Mo3bV"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "38925"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  }
+}

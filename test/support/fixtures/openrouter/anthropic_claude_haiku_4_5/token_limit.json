@@ -1,0 +1,108 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJhbnRocm9waWMvY2xhdWRlLWhhaWt1LTQuNSIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC41fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "anthropic/claude-haiku-4.5",
+      "n": 1,
+      "reasoning_effort": "low",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "# The Last Dragon of Aethermoor\n\n## Part One: The Gift\n\nThe mountain village of Thornhope clung to the rocky slopes like a stubborn burr, its stone cottages stacked in defiance of the cruel winds that howled down from the Frozen Crown peaks. It was here, in a small cottage at the village's edge, that Kael grew up knowing nothing of her true destiny.\n\nShe was seventeen when the dragon came.\n\nKael had always been different from the other children of Thornhope. While they played at merchant and farmer, she traced maps in the dust and whispered stories of ancient times when dragons filled the skies like clouds. The elders would shake their heads and warn her that such daydreaming was dangerous—that the world had moved on from such things, and wise folk didn't dwell on what was gone.\n\nBut Kael couldn't help it. Something deep in her bones called to those old stories, resonating like a bell struck in darkness.\n\nThe night it happened, she'd climbed to the ridge above the village as she often did, seeking solitude beneath the stars. The wind was particularly vicious that evening, carrying the scent of snow from the peaks above. She'd pulled her cloak tighter and settled onto her favorite boulder, the one that overlooked the entire valley, when she heard the sound.\n\nIt wasn't the wind.\n\nIt was a cry—a sound so ancient and mournful that it didn't belong to any creature Kael knew. It echoed across the mountains, reverberating through her chest, and she found herself standing without realizing it, her eyes scanning the darkness above.\n\nThen she saw it.\n\nAt first, it was only a silhouette against the star-filled sky, a shape so massive that her mind struggled to comprehend it. Wings spread impossibly wide, outlined in starlight. A long neck, serpentine and graceful, curved in pain. And the sound—that heartbreaking cry—issued from a mouth that opened against the night.\n\nA dragon. A real dragon.\n\nKael's breath caught in her throat. Every instinct screamed at her to run, to hide, to call for help. But she couldn't move. She could only watch as the creature descended toward the ridge, its wings beating against the wind with increasingly desperate strokes.\n\nIt crashed only fifty paces from where she stood.\n\nThe impact shook the earth beneath her feet, dislodging stones that tumbled down the slope. A cloud of dust and snow rose around the creature, and for a moment, Kael could see nothing but swirling darkness. When it cleared, she saw the dragon fully for the first time, and her fear transformed into something else entirely.\n\nAwe.\n\nThe dragon was enormous, easily the length of three houses, with scales that gleamed like polished silver in the moonlight. Its wings were folded against its body, one of them bent at an unnatural angle. Blood—dark and glistening—matted the scales along its left side, and its breathing came in shallow, labored gasps. But it was the creature's eyes that held her transfixed. Golden and intelligent, they fixed upon her with a clarity that spoke of consciousness, of thought, of fear.\n\nIt was afraid. The dragon was afraid.\n\nWithout thinking, Kael stepped forward.\n\n\"Easy,\" she whispered, as if approaching a frightened horse. \"Easy, I won't hurt you.\"\n\nThe dragon's eyes widened—a flash of something that might have been surprise or gratitude. Its great head turned toward her, and Kael could see the wound more clearly now. A deep gash ran across its flank, and several scales were cracked and hanging loose. Something had done this. Something had hunted this magnificent creature.\n\n\"What happened to you?\" Kael asked softly, drawing closer.\n\nThe dragon's mouth opened slightly, and a low rumble emerged—not a roar, but something quieter. A sound of pain and exhaustion. Its golden eyes began to close.\n\n\"No, no, stay with me,\" Kael said, surprising herself with the urgency in her voice. She knelt beside the massive creature, her small hand reaching out to touch one of the warm scales. \"You're going to be okay. You're going to—\"\n\nThe dragon's eye opened again, fixing on her with such intensity that she fell silent. And then, something extraordinary happened.\n\nAn image filled her mind.\n\nIt wasn't a vision exactly, but something more intimate. She saw through the dragon's eyes, experienced its desperation and pain. She felt the burning in its side, the exhaustion of a long flight, the terror of pursuit. But beneath it all, she felt something else: a desperate hope. A seeking.\n\nAnd then, with sudden certainty, she knew. The dragon had come here for her.\n\nThe moment shattered like glass, and Kael gasped, pulling her hand back. But the dragon didn't move. It simply breathed, its great flanks rising and falling, its golden eyes watching her with an expression she could only describe as pleading.\n\n\"I don't understand,\" Kael whispered. \"Why... what do you want from me?\"\n\nThe dragon's mouth moved, and sounds emerged—not words exactly, but something close. A rumbling speech that bypassed her ears and spoke directly to her mind. The sensation was overwhelming, like trying to drink from a storm-swollen river.\n\n*Blood... of the old line... I have found you at last...*\n\nThe words were fragments, scattered and hard to grasp, but their meaning leaked through: she was important to this creature. Somehow, impossibly, this ancient being had sought her out deliberately.\n\nThen, the sound of voices drifted up the ridge.\n\nThe villagers had heard the crash. Even now, Kael could see the first torches emerging from houses below, could hear the shouts of alarm. Her time was running out.\n\n\"We need to hide you,\" she said urgently. \"They'll come with weapons. They don't understand. They'll hurt you.\"\n\nThe dragon struggled to move, but the effort clearly cost it. Its golden eyes fixed on her with desperate intensity. *You... must go... beyond the mountains... to Aethermoor... find the others of your kind...*\n\n\"My kind? I'm not—\"\n\nBut there was no time to argue. Kael could hear the villagers more clearly now, their voices calling out in fear and anger. One of them had seen the dragon, because a shout of \"Fire! There's a dragon on the ridge!\" cut through the night.\n\n\"Hold on,\" Kael said, and with an audacity born of pure instinct, she grabbed hold of the dragon's neck. \"Get up. Please.\"\n\nThe dragon, despite its pain, heaved itself to its feet. It staggered, wounded and exhausted, but it moved. With Kael clinging to its neck, the creature shuffled to the edge of the ridge and, with a tremendous effort that seemed to tear a scream from its throat, spread its great wings.\n\nThey launched into the air just as the first villagers crested the ridge. Kael heard them shouting, heard the sound of crossbows being loaded, but then they were rising, climbing into the star-filled sky, and the village below was falling away like a memory.\n\nThe wind screamed in Kael's ears. She held onto the dragon's neck with all her strength, her small form nearly invisible against the creature's vast bulk. Below, Thornhope dwindled to a cluster of lights, then to nothing at all.\n\nThey flew through the night, climbing steadily toward the mountains themselves. The dragon moved with obvious pain, its breath coming in gasping heaves, but it didn't stop. Kael wasn't sure if the creature was still conscious or if some primal force simply drove it onward.\n\nJust as dawn broke, painting the sky in shades of rose and gold, the dragon descended toward a valley she'd never seen before. It was utterly hidden, surrounded on all sides by towering peaks. A river ran through it, reflecting the sunrise, and the vegetation was lush despite the altitude.\n\nThe dragon landed hard, sending up sprays of stone and earth. It collapsed immediately, its great body thudding to the ground with a finality that stopped Kael's heart.\n\n\"No!\" she cried, scrambling from the creature's neck. \"Don't you dare! Not now!\"\n\nThe dragon's eyes remained closed, its breathing shallow. Blood seeped from the wound on its flank, pooling beneath it. Kael looked around desperately, as if the solution to this impossible situation might be written on the cliffs around her.\n\nA river. Water. If she could clean the wound, if she could stop the bleeding—\n\nShe ran to the river and found a cloth in her pack, the small bundle she'd grabbed without thinking when they fled. It wasn't much, but it was something. She soaked the cloth and hurried back to the dragon, working frantically to clean the edges of the wound.\n\nAs her hands touched the dragon's scales, that same connection from before sparked to life. Images and sensations flooded her mind: a vast council of dragons, gathered beneath a starless sky; a treachery, a betrayal born of ambition; a young silver dragon fleeing alone, hunted by those who had once been kin; and beneath it all, a secret, hidden away, protected by ancient magic.\n\nWhen Kael pulled her hands back, she was gasping as if she'd run a great distance.\n\nThe dragon's eye opened slightly, that golden iris finding her in the morning light.\n\n*Thank you,* came the thought, quieter now, a fading whisper. *My name... is Aethermoor... and you... daughter of Kael... are the last hope of the dragonkind...*\n\n\"Aethermoor,\" Kael repeated. \"My name's Kael too. We share a name?\"\n\n*Not by chance,* the dragon murmured. *Your mother... my sister... she gave you her name to protect you... to call you back when the time came... I did not know if I would find you in time...*\n\nKael's mind reeled. Her mother? She had no mother—or so she'd been told. A foundling, the village had called her. An orphan left on the church steps.\n\n\"I don't understand any of this,\" she whispered, but even as she spoke, she realized it was a lie. Some part of her had always known. Some deep, hidden part of her had been waiting for this revelation, for the world to finally make sense.\n\n\"Rest,\" she told the dragon. \"I'll care for your wounds. You can tell me everything when you're stronger.\"\n\nOver the following weeks, Kael learned the truth of her origins and the burden of her inheritance.\n\n## Part Two: The Dragon's Tale\n\nThe valley where Aethermoor had brought her became her sanctuary. It was a place that seemed to exist outside the normal world, protected by ancient magic that had kept it hidden from mortal eyes for centuries. A small cave served as shelter, and the river provided water. The forest around them was thick with game and edible plants.\n\nKael became both a healer and a student.\n\nAs Aethermoor's wounds slowly mended—a process that took far longer than she'd expected—the dragon shared the history of his kind, trusting his memories to her mind through the contact of her hands on his scales.\n\nThe dragons, he explained, had once ruled the world. Millennia ago, before the rise of men and the consolidation of kingdoms, the dragonkind had been numerous and mighty. They were intelligent, long-lived, and possessed of magical abilities that made them nearly godlike. They had their own civilization, their own culture, and a complex society governed by ancient laws and traditions.\n\nBut power, Aethermoor told her, bred corruption.\n\nNot all dragons were content with the balance that had existed since time immemorial. Some grew hungry for dominion over lesser species. They saw the burgeoning kingdoms of men, elves, and dwarves, and desired to rule them as servants. A faction arose, led by a dragon named Malachar the Ambitious, who preached that the dragonkind should openly enslave the world beneath them.\n\nThe other dragons, those who still held to the old ways, opposed this vehemently. A great war split dragonkind in two. It was terrible and devastating, fought with magic and fire that scarred the very earth.\n\nIn the end, the traditionalists won, but the victory was hollow. Hundreds of dragons lay dead. The survivors, both victor and vanquished, were so weakened that they could no longer maintain their dominion. Over the following centuries, as men grew in number and strength, the dragons withdrew from the world of lesser beings.\n\nAethermoor himself was part of this retreat. He and his sister—Kael's mother—were of the old bloodline, defenders of the ancient ways. Her mother, Siereth, had been a dragon of exceptional wisdom and magic.\n\n\"She fell in love with a",
+            "reasoning": "The user wants a very long story about dragons and adventures. I should write a substantial, engaging fantasy story with multiple plot points, character development, and adventure elements. Let me create an original tale with interesting characters, conflicts, and world-building. I'll aim for a story that's several thousand words long.",
+            "reasoning_details": [
+              {
+                "format": "anthropic-claude-v1",
+                "index": 0,
+                "signature": "Ev0DCkgICRACGAIqQHipMVAbFjifp3Jniu6bXvoxOCzOhSkbWfxB86ji383k+qzFQuyYthiHJpFg7dkWvEBpQ4C83JCoD2uBCWzqwfwSDGs6fRDISc8HWnMCLRoM6/h3/jOuefHOv/WnIjBsv3mvWJyK/MxCYLQBSddsM4asz+VpYZuEZ6XNhT1ovTYx0jqvTqwR4uPOptmJ6jkq4gJwr4SZnNkkrVB/z3exBPDzAsQ1xOGMcHBSZHSMO3kSEFHL0bjx7yhpvQEMxXjMxA/K+qmGz7PFdXlEEbKQmZkMh10XOXVb7BRFnusMpGD0hPXQi8mwrTMc/PhM1tOs00zUTpPbR91+uoRS1uNI3byCp4jIuFWJd7RrLSgZp6PpDdXx2/6E1Q+bYV/px1MLd+cenJYKwBdnmlknAa8d1USiVTPb9uKrSjcZ1AuvWaEOBIcUL4x236xFMJqwR3niBGVvYfm5Hoq0A8h4vo88RnZaK2XdDaQMkRYsOzwZCtjm3Cqrjc/t711RCJcUSrxY2a3LJe/VYlsKge03t/KHbiDwffccw8aFMSuHZ2ylRKuKhb/rLBb9xZQubmy8o0I9LX2wid9asKZpVwVXiYvmwioi0zigh8TdAir/6ebp6uDHUTZySDXEpuZLIgV9aa2zzYfkHKaYWW7RQSQeLjYzQo6ze4wYAQ==",
+                "text": "The user wants a very long story about dragons and adventures. I should write a substantial, engaging fantasy story with multiple plot points, character development, and adventure elements. Let me create an original tale with interesting characters, conflicts, and world-building. I'll aim for a story that's several thousand words long.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "length"
+        }
+      ],
+      "created": 1761606449,
+      "id": "gen-1761606449-UCflzUTHyFcbqZHryLS6",
+      "model": "anthropic/claude-haiku-4.5",
+      "object": "chat.completion",
+      "provider": "Google",
+      "usage": {
+        "completion_tokens": 3000,
+        "prompt_tokens": 44,
+        "total_tokens": 3044
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "9955d9936c117fb0-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 27 Oct 2025 23:07:29 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

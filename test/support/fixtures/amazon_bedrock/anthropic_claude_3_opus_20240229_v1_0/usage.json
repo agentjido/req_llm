@@ -1,0 +1,64 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6ImJlZHJvY2stMjAyMy0wNS0zMSIsIm1heF90b2tlbnMiOjEwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhpIHRoZXJlISIsInJvbGUiOiJ1c2VyIn1dLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "anthropic_version": "bedrock-2023-05-31",
+      "max_tokens": 10,
+      "messages": [
+        {
+          "content": "Hi there!",
+          "role": "user"
+        }
+      ],
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "411f0479c7fd6f9549dec6caa79c8c8713631bde580970ae64336c0969d9bb51"
+      ],
+      "x-amz-date": [
+        "20251028T084225Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/anthropic.claude-3-opus-20240229-v1:0/invoke"
+  },
+  "response": {
+    "body": {
+      "message": "Invocation of model ID anthropic.claude-3-opus-20240229-v1:0 with on-demand throughput isn’t supported. Retry your request with the ID or ARN of an inference profile that contains this model."
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 28 Oct 2025 08:42:25 GMT"
+      ],
+      "x-amzn-errortype": [
+        "ValidationException:http://internal.amazon.com/coral/com.amazon.bedrock/"
+      ],
+      "x-amzn-requestid": [
+        "acefa945-9197-4b10-a8fb-df215e8087c2"
+      ]
+    },
+    "status": 400
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6ImJlZHJvY2stMjAyMy0wNS0zMSIsIm1heF90b2tlbnMiOjQwMDEsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGVsbG8gd29ybGQhIiwicm9sZSI6InVzZXIifV0sInRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjQwMDAsInR5cGUiOiJlbmFibGVkIn19"
+    },
+    "canonical_json": {
+      "anthropic_version": "bedrock-2023-05-31",
+      "max_tokens": 4001,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "thinking": {
+        "budget_tokens": 4000,
+        "type": "enabled"
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "3d73b4469af51a5d831181a0e32084c97ebffb4dac1b3053057d31db059d8d90"
+      ],
+      "x-amz-date": [
+        "20251028T084237Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/anthropic.claude-opus-4-1-20250805-v1:0/invoke"
+  },
+  "response": {
+    "body": {
+      "message": "Invocation of model ID anthropic.claude-opus-4-1-20250805-v1:0 with on-demand throughput isn’t supported. Retry your request with the ID or ARN of an inference profile that contains this model."
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 28 Oct 2025 08:42:37 GMT"
+      ],
+      "x-amzn-errortype": [
+        "ValidationException:http://internal.amazon.com/coral/com.amazon.bedrock/"
+      ],
+      "x-amzn-requestid": [
+        "e2bcfc76-992f-4a12-a626-19224dd37dc2"
+      ]
+    },
+    "status": 400
+  }
+}

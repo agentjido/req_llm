@@ -1,0 +1,107 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJkZWVwc2Vlay9kZWVwc2Vlay12My4xLXRlcm1pbnVzOmV4YWN0byIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC41fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "deepseek/deepseek-v3.1-terminus:exacto",
+      "n": 1,
+      "reasoning_effort": "low",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": {
+            "content": [],
+            "refusal": []
+          },
+          "message": {
+            "content": "## The Last Egg of Aethelgard\n\nThe world had forgotten the dragons. Once, their shadows had been as common as clouds against the sun, their roars the thunder that shook the foundations of mountains. They were the architects of the first age, the Aethelgard, the Great Wyrm-Kings and Queens whose breath could carve continents and whose wisdom was woven into the very laws of magic. But that was an age of myth, a shimmering tapestry frayed by time. Now, in the Third Age of Man, dragons were mere whispers on the wind, skeletal remains in forgotten caves, and glittering motifs on the banners of kings who had never seen one alive.\n\nOur story begins not with a roar, but with a sigh. The sigh belonged to Elara, a young woman with eyes the color of a twilight sky and hands perpetually stained with ink and soil. She was the Keeper of the Royal Archives of Eldoria, a title that sounded grand but amounted to dusting shelves of crumbling scrolls and fending off the boredom that clung to the silent, hallowed halls. Her only companions were the stories—the grand, fading epics of knights and dragons that felt more real to her than the world outside.\n\nOne rain-lashed evening, as she was cataloging a new donation from a reclusive northern monastery, she found it. It wasn't a scroll, but a stone tablet, small enough to fit in her palm, yet impossibly heavy. Its surface was not carved, but seemed to have been melted and reformed, swirling with patterns that hurt to look at directly. In its center was a deep, crystalline depression. As Elara ran her fingers over the strange artifact, a jolt, like a spark of static, shot up her arm. A single, resonant word echoed in her mind, not through her ears, but in her soul: *Aethelgard*.\n\nThat night, haunted by the word, she delved into the oldest, most forbidden texts. She pieced together a legend not sung in taverns: the legend of the Last Egg. Before the Great Silence fell upon dragonkind, it was said the last Queen of the Aethelgard, Lyraxia the Storm-Singer, secreted away a single, perfect egg, hoping to preserve her kind from a coming calamity. The egg was hidden in a place \"where the sky mourns the earth,\" guarded by a magic that would only awaken for a \"heart that remembers the song of the world.\"\n\nTo most, it was a fairy tale. To Elara, it was a key that fit the lock of the strange tablet. The depression wasn't just a design; it was a cradle. For an egg.\n\nHer discovery did not go unnoticed. The next morning, the Archives were invaded by the Sun Guard, the personal army of Lord Malakor, the King’s Regent. Malakor was a man whose ambition was as cold and sharp as the steel he wore. He had ears everywhere. He too knew the legends, but where Elara saw a chance for rebirth, he saw a weapon. A dragon, the ultimate symbol of power, bound to his will would make him unstoppable.\n\nElara, clutching the stone tablet, fled through secret passages known only to the Keepers, emerging into the chaotic, rain-swept streets of the capital. She was a fugitive, a keeper of secrets with no idea where to go. That’s when she met Kaelen.\n\nKaelen was a sellsword with a price on his head almost as large as his appetite. He found her hiding in a hayloft, not out of nobility, but because he was hiding there himself from a displeased tavern owner. He was a man of few words and many scars, with a cynical outlook forged in a hundred back-alley brawls. When Elara, desperate, showed him the tablet and babbled about dragons and eggs, he laughed, a short, harsh sound.\n\n“Dragons? Girl, you’ve been reading too much. The only dragons left are in the stories drunkards tell each other.”\n\nBut as Malakor’s guards swarmed the city, their search growing more frantic, Kaelen saw an opportunity. A crazy quest was better than a noose. And the reward for a real dragon egg… well, that was a thought to warm a cold night. Reluctantly, he agreed to be her guide.\n\nTheir journey began in the sewers of Eldoria and led them into the wilds. Their first clue came from an ancient map Elara had memorized, pointing to the Whispering Woods, a forest so old the trees were said to whisper secrets of the first dawn. It was there they encountered the first true magic of their quest. A pack of Shadow-Wargs, creatures of darkness summoned by Malakor’s sorcerers, hunted them. As the beasts closed in, Elara, acting on an instinct she didn't understand, pressed the stone tablet against the bark of the forest’s eldest tree. The tree pulsed with a soft, green light, and the very forest came alive, roots twisting to ensnare the Wargs, allowing their escape.\n\nIt was also in the Whispering Woods that they found their third companion. Not a warrior, but a creature. A small, fox-like being with fur the color of moss and intelligent, golden eyes. It was a Pilliwick, a creature believed to be extinct, a living memory of the Aethelgard. It had been following them, drawn to the song of the tablet. Elara named him Finn, and he became their scout and a silent, comforting presence, his mere existence proof that the old magic was not entirely gone.\n\nTheir path led them north, to the jagged, ice-bound peaks of the World's Spine mountains. The legends spoke of the \"Sky-Mourner,\" a peak perpetually shrouded in a weeping mist. The climb was a trial of endurance. Frostbite gnawed at their fingers, and avalanches threatened to bury them. Kaelen’s cynical armor began to crack, replaced by a grudging respect for Elara’s unwavering determination. He saved her from a fall; she used her knowledge of ancient texts to find a path through a labyrinth of ice caves.\n\nAt the peak of the Sky-Mourner, they found not a cave, but a gateway. A vast, circular archway carved from the mountain itself, covered in runes that glowed with a faint blue light. In the center of the archway was a perfect, egg-shaped slot. With trembling hands, Elara placed the stone tablet into the slot.\n\nThe mountain shuddered. The runes blazed, and the archway filled not with a view of the other side of the mountain, but with a swirling vortex of light and color—a portal. Taking a deep breath, hand in hand, Elara and Kaelen, with Finn perched on her shoulder, stepped through.\n\nThey emerged into a valley that defied reality. The sky above was a perpetual, gentle twilight, lit by two small, placid moons. The air hummed with a potent, ancient magic. Giant, bioluminescent flowers dotted a landscape of silver grass and crystal-clear streams. This was the Sanctum of Lyraxia, a pocket dimension hidden from the world. And in the center of the valley, on a pedestal of pure white quartz, sat the Egg.\n\nIt was larger than a human torso, its shell a swirling nebula of opal and sapphire, pulsing with a soft, internal light. It was the most beautiful thing Elara had ever seen.\n\nBut their triumph was short-lived. As they approached the Egg, the portal behind them shimmered, and Lord Malakor stepped through, followed by a dozen of his most elite Sun Guards. He had tracked them, using a sorcerous tether placed on the stone tablet.\n\n“A remarkable journey, Keeper,” Malakor said, his voice slick with triumph. “You have served your purpose. The Egg is mine.”\n\nA fierce battle ensued. Kaelen fought with the savage skill of a cornered animal, but he was outnumbered. Just as a guard was about to run him through, Elara did the only thing she could think of. She threw herself onto the Egg, wrapping her arms around it, not as a thief, but as a protector.\n\nHer touch awakened it.\n\nA wave of pure, raw energy exploded outwards, throwing everyone back. The shell of the Egg didn’t crack; it dissolved into a thousand points of light, which then coalesced. And there, where the Egg had been, was a dragon.\n\nIt was small, no larger than a horse, with scales that shimmered from deep blue to silver. Its wings were delicate, like frosted glass, and its eyes were the same twilight hue as Elara’s. They were old eyes, filled with an ancient intelligence. The dragonet looked at Elara, and a voice, clear and melodic, spoke in her mind.\n\n*I am Therion. You are the Rememberer. You have awakened me.*\n\nMalakor scrambled to his feet, his face a mask of greed. “It speaks! Magnificent! You will obey me, beast!”\n\nTherion turned his gaze to Malakor. The air grew cold. *Your heart is a barren rock. You understand only dominion. You are of the Silence that sought to end us.*\n\nMalakor drew a dark, rune-etched dagger—a weapon designed to subjugate magical creatures. He lunged. But Therion was faster. He didn’t breathe fire or ice. He breathed a beam of pure, concentrated moonlight. It struck the dagger, which shattered into dust, and sent Malakor flying back into his men.\n\nThe fight was over. The guards, seeing the power of the dragon, faltered. Malakor, seething with rage, was forced to retreat back through the portal, which snapped shut behind him.\n\nElara, Kaelen, and the newborn dragon were alone in the sanctum. But Therion’s awakening had been a beacon. The magic that sustained the pocket dimension was fading. The valley began to dissolve around them, the sky flickering. They had to leave.\n\nUsing the last of his strength, Therion opened a new portal, and they tumbled out onto a grassy plain far from the World's Spine. Their adventure was not over; it had just changed. Malakor would not rest. He knew a dragon lived, and he would move heaven and earth to possess it.\n\nTheir journey back was a race against time. Therion grew at an astonishing rate, his body nourished by the returning magic of the world. Within weeks, he was large enough to carry them both. They flew over lands they had trudged across, seeing the world from a perspective no human had known for centuries. They encountered other remnants of the Aethelgard: a grove of talking trees, a river spirit that blessed their path, and a colony of Pilliwicks who greeted Finn as a long-lost prince.\n\nThey learned that the \"Great Silence\" had been a magical plague, a weapon created by an ancient, jealous human sorcerer-king to sever the connection between dragons and the world's magic. Therion was the cure, his very existence healing the wounds of the past.\n\nThe final confrontation came not at the gates of Eldoria, but in the skies above it. Malakor, in a desperate, blasphemous act, had unearthed the ancient weapon—the Silent Heart, a pulsating orb of anti-magic—and mounted it on a colossal war-zeppelin. The sky turned a sickly gray as the Silent Heart’s influence spread, draining the color and life from the land below.\n\nAboard Therion, who was now a magnificent young dragon with wings that could blot out the sun, Elara and Kaelen led the charge. It was a battle of a scale not seen since the Aethelgard. Therion’s elemental breath—streams of lightning and solar fire—clashed against the nullifying beams of the Silent Heart. Kaelen, no longer a sellsword but a dragon-rider, fought with a valor born of loyalty, deflecting ballista bolts with his sword.\n\nIn the end, it was not brute force that won the day, but the very thing Malakor scorned: connection. As the Silent Heart prepared to unleash a final, world-ending pulse, Elara reached out, not with a weapon, but with her mind, linking with Therion, with Kaelen, with Finn, and with every awakened spark of magic in the land. They became a conduit of life, a song of defiance against the silence.\n\nTherion dove straight for the heart of the orb. Instead of destroying it, he enveloped it in a cocoon of pure, harmonious magic. There was a flash of incandescent light, and then… peace. The Silent Heart was neutralized, its power transformed into a gentle rain that washed over Eldoria, restoring what had been drained.\n\nMalakor’s zeppelin crumbled, and he fell into the sea, his ambition extinguished forever.\n\nThe world had not forgotten the dragons anymore. It remembered.\n\nElara, the humble Keeper, became the first Dragon-Speaker of the new age. Kaelen, the cynical sellsword, became the Commander of the Sky Guard, a new order dedicated to protecting the reborn wonder of",
+            "reasoning": "Hmm, the user wants a very long story about dragons and adventures. They're likely looking for an epic fantasy tale with rich world-building and memorable characters. Since they didn't specify any particular elements, I can create something original while hitting classic fantasy tropes.\n\nI'll structure it like a traditional hero's journey but with a twist - maybe make the protagonist an unlikely hero. A stable boy turned dragon rider could be interesting. The story should have multiple arcs: introduction of the world, the call to adventure, training sequence, major conflict, and resolution.\n\nFor dragons, I want them to feel ancient and magical rather than just beasts. Perhaps they're nearly extinct, making the bond more special. The adventure should span different landscapes - cities, forests, mountains - to keep it visually engaging.\n\nThe tone should balance wonder with high stakes. I'll include moments of quiet beauty alongside action sequences. The ending should feel earned but leave room for imagination about future adventures.",
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "length"
+        }
+      ],
+      "created": 1761606670,
+      "id": "gen-1761606670-Zq41jnqi696uBBPbmViG",
+      "model": "deepseek/deepseek-v3.1-terminus:exacto",
+      "object": "chat.completion",
+      "provider": "Novita",
+      "usage": {
+        "completion_tokens": 3000,
+        "completion_tokens_details": null,
+        "prompt_tokens": 13,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 13
+        },
+        "total_tokens": 3013
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "9955def92e2c61cc-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 27 Oct 2025 23:11:10 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

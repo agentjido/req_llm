@@ -1,0 +1,67 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfZ2VuX2xlbiI6MTAwLCJwcm9tcHQiOiI8fGJlZ2luX29mX3RleHR8Pjx8c3RhcnRfaGVhZGVyX2lkfD51c2VyPHxlbmRfaGVhZGVyX2lkfD5cblxuV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlczx8ZW90X2lkfD48fHN0YXJ0X2hlYWRlcl9pZHw+YXNzaXN0YW50PHxlbmRfaGVhZGVyX2lkfD5cblxuIiwidGVtcGVyYXR1cmUiOjAuNX0="
+    },
+    "canonical_json": {
+      "max_gen_len": 100,
+      "prompt": "<|begin_of_text|><|start_header_id|>user<|end_header_id|>\n\nWrite a very long story about dragons and adventures<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n",
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "edc5daf904704c753c4b2e6a515d8fc690014dd60b327d0383ea7d44fcf0d68e"
+      ],
+      "x-amz-date": [
+        "20251028T084206Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/meta.llama3-8b-instruct-v1:0/invoke"
+  },
+  "response": {
+    "body": {
+      "generation": "In the land of Eridoria, where the sun dipped into the horizon and painted the sky with hues of crimson and gold, the legend of the dragons lived on. For centuries, these majestic creatures had roamed the skies, their scales glinting like diamonds in the sunlight, their fiery breath illuminating the landscape. The people of Eridoria had always been fascinated by the dragons, and many had made it their life's quest to learn more about these magnificent beings.\n\nAmong the many who",
+      "generation_token_count": 100,
+      "prompt_token_count": 19,
+      "stop_reason": "length"
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 28 Oct 2025 08:42:07 GMT"
+      ],
+      "x-amzn-bedrock-input-token-count": [
+        "19"
+      ],
+      "x-amzn-bedrock-invocation-latency": [
+        "1076"
+      ],
+      "x-amzn-bedrock-output-token-count": [
+        "100"
+      ],
+      "x-amzn-requestid": [
+        "6cff2d02-2c4c-4d14-a6c9-597aaa3b9538"
+      ]
+    },
+    "status": 200
+  }
+}

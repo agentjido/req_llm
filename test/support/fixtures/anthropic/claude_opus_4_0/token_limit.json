@@ -1,0 +1,152 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtb3B1cy00LTAiLCJzdHJlYW0iOmZhbHNlLCJ0aGlua2luZyI6eyJidWRnZXRfdG9rZW5zIjoxMDI0LCJ0eXBlIjoiZW5hYmxlZCJ9fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "claude-opus-4-0",
+      "stream": false,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-beta": [
+        "interleaved-thinking-2025-05-14"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "ErwDCkYICRgCKkDthVa/cOcLeDtCAOb8hlAlK2/QYWejoaJqG6NpMShBsPyr7ch/SLdaBhg9aXw0PqNd/9+yCci3ft5PpxeM+F4QEgxylwkAnfYEFR/GGmsaDJFBozOShEGAgeUZyCIw854Z5W3JfhXU9UPFoSaZbdBfDeys9jZzD8afEXmCJur4QZ/WrJD4eLKHJOfakqHOKqMCqnnbh4F7xDsEdUwsCG/Od7klPD5A30buhXhkfCcS4kdzgyWql/XmD7VbtImtvC31B3o7HrNjpDTF4V4GkYXfbyYmOVXGbQjQAy9E3grh2MJhwsDgCSAC1UFIHBY9m2d0qBrr/2nc1sR5bDeUD9IHgUBjNvzuZhemac0Wc+260uHKl1w2Zxvc7sGawmJQwFQ0qCf9dgDX9CDwIe9wLI+AiESdQME/rS1a2vuW+gIeY5S7fRN+vcbO6yneSwXj5RF+Hk8Q1AH5GvGL4Jm4aAlvkKBkSmBB04M5gys30lIYkydvuBIe9GwAHor/iKnTr4H1ipLCgJxKmX1RC9SJt4jlS1E848K7wc/x3h88tbTY/jL8jkXT+Znqdagsy3fDZVLceOZkGAE=",
+          "thinking": "The user is asking for a very long story about dragons and adventures. I should create an engaging fantasy story with multiple chapters, interesting characters, dragon encounters, and various adventures. I'll aim for a substantial length while keeping it engaging throughout.",
+          "type": "thinking"
+        },
+        {
+          "text": "# The Chronicles of the Dragonstone\n\n## Chapter 1: The Prophecy Awakens\n\nThe morning mist clung to the mountainside like a shroud as Kira made her way up the treacherous path. At seventeen, she had spent her entire life in the village of Thornhaven, nestled in the valley below, but she had never ventured this far up Mount Drakmoor. The elders spoke of it only in whispers – the forbidden peak where dragons once soared and where ancient magic still lingered in the very stones.\n\nKira adjusted the worn leather satchel on her shoulder, her fingers unconsciously tracing the strange mark that had appeared on her palm three days ago. It had begun as a faint shimmer, like silver ink beneath her skin, but now it glowed with an inner light that pulsed in rhythm with her heartbeat. The mark was what had driven her here, following a compulsion she couldn't explain.\n\nThe path narrowed, forcing her to press against the cold stone face of the mountain. Below, the world disappeared into a sea of white clouds. One wrong step would mean certain death, but Kira found herself surprisingly calm. The mark on her hand grew warmer with each step upward, as if guiding her toward some unseen destination.\n\nAs the sun reached its zenith, burning away the morning mist, Kira rounded a sharp bend and gasped. Before her lay the entrance to a massive cave, its mouth carved in the shape of a dragon's maw. Ancient runes covered the stone archway, their meaning lost to time but their power still tangible in the air. The mark on her hand flared with brilliant light.\n\n\"So, you have come at last.\"\n\nThe voice resonated from within the cave, neither male nor female, but something altogether different – like the rumble of distant thunder given form. Kira's heart raced, but her feet carried her forward as if of their own accord.\n\nThe cave opened into a vast chamber illuminated by crystals that jutted from the walls like frozen fire. In the center of the chamber, coiled upon a raised dais, lay a dragon. But this was no ordinary dragon from the tales. Its scales shifted color like oil on water – deep purple to midnight blue to silver – and its eyes held the wisdom of millennia.\n\n\"I am Nethysara, last of the Void Dragons,\" the creature spoke without moving its mouth, the words forming directly in Kira's mind. \"And you, child, bear the mark of the Dragonbound.\"\n\n\"I don't understand,\" Kira whispered, her voice small in the vastness of the chamber. \"What's happening to me?\"\n\nNethysara's great head lowered until it was level with Kira's own. \"You are the culmination of a prophecy spoken when the world was young. Every thousand years, when the barriers between realms grow thin, a human is chosen to bear the Dragonstone's mark. You will be the bridge between our kinds, the key to preventing a catastrophe that threatens both dragon and humankind.\"\n\nThe dragon's tail swept across the chamber floor, revealing a pedestal that rose from the stone. Upon it rested a crystal the size of Kira's fist, dark as night but shot through with veins of silver light.\n\n\"The Dragonstone,\" Nethysara explained. \"For generations beyond counting, it has waited for one who could wield its power. Take it, and accept your destiny.\"\n\nKira approached the pedestal slowly, her marked hand tingling with increasing intensity. The moment her fingers closed around the crystal, the world exploded into light and sensation. Images flooded her mind – dragons soaring through ancient skies, great cities rising and falling, and a darkness spreading across the land like a plague. She saw herself standing against that darkness, the Dragonstone blazing in her hand, with dragons at her side.\n\nWhen the visions faded, Kira found herself on her knees, gasping. The Dragonstone had vanished, but she could feel its power thrumming through her veins. The mark on her palm had changed, spreading up her arm in intricate patterns that seemed to move of their own accord.\n\n\"The bonding is complete,\" Nethysara said, and for the first time, Kira detected a note of relief in the dragon's mental voice. \"But this is only the beginning. The Shadow Lord has already begun to move. His servants seek the ancient weapons that can tear the veil between worlds. If he succeeds, both our realms will be consumed by the Void.\"\n\n\"Shadow Lord?\" Kira struggled to her feet, still reeling from the transformation. \"Who is he?\"\n\n\"A being of immense power who once served the dragons, until ambition and madness consumed him. We thought him destroyed in the War of Shadows, but he merely slept, gathering strength. Now he wakes, and only the Dragonbound can stop him.\"\n\nNethysara rose, her massive form filling the chamber. \"You must gather the Five – champions who will stand with you against the coming darkness. The road will be perilous, filled with trials that will test every fiber of your being. But you will not walk it alone.\"\n\nThe dragon touched her snout to Kira's forehead, and another surge of power flowed between them. When Kira opened her eyes, she understood – she could sense Nethysara's presence in her mind, a comforting weight that promised she would never be truly alone again.\n\n\"Where do I start?\" Kira asked, surprised by the steadiness in her voice.\n\n\"East, to the Whispering Woods. There you will find the first of your companions – though whether friend or foe, that remains to be seen. Trust in the Dragonstone's guidance, and remember: power shared is power multiplied.\"\n\n## Chapter 2: The Whispering Woods\n\nThe journey from Mount Drakmoor to the Whispering Woods took three days of hard travel. Kira had descended the mountain to find her horse, Windrunner, waiting patiently where she had left him. But the mare shied away from her at first, sensing the change. It was only when Kira spoke softly, her voice now carrying an undertone of draconic power, that Windrunner calmed and allowed her to mount.\n\nThe transformation went deeper than Kira had initially realized. Her senses were sharper – she could hear the heartbeat of a rabbit hiding in the brush fifty paces away, smell rain on the wind hours before it arrived. Her reflexes had quickened too, proven when a mountain cat attempted to ambush them on a narrow trail. Kira had drawn her sword and struck before her conscious mind even registered the threat.\n\nBut it was the mental changes that unsettled her most. Nethysara's presence was constant, a warm ember in the back of her mind. Through their bond, Kira could access fragments of the dragon's vast memories – glimpses of the world as it had been centuries ago, knowledge of ancient magics, and most disturbingly, the ability to sense other dragons.\n\nThey were out there, Nethysara assured her. Hidden, sleeping, or disguised, but still present in the world. The time would come when Kira would need to wake them, to rally them for the battle ahead. But first, she needed human allies.\n\nThe Whispering Woods lived up to their name. As Kira entered the forest's embrace, she heard them – thousands of voices speaking in languages both familiar and unknown, carrying on conversations that had begun centuries ago. The trees here were ancient, their trunks so massive that a dozen people holding hands couldn't encircle them. Moss hung from their branches like tattered banners, and the air was thick with the scent of age and mystery.\n\n*Be cautious,* Nethysara warned. *The Woods test all who enter. They will know what you are, and they will judge whether you are worthy.*\n\nKira dismounted, leading Windrunner along a path that seemed to shift and change when she wasn't looking directly at it. The whispers grew louder, more insistent. Some seemed to be calling her name, others spoke warnings in long-dead tongues. She caught fragments – \"dragonbound,\" \"chosen,\" \"danger,\" \"hope.\"\n\nHours passed, or perhaps minutes – time moved strangely in the Woods. The path led her deeper, past trees that bore faces in their bark and streams that flowed uphill. Finally, as twilight painted the forest in shades of purple and gold, Kira emerged into a clearing.\n\nIn the center stood a figure wrapped in a cloak of leaves that seemed to shift and rustle with a life of its own. As Kira approached, the figure turned, revealing a young man perhaps a few years older than herself. His hair was the color of autumn leaves, his eyes a startling green that held depths like the forest itself. Pointed ears marked him as one of the Eldari, the forest folk who had retreated from the world of men generations ago.\n\n\"Kira Dragonbound,\" he said, his voice carrying the rustle of wind through leaves. \"The Woods have been expecting you.\"\n\n\"You know who I am?\"\n\nA smile played at the corners of his mouth. \"The entire forest knows. Your coming has woken things that have slept for a very long time. I am Theron Oakwhisper, Guardian of the Whispering Woods and, if the prophecies speak true, one of the Five you seek.\"\n\n\"How do you know about the Five?\"\n\nTheron gestured to the trees around them. \"The Woods remember everything. Every word spoken beneath their boughs, every deed done in their shadow. They remember the last Dragonbound, a thousand years ago, and how she gathered her champions. They remember, too, how she failed.\"\n\nA chill ran down Kira's spine. \"Failed?\"\n\n\"Not entirely,\" Theron amended. \"She stopped the Shadow Lord, but at great cost. She and her Five gave their lives to seal him away. But seals, as you have learned, do not last forever.\"\n\nHe studied her with those ancient green eyes. \"You are younger than she was. Untested. The Woods wonder if you have the strength to succeed where she merely postponed the inevitable.\"\n\nKira felt the Dragonstone's power stir within her, responding to the challenge. \"Then I'll have to prove them wrong, won't I?\"\n\nTheron's smile widened. \"Perhaps you will. But first, you must pass the Woods' test. They will not release me to your service without proof of your worth.\"\n\nBefore Kira could ask what test he meant, the clearing began to change. The trees drew back, their trunks groaning like old bones, revealing three paths that hadn't been there moments before.\n\n\"The Path of Courage,\" Theron indicated the leftmost trail, where shadows writhed like living things. \"The Path of Wisdom,\" the center path, shrouded in mist that sparkled with hidden lights. \"And the Path of Sacrifice,\" the right path, which appeared normal save for the crimson flowers that lined its edges like drops of blood.\n\n\"Choose,\" Theron said simply. \"And choose wisely. The Woods will know if you choose falsely, picking what you think they want rather than what your heart tells you.\"\n\nKira studied each path, reaching out with her enhanced senses. The Path of Courage reeked of fear and challenge – she could hear roars and battle cries echoing from its depths. The Path of Wisdom hummed with power and puzzles, riddles waiting to be solved. But it was the Path of Sacrifice that called to her, though she couldn't say why.\n\n*Trust your instincts,* Nethysara counseled. *The Dragonbound's greatest strength has always been the willingness to give of themselves for others.*\n\nWithout hesitation, Kira stepped onto the Path of Sacrifice.\n\nThe moment her foot touched the trail, the world shifted. She found herself no longer in the Woods but standing in Thornhaven – her village. But something was wrong. The houses were burning, screams filled the air, and dark shapes moved through the smoke.\n\n\"Kira!\" She spun to see her younger brother, Tam, cowering behind an overturned cart. Shadow creatures circled him, their forms writhing like smoke given malevolent life.\n\nEvery instinct screamed at her to rush to his aid, but Kira forced herself to stop and think. This was a test, an illusion. Wasn't it? But the fear in Tam's eyes looked so real, the smoke stung her nostrils, the heat of the flames made her skin prickle.\n\n*Even in illusion, our choices define us,* Nethysara whispered.\n\nKira drew her sword, the blade humming with draconic power. \"If this is real, I save him. If it's not, I still save him. That's who I am.\"\n\nShe charged the shadow creatures, her blade cutting through them like morning sun through mist. They dissipated at her touch,",
+          "type": "text"
+        }
+      ],
+      "id": "msg_0149Lw4xY6ZgcAXZKjcqg2yF",
+      "model": "claude-opus-4-20250514",
+      "role": "assistant",
+      "stop_reason": "max_tokens",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 44,
+        "output_tokens": 3000,
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": [
+        "a71659e7-a922-4ff7-99de-f3ba615face1"
+      ],
+      "anthropic-ratelimit-input-tokens-limit": [
+        "450000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "450000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2025-10-27T22:48:08Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "90000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "87000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2025-10-27T22:49:44Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "1000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2025-10-27T22:48:07Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "540000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "537000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2025-10-27T22:48:08Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9955bd37fb09cd80-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 27 Oct 2025 22:49:42 GMT"
+      ],
+      "request-id": [
+        "req_011CUYWzkQUK4SFyrjnckLso"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "94717"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImFudGhyb3BpYy9jbGF1ZGUtaGFpa3UtNC41IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MS4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "anthropic/claude-haiku-4.5",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "# 12 × 7\n\n**Internal thinking:**\n- Breaking down: 12 = 10 + 2\n- So: (10 + 2) × 7 = (10 × 7) + (2 × 7)\n- Calculate: 70 + 14 = 84\n\n**Answer: 84**",
+            "reasoning": "I need to solve 12 * 7 and show my thinking.\n\nLet me break this down:\n12 * 7 = ?\n\nI can think of this as:\n- 12 * 7 = (10 + 2) * 7\n- = 10 * 7 + 2 * 7\n- = 70 + 14\n- = 84\n\nOr I could think of it as:\n- 12 * 7 = 12 * (5 + 2)\n- = 12 * 5 + 12 * 2\n- = 60 + 24\n- = 84\n\nEither way, the answer is 84.",
+            "reasoning_details": [
+              {
+                "format": "anthropic-claude-v1",
+                "index": 0,
+                "signature": "Es0DCkgICRACGAIqQLssNXlr2aV7n/2LxWhFLk1RbFaEMC5AVB0ybGKG9H/uhBFeKi3KfJXDD3fNHaMwOaR1FF5HmF4B0gSszqNaqQoSDB6nJh+3l1JTmvQ1choMKT/ySxDwpOqSZ34oIjB3mqJQCp3pK7zaZLwqUb0qSgJp9a9GKETjNkmvox+2XvALpFCt9B/OIIpXsdCQLoMqsgIYt0a7hOMq4C/GKLWfwkAPBX/fwtAjBfZAdakAhkm8w1TXLlX+DAuMLvyEjsZTVd9vr++PPE+7ASmdyijBfD/GRcLeAb+ZUw0AjnNxb1ZwnclqYGv826hAPgCIWRiL9Zt/94UzzEFb09w2O9XLmnlpf0q52P80b+m4okYC09s9p9dmsaCJK++fb/WBd4sckbbT5cpfxOTkPPxeFrEdXwZjVqfFMzzvKsZXXJsIrDJk5uWSJuCXInk7Y9L8abumrzjuUHbBaK/JNa31wNzMPRWguWTGCACvr9gcQumdSwgeFR+pnXJEdL9NTevKP0cHge+Li5dn3nMai8wzy/YJSssA/OLlY8yzLEa+5+EVtFuYw/dVgXDxzKOxEcnkOui6VxbZAqg4evFIkREAUA/eHwNvuvwYAQ==",
+                "text": "I need to solve 12 * 7 and show my thinking.\n\nLet me break this down:\n12 * 7 = ?\n\nI can think of this as:\n- 12 * 7 = (10 + 2) * 7\n- = 10 * 7 + 2 * 7\n- = 70 + 14\n- = 84\n\nOr I could think of it as:\n- 12 * 7 = 12 * (5 + 2)\n- = 12 * 5 + 12 * 2\n- = 60 + 24\n- = 84\n\nEither way, the answer is 84.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1761606480,
+      "id": "gen-1761606480-1C2srHPHOY7zvzG1ZGmS",
+      "model": "anthropic/claude-haiku-4.5",
+      "object": "chat.completion",
+      "provider": "Google",
+      "usage": {
+        "completion_tokens": 253,
+        "prompt_tokens": 50,
+        "total_tokens": 303
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "9955da58cca07fb0-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 27 Oct 2025 23:08:01 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

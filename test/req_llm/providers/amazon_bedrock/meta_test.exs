@@ -195,7 +195,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.MetaTest do
     test "returns error for invalid response" do
       response_body = %{"invalid" => "format"}
 
-      assert {:error, "Invalid response format"} = Meta.parse_response(response_body, [])
+      assert {:error, "Invalid response format: missing required fields"} =
+               Meta.parse_response(response_body, [])
     end
   end
 

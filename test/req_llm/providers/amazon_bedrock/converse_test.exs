@@ -331,7 +331,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
           context,
           operation: :object,
           compiled_schema: compiled_schema,
-          max_tokens: 500
+          max_tokens: 500,
+          formatter_module: ReqLLM.Providers.AmazonBedrock.Anthropic
         )
 
       # Should include toolConfig with structured_output tool
@@ -434,7 +435,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
           "test-model",
           context,
           tools: [tool],
-          tool_choice: %{type: "tool", name: "test_tool"}
+          tool_choice: %{type: "tool", name: "test_tool"},
+          formatter_module: ReqLLM.Providers.AmazonBedrock.Anthropic
         )
 
       # Should convert to Converse format

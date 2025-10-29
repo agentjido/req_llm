@@ -277,12 +277,12 @@ defmodule ReqLLM.CatalogTest do
     test "deep merges nested override maps" do
       config = [
         allow: %{
-          anthropic: ["claude-3-5-sonnet-20241022"]
+          anthropic: ["claude-3-5-haiku-20241022"]
         },
         overrides: [
           models: %{
             anthropic: %{
-              "claude-3-5-sonnet-20241022" => %{
+              "claude-3-5-haiku-20241022" => %{
                 "cost" => %{
                   "input" => 3.5
                 }
@@ -294,9 +294,9 @@ defmodule ReqLLM.CatalogTest do
 
       assert {:ok, catalog} = Catalog.load(config)
 
-      model = catalog["anthropic"]["models"]["claude-3-5-sonnet-20241022"]
+      model = catalog["anthropic"]["models"]["claude-3-5-haiku-20241022"]
       assert model["cost"]["input"] == 3.5
-      assert model["cost"]["output"] == 15.0
+      assert model["cost"]["output"] == 4
     end
 
     test "provider overrides cannot touch models key" do

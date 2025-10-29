@@ -1,0 +1,152 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1vcHVzLTQtMSIsInN0cmVhbSI6ZmFsc2UsInRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19"
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "claude-opus-4-1",
+      "stream": false,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-beta": [
+        "interleaved-thinking-2025-05-14"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "Es4DCkYICRgCKkDZ50WO4JOVALSnqnGVjPL6XS+q1EJpJOjsBhyVqKRtkYtn+im85QKCu97bimV+8RRkRqGWUK0Vb9uYo4Z3o44tEgzZYsVT1PdGkAP0AocaDGJ7ehrMUnqoNyERyCIwIwqZEUUilRUVmLEWe63i1Ef8cnQXAS2/XM1KQ8oH7crm0MeXQjCaL1aJxo60JelbKrUCjxC0Hb/YPxZgjnwrUcLIvzQ5Hcs9qnCoT8/RWHLv8HdHel68GMby71NiDK7qC1D85851bSpu+JK8HTIv0akG1GM6c84nBf3a/6PKGnz1zqp312qL25lz4nfr9K+jaedJrJgG4NqYM44EdMybUO8ZKpNjpkxz1ZDaiH4c/oFosCs+Dro1gj+Ne90ZzImZwotkzdL1WLBXgqoXPTYVcCzAswkehhVfHWmxoNUDfC9C/cdGGKspjHpSmErZnGgcnm2WW+EJqkLf1JEd++Z7aeuwg1nJYoL1z9N2nDLpb+puHlqCmF6d9F+CIawaTcpR8FvSgkxQO8TJdWATt/Zz/01GGRsyu7FWWPqN9itEpqRmJA6h/etLWX9IuQXR5DlEBZWnsHO0ecsROBdmqigXc7ls/4P/x+DdGAE=",
+          "thinking": "The user just said \"Hello world!\" which is a classic greeting often used in programming as the first program one writes when learning a new language. They might just be saying hello, or they might be referencing programming. I'll respond in a friendly way that acknowledges both possibilities.",
+          "type": "thinking"
+        },
+        {
+          "text": "Hello! 👋 \n\nWhether you're greeting the world or writing your first program, hello to you too! How can I help you today?",
+          "type": "text"
+        }
+      ],
+      "id": "msg_013XdRLYsSbc4h4EgPE34A9X",
+      "model": "claude-opus-4-1-20250805",
+      "role": "assistant",
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 38,
+        "output_tokens": 100,
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": [
+        "a71659e7-a922-4ff7-99de-f3ba615face1"
+      ],
+      "anthropic-ratelimit-input-tokens-limit": [
+        "450000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "450000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2025-10-27T22:46:15Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "90000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "90000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2025-10-27T22:46:18Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "1000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2025-10-27T22:46:12Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "540000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "540000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2025-10-27T22:46:15Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9955ba6868cec77f-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 27 Oct 2025 22:46:18 GMT"
+      ],
+      "request-id": [
+        "req_011CUYWrGBsR9UhyBAvpyA2W"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "6127"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  }
+}

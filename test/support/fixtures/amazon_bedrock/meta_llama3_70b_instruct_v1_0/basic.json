@@ -1,0 +1,67 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfZ2VuX2xlbiI6NTAsInByb21wdCI6Ijx8YmVnaW5fb2ZfdGV4dHw+PHxzdGFydF9oZWFkZXJfaWR8PnVzZXI8fGVuZF9oZWFkZXJfaWR8PlxuXG5IZWxsbyB3b3JsZCE8fGVvdF9pZHw+PHxzdGFydF9oZWFkZXJfaWR8PmFzc2lzdGFudDx8ZW5kX2hlYWRlcl9pZHw+XG5cbiIsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_gen_len": 50,
+      "prompt": "<|begin_of_text|><|start_header_id|>user<|end_header_id|>\n\nHello world!<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n",
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "c2e05d25f61c0cecc5d4def94ead550578683b89c3965229cae6062daea3872a"
+      ],
+      "x-amz-date": [
+        "20251028T084213Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/meta.llama3-70b-instruct-v1:0/invoke"
+  },
+  "response": {
+    "body": {
+      "generation": "The classic greeting! Hello back to you! It's great to meet you. Is there something I can help you with, or would you like to chat about something in particular?",
+      "generation_token_count": 37,
+      "prompt_token_count": 13,
+      "stop_reason": "stop"
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 28 Oct 2025 08:42:14 GMT"
+      ],
+      "x-amzn-bedrock-input-token-count": [
+        "13"
+      ],
+      "x-amzn-bedrock-invocation-latency": [
+        "1119"
+      ],
+      "x-amzn-bedrock-output-token-count": [
+        "37"
+      ],
+      "x-amzn-requestid": [
+        "c571d552-c98b-4688-827d-86feca197605"
+      ]
+    },
+    "status": 200
+  }
+}

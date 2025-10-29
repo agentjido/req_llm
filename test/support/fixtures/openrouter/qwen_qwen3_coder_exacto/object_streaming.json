@@ -1,0 +1,97 @@
+{
+  "captured_at": "2025-10-27T23:07:24.868777Z",
+  "chunks": [
+    {
+      "b64": "OiBPUEVOUk9VVEVSIFBST0NFU1NJTkcKCmRhdGE6IHsiaWQiOiJnZW4tMTc2MTYwNjQ0NC1PcG1WdjQ1blpKMmNkQ0VjZmFXTSIsInByb3ZpZGVyIjoiQmFzZVRlbiIsIm1vZGVsIjoicXdlbi9xd2VuMy1jb2RlcjpleGFjdG8iLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJjcmVhdGVkIjoxNzYxNjA2NDQ0LCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnsicm9sZSI6ImFzc2lzdGFudCIsImNvbnRlbnQiOm51bGwsInRvb2xfY2FsbHMiOlt7ImluZGV4IjowLCJpZCI6ImNoYXRjbXBsLXRvb2wtODAzNTI5NzNkZTkzNGEyZmE3ZWNlMjg5NTU1NjBmZTQiLCJ0eXBlIjoiZnVuY3Rpb24iLCJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJhcmd1bWVudHMiOiJ7XCJuYW1lXCI6IFwiSm9obiBEb2VcIiwgXCJhZ2VcIjogMzAsIFwib2NjdXBhdGlvblwiOiBcIlNvZnR3YXJlIEVuZ2luZWVyXCJ9In19XX0sImZpbmlzaF9yZWFzb24iOiJ0b29sX2NhbGxzIiwibmF0aXZlX2ZpbmlzaF9yZWFzb24iOiJ0b29sX2NhbGxzIiwibG9ncHJvYnMiOm51bGx9XSwic3lzdGVtX2ZpbmdlcnByaW50IjpudWxsfQoK",
+      "decoded": ": OPENROUTER PROCESSING\n\ndata: {\"id\":\"gen-1761606444-OpmVv45nZJ2cdCEcfaWM\",\"provider\":\"BaseTen\",\"model\":\"qwen/qwen3-coder:exacto\",\"object\":\"chat.completion.chunk\",\"created\":1761606444,\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":null,\"tool_calls\":[{\"index\":0,\"id\":\"chatcmpl-tool-80352973de934a2fa7ece28955560fe4\",\"type\":\"function\",\"function\":{\"name\":\"structured_output\",\"arguments\":\"{\\\"name\\\": \\\"John Doe\\\", \\\"age\\\": 30, \\\"occupation\\\": \\\"Software Engineer\\\"}\"}}]},\"finish_reason\":\"tool_calls\",\"native_finish_reason\":\"tool_calls\",\"logprobs\":null}],\"system_fingerprint\":null}\n\n"
+    },
+    {
+      "b64": "ZGF0YTogeyJpZCI6Imdlbi0xNzYxNjA2NDQ0LU9wbVZ2NDVuWkoyY2RDRWNmYVdNIiwicHJvdmlkZXIiOiJCYXNlVGVuIiwibW9kZWwiOiJxd2VuL3F3ZW4zLWNvZGVyOmV4YWN0byIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3NjE2MDY0NDQsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJyb2xlIjoiYXNzaXN0YW50IiwiY29udGVudCI6IiJ9LCJmaW5pc2hfcmVhc29uIjpudWxsLCJuYXRpdmVfZmluaXNoX3JlYXNvbiI6bnVsbCwibG9ncHJvYnMiOm51bGx9XSwidXNhZ2UiOnsicHJvbXB0X3Rva2VucyI6Mzg5LCJjb21wbGV0aW9uX3Rva2VucyI6MzYsInRvdGFsX3Rva2VucyI6NDI1LCJjb3N0IjowLjAwMDIwMjksImlzX2J5b2siOmZhbHNlLCJwcm9tcHRfdG9rZW5zX2RldGFpbHMiOnsiY2FjaGVkX3Rva2VucyI6MCwiYXVkaW9fdG9rZW5zIjowfSwiY29zdF9kZXRhaWxzIjp7InVwc3RyZWFtX2luZmVyZW5jZV9jb3N0IjpudWxsLCJ1cHN0cmVhbV9pbmZlcmVuY2VfcHJvbXB0X2Nvc3QiOjAuMDAwMTQ3ODIsInVwc3RyZWFtX2luZmVyZW5jZV9jb21wbGV0aW9uc19jb3N0IjowLjAwMDA1NTA4fSwiY29tcGxldGlvbl90b2tlbnNfZGV0YWlscyI6eyJyZWFzb25pbmdfdG9rZW5zIjowLCJpbWFnZV90b2tlbnMiOjB9fX0KCmRhdGE6IFtET05FXQoK",
+      "decoded": "data: {\"id\":\"gen-1761606444-OpmVv45nZJ2cdCEcfaWM\",\"provider\":\"BaseTen\",\"model\":\"qwen/qwen3-coder:exacto\",\"object\":\"chat.completion.chunk\",\"created\":1761606444,\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\"},\"finish_reason\":null,\"native_finish_reason\":null,\"logprobs\":null}],\"usage\":{\"prompt_tokens\":389,\"completion_tokens\":36,\"total_tokens\":425,\"cost\":0.0002029,\"is_byok\":false,\"prompt_tokens_details\":{\"cached_tokens\":0,\"audio_tokens\":0},\"cost_details\":{\"upstream_inference_cost\":null,\"upstream_inference_prompt_cost\":0.00014782,\"upstream_inference_completions_cost\":0.00005508},\"completion_tokens_details\":{\"reasoning_tokens\":0,\"image_tokens\":0}}}\n\ndata: [DONE]\n\n"
+    }
+  ],
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoicXdlbi9xd2VuMy1jb2RlcjpleGFjdG8iLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjp0cnVlLCJzdHJlYW1fb3B0aW9ucyI6eyJpbmNsdWRlX3VzYWdlIjp0cnVlfSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbF9jaG9pY2UiOnsiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0In0sInR5cGUiOiJmdW5jdGlvbiJ9LCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZW5lcmF0ZSBzdHJ1Y3R1cmVkIG91dHB1dCBtYXRjaGluZyB0aGUgcHJvdmlkZWQgc2NoZW1hIiwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibmFtZSIsImFnZSJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Generate a software engineer profile",
+          "role": "user"
+        }
+      ],
+      "model": "qwen/qwen3-coder:exacto",
+      "n": 1,
+      "seed": 42,
+      "stream": true,
+      "stream_options": {
+        "include_usage": true
+      },
+      "temperature": 0.0,
+      "tool_choice": {
+        "function": {
+          "name": "structured_output"
+        },
+        "type": "function"
+      },
+      "tools": [
+        {
+          "function": {
+            "description": "Generate structured output matching the provided schema",
+            "name": "structured_output",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "age": {
+                  "description": "Person's age in years",
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "name": {
+                  "description": "Person's full name",
+                  "type": "string"
+                },
+                "occupation": {
+                  "description": "Person's job or profession",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "age"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept": "text/event-stream",
+      "authorization": "[REDACTED:authorization]",
+      "content-type": "application/json"
+    },
+    "method": "POST",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": null,
+    "headers": {
+      "access-control-allow-origin": "*",
+      "cache-control": "no-cache",
+      "cf-ray": "9955d9748ba961b3-ORD",
+      "connection": "keep-alive",
+      "content-type": "text/event-stream",
+      "date": "Mon, 27 Oct 2025 23:07:24 GMT",
+      "permissions-policy": "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")",
+      "referrer-policy": "no-referrer, strict-origin-when-cross-origin",
+      "server": "cloudflare",
+      "transfer-encoding": "chunked",
+      "x-content-type-options": "nosniff"
+    },
+    "status": 200
+  }
+}

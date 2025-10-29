@@ -1,0 +1,109 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo4MTksInRlbXBlcmF0dXJlIjowLjB9LCJtZXNzYWdlcyI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMifV0sInJvbGUiOiJ1c2VyIn1dLCJ0b29sQ29uZmlnIjp7InRvb2xzIjpbeyJ0b29sU3BlYyI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJpbnB1dFNjaGVtYSI6eyJqc29uIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoiZ2V0X3dlYXRoZXIifX1dfX0="
+    },
+    "canonical_json": {
+      "inferenceConfig": {
+        "maxTokens": 819,
+        "temperature": 0.0
+      },
+      "messages": [
+        {
+          "content": [
+            {
+              "text": "Tell me a joke about cats"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "toolConfig": {
+        "tools": [
+          {
+            "toolSpec": {
+              "description": "Get current weather information for a location",
+              "inputSchema": {
+                "json": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "location": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "location"
+                  ],
+                  "type": "object"
+                }
+              },
+              "name": "get_weather"
+            }
+          }
+        ]
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "1d389e67524f02134a8a9ac2ab9fdf897ca50c143ebea01755e7697ba3b03a24"
+      ],
+      "x-amz-date": [
+        "20251028T084214Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/anthropic.claude-3-5-sonnet-20240620-v1:0/converse"
+  },
+  "response": {
+    "body": {
+      "metrics": {
+        "latencyMs": 3007
+      },
+      "output": {
+        "message": {
+          "content": [
+            {
+              "text": "I apologize, but I don't have a specific tool or function available to generate jokes about cats. As an AI assistant, I don't have a built-in database of jokes. However, I can try to come up with a simple cat-related joke for you:\n\nWhy don't cats play poker in the jungle?\nToo many cheetahs!\n\nI hope that brought a smile to your face! If you'd like to know about something I can assist you with using the available tools, such as checking the weather for a particular location, please let me know."
+            }
+          ],
+          "role": "assistant"
+        }
+      },
+      "stopReason": "end_turn",
+      "usage": {
+        "inputTokens": 369,
+        "outputTokens": 122,
+        "serverToolUsage": {},
+        "totalTokens": 491
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 28 Oct 2025 08:42:18 GMT"
+      ],
+      "x-amzn-requestid": [
+        "3395d93e-fa6f-4b04-bc1e-33bfbf96e750"
+      ]
+    },
+    "status": 200
+  }
+}

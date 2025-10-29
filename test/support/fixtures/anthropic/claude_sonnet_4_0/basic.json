@@ -1,0 +1,152 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1zb25uZXQtNC0wIiwic3RyZWFtIjpmYWxzZSwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifX0="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "claude-sonnet-4-0",
+      "stream": false,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-beta": [
+        "interleaved-thinking-2025-05-14"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "EoADCkYICRgCKkCbMnDJQ9S/bMPUVo3ivic9DhgsB8R39mCbr8zkmnbj4rVY6JwShz822sxO7/IdTEz3B+Fxx9J+4Pi/b0B79xowEgzfFldioDChde5TE4IaDBzlBFpX10CEqrYp1SIwXmmeNmMA9orlfRa5F/IhpJSNekkn6uzlc2c0NJOzKlS1zmPGoDLRyRWrRWNLzpSpKucBYasiKdExtsdGrj5Ow1wYH4yeidtgig3xmMGyv86rqVIMSgu5gsjXZbvSjhfPzKM55jmkzQDVrItryzRDmMNg0+c9/fn8XI7wlQk6wxDyU0mm89j3JMhKXGc6rEhnBDx+fIpAHqZFMo38tH96mxIwk8QHaibOnraghqyOlzasPpgbT+LB7dBIAA05jEZlD0TcT6BTU7cPef5ppYybnxw3fgyrwSHG2+A5FlIke9ST8DzKGYFZIjEJj2uIrT1iP2ESzneP6oSMLn/mh/mFhdmePQDAJ1THvcovZ++wJaZwR31HkCcpyb86GAE=",
+          "thinking": "The human has greeted me with \"Hello world!\" - this is a classic, friendly greeting often used in programming as a first program, but here it's just a simple, cheerful hello. I should respond warmly and welcomingly.",
+          "type": "thinking"
+        },
+        {
+          "text": "Hello! It's great to meet you! How are you doing today? Is there anything I can help you with?",
+          "type": "text"
+        }
+      ],
+      "id": "msg_015JxS1wMJw3Eq1U9MeAY4jQ",
+      "model": "claude-sonnet-4-20250514",
+      "role": "assistant",
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 38,
+        "output_tokens": 85,
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": [
+        "a71659e7-a922-4ff7-99de-f3ba615face1"
+      ],
+      "anthropic-ratelimit-input-tokens-limit": [
+        "450000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "450000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2025-10-27T22:48:01Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "90000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "90000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2025-10-27T22:48:03Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "1000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2025-10-27T22:47:58Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "540000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "540000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2025-10-27T22:48:01Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9955bcfc3ffde80d-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 27 Oct 2025 22:48:03 GMT"
+      ],
+      "request-id": [
+        "req_011CUYWz3YKw6K3K2To4rvBs"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "5514"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  }
+}

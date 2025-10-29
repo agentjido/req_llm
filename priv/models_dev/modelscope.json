@@ -179,6 +179,36 @@
       "release_date": "2025-07-28",
       "temperature": true,
       "tool_call": true
+    },
+    {
+      "attachment": false,
+      "cost": {
+        "input": 0,
+        "output": 0
+      },
+      "id": "ZhipuAI/GLM-4.6",
+      "knowledge": "2025-07",
+      "last_updated": "2025-09-30",
+      "limit": {
+        "context": 202752,
+        "output": 98304
+      },
+      "modalities": {
+        "input": [
+          "text"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "GLM-4.6",
+      "open_weights": true,
+      "provider": "modelscope",
+      "provider_model_id": "ZhipuAI/GLM-4.6",
+      "reasoning": true,
+      "release_date": "2025-09-30",
+      "temperature": true,
+      "tool_call": true
     }
   ],
   "provider": {

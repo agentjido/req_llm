@@ -1,0 +1,58 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfZ2VuX2xlbiI6MTAsInByb21wdCI6Ijx8YmVnaW5fb2ZfdGV4dHw+PHxzdGFydF9oZWFkZXJfaWR8PnVzZXI8fGVuZF9oZWFkZXJfaWR8PlxuXG5IaSB0aGVyZSE8fGVvdF9pZHw+PHxzdGFydF9oZWFkZXJfaWR8PmFzc2lzdGFudDx8ZW5kX2hlYWRlcl9pZHw+XG5cbiIsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "max_gen_len": 10,
+      "prompt": "<|begin_of_text|><|start_header_id|>user<|end_header_id|>\n\nHi there!<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n",
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "f9063db6a695435c985943f2367c504bdc93484a1f2fef317309f6f20599159f"
+      ],
+      "x-amz-date": [
+        "20251028T084218Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/meta.llama3-3-70b-instruct-v1:0/invoke"
+  },
+  "response": {
+    "body": {
+      "message": "Invocation of model ID meta.llama3-3-70b-instruct-v1:0 with on-demand throughput isn’t supported. Retry your request with the ID or ARN of an inference profile that contains this model."
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 28 Oct 2025 08:42:18 GMT"
+      ],
+      "x-amzn-errortype": [
+        "ValidationException:http://internal.amazon.com/coral/com.amazon.bedrock/"
+      ],
+      "x-amzn-requestid": [
+        "bd9e74c9-3a8a-4f1e-8393-a5c7726e0339"
+      ]
+    },
+    "status": 400
+  }
+}

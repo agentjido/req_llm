@@ -1,0 +1,135 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjQwMDAsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjoxMjgwMH0sIm1lc3NhZ2VzIjpbeyJjb250ZW50IjpbeyJ0ZXh0IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8ifV0sInJvbGUiOiJ1c2VyIn1dLCJ0b29sQ29uZmlnIjp7InRvb2xzIjpbeyJ0b29sU3BlYyI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJpbnB1dFNjaGVtYSI6eyJqc29uIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn0sInVuaXQiOnsiZW51bSI6WyJjZWxzaXVzIiwiZmFocmVuaGVpdCJdLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoiZ2V0X3dlYXRoZXIifX0seyJ0b29sU3BlYyI6eyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwiaW5wdXRTY2hlbWEiOnsianNvbiI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsidG9waWMiOnsiZGVzY3JpcHRpb24iOiJUb3BpYyBmb3IgdGhlIGpva2UiLCJ0eXBlIjoic3RyaW5nIn19LCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoidGVsbF9qb2tlIn19LHsidG9vbFNwZWMiOnsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsImlucHV0U2NoZW1hIjp7Impzb24iOnsicHJvcGVydGllcyI6e30sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfdGltZSJ9fV19fQ=="
+    },
+    "canonical_json": {
+      "additionalModelRequestFields": {
+        "thinking": {
+          "budget_tokens": 4000,
+          "type": "enabled"
+        }
+      },
+      "inferenceConfig": {
+        "maxTokens": 12800
+      },
+      "messages": [
+        {
+          "content": [
+            {
+              "text": "What's the weather like in Paris, France?"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "toolConfig": {
+        "tools": [
+          {
+            "toolSpec": {
+              "description": "Get current weather information for a location",
+              "inputSchema": {
+                "json": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "location": {
+                      "type": "string"
+                    },
+                    "unit": {
+                      "enum": [
+                        "celsius",
+                        "fahrenheit"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "location"
+                  ],
+                  "type": "object"
+                }
+              },
+              "name": "get_weather"
+            }
+          },
+          {
+            "toolSpec": {
+              "description": "Tell a funny joke",
+              "inputSchema": {
+                "json": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "topic": {
+                      "description": "Topic for the joke",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "name": "tell_joke"
+            }
+          },
+          {
+            "toolSpec": {
+              "description": "Get the current time",
+              "inputSchema": {
+                "json": {
+                  "properties": {},
+                  "type": "object"
+                }
+              },
+              "name": "get_time"
+            }
+          }
+        ]
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "5fee9366026def895d928852036608e748fadc8068242e50fbdfb306c15277cf"
+      ],
+      "x-amz-date": [
+        "20251028T084224Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/anthropic.claude-sonnet-4-20250514-v1:0/converse"
+  },
+  "response": {
+    "body": {
+      "message": "Invocation of model ID anthropic.claude-sonnet-4-20250514-v1:0 with on-demand throughput isn’t supported. Retry your request with the ID or ARN of an inference profile that contains this model."
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 28 Oct 2025 08:42:24 GMT"
+      ],
+      "x-amzn-errortype": [
+        "ValidationException:http://internal.amazon.com/coral/com.amazon.bedrock/"
+      ],
+      "x-amzn-requestid": [
+        "c5d59140-d07f-4a73-8d86-374aaed680b4"
+      ]
+    },
+    "status": 400
+  }
+}

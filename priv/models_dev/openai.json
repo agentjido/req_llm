@@ -547,6 +547,39 @@
       "api": "responses",
       "attachment": true,
       "cost": {
+        "input": 15,
+        "output": 120
+      },
+      "id": "gpt-5-pro",
+      "knowledge": "2024-09-30",
+      "last_updated": "2025-10-06",
+      "limit": {
+        "context": 400000,
+        "output": 272000
+      },
+      "modalities": {
+        "input": [
+          "text",
+          "image"
+        ],
+        "output": [
+          "text"
+        ]
+      },
+      "name": "GPT-5 Pro",
+      "open_weights": false,
+      "provider": "openai",
+      "provider_model_id": "gpt-5-pro",
+      "reasoning": true,
+      "release_date": "2025-10-06",
+      "supports_json_schema_response_format": true,
+      "temperature": false,
+      "tool_call": true
+    },
+    {
+      "api": "responses",
+      "attachment": true,
+      "cost": {
         "cache_read": 7.5,
         "input": 15,
         "output": 60

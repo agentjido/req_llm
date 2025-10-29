@@ -23,6 +23,11 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
   alias ReqLLM.Providers.Anthropic
 
   @doc """
+  Returns whether this model family supports toolChoice in Bedrock Converse API.
+  """
+  def supports_converse_tool_choice?, do: true
+
+  @doc """
   Formats a ReqLLM context into Anthropic request format for Bedrock.
 
   Delegates to the native Anthropic.Context module and adds Bedrock-specific
@@ -97,16 +102,29 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
   defp maybe_add_param(body, key, value), do: Map.put(body, key, value)
 
   # Add tools from opts to request body (same as native Anthropic provider)
+  # Bedrock-specific: If no tools in opts but messages contain tool_use/tool_result,
+  # create stub tool definitions to satisfy Bedrock's validation
   defp maybe_add_tools(body, opts) do
     tools = Keyword.get(opts, :tools, [])
+
+    tools =
+      case tools do
+        [] ->
+          # Check if body has tool messages - if so, create stubs
+          extract_stub_tools_if_needed(body)
+
+        tools when is_list(tools) ->
+          tools
+      end
 
     case tools do
       [] ->
         body
 
       tools when is_list(tools) ->
-        # Convert ReqLLM.Tool structs to Anthropic format
-        body = Map.put(body, :tools, Enum.map(tools, &tool_to_anthropic_format/1))
+        # Convert tools to Anthropic format (handles both ReqLLM.Tool structs and stub maps)
+        anthropic_tools = Enum.map(tools, &tool_to_anthropic_format/1)
+        body = Map.put(body, :tools, anthropic_tools)
 
         # Add tool_choice if specified
         case Keyword.get(opts, :tool_choice) do
@@ -116,8 +134,42 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
     end
   end
 
-  # Convert ReqLLM.Tool to Anthropic tool format
-  defp tool_to_anthropic_format(tool) do
+  # Extract stub tools from messages when Bedrock requires tools but none provided.
+  # This handles multi-turn tool conversations where the caller didn't pass tools
+  # on subsequent requests (works for other providers, but Bedrock is strict).
+  defp extract_stub_tools_if_needed(body) do
+    messages = Map.get(body, :messages, [])
+
+    tool_names =
+      messages
+      |> Enum.flat_map(fn msg ->
+        case msg do
+          %{content: content} when is_list(content) ->
+            content
+            |> Enum.filter(fn
+              %{type: "tool_use", name: _} -> true
+              _ -> false
+            end)
+            |> Enum.map(fn %{name: name} -> name end)
+
+          _ ->
+            []
+        end
+      end)
+      |> Enum.uniq()
+
+    # Create minimal stub tools for validation
+    Enum.map(tool_names, fn name ->
+      %{
+        name: name,
+        description: "Tool stub for multi-turn conversation",
+        input_schema: %{type: "object", properties: %{}}
+      }
+    end)
+  end
+
+  # Convert ReqLLM.Tool or stub map to Anthropic tool format
+  defp tool_to_anthropic_format(%ReqLLM.Tool{} = tool) do
     schema = ReqLLM.Tool.to_schema(tool, :openai)
 
     %{
@@ -127,12 +179,15 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
     }
   end
 
+  # Stub tools are already in Anthropic format
+  defp tool_to_anthropic_format(%{name: _, description: _, input_schema: _} = stub), do: stub
+
   # Add extended thinking configuration for native Anthropic endpoint
   # Note: pre_validate_options already extracted reasoning params and added to additional_model_request_fields
-  # For Converse API, but native endpoint uses different format
   defp maybe_add_thinking(body, opts) do
-    # Check if additional_model_request_fields has reasoning_config (from pre_validate_options)
-    case get_in(opts, [:additional_model_request_fields, :reasoning_config]) do
+    # Check if additional_model_request_fields has thinking config (from pre_validate_options)
+    # Note: additional_model_request_fields is nested under :provider_options after Options.process
+    case get_in(opts, [:provider_options, :additional_model_request_fields, :thinking]) do
       %{type: "enabled", budget_tokens: budget} ->
         Map.put(body, :thinking, %{type: "enabled", budget_tokens: budget})
 
@@ -216,6 +271,12 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
   Extracts usage metadata from the response body.
 
   Delegates to the native Anthropic provider.
+
+  Note: AWS Bedrock does not return a separate `reasoning_tokens` field in its
+  response structure. Extended thinking tokens are included in `output_tokens`
+  and billed accordingly, but Bedrock's API response only provides `input_tokens`
+  and `output_tokens`. This differs from Anthropic's direct API which returns
+  `reasoning_tokens` as a separate field.
   """
   def extract_usage(body, model) do
     # Delegate to native Anthropic extract_usage

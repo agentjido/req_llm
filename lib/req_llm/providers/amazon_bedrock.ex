@@ -94,6 +94,14 @@ defmodule ReqLLM.Providers.AmazonBedrock do
         type: :map,
         doc:
           "Additional model-specific request fields (e.g., reasoning_config for Claude extended thinking)"
+      ],
+      anthropic_prompt_cache: [
+        type: :boolean,
+        doc: "Enable Anthropic prompt caching for Claude models on Bedrock"
+      ],
+      anthropic_prompt_cache_ttl: [
+        type: :string,
+        doc: "TTL for cache (\"1h\" for one hour; omit for default ~5m)"
       ]
     ]
 
@@ -128,7 +136,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       endpoint = if opts[:stream], do: "/invoke-with-response-stream", else: "/invoke"
 
       request =
-        Req.new([url: endpoint, method: :post, receive_timeout: 30_000] ++ http_opts)
+        Req.new([url: endpoint, method: :post, receive_timeout: 60_000] ++ http_opts)
         |> attach(model, Keyword.put(opts, :context, context))
 
       {:ok, request}
@@ -150,7 +158,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       opts_with_operation = Keyword.put(opts, :operation, :object)
 
       request =
-        Req.new([url: endpoint, method: :post, receive_timeout: 30_000] ++ http_opts)
+        Req.new([url: endpoint, method: :post, receive_timeout: 60_000] ++ http_opts)
         |> attach(model, Keyword.put(opts_with_operation, :context, context))
 
       {:ok, request}
@@ -179,8 +187,18 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     # Validate we have necessary AWS credentials
     validate_aws_credentials!(aws_creds)
 
-    # Use the options directly
-    opts = other_opts
+    # Process options (validates, normalizes, and calls pre_validate_options)
+    operation = other_opts[:operation] || :chat
+
+    opts =
+      case ReqLLM.Provider.Options.process(__MODULE__, operation, model, other_opts) do
+        {:ok, processed_opts} -> processed_opts
+        {:error, error} -> raise error
+      end
+
+    # For Anthropic models: Remove thinking from additional_model_request_fields if it was removed by translate_options
+    # This handles the case where thinking is incompatible with forced tool_choice
+    opts = maybe_clean_thinking_after_translation(opts, get_model_family(model.model), operation)
 
     # Construct the base URL with region
     region = aws_creds.region || "us-east-1"
@@ -260,9 +278,16 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     # Validate we have necessary AWS credentials
     validate_aws_credentials!(aws_creds)
 
+    # Apply pre-validation (reasoning params, etc.) - streaming bypasses Options.process
+    {pre_validated_opts, _warnings} = pre_validate_options(:chat, model, other_opts)
+
+    # Apply option translation (temperature/top_p conflicts, etc.)
+    # This is critical for streaming requests which bypass the normal Options.process pipeline
+    {translated_opts, _warnings} = translate_options(:chat, model, pre_validated_opts)
+
     # Check if we should use Converse API
     # Priority: explicit use_converse option > prompt caching optimization > auto-detect from tools presence
-    use_converse = determine_use_converse(other_opts)
+    use_converse = determine_use_converse(translated_opts)
 
     # Get model-specific or Converse formatter
     model_id = model.model
@@ -276,8 +301,8 @@ defmodule ReqLLM.Providers.AmazonBedrock do
         {formatter, "/model/#{model_id}/invoke-with-response-stream"}
       end
 
-    # Build request body
-    body = formatter.format_request(model_id, context, other_opts)
+    # Build request body with translated options
+    body = formatter.format_request(model_id, context, translated_opts)
     json_body = Jason.encode!(body)
 
     # Ensure json_body is binary
@@ -359,7 +384,6 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   # It's called by Options.process/4 if the provider exports it
   def pre_validate_options(_operation, model, opts) do
     # Handle reasoning parameters for Claude models on Bedrock
-    # Claude Sonnet 3.7, 4.x support extended thinking via additionalModelRequestFields
     opts = maybe_translate_reasoning_params(model, opts)
     {opts, []}
   end
@@ -369,14 +393,12 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   defp maybe_translate_reasoning_params(model, opts) do
     model_id = model.model
 
-    # Check if this is a Claude model with reasoning support
-    is_claude_reasoning =
-      String.contains?(model_id, "anthropic.claude") and
-        (String.contains?(model_id, "sonnet-3-7") or
-           String.contains?(model_id, "sonnet-4") or
-           String.contains?(model_id, "opus-4"))
+    # Check if this is a Claude model with reasoning capability
+    # Use model.capabilities.reasoning instead of hardcoding model IDs
+    is_claude = String.contains?(model_id, "anthropic.claude")
+    has_reasoning = get_in(model, [Access.key(:capabilities), Access.key(:reasoning)]) == true
 
-    if is_claude_reasoning do
+    if is_claude and has_reasoning do
       {reasoning_effort, opts} = Keyword.pop(opts, :reasoning_effort)
       {reasoning_budget, opts} = Keyword.pop(opts, :reasoning_token_budget)
 
@@ -400,11 +422,18 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   end
 
   defp add_reasoning_to_additional_fields(opts, budget_tokens) do
-    additional_fields =
-      Keyword.get(opts, :additional_model_request_fields, %{})
-      |> Map.put(:reasoning_config, %{type: "enabled", budget_tokens: budget_tokens})
+    # Get existing additional_model_request_fields from provider_options (if any)
+    provider_opts = Keyword.get(opts, :provider_options, [])
 
-    Keyword.put(opts, :additional_model_request_fields, additional_fields)
+    additional_fields =
+      Keyword.get(provider_opts, :additional_model_request_fields, %{})
+      |> Map.put(:thinking, %{type: "enabled", budget_tokens: budget_tokens})
+
+    # Put it back into provider_options
+    updated_provider_opts =
+      Keyword.put(provider_opts, :additional_model_request_fields, additional_fields)
+
+    Keyword.put(opts, :provider_options, updated_provider_opts)
   end
 
   defp map_reasoning_effort_to_budget(:low), do: 4_000
@@ -603,6 +632,24 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   end
 
   @impl ReqLLM.Provider
+  def translate_options(operation, model, opts) do
+    # Delegate to native Anthropic option translation for Anthropic models
+    # This ensures we get all Anthropic-specific handling (temperature/top_p conflicts,
+    # reasoning effort, etc.) for free
+    model_family = get_model_family(model.model)
+
+    case model_family do
+      "anthropic" ->
+        # Delegate temperature/top_p translation to Anthropic provider
+        ReqLLM.Providers.Anthropic.translate_options(operation, model, opts)
+
+      _ ->
+        # Other model families: no translation needed yet
+        {opts, []}
+    end
+  end
+
+  @impl ReqLLM.Provider
   def encode_body(request) do
     request
   end
@@ -673,9 +720,37 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     {req, err}
   end
 
+  # Remove thinking from additional_model_request_fields after Options.process if needed
+  # This is necessary because translate_options can't modify provider_options (they get restored)
+  defp maybe_clean_thinking_after_translation(opts, model_family, operation) do
+    if model_family == "anthropic" do
+      # Check if we have forced tool_choice
+      # For :object operation, tool_choice is added later by the formatter, but we know it will be forced
+      tool_choice = opts[:tool_choice]
+      has_forced_tool = match?(%{type: "tool"}, tool_choice) or operation == :object
+
+      if has_forced_tool do
+        # Remove thinking from additional_model_request_fields
+        update_in(
+          opts,
+          [:provider_options, :additional_model_request_fields],
+          fn
+            nil -> nil
+            fields when is_map(fields) -> Map.delete(fields, :thinking)
+          end
+        )
+      else
+        opts
+      end
+    else
+      opts
+    end
+  end
+
   # Private helper: Determine whether to use Converse API with caching optimization
   defp determine_use_converse(opts) do
-    case opts[:use_converse] do
+    # After Options.process, use_converse is in :provider_options
+    case get_in(opts, [:provider_options, :use_converse]) do
       true ->
         true
 
@@ -684,7 +759,8 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
       nil ->
         has_tools = opts[:tools] != nil and opts[:tools] != []
-        has_caching = ReqLLM.Providers.Anthropic.has_prompt_caching?(opts)
+        # After Options.process, anthropic_prompt_cache is in :provider_options
+        has_caching = get_in(opts, [:provider_options, :anthropic_prompt_cache]) == true
 
         cond do
           # If caching is enabled with tools, force native API for full caching support

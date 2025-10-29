@@ -44,7 +44,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
 
       @moduletag :coverage
       @moduletag provider: to_string(provider)
-      @moduletag timeout: 180_000
+      @moduletag timeout: 300_000
 
       @provider provider
       @models ModelMatrix.models_for_provider(provider, operation: :text)

@@ -1,0 +1,109 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo0MDksInRlbXBlcmF0dXJlIjowLjB9LCJtZXNzYWdlcyI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMifV0sInJvbGUiOiJ1c2VyIn1dLCJ0b29sQ29uZmlnIjp7InRvb2xzIjpbeyJ0b29sU3BlYyI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJpbnB1dFNjaGVtYSI6eyJqc29uIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoiZ2V0X3dlYXRoZXIifX1dfX0="
+    },
+    "canonical_json": {
+      "inferenceConfig": {
+        "maxTokens": 409,
+        "temperature": 0.0
+      },
+      "messages": [
+        {
+          "content": [
+            {
+              "text": "Tell me a joke about cats"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "toolConfig": {
+        "tools": [
+          {
+            "toolSpec": {
+              "description": "Get current weather information for a location",
+              "inputSchema": {
+                "json": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "location": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "location"
+                  ],
+                  "type": "object"
+                }
+              },
+              "name": "get_weather"
+            }
+          }
+        ]
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "1fd7ff179994c55881f8ca0b7ef5646dfefa89d16b503404e084ddabc332180f"
+      ],
+      "x-amz-date": [
+        "20251028T084203Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/anthropic.claude-3-haiku-20240307-v1:0/converse"
+  },
+  "response": {
+    "body": {
+      "metrics": {
+        "latencyMs": 871
+      },
+      "output": {
+        "message": {
+          "content": [
+            {
+              "text": "Here's a silly cat joke for you:\n\nWhy don't cats play poker in the jungle? \nToo many cheetahs!"
+            }
+          ],
+          "role": "assistant"
+        }
+      },
+      "stopReason": "end_turn",
+      "usage": {
+        "inputTokens": 339,
+        "outputTokens": 32,
+        "serverToolUsage": {},
+        "totalTokens": 371
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 28 Oct 2025 08:42:04 GMT"
+      ],
+      "x-amzn-requestid": [
+        "fa6ef01c-acde-402a-be8c-e158b1e43ed1"
+      ]
+    },
+    "status": 200
+  }
+}

@@ -1,0 +1,207 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo2NDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/Iiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiY2xhdWRlLW9wdXMtNC0xIiwic3RyZWFtIjpmYWxzZSwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifSwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0X3NjaGVtYSI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoiZ2V0X3dlYXRoZXIifSx7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJpbnB1dF9zY2hlbWEiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoidGVsbF9qb2tlIn0seyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwiaW5wdXRfc2NoZW1hIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJnZXRfdGltZSJ9XX0="
+    },
+    "canonical_json": {
+      "max_tokens": 6400,
+      "messages": [
+        {
+          "content": "What's the weather like in Paris, France?",
+          "role": "user"
+        }
+      ],
+      "model": "claude-opus-4-1",
+      "stream": false,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      },
+      "tools": [
+        {
+          "description": "Get current weather information for a location",
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "location": {
+                "type": "string"
+              },
+              "unit": {
+                "enum": [
+                  "celsius",
+                  "fahrenheit"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "location"
+            ],
+            "type": "object"
+          },
+          "name": "get_weather"
+        },
+        {
+          "description": "Tell a funny joke",
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "topic": {
+                "description": "Topic for the joke",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "name": "tell_joke"
+        },
+        {
+          "description": "Get the current time",
+          "input_schema": {
+            "properties": {},
+            "type": "object"
+          },
+          "name": "get_time"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-beta": [
+        "interleaved-thinking-2025-05-14,tools-2024-05-16"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "EuYECkYICRgCKkCDSJQyzxtM8S5gtvOQD2Lu/rIexAr9cbK/DcaI10sQYEwMhLOaDN3z6ls/uhMSdHc/YYAibSr2QK9dugN/Kpz8EgxeiXAoSN5Eu7vTJ+AaDCh2NYkQPdodOMV8vCIw1DPCfMtgUJw5wv8Xw9P6Wsb0F5TJ/cHAAVn7WYj+o6UJkRFq/2T5tInJxnTrLD1AKs0DqUAYQs5zlg50yhr9I0PnoXqcKjtFPLDFrD2en9bLiI7X1Llnjcw8qUGtdDI1S9kzcckn5+4f501KsU6FqJBFdav2MBD4z+tCNcFq2Gx81P2t5s5kYlAWe9BTleZZJcFLhzAzaZ3eZ0CRJvCMtpWiRskJu2Bv0UdGKXrHRbS4kGhpF90IoBZpPyAH6n2FdVYV8NUZqGB1nUR53LWAM18IqbySMHS/mDGfX+e/voif574AaEAu5bvAIo8P6zCW88c6UnOk3iqm9F6Ts0ztVmzrjoMpILiWGP9P4uf+f1VznrIgKwmQXpHodETFRdXayk0Tzz8cqLMStnmtOV8RjxMS6gEU+hzXp+6OnjNDwV7gBPnBwvwS0c4iidgzQhRuwSOD2OFgM/r/f49PYsmpYplMp5puYrZcHKeRGULk+IOLM0zJrBXstMCyqCf6w+thydn4XKykwbp99mCW74EDv3vn6XJo/Qx3gs3Qch2d1jzwPFx0IjmdrvYfg/u+3N5h2BK2iwyhAAbcSIYpbdHb9kG1cPlHhIspniJbp5UKhV/ksFU1cgh7vqXRvCSkdHl/QymqGcxcE3nHi+TLcFi+dh9fCAXzn+x5TbDcGCSxhaYYAQ==",
+          "thinking": "The user is asking about the weather in Paris, France. I have access to the get_weather function which can provide current weather information for a location. The required parameter is \"location\" which the user has provided as \"Paris, France\". The optional parameter is \"unit\" which can be \"celsius\" or \"fahrenheit\", but since the user didn't specify, I won't include it (following the instruction not to make up values for optional parameters).",
+          "type": "thinking"
+        },
+        {
+          "text": "I'll check the current weather in Paris, France for you.",
+          "type": "text"
+        },
+        {
+          "id": "toolu_017FaJY9LR8SHz3JP28U3xyB",
+          "input": {
+            "location": "Paris, France"
+          },
+          "name": "get_weather",
+          "type": "tool_use"
+        }
+      ],
+      "id": "msg_01RDRRrHxP9B23Dy7NugLQoY",
+      "model": "claude-opus-4-1-20250805",
+      "role": "assistant",
+      "stop_reason": "tool_use",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 689,
+        "output_tokens": 171,
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": [
+        "a71659e7-a922-4ff7-99de-f3ba615face1"
+      ],
+      "anthropic-ratelimit-input-tokens-limit": [
+        "450000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "450000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2025-10-27T22:46:21Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "90000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "90000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2025-10-27T22:46:24Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "1000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2025-10-27T22:46:18Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "540000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "540000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2025-10-27T22:46:21Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9955ba8f3950c77f-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 27 Oct 2025 22:46:24 GMT"
+      ],
+      "request-id": [
+        "req_011CUYWrijJ96Pd2t1KkSyWb"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "5411"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  }
+}

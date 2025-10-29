@@ -30,6 +30,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Metadata collection timeout errors on large documents with long processing times
 - Bedrock streaming now works correctly (fixed deprecated function capture syntax)
 - Tool.Inspect protocol crash when inspecting tools with JSON Schema (map) parameter schemas
+- Model compatibility task now uses `normalize_model_id` callback for registry lookups (fixes inference profile ID recognition)
+- Missing `:compiled_schema` in object streaming options causing KeyError across all providers with structured output
+- Bedrock streaming temperature/top_p conflicts and timeout issues
+  - Bedrock now delegates to Anthropic's option translation for temperature/top_p handling
+  - Streaming requests now apply translate_options to prevent parameter conflicts
+  - Increased receive timeout from 30s to 60s for large responses
+- Jason.EncodeError when saving Bedrock streaming fixtures (binary protocol contains invalid UTF-8)
+  - Removed redundant "decoded" field from streaming fixtures (only "b64" field needed for replay)
+  - Bedrock's AWS Event Stream binary protocol now saves correctly
+- Bedrock extended thinking (reasoning) now works correctly with `reasoning_effort` option
+  - Bedrock provider now calls Options.process like other providers
+  - Reasoning parameters properly translated to Bedrock's `thinking` parameter format
+  - Uses model capabilities instead of hardcoded model IDs for reasoning support detection
+  - Thinking parameter correctly removed when incompatible with forced tool_choice (object generation)
+- Bedrock streaming unified with non-streaming to use Options.process pipeline
+  - Fixes nil access error in object streaming operations
+  - Ensures consistent option translation across streaming and non-streaming
+  - Post-processing fixes for thinking/temperature applied after translation
+- Bedrock tool round-trip conversations now work correctly
+  - Extracts stub tools from messages when tools required but not provided
+  - Bedrock requires tools definition even for multi-turn tool conversations
+  - Supports both ReqLLM.Tool structs and minimal stub tools for validation
+- Bedrock usage metrics now include all required fields (cached_tokens, reasoning_tokens)
+  - Meta Llama models provide complete usage data
+  - OpenAI OSS models provide complete usage data
+- Comprehensive test timeout increased from 180s to 300s for slow models
+- Claude Opus 4.1 (us.anthropic.claude-opus-4-1-20250805-v1:0) added to ModelMatrix
 
 ### Changed
 
@@ -40,6 +67,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Updated Finch streaming to use credential-based signing API
   - Session tokens now handled automatically by ex_aws_auth
 - Simplified STS AssumeRole implementation using credential-based API
+- Refactored Meta/Llama support into generic provider for code reuse
+  - Created `ReqLLM.Providers.Meta` for Meta's native prompt format
+  - Bedrock Meta now delegates to generic provider for format conversion
+  - Documents that most providers (Azure, Vertex AI, vLLM, Ollama) use OpenAI-compatible APIs
+  - Generic provider handles native format with `prompt`, `max_gen_len`, `generation` fields
 
 ## [1.0.0-rc.7] - 2025-10-16
 

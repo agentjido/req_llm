@@ -1,0 +1,152 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1zb25uZXQtNC01Iiwic3RyZWFtIjpmYWxzZSwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifX0="
+    },
+    "canonical_json": {
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "claude-sonnet-4-5",
+      "stream": false,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-beta": [
+        "interleaved-thinking-2025-05-14"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "EswCCkYICRgCKkAXJvjd0pgEr5cejfJneZzluEBSy8qLwI6LQFhl1wGbS1nrU+9COudzwAL2psXIhEQIkY4YUiWurVmEgeGyU3DsEgx1CIZlL2iF3zd1DeoaDP5GLrChxi/wtn6szCIwwHxiQ01tygeCNML/v81zHk5r6m4IUAxKd043C01tzX3VNCFszMljQrL/NWgE8+HaKrMB+8l8orQ9MCd5zIUPPvqQ3lL4CvyWKQ8HzzJf+gAzNKt+JPkLUMBU7aR+Rol6GtPeldBU2tBKDFVCYnX+80c2b/Vj8hgeIvrxEpU88bf5FkUbMQtpryv5x+h4eOfc1UdLtU7or3pUkplaLKYz/bncOK5HgSARb13b9rUy5Gaui0uYlXkRa6aNMyI7GkeNxe2bhn1bC18cHGPiTPtEQQLvKsGzW75unJ5u8U0JxTawMH9lVRgYAQ==",
+          "thinking": "I need to multiply 12 by 7.\n\n12 × 7 = (10 + 2) × 7 = 70 + 14 = 84\n\nOr I can think of it as:\n12 × 7 = 12 × 7 = 84\n\nI know this from basic multiplication tables.",
+          "type": "thinking"
+        },
+        {
+          "text": "12 × 7 = **84**\n\n**Thinking:** I broke down 12 as (10 + 2), then: 10×7 = 70, and 2×7 = 14, so 70 + 14 = 84",
+          "type": "text"
+        }
+      ],
+      "id": "msg_01TJXQMAHgBcktM6fNRtGrFP",
+      "model": "claude-sonnet-4-5-20250929",
+      "role": "assistant",
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 50,
+        "output_tokens": 150,
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": [
+        "a71659e7-a922-4ff7-99de-f3ba615face1"
+      ],
+      "anthropic-ratelimit-input-tokens-limit": [
+        "450000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "450000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2025-10-27T22:49:13Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "90000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "90000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2025-10-27T22:49:16Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "1000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2025-10-27T22:49:12Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "540000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "540000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2025-10-27T22:49:13Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9955beca0f73e812-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 27 Oct 2025 22:49:16 GMT"
+      ],
+      "request-id": [
+        "req_011CUYX5VTwapotYdFXFfXMR"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "4152"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  }
+}

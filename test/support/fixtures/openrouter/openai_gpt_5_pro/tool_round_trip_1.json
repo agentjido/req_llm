@@ -1,0 +1,153 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyNzIwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJvcGVuYWkvZ3B0LTUtcHJvIiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xfY2hvaWNlIjp7ImZ1bmN0aW9uIjp7Im5hbWUiOiJhZGQifSwidHlwZSI6ImZ1bmN0aW9uIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkFkZCB0d28gaW50ZWdlcnMiLCJuYW1lIjoiYWRkIiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYSI6eyJ0eXBlIjoiaW50ZWdlciJ9LCJiIjp7InR5cGUiOiJpbnRlZ2VyIn19LCJyZXF1aXJlZCI6WyJhIiwiYiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+    },
+    "canonical_json": {
+      "max_tokens": 27200,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        }
+      ],
+      "model": "openai/gpt-5-pro",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0,
+      "tool_choice": {
+        "function": {
+          "name": "add"
+        },
+        "type": "function"
+      },
+      "tools": [
+        {
+          "function": {
+            "description": "Add two integers",
+            "name": "add",
+            "parameters": {
+              "additionalProperties": false,
+              "properties": {
+                "a": {
+                  "type": "integer"
+                },
+                "b": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "a",
+                "b"
+              ],
+              "type": "object"
+            }
+          },
+          "type": "function"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "tool_calls",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "",
+            "reasoning": null,
+            "reasoning_details": [
+              {
+                "data": "gAAAAABo__1ftM21bVMdFWmcfvL19sK6-O5I6YGmFWVNaW0o0-cBhwvVyqMMB_n24fDcKB5bubffDd_5UiMG6zlTb7ioUxkk3LMmSgWak1CnHWsIncOqBKWxN86f6ik5jWh_oN-zs71zM6hAD_bczkMAAhO3ADlAquq1ndIOllAHZz_KQHRayVrGsLQCh7kb8w7HFhdXjJdS9HSeoK5XKIW6Lwt4iNgyPGIC8Nqy2TefF6FsvTYMw0KOt3JiTTc32kKUT3P-IJywYjfqzZMYVeMT71aWTSD7Eh_30I1HgnqSt9RTTg2CydeB6Om2PntH9d50aif8oz2nyWlPQeUg6afagt2IoZKzcWm2eMny3TCD5BIWb-XrTJoBqzjJT00M5LTaRwsp-5Inyp3cOPZd55-RJ78JdMMNn52ejjTuJqEUWf9aVYb1zEJODHVEsw59clLO80PYx2A3C_1VYmDjk8UeUOqv679b7gLkqw1yeLBh0SVVpsBd76kGqn_T9KgjN7gVpqK9Pp_coxB6-_j8lkN51DvS8sp8at9MMAVOf3yC8eBDH_Ws5qQZe0uEzzGzqKPz6cRBymYwbqe4IXQuwNFexHle5TCYT9x3ZSp8sxCHpq_t7fxozqDywP2IyuZX6gQD3rbSD9iqH9Dq0SUWI-lddUHgs-yz3f4nUXvbVp38pbKCo_zDdHDE2ZdwsyqlWPLeTefbQGg8RXe5uoTp8DHlrXpGy3WN9V_E11gOz8iVV9mF5XYcki6xsFm0IAkIVGBtNu7uwbcMnfQEWuCOOdyJnejdOBzO-_PGcJAwVfWDtT1aKDDZazYpGCylFbpgHnocEGuMaUpWsTH9dZpIBWHF5Gq_vPCx1zXkes2ddrluL5ibB-DGwfRStkVFnQkXkPBquhNfgiUBvklfDNg0urXmim0SoLHKnfSl90Inn5eoJGsor7Ha1_c5VCf5evKAx4aX7a-tHcCP_VzRzcAAVBaCITyavpSEiOPZwXhL6QaGN3_cdLu6J0NCYq6kfhVJwKzg-wT30PUfAyGnkLzCsljeJh_qqu7mbty-lMU7-PunS2lPxnB8TVZnTFcWZqpYqffPbgyA01LYAY85jK8X71va_2R-4ICjpaznEm130cX-iA0HRxP7xlO1L8jylvRBiAl8RWnvX26oxHw-U8sgs48oC93f37BBUwj0aYhbR3BIH0AJRrLAqM-7n2Ndc_kLSPmLpea-JeE_jdDl2ewSCJH6viFNDjv5JOiV2J8ec-wlLA85c6aCuRSe-TcAmKSD7UxpLSc-Eoqabb8nkHBX477BswW04TTN9-I7vsIfFLJt89PMoVoEVrdYJdvO2XOLV1Y0v_auAVhpvo02TOAfK-j7XPhvKO71IKd94FFb_2zBmG8IoEvS6Knuoz_-V2A9MhGdxrliZoJCnceoLqlbgg414dm6p5xowTJEUHDGqvlYEjXWM4Dp2MDqpN9RBMJ9LmLcB8fGbrnpDSDcE90uZPQoYonsy31kZoC3BKjXMF-iE_x6vlFsVm_1Ta4oaLOjXj-jjy8I0QMaaZQC3cj7fkOcaF-KrdwwNBdMRECNpoaBNrp1A6OX7KSr3E1N04nvmAmLqIs5I9gKWfbAP_5avK5SAvuUt0G7P-dVL5SSlNtO7T7PfslVJ2_QOs2zEBxbk4m-Dlvvs-8S9ULaI2iQob1KlJwPCcUY9PopXhEsinlWufq_X2Bc6owJPfYyUidRYBIA6BZDxpKvsekt0-v5Z0I_yLg0g7ikArnExYXpCyEw_SqDFmig4S_8wd-q7xj2wltJevnVusd763ofIuBxysBM0_7gtmsXRXPVSqOXbl2SKgaBiLdy6g_TOrcu6XVrW16vqfGzdZvpSQ2Tlzt4U8ItdFRlNCJ8Z7Wm2wkQocKEqZMSNoWXoQwA62oZN4uNQZ_WnaJ4KgoHv5K6y3tzJCG5SB3T7V54EOX9oBFXWQEI_73ToO49uJxywpUFaW9J5X7prOqE0tUMOnuKMVU2t79o8NgZnFDTpYwhdAIROBwISwG86sV8p9t9nxljG31lLSAy7CtLRL5GN9gSbzREQRYnDf2YTPKs8vZrbTlf2-4_I0xrkdp5mdjyKeWSlxgGb3imTh-VeQVVSFoZbuhirDhj-SBiPyyBW-Kb3hHnIZ3JdtiVsANC976p-Pj2DcmQFk1hP-rgzCV-upSRVGHKF_5GyVnCmoEZCL8J5ex58xHqJQMBxP7ni5jFdBXxJQ87m1zqBsPptV-HPS3YJ3yrXiJhFNpFXSToAsVnqrHJ7wTGJMCdIoOT8cIVw4KNyu2nepfLZ1qp5jB78n9CbhmfGio_GJi0qQ1owAQQq_IdxP2KSgIr8nmQblbr_AoZ6UVsl6KT8aShF4ol5SOe-aBlENr7K5jdnMk27IGoIXXfExEHGgHXa4O9cfx-z5djK2TpnHnQNg7HG990C5Fm4PpY7VmXrbVluH0DbaBwI2zvFscMdVAcSea4eQU4rhtvkaVY6XJKQ_VqpEsrApY5fqdNKVmKZLLg5jT9r99jEZUxH67uzv4zq_twupc9ikzmiHai6mcEUTXqAlYIEVNxVPI9P5w7yzrSA4X1xVG6LCGM8ZXyJ_oyNoyd0Mk2JZ-egRe2pnWOi3KdtqSe5XSPoGHsRayDT-iSRwhHH8QYf2RrkI8-CRclybZPKEKK-CuQsJ5zNwJ6WrW84dV8d_lmH6MYtKxIsa4zFAtJsfjuDP16a1A5G7V0wpVkxHPynQG8Tn69ol6E6the4w5zwMQ-ZlaqBt1I8iQBmC6xjGRNieBXLHWqhcAn8eG5IBCabeYWXLulfcGCm9ssmEN4kB8DFZEGojY7kQl7EF79n6aMDMEUkzmMq8TOHZ11FqVhkRRtGhldwhL-ePmXQwWQNhzVMewY4R7DpWHdU_5JwATXY_d-eeRzF_3maeClJfQ8Ee92qRKOiUY9-6Tz0lKvrNhecOxedLHhTZw4uGCQtum6-wo39G1nMcPnJU-eO3YazhvCPpYOwf8HuQ1-KNQ9hKS3uNe5APo_HLl5Mt-6ox1fboXNgTOzZO2mILN-zGAtmCpSF0Xa3qXpMfdsNLZ_YNne8VI4rfoe8B8m6fgBNlxy0SbFKuq1PcTsUHMcVDu4blk2Jpa4u3znDaOVleTvob-Xrcr1Xrm-AJZ2sFnPonZbOBZnb5a9fIc5xwN-DCg=",
+                "format": "openai-responses-v1",
+                "id": "rs_049439ea6bf8cf5f0168fffd5f4e70819689c34afc1b18de9d",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{ \"a\": 2, \"b\": 3 }",
+                  "name": "add"
+                },
+                "id": "call_iRYOF73QJzFsOgqb0UjklDij",
+                "index": 0,
+                "type": "function"
+              }
+            ]
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1761606953,
+      "id": "gen-1761606953-1ooqcLwFWeeGTdrk3xrt",
+      "model": "openai/gpt-5-pro",
+      "object": "chat.completion",
+      "provider": "OpenAI",
+      "usage": {
+        "completion_tokens": 347,
+        "completion_tokens_details": {
+          "reasoning_tokens": 320
+        },
+        "prompt_tokens": 68,
+        "total_tokens": 415
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "9955e5e5a95172e5-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 27 Oct 2025 23:15:54 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

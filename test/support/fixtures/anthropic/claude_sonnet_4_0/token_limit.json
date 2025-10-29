@@ -1,0 +1,152 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtc29ubmV0LTQtMCIsInN0cmVhbSI6ZmFsc2UsInRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19"
+    },
+    "canonical_json": {
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "claude-sonnet-4-0",
+      "stream": false,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-beta": [
+        "interleaved-thinking-2025-05-14"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "EsAFCkYICRgCKkANNLekXAXqfk1n91M4kVDiWkGWi7Oajn1dQlKiP9otM9zV8WeueHBfHApKpI/Kz5fnv6x1JHG8N4jh/o+1uajTEgwRTuQlkyMre3CWUSoaDAv5jPGEPvXGIqCQlCIwqIEwxsww1npfKCbly3XO9lngojcF11XTo0WTCIy6pEyQJbs8Ys7xLWSkPzIfelOgKqcEvWiRrG35Qvauv1P3DZDqDrkw9RG0wwD0ECHb5Jn5cTDg9hM/MqvHrVrr3IqUBFto4VedLJUhzM1JKGNzIe7iXV2RrudKgiVBk+0RIqi5dl296W+kgCHjdN/z3P7QrH9FmKUvgHLe8+IblupnkoxXt7xl9No4ojFmtYjE9Ujf/1D2MNnmLAJK82g5poz3E81UJqa0L60ISs79JsMOhjBFxrrqhTLs9UKrHBw3o7HdSiK/HGCOB0ccGaY9ebYE1xrMj1/WBR6gVmz9l1gSQ4ZEtLrGjxyoKuKZQn2kMCc5ZDJ5VTxty+Uz8Enj858Hs5QB7UAc6ScQDPLCyjcE7eHPBrQ7DAO+ALebJFfGL0QmyVgAaVygq3Nv4pwYuyLEpyKNUQUv1S+ku5+ePYjypc9rHAcjQYpxzSALwJP869mkQsyI9wKYURvFCsOz08OJbbBCqqTnK9+Y9Mxd0GYqga+Gf+4LoUkU9EkxR0lljyqa4/x904t8FwYc2DWmnoL8xRlaI0BFyufAh5pkoLh57KocSPsV1LcbFsrRNsqZqdxP7oKnHQMIx70FdWvPH+4BCTtItsGtPhBRQINVYTHc0TvtMT3bWlUfxYtqCmGIKoNm8qBXhWc5iA2lKF0SH+uDCBzaQTiKUElXNQ1MZ7VoEg1r4Y4Ty8FoogdMYfz+a1RbzvS9qjqalwgNHTD6iG2W8fMDFfjRXHfqRn3tz18xm8kkTKPSIGy8fBoYAQ==",
+          "thinking": "The user wants a very long story about dragons and adventures. I should create an engaging fantasy tale with multiple characters, plot twists, world-building, and exciting adventures. I'll aim for a substantial length while keeping it interesting throughout. Let me create a story with:\n\n1. A compelling protagonist\n2. Dragons with unique characteristics\n3. Multiple adventures/quests\n4. Rich world-building\n5. Character development\n6. A satisfying conclusion\n\nI'll structure it with clear narrative progression and vivid descriptions.",
+          "type": "thinking"
+        },
+        {
+          "text": "# The Chronicles of Aerion: The Last Dragon Whisperer\n\n## Chapter 1: The Awakening\n\nIn the realm of Valdoria, where ancient mountains scraped the belly of storm clouds and forests whispered secrets older than memory, there lived a young woman named Kira Stormwind. She possessed an unusual gift that had remained dormant for nineteen years of her life—until the night the dragons returned.\n\nKira worked as a blacksmith's apprentice in the village of Thornwick, her calloused hands more familiar with hammer and anvil than the mystical arts her grandmother had whispered about in bedtime stories. Her auburn hair was perpetually singed at the edges from the forge fires, and her green eyes held the steady gaze of someone accustomed to hard work and simple pleasures.\n\nThe night everything changed began like any other. Kira was banking the forge fires when a sound unlike anything she had ever heard echoed across the valley—a deep, resonant call that seemed to vibrate through her very bones. She dropped her tools and stepped outside, scanning the star-scattered sky.\n\nWhat she saw defied belief.\n\nA dragon, magnificent and terrible, soared overhead. Its scales caught the moonlight like liquid silver, and its wings spanned nearly the width of the village square. But this was no beast from children's tales—this dragon was wounded, its flight erratic, dark drops falling from its side like rain.\n\nWithout thinking, Kira called out. Not with her voice, but with something deeper, something that seemed to rise from the very core of her being. The dragon's great head turned, and for one impossible moment, their eyes met. In that instant, Kira heard something that would change her life forever—the dragon's voice in her mind.\n\n*Help me, Whisperer. The old bonds still hold.*\n\nThe dragon crashed into the Whispering Woods beyond the village, and Kira found herself running toward the sound, her heart pounding with a mixture of terror and inexplicable purpose.\n\n## Chapter 2: The First Bond\n\nKira discovered the dragon in a clearing where ancient oaks had been felled by its impact. Up close, the creature was even more magnificent—and more wounded than she had realized. Deep gashes scored its silver hide, and one wing hung at an unnatural angle. The dragon's eyes, each the size of dinner plates and colored like liquid amber, fixed upon her with an intelligence that was undeniably ancient.\n\n*You can hear me,* the dragon said without moving its lips, its mental voice carrying notes of surprise and relief. *I had begun to fear that the gift had died with the others.*\n\n\"Others?\" Kira whispered, her voice barely audible.\n\n*The Dragon Whisperers. Your kind were our companions once, our partners in the great work of keeping the balance. But that was centuries ago, before the Sundering, before we retreated to the Far Realms.*\n\nKira knelt beside the great beast, her hands hovering uncertainly over its wounds. \"I don't know how to help you. I'm just a blacksmith's apprentice.\"\n\n*You are Kira Stormwind, granddaughter of Elena the Wise. Your grandmother was the last true Whisperer before you. The blood remembers, even when the mind forgets.*\n\nAt the mention of her grandmother, memories flooded back—not her own memories, but older ones, inherited through bloodline and magic. Images of dragons and humans working together, of great cities in the sky, of magic that could heal the earth itself.\n\nInstinctively, Kira placed her hands on the dragon's largest wound. Power flowed through her, warm and electric, and she watched in amazement as the gash began to close. The dragon's breathing eased, and it managed to lift its great head.\n\n*I am Draconius the Stormborn, last of the Silver Flight. And I bring dire news, young Whisperer. The Shadow King has risen again, and this time, he means to unmake the world itself.*\n\n## Chapter 3: The Shadow King's Return\n\nAs Draconius healed under Kira's newfound power, he told her of the great threat that loomed over all the realms. The Shadow King, Malachar the Void-Touched, had once been defeated by an alliance of dragons and Whisperers a thousand years ago. But evil of such magnitude could never be truly destroyed, only banished.\n\n\"Malachar has spent a millennium in the Void Between Worlds,\" Draconius explained, his mental voice heavy with ancient sorrow. \"He has learned to corrupt the very fabric of reality. Already, his influence spreads. The Far Realms grow cold and dark, and creatures of shadow walk where flowers once bloomed.\"\n\nKira felt overwhelmed. \"But I'm just one person. How can I possibly stand against something like that?\"\n\n*You are not alone,* Draconius assured her. *Other dragons still live, though they are scattered and few. And somewhere in the world, other Whisperer bloodlines may yet survive, their gifts dormant but not dead.*\n\nAs if to prove his point, a new voice echoed in the clearing—not in their minds, but spoken aloud with the confidence of someone accustomed to being obeyed.\n\n\"Well, well. A dragon and a Whisperer. How delightfully archaic.\"\n\nKira spun around to see a tall figure emerge from the shadows between the trees. The stranger wore robes of midnight blue decorated with silver stars, and his staff topped with a crystal that pulsed with inner light. His hair was silver despite his apparently young face, and his eyes held depths that spoke of knowledge both wonderful and terrible.\n\n\"I am Theron Starcaller, last of the Order of Celestial Mages,\" he said with a slight bow. \"And if you're planning to take on the Shadow King, you're going to need help.\"\n\n## Chapter 4: Gathering Allies\n\nTheron proved to be a valuable, if mysterious, addition to their group. He had spent years researching the ancient war against Malachar and had felt the disturbances in the magical fabric that marked the Shadow King's return.\n\n\"The signs are unmistakable,\" he explained as they made camp that first night. \"Animals fleeing en masse, plants withering without cause, and most telling of all—the stars themselves are going out, one by one.\"\n\nKira looked up at the night sky and gasped. She had been so focused on earthly matters that she hadn't noticed several dark patches where stars should have been.\n\n*He consumes light itself,* Draconius confirmed. *It is how he grows strong enough to manifest in our realm.*\n\n\"Then we need to find the other dragons quickly,\" Kira said. \"Where are they?\"\n\nDraconius was quiet for a long moment. *The Green Flight dwells in the Everbloom Forest, guardians of life and growth. Verdania the Ancient would be our greatest ally, if she still lives. The Red Flight has made their home in the Volcanic Chain to the south—proud Pyrion the Terrible commands them. And somewhere in the Floating Isles, Aethon of the Blue Flight keeps watch over the winds and weather.*\n\nTheron nodded thoughtfully. \"A dangerous journey to reach them all, especially with shadow creatures already beginning to appear in the outer provinces. But I know of shortcuts through the ley lines, paths that even Malachar cannot easily follow.\"\n\nTheir quest began at dawn.\n\n## Chapter 5: The Everbloom Forest\n\nThe journey to the Everbloom Forest took them across the Whispering Plains, where the grass itself seemed to murmur ancient secrets. Draconius had to remain hidden during daylight hours—despite the alliance of old, most humans still feared dragons and would react with panic or hostility.\n\nAs they traveled, Theron taught Kira more about her abilities as a Dragon Whisperer. \"The bond between Whisperer and dragon is not just communication,\" he explained. \"You share strength, knowledge, even life force. In the ancient days, the greatest Whisperers could see through their dragon's eyes from across the world, or channel their elemental powers.\"\n\nKira practiced these skills, learning to share Draconius's acute senses, to feel the electromagnetic fields he used for navigation, even to perceive the magical auras that surrounded all living things. It was overwhelming at first—the world became a symphony of sensation that threatened to drown her merely human consciousness.\n\n*Peace,* Draconius counseled. *Do not try to experience everything at once. The bond grows stronger with time and trust.*\n\nThey reached the borders of the Everbloom Forest just as the first shadow creatures appeared.\n\nThe beasts were wrong in every conceivable way—wolves with too many eyes and mouths that opened sideways, birds whose wings cast darkness instead of shadow, and things that had no earthly name but moved like living nightmares given form. They attacked without warning, pouring from between the trees in a tide of corruption.\n\nTheron's staff blazed with starlight as he cast bolts of pure energy, but the creatures seemed to absorb light itself. Kira found herself swept up in Draconius's mind as he took to the air, breathing silver fire that actually drove the shadows back.\n\nThrough their bond, Kira felt herself channeling the dragon's power. Lightning crackled from her hands, and she moved with inhuman speed and strength. Together, they drove off the creatures, but not before Kira caught a glimpse of something that chilled her to the bone—a figure watching from deep within the forest, humanoid but wrong, its eyes like holes in reality itself.\n\n\"Malachar's herald,\" Theron said grimly when she described what she'd seen. \"He grows stronger faster than we hoped.\"\n\n## Chapter 6: Verdania the Ancient\n\nThe Everbloom Forest was a miracle of nature. Trees grew to impossible heights, their branches intertwining to form natural bridges and platforms. Flowers bloomed in colors that had no names, and the very air thrummed with life energy so potent it made Kira's newly awakened senses sing.\n\nAt the heart of the forest stood the Great Oak, a tree so massive that its trunk could have housed a small city. And resting among its branches was the most beautiful dragon Kira had ever seen.\n\nVerdania the Ancient was a study in living emerald. Her scales shifted between the deep green of forest shadows and the bright green of spring leaves. Vines and flowers grew directly from her hide, and small woodland creatures made their homes among her spines. When she opened her eyes, they were the color of sunlight filtering through leaves.\n\n*Young Stormborn,* she said, her mental voice like wind through leaves, *you bring troubling news and stranger company.*\n\nDraconius bowed his great head respectfully. *Ancient One, the Shadow King stirs again. This young woman is a Whisperer, perhaps the last of her kind.*\n\nVerdania's attention turned to Kira, and the scrutiny of those ancient eyes was almost unbearable. *Yes, I see the blood of Elena in her. Your grandmother was dear to me, child. She helped heal the forest after the last war's devastation.*\n\n\"Will you help us?\" Kira asked.\n\n*Help you do what? Rush headlong into battle against a force that nearly destroyed the world once before? The Green Flight remembers the cost of that war—whole species lost forever, forests turned to ash, rivers that ran black for decades.*\n\n\"But if we don't fight—\" Kira began.\n\n*If we do not fight wisely, we will share the fate of our predecessors,* Verdania interrupted. *Tell me, young Whisperer, what do you know of the Sundering?*\n\nKira admitted she knew very little, only legends and fragments.\n\n*Then let me show you,* Verdania said, and suddenly Kira found herself experiencing memories not her own—visions of the last great war.\n\n## Chapter 7: Visions of the Past\n\nThe memories hit Kira like a physical blow. She saw dragons and Whisperers fighting side by side against hordes of shadow creatures. She witnessed entire cities consumed by darkness, their people transformed into twisted servants of the void. And at the center of it all, she saw him—Malachar in his prime, a figure of such malevolent power that reality bent around him.\n\nBut she also saw the price of victory. Dragons fell from the sky like burning stars. Whisperers died as their bonded partners perished, their minds shattering from the severed connection. In the end, only a handful of each remained, and they were forced to make a terrible choice.\n\n*We sundere",
+          "type": "text"
+        }
+      ],
+      "id": "msg_01V6msZEYjW7hcMEMmHMjTGX",
+      "model": "claude-sonnet-4-20250514",
+      "role": "assistant",
+      "stop_reason": "max_tokens",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 44,
+        "output_tokens": 3000,
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": [
+        "a71659e7-a922-4ff7-99de-f3ba615face1"
+      ],
+      "anthropic-ratelimit-input-tokens-limit": [
+        "450000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "450000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2025-10-27T22:48:25Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "90000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "87000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2025-10-27T22:49:39Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "1000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2025-10-27T22:48:23Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "540000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "537000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2025-10-27T22:48:25Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9955bd997808e80d-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 27 Oct 2025 22:49:37 GMT"
+      ],
+      "request-id": [
+        "req_011CUYX1uFZjv44LguFmE1fF"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "74297"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  }
+}

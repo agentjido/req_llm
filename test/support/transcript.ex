@@ -199,8 +199,7 @@ defmodule ReqLLM.Test.Transcript do
     data_chunks(t)
     |> Enum.map(fn chunk ->
       %{
-        "b64" => Base.encode64(chunk),
-        "decoded" => chunk
+        "b64" => Base.encode64(chunk)
       }
     end)
   end

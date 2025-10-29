@@ -151,7 +151,7 @@
     "status": "pass",
     "last_checked": "2025-10-27T21:05:14Z"
   },
-  "anthropic:claude-3-5-sonnet-20240620": {
+  "anthropic:claude-3-5-haiku-latest": {
     "status": "pass",
     "last_checked": "2025-10-27T21:05:14Z"
   },
@@ -160,6 +160,10 @@
     "last_checked": "2025-10-27T21:05:14Z"
   },
   "anthropic:claude-3-7-sonnet-20250219": {
+    "status": "excluded",
+    "last_checked": "2025-10-29T18:54:47Z"
+  },
+  "anthropic:claude-3-7-sonnet-latest": {
     "status": "pass",
     "last_checked": "2025-10-27T21:05:14Z"
   },
@@ -174,6 +178,10 @@
   "anthropic:claude-3-sonnet-20240229": {
     "status": "excluded",
     "last_checked": null
+  },
+  "anthropic:claude-haiku-4-5": {
+    "status": "pass",
+    "last_checked": "2025-10-29T19:15:05Z"
   },
   "anthropic:claude-haiku-4-5-20251001": {
     "status": "pass",
@@ -215,6 +223,14 @@
     "status": "excluded",
     "last_checked": "2025-10-03T23:26:57Z"
   },
+  "google:gemini-1.5-flash-001": {
+    "status": "excluded",
+    "last_checked": null
+  },
+  "google:gemini-1.5-flash-002": {
+    "status": "excluded",
+    "last_checked": null
+  },
   "google:gemini-1.5-flash-8b": {
     "status": "excluded",
     "last_checked": "2025-10-03T23:26:57Z"
@@ -222,6 +238,14 @@
   "google:gemini-1.5-pro": {
     "status": "excluded",
     "last_checked": "2025-10-03T23:26:57Z"
+  },
+  "google:gemini-1.5-pro-001": {
+    "status": "excluded",
+    "last_checked": null
+  },
+  "google:gemini-1.5-pro-002": {
+    "status": "excluded",
+    "last_checked": null
   },
   "google:gemini-2.0-flash": {
     "status": "pass",
@@ -295,6 +319,14 @@
     "status": "pass",
     "last_checked": "2025-10-04T12:50:52Z"
   },
+  "google:gemini-embedding-exp": {
+    "status": "excluded",
+    "last_checked": null
+  },
+  "google:gemini-embedding-exp-03-07": {
+    "status": "excluded",
+    "last_checked": null
+  },
   "google:gemini-flash-latest": {
     "status": "pass",
     "last_checked": "2025-10-27T21:05:14Z"
@@ -315,9 +347,33 @@
     "status": "excluded",
     "last_checked": "2025-10-07T19:52:39Z"
   },
+  "groq:deepseek-r1-distill-llama-70b-specdec": {
+    "status": "excluded",
+    "last_checked": null
+  },
+  "groq:deepseek-r1-distill-qwen-32b": {
+    "status": "excluded",
+    "last_checked": null
+  },
+  "groq:distil-whisper-large-v3-en": {
+    "status": "excluded",
+    "last_checked": null
+  },
+  "groq:gemma-7b-it": {
+    "status": "excluded",
+    "last_checked": null
+  },
   "groq:gemma2-9b-it": {
     "status": "excluded",
     "last_checked": "2025-10-03T17:50:32Z"
+  },
+  "groq:llama-3.1-70b-specdec": {
+    "status": "excluded",
+    "last_checked": null
+  },
+  "groq:llama-3.1-70b-versatile": {
+    "status": "excluded",
+    "last_checked": null
   },
   "groq:llama-3.1-8b-instant": {
     "status": "pass",
@@ -339,21 +395,37 @@
     "status": "excluded",
     "last_checked": "2025-10-03T17:50:32Z"
   },
+  "groq:llama3-groq-70b-8192-tool-use-preview": {
+    "status": "excluded",
+    "last_checked": null
+  },
+  "groq:llama3-groq-8b-8192-tool-use-preview": {
+    "status": "excluded",
+    "last_checked": null
+  },
+  "groq:llava-v1.5-7b-4096-preview": {
+    "status": "excluded",
+    "last_checked": null
+  },
   "groq:meta-llama/llama-4-maverick-17b-128e-instruct": {
     "status": "pass",
     "last_checked": "2025-10-27T21:05:14Z"
   },
   "groq:meta-llama/llama-4-scout-17b-16e-instruct": {
-    "status": "excluded",
-    "last_checked": "2025-10-03T18:31:26Z"
+    "status": "fail",
+    "last_checked": "2025-10-29T19:15:05Z"
   },
   "groq:meta-llama/llama-guard-4-12b": {
-    "status": "excluded",
-    "last_checked": "2025-10-03T18:31:32Z"
+    "status": "fail",
+    "last_checked": "2025-10-29T19:15:05Z"
   },
   "groq:mistral-saba-24b": {
     "status": "excluded",
     "last_checked": "2025-10-03T17:50:32Z"
+  },
+  "groq:mixtral-8x7b-32768": {
+    "status": "excluded",
+    "last_checked": null
   },
   "groq:moonshotai/kimi-k2-instruct": {
     "status": "excluded",
@@ -511,6 +583,10 @@
     "status": "fail",
     "last_checked": "2025-10-27T21:05:14Z"
   },
+  "openrouter:anthropic/claude-haiku-4.5": {
+    "status": "pass",
+    "last_checked": "2025-10-29T19:15:05Z"
+  },
   "openrouter:anthropic/claude-opus-4": {
     "status": "pass",
     "last_checked": "2025-10-27T21:05:14Z"
@@ -646,6 +722,18 @@
   "openrouter:microsoft/mai-ds-r1:free": {
     "status": "excluded",
     "last_checked": "2025-10-07T14:19:05Z"
+  },
+  "openrouter:minimax/minimax-01": {
+    "status": "fail",
+    "last_checked": "2025-10-29T19:15:05Z"
+  },
+  "openrouter:minimax/minimax-m1": {
+    "status": "fail",
+    "last_checked": "2025-10-29T19:15:05Z"
+  },
+  "openrouter:minimax/minimax-m2:free": {
+    "status": "fail",
+    "last_checked": "2025-10-29T19:15:05Z"
   },
   "openrouter:mistralai/codestral-2508": {
     "status": "pass",
@@ -939,7 +1027,7 @@
     "status": "pass",
     "last_checked": "2025-10-27T21:05:14Z"
   },
-  "xai:grok-2": {
+  "openrouter:z-ai/glm-4.6:exacto": {
     "status": "pass",
     "last_checked": "2025-10-27T21:05:14Z"
   },

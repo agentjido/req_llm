@@ -1,0 +1,170 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMjgwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiY2xhdWRlLTMtNy1zb25uZXQtbGF0ZXN0Iiwic3RyZWFtIjpmYWxzZSwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifSwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0X3NjaGVtYSI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoiZ2V0X3dlYXRoZXIifV19"
+    },
+    "canonical_json": {
+      "max_tokens": 12800,
+      "messages": [
+        {
+          "content": "Tell me a joke about cats",
+          "role": "user"
+        }
+      ],
+      "model": "claude-3-7-sonnet-latest",
+      "stream": false,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      },
+      "tools": [
+        {
+          "description": "Get current weather information for a location",
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "location": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "location"
+            ],
+            "type": "object"
+          },
+          "name": "get_weather"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-beta": [
+        "interleaved-thinking-2025-05-14,tools-2024-05-16"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "ErUBCkYICRgCIkB2cDwsK1+FgCw9g3brniGxwZr8qSlgf0OhJ8dIFie4bTxsPPTNrvDZtN1h2TUqxhmjRvg5PKcjn+nFnsEQ1zzCEgxvh1Jrr/BT0XGXelcaDHegZujqT863rxWMbSIwLpQJMX1bFCuHYFJlHUAyui72zh/7CpSWP/j3HYex2uSBGBaYSk0jDZdOh1KBTNOdKh3RIdXwNW8siIorpYxeMpmazfseIThIwrjul8D6ahgC",
+          "thinking": "The user has requested a joke about cats. Let me analyze the request:\n\n1. No tools or functions are required to answer this request.\n2. I don't need weather information or any other external data.\n3. I can respond with a cat joke directly from my knowledge.\n\nI'll share a light-hearted cat joke with the user.",
+          "type": "thinking"
+        },
+        {
+          "text": "I'd be happy to tell you a joke about cats!\n\nWhy don't cats like online shopping?\nThey prefer a cat-alogue!\n\nWould you like to hear another cat joke?",
+          "type": "text"
+        }
+      ],
+      "id": "msg_014NktqhLamjcsq8kAwft9JX",
+      "model": "claude-3-7-sonnet-20250219",
+      "role": "assistant",
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 417,
+        "output_tokens": 126,
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": [
+        "a71659e7-a922-4ff7-99de-f3ba615face1"
+      ],
+      "anthropic-ratelimit-input-tokens-limit": [
+        "40000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "40000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2025-10-27T22:47:45Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "16000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "16000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2025-10-27T22:47:47Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "1000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2025-10-27T22:47:44Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "56000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "56000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2025-10-27T22:47:45Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9955bca8eca5aca8-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 27 Oct 2025 22:47:47 GMT"
+      ],
+      "request-id": [
+        "req_011CUYWy4X6B6hWManNgd6Aw"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "via": [
+        "1.1 google"
+      ],
+      "x-envoy-upstream-service-time": [
+        "2564"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  }
+}
