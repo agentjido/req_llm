@@ -256,15 +256,23 @@ defmodule Mix.Tasks.ReqLlm.ModelSync do
 
       if not Enum.empty?(models) do
         provider_file = Path.join(@providers_dir, "#{normalized_id}.json")
-        config = get_provider_config(normalized_id)
+        fallback_config = get_provider_config(normalized_id)
+
+        existing_provider = provider_data["provider"] || %{}
 
         provider_json = %{
           "provider" => %{
             "id" => normalized_id,
-            "name" => provider_data["name"] || format_provider_name(normalized_id),
-            "base_url" => config["base_url"],
-            "env" => config["env"] || [],
-            "doc" => provider_data["description"] || "AI model provider"
+            "name" =>
+              existing_provider["name"] || provider_data["name"] ||
+                format_provider_name(normalized_id),
+            "base_url" =>
+              existing_provider["base_url"] || provider_data["base_url"] ||
+                fallback_config["base_url"],
+            "env" =>
+              existing_provider["env"] || provider_data["env"] || fallback_config["env"] || [],
+            "doc" =>
+              existing_provider["doc"] || provider_data["description"] || "AI model provider"
           },
           "models" => prune_model_fields(models)
         }
@@ -326,8 +334,18 @@ defmodule Mix.Tasks.ReqLlm.ModelSync do
     |> Enum.map_join(" ", &String.capitalize/1)
   end
 
-  # Provider-specific configuration (missing from models.dev)
-  # Simplified - no module attribute, inline function
+  # Provider-specific fallback configuration
+  #
+  # These configurations are used as fallbacks when:
+  # 1. The models.dev API doesn't provide complete provider metadata
+  # 2. Local patch files don't override these values
+  #
+  # Priority order (highest to lowest):
+  # 1. Local patch file (priv/models_local/<provider>_patch.json)
+  # 2. models.dev API data
+  # 3. Hardcoded fallback config (below)
+  #
+  # This means you can override any provider config by creating a patch file.
   defp get_provider_config("openai") do
     %{
       "base_url" => "https://api.openai.com/v1",
@@ -351,7 +369,7 @@ defmodule Mix.Tasks.ReqLlm.ModelSync do
 
   defp get_provider_config("google") do
     %{
-      "base_url" => "https://generativelanguage.googleapis.com/v1beta",
+      "base_url" => "https://generativelanguage.googleapis.com/v1",
       "env" => ["GOOGLE_API_KEY"]
     }
   end

@@ -34,6 +34,7 @@ defmodule ReqLLM.Coverage.Google.GroundingTest do
         opts =
           fixture_opts("grounding_basic",
             provider_options: [
+              google_api_version: "v1beta",
               google_grounding: %{enable: true}
             ]
           )
@@ -67,6 +68,7 @@ defmodule ReqLLM.Coverage.Google.GroundingTest do
         opts =
           fixture_opts("grounding_context",
             provider_options: [
+              google_api_version: "v1beta",
               google_grounding: %{enable: true}
             ]
           )
@@ -96,6 +98,7 @@ defmodule ReqLLM.Coverage.Google.GroundingTest do
           fixture_opts("grounding_streaming",
             stream: true,
             provider_options: [
+              google_api_version: "v1beta",
               google_grounding: %{enable: true}
             ]
           )
@@ -127,6 +130,7 @@ defmodule ReqLLM.Coverage.Google.GroundingTest do
           opts =
             fixture_opts("grounding_legacy",
               provider_options: [
+                google_api_version: "v1beta",
                 google_grounding: %{
                   dynamic_retrieval: %{
                     mode: "MODE_DYNAMIC",
