@@ -34,7 +34,7 @@ For standard GPT models:
 For reasoning models with extended thinking:
 - `o1`, `o1-mini`, `o1-preview`
 - `o3`, `o3-mini`
-- `o4`-mini`
+- `o4-mini`
 - `gpt-4.1`, `gpt-5`
 
 ReqLLM automatically routes to the correct API based on model metadata.
