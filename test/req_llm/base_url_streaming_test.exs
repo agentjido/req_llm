@@ -231,7 +231,10 @@ defmodule ReqLLM.BaseURLStreamingTest do
     } do
       Application.delete_env(:req_llm, :google)
 
-      opts = [api_key: "[REDACTED:api-key]", provider_options: [google_grounding: %{enable: true}]]
+      opts = [
+        api_key: "[REDACTED:api-key]",
+        provider_options: [google_grounding: %{enable: true}]
+      ]
 
       {:ok, finch_request} = ReqLLM.Providers.Google.attach_stream(model, context, opts, nil)
 
