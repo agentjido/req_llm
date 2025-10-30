@@ -144,6 +144,22 @@ defmodule ReqLLM.Provider.OptionsTest do
       assert processed[:provider_options][:custom_option] == "nested_value"
       assert processed[:provider_options][:another_option] == 200
     end
+
+    test "supports config-based override of `base_url`" do
+      defmodule BaseURLOverwriteProvider do
+        use ReqLLM.Provider.DSL,
+          id: :url_override,
+          base_url: "https://example.com"
+      end
+
+      model = %ReqLLM.Model{provider: :url_override, model: "test-model"}
+      opts = []
+      Application.put_env(:req_llm, :url_override, base_url: "https://overriden.com")
+
+      {:ok, processed} = Options.process(BaseURLOverwriteProvider, :chat, model, opts)
+
+      assert "https://overriden.com" = processed[:base_url]
+    end
   end
 
   describe "Options.process/4 - model options extraction" do

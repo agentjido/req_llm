@@ -732,21 +732,21 @@ defmodule ReqLLM.Provider.Options do
   end
 
   defp inject_base_url_from_registry(opts, model, provider_mod) do
-    case Keyword.get(opts, :base_url) do
-      nil ->
-        effective_base_url =
-          with {:ok, metadata} <- ReqLLM.Provider.Registry.get_provider_metadata(model.provider),
-               base_url when not is_nil(base_url) <-
-                 get_in(metadata, ["provider", "base_url"]) || metadata["base_url"] do
-            base_url
-          else
-            _ -> provider_mod.default_base_url()
-          end
+    Keyword.put_new_lazy(opts, :base_url, fn ->
+      config_base_url_override(model.provider) ||
+        base_url_from_provider_metadata(model.provider) ||
+        provider_mod.default_base_url()
+    end)
+  end
 
-        Keyword.put(opts, :base_url, effective_base_url)
+  defp base_url_from_provider_metadata(provider) do
+    {:ok, metadata} = ReqLLM.Provider.Registry.get_provider_metadata(provider)
 
-      _ ->
-        opts
-    end
+    get_in(metadata, ["provider", "base_url"]) || metadata["base_url"]
+  end
+
+  defp config_base_url_override(provider_id) do
+    config = Application.get_env(:req_llm, provider_id, [])
+    Keyword.get(config, :base_url)
   end
 end
