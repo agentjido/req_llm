@@ -27,7 +27,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
     test "opts[:base_url] takes precedence over app config", %{model: model, context: context} do
       Application.put_env(:req_llm, :openai, base_url: "https://config.example.com")
 
-      opts = [base_url: "https://opts.example.com"]
+      opts = [api_key: "test-openai", base_url: "https://opts.example.com"]
 
       {:ok, finch_request} =
         ReqLLM.Providers.OpenAI.ChatAPI.attach_stream(model, context, opts, nil)
@@ -43,7 +43,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
     } do
       Application.put_env(:req_llm, :openai, base_url: "https://config.example.com")
 
-      opts = []
+      opts = [api_key: "test-openai"]
 
       {:ok, finch_request} =
         ReqLLM.Providers.OpenAI.ChatAPI.attach_stream(model, context, opts, nil)
@@ -59,7 +59,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
     } do
       Application.delete_env(:req_llm, :openai)
 
-      opts = []
+      opts = [api_key: "[REDACTED:api-key]"]
 
       {:ok, finch_request} =
         ReqLLM.Providers.OpenAI.ChatAPI.attach_stream(model, context, opts, nil)
@@ -80,7 +80,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
     test "opts[:base_url] takes precedence over app config", %{model: model, context: context} do
       Application.put_env(:req_llm, :anthropic, base_url: "https://config.example.com")
 
-      opts = [base_url: "https://opts.example.com"]
+      opts = [api_key: "[REDACTED:api-key]", base_url: "https://opts.example.com"]
 
       {:ok, finch_request} =
         ReqLLM.Providers.Anthropic.attach_stream(model, context, opts, nil)
@@ -96,7 +96,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
     } do
       Application.put_env(:req_llm, :anthropic, base_url: "https://config.example.com")
 
-      opts = []
+      opts = [api_key: "[REDACTED:api-key]"]
 
       {:ok, finch_request} =
         ReqLLM.Providers.Anthropic.attach_stream(model, context, opts, nil)
@@ -112,7 +112,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
     } do
       Application.delete_env(:req_llm, :anthropic)
 
-      opts = []
+      opts = [api_key: "[REDACTED:api-key]"]
 
       {:ok, finch_request} =
         ReqLLM.Providers.Anthropic.attach_stream(model, context, opts, nil)
@@ -133,7 +133,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
     test "opts[:base_url] takes precedence over app config", %{model: model, context: context} do
       Application.put_env(:req_llm, :openrouter, base_url: "https://config.example.com")
 
-      opts = [base_url: "https://opts.example.com"]
+      opts = [api_key: "[REDACTED:api-key]", base_url: "https://opts.example.com"]
 
       {:ok, finch_request} =
         ReqLLM.Providers.OpenRouter.attach_stream(model, context, opts, nil)
@@ -149,7 +149,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
     } do
       Application.put_env(:req_llm, :openrouter, base_url: "https://config.example.com")
 
-      opts = []
+      opts = [api_key: "[REDACTED:api-key]"]
 
       {:ok, finch_request} =
         ReqLLM.Providers.OpenRouter.attach_stream(model, context, opts, nil)
@@ -165,7 +165,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
     } do
       Application.delete_env(:req_llm, :openrouter)
 
-      opts = []
+      opts = [api_key: "[REDACTED:api-key]"]
 
       {:ok, finch_request} =
         ReqLLM.Providers.OpenRouter.attach_stream(model, context, opts, nil)
@@ -186,7 +186,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
     test "opts[:base_url] takes precedence over app config", %{model: model, context: context} do
       Application.put_env(:req_llm, :google, base_url: "https://config.example.com")
 
-      opts = [base_url: "https://opts.example.com"]
+      opts = [api_key: "[REDACTED:api-key]", base_url: "https://opts.example.com"]
 
       {:ok, finch_request} = ReqLLM.Providers.Google.attach_stream(model, context, opts, nil)
 
@@ -201,7 +201,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
     } do
       Application.put_env(:req_llm, :google, base_url: "https://config.example.com")
 
-      opts = []
+      opts = [api_key: "[REDACTED:api-key]"]
 
       {:ok, finch_request} = ReqLLM.Providers.Google.attach_stream(model, context, opts, nil)
 
@@ -216,7 +216,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
     } do
       Application.delete_env(:req_llm, :google)
 
-      opts = []
+      opts = [api_key: "[REDACTED:api-key]"]
 
       {:ok, finch_request} = ReqLLM.Providers.Google.attach_stream(model, context, opts, nil)
 
@@ -231,7 +231,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
     } do
       Application.delete_env(:req_llm, :google)
 
-      opts = [provider_options: [google_grounding: %{enable: true}]]
+      opts = [api_key: "[REDACTED:api-key]", provider_options: [google_grounding: %{enable: true}]]
 
       {:ok, finch_request} = ReqLLM.Providers.Google.attach_stream(model, context, opts, nil)
 
@@ -248,7 +248,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
     } do
       Application.delete_env(:req_llm, :google)
 
-      opts = [provider_options: [google_api_version: "v1beta"]]
+      opts = [api_key: "[REDACTED:api-key]", provider_options: [google_api_version: "v1beta"]]
 
       {:ok, finch_request} = ReqLLM.Providers.Google.attach_stream(model, context, opts, nil)
 
@@ -266,6 +266,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
       Application.delete_env(:req_llm, :google)
 
       opts = [
+        api_key: "[REDACTED:api-key]",
         base_url: "https://custom.example.com/v1",
         provider_options: [google_grounding: %{enable: true}]
       ]
@@ -282,7 +283,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
     test "handles base_url with trailing slash correctly for OpenAI" do
       {:ok, model} = Model.from("openai:gpt-4o-mini")
       context = Context.new([Context.user("test")])
-      opts = [base_url: "https://example.com"]
+      opts = [api_key: "[REDACTED:api-key]", base_url: "https://example.com"]
 
       {:ok, finch_request} =
         ReqLLM.Providers.OpenAI.ChatAPI.attach_stream(model, context, opts, nil)
@@ -294,7 +295,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
     test "handles base_url without scheme for Anthropic" do
       {:ok, model} = Model.from("anthropic:claude-3-5-haiku-20241022")
       context = Context.new([Context.user("test")])
-      opts = [base_url: "http://example.com"]
+      opts = [api_key: "[REDACTED:api-key]", base_url: "http://example.com"]
 
       {:ok, finch_request} =
         ReqLLM.Providers.Anthropic.attach_stream(model, context, opts, nil)
@@ -306,7 +307,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
     test "constructed request includes proper headers and body" do
       {:ok, model} = Model.from("openai:gpt-4o-mini")
       context = Context.new([Context.user("hello")])
-      opts = [base_url: "https://custom.example.com"]
+      opts = [api_key: "[REDACTED:api-key]", base_url: "https://custom.example.com"]
 
       {:ok, finch_request} =
         ReqLLM.Providers.OpenAI.ChatAPI.attach_stream(model, context, opts, nil)
