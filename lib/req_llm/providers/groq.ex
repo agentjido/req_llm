@@ -355,9 +355,9 @@ defmodule ReqLLM.Providers.Groq do
     case :binary.match(buf, "<think>") do
       :nomatch ->
         if byte_size(buf) > 6 do
-          take = byte_size(buf) - 6
+          take = find_safe_split_point(buf, byte_size(buf) - 6)
           emit = binary_part(buf, 0, take)
-          keep = binary_part(buf, take, 6)
+          keep = binary_part(buf, take, byte_size(buf) - take)
           {[ReqLLM.StreamChunk.text(emit)], %{st | buffer: keep}}
         else
           {[], st}
@@ -376,9 +376,9 @@ defmodule ReqLLM.Providers.Groq do
     case :binary.match(buf, "</think>") do
       :nomatch ->
         if byte_size(buf) > 7 do
-          take = byte_size(buf) - 7
+          take = find_safe_split_point(buf, byte_size(buf) - 7)
           emit = binary_part(buf, 0, take)
-          keep = binary_part(buf, take, 7)
+          keep = binary_part(buf, take, byte_size(buf) - take)
           {[ReqLLM.StreamChunk.thinking(emit)], %{st | buffer: keep}}
         else
           {[], st}
@@ -390,6 +390,22 @@ defmodule ReqLLM.Providers.Groq do
         emits = if inner == "", do: [], else: [ReqLLM.StreamChunk.thinking(inner)]
         {more, st2} = consume_complete_segments(%{mode: :text, buffer: rest})
         {emits ++ more, st2}
+    end
+  end
+
+  defp find_safe_split_point(_binary, pos) when pos <= 0, do: 0
+  defp find_safe_split_point(binary, pos) when pos >= byte_size(binary), do: byte_size(binary)
+
+  defp find_safe_split_point(binary, pos) do
+    case :binary.at(binary, pos) do
+      byte when byte < 128 ->
+        pos
+
+      byte when byte >= 192 ->
+        pos
+
+      _continuation_byte ->
+        find_safe_split_point(binary, pos - 1)
     end
   end
 end
