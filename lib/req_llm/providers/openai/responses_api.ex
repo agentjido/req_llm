@@ -306,6 +306,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   def attach_stream(model, context, opts, _finch_name) do
     headers = build_request_headers(model, opts) ++ [{"Accept", "text/event-stream"}]
 
+    base_url = ReqLLM.Provider.Options.effective_base_url(ReqLLM.Providers.OpenAI, model, opts)
+
     provider_opts = opts |> Keyword.get(:provider_options, []) |> Map.new() |> Map.to_list()
 
     cleaned_opts =
@@ -317,9 +319,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> Keyword.put(:stream, true)
       |> Keyword.put(:model, model.model)
       |> Keyword.put(:context, context)
+      |> Keyword.put(:base_url, base_url)
 
     body = build_request_body(context, model.model, cleaned_opts, nil)
-    url = build_request_url(opts)
+    url = build_request_url(cleaned_opts)
 
     {:ok, Finch.build(:post, url, headers, Jason.encode!(body))}
   rescue

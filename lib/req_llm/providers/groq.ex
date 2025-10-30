@@ -200,7 +200,8 @@ defmodule ReqLLM.Providers.Groq do
   @impl ReqLLM.Provider
   def attach_stream(model, context, opts, finch_name) do
     {translated_opts, _warnings} = translate_options(:chat, model, opts)
-    opts_with_base_url = Keyword.put_new(translated_opts, :base_url, default_base_url())
+    base_url = ReqLLM.Provider.Options.effective_base_url(__MODULE__, model, translated_opts)
+    opts_with_base_url = Keyword.put(translated_opts, :base_url, base_url)
     ReqLLM.Providers.OpenAI.ChatAPI.attach_stream(model, context, opts_with_base_url, finch_name)
   end
 

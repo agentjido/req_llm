@@ -1113,7 +1113,7 @@ defmodule ReqLLM.Providers.Google do
 
     with {:ok, processed_opts} <-
            ReqLLM.Provider.Options.process(__MODULE__, operation, model, opts_to_process) do
-      base_url = Keyword.get(req_opts, :base_url, default_base_url())
+      base_url = Keyword.get(req_opts, :base_url, effective_base_url(processed_opts))
 
       opts_with_base = Keyword.merge(processed_opts, base_url: base_url, model_struct: model)
 
