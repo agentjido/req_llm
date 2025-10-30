@@ -395,7 +395,7 @@ defmodule ReqLLM.Provider.Registry do
       env_vars #=> ["ANTHROPIC_API_KEY"]
 
   """
-  @spec get_provider_metadata(atom()) :: {:ok, map()} | {:error, :not_found}
+  @spec get_provider_metadata(atom()) :: {:ok, map()} | {:error, :provider_not_found}
   def get_provider_metadata(provider_id) when is_atom(provider_id) do
     case get_provider_info(provider_id) do
       {:ok, %{metadata: metadata}} -> {:ok, metadata}
