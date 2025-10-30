@@ -1,5 +1,5 @@
 defmodule ReqLLM.BaseURLStreamingTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
 
   alias ReqLLM.Context
   alias ReqLLM.Model
@@ -7,6 +7,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
   setup do
     ReqLLM.TestSupport.FakeKeys.install!()
 
+    # Save original config and restore after each test
     original_env = Application.get_all_env(:req_llm)
 
     on_exit(fn ->
