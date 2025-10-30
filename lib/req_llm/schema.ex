@@ -277,7 +277,7 @@ defmodule ReqLLM.Schema do
     Enum.map(value, &normalize_json_schema/1)
   end
 
-  defp normalize_json_schema(value) when is_atom(value) do
+  defp normalize_json_schema(value) when is_atom(value) and not is_boolean(value) do
     Atom.to_string(value)
   end
 
