@@ -41,7 +41,6 @@ defmodule ReqLLM.MixProject do
           "guides/core-concepts.md",
           "guides/data-structures.md",
           "guides/model-metadata.md",
-          "guides/api-reference.md",
           "guides/mix-tasks.md",
           "guides/fixture-testing.md",
           "guides/adding_a_provider.md",
@@ -65,8 +64,7 @@ defmodule ReqLLM.MixProject do
             "guides/getting-started.md",
             "guides/core-concepts.md",
             "guides/data-structures.md",
-            "guides/model-metadata.md",
-            "guides/api-reference.md"
+            "guides/model-metadata.md"
           ],
           "Development & Testing": [
             "guides/mix-tasks.md",

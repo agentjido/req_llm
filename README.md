@@ -285,7 +285,6 @@ This approach gives you full control over the Req pipeline, allowing you to add 
 
 - [Getting Started](guides/getting-started.md) – first call and basic concepts
 - [Core Concepts](guides/core-concepts.md) – architecture & data model
-- [API Reference](guides/api-reference.md) – functions & types
 - [Data Structures](guides/data-structures.md) – detailed type information
 - [Mix Tasks](guides/mix-tasks.md) – model sync, compatibility testing, code generation
 - [Fixture Testing](guides/fixture-testing.md) – model validation and supported models
