@@ -335,11 +335,11 @@ mix quality  # Runs all of the above
 - **Pattern matching over conditionals**: Prefer pattern matching when possible
 - **Explicit module calls**: Minimize imports, prefer `Module.function()` style
 
-See [AGENTS.md](AGENTS.md) for complete style guide and architecture details.
+See the project root AGENTS.md file for complete style guide and architecture details.
 
 ## Questions?
 
-- **Documentation**: Check [guides/](guides/) for detailed implementation guides
+- **Documentation**: Check the guides/ directory for detailed implementation guides
 - **Issues**: Open an issue for questions or bug reports
 - **Discussions**: Use GitHub Discussions for general questions
 - **Examples**: Look at existing providers for implementation patterns

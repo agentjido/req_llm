@@ -32,7 +32,7 @@ defmodule ReqLLM.MixProject do
       homepage_url: @source_url,
       source_ref: "v#{@version}",
       docs: [
-        main: "readme",
+        main: "getting-started",
         extras: [
           "README.md",
           "CHANGELOG.md",
@@ -200,7 +200,8 @@ defmodule ReqLLM.MixProject do
         "credo --strict"
       ],
       q: ["quality"],
-      mc: ["req_llm.model_compat"]
+      mc: ["req_llm.model_compat"],
+      docs: ["docs --formatter html"]
     ]
   end
 end

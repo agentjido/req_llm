@@ -32,10 +32,10 @@ For standard GPT models:
 ### Responses API (ResponsesAPI)
 
 For reasoning models with extended thinking:
-- `o1`, `o1-mini`, `o1-preview`
-- `o3`, `o3-mini`
-- `o4`-mini`
-- `gpt-4.1`, `gpt-5`
+- o1, o1-mini, o1-preview
+- o3, o3-mini
+- o4-mini
+- gpt-4.1, gpt-5
 
 ReqLLM automatically routes to the correct API based on model metadata.
 
@@ -96,7 +96,7 @@ Required for reasoning models (o1, o3, gpt-5):
 )
 ```
 
-**Note**: Reasoning models use `max_completion_tokens` instead of `max_tokens`. ReqLLM handles this translation automatically when you use `max_tokens`.
+**Note**: Reasoning models use max_completion_tokens instead of max_tokens. ReqLLM handles this translation automatically when you use max_tokens.
 
 ### Structured Output Mode
 
@@ -117,9 +117,9 @@ schema = [
 ```
 
 Modes:
-- `:auto` - Use `json_schema` when supported, else strict tools (default)
-- `:json_schema` - Force `response_format` with `json_schema` (requires model support)
-- `:tool_strict` - Force `strict: true` on function tools
+- :auto - Use json_schema when supported, else strict tools (default)
+- :json_schema - Force response_format with json_schema (requires model support)
+- :tool_strict - Force strict: true on function tools
 
 ### Response Format
 
@@ -166,7 +166,7 @@ Control reasoning effort for o1/o3/GPT-5 models:
 )
 ```
 
-Levels: `:minimal`, `:low`, `:medium`, `:high`
+Available levels: :minimal, :low, :medium, and :high
 
 ### Seed for Reproducibility
 

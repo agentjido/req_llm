@@ -142,7 +142,7 @@ defmodule ReqLLM.StreamResponse do
   ## Performance
 
   This function will consume the entire stream. If you need both streaming display
-  and final text, consider using `Stream.tee/2` to split the stream.
+  and final text, consider splitting the stream with an intermediate collection step.
   """
   @spec text(t()) :: String.t()
   def text(%__MODULE__{} = stream_response) do
