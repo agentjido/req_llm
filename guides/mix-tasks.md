@@ -413,7 +413,7 @@ mix mc "anthropic:*" --record
 mix mc "*:*" --record
 ```
 
-See [Fixture Testing Guide](fixture-testing.md) and [Coverage Testing Guide](coverage-testing.md) for complete details.
+See [Fixture Testing Guide](fixture-testing.md) for complete details.
 
 ## mix req_llm.model_sync
 
@@ -652,7 +652,7 @@ Error: Model 'gpt-invalid' not found
 
 - [Model Metadata Guide](model-metadata.md) - Deep dive into model registry
 - [Fixture Testing Guide](fixture-testing.md) - Complete testing documentation
-- [Coverage Testing Guide](coverage-testing.md) - Coverage validation details
+
 
 ## Summary
 

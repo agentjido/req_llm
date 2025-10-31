@@ -289,26 +289,10 @@ This approach gives you full control over the Req pipeline, allowing you to add 
 - [Data Structures](guides/data-structures.md) – detailed type information
 - [Mix Tasks](guides/mix-tasks.md) – model sync, compatibility testing, code generation
 - [Fixture Testing](guides/fixture-testing.md) – model validation and supported models
-- [Streaming Migration](guides/streaming-migration.md) – migrate from deprecated `stream_text!/3`
 - [Adding a Provider](guides/adding_a_provider.md) – extend with new providers
 - Provider Guides: [Anthropic](guides/anthropic.md), [OpenAI](guides/openai.md), [Google](guides/google.md), [xAI](guides/xai.md), [Groq](guides/groq.md), [OpenRouter](guides/openrouter.md), [Amazon Bedrock](guides/amazon_bedrock.md), [Cerebras](guides/cerebras.md), [Meta](guides/meta.md), [Z.AI](guides/zai.md), [Z.AI Coder](guides/zai_coder.md)
 
-## Migration from Deprecated APIs
 
-If you're using the deprecated `stream_text!/3` function, please migrate to the new `StreamResponse` API:
-
-```elixir
-# Old (deprecated - no longer functions, only logs deprecation warning)
-ReqLLM.stream_text!(model, messages) |> Enum.each(&IO.write/1)
-
-# New (recommended)
-{:ok, response} = ReqLLM.stream_text(model, messages)
-ReqLLM.StreamResponse.tokens(response)
-|> Stream.each(&IO.write/1)
-|> Stream.run()
-```
-
-See the [Streaming Migration Guide](guides/streaming-migration.md) for complete migration instructions and examples.
 
 ## Roadmap & Status
 
