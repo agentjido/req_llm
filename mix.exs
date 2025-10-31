@@ -203,8 +203,10 @@ defmodule ReqLLM.MixProject do
         "credo --strict"
       ],
       q: ["quality"],
-      mc: ["req_llm.model_compat"],
-      docs: ["docs --formatter html"]
+      docs: ["docs --formatter html"],
+      mc: ["req_llm.model_sync"],
+      ms: ["req_llm.model_compat"],
+      llm: ["req_llm.gen"]
     ]
   end
 end

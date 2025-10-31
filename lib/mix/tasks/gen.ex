@@ -29,10 +29,8 @@ defmodule Mix.Tasks.ReqLlm.Gen do
       --temperature, -t TEMP  Sampling temperature for randomness (0.0-2.0)
                              Lower values = more focused, higher = more creative
 
-      --reasoning-effort EFFORT Reasoning effort for GPT-5 models
-                              (minimal, low, medium, high)
-
-      --stream                Stream output in real-time (default: false)
+      --stream                Stream output in real-time (default: true)
+      --no-stream             Disable streaming (non-streaming mode)
       --json                  Generate structured JSON object (default: text)
 
       --log-level, -l LEVEL   Output verbosity level:
@@ -43,33 +41,35 @@ defmodule Mix.Tasks.ReqLlm.Gen do
 
   ## Examples
 
-      # Basic text generation with default model
+      # Basic text generation (streams by default)
       mix req_llm.gen "Explain how neural networks work"
 
-      # Streaming text from specific provider
+      # Text generation with specific provider and system prompt
       mix req_llm.gen "Write a story about space" \\
         --model openai:gpt-4o \\
-        --system "You are a creative science fiction writer" \\
-        --stream
+        --system "You are a creative science fiction writer"
 
       # Generate with GPT-5 and high reasoning effort
       mix req_llm.gen "Solve this complex math problem step by step" \\
         --model openai:gpt-5-mini \\
         --reasoning-effort high
 
-      # Generate structured JSON object
+      # Generate structured JSON object (streams by default)
       mix req_llm.gen "Create a user profile for John Smith, age 30, engineer in Seattle" \\
         --model openai:gpt-4o-mini \\
         --json
 
-      # Streaming JSON generation with metrics
+      # JSON generation with metrics (streams by default)
       mix req_llm.gen "Extract person info from this text" \\
         --model anthropic:claude-3-sonnet \\
-        --json --stream \\
+        --json \\
         --temperature 0.1 \\
         --log-level debug
 
-      # Quick generation without extra output
+      # Non-streaming mode (waits for complete response)
+      mix req_llm.gen "What is 2+2?" --no-stream
+
+      # Quick generation without extra output (streams by default)
       mix req_llm.gen "What is 2+2?" --log-level warning
 
   ## JSON Schema
@@ -149,6 +149,7 @@ defmodule Mix.Tasks.ReqLlm.Gen do
   def run(args) do
     extra_switches = [
       stream: :boolean,
+      no_stream: :boolean,
       json: :boolean,
       reasoning_effort: :string,
       schema: :string
@@ -167,7 +168,13 @@ defmodule Mix.Tasks.ReqLlm.Gen do
 
         case validate_model_spec(model_spec) do
           {:ok, _model} ->
-            streaming = Keyword.get(opts, :stream, false)
+            streaming =
+              cond do
+                Keyword.get(opts, :no_stream, false) -> false
+                Keyword.has_key?(opts, :stream) -> Keyword.get(opts, :stream, true)
+                true -> true
+              end
+
             json_mode = Keyword.get(opts, :json, false)
 
             mode =
