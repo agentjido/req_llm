@@ -17,12 +17,12 @@ Returns a canonical ReqLLM.Response with usage data, context, and metadata.
 **Examples:**
 ```elixir
 # Simple text generation
-{:ok, response} = ReqLLM.generate_text("anthropic:claude-3-sonnet-20240229", "Hello world")
+{:ok, response} = ReqLLM.generate_text("anthropic:claude-haiku-4-5", "Hello world")
 ReqLLM.Response.text(response)  # => "Hello! How can I assist you today?"
 
 # With options
 {:ok, response} = ReqLLM.generate_text(
-  "anthropic:claude-3-sonnet-20240229", 
+  "anthropic:claude-haiku-4-5", 
   "Write a haiku",
   temperature: 0.8,
   max_tokens: 100
@@ -33,7 +33,7 @@ ctx = ReqLLM.context([
   ReqLLM.Context.system("You are a helpful assistant"),
   ReqLLM.Context.user("What's 2+2?")
 ])
-{:ok, response} = ReqLLM.generate_text("anthropic:claude-3-sonnet-20240229", ctx)
+{:ok, response} = ReqLLM.generate_text("anthropic:claude-haiku-4-5", ctx)
 ```
 
 ### generate_text!/3
@@ -46,7 +46,7 @@ Generate text returning only the text content.
 
 **Examples:**
 ```elixir
-ReqLLM.generate_text!("anthropic:claude-3-sonnet-20240229", "Hello")
+ReqLLM.generate_text!("anthropic:claude-haiku-4-5", "Hello")
 # => "Hello! How can I assist you today?"
 ```
 
@@ -62,25 +62,11 @@ Returns a canonical ReqLLM.Response containing usage data and stream.
 
 **Examples:**
 ```elixir
-{:ok, response} = ReqLLM.stream_text("anthropic:claude-3-sonnet-20240229", "Tell me a story")
+{:ok, response} = ReqLLM.stream_text("anthropic:claude-haiku-4-5", "Tell me a story")
 ReqLLM.StreamResponse.tokens(response) |> Enum.each(&IO.write/1)
 
 # Access usage after streaming
 ReqLLM.Response.usage(response)
-```
-
-### stream_text!/3
-
-Stream text generation returning only the stream.
-
-```elixir
-@spec stream_text!(model_spec, messages, opts) :: Stream.t() | no_return()
-```
-
-**Examples:**
-```elixir
-ReqLLM.stream_text!("anthropic:claude-3-sonnet-20240229", "Count to 10")
-|> Enum.each(&IO.write/1)
 ```
 
 ## Structured Data Generation
@@ -93,7 +79,34 @@ Generate structured data with schema validation.
 @spec generate_object(model_spec, messages, schema, opts) :: {:ok, ReqLLM.Response.t()} | {:error, term()}
 ```
 
-Equivalent to Vercel AI SDK's `generateObject()`.
+Equivalent to Vercel AI SDK's `generateObject()`. Supports three schema formats: NimbleOptions, JSON Schema, and Zoi.
+
+**Schema Formats:**
+
+```elixir
+# NimbleOptions format (recommended)
+schema = [
+  name: [type: :string, required: true],
+  age: [type: :pos_integer, required: true],
+  email: [type: :string]
+]
+
+# JSON Schema format
+schema = %{
+  "type" => "object",
+  "properties" => %{
+    "name" => %{"type" => "string"},
+    "age" => %{"type" => "integer"}
+  },
+  "required" => ["name", "age"]
+}
+
+# Zoi schema format
+schema = Zoi.object(%{
+  name: Zoi.string() |> Zoi.required(),
+  age: Zoi.number() |> Zoi.int() |> Zoi.positive() |> Zoi.required()
+})
+```
 
 **Examples:**
 ```elixir
@@ -101,7 +114,9 @@ schema = [
   name: [type: :string, required: true],
   age: [type: :pos_integer, required: true]
 ]
-{:ok, response} = ReqLLM.generate_object("anthropic:claude-3-sonnet-20240229", "Generate a person", schema)
+{:ok, response} = ReqLLM.generate_object("anthropic:claude-haiku-4-5", "Generate a person", schema)
+person = ReqLLM.Response.object(response)
+# => %{name: "John Doe", age: 30}
 ```
 
 ### generate_object!/4
@@ -112,12 +127,26 @@ Generate structured data returning only the object.
 @spec generate_object!(model_spec, messages, schema, opts) :: term() | no_return()
 ```
 
+**Examples:**
+```elixir
+schema = [name: [type: :string, required: true], age: [type: :pos_integer]]
+person = ReqLLM.generate_object!("anthropic:claude-haiku-4-5", "Generate a person", schema)
+# => %{name: "John Doe", age: 30}
+```
+
 ### stream_object/4
 
-Stream structured data generation.
+Stream structured data generation. Supports the same schema formats as `generate_object/4`.
 
 ```elixir
 @spec stream_object(model_spec, messages, schema, opts) :: {:ok, ReqLLM.StreamResponse.t()} | {:error, term()}
+```
+
+**Examples:**
+```elixir
+schema = [items: [type: {:list, :string}, required: true]]
+{:ok, response} = ReqLLM.stream_object("anthropic:claude-haiku-4-5", "List 5 cities", schema)
+ReqLLM.StreamResponse.tokens(response) |> Enum.each(&IO.inspect/1)
 ```
 
 ### stream_object!/4
@@ -154,7 +183,7 @@ ReqLLM accepts flexible model specifications:
 ### String Format
 ```elixir
 "provider:model"
-"anthropic:claude-3-sonnet-20240229"
+"anthropic:claude-haiku-4-5"
 "openai:gpt-4o"
 "ollama:llama3"
 ```
@@ -200,7 +229,7 @@ ReqLLM accepts flexible model specifications:
 ctx = ReqLLM.context("Hello")
 
 {:ok, response} = ReqLLM.generate_text(
-  "anthropic:claude-3-sonnet-20240229",
+  "anthropic:claude-haiku-4-5",
   ctx,
   temperature: 0.8,
   max_tokens: 500,
@@ -256,7 +285,7 @@ weather_tool = ReqLLM.tool(
 )
 
 {:ok, response} = ReqLLM.generate_text(
-  "anthropic:claude-3-sonnet-20240229",
+  "anthropic:claude-haiku-4-5",
   "What's the weather in Paris?",
   tools: [weather_tool]
 )

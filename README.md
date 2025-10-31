@@ -4,23 +4,26 @@
 [![Documentation](https://img.shields.io/badge/hex-docs-blue.svg)](https://hexdocs.pm/req_llm)
 [![License](https://img.shields.io/hexpm/l/req_llm.svg)](https://github.com/agentjido/req_llm/blob/main/LICENSE)
 
-A [Req](https://github.com/wojtekmach/req)-based package to call LLM APIs. The purpose is to standardize the API calls and API responses for all supported LLM providers.
+A [Req](https://github.com/wojtekmach/req)-based package to call LLM APIs that standardizes the API calls and responses for LLM providers.
 
 ## Why Req LLM?
 
-LLM API's are often inconsistent. ReqLLM aims to provide a consistent, data-driven, idiomatic Elixir interface to make requests to these API's and standardize the responses, making it easier to work with LLMs in Elixir.
+LLM APIs are inconsistent. ReqLLM provides a unified, idiomatic Elixir interface with standardized requests and responses across providers.
 
-This package provides **two-layers** of client interfaces. The top layer is a high-level, provider-agnostic interface that mimic's the Vercel AI SDK and lives in `ReqLLM.ex` using methods like `generate_text/3`. This package seeks to standardize this high-level API across all supported providers, making it easy for Elixir developers to with standard features supported by LLMs. However, any high level abstraction requires trade-offs in terms of flexibility and customization.
+**Two-layer architecture:**
 
-The low-level client interface directly utilizes `Req` plugins to make HTTP requests to the LLM API's. This layer is more flexible and customizable, but requires more knowledge of the underlying API's. This package is built around the OpenAI API Baseline standard, making it easier to implement providers that follow this standard. Providers such as _Anthropic_ who do not follow the OpenAI standard are heavily customized through provider callbacks.
+- **High-level API** – Vercel AI SDK-inspired functions (`generate_text/3`, `stream_text/3`, `generate_object/4` and more) that work uniformly across providers. Standard features, minimal configuration.
+- **Low-level API** – Direct Req plugin access for full HTTP control. Built around OpenAI Chat Completions baseline with provider-specific callbacks for non-compatible APIs (e.g., Anthropic).
 
-**Supported Providers:** Anthropic, OpenAI, Google, Groq, OpenRouter, xAI, and more. See [Provider Guides](guides/providers/README.md) for provider-specific documentation.
+**Supported Providers:** Anthropic, OpenAI, Google, Groq, OpenRouter, xAI, AWS Bedrock, and more. See [Provider Guides](guides/providers/README.md) for details.
+
+\* _Streaming uses Finch directly due to known Req limitations with SSE responses._
 
 ## Quick Start
 
 ```elixir
 # Keys are picked up from .env files or environment variables - see `ReqLLM.Keys`
-model = "anthropic:claude-3-sonnet-20240229"
+model = "anthropic:claude-haiku-4-5"
 
 ReqLLM.generate_text!(model, "Hello world")
 #=> "Hello! How can I assist you today?"
@@ -136,8 +139,8 @@ ReqLLM.put_key(:anthropic_api_key, "sk-ant-...")
 All functions accept an `api_key` parameter to override the stored key:
 
 ```elixir
-ReqLLM.generate_text("openai:gpt-4", "Hello", api_key: "sk-...")
-{:ok, response} = ReqLLM.stream_text("anthropic:claude-3-sonnet", "Story", api_key: "sk-ant-...")
+ReqLLM.generate_text("anthropic:claude-haiku-4-5", "Hello", api_key: "sk-ant-...")
+{:ok, response} = ReqLLM.stream_text("anthropic:claude-haiku-4-5", "Story", api_key: "sk-ant-...")
 ```
 
 ## Usage Cost Tracking
@@ -145,7 +148,7 @@ ReqLLM.generate_text("openai:gpt-4", "Hello", api_key: "sk-...")
 Every response includes detailed usage and cost information calculated from model metadata:
 
 ```elixir
-{:ok, response} = ReqLLM.generate_text("openai:gpt-4", "Hello")
+{:ok, response} = ReqLLM.generate_text("anthropic:claude-haiku-4-5", "Hello")
 
 response.usage
 #=> %{
@@ -252,7 +255,7 @@ For advanced use cases, you can use ReqLLM providers directly as Req plugins. Th
 
 ```elixir
 # The canonical pattern from ReqLLM.Generation.generate_text/3
-with {:ok, model} <- ReqLLM.Model.from("anthropic:claude-3-sonnet-20240229"), # Parse model spec
+with {:ok, model} <- ReqLLM.Model.from("anthropic:claude-haiku-4-5"), # Parse model spec
      {:ok, provider_module} <- ReqLLM.provider(model.provider),        # Get provider module
      {:ok, request} <- provider_module.prepare_request(:chat, model, "Hello!", temperature: 0.7), # Build Req request
      {:ok, %Req.Response{body: response}} <- Req.request(request) do   # Execute HTTP request
@@ -260,12 +263,7 @@ with {:ok, model} <- ReqLLM.Model.from("anthropic:claude-3-sonnet-20240229"), # 
 end
 
 # Customize the Req pipeline with additional headers or middleware
-{:ok, model} = ReqLLM.Model.from("anthropic:claude-3-sonnet")
-{:ok, provider_module} = ReqLLM.provider(model.provider)
-{:ok, request} = provider_module.prepare_request(:chat, model, "Hello!", temperature: 0.7)
-
-# Add custom headers or middleware before sending
-{:ok, model} = ReqLLM.Model.from("anthropic:claude-3-sonnet-20240229")
+{:ok, model} = ReqLLM.Model.from("anthropic:claude-haiku-4-5")
 {:ok, provider_module} = ReqLLM.provider(model.provider)
 {:ok, request} = provider_module.prepare_request(:chat, model, "Hello!", temperature: 0.7)
 
@@ -316,17 +314,11 @@ ReqLLM is currently in **release candidate** status (v1.0.0-rc.6). The core API 
 
 ### Test Coverage & Quality Commitment
 
-**135+ models currently pass our comprehensive fixture-based test suite** across 10 providers. The LLM API landscape is highly dynamic. We guarantee that all supported models pass our fixture tests for basic functionality (text generation, streaming, tool calling, structured output, and embeddings where applicable).
+**130+ models currently pass our comprehensive fixture-based test suite** across 10 providers. The LLM API landscape is highly dynamic. We guarantee that all supported models pass our fixture tests for basic functionality (text generation, streaming, tool calling, structured output, and embeddings where applicable).
 
 These fixture tests are regularly refreshed against live APIs to ensure accuracy and catch provider-side changes. While we can't guarantee every edge case in production, our fixture-based approach provides a reliable baseline that you can verify with `mix mc "*:*"`.
 
 **We welcome bug reports and feedback!** If you encounter issues with any supported model, please open a GitHub issue with details. The more feedback we receive, the stronger the code will be!
-
-**Planned for 1.x:**
-
-- Additional open-source providers (Ollama, LocalAI)
-- Performance optimizations
-- Extended model metadata
 
 ## Development
 

@@ -32,9 +32,9 @@ defmodule ReqLLM.MixProject do
       homepage_url: @source_url,
       source_ref: "v#{@version}",
       docs: [
-        main: "getting-started",
+        main: "overview",
         extras: [
-          "README.md",
+          {"README.md", title: "Overview", filename: "overview"},
           "CHANGELOG.md",
           "CONTRIBUTING.md",
           "guides/getting-started.md",
@@ -56,6 +56,9 @@ defmodule ReqLLM.MixProject do
           "guides/providers/xai.md"
         ],
         groups_for_extras: [
+          Overview: [
+            "README.md"
+          ],
           Guides: [
             "guides/getting-started.md",
             "guides/core-concepts.md",
