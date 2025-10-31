@@ -3,6 +3,9 @@
 [![Hex.pm](https://img.shields.io/hexpm/v/req_llm.svg)](https://hex.pm/packages/req_llm)
 [![Documentation](https://img.shields.io/badge/hex-docs-blue.svg)](https://hexdocs.pm/req_llm)
 [![License](https://img.shields.io/hexpm/l/req_llm.svg)](https://github.com/agentjido/req_llm/blob/main/LICENSE)
+[![Discord](https://img.shields.io/discord/1234567890?color=7289da&label=discord&logo=discord&logoColor=white)](https://discord.gg/YG4qQuyy)
+
+> **Join the community!** Come chat about building AI tools with Elixir and coding Elixir with LLMs in [The Swarm: Elixir AI Collective](https://discord.gg/YG4qQuyy) Discord server.
 
 A [Req](https://github.com/wojtekmach/req)-based package to call LLM APIs that standardizes the API calls and responses for LLM providers.
 
@@ -15,7 +18,7 @@ LLM APIs are inconsistent. ReqLLM provides a unified, idiomatic Elixir interface
 - **High-level API** – Vercel AI SDK-inspired functions (`generate_text/3`, `stream_text/3`, `generate_object/4` and more) that work uniformly across providers. Standard features, minimal configuration.
 - **Low-level API** – Direct Req plugin access for full HTTP control. Built around OpenAI Chat Completions baseline with provider-specific callbacks for non-compatible APIs (e.g., Anthropic).
 
-**Supported Providers:** Anthropic, OpenAI, Google, Groq, OpenRouter, xAI, AWS Bedrock, and more. See [Provider Guides](guides/providers/README.md) for details.
+**Supported Providers:** Anthropic, OpenAI, Google, Groq, OpenRouter, xAI, AWS Bedrock, Cerebras, Meta, Z.AI, and more. See provider guides in [documentation](https://hexdocs.pm/req_llm) for details.
 
 \* _Streaming uses Finch directly due to known Req limitations with SSE responses._
 
@@ -287,9 +290,8 @@ This approach gives you full control over the Req pipeline, allowing you to add 
 - [Mix Tasks](guides/mix-tasks.md) – model sync, compatibility testing, code generation
 - [Fixture Testing](guides/fixture-testing.md) – model validation and supported models
 - [Streaming Migration](guides/streaming-migration.md) – migrate from deprecated `stream_text!/3`
-- [Coverage Testing](guides/coverage-testing.md) – testing strategies
-- [Provider Guides](guides/providers/README.md) – provider-specific documentation
 - [Adding a Provider](guides/adding_a_provider.md) – extend with new providers
+- Provider Guides: [Anthropic](guides/anthropic.md), [OpenAI](guides/openai.md), [Google](guides/google.md), [xAI](guides/xai.md), [Groq](guides/groq.md), [OpenRouter](guides/openrouter.md), [Amazon Bedrock](guides/amazon_bedrock.md), [Cerebras](guides/cerebras.md), [Meta](guides/meta.md), [Z.AI](guides/zai.md), [Z.AI Coder](guides/zai_coder.md)
 
 ## Migration from Deprecated APIs
 

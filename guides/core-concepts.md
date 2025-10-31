@@ -1,283 +1,93 @@
 # Core Concepts
 
-ReqLLM = Req (HTTP) + Provider Plugins (format) + Canonical Data Model
+## ReqLLM's purpose
 
-## Data Model
+ReqLLM normalizes the many ways LLM providers model requests and responses into a small set of common data structures. You work with a single, canonical model for:
+- specifying models across providers
+- representing conversations (context and messages)
+- handling tool calls
+- consuming streaming and final results
 
-```
-ReqLLM.Model          # Model configuration with metadata
-    ↓
-ReqLLM.Context        # Collection of conversation messages  
-    ↓
-ReqLLM.Message        # Individual messages with typed content
-    ↓
-ReqLLM.Message.ContentPart  # Text, images, files, tool calls
-    ↓
-ReqLLM.StreamChunk    # Unified streaming response format
-    ↓
-ReqLLM.Tool           # Function definitions with validation
-```
+For full type and field details, see the [Data Structures](data-structures.md) guide.
 
-### Model Abstraction
+## What normalization means
 
-```elixir
-%ReqLLM.Model{
-  provider: :anthropic,
-  model: "claude-3-5-sonnet",
-  temperature: 0.7,
-  max_tokens: 1000,
-  
-  # Capability metadata from models.dev
-  capabilities: %{tool_call: true, reasoning: false},
-  modalities: %{input: [:text, :image], output: [:text]},
-  cost: %{input: 3.0, output: 15.0}
-}
-```
+- **One conversation model**: user/system/assistant messages with typed content parts (text, images, files, tool calls/results).
+- **One model spec**: "provider:model" plus common options; provider-specific options are translated under the hood.
+- **One streaming shape**: unified `StreamChunk` events for content, tool calls, and metadata across providers.
+- **One response shape**: a `Response` that exposes text/object extraction and usage consistently.
 
-### Multimodal Content
+## 1) Model specification
 
-```elixir
-message = %ReqLLM.Message{
-  role: :user,
-  content: [
-    ContentPart.text("Analyze this image and document:"),
-    ContentPart.image_url("https://example.com/chart.png"),
-    ContentPart.file(pdf_data, "report.pdf", "application/pdf"),
-    ContentPart.text("What insights do you see?")
-  ]
-}
-```
+Models can be specified as:
+- **String**: `"provider:model"` (e.g., `"anthropic:claude-haiku-4-5"`)
+- **Tuple**: `{:provider, "model", opt1: ..., opt2: ...}`
+- **Struct**: `%ReqLLM.Model{...}`
 
-### Unified Streaming
-
-```elixir
-# Text content
-%StreamChunk{type: :content, text: "Hello there!"}
-
-# Reasoning tokens (for supported models)
-%StreamChunk{type: :thinking, text: "Let me consider..."}
-
-# Tool calls
-%StreamChunk{type: :tool_call, name: "get_weather", arguments: %{location: "NYC"}}
-
-# Metadata
-%StreamChunk{type: :meta, metadata: %{finish_reason: "stop"}}
-```
-
-## Plugin Architecture
-
-Providers implement `ReqLLM.Provider` behavior with callbacks for request preparation and response parsing.
-
-```elixir
-defmodule ReqLLM.Providers.Anthropic do
-  @behaviour ReqLLM.Provider
-
-  use ReqLLM.Provider.DSL,
-    id: :anthropic,
-    base_url: "https://api.anthropic.com/v1",
-    metadata: "priv/models_dev/anthropic.json",
-    default_env_key: "ANTHROPIC_API_KEY",
-    provider_schema: [
-      api_version: [type: :string, default: "2023-06-01"]
-    ]
-
-  # DSL generates: metadata/0, provider_id/0, supported_provider_options/0
-
-  @impl ReqLLM.Provider
-  def prepare_request(operation, model, messages, opts) do
-    # Configure operation-specific request
-  end
-
-  @impl ReqLLM.Provider  
-  def attach(request, model, opts) do
-    # Register encode_body and decode_response as Req steps
-  end
-
-  @impl ReqLLM.Provider
-  def encode_body(context) do
-    # Transform context to provider JSON format
-  end
-
-  @impl ReqLLM.Provider
-  def decode_response(response) do
-    # Parse API response to canonical format
-  end
-end
-```
-
-### Request Flow
-
-```
-User API Call
-    ↓ ReqLLM.generate_text/3
-Model Resolution
-    ↓ ReqLLM.Model.from/1  
-Provider Lookup
-    ↓ ReqLLM.Provider.Registry.fetch/1
-Request Creation
-    ↓ Req.new/1
-Provider Attachment  
-    ↓ provider.attach/3 (registers decode_response as Req step)
-HTTP Request
-    ↓ Req.request/1 (decode_response step runs automatically)
-Canonical Response
-```
-
-### Composable Middleware
-
+Example:
 ```elixir
 {:ok, model} = ReqLLM.Model.from("anthropic:claude-haiku-4-5")
-{:ok, provider} = ReqLLM.provider(:anthropic)
 
-request = Req.new()
-|> Req.Request.append_request_steps(log_request: &log_request/1)
-|> Req.Request.append_response_steps(cache_response: &cache/1)
-|> provider.attach(model, [])
-
-{:ok, response} = Req.request(request)
+# With options
+{:ok, model} = ReqLLM.Model.from({:anthropic, "claude-3-5-sonnet",
+  temperature: 0.7, max_tokens: 1000
+})
 ```
 
-## Format Translation
+**Normalization in practice**:
+- Common options like `temperature` and `max_tokens` are normalized.
+- Provider-specific options are translated by the provider adapter; you still pass them in one place.
 
-### Context Encoding
-- Provider callbacks handle canonical-to-provider request format
-- Built-in defaults provide OpenAI-style encoding, providers can override
+## 2) Providers
 
-### Response Decoding  
-- Provider callbacks handle provider-to-canonical response format
-- Unified streaming chunks across all providers
+Providers are plugins that translate between ReqLLM's canonical data structures and provider-specific HTTP APIs.
+- You use the same API regardless of provider.
+- Provider adapters handle request encoding, response decoding, streaming event conversion, and usage extraction.
 
-## Req Integration
+You rarely need provider internals to build applications. If you author providers, see the [Adding a Provider](adding_a_provider.md) guide.
 
-Transport vs Format separation:
+## 3) Context (conversations)
 
-**Transport (Req):**
-- Connection pooling
-- SSL/TLS 
-- Streaming (SSE)
-- Retries & error handling
+A `Context` is a list of `Message` structs. Each `Message` has a role and a list of typed `ContentPart` items. This uniform design enables multimodal conversations across providers.
 
-**Format (ReqLLM):**
-- Model validation
-- Message normalization  
-- Response standardization
-- Usage extraction
-
-### Generation Flow
-
+Example:
 ```elixir
-# API call
-ReqLLM.generate_text("anthropic:claude-haiku-4-5", "Hello")
+alias ReqLLM.Message.ContentPart
 
-# Model resolution  
-{:ok, model} = ReqLLM.Model.from("anthropic:claude-haiku-4-5")
-
-# Provider lookup
-{:ok, provider} = ReqLLM.provider(:anthropic)
-
-# Request creation & attachment
-request = Req.new() |> provider.attach(model, [])
-
-# HTTP execution
-{:ok, http_response} = Req.request(request) 
-
-# Response parsing
-{:ok, chunks} = provider.parse_response(http_response, model)
+messages = [
+  ReqLLM.Context.system("You are a helpful assistant."),
+  ReqLLM.Context.user([
+    ContentPart.text("Analyze this image:"),
+    ContentPart.image_url("https://example.com/chart.png")
+  ])
+]
 ```
 
-### Streaming Flow
+**Normalization in practice**:
+- Same structure for text, image, and file inputs.
+- No provider-specific message formats to learn.
 
+## 4) Tool calls
+
+Define tools once; invoke across providers with a unified call/result shape.
+- Define tools with a name, description, and a `NimbleOptions` schema for validated arguments.
+- Tool call requests and results appear as typed `ContentPart`s and `StreamChunk`s.
+
+Example:
 ```elixir
-{:ok, stream_response} = ReqLLM.stream_text("anthropic:claude-haiku-4-5", "Tell a story")
-# Returns {:ok, %ReqLLM.StreamResponse{}}
-
-# Streaming uses Finch directly (not Req)
-# StreamServer GenServer manages SSE event parsing
-# Provider's decode_sse_event/2 converts to StreamChunk structs
-
-StreamResponse.stream(stream_response)
-|> Stream.filter(&(&1.type == :content))
-|> Stream.map(&(&1.text))
-|> Stream.each(&IO.write/1)
-|> Stream.run()
-```
-
-## Provider System
-
-### Creating Providers
-
-```elixir
-defmodule ReqLLM.Providers.CustomProvider do
-  @behaviour ReqLLM.Provider
-  
-  use ReqLLM.Provider.DSL,
-    id: :custom,
-    base_url: "https://api.custom.com",
-    metadata: "priv/models_dev/custom.json"
-    
-  @impl ReqLLM.Provider
-  def prepare_request(operation, model, data, opts) do
-    # Create and configure request for operation type
-  end
-  
-  @impl ReqLLM.Provider
-  def attach(request, model, opts) do
-    # Register encode_body/decode_response steps
-  end
-end
-```
-
-### Integration Points
-
-1. `ReqLLM.Provider` behavior with required callbacks:
-   - `prepare_request/4` - Configure operation-specific requests
-   - `attach/3` - Register Req pipeline steps
-   - `encode_body/1` - Transform context to provider JSON
-   - `decode_response/1` - Parse API responses
-2. Optional streaming callbacks:
-   - `attach_stream/4` - Build Finch streaming requests
-   - `decode_sse_event/2` - Decode SSE events to StreamChunk
-   - `extract_usage/2` - Extract usage/cost data
-   - `translate_options/3` - Provider-specific parameter translation
-3. Models.dev metadata for capabilities and pricing
-
-## Testing
-
-Capability-focused test suites with live/cached fixture support:
-
-```elixir
-defmodule CoreTest do
-  use ReqLLM.Test.LiveFixture, provider: :anthropic
-  use ExUnit.Case, async: true
-
-  describe "generate_text/3" do
-    test "basic response" do
-      {:ok, response} =
-        use_fixture(:anthropic, "core-basic", fn ->
-          ReqLLM.generate_text("anthropic:claude-3-haiku", "Hello")
-        end)
-
-      assert %ReqLLM.Response{} = response
-      assert ReqLLM.Response.text(response) =~ "Hello"
-    end
-  end
-end
-```
-
-## Observability
-
-Standard Req steps enable monitoring and debugging:
-
-```elixir
-request = Req.new()
-|> Req.Request.append_request_steps(
-  log_request: &log_request/1,
-  trace_request: &add_trace_headers/1
-)
-|> Req.Request.append_response_steps(
-  log_response: &log_response/1,
-  extract_usage: &ReqLLM.Step.Usage.extract_usage/1
+tool = ReqLLM.Tool.new(
+  name: "get_weather",
+  description: "Gets weather by city",
+  schema: [city: [type: :string, required: true]]
 )
 
-configured = provider.attach(request, model, [])
+{:ok, response} =
+  ReqLLM.generate_text("anthropic:claude-haiku-4-5",
+    ReqLLM.Context.new([ReqLLM.Context.user("Weather in NYC today?")]),
+    tools: [tool]
+  )
 ```
+
+## Next steps
+
+Learn the canonical types in detail in the [Data Structures](data-structures.md) guide.

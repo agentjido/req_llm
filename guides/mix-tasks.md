@@ -1,6 +1,6 @@
 # Mix Tasks Guide
 
-ReqLLM provides powerful Mix tasks for model synchronization, coverage validation, and text generation. This guide covers all available tasks, their options, and common workflows.
+ReqLLM provides powerful Mix tasks for text generation, model coverage validation, and model synchronization. This guide covers all available tasks, their options, and common workflows.
 
 ## Overview
 
@@ -8,123 +8,195 @@ ReqLLM includes three main Mix tasks:
 
 | Task | Alias | Purpose |
 |------|-------|---------|
-| `mix req_llm.model_sync` | - | Sync model metadata from models.dev |
+| `mix req_llm.gen` | `mix llm` | Generate text/objects from the command line |
 | `mix req_llm.model_compat` | `mix mc` | Validate model coverage with fixtures |
-| `mix req_llm.gen` | - | Generate text/objects from the command line |
+| `mix req_llm.model_sync` | `mix ms` | Sync model metadata from models.dev |
 
-## mix req_llm.model_sync
+## mix req_llm.gen
 
-Synchronize AI model catalog and pricing data from the models.dev API. Essential for keeping model metadata, pricing, and capabilities up-to-date.
-
-### What It Does
-
-1. **Fetches** complete model catalog from models.dev API
-2. **Processes** providers and extracts model data
-3. **Merges** local patches from `priv/models_local/`
-4. **Generates** JSON files for each provider
-5. **Updates** ValidProviders module with available providers
+Generate text or structured objects from any AI model with unified interface. Useful for testing, experimentation, and quick one-off generations.
 
 ### Basic Usage
 
 ```bash
-# Sync all providers (quiet mode)
-mix req_llm.model_sync
+# Basic text generation
+mix req_llm.gen "Explain how neural networks work"
 
-# Detailed output with progress
-mix req_llm.model_sync --verbose
+# Streaming text
+mix req_llm.gen "Write a story about space" --stream
+
+# Generate JSON object
+mix req_llm.gen "Create a user profile for John Smith, age 30" --json
+
+# Specify model
+mix req_llm.gen "Hello!" --model anthropic:claude-3-5-sonnet
 ```
 
 ### Options
 
-| Option | Alias | Description |
-|--------|-------|-------------|
-| `--verbose` | `-v` | Show detailed progress and statistics |
+| Option | Alias | Default | Description |
+|--------|-------|---------|-------------|
+| `--model` | `-m` | Config or `openai:gpt-4o-mini` | Model specification (provider:model) |
+| `--stream` | `-s` | `true` | Stream the response token-by-token |
+| `--json` | `-j` | `false` | Generate structured JSON object |
+| `--temperature` | `-t` | Model default | Sampling temperature (0.0-2.0) |
+| `--log-level` | `-l` | `info` | Log verbosity: `debug`, `info`, `warning` |
 
-### Output Structure
+### Examples
 
-After running, files are created/updated in:
+#### Basic Text
 
+```bash
+# Simple question
+mix req_llm.gen "What is 2+2?"
+
+# Multi-word prompt
+mix req_llm.gen "Explain quantum computing in simple terms"
+
+# With specific model
+mix req_llm.gen "Write a haiku" --model anthropic:claude-3-5-sonnet
 ```
-priv/models_dev/
-├── anthropic.json         # Anthropic models (Claude, etc.)
-├── openai.json            # OpenAI models (GPT-4, GPT-3.5, etc.)
-├── google.json            # Google models (Gemini, etc.)
-├── groq.json              # Groq models
-├── xai.json               # xAI models (Grok, etc.)
-├── openrouter.json        # OpenRouter proxy models
-└── .catalog_manifest.json # Auto-generated manifest with hash
 
-lib/req_llm/provider/generated/
-└── valid_providers.ex     # Generated list of valid provider atoms
+#### Streaming
+
+```bash
+# Stream basic text
+mix req_llm.gen "Tell me a joke" --stream
+
+# Stream with model selection
+mix req_llm.gen "Explain recursion" \
+  --model openai:gpt-4o \
+  --stream
+
+# Stream creative content
+mix req_llm.gen "Write a short story about AI" \
+  --stream \
+  --temperature 0.9
 ```
 
-### Local Patches
+#### JSON Generation
 
-Local customizations in `priv/models_local/*.json` are automatically merged during sync. This allows you to:
+```bash
+# Generate structured object
+mix req_llm.gen "Create a profile for Jane Doe, software engineer" --json
 
-- Add missing models not yet in models.dev
-- Override pricing for enterprise agreements
-- Include custom or private model deployments
-- Exclude specific models from testing
+# With specific model
+mix req_llm.gen "Generate user data for Bob Smith" \
+  --model anthropic:claude-3-sonnet \
+  --json \
+  --temperature 0.1
 
-#### Adding Models
+# Stream JSON generation
+mix req_llm.gen "Generate a product listing" \
+  --json --stream \
+  --log-level debug
+```
 
-Create a patch file in `priv/models_local/openai_patch.json`:
+#### Log Levels
+
+```bash
+# Quiet (only show generated content)
+mix req_llm.gen "What is 2+2?" --log-level warning
+
+# Normal (show model info and content) - default
+mix req_llm.gen "Hello!" --log-level info
+
+# Verbose (show timing and usage stats)
+mix req_llm.gen "Explain AI" --log-level debug
+```
+
+### Built-in JSON Schema
+
+When using `--json`, a default "person" schema is used:
 
 ```json
 {
-  "provider": {
-    "id": "openai"
-  },
-  "models": [
-    {
-      "id": "gpt-4o-mini-2024-07-18",
-      "name": "GPT-4o Mini (2024-07-18)",
-      "provider": "openai",
-      "provider_model_id": "gpt-4o-mini-2024-07-18",
-      "type": "chat",
-      "cost": {
-        "input": 0.00015,
-        "output": 0.0006
-      }
-    }
-  ]
+  "name": "string (required) - Full name of the person",
+  "age": "integer - Age in years",
+  "occupation": "string - Job or profession",
+  "location": "string - City or region where they live"
 }
 ```
 
-#### Excluding Models
+### Output Examples
 
-To exclude models from validation:
+#### Text Generation
 
-```json
+```
+openai:gpt-4o → "What is 2+2?"
+
+4
+
+250ms • 15→3 tokens • ~$0.000090
+```
+
+#### Streaming
+
+```
+anthropic:claude-3-5-sonnet → "Write a haiku about coding"
+
+Code flows like water,
+Logic blooms in silent thought,
+Debug reveals truth.
+
+850ms • 28→45 tokens • ~$0.000420
+```
+
+#### JSON Generation
+
+```
+Generating object from openai:gpt-4o-mini
+Prompt: Create a user profile for John Smith, age 30
+
 {
-  "provider": {
-    "id": "xai"
-  },
-  "exclude": [
-    "grok-vision-beta"
-  ]
+  "name": "John Smith",
+  "age": 30,
+  "occupation": "Software Engineer",
+  "location": "San Francisco, CA"
 }
 ```
 
-### When to Run
+### Configuration
 
-- **After library updates**: Ensure model compatibility
-- **New provider support**: When providers add new models
-- **Regular maintenance**: Weekly or monthly for pricing updates
-- **Before production**: Always sync before deploying
+Set default model in `config/config.exs`:
 
-### Example Output
-
-```
-Syncing models for openai...
-✓ Fetched 45 models from models.dev
-✓ Found 1 patch file: priv/models_local/openai_patch.json  
-✓ Merged 3 patch models
-✓ Saved 48 models to priv/models_dev/openai.json
+```elixir
+config :req_llm, default_model: "openai:gpt-4o-mini"
 ```
 
-See [Model Metadata Guide](model-metadata.md) for more details on the metadata system.
+### Environment Variables
+
+API keys are required for each provider:
+
+```bash
+export OPENAI_API_KEY=sk-...
+export ANTHROPIC_API_KEY=sk-ant-...
+export GOOGLE_API_KEY=...
+export OPENROUTER_API_KEY=...
+export XAI_API_KEY=...
+```
+
+### Error Handling
+
+```bash
+# Missing API key
+$ mix req_llm.gen "Hello" --model anthropic:claude-3-sonnet
+Error: API key not found for anthropic
+
+Please set your API key using one of these methods:
+  1. Environment variable: export ANTHROPIC_API_KEY=your-api-key
+  2. Application config: config :req_llm, anthropic_api_key: "your-api-key"
+  3. Pass directly: generate_text(model, prompt, api_key: "your-api-key")
+
+# Invalid model
+$ mix req_llm.gen "Hello" --model openai:gpt-invalid
+Error: Invalid model specification 'openai:gpt-invalid'
+
+Available openai models:
+  • openai:gpt-4o
+  • openai:gpt-4o-mini
+  • openai:gpt-3.5-turbo
+```
 
 ## mix req_llm.model_compat (mix mc)
 
@@ -343,197 +415,119 @@ mix mc "*:*" --record
 
 See [Fixture Testing Guide](fixture-testing.md) and [Coverage Testing Guide](coverage-testing.md) for complete details.
 
-## mix req_llm.gen
+## mix req_llm.model_sync
 
-Generate text or structured objects from any AI model with unified interface. Useful for testing, experimentation, and quick one-off generations.
+Synchronize AI model catalog and pricing data from the models.dev API. Essential for keeping model metadata, pricing, and capabilities up-to-date.
+
+### What It Does
+
+1. **Fetches** complete model catalog from models.dev API
+2. **Processes** providers and extracts model data
+3. **Merges** local patches from `priv/models_local/`
+4. **Generates** JSON files for each provider
+5. **Updates** ValidProviders module with available providers
 
 ### Basic Usage
 
 ```bash
-# Basic text generation
-mix req_llm.gen "Explain how neural networks work"
+# Sync all providers (quiet mode)
+mix req_llm.model_sync
 
-# Streaming text
-mix req_llm.gen "Write a story about space" --stream
-
-# Generate JSON object
-mix req_llm.gen "Create a user profile for John Smith, age 30" --json
-
-# Specify model
-mix req_llm.gen "Hello!" --model anthropic:claude-3-5-sonnet
+# Detailed output with progress
+mix req_llm.model_sync --verbose
 ```
 
 ### Options
 
-| Option | Alias | Type | Description |
-|--------|-------|------|-------------|
-| `--model` | `-m` | string | Model spec (provider:model-name) |
-| `--system` | `-s` | string | System prompt/message |
-| `--max-tokens` | - | integer | Maximum tokens to generate |
-| `--temperature` | `-t` | float | Sampling temperature (0.0-2.0) |
-| `--reasoning-effort` | - | string | Reasoning effort (minimal, low, medium, high) |
-| `--stream` | - | boolean | Stream output in real-time |
-| `--json` | - | boolean | Generate structured JSON object |
-| `--log-level` | `-l` | string | Output verbosity (warning, info, debug) |
+| Option | Alias | Description |
+|--------|-------|-------------|
+| `--verbose` | `-v` | Show detailed progress and statistics |
 
-### Examples
+### Output Structure
 
-#### Text Generation
+After running, files are created/updated in:
 
-```bash
-# Default model (openai:gpt-4o-mini)
-mix req_llm.gen "What is 2+2?"
+```
+priv/models_dev/
+├── anthropic.json         # Anthropic models (Claude, etc.)
+├── openai.json            # OpenAI models (GPT-4, GPT-3.5, etc.)
+├── google.json            # Google models (Gemini, etc.)
+├── groq.json              # Groq models
+├── xai.json               # xAI models (Grok, etc.)
+├── openrouter.json        # OpenRouter proxy models
+└── .catalog_manifest.json # Auto-generated manifest with hash
 
-# Specific model with system prompt
-mix req_llm.gen "Write a haiku about coding" \
-  --model anthropic:claude-3-5-haiku \
-  --system "You are a poetic AI assistant"
-
-# Creative writing with higher temperature
-mix req_llm.gen "Tell me a creative story" \
-  --model openai:gpt-4o \
-  --temperature 1.2 \
-  --max-tokens 500
+lib/req_llm/provider/generated/
+└── valid_providers.ex     # Generated list of valid provider atoms
 ```
 
-#### Streaming
+### Local Patches
 
-```bash
-# Stream text generation
-mix req_llm.gen "Explain quantum computing" \
-  --model openai:gpt-4o \
-  --stream
+Local customizations in `priv/models_local/*.json` are automatically merged during sync. This allows you to:
 
-# Stream with reasoning tokens (GPT-5)
-mix req_llm.gen "Solve this complex math problem step by step" \
-  --model openai:gpt-5-mini \
-  --reasoning-effort high \
-  --stream
-```
+- Add missing models not yet in models.dev
+- Override pricing for enterprise agreements
+- Include custom or private model deployments
+- Exclude specific models from testing
 
-#### JSON Object Generation
+#### Adding Models
 
-```bash
-# Basic JSON object
-mix req_llm.gen "Create a user profile for Alice, 25, developer in NYC" --json
-
-# JSON with specific model
-mix req_llm.gen "Extract person info from this text" \
-  --model anthropic:claude-3-sonnet \
-  --json \
-  --temperature 0.1
-
-# Stream JSON generation
-mix req_llm.gen "Generate a product listing" \
-  --json --stream \
-  --log-level debug
-```
-
-#### Log Levels
-
-```bash
-# Quiet (only show generated content)
-mix req_llm.gen "What is 2+2?" --log-level warning
-
-# Normal (show model info and content) - default
-mix req_llm.gen "Hello!" --log-level info
-
-# Verbose (show timing and usage stats)
-mix req_llm.gen "Explain AI" --log-level debug
-```
-
-### Built-in JSON Schema
-
-When using `--json`, a default "person" schema is used:
+Create a patch file in `priv/models_local/openai_patch.json`:
 
 ```json
 {
-  "name": "string (required) - Full name of the person",
-  "age": "integer - Age in years",
-  "occupation": "string - Job or profession",
-  "location": "string - City or region where they live"
+  "provider": {
+    "id": "openai"
+  },
+  "models": [
+    {
+      "id": "gpt-4o-mini-2024-07-18",
+      "name": "GPT-4o Mini (2024-07-18)",
+      "provider": "openai",
+      "provider_model_id": "gpt-4o-mini-2024-07-18",
+      "type": "chat",
+      "cost": {
+        "input": 0.00015,
+        "output": 0.0006
+      }
+    }
+  ]
 }
 ```
 
-### Output Examples
+#### Excluding Models
 
-#### Text Generation
+To exclude models from validation:
 
-```
-openai:gpt-4o → "What is 2+2?"
-
-4
-
-250ms • 15→3 tokens • ~$0.000090
-```
-
-#### Streaming
-
-```
-anthropic:claude-3-5-sonnet → "Write a haiku about coding"
-
-Code flows like water,
-Logic blooms in silent thought,
-Debug reveals truth.
-
-850ms • 28→45 tokens • ~$0.000420
-```
-
-#### JSON Generation
-
-```
-Generating object from openai:gpt-4o-mini
-Prompt: Create a user profile for John Smith, age 30
-
+```json
 {
-  "name": "John Smith",
-  "age": 30,
-  "occupation": "Software Engineer",
-  "location": "San Francisco, CA"
+  "provider": {
+    "id": "xai"
+  },
+  "exclude": [
+    "grok-vision-beta"
+  ]
 }
 ```
 
-### Configuration
+### When to Run
 
-Set default model in `config/config.exs`:
+- **After library updates**: Ensure model compatibility
+- **New provider support**: When providers add new models
+- **Regular maintenance**: Weekly or monthly for pricing updates
+- **Before production**: Always sync before deploying
 
-```elixir
-config :req_llm, default_model: "openai:gpt-4o-mini"
+### Example Output
+
+```
+Syncing models for openai...
+✓ Fetched 45 models from models.dev
+✓ Found 1 patch file: priv/models_local/openai_patch.json  
+✓ Merged 3 patch models
+✓ Saved 48 models to priv/models_dev/openai.json
 ```
 
-### Environment Variables
-
-API keys are required for each provider:
-
-```bash
-export OPENAI_API_KEY=sk-...
-export ANTHROPIC_API_KEY=sk-ant-...
-export GOOGLE_API_KEY=...
-export OPENROUTER_API_KEY=...
-export XAI_API_KEY=...
-```
-
-### Error Handling
-
-```bash
-# Missing API key
-$ mix req_llm.gen "Hello" --model anthropic:claude-3-sonnet
-Error: API key not found for anthropic
-
-Please set your API key using one of these methods:
-  1. Environment variable: export ANTHROPIC_API_KEY=your-api-key
-  2. Application config: config :req_llm, anthropic_api_key: "your-api-key"
-  3. Pass directly: generate_text(model, prompt, api_key: "your-api-key")
-
-# Invalid model
-$ mix req_llm.gen "Hello" --model openai:gpt-invalid
-Error: Invalid model specification 'openai:gpt-invalid'
-
-Available openai models:
-  • openai:gpt-4o
-  • openai:gpt-4o-mini
-  • openai:gpt-3.5-turbo
-```
+See [Model Metadata Guide](model-metadata.md) for more details on the metadata system.
 
 ## Common Workflows
 
@@ -664,8 +658,8 @@ Error: Model 'gpt-invalid' not found
 
 ReqLLM's Mix tasks provide a complete toolkit for:
 
-- **Syncing** model metadata from models.dev with local customization
-- **Validating** model coverage with comprehensive fixture-based tests
 - **Generating** text and objects from any supported model
+- **Validating** model coverage with comprehensive fixture-based tests
+- **Syncing** model metadata from models.dev with local customization
 
 All tasks work together to ensure ReqLLM maintains high-quality support across 135+ models.
