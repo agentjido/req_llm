@@ -68,15 +68,10 @@ defmodule ReqLLM.Schema do
 
   Nested schemas are supported through recursive type handling:
 
+      tag_schema = {:map, [title: [type: :string, required: true], id: [type: :integer]]}
+
       schema = [
-        user: [
-          type: {:list, :map},
-          doc: "List of user objects",
-          properties: [
-            name: [type: :string, required: true],
-            email: [type: :string, required: true]
-          ]
-        ]
+        tags: [type: {:list, tag_schema}],
       ]
 
   """
@@ -277,7 +272,7 @@ defmodule ReqLLM.Schema do
     Enum.map(value, &normalize_json_schema/1)
   end
 
-  defp normalize_json_schema(value) when is_atom(value) do
+  defp normalize_json_schema(value) when is_atom(value) and not is_boolean(value) do
     Atom.to_string(value)
   end
 
@@ -381,6 +376,32 @@ defmodule ReqLLM.Schema do
 
         :map ->
           %{"type" => "object"}
+
+        {:map, opts} when is_list(opts) and opts != [] ->
+          required_keys =
+            opts
+            |> Enum.filter(fn {_key, prop_opts} ->
+              Keyword.get(prop_opts, :required, false) == true
+            end)
+            |> Enum.map(fn {key, _} -> to_string(key) end)
+
+          properties =
+            Map.new(opts, fn {prop_name, prop_opts} ->
+              prop_type = Keyword.fetch!(prop_opts, :type)
+              {to_string(prop_name), nimble_type_to_json_schema(prop_type, [])}
+            end)
+
+          map_schema = %{
+            "type" => "object",
+            "properties" => properties,
+            "additionalProperties" => false
+          }
+
+          if required_keys == [] do
+            map_schema
+          else
+            Map.put(map_schema, "required", required_keys)
+          end
 
         {:map, _} ->
           %{"type" => "object"}

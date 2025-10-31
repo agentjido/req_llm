@@ -322,6 +322,9 @@ defmodule ReqLLM.Providers.Anthropic do
 
     translated_opts = Keyword.put_new(translated_opts, :receive_timeout, default_timeout)
 
+    base_url = ReqLLM.Provider.Options.effective_base_url(__MODULE__, model, translated_opts)
+    translated_opts = Keyword.put(translated_opts, :base_url, base_url)
+
     # Build request using shared helpers
     headers = build_request_headers(model, translated_opts)
     streaming_headers = [{"Accept", "text/event-stream"} | headers]

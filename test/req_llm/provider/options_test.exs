@@ -1,5 +1,5 @@
 defmodule ReqLLM.Provider.OptionsTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
 
   alias ReqLLM.Provider.Options
 
@@ -143,6 +143,32 @@ defmodule ReqLLM.Provider.OptionsTest do
       assert processed[:temperature] == 0.8
       assert processed[:provider_options][:custom_option] == "nested_value"
       assert processed[:provider_options][:another_option] == 200
+    end
+
+    test "supports config-based override of `base_url`" do
+      defmodule BaseURLOverwriteProvider do
+        use ReqLLM.Provider.DSL,
+          id: :url_override,
+          base_url: "https://example.com"
+      end
+
+      original_env = Application.get_env(:req_llm, :url_override)
+
+      on_exit(fn ->
+        if original_env do
+          Application.put_env(:req_llm, :url_override, original_env)
+        else
+          Application.delete_env(:req_llm, :url_override)
+        end
+      end)
+
+      model = %ReqLLM.Model{provider: :url_override, model: "test-model"}
+      opts = []
+      Application.put_env(:req_llm, :url_override, base_url: "https://overriden.com")
+
+      {:ok, processed} = Options.process(BaseURLOverwriteProvider, :chat, model, opts)
+
+      assert "https://overriden.com" = processed[:base_url]
     end
   end
 

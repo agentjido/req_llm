@@ -64,6 +64,22 @@ defmodule ReqLLM.SchemaTest do
       assert Enum.sort(result["required"]) == ["active", "name"]
     end
 
+    test "handles lists with a map subtype" do
+      tag_schema = {:map, [title: [type: :string, required: true], id: [type: :integer]]}
+
+      schema = [
+        tags: [type: {:list, tag_schema}]
+      ]
+
+      result = Schema.to_json(schema)
+
+      assert result["properties"]["tags"]["type"] == "array"
+      assert result["properties"]["tags"]["items"]["type"] == "object"
+      assert result["properties"]["tags"]["items"]["properties"]["title"]["type"] == "string"
+      assert result["properties"]["tags"]["items"]["properties"]["id"]["type"] == "integer"
+      assert result["properties"]["tags"]["items"]["required"] == ["title"]
+    end
+
     test "handles schema without required fields" do
       schema = [name: [type: :string, doc: "User name"], age: [type: :integer]]
 

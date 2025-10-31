@@ -136,14 +136,17 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
   def attach_stream(model, context, opts, _finch_name) do
     headers = build_request_headers(model, opts) ++ [{"Accept", "text/event-stream"}]
 
+    base_url = ReqLLM.Provider.Options.effective_base_url(ReqLLM.Providers.OpenAI, model, opts)
+
     cleaned_opts =
       opts
       |> Keyword.delete(:finch_name)
       |> Keyword.delete(:compiled_schema)
       |> Keyword.put(:stream, true)
+      |> Keyword.put(:base_url, base_url)
 
     body = build_request_body(context, model.model, cleaned_opts)
-    url = build_request_url(opts)
+    url = build_request_url(cleaned_opts)
 
     {:ok, Finch.build(:post, url, headers, Jason.encode!(body))}
   rescue

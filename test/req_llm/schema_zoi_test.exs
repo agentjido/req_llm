@@ -173,6 +173,17 @@ defmodule ReqLLM.Schema.ZoiTest do
       assert user_schema["properties"]["tags"]["items"]["type"] == "string"
       assert user_schema["properties"]["active"]["type"] == "boolean"
     end
+
+    test "encodes boolean additionalProperties as a boolean" do
+      schema =
+        Zoi.object(%{
+          name: Zoi.string()
+        })
+
+      result = Schema.to_json(schema)
+
+      assert result["additionalProperties"] == false
+    end
   end
 
   describe "validate/2 with Zoi schemas" do

@@ -459,14 +459,8 @@ defmodule ReqLLM.Provider.Defaults do
     # Build URL
     method = :post
 
-    url =
-      case Keyword.get(opts, :base_url) do
-        nil ->
-          provider_mod.default_base_url() <> path
-
-        base_url ->
-          "#{base_url}#{path}"
-      end
+    base_url = ReqLLM.Provider.Options.effective_base_url(provider_mod, model, opts)
+    url = "#{base_url}#{path}"
 
     # Build request body using provider's encode logic
     body = build_streaming_body(provider_mod, model, context, opts)

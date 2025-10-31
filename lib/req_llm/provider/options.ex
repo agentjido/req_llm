@@ -395,6 +395,39 @@ defmodule ReqLLM.Provider.Options do
     compose_schema_internal(base_schema, provider_mod)
   end
 
+  @doc """
+  Returns the effective base URL for the provider based on precedence rules.
+
+  The base URL is determined by the following precedence order (highest to lowest):
+  1. `opts[:base_url]` - Explicitly passed in options
+  2. Application config - `Application.get_env(:req_llm, model.provider)[:base_url]`
+  3. Provider registry metadata - Loaded from provider's JSON metadata file
+  4. Provider default - `provider_mod.default_base_url()`
+
+  ## Parameters
+
+  - `provider_mod` - Provider module implementing the Provider behavior
+  - `model` - ReqLLM.Model struct containing provider information
+  - `opts` - Options keyword list that may contain :base_url
+
+  ## Examples
+
+      iex> model = %ReqLLM.Model{provider: :openai, model: "gpt-4"}
+      iex> ReqLLM.Provider.Options.effective_base_url(ReqLLM.Providers.OpenAI, model, [])
+      "https://api.openai.com/v1"
+
+      iex> opts = [base_url: "https://custom.example.com"]
+      iex> ReqLLM.Provider.Options.effective_base_url(ReqLLM.Providers.OpenAI, model, opts)
+      "https://custom.example.com"
+  """
+  @spec effective_base_url(module(), ReqLLM.Model.t(), keyword()) :: String.t()
+  def effective_base_url(provider_mod, %ReqLLM.Model{} = model, opts) do
+    opts[:base_url] ||
+      base_url_from_application_config(model.provider) ||
+      base_url_from_provider_metadata(model.provider) ||
+      provider_mod.default_base_url()
+  end
+
   # Private helper functions
 
   defp normalize_legacy_options(opts) do
@@ -732,21 +765,22 @@ defmodule ReqLLM.Provider.Options do
   end
 
   defp inject_base_url_from_registry(opts, model, provider_mod) do
-    case Keyword.get(opts, :base_url) do
-      nil ->
-        effective_base_url =
-          with {:ok, metadata} <- ReqLLM.Provider.Registry.get_provider_metadata(model.provider),
-               base_url when not is_nil(base_url) <-
-                 get_in(metadata, ["provider", "base_url"]) || metadata["base_url"] do
-            base_url
-          else
-            _ -> provider_mod.default_base_url()
-          end
+    Keyword.put_new_lazy(opts, :base_url, fn ->
+      base_url_from_application_config(model.provider) ||
+        base_url_from_provider_metadata(model.provider) ||
+        provider_mod.default_base_url()
+    end)
+  end
 
-        Keyword.put(opts, :base_url, effective_base_url)
-
-      _ ->
-        opts
+  defp base_url_from_provider_metadata(provider) do
+    case ReqLLM.Provider.Registry.get_provider_metadata(provider) do
+      {:ok, metadata} -> get_in(metadata, ["provider", "base_url"]) || metadata["base_url"]
+      {:error, :provider_not_found} -> nil
     end
+  end
+
+  defp base_url_from_application_config(provider_id) do
+    config = Application.get_env(:req_llm, provider_id, [])
+    Keyword.get(config, :base_url)
   end
 end
