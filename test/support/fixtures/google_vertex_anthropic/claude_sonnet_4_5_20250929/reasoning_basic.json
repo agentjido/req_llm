@@ -1,0 +1,117 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6InZlcnRleC0yMDIzLTEwLTE2IiwibWF4X3Rva2VucyI6NTAwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJTb2x2ZSAxMio3IGFuZCBzaG93IHlvdXIgaW50ZXJuYWwgdGhpbmtpbmcgKGJyaWVmKS4iLCJyb2xlIjoidXNlciJ9XSwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjEuMCwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifX0="
+    },
+    "canonical_json": {
+      "anthropic_version": "vertex-2023-10-16",
+      "max_tokens": 5000,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "stream": false,
+      "temperature": 1.0,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://aiplatform.googleapis.com/v1/projects/disco-park-312913/locations/global/publishers/anthropic/models/claude-sonnet-4-5@20250929:rawPredict"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "EtYCCkgICRACGAIqQOvxQeW0mcUn0w2jrlDNd7zwgZqFemrGJNI/ALgs3N+ViIgNL46D73KcxG1pENP0JAc7k0xoPOCb511/ePltatUSDFDbBfC8kscJgBT1/RoM0kvNUEqDr59uk3tiIjCZWoQpzmjtqRecWCFyokMim4BDlGx3r/tiuNgGdpLQPv4xu0itbcZXegouxujIdnoquwGvX82teYnxIiwzW23zkyszfG/Gc1TPiDqr7vcTMY4SrbMc920RSO5YqXJ43XpgNNGYiGOIoZ8OdzEBam9P407m7iKwUZbJYjUihhpKoizYhm4vv7k7NzS3CUePU2btdL2e4A3sq4h7skeqttzeb7OqJE0T36UmR0YuZqpHxboT8ssEp77ARqfW2eOaConfrb2An5jMfP+ngNAJZO9fw3QaQFwOAacgrUxw3idUJ+UVSzj6HX6i6VHIIdIfGAE=",
+          "thinking": "This is a simple multiplication problem: 12 * 7\n\nI can solve this by:\n12 * 7 = (10 + 2) * 7 = 70 + 14 = 84\n\nOr by knowing that 12 * 7 = 84 from basic multiplication facts.",
+          "type": "thinking"
+        },
+        {
+          "text": "12 × 7 = **84**\n\n**Thinking:** \n- 10 × 7 = 70\n- 2 × 7 = 14  \n- 70 + 14 = 84",
+          "type": "text"
+        }
+      ],
+      "id": "msg_vrtx_01LXN4whNAHNWWmo6S2fHVKW",
+      "model": "claude-sonnet-4-5-20250929",
+      "role": "assistant",
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 50,
+        "output_tokens": 136
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 02 Nov 2025 05:03:25 GMT"
+      ],
+      "internal-input-tokens": [
+        "50"
+      ],
+      "internal-output-tokens": [
+        "136"
+      ],
+      "pinnacle-error-category": [
+        "no_error"
+      ],
+      "request-id": [
+        "req_vrtx_011CUiUeuKW5p1RgyV8pe94L"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "stream-reported-http-code": [
+        "200"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-vertex-ai-internal-prediction-backend": [
+        "harpoon"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  }
+}

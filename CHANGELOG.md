@@ -32,6 +32,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - AWS Bedrock Cohere Command R models with complete fixtures (2 models)
   - cohere.command-r-v1:0 (10 fixtures)
   - cohere.command-r-plus-v1:0 (10 fixtures)
+- Google Vertex AI Anthropic Claude models with complete fixtures (3 models)
+  - claude-haiku-4-5@20251001 (12 fixtures)
+  - claude-sonnet-4-5@20250929 (12 fixtures)
+  - claude-opus-4-1@20250805 (12 fixtures)
+- Google Vertex AI provider guide with comprehensive documentation
+  - OAuth2 authentication with service accounts
+  - Full Claude 4.x model support (Haiku, Sonnet, Opus)
+  - Extended thinking and prompt caching support
+  - Model-specific request fields configuration
 
 ### Fixed
 

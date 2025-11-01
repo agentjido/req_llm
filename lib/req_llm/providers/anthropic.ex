@@ -87,6 +87,12 @@ defmodule ReqLLM.Providers.Anthropic do
   @anthropic_beta_tools "tools-2024-05-16"
   @anthropic_beta_prompt_caching "prompt-caching-2024-07-31"
 
+  # Canonical reasoning effort token budgets for Anthropic models
+  # These values are used across all providers hosting Anthropic models
+  @reasoning_budget_low 1_024
+  @reasoning_budget_medium 2_048
+  @reasoning_budget_high 4_096
+
   @impl ReqLLM.Provider
   def prepare_request(:chat, model_spec, prompt, opts) do
     with {:ok, model} <- ReqLLM.Model.from(model_spec),
@@ -542,7 +548,12 @@ defmodule ReqLLM.Providers.Anthropic do
     Map.get(options, key, default)
   end
 
-  defp tool_to_anthropic_format(tool) do
+  @doc """
+  Convert a ReqLLM.Tool to Anthropic's tool format.
+
+  This is made public so that Bedrock and Vertex formatters can reuse it.
+  """
+  def tool_to_anthropic_format(tool) do
     schema = ReqLLM.Tool.to_schema(tool, :openai)
 
     %{
@@ -552,13 +563,39 @@ defmodule ReqLLM.Providers.Anthropic do
     }
   end
 
+  @doc """
+  Maps reasoning effort levels to token budgets.
+
+  This is the canonical source of truth for Anthropic reasoning effort mappings,
+  used by all providers hosting Anthropic models.
+
+  - `:low` → 1,024 tokens
+  - `:medium` → 2,048 tokens
+  - `:high` → 4,096 tokens
+
+  ## Examples
+
+      iex> ReqLLM.Providers.Anthropic.map_reasoning_effort_to_budget(:low)
+      1024
+
+      iex> ReqLLM.Providers.Anthropic.map_reasoning_effort_to_budget("medium")
+      2048
+  """
+  def map_reasoning_effort_to_budget(:low), do: @reasoning_budget_low
+  def map_reasoning_effort_to_budget(:medium), do: @reasoning_budget_medium
+  def map_reasoning_effort_to_budget(:high), do: @reasoning_budget_high
+  def map_reasoning_effort_to_budget("low"), do: map_reasoning_effort_to_budget(:low)
+  def map_reasoning_effort_to_budget("medium"), do: map_reasoning_effort_to_budget(:medium)
+  def map_reasoning_effort_to_budget("high"), do: map_reasoning_effort_to_budget(:high)
+  def map_reasoning_effort_to_budget(_), do: @reasoning_budget_medium
+
   defp translate_reasoning_effort(opts) do
     {reasoning_effort, opts} = Keyword.pop(opts, :reasoning_effort)
     {reasoning_budget, opts} = Keyword.pop(opts, :reasoning_token_budget)
 
     case reasoning_effort do
       :low ->
-        budget = reasoning_budget || 1024
+        budget = reasoning_budget || map_reasoning_effort_to_budget(:low)
 
         opts
         |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: budget})
@@ -566,7 +603,7 @@ defmodule ReqLLM.Providers.Anthropic do
         |> adjust_top_p_for_thinking()
 
       :medium ->
-        budget = reasoning_budget || 2048
+        budget = reasoning_budget || map_reasoning_effort_to_budget(:medium)
 
         opts
         |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: budget})
@@ -574,7 +611,7 @@ defmodule ReqLLM.Providers.Anthropic do
         |> adjust_top_p_for_thinking()
 
       :high ->
-        budget = reasoning_budget || 4096
+        budget = reasoning_budget || map_reasoning_effort_to_budget(:high)
 
         opts
         |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: budget})

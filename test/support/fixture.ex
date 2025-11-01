@@ -193,6 +193,8 @@ defmodule ReqLLM.Step.Fixture.Backend do
   defp provider_module(:cerebras), do: ReqLLM.Providers.Cerebras
   defp provider_module(:openai), do: ReqLLM.Providers.OpenAI
   defp provider_module(:google), do: ReqLLM.Providers.Google
+  defp provider_module(:google_vertex), do: ReqLLM.Providers.GoogleVertex
+  defp provider_module(:google_vertex_anthropic), do: ReqLLM.Providers.GoogleVertex
   defp provider_module(:groq), do: ReqLLM.Providers.Groq
   defp provider_module(:openrouter), do: ReqLLM.Providers.OpenRouter
   defp provider_module(:xai), do: ReqLLM.Providers.XAI
@@ -224,6 +226,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
           case request.body do
             {:json, json_map} -> json_map
             other when is_binary(other) -> Jason.decode!(other)
+            other when is_list(other) -> other |> IO.iodata_to_binary() |> Jason.decode!()
             other -> other
           end
 
@@ -264,7 +267,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
 
     response_meta = %{
       status: resp.status,
-      headers: mapify_headers(resp.headers)
+      headers: resp.headers |> Enum.to_list()
     }
 
     Logger.debug("Fixture request: method=#{request_meta.method}, url=#{request_meta.url}")
@@ -275,13 +278,22 @@ defmodule ReqLLM.Step.Fixture.Backend do
 
     Logger.debug("Fixture recording non-streaming response, body_size=#{body_size}")
 
-    case ReqLLM.Test.VCR.record(path,
-           provider: model.provider,
-           model: model_spec,
-           request: request_meta,
-           response: response_meta,
-           body: body
-         ) do
+    result =
+      try do
+        ReqLLM.Test.VCR.record(path,
+          provider: model.provider,
+          model: model_spec,
+          request: request_meta,
+          response: response_meta,
+          body: body
+        )
+      rescue
+        e ->
+          Logger.error("VCR.record exception: #{Exception.format(:error, e, __STACKTRACE__)}")
+          {:error, e}
+      end
+
+    case result do
       :ok ->
         dbug(
           fn ->
@@ -298,7 +310,14 @@ defmodule ReqLLM.Step.Fixture.Backend do
           component: :fixtures
         )
 
-        Logger.error("Fixture save failed: #{inspect(reason)}")
+        case reason do
+          %FunctionClauseError{} = e ->
+            Logger.error("FunctionClauseError in VCR.record: #{Exception.message(e)}")
+            Logger.error("Module: #{e.module}, Function: #{e.function}, Arity: #{e.arity}")
+
+          _ ->
+            Logger.error("Fixture save failed: #{inspect(reason)}")
+        end
     end
   end
 

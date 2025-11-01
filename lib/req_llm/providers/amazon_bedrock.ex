@@ -162,6 +162,8 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   alias ReqLLM.Error
   alias ReqLLM.Error.Invalid.Parameter, as: InvalidParameter
   alias ReqLLM.Providers.AmazonBedrock.AWSEventStream
+  alias ReqLLM.Providers.Anthropic
+  alias ReqLLM.Providers.Anthropic.PlatformReasoning
   alias ReqLLM.Step
 
   @dialyzer :no_match
@@ -526,12 +528,12 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       cond do
         reasoning_budget && is_integer(reasoning_budget) ->
           # Explicit budget_tokens provided
-          add_reasoning_to_additional_fields(opts, reasoning_budget)
+          PlatformReasoning.add_reasoning_to_additional_fields(opts, reasoning_budget)
 
         reasoning_effort ->
-          # Map effort to budget
-          budget = map_reasoning_effort_to_budget(reasoning_effort)
-          add_reasoning_to_additional_fields(opts, budget)
+          # Map effort to budget using canonical Anthropic mappings
+          budget = Anthropic.map_reasoning_effort_to_budget(reasoning_effort)
+          PlatformReasoning.add_reasoning_to_additional_fields(opts, budget)
 
         true ->
           opts
@@ -541,29 +543,6 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       opts
     end
   end
-
-  defp add_reasoning_to_additional_fields(opts, budget_tokens) do
-    # Get existing additional_model_request_fields from provider_options (if any)
-    provider_opts = Keyword.get(opts, :provider_options, [])
-
-    additional_fields =
-      Keyword.get(provider_opts, :additional_model_request_fields, %{})
-      |> Map.put(:thinking, %{type: "enabled", budget_tokens: budget_tokens})
-
-    # Put it back into provider_options
-    updated_provider_opts =
-      Keyword.put(provider_opts, :additional_model_request_fields, additional_fields)
-
-    Keyword.put(opts, :provider_options, updated_provider_opts)
-  end
-
-  defp map_reasoning_effort_to_budget(:low), do: 4_000
-  defp map_reasoning_effort_to_budget(:medium), do: 8_000
-  defp map_reasoning_effort_to_budget(:high), do: 16_000
-  defp map_reasoning_effort_to_budget("low"), do: 4_000
-  defp map_reasoning_effort_to_budget("medium"), do: 8_000
-  defp map_reasoning_effort_to_budget("high"), do: 16_000
-  defp map_reasoning_effort_to_budget(_), do: 8_000
 
   defp is_inference_profile_model?(model_id) when is_binary(model_id) do
     String.starts_with?(model_id, ["us.", "eu.", "ap.", "ca.", "global."])
@@ -933,24 +912,8 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   # This is necessary because translate_options can't modify provider_options (they get restored)
   defp maybe_clean_thinking_after_translation(opts, model_family, operation) do
     if model_family == "anthropic" do
-      # Check if we have forced tool_choice
-      # For :object operation, tool_choice is added later by the formatter, but we know it will be forced
-      tool_choice = opts[:tool_choice]
-      has_forced_tool = match?(%{type: "tool"}, tool_choice) or operation == :object
-
-      if has_forced_tool do
-        # Remove thinking from additional_model_request_fields
-        update_in(
-          opts,
-          [:provider_options, :additional_model_request_fields],
-          fn
-            nil -> nil
-            fields when is_map(fields) -> Map.delete(fields, :thinking)
-          end
-        )
-      else
-        opts
-      end
+      # Delegate to shared PlatformReasoning module
+      PlatformReasoning.maybe_clean_thinking_after_translation(opts, operation)
     else
       opts
     end

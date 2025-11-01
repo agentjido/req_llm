@@ -89,7 +89,7 @@
       "reasoning": false,
       "release_date": "2024-09-25",
       "temperature": true,
-      "tool_call": false
+      "tool_call": true
     },
     {
       "attachment": true,
@@ -152,37 +152,7 @@
       "reasoning": false,
       "release_date": "2024-09-25",
       "temperature": true,
-      "tool_call": false
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0.15,
-        "output": 0.2
-      },
-      "id": "mistral.mistral-7b-instruct-v0:2",
-      "knowledge": "2023-12",
-      "limit": {
-        "context": 32000,
-        "output": 8192
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Mistral 7B Instruct",
-      "open_weights": true,
-      "provider": "amazon_bedrock",
-      "provider_model_id": "mistral.mistral-7b-instruct-v0:2",
-      "reasoning": false,
-      "release_date": "2023-09-27",
-      "system_messages": false,
-      "temperature": true,
-      "tool_call": false
+      "tool_call": true
     },
     {
       "attachment": true,
@@ -276,35 +246,6 @@
       "release_date": "2024-03-11",
       "temperature": true,
       "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 4.0,
-        "output": 12.0
-      },
-      "id": "mistral.mistral-large-2402-v1:0",
-      "knowledge": "2024-11",
-      "limit": {
-        "context": 131072,
-        "output": 16384
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Mistral Large (24.02)",
-      "open_weights": false,
-      "provider": "amazon_bedrock",
-      "provider_model_id": "mistral.mistral-large-2402-v1:0",
-      "reasoning": false,
-      "release_date": "2024-02-01",
-      "temperature": true,
-      "tool_call": false
     },
     {
       "attachment": true,
@@ -931,96 +872,6 @@
     {
       "attachment": true,
       "cost": {
-        "input": 3.0,
-        "output": 9.0
-      },
-      "id": "us.mistral.pixtral-large-2502-v1:0",
-      "knowledge": "2024-11",
-      "limit": {
-        "context": 128000,
-        "output": 128000
-      },
-      "modalities": {
-        "input": [
-          "text",
-          "image"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Pixtral Large (25.02)",
-      "open_weights": false,
-      "provider": "amazon_bedrock",
-      "provider_model_id": "us.mistral.pixtral-large-2502-v1:0",
-      "reasoning": false,
-      "release_date": "2025-02-01",
-      "temperature": true,
-      "tool_call": false
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0.0,
-        "output": 0.0
-      },
-      "id": "openai.gpt-oss-20b-1:0",
-      "knowledge": "2024-04",
-      "limit": {
-        "context": 8192,
-        "output": 4096
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "GPT-OSS 20B",
-      "open_weights": true,
-      "provider": "amazon_bedrock",
-      "provider_model_id": "openai.gpt-oss-20b-1:0",
-      "reasoning": false,
-      "release_date": "2024-06-01",
-      "system_messages": true,
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 0.0,
-        "output": 0.0
-      },
-      "id": "openai.gpt-oss-120b-1:0",
-      "knowledge": "2024-04",
-      "limit": {
-        "context": 8192,
-        "output": 4096
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "GPT-OSS 120B",
-      "open_weights": true,
-      "provider": "amazon_bedrock",
-      "provider_model_id": "openai.gpt-oss-120b-1:0",
-      "reasoning": false,
-      "release_date": "2024-06-01",
-      "system_messages": true,
-      "temperature": true,
-      "tool_call": true
-    },
-    {
-      "attachment": true,
-      "cost": {
         "cache_read": 1.5,
         "cache_write": 18.75,
         "input": 15,
@@ -1269,36 +1120,6 @@
       "tool_call": true
     },
     {
-      "attachment": false,
-      "cost": {
-        "input": 0.45,
-        "output": 0.7
-      },
-      "id": "mistral.mixtral-8x7b-instruct-v0:1",
-      "knowledge": "2024-01",
-      "limit": {
-        "context": 32000,
-        "output": 8192
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Mixtral 8x7B Instruct",
-      "open_weights": true,
-      "provider": "amazon_bedrock",
-      "provider_model_id": "mistral.mixtral-8x7b-instruct-v0:1",
-      "reasoning": false,
-      "release_date": "2023-12-11",
-      "system_messages": false,
-      "temperature": true,
-      "tool_call": false
-    },
-    {
       "attachment": true,
       "cost": {
         "input": 3,
@@ -1328,35 +1149,6 @@
       "release_date": "2024-03-04",
       "temperature": true,
       "tool_call": true
-    },
-    {
-      "attachment": false,
-      "cost": {
-        "input": 1.0,
-        "output": 3.0
-      },
-      "id": "mistral.mistral-small-2402-v1:0",
-      "knowledge": "2025-03",
-      "limit": {
-        "context": 128000,
-        "output": 16384
-      },
-      "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "text"
-        ]
-      },
-      "name": "Mistral Small (24.02)",
-      "open_weights": false,
-      "provider": "amazon_bedrock",
-      "provider_model_id": "mistral.mistral-small-2402-v1:0",
-      "reasoning": false,
-      "release_date": "2024-02-01",
-      "temperature": true,
-      "tool_call": false
     },
     {
       "attachment": true,
@@ -1512,12 +1304,9 @@
     }
   ],
   "provider": {
-    "base_url": "https://bedrock-runtime.{region}.amazonaws.com",
-    "doc": "AWS Bedrock multi-provider ML platform",
-    "env": [
-      "AWS_ACCESS_KEY_ID",
-      "AWS_SECRET_ACCESS_KEY"
-    ],
+    "base_url": null,
+    "doc": "AI model provider",
+    "env": [],
     "id": "amazon_bedrock",
     "name": "Amazon Bedrock"
   }

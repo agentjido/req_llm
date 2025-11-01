@@ -46,6 +46,9 @@ defmodule ReqLLM.Test.ModelMatrix do
     amazon_bedrock:us.anthropic.claude-opus-4-1-20250805-v1:0
     amazon_bedrock:openai.gpt-oss-20b-1:0
     amazon_bedrock:openai.gpt-oss-120b-1:0
+    google_vertex:claude-haiku-4-5@20251001
+    google_vertex:claude-sonnet-4-5@20250929
+    google_vertex:claude-opus-4-1@20250805
     openai:gpt-4o-mini
     openai:gpt-4-turbo
     google:gemini-2.0-flash

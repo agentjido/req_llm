@@ -21,6 +21,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
 
   alias ReqLLM.Providers.AmazonBedrock
   alias ReqLLM.Providers.Anthropic
+  alias ReqLLM.Providers.Anthropic.AdapterHelpers
 
   @doc """
   Returns whether this model family supports toolChoice in Bedrock Converse API.
@@ -50,7 +51,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
     # For :object operation, we need to inject the structured_output tool
     {context, opts} =
       if operation == :object do
-        prepare_structured_output_context(context, opts)
+        AdapterHelpers.prepare_structured_output_context(context, opts)
       else
         {context, opts}
       end
@@ -70,44 +71,15 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
 
     body
     |> Map.put(:anthropic_version, "bedrock-2023-05-31")
-    |> maybe_add_param(:max_tokens, opts[:max_tokens] || default_max_tokens)
-    |> maybe_add_param(:temperature, opts[:temperature])
-    |> maybe_add_param(:top_p, opts[:top_p])
-    |> maybe_add_param(:top_k, opts[:top_k])
-    |> maybe_add_param(:stop_sequences, opts[:stop_sequences])
-    |> maybe_add_thinking(opts)
+    |> AdapterHelpers.maybe_add_param(:max_tokens, opts[:max_tokens] || default_max_tokens)
+    |> AdapterHelpers.maybe_add_param(:temperature, opts[:temperature])
+    |> AdapterHelpers.maybe_add_param(:top_p, opts[:top_p])
+    |> AdapterHelpers.maybe_add_param(:top_k, opts[:top_k])
+    |> AdapterHelpers.maybe_add_param(:stop_sequences, opts[:stop_sequences])
+    |> AdapterHelpers.maybe_add_thinking(opts)
     |> maybe_add_tools(opts)
     |> Anthropic.maybe_apply_prompt_caching(opts)
   end
-
-  # Create the synthetic structured_output tool for :object operations
-  defp prepare_structured_output_context(context, opts) do
-    compiled_schema = Keyword.fetch!(opts, :compiled_schema)
-
-    # Create the structured_output tool (same as native Anthropic provider)
-    structured_output_tool =
-      ReqLLM.Tool.new!(
-        name: "structured_output",
-        description: "Generate structured output matching the provided schema",
-        parameter_schema: compiled_schema.schema,
-        callback: fn _args -> {:ok, "structured output generated"} end
-      )
-
-    # Add tool to context - Context may or may not have a tools field
-    existing_tools = Map.get(context, :tools, [])
-    updated_context = Map.put(context, :tools, [structured_output_tool | existing_tools])
-
-    # Update opts to force tool choice
-    updated_opts =
-      opts
-      |> Keyword.put(:tools, [structured_output_tool | Keyword.get(opts, :tools, [])])
-      |> Keyword.put(:tool_choice, %{type: "tool", name: "structured_output"})
-
-    {updated_context, updated_opts}
-  end
-
-  defp maybe_add_param(body, _key, nil), do: body
-  defp maybe_add_param(body, key, value), do: Map.put(body, key, value)
 
   # Add tools from opts to request body (same as native Anthropic provider)
   # Bedrock-specific: If no tools in opts but messages contain tool_use/tool_result,
@@ -187,45 +159,12 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
 
   # Convert ReqLLM.Tool or stub map to Anthropic tool format
   defp tool_to_anthropic_format(%ReqLLM.Tool{} = tool) do
-    schema = ReqLLM.Tool.to_schema(tool, :openai)
-
-    %{
-      name: schema["function"]["name"],
-      description: schema["function"]["description"],
-      input_schema: schema["function"]["parameters"]
-    }
+    # Use the public helper from native Anthropic provider
+    Anthropic.tool_to_anthropic_format(tool)
   end
 
   # Stub tools are already in Anthropic format
   defp tool_to_anthropic_format(%{name: _, description: _, input_schema: _} = stub), do: stub
-
-  # Add extended thinking configuration for native Anthropic endpoint
-  # Note: pre_validate_options already extracted reasoning params and added to additional_model_request_fields
-  defp maybe_add_thinking(body, opts) do
-    # Check if additional_model_request_fields has thinking config (from pre_validate_options)
-    # Note: additional_model_request_fields is nested under :provider_options after Options.process
-    thinking_config =
-      get_in(opts, [:provider_options, :additional_model_request_fields, :thinking])
-
-    tool_choice = opts[:tool_choice]
-
-    # AWS Bedrock doesn't allow thinking when tool_choice forces a specific tool
-    # See: https://docs.claude.com/en/docs/build-with-claude/extended-thinking
-    forced_tool_choice? =
-      case tool_choice do
-        %{type: "tool", name: _} -> true
-        %{"type" => "tool", "name" => _} -> true
-        _ -> false
-      end
-
-    case thinking_config do
-      %{type: "enabled", budget_tokens: budget} when not forced_tool_choice? ->
-        Map.put(body, :thinking, %{type: "enabled", budget_tokens: budget})
-
-      _ ->
-        body
-    end
-  end
 
   @doc """
   Parses Anthropic response from Bedrock into ReqLLM format.
@@ -247,7 +186,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
         # For :object operation, extract structured output from tool call
         final_response =
           if opts[:operation] == :object do
-            extract_and_set_object(response)
+            AdapterHelpers.extract_and_set_object(response)
           else
             response
           end
@@ -257,16 +196,6 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
       error ->
         error
     end
-  end
-
-  # Extract structured output from tool call (same logic as native Anthropic provider)
-  defp extract_and_set_object(response) do
-    extracted_object =
-      response
-      |> ReqLLM.Response.tool_calls()
-      |> ReqLLM.ToolCall.find_args("structured_output")
-
-    %{response | object: extracted_object}
   end
 
   @doc """

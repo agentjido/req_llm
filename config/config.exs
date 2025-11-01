@@ -21,6 +21,9 @@ config :req_llm, :sample_text_models, ~w(
     amazon_bedrock:us.meta.llama3-2-3b-instruct-v1:0
     amazon_bedrock:cohere.command-r-v1:0
     amazon_bedrock:cohere.command-r-plus-v1:0
+    google_vertex_anthropic:claude-haiku-4-5@20251001
+    google_vertex_anthropic:claude-sonnet-4-5@20250929
+    google_vertex_anthropic:claude-opus-4-1@20250805
     openai:gpt-4o-mini
     openai:gpt-4-turbo
     google:gemini-2.0-flash

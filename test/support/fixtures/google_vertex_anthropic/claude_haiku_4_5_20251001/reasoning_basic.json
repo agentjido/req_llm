@@ -1,0 +1,117 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6InZlcnRleC0yMDIzLTEwLTE2IiwibWF4X3Rva2VucyI6NTAwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJTb2x2ZSAxMio3IGFuZCBzaG93IHlvdXIgaW50ZXJuYWwgdGhpbmtpbmcgKGJyaWVmKS4iLCJyb2xlIjoidXNlciJ9XSwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjEuMCwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifX0="
+    },
+    "canonical_json": {
+      "anthropic_version": "vertex-2023-10-16",
+      "max_tokens": 5000,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "stream": false,
+      "temperature": 1.0,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://aiplatform.googleapis.com/v1/projects/disco-park-312913/locations/global/publishers/anthropic/models/claude-haiku-4-5@20251001:rawPredict"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "EqsDCkgICRACGAIqQDmAIIcL7/SqJirr0fHj0aonHkDrh971A2U6EJzz3h9JOB5DxeUGfFUhbqoQv1pLwvXYizclzFKewa6Tmr7MEbcSDI7WNtTbZx3xwjvEdhoMtclXkZ+aL9sKXto8IjCKxChM0PiQQ24gBGWADotlPLNWRT1tyihiiXz1Jl5ae2cDY0LdMUTHaL+ulpZo/mcqkAJ8sBBQuPoaGL1aksT77kWZQoPw9b9aeWVvIYXZM+vlYLyv4WWq4DStRnH500yVq6VGmNKVdFpHrUCz5gCh76oqgZr3FgJ32BXrtf768G21W7uSteah9AV54PFvukZDhHcJqCDPTiaE+DZj2d24zyEh0XAqVo1HmIkJs3e0mCD+Z6nYN/2h99wqZYr2CXi9ynsiZ24yZEdBb6uI7SZ7+8nMXIrtwIFNkr5g1Dv5KwbZVf51hMTEzWcD0pkoRbSDu4MjOJOyJk/KRyahivXLvYW/+vaE2JtAq0/xsoLmxfpvBtLo8QkABbjV+ayIwK5lH6AmKp+7d5rXpntHTDYCJHlX3efBJNxlBQXPiCniMrZQARgB",
+          "thinking": "I need to calculate 12 * 7.\n\nLet me break this down:\n12 * 7 = (10 + 2) * 7\n= 10 * 7 + 2 * 7\n= 70 + 14\n= 84\n\nAlternatively, I could think of it as:\n12 * 7 = 12 * (5 + 2)\n= 12 * 5 + 12 * 2\n= 60 + 24\n= 84\n\nOr just recall that 12 * 7 = 84 (multiplication fact)",
+          "type": "thinking"
+        },
+        {
+          "text": "# 12 × 7\n\n**Internal thinking:**\n- Break it down: 12 × 7 = (10 + 2) × 7\n- Distribute: (10 × 7) + (2 × 7)\n- Calculate: 70 + 14\n- Result: 84\n\n**Answer: 84**",
+          "type": "text"
+        }
+      ],
+      "id": "msg_vrtx_01UNFLE1DwUmxywK7JsVj9F9",
+      "model": "claude-haiku-4-5-20251001",
+      "role": "assistant",
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 50,
+        "output_tokens": 233
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 02 Nov 2025 04:59:15 GMT"
+      ],
+      "internal-input-tokens": [
+        "50"
+      ],
+      "internal-output-tokens": [
+        "233"
+      ],
+      "pinnacle-error-category": [
+        "no_error"
+      ],
+      "request-id": [
+        "req_vrtx_011CUiULi26yZiNnadEFvY27"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "stream-reported-http-code": [
+        "200"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-vertex-ai-internal-prediction-backend": [
+        "harpoon"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  }
+}
