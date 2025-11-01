@@ -4,7 +4,7 @@
 
 - Implement a provider module under `lib/req_llm/providers/`, use `ReqLLM.Provider.DSL` + `Defaults`, and only override what the API actually deviates on.
 - The `Default` provider implementation is OpenAI Compatible.
-- Non-streaming requests run through Req with `attach/3` + `encode_body/1` + `decode_response/1`; streaming runs through Finch with `attach_stream/4` + `decode_sse_event/2` or `/3`.
+- Non-streaming requests run through Req with `attach/3` + `encode_body/1` + `decode_response/1`; streaming runs through Finch with `attach_stream/4` + `decode_stream_event/2` or `/3`.
 - Add models via `priv/models_local/`, run `mix req_llm.model_sync`, then add tests using the three-tier strategy and record fixtures with `LIVE=true`.
 
 ## Overview and Prerequisites
@@ -59,7 +59,7 @@ Required vs optional callbacks:
 
 **Streaming (recommended):**
 - `attach_stream/4` - Build complete Finch streaming request
-- `decode_sse_event/2` or `/3` - Decode provider SSE events to StreamChunk structs
+- `decode_stream_event/2` or `/3` - Decode provider SSE events to StreamChunk structs
 
 **Optional:**
 - `extract_usage/2` - Extract usage/cost data
@@ -233,7 +233,7 @@ defmodule ReqLLM.Providers.Zephyr do
   end
 
   @impl ReqLLM.Provider
-  def decode_sse_event(%{data: data}, model) do
+  def decode_stream_event(%{data: data}, model) do
     case Jason.decode(data) do
       {:ok, %{"type" => "delta", "text" => text}} when is_binary(text) and text != "" ->
         [ReqLLM.StreamChunk.text(text)]
@@ -804,7 +804,7 @@ mix mc --available
 ### Streaming
 
 - Build the Finch request in `attach_stream/4`
-- Decode events to `StreamChunk` in `decode_sse_event/2` or `/3`
+- Decode events to `StreamChunk` in `decode_stream_event/2` or `/3`
 - Emit terminal meta chunk with `finish_reason` and usage if provided
 
 ### Testing incrementally
@@ -823,7 +823,7 @@ mix mc --available
 ### Advanced implementations
 
 - Implement `parse_stream_protocol/2` for custom binary protocols (e.g., AWS Event Stream)
-- Implement `init_stream_state/1`, `decode_sse_event/3`, `flush_stream_state/2` to accumulate partial tool_call args or demultiplex multi-channel events
+- Implement `init_stream_state/1`, `decode_stream_event/3`, `flush_stream_state/2` to accumulate partial tool_call args or demultiplex multi-channel events
 - Implement `normalize_model_id/1` for regional aliases and `translate_options/3` with warning aggregation
 - Provide provider-specific usage accounting that merges multi-phase usage deltas
 
@@ -851,7 +851,7 @@ mix mc --available
 - Must return `{:ok, Finch.Request.t()}`
 - Defaults build OpenAI-compatible streaming requests; override for custom endpoints/headers
 
-**decode_sse_event/2 or /3**
+**decode_stream_event/2 or /3**
 - Map provider events to StreamChunk
 - Defaults handle OpenAI-compatible deltas
 

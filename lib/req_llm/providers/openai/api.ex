@@ -16,7 +16,7 @@ defmodule ReqLLM.Providers.OpenAI.API do
   - `path/0` - Returns the API endpoint path
   - `encode_body/1` - Transforms request into provider-specific JSON format
   - `decode_response/1` - Parses API responses into ReqLLM structures
-  - `decode_sse_event/2` - Decodes server-sent events for streaming
+  - `decode_stream_event/2` - Decodes server-sent events for streaming
   - `attach_stream/4` - Builds Finch streaming request with proper headers/body
   """
 
@@ -24,7 +24,7 @@ defmodule ReqLLM.Providers.OpenAI.API do
   @callback encode_body(Req.Request.t()) :: Req.Request.t()
   @callback decode_response({Req.Request.t(), Req.Response.t()}) ::
               {Req.Request.t(), Req.Response.t() | Exception.t()}
-  @callback decode_sse_event(map(), ReqLLM.Model.t()) :: [ReqLLM.StreamChunk.t()]
+  @callback decode_stream_event(map(), ReqLLM.Model.t()) :: [ReqLLM.StreamChunk.t()]
   @callback attach_stream(
               ReqLLM.Model.t(),
               ReqLLM.Context.t(),

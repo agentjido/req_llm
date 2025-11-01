@@ -620,15 +620,15 @@ defmodule ReqLLM.StreamServer do
 
   defp decode_provider_event(event, provider_mod, model, provider_state) do
     cond do
-      function_exported?(provider_mod, :decode_sse_event, 3) ->
-        provider_mod.decode_sse_event(event, model, provider_state)
+      function_exported?(provider_mod, :decode_stream_event, 3) ->
+        provider_mod.decode_stream_event(event, model, provider_state)
 
-      function_exported?(provider_mod, :decode_sse_event, 2) ->
-        chunks = provider_mod.decode_sse_event(event, model)
+      function_exported?(provider_mod, :decode_stream_event, 2) ->
+        chunks = provider_mod.decode_stream_event(event, model)
         {chunks, provider_state}
 
       true ->
-        chunks = ReqLLM.Provider.Defaults.default_decode_sse_event(event, model)
+        chunks = ReqLLM.Provider.Defaults.default_decode_stream_event(event, model)
         {chunks, provider_state}
     end
   end

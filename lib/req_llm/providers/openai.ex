@@ -377,16 +377,16 @@ defmodule ReqLLM.Providers.OpenAI do
   end
 
   @doc """
-  Custom decode_sse_event to route based on model API type.
+  Custom decode_stream_event to route based on model API type.
   """
   @impl ReqLLM.Provider
-  def decode_sse_event(event, model) do
+  def decode_stream_event(event, model) do
     api_type = get_in(model, [Access.key(:_metadata, %{}), "api"])
 
     if api_type == "responses" do
-      ReqLLM.Providers.OpenAI.ResponsesAPI.decode_sse_event(event, model)
+      ReqLLM.Providers.OpenAI.ResponsesAPI.decode_stream_event(event, model)
     else
-      ReqLLM.Providers.OpenAI.ChatAPI.decode_sse_event(event, model)
+      ReqLLM.Providers.OpenAI.ChatAPI.decode_stream_event(event, model)
     end
   end
 

@@ -345,8 +345,8 @@ defmodule ReqLLM.Providers.Anthropic do
   end
 
   @impl ReqLLM.Provider
-  def decode_sse_event(event, model) do
-    ReqLLM.Providers.Anthropic.Response.decode_sse_event(event, model)
+  def decode_stream_event(event, model) do
+    ReqLLM.Providers.Anthropic.Response.decode_stream_event(event, model)
   end
 
   @impl ReqLLM.Provider

@@ -69,8 +69,8 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
   end
 
   @impl true
-  def decode_sse_event(event, model) do
-    ReqLLM.Provider.Defaults.default_decode_sse_event(event, model)
+  def decode_stream_event(event, model) do
+    ReqLLM.Provider.Defaults.default_decode_stream_event(event, model)
   end
 
   # ========================================================================

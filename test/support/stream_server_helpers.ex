@@ -3,7 +3,7 @@ defmodule ReqLLM.Test.StreamServerHelpers do
   Shared test helpers for StreamServer testing.
 
   Provides:
-  - MockProvider: A test provider implementing decode_sse_event for common SSE patterns
+  - MockProvider: A test provider implementing decode_stream_event for common SSE patterns
   - Helper functions for starting servers and mocking HTTP tasks
   - Utilities for testing StreamServer behavior in isolation
   """
@@ -15,30 +15,33 @@ defmodule ReqLLM.Test.StreamServerHelpers do
     @moduledoc """
     Mock provider for testing StreamServer SSE parsing and token queuing.
 
-    Implements decode_sse_event to handle common SSE patterns:
+    Implements decode_stream_event to handle common SSE patterns:
     - OpenAI-style: `{"choices": [{"delta": {"content": "..."}}]}`
     - Anthropic-style: `{"type": "content_block_delta", "delta": {"text": "..."}}`
     - Usage metadata: `{"usage": {...}}`
     """
     @behaviour ReqLLM.Provider
 
-    def decode_sse_event(%{data: %{"choices" => [%{"delta" => %{"content" => content}}]}}, _model)
+    def decode_stream_event(
+          %{data: %{"choices" => [%{"delta" => %{"content" => content}}]}},
+          _model
+        )
         when is_binary(content) do
       [StreamChunk.text(content)]
     end
 
-    def decode_sse_event(
+    def decode_stream_event(
           %{data: %{"type" => "content_block_delta", "delta" => %{"text" => text}}},
           _model
         ) do
       [StreamChunk.text(text)]
     end
 
-    def decode_sse_event(%{data: %{"usage" => usage}}, _model) do
+    def decode_stream_event(%{data: %{"usage" => usage}}, _model) do
       [StreamChunk.meta(%{usage: usage})]
     end
 
-    def decode_sse_event(_event, _model), do: []
+    def decode_stream_event(_event, _model), do: []
 
     def prepare_request(_op, _model, _data, _opts), do: {:error, :not_implemented}
     def attach(_req, _model, _opts), do: {:error, :not_implemented}

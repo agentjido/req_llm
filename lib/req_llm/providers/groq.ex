@@ -222,8 +222,8 @@ defmodule ReqLLM.Providers.Groq do
   Returns updated chunks and new state.
   """
   @impl ReqLLM.Provider
-  def decode_sse_event(event, model, provider_state) do
-    chunks = ReqLLM.Provider.Defaults.default_decode_sse_event(event, model)
+  def decode_stream_event(event, model, provider_state) do
+    chunks = ReqLLM.Provider.Defaults.default_decode_stream_event(event, model)
 
     Enum.reduce(chunks, {[], provider_state}, fn chunk, {acc, state} ->
       case chunk.type do

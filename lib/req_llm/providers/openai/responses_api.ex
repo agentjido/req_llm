@@ -91,17 +91,17 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   @impl true
-  def decode_sse_event(%{data: "[DONE]"}, _model) do
+  def decode_stream_event(%{data: "[DONE]"}, _model) do
     [ReqLLM.StreamChunk.meta(%{terminal?: true})]
   end
 
-  def decode_sse_event(%{data: data} = event, model) when is_map(data) do
+  def decode_stream_event(%{data: data} = event, model) when is_map(data) do
     event_type =
       Map.get(event, :event) || Map.get(event, "event") || data["event"] || data["type"]
 
     Debug.dbug(
       fn ->
-        "ResponsesAPI decode_sse_event: event=#{inspect(Map.keys(event))}, event_type=#{inspect(event_type)}"
+        "ResponsesAPI decode_stream_event: event=#{inspect(Map.keys(event))}, event_type=#{inspect(event_type)}"
       end,
       component: :provider
     )
@@ -196,7 +196,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     end
   end
 
-  def decode_sse_event(_event, _model), do: []
+  def decode_stream_event(_event, _model), do: []
 
   # ========================================================================
   # Shared Request Building Helpers (used by both encode_body and attach_stream)

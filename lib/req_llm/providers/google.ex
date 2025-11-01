@@ -1133,7 +1133,7 @@ defmodule ReqLLM.Providers.Google do
   end
 
   @impl ReqLLM.Provider
-  def decode_sse_event(event, model) do
+  def decode_stream_event(event, model) do
     case event do
       %{data: data} when is_map(data) -> decode_google_event(data, model)
       data when is_map(data) -> decode_google_event(data, model)

@@ -74,8 +74,8 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   @doc """
   Decode Anthropic SSE event data into StreamChunks.
   """
-  @spec decode_sse_event(map(), ReqLLM.Model.t()) :: [ReqLLM.StreamChunk.t()]
-  def decode_sse_event(%{data: data}, _model) when is_map(data) do
+  @spec decode_stream_event(map(), ReqLLM.Model.t()) :: [ReqLLM.StreamChunk.t()]
+  def decode_stream_event(%{data: data}, _model) when is_map(data) do
     case data do
       %{"type" => "message_start", "message" => message} ->
         usage_data = Map.get(message, "usage", %{})
@@ -128,7 +128,7 @@ defmodule ReqLLM.Providers.Anthropic.Response do
     end
   end
 
-  def decode_sse_event(_, _model), do: []
+  def decode_stream_event(_, _model), do: []
 
   # Private helper functions
 

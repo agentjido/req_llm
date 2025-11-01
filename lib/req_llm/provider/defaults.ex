@@ -34,7 +34,7 @@ defmodule ReqLLM.Provider.Defaults do
   - `decode_response/1` - Standard response decoding with error handling
   - `extract_usage/2` - Usage extraction from standard `usage` field
   - `translate_options/3` - No-op translation (pass-through)
-  - `decode_sse_event/2` - OpenAI-compatible SSE event decoding
+  - `decode_stream_event/2` - OpenAI-compatible SSE event decoding
   - `attach_stream/4` - OpenAI-compatible streaming request building
   - `display_name/0` - Human-readable provider name from provider_id
 
@@ -51,7 +51,7 @@ defmodule ReqLLM.Provider.Defaults do
   - `default_decode_response/1`
   - `default_extract_usage/2`
   - `default_translate_options/3`
-  - `default_decode_sse_event/2`
+  - `default_decode_stream_event/2`
   - `default_attach_stream/5`
   - `default_display_name/1`
 
@@ -145,13 +145,13 @@ defmodule ReqLLM.Provider.Defaults do
       end
 
       @doc """
-      Default implementation of decode_sse_event/2.
+      Default implementation of decode_stream_event/2.
 
       Decodes SSE events using OpenAI-compatible format.
       """
       @impl ReqLLM.Provider
-      def decode_sse_event(event, model) do
-        ReqLLM.Provider.Defaults.default_decode_sse_event(event, model)
+      def decode_stream_event(event, model) do
+        ReqLLM.Provider.Defaults.default_decode_stream_event(event, model)
       end
 
       @doc """
@@ -177,7 +177,7 @@ defmodule ReqLLM.Provider.Defaults do
                      decode_response: 1,
                      extract_usage: 2,
                      translate_options: 3,
-                     decode_sse_event: 2,
+                     decode_stream_event: 2,
                      attach_stream: 4
     end
   end
@@ -661,8 +661,8 @@ defmodule ReqLLM.Provider.Defaults do
   This function moves the logic from ReqLLM.Response.Codec.Map directly into
   Provider.Defaults for the protocol removal refactoring.
   """
-  @spec default_decode_sse_event(map(), ReqLLM.Model.t()) :: [ReqLLM.StreamChunk.t()]
-  def default_decode_sse_event(%{data: data}, model) when is_map(data) do
+  @spec default_decode_stream_event(map(), ReqLLM.Model.t()) :: [ReqLLM.StreamChunk.t()]
+  def default_decode_stream_event(%{data: data}, model) when is_map(data) do
     case data do
       %{"choices" => [%{"delta" => delta} | _], "usage" => usage} ->
         # Stream chunk with usage metadata
@@ -691,11 +691,11 @@ defmodule ReqLLM.Provider.Defaults do
   end
 
   # Handle terminal [DONE] event
-  def default_decode_sse_event(%{data: "[DONE]"}, _model) do
+  def default_decode_stream_event(%{data: "[DONE]"}, _model) do
     [ReqLLM.StreamChunk.meta(%{terminal?: true})]
   end
 
-  def default_decode_sse_event(_, _model), do: []
+  def default_decode_stream_event(_, _model), do: []
 
   defp decode_openai_message(message) when is_map(message) do
     content_chunks = decode_openai_content(message)

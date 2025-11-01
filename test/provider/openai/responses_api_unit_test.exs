@@ -543,7 +543,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     end
   end
 
-  describe "decode_sse_event/2" do
+  describe "decode_stream_event/2" do
     setup do
       model = %ReqLLM.Model{provider: :openai, model: "gpt-5"}
       {:ok, model: model}
@@ -552,7 +552,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     test "decodes output_text delta", %{model: model} do
       event = %{data: %{"event" => "response.output_text.delta", "delta" => "Hello"}}
 
-      assert [chunk] = ResponsesAPI.decode_sse_event(event, model)
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
       assert chunk.type == :content
       assert chunk.text == "Hello"
     end
@@ -560,13 +560,13 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     test "ignores empty output_text delta", %{model: model} do
       event = %{data: %{"event" => "response.output_text.delta", "delta" => ""}}
 
-      assert [] = ResponsesAPI.decode_sse_event(event, model)
+      assert [] = ResponsesAPI.decode_stream_event(event, model)
     end
 
     test "decodes reasoning delta", %{model: model} do
       event = %{data: %{"event" => "response.reasoning.delta", "delta" => "Thinking..."}}
 
-      assert [chunk] = ResponsesAPI.decode_sse_event(event, model)
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
       assert chunk.type == :thinking
       assert chunk.text == "Thinking..."
     end
@@ -574,7 +574,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     test "ignores empty reasoning delta", %{model: model} do
       event = %{data: %{"event" => "response.reasoning.delta", "delta" => ""}}
 
-      assert [] = ResponsesAPI.decode_sse_event(event, model)
+      assert [] = ResponsesAPI.decode_stream_event(event, model)
     end
 
     test "decodes usage event", %{model: model} do
@@ -588,7 +588,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
         }
       }
 
-      assert [chunk] = ResponsesAPI.decode_sse_event(event, model)
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
       assert chunk.type == :meta
       assert chunk.metadata.usage.input_tokens == 10
       assert chunk.metadata.usage.output_tokens == 20
@@ -610,7 +610,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
         }
       }
 
-      assert [chunk] = ResponsesAPI.decode_sse_event(event, model)
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
       assert chunk.metadata.usage.input_tokens == 10
       assert chunk.metadata.usage.output_tokens == 20
       assert chunk.metadata.usage.total_tokens == 30
@@ -621,13 +621,13 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     test "ignores output_text done event", %{model: model} do
       event = %{data: %{"event" => "response.output_text.done"}}
 
-      assert [] = ResponsesAPI.decode_sse_event(event, model)
+      assert [] = ResponsesAPI.decode_stream_event(event, model)
     end
 
     test "decodes completed event", %{model: model} do
       event = %{data: %{"event" => "response.completed"}}
 
-      assert [chunk] = ResponsesAPI.decode_sse_event(event, model)
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
       assert chunk.type == :meta
       assert chunk.metadata.terminal? == true
       assert chunk.metadata.finish_reason == :stop
@@ -636,7 +636,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     test "decodes incomplete event", %{model: model} do
       event = %{data: %{"event" => "response.incomplete", "reason" => "length"}}
 
-      assert [chunk] = ResponsesAPI.decode_sse_event(event, model)
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
       assert chunk.type == :meta
       assert chunk.metadata.terminal? == true
       assert chunk.metadata.finish_reason == :length
@@ -645,7 +645,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     test "handles [DONE] event", %{model: model} do
       event = %{data: "[DONE]"}
 
-      assert [chunk] = ResponsesAPI.decode_sse_event(event, model)
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
       assert chunk.type == :meta
       assert chunk.metadata.terminal? == true
     end
@@ -653,7 +653,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     test "uses type field when event field missing", %{model: model} do
       event = %{data: %{"type" => "response.output_text.delta", "delta" => "Text"}}
 
-      assert [chunk] = ResponsesAPI.decode_sse_event(event, model)
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
       assert chunk.type == :content
       assert chunk.text == "Text"
     end
@@ -661,13 +661,13 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     test "ignores unknown event types", %{model: model} do
       event = %{data: %{"event" => "response.unknown.type"}}
 
-      assert [] = ResponsesAPI.decode_sse_event(event, model)
+      assert [] = ResponsesAPI.decode_stream_event(event, model)
     end
 
     test "ignores events with missing event type", %{model: model} do
       event = %{data: %{"delta" => "text"}}
 
-      assert [] = ResponsesAPI.decode_sse_event(event, model)
+      assert [] = ResponsesAPI.decode_stream_event(event, model)
     end
   end
 

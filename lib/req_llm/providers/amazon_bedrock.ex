@@ -363,7 +363,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   end
 
   @impl ReqLLM.Provider
-  def decode_sse_event(event, model) when is_map(event) do
+  def decode_stream_event(event, model) when is_map(event) do
     # Decode AWS event stream events into StreamChunks
     # This is called after parse_stream_protocol returns events
     model_family = get_model_family(model.model)
@@ -376,7 +376,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     end
   end
 
-  def decode_sse_event(_data, _model) do
+  def decode_stream_event(_data, _model) do
     []
   end
 

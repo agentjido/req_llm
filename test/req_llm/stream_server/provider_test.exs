@@ -4,7 +4,7 @@ defmodule ReqLLM.StreamServer.ProviderTest.GoogleJsonProvider do
 
   alias ReqLLM.StreamChunk
 
-  def decode_sse_event(%{data: data}, _model) when is_map(data) do
+  def decode_stream_event(%{data: data}, _model) when is_map(data) do
     case data do
       %{"candidates" => [%{"content" => %{"parts" => parts}} | _]} ->
         Enum.flat_map(parts, fn part ->
@@ -19,7 +19,7 @@ defmodule ReqLLM.StreamServer.ProviderTest.GoogleJsonProvider do
     end
   end
 
-  def decode_sse_event(_event, _model), do: []
+  def decode_stream_event(_event, _model), do: []
 
   def prepare_request(_op, _model, _data, _opts), do: {:error, :not_implemented}
   def attach(_req, _model, _opts), do: {:error, :not_implemented}
@@ -33,12 +33,15 @@ defmodule ReqLLM.StreamServer.ProviderTest.OpenAIJsonProvider do
 
   alias ReqLLM.StreamChunk
 
-  def decode_sse_event(%{data: %{"choices" => [%{"delta" => %{"content" => content}}]}}, _model)
+  def decode_stream_event(
+        %{data: %{"choices" => [%{"delta" => %{"content" => content}}]}},
+        _model
+      )
       when is_binary(content) do
     [StreamChunk.text(content)]
   end
 
-  def decode_sse_event(_event, _model), do: []
+  def decode_stream_event(_event, _model), do: []
 
   def prepare_request(_op, _model, _data, _opts), do: {:error, :not_implemented}
   def attach(_req, _model, _opts), do: {:error, :not_implemented}
@@ -54,17 +57,17 @@ defmodule ReqLLM.StreamServer.ProviderTest.ProviderWithState do
 
   def init_stream_state(_model), do: %{count: 0}
 
-  def decode_sse_event(%{data: "content"}, _model, provider_state) do
+  def decode_stream_event(%{data: "content"}, _model, provider_state) do
     new_state = Map.update(provider_state, :count, 1, &(&1 + 1))
     chunk = StreamChunk.text("chunk")
     {[chunk], new_state}
   end
 
-  def decode_sse_event(%{event: "[DONE]"}, _model, _provider_state) do
+  def decode_stream_event(%{event: "[DONE]"}, _model, _provider_state) do
     {:halt, nil}
   end
 
-  def decode_sse_event(_, _model, provider_state), do: {[], provider_state}
+  def decode_stream_event(_, _model, provider_state), do: {[], provider_state}
 
   def flush_stream_state(_model, %{count: count} = provider_state) do
     {[StreamChunk.text("FLUSH:#{count}")], provider_state}
@@ -106,7 +109,7 @@ defmodule ReqLLM.StreamServer.ProviderTest do
   end
 
   describe "provider integration" do
-    test "uses provider decode_sse_event when available" do
+    test "uses provider decode_stream_event when available" do
       server = start_server()
       _task = mock_http_task(server)
 
@@ -120,7 +123,7 @@ defmodule ReqLLM.StreamServer.ProviderTest do
       StreamServer.cancel(server)
     end
 
-    test "falls back to default decoding when provider doesn't implement decode_sse_event" do
+    test "falls back to default decoding when provider doesn't implement decode_stream_event" do
       defmodule MinimalProvider do
         @behaviour ReqLLM.Provider
 
@@ -144,7 +147,7 @@ defmodule ReqLLM.StreamServer.ProviderTest do
   end
 
   describe "provider state management" do
-    test "threads provider state through decode_sse_event/3" do
+    test "threads provider state through decode_stream_event/3" do
       model = %Model{provider: ProviderWithState, model: "test"}
       server = start_server(provider_mod: ProviderWithState, model: model)
       _task = mock_http_task(server)

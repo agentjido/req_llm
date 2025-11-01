@@ -247,15 +247,15 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
   def parse_stream_chunk(chunk, opts) when is_map(chunk) do
     # First, unwrap the Bedrock AWS event stream encoding
     with {:ok, event} <- AmazonBedrock.Response.unwrap_stream_chunk(chunk) do
-      # Create a model struct for Anthropic.Response.decode_sse_event
+      # Create a model struct for Anthropic.Response.decode_stream_event
       model = %ReqLLM.Model{
         provider: :anthropic,
         model: opts[:model] || "bedrock-anthropic"
       }
 
       # Delegate to native Anthropic SSE event parsing
-      # decode_sse_event expects %{data: event_data} format
-      chunks = Anthropic.Response.decode_sse_event(%{data: event}, model)
+      # decode_stream_event expects %{data: event_data} format
+      chunks = Anthropic.Response.decode_stream_event(%{data: event}, model)
 
       # Return first chunk if any, or nil
       case chunks do

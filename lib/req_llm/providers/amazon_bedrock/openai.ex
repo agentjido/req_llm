@@ -233,7 +233,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
           # Event is already parsed JSON, wrap in SSE format expected by decoder
           sse_event = %{data: event}
 
-          chunks = Defaults.default_decode_sse_event(sse_event, model)
+          chunks = Defaults.default_decode_stream_event(sse_event, model)
 
           # Return first chunk if any, or nil
           case chunks do
