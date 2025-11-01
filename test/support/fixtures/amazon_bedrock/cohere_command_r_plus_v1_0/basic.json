@@ -1,0 +1,85 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo1MCwidGVtcGVyYXR1cmUiOjAuMH0sIm1lc3NhZ2VzIjpbeyJjb250ZW50IjpbeyJ0ZXh0IjoiSGVsbG8gd29ybGQhIn1dLCJyb2xlIjoidXNlciJ9XX0="
+    },
+    "canonical_json": {
+      "inferenceConfig": {
+        "maxTokens": 50,
+        "temperature": 0.0
+      },
+      "messages": [
+        {
+          "content": [
+            {
+              "text": "Hello world!"
+            }
+          ],
+          "role": "user"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "b5cafe27ce07389960ed7a8c3ac8b1c71f1c73c545b7345e1fb627d95d457e1a"
+      ],
+      "x-amz-date": [
+        "20251101T151715Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/cohere.command-r-plus-v1:0/converse"
+  },
+  "response": {
+    "body": {
+      "metrics": {
+        "latencyMs": 350
+      },
+      "output": {
+        "message": {
+          "content": [
+            {
+              "text": "Hello! How can I help you today?"
+            }
+          ],
+          "role": "assistant"
+        }
+      },
+      "stopReason": "end_turn",
+      "usage": {
+        "inputTokens": 3,
+        "outputTokens": 9,
+        "serverToolUsage": {},
+        "totalTokens": 12
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 01 Nov 2025 15:17:16 GMT"
+      ],
+      "x-amzn-requestid": [
+        "41a6faa3-e1c3-4c69-a922-4025cba9f7d1"
+      ]
+    },
+    "status": 200
+  }
+}

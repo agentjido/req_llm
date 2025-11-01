@@ -27,6 +27,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - AWS Bedrock OpenAI OSS models with complete fixtures (2 models)
   - openai.gpt-oss-20b-1:0 (10 fixtures)
   - openai.gpt-oss-120b-1:0 (10 fixtures)
+- AWS Bedrock Meta Llama inference profile model with basic fixtures (1 model)
+  - us.meta.llama3-2-3b-instruct-v1:0 (4 fixtures: basic, streaming, token_limit, usage)
+- AWS Bedrock Cohere Command R models with complete fixtures (2 models)
+  - cohere.command-r-v1:0 (10 fixtures)
+  - cohere.command-r-plus-v1:0 (10 fixtures)
 
 ### Fixed
 
@@ -41,10 +46,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Fixed `normalize_model_id/1` to always strip region prefixes for Registry lookups
   - Enables capabilities detection for inference profile models
   - Separates metadata lookup (always normalized) from API requests (preserve_inference_profile? controls)
-- AWS Bedrock provider now only advertises Anthropic and OpenAI models
-  - Removed Meta and Mistral from @model_families (not currently supported)
+- AWS Bedrock provider model family support
+  - Added Meta to @model_families for Llama models using Converse API
   - Added OpenAI to @model_families for gpt-oss models
-  - Test metadata validation now skips non-Anthropic/OpenAI Bedrock models
+  - Cohere Command R models use Converse API directly with full tool support (no custom formatter needed)
 
 ## [1.0.0-rc.8] - 2025-10-29
 

@@ -1,0 +1,85 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjV9LCJtZXNzYWdlcyI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMifV0sInJvbGUiOiJ1c2VyIn1dfQ=="
+    },
+    "canonical_json": {
+      "inferenceConfig": {
+        "maxTokens": 100,
+        "temperature": 0.5
+      },
+      "messages": [
+        {
+          "content": [
+            {
+              "text": "Write a very long story about dragons and adventures"
+            }
+          ],
+          "role": "user"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "af3f637afd9c02d90b55ab65f033e5438add0479d2f6b78eb0e25cc0524c5965"
+      ],
+      "x-amz-date": [
+        "20251101T151721Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/cohere.command-r-plus-v1:0/converse"
+  },
+  "response": {
+    "body": {
+      "metrics": {
+        "latencyMs": 2672
+      },
+      "output": {
+        "message": {
+          "content": [
+            {
+              "text": "Title: The Dragon's Quest\n\nOnce upon a time, in a land filled with magic and wonder, there lived a brave and noble dragon named Auron. He was a massive creature, with scales as bright as gold and eyes that shimmered like emeralds. Auron possessed an ancient wisdom and an unwavering loyalty to his kingdom, a realm known as Valorian. Valorian was a prosperous land, nestled between towering mountains and lush forests, where humans and dragons coexisted in harmony. However"
+            }
+          ],
+          "role": "assistant"
+        }
+      },
+      "stopReason": "max_tokens",
+      "usage": {
+        "inputTokens": 9,
+        "outputTokens": 100,
+        "serverToolUsage": {},
+        "totalTokens": 109
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 01 Nov 2025 15:17:23 GMT"
+      ],
+      "x-amzn-requestid": [
+        "9ad74717-dccb-4a25-8558-d4fef99ddbeb"
+      ]
+    },
+    "status": 200
+  }
+}

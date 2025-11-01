@@ -1,0 +1,146 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo0MDksInRlbXBlcmF0dXJlIjowLjB9LCJtZXNzYWdlcyI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiJ9XSwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOlt7InRleHQiOiJJIHdpbGwgdXNlIHRoZSBhZGQgdG9vbCB0byBjYWxjdWxhdGUgdGhlIHN1bSBvZiAyIGFuZCAzLCBhbmQgdGhlbiByZXNwb25kIHdpdGggdGhlIGFuc3dlciBpbiB0aGUgZm9ybWF0IHJlcXVlc3RlZCBieSB0aGUgdXNlci4ifSx7InRvb2xVc2UiOnsiaW5wdXQiOnsiYSI6MiwiYiI6M30sIm5hbWUiOiJhZGQiLCJ0b29sVXNlSWQiOiJ0b29sdXNlX1hWYUNKNGVNUjF5Y2Q4bjhKZ2s0UUEifX1dLCJyb2xlIjoiYXNzaXN0YW50In0seyJjb250ZW50IjpbeyJ0b29sUmVzdWx0Ijp7ImNvbnRlbnQiOlt7InRleHQiOiI1In1dLCJ0b29sVXNlSWQiOiJ0b29sdXNlX1hWYUNKNGVNUjF5Y2Q4bjhKZ2s0UUEifX1dLCJyb2xlIjoidXNlciJ9XSwidG9vbENvbmZpZyI6eyJ0b29scyI6W3sidG9vbFNwZWMiOnsiZGVzY3JpcHRpb24iOiJBZGQgdHdvIGludGVnZXJzIiwiaW5wdXRTY2hlbWEiOnsianNvbiI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYSI6eyJ0eXBlIjoiaW50ZWdlciJ9LCJiIjp7InR5cGUiOiJpbnRlZ2VyIn19LCJyZXF1aXJlZCI6WyJhIiwiYiJdLCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoiYWRkIn19XX19"
+    },
+    "canonical_json": {
+      "inferenceConfig": {
+        "maxTokens": 409,
+        "temperature": 0.0
+      },
+      "messages": [
+        {
+          "content": [
+            {
+              "text": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'."
+            }
+          ],
+          "role": "user"
+        },
+        {
+          "content": [
+            {
+              "text": "I will use the add tool to calculate the sum of 2 and 3, and then respond with the answer in the format requested by the user."
+            },
+            {
+              "toolUse": {
+                "input": {
+                  "a": 2,
+                  "b": 3
+                },
+                "name": "add",
+                "toolUseId": "tooluse_XVaCJ4eMR1ycd8n8Jgk4QA"
+              }
+            }
+          ],
+          "role": "assistant"
+        },
+        {
+          "content": [
+            {
+              "toolResult": {
+                "content": [
+                  {
+                    "text": "5"
+                  }
+                ],
+                "toolUseId": "tooluse_XVaCJ4eMR1ycd8n8Jgk4QA"
+              }
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "toolConfig": {
+        "tools": [
+          {
+            "toolSpec": {
+              "description": "Add two integers",
+              "inputSchema": {
+                "json": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "a": {
+                      "type": "integer"
+                    },
+                    "b": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "a",
+                    "b"
+                  ],
+                  "type": "object"
+                }
+              },
+              "name": "add"
+            }
+          }
+        ]
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "6dc1f9a548998bb8edce946d4d2c9eb2dc10e6906e691ec458a7433879f7c98f"
+      ],
+      "x-amz-date": [
+        "20251101T151731Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/cohere.command-r-plus-v1:0/converse"
+  },
+  "response": {
+    "body": {
+      "metrics": {
+        "latencyMs": 1281
+      },
+      "output": {
+        "message": {
+          "content": [
+            {
+              "text": "sum=5"
+            }
+          ],
+          "role": "assistant"
+        }
+      },
+      "stopReason": "end_turn",
+      "usage": {
+        "inputTokens": 72,
+        "outputTokens": 3,
+        "serverToolUsage": {},
+        "totalTokens": 75
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 01 Nov 2025 15:17:33 GMT"
+      ],
+      "x-amzn-requestid": [
+        "be753eb0-fd93-4828-b56e-45ab3011f56f"
+      ]
+    },
+    "status": 200
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjV9LCJtZXNzYWdlcyI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMifV0sInJvbGUiOiJ1c2VyIn1dfQ=="
+    },
+    "canonical_json": {
+      "inferenceConfig": {
+        "maxTokens": 100,
+        "temperature": 0.5
+      },
+      "messages": [
+        {
+          "content": [
+            {
+              "text": "Write a very long story about dragons and adventures"
+            }
+          ],
+          "role": "user"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ],
+      "x-amz-content-sha256": [
+        "af3f637afd9c02d90b55ab65f033e5438add0479d2f6b78eb0e25cc0524c5965"
+      ],
+      "x-amz-date": [
+        "20251101T151655Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/cohere.command-r-v1:0/converse"
+  },
+  "response": {
+    "body": {
+      "metrics": {
+        "latencyMs": 1183
+      },
+      "output": {
+        "message": {
+          "content": [
+            {
+              "text": "In a faraway land, a young boy named Erec dreamed of dragons and adventure. He spent his days staring up at the sky, imagining the world beyond his village, where majestic beasts roamed the clouds. He yearned to embark on a heroic quest, but little did he know that his destiny would soon lead him down a path filled with danger and marvel.\n\nOne day, Erec heard rumors spreading throughout the village like wildfire. A dragon, a creature of immense power and mystery"
+            }
+          ],
+          "role": "assistant"
+        }
+      },
+      "stopReason": "max_tokens",
+      "usage": {
+        "inputTokens": 9,
+        "outputTokens": 100,
+        "serverToolUsage": {},
+        "totalTokens": 109
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sat, 01 Nov 2025 15:16:56 GMT"
+      ],
+      "x-amzn-requestid": [
+        "1433056c-e14b-4260-90ba-927ef73aebf7"
+      ]
+    },
+    "status": 200
+  }
+}
