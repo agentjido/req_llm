@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- AWS Bedrock API key authentication support (introduced by AWS in July 2025)
+  - Simple Bearer token authentication as alternative to IAM credentials
+  - `api_key` provider option with `AWS_BEARER_TOKEN_BEDROCK` environment variable fallback
+  - Short-term keys (up to 12 hours) recommended for production
+  - Long-term keys available for exploration
+  - Limitations: Cannot use with InvokeModelWithBidirectionalStream, Agents, or Data Automation
 - Context tools persistence for AWS Bedrock multi-turn conversations (fixes #158)
   - Tools automatically persist in context after first request
   - Bedrock-specific implementation with zero impact on other providers

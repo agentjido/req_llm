@@ -12,18 +12,43 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
   ## Authentication
 
-  Bedrock uses AWS Signature V4 authentication. Configure credentials via:
+  Bedrock supports two authentication methods:
 
-      # Option 1: Environment variables (recommended)
+  ### API Keys (Simplest - Introduced July 2025)
+
+  AWS Bedrock API keys provide simplified authentication with Bearer tokens:
+
+      # Option 1: Environment variable (recommended)
+      export AWS_BEARER_TOKEN_BEDROCK=your-api-key
+      export AWS_REGION=us-east-1
+
+      # Option 2: Pass directly in options
+      ReqLLM.generate_text(
+        "bedrock:anthropic.claude-3-sonnet-20240229-v1:0",
+        "Hello",
+        api_key: "your-api-key",
+        region: "us-east-1"
+      )
+
+  **Note**: API keys cannot be used with InvokeModelWithBidirectionalStream, Agents, or Data Automation operations.
+  Short-term keys (up to 12 hours) are recommended for production. Long-term keys are for exploration only.
+
+  ### IAM Credentials (AWS Signature V4)
+
+  Traditional AWS authentication using access keys:
+
+      # Option 1: Environment variables
       export AWS_ACCESS_KEY_ID=AKIA...
       export AWS_SECRET_ACCESS_KEY=...
       export AWS_REGION=us-east-1
 
       # Option 2: Pass directly in options
-      model = ReqLLM.Model.from("bedrock:anthropic.claude-3-sonnet-20240229-v1:0",
-        region: "us-east-1",
+      ReqLLM.generate_text(
+        "bedrock:anthropic.claude-3-sonnet-20240229-v1:0",
+        "Hello",
         access_key_id: "AKIA...",
-        secret_access_key: "..."
+        secret_access_key: "...",
+        region: "us-east-1"
       )
 
       # Option 3: Use ReqLLM.Keys (with composite key)
@@ -90,6 +115,11 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     metadata: "priv/models_dev/amazon_bedrock.json",
     default_env_key: "AWS_ACCESS_KEY_ID",
     provider_schema: [
+      api_key: [
+        type: :string,
+        doc:
+          "Bedrock API key for simplified authentication (can also use AWS_BEARER_TOKEN_BEDROCK env var). Alternative to IAM credentials."
+      ],
       region: [
         type: :string,
         default: "us-east-1",
@@ -238,7 +268,15 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     opts = maybe_clean_thinking_after_translation(opts, get_model_family(model.model), operation)
 
     # Construct the base URL with region
-    region = aws_creds.region || "us-east-1"
+    region =
+      case aws_creds do
+        %{region: r} when is_binary(r) -> r
+        %{region: _} -> "us-east-1"
+        %AWSAuth.Credentials{region: r} when is_binary(r) -> r
+        %AWSAuth.Credentials{} -> "us-east-1"
+        _ -> "us-east-1"
+      end
+
     base_url = "https://bedrock-runtime.#{region}.amazonaws.com"
 
     model_id = model.model
@@ -559,28 +597,40 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
   # AWS Authentication
   defp extract_aws_credentials(opts) do
-    aws_keys = [:access_key_id, :secret_access_key, :session_token, :region]
+    aws_keys = [:api_key, :access_key_id, :secret_access_key, :session_token, :region]
 
     # Split AWS credentials from other options
     {passed_creds, other_opts} = Keyword.split(opts, aws_keys)
 
-    # Try to get credentials from environment first, then overlay passed options
+    # Credential precedence:
+    # 1. Passed API key
+    # 2. Passed IAM credentials
+    # 3. Env var API key
+    # 4. Env var IAM credentials
+
     creds =
-      case AWSAuth.Credentials.from_env() do
-        nil ->
-          # No env credentials, use passed credentials directly
-          if passed_creds[:access_key_id] && passed_creds[:secret_access_key] do
-            AWSAuth.Credentials.from_map(passed_creds)
-          end
+      cond do
+        # 1. Passed API key takes highest priority
+        passed_creds[:api_key] ->
+          %{
+            api_key: passed_creds[:api_key],
+            region: passed_creds[:region] || System.get_env("AWS_REGION") || "us-east-1"
+          }
 
-        %AWSAuth.Credentials{} = env_creds ->
-          # Merge passed credentials over environment credentials
-          merged =
-            env_creds
-            |> Map.from_struct()
-            |> Map.merge(Map.new(passed_creds))
+        # 2. Passed IAM credentials
+        passed_creds[:access_key_id] && passed_creds[:secret_access_key] ->
+          AWSAuth.Credentials.from_map(passed_creds)
 
-          struct(AWSAuth.Credentials, merged)
+        # 3. Env var API key
+        env_api_key = System.get_env("AWS_BEARER_TOKEN_BEDROCK") ->
+          %{
+            api_key: env_api_key,
+            region: passed_creds[:region] || System.get_env("AWS_REGION") || "us-east-1"
+          }
+
+        # 4. Env var IAM credentials
+        true ->
+          AWSAuth.Credentials.from_env()
       end
 
     {creds, other_opts}
@@ -590,25 +640,35 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     raise ArgumentError, """
     AWS credentials required for Bedrock. Please provide either:
 
-    1. Environment variables:
+    1. API Key (simplest):
+       AWS_BEARER_TOKEN_BEDROCK=... (environment variable)
+       or api_key: "..." (option)
+
+    2. IAM Credentials:
        AWS_ACCESS_KEY_ID=...
        AWS_SECRET_ACCESS_KEY=...
-
-    2. Options:
-       access_key_id: "...", secret_access_key: "..."
+       or access_key_id: "...", secret_access_key: "..."
     """
+  end
+
+  defp validate_aws_credentials!(%{api_key: api_key}) when is_binary(api_key), do: :ok
+
+  defp validate_aws_credentials!(%{api_key: _}) do
+    raise ArgumentError, "API key must be a non-empty string"
   end
 
   defp validate_aws_credentials!(%AWSAuth.Credentials{access_key_id: nil}) do
     raise ArgumentError, """
     AWS credentials required for Bedrock. Please provide either:
 
-    1. Environment variables:
+    1. API Key (simplest):
+       AWS_BEARER_TOKEN_BEDROCK=... (environment variable)
+       or api_key: "..." (option)
+
+    2. IAM Credentials:
        AWS_ACCESS_KEY_ID=...
        AWS_SECRET_ACCESS_KEY=...
-
-    2. Options:
-       access_key_id: "...", secret_access_key: "..."
+       or access_key_id: "...", secret_access_key: "..."
     """
   end
 
@@ -616,17 +676,25 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     raise ArgumentError, """
     AWS credentials required for Bedrock. Please provide either:
 
-    1. Environment variables:
+    1. API Key (simplest):
+       AWS_BEARER_TOKEN_BEDROCK=... (environment variable)
+       or api_key: "..." (option)
+
+    2. IAM Credentials:
        AWS_ACCESS_KEY_ID=...
        AWS_SECRET_ACCESS_KEY=...
-
-    2. Options:
-       access_key_id: "...", secret_access_key: "..."
+       or access_key_id: "...", secret_access_key: "..."
     """
   end
 
   defp validate_aws_credentials!(%AWSAuth.Credentials{}), do: :ok
 
+  # API Key authentication - use Bearer token
+  defp put_aws_sigv4(request, %{api_key: api_key}) when is_binary(api_key) do
+    Req.Request.put_header(request, "authorization", "Bearer #{api_key}")
+  end
+
+  # IAM authentication - use AWS Signature V4
   defp put_aws_sigv4(request, %AWSAuth.Credentials{} = aws_creds) do
     case Code.ensure_loaded(AWSAuth.Req) do
       {:module, _} ->
@@ -644,6 +712,18 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   end
 
   # Sign a Finch request with AWS Signature V4 using ex_aws_auth library
+  # API Key authentication - just add Bearer token header
+  defp sign_aws_request(finch_request, %{api_key: api_key}, _region, _service)
+       when is_binary(api_key) do
+    # Normalize headers to lowercase (matching IAM path behavior)
+    normalized_headers =
+      Enum.map(finch_request.headers, fn {k, v} -> {String.downcase(k), v} end)
+
+    headers = normalized_headers ++ [{"authorization", "Bearer #{api_key}"}]
+    %{finch_request | headers: headers}
+  end
+
+  # IAM authentication - use AWS Signature V4
   defp sign_aws_request(finch_request, %AWSAuth.Credentials{} = aws_creds, _region, service) do
     case Code.ensure_loaded(AWSAuth) do
       {:module, _} ->

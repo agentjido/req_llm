@@ -42,6 +42,7 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
       supported = AmazonBedrock.supported_provider_options()
 
       # Should support AWS credential options
+      assert :api_key in supported
       assert :access_key_id in supported
       assert :secret_access_key in supported
       assert :session_token in supported
@@ -146,6 +147,7 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
       # Clear environment variables
       System.delete_env("AWS_ACCESS_KEY_ID")
       System.delete_env("AWS_SECRET_ACCESS_KEY")
+      System.delete_env("AWS_BEARER_TOKEN_BEDROCK")
 
       model = ReqLLM.Model.from!("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
       context = context_fixture()
@@ -154,6 +156,65 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
       assert_raise ArgumentError, ~r/AWS credentials required/, fn ->
         AmazonBedrock.prepare_request(:chat, model, context, opts)
       end
+    end
+
+    test "API key authentication via environment variable" do
+      System.put_env("AWS_BEARER_TOKEN_BEDROCK", "test-api-key-123")
+
+      model = ReqLLM.Model.from!("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      context = context_fixture()
+
+      opts = [region: "us-east-1"]
+
+      {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+
+      # Should create valid request with Bearer token
+      assert %Req.Request{} = request
+      assert request.url.host == "bedrock-runtime.us-east-1.amazonaws.com"
+
+      # Check Authorization header is set to Bearer token
+      headers = Req.Request.get_header(request, "authorization")
+      assert headers == ["Bearer test-api-key-123"]
+    end
+
+    test "API key authentication via provider options" do
+      model = ReqLLM.Model.from!("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      context = context_fixture()
+
+      opts = [
+        api_key: "test-api-key-456",
+        region: "us-west-2"
+      ]
+
+      {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+
+      # Should create valid request with Bearer token
+      assert %Req.Request{} = request
+      assert request.url.host == "bedrock-runtime.us-west-2.amazonaws.com"
+
+      # Check Authorization header is set to Bearer token
+      headers = Req.Request.get_header(request, "authorization")
+      assert headers == ["Bearer test-api-key-456"]
+    end
+
+    test "API key takes precedence over IAM credentials" do
+      # Set both IAM and API key
+      System.put_env("AWS_ACCESS_KEY_ID", "AKIATEST")
+      System.put_env("AWS_SECRET_ACCESS_KEY", "secretTEST")
+
+      model = ReqLLM.Model.from!("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      context = context_fixture()
+
+      opts = [
+        api_key: "test-api-key-789",
+        region: "us-east-1"
+      ]
+
+      {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+
+      # Should use Bearer token, not AWS SigV4
+      headers = Req.Request.get_header(request, "authorization")
+      assert headers == ["Bearer test-api-key-789"]
     end
 
     test "uses region from options" do
@@ -214,6 +275,29 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
       assert headers_map["accept"] == "application/vnd.amazon.eventstream"
       assert headers_map["content-type"] == "application/json"
       assert headers_map["authorization"] =~ "AWS4-HMAC-SHA256"
+    end
+
+    test "attach_stream with API key authentication" do
+      model = ReqLLM.Model.from!("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      context = context_fixture()
+
+      opts = [
+        api_key: "test-api-key-streaming-123",
+        region: "us-west-2"
+      ]
+
+      assert {:ok, finch_request} =
+               AmazonBedrock.attach_stream(model, context, opts, __MODULE__.TestFinch)
+
+      assert finch_request.scheme == :https
+      assert finch_request.host == "bedrock-runtime.us-west-2.amazonaws.com"
+      assert finch_request.path =~ "invoke-with-response-stream"
+      assert finch_request.method == "POST"
+
+      headers_map = Map.new(finch_request.headers)
+      assert headers_map["accept"] == "application/vnd.amazon.eventstream"
+      assert headers_map["content-type"] == "application/json"
+      assert headers_map["authorization"] == "Bearer test-api-key-streaming-123"
     end
 
     test "parse_stream_protocol handles AWS Event Stream" do
