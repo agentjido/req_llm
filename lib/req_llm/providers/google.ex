@@ -23,20 +23,19 @@ defmodule ReqLLM.Providers.Google do
 
   ## API Version Selection
 
-  The provider defaults to Google's stable v1 API for production reliability. To use beta features like
-  Google Search grounding, explicitly set `google_api_version: "v1beta"`:
+  The provider defaults to Google's v1beta API which supports all features including function calling
+  (tools) and Google Search grounding. For legacy compatibility, you can force v1 by setting
+  `google_api_version: "v1"`, but note that v1 does not support function calling or grounding:
 
       ReqLLM.generate_text(
         "google:gemini-2.5-flash",
         "What are today's tech headlines?",
         provider_options: [
-          google_api_version: "v1beta",
           google_grounding: %{enable: true}
         ]
       )
 
-  **Note**: When `google_grounding` is used without specifying an API version, v1beta is automatically
-  selected with a warning. Setting v1 explicitly with grounding enabled will return an error.
+  **Note**: Setting `google_api_version: "v1"` with function calling (tools) or grounding will return an error.
 
   ## Configuration
 
@@ -48,14 +47,14 @@ defmodule ReqLLM.Providers.Google do
 
   use ReqLLM.Provider.DSL,
     id: :google,
-    base_url: "https://generativelanguage.googleapis.com/v1",
+    base_url: "https://generativelanguage.googleapis.com/v1beta",
     metadata: "priv/models_dev/google.json",
     default_env_key: "GOOGLE_API_KEY",
     provider_schema: [
       google_api_version: [
         type: {:in, ["v1", "v1beta"]},
         doc:
-          "Google API version. Default is 'v1' for production stability. Set to 'v1beta' to enable beta features like Google Search grounding. When google_grounding is used without specifying a version, v1beta is automatically selected."
+          "Google API version. Default is 'v1beta'. Set to 'v1' only if you need legacy API behavior. Note: function calling (tools) and grounding require 'v1beta'."
       ],
       google_safety_settings: [
         type: {:list, :map},
@@ -73,7 +72,7 @@ defmodule ReqLLM.Providers.Google do
       google_grounding: [
         type: :map,
         doc:
-          "Enable Google Search grounding - allows model to search the web. Set to %{enable: true} for modern models, or %{dynamic_retrieval: %{mode: \"MODE_DYNAMIC\", dynamic_threshold: 0.7}} for Gemini 1.5 legacy support. Requires google_api_version: 'v1beta'"
+          "Enable Google Search grounding - allows model to search the web. Set to %{enable: true} for modern models, or %{dynamic_retrieval: %{mode: \"MODE_DYNAMIC\", dynamic_threshold: 0.7}} for Gemini 1.5 legacy support. Requires v1beta (default)."
       ],
       dimensions: [
         type: :pos_integer,
@@ -101,6 +100,13 @@ defmodule ReqLLM.Providers.Google do
     end
   end
 
+  defp has_tools?(opts) do
+    case Keyword.get(opts, :tools) do
+      tools when is_list(tools) and tools != [] -> true
+      _ -> false
+    end
+  end
+
   defp resolve_api_version(opts) do
     provider = Keyword.get(opts, :provider_options, [])
 
@@ -120,25 +126,25 @@ defmodule ReqLLM.Providers.Google do
         "https://generativelanguage.googleapis.com/v1beta"
 
       nil ->
-        if has_grounding?(processed_opts) do
-          Logger.warning(
-            "google_grounding requires v1beta; defaulting this request to v1beta. " <>
-              "Set provider option google_api_version: \"v1beta\" to silence this message."
-          )
-
-          "https://generativelanguage.googleapis.com/v1beta"
-        else
-          Keyword.get(processed_opts, :base_url, default_base_url())
-        end
+        Keyword.get(processed_opts, :base_url, default_base_url())
     end
   end
 
   defp validate_version_feature_compat(processed_opts) do
-    case {resolve_api_version(processed_opts), has_grounding?(processed_opts)} do
-      {"v1", true} ->
+    case {resolve_api_version(processed_opts), has_grounding?(processed_opts),
+          has_tools?(processed_opts)} do
+      {"v1", true, _} ->
         {:error,
          ReqLLM.Error.Invalid.Parameter.exception(
-           parameter: ~s/google_grounding requires google_api_version: "v1beta"/
+           parameter:
+             ~s/google_grounding requires google_api_version: "v1beta" (or remove the v1 override to use the default)/
+         )}
+
+      {"v1", _, true} ->
+        {:error,
+         ReqLLM.Error.Invalid.Parameter.exception(
+           parameter:
+             ~s/function calling (tools) requires google_api_version: "v1beta" (or remove the v1 override to use the default)/
          )}
 
       _ ->
@@ -171,7 +177,7 @@ defmodule ReqLLM.Providers.Google do
 
       req_keys =
         __MODULE__.supported_provider_options() ++
-          [:context, :operation, :text, :stream, :model, :provider_options]
+          [:context, :operation, :text, :stream, :model, :provider_options, :tools, :tool_choice]
 
       # Add alt=sse parameter for streaming requests
       base_params = if processed_opts[:stream], do: [alt: "sse"], else: []
@@ -248,7 +254,9 @@ defmodule ReqLLM.Providers.Google do
                     :text,
                     :stream,
                     :model,
-                    :provider_options
+                    :provider_options,
+                    :tools,
+                    :tool_choice
                   ]
 
               base_params = if processed_opts[:stream], do: [alt: "sse"], else: []
@@ -366,7 +374,17 @@ defmodule ReqLLM.Providers.Google do
 
     # Register extra options that might be passed but aren't standard Req options
     extra_option_keys =
-      [:model, :compiled_schema, :temperature, :max_tokens, :app_referer, :app_title, :fixture] ++
+      [
+        :model,
+        :compiled_schema,
+        :temperature,
+        :max_tokens,
+        :app_referer,
+        :app_title,
+        :fixture,
+        :tools,
+        :tool_choice
+      ] ++
         __MODULE__.supported_provider_options()
 
     request
@@ -532,10 +550,11 @@ defmodule ReqLLM.Providers.Google do
           split_messages_for_gemini(request.options[:messages] || [])
       end
 
+    tool_config = build_google_tool_config(request.options[:tool_choice])
+
     tools_data =
       case request.options[:tools] do
         tools when is_list(tools) and tools != [] ->
-          tool_config = build_google_tool_config(request.options[:tool_choice])
           grounding_tools = build_grounding_tools(request.options[:google_grounding])
 
           user_tools = [
@@ -549,8 +568,13 @@ defmodule ReqLLM.Providers.Google do
 
         _ ->
           case build_grounding_tools(request.options[:google_grounding]) do
-            [] -> %{}
-            grounding_tools -> %{tools: grounding_tools}
+            [] ->
+              %{}
+              |> maybe_put(:toolConfig, tool_config)
+
+            grounding_tools ->
+              %{tools: grounding_tools}
+              |> maybe_put(:toolConfig, tool_config)
           end
       end
 
@@ -621,7 +645,6 @@ defmodule ReqLLM.Providers.Google do
 
     generation_config =
       %{
-        responseMimeType: "application/json",
         candidateCount: 1
       }
       |> maybe_put(:temperature, request.options[:temperature])
@@ -629,6 +652,13 @@ defmodule ReqLLM.Providers.Google do
       |> maybe_put(:topP, request.options[:top_p])
       |> maybe_put(:topK, request.options[:top_k])
       |> maybe_add_thinking_config(request.options[:google_thinking_budget])
+      |> then(fn cfg ->
+        if include_response_mime?(request, model_name) do
+          Map.put(cfg, :responseMimeType, "application/json")
+        else
+          cfg
+        end
+      end)
       |> put_schema_for_model(model_name, compiled_schema)
 
     %{}
@@ -643,6 +673,10 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp gemini_2_5?(_), do: false
+
+  defp include_response_mime?(request, model_name) do
+    gemini_2_5?(model_name) or resolve_api_version(request.options) == "v1beta"
+  end
 
   defp put_schema_for_model(generation_config, model_name, compiled_schema) do
     json_schema = ReqLLM.Schema.to_json(compiled_schema.schema)

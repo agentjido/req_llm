@@ -140,7 +140,6 @@ defmodule ReqLLM.Coverage.XAI.StreamingStructuredOutputTest do
   describe "error handling in streaming" do
     @describetag model: "grok-4"
     @tag scenario: :streaming_error_handling
-    @tag :skip
 
     test "handles interrupted stream gracefully" do
       opts =

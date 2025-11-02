@@ -40,7 +40,7 @@ defmodule ReqLLM.Providers.GoogleVersionTest do
       assert request.options[:base_url] == "https://generativelanguage.googleapis.com/v1beta"
     end
 
-    test "defaults to v1 without grounding" do
+    test "defaults to v1beta without explicit version" do
       opts = [provider_options: []]
 
       assert {:ok, request} =
@@ -51,7 +51,7 @@ defmodule ReqLLM.Providers.GoogleVersionTest do
                  opts
                )
 
-      assert request.options[:base_url] == "https://generativelanguage.googleapis.com/v1"
+      assert request.options[:base_url] == "https://generativelanguage.googleapis.com/v1beta"
     end
   end
 end

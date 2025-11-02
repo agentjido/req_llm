@@ -640,7 +640,8 @@ defmodule ReqLLM.Providers.GoogleTest do
           model: model.model,
           operation: :object,
           compiled_schema: schema,
-          max_tokens: 500
+          max_tokens: 500,
+          provider_options: [google_api_version: "v1beta"]
         ]
       }
 

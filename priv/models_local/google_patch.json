@@ -2,7 +2,7 @@
   "provider": {
     "id": "google",
     "name": "Google",
-    "base_url": "https://generativelanguage.googleapis.com/v1",
+    "base_url": "https://generativelanguage.googleapis.com/v1beta",
     "env": ["GOOGLE_API_KEY"],
     "doc": "AI model provider"
   },
@@ -18,12 +18,8 @@
         "context": 2048
       },
       "modalities": {
-        "input": [
-          "text"
-        ],
-        "output": [
-          "embedding"
-        ]
+        "input": ["text"],
+        "output": ["embedding"]
       },
       "name": "Gemini Embedding 001",
       "open_weights": false,

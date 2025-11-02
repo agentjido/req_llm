@@ -210,7 +210,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
       assert finch_request.path =~ ~r/^\/models\/gemini-2.0-flash-exp:streamGenerateContent/
     end
 
-    test "fallback to v1 default when neither opts nor app config set", %{
+    test "fallback to v1beta default when neither opts nor app config set", %{
       model: model,
       context: context
     } do
@@ -222,7 +222,9 @@ defmodule ReqLLM.BaseURLStreamingTest do
 
       assert finch_request.scheme == :https
       assert finch_request.host == "generativelanguage.googleapis.com"
-      assert finch_request.path =~ ~r/^\/v1\/models\/gemini-2.0-flash-exp:streamGenerateContent/
+
+      assert finch_request.path =~
+               ~r/^\/v1beta\/models\/gemini-2.0-flash-exp:streamGenerateContent/
     end
 
     test "v1beta selected when grounding is enabled without explicit version", %{
