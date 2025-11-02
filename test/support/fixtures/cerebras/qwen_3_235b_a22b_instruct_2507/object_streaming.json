@@ -1,13 +1,11 @@
 {
-  "captured_at": "2025-10-13T23:00:36.599881Z",
+  "captured_at": "2025-11-02T17:12:00.216262Z",
   "chunks": [
     {
-      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLWQ0NWZjNzU3LWU3MTMtNDJhZi1iMTk3LThlNTgzNjg2NzhmNyIsImNob2ljZXMiOlt7ImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQifSwiaW5kZXgiOjB9XSwiY3JlYXRlZCI6MTc2MDM5NjQzNiwibW9kZWwiOiJxd2VuLTMtMjM1Yi1hMjJiLWluc3RydWN0LTI1MDciLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF9jN2Y2MTI3NzllZDRhZTkyNDk2ZiIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayJ9Cgo=",
-      "decoded": "data: {\"id\":\"chatcmpl-d45fc757-e713-42af-b197-8e58368678f7\",\"choices\":[{\"delta\":{\"role\":\"assistant\"},\"index\":0}],\"created\":1760396436,\"model\":\"qwen-3-235b-a22b-instruct-2507\",\"system_fingerprint\":\"fp_c7f612779ed4ae92496f\",\"object\":\"chat.completion.chunk\"}\n\n"
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLWM2NzNjM2Q0LTMyMmYtNGMzOS1iOGE3LWVkNmEwOWYxM2UyNSIsImNob2ljZXMiOlt7ImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQifSwiaW5kZXgiOjB9XSwiY3JlYXRlZCI6MTc2MjEwMzUxNywibW9kZWwiOiJxd2VuLTMtMjM1Yi1hMjJiLWluc3RydWN0LTI1MDciLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF9jN2Y2MTI3NzllZDRhZTkyNDk2ZiIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayJ9Cgo="
     },
     {
-      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLWQ0NWZjNzU3LWU3MTMtNDJhZi1iMTk3LThlNTgzNjg2NzhmNyIsImNob2ljZXMiOlt7ImRlbHRhIjp7InRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsImFyZ3VtZW50cyI6IntcImFnZVwiOiAzMCwgXCJuYW1lXCI6IFwiQWxleCBKb2huc29uXCIsIFwib2NjdXBhdGlvblwiOiBcIlNvZnR3YXJlIEVuZ2luZWVyXCJ9In0sInR5cGUiOiJmdW5jdGlvbiIsImlkIjoiNzA4NDNkZGNkIiwiaW5kZXgiOjB9XX0sImluZGV4IjowfV0sImNyZWF0ZWQiOjE3NjAzOTY0MzYsIm1vZGVsIjoicXdlbi0zLTIzNWItYTIyYi1pbnN0cnVjdC0yNTA3Iiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfYzdmNjEyNzc5ZWQ0YWU5MjQ5NmYiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsifQoKZGF0YTogeyJpZCI6ImNoYXRjbXBsLWQ0NWZjNzU3LWU3MTMtNDJhZi1iMTk3LThlNTgzNjg2NzhmNyIsImNob2ljZXMiOlt7ImRlbHRhIjp7fSwiZmluaXNoX3JlYXNvbiI6InRvb2xfY2FsbHMiLCJpbmRleCI6MH1dLCJjcmVhdGVkIjoxNzYwMzk2NDM2LCJtb2RlbCI6InF3ZW4tMy0yMzViLWEyMmItaW5zdHJ1Y3QtMjUwNyIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwX2M3ZjYxMjc3OWVkNGFlOTI0OTZmIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwidXNhZ2UiOnsicHJvbXB0X3Rva2VucyI6MjI1LCJjb21wbGV0aW9uX3Rva2VucyI6MzMsInRvdGFsX3Rva2VucyI6MjU4LCJwcm9tcHRfdG9rZW5zX2RldGFpbHMiOnsiY2FjaGVkX3Rva2VucyI6MH19LCJ0aW1lX2luZm8iOnsicXVldWVfdGltZSI6MC4xNjA1ODI3MDksInByb21wdF90aW1lIjowLjAxNTEyODMyNywiY29tcGxldGlvbl90aW1lIjowLjAxOTQzODI2MywidG90YWxfdGltZSI6MC4xOTcyOTMyODE1NTUxNzU3OCwiY3JlYXRlZCI6MTc2MDM5NjQzNn19Cgo=",
-      "decoded": "data: {\"id\":\"chatcmpl-d45fc757-e713-42af-b197-8e58368678f7\",\"choices\":[{\"delta\":{\"tool_calls\":[{\"function\":{\"name\":\"structured_output\",\"arguments\":\"{\\\"age\\\": 30, \\\"name\\\": \\\"Alex Johnson\\\", \\\"occupation\\\": \\\"Software Engineer\\\"}\"},\"type\":\"function\",\"id\":\"70843ddcd\",\"index\":0}]},\"index\":0}],\"created\":1760396436,\"model\":\"qwen-3-235b-a22b-instruct-2507\",\"system_fingerprint\":\"fp_c7f612779ed4ae92496f\",\"object\":\"chat.completion.chunk\"}\n\ndata: {\"id\":\"chatcmpl-d45fc757-e713-42af-b197-8e58368678f7\",\"choices\":[{\"delta\":{},\"finish_reason\":\"tool_calls\",\"index\":0}],\"created\":1760396436,\"model\":\"qwen-3-235b-a22b-instruct-2507\",\"system_fingerprint\":\"fp_c7f612779ed4ae92496f\",\"object\":\"chat.completion.chunk\",\"usage\":{\"prompt_tokens\":225,\"completion_tokens\":33,\"total_tokens\":258,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"time_info\":{\"queue_time\":0.160582709,\"prompt_time\":0.015128327,\"completion_time\":0.019438263,\"total_time\":0.19729328155517578,\"created\":1760396436}}\n\n"
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLWM2NzNjM2Q0LTMyMmYtNGMzOS1iOGE3LWVkNmEwOWYxM2UyNSIsImNob2ljZXMiOlt7ImRlbHRhIjp7InRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsImFyZ3VtZW50cyI6IntcImFnZVwiOiAzMCwgXCJuYW1lXCI6IFwiQWxleCBKb2huc29uXCIsIFwib2NjdXBhdGlvblwiOiBcIlNvZnR3YXJlIEVuZ2luZWVyXCJ9In0sInR5cGUiOiJmdW5jdGlvbiIsImlkIjoiZjM5Y2I3NjM2IiwiaW5kZXgiOjB9XX0sImluZGV4IjowfV0sImNyZWF0ZWQiOjE3NjIxMDM1MTcsIm1vZGVsIjoicXdlbi0zLTIzNWItYTIyYi1pbnN0cnVjdC0yNTA3Iiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfYzdmNjEyNzc5ZWQ0YWU5MjQ5NmYiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsifQoKZGF0YTogeyJpZCI6ImNoYXRjbXBsLWM2NzNjM2Q0LTMyMmYtNGMzOS1iOGE3LWVkNmEwOWYxM2UyNSIsImNob2ljZXMiOlt7ImRlbHRhIjp7fSwiZmluaXNoX3JlYXNvbiI6InRvb2xfY2FsbHMiLCJpbmRleCI6MH1dLCJjcmVhdGVkIjoxNzYyMTAzNTE3LCJtb2RlbCI6InF3ZW4tMy0yMzViLWEyMmItaW5zdHJ1Y3QtMjUwNyIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwX2M3ZjYxMjc3OWVkNGFlOTI0OTZmIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwidXNhZ2UiOnsicHJvbXB0X3Rva2VucyI6MjI1LCJjb21wbGV0aW9uX3Rva2VucyI6MzMsInRvdGFsX3Rva2VucyI6MjU4LCJwcm9tcHRfdG9rZW5zX2RldGFpbHMiOnsiY2FjaGVkX3Rva2VucyI6MH19LCJ0aW1lX2luZm8iOnsicXVldWVfdGltZSI6MC4xODg5NDY0MDMsInByb21wdF90aW1lIjowLjAzMjE2MDkxOCwiY29tcGxldGlvbl90aW1lIjowLjAxOTQ4NTM3NSwidG90YWxfdGltZSI6MC4yNDIwNjk0ODI4MDMzNDQ3MywiY3JlYXRlZCI6MTc2MjEwMzUxN319Cgo="
     }
   ],
   "request": {
@@ -75,22 +73,24 @@
     "headers": {
       "alt-svc": "h3=\":443\"; ma=86400",
       "cf-cache-status": "DYNAMIC",
-      "cf-ray": "98e2743edd9feaca-ORD",
+      "cf-ray": "9985411719166e89-ORD",
+      "connection": "keep-alive",
       "content-type": "text/event-stream; charset=utf-8",
-      "date": "Mon, 13 Oct 2025 23:00:36 GMT",
-      "inference-id": "chatcmpl-d45fc757-e713-42af-b197-8e58368678f7",
+      "date": "Sun, 02 Nov 2025 17:11:59 GMT",
+      "inference-id": "chatcmpl-c673c3d4-322f-4c39-b8a7-ed6a09f13e25",
       "referrer-policy": "strict-origin-when-cross-origin",
       "server": "cloudflare",
-      "set-cookie": "__cf_bm=O0H72OUFErj2ZDmPOeKVt0icEOJtTlAejfPU7GP6qY8-1760396436-1.0.1.1-QQsgsvXvkq0EvAz7QWe2BoPHcPmf8BRdT4cbLQI9t_lQFHnkkrFE.mOqI86qEIuEMUuAkodlmXaTREYWlgYa3hyNoydLoW.YeAomWxOFUWc; path=/; expires=Mon, 13-Oct-25 23:30:36 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None",
+      "set-cookie": "__cf_bm=C8AeeBB4TYrgtmL5FQqjZaWzqEw83iOwxw4ub0foJ.U-1762103519.8601286-1.0.1.1-mt1QqP8CxxpiMLehe_cZMHpSarlU4WVHFcW_XZqOVhMqEkYGsnntZ2PHqJ3sKE__.XRxe83doewnXQ6ofYVxMv69MEwFLbXiZWwg2wPdBZYr9ibGxpPgF0R4WtRiQN3t; HttpOnly; Secure; Path=/; Domain=cerebras-sandbox.net; Expires=Sun, 02 Nov 2025 17:41:59 GMT",
       "strict-transport-security": "max-age=3600; includeSubDomains",
+      "transfer-encoding": "chunked",
       "x-content-type-options": "nosniff",
       "x-ratelimit-limit-requests-day": "1440000",
       "x-ratelimit-limit-tokens-minute": "1000000",
-      "x-ratelimit-remaining-requests-day": "1439989",
-      "x-ratelimit-remaining-tokens-minute": "999927",
-      "x-ratelimit-reset-requests-day": "3563.585633277893",
-      "x-ratelimit-reset-tokens-minute": "23.585633277893066",
-      "x-request-id": "98e2743edd9feaca-ORD"
+      "x-ratelimit-remaining-requests-day": "1439994",
+      "x-ratelimit-remaining-tokens-minute": "999220",
+      "x-ratelimit-reset-requests-day": "24480.0326256752",
+      "x-ratelimit-reset-tokens-minute": "0.032625675201416016",
+      "x-request-id": "9985411719166e89-ORD"
     },
     "status": 200
   }

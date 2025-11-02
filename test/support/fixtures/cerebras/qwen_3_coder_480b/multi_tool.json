@@ -101,24 +101,24 @@
                   "arguments": "{\"location\": \"Paris, France\", \"unit\": \"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "41a72002b",
+                "id": "51ccab12d",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1760396497,
-      "id": "chatcmpl-9e34fc16-6f20-4e64-b216-5c6039508378",
+      "created": 1762103518,
+      "id": "chatcmpl-b6851ac7-38d5-4656-a287-74fead6653bf",
       "model": "qwen-3-coder-480b",
       "object": "chat.completion",
-      "system_fingerprint": "fp_b137de5cdea5effc293c",
+      "system_fingerprint": "fp_386b539e7b02ce3613b7",
       "time_info": {
-        "completion_time": 0.022102104,
-        "created": 1760396497,
-        "prompt_time": 0.004023516,
-        "queue_time": 7.3015e-4,
-        "total_time": 0.028572797775268555
+        "completion_time": 0.023848346,
+        "created": 1762103518.193693,
+        "prompt_time": 0.015535781,
+        "queue_time": 1.71031e-4,
+        "total_time": 0.0410768985748291
       },
       "usage": {
         "completion_tokens": 35,
@@ -137,7 +137,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e275becaebfa17-ORD"
+        "9985410c4ef8000c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -146,10 +146,10 @@
         "application/json"
       ],
       "date": [
-        "Mon, 13 Oct 2025 23:01:37 GMT"
+        "Sun, 02 Nov 2025 17:11:58 GMT"
       ],
       "inference-id": [
-        "chatcmpl-9e34fc16-6f20-4e64-b216-5c6039508378"
+        "chatcmpl-b6851ac7-38d5-4656-a287-74fead6653bf"
       ],
       "referrer-policy": [
         "strict-origin-when-cross-origin"
@@ -157,8 +157,12 @@
       "server": [
         "cloudflare"
       ],
+      "server-timing": [
+        "cfCacheStatus;desc=\"DYNAMIC\"",
+        "cfEdge;dur=7,cfOrigin;dur=174"
+      ],
       "set-cookie": [
-        "__cf_bm=kcIdKwFzTuZESXuvDa5R6LZ4lI9BNF_G.wOjJ7pBNl0-1760396497-1.0.1.1-McBI3mltDz38TK_bhATYBcjcRMa6wE_gKJvGUMBvksP2ikbMJ.tmr0n2AHFJeH0yOkLLAhkFb2gGc9CWyGyJMguX9BgSxfsdvmACk14F56M; path=/; expires=Mon, 13-Oct-25 23:31:37 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=jGfy6Y6QGbQC6qyqj9WsCbJCb4UPOqucm0AzrZhDwfw-1762103518.121698-1.0.1.1-2tnhsRTjide80eJKth2hJ5X8TvfYoohj02GrRw8eTM_iOKwXs75DeElM5gNOngqTC0VznFKSGt1u92lc6fOmbsOW7AWGmbRz537TIqTsr6UtZlG9ir32QakE88PekOgS; HttpOnly; Secure; Path=/; Domain=cerebras-sandbox.net; Expires=Sun, 02 Nov 2025 17:41:58 GMT"
       ],
       "strict-transport-security": [
         "max-age=3600; includeSubDomains"
@@ -176,19 +180,19 @@
         "1000000"
       ],
       "x-ratelimit-remaining-requests-day": [
-        "1439966"
+        "1439991"
       ],
       "x-ratelimit-remaining-tokens-minute": [
-        "998643"
+        "998235"
       ],
       "x-ratelimit-reset-requests-day": [
-        "3502.1408627033234"
+        "24481.73235654831"
       ],
       "x-ratelimit-reset-tokens-minute": [
-        "22.140862703323364"
+        "1.7323565483093262"
       ],
       "x-request-id": [
-        "98e275becaebfa17-ORD"
+        "9985410c4ef8000c-ORD"
       ]
     },
     "status": 200

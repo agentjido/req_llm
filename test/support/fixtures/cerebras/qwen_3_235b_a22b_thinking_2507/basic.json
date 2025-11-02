@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJxd2VuLTMtMjM1Yi1hMjJiLWluc3RydWN0LTI1MDciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJxd2VuLTMtMjM1Yi1hMjJiLXRoaW5raW5nLTI1MDciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
       "max_tokens": 50,
@@ -11,7 +11,7 @@
           "role": "user"
         }
       ],
-      "model": "qwen-3-235b-a22b-instruct-2507",
+      "model": "qwen-3-235b-a22b-thinking-2507",
       "seed": 42,
       "stream": false,
       "temperature": 0.0
@@ -35,33 +35,33 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "Hello! How can I assist you today? 😊",
+            "content": "Okay, the user said \"Hello world!\" which is a classic first program in many coding tutorials. They might be new to programming or just testing if I respond to common phrases.\n\nI should keep it friendly and encouraging. Maybe add a bit of humor",
             "role": "assistant"
           }
         }
       ],
-      "created": 1762103519,
-      "id": "chatcmpl-deea14f6-3a57-4e53-826f-1f07e7f644dc",
-      "model": "qwen-3-235b-a22b-instruct-2507",
+      "created": 1762103516,
+      "id": "chatcmpl-7105a44b-16ba-4010-b075-769b41cd3885",
+      "model": "qwen-3-235b-a22b-thinking-2507",
       "object": "chat.completion",
-      "system_fingerprint": "fp_c7f612779ed4ae92496f",
+      "system_fingerprint": "fp_3182fd252640150dc65b",
       "time_info": {
-        "completion_time": 0.011761793,
-        "created": 1762103519,
-        "prompt_time": 0.003785491,
-        "queue_time": 1.091e-4,
-        "total_time": 0.017516136169433594
+        "completion_time": 0.08184866,
+        "created": 1762103516.1372995,
+        "prompt_time": 0.001775313,
+        "queue_time": 5.56991e-4,
+        "total_time": 0.08523964881896973
       },
       "usage": {
-        "completion_tokens": 12,
-        "prompt_tokens": 11,
+        "completion_tokens": 50,
+        "prompt_tokens": 13,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 23
+        "total_tokens": 63
       }
     },
     "headers": {
@@ -72,7 +72,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998541133b8e72e2-ORD"
+        "998540ff2e40e81c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -81,10 +81,10 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:11:59 GMT"
+        "Sun, 02 Nov 2025 17:11:56 GMT"
       ],
       "inference-id": [
-        "chatcmpl-deea14f6-3a57-4e53-826f-1f07e7f644dc"
+        "chatcmpl-7105a44b-16ba-4010-b075-769b41cd3885"
       ],
       "referrer-policy": [
         "strict-origin-when-cross-origin"
@@ -94,10 +94,10 @@
       ],
       "server-timing": [
         "cfCacheStatus;desc=\"DYNAMIC\"",
-        "cfEdge;dur=11,cfOrigin;dur=152"
+        "cfEdge;dur=6,cfOrigin;dur=244"
       ],
       "set-cookie": [
-        "__cf_bm=09l845k.ejqnBrnMHftkvO06VTV8vIeKMOJIYM349FY-1762103519.2337773-1.0.1.1-o94bX482Nda.4MV71sKNtN4ttsMzNW7BqS3pSPb4DG4pmR2RwxwtetJ6Kb0TEu2BAIHrAZjNJVfO2TL3D2nNrxfSrdhsCPO68.WSowa_IFNlQs8aDoK3eRhvaLb_enNu; HttpOnly; Secure; Path=/; Domain=cerebras-sandbox.net; Expires=Sun, 02 Nov 2025 17:41:59 GMT"
+        "__cf_bm=ep0I6UIRN_Ue.sj2OCi.7m9q7kN_wyelagqDSWYq1sU-1762103516.027189-1.0.1.1-izedhxiYwHfauJPrwFqpsmJKExx7CBlsgjcbux8QwCVG80I9xtxjbqQ8trT3pz29HSeuyx94GYwFQShxW.Grkk4Jg1Zl9F6smtUyCcFdGZNK0ENo.8.O8oFVc95pljT4; HttpOnly; Secure; Path=/; Domain=cerebras-sandbox.net; Expires=Sun, 02 Nov 2025 17:41:56 GMT"
       ],
       "strict-transport-security": [
         "max-age=3600; includeSubDomains"
@@ -115,19 +115,19 @@
         "1000000"
       ],
       "x-ratelimit-remaining-requests-day": [
-        "1439997"
+        "1440000"
       ],
       "x-ratelimit-remaining-tokens-minute": [
-        "999360"
+        "1000000"
       ],
       "x-ratelimit-reset-requests-day": [
-        "24480.637642145157"
+        "24483.749445676804"
       ],
       "x-ratelimit-reset-tokens-minute": [
-        "0.6376421451568604"
+        "3.749445676803589"
       ],
       "x-request-id": [
-        "998541133b8e72e2-ORD"
+        "998540ff2e40e81c-ORD"
       ]
     },
     "status": 200

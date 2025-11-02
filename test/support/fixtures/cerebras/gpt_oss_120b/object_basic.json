@@ -77,35 +77,35 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\n  \"age\": 30,\n  \"name\": \"Alex Johnson\",\n  \"occupation\": \"Software Engineer\"\n}",
+                  "arguments": "{\n  \"age\": 29,\n  \"name\": \"Alexandra Rivera\",\n  \"occupation\": \"Software Engineer\"\n}",
                   "name": "structured_output"
                 },
-                "id": "2df84b5a3",
+                "id": "e2047f00e",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1760396444,
-      "id": "chatcmpl-7f4f6556-81f6-4e0e-99c4-923dc37ecf3f",
+      "created": 1762103513,
+      "id": "chatcmpl-7807e736-813f-4457-9ccf-5830b1f14b73",
       "model": "gpt-oss-120b",
       "object": "chat.completion",
-      "system_fingerprint": "fp_8a8c0bd8448557718491",
+      "system_fingerprint": "fp_c5eb0443f84076c16415",
       "time_info": {
-        "completion_time": 0.061719446,
-        "created": 1760396444,
-        "prompt_time": 0.002396155,
-        "queue_time": 0.004941823,
-        "total_time": 0.07090592384338379
+        "completion_time": 0.058299983,
+        "created": 1762103513.915269,
+        "prompt_time": 0.003341555,
+        "queue_time": 0.004464414,
+        "total_time": 0.06776905059814453
       },
       "usage": {
-        "completion_tokens": 98,
+        "completion_tokens": 99,
         "prompt_tokens": 145,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 243
+        "total_tokens": 244
       }
     },
     "headers": {
@@ -116,7 +116,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e2746ea8a4f32d-ORD"
+        "998541020c3010c2-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -125,10 +125,10 @@
         "application/json"
       ],
       "date": [
-        "Mon, 13 Oct 2025 23:00:44 GMT"
+        "Sun, 02 Nov 2025 17:11:56 GMT"
       ],
       "inference-id": [
-        "chatcmpl-7f4f6556-81f6-4e0e-99c4-923dc37ecf3f"
+        "chatcmpl-7807e736-813f-4457-9ccf-5830b1f14b73"
       ],
       "referrer-policy": [
         "strict-origin-when-cross-origin"
@@ -136,8 +136,12 @@
       "server": [
         "cloudflare"
       ],
+      "server-timing": [
+        "cfCacheStatus;desc=\"DYNAMIC\"",
+        "cfEdge;dur=6,cfOrigin;dur=203"
+      ],
       "set-cookie": [
-        "__cf_bm=Qts5KL8c1OtDRmja71E2BynkF4b7JOlf93Zf05WcU.A-1760396444-1.0.1.1-4p1Hsz573tUmE805yLpo9u.4EHYfHXMO2k8qqoGwhsPitQpXNJ0Lh0zAF1GvMFUt8MBig9XYq01Z6kn2GYFayzfNwtnon9ABANfVkv4_gzg; path=/; expires=Mon, 13-Oct-25 23:30:44 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=tqwXAc0kHGmezUwhK4ERUO5DNooRnRLSKemmkfwmWdY-1762103516.4841309-1.0.1.1-_d6WnnhhUUVOxTi5R7Y1De_jfv6xgQnN49jDi2U818n_JowIFSSxaR26t9frThauVYy0Yjbl9k_fCOiPbODk26r4HMjuG5_v1GzldBqe2cB1hvBeXMLYpfJZEyR4sr34; HttpOnly; Secure; Path=/; Domain=cerebras-sandbox.net; Expires=Sun, 02 Nov 2025 17:41:56 GMT"
       ],
       "strict-transport-security": [
         "max-age=3600; includeSubDomains"
@@ -155,19 +159,19 @@
         "1000000"
       ],
       "x-ratelimit-remaining-requests-day": [
-        "1439984"
+        "1439999"
       ],
       "x-ratelimit-remaining-tokens-minute": [
-        "996115"
+        "999827"
       ],
       "x-ratelimit-reset-requests-day": [
-        "3555.864930868149"
+        "24483.334134578705"
       ],
       "x-ratelimit-reset-tokens-minute": [
-        "15.864930868148804"
+        "3.334134578704834"
       ],
       "x-request-id": [
-        "98e2746ea8a4f32d-ORD"
+        "998541020c3010c2-ORD"
       ]
     },
     "status": 200

@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjozMjAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6ImU0ZjdlZDcxMiIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImU0ZjdlZDcxMiJ9XSwibW9kZWwiOiJxd2VuLTMtMjM1Yi1hMjJiLWluc3RydWN0LTI1MDciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjozMjAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiIiwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6IjUzZjFmNTRlYyIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6IjUzZjFmNTRlYyJ9XSwibW9kZWwiOiJxd2VuLTMtMjM1Yi1hMjJiLWluc3RydWN0LTI1MDciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
       "max_tokens": 3200,
@@ -11,7 +11,7 @@
           "role": "user"
         },
         {
-          "content": [],
+          "content": "",
           "role": "assistant",
           "tool_calls": [
             {
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "e4f7ed712",
+              "id": "53f1f54ec",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "e4f7ed712"
+          "tool_call_id": "53f1f54ec"
         }
       ],
       "model": "qwen-3-235b-a22b-instruct-2507",
@@ -63,17 +63,17 @@
           }
         }
       ],
-      "created": 1760396438,
-      "id": "chatcmpl-ccf133bf-2212-4f66-b4b0-6cb9c9cc422b",
+      "created": 1762103518,
+      "id": "chatcmpl-98472991-0f5e-4e07-b603-20cd81c198b9",
       "model": "qwen-3-235b-a22b-instruct-2507",
       "object": "chat.completion",
       "system_fingerprint": "fp_c7f612779ed4ae92496f",
       "time_info": {
-        "completion_time": 0.008563768,
-        "created": 1760396438,
-        "prompt_time": 0.008613906,
-        "queue_time": 0.818141481,
-        "total_time": 0.8365495204925537
+        "completion_time": 0.010303124,
+        "created": 1762103518,
+        "prompt_time": 0.024595833,
+        "queue_time": 1.094204038,
+        "total_time": 1.1305150985717773
       },
       "usage": {
         "completion_tokens": 4,
@@ -92,7 +92,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e274593ea8223a-ORD"
+        "99854120c90472e2-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -101,10 +101,10 @@
         "application/json"
       ],
       "date": [
-        "Mon, 13 Oct 2025 23:00:41 GMT"
+        "Sun, 02 Nov 2025 17:12:02 GMT"
       ],
       "inference-id": [
-        "chatcmpl-ccf133bf-2212-4f66-b4b0-6cb9c9cc422b"
+        "chatcmpl-98472991-0f5e-4e07-b603-20cd81c198b9"
       ],
       "referrer-policy": [
         "strict-origin-when-cross-origin"
@@ -112,8 +112,12 @@
       "server": [
         "cloudflare"
       ],
+      "server-timing": [
+        "cfCacheStatus;desc=\"DYNAMIC\"",
+        "cfEdge;dur=5,cfOrigin;dur=1254"
+      ],
       "set-cookie": [
-        "__cf_bm=Ut9hnKSJTwXt5V.jl6ZyEbeGcJgrXEkROYi_QUvfMKw-1760396441-1.0.1.1-edKhi8uXtLHk1IV6R5BMAWebiSeGoRcI2LsUZ9tM5OEezG91JJ39ej2FA8Rypenq4FvZp0eySQqH4sDfniJplZJgCa42WjK5GOk328M5PCY; path=/; expires=Mon, 13-Oct-25 23:30:41 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=2xeo_HgW5trvbc6QHbbLBM7.i23STb2r1woT9pnhr9Y-1762103521.406724-1.0.1.1-7UQo0bIK4Wm7xhgg2gsOvg6WAxFuOIYt7.3OXO2ZFF8veRtdnXA5Eq77Wl58xdZ6pfsOxUikU483PZgpQgcYmo0m.3pGfdJw3iKT51afxDufLifncgSBReYi3qb_eYc5; HttpOnly; Secure; Path=/; Domain=cerebras-sandbox.net; Expires=Sun, 02 Nov 2025 17:42:02 GMT"
       ],
       "strict-transport-security": [
         "max-age=3600; includeSubDomains"
@@ -131,19 +135,19 @@
         "1000000"
       ],
       "x-ratelimit-remaining-requests-day": [
-        "1439984"
+        "1439993"
       ],
       "x-ratelimit-remaining-tokens-minute": [
-        "998701"
+        "999789"
       ],
       "x-ratelimit-reset-requests-day": [
-        "3558.5290536880493"
+        "24477.360426187515"
       ],
       "x-ratelimit-reset-tokens-minute": [
-        "18.529053688049316"
+        "57.36042618751526"
       ],
       "x-request-id": [
-        "98e274593ea8223a-ORD"
+        "99854120c90472e2-ORD"
       ]
     },
     "status": 200

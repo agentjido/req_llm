@@ -1,20 +1,19 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJxd2VuLTMtMjM1Yi1hMjJiLWluc3RydWN0LTI1MDciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6InF3ZW4tMy0yMzViLWEyMmItdGhpbmtpbmctMjUwNyIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjV9"
     },
     "canonical_json": {
-      "max_tokens": 50,
+      "max_tokens": 100,
       "messages": [
         {
-          "content": "Hello world!",
+          "content": "Write a very long story about dragons and adventures",
           "role": "user"
         }
       ],
-      "model": "qwen-3-235b-a22b-instruct-2507",
-      "seed": 42,
+      "model": "qwen-3-235b-a22b-thinking-2507",
       "stream": false,
-      "temperature": 0.0
+      "temperature": 0.5
     },
     "headers": {
       "accept-encoding": [
@@ -35,33 +34,33 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "Hello! How can I assist you today? 😊",
+            "content": "Okay, the user asked for a \"very long story about dragons and adventures.\" Hmm, that's a broad request but also exciting—they clearly want immersion and epic scale. Let me unpack this.  \n\nFirst, \"very long\" suggests they're craving depth, not just a snippet. Probably a fantasy fan who loves rich worlds—maybe Tolkien or Sanderson-level detail. They didn't specify tone, but \"adventures\" implies action, wonder, and high stakes. No age given, but",
             "role": "assistant"
           }
         }
       ],
-      "created": 1762103519,
-      "id": "chatcmpl-deea14f6-3a57-4e53-826f-1f07e7f644dc",
-      "model": "qwen-3-235b-a22b-instruct-2507",
+      "created": 1762103518,
+      "id": "chatcmpl-7b57ed2d-e02d-4194-831e-f93e4f119c87",
+      "model": "qwen-3-235b-a22b-thinking-2507",
       "object": "chat.completion",
-      "system_fingerprint": "fp_c7f612779ed4ae92496f",
+      "system_fingerprint": "fp_3182fd252640150dc65b",
       "time_info": {
-        "completion_time": 0.011761793,
-        "created": 1762103519,
-        "prompt_time": 0.003785491,
+        "completion_time": 0.112287861,
+        "created": 1762103518.2309256,
+        "prompt_time": 0.002594979,
         "queue_time": 1.091e-4,
-        "total_time": 0.017516136169433594
+        "total_time": 0.11648225784301758
       },
       "usage": {
-        "completion_tokens": 12,
-        "prompt_tokens": 11,
+        "completion_tokens": 100,
+        "prompt_tokens": 19,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 23
+        "total_tokens": 119
       }
     },
     "headers": {
@@ -72,7 +71,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998541133b8e72e2-ORD"
+        "9985410c4aafe81c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -81,10 +80,10 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:11:59 GMT"
+        "Sun, 02 Nov 2025 17:11:58 GMT"
       ],
       "inference-id": [
-        "chatcmpl-deea14f6-3a57-4e53-826f-1f07e7f644dc"
+        "chatcmpl-7b57ed2d-e02d-4194-831e-f93e4f119c87"
       ],
       "referrer-policy": [
         "strict-origin-when-cross-origin"
@@ -94,10 +93,10 @@
       ],
       "server-timing": [
         "cfCacheStatus;desc=\"DYNAMIC\"",
-        "cfEdge;dur=11,cfOrigin;dur=152"
+        "cfEdge;dur=6,cfOrigin;dur=275"
       ],
       "set-cookie": [
-        "__cf_bm=09l845k.ejqnBrnMHftkvO06VTV8vIeKMOJIYM349FY-1762103519.2337773-1.0.1.1-o94bX482Nda.4MV71sKNtN4ttsMzNW7BqS3pSPb4DG4pmR2RwxwtetJ6Kb0TEu2BAIHrAZjNJVfO2TL3D2nNrxfSrdhsCPO68.WSowa_IFNlQs8aDoK3eRhvaLb_enNu; HttpOnly; Secure; Path=/; Domain=cerebras-sandbox.net; Expires=Sun, 02 Nov 2025 17:41:59 GMT"
+        "__cf_bm=WHGPjJf11vKxWgPuMZw2N2_XsdG8CHDdiN3iQlQBJfE-1762103518.1214988-1.0.1.1-fZPSYsd8i6tKBYaLVx3y8gpueKyNqJO7BlElPMIwZGuAglIVrwdXu2bt9DN8T09rZGZuyJB2cYEbWAjlwLGKPOpO0uw.CaVm3bMbS9SzODOIUJbLFVsJ2dIMdx8K47NA; HttpOnly; Secure; Path=/; Domain=cerebras-sandbox.net; Expires=Sun, 02 Nov 2025 17:41:58 GMT"
       ],
       "strict-transport-security": [
         "max-age=3600; includeSubDomains"
@@ -115,19 +114,19 @@
         "1000000"
       ],
       "x-ratelimit-remaining-requests-day": [
-        "1439997"
+        "1439998"
       ],
       "x-ratelimit-remaining-tokens-minute": [
-        "999360"
+        "999805"
       ],
       "x-ratelimit-reset-requests-day": [
-        "24480.637642145157"
+        "24481.62512898445"
       ],
       "x-ratelimit-reset-tokens-minute": [
-        "0.6376421451568604"
+        "1.625128984451294"
       ],
       "x-request-id": [
-        "998541133b8e72e2-ORD"
+        "9985410c4aafe81c-ORD"
       ]
     },
     "status": 200

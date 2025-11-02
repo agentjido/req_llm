@@ -97,7 +97,7 @@
           "finish_reason": "tool_calls",
           "index": 0,
           "message": {
-            "reasoning": "User asks for weather in Paris, France. Use get_weather function. Need location string \"Paris, France\". Unit maybe \"celsius\". Provide result.",
+            "reasoning": "User asks for weather in Paris, France. Use get_weather function.",
             "role": "assistant",
             "tool_calls": [
               {
@@ -105,32 +105,32 @@
                   "arguments": "{\n  \"location\": \"Paris, France\",\n  \"unit\": \"celsius\"\n}",
                   "name": "get_weather"
                 },
-                "id": "15d92997f",
+                "id": "b3ddf3be4",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1760396438,
-      "id": "chatcmpl-1448d87b-dd63-40e6-b489-8b47a96a1494",
+      "created": 1762103517,
+      "id": "chatcmpl-64c7e62c-91f1-4072-9568-ae1d0a2b5298",
       "model": "gpt-oss-120b",
       "object": "chat.completion",
-      "system_fingerprint": "fp_8a8c0bd8448557718491",
+      "system_fingerprint": "fp_c5eb0443f84076c16415",
       "time_info": {
-        "completion_time": 0.048029363,
-        "created": 1760396438,
-        "prompt_time": 0.004622988,
-        "queue_time": 0.820710388,
-        "total_time": 0.8753535747528076
+        "completion_time": 0.031687539,
+        "created": 1762103517.996796,
+        "prompt_time": 0.002802698,
+        "queue_time": 0.006000167,
+        "total_time": 0.041945695877075195
       },
       "usage": {
-        "completion_tokens": 69,
+        "completion_tokens": 52,
         "prompt_tokens": 171,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 240
+        "total_tokens": 223
       }
     },
     "headers": {
@@ -141,7 +141,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e2744d4ecdf32d-ORD"
+        "9985411b2d4010c2-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -150,10 +150,10 @@
         "application/json"
       ],
       "date": [
-        "Mon, 13 Oct 2025 23:00:39 GMT"
+        "Sun, 02 Nov 2025 17:12:00 GMT"
       ],
       "inference-id": [
-        "chatcmpl-1448d87b-dd63-40e6-b489-8b47a96a1494"
+        "chatcmpl-64c7e62c-91f1-4072-9568-ae1d0a2b5298"
       ],
       "referrer-policy": [
         "strict-origin-when-cross-origin"
@@ -161,8 +161,12 @@
       "server": [
         "cloudflare"
       ],
+      "server-timing": [
+        "cfCacheStatus;desc=\"DYNAMIC\"",
+        "cfEdge;dur=8,cfOrigin;dur=236"
+      ],
       "set-cookie": [
-        "__cf_bm=FlR11rm9AEoRH_S83eB9hyYXGu5iN3M4w6tIrUvONo8-1760396439-1.0.1.1-eejWNqSkob12RSm_Inar.jUkiv7zNcZVHvtpatcE.0Vow5WLbD9YTmEn.hY7wWM5wzdGse60UhM5H73RTAx.zIXnHrhYpOqjoCjmYVHr0gk; path=/; expires=Mon, 13-Oct-25 23:30:39 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=eXHPL2PARIvhBp26zJXL.1lNstFmSHY4oTQ9obA6dNQ-1762103520.5066302-1.0.1.1-NZT1bNnfstVTEzOMaZeqnPkBYW1scHHFSTrLlvtJGWqPlvMA6PcZCYwyZWoADpBjw_h88L2qOtdWJFlJvDpnE9HHSLqdSCvfOzMoaXvT.y_lB.f6RFKADP2mCaYUOpzb; HttpOnly; Secure; Path=/; Domain=cerebras-sandbox.net; Expires=Sun, 02 Nov 2025 17:42:00 GMT"
       ],
       "strict-transport-security": [
         "max-age=3600; includeSubDomains"
@@ -180,19 +184,19 @@
         "1000000"
       ],
       "x-ratelimit-remaining-requests-day": [
-        "1439988"
+        "1439992"
       ],
       "x-ratelimit-remaining-tokens-minute": [
-        "999780"
+        "1000000"
       ],
       "x-ratelimit-reset-requests-day": [
-        "3560.397132873535"
+        "24479.278738737106"
       ],
       "x-ratelimit-reset-tokens-minute": [
-        "20.397132873535156"
+        "59.27873873710632"
       ],
       "x-request-id": [
-        "98e2744d4ecdf32d-ORD"
+        "9985411b2d4010c2-ORD"
       ]
     },
     "status": 200

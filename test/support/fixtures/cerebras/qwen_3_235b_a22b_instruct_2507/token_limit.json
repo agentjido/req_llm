@@ -37,22 +37,22 @@
           "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "### The Ancient Origins of Dragons  \n\nLong before the rise of kingdoms, before the first cities were built and the first maps drawn, the world was shaped by forces older than memory. The earth trembled beneath the wings of dragons, colossal beings born of fire, wind, and ancient magic. They were not mere beasts, but sentient creatures of immense power, each embodying the essence of an elemental force—flame, storm, earth, and ice. The first dragons emerged from the heart of the",
+            "content": "### The Origins of Dragons  \n\nIn the dawn of time, when the world was still young and the stars hung low over primordial seas, the first dragons emerged from the molten heart of the earth. Born of fire, wind, and ancient magic, they were not mere beasts but embodiments of elemental forces, each clan tied to a different aspect of nature. The Emberclaws, with scales like molten lava and breath that could melt stone, ruled the volcanic highlands. The Stormwings",
             "role": "assistant"
           }
         }
       ],
-      "created": 1760396435,
-      "id": "chatcmpl-20128635-1bc1-4b42-ae58-23b942981207",
+      "created": 1762103519,
+      "id": "chatcmpl-5fb1109e-2a49-42ac-8a26-2b45f64ab5f2",
       "model": "qwen-3-235b-a22b-instruct-2507",
       "object": "chat.completion",
       "system_fingerprint": "fp_c7f612779ed4ae92496f",
       "time_info": {
-        "completion_time": 0.187768933,
-        "created": 1760396435,
-        "prompt_time": 0.002637612,
-        "queue_time": 0.552067398,
-        "total_time": 0.7440400123596191
+        "completion_time": 0.137896611,
+        "created": 1762103519,
+        "prompt_time": 0.002745123,
+        "queue_time": 0.067677056,
+        "total_time": 0.20973658561706543
       },
       "usage": {
         "completion_tokens": 100,
@@ -71,7 +71,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e274494caa223a-ORD"
+        "998541147ffa72e2-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -80,10 +80,10 @@
         "application/json"
       ],
       "date": [
-        "Mon, 13 Oct 2025 23:00:38 GMT"
+        "Sun, 02 Nov 2025 17:11:59 GMT"
       ],
       "inference-id": [
-        "chatcmpl-20128635-1bc1-4b42-ae58-23b942981207"
+        "chatcmpl-5fb1109e-2a49-42ac-8a26-2b45f64ab5f2"
       ],
       "referrer-policy": [
         "strict-origin-when-cross-origin"
@@ -91,8 +91,12 @@
       "server": [
         "cloudflare"
       ],
+      "server-timing": [
+        "cfCacheStatus;desc=\"DYNAMIC\"",
+        "cfEdge;dur=4,cfOrigin;dur=328"
+      ],
       "set-cookie": [
-        "__cf_bm=2aYrBzO_ziSRNPu5ac15q_nV27d9hSSbdl3.rRKvIXU-1760396438-1.0.1.1-cpzciECKnj6QK_WDcjiGpqjFUyGPZyMHdBR5Bk1p7yQHVpU6ApIBgzDfdt_vIffn7EaX2rtmZgYvnDkay_qGbyJTBgoKMlqmn22RMByzKs0; path=/; expires=Mon, 13-Oct-25 23:30:38 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=tA8wFni1gXh4hnKBR9n1HPPm.6MwjiqLe2Gg_zM3X_0-1762103519.4355712-1.0.1.1-eoLohNyexZaxiY5Mufacq.yGESP68qxfYKlkwOASSB0U404zgtwTzwMg1Urpj9JhIJ_BPdKoE8pooT48IS5K2RE5zPJk2YnmvTbNDqfd5t5kATNsJ60OeIHZeW5PzMnI; HttpOnly; Secure; Path=/; Domain=cerebras-sandbox.net; Expires=Sun, 02 Nov 2025 17:41:59 GMT"
       ],
       "strict-transport-security": [
         "max-age=3600; includeSubDomains"
@@ -110,19 +114,19 @@
         "1000000"
       ],
       "x-ratelimit-remaining-requests-day": [
-        "1439987"
+        "1439996"
       ],
       "x-ratelimit-remaining-tokens-minute": [
-        "999287"
+        "999337"
       ],
       "x-ratelimit-reset-requests-day": [
-        "3561.1711690425873"
+        "24480.25661110878"
       ],
       "x-ratelimit-reset-tokens-minute": [
-        "21.17116904258728"
+        "0.2566111087799072"
       ],
       "x-request-id": [
-        "98e274494caa223a-ORD"
+        "998541147ffa72e2-ORD"
       ]
     },
     "status": 200

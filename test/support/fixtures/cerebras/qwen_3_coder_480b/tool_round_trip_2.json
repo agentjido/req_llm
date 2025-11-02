@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjozMjAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiIiwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6IjE0OWVkOTMzMyIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6IjE0OWVkOTMzMyJ9XSwibW9kZWwiOiJxd2VuLTMtY29kZXItNDgwYiIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjozMjAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiIiwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6IjZjMzljZGI5MSIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6IjZjMzljZGI5MSJ9XSwibW9kZWwiOiJxd2VuLTMtY29kZXItNDgwYiIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
       "max_tokens": 3200,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "149ed9333",
+              "id": "6c39cdb91",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "149ed9333"
+          "tool_call_id": "6c39cdb91"
         }
       ],
       "model": "qwen-3-coder-480b",
@@ -63,17 +63,17 @@
           }
         }
       ],
-      "created": 1760396496,
-      "id": "chatcmpl-1002351a-8402-4239-8984-8481350f5570",
+      "created": 1762103517,
+      "id": "chatcmpl-316a44e2-326e-4d86-9a12-f3d47e28fd00",
       "model": "qwen-3-coder-480b",
       "object": "chat.completion",
-      "system_fingerprint": "fp_b137de5cdea5effc293c",
+      "system_fingerprint": "fp_386b539e7b02ce3613b7",
       "time_info": {
-        "completion_time": 0.005916924,
-        "created": 1760396496,
-        "prompt_time": 0.003034233,
-        "queue_time": 1.4688e-4,
-        "total_time": 0.010920286178588867
+        "completion_time": 0.005624469,
+        "created": 1762103517.6488118,
+        "prompt_time": 0.003574151,
+        "queue_time": 1.25011e-4,
+        "total_time": 0.010915994644165039
       },
       "usage": {
         "completion_tokens": 4,
@@ -92,7 +92,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e275b79b1efa17-ORD"
+        "99854108db88000c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -101,10 +101,10 @@
         "application/json"
       ],
       "date": [
-        "Mon, 13 Oct 2025 23:01:36 GMT"
+        "Sun, 02 Nov 2025 17:11:57 GMT"
       ],
       "inference-id": [
-        "chatcmpl-1002351a-8402-4239-8984-8481350f5570"
+        "chatcmpl-316a44e2-326e-4d86-9a12-f3d47e28fd00"
       ],
       "referrer-policy": [
         "strict-origin-when-cross-origin"
@@ -112,8 +112,12 @@
       "server": [
         "cloudflare"
       ],
+      "server-timing": [
+        "cfCacheStatus;desc=\"DYNAMIC\"",
+        "cfEdge;dur=5,cfOrigin;dur=140"
+      ],
       "set-cookie": [
-        "__cf_bm=PbyDqxMjnOGa6WdjDr88LJbc8SOW9DlgbOc6LawN_oc-1760396496-1.0.1.1-Uh_KKLCBF4yiy..IefjVwFBbMMALecEgpJ6of9urCsYxoVvmZ2lvCer76myreK1wyWQ_JE5FCLg7A_zk2TNa1lJVTzCEf9.DmXHqOUAbUkw; path=/; expires=Mon, 13-Oct-25 23:31:36 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=rnzUoTHsfNMJeYY.1dbMIjFO_Z_G_a1ASph2OhpIQ4Q-1762103517.578438-1.0.1.1-xyP2eIIcAg4SM3s.IfEkX7I37_2Qa8BDBFkDeXekCFJ92_1mn.mnSO7tJnzOrw_6YH.bNXwqAp9pWt1tBdjofkiyoCOKrCQPowvjDJg589CdCS6.WOZYURs7y.trvSQY; HttpOnly; Secure; Path=/; Domain=cerebras-sandbox.net; Expires=Sun, 02 Nov 2025 17:41:57 GMT"
       ],
       "strict-transport-security": [
         "max-age=3600; includeSubDomains"
@@ -131,19 +135,19 @@
         "1000000"
       ],
       "x-ratelimit-remaining-requests-day": [
-        "1439972"
+        "1439993"
       ],
       "x-ratelimit-remaining-tokens-minute": [
-        "999296"
+        "998433"
       ],
       "x-ratelimit-reset-requests-day": [
-        "3503.3056972026825"
+        "24482.31050992012"
       ],
       "x-ratelimit-reset-tokens-minute": [
-        "23.305697202682495"
+        "2.3105099201202393"
       ],
       "x-request-id": [
-        "98e275b79b1efa17-ORD"
+        "99854108db88000c-ORD"
       ]
     },
     "status": 200

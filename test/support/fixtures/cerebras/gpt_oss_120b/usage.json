@@ -38,31 +38,31 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "Hello! 👋 How can I assist you today?",
-            "reasoning": "The user just says \"Hi there!\" Likely a greeting. We should respond friendly. Ask how can help.",
+            "content": "Hello! 👋 How can I help you today?",
+            "reasoning": "We need to respond as ChatGPT. The user says \"Hi there!\" Probably a greeting. We can respond friendly.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1760396434,
-      "id": "chatcmpl-a159d039-9495-43ff-a21e-98cea00be549",
+      "created": 1762103520,
+      "id": "chatcmpl-460d4ee5-2c8d-4359-9e3f-39719bfa12ea",
       "model": "gpt-oss-120b",
       "object": "chat.completion",
-      "system_fingerprint": "fp_8a8c0bd8448557718491",
+      "system_fingerprint": "fp_c5eb0443f84076c16415",
       "time_info": {
-        "completion_time": 0.041433882,
-        "created": 1760396434,
-        "prompt_time": 0.003038718,
-        "queue_time": 1.904996965,
-        "total_time": 1.9507827758789062
+        "completion_time": 0.023503927,
+        "created": 1762103520.8390172,
+        "prompt_time": 0.001451074,
+        "queue_time": 7.58317e-4,
+        "total_time": 0.02759838104248047
       },
       "usage": {
-        "completion_tokens": 44,
+        "completion_tokens": 45,
         "prompt_tokens": 70,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 114
+        "total_tokens": 115
       }
     },
     "headers": {
@@ -73,7 +73,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e2744008b7f32d-ORD"
+        "9985411cdefe10c2-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -82,10 +82,10 @@
         "application/json"
       ],
       "date": [
-        "Mon, 13 Oct 2025 23:00:38 GMT"
+        "Sun, 02 Nov 2025 17:12:00 GMT"
       ],
       "inference-id": [
-        "chatcmpl-a159d039-9495-43ff-a21e-98cea00be549"
+        "chatcmpl-460d4ee5-2c8d-4359-9e3f-39719bfa12ea"
       ],
       "referrer-policy": [
         "strict-origin-when-cross-origin"
@@ -93,8 +93,12 @@
       "server": [
         "cloudflare"
       ],
+      "server-timing": [
+        "cfCacheStatus;desc=\"DYNAMIC\"",
+        "cfEdge;dur=8,cfOrigin;dur=149"
+      ],
       "set-cookie": [
-        "__cf_bm=2Pn1E.SEGBXhBTJBoY3vEZoWh2vzHzNfk7bxB0TNiEc-1760396438-1.0.1.1-4GWvncRd6NqJ0fTbq0VRJiaPBwCHpCl3NjJWWmtq8mus5Z_GvOj5hNa0bgTnTYnQfMvyxumW3s4JPkLq6Fwleyp0OMnigN3Nf4I2FfcWKx8; path=/; expires=Mon, 13-Oct-25 23:30:38 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=E.zhskV70d525s.0p3lm1weV5c6XHhRubE.7homwfZ8-1762103520.7774062-1.0.1.1-0ogq7qE.o10OC_Fa8F_ZuxIwfOcaBHfMRs0mk9X_wXPdSrKoK06JR.wqTQ.76QuBQ.6CGcmB0cFvAG8_XIGQBeJ1VM4rdNus1T6._qwcp_3iKvJfe7EGHOscRUeiGbY8; HttpOnly; Secure; Path=/; Domain=cerebras-sandbox.net; Expires=Sun, 02 Nov 2025 17:42:00 GMT"
       ],
       "strict-transport-security": [
         "max-age=3600; includeSubDomains"
@@ -112,19 +116,19 @@
         "1000000"
       ],
       "x-ratelimit-remaining-requests-day": [
-        "1439989"
+        "1439991"
       ],
       "x-ratelimit-remaining-tokens-minute": [
-        "999894"
+        "1000000"
       ],
       "x-ratelimit-reset-requests-day": [
-        "3561.452652692795"
+        "24479.090344190598"
       ],
       "x-ratelimit-reset-tokens-minute": [
-        "21.4526526927948"
+        "59.090344190597534"
       ],
       "x-request-id": [
-        "98e2744008b7f32d-ORD"
+        "9985411cdefe10c2-ORD"
       ]
     },
     "status": 200

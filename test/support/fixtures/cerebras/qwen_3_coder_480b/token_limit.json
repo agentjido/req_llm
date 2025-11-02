@@ -37,22 +37,22 @@
           "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "# The Last Ember of Aethermoor\n\n## Chapter 1: The Village of Thornwick\n\nIn the shadow of the Whispering Mountains, where ancient winds carried secrets from times long forgotten, lay the small village of Thornwick. It was a place of cobblestone paths, thatched roofs, and simple folk who lived by the rhythm of seasons and the turning of the earth. For generations, the villagers had whispered tales of the great dragons that once soared through their skies, but these",
+            "content": "# The Last Ember of Aethermoor\n\n## Chapter 1: The Boy Who Found the Map\n\nThe morning mist clung to the rolling hills of Thornwick like ghostly fingers, and twelve-year-old Kaelen Brightwater pressed his face against the cold window of his attic bedroom, watching the world slowly emerge from the gray veil. His breath fogged the glass as he traced patterns in the condensation, but his attention was drawn to something far more interesting than window art—the ancient",
             "role": "assistant"
           }
         }
       ],
-      "created": 1760396497,
-      "id": "chatcmpl-03457578-121a-42b8-bad3-d6bfe4ec3c22",
+      "created": 1762103517,
+      "id": "chatcmpl-5e2d97ba-acab-4c6b-a540-21df30324dd3",
       "model": "qwen-3-coder-480b",
       "object": "chat.completion",
-      "system_fingerprint": "fp_b137de5cdea5effc293c",
+      "system_fingerprint": "fp_386b539e7b02ce3613b7",
       "time_info": {
-        "completion_time": 0.188286213,
-        "created": 1760396497,
-        "prompt_time": 0.001897601,
-        "queue_time": 0.001799092,
-        "total_time": 0.19391655921936035
+        "completion_time": 0.137958857,
+        "created": 1762103517.826007,
+        "prompt_time": 0.017452553,
+        "queue_time": 0.044776397,
+        "total_time": 0.20192480087280273
       },
       "usage": {
         "completion_tokens": 100,
@@ -71,7 +71,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e275bc9c2afa17-ORD"
+        "9985410a0f64000c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -80,10 +80,10 @@
         "application/json"
       ],
       "date": [
-        "Mon, 13 Oct 2025 23:01:37 GMT"
+        "Sun, 02 Nov 2025 17:11:58 GMT"
       ],
       "inference-id": [
-        "chatcmpl-03457578-121a-42b8-bad3-d6bfe4ec3c22"
+        "chatcmpl-5e2d97ba-acab-4c6b-a540-21df30324dd3"
       ],
       "referrer-policy": [
         "strict-origin-when-cross-origin"
@@ -91,8 +91,12 @@
       "server": [
         "cloudflare"
       ],
+      "server-timing": [
+        "cfCacheStatus;desc=\"DYNAMIC\"",
+        "cfEdge;dur=4,cfOrigin;dur=311"
+      ],
       "set-cookie": [
-        "__cf_bm=_tCPqiFuuNNyTHmc2ZqEygHom6xkHVkZXD70pFx2v2o-1760396497-1.0.1.1-BBzu_JQUlLQmKPKyKKt5LMfbta29UdWgSbkbEZ1OMRFwePc1rnz0Y4SUnZ7JNVAlq9J10qR5DDxkzZvsGsWeUYWbpUFSje2CzXNBL2tN1Ko; path=/; expires=Mon, 13-Oct-25 23:31:37 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=Y0onWx36R.b1bat.0EjZWGXYR3rGIFxLObxbf.1_Ztw-1762103517.767851-1.0.1.1-kVpuqXVz14FHB_FLnQc_lOGcbHb9Zh6.aI.feq9Xndjqy77M4c9usavewNcHRjPtWNIETH0SVyCwMSzQpXFnw7X.7O9QcpqlAS9_N5jUY1sbM461q_MpYWl0q27NCAa4; HttpOnly; Secure; Path=/; Domain=cerebras-sandbox.net; Expires=Sun, 02 Nov 2025 17:41:58 GMT"
       ],
       "strict-transport-security": [
         "max-age=3600; includeSubDomains"
@@ -110,19 +114,19 @@
         "1000000"
       ],
       "x-ratelimit-remaining-requests-day": [
-        "1439967"
+        "1439992"
       ],
       "x-ratelimit-remaining-tokens-minute": [
-        "998760"
+        "998352"
       ],
       "x-ratelimit-reset-requests-day": [
-        "3502.3361411094666"
+        "24481.944403409958"
       ],
       "x-ratelimit-reset-tokens-minute": [
-        "22.336141109466553"
+        "1.9444034099578857"
       ],
       "x-request-id": [
-        "98e275bc9c2afa17-ORD"
+        "9985410a0f64000c-ORD"
       ]
     },
     "status": 200

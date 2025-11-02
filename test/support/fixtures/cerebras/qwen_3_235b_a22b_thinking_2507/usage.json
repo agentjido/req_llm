@@ -1,17 +1,17 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJxd2VuLTMtMjM1Yi1hMjJiLWluc3RydWN0LTI1MDciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJxd2VuLTMtMjM1Yi1hMjJiLXRoaW5raW5nLTI1MDciLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
-      "max_tokens": 50,
+      "max_tokens": 10,
       "messages": [
         {
-          "content": "Hello world!",
+          "content": "Hi there!",
           "role": "user"
         }
       ],
-      "model": "qwen-3-235b-a22b-instruct-2507",
+      "model": "qwen-3-235b-a22b-thinking-2507",
       "seed": 42,
       "stream": false,
       "temperature": 0.0
@@ -35,29 +35,29 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "length",
           "index": 0,
           "message": {
-            "content": "Hello! How can I assist you today? 😊",
+            "content": "Okay, the user said \"Hi there!\" which",
             "role": "assistant"
           }
         }
       ],
-      "created": 1762103519,
-      "id": "chatcmpl-deea14f6-3a57-4e53-826f-1f07e7f644dc",
-      "model": "qwen-3-235b-a22b-instruct-2507",
+      "created": 1762103515,
+      "id": "chatcmpl-21de93c0-5339-4937-9c72-f2481519ecff",
+      "model": "qwen-3-235b-a22b-thinking-2507",
       "object": "chat.completion",
-      "system_fingerprint": "fp_c7f612779ed4ae92496f",
+      "system_fingerprint": "fp_3182fd252640150dc65b",
       "time_info": {
-        "completion_time": 0.011761793,
-        "created": 1762103519,
-        "prompt_time": 0.003785491,
-        "queue_time": 1.091e-4,
-        "total_time": 0.017516136169433594
+        "completion_time": 0.006381083,
+        "created": 1762103515.369555,
+        "prompt_time": 0.003717439,
+        "queue_time": 9.204e-5,
+        "total_time": 0.01122593879699707
       },
       "usage": {
-        "completion_tokens": 12,
-        "prompt_tokens": 11,
+        "completion_tokens": 10,
+        "prompt_tokens": 13,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
@@ -72,7 +72,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "998541133b8e72e2-ORD"
+        "9985410b1f4de81c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -81,10 +81,10 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:11:59 GMT"
+        "Sun, 02 Nov 2025 17:11:58 GMT"
       ],
       "inference-id": [
-        "chatcmpl-deea14f6-3a57-4e53-826f-1f07e7f644dc"
+        "chatcmpl-21de93c0-5339-4937-9c72-f2481519ecff"
       ],
       "referrer-policy": [
         "strict-origin-when-cross-origin"
@@ -94,10 +94,10 @@
       ],
       "server-timing": [
         "cfCacheStatus;desc=\"DYNAMIC\"",
-        "cfEdge;dur=11,cfOrigin;dur=152"
+        "cfEdge;dur=5,cfOrigin;dur=144"
       ],
       "set-cookie": [
-        "__cf_bm=09l845k.ejqnBrnMHftkvO06VTV8vIeKMOJIYM349FY-1762103519.2337773-1.0.1.1-o94bX482Nda.4MV71sKNtN4ttsMzNW7BqS3pSPb4DG4pmR2RwxwtetJ6Kb0TEu2BAIHrAZjNJVfO2TL3D2nNrxfSrdhsCPO68.WSowa_IFNlQs8aDoK3eRhvaLb_enNu; HttpOnly; Secure; Path=/; Domain=cerebras-sandbox.net; Expires=Sun, 02 Nov 2025 17:41:59 GMT"
+        "__cf_bm=7KZqNuFmkm8Uotgmz4TIs.IndXMPo1uqZ_qvo_k5Leg-1762103517.9402173-1.0.1.1-sGpjL5QwcLUUU2kQFfxhbY19UObE5gVpfI7WfJdcAzZq0wR7.SeZtwJIlcJJWNq2V3QHUZy.qEajhw387LXJUasMQz5_K6fI8WsMhJS0LBjrLV191NAornwimV9BC38E; HttpOnly; Secure; Path=/; Domain=cerebras-sandbox.net; Expires=Sun, 02 Nov 2025 17:41:58 GMT"
       ],
       "strict-transport-security": [
         "max-age=3600; includeSubDomains"
@@ -115,19 +115,19 @@
         "1000000"
       ],
       "x-ratelimit-remaining-requests-day": [
-        "1439997"
+        "1439999"
       ],
       "x-ratelimit-remaining-tokens-minute": [
-        "999360"
+        "999937"
       ],
       "x-ratelimit-reset-requests-day": [
-        "24480.637642145157"
+        "24481.940816879272"
       ],
       "x-ratelimit-reset-tokens-minute": [
-        "0.6376421451568604"
+        "1.940816879272461"
       ],
       "x-request-id": [
-        "998541133b8e72e2-ORD"
+        "9985410b1f4de81c-ORD"
       ]
     },
     "status": 200

@@ -71,24 +71,24 @@
                   "arguments": "{\"a\": 2, \"b\": 3}",
                   "name": "add"
                 },
-                "id": "e4f7ed712",
+                "id": "53f1f54ec",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1760396439,
-      "id": "chatcmpl-c028179d-18ab-4471-8f40-015b1c8c1d7a",
+      "created": 1762103520,
+      "id": "chatcmpl-58e349ff-2508-4aab-bbd2-aa1c83bcc791",
       "model": "qwen-3-235b-a22b-instruct-2507",
       "object": "chat.completion",
       "system_fingerprint": "fp_c7f612779ed4ae92496f",
       "time_info": {
-        "completion_time": 0.009731421,
-        "created": 1760396439,
-        "prompt_time": 0.011909378,
-        "queue_time": 1.183202713,
-        "total_time": 1.206559658050537
+        "completion_time": 0.009403435,
+        "created": 1762103520,
+        "prompt_time": 0.009892547,
+        "queue_time": 0.875425582,
+        "total_time": 0.8982436656951904
       },
       "usage": {
         "completion_tokens": 23,
@@ -107,7 +107,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e274509d02223a-ORD"
+        "99854119a97e72e2-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -116,10 +116,10 @@
         "application/json"
       ],
       "date": [
-        "Mon, 13 Oct 2025 23:00:40 GMT"
+        "Sun, 02 Nov 2025 17:12:01 GMT"
       ],
       "inference-id": [
-        "chatcmpl-c028179d-18ab-4471-8f40-015b1c8c1d7a"
+        "chatcmpl-58e349ff-2508-4aab-bbd2-aa1c83bcc791"
       ],
       "referrer-policy": [
         "strict-origin-when-cross-origin"
@@ -127,8 +127,12 @@
       "server": [
         "cloudflare"
       ],
+      "server-timing": [
+        "cfCacheStatus;desc=\"DYNAMIC\"",
+        "cfEdge;dur=3,cfOrigin;dur=1108"
+      ],
       "set-cookie": [
-        "__cf_bm=SqrvKdPFgB7bLRKjOzsI6UqpBoCHGvieHPGKVyzffSo-1760396440-1.0.1.1-79lmmNbzaren3z0oSdxXht07gnEZT_YAW0pxz4zUci9Lxa9Lc4fAqBjxYAO1QQSH.Me1qozMCCN6NFg6p8Aj_L_qSCWpqR4ffRgPiiPHE6Y; path=/; expires=Mon, 13-Oct-25 23:30:40 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=AZmG748VIwtBNYX4FoZ9oPJ2zJ7lTGT4VTQeeEFmqwU-1762103520.2698407-1.0.1.1-EO5BkSAjGENsOLHbXSrhDi5XZGBL2.1CtFpgEMglaT1A.7rzgGJAolLWywe1TXD3Dg1tDfHIdDjegDgf0606u6Uz9L2X_uJlmMFvcr_EckBNUFVf8cwhHWlOYj20Bdkk; HttpOnly; Secure; Path=/; Domain=cerebras-sandbox.net; Expires=Sun, 02 Nov 2025 17:42:01 GMT"
       ],
       "strict-transport-security": [
         "max-age=3600; includeSubDomains"
@@ -146,19 +150,19 @@
         "1000000"
       ],
       "x-ratelimit-remaining-requests-day": [
-        "1439985"
+        "1439994"
       ],
       "x-ratelimit-remaining-tokens-minute": [
-        "998912"
+        "1000000"
       ],
       "x-ratelimit-reset-requests-day": [
-        "3559.553275823593"
+        "24478.65530896187"
       ],
       "x-ratelimit-reset-tokens-minute": [
-        "19.55327582359314"
+        "58.655308961868286"
       ],
       "x-request-id": [
-        "98e274509d02223a-ORD"
+        "99854119a97e72e2-ORD"
       ]
     },
     "status": 200

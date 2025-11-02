@@ -43,17 +43,17 @@
           }
         }
       ],
-      "created": 1760396494,
-      "id": "chatcmpl-b571654d-70bb-4b35-91bc-69c23cae007e",
+      "created": 1762103516,
+      "id": "chatcmpl-235db4d1-1f4a-4f34-8c78-eeff2b525f26",
       "model": "qwen-3-coder-480b",
       "object": "chat.completion",
-      "system_fingerprint": "fp_b137de5cdea5effc293c",
+      "system_fingerprint": "fp_386b539e7b02ce3613b7",
       "time_info": {
-        "completion_time": 0.009131725,
-        "created": 1760396494,
-        "prompt_time": 0.001497715,
-        "queue_time": 3.52741e-4,
-        "total_time": 0.012295961380004883
+        "completion_time": 0.008236517,
+        "created": 1762103516.9933488,
+        "prompt_time": 0.001803859,
+        "queue_time": 9.1981e-5,
+        "total_time": 0.011353731155395508
       },
       "usage": {
         "completion_tokens": 10,
@@ -72,7 +72,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e275b8ced6fa17-ORD"
+        "99854104cd6f000c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -81,10 +81,10 @@
         "application/json"
       ],
       "date": [
-        "Mon, 13 Oct 2025 23:01:36 GMT"
+        "Sun, 02 Nov 2025 17:11:57 GMT"
       ],
       "inference-id": [
-        "chatcmpl-b571654d-70bb-4b35-91bc-69c23cae007e"
+        "chatcmpl-235db4d1-1f4a-4f34-8c78-eeff2b525f26"
       ],
       "referrer-policy": [
         "strict-origin-when-cross-origin"
@@ -92,8 +92,12 @@
       "server": [
         "cloudflare"
       ],
+      "server-timing": [
+        "cfCacheStatus;desc=\"DYNAMIC\"",
+        "cfEdge;dur=6,cfOrigin;dur=129"
+      ],
       "set-cookie": [
-        "__cf_bm=aTuwfC3NNHLz.P4i53828wGlPaoCergFns4od1CCs88-1760396496-1.0.1.1-p25daQukEvPbj19p5UYX.K.xqfM.CTHMezSoQ2PeuWsLMlYsBhrVbL3XocqmPcPd7c_P_zkyWwqRPd8321pwpbhTuCONkx65Ii4uWV521IQ; path=/; expires=Mon, 13-Oct-25 23:31:36 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=Zj8..5EkD2LwltyWMnQAsOZ0hPG.4.NU7JaVcALynd0-1762103516.9247773-1.0.1.1-rtti_0gogozyuwyBm0EvVcJNR.nG3o3EN9c9Ff_CYXG79ek8Km0E4riON5jmxXJnKqEzmylivWk2sQrXJPpVhuYT9rRlLFunPs7ao9nrr6Ngqk8fWSZPG09P5JZyc8J9; HttpOnly; Secure; Path=/; Domain=cerebras-sandbox.net; Expires=Sun, 02 Nov 2025 17:41:57 GMT"
       ],
       "strict-transport-security": [
         "max-age=3600; includeSubDomains"
@@ -111,19 +115,19 @@
         "1000000"
       ],
       "x-ratelimit-remaining-requests-day": [
-        "1439971"
+        "1439997"
       ],
       "x-ratelimit-remaining-tokens-minute": [
-        "999215"
+        "998896"
       ],
       "x-ratelimit-reset-requests-day": [
-        "3503.11497092247"
+        "24482.967672109604"
       ],
       "x-ratelimit-reset-tokens-minute": [
-        "23.114970922470093"
+        "2.967672109603882"
       ],
       "x-request-id": [
-        "98e275b8ced6fa17-ORD"
+        "99854104cd6f000c-ORD"
       ]
     },
     "status": 200

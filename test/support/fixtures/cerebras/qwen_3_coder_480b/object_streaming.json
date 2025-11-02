@@ -1,19 +1,4 @@
 {
-  "captured_at": "2025-10-13T23:01:36.289325Z",
-  "chunks": [
-    {
-      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLTU3NzBiYjA3LWEwYmItNDMwYi1hMmFlLTRmNjc2OWI5MzkxZiIsImNob2ljZXMiOlt7ImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQifSwiaW5kZXgiOjB9XSwiY3JlYXRlZCI6MTc2MDM5NjQ5NiwibW9kZWwiOiJxd2VuLTMtY29kZXItNDgwYiIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwX2IxMzdkZTVjZGVhNWVmZmMyOTNjIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIn0KCg==",
-      "decoded": "data: {\"id\":\"chatcmpl-5770bb07-a0bb-430b-a2ae-4f6769b9391f\",\"choices\":[{\"delta\":{\"role\":\"assistant\"},\"index\":0}],\"created\":1760396496,\"model\":\"qwen-3-coder-480b\",\"system_fingerprint\":\"fp_b137de5cdea5effc293c\",\"object\":\"chat.completion.chunk\"}\n\n"
-    },
-    {
-      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLTU3NzBiYjA3LWEwYmItNDMwYi1hMmFlLTRmNjc2OWI5MzkxZiIsImNob2ljZXMiOlt7ImRlbHRhIjp7InRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7Im5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsImFyZ3VtZW50cyI6IntcIm5hbWVcIjogXCJKb2huIERvZVwiLCBcImFnZVwiOiAzMCwgXCJvY2N1cGF0aW9uXCI6IFwiU29mdHdhcmUgRW5naW5lZXJcIn0ifSwidHlwZSI6ImZ1bmN0aW9uIiwiaWQiOiIyODg3YWFmODYiLCJpbmRleCI6MH1dfSwiaW5kZXgiOjB9XSwiY3JlYXRlZCI6MTc2MDM5NjQ5NiwibW9kZWwiOiJxd2VuLTMtY29kZXItNDgwYiIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwX2IxMzdkZTVjZGVhNWVmZmMyOTNjIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIn0KCg==",
-      "decoded": "data: {\"id\":\"chatcmpl-5770bb07-a0bb-430b-a2ae-4f6769b9391f\",\"choices\":[{\"delta\":{\"tool_calls\":[{\"function\":{\"name\":\"structured_output\",\"arguments\":\"{\\\"name\\\": \\\"John Doe\\\", \\\"age\\\": 30, \\\"occupation\\\": \\\"Software Engineer\\\"}\"},\"type\":\"function\",\"id\":\"2887aaf86\",\"index\":0}]},\"index\":0}],\"created\":1760396496,\"model\":\"qwen-3-coder-480b\",\"system_fingerprint\":\"fp_b137de5cdea5effc293c\",\"object\":\"chat.completion.chunk\"}\n\n"
-    },
-    {
-      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLTU3NzBiYjA3LWEwYmItNDMwYi1hMmFlLTRmNjc2OWI5MzkxZiIsImNob2ljZXMiOlt7ImRlbHRhIjp7fSwiZmluaXNoX3JlYXNvbiI6InRvb2xfY2FsbHMiLCJpbmRleCI6MH1dLCJjcmVhdGVkIjoxNzYwMzk2NDk2LCJtb2RlbCI6InF3ZW4tMy1jb2Rlci00ODBiIiwic3lzdGVtX2ZpbmdlcnByaW50IjoiZnBfYjEzN2RlNWNkZWE1ZWZmYzI5M2MiLCJvYmplY3QiOiJjaGF0LmNvbXBsZXRpb24uY2h1bmsiLCJ1c2FnZSI6eyJwcm9tcHRfdG9rZW5zIjozNTUsImNvbXBsZXRpb25fdG9rZW5zIjo0NSwidG90YWxfdG9rZW5zIjo0MDAsInByb21wdF90b2tlbnNfZGV0YWlscyI6eyJjYWNoZWRfdG9rZW5zIjowfX0sInRpbWVfaW5mbyI6eyJxdWV1ZV90aW1lIjowLjAwMDEwMDgsInByb21wdF90aW1lIjowLjAxMjIzMDkwNiwiY29tcGxldGlvbl90aW1lIjowLjAzNDcxNDk5LCJ0b3RhbF90aW1lIjowLjA0OTMwMTM4NTg3OTUxNjYsImNyZWF0ZWQiOjE3NjAzOTY0OTZ9fQoK",
-      "decoded": "data: {\"id\":\"chatcmpl-5770bb07-a0bb-430b-a2ae-4f6769b9391f\",\"choices\":[{\"delta\":{},\"finish_reason\":\"tool_calls\",\"index\":0}],\"created\":1760396496,\"model\":\"qwen-3-coder-480b\",\"system_fingerprint\":\"fp_b137de5cdea5effc293c\",\"object\":\"chat.completion.chunk\",\"usage\":{\"prompt_tokens\":355,\"completion_tokens\":45,\"total_tokens\":400,\"prompt_tokens_details\":{\"cached_tokens\":0}},\"time_info\":{\"queue_time\":0.0001008,\"prompt_time\":0.012230906,\"completion_time\":0.03471499,\"total_time\":0.0493013858795166,\"created\":1760396496}}\n\n"
-    }
-  ],
   "request": {
     "body": {
       "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoicXdlbi0zLWNvZGVyLTQ4MGIiLCJzZWVkIjo0Miwic3RyZWFtIjp0cnVlLCJzdHJlYW1fb3B0aW9ucyI6eyJpbmNsdWRlX3VzYWdlIjp0cnVlfSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbF9jaG9pY2UiOiJhdXRvIiwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2VuZXJhdGUgc3RydWN0dXJlZCBvdXRwdXQgbWF0Y2hpbmcgdGhlIHByb3ZpZGVkIHNjaGVtYSIsIm5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbIm5hbWUiLCJhZ2UiXSwidHlwZSI6Im9iamVjdCJ9fSwidHlwZSI6ImZ1bmN0aW9uIn1dfQ=="
@@ -75,26 +60,30 @@
     "url": "https://api.cerebras.ai/v1/chat/completions"
   },
   "response": {
-    "body": null,
+    "body": {
+      "b64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLTk1YThlNTdkLTQ1NGUtNDdmOC04NTVkLTdiNzg0ZTg0NTBiNCIsImNob2ljZXMiOlt7ImRlbHRhIjp7InJvbGUiOiJhc3Npc3RhbnQifSwiaW5kZXgiOjB9XSwiY3JlYXRlZCI6MTc2MjEwMzUxNiwibW9kZWwiOiJxd2VuLTMtY29kZXItNDgwYiIsInN5c3RlbV9maW5nZXJwcmludCI6ImZwXzM4NmI1MzllN2IwMmNlMzYxM2I3Iiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIn0KCmRhdGE6IHsiaWQiOiJjaGF0Y21wbC05NWE4ZTU3ZC00NTRlLTQ3ZjgtODU1ZC03Yjc4NGU4NDUwYjQiLCJjaG9pY2VzIjpbeyJkZWx0YSI6eyJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJhcmd1bWVudHMiOiJ7XCJuYW1lXCI6IFwiSm9obiBEb2VcIiwgXCJhZ2VcIjogMzAsIFwib2NjdXBhdGlvblwiOiBcIlNvZnR3YXJlIEVuZ2luZWVyXCJ9In0sInR5cGUiOiJmdW5jdGlvbiIsImlkIjoiNGRlNDU2MzRiIiwiaW5kZXgiOjB9XX0sImluZGV4IjowfV0sImNyZWF0ZWQiOjE3NjIxMDM1MTYsIm1vZGVsIjoicXdlbi0zLWNvZGVyLTQ4MGIiLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF8zODZiNTM5ZTdiMDJjZTM2MTNiNyIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayJ9CgpkYXRhOiB7ImlkIjoiY2hhdGNtcGwtOTVhOGU1N2QtNDU0ZS00N2Y4LTg1NWQtN2I3ODRlODQ1MGI0IiwiY2hvaWNlcyI6W3siZGVsdGEiOnt9LCJmaW5pc2hfcmVhc29uIjoidG9vbF9jYWxscyIsImluZGV4IjowfV0sImNyZWF0ZWQiOjE3NjIxMDM1MTYsIm1vZGVsIjoicXdlbi0zLWNvZGVyLTQ4MGIiLCJzeXN0ZW1fZmluZ2VycHJpbnQiOiJmcF8zODZiNTM5ZTdiMDJjZTM2MTNiNyIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsInVzYWdlIjp7InByb21wdF90b2tlbnMiOjM1NSwiY29tcGxldGlvbl90b2tlbnMiOjQ1LCJ0b3RhbF90b2tlbnMiOjQwMCwicHJvbXB0X3Rva2Vuc19kZXRhaWxzIjp7ImNhY2hlZF90b2tlbnMiOjB9fSwidGltZV9pbmZvIjp7InF1ZXVlX3RpbWUiOjAuMDAwMjc3MzAyLCJwcm9tcHRfdGltZSI6MC4wMTA5MjkwMDIsImNvbXBsZXRpb25fdGltZSI6MC4wMzE3NTU0MDksInRvdGFsX3RpbWUiOjAuMDQ0Nzk4NjEyNTk0NjA0NDksImNyZWF0ZWQiOjE3NjIxMDM1MTYuMzY3MTIyN319Cgo="
+    },
     "headers": {
       "alt-svc": "h3=\":443\"; ma=86400",
       "cf-cache-status": "DYNAMIC",
-      "cf-ray": "98e275b4ebd82331-ORD",
+      "cf-ray": "99854100d8aceae4-ORD",
+      "connection": "keep-alive",
       "content-type": "text/event-stream; charset=utf-8",
-      "date": "Mon, 13 Oct 2025 23:01:36 GMT",
-      "inference-id": "chatcmpl-5770bb07-a0bb-430b-a2ae-4f6769b9391f",
+      "date": "Sun, 02 Nov 2025 17:11:56 GMT",
+      "inference-id": "chatcmpl-95a8e57d-454e-47f8-855d-7b784e8450b4",
       "referrer-policy": "strict-origin-when-cross-origin",
       "server": "cloudflare",
-      "set-cookie": "__cf_bm=4fywmGDtD.AlFH6dHEqTSPOtW._8BqKxwSVLjXjC_YI-1760396496-1.0.1.1-3pB.cy3vuL_qzQhI7OrnWDZldDTIjtcqRNwo8LYlds3n9F3SbHZZ9X0BCCMOP3uT..d1cCZoUaaBNox3mPxwunzbphzFmvd2Le.dpl6bXBI; path=/; expires=Mon, 13-Oct-25 23:31:36 GMT; domain=.api.cerebras.ai; HttpOnly; Secure; SameSite=None",
+      "set-cookie": "__cf_bm=LD380cl.yTCQgHHukqdm2i8V0itI0pzPxxrZvIUBFkY-1762103516.2961793-1.0.1.1-uM28MjFzhFr56cQiD_x7qZ2h3xs3FTmGep6QS7RViTEtR00K_9DnwjCX8rrRBnJM2_u9eOag1CzHe0vLZPg8X7kuDpP5WspFyYJq6ecA_8Xs54zojL9edUPPiJfvQ3eu; HttpOnly; Secure; Path=/; Domain=cerebras-sandbox.net; Expires=Sun, 02 Nov 2025 17:41:56 GMT",
       "strict-transport-security": "max-age=3600; includeSubDomains",
+      "transfer-encoding": "chunked",
       "x-content-type-options": "nosniff",
       "x-ratelimit-limit-requests-day": "1440000",
       "x-ratelimit-limit-tokens-minute": "1000000",
-      "x-ratelimit-remaining-requests-day": "1439972",
-      "x-ratelimit-remaining-tokens-minute": "999696",
-      "x-ratelimit-reset-requests-day": "3503.7551975250244",
-      "x-ratelimit-reset-tokens-minute": "23.755197525024414",
-      "x-request-id": "98e275b4ebd82331-ORD"
+      "x-ratelimit-remaining-requests-day": "1439999",
+      "x-ratelimit-remaining-tokens-minute": "1000000",
+      "x-ratelimit-reset-requests-day": "24483.60509300232",
+      "x-ratelimit-reset-tokens-minute": "3.605093002319336",
+      "x-request-id": "99854100d8aceae4-ORD"
     },
     "status": 200
   }
