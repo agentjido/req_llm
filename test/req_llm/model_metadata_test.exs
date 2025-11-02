@@ -109,7 +109,10 @@ defmodule ReqLLM.ModelMetadataTest do
                   "global.anthropic."
                 ])
 
-            if is_embedding or is_unsupported_bedrock do
+            # Skip models not in catalog_allow
+            is_allowed = ReqLLM.Catalog.allowed_spec?(provider_id, model_id)
+
+            if is_embedding or is_unsupported_bedrock or not is_allowed do
               acc_issues
             else
               case Model.from(model_spec) do

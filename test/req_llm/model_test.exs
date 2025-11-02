@@ -387,13 +387,30 @@ defmodule ReqLLM.ModelTest do
     priv_dir = Application.app_dir(:req_llm, "priv")
     models_dir = Path.join(priv_dir, "models_dev")
 
+    # Prioritize supported providers for better test coverage
+    priority_providers = ["anthropic.json", "openai.json", "google.json", "groq.json", "xai.json"]
+
     case File.ls(models_dir) do
       {:ok, files} ->
-        files
-        |> Enum.filter(&String.ends_with?(&1, ".json"))
+        sorted_files =
+          files
+          |> Enum.filter(&String.ends_with?(&1, ".json"))
+          |> Enum.sort_by(fn file ->
+            # Put priority providers first
+            case Enum.find_index(priority_providers, &(&1 == file)) do
+              nil -> 999
+              idx -> idx
+            end
+          end)
+
+        sorted_files
         # Sample files for performance
-        |> Enum.take(5)
+        |> Enum.take(10)
         |> Enum.flat_map(&load_models_from_file(models_dir, &1))
+        # Filter to only catalog_allow models
+        |> Enum.filter(fn {provider_id, model_data} ->
+          ReqLLM.Catalog.allowed_spec?(provider_id, model_data["id"])
+        end)
         # Limit total models
         |> Enum.take(50)
 
