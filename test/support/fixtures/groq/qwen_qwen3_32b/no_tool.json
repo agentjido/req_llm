@@ -60,30 +60,30 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Here's a cat joke for you:\n\n\"Why did the cat cross the road? To get to the mouse party on the other side!\" 😸\n\nLet me know if you'd like another!",
-            "reasoning": "Okay, the user asked for a joke about cats. Let me think. The tools provided include a function to get weather information, but that's not related to jokes. Since there's no function for telling jokes or retrieving cat jokes specifically, I can't use any of the provided tools here. I need to respond directly with a joke. Let me come up with a simple one. Maybe something like, \"Why did the cat cross the road? To get to the mouse party on the other side!\" That's a classic structure. I'll make sure it's friendly and fits the request.\n",
+            "content": "I don't have access to a specific \"cat joke\" function in my tools, but I can tell you this classic: Why did the cat fall off the roof? Because it lost its \"claw\"! 😸\n\nWould you like me to check the weather for you instead using my available tool?",
+            "reasoning": "Okay, the user asked for a joke about cats. Let me think. The tools provided include a function to get weather information, but that's not related to jokes. Since there's no function for telling jokes or retrieving cat jokes specifically, I can't use any of the provided tools here. I need to respond by letting the user know I can't perform that task with the available functions. I should apologize and explain that I don't have the capability to tell jokes, but maybe offer to help with something else using the tools I have, like checking the weather.\n",
             "role": "assistant"
           }
         }
       ],
-      "created": 1760389839,
-      "id": "chatcmpl-c0a06778-668c-4edb-a146-67aaf79636ff",
+      "created": 1762103739,
+      "id": "chatcmpl-bb434bfb-b094-4179-b5f1-74d7437d1707",
       "model": "qwen/qwen3-32b",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_5cf921caa2",
+      "system_fingerprint": "fp_78ac7f3229",
       "usage": {
-        "completion_time": 0.350017615,
-        "completion_tokens": 163,
-        "prompt_time": 0.00677416,
+        "completion_time": 0.426463643,
+        "completion_tokens": 181,
+        "prompt_time": 0.006293697,
         "prompt_tokens": 159,
-        "queue_time": 0.205861292,
-        "total_time": 0.356791775,
-        "total_tokens": 322
+        "queue_time": 0.035983082,
+        "total_time": 0.43275734,
+        "total_tokens": 340
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k7fpjdwdfe3t1j60dqrqm490"
+        "id": "req_01k92s2ge0fapb6n2xqqqhw9b3"
       }
     },
     "headers": {
@@ -97,7 +97,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e1d32bde18eb07-ORD"
+        "9985466f7e67e24f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -106,13 +106,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 13 Oct 2025 21:10:39 GMT"
+        "Sun, 02 Nov 2025 17:15:39 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=wHJpd1aDsKyultlKidWSmDLizYRWb_ksx5Gz8uqGpSQ-1760389839-1.0.1.1-807GoBC2qYld5DKMMm60vfGU1aBzRlq9x2JMRUHtYNfAwVGlwZr2ZRcw3j2z7SGFsyehz9btzHR1EoYtKib3.GFWstTaqAosyaQ8K7lOnRE; path=/; expires=Mon, 13-Oct-25 21:40:39 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=wWdagrCBuXA6QY5tHlJk2PQcNfKg_HsrEesNRHhWU9k-1762103738.7970216-1.0.1.1-rGCfKFQZh8XIEH8Y2_3ihieTAazBwv_BQgRSt7EtEprHSuCYQlX0WRR0VxLsh1Kpg4CgW0elwPUsprOVAF6498g6MqeSpVhBAiHjnR2KXHYB03MY74Ioz2SKnl.4Eix8; HttpOnly; Secure; Path=/; Domain=groq.com; Expires=Sun, 02 Nov 2025 17:45:39 GMT"
       ],
       "transfer-encoding": [
         "chunked"
@@ -133,19 +133,19 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "998"
+        "990"
       ],
       "x-ratelimit-remaining-tokens": [
-        "5840"
+        "1983"
       ],
       "x-ratelimit-reset-requests": [
-        "2m52.8s"
+        "14m24s"
       ],
       "x-ratelimit-reset-tokens": [
-        "1.6s"
+        "40.17s"
       ],
       "x-request-id": [
-        "req_01k7fpjdwdfe3t1j60dqrqm490"
+        "req_01k92s2ge0fapb6n2xqqqhw9b3"
       ]
     },
     "status": 200

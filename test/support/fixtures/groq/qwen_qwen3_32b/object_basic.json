@@ -77,39 +77,39 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "reasoning": "Okay, the user wants me to generate a software engineer profile. Let me check the tools provided. There's a function called structured_output that requires name, age, and occupation. The required fields are name and age, with occupation being optional. Since the user specified a software engineer, I should include that as the occupation. I need to make sure the age is an integer and at least 1. Let me come up with a name, maybe something common like John Doe. Age could be 30. Occupation is software engineer. Let me structure the JSON accordingly. Wait, the schema says occupation is a string, so that's fine. I'll include all three fields. Let me double-check the parameters to ensure there are no additional properties. Yep, only name, age, and occupation. Alright, that should work.\n",
+            "reasoning": "Okay, the user wants me to generate a software engineer profile. Let me check the tools provided. There's a function called structured_output that requires name, age, and occupation. The required fields are name and age, and occupation is optional but probably a good idea to include since they mentioned software engineer.\n\nFirst, I need to come up with a name. Maybe a common name like John Doe? Or something more creative. Let's go with \"Alice Johnson\" as a full name. Age should be an integer, let's pick 28. Occupation is software engineer. Let me make sure the parameters fit the schema: name is a string, age is an integer, and occupation is a string. All required fields are there. I'll structure the JSON accordingly.\n",
             "role": "assistant",
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"age\":30,\"name\":\"John Doe\",\"occupation\":\"Software Engineer\"}",
+                  "arguments": "{\"age\":28,\"name\":\"Alice Johnson\",\"occupation\":\"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "t7kd3t6fp",
+                "id": "rveks9yyx",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1760389853,
-      "id": "chatcmpl-8150ee4b-aa4d-4e28-b844-08539ebe67a0",
+      "created": 1762103726,
+      "id": "chatcmpl-623044b8-9c37-4fcd-970c-db0230ceb249",
       "model": "qwen/qwen3-32b",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_5cf921caa2",
+      "system_fingerprint": "fp_78ac7f3229",
       "usage": {
-        "completion_time": 0.368248347,
-        "completion_tokens": 206,
-        "prompt_time": 0.009281842,
+        "completion_time": 0.377235448,
+        "completion_tokens": 194,
+        "prompt_time": 0.009207189,
         "prompt_tokens": 231,
-        "queue_time": 0.204632607,
-        "total_time": 0.377530189,
-        "total_tokens": 437
+        "queue_time": 0.036342849,
+        "total_time": 0.386442637,
+        "total_tokens": 425
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k7fpjw4be40aspar07pe8qxc"
+        "id": "req_01k92s24fae49vv7pjernzssf8"
       }
     },
     "headers": {
@@ -123,7 +123,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e1d3870970eb07-ORD"
+        "99854622fd0be24f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -132,13 +132,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 13 Oct 2025 21:10:53 GMT"
+        "Sun, 02 Nov 2025 17:15:27 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=WzE6q85Y4bXoeC1RAFuUx8BvZMWaaa6L9uB.u_rjafk-1760389853-1.0.1.1-vhSxBXjbA.bgttKtFly0E19Fa5dAK29lOAB.27w6etflM3ehWRijUN3pFltU_yUOudyzY8E9J.J.3vCqnHFlT5ZFr7mGKxg1SWZDgqwASj4; path=/; expires=Mon, 13-Oct-25 21:40:53 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=jditcCqGkK1T_49IysxRgH6C5tDqR5.m8RxkWwT7qkg-1762103726.5520926-1.0.1.1-bWiX.a0k7ZFOB240fdWT7xB3_YKXcDdCBbE1agdFU1qBi9spM7.mgue1RAWjU2EtZW2AifP3KZ_gQzpQpPF2zu8sQI2qDVVPFKOPAfIZzLlGQKeWdNDYEu2myzq_Avz7; HttpOnly; Secure; Path=/; Domain=groq.com; Expires=Sun, 02 Nov 2025 17:45:27 GMT"
       ],
       "transfer-encoding": [
         "chunked"
@@ -159,19 +159,19 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "988"
+        "997"
       ],
       "x-ratelimit-remaining-tokens": [
-        "2300"
+        "5322"
       ],
       "x-ratelimit-reset-requests": [
-        "17m16.8s"
+        "4m19.2s"
       ],
       "x-ratelimit-reset-tokens": [
-        "37s"
+        "6.78s"
       ],
       "x-request-id": [
-        "req_01k7fpjw4be40aspar07pe8qxc"
+        "req_01k92s24fae49vv7pjernzssf8"
       ]
     },
     "status": 200

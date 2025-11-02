@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibWV0YS1sbGFtYS9sbGFtYS00LXNjb3V0LTE3Yi0xNmUtaW5zdHJ1Y3QiLCJzZWVkIjo0Miwic3RyZWFtIjp0cnVlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQifSwidHlwZSI6ImZ1bmN0aW9uIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibmFtZSIsImFnZSJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibWV0YS1sbGFtYS9sbGFtYS00LXNjb3V0LTE3Yi0xNmUtaW5zdHJ1Y3QiLCJzZWVkIjo0Miwic3RyZWFtIjp0cnVlLCJzdHJlYW1fb3B0aW9ucyI6eyJpbmNsdWRlX3VzYWdlIjp0cnVlfSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbF9jaG9pY2UiOnsiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0In0sInR5cGUiOiJmdW5jdGlvbiJ9LCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZW5lcmF0ZSBzdHJ1Y3R1cmVkIG91dHB1dCBtYXRjaGluZyB0aGUgcHJvdmlkZWQgc2NoZW1hIiwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibmFtZSIsImFnZSJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
-      "max_tokens": 200,
+      "max_tokens": 500,
       "messages": [
         {
           "content": "Generate a software engineer profile",
@@ -14,6 +14,9 @@
       "model": "meta-llama/llama-4-scout-17b-16e-instruct",
       "seed": 42,
       "stream": true,
+      "stream_options": {
+        "include_usage": true
+      },
       "temperature": 0.0,
       "tool_choice": {
         "function": {
@@ -27,6 +30,7 @@
             "description": "Generate structured output matching the provided schema",
             "name": "structured_output",
             "parameters": {
+              "additionalProperties": false,
               "properties": {
                 "age": {
                   "description": "Person's age in years",
@@ -63,27 +67,29 @@
   },
   "response": {
     "body": {
-      "b64": "ZXZlbnQ6IGVycm9yCmRhdGE6IHsiZXJyb3IiOnsibWVzc2FnZSI6InRvb2wgY2FsbCB2YWxpZGF0aW9uIGZhaWxlZDogcGFyYW1ldGVycyBmb3IgdG9vbCBzdHJ1Y3R1cmVkX291dHB1dCBkaWQgbm90IG1hdGNoIHNjaGVtYTogZXJyb3JzOiBbYC9hZ2VgOiBleHBlY3RlZCBpbnRlZ2VyLCBidXQgZ290IHN0cmluZ10iLCJ0eXBlIjoiaW52YWxpZF9yZXF1ZXN0X2Vycm9yIiwiY29kZSI6InRvb2xfdXNlX2ZhaWxlZCIsImZhaWxlZF9nZW5lcmF0aW9uIjoiW1xuIHtcbiBcIm5hbWVcIjogXCJzdHJ1Y3R1cmVkX291dHB1dFwiLFxuIFwicGFyYW1ldGVyc1wiOiB7XG4gXCJhZ2VcIjogXCIzMFwiLFxuIFwibmFtZVwiOiBcIkpvaG4gRG9lXCIsXG4gXCJvY2N1cGF0aW9uXCI6IFwiU29mdHdhcmUgRW5naW5lZXJcIlxuIH1cbiB9XG5dIiwic3RhdHVzX2NvZGUiOjQwMH19Cgo="
+      "b64": "ZXZlbnQ6IGVycm9yCmRhdGE6IHsiZXJyb3IiOnsibWVzc2FnZSI6InRvb2wgY2FsbCB2YWxpZGF0aW9uIGZhaWxlZDogcGFyYW1ldGVycyBmb3IgdG9vbCBzdHJ1Y3R1cmVkX291dHB1dCBkaWQgbm90IG1hdGNoIHNjaGVtYTogZXJyb3JzOiBbYC9hZ2VgOiBleHBlY3RlZCBpbnRlZ2VyLCBidXQgZ290IHN0cmluZ10iLCJ0eXBlIjoiaW52YWxpZF9yZXF1ZXN0X2Vycm9yIiwiY29kZSI6InRvb2xfdXNlX2ZhaWxlZCIsImZhaWxlZF9nZW5lcmF0aW9uIjoiW1xuICB7XG4gICAgXCJuYW1lXCI6IFwic3RydWN0dXJlZF9vdXRwdXRcIixcbiAgICBcInBhcmFtZXRlcnNcIjoge1xuICAgICAgXCJhZ2VcIjogXCIzMFwiLFxuICAgICAgXCJuYW1lXCI6IFwiSm9obiBEb2VcIixcbiAgICAgIFwib2NjdXBhdGlvblwiOiBcIlNvZnR3YXJlIEVuZ2luZWVyXCJcbiAgICB9XG4gIH1cbl0iLCJzdGF0dXNfY29kZSI6NDAwfX0KCg=="
     },
     "headers": {
       "alt-svc": "h3=\":443\"; ma=86400",
       "cache-control": "no-cache",
       "cf-cache-status": "DYNAMIC",
-      "cf-ray": "988e842d78caddf4-ORD",
+      "cf-ray": "9985461fef6561fb-ORD",
+      "connection": "keep-alive",
       "content-type": "text/event-stream",
-      "date": "Fri, 03 Oct 2025 18:31:25 GMT",
+      "date": "Sun, 02 Nov 2025 17:15:26 GMT",
       "server": "cloudflare",
-      "set-cookie": "__cf_bm=sKZdgIRUbYbQ1v1QmgQyeaYMFv0X0_gDU4jyjRz6_1c-1759516285-1.0.1.1-jGpU2l49aeaK61wSFwvyFQycdU7KM2799JQloqF5RnSq8x4RF3eBtM3nDldpqYzgZDELimx9bB70eVOs6iZyUH.OD5QaFaUmD0BlIyobWd4; path=/; expires=Fri, 03-Oct-25 19:01:25 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None",
+      "set-cookie": "__cf_bm=tGXbmjSv1hpZRZWklic8CFSkNgiRO0aKMH00BCm2K2c-1762103726.0667248-1.0.1.1-JRQwZs1jAwufG_99_HJ.Ve3WXc8s0Sd_J8jroLQ._LEi0oXWQqRuTeEJsqO_LvqqfpUXGKJrHYOFs9puYCcKkEqUu2VYLf3IPwFf8bpXghiFI2iCw4_GqQJl3SDJ9fRg; HttpOnly; Secure; Path=/; Domain=groq.com; Expires=Sun, 02 Nov 2025 17:45:26 GMT",
+      "transfer-encoding": "chunked",
       "vary": "Origin",
       "via": "1.1 google",
       "x-groq-region": "yul",
       "x-ratelimit-limit-requests": "1000",
       "x-ratelimit-limit-tokens": "30000",
-      "x-ratelimit-remaining-requests": "982",
-      "x-ratelimit-remaining-tokens": "28998",
-      "x-ratelimit-reset-requests": "25m54.826s",
-      "x-ratelimit-reset-tokens": "2.003s",
-      "x-request-id": "req_01k6nnfp4beyza30pwptef449d"
+      "x-ratelimit-remaining-requests": "997",
+      "x-ratelimit-remaining-tokens": "28588",
+      "x-ratelimit-reset-requests": "4m19.2s",
+      "x-ratelimit-reset-tokens": "2.824s",
+      "x-request-id": "req_01k92s2409f8ms8nep0121thnd"
     },
     "status": 200
   }

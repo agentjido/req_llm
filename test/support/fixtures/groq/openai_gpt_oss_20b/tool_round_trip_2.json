@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjozMjc2LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6ImZjX2EyMjliN2RkLTA3NDItNGUwYy1iYTNlLTJiYmU2MDA1MzVkMSIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImZjX2EyMjliN2RkLTA3NDItNGUwYy1iYTNlLTJiYmU2MDA1MzVkMSJ9XSwibW9kZWwiOiJvcGVuYWkvZ3B0LW9zcy0yMGIiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjozMjc2LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6ImZjXzNiYTU2YWIwLTBiNzItNGJjNC05NTFkLTJkZWFkNmIwZmJmOCIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImZjXzNiYTU2YWIwLTBiNzItNGJjNC05NTFkLTJkZWFkNmIwZmJmOCJ9XSwibW9kZWwiOiJvcGVuYWkvZ3B0LW9zcy0yMGIiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
       "max_tokens": 3276,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "fc_a229b7dd-0742-4e0c-ba3e-2bbe600535d1",
+              "id": "fc_3ba56ab0-0b72-4bc4-951d-2dead6b0fbf8",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "fc_a229b7dd-0742-4e0c-ba3e-2bbe600535d1"
+          "tool_call_id": "fc_3ba56ab0-0b72-4bc4-951d-2dead6b0fbf8"
         }
       ],
       "model": "openai/gpt-oss-20b",
@@ -60,29 +60,29 @@
           "logprobs": null,
           "message": {
             "content": "sum=5",
-            "reasoning": "We need to respond after tool result arrives: 'sum=<value>'. The tool returned 5. So output: sum=5.",
+            "reasoning": "We need to respond after tool result arrives: 'sum=5'. So final answer: sum=5.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1760389845,
-      "id": "chatcmpl-f4768dfc-01b9-4cb8-b20f-9ff8fd12ce2f",
+      "created": 1762103728,
+      "id": "chatcmpl-616eba88-ca56-46e7-a7c5-d69176f36566",
       "model": "openai/gpt-oss-20b",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_80501ff3a1",
+      "system_fingerprint": "fp_0e024b9980",
       "usage": {
-        "completion_time": 0.040267024,
-        "completion_tokens": 40,
-        "prompt_time": 0.006207342,
+        "completion_time": 0.034968878,
+        "completion_tokens": 35,
+        "prompt_time": 0.006892206,
         "prompt_tokens": 124,
-        "queue_time": 0.200595382,
-        "total_time": 0.046474366,
-        "total_tokens": 164
+        "queue_time": 0.003232638,
+        "total_time": 0.041861084,
+        "total_tokens": 159
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k7fpjm2kfhyvm4x8ajfptv2f"
+        "id": "req_01k92s25v4ep2tywc6znh016nk"
       }
     },
     "headers": {
@@ -96,7 +96,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e1d3538e339d4a-ORD"
+        "9985462bbda650bb-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -105,13 +105,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 13 Oct 2025 21:10:45 GMT"
+        "Sun, 02 Nov 2025 17:15:28 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=xyliWyktbILAUcDDSVuwOIhJqec.wFfia7JeUhnmKw4-1760389845-1.0.1.1-aWvWlVg771SRZttNfRVa87NoWhzZ_Ty0_ywKL33rUb.doiqaD1dgcgiseU9Qk6BDDIVpuAg4Ygk.loFOdAcbvvxO03oX8CQqRKJuBM0FmUc; path=/; expires=Mon, 13-Oct-25 21:40:45 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=gC9OR4jl9f97961QPzoXwalY711hTptgaR3kUVXbxcY-1762103727.9555101-1.0.1.1-wZugmtTNjjI2EkZn2_wBRh7QwrEofRvNK3Ja094pIbJxRPMrUo2cu1uo5NDL4xbwQLVUoECP3HC_JvnOSf9gYtVIo11ofRcWQ0YDhoKKiHjZWepYn36Edl3tGUzq2887; HttpOnly; Secure; Path=/; Domain=groq.com; Expires=Sun, 02 Nov 2025 17:45:28 GMT"
       ],
       "transfer-encoding": [
         "chunked"
@@ -132,19 +132,19 @@
         "8000"
       ],
       "x-ratelimit-remaining-requests": [
-        "930"
+        "995"
       ],
       "x-ratelimit-remaining-tokens": [
-        "3281"
+        "5721"
       ],
       "x-ratelimit-reset-requests": [
-        "1h40m48s"
+        "7m12s"
       ],
       "x-ratelimit-reset-tokens": [
-        "35.3925s"
+        "17.0925s"
       ],
       "x-request-id": [
-        "req_01k7fpjm2kfhyvm4x8ajfptv2f"
+        "req_01k92s25v4ep2tywc6znh016nk"
       ]
     },
     "status": 200

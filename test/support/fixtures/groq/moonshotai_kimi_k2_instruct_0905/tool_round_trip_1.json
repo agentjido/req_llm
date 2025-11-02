@@ -84,24 +84,24 @@
           }
         }
       ],
-      "created": 1760389838,
-      "id": "chatcmpl-207581e0-4f3c-4d62-8239-5063639ea040",
+      "created": 1762103726,
+      "id": "chatcmpl-81ced4a0-f4a8-45f9-a2a1-a0c7e9ac12a8",
       "model": "moonshotai/kimi-k2-instruct-0905",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_05df423bab",
+      "system_fingerprint": "fp_5fe129dff6",
       "usage": {
-        "completion_time": 0.070074718,
+        "completion_time": 0.073811021,
         "completion_tokens": 22,
-        "prompt_time": 0.017563597,
-        "prompt_tokens": 134,
-        "queue_time": 0.07036125,
-        "total_time": 0.087638315,
-        "total_tokens": 156
+        "prompt_time": 0.018978547,
+        "prompt_tokens": 129,
+        "queue_time": 0.068639717,
+        "total_time": 0.092789568,
+        "total_tokens": 151
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k7fpjde3erms3eq6nv8gyf62"
+        "id": "req_01k92s24g8f8p878v1ya4y6jsh"
       }
     },
     "headers": {
@@ -115,7 +115,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e1d328df661409-ORD"
+        "998546231fe8eb05-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -124,13 +124,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 13 Oct 2025 21:10:38 GMT"
+        "Sun, 02 Nov 2025 17:15:26 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=hKvWHzfffwSKZl.an30.sJ2JLAlP0lZoosjYHpvm1QQ-1760389838-1.0.1.1-Jjt.9bavzGA9LeeotqB8m868OIqNzKRpYeFzy2iUWc1rl2ZFkWJuKUmsR5dSL7NyluvSBAoWGH5SLxwGVjfUvgMy4rR1MFpzt3.rhXyyqlc; path=/; expires=Mon, 13-Oct-25 21:40:38 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=IkQVqsW01cA6RdaSw4x5uM9TvqbEV3hLRQj3IKftPzc-1762103726.5795734-1.0.1.1-kGautkZgjR7zRpYrSP1dev_RBCAsqBiu2BM3.HwerkxtCtxR1g3uiwLRhNDFmd79H6hZ5tcZF_6ba4kl8B3MZ1QEHjlIrAo7H2h47uk6AA3WIf3HR5B8BceQ9EAJXcOU; HttpOnly; Secure; Path=/; Domain=groq.com; Expires=Sun, 02 Nov 2025 17:45:26 GMT"
       ],
       "transfer-encoding": [
         "chunked"
@@ -151,19 +151,19 @@
         "10000"
       ],
       "x-ratelimit-remaining-requests": [
-        "999"
+        "995"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9865"
+        "9680"
       ],
       "x-ratelimit-reset-requests": [
-        "1m26.4s"
+        "7m12s"
       ],
       "x-ratelimit-reset-tokens": [
-        "810ms"
+        "1.92s"
       ],
       "x-request-id": [
-        "req_01k7fpjde3erms3eq6nv8gyf62"
+        "req_01k92s24g8f8p878v1ya4y6jsh"
       ]
     },
     "status": 200

@@ -1,10 +1,10 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJtZXRhLWxsYW1hL2xsYW1hLTQtc2NvdXQtMTdiLTE2ZS1pbnN0cnVjdCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJtZXRhLWxsYW1hL2xsYW1hLTQtc2NvdXQtMTdiLTE2ZS1pbnN0cnVjdCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
-      "max_tokens": 50,
+      "max_tokens": 10,
       "messages": [
         {
           "content": "Hi there!",
@@ -35,33 +35,33 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "length",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "It's nice to meet you. Is there something I can help you with, or would you like to chat?",
+            "content": "It's nice to meet you. Is there something I",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759516284,
-      "id": "chatcmpl-ce64931b-da58-427b-bff1-06c2ea85e7b3",
+      "created": 1762103725,
+      "id": "chatcmpl-a351e024-e22d-4946-9324-e543e01cdd68",
       "model": "meta-llama/llama-4-scout-17b-16e-instruct",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_5d3e4e58e1",
+      "system_fingerprint": "fp_59d473797c",
       "usage": {
-        "completion_time": 0.05211831,
-        "completion_tokens": 23,
-        "prompt_time": 1.00928e-4,
+        "completion_time": 0.023569985,
+        "completion_tokens": 10,
+        "prompt_time": 3.18162e-4,
         "prompt_tokens": 13,
-        "queue_time": 0.20149024,
-        "total_time": 0.052219238,
-        "total_tokens": 36
+        "queue_time": 0.032056992,
+        "total_time": 0.023888147,
+        "total_tokens": 23
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6nnfndweyx8h02ta7j04755"
+        "id": "req_01k92s23t4enht76p03rqd81m8"
       }
     },
     "headers": {
@@ -75,7 +75,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988e84290ec5aca6-ORD"
+        "9985461ea8d9232a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -84,13 +84,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 18:31:24 GMT"
+        "Sun, 02 Nov 2025 17:15:25 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=pP0WFxbjk5DSXBCcT5h325.7IUqd.A8iDNRwzhyuSd8-1759516284-1.0.1.1-K9LT2DLnR2_K5hJzcsAkWZ5VwynzDn9M9KQBClkKFouCVvugVJzWjyYp3h6yhfVolZnseGSYlclNYUXAHxdYP3kr4hXsrmnCx0WL38OL_90; path=/; expires=Fri, 03-Oct-25 19:01:24 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=J2wBScTNO3Msfk1R1NDVIZLX1pLumWpXnLFA.Eu6o6Y-1762103725.8718016-1.0.1.1-VonyF5PyNC.bf_e4pR1asFzCpxPBWLOdstLDadpb4Aa.ChuqQibgbClZee0_wUXbOAQRNxEhHLJUURLN065NGACMSI17VnpXM38oN5nktFTbqDhOj3EfbQ3dSCZTaHIF; HttpOnly; Secure; Path=/; Domain=groq.com; Expires=Sun, 02 Nov 2025 17:45:25 GMT"
       ],
       "transfer-encoding": [
         "chunked"
@@ -111,19 +111,19 @@
         "30000"
       ],
       "x-ratelimit-remaining-requests": [
-        "984"
+        "998"
       ],
       "x-ratelimit-remaining-tokens": [
-        "28721"
+        "29269"
       ],
       "x-ratelimit-reset-requests": [
-        "23m2.068999999s"
+        "2m52.8s"
       ],
       "x-ratelimit-reset-tokens": [
-        "2.558s"
+        "1.462s"
       ],
       "x-request-id": [
-        "req_01k6nnfndweyx8h02ta7j04755"
+        "req_01k92s23t4enht76p03rqd81m8"
       ]
     },
     "status": 200

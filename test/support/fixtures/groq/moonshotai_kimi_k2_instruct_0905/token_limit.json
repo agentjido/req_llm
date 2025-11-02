@@ -38,29 +38,29 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Title: The Ember-Bound Oath  \nSubtitle: A Chronicle of the Last Dragons and the Mortal Who Carried Their Fire  \n\n––––––––––––––––––––––––  \nPROLOGUE – THE WORLD BEFORE MEMORY  \n––––––––––––––––––––––––  \n\nIn the age before memory, the sky was a living tapestry of wings.  \nDragons—Elyrians, the firstborn—ruled the thermals with bronze eyes and voices like",
+            "content": "Title: The Ember-Bound Oath  \nA Dragon-Road Epic in Seven Bells  \n\n––––––––––––––––––  \nPrologue – The World That Breathes  \n––––––––––––––––––  \n\nThere is a saying in the high valleys of Arkenvelt:  \n“Every mountain exhales once in a thousand years, and what it breathes is dragon.”  \n\nThe range itself is older than kings, older than the star-iron swords that",
             "role": "assistant"
           }
         }
       ],
-      "created": 1760389839,
-      "id": "chatcmpl-3aff3e3d-5d35-4ffe-bcb0-29ca8adabc67",
+      "created": 1762103726,
+      "id": "chatcmpl-c3d1b322-5785-4d6e-835f-04d28b5d3758",
       "model": "moonshotai/kimi-k2-instruct-0905",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_05df423bab",
+      "system_fingerprint": "fp_3312304636",
       "usage": {
-        "completion_time": 0.454710794,
+        "completion_time": 0.495918746,
         "completion_tokens": 100,
-        "prompt_time": 0.027459886,
-        "prompt_tokens": 34,
-        "queue_time": 0.070675037,
-        "total_time": 0.48217068,
-        "total_tokens": 134
+        "prompt_time": 0.010099449,
+        "prompt_tokens": 35,
+        "queue_time": 0.073216067,
+        "total_time": 0.506018195,
+        "total_tokens": 135
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k7fpjearfe9br18s1jxqh0v0"
+        "id": "req_01k92s23m7enfrhwz6hbh1p59v"
       }
     },
     "headers": {
@@ -74,7 +74,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e1d32ebd491409-ORD"
+        "9985461d8eaceb05-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -83,13 +83,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 13 Oct 2025 21:10:39 GMT"
+        "Sun, 02 Nov 2025 17:15:26 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=XMgPmA1umz013ccDf5TGF2tUXgk9vbBye4DE1RpPCiI-1760389839-1.0.1.1-QHnvvECDnuKqg2V5idNJWggo9hb2OGN2Ymqu1fNzpBiygI0vvkY7_e5x6BkX4SE_LWJPJO3.pBrCJEXYHBxDzcKnF7XYrg1rnSA2PuuSwws; path=/; expires=Mon, 13-Oct-25 21:40:39 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=LqJfh8upkLnIJKAat3I1AuqCbgS0Jk2oBh61aSI52fU-1762103725.6837463-1.0.1.1-yX61nz9pwNN4Jhq1OO61oyxAiU4a_Nu_.MDdtmaIJnfqskBAi5bq8TE_xbQIh27WYSPnvGKjJVmUvoDe_ZkRpCvm8IYSuUtFiGFeWaLkPqw1VU8nMr9NRw28.A7pbh.n; HttpOnly; Secure; Path=/; Domain=groq.com; Expires=Sun, 02 Nov 2025 17:45:26 GMT"
       ],
       "transfer-encoding": [
         "chunked"
@@ -110,19 +110,19 @@
         "10000"
       ],
       "x-ratelimit-remaining-requests": [
-        "995"
+        "997"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9557"
+        "9803"
       ],
       "x-ratelimit-reset-requests": [
-        "7m12s"
+        "4m19.2s"
       ],
       "x-ratelimit-reset-tokens": [
-        "2.658s"
+        "1.182s"
       ],
       "x-request-id": [
-        "req_01k7fpjearfe9br18s1jxqh0v0"
+        "req_01k92s23m7enfrhwz6hbh1p59v"
       ]
     },
     "status": 200

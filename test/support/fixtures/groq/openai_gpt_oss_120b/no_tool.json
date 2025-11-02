@@ -61,30 +61,30 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Why did the cat sit on the computer?  \n\nBecause it wanted to keep an eye on the mouse! 🐱💻",
-            "reasoning": "Need to respond with a joke.",
+            "content": "Why did the cat sit on the computer?  \n\nBecause it wanted to keep an eye on the mouse! 😸",
+            "reasoning": "We just need to respond with a joke.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1760389839,
-      "id": "chatcmpl-02248032-0aad-44b5-8b2d-d3afb233c90b",
+      "created": 1762103726,
+      "id": "chatcmpl-de395a23-be74-4252-ae12-87a74987876a",
       "model": "openai/gpt-oss-120b",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_5c888d599f",
+      "system_fingerprint": "fp_07c3a8857b",
       "usage": {
-        "completion_time": 0.087252159,
-        "completion_tokens": 43,
-        "prompt_time": 0.014666041,
+        "completion_time": 0.088826879,
+        "completion_tokens": 42,
+        "prompt_time": 0.006258217,
         "prompt_tokens": 127,
-        "queue_time": 0.201119231,
-        "total_time": 0.1019182,
-        "total_tokens": 170
+        "queue_time": 0.034383654,
+        "total_time": 0.095085096,
+        "total_tokens": 169
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k7fpjeewfeb94j23j14dr0d6"
+        "id": "req_01k92s23z4f8mrnkqgehyvrk6c"
       }
     },
     "headers": {
@@ -98,7 +98,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e1d32f8a33e249-ORD"
+        "9985461fb84af865-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -107,13 +107,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 13 Oct 2025 21:10:39 GMT"
+        "Sun, 02 Nov 2025 17:15:26 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=L7_VMl6mfNqI65swtkNML3Oqa5aGqaHCJ6SOWSurp_g-1760389839-1.0.1.1-D_D7J_HRRTAyGBmY7HFQ1ImnFVmTFkB4R35PEvzUBzx.q_y3fy18zdfZ5sTJ_NEyjZcfe2yQMBpSWL6.XVc8KldePZbRiwXHdBOGYTyTCZI; path=/; expires=Mon, 13-Oct-25 21:40:39 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=TCjEf7UT6tF8SObUezSeLOMc0NvUeQLNZyEYYEw93Hk-1762103726.0314884-1.0.1.1-knGM0aXVqmhWQx1jx3a2HVyVS22R8acmKCKePQM0AE.FIF97ly5FsxLu7TCVM8kqTehRBNDuWdOXQWCb_TxrXTqy5nx3BUtH.1M_ILsX.zA80Kt8Y7uzu8pFyUAeBGru; HttpOnly; Secure; Path=/; Domain=groq.com; Expires=Sun, 02 Nov 2025 17:45:26 GMT"
       ],
       "transfer-encoding": [
         "chunked"
@@ -134,19 +134,19 @@
         "8000"
       ],
       "x-ratelimit-remaining-requests": [
-        "984"
+        "999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "5410"
+        "7872"
       ],
       "x-ratelimit-reset-requests": [
-        "23m2.4s"
+        "1m26.4s"
       ],
       "x-ratelimit-reset-tokens": [
-        "19.424999999s"
+        "960ms"
       ],
       "x-request-id": [
-        "req_01k7fpjeewfeb94j23j14dr0d6"
+        "req_01k92s23z4f8mrnkqgehyvrk6c"
       ]
     },
     "status": 200

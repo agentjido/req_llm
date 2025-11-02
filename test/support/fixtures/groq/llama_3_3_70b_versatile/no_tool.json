@@ -65,24 +65,24 @@
           }
         }
       ],
-      "created": 1760389842,
-      "id": "chatcmpl-f8d946c1-eb39-4233-b5cf-25f53490b87a",
+      "created": 1762103726,
+      "id": "chatcmpl-ee2140a2-dc19-4858-89cf-640404fafff0",
       "model": "llama-3.3-70b-versatile",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_34d416ee39",
+      "system_fingerprint": "fp_21854da540",
       "usage": {
-        "completion_time": 0.030315223,
+        "completion_time": 0.028907546,
         "completion_tokens": 21,
-        "prompt_time": 0.019914931,
+        "prompt_time": 0.020124738,
         "prompt_tokens": 225,
-        "queue_time": 0.209533869,
-        "total_time": 0.050230154,
+        "queue_time": 0.031430385,
+        "total_time": 0.049032284,
         "total_tokens": 246
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k7fpjgzbffravjh0c4wvs0w4"
+        "id": "req_01k92s24kzenvb0qnwz151hgp9"
       }
     },
     "headers": {
@@ -96,7 +96,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e1d33fb95475e4-ORD"
+        "99854623db1fe13f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -105,13 +105,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 13 Oct 2025 21:10:42 GMT"
+        "Sun, 02 Nov 2025 17:15:26 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=zd_X8OCGst0Dx6u_HLAhac7ZT3dMIxT_kdwsKxENu14-1760389842-1.0.1.1-6HRWbNv5lNMihOJdb_InnVKZUHJZ.jkqPUPn.FQEMe9ZVsXrhPzEkR.ZOGEvKCoQEkdVvT9Rwebag_fZVjYFARTOOVMFab1TspOQicB4r_Y; path=/; expires=Mon, 13-Oct-25 21:40:42 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=d9A.ycCzF5sonHh6XJFgM26SYjAhXR_VFWxGCzlU_2k-1762103726.6998324-1.0.1.1-XXH5wRca6Z5o0UkrRhI.nNR98hNn0ocMxtPwoO1MuRdfo9mjvGczUydc_9WB8jjtFfy_52ZjpPW70raLL.v8448iD1SpPzr11SKVV.pfD6N33Ld1aM_XEqwYh.n.B6gp; HttpOnly; Secure; Path=/; Domain=groq.com; Expires=Sun, 02 Nov 2025 17:45:26 GMT"
       ],
       "transfer-encoding": [
         "chunked"
@@ -132,19 +132,19 @@
         "12000"
       ],
       "x-ratelimit-remaining-requests": [
-        "991"
+        "992"
       ],
       "x-ratelimit-remaining-tokens": [
-        "10748"
+        "10728"
       ],
       "x-ratelimit-reset-requests": [
-        "12m57.599999999s"
+        "11m31.2s"
       ],
       "x-ratelimit-reset-tokens": [
-        "6.26s"
+        "6.359999999s"
       ],
       "x-request-id": [
-        "req_01k7fpjgzbffravjh0c4wvs0w4"
+        "req_01k92s24kzenvb0qnwz151hgp9"
       ]
     },
     "status": 200

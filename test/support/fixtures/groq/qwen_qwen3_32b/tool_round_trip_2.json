@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxNjM4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6InJ3czF4Y3BhciIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6InJ3czF4Y3BhciJ9XSwibW9kZWwiOiJxd2VuL3F3ZW4zLTMyYiIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoxNjM4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6IjV4dmRtM3JyNSIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6IjV4dmRtM3JyNSJ9XSwibW9kZWwiOiJxd2VuL3F3ZW4zLTMyYiIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
       "max_tokens": 1638,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "rws1xcpar",
+              "id": "5xvdm3rr5",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "rws1xcpar"
+          "tool_call_id": "5xvdm3rr5"
         }
       ],
       "model": "qwen/qwen3-32b",
@@ -59,29 +59,29 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "<think>\nOkay, the user asked me to use the add tool to compute 2 + 3. I called the tool with the arguments a=2.0 and b=3.0. The tool returned the result 5. Now I need to respond with 'sum=<value>'. So I just take the result from the tool and plug it into the response format. That should be it. Let me make sure I didn't miss any steps. The user wanted the sum of 2 and 3, the tool did the addition, and I'm supposed to output the sum in the specified format. Yep, looks straightforward. I'll just write the sum as 5.\n</think>\n\nsum=5",
+            "content": "<think>\nOkay, the user asked me to use the add tool to compute 2 + 3. I called the tool with the arguments a=2.0 and b=3.0. The tool returned the result 5. Now I need to respond with 'sum=<value>'. So I just take the result from the tool and plug it into the response format. That should be it. Let me make sure there's no extra step here. The user just wants the sum in that specific format. Yep, looks straightforward. I'll output 'sum=5'.\n</think>\n\nsum=5",
             "role": "assistant"
           }
         }
       ],
-      "created": 1760389841,
-      "id": "chatcmpl-4c20295e-17a5-455f-9e8f-ec30a996eb69",
+      "created": 1762103726,
+      "id": "chatcmpl-381a05f9-23f8-491d-8f40-77132433f038",
       "model": "qwen/qwen3-32b",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_5cf921caa2",
+      "system_fingerprint": "fp_228bd8fb0d",
       "usage": {
-        "completion_time": 0.291053307,
-        "completion_tokens": 144,
-        "prompt_time": 0.003335701,
+        "completion_time": 0.238646125,
+        "completion_tokens": 122,
+        "prompt_time": 0.002843532,
         "prompt_tokens": 76,
-        "queue_time": 0.23747803,
-        "total_time": 0.294389008,
-        "total_tokens": 220
+        "queue_time": 0.072975751,
+        "total_time": 0.241489657,
+        "total_tokens": 198
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k7fpjgceffercarhf2dn7eqz"
+        "id": "req_01k92s243henmtkb3a7wy1yg2p"
       }
     },
     "headers": {
@@ -95,7 +95,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e1d33bf917eb07-ORD"
+        "998546209a5ae24f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -104,13 +104,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 13 Oct 2025 21:10:41 GMT"
+        "Sun, 02 Nov 2025 17:15:26 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=f2oltZt8OPn5f1Ka4ERLY5IfsmTB14ffcBPGQTrFopk-1760389841-1.0.1.1-y4xQXfsOH4u4F8Uzv_MWZGNHkSRvz6TH34M_7j4SStyUqv6Lrwtw3KaaazhdmiQA2Gt_uDnS2sZDVoi6cCGV11SMhtnsVyVAcuYNnyuvEGs; path=/; expires=Mon, 13-Oct-25 21:40:41 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=JX4Ma_vInA4sdzZzqKWwhL5d4UGl1ZvEvPlMSCP.urk-1762103726.171725-1.0.1.1-4MMK7KdFr.PQf.mw_sfMhzYNhyNqPMqeNY8yHV.hnEEIkuYU2iLdsAgun6OQOjUHw7JJY1c46xBCP_OTy8eXJC26eBy975oqebToyHh_sCZPNiyjWKfOD7.ZB.5Sn6b.; HttpOnly; Secure; Path=/; Domain=groq.com; Expires=Sun, 02 Nov 2025 17:45:26 GMT"
       ],
       "transfer-encoding": [
         "chunked"
@@ -131,19 +131,19 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "994"
+        "998"
       ],
       "x-ratelimit-remaining-tokens": [
-        "4980"
+        "5638"
       ],
       "x-ratelimit-reset-requests": [
-        "8m38.4s"
+        "2m52.8s"
       ],
       "x-ratelimit-reset-tokens": [
-        "10.2s"
+        "3.62s"
       ],
       "x-request-id": [
-        "req_01k7fpjgceffercarhf2dn7eqz"
+        "req_01k92s243henmtkb3a7wy1yg2p"
       ]
     },
     "status": 200

@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibGxhbWEtMy4zLTcwYi12ZXJzYXRpbGUiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbF9jaG9pY2UiOnsiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0In0sInR5cGUiOiJmdW5jdGlvbiJ9LCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZW5lcmF0ZSBzdHJ1Y3R1cmVkIG91dHB1dCBtYXRjaGluZyB0aGUgcHJvdmlkZWQgc2NoZW1hIiwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibmFtZSIsImFnZSJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibWV0YS1sbGFtYS9sbGFtYS00LXNjb3V0LTE3Yi0xNmUtaW5zdHJ1Y3QiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbF9jaG9pY2UiOnsiZnVuY3Rpb24iOnsibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0In0sInR5cGUiOiJmdW5jdGlvbiJ9LCJ0b29scyI6W3siZnVuY3Rpb24iOnsiZGVzY3JpcHRpb24iOiJHZW5lcmF0ZSBzdHJ1Y3R1cmVkIG91dHB1dCBtYXRjaGluZyB0aGUgcHJvdmlkZWQgc2NoZW1hIiwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0IiwicGFyYW1ldGVycyI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibmFtZSIsImFnZSJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
       "max_tokens": 500,
@@ -11,7 +11,7 @@
           "role": "user"
         }
       ],
-      "model": "llama-3.3-70b-versatile",
+      "model": "meta-llama/llama-4-scout-17b-16e-instruct",
       "seed": 42,
       "stream": false,
       "temperature": 0.0,
@@ -71,44 +71,11 @@
   },
   "response": {
     "body": {
-      "choices": [
-        {
-          "finish_reason": "tool_calls",
-          "index": 0,
-          "logprobs": null,
-          "message": {
-            "role": "assistant",
-            "tool_calls": [
-              {
-                "function": {
-                  "arguments": "{\"age\":30,\"name\":\"John Doe\",\"occupation\":\"Software Engineer\"}",
-                  "name": "structured_output"
-                },
-                "id": "f8nmsqpmp",
-                "type": "function"
-              }
-            ]
-          }
-        }
-      ],
-      "created": 1762103726,
-      "id": "chatcmpl-bf2cc8d1-5058-4bda-a443-7e91c3e7051b",
-      "model": "llama-3.3-70b-versatile",
-      "object": "chat.completion",
-      "service_tier": "on_demand",
-      "system_fingerprint": "fp_1e64f9ee0d",
-      "usage": {
-        "completion_time": 0.054693651,
-        "completion_tokens": 24,
-        "prompt_time": 0.024983472,
-        "prompt_tokens": 284,
-        "queue_time": 0.031042503,
-        "total_time": 0.079677123,
-        "total_tokens": 308
-      },
-      "usage_breakdown": null,
-      "x_groq": {
-        "id": "req_01k92s24rkenxby8400btgdp7p"
+      "error": {
+        "code": "tool_use_failed",
+        "failed_generation": "[\n  {\n    \"name\": \"structured_output\",\n    \"parameters\": {\n      \"age\": \"30\",\n      \"name\": \"John Doe\",\n      \"occupation\": \"Software Engineer\"\n    }\n  }\n]",
+        "message": "tool call validation failed: parameters for tool structured_output did not match schema: errors: [`/age`: expected integer, but got string]",
+        "type": "invalid_request_error"
       }
     },
     "headers": {
@@ -122,7 +89,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "99854624cc06e13f-ORD"
+        "99854623ae27232a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -137,10 +104,7 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=6UGCW8j00Jhc3cUsVeaG4TeRNAEaPAzaHU3Fg5R2Cbs-1762103726.8485627-1.0.1.1-NafGuteEYrStzTfZiuPbuAxRGlv_uE1y1xRiB5HxvJiJ083sBaCu9yRuE4Y7.mNc6Yk1_O4jp0TAEjMoP7Qulzp7XNlSmdrZmC3eiIMRZGCfjAiU_BFp1lm40fsnCksw; HttpOnly; Secure; Path=/; Domain=groq.com; Expires=Sun, 02 Nov 2025 17:45:26 GMT"
-      ],
-      "transfer-encoding": [
-        "chunked"
+        "__cf_bm=bdjgYhDwcNnrGDlm_6JQUT3_ysCUmd8wtWBtu6c5Sm0-1762103726.6650748-1.0.1.1-9BO6tkIAF2A8ojTCLidvpkCS.7fXRf.82UPzuC4MaGXhOYLekBePiSaDtg3ydMgkITjq9WeJ59Se0Ca5owEHot36wHozgsEPxc10GxPa47YcFC7QJBrTn61LeVlhdVlp; HttpOnly; Secure; Path=/; Domain=groq.com; Expires=Sun, 02 Nov 2025 17:45:26 GMT"
       ],
       "vary": [
         "Origin"
@@ -155,24 +119,24 @@
         "1000"
       ],
       "x-ratelimit-limit-tokens": [
-        "12000"
+        "30000"
       ],
       "x-ratelimit-remaining-requests": [
-        "991"
+        "995"
       ],
       "x-ratelimit-remaining-tokens": [
-        "10452"
+        "27378"
       ],
       "x-ratelimit-reset-requests": [
-        "12m57.599999999s"
+        "7m12s"
       ],
       "x-ratelimit-reset-tokens": [
-        "7.74s"
+        "5.244s"
       ],
       "x-request-id": [
-        "req_01k92s24rkenxby8400btgdp7p"
+        "req_01k92s24jxf8psej18fs6n7zt4"
       ]
     },
-    "status": 200
+    "status": 400
   }
 }

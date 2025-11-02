@@ -38,29 +38,29 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "In the land of Eridoria, where the sun dipped into the horizon and painted the sky with hues of crimson and gold, the village of Brindlemark lay nestled within a valley. It was a small, peaceful village, home to farmers, blacksmiths, and artisans. But amidst the tranquility, a sense of wonder and magic lingered in the air, for it was said that dragons roamed the skies and mountains that surrounded the village.\n\nThe villagers of Brind",
+            "content": "In the land of Eridoria, where the sun dipped into the horizon and painted the sky with hues of crimson and gold, the village of Brindlemark lay nestled in a valley. It was a quaint settlement, home to farmers, blacksmiths, and artisans, who lived simple lives, tending to their crops and crafts. However, amidst the peaceful surroundings, a sense of wonder and awe lingered in the air, for it was said that dragons roamed the",
             "role": "assistant"
           }
         }
       ],
-      "created": 1759516286,
-      "id": "chatcmpl-13ada8c0-1380-4999-855e-99270352787c",
+      "created": 1762103727,
+      "id": "chatcmpl-b3e85b2b-bd77-4970-ae48-54a02135792f",
       "model": "meta-llama/llama-4-scout-17b-16e-instruct",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_5d3e4e58e1",
+      "system_fingerprint": "fp_5436ed2ebe",
       "usage": {
-        "completion_time": 0.238367312,
+        "completion_time": 0.228170147,
         "completion_tokens": 100,
-        "prompt_time": 1.35017e-4,
+        "prompt_time": 4.28984e-4,
         "prompt_tokens": 19,
-        "queue_time": 0.202942803,
-        "total_time": 0.238502329,
+        "queue_time": 0.08704663,
+        "total_time": 0.228599131,
         "total_tokens": 119
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k6nnfpvpefsrpevj4hsgqjnh"
+        "id": "req_01k92s25agf8rvwynr5070f78g"
       }
     },
     "headers": {
@@ -74,7 +74,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "988e84321cb7aca6-ORD"
+        "998546285b6a232a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -83,13 +83,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 03 Oct 2025 18:31:26 GMT"
+        "Sun, 02 Nov 2025 17:15:27 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=HO5v5J2qm.jWOjCodL1Ptrci72WCHsiagDt5Ce6OUz8-1759516286-1.0.1.1-C2Qg_fcVeEFkpD.bqoz6xxiXA9.wYHiJyBtMXNR.jUvwsArEL4dm93FrqaGWbdxWhXS4oanRdlwbPlmI0FMcRtXT0X5nvwvHnw0mhGsKUL4; path=/; expires=Fri, 03-Oct-25 19:01:26 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=7kPS.6ddkvjh_LQip7ljLVfW8MLqx3SdF268rep3LbA-1762103727.4203207-1.0.1.1-bguSiXzZbIbD0z4ATpdPbd.hQ00dg7KpS32iaR.zT_haUsId6u7fI0mirPvGOGd5pPrrF1_sCJm.aeSE_KFvRyVTRqdYwUfY8f1gNF6wEEQfJZwcBulEYH8s3K3w1AZg; HttpOnly; Secure; Path=/; Domain=groq.com; Expires=Sun, 02 Nov 2025 17:45:27 GMT"
       ],
       "transfer-encoding": [
         "chunked"
@@ -110,19 +110,19 @@
         "30000"
       ],
       "x-ratelimit-remaining-requests": [
-        "980"
+        "992"
       ],
       "x-ratelimit-remaining-tokens": [
-        "29319"
+        "26946"
       ],
       "x-ratelimit-reset-requests": [
-        "28m47.678999999s"
+        "11m31.2s"
       ],
       "x-ratelimit-reset-tokens": [
-        "1.361s"
+        "6.108s"
       ],
       "x-request-id": [
-        "req_01k6nnfpvpefsrpevj4hsgqjnh"
+        "req_01k92s25agf8rvwynr5070f78g"
       ]
     },
     "status": 200

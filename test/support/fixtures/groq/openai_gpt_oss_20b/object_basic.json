@@ -86,31 +86,31 @@
                   "arguments": "{\"age\":29,\"name\":\"Alexandra Patel\",\"occupation\":\"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "fc_5c97a93d-c09c-48ec-8985-1073c2273e79",
+                "id": "fc_1c4b3b23-9070-4841-92c7-fa8e24eb33cc",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1760389839,
-      "id": "chatcmpl-3d0a3a77-f721-41b3-aa81-b2dcbce4b069",
+      "created": 1762103729,
+      "id": "chatcmpl-36d824e9-f040-47d8-8287-65beed720c07",
       "model": "openai/gpt-oss-20b",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_c5a89987dc",
+      "system_fingerprint": "fp_3d50e63726",
       "usage": {
-        "completion_time": 0.053867579,
+        "completion_time": 0.054755206,
         "completion_tokens": 54,
-        "prompt_time": 0.007376498,
+        "prompt_time": 0.008533813,
         "prompt_tokens": 151,
-        "queue_time": 0.201455256,
-        "total_time": 0.061244077,
+        "queue_time": 0.003134493,
+        "total_time": 0.063289019,
         "total_tokens": 205
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k7fpjeh7es1rw0rv3crdt461"
+        "id": "req_01k92s26xce4m8ce4mrmyc439s"
       }
     },
     "headers": {
@@ -124,7 +124,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e1d3300e269d4a-ORD"
+        "998546328bf650bb-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -133,13 +133,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 13 Oct 2025 21:10:39 GMT"
+        "Sun, 02 Nov 2025 17:15:29 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=a8Osxz7zGgWvY9SlaNG.mXa3.ms4IDlE8wlXyp1yNPM-1760389839-1.0.1.1-t.F4u1Y9CGsEqsPI9N61OmmIGaTWrN61sVBZPBBu0u3_ukzmte0sZzjPapRO9rBsf3CHpa5.ZOJXLtFukS6bBrQpzXOr.wxCxh1dUqT_TZU; path=/; expires=Mon, 13-Oct-25 21:40:39 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=J_3nEuZ3z5cQtJSepUXh2sowqPFCf9ca50QbTuZEwCc-1762103729.0427873-1.0.1.1-PrkjBiGNz4dea0MjDD97mCK3Dr6ToRxPo9L45QhOPMFlh9GebzuiTWNBc1Rr6V3hAWyipQ6N566xLp_b8LwwKtQ6q03yH.EoFhIi79Po0_BuL5rOSTtCcpjEHh0p_ZQi; HttpOnly; Secure; Path=/; Domain=groq.com; Expires=Sun, 02 Nov 2025 17:45:29 GMT"
       ],
       "transfer-encoding": [
         "chunked"
@@ -160,19 +160,19 @@
         "8000"
       ],
       "x-ratelimit-remaining-requests": [
-        "937"
+        "988"
       ],
       "x-ratelimit-remaining-tokens": [
-        "6780"
+        "4579"
       ],
       "x-ratelimit-reset-requests": [
-        "1h30m43.2s"
+        "17m16.8s"
       ],
       "x-ratelimit-reset-tokens": [
-        "9.15s"
+        "25.6575s"
       ],
       "x-request-id": [
-        "req_01k7fpjeh7es1rw0rv3crdt461"
+        "req_01k92s26xce4m8ce4mrmyc439s"
       ]
     },
     "status": 200

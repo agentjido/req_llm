@@ -70,7 +70,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "reasoning": "Okay, the user wants me to use the add tool to compute 2 + 3. Let me check the available functions. There's a function called add that takes two integers, a and b. So I need to call add with a=2 and b=3. I'll generate the tool call with those parameters. Once I get the result, I should respond with 'sum=' followed by the value. The result should be 5. Let me make sure the JSON is correctly formatted with the right parameters.\n",
+            "reasoning": "Okay, the user wants me to use the add tool to compute 2 + 3. Let me check the available functions. There's an add function that takes two integers, a and b. So I need to call add with a=2 and b=3. I'll generate the tool call with those parameters. Once I get the result, I should respond with 'sum=' followed by the value. The result should be 5. Let me make sure the JSON is correctly formatted with the right parameters.\n",
             "role": "assistant",
             "tool_calls": [
               {
@@ -78,31 +78,31 @@
                   "arguments": "{\"a\":2,\"b\":3}",
                   "name": "add"
                 },
-                "id": "rws1xcpar",
+                "id": "5xvdm3rr5",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1760389841,
-      "id": "chatcmpl-52b90dd8-589a-4da8-897f-956f4c9c893b",
+      "created": 1762103726,
+      "id": "chatcmpl-ba9f8e74-2430-49d6-b3d2-ea13ffb73cd8",
       "model": "qwen/qwen3-32b",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_5cf921caa2",
+      "system_fingerprint": "fp_228bd8fb0d",
       "usage": {
-        "completion_time": 0.236067103,
-        "completion_tokens": 134,
-        "prompt_time": 0.0087287,
+        "completion_time": 0.202851348,
+        "completion_tokens": 133,
+        "prompt_time": 0.007342538,
         "prompt_tokens": 185,
-        "queue_time": 0.264461973,
-        "total_time": 0.244795803,
-        "total_tokens": 319
+        "queue_time": 0.07329911,
+        "total_time": 0.210193886,
+        "total_tokens": 318
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k7fpjfv6ff2btg764wew6ky1"
+        "id": "req_01k92s23rmf8m8tr9vxq0cdtja"
       }
     },
     "headers": {
@@ -116,7 +116,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e1d3387c94eb07-ORD"
+        "9985461e680ae24f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -125,13 +125,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 13 Oct 2025 21:10:41 GMT"
+        "Sun, 02 Nov 2025 17:15:26 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=zt13rpSxDOnfJGAjKtOeK3rROJZWqcT6NVxgaLzIHz0-1760389841-1.0.1.1-i5TmNhr7BynsAa68GkZ0nnkQwQSXePQMyGaBc5T.fFIx1m7kPggIowyKvfPLHuLBfgbJXPsmq4IkbiUY7PeY7m0nc7Ld720Naxm_CU4f5eM; path=/; expires=Mon, 13-Oct-25 21:40:41 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=b_.u7KTOnLEG8_LwASLope76b1irL6add4EGgJH1rE8-1762103725.8231611-1.0.1.1-tjVNPYcFXe037MbFkwp6v_4ZYdUvT8XUgU.wJ2sTiq93BtMJdhAThq07.ZdSrSArAzbCoCIHHMZ.uK76r3JRFehLIKbqeir_HSPK3Af7tLF2.aSfdgEzNNzZkt1d9cM.; HttpOnly; Secure; Path=/; Domain=groq.com; Expires=Sun, 02 Nov 2025 17:45:26 GMT"
       ],
       "transfer-encoding": [
         "chunked"
@@ -152,19 +152,19 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "995"
+        "999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "5136"
+        "5814"
       ],
       "x-ratelimit-reset-requests": [
-        "7m12s"
+        "1m26.4s"
       ],
       "x-ratelimit-reset-tokens": [
-        "8.639999999s"
+        "1.859999999s"
       ],
       "x-request-id": [
-        "req_01k7fpjfv6ff2btg764wew6ky1"
+        "req_01k92s23rmf8m8tr9vxq0cdtja"
       ]
     },
     "status": 200

@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzLiBBZnRlciB0aGUgdG9vbCByZXN1bHQgYXJyaXZlcywgcmVzcG9uZCB3aXRoICdzdW09PHZhbHVlPicuIiwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOltdLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2t6YThmODc0IiwidHlwZSI6ImZ1bmN0aW9uIn1dfSx7ImNvbnRlbnQiOiI1IiwibmFtZSI6ImFkZCIsInJvbGUiOiJ0b29sIiwidG9vbF9jYWxsX2lkIjoiY2t6YThmODc0In1dLCJtb2RlbCI6ImxsYW1hLTMuMS04Yi1pbnN0YW50Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzLiBBZnRlciB0aGUgdG9vbCByZXN1bHQgYXJyaXZlcywgcmVzcG9uZCB3aXRoICdzdW09PHZhbHVlPicuIiwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOltdLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2gzcHZhZThzIiwidHlwZSI6ImZ1bmN0aW9uIn1dfSx7ImNvbnRlbnQiOiI1IiwibmFtZSI6ImFkZCIsInJvbGUiOiJ0b29sIiwidG9vbF9jYWxsX2lkIjoiY2gzcHZhZThzIn1dLCJtb2RlbCI6ImxsYW1hLTMuMS04Yi1pbnN0YW50Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
       "max_tokens": 819,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "ckza8f874",
+              "id": "ch3pvae8s",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "ckza8f874"
+          "tool_call_id": "ch3pvae8s"
         }
       ],
       "model": "llama-3.1-8b-instant",
@@ -64,24 +64,24 @@
           }
         }
       ],
-      "created": 1760389840,
-      "id": "chatcmpl-2cd69ea2-3b00-45f4-8325-ee2cee8f0239",
+      "created": 1762103725,
+      "id": "chatcmpl-8102b74d-c104-4669-a89f-e6f991ef3ada",
       "model": "llama-3.1-8b-instant",
       "object": "chat.completion",
       "service_tier": "on_demand",
-      "system_fingerprint": "fp_7b3cfae3af",
+      "system_fingerprint": "fp_020e283281",
       "usage": {
-        "completion_time": 0.004264357,
+        "completion_time": 0.004646672,
         "completion_tokens": 4,
-        "prompt_time": 0.00467083,
+        "prompt_time": 0.004601483,
         "prompt_tokens": 86,
-        "queue_time": 0.202248605,
-        "total_time": 0.008935187,
+        "queue_time": 0.035410354,
+        "total_time": 0.009248155,
         "total_tokens": 90
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k7fpjfdkfervrhhah3bem338"
+        "id": "req_01k92s23r9enh997pn6vj5d27j"
       }
     },
     "headers": {
@@ -95,7 +95,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e1d335b861f85e-ORD"
+        "9985461e587ae26b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -104,13 +104,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 13 Oct 2025 21:10:40 GMT"
+        "Sun, 02 Nov 2025 17:15:25 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=FAXG7FXOfNsSvUXIdcv6dYGOQBDUsTgQfr.xZyxgbKQ-1760389840-1.0.1.1-78Y3apEi4kp.Yfbvr9tolhzMlIXrcjBRFmaZjHDJ5iQDoUQINWI_jM9AO_yxl9sHpnhu8MQqNah4PDxi7jLSzji1fmfYaGJx4GqiDlaKTcI; path=/; expires=Mon, 13-Oct-25 21:40:40 GMT; domain=.groq.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=Ze5Df6RXSXaLXX42vSN6GvRdUdoBkFgv6esgS_gbSD4-1762103725.8141544-1.0.1.1-kcAZlnVQxM2yhFG6425Nr1z2y9h1E4ZBCc2MStF2A6gKJj1dE.eco.zEHtjCFWAv5XCiMt0TzsLG9CK.HwYTHMJaWb77yJAfHRQ2.4EozsLi8kNzwnCPjjtHvP09_St7; HttpOnly; Secure; Path=/; Domain=groq.com; Expires=Sun, 02 Nov 2025 17:45:25 GMT"
       ],
       "transfer-encoding": [
         "chunked"
@@ -131,19 +131,19 @@
         "6000"
       ],
       "x-ratelimit-remaining-requests": [
-        "14394"
+        "14395"
       ],
       "x-ratelimit-remaining-tokens": [
-        "4841"
+        "5152"
       ],
       "x-ratelimit-reset-requests": [
-        "36s"
+        "30s"
       ],
       "x-ratelimit-reset-tokens": [
-        "11.59s"
+        "8.48s"
       ],
       "x-request-id": [
-        "req_01k7fpjfdkfervrhhah3bem338"
+        "req_01k92s23r9enh997pn6vj5d27j"
       ]
     },
     "status": 200
