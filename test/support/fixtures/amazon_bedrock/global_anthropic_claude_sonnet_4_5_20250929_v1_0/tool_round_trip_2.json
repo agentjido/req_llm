@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo2NDAwLCJ0ZW1wZXJhdHVyZSI6MC4wfSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4ifV0sInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbeyJ0b29sVXNlIjp7ImlucHV0Ijp7ImEiOjIsImIiOjN9LCJuYW1lIjoiYWRkIiwidG9vbFVzZUlkIjoidG9vbHVzZV80VFAzU1NRM1FtZS0wWXU2MG5SSXV3In19XSwicm9sZSI6ImFzc2lzdGFudCJ9LHsiY29udGVudCI6W3sidG9vbFJlc3VsdCI6eyJjb250ZW50IjpbeyJ0ZXh0IjoiNSJ9XSwidG9vbFVzZUlkIjoidG9vbHVzZV80VFAzU1NRM1FtZS0wWXU2MG5SSXV3In19XSwicm9sZSI6InVzZXIifV0sInRvb2xDb25maWciOnsidG9vbHMiOlt7InRvb2xTcGVjIjp7ImRlc2NyaXB0aW9uIjoiQWRkIHR3byBpbnRlZ2VycyIsImlucHV0U2NoZW1hIjp7Impzb24iOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImEiOnsidHlwZSI6ImludGVnZXIifSwiYiI6eyJ0eXBlIjoiaW50ZWdlciJ9fSwicmVxdWlyZWQiOlsiYSIsImIiXSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImFkZCJ9fV19fQ=="
+      "b64": "eyJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo2NDAwLCJ0ZW1wZXJhdHVyZSI6MC4wfSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4ifV0sInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbeyJ0b29sVXNlIjp7ImlucHV0Ijp7ImEiOjIsImIiOjN9LCJuYW1lIjoiYWRkIiwidG9vbFVzZUlkIjoidG9vbHVzZV8tSEVRLW00SVNrNk9MYXVOV2lEVEZ3In19XSwicm9sZSI6ImFzc2lzdGFudCJ9LHsiY29udGVudCI6W3sidG9vbFJlc3VsdCI6eyJjb250ZW50IjpbeyJ0ZXh0IjoiNSJ9XSwidG9vbFVzZUlkIjoidG9vbHVzZV8tSEVRLW00SVNrNk9MYXVOV2lEVEZ3In19XSwicm9sZSI6InVzZXIifV0sInRvb2xDb25maWciOnsidG9vbHMiOlt7InRvb2xTcGVjIjp7ImRlc2NyaXB0aW9uIjoiQWRkIHR3byBpbnRlZ2VycyIsImlucHV0U2NoZW1hIjp7Impzb24iOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImEiOnsidHlwZSI6ImludGVnZXIifSwiYiI6eyJ0eXBlIjoiaW50ZWdlciJ9fSwicmVxdWlyZWQiOlsiYSIsImIiXSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImFkZCJ9fV19fQ=="
     },
     "canonical_json": {
       "inferenceConfig": {
@@ -26,7 +26,7 @@
                   "b": 3
                 },
                 "name": "add",
-                "toolUseId": "tooluse_4TP3SSQ3Qme-0Yu60nRIuw"
+                "toolUseId": "tooluse_-HEQ-m4ISk6OLauNWiDTFw"
               }
             }
           ],
@@ -41,7 +41,7 @@
                     "text": "5"
                   }
                 ],
-                "toolUseId": "tooluse_4TP3SSQ3Qme-0Yu60nRIuw"
+                "toolUseId": "tooluse_-HEQ-m4ISk6OLauNWiDTFw"
               }
             }
           ],
@@ -92,10 +92,10 @@
         "req/0.5.15"
       ],
       "x-amz-content-sha256": [
-        "9fb38c431f5f546953f08a02dc6f437f23214cea7b6ac9a5fb83532ea44d2b7e"
+        "3f8d98a2672e1ad7c3b6fdd70199aa26067775ae8a8e3440d6f8ced03de4f7e9"
       ],
       "x-amz-date": [
-        "20251101T002520Z"
+        "20251102T171336Z"
       ]
     },
     "method": "post",
@@ -104,7 +104,7 @@
   "response": {
     "body": {
       "metrics": {
-        "latencyMs": 3816
+        "latencyMs": 2239
       },
       "output": {
         "message": {
@@ -136,10 +136,10 @@
         "application/json"
       ],
       "date": [
-        "Sat, 01 Nov 2025 00:25:24 GMT"
+        "Sun, 02 Nov 2025 17:13:39 GMT"
       ],
       "x-amzn-requestid": [
-        "53b0f5dd-900a-4815-96a2-d9e30a8aeae5"
+        "6532ca19-480b-4871-add6-c030c029d259"
       ]
     },
     "status": 200

@@ -1,12 +1,12 @@
 {
   "request": {
     "body": {
-      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjQwMDAsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo1MDAwLCJ0ZW1wZXJhdHVyZSI6MS4wfSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJTb2x2ZSAxMio3IGFuZCBzaG93IHlvdXIgaW50ZXJuYWwgdGhpbmtpbmcgKGJyaWVmKS4ifV0sInJvbGUiOiJ1c2VyIn1dfQ=="
+      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo1MDAwLCJ0ZW1wZXJhdHVyZSI6MS4wfSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJTb2x2ZSAxMio3IGFuZCBzaG93IHlvdXIgaW50ZXJuYWwgdGhpbmtpbmcgKGJyaWVmKS4ifV0sInJvbGUiOiJ1c2VyIn1dfQ=="
     },
     "canonical_json": {
       "additionalModelRequestFields": {
         "thinking": {
-          "budget_tokens": 4000,
+          "budget_tokens": 1024,
           "type": "enabled"
         }
       },
@@ -40,10 +40,10 @@
         "req/0.5.15"
       ],
       "x-amz-content-sha256": [
-        "6977e56a858e5a9aa776d1bfe9e7be534e1e468954a005600705cf7c48718061"
+        "0c4828317b4255f30afd38fdff4e99c131cf1838ebb898089a1f039a9751c01c"
       ],
       "x-amz-date": [
-        "20251101T004551Z"
+        "20251102T172116Z"
       ]
     },
     "method": "post",
@@ -52,7 +52,7 @@
   "response": {
     "body": {
       "metrics": {
-        "latencyMs": 13981
+        "latencyMs": 11750
       },
       "output": {
         "message": {
@@ -60,13 +60,13 @@
             {
               "reasoningContent": {
                 "reasoningText": {
-                  "signature": "EoUDCkgICRABGAIqQNGJ0Xflzzeg+IY1Ofe+tl/bT6ZsEvU0iR2Fw3vPQo47rBeUxGzIbMbk7bOAKUM+cWzmEh1X2qAnlSu1HkjMB7sSDNMxl7UKspfClE/Q7BoMkV5oDSdYXv13/xC6IjAbGGZpSJn/33zprPYWwfW1RLTiWJMy7uIR/uEK2yCLttTZJxsi4yCOtla4NPYFUPEq6gHmt3NPrqjcVzj5+p92OndRNrjvRZHIrROokgISiundlhsgUVEMc+s47dKvvRgUVSopC0v+N1S77iCLWmKidT7k4rijae9pSzUztnDceUytlJ9+VYtGjZdbZ00hpGP2w6rqnjazb3RVKwtH5rn2FkttFAvkz3X2zpk6v+x6mQ+1S0WgL8FR7rzqsW0LceJVJkhry0YYQZdeE58dP/IRF2DcQqhU2drG7iR+NGvxLLmjtdDZdydUmbvjWUGaq+RRdUwsLtG1cBZdALziOFr3t3eUHmB8uzoFOgC0HV+Cfgp8hV7Vwrdx17LUfUQYAQ==",
-                  "text": "I need to calculate 12 * 7.\n\nLet me think through this:\n12 * 7 = (10 + 2) * 7\n= 10 * 7 + 2 * 7\n= 70 + 14\n= 84\n\nOr I could think of it as:\n12 * 7 = 12 * (5 + 2)\n= 12 * 5 + 12 * 2\n= 60 + 24\n= 84\n\nBoth methods give me 84."
+                  "signature": "Ev0CCkgICRABGAIqQJSfcIpo19ujArc/VQW4hS+xbZCV58/9IXyfwQ+IPU+91AeVCAkwcs15Ce5FZC0DULekQTRgd+zwW2bqk/T4LwISDD3FeRPBQvDvdIFaURoMRvANeEqxexu7QPJiIjA9HalBjDHdNYDP6NZ1HsAruqesh3BclV5KG61uYloWMrS/8/mwqYl328xI82WiwG8q4gE87kLIUBjhErhtcWna3skAKvQzMyl3nhdaNkd8Du+fSR+EpmCg+A8tc65+ckkqba7TuXtdND9DFnHXHuW769ue7HFKPztrhopyo6gfNUCvTML7h2Ol+iMm2Yw9WjSrD6YfxNHegDpuRCoyO2NH/xhi2xOZFWmXGoqvyY2U75piGMQ/34s7Mh6u2oR5quF3KLwaw8VoJUJqRBAwbjADQAaXUs8Bbf7/VB5mqwMT1qfeXq4Jp0rMmarOt3eOa69JIamWfR0ltxkPDM1SR/hhqWNoYq+j+9/reTkRVOytc4/QnT4EGAE=",
+                  "text": "I need to solve 12 * 7.\n\nI can break this down:\n12 * 7 = (10 + 2) * 7\n= 10 * 7 + 2 * 7\n= 70 + 14\n= 84\n\nOr I could think of it as:\n12 * 7 = 12 * (5 + 2)\n= 12 * 5 + 12 * 2\n= 60 + 24\n= 84\n\nBoth methods give me 84."
                 }
               }
             },
             {
-              "text": "**Internal thinking:**\n- Breaking down 12 × 7\n- Method: 12 × 7 = (10 + 2) × 7\n- = 70 + 14\n- = 84\n\n**Answer: 84**"
+              "text": "**Internal thinking:**\nBreaking down 12 × 7 using the distributive property:\n- 12 × 7 = (10 + 2) × 7\n- = (10 × 7) + (2 × 7)\n- = 70 + 14\n- = 84\n\n**Answer: 84**"
             }
           ],
           "role": "assistant"
@@ -79,9 +79,9 @@
         "cacheWriteInputTokenCount": 0,
         "cacheWriteInputTokens": 0,
         "inputTokens": 50,
-        "outputTokens": 197,
+        "outputTokens": 219,
         "serverToolUsage": {},
-        "totalTokens": 247
+        "totalTokens": 269
       }
     },
     "headers": {
@@ -92,10 +92,10 @@
         "application/json"
       ],
       "date": [
-        "Sat, 01 Nov 2025 00:46:05 GMT"
+        "Sun, 02 Nov 2025 17:21:27 GMT"
       ],
       "x-amzn-requestid": [
-        "d5325af2-2907-4b37-b9ef-35f809c0dd8c"
+        "7b272e82-b3c9-4a01-8fbd-2f20e1c4e526"
       ]
     },
     "status": 200

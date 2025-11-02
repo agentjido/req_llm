@@ -1,12 +1,12 @@
 {
   "request": {
     "body": {
-      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjQwMDAsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo0MDAxLCJ0ZW1wZXJhdHVyZSI6MS4wfSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dfQ=="
+      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo0MDAxLCJ0ZW1wZXJhdHVyZSI6MS4wfSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dfQ=="
     },
     "canonical_json": {
       "additionalModelRequestFields": {
         "thinking": {
-          "budget_tokens": 4000,
+          "budget_tokens": 1024,
           "type": "enabled"
         }
       },
@@ -40,10 +40,10 @@
         "req/0.5.15"
       ],
       "x-amz-content-sha256": [
-        "7f9a966d6b206c355901091927ad26f0f732dcaad1ce5e6763fbc8c9d997d40b"
+        "fe78fd45026a33fc06dee96b282eefb729f5752df1f132a573fa39c4355fbf39"
       ],
       "x-amz-date": [
-        "20251101T002515Z"
+        "20251102T171148Z"
       ]
     },
     "method": "post",
@@ -52,7 +52,7 @@
   "response": {
     "body": {
       "metrics": {
-        "latencyMs": 2591
+        "latencyMs": 3266
       },
       "output": {
         "message": {
@@ -60,7 +60,7 @@
             {
               "reasoningContent": {
                 "reasoningText": {
-                  "signature": "ErcCCkgICRABGAIqQJuqszQ9LWNLnFfLTqJBkjbWfEdEoWiLgbB5JLhT1hSUbETNNV6veSzixNbV1EWW3S2tlyAbk1QNYvAWRiTaQukSDCr+ZzN8ULSqjRYmPBoM728xAguID2AvAyOTIjDWdkfz7myFzFE5F9MEMGpqPxVSq4TUP8Pn+Ajrqbe3zuke5Se9NfwFhFkq1ULzvHcqnAG5aARlQ8sVPHrqq+Qy5DhiMFP5Qu9IuXd8uKNnffBeymQcoGf1xH8MM9gYoq/1iUrLHboue8iAcof96zuomIehDzOMWtJF7K8fzkRU3FoXsKPd/hnchjAdLjoYDUwPs5jNUWNVfEECIZNhiQxAktdtlptZeyx9RTjHpPS2yFVJFtBnKN9NyJ3a2TywfJ6UTwXe2TvxsavU1SK7iEIYAQ==",
+                  "signature": "ErcCCkgICRABGAIqQJuqszQ9LWNLnFfLTqJBkjbWfEdEoWiLgbB5JLhT1hSUbETNNV6veSzixNbV1EWW3S2tlyAbk1QNYvAWRiTaQukSDKZdCWQ8Xll46UllKxoM4KhciGvwDmQEYeCeIjByZTAxgNV8Et4qyV2DLqbNo6zc8rH8Aj5u5M/tTJXuHaWuSvhwJPOZIqrWDffMxc8qnAEtw5QiN0SlgaBGdcQ9N3DYnaULNi3jffGJlckdmR7EDXwbR18BAkbcVOFKJPDkox+L5UY6dzN0YumGOhwJZsai/7EPoBtx4XOgjbYwbosA7ryPuXJGvYVwnBCtN3jH8nKFduLXaVLvomtsextfvbemfRMFzOOuE3w91gHWOOngcgCcOzBk0CsNIlkFSRxKBx2WLKyhQkxrooLKTFUYAQ==",
                   "text": "The user has sent a simple \"Hello world!\" greeting. This is a friendly, casual greeting and I should respond in a warm and welcoming manner."
                 }
               }
@@ -92,10 +92,10 @@
         "application/json"
       ],
       "date": [
-        "Sat, 01 Nov 2025 00:25:18 GMT"
+        "Sun, 02 Nov 2025 17:11:51 GMT"
       ],
       "x-amzn-requestid": [
-        "6e24ef8d-94f1-48af-8077-a5564dd8754d"
+        "c6fc8c61-ad03-4fe6-a76d-c85d3b4f68a4"
       ]
     },
     "status": 200

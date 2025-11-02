@@ -1,12 +1,12 @@
 {
   "request": {
     "body": {
-      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjQwMDAsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo0MDAxLCJ0ZW1wZXJhdHVyZSI6MS4wfSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUifV0sInJvbGUiOiJ1c2VyIn1dLCJ0b29sQ29uZmlnIjp7InRvb2xzIjpbeyJ0b29sU3BlYyI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJpbnB1dFNjaGVtYSI6eyJqc29uIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiYWdlIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCJ9fV19fQ=="
+      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo0MDAxLCJ0ZW1wZXJhdHVyZSI6MS4wfSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUifV0sInJvbGUiOiJ1c2VyIn1dLCJ0b29sQ29uZmlnIjp7InRvb2xzIjpbeyJ0b29sU3BlYyI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJpbnB1dFNjaGVtYSI6eyJqc29uIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiYWdlIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCJ9fV19fQ=="
     },
     "canonical_json": {
       "additionalModelRequestFields": {
         "thinking": {
-          "budget_tokens": 4000,
+          "budget_tokens": 1024,
           "type": "enabled"
         }
       },
@@ -75,10 +75,10 @@
         "req/0.5.15"
       ],
       "x-amz-content-sha256": [
-        "6d9e17859921ac68a6e25e858385ac139251475c6e5630e284868a9fe76e7523"
+        "d24b5f540269424ea1d35fc4a29196aaeb0590621683c5f65611e11ae942a4fd"
       ],
       "x-amz-date": [
-        "20251101T002514Z"
+        "20251102T171138Z"
       ]
     },
     "method": "post",
@@ -87,7 +87,7 @@
   "response": {
     "body": {
       "metrics": {
-        "latencyMs": 2139
+        "latencyMs": 2510
       },
       "output": {
         "message": {
@@ -95,8 +95,8 @@
             {
               "reasoningContent": {
                 "reasoningText": {
-                  "signature": "EsYFCkgICRABGAIqQEzqVhrqgfCMwvi6qCcKBgTueEDf+/uovE7Qoi7ojqSzPCWNMwmc2J+0Yu6hoCKvmN3k+G7L5YHsv2zxyv/2pXsSDNwr1B8ph09ISfwSsRoMGj5WPOgbBfoTz8FfIjAbV/+v+stjN1EiB7VyPACdE/7IsaB3IpsESGLeLS9hTuDkIQRMgPUb2arLFADgTQgqqwT9kN1XUGU7lSWckTn0JDnj6hKMpbmgkr7tqWsYPGaub3P988yis4L026UcWH86zPZU0U47S3tHz7m9oj9pp27oAtwTgDMAFxSFZxMu6HDrI4C8VXwa3ArDrtwM78ev0ZXMUNkXRDqXZW2vg+2Vf43PJ96WbKNiYuq6Sz0Kv4jmrACyiw0pYCk7XELsvswBxfUYsW4GhUk6LbUZcS4otCBy7TKF+iGOAvp6iej04GUYqVySsOjaMTjlIPvJBjwDuxzO+18qkMQqog8EfOADoSJRrR+ycdkwK/RQS20k6JZe3F/uVSy3G8Rj4gm76ywM721VVMCwl6EFEzoQ7b0jXCcTYrTQFq/brgYOZ5FVsDFgSHvEHbHDwP+z/av8oYZEBNcrvnp7YLqs9Q5doxRld4p+DNi2PNn6uBo25pzFy2osPdzwvb7U/of9I/pWWn/Rn6bkl8S26Or16rWRQxeKeCl8hY0pgD8RC83zgpF+zGltDhXZSMS6DS3gyfF4p2oswETH77qq6pH8bXB60eg+AjSLSoRftLmLuJ6dKUk7qpf6A3+8jq2bk+Z7NdrzLS3XPOIPvhZmgdomWOfCJl1QGrYy/Us6zOU90+xtOX9eMPtmkKrB+1tTBZhonYrWuZ9fvjWlEnUoy8NYUeO/hp5sPjCH/nRgpXKtHTN3Bh+YF0/cetqgVvah8/p+GgoT3ZJ/MJN64F+G3H2znKV1I6dp4r7Le6lXAjhR9WOC85wYAQ==",
-                  "text": "The user is asking me to generate a software engineer profile. I should use the structured_output function to create this. The function requires:\n- name (required): Person's full name\n- age (required): Person's age in years\n- occupation (optional): Person's job or profession\n\nSince the user wants a software engineer profile, I should create a realistic example with:\n- A realistic name\n- A reasonable age for a software engineer\n- The occupation set to \"Software Engineer\" or similar\n\nI'll create a sample profile with reasonable values."
+                  "signature": "EvgHCkgICRABGAIqQGszDnaFjMaDjepHbeZ4b0+x5Q/NNq94o6SS0Bczk3zC0xmLfUPMuesVHOCWKWVxsa37og1sx6w3O/D+WpC52T8SDCJjZt/hVoaNI0tDOxoMDVAwqq2Htb/1zN7YIjARy9QSxLk90yGHPCXUokrfN1KxfHMM9S+v7nChksMxbGVYjcHnj9IKSh6HtHDVgQkq3QaLg0VZqbTEpXr6bOhGhZfyE3GZ5XuLmvaSkSB45ggDsugiURWdqN1SttiRKUo2dpFep7PXmqtpTOHvAT8ukfo21OS9ZvxukpqXrBxMtR4+Np/ufG6pnMBHOykNlTlDelDTXEUeVCRhStmb4mZcuZLBTXNUXqGBJltgHLSJ9Kp7iMy6Pdf0/5qljRIvBwp8R5Uc6eP6G6fOLCrEnYOoYqQywhs2X/hbNpGi9YLn08+NSgc6f8Ta2EjYStLivLOZJhKWY1AKn3kNfbCPOZb5Ba/zCHvr0wL7CIu+ywRj3e3xIXb0AD8fdyR6AQzNFFXyfE3iV0441zFubwrN6iN3BowQu5PaXyYVXuKH2wZ3UR0QNzR6FabarRw2qpGvp/RBwpT7Gvkwv1y203sJHnI531wxyOUUIk4i849vepOv3v9E5hLvaU8Pl2zoEoI6XEHPEtZRGM0F02QpYsHdJz8VieFbhWtpukBaqw2Ove8Q0lKsE3lKPdILVKsMR5Qv1yvknbP/BMaXscEuBgFly7Iw04rd3akmLVQT1qcUfscS2tjKi2bTpj5DjQ9sZ1Ko/hlYRHjsK4fZ+0WfYkyVds2LOlzSmABpZZFJBIT70tTunC22gFq45u3k9wk0PFfBtwE6jIFKM7WFTdm0XzjxNgeixRDEIp3HheVAtSoUAiJvvi9TsTD44cVcnO5dkoIZN35NH/QT/90NWPaSQGSBLTHIwoXMdKxfyTDe5wD9jOtNWHHcLM8UZjEZaR36JZh9RV7J0ZcCCiV+Mcq2EJ0EczHj2Ng2h+e5h0oDaXUMqZGRCno+SQDwxZ9egVS0PMUwKyacUxZ8pHFtofpdwW7xuna8sVaMURCMXzSWsm+CFxIkLOS0QnjSTCu7VEnQ2+bod+gCKEHr2+PiZrYiLEIxOD45ZGA6S59DV8iLp+AmCpbHSNE2UaPsITjUS8s62Q8umLZksT6mwTEhjoEYsukP3HtYOLp0AlWBCAcNpbde7Qb1OhrfugRMnIF3QZL8ryCVsYUuWx8On2fcNZuhnbv5vQxGgCkvwY5jZKv/Eu/EZmvITu/nSgbF1gDquBXATbFNkQxeyHxL7y2qZUiua9RcdqdfGAbjlopFXJ2Sk+UqjRxg5QYabGqe6/KbnbTpHAWYOksYAQ==",
+                  "text": "The user is asking me to generate a software engineer profile. They want me to use the structured_output function to create a profile matching the schema provided.\n\nLooking at the schema:\n- name (required): Person's full name - string\n- age (required): Person's age in years - integer (minimum 1)\n- occupation (optional): Person's job or profession - string\n\nSince the user is asking me to generate a software engineer profile but hasn't provided specific details, I should create a reasonable example. The user said \"Generate a software engineer profile\" which implies they want me to create one with plausible data.\n\nLet me create a realistic software engineer profile:\n- name: I'll create a realistic name\n- age: A reasonable age for a software engineer\n- occupation: \"Software Engineer\" or similar\n\nI'll proceed with generating this profile."
                 }
               }
             },
@@ -108,7 +108,7 @@
                   "occupation": "Software Engineer"
                 },
                 "name": "structured_output",
-                "toolUseId": "tooluse_rskeutlaS0Gfsj9nLbnscg",
+                "toolUseId": "tooluse_qXbTTUFETvyVc6bHFQgBAg",
                 "type": "tool_use"
               }
             }
@@ -123,9 +123,9 @@
         "cacheWriteInputTokenCount": 0,
         "cacheWriteInputTokens": 0,
         "inputTokens": 657,
-        "outputTokens": 213,
+        "outputTokens": 279,
         "serverToolUsage": {},
-        "totalTokens": 870
+        "totalTokens": 936
       }
     },
     "headers": {
@@ -136,10 +136,10 @@
         "application/json"
       ],
       "date": [
-        "Sat, 01 Nov 2025 00:25:16 GMT"
+        "Sun, 02 Nov 2025 17:11:40 GMT"
       ],
       "x-amzn-requestid": [
-        "11b5d00f-161f-4cf5-b092-a3b63fdf7d79"
+        "593992ee-0c93-4ba0-bb03-e3e0a6a7c5f7"
       ]
     },
     "status": 200

@@ -1,12 +1,12 @@
 {
   "request": {
     "body": {
-      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjQwMDAsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo2NDAwLCJ0ZW1wZXJhdHVyZSI6MS4wfSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIn1dLCJyb2xlIjoidXNlciJ9XSwidG9vbENvbmZpZyI6eyJ0b29scyI6W3sidG9vbFNwZWMiOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwiaW5wdXRTY2hlbWEiOnsianNvbiI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImdldF93ZWF0aGVyIn19XX19"
+      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo2NDAwLCJ0ZW1wZXJhdHVyZSI6MS4wfSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIn1dLCJyb2xlIjoidXNlciJ9XSwidG9vbENvbmZpZyI6eyJ0b29scyI6W3sidG9vbFNwZWMiOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwiaW5wdXRTY2hlbWEiOnsianNvbiI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImdldF93ZWF0aGVyIn19XX19"
     },
     "canonical_json": {
       "additionalModelRequestFields": {
         "thinking": {
-          "budget_tokens": 4000,
+          "budget_tokens": 1024,
           "type": "enabled"
         }
       },
@@ -64,10 +64,10 @@
         "req/0.5.15"
       ],
       "x-amz-content-sha256": [
-        "c8e27cccafa211862ae72cb6a3244213ec5f6ec2e8efb915c246b5fd244a75d3"
+        "7548c080187cfe4a820e0ae74441260c5bdfc3ec56297a690e80cb2862ddcf0c"
       ],
       "x-amz-date": [
-        "20251101T004337Z"
+        "20251102T172045Z"
       ]
     },
     "method": "post",
@@ -76,7 +76,7 @@
   "response": {
     "body": {
       "metrics": {
-        "latencyMs": 10989
+        "latencyMs": 7242
       },
       "output": {
         "message": {
@@ -84,13 +84,13 @@
             {
               "reasoningContent": {
                 "reasoningText": {
-                  "signature": "Eu8CCkgICRABGAIqQPg60qHaP/QsVnJtibID13LrgTqNEr7oAOMqq7WL88yg92vabDW/rOG+nBidITMKsfGuI/nTdH3Etw/ISosI5v0SDPMcyZS84y2roOEfJBoMxMtrb0JLpHRUxGDdIjBHOSw0BqvPX2kxXUpkzOWVUcKBmKAPoyvtOikEG/x649r+uFlsAS4IEOqGCDyuNLkq1AHSmeYtbO1vU47kn+mOivO0ZWwnafMrJWYSf7vprMMCJSjACkJV72un2qxEvmLqso1iGCnaefhLBucX/bHmk74138makgINm1zwbg+wSR085C6iZWv5LMtHWgjcbZOYwtzPg8+I40bGxn0xOFhmnQ3vfDuA97X34UW+Y2FqS4/hnblI6OORzUtSCrJlmAgBdfakL6NeJIZvT8r5ilMSb+zUwjxVbIPPSEpZyXiJC18Slb+hCvvXLU/s6sdkR2TFP00e/zLN7bcR1apoU1607CGFGQFkaBgB",
-                  "text": "The user is asking for a joke about cats. This is not related to weather information, so I don't need to use the get_weather function. I can simply respond with a cat joke without using any tools."
+                  "signature": "Et0CCkgICRABGAIqQLFrkgIAiMpSTAW+IHBoAM/FipKBUI5IwxOhgHZ8cOIemFFIgynr/AO+VL530XriDZaBXMCW28YZTmNXn1zU/6wSDBRz0CIOWG0vs02TeRoMAwlC4q8o2ZL3W8CMIjBoKcvQO5z9JVDpJqUBaf8KtJ3zhhDE5Q4kLn/b9BfxdqDFmSE7Kh2e1G6lTzIOZQUqwgFgIkXiL1fBbkKTam2wVdu6x7u5j56By3Lar1VgzNTbHXWzIUrKtU3rt+KsGF7yVHwM7/+3rrKagi7p3wumevceK4+mRUqn2YL1AbWdWUsNqxOvjFQnHee3ZSWvzUszDUZb89rqZ6RssSoCDgswzfxH8kBV6QmyyUZWn14anhe3RI98QCQIhcAOja5fH+yZ92r37cd+hqVO22e3hYxO5aVGcx4QoQZ1GLwNj0N6OrIG9BHIgpwDrcwdloK2ctUopLR/4hgB",
+                  "text": "The user is asking for a joke about cats. This is not related to weather information, so I don't need to use the get_weather function. I can simply tell them a cat joke directly."
                 }
               }
             },
             {
-              "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs! 🐱\n\n(And if you ask a cat about it, they'll probably just say they weren't interested anyway - typical cat attitude!)"
+              "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs!\n\n😸"
             }
           ],
           "role": "assistant"
@@ -103,9 +103,9 @@
         "cacheWriteInputTokenCount": 0,
         "cacheWriteInputTokens": 0,
         "inputTokens": 417,
-        "outputTokens": 113,
+        "outputTokens": 83,
         "serverToolUsage": {},
-        "totalTokens": 530
+        "totalTokens": 500
       }
     },
     "headers": {
@@ -116,10 +116,10 @@
         "application/json"
       ],
       "date": [
-        "Sat, 01 Nov 2025 00:43:48 GMT"
+        "Sun, 02 Nov 2025 17:20:52 GMT"
       ],
       "x-amzn-requestid": [
-        "5e9689ac-7c65-44b9-9f34-9eae15a6b705"
+        "c711a6b3-3345-416a-bd42-a0fdb053425d"
       ]
     },
     "status": 200

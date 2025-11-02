@@ -34,7 +34,7 @@
         "960e7826e9451155bc69fe5ca981d98281d5e0b44d274a64ccd5a7dddd627228"
       ],
       "x-amz-date": [
-        "20251101T005626Z"
+        "20251102T171359Z"
       ]
     },
     "method": "post",
@@ -48,21 +48,21 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "<reasoning>The user says \"Hello world!\". The system message says we are ChatGPT. There's no special instruction. So respond politely.</reasoning>Hello! How can I assist you today?",
+            "content": "<reasoning>The user says \"Hello world!\" Probably just a greeting. We respond politely.</reasoning>Hello! How can I assist you today?",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1761958586,
-      "id": "chatcmpl-85baa26e-974f-4827-9ca8-6ec9e7f42bd6",
+      "created": 1762103639,
+      "id": "chatcmpl-4bc1caec-3437-453f-a444-b6e469f97eb7",
       "model": "openai.gpt-oss-120b-1:0",
       "object": "chat.completion",
       "service_tier": "auto",
       "usage": {
-        "completion_tokens": 44,
+        "completion_tokens": 35,
         "prompt_tokens": 72,
-        "total_tokens": 116
+        "total_tokens": 107
       }
     },
     "headers": {
@@ -73,19 +73,19 @@
         "application/json"
       ],
       "date": [
-        "Sat, 01 Nov 2025 00:56:27 GMT"
+        "Sun, 02 Nov 2025 17:13:59 GMT"
       ],
       "x-amzn-bedrock-input-token-count": [
         "72"
       ],
       "x-amzn-bedrock-invocation-latency": [
-        "421"
+        "407"
       ],
       "x-amzn-bedrock-output-token-count": [
-        "44"
+        "35"
       ],
       "x-amzn-requestid": [
-        "1d1c9efd-f3bf-4cd9-b127-d15f56251f90"
+        "a67f530a-db87-4907-8c87-63b44d3710ee"
       ]
     },
     "status": 200

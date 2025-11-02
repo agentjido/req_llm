@@ -1,12 +1,12 @@
 {
   "request": {
     "body": {
-      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjQwMDAsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjoxMjgwMCwidGVtcGVyYXR1cmUiOjEuMH0sIm1lc3NhZ2VzIjpbeyJjb250ZW50IjpbeyJ0ZXh0IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyJ9XSwicm9sZSI6InVzZXIifV0sInRvb2xDb25maWciOnsidG9vbHMiOlt7InRvb2xTcGVjIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0U2NoZW1hIjp7Impzb24iOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfd2VhdGhlciJ9fV19fQ=="
+      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjoxMjgwMCwidGVtcGVyYXR1cmUiOjEuMH0sIm1lc3NhZ2VzIjpbeyJjb250ZW50IjpbeyJ0ZXh0IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyJ9XSwicm9sZSI6InVzZXIifV0sInRvb2xDb25maWciOnsidG9vbHMiOlt7InRvb2xTcGVjIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0U2NoZW1hIjp7Impzb24iOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfd2VhdGhlciJ9fV19fQ=="
     },
     "canonical_json": {
       "additionalModelRequestFields": {
         "thinking": {
-          "budget_tokens": 4000,
+          "budget_tokens": 1024,
           "type": "enabled"
         }
       },
@@ -64,10 +64,10 @@
         "req/0.5.15"
       ],
       "x-amz-content-sha256": [
-        "c4eb11a862bce5b2d914c2b19dcade70e9a69b245b41bc4669fd2bb923780e37"
+        "f185076a5e5a76e6b8345b555d6cd13771eae254ab6f99e3eea55206873496b2"
       ],
       "x-amz-date": [
-        "20251101T002457Z"
+        "20251102T171136Z"
       ]
     },
     "method": "post",
@@ -76,7 +76,7 @@
   "response": {
     "body": {
       "metrics": {
-        "latencyMs": 1628
+        "latencyMs": 1330
       },
       "output": {
         "message": {
@@ -84,13 +84,13 @@
             {
               "reasoningContent": {
                 "reasoningText": {
-                  "signature": "Ev0CCkgICRABGAIqQC5cKTUb1+99tEC7iMPvsZ/c1HwhazAQybD2p12hagXbyegqNt6lQWG+kBXP6U9dm0OzYMPjnwvtTmaRWh3JkqMSDNtPL0DCzZZwmFJZnBoMSfRjb7+spF17mAiNIjCE4NMOc/rxEHC7ASEFtNRJ48RvjOLvoW6hetLyp38YnE4vL/FINzHOUCbe/BjQvl0q4gH0rIKc6q+7lps76kIeO25oKWqdG7ZjFo74VifXd8pSwJKkrP1cyItv15N0NT1kFyuFPOCx89R9gdnInQXYmUTBrW8/7Uf2E0/v1YRdGXLejC7LPvjvWnBasDGWVj5IPXUPATCBgrsh3dEXnzntgiHCIhHde7sS1AExpvWnoI2Mc0AuVFTrMe4wsmapUXtWOiPYOxWMU9BGLjaMKejkocbbBmx6lkN0wCWL4CfwuNEIcq36jxirRGa4Eke+6Q1vgL8rUdKkxNbG8d5hO6SvnbiFkv7hGhb0fxe1dnxP9sfhFYmHGAE=",
-                  "text": "The user is asking me to tell a joke about cats. This doesn't require any tools or function calls - it's just a simple request for me to create/tell a joke. I should just respond with a funny cat joke directly."
+                  "signature": "EvgCCkgICRABGAIqQP0smTwxPtigmUQ7DQ6ZpCwtU2C2Grdlq9zHWG7ZN8V4+lOgwcYrP2AVEj0EGXTyAeH3h9D6E+6p4oQ+L9H4LvsSDDrjfG9rNgJhS3TvqhoMebZ4hgFSN+nsh915IjCSMKfQyFZXVckyvHynGJod237ZuxnlNL1arF2w+Ekpwp5Jya3RZp1uWLr6SYCP4s8q3QGQt/OA7FRqrTpkDpFeoAutNGRlNLYBnKKQ9g99USTeX/RPqeLUtCX5IiQpiiPEaScnjRCZBEeZ495KwzIDwmXM7DbvDSARi+Tw61/nUjwVQa36739K5FECooZ3DGdYVDqwO9SGo85MTMiFthHTBdXTMfeGz0M/m0ok1n26hoqKOvxa1m5aXWkulkaF1nKCqlISrNTP6sXZn6MwYvQ8Uj6NzyFkfTCdcfus6LD+IghGlf/EkUqN21+jGMiT6rGU0tmbRaZDZV0MyBI2MDjVNxAJ12d4zhWw5iAJc3PFbxgB",
+                  "text": "The user is asking me to tell a joke about cats. This is a straightforward request that doesn't require using any tools. I should just provide a funny cat joke directly.\n\nLet me think of a good cat joke..."
                 }
               }
             },
             {
-              "text": "Here's one for you:\n\nWhy did the cat sit on the computer?\n\nBecause it wanted to keep an eye on the mouse! 😸\n\nWould you like to hear another one?"
+              "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nBecause there are too many cheetahs! 🐱"
             }
           ],
           "role": "assistant"
@@ -103,9 +103,9 @@
         "cacheWriteInputTokenCount": 0,
         "cacheWriteInputTokens": 0,
         "inputTokens": 600,
-        "outputTokens": 100,
+        "outputTokens": 92,
         "serverToolUsage": {},
-        "totalTokens": 700
+        "totalTokens": 692
       }
     },
     "headers": {
@@ -116,10 +116,10 @@
         "application/json"
       ],
       "date": [
-        "Sat, 01 Nov 2025 00:24:59 GMT"
+        "Sun, 02 Nov 2025 17:11:38 GMT"
       ],
       "x-amzn-requestid": [
-        "f1d6b48f-2cf6-4e9d-8823-29409cb74aac"
+        "e89ef982-263a-4c3d-b147-faad899b13ed"
       ]
     },
     "status": 200

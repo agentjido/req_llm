@@ -72,45 +72,15 @@
         "023a2dce3b08acd7d8e5de8dfc2f46d17b613d6a408e807e4ced55c6a19ed6f2"
       ],
       "x-amz-date": [
-        "20251102T171025Z"
+        "20251102T172205Z"
       ]
     },
     "method": "post",
-    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/cohere.command-r-plus-v1:0/converse"
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/us.meta.llama3-2-3b-instruct-v1:0/converse"
   },
   "response": {
     "body": {
-      "metrics": {
-        "latencyMs": 2146
-      },
-      "output": {
-        "message": {
-          "content": [
-            {
-              "text": "I will generate a software engineer profile using the structured_output tool."
-            },
-            {
-              "toolUse": {
-                "input": {
-                  "age": 30,
-                  "name": "John Smith",
-                  "occupation": "Software Engineer"
-                },
-                "name": "structured_output",
-                "toolUseId": "tooluse_FLySbR_jSqKb7w4AI5ntwQ"
-              }
-            }
-          ],
-          "role": "assistant"
-        }
-      },
-      "stopReason": "tool_use",
-      "usage": {
-        "inputTokens": 38,
-        "outputTokens": 33,
-        "serverToolUsage": {},
-        "totalTokens": 71
-      }
+      "message": "This model doesn't support tool use."
     },
     "headers": {
       "connection": [
@@ -120,12 +90,15 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:10:27 GMT"
+        "Sun, 02 Nov 2025 17:22:05 GMT"
+      ],
+      "x-amzn-errortype": [
+        "ValidationException:http://internal.amazon.com/coral/com.amazon.bedrock/"
       ],
       "x-amzn-requestid": [
-        "049e8000-162d-424b-b2f0-a14c69dfd3ef"
+        "0fc01691-25a0-4e75-9849-385a9a11b400"
       ]
     },
-    "status": 200
+    "status": 400
   }
 }

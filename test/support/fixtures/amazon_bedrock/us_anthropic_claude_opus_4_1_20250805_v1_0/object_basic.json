@@ -1,12 +1,12 @@
 {
   "request": {
     "body": {
-      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjQwMDAsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo0MDAxLCJ0ZW1wZXJhdHVyZSI6MS4wfSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUifV0sInJvbGUiOiJ1c2VyIn1dLCJ0b29sQ29uZmlnIjp7InRvb2xzIjpbeyJ0b29sU3BlYyI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJpbnB1dFNjaGVtYSI6eyJqc29uIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiYWdlIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCJ9fV19fQ=="
+      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo0MDAxLCJ0ZW1wZXJhdHVyZSI6MS4wfSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUifV0sInJvbGUiOiJ1c2VyIn1dLCJ0b29sQ29uZmlnIjp7InRvb2xzIjpbeyJ0b29sU3BlYyI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJpbnB1dFNjaGVtYSI6eyJqc29uIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiYWdlIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCJ9fV19fQ=="
     },
     "canonical_json": {
       "additionalModelRequestFields": {
         "thinking": {
-          "budget_tokens": 4000,
+          "budget_tokens": 1024,
           "type": "enabled"
         }
       },
@@ -75,10 +75,10 @@
         "req/0.5.15"
       ],
       "x-amz-content-sha256": [
-        "6d9e17859921ac68a6e25e858385ac139251475c6e5630e284868a9fe76e7523"
+        "d24b5f540269424ea1d35fc4a29196aaeb0590621683c5f65611e11ae942a4fd"
       ],
       "x-amz-date": [
-        "20251101T004536Z"
+        "20251102T172052Z"
       ]
     },
     "method": "post",
@@ -87,7 +87,7 @@
   "response": {
     "body": {
       "metrics": {
-        "latencyMs": 14654
+        "latencyMs": 11644
       },
       "output": {
         "message": {
@@ -95,13 +95,13 @@
             {
               "reasoningContent": {
                 "reasoningText": {
-                  "signature": "EpAFCkgICRABGAIqQHRxZcopfE/lBbOX4TuWJOIiMU0nBBKAfqjcHQDYqht9Q8PMpMMKTjcphWNFrIEawhjpCecb1XzGuriEbFKeAsYSDKftf3IQJ1QwxWSVxhoMzSfF8CX2aFNzAdw4IjCQDcY4+aoaKd88h2gwPANsCjeR0Jffo7e3ISzPLitUzpf8IyDUw4/yhwjJ+StXHrYq9QPDSYMGjxn1gsW7UbHqOrNJcbbqRis8Hiy6Xe/bxXGlf5GZdLT1e96O6HudjBtmwAY0u/gn7J2jXvIY41UGfCA7iWoYZypJGXW5VvVuTsyWRsQ2jMALYGqg/OMIsTJyHxFRKUftelIpeY9SCR8uKs+J3kwM9mBrvX18vd5G8bUvets4tdZZ0VID6ugK8gKkzUjTFNswsTU8v5549BknjduszETdYRllj98fdzojhIzr945Agp9djxQP9QNCtxFfIYQiD9DFbawaMiVsrtDdfWcxybnJ5ZQPJ6tuv8A0zwjTS1A0Acy3IL2wcEldObdDGGOeMtal/HpMYUmCEXk9IUb1FZ7N9bkXhSTaG8hm5ZKRGUY7ZEhQKGl6/wXRGxwNQo05SJ/dAFbmwKnZQ11c5+uI3xy0pZC5+J+ud0P1tWpsY/x76ZqPDn+wTKViJvr5AJx4/7SOBpgKWQF35A2KSMwKmR+Lk2mRdIA5Lx7DTAWB6EB7iSkQzVJZrFdCz7ghKJpH6fnk1Io+pjUi0yaZTtj9ReWYC1vM9XZ7hN3NSJD9LKLQ1cUlUZK//uaUzg9oqN2HunPvAbCiG+f1n/fJ5UsNWrZ0EqkSVnqLYuHAuaDjoK+p11cnGZLBH8khSEdYxjDDngYYTZVvt7YQob7Nhn8y6/xbL0EYAQ==",
-                  "text": "The user is asking me to generate a profile for a software engineer. I need to use the structured_output function to create this profile. The required parameters are \"name\" and \"age\", and \"occupation\" is optional but relevant here since we're specifically creating a software engineer profile.\n\nLet me create a realistic profile for a software engineer with:\n- A name (required)\n- An age (required)\n- An occupation (optional, but I'll include it since we know it's a software engineer)"
+                  "signature": "EoMECkgICRABGAIqQOKihSaJVb5v/SGyDfcIoBiLrQdLZDLEZ1/MZaTvYNTXM98JIdTYt/5MwG0E3KE90FgBCmhJ4mO4bXfmJ1hRwccSDDJvRZhXz1TLbK2UzxoMo04OTaJSNs4dW3cGIjDRXRvlJEJIUJHlcZwrT8B5mN1qEOh72zDGRtBITrCbBmNQqHRMZdE7B4WEkKfurFMq6AJuAZv88TaVLYjyYIyW0lY/SK317aLq1NU9hvJMgNPzqhlsqweqGNb0omxSHa5dgMbVcVoAlJypPwJOGb9uW07284kyfc+4RVvBjU+MC862BtaFjKp4sDG5mWpl9gnbhtLfth0LOxDcGMaROkXdnx9JIQFW/bvnsMUws4rDlJfIUtRr8pTZf7IqJ7UrmPddmnATLHUfz0R9v+Qe9qFlKSf41P/jf08ikNxdENizt346t4oamc1kfrsEmp9S+X104pG/X5CmwA/ByluCa8W4YKgwkEpJcEHVBqSWmOvXVaFRgIFZWhVLJaMRGtJu33Wx/oyHsh0XqEyfy2HwNyBjknYFf+lX5/7HfSpTe8XGu0A2X1RIne3aVkExmXqjwyvMvTHZp3zKKwnPhq9Q1FT6TX6pfIRizKrSSsWaffwjptYnUr/mOTzRRfTQiULdpeCaoVBiJb1kkyVA7x/Gz5KJ43nXYwd5LYI2mbMYAQ==",
+                  "text": "The user is asking me to generate a software engineer profile. I have a structured_output function that can generate data with fields for name, age, and occupation. Since they're asking for a software engineer profile, I should set the occupation to \"Software Engineer\". I'll need to create realistic values for the name and age fields as well."
                 }
               }
             },
             {
-              "text": "I'll generate a software engineer profile for you using the structured output format."
+              "text": "I'll generate a software engineer profile for you using the structured output function."
             },
             {
               "toolUse": {
@@ -111,7 +111,7 @@
                   "occupation": "Software Engineer"
                 },
                 "name": "structured_output",
-                "toolUseId": "tooluse_85F23ivDRJCQ5QyOhdy0BA",
+                "toolUseId": "tooluse_qY30GP-jR9OAXKU_oU2BBg",
                 "type": "tool_use"
               }
             }
@@ -126,9 +126,9 @@
         "cacheWriteInputTokenCount": 0,
         "cacheWriteInputTokens": 0,
         "inputTokens": 474,
-        "outputTokens": 220,
+        "outputTokens": 183,
         "serverToolUsage": {},
-        "totalTokens": 694
+        "totalTokens": 657
       }
     },
     "headers": {
@@ -139,10 +139,10 @@
         "application/json"
       ],
       "date": [
-        "Sat, 01 Nov 2025 00:45:51 GMT"
+        "Sun, 02 Nov 2025 17:21:04 GMT"
       ],
       "x-amzn-requestid": [
-        "c72cf867-5cf5-4887-b1ba-24b6a6592201"
+        "a4c3b149-27dd-4359-b00e-ece4081a7e3b"
       ]
     },
     "status": 200

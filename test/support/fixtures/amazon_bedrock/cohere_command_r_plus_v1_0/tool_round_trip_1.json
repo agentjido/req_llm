@@ -65,7 +65,7 @@
         "80b9c6d4ea84d1d38c558d42ad212386b3182e84932d022ae96b670f3775ffd9"
       ],
       "x-amz-date": [
-        "20251101T151729Z"
+        "20251102T171017Z"
       ]
     },
     "method": "post",
@@ -74,13 +74,13 @@
   "response": {
     "body": {
       "metrics": {
-        "latencyMs": 2246
+        "latencyMs": 2576
       },
       "output": {
         "message": {
           "content": [
             {
-              "text": "I will use the add tool to calculate the sum of 2 and 3, and then respond with the answer in the format requested by the user."
+              "text": "I will use the add tool to calculate the sum of 2 and 3 and then respond with the answer in the requested format."
             },
             {
               "toolUse": {
@@ -89,7 +89,7 @@
                   "b": 3
                 },
                 "name": "add",
-                "toolUseId": "tooluse_XVaCJ4eMR1ycd8n8Jgk4QA"
+                "toolUseId": "tooluse_Z5NcqWdtQDi1Z47juNP-zA"
               }
             }
           ],
@@ -99,9 +99,9 @@
       "stopReason": "tool_use",
       "usage": {
         "inputTokens": 31,
-        "outputTokens": 41,
+        "outputTokens": 37,
         "serverToolUsage": {},
-        "totalTokens": 72
+        "totalTokens": 68
       }
     },
     "headers": {
@@ -112,10 +112,10 @@
         "application/json"
       ],
       "date": [
-        "Sat, 01 Nov 2025 15:17:31 GMT"
+        "Sun, 02 Nov 2025 17:10:20 GMT"
       ],
       "x-amzn-requestid": [
-        "7f3d8212-4b9b-42db-9c26-c45d8bcad335"
+        "5a3f9ef1-e9a1-44f5-9622-7bed13e9fc2b"
       ]
     },
     "status": 200

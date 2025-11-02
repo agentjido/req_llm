@@ -1,12 +1,12 @@
 {
   "request": {
     "body": {
-      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjQwMDAsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjoxMjgwMCwidGVtcGVyYXR1cmUiOjEuMH0sIm1lc3NhZ2VzIjpbeyJjb250ZW50IjpbeyJ0ZXh0IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyJ9XSwicm9sZSI6InVzZXIifV0sInRvb2xDb25maWciOnsidG9vbHMiOlt7InRvb2xTcGVjIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0U2NoZW1hIjp7Impzb24iOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfd2VhdGhlciJ9fV19fQ=="
+      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjoxMjgwMCwidGVtcGVyYXR1cmUiOjEuMH0sIm1lc3NhZ2VzIjpbeyJjb250ZW50IjpbeyJ0ZXh0IjoiVGVsbCBtZSBhIGpva2UgYWJvdXQgY2F0cyJ9XSwicm9sZSI6InVzZXIifV0sInRvb2xDb25maWciOnsidG9vbHMiOlt7InRvb2xTcGVjIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0U2NoZW1hIjp7Impzb24iOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfd2VhdGhlciJ9fV19fQ=="
     },
     "canonical_json": {
       "additionalModelRequestFields": {
         "thinking": {
-          "budget_tokens": 4000,
+          "budget_tokens": 1024,
           "type": "enabled"
         }
       },
@@ -64,10 +64,10 @@
         "req/0.5.15"
       ],
       "x-amz-content-sha256": [
-        "c4eb11a862bce5b2d914c2b19dcade70e9a69b245b41bc4669fd2bb923780e37"
+        "f185076a5e5a76e6b8345b555d6cd13771eae254ab6f99e3eea55206873496b2"
       ],
       "x-amz-date": [
-        "20251101T002505Z"
+        "20251102T171339Z"
       ]
     },
     "method": "post",
@@ -76,7 +76,7 @@
   "response": {
     "body": {
       "metrics": {
-        "latencyMs": 4150
+        "latencyMs": 3584
       },
       "output": {
         "message": {
@@ -84,13 +84,13 @@
             {
               "reasoningContent": {
                 "reasoningText": {
-                  "signature": "EscCCkgICRABGAIqQPTRk0Gz5uARPi0alf1c0hgA7qNtr6DBr11B0/zTOb5aYfWwXGvL7XBfysD3zNaJzpyVTbColfQJyyDJm18Nq90SDJHyvRg5KbKIROpk+BoMN7InmRn764qxRliRIjCjejL6sQKn7IBd23csS1iCQsywZ0IoBwkualD25Sa/hxiikhfVqLV5KvOwbP20g1AqrAGdHCbgMntdfBF1a/NuyeGPwPWufdH5OgRzs0Serx1yjZDAsRgojrLqYKmf2D2IkziWt9lT3Q1EIW3vjuXbcBJYqa5gV7rlYShE8PXJ5fq8kZI8p6dNY/Bk73/GlPgYfaszqOpWtSTA0NN9U39JZr84pWFnLNUI3j+meQdNCCXoA1YxPyade6DrFIEnPyS6kKSP31+L4d0eH4mYvwrNfev4gBWQ43F2v9zKHZzmGAE=",
-                  "text": "The user is asking for a joke about cats. This is a simple request that doesn't require any tools or functions. I should just tell them a cat joke directly."
+                  "signature": "EukCCkgICRABGAIqQBED8KXNVZ6czM+M+0uyRGOu+1xcT4wsm+Ilv/xCMHEsXkXqv7Hw4Wa3ZiPqGItfwM8aoD+FCsbjeQectBCbAHsSDGPyleVv7BgYBchZZBoMZUADOUr876va8QftIjCM+DFuuqccXXUZ07bL83r9qxVirLuBR62Ye9j0A0369qEsV1FXQ9qz7n+CQEFmP/YqzgG/v6SLOkIisfs7ClgpgEDZylxRA6DkbdCKki97DbSTLrG0k1enh6rRXiSG4YdO/gRQ9uKuH1VeKD611yiNTAFy/0zEBxn0QvTIaG9Vnd9zzpcdQ2RfR5IhqtxpQJOTgMzO+af/QgFu4wdFKn6zmoQdafdE1GAXCa7AFIb+2dtbqFuPike/CZLw+OgT9q5FktGmbaSNzt5GWB8jSkCggvWntzhnEFHDH6kUhgQoi1KtNqSzWrle4udOq+hqPqwJX2J9HSiSuKKcG7Iz0vGQFRgB",
+                  "text": "The user is asking for a joke about cats. This is a simple request that doesn't require any tools - I should just tell them a cat joke. I don't need to use the get_weather function for this."
                 }
               }
             },
             {
-              "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs!\n\nWould you like to hear another one? 😸"
+              "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs! 🐱\n\nWould you like to hear another one?"
             }
           ],
           "role": "assistant"
@@ -103,9 +103,9 @@
         "cacheWriteInputTokenCount": 0,
         "cacheWriteInputTokens": 0,
         "inputTokens": 600,
-        "outputTokens": 85,
+        "outputTokens": 97,
         "serverToolUsage": {},
-        "totalTokens": 685
+        "totalTokens": 697
       }
     },
     "headers": {
@@ -116,10 +116,10 @@
         "application/json"
       ],
       "date": [
-        "Sat, 01 Nov 2025 00:25:09 GMT"
+        "Sun, 02 Nov 2025 17:13:42 GMT"
       ],
       "x-amzn-requestid": [
-        "3ab3a6a9-1308-4c8a-9df4-7e0443c3fb41"
+        "5693f06f-04e9-484e-9890-b27a7a828d42"
       ]
     },
     "status": 200

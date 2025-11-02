@@ -1,12 +1,12 @@
 {
   "request": {
     "body": {
-      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjQwMDAsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo0MDAxLCJ0ZW1wZXJhdHVyZSI6MS4wfSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XX0="
+      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo0MDAxLCJ0ZW1wZXJhdHVyZSI6MS4wfSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XX0="
     },
     "canonical_json": {
       "additionalModelRequestFields": {
         "thinking": {
-          "budget_tokens": 4000,
+          "budget_tokens": 1024,
           "type": "enabled"
         }
       },
@@ -40,10 +40,10 @@
         "req/0.5.15"
       ],
       "x-amz-content-sha256": [
-        "6db0b5792c8bea0bccb48e26e4641fc3040c401b4120e29897197667c67b9921"
+        "6db62c80ebd972fea3bd5c9b06922f56a2279fe551497c8c12d61524c8e73d2f"
       ],
       "x-amz-date": [
-        "20251101T003650Z"
+        "20251102T171419Z"
       ]
     },
     "method": "post",
@@ -51,7 +51,7 @@
   },
   "response": {
     "body": {
-      "message": "Signature expired: 20251101T003650Z is now earlier than 20251101T003751Z (20251101T004251Z - 5 min.)"
+      "message": "Signature expired: 20251102T171419Z is now earlier than 20251102T171519Z (20251102T172019Z - 5 min.)"
     },
     "headers": {
       "connection": [
@@ -61,13 +61,13 @@
         "application/json"
       ],
       "date": [
-        "Sat, 01 Nov 2025 00:42:51 GMT"
+        "Sun, 02 Nov 2025 17:20:19 GMT"
       ],
       "x-amzn-errortype": [
         "InvalidSignatureException:http://internal.amazon.com/coral/com.amazon.coral.service/"
       ],
       "x-amzn-requestid": [
-        "c231efd1-e6d3-4a9b-9eb6-c7260450b2b9"
+        "ec43aa7f-9a05-4448-b6c4-6304fa847c27"
       ]
     },
     "status": 403

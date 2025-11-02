@@ -33,7 +33,7 @@
         "29b597b5231a0adde066cfd82e8b9ed1bf4dc5f6d20883501f69b1cce738de0e"
       ],
       "x-amz-date": [
-        "20251101T005607Z"
+        "20251102T171403Z"
       ]
     },
     "method": "post",
@@ -47,24 +47,20 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "<reasoning>The user wants: \"Write a very long story about dragons and adventures\". They want a very long story. We need to produce a long story. There's no constraints on length, but we should produce a fairly long narrative. We should incorporate dragons and adventures. We need to ensure it's engaging, with characters, plot, setting, etc. We should aim for maybe 2000-3000 words? But we can't guarantee length. We should produce a long story. Let's try to</reasoning>",
+            "content": "<reasoning>We need to produce a very long story about dragons and adventures. The user wants a very long story. There's no constraints on length. We should produce a detailed, engaging narrative. We can create a fantasy setting with dragons, heroes, quests, etc. \"Very long\" means maybe a few thousand words. We should aim for a story with multiple chapters, subplots, characters, world-building. We should avoid being too repetitive. We should keep it engaging. Use descriptive language,</reasoning>",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1761958568,
-      "id": "chatcmpl-1e135fe8-95f7-411b-baf7-dfc37ca6c774",
+      "created": 1762103643,
+      "id": "chatcmpl-0afb9c4e-fa2a-432e-9215-365a969d0195",
       "model": "openai.gpt-oss-20b-1:0",
       "object": "chat.completion",
       "service_tier": "auto",
       "usage": {
         "completion_tokens": 100,
         "prompt_tokens": 78,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 32
-        },
         "total_tokens": 178
       }
     },
@@ -76,19 +72,19 @@
         "application/json"
       ],
       "date": [
-        "Sat, 01 Nov 2025 00:56:09 GMT"
+        "Sun, 02 Nov 2025 17:14:03 GMT"
       ],
       "x-amzn-bedrock-input-token-count": [
         "78"
       ],
       "x-amzn-bedrock-invocation-latency": [
-        "715"
+        "505"
       ],
       "x-amzn-bedrock-output-token-count": [
         "100"
       ],
       "x-amzn-requestid": [
-        "726cfbb0-cc49-4f2c-9eef-1af597c06075"
+        "1b970ed1-ad34-4b0c-af0b-a345654bfbd2"
       ]
     },
     "status": 200

@@ -1,12 +1,12 @@
 {
   "request": {
     "body": {
-      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjQwMDAsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo1MDAwLCJ0ZW1wZXJhdHVyZSI6MS4wfSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJTb2x2ZSAxMio3IGFuZCBzaG93IHlvdXIgaW50ZXJuYWwgdGhpbmtpbmcgKGJyaWVmKS4ifV0sInJvbGUiOiJ1c2VyIn1dfQ=="
+      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo1MDAwLCJ0ZW1wZXJhdHVyZSI6MS4wfSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJTb2x2ZSAxMio3IGFuZCBzaG93IHlvdXIgaW50ZXJuYWwgdGhpbmtpbmcgKGJyaWVmKS4ifV0sInJvbGUiOiJ1c2VyIn1dfQ=="
     },
     "canonical_json": {
       "additionalModelRequestFields": {
         "thinking": {
-          "budget_tokens": 4000,
+          "budget_tokens": 1024,
           "type": "enabled"
         }
       },
@@ -40,10 +40,10 @@
         "req/0.5.15"
       ],
       "x-amz-content-sha256": [
-        "6977e56a858e5a9aa776d1bfe9e7be534e1e468954a005600705cf7c48718061"
+        "0c4828317b4255f30afd38fdff4e99c131cf1838ebb898089a1f039a9751c01c"
       ],
       "x-amz-date": [
-        "20251101T002457Z"
+        "20251102T171351Z"
       ]
     },
     "method": "post",
@@ -52,7 +52,7 @@
   "response": {
     "body": {
       "metrics": {
-        "latencyMs": 4120
+        "latencyMs": 3720
       },
       "output": {
         "message": {
@@ -60,13 +60,13 @@
             {
               "reasoningContent": {
                 "reasoningText": {
-                  "signature": "EpADCkgICRABGAIqQNc62R23sTClkP0cRS1DfOPRSnzu2DcqxtQ4SzgJVWOGSMjKlXRO+2xB0kBa8xtycaggNVrtdelEX2TgwaO6AeQSDHfPtldKl+mrWAmZ9BoMlvR0VWdVvdgeWXT4IjBVmMTFh4PRU6i288S5uIttMgII218bax+i2uaJ07NBOVsORUvyl5/dXmbRRhDflwUq9QG9p9wlvAkQLJQRTOL+7kpLGGpHReuMfAJfND3m4noG6zgc1LN6n2s/rnwzaA33qD09USZSoEZUnDO8cUiWjhCMUphRTcCDFkWALAuTaHpA78zmRvDvQmDq2+Oxm0vXj7Wgn6rWUBsMlCEB6sWjtg8LaAh7YINmdVTY5WDS6LA00lv9FRzcia/wn19rj2+CHJQNZ0ML86QB4Tfo4+Rqq6PBfspsK4SOaFhspRQFEN0hZIGS3vZ1vWRN2uQ62nLnVzfNhKDDj6WLNbTX0OlES6f5e2u0jdYBE3pFDnw55xjzGUc/qNvTLap6d9uz+qjyGOCzE43pdhgB",
-                  "text": "I need to solve 12 * 7.\n\nLet me calculate this:\n12 * 7 = (10 + 2) * 7\n= 10 * 7 + 2 * 7\n= 70 + 14\n= 84\n\nAlternatively, I could think of it as:\n12 * 7 = 12 * (5 + 2) = 60 + 24 = 84\n\nOr simply: 7 * 12 = 7 * 10 + 7 * 2 = 70 + 14 = 84"
+                  "signature": "EroCCkgICRABGAIqQFC7AhY6flCurxJ/yRZXxG3Ty8aKRoYwYRP2C24z8Ht7XyLXn1P1DvnBTjNEl34FIjlJlh0E1EL3BFUB7x9YVn0SDAIwgd/k7HN4iSv9GRoMlbint0M92IYyTRnIIjBCQ3LO1+fY9EgI5C0EsCE0kqgCFQVmaFvbDymMdmjYF0/vj+cA78oRm+l+6+R+OW4qnwHgBaR/6Yr3vBEqLwfG45ZB1YixA+r+XaxWDr2+G/5aM8Y0awmSsA1YIa+dOeCSzYHNSqrUsFC9wfp+ZXDmCdjtZfbLpxhNM0W1C0q7LDpsJbFcPGhKexgpmq1xn6dESS9YY/un6RdsAujsytkKc3aA38Hl2qtzFifBZ7MLcjEopr/8TFCi60r66vlsqdwZNHfpZpC/HjpDcvpQa2h/SXoYAQ==",
+                  "text": "I need to calculate 12 * 7.\n\n12 * 7 = 12 * 7\n= (10 + 2) * 7\n= 10 * 7 + 2 * 7\n= 70 + 14\n= 84\n\nOr I can just recall that 12 * 7 = 84 from memory."
                 }
               }
             },
             {
-              "text": "**12 × 7 = 84**\n\n**Internal thinking:**\n- Break down: 12 × 7 = (10 + 2) × 7\n- Distribute: (10 × 7) + (2 × 7)\n- Calculate: 70 + 14 = 84"
+              "text": "12 × 7 = **84**\n\n**Internal thinking:**\n- 10 × 7 = 70\n- 2 × 7 = 14\n- 70 + 14 = 84"
             }
           ],
           "role": "assistant"
@@ -79,9 +79,9 @@
         "cacheWriteInputTokenCount": 0,
         "cacheWriteInputTokens": 0,
         "inputTokens": 50,
-        "outputTokens": 227,
+        "outputTokens": 149,
         "serverToolUsage": {},
-        "totalTokens": 277
+        "totalTokens": 199
       }
     },
     "headers": {
@@ -92,10 +92,10 @@
         "application/json"
       ],
       "date": [
-        "Sat, 01 Nov 2025 00:25:02 GMT"
+        "Sun, 02 Nov 2025 17:13:55 GMT"
       ],
       "x-amzn-requestid": [
-        "853a3d59-332b-497a-829a-43c4dd8e5d88"
+        "40dfdd56-4eb5-4c65-8570-d3505edaac15"
       ]
     },
     "status": 200

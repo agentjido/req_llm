@@ -34,7 +34,7 @@
         "879f888be34554cdad886ecb81631e3895d9df6023cf4593f6e3103112b8b00e"
       ],
       "x-amz-date": [
-        "20251101T005608Z"
+        "20251102T171402Z"
       ]
     },
     "method": "post",
@@ -48,21 +48,21 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "<reasoning>The user says \"Hello world!\" This is a greeting. We should respond politely. Probably a friendly greeting.</reasoning>Hello! 👋 How can I help you today?",
+            "content": "<reasoning>User says \"Hello world!\" Probably wants a response. We can respond with a friendly greeting.</reasoning>Hello! 👋 How can I help you today?",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1761958569,
-      "id": "chatcmpl-9fcfb55c-2b4d-4176-8d61-0be0456e6a2f",
+      "created": 1762103642,
+      "id": "chatcmpl-2a62d556-419c-4b7f-8e12-0bab0d053b79",
       "model": "openai.gpt-oss-20b-1:0",
       "object": "chat.completion",
       "service_tier": "auto",
       "usage": {
-        "completion_tokens": 43,
+        "completion_tokens": 40,
         "prompt_tokens": 72,
-        "total_tokens": 115
+        "total_tokens": 112
       }
     },
     "headers": {
@@ -73,19 +73,19 @@
         "application/json"
       ],
       "date": [
-        "Sat, 01 Nov 2025 00:56:09 GMT"
+        "Sun, 02 Nov 2025 17:14:02 GMT"
       ],
       "x-amzn-bedrock-input-token-count": [
         "72"
       ],
       "x-amzn-bedrock-invocation-latency": [
-        "589"
+        "387"
       ],
       "x-amzn-bedrock-output-token-count": [
-        "43"
+        "40"
       ],
       "x-amzn-requestid": [
-        "6d25fbf0-b119-4235-b356-9e090b4763db"
+        "ae3ee491-74e2-4a1c-aa63-79561d8678f6"
       ]
     },
     "status": 200

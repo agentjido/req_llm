@@ -37,7 +37,7 @@
         "b5cafe27ce07389960ed7a8c3ac8b1c71f1c73c545b7345e1fb627d95d457e1a"
       ],
       "x-amz-date": [
-        "20251101T151649Z"
+        "20251102T171029Z"
       ]
     },
     "method": "post",
@@ -46,13 +46,13 @@
   "response": {
     "body": {
       "metrics": {
-        "latencyMs": 336
+        "latencyMs": 343
       },
       "output": {
         "message": {
           "content": [
             {
-              "text": "Hello! How's it going? I hope you're having a fantastic day! 😊"
+              "text": "Hello to you too! How's it going? I hope you're having a fantastic day!"
             }
           ],
           "role": "assistant"
@@ -61,9 +61,9 @@
       "stopReason": "end_turn",
       "usage": {
         "inputTokens": 3,
-        "outputTokens": 18,
+        "outputTokens": 19,
         "serverToolUsage": {},
-        "totalTokens": 21
+        "totalTokens": 22
       }
     },
     "headers": {
@@ -74,10 +74,10 @@
         "application/json"
       ],
       "date": [
-        "Sat, 01 Nov 2025 15:16:50 GMT"
+        "Sun, 02 Nov 2025 17:10:30 GMT"
       ],
       "x-amzn-requestid": [
-        "f5904408-224a-40da-94db-89e44e353fab"
+        "086db527-0b62-443c-b68e-f30e81aae957"
       ]
     },
     "status": 200

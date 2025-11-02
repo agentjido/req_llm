@@ -98,43 +98,15 @@
         "2cd73e7f112fb8c174a296e30431b7bcc1da697375f951277001832a4916556f"
       ],
       "x-amz-date": [
-        "20251102T171032Z"
+        "20251102T172204Z"
       ]
     },
     "method": "post",
-    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/cohere.command-r-v1:0/converse"
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/us.meta.llama3-2-3b-instruct-v1:0/converse"
   },
   "response": {
     "body": {
-      "metrics": {
-        "latencyMs": 852
-      },
-      "output": {
-        "message": {
-          "content": [
-            {
-              "text": "I will search for the weather in Paris, France, and relay this information to the user."
-            },
-            {
-              "toolUse": {
-                "input": {
-                  "location": "Paris, France"
-                },
-                "name": "get_weather",
-                "toolUseId": "tooluse_DAeadQckSB-HPph0xso7lQ"
-              }
-            }
-          ],
-          "role": "assistant"
-        }
-      },
-      "stopReason": "tool_use",
-      "usage": {
-        "inputTokens": 51,
-        "outputTokens": 29,
-        "serverToolUsage": {},
-        "totalTokens": 80
-      }
+      "message": "This model doesn't support tool use."
     },
     "headers": {
       "connection": [
@@ -144,12 +116,15 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:10:33 GMT"
+        "Sun, 02 Nov 2025 17:22:05 GMT"
+      ],
+      "x-amzn-errortype": [
+        "ValidationException:http://internal.amazon.com/coral/com.amazon.bedrock/"
       ],
       "x-amzn-requestid": [
-        "80127f8b-5259-4d9c-8f0b-84477133ee74"
+        "8fb26542-58ae-4bbe-8669-9cdef3ca47c2"
       ]
     },
-    "status": 200
+    "status": 400
   }
 }

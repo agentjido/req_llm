@@ -1,12 +1,12 @@
 {
   "request": {
     "body": {
-      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjQwMDAsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo0MDAxLCJ0ZW1wZXJhdHVyZSI6MS4wfSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dfQ=="
+      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo0MDAxLCJ0ZW1wZXJhdHVyZSI6MS4wfSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dfQ=="
     },
     "canonical_json": {
       "additionalModelRequestFields": {
         "thinking": {
-          "budget_tokens": 4000,
+          "budget_tokens": 1024,
           "type": "enabled"
         }
       },
@@ -40,10 +40,10 @@
         "req/0.5.15"
       ],
       "x-amz-content-sha256": [
-        "7f9a966d6b206c355901091927ad26f0f732dcaad1ce5e6763fbc8c9d997d40b"
+        "fe78fd45026a33fc06dee96b282eefb729f5752df1f132a573fa39c4355fbf39"
       ],
       "x-amz-date": [
-        "20251101T002509Z"
+        "20251102T171039Z"
       ]
     },
     "method": "post",
@@ -52,7 +52,7 @@
   "response": {
     "body": {
       "metrics": {
-        "latencyMs": 858
+        "latencyMs": 1036
       },
       "output": {
         "message": {
@@ -60,8 +60,8 @@
             {
               "reasoningContent": {
                 "reasoningText": {
-                  "signature": "EpwCCkgICRABGAIqQHCIuudqHeJAuKwPr6JSo5iFWHBaq2t192i2dnfFnnlJ1iqfa7FhjMskM2SdE1tyY1TuPRTyTSlxLFWcXw+vrPgSDNP+NT858CngHq3zSRoMzo8de/QoWxyfMlsjIjCaBssgfZ0ABLzwoRM/oZ+UODg4bdmjAsevLGzhHtyU80ubEVkJgMDq1s5jWmyNyW4qgQFawSrs0/ZGc2eyNlfLz9XD8NcVOF0XGHIzHvHXf5bm2WhFM/RoHDOly7d27yPuGG0gKmcW7tAe//KLQOSxTKGZSpSEk2Kpk2TusOBaGiXrvJEYAhJcAHCSbA4cNj8844MkJvLXP4nBLtPUfsZZ5xdnDyJdnRCcfLVpYv/uj224llcYAQ==",
-                  "text": "The user has greeted me with \"Hello world!\" - this is a friendly greeting. I should respond warmly and helpfully."
+                  "signature": "EqUCCkgICRABGAIqQPSaCKhZEgbdoWVEx3cJUr+UvNPxjwhoPBRLw2Wj2IxL2BTyAP6yvlSqp5wOznB7f46s1YQd15kd4ptYNDlcElcSDGnxwUanQVyL3kNHzxoMu7TMr/u5D8A+X3NTIjAljpYqnrBio7SpeYMwO/hntFa6qKGfudutCmPbgY+PeR37vQuIbMImPXAEP/Yh3ZYqigEpHi1NQYOqH3qhn4RzYToj2pUDoghBvyIJ6eSmxHaxeVCI87OYG3uFcnYNss56e3wB7nceUS99bGcGUT7ATksc1QqiqloeafIaAfcqpRaxEyk3LDPw9iV3rto2gr9cG/+xYW8XHcmmXN2NHW2oIsXbM6Y5sQ6IPqqVBznQOgjfkO6P/0fxD0EEJlQYAQ==",
+                  "text": "The user has greeted me with a simple \"Hello world!\" - this is a friendly greeting. I should respond warmly and helpfully."
                 }
               }
             },
@@ -79,9 +79,9 @@
         "cacheWriteInputTokenCount": 0,
         "cacheWriteInputTokens": 0,
         "inputTokens": 38,
-        "outputTokens": 59,
+        "outputTokens": 61,
         "serverToolUsage": {},
-        "totalTokens": 97
+        "totalTokens": 99
       }
     },
     "headers": {
@@ -92,10 +92,10 @@
         "application/json"
       ],
       "date": [
-        "Sat, 01 Nov 2025 00:25:10 GMT"
+        "Sun, 02 Nov 2025 17:10:40 GMT"
       ],
       "x-amzn-requestid": [
-        "dc9e91de-772e-4862-95e4-11c9adc4a325"
+        "cba046d1-1d02-4d45-a1fe-4209e5d46440"
       ]
     },
     "status": 200

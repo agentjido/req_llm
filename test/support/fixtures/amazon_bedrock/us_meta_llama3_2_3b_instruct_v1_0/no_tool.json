@@ -61,34 +61,15 @@
         "1fd7ff179994c55881f8ca0b7ef5646dfefa89d16b503404e084ddabc332180f"
       ],
       "x-amz-date": [
-        "20251102T171035Z"
+        "20251102T172205Z"
       ]
     },
     "method": "post",
-    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/cohere.command-r-v1:0/converse"
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/us.meta.llama3-2-3b-instruct-v1:0/converse"
   },
   "response": {
     "body": {
-      "metrics": {
-        "latencyMs": 1963
-      },
-      "output": {
-        "message": {
-          "content": [
-            {
-              "text": "I couldn't find any cat-related jokes, but here's a riddle for you: 'What has four legs in the morning, two at noon, and three in the evening?' Do you give up? The answer is a cat!"
-            }
-          ],
-          "role": "assistant"
-        }
-      },
-      "stopReason": "end_turn",
-      "usage": {
-        "inputTokens": 17,
-        "outputTokens": 53,
-        "serverToolUsage": {},
-        "totalTokens": 70
-      }
+      "message": "This model doesn't support tool use."
     },
     "headers": {
       "connection": [
@@ -98,12 +79,15 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:10:37 GMT"
+        "Sun, 02 Nov 2025 17:22:05 GMT"
+      ],
+      "x-amzn-errortype": [
+        "ValidationException:http://internal.amazon.com/coral/com.amazon.bedrock/"
       ],
       "x-amzn-requestid": [
-        "e7eaef8d-4449-4e0d-8757-2e0d1a802c7c"
+        "8a54f487-89ac-49b3-947a-15df8b6c5ef7"
       ]
     },
-    "status": 200
+    "status": 400
   }
 }

@@ -1,12 +1,12 @@
 {
   "request": {
     "body": {
-      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjQwMDAsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo0MDAxLCJ0ZW1wZXJhdHVyZSI6MS4wfSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUifV0sInJvbGUiOiJ1c2VyIn1dLCJ0b29sQ29uZmlnIjp7InRvb2xzIjpbeyJ0b29sU3BlYyI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJpbnB1dFNjaGVtYSI6eyJqc29uIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiYWdlIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCJ9fV19fQ=="
+      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo0MDAxLCJ0ZW1wZXJhdHVyZSI6MS4wfSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUifV0sInJvbGUiOiJ1c2VyIn1dLCJ0b29sQ29uZmlnIjp7InRvb2xzIjpbeyJ0b29sU3BlYyI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJpbnB1dFNjaGVtYSI6eyJqc29uIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiYWdlIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJzdHJ1Y3R1cmVkX291dHB1dCJ9fV19fQ=="
     },
     "canonical_json": {
       "additionalModelRequestFields": {
         "thinking": {
-          "budget_tokens": 4000,
+          "budget_tokens": 1024,
           "type": "enabled"
         }
       },
@@ -75,10 +75,10 @@
         "req/0.5.15"
       ],
       "x-amz-content-sha256": [
-        "6d9e17859921ac68a6e25e858385ac139251475c6e5630e284868a9fe76e7523"
+        "d24b5f540269424ea1d35fc4a29196aaeb0590621683c5f65611e11ae942a4fd"
       ],
       "x-amz-date": [
-        "20251101T002509Z"
+        "20251102T171342Z"
       ]
     },
     "method": "post",
@@ -87,7 +87,7 @@
   "response": {
     "body": {
       "metrics": {
-        "latencyMs": 5107
+        "latencyMs": 4008
       },
       "output": {
         "message": {
@@ -95,20 +95,20 @@
             {
               "reasoningContent": {
                 "reasoningText": {
-                  "signature": "EscGCkgICRABGAIqQPbzJNcpLHubeOBSNomwonOH0sRzXjjfh7QWfYXrVNw+5lYhGNkkE9k8LbjJLNS09UWEqMQDc2B73aPphMPSBWwSDCqxajY0jRGfxOttTxoMwUXdUplaod0Yb/NbIjD7G4MTYqI5cli4F3uaRmccByzSdwKTjV7RRTLqB2rk60CQ40OivoZXdph2FnclwSAqrAXXbV4r7vqhY662KI2OxciUqvV0gdk/9ZvYn0TnRQ9vYKzKMHXxvr6jkC9KBKcIuy83Kt5e9O7FuHPe4U37hLVyKplAQ7YvG34xwe64OH/DaULPUbgnZNFIWyDL5cyF0dGGp822OhL1BubRxaX0oh55zXmt3bORs1Y33aR3ODUCYBR3E04++rgwHdCDk8jB+JTnI/HG50sC8SKHNuSf16R6Eks9io2T8jJQCi2k5sOVIqU77edxyTpfVkxDZwLmlf0Ge1VMU1/tWkJHUfemEUIrU6dLacMUlZYNqCly8sa4q7rjHg2SsTf9mQ1V4l6AlZdQGjLylPf/WyEI9R+mcSTg3UnXiglIPYdHZSWeGItcfmbGCfOXUas3CVGDwcKlisH6u1bZ1LK/2Owd73zWHfzlwyK1P+ZZGetBlYvGuOhlQ2uJCPaBdmyU1Ke5PlXREkSUPiv9VG0YNJLSGIAeI+O0sw+e7u4JHddE5nYASFSgZVVSFQ1zubs6YFDl50/LCLPyqrQ36z/j52NaVJsrCXRVFo32zzMDLlWyulNsPC1Hba2BDm+X6nZRE58ijJIm3AXLUQpG+owAN7nJfb1unAAbANp9jIcs9CobIWDeMNGmQRbnvSF1fsPjPOYR2DKP7CdD/N6U/sgi71etMbimX59YXZX2GN3x0wUcEL+5YUmi4/hSSZbRj22U4Z42mSqGv6bT+mJqF7Pk2XpSKkPoZIcbqCD+ck7saa7b1zrxcd3YKe7w1NF1es8TTEbl70BvIQ2LJa9e0wV5eS8vkR5VI0fgtKIbv1lKUvNyCsDcJ8D/i9mki5VkkucG9M2IcJc4zxa/OYrMrQK7YqEdbjoP3ioUafErQADuO45NzcDz5f5720x9XwrDZEgLoRJL+bwpAaHbvCGxf68olEGjWOUYAQ==",
-                  "text": "The user is asking me to generate a software engineer profile. I need to use the structured_output function to create a person profile with:\n- name (required): A person's full name\n- age (required): An integer representing their age (minimum 1)\n- occupation (optional): Their job or profession\n\nSince the user wants a software engineer profile, I should set the occupation to \"Software Engineer\" and create reasonable values for name and age.\n\nLet me generate a realistic profile:\n- Name: I'll use a common name\n- Age: A typical age for a software engineer might be anywhere from early 20s to 60s, I'll pick something in the mid-range\n- Occupation: \"Software Engineer\""
+                  "signature": "EqQECkgICRABGAIqQM8DJ26GQbjjrKB6eSU0v/yrb/mkAHRCwC06sg95i/cNgNW70hbAQ8AwwNU+BhZADcWe+yMmQDvUSPqkoU829dcSDC1eBBN+VUT1YD5X8xoMo3wf/uVIn96HUd7kIjB+N54ZDsKICQMMAmSEolz96FyvJmCHu+9rxNedc9r2+uuuqzDyvK0ijw5b2okt9d8qiQMhJSrQSok9OzXavw4UziB94GwgFL1BnyT1h8qeQieKgfhpZ8UDPO96D4pviBWSi9oloYWDtJiUV4CGMfNAo5+qzi69ndbk5oyFy6IKQmVctMX9aPkAmh9cctoe0pJfyufCfzAw7mqKIzoQT0kQPHJFtZTvyW87GBkz54Gk/e+xrHCde48cP2bTSshWGQmP01dsiPYAQa5YLFQrw4SOlxrbSEjMKds+TJMYBwuTwFHlHcoCoPNMfxBBzHRkX3mIQ662YgDCR5GDF3eX0d0zz3t75ZpAlU0i+DmX54mJpVDT9RLXqR2A0BQDZhlZPa7GGJqH4AZLT1Xq+4GA59Y/J9fs06ErsmYLQnBbMMf7LQR8iLVr8WbvgD2ErucYQPKoIlKxWx+3A3SZFvkVAHTg6V1cxCBZzIwebXYofTyxJJi8uWLs2ZQAqmuXiIKH1wnw2nHHT6itUevq1cJqtovhxlo33ErSOy+Zr7XpCC5rC/6uSUUpuCoh51XZW5ucDiisRAD79gzkn9/9WokYAQ==",
+                  "text": "The user wants me to generate a software engineer profile. I should use the structured_output function to create a profile with a name, age, and occupation (which would be \"Software Engineer\").\n\nLet me create a reasonable profile:\n- Name: I'll choose a professional name\n- Age: A reasonable age for a software engineer (perhaps mid-20s to 30s)\n- Occupation: \"Software Engineer\""
                 }
               }
             },
             {
               "toolUse": {
                 "input": {
-                  "age": 29,
+                  "age": 28,
                   "name": "Alex Chen",
                   "occupation": "Software Engineer"
                 },
                 "name": "structured_output",
-                "toolUseId": "tooluse_MAhx682cQFq5U67JwcYMqw",
+                "toolUseId": "tooluse_Qjlp05wzQb2LBxaKg3t-sg",
                 "type": "tool_use"
               }
             }
@@ -123,9 +123,9 @@
         "cacheWriteInputTokenCount": 0,
         "cacheWriteInputTokens": 0,
         "inputTokens": 657,
-        "outputTokens": 252,
+        "outputTokens": 186,
         "serverToolUsage": {},
-        "totalTokens": 909
+        "totalTokens": 843
       }
     },
     "headers": {
@@ -136,10 +136,10 @@
         "application/json"
       ],
       "date": [
-        "Sat, 01 Nov 2025 00:25:15 GMT"
+        "Sun, 02 Nov 2025 17:13:46 GMT"
       ],
       "x-amzn-requestid": [
-        "40e99f02-ebb3-4631-9fba-df8ebdcafa04"
+        "88a7bf86-03a2-4020-b7f6-9bd6794c80ae"
       ]
     },
     "status": 200

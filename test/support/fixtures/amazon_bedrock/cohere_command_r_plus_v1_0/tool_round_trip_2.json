@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo0MDksInRlbXBlcmF0dXJlIjowLjB9LCJtZXNzYWdlcyI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiJ9XSwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOlt7InRleHQiOiJJIHdpbGwgdXNlIHRoZSBhZGQgdG9vbCB0byBjYWxjdWxhdGUgdGhlIHN1bSBvZiAyIGFuZCAzLCBhbmQgdGhlbiByZXNwb25kIHdpdGggdGhlIGFuc3dlciBpbiB0aGUgZm9ybWF0IHJlcXVlc3RlZCBieSB0aGUgdXNlci4ifSx7InRvb2xVc2UiOnsiaW5wdXQiOnsiYSI6MiwiYiI6M30sIm5hbWUiOiJhZGQiLCJ0b29sVXNlSWQiOiJ0b29sdXNlX1hWYUNKNGVNUjF5Y2Q4bjhKZ2s0UUEifX1dLCJyb2xlIjoiYXNzaXN0YW50In0seyJjb250ZW50IjpbeyJ0b29sUmVzdWx0Ijp7ImNvbnRlbnQiOlt7InRleHQiOiI1In1dLCJ0b29sVXNlSWQiOiJ0b29sdXNlX1hWYUNKNGVNUjF5Y2Q4bjhKZ2s0UUEifX1dLCJyb2xlIjoidXNlciJ9XSwidG9vbENvbmZpZyI6eyJ0b29scyI6W3sidG9vbFNwZWMiOnsiZGVzY3JpcHRpb24iOiJBZGQgdHdvIGludGVnZXJzIiwiaW5wdXRTY2hlbWEiOnsianNvbiI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYSI6eyJ0eXBlIjoiaW50ZWdlciJ9LCJiIjp7InR5cGUiOiJpbnRlZ2VyIn19LCJyZXF1aXJlZCI6WyJhIiwiYiJdLCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoiYWRkIn19XX19"
+      "b64": "eyJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo0MDksInRlbXBlcmF0dXJlIjowLjB9LCJtZXNzYWdlcyI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiJ9XSwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOlt7InRleHQiOiJJIHdpbGwgdXNlIHRoZSBhZGQgdG9vbCB0byBjYWxjdWxhdGUgdGhlIHN1bSBvZiAyIGFuZCAzIGFuZCB0aGVuIHJlc3BvbmQgd2l0aCB0aGUgYW5zd2VyIGluIHRoZSByZXF1ZXN0ZWQgZm9ybWF0LiJ9LHsidG9vbFVzZSI6eyJpbnB1dCI6eyJhIjoyLCJiIjozfSwibmFtZSI6ImFkZCIsInRvb2xVc2VJZCI6InRvb2x1c2VfWjVOY3FXZHRRRGkxWjQ3anVOUC16QSJ9fV0sInJvbGUiOiJhc3Npc3RhbnQifSx7ImNvbnRlbnQiOlt7InRvb2xSZXN1bHQiOnsiY29udGVudCI6W3sidGV4dCI6IjUifV0sInRvb2xVc2VJZCI6InRvb2x1c2VfWjVOY3FXZHRRRGkxWjQ3anVOUC16QSJ9fV0sInJvbGUiOiJ1c2VyIn1dLCJ0b29sQ29uZmlnIjp7InRvb2xzIjpbeyJ0b29sU3BlYyI6eyJkZXNjcmlwdGlvbiI6IkFkZCB0d28gaW50ZWdlcnMiLCJpbnB1dFNjaGVtYSI6eyJqc29uIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhIjp7InR5cGUiOiJpbnRlZ2VyIn0sImIiOnsidHlwZSI6ImludGVnZXIifX0sInJlcXVpcmVkIjpbImEiLCJiIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJhZGQifX1dfX0="
     },
     "canonical_json": {
       "inferenceConfig": {
@@ -20,7 +20,7 @@
         {
           "content": [
             {
-              "text": "I will use the add tool to calculate the sum of 2 and 3, and then respond with the answer in the format requested by the user."
+              "text": "I will use the add tool to calculate the sum of 2 and 3 and then respond with the answer in the requested format."
             },
             {
               "toolUse": {
@@ -29,7 +29,7 @@
                   "b": 3
                 },
                 "name": "add",
-                "toolUseId": "tooluse_XVaCJ4eMR1ycd8n8Jgk4QA"
+                "toolUseId": "tooluse_Z5NcqWdtQDi1Z47juNP-zA"
               }
             }
           ],
@@ -44,7 +44,7 @@
                     "text": "5"
                   }
                 ],
-                "toolUseId": "tooluse_XVaCJ4eMR1ycd8n8Jgk4QA"
+                "toolUseId": "tooluse_Z5NcqWdtQDi1Z47juNP-zA"
               }
             }
           ],
@@ -95,10 +95,10 @@
         "req/0.5.15"
       ],
       "x-amz-content-sha256": [
-        "6dc1f9a548998bb8edce946d4d2c9eb2dc10e6906e691ec458a7433879f7c98f"
+        "e0d1dce483c5ff7729f26f4faf45de2c630d2e65e30b0ad729057165641d1535"
       ],
       "x-amz-date": [
-        "20251101T151731Z"
+        "20251102T171020Z"
       ]
     },
     "method": "post",
@@ -107,7 +107,7 @@
   "response": {
     "body": {
       "metrics": {
-        "latencyMs": 1281
+        "latencyMs": 1334
       },
       "output": {
         "message": {
@@ -121,10 +121,10 @@
       },
       "stopReason": "end_turn",
       "usage": {
-        "inputTokens": 72,
+        "inputTokens": 68,
         "outputTokens": 3,
         "serverToolUsage": {},
-        "totalTokens": 75
+        "totalTokens": 71
       }
     },
     "headers": {
@@ -135,10 +135,10 @@
         "application/json"
       ],
       "date": [
-        "Sat, 01 Nov 2025 15:17:33 GMT"
+        "Sun, 02 Nov 2025 17:10:21 GMT"
       ],
       "x-amzn-requestid": [
-        "be753eb0-fd93-4828-b56e-45ab3011f56f"
+        "9ef594f5-47c1-49b4-a5f0-1ff0cff4e10d"
       ]
     },
     "status": 200

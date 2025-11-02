@@ -1,12 +1,12 @@
 {
   "request": {
     "body": {
-      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjQwMDAsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo0MDAxLCJ0ZW1wZXJhdHVyZSI6MS4wfSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dfQ=="
+      "b64": "eyJhZGRpdGlvbmFsTW9kZWxSZXF1ZXN0RmllbGRzIjp7InRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn19LCJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo0MDAxLCJ0ZW1wZXJhdHVyZSI6MS4wfSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOlt7InRleHQiOiJIZWxsbyB3b3JsZCEifV0sInJvbGUiOiJ1c2VyIn1dfQ=="
     },
     "canonical_json": {
       "additionalModelRequestFields": {
         "thinking": {
-          "budget_tokens": 4000,
+          "budget_tokens": 1024,
           "type": "enabled"
         }
       },
@@ -40,10 +40,10 @@
         "req/0.5.15"
       ],
       "x-amz-content-sha256": [
-        "7f9a966d6b206c355901091927ad26f0f732dcaad1ce5e6763fbc8c9d997d40b"
+        "fe78fd45026a33fc06dee96b282eefb729f5752df1f132a573fa39c4355fbf39"
       ],
       "x-amz-date": [
-        "20251101T004251Z"
+        "20251102T171404Z"
       ]
     },
     "method": "post",
@@ -52,7 +52,7 @@
   "response": {
     "body": {
       "metrics": {
-        "latencyMs": 31058
+        "latencyMs": 6639
       },
       "output": {
         "message": {
@@ -60,13 +60,13 @@
             {
               "reasoningContent": {
                 "reasoningText": {
-                  "signature": "Es0DCkgICRABGAIqQAe8BKbuJnOI4vTtTWWp4hJln9by6Ps3njtNzqYESziVkyP7r0HHNDquv7138EDAsnGI8f7lFkiAea4YLeq1vIoSDGiGmzXVlBmrPVFhnRoM4YLRoRWlVBWJlJL4IjAcMVM4lVyFNLw0Vro19IjgaIjdIfkvLGbCXX3RRKyJvm2MIfcUCnlB6Vj6u4ph+okqsgL3gB2nboWieppXaiSXIX3K26h/Y2M7NKCM6oN2gVsznGGCZTnGrqWmj7oKrgHI7Rusvb5qkY2rhWJDgO4uLtlGi/xlArfMONQpxoFOFuqDN4PxTUarTrr9MaCHXmW3vkjWy5OjrDLDEp4t7eb811fauNh8lFxZaNu6N9n4eV6AwjgxCJRijSBR0cHRhElaQXgZRSPhnumIH41mhxIQVmoacdclNcMU6G075XJE1mVbVqlrDvXWSwX5mdvCxUcnwYmTUH6d0Y9kpMMhaPR1wFxcO4PFjsg13PJsDoyt3Ol+pZ+9dKEnCrNVK/PCYjSZGmTH2AhsoHrTUghavndwUVFX4ikOf7wYJpjJw1AOP4UcMnw3zDWHZlrO4Uyz1UjCGrY5HyHVCHRdDS5TXxccZhXfNd4YAQ==",
-                  "text": "The human has greeted me with \"Hello world!\" - this is a common greeting in programming and computer science, often used as the first program someone writes when learning a new programming language. But it could also just be a friendly greeting. I should respond in a warm and friendly way."
+                  "signature": "EswCCkgICRABGAIqQKo95UO1NGRSvXm2O3MNfY+YxHQ8OHrPLpBiU1/xNAzuu9f5wGyB9JVpgvG03oAgtxVTNq9ztS8nFXUFO09mDegSDBZT+XaSSWyKDxajDBoMyAZsQ9cn+303UZP1IjACMcKfrS9VWcxxfbNbT26dud/Ixd8s1FWmi65cmRIQtDv3V7xF3Rw5m4wPB895MUEqsQHyis/P+zcDH1pLt8y39faz1+7jjQCPr/dhd5qjAZsr3c8DpUHcF9Ynot5OGn9NvTyESgCe3986/WgHGPKwuTY/h1t4jyWvuDFx+p1xYHTt/mmj5rwi5ZMuYqG5m1aW74bAoMqrg9wKHGor32UakotLeEE14IdFa+KoPdyeKBmiZYXrAZcCuJOKOq0mQ5P8FTZL8fkUh+FiwbiaUW1EWBpXStiDuBcOxG5UXBg2aNv5lykYAQ==",
+                  "text": "The user has sent a simple \"Hello world!\" greeting. This is a common programming reference and friendly greeting. I should respond in a warm and friendly manner."
                 }
               }
             },
             {
-              "text": "Hello! Welcome! It's nice to meet you. How are you doing today? Is there anything I can help you with?"
+              "text": "Hello! 👋 It's nice to meet you! How are you doing today? Is there anything I can help you with?"
             }
           ],
           "role": "assistant"
@@ -79,9 +79,9 @@
         "cacheWriteInputTokenCount": 0,
         "cacheWriteInputTokens": 0,
         "inputTokens": 38,
-        "outputTokens": 96,
+        "outputTokens": 72,
         "serverToolUsage": {},
-        "totalTokens": 134
+        "totalTokens": 110
       }
     },
     "headers": {
@@ -92,10 +92,10 @@
         "application/json"
       ],
       "date": [
-        "Sat, 01 Nov 2025 00:43:22 GMT"
+        "Sun, 02 Nov 2025 17:14:10 GMT"
       ],
       "x-amzn-requestid": [
-        "13b04769-b055-43f9-b7a3-03b2d9440d35"
+        "e0f30490-a23e-4fde-9fdc-e92c70b59a90"
       ]
     },
     "status": 200

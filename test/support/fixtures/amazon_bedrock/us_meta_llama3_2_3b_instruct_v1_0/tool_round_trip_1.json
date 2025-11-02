@@ -65,44 +65,15 @@
         "80b9c6d4ea84d1d38c558d42ad212386b3182e84932d022ae96b670f3775ffd9"
       ],
       "x-amz-date": [
-        "20251102T171033Z"
+        "20251102T172205Z"
       ]
     },
     "method": "post",
-    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/cohere.command-r-v1:0/converse"
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/us.meta.llama3-2-3b-instruct-v1:0/converse"
   },
   "response": {
     "body": {
-      "metrics": {
-        "latencyMs": 918
-      },
-      "output": {
-        "message": {
-          "content": [
-            {
-              "text": "I will use the add tool to add 2 and 3 together and relay the answer to the user."
-            },
-            {
-              "toolUse": {
-                "input": {
-                  "a": 2,
-                  "b": 3
-                },
-                "name": "add",
-                "toolUseId": "tooluse_l8o-92PmSxKPplx-CbOkBw"
-              }
-            }
-          ],
-          "role": "assistant"
-        }
-      },
-      "stopReason": "tool_use",
-      "usage": {
-        "inputTokens": 31,
-        "outputTokens": 32,
-        "serverToolUsage": {},
-        "totalTokens": 63
-      }
+      "message": "This model doesn't support tool use."
     },
     "headers": {
       "connection": [
@@ -112,12 +83,15 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:10:34 GMT"
+        "Sun, 02 Nov 2025 17:22:05 GMT"
+      ],
+      "x-amzn-errortype": [
+        "ValidationException:http://internal.amazon.com/coral/com.amazon.bedrock/"
       ],
       "x-amzn-requestid": [
-        "ec5d1546-4c6a-4d6e-b0b9-24333143efc8"
+        "ed229bab-8e7e-48db-8246-f1e7078d3cb2"
       ]
     },
-    "status": 200
+    "status": 400
   }
 }
