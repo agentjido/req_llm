@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoyNTYwMCwibW9kZWwiOiJncHQtNS1uYW5vIiwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfd2VhdGhlciIsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoyNTYwMCwibW9kZWwiOiJncHQtNS1uYW5vIiwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6dHJ1ZX0sIm5hbWUiOiJnZXRfd2VhdGhlciIsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
       "input": [
@@ -24,7 +24,6 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
-              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -34,7 +33,8 @@
                 "location"
               ],
               "type": "object"
-            }
+            },
+            "strict": true
           },
           "name": "get_weather",
           "type": "function"
@@ -62,9 +62,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760405669,
+      "created_at": 1762105858,
       "error": null,
-      "id": "resp_0793c3cbd69167400068eda8a539288196b8c678e8fded3dd8",
+      "id": "resp_03f5999cd59f7b4a0069079a02c6cc8194a81a0dc49630ba4a",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 25600,
@@ -74,7 +74,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_0793c3cbd69167400068eda8a5c2948196949655bf09b941e8",
+          "id": "rs_03f5999cd59f7b4a0069079a031fec8194978f1120c50709fa",
           "summary": [],
           "type": "reasoning"
         },
@@ -83,11 +83,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle? Too many cheetahs.\n\nWant another cat joke?",
+              "text": "Here are a few cat jokes:\n\n- Why don’t cats play poker in the jungle? Too many cheetahs.\n- Why was the cat sitting on the computer? It wanted to keep an eye on the mouse.\n- What do you call a pile of cats? A meowtain.\n\nWant more, or a specific cat vibe (cute, punny, dark)?",
               "type": "output_text"
             }
           ],
-          "id": "msg_0793c3cbd69167400068eda8a886108196a28832dcee7fe3ae",
+          "id": "msg_03f5999cd59f7b4a0069079a05d1b0819480ca4a9feca8f292",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -96,6 +96,7 @@
       "parallel_tool_calls": true,
       "previous_response_id": null,
       "prompt_cache_key": null,
+      "prompt_cache_retention": null,
       "reasoning": {
         "effort": "medium",
         "summary": null
@@ -134,11 +135,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 417,
+        "output_tokens": 529,
         "output_tokens_details": {
-          "reasoning_tokens": 384
+          "reasoning_tokens": 448
         },
-        "total_tokens": 452
+        "total_tokens": 564
       },
       "user": null
     },
@@ -150,7 +151,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e355a82e6a6159-ORD"
+        "99857a310af9e800-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -159,13 +160,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 01:34:33 GMT"
+        "Sun, 02 Nov 2025 17:51:02 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "4003"
+        "3788"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -177,8 +178,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=FDr.Qi4PZxRBjnSfbfQg2ng6gtXuZWZao68hesm.7xc-1760405673-1.0.1.1-y0cScpavmm8Wkph2PFptGxzIu3k10bw3vTsohKgDrvZG5ZZOW_uZ15WXUstLGHFep9SWAfwsXAKkn50RagrX1XdmYrQOYB70BputPMpTfc0; path=/; expires=Tue, 14-Oct-25 02:04:33 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=JWu4GNeQMEiwaUckWXvSOqLWCc0fs4NIqEYlbp1l4fA-1760405673239-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=CWbrwpejZzqLTHm0tv9BzpG4Gq90FAA6JKg2LVGZ3z0-1762105862-1.0.1.1-foEC95e7CexZJ6u.zygsPtkNS6eOplcX0_gZuRHMSR1nAncBeFoi8Z20UcQuVZ.U3mPIFtDLRR86blA6YSWiziZ8irExyA0s69bK3GPJgU8; path=/; expires=Sun, 02-Nov-25 18:21:02 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=GjotYgxQ3_ZhNTTUsYBNVlOJhJYV7txqE32gochus9s-1762105862586-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -190,7 +191,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "4013"
+        "3792"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -202,16 +203,16 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9999475"
+        "9999961"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "3ms"
+        "0s"
       ],
       "x-request-id": [
-        "req_e8afa89fb5dd46f8b534080ace198e0a"
+        "req_1fb95859d6b54644b15a4d8dff7c8f2c"
       ]
     },
     "status": 200

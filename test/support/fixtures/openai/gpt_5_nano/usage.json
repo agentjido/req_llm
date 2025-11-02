@@ -40,12 +40,10 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760405697,
+      "created_at": 1762105871,
       "error": null,
-      "id": "resp_093f36819d471d920068eda8c113648196a2ada28da434d56e",
-      "incomplete_details": {
-        "reason": "max_output_tokens"
-      },
+      "id": "resp_03a3f19ac69d86580069079a0f5e88819095823afbb83c40db",
+      "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 500,
       "max_tool_calls": null,
@@ -54,21 +52,36 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_093f36819d471d920068eda8c1acfc819694802f87a708b0aa",
+          "id": "rs_03a3f19ac69d86580069079a10832881909185332d11477c95",
           "summary": [],
           "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "Hi there! How can I help today? If you’re not sure where to start, tell me your goal and I can assist with explanations, writing, problem-solving, planning, coding help, or just a friendly chat. Here are a few ideas:\n- Explain a concept in simple terms\n- Draft or edit a document, email, or message\n- Debug or brainstorm code\n- Plan a trip, meal, or project\n- Summarize a text or generate ideas\n\nWhat would you like to do?",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_03a3f19ac69d86580069079a11a0908190b327b24155b1e5fc",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
         }
       ],
       "parallel_tool_calls": true,
       "previous_response_id": null,
       "prompt_cache_key": null,
+      "prompt_cache_retention": null,
       "reasoning": {
         "effort": "medium",
         "summary": null
       },
       "safety_identifier": null,
       "service_tier": "default",
-      "status": "incomplete",
+      "status": "completed",
       "store": true,
       "temperature": 1.0,
       "text": {
@@ -87,11 +100,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 448,
+        "output_tokens": 302,
         "output_tokens_details": {
-          "reasoning_tokens": 448
+          "reasoning_tokens": 192
         },
-        "total_tokens": 457
+        "total_tokens": 311
       },
       "user": null
     },
@@ -103,7 +116,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e35656182f6159-ORD"
+        "99857a7ccce2e800-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -112,13 +125,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 01:35:00 GMT"
+        "Sun, 02 Nov 2025 17:51:14 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "3639"
+        "3554"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -130,8 +143,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=M7ufRjOYeVQu2G71zSBzrrNfguXPzRKe_zyVp4OdnJs-1760405700-1.0.1.1-QZGjwyv0Z1QUGNLdCKQuES8VX6NcJWByuCQ8aqhna3.iLnnHltrr3cWRb02B7IfdFAJjX4mtWdLlrD._TuCRRFQKoenBWl8n35tBWzT8RTw; path=/; expires=Tue, 14-Oct-25 02:05:00 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=JflCm6Li.Y0ZZsKsE1oJBOqCckdYhrt5boOUU7KissY-1760405700725-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=XWa_aPn4qSK2mUSbdiUecV5CIg4AkYgM32LzLQGPG5Q-1762105874-1.0.1.1-knl5ndaFCqcmPoSjAAIRvR8ANIdAQk7Bj1D8OPn_r8AWQ50h1SLyyUX7PE9QtOy2gbpTnnCYadZvvB6lfX8hM6jGSDidCtyHf1mCEUOgaWo; path=/; expires=Sun, 02-Nov-25 18:21:14 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=gtKEU2ze8VWBs9e6FPc.h61V6pXk7KmEdbxjh1alGqY-1762105874626-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -143,7 +156,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "3644"
+        "3718"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -155,16 +168,16 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9999774"
+        "9999915"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "1ms"
+        "0s"
       ],
       "x-request-id": [
-        "req_95475c44845f4631b6995a7e031e909a"
+        "req_b6d0f4f439114acdacd59787a5f3af2e"
       ]
     },
     "status": 200

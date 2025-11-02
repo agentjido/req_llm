@@ -71,9 +71,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760754354,
+      "created_at": 1762105821,
       "error": null,
-      "id": "resp_0a768f90c6ffbf7a0068f2fab2e26c81a1a19705da4c7eda86",
+      "id": "resp_0256a4f016682a4f00690799ddf2c88190ade72870eb40480c",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 4096,
@@ -83,7 +83,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_0a768f90c6ffbf7a0068f2fab33f6881a1b2b9f18f058e65ba",
+          "id": "rs_0256a4f016682a4f00690799de6ae8819085be18d120d5612e",
           "summary": [],
           "type": "reasoning"
         },
@@ -92,11 +92,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "{\"age\":31,\"name\":\"Alex Rivera\",\"occupation\":\"Senior Software Engineer\"}",
+              "text": "{\"age\":28,\"name\":\"Taylor Nguyen\",\"occupation\":\"Software Engineer\"}",
               "type": "output_text"
             }
           ],
-          "id": "msg_0a768f90c6ffbf7a0068f2faba505881a1a7b8aeafd134e489",
+          "id": "msg_0256a4f016682a4f00690799e915bc8190a0aafdf14fa3ddf3",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -105,6 +105,7 @@
       "parallel_tool_calls": true,
       "previous_response_id": null,
       "prompt_cache_key": null,
+      "prompt_cache_retention": null,
       "reasoning": {
         "effort": "medium",
         "summary": null
@@ -157,11 +158,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 730,
+        "output_tokens": 793,
         "output_tokens_details": {
-          "reasoning_tokens": 704
+          "reasoning_tokens": 768
         },
-        "total_tokens": 800
+        "total_tokens": 863
       },
       "user": null
     },
@@ -173,7 +174,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9904967db86ea2db-YUL"
+        "9985794ace5ba243-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -182,16 +183,16 @@
         "application/json"
       ],
       "date": [
-        "Sat, 18 Oct 2025 02:26:02 GMT"
+        "Sun, 02 Nov 2025 17:50:33 GMT"
       ],
       "openai-organization": [
-        "arcane-jg8nad"
+        "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "7845"
+        "11591"
       ],
       "openai-project": [
-        "proj_8DKgRe3gY7Nepp7KA3kP7man"
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
       ],
       "openai-version": [
         "2020-10-01"
@@ -200,8 +201,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=m7imvakjtqY8rKkme13qhKmaTqizNGuCGBaQOETpONQ-1760754362-1.0.1.1-bg1IUdRL4qxDx0KMSkPJk7QW6ozjMF9nLujY9Oylr6ejMQ_SzbOvrcJsY6kWuyQojFxgskIO4TtDUO6ME.zkyf2mc8RNkz9kTSbHuJhRzVo; path=/; expires=Sat, 18-Oct-25 02:56:02 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=UvEc_I2Uc0ULvlyDr76gWGkM6s4CURrBqmDuAneXAL0-1760754362738-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=mmuwKXJnK_8TzrXZM6H_JsTSrDuaulVDXPbIBkJ.JOQ-1762105833-1.0.1.1-FG6nt113ogLvU15gzPMjCO8ApqBvFkmTMgQ_AMXs7cazC19CGbxhwEsXWxiC6lkWa0aEguYYxCb5GtN_J6Wv.Kk9LXKzV75eGh1oWK8vG4I; path=/; expires=Sun, 02-Nov-25 18:20:33 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=Rwg9qG_u2COLM16W1R.Cr0d7Hfuca_PcOUS7j4rjbYY-1762105833545-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -213,10 +214,28 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "7850"
+        "11597"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "3999423"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "8ms"
       ],
       "x-request-id": [
-        "req_0ee42abbba08468dbc9f2457531ebd31"
+        "req_d5e70650d4364623bca2bd0789673e69"
       ]
     },
     "status": 200

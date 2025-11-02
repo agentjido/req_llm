@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAsIm1vZGVsIjoibzMiLCJzdHJlYW0iOmZhbHNlfQ=="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMDAwLCJtb2RlbCI6Im8zIiwic3RyZWFtIjpmYWxzZX0="
     },
     "canonical_json": {
       "input": [
@@ -15,7 +15,7 @@
           "role": "user"
         }
       ],
-      "max_output_tokens": 100,
+      "max_output_tokens": 3000,
       "model": "o3",
       "stream": false
     },
@@ -40,21 +40,19 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1759698840,
+      "created_at": 1762105918,
       "error": null,
-      "id": "resp_007def71f313c0990068e2df982bd4819bb744da7ae8b16933",
-      "incomplete_details": {
-        "reason": "max_output_tokens"
-      },
+      "id": "resp_02c82d0669b414960069079a3ebefc8197840c36265ceec3d3",
+      "incomplete_details": null,
       "instructions": null,
-      "max_output_tokens": 100,
+      "max_output_tokens": 3000,
       "max_tool_calls": null,
       "metadata": {},
       "model": "o3-2025-04-16",
       "object": "response",
       "output": [
         {
-          "id": "rs_007def71f313c0990068e2df991bb4819b9f5d8214a70c787b",
+          "id": "rs_02c82d0669b414960069079a3fbb1c8197a913089819acf485",
           "summary": [],
           "type": "reasoning"
         },
@@ -63,26 +61,27 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "The Song of Emberclaw\n\nI. Prologue: The Last Ember\n\nThey say the world was sung",
+              "text": "Embers of the Sky  \nA Chronicle in Twelve Flights  \n\nPrologue – The Burnt Map  \nBefore the cataclysm, the continent of Hytherra was a fresco of serenity. Its rivers ran silver with dragon-scale dust, and its mountains trembled faintly with the heartbeat of buried wyrms. All was peaceful until the night the sky cracked and a shard of crimson flame fell upon the royal librarium in Vael. Come morning, only ash remained—ash and a half-burned map inked in an ancient, serpentine script that none but the dragons should have been able to write.\n\nChapter I – The Squire of Broken Oaths  \nCalian Brand, a seventeen-year-old stable squire with more bruises than coins, found the map while scraping soot from the stone floor. Though the royal marshal ordered him to toss it in the refuse, Calian slipped it beneath his tunic. A single phrase shimmered amid the scorch marks:\n\n“Where mountains kiss the moon, the First Fire wakes.”\n\nThat was enough to braid wonder and dread together in the boy’s mind. Dragons, according to the legends, were extinct. Yet the rune-laced parchment pulsed with warmth, as if some hidden heart still beat inside. Calian, raised on half-truths about noble births and lost heirs, felt destiny’s claws hooking under his ribs.\n\nChapter II – The Knife-Singer  \nThree nights later, Calian headed east, the map guiding him beyond Vael’s watch-towers. At the river ferry he met Vesha the Knife-Singer, a wandering duelist whose daggers hummed like chimes when she fought. Vesha was older—perhaps twenty-five—and covered in faint, silver scars that resembled scale patterns. She offered him passage for a single copper. He paid with the last coin he owned and the promise of a story worth hearing. Vesha loved stories nearly as much as she loved fighting. When Calian showed her the map, her eyes flared like struck flint.\n\n“I’ve seen those glyphs before,” she whispered. “They belong to the Sky-Heirs, the brood queens who ruled this world when we crawled in mud.”\n\nThus a squire and a duelist struck an accord: she would guard his life; he would lead her toward a legend.\n\nChapter III – The Howling Vale  \nThe map led them into the Howling Vale, a canyon where wind shrieked day and night. Buried in that wind were voices—fragments of draconic songs said to drive mortals mad. Calian tied wads of wool over his ears. Vesha chose to face the roar bare-headed, claiming she wanted to hear the words beneath the gale. At dusk, the wind parted long enough for them to glimpse an obsidian arch. Glyphs glowed along its spine; the air above it shimmered like heated glass. They stepped through.\n\nChapter IV – The Sleepers Under Stone  \nOn the arch’s far side lay a subterranean amphitheater roofed by glistening quartz. Dragons, dozens of them, slumbered in rings like sleepers around a dying hearth—red, bronze, emerald, and midnight blue. Ropes of molten gold bound their wings. A single figure paced between them: a man in scaled armor, face hidden by a helm shaped like a dragon’s skull. He held a scepter topped by a ruby the size of a clenched fist. Every time the ruby pulsed, the dragons’ chains tightened.\n\nCalian, awed, crept forward. The helm turned.\n\n“I wondered when the map would find another pair of hands,” the stranger said, voice echoing off the quartz. “Come closer, child of cinder.”\n\nThe scepter glowed. Calian’s chest burned, as if his heart tried to escape. Vesha hurled a dagger. It struck the helm’s cheek and shattered, releasing a peal like a struck bell. The man laughed.\n\nChapter V – Revelations of Ash  \nHe called himself Seron Drakengarde, last Magister of the Sky-Heirs. The Sky-Heirs, he claimed, were not dragons but the first humans, gifted heritage by the scale-gods. When dragons rebelled, Magisters chained them beneath the earth. Seron aimed to finish what his order began: siphon the dragons’ magic, fuse it to his blood, and ascend. The map was bait, scattered in fragments so that “those brave enough or foolish enough” might feed his ritual with fresh souls.\n\nVesha spat. “Your order failed because you mistake dominion for strength.”\n\nCalian asked, “Why me?”\n\nSeron raised the scepter. “Because your line is woven with dragon-fire. Hear it.”\n\nFlames erupted around Calian’s hands—white, not red. In their light, he saw scaled patterns on his wrists that mirrored Vesha’s scars.\n\n“You are wyrmblood,” Seron said. “Two halves of a broken egg. Come, stand beside me.”\n\nChapter VI – The Severed Chain  \nCalian almost obeyed—the pull was intoxicating—but Vesha’s shout cleaved the trance. She clamped his wrist. Instead of burning her, the white fire arced into her daggers, coating their blades with light. Together they smashed the scepter’s ruby. A sound like mountains cracking filled the cavern. Gold chains unraveled; the dragons stirred.\n\nSeron staggered, helm splintering, revealing eyes black as void. “Fools,” he hissed as quartz columns shattered. Dust swallowed everything.\n\nChapter VII – Flight of the Bronze Matron  \nCalian awoke upon a bronze dragon’s back, air icy against his cheeks. The matron introduced herself as Harethix. Freed from bonds, she carried the two humans skyward, away from Seron’s wrath. Dragons all around burst from the earth like living geysers, painting streaks across the dusk. Below, Seron gathered shards of his broken ruby, chanting.\n\nHarethix explained: “A Magister unbound by dragon-law grows stronger with each shard of soul he claims. He will hunt you, wyrmblood, until either he shatters or you do.”\n\nCalian looked at his glowing palm and felt very small.\n\nChapter VIII – The Academy in the Clouds  \nThe dragons ferried them to Caelus Spire, a floating citadel hidden in thunderheads where a handful of dragonkind had raised a sanctuary with cloudstone and breath-magic. Here, Calian learned the ancient dialect of roses and embers—the language of creation. He trained with Harethix’s brood, sparring mid-air on transparent terraces. Vesha earned the title Skyblade after besting a crimson drake in ritual combat. Even so, every sunset they scanned the horizons for Seron’s omen: a spiral of black smoke marbling the heavens.\n\nChapter IX – The Choir of Embers  \nOne eve, the sky bled at the horizon. Dragons sensed it first—wings jittering, tails lashing. Seron had forged the shards into a diadem. With each pulse, mortal villages below flickered out like snuffed candles. He harvested lives to fuel a final spell: the Sundering Roar, capable of silencing every dragon’s fire-heart.\n\nThe remaining elders convened a Choir: nine dragons, nine wyrmbloods. Calian and Vesha were chosen for the Ninth Seat. To weave the counter-song, each singer had to bare their memories—joy, grief, love, shame—transmuting them into notes of living flame. Calian poured in the ache of a parentless childhood; Vesha added the harmony of surviving a hundred duels and fearing none yet longing for one worthy death. The Choir’s song rose, braiding into aurora-bright ribbons.\n\nChapter X – Battle Above the Rift  \nThey met Seron over the Rift of Khar—an abyss where the planet’s mantle glimmered like molten gold. Dragons clashed like living comets. Harethix rammed Seron head-on. His diadem deflected her, shearing wing membrane, sending her spiraling. Calian leapt from her back onto Seron’s floating basalt dais. Around him, the eight other wyrmbloods danced and died. Vesha fought Seron at Calian’s side, her daggers singing an aria of sparks.\n\nSeron, bleeding prismatic light, mocked them. “You fight to preserve a world that will feed on you. Let me end hunger, sorrow, death!”\n\nCalian answered by hurling white fire into the diadem. It cracked but did not break. Vesha’s last dagger punched through Seron’s ribs. He caught her by the throat, smile serene. Calian screamed, flames surging uncontrollably. Winds roared. Rift fire licked the platform’s edges.\n\nChapter XI – The White Pyre  \nIn that instant, Calian glimpsed a memory not his own: a nest of eggs, one pale as pearl and one silver as moon. Dragon mothers wept as Magisters stole them. He understood—he and Vesha were those eggs, given mortal form. Twin vessels of wildfire meant either to rule or redeem. Vesha, choking, met his gaze and mouthed one word: “Together.”\n\nCalian pressed his palm to her chest. Their fires merged—white and silver coiling into a spear of radiant dusk. Vesha laughed, a pure, bell-bright sound, even as her body dissolved into the light. Calian aimed the spear at the diadem. It shattered in a silent blossom.\n\nSeron, bereft of stolen souls, seemed suddenly frail, a husk of ambition. Rift winds dragged him downward. He fell, whispering a prayer to a god long dead.\n\nChapter XII – The New Dawn  \nMorning over Hytherra was born anew. Dragons soared unchained, their shadows painting patchwork patterns on fields that had known only plows and fear. At Caelus Spire, songs of mourning and triumph interwove: nine Choir seats, one empty. Calian stood alone on a crystal balcony. The scaled marks on his wrists had faded to pale scars. Where Vesha had dissolved, a single dagger remained, its blade now white as pearl, its edge singing softly with her voice.\n\nHarethix alighted beside him. “The world is changed,” she said. “It will need a keeper.”\n\n“I am no Magister,” Calian replied.\n\n“Nor a squire,” she countered. “You are ember and wing, hope and blade. Will you be our bridge?”\n\nHe looked to the horizon, where new-hatched dragons practiced clumsy loops. “Yes,” he said, gripping the pearl dagger. “But first, teach me to fly on my own.”\n\nEpilogue – The Archivist’s Ink  \nYears later, in the rebuilt librarium of Vael, an anonymous archivist penned the closing lines of a fresh chronicle:\n\n“Here ends the first age after Chains, and here begins the Age of Open Skies. Let it be known that dragons yet live, that humans yet dare, and that sometimes the smallest hearth-fires ignite the firmament itself. Should you doubt, look upward. The proof is written in flame upon the clouds.”\n\nAnd so the story spins onward, on wings of ember and echoes of song, for any traveler brave enough to follow a burnt map into the wide, perilous skies.",
               "type": "output_text"
             }
           ],
-          "id": "msg_007def71f313c0990068e2df9a03c4819ba31f1deaba8eb823",
+          "id": "msg_02c82d0669b414960069079a4226248197bfad02089ad8e2c6",
           "role": "assistant",
-          "status": "incomplete",
+          "status": "completed",
           "type": "message"
         }
       ],
       "parallel_tool_calls": true,
       "previous_response_id": null,
       "prompt_cache_key": null,
+      "prompt_cache_retention": null,
       "reasoning": {
         "effort": "medium",
         "summary": null
       },
       "safety_identifier": null,
       "service_tier": "default",
-      "status": "incomplete",
+      "status": "completed",
       "store": true,
       "temperature": 1.0,
       "text": {
@@ -101,11 +100,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 91,
+        "output_tokens": 2571,
         "output_tokens_details": {
-          "reasoning_tokens": 64
+          "reasoning_tokens": 192
         },
-        "total_tokens": 106
+        "total_tokens": 2586
       },
       "user": null
     },
@@ -117,7 +116,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "989fed167b496087-ORD"
+        "99857ba79c0dda7a-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -126,13 +125,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 05 Oct 2025 21:14:04 GMT"
+        "Sun, 02 Nov 2025 17:52:28 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "4173"
+        "29596"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -144,8 +143,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=TIQyBwQkc_Q3.wCR.3sJmYk.R4S9SIzUJOHCa4ToycI-1759698844-1.0.1.1-6T0VkE1iv2Lw1eKECtYr_kkaiwr6DFwJ8Hitdw.vQZow2TLAI364uGz0bByHM3AHXrvajl2aK4_IoRBC65WVwUep3qYAcHA_IHoOIDszym4; path=/; expires=Sun, 05-Oct-25 21:44:04 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=CS5LgHoPXV5vl7K_UQdPVvTIp1NOr6TNA3LMsazaWVQ-1759698844365-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=aRR6Bq9u.cp8721msBPrG.x9BUW0jVP8_ae9NreEceQ-1762105948-1.0.1.1-ISHd8_W9hiM_b0QXJuf6T5FQ.vO.2Y4B.bWilMXDtETqhY0Fn1YMwMGwOGgKS8AnoLBDO8pVw7jLWG2gFAGVgypCs7L.ZDODlqhose5m5mE; path=/; expires=Sun, 02-Nov-25 18:22:28 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=ovjutU8qjxxScil1FG3gH6RYtixg3agNDouOlE4vgoE-1762105948358-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -157,28 +156,28 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "4188"
+        "29601"
       ],
       "x-ratelimit-limit-requests": [
-        "5000"
+        "10000"
       ],
       "x-ratelimit-limit-tokens": [
-        "800000"
+        "2000000"
       ],
       "x-ratelimit-remaining-requests": [
-        "4999"
+        "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "799778"
+        "1999778"
       ],
       "x-ratelimit-reset-requests": [
-        "12ms"
+        "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "16ms"
+        "6ms"
       ],
       "x-request-id": [
-        "req_f50a9812a4ab3b4a24a5e897b5f57747"
+        "req_32c23654e73245808059f458d0e5e979"
       ]
     },
     "status": 200

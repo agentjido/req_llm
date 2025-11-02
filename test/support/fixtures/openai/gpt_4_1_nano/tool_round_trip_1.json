@@ -1,14 +1,14 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkNhbGwgdGhlIGFkZCB0b29sIHdpdGggYT0yIGFuZCBiPTMuIEFmdGVyIHJlY2VpdmluZyB0aGUgdG9vbCByZXN1bHQsIHJlcGx5IGV4YWN0bHkgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjMyNzYsIm1vZGVsIjoiZ3B0LTQuMS1uYW5vIiwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiQWRkIHR3byBpbnRlZ2VycyIsIm5hbWUiOiJhZGQiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhIjp7InR5cGUiOiJpbnRlZ2VyIn0sImIiOnsidHlwZSI6ImludGVnZXIifX0sInJlcXVpcmVkIjpbImEiLCJiIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJhZGQiLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9XSwibWF4X291dHB1dF90b2tlbnMiOjMyNzYsIm1vZGVsIjoiZ3B0LTQuMS1uYW5vIiwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiQWRkIHR3byBpbnRlZ2VycyIsIm5hbWUiOiJhZGQiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsiYSI6eyJ0eXBlIjoiaW50ZWdlciJ9LCJiIjp7InR5cGUiOiJpbnRlZ2VyIn19LCJyZXF1aXJlZCI6WyJhIiwiYiJdLCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6dHJ1ZX0sIm5hbWUiOiJhZGQiLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
       "input": [
         {
           "content": [
             {
-              "text": "Call the add tool with a=2 and b=3. After receiving the tool result, reply exactly with 'sum=<value>'.",
+              "text": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
               "type": "input_text"
             }
           ],
@@ -24,7 +24,6 @@
             "description": "Add two integers",
             "name": "add",
             "parameters": {
-              "additionalProperties": false,
               "properties": {
                 "a": {
                   "type": "integer"
@@ -38,7 +37,8 @@
                 "b"
               ],
               "type": "object"
-            }
+            },
+            "strict": true
           },
           "name": "add",
           "type": "function"
@@ -66,9 +66,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760405671,
+      "created_at": 1762105817,
       "error": null,
-      "id": "resp_00ddfbc66266f6220068eda8a737408190adb7c1d17233224a",
+      "id": "resp_0e5af9c920dc75e500690799d98bd88196ae73bffea583c533",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 3276,
@@ -79,8 +79,16 @@
       "output": [
         {
           "arguments": "{}",
-          "call_id": "call_4DtO8tWtEyOVQVjunutxtO4U",
-          "id": "fc_00ddfbc66266f6220068eda8a7a17c819086d7310c022786cc",
+          "call_id": "call_seQrcjvMzkLxdsfk0Cn8q0HW",
+          "id": "fc_0e5af9c920dc75e500690799d9ff6c81969d5bbc49b3dfbcfd",
+          "name": "add",
+          "status": "completed",
+          "type": "function_call"
+        },
+        {
+          "arguments": "{}",
+          "call_id": "call_lNt4ryab0R9KfQJZWiZNJInl",
+          "id": "fc_0e5af9c920dc75e500690799da11c48196ba7289dcb469bf6c",
           "name": "add",
           "status": "completed",
           "type": "function_call"
@@ -89,6 +97,7 @@
       "parallel_tool_calls": true,
       "previous_response_id": null,
       "prompt_cache_key": null,
+      "prompt_cache_retention": null,
       "reasoning": {
         "effort": null,
         "summary": null
@@ -123,15 +132,15 @@
       "top_p": 1.0,
       "truncation": "disabled",
       "usage": {
-        "input_tokens": 51,
+        "input_tokens": 24,
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 28,
+        "output_tokens": 38,
         "output_tokens_details": {
           "reasoning_tokens": 0
         },
-        "total_tokens": 79
+        "total_tokens": 62
       },
       "user": null
     },
@@ -143,7 +152,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e355b4bbf37b21-ORD"
+        "9985792f4b12acae-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -152,13 +161,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 01:34:31 GMT"
+        "Sun, 02 Nov 2025 17:50:18 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "558"
+        "792"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -170,8 +179,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=8s1qT27iheun0cgmkwnmDEZz1fqAMPTM7wsenqKOlek-1760405671-1.0.1.1-Y5gwazncM.Kb5LodJ71eXKdrlrwKiqAs5fWwdzIILLBWYVY6rTsQGQqZn3ECNlJ9Le2Hmj8o5i0TvU9R4znIKlNN56GMq8IPJzjsmYNtzkg; path=/; expires=Tue, 14-Oct-25 02:04:31 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=sDDr7w1fOqD_Pv4_OOl6aBM5Q2Sqd2qcl6VD.NcnK6g-1760405671796-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=.ldeOYAzQ4x1wrvKWutflVVAZw_ex_VPdBGOUM_iU1E-1762105818-1.0.1.1-LjSd2W5f0Aow8d0LgOsHxOXdQjKE0yBDD9MtwzYfPY2BvUsdUN0cCxrHoHvJkwgt7E1Vjy3eKscETwT1UbC1ebbDyW2eMnAfvvMiXw76ukc; path=/; expires=Sun, 02-Nov-25 18:20:18 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=Hog83lRi8kA4nm1orAeR708yE1MsKzQ6yvp3Ymst3nA-1762105818351-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -183,7 +192,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "566"
+        "796"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -195,7 +204,7 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9999732"
+        "9999734"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
@@ -204,7 +213,7 @@
         "1ms"
       ],
       "x-request-id": [
-        "req_9e6607faa2684d9c9bf4215b054cc01f"
+        "req_27b6111fa1a3478d9a527fa20c608a77"
       ]
     },
     "status": 200

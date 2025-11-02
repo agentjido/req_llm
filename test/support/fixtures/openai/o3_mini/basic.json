@@ -40,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760405678,
+      "created_at": 1762105873,
       "error": null,
-      "id": "resp_04f2c422403433cb0068eda8ae5b3c8196b74102cfd1014e08",
+      "id": "resp_0aa390997e5dc2600069079a11377c81949c25421e01cbf02a",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 2000,
@@ -52,7 +52,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_04f2c422403433cb0068eda8af5d4c8196b296dca2e6c6511f",
+          "id": "rs_0aa390997e5dc2600069079a1351c88194b281f657fc41e2b4",
           "summary": [],
           "type": "reasoning"
         },
@@ -61,11 +61,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Hello there! How can I assist you today?",
+              "text": "Hello world! How can I help you today?",
               "type": "output_text"
             }
           ],
-          "id": "msg_04f2c422403433cb0068eda8afac688196af99232e33a67946",
+          "id": "msg_0aa390997e5dc2600069079a13f0f48194b8e23fdf2632a695",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -74,6 +74,7 @@
       "parallel_tool_calls": true,
       "previous_response_id": null,
       "prompt_cache_key": null,
+      "prompt_cache_retention": null,
       "reasoning": {
         "effort": "medium",
         "summary": null
@@ -99,11 +100,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 75,
+        "output_tokens": 139,
         "output_tokens_details": {
-          "reasoning_tokens": 64
+          "reasoning_tokens": 128
         },
-        "total_tokens": 84
+        "total_tokens": 148
       },
       "user": null
     },
@@ -115,7 +116,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e355e16822a679-ORD"
+        "99857a8b4b0611cd-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -124,13 +125,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 01:34:40 GMT"
+        "Sun, 02 Nov 2025 17:51:16 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "1654"
+        "3365"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -142,8 +143,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=2yh5d3M4R_JqhJZZoL238UgHACa8pWoHoCStCQ6a1R8-1760405680-1.0.1.1-2SfvuyR_RgwIXx2._RCgzwQhkp9NLKQv01.o5jOTYrUeIJUlzVKlNwLETDoeKvwWykg6yNQwZeA5fVpJ46mql5BTrR5RcCZJCzsRUnWuK1c; path=/; expires=Tue, 14-Oct-25 02:04:40 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=eLRyB._Bv0ilW4L9P4QUfXXtZoV_j260kERRk5WlLPY-1760405680033-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=a9RLTlHTZEiG7idAP8lUxNo2rIYAEv6mMhsSB027JY4-1762105876-1.0.1.1-rSWywIzh8xQ2o3Py4T26q5JQnqVic5Bd4FGQ.lCoqn07fhDXZ69LyG81Xg_ghkXcnsOcAN1IoQvOjnkkEiNdfXVYEdzJrxUV6Cenep12lZY; path=/; expires=Sun, 02-Nov-25 18:21:16 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=M.wQqrJEZNoLZoDQu45DzA.EU01HFd8gNkiWU2l0EF8-1762105876605-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -155,7 +156,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "1658"
+        "3370"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -167,16 +168,16 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9999839"
+        "9999760"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "0s"
+        "1ms"
       ],
       "x-request-id": [
-        "req_c05939a26ab944e99f2548a1cc8e5f87"
+        "req_ac4ed3dc934b437bbef9ddd47d76407e"
       ]
     },
     "status": 200

@@ -61,14 +61,14 @@
           "logprobs": null,
           "message": {
             "annotations": [],
-            "content": "Why don't cats play poker in the jungle? Because there's too many cheetahs!",
+            "content": "Why don't cats play poker in the jungle?\n\nBecause there's too many cheetahs!",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1760529687,
-      "id": "chatcmpl-CQuU3vIFbJpIqZkOBXUnBve48SQhG",
+      "created": 1762105822,
+      "id": "chatcmpl-CXWVaoNMMhFHX37pYOIgXq22XIgWZ",
       "model": "gpt-4-0613",
       "object": "chat.completion",
       "service_tier": "default",
@@ -100,7 +100,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98ef29716d4be830-ORD"
+        "9985794acd70116f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -109,13 +109,13 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:01:29 GMT"
+        "Sun, 02 Nov 2025 17:50:23 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "1877"
+        "1256"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -127,8 +127,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=iRDz5t4P6HwxdkiMVFVh2qzDOYfnKMughToK40JVchY-1760529689-1.0.1.1-adh7mLoo7qWhvgRA0.Xw3ybczZX_Zrg58mUdvgqUzxOiTwezPdrhhJJDDElOso1K05chiBKLe8KUIrg02xd4gjG34gifX1R8HVYY2Ki2R5w; path=/; expires=Wed, 15-Oct-25 12:31:29 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=J4pdi1nxFNNZjOxqZmd0rlput0DSYYOT_HqwhfbJ9Ms-1760529689236-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=dtn7r.dkZlIXG65YWUoaAuaDNWlhxk0PvF9mp2lfTTg-1762105823-1.0.1.1-bbCPXgOxOVktoxhgWFcwjLfQR567jknL09.Wfygn897VdDaL.1ImQ1B7oI6FmEFNhP5NK4vJ6ZY2WcCDds0UCcVegjw3c58fAzdyftDfq5w; path=/; expires=Sun, 02-Nov-25 18:20:23 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=fLECYcCHWrjxMLcS.Wywx5NHbABZkT04bLOxjloPTRQ-1762105823253-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -140,7 +140,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "1927"
+        "1291"
       ],
       "x-openai-proxy-wasm": [
         "v0.1"
@@ -155,7 +155,7 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "299991"
+        "299990"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
@@ -164,7 +164,7 @@
         "1ms"
       ],
       "x-request-id": [
-        "req_397eeaa1340d47008afd519a69a75d43"
+        "req_6ed30bcb4c534cffb0a5ea1f0909358a"
       ]
     },
     "status": 200

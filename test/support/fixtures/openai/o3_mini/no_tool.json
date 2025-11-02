@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoyMDAwMCwibW9kZWwiOiJvMy1taW5pIiwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX0sIm5hbWUiOiJnZXRfd2VhdGhlciIsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoyMDAwMCwibW9kZWwiOiJvMy1taW5pIiwic3RyZWFtIjpmYWxzZSwidG9vbHMiOlt7ImZ1bmN0aW9uIjp7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsIm5hbWUiOiJnZXRfd2VhdGhlciIsInBhcmFtZXRlcnMiOnsicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In0sInN0cmljdCI6dHJ1ZX0sIm5hbWUiOiJnZXRfd2VhdGhlciIsInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
       "input": [
@@ -24,7 +24,6 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
-              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -34,7 +33,8 @@
                 "location"
               ],
               "type": "object"
-            }
+            },
+            "strict": true
           },
           "name": "get_weather",
           "type": "function"
@@ -62,9 +62,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760405676,
+      "created_at": 1762105876,
       "error": null,
-      "id": "resp_0ee6e5ce9ef4ca3b0068eda8ac10f48190a1c64410665d6eb4",
+      "id": "resp_0f48ba257276ebed0069079a14c4dc8190b2515d5282748992",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 20000,
@@ -74,7 +74,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_0ee6e5ce9ef4ca3b0068eda8ad4f6c819089b764f08102c9dd",
+          "id": "rs_0f48ba257276ebed0069079a171cbc8190acbd384d36764f42",
           "summary": [],
           "type": "reasoning"
         },
@@ -83,11 +83,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Why was the cat sitting on the computer? Because it wanted to keep an eye on the mouse!",
+              "text": "Why did the cat sit on the computer? Because it wanted to keep an eye on the mouse!",
               "type": "output_text"
             }
           ],
-          "id": "msg_0ee6e5ce9ef4ca3b0068eda8ade2e881908fbf711ef2ad0b64",
+          "id": "msg_0f48ba257276ebed0069079a1813948190ac0b77799723369b",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -96,6 +96,7 @@
       "parallel_tool_calls": true,
       "previous_response_id": null,
       "prompt_cache_key": null,
+      "prompt_cache_retention": null,
       "reasoning": {
         "effort": "medium",
         "summary": null
@@ -134,11 +135,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 86,
+        "output_tokens": 278,
         "output_tokens_details": {
-          "reasoning_tokens": 64
+          "reasoning_tokens": 256
         },
-        "total_tokens": 119
+        "total_tokens": 311
       },
       "user": null
     },
@@ -150,7 +151,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e355d2eb3fa679-ORD"
+        "99857aa11f1c11cd-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -159,13 +160,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 01:34:38 GMT"
+        "Sun, 02 Nov 2025 17:51:20 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "2197"
+        "3731"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -177,8 +178,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=a5O3zOLP2sTlCrR1UFe07y9bpnqXeX2pSGzvnhI3DB8-1760405678-1.0.1.1-ci1OwyTsDZkfx6sFH5K5gIezwEi0xs6W40h0OZXqXXREBG7vYn0eiZwHMGqirgG5Qvsk.oU2NbfaV5OhEVMUXQ4.1pNZBMAJM.K_JFPPkRg; path=/; expires=Tue, 14-Oct-25 02:04:38 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=fLblgoV5guh_3NFgGvLatrSIiBpp8BbmIJGPK2T.ez4-1760405678273-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=Q7ZoecEHzAudydlUVmjVXrpkxzaPF69OskuWlxsSmhY-1762105880-1.0.1.1-hMyow1fpEZB4WdGa1utCH0jFqZFzjMd7eMpaRqwoNW7CL43uWgZbst56sAI_cF72G1VNItmXxiGLCT_ZVCXUtDV721h.8G0rNwvRtfkyqQ8; path=/; expires=Sun, 02-Nov-25 18:21:20 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=FzDDpfhjAsx913RKHADJ.okTO5MNITF64MOI2os9Vec-1762105880516-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -190,7 +191,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "2203"
+        "3735"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -202,16 +203,16 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9999811"
+        "9999598"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "1ms"
+        "2ms"
       ],
       "x-request-id": [
-        "req_e023565218e24f73be0d22e28f30573d"
+        "req_3ea81274b991473eb7de1e6394adbfbd"
       ]
     },
     "status": 200

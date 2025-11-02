@@ -40,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760542304,
+      "created_at": 1762105831,
       "error": null,
-      "id": "resp_0cf7e372589672aa0068efbe6015f481909a106910295de8a2",
+      "id": "resp_098e4662755c78e600690799e75784819390ef42a9a79067ca",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 2048,
@@ -52,7 +52,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_0cf7e372589672aa0068efbe609fbc8190bd34202812dbf016",
+          "id": "rs_098e4662755c78e600690799e7f13481938562cbbd73739114",
           "summary": [],
           "type": "reasoning"
         },
@@ -61,11 +61,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "12 × 7 = 84\n\nBrief explanation (concise):  \nSplit 12 into 10 + 2.  \n10 × 7 = 70, 2 × 7 = 14, and 70 + 14 = 84.",
+              "text": "12 × 7 = 84\n\nBrief explanation:  \n10 × 7 = 70  \n 2 × 7 = 14  \n70 + 14 = 84",
               "type": "output_text"
             }
           ],
-          "id": "msg_0cf7e372589672aa0068efbe632f448190a38ea559c0c3e8d8",
+          "id": "msg_098e4662755c78e600690799e9f26c8193beeb6817340ebbee",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -74,6 +74,7 @@
       "parallel_tool_calls": true,
       "previous_response_id": null,
       "prompt_cache_key": null,
+      "prompt_cache_retention": null,
       "reasoning": {
         "effort": "medium",
         "summary": null
@@ -99,11 +100,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 315,
+        "output_tokens": 178,
         "output_tokens_details": {
-          "reasoning_tokens": 256
+          "reasoning_tokens": 128
         },
-        "total_tokens": 334
+        "total_tokens": 197
       },
       "user": null
     },
@@ -115,7 +116,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98f05d781a62507c-ORD"
+        "998579857e316184-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -124,13 +125,13 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 15:31:48 GMT"
+        "Sun, 02 Nov 2025 17:50:34 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "4702"
+        "3435"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -142,8 +143,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=YM2tmgbrNM2Fv7J7omHR5.4yczhPNOQ4z6L3EP47oNw-1760542308-1.0.1.1-H7kQejDfcRUEo4E44SMht2brMmhFsBwT0tyWqkeWJY3tcRYZyXnajecocuGNaXtAH945AuvNf56bW9PiP_nf3lH_6YEpxhC7fhkFcU1TM_U; path=/; expires=Wed, 15-Oct-25 16:01:48 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=nuERuRgHDwwTw9YrBmaxTQ.vpYod3M8zje4QA7C4oLo-1760542308801-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=xSv7YXm8WxgEfzDNRl3xR7qmBT7lHXAnnragwLvI.k0-1762105834-1.0.1.1-y4_gKp3S265gkN8q_w9EXjFAkxe.udNDjg_gDNpyXMIl8dyZcZQizt..DCnFeBr7vHVcTDGQzq2sgSe4QsiQ2K1oT7OqsREilbCQ5MtPvkI; path=/; expires=Sun, 02-Nov-25 18:20:34 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=5Tqq5QddUyT2EBmyOIIfciWbLh_vtdBDrHqPiTz2qxg-1762105834798-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -155,7 +156,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "4708"
+        "3441"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -176,7 +177,7 @@
         "1ms"
       ],
       "x-request-id": [
-        "req_666efd6045454127962829fdbf407d2e"
+        "req_6fd0e94f0c854201801b7f2ab412aac4"
       ]
     },
     "status": 200

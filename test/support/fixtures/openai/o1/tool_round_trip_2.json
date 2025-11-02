@@ -1,26 +1,28 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkNhbGwgdGhlIGFkZCB0b29sIHdpdGggYT0yIGFuZCBiPTMuIEFmdGVyIHJlY2VpdmluZyB0aGUgdG9vbCByZXN1bHQsIHJlcGx5IGV4YWN0bHkgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMDAwMCwibW9kZWwiOiJvMSIsInN0cmVhbSI6ZmFsc2V9"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9LHsiY2FsbF9pZCI6ImNhbGxfc0hWWHpKTnNIaGRYbVVuY0NTZFpSRzFoIiwib3V0cHV0Ijoie1wiZXJyb3JcIjpcIlRvb2wgZXhlY3V0aW9uIGZhaWxlZFwifSIsInR5cGUiOiJmdW5jdGlvbl9jYWxsX291dHB1dCJ9XSwibWF4X291dHB1dF90b2tlbnMiOjEwMDAwLCJtb2RlbCI6Im8xIiwicHJldmlvdXNfcmVzcG9uc2VfaWQiOiJyZXNwXzAxMTJhYWYxMTQ2ZjM0ZWYwMDY5MDc5OWU2NTcwYzgxOTc4MjMyNjk2NmZkZGVjOWQ0Iiwic3RyZWFtIjpmYWxzZX0="
     },
     "canonical_json": {
       "input": [
         {
           "content": [
             {
-              "text": "Call the add tool with a=2 and b=3. After receiving the tool result, reply exactly with 'sum=<value>'.",
+              "text": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
               "type": "input_text"
             }
           ],
           "role": "user"
         },
         {
-          "content": [],
-          "role": "assistant"
+          "call_id": "call_sHVXzJNsHhdXmUncCSdZRG1h",
+          "output": "{\"error\":\"Tool execution failed\"}",
+          "type": "function_call_output"
         }
       ],
       "max_output_tokens": 10000,
       "model": "o1",
+      "previous_response_id": "resp_0112aaf1146f34ef00690799e6570c819782326966fddec9d4",
       "stream": false
     },
     "headers": {
@@ -44,9 +46,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760405695,
+      "created_at": 1762105840,
       "error": null,
-      "id": "resp_0e620ebd67c4347a0068eda8bf442081979eb9c10022efbfdb",
+      "id": "resp_0112aaf1146f34ef00690799f045c48197a520061c79254b44",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 10000,
@@ -56,7 +58,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_0e620ebd67c4347a0068eda8c1fd3c8197a52d6a5d3191b3c6",
+          "id": "rs_0112aaf1146f34ef00690799f2d5d481979f9c31435181754c",
           "summary": [],
           "type": "reasoning"
         },
@@ -69,15 +71,16 @@
               "type": "output_text"
             }
           ],
-          "id": "msg_0e620ebd67c4347a0068eda8c2ebb8819788124620db6b492a",
+          "id": "msg_0112aaf1146f34ef00690799f3ecf48197b515329825d19824",
           "role": "assistant",
           "status": "completed",
           "type": "message"
         }
       ],
       "parallel_tool_calls": true,
-      "previous_response_id": null,
+      "previous_response_id": "resp_0112aaf1146f34ef00690799e6570c819782326966fddec9d4",
       "prompt_cache_key": null,
+      "prompt_cache_retention": null,
       "reasoning": {
         "effort": "medium",
         "summary": null
@@ -99,15 +102,15 @@
       "top_p": 1.0,
       "truncation": "disabled",
       "usage": {
-        "input_tokens": 33,
+        "input_tokens": 84,
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 260,
+        "output_tokens": 196,
         "output_tokens_details": {
-          "reasoning_tokens": 256
+          "reasoning_tokens": 192
         },
-        "total_tokens": 293
+        "total_tokens": 280
       },
       "user": null
     },
@@ -119,7 +122,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e3564b0b7d5c91-ORD"
+        "998579bd5b49e578-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -128,13 +131,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 01:34:59 GMT"
+        "Sun, 02 Nov 2025 17:50:44 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "3890"
+        "4046"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -146,8 +149,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=6gridKisr.MQQgFN1Qvh7uBqKdy0nu57GCjuF2MXGkI-1760405699-1.0.1.1-JfMZreoJ_4OMTIEIV8e.DvewYpzLISeB9URHQ41qiQY.zo.8yNpUYuTKKUKrRMcGvAMud.m_110pvGE.sWYMK57iNGowt07AgXFRsEjrtf0; path=/; expires=Tue, 14-Oct-25 02:04:59 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=UZ2TczLRWWFV.C76fAe9xh6FMZoIyEqzf_5GzqcUIeE-1760405699171-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=WwShjmcGrSxzVdJcL3ICe1qdfKiGeY4GRE_gbsieWBU-1762105844-1.0.1.1-Ng4.9TBULkgd1e_E9VmzjgnYZ6CJ6Kacjeo0AHtlz627X4vosTYUVUkoRtg2ol4rq7pPs_z797loQOcvs7unlnqv.x1bkKBm82LsAQavKkw; path=/; expires=Sun, 02-Nov-25 18:20:44 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=2f3lIdJsgMsx.uPeAfqQrp_nTtQqSrG3K6vxWBBCPZ8-1762105844341-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -159,7 +162,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "3895"
+        "4053"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -171,7 +174,7 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "1999616"
+        "1999614"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
@@ -180,7 +183,7 @@
         "11ms"
       ],
       "x-request-id": [
-        "req_bc8cfce22491421c9937f417a3ba7274"
+        "req_2617d87b153c4d9a8519283e5c9a3c61"
       ]
     },
     "status": 200

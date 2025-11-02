@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMjc2LCJtb2RlbCI6ImdwdC00LjEtbmFubyIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMjc2LCJtb2RlbCI6ImdwdC00LjEtbmFubyIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOnRydWV9LCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
       "input": [
@@ -24,7 +24,6 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
-              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -34,7 +33,8 @@
                 "location"
               ],
               "type": "object"
-            }
+            },
+            "strict": true
           },
           "name": "get_weather",
           "type": "function"
@@ -62,9 +62,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760405668,
+      "created_at": 1762105821,
       "error": null,
-      "id": "resp_0304808fcf915ae60068eda8a4add481968e0dcf0fb3bd308e",
+      "id": "resp_00bac1d0793d325600690799dd98048194916f88e8fe39aa60",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 3276,
@@ -82,7 +82,7 @@
               "type": "output_text"
             }
           ],
-          "id": "msg_0304808fcf915ae60068eda8a5aa4c8196bffdd0fa9862370e",
+          "id": "msg_00bac1d0793d325600690799de0c808194931c04b4d8e736c1",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -91,6 +91,7 @@
       "parallel_tool_calls": true,
       "previous_response_id": null,
       "prompt_cache_key": null,
+      "prompt_cache_retention": null,
       "reasoning": {
         "effort": null,
         "summary": null
@@ -145,7 +146,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e355a4d92b7b21-ORD"
+        "99857946ec0eacae-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -154,13 +155,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 01:34:30 GMT"
+        "Sun, 02 Nov 2025 17:50:22 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "1519"
+        "926"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -172,8 +173,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=r8tTZeGBPkhKDbMCudhcBbouuDAB3l8H3u1AXdN49UA-1760405670-1.0.1.1-yiXza72PB9ORmePJEjAn400O5qAlJWewVGZIQrZmWVk25OclA0FJelC2lA66qFGikd3MupPNVhndnxkzD0N9xcga6AlOAaT0DlL9BXfFLtg; path=/; expires=Tue, 14-Oct-25 02:04:30 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=3PWl5KtoN.GCb89FplZv1t7JgqI0XZ3yzO8bG2Mpkjs-1760405670217-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=FO_kA_.7yU6dRTJYs7a_knuVfcDwwe0cwt0K3JxL6pQ-1762105822-1.0.1.1-5ZzgAsQUiBbFjIaCEdAneaDwm68Or6LdKHkJ_UOdv.QNZz6BOBl3c5KPmNMdQqw8S8D04M2N0KrJQFYgCeHmyV88y_zccnqLfKSIcDN88KI; path=/; expires=Sun, 02-Nov-25 18:20:22 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=S0yFawz30jDUvKyBa2jpsIZ83XWSg_WZm26efm3qjlM-1762105822545-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -185,7 +186,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "1524"
+        "932"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -206,7 +207,7 @@
         "1ms"
       ],
       "x-request-id": [
-        "req_e7a4b4902b504d6baf67f90129ec2b2c"
+        "req_14e16cce6d82483a93c44f3171c850cd"
       ]
     },
     "status": 200

@@ -40,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760405671,
+      "created_at": 1762105817,
       "error": null,
-      "id": "resp_0bb1b780c6a9a9470068eda8a7445c81938ab76997ab96f8f4",
+      "id": "resp_06444d7c294fa48700690799d9901081939b2c3064a839bfa4",
       "incomplete_details": {
         "reason": "max_output_tokens"
       },
@@ -58,11 +58,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Sure! Here’s a long, original fantasy story featuring dragons, adventure, and a cast of interesting characters:  \n\n---\n\n### The Ember Crown\n\n#### Chapter 1 — The Last Flight of Aurion\n\nThe sun was sinking beyond the Teeth of Fire — the jagged mountains at the edge of the world. Its fading light washed the peaks in crimson, like the reflection of a dying flame. A single dragon wheeled through the skies above them, his scales so old that they no longer shone",
+              "text": "Sure! Here’s a long, original fantasy story about dragons, adventure, courage, and discovery:  \n\n---\n\n## **The Skyfire Chronicles**\n\n### **Prologue: The Age of Ash**\n\nLong before the first human kingdoms rose, long before the names of mountains or rivers were ever spoken, the world belonged to dragons. They ruled the skies with wings both terrible and glorious—creatures of scale and flame, keepers of ancient wisdom and elemental power.  \n\nBut that age ended in fire.",
               "type": "output_text"
             }
           ],
-          "id": "msg_0bb1b780c6a9a9470068eda8a798348193b269d8fddbdc0e44",
+          "id": "msg_06444d7c294fa48700690799da181481939aa7f1b05b370df9",
           "role": "assistant",
           "status": "incomplete",
           "type": "message"
@@ -71,6 +71,7 @@
       "parallel_tool_calls": true,
       "previous_response_id": null,
       "prompt_cache_key": null,
+      "prompt_cache_retention": null,
       "reasoning": {
         "effort": null,
         "summary": null
@@ -112,7 +113,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e355b51b5de118-ORD"
+        "9985792f7f4eff5b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -121,13 +122,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 01:34:34 GMT"
+        "Sun, 02 Nov 2025 17:50:19 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "2785"
+        "1524"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -139,8 +140,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=o0oIC82bLzX_e7IKteB_5lwUvq_UuKLHax_wCR00bLw-1760405674-1.0.1.1-CMtIQpjxlVilj0.I57IWgOYdSzbv2WfYkSVFb4j7F40deIvYb_uVNvMuRjQ7SYePjOrBQoC2d3712DVaRd96EpZKxlbQwQlPMTd2VH3Q2xo; path=/; expires=Tue, 14-Oct-25 02:04:34 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=wrU6IG1V2Ig.lqQRm0UYoXD08AXRu83OGZE8NthLdkU-1760405674111-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=IEUN7OGwwkXr4ENFhBSscCRlkP9JZ3_q7sw7T838kj4-1762105819-1.0.1.1-ZA7aE5fI0A_NKe.Bfujh79x3D54NBJgM6bP.igmYEnnI9GXjj1EhwAtWEyhv0cQwP0GwEUXa1hLwnMa33qT7.L3Ex8Ch5nORndTu0IYgPFM; path=/; expires=Sun, 02-Nov-25 18:20:19 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=rXRu5gaS1Ocm6YuZkSCyOzgMTf968pPmWF7fB922rEY-1762105819109-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -152,7 +153,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "2788"
+        "1528"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -173,7 +174,7 @@
         "1ms"
       ],
       "x-request-id": [
-        "req_7e764ef339394a75a6400a2bd8ca4fbb"
+        "req_0dc3deb8869a4222b941905397abe1f9"
       ]
     },
     "status": 200

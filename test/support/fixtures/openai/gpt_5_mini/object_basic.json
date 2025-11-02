@@ -71,9 +71,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760754317,
+      "created_at": 1762105844,
       "error": null,
-      "id": "resp_09ec89017d8ff42a0068f2fa8cd3788197bbc507a7751fd4c2",
+      "id": "resp_0c27c2397a25f82a00690799f4f5988196903f1ef5071ccf0f",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 4096,
@@ -83,7 +83,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_09ec89017d8ff42a0068f2fa8d88f88197b4ef0126a7fb7dd0",
+          "id": "rs_0c27c2397a25f82a00690799f5675481968bd9dfc49715fd3f",
           "summary": [],
           "type": "reasoning"
         },
@@ -92,11 +92,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "{\"age\":29,\"name\":\"Alex Morgan\",\"occupation\":\"Senior Full-Stack Software Engineer (React, Node.js, AWS)\"}",
+              "text": "{\"age\":31,\"name\":\"Daniel Kim\",\"occupation\":\"Senior Software Engineer (Full-Stack)\"}",
               "type": "output_text"
             }
           ],
-          "id": "msg_09ec89017d8ff42a0068f2fa8f8dac8197b090e065a74c7b06",
+          "id": "msg_0c27c2397a25f82a00690799f84254819694513c369d3d26f4",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -105,6 +105,7 @@
       "parallel_tool_calls": true,
       "previous_response_id": null,
       "prompt_cache_key": null,
+      "prompt_cache_retention": null,
       "reasoning": {
         "effort": "medium",
         "summary": null
@@ -157,11 +158,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 165,
+        "output_tokens": 223,
         "output_tokens_details": {
-          "reasoning_tokens": 128
+          "reasoning_tokens": 192
         },
-        "total_tokens": 235
+        "total_tokens": 293
       },
       "user": null
     },
@@ -173,7 +174,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9904958fab2ba28c-YUL"
+        "998579dab85411cd-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -182,16 +183,16 @@
         "application/json"
       ],
       "date": [
-        "Sat, 18 Oct 2025 02:25:20 GMT"
+        "Sun, 02 Nov 2025 17:50:49 GMT"
       ],
       "openai-organization": [
-        "arcane-jg8nad"
+        "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "3557"
+        "4685"
       ],
       "openai-project": [
-        "proj_8DKgRe3gY7Nepp7KA3kP7man"
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
       ],
       "openai-version": [
         "2020-10-01"
@@ -200,8 +201,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=T3KKiR7nf9I.JzXICCmlE1bPUl1sBLoRHtv134p5i5A-1760754320-1.0.1.1-kCbWR1tajwI.i_9s_h66.qqLv5WN.AWybXun3PZo4luFlYnYfKQHlaG4e_2E8UU.TvfKPfbI1kW_RC40GgW.4LmPuoXZVgUhtpZuGvfZ7dY; path=/; expires=Sat, 18-Oct-25 02:55:20 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=6.q8V0csxdbRRLMc9OF36Uw0vUXmjHM1drh6eg57Dk0-1760754320393-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=lNQYEc1YczX9wz91cBlySSX_P_6GVaR3gxj3ph0zkaw-1762105849-1.0.1.1-vEMosa1NkvsNStXqpi3OeFGYBM3zB4NCbkcJKVKc0hA02UzGk1l_GwfkgKBLKVK_nlDDEJzyEfC2mBDW9aF2_5kFK_wkoAy5XPiAC6uQ_9w; path=/; expires=Sun, 02-Nov-25 18:20:49 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=aNhuwMX5AFn_O__u7pRH8RP_E8W.dGwgPNq8ZXB6qcE-1762105849660-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -213,28 +214,28 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "3563"
+        "4695"
       ],
       "x-ratelimit-limit-requests": [
-        "5000"
+        "10000"
       ],
       "x-ratelimit-limit-tokens": [
-        "4000000"
+        "10000000"
       ],
       "x-ratelimit-remaining-requests": [
-        "4999"
+        "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "3999713"
+        "9999994"
       ],
       "x-ratelimit-reset-requests": [
-        "12ms"
+        "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "4ms"
+        "0s"
       ],
       "x-request-id": [
-        "req_fb760c83917449f8b2fee9daf710db19"
+        "req_215fe9ee33ca440cbba736088f8a1557"
       ]
     },
     "status": 200

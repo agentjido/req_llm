@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoyMDAwMCwibW9kZWwiOiJvMSIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJsb2NhdGlvbiI6eyJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJsb2NhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlRlbGwgbWUgYSBqb2tlIGFib3V0IGNhdHMiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6InVzZXIifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoyMDAwMCwibW9kZWwiOiJvMSIsInN0cmVhbSI6ZmFsc2UsInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9LCJzdHJpY3QiOnRydWV9LCJuYW1lIjoiZ2V0X3dlYXRoZXIiLCJ0eXBlIjoiZnVuY3Rpb24ifV19"
     },
     "canonical_json": {
       "input": [
@@ -24,7 +24,6 @@
             "description": "Get current weather information for a location",
             "name": "get_weather",
             "parameters": {
-              "additionalProperties": false,
               "properties": {
                 "location": {
                   "type": "string"
@@ -34,7 +33,8 @@
                 "location"
               ],
               "type": "object"
-            }
+            },
+            "strict": true
           },
           "name": "get_weather",
           "type": "function"
@@ -62,9 +62,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760405737,
+      "created_at": 1762105825,
       "error": null,
-      "id": "resp_016fb830aaf4b3560068eda8e9ace88197a3b7860310689454",
+      "id": "resp_0ea6562584c0debc00690799e19ce88194bb7328dca3fffd38",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 20000,
@@ -74,7 +74,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_016fb830aaf4b3560068eda8eae6848197ae7c39a57d2c9f24",
+          "id": "rs_0ea6562584c0debc00690799e3c05c81948584d3d56ddf90b5",
           "summary": [],
           "type": "reasoning"
         },
@@ -83,11 +83,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Here's one:\n\nWhy did the cat join the Red Cross?  \nBecause it wanted to be a first-“aid” kitten!",
+              "text": "Here's one:\n\nWhy did the cat join the computer club?  \nBecause it heard they had great “mouse” pads!",
               "type": "output_text"
             }
           ],
-          "id": "msg_016fb830aaf4b3560068eda8ebf7488197abd1eeafb5bcff52",
+          "id": "msg_0ea6562584c0debc00690799e4e5848194beb11d2d8ed05af7",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -96,6 +96,7 @@
       "parallel_tool_calls": true,
       "previous_response_id": null,
       "prompt_cache_key": null,
+      "prompt_cache_retention": null,
       "reasoning": {
         "effort": "medium",
         "summary": null
@@ -134,11 +135,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 27,
+        "output_tokens": 154,
         "output_tokens_details": {
-          "reasoning_tokens": 0
+          "reasoning_tokens": 128
         },
-        "total_tokens": 60
+        "total_tokens": 187
       },
       "user": null
     },
@@ -150,7 +151,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e357541f155c91-ORD"
+        "99857961bef1e578-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -159,13 +160,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 01:35:40 GMT"
+        "Sun, 02 Nov 2025 17:50:30 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "2710"
+        "4581"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -177,8 +178,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=th_ffkX3Ei1VWsS4KLcdqTm_aYalGf_D77DDpL86JPI-1760405740-1.0.1.1-VrdK0jiKgDORuTe6t4960ONdW.Ue1OAHtzzYMs1f6YZdALjanH_ZjmGmvN3ipfjiCLhIaW12F6vszBXl.JZeGnJKEmxF5f3PGLChWyrTBUM; path=/; expires=Tue, 14-Oct-25 02:05:40 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=pMgdrYKa4OZseTZX0B.xBHKkVo5m7a22YzbVdznWbG0-1760405740419-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=wWKP5QMH292CsHDLNDqGs__Oc5gR8uZ.Dr5N4qalt1A-1762105830-1.0.1.1-U_u4anYvdSsDzlwqvyYf_H1cGE8DTOS5qMxHA1NC_9rNen2MMKODtg_boLHxDofDXDiJXx2FMbY1I1HENlgFF0uCZiKdiicQ6jOT1RoDHYw; path=/; expires=Sun, 02-Nov-25 18:20:30 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=.suOaHozq..btRrMwv4419TKJJVapfbRrthCh5PdIw0-1762105830209-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -190,7 +191,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "2714"
+        "4586"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -202,16 +203,16 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "1999830"
+        "1999738"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "5ms"
+        "7ms"
       ],
       "x-request-id": [
-        "req_da6bbdcb0550464db1a6a75a01fe0bbf"
+        "req_82afc4aef6f64bc180d40d5c379c0d3f"
       ]
     },
     "status": 200

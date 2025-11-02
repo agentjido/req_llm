@@ -1,26 +1,28 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkNhbGwgdGhlIGFkZCB0b29sIHdpdGggYT0yIGFuZCBiPTMuIEFmdGVyIHJlY2VpdmluZyB0aGUgdG9vbCByZXN1bHQsIHJlcGx5IGV4YWN0bHkgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMjgwMCwibW9kZWwiOiJncHQtNSIsInN0cmVhbSI6ZmFsc2V9"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9LHsiY2FsbF9pZCI6ImNhbGxfZWdRTzJRME0yWjdMOUJyRWxwaW5qTUtNIiwib3V0cHV0Ijoie1wiZXJyb3JcIjpcIlRvb2wgZXhlY3V0aW9uIGZhaWxlZFwifSIsInR5cGUiOiJmdW5jdGlvbl9jYWxsX291dHB1dCJ9XSwibWF4X291dHB1dF90b2tlbnMiOjEyODAwLCJtb2RlbCI6ImdwdC01IiwicHJldmlvdXNfcmVzcG9uc2VfaWQiOiJyZXNwXzBlMWRjZTZiZjMyZjU1NDUwMDY5MDc5OWU5YTY5NDgxOTZhMjE0NTFmZGE4OWEzZTZkIiwic3RyZWFtIjpmYWxzZX0="
     },
     "canonical_json": {
       "input": [
         {
           "content": [
             {
-              "text": "Call the add tool with a=2 and b=3. After receiving the tool result, reply exactly with 'sum=<value>'.",
+              "text": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
               "type": "input_text"
             }
           ],
           "role": "user"
         },
         {
-          "content": [],
-          "role": "assistant"
+          "call_id": "call_egQO2Q0M2Z7L9BrElpinjMKM",
+          "output": "{\"error\":\"Tool execution failed\"}",
+          "type": "function_call_output"
         }
       ],
       "max_output_tokens": 12800,
       "model": "gpt-5",
+      "previous_response_id": "resp_0e1dce6bf32f554500690799e9a6948196a21451fda89a3e6d",
       "stream": false
     },
     "headers": {
@@ -44,9 +46,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760409148,
+      "created_at": 1762105841,
       "error": null,
-      "id": "resp_021f04e42116e0790068edb63c4df8819788ee1cc9d8322f16",
+      "id": "resp_0e1dce6bf32f554500690799f11c808196a8a6b2529c5bf236",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 12800,
@@ -56,7 +58,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_021f04e42116e0790068edb63cb41081978cadb8567bc0d164",
+          "id": "rs_0e1dce6bf32f554500690799f2319c8196bc6d01f495200427",
           "summary": [],
           "type": "reasoning"
         },
@@ -69,15 +71,16 @@
               "type": "output_text"
             }
           ],
-          "id": "msg_021f04e42116e0790068edb6455acc81979c45f6193d6ab020",
+          "id": "msg_0e1dce6bf32f554500690799f6948c81968c503ec240e23146",
           "role": "assistant",
           "status": "completed",
           "type": "message"
         }
       ],
       "parallel_tool_calls": true,
-      "previous_response_id": null,
+      "previous_response_id": "resp_0e1dce6bf32f554500690799e9a6948196a21451fda89a3e6d",
       "prompt_cache_key": null,
+      "prompt_cache_retention": null,
       "reasoning": {
         "effort": "medium",
         "summary": null
@@ -99,15 +102,15 @@
       "top_p": 1.0,
       "truncation": "disabled",
       "usage": {
-        "input_tokens": 33,
+        "input_tokens": 583,
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 521,
+        "output_tokens": 329,
         "output_tokens_details": {
-          "reasoning_tokens": 512
+          "reasoning_tokens": 320
         },
-        "total_tokens": 554
+        "total_tokens": 912
       },
       "user": null
     },
@@ -119,7 +122,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e3aa97386b6216-ORD"
+        "998579c28c7ba243-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -128,13 +131,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 02:32:37 GMT"
+        "Sun, 02 Nov 2025 17:50:46 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "9259"
+        "5819"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -146,8 +149,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=dRIAjwOLMH3NJmumgKbmxeLGEsuivQfmmC.Z2lLH958-1760409157-1.0.1.1-T69OXLriG0xI_7.WMKY064ud7ZZA2ZBqVgz_ih8BXWIXWFD6pDPCXluoUCnxK9eWERY2pnU0bQ18_t3X7ncmbyG2HE47sTU5kAlFUd4h5CA; path=/; expires=Tue, 14-Oct-25 03:02:37 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=elnWwhLkm3raDm6wBLr9CX0.uoZjf0Hme6yRy76WVw4-1760409157618-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=WBWe.D6BNwsCIy8Yq5T6uD7YJHF_E67R8jLU_Dl403Q-1762105846-1.0.1.1-fDCEkTFWYV8NSCYICMWuZmLtwn1V6NFBlEzC.6lFCgFQ6Mbl.97BNxbSqm7Lab0soqYyCXookDzw6GQi7E5953yFDy0ryIx_N6hozRjio1s; path=/; expires=Sun, 02-Nov-25 18:20:46 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=9jD2QUaD8hU61JAwDlbDTuCQE6Z0sxziEd0nOvZnRV8-1762105846943-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -159,10 +162,28 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "9262"
+        "5824"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "3999888"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "1ms"
       ],
       "x-request-id": [
-        "req_a1c90fc5a4eb495abcf4aa4ea7b4c5ae"
+        "req_13ef9eb7c4f34d8fbd7ce245d2bb5da6"
       ]
     },
     "status": 200

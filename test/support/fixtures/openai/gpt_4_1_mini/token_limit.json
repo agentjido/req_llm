@@ -40,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760405673,
+      "created_at": 1762105821,
       "error": null,
-      "id": "resp_0ebe1069c41f18790068eda8a915f8819788e82beab0c19f4d",
+      "id": "resp_0179855277ec8ae900690799dde67c8197a315e00bc8bb8103",
       "incomplete_details": {
         "reason": "max_output_tokens"
       },
@@ -58,11 +58,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Certainly! Here’s a long and immersive story about dragons and adventures:\n\n---\n\n**The Legend of Eldoria: The Dragon’s Quest**\n\nIn the ancient kingdom of Eldoria, nestled between towering mountains and vast, enchanted forests, dragons were not mere myths but living legends. These majestic creatures had guarded the realm for centuries, their presence both a blessing and a mystery. The greatest of them all was a dragon named Aelrithor, whose scales shimmered with the colors of the dawn, and",
+              "text": "Certainly! Here is a very long story about dragons and adventures:\n\n---\n\n### The Dragon’s Covenant: A Tale of Fire and Destiny\n\nIn a time long forgotten by humankind, before the rise of kingdoms and the spread of empires, the world was wild and untamed, ruled by elemental forces and ancient creatures. Among these, none were as revered or as feared as the dragons—colossal beings whose wings spanned the sky, whose breath ignited mountains, and whose wisdom shaped the very",
               "type": "output_text"
             }
           ],
-          "id": "msg_0ebe1069c41f18790068eda8a9a5048197a28908fbb41d5355",
+          "id": "msg_0179855277ec8ae900690799de9d148197ad8d8e20f3725544",
           "role": "assistant",
           "status": "incomplete",
           "type": "message"
@@ -71,6 +71,7 @@
       "parallel_tool_calls": true,
       "previous_response_id": null,
       "prompt_cache_key": null,
+      "prompt_cache_retention": null,
       "reasoning": {
         "effort": null,
         "summary": null
@@ -112,7 +113,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e355c07fb46cba-ORD"
+        "9985794a8c70a162-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -121,13 +122,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 01:34:35 GMT"
+        "Sun, 02 Nov 2025 17:50:25 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "2210"
+        "3916"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -139,8 +140,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=vp3r0EflX5jFqckqm1dV.XMvyp0gwK43SvRiHYZSdww-1760405675-1.0.1.1-6r19pADYE92dIOOocjaRKRkqBRY5YDt3MhJeecgZzxow2vV_SCM6StGooAHCKvtJNSzjQJrsHyhw5_tgbzY0C7WIxZj_QTcFIuKZFwoVE0M; path=/; expires=Tue, 14-Oct-25 02:04:35 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=HzgJu.Wd4fVn.r1.d.7FyKrw3jcrpaRVfQQLf.5NH9Q-1760405675310-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=WkSrrNsvJFQ7mkbjxStL_quUXrTsvvo0lyv0EQETXc4-1762105825-1.0.1.1-kUWmliR3xfh1__eEKGP649GS._e5e4MjOpsaE0JDGmKUjp5oPV8vT8sr4nsZrOTeu55SkeZapIEvSwwwLDv4NuShFnEZRk7IzMsFgrg91QY; path=/; expires=Sun, 02-Nov-25 18:20:25 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=7hJadzJU60bqEwr4tTSUm6QNNB.mQVgcnH9Q4ux_1rQ-1762105825840-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -152,7 +153,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "2214"
+        "3920"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -173,7 +174,7 @@
         "0s"
       ],
       "x-request-id": [
-        "req_f6642d40c6254c678d655d5c8d848d4f"
+        "req_271f8548502e4a8887b0e49e01e5d89f"
       ]
     },
     "status": 200

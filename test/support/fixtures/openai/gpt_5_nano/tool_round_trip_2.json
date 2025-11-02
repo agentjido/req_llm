@@ -1,26 +1,28 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkNhbGwgdGhlIGFkZCB0b29sIHdpdGggYT0yIGFuZCBiPTMuIEFmdGVyIHJlY2VpdmluZyB0aGUgdG9vbCByZXN1bHQsIHJlcGx5IGV4YWN0bHkgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQifV0sIm1heF9vdXRwdXRfdG9rZW5zIjoxMjgwMCwibW9kZWwiOiJncHQtNS1uYW5vIiwic3RyZWFtIjpmYWxzZX0="
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9LHsiY2FsbF9pZCI6ImNhbGxfVGNkTzFKcHVkMlNoeVJhSDVEcTVuQ0NwIiwib3V0cHV0Ijoie1wiZXJyb3JcIjpcIlRvb2wgZXhlY3V0aW9uIGZhaWxlZFwifSIsInR5cGUiOiJmdW5jdGlvbl9jYWxsX291dHB1dCJ9XSwibWF4X291dHB1dF90b2tlbnMiOjEyODAwLCJtb2RlbCI6ImdwdC01LW5hbm8iLCJwcmV2aW91c19yZXNwb25zZV9pZCI6InJlc3BfMGFkN2M3MDc1NjFkOWQwNzAwNjkwNzk5ZGZhYjZjODE5NTkwMTc5ZWQ2YzFkZDEzMTIiLCJzdHJlYW0iOmZhbHNlfQ=="
     },
     "canonical_json": {
       "input": [
         {
           "content": [
             {
-              "text": "Call the add tool with a=2 and b=3. After receiving the tool result, reply exactly with 'sum=<value>'.",
+              "text": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
               "type": "input_text"
             }
           ],
           "role": "user"
         },
         {
-          "content": [],
-          "role": "assistant"
+          "call_id": "call_TcdO1Jpud2ShyRaH5Dq5nCCp",
+          "output": "{\"error\":\"Tool execution failed\"}",
+          "type": "function_call_output"
         }
       ],
       "max_output_tokens": 12800,
       "model": "gpt-5-nano",
+      "previous_response_id": "resp_0ad7c707561d9d0700690799dfab6c819590179ed6c1dd1312",
       "stream": false
     },
     "headers": {
@@ -44,9 +46,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760405704,
+      "created_at": 1762105825,
       "error": null,
-      "id": "resp_03149d3c1874994b0068eda8c8264c819492c39fbe44541bdb",
+      "id": "resp_0ad7c707561d9d0700690799e1c5d481959c8870e6d3ff9b81",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 12800,
@@ -56,7 +58,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_03149d3c1874994b0068eda8c88a048194a5be77c9527976a2",
+          "id": "rs_0ad7c707561d9d0700690799e239c08195ad40634f5a414948",
           "summary": [],
           "type": "reasoning"
         },
@@ -65,19 +67,34 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "sum=5",
+              "text": "{\"error\":\"Tool execution failed\"}",
               "type": "output_text"
             }
           ],
-          "id": "msg_03149d3c1874994b0068eda8ccda848194b2e7c70466c88901",
+          "id": "msg_0ad7c707561d9d0700690799e3459c8195b82345daa6af0890",
+          "role": "assistant",
+          "status": "completed",
+          "type": "message"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "I couldn't run the add tool due to an error, but the result of 2 + 3 is 5. Therefore, sum=5.",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_0ad7c707561d9d0700690799e35b00819592f9b96c03d208bf",
           "role": "assistant",
           "status": "completed",
           "type": "message"
         }
       ],
       "parallel_tool_calls": true,
-      "previous_response_id": null,
+      "previous_response_id": "resp_0ad7c707561d9d0700690799dfab6c819590179ed6c1dd1312",
       "prompt_cache_key": null,
+      "prompt_cache_retention": null,
       "reasoning": {
         "effort": "medium",
         "summary": null
@@ -99,15 +116,15 @@
       "top_p": 1.0,
       "truncation": "disabled",
       "usage": {
-        "input_tokens": 33,
+        "input_tokens": 301,
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 713,
+        "output_tokens": 179,
         "output_tokens_details": {
-          "reasoning_tokens": 704
+          "reasoning_tokens": 128
         },
-        "total_tokens": 746
+        "total_tokens": 480
       },
       "user": null
     },
@@ -119,7 +136,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e35682793f6159-ORD"
+        "99857962be5be800-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -128,13 +145,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 01:35:09 GMT"
+        "Sun, 02 Nov 2025 17:50:27 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "4972"
+        "2064"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -146,8 +163,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=pnClClhWkqWEF84_qvQyrvhC_MVXmVJNQ6HX4wpyXMM-1760405709-1.0.1.1-5IbE_YKN.WbAkZtG2KdzxsZvO.0qekoy6rdoHEZLyMR1sR4NNp9xM3Q2lGRVVNIQnqGUeWbRbPYcMVS5x5xpsa520RpgPCLSVxRRxyEnRoo; path=/; expires=Tue, 14-Oct-25 02:05:09 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=VzZeyzagWApfimLVvsnY_Dl0iz_2IRIAw9h1Zb5DuIQ-1760405709138-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=rdL4lMxlG.ZIz0BFAQlTD3v7U9tptYJOBn7rLyakoTw-1762105827-1.0.1.1-GbjkEbqXK0SNG843_YnudMZGUeOHCidUbaMOkf3fHJgMtEqT0SaocxKdEHbzahIMlO94VtxdKYSngSVFUgowskysU6wJG.wCwlmOD_PzPN8; path=/; expires=Sun, 02-Nov-25 18:20:27 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=VvFiUgdnkcyQf.XAWnLplh3WPBD5H5ktgdnPlKGkS1g-1762105827848-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -159,7 +176,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "4976"
+        "2069"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -171,16 +188,16 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9999750"
+        "10000000"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "1ms"
+        "0s"
       ],
       "x-request-id": [
-        "req_5ff8bb6bb5d94a648f46fc08d3992a05"
+        "req_2d724308d80845dcb52a4c1b37b7699a"
       ]
     },
     "status": 200

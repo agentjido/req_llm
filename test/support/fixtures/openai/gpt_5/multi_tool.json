@@ -105,9 +105,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760409207,
+      "created_at": 1762105815,
       "error": null,
-      "id": "resp_03ed9ac3f7ac0b860068edb6770f2c81978a0c999c9d18a233",
+      "id": "resp_0ca855cb4534cad800690799d7aec08195b44848110ee1e8ac",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 25600,
@@ -117,14 +117,14 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_03ed9ac3f7ac0b860068edb677917481978312b721f3fd0d5a",
+          "id": "rs_0ca855cb4534cad800690799d8821c81958c032112a9bf12e9",
           "summary": [],
           "type": "reasoning"
         },
         {
           "arguments": "{}",
-          "call_id": "call_GzFWvICtJGWkN3MV6FIcbcuD",
-          "id": "fc_03ed9ac3f7ac0b860068edb67c060c819788627632199b066b",
+          "call_id": "call_mOE4OnoZ3Svr47UR4awkZQ37",
+          "id": "fc_0ca855cb4534cad800690799dd65b8819580c9222ba45cf76f",
           "name": "get_weather",
           "status": "completed",
           "type": "function_call"
@@ -133,6 +133,7 @@
       "parallel_tool_calls": true,
       "previous_response_id": null,
       "prompt_cache_key": null,
+      "prompt_cache_retention": null,
       "reasoning": {
         "effort": "medium",
         "summary": null
@@ -191,15 +192,15 @@
       "top_p": 1.0,
       "truncation": "disabled",
       "usage": {
-        "input_tokens": 58,
+        "input_tokens": 55,
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 272,
+        "output_tokens": 144,
         "output_tokens_details": {
-          "reasoning_tokens": 256
+          "reasoning_tokens": 128
         },
-        "total_tokens": 330
+        "total_tokens": 199
       },
       "user": null
     },
@@ -211,7 +212,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e3ac07bfaefa1d-ORD"
+        "998579238d5da243-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -220,13 +221,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 02:33:32 GMT"
+        "Sun, 02 Nov 2025 17:50:21 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "5221"
+        "6113"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -238,8 +239,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=dXfFaAl9ch2UDQpF6YCQjfNTw3HGjukTLqAohSA06vc-1760409212-1.0.1.1-2nDxmV._qgdzYF9FbguPkhBJQxpbNc_Iu_9pHL1QtdOi9DUQL6zRnU13jUxP0o_2iZoSaMJadk.w.Yijle.AwRJhu9IGNY8wz2hXXiDGA.I; path=/; expires=Tue, 14-Oct-25 03:03:32 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=aJTPMb4Gv1E7el7X72CtbCg9XmFvy2yIOmoMc0Y8pRM-1760409212291-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=JHWYMELbgB41V2b6.obN77AL9DIro0AkIHFFQkFviWc-1762105821-1.0.1.1-JBBGWXxLM5mUIVYOkTBacFOf.Iwt_NdGAzIAZ51iYVxtUn0vgHdpnnMJVhYM1nmPW075ftHIM5N8AgT1EVgjiZMAmk9QqwXVRoKMZLxR5Ao; path=/; expires=Sun, 02-Nov-25 18:20:21 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=lV2gK.TPLi5pN2iZf3eNOL.UJzhs56mcbDOSQ26zipU-1762105821799-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -251,10 +252,28 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "5227"
+        "6118"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0s"
       ],
       "x-request-id": [
-        "req_285bff1218ff4e5b9cc9b2b52c9bec34"
+        "req_7cdfa97d8bee441a8e7efb11a8bb9e94"
       ]
     },
     "status": 200

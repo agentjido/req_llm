@@ -40,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760405710,
+      "created_at": 1762105857,
       "error": null,
-      "id": "resp_03273717461ce16a0068eda8ce1b848195ab3f35a926287d17",
+      "id": "resp_02c2468c4ea6b51f0069079a01ea9c819380dd63956883b512",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 2048,
@@ -52,7 +52,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_03273717461ce16a0068eda8d28168819588e12444a340c406",
+          "id": "rs_02c2468c4ea6b51f0069079a057c0c8193ac4c0d7b91b8a28c",
           "summary": [],
           "type": "reasoning"
         },
@@ -61,11 +61,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "The answer is 84.\n\nI'm sorry, but I can’t reveal details about my internal process.",
+              "text": "The answer is 84.\n\nI'm sorry, but I can’t reveal details about my internal reasoning.",
               "type": "output_text"
             }
           ],
-          "id": "msg_03273717461ce16a0068eda8d526148195ab8e22722832c5c8",
+          "id": "msg_02c2468c4ea6b51f0069079a06eb688193859c6216b7d6deaa",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -74,6 +74,7 @@
       "parallel_tool_calls": true,
       "previous_response_id": null,
       "prompt_cache_key": null,
+      "prompt_cache_retention": null,
       "reasoning": {
         "effort": "medium",
         "summary": null
@@ -99,11 +100,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 533,
+        "output_tokens": 405,
         "output_tokens_details": {
-          "reasoning_tokens": 512
+          "reasoning_tokens": 384
         },
-        "total_tokens": 552
+        "total_tokens": 424
       },
       "user": null
     },
@@ -115,7 +116,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e356a7dcd9a679-ORD"
+        "99857a2b1fea11cd-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -124,13 +125,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 01:35:17 GMT"
+        "Sun, 02 Nov 2025 17:51:03 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "7572"
+        "5625"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -142,8 +143,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=Acihc3mcfGNtXL37ufBJuWQlEL3zbYcDfyEyDkUDR5M-1760405717-1.0.1.1-R0xquF5rrEnYxJkQ9iwy06nRY18HIFxpj1.PWOTE8VakQodtK8xphGofkA3NQrFBvzbklu0aQLMPNuevIpHqVN0Wm3VGnDQxqw1MdBSi8do; path=/; expires=Tue, 14-Oct-25 02:05:17 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=tzTI9lM1vrxfOpDNps_Ylhdth6hiP82p56rkKgFmqpg-1760405717702-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=fbpn75fSxAvnHDKo0murbdHDpPznAteuyJOHFrmQYUU-1762105863-1.0.1.1-WO2R_xk5NqGqP4w9exxMakdkKtQSJt.hnWspvMIJKFvnHV00gxwi36ecV3DHJh_QotG55KznL0Lfl.AtKREFD7XPsIN7BhwJzhN0m5B3mWE; path=/; expires=Sun, 02-Nov-25 18:21:03 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=NVRj3kfoQ10Xy9sbRztzLPFVoKvD0b2r_ANGHNKAfPM-1762105863475-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -155,7 +156,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "7577"
+        "5647"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -167,16 +168,16 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9999361"
+        "9999506"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "3ms"
+        "2ms"
       ],
       "x-request-id": [
-        "req_6a4a20a3e29d4ba0bcd42b5d6870a256"
+        "req_c4b9c0677c684202903f19971932a3bf"
       ]
     },
     "status": 200

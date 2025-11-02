@@ -40,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760409197,
+      "created_at": 1762105847,
       "error": null,
-      "id": "resp_00687c18b8b033640068edb66d29188193ad348faf86e91eba",
+      "id": "resp_061f22a21d74bd6800690799f70c188193858ba8dd73256007",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 2048,
@@ -52,7 +52,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_00687c18b8b033640068edb66d8f548193b3d0fb1af28e3977",
+          "id": "rs_061f22a21d74bd6800690799f7d1f08193b5d0125ab49bb7cc",
           "summary": [],
           "type": "reasoning"
         },
@@ -61,11 +61,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "I can’t share my internal chain-of-thought, but here’s the result:\n\n12 × 7 = 84\n\nBrief explanation: (10 + 2) × 7 = 70 + 14 = 84.",
+              "text": "I can’t share my internal thinking, but here’s a brief calculation:\n12 × 7 = (10 × 7) + (2 × 7) = 70 + 14 = 84.",
               "type": "output_text"
             }
           ],
-          "id": "msg_00687c18b8b033640068edb6735a948193be8f909e25902a32",
+          "id": "msg_061f22a21d74bd6800690799fc80a88193872e05f2aeeb33d8",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -74,6 +74,7 @@
       "parallel_tool_calls": true,
       "previous_response_id": null,
       "prompt_cache_key": null,
+      "prompt_cache_retention": null,
       "reasoning": {
         "effort": "medium",
         "summary": null
@@ -99,11 +100,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 565,
+        "output_tokens": 369,
         "output_tokens_details": {
-          "reasoning_tokens": 512
+          "reasoning_tokens": 320
         },
-        "total_tokens": 584
+        "total_tokens": 388
       },
       "user": null
     },
@@ -115,7 +116,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e3abc9eb41fa1d-ORD"
+        "998579e79949a243-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -124,13 +125,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 02:33:24 GMT"
+        "Sun, 02 Nov 2025 17:50:53 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "6874"
+        "6114"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -142,8 +143,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=78Nh9KLclCrGuCCiWxCiBX4T7Opf0y2k65CAHBPsVB0-1760409204-1.0.1.1-O8B3ha_hLjPnBrclewT6KJyEdPG574U.moOft3GfNLMg1PkzScSYedMDlul1l_l.79WYRIrbrTBQZiw5impjDSN7Z0PJam07666uRU0AxNk; path=/; expires=Tue, 14-Oct-25 03:03:24 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=EWfFky.eXnO3qwMEES8AkS1mOsbAsct2pueYPVczn4k-1760409204043-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=MuajFcBL_reAdeKX4zmEiPFewlo5B4XG8FB2acCejRI-1762105853-1.0.1.1-j9wWP5SodCKihFplE0BRVGlC0rumdtBoU8LId4a7KaJZP20552qJRMdniPlNjQyDplyKs4CQW6V_CQIazeHcyrONn6DXCg1QRRqOzzYUmvY; path=/; expires=Sun, 02-Nov-25 18:20:53 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=B5WIU4KmqgdVkh40tSCgjtSB.TiR1FOnTdxXlak_a.Y-1762105853174-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -155,10 +156,28 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "6877"
+        "6122"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "3999848"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "2ms"
       ],
       "x-request-id": [
-        "req_edc173a7e47749b5aa5cf8af31c20387"
+        "req_42e75367534e400bacb38d51d197a419"
       ]
     },
     "status": 200

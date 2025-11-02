@@ -40,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760405670,
+      "created_at": 1762105832,
       "error": null,
-      "id": "resp_00035acb799046e50068eda8a61bd48194909bc128ad7fcda3",
+      "id": "resp_00a51d2ae295aace00690799e8edd88196b7d08ecc09fab934",
       "incomplete_details": {
         "reason": "max_output_tokens"
       },
@@ -54,14 +54,29 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_00035acb799046e50068eda8a6da1c819481c298f8b9555e41",
+          "id": "rs_00a51d2ae295aace00690799e94b4c8196a0f99b62e8f26d54",
           "summary": [],
           "type": "reasoning"
+        },
+        {
+          "content": [
+            {
+              "annotations": [],
+              "logprobs": [],
+              "text": "In the northern reaches of the world, where the last of the sun’s warmth bled across the tundra and where jagged mountains cut the clouds like teeth, there stood a stronghold named Citrurik. Its walls glimmered with sun-worn stone and dragonfire-burnished metal, and within it gathered warriors, scholars, bards, and mages from the entire Northern League",
+              "type": "output_text"
+            }
+          ],
+          "id": "msg_00a51d2ae295aace00690799e9bcf08196b4cb6c300bb7cc20",
+          "role": "assistant",
+          "status": "incomplete",
+          "type": "message"
         }
       ],
       "parallel_tool_calls": true,
       "previous_response_id": null,
       "prompt_cache_key": null,
+      "prompt_cache_retention": null,
       "reasoning": {
         "effort": "medium",
         "summary": null
@@ -87,11 +102,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 64,
+        "output_tokens": 83,
         "output_tokens_details": {
-          "reasoning_tokens": 64
+          "reasoning_tokens": 0
         },
-        "total_tokens": 79
+        "total_tokens": 98
       },
       "user": null
     },
@@ -103,7 +118,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e355ac3b622304-ORD"
+        "9985798f7bb2dada-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -112,13 +127,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 01:34:32 GMT"
+        "Sun, 02 Nov 2025 17:50:35 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "2333"
+        "2707"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -130,8 +145,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=DCdBy20sHxvbwkzRbYMrux.a8O1REUSNmoDmGyO0XeM-1760405672-1.0.1.1-lGemWvzDOkAGMfRLwXeLDmXnFs1oI4wdBVAIuLdJHzxuxCZ95VDkd1SAyzCHJ.dY8sWj4DbrqwJ3_2t19SorbiQpGuB44o1s1LgZRov.WjE; path=/; expires=Tue, 14-Oct-25 02:04:32 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=kcfq9bU78i0IQBK8mRMDMGZxCbAd4meb8Jir1gA.XUA-1760405672424-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=2Mc9b5E3JpAXumHr8KoIYf7sfMbpt4Y7NVfC4Lfo_Hs-1762105835-1.0.1.1-fy9dc4KtqvgDnTj_lw9a0OI8pAMuUMZgQUGq1R_zh0nO.ZnVOLcDtOYdUs0T1J1iL8ylZSCIAO2zyre768dxN2g1mv4i_w5277T_e4ECHxs; path=/; expires=Sun, 02-Nov-25 18:20:35 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=gjxYD0wfYR6.orqTNitFU9Tvovo.j4hdV6PWPdRbgGo-1762105835647-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -143,10 +158,10 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "2556"
+        "2712"
       ],
       "x-request-id": [
-        "req_8d0802a83b284efa97618661edd1989c"
+        "req_219c2450a5214d2689a9264c83c850ff"
       ]
     },
     "status": 200

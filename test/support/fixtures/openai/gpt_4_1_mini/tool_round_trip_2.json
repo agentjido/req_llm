@@ -1,26 +1,28 @@
 {
   "request": {
     "body": {
-      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IkNhbGwgdGhlIGFkZCB0b29sIHdpdGggYT0yIGFuZCBiPTMuIEFmdGVyIHJlY2VpdmluZyB0aGUgdG9vbCByZXN1bHQsIHJlcGx5IGV4YWN0bHkgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQifV0sIm1heF9vdXRwdXRfdG9rZW5zIjozMjc2LCJtb2RlbCI6ImdwdC00LjEtbWluaSIsInN0cmVhbSI6ZmFsc2V9"
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInR5cGUiOiJpbnB1dF90ZXh0In1dLCJyb2xlIjoidXNlciJ9LHsiY2FsbF9pZCI6ImNhbGxfYU9CbktLVVBlYU04MkhNaThIem9kMHNDIiwib3V0cHV0Ijoie1wiZXJyb3JcIjpcIlRvb2wgZXhlY3V0aW9uIGZhaWxlZFwifSIsInR5cGUiOiJmdW5jdGlvbl9jYWxsX291dHB1dCJ9XSwibWF4X291dHB1dF90b2tlbnMiOjMyNzYsIm1vZGVsIjoiZ3B0LTQuMS1taW5pIiwicHJldmlvdXNfcmVzcG9uc2VfaWQiOiJyZXNwXzAwYTYxODQ2NmEyOTVlNDIwMDY5MDc5OWRiOTVlMDgxOTdiNDExODI4M2QxZDdmMjJmIiwic3RyZWFtIjpmYWxzZX0="
     },
     "canonical_json": {
       "input": [
         {
           "content": [
             {
-              "text": "Call the add tool with a=2 and b=3. After receiving the tool result, reply exactly with 'sum=<value>'.",
+              "text": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
               "type": "input_text"
             }
           ],
           "role": "user"
         },
         {
-          "content": [],
-          "role": "assistant"
+          "call_id": "call_aOBnKKUPeaM82HMi8Hzod0sC",
+          "output": "{\"error\":\"Tool execution failed\"}",
+          "type": "function_call_output"
         }
       ],
       "max_output_tokens": 3276,
       "model": "gpt-4.1-mini",
+      "previous_response_id": "resp_00a618466a295e4200690799db95e08197b4118283d1d7f22f",
       "stream": false
     },
     "headers": {
@@ -44,9 +46,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760405679,
+      "created_at": 1762105820,
       "error": null,
-      "id": "resp_0676b08907e0d5940068eda8af81a481938fafd4742e5268ff",
+      "id": "resp_00a618466a295e4200690799dcb854819791316462c8f33539",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 3276,
@@ -60,19 +62,20 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "sum=5",
+              "text": "It seems there was an issue with the add tool. However, I can tell you that 2 + 3 = 5. \n\nsum=5",
               "type": "output_text"
             }
           ],
-          "id": "msg_0676b08907e0d5940068eda8b0272c8193b70d8349462a0d8d",
+          "id": "msg_00a618466a295e4200690799dd275c8197b11d8f26c767640d",
           "role": "assistant",
           "status": "completed",
           "type": "message"
         }
       ],
       "parallel_tool_calls": true,
-      "previous_response_id": null,
+      "previous_response_id": "resp_00a618466a295e4200690799db95e08197b4118283d1d7f22f",
       "prompt_cache_key": null,
+      "prompt_cache_retention": null,
       "reasoning": {
         "effort": null,
         "summary": null
@@ -94,15 +97,15 @@
       "top_p": 1.0,
       "truncation": "disabled",
       "usage": {
-        "input_tokens": 34,
+        "input_tokens": 85,
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 4,
+        "output_tokens": 32,
         "output_tokens_details": {
           "reasoning_tokens": 0
         },
-        "total_tokens": 38
+        "total_tokens": 117
       },
       "user": null
     },
@@ -114,7 +117,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e355e8896d6cba-ORD"
+        "998579432c63a162-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -123,13 +126,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 01:34:40 GMT"
+        "Sun, 02 Nov 2025 17:50:21 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "895"
+        "1040"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -141,8 +144,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=Lf4njkNL3iY9uqW7xZ_UOxXHg6r7Ukn_C2jIHv6wli4-1760405680-1.0.1.1-Cd5F0s6mbIm.rZ28c01njUFKCpRs4a7NPn3am3nm7k7ku6Hj3GRDvE4lo5SVuaIelNTn9OfMyTkQWFihtADnifBR1.FRCUAXXxzWWIUcYdM; path=/; expires=Tue, 14-Oct-25 02:04:40 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=LmhPnccMjGFHP3pL3wZLV5LIRKQwKj_a7HgLzNy60uY-1760405680419-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=t3oL8VW7skElJi4XHykTLDHi2N8CIrgHGal6KmD_IiY-1762105821-1.0.1.1-uEl3NQFtboyFWvhuEpKZDl7iPibw2EkB2xjzNhAg99Ks7HOzir9pCvTo.MXXhYCLl8cDgJdHtVGbtW0Ou99QULH9C4TKJeSQwoWim.GwUuE; path=/; expires=Sun, 02-Nov-25 18:20:21 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=yCaMCE14ZlBp5AnL.cq1_JTF7g8CUQDTpYDdNGJTBTg-1762105821768-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -154,7 +157,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "900"
+        "1044"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -166,7 +169,7 @@
         "9999"
       ],
       "x-ratelimit-remaining-tokens": [
-        "9999947"
+        "9999896"
       ],
       "x-ratelimit-reset-requests": [
         "6ms"
@@ -175,7 +178,7 @@
         "0s"
       ],
       "x-request-id": [
-        "req_ecd87da0384446b4bf2fd1fe5801b520"
+        "req_f7c46616171f4f1cb9a40fa366f836a0"
       ]
     },
     "status": 200

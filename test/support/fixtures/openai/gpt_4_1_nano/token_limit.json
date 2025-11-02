@@ -40,9 +40,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760405673,
+      "created_at": 1762105824,
       "error": null,
-      "id": "resp_0c05711e6acb50e50068eda8a905788196a011dd3872f7e6f6",
+      "id": "resp_0d09b8f75972c1fc00690799e00bac8195894a802fba2e8b39",
       "incomplete_details": {
         "reason": "max_output_tokens"
       },
@@ -58,11 +58,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Certainly! Here's a sprawling, adventurous story about dragons and the daring journeys they undertake:\n\n---\n\n**The Realm of Emberfall: A Tale of Dragons and Destiny**\n\nIn the ancient land of Emberfall, mountains pierced the clouds, forests stretched endlessly, and rivers shimmered with the light of a thousand stars. It was a place where magic thrummed through the very soil, and legends whispered on the wind. Amid this wondrous realm lived dragons—magnificent beings of flame, scale, and wisdom—",
+              "text": "Certainly! Here’s a richly detailed, long story about dragons and adventures:\n\n---\n\n**The Embercrest Chronicles**\n\nIn the land of Eryndor, where vast mountain ranges pierced the sky and thick forests stretched beyond the horizon, dragonkind was once abundant. These majestic creatures, known as the Emberwings, ruled the skies with their mighty wings and fiery breath. But as centuries passed, the dragons’ numbers dwindled, and their old territories fell into legend.\n\nAmong the remaining Emberwings",
               "type": "output_text"
             }
           ],
-          "id": "msg_0c05711e6acb50e50068eda8a974b08196b1fb7712fd08496b",
+          "id": "msg_0d09b8f75972c1fc00690799e11a588195a45808b6d71f11f4",
           "role": "assistant",
           "status": "incomplete",
           "type": "message"
@@ -71,6 +71,7 @@
       "parallel_tool_calls": true,
       "previous_response_id": null,
       "prompt_cache_key": null,
+      "prompt_cache_retention": null,
       "reasoning": {
         "effort": null,
         "summary": null
@@ -112,7 +113,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e355bfe87e7b21-ORD"
+        "99857957dca5acae-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -121,13 +122,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 01:34:34 GMT"
+        "Sun, 02 Nov 2025 17:50:26 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "1198"
+        "2678"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -139,8 +140,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=Avx5jrCjEB2PlLQ7OrYARhOyE7QzCKw0.Tm3JZxHFis-1760405674-1.0.1.1-OB8xmkFFJZlfU57bd309OwbMhOw6gce._nlIv2z.7OugrI5dlYiA83VZEe0zn8Cg_nElTtti3yUCnsBQsqu7e0yBSMmo.gGL9SvM0NiQASQ; path=/; expires=Tue, 14-Oct-25 02:04:34 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=BaZLW0mZogluEN8jHk0q1rxJeiZtZulIglpZn826jOQ-1760405674224-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=tzTB1CJ.r48ywRhSGymcKEOyLCMkiF5lZcTrcqtg8qI-1762105826-1.0.1.1-g3eUXeCgjGyIaQhKcqfhGQH4ZN1KfT_8NLnTfcS4QFeu_3o5MPsQhrFc.OQvxBpSMaShhoTAsyTYAiqTNWDajEqUq2hAdqhT6LdsbKX39ec; path=/; expires=Sun, 02-Nov-25 18:20:26 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=qaWbyRjTiwYTuK6PwynTTZi5M4FDzZYTRUD8FWU_.wY-1762105826738-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -152,7 +153,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "1203"
+        "2684"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -173,7 +174,7 @@
         "0s"
       ],
       "x-request-id": [
-        "req_4b0eb12ac8234859bc83416d3342eb1f"
+        "req_ef92e9b851fb4ddd9ecbe1a860078d9f"
       ]
     },
     "status": 200

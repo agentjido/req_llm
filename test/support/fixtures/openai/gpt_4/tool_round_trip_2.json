@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzLiBBZnRlciB0aGUgdG9vbCByZXN1bHQgYXJyaXZlcywgcmVzcG9uZCB3aXRoICdzdW09PHZhbHVlPicuIiwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOltdLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF9OYnQyRlNRUTZzUmFiYXo1N0Zqd2VNcFUiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJjYWxsX05idDJGU1FRNnNSYWJhejU3Rmp3ZU1wVSJ9XSwibW9kZWwiOiJncHQtNCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjo4MTksIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzLiBBZnRlciB0aGUgdG9vbCByZXN1bHQgYXJyaXZlcywgcmVzcG9uZCB3aXRoICdzdW09PHZhbHVlPicuIiwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOltdLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF9uYVZJQWF1ZkpUZXhqRUw0bnVKOXdoVUkiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJjYWxsX25hVklBYXVmSlRleGpFTDRudUo5d2hVSSJ9XSwibW9kZWwiOiJncHQtNCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
       "max_tokens": 819,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_Nbt2FSQQ6sRabaz57FjweMpU",
+              "id": "call_naVIAaufJTexjEL4nuJ9whUI",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "call_Nbt2FSQQ6sRabaz57FjweMpU"
+          "tool_call_id": "call_naVIAaufJTexjEL4nuJ9whUI"
         }
       ],
       "model": "gpt-4",
@@ -66,8 +66,8 @@
           }
         }
       ],
-      "created": 1760529698,
-      "id": "chatcmpl-CQuUEjX8UueQS1ln5iVTlFwbrxczs",
+      "created": 1762105821,
+      "id": "chatcmpl-CXWVZzQo9i94Ovd1XjcPCGMm5HLsO",
       "model": "gpt-4-0613",
       "object": "chat.completion",
       "service_tier": "default",
@@ -99,7 +99,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98ef29b3f92ee830-ORD"
+        "99857947aa16116f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -108,13 +108,13 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:01:39 GMT"
+        "Sun, 02 Nov 2025 17:50:21 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "342"
+        "356"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -126,8 +126,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=k0m1dHA4LZqzPe54PlWufOMDzCK.NU_SiTrewKy.Ls8-1760529699-1.0.1.1-HpZN9UKwVK7dLZIQA8hnhXTx6tkctB1YEBV8HqE9CVjdv_ZskcWrZ5JJuYXUUagtFzb_Xv7qcU.DqChQcvEjwpfaCVQjTomIHg4fIRXHNMk; path=/; expires=Wed, 15-Oct-25 12:31:39 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=u._SzBhemDUGVNAPHKFaSIVZGf.AI.aIMa8YHIgtwaU-1760529699104-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=lI2dnfFZ4SKPt95rmV1377Ve46PeZp8QU2fx9UVN.3g-1762105821-1.0.1.1-3nNINwtbkd4xuJZfa8zFe3Jz_hnLHb.MDCesSkcMmYEpjNlL8KYM9lmvSx7zrDypK6ZmXMkKuaaebb_SfqcMkK8C9Qz5fw3q36qOvFfiLZQ; path=/; expires=Sun, 02-Nov-25 18:20:21 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=TltaX2MsyOW6pbAq0AJsOGWbMRLceyGPmoNZD.3OBMY-1762105821841-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -139,7 +139,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "596"
+        "381"
       ],
       "x-openai-proxy-wasm": [
         "v0.1"
@@ -163,7 +163,7 @@
         "5ms"
       ],
       "x-request-id": [
-        "req_cd49da8ee1954b2986eaa2c2946af9ea"
+        "req_28dc8f24de3249af98ad49fcd0be9e1e"
       ]
     },
     "status": 200

@@ -62,9 +62,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760409191,
+      "created_at": 1762105898,
       "error": null,
-      "id": "resp_0afc89f5438f1abe0068edb6671cb08197b72c289f67f2c8fe",
+      "id": "resp_03ed9feca38012c00069079a29fba8819387758acb173b0e98",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 25600,
@@ -74,7 +74,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_0afc89f5438f1abe0068edb667ba988197b732f515f8c387af",
+          "id": "rs_03ed9feca38012c00069079a2a92d48193ab518283523486ec",
           "summary": [],
           "type": "reasoning"
         },
@@ -83,11 +83,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Why don’t cats play poker in the wild? Too many cheetahs.",
+              "text": "Why did the cat sit on the computer? It wanted to keep an eye on the mouse.",
               "type": "output_text"
             }
           ],
-          "id": "msg_0afc89f5438f1abe0068edb66951fc81979ba8d2cc2692d20a",
+          "id": "msg_03ed9feca38012c00069079a2e13e881939a4d370c92bb11fb",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -96,6 +96,7 @@
       "parallel_tool_calls": true,
       "previous_response_id": null,
       "prompt_cache_key": null,
+      "prompt_cache_retention": null,
       "reasoning": {
         "effort": "medium",
         "summary": null
@@ -130,15 +131,15 @@
       "top_p": 1.0,
       "truncation": "disabled",
       "usage": {
-        "input_tokens": 38,
+        "input_tokens": 35,
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 86,
+        "output_tokens": 217,
         "output_tokens_details": {
-          "reasoning_tokens": 64
+          "reasoning_tokens": 192
         },
-        "total_tokens": 124
+        "total_tokens": 252
       },
       "user": null
     },
@@ -150,7 +151,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e3aba418e9fa1d-ORD"
+        "99857b25f94ca243-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -159,13 +160,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 02:33:13 GMT"
+        "Sun, 02 Nov 2025 17:51:42 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "2688"
+        "4616"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -177,8 +178,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=6zbQvzPf0CV9Xgv31fGwPOSbhQUAMyJNSA2KWAqZayw-1760409193-1.0.1.1-xIfwuSsK5Kmsoo_uAT.p2KEK74U0yXJ0XAFGpnU_kwm32TL7GYJmr4rVzmkjRmg12f2u1pt6RJVJHUi.wVrZrlpFs8CWdB5v6.1k8f7f5W0; path=/; expires=Tue, 14-Oct-25 03:03:13 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=yivRUdaQUEF_NvkD7N69co7qhpHdotYLg0_bQOJUldk-1760409193804-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=_A3Ese4RS4aj2TEJPw.Hn64XVVtaPwu8iReSBX6yjic-1762105902-1.0.1.1-4hVQbsWn_hY619bp53U_GyWaVOpJJMPzro.lsAWvx6_DoFxp79VaLjkiV1w4XKGH5I4HfaHuoC01OHgzsEWYXc9YDTwwjdVe92tsv219zmE; path=/; expires=Sun, 02-Nov-25 18:21:42 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=_J0p7E9ZGEj587kcM0duW6.dwDZ22bxEsSt7bz8rmmk-1762105902602-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -190,10 +191,28 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "2693"
+        "4621"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0s"
       ],
       "x-request-id": [
-        "req_104ed99a00044094b118e13b2d0a51b7"
+        "req_4e9174e0ecb24290950b5d0f49be263d"
       ]
     },
     "status": 200

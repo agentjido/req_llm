@@ -62,9 +62,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760542292,
+      "created_at": 1762105851,
       "error": null,
-      "id": "resp_08681a5a846ccb180068efbe5406b881938cec297f90532a63",
+      "id": "resp_0c09bc8637346c5d00690799fb202c8194938beb012ca1ff5e",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 20000,
@@ -74,7 +74,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_08681a5a846ccb180068efbe54d2888193b6fb7da0ab9da1fa",
+          "id": "rs_0c09bc8637346c5d00690799fb88b081948e804405afa5adb7",
           "summary": [],
           "type": "reasoning"
         },
@@ -83,11 +83,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "Why did the cat sit on the computer?  \nBecause it wanted to keep an eye on the mouse! 😸",
+              "text": "Why don’t cats play poker in the jungle?  \nToo many cheetahs! 😸",
               "type": "output_text"
             }
           ],
-          "id": "msg_08681a5a846ccb180068efbe559b44819399346787cae7e340",
+          "id": "msg_0c09bc8637346c5d00690799fc82e08194ab8e0df5b34c46e1",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -96,6 +96,7 @@
       "parallel_tool_calls": true,
       "previous_response_id": null,
       "prompt_cache_key": null,
+      "prompt_cache_retention": null,
       "reasoning": {
         "effort": "medium",
         "summary": null
@@ -134,11 +135,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 93,
+        "output_tokens": 89,
         "output_tokens_details": {
           "reasoning_tokens": 64
         },
-        "total_tokens": 126
+        "total_tokens": 122
       },
       "user": null
     },
@@ -150,7 +151,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98f05d2ca95d507c-ORD"
+        "99857a011c516184-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -159,13 +160,13 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 15:31:34 GMT"
+        "Sun, 02 Nov 2025 17:50:53 GMT"
       ],
       "openai-organization": [
         "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "2185"
+        "1898"
       ],
       "openai-project": [
         "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
@@ -177,8 +178,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=22WF6vPgmqVFg_cmQdvzG6QZyy4wIpB7RvHhktGIcA4-1760542294-1.0.1.1-eaGTAyZba_UmRqdErMew5LRcRorE2zfqhK0jvkxCM55GQl_6IhTFpDKM2bXd3668LL3OpZty_6FEgsVe9SL6zoe_7hw8giMmpfw3dSbvhIQ; path=/; expires=Wed, 15-Oct-25 16:01:34 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=XZJAr1wgV6SubyeQe6bEZ3dFg4qsTCbciKxCBdScgDw-1760542294226-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=IhuUGTu_IfCQxbwpntLQ3iExYixEX4pzo_mDoF585MI-1762105853-1.0.1.1-RqUTXOMSDrvtshY4LgobLlIoYPvR0ox134jAxEsqvQ2_xXex6iG4X5s6.HlrLx4EMX01UL3dzt2RbwEukFyF1c4rp_macC1iWrll7w3VApY; path=/; expires=Sun, 02-Nov-25 18:20:53 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=sWI3mceLN4V7UvXNAWHRMolxh7vScRhVcJP.dOMxn80-1762105853058-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -190,7 +191,7 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "2202"
+        "1903"
       ],
       "x-ratelimit-limit-requests": [
         "10000"
@@ -211,7 +212,7 @@
         "1ms"
       ],
       "x-request-id": [
-        "req_4e51e486fe3b4de9aae5ba9a8039f692"
+        "req_fab181d1615a4e5c8f1259887d1e1ffb"
       ]
     },
     "status": 200

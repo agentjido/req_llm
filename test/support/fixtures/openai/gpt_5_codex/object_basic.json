@@ -71,9 +71,9 @@
       "billing": {
         "payer": "developer"
       },
-      "created_at": 1760754307,
+      "created_at": 1762105839,
       "error": null,
-      "id": "resp_06f682da632299ea0068f2fa83a0348194b7f9569b589e4e7e",
+      "id": "resp_00982db7da007c6600690799efc96081948710ca19d544ddaf",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 4096,
@@ -83,7 +83,7 @@
       "object": "response",
       "output": [
         {
-          "id": "rs_06f682da632299ea0068f2fa8425a081949ee2fda4b87bc847",
+          "id": "rs_00982db7da007c6600690799f032dc8194a023d23045e47774",
           "summary": [],
           "type": "reasoning"
         },
@@ -92,11 +92,11 @@
             {
               "annotations": [],
               "logprobs": [],
-              "text": "{\"age\":29,\"name\":\"Jordan Avery Daniels\",\"occupation\":\"Software Engineer\"}",
+              "text": "{\"age\":29,\"name\":\"Jordan Patel\",\"occupation\":\"Software Engineer\"}",
               "type": "output_text"
             }
           ],
-          "id": "msg_06f682da632299ea0068f2fa852d688194a311a9f6c4f337f4",
+          "id": "msg_00982db7da007c6600690799f2027c8194870198aa57f4bdaf",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -105,6 +105,7 @@
       "parallel_tool_calls": true,
       "previous_response_id": null,
       "prompt_cache_key": null,
+      "prompt_cache_retention": null,
       "reasoning": {
         "effort": "medium",
         "summary": null
@@ -157,11 +158,11 @@
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 26,
+        "output_tokens": 89,
         "output_tokens_details": {
-          "reasoning_tokens": 0
+          "reasoning_tokens": 64
         },
-        "total_tokens": 96
+        "total_tokens": 159
       },
       "user": null
     },
@@ -173,7 +174,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "990495562951a2ec-YUL"
+        "998579ba4cbfdada-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -182,16 +183,16 @@
         "application/json"
       ],
       "date": [
-        "Sat, 18 Oct 2025 02:25:09 GMT"
+        "Sun, 02 Nov 2025 17:50:42 GMT"
       ],
       "openai-organization": [
-        "arcane-jg8nad"
+        "epic-creative-sogybe"
       ],
       "openai-processing-ms": [
-        "2132"
+        "2853"
       ],
       "openai-project": [
-        "proj_8DKgRe3gY7Nepp7KA3kP7man"
+        "proj_j5AhgU4eLMRmsoO9FDg7BRD3"
       ],
       "openai-version": [
         "2020-10-01"
@@ -200,8 +201,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=lNRVp0OIZ8GeM0dFQD8OzWX7jv2GHY8WI6fBAiVzJlI-1760754309-1.0.1.1-KrEhP88__joJG0GqscpUAVYTcdr5OsfPMDbQbrF0H1aJtnbD.CGUxzc6noV5_m1Ra7Na0dYkiyTsN_lJbgk5K207qrVf.48aqsuq8MU8YGE; path=/; expires=Sat, 18-Oct-25 02:55:09 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=AVhQU675diEXRQo9SXZJuOjdFj9MbORTspLrWGMlz7w-1760754309790-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=hKZAzIYKAEuErSJJSOQzaFpUbnw7kd0gMZPnh2W4Y64-1762105842-1.0.1.1-p7.iTGsEqQumUO5GeccZoSBHK6PXV_ePZwqr7cQlb3hgGjLG_Fr0lYNg9jyrYnUtjeBPQy1BpTRcFzNQD2GE4qvy3JHnkgv6jgxx5ELrkPU; path=/; expires=Sun, 02-Nov-25 18:20:42 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=YCquYq2LYi5YWki1GVcGry550grF2ZfU7NfNL6fHsNY-1762105842650-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -213,10 +214,28 @@
         "nosniff"
       ],
       "x-envoy-upstream-service-time": [
-        "2137"
+        "2858"
+      ],
+      "x-ratelimit-limit-requests": [
+        "10000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "4000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "9999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "3999962"
+      ],
+      "x-ratelimit-reset-requests": [
+        "6ms"
+      ],
+      "x-ratelimit-reset-tokens": [
+        "0s"
       ],
       "x-request-id": [
-        "req_17704c23cc4047cda25fe14649ac6e97"
+        "req_60a079bc2508409f81964bf1f99f3ec7"
       ]
     },
     "status": 200
