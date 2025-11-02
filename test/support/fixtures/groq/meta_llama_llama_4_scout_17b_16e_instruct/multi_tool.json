@@ -102,31 +102,31 @@
                   "arguments": "{\"location\":\"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "g2jpdx8bq",
+                "id": "5g6a5pf87",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1762103725,
-      "id": "chatcmpl-d92abfcf-a90d-473e-9ef6-35747b6090c9",
+      "created": 1762117460,
+      "id": "chatcmpl-639fa16b-c41e-4af4-ab14-d8dde0de4d3f",
       "model": "meta-llama/llama-4-scout-17b-16e-instruct",
       "object": "chat.completion",
       "service_tier": "on_demand",
       "system_fingerprint": "fp_59d473797c",
       "usage": {
-        "completion_time": 0.084096128,
+        "completion_time": 0.070537835,
         "completion_tokens": 31,
-        "prompt_time": 0.026831571,
+        "prompt_time": 0.021880553,
         "prompt_tokens": 799,
-        "queue_time": 0.047513015,
-        "total_time": 0.110927699,
+        "queue_time": 0.004373161,
+        "total_time": 0.092418388,
         "total_tokens": 830
       },
       "usage_breakdown": null,
       "x_groq": {
-        "id": "req_01k92s23jzf8jr11ej42b2gt8k"
+        "id": "req_01k93658nvf77a6w1n8pahg3ah"
       }
     },
     "headers": {
@@ -140,7 +140,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9985461d3f14232a-ORD"
+        "998695710b94f4ae-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -149,13 +149,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:15:25 GMT"
+        "Sun, 02 Nov 2025 21:04:20 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=GPhR1InCO.uCHY.bDElgQBIleO2stoOxpMnLQ2i5H6U-1762103725.6410673-1.0.1.1-Uds4Sp_kUmp.9cqtQVMmeAsabDQYXom2lb3Oceoka7mVC.qWhl8WZj1q9iK7bjs93T05rPivbNzUqx6dffjFEW9QNA_AR1GAy_.7qipJqeFoZN8luZyb5lxhDz.JhcZl; HttpOnly; Secure; Path=/; Domain=groq.com; Expires=Sun, 02 Nov 2025 17:45:25 GMT"
+        "__cf_bm=WTe2qOUg62FudiQSIqQxrIr8.AgA1HiAhUbfMuQvQa0-1762117460.6467059-1.0.1.1-LsGwpyrRnymD0iEJEKFDmldDztQmdTxdGf29HiwxbGCGVIVV6GF..jvCRxifGzWXg43TawcOYiF5WOlI6QV33vBkJQVFnBrTQ4H4qA1j1z1.ZtkbjYrF0xo20wwSk1bS; HttpOnly; Secure; Path=/; Domain=groq.com; Expires=Sun, 02 Nov 2025 21:34:20 GMT"
       ],
       "transfer-encoding": [
         "chunked"
@@ -176,19 +176,19 @@
         "30000"
       ],
       "x-ratelimit-remaining-requests": [
-        "999"
+        "987"
       ],
       "x-ratelimit-remaining-tokens": [
-        "29200"
+        "28009"
       ],
       "x-ratelimit-reset-requests": [
-        "1m26.4s"
+        "18m43.2s"
       ],
       "x-ratelimit-reset-tokens": [
-        "1.6s"
+        "3.982s"
       ],
       "x-request-id": [
-        "req_01k92s23jzf8jr11ej42b2gt8k"
+        "req_01k93658nvf77a6w1n8pahg3ah"
       ]
     },
     "status": 200

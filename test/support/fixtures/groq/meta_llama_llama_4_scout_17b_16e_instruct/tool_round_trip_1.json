@@ -67,7 +67,7 @@
       "error": {
         "code": "tool_use_failed",
         "failed_generation": "[\n  {\n    \"name\": \"add\",\n    \"parameters\": {\n      \"a\": \"2\",\n      \"b\": \"3\"\n    }\n  }\n]",
-        "message": "tool call validation failed: parameters for tool add did not match schema: errors: [`/b`: expected integer, but got string, `/a`: expected integer, but got string]",
+        "message": "tool call validation failed: parameters for tool add did not match schema: errors: [`/a`: expected integer, but got string, `/b`: expected integer, but got string]",
         "type": "invalid_request_error"
       }
     },
@@ -82,7 +82,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "99854624efb9232a-ORD"
+        "99869575dc46f4ae-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -91,13 +91,13 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:15:27 GMT"
+        "Sun, 02 Nov 2025 21:04:21 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=0dEOxic17BsLyIu0A0T4XFbw7VbeQ1w6iaytV2FJpYw-1762103726.8691454-1.0.1.1-4GlJd1pVl3WXZONRHAsS4dzWvafc9tiqN1N4sdV7UeWAFWy_uRU0LtWlIpsllcWoKJSNw8b9bIWrVWMjCWKsfM14CL6j2.EAvDFxfiVcLhuIZ.5nBUcm7hURfSgOx55o; HttpOnly; Secure; Path=/; Domain=groq.com; Expires=Sun, 02 Nov 2025 17:45:27 GMT"
+        "__cf_bm=6pDb0e2mlf_51caiQ1uaeMSiUs.ACLIZsbgPvCUjIbs-1762117461.4153514-1.0.1.1-2reFAU__3vAYFdm7ARUVWK0BduXkcmnJ6NJLaBH8pOx3ZHTlwXvUWNuOf5CYdlRJJ8VaNCGEToJhjl9dtbJAsmTSYW64vHhrx9TN0PcpDoZdJ5LNxIhTM5bfwpcG6yFW; HttpOnly; Secure; Path=/; Domain=groq.com; Expires=Sun, 02 Nov 2025 21:34:21 GMT"
       ],
       "vary": [
         "Origin"
@@ -115,19 +115,19 @@
         "30000"
       ],
       "x-ratelimit-remaining-requests": [
-        "994"
+        "984"
       ],
       "x-ratelimit-remaining-tokens": [
-        "26728"
+        "26720"
       ],
       "x-ratelimit-reset-requests": [
-        "8m38.4s"
+        "23m2.4s"
       ],
       "x-ratelimit-reset-tokens": [
-        "6.544s"
+        "6.56s"
       ],
       "x-request-id": [
-        "req_01k92s24s7f8q8t5tas1gh4w0w"
+        "req_01k93659dtf7av7c2chb40zhy9"
       ]
     },
     "status": 400

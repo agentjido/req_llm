@@ -107,8 +107,18 @@ defmodule ReqLLM.Providers.Google do
     end
   end
 
-  defp resolve_api_version(opts) do
+  defp resolve_api_version(opts) when is_list(opts) do
     provider = Keyword.get(opts, :provider_options, [])
+
+    case Keyword.get(provider, :google_api_version) do
+      "v1" -> "v1"
+      "v1beta" -> "v1beta"
+      _ -> nil
+    end
+  end
+
+  defp resolve_api_version(opts) when is_map(opts) do
+    provider = Map.get(opts, :provider_options, [])
 
     case Keyword.get(provider, :google_api_version) do
       "v1" -> "v1"
@@ -674,8 +684,15 @@ defmodule ReqLLM.Providers.Google do
 
   defp gemini_2_5?(_), do: false
 
+  defp gemini_2_0?(model_name) when is_binary(model_name) do
+    String.starts_with?(model_name, "gemini-2.0-") or model_name == "gemini-2.0"
+  end
+
+  defp gemini_2_0?(_), do: false
+
   defp include_response_mime?(request, model_name) do
-    gemini_2_5?(model_name) or resolve_api_version(request.options) == "v1beta"
+    gemini_2_5?(model_name) or gemini_2_0?(model_name) or
+      resolve_api_version(request.options) == "v1beta"
   end
 
   defp put_schema_for_model(generation_config, model_name, compiled_schema) do
@@ -1139,7 +1156,17 @@ defmodule ReqLLM.Providers.Google do
 
   @impl ReqLLM.Provider
   def attach_stream(model, context, opts, _finch_name) do
-    req_only_keys = [:params, :model, :base_url, :finch_name, :fixture]
+    req_only_keys = [
+      :params,
+      :model,
+      :base_url,
+      :finch_name,
+      :fixture,
+      :retry,
+      :max_retries,
+      :retry_log_level
+    ]
+
     {req_opts, user_opts} = Keyword.split(opts, req_only_keys)
 
     operation = Keyword.get(user_opts, :operation, :chat)

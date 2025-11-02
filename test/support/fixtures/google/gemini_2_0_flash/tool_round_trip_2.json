@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4ifV0sInJvbGUiOiJ1c2VyIn0seyJwYXJ0cyI6W3siZnVuY3Rpb25DYWxsIjp7ImFyZ3MiOnsiYSI6MiwiYiI6M30sImlkIjoidG9vbF9jYWxsXzEzMiIsIm5hbWUiOiJhZGQifX1dLCJyb2xlIjoibW9kZWwifSx7InBhcnRzIjpbeyJ0ZXh0IjoiNSJ9XSwicm9sZSI6InVzZXIifV0sImdlbmVyYXRpb25Db25maWciOnsiY2FuZGlkYXRlQ291bnQiOjEsIm1heE91dHB1dFRva2VucyI6ODE5LCJ0ZW1wZXJhdHVyZSI6MC4wfX0="
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4ifV0sInJvbGUiOiJ1c2VyIn0seyJwYXJ0cyI6W3siZnVuY3Rpb25DYWxsIjp7ImFyZ3MiOnsiYSI6MiwiYiI6M30sImlkIjoidG9vbF9jYWxsXzQ0MTkiLCJuYW1lIjoiYWRkIn19XSwicm9sZSI6Im1vZGVsIn0seyJwYXJ0cyI6W3sidGV4dCI6IjUifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjgxOSwidGVtcGVyYXR1cmUiOjAuMH19"
     },
     "canonical_json": {
       "contents": [
@@ -21,7 +21,7 @@
                   "a": 2,
                   "b": 3
                 },
-                "id": "tool_call_132",
+                "id": "tool_call_4419",
                 "name": "add"
               }
             }
@@ -61,7 +61,7 @@
     "body": {
       "candidates": [
         {
-          "avgLogprobs": -1.3493001461029053e-5,
+          "avgLogprobs": -1.1008232831954956e-5,
           "content": {
             "parts": [
               {
@@ -74,7 +74,7 @@
         }
       ],
       "modelVersion": "gemini-2.0-flash",
-      "responseId": "fYztaKr7CvrWjMcPmuaE6Q0",
+      "responseId": "AsYHaf7SHNKo_uMPwabuyQc",
       "usageMetadata": {
         "candidatesTokenCount": 4,
         "candidatesTokensDetails": [
@@ -101,13 +101,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Mon, 13 Oct 2025 23:34:21 GMT"
+        "Sun, 02 Nov 2025 20:58:42 GMT"
       ],
       "server": [
         "scaffolding on HTTPServer2"
       ],
       "server-timing": [
-        "gfet4t7; dur=580"
+        "gfet4t7; dur=440"
       ],
       "transfer-encoding": [
         "chunked"
