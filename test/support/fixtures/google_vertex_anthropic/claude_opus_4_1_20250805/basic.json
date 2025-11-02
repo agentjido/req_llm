@@ -1,11 +1,11 @@
 {
   "request": {
     "body": {
-      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6InZlcnRleC0yMDIzLTEwLTE2IiwibWF4X3Rva2VucyI6MjAwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6InZlcnRleC0yMDIzLTEwLTE2IiwibWF4X3Rva2VucyI6NDAwMSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjEuMCwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifX0="
     },
     "canonical_json": {
       "anthropic_version": "vertex-2023-10-16",
-      "max_tokens": 2000,
+      "max_tokens": 4001,
       "messages": [
         {
           "content": "Hello world!",
@@ -13,7 +13,11 @@
         }
       ],
       "stream": false,
-      "temperature": 0.0
+      "temperature": 1.0,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
     },
     "headers": {
       "accept": [
@@ -37,11 +41,16 @@
     "body": {
       "content": [
         {
-          "text": "Hello! Welcome! It's great to meet you. How are you doing today? Is there anything you'd like to chat about or any way I can help you?",
+          "signature": "EswDCkgICRACGAIqQOLZiPFZm3giTN5vPPG8ktWDNHPy/WbXXeja7GQbVNZNDhCpEaWJ000uS9lFxYtIiRUmN3Xu+RGBHmMMgsDzUgESDPMrCxe/hPX6DwYhJhoMah1lWswpuNxxKrKIIjDWIDJScGm1NgnaRBvIY6z6E87tVKRspBdj8e8b7M/VhUJhy80UD9cXJ+lxk1w1OGYqsQJpX0/bdLkpry4MRkJm5o0CK3lbV/lSo4phSWHK4qpxoUjz/E1p6BCDM4nANpV2FXVfgY7OSOlG59A4ZRMM9K8Pie6PaWOYSfR1wlsxBJ9AI29RuiVfftMNC6UNfawbYT/7DyO8MlFzifYzji4IamKZfWZJUkrSwjKyxX7qU1zWWRNYOW48OxAtPyWioJX/BE5PJ+AKkM09OqDBx9yXRfFOg7ahpdccdxhd+59ZAUNi2ChvjKHN3JrguKtwjtXmq9IlNZcOugjQeiRF6qICjNNZpiPJGOuX49+EFheZIxiOljICxa/wqZBxpDsipFJJpBF+kAEsJOGA/CCr4i5isUoEHIBlXaO2O3OBepP576QQdvlJkX8XOIhXQNlTsMFyB9gcKuhAznZ2C2oNUGjOW3IHChgB",
+          "thinking": "The human has greeted me with \"Hello world!\" - this is a common greeting in programming and computer science, often used as the first program someone writes when learning a new programming language. It could also just be a friendly greeting. I should respond in a warm and friendly manner.",
+          "type": "thinking"
+        },
+        {
+          "text": "Hello! 👋 It's nice to meet you! Whether you're referencing the classic programming tradition or just saying hi, I'm happy to chat with you. How are you doing today?",
           "type": "text"
         }
       ],
-      "id": "msg_vrtx_01BjfFYGMAsFvGU3T9NpURhH",
+      "id": "msg_vrtx_014DGRNi4o9zGSKbRBobKoVP",
       "model": "claude-opus-4-1-20250805",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -50,8 +59,8 @@
       "usage": {
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 10,
-        "output_tokens": 37
+        "input_tokens": 38,
+        "output_tokens": 110
       }
     },
     "headers": {
@@ -62,19 +71,19 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 04:59:19 GMT"
+        "Sun, 02 Nov 2025 17:03:32 GMT"
       ],
       "internal-input-tokens": [
-        "10"
+        "38"
       ],
       "internal-output-tokens": [
-        "37"
+        "110"
       ],
       "pinnacle-error-category": [
         "no_error"
       ],
       "request-id": [
-        "req_vrtx_011CUiULwvmBgsCexMDfpMd2"
+        "req_vrtx_011CUjRZqDi59tgj2q7pZiCp"
       ],
       "server": [
         "scaffolding on HTTPServer2"

@@ -1,11 +1,11 @@
 {
   "request": {
     "body": {
-      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6InZlcnRleC0yMDIzLTEwLTE2IiwibWF4X3Rva2VucyI6MjAwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6InZlcnRleC0yMDIzLTEwLTE2IiwibWF4X3Rva2VucyI6NDAwMSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjEuMCwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifX0="
     },
     "canonical_json": {
       "anthropic_version": "vertex-2023-10-16",
-      "max_tokens": 2000,
+      "max_tokens": 4001,
       "messages": [
         {
           "content": "Hello world!",
@@ -13,7 +13,11 @@
         }
       ],
       "stream": false,
-      "temperature": 0.0
+      "temperature": 1.0,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
     },
     "headers": {
       "accept": [
@@ -37,11 +41,16 @@
     "body": {
       "content": [
         {
-          "text": "Hello! 👋 Welcome! How can I help you today?",
+          "signature": "EtUCCkgICRACGAIqQEKnoDZD4ojztFBonv7PnW30Ny1vtxRpDbnNWjpyiX86bZeF31X++OHmUnbqcV9Ie4s28LNM0aoMMu8oiwIxdeESDECNpE9LlPVGB2MhwRoMGXFJBrDFeV34F47BIjAiRvRgDykVyKUOJr5dIBkJ/qISF/S+Fo7tpF/S4GAwlCFz0yFG9v1KfysMbI9vcnAqugGTxpBCtDmaHK/q7OTOjBXVvwks+gcIuzkoZnLy8QL60AiDvFssU5FBZNrFvI8ZM4gBJhOyJFyoabiK+lUYcC+k+z0h/9svHSVrEggALbPNntX4UCUcT5DoqIc0SdXty4uPBdqW7HQ+pjR1x4BIg72fCEDRruzPIhHcpg0gFgY0a2X9ggza1BSngihnc3J0OeMb5s1ulXUXpPGas+q1x3kSlnSqPIVLYz+ECoqwsUbEFE9rR/qU4F8r74oYAQ==",
+          "thinking": "The user has sent a simple greeting \"Hello world!\" - this is a very common first program output and general greeting. I should respond in a friendly and welcoming manner.",
+          "type": "thinking"
+        },
+        {
+          "text": "Hello! 👋 How can I help you today?",
           "type": "text"
         }
       ],
-      "id": "msg_vrtx_01VGh2LFqCppNuCPLGdfuVHa",
+      "id": "msg_vrtx_01GFhZaMhbRc2RgU1vF7brx8",
       "model": "claude-sonnet-4-5-20250929",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -50,8 +59,8 @@
       "usage": {
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 10,
-        "output_tokens": 18
+        "input_tokens": 38,
+        "output_tokens": 60
       }
     },
     "headers": {
@@ -62,19 +71,19 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 05:01:53 GMT"
+        "Sun, 02 Nov 2025 17:06:55 GMT"
       ],
       "internal-input-tokens": [
-        "10"
+        "38"
       ],
       "internal-output-tokens": [
-        "18"
+        "60"
       ],
       "pinnacle-error-category": [
         "no_error"
       ],
       "request-id": [
-        "req_vrtx_011CUiUYM7qUvc7VBNZ7qD2P"
+        "req_vrtx_011CUjRq3Zmx6Qu7VkCTXjgH"
       ],
       "server": [
         "scaffolding on HTTPServer2"

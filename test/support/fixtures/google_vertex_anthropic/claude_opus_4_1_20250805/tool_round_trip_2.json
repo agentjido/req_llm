@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6InZlcnRleC0yMDIzLTEwLTE2IiwibWF4X3Rva2VucyI6MzIwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W3siaWQiOiJ0b29sdV92cnR4XzAxVE5iV3FuMksyeXpEdUJVZVltUTFGbiIsImlucHV0Ijp7ImEiOjIsImIiOjN9LCJuYW1lIjoiYWRkIiwidHlwZSI6InRvb2xfdXNlIn1dLCJyb2xlIjoiYXNzaXN0YW50In0seyJjb250ZW50IjpbeyJjb250ZW50IjoiNSIsInRvb2xfdXNlX2lkIjoidG9vbHVfdnJ0eF8wMVROYldxbjJLMnl6RHVCVWVZbVExRm4iLCJ0eXBlIjoidG9vbF9yZXN1bHQifV0sInJvbGUiOiJ1c2VyIn1dLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6InZlcnRleC0yMDIzLTEwLTE2IiwibWF4X3Rva2VucyI6MzIwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W3siaWQiOiJ0b29sdV92cnR4XzAxVUI4S3JrZDhmN2FRWUtjb1ljODNyeSIsImlucHV0Ijp7ImEiOjIsImIiOjN9LCJuYW1lIjoiYWRkIiwidHlwZSI6InRvb2xfdXNlIn1dLCJyb2xlIjoiYXNzaXN0YW50In0seyJjb250ZW50IjpbeyJjb250ZW50IjoiNSIsInRvb2xfdXNlX2lkIjoidG9vbHVfdnJ0eF8wMVVCOEtya2Q4ZjdhUVlLY29ZYzgzcnkiLCJ0eXBlIjoidG9vbF9yZXN1bHQifV0sInJvbGUiOiJ1c2VyIn1dLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
       "anthropic_version": "vertex-2023-10-16",
@@ -14,7 +14,7 @@
         {
           "content": [
             {
-              "id": "toolu_vrtx_01TNbWqn2K2yzDuBUeYmQ1Fn",
+              "id": "toolu_vrtx_01UB8Krkd8f7aQYKcoYc83ry",
               "input": {
                 "a": 2,
                 "b": 3
@@ -29,7 +29,7 @@
           "content": [
             {
               "content": "5",
-              "tool_use_id": "toolu_vrtx_01TNbWqn2K2yzDuBUeYmQ1Fn",
+              "tool_use_id": "toolu_vrtx_01UB8Krkd8f7aQYKcoYc83ry",
               "type": "tool_result"
             }
           ],
@@ -65,7 +65,7 @@
           "type": "text"
         }
       ],
-      "id": "msg_vrtx_017XGE4Yzf638n2VdxMhd46C",
+      "id": "msg_vrtx_013CxEYGGAAngu7dw4DQtt7H",
       "model": "claude-opus-4-1-20250805",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -86,7 +86,7 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 05:01:29 GMT"
+        "Sun, 02 Nov 2025 17:06:28 GMT"
       ],
       "internal-input-tokens": [
         "118"
@@ -98,7 +98,7 @@
         "no_error"
       ],
       "request-id": [
-        "req_vrtx_011CUiUWZ8bBg8p9wxbUbC4s"
+        "req_vrtx_011CUjRo7HThVRG5ddsBVBsg"
       ],
       "server": [
         "scaffolding on HTTPServer2"

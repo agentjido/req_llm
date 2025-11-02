@@ -1,11 +1,11 @@
 {
   "request": {
     "body": {
-      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6InZlcnRleC0yMDIzLTEwLTE2IiwibWF4X3Rva2VucyI6MjAwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6InZlcnRleC0yMDIzLTEwLTE2IiwibWF4X3Rva2VucyI6NDAwMSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjEuMCwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifX0="
     },
     "canonical_json": {
       "anthropic_version": "vertex-2023-10-16",
-      "max_tokens": 2000,
+      "max_tokens": 4001,
       "messages": [
         {
           "content": "Hello world!",
@@ -13,7 +13,11 @@
         }
       ],
       "stream": false,
-      "temperature": 0.0
+      "temperature": 1.0,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
     },
     "headers": {
       "accept": [
@@ -37,11 +41,16 @@
     "body": {
       "content": [
         {
+          "signature": "ErQCCkgICRACGAIqQHEYebYnfjqavDnJbniyoaCmqaD011NM0eUgaOO9FQe7HJGvK/4ab5FggxzlHxPcnFrG85gyN/mNboknwdrEg/gSDHcQqybtzy319ZqIyBoMtyTmHSphr+JD8AvNIjAyWcQ3UXW3F9Wsbyqa7Ay88r9I+iN1kCk+6BkHCbi8MuhJ2c4UlC1L5oHTZ6qotWEqmQGucZid8TRLD0HJCVpC4JRab0gv/m/sCHXhdyYe3kSvAMk9vvSqPqinKKSBJPqMTlyQ5DwPU+rcE9PQhOIZr3908PM/FgxtvqBmLffLavAYJsxNhG7sc3sWTelUbwnJ7ZbQlWReIF60Fs7wntrMhvFKaxjZR1FIiqt6hhy7PlJoOZptkPZvA5fziavYlbBN7v6METzZuNfsI1MYAQ==",
+          "thinking": "The user is greeting me with a simple \"Hello world!\" message. This is a friendly greeting. I should respond in a warm and helpful manner.",
+          "type": "thinking"
+        },
+        {
           "text": "Hello! 👋 It's nice to meet you. How can I help you today?",
           "type": "text"
         }
       ],
-      "id": "msg_vrtx_01199kzbHgJ9vy3NcTpkFTG5",
+      "id": "msg_vrtx_01J59w6MdrP5P9DwSFv1KUpX",
       "model": "claude-haiku-4-5-20251001",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -50,8 +59,8 @@
       "usage": {
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 10,
-        "output_tokens": 23
+        "input_tokens": 38,
+        "output_tokens": 62
       }
     },
     "headers": {
@@ -62,19 +71,19 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 04:58:37 GMT"
+        "Sun, 02 Nov 2025 17:02:32 GMT"
       ],
       "internal-input-tokens": [
-        "10"
+        "38"
       ],
       "internal-output-tokens": [
-        "23"
+        "62"
       ],
       "pinnacle-error-category": [
         "no_error"
       ],
       "request-id": [
-        "req_vrtx_011CUiUHwa6UshPPGNnDMt8q"
+        "req_vrtx_011CUjRVhCtcuTLmxnYQ6xf5"
       ],
       "server": [
         "scaffolding on HTTPServer2"

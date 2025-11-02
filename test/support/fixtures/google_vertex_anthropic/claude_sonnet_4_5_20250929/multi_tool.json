@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6InZlcnRleC0yMDIzLTEwLTE2IiwibWF4X3Rva2VucyI6MTI4MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0X3NjaGVtYSI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoiZ2V0X3dlYXRoZXIifSx7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJpbnB1dF9zY2hlbWEiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoidGVsbF9qb2tlIn0seyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwiaW5wdXRfc2NoZW1hIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJnZXRfdGltZSJ9XX0="
+      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6InZlcnRleC0yMDIzLTEwLTE2IiwibWF4X3Rva2VucyI6MTI4MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV2hhdCdzIHRoZSB3ZWF0aGVyIGxpa2UgaW4gUGFyaXMsIEZyYW5jZT8iLCJyb2xlIjoidXNlciJ9XSwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjEuMCwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifSwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiR2V0IGN1cnJlbnQgd2VhdGhlciBpbmZvcm1hdGlvbiBmb3IgYSBsb2NhdGlvbiIsImlucHV0X3NjaGVtYSI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoiZ2V0X3dlYXRoZXIifSx7ImRlc2NyaXB0aW9uIjoiVGVsbCBhIGZ1bm55IGpva2UiLCJpbnB1dF9zY2hlbWEiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoidGVsbF9qb2tlIn0seyJkZXNjcmlwdGlvbiI6IkdldCB0aGUgY3VycmVudCB0aW1lIiwiaW5wdXRfc2NoZW1hIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In0sIm5hbWUiOiJnZXRfdGltZSJ9XX0="
     },
     "canonical_json": {
       "anthropic_version": "vertex-2023-10-16",
@@ -13,7 +13,11 @@
         }
       ],
       "stream": false,
-      "temperature": 0.0,
+      "temperature": 1.0,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      },
       "tools": [
         {
           "description": "Get current weather information for a location",
@@ -84,7 +88,12 @@
     "body": {
       "content": [
         {
-          "id": "toolu_vrtx_01BZ2gnoTai9kP2fFjL4pveF",
+          "signature": "ErMECkgICRACGAIqQLvyAtamprLy9mVu5fYfYLN7+7C/JHUepOUJht8/5IGimxK3D1WBiQK1KrHg5reXfIXhFlbHV+gUNahoTeTYlrUSDL2hM5a9dfxwgOgJ6RoMP/wkSbMP+EJ6OsxTIjD+P5e9tu9NgkCRu9ZGZ+nSTxDmGhqQzrJUPQT5Fzfns1Wf8QI3lEuOZPLcke7ZJ4sqmAOF3dUzNxkBZOugUZUhDj9cPdylx5j70Z7SMV3qeX9p379cqFcqVfRKvp3c6kDAdHm3j42F52fAXK4IqO0Ygm5J3D6uWocn1uGgJTx004KhWMzlLRVekeyJOf4eCydpY3YW5q5rstynUOqYDypL8J+IiFCmuat7YbLSNaCx0nCFC0d0Eo1AY4wXkMlK5BHU435mvDD1MUIC51F7Oyq4rMzpxOXtuU/T8IV3XBILKIVXfh5JOaQlN9gRnchv4brtjgv4phtGe65wVAm5vG3W5sIfPKffks95a6Xi9p9IrpMv2qa1xPc0+570vaq3AWhG3u5rkC7FKB+ACwEWoZ0/xPb5AcbY6EDyKf9RlHx/S7ZJJLWdYhmyDWqgaHNmFwTm5gdJvftsp9CenFxdLeNBK7M8G2b05e/eIjVqUuJtO9/SorHqWYdr+lTNQQznyj1fFb45VWpFCTEzHxClCWAAyt+n+d2/9MESr7MSnbs4E+3Hd0oXY6odLF3SkdOQmMuIT/bvT3w5BzmbpJGC3EEYlJfVlYumOGriP38YAQ==",
+          "thinking": "The user is asking about the weather in Paris, France. I have a function called `get_weather` that can help with this. Let me check the parameters:\n\n- location (required): The user specified \"Paris, France\"\n- unit (optional, enum: celsius or fahrenheit): Not specified by the user\n\nSince the location is provided and the unit is optional, I can make the call with just the location parameter.",
+          "type": "thinking"
+        },
+        {
+          "id": "toolu_vrtx_01AERwYN3pATcmLk4UbqceGm",
           "input": {
             "location": "Paris, France"
           },
@@ -92,7 +101,7 @@
           "type": "tool_use"
         }
       ],
-      "id": "msg_vrtx_01B4JFdbWCK1LRHEtEJURoUw",
+      "id": "msg_vrtx_019k5nmZAjcmRsgUaGexZR38",
       "model": "claude-sonnet-4-5-20250929",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -101,8 +110,8 @@
       "usage": {
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 695,
-        "output_tokens": 55
+        "input_tokens": 724,
+        "output_tokens": 153
       }
     },
     "headers": {
@@ -113,19 +122,19 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 05:03:15 GMT"
+        "Sun, 02 Nov 2025 17:08:42 GMT"
       ],
       "internal-input-tokens": [
-        "695"
+        "724"
       ],
       "internal-output-tokens": [
-        "55"
+        "153"
       ],
       "pinnacle-error-category": [
         "no_error"
       ],
       "request-id": [
-        "req_vrtx_011CUiUePTPvrFpypqb5v2u3"
+        "req_vrtx_011CUjRxrRHL6nKpZmuYoNdB"
       ],
       "server": [
         "scaffolding on HTTPServer2"

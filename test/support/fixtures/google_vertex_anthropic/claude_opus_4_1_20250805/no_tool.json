@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6InZlcnRleC0yMDIzLTEwLTE2IiwibWF4X3Rva2VucyI6NjQwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJpbnB1dF9zY2hlbWEiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifSwibmFtZSI6ImdldF93ZWF0aGVyIn1dfQ=="
+      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6InZlcnRleC0yMDIzLTEwLTE2IiwibWF4X3Rva2VucyI6NjQwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIiwicm9sZSI6InVzZXIifV0sInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjoxLjAsInRoaW5raW5nIjp7ImJ1ZGdldF90b2tlbnMiOjEwMjQsInR5cGUiOiJlbmFibGVkIn0sInRvb2xzIjpbeyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJpbnB1dF9zY2hlbWEiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifSwibmFtZSI6ImdldF93ZWF0aGVyIn1dfQ=="
     },
     "canonical_json": {
       "anthropic_version": "vertex-2023-10-16",
@@ -13,7 +13,11 @@
         }
       ],
       "stream": false,
-      "temperature": 0.0,
+      "temperature": 1.0,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      },
       "tools": [
         {
           "description": "Get current weather information for a location",
@@ -55,11 +59,16 @@
     "body": {
       "content": [
         {
+          "signature": "EuYCCkgICRACGAIqQCZjx7LnJjVyHIpzwniRiGegn2VkPzT/BiOzogBUAoqbO9/CWnCjDG2SAWm/VRNfMAwhGcxAXvQe+TBnfUiX6nMSDDX/pwqjWcqCwSjAuBoMJzw2e//W5i0MmXFjIjAKIISMMEriyR6OAHeokCX7503Vvdp/I0NhdK/dqhhEownL/7slK5Mn8g+XGTWGsIIqywE64iyMrgYbNQ2pJaTzpyq8aMXxTCMQJP3v+tDwHY8BnEL/n1mY957cbnjGXRHAyupjwbNYWY4Hli+eB/bvo196jq2p8lwedKGVqUETIRKTBkPfPOsR0GbvCRAe3aSQzUCO7TYkhoziw7FL12BCx1XqNef8kHXktiHltxjZ4qfKyFOnqYBV+SqjNsvWWRBCzUrWhLFL9MmIvAxWKqKHTxRidnqkpTR9znycdyMDjSdOkBV63Hp20zW06CZE49FfRTd7/I4LBvit7pFRLRgB",
+          "thinking": "The user is asking for a joke about cats. This is not related to getting weather information, so I don't need to use the get_weather function. I should just tell them a cat joke directly.",
+          "type": "thinking"
+        },
+        {
           "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs!\n\n😸",
           "type": "text"
         }
       ],
-      "id": "msg_vrtx_01HNEoUMzcjVaoEgFwmV2Q3Y",
+      "id": "msg_vrtx_01WAyUMwTEUUgfZiD2khAwa6",
       "model": "claude-opus-4-1-20250805",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -68,8 +77,8 @@
       "usage": {
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
-        "input_tokens": 388,
-        "output_tokens": 33
+        "input_tokens": 417,
+        "output_tokens": 84
       }
     },
     "headers": {
@@ -80,19 +89,19 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 05:01:31 GMT"
+        "Sun, 02 Nov 2025 17:06:32 GMT"
       ],
       "internal-input-tokens": [
-        "388"
+        "417"
       ],
       "internal-output-tokens": [
-        "33"
+        "84"
       ],
       "pinnacle-error-category": [
         "no_error"
       ],
       "request-id": [
-        "req_vrtx_011CUiUWfHB9JJGpvABQFGCU"
+        "req_vrtx_011CUjRoDE9RZ526eHsLX2VD"
       ],
       "server": [
         "scaffolding on HTTPServer2"
