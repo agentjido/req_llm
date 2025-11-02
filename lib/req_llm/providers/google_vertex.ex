@@ -444,17 +444,17 @@ defmodule ReqLLM.Providers.GoogleVertex do
   end
 
   @impl ReqLLM.Provider
-  def decode_sse_event(event, model) do
+  def decode_stream_event(event, model) do
     # Get formatter for this model
     formatter = get_formatter(model.model)
 
     # Delegate SSE parsing to formatter
     # For Anthropic models, Vertex uses standard Anthropic SSE format
-    if function_exported?(formatter, :decode_sse_event, 2) do
-      formatter.decode_sse_event(event, model)
+    if function_exported?(formatter, :decode_stream_event, 2) do
+      formatter.decode_stream_event(event, model)
     else
-      # Fall back to Anthropic's SSE decoder for models using that format
-      ReqLLM.Providers.Anthropic.Response.decode_sse_event(event, model)
+      # Fall back to Anthropic's stream decoder for models using that format
+      ReqLLM.Providers.Anthropic.Response.decode_stream_event(event, model)
     end
   end
 
