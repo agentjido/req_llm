@@ -457,7 +457,10 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
           provider_name(provider) <> IO.ANSI.reset()
       )
 
-      Enum.each(provider_results, &print_result/1)
+      provider_results
+      |> Enum.sort_by(& &1.model_id)
+      |> Enum.each(&print_result/1)
+
       Mix.shell().info("")
     end)
 

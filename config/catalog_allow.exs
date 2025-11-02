@@ -111,8 +111,8 @@ openrouter_models = ~w(
   qwen/qwen3-coder:exacto
   qwen/qwen3-next-80b-a3b-thinking
   x-ai/grok-4
-  x-ai/grok-4-fast
   x-ai/grok-code-fast-1
+  x-ai/grok-4-fast
   z-ai/glm-4.5
   z-ai/glm-4.5-air
   z-ai/glm-4.5v
