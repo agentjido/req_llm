@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjY0MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzLiBBZnRlciB0aGUgdG9vbCByZXN1bHQgYXJyaXZlcywgcmVzcG9uZCB3aXRoICdzdW09PHZhbHVlPicuIiwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOltdLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF82NDQ5MDE0MiIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfNjQ0OTAxNDIifV0sIm1vZGVsIjoiZ3Jvay00LWZhc3QtcmVhc29uaW5nIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjY0MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiVXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzLiBBZnRlciB0aGUgdG9vbCByZXN1bHQgYXJyaXZlcywgcmVzcG9uZCB3aXRoICdzdW09PHZhbHVlPicuIiwicm9sZSI6InVzZXIifSx7ImNvbnRlbnQiOltdLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF80NDExNDk0OSIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfNDQxMTQ5NDkifV0sIm1vZGVsIjoiZ3Jvay00LWZhc3QtcmVhc29uaW5nIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
       "max_completion_tokens": 6400,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_64490142",
+              "id": "call_44114949",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "call_64490142"
+          "tool_call_id": "call_44114949"
         }
       ],
       "model": "grok-4-fast-reasoning",
@@ -64,28 +64,28 @@
           }
         }
       ],
-      "created": 1760471287,
-      "id": "f37729be-60fa-0274-a1eb-40187eef0ea9_us-east-1",
+      "created": 1762103794,
+      "id": "7777330e-ef22-39ab-11ae-54b65806e1a4_us-east-1",
       "model": "grok-4-fast-reasoning",
       "object": "chat.completion",
-      "system_fingerprint": "fp_9362061f30",
+      "system_fingerprint": "fp_bfbe7bd0a2",
       "usage": {
         "completion_tokens": 3,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 22,
+          "reasoning_tokens": 28,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
-        "prompt_tokens": 585,
+        "prompt_tokens": 630,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 540,
+          "cached_tokens": 585,
           "image_tokens": 0,
-          "text_tokens": 585
+          "text_tokens": 630
         },
-        "total_tokens": 610
+        "total_tokens": 661
       }
     },
     "headers": {
@@ -99,7 +99,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e997abbdca22b9-ORD"
+        "998547cc087aeae2-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -108,13 +108,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:48:08 GMT"
+        "Sun, 02 Nov 2025 17:16:34 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=WzgDOahUhoDVknE4pSxCwGYUbQ4Wh.uSHw__0gOcAnM-1760471288-1.0.1.1-uS2co.rSxbcQhABX..lCp1YLRzoDu0jPj_3_FlkH6B4.1kk1a1Bf_fzMDRW9SfQpayHEgu2hKoorKjc.I5Pgyhx7iqVf6RcICF9Y.YPZTPQ; path=/; expires=Tue, 14-Oct-25 20:18:08 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=i._9D7UPgjd3EX29YJUlVyUBaUwPcphemLLnU5RGqfU-1762103794-1.0.1.1-iHMzsCAGR6J7QtdB8DAYR_jPvIds8Y6Hw1W2Urr_CSsAQBhP7qRkehPEODv7tEYDfr6NmeAEcNOTYQdYsyOqHV6Cb.pIe3Rv42SFhnItvaA; path=/; expires=Sun, 02-Nov-25 17:46:34 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -126,7 +126,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-df43ca07a7cef9b25344ce1f08569616-f20d32c3005aa1bf-01"
+        "00-335d0cc68d23b67b5842760ab4c36d68-e078533d006ea2f2-01"
       ],
       "x-zero-data-retention": [
         "false"

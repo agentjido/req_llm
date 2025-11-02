@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjgxOSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6IiAiLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF81MjgzMzQ0NyIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfNTI4MzM0NDcifV0sIm1vZGVsIjoiZ3Jvay0zLW1pbmktZmFzdCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjgxOSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6IiAiLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF83MzU3MzA4NSIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfNzM1NzMwODUifV0sIm1vZGVsIjoiZ3Jvay0zLW1pbmktZmFzdCIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
       "max_completion_tokens": 819,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_52833447",
+              "id": "call_73573085",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "call_52833447"
+          "tool_call_id": "call_73573085"
         }
       ],
       "model": "grok-3-mini-fast",
@@ -59,14 +59,14 @@
           "index": 0,
           "message": {
             "content": "sum=5",
-            "reasoning_content": "First, the user asked me to use the \"add\" tool to compute 2 + 3. Then, after getting the result, I need to respond with 'sum=<value>'.\n\nI just made a function call to the \"add\" tool with a=2 and b=3. The response from the tool is \"Function: 5\", which means the sum is 5.\n\nNow, according to my instructions, I should respond with 'sum=<value>'. So, for this case, it should be 'sum=5'.\n\nI need to ensure my response is clear and not verbose. That means I should just output the required string without any extra text.\n\nThe exact instruction was: \"After the tool result arrives, respond with 'sum=<value>'.\"\n\nSince the tool result has arrived (as per the simulation), I can now form my response.\n\nFinally, structure my output as a direct response.",
+            "reasoning_content": "First, the user asked me to use the \"add\" tool to compute 2 + 3. Then, after the tool result arrives, I need to respond with 'sum=<value>'.\n\nIn my previous response, I already made a function call to the \"add\" tool with a=2 and b=3. Now, the system or the simulation has provided the result: \"Function: 5\".\n\nSo, my next step is to process this result and respond as instructed. The instruction is to respond with 'sum=<value>', where <value> is the result from the tool.\n\nThe result is 5, so I should respond with 'sum=5'.\n\nI need to ensure my response is clear and not verbose, as per my guidelines. That means I should just output the required string without any extra text.\n\nFinally, structure my response appropriately. Since this is a continuation, I should directly provide the final answer.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1760471291,
-      "id": "7f3a9fa4-1117-76c7-8398-df085200a248_us-east-1",
+      "created": 1762103823,
+      "id": "c19fe820-5bbf-2781-2ff6-5ef6d7490fb2_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
@@ -75,18 +75,18 @@
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 185,
+          "reasoning_tokens": 189,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
         "prompt_tokens": 80,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 27,
+          "cached_tokens": 2,
           "image_tokens": 0,
           "text_tokens": 80
         },
-        "total_tokens": 268
+        "total_tokens": 272
       }
     },
     "headers": {
@@ -100,7 +100,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e997c47a600009-ORD"
+        "9985487f6f7be27f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -109,13 +109,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:48:13 GMT"
+        "Sun, 02 Nov 2025 17:17:05 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=Lkji9xknBxy6Luf6WoXoOX6fsbbaSAEkInq2FSpSkvQ-1760471293-1.0.1.1-jG2LmaI_CcMG43t9w.Q38glXt7kUYkqFrOIGA0tfVlHg9Zw8bDkI8_0qeM8sA6A429TIRpRFjsA48SbCFgoG0cqzPlmbi9tTtvs.Fu34eLE; path=/; expires=Tue, 14-Oct-25 20:18:13 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=LwtPEaeUj6l68E7MvUYuCgSWMK8DIZFLrpKYsjqW2DU-1762103825-1.0.1.1-VEpuQ.H9JHCQUqqO5O03fj7Z4p2HkX_a0VjERvutJ9Rb1xshbV4rVTFBp49nKm3wB5qXWbNIl6.sHRjGvfgM9gcBPiY4yMj2ogMQTE_Ofog; path=/; expires=Sun, 02-Nov-25 17:47:05 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -127,7 +127,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-c3385bdd7d409d47af458a5caf23073d-a67c4e9d00682794-01"
+        "00-acd023b4345daf325e06de320bf8b933-847ff43d006e19dd-01"
       ],
       "x-zero-data-retention": [
         "false"

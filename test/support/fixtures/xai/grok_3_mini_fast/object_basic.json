@@ -69,15 +69,15 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "{\"age\":28,\"name\":\"Alice Smith\",\"occupation\":\"Software Engineer\"}",
-            "reasoning_content": "First, the user input is: \"Generate a software engineer profile\". But I have to respond based on the provided schema. The schema defines a JSON object with properties: \"name\", \"age\", and \"occupation\". It's required to include \"name\" and \"age\", and \"occupation\" is optional but fits here.\n\nThe schema is:\n{\n  \"additionalProperties\": false,\n  \"properties\": {\n    \"age\": {\"description\": \"Person's age in years\", \"minimum\": 1, \"type\": \"integer\"},\n    \"name\": {\"description\": \"Person's full name\", \"type\": \"string\"},\n    \"occupation\": {\"description\": \"Person's job or profession\", \"type\": \"string\"}\n  },\n  \"required\": [\"name\", \"age\"],\n  \"type\": \"object\"\n}\n\nSo, my response must be a single JSON string that matches this schema exactly. That means I need to output something like: {\"name\": \"Some Name\", \"age\": Some Number, \"occupation\": \"Some Occupation\"}\n\nThe user asked for a \"software engineer profile\", so I should make up a profile that fits. For example:\n- Name: Something like \"John Doe\"\n- Age: A reasonable age for a software engineer, say 30\n- Occupation: \"Software Engineer\"\n\nI have to ensure that my output is only the JSON string, nothing else. The instructions say: \"Your output MUST be a single JSON string. You MUST use <user_json_schema> to format the JSON string.\"\n\nAlso, it says: \"Make sure to use the exact format as specified in the schema.\"\n\nSince \"occupation\" is not required, I could omit it, but including it makes sense for this context.\n\nLet me think of values:\n- Name: \"Alice Smith\" (a full name)\n- Age: 28 (an integer greater than or equal to 1)\n- Occupation: \"Software Engineer\"\n\nThat seems appropriate.\n\nFinally, output it as a single JSON string. So, something like: {\"name\": \"Alice Smith\", \"age\": 28, \"occupation\": \"Software Engineer\"}\n\nI need to make sure it's valid JSON.",
+            "content": "{\"age\":28,\"name\":\"Alice Johnson\",\"occupation\":\"Software Engineer\"}",
+            "reasoning_content": "First, the user input is: \"Generate a software engineer profile\". But I have to respond based on the provided schema. The schema defines a JSON object with properties: \"name\", \"age\", and \"occupation\". It's required to include \"name\" and \"age\", and \"occupation\" is optional but fits here.\n\nThe schema is:\n{\n  \"additionalProperties\": false,\n  \"properties\": {\n    \"age\": {\"description\": \"Person's age in years\", \"minimum\": 1, \"type\": \"integer\"},\n    \"name\": {\"description\": \"Person's full name\", \"type\": \"string\"},\n    \"occupation\": {\"description\": \"Person's job or profession\", \"type\": \"string\"}\n  },\n  \"required\": [\"name\", \"age\"],\n  \"type\": \"object\"\n}\n\nSo, my response must be a single JSON string that matches this schema exactly. That means I need to output something like: {\"name\": \"Some Name\", \"age\": Some Number, \"occupation\": \"Some Occupation\"}\n\nThe user asked for a \"software engineer profile\", so I should make up a profile that fits. For example:\n- Name: Something like \"John Doe\"\n- Age: A reasonable age for a software engineer, say 30\n- Occupation: \"Software Engineer\"\n\nI have to ensure that my output is only the JSON string, nothing else. The instructions say: \"Your output MUST be a single JSON string. You MUST use <user_json_schema> to format the JSON string.\"\n\nAlso, it specifies \"additionalProperties\": false, so I can't add any extra fields.\n\nLet me think about what values to use:\n- Name: I'll use a fictional full name, like \"Alice Johnson\".\n- Age: An integer greater than or equal to 1, say 28.\n- Occupation: Based on the query, \"Software Engineer\".\n\nThis directly matches the schema.\n\nFinal output should be: {\"name\": \"Alice Johnson\", \"age\": 28, \"occupation\": \"Software Engineer\"}\n\nMake sure it's a valid JSON string.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1760471302,
-      "id": "7303dac6-c5a3-0f2b-112b-797707ce85a0_us-east-1",
+      "created": 1762103825,
+      "id": "02b8e4c6-646b-a81a-8c9e-abc53b094216_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
@@ -86,7 +86,7 @@
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 440,
+          "reasoning_tokens": 420,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
@@ -97,7 +97,7 @@
           "image_tokens": 0,
           "text_tokens": 112
         },
-        "total_tokens": 567
+        "total_tokens": 547
       }
     },
     "headers": {
@@ -111,7 +111,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e99805bd570009-ORD"
+        "9985488b8af6e27f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -120,13 +120,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:48:27 GMT"
+        "Sun, 02 Nov 2025 17:17:09 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=RelC6wetRA68SgpintiGmeGMmqJrNcddgc4kKTwqw.s-1760471307-1.0.1.1-bN9BZOpqMM53owZglITGIvoZV8c0AHk9qxAWhENTwp_3QINwMWeLABXkYSu6m0W5DDQbbXw4WMeSV.l0WVxcd2hwrJ93dkD0XdHwpwefRt0; path=/; expires=Tue, 14-Oct-25 20:18:27 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=JTupDJ4Ou6f_c1YQMo0IhsN9yW14qF0CXnsWkRZm4ec-1762103829-1.0.1.1-3cKlAHyUahN.4ZcTS4uIf2BB8hZkRRCjSkGH.FTmycOzU5vl8o8j4bihd7oz0yBbQTSEdWr.gsyCZxwUjlYLKbBnaqa6Un3LmtnOxjXQinA; path=/; expires=Sun, 02-Nov-25 17:47:09 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -138,7 +138,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-5bbf14a05a3cae6a76e0003dd96e841c-333e2c780059ce7a-01"
+        "00-8c3f5cc299a74e2eefe10aecbb8dc0be-e5691e32006e8c29-01"
       ],
       "x-zero-data-retention": [
         "false"

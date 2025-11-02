@@ -100,27 +100,27 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
+                  "arguments": "{\"location\":\"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "call_16279161",
+                "id": "call_72442645",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1760471284,
-      "id": "36eea82b-b635-59af-90b9-13b3581d2006_us-east-1",
+      "created": 1762103795,
+      "id": "9c19ed04-2747-863f-44a1-9c966a1b2ced_us-east-1",
       "model": "grok-code-fast-1",
       "object": "chat.completion",
       "system_fingerprint": "fp_10f00c862d",
       "usage": {
-        "completion_tokens": 38,
+        "completion_tokens": 27,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 127,
+          "reasoning_tokens": 131,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
@@ -131,7 +131,7 @@
           "image_tokens": 0,
           "text_tokens": 478
         },
-        "total_tokens": 643
+        "total_tokens": 636
       }
     },
     "headers": {
@@ -145,7 +145,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e99795ca8ef8d7-ORD"
+        "998547d159e0e239-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -154,13 +154,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:48:05 GMT"
+        "Sun, 02 Nov 2025 17:16:37 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=ejCSwnZLM9ppHyook5S8Ppr8i.e7CkwRy.4ytRsayr8-1760471285-1.0.1.1-.2ROSOH0p9dJ8.U.XL3JTVoNs7SdL6pq9nrQJYev7bIz.2xdCPNxJFQe27ppkfNnkuO0j1xg0bHraSJwIsWDGt9O6Xvv6FcnmoJ1d_iJDn4; path=/; expires=Tue, 14-Oct-25 20:18:05 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=1cEn.oGocUt7B2Xx8fEF9T8jvqzYlbWnz4eeFahnnyE-1762103797-1.0.1.1-d6TGj1_uxBRI16ul09sDiUfT39ZQRbE_0jUZyHs5hptN2T6RPJ7H.o7zQ33VH9ioJZk2jTyMc9CMnzGHm72NQc0c5twDKsLG2gTW5y5WZA4; path=/; expires=Sun, 02-Nov-25 17:46:37 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -172,7 +172,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-e788786f4d7d7a8a236673a3da190915-5017d8cf0068e928-01"
+        "00-f4d8e6925203b817bb689354dc507bc3-05493de4006e227a-01"
       ],
       "x-zero-data-retention": [
         "false"

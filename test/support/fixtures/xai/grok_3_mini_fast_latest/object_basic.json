@@ -69,15 +69,15 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "{\"age\":30,\"name\":\"Alice Johnson\",\"occupation\":\"Software Engineer\"}",
-            "reasoning_content": "First, the user input is: \"Generate a software engineer profile\". But I have to respond based on the provided schema. The schema defines a JSON object with properties: \"name\", \"age\", and \"occupation\". It's required to include \"name\" and \"age\", and \"occupation\" is optional but fits here.\n\nThe schema is:\n{\n  \"additionalProperties\": false,\n  \"properties\": {\n    \"age\": {\"description\": \"Person's age in years\", \"minimum\": 1, \"type\": \"integer\"},\n    \"name\": {\"description\": \"Person's full name\", \"type\": \"string\"},\n    \"occupation\": {\"description\": \"Person's job or profession\", \"type\": \"string\"}\n  },\n  \"required\": [\"name\", \"age\"],\n  \"type\": \"object\"\n}\n\nSo, my response must be a single JSON string that matches this schema exactly. That means I need to output something like: {\"name\": \"Some Name\", \"age\": Some Number, \"occupation\": \"Some Occupation\"}\n\nThe user is asking for a software engineer profile, so I should fill in the fields accordingly. For example:\n- Occupation: \"Software Engineer\"\n- Name: I need to make one up, since it's not specified.\n- Age: Also make one up, but it has to be an integer greater than or equal to 1.\n\nI must ensure that my output is only the JSON string, nothing else. The instructions say: \"Your output MUST be a single JSON string. You MUST use <user_json_schema> to format the JSON string.\"\n\nSo, I shouldn't add any extra text; just the JSON.\n\nLet me think of sample values:\n- Name: \"Alice Johnson\" (a full name)\n- Age: 30 (an integer, minimum 1)\n- Occupation: \"Software Engineer\" (based on the user's request)\n\nThis fits perfectly.\n\nFinal output should be: {\"name\": \"Alice Johnson\", \"age\": 30, \"occupation\": \"Software Engineer\"}\n\nMake sure it's a valid JSON string.",
+            "content": "{\"age\":30,\"name\":\"John Doe\",\"occupation\":\"Software Engineer\"}",
+            "reasoning_content": "First, the user input is: \"Generate a software engineer profile\". But I have to respond based on the provided schema. The schema defines a JSON object with properties: \"name\", \"age\", and \"occupation\". It's required to include \"name\" and \"age\", and \"occupation\" is optional but fits here.\n\nThe schema is:\n{\n  \"additionalProperties\": false,\n  \"properties\": {\n    \"age\": {\"description\": \"Person's age in years\", \"minimum\": 1, \"type\": \"integer\"},\n    \"name\": {\"description\": \"Person's full name\", \"type\": \"string\"},\n    \"occupation\": {\"description\": \"Person's job or profession\", \"type\": \"string\"}\n  },\n  \"required\": [\"name\", \"age\"],\n  \"type\": \"object\"\n}\n\nSo, my response must be a single JSON string that matches this schema exactly. That means I need to output something like: {\"name\": \"Some Name\", \"age\": Some Number, \"occupation\": \"Some Occupation\"}\n\nThe user asked for a \"software engineer profile\", so I should make up a profile that fits. For example:\n- Name: Something like \"John Doe\"\n- Age: A reasonable age for a software engineer, say 30\n- Occupation: \"Software Engineer\"\n\nI need to ensure that my output is only the JSON string, nothing else. The instructions say: \"Your output MUST be a single JSON string. You MUST use <user_json_schema> to format the JSON string.\"\n\nFinally, structure it as: {\"name\": \"John Doe\", \"age\": 30, \"occupation\": \"Software Engineer\"}\n\nMake sure \"age\" is an integer and at least 1, which 30 is.\n\nI shouldn't add any extra properties, as \"additionalProperties\": false.\n\nOutput it as a string, but since this is a response, I'll just write it as JSON.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1760471297,
-      "id": "7a9e869e-bdb7-74a6-438c-20f8ae46d465_us-east-1",
+      "created": 1762103812,
+      "id": "98333b44-bcf0-219f-64f5-01f9327303f5_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
@@ -86,7 +86,7 @@
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 418,
+          "reasoning_tokens": 389,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
@@ -97,7 +97,7 @@
           "image_tokens": 0,
           "text_tokens": 112
         },
-        "total_tokens": 545
+        "total_tokens": 516
       }
     },
     "headers": {
@@ -111,7 +111,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e997e88b9f338f-ORD"
+        "9985483b4d2deafb-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -120,13 +120,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:48:22 GMT"
+        "Sun, 02 Nov 2025 17:16:55 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=Z5NTmPTbhB7gKKy6Ma6EPMlqaR_Q55gf8XgJfo5EktM-1760471302-1.0.1.1-TMSAduJU_l9WQ8.nv5K9g.RDCCFdiggK9tfIcTpbqQ5702HkSa9zuJeLN8PZEfJkhRk.E1nLQbCPlnb6QvwGQVHvLoJk2hZsj0je8tQPw_g; path=/; expires=Tue, 14-Oct-25 20:18:22 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=fV_vLzd_jzeFESWnMmSIfgG6t1na12EGR8wmbkqTXXQ-1762103815-1.0.1.1-02wtKdmH.hwYS2TBMPaIS5YnUrHRwlHhwY.hRbCQ5Qao9FFu1okT2m1N_LXyKi0e42iP0LEL_cdj1zOViW3f3PPt6WJiwSKjJgiepstOQO4; path=/; expires=Sun, 02-Nov-25 17:46:55 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -138,7 +138,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-2133fa3c35849f40a035640f8423ed21-cf45cf62005a9c88-01"
+        "00-9394d0a800a0f0feb61208288b0c053b-c6d83c7a006ef770-01"
       ],
       "x-zero-data-retention": [
         "false"

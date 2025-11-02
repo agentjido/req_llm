@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjgxOSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6IiAiLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF8wMTI0NTY1MSIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfMDEyNDU2NTEifV0sIm1vZGVsIjoiZ3Jvay0zLW1pbmktZmFzdC1sYXRlc3QiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjgxOSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6IiAiLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF80MDgzNTU4NCIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfNDA4MzU1ODQifV0sIm1vZGVsIjoiZ3Jvay0zLW1pbmktZmFzdC1sYXRlc3QiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
       "max_completion_tokens": 819,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_01245651",
+              "id": "call_40835584",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "call_01245651"
+          "tool_call_id": "call_40835584"
         }
       ],
       "model": "grok-3-mini-fast-latest",
@@ -59,14 +59,14 @@
           "index": 0,
           "message": {
             "content": "sum=5",
-            "reasoning_content": "First, the user asked me to use the \"add\" tool to compute 2 + 3. Then, after getting the result, I need to respond with 'sum=<value>'.\n\nI just made a function call to the \"add\" tool with a=2 and b=3. The response from the tool is \"Function: 5\", which means the sum is 5.\n\nNow, according to my instructions, after the tool result arrives, I should respond with 'sum=<value>'. So, I need to format my response as 'sum=5'.\n\nI have to keep my response clear and not verbose. That means I should just output the required string without any extra explanations.\n\nIn the conversation history, I already output the function call, and now I'm responding to that.\n\nMy final response should be: sum=5\n\nLet me double-check the user's instruction: \"After the tool result arrives, respond with 'sum=<value>'.\" Yes, that's exactly what I need to do.",
+            "reasoning_content": "First, the user asked me to use the \"add\" tool to compute 2 + 3. Then, after getting the result, I need to respond with 'sum=<value>'.\n\nI just made a function call to the \"add\" tool with a=2 and b=3. The response from the tool is \"Function: 5\", which means the result is 5.\n\nNow, according to my instructions, after the tool result arrives, I should respond with 'sum=<value>'. So, I need to format my response as 'sum=5'.\n\nI have to keep my response clear and not verbose. That means I should just output the required string without any extra explanations.\n\nIn the conversation history, I already output the function call, and now I'm responding to that.\n\nMy final response should be: sum=5\n\nLet me double-check the user's instruction: \"After the tool result arrives, respond with 'sum=<value>'.\" Yes, that's exactly what I need to do.",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1760471329,
-      "id": "a399aeb2-efaf-6c8a-a171-e1a7914c6d94_us-east-1",
+      "created": 1762103822,
+      "id": "f6ce077f-90a7-5a86-95b6-1ad970d62f09_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
@@ -100,7 +100,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e998b1ae57338f-ORD"
+        "998548784a43eafb-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -109,13 +109,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:48:56 GMT"
+        "Sun, 02 Nov 2025 17:17:04 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=5j9rOjerK3Jqn5xhmviiNMW1hfIunw_LPikCPeLFbYM-1760471336-1.0.1.1-CKkuMts3LlCW2_gYs8jeNeQ_lz71SPfGZqPCBNnjjLUy2fiNNltxw8FY1cSbN4AWW3JvY9e7YUTUKQ16F22dY_wPjXWYJqpkzo4T5E1CG6k; path=/; expires=Tue, 14-Oct-25 20:18:56 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=oYdQCLWoVMLLKrS5mkdneXQJwHyqm32Mo5A62uRTgYA-1762103824-1.0.1.1-jQZCYqTZi5QTJcj_h9kFxzKQev0ryWfgTfRIf60M5hvPL8VVUNo2w5Nxdqfv8kYIQtNAZiWn6obq6IaVytxFwL4mJ0uiVt435etkEpaxWDg; path=/; expires=Sun, 02-Nov-25 17:47:04 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -127,7 +127,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-dc6be49655894e4b0099e83059876b53-4fa54c0a00680511-01"
+        "00-713a1cd0ac1ed8115595cdf204564d4f-dd7bbb97006ed81f-01"
       ],
       "x-zero-data-retention": [
         "false"

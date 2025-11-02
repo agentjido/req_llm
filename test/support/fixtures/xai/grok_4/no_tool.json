@@ -59,23 +59,23 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "Why did the cat go to school? To improve its purr-sonal skills! 😺",
+            "content": "Why did the cat go to school?  \n\nTo improve its purr-sonal skills! 😺",
             "refusal": null,
             "role": "assistant"
           }
         }
       ],
-      "created": 1760471342,
-      "id": "5dcb71ef-eef3-d48d-df08-e2b445b64b47_us-east-1",
+      "created": 1762103792,
+      "id": "66715eab-0e69-a324-be34-0f8baa25b3cb_us-east-1",
       "model": "grok-4-0709",
       "object": "chat.completion",
-      "system_fingerprint": "fp_19e21a36c0",
+      "system_fingerprint": "fp_794271b43e",
       "usage": {
-        "completion_tokens": 18,
+        "completion_tokens": 19,
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 142,
+          "reasoning_tokens": 141,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
@@ -100,7 +100,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e999003d95a434-ORD"
+        "998547bdfdc6e7fa-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -109,13 +109,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:49:07 GMT"
+        "Sun, 02 Nov 2025 17:16:37 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=Mh0jbZpmRfGBMgtJ0HtNEdLqR4KV6OaD7BWCUd7m5EE-1760471347-1.0.1.1-LGoawH.tBvOZqBkHx2FQ8nQZ4wRmSWSHircunIbNOvJRPQIKHssPaJuykGJ0dqRcqONR8sJHMtnKY62jfJARAJHL2cHm2_2vS..UaPgMqDk; path=/; expires=Tue, 14-Oct-25 20:19:07 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=KFtgwkRDj3W9kx7DT8VDfWxtF_WemoXM_jB18InrgjE-1762103797-1.0.1.1-aw9sq1.vIvqHvwelgOtaMz1.qnziGx8yqFD2BsAwglVbN4pcFhk6kjUXu6hZqda7tqitrVuhti7m_fnGINgyUSIvxGsDjVduZQB8hjuoJuA; path=/; expires=Sun, 02-Nov-25 17:46:37 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -127,7 +127,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-58137e2e5ecdb1b7b896a11421f99971-ffb6872700684c15-01"
+        "00-a70a2769d9a15abb6094ba2b19dc3885-93cf5241006ea002-01"
       ],
       "x-zero-data-retention": [
         "false"

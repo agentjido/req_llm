@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjgxOSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiJjYWxsXzI2MzQyMTI2IiwidHlwZSI6ImZ1bmN0aW9uIn1dfSx7ImNvbnRlbnQiOiI1IiwibmFtZSI6ImFkZCIsInJvbGUiOiJ0b29sIiwidG9vbF9jYWxsX2lkIjoiY2FsbF8yNjM0MjEyNiJ9XSwibW9kZWwiOiJncm9rLTMtbGF0ZXN0Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjgxOSwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiJjYWxsXzQyMTYxMjMzIiwidHlwZSI6ImZ1bmN0aW9uIn1dfSx7ImNvbnRlbnQiOiI1IiwibmFtZSI6ImFkZCIsInJvbGUiOiJ0b29sIiwidG9vbF9jYWxsX2lkIjoiY2FsbF80MjE2MTIzMyJ9XSwibW9kZWwiOiJncm9rLTMtbGF0ZXN0Iiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
       "max_completion_tokens": 819,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_26342126",
+              "id": "call_42161233",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "call_26342126"
+          "tool_call_id": "call_42161233"
         }
       ],
       "model": "grok-3-latest",
@@ -64,8 +64,8 @@
           }
         }
       ],
-      "created": 1760471271,
-      "id": "bf3c652f-51fa-2158-6b79-abb959ae28da_us-east-1",
+      "created": 1762103805,
+      "id": "f46fd16a-8e56-a56b-ca68-01d521046597_us-east-1",
       "model": "grok-3",
       "object": "chat.completion",
       "system_fingerprint": "fp_301fb74d4b",
@@ -99,7 +99,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e997479cb9a679-ORD"
+        "9985480dab511b3c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -108,13 +108,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:47:52 GMT"
+        "Sun, 02 Nov 2025 17:16:45 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=kI4N67TfYK.M83N4vFg.xjTYGH3p6bcFtQNjn_wUqpI-1760471272-1.0.1.1-418p82xS_SUdxS50g63maorMrmvvJOKrpk1TdgPjpThEphNmVKQgrZAJwkfnQdGiAST.8j_LD1Sp5LU4olCy3gSjx_VcVtr8xZbU.ZrkIBo; path=/; expires=Tue, 14-Oct-25 20:17:52 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=zcdDOw799_s6nbO_5lXpQ8GeXBSqlpRQxH8MC3NIsbg-1762103805-1.0.1.1-V2XRAEdK.UvKbT6IgDpabYxfSFfbrBXlwLeU4PxWbJosAlOIoEBbwXXgJ9tIVKVgXBCSLs1S3v5rcT4hbyJqql5Gj6zs1dKHjkFgBsCrhXo; path=/; expires=Sun, 02-Nov-25 17:46:45 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -126,7 +126,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-5234d4b1b3b15f00383e474447f03d2b-ffb6872700683ff2-01"
+        "00-ea693c2a69cbf2752fc850f62c8cbe95-0df2cce0006de8db-01"
       ],
       "x-zero-data-retention": [
         "false"

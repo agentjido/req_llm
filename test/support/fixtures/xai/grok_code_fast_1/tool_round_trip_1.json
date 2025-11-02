@@ -76,15 +76,15 @@
                   "arguments": "{\"a\":2,\"b\":3}",
                   "name": "add"
                 },
-                "id": "call_25038905",
+                "id": "call_57795107",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1760471288,
-      "id": "0c2dfb81-e729-945d-5ae0-0f08931aae6f_us-east-1",
+      "created": 1762103810,
+      "id": "0558a2a3-64fa-4d75-084c-5a1ea6fb1516_us-east-1",
       "model": "grok-code-fast-1",
       "object": "chat.completion",
       "system_fingerprint": "fp_10f00c862d",
@@ -93,7 +93,7 @@
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 370,
+          "reasoning_tokens": 336,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
@@ -104,7 +104,7 @@
           "image_tokens": 0,
           "text_tokens": 229
         },
-        "total_tokens": 634
+        "total_tokens": 600
       }
     },
     "headers": {
@@ -118,7 +118,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e997b21ef8f8d7-ORD"
+        "998548300e40e239-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -127,13 +127,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:48:12 GMT"
+        "Sun, 02 Nov 2025 17:16:53 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=sL9IHLR_6W7lLMmiqs32jFYojZqakP7BfmutPxBdzaU-1760471292-1.0.1.1-FC6c4Nr3fZa1XboVj2Yw7ezmoOf317ncpcKkLnNuyf9IjKdfbbk8EU8cEYq9s8XaKJ6Q.r135npHl4ghAkQKzimvy0z2bF4etDcStX5YZiU; path=/; expires=Tue, 14-Oct-25 20:18:12 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=.DWSE7MF5m84xveAWnDNckIqDvPxm7ZjsdSocPq5Fok-1762103813-1.0.1.1-gQATvvFUbhGWx.NSYFEve9q4PFuOmIn2itB_p4CkKIuopn7dNWqrpfRIr.3i5PTPqMXzDqnaEEnEqTCxuMlX7B1C43Wq2RPQNOyeUu89rT4; path=/; expires=Sun, 02-Nov-25 17:46:53 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -145,7 +145,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-f662b5eeb1fdb050c3134bfbbc35aab5-f4af70d6005a2de7-01"
+        "00-a8a019c8b78452946e84f0be52229918-f9c54677006ef31d-01"
       ],
       "x-zero-data-retention": [
         "false"

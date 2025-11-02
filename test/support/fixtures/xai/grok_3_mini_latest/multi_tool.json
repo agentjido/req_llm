@@ -95,7 +95,7 @@
           "index": 0,
           "message": {
             "content": "",
-            "reasoning_content": "First, the user is asking about the weather in Paris, France. I have a function called \"get_weather\" that matches this request. It requires a \"location\" parameter, which is a string.\n\nThe location is clearly \"Paris, France\", so I can infer that as the parameter. The function also has an optional \"unit\" parameter, which can be \"celsius\" or \"fahrenheit\". The user didn't specify a unit, so I shouldn't assume one. The function description doesn't mark it as required, so I can call the function without it, and it will probably default to something.\n\nThe available functions show: \"required\": [\"location\"], so only location is required. I can proceed with just that.\n\nI need to format the function call as specified: within <function_call> tags, like <function_call>{\"action\": \"function_name\", \"action_input\": {\"parameter\": \"argument\"}}</function_call>\n\nFor this, it should be: <function_call>{\"action\": \"get_weather\", \"action_input\": {\"location\": \"Paris, France\"}}</function_call>\n\nAfter calling this function, I might need to respond with the results, but according to the instructions, I should just make the function call if it's the next step.\n\nThe system prompt says: \"You can call functions to retrieve information or perform actions.\" And \"If the user's query can be addressed using an available function, and all required parameters are provided or obviously inferable, trigger a function call.\"\n\nAll required parameters are provided, so I should call the function.\n\nFinally, keep my response clear and not verbose. So, my entire response should just be the function call tag.\n\nResponse structure: Only include the <function_call> if I'm calling a function. Don't add extra text unless necessary.",
+            "reasoning_content": "First, the user is asking about the weather in Paris, France. I have a function called \"get_weather\" that matches this query. It requires a \"location\" parameter, which is a string.\n\nThe location is clearly \"Paris, France\". That's straightforward and inferable from the query.\n\nThe function also has an optional \"unit\" parameter, which can be \"celsius\" or \"fahrenheit\". The user didn't specify a unit, so I don't have to include it if it's not required. The function's parameters show that only \"location\" is required.\n\nI should call the function with the necessary parameters. So, I'll use: <function_call>{\"action\": \"get_weather\", \"action_input\": {\"location\": \"Paris, France\"}}</function_call>\n\nAfter calling this function, I might need to respond based on the result, but for now, this is the logical next step.\n\nMy response should only include the function call if I'm deciding to use it, and nothing else, as per the instructions. The instructions say: \"You are only permitted to use the <function_call> tag in your response only if you have made the decision to call a function.\"\n\nSo, my entire response should just be the function call tag.\n\nFinally, ensure the format is exact: <function_call>{\"action\": \"get_weather\", \"action_input\": {\"location\": \"Paris, France\"}}</function_call>",
             "refusal": null,
             "role": "assistant",
             "tool_calls": [
@@ -104,15 +104,15 @@
                   "arguments": "{\"location\":\"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "call_44182030",
+                "id": "call_40519719",
                 "type": "function"
               }
             ]
           }
         }
       ],
-      "created": 1760471318,
-      "id": "4ede1051-cdae-d5e8-b349-bac967063068_us-east-1",
+      "created": 1762103791,
+      "id": "183ad40d-4ab2-be4c-bcd4-c101607a6a28_us-east-1",
       "model": "grok-3-mini",
       "object": "chat.completion",
       "system_fingerprint": "fp_4fae27f477",
@@ -121,18 +121,18 @@
         "completion_tokens_details": {
           "accepted_prediction_tokens": 0,
           "audio_tokens": 0,
-          "reasoning_tokens": 359,
+          "reasoning_tokens": 284,
           "rejected_prediction_tokens": 0
         },
         "num_sources_used": 0,
         "prompt_tokens": 362,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 361,
+          "cached_tokens": 237,
           "image_tokens": 0,
           "text_tokens": 362
         },
-        "total_tokens": 749
+        "total_tokens": 674
       }
     },
     "headers": {
@@ -146,7 +146,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e9986b6fa0e239-ORD"
+        "998547b7a8a8f852-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -155,13 +155,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:48:42 GMT"
+        "Sun, 02 Nov 2025 17:16:34 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=uNCwGpgjqMX5pUGhanfrgjeXUkTvGVNLJo4Q4_jPVDc-1760471322-1.0.1.1-jMjKrB9x.YhMnZCcmwjWLcbmmoytjVsn79F8eP.1DMAE4MykAsHe45JsyaANTh.6mykNU8o_sqPO5l3aUP.q98qN9RVlnFqSHBLBSwFAsxo; path=/; expires=Tue, 14-Oct-25 20:18:42 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=8KLywqU952_vxpk2yN5IggPslHEtJrnnxLEwFfO7bZk-1762103794-1.0.1.1-s9zoG8oJvtfm6N21k4O0quq02YWkZPuLoHMONMh.qy1LAfIp3rZ37lz9YRSJ3btEEfaWrZIUd1_GwKQl597MECbb_Bpyj6YpLD6UO2TRg9I; path=/; expires=Sun, 02-Nov-25 17:46:34 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -173,7 +173,7 @@
         "origin, access-control-request-method, access-control-request-headers"
       ],
       "x-request-id": [
-        "00-188ae4d182cc88d9c02d5f871ae4a156-e8ff1829005ab014-01"
+        "00-47b9ff1763ba068df14a534faccd9a47-e6063689006de621-01"
       ],
       "x-zero-data-retention": [
         "false"
