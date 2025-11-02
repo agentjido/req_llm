@@ -38,34 +38,6 @@ defmodule ReqLLM.Test.ModelMatrix do
 
   alias ReqLLM.Provider.Registry
 
-  @default_models Application.compile_env(:req_llm, :sample_text_models, ~w(
-    anthropic:claude-3-5-haiku-20241022
-    anthropic:claude-3-5-sonnet-20241022
-    amazon_bedrock:global.anthropic.claude-sonnet-4-5-20250929-v1:0
-    amazon_bedrock:global.anthropic.claude-haiku-4-5-20251001-v1:0
-    amazon_bedrock:us.anthropic.claude-opus-4-1-20250805-v1:0
-    amazon_bedrock:openai.gpt-oss-20b-1:0
-    amazon_bedrock:openai.gpt-oss-120b-1:0
-    google_vertex:claude-haiku-4-5@20251001
-    google_vertex:claude-sonnet-4-5@20250929
-    google_vertex:claude-opus-4-1@20250805
-    openai:gpt-4o-mini
-    openai:gpt-4-turbo
-    google:gemini-2.0-flash
-    google:gemini-2.5-flash
-    groq:llama-3.3-70b-versatile
-    groq:deepseek-r1-distill-llama-70b
-    xai:grok-2-latest
-    xai:grok-3-mini
-    openrouter:x-ai/grok-4-fast
-    openrouter:anthropic/claude-sonnet-4
-  ))
-
-  @embedding_models Application.compile_env(:req_llm, :sample_embedding_models, ~w(
-    openai:text-embedding-3-small
-    google:text-embedding-004
-  ))
-
   @type operation :: :text | :embedding
   @type opts :: [
           env: %{optional(String.t()) => String.t() | nil},
@@ -169,7 +141,7 @@ defmodule ReqLLM.Test.ModelMatrix do
         all_model_specs(registry)
 
       nil ->
-        default_model_specs(operation)
+        default_model_specs(operation, registry)
 
       pattern_str ->
         resolve_patterns(pattern_str, registry)
@@ -207,17 +179,51 @@ defmodule ReqLLM.Test.ModelMatrix do
   end
 
   defp all_model_specs(registry) do
+    allowed_model_specs(registry)
+  end
+
+  defp allowed_model_specs(registry) do
     registry.list_providers()
     |> Enum.flat_map(fn provider ->
       case registry.list_models(provider) do
-        {:ok, models} -> Enum.map(models, &"#{provider}:#{&1}")
-        {:error, _} -> []
+        {:ok, models} ->
+          models
+          |> Enum.filter(fn model_id ->
+            ReqLLM.Catalog.allowed_spec?(provider, model_id)
+          end)
+          |> Enum.map(&"#{provider}:#{&1}")
+
+        {:error, _} ->
+          []
       end
     end)
   end
 
-  defp default_model_specs(:text), do: @default_models
-  defp default_model_specs(:embedding), do: @embedding_models
+  defp default_model_specs(:text, _registry) do
+    configured = Application.get_env(:req_llm, :sample_text_models)
+
+    if configured && not Enum.empty?(configured) do
+      configured
+    else
+      auto_pick_from_allowed()
+    end
+  end
+
+  defp default_model_specs(:embedding, _registry) do
+    Application.get_env(:req_llm, :sample_embedding_models) || []
+  end
+
+  defp auto_pick_from_allowed do
+    per_provider = Application.get_env(:req_llm, :test_sample_per_provider, 1)
+
+    ReqLLM.Catalog.resolve_allowed_specs()
+    |> Enum.group_by(&extract_provider/1)
+    |> Enum.flat_map(fn {_provider, specs} ->
+      specs
+      |> Enum.sort()
+      |> Enum.take(per_provider)
+    end)
+  end
 
   defp maybe_sample(specs, nil), do: specs
 

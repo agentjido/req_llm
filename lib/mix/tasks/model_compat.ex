@@ -202,6 +202,15 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
     models
     |> Enum.filter(fn {provider, _} -> MapSet.member?(implemented, provider) end)
+    |> Enum.map(fn {provider, provider_models} ->
+      allowed_models =
+        Enum.filter(provider_models, fn model ->
+          ReqLLM.Catalog.allowed_spec?(provider, model["id"])
+        end)
+
+      {provider, allowed_models}
+    end)
+    |> Enum.reject(fn {_provider, models} -> Enum.empty?(models) end)
     |> Enum.sort_by(fn {provider, _} -> provider end)
     |> Enum.each(fn {provider, provider_models} ->
       Mix.shell().info(
