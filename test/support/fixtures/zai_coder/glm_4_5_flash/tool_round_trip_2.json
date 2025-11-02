@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo5ODMwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiXG5JJ2xsIHVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMyBmb3IgeW91LlxuIiwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6ImNhbGxfLTgxOTk3MDc4NDU5MzY0NDYxMTIiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJyb2xlIjoidG9vbCJ9XSwibW9kZWwiOiJnbG0tNC41LWZsYXNoIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjo5ODMwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiXG5JJ2xsIHVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMyBmb3IgeW91LlxuIiwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6ImNhbGxfLTgxOTk3Mzg5MDcxNDA2NDkwMTQiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJyb2xlIjoidG9vbCJ9XSwibW9kZWwiOiJnbG0tNC41LWZsYXNoIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
       "max_tokens": 9830,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_-8199707845936446112",
+              "id": "call_-8199738907140649014",
               "type": "function"
             }
           ]
@@ -56,16 +56,16 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "\n\nsum=5",
-            "reasoning_content": "The add tool returned the result 5 for 2 + 3. Now I need to respond with 'sum=<value>' as requested.",
+            "content": "\nsum=5",
+            "reasoning_content": "\nThe add tool returned the result 5 for 2 + 3. Now I need to respond with 'sum=<value>' as requested.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1762104808,
-      "id": "2025110301332641268514584d47c7",
+      "created": 1762113168,
+      "id": "202511030352462cdde006795c48ec",
       "model": "glm-4.5-flash",
-      "request_id": "2025110301332641268514584d47c7",
+      "request_id": "202511030352462cdde006795c48ec",
       "usage": {
         "completion_tokens": 37,
         "prompt_tokens": 78,
@@ -83,13 +83,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:33:28 GMT"
+        "Sun, 02 Nov 2025 19:52:48 GMT"
       ],
       "server": [
         "ZenZGA/2.4"
       ],
       "set-cookie": [
-        "acw_tc=0bc1a98117621048067597233e5f4b76c4ea01aa17706c0544344c6d75d2f7;path=/;HttpOnly;Max-Age=1800"
+        "acw_tc=ac11000117621131667481793e03a29f07421bd722c880154209ca739706bc;path=/;HttpOnly;Max-Age=1800"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains"
@@ -107,7 +107,7 @@
         "Access-Control-Request-Headers"
       ],
       "x-log-id": [
-        "2025110301332641268514584d47c7"
+        "202511030352462cdde006795c48ec"
       ]
     },
     "status": 200
