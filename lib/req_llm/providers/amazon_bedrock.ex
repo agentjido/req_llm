@@ -908,6 +908,14 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     {req, err}
   end
 
+  @impl ReqLLM.Provider
+  def thinking_constraints do
+    # AWS Bedrock requires temperature=1.0 when extended thinking is enabled
+    # and max_tokens > thinking.budget_tokens (4000 for :low effort)
+    # See: https://docs.claude.com/en/docs/build-with-claude/extended-thinking
+    %{required_temperature: 1.0, min_max_tokens: 4001}
+  end
+
   # Remove thinking from additional_model_request_fields after Options.process if needed
   # This is necessary because translate_options can't modify provider_options (they get restored)
   defp maybe_clean_thinking_after_translation(opts, model_family, operation) do

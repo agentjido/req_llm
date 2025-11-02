@@ -538,6 +538,34 @@ defmodule ReqLLM.Provider do
               atom()
             ) :: {:ok, Finch.Request.t()} | {:error, Exception.t()}
 
+  @doc """
+  Returns thinking/reasoning constraints for models with extended thinking capability.
+
+  Some providers (e.g., AWS Bedrock, Google Vertex AI) have platform-specific requirements
+  when extended thinking is enabled:
+  - Fixed temperature value (typically 1.0)
+  - Minimum max_tokens to accommodate thinking budget
+
+  Returns a map with:
+  - `:required_temperature` - Temperature that must be used (float)
+  - `:min_max_tokens` - Minimum max_tokens value (integer)
+
+  Returns `:none` if no special constraints apply.
+
+  ## Examples
+
+      # Provider with thinking constraints
+      def thinking_constraints do
+        %{required_temperature: 1.0, min_max_tokens: 4001}
+      end
+
+      # Provider without thinking constraints
+      def thinking_constraints, do: :none
+
+  """
+  @callback thinking_constraints() ::
+              %{required_temperature: float(), min_max_tokens: pos_integer()} | :none
+
   @optional_callbacks [
     normalize_model_id: 1,
     extract_usage: 2,
@@ -548,7 +576,8 @@ defmodule ReqLLM.Provider do
     init_stream_state: 1,
     flush_stream_state: 2,
     parse_stream_protocol: 2,
-    attach_stream: 4
+    attach_stream: 4,
+    thinking_constraints: 0
   ]
 
   @doc """

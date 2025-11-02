@@ -349,6 +349,14 @@ defmodule ReqLLM.Providers.GoogleVertex do
   end
 
   @impl ReqLLM.Provider
+  def thinking_constraints do
+    # Google Vertex AI requires the same constraints as Bedrock for extended thinking
+    # temperature=1.0 and max_tokens > thinking.budget_tokens (4000 for :low effort)
+    # See: https://docs.claude.com/en/docs/build-with-claude/extended-thinking
+    %{required_temperature: 1.0, min_max_tokens: 4001}
+  end
+
+  @impl ReqLLM.Provider
   def extract_usage(body, model) do
     formatter = get_formatter(model.model)
 

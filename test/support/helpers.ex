@@ -490,30 +490,49 @@ defmodule ReqLLM.Test.Helpers do
   """
   def reasoning_overlay(model_spec, base_opts, min_tokens \\ nil) do
     case ReqLLM.Model.from(model_spec) do
-      {:ok, %{capabilities: %{reasoning: true}, provider: :amazon_bedrock}} ->
+      {:ok, %{capabilities: %{reasoning: true}, provider: provider_id}} ->
         cfg = param_bundles()
         opts = Keyword.put(base_opts, :reasoning_effort, cfg.reasoning[:reasoning_effort] || :low)
 
-        # AWS Bedrock requires:
-        # 1. temperature=1.0 when thinking is enabled
-        # 2. max_tokens > thinking.budget_tokens (4000 for :low effort)
-        # Bedrock maps :low reasoning_effort to 4000 budget_tokens
-        min_max_tokens = max(min_tokens || 4001, 4001)
+        # Check if provider has thinking constraints
+        case ReqLLM.Provider.Registry.get_provider(provider_id) do
+          {:ok, provider_module} ->
+            if function_exported?(provider_module, :thinking_constraints, 0) do
+              case provider_module.thinking_constraints() do
+                %{required_temperature: temp, min_max_tokens: min_max_tokens} ->
+                  # Apply provider-specific constraints
+                  effective_min = max(min_tokens || min_max_tokens, min_max_tokens)
 
-        opts
-        |> Keyword.put(:temperature, 1.0)
-        |> Keyword.update(:max_tokens, min_max_tokens, fn current ->
-          max(current, min_max_tokens)
-        end)
+                  opts
+                  |> Keyword.put(:temperature, temp)
+                  |> Keyword.update(:max_tokens, effective_min, fn current ->
+                    max(current, effective_min)
+                  end)
 
-      {:ok, %{capabilities: %{reasoning: true}}} ->
-        cfg = param_bundles()
-        opts = Keyword.put(base_opts, :reasoning_effort, cfg.reasoning[:reasoning_effort] || :low)
+                :none ->
+                  # No constraints, just apply min_tokens if specified
+                  if is_integer(min_tokens) and (opts[:max_tokens] || 0) < min_tokens do
+                    Keyword.put(opts, :max_tokens, min_tokens)
+                  else
+                    opts
+                  end
+              end
+            else
+              # Provider doesn't implement thinking_constraints, use default behavior
+              if is_integer(min_tokens) and (opts[:max_tokens] || 0) < min_tokens do
+                Keyword.put(opts, :max_tokens, min_tokens)
+              else
+                opts
+              end
+            end
 
-        if is_integer(min_tokens) and (opts[:max_tokens] || 0) < min_tokens do
-          Keyword.put(opts, :max_tokens, min_tokens)
-        else
-          opts
+          _ ->
+            # Provider not found, use default behavior
+            if is_integer(min_tokens) and (opts[:max_tokens] || 0) < min_tokens do
+              Keyword.put(opts, :max_tokens, min_tokens)
+            else
+              opts
+            end
         end
 
       _ ->
@@ -522,27 +541,8 @@ defmodule ReqLLM.Test.Helpers do
   end
 
   def reasoning_overlay(model_spec, _provider, base_opts, min_tokens) do
-    case ReqLLM.Model.from(model_spec) do
-      {:ok, %{capabilities: %{reasoning: true}, provider: :amazon_bedrock}} ->
-        # AWS Bedrock requires:
-        # 1. temperature=1.0 when thinking is enabled
-        # 2. max_tokens > thinking.budget_tokens (4000 for :low effort)
-        # See: https://docs.claude.com/en/docs/build-with-claude/extended-thinking
-        opts = reasoning_overlay(model_spec, base_opts, min_tokens)
-
-        # Bedrock maps :low reasoning_effort to 4000 budget_tokens
-        # So max_tokens must be > 4000
-        min_max_tokens = 4001
-
-        opts
-        |> Keyword.put(:temperature, 1.0)
-        |> Keyword.update(:max_tokens, min_max_tokens, fn current ->
-          max(current, min_max_tokens)
-        end)
-
-      _ ->
-        reasoning_overlay(model_spec, base_opts, min_tokens)
-    end
+    # Delegate to 3-arity version which now handles all provider-specific constraints
+    reasoning_overlay(model_spec, base_opts, min_tokens)
   end
 
   @doc """
