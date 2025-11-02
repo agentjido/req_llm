@@ -453,6 +453,9 @@ defmodule Mix.Tasks.ReqLlm.ModelSync do
     original_id = provider_data["id"]
 
     # Try normalized ID first, then original (for models.dev data with hyphens)
+    # Important: Patch files must use the original hyphenated ID (e.g., "google-vertex-anthropic")
+    # because models_data map keys come directly from models.dev before normalization.
+    # The code then normalizes the provider ID when writing the output file.
     case Map.get(models_data, provider_id) || Map.get(models_data, original_id) do
       nil ->
         if verbose? do
