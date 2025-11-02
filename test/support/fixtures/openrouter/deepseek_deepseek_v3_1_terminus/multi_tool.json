@@ -97,17 +97,25 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "I'll check the weather in Paris, France for you.",
-            "reasoning": null,
+            "content": "",
+            "reasoning": "Hmm, the user is asking about the weather in Paris, France. This is a straightforward request that matches exactly what the get_weather tool can handle. I need to call the weather function with Paris as the location parameter. \n\nThe user didn't specify temperature units, so I'll default to Celsius since that's commonly used in France. The tool will return the current weather conditions, which should give the user exactly what they're looking for.\n\nThe response should be concise but include all the key weather details the tool provides - temperature, conditions, and any additional relevant information. No need for extra commentary beyond presenting the weather data clearly.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Hmm, the user is asking about the weather in Paris, France. This is a straightforward request that matches exactly what the get_weather tool can handle. I need to call the weather function with Paris as the location parameter. \n\nThe user didn't specify temperature units, so I'll default to Celsius since that's commonly used in France. The tool will return the current weather conditions, which should give the user exactly what they're looking for.\n\nThe response should be concise but include all the key weather details the tool provides - temperature, conditions, and any additional relevant information. No need for extra commentary beyond presenting the weather data clearly.",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant",
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"location\": \"Paris, France\"}",
+                  "arguments": "{\"location\": \"Paris, France\", \"unit\": \"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "call_9dfd0f99b2204de88b85be54",
+                "id": "call_zlnba36bwqdjd6dv1yvz7hob",
                 "index": 0,
                 "type": "function"
               }
@@ -116,16 +124,18 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760546596,
-      "id": "gen-1760546595-kT0APFoJEhheqFGDP8ki",
+      "created": 1762105114,
+      "id": "gen-1762105114-lTRiXq5wFQfK0z6JITV7",
       "model": "deepseek/deepseek-v3.1-terminus",
       "object": "chat.completion",
-      "provider": "Chutes",
+      "provider": "AtlasCloud",
       "usage": {
-        "completion_tokens": 29,
-        "prompt_tokens": 261,
-        "prompt_tokens_details": null,
-        "total_tokens": 290
+        "completion_tokens": 151,
+        "completion_tokens_details": {
+          "reasoning_tokens": 151
+        },
+        "prompt_tokens": 258,
+        "total_tokens": 409
       }
     },
     "headers": {
@@ -133,7 +143,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0c6407b18124c-ORD"
+        "9985680588f79d58-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -142,7 +152,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:43:18 GMT"
+        "Sun, 02 Nov 2025 17:38:35 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

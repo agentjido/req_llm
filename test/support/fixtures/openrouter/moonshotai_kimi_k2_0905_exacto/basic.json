@@ -40,7 +40,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! How can I help you today?",
+            "content": "Hello world right back at you!",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -48,16 +48,16 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1761606458,
-      "id": "gen-1761606458-YjP1sZ9EDAQ7VwNiTT0Y",
+      "created": 1762104987,
+      "id": "gen-1762104987-oWdlSs5JVrVXBOUAKu0o",
       "model": "moonshotai/kimi-k2-0905:exacto",
       "object": "chat.completion",
-      "provider": "Moonshot AI",
-      "system_fingerprint": "fpv0_d0e94924",
+      "provider": "Groq",
+      "system_fingerprint": "fp_3312304636",
       "usage": {
-        "completion_tokens": 10,
-        "prompt_tokens": 10,
-        "total_tokens": 20
+        "completion_tokens": 8,
+        "prompt_tokens": 29,
+        "total_tokens": 37
       }
     },
     "headers": {
@@ -65,7 +65,7 @@
         "*"
       ],
       "cf-ray": [
-        "9955d9ca7c400ea2-ORD"
+        "998564ec5c47e14b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -74,7 +74,7 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 23:07:38 GMT"
+        "Sun, 02 Nov 2025 17:36:27 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

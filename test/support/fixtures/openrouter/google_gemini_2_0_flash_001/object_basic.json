@@ -85,10 +85,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"name\":\"John Smith\",\"occupation\":\"Software Engineer\",\"age\":30}",
+                  "arguments": "{\"name\":\"John Smith\",\"age\":30,\"occupation\":\"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "tool_0_structured_output_DWKx8XMcyO0WBE8SWsE4",
+                "id": "tool_0_structured_output_zrl1G8uQDHcNPZMBNh6l",
                 "index": 0,
                 "type": "function"
               }
@@ -97,11 +97,11 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1760532473,
-      "id": "gen-1760532473-4dhaYSI2DOD0pysi7fbC",
+      "created": 1762104938,
+      "id": "gen-1762104938-TomUkrFiVSePM2FwMrka",
       "model": "google/gemini-2.0-flash-001",
       "object": "chat.completion",
-      "provider": "Google AI Studio",
+      "provider": "Google",
       "usage": {
         "completion_tokens": 11,
         "completion_tokens_details": {
@@ -120,7 +120,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6d799cad5f24-ORD"
+        "998563b108fde81c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -129,7 +129,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:47:54 GMT"
+        "Sun, 02 Nov 2025 17:35:39 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

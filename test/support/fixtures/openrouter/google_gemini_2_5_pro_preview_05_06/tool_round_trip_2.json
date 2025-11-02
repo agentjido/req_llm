@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo2NTUzLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6InRvb2xfMF9hZGRfbmtkd3ZKMjJTU3p6aGRmSzFocHUiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJ0b29sXzBfYWRkX25rZHd2SjIyU1N6emhkZksxaHB1In1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LXByby1wcmV2aWV3LTA1LTA2IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjo2NTUzLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6InRvb2xfMF9hZGRfaVcyczhuM2R5V01UOEhLWjBFZmoiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJ0b29sXzBfYWRkX2lXMnM4bjNkeVdNVDhIS1owRWZqIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LXByby1wcmV2aWV3LTA1LTA2IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
       "max_tokens": 6553,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "tool_0_add_nkdwvJ22SSzzhdfK1hpu",
+              "id": "tool_0_add_iW2s8n3dyWMT8HKZ0Efj",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "tool_0_add_nkdwvJ22SSzzhdfK1hpu"
+          "tool_call_id": "tool_0_add_iW2s8n3dyWMT8HKZ0Efj"
         }
       ],
       "model": "google/gemini-2.5-pro-preview-05-06",
@@ -61,12 +61,12 @@
           "logprobs": null,
           "message": {
             "content": "sum=5",
-            "reasoning": "**Mapping the Parameters**\n\nI'm currently focused on how to pass the numbers \"2\" and \"3\" to the `add` tool. I'm mapping \"2\" to `a` and \"3\" to `b`. Seems straightforward so far, but I need to make sure the types are correct before invoking the tool.\n\n\n**Calculating the Sum**\n\nI've outlined the complete process, from the initial user request, to generating the `default_api.add(a=2, b=3)` call, printing it for execution, processing the tool's output (\"5\"), and finally, formatting the final response as \"sum=5\", satisfying the user's requirements.\n\n\n",
+            "reasoning": "**Mapping the Parameters**\n\nI'm currently focused on how to pass the numbers \"2\" and \"3\" to the `add` tool. I'm mapping \"2\" to `a` and \"3\" to `b`. Seems straightforward so far, but I need to make sure the types are correct before invoking the tool.\n\n\n**Processing the Tool's Response**\n\nI've successfully called the `add` tool and received the output. Now, I'm parsing the JSON response to extract the sum. Specifically, I see the result is \"5\". The final step is formatting the output as \"sum=5\", which should be the final answer the user is seeking.\n\n\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "**Mapping the Parameters**\n\nI'm currently focused on how to pass the numbers \"2\" and \"3\" to the `add` tool. I'm mapping \"2\" to `a` and \"3\" to `b`. Seems straightforward so far, but I need to make sure the types are correct before invoking the tool.\n\n\n**Calculating the Sum**\n\nI've outlined the complete process, from the initial user request, to generating the `default_api.add(a=2, b=3)` call, printing it for execution, processing the tool's output (\"5\"), and finally, formatting the final response as \"sum=5\", satisfying the user's requirements.\n\n\n",
+                "text": "**Mapping the Parameters**\n\nI'm currently focused on how to pass the numbers \"2\" and \"3\" to the `add` tool. I'm mapping \"2\" to `a` and \"3\" to `b`. Seems straightforward so far, but I need to make sure the types are correct before invoking the tool.\n\n\n**Processing the Tool's Response**\n\nI've successfully called the `add` tool and received the output. Now, I'm parsing the JSON response to extract the sum. Specifically, I see the result is \"5\". The final step is formatting the output as \"sum=5\", which should be the final answer the user is seeking.\n\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -76,8 +76,8 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1760532522,
-      "id": "gen-1760532522-6cc7XczKPaOcytAmUCm1",
+      "created": 1762104977,
+      "id": "gen-1762104977-yl3r0MqRp1ZYP7JscDzZ",
       "model": "google/gemini-2.5-pro",
       "object": "chat.completion",
       "provider": "Google",
@@ -99,7 +99,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6ea94910e1b4-ORD"
+        "998564ab2d3be25b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -108,7 +108,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:45 GMT"
+        "Sun, 02 Nov 2025 17:36:19 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

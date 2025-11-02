@@ -63,12 +63,12 @@
           "logprobs": null,
           "message": {
             "content": "\n\nSure! Here's a cat joke for you:\n\nWhy don't cats play poker in the wild?  \nBecause there are too many cheetahs! 😸",
-            "reasoning": "Okay, the user asked for a joke about cats. Let me check the tools provided. The only tool available is get_weather, which requires a location. But the user didn't ask for weather; they want a joke. Since there's no tool for telling jokes, I can't use any of the provided functions. I should just respond directly with a joke without calling any tools.\n",
+            "reasoning": "Okay, the user asked for a joke about cats. Let me check the tools provided. The only tool available is get_weather, which requires a location. But the user didn't ask for weather; they want a joke. The tools don't include a joke-telling function. So I can't use any of the provided tools here. I should just respond directly with a joke without calling any functions.\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "Okay, the user asked for a joke about cats. Let me check the tools provided. The only tool available is get_weather, which requires a location. But the user didn't ask for weather; they want a joke. Since there's no tool for telling jokes, I can't use any of the provided functions. I should just respond directly with a joke without calling any tools.\n",
+                "text": "Okay, the user asked for a joke about cats. Let me check the tools provided. The only tool available is get_weather, which requires a location. But the user didn't ask for weather; they want a joke. The tools don't include a joke-telling function. So I can't use any of the provided tools here. I should just respond directly with a joke without calling any functions.\n",
                 "type": "reasoning.text"
               }
             ],
@@ -78,15 +78,16 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532573,
-      "id": "gen-1760532573-d1FsXCiQaKRLnVP7bVSK",
+      "created": 1762105045,
+      "id": "gen-1762105045-ShQn9MXWnf7hjBn2hN18",
       "model": "qwen/qwen3-next-80b-a3b-thinking",
       "object": "chat.completion",
-      "provider": "AtlasCloud",
+      "provider": "Google",
       "usage": {
-        "completion_tokens": 113,
+        "completion_tokens": 117,
         "prompt_tokens": 156,
-        "total_tokens": 269
+        "prompt_tokens_details": null,
+        "total_tokens": 273
       }
     },
     "headers": {
@@ -94,7 +95,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6feaa92e61f2-ORD"
+        "99856656c85bff5c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -103,7 +104,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:34 GMT"
+        "Sun, 02 Nov 2025 17:37:26 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

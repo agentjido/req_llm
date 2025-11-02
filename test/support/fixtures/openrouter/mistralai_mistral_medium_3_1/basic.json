@@ -36,27 +36,27 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": "stop",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello, world! 🌍✨ How can I brighten your day today? Whether you need help with coding, ideas, or just a fun fact, I'm here for it! 😊\n\n(And yes, your `",
+            "content": "Hello, world! 🌍✨ How can I brighten your day today? 😊\n\n(Need help with coding, ideas, or just a fun chat? I'm here for it!)",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "length"
+          "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532485,
-      "id": "gen-1760532485-Yz2VjejysOF195FJnt18",
+      "created": 1762104958,
+      "id": "gen-1762104958-ekYq6Ptn8aNcfipEoLcj",
       "model": "mistralai/mistral-medium-3.1",
       "object": "chat.completion",
       "provider": "Mistral",
       "usage": {
-        "completion_tokens": 50,
+        "completion_tokens": 44,
         "prompt_tokens": 6,
-        "total_tokens": 56
+        "total_tokens": 50
       }
     },
     "headers": {
@@ -64,7 +64,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6dbf29610046-ORD"
+        "998564350bde1401-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -73,7 +73,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:05 GMT"
+        "Sun, 02 Nov 2025 17:36:00 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

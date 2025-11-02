@@ -62,19 +62,19 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Sure! Here’s a cat joke for you:\n\nWhy don’t cats play poker in the savannah?\n\nToo many cheetahs! 🐱😸",
-            "reasoning": "**Acknowledging compliance requirement**",
+            "content": "Why did the cat sit on the computer? Because it wanted to keep an eye on the mouse!",
+            "reasoning": "**Preparing a joke**",
             "reasoning_details": [
               {
                 "format": "openai-responses-v1",
                 "index": 0,
-                "summary": "**Acknowledging compliance requirement**",
+                "summary": "**Preparing a joke**",
                 "type": "reasoning.summary"
               },
               {
-                "data": "gAAAAABo75huVAwCTqmUC57QFe9l6NQD1uLwft_zhPnsvk_W2gUp454a_aftUdb9SKTRR7gy7VPqxV8uKygNu55GekmHmn5aMDWRNZI3tfEszjcaR8fgNuYysUPih2IKfI302JH6t3v48cVkq3xibG_eKuIPibh1E9b4DlAMlyXcsz8UQrU3ENKUpS3tvY6lJO_p0HTA_XPhFA-SKAOAGFEQq-iJHNTvNo6J3txdMwfA3LtwDhS_dVrHYbGPmAg_fxAMqywpIAv3F3BwNAeQprEPfGJiPAEbUlckqlK0MI8a8MsUENHP3IW4qg7q15LvjikjUMyVYoX-xQGx46Xu-N-payKiMmbFYLOkG4P_mAtlz3WpNFI3MWDswBh-24FCq8k_C5XVq3l43gk3wlrZdVE3iFJ46JpJOudyneMQ6isHxqeCAzv0w4xDhfvRjmW44hnsRwdz2y3ZcD4lp8AzqkCBOmRBuXSIlctF-mN7roEeHSXe4cOP-YRk8xMA9-PoaZPU_tV5aNLPlACscn7IWgF9JYd7CEqIbocA0l3rG2m4V5FpZo86J0aQVigsNM0Rsqyw5sL85uz-O_g2KKKpR04Q28SAQgALFCvxJPOklDRrvV5sTzLHxw2zT76aNmvNI6V0f4StaSv4YzvviiZj1gxmNPbgQOqOxeD5V400b-gv9eCNDYL-u5Kn7CHJvYa5YG-7L-tV3emMLuv9yt0PSpLnAbteKlkyiNf0vZGkVOYNLsfR6yut1jKP1sLqq56n2OnCHaRT7J7v4DQ7VRmMtgRiBnT5KRk3bJUzQTvOl_G6e6vfSfZI10IHIwLF49HDzvGlLMUOQjwQbu96wAuXeFlyAc3PoB3OpncOfMLbfvYbjB8GNoyVUH8=",
+                "data": "gAAAAABpB5bZBtovzCYHIL6MP3dzLwF07SSPehmAqdc6JS-ZW78jO-i3H_fJSbutPaee1a3ovIrKFDT1t7mpi5peeLOZYnFiUWX8OVDkeN_YluxXsEfV_v2Ka8R84La81VaePUgYr7q1i0ltSc7dnuWxLRdPUH6AZNLeJN31wLH2QRWS-H-nFxaZFGoQWfIS2E3N-VhCqZFAPGqLDLdHdoY2zyN9aZ9squ202VqaMTqBUwzC-CS-_1ZO58v6dzg2-tGXfMtHaUXeyR2Gj-yGP_rMI6xopl4b-vjnD-LMsMfJ9QklFwdCqWcCJLpgm7GYyu4PPZHNKL3y95arBtfMyQrBcBayrxFHusKFpfR514cUDMVAFYaytpDW_kYiKlmY7ibYztUchb0rbsSQhgYxNm1xoSQo0oj8ejBoJuOIWGqEN-duhoPaKeoUX9h7Is1D7pbmgTI_28nLpQykXFdZr34PYQNgp4O4De0ojK4gRMbwDSncAEzxA66feR6gxYb8m7XoroYu4aM_QW10JgSnm2dRowT1j3Jo-oTJKQLRTjal0KbaHPBXAHDuXxpgx_YVKUSrGyonKDXXNur_rgbHMAvI3Mi4MEZ7M5mjZOhdsppz9FjuUyXuZFx1rtQc7UnxzFqNeAiOtN5Us0eU9Ib_Fe9P2e4p_kSXQ7brbGdgkPQz_z1m7nFEpvYF73TedWZ0v7ovromZtodvnDo0rpJcouWeWwn1LsE7VaOZIZHBaW2oSJd6auShRtk4UUUDKR6QnujkQ88wpjYNN-lZT8KhrctpOsBkk_pC_izyv4eXAcL_EqDxRxyJV8nub74d6V8H53lp6XjnIBL-ZMHfB4_Wq_umLYpmnhTCaA==",
                 "format": "openai-responses-v1",
-                "id": "rs_05435a809eb9459e0168ef986dc28c8193a22d3a791d7a261c",
+                "id": "rs_0526a4f7f70b6b3501690796d94b348195834dccd665e1daba",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -85,15 +85,18 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1760532588,
-      "id": "gen-1760532588-MzDsO6fi5nanEKSPmAO6",
+      "created": 1762105048,
+      "id": "gen-1762105048-NOFUp1wBxAapVfZAXan9",
       "model": "openai/gpt-5-codex",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
-        "completion_tokens": 38,
-        "prompt_tokens": 53,
-        "total_tokens": 91
+        "completion_tokens": 26,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 50,
+        "total_tokens": 76
       }
     },
     "headers": {
@@ -101,7 +104,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef70466c14e248-ORD"
+        "9985666abfe70006-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -110,7 +113,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:49 GMT"
+        "Sun, 02 Nov 2025 17:37:28 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

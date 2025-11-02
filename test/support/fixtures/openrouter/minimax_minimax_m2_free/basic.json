@@ -1,0 +1,108 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im1pbmltYXgvbWluaW1heC1tMjpmcmVlIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "minimax/minimax-m2:free",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! 👋 I’m MiniMax‑M2, your AI assistant. How can I help you today?",
+            "reasoning": "The user says \"Hello world!\". This is a greeting. I should respond politely. Possibly also ask if they need any help. My role: respond as MiniMax-M2. Provide a friendly greeting. Answer accordingly.\n\nNo policy violation. The user wants just a greeting. So greet them back, perhaps ask what can I help. Possibly: \"Hello! How can I assist you today?\" The assistant is given no special instructions other than to be helpful. So this should be straightforward.\n\nThus final answer: greet back.\n\nI could also add some info: I'm MiniMax-M2, built by MiniMax, etc.\n\nOk.",
+            "reasoning_details": [
+              {
+                "format": null,
+                "index": 0,
+                "text": "The user says \"Hello world!\". This is a greeting. I should respond politely. Possibly also ask if they need any help. My role: respond as MiniMax-M2. Provide a friendly greeting. Answer accordingly.\n\nNo policy violation. The user wants just a greeting. So greet them back, perhaps ask what can I help. Possibly: \"Hello! How can I assist you today?\" The assistant is given no special instructions other than to be helpful. So this should be straightforward.\n\nThus final answer: greet back.\n\nI could also add some info: I'm MiniMax-M2, built by MiniMax, etc.\n\nOk.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1762104961,
+      "id": "gen-1762104961-dHjhAUxILwh7RUSgG7M1",
+      "model": "minimax/minimax-m2:free",
+      "object": "chat.completion",
+      "provider": "Minimax",
+      "usage": {
+        "completion_tokens": 152,
+        "prompt_tokens": 44,
+        "total_tokens": 196
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "998564476e4b98c3-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 02 Nov 2025 17:36:02 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

@@ -72,7 +72,15 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": null,
+            "reasoning": "Okay, the user wants me to compute 2 + 3 using the add tool. Let me check the tools provided. There's an add function that takes two integers, a and b. So I need to call add with a=2 and b=3.\n\nFirst, I'll structure the tool call. The name is \"add\", and the arguments should be a JSON object with a and b as keys. Let me make sure the parameters are correct. The required fields are a and b, both integers. Yep, 2 and 3 are integers.\n\nI should output the tool_call XML with the correct JSON inside. Then, once the tool responds, I have to say 'sum=value' where value is the result. But for now, just the tool call is needed. Let me double-check everything. The user said to use the add tool for 2+3, so the arguments are correct. Alright, time to format the response.\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Okay, the user wants me to compute 2 + 3 using the add tool. Let me check the tools provided. There's an add function that takes two integers, a and b. So I need to call add with a=2 and b=3.\n\nFirst, I'll structure the tool call. The name is \"add\", and the arguments should be a JSON object with a and b as keys. Let me make sure the parameters are correct. The required fields are a and b, both integers. Yep, 2 and 3 are integers.\n\nI should output the tool_call XML with the correct JSON inside. Then, once the tool responds, I have to say 'sum=value' where value is the result. But for now, just the tool call is needed. Let me double-check everything. The user said to use the add tool for 2+3, so the arguments are correct. Alright, time to format the response.\n",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant",
             "tool_calls": [
@@ -81,7 +89,7 @@
                   "arguments": "{\"a\": 2, \"b\": 3}",
                   "name": "add"
                 },
-                "id": "c858f84c8",
+                "id": "call_7aa5756c70ad4299a4910c7d",
                 "index": 0,
                 "type": "function"
               }
@@ -90,19 +98,16 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760532733,
-      "id": "gen-1760532733-Ovuz3gJYKJwEgvVzMaX3",
+      "created": 1762105041,
+      "id": "gen-1762105041-jLQ25Ilntgw7d03pJsfu",
       "model": "qwen/qwen3-235b-a22b-thinking-2507",
       "object": "chat.completion",
-      "provider": "Cerebras",
-      "system_fingerprint": "fp_2550751e3c405168bfb3",
+      "provider": "Chutes",
       "usage": {
-        "completion_tokens": 152,
-        "prompt_tokens": 204,
-        "prompt_tokens_details": {
-          "cached_tokens": 0
-        },
-        "total_tokens": 356
+        "completion_tokens": 226,
+        "prompt_tokens": 182,
+        "prompt_tokens_details": null,
+        "total_tokens": 408
       }
     },
     "headers": {
@@ -110,7 +115,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef73cd1b22cca3-ORD"
+        "9985663e9bceb838-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -119,7 +124,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:52:14 GMT"
+        "Sun, 02 Nov 2025 17:37:25 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

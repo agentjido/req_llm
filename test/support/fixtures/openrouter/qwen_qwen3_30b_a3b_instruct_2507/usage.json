@@ -48,15 +48,15 @@
           "native_finish_reason": "length"
         }
       ],
-      "created": 1760532541,
-      "id": "gen-1760532541-CQe48TBJ5Lclv5WMM2Hd",
+      "created": 1762105024,
+      "id": "gen-1762105024-9yHQ1HAf8gCwz8SWyEXo",
       "model": "qwen/qwen3-30b-a3b-instruct-2507",
       "object": "chat.completion",
-      "provider": "Chutes",
+      "provider": "Alibaba",
+      "system_fingerprint": null,
       "usage": {
         "completion_tokens": 10,
         "prompt_tokens": 11,
-        "prompt_tokens_details": null,
         "total_tokens": 21
       }
     },
@@ -65,7 +65,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6f1d783aff5c-ORD"
+        "998565d0f9dbeaf5-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -74,7 +74,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:01 GMT"
+        "Sun, 02 Nov 2025 17:37:05 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

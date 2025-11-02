@@ -41,15 +41,23 @@
           "logprobs": null,
           "message": {
             "content": "Hello! 👋 It's great to see you. How can I assist you today? Feel free to ask me any questions or let me know if you'd just like to chat! 😊",
-            "reasoning": "\nOkay, the user said \"Hi there!\" which is a common greeting. I should respond in a friendly and welcoming manner. Let me check if there's anything specific they might need. Since it's just a greeting, maybe they're testing if I'm working or starting a conversation. I'll keep it open-ended to encourage them to ask questions or share what's on their mind. Make sure to use a cheerful tone with an emoji to keep it approachable. Let me avoid any technical jargon since it's a casual greeting. Also, confirm that I'm here to help. Alright, that should cover it.\n",
+            "reasoning": "\nOkay, the user said \"Hi there!\" which is a common greeting. I should respond in a friendly and welcoming way. Let me check if there's anything specific they might need. Since it's just a greeting, maybe they're testing if I'm working or starting a conversation. I'll keep it open-ended to encourage them to ask questions or share what's on their mind. Make sure to use a cheerful tone with an emoji to keep it approachable. Let me avoid any technical jargon since it's a casual greeting. Also, confirm that I'm here to help. Alright, that should cover it.\n",
+            "reasoning_details": [
+              {
+                "format": null,
+                "index": 0,
+                "text": "\nOkay, the user said \"Hi there!\" which is a common greeting. I should respond in a friendly and welcoming way. Let me check if there's anything specific they might need. Since it's just a greeting, maybe they're testing if I'm working or starting a conversation. I'll keep it open-ended to encourage them to ask questions or share what's on their mind. Make sure to use a cheerful tone with an emoji to keep it approachable. Let me avoid any technical jargon since it's a casual greeting. Also, confirm that I'm here to help. Alright, that should cover it.\n",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532729,
-      "id": "gen-1760532729-ELJp1MX9rGuHNOXevKrN",
+      "created": 1762105376,
+      "id": "gen-1762105376-r2NDshdOJBry17Nyl2H4",
       "model": "qwen/qwen3-235b-a22b-thinking-2507",
       "object": "chat.completion",
       "provider": "Chutes",
@@ -64,7 +72,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef73b9ff42cca3-ORD"
+        "99856e6918c91910-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -73,7 +81,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:52:10 GMT"
+        "Sun, 02 Nov 2025 17:42:57 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

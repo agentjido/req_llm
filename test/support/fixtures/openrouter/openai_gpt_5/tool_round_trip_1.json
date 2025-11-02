@@ -72,18 +72,12 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "**Planning the computation task**\n\nI need to respond to the user's request by calculating 2 + 3. According to the developer's instructions, I must call the add function immediately when processing the request. I can include a preamble message if needed, but I shouldn’t mention the exact tool name to the user unless instructed. So, I'll make sure to call the add function directly and then respond with the result formatted as 'sum=<value>'.**Executing the addition task**\n\nThe user specifically requested to use the add tool for computing 2 + 3 and to respond with 'sum=<value>' after getting the result. So, I need to call the functions.add with a=2 and b=3. I must ensure no extra content is included in the response. The final output will simply be 'sum=5' after the tool call. I'll be sure to send the tool call in the commentary channel, and then I'll respond accordingly.",
+            "reasoning": null,
             "reasoning_details": [
               {
+                "data": "gAAAAABpB5bIgzhZxKCeu_7xccL0JdMGn8lExTzVEnfEYR6wit3cUpiS2XFQVanTImX-6HyHHbCFB-xRf-zxDPKl2uMfqFSTqkWP2BtzqLeWdE02v2hrQimbl-wQxbCmjrDhl9YCdFbMtsX48bDY8WfPRsZCuXI-tlx9iHhSqSsdjl3dy0ZUVaSSD7QBwt2NEXGhcVtykT--MYczqL46j6CG1c-OAsmTzD27PG6Ls2an-mQHTwEf2O9xoUKNGBA4iIvPcUuzmbtFNYFU5RYGxztOcl318zVHcdxytSKT0ep3ZBgzuJKl1XsV3AN1yxzVSEXeTVi7NPhkWK-OjhNR0Ufu8HqAgxVN6FxRxsSX1y_XiQOIbMxvKMkOVU42H-mYxHeiEVVEMIrQ9ELEaLY6BD_zuDpM5B1oRK1Gi4e6LVmBERuyPDwSFKERRwTySZ3fjW5-Q-0ewP2Iyn5q5PvR-6jNdJhY6uQnnO3oObSdu-5gPJSmc83PXQA6Mw8ne5s0hmR30v0pt3YrujYoi6udbY6nCCCszYqSVPMqMomkmMPgeg03vq5N5nZ3klVl8T6qMPjyGD-zD_IVs5SjPQnjc69QyaFCUsINfQf-ObyAiUBeDx8vroBT5lC1tmKstYwRA0plRuc6QrHW-UM5FoNDPh-arAhA2vZYdthQkvgQkhUo-zsM6ibFKLEzo10TwSvko3nwcTJEsslsIcjr9xAdgJtD52UbSw-lFaknbpgOyCamOpmwCPKPfBR61icxkI2HhYxlhvsQnQ8_-ziynKnOKFWkjnfB8BT7kWh1wbI0PeCOKcwzMhIlpsGB35mCoAemT112d0h7-Dnb7KxaewztREpELGTwW6wh_3uJEyzHPMq56TLa1ng0XS3GJTnidzE4gM0QaVWi1PUYLVbg6EQQPM6ZuckSHZHBFdTSXM1mXunmRfkKNFa3Zz4g-MapEQXGzLZbTYuYCuJsbhg3_opsc_U1yvZIvtVRzyuOL7RPdzeEVOvXcCPqn2ZwbfuaAtdXHKi8Pb9hDyYK9jQjzBISpnC2E2sjyR9L67Gn-S4ozMuV9sN30t6H9cqi15XWlKGqKdvupHHd8opEOIUrudZEDy3qsdZIYyz5mQs4tCqycl2CqqbnNet6s0dNtbQFWTeU63kcDA8MqipZaTWbJDJBIvfc86DOBrGx0fuIjbWRkx9TT-9Eh8q85Gkcyssr_icRJ_PBtIw-pcMryGfMXeNX1MxvF2J5ImkMG6_a0E0SIxBNJuwlNeQ9LviFypzLFc-IXpQ90BjfFu5567a3SQcLp0yBMMh9gRhLs38lNoFLQT2CBduUQVvvjsOytbOz8VcRSE3nTwHIxS5qbD5s2X3x-RbQNWjJRmB-8BqVrfbd_BtmpCZQEXVx1b2kBQonNtfy6DFVlCbURXlEq-4p2r9EE9vCoX8ggqbfVxFC6HxHeraWJNHeRF8V9FU28PmTB6BhNIyR9m4le6S5Ge0Izv7RFyhjCqIg3AKJ5fGVMLpAYHTad8VUgun9MoMSlh71DKCj8p-yToBm_RnnJODhz8erOKpv8Xi1O8PsseTUA9CGgADnJYmNjFu_pOEblvXPsLH0qo1gFmPMHgYR2erzhSOhTdPYONdHHqBmq0kVBJbXgEPWEoNDkulPv92zt8cbKKbIAkB9yaLpDIkhRLj7hYuEDTmUNTN6SXpuVDbBP-JHfogvUihRf0XiKwOzwq7D3imMqC2jIzCJmAwvtg_swXweEjU9EII-7Eizol629wo95f6cCYbbuuAwztQ05l3TMxCZysLO3BnGcHLlay3a_cSVKv2Q-CuLp4HhfCoO0YlOTPaWDrFKFYIlEizT4Pa9IlCwXUwkISw7promHZ-dJfYDE1OYf9ffgn4UIFdPwbZDU3COsGlTVMD36Lw6MSmVqd-jbMuVuZu4zGO6Alp4xAco2r0QqBcMgjx8k2hqnYLIbKnIQ9hYnOhYVQU8v3A5cPwWH2DIt_FzQ_vu",
                 "format": "openai-responses-v1",
-                "index": 0,
-                "summary": "**Planning the computation task**\n\nI need to respond to the user's request by calculating 2 + 3. According to the developer's instructions, I must call the add function immediately when processing the request. I can include a preamble message if needed, but I shouldn’t mention the exact tool name to the user unless instructed. So, I'll make sure to call the add function directly and then respond with the result formatted as 'sum=<value>'.**Executing the addition task**\n\nThe user specifically requested to use the add tool for computing 2 + 3 and to respond with 'sum=<value>' after getting the result. So, I need to call the functions.add with a=2 and b=3. I must ensure no extra content is included in the response. The final output will simply be 'sum=5' after the tool call. I'll be sure to send the tool call in the commentary channel, and then I'll respond accordingly.",
-                "type": "reasoning.summary"
-              },
-              {
-                "data": "gAAAAABo75grUcmDT3rdLc1FS8Y3ZE5pvqTTXsQW1II9XfFQZ_EvQs5WoGPJ8Clc3u00Ravrm1iU1GkSapd0OhDo8P6kVLxu9qu0a84PP-q0epL6TtvFq_lLzsgYX1SP-CnBMzNLeusuV13-qZjSQxaEKHTSr7YF15ndlmCFiZIb5z5rqgDUCmTMG33QbDWAulLZ5y_0-B9DOZgYSqFUkTRva5b-ZkCSAvtha0UVB4Ko-lnyNKS1upzuNxpvWmEJel5nQ1eom5NqUSze1kFzxNG1xlPtObOK8jwhHI-8eH4KRAy7vvPErjX66DTUYpLGgsLHzByr-EQzPZZo2Ih5LgSQ1J6eJVKI5Bfzbd3oRfgZ46v1Pfr6t26xZyo3HpIcO3cSMVdihjNTEdh0aVhv2zpR6UXrgiAMpsMDjziv7JnY0hS6kxWczGZr8eRPvvuehF5nhlA5n-0pgu6ljppUKut5_8LpycFuZvfjIL-ZMqRNtBUVBHF0tKfTmfMJ00eIkrp0H7EbcCsMwi6w9m0AVPdNj7AEvcYYIClpCdm-Qw5nfWE-iXDKr9n1YTFAwKGw6R_fE4N66v_ycM9KfsNvTJafTvKkxG2j_CN-Mj5ziw_tkwFzijuwwyAzPeihnAFe9GfdChlYe4vtOFzh_UBPL1_WiOSBTrfvsT-oyj5HsNeXPa5wIjmpMV3lLdNrd1zUN3Xb2fHJom037u5vp9VekoTWEYgkiDJPhXCPCFVzbrgrlzBtJ3VNTCANMTBKQr1MlMcWMT1oiwtuvpBrSPvtgbWG16JVQmHuie2wi_zYjuJlG5z9o-K0rIfo1RKSxe42JIDdUvQ7kk_wA_f0K6unLj02jIedu0yEkwETYYONps8BQEBn95AeX2verxexnA99nKQWsxwzcne2JyEW-nX4higS0YUPptYXYQqpFO-IaD78bcp8gw__Ym6PdUc0LkRPxV-jjQ1qOgMvi-MlBrvJJ4mORAE83Rg9qXFr7V7INnxt1GovHyXo_hppKjCOFKiw6n7Fyya5b-EZDFcC1gb1uNv6flOawGZwVH_iUGxvpj3w8CavHzQVcgSt3zlc-7LVdiJed-fDjUvDWc84amye1ogoU9M3PoYpv-bLfBCjfkJcVWrGVi8mOsEquh-SlLcXryjin2vSX3L2rwn6-KFpxEEfgfLpVJ2GF3HUhKepowfh4cmx-XauGvLgEQdbVb9hDMR7M9wCUPo3U2Z2cAKyn1_eK_utxsvFL9MDjGb65z55cvhVLdm8DhYbHokzCoxw2aMRMgyKXOf7udfRONygTFzGwXwLczBBTBuIaK56bIxCdvnu75YR4uP0x-ocyqsK2PEZ7yJVws2I57wBQSM28jKcOraHWtbZxxao8ZQ17nbZxmp8JmNU8PmE3Vv5XoUu9g77J5TgBwC_ai2JopfbhjF9tcBLZqpYJAtf2RkNZta8utB_bqw1nIau0kwLBIo2kecSC-5zA5_lzNWRUhmRKOb39Aoz9T9_uYc0PWPG5Xd0xj-XmMHQ_0BJvlrBGVz43tUEglxnIKxLGVM8J42g0YRVILVqqui8-TAaxkFIZi-eOsZ219pA_YMKsCJtFBPLWiIf-BSPwH5DX_tGpWvGqfcRNKUEMeualfKEFeLRZD0TVZwugisEzSjZG_7x2-X4WERf1t6jBv_stoHehy5Px3_Rim-I4KG4HaT_02Odum1gkBuzsX5mn4ZcCUJRViRkbZQfi8FDEpFj4SeN9E_6KaceWzWlglvNyBNyHxtYFk78J7yXOS5Kcs6iuWY_SN46FAyXPzF9TSsNvPnvuuCYkY8i57yb1Y1BQZHPA_-uJT2IYLjnVaPFPG77_rP7_vtKNclnhLN683WyleOjidtUFLAeHIxqSuHRF8kCAuriWbnubXAfmy_XzGSNCOTE-mwzhHvuuo8V5J_0qG98VC7SL4t1JxTHxS-8MoNzRlBj-g-nl3GHZ1lgPq6Ow_znyRnyMxkqu14DOGgoU1TaXd1q97ns-lL1a1iEuOf26XMV-z6_K7II-Ob0_Kv9tXbCxT5UPSwnNUCE8sWu4y0oUyo-s7KCeHtzX3MVnaSHerTGRPe-8cJGd8lz4aquYK9UePdaJa42KDwcLm9-J3X5TgAFyuYuLuKzfyJKALP_a_h-ShJ_DJ-camQx7jgdZ0aLyEkcDCd7ijBRyjHLtVKHQWAtHuZzvkh_sSZdqCKqc6LX503inoZv8ZdrA1_OdI6dKgM40hnB1Jc4_CbF61fpddeJL9kWSdPf09SF0fjVx5Fa_frYQWN8LfGs-Ndc-DZ3BnE70XmXVZn89NV7YSFvobZt5HkWTKbHKjIDBKHEaNr3r8kPPXcexEHEJP_w5wOgBeCG03InimoEwrCTQdw5ZcZLffBrpelZL6LfZxxuEBbVd6Tij5pbgpqkGnSL0zs0OX84-9BffcgohYYAqAmbHpgSocZuC0VyR3wjvSAi0At51vqvzKFC-2C-MjMapn9KYk_jtvPvENFTQzt8JNtyH6UzHL1afhmPcRu_9ZojICP6_fWPygzlnx2z_guv-SCLMXAY6ITp_SVpAtNwUk5zPd7YFYjavrvvXhq3DDiVii_bXiGMYAtOT6C0-MydLRkR6Cbsgnxksawkw0uckIBVXZqzr7pyUtyc6_mg78Fcak2PwoXT9nPBicgILrc=",
-                "format": "openai-responses-v1",
-                "id": "rs_03dca65deec34b060168ef9825f47c81909976293a1d43dee1",
+                "id": "rs_085e3868892bfe0701690796c23b1c8195a8365dcbb54ffd37",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -96,7 +90,7 @@
                   "arguments": "{\"a\":2,\"b\":3}",
                   "name": "add"
                 },
-                "id": "call_KPlwXU9oxwAWvPxLcQqvMVvL",
+                "id": "call_A3PU42YtmteGUekABlkHnyOb",
                 "index": 0,
                 "type": "function"
               }
@@ -105,15 +99,18 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1760532516,
-      "id": "gen-1760532516-kzuIYhaWffU1GIS2wR7B",
+      "created": 1762105025,
+      "id": "gen-1762105025-HBXDabiuBQIK66YqMBKh",
       "model": "openai/gpt-5",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
-        "completion_tokens": 279,
-        "prompt_tokens": 71,
-        "total_tokens": 350
+        "completion_tokens": 215,
+        "completion_tokens_details": {
+          "reasoning_tokens": 192
+        },
+        "prompt_tokens": 68,
+        "total_tokens": 283
       }
     },
     "headers": {
@@ -121,7 +118,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6e85d896f163-ORD"
+        "998565da390aeadf-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -130,7 +127,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:37 GMT"
+        "Sun, 02 Nov 2025 17:37:05 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

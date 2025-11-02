@@ -36,43 +36,42 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": null,
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hi! How can I help you today? ",
-            "reasoning": "First, the user said, \"Hi there!\" which is a casual greeting. As an AI assistant, I should respond in a friendly and engaging manner to build rapport.\n\nMy role is to be helpful, truthful, and engaging, based on the system prompt. I need to keep responses clear and not verbose, so I'll aim for concise yet polite.\n\nPossible responses:\n- A simple greeting back, like \"Hi! How can I help you today?\"\n- This invites further interaction, which is good since the user might have a question or just be starting a conversation.\n\nIf this is the start of a conversation, I should be prepared for anything, but for now, respond appropriately.\n\nEnsure my response aligns with being Grok, built by xAI. I don't need to mention that unless relevant.\n\nFinal response structure:\n- Start with a greeting.\n- Offer assistance to make it useful.\n\nSomething like: \"Hi! I'm Grok, here to help. What's on your mind?\"\n\nThat might be a bit long, but it's clear. To keep it non-verbose: \"Hi! How can I assist you?\"\n\nYes, that works.",
+            "content": "Hi! I'm Grok, your friendly AI assistant",
+            "reasoning": "First, the user said, \"Hi there!\" which is a casual greeting. As an AI assistant, I should respond in a friendly, helpful, and engaging manner to build rapport.\n\nMy role is to be Grok, created by xAI, so I need to incorporate that into my response if appropriate. The system prompt says: \"You are Grok, a helpful and maximally truthful AI built by xAI, not based on any other companies and their models.\" So, I should remind the user of who I am subtly if it fits.\n\nA good response to a greeting should:\n1. Acknowledge the greeting.\n2. Introduce myself if it's the first interaction.\n3. Ask a question or invite further conversation to keep it going.\n4. Be concise and not overwhelming.\n\nPossible structure:\n- Start with a greeting back.\n- Mention my name and origin briefly.\n- Ask how I can help.\n\nFor example: \"Hi! I'm Grok, created by xAI. How can I assist you today?\"\n\nThis keeps it light and opens the door for more interaction.\n\nEnsure I'm maximally truthful: Everything I say should be accurate. In this case, it's straightforward.\n\nFinally, end positively to encourage engagement.",
             "reasoning_details": [
               {
-                "format": "unknown",
+                "format": "xai-responses-v1",
                 "index": 0,
-                "text": "First, the user said, \"Hi there!\" which is a casual greeting. As an AI assistant, I should respond in a friendly and engaging manner to build rapport.\n\nMy role is to be helpful, truthful, and engaging, based on the system prompt. I need to keep responses clear and not verbose, so I'll aim for concise yet polite.\n\nPossible responses:\n- A simple greeting back, like \"Hi! How can I help you today?\"\n- This invites further interaction, which is good since the user might have a question or just be starting a conversation.\n\nIf this is the start of a conversation, I should be prepared for anything, but for now, respond appropriately.\n\nEnsure my response aligns with being Grok, built by xAI. I don't need to mention that unless relevant.\n\nFinal response structure:\n- Start with a greeting.\n- Offer assistance to make it useful.\n\nSomething like: \"Hi! I'm Grok, here to help. What's on your mind?\"\n\nThat might be a bit long, but it's clear. To keep it non-verbose: \"Hi! How can I assist you?\"\n\nYes, that works.",
-                "type": "reasoning.text"
+                "summary": "First, the user said, \"Hi there!\" which is a casual greeting. As an AI assistant, I should respond in a friendly, helpful, and engaging manner to build rapport.\n\nMy role is to be Grok, created by xAI, so I need to incorporate that into my response if appropriate. The system prompt says: \"You are Grok, a helpful and maximally truthful AI built by xAI, not based on any other companies and their models.\" So, I should remind the user of who I am subtly if it fits.\n\nA good response to a greeting should:\n1. Acknowledge the greeting.\n2. Introduce myself if it's the first interaction.\n3. Ask a question or invite further conversation to keep it going.\n4. Be concise and not overwhelming.\n\nPossible structure:\n- Start with a greeting back.\n- Mention my name and origin briefly.\n- Ask how I can help.\n\nFor example: \"Hi! I'm Grok, created by xAI. How can I assist you today?\"\n\nThis keeps it light and opens the door for more interaction.\n\nEnsure I'm maximally truthful: Everything I say should be accurate. In this case, it's straightforward.\n\nFinally, end positively to encourage engagement.",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "OBCwpWaA5EyM59khuoWPeTL3sQSa39+A3hcFuFyA9S7vNkcIaFdyBGpBFrwX8PzdgHSdTjE/XpKyAEy4uJH1cc2nlXNMQYOME2u9zshMuexY01hNIlngn5dr6+QgglbVXihsd2QsqZ7tjfsX2W4CO0fczEQoco1Qnk5pUpyM+jdKSQexzpcffuEb7clIAtsxU7nxnqz82975cKuV0JWoPr0B4S4a7ufONFXI/aWwlE3dqXy2P5CBGpxoT58+MTTrjZxj/lM2JJCf5wRXyE0y536Qvu7ltGhBkGBNsY12F+cyKeQ/hKWSDdSUc+H9uUsW5cD08a8TfqfKMESi3Z6lYrzhClglYu8Wke4cNHA0AZz200i9zmsXx+RytH+W4jQscd90/wWB0mNBVc7wK4VcFrAhttI04P/wRP3TaCA/pyQPf8/7bqm0eCfLq/zxAB1+FvgAW1BY030yVxOXtuvSV+IxLbovENoS4LxqSiRf76RoTwCs6sDPDyJLr0UykRPPyw6mT5T5r+XNf4+5IF6pAbupRwywZLoKcXyithn7kXwZAvAkuVaTOjwrrUj/hih4FjVMNZAL9YkAiDmSjEBb+m48kZc3ysZftozAmFiCSYtsTjH5GKQMv46ii3g/VWhHWA07NfigPmDvJhJaniS8wmtSKluw0kaSZ0vcGjCiJcbRiZvO2aiDgNjoRcKI11uFqXXGN32iIOGjA3uptqjPIXOqH82IjAXamB9Vi7vYCcPa5h0gZNmL3iDpYqYtMgSA74dKwSyp2ZrvYyKi2FRP/iaGcKdomofZ5t0feODlXVtAzMbGtKAGFf7PA6sVHM5qZK8u/aYzCHa5S9UqOYVZZTTjH5V8pkE0mEbcn/PNXWHd12QZ/FBciRjOMhDtquRO5gor9WsuXvXGStPkZOFINHw89ul6vWo2/goMuH2pC9QHRx2oQltC567SgopyalMsinRHEZi18sYJsm0XVXhnPUqjj/+/lWurXLVDwWiZhxXrpPH9kV2MBI2Br/jURS74P0GDlfizYLyrtRmMMfUBxtzCxwzywAcdYvsqXjkyz82uyOj2C7LT3ppfDOlvbu++hahEJfqsTVLoc85HEAMvQ2FwWQ48jNtiQ3f5XAn6jWzIjeA9IrsWV9fmxxz22IqcIhVPjIgPXd8fwvuyLSbrIS7hNTaNLWpBIVHtSUSKeJPVWGB+QkNFJ/uJXghkquHqPYS0pldqDXMxdc8SASq3n3ie+ZnpLCQ3L9UNfjBWyK0xtXHPLgKcUFVJtRHBMORJqr94/KyYRNKdJB+DaUo0PwqXRCgOgZzM5oxCpJdpbZgZkhx6Rj4sepFIFRlgl7PnDlJnE9AuKLbJcAjy1AYYduOm9K76PEUzVeYt/Nc21XW3hULfVPYPPz98WRZytHhX/74IrO8uNrxiH7fd5bHVaIuNAjsL2sMiDib02GGZEcmzWz7OtDeGsxicq0LAU6bWZzOTZ9X5Beg5cXVn",
+                "format": "xai-responses-v1",
+                "id": "rs_afe443fd-e6f5-1e60-3d95-f74104f10e81_us-east-1",
+                "index": 0,
+                "type": "reasoning.encrypted"
               }
             ],
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "length"
+          "native_finish_reason": null
         }
       ],
-      "created": 1760532604,
-      "id": "gen-1760532604-n1ijGaPdDVdsxhgs8R04",
+      "created": 1762105055,
+      "id": "gen-1762105055-qrQE3W26aKy8Q449S2Ug",
       "model": "x-ai/grok-3-mini",
       "object": "chat.completion",
       "provider": "xAI",
-      "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 238,
-        "completion_tokens_details": {
-          "reasoning_tokens": 228
-        },
+        "completion_tokens": 11,
         "prompt_tokens": 10,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 2
-        },
-        "total_tokens": 248
+        "total_tokens": 21
       }
     },
     "headers": {
@@ -80,7 +79,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef70acffb91923-ORD"
+        "99856696bbfe000b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,7 +88,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:50:05 GMT"
+        "Sun, 02 Nov 2025 17:37:35 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

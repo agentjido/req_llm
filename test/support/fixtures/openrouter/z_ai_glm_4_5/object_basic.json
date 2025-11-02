@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiei1haS9nbG0tNC41IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQifSwidHlwZSI6ImZ1bmN0aW9uIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJhZ2UiLCJuYW1lIiwib2NjdXBhdGlvbiJdLCJ0eXBlIjoib2JqZWN0In19LCJ0eXBlIjoiZnVuY3Rpb24ifV19"
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiR2VuZXJhdGUgYSBzb2Z0d2FyZSBlbmdpbmVlciBwcm9maWxlIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoiei1haS9nbG0tNC41IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wLCJ0b29sX2Nob2ljZSI6eyJmdW5jdGlvbiI6eyJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQifSwidHlwZSI6ImZ1bmN0aW9uIn0sInRvb2xzIjpbeyJmdW5jdGlvbiI6eyJkZXNjcmlwdGlvbiI6IkdlbmVyYXRlIHN0cnVjdHVyZWQgb3V0cHV0IG1hdGNoaW5nIHRoZSBwcm92aWRlZCBzY2hlbWEiLCJuYW1lIjoic3RydWN0dXJlZF9vdXRwdXQiLCJwYXJhbWV0ZXJzIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhZ2UiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBhZ2UgaW4geWVhcnMiLCJtaW5pbXVtIjoxLCJ0eXBlIjoiaW50ZWdlciJ9LCJuYW1lIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgZnVsbCBuYW1lIiwidHlwZSI6InN0cmluZyJ9LCJvY2N1cGF0aW9uIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3Mgam9iIG9yIHByb2Zlc3Npb24iLCJ0eXBlIjoic3RyaW5nIn19LCJyZXF1aXJlZCI6WyJuYW1lIiwiYWdlIl0sInR5cGUiOiJvYmplY3QifX0sInR5cGUiOiJmdW5jdGlvbiJ9XX0="
     },
     "canonical_json": {
       "max_tokens": 500,
@@ -46,9 +46,8 @@
                 }
               },
               "required": [
-                "age",
                 "name",
-                "occupation"
+                "age"
               ],
               "type": "object"
             }
@@ -80,13 +79,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "",
-            "reasoning": "\nThe user is asking me to generate a software engineer profile. Looking at the available function, I have a `structured_output` function that can generate structured output with three required parameters:\n- age (integer, minimum 1)\n- name (string) \n- occupation (string)\n\nSince the user wants a software engineer profile, I should:\n1. Set the occupation to \"software engineer\" or similar\n2. Provide a reasonable name for a software engineer\n3. Provide a reasonable age for a software engineer\n\nI'll create a realistic profile with appropriate values for each parameter.",
+            "content": "\n",
+            "reasoning": "\nThe user is asking me to generate a software engineer profile. Looking at the available function, I have a `structured_output` function that can generate structured output with fields for name, age, and occupation. \n\nThe required parameters are:\n- name (required): Person's full name\n- age (required): Person's age in years (minimum 1)\n- occupation (optional): Person's job or profession\n\nSince the user wants a software engineer profile, I should:\n1. Set the occupation to \"software engineer\" \n2. Create a realistic name for a software engineer\n3. Set a reasonable age for a software engineer\n\nLet me generate a profile with appropriate values.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "\nThe user is asking me to generate a software engineer profile. Looking at the available function, I have a `structured_output` function that can generate structured output with three required parameters:\n- age (integer, minimum 1)\n- name (string) \n- occupation (string)\n\nSince the user wants a software engineer profile, I should:\n1. Set the occupation to \"software engineer\" or similar\n2. Provide a reasonable name for a software engineer\n3. Provide a reasonable age for a software engineer\n\nI'll create a realistic profile with appropriate values for each parameter.",
+                "text": "\nThe user is asking me to generate a software engineer profile. Looking at the available function, I have a `structured_output` function that can generate structured output with fields for name, age, and occupation. \n\nThe required parameters are:\n- name (required): Person's full name\n- age (required): Person's age in years (minimum 1)\n- occupation (optional): Person's job or profession\n\nSince the user wants a software engineer profile, I should:\n1. Set the occupation to \"software engineer\" \n2. Create a realistic name for a software engineer\n3. Set a reasonable age for a software engineer\n\nLet me generate a profile with appropriate values.",
                 "type": "reasoning.text"
               }
             ],
@@ -95,10 +94,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"age\":32,\"name\":\"Alex Chen\",\"occupation\":\"Software Engineer\"}",
+                  "arguments": "{\"age\": 28, \"name\": \"Alex Chen\", \"occupation\": \"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "call_8a2a71abc7424cf4adcb430d",
+                "id": "call_80e76ff887974aada508ea8e",
                 "index": 0,
                 "type": "function"
               }
@@ -107,21 +106,18 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760545729,
-      "id": "gen-1760545729-fFTID34mf9WvadlYjnTh",
+      "created": 1762105082,
+      "id": "gen-1762105082-fnIjGBe3Fq9RibM1kOq7",
       "model": "z-ai/glm-4.5",
       "object": "chat.completion",
-      "provider": "Novita",
-      "system_fingerprint": "",
+      "provider": "Chutes",
       "usage": {
-        "completion_tokens": 151,
-        "completion_tokens_details": null,
-        "prompt_tokens": 222,
+        "completion_tokens": 185,
+        "prompt_tokens": 224,
         "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 43
+          "cached_tokens": 41
         },
-        "total_tokens": 373
+        "total_tokens": 409
       }
     },
     "headers": {
@@ -129,7 +125,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0b11bdf1beac0-ORD"
+        "9985673db95a14ce-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -138,7 +134,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:28:50 GMT"
+        "Sun, 02 Nov 2025 17:38:05 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

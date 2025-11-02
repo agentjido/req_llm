@@ -61,39 +61,41 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "I'm sorry, I can't tell jokes. I'm here to help with weather information. If you'd like, I can check the weather for a specific location—just let me know!",
-            "reasoning": "First, the user asked: \"Tell me a joke about cats.\" This is a request for a joke, which is not related to any of the available functions. The only available function is \"get_weather\", which is for getting weather information based on a location.\n\nI need to check if this query can be addressed using the available functions. The available functions are limited to getting weather, so no, this doesn't match.\n\nThe instructions say: \"If the user's query can be addressed using an available function, and all required parameters are provided or obviously inferable, trigger a function call.\" In this case, it cannot be addressed using any available function.\n\nFurther, it says: \"Ask for clarification only if none of the provided functions are able to advance the user's request.\" Since no functions can advance this request, I shouldn't ask for clarification unless it's unclear, but this is clear—it's just not something I can handle.\n\nThe instructions also emphasize: \"Keep your response to user clear; please do not make your response verbose!\" So, I should be direct.\n\nMy response should not include any function calls because there's no relevant function. I need to inform the user that I can't help with that or suggest what I can do, but without being verbose.\n\nPossible response: I could say something like, \"I'm sorry, I can't tell jokes, but I can help with weather information. What location would you like the weather for?\"\n\nHowever, the instructions don't specify to promote other functions, but since that's all I have, it might be appropriate to steer the conversation.\n\nTo keep it simple: Just respond that I can't assist with that.\n\nRe-reading the instructions: \"If there is anything unclear, ask the user for clarification.\" But here, it's clear what they want, it's just not something I can do.\n\nThe best action is to politely decline and perhaps mention what I can do.\n\nFinal decision: Do not use <function_call> tags. Respond clearly and concisely.",
+            "content": "I don't have access to joke-telling functions, but here's a classic one: Why don't cats play poker in the jungle? Too many cheetahs! If you have a weather-related question, I can help with that. 😊",
+            "reasoning": "First, the user asked: \"Tell me a joke about cats.\" This is a request for a joke, which is not related to any of the available functions. The only available function is \"get_weather\", which is for getting weather information based on a location.\n\nI need to check if this query can be addressed using the available functions. The available functions are limited to getting weather, so no, this doesn't match.\n\nThe instructions say: \"If the user's query can be addressed using an available function, and all required parameters are provided or obviously inferable, trigger a function call.\" In this case, it cannot be addressed using any available function.\n\nFurther, \"Do not call a function if no matching functions apply or if parameters are missing/unclear. Ask for clarification only if none of the provided functions are able to advance the user's request.\"\n\nSince none of the functions can advance this request, I should not call any function. Instead, I need to respond directly or ask for clarification if needed. But the query is clear; it's just not something I can handle with the tools I have.\n\nThe instructions emphasize: \"Keep your response to user clear; please do not make your response verbose!\" So, I should be concise.\n\nPossible responses: I could just tell a joke since that's what was asked, but my role is to use the tools provided. However, the system prompt doesn't specify that I have to only use functions; it says to call functions when appropriate.\n\nRe-reading the prompt: \"You can call functions to retrieve information or perform actions.\" But it doesn't say I can't respond directly if no function is needed.\n\nIn the context, it seems like I'm an AI that should primarily use functions for tasks, but for something like telling a joke, which isn't covered, I should probably just respond.\n\nThe prompt says: \"If there is anything unclear, ask the user for clarification.\" But here, it's clear; it's just not actionable with tools.\n\nI think the best approach is to politely respond that I can't fulfill this request with the available tools, or perhaps just provide a joke since that's straightforward.\n\nTo stay true to the instructions, I should not invent capabilities. The prompt is about using functions, so if I can't use a function, I should respond directly.\n\nFinal decision: Since no function applies, I'll respond directly with a joke to keep it simple and helpful.",
             "reasoning_details": [
               {
-                "format": "unknown",
+                "format": "xai-responses-v1",
                 "index": 0,
-                "text": "First, the user asked: \"Tell me a joke about cats.\" This is a request for a joke, which is not related to any of the available functions. The only available function is \"get_weather\", which is for getting weather information based on a location.\n\nI need to check if this query can be addressed using the available functions. The available functions are limited to getting weather, so no, this doesn't match.\n\nThe instructions say: \"If the user's query can be addressed using an available function, and all required parameters are provided or obviously inferable, trigger a function call.\" In this case, it cannot be addressed using any available function.\n\nFurther, it says: \"Ask for clarification only if none of the provided functions are able to advance the user's request.\" Since no functions can advance this request, I shouldn't ask for clarification unless it's unclear, but this is clear—it's just not something I can handle.\n\nThe instructions also emphasize: \"Keep your response to user clear; please do not make your response verbose!\" So, I should be direct.\n\nMy response should not include any function calls because there's no relevant function. I need to inform the user that I can't help with that or suggest what I can do, but without being verbose.\n\nPossible response: I could say something like, \"I'm sorry, I can't tell jokes, but I can help with weather information. What location would you like the weather for?\"\n\nHowever, the instructions don't specify to promote other functions, but since that's all I have, it might be appropriate to steer the conversation.\n\nTo keep it simple: Just respond that I can't assist with that.\n\nRe-reading the instructions: \"If there is anything unclear, ask the user for clarification.\" But here, it's clear what they want, it's just not something I can do.\n\nThe best action is to politely decline and perhaps mention what I can do.\n\nFinal decision: Do not use <function_call> tags. Respond clearly and concisely.",
-                "type": "reasoning.text"
+                "summary": "First, the user asked: \"Tell me a joke about cats.\" This is a request for a joke, which is not related to any of the available functions. The only available function is \"get_weather\", which is for getting weather information based on a location.\n\nI need to check if this query can be addressed using the available functions. The available functions are limited to getting weather, so no, this doesn't match.\n\nThe instructions say: \"If the user's query can be addressed using an available function, and all required parameters are provided or obviously inferable, trigger a function call.\" In this case, it cannot be addressed using any available function.\n\nFurther, \"Do not call a function if no matching functions apply or if parameters are missing/unclear. Ask for clarification only if none of the provided functions are able to advance the user's request.\"\n\nSince none of the functions can advance this request, I should not call any function. Instead, I need to respond directly or ask for clarification if needed. But the query is clear; it's just not something I can handle with the tools I have.\n\nThe instructions emphasize: \"Keep your response to user clear; please do not make your response verbose!\" So, I should be concise.\n\nPossible responses: I could just tell a joke since that's what was asked, but my role is to use the tools provided. However, the system prompt doesn't specify that I have to only use functions; it says to call functions when appropriate.\n\nRe-reading the prompt: \"You can call functions to retrieve information or perform actions.\" But it doesn't say I can't respond directly if no function is needed.\n\nIn the context, it seems like I'm an AI that should primarily use functions for tasks, but for something like telling a joke, which isn't covered, I should probably just respond.\n\nThe prompt says: \"If there is anything unclear, ask the user for clarification.\" But here, it's clear; it's just not actionable with tools.\n\nI think the best approach is to politely respond that I can't fulfill this request with the available tools, or perhaps just provide a joke since that's straightforward.\n\nTo stay true to the instructions, I should not invent capabilities. The prompt is about using functions, so if I can't use a function, I should respond directly.\n\nFinal decision: Since no function applies, I'll respond directly with a joke to keep it simple and helpful.",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "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",
+                "format": "xai-responses-v1",
+                "id": "rs_1d04c7d1-84a6-c18e-8430-e0e89c116b1f_us-east-1",
+                "index": 0,
+                "type": "reasoning.encrypted"
               }
             ],
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "stop"
+          "native_finish_reason": "completed"
         }
       ],
-      "created": 1760532617,
-      "id": "gen-1760532617-Ax7DOfiAcBUfKxphp7Ch",
+      "created": 1762105045,
+      "id": "gen-1762105045-3yylUpBWYryaSdfB2UDm",
       "model": "x-ai/grok-3-mini",
       "object": "chat.completion",
       "provider": "xAI",
-      "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 428,
+        "completion_tokens": 523,
         "completion_tokens_details": {
-          "reasoning_tokens": 394
+          "reasoning_tokens": 476
         },
         "prompt_tokens": 282,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 281
-        },
-        "total_tokens": 710
+        "total_tokens": 805
       }
     },
     "headers": {
@@ -101,7 +103,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef70f91be9eb5d-ORD"
+        "99856658fa74e81d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -110,7 +112,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:50:17 GMT"
+        "Sun, 02 Nov 2025 17:37:26 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

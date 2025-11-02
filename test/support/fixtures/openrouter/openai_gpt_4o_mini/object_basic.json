@@ -85,10 +85,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"age\":30,\"name\":\"John Doe\",\"occupation\":\"Software Engineer\"}",
+                  "arguments": "{\"age\":30,\"name\":\"Alex Johnson\",\"occupation\":\"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "call_4jAUJF6bmYd68wC3810Sl4PP",
+                "id": "call_Tn48NFmUG12Jr7r6OVwN4li3",
                 "index": 0,
                 "type": "function"
               }
@@ -97,8 +97,8 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532499,
-      "id": "gen-1760532499-5f8WzfYeQhsfIgoNF7D5",
+      "created": 1762104969,
+      "id": "gen-1762104969-GsV9h8pPit9VdyOyX0Z3",
       "model": "openai/gpt-4o-mini",
       "object": "chat.completion",
       "provider": "OpenAI",
@@ -121,7 +121,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6e1a9e8f0558-ORD"
+        "99856478cc62eace-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -130,7 +130,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:20 GMT"
+        "Sun, 02 Nov 2025 17:36:09 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

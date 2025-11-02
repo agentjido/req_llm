@@ -46,14 +46,22 @@
           "message": {
             "content": "**Solution:**\n\nWe need to calculate \\(12 \\times 7\\).\n\n1. **Break down the multiplication:**\n   \\[\n   12 \\times 7 = (10 + 2) \\times 7\n   \\]\n\n2. **Multiply each part separately:**\n   \\[\n   10 \\times 7 = 70\n   \\]\n   \\[\n   2 \\times 7 = 14\n   \\]\n\n3. **Add the results together:**\n   \\[\n   70 + 14 = 84\n   \\]\n\n**Final Answer:** \\(\\boxed{84}\\)",
             "reasoning": "First, I recognize that I need to multiply 12 by 7.\n\nI'll break down 12 into 10 and 2 to simplify the calculation.\n\nMultiplying 10 by 7 gives me 70.\n\nThen, multiplying 2 by 7 results in 14.\n\nFinally, I add 70 and 14 together to get the final answer of 84.\n",
+            "reasoning_details": [
+              {
+                "format": null,
+                "index": 0,
+                "text": "First, I recognize that I need to multiply 12 by 7.\n\nI'll break down 12 into 10 and 2 to simplify the calculation.\n\nMultiplying 10 by 7 gives me 70.\n\nThen, multiplying 2 by 7 results in 14.\n\nFinally, I add 70 and 14 together to get the final answer of 84.\n",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532529,
-      "id": "gen-1760532529-vHtrVzSXCwuNq0cwZOJE",
+      "created": 1762104953,
+      "id": "gen-1762104953-e8bICGRpvIB2DLlBrdfg",
       "model": "deepseek/deepseek-r1-distill-qwen-14b",
       "object": "chat.completion",
       "provider": "Novita",
@@ -70,7 +78,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6ed58a9ff604-ORD"
+        "99856415ab88a6ee-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -79,7 +87,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:50 GMT"
+        "Sun, 02 Nov 2025 17:35:53 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

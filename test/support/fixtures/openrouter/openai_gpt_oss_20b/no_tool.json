@@ -63,12 +63,12 @@
           "logprobs": null,
           "message": {
             "content": "Why don’t cats play poker in the jungle?\n\nBecause there are too many cheetahs! 🐾😸",
-            "reasoning": "Need to respond with a joke.",
+            "reasoning": "We need to respond with a joke about cats. No function needed.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "Need to respond with a joke.",
+                "text": "We need to respond with a joke about cats. No function needed.",
                 "type": "reasoning.text"
               }
             ],
@@ -78,16 +78,16 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532511,
-      "id": "gen-1760532511-FM0xUktjPg1Uzxa0WQj8",
+      "created": 1762105008,
+      "id": "gen-1762105008-T6I4K4pRBPeFiFVvJbWg",
       "model": "openai/gpt-oss-20b",
       "object": "chat.completion",
       "provider": "DeepInfra",
       "usage": {
-        "completion_tokens": 40,
+        "completion_tokens": 47,
         "prompt_tokens": 116,
         "prompt_tokens_details": null,
-        "total_tokens": 156
+        "total_tokens": 163
       }
     },
     "headers": {
@@ -95,7 +95,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6e66999b10b2-ORD"
+        "9985656f18d9aca8-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -104,7 +104,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:32 GMT"
+        "Sun, 02 Nov 2025 17:36:48 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

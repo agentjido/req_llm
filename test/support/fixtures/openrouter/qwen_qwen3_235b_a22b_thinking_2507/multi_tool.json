@@ -98,12 +98,12 @@
           "logprobs": null,
           "message": {
             "content": "\n\n",
-            "reasoning": "Okay, the user is asking about the weather in Paris, France. Let me check the available tools. There's a get_weather function that requires a location and an optional unit. The location is specified as Paris, France, so I need to call get_weather with location set to \"Paris, France\". The unit parameter is optional and can be celsius or fahrenheit. Since the user didn't specify the unit, maybe I should default to celsius, but the function doesn't require it. Wait, the required field is only location, so I can omit the unit. Let me make sure. The parameters for get_weather have \"required\": [\"location\"], so unit is optional. So the tool call should include location: \"Paris, France\" and no unit. That's it. I'll structure the tool_call accordingly.\n",
+            "reasoning": "Okay, the user is asking about the weather in Paris, France. Let me check which tool I can use for that. Looking at the provided functions, there's get_weather which requires a location. The parameters need location and optionally unit. The user didn't specify Celsius or Fahrenheit, but since Paris is in France, they probably use Celsius. So I should call get_weather with location set to \"Paris, France\" and unit as \"celsius\". Wait, the unit is optional, but maybe it's better to include it. The enum allows celsius or fahrenheit. Since the user didn't specify, maybe default to celsius. Let me make sure the function call includes location and unit. The required field is location, so unit is optional. But to be precise, maybe include it. Let me check the function definition again. The parameters have \"required\": [\"location\"], so unit is optional. But the user is in France, so celsius is standard. I'll include unit as celsius. So the tool call should be get_weather with location \"Paris, France\" and unit \"celsius\".\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "Okay, the user is asking about the weather in Paris, France. Let me check the available tools. There's a get_weather function that requires a location and an optional unit. The location is specified as Paris, France, so I need to call get_weather with location set to \"Paris, France\". The unit parameter is optional and can be celsius or fahrenheit. Since the user didn't specify the unit, maybe I should default to celsius, but the function doesn't require it. Wait, the required field is only location, so I can omit the unit. Let me make sure. The parameters for get_weather have \"required\": [\"location\"], so unit is optional. So the tool call should include location: \"Paris, France\" and no unit. That's it. I'll structure the tool_call accordingly.\n",
+                "text": "Okay, the user is asking about the weather in Paris, France. Let me check which tool I can use for that. Looking at the provided functions, there's get_weather which requires a location. The parameters need location and optionally unit. The user didn't specify Celsius or Fahrenheit, but since Paris is in France, they probably use Celsius. So I should call get_weather with location set to \"Paris, France\" and unit as \"celsius\". Wait, the unit is optional, but maybe it's better to include it. The enum allows celsius or fahrenheit. Since the user didn't specify, maybe default to celsius. Let me make sure the function call includes location and unit. The required field is location, so unit is optional. But to be precise, maybe include it. Let me check the function definition again. The parameters have \"required\": [\"location\"], so unit is optional. But the user is in France, so celsius is standard. I'll include unit as celsius. So the tool call should be get_weather with location \"Paris, France\" and unit \"celsius\".\n",
                 "type": "reasoning.text"
               }
             ],
@@ -112,10 +112,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"location\": \"Paris, France\"}",
+                  "arguments": " {\"location\": \"Paris, France\", \"unit\": \"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "call_7e0ec97656ca439cb154de73",
+                "id": "019a45a51da01ea46d97510b28b284ba",
                 "index": 0,
                 "type": "function"
               }
@@ -124,16 +124,16 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760532745,
-      "id": "gen-1760532745-Z4Cv74FoFI8nZOMZZ5ha",
+      "created": 1762105024,
+      "id": "gen-1762105024-aJ2VEUdskihGYG6Q7YXq",
       "model": "qwen/qwen3-235b-a22b-thinking-2507",
       "object": "chat.completion",
-      "provider": "GMICloud",
+      "provider": "SiliconFlow",
+      "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 191,
-        "prompt_tokens": 273,
-        "prompt_tokens_details": null,
-        "total_tokens": 464
+        "completion_tokens": 255,
+        "prompt_tokens": 300,
+        "total_tokens": 555
       }
     },
     "headers": {
@@ -141,7 +141,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef7419cd44cca3-ORD"
+        "998565d0ce12b838-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -150,7 +150,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:52:25 GMT"
+        "Sun, 02 Nov 2025 17:37:06 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

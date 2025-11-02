@@ -42,13 +42,13 @@
           "logprobs": null,
           "message": {
             "content": "Hello! 👋 Nice to meet you. How can I help you today?",
-            "reasoning": "The user has greeted me with \"Hello world!\" - a classic first message. This is a friendly greeting. I should respond warmly and helpfully.",
+            "reasoning": "The user has greeted me with a simple \"Hello world!\" This is a friendly greeting. I should respond warmly and helpfully.",
             "reasoning_details": [
               {
                 "format": "anthropic-claude-v1",
                 "index": 0,
-                "signature": "ErQCCkYICRgCKkBCNFXmryfYQp4TPdAz4FJHHC9QmMNelA50Nb/lgovZYZfLoioxyFadUjNOlZ6eB8mgvYzKfe7F3rDaIx8KoBMVEgzi7n3bK0JOCjQPbXoaDFl4RUlgvVUfkKaFYCIwJcjktvg3lndnF/DVZKHvTOF7VATV/g+fqeB8ga8zNxKnFBsmDNbCEHBt5PdKBzGMKpsBQD4xoE5BKcg1X4U1TaRGNSB809FBrHU9xPdQqKyx+hrhj6ujsb40YfK3F/KtnVBPUibRTR/H+ojpTrG0NJgUP7miNWAfGEySX5PPE/ghZj37UUUaamrEGuGsW+Piw8m9T9y9jHU9sc6mRaIohmejfaerswYAfAf83MskVlkc/FF9NdIDmOZgwP+04bLwjOeo2eOiCusuiwijgVcYAQ==",
-                "text": "The user has greeted me with \"Hello world!\" - a classic first message. This is a friendly greeting. I should respond warmly and helpfully.",
+                "signature": "EqQCCkgICRABGAIqQCDpXXLBLiwBknn0uW27nTsbl7wULfnkZAZjm7UpHN8f+ZDOd2BJUFRYDTQIDWA9B7cn0anYtFEaVFLXFYYvhEgSDGlEsTZT2+7iIaq0mBoMhyd9ZtQHXkQ09XxBIjCnFagC4AxBUZrZvI5THDGJ+kGmBol+T8VzYWFdmQeex7Bqt6UV1D9NywEFnLBlDrMqiQHXkvptYnpvJnTcywJG9REAJwN7FuVZUWJ8E5GWjTx8HygAhY2wyrxgZWUhxL22BRLkLiqb0gYdS4IZBWFz3yqXacjP6lEYpi+1A9U9keW5c4JVPukwvOa/xvw2KELe4t0ixiTSeofbQyvsBLkfaNFi3dbs3Tjd81TkTaWlxJEbPMPjKZHJgKohERgB",
+                "text": "The user has greeted me with a simple \"Hello world!\" This is a friendly greeting. I should respond warmly and helpfully.",
                 "type": "reasoning.text"
               }
             ],
@@ -58,15 +58,15 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1761606490,
-      "id": "gen-1761606490-souhGwCDepivJrDp8ULt",
+      "created": 1762104974,
+      "id": "gen-1762104974-cHCA6RDVbdA83qsJ1xO4",
       "model": "anthropic/claude-haiku-4.5",
       "object": "chat.completion",
-      "provider": "Anthropic",
+      "provider": "Amazon Bedrock",
       "usage": {
-        "completion_tokens": 62,
+        "completion_tokens": 58,
         "prompt_tokens": 38,
-        "total_tokens": 100
+        "total_tokens": 96
       }
     },
     "headers": {
@@ -74,7 +74,7 @@
         "*"
       ],
       "cf-ray": [
-        "9955da946dda7fb0-ORD"
+        "998564976e88eac7-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -83,7 +83,7 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 23:08:10 GMT"
+        "Sun, 02 Nov 2025 17:36:15 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

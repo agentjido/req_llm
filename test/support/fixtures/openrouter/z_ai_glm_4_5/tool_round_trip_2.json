@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo5NjAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiXG4iLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF81ZWZlYTgyN2M5OTc0NzI3YTMzMmJmMjIiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJjYWxsXzVlZmVhODI3Yzk5NzQ3MjdhMzMyYmYyMiJ9XSwibW9kZWwiOiJ6LWFpL2dsbS00LjUiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjo5NjAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiXG5cbiIsInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6XCIyXCIsXCJiXCI6XCIzXCJ9IiwibmFtZSI6ImFkZCJ9LCJpZCI6InRvb2xjYWxsLTYxZDEwNGRjTmUyT1ZQMmwiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IntcImVycm9yXCI6XCJUb29sIGV4ZWN1dGlvbiBmYWlsZWRcIn0iLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJ0b29sY2FsbC02MWQxMDRkY05lMk9WUDJsIn1dLCJtb2RlbCI6InotYWkvZ2xtLTQuNSIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
       "max_tokens": 9600,
@@ -11,24 +11,24 @@
           "role": "user"
         },
         {
-          "content": "\n",
+          "content": "\n\n",
           "role": "assistant",
           "tool_calls": [
             {
               "function": {
-                "arguments": "{\"a\":2,\"b\":3}",
+                "arguments": "{\"a\":\"2\",\"b\":\"3\"}",
                 "name": "add"
               },
-              "id": "call_5efea827c9974727a332bf22",
+              "id": "toolcall-61d104dcNe2OVP2l",
               "type": "function"
             }
           ]
         },
         {
-          "content": "5",
+          "content": "{\"error\":\"Tool execution failed\"}",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "call_5efea827c9974727a332bf22"
+          "tool_call_id": "toolcall-61d104dcNe2OVP2l"
         }
       ],
       "model": "z-ai/glm-4.5",
@@ -60,7 +60,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "\nsum=5",
+            "content": "\n\nsum=5",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -68,21 +68,15 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760545965,
-      "id": "gen-1760545965-LlguqcPnOUoP5GpHlbYY",
+      "created": 1762105059,
+      "id": "gen-1762105059-r86BZe8ErznSsJh9QKYD",
       "model": "z-ai/glm-4.5",
       "object": "chat.completion",
-      "provider": "Novita",
-      "system_fingerprint": "",
+      "provider": "WandB",
       "usage": {
-        "completion_tokens": 5,
-        "completion_tokens_details": null,
-        "prompt_tokens": 66,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 4
-        },
-        "total_tokens": 71
+        "completion_tokens": 8,
+        "prompt_tokens": 77,
+        "total_tokens": 85
       }
     },
     "headers": {
@@ -90,7 +84,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0b6dded4eeac0-ORD"
+        "998566ac7c3c14ce-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -99,7 +93,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:32:46 GMT"
+        "Sun, 02 Nov 2025 17:37:39 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

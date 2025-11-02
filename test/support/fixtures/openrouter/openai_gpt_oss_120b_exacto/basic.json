@@ -41,13 +41,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! 👋 How can I help you today?",
-            "reasoning": "The user says \"Hello world!\" Likely a greeting. Respond friendly.",
+            "content": "Hello! How can I assist you today?",
+            "reasoning": "We just respond friendly.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "The user says \"Hello world!\" Likely a greeting. Respond friendly.",
+                "text": "We just respond friendly.",
                 "type": "reasoning.text"
               }
             ],
@@ -57,20 +57,16 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1761606490,
-      "id": "gen-1761606490-CCHyGTN0R2Tv2I3l21FT",
+      "created": 1762105036,
+      "id": "gen-1762105036-LcjBJG2GKYJUClI1xAPY",
       "model": "openai/gpt-oss-120b:exacto",
       "object": "chat.completion",
-      "provider": "Novita",
-      "system_fingerprint": "",
+      "provider": "DeepInfra",
       "usage": {
-        "completion_tokens": 36,
-        "completion_tokens_details": {
-          "reasoning_tokens": 15
-        },
-        "prompt_tokens": 70,
+        "completion_tokens": 23,
+        "prompt_tokens": 57,
         "prompt_tokens_details": null,
-        "total_tokens": 106
+        "total_tokens": 80
       }
     },
     "headers": {
@@ -78,7 +74,7 @@
         "*"
       ],
       "cf-ray": [
-        "9955da981c2deaf0-ORD"
+        "9985661fff75a6ee-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -87,7 +83,7 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 23:08:11 GMT"
+        "Sun, 02 Nov 2025 17:37:16 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

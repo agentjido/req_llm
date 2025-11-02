@@ -98,12 +98,12 @@
           "logprobs": null,
           "message": {
             "content": "\n\n",
-            "reasoning": "Okay, the user is asking about the weather in Paris, France. Let me check the available tools. There's a get_weather function that requires a location and an optional unit. The user didn't specify the unit, so I should probably default to celsius since it's commonly used in France. I need to make sure to include the location as \"Paris, France\" as per the query. Let me structure the tool call with the location parameter. The unit isn't specified, so I'll omit it or maybe use the default. Wait, the function's required parameter is location, so unit is optional. Since the user didn't mention, I'll just provide the location. Let me confirm the parameters: location is required, unit is optional with enum celsius or fahrenheit. So the tool call should have location set to \"Paris, France\" and no unit. Alright, that's all I need.\n",
+            "reasoning": "Okay, the user is asking about the weather in Paris, France. Let me check the available tools. There's a get_weather function that requires a location and an optional unit. The user didn't specify the unit, so I should probably default to celsius since it's commonly used in France. I need to make sure to include the location as \"Paris, France\" as per the query. Let me structure the tool call with the location parameter. The unit is optional, but since they didn't mention it, I'll omit it or maybe set it to celsius. Wait, the function's required parameter is location, so unit is optional. So the arguments should be {\"location\": \"Paris, France\"}. I'll call get_weather with that.\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "Okay, the user is asking about the weather in Paris, France. Let me check the available tools. There's a get_weather function that requires a location and an optional unit. The user didn't specify the unit, so I should probably default to celsius since it's commonly used in France. I need to make sure to include the location as \"Paris, France\" as per the query. Let me structure the tool call with the location parameter. The unit isn't specified, so I'll omit it or maybe use the default. Wait, the function's required parameter is location, so unit is optional. Since the user didn't mention, I'll just provide the location. Let me confirm the parameters: location is required, unit is optional with enum celsius or fahrenheit. So the tool call should have location set to \"Paris, France\" and no unit. Alright, that's all I need.\n",
+                "text": "Okay, the user is asking about the weather in Paris, France. Let me check the available tools. There's a get_weather function that requires a location and an optional unit. The user didn't specify the unit, so I should probably default to celsius since it's commonly used in France. I need to make sure to include the location as \"Paris, France\" as per the query. Let me structure the tool call with the location parameter. The unit is optional, but since they didn't mention it, I'll omit it or maybe set it to celsius. Wait, the function's required parameter is location, so unit is optional. So the arguments should be {\"location\": \"Paris, France\"}. I'll call get_weather with that.\n",
                 "type": "reasoning.text"
               }
             ],
@@ -112,10 +112,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": " {\"location\": \"Paris, France\"}",
+                  "arguments": "{\"location\": \"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "0199e7eaddd87192b2f6f2b9692e8297",
+                "id": "chatcmpl-tool-95b33a5184b3457a8293b6cab4f28c78",
                 "index": 0,
                 "type": "function"
               }
@@ -124,16 +124,15 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760532549,
-      "id": "gen-1760532549-6oSKW3mcLlnKUaP4u7Q5",
+      "created": 1762105080,
+      "id": "gen-1762105080-RbMPpjPnWGn31opFJE8s",
       "model": "qwen/qwen3-30b-a3b-thinking-2507",
       "object": "chat.completion",
-      "provider": "SiliconFlow",
-      "system_fingerprint": "",
+      "provider": "Nebius",
       "usage": {
-        "completion_tokens": 194,
-        "prompt_tokens": 300,
-        "total_tokens": 494
+        "completion_tokens": 177,
+        "prompt_tokens": 288,
+        "total_tokens": 465
       }
     },
     "headers": {
@@ -141,7 +140,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6f5458fb60a1-ORD"
+        "99856733bdd3514c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -150,7 +149,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:11 GMT"
+        "Sun, 02 Nov 2025 17:38:01 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

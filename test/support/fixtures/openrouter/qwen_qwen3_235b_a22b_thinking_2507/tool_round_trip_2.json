@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo4MTkyLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6ImM4NThmODRjOCIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImM4NThmODRjOCJ9XSwibW9kZWwiOiJxd2VuL3F3ZW4zLTIzNWItYTIyYi10aGlua2luZy0yNTA3IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjo4MTkyLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6ImNhbGxfN2FhNTc1NmM3MGFkNDI5OWE0OTEwYzdkIiwidHlwZSI6ImZ1bmN0aW9uIn1dfSx7ImNvbnRlbnQiOiI1IiwibmFtZSI6ImFkZCIsInJvbGUiOiJ0b29sIiwidG9vbF9jYWxsX2lkIjoiY2FsbF83YWE1NzU2YzcwYWQ0Mjk5YTQ5MTBjN2QifV0sIm1vZGVsIjoicXdlbi9xd2VuMy0yMzViLWEyMmItdGhpbmtpbmctMjUwNyIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
       "max_tokens": 8192,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "c858f84c8",
+              "id": "call_7aa5756c70ad4299a4910c7d",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "c858f84c8"
+          "tool_call_id": "call_7aa5756c70ad4299a4910c7d"
         }
       ],
       "model": "qwen/qwen3-235b-a22b-thinking-2507",
@@ -58,30 +58,33 @@
         {
           "finish_reason": "stop",
           "index": 0,
-          "logprobs": {
-            "content": [],
-            "refusal": []
-          },
+          "logprobs": null,
           "message": {
             "content": "sum=5",
-            "reasoning": "\nOkay, the user asked me to use the add tool to compute 2 + 3. I called the add tool with a=2 and b=3. The tool responded with 5. Now I need to respond with 'sum=5'. Let me check if there's anything else. No, the instructions say after the tool result arrives, respond with 'sum=<value>'. So I just need to output sum=5. Let me make sure I didn't miss any steps. Yep, that's it.\n",
+            "reasoning": "\nOkay, let's see. The user asked me to use the add tool to compute 2 + 3. I called the add tool with a=2 and b=3. The tool responded with 5. Now I need to respond with 'sum=5'. Let me check if there's anything else. No, the instructions say after the tool result arrives, respond with 'sum=' followed by the value. So I should just write sum=5. Make sure there's no extra text. Yep, that's it.\n",
+            "reasoning_details": [
+              {
+                "format": null,
+                "index": 0,
+                "text": "\nOkay, let's see. The user asked me to use the add tool to compute 2 + 3. I called the add tool with a=2 and b=3. The tool responded with 5. Now I need to respond with 'sum=5'. Let me check if there's anything else. No, the instructions say after the tool result arrives, respond with 'sum=' followed by the value. So I should just write sum=5. Make sure there's no extra text. Yep, that's it.\n",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532734,
-      "id": "gen-1760532734-RqmCnXLbh80JuqGI08FO",
+      "created": 1762105053,
+      "id": "gen-1762105053-ag9IxH1N9PLBKb8DVvLQ",
       "model": "qwen/qwen3-235b-a22b-thinking-2507",
       "object": "chat.completion",
-      "provider": "Novita",
+      "provider": "Chutes",
       "usage": {
-        "completion_tokens": 111,
-        "completion_tokens_details": null,
+        "completion_tokens": 115,
         "prompt_tokens": 70,
-        "prompt_tokens_details": null,
-        "total_tokens": 181
+        "total_tokens": 185
       }
     },
     "headers": {
@@ -89,7 +92,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef73d82ab1cca3-ORD"
+        "99856686ca03b838-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -98,7 +101,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:52:15 GMT"
+        "Sun, 02 Nov 2025 17:37:34 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

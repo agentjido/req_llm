@@ -71,17 +71,17 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "\n",
+            "content": "",
             "reasoning": null,
             "refusal": null,
             "role": "assistant",
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"a\":2,\"b\":3}",
+                  "arguments": "{\"a\": 2, \"b\": 3}",
                   "name": "add"
                 },
-                "id": "call_8ef33e14d7ac4ef98e8fa472",
+                "id": "call_8a3e110af8b147d8884c12cf",
                 "index": 0,
                 "type": "function"
               }
@@ -90,21 +90,16 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760532800,
-      "id": "gen-1760532800-QvwB9iPNLGc7gxicLxsN",
+      "created": 1762105158,
+      "id": "gen-1762105158-nPWEHgBZPoyA0t4SAfeh",
       "model": "z-ai/glm-4.6",
       "object": "chat.completion",
-      "provider": "Novita",
-      "system_fingerprint": "",
+      "provider": "Parasail",
       "usage": {
-        "completion_tokens": 22,
-        "completion_tokens_details": null,
-        "prompt_tokens": 194,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 43
-        },
-        "total_tokens": 216
+        "completion_tokens": 35,
+        "prompt_tokens": 195,
+        "prompt_tokens_details": null,
+        "total_tokens": 230
       }
     },
     "headers": {
@@ -112,7 +107,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef7574cba17317-ORD"
+        "998569171d27f790-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -121,7 +116,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:53:21 GMT"
+        "Sun, 02 Nov 2025 17:39:18 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

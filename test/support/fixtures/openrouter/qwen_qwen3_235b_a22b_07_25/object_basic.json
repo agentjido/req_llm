@@ -85,10 +85,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"name\": \"Alex Johnson\", \"age\": 29, \"occupation\": \"Software Engineer\"}",
+                  "arguments": "{\"age\": 30, \"name\": \"Alex Johnson\", \"occupation\": \"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "call_IuuLZkWcqUuHb6H97kIMDTsj",
+                "id": "e6fa7e2d514f403c9cf14c3eafbc90c6",
                 "index": 0,
                 "type": "function"
               }
@@ -97,15 +97,15 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760532534,
-      "id": "gen-1760532534-eUdxuihKeijIhuPpTWBN",
+      "created": 1762105027,
+      "id": "gen-1762105027-ioMrtXy0MQnXm4AvLyfy",
       "model": "qwen/qwen3-235b-a22b-2507",
       "object": "chat.completion",
-      "provider": "Fireworks",
+      "provider": "AtlasCloud",
       "usage": {
-        "completion_tokens": 35,
+        "completion_tokens": 22,
         "prompt_tokens": 214,
-        "total_tokens": 249
+        "total_tokens": 236
       }
     },
     "headers": {
@@ -113,7 +113,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6ef29cd65074-ORD"
+        "998565e72979251b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -122,7 +122,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:55 GMT"
+        "Sun, 02 Nov 2025 17:37:08 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

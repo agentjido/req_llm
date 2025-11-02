@@ -85,10 +85,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"name\": \"Alice Johnson\", \"age\": 30, \"occupation\": \"Software Engineer\"}",
+                  "arguments": "{\n  \"age\": 30,\n  \"name\": \"Alex Johnson\",\n  \"occupation\": \"Software Engineer\"\n}",
                   "name": "structured_output"
                 },
-                "id": "call_8d6b31a339da42cdaa66bc17",
+                "id": "chatcmpl-tool-4a160bc728d246509945653afbbcd495",
                 "index": 0,
                 "type": "function"
               }
@@ -97,15 +97,15 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760532543,
-      "id": "gen-1760532543-vtWGsowNJx5NlPA3RNx4",
+      "created": 1762105030,
+      "id": "gen-1762105030-ZihHAQAIRWB9KZgNzxAg",
       "model": "qwen/qwen3-30b-a3b-instruct-2507",
       "object": "chat.completion",
-      "provider": "AtlasCloud",
+      "provider": "Nebius",
       "usage": {
-        "completion_tokens": 35,
-        "prompt_tokens": 209,
-        "total_tokens": 244
+        "completion_tokens": 27,
+        "prompt_tokens": 214,
+        "total_tokens": 241
       }
     },
     "headers": {
@@ -113,7 +113,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6f2a7f0dff5c-ORD"
+        "998565f9291beaf5-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -122,7 +122,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:03 GMT"
+        "Sun, 02 Nov 2025 17:37:10 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

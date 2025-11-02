@@ -77,44 +77,36 @@
         {
           "finish_reason": "tool_calls",
           "index": 0,
-          "logprobs": null,
+          "logprobs": -1.7881393e-6,
           "message": {
-            "content": "\n\n",
-            "reasoning": "Okay, the user wants me to generate a software engineer profile. Let me check the tools provided. There's a structured_output function that requires name, age, and occupation. The required fields are name and age, occupation is optional but since it's a software engineer profile, I should include that.\n\nFirst, I need to create a name. Maybe something common like \"John Doe\" or \"Jane Smith\". Let's pick \"Alex Johnson\" for a neutral name. Age should be an integer between 1 and maybe 65 or so. Let's say 28, which is a typical age for a software engineer. Occupation is \"Software Engineer\".\n\nWait, the schema says occupation is a string, so that's fine. Let me check the parameters again. The required fields are name and age. So I need to make sure those are present. Occupation is optional but since the user asked for a software engineer profile, including it makes sense.\n\nSo the arguments would be name: \"Alex Johnson\", age: 28, occupation: \"Software Engineer\". Let me confirm the JSON structure. The function name is structured_output, and the arguments should be a JSON object with those keys.\n\nYes, that should work. Let me make sure there are no typos. Age is an integer, so 28 is correct. Name is a string, occupation is a string. All good. So the tool call would be to structured_output with those parameters.\n",
-            "reasoning_details": [
-              {
-                "format": "unknown",
-                "index": 0,
-                "text": "Okay, the user wants me to generate a software engineer profile. Let me check the tools provided. There's a structured_output function that requires name, age, and occupation. The required fields are name and age, occupation is optional but since it's a software engineer profile, I should include that.\n\nFirst, I need to create a name. Maybe something common like \"John Doe\" or \"Jane Smith\". Let's pick \"Alex Johnson\" for a neutral name. Age should be an integer between 1 and maybe 65 or so. Let's say 28, which is a typical age for a software engineer. Occupation is \"Software Engineer\".\n\nWait, the schema says occupation is a string, so that's fine. Let me check the parameters again. The required fields are name and age. So I need to make sure those are present. Occupation is optional but since the user asked for a software engineer profile, including it makes sense.\n\nSo the arguments would be name: \"Alex Johnson\", age: 28, occupation: \"Software Engineer\". Let me confirm the JSON structure. The function name is structured_output, and the arguments should be a JSON object with those keys.\n\nYes, that should work. Let me make sure there are no typos. Age is an integer, so 28 is correct. Name is a string, occupation is a string. All good. So the tool call would be to structured_output with those parameters.\n",
-                "type": "reasoning.text"
-              }
-            ],
+            "content": "",
+            "reasoning": null,
             "refusal": null,
             "role": "assistant",
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"name\": \"Alex Johnson\", \"age\": 28, \"occupation\": \"Software Engineer\"}",
+                  "arguments": "{\"age\":30,\"name\":\"John Doe\",\"occupation\":\"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "call_928c2c220caf4f9abbfd5086",
+                "id": "call_4vfl34mwjuy20f0szlef3hg2",
                 "index": 0,
                 "type": "function"
               }
             ]
           },
-          "native_finish_reason": "tool_calls"
+          "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532552,
-      "id": "gen-1760532552-1i1ncWnwSQ0Kd0M1eNiJ",
+      "created": 1762105030,
+      "id": "gen-1762105030-iOJiO42469RgCqHLhVSN",
       "model": "qwen/qwen3-next-80b-a3b-thinking",
       "object": "chat.completion",
-      "provider": "AtlasCloud",
+      "provider": "Together",
       "usage": {
-        "completion_tokens": 332,
-        "prompt_tokens": 211,
-        "total_tokens": 543
+        "completion_tokens": 34,
+        "prompt_tokens": 216,
+        "total_tokens": 250
       }
     },
     "headers": {
@@ -122,7 +114,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6f65afd861f2-ORD"
+        "998565f8b9deff5c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -131,7 +123,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:13 GMT"
+        "Sun, 02 Nov 2025 17:37:11 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

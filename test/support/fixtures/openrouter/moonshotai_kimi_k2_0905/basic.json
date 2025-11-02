@@ -48,16 +48,18 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532504,
-      "id": "gen-1760532504-WWC7YjFgyyPgHyjWPMtF",
+      "created": 1762104966,
+      "id": "gen-1762104966-Xn1gc6AlSfzrFbvSd5V1",
       "model": "moonshotai/kimi-k2-0905",
       "object": "chat.completion",
-      "provider": "SiliconFlow",
-      "system_fingerprint": "",
+      "provider": "Novita",
+      "system_fingerprint": "fpv0_41b1161c",
       "usage": {
-        "completion_tokens": 9,
-        "prompt_tokens": 28,
-        "total_tokens": 37
+        "completion_tokens": 10,
+        "completion_tokens_details": null,
+        "prompt_tokens": 10,
+        "prompt_tokens_details": null,
+        "total_tokens": 20
       }
     },
     "headers": {
@@ -65,7 +67,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6e38bebfcc1a-ORD"
+        "998564659b8ce20b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -74,7 +76,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:25 GMT"
+        "Sun, 02 Nov 2025 17:36:07 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

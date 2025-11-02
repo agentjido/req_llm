@@ -72,64 +72,22 @@
   },
   "response": {
     "body": {
-      "choices": [
-        {
-          "finish_reason": "tool_calls",
-          "index": 0,
-          "logprobs": null,
-          "message": {
-            "content": " ",
-            "reasoning": "First, the user asked to \"Generate a software engineer profile.\" This seems to be asking for a profile of a software engineer, which might include details like name, age, and occupation.\n\nLooking at the available functions, there's only one: \"structured_output\". This function is designed to generate structured output based on a schema. The schema requires \"name\", \"age\", and \"occupation\".\n\nThe schema is:\n\n- name: a string for the person's full name\n\n- age: an integer greater than or equal to 1\n\n- occupation: a string for the person's job or profession\n\nSince the user is asking for a software engineer profile, I can use this function to output a structured profile where the occupation is \"Software Engineer\".\n\nThe function call needs to be in a specific JSON format within <function_call> tags.\n\nMy response should not be verbose; keep it clear.\n\nI need to decide what values to use for name and age. The user didn't specify, so I might need to make assumptions or ask for clarification. However, the system prompt says: \"If there is anything unclear, ask the user for clarification.\" But in this case, I can proceed by generating a sample profile.\n\nThe function description is: \"Generate structured output matching the provided schema\". So, when I call this function, I need to provide the parameters that match the schema.\n\nIn the function call example, it's: <function_call>{\"action\": \"function_name\", \"action_input\": {\"parameter\": \"argument\"}}</function_call>\n\nFor \"structured_output\", the action_input should match its parameters, which are the properties of the schema: name, age, and occupation.\n\nThe function \"structured_output\" is described as: \"Generate structured output matching the provided schema\". But in the available functions, it's defined with parameters that are the schema itself.\n\nLooking closely: The parameters for the action \"structured_output\" are an object with properties: age, name, occupation.\n\nSo, when I call this function, I need to provide values for age, name, and occupation in the action_input.\n\nFor example: {\"action\": \"structured_output\", \"action_input\": {\"name\": \"John Doe\", \"age\": 30, \"occupation\": \"Software Engineer\"}}\n\nThat makes sense. So, I should construct such a JSON.\n\nThe user didn't specify details, so I'll create a sample one. Since the system prompt emphasizes not being verbose and to use the function, I'll just call it with some reasonable values.\n\nFinally, my response should only include the function call.\n\nSo, I'll output:\n\n<function_call>{\"action\": \"structured_output\", \"action_input\": {\"name\": \"Some Name\", \"age\": some age, \"occupation\": \"Software Engineer\"}}</function_call>\n\nLet me choose: Name: \"Alice Johnson\", Age: 28, Occupation: \"Software Engineer\"",
-            "reasoning_details": [
-              {
-                "format": "unknown",
-                "index": 0,
-                "text": "First, the user asked to \"Generate a software engineer profile.\" This seems to be asking for a profile of a software engineer, which might include details like name, age, and occupation.\n\nLooking at the available functions, there's only one: \"structured_output\". This function is designed to generate structured output based on a schema. The schema requires \"name\", \"age\", and \"occupation\".\n\nThe schema is:\n\n- name: a string for the person's full name\n\n- age: an integer greater than or equal to 1\n\n- occupation: a string for the person's job or profession\n\nSince the user is asking for a software engineer profile, I can use this function to output a structured profile where the occupation is \"Software Engineer\".\n\nThe function call needs to be in a specific JSON format within <function_call> tags.\n\nMy response should not be verbose; keep it clear.\n\nI need to decide what values to use for name and age. The user didn't specify, so I might need to make assumptions or ask for clarification. However, the system prompt says: \"If there is anything unclear, ask the user for clarification.\" But in this case, I can proceed by generating a sample profile.\n\nThe function description is: \"Generate structured output matching the provided schema\". So, when I call this function, I need to provide the parameters that match the schema.\n\nIn the function call example, it's: <function_call>{\"action\": \"function_name\", \"action_input\": {\"parameter\": \"argument\"}}</function_call>\n\nFor \"structured_output\", the action_input should match its parameters, which are the properties of the schema: name, age, and occupation.\n\nThe function \"structured_output\" is described as: \"Generate structured output matching the provided schema\". But in the available functions, it's defined with parameters that are the schema itself.\n\nLooking closely: The parameters for the action \"structured_output\" are an object with properties: age, name, occupation.\n\nSo, when I call this function, I need to provide values for age, name, and occupation in the action_input.\n\nFor example: {\"action\": \"structured_output\", \"action_input\": {\"name\": \"John Doe\", \"age\": 30, \"occupation\": \"Software Engineer\"}}\n\nThat makes sense. So, I should construct such a JSON.\n\nThe user didn't specify details, so I'll create a sample one. Since the system prompt emphasizes not being verbose and to use the function, I'll just call it with some reasonable values.\n\nFinally, my response should only include the function call.\n\nSo, I'll output:\n\n<function_call>{\"action\": \"structured_output\", \"action_input\": {\"name\": \"Some Name\", \"age\": some age, \"occupation\": \"Software Engineer\"}}</function_call>\n\nLet me choose: Name: \"Alice Johnson\", Age: 28, Occupation: \"Software Engineer\"",
-                "type": "reasoning.text"
-              }
-            ],
-            "refusal": null,
-            "role": "assistant",
-            "tool_calls": [
-              {
-                "function": {
-                  "arguments": "{\"age\":28,\"name\":\"Alice Johnson\",\"occupation\":\"Software Engineer\"}",
-                  "name": "structured_output"
-                },
-                "id": "call_10739293",
-                "index": 0,
-                "type": "function"
-              }
-            ]
-          },
-          "native_finish_reason": "tool_calls"
+      "error": {
+        "code": 400,
+        "message": "Provider returned error",
+        "metadata": {
+          "provider_name": "xAI",
+          "raw": "{\"code\":\"Client specified an invalid argument\",\"error\":\"Invalid request content: Required function  is not present in the provided tools.\"}"
         }
-      ],
-      "created": 1760532569,
-      "id": "gen-1760532569-fb3I1dkC5JDlna9A6XHy",
-      "model": "x-ai/grok-3-mini",
-      "object": "chat.completion",
-      "provider": "xAI",
-      "system_fingerprint": "fp_4fae27f477",
-      "usage": {
-        "completion_tokens": 616,
-        "completion_tokens_details": {
-          "reasoning_tokens": 576
-        },
-        "prompt_tokens": 205,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 114
-        },
-        "total_tokens": 821
-      }
+      },
+      "user_id": "user_2iYQIxKY28QuzANm4mmKBlOxzx2"
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
       "cf-ray": [
-        "98ef6fcc9a97eb5d-ORD"
+        "998566a5b97de81d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -138,7 +96,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:29 GMT"
+        "Sun, 02 Nov 2025 17:37:38 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -159,6 +117,6 @@
         "nosniff"
       ]
     },
-    "status": 200
+    "status": 400
   }
 }

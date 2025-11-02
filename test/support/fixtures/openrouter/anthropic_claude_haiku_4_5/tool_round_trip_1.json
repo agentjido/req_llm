@@ -81,7 +81,7 @@
                   "arguments": "{\"a\": 2, \"b\": 3}",
                   "name": "add"
                 },
-                "id": "toolu_vrtx_016PcbyAL2G5kHC4CPKkujYQ",
+                "id": "toolu_bdrk_01X2o24kU5mMoX5AtUQFH3pp",
                 "index": 0,
                 "type": "function"
               }
@@ -90,11 +90,11 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1761606485,
-      "id": "gen-1761606485-UfrgHkXWyezpwhiFpouN",
+      "created": 1762104932,
+      "id": "gen-1762104932-ueU1B04B6QXqpnpW3yIq",
       "model": "anthropic/claude-haiku-4.5",
       "object": "chat.completion",
-      "provider": "Google",
+      "provider": "Amazon Bedrock",
       "usage": {
         "completion_tokens": 50,
         "prompt_tokens": 696,
@@ -106,7 +106,7 @@
         "*"
       ],
       "cf-ray": [
-        "9955da74f81f7fb0-ORD"
+        "99856393d91deac7-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -115,7 +115,7 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 23:08:05 GMT"
+        "Sun, 02 Nov 2025 17:35:33 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

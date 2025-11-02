@@ -40,13 +40,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! How can I help you today?",
-            "reasoning": "The user says \"Hi there!\" It's a greeting. We should respond politely.",
+            "content": "Hello! 👋 How can I help you today?",
+            "reasoning": "We need to respond to a greeting. The user says \"Hi there!\" We should respond politely. There's no special instruction. Just a friendly greeting.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "The user says \"Hi there!\" It's a greeting. We should respond politely.",
+                "text": "We need to respond to a greeting. The user says \"Hi there!\" We should respond politely. There's no special instruction. Just a friendly greeting.",
                 "type": "reasoning.text"
               }
             ],
@@ -56,16 +56,15 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532509,
-      "id": "gen-1760532509-GIGD4Iwh57esyRIYrCU0",
+      "created": 1762105007,
+      "id": "gen-1762105007-jEX4Cr082KKux5ptBGu8",
       "model": "openai/gpt-oss-20b",
       "object": "chat.completion",
-      "provider": "DeepInfra",
+      "provider": "Phala",
       "usage": {
-        "completion_tokens": 34,
-        "prompt_tokens": 77,
-        "prompt_tokens_details": null,
-        "total_tokens": 111
+        "completion_tokens": 51,
+        "prompt_tokens": 72,
+        "total_tokens": 123
       }
     },
     "headers": {
@@ -73,7 +72,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6e552c7710b2-ORD"
+        "99856568cc69aca8-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -82,7 +81,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:29 GMT"
+        "Sun, 02 Nov 2025 17:36:48 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

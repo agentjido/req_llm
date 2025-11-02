@@ -39,28 +39,41 @@
         {
           "finish_reason": "stop",
           "index": 0,
-          "logprobs": null,
+          "logprobs": {
+            "content": [],
+            "refusal": []
+          },
           "message": {
-            "content": "Hello world! It's great to see you here. 😊\n\nIf you're looking to write a \"Hello, World!\" program, here's how it looks in a few popular programming languages:\n\n**Python:**\n```python\nprint(\"Hello, World!\")\n```\n\n**Java:**\n```java\npublic class HelloWorld {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, World!\");\n    }\n}\n```\n\n**C++:**\n```cpp\n#include <iostream>\nint main() {\n    std::cout << \"Hello, World!\" << std::endl;\n    return 0;\n}\n```\n\n**JavaScript:**\n```javascript\nconsole.log(\"Hello, World!\");\n```\n\nLet me know if you'd like help with anything else!",
-            "reasoning": "We are going to write a simple \"Hello, World!\" program in Python.\n Since the user's message is \"Hello world!\", we can assume they want a program that prints this.\n However, note that the user's input is in English, but the instruction says to use the same language as the user's message.\n The user's message is in English, so we will respond in English.\n\n Let's write the code accordingly.",
+            "content": "Hello! If you're looking to write a \"Hello, World!\" program, here's a simple example in **Python**:\n\n```python\nprint(\"Hello, World!\")\n```\n\n### Steps to run:\n1. Save the code in a file (e.g., `hello.py`).\n2. Open a terminal/command prompt.\n3. Navigate to the file's directory and run:\n   ```bash\n   python hello.py\n   ```\n\n### Output:\n```\nHello, World!\n```\n\nIf you need examples in other programming languages or have a specific question, feel free to ask! 😊",
+            "reasoning": "We are going to create a simple \"Hello World!\" program in Python.\n Since the user's message is \"Hello world!\", I assume they want a program that prints \"Hello World!\".\n However, note that the user's input is \"Hello world!\" with a lowercase 'w' in \"world\", but the traditional Hello World program uses an uppercase 'W'.\n But let's follow the user's input exactly: they wrote \"Hello world!\" with an exclamation mark.\n\n We'll write a Python code that prints exactly \"Hello world!\" as per the user's input.",
+            "reasoning_details": [
+              {
+                "format": null,
+                "index": 0,
+                "text": "We are going to create a simple \"Hello World!\" program in Python.\n Since the user's message is \"Hello world!\", I assume they want a program that prints \"Hello World!\".\n However, note that the user's input is \"Hello world!\" with a lowercase 'w' in \"world\", but the traditional Hello World program uses an uppercase 'W'.\n But let's follow the user's input exactly: they wrote \"Hello world!\" with an exclamation mark.\n\n We'll write a Python code that prints exactly \"Hello world!\" as per the user's input.",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760546590,
-      "id": "gen-1760546590-7ZTdlkZGKo5r19IdMBwM",
+      "created": 1762105084,
+      "id": "gen-1762105084-vZlOYGpl6b0d9N33vn5z",
       "model": "deepseek/deepseek-v3.1-terminus",
       "object": "chat.completion",
-      "provider": "AtlasCloud",
+      "provider": "Novita",
       "usage": {
-        "completion_tokens": 241,
-        "completion_tokens_details": {
-          "reasoning_tokens": 0
+        "completion_tokens": 237,
+        "completion_tokens_details": null,
+        "prompt_tokens": 7,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 7
         },
-        "prompt_tokens": 8,
-        "total_tokens": 249
+        "total_tokens": 244
       }
     },
     "headers": {
@@ -68,7 +81,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0c620ab0c124c-ORD"
+        "9985674c1dcf9d58-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -77,7 +90,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:43:11 GMT"
+        "Sun, 02 Nov 2025 17:38:05 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

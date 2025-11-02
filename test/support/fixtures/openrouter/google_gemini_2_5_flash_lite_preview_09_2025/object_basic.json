@@ -80,12 +80,12 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "**Creating Software Engineer Profile**\n\nI'm focusing on leveraging the `structured_output` tool to generate a software engineer profile. My next step involves defining specific `name`, `age`, and `occupation` values for this profile generation.\n\n**Forming Software Engineer Details**\n\nI'm currently consolidating the parameters for the `structured_output` tool. My focus is on finalizing the `name`, `age`, and `occupation` to accurately represent a software engineer, which I'll then use to generate the profile.\n\n",
+            "reasoning": "**Creating the Profile**\n\nI'm currently focused on structuring the software engineer profile. I've decided to use the `structured_output` tool for this, ensuring a neat and organized format. Right now, I'm at the point of selecting a suitable name for the profile. This is the first step in populating the required fields like `name`, `age`, and the optional `occupation`. I'm aiming for authenticity.\n\n\n**Constructing the Profile Details**\n\nI've selected \"Alex Johnson\" as the name, set the age to 30, and confirmed the occupation as \"Software Engineer\".  The `structured_output` tool will receive this information for integration into the profile. I'm satisfied with these core elements, now shifting focus to potential enhancements.\n\n\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "**Creating Software Engineer Profile**\n\nI'm focusing on leveraging the `structured_output` tool to generate a software engineer profile. My next step involves defining specific `name`, `age`, and `occupation` values for this profile generation.\n\n**Forming Software Engineer Details**\n\nI'm currently consolidating the parameters for the `structured_output` tool. My focus is on finalizing the `name`, `age`, and `occupation` to accurately represent a software engineer, which I'll then use to generate the profile.\n\n",
+                "text": "**Creating the Profile**\n\nI'm currently focused on structuring the software engineer profile. I've decided to use the `structured_output` tool for this, ensuring a neat and organized format. Right now, I'm at the point of selecting a suitable name for the profile. This is the first step in populating the required fields like `name`, `age`, and the optional `occupation`. I'm aiming for authenticity.\n\n\n**Constructing the Profile Details**\n\nI've selected \"Alex Johnson\" as the name, set the age to 30, and confirmed the occupation as \"Software Engineer\".  The `structured_output` tool will receive this information for integration into the profile. I'm satisfied with these core elements, now shifting focus to potential enhancements.\n\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -94,10 +94,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"age\":32,\"name\":\"Alex Johnson\",\"occupation\":\"Software Engineer\"}",
+                  "arguments": "{\"occupation\":\"Software Engineer\",\"name\":\"Alex Johnson\",\"age\":30}",
                   "name": "structured_output"
                 },
-                "id": "tool_0_structured_output_zmLGDp0tEavcnKC0H7ZH",
+                "id": "tool_0_structured_output_RRb77ew0qPJyOlUMqB4p",
                 "index": 0,
                 "type": "function"
               }
@@ -106,22 +106,22 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1760546976,
-      "id": "gen-1760546976-C4fyF2oLprZ8kP8XNekI",
+      "created": 1762104962,
+      "id": "gen-1762104962-luAAkq10D4mmz7ejPSsh",
       "model": "google/gemini-2.5-flash-lite-preview-09-2025",
       "object": "chat.completion",
-      "provider": "Google",
+      "provider": "Google AI Studio",
       "usage": {
-        "completion_tokens": 151,
+        "completion_tokens": 187,
         "completion_tokens_details": {
           "image_tokens": 0,
-          "reasoning_tokens": 136
+          "reasoning_tokens": 157
         },
-        "prompt_tokens": 41,
+        "prompt_tokens": 85,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 192
+        "total_tokens": 272
       }
     },
     "headers": {
@@ -129,7 +129,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0cf899fc1e26d-ORD"
+        "9985645029111b04-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -138,7 +138,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:49:37 GMT"
+        "Sun, 02 Nov 2025 17:36:03 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

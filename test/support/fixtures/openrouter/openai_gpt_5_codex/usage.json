@@ -41,18 +41,18 @@
           "logprobs": null,
           "message": {
             "content": "Hello! How can I help you today?",
-            "reasoning": "**Starting interaction**",
+            "reasoning": "**Responding with a greeting**",
             "reasoning_details": [
               {
                 "format": "openai-responses-v1",
                 "index": 0,
-                "summary": "**Starting interaction**",
+                "summary": "**Responding with a greeting**",
                 "type": "reasoning.summary"
               },
               {
-                "data": "gAAAAABo75g4K3Z9ZX4zgCPX3FIuWsrbcH5NCdmOxLKDcNcZ88m4c9GjNiLEzZwihQkyRDuJ389AM-hjEz5wcVyo0oCXfuviaruMcdH66MWeSgGTh8-x-Bhqh-iwRT0jnZEqJE1YrTX3KgPr-DzyUntmBKNzsLxvVr8Nzk-FY6MazeKVSsnp6tSPJffnDwiN2C3B89ZZ8zzHPPefMW88NgxiU8yscaUDx9svFfV0EIL08AiAxj6J1mk7THO87Jjof42p5nRJ_fB37QzgeSJqNI31k1i5_aAG90ARyOPsGEWLPpZvmJTnTeO3-GsiajgPkCiWgVm-jUPergGZ6MqXaYOmbun4XeoMOXjXnfzx5p0MC22DqhAE3b26v1uvM33TKrHBEl8ZBZw0Pk0_pACYEuLQ7qjvyO1LESsfMq4nBc9T3XyPUZVgkITOUJov9_oQ1_8ZqIhrV4wL4G9Gt6fqICIh86sJmEqVAaq8vMQFs_dVbGxmGelM1Q4gp_sPH8FUxvN8b0X2OjSIExg9jBL3rpopzuSTnbBiSS7wCXaNknDP50Px9aMUtw6hQKlO0tMhKTtBcEX_mkhavGPIfrKP4xd7x1ygciiFzjlNnNyCs5Scc0-JX4KrSpLWB1T_TStpei7sMFNUI51IGJ5jB9IG2giC0nmEHnJrMAaViAHB3k67YA_hn-jyk6yIi1Htt8Zz6G5TnZA97cQw72Sunv3PU-Xo4Jm_pLjqLjtoLwHazyKmJnsXuKUhM8FOodl9fbSuz6-ZHmYybD_knBnZgZcACTk47lCZbOK2q36h-iALqCN1TwdQjE0uQzLLGMzz5kuJa89yfYvodLAgRDpu0Ylp9g1NwmLtSPWtaQ==",
+                "data": "gAAAAABpB5bYUDvR8N3Z3RxjNKQJhToFyHPFN8iScTiTcmnwDp15d8jG70mOnHaFHCJrl95VGEBKZww71oNGP_3nBwd2cBrjmsr0MPg0RFDDYMNk0Ya_GquvpxjIMGMt4QJf-ns0dYd_6G2Oq_PZhbOH_gHAAvzzwx6GKjp4EQj-pm9HsutzzrRsKP6EZk2G5-SIF5o6e1VgImKliGYCJUiAlmqeDYOv1X9SWdX-HmYZaEUG_Xj41aS4sMoFdkCMPPZbu3bBmDdwHWx2BNt7HluipgqFfbitQaQ0CnnLHaKANc4Tzw8_YqT86nl228CJsGnx7Y9N1-7gBp8ZIVzFsq-EyxAxi1B0-XYT459sNq30xpYswrHV8CNUCWJTxNciL7o1rtyxvUL7PmiFven02iOE4rQHFknpkfut8-XNXpjWdPy7WK6HxBN-Hle8XlCkJUrACkuuGDGY1aNQkCi0Xecfl5LdjVITmH4_r5-mmchCJCiamAgG2sj4xsUwOWd9YEE-M4k9fROnrz4-pzyrnGcnTGMAQLeSTgkdk2Xta0rk0yAi9liyPS9-8bu9nt3vHDg6mFVH2Oph284dr3HT8PKqRWFY8a-_DiTu9IQ69dwzWS1-IdqUzPSt5AmuB-Rqh2VIO66kW0BIXieLMfH4-me3Ht6NokKUmsvYn2ttzDCBxpk6CUMRaMokU0Crmxb3jg9ukTZCQgdFvzE5XJWJqUkndGUrSRJJWyh0mRPSYo-_bf6oLi-e2e7gwjKUYbRjHIRRKQ_Rk-tTGIYdJDvZN6Q93a-f15BNDSalaLO0XidxZy2ffEFezL7SSpulsxeHa_hZrzeb9hXxHLsFvpeQGpGup5KOnjRl6ax7wLik_VdXXbJk83xFEYElHv1uZcArFIK0VuLKpmN8",
                 "format": "openai-responses-v1",
-                "id": "rs_0e062a1a1e29f0d30168ef9837b1d881958f9089d14f41dcd5",
+                "id": "rs_0da99211bf7b4b5401690796d826708196a90185b39348743f",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -63,13 +63,16 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1760532534,
-      "id": "gen-1760532534-A2TPOQFX5PVNnMzrpnYd",
+      "created": 1762105047,
+      "id": "gen-1762105047-oTtyPcUBT1FzVQAgbIqn",
       "model": "openai/gpt-5-codex",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
         "completion_tokens": 15,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
         "prompt_tokens": 9,
         "total_tokens": 24
       }
@@ -79,7 +82,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6ef23dd5e248-ORD"
+        "998566616b920006-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -88,7 +91,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:54 GMT"
+        "Sun, 02 Nov 2025 17:37:27 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

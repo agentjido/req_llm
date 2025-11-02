@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjozMjc2LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6ImZ1bmN0aW9ucy5hZGRfN2NlYyIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImZ1bmN0aW9ucy5hZGRfN2NlYyJ9XSwibW9kZWwiOiJvcGVuYWkvZ3B0LW9zcy0yMGIiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjozMjc2LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6ImZ1bmN0aW9ucy5hZGRfMTY0YiIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImZ1bmN0aW9ucy5hZGRfMTY0YiJ9XSwibW9kZWwiOiJvcGVuYWkvZ3B0LW9zcy0yMGIiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
       "max_tokens": 3276,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "functions.add_7cec",
+              "id": "functions.add_164b",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "functions.add_7cec"
+          "tool_call_id": "functions.add_164b"
         }
       ],
       "model": "openai/gpt-oss-20b",
@@ -61,12 +61,12 @@
           "logprobs": null,
           "message": {
             "content": "sum=5",
-            "reasoning": "The user wants to use the add tool to compute 2 + 3. The assistant should call the add tool. The assistant has already called the add tool with arguments a=2, b=3. The tool returned 5. Now the assistant should respond with 'sum=5'.",
+            "reasoning": "We need to respond after tool result arrives: 'sum=5'. So final answer: sum=5.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "The user wants to use the add tool to compute 2 + 3. The assistant should call the add tool. The assistant has already called the add tool with arguments a=2, b=3. The tool returned 5. Now the assistant should respond with 'sum=5'.",
+                "text": "We need to respond after tool result arrives: 'sum=5'. So final answer: sum=5.",
                 "type": "reasoning.text"
               }
             ],
@@ -76,18 +76,19 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532546,
-      "id": "gen-1760532546-e2t2XYRkQUgWSiPI7eaD",
+      "created": 1762105005,
+      "id": "gen-1762105005-LtbbltgF1oGUV1QSjKH5",
       "model": "openai/gpt-oss-20b",
       "object": "chat.completion",
-      "provider": "Novita",
-      "system_fingerprint": "",
+      "provider": "Groq",
+      "system_fingerprint": "fp_d6de37e6be",
       "usage": {
-        "completion_tokens": 71,
-        "completion_tokens_details": null,
-        "prompt_tokens": 128,
-        "prompt_tokens_details": null,
-        "total_tokens": 199
+        "completion_tokens": 35,
+        "completion_tokens_details": {
+          "reasoning_tokens": 23
+        },
+        "prompt_tokens": 124,
+        "total_tokens": 159
       }
     },
     "headers": {
@@ -95,7 +96,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6f3f2cfc10b2-ORD"
+        "9985655adfafaca8-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -104,7 +105,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:06 GMT"
+        "Sun, 02 Nov 2025 17:36:45 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

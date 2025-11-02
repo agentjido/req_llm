@@ -62,13 +62,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "\n\nWhy don't cats play poker in the jungle?\n\nBecause there are too many cheetahs! 🐱🃏",
-            "reasoning": "The user is asking for a joke about cats. This doesn't require any weather information or function calls - it's just a simple request for a joke. I should provide a cat joke directly without using any tools.",
+            "content": "\nHere's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nBecause there are too many cheetahs! 🐱\n\nHope that made you smile! Let me know if you'd like to hear another one.",
+            "reasoning": "\nThe user is asking for a joke about cats. This doesn't require any weather information or function calls - it's just a simple request for a joke. I should provide a cat joke directly without using any tools.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "The user is asking for a joke about cats. This doesn't require any weather information or function calls - it's just a simple request for a joke. I should provide a cat joke directly without using any tools.",
+                "text": "\nThe user is asking for a joke about cats. This doesn't require any weather information or function calls - it's just a simple request for a joke. I should provide a cat joke directly without using any tools.",
                 "type": "reasoning.text"
               }
             ],
@@ -78,21 +78,18 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532811,
-      "id": "gen-1760532811-ptUkNNl8F3QnEIkszO36",
+      "created": 1762105279,
+      "id": "gen-1762105279-ZNyZy4jHZKLVIMbb9pY5",
       "model": "z-ai/glm-4.6",
       "object": "chat.completion",
-      "provider": "Novita",
-      "system_fingerprint": "",
+      "provider": "Z.AI",
       "usage": {
-        "completion_tokens": 74,
-        "completion_tokens_details": null,
+        "completion_tokens": 98,
         "prompt_tokens": 164,
         "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 43
+          "cached_tokens": 78
         },
-        "total_tokens": 238
+        "total_tokens": 262
       }
     },
     "headers": {
@@ -100,7 +97,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef75b74b0d7317-ORD"
+        "99856c0f8f8af790-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -109,7 +106,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:53:32 GMT"
+        "Sun, 02 Nov 2025 17:41:20 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

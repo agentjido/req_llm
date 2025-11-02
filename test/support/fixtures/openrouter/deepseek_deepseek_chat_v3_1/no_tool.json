@@ -62,24 +62,32 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "I'd be happy to tell you a cat joke! Here's one for you:\n\nWhy don't cats play poker in the jungle?\nBecause there are too many cheetahs!\n\n🐱 Hope that gave you a smile! Would you like to hear another one?",
-            "reasoning": null,
+            "content": "Sure, here's a classic cat joke for you:\n\nWhy do cats make terrible storytellers?\n\nBecause they only have one tail!\n\n😸 Hope that gave you a chuckle! Cats are always good for a laugh with their quirky behaviors and attitudes.",
+            "reasoning": "Hmm, the user asked for a cat joke. This is a simple request that doesn't require any tools since I can generate jokes directly from my knowledge base. \n\nI should respond with something lighthearted and cat-related. Let me think of a classic cat joke that's universally relatable for cat owners. \n\nThe joke about cats knocking things off shelves is perfect - it's a common behavior people find both frustrating and amusing. I'll deliver it with a playful tone to match the request.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Hmm, the user asked for a cat joke. This is a simple request that doesn't require any tools since I can generate jokes directly from my knowledge base. \n\nI should respond with something lighthearted and cat-related. Let me think of a classic cat joke that's universally relatable for cat owners. \n\nThe joke about cats knocking things off shelves is perfect - it's a common behavior people find both frustrating and amusing. I'll deliver it with a playful tone to match the request.",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760547394,
-      "id": "gen-1760547394-iRxuraPL71tAVMkSfLeT",
+      "created": 1762105015,
+      "id": "gen-1762105015-qIHYlKIlSPIKMBR8Qu9u",
       "model": "deepseek/deepseek-chat-v3.1",
       "object": "chat.completion",
-      "provider": "Chutes",
+      "provider": "DeepInfra",
       "usage": {
-        "completion_tokens": 54,
-        "prompt_tokens": 164,
+        "completion_tokens": 149,
+        "prompt_tokens": 154,
         "prompt_tokens_details": null,
-        "total_tokens": 218
+        "total_tokens": 303
       }
     },
     "headers": {
@@ -87,7 +95,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0d9bfd9f2e810-ORD"
+        "998565997a63e8d0-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -96,7 +104,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:56:37 GMT"
+        "Sun, 02 Nov 2025 17:36:55 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

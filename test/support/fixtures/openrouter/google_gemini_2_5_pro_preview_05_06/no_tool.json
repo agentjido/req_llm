@@ -63,12 +63,12 @@
           "logprobs": null,
           "message": {
             "content": "Why was the cat sitting on the computer? To keep an eye on the mouse",
-            "reasoning": "**Processing a Query**\n\nI've initiated a search within my knowledge base, specifically looking for a suitable cat joke to fulfill the user's request. The query appears straightforward; I'm not identifying any particular parameters or the need for any function calls at this stage. It's a simple retrieval task.\n\n\n**Analyzing the Request**\n\nI've advanced to a response strategy. I am now preparing the chosen joke. The plan is to directly deliver it to the user. I've already chosen the joke: \"Why was the cat sitting on the computer? To keep an eye on the mouse!\"\n\n\n",
+            "reasoning": "**Composing A Response**\n\nI've located a suitable joke. My next step involves formulating the response. I'll share the joke: \"Why was the cat sitting on the computer? To keep an eye on the mouse!\" I believe it's a good one.\n\n\n**Analyzing The Options**\n\nI've successfully identified the appropriate joke. Now, I'm focusing on crafting a succinct and engaging response. I'm considering the best way to present the joke to maximize its impact and maintain a conversational tone.\n\n\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "**Processing a Query**\n\nI've initiated a search within my knowledge base, specifically looking for a suitable cat joke to fulfill the user's request. The query appears straightforward; I'm not identifying any particular parameters or the need for any function calls at this stage. It's a simple retrieval task.\n\n\n**Analyzing the Request**\n\nI've advanced to a response strategy. I am now preparing the chosen joke. The plan is to directly deliver it to the user. I've already chosen the joke: \"Why was the cat sitting on the computer? To keep an eye on the mouse!\"\n\n\n",
+                "text": "**Composing A Response**\n\nI've located a suitable joke. My next step involves formulating the response. I'll share the joke: \"Why was the cat sitting on the computer? To keep an eye on the mouse!\" I believe it's a good one.\n\n\n**Analyzing The Options**\n\nI've successfully identified the appropriate joke. Now, I'm focusing on crafting a succinct and engaging response. I'm considering the best way to present the joke to maximize its impact and maintain a conversational tone.\n\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -78,22 +78,22 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1760532571,
-      "id": "gen-1760532571-fC6d2WSoG16JEIHpC5aO",
+      "created": 1762104980,
+      "id": "gen-1762104980-mo3CS2eKI6WGIVKGm5j0",
       "model": "google/gemini-2.5-pro",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
-        "completion_tokens": 140,
+        "completion_tokens": 91,
         "completion_tokens_details": {
           "image_tokens": 0,
-          "reasoning_tokens": 124
+          "reasoning_tokens": 75
         },
         "prompt_tokens": 20,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 160
+        "total_tokens": 111
       }
     },
     "headers": {
@@ -101,7 +101,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6fdb79d1e1b4-ORD"
+        "998564bf0b49e25b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -110,7 +110,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:34 GMT"
+        "Sun, 02 Nov 2025 17:36:22 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -39,7 +39,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Title: The Ember-Bound Atlas  \nA Dragon-Saga in Seven Cantos  \n(≈ 32 000 words)\n\n––––––––––––––––––––––––––––––––––  \nCANTO I  \nThe Cartographer’s Apprentice  \n––––––––––––––––––––––––––––––––––\n\n1  \nOn the island of Vey, where the wind smells of crushed peppercorns and the tide clinks like glass beads",
+            "content": "Title: The Star-Forged Pact  \nA Chronicle of Seven Dragons, Six Kingdoms, and One Human Cartographer Who Drew the Map That Remade the World  \n\n–––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––  \nPrologue: The Quiet Cartographer  \n––––––––––––––––––––––––––––––––––––––––––",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -47,16 +47,15 @@
           "native_finish_reason": "length"
         }
       ],
-      "created": 1760532501,
-      "id": "gen-1760532501-DTtaSOiOOeZdFXc4p1p5",
+      "created": 1762104967,
+      "id": "gen-1762104967-Hxd6So8b9y1O91GYLyT6",
       "model": "moonshotai/kimi-k2",
       "object": "chat.completion",
-      "provider": "DeepInfra",
+      "provider": "Nebius",
       "usage": {
         "completion_tokens": 100,
-        "prompt_tokens": 37,
-        "prompt_tokens_details": null,
-        "total_tokens": 137
+        "prompt_tokens": 25,
+        "total_tokens": 125
       }
     },
     "headers": {
@@ -64,7 +63,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6e294bd189e9-ORD"
+        "9985646f5d2690cb-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -73,7 +72,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:22 GMT"
+        "Sun, 02 Nov 2025 17:36:08 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

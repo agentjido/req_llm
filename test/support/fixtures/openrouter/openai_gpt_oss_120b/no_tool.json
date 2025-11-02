@@ -63,12 +63,12 @@
           "logprobs": null,
           "message": {
             "content": "Why did the cat sit on the computer?\n\nBecause it wanted to keep an eye on the mouse! 😺",
-            "reasoning": "User wants a joke about cats. Just respond.",
+            "reasoning": "User wants a joke about cats. Simple. Provide a cat joke.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "User wants a joke about cats. Just respond.",
+                "text": "User wants a joke about cats. Simple. Provide a cat joke.",
                 "type": "reasoning.text"
               }
             ],
@@ -78,16 +78,16 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532547,
-      "id": "gen-1760532547-KkuxPlca5oI5R8PPUxMb",
+      "created": 1762105010,
+      "id": "gen-1762105010-ZBRcLyiNRhyHkNIWgZdG",
       "model": "openai/gpt-oss-120b",
       "object": "chat.completion",
-      "provider": "DeepInfra",
+      "provider": "Chutes",
       "usage": {
-        "completion_tokens": 41,
-        "prompt_tokens": 116,
+        "completion_tokens": 46,
+        "prompt_tokens": 127,
         "prompt_tokens_details": null,
-        "total_tokens": 157
+        "total_tokens": 173
       }
     },
     "headers": {
@@ -95,7 +95,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6f43dc8db838-ORD"
+        "9985657b1e44f60e-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -104,7 +104,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:07 GMT"
+        "Sun, 02 Nov 2025 17:36:52 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

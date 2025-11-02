@@ -39,33 +39,33 @@
         {
           "finish_reason": "stop",
           "index": 0,
-          "logprobs": {
-            "content": [],
-            "refusal": []
-          },
+          "logprobs": null,
           "message": {
-            "content": "12 × 7 = 84\n\nI calculated this by recognizing that 10 × 7 = 70 and 2 × 7 = 14, then adding them together: 70 + 14 = 84. Alternatively, it can be thought of as adding 12 seven times: 12 + 12 = 24, 24 + 12 = 36, 36 + 12 = 48, 48 + 12 = 60, 60 + 12 = 72, 72 + 12 = 84.",
-            "reasoning": "First, I need to solve 12 times 7. Multiplication is basically repeated addition, so I can think of it as adding 12 seven times.\n\nLet me calculate that: 12 + 12 is 24, then add another 12 is 36, add another 12 is 48, add another 12 is 60, add another 12 is 72, and finally add another 12 is 84. So, 12 added 7 times equals 84.\n\nI know that 10 times 7 is 70, and 2 times 7 is 14, so if I add those together, 70 + 14 = 84. That's another way to do it.\n\nSo, both methods give me 84. Therefore, 12 times 7 is 84.",
+            "content": "To solve 12 × 7, I use the distributive property:  \n12 × 7 = (10 + 2) × 7 = 10×7 + 2×7 = 70 + 14 = 84.  \n\nThus, 12 × 7 = 84.",
+            "reasoning": "First, I need to solve 12 times 7. Multiplication is just repeated addition, so I can think of it as adding 12 seven times.\n\nSo, 12 + 12 + 12 + 12 + 12 + 12 + 12.\n\nI can break it down to make it easier. For example, I know that 10 times 7 is 70, and 2 times 7 is 14. Then I add those together: 70 + 14 = 84.\n\nThat seems straightforward. I can also think of it as 12 times 5 is 60, and 12 times 2 is 24, then 60 + 24 = 84. But that's similar.\n\nSince 12 is 10 + 2, and multiplying by 7, it's distributive: (10 + 2) * 7 = 10*7 + 2*7 = 70 + 14 = 84.\n\nI think that's correct. So, the answer should be 84.",
+            "reasoning_details": [
+              {
+                "format": null,
+                "index": 0,
+                "text": "First, I need to solve 12 times 7. Multiplication is just repeated addition, so I can think of it as adding 12 seven times.\n\nSo, 12 + 12 + 12 + 12 + 12 + 12 + 12.\n\nI can break it down to make it easier. For example, I know that 10 times 7 is 70, and 2 times 7 is 14. Then I add those together: 70 + 14 = 84.\n\nThat seems straightforward. I can also think of it as 12 times 5 is 60, and 12 times 2 is 24, then 60 + 24 = 84. But that's similar.\n\nSince 12 is 10 + 2, and multiplying by 7, it's distributive: (10 + 2) * 7 = 10*7 + 2*7 = 70 + 14 = 84.\n\nI think that's correct. So, the answer should be 84.",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760547267,
-      "id": "gen-1760547267-gQrFYz2ChojOPLLDj3wP",
+      "created": 1762105025,
+      "id": "gen-1762105025-F4JvK1CGxtJoEDsBwAhn",
       "model": "deepseek/deepseek-chat-v3.1",
       "object": "chat.completion",
-      "provider": "Novita",
+      "provider": "Chutes",
       "usage": {
-        "completion_tokens": 282,
-        "completion_tokens_details": null,
-        "prompt_tokens": 17,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 17
-        },
-        "total_tokens": 299
+        "completion_tokens": 276,
+        "prompt_tokens": 18,
+        "total_tokens": 294
       }
     },
     "headers": {
@@ -73,7 +73,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0d6a55b56e810-ORD"
+        "998565d9dd62e8d0-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -82,7 +82,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:54:27 GMT"
+        "Sun, 02 Nov 2025 17:37:07 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

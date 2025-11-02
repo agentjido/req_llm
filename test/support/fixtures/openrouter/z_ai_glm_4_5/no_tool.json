@@ -63,12 +63,12 @@
           "logprobs": null,
           "message": {
             "content": "\nHere's a cat joke for you:\n\nWhy don't cats play poker in the wild?\n\nBecause there are too many cheetahs! 🐱\n\nHope that gave you a chuckle!",
-            "reasoning": "\nThe user is asking for a joke about cats. This doesn't require any weather information or any of the available tools. I should just provide a cat joke directly without using any functions.",
+            "reasoning": "\nThe user is asking for a joke about cats. This doesn't require any weather information or the use of the get_weather function. I should just provide a cat joke directly.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "\nThe user is asking for a joke about cats. This doesn't require any weather information or any of the available tools. I should just provide a cat joke directly without using any functions.",
+                "text": "\nThe user is asking for a joke about cats. This doesn't require any weather information or the use of the get_weather function. I should just provide a cat joke directly.",
                 "type": "reasoning.text"
               }
             ],
@@ -78,21 +78,18 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760545967,
-      "id": "gen-1760545967-SvmEFFzUAfqYTwDrWbOs",
+      "created": 1762105253,
+      "id": "gen-1762105253-f5xyXDRicIM0Mv4p8fP6",
       "model": "z-ai/glm-4.5",
       "object": "chat.completion",
-      "provider": "Novita",
-      "system_fingerprint": "",
+      "provider": "Z.AI",
       "usage": {
-        "completion_tokens": 82,
-        "completion_tokens_details": null,
+        "completion_tokens": 80,
         "prompt_tokens": 164,
         "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 43
+          "cached_tokens": 44
         },
-        "total_tokens": 246
+        "total_tokens": 244
       }
     },
     "headers": {
@@ -100,7 +97,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0b6e71e97eac0-ORD"
+        "99856b69aeaa14ce-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -109,7 +106,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:32:48 GMT"
+        "Sun, 02 Nov 2025 17:40:53 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

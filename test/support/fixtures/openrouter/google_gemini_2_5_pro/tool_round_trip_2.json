@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo2NTUzLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6InRvb2xfMF9hZGRfbUdMTktRVjFjTDZWekJaY01icWYiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJ0b29sXzBfYWRkX21HTE5LUVYxY0w2VnpCWmNNYnFmIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LXBybyIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjo2NTUzLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6InRvb2xfMF9hZGRfbGlzeDVNaHZkQVRpdXlCMk13dzciLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJ0b29sXzBfYWRkX2xpc3g1TWh2ZEFUaXV5QjJNd3c3In1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LXBybyIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
       "max_tokens": 6553,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "tool_0_add_mGLNKQV1cL6VzBZcMbqf",
+              "id": "tool_0_add_lisx5MhvdATiuyB2Mww7",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "tool_0_add_mGLNKQV1cL6VzBZcMbqf"
+          "tool_call_id": "tool_0_add_lisx5MhvdATiuyB2Mww7"
         }
       ],
       "model": "google/gemini-2.5-pro",
@@ -61,12 +61,12 @@
           "logprobs": null,
           "message": {
             "content": "sum=5",
-            "reasoning": "**Calculating Addition**\n\nI'm zeroing in on using the `add` tool within the `default_api`. It appears perfect for the \"2 + 3\" request. The next step is matching the user input to the tool's expected parameters, `a` and `b`.\n\n\n**Refining Response Construction**\n\nI've successfully extracted the result \"5\" from the tool's output, which is key. Now the focus is on constructing the final response. Based on the instructions, the format must be \"sum=5\". I'm ready to craft the response using a string concatenation that follows the format requirements, ensuring the correct \"sum=\" prefix is used.\n\n\n",
+            "reasoning": "**Identifying the Tools**\n\nI've identified the \"add\" tool within the default API as the appropriate instrument. Now I'm meticulously breaking down the user's request. My focus is now shifting towards extracting and assigning the necessary parameters: 'a' and 'b'. I anticipate this step will be straightforward.\n\n\n**Constructing the Function Call**\n\nI've successfully extracted the values for parameters 'a' and 'b'. Next, I'm constructing the function call itself, leveraging the `add` tool. Following that, the plan is to wrap the call in `print()` to ensure the output is readily available for processing. This gets us one step closer to execution.\n\n\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "**Calculating Addition**\n\nI'm zeroing in on using the `add` tool within the `default_api`. It appears perfect for the \"2 + 3\" request. The next step is matching the user input to the tool's expected parameters, `a` and `b`.\n\n\n**Refining Response Construction**\n\nI've successfully extracted the result \"5\" from the tool's output, which is key. Now the focus is on constructing the final response. Based on the instructions, the format must be \"sum=5\". I'm ready to craft the response using a string concatenation that follows the format requirements, ensuring the correct \"sum=\" prefix is used.\n\n\n",
+                "text": "**Identifying the Tools**\n\nI've identified the \"add\" tool within the default API as the appropriate instrument. Now I'm meticulously breaking down the user's request. My focus is now shifting towards extracting and assigning the necessary parameters: 'a' and 'b'. I anticipate this step will be straightforward.\n\n\n**Constructing the Function Call**\n\nI've successfully extracted the values for parameters 'a' and 'b'. Next, I'm constructing the function call itself, leveraging the `add` tool. Following that, the plan is to wrap the call in `print()` to ensure the output is readily available for processing. This gets us one step closer to execution.\n\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -76,22 +76,22 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1760532562,
-      "id": "gen-1760532562-yW8B9oYg0LJBLO34xRqO",
+      "created": 1762104988,
+      "id": "gen-1762104988-eL03uz3kA6lZuiCndvs3",
       "model": "google/gemini-2.5-pro",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
-        "completion_tokens": 210,
+        "completion_tokens": 226,
         "completion_tokens_details": {
           "image_tokens": 0,
-          "reasoning_tokens": 207
+          "reasoning_tokens": 223
         },
         "prompt_tokens": 34,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 244
+        "total_tokens": 260
       }
     },
     "headers": {
@@ -99,7 +99,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6fa17915114e-ORD"
+        "998564f38fc2fe20-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -108,7 +108,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:24 GMT"
+        "Sun, 02 Nov 2025 17:36:30 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

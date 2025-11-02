@@ -106,32 +106,27 @@
                   "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "call_98579882",
+                "id": "call_52123986",
                 "index": 0,
                 "type": "function"
               }
             ]
           },
-          "native_finish_reason": "tool_calls"
+          "native_finish_reason": "completed"
         }
       ],
-      "created": 1760532564,
-      "id": "gen-1760532564-YYoCdSIv8DYkr09o1Fb8",
+      "created": 1762105047,
+      "id": "gen-1762105047-y7PCR7aZUXDONUoqFTQZ",
       "model": "x-ai/grok-3",
       "object": "chat.completion",
       "provider": "xAI",
-      "system_fingerprint": "fp_301fb74d4b",
       "usage": {
         "completion_tokens": 35,
         "completion_tokens_details": {
           "reasoning_tokens": 0
         },
-        "prompt_tokens": 339,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 3
-        },
-        "total_tokens": 374
+        "prompt_tokens": 344,
+        "total_tokens": 379
       }
     },
     "headers": {
@@ -139,7 +134,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6fb0f8c775e4-ORD"
+        "998566605ceae81d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -148,7 +143,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:24 GMT"
+        "Sun, 02 Nov 2025 17:37:27 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -41,19 +41,19 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! How can I help today? If you’d like, I can show a quick \"Hello, World!\" example in a programming language you’re learning or help with whatever you need.",
-            "reasoning": "**Crafting a friendly response**\n\nI should start with a warm greeting and offer my assistance. It doesn't need to be long, just something like, \"Hello! How can I help today?\" If the user wants an example of a quick greeting in different programming languages, I can do that too. Keeping it concise is key, so I won't add unnecessary details. Let’s make sure the user feels welcomed and supported!",
+            "content": "Hello! Nice to meet you. How can I help today?\n\nIf you’d like, I can show a quick “Hello, World!” example in a few programming languages, or we can chat about something else you’re interested in.",
+            "reasoning": "**Greeting and offering assistance**\n\nI need to respond warmly to the user’s greeting. Something like a friendly \"Hello!\" would work, and I should ask how I can help. It's a good idea to provide quick suggestions or offer to code and explain things. I could also offer a demonstration by saying, \"If you'd like, I can show you a simple 'Hello, World!' in a few programming languages.\" Keeping it concise and inviting is important. Let's go ahead and answer!",
             "reasoning_details": [
               {
                 "format": "openai-responses-v1",
                 "index": 0,
-                "summary": "**Crafting a friendly response**\n\nI should start with a warm greeting and offer my assistance. It doesn't need to be long, just something like, \"Hello! How can I help today?\" If the user wants an example of a quick greeting in different programming languages, I can do that too. Keeping it concise is key, so I won't add unnecessary details. Let’s make sure the user feels welcomed and supported!",
+                "summary": "**Greeting and offering assistance**\n\nI need to respond warmly to the user’s greeting. Something like a friendly \"Hello!\" would work, and I should ask how I can help. It's a good idea to provide quick suggestions or offer to code and explain things. I could also offer a demonstration by saying, \"If you'd like, I can show you a simple 'Hello, World!' in a few programming languages.\" Keeping it concise and inviting is important. Let's go ahead and answer!",
                 "type": "reasoning.summary"
               },
               {
-                "data": "gAAAAABo75gefQBdPjIVr-PQXeZMFJ9lv3f2Azvzz_mOyPiPcW_05bfc6nNbnbbDbQ2tlrTNEQ80ToKJbsn0W2DZMBKi3FmcziWjRy3D8ZubTVMFxN0p_JPb2Jueyt549zwIWdN_1tPBtVnnbH9X9c5l_IuRkfyU4uyGxRCAzIx8frfoytjZdxIvd0hRwlDC40FmKQQcrscdgk_RUbZfCo5kYp487OifyqsW8mIzTB6J6msw8hH5Y6dMGf6nmWXVxUk_edwzuz3B47W8WYlLFihh33l4hu5lWCjkDZYdUy8p1H0lDsBBP4vslu3JnZVHDhqY9sxc_EE_5dkkt6h1gIUK2rMWKIAkolXiWpO3cYuLK4NcLFDnwGuEp_omZFLumeUElrKIAYTNgfq_HBsOS1DQe8DurRaln-WFN87o-F-br6xXbvt-EbRqmTFfrcZC3o6afoCmG3aym04JQuz_2BQL1eKVr5e5PMYLQHxL3O0R1GTH-LfX5Zyk65IFsq3aTy05yG2YZKEepI6i2zSuOdzObTDLqrWDjTthgY70uR2tr9AO7h3LYZ32bEiNx78HJRa2ywnKYZYTkDJZeeF95ntG4-YWM1ycDS1OLSOWJMBZqouvBU6d3iEhjRntsiy2mUuOwfNBZwPks-T8E9yQD2Q-P9guOeYrbVSBQZ5ckP7xhntBKpX6Azu1usi_uqF_HeSQjk5TO8KWfemuCUuWSZo3ZPkffMsT81nwnkf-F1Z3ZO8jmvyy1T1JnkSvT07M5Ri0AGzqEFM6zOV2-igdiKBhNUVI4ypop5zow6E4MTL1tUlLdmmMatGiPbVKCO2gC8OpWB1MuAo_r8nF-iXMIpyTPA86vliwZKDsGUYIH1FGlvOkZx7TxuBumJo516PQNPK4ZT0KB2Ndng5Zju51jPpDn50e90lnXsQRB9_iz3O_tmHMuYnVXGCTpmIKMkEJr2hWAxbH6UeVTV27U2CrtK1MjbM-gQB1UMtZuRR3SJxF6YcUVJfJ1uBRdbdx8D8L8vh1Pp5iHQn5ujbCChlpQrI3laCm-zbnbQXnfRXQdVaP0qwZUgOqClog0sz64SeoWNr4BAz6iKY3m7VlX9dzKCEo4DO9i6aORPv2hItBkGRRkp_hCiVhHnANGund7Bc3pB0L1GcVRyMHPssQpgBpRkk0w-HRRmQE9EQQZY6ldSt3PTFEaaiGnVQ=",
+                "data": "gAAAAABpB5ba3XgK3-g1BMZzcfkaTIVad4QxwJqQanqNvbdotJfKvKmyKHyZ8LLC5ysollyocIdtWB_NNkM7Qiie_8uAzIpxZd3TeSLjVUBTXYo_qtzHwVYGaK1zmBrYV0XNqOmy91AiNdkjCk1DICTFs_EQykK2YbEiOzTJBt_YZeDCTOf5KK3VkAPesWv_M9ptnKSqmqjZeCAvkzCkiGHFSuAeKIbMdPefxCSU2PEtp1yWfn1jVq8tJfTDPNgyjhGN1JM1G4qKfg1GZXIQjhiKNQoz3bsx4SLps5dT0f6UBMKHdQdW_MNDi1MpHOkQ-xHU5TZZaK6mdXuijv1_FtpfTf98DmZJfiD8aodGpgWM9JH2NTWJwlrDGq2R4uAG711mhOkJF-l-yRroC5EfHA80Z-r-WcyRQsb3Zy3utTIGUQidFfM1Pc4YfeoOygaDSPsWnEIusEt4QUf46mjS0QRLz8BP94p2rAdZF8C8y0T2UqQyL-xL-1trTe4IlYcpXKFKbKanUWRWc132RjaIC6aNm2539xnN5Y3DbE32hagFtD0dgBxzctxWALNr9_rpPcZEEKPfcc1iPkoojhcG12kpYdjZDunIUm12eI8GU6QJ3CwDhsdkCUhAbkwNbmSSzGU4Yof0V9slshs31ssKvWr-zyz_V8k8LtNOyTYyrY9d_ETj8QfqrmgocyKdhj92u5i0_TVHLIN3G0HpSxCbV_5vzMCbbVa8xCoi8bMO8hLjJMMSVevZCw0nIti26T2hvwrNBwskNHrNaAc7xaXeftu7IHFz8TUMcxSrJHKofLwkI3Eo6Yp96O5sCANiEBrS6GvanF3S3wPHAPZ8Nu8MgmTqNPZuR-o0v5U7t2WDIBmrQikxIunbPlgki7YkEKA8-C8Q-zMLiRe_d0vv59GpJR0ZrPohIiI9Wk4AGs4v1tzshiLZiS78y5Ys7OBfVHBsZ4WucgIoe6dqkdGv3T0cSYskOUjrNOVMERTkV2TtRA41ykYGRPlCSYe-I41xzvM7BG6uIeEIJ5TeeTJfnQ1rAq9u-ayO7sKDFR0gmHiTvH0Hj2eKfhQmRKbmI4ptdWlbEHNbFapXK5hPKcwzqr5xiS2mGyMN1bMWBwr9TMb6u_v4FceALmjltQ4uzkgsG2u6i_eJfV7goeX5raS8J8JNbg0q2yUkqU-x_7OQlAGLgRL-p15vlFRkBtDm11eSFrGqvfMuaqYYj1Eiq4LABKQuBWbHWRKUtBcRgkmXO6vVojUk3b8C0Ujj8QG6O-GvH1m6Rn6yFzJmbhwdVN96NOmpLOnURo6ZjrPYtYiQTEdqasCNSJGFdtVg_9Oq9ekZT2glBMd9Img2ne02iPnaTkG6xs9ts16yCBpqiw==",
                 "format": "openai-responses-v1",
-                "id": "rs_0d1083d1c9a568040168ef981b96a0819790345c5ffa0bd998",
+                "id": "rs_0edd52137867633301690796d201c48197b5acedd230431c9f",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -64,15 +64,18 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1760532506,
-      "id": "gen-1760532506-B88v0orcfdKFvjGYoxQl",
+      "created": 1762105037,
+      "id": "gen-1762105037-PrSd4HDEvT0XjL4I0lqz",
       "model": "openai/gpt-5-nano",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
-        "completion_tokens": 44,
+        "completion_tokens": 117,
+        "completion_tokens_details": {
+          "reasoning_tokens": 64
+        },
         "prompt_tokens": 9,
-        "total_tokens": 53
+        "total_tokens": 126
       }
     },
     "headers": {
@@ -80,7 +83,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6e485a8e61c9-ORD"
+        "998566236b102315-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,7 +92,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:27 GMT"
+        "Sun, 02 Nov 2025 17:37:17 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

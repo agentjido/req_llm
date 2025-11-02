@@ -98,13 +98,13 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "The user is asking for the weather in Paris, France. I have the `get_weather` function available which takes a location parameter (required) and an optional unit parameter.\n\nThe user has provided the location: \"Paris, France\"\n\nThe unit parameter is optional, and the user didn't specify whether they want Celsius or Fahrenheit. Since Paris is in France and they use Celsius there, I could default to Celsius, but I should probably just use Celsius as a reasonable default for a European city. Actually, let me check - the unit parameter is optional based on the function definition, so I can make the call without specifying it. However, it might be better to provide Celsius since France uses that system.\n\nLet me make the call with \"Paris, France\" as the location and I'll use \"celsius\" as the unit since that's standard in France.",
+            "reasoning": "The user is asking about the weather in Paris, France. I have a function `get_weather` available that can provide this information. The function requires:\n- location (required): \"Paris, France\"\n- unit (optional): celsius or fahrenheit - the user didn't specify, but since Paris is in France and they use metric, I'll use celsius as the default, or I could just not specify it and let the function use its default.\n\nActually, looking at the parameters, \"unit\" is not marked as required, so I can just use the location parameter. Let me call the function with \"Paris, France\" as the location. I don't need to specify the unit since it's not required.",
             "reasoning_details": [
               {
                 "format": "anthropic-claude-v1",
                 "index": 0,
-                "signature": "Eu0HCkgICRACGAIqQFe9RFz2LmfQOattfLRN/SbmSCPlOiT8FTkzoCVtNU98ZvDol4IxbAyq+I/cJ0an9hR1x0VqgNWJ4MWmfNQnIrISDC9Zozl40eBxHTExDBoM+P/imT1uj8nSuH8yIjAmhF4HAW6rq4Uu28XjeoXp8g/9PtxunV6I10QIHekYtlnW/kw1mHxvJ5VQskfQwHQq0gYd/l9/OybUKzvw1pe81C+wSyL40S7ntNdEhMp5ne5RNVNDV8SsZbrO+BsQXXwej8WhTWturuPMdy/zAe3Isr0ar4qDb8tcDXOY51282oDYpmpbQoM3GwlfCwrG0QWUhFiIqaqLDO609hI3HGPAiiLzS00R/IV7htJAgLRMW2Y9d+HrKtoIe8iD1GOkeYG5Plzi2Z3XudksskGMKPpNXvUW802w5khQXaaRczNlUcIm2x5jjgXp/hNdFmevvPtZsqqOIC5M8reWbEbmHO1rSygEc5yjwd32WqL7aBNkbn0t+LC5y/1t1dIYy8UUjC5/j2gVi3zhQq1cjW9JvzgbaGiUceT3n/JzzD6OAR1ccvHnFsKI2LufIbe8PVbDfObGFLdTEml6DPvcLTOB9Nr5q6PuDKVx0gwgIrH4k47Hh0+MTRoEChH7JDHEGwUOy35dHzKfiBYcbwbkllcHeszvelAn1WeL+8XnrdzMIeZcz+Y029nJBT39C4vg6F3vdrA/nbxrqQJxY0j4ysfP+Bmu4ZI3uN2nG1f94JRKiMBp9jMbQ/yF3pYz6bHpxxwU/irTfZJguN0hW/UTh56/rnwPcPuySKcRhgK/ouD0bdJGwlT79wWyxvSpuq5YrL0mNB/NQQot7U7hEorSF168+ODncY91qip9nvrUX5ur8bJ48YC2RXIMuyYMcLQD0/dM8difQdwHSpDO0VR1BtIvs0v7d6ApM/q0QKHvkl0uO6izLkvGEzXhFTQad7mnvkkc69Gyobkn+Cd3PpTSEwx58FcBgsi4RHsoaGQy89sXS0D9Mb2t0K56uBaav2rbZLhLBnlTaKfDkEYGOOgxA5HoHGP8PRQrn4VQ/2fbHh5jE0AWCSU8TDUnlPvmq3L5EA0iPRhhmhjYt3UjIIDZsVaDvaIUHMTGHeuGP7LmczCDNjIfgOzJaOr4133ZovriWp3gIhkt15Xbx4y2Y2F3fZtr4gmR/cY/3b36/7jOTZ0oVvf+Z4FPpvUEdwSEuEuoAwcuPaGf2eGW1W74hevJ//6eMBVozL3Xyn7TkT9ZwbRmVhV713TWh3uWAjTHYodgH6c3ikEE/3NN9ufixay3CmwgjMX7Y1fTOaGbEeoWKu5FOejDMyrpxd8rGAE=",
-                "text": "The user is asking for the weather in Paris, France. I have the `get_weather` function available which takes a location parameter (required) and an optional unit parameter.\n\nThe user has provided the location: \"Paris, France\"\n\nThe unit parameter is optional, and the user didn't specify whether they want Celsius or Fahrenheit. Since Paris is in France and they use Celsius there, I could default to Celsius, but I should probably just use Celsius as a reasonable default for a European city. Actually, let me check - the unit parameter is optional based on the function definition, so I can make the call without specifying it. However, it might be better to provide Celsius since France uses that system.\n\nLet me make the call with \"Paris, France\" as the location and I'll use \"celsius\" as the unit since that's standard in France.",
+                "signature": "ErQGCkgICRACGAIqQHfNwndq74libiEkYZ6SWCj0q8npzlw4h8BQDsVizvfVgtr5Pcr6KjSRRlTyaVMXbErN6BkkOZzyVkUOs/IoP7YSDI5ynvQLoX31MCZy3xoMjaYoSu8fpvZl0Jw5IjBPF0/gcjSb0diP2Z5XBOID03CK33zn2ML/jxsCRDofycJcGECtJknljyI053r6fTgqmQVtxswlz59P6rp/yga/OSPG/hQ8El/rWDIPD+3ZG/oRxRpHAF10kghlwHzFqRn07K8drmDYHteKmNuxUDVgTv/Ln+i9X1zJnBWDBoZ1ADdj3e0KkDNQPLEo20DP9LJJy0Ht1ZUQDEwGKYpnGBPeh7konx8Q3xRq1aLKdrGWEieHQzGa9ZHyRKw6Zwpt7eGJz07l/u+CazcVpyDbAn9g84yh9+iK5huqKi0sY5CAUll02CXEMRJTq/uM4i/UImqBwxoJVhgPYcwubZouc+b49VXmi4TWDfZxhH5GNBfSPqzB+7KbuqsvWXanavCnAhuVEWXhKOrEsj3pcJ6AKlZpU0ykhH+n4zjS+TzeeqhGpLlumfn05K4unvIQAhCm7Ob+WaZfba0Zlo3lGI6j7Og9Kd6wykG6+MukkGlzI7S5GuSTRq4zEseVtQzhhBPuotro9R5rglro/9iazV5BPAxTvGaSCyQ497CvUSPgCuEYFKsVeD30o3TKBGN0YVMyGs9yDPVy8BmmJwTks8AzAcIy2x2o6TDFtOFAOMcNCHY7413LE4redYhNDCes1JNsTySQ5wNHANTSChtaJM/WV7qmev3KcqqjBpoZ3Hk5WZvKPNYHn13oB5hoSI0c2EfCNcXD3VxaK0gebNrJAQjS1Lm1v4Re9OpSPjF0t3ZNHOawgNI6QGOEkZL+UNVXcAvkilpAR0znsfOh+h2RKIK2JhzWCRaCQH8rWsprvKClP/zc0/eGQ2y9d6YXmDXl0mgMfDNYVat/uC4T5c9sY+cqyQlCueEK8yEqaKsnMNwfqNqGKy9sBw2l16ngtRfUZMKw8vRdvjtbg6/D6l95CCIqpkGEO9xmhewM0sTmb/0f/MRPfRS3D9peDQxbjpFQyRgB",
+                "text": "The user is asking about the weather in Paris, France. I have a function `get_weather` available that can provide this information. The function requires:\n- location (required): \"Paris, France\"\n- unit (optional): celsius or fahrenheit - the user didn't specify, but since Paris is in France and they use metric, I'll use celsius as the default, or I could just not specify it and let the function use its default.\n\nActually, looking at the parameters, \"unit\" is not marked as required, so I can just use the location parameter. Let me call the function with \"Paris, France\" as the location. I don't need to specify the unit since it's not required.",
                 "type": "reasoning.text"
               }
             ],
@@ -113,10 +113,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"location\": \"Paris, France\", \"unit\": \"celsius\"}",
+                  "arguments": "{\"location\": \"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "toolu_vrtx_01NutpoMtzs6yYRpSnGDv4yh",
+                "id": "toolu_vrtx_018h1oPwb1eGCM8B1NAwueTB",
                 "index": 0,
                 "type": "function"
               }
@@ -125,15 +125,15 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1761606443,
-      "id": "gen-1761606443-q4oliEOtOarQkVFSDyfi",
+      "created": 1762104941,
+      "id": "gen-1762104941-Ztd7MHbeMrli1G6tiCLS",
       "model": "anthropic/claude-haiku-4.5",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
-        "completion_tokens": 265,
+        "completion_tokens": 213,
         "prompt_tokens": 724,
-        "total_tokens": 989
+        "total_tokens": 937
       }
     },
     "headers": {
@@ -141,7 +141,7 @@
         "*"
       ],
       "cf-ray": [
-        "9955d9714c117fb0-ORD"
+        "998563c93913eac7-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -150,7 +150,7 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 23:07:24 GMT"
+        "Sun, 02 Nov 2025 17:35:41 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

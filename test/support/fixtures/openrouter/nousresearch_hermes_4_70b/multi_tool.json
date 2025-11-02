@@ -98,12 +98,12 @@
           "logprobs": null,
           "message": {
             "content": "\n\n",
-            "reasoning": "\nOkay, the user is asking about the weather in Paris, France. I need to figure out which function to use here. The available functions are get_weather, tell_joke, and get_time. The question is about weather, so get_weather is the right choice.\n\nNow, the get_weather function requires a location parameter. The user specified Paris, France, so that's straightforward. The unit parameter is optional, but since it's not provided, I should check if the default is Celsius or Fahrenheit. Looking at the function description, the unit can be either celsius or fahrenheit. The default might be celsius, but maybe I should include it to be safe. Wait, the parameters for get_weather are location (required) and unit (optional). The user didn't specify the unit, so maybe I should include it as celsius by default. Alternatively, maybe the function uses the default if not provided. Let me check the function signature again. The parameters are location (required) and unit (optional). So if the user doesn't provide unit, the function might default to celsius. But to be thorough, perhaps I should include it. Wait, the function's parameters are listed as required: [\"location\"], so unit is optional. So the user didn't specify, so maybe the function uses the default. But the function's description says unit is optional. So perhaps the function will use the default if not provided. But the user might want to know the temperature in a specific unit. Since the user didn't specify, maybe I should include the unit as celsius. Alternatively, maybe the function uses the default. Wait, the function's parameters are optional, so if not provided, the default is celsius. So I can proceed with location: \"Paris, France\" and unit: \"celsius\". So the function call would be get_weather with location \"Paris, France\" and unit \"celsius\". So the JSON would be {\"name\": \"get_weather\", \"arguments\": {\"location\": \"Paris, France\", \"unit\": \"celsius\"}}. That should do it.\n",
+            "reasoning": "\nOkay, the user is asking about the weather in Paris, France. I need to figure out which function to use here. The available functions are get_weather, tell_joke, and get_time. The question is about weather, so get_weather is the right choice.\n\nNow, the get_weather function requires a location parameter. The user specified Paris, France, so that's straightforward. The unit parameter is optional, but since it's not provided, I should check if the default is Celsius or Fahrenheit. Looking at the function description, the unit can be either celsius or fahrenheit. The default might be celsius, but maybe I should include it to be safe. Wait, the parameters for get_weather are location (required) and unit (optional). The user didn't specify the unit, so maybe I should include it as celsius by default. Alternatively, maybe the function uses the default if not provided. Let me check the function signature again. The parameters are location (required) and unit (optional). So if the user doesn't provide unit, the function might default to celsius. But to be thorough, perhaps I should include it. Wait, the function's parameters are listed as required: [\"location\"], so unit is optional. So the user didn't specify, so maybe the function uses the default. But the function's description says unit is optional. So perhaps the function will use the default if not provided. But the user might want to know the temperature in a specific unit. Since the user didn't specify, maybe I should include the unit as celsius. Alternatively, maybe the function uses the default. Wait, the function's parameters are optional, so if not provided, the default is celsius. So I should include the unit as celsius. So the arguments would be location: \"Paris, France\", unit: \"celsius\". So the function call would be get_weather with those arguments. So the final answer is to call get_weather with location \"Paris, France\" and unit \"celsius\".\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "\nOkay, the user is asking about the weather in Paris, France. I need to figure out which function to use here. The available functions are get_weather, tell_joke, and get_time. The question is about weather, so get_weather is the right choice.\n\nNow, the get_weather function requires a location parameter. The user specified Paris, France, so that's straightforward. The unit parameter is optional, but since it's not provided, I should check if the default is Celsius or Fahrenheit. Looking at the function description, the unit can be either celsius or fahrenheit. The default might be celsius, but maybe I should include it to be safe. Wait, the parameters for get_weather are location (required) and unit (optional). The user didn't specify the unit, so maybe I should include it as celsius by default. Alternatively, maybe the function uses the default if not provided. Let me check the function signature again. The parameters are location (required) and unit (optional). So if the user doesn't provide unit, the function might default to celsius. But to be thorough, perhaps I should include it. Wait, the function's parameters are listed as required: [\"location\"], so unit is optional. So the user didn't specify, so maybe the function uses the default. But the function's description says unit is optional. So perhaps the function will use the default if not provided. But the user might want to know the temperature in a specific unit. Since the user didn't specify, maybe I should include the unit as celsius. Alternatively, maybe the function uses the default. Wait, the function's parameters are optional, so if not provided, the default is celsius. So I can proceed with location: \"Paris, France\" and unit: \"celsius\". So the function call would be get_weather with location \"Paris, France\" and unit \"celsius\". So the JSON would be {\"name\": \"get_weather\", \"arguments\": {\"location\": \"Paris, France\", \"unit\": \"celsius\"}}. That should do it.\n",
+                "text": "\nOkay, the user is asking about the weather in Paris, France. I need to figure out which function to use here. The available functions are get_weather, tell_joke, and get_time. The question is about weather, so get_weather is the right choice.\n\nNow, the get_weather function requires a location parameter. The user specified Paris, France, so that's straightforward. The unit parameter is optional, but since it's not provided, I should check if the default is Celsius or Fahrenheit. Looking at the function description, the unit can be either celsius or fahrenheit. The default might be celsius, but maybe I should include it to be safe. Wait, the parameters for get_weather are location (required) and unit (optional). The user didn't specify the unit, so maybe I should include it as celsius by default. Alternatively, maybe the function uses the default if not provided. Let me check the function signature again. The parameters are location (required) and unit (optional). So if the user doesn't provide unit, the function might default to celsius. But to be thorough, perhaps I should include it. Wait, the function's parameters are listed as required: [\"location\"], so unit is optional. So the user didn't specify, so maybe the function uses the default. But the function's description says unit is optional. So perhaps the function will use the default if not provided. But the user might want to know the temperature in a specific unit. Since the user didn't specify, maybe I should include the unit as celsius. Alternatively, maybe the function uses the default. Wait, the function's parameters are optional, so if not provided, the default is celsius. So I should include the unit as celsius. So the arguments would be location: \"Paris, France\", unit: \"celsius\". So the function call would be get_weather with those arguments. So the final answer is to call get_weather with location \"Paris, France\" and unit \"celsius\".\n",
                 "type": "reasoning.text"
               }
             ],
@@ -115,7 +115,7 @@
                   "arguments": "{\"location\": \"Paris, France\", \"unit\": \"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "call_9d5ef9ea1f3142ee965d5369",
+                "id": "call_3602fd13b8b243f78d394833",
                 "index": 0,
                 "type": "function"
               }
@@ -124,16 +124,16 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760532527,
-      "id": "gen-1760532527-bQcjABnM6XOSd2iRZj4p",
+      "created": 1762104980,
+      "id": "gen-1762104980-ZkjQgdxNq3BwoKxRDvu6",
       "model": "nousresearch/hermes-4-70b",
       "object": "chat.completion",
       "provider": "Chutes",
       "usage": {
-        "completion_tokens": 458,
+        "completion_tokens": 440,
         "prompt_tokens": 348,
         "prompt_tokens_details": null,
-        "total_tokens": 806
+        "total_tokens": 788
       }
     },
     "headers": {
@@ -141,7 +141,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6eca7ec572ea-ORD"
+        "998564be2ddce148-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -150,7 +150,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:48 GMT"
+        "Sun, 02 Nov 2025 17:36:21 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

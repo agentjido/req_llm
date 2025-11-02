@@ -97,17 +97,25 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "I'll check the weather in Paris, France for you.",
-            "reasoning": null,
+            "content": "",
+            "reasoning": "Hmm, the user is asking about the weather in Paris, France. This is a straightforward request that requires calling the weather API. I need to get the current weather information for Paris.\n\nI should use the get_weather function with the location parameter set to \"Paris, France\". The user didn't specify a temperature unit, so I'll default to Celsius since that's commonly used in Europe.\n\nLet me make the API call to fetch the weather data for Paris.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Hmm, the user is asking about the weather in Paris, France. This is a straightforward request that requires calling the weather API. I need to get the current weather information for Paris.\n\nI should use the get_weather function with the location parameter set to \"Paris, France\". The user didn't specify a temperature unit, so I'll default to Celsius since that's commonly used in Europe.\n\nLet me make the API call to fetch the weather data for Paris.",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant",
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"location\": \"Paris, France\"}",
+                  "arguments": "{\"location\": \"Paris, France\", \"unit\": \"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "call_61ca9699824244dc8bc191a1",
+                "id": "call_2ff1",
                 "index": 0,
                 "type": "function"
               }
@@ -116,16 +124,16 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760547392,
-      "id": "gen-1760547392-JC7wNbBgvYGjYPQ38E6e",
+      "created": 1762105018,
+      "id": "gen-1762105018-vOI80MKquJbzpGQ7szCS",
       "model": "deepseek/deepseek-chat-v3.1",
       "object": "chat.completion",
-      "provider": "Chutes",
+      "provider": "DeepInfra",
       "usage": {
-        "completion_tokens": 29,
-        "prompt_tokens": 261,
+        "completion_tokens": 119,
+        "prompt_tokens": 249,
         "prompt_tokens_details": null,
-        "total_tokens": 290
+        "total_tokens": 368
       }
     },
     "headers": {
@@ -133,7 +141,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0d9b2dd17e810-ORD"
+        "998565abce97e8d0-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -142,7 +150,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:56:34 GMT"
+        "Sun, 02 Nov 2025 17:36:58 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

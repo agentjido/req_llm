@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyNjIxNCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiJjYWxsX2R6dHBpa2psb3Y5cGM1am1mNWZ3N3dtMiIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfZHp0cGlramxvdjlwYzVqbWY1Znc3d20yIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMtbmV4dC04MGItYTNiLXRoaW5raW5nIiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjoyNjIxNCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiJjYWxsX2hzbXV0eW04eXY4ZXRnbmc4OG44NXlucyIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfaHNtdXR5bTh5djhldGduZzg4bjg1eW5zIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMtbmV4dC04MGItYTNiLXRoaW5raW5nIiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
       "max_tokens": 26214,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_dztpikjlov9pc5jmf5fw7wm2",
+              "id": "call_hsmutym8yv8etgng88n85yns",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "call_dztpikjlov9pc5jmf5fw7wm2"
+          "tool_call_id": "call_hsmutym8yv8etgng88n85yns"
         }
       ],
       "model": "qwen/qwen3-next-80b-a3b-thinking",
@@ -60,13 +60,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "\n\nsum=5",
-            "reasoning": "Okay, the user asked me to use the add tool to compute 2 + 3. I called the add function with a=2 and b=3. The response from the tool was 5. Now I need to respond with 'sum=5'. Let me check if that's correct. Yep, 2 plus 3 is definitely 5. So the final answer should be sum=5.",
+            "content": "sum=5",
+            "reasoning": "Okay, the user asked me to use the add tool to compute 2 + 3. I need to call the add function with a=2 and b=3. Let me check the tool call. The arguments are correct: 2 and 3. The response from the tool was 5. Now I have to respond with 'sum=5'. Let me make sure there's no mistake. Yes, 2 plus 3 is indeed 5. So the final answer should be sum=5",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "Okay, the user asked me to use the add tool to compute 2 + 3. I called the add function with a=2 and b=3. The response from the tool was 5. Now I need to respond with 'sum=5'. Let me check if that's correct. Yep, 2 plus 3 is definitely 5. So the final answer should be sum=5.",
+                "text": "Okay, the user asked me to use the add tool to compute 2 + 3. I need to call the add function with a=2 and b=3. Let me check the tool call. The arguments are correct: 2 and 3. The response from the tool was 5. Now I have to respond with 'sum=5'. Let me make sure there's no mistake. Yes, 2 plus 3 is indeed 5. So the final answer should be sum=5",
                 "type": "reasoning.text"
               }
             ],
@@ -76,16 +76,20 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532579,
-      "id": "gen-1760532578-A4EMQvJgBKDFmjIOZpke",
+      "created": 1762105034,
+      "id": "gen-1762105034-5hKuy3rL6Yer2mhdKDyv",
       "model": "qwen/qwen3-next-80b-a3b-thinking",
       "object": "chat.completion",
-      "provider": "Google",
+      "provider": "Novita",
+      "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 89,
-        "prompt_tokens": 74,
+        "completion_tokens": 111,
+        "completion_tokens_details": {
+          "reasoning_tokens": 103
+        },
+        "prompt_tokens": 69,
         "prompt_tokens_details": null,
-        "total_tokens": 163
+        "total_tokens": 180
       }
     },
     "headers": {
@@ -93,7 +97,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef700a7a5861f2-ORD"
+        "9985660eff41ff5c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -102,7 +106,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:39 GMT"
+        "Sun, 02 Nov 2025 17:37:14 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

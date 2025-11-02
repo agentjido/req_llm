@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo2NjUzLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6ImNhbGxfMGQ4NzdjMTVhZDU3NDQyMjhiNTIwYTg1IiwidHlwZSI6ImZ1bmN0aW9uIn1dfSx7ImNvbnRlbnQiOiI1IiwibmFtZSI6ImFkZCIsInJvbGUiOiJ0b29sIiwidG9vbF9jYWxsX2lkIjoiY2FsbF8wZDg3N2MxNWFkNTc0NDIyOGI1MjBhODUifV0sIm1vZGVsIjoicXdlbi9xd2VuMy1jb2RlciIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjo2NjUzLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjpcIjJcIixcImJcIjpcIjNcIn0iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF8zM2E4ZTNjNGRlMjY3ZjM3IiwidHlwZSI6ImZ1bmN0aW9uIn1dfSx7ImNvbnRlbnQiOiJ7XCJlcnJvclwiOlwiVG9vbCBleGVjdXRpb24gZmFpbGVkXCJ9IiwibmFtZSI6ImFkZCIsInJvbGUiOiJ0b29sIiwidG9vbF9jYWxsX2lkIjoiY2FsbF8zM2E4ZTNjNGRlMjY3ZjM3In1dLCJtb2RlbCI6InF3ZW4vcXdlbjMtY29kZXIiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
       "max_tokens": 6653,
@@ -16,19 +16,19 @@
           "tool_calls": [
             {
               "function": {
-                "arguments": "{\"a\":2,\"b\":3}",
+                "arguments": "{\"a\":\"2\",\"b\":\"3\"}",
                 "name": "add"
               },
-              "id": "call_0d877c15ad5744228b520a85",
+              "id": "call_33a8e3c4de267f37",
               "type": "function"
             }
           ]
         },
         {
-          "content": "5",
+          "content": "{\"error\":\"Tool execution failed\"}",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "call_0d877c15ad5744228b520a85"
+          "tool_call_id": "call_33a8e3c4de267f37"
         }
       ],
       "model": "qwen/qwen3-coder",
@@ -60,7 +60,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "sum=5",
+            "content": "I apologize for the error. Let me try computing the sum directly: 2 + 3 = 5.\n\nsum=5",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -68,15 +68,15 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760547266,
-      "id": "gen-1760547266-UUNRuy6cQywKzhY2ll8b",
+      "created": 1762105036,
+      "id": "gen-1762105030-h8J3rJIPEjzVLniE3C5O",
       "model": "qwen/qwen3-coder",
       "object": "chat.completion",
       "provider": "AtlasCloud",
       "usage": {
-        "completion_tokens": 3,
-        "prompt_tokens": 77,
-        "total_tokens": 80
+        "completion_tokens": 26,
+        "prompt_tokens": 82,
+        "total_tokens": 108
       }
     },
     "headers": {
@@ -84,7 +84,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0d69f2a456183-ORD"
+        "998565fb6888e8ea-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -93,7 +93,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:54:27 GMT"
+        "Sun, 02 Nov 2025 17:37:16 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

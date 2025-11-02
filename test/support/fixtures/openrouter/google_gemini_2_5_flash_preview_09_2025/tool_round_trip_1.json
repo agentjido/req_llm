@@ -67,7 +67,7 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "tool_calls",
+          "finish_reason": "stop",
           "index": 0,
           "logprobs": null,
           "message": {
@@ -78,10 +78,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"a\":2,\"b\":3}",
+                  "arguments": "{\"b\":3,\"a\":2}",
                   "name": "add"
                 },
-                "id": "tool_0_add_pghmesKLQowfvL7zDrSh",
+                "id": "tool_0_add_M1LevdoCnxXxNRDwQFHC",
                 "index": 0,
                 "type": "function"
               }
@@ -90,22 +90,22 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1760546984,
-      "id": "gen-1760546984-m5hx8airmuABgZn2jyaf",
+      "created": 1762104955,
+      "id": "gen-1762104955-Xaw5JzyhP0TqVlewDugZ",
       "model": "google/gemini-2.5-flash-preview-09-2025",
       "object": "chat.completion",
-      "provider": "Google AI Studio",
+      "provider": "Google",
       "usage": {
-        "completion_tokens": 22,
+        "completion_tokens": 9,
         "completion_tokens_details": {
           "image_tokens": 0,
           "reasoning_tokens": 0
         },
-        "prompt_tokens": 71,
+        "prompt_tokens": 37,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 93
+        "total_tokens": 46
       }
     },
     "headers": {
@@ -113,7 +113,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0cfba9a8ec77f-ORD"
+        "998564262ad561d9-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -122,7 +122,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:49:44 GMT"
+        "Sun, 02 Nov 2025 17:35:57 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

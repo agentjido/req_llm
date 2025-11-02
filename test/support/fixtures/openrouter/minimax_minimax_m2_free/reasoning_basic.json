@@ -1,0 +1,108 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDQ4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Im1pbmltYXgvbWluaW1heC1tMjpmcmVlIiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MS4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "minimax/minimax-m2:free",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "**Result:** 12 × 7 = 84  \n\n**Brief internal thinking:**  \n12 = 10 + 2, so (10 + 2) × 7 = (10×7) + (2×7) = 70 + 14 = 84.",
+            "reasoning": "First, the user asks: \"Solve 12*7 and show your internal thinking (brief).\" This is straightforward multiplication: 12 * 7 = 84.\n\nThe instruction: \"show your internal thinking (brief)\" So I need to give a brief explanation of how I arrived at the answer. It's a mental math or multiplication.\n\nShould respond: 12 × 7 = 84. And internal thinking could be: \"12 multiplied by 7 is 7 times 12: 7×10 = 70, 7×2 = 14, 70+14 = 84.\" Or \"It can be thought of as 12×7 = (10+2)×7 = 70+14 = 84.\" That's brief.\n\nHence answer:\n\n- Step: Multiply 10×7=70, 2×7=14, sum 84.\n\nThus output: \"84\" with brief internal steps.\n\nMake sure answer is concise but includes brief internal reasoning.\n\nThat's done.\n\nProceed to final.",
+            "reasoning_details": [
+              {
+                "format": null,
+                "index": 0,
+                "text": "First, the user asks: \"Solve 12*7 and show your internal thinking (brief).\" This is straightforward multiplication: 12 * 7 = 84.\n\nThe instruction: \"show your internal thinking (brief)\" So I need to give a brief explanation of how I arrived at the answer. It's a mental math or multiplication.\n\nShould respond: 12 × 7 = 84. And internal thinking could be: \"12 multiplied by 7 is 7 times 12: 7×10 = 70, 7×2 = 14, 70+14 = 84.\" Or \"It can be thought of as 12×7 = (10+2)×7 = 70+14 = 84.\" That's brief.\n\nHence answer:\n\n- Step: Multiply 10×7=70, 2×7=14, sum 84.\n\nThus output: \"84\" with brief internal steps.\n\nMake sure answer is concise but includes brief internal reasoning.\n\nThat's done.\n\nProceed to final.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1762104949,
+      "id": "gen-1762104949-aLnOQbtslinXt5WJ7GaB",
+      "model": "minimax/minimax-m2:free",
+      "object": "chat.completion",
+      "provider": "Minimax",
+      "usage": {
+        "completion_tokens": 277,
+        "prompt_tokens": 54,
+        "total_tokens": 331
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "998563fd6e6c98c3-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 02 Nov 2025 17:35:50 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

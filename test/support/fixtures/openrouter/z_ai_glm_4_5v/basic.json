@@ -41,26 +41,37 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! It's nice to meet you. I'm here to help with any questions or tasks you might have. How can I assist you today? 😊",
-            "reasoning": "I need to respond to the user's greeting \"Hello world!\". This is a common introductory phrase, so I should respond in a friendly and welcoming manner. I'll start by acknowledging their greeting and then introduce myself briefly. I should keep it simple and positive.",
+            "content": "\nHello there! 😊 It's great to connect with you. How can I assist you today? Whether you have questions, need help, or just want to chat, I'm here for you!",
+            "reasoning": "I see the user just said \"Hello world!\". That's a classic first program greeting. I should respond in a friendly and welcoming way, maybe acknowledge it as a common programming tradition while keeping it natural.\n\nThe user might be testing if I'm working properly, or they could be new to programming. Either way, I'll keep my response warm and inviting without overcomplicating things. A simple hello back with a smile emoji would work well here - it's approachable but not too formal.\n\nI wonder if they're expecting something more technical? But since they didn't ask any specific questions, sticking with a basic greeting seems appropriate for now. If they follow up with coding questions, I can adjust my tone then.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "I see the user just said \"Hello world!\". That's a classic first program greeting. I should respond in a friendly and welcoming way, maybe acknowledge it as a common programming tradition while keeping it natural.\n\nThe user might be testing if I'm working properly, or they could be new to programming. Either way, I'll keep my response warm and inviting without overcomplicating things. A simple hello back with a smile emoji would work well here - it's approachable but not too formal.\n\nI wonder if they're expecting something more technical? But since they didn't ask any specific questions, sticking with a basic greeting seems appropriate for now. If they follow up with coding questions, I can adjust my tone then.",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532604,
-      "id": "gen-1760532604-KNOOAb096BMwmWLIFkze",
+      "created": 1762105073,
+      "id": "gen-1762105073-XylhXuxc8PD42db88mw7",
       "model": "z-ai/glm-4.5v",
       "object": "chat.completion",
-      "provider": "Parasail",
+      "provider": "Novita",
+      "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 88,
-        "prompt_tokens": 9,
+        "completion_tokens": 188,
+        "completion_tokens_details": null,
+        "prompt_tokens": 10,
         "prompt_tokens_details": {
-          "cached_tokens": 0
+          "audio_tokens": 0,
+          "cached_tokens": 4
         },
-        "total_tokens": 97
+        "total_tokens": 198
       }
     },
     "headers": {
@@ -68,7 +79,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef70a96ee7e207-ORD"
+        "99856705c9372240-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -77,7 +88,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:50:04 GMT"
+        "Sun, 02 Nov 2025 17:37:54 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

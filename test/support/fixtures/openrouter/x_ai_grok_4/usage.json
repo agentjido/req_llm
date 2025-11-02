@@ -1,0 +1,108 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJ4LWFpL2dyb2stNCIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 10,
+      "messages": [
+        {
+          "content": "Hi there!",
+          "role": "user"
+        }
+      ],
+      "model": "x-ai/grok-4",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": null,
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hi! How can I help you today? ",
+            "reasoning": null,
+            "reasoning_details": [
+              {
+                "data": "+22zPflYCnRloD2lI5ppj5LbytQNgmmH3GN26ed6fJFxQGFU810Dzb2+TjolUwTSdg7EGMHfCXvf3PengBwCJ20JezkDrKaxhM+lUNwUMSF9+fY+nqvw3djK60FO1sf1jNjgfmEN1YydNvHGLUUm05fVA94gzEKIlgR+Na6mCnUzCvAiS+tixoQSldM7tEUyDV1lX9nOTVoiuga5FbyhpdktEgurG5EAfW/ot1he/53JsAqxlQL8KhRf4TLjwVrvSWXBJjwwpSi0egfe6Gh6IRn7OMcM3sKxV7Ha/iOwASW1VCxDsAAylpHsP8YQBA+UofkwiRvl3YsKqFi4BHo7VLdu4iT0XELj6lx+Do9nyfiDRaMxU7V3Cbu/GpVq9qrqAK4UqvYwHPfJvjmcOHkM3kcO74eTfxwsJpzVRaRz3xdAzCK8Lz8Y5wL+LovwC3ZYjq3i0k82wYmy4msfg8Epmslyz19vV2qTliS/GYDtM1wlNmxsj52p3kObn+zEnplrqqyeYsNSabueJs7O4pjBGWGy/chQYvtfXRMfUeXR/BtDfEJASgN6bsgfs/lofUNZHFgtaturOMkxSIJj91Ca8uVn6y5eG00VwRed03YiwCT9RhlookD3JstRydgdOVlQdWS25PI5WLHIpC5Gm8v8HXFfScI2GHUzYPzj5N8edADrIDDCbNLOt8NVOB4vfex4rJfR0Djh8E0ZR3FXpJGuzG2whvAk2I8seR+Ec1QBKcOi3KFpwS3QALwZ/sLrPn1tHWdN+39JgF/dD65Zw8fC83WHweOxh7LI/pAvYaa/Ma8NoxpqxZhOjmeqxNRZ6CLv7kjD8YloSdlMzl/JhcgmvuOfXB9aAA1MTC5/SsOouXz/Z1acaYvGhPYD65UZ0hwaXE/M1bdW58oDXHivY9JWt75Yf2HPkujBOXu2BUx3e5NYOQ+3aZF5gSq+nws",
+                "format": "xai-responses-v1",
+                "id": "rs_4902d4d1-a914-61f2-e305-827da29f4e83_us-east-1",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": null
+        }
+      ],
+      "created": 1762105054,
+      "id": "gen-1762105054-LvNi1hsJe6VICjpXJDEZ",
+      "model": "x-ai/grok-4",
+      "object": "chat.completion",
+      "provider": "xAI",
+      "usage": {
+        "completion_tokens": 10,
+        "prompt_tokens": 10,
+        "total_tokens": 20
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "9985669038e91070-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 02 Nov 2025 17:37:34 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

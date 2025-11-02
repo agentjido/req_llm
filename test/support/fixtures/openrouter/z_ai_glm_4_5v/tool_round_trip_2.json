@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxNjM4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiSSB3aWxsIGhlbHAgeW91IHRvIGNvbXB1dGUgMiArIDMgdXNpbmcgdGhlIGFkZCB0b29sLlxuIiwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6ImNhbGxfMjAyNTEwMTUyMDUwMDBiNWIwNmI5YzA0ODA0MGUyXzAiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJjYWxsXzIwMjUxMDE1MjA1MDAwYjViMDZiOWMwNDgwNDBlMl8wIn1dLCJtb2RlbCI6InotYWkvZ2xtLTQuNXYiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjoxNjM4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiSSB3aWxsIGhlbHAgeW91IHRvIGNvbXB1dGUgMiArIDMgdXNpbmcgdGhlIGFkZCB0b29sLlxuIiwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6ImNhbGxfMjAyNTExMDMwMTM4MDA1ZGQ5MDlmYjhhNDE0ZGE0XzAiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJjYWxsXzIwMjUxMTAzMDEzODAwNWRkOTA5ZmI4YTQxNGRhNF8wIn1dLCJtb2RlbCI6InotYWkvZ2xtLTQuNXYiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
       "max_tokens": 1638,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_20251015205000b5b06b9c048040e2_0",
+              "id": "call_202511030138005dd909fb8a414da4_0",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "call_20251015205000b5b06b9c048040e2_0"
+          "tool_call_id": "call_202511030138005dd909fb8a414da4_0"
         }
       ],
       "model": "z-ai/glm-4.5v",
@@ -60,7 +60,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "sum=5",
+            "content": "<|begin_of_box|>sum=5<|end_of_box|>",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -68,21 +68,21 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532600,
-      "id": "gen-1760532600-N7G72sJ22UoHsi8Ii6Wy",
+      "created": 1762105080,
+      "id": "gen-1762105080-vDLiYsumvdsnMc250C5e",
       "model": "z-ai/glm-4.5v",
       "object": "chat.completion",
       "provider": "Novita",
       "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 4,
+        "completion_tokens": 6,
         "completion_tokens_details": null,
         "prompt_tokens": 83,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 4
+          "cached_tokens": 5
         },
-        "total_tokens": 87
+        "total_tokens": 89
       }
     },
     "headers": {
@@ -90,7 +90,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef7093ba0ae207-ORD"
+        "99856733fe6b2240-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -99,7 +99,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:50:01 GMT"
+        "Sun, 02 Nov 2025 17:38:01 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

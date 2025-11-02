@@ -36,43 +36,42 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": null,
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hi! How can I assist you today? ",
-            "reasoning": "First, the user said, \"Hi there!\" which is a casual greeting. As an AI assistant, I should respond in a friendly and engaging manner to build rapport.\n\nMy role is to be helpful, truthful, and engaging. I need to keep responses clear and not verbose, as per the instructions.\n\nA typical response to a greeting could be something like \"Hello!\" or \"Hi! How can I help you today?\" But since this is just a greeting, I shouldn't assume they need help right away. Maybe they're just saying hi.\n\nThe instructions say: \"Keep your response to user clear; please do not make your response verbose!\" So, I need to be concise.\n\nPossible responses:\n\n- Simple: \"Hi! How are you?\"\n\n- More engaging: \"Hello! It's nice to chat with you.\"\n\n- If I want to prompt for more: \"Hi there! What can I assist you with?\"\n\nSince the user might be starting a conversation, I should encourage it without overwhelming.\n\nRemember, I'm Grok, built by xAI, so I could subtly reference that if it fits, but it's not necessary for a simple greeting.\n\nFinal response idea: Keep it friendly and open-ended.\n\nResponse: \"Hi! How can I help you today?\"",
+            "content": "Hi! I'm Grok, your AI assistant from",
+            "reasoning": "First, the user said, \"Hi there!\" which is a casual greeting. As an AI assistant, I should respond in a friendly and engaging manner to build rapport.\n\nMy role is to be helpful, truthful, and engaging. I need to keep responses clear and not verbose, as per the system prompt.\n\nA good response to a greeting could be:\n- A simple acknowledgment like \"Hi!\" or \"Hello!\"\n- Followed by something to continue the conversation, like asking how I can help or what they're up to.\n- Since this is the start, I should introduce myself or remind them of my capabilities if appropriate.\n\nThe system prompt says: \"You are Grok, a helpful and maximally truthful AI built by xAI, not based on any other companies and their models.\" So, I should incorporate that if it fits naturally.\n\nKeep it concise: Avoid verbosity. So, aim for a short, friendly reply.\n\nPossible response structure:\n1. Greet back: \"Hi!\" or \"Hello!\"\n2. Add a bit of personality: Since I'm Grok, I could say something witty or relevant.\n3. Offer assistance: \"How can I help you today?\"\n\nCombine them: \"Hi there! I'm Grok, here to help. What's on your mind?\"\n\nThat might be a bit long, but it's still concise.\n\nMake it even shorter: \"Hi! How can I assist you?\"\n\nTo make it more engaging: \"Hey! Nice to meet you. I'm Grok from xAI. What can I do for you?\"\n\nEnsure it's truthful: Everything I say should align with my identity.\n\nFinal thought: Start simple and see where it goes.",
             "reasoning_details": [
               {
-                "format": "unknown",
+                "format": "xai-responses-v1",
                 "index": 0,
-                "text": "First, the user said, \"Hi there!\" which is a casual greeting. As an AI assistant, I should respond in a friendly and engaging manner to build rapport.\n\nMy role is to be helpful, truthful, and engaging. I need to keep responses clear and not verbose, as per the instructions.\n\nA typical response to a greeting could be something like \"Hello!\" or \"Hi! How can I help you today?\" But since this is just a greeting, I shouldn't assume they need help right away. Maybe they're just saying hi.\n\nThe instructions say: \"Keep your response to user clear; please do not make your response verbose!\" So, I need to be concise.\n\nPossible responses:\n\n- Simple: \"Hi! How are you?\"\n\n- More engaging: \"Hello! It's nice to chat with you.\"\n\n- If I want to prompt for more: \"Hi there! What can I assist you with?\"\n\nSince the user might be starting a conversation, I should encourage it without overwhelming.\n\nRemember, I'm Grok, built by xAI, so I could subtly reference that if it fits, but it's not necessary for a simple greeting.\n\nFinal response idea: Keep it friendly and open-ended.\n\nResponse: \"Hi! How can I help you today?\"",
-                "type": "reasoning.text"
+                "summary": "First, the user said, \"Hi there!\" which is a casual greeting. As an AI assistant, I should respond in a friendly and engaging manner to build rapport.\n\nMy role is to be helpful, truthful, and engaging. I need to keep responses clear and not verbose, as per the system prompt.\n\nA good response to a greeting could be:\n- A simple acknowledgment like \"Hi!\" or \"Hello!\"\n- Followed by something to continue the conversation, like asking how I can help or what they're up to.\n- Since this is the start, I should introduce myself or remind them of my capabilities if appropriate.\n\nThe system prompt says: \"You are Grok, a helpful and maximally truthful AI built by xAI, not based on any other companies and their models.\" So, I should incorporate that if it fits naturally.\n\nKeep it concise: Avoid verbosity. So, aim for a short, friendly reply.\n\nPossible response structure:\n1. Greet back: \"Hi!\" or \"Hello!\"\n2. Add a bit of personality: Since I'm Grok, I could say something witty or relevant.\n3. Offer assistance: \"How can I help you today?\"\n\nCombine them: \"Hi there! I'm Grok, here to help. What's on your mind?\"\n\nThat might be a bit long, but it's still concise.\n\nMake it even shorter: \"Hi! How can I assist you?\"\n\nTo make it more engaging: \"Hey! Nice to meet you. I'm Grok from xAI. What can I do for you?\"\n\nEnsure it's truthful: Everything I say should align with my identity.\n\nFinal thought: Start simple and see where it goes.",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "k+02MPX6DTE0yXR0uT4iMv7g2tfjOcQ9m4NNMQprAyPWjaeNvtDek79BOhEa3Z/5poTcsdzEa4MUmjHfLrnKxRRNmI0GopvHhx7kGYXY0HCE4QnGYh+9h2D4PdfNnfRXYWLtAdBPOyYwGBFufsiXmZV3+hr49H2J7xCpw9Jj9+wEKtRFKQ9H7Z63oLGes5mvSbWyjanchgRAdEQR4wtdPwxPY5FnzjSffr1pNcHHDeUz7uONOTfx04imxixIv1V4xkC4ep7qYAYYm4bCH2cLOTgCQUgQit5soBA1+NDDiolSi3S1/DXiDvGhkLlvk1lWLKGyVrKMAN8rmTGetw5Mx+0T1yCJyRkW1fnmV+QUhHbtWp7kTNSrYQqexkbnssrISN5LzS+U2zBPhPDFZ/xdw49ngdV65OSIBLAVQ/ME5rFtkerVyT2ap1BynGbEiHpV52IYkjP2ynui7npSfqv8PV6Wy83sHj5rCSK6OO2+VnotTLruIUZVlO67OXduwUlWLksDpXYV+LcF/B+36ftfagxA+wbzZqXnlYYAd96ANa0GEPhcPS+roXCj4jf23CqrN7JgmaMemtOiYR1Mqx7GOYXdcUd1Rkv769qJ28zag/cOAs8Gx84rPzdC4Fa/L5GHg4OoWa8IHtrO/em6/VpHgZMsk2asSwazfHXwtW4GuCHa29Pdz/up93gyFBo4w0evOrujyM+ToM1z03vqOCNTxtFx2ZToZ0+MFSQmIdUb2ybyBPdhHqfQ10jE8PdtuUeNanYlnizZ1VNw+cUKLiWXkUwz2iVlgoTCatdHIp/OzkAm4qlr6c49Iax2CmH/7iDXCuD8pPFZ7pT+FcM+eTFDni+0fC3jgtBeSOl2OPMl6C3XJbtmjCe4wWH18LTHb7ILVCNl9qsI5Rz7cboerQco9x5qGCbIDNi8pGFELc+aW7JJFb7/FHO56yWRrfNClS3nVlVVQ2zjZcs3U1EQb/+ovz06BCtez51frBz56/yCBBRFNby7JYOKiSqRfVOOnhVG7Vzsd0byHYSe17HktnEe/+vYyhEuWlGGuNEVFJ6PH4yAaDECdYmqJiBnG3L6UgonP2cmdQdLEdSyOXldBbFsqjU7a17JelNUdPCjyoJ1FJtGSqLpy0GSJjT5npGlIqETwuj895dwU4OOTZ2hxKUiNka+AQuumDi0qtuOje9CZjpQqHkiYl3wGGyhZdfFBAyCepntq4GK3xK+SqSKWT9U9HihX/SbJylmeIn/7mMgyj3B8o7IkkUQWYZFDrPRKY1XaQwTX5WSTqoj2YvJCQyPmwIb2XQObmqBlXDbAaLVDAqH/tKU3uPBJkYSrInRMD4Ef7qrki9QvO84L7afmrVb1pZ5HZTN3Wj7GWFuK8eKtis0d7iTN5X5ry37/MIQ8HvRrKeUJkM73DvKkJeqKtqCR2U4AtJxskXQGNYFRsTzfbIGNpTmzH0advn4pHRQXai+7a/+UymYwzsFbs7kNOwfx6X5thVmEcXNwTvJcBhRlcOsOutUk8cSOUmjSvxPYgmLZ633M+Lm7zcVn+eS2picDUY4d+IoW9aemyxYb1nfQxp+6/8pYw1RyOnwVwLh/TH66miCA/vxIHiPDdMWx1dISmFAJ8KDUrIbx+wawHktE+cjPcb9CdyDhbabcs04nHGBvwr4mWj6pr6DlAqGbTkD1bOqCpZpVwFkDhdbDma6574xnBZkGjXW5OMqfifElYkAlFvOYrOE0l4IvWbQ80t6gDTRzf3LRHG2eDaSu13VGcjxa6pyGw/aWjs8P9MGfDDitXdu4QUqYrVF9RkxXwt3f3d7H2a+AOYXL4YYN7hgjCnqWd8FedAZrR6oPv8gkY+EUT0nIFbr1BjvNMmF4rgI+ADTsgmkSVfMz8U1N7wi3YWV0z0/qEVqRKGkbvC8p6vSwM6LgXEVEItyUpZUKEhc",
+                "format": "xai-responses-v1",
+                "id": "rs_568a1550-a5e2-defc-bc7d-a1c48560786b_us-east-1",
+                "index": 0,
+                "type": "reasoning.encrypted"
               }
             ],
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "length"
+          "native_finish_reason": null
         }
       ],
-      "created": 1760532613,
-      "id": "gen-1760532613-74Z0frVMuv8AVVuY5KEF",
+      "created": 1762105058,
+      "id": "gen-1762105058-xeYgMftSRJohL9HmZqJ4",
       "model": "x-ai/grok-3-mini",
       "object": "chat.completion",
       "provider": "xAI",
-      "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 262,
-        "completion_tokens_details": {
-          "reasoning_tokens": 252
-        },
+        "completion_tokens": 11,
         "prompt_tokens": 10,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 2
-        },
-        "total_tokens": 272
+        "total_tokens": 21
       }
     },
     "headers": {
@@ -80,7 +79,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef70e1ea2ceb5d-ORD"
+        "998566a80935e81d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,7 +88,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:50:13 GMT"
+        "Sun, 02 Nov 2025 17:37:38 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

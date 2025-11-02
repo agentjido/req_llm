@@ -62,13 +62,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Sure, here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\nBecause there are too many cheetahs! 😸\n\nHope that gave you a chuckle!",
-            "reasoning": "Hmm, the user asked for a cat joke, which is a simple request that doesn't require any tool usage. The weather function I have access to wouldn't be relevant here. \n\nI should just respond with a lighthearted cat joke to fulfill the request. Since it's a straightforward humor request, I can pull from common cat joke patterns - maybe something about their quirky behaviors or the classic laser pointer trope.\n\nThe joke should be short, cat-themed, and hopefully amusing. I'll go with a simple one about cats and laser pointers since it's relatable to cat owners and captures feline curiosity in a humorous way.",
+            "content": "Why don't cats play poker in the jungle?\n\nToo many cheetahs! \n\nHere's another one: What do you call a cat that's good at computers?\n\nA copy cat! 😸",
+            "reasoning": "Hmm, the user asked for a cat joke, which is a straightforward request that doesn't require any tool usage. The weather tool isn't relevant here since it's just a humor request. \n\nI should keep it light and playful. A classic cat joke with a pun would work well - something about cats and computers feels modern and relatable. \n\nThe \"copy cat\" pun is simple but effective, and the follow-up line adds a bit of tech humor. This should meet the user's expectation for a quick, amusing response without overcomplicating it.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "Hmm, the user asked for a cat joke, which is a simple request that doesn't require any tool usage. The weather function I have access to wouldn't be relevant here. \n\nI should just respond with a lighthearted cat joke to fulfill the request. Since it's a straightforward humor request, I can pull from common cat joke patterns - maybe something about their quirky behaviors or the classic laser pointer trope.\n\nThe joke should be short, cat-themed, and hopefully amusing. I'll go with a simple one about cats and laser pointers since it's relatable to cat owners and captures feline curiosity in a humorous way.",
+                "text": "Hmm, the user asked for a cat joke, which is a straightforward request that doesn't require any tool usage. The weather tool isn't relevant here since it's just a humor request. \n\nI should keep it light and playful. A classic cat joke with a pun would work well - something about cats and computers feels modern and relatable. \n\nThe \"copy cat\" pun is simple but effective, and the follow-up line adds a bit of tech humor. This should meet the user's expectation for a quick, amusing response without overcomplicating it.",
                 "type": "reasoning.text"
               }
             ],
@@ -78,23 +78,18 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760546578,
-      "id": "gen-1760546578-ZBshzdbv6rWzaeqj2fO1",
+      "created": 1762105136,
+      "id": "gen-1762105136-8K2ysrLwhcX7K3LJfw1l",
       "model": "deepseek/deepseek-v3.1-terminus",
       "object": "chat.completion",
-      "provider": "Novita",
-      "system_fingerprint": "",
+      "provider": "AtlasCloud",
       "usage": {
-        "completion_tokens": 165,
+        "completion_tokens": 155,
         "completion_tokens_details": {
-          "reasoning_tokens": 126
+          "reasoning_tokens": 114
         },
         "prompt_tokens": 161,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 0
-        },
-        "total_tokens": 326
+        "total_tokens": 316
       }
     },
     "headers": {
@@ -102,7 +97,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0c5d19c77124c-ORD"
+        "9985688d59c29d58-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -111,7 +106,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:42:59 GMT"
+        "Sun, 02 Nov 2025 17:38:56 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

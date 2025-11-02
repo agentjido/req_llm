@@ -98,18 +98,18 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "**Fetching weather info**\n\nI need to get the weather for Paris, France. I’ll use the get_weather tool and choose Celsius as the unit since that's probably the default. The tool requires a specific unit, so I have to make sure I set it to \"Celsius.\" After that, I’ll just return the result. It should be a straightforward single tool call, making this process simpler and more efficient!",
+            "reasoning": "**Fetching weather info**\n\nI need to get the weather for Paris, France, and I'm thinking Celsius might be the unit to use since the user didn't specify. It's a good idea to either ask the user for their preferred unit or just provide both Celsius and Fahrenheit as options. I can make one tool call using functions.get_weather and then respond with a summary based on that. Let’s go ahead and do it!",
             "reasoning_details": [
               {
                 "format": "openai-responses-v1",
                 "index": 0,
-                "summary": "**Fetching weather info**\n\nI need to get the weather for Paris, France. I’ll use the get_weather tool and choose Celsius as the unit since that's probably the default. The tool requires a specific unit, so I have to make sure I set it to \"Celsius.\" After that, I’ll just return the result. It should be a straightforward single tool call, making this process simpler and more efficient!",
+                "summary": "**Fetching weather info**\n\nI need to get the weather for Paris, France, and I'm thinking Celsius might be the unit to use since the user didn't specify. It's a good idea to either ask the user for their preferred unit or just provide both Celsius and Fahrenheit as options. I can make one tool call using functions.get_weather and then respond with a summary based on that. Let’s go ahead and do it!",
                 "type": "reasoning.summary"
               },
               {
-                "data": "gAAAAABo75iZo2X2dN-gyIy_k2VNoDTLF13Yc7CAbn0T7CVoOQiNlKx8WRl4JOO-fqaxsQWXChqzH-ONPm4i-ofE9rBV2JrbALGXtKYNmecNB-EpMIICqb7XION7iY7E5t51NfOYLZf0fhrCRz1LYotuOyN2bh_VLFQTz96NobkrmcwFWWcZW4oAsaowQWcJu5WEHPI68zerjjIwlW3NbiMF8c6tx780EDHBa7Z73hBpXw0GfOJDkU0GNumfPoRc-bj4IB86mnsn1t6Xv5o9iNBQc8kLoD69grlU4ZtxXWipQp8E8P8_REBXuPIbCg7mIxt404_Tchw0jag59lZNqCyG055kfJwNuYhPXgC-l-n0o_neZEVC3tePRN5FcruCLsrdwF4gakhJEA0BU9hD6lb4eCRx8lq-TbUM0KblkNzsnJGtB86I61TcBvXKmKh5V75dqLuK5prxUiS2hiXGY6vb74YLmXB_J7SGp21aDuXmziybdNhsO0jia9buhUMbQ7ZA14S3xMVEsTOiPVz8wCZ4sf8FfLfgQj_nc9oR0KA9fQwTCODsJNeyu9NYe2JTnIoEn27GtTAsb2pnoHtIclnd56Kh-_QQeo4ZXdhNWxeg0crvr-E8L903SWaHXjpMNQfdwwwcy2DT5mI81mAaZcp88gU_gA3WuSUKdifb4KKJvnYTdYED8DeLTDQ42wGgMD-Gztmv6qpavs1rXaWV_WF4KbK5XSfT3QLGOlkcPaIQgBGpv4nfv7k-eQlj-mY1vx5MFR-iu5FjXarpePiTZV1y8OvH5KUhBxH6WIzjhkda3p0MufOciXPzLyZqcTbZZcii2E0CldGV46h2sc06Jld_uEsRVEoLV0kYfgEI2MhkW1VYxGp1248lgeKNqcGyd8zw0u4rzKc2VAJmBevkcLcS7KQHI5kE-_cLiznZamePDTWrUA1bMOVOi362h-G2B1CbrmnfoMzfmroAeIWEFAd-eje0zQFbpCSSiCzt2QkAddW1LDW12M8SM-MlqeKouwKbOR4N8ueetnisMYJL73VmNXpEckzvVu1BGh9hEKHnQcKchIGduarhoQeMVsC0Eg_rWeao8VNjTmFGIwX7JQehBaOSBKBdO2bRLe3soEZOlh4q2lZOiHFxtWnqhcgp84cyrvKnDxPO",
+                "data": "gAAAAABpB5bCXZBgzX2w3C5W08LUckfllalj8iyFsk7-q8_DxXGTF3iB4sm7DE2FBuwnd3FVZkcs6zXO8ow-p_AnlnmbrUIRcAxxfEbAd19uaVzfAovN-pwdWSET3onCcTOwNxJUQmL81ccAZa7xs-g7rkvLpjEtFXtTVICa90Uo-NwUO8OiLkAxnDqSiMUevgG6uIbwpa9eHHpZ34DWGnA7NifuTBf-SHwWKQUQ0CACyO8XHgNw0FKjYY03tAwRadHfvEol1TL74xiq0yZpOnIrKDGEqU4pncOU3rR-67xrxhWoJduSB53S6jv1YZFFZjTCJ5Kr65RKoKrSzOHaX0Q6icQpN87P5XjqakaibU7-g2ZgvoSEPj6Dp3TbzhirmicIqw6gfHbqSt9ZIZskiovCM9Hq9HnSP7e2oEiUDwAy7VxxUUZLQBoh5rBINm_dl__R5X91Q3pSJH-in2yCl-xDXuWF9ohDfb3YAiJIYzmCA-A8Nch1EH80rxs_VuC1BKpw1c9i_s5CLWSRbMDmjDEAutp67M49RQun3JCpkIlkg_1e5omF_hAZjKyGEJHvgcmT3pFjgNqBwsFYc4FxYZYYvnxGS0v_OOoM-8Uof4AGIdnkTgKiAyHGEjXBKAZDe9UsL1eszYrDliu8vsOLey1_-5RPGH2QfsQJCLYWSl8n3LPZLmsVosXxU2lJzVb21E4zNoBGyhuG8ybkLz0U587i_DNKO8E43iSmeS6vzGNg7hagFKsxiIXe_yWovCxTsBqzBCfgdmiAUhjbpwYNtQoqTeR1Ie3UceLSFrWFGMAq_UZnAIx5wWxRmGInw1bNktXYvTI0mNXalTryboKryQTBw0NQ-pH0V2BHUen2ArRrhagqDQA62AV_t-Ze6P_-IxAh65LeQIm-onFVzf4UhbOO3QdemsjWz_ypNABrEHqIQRHF2gy7ladlWbajf87tPzoBALl3GMi-M8fYsMMSEN7BSqOseyMfj_jywAutVF0aF7G3rr4UuAI9xgnuIwK3tvycPJ6IESsys-YyqZ29uiEc4FWKeJBnvqg0dHHZ7wOBh1gwczVw3Zp_xJGAGxuj-OnpPfnDSxyM3W7MrFiL9UJbD5Es75sTbJKpdOzsH7usqyAKnwQURai_Z5YmGmXKB4hXpEtKSs-WIW9MQF3ne53vtEFYVB3ao8UloVMec9tDffmch6ws9xsLoq3_zZ6lz_gwuajs4c_yjd6F2XiIQ61xvR8i8CmcJy_CObOuPALY9Du0-KL7Z6lX_nMt0Pi7mlXw5iGzuaUOLEBE0wkRyK4yS_H8gCcWiVvk9iXofP8GQPvuOnZF-N_YNhiaarlS7_24LHde03-g4RUvT1J7K0rSaIJ_VztUcd4g8hZsbVixIk1dOAep3vlQzHH4zuK_nvj8wyCd_AMu",
                 "format": "openai-responses-v1",
-                "id": "rs_0972da9f8e01b64e0168ef9894b7a481948b8479bb8462be59",
+                "id": "rs_03481c76f3c9c05101690796bf357c8196ab7385f3129b8dea",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -122,7 +122,7 @@
                   "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "call_4oMLh3C4SwjwpPQLrOZNtHjv",
+                "id": "call_Xu4fbDct2Gmo5PF4pmF0Qetu",
                 "index": 0,
                 "type": "function"
               }
@@ -131,15 +131,18 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1760532628,
-      "id": "gen-1760532628-N61IHTgx4MpaJrPSJZAt",
+      "created": 1762105022,
+      "id": "gen-1762105022-i1cPnyyXZz0szV0vJZU4",
       "model": "openai/gpt-5-nano",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
-        "completion_tokens": 27,
+        "completion_tokens": 91,
+        "completion_tokens_details": {
+          "reasoning_tokens": 64
+        },
         "prompt_tokens": 104,
-        "total_tokens": 131
+        "total_tokens": 195
       }
     },
     "headers": {
@@ -147,7 +150,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef713cfeda61c9-ORD"
+        "998565c73dd52315-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -156,7 +159,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:50:28 GMT"
+        "Sun, 02 Nov 2025 17:37:02 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

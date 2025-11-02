@@ -66,25 +66,20 @@
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "stop"
+          "native_finish_reason": "completed"
         }
       ],
-      "created": 1760532572,
-      "id": "gen-1760532572-nsNYDKSaaoKgz0gOGyDA",
+      "created": 1762105037,
+      "id": "gen-1762105037-zK2gU1RbGNlB1RAWKq9Z",
       "model": "x-ai/grok-3",
       "object": "chat.completion",
       "provider": "xAI",
-      "system_fingerprint": "fp_301fb74d4b",
       "usage": {
         "completion_tokens": 18,
         "completion_tokens_details": {
           "reasoning_tokens": 0
         },
         "prompt_tokens": 259,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 236
-        },
         "total_tokens": 277
       }
     },
@@ -93,7 +88,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6fe34a2c0042-ORD"
+        "99856625f9ab0001-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -102,7 +97,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:32 GMT"
+        "Sun, 02 Nov 2025 17:37:17 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

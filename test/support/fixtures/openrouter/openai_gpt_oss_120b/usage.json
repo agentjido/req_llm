@@ -41,12 +41,12 @@
           "logprobs": null,
           "message": {
             "content": "Hello! How can I help you today?",
-            "reasoning": "The user says \"Hi there!\" It's a greeting. We should respond politely. No special instructions. So just a friendly greeting.",
+            "reasoning": "The user says \"Hi there!\" It's a greeting. We respond friendly.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "The user says \"Hi there!\" It's a greeting. We should respond politely. No special instructions. So just a friendly greeting.",
+                "text": "The user says \"Hi there!\" It's a greeting. We respond friendly.",
                 "type": "reasoning.text"
               }
             ],
@@ -56,15 +56,18 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532507,
-      "id": "gen-1760532507-wu6p5UsFsw6EbLvkp9cl",
+      "created": 1762105001,
+      "id": "gen-1762105001-dq2jng0Ev9De3Im46jUv",
       "model": "openai/gpt-oss-120b",
       "object": "chat.completion",
-      "provider": "Fireworks",
+      "provider": "NCompass",
       "usage": {
-        "completion_tokens": 45,
-        "prompt_tokens": 75,
-        "total_tokens": 120
+        "completion_tokens": 34,
+        "completion_tokens_details": {
+          "reasoning_tokens": 16
+        },
+        "prompt_tokens": 72,
+        "total_tokens": 106
       }
     },
     "headers": {
@@ -72,7 +75,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6e4d7bebb838-ORD"
+        "998565402cd3f60e-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -81,7 +84,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:28 GMT"
+        "Sun, 02 Nov 2025 17:36:42 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

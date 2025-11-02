@@ -40,31 +40,26 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hey there! \"Hello world!\"—starting with the classics, I see! How can I help you today? 😊",
+            "content": "Hey there! \"Hello world!\"—a classic, love it! How can I help you today? 😊",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "stop"
+          "native_finish_reason": "completed"
         }
       ],
-      "created": 1760532571,
-      "id": "gen-1760532571-AaJG90rSAdeQi3ck3usH",
+      "created": 1762105040,
+      "id": "gen-1762105040-xR5U9G7oVhDzXDUhQzZG",
       "model": "x-ai/grok-3",
       "object": "chat.completion",
       "provider": "xAI",
-      "system_fingerprint": "fp_301fb74d4b",
       "usage": {
-        "completion_tokens": 25,
+        "completion_tokens": 23,
         "completion_tokens_details": {
           "reasoning_tokens": 0
         },
         "prompt_tokens": 9,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 2
-        },
-        "total_tokens": 34
+        "total_tokens": 32
       }
     },
     "headers": {
@@ -72,7 +67,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6fdbfe870042-ORD"
+        "998566340aa90001-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -81,7 +76,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:31 GMT"
+        "Sun, 02 Nov 2025 17:37:20 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

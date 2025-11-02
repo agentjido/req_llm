@@ -39,7 +39,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "**The Legend of the Eternal Flame**  \n\n### **Prologue: The Forgotten Prophecy**  \nLong ago, in the age when dragons ruled the skies and magic flowed like rivers through the land, the world of Eldoria was divided. The great Dragon King, Ignarion the Eternal, had united the five dragon clans under his rule, bringing peace between fire, ice, storm, earth, and shadow dragons. But peace was fragile, and when Ignarion vanished without a",
+            "content": "**The Last Dragonriders: A Tale of Fire and Fate**  \n\n### **Prologue: The Forgotten Prophecy**  \n\nLong ago, in the age of the First Flames, the world of Eldrador was ruled by dragons. These magnificent beasts soared through the skies, their wings casting shadows over vast kingdoms of men, elves, and dwarves. The greatest among them, the Elder Wyrms, were beings of immense wisdom and power, their scales shimmering like molten",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -47,16 +47,21 @@
           "native_finish_reason": "length"
         }
       ],
-      "created": 1760532477,
-      "id": "gen-1760532477-wVVi3Ov3cGJbbmkzfQGl",
+      "created": 1762104936,
+      "id": "gen-1762104936-DKZGc7l0osESvudyLBff",
       "model": "deepseek/deepseek-chat-v3-0324",
       "object": "chat.completion",
-      "provider": "GMICloud",
+      "provider": "Novita",
+      "system_fingerprint": "",
       "usage": {
         "completion_tokens": 100,
-        "prompt_tokens": 14,
-        "prompt_tokens_details": null,
-        "total_tokens": 114
+        "completion_tokens_details": null,
+        "prompt_tokens": 12,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 2
+        },
+        "total_tokens": 112
       }
     },
     "headers": {
@@ -64,7 +69,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6d91ca5a115e-ORD"
+        "998563ae296711fb-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -73,7 +78,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:47:58 GMT"
+        "Sun, 02 Nov 2025 17:35:37 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

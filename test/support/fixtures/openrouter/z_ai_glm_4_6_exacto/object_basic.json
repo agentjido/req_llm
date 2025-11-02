@@ -79,13 +79,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "",
-            "reasoning": "\nThe user wants me to generate a software engineer profile. Looking at the available function, I have a \"structured_output\" function that can generate a profile with name, age, and occupation fields. \n\nThe required parameters are:\n- name (required)\n- age (required) \n- occupation (optional)\n\nSince the user wants a software engineer profile, I should:\n1. Set occupation to \"Software Engineer\" \n2. Choose a reasonable name for a software engineer\n3. Choose a reasonable age for a software engineer\n\nLet me create a realistic software engineer profile.",
+            "content": "\nI'll generate a software engineer profile for you using the structured format.\n",
+            "reasoning": "\nThe user wants me to generate a software engineer profile. Looking at the available function, I have a \"structured_output\" function that can generate a profile with name, age, and occupation fields. \n\nThe required parameters are:\n- name (required)\n- age (required) \n- occupation (optional)\n\nSince they want a software engineer profile, I should:\n1. Set occupation to \"Software Engineer\" \n2. Provide a realistic name\n3. Provide a reasonable age for a software engineer\n\nLet me call the function with appropriate values.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "\nThe user wants me to generate a software engineer profile. Looking at the available function, I have a \"structured_output\" function that can generate a profile with name, age, and occupation fields. \n\nThe required parameters are:\n- name (required)\n- age (required) \n- occupation (optional)\n\nSince the user wants a software engineer profile, I should:\n1. Set occupation to \"Software Engineer\" \n2. Choose a reasonable name for a software engineer\n3. Choose a reasonable age for a software engineer\n\nLet me create a realistic software engineer profile.",
+                "text": "\nThe user wants me to generate a software engineer profile. Looking at the available function, I have a \"structured_output\" function that can generate a profile with name, age, and occupation fields. \n\nThe required parameters are:\n- name (required)\n- age (required) \n- occupation (optional)\n\nSince they want a software engineer profile, I should:\n1. Set occupation to \"Software Engineer\" \n2. Provide a realistic name\n3. Provide a reasonable age for a software engineer\n\nLet me call the function with appropriate values.",
                 "type": "reasoning.text"
               }
             ],
@@ -94,10 +94,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"age\":28,\"name\":\"Alexandra Chen\",\"occupation\":\"Software Engineer\"}",
+                  "arguments": "{\"name\": \"Alexandra Chen\", \"age\": \"28\", \"occupation\": \"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "call_2f6e89e3694746e8913a07b6",
+                "id": "call_d1e4",
                 "index": 0,
                 "type": "function"
               }
@@ -106,21 +106,16 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1761606518,
-      "id": "gen-1761606518-zuNGrOPr6YFQ33b6uds6",
+      "created": 1762105239,
+      "id": "gen-1762105239-3iTt5EIqov77Hju4vpDX",
       "model": "z-ai/glm-4.6:exacto",
       "object": "chat.completion",
-      "provider": "Novita",
-      "system_fingerprint": "",
+      "provider": "DeepInfra",
       "usage": {
-        "completion_tokens": 150,
-        "completion_tokens_details": null,
-        "prompt_tokens": 219,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 43
-        },
-        "total_tokens": 369
+        "completion_tokens": 159,
+        "prompt_tokens": 229,
+        "prompt_tokens_details": null,
+        "total_tokens": 388
       }
     },
     "headers": {
@@ -128,7 +123,7 @@
         "*"
       ],
       "cf-ray": [
-        "9955db414db22323-ORD"
+        "99856b13fa16a6ee-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -137,7 +132,7 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 23:08:38 GMT"
+        "Sun, 02 Nov 2025 17:40:39 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

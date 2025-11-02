@@ -80,24 +80,16 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "Okay, the user wants me to generate a software engineer profile. Let me check the tools provided. There's a structured_output function that requires name, age, and occupation. The required fields are name and age, occupation is optional but the user specified \"software engineer\" so I should include that.\n\nFirst, I need to come up with a name. Maybe something common like \"Alex Johnson\". Age should be a positive integer, let's pick 28. Occupation is \"Software Engineer\". Wait, the schema says occupation is a string, so \"Software Engineer\" is fine.\n\nWait, the parameters for structured_output require name and age. Occupation is optional but since the user asked for a software engineer profile, including occupation makes sense. Let me make sure the required fields are covered. Name and age are required, so I'll have those. Occupation can be added as well.\n\nSo the arguments should be name: \"Alex Johnson\", age: 28, occupation: \"Software Engineer\". Let me check the schema again. The occupation is a string, so that's okay. The age must be at least 1, 28 is valid.\n\nI need to output this in the tool_call format. The function name is structured_output, and the arguments are the JSON object with those fields. Let me structure that correctly.\n",
-            "reasoning_details": [
-              {
-                "format": "unknown",
-                "index": 0,
-                "text": "Okay, the user wants me to generate a software engineer profile. Let me check the tools provided. There's a structured_output function that requires name, age, and occupation. The required fields are name and age, occupation is optional but the user specified \"software engineer\" so I should include that.\n\nFirst, I need to come up with a name. Maybe something common like \"Alex Johnson\". Age should be a positive integer, let's pick 28. Occupation is \"Software Engineer\". Wait, the schema says occupation is a string, so \"Software Engineer\" is fine.\n\nWait, the parameters for structured_output require name and age. Occupation is optional but since the user asked for a software engineer profile, including occupation makes sense. Let me make sure the required fields are covered. Name and age are required, so I'll have those. Occupation can be added as well.\n\nSo the arguments should be name: \"Alex Johnson\", age: 28, occupation: \"Software Engineer\". Let me check the schema again. The occupation is a string, so that's okay. The age must be at least 1, 28 is valid.\n\nI need to output this in the tool_call format. The function name is structured_output, and the arguments are the JSON object with those fields. Let me structure that correctly.\n",
-                "type": "reasoning.text"
-              }
-            ],
+            "reasoning": null,
             "refusal": null,
             "role": "assistant",
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"age\": 28, \"name\": \"Alex Johnson\", \"occupation\": \"Software Engineer\"}",
+                  "arguments": "{\"age\": 12, \"name\": \"John Doe\", \"occupation\": \"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "call_2b2c3da7cdf64cfc92828459",
+                "id": "019a45a77798d87838fab5484428f36f",
                 "index": 0,
                 "type": "function"
               }
@@ -106,16 +98,16 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760532590,
-      "id": "gen-1760532590-1dOwN8jJG8397UwCvgt0",
+      "created": 1762105192,
+      "id": "gen-1762105192-fD8vEplEqqTyw39lGxJz",
       "model": "qwen/qwen3-30b-a3b-thinking-2507",
       "object": "chat.completion",
-      "provider": "Chutes",
+      "provider": "SiliconFlow",
+      "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 303,
-        "prompt_tokens": 211,
-        "prompt_tokens_details": null,
-        "total_tokens": 514
+        "completion_tokens": 21,
+        "prompt_tokens": 220,
+        "total_tokens": 241
       }
     },
     "headers": {
@@ -123,7 +115,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef7053bfdf60a1-ORD"
+        "998569ee48eb514c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -132,7 +124,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:52 GMT"
+        "Sun, 02 Nov 2025 17:39:54 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

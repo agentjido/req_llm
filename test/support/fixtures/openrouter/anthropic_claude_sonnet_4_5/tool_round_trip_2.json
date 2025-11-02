@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo2NDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6InRvb2x1X3ZydHhfMDFBbkh2ZXJLYWNEeEx0bjlkMVRxOHlZIiwidHlwZSI6ImZ1bmN0aW9uIn1dfSx7ImNvbnRlbnQiOiI1IiwibmFtZSI6ImFkZCIsInJvbGUiOiJ0b29sIiwidG9vbF9jYWxsX2lkIjoidG9vbHVfdnJ0eF8wMUFuSHZlckthY0R4THRuOWQxVHE4eVkifV0sIm1vZGVsIjoiYW50aHJvcGljL2NsYXVkZS1zb25uZXQtNC41IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjo2NDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6InRvb2x1X3ZydHhfMDE4NjhWMVBxYXliZFlzWDhIMkdZVGFnIiwidHlwZSI6ImZ1bmN0aW9uIn1dfSx7ImNvbnRlbnQiOiI1IiwibmFtZSI6ImFkZCIsInJvbGUiOiJ0b29sIiwidG9vbF9jYWxsX2lkIjoidG9vbHVfdnJ0eF8wMTg2OFYxUHFheWJkWXNYOEgyR1lUYWcifV0sIm1vZGVsIjoiYW50aHJvcGljL2NsYXVkZS1zb25uZXQtNC41IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
       "max_tokens": 6400,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "toolu_vrtx_01AnHverKacDxLtn9d1Tq8yY",
+              "id": "toolu_vrtx_01868V1PqaybdYsX8H2GYTag",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "toolu_vrtx_01AnHverKacDxLtn9d1Tq8yY"
+          "tool_call_id": "toolu_vrtx_01868V1PqaybdYsX8H2GYTag"
         }
       ],
       "model": "anthropic/claude-sonnet-4.5",
@@ -68,8 +68,8 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532482,
-      "id": "gen-1760532482-qMzbsXuIbreCViWOfCUY",
+      "created": 1762104933,
+      "id": "gen-1762104933-onCrIRXdnYf8kyYMc2y3",
       "model": "anthropic/claude-sonnet-4.5",
       "object": "chat.completion",
       "provider": "Google",
@@ -84,7 +84,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6dae3d82e80e-ORD"
+        "99856398a9648f4f-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -93,7 +93,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:03 GMT"
+        "Sun, 02 Nov 2025 17:35:33 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

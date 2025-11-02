@@ -67,46 +67,28 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "tool_calls",
+          "finish_reason": "stop",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "",
+            "content": "I'll use the add tool to compute 2 + 3.<｜tool▁calls▁begin｜><｜tool▁call▁begin｜>add<｜tool▁sep｜>",
             "reasoning": null,
             "refusal": null,
-            "role": "assistant",
-            "tool_calls": [
-              {
-                "function": {
-                  "arguments": "{\"a\": 2, \"b\": 3}",
-                  "name": "add"
-                },
-                "id": "call_bo717ku2dz54qrl4euvvu6aa",
-                "index": 0,
-                "type": "function"
-              }
-            ]
+            "role": "assistant"
           },
-          "native_finish_reason": "tool_calls"
+          "native_finish_reason": "stop"
         }
       ],
-      "created": 1760546564,
-      "id": "gen-1760546564-N4g9UMZZRDTBwMrx6USx",
+      "created": 1762105077,
+      "id": "gen-1762105077-uz2JvkVffR6WHC7Av3wR",
       "model": "deepseek/deepseek-v3.1-terminus",
       "object": "chat.completion",
-      "provider": "Novita",
-      "system_fingerprint": "",
+      "provider": "Chutes",
       "usage": {
-        "completion_tokens": 17,
-        "completion_tokens_details": {
-          "reasoning_tokens": 0
-        },
-        "prompt_tokens": 188,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 0
-        },
-        "total_tokens": 205
+        "completion_tokens": 33,
+        "prompt_tokens": 190,
+        "prompt_tokens_details": null,
+        "total_tokens": 223
       }
     },
     "headers": {
@@ -114,7 +96,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0c57a5e4d124c-ORD"
+        "9985671d4d0c9d58-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -123,7 +105,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:42:48 GMT"
+        "Sun, 02 Nov 2025 17:38:00 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

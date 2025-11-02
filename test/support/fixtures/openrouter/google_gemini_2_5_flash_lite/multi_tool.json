@@ -93,17 +93,17 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "tool_calls",
+          "finish_reason": "stop",
           "index": 0,
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "**Accessing Weather Data**\n\nI'm focusing on fulfilling the request for Paris, France weather. The `get_weather` tool is the right choice here. I'll set the location parameter to \"Paris, France\" and omit the unit parameter as it wasn't specified.\n\n**Gathering Weather Information**\n\nI'm proceeding with the request for Paris, France's weather. The `get_weather` tool is the appropriate function. I will specify \"Paris, France\" for the location parameter and leave the unit parameter blank as no preference was stated.\n\n",
+            "reasoning": "**Finding Paris Weather**\n\nI'm focusing on fulfilling the request for Paris weather. I've identified the `get_weather` tool and determined that \"Paris, France\" is the necessary `location` parameter. I'll omit the `unit` parameter as it wasn't specified.\n\n**Getting Paris Weather Details**\n\nI'm now processing the request for Paris weather. My current thought is to utilize the `get_weather` tool, specifically setting the `location` to \"Paris, France\" while leaving the `unit` parameter unspecified as per the user's input.\n\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "**Accessing Weather Data**\n\nI'm focusing on fulfilling the request for Paris, France weather. The `get_weather` tool is the right choice here. I'll set the location parameter to \"Paris, France\" and omit the unit parameter as it wasn't specified.\n\n**Gathering Weather Information**\n\nI'm proceeding with the request for Paris, France's weather. The `get_weather` tool is the appropriate function. I will specify \"Paris, France\" for the location parameter and leave the unit parameter blank as no preference was stated.\n\n",
+                "text": "**Finding Paris Weather**\n\nI'm focusing on fulfilling the request for Paris weather. I've identified the `get_weather` tool and determined that \"Paris, France\" is the necessary `location` parameter. I'll omit the `unit` parameter as it wasn't specified.\n\n**Getting Paris Weather Details**\n\nI'm now processing the request for Paris weather. My current thought is to utilize the `get_weather` tool, specifically setting the `location` to \"Paris, France\" while leaving the `unit` parameter unspecified as per the user's input.\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -115,7 +115,7 @@
                   "arguments": "{\"location\":\"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "tool_0_get_weather_auiZ7QoxZHG24XHkpDdu",
+                "id": "tool_0_get_weather_sF4QFkNqvSBJYi7QlYGR",
                 "index": 0,
                 "type": "function"
               }
@@ -124,8 +124,8 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1760546983,
-      "id": "gen-1760546983-DvwrKeT6ROUWMDzauIgd",
+      "created": 1762104950,
+      "id": "gen-1762104950-4ZgXpo7itFYEr48Tb3nJ",
       "model": "google/gemini-2.5-flash-lite",
       "object": "chat.completion",
       "provider": "Google",
@@ -147,7 +147,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0cfb3bdd4ff5b-ORD"
+        "998564039fafc365-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -156,7 +156,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:49:43 GMT"
+        "Sun, 02 Nov 2025 17:35:51 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

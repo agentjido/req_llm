@@ -41,13 +41,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "**Internal Thinking (brief):**\n- Multiply 12 by 7.\n- 10 × 7 = 70\n- 2 × 7 = 14\n- Add the partial results: 70 + 14 = 84.\n\n**Answer:** 12 × 7 = **84**.",
-            "reasoning": "We just compute 12*7 = 84. Provide brief internal thinking.",
+            "content": "**Internal thinking (brief):**  \n\n- Multiply 12 by 7.  \n- 10 × 7 = 70.  \n- 2 × 7 = 14.  \n- Add the partial results: 70 + 14 = 84.  \n\n**Answer:** \\(12 \\times 7 = 84\\).",
+            "reasoning": "We need to compute 12*7 = 84. Show internal reasoning briefly.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "We just compute 12*7 = 84. Provide brief internal thinking.",
+                "text": "We need to compute 12*7 = 84. Show internal reasoning briefly.",
                 "type": "reasoning.text"
               }
             ],
@@ -57,14 +57,18 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1761606483,
-      "id": "gen-1761606483-Kw4to9ilwYpGt9YMBISd",
+      "created": 1762105037,
+      "id": "gen-1762105037-q5VlOc1aWoXxhsfhWC8x",
       "model": "openai/gpt-oss-120b:exacto",
       "object": "chat.completion",
-      "provider": "DeepInfra",
+      "provider": "Novita",
+      "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 92,
-        "prompt_tokens": 87,
+        "completion_tokens": 99,
+        "completion_tokens_details": {
+          "reasoning_tokens": 17
+        },
+        "prompt_tokens": 80,
         "prompt_tokens_details": null,
         "total_tokens": 179
       }
@@ -74,7 +78,7 @@
         "*"
       ],
       "cf-ray": [
-        "9955da683c14eaf0-ORD"
+        "99856622b952a6ee-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -83,7 +87,7 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 23:08:03 GMT"
+        "Sun, 02 Nov 2025 17:37:18 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

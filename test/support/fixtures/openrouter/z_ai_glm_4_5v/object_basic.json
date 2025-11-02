@@ -79,25 +79,17 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "\nI'll help you generate a software engineer profile. Let me create a sample profile for you.\n",
-            "reasoning": "The user wants me to generate a software engineer profile. I should use the `structured_output` tool for this purpose. The required parameters are `name` and `age`. Since no specific details were provided, I'll create a generic profile with reasonable values.",
-            "reasoning_details": [
-              {
-                "format": "unknown",
-                "index": 0,
-                "text": "The user wants me to generate a software engineer profile. I should use the `structured_output` tool for this purpose. The required parameters are `name` and `age`. Since no specific details were provided, I'll create a generic profile with reasonable values.",
-                "type": "reasoning.text"
-              }
-            ],
+            "content": "I'll help you generate a software engineer profile. Let me create a comprehensive profile with relevant details.\n",
+            "reasoning": null,
             "refusal": null,
             "role": "assistant",
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"name\": \"Alex Johnson\", \"age\": 28, \"occupation\": \"Software Engineer\"}",
+                  "arguments": "{\"name\": \"Alex Johnson\", \"age\": 28, \"occupation\": \"Senior Software Engineer at TechInnovate Solutions\"}",
                   "name": "structured_output"
                 },
-                "id": "call_202510152049558e804d4d65294a25_0",
+                "id": "call_20251103013752d61aa03e2e27439d_0",
                 "index": 0,
                 "type": "function"
               }
@@ -106,21 +98,21 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760532594,
-      "id": "gen-1760532594-0uDZISV6xStvf2wNm0e0",
+      "created": 1762105072,
+      "id": "gen-1762105072-sDQSe6wYjVuJpGZQpfxG",
       "model": "z-ai/glm-4.5v",
       "object": "chat.completion",
       "provider": "Novita",
       "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 105,
+        "completion_tokens": 61,
         "completion_tokens_details": null,
         "prompt_tokens": 226,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 4
+          "cached_tokens": 52
         },
-        "total_tokens": 331
+        "total_tokens": 287
       }
     },
     "headers": {
@@ -128,7 +120,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef706d1de6e207-ORD"
+        "998566fdd9092240-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -137,7 +129,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:56 GMT"
+        "Sun, 02 Nov 2025 17:37:52 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

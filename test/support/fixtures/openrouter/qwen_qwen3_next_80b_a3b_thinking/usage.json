@@ -38,21 +38,29 @@
         {
           "finish_reason": "stop",
           "index": 0,
-          "logprobs": -1.7881393e-6,
+          "logprobs": null,
           "message": {
-            "content": "Hello! 😊 How can I assist you today?",
+            "content": "\n\nHello! 😊 How can I assist you today?",
             "reasoning": "Okay, the user said \"Hi there!\" so I need to respond appropriately. Let me think about how to greet them back.\n\nFirst, I should be friendly and welcoming. Maybe say something like \"Hello!\" or \"Hi!\" to match their tone. Since they used \"Hi there!\", which is a bit casual and cheerful, I can respond in a similar way.\n\nI should also consider if there's anything else they might need. But since they just said hi, probably just a simple greeting is enough. Maybe add a smiley emoji to keep it warm. Like 😊\n\nWait, but sometimes people might have a follow-up question. So after greeting, I can ask how I can help them today. That way, it's open-ended and invites them to share what they need.\n\nSo possible response: \"Hello! 😊 How can I assist you today?\" That sounds good. Let me check if that's appropriate. Yes, it's friendly, professional, and offers assistance.\n\nAlternatively, maybe \"Hi there! 👋 What can I do for you today?\" But the first one is fine. Let's go with \"Hello! 😊 How can I assist you today?\" That's standard and helpful.\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Okay, the user said \"Hi there!\" so I need to respond appropriately. Let me think about how to greet them back.\n\nFirst, I should be friendly and welcoming. Maybe say something like \"Hello!\" or \"Hi!\" to match their tone. Since they used \"Hi there!\", which is a bit casual and cheerful, I can respond in a similar way.\n\nI should also consider if there's anything else they might need. But since they just said hi, probably just a simple greeting is enough. Maybe add a smiley emoji to keep it warm. Like 😊\n\nWait, but sometimes people might have a follow-up question. So after greeting, I can ask how I can help them today. That way, it's open-ended and invites them to share what they need.\n\nSo possible response: \"Hello! 😊 How can I assist you today?\" That sounds good. Let me check if that's appropriate. Yes, it's friendly, professional, and offers assistance.\n\nAlternatively, maybe \"Hi there! 👋 What can I do for you today?\" But the first one is fine. Let's go with \"Hello! 😊 How can I assist you today?\" That's standard and helpful.\n",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532579,
-      "id": "gen-1760532579-sTquhX3MxIDb6X4rzJ2O",
+      "created": 1762105042,
+      "id": "gen-1762105042-9cChqqONrJ5hFSWIFmQj",
       "model": "qwen/qwen3-next-80b-a3b-thinking",
       "object": "chat.completion",
-      "provider": "Together",
+      "provider": "Google",
       "usage": {
         "completion_tokens": 259,
         "prompt_tokens": 13,
@@ -65,7 +73,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef700f8e2361f2-ORD"
+        "998566451eccff5c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -74,7 +82,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:40 GMT"
+        "Sun, 02 Nov 2025 17:37:23 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

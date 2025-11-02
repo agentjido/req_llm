@@ -98,12 +98,12 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "**Evaluating Tool Relevance**\n\nI've zeroed in on the `get_weather` tool. The query for \"Paris, France\" is a clear match for the location parameter. Now I'm assessing if temperature units need to be specified; I'll default to Celsius if not explicitly stated.\n\n\n**Defining Function Calls**\n\nI've determined the appropriate function call is `default_api.get_weather(location='Paris, France')`. The tool's `location` parameter is a direct match for the user's input, and the absence of a unit specification means the default should apply. Now, I'm verifying the final tool code for execution.\n\n\n",
+            "reasoning": "**Assessing Weather Data**\n\nI'm assessing the best way to utilize the `get_weather` tool. It looks like \"Paris, France\" directly maps to the `location` parameter. Now I need to decide if a unit is necessary. The user didn't specify, so I'll need to decide on a default, probably Celsius.\n\n\n**Confirming Tool Parameters**\n\nI've confirmed the direct mapping of \"Paris, France\" to the `location` parameter. The `unit` parameter remains a point of consideration. The user did not specify, so the default must be considered. I'm leaning toward omitting the `unit` for now to align with the tool's default. The print statement is also confirmed to display the results.\n\n\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "**Evaluating Tool Relevance**\n\nI've zeroed in on the `get_weather` tool. The query for \"Paris, France\" is a clear match for the location parameter. Now I'm assessing if temperature units need to be specified; I'll default to Celsius if not explicitly stated.\n\n\n**Defining Function Calls**\n\nI've determined the appropriate function call is `default_api.get_weather(location='Paris, France')`. The tool's `location` parameter is a direct match for the user's input, and the absence of a unit specification means the default should apply. Now, I'm verifying the final tool code for execution.\n\n\n",
+                "text": "**Assessing Weather Data**\n\nI'm assessing the best way to utilize the `get_weather` tool. It looks like \"Paris, France\" directly maps to the `location` parameter. Now I need to decide if a unit is necessary. The user didn't specify, so I'll need to decide on a default, probably Celsius.\n\n\n**Confirming Tool Parameters**\n\nI've confirmed the direct mapping of \"Paris, France\" to the `location` parameter. The `unit` parameter remains a point of consideration. The user did not specify, so the default must be considered. I'm leaning toward omitting the `unit` for now to align with the tool's default. The print statement is also confirmed to display the results.\n\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -115,7 +115,7 @@
                   "arguments": "{\"location\":\"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "tool_0_get_weather_ortABEUabIoufGCN83xt",
+                "id": "tool_0_get_weather_E2wkdMBr41cUe7gXctT3",
                 "index": 0,
                 "type": "function"
               }
@@ -124,22 +124,22 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1760532551,
-      "id": "gen-1760532551-JpisI9EQfegSPHbJIwMb",
+      "created": 1762105020,
+      "id": "gen-1762105020-GnIjvcLmOGWXShVrJ5d7",
       "model": "google/gemini-2.5-pro",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
-        "completion_tokens": 220,
+        "completion_tokens": 228,
         "completion_tokens_details": {
           "image_tokens": 0,
-          "reasoning_tokens": 213
+          "reasoning_tokens": 221
         },
         "prompt_tokens": 53,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 273
+        "total_tokens": 281
       }
     },
     "headers": {
@@ -147,7 +147,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6f5edfacfa17-ORD"
+        "998565b6fc7a132d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -156,7 +156,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:14 GMT"
+        "Sun, 02 Nov 2025 17:37:02 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -39,7 +39,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Title: The Ember-Bound Atlas  \nA Dragon Epic in Seven Cantos  \n(Being the complete tale of the cartographer’s daughter, the sky-broken dragon, and the map that grew a world)\n\n––––––––––––––––––––––––––––  \nCANTO I  \nThe Girl Who Drew What Wasn’t There Yet  \n––––––––––––––––––––––––––––  \n\n1  \nIn the city of Lumineth, where every",
+            "content": "Title: The Ember-Bound Atlas  \nA Dragon-Saga in Seven Cantos  \n––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––  \nCanto I – The Cartographer’s Daughter  \nCanto II – The Egg That Ate Moonlight  \nCanto III – The Sky-Forge of Aetheros  \nCanto IV – The Labyrinth",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -47,16 +47,23 @@
           "native_finish_reason": "length"
         }
       ],
-      "created": 1760532506,
-      "id": "gen-1760532506-qcSM87I8HuSwYRFPCIAu",
+      "created": 1762104959,
+      "id": "gen-1762104959-P40A1DvFNLHkkTJyBOM9",
       "model": "moonshotai/kimi-k2-0905",
       "object": "chat.completion",
-      "provider": "Moonshot AI",
-      "system_fingerprint": "fpv0_41b1161c",
+      "provider": "BaseTen",
+      "system_fingerprint": null,
       "usage": {
         "completion_tokens": 100,
-        "prompt_tokens": 16,
-        "total_tokens": 116
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 34,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "total_tokens": 134
       }
     },
     "headers": {
@@ -64,7 +71,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6e473828cc1a-ORD"
+        "99856439c988e20b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -73,7 +80,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:28 GMT"
+        "Sun, 02 Nov 2025 17:35:59 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

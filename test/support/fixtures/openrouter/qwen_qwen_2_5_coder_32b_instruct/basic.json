@@ -36,27 +36,28 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "length",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! How can I assist you today?",
+            "content": "<think>\nOkay, the user just said \"Hello world!\" which is a classic first message. I should respond in a friendly and welcoming way. Let me make sure to acknowledge their greeting and offer assistance. Maybe add an emoji to keep it approachable",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "stop"
+          "native_finish_reason": "length"
         }
       ],
-      "created": 1760532515,
-      "id": "gen-1760532515-cLlr93JXlH9NGAWO5Cam",
+      "created": 1762105015,
+      "id": "gen-1762105015-0u8097NzZrkxi8R0OLoH",
       "model": "qwen/qwen-2.5-coder-32b-instruct",
       "object": "chat.completion",
-      "provider": "Chutes",
+      "provider": "DeepInfra",
       "usage": {
-        "completion_tokens": 10,
+        "completion_tokens": 50,
         "prompt_tokens": 11,
-        "total_tokens": 21
+        "prompt_tokens_details": null,
+        "total_tokens": 61
       }
     },
     "headers": {
@@ -64,7 +65,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6e7c7956462e-ORD"
+        "998565978f4e258c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -73,7 +74,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:36 GMT"
+        "Sun, 02 Nov 2025 17:36:55 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

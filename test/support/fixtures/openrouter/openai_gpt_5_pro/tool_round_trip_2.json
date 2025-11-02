@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyNzIwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiJjYWxsX2lSWU9GNzNRSnpGc09ncWIwVWprbERpaiIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfaVJZT0Y3M1FKekZzT2dxYjBVamtsRGlqIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1wcm8iLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjoyNzIwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiJjYWxsX25pNmxlejhIMm04TzNKQlNWZEx0UG9iSiIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfbmk2bGV6OEgybThPM0pCU1ZkTHRQb2JKIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1wcm8iLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
       "max_tokens": 27200,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_iRYOF73QJzFsOgqb0UjklDij",
+              "id": "call_ni6lez8H2m8O3JBSVdLtPobJ",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "call_iRYOF73QJzFsOgqb0UjklDij"
+          "tool_call_id": "call_ni6lez8H2m8O3JBSVdLtPobJ"
         }
       ],
       "model": "openai/gpt-5-pro",
@@ -68,8 +68,8 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1761607007,
-      "id": "gen-1761607007-iZ0JQO9PZxJ7uUbVPRZ4",
+      "created": 1762105153,
+      "id": "gen-1762105153-lL0qeaL9nEMt0PcYeTk8",
       "model": "openai/gpt-5-pro",
       "object": "chat.completion",
       "provider": "OpenAI",
@@ -87,7 +87,7 @@
         "*"
       ],
       "cf-ray": [
-        "9955e7366fbb72e5-ORD"
+        "998568f68bef13f3-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -96,7 +96,7 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 23:16:48 GMT"
+        "Sun, 02 Nov 2025 17:39:13 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

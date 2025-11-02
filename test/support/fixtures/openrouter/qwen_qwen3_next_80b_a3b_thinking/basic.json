@@ -39,26 +39,38 @@
         {
           "finish_reason": "stop",
           "index": 0,
-          "logprobs": -1.7881393e-6,
+          "logprobs": null,
           "message": {
-            "content": "Hello! 😊 How can I assist you today?",
-            "reasoning": "Okay, the user said \"Hello world!\" That's a common greeting, maybe even a classic first program in many programming languages. Let me think about how to respond.\n\nFirst, I should acknowledge their greeting. Maybe say something like \"Hello!\" back. But I should keep it friendly and open-ended. They might just be testing if I'm working, or maybe they want to start a conversation.\n\nWait, the user might be a beginner in programming, since \"Hello world\" is often the first example. But they could also just be saying hello in a casual way. I shouldn't assume too much.\n\nI should respond warmly. Maybe add an emoji to keep it friendly. Like a smiley face. Let me check common responses. Usually, people say \"Hello!\" or \"Hi there!\" with a smile.\n\nAlso, maybe ask how I can help them today. That opens the door for them to ask questions or continue the conversation. Let me make sure the response is simple and not too technical unless they indicate otherwise.\n\nSo possible response: \"Hello! 😊 How can I assist you today?\" That seems good. It's friendly, acknowledges their greeting, and offers help.\n\nWait, but maybe they just wanted to see if I respond to \"Hello world\". But regardless, the standard response is to greet back and offer assistance. Yeah, that's safe.\n\nAlternatively, maybe mention the \"Hello World\" reference. Like \"Hello! 😊 Did you just say 'Hello World' as a programming reference, or just a friendly greeting?\" But that might be overcomplicating. If they're a programmer, they might appreciate that, but if not, it could be confusing. Better to keep it simple unless they specify.\n\nSo better to just say \"Hello! 😊 How can I assist you today?\" That's universally appropriate. Yeah, that's the way to go.\n",
+            "content": "Hello! How can I assist you today? 😊",
+            "reasoning": "Okay, the user said \"Hello world!\". That's a common greeting. I should respond politely. Let me think... Maybe say \"Hello!\" back. But maybe add something friendly. Like \"Hello! How can I assist you today?\" Yeah, that sounds good. Let me check if there's anything else. No, keep it simple. They might just be testing if I'm working. So a standard friendly response is best. Yeah, \"Hello! How can I assist you today?\" That's perfect.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Okay, the user said \"Hello world!\". That's a common greeting. I should respond politely. Let me think... Maybe say \"Hello!\" back. But maybe add something friendly. Like \"Hello! How can I assist you today?\" Yeah, that sounds good. Let me check if there's anything else. No, keep it simple. They might just be testing if I'm working. So a standard friendly response is best. Yeah, \"Hello! How can I assist you today?\" That's perfect.",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532571,
-      "id": "gen-1760532571-OGMD3ta5ebbQoU7qVPpi",
+      "created": 1762105044,
+      "id": "gen-1762105044-ZTEXHQvVBP1EV9BpYtUM",
       "model": "qwen/qwen3-next-80b-a3b-thinking",
       "object": "chat.completion",
-      "provider": "Together",
+      "provider": "Novita",
+      "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 394,
-        "prompt_tokens": 13,
+        "completion_tokens": 118,
+        "completion_tokens_details": {
+          "reasoning_tokens": 102
+        },
+        "prompt_tokens": 11,
         "prompt_tokens_details": null,
-        "total_tokens": 407
+        "total_tokens": 129
       }
     },
     "headers": {
@@ -66,7 +78,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6fdc3d3761f2-ORD"
+        "9985664dae7bff5c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -75,7 +87,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:32 GMT"
+        "Sun, 02 Nov 2025 17:37:24 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

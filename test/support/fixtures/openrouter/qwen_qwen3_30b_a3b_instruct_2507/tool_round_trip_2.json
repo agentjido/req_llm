@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyNjIwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiJjYWxsX2U0NTc3Y2FmNWM4MTRjODA5NGJhODRjMSIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfZTQ1NzdjYWY1YzgxNGM4MDk0YmE4NGMxIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMtMzBiLWEzYi1pbnN0cnVjdC0yNTA3IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjoyNjIwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiJjaGF0Y21wbC10b29sLWI3Mzk1YjJjMTFlYTQ3MzJhZmIxZTFmMWRkOTA5NGM2IiwidHlwZSI6ImZ1bmN0aW9uIn1dfSx7ImNvbnRlbnQiOiI1IiwibmFtZSI6ImFkZCIsInJvbGUiOiJ0b29sIiwidG9vbF9jYWxsX2lkIjoiY2hhdGNtcGwtdG9vbC1iNzM5NWIyYzExZWE0NzMyYWZiMWUxZjFkZDkwOTRjNiJ9XSwibW9kZWwiOiJxd2VuL3F3ZW4zLTMwYi1hM2ItaW5zdHJ1Y3QtMjUwNyIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
       "max_tokens": 26200,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_e4577caf5c814c8094ba84c1",
+              "id": "chatcmpl-tool-b7395b2c11ea4732afb1e1f1dd9094c6",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "call_e4577caf5c814c8094ba84c1"
+          "tool_call_id": "chatcmpl-tool-b7395b2c11ea4732afb1e1f1dd9094c6"
         }
       ],
       "model": "qwen/qwen3-30b-a3b-instruct-2507",
@@ -68,15 +68,14 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532540,
-      "id": "gen-1760532540-vISng2Q6gfPRMDZ1i0Gl",
+      "created": 1762105026,
+      "id": "gen-1762105026-uFkShFE0UApgxRZBFKt1",
       "model": "qwen/qwen3-30b-a3b-instruct-2507",
       "object": "chat.completion",
-      "provider": "Chutes",
+      "provider": "AtlasCloud",
       "usage": {
         "completion_tokens": 4,
         "prompt_tokens": 72,
-        "prompt_tokens_details": null,
         "total_tokens": 76
       }
     },
@@ -85,7 +84,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6f175fedff5c-ORD"
+        "998565dfdac6eaf5-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -94,7 +93,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:00 GMT"
+        "Sun, 02 Nov 2025 17:37:07 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

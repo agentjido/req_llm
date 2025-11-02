@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxNjM4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6ImZ1bmN0aW9ucy5hZGQ6MCIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImZ1bmN0aW9ucy5hZGQ6MCJ9XSwibW9kZWwiOiJtb29uc2hvdGFpL2tpbWktazItMDkwNSIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoxNjM4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiSSdsbCB1c2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMgZm9yIHlvdS4iLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiYWRkOjAiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJhZGQ6MCJ9XSwibW9kZWwiOiJtb29uc2hvdGFpL2tpbWktazItMDkwNSIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
       "max_tokens": 1638,
@@ -11,7 +11,7 @@
           "role": "user"
         },
         {
-          "content": [],
+          "content": "I'll use the add tool to compute 2 + 3 for you.",
           "role": "assistant",
           "tool_calls": [
             {
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "functions.add:0",
+              "id": "add:0",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "functions.add:0"
+          "tool_call_id": "add:0"
         }
       ],
       "model": "moonshotai/kimi-k2-0905",
@@ -68,16 +68,16 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532490,
-      "id": "gen-1760532490-yLRMmdonU0j1CWH6syur",
+      "created": 1762104963,
+      "id": "gen-1762104963-gUfDlWzxWf2ky99MaAWZ",
       "model": "moonshotai/kimi-k2-0905",
       "object": "chat.completion",
-      "provider": "Chutes",
+      "provider": "SiliconFlow",
+      "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 4,
-        "prompt_tokens": 90,
-        "prompt_tokens_details": null,
-        "total_tokens": 94
+        "completion_tokens": 3,
+        "prompt_tokens": 103,
+        "total_tokens": 106
       }
     },
     "headers": {
@@ -85,7 +85,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6ddecc9fcc1a-ORD"
+        "99856455cb34e20b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -94,7 +94,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:11 GMT"
+        "Sun, 02 Nov 2025 17:36:04 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

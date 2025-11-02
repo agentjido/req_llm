@@ -80,12 +80,12 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "The user wants a software engineer profile. Likely need to output structured data using the function. The schema: age (number), name (string), occupation optional string. So we need to call the function with appropriate values. Provide a profile: maybe name \"Alex Johnson\", age 30, occupation \"Software Engineer\". Use function.",
+            "reasoning": "User wants a software engineer profile. Likely need to output structured data using the function. The schema: age (number), name (string), occupation optional. So we need to call the function with appropriate values. Provide a profile. Let's generate a plausible profile: age 29, name \"Alexandra Rivera\", occupation \"Software Engineer\". Use function.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "The user wants a software engineer profile. Likely need to output structured data using the function. The schema: age (number), name (string), occupation optional string. So we need to call the function with appropriate values. Provide a profile: maybe name \"Alex Johnson\", age 30, occupation \"Software Engineer\". Use function.",
+                "text": "User wants a software engineer profile. Likely need to output structured data using the function. The schema: age (number), name (string), occupation optional. So we need to call the function with appropriate values. Provide a profile. Let's generate a plausible profile: age 29, name \"Alexandra Rivera\", occupation \"Software Engineer\". Use function.",
                 "type": "reasoning.text"
               }
             ],
@@ -94,10 +94,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\n  \"age\": 30,\n  \"name\": \"Alex Johnson\",\n  \"occupation\": \"Software Engineer\"\n}",
+                  "arguments": "{\"age\":29,\"name\":\"Alexandra Rivera\",\"occupation\":\"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "call_q2mnDSFFiwy2iOSfoVyKITUN",
+                "id": "fc_66816916-59e8-4a91-98c9-b86733d5d0e6",
                 "index": 0,
                 "type": "function"
               }
@@ -106,15 +106,19 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760532512,
-      "id": "gen-1760532512-3yQwBzKpDpjtwsuUDeFc",
+      "created": 1762104999,
+      "id": "gen-1762104999-CWM5dZT4yVv86aKGa0jK",
       "model": "openai/gpt-oss-120b",
       "object": "chat.completion",
-      "provider": "Fireworks",
+      "provider": "Groq",
+      "system_fingerprint": "fp_eec389997b",
       "usage": {
-        "completion_tokens": 112,
-        "prompt_tokens": 154,
-        "total_tokens": 266
+        "completion_tokens": 117,
+        "completion_tokens_details": {
+          "reasoning_tokens": 72
+        },
+        "prompt_tokens": 151,
+        "total_tokens": 268
       }
     },
     "headers": {
@@ -122,7 +126,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6e6d79adb838-ORD"
+        "99856535fcc5f60e-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -131,7 +135,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:33 GMT"
+        "Sun, 02 Nov 2025 17:36:39 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

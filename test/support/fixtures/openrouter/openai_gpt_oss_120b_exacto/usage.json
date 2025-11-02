@@ -40,13 +40,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! How can I assist you today?",
-            "reasoning": "The user says \"Hi there!\" It's a greeting. We should respond politely. Probably ask how can help.",
+            "content": "Hello! How can I help you today?",
+            "reasoning": " user says \"Hi there!\" It's a greeting. We should respond politely.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "The user says \"Hi there!\" It's a greeting. We should respond politely. Probably ask how can help.",
+                "text": " user says \"Hi there!\" It's a greeting. We should respond politely.",
                 "type": "reasoning.text"
               }
             ],
@@ -56,16 +56,23 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1761606490,
-      "id": "gen-1761606490-yZV8qmTRyfQtoKMsf8AT",
+      "created": 1762105036,
+      "id": "gen-1762105036-c3UsljrvRvUzRmw1ldd5",
       "model": "openai/gpt-oss-120b:exacto",
       "object": "chat.completion",
-      "provider": "DeepInfra",
+      "provider": "Novita",
+      "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 40,
-        "prompt_tokens": 77,
-        "prompt_tokens_details": null,
-        "total_tokens": 117
+        "completion_tokens": 32,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 78,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "total_tokens": 110
       }
     },
     "headers": {
@@ -73,7 +80,7 @@
         "*"
       ],
       "cf-ray": [
-        "9955da93a8e3eaf0-ORD"
+        "9985661d5d86a6ee-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -82,7 +89,7 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 23:08:10 GMT"
+        "Sun, 02 Nov 2025 17:37:16 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

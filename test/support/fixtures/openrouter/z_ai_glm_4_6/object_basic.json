@@ -75,36 +75,39 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": "tool_calls",
           "index": 0,
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "\n",
-            "reasoning_details": [
-              {
-                "format": "unknown",
-                "index": 0,
-                "text": "\n",
-                "type": "reasoning.text"
-              }
-            ],
+            "reasoning": null,
             "refusal": null,
-            "role": "assistant"
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"age\": 32, \"name\": \"Alex Chen\", \"occupation\": \"Software Engineer\"}",
+                  "name": "structured_output"
+                },
+                "id": "call_e9ff077a7c7541278104cdda",
+                "index": 0,
+                "type": "function"
+              }
+            ]
           },
-          "native_finish_reason": "length"
+          "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760532667,
-      "id": "gen-1760532667-CzzjrN7zBg7Q9jXqqQx4",
+      "created": 1762105278,
+      "id": "gen-1762105278-ojRzGGENvH6zsRydHgXL",
       "model": "z-ai/glm-4.6",
       "object": "chat.completion",
-      "provider": "DeepInfra",
+      "provider": "Parasail",
       "usage": {
-        "completion_tokens": 500,
+        "completion_tokens": 48,
         "prompt_tokens": 224,
         "prompt_tokens_details": null,
-        "total_tokens": 724
+        "total_tokens": 272
       }
     },
     "headers": {
@@ -112,7 +115,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef72319a567317-ORD"
+        "99856c065c13f790-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -121,7 +124,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:51:07 GMT"
+        "Sun, 02 Nov 2025 17:41:18 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

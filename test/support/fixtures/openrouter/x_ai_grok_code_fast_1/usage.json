@@ -1,0 +1,114 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIaSB0aGVyZSEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJ4LWFpL2dyb2stY29kZS1mYXN0LTEiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 10,
+      "messages": [
+        {
+          "content": "Hi there!",
+          "role": "user"
+        }
+      ],
+      "model": "x-ai/grok-code-fast-1",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": null,
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hi! How can I help you today? ",
+            "reasoning": "First, the user said \"Hi there!\" This is a casual greeting. As Grok, I'm supposed to be helpful and maximally truthful, built by xAI.\n\n\n## Greeting the User  \n- The user started with a casual \"Hi there!\" greeting.  \n- As Grok, the goal is to be helpful and truthful, aligned with the mission from xAI.",
+            "reasoning_details": [
+              {
+                "format": "xai-responses-v1",
+                "index": 0,
+                "summary": "First, the user said \"Hi there!\" This is a casual greeting. As Grok, I'm supposed to be helpful and maximally truthful, built by xAI.\n\n\n## Greeting the User  \n- The user started with a casual \"Hi there!\" greeting.  \n- As Grok, the goal is to be helpful and truthful, aligned with the mission from xAI.",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "k1yL8ApJhboeJK1n39l6/CNuqxuLR+I7XAQua3Xhn1p+H6349u7QX6FVTafy2NRzQyI8cx/WwGPHvNjhuhwKPQzArIfdgspzjg20cQB7MRlmcSeeumawbXlBnz2FB49FmL/SuBBzFpWckMhtc3XtmsekRZOMEfVrTaMoaSUEvRyqDPXiq8dIxjNPhi7qs9VSolOn9Ie9lx6z//OjmZeq8/EfEpp2fhCauerfUsknMrjn6o7Ens1muktIW7TmjmLUEw4ihbTLpW+MdFK0/msMnFIbchl9i5L1MwMesJoLYQNXIBD4mTxDvtLGWu2zPpQcqzntfKfPHN8U5uFipKbOFwUrsXGGjIC0KypkUxDnMAuoFc9sE4RTrEaDRRYE7lr3nniDOiAnRDA+8jiBY8sti5NlDY8B3R9/rH/hkDVSx2BZcl4uUBfYGHCaV1FwOSg7DeFBg6XOpKPjJ/mWKsJX0Fgtfz/bMQ4vP1idJGFcWEMOx3KgZU8NshOozog3P6rtYWdszvFj92ZwIXkP0PbKCSrOHSDHFLNCOFnajzolTDQO0WbPgI3YEAIFOZz2kFxWI/XryTvvwiz9HKyau0ihiW0DkbZD8HLB3SYp4vEouVPVn2ffJ3T6+B+fcocAiqIaf2WgHkfXlMgOkr9Rr2wM7SIjc7TCvJJHFnAy4uxTU6HadXHAJQQ15ELFwrqHrUjc1R51XkCKPM+DGQZ6iJWGC1R8d3tsCrZ2DdCZON7DTdeSHzshNfe5mnjvyoAiDS2dAuZPDMHuoBhdNotmjJpwA012lPQ9e+W2QXJ19Cj3XJy7GqTDBPK9K6PBLtlIhZrcFflYsF1vqXzX6FIdNMzPgqtSu4u+/b4qlOj6p37DUTQ1c+PB12i/Ppz8fqg/qBAOj1HtbMzIYzuFS7Vh/WgiTQvBWF30wPe+Nkhl72s2bjWmiAXdITPDdBXc6aqfTpswL37gWcD5E/BnnSnQXNx4mzBKZ8r0G2WdEYkcAvZkHBQb5Xe4k7c3gT9fZRQ",
+                "format": "xai-responses-v1",
+                "id": "rs_b8c25bb0-7849-d0fd-6849-2ce762033287_us-east-1",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": null
+        }
+      ],
+      "created": 1762105050,
+      "id": "gen-1762105050-JEeKTSYSTwp3S5znTOt6",
+      "model": "x-ai/grok-code-fast-1",
+      "object": "chat.completion",
+      "provider": "xAI",
+      "usage": {
+        "completion_tokens": 10,
+        "prompt_tokens": 10,
+        "total_tokens": 20
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "998566720dd61106-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 02 Nov 2025 17:37:30 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

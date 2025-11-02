@@ -72,12 +72,12 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "**Processing Addition Requests**\n\nI've received the user's request to add two numbers. The numbers are 2 and 3. My plan is to utilize the `add` tool with the specified inputs, a=2 and b=3. The final step will be to formulate a response in the format 'sum=<value>', after receiving the tool's output.\n\n\n**Defining Execution Strategy**\n\nI've broken down the addition task into distinct steps. Firstly, I identified the `add` tool as the correct tool to invoke. Secondly, I've confirmed parameter values, utilizing the integers \"2\" and \"3.\" Finally, I will format the response as \"sum=<value>\" upon receiving the tool's output. The next step is calling the tool with the provided arguments.\n\n\n",
+            "reasoning": "**Processing the User's Request**\n\nI've taken the user's input and parsed the intention to add two numbers. My next step is to prepare the call to the 'add' tool, setting `a` to 2 and `b` to 3. I'm now anticipating the return value to format the final response correctly.\n\n\n**Defining the Execution Steps**\n\nI'm solidifying the execution plan. Now I'm clearly defining the steps: invoke the 'add' tool, capture the result, and then format the output as requested. I've got the exact function call syntax and the expected final output ready.\n\n\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "**Processing Addition Requests**\n\nI've received the user's request to add two numbers. The numbers are 2 and 3. My plan is to utilize the `add` tool with the specified inputs, a=2 and b=3. The final step will be to formulate a response in the format 'sum=<value>', after receiving the tool's output.\n\n\n**Defining Execution Strategy**\n\nI've broken down the addition task into distinct steps. Firstly, I identified the `add` tool as the correct tool to invoke. Secondly, I've confirmed parameter values, utilizing the integers \"2\" and \"3.\" Finally, I will format the response as \"sum=<value>\" upon receiving the tool's output. The next step is calling the tool with the provided arguments.\n\n\n",
+                "text": "**Processing the User's Request**\n\nI've taken the user's input and parsed the intention to add two numbers. My next step is to prepare the call to the 'add' tool, setting `a` to 2 and `b` to 3. I'm now anticipating the return value to format the final response correctly.\n\n\n**Defining the Execution Steps**\n\nI'm solidifying the execution plan. Now I'm clearly defining the steps: invoke the 'add' tool, capture the result, and then format the output as requested. I've got the exact function call syntax and the expected final output ready.\n\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -89,7 +89,7 @@
                   "arguments": "{\"a\":2,\"b\":3}",
                   "name": "add"
                 },
-                "id": "tool_0_add_1OSjkpBcikHBo1WEE3fJ",
+                "id": "tool_0_add_cLG7uATX04LofhqAs6Fy",
                 "index": 0,
                 "type": "function"
               }
@@ -98,22 +98,22 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1760532476,
-      "id": "gen-1760532476-M5JH5pgF01hK15WCIdbe",
+      "created": 1762105003,
+      "id": "gen-1762105003-mCOJS8xbQViB1gKltHjF",
       "model": "google/gemini-2.5-pro",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
-        "completion_tokens": 291,
+        "completion_tokens": 263,
         "completion_tokens_details": {
           "image_tokens": 0,
-          "reasoning_tokens": 286
+          "reasoning_tokens": 258
         },
         "prompt_tokens": 37,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 328
+        "total_tokens": 300
       }
     },
     "headers": {
@@ -121,7 +121,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6d886c8dfa17-ORD"
+        "9985654ddbc0132d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -130,7 +130,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:47:58 GMT"
+        "Sun, 02 Nov 2025 17:36:45 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

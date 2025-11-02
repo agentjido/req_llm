@@ -39,7 +39,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "# The Chronicles of Pyrion: A Dragon's Journey\n\n## Chapter 1: The Last Hatchling\n\nThe volcanic peaks of the Obsidian Mountains had been silent for over a century. Not a single wisp of smoke had emerged from their dormant craters, and the ancient dragon clans that once called these heights home had long since scattered to distant lands. The mountain folk below had begun to forget that dragons had ever existed at all, dismissing them as mere legends told by their great-grandparents",
+            "content": "# The Last Dragon's Legacy\n\n## Chapter 1: The Forgotten Prophecy\n\nIn the ancient kingdom of Valdris, where misty mountains kissed the sky and forests whispered secrets of old, young Kaelen Brightwater lived a simple life as an apprentice scribe in the capital city of Thornhaven. The twenty-year-old possessed an unusual gift—he could read the old dragon tongue, a skill so rare that even the royal scholars had forgotten its very existence.\n\nIt was on a particularly storm",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -47,22 +47,15 @@
           "native_finish_reason": "length"
         }
       ],
-      "created": 1761606447,
-      "id": "gen-1761606447-ngn9iauqOWMPUtLlv4UN",
+      "created": 1762105030,
+      "id": "gen-1762105030-ekX17CLwC5kOBjb7jvWG",
       "model": "qwen/qwen3-coder:exacto",
       "object": "chat.completion",
-      "provider": "BaseTen",
-      "system_fingerprint": null,
+      "provider": "Google",
       "usage": {
         "completion_tokens": 100,
-        "completion_tokens_details": {
-          "reasoning_tokens": 0
-        },
         "prompt_tokens": 17,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 0
-        },
+        "prompt_tokens_details": null,
         "total_tokens": 117
       }
     },
@@ -71,7 +64,7 @@
         "*"
       ],
       "cf-ray": [
-        "9955d9868f29e830-ORD"
+        "998565f83f09dada-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -80,7 +73,7 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 23:07:27 GMT"
+        "Sun, 02 Nov 2025 17:37:10 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

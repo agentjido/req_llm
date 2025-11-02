@@ -42,12 +42,12 @@
           "logprobs": null,
           "message": {
             "content": "Hello! 👋 How can I help you today?",
-            "reasoning": "User says \"Hello world!\" Probably wants a response. We can respond with a friendly greeting.",
+            "reasoning": "The user says \"Hello world!\" This is a greeting. We should respond politely. Probably a friendly greeting.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "User says \"Hello world!\" Probably wants a response. We can respond with a friendly greeting.",
+                "text": "The user says \"Hello world!\" This is a greeting. We should respond politely. Probably a friendly greeting.",
                 "type": "reasoning.text"
               }
             ],
@@ -57,15 +57,15 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532509,
-      "id": "gen-1760532509-cZDUFW7adhldqi99AuQ7",
+      "created": 1762105010,
+      "id": "gen-1762105010-NzunzT5eV8rl9MrY7e0D",
       "model": "openai/gpt-oss-20b",
       "object": "chat.completion",
-      "provider": "NextBit",
+      "provider": "Phala",
       "usage": {
-        "completion_tokens": 40,
-        "prompt_tokens": 74,
-        "total_tokens": 114
+        "completion_tokens": 43,
+        "prompt_tokens": 72,
+        "total_tokens": 115
       }
     },
     "headers": {
@@ -73,7 +73,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6e5a0fb710b2-ORD"
+        "9985657e49c1aca8-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -82,7 +82,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:30 GMT"
+        "Sun, 02 Nov 2025 17:36:51 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

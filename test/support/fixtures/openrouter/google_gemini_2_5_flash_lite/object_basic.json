@@ -75,17 +75,24 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "error": {
+            "code": 502,
+            "message": "Provider returned error",
+            "metadata": {
+              "raw": "Malformed function call: call:structured_output{age:39,name:"
+            }
+          },
+          "finish_reason": "tool_calls",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "\n",
-            "reasoning": "**Asking for Details**\n\nI'm focused on gathering the necessary information to create the software engineer profile. Since I can generate structured output for name, age, and occupation using the available tool, I need to prompt you for those specific details. The occupation is understood to be \"software engineer.\"\n\n**Soliciting Key Data**\n\nI'm currently prioritizing obtaining the crucial `name` and `age` parameters to populate the software engineer profile. My `structured_output` tool is ready, but requires these specific inputs before I can proceed with profile generation.\n\n",
+            "content": "",
+            "reasoning": "**Seeking User Input**\n\nI'm currently focused on gathering the necessary details to construct a software engineer profile. Specifically, I need to prompt you for your name and age, as these are the essential pieces of information required to proceed with the profile generation using the `structured_output` tool.\n\n**Gathering Essential Data**\n\nI'm now focusing on acquiring the key details needed to build your software engineer profile. My immediate task is to elicit your name and age, which are the foundational elements for utilizing the `structured_output` tool for profile creation.\n\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "**Asking for Details**\n\nI'm focused on gathering the necessary information to create the software engineer profile. Since I can generate structured output for name, age, and occupation using the available tool, I need to prompt you for those specific details. The occupation is understood to be \"software engineer.\"\n\n**Soliciting Key Data**\n\nI'm currently prioritizing obtaining the crucial `name` and `age` parameters to populate the software engineer profile. My `structured_output` tool is ready, but requires these specific inputs before I can proceed with profile generation.\n\n",
+                "text": "**Seeking User Input**\n\nI'm currently focused on gathering the necessary details to construct a software engineer profile. Specifically, I need to prompt you for your name and age, as these are the essential pieces of information required to proceed with the profile generation using the `structured_output` tool.\n\n**Gathering Essential Data**\n\nI'm now focusing on acquiring the key details needed to build your software engineer profile. My immediate task is to elicit your name and age, which are the foundational elements for utilizing the `structured_output` tool for profile creation.\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -94,34 +101,34 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"name\":\"John Doe\",\"occupation\":\"Software Engineer\",\"age\":10}",
+                  "arguments": "{\"name\":\"Jane Doe\",\"occupation\":\"Software Engineer\",\"age\":30}{\"name\":\"John Smith\",\"occupation\":\"Software Engineer\",\"age\":25}{\"occupation\":\"Software Engineer\",\"age\":35,\"name\":\"Alice Wonderland\"}{\"age\":28,\"occupation\":\"Software Engineer\",\"name\":\"Bob The Builder\"}{\"age\":40,\"name\":\"Charlie Chaplin\",\"occupation\":\"Software Engineer\"}{\"name\":\"Diana Prince\",\"age\":22,\"occupation\":\"Software Engineer\"}{\"name\":\"Ethan Hunt\",\"occupation\":\"Software Engineer\",\"age\":31}{\"name\":\"Fiona Glenanne\",\"age\":29,\"occupation\":\"Software Engineer\"}{\"age\":33,\"name\":\"George Jetson\",\"occupation\":\"Software Engineer\"}{\"name\":\"Hannah Montana\",\"age\":27,\"occupation\":\"Software Engineer\"}{\"age\":38,\"name\":\"Ian Malcolm\",\"occupation\":\"Software Engineer\"}{\"name\":\"Jasmine Khan\",\"age\":24,\"occupation\":\"Software Engineer\"}{\"occupation\":\"Software Engineer\",\"age\":36,\"name\":\"Kevin McCallister\"}{\"name\":\"Leia Organa\",\"occupation\":\"Software Engineer\",\"age\":32}{\"name\":\"Michael Scott\",\"age\":26,\"occupation\":\"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "tool_0_structured_output_Z8mMoqRtrf66ji7oUNAz",
+                "id": "tool_0_structured_output_Unvp5y7Wan5ZVjJOoL28",
                 "index": 0,
                 "type": "function"
               }
             ]
           },
-          "native_finish_reason": "STOP"
+          "native_finish_reason": null
         }
       ],
-      "created": 1760546981,
-      "id": "gen-1760546981-KftdTQK7UYZb77mSZPGa",
+      "created": 1762104933,
+      "id": "gen-1762104933-yOdBxqCOywxHWcFNsfFe",
       "model": "google/gemini-2.5-flash-lite",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
-        "completion_tokens": 100,
+        "completion_tokens": 243,
         "completion_tokens_details": {
           "image_tokens": 0,
-          "reasoning_tokens": 88
+          "reasoning_tokens": 72
         },
         "prompt_tokens": 41,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 141
+        "total_tokens": 284
       }
     },
     "headers": {
@@ -129,7 +136,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0cfaa5aeaff5b-ORD"
+        "9985639c2afcc365-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -138,7 +145,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:49:42 GMT"
+        "Sun, 02 Nov 2025 17:35:34 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

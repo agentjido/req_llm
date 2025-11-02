@@ -62,13 +62,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "\n\nI don't have access to joke-telling capabilities, but I can help check the weather! Would you like me to look up current weather conditions for a location?",
-            "reasoning": "Okay, the user asked for a joke about cats. Let me check the tools provided. The only tool available is get_weather, which requires a location. But the user isn't asking for weather info—they want a joke. Since there's no function for jokes, I can't use any tool here. I should inform them I can't tell jokes and maybe suggest they ask for weather instead.\n",
+            "content": "\n\nI don't have access to joke-telling capabilities, but I'd be happy to help with weather information if you'd like! Just let me know a location and I can check the current conditions for you. 😺",
+            "reasoning": "Okay, the user asked for a joke about cats. Let me check the tools provided. The only tool available is get_weather, which requires a location. But the user isn't asking for weather info—they want a joke. Since there's no function for jokes, I can't use any tool here. I should inform them I can't tell jokes but can help with weather if they provide a location.\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "Okay, the user asked for a joke about cats. Let me check the tools provided. The only tool available is get_weather, which requires a location. But the user isn't asking for weather info—they want a joke. Since there's no function for jokes, I can't use any tool here. I should inform them I can't tell jokes and maybe suggest they ask for weather instead.\n",
+                "text": "Okay, the user asked for a joke about cats. Let me check the tools provided. The only tool available is get_weather, which requires a location. But the user isn't asking for weather info—they want a joke. Since there's no function for jokes, I can't use any tool here. I should inform them I can't tell jokes but can help with weather if they provide a location.\n",
                 "type": "reasoning.text"
               }
             ],
@@ -78,16 +78,16 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532738,
-      "id": "gen-1760532738-NXDimwdOj1CKl0ppkzfr",
+      "created": 1762105055,
+      "id": "gen-1762105055-uo9giwLBnFzguCedFzfL",
       "model": "qwen/qwen3-235b-a22b-thinking-2507",
       "object": "chat.completion",
       "provider": "Chutes",
       "usage": {
-        "completion_tokens": 115,
+        "completion_tokens": 128,
         "prompt_tokens": 156,
         "prompt_tokens_details": null,
-        "total_tokens": 271
+        "total_tokens": 284
       }
     },
     "headers": {
@@ -95,7 +95,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef73ed5dcacca3-ORD"
+        "99856695cf9cb838-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -104,7 +104,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:52:19 GMT"
+        "Sun, 02 Nov 2025 17:37:38 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

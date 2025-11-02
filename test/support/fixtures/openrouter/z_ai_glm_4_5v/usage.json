@@ -40,34 +40,29 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "\nHello! How can I assist you today?",
-            "reasoning": "I'm being addressed by the user with a simple greeting. The user hasn't provided any specific question or request yet, so I should respond in a friendly and open manner to encourage them to share what they need help with.",
-            "reasoning_details": [
-              {
-                "format": "unknown",
-                "index": 0,
-                "text": "I'm being addressed by the user with a simple greeting. The user hasn't provided any specific question or request yet, so I should respond in a friendly and open manner to encourage them to share what they need help with.",
-                "type": "reasoning.text"
-              }
-            ],
+            "content": "Hi there! 👋 How can I help you today? Whether you have questions, need advice, or just want to chat, I'm here for you. 😊",
+            "reasoning": null,
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532659,
-      "id": "gen-1760532659-iFM1h5nBSXxgKhVUETqC",
+      "created": 1762105076,
+      "id": "gen-1762105076-LlzQ4RE0N5rNv73C5LV1",
       "model": "z-ai/glm-4.5v",
       "object": "chat.completion",
-      "provider": "Z.AI",
+      "provider": "Novita",
+      "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 57,
-        "prompt_tokens": 10,
+        "completion_tokens": 35,
+        "completion_tokens_details": null,
+        "prompt_tokens": 13,
         "prompt_tokens_details": {
-          "cached_tokens": 4
+          "audio_tokens": 0,
+          "cached_tokens": 7
         },
-        "total_tokens": 67
+        "total_tokens": 48
       }
     },
     "headers": {
@@ -75,7 +70,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef72039bc8e207-ORD"
+        "99856718fb9c2240-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -84,7 +79,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:51:00 GMT"
+        "Sun, 02 Nov 2025 17:37:57 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

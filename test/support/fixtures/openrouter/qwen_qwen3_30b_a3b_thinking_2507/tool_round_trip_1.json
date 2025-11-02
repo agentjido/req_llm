@@ -72,16 +72,24 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": null,
+            "reasoning": "Okay, the user wants me to use the add tool to compute 2 + 3. Let me check the tools provided. There's an add function that takes two integers, a and b. So I need to call add with a=2 and b=3.\n\nWait, the parameters are both integers, and the required fields are a and b. So I should structure the tool call correctly. Let me make sure I'm not missing anything. The function name is \"add\", and the arguments should be a=2 and b=3.\n\nOnce I get the result from the tool, I have to respond with 'sum=<value>'. So after the tool returns the sum, which should be 5, I'll format the response as sum=5.\n\nLet me double-check the parameters. The user said 2 + 3, so a is 2, b is 3. Yep, that's right. No other tools are available, so this is the only function I need to use. Alright, time to make the tool call.\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Okay, the user wants me to use the add tool to compute 2 + 3. Let me check the tools provided. There's an add function that takes two integers, a and b. So I need to call add with a=2 and b=3.\n\nWait, the parameters are both integers, and the required fields are a and b. So I should structure the tool call correctly. Let me make sure I'm not missing anything. The function name is \"add\", and the arguments should be a=2 and b=3.\n\nOnce I get the result from the tool, I have to respond with 'sum=<value>'. So after the tool returns the sum, which should be 5, I'll format the response as sum=5.\n\nLet me double-check the parameters. The user said 2 + 3, so a is 2, b is 3. Yep, that's right. No other tools are available, so this is the only function I need to use. Alright, time to make the tool call.\n",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant",
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"a\": 2, \"b\": 3}",
+                  "arguments": "{\n\n  \"a\": 2,\n  \"b\": 3\n}",
                   "name": "add"
                 },
-                "id": "0199e7eb65fc96e2c50921f8464b8aea",
+                "id": "chatcmpl-tool-5e6b6eb2b2b64e788c3beb5f4f9883d8",
                 "index": 0,
                 "type": "function"
               }
@@ -90,16 +98,15 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760532586,
-      "id": "gen-1760532586-s5ECqJLLLCqoBvTarEh0",
+      "created": 1762105034,
+      "id": "gen-1762105024-8q6ysyOlgNAV6Lz99eYC",
       "model": "qwen/qwen3-30b-a3b-thinking-2507",
       "object": "chat.completion",
-      "provider": "SiliconFlow",
-      "system_fingerprint": "",
+      "provider": "Nebius",
       "usage": {
-        "completion_tokens": 12,
-        "prompt_tokens": 191,
-        "total_tokens": 203
+        "completion_tokens": 231,
+        "prompt_tokens": 187,
+        "total_tokens": 418
       }
     },
     "headers": {
@@ -107,7 +114,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef70375f7460a1-ORD"
+        "998565d4dbcf514c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -116,7 +123,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:48 GMT"
+        "Sun, 02 Nov 2025 17:37:14 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -65,64 +65,22 @@
   },
   "response": {
     "body": {
-      "choices": [
-        {
-          "finish_reason": "tool_calls",
-          "index": 0,
-          "logprobs": null,
-          "message": {
-            "content": " ",
-            "reasoning": "First, the user wants me to use the \"add\" function to compute 2 + 3. The available functions include \"add\", which takes two integers, a and b.\n\nI need to call this function by outputting a JSON in the specified format, enclosed in <function_call> tags.\n\nThe format is: <function_call>{\"action\": \"function_name\", \"action_input\": {\"parameter\": \"argument\"}}</function_call>\n\nFor the \"add\" function, the action is \"add\", and the action_input should be an object with \"a\" and \"b\", both integers.\n\nSo, for 2 + 3, I should set a to 2 and b to 3.\n\nAfter calling the function, the user says: \"After the tool result arrives, respond with 'sum=<value>'.\" But as per my instructions, I just need to make the function call in my response. The system will handle the execution and provide the result, I assume.\n\nMy response should only include the function call, and I shouldn't add any other text unless necessary. The instructions say: \"Keep your response to user clear; please do not make your response verbose!\"\n\nSo, I should not add extra explanations. Just the function call.\n\nThe user specified to respond with 'sum=<value>' after the tool result, but that's for after the function call. In this response, I only need to make the call.\n\nFinally, structure: Use <function_call> tags around the JSON.\n\nJSON: {\"action\": \"add\", \"action_input\": {\"a\": 2, \"b\": 3}}\n\nThat seems correct.",
-            "reasoning_details": [
-              {
-                "format": "unknown",
-                "index": 0,
-                "text": "First, the user wants me to use the \"add\" function to compute 2 + 3. The available functions include \"add\", which takes two integers, a and b.\n\nI need to call this function by outputting a JSON in the specified format, enclosed in <function_call> tags.\n\nThe format is: <function_call>{\"action\": \"function_name\", \"action_input\": {\"parameter\": \"argument\"}}</function_call>\n\nFor the \"add\" function, the action is \"add\", and the action_input should be an object with \"a\" and \"b\", both integers.\n\nSo, for 2 + 3, I should set a to 2 and b to 3.\n\nAfter calling the function, the user says: \"After the tool result arrives, respond with 'sum=<value>'.\" But as per my instructions, I just need to make the function call in my response. The system will handle the execution and provide the result, I assume.\n\nMy response should only include the function call, and I shouldn't add any other text unless necessary. The instructions say: \"Keep your response to user clear; please do not make your response verbose!\"\n\nSo, I should not add extra explanations. Just the function call.\n\nThe user specified to respond with 'sum=<value>' after the tool result, but that's for after the function call. In this response, I only need to make the call.\n\nFinally, structure: Use <function_call> tags around the JSON.\n\nJSON: {\"action\": \"add\", \"action_input\": {\"a\": 2, \"b\": 3}}\n\nThat seems correct.",
-                "type": "reasoning.text"
-              }
-            ],
-            "refusal": null,
-            "role": "assistant",
-            "tool_calls": [
-              {
-                "function": {
-                  "arguments": "{\"a\":2,\"b\":3}",
-                  "name": "add"
-                },
-                "id": "call_43898601",
-                "index": 0,
-                "type": "function"
-              }
-            ]
-          },
-          "native_finish_reason": "tool_calls"
+      "error": {
+        "code": 400,
+        "message": "Provider returned error",
+        "metadata": {
+          "provider_name": "xAI",
+          "raw": "{\"code\":\"Client specified an invalid argument\",\"error\":\"Invalid request content: Required function  is not present in the provided tools.\"}"
         }
-      ],
-      "created": 1760532559,
-      "id": "gen-1760532559-O2ZnXuGNlX4Ua0VpvOd3",
-      "model": "x-ai/grok-3-mini",
-      "object": "chat.completion",
-      "provider": "xAI",
-      "system_fingerprint": "fp_4fae27f477",
-      "usage": {
-        "completion_tokens": 359,
-        "completion_tokens_details": {
-          "reasoning_tokens": 329
-        },
-        "prompt_tokens": 187,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 4
-        },
-        "total_tokens": 546
-      }
+      },
+      "user_id": "user_2iYQIxKY28QuzANm4mmKBlOxzx2"
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
       "cf-ray": [
-        "98ef6f8ff943eb5d-ORD"
+        "99856637c97ee81d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -131,7 +89,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:19 GMT"
+        "Sun, 02 Nov 2025 17:37:20 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -152,6 +110,6 @@
         "nosniff"
       ]
     },
-    "status": 200
+    "status": 400
   }
 }

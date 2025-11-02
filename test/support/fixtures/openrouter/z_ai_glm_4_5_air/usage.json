@@ -40,34 +40,29 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "\nHello! 👋 How can I assist you today? Feel free to ask any questions or share what's on your mind.",
-            "reasoning": "Okay, the user just said \"Hi there!\" which is a very simple greeting. Hmm, they might be testing if I'm responsive or just starting a casual conversation. \n\nI should keep it warm and friendly since they didn't specify any topic. Maybe they're new here or just in a chatty mood. The exclamation mark suggests they're upbeat, so I'll match that energy. \n\nI wonder if they need help with something specific or just want to chat. Since they didn't ask a question, I'll leave the door open for them to steer the conversation. Adding a smiley feels appropriate here - it's welcoming without being overbearing. \n\nThe response should be simple but not robotic. \"Hello!\" feels more personal than \"Greetings,\" and \"How can I assist you today?\" invites them to share their needs. No need to overthink this one - just keep it light and helpful.",
-            "reasoning_details": [
-              {
-                "format": "unknown",
-                "index": 0,
-                "text": "Okay, the user just said \"Hi there!\" which is a very simple greeting. Hmm, they might be testing if I'm responsive or just starting a casual conversation. \n\nI should keep it warm and friendly since they didn't specify any topic. Maybe they're new here or just in a chatty mood. The exclamation mark suggests they're upbeat, so I'll match that energy. \n\nI wonder if they need help with something specific or just want to chat. Since they didn't ask a question, I'll leave the door open for them to steer the conversation. Adding a smiley feels appropriate here - it's welcoming without being overbearing. \n\nThe response should be simple but not robotic. \"Hello!\" feels more personal than \"Greetings,\" and \"How can I assist you today?\" invites them to share their needs. No need to overthink this one - just keep it light and helpful.",
-                "type": "reasoning.text"
-              }
-            ],
+            "content": "Hello! 👋 How can I help you today?",
+            "reasoning": null,
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532716,
-      "id": "gen-1760532716-cBjvqFXOPp6D4qLW2lRO",
+      "created": 1762105053,
+      "id": "gen-1762105053-PClVBxXNOCZ7fB35DN6J",
       "model": "z-ai/glm-4.5-air",
       "object": "chat.completion",
-      "provider": "Z.AI",
+      "provider": "Novita",
+      "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 212,
-        "prompt_tokens": 8,
+        "completion_tokens": 12,
+        "completion_tokens_details": null,
+        "prompt_tokens": 12,
         "prompt_tokens_details": {
+          "audio_tokens": 0,
           "cached_tokens": 4
         },
-        "total_tokens": 220
+        "total_tokens": 24
       }
     },
     "headers": {
@@ -75,7 +70,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef73681c8de822-ORD"
+        "9985668699af5c90-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -84,7 +79,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:51:57 GMT"
+        "Sun, 02 Nov 2025 17:37:33 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

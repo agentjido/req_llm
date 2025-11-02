@@ -61,39 +61,41 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "I'm sorry, but I don't have the capability to tell jokes. I'm here to help with weather information. If you have a question about the weather, let me know!",
-            "reasoning": "First, the user asked: \"Tell me a joke about cats.\" This is a request for a joke, which is not related to any of the available functions. The only available function is \"get_weather\", which is for getting weather information based on a location.\n\nI need to check if this query can be addressed using the available functions. The available functions are limited to getting weather, so no, this doesn't match.\n\nThe instructions say: \"If the user's query can be addressed using an available function, and all required parameters are provided or obviously inferable, trigger a function call.\"\n\nIn this case, it cannot be addressed using an available function, so I should not call any function.\n\nAdditionally: \"Ask for clarification only if none of the provided functions are able to advance the user's request.\"\n\nSince none of the functions can advance this request, I shouldn't ask for clarification unless it's unclear. But this request is clear; it's just not something I can handle with the tools I have.\n\nMy response should be kept clear and not verbose. So, I need to politely inform the user that I can't help with that.\n\nFinally, the system prompt emphasizes: \"You are only permitted to use the <function_call> tag in your response only if you have made the decision to call a function.\"\n\nSince I'm not calling a function, I won't use that tag.\n\nResponse idea: Keep it simple, like \"I'm sorry, but I can only provide information on weather. If you have a weather-related question, let me know!\"\n\nThat sounds good.",
+            "content": "I'm sorry, but I can only assist with weather-related queries using the available tools. If you have a question about the weather, let me know!",
+            "reasoning": "First, the user asked: \"Tell me a joke about cats.\" This is a request for a joke, which is not related to any of the available functions. The only available function is \"get_weather\", which is for getting weather information based on a location.\n\nI need to check if this query can be addressed using the available functions. The available functions are limited to getting weather, so no, this doesn't match.\n\nThe instructions say: \"If the user's query can be addressed using an available function, and all required parameters are provided or obviously inferable, trigger a function call.\"\n\nIn this case, it cannot be addressed using the available function, so I should not call any function.\n\nAdditionally: \"Ask for clarification only if none of the provided functions are able to advance the user's request.\"\n\nSince none of the functions can advance this request, I shouldn't ask for clarification unless it's unclear. But this is clear; they just want a joke.\n\nThe instructions also emphasize: \"Keep your response to user clear; please do not make your response verbose!\"\n\nSo, my response should be straightforward. I should inform the user that I can't help with that or something similar, but since it's not specified, I can just say I don't have that capability.\n\nFinally, if I'm not calling a function, I shouldn't include any <function_call> tags.\n\nResponse idea: \"I'm sorry, but I can only provide information on weather. I don't have jokes about cats.\"\n\nThat keeps it clear and non-verbose.",
             "reasoning_details": [
               {
-                "format": "unknown",
+                "format": "xai-responses-v1",
                 "index": 0,
-                "text": "First, the user asked: \"Tell me a joke about cats.\" This is a request for a joke, which is not related to any of the available functions. The only available function is \"get_weather\", which is for getting weather information based on a location.\n\nI need to check if this query can be addressed using the available functions. The available functions are limited to getting weather, so no, this doesn't match.\n\nThe instructions say: \"If the user's query can be addressed using an available function, and all required parameters are provided or obviously inferable, trigger a function call.\"\n\nIn this case, it cannot be addressed using an available function, so I should not call any function.\n\nAdditionally: \"Ask for clarification only if none of the provided functions are able to advance the user's request.\"\n\nSince none of the functions can advance this request, I shouldn't ask for clarification unless it's unclear. But this request is clear; it's just not something I can handle with the tools I have.\n\nMy response should be kept clear and not verbose. So, I need to politely inform the user that I can't help with that.\n\nFinally, the system prompt emphasizes: \"You are only permitted to use the <function_call> tag in your response only if you have made the decision to call a function.\"\n\nSince I'm not calling a function, I won't use that tag.\n\nResponse idea: Keep it simple, like \"I'm sorry, but I can only provide information on weather. If you have a weather-related question, let me know!\"\n\nThat sounds good.",
-                "type": "reasoning.text"
+                "summary": "First, the user asked: \"Tell me a joke about cats.\" This is a request for a joke, which is not related to any of the available functions. The only available function is \"get_weather\", which is for getting weather information based on a location.\n\nI need to check if this query can be addressed using the available functions. The available functions are limited to getting weather, so no, this doesn't match.\n\nThe instructions say: \"If the user's query can be addressed using an available function, and all required parameters are provided or obviously inferable, trigger a function call.\"\n\nIn this case, it cannot be addressed using the available function, so I should not call any function.\n\nAdditionally: \"Ask for clarification only if none of the provided functions are able to advance the user's request.\"\n\nSince none of the functions can advance this request, I shouldn't ask for clarification unless it's unclear. But this is clear; they just want a joke.\n\nThe instructions also emphasize: \"Keep your response to user clear; please do not make your response verbose!\"\n\nSo, my response should be straightforward. I should inform the user that I can't help with that or something similar, but since it's not specified, I can just say I don't have that capability.\n\nFinally, if I'm not calling a function, I shouldn't include any <function_call> tags.\n\nResponse idea: \"I'm sorry, but I can only provide information on weather. I don't have jokes about cats.\"\n\nThat keeps it clear and non-verbose.",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "IHwx4NBthO6cdQndu3GFPBxIeG7hLAPc8zBHOIJ1y5kY8ZX4BQO4RBFbF0hocYQR7e5rPTy6owgFriP1YI1MvBnDiYohCmWKfnxzfh6kL16hu7JIFvDH3X2lEs4aG1JqYc561MG7r37fQL23xTiq7JNxNW0dzeP4VZ2Op+WCukJb0Yz6TysuYsCBOrQPGeAUlCVFcgQwfCqq6bSsl+RmKiwqPg9zwXJ29kz1k4Z8TK6xpRPkCVh4ahJs458xagvFmLLQezStUknmOPoypuDwLAlbf+BNXBzGvu7yqIedjgj3YXXd1Z0vA+E/ThhUO5XWrjMKhbslH8l4za312lb6uIC31RG51579yaZEasYuCAh5cBjA2l33X4bGDn0n5w3K83R3xaiLF0UbuxjND+3N60o4/IkmZ0aBUlMMDnugy9faw9bvSJW0hGlYVTi98Lky7ngsRMPXjFBQ+5iQvVRTmgt3K5b+kITiFpagQoWtqV4MMormVdNeONumf43CvvoW6HnBdJsg10LZ1Dvi0rMr4iDOLjD4Ej/Ha2j7ArShnGfamqKCZqSJm/BK3w/kVN9UC/XAoJ3FmRF0GKAWcz0ep0WoJFVlflq9Of/K/DvlLLJXjFpHxwM9VwlM0kuk97KxsO7QnukcmoY42xLnESKSFjrlrpoSovzyn8LXeBCW1HJP26cyr95DWg8Lby1lS8/nqsQQAaO9VILX2XaFMcW2TmeR3mrVsnmcW0EnmUgIO2ab5FvbScTd1GpJ/FYIgIIPXdA5tn15Cu5S0Ryc+Kb8/AdTKcotVrRxHSSF/OEtnPQFwgokQI32DCWXmEulG7DjDVtxI0qU/sPk6RTqIAkfbrOI9Et0Z3MlHXSSk0aqhHSUvo0mDxk36weycnlJVfJZt8k5GJtNPVjsD7i+Hti0U4I27WtPuCXom3laZxwGraSokhxp70r7UtgPpy3jHpe2aZXJTBRn5S8w1fV7C9JRMDIpOKk9d4vQvaPZFVcg/x08gDET2megV3WcnJQwcEggYkdB+MwIK4IEzoCmzfaQT/pi2SuzDgcHWXP7Jrch+ovRFV5pmABX3m2nEYMOfcGRLmPzXwkdXBcVHxKS/5I3oNf6rT4qiLIa4yr0CCN2aF+bNFYGec/Ri8JPJCmxSCqfXgMW1U/GIP6vvuEknZE4+BH/HC/1y2JULQvd5ZdswxvMd0CFW4t3Nkre/VEdVltCY6xPipESkS9JSxzYPtKz06/8b3ckpuZWVmigYZt7d78+X9cdKo9rpHfmtDaVx4b29GX0Kp6UimqZVYzoYZTTm9ye9xHxEnlK5xvj5xp+2C4C0N0B1YXSC2veuZdHIDJrrhCcgTcpjADbVgpHkL5UY+lZfs5ktk7z5QVPDclFtNdLRbkzvzDwTVNYpZjtbff6APsH4PhwT7AfpbaawQuWACE9wkyhnL4V9aWEIEH67A8DXQwOu9WT6iHSJNPrSlhgHgv31Kk28m6QDe8+nBtmBTGgYXqCxQX8ZAwzpj2JmtRHw93yEATro/++9T3nj3BBl0dKx730o55e1vQvyL5lZSBlnpIE5agd86Rp3HOeczaURTL9GJqDf2zTi837u97AEkiP+Q4nov0HtIToqngltJUSfVs/HeaFQu3dPkAe+YIzhjVrSE+Kbb/4IOrzb2osD2cqpBk5UJkY9Phh0RbLcY/DqULoA4AyZ7mLE5kIrDBjhbrTPKxU1zHqI8FBfpNaiutGi+esnEU6Nnfs7ro+5y13+uFfNDf8DUZ1eSlTGDzk4Xf1Ynyp/rcb12mrcTOYwyNXzhm2LC4Y9Q3siA7C/eyTaCSWnM7oGD99FFNY84TVgi+NeFg6JdJhzEaowuYC2mPWS8GkaW9AtbfKxx3N4v+EF0yyor411P/l2HmGQDayP3AqvHprO10+UB6f3vpsHEnYVuJYhGAEQpx0SqVfh/NhlPCmGQoVsHDojsxYk0LiPgbBflFo2zARRbxZU7NAey8CyLpVGQJKuYatydCOKWiuEapxKRwRXfnpOYG/2FVFaNM3Ft28",
+                "format": "xai-responses-v1",
+                "id": "rs_8b01d542-48e8-3ef5-c8d4-34d5cb6b44f9_us-east-1",
+                "index": 0,
+                "type": "reasoning.encrypted"
               }
             ],
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "stop"
+          "native_finish_reason": "completed"
         }
       ],
-      "created": 1760532578,
-      "id": "gen-1760532578-TYM12hO4rsHOEiX5lgnn",
+      "created": 1762105052,
+      "id": "gen-1762105052-PZwp4yEiphr8oLCJZhca",
       "model": "x-ai/grok-3-mini",
       "object": "chat.completion",
       "provider": "xAI",
-      "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 342,
+        "completion_tokens": 330,
         "completion_tokens_details": {
-          "reasoning_tokens": 308
+          "reasoning_tokens": 300
         },
         "prompt_tokens": 282,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 231
-        },
-        "total_tokens": 624
+        "total_tokens": 612
       }
     },
     "headers": {
@@ -101,7 +103,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef70061b641923-ORD"
+        "99856681cafd000b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -110,7 +112,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:38 GMT"
+        "Sun, 02 Nov 2025 17:37:32 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -36,7 +36,7 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "length",
           "index": 0,
           "logprobs": null,
           "message": {
@@ -45,17 +45,18 @@
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "stop"
+          "native_finish_reason": "length"
         }
       ],
-      "created": 1760532478,
-      "id": "gen-1760532478-9NT00Gxw2olS8BUGb9II",
+      "created": 1762104945,
+      "id": "gen-1762104945-a510mf0wbVuP0rTV2tlu",
       "model": "meta-llama/llama-3.2-11b-vision-instruct",
       "object": "chat.completion",
-      "provider": "Cloudflare",
+      "provider": "DeepInfra",
       "usage": {
         "completion_tokens": 10,
         "prompt_tokens": 13,
+        "prompt_tokens_details": null,
         "total_tokens": 23
       }
     },
@@ -64,7 +65,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6d94afc81409-ORD"
+        "998563e81832eb65-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -73,7 +74,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:47:58 GMT"
+        "Sun, 02 Nov 2025 17:35:46 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

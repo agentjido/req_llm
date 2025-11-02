@@ -1,0 +1,107 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJtaW5pbWF4L21pbmltYXgtbTI6ZnJlZSIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC41fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "minimax/minimax-m2:free",
+      "n": 1,
+      "reasoning_effort": "low",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "length",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "# The Song Between Stars\n\n## 1. The City of Copper Bridges\n\nPeople say that dragons are fire and fury and folklore. They are the heartbeat of myths and the dawn-illuminated silhouette carved into the memory of every child who has ever looked up at the sky and wished for a second life. But in Asterel, a port city built on a lattice of copper bridges and glass barges, dragons were something else: a tax, a treaty, a neighbor, a crisis, and, sometimes, a friend.\n\nIt was toward the tail end of a restless winter that Mara found herself waist-deep in the river. The moon hung like a coin clinked against the back of a windowpane, and her hair was a net of static catching floating light. She had climbed out from an alley where steam rose like confession from chimneys, where a black market trader had tried to palm a copper-silver spoon bearing a dragon tooth socket with a grin like a shark’s. She had tripped over a barrow of fish, slipped, and landed somewhere between the tide and the tide’s shadow. It wasn’t a romantic splash. It was a practical one, the kind of cold that started in the bones and worked its way to the brain like a question.\n\nMara hauled herself up to a wharf and spat out a taste like mint and algae. “I am owed a carriage,” she said to no one. “I am owed a sign. I am owed a boat.”\n\nAn old man sat in a corner of the wharf with a broken lute. He looked at her with one eye cloudy like pond ice and another that was almost fierce, like a fish ledger balancing the bed of a stream. “You are owed your breath,” he told her. “The tide doesn’t distinguish debt from luck.”\n\nThe city breathed around them, and in its breath, a slow pulse.\n\nAsterel existed because the river did, and the river existed because the mountains above believed in snow. Downstream, the water’s belly was smooth as an unplayed harp; upstream, it ran shallow in places, tossing stones like dice; farther up, the rocks remembered dragons.\n\nThree years earlier, a treaty with the Copperscale Court—a conclave of mountain-dwelling dragons—had marked all iron goods for a tax. Not gold or silver; iron. Iron for weapons, iron for coins, iron for hinges and nails. They wanted iron because their scales were tempered with it, because the metal sang to them like a promise, because iron kept them as powerful and mythic as the stories required. In return, they promised not to consume or incinerate the river barges. The treaty had saved lives and made many things, including dreams, expensive.\n\nThe Court governed the skies like a lighthouse governed the shore. But lighthouses never sold their stones, and dragons had always been nothing but pragmatic about the price of flight.\n\nMara hadn’t crossed paths with a dragon until the morning she met Jorin beneath the Pearl Bridge. Jorin had a ledger in his hand and a hat that could have been mistaken for a roof. He had freckles like charcoal dots and a gait like a person who had once believed in symmetry. He was the sort of person who said “profit” the way other people said “mercy.” He was the city’s Treasurer, and he lived inside numbers the way other people lived inside songs.\n\n“Something is wrong,” Jorin said. “They’re taxing feathers.”\n\nMara stopped biting the rope in her mouth to see if she’d heard correctly. Feathers? Not just iron? “Feathers?”\n\n“For arrow flights, for hats, for quills.” He shook his head as if to throw off a hive of bees. “I have notes from the mountain. The Copperscale Court has added feather tariffs to the ledger.”\n\nMara looked up at the Pearl Bridge, which rose like a curve of distilled sound over the river. At its arch, etched into the glass, were the words of the treaty: Light for feathers, song for scales, copper for quiet. Light for feathers. That was the requirement in exchange for the treaty’s breadth: towns like Asterel had to shine, to glow at night, to give off light where birds would know where to land. Candles, lanterns, fires in signal towers; a soft, steady light like breathing in a room where a child was waking. The city had always been bright at night; there was no difference between light and life here.\n\nJorin pointed at a small fire tower near the edge of the river, a sentinel built on stilts to keep watch. “They’re asking us to maintain that light at all hours.”\n\n“Is this a misunderstanding?” Mara asked. “The treaty says light for feathers. We provide light. We have always provided light.”\n\nHe blew his breath out in a rush. “Now they want us to provide it on demand. When they call for it, not when we imagine it. And they’ve decided that we’ve failed too many calls.”\n\n“Who’s failing calls?”\n\n“The fire towers. The lighthouse on the hill.” He shrugged a helpless shrug. “The city’s always been good at making light. Maybe we made it the wrong way.”\n\nMara gave him a look that made his hat shift a fraction of an inch, a sign that he had said something dangerously true.\n\n## 2. The Dragon Who Understood Titles\n\nMara’s small boat was called the Silverwind. It was not silver and did not go with the wind; it was a barge with a hull heavy enough to sit still under the weight of life, and a mast that could be raised when needed. She kept it at the northern side of the port, tied under a tarpaulin that gave it the illusion of privacy. It smelled like rope and fish and old copper, and the tethers creaked like a voice rehearsing a confession.\n\nShe had built the Silverwind herself, under the watchful eye of a craftsman named Luhay who had both hands and a few more besides. He had given her a hammer and taught her how to balance wood and metal without breaking anything, not even her dignity. Luhay had been in the last dragon raid, twenty summers ago; he told stories with his mouth and his hands, and his fingers always looked like he was praying.\n\n“This boat will outlast you,” he had promised her. “Boats that are built like men—carefully, with blame in one pocket and patience in another—always do.”\n\nMara had said she would use the Silverwind to deliver letters. Now the letters were coming with strange stamps, tied to silk ribbons with the scent of tree resin. The stamps depicted dragons with maps in their eyes.\n\nIt was while she was checking the knots on the night of the rope that she heard it: a sound like a thousand pans clattering in a kitchen and the steady exhale of a furnace. The river stopped for a second, then decided it was a river again and went on as if nothing had happened. She looked up and saw a shape beyond the Pearl Bridge, a shape like a folio written in black. A dragon was descending.\n\nPeople screamed with less volume than their bodies deserved. The dragon didn’t speak, not immediately. It arrived in a cloud of steam and coils of light, and its wings left marks against the sky like ink. It was the size of a cargo barge and wore in its chest a ripple of copper scales, the kind of shimmer that made people remember stories their grandparents had told on stormy nights. Its eyes were plates of green glass; its scales sang in a voice Mara could feel rather than hear.\n\n“Who keeps the city’s light?” it asked, and the words filled the air with the metallic hum of a tuning fork.\n\nMara stood up and raised her hand. “I do,” she said. She didn’t know why she said it. She wasn’t the Mayor. She wasn’t the Treasurer. She wasn’t the one who managed fires or tarps or lamps. She was the one who delivered letters and occasionally fell into the river in pursuit of a spoon.\n\nThe dragon’s head tilted with the motion of a person considering a story they hadn’t yet decided was finished. Its nostrils flared in a way that suggested a smile without going anywhere near it. “You,” it said, “and all the other small lights you make without knowing.”\n\n“Mara,” she said, and the dragon’s ear-like flaps twitched with something like a name. Jorin jumped beside her, his hat nearly falling off his head in a storm of congratulations or panic.\n\n“I am Keth,” the dragon said. “I am of the Court, and I understand titles. The title of Mayor is measured in blocks of rock. The title of Treasurer is measured in numbers. The title of Lanternkeeper is measured in calls answered and lights flared. You have become that in what I see. We require one call answered. We require one sign made.”\n\n“What sort of sign?” Mara asked, voice small enough that it felt like lying.\n\nKeth closed its eyes for a heartbeat. “We will say ‘star.’ We will require the star to rise.”\n\nA dragon asked for a star. The city had a star. It was called the Star of Asterel, a fire that burned atop the tallest tower on the ridge behind the city, visible only to those who cared enough to look, a gentle pale flicker intended for birds to see at night when fog got mean and black. It rose once a night, always at dusk, and it was tended by a man named Pen who was an old friend of the river and an enemy of rain. Keth said that the Star should rise now, even though it was not evening. Keth said that the river’s light should not be visible without the star as a foundation.\n\nThe city obeyed the kind of order that looked like a river obeying a moon.\n\nPen started the star. He moved fast enough that his shoes left marks in ash like little curses on a wall. The star rose without fail, a small burn, a quiet of light. It looked like hope sitting on a stone, barely breathing, the kind of hope that refuses to be anything other than itself.\n\nKeth watched it, and something shifted behind its scales. “Good,” it said, and there was a note in the note. “Good is enough for now.”\n\nA wave of sound rippled down the river. The city exhaled. The fire tower was being fed more fuel. People stood on balconies and looked at the star and felt something inside their heads that was not fear and not relief but something closer to awakening.\n\nJorin took out his ledger and pencil, as if he were noting down notes for a new kind of song. “We need to keep this up,” he said. “We need to schedule. We need to pay.”\n\n“Pay in light,” Keth said. “You pay in light.”\n\nThe dragon turned away and flew up into a sky that had grown a memory of smoke. Mara stood on her boat for a long time after it had gone, staring at the water, and her mind was very quiet.\n\n“What does it mean?” Jorin asked, almost whispering.\n\nMara thought of the old man with the lute on the wharf. “It means,” she said, “that light is a contract.”\n\n## 3. The Line in the Water\n\nThe night was colder after Keth’s visit, the kind of cold that knows people and waits for them. A council meeting was held in the cathedral, where ceilings carried saints like ships, and candles carried their own small muscles. The Mayor sat up front, his face a composition of mostly patience and some dread. Jorin stood beside him with his ledger like a river between two banks. The Treasurer said nothing, then said too much.\n\n“They have added feather tariffs,” he began. “They want more iron than we can mine without stealing mountains. They want the star to rise on demand, not on timing. They want light with coordination. And now they have come and asked for this.”\n\nHe was about to say “power,” but the word felt like an intruder.\n\nMara, who had been asked to attend despite being a letter-carrier, perched on a pew near the back. She watched the stained glass rainbow itself on the floor in little pools and stripes. She thought of the river and the star and the idea that everything in a city was connected like a net. She had the peculiar sensation of having stood up on the barge and said “I do” to something she didn’t understand yet.\n\n“We need to answer every call,” the Mayor said, as if answering every call were the same as staying alive.\n\n“Why would we want to answer a call from dragons?” someone asked from the back. People shouted “risk” like a ball thrown across a fence. People shouted “respect.” People shouted “tax.” People shouted “light” like a person shouting “food” and being refused.\n\nMara looked at Keth’s absence in the room. She",
+            "reasoning": "I'm aiming to write a very long story filled with dragons and adventures, but I must be cautious about maintaining moderate-length sentences. It's essential to balance creativity and comprehensibility while exploring the themes of dragons and adventures. I want to delve into aspects like the world, plot, characters, and even relationships. For the title, \"Wings Over Asterel,\" I’m imagining the protagonists' names, setting the scene in a city-state called Asterel nestled against the Azure Spine mountains.\n\nI'm planning the story with various pivotal scenes. The climax involves the Harbinger's rise, a dragon-scale crown, and a fused aurora that triggers the meltdown of the Heartstone. I think about a character carrying the \"Heartstone shard\" to the sky to create stars, but that feels a bit forced. Ultimately, I want an ending where the youngest dragon, named Tamasine, re-writes tradition by accepting both metal and gold, becoming the guardian of the sky while the characters chart a new trade route and start a new era. However, writing too much might make it feel heavy, so I'll aim for a lighter approach.\n\nI'm focusing on highlighting the use of metaphors at key conceptual moments, like how \"To be bound is to be built.\" I want to clarify that the story isn't instructing on physical acts, just describing them for narrative purposes. I’ll phrase actions in a way that hints at closeness without being explicit. I also need to be mindful not to make the story too formulaic and feel unnatural. My goal is to create a \"very long story\" that’s not too verbose or overshadowing other elements, aiming for around 2800-3600 words. Now, let’s get to writing!",
+            "reasoning_details": [
+              {
+                "format": null,
+                "index": 0,
+                "text": "I'm aiming to write a very long story filled with dragons and adventures, but I must be cautious about maintaining moderate-length sentences. It's essential to balance creativity and comprehensibility while exploring the themes of dragons and adventures. I want to delve into aspects like the world, plot, characters, and even relationships. For the title, \"Wings Over Asterel,\" I’m imagining the protagonists' names, setting the scene in a city-state called Asterel nestled against the Azure Spine mountains.\n\nI'm planning the story with various pivotal scenes. The climax involves the Harbinger's rise, a dragon-scale crown, and a fused aurora that triggers the meltdown of the Heartstone. I think about a character carrying the \"Heartstone shard\" to the sky to create stars, but that feels a bit forced. Ultimately, I want an ending where the youngest dragon, named Tamasine, re-writes tradition by accepting both metal and gold, becoming the guardian of the sky while the characters chart a new trade route and start a new era. However, writing too much might make it feel heavy, so I'll aim for a lighter approach.\n\nI'm focusing on highlighting the use of metaphors at key conceptual moments, like how \"To be bound is to be built.\" I want to clarify that the story isn't instructing on physical acts, just describing them for narrative purposes. I’ll phrase actions in a way that hints at closeness without being explicit. I also need to be mindful not to make the story too formulaic and feel unnatural. My goal is to create a \"very long story\" that’s not too verbose or overshadowing other elements, aiming for around 2800-3600 words. Now, let’s get to writing!",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "length"
+        }
+      ],
+      "created": 1762104972,
+      "id": "gen-1762104972-jrj0xEp8qsIxDwnFCnqB",
+      "model": "minimax/minimax-m2:free",
+      "object": "chat.completion",
+      "provider": "Minimax",
+      "usage": {
+        "completion_tokens": 3000,
+        "prompt_tokens": 50,
+        "total_tokens": 3050
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "9985648e5e2098c3-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 02 Nov 2025 17:36:14 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

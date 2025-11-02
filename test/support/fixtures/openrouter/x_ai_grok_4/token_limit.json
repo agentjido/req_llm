@@ -1,0 +1,107 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6IngtYWkvZ3Jvay00IiwibiI6MSwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuNX0="
+    },
+    "canonical_json": {
+      "max_tokens": 100,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "x-ai/grok-4",
+      "n": 1,
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": null,
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Below is a very long, original story about dragons and adventures. I've crafted it as an epic fantasy tale, complete with heroes, villains, mythical creatures, and thrilling quests. It's divided into chapters for readability, but it's one continuous narrative. I hope you enjoy it!\n\n---\n\n# **The Dragon's Shadow: Chronicles of the Eternal Flame**\n\n## **Chapter 1: The Village of Embers**\n\nIn the shadowed valleys of Eldoria, where mist clung to the ancient pines like a lover's embrace",
+            "reasoning": null,
+            "reasoning_details": [
+              {
+                "data": "I9sIeEXdM8iMhAFy/V2I26/6UKKf5b8Xufbyv0MXZ4gx/WwaT6c3v2BUWJMltfFbusJhq2ntgEiMxgk+M5UvMay7fPIe3MTdkvd8zuSoK8bE6xtlpD/x4hehQ/Po/b+tjMpZ5VjBwAyfzuVAY3CnKieabkd2SB5ocTlXqE1XyCVbVJFb5TfnOgWZSkqXUHAteBcKc4AbeuhhccHF+wCKE243GOAy1UACWWYUyCQtW8D9o88AWXl5WagZw5gcaaCF6nkdg8gOK6bgjj/wt0UJis7bhkjCD8LMg9K4TXVfcigleGGDzP++GuD1FvE73LyniL9R4OMb85tLKDI8Ik31VMVXtViEIgW+l70eEGBZV2f0LvQW3QSBPooo5SLaQMbnDYBCMoX4gjWeDFhIxsNx+8L/wKJUywGLnm+7P7dKgLGn/ccHBqiK0JuE1FWjFIPwauKbhz3wShmHUYx563XSPzzqZeFSF+LL+O726CpRTMST6ciEgtu8fCA9P3qoCmOpOyDRrHbrUN+CjkpE+Gb8MFRmQ5zRQJpSqVoGfcUSreUpC4HUlHHxnegz4rvrXKvstiiBtAM/2AqEi3ZhngI3zV4etSkQBjZu6RYV3L9LYJfRG4nmW0VngxTM4r31tfIncg67jMEAbMpu5eETcfsPM1tBLYvlJ7l6CDStPUuJsimmuPvwWCUqWUQXaIvMHWI7L2thT8JZY/ycXoEQ83NFa+gYYhIF/uWUrecrGrss22XUHwjDsuyOX2zaT1DqFfDg8MuRVe9uaBMirwofSSGW/EqKCvCEX3KqrYhB6MEAdHt3n/SjpfXAMJPb378SEyLO2F5EsFGA3EHyQlpFUcohO+pOWl0DeFW1pL9K/OICQJIVbDym+xn2cvAz0WzalxH6BxFSJ9V4G88ORNqX4PwJbLnE3o6WrFxPdp8SZrIiW5fOj9R2C8zuC7cRdCKexCH1JuAmV1YrXnOz/4BBrqdGDUuj6qHposzM2hPo4C12W4jdnCNQUrFjSciVbBj6ei079hJW9ZelqGi82nwsS3mdjlkDlqG/9buYrJYpLz3ORLlXTG07TbCyqu0AKbDN8mmi3LJGwBBTx/yf+oD4Qrloy/3IcT0ahuMRzOHLSsZ7PFO0uQUjw6UsHUrCUGs6UdJVSd1luuYKCZJidi0Z9Uqjzv/AGn63IsfF52hgesgEa9ebLiXF3L1TZaegVM9DPJlh8+Hzu34MwypVCNj2VB3uhRfffA",
+                "format": "xai-responses-v1",
+                "id": "rs_cf115a5e-24da-cad0-2ca7-cdfb885101de_us-east-1",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": null
+        }
+      ],
+      "created": 1762105044,
+      "id": "gen-1762105044-Lfz6DgFhtJ53vu9Qae81",
+      "model": "x-ai/grok-4",
+      "object": "chat.completion",
+      "provider": "xAI",
+      "usage": {
+        "completion_tokens": 106,
+        "prompt_tokens": 16,
+        "total_tokens": 122
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "998566515b4e1070-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 02 Nov 2025 17:37:24 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

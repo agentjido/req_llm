@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMDAwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiJjYWxsX1R2Tm15REZFMVAyRWo0cXRYQnREU2EzWSIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfVHZObXlERkUxUDJFajRxdFhCdERTYTNZIn1dLCJtb2RlbCI6Im9wZW5haS9vNC1taW5pIiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiJjYWxsXzJKVTVXbk5La0d1TVNaSlhVb0cyUTBmaCIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfMkpVNVduTktrR3VNU1pKWFVvRzJRMGZoIn1dLCJtb2RlbCI6Im9wZW5haS9vNC1taW5pIiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
       "max_tokens": 10000,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_TvNmyDFE1P2Ej4qtXBtDSa3Y",
+              "id": "call_2JU5WnNKkGuMSZJXUoG2Q0fh",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "call_TvNmyDFE1P2Ej4qtXBtDSa3Y"
+          "tool_call_id": "call_2JU5WnNKkGuMSZJXUoG2Q0fh"
         }
       ],
       "model": "openai/o4-mini",
@@ -68,13 +68,16 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1760532572,
-      "id": "gen-1760532572-vqonmm1qhpdNMr6ojn0z",
+      "created": 1762105017,
+      "id": "gen-1762105017-wKZYyr5egnteBl4HQWPU",
       "model": "openai/o4-mini",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
         "completion_tokens": 7,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
         "prompt_tokens": 60,
         "total_tokens": 67
       }
@@ -84,7 +87,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6fe32abaf790-ORD"
+        "998565a63d10f790-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -93,7 +96,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:33 GMT"
+        "Sun, 02 Nov 2025 17:36:57 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -78,16 +78,19 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532727,
-      "id": "gen-1760532727-huiBFVk2AZoZv7Et30F0",
+      "created": 1762105150,
+      "id": "gen-1762105150-z9nOoYUO6bgkmwZyMhwb",
       "model": "z-ai/glm-4.5-air",
       "object": "chat.completion",
-      "provider": "Z.AI",
+      "provider": "Novita",
+      "system_fingerprint": "",
       "usage": {
         "completion_tokens": 89,
+        "completion_tokens_details": null,
         "prompt_tokens": 164,
         "prompt_tokens_details": {
-          "cached_tokens": 78
+          "audio_tokens": 0,
+          "cached_tokens": 40
         },
         "total_tokens": 253
       }
@@ -97,7 +100,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef73aabe95e822-ORD"
+        "998568e809a05c90-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -106,7 +109,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:52:08 GMT"
+        "Sun, 02 Nov 2025 17:39:14 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -62,13 +62,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Why was the cat sitting on the computer?\n\nBecause it wanted to keep an eye on the mouse!",
-            "reasoning": "**Formulating Cat Joke**\n\nI'm focusing on crafting a good cat joke. Since no tools are helpful here, I'll just tell you one!\n\n",
+            "content": "I am sorry, I cannot tell jokes. My capabilities are limited to providing information about the weather.",
+            "reasoning": "**Seeking Joke Capability**\n\nI'm currently evaluating my ability to fulfill your request for a cat joke. It seems my current tools are primarily for weather-related inquiries, not humor generation. I'll let you know if I develop the capacity to share a laugh!\n\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "**Formulating Cat Joke**\n\nI'm focusing on crafting a good cat joke. Since no tools are helpful here, I'll just tell you one!\n\n",
+                "text": "**Seeking Joke Capability**\n\nI'm currently evaluating my ability to fulfill your request for a cat joke. It seems my current tools are primarily for weather-related inquiries, not humor generation. I'll let you know if I develop the capacity to share a laugh!\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -78,22 +78,22 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1760546987,
-      "id": "gen-1760546987-ZTVflh5t7GCUIwFhu7Ds",
+      "created": 1762104935,
+      "id": "gen-1762104935-CzsG8Vz4NNkOPeQTrIqH",
       "model": "google/gemini-2.5-flash-lite",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
-        "completion_tokens": 79,
+        "completion_tokens": 83,
         "completion_tokens_details": {
           "image_tokens": 0,
-          "reasoning_tokens": 58
+          "reasoning_tokens": 63
         },
         "prompt_tokens": 20,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 99
+        "total_tokens": 103
       }
     },
     "headers": {
@@ -101,7 +101,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0cfce0d37ff5b-ORD"
+        "998563a48fc7c365-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -110,7 +110,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:49:47 GMT"
+        "Sun, 02 Nov 2025 17:35:35 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

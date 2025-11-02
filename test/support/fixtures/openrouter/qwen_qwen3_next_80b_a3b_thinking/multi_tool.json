@@ -95,15 +95,15 @@
         {
           "finish_reason": "tool_calls",
           "index": 0,
-          "logprobs": null,
+          "logprobs": -1.7881393e-6,
           "message": {
-            "content": "\n\n",
-            "reasoning": "Okay, the user is asking about the weather in Paris, France. Let me check the available tools. There's a get_weather function that requires location and optionally unit. The location is specified as Paris, France. The unit isn't mentioned, so maybe default to Celsius? But the parameters say unit is optional, with enum celsius or fahrenheit. Since the user didn't specify, maybe I should just use the location and not include unit, or maybe default to celsius. Wait, the required field is only location, so unit is optional. So I can call get_weather with location \"Paris, France\" and maybe omit unit. But sometimes people might expect Fahrenheit, but in France they use Celsius, so probably safe to use Celsius. But the function allows unit parameter, but since it's optional, maybe just provide location. Let me check the tool definition again. The parameters for get_weather: required is location, unit is optional with enum. So the correct call would be {\"location\": \"Paris, France\"} and maybe include unit as \"celsius\" if needed. But the user didn't specify, so perhaps the function can handle it without unit, or maybe the default is Celsius. But to be safe, maybe include unit as celsius. Wait, the problem is that the user didn't specify, so maybe the tool expects the unit to be provided. But according to the parameters, unit is not required. So the function can be called with just location. So the correct tool call is {\"name\": \"get_weather\", \"arguments\": {\"location\": \"Paris, France\"}}. Alternatively, maybe the system expects to include unit, but since it's optional, it's okay to omit. Let me check the tool's parameters again. The parameters for get_weather: required is [\"location\"], so unit is optional. So yes, just location is needed. So the tool call should have location as Paris, France. So I should generate the tool call with that.\n",
+            "content": "",
+            "reasoning": "Okay, the user is asking about the weather in Paris, France. Let me check the available tools. There's a get_weather function that requires location and optionally unit. The location is specified as Paris, France. The unit isn't mentioned, so maybe default to Celsius? But the parameters say unit is optional, with enum celsius or fahrenheit. Since the user didn't specify, maybe I should just use the location and not include unit, or maybe default to celsius. Wait, the required field is only location, so unit is optional. So I can call get_weather with location \"Paris, France\" and maybe omit unit. But sometimes people might expect Fahrenheit, but since it's France, probably Celsius is standard. However, the function allows unit to be specified, but since the user didn't say, maybe just provide the location. Let me check the parameters again. The get_weather function has required [\"location\"], so unit is optional. So the correct call is to pass location as \"Paris, France\" and not include unit. So the tool call should be {\"name\": \"get_weather\", \"arguments\": {\"location\": \"Paris, France\"}}. Yeah, that's right. No need to specify unit unless the user asked for it. So I should generate that tool call.\n",
             "reasoning_details": [
               {
-                "format": "unknown",
+                "format": null,
                 "index": 0,
-                "text": "Okay, the user is asking about the weather in Paris, France. Let me check the available tools. There's a get_weather function that requires location and optionally unit. The location is specified as Paris, France. The unit isn't mentioned, so maybe default to Celsius? But the parameters say unit is optional, with enum celsius or fahrenheit. Since the user didn't specify, maybe I should just use the location and not include unit, or maybe default to celsius. Wait, the required field is only location, so unit is optional. So I can call get_weather with location \"Paris, France\" and maybe omit unit. But sometimes people might expect Fahrenheit, but in France they use Celsius, so probably safe to use Celsius. But the function allows unit parameter, but since it's optional, maybe just provide location. Let me check the tool definition again. The parameters for get_weather: required is location, unit is optional with enum. So the correct call would be {\"location\": \"Paris, France\"} and maybe include unit as \"celsius\" if needed. But the user didn't specify, so perhaps the function can handle it without unit, or maybe the default is Celsius. But to be safe, maybe include unit as celsius. Wait, the problem is that the user didn't specify, so maybe the tool expects the unit to be provided. But according to the parameters, unit is not required. So the function can be called with just location. So the correct tool call is {\"name\": \"get_weather\", \"arguments\": {\"location\": \"Paris, France\"}}. Alternatively, maybe the system expects to include unit, but since it's optional, it's okay to omit. Let me check the tool's parameters again. The parameters for get_weather: required is [\"location\"], so unit is optional. So yes, just location is needed. So the tool call should have location as Paris, France. So I should generate the tool call with that.\n",
+                "text": "Okay, the user is asking about the weather in Paris, France. Let me check the available tools. There's a get_weather function that requires location and optionally unit. The location is specified as Paris, France. The unit isn't mentioned, so maybe default to Celsius? But the parameters say unit is optional, with enum celsius or fahrenheit. Since the user didn't specify, maybe I should just use the location and not include unit, or maybe default to celsius. Wait, the required field is only location, so unit is optional. So I can call get_weather with location \"Paris, France\" and maybe omit unit. But sometimes people might expect Fahrenheit, but since it's France, probably Celsius is standard. However, the function allows unit to be specified, but since the user didn't say, maybe just provide the location. Let me check the parameters again. The get_weather function has required [\"location\"], so unit is optional. So the correct call is to pass location as \"Paris, France\" and not include unit. So the tool call should be {\"name\": \"get_weather\", \"arguments\": {\"location\": \"Paris, France\"}}. Yeah, that's right. No need to specify unit unless the user asked for it. So I should generate that tool call.\n",
                 "type": "reasoning.text"
               }
             ],
@@ -112,27 +112,27 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"location\": \"Paris, France\"}",
+                  "arguments": "{\"location\":\"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "call_79d3fcd665a84808abe29054",
+                "id": "call_1dmnsrm9c1k3ddoj5sm9u24j",
                 "index": 0,
                 "type": "function"
               }
             ]
           },
-          "native_finish_reason": "tool_calls"
+          "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532575,
-      "id": "gen-1760532575-BlY95YDJlx03qPnnO5Tx",
+      "created": 1762105035,
+      "id": "gen-1762105035-64wzRZ4XEM19KhNpECLF",
       "model": "qwen/qwen3-next-80b-a3b-thinking",
       "object": "chat.completion",
-      "provider": "AtlasCloud",
+      "provider": "Together",
       "usage": {
-        "completion_tokens": 424,
-        "prompt_tokens": 273,
-        "total_tokens": 697
+        "completion_tokens": 286,
+        "prompt_tokens": 288,
+        "total_tokens": 574
       }
     },
     "headers": {
@@ -140,7 +140,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6ff1ce5861f2-ORD"
+        "998566174e20ff5c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -149,7 +149,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:35 GMT"
+        "Sun, 02 Nov 2025 17:37:15 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

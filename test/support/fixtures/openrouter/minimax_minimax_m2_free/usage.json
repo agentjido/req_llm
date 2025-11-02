@@ -1,0 +1,107 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGkgdGhlcmUhIiwicm9sZSI6InVzZXIifV0sIm1vZGVsIjoibWluaW1heC9taW5pbWF4LW0yOmZyZWUiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 500,
+      "messages": [
+        {
+          "content": "Hi there!",
+          "role": "user"
+        }
+      ],
+      "model": "minimax/minimax-m2:free",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hey there! 👋✨ So great to meet you! I'm MiniMax-M2—your go-to assistant for answers, creativity, math, stories, explanations, or just friendly conversation.  \n\nWhat can I help you with today? Whether it’s exploring ideas, solving a puzzle, drafting a message, or learning something new—I'm here! 😊🔍",
+            "reasoning": "Hmm, the user has just started with a simple greeting \"Hi there!\". They're probably testing the waters or wanting to see how I respond. Since this is the first interaction, I'll focus on being warm and encouraging to establish rapport. \n\nI should match their energy with equal enthusiasm (\"Hey!\"). The tone should be upbeat and open-ended to invite further conversation. Maybe add an emoji to make it friendlier? \n\nI recall being MiniMax-M2 with broad knowledge - should highlight that capability subtly without overwhelming them. Offering help across categories gives flexibility. Ending with a question keeps the ball in their court. \n\n...Double-checking tone consistency: enthusiastic but not overbearing, knowledgeable but approachable. The \"🔍\" emoji keeps it playful while suggesting I'm ready to dive into problems. Seems balanced.",
+            "reasoning_details": [
+              {
+                "format": null,
+                "index": 0,
+                "text": "Hmm, the user has just started with a simple greeting \"Hi there!\". They're probably testing the waters or wanting to see how I respond. Since this is the first interaction, I'll focus on being warm and encouraging to establish rapport. \n\nI should match their energy with equal enthusiasm (\"Hey!\"). The tone should be upbeat and open-ended to invite further conversation. Maybe add an emoji to make it friendlier? \n\nI recall being MiniMax-M2 with broad knowledge - should highlight that capability subtly without overwhelming them. Offering help across categories gives flexibility. Ending with a question keeps the ball in their court. \n\n...Double-checking tone consistency: enthusiastic but not overbearing, knowledgeable but approachable. The \"🔍\" emoji keeps it playful while suggesting I'm ready to dive into problems. Seems balanced.",
+                "type": "reasoning.text"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "stop"
+        }
+      ],
+      "created": 1762105038,
+      "id": "gen-1762105038-Ga7AXkDD1XvoWuc9d5Qe",
+      "model": "minimax/minimax-m2:free",
+      "object": "chat.completion",
+      "provider": "Minimax",
+      "usage": {
+        "completion_tokens": 233,
+        "prompt_tokens": 44,
+        "total_tokens": 277
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "99856629cb9d98c3-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 02 Nov 2025 17:37:18 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

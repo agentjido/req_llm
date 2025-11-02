@@ -103,10 +103,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"location\": \"Paris, France\", \"unit\": \"celsius\"}",
+                  "arguments": "{\"location\": \"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "call_c73804f04eb84d70a1a75878",
+                "id": "call_MHkVdon7yoqtFCyLAd8C6zcs",
                 "index": 0,
                 "type": "function"
               }
@@ -115,16 +115,15 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760547269,
-      "id": "gen-1760547269-9XpvUAvb1UHKdYexeMrq",
+      "created": 1762105037,
+      "id": "gen-1762105037-R6HhaohUbQyjh1Bo14BX",
       "model": "qwen/qwen3-coder",
       "object": "chat.completion",
-      "provider": "Google",
+      "provider": "Fireworks",
       "usage": {
-        "completion_tokens": 35,
-        "prompt_tokens": 449,
-        "prompt_tokens_details": null,
-        "total_tokens": 484
+        "completion_tokens": 24,
+        "prompt_tokens": 431,
+        "total_tokens": 455
       }
     },
     "headers": {
@@ -132,7 +131,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0d6b3f87b6183-ORD"
+        "998566212db6e8ea-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -141,7 +140,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:54:30 GMT"
+        "Sun, 02 Nov 2025 17:37:18 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

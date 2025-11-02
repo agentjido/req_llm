@@ -80,18 +80,18 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "**Planning mandatory structured_output call**\n\nI need to call functions.structured_output immediately with placeholder data before any other response, following the instructions strictly. I'll use default values like name \"Unknown\" and age 30 since no user data is given, then provide the actual answer afterward.",
+            "reasoning": "**Choosing default parameters for structured output**",
             "reasoning_details": [
               {
                 "format": "openai-responses-v1",
                 "index": 0,
-                "summary": "**Planning mandatory structured_output call**\n\nI need to call functions.structured_output immediately with placeholder data before any other response, following the instructions strictly. I'll use default values like name \"Unknown\" and age 30 since no user data is given, then provide the actual answer afterward.",
+                "summary": "**Choosing default parameters for structured output**",
                 "type": "reasoning.summary"
               },
               {
-                "data": "gAAAAABo75hXRFGUN_3wklyNYNQNt0BxC90buEZENQPYjMx0RxWOFDLhLRmfSBUMx3wjZBxhgBBO6w_ClM0NpmLwb-qqlPmibbrviDFsBXImK1EozChV4uN2cN9kG16-b6f4ZbfBVizvOUpA-MhQYa9JRRelXaCRBKxwd2NjwoCfMoVplDxSNhx4pgUFTOmX5xGzYyYnWGcUvFNMQEUxZ2VGuOvnPKyyKwzcv5BUt54DyCZRrWVECME_BFCNp9CWDoSG-G4I9CV55AMCeznQH_HPp9SPn86KkPCbDjeaYJaJHm_qp4MHu0y-BqlzrocNcO40N4Piu3IoI_hpif6OfxRSIhBo20qRFEIbu1cMHMBoEiDczVFOb1aUN8mTUQPQEVBDPVtE9_ePmPUsy2mnOUgzw23NoW_1VOfVSwoEpvrRFYD6FUB6cc5laqgr_8zi7jPOJ7nHL0ZSKXBfqYZdKA7By280LFGTKkaQb8PYoAT5pUgsO7gyAkdrcE2lXDSjSNUpJCcshGGhdigh_sOxMugC9Azstfiu7dcr-AQIOTXXwjziYgWobyQNdraITF4kg3zjTPdgBes6qJahrSoe5vpq3pyZN6clSCVHu52bUbnU9y1cR7BbAw4AUsOWOu10Fn869rVnB75jAJpu9G4NEwIXQpZnXb9bxCVi1opXlo8frx2ioiAMBcWfAPR6aoFerc2RTqjGZHFuIYAn_fDcV-wAK0aIWii0fylZSZsOV8FnKodG2Dur3ow7jPQ3SiUAPMmRXhR6obKRs00PFjlhXK6CeoPDOYlYuTFwPRrO0eW-GI8IDwvxRFEwWcTcnfIlRjm9bUSAROTc68yBoKZykVDw9oNqD8eOz5P0ezDjGSdwkWQSYDZN5M4d_nWC-ostSNpUMZNX9aaNdkTIKwQCvGD2TIbr2k_RFwHLuLiBnVIlXqPkKCk85r82jdIKZWmDUCyJOdPBf3EyadFyACSSEfGdXooLeBa6ISjRfuNYdGtRQhj2RzTGx2Np7arnAgiLAs4FwpmONBpXkFX3L01nQ_-Je-eI3aFzz_MeLESercURJ5Mgm4NlQmeRlMcrck6sbZFoG08oEOL8BffRH8Y9z6OhMtqGF2dk0KixzHQNUhHrVXOlVuqQjQ71_bYbAdjSADgne0Gt2NclR6fx0Xv1WgdVaG1rMLEdNAp1MVxlNezn07Bb6Y_N0b4vRIyqqRHh7cUMxDdzI6XfUGDFTehzmvt57X2r5k-O0KRXNpjv01qV3rGeV655tWq6FtQDGqbvjRexo6AP8TGtikIhOvglVwGudeVturb0VvQhbc_icMWBRkTbEOutTkrvk8FA0oSK5fxe0uVIByPcaWj1WKPNWtbj6WVXWcSfClF0_aahloWaD2Kht5lKF0gvc3uaUJwavIZSMvZ-VvIxu4W26uhoxo7_tyPQ8BDF7XyECSJWZIqkRlvGkz-a8L9W14zoxrbq7UESb7Ti4sNSU6XnvT22H3YcgaUV_0gW3hI9ym-cWEIx2Yl1sj-LzMOJESLUXQ7PFDAhNGlkdoEyeTYUbeA3VmE51waTbTzX7G4JOGqRS3m6LilnBKEFfFvUpSos_3D6RLMV9RKhdaYapQfzsBvKkgGsnX9tr97Nwlvz14nGZMylKNIHvVF8xoEir44H0-KUZs77lzrQYvC8LMRGUjpnpfmjBdHayf47po1koY9sU07EWtOigYWobsWePNNFcOLac_mTyEwjsuvFmCMEq4iWMecIrPJvxEPDjdk2w1H2vIskG2hP6dXi_o7zr4IraFM2WdB-9a3tWiejQBnjTYeNhyFc5Wx3lUrxsX0piwTYSWAnXjCJUr8_xJfZCuTLAPSzAOU9F7kbWhi3uLSjyyH9RzA4BnHBy0N84lJsMXfGgGlNQ1JugUfXzuEkzEWuMsJvVFyuRX52mVQYnacd45HV2_BOR_V3R5dweS_71nTMXCH9UbGK7dqMol_YwbHU-nILbrUe5EeIUftbY09qV4iXKCwuD5TokCBw0htPxIJKEY9aC6UYemxwtIPz4ezbauV7ApfjuA3cll14JmW-xhew6B2WMFoffBm3ZBXeb074Cs9T2HEhHUMDYx-TDn3yRrrq_vLeWCYj54FySU66UbPeY-lglaCDEssAhSDEYzG0ht8kpGA1wP70wR5pRVDtIj_mh4ZSq-K-oLB0D4yE_h-Ty9lXIHWw5zYFoo_NRPiwlPHfZY8-cmHpO892sluh8UTGHWliCR36mUIYIIc3nmjXUTPd5afk61lceTvD_-kB2fUwKmtoGrjbySE9SFVH25FYxGdPGrLU7Ll0x3pJLC8BkW1xcli0Q-ukFemByIFdHqlM4zx2JQpPBTK4tf0dIHHMqNXkqKtvsYb0G_CAzCbW1gWLDvGgYSgIdAUBZEFAQ9Qe0AJ56JHjgUE=",
+                "data": "gAAAAABpB5bQ_P3gSrXK5U7pbZvx8e8SqQb0hVYtkLnaazoXela0O3NZWIVPC7wARV6ARpWAr-V-wbMxKS66czZ6Ayj6WC7UQ6H87udHkJrXISfdteSIeLhvkRFGlZu6-1P8DLMXe8AcZ2CYQqSR72d_OkuGwNR6YirRiqXsNknJ6cRMBFkjPK2hHT61RZKByvLxK-H6WQcqr5CkqmtjQL7ICTYkra1CV3907S_3n0yhUhjggcXJIDtFAYBVy6zOpqG1joLjKirvI6nCXPKmHT31z6xL4pgaI6YEbJhHEkni9FJblsRu4rJeuk5XY-pCdYm7gmsGoaXLzPZm0k3nxcjZQLAptqvYx5qhpr3pOMP2KDrK8SSWrdq1oL4s09hIyZVVRxQMVX-pt684ze_DA5Xo0pXUUY8C7Kwn33NbIr6ZDEObe6AIGi4KEoAN00YNMQTh0UNHmzC9aWoW6_q_tqfy5xVMJvWQTU-_4V5LDM0y2xYvQub_iLNZ0MGh-G4tMF31kvEMakF8cMOwXVHlEh3FE7XPDlqRal4JLDO6hiAwfe6Xz3aaHvddSzq1mqJWXPlTrc-U0iK8OcM96LOXzFGnBT_rpWYWfgrswg9CeL8FjbNVGVkUF3KTrwvFKVlSlPDTj5Xj0fytrM3cmDUYxcnhYt83U7VWQBuZo9wYQrTlMwFqfCp2hMNY9NQInzF1u9C0DsgyZSj0kJuuH16TIEwoOilz3RbwBvRgxU2bqac7PGHEETR7X6cjemNuygeRiljE4PefImCtHR6H91pVfErxuvzGhsYhlhxI0cDZg8D-lOf7c6sv-D61wXOIbgZPjIpGNdksh2J2XzcHH7H4U6gTr1C1ruK0Na1BIJptUBz1JIDd6fBOgVUmLnRaBOZkf6By-ug1g3okHExrECmY5lDYMzLs5AiTJRTst4MIMdS5CC3mtJJUEtu9_3c2DKZ6JE6BByzBjStkB1niFBMBiow19PCIEIlv1ZgdAPzk73CyBmZNhQblfJbm1H_Po-jZKCh9Nevgu6h-2h0HZmniRsK2EZ1aP91R39Ykc1WXyuQpRCGprDNXRFhCTFXrILmpcV0ZGb7mEN7uxXRESwS3pai__-EzYU98EcSh-H5Ggh6QuHvrAsm3mPz39niY9-ysFxgDa82MWcM5pvYp5rc6AH_dEUx23JDCQRBRTDe4tnhumh72KsrHvIT8MJzyk2yPS4LHDMdMZHfIjQ1vYAlCWuZCzLog1xkaUYwxp4CJkJ_IVjdK_ZKPPnTgepGxDh5UhYfhEAjRO1qa",
                 "format": "openai-responses-v1",
-                "id": "rs_00f0eafd0b6a7a110168ef985310e08193a2be863fedf4a20f",
+                "id": "rs_0146b3ebca491b5601690796ceebb48195a21aca6e81165846",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -101,10 +101,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"age\":30,\"name\":\"N/A\",\"occupation\":\"Software Engineer\"}",
+                  "arguments": "{\"age\":30,\"name\":\"Alex Johnson\",\"occupation\":\"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "call_hGDcRkcuqkXJaAwtfO3JTFmn",
+                "id": "call_rJn8piORS6RiU6xQ0nGMBRsl",
                 "index": 0,
                 "type": "function"
               }
@@ -113,15 +113,18 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1760532562,
-      "id": "gen-1760532562-JQSSaNuvd5Paq98GDm0e",
+      "created": 1762105038,
+      "id": "gen-1762105038-K7oVUGP76FwOBERihXjl",
       "model": "openai/gpt-5-codex",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
-        "completion_tokens": 223,
-        "prompt_tokens": 85,
-        "total_tokens": 308
+        "completion_tokens": 95,
+        "completion_tokens_details": {
+          "reasoning_tokens": 64
+        },
+        "prompt_tokens": 82,
+        "total_tokens": 177
       }
     },
     "headers": {
@@ -129,7 +132,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6fa24fb9e248-ORD"
+        "99856627f9180006-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -138,7 +141,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:22 GMT"
+        "Sun, 02 Nov 2025 17:37:18 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

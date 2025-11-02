@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjozMjc2LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6ImZ1bmN0aW9ucy5hZGRfNDgzYSIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImZ1bmN0aW9ucy5hZGRfNDgzYSJ9XSwibW9kZWwiOiJvcGVuYWkvZ3B0LW9zcy0xMjBiIiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjozMjc2LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6ImZ1bmN0aW9ucy5hZGRfMjFmMiIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImZ1bmN0aW9ucy5hZGRfMjFmMiJ9XSwibW9kZWwiOiJvcGVuYWkvZ3B0LW9zcy0xMjBiIiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
       "max_tokens": 3276,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "functions.add_483a",
+              "id": "functions.add_21f2",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "functions.add_483a"
+          "tool_call_id": "functions.add_21f2"
         }
       ],
       "model": "openai/gpt-oss-120b",
@@ -76,16 +76,13 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532514,
-      "id": "gen-1760532514-Um0vVjmqAHHScRRw45iP",
+      "created": 1762105003,
+      "id": "gen-1762105003-uOQu0BtgCwcUIoQBMGc6",
       "model": "openai/gpt-oss-120b",
       "object": "chat.completion",
-      "provider": "NCompass",
+      "provider": "Phala",
       "usage": {
         "completion_tokens": 54,
-        "completion_tokens_details": {
-          "reasoning_tokens": 41
-        },
         "prompt_tokens": 124,
         "total_tokens": 178
       }
@@ -95,7 +92,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6e77fa34b838-ORD"
+        "9985654cbce0f60e-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -104,7 +101,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:36 GMT"
+        "Sun, 02 Nov 2025 17:36:43 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -72,12 +72,12 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "The user wants us to use the add tool to compute 2+3. We need to call the add tool with a=2, b=3. Then after tool result, respond with \"sumvalue>\". So we need to call the tool.commentary to=repo_browser.open_file code<|message|>{\"path\": \"\", \"line_start\": 1, \"line_end\": 200}",
+            "reasoning": "The user wants to use the add tool to compute 2+3. We need to call the add tool with a=2, b=3. Then after tool result, respond with \"sumvalue>\". So we need to call the tool.commentary to=repo_browser.open_file code<|message|>{\"path\": \"\", \"line_start\": 1, \"line_end\": 200}",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "The user wants us to use the add tool to compute 2+3. We need to call the add tool with a=2, b=3. Then after tool result, respond with \"sumvalue>\". So we need to call the tool.commentary to=repo_browser.open_file code<|message|>{\"path\": \"\", \"line_start\": 1, \"line_end\": 200}",
+                "text": "The user wants to use the add tool to compute 2+3. We need to call the add tool with a=2, b=3. Then after tool result, respond with \"sumvalue>\". So we need to call the tool.commentary to=repo_browser.open_file code<|message|>{\"path\": \"\", \"line_start\": 1, \"line_end\": 200}",
                 "type": "reasoning.text"
               }
             ],
@@ -87,20 +87,20 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1761606444,
-      "id": "gen-1761606444-ru3XQHcQHeLs2GxEGa2m",
+      "created": 1762105029,
+      "id": "gen-1762105029-Qf037pAHyzTuCLAb2R4P",
       "model": "openai/gpt-oss-120b:exacto",
       "object": "chat.completion",
       "provider": "Novita",
       "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 88,
+        "completion_tokens": 87,
         "completion_tokens_details": {
-          "reasoning_tokens": 80
+          "reasoning_tokens": 79
         },
         "prompt_tokens": 92,
         "prompt_tokens_details": null,
-        "total_tokens": 180
+        "total_tokens": 179
       }
     },
     "headers": {
@@ -108,7 +108,7 @@
         "*"
       ],
       "cf-ray": [
-        "9955d9763f89eaf0-ORD"
+        "998565ef0ed5a6ee-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -117,7 +117,7 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 23:07:25 GMT"
+        "Sun, 02 Nov 2025 17:37:09 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

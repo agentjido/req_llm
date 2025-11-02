@@ -81,7 +81,7 @@
                   "arguments": "{\"a\": 2, \"b\": 3}",
                   "name": "add"
                 },
-                "id": "call_028f83c507424c7db21cf657",
+                "id": "chatcmpl-tool-10701ab49328429e847cd4a72d3e01ca",
                 "index": 0,
                 "type": "function"
               }
@@ -90,16 +90,23 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1761606446,
-      "id": "gen-1761606446-NZAHbAjAY4gSVyz9UOLF",
+      "created": 1762105029,
+      "id": "gen-1762105029-ionQYJ7SvDx7Xxbpa2OD",
       "model": "qwen/qwen3-coder:exacto",
       "object": "chat.completion",
-      "provider": "Google",
+      "provider": "BaseTen",
+      "system_fingerprint": null,
       "usage": {
-        "completion_tokens": 28,
-        "prompt_tokens": 331,
-        "prompt_tokens_details": null,
-        "total_tokens": 359
+        "completion_tokens": 22,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 340,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "total_tokens": 362
       }
     },
     "headers": {
@@ -107,7 +114,7 @@
         "*"
       ],
       "cf-ray": [
-        "9955d9805b72e830-ORD"
+        "998565efdbf4dada-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -116,7 +123,7 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 23:07:26 GMT"
+        "Sun, 02 Nov 2025 17:37:09 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

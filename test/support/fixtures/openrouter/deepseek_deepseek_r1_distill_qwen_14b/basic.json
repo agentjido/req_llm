@@ -44,25 +44,33 @@
             "refusal": []
           },
           "message": {
-            "content": "Hello! How can I assist you today? Please provide more details about your request.",
-            "reasoning": "Alright, the user greeted me with \"Hello world!\" and then said \"Hello! How can I assist you today?\" followed by \"Please provide more details about your request.\" So, I need to respond in a friendly and helpful manner.\n\nI should acknowledge their greeting and let them know I'm here to help. Maybe ask them to clarify their request or provide more details so I can assist them better.\n\nKeeping it simple and open-ended should encourage them to share more information.\n",
+            "content": "Hello! How can I assist you today? 😊",
+            "reasoning": "Alright, the user said \"Hello world!\" That's a classic greeting.\n\nI should respond in a friendly and welcoming manner.\n\nMaybe add a smiley to keep it warm and approachable.\n\nLet me go with \"Hello! How can I assist you today? 😊\"\n",
+            "reasoning_details": [
+              {
+                "format": null,
+                "index": 0,
+                "text": "Alright, the user said \"Hello world!\" That's a classic greeting.\n\nI should respond in a friendly and welcoming manner.\n\nMaybe add a smiley to keep it warm and approachable.\n\nLet me go with \"Hello! How can I assist you today? 😊\"\n",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532472,
-      "id": "gen-1760532472-vBHM4bCcIx1AGXIsZ6Qa",
+      "created": 1762104930,
+      "id": "gen-1762104930-peWi5SGAuHQhAhGlKDsB",
       "model": "deepseek/deepseek-r1-distill-qwen-14b",
       "object": "chat.completion",
       "provider": "Novita",
       "usage": {
-        "completion_tokens": 115,
+        "completion_tokens": 69,
         "completion_tokens_details": null,
         "prompt_tokens": 9,
         "prompt_tokens_details": null,
-        "total_tokens": 124
+        "total_tokens": 78
       }
     },
     "headers": {
@@ -70,7 +78,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6d71ec68f604-ORD"
+        "99856385394aa6ee-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -79,7 +87,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:47:53 GMT"
+        "Sun, 02 Nov 2025 17:35:31 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

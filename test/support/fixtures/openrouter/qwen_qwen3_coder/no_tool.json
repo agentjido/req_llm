@@ -69,15 +69,16 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760547267,
-      "id": "gen-1760547267-EJClM8gANX4VpUIkaXuZ",
+      "created": 1762105027,
+      "id": "gen-1762105027-aWavHvYTOBrEYA2K9eyQ",
       "model": "qwen/qwen3-coder",
       "object": "chat.completion",
-      "provider": "AtlasCloud",
+      "provider": "SiliconFlow",
+      "system_fingerprint": "",
       "usage": {
         "completion_tokens": 22,
-        "prompt_tokens": 293,
-        "total_tokens": 315
+        "prompt_tokens": 281,
+        "total_tokens": 303
       }
     },
     "headers": {
@@ -85,7 +86,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0d6a4a8556183-ORD"
+        "998565e788d2e8ea-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -94,7 +95,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:54:28 GMT"
+        "Sun, 02 Nov 2025 17:37:09 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

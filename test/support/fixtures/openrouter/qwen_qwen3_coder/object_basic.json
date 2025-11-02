@@ -85,10 +85,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"name\": \"John Doe\", \"age\": 30, \"occupation\": \"Software Engineer\"}",
+                  "arguments": "{\"age\": 25, \"name\": \"John Doe\", \"occupation\": \"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "call_6facb69b7d3041b7b77eddbb",
+                "id": "call_c0ecc140c4794c08bf1108b5",
                 "index": 0,
                 "type": "function"
               }
@@ -97,18 +97,16 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760547268,
-      "id": "gen-1760547268-E6a1qLlgfJhGwDFqbGmi",
+      "created": 1762105025,
+      "id": "gen-1762105025-vhT2CyWg2zygRptd8Uv2",
       "model": "qwen/qwen3-coder",
       "object": "chat.completion",
-      "provider": "Novita",
-      "system_fingerprint": "",
+      "provider": "Chutes",
       "usage": {
-        "completion_tokens": 44,
-        "completion_tokens_details": null,
-        "prompt_tokens": 374,
+        "completion_tokens": 37,
+        "prompt_tokens": 362,
         "prompt_tokens_details": null,
-        "total_tokens": 418
+        "total_tokens": 399
       }
     },
     "headers": {
@@ -116,7 +114,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0d6abe80d6183-ORD"
+        "998565dbed79e8ea-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -125,7 +123,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:54:29 GMT"
+        "Sun, 02 Nov 2025 17:37:07 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

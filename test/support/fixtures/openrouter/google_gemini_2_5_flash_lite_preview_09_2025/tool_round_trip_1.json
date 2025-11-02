@@ -67,7 +67,7 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "tool_calls",
           "index": 0,
           "logprobs": null,
           "message": {
@@ -81,7 +81,7 @@
                   "arguments": "{\"b\":3,\"a\":2}",
                   "name": "add"
                 },
-                "id": "tool_0_add_BW3UmCVDzbxqjezUCO0T",
+                "id": "tool_0_add_5FSkXdj7JnjR8hFItAHO",
                 "index": 0,
                 "type": "function"
               }
@@ -90,22 +90,22 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1760546977,
-      "id": "gen-1760546977-nMbT2Z7Gx795KDYhDRL9",
+      "created": 1762104933,
+      "id": "gen-1762104933-ysyS13QhRmZtYIx60utM",
       "model": "google/gemini-2.5-flash-lite-preview-09-2025",
       "object": "chat.completion",
-      "provider": "Google AI Studio",
+      "provider": "Google",
       "usage": {
-        "completion_tokens": 22,
+        "completion_tokens": 9,
         "completion_tokens_details": {
           "image_tokens": 0,
           "reasoning_tokens": 0
         },
-        "prompt_tokens": 71,
+        "prompt_tokens": 37,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 93
+        "total_tokens": 46
       }
     },
     "headers": {
@@ -113,7 +113,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0cf92a8f8e26d-ORD"
+        "9985639d18ca1b04-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -122,7 +122,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:49:39 GMT"
+        "Sun, 02 Nov 2025 17:35:35 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

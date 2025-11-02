@@ -45,14 +45,22 @@
           "message": {
             "content": "Hello! How can I assist you today?",
             "reasoning": "Alright, the user just said \"Hi there!\" I should respond in a friendly and welcoming manner. Maybe say hello back and offer assistance. Keep it open-ended so they feel comfortable asking for help.\n",
+            "reasoning_details": [
+              {
+                "format": null,
+                "index": 0,
+                "text": "Alright, the user just said \"Hi there!\" I should respond in a friendly and welcoming manner. Maybe say hello back and offer assistance. Keep it open-ended so they feel comfortable asking for help.\n",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532476,
-      "id": "gen-1760532476-ISTIsw8LzkJR8taQB7ZT",
+      "created": 1762104966,
+      "id": "gen-1762104966-1e4SoUZ9dCrzFtWuIaRi",
       "model": "deepseek/deepseek-r1-distill-qwen-14b",
       "object": "chat.completion",
       "provider": "Novita",
@@ -69,7 +77,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6d87efcbf604-ORD"
+        "998564670d3aa6ee-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -78,7 +86,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:47:56 GMT"
+        "Sun, 02 Nov 2025 17:36:06 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

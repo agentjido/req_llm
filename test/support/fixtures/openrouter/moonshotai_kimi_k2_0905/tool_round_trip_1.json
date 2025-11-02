@@ -71,7 +71,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "",
+            "content": "I'll use the add tool to compute 2 + 3 for you.",
             "reasoning": null,
             "refusal": null,
             "role": "assistant",
@@ -81,7 +81,7 @@
                   "arguments": "{\"a\": 2, \"b\": 3}",
                   "name": "add"
                 },
-                "id": "functions.add:0",
+                "id": "add:0",
                 "index": 0,
                 "type": "function"
               }
@@ -90,16 +90,18 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760532488,
-      "id": "gen-1760532488-R0FnbgWSVZ7jJ8IAuPkn",
+      "created": 1762104960,
+      "id": "gen-1762104960-sOZJHbLeewj05rujyvKf",
       "model": "moonshotai/kimi-k2-0905",
       "object": "chat.completion",
-      "provider": "Chutes",
+      "provider": "Novita",
+      "system_fingerprint": "fpv0_41b1161c",
       "usage": {
-        "completion_tokens": 19,
-        "prompt_tokens": 105,
+        "completion_tokens": 36,
+        "completion_tokens_details": null,
+        "prompt_tokens": 90,
         "prompt_tokens_details": null,
-        "total_tokens": 124
+        "total_tokens": 126
       }
     },
     "headers": {
@@ -107,7 +109,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6dd71b73cc1a-ORD"
+        "99856441e93be20b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -116,7 +118,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:09 GMT"
+        "Sun, 02 Nov 2025 17:36:01 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -40,29 +40,32 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! I'm your GLM model trained by Zhipu AI. How can I assist you today? Whether you have questions, need information, or just want to chat, I'm here to help. What would you like to discuss?",
-            "reasoning": null,
+            "content": "\n",
+            "reasoning": "1.  **Analyze the User's Input:**\n    *   The user said: \"Hi there!\"\n    *   This is a very common, friendly, and informal greeting.\n    *   It's an opening line, a conversation starter.\n    *   It doesn't contain a specific question or request.\n\n2.  **Determine the Goal of the Response:**\n    *   The primary goal is to reciprocate the friendliness and encourage further interaction.\n    *   I need to be welcoming, helpful, and open-ended.\n    *   I should signal that I'm ready and waiting for their actual query or task.\n    *   The tone should match the user's: friendly and approachable.\n\n3.  **Brainstorm Potential Response Components:**\n    *   **Reciprocal Greeting:** Start by saying \"Hello,\" \"Hi,\" \"Hey,\" or something similar. This immediately mirrors their energy.\n    *   **Enthusiasm/Welcome:** Add a word or phrase to show I'm happy to hear from them. \"Hello!\", \"Hi there!\", \"Hey!\", \"Greetings!\", \"Welcome!\" are all good options. \"Hello there!\" is a nice, slightly more formal but still friendly echo of their \"Hi there!\".\n    *   **Statement of Purpose/Readiness:** I need to tell them what I'm here for. This is crucial for an AI assistant. Phrases like:\n        *   \"How can I help you today?\"\n        *   \"What can I do for you?\"\n        *   \"I'm here to help.\"\n        *   \"What's on your mind?\"\n        *   \"How can I assist you?\"\n    *   **Offer of Specific Capabilities (Optional but good):** I could hint at what I can do to spark ideas if they don't have one yet. This is a great way to be proactive.\n        *   \"Whether you have a question, need a creative idea, or just want to chat...\"\n        *   \"I can help with writing, brainstorming, coding, and much more.\"\n        *   \"Feel free to ask me anything.\"\n    *   **Closing/Call to Action:** End with an open-ended question that invites them to continue the conversation. The \"How can I help you today?\" part already serves this function well.\n\n4.  **Drafting and Refining - Attempt 1 (Simple & Direct):**\n    *",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "1.  **Analyze the User's Input:**\n    *   The user said: \"Hi there!\"\n    *   This is a very common, friendly, and informal greeting.\n    *   It's an opening line, a conversation starter.\n    *   It doesn't contain a specific question or request.\n\n2.  **Determine the Goal of the Response:**\n    *   The primary goal is to reciprocate the friendliness and encourage further interaction.\n    *   I need to be welcoming, helpful, and open-ended.\n    *   I should signal that I'm ready and waiting for their actual query or task.\n    *   The tone should match the user's: friendly and approachable.\n\n3.  **Brainstorm Potential Response Components:**\n    *   **Reciprocal Greeting:** Start by saying \"Hello,\" \"Hi,\" \"Hey,\" or something similar. This immediately mirrors their energy.\n    *   **Enthusiasm/Welcome:** Add a word or phrase to show I'm happy to hear from them. \"Hello!\", \"Hi there!\", \"Hey!\", \"Greetings!\", \"Welcome!\" are all good options. \"Hello there!\" is a nice, slightly more formal but still friendly echo of their \"Hi there!\".\n    *   **Statement of Purpose/Readiness:** I need to tell them what I'm here for. This is crucial for an AI assistant. Phrases like:\n        *   \"How can I help you today?\"\n        *   \"What can I do for you?\"\n        *   \"I'm here to help.\"\n        *   \"What's on your mind?\"\n        *   \"How can I assist you?\"\n    *   **Offer of Specific Capabilities (Optional but good):** I could hint at what I can do to spark ideas if they don't have one yet. This is a great way to be proactive.\n        *   \"Whether you have a question, need a creative idea, or just want to chat...\"\n        *   \"I can help with writing, brainstorming, coding, and much more.\"\n        *   \"Feel free to ask me anything.\"\n    *   **Closing/Call to Action:** End with an open-ended question that invites them to continue the conversation. The \"How can I help you today?\" part already serves this function well.\n\n4.  **Drafting and Refining - Attempt 1 (Simple & Direct):**\n    *",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532810,
-      "id": "gen-1760532810-ohkpsor9grvtaVDznvO9",
+      "created": 1762105191,
+      "id": "gen-1762105191-eNL5EzLjkTyqLTNWD2hQ",
       "model": "z-ai/glm-4.6",
       "object": "chat.completion",
-      "provider": "Novita",
-      "system_fingerprint": "",
+      "provider": "DeepInfra",
       "usage": {
-        "completion_tokens": 50,
-        "completion_tokens_details": null,
-        "prompt_tokens": 13,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 0
-        },
-        "total_tokens": 63
+        "completion_tokens": 500,
+        "prompt_tokens": 8,
+        "prompt_tokens_details": null,
+        "total_tokens": 508
       }
     },
     "headers": {
@@ -70,7 +73,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef75b00da47317-ORD"
+        "998569e3abe0f790-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -79,7 +82,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:53:30 GMT"
+        "Sun, 02 Nov 2025 17:39:51 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

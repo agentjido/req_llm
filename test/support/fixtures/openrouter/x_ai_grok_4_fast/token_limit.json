@@ -1,0 +1,107 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoxMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6IngtYWkvZ3Jvay00LWZhc3QiLCJuIjoxLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC41fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 100,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "x-ai/grok-4-fast",
+      "n": 1,
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": null,
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "### The Whispering Flames: A Tale of Dragons and Endless Skies\n\nIn the shadowed valleys of Eldoria, where mist clung to the ancient pines like a lover's sigh, lived a girl named Elara. She was no ordinary child of the village; at sixteen summers, her eyes burned with the fire of unspoken dreams, and her hands were calloused from years of tending the forges in her father's smithy. Eldoria was a land forgotten by kings, nestled between jagged mountains that pierced",
+            "reasoning": null,
+            "reasoning_details": [
+              {
+                "data": "C8i+FgWhZyJhrfbH+F0Uuxs6GBiMuzEe7HRPCVRU+lUUiWvRnZk8eO+7UDfTe+NsBimNvgtFugxEhy/U9s5NDK9m5ggcLAizipidQYyFOYHpKDxJnfjlJLUry5cB1grS7nSECuj4D8XRSwMQotCJ08R/uDSnBApEJugGxraORo6H9Z52PnRUOmo9IU5JE8ckwrLtPB5tSVupP8Cep4/t2kp17O1I7NxPuVHGvX/N2FaWrfQw642CZhbL5sk1zE99MTr3spNtx3nFO04SoDVUHc4nLw3FmRu1rxChQhGrjEAMC3jJj9OrtGZ+KJXEsY5tEQ9CzEWM2NqCb37ZugGwczfCPeRN0BE/C9M5hDVO3jw4oo6utnHRsrCGEG1oxQXnK3IdO/F3nvs5z3uh3Z3z2bsQsz17T81ycBZdjnE9OIQdLilLY+tUc/Hl9p4I3IkbKPqBHkZ832owfE7k4qKgQYRq+0hYjdRi3FV2xDxwz2GpVV9ULdaJwsPKrsKDhKf7ZN0HG1qX4RpyO6+7skFS+x0ljXuYy4eOyV1Klt24eC7PdoTLHzKcp9hFczzyeZNh281UJ8MsANfsS0E6FLIfBmPA62P7i43e+l2p0829mRSjKPWReaGXHKABDgY1CAHUowRiKWxevC0yPTyI4/BvOoHGSBlMiImISOxttmaFkxOlzbRvd4xLkluZqwkqLSQO8lqABtpST6wyxYHZpcUfypgJxPx77kTEKgwG73VMoLs4vZ67wtwk/M1OgQzn9FR7/yPQa6Ffs2xYcSeA9KhskLwLwaGLmYHd/p04nsm/S0AKGO057HphwVoIUJ9VQxJWcsDVDDfYPeIsRYtPJfk6vWR2lHq8Bia/YNQeSVNmu14PebW8wBydrPzOqb1ecahcy4QPrYwL9N21R6pEtT+FJBwVXqXiaVttDbC2r6mjA8q8oGqm5iKMFlJAxsUNkB2r0Y23W2YFQ8Mm+BLdDJj/pQ/+879hXCsDz93twfFRHEGy1CmmnwgCI7kJOFAV8s2s4uJbGgD5JMCWkTHaU1Pmdpk396H3d53JBkTk+Fd3Lq8ewgD0cKOApSc",
+                "format": "xai-responses-v1",
+                "id": "rs_c54933ca-9553-fbea-9844-04678d185197_us-east-1",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": null
+        }
+      ],
+      "created": 1762105052,
+      "id": "gen-1762105052-orFEmy4gREFDEZUNEagz",
+      "model": "x-ai/grok-4-fast",
+      "object": "chat.completion",
+      "provider": "xAI",
+      "usage": {
+        "completion_tokens": 106,
+        "prompt_tokens": 16,
+        "total_tokens": 122
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "9985667f9ee47073-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 02 Nov 2025 17:37:32 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

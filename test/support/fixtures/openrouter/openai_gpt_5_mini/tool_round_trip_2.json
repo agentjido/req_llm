@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMjgwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiJjYWxsXzdrMHd6cUV2TXRaaUVWQ3p4TmZiN05NWCIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfN2swd3pxRXZNdFppRVZDenhOZmI3Tk1YIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1taW5pIiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjoxMjgwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiJjYWxsX1NORVJOejRuM0ZBVTB3Y0VaUDhQSktSWCIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfU05FUk56NG4zRkFVMHdjRVpQOFBKS1JYIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1taW5pIiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
       "max_tokens": 12800,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_7k0wzqEvMtZiEVCzxNfb7NMX",
+              "id": "call_SNERNz4n3FAU0wcEZP8PJKRX",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "call_7k0wzqEvMtZiEVCzxNfb7NMX"
+          "tool_call_id": "call_SNERNz4n3FAU0wcEZP8PJKRX"
         }
       ],
       "model": "openai/gpt-5-mini",
@@ -61,37 +61,25 @@
           "logprobs": null,
           "message": {
             "content": "sum=5",
-            "reasoning": "**Responding with output format**\n\nI need to respond using the tool result we got, which is 5. The instruction is clear: I should format it as 'sum=<value>'. It looks like I should avoid extra formatting and I don't need to use single quotes since they're just indicating the text I should produce. So, I'll just go ahead and output it exactly as: sum=5. This seems straightforward!",
-            "reasoning_details": [
-              {
-                "format": "openai-responses-v1",
-                "index": 0,
-                "summary": "**Responding with output format**\n\nI need to respond using the tool result we got, which is 5. The instruction is clear: I should format it as 'sum=<value>'. It looks like I should avoid extra formatting and I don't need to use single quotes since they're just indicating the text I should produce. So, I'll just go ahead and output it exactly as: sum=5. This seems straightforward!",
-                "type": "reasoning.summary"
-              },
-              {
-                "data": "gAAAAABo75hhD8Q30VBGwcylBJEG584S687AreaaMBQZIf6JQVTGEpeOu34O_CRkkCWzxG67I-W2JH9HPbRAvKYZQsulXhImPAnyvdjQvJgDpbtngTrv39nU9h5LXGg13DpIjUbKcW243jRoFnHZqKW8VuNQMDy_V7uQS8qXJCuTvG3xd0XDn4ItVdLobSXTAmKj35Aa8tlVsC6SBsCRCgfzf81MBsI15qTz4lY75xpC2nZJheKbehWUocAPyOs_JJxbXIshd_T4A-bTnxUBnhNK-hNBvE3ohyfTZQYihHQlrzC4_WokVALX5DYiLeoaf_J1Ao5jk1W9gUq_WuhGlC-01iDu91IvZJ2Yh_aCq_wSgDx4J1EFtp_JmueJ6JUbv8f3QwpWwiXZbQQPJietEdsVMu4jNUc9iF6apLoVGlc-hhSQ6tChN0yuxoNF9EZG0E5T7PXhqtIznhPMOwrYiW0FC8cH9vCe3Son-jjRACyiUJ1Mop5O-qrBzJa3FzdXwLHX_AVUQw3FBYHuPEXzQhpFGoLVG0RV1ALO5rVTmQQbkcZb_yK5-kb8vkhoj8BJtScoyJcuFC7DzVUX8hpGZ-ifRae1oACeXDhLwLUB3vKq7qnVhMg7ycVflyEEknhQnnO4YLmbUv59ncXa-Mh6fEJh6FHKu1kEEb5L08CGJiEQ-9LvI1jKPo9IYX3NcnolL17Bz2YI3y7oW-CzxtrgaGQsxcnIhvqv1MuO6vGWVtpxp2FcPgH6vxwtYHfHu41cotDz7co7KvXZfVtd51g_JY8o_OJTJM0gZwXO-OGC-8U7ISmQ-Sp4sZMECcqPWtsDOTWgZMjbthypUOZFonRhFh4jssUM-NqLUB2i583nGQbQ3HZHME9l9ATtE6-urYs3m-H-GnY6CGkKOYUX9sQdKfNB8VmJG-dEl6cOL1FtkA8Tu1d4ZUw9EGj6qO7naPrc2MwCTokuxZ6VXBK2otXWGj3HvJX1BwUUgEckNla382PFldyuYep5_goyf9iz8WzJsGJmj2HNKNgc1IyVRR9JtYA9j6FQ0SdPauUZj5qZ3Khrw2ECDpFJV4dp-S0GigFiFOOOR6Bt6bxsNz9JB12URSIlm_Yh-E2GDUVZthBQlgz6UpFGhcn_FqOwJVt9ZZckrGSR4lQ8wDmqosbswYG6ER_uoqOkovV8HhsaqrD3sWuK0hD2VInPzuICVcQT4LvhEW3aYIYdWpdv6XiUnMCNAkmyxSt8rDA-m-s6-muLhURPmdJS4kDAOaA9BQ_K3_1afmxdQtJXyExhTSN5QEazptFw5CeI4VkFzrR637JbaMGwh8B0YmUYWoGoPbqHEtBKhvIOL-d08EfYj87oXHHzTkV8G0pSZOpTTb4HXeofZHHAljZhKGYbuBbJqwTQt6kKY9quLO3HMzBaGAk3NyFf85Hf5rAQrixfiOZ8hr6ypYty-p7-NnbnAlLmsLAZecBZn7PJ6n7IWCb5SdPrxrcL99XxZ1be9iTVuvEl444xESKWI1hvlxDonzM=",
-                "format": "openai-responses-v1",
-                "id": "rs_68ef985ea0e481908eaddc1fb041bf80",
-                "index": 0,
-                "type": "reasoning.encrypted"
-              }
-            ],
+            "reasoning": null,
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1760532573,
-      "id": "gen-1760532573-MxY1wYeUCnBzVQcgBiom",
+      "created": 1762105007,
+      "id": "gen-1762105007-TJGcPJNlO9iTBn0pq9pC",
       "model": "openai/gpt-5-mini",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
-        "completion_tokens": 73,
+        "completion_tokens": 7,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
         "prompt_tokens": 60,
-        "total_tokens": 133
+        "total_tokens": 67
       }
     },
     "headers": {
@@ -99,7 +87,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6feaada3f92b-ORD"
+        "998565690f261ee4-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -108,7 +96,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:34 GMT"
+        "Sun, 02 Nov 2025 17:36:47 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

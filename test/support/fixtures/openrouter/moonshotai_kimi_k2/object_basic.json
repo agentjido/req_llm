@@ -85,10 +85,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"name\": \"Alex Chen\", \"age\": 29, \"occupation\": \"Software Engineer\"}",
+                  "arguments": "{\"age\":32,\"name\":\"Alex Chen\",\"occupation\":\"Senior Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "structured_output:0",
+                "id": "chatcmpl-tool-bd616b1cb14549c79d4c08808cd8b53e",
                 "index": 0,
                 "type": "function"
               }
@@ -97,23 +97,15 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760532499,
-      "id": "gen-1760532499-iL7hYu7e87vyV65ZarNd",
+      "created": 1762104962,
+      "id": "gen-1762104962-CHOjywKJHDtHE0C0ZJM8",
       "model": "moonshotai/kimi-k2",
       "object": "chat.completion",
-      "provider": "Novita",
-      "system_fingerprint": "",
+      "provider": "Nebius",
       "usage": {
-        "completion_tokens": 31,
-        "completion_tokens_details": {
-          "reasoning_tokens": 0
-        },
-        "prompt_tokens": 157,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 0
-        },
-        "total_tokens": 188
+        "completion_tokens": 18,
+        "prompt_tokens": 147,
+        "total_tokens": 165
       }
     },
     "headers": {
@@ -121,7 +113,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6e1a188489e9-ORD"
+        "9985644fe82190cb-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -130,7 +122,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:20 GMT"
+        "Sun, 02 Nov 2025 17:36:02 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

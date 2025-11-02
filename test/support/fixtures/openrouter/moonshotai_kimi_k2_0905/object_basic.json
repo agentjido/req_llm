@@ -85,10 +85,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"age\": 29, \"name\": \"Alex Chen\", \"occupation\": \"Software Engineer\"}",
+                  "arguments": "{\"age\":28,\"name\":\"Alex Chen\",\"occupation\":\"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "functions.structured_output:0",
+                "id": "019a45a41a309e10444bdd589f8242df",
                 "index": 0,
                 "type": "function"
               }
@@ -97,16 +97,16 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760532498,
-      "id": "gen-1760532498-ENcIcNoqDhqqO0O8PbuY",
+      "created": 1762104971,
+      "id": "gen-1762104971-UkTfmKMJkBPKTvnQKQES",
       "model": "moonshotai/kimi-k2-0905",
       "object": "chat.completion",
-      "provider": "AtlasCloud",
+      "provider": "SiliconFlow",
+      "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 26,
-        "prompt_tokens": 123,
-        "prompt_tokens_details": null,
-        "total_tokens": 149
+        "completion_tokens": 16,
+        "prompt_tokens": 130,
+        "total_tokens": 146
       }
     },
     "headers": {
@@ -114,7 +114,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6e106ee3cc1a-ORD"
+        "998564846f70e20b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -123,7 +123,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:18 GMT"
+        "Sun, 02 Nov 2025 17:36:14 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

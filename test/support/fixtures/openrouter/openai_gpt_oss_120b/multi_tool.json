@@ -98,12 +98,12 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "We need to call get_weather.",
+            "reasoning": "User asks current weather in Paris, France. Use get_weather function.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "We need to call get_weather.",
+                "text": "User asks current weather in Paris, France. Use get_weather function.",
                 "type": "reasoning.text"
               }
             ],
@@ -112,10 +112,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\n  \"location\": \"Paris, France\",\n  \"unit\": \"celsius\"\n}",
+                  "arguments": "{\"location\": \"Paris, France\", \"unit\": \"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "functions.get_weather_9580",
+                "id": "call_f555f99b0eca4a0892e74c8a",
                 "index": 0,
                 "type": "function"
               }
@@ -124,16 +124,16 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760532546,
-      "id": "gen-1760532546-4n1Ac6P6SQjD8PNeT20o",
+      "created": 1762105004,
+      "id": "gen-1762105004-a0wIVdY6aYT6mkAilA9k",
       "model": "openai/gpt-oss-120b",
       "object": "chat.completion",
-      "provider": "DeepInfra",
+      "provider": "Chutes",
       "usage": {
-        "completion_tokens": 44,
-        "prompt_tokens": 172,
+        "completion_tokens": 52,
+        "prompt_tokens": 180,
         "prompt_tokens_details": null,
-        "total_tokens": 216
+        "total_tokens": 232
       }
     },
     "headers": {
@@ -141,7 +141,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6f3feadab838-ORD"
+        "998565543db4f60e-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -150,7 +150,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:06 GMT"
+        "Sun, 02 Nov 2025 17:36:47 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

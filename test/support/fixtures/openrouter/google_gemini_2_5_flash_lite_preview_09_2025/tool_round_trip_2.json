@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo2NTUzLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6InRvb2xfMF9hZGRfQlczVW1DVkR6YnhxamV6VUNPMFQiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJ0b29sXzBfYWRkX0JXM1VtQ1ZEemJ4cWplelVDTzBUIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LWZsYXNoLWxpdGUtcHJldmlldy0wOS0yMDI1IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjo2NTUzLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6InRvb2xfMF9hZGRfNUZTa1hkajdKbmpSOGhGSXRBSE8iLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJ0b29sXzBfYWRkXzVGU2tYZGo3Sm5qUjhoRkl0QUhPIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LWZsYXNoLWxpdGUtcHJldmlldy0wOS0yMDI1IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
       "max_tokens": 6553,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "tool_0_add_BW3UmCVDzbxqjezUCO0T",
+              "id": "tool_0_add_5FSkXdj7JnjR8hFItAHO",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "tool_0_add_BW3UmCVDzbxqjezUCO0T"
+          "tool_call_id": "tool_0_add_5FSkXdj7JnjR8hFItAHO"
         }
       ],
       "model": "google/gemini-2.5-flash-lite-preview-09-2025",
@@ -68,22 +68,22 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1760546979,
-      "id": "gen-1760546979-zbNAUSu7P8KjEL16uddo",
+      "created": 1762104935,
+      "id": "gen-1762104935-y0MSNqPW4alt6EpLyYmw",
       "model": "google/gemini-2.5-flash-lite-preview-09-2025",
       "object": "chat.completion",
-      "provider": "Google AI Studio",
+      "provider": "Google",
       "usage": {
         "completion_tokens": 3,
         "completion_tokens_details": {
           "image_tokens": 0,
           "reasoning_tokens": 0
         },
-        "prompt_tokens": 58,
+        "prompt_tokens": 34,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 61
+        "total_tokens": 37
       }
     },
     "headers": {
@@ -91,7 +91,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0cf9cca64e26d-ORD"
+        "998563a4bf8f1b04-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -100,7 +100,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:49:39 GMT"
+        "Sun, 02 Nov 2025 17:35:35 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

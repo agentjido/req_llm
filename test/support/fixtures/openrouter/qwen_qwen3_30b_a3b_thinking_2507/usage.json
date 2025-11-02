@@ -41,12 +41,12 @@
           "logprobs": null,
           "message": {
             "content": "\n\nHello! 😊 How can I assist you today?",
-            "reasoning": "Okay, the user said, Hi there! Let me think about how to respond. First, I need to be friendly and welcoming. Maybe say something like, Hello! How can I assist you today? But wait, the user might be testing if I'm a real person or just a bot. I should make sure my response is natural and not too robotic.\n\nHmm, the user's message is very short, so they might be new to chatting with me. I should keep it simple and open-ended. Let me check the guidelines again. The user wants a helpful and engaging response. Maybe add an emoji to make it friendly. Like, Hello! 😊 How can I assist you today?\n\nWait, the user said \"Hi there!\" so maybe they're in a good mood. I should match that energy. Let me make sure not to overcomplicate it. Just a simple greeting and an offer to help. Yeah, that's good. Let me go with Hello! 😊 How can I assist you today?\n\nWait, but the user might have a specific question. But since they just said hi, I shouldn't assume. Just keep it open. Let me confirm the response. Yep, that's standard. Alright, that should work.\n",
+            "reasoning": "Okay, the user said, Hi there! Let me think about how to respond. First, I need to be friendly and welcoming. Maybe say something like, Hello! How can I assist you today? But wait, the user might be testing if I'm a real person or just a robot. I should keep it natural.\n\nHmm, the user's message is very short, so they might be new to chatting with me. I should make sure to ask how I can help them. Let me check the guidelines. Oh right, I should avoid being too formal. Maybe add an emoji to keep it friendly. Like, Hello! 😊 How can I assist you today?\n\nWait, the user might have a specific question or need help with something. I should keep my response open-ended so they feel comfortable sharing. Let me make sure it's not too long. Just a simple greeting and an offer to help. Yeah, that should work. Let me go with Hello! 😊 How can I assist you today?\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "Okay, the user said, Hi there! Let me think about how to respond. First, I need to be friendly and welcoming. Maybe say something like, Hello! How can I assist you today? But wait, the user might be testing if I'm a real person or just a bot. I should make sure my response is natural and not too robotic.\n\nHmm, the user's message is very short, so they might be new to chatting with me. I should keep it simple and open-ended. Let me check the guidelines again. The user wants a helpful and engaging response. Maybe add an emoji to make it friendly. Like, Hello! 😊 How can I assist you today?\n\nWait, the user said \"Hi there!\" so maybe they're in a good mood. I should match that energy. Let me make sure not to overcomplicate it. Just a simple greeting and an offer to help. Yeah, that's good. Let me go with Hello! 😊 How can I assist you today?\n\nWait, but the user might have a specific question. But since they just said hi, I shouldn't assume. Just keep it open. Let me confirm the response. Yep, that's standard. Alright, that should work.\n",
+                "text": "Okay, the user said, Hi there! Let me think about how to respond. First, I need to be friendly and welcoming. Maybe say something like, Hello! How can I assist you today? But wait, the user might be testing if I'm a real person or just a robot. I should keep it natural.\n\nHmm, the user's message is very short, so they might be new to chatting with me. I should make sure to ask how I can help them. Let me check the guidelines. Oh right, I should avoid being too formal. Maybe add an emoji to keep it friendly. Like, Hello! 😊 How can I assist you today?\n\nWait, the user might have a specific question or need help with something. I should keep my response open-ended so they feel comfortable sharing. Let me make sure it's not too long. Just a simple greeting and an offer to help. Yeah, that should work. Let me go with Hello! 😊 How can I assist you today?\n",
                 "type": "reasoning.text"
               }
             ],
@@ -56,15 +56,19 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532553,
-      "id": "gen-1760532553-A6PZbZorBPv43VJld1KX",
+      "created": 1762105086,
+      "id": "gen-1762105086-0FgX2hZjeFk8r1zoc7ix",
       "model": "qwen/qwen3-30b-a3b-thinking-2507",
       "object": "chat.completion",
-      "provider": "Nebius",
+      "provider": "SiliconFlow",
+      "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 266,
+        "completion_tokens": 217,
+        "completion_tokens_details": {
+          "reasoning_tokens": 205
+        },
         "prompt_tokens": 13,
-        "total_tokens": 279
+        "total_tokens": 230
       }
     },
     "headers": {
@@ -72,7 +76,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6f6cdfd460a1-ORD"
+        "99856755cea5514c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -81,7 +85,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:14 GMT"
+        "Sun, 02 Nov 2025 17:38:08 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -40,7 +40,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! 😊 How can I assist you today",
+            "content": "Hello!  👋 How can I help you today",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -48,16 +48,21 @@
           "native_finish_reason": "length"
         }
       ],
-      "created": 1760532479,
-      "id": "gen-1760532479-qUKMtcXHCCLKnc2waJIs",
+      "created": 1762104934,
+      "id": "gen-1762104934-soGRzGJzg20iUL2SHYb8",
       "model": "deepseek/deepseek-chat-v3-0324",
       "object": "chat.completion",
-      "provider": "Chutes",
+      "provider": "Novita",
+      "system_fingerprint": "",
       "usage": {
         "completion_tokens": 10,
-        "prompt_tokens": 8,
-        "prompt_tokens_details": null,
-        "total_tokens": 18
+        "completion_tokens_details": null,
+        "prompt_tokens": 6,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 2
+        },
+        "total_tokens": 16
       }
     },
     "headers": {
@@ -65,7 +70,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6d9d0b32115e-ORD"
+        "998563a259d311fb-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -74,7 +79,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:00 GMT"
+        "Sun, 02 Nov 2025 17:35:36 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

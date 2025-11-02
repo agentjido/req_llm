@@ -97,13 +97,20 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "First, the user is asking about the weather in Paris, France. I have a function called \"get_weather\" that matches this request. It requires a \"location\" parameter, which is a string.\n\nThe location is \"Paris, France\", which is clearly provided in the query. So, I can infer the parameter directly.\n\nThe function also has an optional \"unit\" parameter, which can be \"celsius\" or \"fahrenheit\". The user didn't specify a unit, so I shouldn't assume one. The function description doesn't mark it as required, so I can call the function without it, and it will probably default to something.\n\nAvailable functions show: \"required\": [\"location\"], so only location is required. Unit is optional.\n\nI should call the function with the location. My response should be a function call in the specified JSON format within <function_call> tags.\n\nThe format is: <function_call>{\"action\": \"function_name\", \"action_input\": {\"parameter\": \"argument\"}}</function_call>\n\nFor this, it would be: <function_call>{\"action\": \"get_weather\", \"action_input\": {\"location\": \"Paris, France\"}}</function_call>\n\nI shouldn't add any other text unless necessary. The instructions say: \"Keep your response to user clear; please do not make your response verbose!\" So, if I'm calling a function, that should be the entire response.\n\nThis advances the user's request, as getting the weather is exactly what they asked for.\n\nNo need for clarification since all required parameters are present.",
+            "reasoning": "First, the user is asking about the weather in Paris, France. I have a function called \"get_weather\" that matches this query. It requires a \"location\" parameter, which is a string.\n\nThe location is \"Paris, France\", which is clearly provided in the query. So, I can infer the location parameter directly from the user's message.\n\nThe function also has an optional \"unit\" parameter, which can be \"celsius\" or \"fahrenheit\". The user didn't specify a unit, so I shouldn't assume one. The function description doesn't mark it as required, so I can call the function without it, and it will probably default to something.\n\nThe available functions show: \"required\": [\"location\"], so only location is required. Unit is not required.\n\nI should call the function with the location. In JSON format within <function_call> tags.\n\nMy response should be decisive: if I can call the function, I do so without extra chit-chat, as per the instructions: \"Keep your response to user clear; please do not make your response verbose!\"\n\nSo, my response should just be the function call.\n\nFinal decision: Call \"get_weather\" with {\"location\": \"Paris, France\"}.\n\nFunction call format: <function_call>{\"action\": \"get_weather\", \"action_input\": {\"location\": \"Paris, France\"}}</function_call>",
             "reasoning_details": [
               {
-                "format": "unknown",
+                "format": "xai-responses-v1",
                 "index": 0,
-                "text": "First, the user is asking about the weather in Paris, France. I have a function called \"get_weather\" that matches this request. It requires a \"location\" parameter, which is a string.\n\nThe location is \"Paris, France\", which is clearly provided in the query. So, I can infer the parameter directly.\n\nThe function also has an optional \"unit\" parameter, which can be \"celsius\" or \"fahrenheit\". The user didn't specify a unit, so I shouldn't assume one. The function description doesn't mark it as required, so I can call the function without it, and it will probably default to something.\n\nAvailable functions show: \"required\": [\"location\"], so only location is required. Unit is optional.\n\nI should call the function with the location. My response should be a function call in the specified JSON format within <function_call> tags.\n\nThe format is: <function_call>{\"action\": \"function_name\", \"action_input\": {\"parameter\": \"argument\"}}</function_call>\n\nFor this, it would be: <function_call>{\"action\": \"get_weather\", \"action_input\": {\"location\": \"Paris, France\"}}</function_call>\n\nI shouldn't add any other text unless necessary. The instructions say: \"Keep your response to user clear; please do not make your response verbose!\" So, if I'm calling a function, that should be the entire response.\n\nThis advances the user's request, as getting the weather is exactly what they asked for.\n\nNo need for clarification since all required parameters are present.",
-                "type": "reasoning.text"
+                "summary": "First, the user is asking about the weather in Paris, France. I have a function called \"get_weather\" that matches this query. It requires a \"location\" parameter, which is a string.\n\nThe location is \"Paris, France\", which is clearly provided in the query. So, I can infer the location parameter directly from the user's message.\n\nThe function also has an optional \"unit\" parameter, which can be \"celsius\" or \"fahrenheit\". The user didn't specify a unit, so I shouldn't assume one. The function description doesn't mark it as required, so I can call the function without it, and it will probably default to something.\n\nThe available functions show: \"required\": [\"location\"], so only location is required. Unit is not required.\n\nI should call the function with the location. In JSON format within <function_call> tags.\n\nMy response should be decisive: if I can call the function, I do so without extra chit-chat, as per the instructions: \"Keep your response to user clear; please do not make your response verbose!\"\n\nSo, my response should just be the function call.\n\nFinal decision: Call \"get_weather\" with {\"location\": \"Paris, France\"}.\n\nFunction call format: <function_call>{\"action\": \"get_weather\", \"action_input\": {\"location\": \"Paris, France\"}}</function_call>",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "7hegwqOY0XkN6SYLiMuaycsf0EmHg+TtXDucqXGIGygBbICAZiMO1pAkLuS3j21nZxcHbpVT+b/nv30b+P9yH/hM5beBu/4R8KNPcU1eRUrJCrHilHbXX1weHFHgll60oactBMX4c0ZtpTMAj++qdI3sGFxuqhfbxWISq/wyxAIggyDhfdtgYruJUIUb/6JBrB+gmdt6efM31idxPwPP9Dx+vfaI99/Ps5zYZqZJzGOIDoQP2yhhzD/sFt3YZzl1fQ393WSif7IQM7Yea5i0T1Wmo+91eevnA+xsF2uKhgN+nSdZCQFeBG45UtwD6/wp9bIwpSUKuKZUlTfIyNFWzwGTXth3ZrCPwdQXkUJN+RONIU0kAPCKBe78jS61AlZzseHCSzk2dC8JmDbbImBGA9SXA33l/rrVbiun8PHpjMmIZmMwFlxRysJrx9IRbBlp/whe8OVskvDoEsov9JreOyCIh/3ilUCvdP3WiFDgFCKV1MMxkk/5o7CBI04Cv/xXluNLHl6G94KFZ+C/fCiyPDv/8PlS8KOMS38dDpj9CtcsFnQE9EIY2+UPjQsstyEmJwCNbSvJA4wO3+sSqF2idhZVEwqE7iHc9m6RDIM/n3DF797iQ/5SqC2ztYfih5UtAciCNF79er4fTA7DiIiz1oFxSxiQ8KQ5dmiGQas2KvCVL6af7v98UKYr1OMzgsD4yzreF2bjtw01ab8GeGdp2LQqd6ywtolxoDs3mMsncMmqmorXqrJEOuSb/RPVjITwXGyXg6wSQFNAeDsdKAjPVh7yzRb97ZmcpqrBNLqU0T2ejsycXtSq7rS2u5QeXN7A+58hqo+AHPqfMofJrJtf0Ruf5Mq1uVQtw9umI6Lu3Gx9tGPP2QTsX/Kxo4eyJtQQyW9a05dAKk6NxosQ0HzL0VM2DBJrE5fr2Z6vmYXNptobpBwAWdsI7gMmm1rckxn10QayBPOsYgzfIJpMSY6ehAO+2nKnlmmJrRdW5sK4z9nWdZU90v7QXNKgJqs+4MMlRKV1lrSmYYLNt8lOsoJuAgJqndRfLYTLqWK8lLiJ0rFP21BAaYnQqSBDuS/pt9EkoJ4m7xglY7+SSPu/bUZJz6e6KJdZlwhTyfsg0n4Yl7XkckVqbc3JBPMckB1UNYbWM6Kyd3QDPm2l1FSPuTn06iL+GFVO1s5+NJPXQ0mLxbel8F0lv0Xt4ukEVoHi19Z4GRfMoM4Xg5P/zON6mkRgo/3kC9xgOacXIDcfdYcRoa41rCfOgFQ2XahokO335zYVZDH4KuBP6KVcqF3lszA4nwfP4fEwBS+6ErjNgm51pfTatEWE4tgcIH9AuPXDqp1QCu2DnChrEhRmbYN+qbnrhuMn6YOqjvwaUMnwd8OKRkhPXKbr5SGZMW70aA96mzMQyIIX6Q/7EgvTjJ4O3uP02U5af80v0V9j9NdL1YJ8jb+zecZ+0q21PvhYURWA07Rn48E/pMs/OQqDSRw+sJfDa4QIE8CRqUy1cif/RihKWuWx2hLKAFNUj8X3r0VWaAELDyZ1LQlkrwwEWpybnL2yMp8G7QiQWRgDh+mv7TwCLdqV71gPCCpM5r+WJXNeGdv1rO71zpHd/JhaLoZgJ7MU3Z1cBqZqckvTe/+ae+AvV6lGPFgKkgpkyGE7I8T+n0PTKopDjlgzO2ul7HFJBz7RP4FubmnLm84ynzzZY9qCDuTfqaTtJYoecyu6",
+                "format": "xai-responses-v1",
+                "id": "rs_4b7ff7ef-34be-61e0-3e57-880dfcbeb4fb_us-east-1",
+                "index": 0,
+                "type": "reasoning.encrypted"
               }
             ],
             "refusal": null,
@@ -114,32 +121,27 @@
                   "arguments": "{\"location\":\"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "call_68402071",
+                "id": "call_16075194",
                 "index": 0,
                 "type": "function"
               }
             ]
           },
-          "native_finish_reason": "tool_calls"
+          "native_finish_reason": "completed"
         }
       ],
-      "created": 1760532562,
-      "id": "gen-1760532562-hLKAoVYV7zssxhFDdmCi",
+      "created": 1762105059,
+      "id": "gen-1762105059-2Qh1aLaGYwJnx9mQseGh",
       "model": "x-ai/grok-3-mini",
       "object": "chat.completion",
       "provider": "xAI",
-      "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 337,
+        "completion_tokens": 303,
         "completion_tokens_details": {
-          "reasoning_tokens": 309
+          "reasoning_tokens": 275
         },
-        "prompt_tokens": 362,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 3
-        },
-        "total_tokens": 699
+        "prompt_tokens": 367,
+        "total_tokens": 670
       }
     },
     "headers": {
@@ -147,7 +149,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6fa4ae761923-ORD"
+        "998566aad9e1000b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -156,7 +158,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:22 GMT"
+        "Sun, 02 Nov 2025 17:37:39 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

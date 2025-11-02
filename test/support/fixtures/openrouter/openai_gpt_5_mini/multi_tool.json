@@ -98,18 +98,18 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "**Getting weather information**\n\nI need to call the get_weather function with the location set to \"Paris, France,\" and I'm considering Celsius for the unit. Should I use multi_tool_use.parallel? It seems a bit extra for this task. I really should just stick to using the functions namespace by calling functions.get_weather directly. Simplicity is key here! So, I'll go ahead and call functions.get_weather now.",
+            "reasoning": "**Getting weather info**\n\nI'm thinking about how to get the weather. I need to call the weather tool and specify that I want the temperature in Celsius. It doesn't seem necessary to use multi_tool_use since I just need to call one function directly. So, I'll focus on calling functions.get_weather to get the information I need. It's pretty straightforward, and I'll ensure to have it all set up correctly!",
             "reasoning_details": [
               {
                 "format": "openai-responses-v1",
                 "index": 0,
-                "summary": "**Getting weather information**\n\nI need to call the get_weather function with the location set to \"Paris, France,\" and I'm considering Celsius for the unit. Should I use multi_tool_use.parallel? It seems a bit extra for this task. I really should just stick to using the functions namespace by calling functions.get_weather directly. Simplicity is key here! So, I'll go ahead and call functions.get_weather now.",
+                "summary": "**Getting weather info**\n\nI'm thinking about how to get the weather. I need to call the weather tool and specify that I want the temperature in Celsius. It doesn't seem necessary to use multi_tool_use since I just need to call one function directly. So, I'll focus on calling functions.get_weather to get the information I need. It's pretty straightforward, and I'll ensure to have it all set up correctly!",
                 "type": "reasoning.summary"
               },
               {
-                "data": "gAAAAABo75gd-JLxQJUL8Bk6tZOjFbhjYpIvHJgxHEkRg-udeJtmUPCOiENf_gCqu3oChSo0fPBXYvwSRbcnEAEn4Jf7SN6mf0YVVWSVv9bcgAL6OgzZ-fhhs7ky3puyW9iiJQvnOUxkMEek4mNBrQv4G0948bkjcOdohZDn965p3a3pIEUS9ZxNvtHm4ZmgdLMFEZBlCgn9XEIw3UH1rLMQPULHLz4ADlWjJiJ_lV4dNTOsKvQ_mq0CYqzilowtXvhuSYuCSROMmLZM5h1HhDybuZFSZLMy7HqwF8MYJRCOKHk4HNIGwsYrpwNtBI3hzZ0t_F-B0GBbgrZ7PaYqb8g9i9UjjkofBJfbs073f4ogtn5QJPDxNC3_noyizYp1TWasM0s13ssh0GhZtkUaoRyVAeqDDb5UYjXErYH62FA38rBTfIfnBGl8mI5WItk-3R8I7OVamk6AHgXWpJSS8oQY3QrQNJNvFbksSTBOfWN2o6AxCNZErN2a2viBV1mZyiBFlkT8HfolUj-Xp2woGBG6TdVYBHoplBp48QJttmgNgsvx90-AtrIH_-eDWgEMrUcO57qStu_miGjOoPRKtS0Abc0dnA8UO4_UPHBt1O1evNvRt8F535wTym235P7pnwMgPphQsBJOdDSsw87CgMGpmk1YJWTjwSebQOS7atipvUJeSke5SbIPBAbjoxsYzhgSrlZJX57CCvwKVDDsGqxaqS9HZlVt4ws0Rm_QLsJd3dA0fBx9sIQsjQI8lE4QgUOS4z_x1fwxTlKoOmXYFd8qMTthl3cULhVmB4I-kYGFqL6jsKg70lke-zhtsHLvF_6nUwqVzGt9XnvFCbzDEbVyyEehAMMPDFQSUfvYfe8jM_EIywkuqAj7wjpNk4lchPODRIEzl2MVOo73zx-QpndlFRMKknOUjYqU2gLcctq_4sl2Hf-WhXQh9x2VU6yzr_J1bzEje9j4yV5xpS3dVB44ac7dW4bQPGiPSUHWFT-rLMRAJptDl6KFCSg61qYm0Bpi8zqboOkpAk-JzdrUiXWK1x2f6_H5lfFP-ENIhcZAxCgYhupCKTpYmV3lreq2Zesgh5ivpUAw91ZgEP4qZQcNYCIlCXMI4dN6f1jqxkD3El-T4r_RMBdDbBLuM17JI0lklVK_422TSq1nL_N3d5R-vEZBtOzCX_7kFjg0Pduuzze0DQ8uY0_8UjhzwaqJcSkXta-qZWow6PaONNL43nAssESWZ6_a_pfHP4TH_hesRwEROj0Bc8K622XJ-2L5yOjyWaNxz6OUSnVgNEfVHWwWJ83OmmKswsbdGKTqgVCWqh69YxNuzjNmzeFRUqTsd7htNKwZQnOgJ7SmsmeHspbXn1c0yh30Lg==",
+                "data": "gAAAAABpB5ab_4zKGdWSy59jdxgLutH7BaCuAhtcjVnoy2_agK_3sZe7eFoKSx7PgcYSCYkga7UKMUcKxjj90tyIvqCsH_3VLDxd30fYo1Rpt8uACSjPq9r11TV_IuYYt2_k7iI2ArJeiurtDBgickK7OmA3X1cdor5fNRJbCorsqbeLu7RyuP_W2tJfktKf42d1SvHOenip3KBMzaEX1A3mL8AO-DujvU-wTBWzuprMh_M6eXNxje-JRzcsprxaNZqe7ePMkcOpmS_44NrraS-59wEHxh1yXyh-34Qjv1A_lWVGgOaqXWwm_26E06qEWp9ys72XyGmqTMFb8v_LjTObfhiE0iu1k9PfGutZiEyiJPFlrED1CC-IpimeSn5gCEc3Mc4Xj44KurjISuoH1udD_lMgFF9MeU4HoNupGK09KRssAIBRvHoxMA1Tc84nwaEpjpwZjZju4emDa1MQg5v6KkBXHqwFrUJ5J-xsNoTpvnDYD5MszW0Y8SnoEnHMS18WXD8tKIBzxRGKzPIQTeiOQw1hS05hOuHWboKSo3optpJAKZkuulhhvAnPxAa6G9znoG4NvIA9TqomnvHNxn5OkI5hjnzpfJBq7b3OAFsv6cWPZUyeqGXKYnEuEpVjMWRn58_-V-9UAfD-wHbys6rNUuqNHEoprzchxRAmamm5G4L2pkVTR7P6e_sGVkZPIwpHsBVThytuhyrvs1RWm1ZdY_2lFj53-xWWIny4bcu3PdZrtoIm95StJWECnGeFR8nAEAv2stIw8HDVKKnMcQQIWxBsVn351_vPKpKww0JQVHiy5ornr8C0qi4FVuZMyD-LdumE3RTEbscT9zZgqBixbn2UQYTaKexX8ij30UArBj-63FPmeoh87R-u2pzd4dEgX0owNaoNU8xslOhWiJHT8uJ0DjOF1-UZnEySsyx9hprDHh3ak7A5NqUfDExpwE3sWWJjf0VpSq6K-T9YXLoNAHF-qu_7EPLy1hCaoeUNiMOjSiis7pmSX-g-29bJb4uG7aIkgutI",
                 "format": "openai-responses-v1",
-                "id": "rs_025459a26afbfada0168ef981ac374819786639b0beff41441",
+                "id": "rs_0dd84827baf810a20169079699b4b081979818886406f53205",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -122,7 +122,7 @@
                   "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "call_D13QcQ3cWzUx9fO7JHx0pqna",
+                "id": "call_6TGlxs3wu35jFr9XNle1xY38",
                 "index": 0,
                 "type": "function"
               }
@@ -131,15 +131,18 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1760532506,
-      "id": "gen-1760532506-jo3d8qieTj9qQj0Eix66",
+      "created": 1762104985,
+      "id": "gen-1762104985-ZfDBcsw0AAawfQ4P7Aqz",
       "model": "openai/gpt-5-mini",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
-        "completion_tokens": 91,
+        "completion_tokens": 27,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
         "prompt_tokens": 104,
-        "total_tokens": 195
+        "total_tokens": 131
       }
     },
     "headers": {
@@ -147,7 +150,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6e42bc10f92b-ORD"
+        "998564dc8ded1ee4-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -156,7 +159,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:26 GMT"
+        "Sun, 02 Nov 2025 17:36:25 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

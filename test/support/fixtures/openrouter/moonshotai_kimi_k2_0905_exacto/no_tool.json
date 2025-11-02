@@ -61,7 +61,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Why did the cat run from the tree?\n\nBecause it was afraid of the bark!",
+            "content": "Why was the cat sitting on the computer?\n\nBecause it wanted to keep an eye on the mouse!",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -69,16 +69,16 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1761606454,
-      "id": "gen-1761606454-hpMDxVOItRzZ1lsMh1OA",
+      "created": 1762104985,
+      "id": "gen-1762104985-N9Tu0m1zbfiK9Vp9XXIf",
       "model": "moonshotai/kimi-k2-0905:exacto",
       "object": "chat.completion",
-      "provider": "Groq",
-      "system_fingerprint": "fp_3312304636",
+      "provider": "Moonshot AI",
+      "system_fingerprint": "fpv0_41b1161c",
       "usage": {
-        "completion_tokens": 18,
-        "prompt_tokens": 103,
-        "total_tokens": 121
+        "completion_tokens": 21,
+        "prompt_tokens": 68,
+        "total_tokens": 89
       }
     },
     "headers": {
@@ -86,7 +86,7 @@
         "*"
       ],
       "cf-ray": [
-        "9955d9b62eaf0ea2-ORD"
+        "998564dc7bd9e14b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -95,7 +95,7 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 23:07:35 GMT"
+        "Sun, 02 Nov 2025 17:36:26 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

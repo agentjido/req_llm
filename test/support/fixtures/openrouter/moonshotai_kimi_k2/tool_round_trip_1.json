@@ -81,24 +81,24 @@
                   "arguments": "{\"a\":2,\"b\":3}",
                   "name": "add"
                 },
-                "id": "call_b5eawzg4gjwatp52o6m3rtei",
+                "id": "chatcmpl-tool-4f85a55bd81842cbaa745bb2788a8ea8",
                 "index": 0,
                 "type": "function"
               }
             ]
           },
-          "native_finish_reason": "stop"
+          "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760532487,
-      "id": "gen-1760532487-Vn75wKtbbXnPCC09viH2",
+      "created": 1762104965,
+      "id": "gen-1762104965-Ng4B4vIoDt82QVMWYp3T",
       "model": "moonshotai/kimi-k2",
       "object": "chat.completion",
-      "provider": "Together",
+      "provider": "Nebius",
       "usage": {
-        "completion_tokens": 22,
-        "prompt_tokens": 119,
-        "total_tokens": 141
+        "completion_tokens": 10,
+        "prompt_tokens": 118,
+        "total_tokens": 128
       }
     },
     "headers": {
@@ -106,7 +106,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6dd08f5d89e9-ORD"
+        "99856462d99c90cb-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -115,7 +115,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:09 GMT"
+        "Sun, 02 Nov 2025 17:36:06 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

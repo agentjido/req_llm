@@ -1,0 +1,117 @@
+{
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJIZWxsbyB3b3JsZCEiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJ4LWFpL2dyb2stY29kZS1mYXN0LTEiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 50,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "x-ai/grok-code-fast-1",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.15"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello, world! Nice to see you're starting with the classics. How can I assist you today? 🚀",
+            "reasoning": "First, the user said \"Hello world!\" This is a simple greeting, likely a reference to the classic programming phrase.\n\n\n## Greeting Analysis\n- The user started with \"Hello world!\"—a classic programming greeting often used to test systems.",
+            "reasoning_details": [
+              {
+                "format": "xai-responses-v1",
+                "index": 0,
+                "summary": "First, the user said \"Hello world!\" This is a simple greeting, likely a reference to the classic programming phrase.\n\n\n## Greeting Analysis\n- The user started with \"Hello world!\"—a classic programming greeting often used to test systems.",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "vr8ANjhO9ZuTGHmGDZqhFn11zasd8EslrjTqrZe/moavo5gkhctJ7v1xU02dqGI1MZddRso+0ut70F3kF5QOlh1fwpEGC9NtPmU6faXlc51/IuMCWmbHEjd4OxYJ4RU/el0nYonuTxUOZUVe7dDIGKKGuS3+rBArMeZnvPNhaMwkpYmvE5jEtfmXcxUiBzdA3R058l36Gai4E7WEV+sHBO+nrbeT0a2SjD5XPMCdst4EdcCJztgB1AOil+EriqGPSqgvzaINCAzTfBEqC8eAcYequXj1Z03KJuGIqhXATJTYB3W7KUQvLe4/VUxthYTeQdSe1b8gNIlc/D/tBRINDjnSKYKCHL5iahsohNHIfwRPF+yM/TD6ouaP6JWrcoBLOQGNH94r/7dJHLEmg+s6vZbMIQ01ahfZPFVzrHrKh6Fvk9kxEhr3Yn5ICWEVc5Cx4fVQKP8Q+mfnXaqwPvyRrHU793Lh4w5ipM2V/HzHB7lOahEayJrDG0W4WTF/upBqRSzpblOpYDdj0fe8lJvsV+IOyAWA0fbL1hBFApmdxgPLxAR2ESJWJAS4u/0sN234kSO2qXuVXkGZz3X+FbSwxTQEaJL2V/E16sHnxrWA3Tk8s6f8U0WCWb1BAvap9yl4+/ly+K+xtGsH16CPsDwx+a5BYoLIa2y3+vyJoF0AZE/9IA2knvM5AwoVik8n4yVuULcGNTn+rX8hV89pc6yDhaF8b3gIYlHnLf4QuE6K+dxYS1GkGohozUk67xHMMb/1rJxBeRRX1b11AyZo0rbuLMEKqh5npf4guSHP/7jMSFPZNR+ob8FiGQ95M6gIz+LDNXgj9Eax1FijhHfYPv8qGT5ioLzpNElynC8NZwws9MPrqbWnBAweGMqUfcxEtk5M4Uo4XpNYNL0",
+                "format": "xai-responses-v1",
+                "id": "rs_3a4e7c11-8fa6-21a4-461d-5d904086f354_us-east-1",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "completed"
+        }
+      ],
+      "created": 1762105061,
+      "id": "gen-1762105061-4KEwV9RqnBjrAPbpWeBA",
+      "model": "x-ai/grok-code-fast-1",
+      "object": "chat.completion",
+      "provider": "xAI",
+      "usage": {
+        "completion_tokens": 163,
+        "completion_tokens_details": {
+          "reasoning_tokens": 141
+        },
+        "prompt_tokens": 207,
+        "total_tokens": 370
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "998566b7fff81106-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Sun, 02 Nov 2025 17:37:41 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

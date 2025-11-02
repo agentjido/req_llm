@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjozMjc2LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6ImNhbGxfMDI4ZjgzYzUwNzQyNGM3ZGIyMWNmNjU3IiwidHlwZSI6ImZ1bmN0aW9uIn1dfSx7ImNvbnRlbnQiOiI1IiwibmFtZSI6ImFkZCIsInJvbGUiOiJ0b29sIiwidG9vbF9jYWxsX2lkIjoiY2FsbF8wMjhmODNjNTA3NDI0YzdkYjIxY2Y2NTcifV0sIm1vZGVsIjoicXdlbi9xd2VuMy1jb2RlcjpleGFjdG8iLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjozMjc2LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6ImNoYXRjbXBsLXRvb2wtMTA3MDFhYjQ5MzI4NDI5ZTg0N2NkNGE3MmQzZTAxY2EiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJjaGF0Y21wbC10b29sLTEwNzAxYWI0OTMyODQyOWU4NDdjZDRhNzJkM2UwMWNhIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMtY29kZXI6ZXhhY3RvIiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
       "max_tokens": 3276,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_028f83c507424c7db21cf657",
+              "id": "chatcmpl-tool-10701ab49328429e847cd4a72d3e01ca",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "call_028f83c507424c7db21cf657"
+          "tool_call_id": "chatcmpl-tool-10701ab49328429e847cd4a72d3e01ca"
         }
       ],
       "model": "qwen/qwen3-coder:exacto",
@@ -68,8 +68,8 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1761606446,
-      "id": "gen-1761606446-mpJgSE35vjUHYDMXAcuA",
+      "created": 1762105029,
+      "id": "gen-1762105029-p4TA4CZ9DQPrCp2Tdk6b",
       "model": "qwen/qwen3-coder:exacto",
       "object": "chat.completion",
       "provider": "BaseTen",
@@ -92,7 +92,7 @@
         "*"
       ],
       "cf-ray": [
-        "9955d985185ce830-ORD"
+        "998565f29cd7dada-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -101,7 +101,7 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 23:07:27 GMT"
+        "Sun, 02 Nov 2025 17:37:09 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

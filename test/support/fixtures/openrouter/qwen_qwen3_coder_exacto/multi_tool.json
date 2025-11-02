@@ -103,10 +103,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"location\": \"Paris, France\", \"unit\": \"celsius\"}",
+                  "arguments": "{\"location\": \"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "526c4e7c6",
+                "id": "chatcmpl-tool-81b24eff03ca4fe381ff025a214c6037",
                 "index": 0,
                 "type": "function"
               }
@@ -115,19 +115,23 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1761606448,
-      "id": "gen-1761606448-qB0g93QgPWQCrdAwOC2T",
+      "created": 1762105032,
+      "id": "gen-1762105032-3DjYuRREZTbB8YWgkffx",
       "model": "qwen/qwen3-coder:exacto",
       "object": "chat.completion",
-      "provider": "Cerebras",
-      "system_fingerprint": "fp_386b539e7b02ce3613b7",
+      "provider": "BaseTen",
+      "system_fingerprint": null,
       "usage": {
-        "completion_tokens": 35,
-        "prompt_tokens": 410,
+        "completion_tokens": 23,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 452,
         "prompt_tokens_details": {
+          "audio_tokens": 0,
           "cached_tokens": 0
         },
-        "total_tokens": 445
+        "total_tokens": 475
       }
     },
     "headers": {
@@ -135,7 +139,7 @@
         "*"
       ],
       "cf-ray": [
-        "9955d9919e8ee830-ORD"
+        "99856607c9dddada-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -144,7 +148,7 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 23:07:29 GMT"
+        "Sun, 02 Nov 2025 17:37:13 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

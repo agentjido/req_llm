@@ -39,33 +39,33 @@
         {
           "finish_reason": "stop",
           "index": 0,
-          "logprobs": {
-            "content": [],
-            "refusal": []
-          },
+          "logprobs": null,
           "message": {
-            "content": "To solve 12 × 7, I break it down into simpler parts. I know that 10 × 7 = 70 and 2 × 7 = 14. Then, I add these results: 70 + 14 = 84. Therefore, 12 × 7 = 84.",
-            "reasoning": "First, I need to solve 12 multiplied by 7. Multiplication is just repeated addition, so I can think of it as adding 12 seven times.\n\nI know that 10 times 7 is 70, and 2 times 7 is 14. Then, I can add those together: 70 plus 14 is 84.\n\nSo, 12 times 7 should be 84.\n\nI can also think of it as 7 times 12. Since 7 times 10 is 70 and 7 times 2 is 14, again 70 plus 14 is 84.\n\nEither way, I get the same answer.\n\nI think that's straightforward. So, the answer is 84.",
+            "content": "To solve 12 × 7, I break it down:  \n- 10 × 7 = 70  \n- 2 × 7 = 14  \nThen, add them together: 70 + 14 = 84.  \n\nThus, 12 × 7 = 84.",
+            "reasoning": "First, I need to solve 12 multiplied by 7. Multiplication is basically repeated addition. So, 12 times 7 means adding 12 together 7 times.\n\nI can break it down: 10 times 7 is 70, and 2 times 7 is 14. Then, adding 70 and 14 gives me 84. That seems straightforward.\n\nI could also think of it as 7 times 12. 7 times 10 is 70, and 7 times 2 is 14, again 70 plus 14 is 84.\n\nSo, the answer should be 84.",
+            "reasoning_details": [
+              {
+                "format": null,
+                "index": 0,
+                "text": "First, I need to solve 12 multiplied by 7. Multiplication is basically repeated addition. So, 12 times 7 means adding 12 together 7 times.\n\nI can break it down: 10 times 7 is 70, and 2 times 7 is 14. Then, adding 70 and 14 gives me 84. That seems straightforward.\n\nI could also think of it as 7 times 12. 7 times 10 is 70, and 7 times 2 is 14, again 70 plus 14 is 84.\n\nSo, the answer should be 84.",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760546570,
-      "id": "gen-1760546570-dhtmP4Tg70d45HjXiGjD",
+      "created": 1762105095,
+      "id": "gen-1762105095-4kRH6GjNK2sDyZxyfGNT",
       "model": "deepseek/deepseek-v3.1-terminus",
       "object": "chat.completion",
-      "provider": "Novita",
+      "provider": "Chutes",
       "usage": {
-        "completion_tokens": 215,
-        "completion_tokens_details": null,
-        "prompt_tokens": 17,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 17
-        },
-        "total_tokens": 232
+        "completion_tokens": 191,
+        "prompt_tokens": 18,
+        "total_tokens": 209
       }
     },
     "headers": {
@@ -73,7 +73,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0c59e5943124c-ORD"
+        "9985678d4d529d58-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -82,7 +82,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:42:50 GMT"
+        "Sun, 02 Nov 2025 17:38:20 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

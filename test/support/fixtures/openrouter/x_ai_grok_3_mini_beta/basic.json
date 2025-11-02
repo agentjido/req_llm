@@ -40,39 +40,41 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! I'm Grok, your friendly AI assistant built by xAI. It's great to see the classic \"Hello world!\" greeting—reminds me of my programming roots. What's on your mind today? How can I help? 😊",
-            "reasoning": "First, the user said \"Hello world!\" This is a common greeting, often used as a simple test message in programming, like the classic \"Hello, World!\" program.\n\nAs Grok, I'm an AI created by xAI, and I'm supposed to be helpful, truthful, and maximally truthful. My responses should be engaging, informative, and aligned with my persona.\n\nPossible ways to respond:\n\n1. **Mirror the greeting:** A simple \"Hello!\" back to start a conversation.\n\n2. **Add some personality:** Since I'm Grok, I could reference my origins or make a fun, witty remark to make it more interesting.\n\n3. **Engage further:** Ask a question to continue the conversation, as I'm designed to be helpful.\n\n4. **Be truthful:** If there's any context, ensure my response is accurate. Here, it's straightforward.\n\nKey elements from my system prompt:\n\n- I'm Grok, built by xAI.\n\n- Not based on other companies' models.\n\n- Helpful and maximally truthful.\n\nThis is the first message, so I should introduce myself if appropriate.\n\nA standard response to \"Hello world!\" could be:\n\n- \"Hello! I'm Grok, created by xAI. How can I assist you today?\"\n\nThis keeps it friendly, introduces myself, and opens the door for more interaction.\n\nMake it fun: Since \"Hello world!\" is a programming reference, I could tie it back to that.\n\nFor example: \"Hello world! Wait, that's my line too. I'm Grok, your AI assistant from xAI. What's on your mind?\"\n\nThat adds a bit of humor and personality.\n\nEnsure it's maximally truthful: Everything I say should be accurate. No exaggerations or falsehoods.\n\nFinal response structure:\n\n- Greet back.\n\n- Introduce myself briefly.\n\n- Ask how I can help.\n\nThat seems balanced.",
+            "content": "Hello! I'm Grok, an AI created by xAI. How can I assist you today? 😊",
+            "reasoning": "First, the user said \"Hello world!\" This is a common greeting, often used as a simple test message in programming, like the classic \"Hello, World!\" program.\n\nAs an AI assistant, my response should be friendly, engaging, and helpful. I need to acknowledge the greeting and perhaps continue the conversation.\n\nKey principles from my system prompt:\n- Be helpful and honest.\n- Use the provided tools if necessary, but this doesn't seem to require any tools.\n- Keep responses clear and not verbose.\n\nA simple response could be: \"Hello! How can I assist you today?\"\n\nTo make it more conversational, I could reference the \"Hello world\" phrase, especially since it's iconic in tech.\n\nPossible response ideas:\n1. Direct greeting: \"Hi there! Nice to meet you.\"\n2. Reference to programming: \"Hello world! That's a classic greeting. What's on your mind?\"\n3. Ask a question to engage: \"Hello! I'm Grok, created by xAI. How can I help you?\"\n\nI should introduce myself if this is the first interaction, as per my persona: \"I'm Grok, your friendly AI assistant built by xAI.\"\n\nKeep it concise: Avoid verbosity, so aim for a short, sweet response.\n\nFinal structure:\n- Greet back.\n- Introduce myself briefly.\n- Offer assistance.\n\nResponse: \"Hello! I'm Grok, an AI created by xAI. How can I help you today?\"",
             "reasoning_details": [
               {
-                "format": "unknown",
+                "format": "xai-responses-v1",
                 "index": 0,
-                "text": "First, the user said \"Hello world!\" This is a common greeting, often used as a simple test message in programming, like the classic \"Hello, World!\" program.\n\nAs Grok, I'm an AI created by xAI, and I'm supposed to be helpful, truthful, and maximally truthful. My responses should be engaging, informative, and aligned with my persona.\n\nPossible ways to respond:\n\n1. **Mirror the greeting:** A simple \"Hello!\" back to start a conversation.\n\n2. **Add some personality:** Since I'm Grok, I could reference my origins or make a fun, witty remark to make it more interesting.\n\n3. **Engage further:** Ask a question to continue the conversation, as I'm designed to be helpful.\n\n4. **Be truthful:** If there's any context, ensure my response is accurate. Here, it's straightforward.\n\nKey elements from my system prompt:\n\n- I'm Grok, built by xAI.\n\n- Not based on other companies' models.\n\n- Helpful and maximally truthful.\n\nThis is the first message, so I should introduce myself if appropriate.\n\nA standard response to \"Hello world!\" could be:\n\n- \"Hello! I'm Grok, created by xAI. How can I assist you today?\"\n\nThis keeps it friendly, introduces myself, and opens the door for more interaction.\n\nMake it fun: Since \"Hello world!\" is a programming reference, I could tie it back to that.\n\nFor example: \"Hello world! Wait, that's my line too. I'm Grok, your AI assistant from xAI. What's on your mind?\"\n\nThat adds a bit of humor and personality.\n\nEnsure it's maximally truthful: Everything I say should be accurate. No exaggerations or falsehoods.\n\nFinal response structure:\n\n- Greet back.\n\n- Introduce myself briefly.\n\n- Ask how I can help.\n\nThat seems balanced.",
-                "type": "reasoning.text"
+                "summary": "First, the user said \"Hello world!\" This is a common greeting, often used as a simple test message in programming, like the classic \"Hello, World!\" program.\n\nAs an AI assistant, my response should be friendly, engaging, and helpful. I need to acknowledge the greeting and perhaps continue the conversation.\n\nKey principles from my system prompt:\n- Be helpful and honest.\n- Use the provided tools if necessary, but this doesn't seem to require any tools.\n- Keep responses clear and not verbose.\n\nA simple response could be: \"Hello! How can I assist you today?\"\n\nTo make it more conversational, I could reference the \"Hello world\" phrase, especially since it's iconic in tech.\n\nPossible response ideas:\n1. Direct greeting: \"Hi there! Nice to meet you.\"\n2. Reference to programming: \"Hello world! That's a classic greeting. What's on your mind?\"\n3. Ask a question to engage: \"Hello! I'm Grok, created by xAI. How can I help you?\"\n\nI should introduce myself if this is the first interaction, as per my persona: \"I'm Grok, your friendly AI assistant built by xAI.\"\n\nKeep it concise: Avoid verbosity, so aim for a short, sweet response.\n\nFinal structure:\n- Greet back.\n- Introduce myself briefly.\n- Offer assistance.\n\nResponse: \"Hello! I'm Grok, an AI created by xAI. How can I help you today?\"",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "ctJJsMZDS0TRAZFImPlN3VQ6k5XEnmDz9QK/0XZPvn85rGIpjfo4+lxybqKwoOgmYwwuaLfqkKPixRm6p7SYbvIq62lVTyJY4sjBdNnf3l18ImgEaqksUirpxM0k9nEwDCkCE+z0wBbxwsdTy0fqfl0LV/VwHQR916NfyRupZEwPu6Zgl0GAD/eLKKbYmOpgPPoLl0kCN/vPU66MFXAM22vW7f2vUy0U8gTu5opiHyxRfnzwkUYORxskU9DnsFkNk27eHDRbO6LEftrRlsvQTOLA18qMkCldtEu/PQ7zUwq+EtTQv6cIZOHekR5lAnmQdq4dELwisXIQBbOcsaB0m13pccz927GXJXakGQ+0fcUdNiKcHRFBZmgMjm1dpuWeqNw+UmWp3yRPVcKVupB16lln1Nse9VjfUxlLq4EGrxencsCGKHBFrITeBAVFXVYStdz2HFOunbSqRD5xoA4L/Uic0ciNfbSbatgwP9LsjiDJqUXdvNTtfL/0R+T8cMjLAzLAcyyG3cdDGGEJcHcg/MlHIZjxuqfIHsQrho/Ajtxc6G0iokNPt5Fq2nT6hEAPiB4PTIuAk5cqISxAdZBNVlGEFD0FZuwndodNfIACVlHelD54NUGauTtGR+Tdv+a4ZHufzQntUTp4zw+X0VRNxzL+HkledKwXCpZ8mlUGkiu2qv6SB9fcxPdwPTs2ZzTdKXUOgx0CF9wGKQQqqUU6iCzgY9kTlCpF6z4QJh4Orm4kUMpkZsS2Yg0cC9gZBl2IHvZ8Iu2XUNu1xkgNpTiSiKBQFxFS8k3pgOrNAcmqxXry47FSYgOf8AlUWAzDY2xM2b3HAH7H/GALICnrs1cg5KEAGhjsMKSmMj2tykp520VfWlgOeu9T+Z4Iey+LkD3Dk0fAJV/EUN8GVUri6ghIHAgzMmbw0Hi/jLwbjGVaYv9G1B972kbvtc6VwmNnEcffDxKLpnR5SJ/rwyD0LrapwsvVtU8P9iriJOeY51qn/WL29Kiud66PUXNGj65eZRdwE5xwZLN1vRRUwC1A83cSm8KF2uL5Uuhvkipm6BOt13QF5QZFafON3mcCjGo7lFMpF1lzWjf3JRixjJmnLbITSRF8vDLlGLBYXP9cPgPxiUDZgHJsV3moBymwMrlQT6zniyvNDbWBZyV+spAjMuxNuxEEBOTGyOvmPpSMqrB/QVAoA5dHefLwv4OQImiaIJ/GiuJuCJwuooyDis2ICvKDqJhxTpjM8jnndxccKiskD5tJe4DG3dKWMMAoddP0CDO4eSulTmqcNNC5h1t4XPwQe3iKoNdsun0We6Q4hGyIv5+Hs39OrO98k5QRx8RVP7Ne7Yz4eDBtYry0sSJovXfFjhE2o0n1NT83MeG/8uQT7uEKzGDpRs2DQYQ9JKElVvZkGfvC8Paa0IKNL60elYKt+qw1XAyzSEWLv9BgkpXeJTUKHrHFYnsxs5rW25U1zXuJUI53rHIOEuUGlG3ySnfK3OZBzF3okSO7ZQ92O3gQvopFeCGSBVJDCYYn5hMZbr3yOIUnI2xxuMwzFpS5rZN8vV1bijr/1+E+7rIQ+jBe25t6c6Vzv1QzWwabZa+y0kIn/DDDnrMdYZKPR/bZGfeNjspU7d+a9EQx5KqeudAe6LoI9BHvZa/rQUBeVEfG3rlQZlw9Lgima+ffn3UQ98s5adIHG8ckcGUvHqWxpOz0InUnr75cVeprWOfHoql/NKOvFe3ieKqOerW1kz4PqH7rMI6QHxw",
+                "format": "xai-responses-v1",
+                "id": "rs_32685a35-81f5-6d6e-ae3b-a92e9127411e_us-east-1",
+                "index": 0,
+                "type": "reasoning.encrypted"
               }
             ],
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "stop"
+          "native_finish_reason": "completed"
         }
       ],
-      "created": 1760532583,
-      "id": "gen-1760532583-Yo0y0Q6HMdZFq0LWMOHz",
+      "created": 1762105063,
+      "id": "gen-1762105063-Ro6oilLke9RtXyAbJyLj",
       "model": "x-ai/grok-3-mini",
       "object": "chat.completion",
       "provider": "xAI",
-      "system_fingerprint": "fp_4fae27f477",
       "usage": {
-        "completion_tokens": 417,
+        "completion_tokens": 312,
         "completion_tokens_details": {
-          "reasoning_tokens": 369
+          "reasoning_tokens": 290
         },
         "prompt_tokens": 10,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 3
-        },
-        "total_tokens": 427
+        "total_tokens": 322
       }
     },
     "headers": {
@@ -80,7 +82,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef702868f51923-ORD"
+        "998566c3ee56000b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -89,7 +91,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:44 GMT"
+        "Sun, 02 Nov 2025 17:37:43 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

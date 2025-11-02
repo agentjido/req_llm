@@ -80,24 +80,16 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "Hmm, the user wants me to generate a software engineer profile. I have access to a structured output tool that can create profiles with name, age, and occupation fields. \n\nThe tool requires name and age as mandatory fields, with occupation as optional. Since the user specifically asked for a software engineer profile, I'll include the occupation field too. \n\nI'll create a realistic profile with a common name, reasonable age for a working professional, and the specified occupation. Let me use the structured output tool to generate this.",
-            "reasoning_details": [
-              {
-                "format": "unknown",
-                "index": 0,
-                "text": "Hmm, the user wants me to generate a software engineer profile. I have access to a structured output tool that can create profiles with name, age, and occupation fields. \n\nThe tool requires name and age as mandatory fields, with occupation as optional. Since the user specifically asked for a software engineer profile, I'll include the occupation field too. \n\nI'll create a realistic profile with a common name, reasonable age for a working professional, and the specified occupation. Let me use the structured output tool to generate this.",
-                "type": "reasoning.text"
-              }
-            ],
+            "reasoning": null,
             "refusal": null,
             "role": "assistant",
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"name\": \"Alex Johnson\", \"age\": 32, \"occupation\": \"Software Engineer\"}",
+                  "arguments": "{\"name\": \"John Doe\", \"age\": 30, \"occupation\": \"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "call_r8kmi4zoldppmy5ldzjl0zev",
+                "id": "call_agtihnb92c1nc4xpx283ecat",
                 "index": 0,
                 "type": "function"
               }
@@ -106,18 +98,18 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1761606838,
-      "id": "gen-1761606838-zdlhrGcG4wzUIAUskpLN",
+      "created": 1762105015,
+      "id": "gen-1762105015-j0lWzAQJAaWRPybaPehT",
       "model": "deepseek/deepseek-v3.1-terminus:exacto",
       "object": "chat.completion",
       "provider": "AtlasCloud",
       "usage": {
-        "completion_tokens": 133,
+        "completion_tokens": 27,
         "completion_tokens_details": {
-          "reasoning_tokens": 133
+          "reasoning_tokens": 27
         },
-        "prompt_tokens": 216,
-        "total_tokens": 349
+        "prompt_tokens": 218,
+        "total_tokens": 245
       }
     },
     "headers": {
@@ -125,7 +117,7 @@
         "*"
       ],
       "cf-ray": [
-        "9955e316da6861cc-ORD"
+        "9985659cae4050bb-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -134,7 +126,7 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 23:13:59 GMT"
+        "Sun, 02 Nov 2025 17:36:56 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

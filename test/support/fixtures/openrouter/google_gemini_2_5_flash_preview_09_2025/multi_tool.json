@@ -98,12 +98,12 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "**Initiating the Inquiry**\n\nI've registered the user's request; it's about the weather in Paris. My next step is to select and utilize the `get_weather` tool to retrieve the relevant data. This seems straightforward enough, and I'm ready to proceed with the action.\n\n\n",
+            "reasoning": "**Fetching Parisian Forecast**\n\nI've determined the user is asking for the weather in Paris. My plan is to use the `default_api:get_weather` tool and feed it \"Paris, France\" as the location. No unit specification is needed as the tool has a default setting. Now I am ready to get the data.\n\n\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "**Initiating the Inquiry**\n\nI've registered the user's request; it's about the weather in Paris. My next step is to select and utilize the `get_weather` tool to retrieve the relevant data. This seems straightforward enough, and I'm ready to proceed with the action.\n\n\n",
+                "text": "**Fetching Parisian Forecast**\n\nI've determined the user is asking for the weather in Paris. My plan is to use the `default_api:get_weather` tool and feed it \"Paris, France\" as the location. No unit specification is needed as the tool has a default setting. Now I am ready to get the data.\n\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -115,7 +115,7 @@
                   "arguments": "{\"location\":\"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "tool_0_get_weather_gdnDUw2TUdnPwBWuhSCC",
+                "id": "tool_0_get_weather_Z2SlOZiYOtgsiKex1oJT",
                 "index": 0,
                 "type": "function"
               }
@@ -124,22 +124,22 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1760546974,
-      "id": "gen-1760546974-akyJaTMb86i6cw0wEfMp",
+      "created": 1762104960,
+      "id": "gen-1762104960-HMhhrTYoDDFYcSegM8P9",
       "model": "google/gemini-2.5-flash-preview-09-2025",
       "object": "chat.completion",
-      "provider": "Google",
+      "provider": "Google AI Studio",
       "usage": {
-        "completion_tokens": 36,
+        "completion_tokens": 82,
         "completion_tokens_details": {
           "image_tokens": 0,
-          "reasoning_tokens": 25
+          "reasoning_tokens": 62
         },
-        "prompt_tokens": 53,
+        "prompt_tokens": 142,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 89
+        "total_tokens": 224
       }
     },
     "headers": {
@@ -147,7 +147,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0cf7b3d88c77f-ORD"
+        "998564456f8a61d9-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -156,7 +156,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:49:35 GMT"
+        "Sun, 02 Nov 2025 17:36:02 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -41,24 +41,32 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello world! 😊 How can I assist you today?",
-            "reasoning": "Hmm, the user simply greeted with \"Hello world!\" which is a common programming phrase. Since there's no specific question or request, a friendly and enthusiastic response would be appropriate. \n\nI can mirror the greeting with a similar tone and add a bit of warmth to make it engaging. Maybe include an emoji to keep it lighthearted. \n\nThe response should be concise since the input is minimal. No need to overcomplicate it—just acknowledge the greeting and offer assistance if needed.",
+            "content": "Hello! How can I assist you today?",
+            "reasoning": "Hmm, the user simply greeted with \"Hello world!\" which is a classic programming phrase. This doesn't require any complex analysis or response. \n\nA straightforward friendly acknowledgment would be appropriate here. No need to overthink it - just mirror the cheerful tone with a simple greeting in return. \n\nThe response should be warm but concise since the input was minimal. Adding a small offer for further assistance keeps it open-ended without being pushy.",
+            "reasoning_details": [
+              {
+                "format": null,
+                "index": 0,
+                "text": "Hmm, the user simply greeted with \"Hello world!\" which is a classic programming phrase. This doesn't require any complex analysis or response. \n\nA straightforward friendly acknowledgment would be appropriate here. No need to overthink it - just mirror the cheerful tone with a simple greeting in return. \n\nThe response should be warm but concise since the input was minimal. Adding a small offer for further assistance keeps it open-ended without being pushy.",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760547398,
-      "id": "gen-1760547398-5PEJpFQIqJ4ec6RC64aJ",
+      "created": 1762105022,
+      "id": "gen-1762105022-KsZEoJWwX92b2ySnq2XB",
       "model": "deepseek/deepseek-chat-v3.1",
       "object": "chat.completion",
       "provider": "DeepInfra",
       "usage": {
-        "completion_tokens": 113,
+        "completion_tokens": 99,
         "prompt_tokens": 7,
         "prompt_tokens_details": null,
-        "total_tokens": 120
+        "total_tokens": 106
       }
     },
     "headers": {
@@ -66,7 +74,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0d9d99b53e810-ORD"
+        "998565c5192ee8d0-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -75,7 +83,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:56:38 GMT"
+        "Sun, 02 Nov 2025 17:37:02 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

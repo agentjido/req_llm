@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMzEwNywibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6Ijx0b29sX2NhbGw+XG48L3Rvb2xfY2FsbD4iLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF9mNTU3YTA2ZTk0NGQ0ZTAzOGE2MzI2OWQiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJjYWxsX2Y1NTdhMDZlOTQ0ZDRlMDM4YTYzMjY5ZCJ9XSwibW9kZWwiOiJub3VzcmVzZWFyY2gvaGVybWVzLTQtNzBiIiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjoxMzEwNywibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6Ijx0b29sX2NhbGw+XG48L3Rvb2xfY2FsbD4iLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF8yZGMxZWQ0OTdkNWI0N2RlYTNlZGIxNDEiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJjYWxsXzJkYzFlZDQ5N2Q1YjQ3ZGVhM2VkYjE0MSJ9XSwibW9kZWwiOiJub3VzcmVzZWFyY2gvaGVybWVzLTQtNzBiIiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
       "max_tokens": 13107,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_f557a06e944d4e038a63269d",
+              "id": "call_2dc1ed497d5b47dea3edb141",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "call_f557a06e944d4e038a63269d"
+          "tool_call_id": "call_2dc1ed497d5b47dea3edb141"
         }
       ],
       "model": "nousresearch/hermes-4-70b",
@@ -68,8 +68,8 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760547248,
-      "id": "gen-1760547248-MlpF9FMPgwUAmTOd29Ui",
+      "created": 1762105013,
+      "id": "gen-1762105013-KCE8akhP75Nn4rfdUsDZ",
       "model": "nousresearch/hermes-4-70b",
       "object": "chat.completion",
       "provider": "Nebius",
@@ -84,7 +84,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0d62e7ba1e814-ORD"
+        "9985658d7d29e148-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -93,7 +93,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:54:08 GMT"
+        "Sun, 02 Nov 2025 17:36:53 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

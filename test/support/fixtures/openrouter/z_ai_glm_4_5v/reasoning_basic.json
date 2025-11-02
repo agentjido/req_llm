@@ -41,26 +41,37 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "To solve \\(12 \\times 7\\), I can use the distributive property: break 12 into \\(10 + 2\\), then multiply each part by 7 and add the results.  \n- \\(10 \\times 7 = 70\\)  \n- \\(2 \\times 7 = 14\\)  \n- \\(70 + 14 = 84\\)  \n\nThus, \\(12 \\times 7 = 84\\).  \n\nThe answer is \\(<|begin_of_box|>84<|end_of_box|>\\).",
-            "reasoning": "Got it, let's see. I need to solve 12 times 7. Hmm, how do I approach this? Well, multiplication is basically repeated addition, right? So 12 times 7 means adding 12 seven times. Let me try that. 12 + 12 is 24, then add another 12 to get 36, then 48, 60, 72, 84. Wait, let me count: that's 7 times. Let me check again. 12*1=12, 12*2=24, 12*3=36, 12*4=48, 12*5=60, 12*6=72, 12*7=84. Yeah, that's right. Or maybe I can break it down into smaller parts. 10 times 7 is 70, and 2 times 7 is 14. Then add those together: 70 + 14 = 84. That's another way to do it, using the distributive property. Either way, the answer should be 84. Let me make sure I didn't make a mistake in the addition. 70 plus 14 is definitely 84. Yep, that checks out. So the final answer is 84.",
+            "content": "\nTo solve \\(12 \\times 7\\), break 12 into \\(10 + 2\\). Multiply each part by 7:  \n\\(10 \\times 7 = 70\\) and \\(2 \\times 7 = 14\\). Add the results: \\(70 + 14 = 84\\).  \n\nThe answer is \\(<|begin_of_box|>84<|end_of_box|>\\).",
+            "reasoning": "Got it, let's see. I need to solve 12 times 7. Hmm, multiplication is just repeated addition, right? So 12*7 means adding 12 seven times. Let me do that step by step. 12 + 12 is 24, then add another 12 to get 36, then 48, then 60, then 72, then 84. Wait, maybe there's a quicker way. I know that 10*7 is 70, and 2*7 is 14. Then add those together: 70 + 14 = 84. Oh, that's faster. Yeah, breaking it down into tens and ones makes it easier. So 12 is 10 + 2, so multiplying each part by 7 and adding the results. That works. So 10*7=70, 2*7=14, 70+14=84. Yep, that's right.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "Got it, let's see. I need to solve 12 times 7. Hmm, multiplication is just repeated addition, right? So 12*7 means adding 12 seven times. Let me do that step by step. 12 + 12 is 24, then add another 12 to get 36, then 48, then 60, then 72, then 84. Wait, maybe there's a quicker way. I know that 10*7 is 70, and 2*7 is 14. Then add those together: 70 + 14 = 84. Oh, that's faster. Yeah, breaking it down into tens and ones makes it easier. So 12 is 10 + 2, so multiplying each part by 7 and adding the results. That works. So 10*7=70, 2*7=14, 70+14=84. Yep, that's right.",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532587,
-      "id": "gen-1760532587-cZA1vZ58Y2N8niZf9imd",
+      "created": 1762105058,
+      "id": "gen-1762105058-jmjJnaFsQE1wLM1pKzrz",
       "model": "z-ai/glm-4.5v",
       "object": "chat.completion",
-      "provider": "Parasail",
+      "provider": "Novita",
+      "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 367,
-        "prompt_tokens": 20,
+        "completion_tokens": 275,
+        "completion_tokens_details": null,
+        "prompt_tokens": 21,
         "prompt_tokens_details": {
-          "cached_tokens": 0
+          "audio_tokens": 0,
+          "cached_tokens": 4
         },
-        "total_tokens": 387
+        "total_tokens": 296
       }
     },
     "headers": {
@@ -68,7 +79,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef7041e8dee207-ORD"
+        "998566a61be72240-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -77,7 +88,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:48 GMT"
+        "Sun, 02 Nov 2025 17:37:39 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

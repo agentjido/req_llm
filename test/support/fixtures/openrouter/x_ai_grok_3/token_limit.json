@@ -35,35 +35,27 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": null,
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "### The Dragonheart Chronicles: A Saga of Fire and Valor\n\nLong ago, in a realm where the skies shimmered with the hues of molten gold and the earth trembled with ancient magic, there existed a land called Draktharion. This was a world of towering mountains, endless forests, and sprawling kingdoms, but above all, it was a land of dragons—majestic, fearsome creatures whose fiery breath could melt stone and whose wisdom rivaled the oldest sages. Dragons were both revered and",
+            "content": "**The Chronicles of Eryndor: The Dragon's Legacy**\n\nIn the ancient realm of Eryndor, where jagged mountains pierced the heavens and vast, untamed forests whispered secrets of old, the world was alive with magic. Rivers shimmered with an ethereal glow, and the wind carried the faint hum of enchantments long forgotten. But above all, Eryndor was known for its dragons—majestic, fearsome creatures of legend, guardians of the land's deepest mysteries. Some saw them",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "length"
+          "native_finish_reason": null
         }
       ],
-      "created": 1760532565,
-      "id": "gen-1760532565-wRSMu6XkgH6LLAFKATz6",
+      "created": 1762105043,
+      "id": "gen-1762105043-uohSFldEgtIJ4f4qafWh",
       "model": "x-ai/grok-3",
       "object": "chat.completion",
       "provider": "xAI",
-      "system_fingerprint": "fp_301fb74d4b",
       "usage": {
-        "completion_tokens": 100,
-        "completion_tokens_details": {
-          "reasoning_tokens": 0
-        },
-        "prompt_tokens": 15,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 2
-        },
-        "total_tokens": 115
+        "completion_tokens": 105,
+        "prompt_tokens": 16,
+        "total_tokens": 121
       }
     },
     "headers": {
@@ -71,7 +63,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6fb73c060042-ORD"
+        "9985664a3c460001-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -80,7 +72,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:26 GMT"
+        "Sun, 02 Nov 2025 17:37:23 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

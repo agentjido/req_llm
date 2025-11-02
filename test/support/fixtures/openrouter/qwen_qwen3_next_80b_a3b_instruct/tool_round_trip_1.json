@@ -67,39 +67,27 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "tool_calls",
+          "finish_reason": null,
           "index": 0,
           "logprobs": null,
           "message": {
             "content": "",
             "reasoning": null,
             "refusal": null,
-            "role": "assistant",
-            "tool_calls": [
-              {
-                "function": {
-                  "arguments": "{\"a\": 2, \"b\": 3}",
-                  "name": "add"
-                },
-                "id": "call_7e0fb5465515442a8b20a9fb",
-                "index": 0,
-                "type": "function"
-              }
-            ]
+            "role": "assistant"
           },
-          "native_finish_reason": "tool_calls"
+          "native_finish_reason": null
         }
       ],
-      "created": 1760545135,
-      "id": "gen-1760545135-wTQ1c6wNh9kXVPUG4118",
+      "created": 1762105029,
+      "id": "gen-1762105029-5P8NEr1x3l6SoIgfgnpY",
       "model": "qwen/qwen3-next-80b-a3b-instruct",
       "object": "chat.completion",
-      "provider": "Chutes",
+      "provider": "Hyperbolic",
       "usage": {
-        "completion_tokens": 24,
-        "prompt_tokens": 180,
-        "prompt_tokens_details": null,
-        "total_tokens": 204
+        "completion_tokens": 0,
+        "prompt_tokens": 95,
+        "total_tokens": 95
       }
     },
     "headers": {
@@ -107,7 +95,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0a2985a0372e8-ORD"
+        "998565f0de9a9120-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -116,7 +104,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:18:56 GMT"
+        "Sun, 02 Nov 2025 17:37:09 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

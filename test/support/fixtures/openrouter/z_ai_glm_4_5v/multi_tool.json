@@ -97,7 +97,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "\nI'll get the current weather information for Paris, France for you.\n",
+            "content": "\nI'll help you find out the weather in Paris, France.\n",
             "reasoning": "The user is asking about the weather in Paris, France. I should use the `get_weather` tool to retrieve this information. The `location` parameter should be set to \"Paris, France\".",
             "reasoning_details": [
               {
@@ -115,7 +115,7 @@
                   "arguments": "{\"location\": \"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "call_202510152050023a9c8641d5984589_0",
+                "id": "call_20251103013758401f91c0c12d4311_0",
                 "index": 0,
                 "type": "function"
               }
@@ -124,21 +124,21 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760532602,
-      "id": "gen-1760532602-a4JuCbjgWBM0rOR22XfO",
+      "created": 1762105077,
+      "id": "gen-1762105077-gDaFif4iwO4PBiPFUjAd",
       "model": "z-ai/glm-4.5v",
       "object": "chat.completion",
       "provider": "Novita",
       "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 72,
+        "completion_tokens": 71,
         "completion_tokens_details": null,
         "prompt_tokens": 293,
         "prompt_tokens_details": {
           "audio_tokens": 0,
-          "cached_tokens": 4
+          "cached_tokens": 52
         },
-        "total_tokens": 365
+        "total_tokens": 364
       }
     },
     "headers": {
@@ -146,7 +146,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef709af973e207-ORD"
+        "998567204adb2240-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -155,7 +155,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:50:03 GMT"
+        "Sun, 02 Nov 2025 17:37:58 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

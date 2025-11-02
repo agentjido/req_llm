@@ -115,15 +115,18 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760532516,
-      "id": "gen-1760532516-AyefJfRU0ewMPmWr7AEP",
+      "created": 1762104969,
+      "id": "gen-1762104969-tktHFyyIAXyPJJ8UIqql",
       "model": "moonshotai/kimi-k2-0905",
       "object": "chat.completion",
       "provider": "Fireworks",
       "usage": {
         "completion_tokens": 31,
-        "prompt_tokens": 233,
-        "total_tokens": 264
+        "prompt_tokens": 218,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "total_tokens": 249
       }
     },
     "headers": {
@@ -131,7 +134,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6e824d5bcc1a-ORD"
+        "9985647b9ffce20b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -140,7 +143,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:37 GMT"
+        "Sun, 02 Nov 2025 17:36:10 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -80,12 +80,12 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "\nOkay, the user wants me to generate a software engineer profile. Let me think about what information is needed here. The structured_output function requires a name, age, and occupation. The occupation should be \"Software Engineer\" since that's the profile type. \n\nFirst, I need to come up with a name. Maybe a common name like John Doe. Then, the age. Let's pick a reasonable age for a software engineer, maybe 30. That's a typical age for someone in the field. \n\nWait, the function parameters are name, age, and occupation. The occupation is already set to Software Engineer. So the arguments for structured_output would be name: \"John Doe\", age: 30, occupation: \"Software Engineer\". \n\nI should make sure the age is an integer and the name is a string. The function requires name and age as mandatory, so those are covered. Occupation is optional but provided here. \n\nLet me check if there are any other parameters, but the schema says only those three. So the function call should be straightforward. No need for any other tools. Just pass the required fields. \n\nYes, that should do it. The output will be a JSON object with the function name structured_output and the arguments as specified.\n",
+            "reasoning": "\nOkay, I need to generate a software engineer profile using the provided function. Let me think about the steps involved here.\n\nFirst, the user wants a software engineer profile. The function provided is called structured_output, which requires certain parameters: name, age, and occupation. The occupation here should be \"Software Engineer\". The age needs to be a positive integer, and the name should be a string.\n\nWait, the function parameters are name, age, and occupation. The user didn't specify a name or age, so I need to come up with a default or example values. Maybe I can use a placeholder name like \"John Doe\" and a reasonable age, say 30. But the user might want a more specific example. Alternatively, maybe the function allows for default values. Let me check the function's parameters again.\n\nLooking at the structured_output function's parameters: name is required, age is required, and occupation is required. So all three must be provided. The user hasn't given any specific details, so I need to create a sample profile. Let's pick a common name, maybe \"Jane Smith\", age 28, and occupation \"Software Engineer\". That should work.\n\nWait, but the user might expect a more detailed profile. Maybe include more fields? But the function only allows name, age, and occupation. So I can't add more. So the output should be a JSON object with those three fields. Let me structure that.\n\nSo the function call would be structured_output with arguments name: \"Jane Smith\", age: 28, occupation: \"Software Engineer\". That should generate the required profile. Let me make sure the age is an integer and the name is a string. Yes, that's correct. The occupation is a string as well. So the function should return the correct JSON structure.\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "\nOkay, the user wants me to generate a software engineer profile. Let me think about what information is needed here. The structured_output function requires a name, age, and occupation. The occupation should be \"Software Engineer\" since that's the profile type. \n\nFirst, I need to come up with a name. Maybe a common name like John Doe. Then, the age. Let's pick a reasonable age for a software engineer, maybe 30. That's a typical age for someone in the field. \n\nWait, the function parameters are name, age, and occupation. The occupation is already set to Software Engineer. So the arguments for structured_output would be name: \"John Doe\", age: 30, occupation: \"Software Engineer\". \n\nI should make sure the age is an integer and the name is a string. The function requires name and age as mandatory, so those are covered. Occupation is optional but provided here. \n\nLet me check if there are any other parameters, but the schema says only those three. So the function call should be straightforward. No need for any other tools. Just pass the required fields. \n\nYes, that should do it. The output will be a JSON object with the function name structured_output and the arguments as specified.\n",
+                "text": "\nOkay, I need to generate a software engineer profile using the provided function. Let me think about the steps involved here.\n\nFirst, the user wants a software engineer profile. The function provided is called structured_output, which requires certain parameters: name, age, and occupation. The occupation here should be \"Software Engineer\". The age needs to be a positive integer, and the name should be a string.\n\nWait, the function parameters are name, age, and occupation. The user didn't specify a name or age, so I need to come up with a default or example values. Maybe I can use a placeholder name like \"John Doe\" and a reasonable age, say 30. But the user might want a more specific example. Alternatively, maybe the function allows for default values. Let me check the function's parameters again.\n\nLooking at the structured_output function's parameters: name is required, age is required, and occupation is required. So all three must be provided. The user hasn't given any specific details, so I need to create a sample profile. Let's pick a common name, maybe \"Jane Smith\", age 28, and occupation \"Software Engineer\". That should work.\n\nWait, but the user might expect a more detailed profile. Maybe include more fields? But the function only allows name, age, and occupation. So I can't add more. So the output should be a JSON object with those three fields. Let me structure that.\n\nSo the function call would be structured_output with arguments name: \"Jane Smith\", age: 28, occupation: \"Software Engineer\". That should generate the required profile. Let me make sure the age is an integer and the name is a string. Yes, that's correct. The occupation is a string as well. So the function should return the correct JSON structure.\n",
                 "type": "reasoning.text"
               }
             ],
@@ -94,10 +94,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"age\": 30, \"name\": \"John Doe\", \"occupation\": \"Software Engineer\"}",
+                  "arguments": "{\"age\": 28, \"name\": \"Jane Smith\", \"occupation\": \"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "call_09f19b262b4344d4941ac1cb",
+                "id": "call_bc988da7f1c64ce2abd06642",
                 "index": 0,
                 "type": "function"
               }
@@ -106,16 +106,16 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760547023,
-      "id": "gen-1760547023-4CmQP12vkxWolS8lvfgC",
+      "created": 1762104986,
+      "id": "gen-1762104986-iI0xE0grqJjOYd5RTVh3",
       "model": "nousresearch/hermes-4-70b",
       "object": "chat.completion",
       "provider": "Chutes",
       "usage": {
-        "completion_tokens": 291,
+        "completion_tokens": 403,
         "prompt_tokens": 286,
         "prompt_tokens_details": null,
-        "total_tokens": 577
+        "total_tokens": 689
       }
     },
     "headers": {
@@ -123,7 +123,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0d0b33aadeaf5-ORD"
+        "998564e2ddf3e148-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -132,7 +132,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:50:25 GMT"
+        "Sun, 02 Nov 2025 17:36:27 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

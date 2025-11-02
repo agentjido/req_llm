@@ -72,12 +72,12 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "**Analyzing Addition Requirements**\n\nI've received the request to add two numbers and have parsed the input. It's straightforward: I need to invoke the `add` tool. The values for 'a' and 'b' are clearly defined as 2 and 3, respectively. My next step is to execute the tool call with these specific parameters. Then, I will format the output.\n\n\n**Formulating Tool Invocation**\n\nI've now zeroed in on the optimal approach. The tool is identified, and the parameters are mapped: a=2 and b=3. Next up: constructing and executing the tool call. I am structuring the call to the `add` function using these parameters. Subsequently, I will parse and prepare the output, anticipating the format `sum=<value>`.\n\n\n",
+            "reasoning": "**Analyzing Addition Requirements**\n\nI've determined the user's intent is to sum two numbers. I've parsed the inputs, successfully identifying 2 and 3 as the operands. My next step involves formulating the appropriate call to the `add` tool. Then, I need to extract the result and provide the correct response format: 'sum=<value>'.\n\n\n**Refining Function Execution**\n\nI'm now certain of the function to call and the associated parameters. I've successfully mapped the user's provided integers to the `add` tool's inputs, `a` and `b`. The next step is to execute the tool with the identified parameters, then format the result as `sum=<value>`, as requested by the user. I can now proceed to formulate the appropriate call to the tool and the format the appropriate response for the user.\n\n\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "**Analyzing Addition Requirements**\n\nI've received the request to add two numbers and have parsed the input. It's straightforward: I need to invoke the `add` tool. The values for 'a' and 'b' are clearly defined as 2 and 3, respectively. My next step is to execute the tool call with these specific parameters. Then, I will format the output.\n\n\n**Formulating Tool Invocation**\n\nI've now zeroed in on the optimal approach. The tool is identified, and the parameters are mapped: a=2 and b=3. Next up: constructing and executing the tool call. I am structuring the call to the `add` function using these parameters. Subsequently, I will parse and prepare the output, anticipating the format `sum=<value>`.\n\n\n",
+                "text": "**Analyzing Addition Requirements**\n\nI've determined the user's intent is to sum two numbers. I've parsed the inputs, successfully identifying 2 and 3 as the operands. My next step involves formulating the appropriate call to the `add` tool. Then, I need to extract the result and provide the correct response format: 'sum=<value>'.\n\n\n**Refining Function Execution**\n\nI'm now certain of the function to call and the associated parameters. I've successfully mapped the user's provided integers to the `add` tool's inputs, `a` and `b`. The next step is to execute the tool with the identified parameters, then format the result as `sum=<value>`, as requested by the user. I can now proceed to formulate the appropriate call to the tool and the format the appropriate response for the user.\n\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -89,7 +89,7 @@
                   "arguments": "{\"b\":3,\"a\":2}",
                   "name": "add"
                 },
-                "id": "tool_0_add_mGLNKQV1cL6VzBZcMbqf",
+                "id": "tool_0_add_lisx5MhvdATiuyB2Mww7",
                 "index": 0,
                 "type": "function"
               }
@@ -98,22 +98,22 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1760532557,
-      "id": "gen-1760532557-EUd1LNq9Jo3iQi1Bn519",
+      "created": 1762104983,
+      "id": "gen-1762104983-1KJSlrKEp5F8iLx6YapI",
       "model": "google/gemini-2.5-pro",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
-        "completion_tokens": 286,
+        "completion_tokens": 263,
         "completion_tokens_details": {
           "image_tokens": 0,
-          "reasoning_tokens": 281
+          "reasoning_tokens": 258
         },
         "prompt_tokens": 37,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 323
+        "total_tokens": 300
       }
     },
     "headers": {
@@ -121,7 +121,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6f81b8b0114e-ORD"
+        "998564d58c3dfe20-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -130,7 +130,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:19 GMT"
+        "Sun, 02 Nov 2025 17:36:26 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

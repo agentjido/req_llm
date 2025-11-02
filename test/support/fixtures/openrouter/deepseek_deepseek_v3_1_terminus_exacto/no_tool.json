@@ -62,13 +62,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\nToo many cheetahs!\n\n😸",
-            "reasoning": "Hmm, the user asked for a cat joke, which is a simple request that doesn't require any tool usage. The weather tool I have access to wouldn't be relevant here. \n\nI should just respond with a lighthearted cat joke to fulfill the request. Since it's a straightforward question, I can pull from common cat humor tropes - maybe something about their behavior or the classic \"laser pointer\" theme.\n\nThe response should be concise and playful to match the casual tone of the request. No need for additional explanations or follow-up questions since the user just wanted a simple joke.",
+            "content": "Here's a classic cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs! 😸\n\nHope that gave you a chuckle!",
+            "reasoning": "Hmm, the user asked for a cat joke. This is a straightforward request that doesn't require any tool usage since it's just asking for humor. \n\nI can recall a classic cat joke that's lighthearted and universally understandable. The joke about cats and dogs playing poker is simple but effective - it plays on the stereotype of cats being aloof while dogs are more enthusiastic. \n\nThe response should be concise and delivered with a friendly tone to match the casual nature of the request. No need for elaborate explanations or follow-up questions since the user just wants a quick laugh.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "Hmm, the user asked for a cat joke, which is a simple request that doesn't require any tool usage. The weather tool I have access to wouldn't be relevant here. \n\nI should just respond with a lighthearted cat joke to fulfill the request. Since it's a straightforward question, I can pull from common cat humor tropes - maybe something about their behavior or the classic \"laser pointer\" theme.\n\nThe response should be concise and playful to match the casual tone of the request. No need for additional explanations or follow-up questions since the user just wanted a simple joke.",
+                "text": "Hmm, the user asked for a cat joke. This is a straightforward request that doesn't require any tool usage since it's just asking for humor. \n\nI can recall a classic cat joke that's lighthearted and universally understandable. The joke about cats and dogs playing poker is simple but effective - it plays on the stereotype of cats being aloof while dogs are more enthusiastic. \n\nThe response should be concise and delivered with a friendly tone to match the casual nature of the request. No need for elaborate explanations or follow-up questions since the user just wants a quick laugh.",
                 "type": "reasoning.text"
               }
             ],
@@ -78,16 +78,18 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1761606821,
-      "id": "gen-1761606821-QElqZSwVh5hV6z7OeVUt",
+      "created": 1762104996,
+      "id": "gen-1762104996-q7ntzykpMJQ2nKXUAr5A",
       "model": "deepseek/deepseek-v3.1-terminus:exacto",
       "object": "chat.completion",
-      "provider": "DeepInfra",
+      "provider": "AtlasCloud",
       "usage": {
-        "completion_tokens": 147,
-        "prompt_tokens": 152,
-        "prompt_tokens_details": null,
-        "total_tokens": 299
+        "completion_tokens": 151,
+        "completion_tokens_details": {
+          "reasoning_tokens": 116
+        },
+        "prompt_tokens": 161,
+        "total_tokens": 312
       }
     },
     "headers": {
@@ -95,7 +97,7 @@
         "*"
       ],
       "cf-ray": [
-        "9955e2a76a9a61cc-ORD"
+        "99856520dd2450bb-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -104,7 +106,7 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 23:13:41 GMT"
+        "Sun, 02 Nov 2025 17:36:36 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

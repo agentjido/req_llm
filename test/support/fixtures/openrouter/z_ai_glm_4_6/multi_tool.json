@@ -97,13 +97,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "\n\nI'll check the current weather in Paris, France for you.\n",
-            "reasoning": "The user is asking about the weather in Paris, France. I have access to a get_weather function that can provide weather information for a location. Let me check the parameters:\n\n- location: required parameter - the user specified \"Paris, France\"\n- unit: optional parameter - the user didn't specify a unit, and the instructions say not to make up values for optional parameters\n\nI have all the required parameters, so I can proceed with the function call.",
+            "content": "\nI'll check the current weather in Paris, France for you.\n",
+            "reasoning": "\nThe user is asking about the weather in Paris, France. I have access to a get_weather function that can provide weather information for a location. Let me check the parameters:\n\n- location: required parameter - the user specified \"Paris, France\"\n- unit: optional parameter with enum values [\"celsius\", \"fahrenheit\"] - the user didn't specify, so I won't include it since the instructions say not to make up values for optional parameters\n\nI have all the required parameters, so I can proceed with the function call.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "The user is asking about the weather in Paris, France. I have access to a get_weather function that can provide weather information for a location. Let me check the parameters:\n\n- location: required parameter - the user specified \"Paris, France\"\n- unit: optional parameter - the user didn't specify a unit, and the instructions say not to make up values for optional parameters\n\nI have all the required parameters, so I can proceed with the function call.",
+                "text": "\nThe user is asking about the weather in Paris, France. I have access to a get_weather function that can provide weather information for a location. Let me check the parameters:\n\n- location: required parameter - the user specified \"Paris, France\"\n- unit: optional parameter with enum values [\"celsius\", \"fahrenheit\"] - the user didn't specify, so I won't include it since the instructions say not to make up values for optional parameters\n\nI have all the required parameters, so I can proceed with the function call.",
                 "type": "reasoning.text"
               }
             ],
@@ -115,7 +115,7 @@
                   "arguments": "{\"location\":\"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "call_7087b30fbd4248b5badbb462",
+                "id": "call_44e88991d30c4a5f9a5253c5",
                 "index": 0,
                 "type": "function"
               }
@@ -124,21 +124,18 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760532806,
-      "id": "gen-1760532806-We9SPbQLxdbYCb5w52uw",
+      "created": 1762105276,
+      "id": "gen-1762105276-zyxUVGA7ZPQIbDkbXnlz",
       "model": "z-ai/glm-4.6",
       "object": "chat.completion",
-      "provider": "Novita",
-      "system_fingerprint": "",
+      "provider": "Z.AI",
       "usage": {
-        "completion_tokens": 125,
-        "completion_tokens_details": null,
-        "prompt_tokens": 271,
+        "completion_tokens": 140,
+        "prompt_tokens": 276,
         "prompt_tokens_details": {
-          "audio_tokens": 0,
           "cached_tokens": 43
         },
-        "total_tokens": 396
+        "total_tokens": 416
       }
     },
     "headers": {
@@ -146,7 +143,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef759b7b7b7317-ORD"
+        "99856bfaefcbf790-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -155,7 +152,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:53:27 GMT"
+        "Sun, 02 Nov 2025 17:41:17 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -98,12 +98,12 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "**Evaluating Tool Relevance**\n\nI've zeroed in on the `get_weather` tool. The query for \"Paris, France\" is a clear match for the location parameter. Now I'm assessing if temperature units need to be specified; I'll default to Celsius if not explicitly stated.\n\n\n**Defining the Function Call**\n\nI've confirmed the relevance of the weather tool and mapped the user's query to its parameters. The \"Paris, France\" location is straightforward. Since a temperature unit wasn't given, it's clear to default to Celsius. Now I'm ready to construct the API call: `default_api.get_weather(location='Paris, France')`, and am satisfied that my logic for the function call looks solid.\n\n\n",
+            "reasoning": "**Assessing Weather Data**\n\nI'm assessing the tool `get_weather` and its parameters to address the user's request. It seems straightforward, requiring only the location, \"Paris, France\". I'll default to Celsius if a unit isn't specified, and now I'm formulating the tool call.\n\n\n**Refining Function Call**\n\nI'm now optimizing the function call. Following the parameter assessment, the logic is clear. The absence of a unit necessitates a default of Celsius. Thus, I've confirmed that the only necessary parameter is the location, \"Paris, France\". The function call is now solidified: `default_api.get_weather(location='Paris, France')`. I'll now finalize the code block.\n\n\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "**Evaluating Tool Relevance**\n\nI've zeroed in on the `get_weather` tool. The query for \"Paris, France\" is a clear match for the location parameter. Now I'm assessing if temperature units need to be specified; I'll default to Celsius if not explicitly stated.\n\n\n**Defining the Function Call**\n\nI've confirmed the relevance of the weather tool and mapped the user's query to its parameters. The \"Paris, France\" location is straightforward. Since a temperature unit wasn't given, it's clear to default to Celsius. Now I'm ready to construct the API call: `default_api.get_weather(location='Paris, France')`, and am satisfied that my logic for the function call looks solid.\n\n\n",
+                "text": "**Assessing Weather Data**\n\nI'm assessing the tool `get_weather` and its parameters to address the user's request. It seems straightforward, requiring only the location, \"Paris, France\". I'll default to Celsius if a unit isn't specified, and now I'm formulating the tool call.\n\n\n**Refining Function Call**\n\nI'm now optimizing the function call. Following the parameter assessment, the logic is clear. The absence of a unit necessitates a default of Celsius. Thus, I've confirmed that the only necessary parameter is the location, \"Paris, France\". The function call is now solidified: `default_api.get_weather(location='Paris, France')`. I'll now finalize the code block.\n\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -115,7 +115,7 @@
                   "arguments": "{\"location\":\"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "tool_0_get_weather_ZDGSxXu8NuAERpTHrVaV",
+                "id": "tool_0_get_weather_epICBk3xt52EV3F3LHwq",
                 "index": 0,
                 "type": "function"
               }
@@ -124,22 +124,22 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1760532506,
-      "id": "gen-1760532506-5taQxNGI3bAuzwL4Ybim",
+      "created": 1762104930,
+      "id": "gen-1762104930-TRgtwnQBrPJozIHf9NEJ",
       "model": "google/gemini-2.5-pro",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
-        "completion_tokens": 220,
+        "completion_tokens": 169,
         "completion_tokens_details": {
           "image_tokens": 0,
-          "reasoning_tokens": 213
+          "reasoning_tokens": 162
         },
         "prompt_tokens": 53,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 273
+        "total_tokens": 222
       }
     },
     "headers": {
@@ -147,7 +147,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6e42bb55114e-ORD"
+        "99856389bd10fe20-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -156,7 +156,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:28 GMT"
+        "Sun, 02 Nov 2025 17:35:32 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

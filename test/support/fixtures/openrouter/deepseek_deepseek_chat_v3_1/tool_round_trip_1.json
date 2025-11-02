@@ -81,7 +81,7 @@
                   "arguments": "{\"a\": 2, \"b\": 3}",
                   "name": "add"
                 },
-                "id": "call_1320",
+                "id": "chatcmpl-tool-1b39f75aa6dc40b796299253dfe59f2b",
                 "index": 0,
                 "type": "function"
               }
@@ -90,16 +90,18 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760547306,
-      "id": "gen-1760547295-eW42h0nuZ3rJZkFLbxQ9",
+      "created": 1762105067,
+      "id": "gen-1762105067-zz3JXcthe9V2CyRCChBV",
       "model": "deepseek/deepseek-chat-v3.1",
       "object": "chat.completion",
-      "provider": "DeepInfra",
+      "provider": "Novita",
+      "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 15,
-        "prompt_tokens": 184,
+        "completion_tokens": 13,
+        "completion_tokens_details": null,
+        "prompt_tokens": 253,
         "prompt_tokens_details": null,
-        "total_tokens": 199
+        "total_tokens": 266
       }
     },
     "headers": {
@@ -107,7 +109,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0d7565980e810-ORD"
+        "998566e0abd9e8d0-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -116,7 +118,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:55:05 GMT"
+        "Sun, 02 Nov 2025 17:37:49 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

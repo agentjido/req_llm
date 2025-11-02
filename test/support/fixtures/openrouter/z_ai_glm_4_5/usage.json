@@ -40,29 +40,34 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! How can I help you today?",
-            "reasoning": null,
+            "content": "Hello! How can I assist you today? 😊",
+            "reasoning": "\n",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "\n",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760545963,
-      "id": "gen-1760545963-urZMOOjIXpnYsRc00POD",
+      "created": 1762105080,
+      "id": "gen-1762105080-nOWW1ZLOxm6vPawz8e8I",
       "model": "z-ai/glm-4.5",
       "object": "chat.completion",
-      "provider": "Novita",
-      "system_fingerprint": "",
+      "provider": "Z.AI",
       "usage": {
-        "completion_tokens": 10,
-        "completion_tokens_details": null,
-        "prompt_tokens": 12,
+        "completion_tokens": 15,
+        "prompt_tokens": 8,
         "prompt_tokens_details": {
-          "audio_tokens": 0,
           "cached_tokens": 4
         },
-        "total_tokens": 22
+        "total_tokens": 23
       }
     },
     "headers": {
@@ -70,7 +75,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0b6ccf9f1eac0-ORD"
+        "998567316a6f14ce-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -79,7 +84,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:32:43 GMT"
+        "Sun, 02 Nov 2025 17:38:01 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

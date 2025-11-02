@@ -80,12 +80,12 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "We need to produce structured output matching schema: age, name, occupation optional. We need to generate a software engineer profile. So we need to output JSON with those fields. Use function.",
+            "reasoning": "The user says: \"Generate a software engineer profile\". They likely want a structured output with fields: age, name, occupation. The schema: age: number, name: string, occupation?: string. So we need to produce a JSON object with those fields. The user didn't specify any particular values. We can generate a random profile. Let's produce a plausible software engineer profile. For example: age 29, name \"Alexandra Martinez\", occupation \"Software Engineer\". That matches. We need to call the function.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "We need to produce structured output matching schema: age, name, occupation optional. We need to generate a software engineer profile. So we need to output JSON with those fields. Use function.",
+                "text": "The user says: \"Generate a software engineer profile\". They likely want a structured output with fields: age, name, occupation. The schema: age: number, name: string, occupation?: string. So we need to produce a JSON object with those fields. The user didn't specify any particular values. We can generate a random profile. Let's produce a plausible software engineer profile. For example: age 29, name \"Alexandra Martinez\", occupation \"Software Engineer\". That matches. We need to call the function.",
                 "type": "reasoning.text"
               }
             ],
@@ -94,10 +94,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"age\": 29, \"name\": \"Alexandra Martinez\", \"occupation\": \"Software Engineer\"}",
+                  "arguments": "{\"age\":29,\"name\":\"Alexandra Martinez\",\"occupation\":\"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "call_1iKxwTLaQoz84SrfJW4JrHiF",
+                "id": "chatcmpl-tool-1919cf4dfb1a468fb96b561eee1e8f0f",
                 "index": 0,
                 "type": "function"
               }
@@ -106,15 +106,15 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760532544,
-      "id": "gen-1760532544-6KkgoGOfBdVXTQbUdhaJ",
+      "created": 1762105013,
+      "id": "gen-1762105013-F2XTcmsFvFrE7YhTZhh6",
       "model": "openai/gpt-oss-20b",
       "object": "chat.completion",
-      "provider": "Fireworks",
+      "provider": "Phala",
       "usage": {
-        "completion_tokens": 79,
-        "prompt_tokens": 154,
-        "total_tokens": 233
+        "completion_tokens": 140,
+        "prompt_tokens": 149,
+        "total_tokens": 289
       }
     },
     "headers": {
@@ -122,7 +122,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6f31191910b2-ORD"
+        "9985658bac72aca8-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -131,7 +131,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:04 GMT"
+        "Sun, 02 Nov 2025 17:36:53 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

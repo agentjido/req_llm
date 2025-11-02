@@ -62,13 +62,13 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Why was the cat sitting on the computer? To keep an eye on the mouse!",
-            "reasoning": "**Analyzing User Request**\n\nI've assessed the user's desire for a cat joke. My tools include only a weather retrieval function, making this a non-starter. There's zero overlap between the request and available functionalities; I'm dead in the water.\n\n\n**Formulating a Response**\n\nI've moved past the initial frustration and, recognizing the tool's inadequacy, I'm now focused on a direct response strategy. I've decided that since I cannot use any tools, a simple cat joke will suffice. I've come up with a straightforward joke: \"Why was the cat sitting on the computer? To keep an eye on the mouse!\" I am ready to respond.\n\n\n",
+            "content": "Why was the cat sitting on the computer? To keep an eye on the mouse",
+            "reasoning": "**Composing a Response**\n\nI've located a suitable joke. Time to craft the response to the user. I'll make sure it's concise, and formatted well. I want to ensure that it delivers the humor effectively.\n\n\n**Finalizing Delivery**\n\nI've selected the perfect joke! I'm now polishing the phrasing for maximum impact. The response will be short and sweet, and I'm confident it'll land well.\n\n\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "**Analyzing User Request**\n\nI've assessed the user's desire for a cat joke. My tools include only a weather retrieval function, making this a non-starter. There's zero overlap between the request and available functionalities; I'm dead in the water.\n\n\n**Formulating a Response**\n\nI've moved past the initial frustration and, recognizing the tool's inadequacy, I'm now focused on a direct response strategy. I've decided that since I cannot use any tools, a simple cat joke will suffice. I've come up with a straightforward joke: \"Why was the cat sitting on the computer? To keep an eye on the mouse!\" I am ready to respond.\n\n\n",
+                "text": "**Composing a Response**\n\nI've located a suitable joke. Time to craft the response to the user. I'll make sure it's concise, and formatted well. I want to ensure that it delivers the humor effectively.\n\n\n**Finalizing Delivery**\n\nI've selected the perfect joke! I'm now polishing the phrasing for maximum impact. The response will be short and sweet, and I'm confident it'll land well.\n\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -78,22 +78,22 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1760532489,
-      "id": "gen-1760532489-ONgKbTwms7loqFmYdBoa",
+      "created": 1762104992,
+      "id": "gen-1762104992-tMngqUhDL73PCjer3FuK",
       "model": "google/gemini-2.5-pro",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
-        "completion_tokens": 218,
+        "completion_tokens": 91,
         "completion_tokens_details": {
           "image_tokens": 0,
-          "reasoning_tokens": 201
+          "reasoning_tokens": 75
         },
         "prompt_tokens": 20,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 238
+        "total_tokens": 111
       }
     },
     "headers": {
@@ -101,7 +101,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6ddb4a05114e-ORD"
+        "99856507ed8ffe20-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -110,7 +110,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:12 GMT"
+        "Sun, 02 Nov 2025 17:36:34 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

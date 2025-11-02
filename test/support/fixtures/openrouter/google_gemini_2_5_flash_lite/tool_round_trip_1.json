@@ -78,10 +78,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"b\":3,\"a\":2}",
+                  "arguments": "{\"a\":2,\"b\":3}",
                   "name": "add"
                 },
-                "id": "tool_0_add_wPO1F2MBQjsNb5E2WyxU",
+                "id": "tool_0_add_ymGZviEdTOcQg6CSYmHr",
                 "index": 0,
                 "type": "function"
               }
@@ -90,8 +90,8 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1760546978,
-      "id": "gen-1760546978-2MC2Lep2wha6UuUJWpcd",
+      "created": 1762104931,
+      "id": "gen-1762104931-3MwFVv4XUHynO4swKel3",
       "model": "google/gemini-2.5-flash-lite",
       "object": "chat.completion",
       "provider": "Google",
@@ -113,7 +113,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0cf977e70ff5b-ORD"
+        "9985638f1e25c365-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -122,7 +122,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:49:39 GMT"
+        "Sun, 02 Nov 2025 17:35:32 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

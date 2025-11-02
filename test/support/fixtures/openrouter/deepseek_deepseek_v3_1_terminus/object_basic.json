@@ -86,10 +86,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"name\": \"John Doe\", \"age\": 30, \"occupation\": \"Software Engineer\"}",
+                  "arguments": "{\n  \"age\": 1,\n  \"name\": \"Software Engineer Profile\"\n}",
                   "name": "structured_output"
                 },
-                "id": "call_cvpmgd9zl1nz5n106wgkjoak",
+                "id": "019a45a5c5913cfc3ae2ca3dbeaab0cf",
                 "index": 0,
                 "type": "function"
               }
@@ -98,23 +98,16 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760546588,
-      "id": "gen-1760546588-jMjcjaa1mouEoGMc4MHl",
+      "created": 1762105082,
+      "id": "gen-1762105082-8g4FGwJtfSVu8XS1YTV9",
       "model": "deepseek/deepseek-v3.1-terminus",
       "object": "chat.completion",
-      "provider": "Novita",
+      "provider": "SiliconFlow",
       "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 27,
-        "completion_tokens_details": {
-          "reasoning_tokens": 27
-        },
+        "completion_tokens": 18,
         "prompt_tokens": 218,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 0
-        },
-        "total_tokens": 245
+        "total_tokens": 236
       }
     },
     "headers": {
@@ -122,7 +115,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0c60f6f36124c-ORD"
+        "9985673b4a809d58-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -131,7 +124,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:43:09 GMT"
+        "Sun, 02 Nov 2025 17:38:03 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

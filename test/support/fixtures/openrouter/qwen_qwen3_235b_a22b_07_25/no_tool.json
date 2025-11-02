@@ -61,7 +61,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Why was the cat sitting on the computer?\n\nBecause it wanted to keep an eye on the mouse! 🐱💻🐭",
+            "content": "Why don't cats play poker in the wild?\n\nBecause they're afraid of cheetahs! 🐾",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -69,16 +69,18 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532536,
-      "id": "gen-1760532536-fMmB7lHRT4KTJttnezem",
+      "created": 1762105016,
+      "id": "gen-1762105016-uUFPDuuONj6DOm7RHuyz",
       "model": "qwen/qwen3-235b-a22b-2507",
       "object": "chat.completion",
-      "provider": "Targon",
+      "provider": "Novita",
+      "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 26,
-        "prompt_tokens": 154,
+        "completion_tokens": 24,
+        "completion_tokens_details": null,
+        "prompt_tokens": 159,
         "prompt_tokens_details": null,
-        "total_tokens": 180
+        "total_tokens": 183
       }
     },
     "headers": {
@@ -86,7 +88,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6f01c8f15074-ORD"
+        "9985659f6957251b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -95,7 +97,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:57 GMT"
+        "Sun, 02 Nov 2025 17:36:57 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -85,7 +85,7 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"name\": \"Alex Chen\", \"age\": 28, \"occupation\": \"Software Engineer\"}",
+                  "arguments": "{\"name\": \"Alex Chen\", \"age\": 32, \"occupation\": \"Software Engineer\"}",
                   "name": "structured_output"
                 },
                 "id": "structured_output:0",
@@ -97,8 +97,8 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1761606449,
-      "id": "gen-1761606449-goExaoQjE86O788qZmP7",
+      "created": 1762104960,
+      "id": "gen-1762104960-bcKv0CewU6PERrmIyiqi",
       "model": "moonshotai/kimi-k2-0905:exacto",
       "object": "chat.completion",
       "provider": "Moonshot AI",
@@ -114,7 +114,7 @@
         "*"
       ],
       "cf-ray": [
-        "9955d9946a640ea2-ORD"
+        "99856444697ee14b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -123,7 +123,7 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 23:07:31 GMT"
+        "Sun, 02 Nov 2025 17:36:02 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

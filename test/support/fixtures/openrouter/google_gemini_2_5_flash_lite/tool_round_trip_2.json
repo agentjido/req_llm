@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo2NTUzLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6InRvb2xfMF9hZGRfd1BPMUYyTUJRanNOYjVFMld5eFUiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJ0b29sXzBfYWRkX3dQTzFGMk1CUWpzTmI1RTJXeXhVIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LWZsYXNoLWxpdGUiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjo2NTUzLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6InRvb2xfMF9hZGRfeW1HWnZpRWRUT2NRZzZDU1ltSHIiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJuYW1lIjoiYWRkIiwicm9sZSI6InRvb2wiLCJ0b29sX2NhbGxfaWQiOiJ0b29sXzBfYWRkX3ltR1p2aUVkVE9jUWc2Q1NZbUhyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMi41LWZsYXNoLWxpdGUiLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
       "max_tokens": 6553,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "tool_0_add_wPO1F2MBQjsNb5E2WyxU",
+              "id": "tool_0_add_ymGZviEdTOcQg6CSYmHr",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "tool_0_add_wPO1F2MBQjsNb5E2WyxU"
+          "tool_call_id": "tool_0_add_ymGZviEdTOcQg6CSYmHr"
         }
       ],
       "model": "google/gemini-2.5-flash-lite",
@@ -68,8 +68,8 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1760546979,
-      "id": "gen-1760546979-70HgnjcZ5fnOsZlAJ1en",
+      "created": 1762104932,
+      "id": "gen-1762104932-IvTMJS8U2eEUkHufq0FZ",
       "model": "google/gemini-2.5-flash-lite",
       "object": "chat.completion",
       "provider": "Google",
@@ -91,7 +91,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0cf9b0dc4ff5b-ORD"
+        "99856391ffeec365-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -100,7 +100,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:49:39 GMT"
+        "Sun, 02 Nov 2025 17:35:32 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

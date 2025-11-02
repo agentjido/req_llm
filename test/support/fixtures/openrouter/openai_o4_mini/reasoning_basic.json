@@ -41,13 +41,19 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "12 × 7 = 84\n\nBrief rationale (concise):  \n• 10 × 7 = 70  \n• 2 × 7 = 14  \n• Sum: 70 + 14 = 84",
-            "reasoning": null,
+            "content": "12 × 7 = 84\n\nBrief reasoning:  \n• 12 × 7 = (10 × 7) + (2 × 7) = 70 + 14 = 84.",
+            "reasoning": "**Explaining the multiplication**\n\nThe user wants me to solve 12 times 7 and show some internal thinking without revealing the full reasoning. I understand that I can provide the answer along with a brief outline of my thought process. So, I'll calculate it as 12 times 7 equals 84. To explain briefly, I can mention that I multiplied 7 by 10 and then added 7 times 2 to get the final result. I'll keep it concise and clear!",
             "reasoning_details": [
               {
-                "data": "gAAAAABo75h5LbdyT9HKB_if972jsU9jUD4pag3H64s6KGHm52nObJ7SSV_YPulHQQcIoufvQ9rRCppmYJEXUNXGjm5GubdMst5mkah9kfHPCop9ONk8K5Nt6gAOLSV9veDer_xps6R9oRyAADrtkps7t8z9MDpw5-rBsy3G2WT4P0IzvKWBRUBaJNzDfLYt8FkM42MpfSdv7o7DW8mSNn_TWncNV54wq-bu6SuA_wsjpZiQBodmPCsbE8B9uZp7v6GHroo6flqPfenSSHfi2sXWi69Qx2b59oxAixMFVfs5qxHiq1poZaShEOF3NAHbqTuaskUrAEHRUnbKxMIYGP5a7u9srZ6pwnlFLCFAdaSe7THsaeLnW_dq4YACYfMACmrH97N7pniRqxJucULatCCmPEigswIInB5bUheAeHrxKS8DHu6iFc_P7JqAwLdUDozt_crHjElMWhG9MAQm3NKSJRDKDeJyWUUMOePwfAI1RneInNKjsZzqZBQV3Gvdo6jFuPL5uLpycdWZx6SctNZGXKPsTxC8frG_GfhdZL-earxnKyCcnRsB47llKheltLPEg_yYXeelfPZaPnBUxHwot0MKWW88pwscbPIuWyzP0CzLeHnyLTpmcEYOpEZ519kR1aQiawFZvtHmM7n-OpGFQJ7OvlaiK0yvraeeeKdyOekZRF7ixefr4U4DUVDo7AcU4_Nr1hHHxuw0wn4PMRPCm3HWO2MKyfVuMZO6wgEHFiNP-R_sf6Ip74J18oKdKAyrj9fXGCuj9vBnwKek8uD4k3uZzm4gorimV667b6c-7jXCd45KsnaoHlpTHOlEt7zdXWflHOZzKXTQcSvlJTmE1dnxeqqhgjU1PT6qmWahDd6Ui7glpFwwrwWd-ROpIvrtfYdiQPkg-SxFXGDsCeh0bEf4MtCl8b_97_HciqYhJ0AqDl6NSEb1hdLXrzsGQJyRrTeFQpCW-sXvoMkKq8oiz6W9lB0987UMJ1A0Ca0w05UmfcwsNXGXutJUXH2LnwoXC_4Evk1mnnQfxsJorn5clg3dS0dNy_7Mbi_sqmR3PwnlS-ImVPHnOEunEWpPMJmdfAsH90yW9wWSLgt_GT7wsKSJ0zIgK9stJAor3fdPDznZY8iYFtENRs1S8TOU8jo2ai9DAxfL4GrECEFq7gnOxkIkWZfPjw6u23Kk1Z7Q5FA2zwXbRpQ=",
                 "format": "openai-responses-v1",
-                "id": "rs_09a20512b35f66000168ef98773f648195bac94cc614dc6aee",
+                "index": 0,
+                "summary": "**Explaining the multiplication**\n\nThe user wants me to solve 12 times 7 and show some internal thinking without revealing the full reasoning. I understand that I can provide the answer along with a brief outline of my thought process. So, I'll calculate it as 12 times 7 equals 84. To explain briefly, I can mention that I multiplied 7 by 10 and then added 7 times 2 to get the final result. I'll keep it concise and clear!",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "gAAAAABpB5a-dAKCpDOeeutEg5FLi5r5-8Gp3EbZi54aCxZndIknifDDF4Bf3ylevXdK7OsfEHZ1pd45sTUIBL2GEGUeuUDWSZJ7GV-ebcYzXk9ixQll_abVGV7JQruqpZD7xKm2qs6E5sYobCHkKCMcHog1IOygeQP4zFnU4OSf9o8W-Bcy4U1Z2BUw8V8iBEQ3coCgem6U2KjpxCFkCIW9GX7kC95BzHstqZ1pKsxSRZkhNwOiC6nbHXd_Au3DEjpfhXhOH-OKR581e8jCCjmvuw7vKKOg7ufkcenYSF8QRmL-uUjs8dI92wf0CXkRNJgRgfK7inbCmYM5cLgqOVYl1G08TiW17KYZPnBE6j5ryW_MBt1DJnbBLHL4fedACxb84ymaApdziP_lHz0wQrUfr82Lv1qEseiSBjWwT36DlUFC0A7fU0vlVI0gJRJZQL2ZSYKq_-vkh52RyyBL9JMjR81H73Lnjk89So6zZYH4-2Qt-D7A9w8CrULxs0Fjmrm_Jsv9Dv9Ik449BxeET74Uu4mIqIUOX7EPISZ9gxVcUhlQdou9WoQp3VuEoF6r4OJvqlXcB_KqGSsxoltcBIkNJ3KoQdFfbNHig4GDjpZoJOO-Ma4g_hQSmwyVmaVP1IfgHQ8jqYaxjdLO0JZpsImeo_cig-PzRstUfisEHrQ-XGiVLV8E5YcaROYjUJXyv6pswGTOsXt6LREKIIEV1FJ7ULOl1RUAvl0eGBwyvjLU6lDhgKvVY0V4MtWNSDfd24SBCdd3PCDRfTgCyFAgziYbhcbMBz7RBviLMtG2WaGfe-DXq3K4V2OmrMk0GwnFgYCw_9bhZfVvaJg66evB5_Qp2gp467vAKODnKJHP9N7DMeoJIGDKvLRmSvK3Cakzza6BrnVJe6fEOwapY_cN1Ipw9av3XPD9B4NgEJeBw7spQijoFKmd97KDjtKb4IsWQrglKGykeNu2wO92PjlS_BSzTsbSiebp_a8-N2xL0lxw3Zb2gqtlMlJuRkfRLt_Jeqfpod8K9XtbHAghqa7smOO048pq8Y-NitI4I8rXbPi6o6nE8slhdKjJbW-S3oYv93lACILbl3Ifahubjs1QOeemXaiIa7vrqDIcdUoZfdJqgBHtk7EplLCA6OD7pJyzGgza-wTP9aZH_0Ripqq4Su7fivGDgCrMJDxg99WxkmOfI4sXAqkwak_O3hdz4RgoILlFMSR1jleHOEeVDFmFTuw3v8mTlnRdHU_C80vBX3y8biToflQPztlmZdaQdwS0DWWhzlacLX3oVAha3SB9EFgWiEOpi68XH8JX590bRtfgXMS0IOadlXMN23XapDbKecDk-XEdB3Rgmmf7CekPSwJZ58nkc0GFB_5-F_1r6A53gZd6ZbsYO8qv9dqcd0z_Xg73G5dFgaVnIRoBeCKZe7VQLgwetw2ir0cGaC_PCty-Qw9urh-5xp_t67Bgz1CtnQhamo_HNjL6TS976fxoJLFWHMybcbclUviNJc8VYi1hg-3wDNyyegBVDLkbQsvI1H16cBRvA6UvU5ARXkUf_9skhikbR3c1Zw==",
+                "format": "openai-responses-v1",
+                "id": "rs_02eea7d96be597de01690796baa6708190ba09bd19b66b55d6",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -58,15 +64,18 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1760532598,
-      "id": "gen-1760532598-sjTQB0uyQOH7JaawDROG",
+      "created": 1762105018,
+      "id": "gen-1762105018-hcN9Tlyl3eh6EtkfUYor",
       "model": "openai/o4-mini",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
-        "completion_tokens": 52,
+        "completion_tokens": 176,
+        "completion_tokens_details": {
+          "reasoning_tokens": 128
+        },
         "prompt_tokens": 19,
-        "total_tokens": 71
+        "total_tokens": 195
       }
     },
     "headers": {
@@ -74,7 +83,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef7084e9c6f790-ORD"
+        "998565aacb30f790-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -83,7 +92,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:58 GMT"
+        "Sun, 02 Nov 2025 17:36:58 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -79,17 +79,25 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "",
-            "reasoning": null,
+            "content": "\n",
+            "reasoning": "The user is asking me to generate a software engineer profile. Looking at the available function, I have a \"structured_output\" function that can generate structured output with the following parameters:\n- name (required): Person's full name\n- age (required): Person's age in years (minimum 1)\n- occupation (optional): Person's job or profession\n\nSince the user wants a software engineer profile, I should use this function. I need to provide a name and age (required), and I can specify \"Software Engineer\" as the occupation (optional).\n\nI should create a reasonable profile with a name, age, and occupation. Let me pick a name and age that would be typical for a software engineer.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "The user is asking me to generate a software engineer profile. Looking at the available function, I have a \"structured_output\" function that can generate structured output with the following parameters:\n- name (required): Person's full name\n- age (required): Person's age in years (minimum 1)\n- occupation (optional): Person's job or profession\n\nSince the user wants a software engineer profile, I should use this function. I need to provide a name and age (required), and I can specify \"Software Engineer\" as the occupation (optional).\n\nI should create a reasonable profile with a name, age, and occupation. Let me pick a name and age that would be typical for a software engineer.",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant",
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\n  \"age\": 15,\n  \"name\": \"Alex Johnson\",\n  \"occupation\": \"Software Engineer\"\n}",
+                  "arguments": "{\"age\": 28, \"name\": \"Sarah Johnson\", \"occupation\": \"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "0199e7ed59df48e61d4c235bc271ead0",
+                "id": "call_145764ed7ed6436597b68cb6",
                 "index": 0,
                 "type": "function"
               }
@@ -98,16 +106,21 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760532713,
-      "id": "gen-1760532713-HyMvSEgJkbx8vg0wigvT",
+      "created": 1762105094,
+      "id": "gen-1762105094-Un5jcp89yyyLhqc6zICE",
       "model": "z-ai/glm-4.5-air",
       "object": "chat.completion",
-      "provider": "SiliconFlow",
+      "provider": "Novita",
       "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 25,
-        "prompt_tokens": 237,
-        "total_tokens": 262
+        "completion_tokens": 178,
+        "completion_tokens_details": null,
+        "prompt_tokens": 219,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 40
+        },
+        "total_tokens": 397
       }
     },
     "headers": {
@@ -115,7 +128,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef7351cf75e822-ORD"
+        "9985678ae8345c90-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -124,7 +137,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:51:56 GMT"
+        "Sun, 02 Nov 2025 17:38:15 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

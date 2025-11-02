@@ -36,27 +36,33 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "length",
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello, world! 🌍 Welcome! How can I assist you today? 😊",
+            "content": "Hello there!  🌍✨ It looks like you're starting with the classic \"Hello, world!\"—a timeless tradition in programming. Whether you're coding in Python, Java, JavaScript, or any other language, this first step is always exciting!",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "stop"
+          "native_finish_reason": "length"
         }
       ],
-      "created": 1760532473,
-      "id": "gen-1760532473-MPcczJPRS3tZi9wgPK2H",
+      "created": 1762104929,
+      "id": "gen-1762104929-8Av3EPfpAGxsZql8Jbg5",
       "model": "deepseek/deepseek-chat-v3-0324",
       "object": "chat.completion",
-      "provider": "Crusoe",
+      "provider": "Novita",
+      "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 18,
-        "prompt_tokens": 8,
-        "total_tokens": 26
+        "completion_tokens": 50,
+        "completion_tokens_details": null,
+        "prompt_tokens": 6,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 2
+        },
+        "total_tokens": 56
       }
     },
     "headers": {
@@ -64,7 +70,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6d765c0b115e-ORD"
+        "99856380efbd11fb-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -73,7 +79,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:47:53 GMT"
+        "Sun, 02 Nov 2025 17:35:30 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

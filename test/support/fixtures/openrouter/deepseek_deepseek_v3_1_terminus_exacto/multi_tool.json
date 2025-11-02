@@ -98,12 +98,12 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "Hmm, the user is asking for weather information in Paris, France. This is straightforward since I have a weather tool available. \n\nI need to call the get_weather function with Paris as the location parameter. The tool requires the location field, and I can let it default to Celsius since the user didn't specify a preference. \n\nThe response should be concise - just state that I'm checking the weather and then deliver the results when the tool responds. No need for extra explanations since this is a simple query.",
+            "reasoning": "Hmm, the user is asking about the weather in Paris, France. This is a straightforward request that matches exactly what the get_weather tool can do. \n\nI need to call the get_weather function with the location parameter set to \"Paris, France\". The user didn't specify a temperature unit, so I'll use the default (probably Celsius since Paris uses metric system). \n\nThe tool should return the current weather conditions there. I'll wait for the response and then present it clearly to the user.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "Hmm, the user is asking for weather information in Paris, France. This is straightforward since I have a weather tool available. \n\nI need to call the get_weather function with Paris as the location parameter. The tool requires the location field, and I can let it default to Celsius since the user didn't specify a preference. \n\nThe response should be concise - just state that I'm checking the weather and then deliver the results when the tool responds. No need for extra explanations since this is a simple query.",
+                "text": "Hmm, the user is asking about the weather in Paris, France. This is a straightforward request that matches exactly what the get_weather tool can do. \n\nI need to call the get_weather function with the location parameter set to \"Paris, France\". The user didn't specify a temperature unit, so I'll use the default (probably Celsius since Paris uses metric system). \n\nThe tool should return the current weather conditions there. I'll wait for the response and then present it clearly to the user.",
                 "type": "reasoning.text"
               }
             ],
@@ -115,7 +115,7 @@
                   "arguments": "{\"location\": \"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "call_jfxl06twrl2xnt6cs0wgy9jt",
+                "id": "call_1cc9",
                 "index": 0,
                 "type": "function"
               }
@@ -124,23 +124,16 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1761606841,
-      "id": "gen-1761606841-LyRdesX8LiDt0Kc2TkTP",
+      "created": 1762104931,
+      "id": "gen-1762104931-cfDVm4wYpGNv2HZ73VsL",
       "model": "deepseek/deepseek-v3.1-terminus:exacto",
       "object": "chat.completion",
-      "provider": "Novita",
-      "system_fingerprint": "",
+      "provider": "DeepInfra",
       "usage": {
-        "completion_tokens": 121,
-        "completion_tokens_details": {
-          "reasoning_tokens": 105
-        },
-        "prompt_tokens": 258,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 0
-        },
-        "total_tokens": 379
+        "completion_tokens": 120,
+        "prompt_tokens": 247,
+        "prompt_tokens_details": null,
+        "total_tokens": 367
       }
     },
     "headers": {
@@ -148,7 +141,7 @@
         "*"
       ],
       "cf-ray": [
-        "9955e329de4661cc-ORD"
+        "9985638b3c7650bb-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -157,7 +150,7 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 23:14:03 GMT"
+        "Sun, 02 Nov 2025 17:35:31 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

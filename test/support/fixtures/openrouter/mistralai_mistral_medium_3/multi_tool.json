@@ -103,10 +103,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"location\": \"Paris, France\"}",
+                  "arguments": "{\"location\": \"Paris, France\", \"unit\": \"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "lP8ECDbRw",
+                "id": "VCFzNuZzG",
                 "index": 0,
                 "type": "function"
               }
@@ -115,15 +115,15 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760532485,
-      "id": "gen-1760532485-9GYBy4TEfUjVYhiAb60s",
+      "created": 1762104964,
+      "id": "gen-1762104964-bImmwWiJOWd4ym5l6rMy",
       "model": "mistralai/mistral-medium-3",
       "object": "chat.completion",
       "provider": "Mistral",
       "usage": {
-        "completion_tokens": 14,
+        "completion_tokens": 21,
         "prompt_tokens": 204,
-        "total_tokens": 218
+        "total_tokens": 225
       }
     },
     "headers": {
@@ -131,7 +131,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6dc3bf7dbd1f-ORD"
+        "9985645a5bd8aca8-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -140,7 +140,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:06 GMT"
+        "Sun, 02 Nov 2025 17:36:04 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

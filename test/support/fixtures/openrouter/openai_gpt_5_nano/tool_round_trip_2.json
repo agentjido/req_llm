@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMjgwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiJjYWxsX2Y3dHY3ekFSWUhqQ241czBHSDJWdEszSSIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfZjd0djd6QVJZSGpDbjVzMEdIMlZ0SzNJIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1uYW5vIiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjoxMjgwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiJjYWxsX3NnSERZYTJpQzFENzdkWVNMbExPUGNRbSIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6ImNhbGxfc2dIRFlhMmlDMUQ3N2RZU0xsTE9QY1FtIn1dLCJtb2RlbCI6Im9wZW5haS9ncHQtNS1uYW5vIiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
       "max_tokens": 12800,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_f7tv7zARYHjCn5s0GH2VtK3I",
+              "id": "call_sgHDYa2iC1D77dYSLlLOPcQm",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "call_f7tv7zARYHjCn5s0GH2VtK3I"
+          "tool_call_id": "call_sgHDYa2iC1D77dYSLlLOPcQm"
         }
       ],
       "model": "openai/gpt-5-nano",
@@ -64,9 +64,9 @@
             "reasoning": null,
             "reasoning_details": [
               {
-                "data": "gAAAAABo75iPpArlTiXkRIX6bz6-QFjbctTGy1ILcSc_qlzuH74CVxKW2aufvIGJGFIvtJnQMHmH-Gu8o8wRQyoUigp9Ctn7j494z9i0STH8sigDegBZvYa1zvv_P_XwQDLeBarGaCQTAjjVanVUcE-KI620VtTb4QYXpK6_yRSXKW8Dt5tymN-DWV744hMuujmenQztIe_rwJ-PCQ36NHbrT5eKaVefH7gQB1wJx5HVjpnsHVqDccZadtii0n7NoIG-9XAwhzCSlwKsNfzNG3HneFbIqEvKYOrCY68b8gH6CGraK68k4zFIyDOmU_UGaW3OQbDwL9rWBZQdeita3fj8JcX7ICm3uPbEBq_cHejZ3QYVN_Tf1rEcoLEjE4eZ_wE_zUMUhcgEO33smrtVVMGON31eRJz7UeTNsInrzLLoBMAkAaGbsJL4Sg7Re4e92zBCSeIM24sE98sQO_VbOIztZ5kDNJlC8HDhuE_f8k27VKW2gsdRnrLwUo3yNNd8HZzc565b4-gMV6JNUKykHPA3WFJU-_rkCS-HkOskqJlOkavI2huoYjNbcxxCGzxjvMlT1hL83ixJ9jbZjaBeP5WXgedt51XEy_x_VYwlFl7iICdZXQQLd78xSzSVN3yLx_RQ7HicI9GgsoB5P-Rf6N1-ZjIm7kq7P123sf4ISTHekNzoIax85yHOB4I1RWCsX-9TrR3oK5j0et_KD1As6VPMTWmIHbGduH4APd_Rt6C8FrXDZ4rDUo-Fa9tNbh77CPIpuHfxxC4mfZ4y_aeVCJe6LbBvZPDuxO3h30hPeUeyHoYZaSz2lr7Sv4ucC6Ht1DJ16Gz_lv_X_5n_gPS-aD94sFMGK99t_uEA6U1ZZX-cbGDNwYmCqVEp-pw-hIvN6ivC-9I_mo3BE5bYtFks_CYWFNqMAKm1eDz1qrLrmuCfyf5QeyYAAadfcGPBpslDxZ8vrCaLVF7cQC1pbIj6MAD7o7V82KzKGASb0QwoWWnlW9uMHK8HFxMHQA_POJ45g2K5UU9hOAJdU8F5m0ZWCHWDapu4RJluWwc4I_dS1boxhAq3JTCDhUqjqufz8T8UPxDxWnasvjEKcf3Xs1KRPscoklab18A0sAXpVzM076cB5IXiam_w7SjOvKUwKN3fpBsweHyi_zjaWe69VcOjby3wi5s-BXkZEa38G9fZZLfQ1rgmHdXMFqerebwST2A4urpoLjWmZ3lvOfDtNDRFe1lXn_8sRsCZV93kYxBxf6upksXdX00m9dk9cpPvHaBxbBSMVsRyn1Be26yq-cet-L-n3nyAuBoCqQ==",
+                "data": "gAAAAABpB5aeGeTAbiXQwj_655pO45dHq0-49f2eK8W5vDcvox8e9lmmYgUECBhf1taJ2mlNvU2vX568KC3JsSgl1X6TgnDBPrbS7BHT8fZRfc1DHnovbfCEorxR67ck9pF4fbCn2J5MEGKlWvEzrUqjQ5890Bt_mu_I7I3b_dK2Q7SxUgTpCVi4IAuPHUXhDQXZiQ2dmBklQ1iRELoILsqOR64hyE5N5UBmrPHlYmwJs_VYEBHtLMXd0f_iIyPLl0qbkMl2uueGYIshbgRiCQEqKldWeuI-37Edo0nO9Qwea81rru3_USnwgrbteizUY_pfOEL9fo2I9JVtLF8bi7qIvjSxr-wGnUe6xp1TANJ8bWmAm9IxcIt1-W21TMzFFTH-yysENNxxreFIdzQuZq-nPh6CjaEw6HIy2stcmnYg6gqoY2Z0tBuO4U8sytYF6jlmb72PY6aKP2IB-dmS_Rmdj7TcoPb98USVTZMDl_fhYwA3GBtnNe-44hReg9AvOq3XQZt4GaxsnnWpDAYh-dkRyTI3IhAHOrfy936oVTm8O6-vuvD6U0D6aY-MOK4IyE1_1GQpgkWI-GW_PI1JrIlePHoB4J1lcP0S__wznwF_fKptDzTYbeClDJrt5kHJWB-7_Dy-4DKi5is6wyM1gcKRi0Nto2z1LliGeJPoxcOtaT9JBSTAMoT2LN_rnQPjAa3XECoaQ2QoEAnIoYw7ytmZdlAToJAK6VUiqx0I2tu6uLuQrkAdmVRirywMJRWHGAsCVMK-hBRbFvLw7A61j2jxnErjOT20V6M2dA-CNwDhAekFmjKIBOtKIFyD8mCNJ6kXfA8-FQJrbsPlUfGy-U71q2Y6PiMEKWmIN8Op712q-g5ss2v51z1vLTSInvm58B5XG_057u2pOkFENvY0hWrQDvyT3PqS8YhkzTc9D5ainS9TuZNZ5_VA2jR_mGS2H1PavAKFRm0wSVyYjYgOOajvfSB9j81V4DdwUA3_qMhyxwPa8qdizHDN-OZT0J-P6RfeAAC7APBxKb98_ZK9YnShDYxp4J0wK4eRLW1DF673DEDokzTZaPc1bRXVhdkjacr2uQeeCPMDfkTbYtNwBPrrrJurcyfs3n12yKw965wboNHVBV-lu_1arftAnzu5HV9cKgxtvt4ApmxpM0_8dDqnjs-HlYcK9-G4WB-EyGyOaNWiSHpXb5r6BH5hJmFcqXcIXdL3wTpFr5BbSkZiyMngKpCuptHRoxYf_SwUi5IqR5iQVeNVcSxnf-tfiZk7lz6dJesVJsBpg3Jtbuiz78Z-doe9qevZiA==",
                 "format": "openai-responses-v1",
-                "id": "rs_68ef988e76b08190a92e5d8ef595a3a2",
+                "id": "rs_6907969dd3a881909928e1f156802fb9",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -77,13 +77,16 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1760532621,
-      "id": "gen-1760532621-r9K4o3p3VcMfeYL5OjQ9",
+      "created": 1762104989,
+      "id": "gen-1762104989-i4V338cvfUgLEi7YDnJ0",
       "model": "openai/gpt-5-nano",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
         "completion_tokens": 73,
+        "completion_tokens_details": {
+          "reasoning_tokens": 64
+        },
         "prompt_tokens": 60,
         "total_tokens": 133
       }
@@ -93,7 +96,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef71169ce161c9-ORD"
+        "998564f77d062315-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -102,7 +105,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:50:22 GMT"
+        "Sun, 02 Nov 2025 17:36:29 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -65,64 +65,22 @@
   },
   "response": {
     "body": {
-      "choices": [
-        {
-          "finish_reason": "tool_calls",
-          "index": 0,
-          "logprobs": null,
-          "message": {
-            "content": " ",
-            "reasoning": "First, the user wants me to use the \"add\" function to compute 2 + 3. The available functions include \"add\", which takes two integers, a and b.\n\nI need to call this function by outputting a JSON in the specified format, enclosed in <function_call> tags.\n\nThe format is: <function_call>{\"action\": \"function_name\", \"action_input\": {\"parameter\": \"argument\"}}</function_call>\n\nFor the \"add\" function, the action is \"add\", and the action_input should be an object with \"a\" and \"b\" as required parameters.\n\nSo, for 2 + 3, I should set a to 2 and b to 3.\n\nAfter calling the function, the user says: \"After the tool result arrives, respond with 'sum=<value>'.\" But as per my system prompt, I just need to make the function call in my response. The actual execution and subsequent response might be handled externally.\n\nMy response MUST include the function call in the specified way. I shouldn't make the response verbose; keep it clear.\n\nThe user is instructing me on what to do after the result, but I think that's for my next step after the function call is processed. For now, I just need to initiate the function call.\n\nFinally, structure my response: Just the function call, nothing else, to keep it clear.\n\nSo, the function call should be:\n\n<function_call>{\"action\": \"add\", \"action_input\": {\"a\": 2, \"b\": 3}}</function_call>\n\nThat matches the requirements.",
-            "reasoning_details": [
-              {
-                "format": "unknown",
-                "index": 0,
-                "text": "First, the user wants me to use the \"add\" function to compute 2 + 3. The available functions include \"add\", which takes two integers, a and b.\n\nI need to call this function by outputting a JSON in the specified format, enclosed in <function_call> tags.\n\nThe format is: <function_call>{\"action\": \"function_name\", \"action_input\": {\"parameter\": \"argument\"}}</function_call>\n\nFor the \"add\" function, the action is \"add\", and the action_input should be an object with \"a\" and \"b\" as required parameters.\n\nSo, for 2 + 3, I should set a to 2 and b to 3.\n\nAfter calling the function, the user says: \"After the tool result arrives, respond with 'sum=<value>'.\" But as per my system prompt, I just need to make the function call in my response. The actual execution and subsequent response might be handled externally.\n\nMy response MUST include the function call in the specified way. I shouldn't make the response verbose; keep it clear.\n\nThe user is instructing me on what to do after the result, but I think that's for my next step after the function call is processed. For now, I just need to initiate the function call.\n\nFinally, structure my response: Just the function call, nothing else, to keep it clear.\n\nSo, the function call should be:\n\n<function_call>{\"action\": \"add\", \"action_input\": {\"a\": 2, \"b\": 3}}</function_call>\n\nThat matches the requirements.",
-                "type": "reasoning.text"
-              }
-            ],
-            "refusal": null,
-            "role": "assistant",
-            "tool_calls": [
-              {
-                "function": {
-                  "arguments": "{\"a\":2,\"b\":3}",
-                  "name": "add"
-                },
-                "id": "call_55372073",
-                "index": 0,
-                "type": "function"
-              }
-            ]
-          },
-          "native_finish_reason": "tool_calls"
+      "error": {
+        "code": 400,
+        "message": "Provider returned error",
+        "metadata": {
+          "provider_name": "xAI",
+          "raw": "{\"code\":\"Client specified an invalid argument\",\"error\":\"Invalid request content: Required function  is not present in the provided tools.\"}"
         }
-      ],
-      "created": 1760532591,
-      "id": "gen-1760532591-HDH5vhs9AvzH9GGtxqLo",
-      "model": "x-ai/grok-3-mini",
-      "object": "chat.completion",
-      "provider": "xAI",
-      "system_fingerprint": "fp_4fae27f477",
-      "usage": {
-        "completion_tokens": 350,
-        "completion_tokens_details": {
-          "reasoning_tokens": 320
-        },
-        "prompt_tokens": 187,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 186
-        },
-        "total_tokens": 537
-      }
+      },
+      "user_id": "user_2iYQIxKY28QuzANm4mmKBlOxzx2"
     },
     "headers": {
       "access-control-allow-origin": [
         "*"
       ],
       "cf-ray": [
-        "98ef7056aebe1923-ORD"
+        "998566c13e0b000b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -131,7 +89,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:51 GMT"
+        "Sun, 02 Nov 2025 17:37:42 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
@@ -152,6 +110,6 @@
         "nosniff"
       ]
     },
-    "status": 200
+    "status": 400
   }
 }

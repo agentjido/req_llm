@@ -78,10 +78,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"a\": 2, \"b\": 3}",
+                  "arguments": "{\n  \"a\": 2,\n  \"b\": 3\n}",
                   "name": "add"
                 },
-                "id": "call_e4577caf5c814c8094ba84c1",
+                "id": "chatcmpl-tool-b7395b2c11ea4732afb1e1f1dd9094c6",
                 "index": 0,
                 "type": "function"
               }
@@ -90,15 +90,15 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760532539,
-      "id": "gen-1760532539-HMGw4GkhWkIV1XZ7v98x",
+      "created": 1762105025,
+      "id": "gen-1762105025-TaFSUsb4XQEHd2KXFlQH",
       "model": "qwen/qwen3-30b-a3b-instruct-2507",
       "object": "chat.completion",
-      "provider": "AtlasCloud",
+      "provider": "Nebius",
       "usage": {
-        "completion_tokens": 25,
-        "prompt_tokens": 180,
-        "total_tokens": 205
+        "completion_tokens": 17,
+        "prompt_tokens": 185,
+        "total_tokens": 202
       }
     },
     "headers": {
@@ -106,7 +106,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6f11cf68ff5c-ORD"
+        "998565db5bbdeaf5-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -115,7 +115,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:59 GMT"
+        "Sun, 02 Nov 2025 17:37:06 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -80,12 +80,12 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "**Begin Structuring the Profile**\n\nI've started to map out the structure for the software engineer profile. The `default_api:structured_output` tool is a constraint, which forces me to work within a specific JSON schema. I'm focusing on \"name\" and \"age\" fields first, before the more complex elements. Now I'm considering what other fields are essential for this profile, for example, \"skills\".\n\n\n**Expanding Field Considerations**\n\nThe JSON schema presents limitations with its structure. While \"name,\" \"age,\" and \"occupation\" are straightforward, I am now thinking about how best to reflect the skills of a software engineer. \"Skills\" feels like an important, complex field. Should I consider an array of strings, or a more structured nested object to detail each skill? I'm considering using skills like \"Python\" as a start.\n\n\n",
+            "reasoning": "**Structuring Profile Output**\n\nI'm working on generating a structured output for a software engineer's profile, leveraging the `default_api:structured_output` tool. My focus now is fine-tuning the inputs to the tool to ensure the resulting profile is comprehensive and accurate. I'm exploring different data representations to optimize the profile's structure.\n\n\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "**Begin Structuring the Profile**\n\nI've started to map out the structure for the software engineer profile. The `default_api:structured_output` tool is a constraint, which forces me to work within a specific JSON schema. I'm focusing on \"name\" and \"age\" fields first, before the more complex elements. Now I'm considering what other fields are essential for this profile, for example, \"skills\".\n\n\n**Expanding Field Considerations**\n\nThe JSON schema presents limitations with its structure. While \"name,\" \"age,\" and \"occupation\" are straightforward, I am now thinking about how best to reflect the skills of a software engineer. \"Skills\" feels like an important, complex field. Should I consider an array of strings, or a more structured nested object to detail each skill? I'm considering using skills like \"Python\" as a start.\n\n\n",
+                "text": "**Structuring Profile Output**\n\nI'm working on generating a structured output for a software engineer's profile, leveraging the `default_api:structured_output` tool. My focus now is fine-tuning the inputs to the tool to ensure the resulting profile is comprehensive and accurate. I'm exploring different data representations to optimize the profile's structure.\n\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -94,10 +94,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"occupation\":\"Software Engineer\",\"name\":\"Alice Johnson\",\"age\":32}",
+                  "arguments": "{\"name\":\"Alice Johnson\",\"age\":30,\"occupation\":\"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "tool_0_structured_output_5hUDx1lJ4sqJf7ROhUfY",
+                "id": "tool_0_structured_output_njC4sNVf3SXhQOH5TKSE",
                 "index": 0,
                 "type": "function"
               }
@@ -106,22 +106,22 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1760546978,
-      "id": "gen-1760546978-Z1yOLhZgFbYGzMTpgMI1",
+      "created": 1762104931,
+      "id": "gen-1762104931-BuHH7CiAMIalkiABRnYE",
       "model": "google/gemini-2.5-flash-preview-09-2025",
       "object": "chat.completion",
-      "provider": "Google",
+      "provider": "Google AI Studio",
       "usage": {
-        "completion_tokens": 113,
+        "completion_tokens": 63,
         "completion_tokens_details": {
           "image_tokens": 0,
-          "reasoning_tokens": 98
+          "reasoning_tokens": 32
         },
-        "prompt_tokens": 41,
+        "prompt_tokens": 85,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 154
+        "total_tokens": 148
       }
     },
     "headers": {
@@ -129,7 +129,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0cf96ee55c77f-ORD"
+        "9985638fdb3161d9-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -138,7 +138,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:49:40 GMT"
+        "Sun, 02 Nov 2025 17:35:33 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

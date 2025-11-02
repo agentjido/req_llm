@@ -98,12 +98,12 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "**Querying the Weather**\n\nI'm currently focusing on the weather query for \"Paris, France.\" My primary task involves determining the appropriate tool. The `get_weather` tool looks suitable. I'm also evaluating the required parameters, namely \"location\" and the optional \"unit\". My plan is to invoke the tool with \"Paris, France\" and no unit specified, defaulting to Celsius if necessary.\n\n\n**Finalizing the Tool Call**\n\nI've now zeroed in on the specifics. The location input for the tool is confirmed as \"Paris, France\". Since the user hasn't indicated a unit, I'm opting to omit it entirely, relying on the default, whatever it may be. The complete function call will be wrapped within a `print()` statement for output. The ultimate code snippet is now set.\n\n\n",
+            "reasoning": "**Assessing Weather Data**\n\nI'm assessing the tool `get_weather` and its parameters to address the user's request. It seems clear I need to use the `get_weather` tool, and I need to input the user's location, \"Paris, France\". I'm also considering the optional temperature unit parameter; I will default to Celsius if none is provided.\n\n\n**Formulating Function Calls**\n\nI'm now formulating the function call. The location is straightforward: \"Paris, France.\" Since no unit is specified, I'll allow the default unit (Celsius) to be used, and thus, I won't specify the `unit` parameter. I believe the function call will look like this: `default_api.get_weather(location='Paris, France')`.\n\n\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "**Querying the Weather**\n\nI'm currently focusing on the weather query for \"Paris, France.\" My primary task involves determining the appropriate tool. The `get_weather` tool looks suitable. I'm also evaluating the required parameters, namely \"location\" and the optional \"unit\". My plan is to invoke the tool with \"Paris, France\" and no unit specified, defaulting to Celsius if necessary.\n\n\n**Finalizing the Tool Call**\n\nI've now zeroed in on the specifics. The location input for the tool is confirmed as \"Paris, France\". Since the user hasn't indicated a unit, I'm opting to omit it entirely, relying on the default, whatever it may be. The complete function call will be wrapped within a `print()` statement for output. The ultimate code snippet is now set.\n\n\n",
+                "text": "**Assessing Weather Data**\n\nI'm assessing the tool `get_weather` and its parameters to address the user's request. It seems clear I need to use the `get_weather` tool, and I need to input the user's location, \"Paris, France\". I'm also considering the optional temperature unit parameter; I will default to Celsius if none is provided.\n\n\n**Formulating Function Calls**\n\nI'm now formulating the function call. The location is straightforward: \"Paris, France.\" Since no unit is specified, I'll allow the default unit (Celsius) to be used, and thus, I won't specify the `unit` parameter. I believe the function call will look like this: `default_api.get_weather(location='Paris, France')`.\n\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -115,7 +115,7 @@
                   "arguments": "{\"location\":\"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "tool_0_get_weather_zKsEgarhTxXfFLtbZ9Pj",
+                "id": "tool_0_get_weather_GgivnWUJhQQDBZqCld0I",
                 "index": 0,
                 "type": "function"
               }
@@ -124,22 +124,22 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1760532472,
-      "id": "gen-1760532472-CesXssNZStVQeRnpFsns",
+      "created": 1762104982,
+      "id": "gen-1762104982-K18NgsB7GUvjRmfaKYx5",
       "model": "google/gemini-2.5-pro",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
-        "completion_tokens": 228,
+        "completion_tokens": 220,
         "completion_tokens_details": {
           "image_tokens": 0,
-          "reasoning_tokens": 221
+          "reasoning_tokens": 213
         },
         "prompt_tokens": 53,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 281
+        "total_tokens": 273
       }
     },
     "headers": {
@@ -147,7 +147,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6d709a68e1b4-ORD"
+        "998564ce5d83e25b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -156,7 +156,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:47:56 GMT"
+        "Sun, 02 Nov 2025 17:36:25 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

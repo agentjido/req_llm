@@ -86,10 +86,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"occupation\":\"Software Engineer\",\"age\":30,\"name\":\"John Doe\"}",
+                  "arguments": "{\"name\":\"John Doe\",\"age\":30,\"occupation\":\"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "tool_0_structured_output_bCbkrGO2Pbl9VNp3DL2K",
+                "id": "tool_0_structured_output_ajBLuAHfBCcAmEK45RM5",
                 "index": 0,
                 "type": "function"
               }
@@ -98,8 +98,8 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1760532473,
-      "id": "gen-1760532473-Bm6SshCFzmEw0TYJhS73",
+      "created": 1762104935,
+      "id": "gen-1762104935-STU6tb2DedSn7mBpOucY",
       "model": "google/gemini-2.5-flash",
       "object": "chat.completion",
       "provider": "Google",
@@ -121,7 +121,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6d773c09e828-ORD"
+        "998563a5da0e10df-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -130,7 +130,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:47:54 GMT"
+        "Sun, 02 Nov 2025 17:35:36 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

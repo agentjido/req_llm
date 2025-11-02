@@ -80,12 +80,18 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": null,
+            "reasoning": "**Generating a software engineer profile**\n\nI need to start by using structured_output to gather some sample data like age, name, and occupation for the user’s request to generate a software engineer profile. I should call the function immediately before executing any other tool. For now, I’ll use \"Alex Carter,\" age 28, and occupation \"Software Engineer.\" Once I call the tool and it returns the data, I can then present the profile content. Multi-tool use isn’t necessary for this task.",
             "reasoning_details": [
               {
-                "data": "gAAAAABo75isIXQLZuq9AE8gdSyeZRcAdyFg_kTuc0VoCV6VgQeQbzLju6VnoT5fM8w2bKs6NorZkw5rUkVB5S0sdFqeQ5m5flFF_vORnYDNffEcg6z9iQ5h_4jcVSu0nwjYp7KSolBkj0KmbUbKNTMAcigcEGvixVmzZVXCguOsahtH3Yl5hZT3zaeEyhPXyXVQOR81GZeDmmurQj3WFHt-cANXTUaIhF41icUCcwlp9RV2sSsaYG87lNcHy_UeIhVHk2PiKPd0g9SGMpyBEhHVeHTfSoDVcPNdIcbBjA1T9dZ7qRJ42VQL3EXdkmF7bEgH97bPdVTPlPLwtIMjvpAzj8Nu5pIftvHzQGAzxKIC986AbSzQws9qgafVRle5DPuSYGMjR5C2dcEjwMV41I7nVB2qH33TjE7dCr0JTDrKOXs9Qp2odv9UKNO_yrEdhLwBUvBqQkOS4hCfY9TTHc7TI_JoJcaDLfZali9lzBYFChVLMUqbBIZhhpaVLS4fyumNsOQ9ueugoD_P4o9HOWSd-6eU7Dg5U9L-44D4bUz4sh2D5FT21hPWxf3joX_h7FJj4SoUl-LK5A4XeLFKCXQ9r3mHIXRkTy5ulC8g1JyPURv5joBIda1fbd4igzW8Aa3ioMzDnYbPGfivIMf4X8enrzGU1NznCiMoyPXEmyZPPaZVcp74oVF5V-CxFr2oCygeIPBxg0336aSXxVVGcnRCsGZV7IYJqLiecVAcMsIxQXEq1H3mFxqGTudY95aHYNVQW_wjm5mFq9zj4YkeO16pr_2yAPnf9z64E2AThBZhqwazGmkzjkd7vpfgnC7X5qovZhNbRZkMN5XRP5eL__EocaVS_e3oEt9RDPxG9G7osvjly7iBbEJCOWjnK58EoZ5BnLPcTYA5488ibWglSZkmWK4sOi5Hl6jw_JPMllqPRUlKywnkj0CVUAjCqS5m_thnQIXdo0owktxsEwlrr_cBBl9x3wMAjdmm5FBtzyDtpJOXuHuNiN1WWs2-rpn3Ft9vtoOijh8ffkFuKD9kl1latCVQaEkO8TuvplUz-YRvtWvEJBLxee6J6AypsVx5R8W0hDqqN3LE9fn-IQv1ytWqEqAMPHr_JopX0tLWLGnx58E6ndTEB0Mhh3GEiESNPg-cXwkvlX4FNoNZCk4IIqDmc_22Qlfp3ZCbrUFbdOTS0cDCq7iSFWZIVoC8EfGcJ_p-vDQsnIYJ7ijjDmgLnIbaoIbRIkYrxuIF3f1ipMVH2HHQPK77anQkPfx3-FxQZAz_ZU1mD_fYZVHRDAt6DGxk_VpciBH1XZhwWo8pyjKCh4FLd3C0ziH5N65LHFEQPBbw4-LBfsRtc5CX0bio1Q2w8YQAcbmm9T_SR3e23pM7dsclicofVzVtvNgso-R6A0mj8clcHGNL7G6yitkQ9EYxYpHuoYWAovghMs-_cbhFjM9S69mdIUcDmhRD-iNREazvIvPTo0pHtZIyWCzIUvVltuDDcoOUF3w9rX_bXw9tTpP0xzQ56GjE8MwTl9yAFwTw0sRX5fOs6aSkKD-wpgpNZeWFEmug7XWDvBNoBtZd5FlN99QwmTHCvCdUOhpPWe7NxEp_92uxd4pWeQ916eCVsnbgyhQbSS7-FH305JrD4kJmUqaKbVSLNmNRrgatewtyRDEbK-sqwXTqYa_EH_wJA-9mxcH-youP6n5hb9OFdu6HzbKmPhItNf2Ia6tEm9HjkBdIJRsuDGn-kudtevkoBVOAVvFOCJuYpiHtrmLUNRaANCV5lCpRqd4m_cqZGpU3gm17CQAMU-ApzN2w9PBxjN99SghQdXAn0oJX8TqU_KJBeaH2yKZBJGnpHhl5iVHKffOKhjnLztp17jdBy2SvNwIzC31FI9IuYGgnkR3i1NC43MWzIdiGgJ8C4IG0d8AAPmsU728tCVA-UxDzxhDVXKQKngLPStWYVHBkXyysl38wdKAmKWOMeEeIbxIaz6qJ4alBsMZcQ9YMgRWCI70PTQ4h0GKLrCBp8L-HPbB8TLseDyRrD52EkR6k675UrygN_sUSoS4Y5Vv9mv6KNNt0ipDY19PRyEdh9hvdWFBxp4zsUyWEq4N33YAQUhvrKQzcgS1iBzlf",
                 "format": "openai-responses-v1",
-                "id": "rs_0b734f553bea89220168ef98aaae70819592b11218fa7128fa",
+                "index": 0,
+                "summary": "**Generating a software engineer profile**\n\nI need to start by using structured_output to gather some sample data like age, name, and occupation for the user’s request to generate a software engineer profile. I should call the function immediately before executing any other tool. For now, I’ll use \"Alex Carter,\" age 28, and occupation \"Software Engineer.\" Once I call the tool and it returns the data, I can then present the profile content. Multi-tool use isn’t necessary for this task.",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "gAAAAABpB5a64oFwUjlr97PM75QTZVmwafGn1cEe1KyAUlLZ988KrIyZFw3mLC6u3OMB0hG-X256gwcfO2F2eTUn4MH6MwNo9Fh0KqTTDbev0gfz05WqvI75u33aafj0YTtd7RPictkVk0Zq6C9RUU31W45vmRCJiZaSa9Q30g8o2p25XLaL0Qtzdv8Lw11lxFu2Mlcd8GmyYo6mZ2zpgbOe_Uu7icWdtJpCM4alTKilTrdVsGDe-hEywCocc_U0ahJwZKBEaFOZBGYzFLlcPHih67h-v2IcNK7Z0chq0Rei3sNX7C-uMs1WDztfWQZiUpgY0ZDn8N_UMvH_FVauyQZX9dok0PNzqNJSKkHDygeCLSboZrpbxfVerTSs2UXR1SVPu_xbEPLo2n3dolCdmsIePbE7BCDVMA4PDeIasqGoV_E-FrHwmrkreT3rdPDgoSw6Uco77neKV_wEoZ1G7eSQnL9JG0wFe8Tj6_U5X9-LTdQEnjmHrOO3DxcifJqop1ePSfuZ_3nguWCK93FYoKjjIqEYnb9OYwA6YoWqZuG9KyX8r3D1nJMr7oe3x0nJAaVlg3VpyatLDGIrUsfmSQ5eVCCdTyiQL1VZfCCVTk-f9Zx0sCD-xsEUkNpNfEcOHCDRdp_RdMX8y1gM6Kxl8gxM3eVK8osMfA6Xr6Y5KGVhnF5MsSHzpH-jpMLr37b09gkPG61ImadzXJPGOX_0-idDgImYq8ZZnAL7TBg-gQ4kB0bxq1zC3NyWVVKwux9bjFsedhhpA7iKrZjtrnZkn3Kwgwa7vX9DqXDwxwhZBXZcABJ-3BUl-LcwwDizxSVqyYjnD8dLPlAH2JutYRJoy51g13vNi4_qpb8sCufgX2jRmIig4izL4MzRNj2V-_qErteelRWzB2gmnTJZaI-1fcSuNq83I2syVkzD6EZSgqYmcaPUWteI0B19Pt7LEuKJlxc2z14ujyMHciD8l3YS7pXdTvAalgF1eazCmVcejQfuWmP3rj88m84G45OJ-4bzjFS_JhrOP7pwrH5x3zlgt71RI2XZfrmcAgi1Lnh9_8J_lAJmjKz7GylJ4rfDbL7If5zYhJ39j3XTEA8qWjRmU0xDxRM6ysP9HOhPxMU2_zxhwnhm1VaLDt4_a0iIIBEKOE6hxaheazCGW_3hgYuTcbBS5tH5WfNRvtoISPBsaANGmbAW2LTSC51LXyWn1Y5s7u7bbaOFEBDU6fAg-COzbCBUR6nBrpMK7stqPwB_I8Rk1th0-GmgB_4DJK6c0S06FvMNfwZya0gHXh1dyXSG7k--Br-GWKsAA7stlSqlI9eftuA4IzwLrTDCoUEa28n_V87VY_QZUAbjcjS-KGOTxIXHJboSwOTWZdk7sAs49h4R4N0TiPF8ZAFgrF22XBmTF4ApRDv1ifxdNymAJydF1yg-EM3ZR5eVEmP21yGMRt-f6FbXQBzDisYYT2W8UDDmuGW6_H35Z7SPTeI6GbRgwhsXKbBHyfQRJEMykzywOAHUKiSitUliyd3CjXwAi8B1juN-ElFrNTXWhrtj6SzuWK4VBkwnlaAi9oKljhkbvG0WWOraImQgeuFBUjt7wB-yFtybQsuxuC5WaVzXY3Mwx9pTgMMk8ZrxR_GIdUobCxElc9Do4DdBPIHBgrirrBUBkRlD5ZYe2JSUOuAYb2w03vKrtLh1d425-LUjRToIY7dQFRs6dnixZTUy68rx_nxoEH5LwkbqnlNRWVBzdOW-XiutbuyYwOXQFw==",
+                "format": "openai-responses-v1",
+                "id": "rs_0ca0e160f948a7df01690796b86ad48190b83d4f945e15b6b8",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -95,10 +101,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"age\":30,\"name\":\"Alex Kim\",\"occupation\":\"Software Engineer\"}",
+                  "arguments": "{\"age\": 28, \"name\": \"Alex Carter\", \"occupation\": \"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "call_RUB8kjfGr8TwUytODJsPjAKL",
+                "id": "call_aWdCcOppVuydMViZSEyTNCBd",
                 "index": 0,
                 "type": "function"
               }
@@ -107,15 +113,18 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1760532650,
-      "id": "gen-1760532650-56EkEFT58fwgJKFULkMV",
+      "created": 1762105015,
+      "id": "gen-1762105015-CZfbmzTQEMYNERDnT6wd",
       "model": "openai/gpt-5-nano",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
-        "completion_tokens": 159,
+        "completion_tokens": 164,
+        "completion_tokens_details": {
+          "reasoning_tokens": 128
+        },
         "prompt_tokens": 82,
-        "total_tokens": 241
+        "total_tokens": 246
       }
     },
     "headers": {
@@ -123,7 +132,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef71c76b1461c9-ORD"
+        "9985659d4bbc2315-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -132,7 +141,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:50:50 GMT"
+        "Sun, 02 Nov 2025 17:36:56 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

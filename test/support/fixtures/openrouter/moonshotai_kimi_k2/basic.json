@@ -40,7 +40,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hello! How can I help you today?",
+            "content": "Hello! Welcome to the world of endless possibilities. How can I assist you today?",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -48,16 +48,23 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532503,
-      "id": "gen-1760532503-ex61ARmPHxjRiYaEjTFS",
+      "created": 1762104963,
+      "id": "gen-1762104963-pBLNvsmaMnledoymENWi",
       "model": "moonshotai/kimi-k2",
       "object": "chat.completion",
-      "provider": "Together",
+      "provider": "Novita",
+      "system_fingerprint": "",
       "usage": {
-        "completion_tokens": 10,
-        "prompt_tokens": 19,
-        "prompt_tokens_details": null,
-        "total_tokens": 29
+        "completion_tokens": 17,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 28,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        },
+        "total_tokens": 45
       }
     },
     "headers": {
@@ -65,7 +72,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6e34a87289e9-ORD"
+        "998564542dbe90cb-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -74,7 +81,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:24 GMT"
+        "Sun, 02 Nov 2025 17:36:04 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

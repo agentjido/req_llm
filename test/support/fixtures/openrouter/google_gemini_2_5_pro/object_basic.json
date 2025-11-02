@@ -80,12 +80,12 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "**Defining the Scope**\n\nI'm now trying to get a grip on the breadth of this request. \"Software engineer profile\" is way too open-ended. I'm thinking about breaking it down.  Maybe start with the basics and build from there, using the tool provided.\n\n\n",
+            "reasoning": "**Beginning the Profiling Task**\n\nI'm now considering the user's need to generate a \"software engineer profile.\" The challenge lies in the vagueness of the request. My current focus is on how to best utilize the `structured_output` tool, which seems like a good fit, even though it may require some creative application.\n\n\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "**Defining the Scope**\n\nI'm now trying to get a grip on the breadth of this request. \"Software engineer profile\" is way too open-ended. I'm thinking about breaking it down.  Maybe start with the basics and build from there, using the tool provided.\n\n\n",
+                "text": "**Beginning the Profiling Task**\n\nI'm now considering the user's need to generate a \"software engineer profile.\" The challenge lies in the vagueness of the request. My current focus is on how to best utilize the `structured_output` tool, which seems like a good fit, even though it may require some creative application.\n\n\n",
                 "type": "reasoning.text"
               }
             ],
@@ -94,10 +94,10 @@
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"occupation\":\"Software Engineer\",\"name\":\"John Doe\",\"age\":30}",
+                  "arguments": "{\"name\":\"John Doe\",\"age\":30,\"occupation\":\"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "tool_0_structured_output_Eryk8ccKh2N0J8kguEMA",
+                "id": "tool_0_structured_output_mMSKDNNHgZDHWq6Qv6FQ",
                 "index": 0,
                 "type": "function"
               }
@@ -106,22 +106,22 @@
           "native_finish_reason": "STOP"
         }
       ],
-      "created": 1760532487,
-      "id": "gen-1760532487-wvaCkADfhpflzNWwhFvj",
+      "created": 1762105002,
+      "id": "gen-1762105002-6j7yaPMPoF0pGbvnxrNd",
       "model": "google/gemini-2.5-pro",
       "object": "chat.completion",
       "provider": "Google",
       "usage": {
-        "completion_tokens": 66,
+        "completion_tokens": 63,
         "completion_tokens_details": {
           "image_tokens": 0,
-          "reasoning_tokens": 55
+          "reasoning_tokens": 52
         },
         "prompt_tokens": 41,
         "prompt_tokens_details": {
           "cached_tokens": 0
         },
-        "total_tokens": 107
+        "total_tokens": 104
       }
     },
     "headers": {
@@ -129,7 +129,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6dcc5e79114e-ORD"
+        "9985654af83efe20-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -138,7 +138,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:09 GMT"
+        "Sun, 02 Nov 2025 17:36:44 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

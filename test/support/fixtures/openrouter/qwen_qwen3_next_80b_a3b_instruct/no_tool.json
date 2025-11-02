@@ -61,7 +61,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Sure! Here's a purr-fect one for you:\n\nWhy don’t cats play poker in the wild?\n\nBecause there’s too many cheetahs! 🐱🃏\n\n*(Bonus groan: They’d also get kicked out for using tails as bluffing tools.)*",
+            "content": "Why don't cats play poker in the wild?  \nToo many cheetahs! 😸🃏",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -69,16 +69,16 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760545140,
-      "id": "gen-1760545140-Meq55vrM1V21oN14rPxO",
+      "created": 1762105030,
+      "id": "gen-1762105030-jG9rpy58m0LNyyrzOZU3",
       "model": "qwen/qwen3-next-80b-a3b-instruct",
       "object": "chat.completion",
-      "provider": "Hyperbolic",
+      "provider": "GMICloud",
       "usage": {
-        "completion_tokens": 59,
-        "prompt_tokens": 14,
+        "completion_tokens": 22,
+        "prompt_tokens": 154,
         "prompt_tokens_details": null,
-        "total_tokens": 73
+        "total_tokens": 176
       }
     },
     "headers": {
@@ -86,7 +86,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0a2b97d9e72e8-ORD"
+        "998565f929759120-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -95,7 +95,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:19:01 GMT"
+        "Sun, 02 Nov 2025 17:37:11 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

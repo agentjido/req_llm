@@ -39,25 +39,33 @@
         {
           "finish_reason": "stop",
           "index": 0,
-          "logprobs": null,
+          "logprobs": -1.7881393e-6,
           "message": {
-            "content": "Hello, World! 🌍  \nAh, the classic first line of code—such a nostalgic way to start things off! Whether you're diving into programming for the first time or just saying hi, I'm here to help. What's on your mind? 😊",
-            "reasoning": "\nOkay, the user said \"Hello world!\" which is a classic first program in many coding tutorials. They might be new to programming or just testing if I respond correctly.\n\nI should acknowledge their greeting in a friendly way. Maybe add a bit of humor related to coding since they used that phrase. Let me check if there's a standard response for this.\n\n\"Hello, World!\" is often the first thing you print when learning a new language. So I can mention that. Also, offer help if they're starting to code. Keep it welcoming and encouraging.\n\nMake sure the tone is positive and supportive. Avoid any technical jargon since they might be beginners. Let me put that together.\n",
+            "content": "Hello, world! 👋 Welcome to the conversation. Ready to code some magic or just chat? 😊",
+            "reasoning": "\nOkay, the user said \"Hello world!\" which is a classic first program people write when learning to code. It's usually the first thing you print out to test if your environment is set up right.\n\nI should respond in a friendly and welcoming way. Maybe add a little humor or a reference to programming since they used that phrase. Let me think... \"Hello, world! 👋 Welcome to the conversation. Ready to code some magic or just chat?\" That sounds good. It acknowledges the programming joke, says hello back, and opens the door for them to ask for help or just talk. The emoji adds a friendly touch. I'll go with that.\n",
+            "reasoning_details": [
+              {
+                "format": null,
+                "index": 0,
+                "text": "\nOkay, the user said \"Hello world!\" which is a classic first program people write when learning to code. It's usually the first thing you print out to test if your environment is set up right.\n\nI should respond in a friendly and welcoming way. Maybe add a little humor or a reference to programming since they used that phrase. Let me think... \"Hello, world! 👋 Welcome to the conversation. Ready to code some magic or just chat?\" That sounds good. It acknowledges the programming joke, says hello back, and opens the door for them to ask for help or just talk. The emoji adds a friendly touch. I'll go with that.\n",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532748,
-      "id": "gen-1760532748-CfXjk60fngqyfECyyEtn",
+      "created": 1762105016,
+      "id": "gen-1762105016-9BzVWkbAoi5POMRb0HWt",
       "model": "qwen/qwen3-235b-a22b-thinking-2507",
       "object": "chat.completion",
-      "provider": "Chutes",
+      "provider": "Together",
       "usage": {
-        "completion_tokens": 197,
+        "completion_tokens": 159,
         "prompt_tokens": 12,
-        "total_tokens": 209
+        "total_tokens": 171
       }
     },
     "headers": {
@@ -65,7 +73,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef742dcc4dcca3-ORD"
+        "998565a118bab838-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -74,7 +82,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:52:29 GMT"
+        "Sun, 02 Nov 2025 17:36:58 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoyNjIwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiIwMTk5ZTdlYjY1ZmM5NmUyYzUwOTIxZjg0NjRiOGFlYSIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsIm5hbWUiOiJhZGQiLCJyb2xlIjoidG9vbCIsInRvb2xfY2FsbF9pZCI6IjAxOTllN2ViNjVmYzk2ZTJjNTA5MjFmODQ2NGI4YWVhIn1dLCJtb2RlbCI6InF3ZW4vcXdlbjMtMzBiLWEzYi10aGlua2luZy0yNTA3IiwibiI6MSwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjoyNjIwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiJjaGF0Y21wbC10b29sLTVlNmI2ZWIyYjJiNjRlNzg4YzNiZWI1ZjRmOTg4M2Q4IiwidHlwZSI6ImZ1bmN0aW9uIn1dfSx7ImNvbnRlbnQiOiI1IiwibmFtZSI6ImFkZCIsInJvbGUiOiJ0b29sIiwidG9vbF9jYWxsX2lkIjoiY2hhdGNtcGwtdG9vbC01ZTZiNmViMmIyYjY0ZTc4OGMzYmViNWY0Zjk4ODNkOCJ9XSwibW9kZWwiOiJxd2VuL3F3ZW4zLTMwYi1hM2ItdGhpbmtpbmctMjUwNyIsIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
       "max_tokens": 26200,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "0199e7eb65fc96e2c50921f8464b8aea",
+              "id": "chatcmpl-tool-5e6b6eb2b2b64e788c3beb5f4f9883d8",
               "type": "function"
             }
           ]
@@ -28,7 +28,7 @@
           "content": "5",
           "name": "add",
           "role": "tool",
-          "tool_call_id": "0199e7eb65fc96e2c50921f8464b8aea"
+          "tool_call_id": "chatcmpl-tool-5e6b6eb2b2b64e788c3beb5f4f9883d8"
         }
       ],
       "model": "qwen/qwen3-30b-a3b-thinking-2507",
@@ -76,19 +76,15 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532588,
-      "id": "gen-1760532588-vQWa3cJrT5BOMmHiW5si",
+      "created": 1762105037,
+      "id": "gen-1762105037-uU3Po2zUdS1WMIs7jLo4",
       "model": "qwen/qwen3-30b-a3b-thinking-2507",
       "object": "chat.completion",
-      "provider": "SiliconFlow",
-      "system_fingerprint": "",
+      "provider": "Nebius",
       "usage": {
-        "completion_tokens": 106,
-        "completion_tokens_details": {
-          "reasoning_tokens": 102
-        },
+        "completion_tokens": 108,
         "prompt_tokens": 74,
-        "total_tokens": 180
+        "total_tokens": 182
       }
     },
     "headers": {
@@ -96,7 +92,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef70457b3a60a1-ORD"
+        "998566216f69514c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -105,7 +101,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:49 GMT"
+        "Sun, 02 Nov 2025 17:37:17 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

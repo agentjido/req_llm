@@ -35,35 +35,27 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": null,
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "### The Dragonheart Chronicles: A Tale of Fire and Valor\n\nIn the ancient realm of Eryndral, where jagged mountains pierced the heavens and vast forests whispered with secrets older than time, the legend of dragons was not merely a tale told by flickering firelight. Dragons were real, their scales shimmering like molten metal, their roars shaking the very earth. They were both protectors and destroyers, revered and feared by all who walked the land. This is the story of Kael, a young",
+            "content": "**The Chronicles of Aetherflame: A Dragon's Odyssey**\n\nIn the ancient realm of Eldoria, where the sky shimmered with hues of amber and violet, and the mountains stood as silent sentinels guarding secrets older than time itself, there lived a dragon named Kaelthyr, the Aetherflame. Kaelthyr was no ordinary dragon; his scales shimmered like molten sapphire, and his eyes burned with the intensity of a thousand suns. Legends spoke of his lineage",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "length"
+          "native_finish_reason": null
         }
       ],
-      "created": 1760532588,
-      "id": "gen-1760532588-8vU6h7vFjv1rnVzKrpAG",
+      "created": 1762105039,
+      "id": "gen-1762105039-Rr5cW3AvXbsn9z7yz0OA",
       "model": "x-ai/grok-3",
       "object": "chat.completion",
       "provider": "xAI",
-      "system_fingerprint": "fp_301fb74d4b",
       "usage": {
         "completion_tokens": 100,
-        "completion_tokens_details": {
-          "reasoning_tokens": 0
-        },
-        "prompt_tokens": 15,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 2
-        },
-        "total_tokens": 115
+        "prompt_tokens": 16,
+        "total_tokens": 116
       }
     },
     "headers": {
@@ -71,7 +63,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef7043baed75e4-ORD"
+        "9985662f3cafe81d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -80,7 +72,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:49:48 GMT"
+        "Sun, 02 Nov 2025 17:37:19 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

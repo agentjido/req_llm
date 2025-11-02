@@ -42,20 +42,31 @@
           "message": {
             "content": "Hello! How can I assist you today?",
             "reasoning": "Alright, the user greeted me with \"Hi there!\" and I responded in a friendly manner. I should keep the conversation going by asking how I can assist them today. That should encourage them to share what they need help with.\n",
+            "reasoning_details": [
+              {
+                "format": null,
+                "index": 0,
+                "text": "Alright, the user greeted me with \"Hi there!\" and I responded in a friendly manner. I should keep the conversation going by asking how I can assist them today. That should encourage them to share what they need help with.\n",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant"
           },
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532515,
-      "id": "gen-1760532515-wL1lRpqmqujFWckDRdyh",
+      "created": 1762105081,
+      "id": "gen-1762105080-Fte9FVN0h9tXfC6dKDmD",
       "model": "deepseek/deepseek-r1-distill-llama-70b",
       "object": "chat.completion",
       "provider": "Chutes",
       "usage": {
         "completion_tokens": 58,
         "prompt_tokens": 9,
+        "prompt_tokens_details": {
+          "cached_tokens": 3
+        },
         "total_tokens": 67
       }
     },
@@ -64,7 +75,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6e7c3e67eb09-ORD"
+        "998567339ed613a0-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -73,7 +84,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:36 GMT"
+        "Sun, 02 Nov 2025 17:38:02 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

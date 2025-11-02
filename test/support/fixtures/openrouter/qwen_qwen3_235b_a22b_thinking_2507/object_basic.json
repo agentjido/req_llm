@@ -80,12 +80,12 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "Okay, the user wants me to generate a software engineer profile. Let me check the tools provided. There's a structured_output function that requires name and age, with occupation as optional. The schema needs name (string), age (integer >=1), and occupation (string). Since the user specified \"software engineer\", I should set occupation to that. I need to pick a name and age. Let's go with a common name like John Doe and age 30. Make sure age is at least 1. Let me structure the JSON with those values.\n",
+            "reasoning": "Okay, the user wants me to generate a software engineer profile. Let me check the tools provided. There's a structured_output function that requires name and age, with optional occupation. The user specified \"software engineer\" as the occupation, so I should include that.\n\nFirst, I need to make sure the required fields are there: name and age. Since the user didn't provide specific details, I'll have to come up with a plausible example. Let's pick a common name like John Doe. Age should be a positive integer, maybe 30 years old. Occupation is software engineer.\n\nWait, the parameters for structured_output have name, age (required), and occupation (optional). So I'll set name to \"John Doe\", age to 30, occupation to \"Software Engineer\". Let me double-check the schema: age must be at least 1, which 30 is. All required fields are present. Looks good. I'll structure the tool call accordingly.\n",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "Okay, the user wants me to generate a software engineer profile. Let me check the tools provided. There's a structured_output function that requires name and age, with occupation as optional. The schema needs name (string), age (integer >=1), and occupation (string). Since the user specified \"software engineer\", I should set occupation to that. I need to pick a name and age. Let's go with a common name like John Doe and age 30. Make sure age is at least 1. Let me structure the JSON with those values.\n",
+                "text": "Okay, the user wants me to generate a software engineer profile. Let me check the tools provided. There's a structured_output function that requires name and age, with optional occupation. The user specified \"software engineer\" as the occupation, so I should include that.\n\nFirst, I need to make sure the required fields are there: name and age. Since the user didn't provide specific details, I'll have to come up with a plausible example. Let's pick a common name like John Doe. Age should be a positive integer, maybe 30 years old. Occupation is software engineer.\n\nWait, the parameters for structured_output have name, age (required), and occupation (optional). So I'll set name to \"John Doe\", age to 30, occupation to \"Software Engineer\". Let me double-check the schema: age must be at least 1, which 30 is. All required fields are present. Looks good. I'll structure the tool call accordingly.\n",
                 "type": "reasoning.text"
               }
             ],
@@ -97,7 +97,7 @@
                   "arguments": "{\"age\": 30, \"name\": \"John Doe\", \"occupation\": \"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "call_f8cedbba4e464678912e7474",
+                "id": "call_8075c99b3c3f47e1a39e6f5b",
                 "index": 0,
                 "type": "function"
               }
@@ -106,16 +106,16 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760532727,
-      "id": "gen-1760532727-mmmjdEYVhkCJtTFeWUSG",
+      "created": 1762105020,
+      "id": "gen-1762105020-lzSJXirXmLibgJTZ4Nse",
       "model": "qwen/qwen3-235b-a22b-thinking-2507",
       "object": "chat.completion",
       "provider": "Chutes",
       "usage": {
-        "completion_tokens": 157,
+        "completion_tokens": 242,
         "prompt_tokens": 211,
         "prompt_tokens_details": null,
-        "total_tokens": 368
+        "total_tokens": 453
       }
     },
     "headers": {
@@ -123,7 +123,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef73a85895cca3-ORD"
+        "998565b8e92eb838-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -132,7 +132,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:52:08 GMT"
+        "Sun, 02 Nov 2025 17:37:01 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

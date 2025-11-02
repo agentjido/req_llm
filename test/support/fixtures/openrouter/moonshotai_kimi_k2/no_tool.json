@@ -69,16 +69,15 @@
           "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532498,
-      "id": "gen-1760532498-TPFneVOP115k1V0lca6w",
+      "created": 1762104960,
+      "id": "gen-1762104960-BI8DNqlSWN52P2BOpmwK",
       "model": "moonshotai/kimi-k2",
       "object": "chat.completion",
-      "provider": "DeepInfra",
+      "provider": "AtlasCloud",
       "usage": {
         "completion_tokens": 20,
-        "prompt_tokens": 110,
-        "prompt_tokens_details": null,
-        "total_tokens": 130
+        "prompt_tokens": 97,
+        "total_tokens": 117
       }
     },
     "headers": {
@@ -86,7 +85,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6e14097489e9-ORD"
+        "998564420b0090cb-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -95,7 +94,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:19 GMT"
+        "Sun, 02 Nov 2025 17:36:01 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

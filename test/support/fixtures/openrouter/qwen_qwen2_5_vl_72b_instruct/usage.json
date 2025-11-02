@@ -36,7 +36,7 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "length",
+          "finish_reason": "stop",
           "index": 0,
           "logprobs": null,
           "message": {
@@ -45,18 +45,17 @@
             "refusal": null,
             "role": "assistant"
           },
-          "native_finish_reason": "length"
+          "native_finish_reason": "stop"
         }
       ],
-      "created": 1760532523,
-      "id": "gen-1760532523-PFakSmzoUM7DAeK6gRZ5",
+      "created": 1762105015,
+      "id": "gen-1762105015-YSox02ti7cgSX0staDbg",
       "model": "qwen/qwen2.5-vl-72b-instruct",
       "object": "chat.completion",
-      "provider": "Chutes",
+      "provider": "Nebius",
       "usage": {
         "completion_tokens": 10,
         "prompt_tokens": 22,
-        "prompt_tokens_details": null,
         "total_tokens": 32
       }
     },
@@ -65,7 +64,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6eb05f5ed300-ORD"
+        "9985659d2c6fb266-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -74,7 +73,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:44 GMT"
+        "Sun, 02 Nov 2025 17:36:56 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

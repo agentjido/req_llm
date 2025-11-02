@@ -71,17 +71,25 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "\n",
-            "reasoning": null,
+            "content": "\n\n",
+            "reasoning": "The user wants me to use the add tool to compute 2 + 3, and then respond with 'sum=<value>' after getting the result. I need to call the add function with parameters a=2 and b=3.",
+            "reasoning_details": [
+              {
+                "format": "unknown",
+                "index": 0,
+                "text": "The user wants me to use the add tool to compute 2 + 3, and then respond with 'sum=<value>' after getting the result. I need to call the add function with parameters a=2 and b=3.",
+                "type": "reasoning.text"
+              }
+            ],
             "refusal": null,
             "role": "assistant",
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"a\":2,\"b\":3}",
+                  "arguments": "{\"a\":\"2\",\"b\":\"3\"}",
                   "name": "add"
                 },
-                "id": "call_5efea827c9974727a332bf22",
+                "id": "toolcall-61d104dcNe2OVP2l",
                 "index": 0,
                 "type": "function"
               }
@@ -90,21 +98,15 @@
           "native_finish_reason": "tool_calls"
         }
       ],
-      "created": 1760545964,
-      "id": "gen-1760545964-l2YJ8STG6gpU6vwkTBOZ",
+      "created": 1762105056,
+      "id": "gen-1762105056-z4O3dE6BufAkyfKfr3uV",
       "model": "z-ai/glm-4.5",
       "object": "chat.completion",
-      "provider": "Novita",
-      "system_fingerprint": "",
+      "provider": "Mancer 2",
       "usage": {
-        "completion_tokens": 22,
-        "completion_tokens_details": null,
-        "prompt_tokens": 194,
-        "prompt_tokens_details": {
-          "audio_tokens": 0,
-          "cached_tokens": 43
-        },
-        "total_tokens": 216
+        "completion_tokens": 73,
+        "prompt_tokens": 204,
+        "total_tokens": 277
       }
     },
     "headers": {
@@ -112,7 +114,7 @@
         "*"
       ],
       "cf-ray": [
-        "98f0b6d44b8deac0-ORD"
+        "9985669acf3814ce-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -121,7 +123,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 16:32:45 GMT"
+        "Sun, 02 Nov 2025 17:37:37 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

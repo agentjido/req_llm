@@ -41,13 +41,19 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "I can’t share my internal chain-of-thought, but here’s the answer and a brief, external explanation.\n\n12 × 7 = (10 × 7) + (2 × 7) = 70 + 14 = 84.",
-            "reasoning": null,
+            "content": "12 * 7 = 84.\n\nBrief summary: 10*7 = 70 and 2*7 = 14, then 70 + 14 = 84.",
+            "reasoning": "**Calculating multiplication result**\n\nThe user wants me to solve 12 multiplied by 7 and share a brief description of my reasoning. So, I’ll calculate that to get 84. I’ll share a straightforward explanation of the method I used: \"12 multiplied by 7 equals 84. I calculated it by breaking it down into chunks: 10 times 7 plus 2 times 7, which is 70 plus 14, giving me the final result of 84.\"",
             "reasoning_details": [
               {
-                "data": "gAAAAABo75iTYtT2LzhlE8FBlzMAtbdpyOmUjRi0u2KKI5tB4ARqZC4Uu_4u8Zvk46EzgTA0H6KpmJDiJUDroOQUzg-NHMF74DWE_jjMNpY4rgfMicUV3Ta3Hq8JgnfDJjwT24PTzAEUBIw864uk54Y31iPTfftnIlY_YnCnmVi337AjhZ1K9Nlduu746HhMPAvuLcN779nFUZnqVODZys1uiHHMUjpeM35EGDwCnDhqhkMJTGdqBuoKGZqJfJU9KxDFb9Mfqoy8x1JjMigAUU4oanTRRhdDb3uAXwQ96sVJCeEU7vtmueV-FDy9ceT4RIGt97V_wCAMEH58RAm82r6Ji0abAwvL8l0oqbyw6XCyeBCb4eOfCfiHvNeJajnALFCmgHPYVxdm28FoP-WLp4wlgEOOdwGeg5gAf3dI6s_Ype4Za8q4MkIdxbOu-YSNzQ155AGnee_-adLcNS7cL8lr0wdC_Y27NVMhp9fO_nqOIDhm42MT-sYXmr0ngggSU5N2K56Y6SePFceLGCILv2YlAl3x5-bd-pH5B6BOEfJueTUmJ77ugxBXI2fyrx8FSLfBoBPqEkXGMFoEN2l6Tyjh_07AvZTUe4hqfHkTldh0-NAOqyTy-ygoMzRonD3fcHmUhuWyRQxvGWbSZ_ylriVsVdnSBzlbc717BtZaI-nI2MRfZNBMCQU5kRHCKR2iQjCyhnYSLBFkkDlZLoiYRglHRY6AlwpycN3m-KXfNQNYhPDB8vKzf3a-C1CCSo3b6IvH8WqpduabJNFlcR4VlGDPldbesG31rdyUxBWibR7vZ0AmjByuWlqfMHg6El7PA_tAcEiKmVVulZz9oAEe180Y_uDkDUn0b2OaAyvjeRN4l7u7fcy9ufLBRmpCNaqOfH8meN2CyCqSQstheyWUd9cJdOu2S51xjIM2qLzuQgyzrQaPjktBCBvoR6JVAvoqwLxU1EHwu8GtPSllliIHh2r2iS9bFPjW9dQY5qHzxH0t5-oJAF9FDljIeVGBKkyueFFt3UmmC4PbJPSRmxPFl5LuUIQqGLZU1CqzyfXVlzcwftwX05xiH34QnugDJK7Lu5m7-mCKNAKMcWd1xch9mUPXvWVMz1JEvc9UVg7kmNLqEzik9BvRYRL5TrkSUi5RN6HHPyGBfIw7qPZEOgJGsEbxB2nQnrkWwSsaYt670b-UBCPfTKdFqe1H-GlhH3Xehe0j1sl7DSjmaZR2TFWsoz76SpT0G_mq-FeBDiYL8jQ77r5r8w_IWS0ljO3KqCW09xEw4v8CYH0RSvVvvbvsRysemQ3oZxCftcqQRo9D8q3MUrjHGa-VI-kbDdnz7VJcHGmxKZSVbU6TlyFZhqhos0dy07ERFm3iyrBCvqojYqyeYcn7prq9E3k8uc63g63myamAmPqUehJECmESX_jDa2VnE6fxSqdm-EJucob5JPc5Hlu-nu71hQg_-vvo8AJ2Tnqc3gdZcjv-Tj8iRUm3Tq_7D_6WN6Vh6rpKlP35JQofTfgo_edaYFm5h28qtjtbjKBsQPL45WSYd_Eeyt16fVRtJfO5rCC4G8ke2ThI3TA3ek9lYZjPVmZd-8J9MljK_lxLdi5zB-CAsOTxjJBfNjFUZZCN9R-W5G0NWTNlX6ZRbsuRsZlb3BygThf6HLFBXuZzwpMauC6bQfsXwAlTmtOKE0hYNC26IwCdeLH6ZeH4g-lGCXIv8-Z1SgKioP5hVvD5nB1RNkSZ0DqFNIxJV282OlnJCvocMc7q0KdYRVYs-fdtz0kyK7rSezYZ5zKNjQptTC3_e3ljisKFWpNuFlpryQinmx93DcUu-yObVEYDblyEu1g-Ivzxd8e4KtryjYNDDpnc9dCP",
                 "format": "openai-responses-v1",
-                "id": "rs_0228392752f218dd0168ef989181748196a363b237bc3a914c",
+                "index": 0,
+                "summary": "**Calculating multiplication result**\n\nThe user wants me to solve 12 multiplied by 7 and share a brief description of my reasoning. So, I’ll calculate that to get 84. I’ll share a straightforward explanation of the method I used: \"12 multiplied by 7 equals 84. I calculated it by breaking it down into chunks: 10 times 7 plus 2 times 7, which is 70 plus 14, giving me the final result of 84.\"",
+                "type": "reasoning.summary"
+              },
+              {
+                "data": "gAAAAABpB5ajOC8UHNfqwlrhQkdyAaG89cSs5nfuUl93_OUWRnKn16ZAGQ7VCPXcCDzD-hTVKJ3cC15WEWB7vHisP1g2Tod5Lk8d92iWb1NSUNq91xXCg7KmRA67kmx3rjGwXdQebAbG_1K2gdrVX3HG35-_zvyK8L48U_tVwD41sj-wuLdY4EBD7B8Y4C1m7gSqvkFJHthXWYDTz_Cidn0fTymQ2xY1e41rIlqqjgfYq0v25EZijgediPBHeFzQ-CeI6jNtm3_w6JYgecpX1Z9ACLMKKZhN7ZGGyEs9X7AgqQ9DX1Ep9DNMREq-mrukJGWKvEJg-ihwe83EayqgWTiH5NgvCDpqs3lAmkuHmmMdKtVmfsQidJkDyqoLG2LYdTLkCwxRqUfPIfvU-fDq-a7EIbIt86-FDSDqtUD0-Db-Qw_MpQMnMfo6bggLSTaxz5XAedJiHZABgBMxxFUW9EO6SgbRsIp2iKa_JfRad5ZtPALW9-QIfrjO7w0DofT6aplF8-gWEq8Qj9Flr8UB4p3Xi9iajxZUJeBkjpnQ1UCGYp8n0Yx2s82PAKP_FKZYxAyFWhbUsVQ0peJtQA34OTPoiYOajTB-6tXk27EYF_oC7N2ZCI5nAHxcGZ4l9fEWHxM-NlvFJgFR6sulr8a-edkwxgtm3yzY-oMVVNU_8cSZQGUMJByEs__0c1T0MgnqHRraYfoW3QjB2gqZvnP9PwX2iqvJ-2MGLnaS2ObAvq6CjuGa3BwBf0VyDRtCkUo3BsunB1zaq_DvVma1WmmaU23AuEeHvlJmQFfWigVTo8vhZqr_shhl6OQkQTOs3rVU-p1dxnLzSWTVF24L1r_Xnb6Z3sgKbALDmqFs0K64ZDmXh8x74fRCLZ0-wTDMod0sNoKqcMzE1VtcICRgTphvUJtathjoI4H1DZ8SVymFm7ZVbV2RTM4yHfC3dozSej8_gKyugZg88Dh5Xu6zpCqXwojFEoylApRT0e0oJDzU5Q6cFz8tVFStfauvzTd7AYYZ0akccFxmhsYfUo-y5KaoMaMyhrmMHZ-yho4SCKsWQ2LxM0bfEID5Rz2-232yqiqNbRkaPzxQ1vdfozg8FTx7EHbzjfyk2iCpkT4LygHQ5UaxA_H5BnQpHi8DF9-5emGS1aveBZVPKYgoiAmJzZbHbgtEwSc13B6-Uqe6qSo-IdIsqLOzAc1VrkJqS6Vufqwhwg58O31yW9jABszx8ipltU2bncYm9f3-DJuS7UdXy0WUUsAewDTU7KWPjhsczSHX2iSWccrM7YrjrOIyB7qXL6DzWqUGrZjGNOeK3M7NUBRePJQvgC0TSPPr7teOpYzpStH5hE9nK0Ekgxwdn5pZFT1KqnZQ7ZLfNxkkXNnvsU8PfYhsaG4CbQdULVRiCJf_jI1NZhNF-3h_KuzSn13JdaM1QwDyzcdF9ffxZ416QELxMzhbV02vXe4Cl-f0mV94oHp3cWBMKq5ut9sDb5wshzeuMAKd7ieWP5t1zv3I2uM1-c4y3CuFJfWs3wiruOgDoyhcKhHZq0znKkKjdilyRnzMB2enQA5-TZCwL42e8-ugmzy8XXezu74Nhs2GQyyEUzTCVvwrDDYz62BJT964kQGGsR_ZQFKf21Sm5Vy6UUJ1Td_Qha_EDcjDw-eLoxciWzswfYgfmACX",
+                "format": "openai-responses-v1",
+                "id": "rs_0119686a0cb0ec60016907969f3aa48196978b5390224b2947",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -58,15 +64,18 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1760532625,
-      "id": "gen-1760532625-usB0WiFcN9luwe7v4xgk",
+      "created": 1762104990,
+      "id": "gen-1762104990-snhBd8kDbI9dLjjrAxUz",
       "model": "openai/gpt-5-mini",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
-        "completion_tokens": 185,
+        "completion_tokens": 171,
+        "completion_tokens_details": {
+          "reasoning_tokens": 128
+        },
         "prompt_tokens": 19,
-        "total_tokens": 204
+        "total_tokens": 190
       }
     },
     "headers": {
@@ -74,7 +83,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef712a4ffcf92b-ORD"
+        "9985650069c21ee4-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -83,7 +92,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:50:25 GMT"
+        "Sun, 02 Nov 2025 17:36:31 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

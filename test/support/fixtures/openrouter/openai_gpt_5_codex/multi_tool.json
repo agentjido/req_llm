@@ -98,18 +98,18 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "**Planning to use get_weather function**",
+            "reasoning": "**Preparing to call get_weather**",
             "reasoning_details": [
               {
                 "format": "openai-responses-v1",
                 "index": 0,
-                "summary": "**Planning to use get_weather function**",
+                "summary": "**Preparing to call get_weather**",
                 "type": "reasoning.summary"
               },
               {
-                "data": "gAAAAABo75gaqH6K8IZgYtwv4wlWM-Xpkocssf-fag2NE1LwkEAPNQ7hoGla9_xsn6NOToBU44Ctoo6Nc1HuckAUDmsGzf_c7BSbKhFJMgNjUWwOoBWkNDZkobyeIznME6c-a5K7EgfZOiMZtM4sDzG-hZHyaDBF94c4s2IJtMDGAP69AU-_YJ6dN1A0aQKFFjrnyaijKR6b3MPrHdm25iaBoXVU2tjOOt-JRGvNbatCBn3J1AhrVeyTZa3s-VUixdVkB7HplFLzgiT9irntJPbXKtTnlqT9z-vzphBaiBnFI_fCRktA6NjiCpkUExWeoEtct5wdWmswHObt7a8I69KBQx6Y79jLvVEXldpTr9cYwOWvFsFv37VUgTSO65l7Yrjm5cNG8EBjAJjRdIv_fC9PuvCdyPtkm_ZpTDG2O4TfxIPEaWph2JukdodECqdA5HneYHtfuubgQjHgj1avt8AJCdvUZnptJtnRpePWLLt15OvkkeBkKW6uabkXYao2ZSf5fsQVLTNzBo2oGEf4bqUC_V7jBl7DiZXQG2ITuLW9UlBFb-8xwFfIZe5w8zKwZrK1bN8wH_hAbJbb1j1dgWQqlrcTyNW_Sh_DSr48C2W6pgMWyckRfyMv1Qs0_000FGUA_Y_5993wNyCEgrW4Q0G2_2cgSh6AJhHRM5KR0cG3WUt_RYy8gv3IhvL76PmnW2htlx_QZMp3hLOwP-9zfMP1Gr_TfI1teNNFtXlyDbivOz1NEqKPl1ZcXxH-oIGJD-jmXoCqNo0lO51_VyZ2e3TcTl99pT2lSJwOFQnE7ud3P6EKr6RGdY2jNBmYcO0VVLtShr0FGdFzIS7pzDKSQvEEC-Nf36hK7qnQPRFmiGdH0T8ZgzbwGhY=",
+                "data": "gAAAAABpB5aMnOHQVc1I4DgO71n5Nj79qWfYydMl29Rj8AfdMaHfmw4mYUR5w0EioqGCxIXBRqXF4LhbIEmyahN5KoEY5ZYlLAnvMZxJnRCRuZIHTK7XzEQhu34ylB7lnRsmkaPBrDlJap1llmXwvbxfPf_AcGQNY7yZ8oPly3T_kHeMI4ME3bwHIw3uzqiH1HFnZbkrKfDp9MYtllURCwaWKS8DaZEFVCf1nM4TDXX0SSCAexTVRsOl0e0CTGQDr9dF0_75X8_fHUiAN22BHwepdVCWUH8tn91hH13lvKh6id-j6Go49THfsTXNlNeCxgvVmoT6hZAIaQn4D3ohNMrWu6aos186SAusyX5ZC39Bs6Sd70rNpS1a-BHxZG1Pn6DgU1DKwFOzIFggQc_3otMkzlE-Oln0hLpFa6TJvVJtuLQH9Ek9RTN766nJMkTtwycMXwbYgSWoWUcEEYbaKWkMbnq2vIlNCJQxunwCFpDFfQUnsQ-c81QdYpE8DZAdmZGze2Rb3wN9vI0hIHyOh_LwaKK4moxTdt5LLQ3Y3w_4MmVszuqV9b0Pft65M4ypDbraxnblyfEG6MrKU_LkqkxPWIQ1Jk70-S3qUkaLXH5JUU1RN4ctIgJiIvNggq4ZM6nsfa6hs7LIUNHgggAdffDnCrS5aI8X877ZXDDv8fEhq4rf832d3ILObeCi6Nwz8K8f_1gAoWpJK33zzKXVGpo7qL3xRY-SebbXm3j4J_grGDXWFFjd9TIa0xBZN7RbdLhe20Xkw5ykwdrxoBjwm6oOQxcdwJ3LYREEEfmR9r_f8pjqdAmj4-DbHbcTL_vutUr182dNI9wWER6XzLt_YlvfeIJlWtYDvoYSdxL70eW4JclnEMyXQ30=",
                 "format": "openai-responses-v1",
-                "id": "rs_046f72fc0750c2800168ef981a3c0c8190bf0d1b9bd4972fc7",
+                "id": "rs_0793e94238894331016907968b61c081939721ce4fe39692f7",
                 "index": 0,
                 "type": "reasoning.encrypted"
               }
@@ -122,7 +122,7 @@
                   "arguments": "{\"location\":\"Paris, France\",\"unit\":\"celsius\"}",
                   "name": "get_weather"
                 },
-                "id": "call_oJBuumfQlZBBkFu3Cc2rBC2B",
+                "id": "call_kutv7iuZCFZD3Pi2MuIMz1Uz",
                 "index": 0,
                 "type": "function"
               }
@@ -131,15 +131,18 @@
           "native_finish_reason": "completed"
         }
       ],
-      "created": 1760532505,
-      "id": "gen-1760532505-iN7J7cihm6EIg2ZxPAuA",
+      "created": 1762104970,
+      "id": "gen-1762104970-LfpJxdbKqq42mmCFbWLV",
       "model": "openai/gpt-5-codex",
       "object": "chat.completion",
       "provider": "OpenAI",
       "usage": {
         "completion_tokens": 27,
-        "prompt_tokens": 107,
-        "total_tokens": 134
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens": 104,
+        "total_tokens": 131
       }
     },
     "headers": {
@@ -147,7 +150,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6e40af93e248-ORD"
+        "998564826bf00006-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -156,7 +159,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:25 GMT"
+        "Sun, 02 Nov 2025 17:36:10 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"

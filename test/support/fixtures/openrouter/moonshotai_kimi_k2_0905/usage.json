@@ -40,7 +40,7 @@
           "index": 0,
           "logprobs": null,
           "message": {
-            "content": "Hey! What can I help you with today?",
+            "content": "Hey there! How can I help you today?",
             "reasoning": null,
             "refusal": null,
             "role": "assistant"
@@ -48,16 +48,16 @@
           "native_finish_reason": "length"
         }
       ],
-      "created": 1760532491,
-      "id": "gen-1760532491-a8C2uW5vu6wVbWZ3Knju",
+      "created": 1762104967,
+      "id": "gen-1762104967-lFMUGiTLQ41ToKCsh7ny",
       "model": "moonshotai/kimi-k2-0905",
       "object": "chat.completion",
-      "provider": "DeepInfra",
+      "provider": "Parasail",
       "usage": {
         "completion_tokens": 10,
-        "prompt_tokens": 31,
+        "prompt_tokens": 29,
         "prompt_tokens_details": null,
-        "total_tokens": 41
+        "total_tokens": 39
       }
     },
     "headers": {
@@ -65,7 +65,7 @@
         "*"
       ],
       "cf-ray": [
-        "98ef6de57f80cc1a-ORD"
+        "9985646f9ccde20b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -74,7 +74,7 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 12:48:11 GMT"
+        "Sun, 02 Nov 2025 17:36:08 GMT"
       ],
       "permissions-policy": [
         "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
