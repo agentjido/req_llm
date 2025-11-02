@@ -317,34 +317,33 @@ defmodule ReqLLM.Catalog do
   Patterns can be:
   - `:all` - All models for the provider
   - List of model IDs or glob patterns with `*`
-  
+
   ## Examples
-  
+
       allowed_patterns()
       # => %{anthropic: :all, openai: ["gpt-4o-mini", "gpt-*"]}
   """
   @spec allowed_patterns() :: %{atom() => :all | [String.t()]}
   def allowed_patterns do
     catalog_config = Application.get_env(:req_llm, :catalog, [])
-    
+
     allow = Keyword.get(catalog_config, :allow, %{})
-    
+
     allow
     |> normalize_keys()
-    |> Enum.map(fn {provider_id, patterns} ->
+    |> Map.new(fn {provider_id, patterns} ->
       provider_atom =
         if is_binary(provider_id), do: String.to_atom(provider_id), else: provider_id
 
       {provider_atom, patterns}
     end)
-    |> Map.new()
   end
 
   @doc """
   Checks if a specific model is allowed based on catalog patterns.
-  
+
   ## Examples
-  
+
       allowed_spec?(:anthropic, "claude-3-5-sonnet")
       # => true (if anthropic: :all in catalog)
       
@@ -359,7 +358,7 @@ defmodule ReqLLM.Catalog do
 
   defp match_pattern?(_model_id, :all), do: true
   defp match_pattern?(_model_id, []), do: false
-  
+
   defp match_pattern?(model_id, patterns) when is_list(patterns) do
     Enum.any?(patterns, fn pattern ->
       if String.contains?(pattern, "*") do
@@ -376,17 +375,17 @@ defmodule ReqLLM.Catalog do
       |> Regex.escape()
       |> String.replace("\\*", ".*")
       |> String.replace("\\?", ".")
-    
+
     Regex.match?(~r/^#{regex_pattern}$/, id)
   end
 
   @doc """
   Resolves all allowed model specs from the catalog and registry.
-  
+
   Expands provider patterns to concrete "provider:model_id" specs.
-  
+
   ## Examples
-  
+
       resolve_allowed_specs()
       # => ["anthropic:claude-3-5-sonnet", "openai:gpt-4o-mini", ...]
   """
@@ -398,7 +397,7 @@ defmodule ReqLLM.Catalog do
         |> Enum.flat_map(fn {provider_id, provider_data} ->
           provider_atom = String.to_atom(provider_id)
           models = Map.get(provider_data, "models", %{})
-          
+
           models
           |> Enum.map(fn {_model_id, model} ->
             id = Map.get(model, "id")
@@ -406,7 +405,7 @@ defmodule ReqLLM.Catalog do
           end)
         end)
         |> Enum.sort()
-        
+
       {:error, _} ->
         []
     end

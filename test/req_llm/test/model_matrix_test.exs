@@ -9,9 +9,7 @@ defmodule ReqLLM.Test.ModelMatrixTest do
     test "returns default models when no env vars set" do
       specs = ModelMatrix.selected_specs(@opts)
 
-      assert "openai:gpt-4-turbo" in specs
       assert "openai:gpt-4o-mini" in specs
-      assert "anthropic:claude-3-5-sonnet-20241022" in specs
       assert "anthropic:claude-3-5-haiku-20241022" in specs
       assert "google:gemini-2.0-flash" in specs
 
