@@ -90,20 +90,21 @@
     "body": {
       "content": [
         {
-          "signature": "EpYECkYICRgCKkB7IetBzQTaBpWo9BVzDYEMGkJkxm4YQx2z8alnbp0nTOkrok6Fgz5IkvQ+qqSE0TE2XdcOyIoiojoCL11vZlKBEgwdPNQY5DXJjaPGzwwaDC9j9t0UHdkMMU72+CIwIJnqj8DDTbjVoceZLJ0/rLA3T0p4nDBhxtenneLS0W/W4wbVIvDgq76JLmnyZsI0Kv0CM/L/P6Gtd/x7RkRd3TEcsZMX27//q9QfHqJUfMNvlU0DGt/QX+dtlrlAwpg6Yc8IboCYWRLhhnWQi7JPwzufhhhCs5ZGDVB80LegUNS9MzzEr7ElZq26AuhXP7w5r01qnVm5Glj+Byi4PUgvTsTfHjuq+dXRSABETS7UOY7Rrhus/T3qx1coJTKqelZUWPN6TtofaC4XfzfKy0Iz3ckvaZg1TQ53N/HOf831PqU42Snt7nPiVND2XP9LDNQvlwQWpoEi0PMjtah/XVo00W6RvsnmARIxZHx2RQFb8Bxxtk4V+Yffm97n3DxLGhEKpL3IR9AiFMToUfFZe3kBNJZecONHEm+EY70P+hFGn5Xgu5S+LrtwQ35L+PgKDu+eQHTZNXZZdevo2pfx4vR/DfBrKL227BEoubXcSB6IUyZSuz22EBA65RKjvJiodw334lUImW+SN7hjnw0H6Xtc3XktiZ/RQ5HNbwJt2V67JVhvt1LQw/gZxkt2sEhi1IDSGAE=",
-          "thinking": "The user is asking about the weather in Paris, France. I have access to the get_weather function which can help me answer this question. \n\nLet me check the parameters:\n- location: required - I have this: \"Paris, France\"\n- unit: optional - not specified by the user, so I can leave it out or choose a default\n\nI'll call the function with just the location parameter.",
+          "signature": "EroECkYICRgCKkBEaIB1NVcdZa5kor/4cUW7Gfbpvkgyx3h3BH/gV5K1cnq2zSr5O9P00JlI9QleLzr6/+fIrDrGoPxRIvdbUtNIEgwuQPiEMwuiqDy7M7saDJ7t4+eh7HmnylU2TyIwsk8vzsQKZJNPFjX2aGw18WCb6zfEOjy/iJsEpGVB6aalQH5tyBezENH038CekXtzKqEDnlZDBzJw6BnBXvDv3uknaUBeDT9tSmPwjBpk6ZMHBS1nNCCWtoJutXSWD+eay3UVDmUDawbtwQnoOurWdKNXvaOI0E5LzBbusJxuvOQnF4Gs8dsH3sJ7XkstcdypLtp6Lj4EEf7p5Rb3aH8TvLyaL0V602IhsKkr557UTmuMJ1kMYV/9JJYAwu1N8tty9bVqZLeRyEviTGGBpT9b3YSWPneX6dONAVbGU5dx4D1BIq3EVUG2yAgb9pwUslfJtmOTrojtiOqO6PXbuFwZ7PLZQEPC71YLDtTh+byZDXqrl/WU6PgaDxNKEv9uylN9VoOhk0khmT61qNqjIvqsKt11BoCxVujcJrCBcVTQC9sH6//9DGvU8VSElUgWRj0nPQsI0voBp5CgWue7Mqj6HB21hgNu3S/EweD1eH4S6vegZnvA3Xhl1z816eLLJGQMHUYB8QpbBWlMsTwDO5mMVNn4nGgM+QemX/7t/jU59RY+pAzZCYcV1bQw+QFlhegsCbVcTI93YElxWbEQ7L+478mryxPQCyddSzxTzRwn0l6LozorGAE=",
+          "thinking": "The user is asking about the weather in Paris, France. I have access to the get_weather function which can provide this information. Let me check the parameters:\n- location: \"Paris, France\" (required) - I have this\n- unit: either \"celsius\" or \"fahrenheit\" (optional) - The user didn't specify, so I'll use celsius since Paris is in France which uses the metric system\n\nI'll make the function call now.",
           "type": "thinking"
         },
         {
-          "id": "toolu_01P1iup761UcLq3mH6roYhxE",
+          "id": "toolu_01FMGP65fdhmGmojYUQ2BkQb",
           "input": {
-            "location": "Paris, France"
+            "location": "Paris, France",
+            "unit": "celsius"
           },
           "name": "get_weather",
           "type": "tool_use"
         }
       ],
-      "id": "msg_011vHuP64SqN1wsYU1hAfED7",
+      "id": "msg_01GrpKTBf2r9AbP4dZFck8mp",
       "model": "claude-sonnet-4-5-20250929",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -117,7 +118,7 @@
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
         "input_tokens": 872,
-        "output_tokens": 150,
+        "output_tokens": 177,
         "service_tier": "standard"
       }
     },
@@ -132,7 +133,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-27T22:49:05Z"
+        "2025-11-02T17:06:39Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -141,7 +142,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-27T22:49:07Z"
+        "2025-11-02T17:06:41Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -150,7 +151,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-27T22:49:04Z"
+        "2025-11-02T17:06:37Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -159,13 +160,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-27T22:49:05Z"
+        "2025-11-02T17:06:39Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9955be99486fe812-ORD"
+        "998539399a22e800-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -174,10 +175,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 22:49:07 GMT"
+        "Sun, 02 Nov 2025 17:06:41 GMT"
       ],
       "request-id": [
-        "req_011CUYX4v8yPaobrRwNrSqFG"
+        "req_011CUjRoqZSKqZZ3ecF8KCA6"
+      ],
+      "retry-after": [
+        "21"
       ],
       "server": [
         "cloudflare"
@@ -188,11 +192,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "3573"
+        "3598"
       ],
       "x-robots-tag": [
         "none"

@@ -37,11 +37,11 @@
     "body": {
       "content": [
         {
-          "text": "Here's the beginning of a long dragon adventure story:\n\nThe Scales of Destiny\n\nIn the misty mountains of Eldoria, where ancient peaks touched the clouds and forgotten magic lingered in every crevice, a young woman named Aria stood at the edge of a precipice. The wind whipped her dark hair around her face, carrying with it the promise of an extraordinary journey.\n\nAria was not like other people in her village. While most were content with their",
+          "text": "Here's the beginning of an epic dragon adventure story:\n\nThe Dragon's Prophecy\n\nIn the misty mountains of Eldoria, where ancient peaks touched the clouds and forgotten magic still whispered through rocky valleys, a prophecy had long been spoken. It was said that one day, a young hero would rise to unite the dragon clans and save the realm from an impending darkness that threatened to consume everything.\n\nAria had never believed in such stories. Growing up in a",
           "type": "text"
         }
       ],
-      "id": "msg_01LCL2Mt7zopWYybAHrqH3fc",
+      "id": "msg_01WATRqAnDsQfJ72pqsVfJKb",
       "model": "claude-3-5-haiku-20241022",
       "role": "assistant",
       "stop_reason": "max_tokens",
@@ -70,7 +70,7 @@
         "100000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-27T22:47:48Z"
+        "2025-11-02T17:04:59Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "20000"
@@ -79,7 +79,7 @@
         "20000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-27T22:47:51Z"
+        "2025-11-02T17:05:01Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -88,7 +88,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-27T22:47:48Z"
+        "2025-11-02T17:04:58Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "120000"
@@ -97,13 +97,13 @@
         "120000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-27T22:47:48Z"
+        "2025-11-02T17:04:59Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9955bcbddf5e22db-ORD"
+        "998536ce9c1a2300-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -112,10 +112,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 22:47:50 GMT"
+        "Sun, 02 Nov 2025 17:05:01 GMT"
       ],
       "request-id": [
-        "req_011CUYWyJvWvWuNm1MFWtjED"
+        "req_011CUjRgY8zNjHXxEooS7cTr"
+      ],
+      "retry-after": [
+        "1"
       ],
       "server": [
         "cloudflare"
@@ -126,11 +129,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "2603"
+        "2900"
       ],
       "x-robots-tag": [
         "none"

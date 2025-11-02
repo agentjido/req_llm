@@ -90,8 +90,8 @@
     "body": {
       "content": [
         {
-          "signature": "ErUBCkYICRgCIkDIKkjvVrfu41pRSNyDP3seALNfF7OifgH/ZSssQhDArrdfONL6b2ZKPa6Fvrguz8S60GVzR6xiXLr1d/4GqWo6Egz83NDIUNc6qPaCI+4aDH+8wDGW03CRfYe6XCIwMdv0ifwYzaGNmnnkkHaWkLjeYi/Y4fi4QtrRaJ3qtWYC8ZU1Ff98n0p07NAI7iuzKh2AGuYfTC+IKOxleY5nlRXm478pEAbSb73DYS7j8RgC",
-          "thinking": "The user is asking about the current weather in Paris, France. I should use the `get_weather` function to answer this question.\n\nLet me check the parameters needed for `get_weather`:\n- Required: \"location\" (string)\n- Optional: \"unit\" (enum: \"celsius\" or \"fahrenheit\")\n\nThe location is clearly \"Paris, France\", but the unit is not specified. Since this is optional, I don't need to ask the user about it, and I can proceed with the call using just the location parameter.",
+          "signature": "ErUBCkYICRgCIkBBY/acW+7pbPNGf6TEEAzbQcFDDXuy17GSMCRc+C5iEOz3vwZF8Y+Jn5DiQ1Cmq5ggh8rfwGjtRDAruFyU7HQpEgwwxUYJMCMp53iCYEgaDPGRUEQTxj8IuS8W9CIwK/Tk4OpBXzKg1qufnUsv6xJhDIZYIY4EMS3sdA8NLrH+bPzMXbEHT6QpLP7tKrlpKh0lCkCP0vR+wlDMrY2JPrngay0aJ5V3qTDf+KAAFhgC",
+          "thinking": "The user is asking about the weather in Paris, France. I can use the get_weather function to provide this information.\n\nLet me check the required parameters for the get_weather function:\n- location: This is required, and the user has specified \"Paris, France\"\n- unit: This is not required, so I'll let the function use its default\n\nI have all the required information to make the function call.",
           "type": "thinking"
         },
         {
@@ -99,7 +99,7 @@
           "type": "text"
         },
         {
-          "id": "toolu_01YJ7zTzg9Fm8odcSZwyaKX3",
+          "id": "toolu_01FPh1UqX9s8nDc7qcX1uKW1",
           "input": {
             "location": "Paris, France"
           },
@@ -107,7 +107,7 @@
           "type": "tool_use"
         }
       ],
-      "id": "msg_01V4djti9vXL45cbaoadoQXC",
+      "id": "msg_011cnoCjHAD2Fr1Cy1hSzqKT",
       "model": "claude-3-7-sonnet-20250219",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -121,7 +121,7 @@
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
         "input_tokens": 541,
-        "output_tokens": 193,
+        "output_tokens": 166,
         "service_tier": "standard"
       }
     },
@@ -136,16 +136,16 @@
         "40000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-27T22:48:57Z"
+        "2025-11-02T17:05:10Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "16000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "14000"
+        "16000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-27T22:49:06Z"
+        "2025-11-02T17:05:13Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -154,22 +154,22 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-27T22:48:56Z"
+        "2025-11-02T17:05:09Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "56000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "54000"
+        "56000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-27T22:48:57Z"
+        "2025-11-02T17:05:10Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9955be67a823aca8-ORD"
+        "99853711df99d2ec-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -178,10 +178,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 22:48:59 GMT"
+        "Sun, 02 Nov 2025 17:05:12 GMT"
       ],
       "request-id": [
-        "req_011CUYX4L9L2FWQVw1CPyLf2"
+        "req_011CUjRhLCBGyWzfyQ23Cd8h"
+      ],
+      "retry-after": [
+        "54"
       ],
       "server": [
         "cloudflare"
@@ -192,11 +195,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "2999"
+        "3009"
       ],
       "x-robots-tag": [
         "none"

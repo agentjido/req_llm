@@ -61,16 +61,16 @@
     "body": {
       "content": [
         {
-          "signature": "EtkCCkYICBgCKkANLA7cHEFr8sY0QIjl5PF5uI05bqCkOv/TAvXDAjSSWBAuUb13XPDrW6qJYbKep/PJ6ORszfziQY/vL9SF6FvoEgzl2I+jrwl8dcLNSRoaDDlCXEVCxVo6nPN5MCIwF6e6h9CTKSJzC75NxMVHwhg7N2DOrNk0yj5Tq/cWrfT5LVCzHMc2ESB5xx3G9Ww3KsABfqAmUraj0X4d0U/zxeal7TLFzw1/m5AQQN13pWqfaupTPtCKn2VpBJPOBdbrnd6EhQkfjHc8N9zMrbm33zYiWEaS+72e/FLGkklfO7BbyGoqgrvrA4voLjs6nOvVMMBSRUM8/MorF2SgsT8hUYPr+2L9Z9fvLc7dwfmkfRFrn7tvnX2uWTEaQMCb36r6WPLjCESSnlQav9TuLMhrKq/S6L4iuZHG/VO/T2yx1jWaVo3AWKCjruWLKr35wLJ9ynQsGAE=",
-          "thinking": "The user is asking for a joke about cats. This doesn't require using any of the available tools (which is just a weather function). I should just tell them a cat joke directly.",
+          "signature": "EvICCkYICRgCKkC/G0mAsnRcEisOrPkcFCpWlpBq0JoK+/zbmlnmEwcnIxrOeMPsBxNFbtPMEiaA6xFk8ePmO01/aJOUp37Qdh3eEgyCPKaWOOSkNKEdqsoaDHqtmAQ+tSNLuAZOFiIwKGij67Zq3r86Ro4CC0EZpmGeDhBwRtgAmNfgw/c3yvklsVCPvxM0fStTHZ7j0woyKtkBErbWHIIABETkAWXBXLPRnJwN+4+AYzpwCJ5/AlYMyf01m8VU2FwLuDLUVyc2vgOTNJeSOhRcVxQLA31GWSY3VHUqlJPOcaBcPM+pDdtFM5v9TJ2jpNXld798cvpNiXfCNoHkmdOaCrZc99bUt7y83Tv9sEwx9DDMTWJIfD2KL66W0bY+i422Mtm+UDspsnixJhF72dm7E2OUjPzdGEpyaUS+/AVQxOpR5UdehzOrPr5yrKhGhRpOSt/SXj3miOxP/acVf04MeZgJwOA6CbgNfo3n9SsvfIf84BgB",
+          "thinking": "The user is asking for a joke about cats. This doesn't require any tools - it's just a request for a joke. I don't need to use the weather function for this. I can simply tell them a cat joke directly.",
           "type": "thinking"
         },
         {
-          "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs! 🐱\n\nAnd here's a bonus one:\n\nWhat do you call a cat that works for the Red Cross?\n\nA first-aid kit! 😸",
+          "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nBecause there are too many cheetahs! 🐱\n\nOr here's another one:\n\nWhat do you call a pile of kittens?\n\nA meowtain! 😸",
           "type": "text"
         }
       ],
-      "id": "msg_01WWnbkwYhCpb1XMMhjRrh99",
+      "id": "msg_01SgQcuWgtXJV3g8ANNK5DAw",
       "model": "claude-sonnet-4-20250514",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -84,7 +84,7 @@
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
         "input_tokens": 565,
-        "output_tokens": 113,
+        "output_tokens": 123,
         "service_tier": "standard"
       }
     },
@@ -99,7 +99,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-14T19:38:43Z"
+        "2025-11-02T17:05:13Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -108,7 +108,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-14T19:38:45Z"
+        "2025-11-02T17:05:15Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -117,7 +117,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-14T19:38:42Z"
+        "2025-11-02T17:05:12Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -126,13 +126,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-14T19:38:43Z"
+        "2025-11-02T17:05:13Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e989de4a10116b-ORD"
+        "998537224d34251b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -141,10 +141,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:38:45 GMT"
+        "Sun, 02 Nov 2025 17:05:15 GMT"
       ],
       "request-id": [
-        "req_011CU7f34Ax9y4QweLF5pjWA"
+        "req_011CUjRhXRMtMJ5gqqRLuj8h"
+      ],
+      "retry-after": [
+        "48"
       ],
       "server": [
         "cloudflare"
@@ -155,11 +158,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "3458"
+        "3123"
       ],
       "x-robots-tag": [
         "none"

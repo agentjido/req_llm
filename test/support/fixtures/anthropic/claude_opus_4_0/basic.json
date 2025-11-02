@@ -43,16 +43,16 @@
     "body": {
       "content": [
         {
-          "signature": "ErIECkYICRgCKkDdIokTGiOBLL8OxU1QbjLaLXZj0N3aXfBMv07kRErcS0f/JXxafkeQHtnuV+AkWmAk/zXrwgX5avsTnv1wVNJcEgw9j7JQzJ9dZr6klGEaDGWfdqez96sPE2zGmiIwm8eEctN0oyZRE91NK3fjsVfry4hfJF3+TRdyb/t7x3JWBvl9MjxCx9Pf/2y0J036KpkD/mOKMVmZR8KDLRpPaM2wIYENeX0y6rphuTxglMVkIvUTm8qpb+8qsfXwdTAY44bQ3Qot8t3WTSWPDyVzmLw/Oh7X4d8Uq/hICpcbo0H5a2NXbXyTMEZm2akMb3C2kTzeaCdriK/76PgX6Cofx5jvMcl7HYCzkffDhrK+k9CmtZb8MBANUyLX7+sK9VBFDkw3FLaAYIrFduwg2M8UCIg8z8QEHJdOuHdmoMjP1MLjE5UQusDJcjnFfceldGCl6OpYK/wBe3DtCqYFAiLUhZ71fk5poNy6UQERInD4wKXoFqkCnqN+xRJlX9lre0VXw4ikOzNU5yjPpqvmyaDwldj4Mgyi8gWBu8ZPiL3TKPXdEPyBAujVFmKdgHYZXxeQztzTyKVLNh+GsWih8uN35sj4xmILr8kUUIYQD+GH5VKOXb051/KOES41Ifh+ljCpdKIa5pTIDgRyR7YO4FEK0L1x5V+MKJ8pyF6GrA8kQbusTp73vWHsJE9peC/4KmbgO7AUXCjAjKzFV+O4PmB6Ro0x0bBpAkOmwSHSmBgB",
-          "thinking": "The user has said \"Hello world!\" which is a common greeting often used in programming as a first example. They might be:\n1. Just saying hello casually\n2. Making a reference to programming\n3. Testing the chat interface\n\nIn any case, I should respond in a friendly way and perhaps acknowledge the programming reference while keeping things open for wherever they'd like to take the conversation.",
+          "signature": "EsQCCkYICRgCKkAxvi6r8YPE9LtBOeZuNBb5zvnyLLN8/e7lQz2o/eGnBuTmJUBQez0LjsR8wwjIv3b+tmZM6EXG3C91vRKE4SFGEgyPoDo50K9tXAUla2AaDMHKtave38I47TDQ6SIw3s5WXvnqLrd6Dl6frz2TBd241FFh9Ut64STOVY/pupMTEKy9Clyb+xVA3zos38m9KqsBlwyzu+ntmc0bzDJb5SldT3H16w8kBmn1uMDBgL3JkaYGS0V5OxjE6w5LkFoZqOzyorZlYRI8sUATUt1lJvxMCesJSwwC5ZfXwii6GJAnpLcg/peEQq2DUwdbhQ+Y8MpM5c+1vn2YBr+8J6Dpy3paKtJdJhdn2+hbV9E+CVLaVxPQ6rcmKoyiOt7mM7gjgo8pQgh8sotv5KdanUuvPMqzxP7Js6b0Zj+0Zl4ZGAE=",
+          "thinking": "The human has sent a greeting \"Hello world!\" which is a common programming reference and friendly greeting. I should respond in a warm and friendly manner.",
           "type": "thinking"
         },
         {
-          "text": "Hello! 👋 It's nice to meet you! \"Hello World\" - the classic first program! Whether you're just saying hi or diving into some coding, I'm here to help. What brings you here today?",
+          "text": "Hello! 👋 It's nice to meet you. How are you doing today?",
           "type": "text"
         }
       ],
-      "id": "msg_016P66MHuGDRjPC1bXUQPfWM",
+      "id": "msg_01MQzP3ThtjHnnRhgjvz3Z1z",
       "model": "claude-opus-4-20250514",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -66,7 +66,7 @@
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
         "input_tokens": 38,
-        "output_tokens": 140,
+        "output_tokens": 61,
         "service_tier": "standard"
       }
     },
@@ -81,16 +81,16 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-27T22:49:43Z"
+        "2025-11-02T17:06:49Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "90000"
+        "87000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-27T22:49:48Z"
+        "2025-11-02T17:06:52Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -99,22 +99,22 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-27T22:49:42Z"
+        "2025-11-02T17:06:47Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "540000"
+        "537000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-27T22:49:43Z"
+        "2025-11-02T17:06:49Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9955bf884ffecd80-ORD"
+        "99853978a868ab71-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -123,10 +123,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 22:49:48 GMT"
+        "Sun, 02 Nov 2025 17:06:50 GMT"
       ],
       "request-id": [
-        "req_011CUYX7jc3neDQ2eQi7wC6B"
+        "req_011CUjRpajz7L2kNivfadNHx"
+      ],
+      "retry-after": [
+        "12"
       ],
       "server": [
         "cloudflare"
@@ -137,11 +140,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "5768"
+        "2893"
       ],
       "x-robots-tag": [
         "none"

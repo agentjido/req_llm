@@ -37,11 +37,11 @@
     "body": {
       "content": [
         {
-          "text": "Here is a very long story about dragons and adventures:\n\nThe Realm of the Dragonflight\n\nChapter 1: The Hatching\n\nThe sun had barely crested the horizon, casting a warm glow over the rugged terrain of the Dragon Sanctum. High atop the craggy peaks, nestled within the ancient stone walls of the Citadel, the Dragonflight stirred from their slumber. The time had come for a new generation",
+          "text": "Here is a very long story about dragons and adventures:\n\nThe Realm of Dragonfire\n\nChapter 1: The Call of the Wyrms\n\nThe land of Tharador had long been the domain of the mighty dragons, great winged beasts who soared through the skies, their scales glittering like jewels in the sunlight. For centuries, these majestic creatures had ruled over the valleys, mountains, and forests, their presence a source of",
           "type": "text"
         }
       ],
-      "id": "msg_01P9ESyMwYGNq49j6kprJD56",
+      "id": "msg_01Q7jBguHM3js6bX8GDJm3dE",
       "model": "claude-3-haiku-20240307",
       "role": "assistant",
       "stop_reason": "max_tokens",
@@ -70,7 +70,7 @@
         "100000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-14T19:38:48Z"
+        "2025-11-02T17:04:53Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "20000"
@@ -79,7 +79,7 @@
         "20000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-14T19:38:49Z"
+        "2025-11-02T17:04:54Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -88,7 +88,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-14T19:38:48Z"
+        "2025-11-02T17:04:53Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "120000"
@@ -97,13 +97,13 @@
         "120000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-14T19:38:48Z"
+        "2025-11-02T17:04:53Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e98a041fc88f48-ORD"
+        "998536ab4ee81130-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -112,10 +112,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:38:49 GMT"
+        "Sun, 02 Nov 2025 17:04:53 GMT"
       ],
       "request-id": [
-        "req_011CU7f3VvzuB3fqBspWKmcw"
+        "req_011CUjRg7zvf8iyTrAE4jYDy"
+      ],
+      "retry-after": [
+        "7"
       ],
       "server": [
         "cloudflare"
@@ -126,11 +129,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "1065"
+        "841"
       ],
       "x-robots-tag": [
         "none"

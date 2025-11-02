@@ -41,7 +41,7 @@
           "type": "text"
         }
       ],
-      "id": "msg_01NwttFDBiAEuubEv9hzigqF",
+      "id": "msg_01MLjDWsaQLKbx9GdvNBe7N4",
       "model": "claude-opus-4-20250514",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -70,40 +70,40 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-14T19:39:10Z"
+        "2025-11-02T17:07:03Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "90000"
+        "89000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-14T19:39:10Z"
+        "2025-11-02T17:07:03Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
       ],
       "anthropic-ratelimit-requests-remaining": [
-        "999"
+        "998"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-14T19:39:09Z"
+        "2025-11-02T17:07:02Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "540000"
+        "539000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-14T19:39:10Z"
+        "2025-11-02T17:07:03Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e98a83beeee127-ORD"
+        "998539d0cf24edc5-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -112,10 +112,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:39:10 GMT"
+        "Sun, 02 Nov 2025 17:07:03 GMT"
       ],
       "request-id": [
-        "req_011CU7f51dxKtYdvybg6Saqi"
+        "req_011CUjRqd3vKHHniuLNPmP24"
+      ],
+      "retry-after": [
+        "59"
       ],
       "server": [
         "cloudflare"
@@ -126,11 +129,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "1731"
+        "1444"
       ],
       "x-robots-tag": [
         "none"

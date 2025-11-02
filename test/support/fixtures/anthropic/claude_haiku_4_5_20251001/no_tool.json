@@ -61,16 +61,16 @@
     "body": {
       "content": [
         {
-          "signature": "EuACCkYICBgCKkAHzNWLB6rXPPk4o2BGnU6vcHrBIXvbijzNApCTNQdKhDKpigqR2dkFTmkdy5Gq3JdJXqlhjwATV2a9Il4t8HGVEgxczjKI0HwHsFGnKGIaDOTP8u+w0JV7eDrpqyIwBI/fnmV6SiGKrpKhn5UwK3M6RJTPec3At+9zlULplptHV/J/PUwI+oICNp1QvLHQKscBARauVGW7leyXtxPCVn4qinVT5c0KJ4Y7+Yy/ig9wlv7ze0KdxUod+2v3hSTWLZw4mCTVcDVHV4hcyUNwWzxdlRbF/xJOqYnbUxeYgbMFMIrdwLGO3+0RUF/o8gJab114lthK1kVUysRNTbTMS3aIJY94ns1Qt9ZaOW72TkwqZdA7TCpFyE14WbtAqB4wUNuZH+VH3wRfaNiuEMZpq4cbSYKGglTeFFKySy5pOZmM+HknuInOZAafIJF+Tj8rJjpgE/LqN+O0GRgB",
-          "thinking": "The user is asking me to tell a joke about cats. This is a straightforward request that doesn't require any tools or function calls. I can just respond with a funny cat joke directly.",
+          "signature": "EtoCCkYICRgCKkDMQEhc/khAgQ7CJB2ziJinBeNcElsjMwKrgYVYdy0uEqmhdP4CobBWfe6WAczpofmQin+LwS0KKww538/i5d0EEgxAKAm3lJQTpj706jcaDILRwfpaG3JP6fJH0CIwmpaEnBbwjQ+YadiZJdAoOiZDGuV0uSUpZ5jLXgQNbeZ0hsN2kq/GOR8BRC9HyjqXKsEBa1/nLVF+bcSQ4GjjFWirm4iMQYDNNl0AuIw7be7m1I5a5T4ktsllhPFvy3PnehnbZkvA0htzNhZpCc4YyufWlswqtqhbJbyZpCmAuKUmRk/MGXG2GyyaddH5vfvbQH9Rx7jSeaUn3UTUlpq9SV53196TnO85Xfl67w07G8w2C8Q6Se1YbuFplomIlzhSGBCvRIjIcwfPMDhK8WkAPgK3t5CpQbA+UCZbD7y4qbcv9E+mOs3lvvRrb6jymSVvsiDRZRgB",
+          "thinking": "The user is asking me to tell a joke about cats. This doesn't require any of the available tools (which is just a weather function). I should simply tell them a joke about cats.",
           "type": "thinking"
         },
         {
-          "text": "Why don't cats play poker in the jungle?\n\nBecause there are too many cheetahs! 🐱",
+          "text": "Here's one for you:\n\nWhy don't cats play poker in the jungle?\n\nBecause there are too many cheetahs! 🐆😹",
           "type": "text"
         }
       ],
-      "id": "msg_01PiV6yLouqgA3uTAmFs2TgV",
+      "id": "msg_01JNaBgRap52uyreYCyZxTm6",
       "model": "claude-haiku-4-5-20251001",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -84,7 +84,7 @@
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
         "input_tokens": 748,
-        "output_tokens": 76,
+        "output_tokens": 85,
         "service_tier": "standard"
       }
     },
@@ -99,16 +99,16 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-15T17:29:10Z"
+        "2025-11-02T17:05:41Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "89000"
+        "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-15T17:29:11Z"
+        "2025-11-02T17:05:42Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -117,22 +117,22 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-15T17:29:09Z"
+        "2025-11-02T17:05:41Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "539000"
+        "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-15T17:29:10Z"
+        "2025-11-02T17:05:41Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98f1097a4b6cf60c-ORD"
+        "998537d85b15f92b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -141,10 +141,13 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 17:29:10 GMT"
+        "Sun, 02 Nov 2025 17:05:42 GMT"
       ],
       "request-id": [
-        "req_011CU9Ny18RpcvnboXQW8xAb"
+        "req_011CUjRjfwdW93HLj7BMoWuC"
+      ],
+      "retry-after": [
+        "19"
       ],
       "server": [
         "cloudflare"
@@ -155,11 +158,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "1200"
+        "1305"
       ],
       "x-robots-tag": [
         "none"

@@ -72,17 +72,17 @@
     "body": {
       "content": [
         {
-          "id": "toolu_013SgL7ri29pke3puoJ4mnNS",
+          "id": "toolu_014xuozTiNWA1B7ZAmz51fVF",
           "input": {
             "age": 28,
-            "name": "Alex Chen",
+            "name": "Alex Johnson",
             "occupation": "Software Engineer"
           },
           "name": "structured_output",
           "type": "tool_use"
         }
       ],
-      "id": "msg_01E13ZM2r68q38b9bBHnqp2e",
+      "id": "msg_01VKEeNSujfeJ2ZqVhadNYxn",
       "model": "claude-opus-4-20250514",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -111,7 +111,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-14T19:41:13Z"
+        "2025-11-02T17:04:58Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -120,7 +120,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-14T19:41:14Z"
+        "2025-11-02T17:04:59Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -129,7 +129,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-14T19:41:12Z"
+        "2025-11-02T17:04:57Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -138,13 +138,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-14T19:41:13Z"
+        "2025-11-02T17:04:58Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e98d87fb73e127-ORD"
+        "998536c31909edc5-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -153,10 +153,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:41:14 GMT"
+        "Sun, 02 Nov 2025 17:04:59 GMT"
       ],
       "request-id": [
-        "req_011CU7fE7c8T5QvnbrJx2k2B"
+        "req_011CUjRgQLvxJS4MsUcogZnv"
+      ],
+      "retry-after": [
+        "2"
       ],
       "server": [
         "cloudflare"
@@ -167,11 +170,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "1916"
+        "2687"
       ],
       "x-robots-tag": [
         "none"

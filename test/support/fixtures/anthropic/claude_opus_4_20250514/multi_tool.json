@@ -90,8 +90,8 @@
     "body": {
       "content": [
         {
-          "signature": "EocECkYICBgCKkC8j814EkAL0veVExvyXbmCaIRqI8J5CNx+QQgMwSwtKOnPdb3lzRSHAXjkf6RpF2XaA01Zv30jF6hukn5fbrL+Egz8O4coEa61XeAcPmgaDO336uFyH9du4F3aoCIwxHA0UPq6umnw3BLSmOJgqk6rZkWs+wxwdRov+vCzT6DNmW7EU9m7vU1b1oqg3oOxKu4CnTYIpdqO9vl7Xwnp5DvYCtfPlgqw2kTRl14wFlOe1P9nixxs3IlFF0PSKpo1b1s0ND9RG2Ziw6Dmr4IP/bMKBOWAOAV1bLsjXZeyRD7unpDByh0ipu6DmHZOKgkNFkB8ewozUtaeByeJ3VT0DSjImWD6alMU9PPXOA1gpgdpQfSojwMn61H9xJ2ddGnTyF9mmc3QtPz9Hm2epjlAnlZxgmR2BFXLH6SwKKYTDfVATY4zsr4DHkkF8BMLW+N65Xsm1eiOxEwwbSQXxQ8sXIRZKsfGnER3jsVP06R8GPZuOpyDiENFlehnNezknV+tHUlcsymKnrtNQjPZVUz38arw+mR8gc2LUEgGHJLWaNmBuGOQK+Li8ckSmzdqNMwE64Tign/Pys/srBMeetW0mEJtDSf+GT2LzXIZnyOHvsYXvAMxlCCcdPSYW9U3U+YwjGo1KtZsKbWTR+5DjH7rbk0QIgKIwH+GMovrcedGjshLGAE=",
-          "thinking": "The user is asking about the weather in Paris, France. I have access to a get_weather function that can provide current weather information for a location. The required parameter is \"location\" and there's an optional \"unit\" parameter (celsius or fahrenheit). Since the user didn't specify a unit preference, I'll use the default by not specifying it.",
+          "signature": "EooECkYICRgCKkDbWyiE35vWwvj3x3BUpSWzWQluDJBm2LJTG8OE9JDl6ZIL6SsB8m4hA/Lm1v7+mgpikpgJhZdhZFi6BBHhvPBgEgx2yMJYMRdyMPorhaEaDO97XiPDxJRVJ5wJFiIw6jF90o/d51BS/RRoAmpFVMr8euLZFjpVqoAdg/Xn0YYa5fVtQiR+Qji5hV9pt2zqKvEC3Pq4kEKHJFSDW0G1eUt6TPdrLp7smc/NSR519bWIUK86ljUWwdnidsuEc04IzBDpXekPfvXpGqvvrIF0HpYjGrCUsfWoZkFA18Ezq/Tz3P95JdkhvGAe3Cg59yrJT2fJpy1mv8PeymV2ClBcaPoD8MwV5rkY56088Xt5hufhcMVja2Cu4/mMXZiSeco6KgrU/oQLB/9hQnYh8Y1G0+WQ3hH2f8a1zW3PIurcwcxdA8eGtJhdXOA69je+uKpz+Q5XicVmliVSGW6wSExkWhph3hdMZCnxvD2BYT+dAlNRHA7IWxfTBwRfXz3pRNOrprSLVhXyUc1zHr7JN2vTX8ccxsH8knuqzowpp5UawL2EwJilDM5b1OtnQmwGy6OgJZVTQZWNqx9AtPrSIKMXgPdfAa/rYMfdcEw2lpCxb/wIcm5o6BBK9MQeT7VFGZ99FriB95dB4eIuTTKlzo7wTZ7yuLb/Th3wo/luaA+cEP+GqM9jGAE=",
+          "thinking": "The user is asking about the weather in Paris, France. I have access to the get_weather function which can provide current weather information for a location. The required parameter is \"location\" and the optional parameter is \"unit\" (celsius or fahrenheit). Since the user didn't specify a unit, I'll not include it and let the function use its default.",
           "type": "thinking"
         },
         {
@@ -99,7 +99,7 @@
           "type": "text"
         },
         {
-          "id": "toolu_01F1BbhFXBjT5SpPtNJAr5ni",
+          "id": "toolu_01LY5Br3U4U5tbWhPritPSD9",
           "input": {
             "location": "Paris, France"
           },
@@ -107,7 +107,7 @@
           "type": "tool_use"
         }
       ],
-      "id": "msg_01Wpi7ktf7sVZsmVAXf2PshU",
+      "id": "msg_01K6GBzAC7JoKbyxhc2qF89t",
       "model": "claude-opus-4-20250514",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -136,7 +136,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-14T19:39:08Z"
+        "2025-11-02T17:05:22Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -145,7 +145,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-14T19:39:08Z"
+        "2025-11-02T17:05:25Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -154,7 +154,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-14T19:39:05Z"
+        "2025-11-02T17:05:21Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -163,13 +163,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-14T19:39:08Z"
+        "2025-11-02T17:05:22Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e98a6da88f5c94-ORD"
+        "9985375a6a5795c1-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -178,10 +178,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:39:08 GMT"
+        "Sun, 02 Nov 2025 17:05:25 GMT"
       ],
       "request-id": [
-        "req_011CU7f4kBmzQHEpLK5Swp5n"
+        "req_011CUjRiBnCE1UFCHFQhUiLE"
+      ],
+      "retry-after": [
+        "39"
       ],
       "server": [
         "cloudflare"
@@ -192,11 +195,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "3433"
+        "3987"
       ],
       "x-robots-tag": [
         "none"

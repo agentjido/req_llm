@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo2NDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbeyJpZCI6InRvb2x1XzAxTlc3MURFMXhHTDlkZGhGTnEyc0JnNCIsImlucHV0Ijp7ImEiOjIsImIiOjN9LCJuYW1lIjoiYWRkIiwidHlwZSI6InRvb2xfdXNlIn1dLCJyb2xlIjoiYXNzaXN0YW50In0seyJjb250ZW50IjpbeyJjb250ZW50IjoiNSIsInRvb2xfdXNlX2lkIjoidG9vbHVfMDFOVzcxREUxeEdMOWRkaEZOcTJzQmc0IiwidHlwZSI6InRvb2xfcmVzdWx0In1dLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtc29ubmV0LTQtMjAyNTA1MTQiLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjo2NDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbeyJpZCI6InRvb2x1XzAxRzVmZXIxdjFlZ3lEU1BGdHE4eUpQTSIsImlucHV0Ijp7ImEiOjIsImIiOjN9LCJuYW1lIjoiYWRkIiwidHlwZSI6InRvb2xfdXNlIn1dLCJyb2xlIjoiYXNzaXN0YW50In0seyJjb250ZW50IjpbeyJjb250ZW50IjoiNSIsInRvb2xfdXNlX2lkIjoidG9vbHVfMDFHNWZlcjF2MWVneURTUEZ0cTh5SlBNIiwidHlwZSI6InRvb2xfcmVzdWx0In1dLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJjbGF1ZGUtc29ubmV0LTQtMjAyNTA1MTQiLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
       "max_tokens": 6400,
@@ -13,7 +13,7 @@
         {
           "content": [
             {
-              "id": "toolu_01NW71DE1xGL9ddhFNq2sBg4",
+              "id": "toolu_01G5fer1v1egyDSPFtq8yJPM",
               "input": {
                 "a": 2,
                 "b": 3
@@ -28,7 +28,7 @@
           "content": [
             {
               "content": "5",
-              "tool_use_id": "toolu_01NW71DE1xGL9ddhFNq2sBg4",
+              "tool_use_id": "toolu_01G5fer1v1egyDSPFtq8yJPM",
               "type": "tool_result"
             }
           ],
@@ -65,7 +65,7 @@
           "type": "text"
         }
       ],
-      "id": "msg_01KPYwaHQZWYkYktT9THRy86",
+      "id": "msg_01ENdZEPrsKrQP6iyevnAEih",
       "model": "claude-sonnet-4-20250514",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -94,7 +94,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-14T19:39:08Z"
+        "2025-11-02T17:05:24Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -103,16 +103,16 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-14T19:39:08Z"
+        "2025-11-02T17:05:24Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
       ],
       "anthropic-ratelimit-requests-remaining": [
-        "998"
+        "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-14T19:39:07Z"
+        "2025-11-02T17:05:22Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -121,13 +121,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-14T19:39:08Z"
+        "2025-11-02T17:05:24Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e98a793889dadb-ORD"
+        "99853763fd3672e8-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -136,10 +136,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:39:08 GMT"
+        "Sun, 02 Nov 2025 17:05:24 GMT"
       ],
       "request-id": [
-        "req_011CU7f4t7XASqS7y1xTNjE8"
+        "req_011CUjRiJK6W98mzzFx9tLku"
+      ],
+      "retry-after": [
+        "37"
       ],
       "server": [
         "cloudflare"
@@ -150,11 +153,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "1693"
+        "1564"
       ],
       "x-robots-tag": [
         "none"

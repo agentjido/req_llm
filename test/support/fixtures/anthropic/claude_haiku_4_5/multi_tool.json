@@ -90,12 +90,12 @@
     "body": {
       "content": [
         {
-          "signature": "EpwICkYICRgCKkB4OM8UJANy3Vx4lrmG1zr/q+j5bze3u6RADs6LVf/jFS9YrpRH7Hw832RlpwqhN54CAg722fwRHR8t6jyG6FzjEgwEFm06kqCQlYBlouAaDFIWqMtxi092EsutZyIwxeCTsbPp+/bgJxK23K0WsYZnwJ0Fl/OsDhdMthuVwawV0m0dYSFiQfhxdnJEkxJdKoMHFwn0gNggDg7nmx9AO7TG6rw4nSK52OYsjJ2VAp9q7BfJAFnfXXm7gYxqDXma2N7Zm9fSfJEOESDuC/pIrkTnmc2z4A089FxSn0RTEU2myPINUUAp4Zasdcb8v7fKi0cbbNpr/71tlu/ozB4NNBieArC2mBwKcXDeQcfEXvf+JLOaQvq5Mzp+PG++bn6nax1+T8s37a3WfD0i5QsgrQc5g26KUE74R2rKCjCvBnyrQcwSY5S8fTPUSJsWKvzYa+LloHS002ncfxRgHH31OTw9+AT9eY6WBnGC5jftIUVTs3sqCDyiWpVfHo2QUwLtklS0MnqaBuUx1Mob35FxUP9P9yGLQs54kx1sLRHC5ZtL0+YU3Yy6FgkMH/mZRBXxu0PMD0YEGHpE6kQSXPYY61YSFZnTEUKFI9oKrn2syXcVhuypbGJ6JP+6TA29482/+ph3COHosdO95l8yrBDT0eZmjgPA1jse2ZFVkNv9gzySXG8D6z1ufd55lw4lhFD8JzUuxw1gAID2bfPJhkX6It9EUz/7C3+q5GgfB7/XRkMcsHW9X/WOD7c/fMYqSLPVaWdmrTKgA1Rx6Yee4P2lGH2tc2asJitqbsoIqItH+BAM5dk1n/ClGGl7ZEOXfJsGoVdQtHUS08u53H1MsZ9SSKb2t3W5GjcpHN0H2GYJEe8ARlBiSIi4aNJqZOMYbjAr++JX+WPfnKGIh5F+3A/kNSl3fj9jei9+mAlkp2yRv4kR4eM5NYh1mtKFlNSTxdVl43lwGInTEVbGDdEJBt/wc+n+QUER8XM1yyRBH5Eg84fvzk9ZjVQd/y12XwLyK1ne3ylyIrLYMVByL/fXMExAoht07mJY9xgwqrigAMjIZpGMbqME9oGkottYxX3uNvacKHIQ7NBDaACqwGraao+P31UFlUWtV+RjiAMDLYOR1VI8vgnVJioROZVG9a7xVWiiWcs7agamtNiIbwMUPcOuAZZgdtNvbsAIYZGLMVu5xtYrTZwPDP5YpJi+IHjTgMHahsSFkmI0QVIOBufoxCCv/U1n//ZxsLTUG/Uvfpm0WQAwg+jwRH2CW5hSaMo8rndVnPqHyg85uSBKHQOTYTS5mJLAnx3TAucV11HipjjXlv9eB4rVTQpMyEjlUE15Wb7FjJErfZ04V6w7x1iUiDGg9ScSW8aSNfyL0to3qtLJAfTcZiJgQxkYAQ==",
-          "thinking": "The user is asking for the weather in Paris, France. I have a function called `get_weather` that can help me get this information. The function requires a `location` parameter, and has an optional `unit` parameter for temperature (celsius or fahrenheit).\n\nThe user specified \"Paris, France\" so I'll use that as the location. Since they didn't specify a unit preference, I could default to either celsius or fahrenheit. Since Paris is in France and France uses Celsius, it would be most appropriate to use Celsius. However, I could also just pick one reasonable default. Let me use celsius since that's the standard for France.\n\nActually, looking at the instructions again, it says \"DO NOT make up values for or ask about optional parameters\" - so I should just use the required parameter and not specify the optional one unless the user asks for it. Let me just provide the location.",
+          "signature": "EqIHCkYICRgCKkCmzOLV5qNnMhW9zYjMR7PP+lkqvhJv4O4IGL/28oASw2lo5txm2cf60hgVCcbld+6NfAQVsm1PCQUqv7VANkFZEgxox0Deu++5/onoFAwaDNLLZdXqs4FwIA+luyIwMJmEJRR59M1Xe8ywyv6+mkfgLdgDL/uW7sNS83ZEvj8R+dJKIo1gz1qZL4GmgUbPKokGscf8Xt5cnJRlrAyk6oTTm1R2XGgNHlE6Z6IJjM/8vX3iJDitQRmHk73izPcrbT1KihGDXffQrNdffw+T0mbAZeyiBUBAcFH3IHD7edTt3yxC/3cRAepXIbMVlieMCFtw2tDH65avctk78bFUdfHZXvxhD767l9fpPcsdCRdJQgaBIiIEZuzMFX+5WaK4elDhkgH5ZWAgsBQi/aLLAoZKDW1pEBtXuoHYX1mrNWZesyx6RPpLf+Alw40rYboj6xaHG8OZ50Q36qLxbSsI/8XjXjVNWPKb+7hBtQ7zh1ZqlRC2GfNWb2CdbFdXwObW2wRY5P4fW/r5TklFQixcvM2qJ00PLeOrBE4cKtvv+HFY0D0DvEIbvL+h9WsCbSZ0FuXmG5FKP8nA7EkjFOA0hxks8XwXouYVHa/TeiFG2D2ECeea7wDqweMpf5nUsdOxx0XDh5vKX9tc1iupGLVINdyTjAPrl3TTsJ70eG1NC4xX7n42pPGrRKF5sz3tKPQud7LZw77ORhCnV8KHigjos7afEcCo6iBdXQChTGe0Kzf+QmN/JUCClm+sZ3kRKBhzOqJM7E0ff/CjXK7vMRAfg2je3DKYbAl5VUKYKXG5DwkC1dkPVYgMonxrlOctmDqB9t2AEvcnE9/KYK2fECQuIgERSEfBaPLjxNgbhUPSrZH5pztWabYEdGbioNy5XFHhRvdkBnSddvb8hRJTJ+kb0wC+BL3+AopVRhSiD10aRDzo68nl2dY3V95IdVjbJyntu+Y3donP1nLl72X897nctH24OPjo6yYqB4zPy+usAjb4kvJdAiIHWOatkMOVqDMMdhmOZNQ899XBbR9loIyUzgMzEINDkxutteyXXl52pFkE/E1myY9XjPa/upwwXqeHbg5gw9vUalMK9XOP4A4vlA5VUImogQT7H7eaoh7aMkO3kZcgVVrArk1bQHWfR5KcL6emlncN8cmwH2LiPvOVCy6tLpQBp25IeJkmBUjxzXnKKBqAuEhpDF36BlRgaqQO2NuI33eZyX7gnYlyGAE=",
+          "thinking": "The user is asking for the weather in Paris, France. I have a function called `get_weather` that can help with this. Let me call it with the location \"Paris, France\".\n\nThe function requires:\n- location (required): \"Paris, France\"\n- unit (optional): I can specify \"celsius\" or \"fahrenheit\", but since the user didn't specify, I'll use the default or celsius since Paris is in France which uses Celsius.\n\nActually, looking at the parameters again, `unit` is not marked as required, so I can leave it out or choose a sensible default. Since the user didn't specify, I'll just use the location and let the system use its default, or I can choose celsius since we're talking about Paris in France. I'll go with just the location parameter since unit is not required.",
           "type": "thinking"
         },
         {
-          "id": "toolu_01AU9L81ecEUADTVaxaJPfc9",
+          "id": "toolu_01AJuKziRRHmuWxQXJDofBQC",
           "input": {
             "location": "Paris, France"
           },
@@ -103,7 +103,7 @@
           "type": "tool_use"
         }
       ],
-      "id": "msg_013L1mB1eEXrtn2igQZGjuzT",
+      "id": "msg_013mUwvkCkvTcE3RY3GF9s13",
       "model": "claude-haiku-4-5-20251001",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -117,7 +117,7 @@
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
         "input_tokens": 872,
-        "output_tokens": 253,
+        "output_tokens": 242,
         "service_tier": "standard"
       }
     },
@@ -132,7 +132,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-27T22:42:11Z"
+        "2025-11-02T17:05:48Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -141,7 +141,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-27T22:42:13Z"
+        "2025-11-02T17:05:50Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -150,7 +150,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-27T22:42:10Z"
+        "2025-11-02T17:05:47Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -159,13 +159,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-27T22:42:11Z"
+        "2025-11-02T17:05:48Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9955b4817da3eafd-ORD"
+        "998538018899f851-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -174,10 +174,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 22:42:13 GMT"
+        "Sun, 02 Nov 2025 17:05:50 GMT"
       ],
       "request-id": [
-        "req_011CUYWYShPJ3AWKu8v2YDSh"
+        "req_011CUjRkA7nae6SbPoKyesi1"
+      ],
+      "retry-after": [
+        "12"
       ],
       "server": [
         "cloudflare"
@@ -188,11 +191,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "2637"
+        "2319"
       ],
       "x-robots-tag": [
         "none"

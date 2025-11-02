@@ -61,16 +61,16 @@
     "body": {
       "content": [
         {
-          "signature": "EpsDCkYICBgCKkBHSBO3hy9/DqrXlX+2Kjd5kYfJozXzCyhoBvj1WQSQRI1eZCP3qa34tslLKG4LTq/2Y0J9LVHvgf+x433RDloPEgxWIM1JdvQhAciC/AoaDNoJcPyA6JPOkyPoRyIwi1REEOUxgsAnpcaDq2rDwUvfv4rNeu8nNzSOOFB0O1ObaoYyUSSsx54WuyWxASiEKoICI4hSubFtp4Dk/UdFdP8onGu4VJELzhzymWmx/MOxHVPXoYqfVFubiEXeUWAbqXFJWyKC75z4uP4EG8oSoC7OIajSQlpULuu1zGTaqqstgnMg2j2FcjX2tiV3VOHgNEBmAmrNIOC0IVvoUnI3WIih4NOGLpikvKak2TA5nj+NKsdJ6i9f8nOFsNFGDhMNFO88griArf+a99cidNzrcMuj4qcx8kA8GOpbRjwnsM8rYIFtRg4j2VCMN/nkTOHX+P09V/W/DcyhCdD1BOjRZz3Swg9R6RJHDLrdP16gzq4JRxGjkkRjaPWmRpgUtRPhZMGU9G6o+RgSCBdm6kDpfDVltUiTGAE=",
-          "thinking": "The user is asking for a joke about cats. This is a simple request for entertainment/humor and doesn't require any tools or function calls. I don't need to check the weather or use any other tools - I just need to provide a cat joke directly.",
+          "signature": "ErEDCkYICRgCKkDzNjFDqw8nVtFvMnf3xbq1yau1DaFPm2VFkPkPrYFPsi7EdtWN7SFBAmJw2CcnTqEsb/HtaLlBVJS//0L/GTtFEgwKELJa4kdl+Wh6EVMaDFxAcJzGdgBEYnxh2CIwx49Mu/slTOHsByo1ajJh2u0qzHZPFQSYnLVpVog1PEVpAf3d0ZU1W6iR1mRCNO+HKpgCwJve554fO6Y/7apBSPoh10KMaqncE/sk3z94H2mWlOSs0QVAIEL6P0G/SID3uOJ51FtI1HhjYYIZA7x4nSymfdmBL5NQ2d83zYzlGlkQKTQfnSqUdCgAuyo02advBOwxcOjz5h/XG5T/9BKUxGVybb1w4KsP3dAC2/GNiFhRZFgtGbsBnBAKkbuZTRx8ZU5TbSz5oHnKIFPVg012QViJcHzORelKCR9/96zy8yNY7nAuTQO1M+lgyDCc1NBnk6dawUdo4I+USPC//yTSi+B95pe6yjZqMnIDklNSGVRpflVyc9wBaAL7CdGdB7JEhV13aoVJLCu3JgPiXGaoLKVIwP2cJOnQDx20UIaQgEwj23r2OyuH9Z1qkhgB",
+          "thinking": "The user is asking for a joke about cats. This is a simple request that doesn't require any tools or function calls. The available function is for getting weather information, which is not relevant to telling a joke. I should just respond with a cat joke directly.",
           "type": "thinking"
         },
         {
-          "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs!\n\n😸 Would you like to hear another one?",
+          "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs! 🐱\n\n(And if you ask a cat about it, they'll probably just say it's because they prefer to knock all the cards off the table instead!)",
           "type": "text"
         }
       ],
-      "id": "msg_01R4SBMJjkP6um61sG1s3DS8",
+      "id": "msg_011fkteyX57bm6KHJNr3Ehnt",
       "model": "claude-opus-4-1-20250805",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -84,7 +84,7 @@
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
         "input_tokens": 565,
-        "output_tokens": 104,
+        "output_tokens": 127,
         "service_tier": "standard"
       }
     },
@@ -99,7 +99,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-14T19:39:21Z"
+        "2025-11-02T17:07:05Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -108,7 +108,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-14T19:39:22Z"
+        "2025-11-02T17:07:09Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -117,7 +117,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-14T19:39:13Z"
+        "2025-11-02T17:07:01Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -126,13 +126,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-14T19:39:21Z"
+        "2025-11-02T17:07:05Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e98aa23e14dadf-ORD"
+        "998539d09cc0e1f7-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -141,10 +141,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:39:22 GMT"
+        "Sun, 02 Nov 2025 17:07:09 GMT"
       ],
       "request-id": [
-        "req_011CU7f5N8kV8rNNzqJSaCai"
+        "req_011CUjRqcuVJHDJyzDcR9XAP"
+      ],
+      "retry-after": [
+        "60"
       ],
       "server": [
         "cloudflare"
@@ -155,11 +158,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "8516"
+        "7197"
       ],
       "x-robots-tag": [
         "none"

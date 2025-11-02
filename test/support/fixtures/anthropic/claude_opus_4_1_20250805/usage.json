@@ -37,11 +37,11 @@
     "body": {
       "content": [
         {
-          "text": "Hello! How are you doing today? Is there anything I can help you with?",
+          "text": "Hello! How can I help you today?",
           "type": "text"
         }
       ],
-      "id": "msg_01NiHUczr4EZiDLKs8sLUEQd",
+      "id": "msg_01PVwn5VDGSvWweaTrGgo9cu",
       "model": "claude-opus-4-1-20250805",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -55,7 +55,7 @@
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
         "input_tokens": 10,
-        "output_tokens": 20,
+        "output_tokens": 12,
         "service_tier": "standard"
       }
     },
@@ -70,7 +70,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-14T19:41:35Z"
+        "2025-11-02T17:07:01Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -79,7 +79,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-14T19:41:35Z"
+        "2025-11-02T17:07:01Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -88,7 +88,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-14T19:41:33Z"
+        "2025-11-02T17:07:00Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -97,13 +97,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-14T19:41:35Z"
+        "2025-11-02T17:07:01Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e98e098cc5e263-ORD"
+        "998539c62b98eb04-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -112,10 +112,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:41:35 GMT"
+        "Sun, 02 Nov 2025 17:07:01 GMT"
       ],
       "request-id": [
-        "req_011CU7fFeBfvpHy9cicBvrFj"
+        "req_011CUjRqVmNFhKfbL5CohBTx"
+      ],
+      "retry-after": [
+        "64"
       ],
       "server": [
         "cloudflare"
@@ -126,11 +129,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "2663"
+        "1559"
       ],
       "x-robots-tag": [
         "none"

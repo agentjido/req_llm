@@ -72,17 +72,17 @@
     "body": {
       "content": [
         {
-          "id": "toolu_0158QUopDRAdCEczFoBhMGXn",
+          "id": "toolu_01JZrMpVPd5eFWTH53FCLV1A",
           "input": {
-            "age": 32,
-            "name": "Alexander Chen",
+            "age": 28,
+            "name": "Alex Chen",
             "occupation": "Software Engineer"
           },
           "name": "structured_output",
           "type": "tool_use"
         }
       ],
-      "id": "msg_01KFZqoPXqSCfvQ19hYD46AV",
+      "id": "msg_018nhogsw35LXaQ9MhKnHCSk",
       "model": "claude-haiku-4-5-20251001",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -111,16 +111,16 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-27T22:43:04Z"
+        "2025-11-02T17:05:52Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "88000"
+        "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-27T22:43:05Z"
+        "2025-11-02T17:05:52Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -129,22 +129,22 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-27T22:43:03Z"
+        "2025-11-02T17:05:51Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "538000"
+        "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-27T22:43:04Z"
+        "2025-11-02T17:05:52Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9955b5cd287acc1a-ORD"
+        "9985381b0f0feacf-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -153,10 +153,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 22:43:04 GMT"
+        "Sun, 02 Nov 2025 17:05:52 GMT"
       ],
       "request-id": [
-        "req_011CUYWcMZgRnMVNRMTdvQp3"
+        "req_011CUjRkTa1rWDkjDrtLdhux"
+      ],
+      "retry-after": [
+        "8"
       ],
       "server": [
         "cloudflare"
@@ -167,11 +170,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "872"
+        "967"
       ],
       "x-robots-tag": [
         "none"

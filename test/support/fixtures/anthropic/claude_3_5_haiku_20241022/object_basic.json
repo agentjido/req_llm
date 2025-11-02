@@ -73,7 +73,7 @@
     "body": {
       "content": [
         {
-          "id": "toolu_01Tchyh9s1ohdysnhAq6xXfu",
+          "id": "toolu_01LW7fooobrq7HvCXb4NjD8H",
           "input": {
             "age": 32,
             "name": "Emily Rodriguez",
@@ -83,7 +83,7 @@
           "type": "tool_use"
         }
       ],
-      "id": "msg_01Mq5Npnu1dB11jus4tUz9ky",
+      "id": "msg_01MU1xBnsDNAdCedH8x86mBm",
       "model": "claude-3-5-haiku-20241022",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -112,7 +112,7 @@
         "100000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-14T19:38:57Z"
+        "2025-11-02T17:04:53Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "20000"
@@ -121,7 +121,7 @@
         "20000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-14T19:38:57Z"
+        "2025-11-02T17:04:54Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -130,7 +130,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-14T19:38:56Z"
+        "2025-11-02T17:04:52Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "120000"
@@ -139,13 +139,13 @@
         "120000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-14T19:38:57Z"
+        "2025-11-02T17:04:53Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e98a36383e870e-ORD"
+        "998536a8e9ad6094-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -154,10 +154,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:38:57 GMT"
+        "Sun, 02 Nov 2025 17:04:53 GMT"
       ],
       "request-id": [
-        "req_011CU7f46GVPi1iLRHgXL6pF"
+        "req_011CUjRg6NwnpGqRaaS7Prxm"
+      ],
+      "retry-after": [
+        "7"
       ],
       "server": [
         "cloudflare"
@@ -168,11 +171,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "1436"
+        "1246"
       ],
       "x-robots-tag": [
         "none"

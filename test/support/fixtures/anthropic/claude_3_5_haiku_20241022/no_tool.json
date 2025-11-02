@@ -58,11 +58,11 @@
     "body": {
       "content": [
         {
-          "text": "I apologize, but I don't have a specific tool for generating jokes about cats. The only tool available to me right now is getting weather information. Would you like to know the current weather somewhere instead? If you'd like a cat joke, I can try to tell you one from my own knowledge:\n\nWhy don't cats play poker in the jungle? \n\nToo many cheetahs! 😺\n\nWould you like me to check the weather for a location to lighten the mood?",
+          "text": "I apologize, but I don't have a specific tool for generating jokes about cats. The only tool available to me right now is getting weather information. Would you like to know the current weather somewhere instead? If you'd like a cat joke, I can try to tell you one from my own knowledge:\n\nWhy don't cats play poker in the jungle? \nToo many cheetahs! 😺\n\nWould you like me to check the weather for a location to add some fun to our conversation?",
           "type": "text"
         }
       ],
-      "id": "msg_01PYY7DnYVvLiTdVZ9Xb3pLW",
+      "id": "msg_017hYjbzYWxtENE2rYNRCYCZ",
       "model": "claude-3-5-haiku-20241022",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -76,7 +76,7 @@
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
         "input_tokens": 339,
-        "output_tokens": 106,
+        "output_tokens": 108,
         "service_tier": "standard"
       }
     },
@@ -91,7 +91,7 @@
         "100000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-14T19:38:53Z"
+        "2025-11-02T17:04:56Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "20000"
@@ -100,7 +100,7 @@
         "20000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-14T19:38:56Z"
+        "2025-11-02T17:04:59Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -109,7 +109,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-14T19:38:53Z"
+        "2025-11-02T17:04:56Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "120000"
@@ -118,13 +118,13 @@
         "120000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-14T19:38:53Z"
+        "2025-11-02T17:04:56Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e98a225dd9870e-ORD"
+        "998536bd8b6c6094-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -133,10 +133,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:38:56 GMT"
+        "Sun, 02 Nov 2025 17:04:58 GMT"
       ],
       "request-id": [
-        "req_011CU7f3rewBG9QStwfwU1w5"
+        "req_011CUjRgLVWdrYE3fMKLJ95h"
+      ],
+      "retry-after": [
+        "4"
       ],
       "server": [
         "cloudflare"
@@ -147,11 +150,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "3116"
+        "3014"
       ],
       "x-robots-tag": [
         "none"

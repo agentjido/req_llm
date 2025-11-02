@@ -62,7 +62,7 @@
           "type": "text"
         }
       ],
-      "id": "msg_01QjUDxypM3Ut6qhQLUvp7AZ",
+      "id": "msg_01NU4d2QQ7qS5rTzftotBU1w",
       "model": "claude-3-5-haiku-20241022",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -91,7 +91,7 @@
         "100000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-27T22:47:41Z"
+        "2025-11-02T17:04:50Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "20000"
@@ -100,7 +100,7 @@
         "20000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-27T22:47:44Z"
+        "2025-11-02T17:04:53Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -109,7 +109,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-27T22:47:41Z"
+        "2025-11-02T17:04:50Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "120000"
@@ -118,13 +118,13 @@
         "120000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-27T22:47:41Z"
+        "2025-11-02T17:04:50Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9955bc90c81a22db-ORD"
+        "99853696abee2300-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -133,10 +133,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 22:47:43 GMT"
+        "Sun, 02 Nov 2025 17:04:52 GMT"
       ],
       "request-id": [
-        "req_011CUYWxn4doN4Y1Bq9doW51"
+        "req_011CUjRfsyKQYvCvqrAiqjLG"
+      ],
+      "retry-after": [
+        "10"
       ],
       "server": [
         "cloudflare"
@@ -147,11 +150,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "2889"
+        "3059"
       ],
       "x-robots-tag": [
         "none"

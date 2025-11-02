@@ -72,7 +72,7 @@
     "body": {
       "content": [
         {
-          "id": "toolu_01SQdSZm2gq6FVUzDaWeetxY",
+          "id": "toolu_01XQNU99dBECj9r76vT1XZqg",
           "input": {
             "age": 28,
             "name": "Alex Chen",
@@ -82,7 +82,7 @@
           "type": "tool_use"
         }
       ],
-      "id": "msg_01Hemm7YvHuBG7N5qYTGbKfz",
+      "id": "msg_01P9qhzEXJ1eVMyJ154cYc7y",
       "model": "claude-opus-4-20250514",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -111,7 +111,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-27T22:47:53Z"
+        "2025-11-02T17:04:52Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -120,7 +120,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-27T22:47:54Z"
+        "2025-11-02T17:04:53Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -129,7 +129,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-27T22:47:52Z"
+        "2025-11-02T17:04:51Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -138,13 +138,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-27T22:47:53Z"
+        "2025-11-02T17:04:52Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9955bcda0e5ea434-ORD"
+        "998536a1fe008f4d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -153,10 +153,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 22:47:54 GMT"
+        "Sun, 02 Nov 2025 17:04:53 GMT"
       ],
       "request-id": [
-        "req_011CUYWyeA9qMZxRAEFGhbqd"
+        "req_011CUjRg1dgrU2t66HveAcyG"
+      ],
+      "retry-after": [
+        "8"
       ],
       "server": [
         "cloudflare"
@@ -167,11 +170,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "1909"
+        "1936"
       ],
       "x-robots-tag": [
         "none"

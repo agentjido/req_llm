@@ -90,12 +90,12 @@
     "body": {
       "content": [
         {
-          "signature": "EsIECkYICBgCKkAnp9Y/rHjXeOxn63TR0wNyXoQxxDVkmqz7Zb+aOiqrtMkdJxv6IcEE5Pl15WnUxaBc+v31tWTP/CH+OgMC3Bc0EgypgGZokruf40Wjp2MaDD5BZULHVX3hG0EvmyIw1oXKB4+no9Iqh6aHCT5hjohsynR6c687i8mowd7c8XvBI7FEIvITUoikckfMpwmWKqkDwiyEHCWo/2a/cDGVkMgprLk4XiW/eb99ihw/geFIlPWWuH67JL/rhqFQfggDJtgybc70eaZti7yio1oZlQf+mtIOzkIcKWk6Uvs9WFmfmCxS+3ThgDBD4ZDeamyrlkO9rqtNWvv0XNEkgAF+F166x7mUODeppezYUKSY4ZhcwnDy94B9Yl/r2q/0Z0kcKUiE7ilcEgyqZOz0QYCsNlOoNm/M8/k4tSVqZxoJZ8fenwYECAaQ/K0RlYKAKYqTEiwP3Kj/nwoKp5r4ZPcRmyHFha47pf8B5AdYJx6NMt3gazlL4b72hvuUvKhq59oVHSAsHb6S7Bdn6tH4DWld0OqBbBHDo0gOELaTFxe0tvTq8Bvw9zEMZPujSGGBIda963Ux3MLHjb+opYDppg0yH4JrIRcUXY9A6SoBM0Q58Nd2wyGMmKr3LiX5ARfO3fm4/WcNNW8+eJ3gZ3K+sblhfLZzRKZ/cR88mEFg4ZafRX+GPOqMZs6oAKvnQGiyxY15y7E2g6BUr/x+3a2kJFw27SbwpX36tM53x4MlNDe5EQPzolsoXAHHATJThIoYAQ==",
-          "thinking": "The user is asking about the weather in Paris, France. I have a function called `get_weather` that can provide this information. Let me check the parameters:\n- location: required, type string - I have this: \"Paris, France\"\n- unit: optional, enum of [\"celsius\", \"fahrenheit\"] - Not specified by user, so I can omit it or the function will use a default\n\nI'll call the function with just the location parameter.",
+          "signature": "Et8DCkYICRgCKkD/DnXLnk+V3IJhhGhyEAodAr+eI/NR7oszMRfDK3LyePn6QvZnjm9QdGAgsmMREP95HLs025BLhU18p/qXCFCPEgw95gnBuOoN4/cbzAcaDBKNmyahv5VxjcC58iIwncf4Iiif4mMiMds6lo+gnEeWZlp2ZpAv3ggRdamqrbIpWMUBdL2jFBkNJpZ7vmmkKsYCA2PsGQKDPvNuVwbJ3c/1ulw4gCPZva6QDWERbksSubNp+6FyRJLAUNhmO59POY7mDNkL0/EbacEVXrEFym4CbmT92feqixrY774a5ZvBLleAysrRHqg9W2js4cVl0BLzS37IwbbMh1YlNpUZkS86oZo0LlsQ/XkW/30AXfgfufVSX0at+LndZEQ/yreyGg9YX0XSwDUP/Z78mauMSrnmp3WKl6KdxYP8+pEAUC5z70M7+9JE96UTMrYGxqjeZveIskiyXpTbsvmmULUGxLtBoTaI8b/MHwYBq9xm1c8x351TLHCiOovSqJME12FrzxXsYKNoMoMVGaw1/yyEOB8sADMdcQqSfS8bDmDByWoaU3w3tjFfg+3k/luHVOQCCOFBQK0BNS9ZAuvmlqceKIbRdUTKhAsZAXd+663oWvzoE+CyVFW5dWUYAQ==",
+          "thinking": "The user is asking about the weather in Paris, France. I have a function called `get_weather` that can provide this information. Let me check the parameters:\n- location (required): \"Paris, France\"\n- unit (optional): not specified, so I won't include it\n\nI'll make the function call with the location parameter.",
           "type": "thinking"
         },
         {
-          "id": "toolu_0171nnCwXYeei7PvV55a2Pcz",
+          "id": "toolu_01E68DKHzrR5WvjNwRs2Fhu4",
           "input": {
             "location": "Paris, France"
           },
@@ -103,7 +103,7 @@
           "type": "tool_use"
         }
       ],
-      "id": "msg_01Fqa8cQEmGCFj3VQzZpiC3k",
+      "id": "msg_01Q8sNx4HJjTwkdyx2dxE4S2",
       "model": "claude-sonnet-4-5-20250929",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -117,7 +117,7 @@
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
         "input_tokens": 872,
-        "output_tokens": 162,
+        "output_tokens": 136,
         "service_tier": "standard"
       }
     },
@@ -132,7 +132,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-14T19:38:55Z"
+        "2025-11-02T17:05:03Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -141,7 +141,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-14T19:38:57Z"
+        "2025-11-02T17:05:05Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -150,7 +150,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-14T19:38:53Z"
+        "2025-11-02T17:05:01Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -159,13 +159,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-14T19:38:55Z"
+        "2025-11-02T17:05:03Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e98a223b4513f8-ORD"
+        "998536e14de99d42-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -174,10 +174,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:38:57 GMT"
+        "Sun, 02 Nov 2025 17:05:05 GMT"
       ],
       "request-id": [
-        "req_011CU7f3rZyaYxJppRkCBXTD"
+        "req_011CUjRgkvS7LhDiWiHTWRZu"
+      ],
+      "retry-after": [
+        "59"
       ],
       "server": [
         "cloudflare"
@@ -188,11 +191,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "4068"
+        "3464"
       ],
       "x-robots-tag": [
         "none"

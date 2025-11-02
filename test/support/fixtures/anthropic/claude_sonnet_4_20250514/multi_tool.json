@@ -90,16 +90,12 @@
     "body": {
       "content": [
         {
-          "signature": "EtIFCkYICBgCKkBPt2xoT/7emooS+zPHl/aPb40EqD05CkwaZRAh4FHTxOlnaSZMTdK2/zcYRuuj+tsdXsz7K71Duz+eur2s/T5DEgzlMgh3qxORTItEK4QaDEBpfQz1OsLtV5CoRCIwmnlbEsVZH8NtAKz+4Im+S9uMwexABrYZtlydsNsuCW7jobmoHb8QsHRC7/DFa9zJKrkEwWCqQSPrGVpnIeMtK1z67pLxGT+GeIEaIUAFYr+5hzcKt3jx8Z2m5SawHHJGm7A7ym/o7OZ9WY9LRQF9hXBGq2IXdVvyod7bpvPGZHQGC1AP9oO8Iyv8hOA8P3II27vtUXwVIYvZgpmm5PKSQ1pBA5Rtupehaw48IJk3hnYiz23K/2cXqpRjhn+6zoq0qZpggyeYgLAXTyhTx6+nGSJt3+7jNoWl71R75/f7UAweSBheAiWm8Z1Rh8d4L/XeD2vawCZgaQqthPJ2B5fnCyWv3PQytcNC686ftPh/LAYoKPvWesTxtGlwfZbnJdaweOB4hEzyCyu0/4fPyrYgWa2c459rnNcV28PK3ggqp7jtx9Zb60rre+emv800GjUEYb0oqRIMaJYfh0wVi2r/fkhU7qTHNkmV+4kX3Wkc2PeF/2WqnBfk7WctRQ9+hkWcyvpsoq/SrIk30HVjt1iqmWapLjfA2B5M7wb/biymovRzfUW6MWyDHrhJebxdoKU2iod4N0cdFWDMI93jV+kT7+ZhOuUDIwLZZBBQVlIpEge8bRqrZml9VnnlUqtV/atpEI9iY5iMc/VS06yDu/vtgkWQUH+tuqsk1K5vgHONU4nkKAjFPo3yKLss5eSRUN55TPw/bH16Nt67Cfl4G8jCxVp1EvDbzvoDYa73geDNHEkK0rN2dlAmLKt9SkDt8lBN+u4VVCnC+R8sIRBFojyEa9VtiAVTWZLFE+k7HUoCK9HhmQaTw8SLlE4g4YAYAQ==",
-          "thinking": "The user is asking about the weather in Paris, France. I have the get_weather function available that can provide current weather information for a location. \n\nLooking at the function parameters:\n- location (required): The user provided \"Paris, France\" which is a clear location\n- unit (optional): The user didn't specify whether they want celsius or fahrenheit, and since this is optional, I should not ask about it or make up a value. I'll let the function use its default.\n\nI have all the required parameters, so I can proceed with the function call.",
+          "signature": "EosFCkYICRgCKkAmC6fFzN7t5Sa6uaFmT63j+VeZsAXWQubYedoBI/K7T4YWWf/2d3hlshDi2b+lx3b0k8d5mox/fPBsblVzFMH+Egw+aK647r2t2Fty+DgaDEiYz36sIuHBJ4XowiIwZqFm+TsuPqWWjnh8eaUvxrBd2nVZy5nsY+qBHfjjqzjMmV7QubZc6tvsB9GsBNncKvIDImJBBwQy8+KbLCAP8+8sVYArSGOHwiCpjEBwwvNVTZk4jC1Gp9qrD4MbjRMBigPkRODRBqt0iS/OKNZoBhrI3jYpAdAjACqNeq50trtyb+E9bTafi0nRQMhclYWJIX555VnxC/SIJJjFgPEvpHXguJSVxqarxUPYX2f+542dxa+YnRDmopl88P9zmoyuZluW88altU0Wpj59nVNgozLUoNMjfYoPiERt1iqHU+ZHIVGiMEFk3HYgU0W2K26fBa3P+4nk6QsT83JPHT6qo3zg9hikWfWivAC0eCnrmMsJRptTI3DRhPqt+nkDs7oM3aGjj3omcgFzBjQgkWgZ2ReJDmZs/8V+yCg1HPnHL5v/melCt7x44QVunYR1JXB3gHtEzxTHDD/62LUHfLIkFJBVe8abIjjVU216IWefyIZzxxomkl4g7F4t4SUmAEiLB/OQeHa13+1qgPPqOGIrR+QB0Iilbwb+jOnm5dzqbm/1M5hCCL30NzIilb2aTFnNLB9cC0CuPBxRD8bw6RoiD3PsE1InuHH8Qyqn65vN8FPgSLgMpfMWjhi5vmCi9VEM1j6LcGRCtOKlwA4U4u1XLmVulhaGACf71fi3upseJvusDiVqqBEinfoonVykmFl/ELuOjhvKQH+zoaCeEO5dceKVugg8GAE=",
+          "thinking": "The user is asking for weather information for Paris, France. I have access to a get_weather function that can provide current weather information for a location. \n\nLooking at the function parameters:\n- location (required): \"Paris, France\" \n- unit (optional): can be \"celsius\" or \"fahrenheit\", but this is not required\n\nSince the user didn't specify a temperature unit, I'll use the function without the optional unit parameter. The location is clearly specified as \"Paris, France\".",
           "type": "thinking"
         },
         {
-          "text": "I'll check the current weather in Paris, France for you.",
-          "type": "text"
-        },
-        {
-          "id": "toolu_01Qfymkdx63GbTUbLzsikCh3",
+          "id": "toolu_01D8qtS9icg6UKQHfqNxPU3c",
           "input": {
             "location": "Paris, France"
           },
@@ -107,7 +103,7 @@
           "type": "tool_use"
         }
       ],
-      "id": "msg_01Spxd59VnA1FodcByAJwUvW",
+      "id": "msg_012gx4NPF81NiUiCy8UqW6xB",
       "model": "claude-sonnet-4-20250514",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -121,7 +117,7 @@
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
         "input_tokens": 689,
-        "output_tokens": 198,
+        "output_tokens": 169,
         "service_tier": "standard"
       }
     },
@@ -136,7 +132,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-14T19:39:14Z"
+        "2025-11-02T17:05:07Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -145,7 +141,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-14T19:39:17Z"
+        "2025-11-02T17:05:09Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -154,7 +150,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-14T19:39:13Z"
+        "2025-11-02T17:05:06Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -163,13 +159,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-14T19:39:14Z"
+        "2025-11-02T17:05:07Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e98aa078df116b-ORD"
+        "998536fc2808251b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -178,10 +174,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:39:17 GMT"
+        "Sun, 02 Nov 2025 17:05:09 GMT"
       ],
       "request-id": [
-        "req_011CU7f5LyJEZdZv7Xbj7ftC"
+        "req_011CUjRh5MhpLzUUDknTmu1J"
+      ],
+      "retry-after": [
+        "54"
       ],
       "server": [
         "cloudflare"
@@ -192,11 +191,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "4229"
+        "3705"
       ],
       "x-robots-tag": [
         "none"

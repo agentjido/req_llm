@@ -66,7 +66,7 @@
     "body": {
       "content": [
         {
-          "id": "toolu_01U7wM8anaPsxyug7JU3D2bB",
+          "id": "toolu_0148gsdSLvJLvj1KE6DtHhhu",
           "input": {
             "a": 2,
             "b": 3
@@ -75,7 +75,7 @@
           "type": "tool_use"
         }
       ],
-      "id": "msg_01XtcC9ZCeWnSgUkbjwpsxUA",
+      "id": "msg_012z5uhsYXihyiNfafHk6GdC",
       "model": "claude-sonnet-4-5-20250929",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -104,7 +104,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-14T19:38:44Z"
+        "2025-11-02T17:06:27Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -113,7 +113,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-14T19:38:44Z"
+        "2025-11-02T17:06:27Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -122,7 +122,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-14T19:38:42Z"
+        "2025-11-02T17:06:25Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -131,13 +131,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-14T19:38:44Z"
+        "2025-11-02T17:06:27Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e989e05c6b5d07-ORD"
+        "998538ed2eec876c-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -146,10 +146,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:38:44 GMT"
+        "Sun, 02 Nov 2025 17:06:27 GMT"
       ],
       "request-id": [
-        "req_011CU7f35eznvHeq915Gm7Zz"
+        "req_011CUjRnwJgu3PEd2pnSMe39"
+      ],
+      "retry-after": [
+        "35"
       ],
       "server": [
         "cloudflare"
@@ -160,11 +163,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "2051"
+        "1931"
       ],
       "x-robots-tag": [
         "none"

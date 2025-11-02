@@ -37,11 +37,11 @@
     "body": {
       "content": [
         {
-          "text": "Here's the beginning of an epic dragon adventure story:\n\nThe Scales of Destiny\n\nIn the misty mountains of Eldoria, where ancient peaks touched the clouds and wind whispered secrets of forgotten magic, a young girl named Aria stood at the edge of her village, gazing into the distant horizon. She had always been different from the other children—her eyes held a wildness, a longing for something beyond the simple life of mountain shepherds.\n\nOn her six",
+          "text": "Here's the beginning of an epic dragon adventure story:\n\nThe Scales of Destiny\n\nIn the misty mountains of Eldoria, where ancient peaks touched the clouds and forgotten magic still whispered through rocky valleys, a young woman named Aria stood at the edge of a precipice. Her emerald green cloak whipped around her body, and her hand rested on the hilt of a sword passed down through generations of her family.\n\nAria was not like other people",
           "type": "text"
         }
       ],
-      "id": "msg_014yiRJviTpnCQh92vAwFiXH",
+      "id": "msg_018VbrwnQbJZfhMBCSwpbqnR",
       "model": "claude-3-5-haiku-20241022",
       "role": "assistant",
       "stop_reason": "max_tokens",
@@ -70,7 +70,7 @@
         "100000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-14T19:38:46Z"
+        "2025-11-02T17:05:02Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "20000"
@@ -79,7 +79,7 @@
         "20000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-14T19:38:49Z"
+        "2025-11-02T17:05:05Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -88,7 +88,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-14T19:38:46Z"
+        "2025-11-02T17:05:02Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "120000"
@@ -97,13 +97,13 @@
         "120000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-14T19:38:46Z"
+        "2025-11-02T17:05:02Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e989f4d9b1870e-ORD"
+        "998536e32dbc6094-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -112,10 +112,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:38:48 GMT"
+        "Sun, 02 Nov 2025 17:05:04 GMT"
       ],
       "request-id": [
-        "req_011CU7f3KYv7SsHZ4UyaugUY"
+        "req_011CUjRgnEZyyGuTJD2TscJf"
+      ],
+      "retry-after": [
+        "60"
       ],
       "server": [
         "cloudflare"
@@ -126,11 +129,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "2870"
+        "2912"
       ],
       "x-robots-tag": [
         "none"

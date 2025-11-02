@@ -72,9 +72,9 @@
     "body": {
       "content": [
         {
-          "id": "toolu_01SybB8kQmS8299VaX6qy9NH",
+          "id": "toolu_016kFqe1ESCv9C17Sq8Ccf9o",
           "input": {
-            "age": 29,
+            "age": 28,
             "name": "Alex Chen",
             "occupation": "Software Engineer"
           },
@@ -82,7 +82,7 @@
           "type": "tool_use"
         }
       ],
-      "id": "msg_017V3uDMWdFUnmShZe4CzRQC",
+      "id": "msg_01H5fxGKNUizARCh8oVnE8mS",
       "model": "claude-sonnet-4-20250514",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -111,7 +111,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-14T19:39:12Z"
+        "2025-11-02T17:05:19Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -120,7 +120,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-14T19:39:13Z"
+        "2025-11-02T17:05:20Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -129,7 +129,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-14T19:39:11Z"
+        "2025-11-02T17:05:18Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -138,13 +138,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-14T19:39:12Z"
+        "2025-11-02T17:05:19Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e98a93abb3dadb-ORD"
+        "998537488c4272e8-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -153,10 +153,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:39:13 GMT"
+        "Sun, 02 Nov 2025 17:05:20 GMT"
       ],
       "request-id": [
-        "req_011CU7f5CDCMqiuz82p9TtPW"
+        "req_011CUjRhyaidbW1c3pVd2V2e"
+      ],
+      "retry-after": [
+        "41"
       ],
       "server": [
         "cloudflare"
@@ -167,11 +170,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "1974"
+        "2123"
       ],
       "x-robots-tag": [
         "none"

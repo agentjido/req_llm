@@ -90,12 +90,12 @@
     "body": {
       "content": [
         {
-          "signature": "EvMDCkYICBgCKkAjP6UT+aF0pPGqirn6vX+YoKCNcx2yjN3umKIHWJRpobzL0BIqsAzXaNGMbtZMFrl4NRD1YtdfnRzsz+QGRcWzEgxfeJKOILl4GPu67AYaDG90C2Kk5lMFjqmEFiIwwLdwEJaJd4M0VLTnCCXep3GTgFf2PXUhd3Rz0nDcASMhSO3toH/1ObwuHkdrOpW1KtoC4/cKVIVqIk79vd1cYqWwiRyL7g/RCV9SK21MkzFJDHV6Gs33NqG6Ie3AC1cepU8sxpKcS5JUa+QuyWGUKFe4RWWk3KYsdbxNSJ7YtZwqhQdb35HtKrJt77lKBuFZgWR4HwDbgPrFe6OlXOUfdJFN2o//kBctT5zyyBVu6GrOlSmbe9dM1YDmc0mfONpkuGAQlDIAINixPfH5K+HvMHCE2HSRTcgwQtO0In7HOpfZpjU9TzOTRZ2fFNPnrYgHQW5pZJDf6BaEuX+i2Fz7P/1egYuS/fZhxPQeV6r1RAqkgOK8+9C3ayihGdEE1q4TlHsro8ygb1WFbQdLVPOSDdCzKsSb3dbIjS2fbnbsth82DhiQHdgPIa/iYGJ5bI8JkMgXlRPvJ4AzouMWDfe6VrSu9ErDfXB1B8CiiT35hSQFDM0ODKr+2Hah3PxPejG8/R718G7OnFOCyGwZDBgB",
-          "thinking": "The user is asking for the weather in Paris, France. I have the `get_weather` function available which takes a location parameter and an optional unit parameter. I should call this function with \"Paris, France\" as the location. The unit parameter is optional, so I don't need to ask the user or specify it - I can use the default.",
+          "signature": "EogFCkYICRgCKkD2OgaS/AzlPo6lfXP/LXZra4W46So0SlIgiKYlqSAQpfl0ivwEi3IjCTGJR1Vr+pKYnL0rzblxjlyq9khzqqPxEgxFHeinpRGMp0OqoegaDNDHAlsTHcibQus26iIw6bMPZZo7/D+jp3m3pJsulYxucGJVstjaKtDbBCuz1XlJDomuykVC2BxrVnW0vqEoKu8DcyDEHQcCIxF0grzepF16zLmwLN/ADKckLHhUGMeo1kh18GKZfRGpo7JlXI36A949mmPGKmVJuKdLYkz2aIMRiJFyFN6mrYgNLfKDpOVKA/b9PfVGXDGN1RkRl7Kh/GthloxGyTdfMZVWeCQ3Hmj70PXZrB9U/0jJidGdrdaZmOCjtVUUrZb/NUApqjCfYunmpQ50ULjloJZaTzGjLuaTwomDiWye87QgagfpyOGox3ae2l6NFVsscbIP/E28p0twhPRS4YxrT07fzLadspqdYWits9yWJAGSCwF4LvsdN+xlu9cJTuTDjxnXRbUM2dtnkIXtCVrCSItebDuKFzYmzM54d1ll9nvD/bbrZW/EwIO+7rQQYBVusBBHtGG6Gep/0FCSv9D8vxbuIrZomhVKn6vGLHeUWYhWSNfWZHEBkKS18L3C+lK7xglB31XNaK2m/7feigm8Cw2EQpKTJfh+ijuJkzgKS4pOpdmeaAVqIQ6oVsVT0PETiQo0X6NICJ0+eelnAYzRpQzjcFF7AC48xp2gDtmWxYcgiDXUtLwRN+x4JdGyfj/gEqVs5XIglOp0Q8NMT5uUeX0dUDi+V+BEKsiyv+nl/lvETq0eJJzeZ0SjES9BuyKks6z4+K6uQmDkGl/Its8nE9Co+gcPfxBFGAE=",
+          "thinking": "The user is asking about the weather in Paris, France. I have the `get_weather` function available that can help with this. I need to provide the location as a parameter. The user specified \"Paris, France\", so I'll use that as the location. The unit parameter is optional - the user didn't specify whether they want Celsius or Fahrenheit, so I won't specify it and will let the function use its default.\n\nLet me call the get_weather function with location set to \"Paris, France\".",
           "type": "thinking"
         },
         {
-          "id": "toolu_01EF9nzdx7obF3nmSFWsfbca",
+          "id": "toolu_01Xi2HC3kvfiUT2B12LEfzbf",
           "input": {
             "location": "Paris, France"
           },
@@ -103,7 +103,7 @@
           "type": "tool_use"
         }
       ],
-      "id": "msg_01T9PzCahtxe5W8ARWX65Q9p",
+      "id": "msg_01B8SJVAVsB6u3wijjvridvn",
       "model": "claude-haiku-4-5-20251001",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -117,7 +117,7 @@
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
         "input_tokens": 872,
-        "output_tokens": 137,
+        "output_tokens": 173,
         "service_tier": "standard"
       }
     },
@@ -132,7 +132,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-15T17:28:31Z"
+        "2025-11-02T17:05:43Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -141,7 +141,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-15T17:28:32Z"
+        "2025-11-02T17:05:44Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -150,7 +150,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-15T17:28:30Z"
+        "2025-11-02T17:05:43Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -159,13 +159,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-15T17:28:31Z"
+        "2025-11-02T17:05:43Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98f108865f34f60c-ORD"
+        "998537e31b9bf92b-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -174,10 +174,13 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 17:28:32 GMT"
+        "Sun, 02 Nov 2025 17:05:44 GMT"
       ],
       "request-id": [
-        "req_011CU9Nv8KC6hfbEWgvCepbK"
+        "req_011CUjRjoK92u8jTKYQb6TKX"
+      ],
+      "retry-after": [
+        "18"
       ],
       "server": [
         "cloudflare"
@@ -188,11 +191,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "1557"
+        "1769"
       ],
       "x-robots-tag": [
         "none"

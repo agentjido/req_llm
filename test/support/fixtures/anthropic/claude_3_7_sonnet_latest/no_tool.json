@@ -61,16 +61,16 @@
     "body": {
       "content": [
         {
-          "signature": "ErUBCkYICRgCIkB2cDwsK1+FgCw9g3brniGxwZr8qSlgf0OhJ8dIFie4bTxsPPTNrvDZtN1h2TUqxhmjRvg5PKcjn+nFnsEQ1zzCEgxvh1Jrr/BT0XGXelcaDHegZujqT863rxWMbSIwLpQJMX1bFCuHYFJlHUAyui72zh/7CpSWP/j3HYex2uSBGBaYSk0jDZdOh1KBTNOdKh3RIdXwNW8siIorpYxeMpmazfseIThIwrjul8D6ahgC",
-          "thinking": "The user has requested a joke about cats. Let me analyze the request:\n\n1. No tools or functions are required to answer this request.\n2. I don't need weather information or any other external data.\n3. I can respond with a cat joke directly from my knowledge.\n\nI'll share a light-hearted cat joke with the user.",
+          "signature": "ErUBCkYICRgCIkCtDoEPs6SymylJUigJg6CCmE1IiAFp2Dktf6vb6+dQ3ztGfD/0SbYwQ00HO4bVnMvRSL6R9IfGmYdZO8TPpeQQEgzehVJndV2MNRVGzqYaDFYWea6bgc/r977ddiIwOKE+Wj1sqFwIxOzBSaOnnQVI1VFT3xn/PNcAlrFw3kDbwaJFkjNxTieRP5RifQsAKh2Ri3Y/QA3mN+cynmlx2Dr2fHSYE0smhRzeKArWKBgC",
+          "thinking": "The user is asking for a joke about cats. This is a simple request that doesn't require any of the available tools. The only tool I have access to is `get_weather`, which is used to get weather information for a location. A joke about cats doesn't involve weather information, so I don't need to use any tools for this request.",
           "type": "thinking"
         },
         {
-          "text": "I'd be happy to tell you a joke about cats!\n\nWhy don't cats like online shopping?\nThey prefer a cat-alogue!\n\nWould you like to hear another cat joke?",
+          "text": "I'd be happy to tell you a joke about cats!\n\nWhy don't cats play poker in the jungle?\nToo many cheetahs!\n\nWould you like to hear another cat joke? Or perhaps I can help you with something else, like checking the weather for a location?",
           "type": "text"
         }
       ],
-      "id": "msg_014NktqhLamjcsq8kAwft9JX",
+      "id": "msg_01BETzqUB9PTbDhqmykBR6Wt",
       "model": "claude-3-7-sonnet-20250219",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -84,7 +84,7 @@
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
         "input_tokens": 417,
-        "output_tokens": 126,
+        "output_tokens": 143,
         "service_tier": "standard"
       }
     },
@@ -99,7 +99,7 @@
         "40000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-27T22:47:45Z"
+        "2025-11-02T17:05:00Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "16000"
@@ -108,7 +108,7 @@
         "16000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-27T22:47:47Z"
+        "2025-11-02T17:05:03Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -117,7 +117,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-27T22:47:44Z"
+        "2025-11-02T17:04:59Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "56000"
@@ -126,13 +126,13 @@
         "56000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-27T22:47:45Z"
+        "2025-11-02T17:05:00Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9955bca8eca5aca8-ORD"
+        "998536d43f59d2ec-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -141,10 +141,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 22:47:47 GMT"
+        "Sun, 02 Nov 2025 17:05:02 GMT"
       ],
       "request-id": [
-        "req_011CUYWy4X6B6hWManNgd6Aw"
+        "req_011CUjRgcA611UzGDRcSqFEV"
+      ],
+      "retry-after": [
+        "1"
       ],
       "server": [
         "cloudflare"
@@ -155,11 +158,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "2564"
+        "3088"
       ],
       "x-robots-tag": [
         "none"

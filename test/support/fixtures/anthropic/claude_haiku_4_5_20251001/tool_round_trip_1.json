@@ -66,7 +66,7 @@
     "body": {
       "content": [
         {
-          "id": "toolu_01BfcYJ9NbfLrZrVTriUfKRq",
+          "id": "toolu_01VGARzMHnnSHxwnXxdfmxzw",
           "input": {
             "a": 2,
             "b": 3
@@ -75,7 +75,7 @@
           "type": "tool_use"
         }
       ],
-      "id": "msg_01QGrH3rJuo9UUKng5YCPiSh",
+      "id": "msg_01RWPZE34EQCawaU5nWZUnkS",
       "model": "claude-haiku-4-5-20251001",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -104,16 +104,16 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-15T17:29:16Z"
+        "2025-11-02T17:05:36Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-remaining": [
-        "90000"
+        "89000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-15T17:29:16Z"
+        "2025-11-02T17:05:37Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -122,22 +122,22 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-15T17:29:16Z"
+        "2025-11-02T17:05:35Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
       ],
       "anthropic-ratelimit-tokens-remaining": [
-        "540000"
+        "539000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-15T17:29:16Z"
+        "2025-11-02T17:05:36Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98f109a38bab381e-ORD"
+        "998537b4ab82132d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -146,10 +146,13 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 17:29:16 GMT"
+        "Sun, 02 Nov 2025 17:05:36 GMT"
       ],
       "request-id": [
-        "req_011CU9NyVMoopUCvjPtNLYby"
+        "req_011CUjRjFaAnNCAj1v1jNRpA"
+      ],
+      "retry-after": [
+        "24"
       ],
       "server": [
         "cloudflare"
@@ -160,11 +163,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "671"
+        "1126"
       ],
       "x-robots-tag": [
         "none"

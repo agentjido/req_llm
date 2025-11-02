@@ -43,16 +43,16 @@
     "body": {
       "content": [
         {
-          "signature": "Er8CCkYICBgCKkCqMEPRxFmCkdcG3hLPUjdAqT+7moVtJCcJ7NlmNLbybe6PL3m6M2xdvRvITaROcZ7iIYkEU3vT/t4uuOYA8eFmEgwDSl6cMDZDmaHyuc8aDB5kesmTSEhPG6I6FyIwWjzNrs6NgxKSd7uKKuXI2VR0FbvW+u79/NLuGG67w+RUT6aoN3kXGiqqwgexDcLwKqYB9c5OMUaSvdPzYMANpM5FNhH2L5+A+pYh/Ri3Jjhqjn9AVIAiGlag20n+oYRXPoAr5jVEKJf8gv49cTHi+HM3g2HCybVC9DCdUSXEI/LpN5m0G9/VoR+HIS4ouohk9UA1DlfL3b1U96D+AhVd299pFINEnHzIy5t0jBPImJsp+nlIn3IlqvFtZgaw/q/RrTgTSRujno7EBwQEuZwlcmxqMJUi6rtt8hgB",
-          "thinking": "The user has sent a simple greeting \"Hello world!\" - this is a classic first message/program output. I should respond in a friendly and welcoming way.",
+          "signature": "EuACCkYICRgCKkCq2zhMVdgcfIHbtH3VOf4lCISOv58/F8E0WEOSo3Ga5iNzHkq3nXJgXHLt/T1GBfqYuIspAdNtsW8ZhhgnSBzoEgxAgoTfFLN7UUjVLq0aDIc96p+nWNawTcYEliIwmBPt35iM/XaW2Gz4OX6TmDepvxRdgDSQNuQDdw5gjYgc2I54flB11lnzLOdxrHI5KscBfX5R2DnkMxm9QDQRWf906SkWx/HMEsCpYl7DxMT+YeeO6OOqOq5TQ12N7ayNkMtLHQEqVgejXHd/dYhXWuy5fPP/J+qrCxH07uVIrTIzl7uZyX6eIeIqlofG3hpyZCTsLIYZq2UwSoQfA/oR0rYVFCNyofiw4+eEhQCEtlqMtZ7EUBE7kvugmY7ocih6fIYdBqGnV9otPxp5HDO+3u/hmKOSV4rJB8T7GpksHYzotAFAA8wvbRURpQPRWx8bNBXYhKr6klMLnhgB",
+          "thinking": "The user has sent a simple greeting \"Hello world!\" - this is a common first message or test message in programming and communication. I should respond in a friendly and welcoming way.",
           "type": "thinking"
         },
         {
-          "text": "Hello! 👋 How can I help you today?",
+          "text": "Hello! How can I help you today?",
           "type": "text"
         }
       ],
-      "id": "msg_01W5NPpVx1sHh3D9wz8YaNCW",
+      "id": "msg_014XyhUTvNWpZYVvVm63BXRL",
       "model": "claude-sonnet-4-5-20250929",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -81,7 +81,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-14T19:38:52Z"
+        "2025-11-02T17:06:24Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -90,7 +90,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-14T19:38:53Z"
+        "2025-11-02T17:06:25Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -99,7 +99,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-14T19:38:50Z"
+        "2025-11-02T17:06:22Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -108,13 +108,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-14T19:38:52Z"
+        "2025-11-02T17:06:24Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e98a0f6aed13f8-ORD"
+        "998538d8ac4e9d42-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -123,10 +123,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:38:53 GMT"
+        "Sun, 02 Nov 2025 17:06:25 GMT"
       ],
       "request-id": [
-        "req_011CU7f3dhaBdHTbAe5ugyLZ"
+        "req_011CUjRnhJpPA7oNzW45uq7F"
+      ],
+      "retry-after": [
+        "38"
       ],
       "server": [
         "cloudflare"
@@ -137,11 +140,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "2921"
+        "3195"
       ],
       "x-robots-tag": [
         "none"

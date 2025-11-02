@@ -66,7 +66,7 @@
     "body": {
       "content": [
         {
-          "id": "toolu_01LSXrc8Zw85Kzb9onHBPkaH",
+          "id": "toolu_01QbTsztMsyPofaS7Kqcmcbj",
           "input": {
             "a": 2,
             "b": 3
@@ -75,7 +75,7 @@
           "type": "tool_use"
         }
       ],
-      "id": "msg_01BUD6QCwCi4oNApfqgdWyL4",
+      "id": "msg_01833CEa8Pd2e1K9XTeXo1nr",
       "model": "claude-opus-4-1-20250805",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -104,7 +104,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-27T22:46:03Z"
+        "2025-11-02T17:04:51Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -113,7 +113,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-27T22:46:04Z"
+        "2025-11-02T17:04:52Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -122,7 +122,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-27T22:46:01Z"
+        "2025-11-02T17:04:50Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -131,13 +131,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-27T22:46:03Z"
+        "2025-11-02T17:04:51Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9955ba1f9f96eaf1-ORD"
+        "998536982f926183-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -146,10 +146,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 22:46:04 GMT"
+        "Sun, 02 Nov 2025 17:04:52 GMT"
       ],
       "request-id": [
-        "req_011CUYWqQQT2X62i3xgA9REw"
+        "req_011CUjRftvNKUFcq84m84qiX"
+      ],
+      "retry-after": [
+        "9"
       ],
       "server": [
         "cloudflare"
@@ -160,11 +163,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "3678"
+        "2154"
       ],
       "x-robots-tag": [
         "none"

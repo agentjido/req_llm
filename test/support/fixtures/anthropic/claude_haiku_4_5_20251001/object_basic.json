@@ -72,17 +72,17 @@
     "body": {
       "content": [
         {
-          "id": "toolu_01RuXtyVN6rfpx4bACmgfdne",
+          "id": "toolu_01W1pLhRpArVm37dAqaaFSeu",
           "input": {
             "age": 32,
-            "name": "James Mitchell",
+            "name": "Alex Johnson",
             "occupation": "Software Engineer"
           },
           "name": "structured_output",
           "type": "tool_use"
         }
       ],
-      "id": "msg_01FidQDnbLBCzjE2rJh42hpv",
+      "id": "msg_01NwevvTz72JctMsAJCteSV2",
       "model": "claude-haiku-4-5-20251001",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -111,7 +111,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-15T17:29:15Z"
+        "2025-11-02T17:05:39Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -120,7 +120,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-15T17:29:16Z"
+        "2025-11-02T17:05:39Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -129,7 +129,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-15T17:29:15Z"
+        "2025-11-02T17:05:38Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -138,13 +138,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-15T17:29:15Z"
+        "2025-11-02T17:05:39Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98f1099bc965381e-ORD"
+        "998537ca0dae132d-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -153,10 +153,13 @@
         "application/json"
       ],
       "date": [
-        "Wed, 15 Oct 2025 17:29:16 GMT"
+        "Sun, 02 Nov 2025 17:05:39 GMT"
       ],
       "request-id": [
-        "req_011CU9NyQ3pNyWHExUcFpaKW"
+        "req_011CUjRjW82oDihXxBDFWv9U"
+      ],
+      "retry-after": [
+        "21"
       ],
       "server": [
         "cloudflare"
@@ -167,11 +170,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "1183"
+        "778"
       ],
       "x-robots-tag": [
         "none"

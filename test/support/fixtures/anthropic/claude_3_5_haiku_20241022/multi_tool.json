@@ -87,11 +87,11 @@
     "body": {
       "content": [
         {
-          "text": "I'll check the current weather in Paris for you right now.",
+          "text": "Let me check the current weather in Paris for you.",
           "type": "text"
         },
         {
-          "id": "toolu_01JoZwsFKrM9YLiqhGq3EcAf",
+          "id": "toolu_01N1b689EJF2afqDjRzt2W1f",
           "input": {
             "location": "Paris, France",
             "unit": "celsius"
@@ -100,7 +100,7 @@
           "type": "tool_use"
         }
       ],
-      "id": "msg_0118fyL6PcQC1BpkMp61ZVga",
+      "id": "msg_01A1tuPzoueXGRxwQYeMqN9u",
       "model": "claude-3-5-haiku-20241022",
       "role": "assistant",
       "stop_reason": "tool_use",
@@ -114,7 +114,7 @@
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
         "input_tokens": 463,
-        "output_tokens": 86,
+        "output_tokens": 84,
         "service_tier": "standard"
       }
     },
@@ -129,7 +129,7 @@
         "100000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-14T19:38:51Z"
+        "2025-11-02T17:04:51Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "20000"
@@ -138,7 +138,7 @@
         "20000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-14T19:38:53Z"
+        "2025-11-02T17:04:52Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -147,7 +147,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-14T19:38:51Z"
+        "2025-11-02T17:04:51Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "120000"
@@ -156,13 +156,13 @@
         "120000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-14T19:38:51Z"
+        "2025-11-02T17:04:51Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "98e98a1639c9870e-ORD"
+        "9985369f18506094-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -171,10 +171,13 @@
         "application/json"
       ],
       "date": [
-        "Tue, 14 Oct 2025 19:38:53 GMT"
+        "Sun, 02 Nov 2025 17:04:52 GMT"
       ],
       "request-id": [
-        "req_011CU7f3iNcCgMQ44ZEofEJ1"
+        "req_011CUjRfyirD6oJUSZpBcb42"
+      ],
+      "retry-after": [
+        "9"
       ],
       "server": [
         "cloudflare"
@@ -185,11 +188,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "1864"
+        "1478"
       ],
       "x-robots-tag": [
         "none"

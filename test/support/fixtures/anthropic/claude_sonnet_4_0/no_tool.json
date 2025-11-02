@@ -61,16 +61,16 @@
     "body": {
       "content": [
         {
-          "signature": "EpMDCkYICRgCKkCjTerrbg94/sKYGFuBDMBoF/SsF/cU7rBYzZWsOjNwwbjtUSGUllrc6PmN/gBvtfGma1v9hpQcTU0qCL1Qj82GEgwADVBE08cPIOcJs5EaDD1kJJvZiygPO+wtuCIw3Y8Z9YJVcMYe35xJrFDRZFCzaZHmc8U2HBvyJcAADkYIahHAP9KN33au5N1OVo6PKvoBmK+EG6ClvQ6SCPvo9SonskAcKPw+DQx5Ir+LLR9S3Vy8wda9Ir81he/u3IGwxc+P77gxpV2oyZwBHcrrksf0h29Xg6zkb9UGJuyuYnU2zdbHMrANcvS6sWBqIp2pxA8j5jKgo3zpES4se0Ey0Ggwj8T7SztrD8caCeruNIlUd5Y885brHsTRcz1w19QyuMZIjo0CubL5OVlC2x8l/w01yAl0+oiNUOXJSV9Zhi6yIle87DsUysxdnN0PtIHIlya6feisw1KMNy2zfVD35bzSXEqehG6A264fVTzUt1kgUKTz8gPFLFD7D4BBe79exXMM4UVcqdgGXQypIBgB",
-          "thinking": "The user is asking for a joke about cats. This is a simple request that doesn't require any of the available tools (I only have a weather function available). I should just respond with a cat joke directly without using any functions.",
+          "signature": "EvUCCkYICRgCKkBD81Ho6dpagOrurBFqyCpWfO2pFmeGZQBXpcC9g39+SONhe6TRdvlxD0OfKKVZQ+2yvOxNA+hAYw9/AY7FmQ/+EgyprK4jFGOaCezrbBQaDLNr44w03Z6uS4GKkCIwvolGi6qAuvzX66v9Mjk5zqQvpOuEsnD1oKH/EAFi8kljQpmEkscDUiXI0EGsplIUKtwBEjBEBIcT/Rbh8ZYWxEzkVlDnBEjbYK5iYak1MDqC5MApnicqOcApM2fcCwrZ/paLB5VLPRMLguk2nUTEXKVlxAsz28BvgAhgH+OVr086+P1DGsfbAR7H7PsWGl7VB5fCQdLNMg1LWt8knyytkUZAPzHXwbjUvn8i/VyiP4LjiS39CK1OeV8U48dxiP48Tv4h46ODZipIC/htiqjdXGySLE1MB87zJ1/1hDOkO0OlR4pWgrsN4XV1WXEX45qK++UwtQKdmFUtKQVrk+zdywNANuZNn9gw2UU0OEXSiRgB",
+          "thinking": "The user is asking for a joke about cats. This doesn't require any tools or function calls - it's just a request for a joke. I can provide a cat joke directly without using any of the available functions.",
           "type": "thinking"
         },
         {
-          "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs! 🐱\n\n(And here's a bonus one: What do you call a pile of cats? A meowtain! 🏔️)",
+          "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs! 🐱\n\nWould you like to hear another one, or is there anything else I can help you with?",
           "type": "text"
         }
       ],
-      "id": "msg_01Q4HjYecWf4cy6P1zqdbXC6",
+      "id": "msg_01AuZWTWLdURvqUzVrJbNqJc",
       "model": "claude-sonnet-4-20250514",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -84,7 +84,7 @@
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
         "input_tokens": 565,
-        "output_tokens": 120,
+        "output_tokens": 107,
         "service_tier": "standard"
       }
     },
@@ -99,7 +99,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-27T22:48:20Z"
+        "2025-11-02T17:05:15Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -108,7 +108,7 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-27T22:48:23Z"
+        "2025-11-02T17:05:17Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
@@ -117,7 +117,7 @@
         "999"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-27T22:48:19Z"
+        "2025-11-02T17:05:14Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -126,13 +126,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-27T22:48:20Z"
+        "2025-11-02T17:05:15Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9955bd7faf47e80d-ORD"
+        "9985372fba8ab947-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -141,10 +141,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 22:48:23 GMT"
+        "Sun, 02 Nov 2025 17:05:17 GMT"
       ],
       "request-id": [
-        "req_011CUYX1bq4ffqcw14i1pdvA"
+        "req_011CUjRhgaX5Qw5C2RiY1JnK"
+      ],
+      "retry-after": [
+        "48"
       ],
       "server": [
         "cloudflare"
@@ -155,11 +158,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "3867"
+        "3383"
       ],
       "x-robots-tag": [
         "none"

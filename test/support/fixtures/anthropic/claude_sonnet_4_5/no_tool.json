@@ -61,16 +61,16 @@
     "body": {
       "content": [
         {
-          "signature": "EpMDCkYICRgCKkBZj/tuynAjr/eC/98l+sTXzmRm/XDPTyW9i43hR3HiYYe6NwlLCamp4AOEwEnWo5CyC5Obwn9CCDnbleTJ03g9EgynnzH2Kn9CqnsW3xAaDNRCPtd4sg/3cCM8xiIwisKNbr8SN29ipW+h1viZYdXADE3adw4EwwXtlUsAUy4zkZ/a0E30vVgUaGkxk9LZKvoB1Zip4XXzBQExMy24WWyOaxAv0VFQ5TZ+w1tpcIlnhmfJ42DnpHEKnyxhtKySBhUQd8emuJGVawz8Q90mCKnVmEMo2IxoRxtLGh077+PFXWmor0BYhPE7soW9AxRDFysU9oqdj2WFh3SINuQVtWV++CAMP8CQRTaTN2TXd+C3OqjoSG4IPIsa5A7CpekkGFv3E0wQj72zMrYhNr+SF4Qpcm+4BHKuF4o7OUzwbCNOibyS3CGA8B5Y0CjKfazyfCYOCnPlDOjKzyydj7Rm5889V+/ioJwbpsGGKjm2LCdwh/49HkLXyXVRPldvrhd/8h7xXhrn6/4KULkVyRgB",
-          "thinking": "The user is asking for a joke about cats. This is a simple request that doesn't require any function calls - they just want me to tell them a joke. I don't need to use the weather function for this.\n\nLet me think of a good cat joke...",
+          "signature": "EuICCkYICRgCKkAiqE3piIrcmorYlILN1+gszpKGdXrl1YBWl1iO9ObwR/tKLEmGkE/glpfuUG5uGUg1uXFum48e6tc++YQzEaEoEgxcOsYb0ZCxps2ekbMaDIQlOq4UYsqpSEV0+SIwFnQ7z99d1E6v0bOSeBzTqyocDNrt6o54XPTSbGUl6YiUJpnKLtEXmkZu2PjyzrHZKskBhXUsxBVVQanWw/afD70zLN+FQGefvqkDB51t0d5+7+TB1UsIT3JA4BUUqtrEOH/ekW+8qtkhTllCHMTQGt7u+2EIQhMagRYIPidQTP0F/xJ1wMbPnjeLLh4lZLyJiOcO3uVu9yyHOZL1+VpnplqaMHiMFetAkiGLkKYcrPC9WZO0hcfa3sPCwS4/CHsDIYz7KN6vUM0lyOmX85waYAp7nuGPqCp1nn/2UIy+GLvkR1wVBXqahiLWKJH8t/OyBWaq0Uh0tdqRBJdZGAE=",
+          "thinking": "The user is asking for a joke about cats. This is a simple request that doesn't require any function calls - they just want to hear a cat joke. I should just tell them a funny cat joke.",
           "type": "thinking"
         },
         {
-          "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs! 🐱\n\nWant to hear another one, or can I help you with something else?",
+          "text": "Here's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs! 🐱😄",
           "type": "text"
         }
       ],
-      "id": "msg_012VuYv1S1Qz3xr16HBDkfJf",
+      "id": "msg_014M1Nr6f2eXttKAhVDWY9ZZ",
       "model": "claude-sonnet-4-5-20250929",
       "role": "assistant",
       "stop_reason": "end_turn",
@@ -84,7 +84,7 @@
         "cache_creation_input_tokens": 0,
         "cache_read_input_tokens": 0,
         "input_tokens": 748,
-        "output_tokens": 114,
+        "output_tokens": 87,
         "service_tier": "standard"
       }
     },
@@ -99,7 +99,7 @@
         "450000"
       ],
       "anthropic-ratelimit-input-tokens-reset": [
-        "2025-10-27T22:47:40Z"
+        "2025-11-02T17:04:55Z"
       ],
       "anthropic-ratelimit-output-tokens-limit": [
         "90000"
@@ -108,16 +108,16 @@
         "90000"
       ],
       "anthropic-ratelimit-output-tokens-reset": [
-        "2025-10-27T22:47:42Z"
+        "2025-11-02T17:04:56Z"
       ],
       "anthropic-ratelimit-requests-limit": [
         "1000"
       ],
       "anthropic-ratelimit-requests-remaining": [
-        "999"
+        "998"
       ],
       "anthropic-ratelimit-requests-reset": [
-        "2025-10-27T22:47:38Z"
+        "2025-11-02T17:04:53Z"
       ],
       "anthropic-ratelimit-tokens-limit": [
         "540000"
@@ -126,13 +126,13 @@
         "540000"
       ],
       "anthropic-ratelimit-tokens-reset": [
-        "2025-10-27T22:47:40Z"
+        "2025-11-02T17:04:55Z"
       ],
       "cf-cache-status": [
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9955bc840ca1e812-ORD"
+        "998536ad7f55e800-ORD"
       ],
       "connection": [
         "keep-alive"
@@ -141,10 +141,13 @@
         "application/json"
       ],
       "date": [
-        "Mon, 27 Oct 2025 22:47:42 GMT"
+        "Sun, 02 Nov 2025 17:04:56 GMT"
       ],
       "request-id": [
-        "req_011CUYWxdKXDsZuEj656jRru"
+        "req_011CUjRg9WxQMfNVRq9gKCk5"
+      ],
+      "retry-after": [
+        "5"
       ],
       "server": [
         "cloudflare"
@@ -155,11 +158,8 @@
       "transfer-encoding": [
         "chunked"
       ],
-      "via": [
-        "1.1 google"
-      ],
       "x-envoy-upstream-service-time": [
-        "3232"
+        "2825"
       ],
       "x-robots-tag": [
         "none"
