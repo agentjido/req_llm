@@ -35,11 +35,16 @@ defmodule ReqLLM.Catalog do
 
   Reads configuration from `Application.get_env(:req_llm, :catalog, [])` and calls `load/1`.
 
+  When `:catalog_enabled?` is false, bypasses filtering and returns all models.
+
   Returns `{:ok, catalog}` or `{:error, reason}`.
   """
   @spec load() :: {:ok, map()} | {:error, term()}
   def load do
     config = Application.get_env(:req_llm, :catalog, [])
+    enabled? = Application.get_env(:req_llm, :catalog_enabled?, false)
+
+    config = if enabled?, do: config, else: Keyword.put(config, :allow, %{})
     load(config)
   end
 
@@ -167,6 +172,9 @@ defmodule ReqLLM.Catalog do
         nil ->
           nil
 
+        v when v in [true, :all, "*"] ->
+          {provider_id, provider}
+
         allowed_models when is_list(allowed_models) ->
           allowed_models = Enum.map(allowed_models, &to_string/1)
 
@@ -174,7 +182,7 @@ defmodule ReqLLM.Catalog do
             case provider["models"] do
               models when is_map(models) ->
                 models
-                |> Enum.filter(fn {model_id, _model} -> model_id in allowed_models end)
+                |> Enum.filter(fn {model_id, _model} -> match_any?(model_id, allowed_models) end)
                 |> Map.new()
 
               _ ->
@@ -189,6 +197,26 @@ defmodule ReqLLM.Catalog do
     end)
     |> Enum.reject(&is_nil/1)
     |> Map.new()
+  end
+
+  defp match_any?(model_id, patterns) do
+    Enum.any?(patterns, fn pattern ->
+      if String.contains?(pattern, ["*", "?"]) do
+        glob_to_regex(pattern) |> Regex.match?(model_id)
+      else
+        pattern == model_id
+      end
+    end)
+  end
+
+  defp glob_to_regex(glob) do
+    regex_str =
+      glob
+      |> Regex.escape()
+      |> String.replace("\\*", ".*")
+      |> String.replace("\\?", ".")
+
+    Regex.compile!("^#{regex_str}$")
   end
 
   defp apply_overrides(catalog, []), do: catalog
