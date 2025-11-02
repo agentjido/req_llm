@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo5ODMwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiXG5cbkknbGwgdXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzIGZvciB5b3UuXG4iLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF8tODI1MzAyODQyMTg2MzM5NjUxNyIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsInJvbGUiOiJ0b29sIn1dLCJtb2RlbCI6ImdsbS00LjUtZmxhc2giLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjo5ODMwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiXG5JJ2xsIHVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMyBmb3IgeW91LlxuIiwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6ImNhbGxfLTgxOTk3MzU3ODA0MDQ2MDI0NDgiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJyb2xlIjoidG9vbCJ9XSwibW9kZWwiOiJnbG0tNC41LWZsYXNoIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
       "max_tokens": 9830,
@@ -11,7 +11,7 @@
           "role": "user"
         },
         {
-          "content": "\n\nI'll use the add tool to compute 2 + 3 for you.\n",
+          "content": "\nI'll use the add tool to compute 2 + 3 for you.\n",
           "role": "assistant",
           "tool_calls": [
             {
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_-8253028421863396517",
+              "id": "call_-8199735780404602448",
               "type": "function"
             }
           ]
@@ -62,10 +62,10 @@
           }
         }
       ],
-      "created": 1760463356,
-      "id": "20251015013554fa9ed5052cde4021",
+      "created": 1762104209,
+      "id": "202511030123274c995a9cc9564898",
       "model": "glm-4.5-flash",
-      "request_id": "20251015013554fa9ed5052cde4021",
+      "request_id": "202511030123274c995a9cc9564898",
       "usage": {
         "completion_tokens": 37,
         "prompt_tokens": 78,
@@ -83,13 +83,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 14 Oct 2025 17:35:56 GMT"
+        "Sun, 02 Nov 2025 17:23:29 GMT"
       ],
       "server": [
         "ZenZGA/2.4"
       ],
       "set-cookie": [
-        "acw_tc=ac11000117604633548645152e25b114b8e043f43ac4c62b182a9d727aa84b;path=/;HttpOnly;Max-Age=1800"
+        "acw_tc=ac11000117621042078456784e03a8972f6fb2a8f53b2db035d0a0c101608c;path=/;HttpOnly;Max-Age=1800"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains"
@@ -107,7 +107,7 @@
         "Access-Control-Request-Headers"
       ],
       "x-log-id": [
-        "20251015013554fa9ed5052cde4021"
+        "202511030123274c995a9cc9564898"
       ]
     },
     "status": 200

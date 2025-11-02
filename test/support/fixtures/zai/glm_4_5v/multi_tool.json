@@ -94,7 +94,8 @@
           "finish_reason": "tool_calls",
           "index": 0,
           "message": {
-            "content": "I'll help you find the current weather in Paris, France. Let me check that for you.\n",
+            "content": "\nI'll help you find out what the weather is like in Paris, France.\n",
+            "reasoning_content": "The user is asking about the weather in Paris, France. I should use the `get_weather` tool to retrieve this information. The `location` parameter should be set to \"Paris, France\".",
             "role": "assistant",
             "tool_calls": [
               {
@@ -102,7 +103,7 @@
                   "arguments": "{\"location\": \"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "call_-8253026497717704092",
+                "id": "call_-8199700492952115583",
                 "index": 0,
                 "type": "function"
               }
@@ -110,17 +111,17 @@
           }
         }
       ],
-      "created": 1760461683,
-      "id": "20251015010802f255aae92c784623",
+      "created": 1762103994,
+      "id": "202511030119521febb868fb8f4f1e",
       "model": "glm-4.5v",
-      "request_id": "20251015010802f255aae92c784623",
+      "request_id": "202511030119521febb868fb8f4f1e",
       "usage": {
-        "completion_tokens": 38,
+        "completion_tokens": 74,
         "prompt_tokens": 293,
         "prompt_tokens_details": {
-          "cached_tokens": 52
+          "cached_tokens": 4
         },
-        "total_tokens": 331
+        "total_tokens": 367
       }
     },
     "headers": {
@@ -131,13 +132,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 14 Oct 2025 17:08:03 GMT"
+        "Sun, 02 Nov 2025 17:19:54 GMT"
       ],
       "server": [
         "ZenZGA/2.4"
       ],
       "set-cookie": [
-        "acw_tc=0bc1a98117604616826331452e5f4ac3225e1edef6bc6a2978d9d6e59adbf3;path=/;HttpOnly;Max-Age=1800"
+        "acw_tc=0bc1a9c917621039920028041e08918d2ff0cebfb4f1877819b5b7be074738;path=/;HttpOnly;Max-Age=1800"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains"
@@ -155,7 +156,7 @@
         "Access-Control-Request-Headers"
       ],
       "x-log-id": [
-        "20251015010802f255aae92c784623"
+        "202511030119521febb868fb8f4f1e"
       ]
     },
     "status": 200

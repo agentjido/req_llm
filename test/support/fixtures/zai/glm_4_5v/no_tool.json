@@ -56,26 +56,37 @@
     "body": {
       "choices": [
         {
-          "finish_reason": "stop",
+          "finish_reason": "tool_calls",
           "index": 0,
           "message": {
-            "content": "\nWhy don't cats play poker in the jungle?\n\nToo many cheetahs! 😸",
-            "reasoning_content": "The user is asking for a joke about cats. I should generate a funny cat-related joke.",
-            "role": "assistant"
+            "content": "\nWhy don't cats play poker in the jungle? Too many cheetahs!\n",
+            "reasoning_content": "The user is asking for a joke about cats. I should provide a humorous joke related to cats. Since there's no need for external tools here, I can directly respond with a cat joke.",
+            "role": "assistant",
+            "tool_calls": [
+              {
+                "function": {
+                  "arguments": "{\"location\": \"New York City\"}",
+                  "name": "get_weather"
+                },
+                "id": "call_-8199740831286351585",
+                "index": 0,
+                "type": "function"
+              }
+            ]
           }
         }
       ],
-      "created": 1760461671,
-      "id": "202510150107500b5c7b9369f74f2c",
+      "created": 1762103995,
+      "id": "20251103011954b751f9b94fc64dc5",
       "model": "glm-4.5v",
-      "request_id": "202510150107500b5c7b9369f74f2c",
+      "request_id": "20251103011954b751f9b94fc64dc5",
       "usage": {
-        "completion_tokens": 41,
+        "completion_tokens": 74,
         "prompt_tokens": 171,
         "prompt_tokens_details": {
           "cached_tokens": 4
         },
-        "total_tokens": 212
+        "total_tokens": 245
       }
     },
     "headers": {
@@ -86,13 +97,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 14 Oct 2025 17:07:51 GMT"
+        "Sun, 02 Nov 2025 17:19:56 GMT"
       ],
       "server": [
         "ZenZGA/2.4"
       ],
       "set-cookie": [
-        "acw_tc=0bc1a98117604616707658763e5f4a9bde798679d1269c5b6ed456abcad233;path=/;HttpOnly;Max-Age=1800"
+        "acw_tc=0bc1a9c917621039945178135e0891ac19335cbe6ad9ba9fcd6798e11ab810;path=/;HttpOnly;Max-Age=1800"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains"
@@ -110,7 +121,7 @@
         "Access-Control-Request-Headers"
       ],
       "x-log-id": [
-        "202510150107500b5c7b9369f74f2c"
+        "20251103011954b751f9b94fc64dc5"
       ]
     },
     "status": 200

@@ -59,21 +59,21 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "\nHere's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nBecause there are too many cheetahs! 😸\n\nHope that gave you a chuckle!",
-            "reasoning_content": "\nThe user is asking for a joke about cats. This is a simple request that doesn't require any of the available tools (which is just a weather function). I should just provide a cat joke directly without using any tools.",
+            "content": "\n\nHere's a cat joke for you:\n\nWhy don't cats play poker in the jungle?\n\nBecause there are too many cheetahs! 😄\n\nHope that gave you a chuckle!",
+            "reasoning_content": "The user is asking for a joke about cats. This is a simple request that doesn't require any of the available tools (which is just a weather function). I should just provide a cat joke directly without using any tools.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1760463378,
-      "id": "20251015013615eda83a25bf254ad3",
+      "created": 1762103901,
+      "id": "20251103011818fc7abb1b1c7b4c39",
       "model": "glm-4.5-flash",
-      "request_id": "20251015013615eda83a25bf254ad3",
+      "request_id": "20251103011818fc7abb1b1c7b4c39",
       "usage": {
         "completion_tokens": 89,
         "prompt_tokens": 164,
         "prompt_tokens_details": {
-          "cached_tokens": 163
+          "cached_tokens": 43
         },
         "total_tokens": 253
       }
@@ -86,13 +86,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 14 Oct 2025 17:36:18 GMT"
+        "Sun, 02 Nov 2025 17:18:21 GMT"
       ],
       "server": [
         "ZenZGA/2.4"
       ],
       "set-cookie": [
-        "acw_tc=ac11000117604633754315296e25b15ad051e898a0faa6eb862ec82cb81904;path=/;HttpOnly;Max-Age=1800"
+        "acw_tc=ac11000117621038979127476e03f9940b906c8fd102d4d26a406b269e983d;path=/;HttpOnly;Max-Age=1800"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains"
@@ -110,7 +110,7 @@
         "Access-Control-Request-Headers"
       ],
       "x-log-id": [
-        "20251015013615eda83a25bf254ad3"
+        "20251103011818fc7abb1b1c7b4c39"
       ]
     },
     "status": 200

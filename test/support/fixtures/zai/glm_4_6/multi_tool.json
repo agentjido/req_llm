@@ -94,7 +94,7 @@
           "finish_reason": "tool_calls",
           "index": 0,
           "message": {
-            "reasoning_content": "The user is asking about the weather in Paris, France. I have access to a get_weather function that can provide weather information for a location. Let me check the parameters:\n\n- location: required parameter - the user specified \"Paris, France\"\n- unit: optional parameter - the user didn't specify a unit, and the instructions say not to make up values for optional parameters\n\nI have all the required parameters, so I can proceed with the function call.",
+            "reasoning_content": "\nThe user is asking about the weather in Paris, France. I need to use the get_weather function to get this information. \n\nLooking at the function parameters:\n- location: required parameter - the user specified \"Paris, France\"\n- unit: optional parameter - the user didn't specify a unit, and the instructions say not to make up values for optional parameters\n\nI have all the required parameters, so I can proceed with the function call.",
             "role": "assistant",
             "tool_calls": [
               {
@@ -102,7 +102,7 @@
                   "arguments": "{\"location\":\"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "call_-8253029693173836583",
+                "id": "call_-8199678983755457572",
                 "index": 0,
                 "type": "function"
               }
@@ -110,17 +110,17 @@
           }
         }
       ],
-      "created": 1760461947,
-      "id": "202510150112238abf7bec3af848e8",
+      "created": 1762103894,
+      "id": "20251103011813d882d98e8c984daa",
       "model": "glm-4.6",
-      "request_id": "202510150112238abf7bec3af848e8",
+      "request_id": "20251103011813d882d98e8c984daa",
       "usage": {
-        "completion_tokens": 125,
+        "completion_tokens": 122,
         "prompt_tokens": 276,
         "prompt_tokens_details": {
           "cached_tokens": 43
         },
-        "total_tokens": 401
+        "total_tokens": 398
       }
     },
     "headers": {
@@ -131,13 +131,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 14 Oct 2025 17:12:27 GMT"
+        "Sun, 02 Nov 2025 17:18:15 GMT"
       ],
       "server": [
         "ZenZGA/2.4"
       ],
       "set-cookie": [
-        "acw_tc=0bc1a98117604619437068886e5f3ec42bff259b79610572761345f7ff07a2;path=/;HttpOnly;Max-Age=1800"
+        "acw_tc=ac11000117621038933838369e03c5d41671d079f7d3606d58a45644231e47;path=/;HttpOnly;Max-Age=1800"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains"
@@ -155,7 +155,7 @@
         "Access-Control-Request-Headers"
       ],
       "x-log-id": [
-        "202510150112238abf7bec3af848e8"
+        "20251103011813d882d98e8c984daa"
       ]
     },
     "status": 200

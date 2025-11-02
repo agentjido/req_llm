@@ -71,8 +71,8 @@
           "finish_reason": "tool_calls",
           "index": 0,
           "message": {
-            "content": "\nI'll generate a software engineer profile for you using the structured output function.\n",
-            "reasoning_content": "\nThe user is asking me to generate a software engineer profile. Looking at the available function, I have a \"structured_output\" function that can generate structured output with the following parameters:\n- name (required): Person's full name\n- age (required): Person's age in years  \n- occupation (optional): Person's job or profession\n\nSince the user wants a software engineer profile, I should use this function. I need to provide a name and age (required), and I can optionally provide the occupation as \"Software Engineer\" since that's what they're asking for.\n\nHowever, the user hasn't specified a particular name or age, so I'll need to make reasonable assumptions for these required parameters. For a software engineer profile, I'll use a common name and a reasonable age range for someone in that profession.",
+            "content": "\n\nI'll generate a software engineer profile for you using the structured output function.\n",
+            "reasoning_content": "The user is asking me to generate a software engineer profile. Looking at the available function, I have a \"structured_output\" function that can generate structured output with the following parameters:\n- name (required): Person's full name\n- age (required): Person's age in years (minimum 1)\n- occupation (optional): Person's job or profession\n\nSince the user wants a software engineer profile, I should use this function. I need to provide a name and age (required), and I can specify \"Software Engineer\" as the occupation (optional).\n\nI should create a reasonable profile for a software engineer. Let me think of a name and age that would be typical for a software engineer.",
             "role": "assistant",
             "tool_calls": [
               {
@@ -80,7 +80,7 @@
                   "arguments": "{\"name\": \"Alex Johnson\", \"age\": 28, \"occupation\": \"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "call_-8253052439321305723",
+                "id": "call_-8199737635830151503",
                 "index": 0,
                 "type": "function"
               }
@@ -88,17 +88,17 @@
           }
         }
       ],
-      "created": 1760463197,
-      "id": "202510150133107bdccb2483514e4f",
+      "created": 1762104256,
+      "id": "20251103012408d71da8c9ad224337",
       "model": "glm-4.5-flash",
-      "request_id": "202510150133107bdccb2483514e4f",
+      "request_id": "20251103012408d71da8c9ad224337",
       "usage": {
-        "completion_tokens": 215,
+        "completion_tokens": 191,
         "prompt_tokens": 219,
         "prompt_tokens_details": {
-          "cached_tokens": 218
+          "cached_tokens": 43
         },
-        "total_tokens": 434
+        "total_tokens": 410
       }
     },
     "headers": {
@@ -109,13 +109,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 14 Oct 2025 17:33:17 GMT"
+        "Sun, 02 Nov 2025 17:24:16 GMT"
       ],
       "server": [
         "ZenZGA/2.4"
       ],
       "set-cookie": [
-        "acw_tc=ac11000117604631901563758e25b191a6dcf1a224b4d27a798a41bece8860;path=/;HttpOnly;Max-Age=1800"
+        "acw_tc=ac11000117621042481727063e03a8e2c57f57ff66d3c199e15c5fc3c69f50;path=/;HttpOnly;Max-Age=1800"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains"
@@ -133,7 +133,7 @@
         "Access-Control-Request-Headers"
       ],
       "x-log-id": [
-        "202510150133107bdccb2483514e4f"
+        "20251103012408d71da8c9ad224337"
       ]
     },
     "status": 200

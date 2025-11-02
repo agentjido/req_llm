@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo5ODMwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiXG5cbkknbGwgdXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzIGZvciB5b3UuXG4iLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF8tODI1MzAyODQ1NjIyMzA1NTYxNCIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsInJvbGUiOiJ0b29sIn1dLCJtb2RlbCI6ImdsbS00LjUtYWlyIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+      "b64": "eyJtYXhfdG9rZW5zIjo5ODMwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiXG5cbkknbGwgdXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzIGZvciB5b3UuXG4iLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF8tODE5OTczNTA5MzIwOTM2MTg5MiIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsInJvbGUiOiJ0b29sIn1dLCJtb2RlbCI6ImdsbS00LjUtYWlyIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
       "max_tokens": 9830,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_-8253028456223055614",
+              "id": "call_-8199735093209361892",
               "type": "function"
             }
           ]
@@ -57,22 +57,22 @@
           "index": 0,
           "message": {
             "content": "\n\nsum=5",
-            "reasoning_content": "The add tool returned the result 5 for 2 + 3. Now I need to respond with 'sum=<value>' where <value> is the result, which is 5.",
+            "reasoning_content": "The add tool returned 5 as the result of 2 + 3. Now I need to respond with 'sum=<value>' where <value> is the result, which is 5.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1760461742,
-      "id": "20251015010901e23133b08d0147e4",
+      "created": 1762103904,
+      "id": "2025110301182223eedbd93eba4812",
       "model": "glm-4.5-air",
-      "request_id": "20251015010901e23133b08d0147e4",
+      "request_id": "2025110301182223eedbd93eba4812",
       "usage": {
-        "completion_tokens": 47,
+        "completion_tokens": 48,
         "prompt_tokens": 78,
         "prompt_tokens_details": {
           "cached_tokens": 4
         },
-        "total_tokens": 125
+        "total_tokens": 126
       }
     },
     "headers": {
@@ -83,13 +83,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 14 Oct 2025 17:09:02 GMT"
+        "Sun, 02 Nov 2025 17:18:24 GMT"
       ],
       "server": [
         "ZenZGA/2.4"
       ],
       "set-cookie": [
-        "acw_tc=0bc1a9c917604617413742521e08974191cfad6638f0fb7b669b31d583922e;path=/;HttpOnly;Max-Age=1800"
+        "acw_tc=ac11000117621039023286257e25e8b0687625baa050b9f4b08e1be6a4c70f;path=/;HttpOnly;Max-Age=1800"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains"
@@ -107,7 +107,7 @@
         "Access-Control-Request-Headers"
       ],
       "x-log-id": [
-        "20251015010901e23133b08d0147e4"
+        "2025110301182223eedbd93eba4812"
       ]
     },
     "status": 200

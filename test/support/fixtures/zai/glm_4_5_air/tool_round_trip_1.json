@@ -65,7 +65,7 @@
           "index": 0,
           "message": {
             "content": "\n\nI'll use the add tool to compute 2 + 3 for you.\n",
-            "reasoning_content": "The user wants me to use the add tool to compute 2 + 3, and then respond with 'sum=<value>' after getting the result.\n\nI need to:\n1. Call the add function with a=2 and b=3\n2. After getting the result, respond with 'sum=<value>' where <value> is the result\n\nLet me call the add function first.",
+            "reasoning_content": "The user wants me to use the add tool to compute 2 + 3, and then respond with 'sum=<value>' after getting the result.\n\nI need to:\n1. Use the add function with a=2 and b=3\n2. Wait for the result\n3. Respond with 'sum=<value>' where <value> is the result\n\nLet me call the add function first.",
             "role": "assistant",
             "tool_calls": [
               {
@@ -73,7 +73,7 @@
                   "arguments": "{\"a\": 2, \"b\": 3}",
                   "name": "add"
                 },
-                "id": "call_-8253028456223055614",
+                "id": "call_-8199735093209361892",
                 "index": 0,
                 "type": "function"
               }
@@ -81,17 +81,17 @@
           }
         }
       ],
-      "created": 1760461741,
-      "id": "20251015010859759bb88990704f22",
+      "created": 1762103902,
+      "id": "202511030118183e08dc985bb94947",
       "model": "glm-4.5-air",
-      "request_id": "20251015010859759bb88990704f22",
+      "request_id": "202511030118183e08dc985bb94947",
       "usage": {
-        "completion_tokens": 121,
+        "completion_tokens": 123,
         "prompt_tokens": 190,
         "prompt_tokens_details": {
           "cached_tokens": 43
         },
-        "total_tokens": 311
+        "total_tokens": 313
       }
     },
     "headers": {
@@ -102,13 +102,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 14 Oct 2025 17:09:01 GMT"
+        "Sun, 02 Nov 2025 17:18:22 GMT"
       ],
       "server": [
         "ZenZGA/2.4"
       ],
       "set-cookie": [
-        "acw_tc=0bc1a9c917604617393982428e0897909236bc858922da35a39659915863bc;path=/;HttpOnly;Max-Age=1800"
+        "acw_tc=ac11000117621038986626219e25e8c07fb75a4c5e14645b6187415e19382a;path=/;HttpOnly;Max-Age=1800"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains"
@@ -126,7 +126,7 @@
         "Access-Control-Request-Headers"
       ],
       "x-log-id": [
-        "20251015010859759bb88990704f22"
+        "202511030118183e08dc985bb94947"
       ]
     },
     "status": 200
