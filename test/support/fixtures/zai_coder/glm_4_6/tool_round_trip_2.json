@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxMzEwNywibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiJjYWxsXy04MjUzMDI2ODQxMzE1MTQ0NDM4IiwidHlwZSI6ImZ1bmN0aW9uIn1dfSx7ImNvbnRlbnQiOiI1Iiwicm9sZSI6InRvb2wifV0sIm1vZGVsIjoiZ2xtLTQuNiIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoxMzEwNywibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6W10sInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiJjYWxsXy04MTk5NzM2OTgyOTk1MTcyNjU5IiwidHlwZSI6ImZ1bmN0aW9uIn1dfSx7ImNvbnRlbnQiOiI1Iiwicm9sZSI6InRvb2wifV0sIm1vZGVsIjoiZ2xtLTQuNiIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
       "max_tokens": 13107,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_-8253026841315144438",
+              "id": "call_-8199736982995172659",
               "type": "function"
             }
           ]
@@ -56,20 +56,20 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "sum=5",
+            "content": "\nsum=5",
             "role": "assistant"
           }
         }
       ],
-      "created": 1760463867,
-      "id": "2025101501442736187920b5354e46",
+      "created": 1762104718,
+      "id": "2025110301315685fe10b147314415",
       "model": "glm-4.6",
-      "request_id": "2025101501442736187920b5354e46",
+      "request_id": "2025110301315685fe10b147314415",
       "usage": {
-        "completion_tokens": 6,
-        "prompt_tokens": 64,
+        "completion_tokens": 8,
+        "prompt_tokens": 62,
         "prompt_tokens_details": {
-          "cached_tokens": 0
+          "cached_tokens": 61
         },
         "total_tokens": 70
       }
@@ -82,13 +82,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 14 Oct 2025 17:44:27 GMT"
+        "Sun, 02 Nov 2025 17:31:58 GMT"
       ],
       "server": [
         "ZenZGA/2.4"
       ],
       "set-cookie": [
-        "acw_tc=ac11000117604638674522355e03f62c9799866087a5edf3a46a0b708231a9;path=/;HttpOnly;Max-Age=1800"
+        "acw_tc=0bc1a98117621047162067273e5f44458bbb2c7b6cf6e63a11315a8aa2b323;path=/;HttpOnly;Max-Age=1800"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains"
@@ -106,7 +106,7 @@
         "Access-Control-Request-Headers"
       ],
       "x-log-id": [
-        "2025101501442736187920b5354e46"
+        "2025110301315685fe10b147314415"
       ]
     },
     "status": 200

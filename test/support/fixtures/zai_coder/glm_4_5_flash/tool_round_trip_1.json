@@ -64,8 +64,8 @@
           "finish_reason": "tool_calls",
           "index": 0,
           "message": {
-            "content": "\n\nI'll use the add tool to compute 2 + 3 for you.\n",
-            "reasoning_content": "The user wants me to use the add tool to compute 2 + 3, and then respond with 'sum=<value>' after getting the result.\n\nI need to:\n1. Call the add function with a=2 and b=3\n2. After getting the result, respond with 'sum=<value>' where <value> is the result\n\nLet me call the add function first.",
+            "content": "\nI'll use the add tool to compute 2 + 3 for you.\n",
+            "reasoning_content": "\nThe user wants me to use the add tool to compute 2 + 3, and then respond with 'sum=<value>' after the tool result arrives.\n\nI need to:\n1. Use the add function with parameters a=2 and b=3\n2. After getting the result, respond with 'sum=<value>' where <value> is the result\n\nLet me call the add function first.",
             "role": "assistant",
             "tool_calls": [
               {
@@ -73,7 +73,7 @@
                   "arguments": "{\"a\": 2, \"b\": 3}",
                   "name": "add"
                 },
-                "id": "call_-8253096797744424782",
+                "id": "call_-8199707845936446112",
                 "index": 0,
                 "type": "function"
               }
@@ -81,17 +81,17 @@
           }
         }
       ],
-      "created": 1760464037,
-      "id": "20251015014714ac09d310a6db44d6",
+      "created": 1762104806,
+      "id": "20251103013321467e8c63351d4ea7",
       "model": "glm-4.5-flash",
-      "request_id": "20251015014714ac09d310a6db44d6",
+      "request_id": "20251103013321467e8c63351d4ea7",
       "usage": {
-        "completion_tokens": 121,
+        "completion_tokens": 123,
         "prompt_tokens": 190,
         "prompt_tokens_details": {
-          "cached_tokens": 43
+          "cached_tokens": 189
         },
-        "total_tokens": 311
+        "total_tokens": 313
       }
     },
     "headers": {
@@ -102,13 +102,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 14 Oct 2025 17:47:17 GMT"
+        "Sun, 02 Nov 2025 17:33:26 GMT"
       ],
       "server": [
         "ZenZGA/2.4"
       ],
       "set-cookie": [
-        "acw_tc=ac11000117604640338881518e03f5e474f76bd6405a6c4fbd798f68bf7019;path=/;HttpOnly;Max-Age=1800"
+        "acw_tc=0bc1a98117621048015936909e5f4b873dfcec0dcfc26cd67d478f4cfff9b4;path=/;HttpOnly;Max-Age=1800"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains"
@@ -126,7 +126,7 @@
         "Access-Control-Request-Headers"
       ],
       "x-log-id": [
-        "20251015014714ac09d310a6db44d6"
+        "20251103013321467e8c63351d4ea7"
       ]
     },
     "status": 200

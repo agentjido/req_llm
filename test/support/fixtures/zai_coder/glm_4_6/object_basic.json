@@ -71,7 +71,7 @@
           "finish_reason": "tool_calls",
           "index": 0,
           "message": {
-            "reasoning_content": "The user wants me to generate a software engineer profile. Looking at the available function, I have a \"structured_output\" function that can generate a profile with name, age, and occupation fields. \n\nThe required parameters are:\n- name (required)\n- age (required) \n- occupation (optional)\n\nSince they want a software engineer profile, I should:\n1. Set occupation to \"Software Engineer\"\n2. Create a realistic name for a software engineer\n3. Choose an appropriate age for a software engineer\n\nLet me generate a reasonable profile for a software engineer.",
+            "reasoning_content": "\nThe user wants me to generate a software engineer profile. Looking at the available function, I have a \"structured_output\" function that can generate a profile with name, age, and occupation fields. \n\nThe required parameters are:\n- name (required)\n- age (required) \n- occupation (optional)\n\nSince this is for a software engineer profile, I should:\n1. Provide a name (I'll create a realistic name)\n2. Provide an age (reasonable for a software engineer)\n3. Set occupation to \"Software Engineer\" or similar\n\nLet me call the function with appropriate values.",
             "role": "assistant",
             "tool_calls": [
               {
@@ -79,7 +79,7 @@
                   "arguments": "{\"name\":\"Alexandra Chen\",\"age\":28,\"occupation\":\"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "call_-8253038729785439098",
+                "id": "call_-8199737223513403020",
                 "index": 0,
                 "type": "function"
               }
@@ -87,17 +87,17 @@
           }
         }
       ],
-      "created": 1760463865,
-      "id": "20251015014422554c1354e56d4b05",
+      "created": 1762104805,
+      "id": "20251103013322e2ebb9b4f15c48de",
       "model": "glm-4.6",
-      "request_id": "20251015014422554c1354e56d4b05",
+      "request_id": "20251103013322e2ebb9b4f15c48de",
       "usage": {
-        "completion_tokens": 165,
+        "completion_tokens": 171,
         "prompt_tokens": 219,
         "prompt_tokens_details": {
-          "cached_tokens": 43
+          "cached_tokens": 218
         },
-        "total_tokens": 384
+        "total_tokens": 390
       }
     },
     "headers": {
@@ -108,13 +108,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 14 Oct 2025 17:44:25 GMT"
+        "Sun, 02 Nov 2025 17:33:25 GMT"
       ],
       "server": [
         "ZenZGA/2.4"
       ],
       "set-cookie": [
-        "acw_tc=ac11000117604638619752300e03f6606481b817d0b0844687a7260cad4f2a;path=/;HttpOnly;Max-Age=1800"
+        "acw_tc=0bc1a98117621048020764734e5f447cf968060cdc9cb12e114283c2b2a483;path=/;HttpOnly;Max-Age=1800"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains"
@@ -132,7 +132,7 @@
         "Access-Control-Request-Headers"
       ],
       "x-log-id": [
-        "20251015014422554c1354e56d4b05"
+        "20251103013322e2ebb9b4f15c48de"
       ]
     },
     "status": 200

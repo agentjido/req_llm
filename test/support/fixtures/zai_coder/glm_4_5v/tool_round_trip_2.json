@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjoxNjM4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiSSB3aWxsIGhlbHAgeW91IHRvIGNhbGN1bGF0ZSB0aGUgc3VtIG9mIDIgYW5kIDMgdXNpbmcgdGhlIGFkZCB0b29sLlxuIiwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6ImNhbGxfLTgyNTMwOTM2MDIyODgyMjU3MDgiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJyb2xlIjoidG9vbCJ9XSwibW9kZWwiOiJnbG0tNC41diIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+      "b64": "eyJtYXhfdG9rZW5zIjoxNjM4LCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiSSB3aWxsIGhlbHAgeW91IHRvIGNvbXB1dGUgMiArIDMgdXNpbmcgdGhlIGFkZCB0b29sLlxuIiwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6ImNhbGxfLTgxOTk3NDEyNDM2MDM1NDk2NzAiLCJ0eXBlIjoiZnVuY3Rpb24ifV19LHsiY29udGVudCI6IjUiLCJyb2xlIjoidG9vbCJ9XSwibW9kZWwiOiJnbG0tNC41diIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
     },
     "canonical_json": {
       "max_tokens": 1638,
@@ -11,7 +11,7 @@
           "role": "user"
         },
         {
-          "content": "I will help you to calculate the sum of 2 and 3 using the add tool.\n",
+          "content": "I will help you to compute 2 + 3 using the add tool.\n",
           "role": "assistant",
           "tool_calls": [
             {
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_-8253093602288225708",
+              "id": "call_-8199741243603549670",
               "type": "function"
             }
           ]
@@ -56,22 +56,22 @@
           "finish_reason": "stop",
           "index": 0,
           "message": {
-            "content": "The sum is <|begin_of_box|>5<|end_of_box|>.",
+            "content": "<|begin_of_box|>sum=5<|end_of_box|>",
             "role": "assistant"
           }
         }
       ],
-      "created": 1760463807,
-      "id": "202510150143260a7fee0a1eb7449a",
+      "created": 1762104689,
+      "id": "202511030131281bd45204d4664314",
       "model": "glm-4.5v",
-      "request_id": "202510150143260a7fee0a1eb7449a",
+      "request_id": "202511030131281bd45204d4664314",
       "usage": {
-        "completion_tokens": 11,
-        "prompt_tokens": 83,
+        "completion_tokens": 8,
+        "prompt_tokens": 80,
         "prompt_tokens_details": {
-          "cached_tokens": 4
+          "cached_tokens": 5
         },
-        "total_tokens": 94
+        "total_tokens": 88
       }
     },
     "headers": {
@@ -82,13 +82,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 14 Oct 2025 17:43:27 GMT"
+        "Sun, 02 Nov 2025 17:31:29 GMT"
       ],
       "server": [
         "ZenZGA/2.4"
       ],
       "set-cookie": [
-        "acw_tc=ac11000117604638065342800e03c0ab0b4492b215857aecd7b04aaa913449;path=/;HttpOnly;Max-Age=1800"
+        "acw_tc=0bc1a98117621046888545394e5f444b231a002f2e70d9d561f198d96625f8;path=/;HttpOnly;Max-Age=1800"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains"
@@ -106,7 +106,7 @@
         "Access-Control-Request-Headers"
       ],
       "x-log-id": [
-        "202510150143260a7fee0a1eb7449a"
+        "202511030131281bd45204d4664314"
       ]
     },
     "status": 200

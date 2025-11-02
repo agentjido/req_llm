@@ -72,7 +72,7 @@
           "index": 0,
           "message": {
             "content": "\n\nI'll generate a software engineer profile for you using the structured output function.\n",
-            "reasoning_content": "The user is asking me to generate a software engineer profile. Looking at the available function, I have a \"structured_output\" function that can generate structured output with the following parameters:\n- name (required): Person's full name\n- age (required): Person's age in years (minimum 1)\n- occupation (optional): Person's job or profession\n\nSince the user wants a software engineer profile, I should use this function. I need to provide a name and age (required), and I can specify \"Software Engineer\" as the occupation (optional but relevant to the request).\n\nI should create a reasonable example profile with a name, age, and occupation.",
+            "reasoning_content": "The user is asking me to generate a software engineer profile. Looking at the available function, I have a \"structured_output\" function that can generate structured output with the following parameters:\n- name (required): Person's full name\n- age (required): Person's age in years (minimum 1)\n- occupation (optional): Person's job or profession\n\nSince the user wants a software engineer profile, I should use this function. I need to provide a name and age (required), and I can specify \"Software Engineer\" as the occupation (optional).\n\nLet me create a reasonable software engineer profile with a name, age, and occupation.",
             "role": "assistant",
             "tool_calls": [
               {
@@ -80,7 +80,7 @@
                   "arguments": "{\"name\": \"Alex Johnson\", \"age\": 28, \"occupation\": \"Software Engineer\"}",
                   "name": "structured_output"
                 },
-                "id": "call_-8253095698232673184",
+                "id": "call_-8199741587200856445",
                 "index": 0,
                 "type": "function"
               }
@@ -88,17 +88,17 @@
           }
         }
       ],
-      "created": 1760463832,
-      "id": "202510150143491adc353d481a4d08",
+      "created": 1762104683,
+      "id": "20251103013120c779d8a05de84e23",
       "model": "glm-4.5-air",
-      "request_id": "202510150143491adc353d481a4d08",
+      "request_id": "20251103013120c779d8a05de84e23",
       "usage": {
-        "completion_tokens": 184,
+        "completion_tokens": 180,
         "prompt_tokens": 219,
         "prompt_tokens_details": {
           "cached_tokens": 218
         },
-        "total_tokens": 403
+        "total_tokens": 399
       }
     },
     "headers": {
@@ -109,13 +109,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 14 Oct 2025 17:43:52 GMT"
+        "Sun, 02 Nov 2025 17:31:23 GMT"
       ],
       "server": [
         "ZenZGA/2.4"
       ],
       "set-cookie": [
-        "acw_tc=ac11000117604638297406376e25c40b000d2b5d2dd4da5dff26df67c7eceb;path=/;HttpOnly;Max-Age=1800"
+        "acw_tc=0bc1a98117621046800372793e5f4301c01764d62117ab874145853c1342a1;path=/;HttpOnly;Max-Age=1800"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains"
@@ -133,7 +133,7 @@
         "Access-Control-Request-Headers"
       ],
       "x-log-id": [
-        "202510150143491adc353d481a4d08"
+        "20251103013120c779d8a05de84e23"
       ]
     },
     "status": 200

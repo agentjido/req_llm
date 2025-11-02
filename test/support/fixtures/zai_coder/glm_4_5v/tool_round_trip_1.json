@@ -64,7 +64,7 @@
           "finish_reason": "tool_calls",
           "index": 0,
           "message": {
-            "content": "I will help you to calculate the sum of 2 and 3 using the add tool.\n",
+            "content": "I will help you to compute 2 + 3 using the add tool.\n",
             "role": "assistant",
             "tool_calls": [
               {
@@ -72,7 +72,7 @@
                   "arguments": "{\"a\": 2, \"b\": 3}",
                   "name": "add"
                 },
-                "id": "call_-8253093602288225708",
+                "id": "call_-8199741243603549670",
                 "index": 0,
                 "type": "function"
               }
@@ -80,17 +80,17 @@
           }
         }
       ],
-      "created": 1760463806,
-      "id": "202510150143255b1cbe2b9f2a49b7",
+      "created": 1762104688,
+      "id": "20251103013128ce01ee194f8f4613",
       "model": "glm-4.5v",
-      "request_id": "202510150143255b1cbe2b9f2a49b7",
+      "request_id": "20251103013128ce01ee194f8f4613",
       "usage": {
-        "completion_tokens": 42,
+        "completion_tokens": 39,
         "prompt_tokens": 197,
         "prompt_tokens_details": {
           "cached_tokens": 4
         },
-        "total_tokens": 239
+        "total_tokens": 236
       }
     },
     "headers": {
@@ -101,13 +101,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 14 Oct 2025 17:43:26 GMT"
+        "Sun, 02 Nov 2025 17:31:28 GMT"
       ],
       "server": [
         "ZenZGA/2.4"
       ],
       "set-cookie": [
-        "acw_tc=ac11000117604638053442791e03c089baa3ff76854165cc497c9f4703897e;path=/;HttpOnly;Max-Age=1800"
+        "acw_tc=0bc1a98117621046879325305e5f441288f0f25bd2da81c400d099df6298dc;path=/;HttpOnly;Max-Age=1800"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains"
@@ -125,7 +125,7 @@
         "Access-Control-Request-Headers"
       ],
       "x-log-id": [
-        "202510150143255b1cbe2b9f2a49b7"
+        "20251103013128ce01ee194f8f4613"
       ]
     },
     "status": 200

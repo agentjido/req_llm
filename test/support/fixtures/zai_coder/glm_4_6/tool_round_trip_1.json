@@ -64,7 +64,7 @@
           "finish_reason": "tool_calls",
           "index": 0,
           "message": {
-            "reasoning_content": "The user wants me to:\n1. Use the add tool to compute 2 + 3\n2. After the tool result arrives, respond with 'sum=<value>'\n\nI need to call the add function with parameters a=2 and b=3.",
+            "reasoning_content": "\nThe user wants me to use the add tool to compute 2 + 3, and then respond with 'sum=<value>' after getting the result.\n\nI need to call the add function with parameters a=2 and b=3.",
             "role": "assistant",
             "tool_calls": [
               {
@@ -72,7 +72,7 @@
                   "arguments": "{\"a\":2,\"b\":3}",
                   "name": "add"
                 },
-                "id": "call_-8253026841315144438",
+                "id": "call_-8199736982995172659",
                 "index": 0,
                 "type": "function"
               }
@@ -80,17 +80,17 @@
           }
         }
       ],
-      "created": 1760463867,
-      "id": "202510150144255beea3dae0ae41d2",
+      "created": 1762104715,
+      "id": "20251103013155eb697083bb42495a",
       "model": "glm-4.6",
-      "request_id": "202510150144255beea3dae0ae41d2",
+      "request_id": "20251103013155eb697083bb42495a",
       "usage": {
-        "completion_tokens": 78,
+        "completion_tokens": 73,
         "prompt_tokens": 190,
         "prompt_tokens_details": {
           "cached_tokens": 43
         },
-        "total_tokens": 268
+        "total_tokens": 263
       }
     },
     "headers": {
@@ -101,13 +101,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 14 Oct 2025 17:44:27 GMT"
+        "Sun, 02 Nov 2025 17:31:56 GMT"
       ],
       "server": [
         "ZenZGA/2.4"
       ],
       "set-cookie": [
-        "acw_tc=ac11000117604638653942337e03f6355b06e1a6ef81c3b738f1e954df0ae9;path=/;HttpOnly;Max-Age=1800"
+        "acw_tc=0bc1a98117621047151167213e5f446b8d5efaba29cc1778e68fce2ee0a22c;path=/;HttpOnly;Max-Age=1800"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains"
@@ -125,7 +125,7 @@
         "Access-Control-Request-Headers"
       ],
       "x-log-id": [
-        "202510150144255beea3dae0ae41d2"
+        "20251103013155eb697083bb42495a"
       ]
     },
     "status": 200

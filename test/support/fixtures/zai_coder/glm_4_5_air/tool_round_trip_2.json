@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo5ODMwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiXG5cbiIsInJvbGUiOiJhc3Npc3RhbnQiLCJ0b29sX2NhbGxzIjpbeyJmdW5jdGlvbiI6eyJhcmd1bWVudHMiOiJ7XCJhXCI6MixcImJcIjozfSIsIm5hbWUiOiJhZGQifSwiaWQiOiJjYWxsXy04MjUzMDg3NDUxODk0ODY5MTYzIiwidHlwZSI6ImZ1bmN0aW9uIn1dfSx7ImNvbnRlbnQiOiI1Iiwicm9sZSI6InRvb2wifV0sIm1vZGVsIjoiZ2xtLTQuNS1haXIiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjo5ODMwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiXG5cbkknbGwgdXNlIHRoZSBhZGQgdG9vbCB0byBjb21wdXRlIDIgKyAzIGZvciB5b3UuXG4iLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF8tODE5OTc0MTcyNDYzOTg5NjIwOCIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsInJvbGUiOiJ0b29sIn1dLCJtb2RlbCI6ImdsbS00LjUtYWlyIiwic2VlZCI6NDIsInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
     },
     "canonical_json": {
       "max_tokens": 9830,
@@ -11,7 +11,7 @@
           "role": "user"
         },
         {
-          "content": "\n\n",
+          "content": "\n\nI'll use the add tool to compute 2 + 3 for you.\n",
           "role": "assistant",
           "tool_calls": [
             {
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_-8253087451894869163",
+              "id": "call_-8199741724639896208",
               "type": "function"
             }
           ]
@@ -57,21 +57,22 @@
           "index": 0,
           "message": {
             "content": "\n\nsum=5",
+            "reasoning_content": "The add tool returned 5 as the result of 2 + 3. Now I need to respond with 'sum=<value>' where <value> is the result, which is 5.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1760463887,
-      "id": "202510150144476200d29a00e94ca6",
+      "created": 1762104742,
+      "id": "202511030132225a2a6f58cbdc4c90",
       "model": "glm-4.5-air",
-      "request_id": "202510150144476200d29a00e94ca6",
+      "request_id": "202511030132225a2a6f58cbdc4c90",
       "usage": {
-        "completion_tokens": 8,
-        "prompt_tokens": 62,
+        "completion_tokens": 48,
+        "prompt_tokens": 78,
         "prompt_tokens_details": {
           "cached_tokens": 4
         },
-        "total_tokens": 70
+        "total_tokens": 126
       }
     },
     "headers": {
@@ -82,13 +83,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 14 Oct 2025 17:44:47 GMT"
+        "Sun, 02 Nov 2025 17:32:22 GMT"
       ],
       "server": [
         "ZenZGA/2.4"
       ],
       "set-cookie": [
-        "acw_tc=ac11000117604638872136946e25c4849d35d0f447d3106112a5b1e79a10d8;path=/;HttpOnly;Max-Age=1800"
+        "acw_tc=0bc1a98117621047420215420e5f43d6cb3d6451d7070f13b69625ef428545;path=/;HttpOnly;Max-Age=1800"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains"
@@ -106,7 +107,7 @@
         "Access-Control-Request-Headers"
       ],
       "x-log-id": [
-        "202510150144476200d29a00e94ca6"
+        "202511030132225a2a6f58cbdc4c90"
       ]
     },
     "status": 200

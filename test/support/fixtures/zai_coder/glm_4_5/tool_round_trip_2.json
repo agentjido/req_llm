@@ -1,7 +1,7 @@
 {
   "request": {
     "body": {
-      "b64": "eyJtYXhfdG9rZW5zIjo5ODMwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiXG4iLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF8tODI1MzAyMDc5NDAwMTA0MTI5NyIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsInJvbGUiOiJ0b29sIn1dLCJtb2RlbCI6ImdsbS00LjUiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+      "b64": "eyJtYXhfdG9rZW5zIjo5ODMwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjoiXG4iLCJyb2xlIjoiYXNzaXN0YW50IiwidG9vbF9jYWxscyI6W3siZnVuY3Rpb24iOnsiYXJndW1lbnRzIjoie1wiYVwiOjIsXCJiXCI6M30iLCJuYW1lIjoiYWRkIn0sImlkIjoiY2FsbF8tODE5OTczOTkwMzU3MzI0ODUxNyIsInR5cGUiOiJmdW5jdGlvbiJ9XX0seyJjb250ZW50IjoiNSIsInJvbGUiOiJ0b29sIn1dLCJtb2RlbCI6ImdsbS00LjUiLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
     },
     "canonical_json": {
       "max_tokens": 9830,
@@ -19,7 +19,7 @@
                 "arguments": "{\"a\":2,\"b\":3}",
                 "name": "add"
               },
-              "id": "call_-8253020794001041297",
+              "id": "call_-8199739903573248517",
               "type": "function"
             }
           ]
@@ -61,15 +61,15 @@
           }
         }
       ],
-      "created": 1760463927,
-      "id": "202510150145267f77f8ba7920436a",
+      "created": 1762104769,
+      "id": "202511030132476e4f52a7c8d54764",
       "model": "glm-4.5",
-      "request_id": "202510150145267f77f8ba7920436a",
+      "request_id": "202511030132476e4f52a7c8d54764",
       "usage": {
         "completion_tokens": 8,
         "prompt_tokens": 62,
         "prompt_tokens_details": {
-          "cached_tokens": 4
+          "cached_tokens": 61
         },
         "total_tokens": 70
       }
@@ -82,13 +82,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 14 Oct 2025 17:45:27 GMT"
+        "Sun, 02 Nov 2025 17:32:49 GMT"
       ],
       "server": [
         "ZenZGA/2.4"
       ],
       "set-cookie": [
-        "acw_tc=ac11000117604639267947402e25e5cfa5fbc39a404f86614c89484b2a9117;path=/;HttpOnly;Max-Age=1800"
+        "acw_tc=0bc1a9c917621047675303428e0890959914f6fc45dbce8bec13083c1a751a;path=/;HttpOnly;Max-Age=1800"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains"
@@ -106,7 +106,7 @@
         "Access-Control-Request-Headers"
       ],
       "x-log-id": [
-        "202510150145267f77f8ba7920436a"
+        "202511030132476e4f52a7c8d54764"
       ]
     },
     "status": 200

@@ -95,7 +95,7 @@
           "index": 0,
           "message": {
             "content": "\n",
-            "reasoning_content": "\nThe user is asking for the weather in Paris, France. I have access to a get_weather function that can provide weather information for a location. Let me check the parameters:\n\n- location (required): \"Paris, France\" - this is provided by the user\n- unit (optional): \"celsius\" or \"fahrenheit\" - this is not specified by the user, and the instructions say not to make up values for or ask about optional parameters\n\nSince the location is provided and the unit parameter is optional, I can proceed with the function call using just the location parameter.",
+            "reasoning_content": "\nThe user is asking for the weather in Paris, France. I have access to a get_weather function that can provide weather information for a location. Let me check the parameters:\n\n- location (required): \"Paris, France\" - this is provided\n- unit (optional): \"celsius\" or \"fahrenheit\" - this is not specified, so I won't include it as the instructions say not to make up values for optional parameters\n\nI have all the required parameters, so I can proceed with the function call.",
             "role": "assistant",
             "tool_calls": [
               {
@@ -103,7 +103,7 @@
                   "arguments": "{\"location\":\"Paris, France\"}",
                   "name": "get_weather"
                 },
-                "id": "call_-8253028456223067790",
+                "id": "call_-8199707845936446190",
                 "index": 0,
                 "type": "function"
               }
@@ -111,17 +111,17 @@
           }
         }
       ],
-      "created": 1760463970,
-      "id": "2025101501460675b4abebfde84175",
+      "created": 1762104774,
+      "id": "202511030132494a35812dabcd441b",
       "model": "glm-4.5",
-      "request_id": "2025101501460675b4abebfde84175",
+      "request_id": "202511030132494a35812dabcd441b",
       "usage": {
-        "completion_tokens": 137,
+        "completion_tokens": 125,
         "prompt_tokens": 276,
         "prompt_tokens_details": {
-          "cached_tokens": 43
+          "cached_tokens": 45
         },
-        "total_tokens": 413
+        "total_tokens": 401
       }
     },
     "headers": {
@@ -132,13 +132,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 14 Oct 2025 17:46:10 GMT"
+        "Sun, 02 Nov 2025 17:32:54 GMT"
       ],
       "server": [
         "ZenZGA/2.4"
       ],
       "set-cookie": [
-        "acw_tc=ac11000117604639666847689e25e51aa9cd6ca0e2dddf5a9b25933505b1d5;path=/;HttpOnly;Max-Age=1800"
+        "acw_tc=0bc1a9c917621047693623472e08900a2bb50e1595c3627c1cef2e8c4f0a5c;path=/;HttpOnly;Max-Age=1800"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains"
@@ -156,7 +156,7 @@
         "Access-Control-Request-Headers"
       ],
       "x-log-id": [
-        "2025101501460675b4abebfde84175"
+        "202511030132494a35812dabcd441b"
       ]
     },
     "status": 200

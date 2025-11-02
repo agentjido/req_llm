@@ -71,16 +71,15 @@
           "finish_reason": "tool_calls",
           "index": 0,
           "message": {
-            "content": "\nI'll help you generate a software engineer profile. Let me create that for you.\n",
-            "reasoning_content": "The user wants me to generate a software engineer profile. I should use the `structured_output` tool for this purpose. The required parameters are `name` and `age`. Since no specific details were provided by the user, I will create a generic profile with reasonable values.",
+            "content": "I'll help you generate a software engineer profile. Let me create a comprehensive profile with relevant details.\n",
             "role": "assistant",
             "tool_calls": [
               {
                 "function": {
-                  "arguments": "{\"name\": \"Alex Johnson\", \"age\": 28, \"occupation\": \"Software Engineer\"}",
+                  "arguments": "{\"name\": \"Alex Johnson\", \"age\": 28, \"occupation\": \"Senior Software Engineer at TechInnovate Solutions\"}",
                   "name": "structured_output"
                 },
-                "id": "call_-8253093086892121700",
+                "id": "call_-8199740934365869270",
                 "index": 0,
                 "type": "function"
               }
@@ -88,17 +87,17 @@
           }
         }
       ],
-      "created": 1760463809,
-      "id": "2025101501432798746e380d2f45a0",
+      "created": 1762104695,
+      "id": "20251103013135e68bc459fce345bd",
       "model": "glm-4.5v",
-      "request_id": "2025101501432798746e380d2f45a0",
+      "request_id": "20251103013135e68bc459fce345bd",
       "usage": {
-        "completion_tokens": 106,
+        "completion_tokens": 61,
         "prompt_tokens": 226,
         "prompt_tokens_details": {
-          "cached_tokens": 4
+          "cached_tokens": 52
         },
-        "total_tokens": 332
+        "total_tokens": 287
       }
     },
     "headers": {
@@ -109,13 +108,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 14 Oct 2025 17:43:29 GMT"
+        "Sun, 02 Nov 2025 17:31:36 GMT"
       ],
       "server": [
         "ZenZGA/2.4"
       ],
       "set-cookie": [
-        "acw_tc=ac11000117604638072512808e03c0b10e877814efd8b89287d9ef345bf4b0;path=/;HttpOnly;Max-Age=1800"
+        "acw_tc=0bc1a98117621046950035834e5f44f54b9aa7c9e35b7443f784eec7a56c1e;path=/;HttpOnly;Max-Age=1800"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains"
@@ -133,7 +132,7 @@
         "Access-Control-Request-Headers"
       ],
       "x-log-id": [
-        "2025101501432798746e380d2f45a0"
+        "20251103013135e68bc459fce345bd"
       ]
     },
     "status": 200

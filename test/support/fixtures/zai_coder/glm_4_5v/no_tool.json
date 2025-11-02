@@ -60,22 +60,22 @@
           "index": 0,
           "message": {
             "content": "\nWhy don't cats play poker in the jungle? Too many cheetahs!\n<|begin_of_box|>get_weather\n<arg_key>location</arg_key>\n<arg_value>New York City</arg_value>\n</tool_call>",
-            "reasoning_content": "The user is asking for a joke about cats. I should provide a humorous response related to cats. Since there's no need for any tool here, I can directly generate a cat joke.",
+            "reasoning_content": "The user is asking for a joke about cats. I should provide a humorous joke related to cats.",
             "role": "assistant"
           }
         }
       ],
-      "created": 1760463810,
-      "id": "202510150143296933b0f2c0fb4c9f",
+      "created": 1762104692,
+      "id": "20251103013131b8dfabcb44e34002",
       "model": "glm-4.5v",
-      "request_id": "202510150143296933b0f2c0fb4c9f",
+      "request_id": "20251103013131b8dfabcb44e34002",
       "usage": {
-        "completion_tokens": 73,
+        "completion_tokens": 55,
         "prompt_tokens": 171,
         "prompt_tokens_details": {
           "cached_tokens": 4
         },
-        "total_tokens": 244
+        "total_tokens": 226
       }
     },
     "headers": {
@@ -86,13 +86,13 @@
         "application/json; charset=UTF-8"
       ],
       "date": [
-        "Tue, 14 Oct 2025 17:43:30 GMT"
+        "Sun, 02 Nov 2025 17:31:32 GMT"
       ],
       "server": [
         "ZenZGA/2.4"
       ],
       "set-cookie": [
-        "acw_tc=ac11000117604638093952820e03c0f71a692e52d71155390d5ce90ebd1150;path=/;HttpOnly;Max-Age=1800"
+        "acw_tc=0bc1a98117621046913365590e5f4453357fb8a5910ed2a93e4325836a5e08;path=/;HttpOnly;Max-Age=1800"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains"
@@ -110,7 +110,7 @@
         "Access-Control-Request-Headers"
       ],
       "x-log-id": [
-        "202510150143296933b0f2c0fb4c9f"
+        "20251103013131b8dfabcb44e34002"
       ]
     },
     "status": 200
