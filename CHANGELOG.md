@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **JSV schema compilation** performance improved with ETS-based caching
   - Compiled schemas cached globally to avoid redundant JSV.build!/1 calls
   - Configured with read_concurrency for fast concurrent access
+- Google Vertex AI provider guide missing from documentation
+  - Added google_vertex.md to mix.exs extras and Providers group
 
 ## [1.0.0] - 2025-11-02
 
