@@ -842,6 +842,43 @@ defmodule ReqLLM.SchemaTest do
       assert {:error, %ReqLLM.Error.Validation.Error{tag: :json_schema_validation_failed}} =
                Schema.validate(%{"age" => -5}, schema)
     end
+
+    test "preserves original data types without JSV casting (float to integer)" do
+      schema = %{
+        "type" => "object",
+        "properties" => %{
+          "temperature" => %{"type" => "integer"}
+        }
+      }
+
+      data = %{"temperature" => 1.0}
+
+      assert {:ok, validated} = Schema.validate(data, schema)
+      assert validated == %{"temperature" => 1.0}
+      assert validated["temperature"] === 1.0
+    end
+
+    test "preserves original data structure without JSV casting (nested)" do
+      schema = %{
+        "type" => "object",
+        "properties" => %{
+          "metrics" => %{
+            "type" => "object",
+            "properties" => %{
+              "count" => %{"type" => "integer"},
+              "value" => %{"type" => "number"}
+            }
+          }
+        }
+      }
+
+      data = %{"metrics" => %{"count" => 5.0, "value" => 3.14}}
+
+      assert {:ok, validated} = Schema.validate(data, schema)
+      assert validated == data
+      assert validated["metrics"]["count"] === 5.0
+      assert validated["metrics"]["value"] === 3.14
+    end
   end
 
   describe "map pass-through support" do

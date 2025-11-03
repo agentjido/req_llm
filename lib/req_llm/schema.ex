@@ -742,8 +742,11 @@ defmodule ReqLLM.Schema do
     root = JSV.build!(schema)
 
     case JSV.validate(data, root) do
-      {:ok, validated_data} ->
-        {:ok, validated_data}
+      {:ok, _validated_data} ->
+        # Discard JSV's cast result to preserve original data types.
+        # JSV performs type coercion (e.g., 1.0 -> 1 for integer schemas),
+        # but we want to maintain data fidelity.
+        {:ok, data}
 
       {:error, validation_error} ->
         normalized_error = JSV.normalize_error(validation_error)
