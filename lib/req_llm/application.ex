@@ -13,6 +13,7 @@ defmodule ReqLLM.Application do
   def start(_type, _args) do
     load_dotenv()
     initialize_registry()
+    initialize_schema_cache()
 
     finch_config = get_finch_config()
 
@@ -120,6 +121,15 @@ defmodule ReqLLM.Application do
       _ ->
         ReqLLM.Provider.Registry.initialize()
     end
+  end
+
+  defp initialize_schema_cache do
+    :ets.new(:req_llm_schema_cache, [
+      :set,
+      :public,
+      :named_table,
+      read_concurrency: true
+    ])
   end
 
   defp load_dotenv do

@@ -13,10 +13,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Process streams incrementally with real-time callbacks
   - `on_result` callback for content chunks (fires immediately as text arrives)
   - `on_thinking` callback for reasoning/thinking chunks (fires immediately)
-  - `on_tool_call` callback for complete tool calls (fires after reconstruction)
   - Prevents double-stream consumption bugs through single-pass processing
   - Enables real-time streaming to UIs (Phoenix LiveView, websockets, etc.)
   - No upfront `Enum.to_list` - callbacks fire as chunks arrive from the stream
+
+### Fixed
+
+- **JSV schema validation** now preserves original data types instead of returning cast values
+  - Prevents unwanted type coercion (e.g., 1.0 → 1 for integer schemas)
+  - Validation still enforces schema constraints, but returns original input data
+- **JSV schema compilation** performance improved with ETS-based caching
+  - Compiled schemas cached globally to avoid redundant JSV.build!/1 calls
+  - Configured with read_concurrency for fast concurrent access
+- Google Vertex AI provider guide missing from documentation
+  - Added google_vertex.md to mix.exs extras and Providers group
 
 ## [1.0.0] - 2025-11-02
 

@@ -739,11 +739,14 @@ defmodule ReqLLM.Schema do
   @doc false
   @spec validate_with_jsv(any(), map()) :: {:ok, any()} | {:error, ReqLLM.Error.t()}
   defp validate_with_jsv(data, schema) do
-    root = JSV.build!(schema)
+    root = get_or_build_jsv_schema(schema)
 
     case JSV.validate(data, root) do
-      {:ok, validated_data} ->
-        {:ok, validated_data}
+      {:ok, _validated_data} ->
+        # Discard JSV's cast result to preserve original data types.
+        # JSV performs type coercion (e.g., 1.0 -> 1 for integer schemas),
+        # but we want to maintain data fidelity.
+        {:ok, data}
 
       {:error, validation_error} ->
         normalized_error = JSV.normalize_error(validation_error)
@@ -763,6 +766,20 @@ defmodule ReqLLM.Schema do
          reason: "Invalid JSON Schema: #{Exception.message(e)}",
          context: [schema: schema]
        )}
+  end
+
+  defp get_or_build_jsv_schema(schema) do
+    cache_key = :erlang.phash2(schema)
+
+    case :ets.lookup(:req_llm_schema_cache, cache_key) do
+      [{^cache_key, cached_root}] ->
+        cached_root
+
+      [] ->
+        built = JSV.build!(schema)
+        :ets.insert(:req_llm_schema_cache, {cache_key, built})
+        built
+    end
   end
 
   @doc false
