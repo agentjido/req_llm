@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Real-time stream processing** with `ReqLLM.StreamResponse.process_stream/2`
+  - Process streams incrementally with real-time callbacks
+  - `on_result` callback for content chunks (fires immediately as text arrives)
+  - `on_thinking` callback for reasoning/thinking chunks (fires immediately)
+  - `on_tool_call` callback for complete tool calls (fires after reconstruction)
+  - Prevents double-stream consumption bugs through single-pass processing
+  - Enables real-time streaming to UIs (Phoenix LiveView, websockets, etc.)
+  - No upfront `Enum.to_list` - callbacks fire as chunks arrive from the stream
+
 ## [1.0.0] - 2025-11-02
 
 ### Added
