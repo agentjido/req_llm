@@ -5,11 +5,46 @@
   "models": [
     {
       "id": "gpt-oss-120b",
-      "reasoning": true
+      "reasoning": true,
+      "supports_strict_tools": true
+    },
+    {
+      "id": "qwen-3-235b-a22b-instruct-2507",
+      "supports_strict_tools": false
     },
     {
       "id": "qwen-3-235b-a22b-thinking-2507",
-      "reasoning": false
+      "reasoning": false,
+      "supports_strict_tools": false
+    },
+    {
+      "id": "qwen-3-coder-480b",
+      "supports_strict_tools": false
+    },
+    {
+      "id": "zai-glm-4.6",
+      "name": "ZAI GLM 4.6",
+      "provider": "cerebras",
+      "provider_model_id": "zai-glm-4.6",
+      "reasoning": true,
+      "release_date": "2025-11-05",
+      "last_updated": "2025-11-05",
+      "supports_strict_tools": false,
+      "temperature": true,
+      "tool_call": true,
+      "attachment": false,
+      "cost": {
+        "input": 0.0,
+        "output": 0.0
+      },
+      "limit": {
+        "context": 131072,
+        "output": 131072
+      },
+      "modalities": {
+        "input": ["text"],
+        "output": ["text"]
+      }
     }
   ]
 }
