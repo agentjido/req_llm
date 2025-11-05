@@ -16,6 +16,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Prevents double-stream consumption bugs through single-pass processing
   - Enables real-time streaming to UIs (Phoenix LiveView, websockets, etc.)
   - No upfront `Enum.to_list` - callbacks fire as chunks arrive from the stream
+### Enhanced
+
+- **AWS Event Stream parser documentation** clarifying Bedrock specialization
+  - Explains performance rationale for single-pass parsing and header specialization
+  - Documents non-goals (S3 Select, Transcribe, Kinesis incompatibility)
 
 ### Fixed
 

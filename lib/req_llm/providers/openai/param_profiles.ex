@@ -57,7 +57,7 @@ defmodule ReqLLM.Providers.OpenAI.ParamProfiles do
 
   defp profiles_for(:chat, %ReqLLM.Model{} = model) do
     []
-    |> add_if(is_reasoning_model?(model), :reasoning)
+    |> add_if(reasoning_model?(model), :reasoning)
     |> add_if(no_sampling_params?(model), :no_sampling_params)
     |> add_if(temperature_unsupported?(model), :no_temperature)
     |> add_if(temperature_fixed_one?(model), :temperature_fixed_1)
@@ -66,39 +66,38 @@ defmodule ReqLLM.Providers.OpenAI.ParamProfiles do
 
   defp profiles_for(_op, _model), do: []
 
-  defp is_reasoning_model?(%ReqLLM.Model{capabilities: caps, model: model_name})
-       when is_map(caps) do
+  defp reasoning_model?(%ReqLLM.Model{capabilities: caps, model: model_name}) when is_map(caps) do
     Map.get(caps, :reasoning) == true || Map.get(caps, "reasoning") == true ||
-      is_o_series_model?(model_name) || is_gpt5_model?(model_name) ||
-      is_reasoning_codex_model?(model_name)
+      o_series_model?(model_name) || gpt5_model?(model_name) ||
+      reasoning_codex_model?(model_name)
   end
 
-  defp is_reasoning_model?(%ReqLLM.Model{model: model_name}) do
-    is_o_series_model?(model_name) || is_gpt5_model?(model_name) ||
-      is_reasoning_codex_model?(model_name)
+  defp reasoning_model?(%ReqLLM.Model{model: model_name}) do
+    o_series_model?(model_name) || gpt5_model?(model_name) ||
+      reasoning_codex_model?(model_name)
   end
 
-  defp no_sampling_params?(%ReqLLM.Model{model: model_name}), do: is_gpt5_model?(model_name)
+  defp no_sampling_params?(%ReqLLM.Model{model: model_name}), do: gpt5_model?(model_name)
 
   defp temperature_unsupported?(%ReqLLM.Model{model: model_name}) do
-    is_o_series_model?(model_name)
+    o_series_model?(model_name)
   end
 
   defp temperature_fixed_one?(%ReqLLM.Model{model: _model_name}), do: false
 
-  defp is_o_series_model?(<<"o1", _::binary>>), do: true
-  defp is_o_series_model?(<<"o3", _::binary>>), do: true
-  defp is_o_series_model?(<<"o4", _::binary>>), do: true
-  defp is_o_series_model?(_), do: false
+  defp o_series_model?(<<"o1", _::binary>>), do: true
+  defp o_series_model?(<<"o3", _::binary>>), do: true
+  defp o_series_model?(<<"o4", _::binary>>), do: true
+  defp o_series_model?(_), do: false
 
-  defp is_gpt5_model?("gpt-5-chat-latest"), do: false
-  defp is_gpt5_model?(<<"gpt-5", _::binary>>), do: true
-  defp is_gpt5_model?(_), do: false
+  defp gpt5_model?("gpt-5-chat-latest"), do: false
+  defp gpt5_model?(<<"gpt-5", _::binary>>), do: true
+  defp gpt5_model?(_), do: false
 
-  defp is_reasoning_codex_model?(<<"codex", rest::binary>>),
+  defp reasoning_codex_model?(<<"codex", rest::binary>>),
     do: String.contains?(rest, "mini-latest")
 
-  defp is_reasoning_codex_model?(_), do: false
+  defp reasoning_codex_model?(_), do: false
 
   defp add_if(list, true, item), do: [item | list]
   defp add_if(list, false, _item), do: list

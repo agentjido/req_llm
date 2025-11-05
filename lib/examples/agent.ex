@@ -194,8 +194,10 @@ defmodule ReqLLM.Examples.Agent do
     # Collect argument fragments from meta chunks
     arg_fragments =
       chunks
-      |> Enum.filter(&(&1.type == :meta))
-      |> Enum.filter(&Map.has_key?(&1.metadata, :tool_call_args))
+      |> Enum.filter(fn
+        %{type: :meta, metadata: %{tool_call_args: _}} -> true
+        _ -> false
+      end)
       |> Enum.group_by(& &1.metadata.tool_call_args.index)
       |> Map.new(fn {index, fragments} ->
         json = fragments |> Enum.map_join("", & &1.metadata.tool_call_args.fragment)

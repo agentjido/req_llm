@@ -354,7 +354,7 @@ defmodule ReqLLM.Providers.OpenRouter do
       200 ->
         body = ensure_parsed_body(resp.body)
 
-        if is_deepseek_model?(req) do
+        if deepseek_model?(req) do
           case extract_deepseek_tool_calls(body) do
             {:ok, updated_body} ->
               ReqLLM.Provider.Defaults.default_decode_response(
@@ -401,7 +401,7 @@ defmodule ReqLLM.Providers.OpenRouter do
 
   defp extract_deepseek_tool_calls(_), do: :no_tool_calls
 
-  defp is_deepseek_model?(req) do
+  defp deepseek_model?(req) do
     case req.private[:req_llm_model] do
       %ReqLLM.Model{model: model} -> String.starts_with?(model, "deepseek/")
       _ -> false

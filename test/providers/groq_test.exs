@@ -276,11 +276,11 @@ defmodule ReqLLM.Providers.GroqTest do
            assert json["top_p"] == 0.9
            assert json["frequency_penalty"] == 0.1
          end},
-        {[presence_penalty: 0.2, user: "test_user", seed: 12345],
+        {[presence_penalty: 0.2, user: "test_user", seed: 12_345],
          fn json ->
            assert json["presence_penalty"] == 0.2
            assert json["user"] == "test_user"
-           assert json["seed"] == 12345
+           assert json["seed"] == 12_345
          end},
         {[logit_bias: %{"50256" => -100}],
          fn json -> assert json["logit_bias"] == %{"50256" => -100} end}

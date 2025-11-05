@@ -166,7 +166,7 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
   defp add_token_limits(body, model_name, request_options) do
     body = Map.delete(body, "max_tokens") |> Map.delete("max_completion_tokens")
 
-    if is_reasoning_model_name?(model_name) do
+    if reasoning_model_name?(model_name) do
       maybe_put(
         body,
         :max_completion_tokens,
@@ -179,13 +179,13 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
     end
   end
 
-  defp is_reasoning_model_name?("gpt-5-chat-latest"), do: false
-  defp is_reasoning_model_name?(<<"gpt-5", _::binary>>), do: true
-  defp is_reasoning_model_name?(<<"gpt-4.1", _::binary>>), do: true
-  defp is_reasoning_model_name?(<<"o1", _::binary>>), do: true
-  defp is_reasoning_model_name?(<<"o3", _::binary>>), do: true
-  defp is_reasoning_model_name?(<<"o4", _::binary>>), do: true
-  defp is_reasoning_model_name?(_), do: false
+  defp reasoning_model_name?("gpt-5-chat-latest"), do: false
+  defp reasoning_model_name?(<<"gpt-5", _::binary>>), do: true
+  defp reasoning_model_name?(<<"gpt-4.1", _::binary>>), do: true
+  defp reasoning_model_name?(<<"o1", _::binary>>), do: true
+  defp reasoning_model_name?(<<"o3", _::binary>>), do: true
+  defp reasoning_model_name?(<<"o4", _::binary>>), do: true
+  defp reasoning_model_name?(_), do: false
 
   defp add_stream_options(body, request_options) do
     if request_options[:stream] do

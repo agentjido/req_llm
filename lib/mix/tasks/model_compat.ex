@@ -621,18 +621,18 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   defp model_supports_operation?(registry, provider, model_id, :embedding) do
     case find_model(registry, provider, model_id) do
       nil -> false
-      model -> is_embedding_model?(model)
+      model -> embedding_model?(model)
     end
   end
 
   defp model_supports_operation?(registry, provider, model_id, :text) do
     case find_model(registry, provider, model_id) do
       nil -> false
-      model -> not is_embedding_model?(model)
+      model -> not embedding_model?(model)
     end
   end
 
-  defp is_embedding_model?(model) do
+  defp embedding_model?(model) do
     t = Map.get(model, "type")
     outputs = get_in(model, ["modalities", "output"]) || []
     t == "embedding" or Enum.member?(outputs, "embedding")
