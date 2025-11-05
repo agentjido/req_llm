@@ -472,9 +472,9 @@ defmodule ReqLLM.Providers.Google do
     {Keyword.put(rest, :provider_options, provider_opts), []}
   end
 
-  defp translate_reasoning_effort_to_budget(:low, _model), do: 4096
-  defp translate_reasoning_effort_to_budget(:medium, _model), do: 8192
-  defp translate_reasoning_effort_to_budget(:high, _model), do: 16384
+  defp translate_reasoning_effort_to_budget(:low, _model), do: 4_096
+  defp translate_reasoning_effort_to_budget(:medium, _model), do: 8_192
+  defp translate_reasoning_effort_to_budget(:high, _model), do: 16_384
 
   defp translate_reasoning_effort_to_budget("low", model),
     do: translate_reasoning_effort_to_budget(:low, model)
@@ -486,7 +486,7 @@ defmodule ReqLLM.Providers.Google do
     do: translate_reasoning_effort_to_budget(:high, model)
 
   defp translate_reasoning_effort_to_budget(budget, _model) when is_integer(budget), do: budget
-  defp translate_reasoning_effort_to_budget(_unknown, _model), do: 8192
+  defp translate_reasoning_effort_to_budget(_unknown, _model), do: 8_192
 
   @impl ReqLLM.Provider
   def translate_options(_operation, _model, opts) do
@@ -698,7 +698,7 @@ defmodule ReqLLM.Providers.Google do
   defp put_schema_for_model(generation_config, model_name, compiled_schema) do
     json_schema = ReqLLM.Schema.to_json(compiled_schema.schema)
 
-    if gemini_2_5?(model_name) and is_json_schema?(json_schema) do
+    if gemini_2_5?(model_name) and json_schema?(json_schema) do
       Map.put(generation_config, :responseJsonSchema, json_schema)
     else
       google_schema = convert_to_google_schema(json_schema)
@@ -706,11 +706,11 @@ defmodule ReqLLM.Providers.Google do
     end
   end
 
-  defp is_json_schema?(%{"type" => type}) when is_binary(type) do
+  defp json_schema?(%{"type" => type}) when is_binary(type) do
     type in ["object", "array", "string", "number", "integer", "boolean", "null"]
   end
 
-  defp is_json_schema?(_), do: false
+  defp json_schema?(_), do: false
 
   defp convert_to_google_schema(schema) when is_map(schema) do
     schema

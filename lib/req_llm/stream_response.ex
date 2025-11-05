@@ -223,9 +223,9 @@ defmodule ReqLLM.StreamResponse do
     # Collect argument fragments from meta chunks
     arg_fragments =
       chunks
-      |> Enum.filter(&(&1.type == :meta))
-      |> Enum.filter(fn chunk ->
-        Map.has_key?(chunk.metadata, :tool_call_args)
+      |> Enum.filter(fn
+        %{type: :meta, metadata: %{tool_call_args: _}} -> true
+        _ -> false
       end)
       |> Enum.group_by(fn chunk ->
         chunk.metadata.tool_call_args.index
@@ -467,8 +467,10 @@ defmodule ReqLLM.StreamResponse do
     # Accumulate JSON fragments from meta chunks
     json_fragments_by_index =
       chunks
-      |> Enum.filter(&(&1.type == :meta))
-      |> Enum.filter(&match?(%{metadata: %{tool_call_args: %{index: _, fragment: _}}}, &1))
+      |> Enum.filter(fn
+        %{type: :meta, metadata: %{tool_call_args: %{index: _, fragment: _}}} -> true
+        _ -> false
+      end)
       |> Enum.group_by(fn chunk -> chunk.metadata.tool_call_args.index end)
       |> Map.new(fn {index, meta_chunks} ->
         json =

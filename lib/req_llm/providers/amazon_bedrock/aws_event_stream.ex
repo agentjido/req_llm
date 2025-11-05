@@ -1,11 +1,46 @@
 defmodule ReqLLM.Providers.AmazonBedrock.AWSEventStream do
   @moduledoc """
-  Parser for AWS Event Stream protocol.
+  Parser for the AWS Event Stream protocol, specialized for Amazon Bedrock.
 
   AWS Event Stream is a binary protocol used by various AWS services for streaming responses.
   It includes CRC checksums and a specific binary format for framing messages.
 
   This module provides functions to parse the binary stream into decoded events.
+
+  ## Design Rationale: Bedrock Specialization
+
+  This parser is **intentionally specialized for Amazon Bedrock** and is **not** a
+  general-purpose AWS Event Stream parser. This design was chosen for **performance
+  and convenience** within ReqLLM.
+
+  A generic parser would be less efficient for this use case. It would have to:
+  1. Parse all 10+ possible header types (e.g., UUIDs, Timestamps, Booleans) that
+     Bedrock never uses, adding unnecessary parsing overhead.
+  2. Return a raw binary payload, forcing ReqLLM to perform a second, multi-step
+     decoding process (JSON decode → extract base64 → base64 decode → JSON decode).
+
+  This implementation avoids that overhead by making two key assumptions:
+
+  1. **Header Parsing:** Only parses header values of type `7` (String), which is all
+     Bedrock uses for metadata like `:event-type` and `:content-type`. All other
+     header value types defined in the AWS Event Stream specification are intentionally
+     ignored, simplifying the parsing logic.
+
+  2. **Integrated Payload Decoding:** Decodes the Bedrock-specific payload format
+     *in a single pass*. It handles both the `InvokeModelWithResponseStream` format
+     (`{\"bytes\": \"base64...\"}`) and the `ConverseStream` direct JSON format,
+     returning ready-to-use Elixir maps.
+
+  ## Non-Goals
+
+  Because of this specialization, this parser is **not suitable** for other AWS services
+  that use the Event Stream protocol, such as:
+  - **S3 Select** (uses different header types and binary payloads)
+  - **Amazon Transcribe** (uses non-JSON binary payloads)
+  - **Amazon Kinesis** (different event structure)
+
+  For a general-purpose parser, consider implementing all header types and returning
+  raw payload bytes instead of decoded JSON.
 
   ## Format
 
@@ -20,8 +55,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.AWSEventStream do
   ## Example
 
       data = <<binary_aws_event_stream_data>>
-      case ReqLLM.AWSEventStream.parse_binary(data) do
-        {:ok, events, rest} -> 
+      case ReqLLM.Providers.AmazonBedrock.AWSEventStream.parse_binary(data) do
+        {:ok, events, rest} ->
           # Process events (list of decoded JSON maps)
           # Keep rest for next chunk
         {:incomplete, data} ->
@@ -263,13 +298,13 @@ defmodule ReqLLM.Providers.AmazonBedrock.AWSEventStream do
 
   ## Example
 
-      stream = ReqLLM.AWSEventStream.create_stream(
+      stream = ReqLLM.Providers.AmazonBedrock.AWSEventStream.create_stream(
         process_event: fn event ->
           # Transform the event
           %{data: event}
         end
       )
-      
+
       Enum.each(stream, fn chunk ->
         IO.inspect(chunk)
       end)

@@ -94,7 +94,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAITest do
       response_body = %{
         "id" => "chatcmpl-123",
         "object" => "chat.completion",
-        "created" => 1677_652_288,
+        "created" => 1_677_652_288,
         "model" => "openai.gpt-oss-20b-1:0",
         "choices" => [
           %{
@@ -126,7 +126,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAITest do
       response_body = %{
         "id" => "chatcmpl-tool123",
         "object" => "chat.completion",
-        "created" => 1677_652_288,
+        "created" => 1_677_652_288,
         "model" => "openai.gpt-oss-120b-1:0",
         "choices" => [
           %{
@@ -170,7 +170,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAITest do
       inner_event = %{
         "id" => "chatcmpl-123",
         "object" => "chat.completion.chunk",
-        "created" => 1677_652_288,
+        "created" => 1_677_652_288,
         "model" => "openai.gpt-oss-20b-1:0",
         "choices" => [
           %{
@@ -200,7 +200,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAITest do
       inner_event = %{
         "id" => "chatcmpl-123",
         "object" => "chat.completion.chunk",
-        "created" => 1677_652_288,
+        "created" => 1_677_652_288,
         "model" => "openai.gpt-oss-20b-1:0",
         "choices" => [
           %{

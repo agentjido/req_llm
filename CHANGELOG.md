@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Enhanced
+
+- **AWS Event Stream parser documentation** clarifying Bedrock specialization
+  - Explains performance rationale for single-pass parsing and header specialization
+  - Documents non-goals (S3 Select, Transcribe, Kinesis incompatibility)
+
 ### Fixed
 
 - **JSV schema validation** now preserves original data types instead of returning cast values

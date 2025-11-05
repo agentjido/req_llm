@@ -97,7 +97,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
 
         # For streaming, fixture saving is handled in StreamServer callback
         # For non-streaming, save fixture BEFORE decoding to capture raw response
-        if is_real_time_streaming?(request) do
+        if real_time_streaming?(request) do
           Logger.debug("Fixture streaming request - saving handled in StreamServer")
           request
         else
@@ -120,7 +120,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
   # ---------------------------------------------------------------------------
   defp live?, do: ReqLLM.Test.Env.fixtures_mode() == :record
 
-  defp is_real_time_streaming?(%Req.Request{} = request) do
+  defp real_time_streaming?(%Req.Request{} = request) do
     request.private[:real_time_stream] != nil
   end
 
