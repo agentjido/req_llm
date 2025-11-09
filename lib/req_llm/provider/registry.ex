@@ -519,7 +519,7 @@ defmodule ReqLLM.Provider.Registry do
           "models" => %{"claude-3-sonnet" => %{"id" => "claude-3-sonnet", ...}}
         }
       }
-      
+
       ReqLLM.Provider.Registry.initialize(catalog)
       #=> :ok
 
@@ -691,8 +691,13 @@ defmodule ReqLLM.Provider.Registry do
   @spec discover_providers() :: [module()]
   def discover_providers do
     case :application.get_key(:req_llm, :modules) do
-      {:ok, modules} -> Enum.filter(modules, &provider_module?/1)
-      :undefined -> []
+      {:ok, modules} ->
+        modules
+        |> Enum.concat(Application.get_env(:req_llm, :provider_modules, []))
+        |> Enum.filter(&provider_module?/1)
+
+      :undefined ->
+        []
     end
   end
 
