@@ -693,7 +693,7 @@ defmodule ReqLLM.Provider.Registry do
     case :application.get_key(:req_llm, :modules) do
       {:ok, modules} ->
         modules
-        |> Enum.concat(Application.get_env(:req_llm, :provider_modules, []))
+        |> Enum.concat(Application.get_env(:req_llm, :custom_providers, []))
         |> Enum.filter(&provider_module?/1)
 
       :undefined ->

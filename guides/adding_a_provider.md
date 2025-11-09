@@ -75,12 +75,12 @@ Prefer `use ReqLLM.Provider.Defaults` to get robust OpenAI-style defaults and ov
 
 ### Registering Custom Providers
 
-If you are developing a provider outside of the `req_llm` library (e.g., in your own application), you must register it in your application configuration so `req_llm` can discover it.
+If you are developing a provider outside of the `req_llm` library (e.g., in your own application), you must register it as a custom provider in your application configuration so `req_llm` can discover it.
 
 Add the module to your `config.exs`:
 ```elixir
 # In config/config.exs
-config :req_llm, :provider_modules, [ReqLLM.Providers.Acme]
+config :req_llm, :custom_providers, [ReqLLM.Providers.Acme]
 ```
 This tells `req_llm` to load `ReqLLM.Providers.Acme` as a valid provider module alongside its built-in providers.
 
