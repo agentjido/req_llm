@@ -73,10 +73,6 @@ Required vs optional callbacks:
 
 Prefer `use ReqLLM.Provider.Defaults` to get robust OpenAI-style defaults and override only when needed.
 
-I added the new section under `## Provider Module Structure` with the heading `### Registering Custom Providers`.
-
-Here is the new text I inserted:
-
 ### Registering Custom Providers
 
 If you are developing a provider outside of the `req_llm` library (e.g., in your own application), you must register it in your application configuration so `req_llm` can discover it.
