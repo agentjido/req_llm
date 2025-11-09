@@ -327,7 +327,7 @@ defmodule ReqLLM do
   ## StreamResponse Fields
 
     * `stream` - Lazy enumerable of `StreamChunk` structs for real-time consumption
-    * `metadata_task` - Concurrent Task collecting usage and finish_reason
+    * `metadata_handle` - Concurrent handle collecting usage and finish_reason
     * `cancel` - Function to terminate streaming and cleanup resources
     * `model` - Model specification that generated this response
     * `context` - Updated conversation context including assistant's response

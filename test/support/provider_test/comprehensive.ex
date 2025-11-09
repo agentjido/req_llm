@@ -106,7 +106,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
 
             assert %ReqLLM.StreamResponse{} = stream_response
             assert stream_response.stream
-            assert stream_response.metadata_task
+            assert stream_response.metadata_handle
 
             {:ok, response} = ReqLLM.StreamResponse.to_response(stream_response)
 
@@ -567,7 +567,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
 
               assert %ReqLLM.StreamResponse{} = stream_response
               assert stream_response.stream
-              assert stream_response.metadata_task
+              assert stream_response.metadata_handle
 
               {thinking_count, reasoning_tokens_stream} =
                 stream_response.stream

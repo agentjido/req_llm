@@ -265,25 +265,25 @@ end)
 |> Stream.run()
 ```
 
-### Issue: Concurrent access to usage metadata
+### Shared metadata access
 
-**Problem**: Multiple parts of code need usage metadata without blocking.
-
-**Solution**: Share the metadata task:
+Streaming responses now expose a reusable metadata handle. The handle collects metadata once,
+caches the result, and lets every caller await it independently—no more racing or blocking on a
+single task:
 
 ```elixir
 {:ok, response} = ReqLLM.stream_text(model, messages)
 
-# Multiple consumers can await the same task
-usage_task = response.metadata_task
+# Multiple consumers can await the same metadata handle safely
+metadata_handle = response.metadata_handle
 
 Task.start(fn ->
-  usage = Task.await(usage_task)
+  usage = ReqLLM.StreamResponse.MetadataHandle.await(metadata_handle)
   log_usage(usage)
 end)
 
 Task.start(fn ->
-  metadata = Task.await(usage_task)
+  metadata = ReqLLM.StreamResponse.MetadataHandle.await(metadata_handle)
   update_billing(metadata.usage)
 end)
 ```

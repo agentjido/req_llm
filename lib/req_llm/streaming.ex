@@ -43,6 +43,7 @@ defmodule ReqLLM.Streaming do
 
   """
 
+  alias ReqLLM.StreamResponse.MetadataHandle
   alias ReqLLM.{Context, Model, StreamResponse, StreamServer}
 
   require Logger
@@ -62,7 +63,7 @@ defmodule ReqLLM.Streaming do
 
   ## Returns
 
-    * `{:ok, stream_response}` - StreamResponse with stream and metadata_task
+    * `{:ok, stream_response}` - StreamResponse with stream and metadata_handle
     * `{:error, reason}` - Failed to start streaming components
 
   ## Options
@@ -119,8 +120,8 @@ defmodule ReqLLM.Streaming do
       receive_timeout = Keyword.get(opts, :receive_timeout, default_timeout)
       stream = create_lazy_stream(server_pid, receive_timeout)
 
-      # Start metadata collection task
-      metadata_task = start_metadata_task(server_pid, opts)
+      # Start metadata collection handle
+      metadata_handle = start_metadata_handle(server_pid, opts)
 
       # Create cancel function
       cancel_fn = fn -> StreamServer.cancel(server_pid) end
@@ -128,7 +129,7 @@ defmodule ReqLLM.Streaming do
       # Build StreamResponse
       stream_response = %StreamResponse{
         stream: stream,
-        metadata_task: metadata_task,
+        metadata_handle: metadata_handle,
         cancel: cancel_fn,
         model: model,
         context: context
@@ -247,12 +248,11 @@ defmodule ReqLLM.Streaming do
     )
   end
 
-  # Start metadata collection task that awaits completion
-  defp start_metadata_task(server_pid, opts) do
-    Task.async(fn ->
-      default_metadata_timeout = Application.get_env(:req_llm, :metadata_timeout, 300_000)
-      metadata_timeout = Keyword.get(opts, :metadata_timeout, default_metadata_timeout)
+  defp start_metadata_handle(server_pid, opts) do
+    default_metadata_timeout = Application.get_env(:req_llm, :metadata_timeout, 300_000)
+    metadata_timeout = Keyword.get(opts, :metadata_timeout, default_metadata_timeout)
 
+    fetch_fun = fn ->
       case StreamServer.await_metadata(server_pid, metadata_timeout) do
         {:ok, metadata} ->
           metadata
@@ -261,6 +261,11 @@ defmodule ReqLLM.Streaming do
           Logger.warning("Metadata collection failed: #{inspect(reason)}")
           %{}
       end
-    end)
+    end
+
+    case MetadataHandle.start_link(fetch_fun) do
+      {:ok, handle} -> handle
+      {:error, reason} -> raise "Failed to start metadata handle: #{inspect(reason)}"
+    end
   end
 end

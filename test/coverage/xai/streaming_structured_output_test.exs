@@ -47,7 +47,7 @@ defmodule ReqLLM.Coverage.XAI.StreamingStructuredOutputTest do
 
       assert %ReqLLM.StreamResponse{} = stream_response
       assert stream_response.stream
-      assert stream_response.metadata_task
+      assert stream_response.metadata_handle
 
       {:ok, response} = ReqLLM.StreamResponse.to_response(stream_response)
 
@@ -87,7 +87,7 @@ defmodule ReqLLM.Coverage.XAI.StreamingStructuredOutputTest do
 
       assert %ReqLLM.StreamResponse{} = stream_response
       assert stream_response.stream
-      assert stream_response.metadata_task
+      assert stream_response.metadata_handle
 
       {:ok, response} = ReqLLM.StreamResponse.to_response(stream_response)
 

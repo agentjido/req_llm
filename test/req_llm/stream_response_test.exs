@@ -2,6 +2,7 @@
 defmodule ReqLLM.StreamResponseTest.Helpers do
   import ExUnit.Assertions
 
+  alias ReqLLM.StreamResponse.MetadataHandle
   alias ReqLLM.{Context, Model, StreamChunk, StreamResponse}
 
   @doc """
@@ -19,10 +20,11 @@ defmodule ReqLLM.StreamResponseTest.Helpers do
   def create_stream_response(opts \\ []) do
     defaults = %{
       stream: Stream.cycle([StreamChunk.text("hello")]) |> Stream.take(1),
-      metadata_task:
-        Task.async(fn ->
-          %{usage: %{input_tokens: 5, output_tokens: 10}, finish_reason: :stop}
-        end),
+      metadata_handle:
+        create_metadata_handle(%{
+          usage: %{input_tokens: 5, output_tokens: 10},
+          finish_reason: :stop
+        }),
       cancel: fn -> :ok end,
       model: %Model{provider: :test, model: "test-model"},
       context: Context.new([Context.system("Test")])
@@ -31,8 +33,16 @@ defmodule ReqLLM.StreamResponseTest.Helpers do
     struct!(StreamResponse, Map.merge(defaults, Map.new(opts)))
   end
 
-  def create_metadata_task(data) do
-    Task.async(fn -> data end)
+  def create_metadata_handle(data_or_fun) do
+    fetch_fun =
+      if is_function(data_or_fun, 0) do
+        data_or_fun
+      else
+        fn -> data_or_fun end
+      end
+
+    {:ok, handle} = MetadataHandle.start_link(fetch_fun)
+    handle
   end
 
   def create_cancel_function(ref \\ make_ref()) do
@@ -65,7 +75,7 @@ defmodule ReqLLM.StreamResponseTest do
     test "creates stream response with required fields" do
       context = Context.new([Context.system("Test")])
       model = %Model{provider: :test, model: "test-model"}
-      metadata_task = create_metadata_task(%{usage: %{tokens: 10}, finish_reason: :stop})
+      metadata_handle = create_metadata_handle(%{usage: %{tokens: 10}, finish_reason: :stop})
       cancel_fn = create_cancel_function()
       stream = [StreamChunk.text("hello")]
 
@@ -73,7 +83,7 @@ defmodule ReqLLM.StreamResponseTest do
         create_stream_response(
           context: context,
           model: model,
-          metadata_task: metadata_task,
+          metadata_handle: metadata_handle,
           cancel: cancel_fn,
           stream: stream
         )
@@ -85,7 +95,7 @@ defmodule ReqLLM.StreamResponseTest do
       )
 
       assert is_function(stream_response.cancel, 0)
-      assert %Task{} = stream_response.metadata_task
+      assert is_pid(stream_response.metadata_handle)
     end
 
     test "struct enforces required fields" do
@@ -207,23 +217,23 @@ defmodule ReqLLM.StreamResponseTest do
   describe "usage/1 metadata extraction" do
     test "awaits task and extracts usage map" do
       usage = %{input_tokens: 15, output_tokens: 25, total_cost: 0.045}
-      metadata_task = create_metadata_task(%{usage: usage, finish_reason: :stop})
+      metadata_handle = create_metadata_handle(%{usage: usage, finish_reason: :stop})
 
-      stream_response = create_stream_response(metadata_task: metadata_task)
+      stream_response = create_stream_response(metadata_handle: metadata_handle)
 
       assert StreamResponse.usage(stream_response) == usage
     end
 
     test "returns nil when usage not available" do
-      metadata_task = create_metadata_task(%{finish_reason: :stop})
-      stream_response = create_stream_response(metadata_task: metadata_task)
+      metadata_handle = create_metadata_handle(%{finish_reason: :stop})
+      stream_response = create_stream_response(metadata_handle: metadata_handle)
 
       assert StreamResponse.usage(stream_response) == nil
     end
 
     test "returns nil when task returns non-map" do
-      metadata_task = create_metadata_task("invalid")
-      stream_response = create_stream_response(metadata_task: metadata_task)
+      metadata_handle = create_metadata_handle("invalid")
+      stream_response = create_stream_response(metadata_handle: metadata_handle)
 
       assert StreamResponse.usage(stream_response) == nil
     end
@@ -240,9 +250,18 @@ defmodule ReqLLM.StreamResponseTest do
         total_cost: 0.03
       }
 
-      metadata_task = create_metadata_task(%{usage: usage})
-      stream_response = create_stream_response(metadata_task: metadata_task)
+      metadata_handle = create_metadata_handle(%{usage: usage})
+      stream_response = create_stream_response(metadata_handle: metadata_handle)
 
+      assert StreamResponse.usage(stream_response) == usage
+    end
+
+    test "can be called multiple times safely" do
+      usage = %{input_tokens: 5, output_tokens: 10}
+      metadata_handle = create_metadata_handle(%{usage: usage})
+      stream_response = create_stream_response(metadata_handle: metadata_handle)
+
+      assert StreamResponse.usage(stream_response) == usage
       assert StreamResponse.usage(stream_response) == usage
     end
   end
@@ -260,25 +279,33 @@ defmodule ReqLLM.StreamResponseTest do
 
     for {input, expected} <- finish_reason_tests do
       test "extracts finish_reason: #{inspect(input)} -> #{inspect(expected)}" do
-        metadata_task = create_metadata_task(%{finish_reason: unquote(input)})
-        stream_response = create_stream_response(metadata_task: metadata_task)
+        metadata_handle = create_metadata_handle(%{finish_reason: unquote(input)})
+        stream_response = create_stream_response(metadata_handle: metadata_handle)
 
         assert StreamResponse.finish_reason(stream_response) == unquote(expected)
       end
     end
 
     test "returns nil when finish_reason not available" do
-      metadata_task = create_metadata_task(%{usage: %{tokens: 10}})
-      stream_response = create_stream_response(metadata_task: metadata_task)
+      metadata_handle = create_metadata_handle(%{usage: %{tokens: 10}})
+      stream_response = create_stream_response(metadata_handle: metadata_handle)
 
       assert StreamResponse.finish_reason(stream_response) == nil
     end
 
     test "returns nil when task returns non-map" do
-      metadata_task = create_metadata_task(nil)
-      stream_response = create_stream_response(metadata_task: metadata_task)
+      metadata_handle = create_metadata_handle(nil)
+      stream_response = create_stream_response(metadata_handle: metadata_handle)
 
       assert StreamResponse.finish_reason(stream_response) == nil
+    end
+
+    test "can be called multiple times safely" do
+      metadata_handle = create_metadata_handle(%{finish_reason: :stop})
+      stream_response = create_stream_response(metadata_handle: metadata_handle)
+
+      assert StreamResponse.finish_reason(stream_response) == :stop
+      assert StreamResponse.finish_reason(stream_response) == :stop
     end
   end
 
@@ -286,12 +313,12 @@ defmodule ReqLLM.StreamResponseTest do
     test "converts simple streaming response to legacy Response" do
       chunks = text_chunks(["Hello", " world!"])
       usage = %{input_tokens: 8, output_tokens: 12, total_cost: 0.024}
-      metadata_task = create_metadata_task(%{usage: usage, finish_reason: :stop})
+      metadata_handle = create_metadata_handle(%{usage: usage, finish_reason: :stop})
 
       stream_response =
         create_stream_response(
           stream: chunks,
-          metadata_task: metadata_task
+          metadata_handle: metadata_handle
         )
 
       {:ok, response} = StreamResponse.to_response(stream_response)
@@ -322,12 +349,12 @@ defmodule ReqLLM.StreamResponseTest do
         StreamChunk.tool_call("calculate", %{expr: "2+2"}, %{tool_call_id: "call-456"})
       ]
 
-      metadata_task = create_metadata_task(%{finish_reason: :tool_use})
+      metadata_handle = create_metadata_handle(%{finish_reason: :tool_use})
 
       stream_response =
         create_stream_response(
           stream: chunks,
-          metadata_task: metadata_task
+          metadata_handle: metadata_handle
         )
 
       {:ok, response} = StreamResponse.to_response(stream_response)
@@ -345,7 +372,7 @@ defmodule ReqLLM.StreamResponseTest do
       stream_response =
         create_stream_response(
           stream: [],
-          metadata_task: create_metadata_task(%{finish_reason: :stop})
+          metadata_handle: create_metadata_handle(%{finish_reason: :stop})
         )
 
       {:ok, response} = StreamResponse.to_response(stream_response)
@@ -363,7 +390,7 @@ defmodule ReqLLM.StreamResponseTest do
       stream_response =
         create_stream_response(
           stream: chunks,
-          metadata_task: create_metadata_task(%{finish_reason: :tool_use})
+          metadata_handle: create_metadata_handle(%{finish_reason: :tool_use})
         )
 
       {:ok, response} = StreamResponse.to_response(stream_response)
@@ -408,7 +435,7 @@ defmodule ReqLLM.StreamResponseTest do
       stream_response =
         create_stream_response(
           stream: error_stream,
-          metadata_task: create_metadata_task(%{finish_reason: :stop})
+          metadata_handle: create_metadata_handle(%{finish_reason: :stop})
         )
 
       # Enum.to_list will raise, which to_response should catch
@@ -783,12 +810,12 @@ defmodule ReqLLM.StreamResponseTest do
       assert tool_names == ["first", "second", "third"]
     end
 
-    test "response contains metadata from metadata_task" do
+    test "response contains metadata from metadata_handle" do
       chunks = text_chunks(["test"])
       usage = %{input_tokens: 10, output_tokens: 20, total_cost: 0.03}
-      metadata_task = create_metadata_task(%{usage: usage, finish_reason: :stop})
+      metadata_handle = create_metadata_handle(%{usage: usage, finish_reason: :stop})
 
-      stream_response = create_stream_response(stream: chunks, metadata_task: metadata_task)
+      stream_response = create_stream_response(stream: chunks, metadata_handle: metadata_handle)
 
       {:ok, response} = StreamResponse.process_stream(stream_response)
 
@@ -803,9 +830,8 @@ defmodule ReqLLM.StreamResponseTest do
       chunks = text_chunks(Enum.map(1..100, &"chunk #{&1} "))
 
       # Simulate slow metadata collection
-      metadata_task =
-        Task.async(fn ->
-          # Small delay to ensure concurrency
+      metadata_handle =
+        create_metadata_handle(fn ->
           Process.sleep(10)
           %{usage: %{tokens: 100}, finish_reason: :stop}
         end)
@@ -813,15 +839,15 @@ defmodule ReqLLM.StreamResponseTest do
       stream_response =
         create_stream_response(
           stream: chunks,
-          metadata_task: metadata_task
+          metadata_handle: metadata_handle
         )
 
       # Test text collection and usage from same process
       text = StreamResponse.text(stream_response)
 
       # Create fresh stream_response for usage test
-      metadata_task2 = Task.async(fn -> %{usage: %{tokens: 100}, finish_reason: :stop} end)
-      stream_response2 = create_stream_response(metadata_task: metadata_task2)
+      metadata_handle2 = create_metadata_handle(%{usage: %{tokens: 100}, finish_reason: :stop})
+      stream_response2 = create_stream_response(metadata_handle: metadata_handle2)
       usage = StreamResponse.usage(stream_response2)
 
       assert String.starts_with?(text, "chunk 1 chunk 2")
