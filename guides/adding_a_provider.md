@@ -73,6 +73,21 @@ Required vs optional callbacks:
 
 Prefer `use ReqLLM.Provider.Defaults` to get robust OpenAI-style defaults and override only when needed.
 
+I added the new section under `## Provider Module Structure` with the heading `### Registering Custom Providers`.
+
+Here is the new text I inserted:
+
+### Registering Custom Providers
+
+If you are developing a provider outside of the `req_llm` library (e.g., in your own application), you must register it in your application configuration so `req_llm` can discover it.
+
+Add the module to your `config.exs`:
+```elixir
+# In config/config.exs
+config :req_llm, :provider_modules, [ReqLLM.Providers.Acme]
+```
+This tells `req_llm` to load `ReqLLM.Providers.Acme` as a valid provider module alongside its built-in providers.
+
 ## Core Implementation
 
 ### Minimal OpenAI-compatible provider
