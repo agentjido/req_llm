@@ -395,6 +395,7 @@ defmodule ReqLLM.ModelTest do
         sorted_files =
           files
           |> Enum.filter(&String.ends_with?(&1, ".json"))
+          |> Enum.reject(&String.starts_with?(&1, "."))
           |> Enum.sort_by(fn file ->
             # Put priority providers first
             case Enum.find_index(priority_providers, &(&1 == file)) do
@@ -409,7 +410,10 @@ defmodule ReqLLM.ModelTest do
         |> Enum.flat_map(&load_models_from_file(models_dir, &1))
         # Filter to only catalog_allow models
         |> Enum.filter(fn {provider_id, model_data} ->
-          ReqLLM.Catalog.allowed_spec?(provider_id, model_data["id"])
+          case model_data["id"] do
+            id when is_binary(id) -> ReqLLM.Catalog.allowed_spec?(provider_id, id)
+            _ -> false
+          end
         end)
         # Limit total models
         |> Enum.take(50)
