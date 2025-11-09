@@ -43,8 +43,7 @@ defmodule ReqLLM.Streaming do
 
   """
 
-  alias ReqLLM.StreamResponse.MetadataHandle
-  alias ReqLLM.{Context, Model, StreamResponse, StreamServer}
+  alias ReqLLM.{Context, Model, StreamResponse, StreamResponse.MetadataHandle, StreamServer}
 
   require Logger
 

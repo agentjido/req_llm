@@ -2,8 +2,7 @@
 defmodule ReqLLM.StreamResponseTest.Helpers do
   import ExUnit.Assertions
 
-  alias ReqLLM.StreamResponse.MetadataHandle
-  alias ReqLLM.{Context, Model, StreamChunk, StreamResponse}
+  alias ReqLLM.{Context, Model, StreamChunk, StreamResponse, StreamResponse.MetadataHandle}
 
   @doc """
   Assert multiple struct fields at once for cleaner tests.

@@ -69,8 +69,7 @@ defmodule ReqLLM.StreamResponse do
 
   use TypedStruct
 
-  alias ReqLLM.StreamResponse.MetadataHandle
-  alias ReqLLM.{Context, Model, Response}
+  alias ReqLLM.{Context, Model, Response, StreamResponse.MetadataHandle}
 
   typedstruct enforce: true do
     @typedoc """
@@ -497,9 +496,10 @@ defmodule ReqLLM.StreamResponse do
   """
   @spec usage(t()) :: map() | nil
   def usage(%__MODULE__{metadata_handle: handle}) do
-    case MetadataHandle.await(handle) do
-      %{usage: usage} -> usage
-      %{} -> nil
+    metadata = MetadataHandle.await(handle)
+
+    case metadata do
+      %{usage: usage} when is_map(usage) -> usage
       _ -> nil
     end
   end
@@ -532,15 +532,14 @@ defmodule ReqLLM.StreamResponse do
   """
   @spec finish_reason(t()) :: atom() | nil
   def finish_reason(%__MODULE__{metadata_handle: handle}) do
-    case MetadataHandle.await(handle) do
+    metadata = MetadataHandle.await(handle)
+
+    case metadata do
       %{finish_reason: finish_reason} when is_atom(finish_reason) ->
         finish_reason
 
       %{finish_reason: finish_reason} when is_binary(finish_reason) ->
         String.to_existing_atom(finish_reason)
-
-      %{} ->
-        nil
 
       _ ->
         nil
