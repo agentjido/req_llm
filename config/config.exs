@@ -13,6 +13,7 @@ config :llm_db,
       groq: ["*"],
       openai: ["*"],
       openrouter: ["*"],
+      venice: ["*"],
       xai: ["*"],
       zai: ["*"],
       zai_coder: ["*"]
