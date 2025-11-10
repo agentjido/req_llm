@@ -1,0 +1,67 @@
+{
+  "@context": {
+    "@vocab": "https://schema.reqllm.dev#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+
+    "Model": "Model",
+    "Provider": "Provider",
+    "Context": "Context",
+    "Message": "Message",
+    "ContentPart": "ContentPart",
+    "TextPart": "TextPart",
+    "ImageURLPart": "ImageURLPart",
+    "ImagePart": "ImagePart",
+    "FilePart": "FilePart",
+    "ThinkingPart": "ThinkingPart",
+    "ToolCallPart": "ToolCallPart",
+    "ToolResultPart": "ToolResultPart",
+    "Tool": "Tool",
+    "StreamChunk": "StreamChunk",
+    "Response": "Response",
+    "StreamResponse": "StreamResponse",
+    "Usage": "Usage",
+
+    "provider": "provider",
+    "modelName": "modelName",
+    "temperature": { "@id": "temperature", "@type": "xsd:decimal" },
+    "maxTokens":   { "@id": "maxTokens",   "@type": "xsd:integer" },
+
+    "hasMessage":  { "@id": "hasMessage",  "@type": "@id" },
+    "position":    { "@id": "position",    "@type": "xsd:integer" },
+    "role":        "role",
+    "hasPart":     { "@id": "hasPart",     "@type": "@id" },
+
+    "text":        "text",
+    "url":         { "@id": "url",         "@type": "@id" },
+    "mediaType":   "mediaType",
+    "payload":     "payload",
+    "toolName":    "toolName",
+    "argumentsJson":"argumentsJson",
+    "toolCallId":  "toolCallId",
+    "resultJson":  "resultJson",
+    "thinkingText":"thinkingText",
+
+    "name":        "name",
+    "description": "description",
+    "parameterSchema":"parameterSchema",
+
+    "streamChunk": { "@id": "streamChunk", "@type": "@id" },
+    "chunkType":   "chunkType",
+    "chunkText":   "chunkText",
+    "chunkMeta":   "chunkMeta",
+
+    "hasContext":  { "@id": "hasContext",  "@type": "@id" },
+    "hasMessageOut":{ "@id":"hasMessageOut","@type":"@id" },
+    "hasUsage":    { "@id": "hasUsage",    "@type": "@id" },
+    "finishReason":"finishReason",
+    "id":          "id",
+
+    "inputTokens":     { "@id": "inputTokens",     "@type": "xsd:integer" },
+    "outputTokens":    { "@id": "outputTokens",    "@type": "xsd:integer" },
+    "reasoningTokens": { "@id": "reasoningTokens", "@type": "xsd:integer" },
+    "totalTokens":     { "@id": "totalTokens",     "@type": "xsd:integer" },
+    "inputCostUSD":    { "@id": "inputCost",       "@type": "xsd:decimal" },
+    "outputCostUSD":   { "@id": "outputCost",      "@type": "xsd:decimal" },
+    "totalCostUSD":    { "@id": "totalCost",       "@type": "xsd:decimal" }
+  }
+}

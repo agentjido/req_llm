@@ -1,0 +1,53 @@
+# .github/workflows/ontology.yml
+# Purpose: CI pipeline for ACHI phases: build, test, validate SHACL, and enforce Σ receipt.
+name: ontology
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: '1.17'
+          otp-version: '27'
+
+      - name: Set up Java (for Apache Jena SHACL validator)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install dependencies
+        run: mix deps.get
+
+      - name: Run unit tests
+        run: mix test test/ontology_roundtrip_test.exs
+
+      - name: Run SHACL validation tests
+        run: mix test test/ontology_validation_test.exs
+
+      - name: Run all tests
+        run: mix test
+
+      - name: Validate SHACL constraints (Apache Jena)
+        run: bash script/validate_shacl.sh ontologies/reqllm.shapes.ttl ontologies/reqllm.sigma_observed.ttl
+        continue-on-error: true
+
+      - name: Check version consistency (gitvan)
+        if: github.event_name == 'pull_request'
+        run: mix run script/check_version.exs
+        continue-on-error: true
+
+      - name: Enforce Σ receipt
+        env:
+          Σ_HASH: ${{ secrets.SIGMA_HASH }}
+        run: mix run script/check_sigma_hash.exs

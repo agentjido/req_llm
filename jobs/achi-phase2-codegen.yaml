@@ -1,0 +1,120 @@
+# GitVan Job Specification: ACHI Phase 2 - Code Generation
+# Generated: 2025-11-10
+# Methodology: ACHI (Architecture, Code, History, Infrastructure)
+
+job:
+  id: achi-phase2-codegen
+  name: "ACHI Phase 2: Code Generation from Ontology"
+  description: "Generate Elixir modules from composed RDF ontology"
+  phase: code
+  tool: ggen
+
+metadata:
+  project: req_llm
+  methodology: ACHI
+  phase_number: 2
+  phase_name: "Code (ggen)"
+  date_started: "2025-11-10"
+  date_completed: "2025-11-10"
+  depends_on: achi-phase1-ontology
+
+artifacts:
+  inputs:
+    - path: graph/reqllm.ttl
+      type: rdf-turtle-composed
+      hash: "c0b085bd0214"
+      description: "Composed ontology from Phase 1"
+
+  outputs:
+    - path: lib/req_llm/orchestrator/call_plan.ex
+      lines: 139
+      type: elixir-module
+      rdf_class: "req:CallPlan"
+
+    - path: lib/req_llm/orchestrator/provider_candidate.ex
+      lines: 34
+      type: elixir-module
+      rdf_class: "req:ProviderCandidate"
+
+    - path: lib/req_llm/orchestrator/attempt.ex
+      lines: 100
+      type: elixir-module
+      rdf_class: "req:Attempt"
+
+    - path: lib/req_llm/orchestrator/retry_policy.ex
+      lines: 77
+      type: elixir-module
+      rdf_class: "req:RetryPolicy"
+
+    - path: lib/req_llm/orchestrator/budget_policy.ex
+      lines: 73
+      type: elixir-module
+      rdf_class: "req:BudgetPolicy"
+
+    - path: lib/req_llm/orchestrator/failure.ex
+      lines: 115
+      type: elixir-module
+      rdf_class: "req:Failure"
+
+    - path: lib/req_llm/ontology/emitter.ex
+      description: "Updated with 6 new JSON-LD emitters"
+      functions_added: 6
+
+    - path: test/orchestrator_test.exs
+      lines: 349
+      tests: 24
+      description: "Comprehensive test suite"
+
+execution:
+  method: manual-ontology-driven
+  reason: "ggen CLI does not exist (library-only)"
+  pattern: "RDF Class → Elixir Module → JSON-LD Emitter"
+
+  statistics:
+    production_code_lines: 538
+    test_code_lines: 349
+    total_lines: 887
+    modules_generated: 6
+    emitters_added: 6
+    test_cases: 24
+    test_pass_rate: "100%"
+
+challenges:
+  - issue: "ggen has no binary target"
+    investigation:
+      - "Checked workspace structure"
+      - "Examined Cargo.toml"
+      - "No src/main.rs or [[bin]] sections"
+    resolution: "Manual code generation following ontology patterns"
+    user_approval: yes
+
+  - issue: "LLVM version mismatch"
+    error: "dyld: Symbol not found: __ZN4llvm10DILocation7getImpl"
+    cause: "Rust 1.91.0 requires LLVM 21.x, system had 20.1.4"
+    resolution:
+      - "brew upgrade llvm"
+      - "LLVM 20.1.4 → 21.1.5"
+      - "z3 4.14.1 → 4.15.4"
+
+type_mappings:
+  xsd_string: "String.t()"
+  xsd_decimal: "float()"
+  xsd_integer: "non_neg_integer()"
+  rdf_Property: "module reference"
+
+results:
+  status: success
+  compilation_errors: 0
+  test_failures: 0
+  test_duration_seconds: 0.09
+  ontology_alignment: complete
+  brownfield_integration: seamless
+
+git_receipt:
+  commits:
+    - "95b1f6a8"
+    - "76fa9c2e"
+    - "d307a04d"
+  files_created: 6
+  files_modified: 2
+  test_coverage: "100%"

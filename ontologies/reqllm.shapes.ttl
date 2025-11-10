@@ -1,0 +1,678 @@
+# ontologies/reqllm.shapes.ttl
+# Purpose: SHACL constraints for Σ semantic validation (Q phase)
+# Validates ontology invariants at runtime and in CI
+
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix req:  <https://schema.reqllm.dev#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+##########
+# Message Constraints
+##########
+
+req:MessageShape a sh:NodeShape ;
+  sh:targetClass req:Message ;
+  sh:name "Message Shape" ;
+  sh:description "A Message must have exactly one role and at least one content part." ;
+
+  # Exactly one role
+  sh:property [
+    sh:path req:role ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:in (req:SystemRole req:UserRole req:AssistantRole req:ToolRole) ;
+    sh:message "Message must have exactly one role (system, user, assistant, or tool)" ;
+  ] ;
+
+  # At least one content part
+  sh:property [
+    sh:path req:hasPart ;
+    sh:minCount 1 ;
+    sh:class req:ContentPart ;
+    sh:message "Message must have at least one content part (hasPart)" ;
+  ] ;
+
+  # Position must be non-negative integer if present
+  sh:property [
+    sh:path req:position ;
+    sh:datatype xsd:integer ;
+    sh:minInclusive 0 ;
+    sh:message "Message position must be a non-negative integer" ;
+  ] .
+
+##########
+# ContentPart Constraints (by subtype)
+##########
+
+req:TextPartShape a sh:NodeShape ;
+  sh:targetClass req:TextPart ;
+  sh:name "TextPart Shape" ;
+  sh:description "TextPart requires text property." ;
+
+  sh:property [
+    sh:path req:text ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:datatype xsd:string ;
+    sh:minLength 1 ;
+    sh:message "TextPart must have non-empty text property" ;
+  ] .
+
+req:ImageURLPartShape a sh:NodeShape ;
+  sh:targetClass req:ImageURLPart ;
+  sh:name "ImageURLPart Shape" ;
+  sh:description "ImageURLPart requires url property." ;
+
+  sh:property [
+    sh:path req:url ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:nodeKind sh:IRI ;
+    sh:message "ImageURLPart must have a valid url (IRI)" ;
+  ] .
+
+req:ImagePartShape a sh:NodeShape ;
+  sh:targetClass req:ImagePart ;
+  sh:name "ImagePart Shape" ;
+  sh:description "ImagePart requires mediaType and payload." ;
+
+  sh:property [
+    sh:path req:mediaType ;
+    sh:minCount 1 ;
+    sh:datatype xsd:string ;
+    sh:pattern "^image/" ;
+    sh:message "ImagePart must have mediaType starting with 'image/'" ;
+  ] ;
+
+  sh:property [
+    sh:path req:payload ;
+    sh:minCount 1 ;
+    sh:message "ImagePart must have payload (base64Binary)" ;
+  ] .
+
+req:FilePartShape a sh:NodeShape ;
+  sh:targetClass req:FilePart ;
+  sh:name "FilePart Shape" ;
+  sh:description "FilePart requires mediaType and payload." ;
+
+  sh:property [
+    sh:path req:mediaType ;
+    sh:minCount 1 ;
+    sh:datatype xsd:string ;
+    sh:message "FilePart must have mediaType" ;
+  ] ;
+
+  sh:property [
+    sh:path req:payload ;
+    sh:minCount 1 ;
+    sh:message "FilePart must have payload" ;
+  ] .
+
+req:ThinkingPartShape a sh:NodeShape ;
+  sh:targetClass req:ThinkingPart ;
+  sh:name "ThinkingPart Shape" ;
+  sh:description "ThinkingPart requires thinkingText." ;
+
+  sh:property [
+    sh:path req:thinkingText ;
+    sh:minCount 1 ;
+    sh:datatype xsd:string ;
+    sh:message "ThinkingPart must have thinkingText" ;
+  ] .
+
+req:ToolCallPartShape a sh:NodeShape ;
+  sh:targetClass req:ToolCallPart ;
+  sh:name "ToolCallPart Shape" ;
+  sh:description "ToolCallPart requires toolName and argumentsJson." ;
+
+  sh:property [
+    sh:path req:toolName ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:datatype xsd:string ;
+    sh:minLength 1 ;
+    sh:message "ToolCallPart must have non-empty toolName" ;
+  ] ;
+
+  sh:property [
+    sh:path req:argumentsJson ;
+    sh:minCount 1 ;
+    sh:datatype xsd:string ;
+    sh:message "ToolCallPart must have argumentsJson (JSON string)" ;
+  ] .
+
+req:ToolResultPartShape a sh:NodeShape ;
+  sh:targetClass req:ToolResultPart ;
+  sh:name "ToolResultPart Shape" ;
+  sh:description "ToolResultPart requires toolCallId and resultJson." ;
+
+  sh:property [
+    sh:path req:toolCallId ;
+    sh:minCount 1 ;
+    sh:datatype xsd:string ;
+    sh:message "ToolResultPart must have toolCallId" ;
+  ] ;
+
+  sh:property [
+    sh:path req:resultJson ;
+    sh:minCount 1 ;
+    sh:datatype xsd:string ;
+    sh:message "ToolResultPart must have resultJson (JSON string)" ;
+  ] .
+
+##########
+# Response Constraints
+##########
+
+req:ResponseShape a sh:NodeShape ;
+  sh:targetClass req:Response ;
+  sh:name "Response Shape" ;
+  sh:description "Response must have context, message, and valid finishReason." ;
+
+  # Must have context
+  sh:property [
+    sh:path req:hasContext ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:class req:Context ;
+    sh:message "Response must have exactly one hasContext" ;
+  ] ;
+
+  # Must have output message
+  sh:property [
+    sh:path req:hasMessageOut ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:class req:Message ;
+    sh:message "Response must have exactly one hasMessageOut" ;
+  ] ;
+
+  # finishReason must be from enumeration
+  sh:property [
+    sh:path req:finishReason ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:in (req:Stop req:Length req:ToolCalls req:ContentFilter req:ErrorReason) ;
+    sh:message "Response finishReason must be one of: Stop, Length, ToolCalls, ContentFilter, Error" ;
+  ] ;
+
+  # id must be a string if present
+  sh:property [
+    sh:path req:id ;
+    sh:datatype xsd:string ;
+    sh:message "Response id must be a string" ;
+  ] ;
+
+  # Usage is optional but must be Usage class if present
+  sh:property [
+    sh:path req:hasUsage ;
+    sh:maxCount 1 ;
+    sh:class req:Usage ;
+    sh:message "Response hasUsage must be a Usage instance" ;
+  ] .
+
+req:StreamResponseShape a sh:NodeShape ;
+  sh:targetClass req:StreamResponse ;
+  sh:name "StreamResponse Shape" ;
+  sh:description "StreamResponse must have context and stream chunks." ;
+
+  # Must have context
+  sh:property [
+    sh:path req:hasContext ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:class req:Context ;
+    sh:message "StreamResponse must have exactly one hasContext" ;
+  ] ;
+
+  # Must have stream chunks
+  sh:property [
+    sh:path req:streamChunk ;
+    sh:minCount 1 ;
+    sh:class req:StreamChunk ;
+    sh:message "StreamResponse must have at least one streamChunk" ;
+  ] .
+
+##########
+# Context Constraints
+##########
+
+req:ContextShape a sh:NodeShape ;
+  sh:targetClass req:Context ;
+  sh:name "Context Shape" ;
+  sh:description "Context must have at least one message." ;
+
+  sh:property [
+    sh:path req:hasMessage ;
+    sh:minCount 1 ;
+    sh:class req:Message ;
+    sh:message "Context must have at least one hasMessage" ;
+  ] ;
+
+  # externalId is optional string
+  sh:property [
+    sh:path req:externalId ;
+    sh:datatype xsd:string ;
+    sh:message "Context externalId must be a string" ;
+  ] .
+
+##########
+# Usage Constraints
+##########
+
+req:UsageShape a sh:NodeShape ;
+  sh:targetClass req:Usage ;
+  sh:name "Usage Shape" ;
+  sh:description "Usage token counts must be non-negative integers, costs must be non-negative decimals." ;
+
+  # Input tokens (non-negative integer)
+  sh:property [
+    sh:path req:inputTokens ;
+    sh:datatype xsd:integer ;
+    sh:minInclusive 0 ;
+    sh:message "Usage inputTokens must be a non-negative integer" ;
+  ] ;
+
+  # Output tokens (non-negative integer)
+  sh:property [
+    sh:path req:outputTokens ;
+    sh:datatype xsd:integer ;
+    sh:minInclusive 0 ;
+    sh:message "Usage outputTokens must be a non-negative integer" ;
+  ] ;
+
+  # Reasoning tokens (non-negative integer, optional)
+  sh:property [
+    sh:path req:reasoningTokens ;
+    sh:datatype xsd:integer ;
+    sh:minInclusive 0 ;
+    sh:message "Usage reasoningTokens must be a non-negative integer" ;
+  ] ;
+
+  # Total tokens (non-negative integer, optional)
+  sh:property [
+    sh:path req:totalTokens ;
+    sh:datatype xsd:integer ;
+    sh:minInclusive 0 ;
+    sh:message "Usage totalTokens must be a non-negative integer" ;
+  ] ;
+
+  # Input cost (non-negative decimal, optional)
+  sh:property [
+    sh:path req:inputCost ;
+    sh:datatype xsd:decimal ;
+    sh:minInclusive 0.0 ;
+    sh:message "Usage inputCost must be a non-negative decimal" ;
+  ] ;
+
+  # Output cost (non-negative decimal, optional)
+  sh:property [
+    sh:path req:outputCost ;
+    sh:datatype xsd:decimal ;
+    sh:minInclusive 0.0 ;
+    sh:message "Usage outputCost must be a non-negative decimal" ;
+  ] ;
+
+  # Total cost (non-negative decimal, optional)
+  sh:property [
+    sh:path req:totalCost ;
+    sh:datatype xsd:decimal ;
+    sh:minInclusive 0.0 ;
+    sh:message "Usage totalCost must be a non-negative decimal" ;
+  ] .
+
+##########
+# StreamChunk Constraints
+##########
+
+req:StreamChunkShape a sh:NodeShape ;
+  sh:targetClass req:StreamChunk ;
+  sh:name "StreamChunk Shape" ;
+  sh:description "StreamChunk must have chunkType from valid enumeration." ;
+
+  # chunkType is required
+  sh:property [
+    sh:path req:chunkType ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:in (req:ContentChunk req:ThinkingChunk req:ToolCallChunk req:MetaChunk) ;
+    sh:message "StreamChunk must have chunkType (content, thinking, tool_call, meta)" ;
+  ] ;
+
+  # chunkText is optional string
+  sh:property [
+    sh:path req:chunkText ;
+    sh:datatype xsd:string ;
+    sh:message "StreamChunk chunkText must be a string" ;
+  ] ;
+
+  # chunkMeta is optional string
+  sh:property [
+    sh:path req:chunkMeta ;
+    sh:datatype xsd:string ;
+    sh:message "StreamChunk chunkMeta must be a string" ;
+  ] .
+
+##########
+# Tool Constraints
+##########
+
+req:ToolShape a sh:NodeShape ;
+  sh:targetClass req:Tool ;
+  sh:name "Tool Shape" ;
+  sh:description "Tool must have name and description." ;
+
+  # name is required
+  sh:property [
+    sh:path req:name ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:datatype xsd:string ;
+    sh:minLength 1 ;
+    sh:message "Tool must have non-empty name" ;
+  ] ;
+
+  # description is required
+  sh:property [
+    sh:path req:description ;
+    sh:minCount 1 ;
+    sh:datatype xsd:string ;
+    sh:message "Tool must have description" ;
+  ] ;
+
+  # parameterSchema is optional string
+  sh:property [
+    sh:path req:parameterSchema ;
+    sh:datatype xsd:string ;
+    sh:message "Tool parameterSchema must be a string (JSON schema)" ;
+  ] .
+
+##########
+# Model Constraints
+##########
+
+req:ModelShape a sh:NodeShape ;
+  sh:targetClass req:Model ;
+  sh:name "Model Shape" ;
+  sh:description "Model must have provider and modelName." ;
+
+  # provider is required
+  sh:property [
+    sh:path req:provider ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:class req:Provider ;
+    sh:message "Model must have exactly one provider" ;
+  ] ;
+
+  # modelName is required
+  sh:property [
+    sh:path req:modelName ;
+    sh:minCount 1 ;
+    sh:datatype xsd:string ;
+    sh:message "Model must have modelName" ;
+  ] ;
+
+  # temperature is optional decimal between 0.0 and 2.0
+  sh:property [
+    sh:path req:temperature ;
+    sh:datatype xsd:decimal ;
+    sh:minInclusive 0.0 ;
+    sh:maxInclusive 2.0 ;
+    sh:message "Model temperature must be between 0.0 and 2.0" ;
+  ] ;
+
+  # maxTokens is optional positive integer
+  sh:property [
+    sh:path req:maxTokens ;
+    sh:datatype xsd:integer ;
+    sh:minInclusive 1 ;
+    sh:message "Model maxTokens must be a positive integer" ;
+  ] .
+
+##########
+# Orchestrator Constraints (Phase 2 - Budget-Aware Failover)
+##########
+
+req:BudgetPolicyShape a sh:NodeShape ;
+  sh:targetClass req:BudgetPolicy ;
+  sh:name "BudgetPolicy Shape" ;
+  sh:description "BudgetPolicy defines cost and latency constraints." ;
+
+  # maxTotalCostUSD must be between 0 and 100 USD
+  sh:property [
+    sh:path req:maxTotalCostUSD ;
+    sh:minCount 1 ;
+    sh:datatype xsd:decimal ;
+    sh:minExclusive 0.0 ;
+    sh:maxInclusive 100.0 ;
+    sh:message "maxTotalCostUSD must be between 0 and 100 USD" ;
+  ] ;
+
+  # maxLatencyMs must be between 0 and 300000 ms (5 minutes)
+  sh:property [
+    sh:path req:maxLatencyMs ;
+    sh:minCount 1 ;
+    sh:datatype xsd:integer ;
+    sh:minExclusive 0 ;
+    sh:maxInclusive 300000 ;
+    sh:message "maxLatencyMs must be between 0 and 300000 ms (5 minutes)" ;
+  ] .
+
+req:RetryPolicyShape a sh:NodeShape ;
+  sh:targetClass req:RetryPolicy ;
+  sh:name "RetryPolicy Shape" ;
+  sh:description "RetryPolicy defines retry attempts and backoff timing." ;
+
+  # maxAttempts must be between 1 and 10
+  sh:property [
+    sh:path req:maxAttempts ;
+    sh:minCount 1 ;
+    sh:datatype xsd:integer ;
+    sh:minInclusive 1 ;
+    sh:maxInclusive 10 ;
+    sh:message "maxAttempts must be between 1 and 10" ;
+  ] ;
+
+  # backoffMs must be between 100 and 60000 ms (1 minute)
+  sh:property [
+    sh:path req:backoffMs ;
+    sh:minCount 1 ;
+    sh:datatype xsd:integer ;
+    sh:minInclusive 100 ;
+    sh:maxInclusive 60000 ;
+    sh:message "backoffMs must be between 100 and 60000 ms (1 minute)" ;
+  ] ;
+
+  # backoffMultiplier must be >= 1.0 if present
+  sh:property [
+    sh:path req:backoffMultiplier ;
+    sh:datatype xsd:decimal ;
+    sh:minInclusive 1.0 ;
+    sh:message "backoffMultiplier must be >= 1.0 (exponential growth)" ;
+  ] .
+
+req:ProviderCandidateShape a sh:NodeShape ;
+  sh:targetClass req:ProviderCandidate ;
+  sh:name "ProviderCandidate Shape" ;
+  sh:description "ProviderCandidate represents a provider option with priority and cost." ;
+
+  # providerName is required
+  sh:property [
+    sh:path req:providerName ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:datatype xsd:string ;
+    sh:minLength 1 ;
+    sh:message "ProviderCandidate must have non-empty providerName" ;
+  ] ;
+
+  # priority must be between 0 and 999
+  sh:property [
+    sh:path req:priority ;
+    sh:minCount 1 ;
+    sh:datatype xsd:integer ;
+    sh:minInclusive 0 ;
+    sh:maxInclusive 999 ;
+    sh:message "priority must be between 0 and 999 (0 = highest)" ;
+  ] ;
+
+  # estimatedCost must be non-negative if present
+  sh:property [
+    sh:path req:estimatedCost ;
+    sh:datatype xsd:decimal ;
+    sh:minInclusive 0.0 ;
+    sh:message "estimatedCost must be non-negative" ;
+  ] .
+
+req:CallPlanShape a sh:NodeShape ;
+  sh:targetClass req:CallPlan ;
+  sh:name "CallPlan Shape" ;
+  sh:description "CallPlan orchestrates provider failover with budget and retry constraints." ;
+
+  # Must have exactly one BudgetPolicy
+  sh:property [
+    sh:path req:hasBudgetPolicy ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:class req:BudgetPolicy ;
+    sh:message "CallPlan must have exactly one hasBudgetPolicy" ;
+  ] ;
+
+  # Must have exactly one RetryPolicy
+  sh:property [
+    sh:path req:hasRetryPolicy ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:class req:RetryPolicy ;
+    sh:message "CallPlan must have exactly one hasRetryPolicy" ;
+  ] ;
+
+  # Must have exactly one Context
+  sh:property [
+    sh:path req:hasContext ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+    sh:class req:Context ;
+    sh:message "CallPlan must have exactly one hasContext" ;
+  ] ;
+
+  # Must have at least one ProviderCandidate
+  sh:property [
+    sh:path req:hasCandidate ;
+    sh:minCount 1 ;
+    sh:class req:ProviderCandidate ;
+    sh:message "CallPlan must have at least one hasCandidate" ;
+  ] .
+
+req:AttemptShape a sh:NodeShape ;
+  sh:targetClass req:Attempt ;
+  sh:name "Attempt Shape" ;
+  sh:description "Attempt records a single provider invocation within a CallPlan." ;
+
+  # sequence must be non-negative
+  sh:property [
+    sh:path req:sequence ;
+    sh:minCount 1 ;
+    sh:datatype xsd:integer ;
+    sh:minInclusive 0 ;
+    sh:message "Attempt sequence must be non-negative (0 = first attempt)" ;
+  ] ;
+
+  # providerName is required
+  sh:property [
+    sh:path req:providerName ;
+    sh:minCount 1 ;
+    sh:datatype xsd:string ;
+    sh:message "Attempt must have providerName" ;
+  ] ;
+
+  # startedAtMs must be non-negative
+  sh:property [
+    sh:path req:startedAtMs ;
+    sh:datatype xsd:integer ;
+    sh:minInclusive 0 ;
+    sh:message "startedAtMs must be non-negative (Unix epoch ms)" ;
+  ] ;
+
+  # durationMs must be non-negative if present
+  sh:property [
+    sh:path req:durationMs ;
+    sh:datatype xsd:integer ;
+    sh:minInclusive 0 ;
+    sh:message "durationMs must be non-negative" ;
+  ] .
+
+req:FailureShape a sh:NodeShape ;
+  sh:targetClass req:Failure ;
+  sh:name "Failure Shape" ;
+  sh:description "Failure records provider invocation failure details." ;
+
+  # reason is required
+  sh:property [
+    sh:path req:reason ;
+    sh:minCount 1 ;
+    sh:datatype xsd:string ;
+    sh:minLength 1 ;
+    sh:message "Failure must have non-empty reason" ;
+  ] ;
+
+  # retryable is required boolean
+  sh:property [
+    sh:path req:retryable ;
+    sh:minCount 1 ;
+    sh:datatype xsd:boolean ;
+    sh:message "Failure must have retryable (true/false)" ;
+  ] ;
+
+  # timestampMs must be non-negative if present
+  sh:property [
+    sh:path req:timestampMs ;
+    sh:datatype xsd:integer ;
+    sh:minInclusive 0 ;
+    sh:message "timestampMs must be non-negative (Unix epoch ms)" ;
+  ] .
+
+##########
+# Cross-Property Constraints (SPARQL-based)
+##########
+
+req:CallPlanBudgetConsistencyShape a sh:NodeShape ;
+  sh:targetClass req:CallPlan ;
+  sh:name "CallPlan Budget Consistency" ;
+  sh:sparql [
+    sh:message "At least one provider candidate must have estimatedCost ≤ maxTotalCostUSD" ;
+    sh:select """
+      PREFIX req: <https://schema.reqllm.dev#>
+      SELECT $this WHERE {
+        $this req:hasBudgetPolicy ?budget ;
+              req:hasCandidate ?candidate .
+        ?budget req:maxTotalCostUSD ?maxCost .
+        FILTER NOT EXISTS {
+          $this req:hasCandidate ?affordableCandidate .
+          ?affordableCandidate req:estimatedCost ?affordableCost .
+          FILTER (?affordableCost <= ?maxCost)
+        }
+      }
+    """ ;
+  ] .
+
+req:RetryBudgetWarningShape a sh:NodeShape ;
+  sh:targetClass req:CallPlan ;
+  sh:name "Retry-Budget Warning" ;
+  sh:severity sh:Warning ;
+  sh:sparql [
+    sh:message "High retry attempts (>5) with strict budget may cause premature failure" ;
+    sh:select """
+      PREFIX req: <https://schema.reqllm.dev#>
+      SELECT $this WHERE {
+        $this req:hasRetryPolicy ?retry ;
+              req:hasBudgetPolicy ?budget .
+        ?retry req:maxAttempts ?attempts .
+        ?budget req:maxTotalCostUSD ?maxCost .
+        FILTER (?attempts > 5 && ?maxCost < 1.0)
+      }
+    """ ;
+  ] .

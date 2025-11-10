@@ -1,0 +1,46 @@
+# .clnrm.toml
+# Cleanroom testing configuration for req_llm orchestrator
+
+[test.metadata]
+name = "orchestrator_integration"
+description = "Integration tests for budget-aware provider failover orchestrator"
+timeout_seconds = 30
+
+# Install dependencies first
+[[steps]]
+name = "install_dependencies"
+command = ["sh", "-c", "apk add --no-cache git && mix local.hex --force && mix local.rebar --force && mix deps.get"]
+expected_exit_code = 0
+working_directory = "/workspace"
+
+# Test the orchestrator with simulated provider responses
+[[steps]]
+name = "test_orchestrator_basic_flow"
+command = ["mix", "test", "test/orchestrator_test.exs"]
+expected_exit_code = 0
+working_directory = "/workspace"
+
+[[steps]]
+name = "test_orchestrator_failover"
+command = ["mix", "test", "test/orchestrator_test.exs", "--only", "failover"]
+expected_exit_code = 0
+working_directory = "/workspace"
+
+[assertions]
+execution_should_be_hermetic = true
+steps_should_complete_in_order = true
+all_steps_should_succeed = true
+
+[environment]
+MIX_ENV = "test"
+ELIXIR_VERSION = "1.15"
+
+[services.elixir]
+type = "generic_container"
+image = "elixir:1.15-alpine"
+command = ["tail", "-f", "/dev/null"]
+
+[[services.elixir.volumes]]
+host_path = "/Users/speed/sean/req_llm"
+container_path = "/workspace"
+mode = "rw"

@@ -1,0 +1,30 @@
+# ontologies/reqllm.sigma_normalized.ttl
+# Purpose: Normalized Σ aligned to μ-domain-core (ex:*). Only subclass & subproperty alignments.
+
+@prefix req:   <https://schema.reqllm.dev#> .
+@prefix ex:    <http://example.org/domain#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+
+##########
+# Class alignments
+##########
+
+req:Provider       rdfs:subClassOf ex:Organization .
+req:Model          rdfs:subClassOf ex:Asset .
+req:Tool           rdfs:subClassOf ex:Service .
+req:Context        rdfs:subClassOf ex:Document .
+req:Message        rdfs:subClassOf ex:Document .
+req:ContentPart    rdfs:subClassOf ex:Document .
+req:Response       rdfs:subClassOf ex:Document .
+req:StreamResponse rdfs:subClassOf ex:Asset .
+req:StreamChunk    rdfs:subClassOf ex:Event .
+req:Usage          rdfs:subClassOf ex:Metric .
+
+##########
+# Property alignments (when applicable)
+##########
+
+req:hasUsage       rdfs:subPropertyOf ex:measures .
+req:hasUsageSR     rdfs:subPropertyOf ex:measures .
+req:streamChunk    rdfs:subPropertyOf ex:participatesIn .
+req:hasMessage     rdfs:subPropertyOf ex:about .

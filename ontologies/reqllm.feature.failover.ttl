@@ -1,0 +1,211 @@
+@prefix req: <https://schema.reqllm.dev#> .
+@prefix ex: <http://example.org/domain#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# ============================================================
+# Budget-Aware Provider Failover Extension (ΣΔ)
+# Purpose: Multi-provider orchestration with budget/latency constraints
+# Version: 0.3.0 (extends reqllm.sigma_observed.ttl)
+# ============================================================
+
+# ---------- Core Orchestration Classes ----------
+
+req:CallPlan a rdfs:Class ;
+  rdfs:subClassOf ex:Process ;
+  rdfs:label "CallPlan" ;
+  rdfs:comment "Orchestration plan for multi-provider LLM calls with failover" .
+
+req:ProviderCandidate a rdfs:Class ;
+  rdfs:subClassOf ex:Organization ;
+  rdfs:label "ProviderCandidate" ;
+  rdfs:comment "A provider eligible for an attempt (ordered by priority)" .
+
+req:Attempt a rdfs:Class ;
+  rdfs:subClassOf ex:Event ;
+  rdfs:label "Attempt" ;
+  rdfs:comment "A single attempt to call a specific provider" .
+
+req:RetryPolicy a rdfs:Class ;
+  rdfs:subClassOf ex:Policy ;
+  rdfs:label "RetryPolicy" ;
+  rdfs:comment "Policy for retry behavior (max attempts, backoff)" .
+
+req:BudgetPolicy a rdfs:Class ;
+  rdfs:subClassOf ex:Policy ;
+  rdfs:label "BudgetPolicy" ;
+  rdfs:comment "Policy for cost and latency budgets" .
+
+req:Failure a rdfs:Class ;
+  rdfs:subClassOf ex:Document ;
+  rdfs:label "Failure" ;
+  rdfs:comment "Terminal failure after all retry attempts exhausted" .
+
+# ---------- Orchestration Properties ----------
+
+req:plansForContext a rdf:Property ;
+  rdfs:label "plansForContext" ;
+  rdfs:comment "Links CallPlan to its Context" ;
+  rdfs:domain req:CallPlan ;
+  rdfs:range req:Context .
+
+req:hasCandidate a rdf:Property ;
+  rdfs:label "hasCandidate" ;
+  rdfs:comment "Provider candidate in priority order" ;
+  rdfs:domain req:CallPlan ;
+  rdfs:range req:ProviderCandidate .
+
+req:hasAttempt a rdf:Property ;
+  rdfs:label "hasAttempt" ;
+  rdfs:comment "Attempt made as part of this plan" ;
+  rdfs:domain req:CallPlan ;
+  rdfs:range req:Attempt .
+
+req:producedResponse a rdf:Property ;
+  rdfs:label "producedResponse" ;
+  rdfs:comment "Response produced by successful attempt" ;
+  rdfs:domain req:Attempt ;
+  rdfs:range req:Response .
+
+req:terminalFailure a rdf:Property ;
+  rdfs:label "terminalFailure" ;
+  rdfs:comment "Terminal failure after all attempts exhausted" ;
+  rdfs:domain req:CallPlan ;
+  rdfs:range req:Failure .
+
+req:appliesRetry a rdf:Property ;
+  rdfs:label "appliesRetry" ;
+  rdfs:comment "Retry policy applied to this plan" ;
+  rdfs:domain req:CallPlan ;
+  rdfs:range req:RetryPolicy .
+
+req:appliesBudget a rdf:Property ;
+  rdfs:label "appliesBudget" ;
+  rdfs:comment "Budget policy applied to this plan" ;
+  rdfs:domain req:CallPlan ;
+  rdfs:range req:BudgetPolicy .
+
+# ---------- Budget Properties ----------
+
+req:maxTotalCostUSD a rdf:Property ;
+  rdfs:label "maxTotalCostUSD" ;
+  rdfs:comment "Maximum total cost across all attempts (USD)" ;
+  rdfs:domain req:BudgetPolicy ;
+  rdfs:range xsd:decimal .
+
+req:maxLatencyMs a rdf:Property ;
+  rdfs:label "maxLatencyMs" ;
+  rdfs:comment "Maximum acceptable latency (milliseconds)" ;
+  rdfs:domain req:BudgetPolicy ;
+  rdfs:range xsd:integer .
+
+# ---------- Attempt Properties ----------
+
+req:attemptIndex a rdf:Property ;
+  rdfs:label "attemptIndex" ;
+  rdfs:comment "Zero-based index of attempt in plan" ;
+  rdfs:domain req:Attempt ;
+  rdfs:range xsd:integer .
+
+req:attemptProvider a rdf:Property ;
+  rdfs:label "attemptProvider" ;
+  rdfs:comment "Provider used for this attempt" ;
+  rdfs:domain req:Attempt ;
+  rdfs:range xsd:string .
+
+req:attemptModel a rdf:Property ;
+  rdfs:label "attemptModel" ;
+  rdfs:comment "Model used for this attempt" ;
+  rdfs:domain req:Attempt ;
+  rdfs:range xsd:string .
+
+req:attemptCostUSD a rdf:Property ;
+  rdfs:label "attemptCostUSD" ;
+  rdfs:comment "Cost of this attempt (USD)" ;
+  rdfs:domain req:Attempt ;
+  rdfs:range xsd:decimal .
+
+req:attemptDurationMs a rdf:Property ;
+  rdfs:label "attemptDurationMs" ;
+  rdfs:comment "Duration of this attempt (milliseconds)" ;
+  rdfs:domain req:Attempt ;
+  rdfs:range xsd:integer .
+
+req:attemptSuccess a rdf:Property ;
+  rdfs:label "attemptSuccess" ;
+  rdfs:comment "Whether this attempt succeeded" ;
+  rdfs:domain req:Attempt ;
+  rdfs:range xsd:boolean .
+
+req:attemptError a rdf:Property ;
+  rdfs:label "attemptError" ;
+  rdfs:comment "Error message if attempt failed" ;
+  rdfs:domain req:Attempt ;
+  rdfs:range xsd:string .
+
+# ---------- Candidate Properties ----------
+
+req:candidatePriority a rdf:Property ;
+  rdfs:label "candidatePriority" ;
+  rdfs:comment "Priority ranking (lower = higher priority)" ;
+  rdfs:domain req:ProviderCandidate ;
+  rdfs:range xsd:integer .
+
+req:candidateProvider a rdf:Property ;
+  rdfs:label "candidateProvider" ;
+  rdfs:comment "Provider name" ;
+  rdfs:domain req:ProviderCandidate ;
+  rdfs:range xsd:string .
+
+req:candidateModel a rdf:Property ;
+  rdfs:label "candidateModel" ;
+  rdfs:comment "Model name" ;
+  rdfs:domain req:ProviderCandidate ;
+  rdfs:range xsd:string .
+
+req:candidateEstimatedCost a rdf:Property ;
+  rdfs:label "candidateEstimatedCost" ;
+  rdfs:comment "Estimated cost for this candidate (USD)" ;
+  rdfs:domain req:ProviderCandidate ;
+  rdfs:range xsd:decimal .
+
+# ---------- Retry Properties ----------
+
+req:maxAttempts a rdf:Property ;
+  rdfs:label "maxAttempts" ;
+  rdfs:comment "Maximum number of retry attempts" ;
+  rdfs:domain req:RetryPolicy ;
+  rdfs:range xsd:integer .
+
+req:backoffMs a rdf:Property ;
+  rdfs:label "backoffMs" ;
+  rdfs:comment "Backoff delay between retries (milliseconds)" ;
+  rdfs:domain req:RetryPolicy ;
+  rdfs:range xsd:integer .
+
+req:retryableErrors a rdf:Property ;
+  rdfs:label "retryableErrors" ;
+  rdfs:comment "List of retryable error types" ;
+  rdfs:domain req:RetryPolicy ;
+  rdfs:range xsd:string .
+
+# ---------- Failure Properties ----------
+
+req:failureReason a rdf:Property ;
+  rdfs:label "failureReason" ;
+  rdfs:comment "Reason for terminal failure" ;
+  rdfs:domain req:Failure ;
+  rdfs:range xsd:string .
+
+req:failureAttemptCount a rdf:Property ;
+  rdfs:label "failureAttemptCount" ;
+  rdfs:comment "Number of attempts before failure" ;
+  rdfs:domain req:Failure ;
+  rdfs:range xsd:integer .
+
+req:failureTotalCost a rdf:Property ;
+  rdfs:label "failureTotalCost" ;
+  rdfs:comment "Total cost across all failed attempts" ;
+  rdfs:domain req:Failure ;
+  rdfs:range xsd:decimal .

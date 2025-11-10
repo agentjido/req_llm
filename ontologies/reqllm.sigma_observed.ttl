@@ -1,0 +1,106 @@
+# ontologies/reqllm.sigma_observed.ttl
+# Purpose: Σ° (observed) from the req_llm repository: canonical data model & streaming constructs.
+
+@prefix req:   <https://schema.reqllm.dev#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+
+##########
+# Core Classes as observed in docs (Model, Context, Message, ContentPart, Tool, Response, StreamResponse, StreamChunk, Usage, Provider)
+##########
+
+req:Model          a rdfs:Class ; rdfs:label "Model" ; rdfs:comment "Model configuration & normalized options." .
+req:Provider       a rdfs:Class ; rdfs:label "Provider" ; rdfs:comment "LLM provider (e.g., OpenAI, Anthropic)." .
+req:Context        a rdfs:Class ; rdfs:label "Context" ; rdfs:comment "Conversation history as an ordered set of messages." .
+req:Message        a rdfs:Class ; rdfs:label "Message" ; rdfs:comment "A single conversational turn with a role and content parts." .
+req:ContentPart    a rdfs:Class ; rdfs:label "ContentPart" ; rdfs:comment "Typed content element composing a Message." .
+req:TextPart       a rdfs:Class ; rdfs:subClassOf req:ContentPart ; rdfs:label "TextPart" .
+req:ImageURLPart   a rdfs:Class ; rdfs:subClassOf req:ContentPart ; rdfs:label "ImageURLPart" .
+req:ImagePart      a rdfs:Class ; rdfs:subClassOf req:ContentPart ; rdfs:label "ImagePart" .
+req:FilePart       a rdfs:Class ; rdfs:subClassOf req:ContentPart ; rdfs:label "FilePart" .
+req:ThinkingPart   a rdfs:Class ; rdfs:subClassOf req:ContentPart ; rdfs:label "ThinkingPart" .
+req:ToolCallPart   a rdfs:Class ; rdfs:subClassOf req:ContentPart ; rdfs:label "ToolCallPart" .
+req:ToolResultPart a rdfs:Class ; rdfs:subClassOf req:ContentPart ; rdfs:label "ToolResultPart" .
+
+req:Tool           a rdfs:Class ; rdfs:label "Tool" ; rdfs:comment "Callable function definition with argument schema." .
+req:StreamChunk    a rdfs:Class ; rdfs:label "StreamChunk" ; rdfs:comment "Streaming event (content, thinking, tool_call, meta)." .
+req:Response       a rdfs:Class ; rdfs:label "Response" ; rdfs:comment "Canonical final response with message, context, usage." .
+req:StreamResponse a rdfs:Class ; rdfs:label "StreamResponse" ; rdfs:comment "Handle for streaming operations with helpers." .
+req:Usage          a rdfs:Class ; rdfs:label "Usage" ; rdfs:comment "Token & cost usage metrics for a call." .
+
+# Enumerations as nominal classes with named individuals
+req:Role           a rdfs:Class ; rdfs:label "Role" .
+req:SystemRole     a req:Role ; rdfs:label "system" .
+req:UserRole       a req:Role ; rdfs:label "user" .
+req:AssistantRole  a req:Role ; rdfs:label "assistant" .
+req:ToolRole       a req:Role ; rdfs:label "tool" .
+
+req:ChunkType      a rdfs:Class ; rdfs:label "ChunkType" .
+req:ContentChunk   a req:ChunkType ; rdfs:label "content" .
+req:ThinkingChunk  a req:ChunkType ; rdfs:label "thinking" .
+req:ToolCallChunk  a req:ChunkType ; rdfs:label "tool_call" .
+req:MetaChunk      a req:ChunkType ; rdfs:label "meta" .
+
+req:FinishReason   a rdfs:Class ; rdfs:label "FinishReason" .
+req:Stop           a req:FinishReason ; rdfs:label "stop" .
+req:Length         a req:FinishReason ; rdfs:label "length" .
+req:ToolCalls      a req:FinishReason ; rdfs:label "tool_calls" .
+req:ContentFilter  a req:FinishReason ; rdfs:label "content_filter" .
+req:ErrorReason    a req:FinishReason ; rdfs:label "error" .
+
+##########
+# Properties (domains/ranges reflect canonical shapes from docs)
+##########
+
+# Model & Provider
+req:provider        a rdf:Property ; rdfs:domain req:Model ; rdfs:range req:Provider ; rdfs:label "provider" .
+req:modelName       a rdf:Property ; rdfs:domain req:Model ; rdfs:range xsd:string ; rdfs:label "modelName" .
+req:temperature     a rdf:Property ; rdfs:domain req:Model ; rdfs:range xsd:decimal ; rdfs:label "temperature" .
+req:maxTokens       a rdf:Property ; rdfs:domain req:Model ; rdfs:range xsd:integer ; rdfs:label "maxTokens" .
+
+# Context & Messages
+req:hasMessage      a rdf:Property ; rdfs:domain req:Context ; rdfs:range req:Message ; rdfs:label "hasMessage" ; rdfs:comment "Context contains messages (order tracked via position)." .
+req:position        a rdf:Property ; rdfs:domain req:Message ; rdfs:range xsd:integer ; rdfs:label "position" ; rdfs:comment "Zero-based ordering index within a Context." .
+req:role            a rdf:Property ; rdfs:domain req:Message ; rdfs:range req:Role ; rdfs:label "role" .
+req:hasPart         a rdf:Property ; rdfs:domain req:Message ; rdfs:range req:ContentPart ; rdfs:label "hasPart" ; rdfs:comment "Message is composed of content parts." .
+
+# Content parts
+req:text            a rdf:Property ; rdfs:domain req:TextPart ; rdfs:range xsd:string ; rdfs:label "text" .
+req:url             a rdf:Property ; rdfs:domain req:ImageURLPart ; rdfs:range xsd:anyURI ; rdfs:label "url" .
+req:mediaType       a rdf:Property ; rdfs:domain req:ContentPart ; rdfs:range xsd:string ; rdfs:label "mediaType" ; rdfs:comment "MIME type for binary parts." .
+req:payload         a rdf:Property ; rdfs:domain req:ContentPart ; rdfs:range xsd:base64Binary ; rdfs:label "payload" ; rdfs:comment "Binary data for Image/File parts." .
+req:toolName        a rdf:Property ; rdfs:domain req:ToolCallPart ; rdfs:range xsd:string ; rdfs:label "toolName" .
+req:argumentsJson   a rdf:Property ; rdfs:domain req:ToolCallPart ; rdfs:range xsd:string ; rdfs:label "argumentsJson" ; rdfs:comment "JSON-encoded tool arguments." .
+req:toolCallId      a rdf:Property ; rdfs:domain req:ToolResultPart ; rdfs:range xsd:string ; rdfs:label "toolCallId" .
+req:resultJson      a rdf:Property ; rdfs:domain req:ToolResultPart ; rdfs:range xsd:string ; rdfs:label "resultJson" ; rdfs:comment "JSON-encoded tool result." .
+req:thinkingText    a rdf:Property ; rdfs:domain req:ThinkingPart ; rdfs:range xsd:string ; rdfs:label "thinkingText" .
+
+# Tools
+req:name            a rdf:Property ; rdfs:domain req:Tool ; rdfs:range xsd:string ; rdfs:label "name" .
+req:description     a rdf:Property ; rdfs:domain req:Tool ; rdfs:range xsd:string ; rdfs:label "description" .
+req:parameterSchema a rdf:Property ; rdfs:domain req:Tool ; rdfs:range xsd:string ; rdfs:label "parameterSchema" ; rdfs:comment "Schema expressed in NimbleOptions-like notation (serialized)." .
+
+# Streaming
+req:streamChunk     a rdf:Property ; rdfs:domain req:StreamResponse ; rdfs:range req:StreamChunk ; rdfs:label "streamChunk" ; rdfs:comment "Association from StreamResponse to its chunks." .
+req:chunkType       a rdf:Property ; rdfs:domain req:StreamChunk ; rdfs:range req:ChunkType ; rdfs:label "chunkType" .
+req:chunkText       a rdf:Property ; rdfs:domain req:StreamChunk ; rdfs:range xsd:string ; rdfs:label "chunkText" ; rdfs:comment "For :content chunks." .
+req:chunkMeta       a rdf:Property ; rdfs:domain req:StreamChunk ; rdfs:range xsd:string ; rdfs:label "chunkMeta" ; rdfs:comment "Provider metadata as JSON or string." .
+
+# Responses & usage (shared by both Response and StreamResponse)
+req:hasContext      a rdf:Property ; rdfs:range req:Context ; rdfs:label "hasContext" ; rdfs:comment "Associates Response or StreamResponse with its Context." .
+req:hasMessageOut   a rdf:Property ; rdfs:domain req:Response ; rdfs:range req:Message ; rdfs:label "hasMessageOut" .
+req:hasUsage        a rdf:Property ; rdfs:range req:Usage ; rdfs:label "hasUsage" ; rdfs:comment "Associates Response or StreamResponse with Usage metrics." .
+req:finishReason    a rdf:Property ; rdfs:domain req:Response ; rdfs:range req:FinishReason ; rdfs:label "finishReason" .
+req:id              a rdf:Property ; rdfs:domain req:Response ; rdfs:range xsd:string ; rdfs:label "id" .
+
+# (Removed hasContextSR and hasUsageSR - merged into hasContext and hasUsage)
+
+# Usage metrics
+req:inputTokens     a rdf:Property ; rdfs:domain req:Usage ; rdfs:range xsd:integer ; rdfs:label "inputTokens" .
+req:outputTokens    a rdf:Property ; rdfs:domain req:Usage ; rdfs:range xsd:integer ; rdfs:label "outputTokens" .
+req:reasoningTokens a rdf:Property ; rdfs:domain req:Usage ; rdfs:range xsd:integer ; rdfs:label "reasoningTokens" .
+req:totalTokens     a rdf:Property ; rdfs:domain req:Usage ; rdfs:range xsd:integer ; rdfs:label "totalTokens" .
+req:inputCost       a rdf:Property ; rdfs:domain req:Usage ; rdfs:range xsd:decimal ; rdfs:label "inputCostUSD" .
+req:outputCost      a rdf:Property ; rdfs:domain req:Usage ; rdfs:range xsd:decimal ; rdfs:label "outputCostUSD" .
+req:totalCost       a rdf:Property ; rdfs:domain req:Usage ; rdfs:range xsd:decimal ; rdfs:label "totalCostUSD" .

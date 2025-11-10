@@ -1,0 +1,11 @@
+# ontologies/reqllm.version.ttl
+# Purpose: Pin Σ version for ggen and CI receipts.
+
+@prefix req: <https://schema.reqllm.dev#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+req:OntologyVersion a req:Document ;
+  req:id "Σ.reqllm.clnrm" ;
+  req:description "Normalized Σ after clnrm (v0.1)" ;
+  req:createdAt "2025-11-10T00:00:00Z"^^xsd:dateTime ;
+  req:hash "2aeb94264b64" .

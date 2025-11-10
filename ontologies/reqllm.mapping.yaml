@@ -1,0 +1,90 @@
+# ontologies/reqllm.mapping.yaml
+# Purpose: deterministic mapping from Σ to repo constructs for ggen.
+# Maps ontology classes/properties to concrete Elixir modules/structs/fields in req_llm
+
+classes:
+  # Core entities
+  Response:        ReqLLM.Response
+  StreamResponse:  ReqLLM.Response                    # StreamResponse is Response with stream?: true
+  Context:         ReqLLM.Context
+  Message:         ReqLLM.Message
+  ContentPart:     ReqLLM.Message.ContentPart
+  TextPart:        ReqLLM.Message.ContentPart          # type: :text
+  ImageURLPart:    ReqLLM.Message.ContentPart          # type: :image_url
+  ImagePart:       ReqLLM.Message.ContentPart          # type: :image
+  FilePart:        ReqLLM.Message.ContentPart          # type: :file
+  ThinkingPart:    ReqLLM.Message.ContentPart          # type: :thinking
+  ToolCallPart:    ReqLLM.Message.ContentPart          # type: :tool_call
+  ToolResultPart:  ReqLLM.Message.ContentPart          # type: :tool_result
+  StreamChunk:     ReqLLM.StreamChunk
+  Usage:           map()                               # embedded in Response.usage
+  Model:           ReqLLM.Model
+  Provider:        atom()                              # :openai, :anthropic, etc.
+  Tool:            ReqLLM.Tool
+
+  # Enumerations
+  Role:            atom()                              # :user, :assistant, :system, :tool
+  ChunkType:       atom()                              # :content, :thinking, :tool_call, :meta
+  FinishReason:    atom()                              # :stop, :length, :tool_calls, :content_filter, :error
+
+properties:
+  # Response properties
+  hasContext:      ReqLLM.Response.context
+  hasMessageOut:   ReqLLM.Response.message
+  hasUsage:        ReqLLM.Response.usage
+  finishReason:    ReqLLM.Response.finish_reason
+  id:              ReqLLM.Response.id
+
+  # StreamResponse properties (same struct, stream-specific)
+  streamChunk:     ReqLLM.Response.stream              # Stream of StreamChunks
+
+  # Context properties
+  hasMessage:      ReqLLM.Context.messages             # list of messages
+
+  # Message properties
+  position:        index in Context.messages list
+  role:            ReqLLM.Message.role
+  hasPart:         ReqLLM.Message.content              # list of ContentPart
+
+  # ContentPart properties (vary by type)
+  text:            ReqLLM.Message.ContentPart.text     # for TextPart, ThinkingPart
+  url:             ReqLLM.Message.ContentPart.url      # for ImageURLPart
+  mediaType:       ReqLLM.Message.ContentPart.media_type  # for ImagePart, FilePart
+  payload:         ReqLLM.Message.ContentPart.data     # for ImagePart, FilePart
+  toolName:        ReqLLM.Message.ContentPart.tool_name    # for ToolCallPart
+  argumentsJson:   ReqLLM.Message.ContentPart.input    # for ToolCallPart (as JSON string)
+  toolCallId:      ReqLLM.Message.ContentPart.tool_call_id # for ToolResultPart
+  resultJson:      ReqLLM.Message.ContentPart.content  # for ToolResultPart (as JSON string)
+  thinkingText:    ReqLLM.Message.ContentPart.text     # for ThinkingPart
+
+  # StreamChunk properties
+  chunkType:       ReqLLM.StreamChunk.type
+  chunkText:       ReqLLM.StreamChunk.text
+  chunkMeta:       ReqLLM.StreamChunk.metadata
+
+  # Usage properties (all from Usage map)
+  inputTokens:     usage.input_tokens
+  outputTokens:    usage.output_tokens
+  reasoningTokens: usage.reasoning_tokens
+  totalTokens:     usage.total_tokens
+  inputCost:       usage.input_cost
+  outputCost:      usage.output_cost
+  totalCost:       usage.total_cost
+
+  # Model properties
+  provider:        ReqLLM.Model.provider
+  modelName:       ReqLLM.Model.model
+  temperature:     ReqLLM.Model.temperature
+  maxTokens:       ReqLLM.Model.max_tokens
+
+  # Tool properties
+  name:            ReqLLM.Tool.name
+  description:     ReqLLM.Tool.description
+  parameterSchema: ReqLLM.Tool.parameters_schema
+
+# Additional notes for implementers:
+# - ContentPart is a tagged union; the 'type' field determines which properties are present
+# - StreamResponse and Response share the same struct; check stream?: true
+# - Usage is an embedded map, not a separate struct
+# - Provider is an atom like :openai or :anthropic, not a struct
+# - Position in Context is implicit via list ordering (zero-indexed)

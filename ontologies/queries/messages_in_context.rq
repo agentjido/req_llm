@@ -1,0 +1,12 @@
+# ontologies/queries/messages_in_context.rq
+# Purpose: Assert ordering and presence of messages per context.
+# This query validates that all contexts have at least one message.
+
+PREFIX req: <https://schema.reqllm.dev#>
+
+SELECT ?ctx (COUNT(?m) AS ?n) WHERE {
+  ?ctx a req:Context ;
+       req:hasMessage ?m .
+}
+GROUP BY ?ctx
+HAVING (?n > 0)

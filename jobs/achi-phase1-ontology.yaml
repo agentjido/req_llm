@@ -1,0 +1,82 @@
+# GitVan Job Specification: ACHI Phase 1 - Ontology Composition
+# Generated: 2025-11-10
+# Methodology: ACHI (Architecture, Code, History, Infrastructure)
+
+job:
+  id: achi-phase1-ontology
+  name: "ACHI Phase 1: Ontology Composition"
+  description: "Compose feature ontology for budget-aware provider failover"
+  phase: architecture
+  tool: unrdf
+
+metadata:
+  project: req_llm
+  methodology: ACHI
+  phase_number: 1
+  phase_name: "Architecture (unrdf)"
+  date_started: "2025-11-10"
+  date_completed: "2025-11-10"
+
+artifacts:
+  inputs:
+    - path: ontologies/reqllm.sigma_observed.ttl
+      type: rdf-turtle
+      description: "Base ontology (Σ) - existing req_llm classes"
+
+    - path: ontologies/reqllm.feature.failover.ttl
+      type: rdf-turtle
+      description: "Feature delta (ΣΔ) - new orchestrator classes"
+      classes:
+        - req:CallPlan
+        - req:ProviderCandidate
+        - req:Attempt
+        - req:RetryPolicy
+        - req:BudgetPolicy
+        - req:Failure
+
+  outputs:
+    - path: graph/reqllm.ttl
+      type: rdf-turtle-composed
+      description: "Composed ontology (Σ + ΣΔ)"
+      hash: "c0b085bd0214"
+      validation: manual-inspection
+
+  scripts:
+    - path: script/compose_ontology.sh
+      type: bash
+      description: "Manual composition script (unrdf dependency workaround)"
+
+execution:
+  command: "./script/compose_ontology.sh"
+  working_directory: "/Users/speed/sean/req_llm"
+  environment:
+    ONTOLOGIES_DIR: "ontologies"
+    OUTPUT_FILE: "graph/reqllm.ttl"
+
+  success_criteria:
+    - exit_code: 0
+    - file_exists: "graph/reqllm.ttl"
+    - contains_classes: 11
+    - contains_properties: "35+"
+
+challenges:
+  - issue: "unrdf hooks-cli.mjs module not found"
+    cause: "Dependencies not installed"
+    resolution: "Created manual bash composition script"
+    workaround: "script/compose_ontology.sh"
+
+results:
+  status: success
+  ontology_hash: "c0b085bd0214"
+  classes_defined: 11
+  properties_defined: "35+"
+  composition_method: manual
+  validation_method: inspection
+
+git_receipt:
+  commit: "ea591681"
+  message: "feat: Add Phase 13 - Comprehensive Documentation (FINAL)"
+  files_changed:
+    - ontologies/reqllm.feature.failover.ttl
+    - graph/reqllm.ttl
+    - script/compose_ontology.sh

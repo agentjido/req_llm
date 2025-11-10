@@ -1,0 +1,132 @@
+@prefix req: <https://schema.reqllm.dev#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# ============================================================
+# Conversation History Extension for req_llm
+# Purpose: Track multi-turn conversations with persistent context
+# Version: 0.3.0 (extends reqllm.sigma_observed.ttl)
+# ============================================================
+
+# ---------- Core Conversation Classes ----------
+
+req:Conversation a rdfs:Class ;
+  rdfs:label "Conversation" ;
+  rdfs:comment "A multi-turn conversation with history tracking" .
+
+req:ConversationTurn a rdfs:Class ;
+  rdfs:label "ConversationTurn" ;
+  rdfs:comment "A single turn in a conversation (user prompt + assistant response)" .
+
+req:ConversationMetadata a rdfs:Class ;
+  rdfs:label "ConversationMetadata" ;
+  rdfs:comment "Metadata about conversation (timestamps, token counts, costs)" .
+
+# ---------- Conversation Properties ----------
+
+req:conversationId a rdf:Property ;
+  rdfs:label "conversationId" ;
+  rdfs:comment "Unique identifier for a conversation" ;
+  rdfs:domain req:Conversation ;
+  rdfs:range xsd:string .
+
+req:hasTurn a rdf:Property ;
+  rdfs:label "hasTurn" ;
+  rdfs:comment "Links conversation to its turns" ;
+  rdfs:domain req:Conversation ;
+  rdfs:range req:ConversationTurn .
+
+req:turnIndex a rdf:Property ;
+  rdfs:label "turnIndex" ;
+  rdfs:comment "Zero-based index of turn in conversation" ;
+  rdfs:domain req:ConversationTurn ;
+  rdfs:range xsd:integer .
+
+req:userMessage a rdf:Property ;
+  rdfs:label "userMessage" ;
+  rdfs:comment "User's input message for this turn" ;
+  rdfs:domain req:ConversationTurn ;
+  rdfs:range req:Message .
+
+req:assistantMessage a rdf:Property ;
+  rdfs:label "assistantMessage" ;
+  rdfs:comment "Assistant's response message for this turn" ;
+  rdfs:domain req:ConversationTurn ;
+  rdfs:range req:Message .
+
+req:turnResponse a rdf:Property ;
+  rdfs:label "turnResponse" ;
+  rdfs:comment "Full response object for this turn" ;
+  rdfs:domain req:ConversationTurn ;
+  rdfs:range req:Response .
+
+req:hasMetadata a rdf:Property ;
+  rdfs:label "hasMetadata" ;
+  rdfs:comment "Links conversation to its metadata" ;
+  rdfs:domain req:Conversation ;
+  rdfs:range req:ConversationMetadata .
+
+# ---------- Metadata Properties ----------
+
+req:createdAt a rdf:Property ;
+  rdfs:label "createdAt" ;
+  rdfs:comment "Timestamp when conversation was created" ;
+  rdfs:domain req:ConversationMetadata ;
+  rdfs:range xsd:dateTime .
+
+req:updatedAt a rdf:Property ;
+  rdfs:label "updatedAt" ;
+  rdfs:comment "Timestamp of last update" ;
+  rdfs:domain req:ConversationMetadata ;
+  rdfs:range xsd:dateTime .
+
+req:totalTurns a rdf:Property ;
+  rdfs:label "totalTurns" ;
+  rdfs:comment "Total number of turns in conversation" ;
+  rdfs:domain req:ConversationMetadata ;
+  rdfs:range xsd:integer .
+
+req:totalTokens a rdf:Property ;
+  rdfs:label "totalTokens" ;
+  rdfs:comment "Cumulative token count across all turns" ;
+  rdfs:domain req:ConversationMetadata ;
+  rdfs:range xsd:integer .
+
+req:totalCost a rdf:Property ;
+  rdfs:label "totalCost" ;
+  rdfs:comment "Cumulative cost across all turns" ;
+  rdfs:domain req:ConversationMetadata ;
+  rdfs:range xsd:decimal .
+
+req:provider a rdf:Property ;
+  rdfs:label "provider" ;
+  rdfs:comment "LLM provider used for this conversation" ;
+  rdfs:domain req:ConversationMetadata ;
+  rdfs:range xsd:string .
+
+req:model a rdf:Property ;
+  rdfs:label "model" ;
+  rdfs:comment "Model used for this conversation" ;
+  rdfs:domain req:ConversationMetadata ;
+  rdfs:range xsd:string .
+
+# ---------- Storage Properties ----------
+
+req:storageBackend a rdf:Property ;
+  rdfs:label "storageBackend" ;
+  rdfs:comment "Storage backend type (ets, dets, postgres, etc)" ;
+  rdfs:domain req:Conversation ;
+  rdfs:range xsd:string .
+
+req:maxTurns a rdf:Property ;
+  rdfs:label "maxTurns" ;
+  rdfs:comment "Maximum number of turns to retain (for trimming)" ;
+  rdfs:domain req:Conversation ;
+  rdfs:range xsd:integer .
+
+req:autoTrim a rdf:Property ;
+  rdfs:label "autoTrim" ;
+  rdfs:comment "Whether to automatically trim old turns" ;
+  rdfs:domain req:Conversation ;
+  rdfs:range xsd:boolean .

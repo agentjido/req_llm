@@ -1,0 +1,325 @@
+# GitVan Job Specification: ACHI Phase 6 - Knowledge Hooks (knhk)
+# Generated: 2025-11-10
+# Methodology: ACHI (Architecture, Code, History, Infrastructure, Q, Knowledge Hooks)
+
+job:
+  id: achi-phase6-knhk
+  name: "ACHI Phase 6: Knowledge Hooks & Telemetry"
+  description: "Runtime monitoring and telemetry hooks for orchestrator execution"
+  phase: knowledge
+  tool: knhk
+
+metadata:
+  project: req_llm
+  methodology: ACHI
+  phase_number: 6
+  phase_name: "Knowledge Hooks (knhk)"
+  date_started: "2025-11-10"
+  depends_on: achi-phase5-shacl
+
+hooks:
+  git:
+    post_commit:
+      - validate_ontology_hash
+      - emit_code_generation_receipt
+
+    post_merge:
+      - revalidate_shacl_constraints
+      - regenerate_json_ld_context
+
+  orchestrator:
+    call_plan:
+      before_execution:
+        event: "orchestrator:call_plan:start"
+        data:
+          - plan_id
+          - budget_policy
+          - retry_policy
+          - candidates_count
+          - timestamp_ms
+        actions:
+          - log_to_telemetry
+          - validate_budget_constraints
+          - emit_sparql_event
+
+      after_execution:
+        event: "orchestrator:call_plan:complete"
+        data:
+          - plan_id
+          - result_status
+          - total_cost_usd
+          - total_duration_ms
+          - attempts_count
+          - selected_provider
+          - timestamp_ms
+        actions:
+          - log_to_telemetry
+          - update_cost_tracking
+          - emit_success_receipt
+
+      on_failure:
+        event: "orchestrator:call_plan:failure"
+        data:
+          - plan_id
+          - failure_reason
+          - attempts_made
+          - total_cost_usd
+          - last_error
+          - timestamp_ms
+        actions:
+          - log_error
+          - emit_failure_alert
+          - record_failure_pattern
+
+    provider_attempt:
+      before_call:
+        event: "orchestrator:attempt:start"
+        data:
+          - attempt_index
+          - provider_name
+          - model_name
+          - estimated_cost
+          - timestamp_ms
+        actions:
+          - log_provider_selection
+          - start_latency_timer
+
+      after_call:
+        event: "orchestrator:attempt:complete"
+        data:
+          - attempt_index
+          - provider_name
+          - success
+          - actual_cost_usd
+          - duration_ms
+          - timestamp_ms
+        actions:
+          - log_attempt_result
+          - update_provider_stats
+          - check_budget_remaining
+
+    budget_validation:
+      on_check:
+        event: "orchestrator:budget:check"
+        data:
+          - current_cost
+          - max_cost
+          - remaining_budget
+          - within_budget
+        actions:
+          - log_budget_check
+          - emit_budget_warning_if_low
+
+      on_exceeded:
+        event: "orchestrator:budget:exceeded"
+        data:
+          - total_cost
+          - max_cost
+          - overage_amount
+        actions:
+          - log_budget_exceeded
+          - emit_critical_alert
+          - halt_execution
+
+    retry_decision:
+      on_evaluate:
+        event: "orchestrator:retry:evaluate"
+        data:
+          - attempt_count
+          - max_attempts
+          - error_type
+          - is_retryable
+          - backoff_ms
+        actions:
+          - log_retry_decision
+          - calculate_backoff
+
+      on_backoff:
+        event: "orchestrator:retry:backoff"
+        data:
+          - backoff_duration_ms
+          - next_attempt_index
+        actions:
+          - log_backoff_wait
+          - emit_retry_warning
+
+    shacl_validation:
+      on_validate:
+        event: "orchestrator:shacl:validate"
+        data:
+          - entity_type
+          - validation_result
+          - violations
+        actions:
+          - log_validation
+          - emit_violations_if_any
+
+telemetry_schema:
+  events:
+    - name: "orchestrator:call_plan:start"
+      type: "CallPlanStarted"
+      rdf_class: "req:CallPlanStartEvent"
+      properties:
+        - planId: xsd:string
+        - budgetMaxCost: xsd:decimal
+        - retryMaxAttempts: xsd:integer
+        - candidatesCount: xsd:integer
+        - timestamp: xsd:dateTime
+
+    - name: "orchestrator:call_plan:complete"
+      type: "CallPlanCompleted"
+      rdf_class: "req:CallPlanCompleteEvent"
+      properties:
+        - planId: xsd:string
+        - totalCost: xsd:decimal
+        - totalDuration: xsd:integer
+        - attemptsCount: xsd:integer
+        - selectedProvider: xsd:string
+        - timestamp: xsd:dateTime
+
+    - name: "orchestrator:attempt:start"
+      type: "AttemptStarted"
+      rdf_class: "req:AttemptStartEvent"
+      properties:
+        - attemptIndex: xsd:integer
+        - providerName: xsd:string
+        - modelName: xsd:string
+        - estimatedCost: xsd:decimal
+        - timestamp: xsd:dateTime
+
+    - name: "orchestrator:attempt:complete"
+      type: "AttemptCompleted"
+      rdf_class: "req:AttemptCompleteEvent"
+      properties:
+        - attemptIndex: xsd:integer
+        - providerName: xsd:string
+        - success: xsd:boolean
+        - actualCost: xsd:decimal
+        - duration: xsd:integer
+        - timestamp: xsd:dateTime
+
+    - name: "orchestrator:budget:exceeded"
+      type: "BudgetExceeded"
+      rdf_class: "req:BudgetExceededEvent"
+      severity: critical
+      properties:
+        - totalCost: xsd:decimal
+        - maxCost: xsd:decimal
+        - overageAmount: xsd:decimal
+        - timestamp: xsd:dateTime
+
+sparql_queries:
+  cost_tracking:
+    query: |
+      PREFIX req: <https://schema.reqllm.dev#>
+      PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+      SELECT ?provider (SUM(?cost) as ?totalCost) (COUNT(?attempt) as ?attempts)
+      WHERE {
+        ?event a req:AttemptCompleteEvent ;
+               req:providerName ?provider ;
+               req:actualCost ?cost ;
+               req:timestamp ?timestamp .
+        FILTER (?timestamp > ?startTime)
+      }
+      GROUP BY ?provider
+      ORDER BY DESC(?totalCost)
+
+  failure_patterns:
+    query: |
+      PREFIX req: <https://schema.reqllm.dev#>
+
+      SELECT ?provider ?reason (COUNT(?failure) as ?count)
+      WHERE {
+        ?plan a req:CallPlanCompleteEvent ;
+              req:selectedProvider ?provider ;
+              req:hasFailure ?failure .
+        ?failure req:reason ?reason .
+      }
+      GROUP BY ?provider ?reason
+      ORDER BY DESC(?count)
+
+  budget_utilization:
+    query: |
+      PREFIX req: <https://schema.reqllm.dev#>
+
+      SELECT (AVG(?utilization) as ?avgUtilization)
+      WHERE {
+        ?event a req:CallPlanCompleteEvent ;
+               req:totalCost ?actual .
+        ?plan req:hasBudgetPolicy ?budget .
+        ?budget req:maxTotalCostUSD ?max .
+        BIND((?actual / ?max) as ?utilization)
+      }
+
+integration:
+  elixir_hooks:
+    file: "lib/req_llm/orchestrator/telemetry.ex"
+    functions:
+      - emit_call_plan_start/1
+      - emit_call_plan_complete/2
+      - emit_attempt_start/1
+      - emit_attempt_complete/2
+      - emit_budget_check/2
+      - emit_budget_exceeded/2
+      - emit_retry_decision/2
+      - emit_shacl_validation/2
+
+  gitvan_integration:
+    jobs_directory: "jobs/"
+    hooks_enabled: true
+    telemetry_storage: "graph/telemetry.ttl"
+    sparql_endpoint: "http://localhost:3030/reqllm"
+
+monitoring_dashboard:
+  metrics:
+    - Total calls per provider
+    - Average cost per call
+    - P95 latency per provider
+    - Budget utilization rate
+    - Retry rate by error type
+    - SHACL violation rate
+    - Failover success rate
+
+  alerts:
+    budget_warning:
+      condition: "remaining_budget < 0.2 * max_budget"
+      severity: warning
+      action: "Log warning, continue execution"
+
+    budget_critical:
+      condition: "remaining_budget < 0.05 * max_budget"
+      severity: critical
+      action: "Log critical, prepare to halt"
+
+    high_failure_rate:
+      condition: "failure_rate > 0.5 over 10 attempts"
+      severity: warning
+      action: "Log warning, consider provider rotation"
+
+    constraint_violation:
+      condition: "SHACL validation fails"
+      severity: error
+      action: "Log violation, prevent execution"
+
+implementation_notes:
+  - Hooks emit RDF events to graph/telemetry.ttl
+  - SPARQL queries analyze execution patterns
+  - Dashboard consumes SPARQL query results
+  - Alerts trigger based on semantic rules
+  - All events are JSON-LD serialized
+  - Events link to original CallPlan via planId
+
+production_readiness:
+  - Telemetry overhead < 5ms per event
+  - Async emission (non-blocking)
+  - Configurable sampling rate
+  - Telemetry can be disabled via env var
+  - SPARQL endpoint optional (file-based fallback)
+
+next_steps:
+  - Implement Elixir telemetry emitters
+  - Create SPARQL endpoint configuration
+  - Build monitoring dashboard
+  - Set up alerting system
+  - Document telemetry schema
