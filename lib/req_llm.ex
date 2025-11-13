@@ -31,7 +31,7 @@ defmodule ReqLLM do
       ReqLLM.generate_text({:anthropic, "claude-3-5-sonnet", temperature: 0.7}, messages)
 
       # Model struct format
-      model = %ReqLLM.Model{provider: :anthropic, model: "claude-3-5-sonnet", temperature: 0.5}
+      model = %LLMDB.Model{provider: :anthropic, model: "claude-3-5-sonnet", temperature: 0.5}
       ReqLLM.generate_text(model, messages)
 
   ## Configuration
@@ -179,7 +179,7 @@ defmodule ReqLLM do
           | {:error,
              ReqLLM.Error.Invalid.Provider.t() | ReqLLM.Error.Invalid.Provider.NotImplemented.t()}
   def provider(provider) when is_atom(provider) do
-    ReqLLM.Provider.Registry.fetch(provider)
+    ReqLLM.Providers.get(provider)
   end
 
   @doc """
@@ -190,20 +190,34 @@ defmodule ReqLLM do
     * `model_spec` - Model specification in various formats:
       - String format: `"anthropic:claude-3-sonnet"`
       - Tuple format: `{:anthropic, "claude-3-sonnet", temperature: 0.7}`
-      - Model struct: `%ReqLLM.Model{}`
+      - Model struct: `%LLMDB.Model{}`
 
   ## Examples
 
       ReqLLM.model("anthropic:claude-3-sonnet")
-      #=> {:ok, %ReqLLM.Model{provider: :anthropic, model: "claude-3-sonnet"}}
+      #=> {:ok, %LLMDB.Model{provider: :anthropic, model: "claude-3-sonnet"}}
 
       ReqLLM.model({:anthropic, "claude-3-sonnet", temperature: 0.5})
-      #=> {:ok, %ReqLLM.Model{provider: :anthropic, model: "claude-3-sonnet", temperature: 0.5}}
+      #=> {:ok, %LLMDB.Model{provider: :anthropic, model: "claude-3-sonnet", temperature: 0.5}}
 
   """
   @spec model(String.t() | {atom(), keyword()} | struct()) :: {:ok, struct()} | {:error, term()}
   def model(model_spec) do
-    ReqLLM.Model.from(model_spec)
+    LLMDB.Spec.resolve(model_spec)
+  end
+
+  @doc """
+  Same as `model/1` but raises on error.
+
+  ## Examples
+
+      ReqLLM.model!("anthropic:claude-3-sonnet")
+      #=> %LLMDB.Model{provider: :anthropic, model: "claude-3-sonnet"}
+
+  """
+  @spec model!(String.t() | {atom(), keyword()} | struct()) :: struct()
+  def model!(model_spec) do
+    LLMDB.Spec.resolve!(model_spec)
   end
 
   @doc """
@@ -220,7 +234,7 @@ defmodule ReqLLM do
       ReqLLM.capabilities("anthropic:claude-3-haiku")
       #=> [:max_tokens, :system_prompt, :temperature, :tools, :streaming]
 
-      model = %ReqLLM.Model{provider: :anthropic, model: "claude-3-sonnet"}
+      model = %LLMDB.Model{provider: :anthropic, model: "claude-3-sonnet"}
       ReqLLM.capabilities(model)
       #=> [:max_tokens, :system_prompt, :temperature, :tools, :streaming, :reasoning]
   """

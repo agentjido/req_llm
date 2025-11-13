@@ -2,7 +2,6 @@ defmodule ReqLLM.Streaming.FinchClientTest do
   use ExUnit.Case, async: true
 
   alias ReqLLM.Context
-  alias ReqLLM.Model
   alias ReqLLM.Streaming.FinchClient
   alias ReqLLM.Streaming.Fixtures.HTTPContext
 
@@ -112,7 +111,7 @@ defmodule ReqLLM.Streaming.FinchClientTest do
       result =
         FinchClient.start_stream(
           NonExistentProvider,
-          %Model{provider: :invalid, model: "test"},
+          %LLMDB.Model{provider: :invalid, id: "test"},
           context,
           [],
           stream_server
@@ -123,7 +122,7 @@ defmodule ReqLLM.Streaming.FinchClientTest do
 
     test "successfully creates HTTPContext with proper structure" do
       {:ok, stream_server} = MockStreamServer.start_link()
-      {:ok, model} = Model.from("openai:gpt-4")
+      {:ok, model} = ReqLLM.model("openai:gpt-4")
       {:ok, context} = Context.normalize("Test")
 
       result =

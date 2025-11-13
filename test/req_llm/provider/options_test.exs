@@ -20,7 +20,7 @@ defmodule ReqLLM.Provider.OptionsTest do
     end
 
     # Translation function that renames max_tokens for o1 models
-    def translate_options(:chat, %ReqLLM.Model{model: <<"o1", _::binary>>}, opts) do
+    def translate_options(:chat, %LLMDB.Model{id: <<"o1", _::binary>>}, opts) do
       case Keyword.pop(opts, :max_tokens) do
         {nil, rest} ->
           {rest, []}
@@ -58,7 +58,7 @@ defmodule ReqLLM.Provider.OptionsTest do
 
   describe "Options.process/4 - core functionality" do
     test "validates and passes through standard generation options" do
-      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+      model = %LLMDB.Model{provider: :mock, id: "test-model"}
       opts = [temperature: 0.7, max_tokens: 1000]
 
       assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts)
@@ -67,7 +67,7 @@ defmodule ReqLLM.Provider.OptionsTest do
     end
 
     test "returns error for invalid generation options" do
-      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+      model = %LLMDB.Model{provider: :mock, id: "test-model"}
       opts = [temperature: "invalid"]
 
       assert {:error, %ReqLLM.Error.Unknown.Unknown{}} =
@@ -75,7 +75,7 @@ defmodule ReqLLM.Provider.OptionsTest do
     end
 
     test "handles empty options with defaults" do
-      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+      model = %LLMDB.Model{provider: :mock, id: "test-model"}
       opts = []
 
       assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts)
@@ -87,7 +87,7 @@ defmodule ReqLLM.Provider.OptionsTest do
 
   describe "Options.process/4 - provider-specific options" do
     test "validates provider options nested under :provider_options key" do
-      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+      model = %LLMDB.Model{provider: :mock, id: "test-model"}
 
       opts = [
         temperature: 0.7,
@@ -104,7 +104,7 @@ defmodule ReqLLM.Provider.OptionsTest do
     end
 
     test "rejects invalid provider options" do
-      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+      model = %LLMDB.Model{provider: :mock, id: "test-model"}
 
       opts = [
         temperature: 0.7,
@@ -120,7 +120,7 @@ defmodule ReqLLM.Provider.OptionsTest do
     end
 
     test "works with providers that have no custom schema" do
-      model = %ReqLLM.Model{provider: :simple, model: "test-model"}
+      model = %LLMDB.Model{provider: :simple, id: "test-model"}
       opts = [temperature: 0.7]
 
       assert {:ok, processed} = Options.process(SimpleProvider, :chat, model, opts)
@@ -129,7 +129,7 @@ defmodule ReqLLM.Provider.OptionsTest do
     end
 
     test "supports nested provider options" do
-      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+      model = %LLMDB.Model{provider: :mock, id: "test-model"}
 
       opts = [
         temperature: 0.8,
@@ -162,7 +162,7 @@ defmodule ReqLLM.Provider.OptionsTest do
         end
       end)
 
-      model = %ReqLLM.Model{provider: :url_override, model: "test-model"}
+      model = %LLMDB.Model{provider: :url_override, id: "test-model"}
       opts = []
       Application.put_env(:req_llm, :url_override, base_url: "https://overriden.com")
 
@@ -174,7 +174,7 @@ defmodule ReqLLM.Provider.OptionsTest do
 
   describe "Options.process/4 - model options extraction" do
     test "extracts max_tokens from model.limit.output" do
-      model = %ReqLLM.Model{provider: :mock, model: "test-model", limit: %{output: 4}}
+      model = %LLMDB.Model{provider: :mock, id: "test-model", limits: %{output: 4}}
       opts = []
 
       assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts)
@@ -182,7 +182,7 @@ defmodule ReqLLM.Provider.OptionsTest do
     end
 
     test "opts take precedence over model.limit.output" do
-      model = %ReqLLM.Model{provider: :mock, model: "test-model", limit: %{output: 4}}
+      model = %LLMDB.Model{provider: :mock, id: "test-model", limits: %{output: 4}}
       opts = [max_tokens: 100]
 
       assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts)
@@ -190,7 +190,7 @@ defmodule ReqLLM.Provider.OptionsTest do
     end
 
     test "merges model limit.output with other opts" do
-      model = %ReqLLM.Model{provider: :mock, model: "test-model", limit: %{output: 4}}
+      model = %LLMDB.Model{provider: :mock, id: "test-model", limits: %{output: 4}}
       opts = [temperature: 0.7, top_p: 0.9]
 
       assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts)
@@ -200,7 +200,7 @@ defmodule ReqLLM.Provider.OptionsTest do
     end
 
     test "handles model without limit.output gracefully" do
-      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+      model = %LLMDB.Model{provider: :mock, id: "test-model"}
       opts = [temperature: 0.7]
 
       assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts)
@@ -210,19 +210,19 @@ defmodule ReqLLM.Provider.OptionsTest do
 
     test "works across different providers" do
       # Test with MockProvider
-      model1 = %ReqLLM.Model{provider: :mock, model: "test-model", limit: %{output: 50}}
+      model1 = %LLMDB.Model{provider: :mock, id: "test-model", limits: %{output: 50}}
       assert {:ok, processed1} = Options.process(MockProvider, :chat, model1, [])
       assert processed1[:max_tokens] == 50
 
       # Test with SimpleProvider
-      model2 = %ReqLLM.Model{provider: :simple, model: "test-model", limit: %{output: 75}}
+      model2 = %LLMDB.Model{provider: :simple, id: "test-model", limits: %{output: 75}}
       assert {:ok, processed2} = Options.process(SimpleProvider, :chat, model2, [])
       assert processed2[:max_tokens] == 75
     end
 
     test "extraction happens before provider translation" do
       # MockProvider translates max_tokens -> max_completion_tokens for o1 models
-      model = %ReqLLM.Model{provider: :mock, model: "o1-preview", limit: %{output: 1000}}
+      model = %LLMDB.Model{provider: :mock, id: "o1-preview", limits: %{output: 1000}}
       opts = []
 
       assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts)
@@ -235,7 +235,7 @@ defmodule ReqLLM.Provider.OptionsTest do
     test "does not extract max_tokens: 0 (embedding models)" do
       # Embedding models have max_tokens: 0 in their limit.output
       # This should NOT be extracted as it's not a valid max_tokens value
-      model = %ReqLLM.Model{provider: :mock, model: "embedding-model", limit: %{output: 0}}
+      model = %LLMDB.Model{provider: :mock, id: "embedding-model", limits: %{output: 0}}
       opts = [temperature: 0.5]
 
       assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts)
@@ -248,7 +248,7 @@ defmodule ReqLLM.Provider.OptionsTest do
 
   describe "Options.process/4 - req_http_options handling" do
     test "preserves req_http_options for merging into Req request" do
-      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+      model = %LLMDB.Model{provider: :mock, id: "test-model"}
 
       opts = [
         temperature: 0.7,
@@ -265,7 +265,7 @@ defmodule ReqLLM.Provider.OptionsTest do
     end
 
     test "handles missing req_http_options gracefully" do
-      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+      model = %LLMDB.Model{provider: :mock, id: "test-model"}
       opts = [temperature: 0.7]
 
       assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts)
@@ -276,7 +276,7 @@ defmodule ReqLLM.Provider.OptionsTest do
 
   describe "Options.process/4 - provider translation" do
     test "applies provider-specific option translation" do
-      model = %ReqLLM.Model{provider: :mock, model: "o1-preview"}
+      model = %LLMDB.Model{provider: :mock, id: "o1-preview"}
       opts = [temperature: 0.7, max_tokens: 1000]
 
       assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts)
@@ -290,7 +290,7 @@ defmodule ReqLLM.Provider.OptionsTest do
     test "handles translation warnings based on on_unsupported setting" do
       import ExUnit.CaptureLog
 
-      model = %ReqLLM.Model{provider: :mock, model: "o1-preview"}
+      model = %LLMDB.Model{provider: :mock, id: "o1-preview"}
       opts = [max_tokens: 1000, on_unsupported: :warn]
 
       log_output =
@@ -303,7 +303,7 @@ defmodule ReqLLM.Provider.OptionsTest do
     end
 
     test "translation works correctly for o1 models" do
-      model = %ReqLLM.Model{provider: :mock, model: "o1-preview"}
+      model = %LLMDB.Model{provider: :mock, id: "o1-preview"}
 
       opts = [
         max_tokens: 1000,
@@ -321,7 +321,7 @@ defmodule ReqLLM.Provider.OptionsTest do
 
   describe "Options.process/4 - internal keys handling" do
     test "preserves internal keys and bypasses validation" do
-      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+      model = %LLMDB.Model{provider: :mock, id: "test-model"}
 
       opts = [
         temperature: 0.7,
@@ -344,7 +344,7 @@ defmodule ReqLLM.Provider.OptionsTest do
     end
 
     test "validates context when provided" do
-      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+      model = %LLMDB.Model{provider: :mock, id: "test-model"}
 
       # Valid context
       valid_opts = [temperature: 0.7, context: %ReqLLM.Context{messages: []}]
@@ -362,7 +362,7 @@ defmodule ReqLLM.Provider.OptionsTest do
 
   describe "Options.process/4 - error handling" do
     test "process/4 returns error tuples while process!/4 raises" do
-      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+      model = %LLMDB.Model{provider: :mock, id: "test-model"}
       invalid_opts = [temperature: "invalid"]
 
       # process/4 returns error tuple
@@ -403,7 +403,7 @@ defmodule ReqLLM.Provider.OptionsTest do
     end
 
     test "detects when provider options shadow core generation options" do
-      model = %ReqLLM.Model{provider: :conflicting, model: "test-model"}
+      model = %LLMDB.Model{provider: :conflicting, id: "test-model"}
       opts = [temperature: 0.7]
 
       assert_raise ReqLLM.Error.Invalid.Parameter, fn ->
@@ -412,7 +412,7 @@ defmodule ReqLLM.Provider.OptionsTest do
     end
 
     test "provides helpful error message about conflicting keys" do
-      model = %ReqLLM.Model{provider: :conflicting, model: "test-model"}
+      model = %LLMDB.Model{provider: :conflicting, id: "test-model"}
       opts = [temperature: 0.7]
 
       error =
@@ -428,7 +428,7 @@ defmodule ReqLLM.Provider.OptionsTest do
     end
 
     test "allows providers with non-conflicting options to work normally" do
-      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+      model = %LLMDB.Model{provider: :mock, id: "test-model"}
 
       opts = [
         temperature: 0.7,
@@ -443,7 +443,7 @@ defmodule ReqLLM.Provider.OptionsTest do
 
   describe "Options.process/4 - enhanced error messages" do
     test "suggests provider_options for unknown options that match provider schema" do
-      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+      model = %LLMDB.Model{provider: :mock, id: "test-model"}
 
       opts = [
         temperature: 0.7,
@@ -465,7 +465,7 @@ defmodule ReqLLM.Provider.OptionsTest do
     end
 
     test "provides helpful suggestions for similar option names" do
-      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+      model = %LLMDB.Model{provider: :mock, id: "test-model"}
 
       opts = [
         temperature: 0.7,
@@ -485,7 +485,7 @@ defmodule ReqLLM.Provider.OptionsTest do
     end
 
     test "provides tips for invalid value errors" do
-      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+      model = %LLMDB.Model{provider: :mock, id: "test-model"}
       # Should be a number
       opts = [temperature: "invalid"]
 
@@ -503,7 +503,7 @@ defmodule ReqLLM.Provider.OptionsTest do
 
   describe "Options.process/4 - edge cases" do
     test "handles stream/stream? alias conversion" do
-      model = %ReqLLM.Model{provider: :mock, model: "test-model"}
+      model = %LLMDB.Model{provider: :mock, id: "test-model"}
 
       # stream? should be converted to stream
       opts_with_alias = [stream?: true, temperature: 0.7]
@@ -513,7 +513,7 @@ defmodule ReqLLM.Provider.OptionsTest do
     end
 
     test "handles provider without translate_options callback" do
-      model = %ReqLLM.Model{provider: :simple, model: "test-model"}
+      model = %LLMDB.Model{provider: :simple, id: "test-model"}
       opts = [temperature: 0.7, max_tokens: 1000]
 
       assert {:ok, processed} = Options.process(SimpleProvider, :chat, model, opts)

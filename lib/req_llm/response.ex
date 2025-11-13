@@ -261,7 +261,7 @@ defmodule ReqLLM.Response do
   and directly calls the provider's decode_response/1 callback for zero-ceremony decoding.
 
   Supports both Model struct and string inputs, automatically resolving model
-  strings using Model.from!/1.
+  strings using ReqLLM.model!/1.
 
   ## Parameters
 
@@ -282,9 +282,9 @@ defmodule ReqLLM.Response do
   @spec decode_response(term(), Model.t() | String.t()) :: {:ok, t()} | {:error, term()}
   @dialyzer {:nowarn_function, decode_response: 2}
   def decode_response(raw_data, model_input) do
-    model = if is_binary(model_input), do: Model.from!(model_input), else: model_input
+    model = if is_binary(model_input), do: ReqLLM.model!(model_input), else: model_input
 
-    case ReqLLM.Provider.Registry.get_provider(model.provider) do
+    case ReqLLM.Providers.get(model.provider) do
       {:ok, provider_mod} ->
         wrapped_data =
           if function_exported?(provider_mod, :wrap_response, 1) do
@@ -295,7 +295,7 @@ defmodule ReqLLM.Response do
 
         fixture_request = %Req.Request{
           private: %{req_llm_model: model},
-          options: %{model: model.model}
+          options: %{model: model.id}
         }
 
         fixture_response = %Req.Response{body: wrapped_data, status: 200}

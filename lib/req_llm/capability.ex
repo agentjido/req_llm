@@ -6,8 +6,6 @@ defmodule ReqLLM.Capability do
   Capabilities are extracted from provider metadata loaded from models.dev.
   """
 
-  alias ReqLLM.Provider.Registry
-
   @doc """
   Get all supported capabilities for a model.
 
@@ -16,10 +14,10 @@ defmodule ReqLLM.Capability do
       iex> ReqLLM.Capability.capabilities("anthropic:claude-3-haiku")
       [:max_tokens, :system_prompt, :temperature, :tools, :streaming]
   """
-  @spec capabilities(ReqLLM.Model.t() | binary()) :: [atom()]
+  @spec capabilities(LLMDB.Model.t() | binary()) :: [atom()]
   def capabilities(model_input) do
     case normalize_model(model_input) do
-      {:ok, %ReqLLM.Model{} = model} -> extract_capabilities_from_model(model)
+      {:ok, %LLMDB.Model{} = model} -> extract_capabilities_from_model(model)
       _ -> []
     end
   end
@@ -32,7 +30,7 @@ defmodule ReqLLM.Capability do
       iex> ReqLLM.Capability.supports?("anthropic:claude-3-sonnet", :tools)
       true
   """
-  @spec supports?(ReqLLM.Model.t() | binary(), atom()) :: boolean()
+  @spec supports?(LLMDB.Model.t() | binary(), atom()) :: boolean()
   def supports?(model_spec, capability) when is_atom(capability) do
     model_capabilities = capabilities(model_spec)
     capability in model_capabilities
@@ -54,10 +52,10 @@ defmodule ReqLLM.Capability do
       iex> ReqLLM.Capability.supports_object_generation?("anthropic:claude-3-haiku")
       true
   """
-  @spec supports_object_generation?(ReqLLM.Model.t() | binary()) :: boolean()
+  @spec supports_object_generation?(LLMDB.Model.t() | binary()) :: boolean()
   def supports_object_generation?(model_input) do
     case normalize_model(model_input) do
-      {:ok, %ReqLLM.Model{} = model} ->
+      {:ok, %LLMDB.Model{} = model} ->
         case model.provider do
           :google ->
             true
@@ -91,15 +89,9 @@ defmodule ReqLLM.Capability do
   """
   @spec models_for(atom(), atom()) :: [binary()]
   def models_for(provider, capability) when is_atom(provider) and is_atom(capability) do
-    case Registry.list_models(provider) do
-      {:ok, model_names} ->
-        model_names
-        |> Enum.map(&"#{provider}:#{&1}")
-        |> Enum.filter(fn model_spec -> supports?(model_spec, capability) end)
-
-      {:error, _} ->
-        []
-    end
+    LLMDB.models(provider)
+    |> Enum.map(&"#{provider}:#{&1.id}")
+    |> Enum.filter(fn model_spec -> supports?(model_spec, capability) end)
   end
 
   @doc """
@@ -112,10 +104,8 @@ defmodule ReqLLM.Capability do
   """
   @spec provider_models(atom()) :: [binary()]
   def provider_models(provider) when is_atom(provider) do
-    case Registry.list_models(provider) do
-      {:ok, model_names} -> Enum.map(model_names, &"#{provider}:#{&1}")
-      {:error, _} -> []
-    end
+    LLMDB.models(provider)
+    |> Enum.map(&"#{provider}:#{&1.id}")
   end
 
   @doc """
@@ -128,7 +118,7 @@ defmodule ReqLLM.Capability do
   """
   @spec providers_for(atom()) :: [atom()]
   def providers_for(capability) when is_atom(capability) do
-    Registry.list_providers()
+    ReqLLM.Providers.list()
     |> Enum.filter(&(!Enum.empty?(models_for(&1, capability))))
   end
 
@@ -147,7 +137,7 @@ defmodule ReqLLM.Capability do
       iex> ReqLLM.Capability.validate!(model, tools: [...], on_unsupported: :error)
       ** (ReqLLM.Error.Invalid.Capability) Model does not support [:tools]
   """
-  @spec validate!(ReqLLM.Model.t() | binary(), keyword()) :: :ok
+  @spec validate!(LLMDB.Model.t() | binary(), keyword()) :: :ok
   def validate!(model, opts) do
     model_capabilities = capabilities(model)
     on_unsupported = Keyword.get(opts, :on_unsupported, :ignore)
@@ -163,11 +153,11 @@ defmodule ReqLLM.Capability do
   end
 
   # Convert various model inputs to a Model struct
-  defp normalize_model(%ReqLLM.Model{} = model), do: {:ok, model}
-  defp normalize_model(model_spec), do: ReqLLM.Model.from(model_spec)
+  defp normalize_model(%LLMDB.Model{} = model), do: {:ok, model}
+  defp normalize_model(model_spec), do: ReqLLM.model(model_spec)
 
   # Extract capabilities from a Model struct, preferring validated capabilities if available
-  defp extract_capabilities_from_model(%ReqLLM.Model{capabilities: capabilities})
+  defp extract_capabilities_from_model(%LLMDB.Model{capabilities: capabilities})
        when not is_nil(capabilities) do
     # Use validated capabilities from the model struct when available
     validated_capabilities = for {key, true} <- capabilities, do: key
@@ -187,57 +177,51 @@ defmodule ReqLLM.Capability do
     |> Enum.uniq()
   end
 
-  defp extract_capabilities_from_model(%ReqLLM.Model{provider: provider, model: model_name}) do
-    # Fallback to loading metadata directly
-    case ReqLLM.Model.Metadata.get_model_metadata(provider, model_name) do
-      {:ok, metadata} -> extract_capabilities(metadata)
-      _ -> []
+  defp extract_capabilities_from_model(%LLMDB.Model{
+         capabilities: nil,
+         provider: provider,
+         model: model_name
+       }) do
+    case LLMDB.model(provider, model_name) do
+      {:ok, llmdb_model} ->
+        extract_capabilities_from_llmdb_capabilities(llmdb_model.capabilities)
+
+      _ ->
+        []
     end
   end
 
-  # Extract all supported capabilities from model metadata (fallback method)
-  defp extract_capabilities(metadata) do
-    capabilities = ReqLLM.Metadata.build_capabilities_from_metadata(metadata)
+  # Extract capabilities from LLMDB capabilities map
+  defp extract_capabilities_from_llmdb_capabilities(llmdb_capabilities)
+       when is_map(llmdb_capabilities) do
+    validated_capabilities =
+      llmdb_capabilities
+      |> Enum.flat_map(fn
+        {_key, nested} when is_map(nested) ->
+          for {k, true} <- nested, do: k
 
-    # Get validated capabilities from metadata structure
-    validated_capabilities = for {key, true} <- capabilities, do: key
+        {key, true} ->
+          [key]
 
-    # Add additional capabilities that are always supported or derived from other metadata
-    additional_capabilities = [
-      # All models support token limits
-      :max_tokens,
-      # All models support system prompts
-      :system_prompt,
-      # All models have metadata
-      :metadata,
-      # All models support stop sequences
-      :stop_sequences
-    ]
+        _ ->
+          []
+      end)
 
-    # Add sampling parameters based on metadata
-    sampling_capabilities =
-      for {key, supported} <- %{
-            temperature: Map.get(metadata, "temperature", false),
-            top_p: Map.get(metadata, "top_p", false),
-            top_k: Map.get(metadata, "top_k", false)
-          },
-          supported,
-          do: key
+    additional_capabilities = [:max_tokens, :system_prompt, :metadata, :stop_sequences]
 
-    # Add streaming support (default to true if not specified)
-    streaming_capabilities =
-      if Map.get(metadata, "streaming", true), do: [:streaming], else: []
-
-    # Add tool-related capabilities based on tool_call support
     tool_capabilities =
-      if Map.get(metadata, "tool_call", false), do: [:tools, :tool_choice], else: []
+      if get_in(llmdb_capabilities, [:tools, :enabled]) == true,
+        do: [:tools, :tool_choice],
+        else: []
+
+    streaming_capabilities = [:streaming]
 
     (validated_capabilities ++
-       additional_capabilities ++
-       sampling_capabilities ++
-       streaming_capabilities ++ tool_capabilities)
+       additional_capabilities ++ tool_capabilities ++ streaming_capabilities)
     |> Enum.uniq()
   end
+
+  defp extract_capabilities_from_llmdb_capabilities(_), do: []
 
   # Extract capability requirements from user options
   defp extract_capability_requirements(opts) do
@@ -281,7 +265,7 @@ defmodule ReqLLM.Capability do
   end
 
   # Format model name for error messages
-  defp format_model_name(%ReqLLM.Model{provider: provider, model: model}),
+  defp format_model_name(%LLMDB.Model{provider: provider, model: model}),
     do: "#{provider}:#{model}"
 
   defp format_model_name(model_spec) when is_binary(model_spec), do: model_spec

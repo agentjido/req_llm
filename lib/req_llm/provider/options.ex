@@ -200,7 +200,7 @@ defmodule ReqLLM.Provider.Options do
   `{:ok, processed_opts}` or `{:error, wrapped_error}`
 
   ## Examples
-      model = %ReqLLM.Model{provider: :openai, model: "gpt-4"}
+      model = %LLMDB.Model{provider: :openai, model: "gpt-4"}
 
       opts = [
         temperature: 0.7,
@@ -208,7 +208,7 @@ defmodule ReqLLM.Provider.Options do
       ]
       {:ok, processed} = Options.process(MyProvider, :chat, model, opts)
   """
-  @spec process(module(), atom(), ReqLLM.Model.t(), keyword()) ::
+  @spec process(module(), atom(), LLMDB.Model.t(), keyword()) ::
           {:ok, keyword()} | {:error, term()}
   def process(provider_mod, operation, model, opts) do
     processed_opts = process!(provider_mod, operation, model, opts)
@@ -226,7 +226,7 @@ defmodule ReqLLM.Provider.Options do
   @doc """
   Same as process/4 but raises on error.
   """
-  @spec process!(module(), atom(), ReqLLM.Model.t(), keyword()) :: keyword()
+  @spec process!(module(), atom(), LLMDB.Model.t(), keyword()) :: keyword()
   def process!(provider_mod, operation, model, opts) do
     {internal_opts, user_opts} = Keyword.split(opts, @internal_keys)
     user_opts = handle_stream_alias(user_opts)
@@ -418,7 +418,7 @@ defmodule ReqLLM.Provider.Options do
 
   ## Examples
 
-      iex> model = %ReqLLM.Model{provider: :openai, model: "gpt-4"}
+      iex> model = %LLMDB.Model{provider: :openai, model: "gpt-4"}
       iex> ReqLLM.Provider.Options.effective_base_url(ReqLLM.Providers.OpenAI, model, [])
       "https://api.openai.com/v1"
 
@@ -426,8 +426,8 @@ defmodule ReqLLM.Provider.Options do
       iex> ReqLLM.Provider.Options.effective_base_url(ReqLLM.Providers.OpenAI, model, opts)
       "https://custom.example.com"
   """
-  @spec effective_base_url(module(), ReqLLM.Model.t(), keyword()) :: String.t()
-  def effective_base_url(provider_mod, %ReqLLM.Model{} = model, opts) do
+  @spec effective_base_url(module(), LLMDB.Model.t(), keyword()) :: String.t()
+  def effective_base_url(provider_mod, %LLMDB.Model{} = model, opts) do
     opts[:base_url] ||
       base_url_from_application_config(model.provider) ||
       base_url_from_provider_metadata(model.provider) ||
@@ -444,13 +444,13 @@ defmodule ReqLLM.Provider.Options do
     |> normalize_tools()
   end
 
-  defp extract_model_options(%ReqLLM.Model{} = model, opts) do
+  defp extract_model_options(%LLMDB.Model{} = model, opts) do
     cond do
       Keyword.has_key?(opts, :max_tokens) ->
         opts
 
-      is_map(model.limit) and is_integer(model.limit[:output]) and model.limit[:output] > 0 ->
-        Keyword.put(opts, :max_tokens, model.limit.output)
+      is_map(model.limits) and is_integer(model.limits[:output]) and model.limits[:output] > 0 ->
+        Keyword.put(opts, :max_tokens, model.limits.output)
 
       true ->
         opts
@@ -784,9 +784,9 @@ defmodule ReqLLM.Provider.Options do
   end
 
   defp base_url_from_provider_metadata(provider) do
-    case ReqLLM.Provider.Registry.get_provider_metadata(provider) do
-      {:ok, metadata} -> get_in(metadata, ["provider", "base_url"]) || metadata["base_url"]
-      {:error, :provider_not_found} -> nil
+    case LLMDB.provider(provider) do
+      {:ok, provider_data} -> provider_data.base_url
+      {:error, _} -> nil
     end
   end
 

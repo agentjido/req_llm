@@ -1,12 +1,11 @@
 defmodule ReqLLM.Providers.OpenAI.StructuredOutputTest do
   use ExUnit.Case, async: true
 
-  alias ReqLLM.Model
   alias ReqLLM.Tool
 
   describe "provider options validation" do
     test "openai_structured_output_mode accepts valid modes" do
-      {:ok, model} = Model.from("openai:gpt-4o-2024-08-06")
+      {:ok, model} = ReqLLM.model("openai:gpt-4o-2024-08-06")
 
       valid_modes = [:auto, :json_schema, :tool_strict]
 
@@ -22,7 +21,7 @@ defmodule ReqLLM.Providers.OpenAI.StructuredOutputTest do
     end
 
     test "openai_structured_output_mode rejects invalid modes" do
-      {:ok, model} = Model.from("openai:gpt-4o-2024-08-06")
+      {:ok, model} = ReqLLM.model("openai:gpt-4o-2024-08-06")
 
       assert {:error, _} =
                ReqLLM.Providers.OpenAI.prepare_request(
@@ -34,7 +33,7 @@ defmodule ReqLLM.Providers.OpenAI.StructuredOutputTest do
     end
 
     test "openai_structured_output_mode defaults to :auto" do
-      {:ok, model} = Model.from("openai:gpt-4o-2024-08-06")
+      {:ok, model} = ReqLLM.model("openai:gpt-4o-2024-08-06")
 
       {:ok, request} = ReqLLM.Providers.OpenAI.prepare_request(:chat, model, "test", [])
 
@@ -45,7 +44,7 @@ defmodule ReqLLM.Providers.OpenAI.StructuredOutputTest do
     end
 
     test "openai_parallel_tool_calls accepts boolean or nil" do
-      {:ok, model} = Model.from("openai:gpt-4o-2024-08-06")
+      {:ok, model} = ReqLLM.model("openai:gpt-4o-2024-08-06")
 
       for value <- [true, false, nil] do
         assert {:ok, _request} =
@@ -59,7 +58,7 @@ defmodule ReqLLM.Providers.OpenAI.StructuredOutputTest do
     end
 
     test "openai_parallel_tool_calls defaults to nil" do
-      {:ok, model} = Model.from("openai:gpt-4o-2024-08-06")
+      {:ok, model} = ReqLLM.model("openai:gpt-4o-2024-08-06")
 
       {:ok, request} = ReqLLM.Providers.OpenAI.prepare_request(:chat, model, "test", [])
 
@@ -103,31 +102,31 @@ defmodule ReqLLM.Providers.OpenAI.StructuredOutputTest do
 
   describe "capability detection" do
     test "supports_json_schema? returns true for gpt-4o-2024-08-06" do
-      {:ok, model} = Model.from("openai:gpt-4o-2024-08-06")
+      {:ok, model} = ReqLLM.model("openai:gpt-4o-2024-08-06")
 
       assert get_in(model._metadata, ["supports_json_schema_response_format"]) == true
     end
 
     test "supports_json_schema? returns true for gpt-4o-2024-11-20" do
-      {:ok, model} = Model.from("openai:gpt-4o-2024-11-20")
+      {:ok, model} = ReqLLM.model("openai:gpt-4o-2024-11-20")
 
       assert get_in(model._metadata, ["supports_json_schema_response_format"]) == true
     end
 
     test "supports_json_schema? returns true for gpt-4o-mini" do
-      {:ok, model} = Model.from("openai:gpt-4o-mini")
+      {:ok, model} = ReqLLM.model("openai:gpt-4o-mini")
 
       assert get_in(model._metadata, ["supports_json_schema_response_format"]) == true
     end
 
     test "supports_strict_tools? returns true for gpt-4o-2024-08-06" do
-      {:ok, model} = Model.from("openai:gpt-4o-2024-08-06")
+      {:ok, model} = ReqLLM.model("openai:gpt-4o-2024-08-06")
 
       assert get_in(model._metadata, ["supports_strict_tools"]) == true
     end
 
     test "supports_strict_tools? returns true for older models" do
-      {:ok, model} = Model.from("openai:gpt-4")
+      {:ok, model} = ReqLLM.model("openai:gpt-4")
 
       assert get_in(model._metadata, ["supports_strict_tools"]) == true
     end
@@ -251,11 +250,11 @@ defmodule ReqLLM.Providers.OpenAI.StructuredOutputTest do
     end
   end
 
-  defp supports_json_schema?(%Model{} = model) do
+  defp supports_json_schema?(%LLMDB.Model{} = model) do
     get_in(model, [Access.key(:_metadata, %{}), "supports_json_schema_response_format"]) == true
   end
 
-  defp supports_strict_tools?(%Model{} = model) do
+  defp supports_strict_tools?(%LLMDB.Model{} = model) do
     get_in(model, [Access.key(:_metadata, %{}), "supports_strict_tools"]) == true
   end
 

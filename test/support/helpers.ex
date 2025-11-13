@@ -10,7 +10,7 @@ defmodule ReqLLM.Test.Helpers do
 
   import ExUnit.Assertions
 
-  alias ReqLLM.{Context, Message, Model, Response, StreamChunk}
+  alias ReqLLM.{Context, Message, Response, StreamChunk}
 
   @doc """
   Create a basic context fixture for testing.
@@ -32,7 +32,7 @@ defmodule ReqLLM.Test.Helpers do
 
   """
   def model_fixture(model_spec) when is_binary(model_spec) do
-    Model.from!(model_spec)
+    ReqLLM.model!(model_spec)
   end
 
   @doc """
@@ -336,8 +336,8 @@ defmodule ReqLLM.Test.Helpers do
       819
   """
   def tool_budget_for(model_spec) do
-    case Model.from(model_spec) do
-      {:ok, model} ->
+    case ReqLLM.model(model_spec) do
+      {:ok, {_provider, _id, model}} ->
         cond do
           is_map(model.limit) and is_integer(model.limit[:output]) and model.limit[:output] > 0 ->
             max(64, div(model.limit[:output], 10))
@@ -489,13 +489,13 @@ defmodule ReqLLM.Test.Helpers do
       [temperature: 0.0, max_tokens: 200, reasoning_effort: :low]
   """
   def reasoning_overlay(model_spec, base_opts, min_tokens \\ nil) do
-    case ReqLLM.Model.from(model_spec) do
+    case ReqLLM.model(model_spec) do
       {:ok, %{capabilities: %{reasoning: true}, provider: provider_id}} ->
         cfg = param_bundles()
         opts = Keyword.put(base_opts, :reasoning_effort, cfg.reasoning[:reasoning_effort] || :low)
 
         # Check if provider has thinking constraints
-        case ReqLLM.Provider.Registry.get_provider(provider_id) do
+        case ReqLLM.Providers.get(provider_id) do
           {:ok, provider_module} ->
             if function_exported?(provider_module, :thinking_constraints, 0) do
               case provider_module.thinking_constraints() do

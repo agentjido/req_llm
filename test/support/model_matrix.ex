@@ -223,15 +223,10 @@ defmodule ReqLLM.Test.ModelMatrix do
   end
 
   defp resolve_allowed_specs do
-    ReqLLM.Provider.Registry.list_providers()
+    ReqLLM.Providers.list()
     |> Enum.flat_map(fn provider ->
-      case ReqLLM.Provider.Registry.list_models_from_llmdb(provider) do
-        {:ok, models} ->
-          Enum.map(models, fn model -> "#{provider}:#{model.model}" end)
-
-        {:error, _} ->
-          []
-      end
+      models = LLMDB.models(provider)
+      Enum.map(models, fn model -> "#{provider}:#{model.id}" end)
     end)
     |> Enum.sort()
   end

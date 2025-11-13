@@ -185,7 +185,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
         }
       }
 
-      {:ok, result} = Converse.parse_response(response_body, model: "test-model")
+      {:ok, result} = Converse.parse_response(response_body, id: "test-model")
 
       assert result.model == "test-model"
       assert result.finish_reason == :stop
@@ -226,7 +226,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
         }
       }
 
-      {:ok, result} = Converse.parse_response(response_body, model: "test-model")
+      {:ok, result} = Converse.parse_response(response_body, id: "test-model")
 
       assert result.finish_reason == :tool_calls
       assert result.message.role == :assistant
@@ -260,7 +260,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
           "stopReason" => bedrock_reason
         }
 
-        {:ok, result} = Converse.parse_response(response_body, model: "test")
+        {:ok, result} = Converse.parse_response(response_body, id: "test")
         assert result.finish_reason == expected_reason
       end
     end
@@ -395,7 +395,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
         }
       }
 
-      {:ok, result} = Converse.parse_response(response_body, operation: :object, model: "test")
+      {:ok, result} = Converse.parse_response(response_body, operation: :object, id: "test")
 
       assert result.finish_reason == :tool_calls
 
@@ -422,7 +422,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
         }
       }
 
-      {:ok, result} = Converse.parse_response(response_body, operation: :chat, model: "test")
+      {:ok, result} = Converse.parse_response(response_body, operation: :chat, id: "test")
 
       assert result.finish_reason == :stop
       # Should not have object field for :chat operation

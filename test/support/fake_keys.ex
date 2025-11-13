@@ -17,7 +17,7 @@ defmodule ReqLLM.TestSupport.FakeKeys do
   """
   def install! do
     if ReqLLM.Test.Env.fixtures_mode() != :record do
-      providers = ReqLLM.Provider.Registry.list_providers()
+      providers = ReqLLM.Providers.list()
 
       for provider <- providers do
         env_var = ReqLLM.Keys.env_var_name(provider)

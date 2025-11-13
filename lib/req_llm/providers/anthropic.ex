@@ -23,45 +23,10 @@ defmodule ReqLLM.Providers.Anthropic do
 
   """
 
-  @behaviour ReqLLM.Provider
-
-  use ReqLLM.Provider.DSL,
+  use ReqLLM.Provider,
     id: :anthropic,
     base_url: "https://api.anthropic.com",
-    metadata: "priv/models_dev/anthropic.json",
-    default_env_key: "ANTHROPIC_API_KEY",
-    provider_schema: [
-      anthropic_top_k: [
-        type: :pos_integer,
-        doc: "Sample from the top K options for each subsequent token (1-40)"
-      ],
-      anthropic_version: [
-        type: :string,
-        doc: "Anthropic API version to use",
-        default: "2023-06-01"
-      ],
-      stop_sequences: [
-        type: {:list, :string},
-        doc: "Custom sequences that will cause the model to stop generating"
-      ],
-      anthropic_metadata: [
-        type: :map,
-        doc: "Optional metadata to include with the request"
-      ],
-      thinking: [
-        type: :map,
-        doc:
-          "Enable thinking/reasoning for supported models (e.g. %{type: \"enabled\", budget_tokens: 4096})"
-      ],
-      anthropic_prompt_cache: [
-        type: :boolean,
-        doc: "Enable Anthropic prompt caching"
-      ],
-      anthropic_prompt_cache_ttl: [
-        type: :string,
-        doc: "TTL for cache (\"1h\" for one hour; omit for default ~5m)"
-      ]
-    ]
+    default_env_key: "ANTHROPIC_API_KEY"
 
   import ReqLLM.Provider.Utils, only: [maybe_put: 3, ensure_parsed_body: 1]
 
@@ -91,7 +56,7 @@ defmodule ReqLLM.Providers.Anthropic do
 
   @impl ReqLLM.Provider
   def prepare_request(:chat, model_spec, prompt, opts) do
-    with {:ok, model} <- ReqLLM.Model.from(model_spec),
+    with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, context} <- ReqLLM.Context.normalize(prompt, opts),
          opts_with_context = Keyword.put(opts, :context, context),
          {:ok, processed_opts} <-
@@ -109,7 +74,7 @@ defmodule ReqLLM.Providers.Anthropic do
 
       timeout = Keyword.get(processed_opts, :receive_timeout, default_timeout)
 
-      base_url = Keyword.get(processed_opts, :base_url, default_base_url())
+      base_url = Keyword.get(processed_opts, :base_url, base_url())
 
       request =
         Req.new(
@@ -123,9 +88,7 @@ defmodule ReqLLM.Providers.Anthropic do
           ] ++ http_opts
         )
         |> Req.Request.register_options(req_keys)
-        |> Req.Request.merge_options(
-          Keyword.take(processed_opts, req_keys) ++ [model: model.model]
-        )
+        |> Req.Request.merge_options(Keyword.take(processed_opts, req_keys) ++ [model: model.id])
         |> attach(model, processed_opts)
 
       {:ok, request}
@@ -182,7 +145,7 @@ defmodule ReqLLM.Providers.Anthropic do
     |> Req.Request.put_header("anthropic-version", get_anthropic_version(user_opts))
     |> Req.Request.put_private(:req_llm_model, model)
     |> maybe_add_beta_header(user_opts)
-    |> Req.Request.merge_options([model: model.model] ++ user_opts)
+    |> Req.Request.merge_options([model: model.id] ++ user_opts)
     |> ReqLLM.Step.Error.attach()
     |> ReqLLM.Step.Retry.attach(user_opts)
     |> Req.Request.append_request_steps(llm_encode_body: &encode_body/1)
@@ -259,7 +222,7 @@ defmodule ReqLLM.Providers.Anthropic do
   end
 
   defp build_request_url(opts) do
-    base_url = get_option(opts, :base_url, default_base_url())
+    base_url = get_option(opts, :base_url, base_url())
     "#{base_url}/v1/messages"
   end
 
@@ -331,7 +294,7 @@ defmodule ReqLLM.Providers.Anthropic do
     beta_headers = build_beta_headers(translated_opts)
     all_headers = streaming_headers ++ beta_headers
 
-    body = build_request_body(context, model.model, translated_opts ++ [stream: true])
+    body = build_request_body(context, model.id, translated_opts ++ [stream: true])
     url = build_request_url(translated_opts)
 
     finch_request = Finch.build(:post, url, all_headers, Jason.encode!(body))
@@ -751,12 +714,12 @@ defmodule ReqLLM.Providers.Anthropic do
       case model_name do
         nil ->
           case req.private[:req_llm_model] do
-            %ReqLLM.Model{} = stored_model -> stored_model
-            _ -> %ReqLLM.Model{provider: :anthropic, model: "unknown"}
+            %LLMDB.Model{} = stored_model -> stored_model
+            _ -> %LLMDB.Model{id: "unknown", provider: :anthropic}
           end
 
         model_name when is_binary(model_name) ->
-          %ReqLLM.Model{provider: :anthropic, model: model_name}
+          %LLMDB.Model{id: model_name, provider: :anthropic}
       end
 
     is_streaming = req.options[:stream] == true

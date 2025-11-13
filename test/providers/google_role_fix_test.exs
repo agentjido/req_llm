@@ -19,7 +19,7 @@ defmodule ReqLLM.Providers.GoogleRoleFixTest do
       request = %Req.Request{
         options: %{
           context: context,
-          model: "gemini-1.5-flash"
+          id: "gemini-1.5-flash"
         }
       }
 
@@ -60,7 +60,7 @@ defmodule ReqLLM.Providers.GoogleRoleFixTest do
       request = %Req.Request{
         options: %{
           context: context,
-          model: "gemini-1.5-flash"
+          id: "gemini-1.5-flash"
         }
       }
 
@@ -89,7 +89,7 @@ defmodule ReqLLM.Providers.GoogleRoleFixTest do
       request = %Req.Request{
         options: %{
           messages: messages,
-          model: "gemini-1.5-flash"
+          id: "gemini-1.5-flash"
         }
       }
 

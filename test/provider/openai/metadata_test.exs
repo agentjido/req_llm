@@ -51,8 +51,7 @@ defmodule Provider.OpenAI.MetadataTest do
         "gpt-5-chat-latest",
         "gpt-5-codex",
         "gpt-5-mini",
-        "gpt-5-nano",
-        "codex-mini-latest"
+        "gpt-5-nano"
       ]
 
       for model_id <- responses_models do

@@ -27,7 +27,7 @@ defmodule ReqLLM.Streaming do
 
       {:ok, stream_response} = ReqLLM.Streaming.start_stream(
         ReqLLM.Providers.Anthropic,
-        %ReqLLM.Model{provider: :anthropic, name: "claude-3-sonnet"},
+        %LLMDB.Model{provider: :anthropic, name: "claude-3-sonnet"},
         ReqLLM.Context.new("Hello!"),
         []
       )

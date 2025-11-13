@@ -14,8 +14,8 @@ defmodule ReqLLM.Providers.OpenAITest do
   describe "provider contract" do
     test "provider identity and configuration" do
       assert is_atom(OpenAI.provider_id())
-      assert is_binary(OpenAI.default_base_url())
-      assert String.starts_with?(OpenAI.default_base_url(), "http")
+      assert is_binary(OpenAI.base_url())
+      assert String.starts_with?(OpenAI.base_url(), "http")
     end
 
     test "provider schema separation from core options" do
@@ -64,7 +64,7 @@ defmodule ReqLLM.Providers.OpenAITest do
 
   describe "request preparation & pipeline wiring" do
     test "prepare_request creates configured chat request" do
-      model = ReqLLM.Model.from!("openai:gpt-4o")
+      model = ReqLLM.model!("openai:gpt-4o")
       context = context_fixture()
       opts = [temperature: 0.7, max_tokens: 100]
 
@@ -76,7 +76,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "prepare_request creates configured embedding request" do
-      model = ReqLLM.Model.from!("openai:text-embedding-3-small")
+      model = ReqLLM.model!("openai:text-embedding-3-small")
       text = "Hello, world!"
       opts = [provider_options: [dimensions: 512]]
 
@@ -88,7 +88,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "prepare_request configures authentication and pipeline for chat" do
-      model = ReqLLM.Model.from!("openai:gpt-4o")
+      model = ReqLLM.model!("openai:gpt-4o")
       prompt = "Hello, world!"
       opts = [temperature: 0.5, max_tokens: 50]
 
@@ -109,7 +109,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "prepare_request configures authentication and pipeline for embedding" do
-      model = ReqLLM.Model.from!("openai:text-embedding-3-small")
+      model = ReqLLM.model!("openai:text-embedding-3-small")
       text = "Hello, world!"
       opts = [provider_options: [dimensions: 512]]
 
@@ -126,7 +126,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "error handling for invalid configurations" do
-      model = ReqLLM.Model.from!("openai:gpt-4o")
+      model = ReqLLM.model!("openai:gpt-4o")
       context = context_fixture()
 
       # Unsupported operation
@@ -134,7 +134,7 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert %ReqLLM.Error.Invalid.Parameter{} = error
 
       # Provider mismatch
-      wrong_model = ReqLLM.Model.from!("groq:llama-3.1-8b-instant")
+      wrong_model = ReqLLM.model!("groq:llama-3.1-8b-instant")
 
       assert_raise ReqLLM.Error.Invalid.Provider, fn ->
         Req.new() |> OpenAI.attach(wrong_model, [])
@@ -144,7 +144,7 @@ defmodule ReqLLM.Providers.OpenAITest do
 
   describe "body encoding & context translation" do
     test "encode_body for chat without tools" do
-      model = ReqLLM.Model.from!("openai:gpt-4o")
+      model = ReqLLM.model!("openai:gpt-4o")
       context = context_fixture()
 
       # Create a mock request with the expected structure
@@ -174,7 +174,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "encode_body for chat with tools but no tool_choice" do
-      model = ReqLLM.Model.from!("openai:gpt-4o")
+      model = ReqLLM.model!("openai:gpt-4o")
       context = context_fixture()
 
       tool =
@@ -208,7 +208,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "encode_body for chat with tools and tool_choice" do
-      model = ReqLLM.Model.from!("openai:gpt-4o")
+      model = ReqLLM.model!("openai:gpt-4o")
       context = context_fixture()
 
       tool =
@@ -245,7 +245,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "encode_body for o1 models uses max_completion_tokens" do
-      model = ReqLLM.Model.from!("openai:o1-mini")
+      model = ReqLLM.model!("openai:o1-mini")
       context = context_fixture()
 
       mock_request = %Req.Request{
@@ -267,7 +267,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "encode_body for o3 models uses max_completion_tokens" do
-      model = ReqLLM.Model.from!("openai:o3-mini")
+      model = ReqLLM.model!("openai:o3-mini")
       context = context_fixture()
 
       mock_request = %Req.Request{
@@ -289,7 +289,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "encode_body for gpt-5 models uses max_completion_tokens" do
-      model = ReqLLM.Model.from!("openai:gpt-5")
+      model = ReqLLM.model!("openai:gpt-5")
       context = context_fixture()
 
       mock_request = %Req.Request{
@@ -312,7 +312,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "encode_body for o4 models uses max_completion_tokens" do
-      model = ReqLLM.Model.from!("openai:o4-mini")
+      model = ReqLLM.model!("openai:o4-mini")
       context = context_fixture()
 
       mock_request = %Req.Request{
@@ -334,7 +334,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "encode_body for regular models uses max_tokens" do
-      model = ReqLLM.Model.from!("openai:gpt-4o")
+      model = ReqLLM.model!("openai:gpt-4o")
       context = context_fixture()
 
       mock_request = %Req.Request{
@@ -357,7 +357,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "encode_body for embedding operation" do
-      model = ReqLLM.Model.from!("openai:text-embedding-3-small")
+      model = ReqLLM.model!("openai:text-embedding-3-small")
       text = "Hello, world!"
 
       mock_request = %Req.Request{
@@ -409,7 +409,7 @@ defmodule ReqLLM.Providers.OpenAITest do
         body: mock_response_body
       }
 
-      model = ReqLLM.Model.from!("openai:gpt-4o")
+      model = ReqLLM.model!("openai:gpt-4o")
       context = context_fixture()
 
       mock_req = %Req.Request{
@@ -522,7 +522,7 @@ defmodule ReqLLM.Providers.OpenAITest do
       }
 
       mock_req = %Req.Request{
-        options: [operation: :embedding, model: "text-embedding-3-small"]
+        options: [operation: :embedding, id: "text-embedding-3-small"]
       }
 
       # Test decode_response for embeddings
@@ -551,7 +551,7 @@ defmodule ReqLLM.Providers.OpenAITest do
       context = context_fixture()
 
       mock_req = %Req.Request{
-        options: [context: context, model: "gpt-4o"]
+        options: [context: context, id: "gpt-4o"]
       }
 
       # Test decode_response error handling (now delegated to ChatAPI)
@@ -571,7 +571,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "translate_options passes through normal options unchanged" do
-      model = ReqLLM.Model.from!("openai:gpt-4o")
+      model = ReqLLM.model!("openai:gpt-4o")
 
       # Test that normal translation returns options unchanged
       opts = [temperature: 0.7, max_tokens: 1000]
@@ -582,7 +582,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "translate_options for o1 models renames max_tokens and drops temperature" do
-      model = ReqLLM.Model.from!("openai:o1-mini")
+      model = ReqLLM.model!("openai:o1-mini")
 
       opts = [max_tokens: 1000, temperature: 0.7, top_p: 0.9]
       {translated_opts, warnings} = OpenAI.translate_options(:chat, model, opts)
@@ -597,7 +597,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "translate_options for o3 models renames max_tokens and drops temperature" do
-      model = ReqLLM.Model.from!("openai:o3-mini")
+      model = ReqLLM.model!("openai:o3-mini")
 
       opts = [max_tokens: 2000, temperature: 1.0, frequency_penalty: 0.1]
       {translated_opts, warnings} = OpenAI.translate_options(:chat, model, opts)
@@ -612,7 +612,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "translate_options for regular models passes through unchanged" do
-      model = ReqLLM.Model.from!("openai:gpt-4o")
+      model = ReqLLM.model!("openai:gpt-4o")
 
       opts = [max_tokens: 1000, temperature: 0.7, top_p: 0.9]
       {translated_opts, warnings} = OpenAI.translate_options(:chat, model, opts)
@@ -622,7 +622,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "translate_options for gpt-5 models renames max_tokens and drops sampling params" do
-      model = ReqLLM.Model.from!("openai:gpt-5")
+      model = ReqLLM.model!("openai:gpt-5")
       opts = [max_tokens: 1500, temperature: 0.7, top_p: 0.9]
       {translated_opts, warnings} = OpenAI.translate_options(:chat, model, opts)
 
@@ -636,7 +636,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "translate_options for gpt-5-mini models renames max_tokens and drops sampling params" do
-      model = ReqLLM.Model.from!("openai:gpt-5-mini")
+      model = ReqLLM.model!("openai:gpt-5-mini")
       opts = [max_tokens: 2500, temperature: 0.5]
       {translated_opts, warnings} = OpenAI.translate_options(:chat, model, opts)
 
@@ -649,7 +649,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "translate_options for o4 models renames max_tokens and drops temperature" do
-      model = ReqLLM.Model.from!("openai:o4-mini")
+      model = ReqLLM.model!("openai:o4-mini")
       opts = [max_tokens: 3000, temperature: 0.8]
       {translated_opts, warnings} = OpenAI.translate_options(:chat, model, opts)
 
@@ -662,7 +662,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "translate_options for non-chat operations passes through unchanged" do
-      model = ReqLLM.Model.from!("openai:o1-mini")
+      model = ReqLLM.model!("openai:o1-mini")
 
       opts = [max_tokens: 1000, temperature: 0.7]
       {translated_opts, warnings} = OpenAI.translate_options(:embedding, model, opts)
@@ -674,7 +674,7 @@ defmodule ReqLLM.Providers.OpenAITest do
 
   describe "usage extraction" do
     test "extract_usage with valid usage data" do
-      model = ReqLLM.Model.from!("openai:gpt-4o")
+      model = ReqLLM.model!("openai:gpt-4o")
 
       body_with_usage = %{
         "usage" => %{
@@ -691,14 +691,14 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "extract_usage with missing usage data" do
-      model = ReqLLM.Model.from!("openai:gpt-4o")
+      model = ReqLLM.model!("openai:gpt-4o")
       body_without_usage = %{"choices" => []}
 
       {:error, :no_usage_found} = OpenAI.extract_usage(body_without_usage, model)
     end
 
     test "extract_usage with invalid body type" do
-      model = ReqLLM.Model.from!("openai:gpt-4o")
+      model = ReqLLM.model!("openai:gpt-4o")
 
       {:error, :invalid_body} = OpenAI.extract_usage("invalid", model)
       {:error, :invalid_body} = OpenAI.extract_usage(nil, model)
@@ -708,7 +708,7 @@ defmodule ReqLLM.Providers.OpenAITest do
 
   describe "embedding support" do
     test "prepare_request for embedding with all options" do
-      model = ReqLLM.Model.from!("openai:text-embedding-3-large")
+      model = ReqLLM.model!("openai:text-embedding-3-large")
       text = "Sample text for embedding"
       opts = [dimensions: 1024, encoding_format: "float", user: "test-user"]
 
@@ -722,7 +722,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "encode_body for embedding with optional parameters" do
-      model = ReqLLM.Model.from!("openai:text-embedding-3-large")
+      model = ReqLLM.model!("openai:text-embedding-3-large")
 
       mock_request = %Req.Request{
         options: [
@@ -763,7 +763,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "prepare_request rejects unsupported operations" do
-      model = ReqLLM.Model.from!("openai:gpt-4o")
+      model = ReqLLM.model!("openai:gpt-4o")
       context = context_fixture()
 
       {:error, error} = OpenAI.prepare_request(:unsupported, model, context, [])
@@ -772,7 +772,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "attach rejects invalid model provider" do
-      wrong_model = ReqLLM.Model.from!("groq:llama-3.1-8b-instant")
+      wrong_model = ReqLLM.model!("groq:llama-3.1-8b-instant")
 
       assert_raise ReqLLM.Error.Invalid.Provider, fn ->
         Req.new() |> OpenAI.attach(wrong_model, [])
@@ -817,7 +817,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "ResponsesAPI includes text parameter in request body with name at format level" do
-      model = ReqLLM.Model.from!("openai:gpt-5-nano")
+      model = ReqLLM.model!("openai:gpt-5-nano")
 
       schema = [
         name: [type: :string, required: true],
@@ -879,7 +879,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "ResponsesAPI decode_response extracts and validates object from json_schema response" do
-      model = ReqLLM.Model.from!("openai:gpt-5-nano")
+      model = ReqLLM.model!("openai:gpt-5-nano")
 
       schema = [
         name: [type: :string, required: true]

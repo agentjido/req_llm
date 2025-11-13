@@ -24,7 +24,7 @@ defmodule ReqLLM.Test.VCRTest do
       assert :ok =
                VCR.record(path,
                  provider: :openai,
-                 model: "gpt-4",
+                 id: "gpt-4",
                  request: %{
                    method: "POST",
                    url: "https://api.openai.com/v1/chat/completions",
@@ -53,7 +53,7 @@ defmodule ReqLLM.Test.VCRTest do
       :ok =
         VCR.record(path,
           provider: :anthropic,
-          model: "claude-3",
+          id: "claude-3",
           request: %{
             method: "POST",
             url: "https://api.anthropic.com/v1/messages",
@@ -78,7 +78,7 @@ defmodule ReqLLM.Test.VCRTest do
       assert :ok =
                VCR.record(path,
                  provider: :openai,
-                 model: "gpt-4",
+                 id: "gpt-4",
                  request: %{
                    method: "POST",
                    url: "https://api.openai.com/v1/chat/completions",
@@ -104,7 +104,7 @@ defmodule ReqLLM.Test.VCRTest do
       result =
         VCR.record(path,
           provider: :openai,
-          model: "gpt-4",
+          id: "gpt-4",
           request: %{method: "POST", url: "...", headers: [], canonical_json: %{}},
           response: %{status: 200, headers: []}
         )
@@ -120,7 +120,7 @@ defmodule ReqLLM.Test.VCRTest do
       result =
         VCR.record(path,
           provider: :openai,
-          model: "gpt-4",
+          id: "gpt-4",
           request: %{method: "POST", url: "...", headers: [], canonical_json: %{}},
           response: %{status: 200, headers: []},
           collector: collector,
@@ -140,7 +140,7 @@ defmodule ReqLLM.Test.VCRTest do
       result =
         VCR.record(path,
           provider: :openai,
-          model: "gpt-4",
+          id: "gpt-4",
           request: %{},
           response: %{status: 200, headers: []},
           collector: collector
@@ -157,7 +157,7 @@ defmodule ReqLLM.Test.VCRTest do
       :ok =
         VCR.record(path,
           provider: :openai,
-          model: "gpt-4",
+          id: "gpt-4",
           request: %{
             method: "POST",
             url: "https://api.openai.com/v1/chat/completions",
@@ -195,7 +195,7 @@ defmodule ReqLLM.Test.VCRTest do
       :ok =
         VCR.record(path,
           provider: :openai,
-          model: "gpt-4",
+          id: "gpt-4",
           request: %{
             method: "POST",
             url: "https://api.openai.com/v1/chat/completions",
@@ -217,7 +217,7 @@ defmodule ReqLLM.Test.VCRTest do
       :ok =
         VCR.record(path,
           provider: :openai,
-          model: "gpt-4",
+          id: "gpt-4",
           request: %{
             method: "POST",
             url: "https://api.openai.com/v1/chat/completions",
@@ -245,7 +245,7 @@ defmodule ReqLLM.Test.VCRTest do
       :ok =
         VCR.record(path,
           provider: :openai,
-          model: "gpt-4",
+          id: "gpt-4",
           request: %{
             method: "POST",
             url: "https://api.openai.com/v1/chat/completions",
@@ -269,7 +269,7 @@ defmodule ReqLLM.Test.VCRTest do
       :ok =
         VCR.record(path,
           provider: :openai,
-          model: "gpt-4",
+          id: "gpt-4",
           request: %{
             method: "POST",
             url: "https://api.openai.com/v1/chat/completions",
@@ -295,7 +295,7 @@ defmodule ReqLLM.Test.VCRTest do
       :ok =
         VCR.record(path,
           provider: :openai,
-          model: "gpt-4",
+          id: "gpt-4",
           request: %{
             method: "POST",
             url: "https://api.openai.com/v1/chat/completions",
@@ -318,7 +318,7 @@ defmodule ReqLLM.Test.VCRTest do
       :ok =
         VCR.record(path,
           provider: :openai,
-          model: "gpt-4",
+          id: "gpt-4",
           request: %{
             method: "POST",
             url: "https://api.openai.com/v1/chat/completions",
@@ -345,7 +345,7 @@ defmodule ReqLLM.Test.VCRTest do
       :ok =
         VCR.record(path,
           provider: :openai,
-          model: "gpt-4",
+          id: "gpt-4",
           request: %{
             method: "POST",
             url: "https://api.openai.com/v1/chat/completions",
@@ -368,7 +368,7 @@ defmodule ReqLLM.Test.VCRTest do
       :ok =
         VCR.record(path,
           provider: :openai,
-          model: "gpt-4",
+          id: "gpt-4",
           request: %{
             method: "POST",
             url: "https://api.openai.com/v1/chat/completions",
@@ -395,7 +395,7 @@ defmodule ReqLLM.Test.VCRTest do
       :ok =
         VCR.record(path,
           provider: :anthropic,
-          model: "claude-3-sonnet",
+          id: "claude-3-sonnet",
           request: %{
             method: "POST",
             url: "https://api.anthropic.com/v1/messages",
@@ -419,7 +419,7 @@ defmodule ReqLLM.Test.VCRTest do
       :ok =
         VCR.record(path,
           provider: :openai,
-          model: "gpt-4",
+          id: "gpt-4",
           request: %{
             method: "POST",
             url: "https://api.openai.com/v1/chat/completions",

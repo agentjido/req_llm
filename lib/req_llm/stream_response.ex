@@ -455,7 +455,7 @@ defmodule ReqLLM.StreamResponse do
 
     %Response{
       id: generate_response_id(),
-      model: stream_response.model.model,
+      model: stream_response.model.id,
       context: stream_response.context,
       message: message,
       object: object,
@@ -601,7 +601,7 @@ defmodule ReqLLM.StreamResponse do
       # Create Response struct
       response = %Response{
         id: generate_response_id(),
-        model: stream_response.model.model,
+        model: stream_response.model.id,
         context: stream_response.context,
         message: message,
         object: object,
@@ -621,7 +621,7 @@ defmodule ReqLLM.StreamResponse do
     :exit, reason -> {:error, reason}
   end
 
-  defp responses_api_model?(%ReqLLM.Model{} = model) do
+  defp responses_api_model?(%LLMDB.Model{} = model) do
     get_in(model, [Access.key(:_metadata, %{}), "api"]) == "responses"
   end
 
@@ -632,11 +632,11 @@ defmodule ReqLLM.StreamResponse do
     body =
       ReqLLM.Providers.OpenAI.ResponsesAPI.build_responses_body_from_chunks(
         chunks,
-        stream_response.model.model
+        stream_response.model.id
       )
 
     # Create fake req/resp to pass through existing decode logic
-    req = %{options: %{model: stream_response.model.model, context: stream_response.context}}
+    req = %{options: %{model: stream_response.model.id, context: stream_response.context}}
     resp = %{status: 200, body: body}
 
     # Reuse Responses API decode logic - guarantees format parity!

@@ -1,7 +1,7 @@
 defmodule ReqLLM.Providers.AmazonBedrock.AdditionalTest do
   use ExUnit.Case, async: true
 
-  alias ReqLLM.{Context, Model, Providers.AmazonBedrock}
+  alias ReqLLM.{Context, Providers.AmazonBedrock}
 
   describe "provider_id" do
     test "returns :amazon_bedrock" do
@@ -11,7 +11,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.AdditionalTest do
 
   describe "default_base_url" do
     test "returns bedrock endpoint format with region placeholder" do
-      url = AmazonBedrock.default_base_url()
+      url = AmazonBedrock.base_url()
       assert url =~ "bedrock-runtime"
       assert url =~ "amazonaws.com"
       assert url =~ "{region}"
@@ -50,8 +50,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.AdditionalTest do
       for model_id <- models do
         # We can't test private functions directly, but we can test
         # that anthropic models don't raise when building requests
-        model = %Model{
-          model: model_id,
+        model = %LLMDB.Model{
+          id: model_id,
           provider: :amazon_bedrock
         }
 
@@ -80,8 +80,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.AdditionalTest do
       ]
 
       for model_id <- models_without_formatters do
-        model = %Model{
-          model: model_id,
+        model = %LLMDB.Model{
+          id: model_id,
           provider: :amazon_bedrock
         }
 
@@ -104,8 +104,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.AdditionalTest do
 
   describe "AWS credential validation" do
     test "accepts valid credentials" do
-      model = %Model{
-        model: "anthropic.claude-3-haiku-20240307-v1:0",
+      model = %LLMDB.Model{
+        id: "anthropic.claude-3-haiku-20240307-v1:0",
         provider: :amazon_bedrock
       }
 
@@ -123,8 +123,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.AdditionalTest do
 
   describe "request building" do
     test "builds finch request with correct headers" do
-      model = %Model{
-        model: "anthropic.claude-3-haiku-20240307-v1:0",
+      model = %LLMDB.Model{
+        id: "anthropic.claude-3-haiku-20240307-v1:0",
         provider: :amazon_bedrock
       }
 
@@ -153,8 +153,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.AdditionalTest do
     end
 
     test "includes session token when provided" do
-      model = %Model{
-        model: "anthropic.claude-3-haiku-20240307-v1:0",
+      model = %LLMDB.Model{
+        id: "anthropic.claude-3-haiku-20240307-v1:0",
         provider: :amazon_bedrock
       }
 
@@ -173,8 +173,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.AdditionalTest do
     end
 
     test "formats request body correctly" do
-      model = %Model{
-        model: "anthropic.claude-3-haiku-20240307-v1:0",
+      model = %LLMDB.Model{
+        id: "anthropic.claude-3-haiku-20240307-v1:0",
         provider: :amazon_bedrock
       }
 

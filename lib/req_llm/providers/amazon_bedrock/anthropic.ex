@@ -175,9 +175,11 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
   """
   def parse_response(body, opts) when is_map(body) do
     # Create a model struct for Anthropic.Response.decode_response
-    model = %ReqLLM.Model{
-      provider: :anthropic,
-      model: Map.get(body, "model", opts[:model] || "bedrock-anthropic")
+    model_id = Map.get(body, "model", opts[:model] || "bedrock-anthropic")
+
+    model = %LLMDB.Model{
+      id: model_id,
+      provider: :anthropic
     }
 
     # Delegate to native Anthropic response decoding
@@ -208,9 +210,11 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
     # First, unwrap the Bedrock AWS event stream encoding
     with {:ok, event} <- AmazonBedrock.Response.unwrap_stream_chunk(chunk) do
       # Create a model struct for Anthropic.Response.decode_stream_event
-      model = %ReqLLM.Model{
-        provider: :anthropic,
-        model: opts[:model] || "bedrock-anthropic"
+      model_id = opts[:model] || "bedrock-anthropic"
+
+      model = %LLMDB.Model{
+        id: model_id,
+        provider: :anthropic
       }
 
       # Delegate to native Anthropic SSE event parsing

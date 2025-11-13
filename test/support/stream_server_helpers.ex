@@ -67,7 +67,7 @@ defmodule ReqLLM.Test.StreamServerHelpers do
   def start_server(opts \\ []) do
     default_opts = [
       provider_mod: MockProvider,
-      model: %ReqLLM.Model{provider: :test, model: "test-model"}
+      model: %LLMDB.Model{provider: :test, id: "test-model"}
     ]
 
     opts = Keyword.merge(default_opts, opts)

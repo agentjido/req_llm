@@ -11,7 +11,7 @@ defmodule ReqLLM.Generation do
   with proper error handling.
   """
 
-  alias ReqLLM.{Model, Response}
+  alias ReqLLM.Response
 
   require Logger
 
@@ -72,7 +72,7 @@ defmodule ReqLLM.Generation do
           keyword()
         ) :: {:ok, Response.t()} | {:error, term()}
   def generate_text(model_spec, messages, opts \\ []) do
-    with {:ok, model} <- Model.from(model_spec),
+    with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, request} <- provider_module.prepare_request(:chat, model, messages, opts),
          {:ok, %Req.Response{status: status, body: decoded_response}} when status in 200..299 <-
@@ -147,7 +147,7 @@ defmodule ReqLLM.Generation do
           keyword()
         ) :: {:ok, ReqLLM.StreamResponse.t()} | {:error, term()}
   def stream_text(model_spec, messages, opts \\ []) do
-    with {:ok, model} <- Model.from(model_spec),
+    with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, context} <- ReqLLM.Context.normalize(messages, opts) do
       ReqLLM.Streaming.start_stream(provider_module, model, context, opts)
@@ -234,7 +234,7 @@ defmodule ReqLLM.Generation do
           keyword()
         ) :: {:ok, Response.t()} | {:error, term()}
   def generate_object(model_spec, messages, object_schema, opts \\ []) do
-    with {:ok, model} <- Model.from(model_spec),
+    with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, compiled_schema} <- ReqLLM.Schema.compile(object_schema),
          opts_with_schema = Keyword.put(opts, :compiled_schema, compiled_schema),
@@ -339,7 +339,7 @@ defmodule ReqLLM.Generation do
           keyword()
         ) :: {:ok, ReqLLM.StreamResponse.t()} | {:error, term()}
   def stream_object(model_spec, messages, object_schema, opts \\ []) do
-    with {:ok, model} <- Model.from(model_spec),
+    with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, compiled_schema} <- ReqLLM.Schema.compile(object_schema),
          {:ok, prepared_req} <-

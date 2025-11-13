@@ -177,7 +177,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             )
 
             max_tokens =
-              case ReqLLM.Model.from(@model_spec) do
+              case ReqLLM.model(@model_spec) do
                 {:ok, %{capabilities: %{reasoning: true}}} -> 500
                 {:ok, %{model: "gpt-4.1" <> _}} -> 16
                 {:ok, %{_metadata: %{"api" => "responses"}}} -> 16
@@ -213,8 +213,8 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             assert is_number(response.usage.reasoning_tokens) and
                      response.usage.reasoning_tokens >= 0
 
-            case ReqLLM.Model.from(@model_spec) do
-              {:ok, %ReqLLM.Model{cost: cost_map}} when is_map(cost_map) ->
+            case ReqLLM.model(@model_spec) do
+              {:ok, %LLMDB.Model{cost: cost_map}} when is_map(cost_map) ->
                 assert is_number(response.usage.input_cost) and response.usage.input_cost >= 0
 
                 assert is_number(response.usage.output_cost) and
@@ -491,7 +491,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 component: :test
               )
 
-              {:ok, model} = ReqLLM.Model.from(@model_spec)
+              {:ok, model} = ReqLLM.model(@model_spec)
 
               provider_config = param_bundles(@provider)
 

@@ -79,11 +79,11 @@ defmodule ReqLLM.EmbeddingTest do
       assert {:ok, _} = Embedding.validate_model("openai:text-embedding-3-small")
 
       # Model struct format
-      model = ReqLLM.Model.from!("openai:text-embedding-3-small")
+      model = ReqLLM.model!("openai:text-embedding-3-small")
       assert {:ok, _} = Embedding.validate_model(model)
 
       # Tuple format (if supported)
-      assert {:ok, _} = Embedding.validate_model({:openai, model: "text-embedding-3-small"})
+      assert {:ok, _} = Embedding.validate_model({:openai, id: "text-embedding-3-small"})
     end
   end
 
@@ -180,8 +180,8 @@ defmodule ReqLLM.EmbeddingTest do
   end
 
   describe "integration with ReqLLM.Model" do
-    test "works with Model.from!/1" do
-      model = ReqLLM.Model.from!("openai:text-embedding-3-small")
+    test "works with ReqLLM.model!/1" do
+      model = ReqLLM.model!("openai:text-embedding-3-small")
 
       # Should validate successfully
       case Embedding.validate_model(model) do

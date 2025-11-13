@@ -102,7 +102,7 @@ defmodule ReqLLM.Application do
   end
 
   defp initialize_registry do
-    ReqLLM.Provider.Registry.initialize()
+    ReqLLM.Providers.initialize()
   end
 
   defp initialize_schema_cache do

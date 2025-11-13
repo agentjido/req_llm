@@ -166,10 +166,9 @@ defmodule ReqLLM.MixProject do
       {:splode, "~> 0.2.3"},
       {:typed_struct, "~> 0.3.0"},
       {:uniq, "~> 0.6"},
-      {:zoi, "~> 0.8"},
+      {:zoi, "~> 0.10"},
       {:jsv, "~> 0.11"},
-      {:llm_db,
-       github: "agentjido/llm_db", branch: "breaking/llmdb-model-runtime", runtime: false},
+      {:llm_db, path: "../llm_db"},
 
       # Dev/test dependencies
       {:bandit, "~> 1.8", only: :dev, runtime: false},

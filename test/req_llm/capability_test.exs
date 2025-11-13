@@ -22,7 +22,7 @@ defmodule ReqLLM.CapabilityTest do
     end
 
     test "works with Model struct" do
-      model = %ReqLLM.Model{provider: :anthropic, model: "claude-3-haiku-20240307"}
+      model = %LLMDB.Model{provider: :anthropic, id: "claude-3-haiku-20240307"}
       capabilities = Capability.capabilities(model)
 
       assert is_list(capabilities)
@@ -46,7 +46,7 @@ defmodule ReqLLM.CapabilityTest do
     end
 
     test "works with Model struct" do
-      model = %ReqLLM.Model{provider: :anthropic, model: "claude-3-haiku-20240307"}
+      model = %LLMDB.Model{provider: :anthropic, id: "claude-3-haiku-20240307"}
       assert Capability.supports?(model, :max_tokens)
     end
 
@@ -148,7 +148,7 @@ defmodule ReqLLM.CapabilityTest do
     end
 
     test "works with Model struct" do
-      model = %ReqLLM.Model{provider: :anthropic, model: "claude-3-haiku-20240307"}
+      model = %LLMDB.Model{provider: :anthropic, id: "claude-3-haiku-20240307"}
 
       assert :ok = Capability.validate!(model, temperature: 0.7)
     end

@@ -1,7 +1,6 @@
 defmodule ReqLLM.Step.RetryProviderIntegrationTest do
   use ExUnit.Case, async: true
 
-  alias ReqLLM.Model
   alias ReqLLM.Providers.AmazonBedrock
   alias ReqLLM.Providers.Anthropic
   alias ReqLLM.Providers.Google
@@ -27,7 +26,7 @@ defmodule ReqLLM.Step.RetryProviderIntegrationTest do
 
   describe "Anthropic provider retry configuration" do
     test "attach/3 configures retry options on request" do
-      model = %Model{provider: :anthropic, model: "claude-3-5-haiku-20241022"}
+      model = %LLMDB.Model{provider: :anthropic, id: "claude-3-5-haiku-20241022"}
 
       request =
         Anthropic.attach(
@@ -44,7 +43,7 @@ defmodule ReqLLM.Step.RetryProviderIntegrationTest do
     end
 
     test "retry function correctly identifies retryable errors" do
-      model = %Model{provider: :anthropic, model: "claude-3-5-haiku-20241022"}
+      model = %LLMDB.Model{provider: :anthropic, id: "claude-3-5-haiku-20241022"}
 
       request =
         Anthropic.attach(
@@ -67,7 +66,7 @@ defmodule ReqLLM.Step.RetryProviderIntegrationTest do
 
   describe "Google provider retry configuration" do
     test "attach/3 configures retry options on request" do
-      model = %Model{provider: :google, model: "gemini-2.0-flash-exp"}
+      model = %LLMDB.Model{provider: :google, id: "gemini-2.0-flash-exp"}
 
       request =
         Google.attach(
@@ -84,7 +83,7 @@ defmodule ReqLLM.Step.RetryProviderIntegrationTest do
     end
 
     test "retry function correctly identifies retryable errors" do
-      model = %Model{provider: :google, model: "gemini-2.0-flash-exp"}
+      model = %LLMDB.Model{provider: :google, id: "gemini-2.0-flash-exp"}
 
       request =
         Google.attach(
@@ -107,7 +106,10 @@ defmodule ReqLLM.Step.RetryProviderIntegrationTest do
 
   describe "Amazon Bedrock provider retry configuration" do
     test "attach/3 configures retry options on request", %{context: context} do
-      model = %Model{provider: :amazon_bedrock, model: "anthropic.claude-3-5-haiku-20241022-v1:0"}
+      model = %LLMDB.Model{
+        provider: :amazon_bedrock,
+        id: "anthropic.claude-3-5-haiku-20241022-v1:0"
+      }
 
       request =
         AmazonBedrock.attach(
@@ -124,7 +126,10 @@ defmodule ReqLLM.Step.RetryProviderIntegrationTest do
     end
 
     test "retry function correctly identifies retryable errors", %{context: context} do
-      model = %Model{provider: :amazon_bedrock, model: "anthropic.claude-3-5-haiku-20241022-v1:0"}
+      model = %LLMDB.Model{
+        provider: :amazon_bedrock,
+        id: "anthropic.claude-3-5-haiku-20241022-v1:0"
+      }
 
       request =
         AmazonBedrock.attach(
@@ -147,12 +152,12 @@ defmodule ReqLLM.Step.RetryProviderIntegrationTest do
 
   describe "all three providers have consistent retry behavior" do
     test "all providers use the same retry configuration", %{context: context} do
-      anthropic_model = %Model{provider: :anthropic, model: "claude-3-5-haiku-20241022"}
-      google_model = %Model{provider: :google, model: "gemini-2.0-flash-exp"}
+      anthropic_model = %LLMDB.Model{provider: :anthropic, id: "claude-3-5-haiku-20241022"}
+      google_model = %LLMDB.Model{provider: :google, id: "gemini-2.0-flash-exp"}
 
-      bedrock_model = %Model{
+      bedrock_model = %LLMDB.Model{
         provider: :amazon_bedrock,
-        model: "anthropic.claude-3-5-haiku-20241022-v1:0"
+        id: "anthropic.claude-3-5-haiku-20241022-v1:0"
       }
 
       anthropic_request =
@@ -195,12 +200,12 @@ defmodule ReqLLM.Step.RetryProviderIntegrationTest do
     end
 
     test "all providers handle the same set of retryable errors", %{context: context} do
-      anthropic_model = %Model{provider: :anthropic, model: "claude-3-5-haiku-20241022"}
-      google_model = %Model{provider: :google, model: "gemini-2.0-flash-exp"}
+      anthropic_model = %LLMDB.Model{provider: :anthropic, id: "claude-3-5-haiku-20241022"}
+      google_model = %LLMDB.Model{provider: :google, id: "gemini-2.0-flash-exp"}
 
-      bedrock_model = %Model{
+      bedrock_model = %LLMDB.Model{
         provider: :amazon_bedrock,
-        model: "anthropic.claude-3-5-haiku-20241022-v1:0"
+        id: "anthropic.claude-3-5-haiku-20241022-v1:0"
       }
 
       anthropic_request =
