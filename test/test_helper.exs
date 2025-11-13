@@ -1,3 +1,6 @@
+# Ensure LLMDB is started first (loads model catalog)
+Application.ensure_all_started(:llm_db)
+
 # Ensure providers are loaded for testing
 Application.ensure_all_started(:req_llm)
 
