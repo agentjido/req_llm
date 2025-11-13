@@ -357,7 +357,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
     request_with_body
     |> Step.Error.attach()
-    |> ReqLLM.Step.Retry.attach()
+    |> ReqLLM.Step.Retry.attach(user_opts)
     |> put_aws_sigv4(aws_creds)
     # No longer attach streaming here - it's handled by attach_stream
     |> Req.Request.append_response_steps(llm_decode_response: &decode_response/1)

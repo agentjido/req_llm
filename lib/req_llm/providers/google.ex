@@ -402,7 +402,7 @@ defmodule ReqLLM.Providers.Google do
     |> Req.Request.register_options(extra_option_keys)
     |> Req.Request.merge_options([model: model.model, params: [key: api_key]] ++ user_opts)
     |> ReqLLM.Step.Error.attach()
-    |> ReqLLM.Step.Retry.attach()
+    |> ReqLLM.Step.Retry.attach(user_opts)
     |> Req.Request.append_request_steps(llm_encode_body: &__MODULE__.encode_body/1)
     |> Req.Request.append_response_steps(llm_decode_response: &__MODULE__.decode_response/1)
     |> ReqLLM.Step.Usage.attach(model)

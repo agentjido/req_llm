@@ -181,7 +181,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
         request
         |> Req.Request.put_header("authorization", "Bearer #{access_token}")
         |> ReqLLM.Step.Error.attach()
-        |> ReqLLM.Step.Retry.attach()
+        |> ReqLLM.Step.Retry.attach(opts)
         |> Req.Request.append_response_steps(llm_decode_response: &decode_response/1)
         |> ReqLLM.Step.Usage.attach(model)
         |> ReqLLM.Step.Fixture.maybe_attach(model, opts)

@@ -184,7 +184,7 @@ defmodule ReqLLM.Providers.Anthropic do
     |> maybe_add_beta_header(user_opts)
     |> Req.Request.merge_options([model: model.model] ++ user_opts)
     |> ReqLLM.Step.Error.attach()
-    |> ReqLLM.Step.Retry.attach()
+    |> ReqLLM.Step.Retry.attach(user_opts)
     |> Req.Request.append_request_steps(llm_encode_body: &encode_body/1)
     |> Req.Request.append_response_steps(llm_decode_response: &decode_response/1)
     |> ReqLLM.Step.Usage.attach(model)
