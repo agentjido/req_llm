@@ -19,7 +19,7 @@ defmodule ReqLLM.StreamResponse.MetadataHandle do
   end
 
   @spec await(t(), timeout()) :: map()
-  def await(handle, timeout \\ 5_000) when is_pid(handle) do
+  def await(handle, timeout \\ :infinity) when is_pid(handle) do
     case GenServer.call(handle, :await, timeout) do
       {:ok, metadata} -> metadata
       {:error, reason} -> raise reason
