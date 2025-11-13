@@ -399,7 +399,20 @@ defmodule ReqLLM.Providers.Google do
         :app_title,
         :fixture,
         :tools,
-        :tool_choice
+        :tool_choice,
+        :n,
+        :top_p,
+        :top_k,
+        :frequency_penalty,
+        :presence_penalty,
+        :seed,
+        :stop,
+        :user,
+        :system_prompt,
+        :reasoning_effort,
+        :reasoning_token_budget,
+        :stream,
+        :provider_options
       ] ++
         __MODULE__.supported_provider_options()
 

@@ -330,7 +330,8 @@ defmodule ReqLLM.Provider.Defaults do
       :text,
       :operation,
       :receive_timeout,
-      :max_retries
+      :max_retries,
+      :req_http_options
     ]
 
     Keyword.drop(opts, internal_keys)
