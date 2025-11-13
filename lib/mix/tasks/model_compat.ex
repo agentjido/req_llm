@@ -3,7 +3,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   @moduledoc """
   Validate ReqLLM model coverage using the fixture system.
 
-  Models are sourced from priv/models_dev/*.json (synced via mix req_llm.model_sync).
+  Models are sourced from LLMDB and priv/models_dev/*.json (legacy).
   Fixture validation state is tracked in priv/supported_models.json (auto-generated).
 
   ## Selection Principles
@@ -203,12 +203,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     models
     |> Enum.filter(fn {provider, _} -> MapSet.member?(implemented, provider) end)
     |> Enum.map(fn {provider, provider_models} ->
-      allowed_models =
-        Enum.filter(provider_models, fn model ->
-          ReqLLM.Catalog.allowed_spec?(provider, model["id"])
-        end)
-
-      {provider, allowed_models}
+      {provider, provider_models}
     end)
     |> Enum.reject(fn {_provider, models} -> Enum.empty?(models) end)
     |> Enum.sort_by(fn {provider, _} -> provider end)
@@ -697,9 +692,6 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     |> Enum.flat_map(fn {provider, models} ->
       if MapSet.member?(implemented, provider) do
         models
-        |> Enum.filter(fn m ->
-          ReqLLM.Catalog.allowed_spec?(provider, m["id"])
-        end)
         |> Enum.map(fn m -> {provider, m["id"]} end)
       else
         []
@@ -714,9 +706,6 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
       models ->
         models
-        |> Enum.filter(fn m ->
-          ReqLLM.Catalog.allowed_spec?(provider, m["id"])
-        end)
         |> Enum.map(fn m -> {provider, m["id"]} end)
     end
   end

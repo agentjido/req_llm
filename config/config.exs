@@ -4,10 +4,6 @@ config :llm_db,
   compile_embed: false,
   integrity_policy: :warn
 
-config :req_llm, :catalog_enabled?, true
-
-import_config "catalog_allow.exs"
-
 config :req_llm,
   receive_timeout: 120_000,
   stream_receive_timeout: 120_000,

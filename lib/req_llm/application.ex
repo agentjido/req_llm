@@ -102,25 +102,7 @@ defmodule ReqLLM.Application do
   end
 
   defp initialize_registry do
-    case Application.get_env(:req_llm, :catalog_enabled?, false) do
-      true ->
-        case ReqLLM.Catalog.load() do
-          {:ok, catalog} ->
-            ReqLLM.Provider.Registry.initialize(catalog)
-
-          {:error, reason} ->
-            require Logger
-
-            Logger.warning(
-              "Catalog load failed: #{inspect(reason)}; falling back to provider discovery"
-            )
-
-            ReqLLM.Provider.Registry.initialize()
-        end
-
-      _ ->
-        ReqLLM.Provider.Registry.initialize()
-    end
+    ReqLLM.Provider.Registry.initialize()
   end
 
   defp initialize_schema_cache do

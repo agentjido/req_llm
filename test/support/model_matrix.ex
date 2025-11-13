@@ -188,9 +188,6 @@ defmodule ReqLLM.Test.ModelMatrix do
       case registry.list_models(provider) do
         {:ok, models} ->
           models
-          |> Enum.filter(fn model_id ->
-            ReqLLM.Catalog.allowed_spec?(provider, model_id)
-          end)
           |> Enum.map(&"#{provider}:#{&1}")
 
         {:error, _} ->
@@ -216,13 +213,27 @@ defmodule ReqLLM.Test.ModelMatrix do
   defp auto_pick_from_allowed do
     per_provider = Application.get_env(:req_llm, :test_sample_per_provider, 1)
 
-    ReqLLM.Catalog.resolve_allowed_specs()
+    resolve_allowed_specs()
     |> Enum.group_by(&extract_provider/1)
     |> Enum.flat_map(fn {_provider, specs} ->
       specs
       |> Enum.sort()
       |> Enum.take(per_provider)
     end)
+  end
+
+  defp resolve_allowed_specs do
+    ReqLLM.Provider.Registry.list_providers()
+    |> Enum.flat_map(fn provider ->
+      case ReqLLM.Provider.Registry.list_models_from_llmdb(provider) do
+        {:ok, models} ->
+          Enum.map(models, fn model -> "#{provider}:#{model.model}" end)
+
+        {:error, _} ->
+          []
+      end
+    end)
+    |> Enum.sort()
   end
 
   defp maybe_sample(specs, nil), do: specs

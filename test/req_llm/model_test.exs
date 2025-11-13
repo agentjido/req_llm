@@ -401,13 +401,6 @@ defmodule ReqLLM.ModelTest do
         # Sample files for performance
         |> Enum.take(10)
         |> Enum.flat_map(&load_models_from_file(models_dir, &1))
-        # Filter to only catalog_allow models
-        |> Enum.filter(fn {provider_id, model_data} ->
-          case model_data["id"] do
-            id when is_binary(id) -> ReqLLM.Catalog.allowed_spec?(provider_id, id)
-            _ -> false
-          end
-        end)
         # Limit total models
         |> Enum.take(50)
 

@@ -207,7 +207,6 @@ defmodule ReqLLM.MixProject do
       ],
       q: ["quality"],
       docs: ["docs --formatter html"],
-      ms: ["req_llm.model_sync"],
       mc: ["req_llm.model_compat"],
       llm: ["req_llm.gen"]
     ]

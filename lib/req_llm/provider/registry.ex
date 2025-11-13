@@ -724,14 +724,7 @@ defmodule ReqLLM.Provider.Registry do
 
   @spec reload() :: :ok
   def reload do
-    if Application.get_env(:req_llm, :catalog_enabled?, false) do
-      case ReqLLM.Catalog.load() do
-        {:ok, catalog} -> initialize(catalog)
-        _ -> initialize()
-      end
-    else
-      initialize()
-    end
+    initialize()
   end
 
   @doc """
