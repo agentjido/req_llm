@@ -1,5 +1,9 @@
 import Config
 
+config :llm_db,
+  compile_embed: false,
+  integrity_policy: :warn
+
 config :logger, :console,
   level: :warning,
   format: "$time $metadata[$level] $message\n",
