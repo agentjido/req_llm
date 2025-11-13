@@ -41,7 +41,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
   describe "request preparation & pipeline wiring" do
     test "prepare_request creates configured request" do
-      model = ReqLLM.model!("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
       prompt = "Hello world"
       opts = [temperature: 0.7, max_tokens: 100]
 
@@ -53,7 +53,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
     end
 
     test "attach configures authentication and pipeline" do
-      model = ReqLLM.model!("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
       opts = [temperature: 0.5, max_tokens: 50]
 
       request = Req.new() |> Anthropic.attach(model, opts)
@@ -85,7 +85,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
     end
 
     test "error handling for invalid configurations" do
-      model = ReqLLM.model!("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
       prompt = "Hello world"
 
       # Unsupported operation
@@ -93,7 +93,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert %ReqLLM.Error.Invalid.Parameter{} = error
 
       # Provider mismatch
-      wrong_model = ReqLLM.model!("openai:gpt-4")
+      {:ok, wrong_model} = ReqLLM.model("openai:gpt-4")
 
       assert_raise ReqLLM.Error.Invalid.Provider, fn ->
         Req.new() |> Anthropic.attach(wrong_model, [])
@@ -103,7 +103,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
   describe "body encoding & context translation" do
     test "encode_body without tools" do
-      model = ReqLLM.model!("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
       context = context_fixture()
 
       # Create a mock request with the expected structure
@@ -137,7 +137,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
     end
 
     test "encode_body with tools" do
-      model = ReqLLM.model!("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
       context = context_fixture()
 
       tool =
@@ -188,7 +188,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
       }
 
       # Create a mock request with context
-      model = ReqLLM.model!("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
       context = context_fixture()
 
       mock_req = %Req.Request{
@@ -257,7 +257,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
   describe "option translation" do
     test "translate_options converts stop to stop_sequences" do
-      model = ReqLLM.model!("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
 
       # Test single stop string
       {translated_opts, []} = Anthropic.translate_options(:chat, model, stop: "STOP")
@@ -271,7 +271,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
     end
 
     test "translate_options removes unsupported parameters" do
-      model = ReqLLM.model!("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
 
       opts = [
         temperature: 0.7,
@@ -296,7 +296,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
   describe "usage extraction" do
     test "extract_usage with valid usage data" do
-      model = ReqLLM.model!("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
 
       body_with_usage = %{
         "usage" => %{
@@ -311,14 +311,14 @@ defmodule ReqLLM.Providers.AnthropicTest do
     end
 
     test "extract_usage with missing usage data" do
-      model = ReqLLM.model!("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
       body_without_usage = %{"content" => []}
 
       {:error, :no_usage_found} = Anthropic.extract_usage(body_without_usage, model)
     end
 
     test "extract_usage with invalid body type" do
-      model = ReqLLM.model!("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
 
       {:error, :invalid_body} = Anthropic.extract_usage("invalid", model)
       {:error, :invalid_body} = Anthropic.extract_usage(nil, model)
@@ -358,7 +358,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
     end
 
     test "map-based schema works with Anthropic prepare_request pipeline" do
-      model = ReqLLM.model!("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
 
       json_schema = %{
         "type" => "object",

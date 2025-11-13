@@ -70,7 +70,8 @@ defmodule ReqLLM.ProviderCase do
   Create a model fixture from a model specification string.
   """
   def model_fixture(model_string) do
-    ReqLLM.model!(model_string)
+    {:ok, model} = ReqLLM.model(model_string)
+    model
   end
 
   @doc """

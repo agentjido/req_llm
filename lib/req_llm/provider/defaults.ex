@@ -317,9 +317,28 @@ defmodule ReqLLM.Provider.Defaults do
   @doc """
   Default attachment implementation with Bearer token auth and standard pipeline steps.
   """
+  @doc """
+  Filters out internal ReqLLM keys that should not be passed to Req.
+
+  These keys are used by ReqLLM for internal processing but are not valid Req options.
+  """
+  @spec filter_req_opts(keyword()) :: keyword()
+  def filter_req_opts(opts) do
+    internal_keys = [
+      :on_unsupported,
+      :context,
+      :text,
+      :operation,
+      :receive_timeout,
+      :max_retries
+    ]
+
+    Keyword.drop(opts, internal_keys)
+  end
+
   @spec default_attach(module(), Req.Request.t(), term(), keyword()) :: Req.Request.t()
   def default_attach(provider_mod, %Req.Request{} = request, model_input, user_opts) do
-    %LLMDB.Model{} = model = ReqLLM.model!(model_input)
+    {:ok, %LLMDB.Model{} = model} = ReqLLM.model(model_input)
 
     if model.provider != provider_mod.provider_id() do
       raise ReqLLM.Error.Invalid.Provider.exception(provider: model.provider)
@@ -348,6 +367,9 @@ defmodule ReqLLM.Provider.Defaults do
           {binary(), [atom()]}
   def fetch_api_key_and_extra_options(provider_mod, model, user_opts) do
     api_key = ReqLLM.Keys.get!(model, user_opts)
+
+    # Filter out internal keys before passing to Req
+    req_opts = filter_req_opts(user_opts)
 
     # Register options that might be passed by users but aren't standard Req options
     extra_option_keys =

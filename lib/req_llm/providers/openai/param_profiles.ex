@@ -33,7 +33,7 @@ defmodule ReqLLM.Providers.OpenAI.ParamProfiles do
 
   ## Examples
 
-      iex> model = ReqLLM.model!("openai:o3-mini")
+      iex> {:ok, model} = ReqLLM.model("openai:o3-mini")
       iex> steps = ReqLLM.Providers.OpenAI.ParamProfiles.steps_for(:chat, model)
       iex> length(steps) > 0
       true

@@ -32,7 +32,8 @@ defmodule ReqLLM.Test.Helpers do
 
   """
   def model_fixture(model_spec) when is_binary(model_spec) do
-    ReqLLM.model!(model_spec)
+    {:ok, model} = ReqLLM.model(model_spec)
+    model
   end
 
   @doc """
@@ -495,7 +496,7 @@ defmodule ReqLLM.Test.Helpers do
         opts = Keyword.put(base_opts, :reasoning_effort, cfg.reasoning[:reasoning_effort] || :low)
 
         # Check if provider has thinking constraints
-        case ReqLLM.Providers.get(provider_id) do
+        case ReqLLM.provider(provider_id) do
           {:ok, provider_module} ->
             if function_exported?(provider_module, :thinking_constraints, 0) do
               case provider_module.thinking_constraints() do

@@ -66,7 +66,7 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
 
   describe "request preparation & pipeline wiring" do
     test "prepare_request creates configured request for Anthropic models" do
-      model = ReqLLM.model!("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
       context = context_fixture()
 
       opts = [
@@ -90,7 +90,7 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
     end
 
     test "attach configures authentication and pipeline" do
-      model = ReqLLM.model!("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
 
       opts = [
         temperature: 0.5,
@@ -112,7 +112,7 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
     end
 
     test "attach with streaming option configures SSE" do
-      model = ReqLLM.model!("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
 
       opts = [
         stream: true,
@@ -128,7 +128,7 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
     end
 
     test "uses Converse API as fallback for models without dedicated formatters" do
-      model = ReqLLM.model!("amazon-bedrock:cohere.command-text-v14")
+      {:ok, model} = ReqLLM.model("amazon-bedrock:cohere.command-text-v14")
       context = context_fixture()
 
       opts = [
@@ -149,7 +149,7 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
       System.delete_env("AWS_SECRET_ACCESS_KEY")
       System.delete_env("AWS_BEARER_TOKEN_BEDROCK")
 
-      model = ReqLLM.model!("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
       context = context_fixture()
       opts = []
 
@@ -161,7 +161,7 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
     test "API key authentication via environment variable" do
       System.put_env("AWS_BEARER_TOKEN_BEDROCK", "test-api-key-123")
 
-      model = ReqLLM.model!("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
       context = context_fixture()
 
       opts = [region: "us-east-1"]
@@ -178,7 +178,7 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
     end
 
     test "API key authentication via provider options" do
-      model = ReqLLM.model!("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
       context = context_fixture()
 
       opts = [
@@ -202,7 +202,7 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
       System.put_env("AWS_ACCESS_KEY_ID", "AKIATEST")
       System.put_env("AWS_SECRET_ACCESS_KEY", "secretTEST")
 
-      model = ReqLLM.model!("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
       context = context_fixture()
 
       opts = [
@@ -218,7 +218,7 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
     end
 
     test "uses region from options" do
-      model = ReqLLM.model!("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
       context = context_fixture()
 
       opts = [
@@ -232,7 +232,7 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
     end
 
     test "includes session token when provided via streaming" do
-      model = ReqLLM.model!("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
       context = context_fixture()
 
       opts = [
@@ -254,7 +254,7 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
 
   describe "streaming support" do
     test "attach_stream builds proper Finch request" do
-      model = ReqLLM.model!("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
       context = context_fixture()
 
       opts = [
@@ -278,7 +278,7 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
     end
 
     test "attach_stream with API key authentication" do
-      model = ReqLLM.model!("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
       context = context_fixture()
 
       opts = [
@@ -335,7 +335,7 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
 
   describe "response handling" do
     test "extract_usage delegates to formatter" do
-      model = ReqLLM.model!("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
 
       body = %{
         "usage" => %{

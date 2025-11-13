@@ -1,6 +1,10 @@
 # Ensure LLMDB is started first (loads model catalog)
 Application.ensure_all_started(:llm_db)
 
+# Reload LLMDB with custom test models from config
+custom_providers = Application.get_env(:llm_db, :custom, %{})
+LLMDB.load(custom: custom_providers)
+
 # Ensure providers are loaded for testing
 Application.ensure_all_started(:req_llm)
 

@@ -64,7 +64,7 @@ defmodule ReqLLM.Providers.GoogleTest do
 
   describe "request preparation & pipeline wiring" do
     test "prepare_request creates configured request" do
-      model = ReqLLM.model!("google:gemini-1.5-flash")
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
       context = context_fixture()
       opts = [temperature: 0.7, max_tokens: 100]
 
@@ -76,7 +76,7 @@ defmodule ReqLLM.Providers.GoogleTest do
     end
 
     test "prepare_request for streaming creates streaming endpoint" do
-      model = ReqLLM.model!("google:gemini-1.5-flash")
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
       context = context_fixture()
       opts = [temperature: 0.7, max_tokens: 100, stream: true]
 
@@ -88,7 +88,7 @@ defmodule ReqLLM.Providers.GoogleTest do
     end
 
     test "attach configures authentication and pipeline" do
-      model = ReqLLM.model!("google:gemini-1.5-flash")
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
       opts = [temperature: 0.5, max_tokens: 50]
 
       request = Req.new() |> Google.attach(model, opts)
@@ -110,7 +110,7 @@ defmodule ReqLLM.Providers.GoogleTest do
     end
 
     test "error handling for invalid configurations" do
-      model = ReqLLM.model!("google:gemini-1.5-flash")
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
       context = context_fixture()
 
       # Unsupported operation
@@ -118,7 +118,7 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert %ReqLLM.Error.Invalid.Parameter{} = error
 
       # Provider mismatch
-      wrong_model = ReqLLM.model!("openai:gpt-4")
+      {:ok, wrong_model} = ReqLLM.model("openai:gpt-4")
 
       assert_raise ReqLLM.Error.Invalid.Provider, fn ->
         Req.new() |> Google.attach(wrong_model, [])
@@ -128,7 +128,7 @@ defmodule ReqLLM.Providers.GoogleTest do
 
   describe "body encoding & context translation" do
     test "encode_body without tools" do
-      model = ReqLLM.model!("google:gemini-1.5-flash")
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
       context = context_fixture()
 
       # Create a mock request with the expected structure
@@ -167,7 +167,7 @@ defmodule ReqLLM.Providers.GoogleTest do
     end
 
     test "encode_body with tools but no tool_choice" do
-      model = ReqLLM.model!("google:gemini-1.5-flash")
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
       context = context_fixture()
 
       tool =
@@ -202,7 +202,7 @@ defmodule ReqLLM.Providers.GoogleTest do
     end
 
     test "encode_body with Google-specific options" do
-      model = ReqLLM.model!("google:gemini-1.5-flash")
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
       context = context_fixture()
 
       safety_settings = [
@@ -284,7 +284,7 @@ defmodule ReqLLM.Providers.GoogleTest do
         body: google_response
       }
 
-      model = ReqLLM.model!("google:gemini-1.5-flash")
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
       context = context_fixture()
 
       mock_req = %Req.Request{
@@ -479,7 +479,7 @@ defmodule ReqLLM.Providers.GoogleTest do
     end
 
     test "translate_options handles stream? alias" do
-      model = ReqLLM.model!("google:gemini-1.5-flash")
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
 
       # Test stream? -> stream translation
       opts = [temperature: 0.7, stream?: true]
@@ -506,7 +506,7 @@ defmodule ReqLLM.Providers.GoogleTest do
 
   describe "usage extraction" do
     test "extract_usage with valid usage data" do
-      model = ReqLLM.model!("google:gemini-1.5-flash")
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
 
       body_with_usage = %{
         "usageMetadata" => %{
@@ -523,14 +523,14 @@ defmodule ReqLLM.Providers.GoogleTest do
     end
 
     test "extract_usage with missing usage data" do
-      model = ReqLLM.model!("google:gemini-1.5-flash")
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
       body_without_usage = %{"candidates" => []}
 
       {:error, :no_usage_found} = Google.extract_usage(body_without_usage, model)
     end
 
     test "extract_usage with invalid body type" do
-      model = ReqLLM.model!("google:gemini-1.5-flash")
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
 
       {:error, :invalid_body} = Google.extract_usage("invalid", model)
       {:error, :invalid_body} = Google.extract_usage(nil, model)
@@ -538,7 +538,7 @@ defmodule ReqLLM.Providers.GoogleTest do
     end
 
     test "extract_usage with cached content tokens" do
-      model = ReqLLM.model!("google:gemini-1.5-flash")
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
 
       body_with_cached_tokens = %{
         "usageMetadata" => %{
@@ -557,7 +557,7 @@ defmodule ReqLLM.Providers.GoogleTest do
     end
 
     test "extract_usage without cached content tokens" do
-      model = ReqLLM.model!("google:gemini-1.5-flash")
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
 
       body_without_cached_tokens = %{
         "usageMetadata" => %{
@@ -577,7 +577,7 @@ defmodule ReqLLM.Providers.GoogleTest do
 
   describe "object generation with native JSON mode" do
     test "prepare_request for :object with low max_tokens gets adjusted" do
-      model = ReqLLM.model!("google:gemini-1.5-flash")
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
       context = context_fixture()
       {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string, required: true])
 
@@ -588,7 +588,7 @@ defmodule ReqLLM.Providers.GoogleTest do
     end
 
     test "prepare_request for :object with nil max_tokens gets default" do
-      model = ReqLLM.model!("google:gemini-1.5-flash")
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
       context = context_fixture()
       {:ok, schema} = ReqLLM.Schema.compile([])
 
@@ -599,7 +599,7 @@ defmodule ReqLLM.Providers.GoogleTest do
     end
 
     test "prepare_request for :object with sufficient max_tokens unchanged" do
-      model = ReqLLM.model!("google:gemini-1.5-flash")
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
       context = context_fixture()
       {:ok, schema} = ReqLLM.Schema.compile(value: [type: :integer])
 
@@ -610,7 +610,7 @@ defmodule ReqLLM.Providers.GoogleTest do
     end
 
     test "prepare_request for :object rejects tools" do
-      model = ReqLLM.model!("google:gemini-1.5-flash")
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
       context = context_fixture()
       {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string])
 
@@ -630,7 +630,7 @@ defmodule ReqLLM.Providers.GoogleTest do
     end
 
     test "encode_object_body creates JSON mode request" do
-      model = ReqLLM.model!("google:gemini-1.5-flash")
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
       context = context_fixture()
       {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string, required: true])
 
@@ -712,7 +712,7 @@ defmodule ReqLLM.Providers.GoogleTest do
     end
 
     test "prepare_request creates configured embedding request" do
-      model = ReqLLM.model!("google:gemini-embedding-001")
+      {:ok, model} = ReqLLM.model("google:gemini-embedding-001")
       text = "Hello, world!"
       opts = [dimensions: 768]
 
@@ -728,7 +728,7 @@ defmodule ReqLLM.Providers.GoogleTest do
     end
 
     test "prepare_request rejects unsupported operations" do
-      model = ReqLLM.model!("google:gemini-1.5-flash")
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
       context = context_fixture()
 
       # Test unsupported operation for 3-arg version

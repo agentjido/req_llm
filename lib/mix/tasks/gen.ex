@@ -694,7 +694,7 @@ defmodule Mix.Tasks.ReqLlm.Gen do
   defp handle_missing_api_key_error(error_message, model_spec, log_level) do
     case parse_provider_from_spec(model_spec) do
       {:ok, provider_id} ->
-        case ReqLLM.Providers.get(provider_id) do
+        case ReqLLM.provider(provider_id) do
           {:ok, provider_module} ->
             env_var = provider_module.default_env_key([])
             log_puts("Error: API key not found for #{provider_id}", :warning, log_level)

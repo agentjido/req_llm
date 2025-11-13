@@ -440,7 +440,7 @@ defmodule ReqLLM.Providers.XAITest do
 
   describe "request preparation & pipeline wiring" do
     test "prepare_request creates configured request for :chat" do
-      model = ReqLLM.model!("xai:grok-3")
+      {:ok, model} = ReqLLM.model("xai:grok-3")
       context = context_fixture()
       opts = [temperature: 0.7, max_tokens: 100]
 
@@ -452,7 +452,7 @@ defmodule ReqLLM.Providers.XAITest do
     end
 
     test "attach configures authentication and pipeline" do
-      model = ReqLLM.model!("xai:grok-3")
+      {:ok, model} = ReqLLM.model("xai:grok-3")
       opts = [temperature: 0.5, max_tokens: 50]
 
       request = Req.new() |> XAI.attach(model, opts)
@@ -467,7 +467,7 @@ defmodule ReqLLM.Providers.XAITest do
     end
 
     test "rejects unsupported operations" do
-      model = ReqLLM.model!("xai:grok-3")
+      {:ok, model} = ReqLLM.model("xai:grok-3")
       context = context_fixture()
 
       {:error, error} = XAI.prepare_request(:embedding, model, context, [])
@@ -476,7 +476,7 @@ defmodule ReqLLM.Providers.XAITest do
     end
 
     test "rejects provider mismatch" do
-      wrong_model = ReqLLM.model!("openai:gpt-4")
+      {:ok, wrong_model} = ReqLLM.model("openai:gpt-4")
 
       assert_raise ReqLLM.Error.Invalid.Provider, fn ->
         Req.new() |> XAI.attach(wrong_model, [])
@@ -486,7 +486,7 @@ defmodule ReqLLM.Providers.XAITest do
 
   describe "body encoding" do
     test "encode_body with minimal context" do
-      model = ReqLLM.model!("xai:grok-3")
+      {:ok, model} = ReqLLM.model("xai:grok-3")
       context = context_fixture()
 
       mock_request = %Req.Request{
@@ -507,7 +507,7 @@ defmodule ReqLLM.Providers.XAITest do
     end
 
     test "encode_body with tools" do
-      model = ReqLLM.model!("xai:grok-3")
+      {:ok, model} = ReqLLM.model("xai:grok-3")
       context = context_fixture()
 
       tool =
@@ -536,7 +536,7 @@ defmodule ReqLLM.Providers.XAITest do
     end
 
     test "encode_body with response_format" do
-      model = ReqLLM.model!("xai:grok-3")
+      {:ok, model} = ReqLLM.model("xai:grok-3")
       context = context_fixture()
 
       mock_request = %Req.Request{
@@ -555,7 +555,7 @@ defmodule ReqLLM.Providers.XAITest do
     end
 
     test "encode_body with xAI-specific options" do
-      model = ReqLLM.model!("xai:grok-3")
+      {:ok, model} = ReqLLM.model("xai:grok-3")
       context = context_fixture()
 
       mock_request = %Req.Request{
@@ -581,7 +581,7 @@ defmodule ReqLLM.Providers.XAITest do
 
   describe "translate_options" do
     test "translates max_tokens to max_completion_tokens with warning" do
-      model = ReqLLM.model!("xai:grok-4")
+      {:ok, model} = ReqLLM.model("xai:grok-4")
       opts = [temperature: 0.7, max_tokens: 1000]
       {translated_opts, warnings} = XAI.translate_options(:chat, model, opts)
 
@@ -592,7 +592,7 @@ defmodule ReqLLM.Providers.XAITest do
     end
 
     test "handles web_search_options -> search_parameters alias" do
-      model = ReqLLM.model!("xai:grok-3")
+      {:ok, model} = ReqLLM.model("xai:grok-3")
       opts = [web_search_options: %{mode: "auto"}]
       {translated_opts, warnings} = XAI.translate_options(:chat, model, opts)
 
@@ -602,7 +602,7 @@ defmodule ReqLLM.Providers.XAITest do
     end
 
     test "removes unsupported parameters with warnings" do
-      model = ReqLLM.model!("xai:grok-3")
+      {:ok, model} = ReqLLM.model("xai:grok-3")
       opts = [temperature: 0.7, logit_bias: %{"123" => 10}, service_tier: "auto"]
       {translated_opts, warnings} = XAI.translate_options(:chat, model, opts)
 
@@ -631,7 +631,7 @@ defmodule ReqLLM.Providers.XAITest do
 
   describe "usage extraction" do
     test "extract_usage with valid usage data" do
-      model = ReqLLM.model!("xai:grok-3")
+      {:ok, model} = ReqLLM.model("xai:grok-3")
 
       body_with_usage = %{
         "usage" => %{
@@ -648,14 +648,14 @@ defmodule ReqLLM.Providers.XAITest do
     end
 
     test "extract_usage with missing usage data" do
-      model = ReqLLM.model!("xai:grok-3")
+      {:ok, model} = ReqLLM.model("xai:grok-3")
       body_without_usage = %{"choices" => []}
 
       {:error, :no_usage_found} = XAI.extract_usage(body_without_usage, model)
     end
 
     test "extract_usage with invalid body type" do
-      model = ReqLLM.model!("xai:grok-3")
+      {:ok, model} = ReqLLM.model("xai:grok-3")
 
       {:error, :invalid_body} = XAI.extract_usage("invalid", model)
       {:error, :invalid_body} = XAI.extract_usage(nil, model)

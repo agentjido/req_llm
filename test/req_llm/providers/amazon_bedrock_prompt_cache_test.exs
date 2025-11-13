@@ -24,7 +24,7 @@ defmodule ReqLLM.Providers.AmazonBedrockPromptCacheTest do
     context = Context.new([Context.user("test message")])
 
     # Use a known Bedrock Claude model
-    model = ReqLLM.model!("amazon_bedrock:anthropic.claude-3-5-sonnet-20241022-v2:0")
+    {:ok, model} = ReqLLM.model("amazon_bedrock:anthropic.claude-3-5-sonnet-20241022-v2:0")
 
     {:ok, context: context, model: model}
   end

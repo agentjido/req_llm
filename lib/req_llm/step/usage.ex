@@ -120,7 +120,7 @@ defmodule ReqLLM.Step.Usage do
   defp get_provider_module(%Req.Request{options: options}) do
     case options[:model] do
       %LLMDB.Model{provider: provider_id} ->
-        case ReqLLM.Providers.get(provider_id) do
+        case ReqLLM.provider(provider_id) do
           {:ok, module} -> module
           _ -> nil
         end

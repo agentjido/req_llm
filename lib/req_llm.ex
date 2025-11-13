@@ -202,23 +202,8 @@ defmodule ReqLLM do
 
   """
   @spec model(String.t() | {atom(), keyword()} | struct()) :: {:ok, struct()} | {:error, term()}
-  def model(model_spec) do
-    LLMDB.Spec.resolve(model_spec)
-  end
-
-  @doc """
-  Same as `model/1` but raises on error.
-
-  ## Examples
-
-      ReqLLM.model!("anthropic:claude-3-sonnet")
-      #=> %LLMDB.Model{provider: :anthropic, model: "claude-3-sonnet"}
-
-  """
-  @spec model!(String.t() | {atom(), keyword()} | struct()) :: struct()
-  def model!(model_spec) do
-    LLMDB.Spec.resolve!(model_spec)
-  end
+  def model(%LLMDB.Model{} = model), do: {:ok, model}
+  def model(model_spec), do: LLMDB.model(model_spec)
 
   @doc """
   Get all supported capabilities for a model.
@@ -444,9 +429,9 @@ defmodule ReqLLM do
         name: Zoi.string(),
         age: Zoi.number()
       })
-      
+
       array_schema = Zoi.array(person) |> ReqLLM.Schema.to_json()
-      
+
       {:ok, response} = ReqLLM.generate_object(
         "openai:gpt-4o",
         "Generate 3 heroes",

@@ -64,7 +64,7 @@ defmodule ReqLLM.Providers.GroqTest do
 
   describe "request preparation & pipeline wiring" do
     test "prepare_request creates configured request" do
-      model = ReqLLM.model!("groq:llama-3.1-8b-instant")
+      {:ok, model} = ReqLLM.model("groq:llama-3.1-8b-instant")
       prompt = "Hello world"
       opts = [temperature: 0.7, max_tokens: 100]
 
@@ -76,7 +76,7 @@ defmodule ReqLLM.Providers.GroqTest do
     end
 
     test "attach configures authentication and pipeline" do
-      model = ReqLLM.model!("groq:llama-3.1-8b-instant")
+      {:ok, model} = ReqLLM.model("groq:llama-3.1-8b-instant")
       opts = [temperature: 0.5, max_tokens: 50]
 
       request = Req.new() |> Groq.attach(model, opts)
@@ -96,7 +96,7 @@ defmodule ReqLLM.Providers.GroqTest do
     end
 
     test "error handling for invalid configurations" do
-      model = ReqLLM.model!("groq:llama-3.1-8b-instant")
+      {:ok, model} = ReqLLM.model("groq:llama-3.1-8b-instant")
       prompt = "Hello world"
 
       # Unsupported operation
@@ -104,7 +104,7 @@ defmodule ReqLLM.Providers.GroqTest do
       assert %ReqLLM.Error.Invalid.Parameter{} = error
 
       # Provider mismatch
-      wrong_model = ReqLLM.model!("openai:gpt-4")
+      {:ok, wrong_model} = ReqLLM.model("openai:gpt-4")
 
       assert_raise ReqLLM.Error.Invalid.Provider, fn ->
         Req.new() |> Groq.attach(wrong_model, [])
@@ -114,7 +114,7 @@ defmodule ReqLLM.Providers.GroqTest do
 
   describe "body encoding & context translation" do
     test "encode_body without tools" do
-      model = ReqLLM.model!("groq:llama-3.1-8b-instant")
+      {:ok, model} = ReqLLM.model("groq:llama-3.1-8b-instant")
       context = context_fixture()
 
       # Create a mock request with the expected structure
@@ -144,7 +144,7 @@ defmodule ReqLLM.Providers.GroqTest do
     end
 
     test "encode_body with tools but no tool_choice" do
-      model = ReqLLM.model!("groq:llama-3.1-8b-instant")
+      {:ok, model} = ReqLLM.model("groq:llama-3.1-8b-instant")
       context = context_fixture()
 
       tool =
@@ -178,7 +178,7 @@ defmodule ReqLLM.Providers.GroqTest do
     end
 
     test "encode_body with tools and tool_choice" do
-      model = ReqLLM.model!("groq:llama-3.1-8b-instant")
+      {:ok, model} = ReqLLM.model("groq:llama-3.1-8b-instant")
       context = context_fixture()
 
       tool =
@@ -215,7 +215,7 @@ defmodule ReqLLM.Providers.GroqTest do
     end
 
     test "encode_body with response_format" do
-      model = ReqLLM.model!("groq:llama-3.1-8b-instant")
+      {:ok, model} = ReqLLM.model("groq:llama-3.1-8b-instant")
       context = context_fixture()
 
       response_format = %{type: "json_object"}
@@ -236,7 +236,7 @@ defmodule ReqLLM.Providers.GroqTest do
     end
 
     test "encode_body provider-specific options with skip values" do
-      model = ReqLLM.model!("groq:llama-3.1-8b-instant")
+      {:ok, model} = ReqLLM.model("groq:llama-3.1-8b-instant")
       context = context_fixture()
 
       test_cases = [
@@ -265,7 +265,7 @@ defmodule ReqLLM.Providers.GroqTest do
     end
 
     test "encode_body handles standard OpenAI options" do
-      model = ReqLLM.model!("groq:llama-3.1-8b-instant")
+      {:ok, model} = ReqLLM.model("groq:llama-3.1-8b-instant")
       context = context_fixture()
 
       test_cases = [
@@ -308,7 +308,7 @@ defmodule ReqLLM.Providers.GroqTest do
       }
 
       # Create a mock request with context
-      model = ReqLLM.model!("groq:llama-3.1-8b-instant")
+      {:ok, model} = ReqLLM.model("groq:llama-3.1-8b-instant")
       context = context_fixture()
 
       mock_req = %Req.Request{
@@ -444,7 +444,7 @@ defmodule ReqLLM.Providers.GroqTest do
 
   describe "usage extraction" do
     test "extract_usage with valid usage data" do
-      model = ReqLLM.model!("groq:llama-3.1-8b-instant")
+      {:ok, model} = ReqLLM.model("groq:llama-3.1-8b-instant")
 
       body_with_usage = %{
         "usage" => %{
@@ -461,14 +461,14 @@ defmodule ReqLLM.Providers.GroqTest do
     end
 
     test "extract_usage with missing usage data" do
-      model = ReqLLM.model!("groq:llama-3.1-8b-instant")
+      {:ok, model} = ReqLLM.model("groq:llama-3.1-8b-instant")
       body_without_usage = %{"choices" => []}
 
       {:error, :no_usage_found} = Groq.extract_usage(body_without_usage, model)
     end
 
     test "extract_usage with invalid body type" do
-      model = ReqLLM.model!("groq:llama-3.1-8b-instant")
+      {:ok, model} = ReqLLM.model("groq:llama-3.1-8b-instant")
 
       {:error, :invalid_body} = Groq.extract_usage("invalid", model)
       {:error, :invalid_body} = Groq.extract_usage(nil, model)
@@ -478,7 +478,7 @@ defmodule ReqLLM.Providers.GroqTest do
 
   describe "object generation edge cases" do
     test "prepare_request for :object with low max_tokens gets adjusted" do
-      model = ReqLLM.model!("groq:llama-3.1-8b-instant")
+      {:ok, model} = ReqLLM.model("groq:llama-3.1-8b-instant")
       prompt = "Generate a person"
       {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string, required: true])
 
@@ -491,7 +491,7 @@ defmodule ReqLLM.Providers.GroqTest do
     end
 
     test "prepare_request for :object with nil max_tokens gets default" do
-      model = ReqLLM.model!("groq:llama-3.1-8b-instant")
+      {:ok, model} = ReqLLM.model("groq:llama-3.1-8b-instant")
       prompt = "Generate an object"
       {:ok, schema} = ReqLLM.Schema.compile([])
 
@@ -504,7 +504,7 @@ defmodule ReqLLM.Providers.GroqTest do
     end
 
     test "prepare_request for :object with sufficient max_tokens unchanged" do
-      model = ReqLLM.model!("groq:llama-3.1-8b-instant")
+      {:ok, model} = ReqLLM.model("groq:llama-3.1-8b-instant")
       prompt = "Generate data"
       {:ok, schema} = ReqLLM.Schema.compile(value: [type: :integer])
 
@@ -516,7 +516,7 @@ defmodule ReqLLM.Providers.GroqTest do
     end
 
     test "prepare_request rejects unsupported operations" do
-      model = ReqLLM.model!("groq:llama-3.1-8b-instant")
+      {:ok, model} = ReqLLM.model("groq:llama-3.1-8b-instant")
       prompt = "Hello world"
 
       # Embedding is now supported via defaults, so test an actually unsupported operation

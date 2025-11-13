@@ -385,6 +385,9 @@ defmodule ReqLLM.Providers.Google do
 
     api_key = ReqLLM.Keys.get!(model, user_opts)
 
+    # Filter out internal keys before passing to Req
+    req_opts = ReqLLM.Provider.Defaults.filter_req_opts(user_opts)
+
     # Register extra options that might be passed but aren't standard Req options
     extra_option_keys =
       [
@@ -403,7 +406,7 @@ defmodule ReqLLM.Providers.Google do
     request
     # Google uses query parameter for API key, not Authorization header
     |> Req.Request.register_options(extra_option_keys)
-    |> Req.Request.merge_options([model: model.id, params: [key: api_key]] ++ user_opts)
+    |> Req.Request.merge_options([model: model.id, params: [key: api_key]] ++ req_opts)
     |> ReqLLM.Step.Error.attach()
     |> ReqLLM.Step.Retry.attach(user_opts)
     |> Req.Request.append_request_steps(llm_encode_body: &__MODULE__.encode_body/1)

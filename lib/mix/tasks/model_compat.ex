@@ -868,7 +868,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     # Normalize model_id using provider's callback if available
     # This allows providers to handle model ID aliases (e.g., Bedrock inference profiles)
     normalized_model_id =
-      case ReqLLM.Providers.get(provider_atom) do
+      case ReqLLM.provider(provider_atom) do
         {:ok, provider_module} when not is_nil(provider_module) ->
           if function_exported?(provider_module, :normalize_model_id, 1) do
             provider_module.normalize_model_id(model_id)

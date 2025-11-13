@@ -510,7 +510,7 @@ defmodule ReqLLM.Context do
   """
   @spec wrap(t(), LLMDB.Model.t()) :: term()
   def wrap(%__MODULE__{} = ctx, %LLMDB.Model{provider: provider_atom}) do
-    case ReqLLM.Providers.get(provider_atom) do
+    case ReqLLM.provider(provider_atom) do
       {:ok, provider_mod} ->
         if function_exported?(provider_mod, :wrap_context, 1) do
           provider_mod.wrap_context(ctx)

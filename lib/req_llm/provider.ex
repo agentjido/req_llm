@@ -663,7 +663,7 @@ defmodule ReqLLM.Provider do
   """
   @spec get!(atom()) :: module()
   def get!(provider_id) do
-    case ReqLLM.Providers.get(provider_id) do
+    case ReqLLM.provider(provider_id) do
       {:ok, module} ->
         module
 

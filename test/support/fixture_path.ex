@@ -32,7 +32,7 @@ defmodule ReqLLM.Test.FixturePath do
   end
 
   def file(model_spec, test_name) when is_binary(model_spec) and is_binary(test_name) do
-    model = ReqLLM.model!model_spec)
+    {:ok, model} = ReqLLM.model(model_spec)
     file(model, test_name)
   end
 

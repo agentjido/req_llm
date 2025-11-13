@@ -65,8 +65,12 @@ defmodule ReqLLM.Test.Fixtures do
 
       model =
         case model_or_spec do
-          %LLMDB.Model{} = m -> m
-          spec when is_binary(spec) -> ReqLLM.model!(spec)
+          %LLMDB.Model{} = m ->
+            m
+
+          spec when is_binary(spec) ->
+            {:ok, model} = ReqLLM.model(spec)
+            model
         end
 
       test_name = Keyword.get(opts, :fixture, Path.basename(path, ".json"))
@@ -116,8 +120,12 @@ defmodule ReqLLM.Test.Fixtures do
     if result do
       model =
         case model_or_spec do
-          %LLMDB.Model{} = m -> m
-          spec when is_binary(spec) -> ReqLLM.model!(spec)
+          %LLMDB.Model{} = m ->
+            m
+
+          spec when is_binary(spec) ->
+            {:ok, model} = ReqLLM.model(spec)
+            model
         end
 
       test_name = Keyword.get(opts, :fixture, Path.basename(result, ".json"))
