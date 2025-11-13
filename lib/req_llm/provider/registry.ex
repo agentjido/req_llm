@@ -1,10 +1,21 @@
 defmodule ReqLLM.Provider.Registry do
   @moduledoc """
-  Registry for AI providers and their supported models.
+  Registry for AI providers and their behavior modules.
 
   The registry uses `:persistent_term` for efficient, read-heavy access patterns typical
   in AI applications. Providers are registered at compile time through the DSL, ensuring
   all available providers and models are known at startup.
+
+  ## Two-Level Architecture
+
+  ### Provider Registry (this module)
+  Maps provider atoms to behavior modules that implement the ReqLLM.Provider behavior.
+  This is about **dispatch** - finding the right module to handle API calls.
+
+  ### Model Metadata (delegated to LLMDB)
+  Model metadata (capabilities, limits, costs) is sourced from LLMDB when available,
+  with fallback to legacy registry metadata files. This enables gradual migration to
+  LLMDB as the source of truth.
 
   ## Storage Format
 
@@ -19,13 +30,13 @@ defmodule ReqLLM.Provider.Registry do
 
   ## Usage Examples
 
-      # Get a provider module
+      # Get a provider module (for dispatch)
       {:ok, module} = ReqLLM.Provider.Registry.get_provider(:anthropic)
       module #=> ReqLLM.Providers.Anthropic
 
-      # Get model information
+      # Get model information (delegates to LLMDB when available)
       {:ok, model} = ReqLLM.Provider.Registry.get_model(:anthropic, "claude-3-sonnet")
-      model.metadata.context_length #=> 200000
+      model.limit.context #=> 200000
 
       # Check if a model exists
       ReqLLM.Provider.Registry.model_exists?("anthropic:claude-3-sonnet") #=> true
@@ -33,8 +44,8 @@ defmodule ReqLLM.Provider.Registry do
       # List all providers
       ReqLLM.Provider.Registry.list_providers() #=> [:anthropic, :openai, :github_models]
 
-      # List models for a provider
-      ReqLLM.Provider.Registry.list_models(:anthropic) #=> ["claude-3-sonnet", "claude-3-haiku", ...]
+      # List models for a provider (from LLMDB when available)
+      {:ok, models} = ReqLLM.Provider.Registry.list_models_from_llmdb(:anthropic)
 
   ## Integration
 
@@ -163,6 +174,10 @@ defmodule ReqLLM.Provider.Registry do
   @doc """
   Retrieves model information for a specific provider and model.
 
+  Delegates to LLMDB first, falls back to legacy registry metadata if LLMDB
+  doesn't have the model. This enables gradual migration to LLMDB as the source
+  of truth.
+
   ## Parameters
 
     * `provider_id` - The provider identifier (atom)
@@ -187,9 +202,91 @@ defmodule ReqLLM.Provider.Registry do
   @spec get_model(atom(), String.t()) ::
           {:ok, ReqLLM.Model.t()} | {:error, :provider_not_found | :model_not_found}
   def get_model(provider_id, model_name) when is_atom(provider_id) and is_binary(model_name) do
+    case get_model_from_llmdb(provider_id, model_name) do
+      {:ok, _model} = result ->
+        result
+
+      {:error, _} ->
+        get_model_from_registry(provider_id, model_name)
+    end
+  end
+
+  @doc """
+  Gets model metadata from LLMDB.
+
+  This is the preferred source for model metadata. Falls back to registry if LLMDB
+  doesn't have the model or isn't loaded.
+
+  ## Parameters
+
+    * `provider_id` - The provider identifier (atom)
+    * `model_name` - The model name (string)
+
+  ## Returns
+
+    * `{:ok, model}` - ReqLLM.Model struct from LLMDB.Model
+    * `{:error, reason}` - LLMDB lookup failed or model not found
+
+  """
+  @spec get_model_from_llmdb(atom(), String.t()) ::
+          {:ok, ReqLLM.Model.t()} | {:error, term()}
+  def get_model_from_llmdb(provider_id, model_name)
+      when is_atom(provider_id) and is_binary(model_name) do
+    case Code.ensure_loaded?(LLMDB) do
+      true ->
+        case LLMDB.model(provider_id, model_name) do
+          {:ok, llmdb_model} ->
+            ReqLLM.Model.from(llmdb_model)
+
+          {:error, _} = error ->
+            error
+        end
+
+      false ->
+        {:error, :llmdb_not_available}
+    end
+  rescue
+    _ -> {:error, :llmdb_lookup_failed}
+  end
+
+  @doc """
+  Lists models for a provider from LLMDB.
+
+  Returns a list of ReqLLM.Model structs sourced from LLMDB. Falls back to
+  registry if LLMDB is not available.
+
+  ## Parameters
+
+    * `provider_id` - The provider identifier (atom)
+
+  ## Returns
+
+    * `{:ok, models}` - List of ReqLLM.Model structs
+    * `{:error, reason}` - LLMDB lookup failed
+
+  """
+  @spec list_models_from_llmdb(atom()) ::
+          {:ok, [ReqLLM.Model.t()]} | {:error, term()}
+  def list_models_from_llmdb(provider_id) when is_atom(provider_id) do
+    case Code.ensure_loaded?(LLMDB) do
+      true ->
+        models =
+          LLMDB.models(provider_id)
+          |> Enum.map(&ReqLLM.Model.from/1)
+          |> Enum.map(fn {:ok, model} -> model end)
+
+        {:ok, models}
+
+      false ->
+        {:error, :llmdb_not_available}
+    end
+  rescue
+    _ -> {:error, :llmdb_lookup_failed}
+  end
+
+  defp get_model_from_registry(provider_id, model_name) do
     case get_provider_info(provider_id) do
       {:ok, provider_info} ->
-        # Normalize model name if provider implements normalize_model_id/1
         normalized_model_name =
           case provider_info.module do
             nil ->
@@ -205,7 +302,6 @@ defmodule ReqLLM.Provider.Registry do
 
         case find_model_metadata(provider_info, normalized_model_name) do
           {:ok, model_metadata} ->
-            # Create enhanced model with structured fields populated from metadata
             limit =
               get_in(model_metadata, ["limit"])
               |> ReqLLM.Metadata.map_string_keys_to_atoms()
@@ -228,7 +324,6 @@ defmodule ReqLLM.Provider.Registry do
                 cost: cost
               )
 
-            # Add raw metadata for backward compatibility and additional fields
             model_with_metadata = Map.put(enhanced_model, :_metadata, model_metadata)
             {:ok, model_with_metadata}
 
