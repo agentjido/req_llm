@@ -36,15 +36,13 @@ defmodule ReqLLM.Model do
           attachment: boolean()
         }
 
-  @derive {Jason.Encoder, only: [:provider, :model, :max_tokens, :max_retries]}
+  @derive {Jason.Encoder, only: [:provider, :model]}
   typedstruct do
     @typedoc "An AI model configuration"
 
-    # Required runtime fields
+    # Required fields
     field(:provider, atom(), enforce: true)
     field(:model, String.t(), enforce: true)
-    field(:max_tokens, non_neg_integer() | nil)
-    field(:max_retries, non_neg_integer() | nil, default: 3)
 
     # Optional metadata fields
     field(:limit, limit() | nil)
@@ -65,8 +63,6 @@ defmodule ReqLLM.Model do
 
   ## Options
 
-  - `:max_tokens` - Maximum tokens the model can generate (defaults to model's output limit)
-  - `:max_retries` - Maximum retry attempts (default: 3)
   - `:limit` - Token limits map with `:context` and `:output` keys
   - `:modalities` - Input/output modalities map with lists of supported types
   - `:capabilities` - Model capabilities like `:reasoning`, `:tool_call`, `:temperature`, `:attachment`
@@ -77,23 +73,18 @@ defmodule ReqLLM.Model do
   ## Examples
 
       iex> ReqLLM.Model.new(:anthropic, "claude-3-5-sonnet")
-      %ReqLLM.Model{provider: :anthropic, model: "claude-3-5-sonnet", max_tokens: nil, max_retries: 3}
+      %ReqLLM.Model{provider: :anthropic, model: "claude-3-5-sonnet"}
 
-      iex> ReqLLM.Model.new(:anthropic, "claude-3-sonnet", max_tokens: 1000)
-      %ReqLLM.Model{provider: :anthropic, model: "claude-3-sonnet", max_tokens: 1000, max_retries: 3}
+      iex> ReqLLM.Model.new(:anthropic, "claude-3-sonnet", capabilities: %{tool_call: true})
+      %ReqLLM.Model{provider: :anthropic, model: "claude-3-sonnet", capabilities: %{tool_call: true}}
 
   """
   @spec new(atom(), String.t(), keyword()) :: t()
   def new(provider, model, opts \\ []) when is_atom(provider) and is_binary(model) do
-    limit = Keyword.get(opts, :limit)
-    default_max_tokens = if limit, do: Map.get(limit, :output)
-
     %__MODULE__{
       provider: provider,
       model: model,
-      max_tokens: Keyword.get(opts, :max_tokens, default_max_tokens),
-      max_retries: Keyword.get(opts, :max_retries, 3),
-      limit: limit,
+      limit: Keyword.get(opts, :limit),
       modalities: Keyword.get(opts, :modalities),
       capabilities: Keyword.get(opts, :capabilities),
       cost: Keyword.get(opts, :cost),
@@ -106,6 +97,7 @@ defmodule ReqLLM.Model do
 
   Supports:
   - Existing Model struct (returned as-is)
+  - LLMDB.Model struct (converted to ReqLLM.Model)
   - 3-tuple format: `{provider, model, opts}` where provider is atom, model is string, opts is keyword list
   - 2-tuple format (legacy): `{provider, opts}` where provider is atom and opts is keyword list with `:model` key
   - String format: `"provider:model"` (e.g., `"anthropic:claude-3-5-sonnet"`)
@@ -115,20 +107,45 @@ defmodule ReqLLM.Model do
       # From existing struct
       {:ok, model} = ReqLLM.Model.from(%ReqLLM.Model{provider: :anthropic, model: "claude-3-5-sonnet"})
 
+      # From LLMDB.Model
+      {:ok, model} = ReqLLM.Model.from(%LLMDB.Model{provider: :anthropic, id: "claude-3-5-sonnet"})
+
       # From 3-tuple format (preferred)
-      {:ok, model} = ReqLLM.Model.from({:anthropic, "claude-3-5-sonnet", max_tokens: 1000})
+      {:ok, model} = ReqLLM.Model.from({:anthropic, "claude-3-5-sonnet", capabilities: %{tool_call: true}})
 
       # From 2-tuple format (legacy support)
-      {:ok, model} = ReqLLM.Model.from({:anthropic, model: "claude-3-5-sonnet", max_tokens: 1000,
+      {:ok, model} = ReqLLM.Model.from({:anthropic, model: "claude-3-5-sonnet",
                                        capabilities: %{tool_call: true}})
 
       # From string specification
       {:ok, model} = ReqLLM.Model.from("anthropic:claude-3-sonnet")
 
   """
-  @spec from(t() | {atom(), String.t(), keyword()} | {atom(), keyword()} | String.t()) ::
+  @dialyzer {:nowarn_function, from: 1}
+  @spec from(
+          t()
+          | LLMDB.Model.t()
+          | {atom(), String.t(), keyword()}
+          | {atom(), keyword()}
+          | String.t()
+        ) ::
           {:ok, t()} | {:error, term()}
   def from(%__MODULE__{} = model), do: {:ok, model}
+
+  def from(%LLMDB.Model{} = llm_db_model) do
+    capabilities = convert_llmdb_capabilities(llm_db_model.capabilities, llm_db_model.modalities)
+
+    {:ok,
+     %__MODULE__{
+       provider: llm_db_model.provider,
+       model: llm_db_model.model,
+       limit: llm_db_model.limits,
+       modalities: llm_db_model.modalities,
+       capabilities: capabilities,
+       cost: llm_db_model.cost,
+       _metadata: llm_db_model.extra
+     }}
+  end
 
   # New 3-tuple format: {provider, model, opts}
   def from({provider, model, opts})
@@ -202,8 +219,8 @@ defmodule ReqLLM.Model do
   ## Examples
 
       iex> model = ReqLLM.Model.from!("anthropic:claude-3-haiku-20240307")
-      iex> {model.provider, model.model, model.max_tokens}
-      {:anthropic, "claude-3-haiku-20240307", 4096}
+      iex> {model.provider, model.model, model.capabilities.tool_call}
+      {:anthropic, "claude-3-haiku-20240307", true}
 
   """
   @spec from!(t() | {atom(), String.t(), keyword()} | {atom(), keyword()} | String.t()) :: t()
@@ -219,7 +236,7 @@ defmodule ReqLLM.Model do
 
   ## Examples
 
-      iex> model = %ReqLLM.Model{provider: :anthropic, model: "claude-3-5-sonnet", max_tokens: 4096, max_retries: 3}
+      iex> model = %ReqLLM.Model{provider: :anthropic, model: "claude-3-5-sonnet"}
       iex> ReqLLM.Model.valid?(model)
       true
 
@@ -228,9 +245,8 @@ defmodule ReqLLM.Model do
 
   """
   @spec valid?(t()) :: boolean()
-  def valid?(%__MODULE__{provider: provider, model: model, max_retries: max_retries})
-      when is_atom(provider) and is_binary(model) and model != "" and is_integer(max_retries) and
-             max_retries >= 0 do
+  def valid?(%__MODULE__{provider: provider, model: model})
+      when is_atom(provider) and is_binary(model) and model != "" do
     true
   end
 
@@ -347,5 +363,25 @@ defmodule ReqLLM.Model do
   @spec default_model(map()) :: binary() | nil
   def default_model(spec) do
     ReqLLM.Metadata.default_model(spec)
+  end
+
+  defp convert_llmdb_capabilities(nil, _modalities), do: nil
+
+  defp convert_llmdb_capabilities(caps, modalities) when is_map(caps) do
+    attachment =
+      case modalities do
+        %{input: input_list} when is_list(input_list) ->
+          Enum.any?(input_list, &(&1 in [:image, :audio, :video, :pdf]))
+
+        _ ->
+          false
+      end
+
+    %{
+      reasoning: get_in(caps, [:reasoning, :enabled]) || false,
+      tool_call: get_in(caps, [:tools, :enabled]) || false,
+      temperature: true,
+      attachment: attachment
+    }
   end
 end

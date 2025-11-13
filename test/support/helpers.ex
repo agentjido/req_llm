@@ -339,8 +339,8 @@ defmodule ReqLLM.Test.Helpers do
     case Model.from(model_spec) do
       {:ok, model} ->
         cond do
-          is_integer(model.max_tokens) and model.max_tokens > 0 ->
-            max(64, div(model.max_tokens, 10))
+          is_map(model.limit) and is_integer(model.limit[:output]) and model.limit[:output] > 0 ->
+            max(64, div(model.limit[:output], 10))
 
           is_map(model.cost) and is_number(model.cost[:output]) and model.cost[:output] < 0.001 ->
             500

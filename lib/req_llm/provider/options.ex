@@ -439,10 +439,15 @@ defmodule ReqLLM.Provider.Options do
   end
 
   defp extract_model_options(%ReqLLM.Model{} = model, opts) do
-    if model.max_tokens && model.max_tokens > 0 do
-      Keyword.put_new(opts, :max_tokens, model.max_tokens)
-    else
-      opts
+    cond do
+      Keyword.has_key?(opts, :max_tokens) ->
+        opts
+
+      is_map(model.limit) and is_integer(model.limit[:output]) and model.limit[:output] > 0 ->
+        Keyword.put(opts, :max_tokens, model.limit.output)
+
+      true ->
+        opts
     end
   end
 

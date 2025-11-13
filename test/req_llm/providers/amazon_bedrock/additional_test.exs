@@ -52,8 +52,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.AdditionalTest do
         # that anthropic models don't raise when building requests
         model = %Model{
           model: model_id,
-          provider: :amazon_bedrock,
-          max_tokens: 100
+          provider: :amazon_bedrock
         }
 
         context = Context.new([Context.user("test")])
@@ -83,8 +82,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.AdditionalTest do
       for model_id <- models_without_formatters do
         model = %Model{
           model: model_id,
-          provider: :amazon_bedrock,
-          max_tokens: 100
+          provider: :amazon_bedrock
         }
 
         context = Context.new([Context.user("test")])

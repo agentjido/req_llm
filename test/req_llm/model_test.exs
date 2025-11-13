@@ -15,21 +15,17 @@ defmodule ReqLLM.ModelTest do
   describe "new/3" do
     test "creates model with required fields" do
       model = Model.new(:anthropic, "claude-3-5-sonnet")
-      assert %Model{provider: :anthropic, model: "claude-3-5-sonnet", max_retries: 3} = model
-      assert model.max_tokens == nil
+      assert %Model{provider: :anthropic, model: "claude-3-5-sonnet"} = model
     end
 
-    test "creates model with runtime and metadata options" do
+    test "creates model with metadata options" do
       model =
         Model.new(:anthropic, "claude-3-sonnet",
-          max_tokens: 1000,
-          max_retries: 5,
           limit: %{context: 200_000, output: 8192},
           capabilities: %{reasoning: true, tool_call: true},
           cost: %{input: 3.0, output: 15.0}
         )
 
-      assert model.max_tokens == 1000 and model.max_retries == 5
       assert model.limit.context == 200_000 and model.capabilities.reasoning == true
       assert model.cost.input == 3.0
     end
@@ -37,7 +33,7 @@ defmodule ReqLLM.ModelTest do
 
   describe "from/1 - model struct passthrough" do
     test "returns existing model unchanged" do
-      original = Model.new(:anthropic, "claude-3-5-sonnet", max_tokens: 4096)
+      original = Model.new(:anthropic, "claude-3-5-sonnet")
       assert {:ok, ^original} = Model.from(original)
     end
   end
@@ -46,12 +42,11 @@ defmodule ReqLLM.ModelTest do
     test "parses basic and complex 3-tuples" do
       {:ok, model1} = Model.from({:anthropic, "claude-3-5-sonnet", []})
       assert model1.provider == :anthropic and model1.model == "claude-3-5-sonnet"
-      assert model1.max_retries == 3
 
       {:ok, model2} =
-        Model.from({:anthropic, "claude-3-5-sonnet", max_tokens: 1000})
+        Model.from({:anthropic, "claude-3-5-sonnet", capabilities: %{tool_call: true}})
 
-      assert model2.max_tokens == 1000
+      assert model2.capabilities.tool_call == true
     end
 
     test "rejects invalid model in 3-tuple" do
@@ -70,13 +65,15 @@ defmodule ReqLLM.ModelTest do
 
   describe "from/1 - legacy 2-tuple format" do
     test "parses legacy tuple with model in options" do
-      {:ok, model} = Model.from({:anthropic, model: "claude-3-5-sonnet", max_tokens: 1000})
+      {:ok, model} =
+        Model.from({:anthropic, model: "claude-3-5-sonnet", capabilities: %{tool_call: true}})
+
       assert model.provider == :anthropic and model.model == "claude-3-5-sonnet"
-      assert model.max_tokens == 1000
+      assert model.capabilities.tool_call == true
     end
 
     test "rejects legacy tuple with missing or invalid model" do
-      {:error, error1} = Model.from({:anthropic, [max_tokens: 1000]})
+      {:error, error1} = Model.from({:anthropic, []})
       assert error1.tag == :missing_model
 
       {:error, error2} = Model.from({:anthropic, [model: :invalid]})
@@ -143,8 +140,8 @@ defmodule ReqLLM.ModelTest do
     test "validates correct and rejects invalid models" do
       valid_models = [
         Model.new(:anthropic, "claude-3-5-sonnet"),
-        Model.new(:openai, "gpt-4", temperature: 0.7),
-        %Model{provider: :anthropic, model: "test", max_retries: 0}
+        Model.new(:openai, "gpt-4", capabilities: %{tool_call: true}),
+        %Model{provider: :anthropic, model: "test"}
       ]
 
       assert Enum.all?(valid_models, &Model.valid?/1)
@@ -153,15 +150,11 @@ defmodule ReqLLM.ModelTest do
         # Not a Model struct
         %{provider: :anthropic, model: "test"},
         # Provider not atom
-        %Model{provider: "anthropic", model: "test", max_retries: 3},
+        %Model{provider: "anthropic", model: "test"},
         # Model not string
-        %Model{provider: :anthropic, model: :test, max_retries: 3},
+        %Model{provider: :anthropic, model: :test},
         # Empty model
-        %Model{provider: :anthropic, model: "", max_retries: 3},
-        # Negative retries
-        %Model{provider: :anthropic, model: "test", max_retries: -1},
-        # Retries not integer
-        %Model{provider: :anthropic, model: "test", max_retries: "3"}
+        %Model{provider: :anthropic, model: ""}
       ]
 
       refute Enum.any?(invalid_models, &Model.valid?/1)

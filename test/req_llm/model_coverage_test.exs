@@ -42,19 +42,12 @@ defmodule ReqLLM.ModelCoverageTest do
   end
 
   describe "new/3 with limit edge cases" do
-    test "handles new/3 with limit providing default max_tokens" do
+    test "handles new/3 with limit metadata" do
       limit = %{context: 100_000, output: 4_096}
       model = Model.new(:test, "model", limit: limit)
 
-      # max_tokens should default to limit.output when limit is provided
-      assert model.max_tokens == 4_096
       assert model.limit.output == 4_096
-
-      # Explicit max_tokens should override
-      model_override = Model.new(:test, "model", limit: limit, max_tokens: 2048)
-      assert model_override.max_tokens == 2048
-      # limit unchanged
-      assert model_override.limit.output == 4_096
+      assert model.limit.context == 100_000
     end
   end
 
