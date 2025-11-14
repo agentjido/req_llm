@@ -205,66 +205,19 @@ defmodule ReqLLM do
           {:ok, struct()} | {:error, term()}
   def model(%LLMDB.Model{} = model), do: {:ok, model}
 
-  def model({provider, model_id, opts})
-      when is_atom(provider) and is_binary(model_id) and is_list(opts) do
-    model("#{provider}:#{model_id}")
+  def model({provider, model_id, _opts})
+      when is_atom(provider) and is_binary(model_id) do
+    LLMDB.model(provider, model_id)
   end
 
   def model({provider, kw}) when is_atom(provider) and is_list(kw) do
     case kw[:id] || kw[:model] do
-      id when is_binary(id) -> model("#{provider}:#{id}")
+      id when is_binary(id) -> LLMDB.model(provider, id)
       _ -> {:error, ReqLLM.Error.Invalid.Parameter.exception(parameter: :model, value: kw)}
     end
   end
 
-  def model(spec) when is_binary(spec) do
-    case LLMDB.model(spec) do
-      {:ok, m} ->
-        {:ok, m}
-
-      {:error, :unknown_provider} ->
-        case String.split(spec, ":", parts: 2) do
-          [prov, _] ->
-            provider_atom =
-              try do
-                String.to_existing_atom(prov)
-              rescue
-                ArgumentError -> nil
-              end
-
-            {:error,
-             ReqLLM.Error.Invalid.Provider.exception(
-               provider: provider_atom,
-               message: "Unknown provider: #{prov}"
-             )}
-
-          _ ->
-            {:error,
-             ReqLLM.Error.Validation.Error.exception(
-               message: "Invalid model spec format: #{inspect(spec)}"
-             )}
-        end
-
-      {:error, :not_found} ->
-        case String.split(spec, ":", parts: 2) do
-          ["openrouter", id] ->
-            {:ok, %LLMDB.Model{provider: :openrouter, id: id, model: id}}
-
-          [_prov, _] ->
-            {:error,
-             ReqLLM.Error.Invalid.Model.exception(model: spec, message: "Model not found")}
-
-          _ ->
-            {:error,
-             ReqLLM.Error.Validation.Error.exception(
-               message: "Invalid model spec format: #{inspect(spec)}"
-             )}
-        end
-
-      {:error, reason} ->
-        {:error, ReqLLM.Error.Invalid.Model.exception(model: spec, reason: reason)}
-    end
-  end
+  def model(spec) when is_binary(spec), do: LLMDB.model(spec)
 
   def model(other) do
     {:error,
