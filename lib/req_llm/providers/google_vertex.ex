@@ -57,7 +57,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
   use ReqLLM.Provider,
     id: :google_vertex_anthropic,
-    base_url: "https://{region}-aiplatform.googleapis.com",
+    default_base_url: "https://{region}-aiplatform.googleapis.com",
     default_env_key: "GOOGLE_APPLICATION_CREDENTIALS"
 
   require Logger

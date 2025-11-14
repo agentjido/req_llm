@@ -28,7 +28,7 @@ defmodule ReqLLM.Providers.Groq do
 
   use ReqLLM.Provider,
     id: :groq,
-    base_url: "https://api.groq.com/openai/v1",
+    default_base_url: "https://api.groq.com/openai/v1",
     default_env_key: "GROQ_API_KEY"
 
   use ReqLLM.Provider.Defaults

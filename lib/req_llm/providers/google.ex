@@ -45,7 +45,7 @@ defmodule ReqLLM.Providers.Google do
 
   use ReqLLM.Provider,
     id: :google,
-    base_url: "https://generativelanguage.googleapis.com/v1beta",
+    default_base_url: "https://generativelanguage.googleapis.com/v1beta",
     default_env_key: "GOOGLE_API_KEY"
 
   import ReqLLM.Provider.Utils,

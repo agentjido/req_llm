@@ -85,7 +85,7 @@ defmodule ReqLLM.Providers.OpenAI do
 
   use ReqLLM.Provider,
     id: :openai,
-    base_url: "https://api.openai.com/v1",
+    default_base_url: "https://api.openai.com/v1",
     default_env_key: "OPENAI_API_KEY"
 
   require Logger

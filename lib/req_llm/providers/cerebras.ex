@@ -31,7 +31,7 @@ defmodule ReqLLM.Providers.Cerebras do
 
   use ReqLLM.Provider,
     id: :cerebras,
-    base_url: "https://api.cerebras.ai/v1",
+    default_base_url: "https://api.cerebras.ai/v1",
     default_env_key: "CEREBRAS_API_KEY"
 
   @provider_schema []

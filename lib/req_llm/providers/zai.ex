@@ -27,7 +27,7 @@ defmodule ReqLLM.Providers.Zai do
 
   use ReqLLM.Provider,
     id: :zai,
-    base_url: "https://api.z.ai/api/paas/v4",
+    default_base_url: "https://api.z.ai/api/paas/v4",
     default_env_key: "ZAI_API_KEY"
 
   @provider_schema []

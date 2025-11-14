@@ -25,7 +25,7 @@ defmodule ReqLLM.Provider do
       defmodule MyProvider do
         use ReqLLM.Provider,
           id: :myprovider,
-          base_url: "https://api.example.com/v1",
+          default_base_url: "https://api.example.com/v1",
           default_env_key: "MYPROVIDER_API_KEY"
 
         @impl ReqLLM.Provider
@@ -606,15 +606,16 @@ defmodule ReqLLM.Provider do
 
   defmacro __using__(opts) do
     provider_id = Keyword.fetch!(opts, :id)
-    base_url = Keyword.fetch!(opts, :base_url)
+    default_base_url = Keyword.fetch!(opts, :default_base_url)
     default_env_key = Keyword.get(opts, :default_env_key)
 
     if !is_atom(provider_id) do
       raise ArgumentError, "Provider :id must be an atom, got: #{inspect(provider_id)}"
     end
 
-    if !is_binary(base_url) do
-      raise ArgumentError, "Provider :base_url must be a string, got: #{inspect(base_url)}"
+    if !is_binary(default_base_url) do
+      raise ArgumentError,
+            "Provider :default_base_url must be a string, got: #{inspect(default_base_url)}"
     end
 
     if default_env_key && !is_binary(default_env_key) do
@@ -631,7 +632,7 @@ defmodule ReqLLM.Provider do
       @provider_schema []
 
       def provider_id, do: unquote(provider_id)
-      def default_base_url, do: unquote(base_url)
+      def default_base_url, do: unquote(default_base_url)
       def base_url, do: default_base_url()
 
       unquote(

@@ -38,7 +38,7 @@ defmodule ReqLLM.Providers.OpenRouter do
 
   use ReqLLM.Provider,
     id: :openrouter,
-    base_url: "https://openrouter.ai/api/v1",
+    default_base_url: "https://openrouter.ai/api/v1",
     default_env_key: "OPENROUTER_API_KEY"
 
   import ReqLLM.Provider.Utils, only: [maybe_put: 3]

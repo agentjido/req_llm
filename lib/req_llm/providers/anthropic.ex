@@ -25,7 +25,7 @@ defmodule ReqLLM.Providers.Anthropic do
 
   use ReqLLM.Provider,
     id: :anthropic,
-    base_url: "https://api.anthropic.com",
+    default_base_url: "https://api.anthropic.com",
     default_env_key: "ANTHROPIC_API_KEY"
 
   import ReqLLM.Provider.Utils, only: [maybe_put: 3, ensure_parsed_body: 1]

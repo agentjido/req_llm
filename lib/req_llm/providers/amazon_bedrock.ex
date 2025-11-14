@@ -109,7 +109,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
   use ReqLLM.Provider,
     id: :amazon_bedrock,
-    base_url: "https://bedrock-runtime.{region}.amazonaws.com",
+    default_base_url: "https://bedrock-runtime.{region}.amazonaws.com",
     default_env_key: "AWS_ACCESS_KEY_ID"
 
   import ReqLLM.Provider.Utils,

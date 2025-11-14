@@ -60,7 +60,7 @@ defmodule ReqLLM.Provider.OptionsTest do
   defmodule BaseURLOverwriteProvider do
     use ReqLLM.Provider,
       id: :url_override,
-      base_url: "https://example.com"
+      default_base_url: "https://example.com"
   end
 
   describe "Options.process/4 - core functionality" do

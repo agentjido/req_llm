@@ -98,7 +98,7 @@ defmodule ReqLLM.Providers.XAI do
 
   use ReqLLM.Provider,
     id: :xai,
-    base_url: "https://api.x.ai/v1",
+    default_base_url: "https://api.x.ai/v1",
     default_env_key: "XAI_API_KEY"
 
   use ReqLLM.Provider.Defaults
