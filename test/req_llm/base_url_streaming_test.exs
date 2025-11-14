@@ -124,7 +124,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
 
   describe "OpenRouter base_url precedence" do
     setup do
-      {:ok, model} = ReqLLM.model("openrouter:anthropic/claude-3.5-sonnet")
+      {:ok, model} = ReqLLM.model("openrouter:anthropic/claude-3-haiku")
 
       context = Context.new([Context.user("test")])
       {:ok, model: model, context: context}

@@ -205,8 +205,7 @@ defmodule ReqLLM do
           {:ok, struct()} | {:error, term()}
   def model(%LLMDB.Model{} = model), do: {:ok, model}
 
-  def model({provider, model_id, _opts})
-      when is_atom(provider) and is_binary(model_id) do
+  def model({provider, model_id, _opts}) when is_atom(provider) and is_binary(model_id) do
     LLMDB.model(provider, model_id)
   end
 

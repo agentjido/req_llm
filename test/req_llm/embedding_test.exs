@@ -66,12 +66,7 @@ defmodule ReqLLM.EmbeddingTest do
     end
 
     test "rejects unsupported providers" do
-      assert {:error, error} = Embedding.validate_model("unsupported:model")
-
-      msg = Exception.message(error)
-
-      assert msg =~ "Unknown provider" or msg =~ "unsupported" or
-               msg =~ "does not support embedding operations"
+      assert {:error, :unknown_provider} = Embedding.validate_model("unsupported:model")
     end
 
     test "handles various model input formats" do
@@ -107,12 +102,7 @@ defmodule ReqLLM.EmbeddingTest do
     end
 
     test "rejects unsupported providers" do
-      assert {:error, error} = Embedding.embed("unsupported:model", "Hello")
-
-      msg = Exception.message(error)
-
-      assert msg =~ "Unknown provider" or msg =~ "unsupported" or
-               msg =~ "does not support embedding operations"
+      assert {:error, :unknown_provider} = Embedding.embed("unsupported:model", "Hello")
     end
   end
 
