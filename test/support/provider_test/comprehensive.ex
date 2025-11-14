@@ -29,6 +29,25 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
   Set REQ_LLM_DEBUG=1 to enable verbose fixture output during test runs.
   """
 
+  def supports_object_generation?(model_spec) do
+    {:ok, model} = ReqLLM.model(model_spec)
+    caps = model.capabilities || %{}
+
+    get_in(caps, [:json, :native]) ||
+      get_in(caps, [:json, :schema]) ||
+      (get_in(caps, [:tools, :enabled]) && get_in(caps, [:tools, :strict]))
+  end
+
+  def supports_tool_calling?(model_spec) do
+    {:ok, model} = ReqLLM.model(model_spec)
+    get_in(model.capabilities, [:tools, :enabled]) == true
+  end
+
+  def supports_reasoning?(model_spec) do
+    {:ok, model} = ReqLLM.model(model_spec)
+    get_in(model.capabilities, [:reasoning, :enabled]) == true
+  end
+
   defmacro __using__(opts) do
     provider = Keyword.fetch!(opts, :provider)
 
@@ -230,7 +249,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             end
           end
 
-          if :tool_call in ReqLLM.capabilities(model_spec) do
+          if ReqLLM.ProviderTest.Comprehensive.supports_tool_calling?(model_spec) do
             @tag scenario: :tool_multi
             test "tool calling - multi-tool selection" do
               tools = [
@@ -378,7 +397,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             end
           end
 
-          if ReqLLM.Capability.supports_object_generation?(model_spec) do
+          if ReqLLM.ProviderTest.Comprehensive.supports_object_generation?(model_spec) do
             @tag scenario: :object_basic
             test "object generation (non-streaming)" do
               schema = [
@@ -483,7 +502,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             end
           end
 
-          if :reasoning in ReqLLM.capabilities(model_spec) do
+          if ReqLLM.ProviderTest.Comprehensive.supports_reasoning?(model_spec) do
             @tag scenario: :reasoning
             test "reasoning/thinking tokens (non-streaming + streaming)" do
               dbug(

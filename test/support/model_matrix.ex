@@ -226,7 +226,7 @@ defmodule ReqLLM.Test.ModelMatrix do
     ReqLLM.Providers.list()
     |> Enum.flat_map(fn provider ->
       models = LLMDB.models(provider)
-      Enum.map(models, fn model -> "#{provider}:#{model.id}" end)
+      Enum.map(models, fn model -> LLMDB.Model.spec(model) end)
     end)
     |> Enum.sort()
   end

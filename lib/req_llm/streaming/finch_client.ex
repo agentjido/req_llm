@@ -74,7 +74,7 @@ defmodule ReqLLM.Streaming.FinchClient do
         Debug.dbug(
           fn ->
             test_name = Keyword.get(opts, :fixture, Path.basename(fixture_path, ".json"))
-            "step: model=#{model.provider}:#{model.id}, name=#{test_name}"
+            "step: model=#{LLMDB.Model.spec(model)}, name=#{test_name}"
           end,
           component: :streaming
         )

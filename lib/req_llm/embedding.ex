@@ -21,7 +21,7 @@ defmodule ReqLLM.Embedding do
         model.capabilities && model.capabilities.embeddings
       end)
       |> Enum.map(fn model ->
-        "#{provider}:#{model.id}"
+        LLMDB.Model.spec(model)
       end)
     end)
   end
@@ -88,7 +88,7 @@ defmodule ReqLLM.Embedding do
           {:ok, Model.t()} | {:error, term()}
   def validate_model(model_spec) do
     with {:ok, model} <- ReqLLM.model(model_spec) do
-      model_string = "#{model.provider}:#{model.id}"
+      model_string = LLMDB.Model.spec(model)
 
       # Check if model is in the embedding models list
       embedding_models = get_embedding_models()

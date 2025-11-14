@@ -764,7 +764,7 @@ defmodule Mix.Tasks.ReqLlm.Gen do
         IO.puts("\nAvailable #{provider} models:")
 
         Enum.each(models, fn model ->
-          IO.puts("  • #{provider}:#{model.id}")
+          IO.puts("  • #{LLMDB.Model.spec(model)}")
         end)
 
       [] ->

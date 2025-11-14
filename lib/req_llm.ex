@@ -271,26 +271,6 @@ defmodule ReqLLM do
      ReqLLM.Error.Validation.Error.exception(message: "Invalid model spec: #{inspect(other)}")}
   end
 
-  @doc """
-  Get all supported capabilities for a model.
-
-  Returns a list of capability atoms that the model supports based on provider metadata.
-
-  ## Parameters
-
-    * `model_spec` - Model specification in various formats
-
-  ## Examples
-
-      ReqLLM.capabilities("anthropic:claude-3-haiku")
-      #=> [:max_tokens, :system_prompt, :temperature, :tools, :streaming]
-
-      model = %LLMDB.Model{provider: :anthropic, model: "claude-3-sonnet"}
-      ReqLLM.capabilities(model)
-      #=> [:max_tokens, :system_prompt, :temperature, :tools, :streaming, :reasoning]
-  """
-  defdelegate capabilities(model_spec), to: ReqLLM.Capability
-
   # ===========================================================================
   # Text Generation API - Delegated to ReqLLM.Generation
   # ===========================================================================
