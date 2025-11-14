@@ -462,7 +462,6 @@ defmodule ReqLLM.Provider.Defaults do
           atom()
         ) :: {:ok, Finch.Request.t()} | {:error, Exception.t()}
   def default_attach_stream(provider_mod, model, context, opts, _finch_name) do
-    require Logger
     # Get API key
     api_key = ReqLLM.Keys.get!(model, opts)
 
@@ -493,10 +492,6 @@ defmodule ReqLLM.Provider.Defaults do
 
     base_url = ReqLLM.Provider.Options.effective_base_url(provider_mod, model, opts)
     url = "#{base_url}#{path}"
-
-    Logger.debug(
-      "default_attach_stream: base_url=#{inspect(base_url)}, path=#{inspect(path)}, url=#{inspect(url)}"
-    )
 
     # Build request body using provider's encode logic
     body = build_streaming_body(provider_mod, model, context, opts)
