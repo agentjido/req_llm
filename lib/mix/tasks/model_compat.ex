@@ -772,9 +772,10 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   end
 
   defp infer_type(model) do
-    cond do
-      model.capabilities && model.capabilities.embeddings != false -> "embedding"
-      true -> "text"
+    if model.capabilities && model.capabilities.embeddings != false do
+      "embedding"
+    else
+      "text"
     end
   end
 
