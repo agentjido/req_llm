@@ -4,6 +4,15 @@ defmodule ReqLLM.Providers do
 
   Automatically discovers all modules implementing ReqLLM.Provider
   behaviour at startup and stores provider_id → module mapping.
+
+  External packages can register custom providers via `register/1`:
+
+      defmodule MyApp.Application do
+        def start(_type, _args) do
+          ReqLLM.Providers.register(MyApp.CustomProvider)
+          # ...
+        end
+      end
   """
 
   @registry_key :req_llm_providers
@@ -40,6 +49,27 @@ defmodule ReqLLM.Providers do
     :persistent_term.get(@registry_key, %{})
     |> Map.keys()
     |> Enum.sort()
+  end
+
+  def register(module) when is_atom(module) do
+    with {:ok, provider_id} <- validate_provider_module(module),
+         :ok <- update_registry(provider_id, module) do
+      {:ok, provider_id}
+    end
+  end
+
+  def register!(module) do
+    case register(module) do
+      {:ok, provider_id} -> provider_id
+      {:error, error} -> raise error
+    end
+  end
+
+  def unregister(provider_id) when is_atom(provider_id) do
+    current_registry = :persistent_term.get(@registry_key, %{})
+    updated_registry = Map.delete(current_registry, provider_id)
+    :persistent_term.put(@registry_key, updated_registry)
+    :ok
   end
 
   def get_env_key(provider_id) do
@@ -81,5 +111,31 @@ defmodule ReqLLM.Providers do
     end
   rescue
     _ -> :error
+  end
+
+  defp validate_provider_module(module) do
+    behaviours = module.__info__(:attributes)[:behaviour] || []
+
+    if ReqLLM.Provider in behaviours do
+      get_provider_id(module)
+    else
+      {:error,
+       ReqLLM.Error.Invalid.exception(
+         message: "Module #{inspect(module)} does not implement ReqLLM.Provider behaviour"
+       )}
+    end
+  rescue
+    error ->
+      {:error,
+       ReqLLM.Error.Invalid.exception(
+         message: "Failed to validate provider module #{inspect(module)}: #{inspect(error)}"
+       )}
+  end
+
+  defp update_registry(provider_id, module) do
+    current_registry = :persistent_term.get(@registry_key, %{})
+    updated_registry = Map.put(current_registry, provider_id, module)
+    :persistent_term.put(@registry_key, updated_registry)
+    :ok
   end
 end

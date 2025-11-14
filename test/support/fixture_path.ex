@@ -19,7 +19,7 @@ defmodule ReqLLM.Test.FixturePath do
 
   ## Examples
 
-      iex> model = %LLMDB.Model{provider: :anthropic, id: "claude-3-5-haiku-20241022"}
+      iex> {:ok, model} = ReqLLM.model("anthropic:claude-3-5-haiku-20241022")
       iex> ReqLLM.Test.FixturePath.file(model, "basic")
       ".../test/support/fixtures/anthropic/claude_3_5_haiku_20241022/basic.json"
 

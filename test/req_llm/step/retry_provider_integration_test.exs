@@ -26,7 +26,7 @@ defmodule ReqLLM.Step.RetryProviderIntegrationTest do
 
   describe "Anthropic provider retry configuration" do
     test "attach/3 configures retry options on request" do
-      model = %LLMDB.Model{provider: :anthropic, id: "claude-3-5-haiku-20241022"}
+      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-haiku-20241022")
 
       request =
         Anthropic.attach(
@@ -43,7 +43,7 @@ defmodule ReqLLM.Step.RetryProviderIntegrationTest do
     end
 
     test "retry function correctly identifies retryable errors" do
-      model = %LLMDB.Model{provider: :anthropic, id: "claude-3-5-haiku-20241022"}
+      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-haiku-20241022")
 
       request =
         Anthropic.attach(
@@ -66,7 +66,7 @@ defmodule ReqLLM.Step.RetryProviderIntegrationTest do
 
   describe "Google provider retry configuration" do
     test "attach/3 configures retry options on request" do
-      model = %LLMDB.Model{provider: :google, id: "gemini-2.0-flash-exp"}
+      {:ok, model} = ReqLLM.model("google:gemini-2.0-flash-exp")
 
       request =
         Google.attach(
@@ -83,7 +83,7 @@ defmodule ReqLLM.Step.RetryProviderIntegrationTest do
     end
 
     test "retry function correctly identifies retryable errors" do
-      model = %LLMDB.Model{provider: :google, id: "gemini-2.0-flash-exp"}
+      {:ok, model} = ReqLLM.model("google:gemini-2.0-flash-exp")
 
       request =
         Google.attach(
@@ -152,13 +152,11 @@ defmodule ReqLLM.Step.RetryProviderIntegrationTest do
 
   describe "all three providers have consistent retry behavior" do
     test "all providers use the same retry configuration", %{context: context} do
-      anthropic_model = %LLMDB.Model{provider: :anthropic, id: "claude-3-5-haiku-20241022"}
-      google_model = %LLMDB.Model{provider: :google, id: "gemini-2.0-flash-exp"}
+      {:ok, anthropic_model} = ReqLLM.model("anthropic:claude-3-5-haiku-20241022")
+      {:ok, google_model} = ReqLLM.model("google:gemini-2.0-flash-exp")
 
-      bedrock_model = %LLMDB.Model{
-        provider: :amazon_bedrock,
-        id: "anthropic.claude-3-5-haiku-20241022-v1:0"
-      }
+      {:ok, bedrock_model} =
+        ReqLLM.model("amazon_bedrock:anthropic.claude-3-5-haiku-20241022-v1:0")
 
       anthropic_request =
         Anthropic.attach(
@@ -200,13 +198,11 @@ defmodule ReqLLM.Step.RetryProviderIntegrationTest do
     end
 
     test "all providers handle the same set of retryable errors", %{context: context} do
-      anthropic_model = %LLMDB.Model{provider: :anthropic, id: "claude-3-5-haiku-20241022"}
-      google_model = %LLMDB.Model{provider: :google, id: "gemini-2.0-flash-exp"}
+      {:ok, anthropic_model} = ReqLLM.model("anthropic:claude-3-5-haiku-20241022")
+      {:ok, google_model} = ReqLLM.model("google:gemini-2.0-flash-exp")
 
-      bedrock_model = %LLMDB.Model{
-        provider: :amazon_bedrock,
-        id: "anthropic.claude-3-5-haiku-20241022-v1:0"
-      }
+      {:ok, bedrock_model} =
+        ReqLLM.model("amazon_bedrock:anthropic.claude-3-5-haiku-20241022-v1:0")
 
       anthropic_request =
         Anthropic.attach(Req.new(), anthropic_model, [])

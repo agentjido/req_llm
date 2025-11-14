@@ -94,7 +94,7 @@ defmodule ReqLLM.Providers.Cerebras do
   defp add_strict_to_tools(body, _model), do: body
 
   defp supports_strict_tools?(%LLMDB.Model{} = model) do
-    get_in(model, [Access.key(:_metadata, %{}), "supports_strict_tools"]) == true
+    get_in(model.capabilities, [:tools, :strict]) == true
   end
 
   defp supports_strict_tools?(_), do: false

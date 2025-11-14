@@ -75,7 +75,7 @@ defmodule ReqLLM.Providers.XAITest do
       assert XAI.supports_native_structured_outputs?("grok-2-vision") == false
       assert XAI.supports_native_structured_outputs?("grok-2-1111") == false
 
-      model = %LLMDB.Model{provider: :xai, id: "grok-2"}
+      {:ok, model} = ReqLLM.model("xai:grok-2")
       refute XAI.supports_native_structured_outputs?(model)
     end
 
@@ -84,7 +84,7 @@ defmodule ReqLLM.Providers.XAITest do
       assert XAI.supports_native_structured_outputs?("grok-2-1213")
       assert XAI.supports_native_structured_outputs?("grok-2-vision-1212")
 
-      model = %LLMDB.Model{provider: :xai, id: "grok-2-1212"}
+      {:ok, model} = ReqLLM.model("xai:grok-2-1212")
       assert XAI.supports_native_structured_outputs?(model)
     end
 
@@ -120,42 +120,42 @@ defmodule ReqLLM.Providers.XAITest do
 
   describe "mode selection - determine_output_mode/2 with :auto" do
     test "selects :json_schema for modern models without other tools" do
-      model = %LLMDB.Model{provider: :xai, id: "grok-3"}
+      {:ok, model} = ReqLLM.model("xai:grok-3")
       assert XAI.determine_output_mode(model, []) == :json_schema
 
-      model_beta = %LLMDB.Model{provider: :xai, id: "grok-beta"}
+      {:ok, model_beta} = ReqLLM.model("xai:grok-beta")
       assert XAI.determine_output_mode(model_beta, []) == :json_schema
 
-      model_2_1212 = %LLMDB.Model{provider: :xai, id: "grok-2-1212"}
+      {:ok, model_2_1212} = ReqLLM.model("xai:grok-2-1212")
       assert XAI.determine_output_mode(model_2_1212, []) == :json_schema
     end
 
     test "selects :tool_strict for legacy models" do
-      model = %LLMDB.Model{provider: :xai, id: "grok-2"}
+      {:ok, model} = ReqLLM.model("xai:grok-2")
       assert XAI.determine_output_mode(model, []) == :tool_strict
     end
 
     test "selects :tool_strict when other tools present" do
-      model = %LLMDB.Model{provider: :xai, id: "grok-3"}
+      {:ok, model} = ReqLLM.model("xai:grok-3")
       other_tool = %{name: "other_function"}
       opts = [tools: [other_tool]]
       assert XAI.determine_output_mode(model, opts) == :tool_strict
     end
 
     test "selects :json_schema with only structured_output tool" do
-      model = %LLMDB.Model{provider: :xai, id: "grok-3"}
+      {:ok, model} = ReqLLM.model("xai:grok-3")
       structured_tool = %{name: "structured_output"}
       opts = [tools: [structured_tool]]
       assert XAI.determine_output_mode(model, opts) == :json_schema
     end
 
     test "handles empty tools list" do
-      model = %LLMDB.Model{provider: :xai, id: "grok-3"}
+      {:ok, model} = ReqLLM.model("xai:grok-3")
       assert XAI.determine_output_mode(model, tools: []) == :json_schema
     end
 
     test "handles ReqLLM.Tool struct" do
-      model = %LLMDB.Model{provider: :xai, id: "grok-3"}
+      {:ok, model} = ReqLLM.model("xai:grok-3")
 
       tool_struct = %ReqLLM.Tool{
         name: "test_tool",
@@ -169,13 +169,13 @@ defmodule ReqLLM.Providers.XAITest do
 
   describe "mode selection - explicit mode override" do
     test "honors explicit :json_schema when supported" do
-      model = %LLMDB.Model{provider: :xai, id: "grok-3"}
+      {:ok, model} = ReqLLM.model("xai:grok-3")
       opts = [provider_options: [xai_structured_output_mode: :json_schema]]
       assert XAI.determine_output_mode(model, opts) == :json_schema
     end
 
     test "raises when explicit :json_schema on unsupported model" do
-      model = %LLMDB.Model{provider: :xai, id: "grok-2"}
+      {:ok, model} = ReqLLM.model("xai:grok-2")
       opts = [provider_options: [xai_structured_output_mode: :json_schema]]
 
       assert_raise ArgumentError, ~r/does not support :json_schema mode/, fn ->
@@ -184,16 +184,16 @@ defmodule ReqLLM.Providers.XAITest do
     end
 
     test "honors explicit :tool_strict on any model" do
-      model_modern = %LLMDB.Model{provider: :xai, id: "grok-3"}
+      {:ok, model_modern} = ReqLLM.model("xai:grok-3")
       opts = [provider_options: [xai_structured_output_mode: :tool_strict]]
       assert XAI.determine_output_mode(model_modern, opts) == :tool_strict
 
-      model_legacy = %LLMDB.Model{provider: :xai, id: "grok-2"}
+      {:ok, model_legacy} = ReqLLM.model("xai:grok-2")
       assert XAI.determine_output_mode(model_legacy, opts) == :tool_strict
     end
 
     test "raises on invalid explicit mode" do
-      model = %LLMDB.Model{provider: :xai, id: "grok-3"}
+      {:ok, model} = ReqLLM.model("xai:grok-3")
       opts = [provider_options: [xai_structured_output_mode: :invalid]]
 
       assert_raise ArgumentError, ~r/Invalid xai_structured_output_mode/, fn ->
@@ -204,13 +204,13 @@ defmodule ReqLLM.Providers.XAITest do
 
   describe "mode selection - response_format forcing" do
     test "forces :json_schema when response_format has json_schema" do
-      model = %LLMDB.Model{provider: :xai, id: "grok-3"}
+      {:ok, model} = ReqLLM.model("xai:grok-3")
       opts = [response_format: %{json_schema: %{name: "test"}}]
       assert XAI.determine_output_mode(model, opts) == :json_schema
     end
 
     test "forces :json_schema even with other tools present" do
-      model = %LLMDB.Model{provider: :xai, id: "grok-3"}
+      {:ok, model} = ReqLLM.model("xai:grok-3")
       other_tool = %{name: "other_function"}
 
       opts = [
@@ -222,7 +222,7 @@ defmodule ReqLLM.Providers.XAITest do
     end
 
     test "does not force json_schema for response_format without json_schema" do
-      model = %LLMDB.Model{provider: :xai, id: "grok-2"}
+      {:ok, model} = ReqLLM.model("xai:grok-2")
       opts = [response_format: %{type: "json_object"}]
       assert XAI.determine_output_mode(model, opts) == :tool_strict
     end

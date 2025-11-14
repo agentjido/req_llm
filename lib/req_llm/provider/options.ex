@@ -200,7 +200,7 @@ defmodule ReqLLM.Provider.Options do
   `{:ok, processed_opts}` or `{:error, wrapped_error}`
 
   ## Examples
-      model = %LLMDB.Model{provider: :openai, model: "gpt-4"}
+      {:ok, model} = ReqLLM.model("openai:gpt-4")
 
       opts = [
         temperature: 0.7,
@@ -418,7 +418,7 @@ defmodule ReqLLM.Provider.Options do
 
   ## Examples
 
-      iex> model = %LLMDB.Model{provider: :openai, model: "gpt-4"}
+      iex> {:ok, model} = ReqLLM.model("openai:gpt-4")
       iex> ReqLLM.Provider.Options.effective_base_url(ReqLLM.Providers.OpenAI, model, [])
       "https://api.openai.com/v1"
 
@@ -428,18 +428,12 @@ defmodule ReqLLM.Provider.Options do
   """
   @spec effective_base_url(module(), LLMDB.Model.t(), keyword()) :: String.t()
   def effective_base_url(provider_mod, %LLMDB.Model{} = model, opts) do
-    require Logger
-
     from_opts = opts[:base_url]
     from_config = base_url_from_application_config(model.provider)
     from_metadata = base_url_from_provider_metadata(model.provider)
     from_provider_default = provider_mod.default_base_url()
 
     result = from_opts || from_config || from_metadata || from_provider_default
-
-    Logger.debug(
-      "effective_base_url: opts[:base_url]=#{inspect(from_opts)}, from_config=#{inspect(from_config)}, from_metadata=#{inspect(from_metadata)}, provider_default=#{inspect(from_provider_default)}, result=#{inspect(result)}"
-    )
 
     result
   end
@@ -797,12 +791,6 @@ defmodule ReqLLM.Provider.Options do
     result =
       case LLMDB.provider(provider) do
         {:ok, provider_data} ->
-          require Logger
-
-          Logger.debug(
-            "base_url_from_provider_metadata: provider=#{inspect(provider)}, provider_data.base_url=#{inspect(provider_data.base_url)}"
-          )
-
           provider_data.base_url
 
         {:error, _} ->

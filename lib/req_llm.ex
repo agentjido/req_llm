@@ -31,7 +31,7 @@ defmodule ReqLLM do
       ReqLLM.generate_text({:anthropic, "claude-3-5-sonnet", temperature: 0.7}, messages)
 
       # Model struct format
-      model = %LLMDB.Model{provider: :anthropic, model: "claude-3-5-sonnet", temperature: 0.5}
+      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet", temperature: 0.5)
       ReqLLM.generate_text(model, messages)
 
   ## Configuration

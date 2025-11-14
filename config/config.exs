@@ -1,5 +1,22 @@
 import Config
 
+config :llm_db,
+  filter: %{
+    allow: %{
+      amazon_bedrock: ["*"],
+      anthropic: ["*"],
+      cerebras: ["*"],
+      google: ["*"],
+      google_vertex: ["*"],
+      groq: ["*"],
+      openai: ["*"],
+      openrouter: ["*"],
+      xai: ["*"],
+      zai: ["*"]
+    },
+    deny: %{}
+  }
+
 config :req_llm,
   receive_timeout: 120_000,
   stream_receive_timeout: 120_000,
@@ -7,23 +24,6 @@ config :req_llm,
   req_pool_timeout: 120_000,
   metadata_timeout: 120_000,
   thinking_timeout: 300_000
-
-config :llm_db,
-  filter: %{
-    allow: %{
-      anthropic: ["*"],
-      cerebras: ["*"],
-      google: ["*"],
-      google_vertex: ["*"],
-      groq: ["*"],
-      meta: ["*"],
-      openai: ["*"],
-      openrouter: ["*"],
-      xai: ["*"]
-    },
-    deny: %{}
-  },
-  prefer: [:openai, :anthropic, :google, :groq]
 
 if System.get_env("REQ_LLM_DEBUG") in ~w(1 true yes on) do
   config :logger, level: :debug

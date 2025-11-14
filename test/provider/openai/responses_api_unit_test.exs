@@ -545,7 +545,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
 
   describe "decode_stream_event/2" do
     setup do
-      model = %LLMDB.Model{provider: :openai, id: "gpt-5"}
+      {:ok, model} = ReqLLM.model("openai:gpt-5")
       {:ok, model: model}
     end
 

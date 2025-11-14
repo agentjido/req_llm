@@ -48,7 +48,7 @@ defmodule ReqLLM.Step.UsageTest do
 
   describe "attach/2" do
     test "attaches usage step and preserves request structure" do
-      model = %LLMDB.Model{provider: :openai, id: "gpt-4"}
+      {:ok, model} = ReqLLM.model("openai:gpt-4")
 
       request = %Req.Request{
         options: [test: "value"],
@@ -316,7 +316,7 @@ defmodule ReqLLM.Step.UsageTest do
 
     for {description, reasoning_value, expected_reasoning} <- @reasoning_scenarios do
       test "handles #{description}" do
-        model = %LLMDB.Model{provider: :openai, id: "gpt-4"}
+        {:ok, model} = ReqLLM.model("openai:gpt-4")
         request = mock_request(model: model)
 
         response_body = %{
@@ -871,7 +871,7 @@ defmodule ReqLLM.Step.UsageTest do
 
     test "handles Response struct without cost data gracefully" do
       # no cost map
-      model = %LLMDB.Model{provider: :openai, id: "gpt-4"}
+      {:ok, model} = ReqLLM.model("openai:gpt-4")
       request = mock_request(model: model)
 
       response_body = %ReqLLM.Response{
@@ -898,7 +898,7 @@ defmodule ReqLLM.Step.UsageTest do
     end
 
     test "handles Response struct with malformed usage gracefully" do
-      model = %LLMDB.Model{provider: :openai, id: "gpt-4", cost: %{input: 0.01, output: 0.03}}
+      {:ok, model} = ReqLLM.model("openai:gpt-4")
       request = mock_request(model: model)
 
       response_body = %ReqLLM.Response{

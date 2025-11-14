@@ -374,7 +374,7 @@ defmodule ReqLLM.ResponseTest do
     end
 
     test "handles Model struct input directly" do
-      model = %LLMDB.Model{provider: :groq, id: "llama3-8b-8192"}
+      {:ok, model} = ReqLLM.model("groq:llama3-8b-8192")
       data = %{"id" => "test", "choices" => []}
 
       _result = Response.decode_response(data, model)
