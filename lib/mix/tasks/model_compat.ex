@@ -750,37 +750,44 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   end
 
   defp load_registry do
-    priv_dir = :code.priv_dir(:req_llm)
-    models_dir = Path.join(priv_dir, "models_dev")
+    LLMDB.providers()
+    |> Enum.map(fn provider ->
+      models =
+        LLMDB.models(provider.id)
+        |> Enum.map(fn model ->
+          tier = extract_tier(model.tags)
 
-    if !File.dir?(models_dir) do
-      Mix.raise("""
-      Models directory not found: #{models_dir}
+          %{
+            "id" => model.id,
+            "type" => infer_type(model),
+            "tier" => tier,
+            "modalities" => model.modalities
+          }
+        end)
 
-      Run: mix req_llm.model_sync
-      """)
-    end
-
-    models_dir
-    |> File.ls!()
-    |> Enum.filter(&String.ends_with?(&1, ".json"))
-    |> Enum.map(fn filename ->
-      provider = filename |> String.replace_suffix(".json", "") |> String.to_atom()
-      path = Path.join(models_dir, filename)
-
-      case File.read(path) do
-        {:ok, content} ->
-          data = Jason.decode!(content)
-          models = Map.get(data, "models", [])
-          {provider, models}
-
-        {:error, reason} ->
-          Mix.raise("Failed to read #{path}: #{inspect(reason)}")
-      end
+      {provider.id, models}
     end)
     |> Enum.reject(fn {_, models} -> Enum.empty?(models) end)
     |> Map.new()
   end
+
+  defp infer_type(model) do
+    cond do
+      model.capabilities && model.capabilities.embeddings != false -> "embedding"
+      true -> "text"
+    end
+  end
+
+  defp extract_tier(tags) when is_list(tags) do
+    Enum.find_value(tags, fn tag ->
+      case tag do
+        "tier:" <> tier -> tier
+        _ -> nil
+      end
+    end)
+  end
+
+  defp extract_tier(_), do: nil
 
   defp load_state do
     priv_dir = :code.priv_dir(:req_llm)
