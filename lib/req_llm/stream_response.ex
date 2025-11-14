@@ -622,7 +622,7 @@ defmodule ReqLLM.StreamResponse do
   end
 
   defp responses_api_model?(%LLMDB.Model{} = model) do
-    get_in(model, [Access.key(:_metadata, %{}), "api"]) == "responses"
+    get_in(model, [Access.key(:extra, %{}), :api]) == "responses"
   end
 
   defp responses_api_model?(_), do: false

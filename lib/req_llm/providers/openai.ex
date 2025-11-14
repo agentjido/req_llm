@@ -132,10 +132,12 @@ defmodule ReqLLM.Providers.OpenAI do
 
   @compile {:no_warn_undefined, [{nil, :path, 0}, {nil, :attach_stream, 4}]}
 
-  defp select_api_mod(%LLMDB.Model{} = model) do
-    api_type = get_in(model, [Access.key(:_metadata, %{}), "api"])
+  defp get_api_type(%LLMDB.Model{} = model) do
+    get_in(model, [Access.key(:extra, %{}), :api])
+  end
 
-    case api_type do
+  defp select_api_mod(%LLMDB.Model{} = model) do
+    case get_api_type(model) do
       "chat" -> ReqLLM.Providers.OpenAI.ChatAPI
       "responses" -> ReqLLM.Providers.OpenAI.ResponsesAPI
       _ -> ReqLLM.Providers.OpenAI.ChatAPI
@@ -168,7 +170,8 @@ defmodule ReqLLM.Providers.OpenAI do
             :stream,
             :model,
             :provider_options,
-            :api_mod
+            :api_mod,
+            :max_completion_tokens
           ]
 
       request =
@@ -311,14 +314,12 @@ defmodule ReqLLM.Providers.OpenAI do
     steps = ReqLLM.Providers.OpenAI.ParamProfiles.steps_for(op, model)
     {opts1, warns} = ReqLLM.ParamTransform.apply(opts, steps)
 
-    api_type = get_in(model, [Access.key(:_metadata, %{}), "api"])
+    if get_api_type(model) == "responses" do
+      mct = Keyword.get(opts1, :max_completion_tokens)
 
-    if api_type == "responses" do
-      mot = Keyword.get(opts1, :max_output_tokens) || Keyword.get(opts1, :max_completion_tokens)
-
-      if is_integer(mot) and mot < 16 do
-        {Keyword.put(opts1, :max_output_tokens, 16),
-         ["Raised :max_output_tokens to API minimum (16)" | warns]}
+      if is_integer(mct) and mct < 16 do
+        {Keyword.put(opts1, :max_completion_tokens, 16),
+         ["Raised :max_completion_tokens to API minimum (16)" | warns]}
       else
         {opts1, warns}
       end
@@ -379,9 +380,7 @@ defmodule ReqLLM.Providers.OpenAI do
   """
   @impl ReqLLM.Provider
   def decode_stream_event(event, model) do
-    api_type = get_in(model, [Access.key(:_metadata, %{}), "api"])
-
-    if api_type == "responses" do
+    if get_api_type(model) == "responses" do
       ReqLLM.Providers.OpenAI.ResponsesAPI.decode_stream_event(event, model)
     else
       ReqLLM.Providers.OpenAI.ChatAPI.decode_stream_event(event, model)
@@ -391,9 +390,7 @@ defmodule ReqLLM.Providers.OpenAI do
   defp put_default_max_tokens_for_model(opts, model_spec) do
     case ReqLLM.model(model_spec) do
       {:ok, model} ->
-        api = get_in(model, [Access.key(:_metadata, %{}), "api"])
-
-        case api do
+        case get_api_type(model) do
           "responses" ->
             Keyword.put_new(opts, :max_completion_tokens, 4096)
 

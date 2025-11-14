@@ -25,6 +25,11 @@ defmodule ReqLLM.Coverage.XAI.StreamingStructuredOutputTest do
     occupation: [type: :string, doc: "Person's job or profession"]
   ]
 
+  setup_all do
+    LLMDB.load(allow: :all, custom: %{})
+    :ok
+  end
+
   describe "streaming with json_schema mode (grok-4)" do
     @tag scenario: :object_streaming_json_schema
 

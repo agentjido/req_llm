@@ -52,6 +52,13 @@ config :llm_db,
           limits: %{context: 128_000, output: 16_384},
           cost: %{input: 0.15, output: 0.60}
         },
+        "gpt-3.5-turbo" => %{
+          name: "GPT-3.5 Turbo",
+          family: "gpt-3.5",
+          capabilities: %{chat: true, tools: %{enabled: true, streaming: true}},
+          limits: %{context: 16_385, output: 4096},
+          cost: %{input: 0.50, output: 1.50}
+        },
         "gpt-4" => %{
           name: "GPT-4",
           family: "gpt-4",

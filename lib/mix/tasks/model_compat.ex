@@ -72,6 +72,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   @impl Mix.Task
   def run(args) do
     Application.ensure_all_started(:req_llm)
+    # LLMDB.load(allow: :all, custom: %{})
 
     {opts, positional, _} =
       OptionParser.parse(args,

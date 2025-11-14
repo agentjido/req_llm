@@ -68,6 +68,11 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
       @provider provider
       @models ModelMatrix.models_for_provider(provider, operation: :text)
 
+      setup_all do
+        LLMDB.load(allow: :all, custom: %{})
+        :ok
+      end
+
       for model_spec <- @models do
         @model_spec model_spec
 
