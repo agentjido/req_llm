@@ -1,7 +1,7 @@
-# Ensure LLMDB is started first (loads model catalog)
+# Ensure LLMDB is started first (loads model catalog from snapshot)
 Application.ensure_all_started(:llm_db)
 
-# Reload LLMDB with custom test models from config
+# Reload LLMDB with custom test models merged with snapshot
 custom_providers = Application.get_env(:llm_db, :custom, %{})
 LLMDB.load(custom: custom_providers)
 
