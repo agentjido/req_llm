@@ -168,7 +168,7 @@ defmodule ReqLLM.MixProject do
       {:uniq, "~> 0.6"},
       {:zoi, "~> 0.10"},
       {:jsv, "~> 0.11"},
-      {:llm_db, path: "../llm_db"},
+      {:llm_db, "~> 2025.11.14-preview"},
 
       # Dev/test dependencies
       {:bandit, "~> 1.8", only: :dev, runtime: false},
