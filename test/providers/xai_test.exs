@@ -38,13 +38,14 @@ defmodule ReqLLM.Providers.XAITest do
              "Schema overlap detected: #{inspect(MapSet.to_list(overlap))}"
     end
 
-    test "supported options include core generation keys" do
-      supported = XAI.supported_provider_options()
+    test "provider schema combined with generation schema includes all core keys" do
+      full_schema = XAI.provider_extended_generation_schema()
+      full_keys = Keyword.keys(full_schema.schema)
       core_keys = ReqLLM.Provider.Options.all_generation_keys()
 
       core_without_meta = Enum.reject(core_keys, &(&1 == :provider_options))
-      missing = core_without_meta -- supported
-      assert missing == [], "Missing core generation keys: #{inspect(missing)}"
+      missing = core_without_meta -- full_keys
+      assert missing == [], "Missing core generation keys in extended schema: #{inspect(missing)}"
     end
 
     test "provider_extended_generation_schema includes both base and provider options" do
@@ -613,14 +614,14 @@ defmodule ReqLLM.Providers.XAITest do
     end
 
     test "validates reasoning_effort model compatibility" do
-      grok_3_mini = ReqLLM.model!("xai:grok-3-mini")
+      {:ok, grok_3_mini} = ReqLLM.model("xai:grok-3-mini")
       opts = [reasoning_effort: "high"]
       {translated_opts, warnings} = XAI.translate_options(:chat, grok_3_mini, opts)
 
       assert Keyword.get(translated_opts, :reasoning_effort) == "high"
       assert warnings == []
 
-      grok_4 = ReqLLM.model!("xai:grok-4")
+      {:ok, grok_4} = ReqLLM.model("xai:grok-4")
       {translated_opts, warnings} = XAI.translate_options(:chat, grok_4, opts)
 
       refute Keyword.has_key?(translated_opts, :reasoning_effort)

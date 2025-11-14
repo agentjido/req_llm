@@ -428,10 +428,20 @@ defmodule ReqLLM.Provider.Options do
   """
   @spec effective_base_url(module(), LLMDB.Model.t(), keyword()) :: String.t()
   def effective_base_url(provider_mod, %LLMDB.Model{} = model, opts) do
-    opts[:base_url] ||
-      base_url_from_application_config(model.provider) ||
-      base_url_from_provider_metadata(model.provider) ||
-      provider_mod.default_base_url()
+    require Logger
+
+    from_opts = opts[:base_url]
+    from_config = base_url_from_application_config(model.provider)
+    from_metadata = base_url_from_provider_metadata(model.provider)
+    from_provider_default = provider_mod.default_base_url()
+
+    result = from_opts || from_config || from_metadata || from_provider_default
+
+    Logger.debug(
+      "effective_base_url: opts[:base_url]=#{inspect(from_opts)}, from_config=#{inspect(from_config)}, from_metadata=#{inspect(from_metadata)}, provider_default=#{inspect(from_provider_default)}, result=#{inspect(result)}"
+    )
+
+    result
   end
 
   # Private helper functions
@@ -784,10 +794,22 @@ defmodule ReqLLM.Provider.Options do
   end
 
   defp base_url_from_provider_metadata(provider) do
-    case LLMDB.provider(provider) do
-      {:ok, provider_data} -> provider_data.base_url
-      {:error, _} -> nil
-    end
+    result =
+      case LLMDB.provider(provider) do
+        {:ok, provider_data} ->
+          require Logger
+
+          Logger.debug(
+            "base_url_from_provider_metadata: provider=#{inspect(provider)}, provider_data.base_url=#{inspect(provider_data.base_url)}"
+          )
+
+          provider_data.base_url
+
+        {:error, _} ->
+          nil
+      end
+
+    result
   end
 
   defp base_url_from_application_config(provider_id) do

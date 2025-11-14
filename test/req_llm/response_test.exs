@@ -19,7 +19,7 @@ defmodule ReqLLM.ResponseTest.Helpers do
   def create_response(opts \\ []) do
     defaults = %{
       id: "test-id",
-      id: "test-model",
+      model: "test-model",
       context: Context.new([Context.system("Test")]),
       message: Context.assistant("Hello"),
       usage: nil,
@@ -69,7 +69,7 @@ defmodule ReqLLM.ResponseTest do
       # Test all default values efficiently
       assert_fields(response,
         id: "test-123",
-        id: "test-model",
+        model: "test-model",
         context: context,
         message: message,
         object: nil,
@@ -316,7 +316,7 @@ defmodule ReqLLM.ResponseTest do
       response =
         create_response(
           id: "original-id",
-          id: "original-model",
+          model: "original-model",
           context: Context.new([Context.system("Original")]),
           stream?: true,
           stream: Stream.take(Stream.cycle(chunks), 1),

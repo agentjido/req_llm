@@ -115,16 +115,39 @@ defmodule ReqLLM.Error do
     end
   end
 
+  defmodule Invalid.Model do
+    @moduledoc "Error for invalid or unknown model specifications."
+    use Splode.Error, fields: [:model, :reason], class: :invalid
+
+    @typedoc "Error for invalid model"
+    @type t() :: %__MODULE__{
+            model: String.t(),
+            reason: term()
+          }
+
+    @spec message(map()) :: String.t()
+    def message(%{model: model, reason: reason}) when not is_nil(reason) do
+      "Invalid model '#{model}': #{inspect(reason)}"
+    end
+
+    def message(%{model: model}) do
+      "Invalid model: #{model}"
+    end
+  end
+
   defmodule Invalid.Provider do
     @moduledoc "Error for unknown or unsupported providers."
-    use Splode.Error, fields: [:provider], class: :invalid
+    use Splode.Error, fields: [:message, :provider], class: :invalid
 
     @typedoc "Error for unknown provider"
     @type t() :: %__MODULE__{
+            message: String.t(),
             provider: atom()
           }
 
     @spec message(map()) :: String.t()
+    def message(%{message: msg}) when is_binary(msg), do: msg
+
     def message(%{provider: provider}) do
       "Unknown provider: #{provider}"
     end

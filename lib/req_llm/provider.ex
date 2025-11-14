@@ -628,6 +628,7 @@ defmodule ReqLLM.Provider do
       use ReqLLM.Provider.Defaults
 
       Module.register_attribute(__MODULE__, :provider_schema, accumulate: false)
+      @provider_schema []
 
       def provider_id, do: unquote(provider_id)
       def default_base_url, do: unquote(base_url)

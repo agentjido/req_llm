@@ -315,9 +315,6 @@ defmodule ReqLLM.Provider.Defaults do
   end
 
   @doc """
-  Default attachment implementation with Bearer token auth and standard pipeline steps.
-  """
-  @doc """
   Filters out internal ReqLLM keys that should not be passed to Req.
 
   These keys are used by ReqLLM for internal processing but are not valid Req options.
@@ -465,6 +462,7 @@ defmodule ReqLLM.Provider.Defaults do
           atom()
         ) :: {:ok, Finch.Request.t()} | {:error, Exception.t()}
   def default_attach_stream(provider_mod, model, context, opts, _finch_name) do
+    require Logger
     # Get API key
     api_key = ReqLLM.Keys.get!(model, opts)
 
@@ -495,6 +493,10 @@ defmodule ReqLLM.Provider.Defaults do
 
     base_url = ReqLLM.Provider.Options.effective_base_url(provider_mod, model, opts)
     url = "#{base_url}#{path}"
+
+    Logger.debug(
+      "default_attach_stream: base_url=#{inspect(base_url)}, path=#{inspect(path)}, url=#{inspect(url)}"
+    )
 
     # Build request body using provider's encode logic
     body = build_streaming_body(provider_mod, model, context, opts)
@@ -1084,15 +1086,8 @@ defmodule ReqLLM.Provider.Defaults do
           get_provider_display_name(provider_id)
 
         _ ->
-          # Fallback to parsing model name if req_llm_model not available
-          case req.options[:model] do
-            nil ->
-              "Unknown"
-
-            model_str ->
-              provider_id = model_str |> String.split(":") |> List.first() |> String.to_atom()
-              get_provider_display_name(provider_id)
-          end
+          # Fallback: can't determine provider, use generic name
+          "OpenAI"
       end
 
     err =

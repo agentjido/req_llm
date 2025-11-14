@@ -180,9 +180,9 @@ defmodule ReqLLM.Capability do
   defp extract_capabilities_from_model(%LLMDB.Model{
          capabilities: nil,
          provider: provider,
-         model: model_name
+         id: model_id
        }) do
-    case LLMDB.model(provider, model_name) do
+    case LLMDB.model(provider, model_id) do
       {:ok, llmdb_model} ->
         extract_capabilities_from_llmdb_capabilities(llmdb_model.capabilities)
 
@@ -265,8 +265,8 @@ defmodule ReqLLM.Capability do
   end
 
   # Format model name for error messages
-  defp format_model_name(%LLMDB.Model{provider: provider, model: model}),
-    do: "#{provider}:#{model}"
+  defp format_model_name(%LLMDB.Model{provider: provider, id: model_id}),
+    do: "#{provider}:#{model_id}"
 
   defp format_model_name(model_spec) when is_binary(model_spec), do: model_spec
 end

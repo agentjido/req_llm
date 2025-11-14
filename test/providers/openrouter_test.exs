@@ -29,14 +29,14 @@ defmodule ReqLLM.Providers.OpenRouterTest do
              "Schema overlap detected: #{inspect(MapSet.to_list(overlap))}"
     end
 
-    test "supported options include core generation keys" do
-      supported = OpenRouter.supported_provider_options()
+    test "provider schema combined with generation schema includes all core keys" do
+      full_schema = OpenRouter.provider_extended_generation_schema()
+      full_keys = Keyword.keys(full_schema.schema)
       core_keys = ReqLLM.Provider.Options.all_generation_keys()
 
-      # All core keys should be supported (except meta-keys like :provider_options)
       core_without_meta = Enum.reject(core_keys, &(&1 == :provider_options))
-      missing = core_without_meta -- supported
-      assert missing == [], "Missing core generation keys: #{inspect(missing)}"
+      missing = core_without_meta -- full_keys
+      assert missing == [], "Missing core generation keys in extended schema: #{inspect(missing)}"
     end
 
     test "provider_extended_generation_schema includes both base and provider options" do

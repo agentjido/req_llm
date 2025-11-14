@@ -26,7 +26,7 @@ defmodule ReqLLM.Response do
 
   use TypedStruct
 
-  alias ReqLLM.{Context, Message, Model}
+  alias ReqLLM.{Context, Message}
 
   @derive {Jason.Encoder, except: [:stream]}
 
@@ -279,7 +279,7 @@ defmodule ReqLLM.Response do
       {:ok, response} = ReqLLM.Response.decode_response(raw_json, model_struct)
 
   """
-  @spec decode_response(term(), Model.t() | String.t()) :: {:ok, t()} | {:error, term()}
+  @spec decode_response(term(), LLMDB.Model.t() | String.t()) :: {:ok, t()} | {:error, term()}
   @dialyzer {:nowarn_function, decode_response: 2}
   def decode_response(raw_data, model_input) do
     model =
@@ -339,7 +339,8 @@ defmodule ReqLLM.Response do
     * `{:error, reason}` on failure
 
   """
-  @spec decode_object(term(), Model.t() | String.t(), keyword()) :: {:ok, t()} | {:error, term()}
+  @spec decode_object(term(), LLMDB.Model.t() | String.t(), keyword()) ::
+          {:ok, t()} | {:error, term()}
   def decode_object(raw_data, model_input, schema) do
     with {:ok, response} <- decode_response(raw_data, model_input),
          {:ok, object} <- extract_object_from_response(response, schema) do
@@ -365,7 +366,7 @@ defmodule ReqLLM.Response do
     * `{:error, reason}` on failure
 
   """
-  @spec decode_object_stream(term(), Model.t() | String.t(), keyword()) ::
+  @spec decode_object_stream(term(), LLMDB.Model.t() | String.t(), keyword()) ::
           {:ok, t()} | {:error, term()}
   def decode_object_stream(raw_data, model_input, _schema) do
     decode_response(raw_data, model_input)

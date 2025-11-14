@@ -165,7 +165,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.MetaTest do
       }
 
       assert {:ok, parsed} =
-               Meta.parse_response(response_body, id: "meta.llama3-8b-instruct-v1:0")
+               Meta.parse_response(response_body, model: "meta.llama3-8b-instruct-v1:0")
 
       assert %ReqLLM.Response{} = parsed
       assert parsed.model == "meta.llama3-8b-instruct-v1:0"
@@ -187,7 +187,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.MetaTest do
       }
 
       assert {:ok, parsed} =
-               Meta.parse_response(response_body, id: "meta.llama3-70b-instruct-v1:0")
+               Meta.parse_response(response_body, model: "meta.llama3-70b-instruct-v1:0")
 
       assert parsed.finish_reason == :length
     end

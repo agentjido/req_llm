@@ -126,15 +126,21 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp effective_base_url(processed_opts) do
-    case resolve_api_version(processed_opts) do
-      "v1" ->
-        "https://generativelanguage.googleapis.com/v1"
+    base_url = Keyword.get(processed_opts, :base_url)
 
-      "v1beta" ->
-        "https://generativelanguage.googleapis.com/v1beta"
+    if base_url == default_base_url() or base_url == "https://generativelanguage.googleapis.com" do
+      case resolve_api_version(processed_opts) do
+        "v1" ->
+          "https://generativelanguage.googleapis.com/v1"
 
-      nil ->
-        Keyword.get(processed_opts, :base_url, base_url())
+        "v1beta" ->
+          "https://generativelanguage.googleapis.com/v1beta"
+
+        nil ->
+          "https://generativelanguage.googleapis.com/v1beta"
+      end
+    else
+      base_url || "https://generativelanguage.googleapis.com/v1beta"
     end
   end
 
@@ -627,10 +633,11 @@ defmodule ReqLLM.Providers.Google do
 
   defp encode_embedding_body(request) do
     text = request.options[:text]
+    model_id = request.options[:id] || request.options[:model]
 
     build_embedding_body = fn t ->
       %{
-        model: "models/#{request.options[:model]}",
+        model: "models/#{model_id}",
         content: %{parts: [%{text: t}]}
       }
       |> maybe_put(:outputDimensionality, request.options[:dimensions])
@@ -1142,7 +1149,7 @@ defmodule ReqLLM.Providers.Google do
 
   defp build_request_url(model_name, opts) do
     api_key = ReqLLM.Keys.get!(opts[:model_struct] || opts[:model], opts)
-    base_url = Keyword.get(opts, :base_url, base_url())
+    base_url = Keyword.fetch!(opts, :base_url)
 
     "#{base_url}/models/#{model_name}:streamGenerateContent?key=#{api_key}&alt=sse"
   end
@@ -1175,6 +1182,10 @@ defmodule ReqLLM.Providers.Google do
 
   @impl ReqLLM.Provider
   def attach_stream(model, context, opts, _finch_name) do
+    require Logger
+
+    Logger.debug("Google attach_stream - model: #{inspect(model)}")
+
     req_only_keys = [
       :params,
       :model,
@@ -1191,15 +1202,31 @@ defmodule ReqLLM.Providers.Google do
     operation = Keyword.get(user_opts, :operation, :chat)
     opts_to_process = Keyword.merge(user_opts, context: context, stream: true)
 
-    with {:ok, processed_opts} <-
-           ReqLLM.Provider.Options.process(__MODULE__, operation, model, opts_to_process) do
-      base_url = Keyword.get(req_opts, :base_url, effective_base_url(processed_opts))
+    with {:ok, processed_opts0} <-
+           ReqLLM.Provider.Options.process(__MODULE__, operation, model, opts_to_process),
+         :ok <- validate_version_feature_compat(processed_opts0) do
+      require Logger
+
+      Logger.debug(
+        "Google attach_stream - processed_opts0[:base_url]: #{inspect(processed_opts0[:base_url])}, api_version: #{inspect(resolve_api_version(processed_opts0))}"
+      )
+
+      computed_base_url = effective_base_url(processed_opts0)
+      processed_opts = Keyword.put(processed_opts0, :base_url, computed_base_url)
+
+      base_url = Keyword.get(req_opts, :base_url, processed_opts[:base_url])
+
+      Logger.debug(
+        "Google attach_stream - computed_base_url: #{inspect(computed_base_url)}, req_opts[:base_url]: #{inspect(req_opts[:base_url])}, final base_url: #{inspect(base_url)}"
+      )
 
       opts_with_base = Keyword.merge(processed_opts, base_url: base_url, model_struct: model)
 
       headers = build_request_headers(model, opts_with_base) ++ [{"Accept", "text/event-stream"}]
       url = build_request_url(model.id, opts_with_base)
       body = build_request_body(model, context, processed_opts)
+
+      Logger.debug("Google attach_stream URL: #{inspect(url)}")
 
       finch_request = Finch.build(:post, url, headers, body)
       {:ok, finch_request}

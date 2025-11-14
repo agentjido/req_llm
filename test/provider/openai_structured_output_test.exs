@@ -104,37 +104,37 @@ defmodule ReqLLM.Providers.OpenAI.StructuredOutputTest do
     test "supports_json_schema? returns true for gpt-4o-2024-08-06" do
       {:ok, model} = ReqLLM.model("openai:gpt-4o-2024-08-06")
 
-      assert get_in(model._metadata, ["supports_json_schema_response_format"]) == true
+      assert get_in(model.capabilities, [:json, :schema]) == true
     end
 
     test "supports_json_schema? returns true for gpt-4o-2024-11-20" do
       {:ok, model} = ReqLLM.model("openai:gpt-4o-2024-11-20")
 
-      assert get_in(model._metadata, ["supports_json_schema_response_format"]) == true
+      assert get_in(model.capabilities, [:json, :schema]) == true
     end
 
-    test "supports_json_schema? returns true for gpt-4o-mini" do
+    test "supports_json_schema? returns false for gpt-4o-mini" do
       {:ok, model} = ReqLLM.model("openai:gpt-4o-mini")
 
-      assert get_in(model._metadata, ["supports_json_schema_response_format"]) == true
+      assert get_in(model.capabilities, [:json, :schema]) == false
     end
 
     test "supports_strict_tools? returns true for gpt-4o-2024-08-06" do
       {:ok, model} = ReqLLM.model("openai:gpt-4o-2024-08-06")
 
-      assert get_in(model._metadata, ["supports_strict_tools"]) == true
+      assert get_in(model.capabilities, [:tools, :strict]) == true
     end
 
-    test "supports_strict_tools? returns true for older models" do
+    test "supports_strict_tools? returns false for older models" do
       {:ok, model} = ReqLLM.model("openai:gpt-4")
 
-      assert get_in(model._metadata, ["supports_strict_tools"]) == true
+      refute get_in(model.capabilities, [:tools, :strict])
     end
   end
 
   describe "mode determination logic" do
     test ":auto mode with json_schema-capable model, no tools -> :json_schema" do
-      {:ok, model} = Model.from("openai:gpt-4o-2024-08-06")
+      {:ok, model} = ReqLLM.model("openai:gpt-4o-2024-08-06")
 
       opts = [
         provider_options: [openai_structured_output_mode: :auto],
@@ -154,7 +154,7 @@ defmodule ReqLLM.Providers.OpenAI.StructuredOutputTest do
     end
 
     test ":auto mode with json_schema-capable model, with other tools -> :tool_strict" do
-      {:ok, model} = Model.from("openai:gpt-4o-2024-08-06")
+      {:ok, model} = ReqLLM.model("openai:gpt-4o-2024-08-06")
 
       opts = [
         provider_options: [openai_structured_output_mode: :auto],
@@ -180,7 +180,7 @@ defmodule ReqLLM.Providers.OpenAI.StructuredOutputTest do
     end
 
     test ":auto mode with old model -> :tool_strict" do
-      {:ok, model} = Model.from("openai:gpt-3.5-turbo")
+      {:ok, model} = ReqLLM.model("openai:gpt-3.5-turbo")
 
       opts = [
         provider_options: [openai_structured_output_mode: :auto]
@@ -192,7 +192,7 @@ defmodule ReqLLM.Providers.OpenAI.StructuredOutputTest do
     end
 
     test "explicit :json_schema mode overrides auto detection" do
-      {:ok, model} = Model.from("openai:gpt-3.5-turbo")
+      {:ok, model} = ReqLLM.model("openai:gpt-3.5-turbo")
 
       opts = [
         provider_options: [openai_structured_output_mode: :json_schema]
@@ -204,7 +204,7 @@ defmodule ReqLLM.Providers.OpenAI.StructuredOutputTest do
     end
 
     test "explicit :tool_strict mode overrides auto detection" do
-      {:ok, model} = Model.from("openai:gpt-3.5-turbo")
+      {:ok, model} = ReqLLM.model("openai:gpt-3.5-turbo")
 
       opts = [
         provider_options: [openai_structured_output_mode: :tool_strict]
@@ -216,7 +216,7 @@ defmodule ReqLLM.Providers.OpenAI.StructuredOutputTest do
     end
 
     test "explicit :tool_strict mode on json_schema-capable model" do
-      {:ok, model} = Model.from("openai:gpt-4o-2024-08-06")
+      {:ok, model} = ReqLLM.model("openai:gpt-4o-2024-08-06")
 
       opts = [
         provider_options: [openai_structured_output_mode: :tool_strict]
@@ -251,11 +251,11 @@ defmodule ReqLLM.Providers.OpenAI.StructuredOutputTest do
   end
 
   defp supports_json_schema?(%LLMDB.Model{} = model) do
-    get_in(model, [Access.key(:_metadata, %{}), "supports_json_schema_response_format"]) == true
+    get_in(model.capabilities, [:json, :schema]) == true
   end
 
   defp supports_strict_tools?(%LLMDB.Model{} = model) do
-    get_in(model, [Access.key(:_metadata, %{}), "supports_strict_tools"]) == true
+    get_in(model.capabilities, [:tools, :strict]) == true
   end
 
   defp has_other_tools?(opts) do
@@ -371,7 +371,7 @@ defmodule ReqLLM.Providers.OpenAI.StructuredOutputTest do
     end
 
     test "map-based schema works with provider prepare_request pipeline" do
-      {:ok, model} = Model.from("openai:gpt-4o-2024-08-06")
+      {:ok, model} = ReqLLM.model("openai:gpt-4o-2024-08-06")
 
       json_schema = %{
         "type" => "object",

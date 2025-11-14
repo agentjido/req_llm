@@ -43,7 +43,7 @@ defmodule ReqLLM.Streaming do
 
   """
 
-  alias ReqLLM.{Context, Model, StreamResponse, StreamResponse.MetadataHandle, StreamServer}
+  alias ReqLLM.{Context, StreamResponse, StreamResponse.MetadataHandle, StreamServer}
 
   require Logger
 
@@ -102,7 +102,7 @@ defmodule ReqLLM.Streaming do
 
   All failures return `{:error, reason}` with descriptive error information.
   """
-  @spec start_stream(module(), Model.t(), Context.t(), keyword()) ::
+  @spec start_stream(module(), LLMDB.Model.t(), Context.t(), keyword()) ::
           {:ok, StreamResponse.t()} | {:error, term()}
   def start_stream(provider_mod, model, context, opts \\ []) do
     with {:ok, server_pid} <- start_stream_server(provider_mod, model, opts),

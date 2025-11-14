@@ -1,8 +1,8 @@
 import Config
 
 config :llm_db,
-  compile_embed: false,
-  integrity_policy: :warn
+  compile_embed: true,
+  integrity_policy: :strict
 
 config :req_llm,
   receive_timeout: 120_000,

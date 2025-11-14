@@ -40,7 +40,7 @@ config :llm_db,
     ],
     openai: [
       name: "OpenAI",
-      base_url: "https://api.openai.com",
+      base_url: "https://api.openai.com/v1",
       env: ["OPENAI_API_KEY"],
       doc: "https://platform.openai.com/docs",
       models: %{
@@ -216,7 +216,7 @@ config :llm_db,
     ],
     openrouter: [
       name: "OpenRouter",
-      base_url: "https://openrouter.ai/api",
+      base_url: "https://openrouter.ai/api/v1",
       env: ["OPENROUTER_API_KEY"],
       models: %{
         "openai/gpt-4" => %{

@@ -41,26 +41,32 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
     test "supported options include AWS-specific keys" do
       supported = AmazonBedrock.supported_provider_options()
 
-      # Should support AWS credential options
+      # Should support AWS credential options (provider-specific)
       assert :api_key in supported
       assert :access_key_id in supported
       assert :secret_access_key in supported
       assert :session_token in supported
       assert :region in supported
 
-      # Should support standard generation options
-      assert :temperature in supported
-      assert :max_tokens in supported
+      # Standard generation options should NOT be in provider-specific options
+      refute :temperature in supported
+      refute :max_tokens in supported
+
+      # But they should be in the extended schema
+      extended_schema = AmazonBedrock.provider_extended_generation_schema()
+      extended_keys = Keyword.keys(extended_schema.schema)
+      assert :temperature in extended_keys
+      assert :max_tokens in extended_keys
     end
 
-    test "supported options include core generation keys" do
-      supported = AmazonBedrock.supported_provider_options()
+    test "provider schema combined with generation schema includes all core keys" do
+      full_schema = AmazonBedrock.provider_extended_generation_schema()
+      full_keys = Keyword.keys(full_schema.schema)
       core_keys = Options.all_generation_keys()
 
-      # All core keys should be supported (except meta-keys like :provider_options)
       core_without_meta = Enum.reject(core_keys, &(&1 == :provider_options))
-      missing = core_without_meta -- supported
-      assert missing == [], "Missing core generation keys: #{inspect(missing)}"
+      missing = core_without_meta -- full_keys
+      assert missing == [], "Missing core generation keys in extended schema: #{inspect(missing)}"
     end
   end
 

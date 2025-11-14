@@ -948,7 +948,7 @@ defmodule ReqLLM.Step.UsageTest do
 
       # All original fields should be preserved
       assert updated_resp.body.id == "test-id"
-      assert updated_resp.body.model == "gpt-4"
+      assert updated_resp.body.model == model
       assert updated_resp.body.message == original_message
       assert updated_resp.body.finish_reason == :stop
       assert updated_resp.body.provider_meta == %{custom: "data"}

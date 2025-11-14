@@ -64,7 +64,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   @impl true
   def encode_body(request) do
     context = request.options[:context] || %ReqLLM.Context{messages: []}
-    model_name = request.options[:model]
+    model_name = request.options[:model] || request.options[:id]
     opts = request.options
 
     body = build_request_body(context, model_name, opts, request)

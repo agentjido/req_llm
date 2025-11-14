@@ -408,12 +408,12 @@ defmodule ReqLLM.Providers.OpenAI do
 
   @doc false
   def supports_json_schema?(%LLMDB.Model{} = model) do
-    get_in(model, [Access.key(:_metadata, %{}), "supports_json_schema_response_format"]) == true
+    get_in(model.capabilities, [:json, :schema]) == true
   end
 
   @doc false
   def supports_strict_tools?(%LLMDB.Model{} = model) do
-    get_in(model, [Access.key(:_metadata, %{}), "supports_strict_tools"]) == true
+    get_in(model.capabilities, [:tools, :strict]) == true
   end
 
   @doc false

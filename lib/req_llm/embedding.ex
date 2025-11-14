@@ -10,7 +10,7 @@ defmodule ReqLLM.Embedding do
   Currently only OpenAI models are supported for embeddings.
   """
 
-  alias ReqLLM.Model
+  alias LLMDB.Model
 
   # Get embedding models dynamically from LLMDB
   defp get_embedding_models do

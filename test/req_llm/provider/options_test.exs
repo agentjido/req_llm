@@ -56,6 +56,13 @@ defmodule ReqLLM.Provider.OptionsTest do
     def decode_response(_response), do: nil
   end
 
+  # Provider for testing config-based base_url override
+  defmodule BaseURLOverwriteProvider do
+    use ReqLLM.Provider,
+      id: :url_override,
+      base_url: "https://example.com"
+  end
+
   describe "Options.process/4 - core functionality" do
     test "validates and passes through standard generation options" do
       model = %LLMDB.Model{provider: :mock, id: "test-model"}
@@ -146,12 +153,6 @@ defmodule ReqLLM.Provider.OptionsTest do
     end
 
     test "supports config-based override of `base_url`" do
-      defmodule BaseURLOverwriteProvider do
-        use ReqLLM.Provider.DSL,
-          id: :url_override,
-          base_url: "https://example.com"
-      end
-
       original_env = Application.get_env(:req_llm, :url_override)
 
       on_exit(fn ->
