@@ -3,7 +3,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   @moduledoc """
   Validate ReqLLM model coverage using the fixture system.
 
-  Models are sourced from LLMDB and priv/models_dev/*.json (legacy).
+  Models are sourced from LLMDB
   Fixture validation state is tracked in priv/supported_models.json (auto-generated).
 
   ## Selection Principles
@@ -20,7 +20,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   - **sample** (optional): Further reduces using `:sample_text_models` or `:sample_embedding_models`.
     If not configured, falls back to one model per provider.
 
-  **Important**: 
+  **Important**:
   - Only **implemented providers** are included (registry models without implementation are skipped)
   - Config lists (`:test_models`, `:test_embedding_models`) are defaults only, not hard filters
   - Explicit specs like `"anthropic:*"` test ALL registry models for that provider

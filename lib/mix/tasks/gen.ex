@@ -757,9 +757,7 @@ defmodule Mix.Tasks.ReqLlm.Gen do
   defp parse_provider_from_spec(_), do: {:error, :invalid_spec}
 
   defp list_provider_models(provider) do
-    models = LLMDB.models(provider)
-
-    case models do
+    case LLMDB.models(provider) do
       models when models != [] ->
         IO.puts("\nAvailable #{provider} models:")
 

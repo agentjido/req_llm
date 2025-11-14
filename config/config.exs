@@ -8,6 +8,23 @@ config :req_llm,
   metadata_timeout: 120_000,
   thinking_timeout: 300_000
 
+config :llm_db,
+  filter: %{
+    allow: %{
+      anthropic: ["*"],
+      cerebras: ["*"],
+      google: ["*"],
+      google_vertex: ["*"],
+      groq: ["*"],
+      meta: ["*"],
+      openai: ["*"],
+      openrouter: ["*"],
+      xai: ["*"]
+    },
+    deny: %{}
+  },
+  prefer: [:openai, :anthropic, :google, :groq]
+
 if System.get_env("REQ_LLM_DEBUG") in ~w(1 true yes on) do
   config :logger, level: :debug
 
