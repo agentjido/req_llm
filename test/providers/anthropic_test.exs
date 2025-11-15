@@ -73,6 +73,17 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert :llm_decode_response in response_steps
     end
 
+    test "attach custom api_key option" do
+      model = ReqLLM.Model.from!("anthropic:claude-3-5-sonnet-20241022")
+      custom_key = "custom_api_key_123"
+
+      request =
+        Req.new()
+        |> Anthropic.attach(model, api_key: custom_key)
+
+      assert request.options.api_key == custom_key
+    end
+
     test "error handling for invalid configurations" do
       model = ReqLLM.Model.from!("anthropic:claude-3-5-sonnet-20241022")
       prompt = "Hello world"

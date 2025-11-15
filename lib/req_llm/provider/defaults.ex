@@ -325,6 +325,28 @@ defmodule ReqLLM.Provider.Defaults do
       raise ReqLLM.Error.Invalid.Provider.exception(provider: model.provider)
     end
 
+    {api_key, extra_option_keys} =
+      fetch_api_key_and_extra_options(provider_mod, model_input, user_opts)
+
+    request
+    |> Req.Request.put_header("content-type", "application/json")
+    |> Req.Request.put_header("authorization", "Bearer #{api_key}")
+    |> Req.Request.register_options(extra_option_keys)
+    |> Req.Request.merge_options([model: model.model, auth: {:bearer, api_key}] ++ user_opts)
+    |> ReqLLM.Step.Retry.attach()
+    |> ReqLLM.Step.Error.attach()
+    |> Req.Request.append_request_steps(llm_encode_body: &provider_mod.encode_body/1)
+    |> Req.Request.append_response_steps(llm_decode_response: &provider_mod.decode_response/1)
+    |> ReqLLM.Step.Usage.attach(model)
+    |> ReqLLM.Step.Fixture.maybe_attach(model, user_opts)
+  end
+
+  @doc """
+  Fetches API key and extra common option keys
+  """
+  @spec fetch_api_key_and_extra_options(module(), ReqLLM.Model.t(), keyword()) ::
+          {binary(), [atom()]}
+  def fetch_api_key_and_extra_options(provider_mod, model, user_opts) do
     api_key = ReqLLM.Keys.get!(model, user_opts)
 
     # Register options that might be passed by users but aren't standard Req options
@@ -338,20 +360,9 @@ defmodule ReqLLM.Provider.Defaults do
         :app_title,
         :fixture,
         :api_key
-      ] ++
-        provider_mod.supported_provider_options()
+      ] ++ provider_mod.supported_provider_options()
 
-    request
-    |> Req.Request.put_header("content-type", "application/json")
-    |> Req.Request.put_header("authorization", "Bearer #{api_key}")
-    |> Req.Request.register_options(extra_option_keys)
-    |> Req.Request.merge_options([model: model.model, auth: {:bearer, api_key}] ++ user_opts)
-    |> ReqLLM.Step.Retry.attach()
-    |> ReqLLM.Step.Error.attach()
-    |> Req.Request.append_request_steps(llm_encode_body: &provider_mod.encode_body/1)
-    |> Req.Request.append_response_steps(llm_decode_response: &provider_mod.decode_response/1)
-    |> ReqLLM.Step.Usage.attach(model)
-    |> ReqLLM.Step.Fixture.maybe_attach(model, user_opts)
+    {api_key, extra_option_keys}
   end
 
   @doc """
