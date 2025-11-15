@@ -17,15 +17,13 @@ config :llm_db,
     },
     deny: %{
       anthropic: [
-        "claude-3-haiku",
+        "claude-3-haiku-20240307",
         "claude-3-opus",
-        "claude-3.5-haiku",
-        "claude-3.5-sonnet",
+        "claude-3-5-haiku-20241022",
         "claude-3.5-sonnet-20240620",
         "claude-3.7-sonnet",
-        "claude-3.7-sonnet:thinking",
-        "claude-opus-4",
-        "claude-sonnet-4"
+        "claude-opus-4-20250514",
+        "claude-sonnet-4-20250514"
       ],
       cerebras: [
         "zai-glm-4.6"

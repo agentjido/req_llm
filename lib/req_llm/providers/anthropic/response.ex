@@ -10,7 +10,7 @@ defmodule ReqLLM.Providers.Anthropic.Response do
         "id" => "msg_01XFDUDYJgAACzvnptvVoYEL",
         "type" => "message",
         "role" => "assistant",
-        "model" => "claude-3-5-sonnet-20241022",
+        "model" => "claude-sonnet-4-5-20250929",
         "content" => [
           %{"type" => "text", "text" => "Hello! How can I help you today?"}
         ],

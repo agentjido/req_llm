@@ -405,7 +405,7 @@ defmodule ReqLLM.StreamResponseTest do
           Context.user("Hello!")
         ])
 
-      {:ok, original_model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, original_model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
 
       stream_response =
         create_stream_response(
@@ -417,7 +417,7 @@ defmodule ReqLLM.StreamResponseTest do
       {:ok, response} = StreamResponse.to_response(stream_response)
 
       assert response.context == original_context
-      assert response.model == "claude-3-5-sonnet-20241022"
+      assert response.model == "claude-sonnet-4-5-20250929"
     end
 
     test "handles stream enumeration errors" do

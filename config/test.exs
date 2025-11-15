@@ -11,9 +11,9 @@ config :llm_db,
       env: ["ANTHROPIC_API_KEY"],
       doc: "https://docs.anthropic.com",
       models: %{
-        "claude-3-5-sonnet-20241022" => %{
-          name: "Claude 3.5 Sonnet",
-          family: "claude-3.5",
+        "claude-sonnet-4-5-20250929" => %{
+          name: "Claude Sonnet 4.5",
+          family: "claude-4.5",
           capabilities: %{chat: true, tools: %{enabled: true, streaming: true}},
           limits: %{context: 200_000, output: 8192},
           cost: %{input: 3.0, output: 15.0}

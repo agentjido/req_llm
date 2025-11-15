@@ -17,7 +17,7 @@ defmodule ToolsFunctionCalling do
   ## Usage
 
       mix run lib/examples/scripts/tools_function_calling.exs [PROMPT]
-      mix run lib/examples/scripts/tools_function_calling.exs --model anthropic:claude-3-5-sonnet-20241022 [PROMPT]
+      mix run lib/examples/scripts/tools_function_calling.exs --model anthropic:claude-sonnet-4-5-20250929 [PROMPT]
 
   ## Options
 
@@ -35,7 +35,7 @@ defmodule ToolsFunctionCalling do
       mix run lib/examples/scripts/tools_function_calling.exs "What's the weather in Tokyo?"
 
       # Specific model
-      mix run lib/examples/scripts/tools_function_calling.exs --model anthropic:claude-3-5-sonnet-20241022 "Get current time"
+      mix run lib/examples/scripts/tools_function_calling.exs --model anthropic:claude-sonnet-4-5-20250929 "Get current time"
   """
   @script_name "tools_function_calling.exs"
 

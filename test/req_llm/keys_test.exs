@@ -42,7 +42,7 @@ defmodule ReqLLM.KeysTest do
 
     test "works with ReqLLM.Model structs" do
       on_exit(fn -> System.delete_env("ANTHROPIC_API_KEY") end)
-      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       System.put_env("ANTHROPIC_API_KEY", "test-key")
 
       assert {:ok, "test-key", :system} = Keys.get(model, [])

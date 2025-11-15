@@ -71,7 +71,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
 
   describe "Anthropic base_url precedence" do
     setup do
-      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-haiku-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-3-haiku")
       context = Context.new([Context.user("test")])
       {:ok, model: model, context: context}
     end
@@ -298,7 +298,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
     end
 
     test "handles base_url without scheme for Anthropic" do
-      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-haiku-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-3-haiku")
       context = Context.new([Context.user("test")])
       opts = [api_key: "[REDACTED:api-key]", base_url: "http://example.com"]
 

@@ -27,7 +27,7 @@ defmodule TextGenerate do
 
       # Using a specific model with system prompt
       mix run lib/examples/scripts/text_generate.exs "Write a haiku" \\
-        --model anthropic:claude-3-5-sonnet-20241022 \\
+        --model anthropic:claude-sonnet-4-5-20250929 \\
         --system "You are a creative poet"
 
       # With generation parameters

@@ -26,7 +26,7 @@ defmodule ReqLLM.Step.RetryProviderIntegrationTest do
 
   describe "Anthropic provider retry configuration" do
     test "attach/3 configures retry options on request" do
-      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-haiku-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-3-haiku")
 
       request =
         Anthropic.attach(
@@ -43,7 +43,7 @@ defmodule ReqLLM.Step.RetryProviderIntegrationTest do
     end
 
     test "retry function correctly identifies retryable errors" do
-      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-haiku-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-3-haiku")
 
       request =
         Anthropic.attach(
@@ -152,11 +152,11 @@ defmodule ReqLLM.Step.RetryProviderIntegrationTest do
 
   describe "all three providers have consistent retry behavior" do
     test "all providers use the same retry configuration", %{context: context} do
-      {:ok, anthropic_model} = ReqLLM.model("anthropic:claude-3-5-haiku-20241022")
+      {:ok, anthropic_model} = ReqLLM.model("anthropic:claude-3-haiku")
       {:ok, google_model} = ReqLLM.model("google:gemini-2.0-flash-exp")
 
       {:ok, bedrock_model} =
-        ReqLLM.model("amazon_bedrock:anthropic.claude-3-5-haiku-20241022-v1:0")
+        ReqLLM.model("amazon_bedrock:anthropic.claude-3-haiku-20240307-v1:0")
 
       anthropic_request =
         Anthropic.attach(
@@ -198,11 +198,11 @@ defmodule ReqLLM.Step.RetryProviderIntegrationTest do
     end
 
     test "all providers handle the same set of retryable errors", %{context: context} do
-      {:ok, anthropic_model} = ReqLLM.model("anthropic:claude-3-5-haiku-20241022")
+      {:ok, anthropic_model} = ReqLLM.model("anthropic:claude-3-haiku")
       {:ok, google_model} = ReqLLM.model("google:gemini-2.0-flash-exp")
 
       {:ok, bedrock_model} =
-        ReqLLM.model("amazon_bedrock:anthropic.claude-3-5-haiku-20241022-v1:0")
+        ReqLLM.model("amazon_bedrock:anthropic.claude-3-haiku-20240307-v1:0")
 
       anthropic_request =
         Anthropic.attach(Req.new(), anthropic_model, [])

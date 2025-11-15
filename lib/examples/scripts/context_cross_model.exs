@@ -12,7 +12,7 @@ defmodule ContextCrossModel do
   ## Usage
 
       mix run lib/examples/scripts/context_cross_model.exs "Tell me a joke"
-      mix run lib/examples/scripts/context_cross_model.exs "Explain functional programming" --model-a openai:gpt-4o --model-b anthropic:claude-3-5-sonnet-20241022
+      mix run lib/examples/scripts/context_cross_model.exs "Explain functional programming" --model-a openai:gpt-4o --model-b anthropic:claude-sonnet-4-5-20250929
 
   ## Options
 

@@ -29,7 +29,7 @@ defmodule MultimodalPdfQA do
       mix run lib/examples/scripts/multimodal_pdf_qa.exs "What is the main conclusion?" --file report.pdf
 
       # Use a different Claude model
-      mix run lib/examples/scripts/multimodal_pdf_qa.exs --file document.pdf --model anthropic:claude-3-5-sonnet-20241022
+      mix run lib/examples/scripts/multimodal_pdf_qa.exs --file document.pdf --model anthropic:claude-sonnet-4-5-20250929
 
       # Extract specific information
       mix run lib/examples/scripts/multimodal_pdf_qa.exs "List all financial figures" --file report.pdf --max-tokens 1000
@@ -175,7 +175,7 @@ defmodule MultimodalPdfQA do
     )
 
     IO.puts(
-      "  mix run #{@script_name} --file document.pdf --model anthropic:claude-3-5-sonnet-20241022"
+      "  mix run #{@script_name} --file document.pdf --model anthropic:claude-sonnet-4-5-20250929"
     )
   end
 

@@ -25,7 +25,7 @@ defmodule ReqLLM do
   Multiple formats supported for maximum flexibility:
 
       # String format: "provider:model"
-      ReqLLM.generate_text("anthropic:claude-3-5-sonnet-20241022", messages)
+      ReqLLM.generate_text("anthropic:claude-sonnet-4-5-20250929", messages)
 
       # Tuple format: {provider, options}
       ReqLLM.generate_text({:anthropic, "claude-3-5-sonnet", temperature: 0.7}, messages)

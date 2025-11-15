@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.Anthropic do
   Provider implementation for Anthropic Claude models.
 
   Supports Claude 3 models including:
-  - claude-3-5-sonnet-20241022
+  - claude-sonnet-4-5-20250929
   - claude-3-5-haiku-20241022
   - claude-3-opus-20240229
 
@@ -18,7 +18,7 @@ defmodule ReqLLM.Providers.Anthropic do
 
   ## Usage
 
-      iex> ReqLLM.generate_text("anthropic:claude-3-5-sonnet-20241022", "Hello!")
+      iex> ReqLLM.generate_text("anthropic:claude-sonnet-4-5-20250929", "Hello!")
       {:ok, response}
 
   """
@@ -88,7 +88,9 @@ defmodule ReqLLM.Providers.Anthropic do
           ] ++ http_opts
         )
         |> Req.Request.register_options(req_keys)
-        |> Req.Request.merge_options(Keyword.take(processed_opts, req_keys) ++ [model: model.id])
+        |> Req.Request.merge_options(
+          Keyword.take(processed_opts, req_keys) ++ [model: get_api_model_id(model)]
+        )
         |> attach(model, processed_opts)
 
       {:ok, request}
@@ -145,7 +147,7 @@ defmodule ReqLLM.Providers.Anthropic do
     |> Req.Request.put_header("anthropic-version", get_anthropic_version(user_opts))
     |> Req.Request.put_private(:req_llm_model, model)
     |> maybe_add_beta_header(user_opts)
-    |> Req.Request.merge_options([model: model.id] ++ req_opts)
+    |> Req.Request.merge_options(req_opts)
     |> ReqLLM.Step.Error.attach()
     |> ReqLLM.Step.Retry.attach(user_opts)
     |> Req.Request.append_request_steps(llm_encode_body: &encode_body/1)
@@ -294,7 +296,7 @@ defmodule ReqLLM.Providers.Anthropic do
     beta_headers = build_beta_headers(translated_opts)
     all_headers = streaming_headers ++ beta_headers
 
-    body = build_request_body(context, model.id, translated_opts ++ [stream: true])
+    body = build_request_body(context, get_api_model_id(model), translated_opts ++ [stream: true])
     url = build_request_url(translated_opts)
 
     finch_request = Finch.build(:post, url, all_headers, Jason.encode!(body))
@@ -800,4 +802,9 @@ defmodule ReqLLM.Providers.Anthropic do
   end
 
   defp default_max_tokens(_model_name), do: 1024
+
+  defp get_api_model_id(%LLMDB.Model{provider_model_id: api_id}) when not is_nil(api_id),
+    do: api_id
+
+  defp get_api_model_id(%LLMDB.Model{id: id}), do: String.replace(id, ~r/-\d{8}$/, "")
 end

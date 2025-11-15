@@ -8,8 +8,8 @@ defmodule ReqLLMTest do
     end
 
     test "resolves anthropic model with haiku" do
-      assert {:ok, %LLMDB.Model{provider: :anthropic, id: "claude-3-haiku-20240307"}} =
-               ReqLLM.model("anthropic:claude-3-haiku-20240307")
+      assert {:ok, %LLMDB.Model{provider: :anthropic, id: "claude-3-haiku"}} =
+               ReqLLM.model("anthropic:claude-3-haiku")
     end
 
     test "returns error for invalid provider" do

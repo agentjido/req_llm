@@ -30,22 +30,31 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
   """
 
   def supports_object_generation?(model_spec) do
-    {:ok, model} = ReqLLM.model(model_spec)
-    caps = model.capabilities || %{}
+    case ReqLLM.model(model_spec) do
+      {:ok, model} ->
+        caps = model.capabilities || %{}
 
-    get_in(caps, [:json, :native]) ||
-      get_in(caps, [:json, :schema]) ||
-      (get_in(caps, [:tools, :enabled]) && get_in(caps, [:tools, :strict]))
+        get_in(caps, [:json, :native]) ||
+          get_in(caps, [:json, :schema]) ||
+          (get_in(caps, [:tools, :enabled]) && get_in(caps, [:tools, :strict]))
+
+      {:error, _} ->
+        false
+    end
   end
 
   def supports_tool_calling?(model_spec) do
-    {:ok, model} = ReqLLM.model(model_spec)
-    get_in(model.capabilities, [:tools, :enabled]) == true
+    case ReqLLM.model(model_spec) do
+      {:ok, model} -> get_in(model.capabilities, [:tools, :enabled]) == true
+      {:error, _} -> false
+    end
   end
 
   def supports_reasoning?(model_spec) do
-    {:ok, model} = ReqLLM.model(model_spec)
-    get_in(model.capabilities, [:reasoning, :enabled]) == true
+    case ReqLLM.model(model_spec) do
+      {:ok, model} -> get_in(model.capabilities, [:reasoning, :enabled]) == true
+      {:error, _} -> false
+    end
   end
 
   defmacro __using__(opts) do

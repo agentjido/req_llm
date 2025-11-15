@@ -42,7 +42,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
   describe "request preparation & pipeline wiring" do
     test "prepare_request creates configured request" do
-      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       prompt = "Hello world"
       opts = [temperature: 0.7, max_tokens: 100]
 
@@ -54,7 +54,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
     end
 
     test "attach configures authentication and pipeline" do
-      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       opts = [temperature: 0.5, max_tokens: 50]
 
       request = Req.new() |> Anthropic.attach(model, opts)
@@ -86,7 +86,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
     end
 
     test "error handling for invalid configurations" do
-      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       prompt = "Hello world"
 
       # Unsupported operation
@@ -104,7 +104,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
   describe "body encoding & context translation" do
     test "encode_body without tools" do
-      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       context = context_fixture()
 
       # Create a mock request with the expected structure
@@ -122,7 +122,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert is_binary(updated_request.body)
       decoded = Jason.decode!(updated_request.body)
 
-      assert decoded["model"] == "claude-3-5-sonnet-20241022"
+      assert decoded["model"] == "claude-sonnet-4-5-20250929"
       assert is_list(decoded["messages"])
       # Only user message, system goes to top-level
       assert length(decoded["messages"]) == 1
@@ -138,7 +138,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
     end
 
     test "encode_body with tools" do
-      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       context = context_fixture()
 
       tool =
@@ -189,11 +189,11 @@ defmodule ReqLLM.Providers.AnthropicTest do
       }
 
       # Create a mock request with context
-      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       context = context_fixture()
 
       mock_req = %Req.Request{
-        options: [context: context, stream: false, id: "anthropic:claude-3-5-sonnet-20241022"]
+        options: [context: context, stream: false, id: "anthropic:claude-sonnet-4-5-20250929"]
       }
 
       # Test decode_response directly
@@ -242,7 +242,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
       context = context_fixture()
 
       mock_req = %Req.Request{
-        options: [context: context, id: "claude-3-5-sonnet-20241022"]
+        options: [context: context, id: "claude-sonnet-4-5-20250929"]
       }
 
       # Test decode_response error handling
@@ -258,7 +258,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
   describe "option translation" do
     test "translate_options converts stop to stop_sequences" do
-      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
 
       # Test single stop string
       {translated_opts, []} = Anthropic.translate_options(:chat, model, stop: "STOP")
@@ -272,7 +272,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
     end
 
     test "translate_options removes unsupported parameters" do
-      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
 
       opts = [
         temperature: 0.7,
@@ -297,7 +297,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
   describe "usage extraction" do
     test "extract_usage with valid usage data" do
-      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
 
       body_with_usage = %{
         "usage" => %{
@@ -312,14 +312,14 @@ defmodule ReqLLM.Providers.AnthropicTest do
     end
 
     test "extract_usage with missing usage data" do
-      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       body_without_usage = %{"content" => []}
 
       {:error, :no_usage_found} = Anthropic.extract_usage(body_without_usage, model)
     end
 
     test "extract_usage with invalid body type" do
-      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
 
       {:error, :invalid_body} = Anthropic.extract_usage("invalid", model)
       {:error, :invalid_body} = Anthropic.extract_usage(nil, model)
@@ -359,7 +359,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
     end
 
     test "map-based schema works with Anthropic prepare_request pipeline" do
-      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
 
       json_schema = %{
         "type" => "object",
@@ -429,7 +429,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
       "id" => Keyword.get(opts, :id, "msg_01XFDUDYJgAACzvnptvVoYEL"),
       "type" => "message",
       "role" => "assistant",
-      "model" => Keyword.get(opts, :model, "claude-3-5-sonnet-20241022"),
+      "model" => Keyword.get(opts, :model, "claude-sonnet-4-5-20250929"),
       "content" => [
         %{
           "type" => "text",
