@@ -769,7 +769,6 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     LLMDB.model(spec)
   end
 
-  defp get_lifecycle_status(nil), do: :active
   defp get_lifecycle_status(%LLMDB.Model{lifecycle: nil}), do: :active
   defp get_lifecycle_status(%LLMDB.Model{lifecycle: %{status: "retired"}}), do: :retired
   defp get_lifecycle_status(%LLMDB.Model{lifecycle: %{status: "deprecated"}}), do: :deprecated

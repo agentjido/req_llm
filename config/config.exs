@@ -17,13 +17,7 @@ config :llm_db,
     },
     deny: %{
       anthropic: [
-        "claude-3-haiku-20240307",
-        "claude-3-opus",
-        "claude-3-5-haiku-20241022",
-        "claude-3.5-sonnet-20240620",
-        "claude-3.7-sonnet",
-        "claude-opus-4-20250514",
-        "claude-sonnet-4-20250514"
+        "claude-3.7-sonnet"
       ],
       cerebras: [
         "zai-glm-4.6"

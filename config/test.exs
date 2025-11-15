@@ -35,7 +35,8 @@ config :llm_db,
           name: "Claude 3 Haiku",
           family: "claude-3",
           capabilities: %{chat: true, tools: %{enabled: true}},
-          limits: %{context: 200_000, output: 4096}
+          limits: %{context: 200_000, output: 4096},
+          aliases: ["claude-3-haiku"]
         }
       }
     ],
@@ -237,7 +238,8 @@ config :llm_db,
           name: "Claude 3 Haiku",
           family: "claude-3",
           capabilities: %{chat: true, tools: %{enabled: true}},
-          limits: %{context: 200_000, output: 4096}
+          limits: %{context: 200_000, output: 4096},
+          aliases: []
         }
       }
     ],
