@@ -395,7 +395,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
         }
       }
 
-      {:ok, result} = Converse.parse_response(response_body, operation: :object, model: "test")
+      {:ok, result} = Converse.parse_response(response_body, operation: :object, id: "test")
 
       assert result.finish_reason == :tool_calls
 
@@ -422,7 +422,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
         }
       }
 
-      {:ok, result} = Converse.parse_response(response_body, operation: :chat, model: "test")
+      {:ok, result} = Converse.parse_response(response_body, operation: :chat, id: "test")
 
       assert result.finish_reason == :stop
       # Should not have object field for :chat operation

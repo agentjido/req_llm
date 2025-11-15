@@ -123,6 +123,8 @@ defmodule ReqLLM.Test.Transcript do
 
   defp to_streaming_format(t) do
     %{
+      "provider" => Atom.to_string(t.provider),
+      "model_spec" => t.model_spec,
       "request" => build_request_map(t),
       "response" => build_streaming_response_map(t),
       "captured_at" => DateTime.to_iso8601(t.captured_at),
@@ -132,6 +134,8 @@ defmodule ReqLLM.Test.Transcript do
 
   defp to_non_streaming_format(t) do
     %{
+      "provider" => Atom.to_string(t.provider),
+      "model_spec" => t.model_spec,
       "request" => build_request_map(t),
       "response" => build_non_streaming_response_map(t)
     }

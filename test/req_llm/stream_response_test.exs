@@ -2,7 +2,7 @@
 defmodule ReqLLM.StreamResponseTest.Helpers do
   import ExUnit.Assertions
 
-  alias ReqLLM.{Context, Model, StreamChunk, StreamResponse, StreamResponse.MetadataHandle}
+  alias ReqLLM.{Context, StreamChunk, StreamResponse, StreamResponse.MetadataHandle}
 
   @doc """
   Assert multiple struct fields at once for cleaner tests.
@@ -25,7 +25,7 @@ defmodule ReqLLM.StreamResponseTest.Helpers do
           finish_reason: :stop
         }),
       cancel: fn -> :ok end,
-      model: %Model{provider: :test, model: "test-model"},
+      model: %LLMDB.Model{provider: :test, id: "test-model"},
       context: Context.new([Context.system("Test")])
     }
 
@@ -68,12 +68,12 @@ defmodule ReqLLM.StreamResponseTest do
 
   import ReqLLM.StreamResponseTest.Helpers
 
-  alias ReqLLM.{Context, Model, Response, StreamChunk, StreamResponse}
+  alias ReqLLM.{Context, Response, StreamChunk, StreamResponse}
 
   describe "struct validation and defaults" do
     test "creates stream response with required fields" do
       context = Context.new([Context.system("Test")])
-      model = %Model{provider: :test, model: "test-model"}
+      model = %LLMDB.Model{provider: :test, id: "test-model"}
       metadata_handle = create_metadata_handle(%{usage: %{tokens: 10}, finish_reason: :stop})
       cancel_fn = create_cancel_function()
       stream = [StreamChunk.text("hello")]
@@ -405,7 +405,7 @@ defmodule ReqLLM.StreamResponseTest do
           Context.user("Hello!")
         ])
 
-      original_model = %Model{provider: :anthropic, model: "claude-3-sonnet"}
+      {:ok, original_model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
 
       stream_response =
         create_stream_response(
@@ -417,7 +417,7 @@ defmodule ReqLLM.StreamResponseTest do
       {:ok, response} = StreamResponse.to_response(stream_response)
 
       assert response.context == original_context
-      assert response.model == "claude-3-sonnet"
+      assert response.model == "claude-sonnet-4-5-20250929"
     end
 
     test "handles stream enumeration errors" do

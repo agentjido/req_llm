@@ -27,7 +27,7 @@ defmodule TextStream do
 
       # With specific model and parameters
       mix run lib/examples/scripts/text_stream.exs "Explain quantum physics" \\
-        --model anthropic:claude-3-5-sonnet-20241022 \\
+        --model anthropic:claude-sonnet-4-5-20250929 \\
         --max_tokens 500 \\
         --temperature 0.7
 

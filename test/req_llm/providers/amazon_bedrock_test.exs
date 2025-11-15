@@ -1,7 +1,7 @@
 defmodule ReqLLM.Providers.AmazonBedrockTest do
   use ExUnit.Case, async: true
 
-  alias ReqLLM.{Context, Model, Providers.AmazonBedrock}
+  alias ReqLLM.{Context, Providers.AmazonBedrock}
 
   describe "provider basics" do
     test "provider_id returns :amazon_bedrock" do
@@ -9,7 +9,7 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
     end
 
     test "default_base_url returns Bedrock endpoint format" do
-      url = AmazonBedrock.default_base_url()
+      url = AmazonBedrock.base_url()
       assert url =~ "bedrock-runtime"
       assert url =~ "amazonaws.com"
     end
@@ -110,7 +110,7 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
       System.put_env("AWS_REGION", "us-east-1")
 
       # Simulate a complete tool calling flow using Converse API
-      model = Model.from!("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
 
       # Create tool call using new ToolCall API
       tool_call = ToolCall.new("toolu_add_123", "add", Jason.encode!(%{a: 5, b: 3}))
@@ -203,7 +203,7 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
       System.put_env("AWS_ACCESS_KEY_ID", "AKIATEST")
       System.put_env("AWS_SECRET_ACCESS_KEY", "secretTEST")
 
-      model = Model.from!("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
 
       # Create tool call using new ToolCall API
       tool_call = ToolCall.new("toolu_add_123", "add", Jason.encode!(%{a: 5, b: 3}))
@@ -256,7 +256,7 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
   describe "AWS session token support" do
     test "includes session token in signed Req request headers" do
       # Test non-streaming path (Req pipeline via put_aws_sigv4)
-      model = Model.from!("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
       context = Context.new([Context.user("Hello")])
       session_token = "FwoGZXIvYXdzEBYaDHhBTEMPLESessionToken123"
 
@@ -299,7 +299,7 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
 
   describe "attach_stream/4" do
     setup do
-      model = Model.from!("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
       context = Context.new([Context.user("Hello")])
 
       opts = [

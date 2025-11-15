@@ -545,7 +545,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
 
   describe "decode_stream_event/2" do
     setup do
-      model = %ReqLLM.Model{provider: :openai, model: "gpt-5"}
+      {:ok, model} = ReqLLM.model("openai:gpt-5")
       {:ok, model: model}
     end
 
@@ -676,7 +676,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     provider_opts = Keyword.get(opts, :provider_options, [])
 
     req_opts = %{
-      model: "gpt-5",
+      id: "gpt-5",
       context: context,
       stream: Keyword.get(opts, :stream),
       max_output_tokens: Keyword.get(opts, :max_output_tokens),
@@ -704,7 +704,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       url: URI.parse("https://api.openai.com/v1/responses"),
       headers: %{},
       body: {:json, %{}},
-      options: %{model: "gpt-5", context: context}
+      options: %{id: "gpt-5", context: context}
     }
 
     resp = %Req.Response{

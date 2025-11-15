@@ -52,7 +52,7 @@ defmodule ReqLLM.ResponseTest do
 
   import ReqLLM.ResponseTest.Helpers
 
-  alias ReqLLM.{Context, Error, Message, Message.ContentPart, Model, Response, StreamChunk}
+  alias ReqLLM.{Context, Error, Message, Message.ContentPart, Response, StreamChunk}
 
   # Mock provider for testing
   defmodule TestProvider do
@@ -86,7 +86,7 @@ defmodule ReqLLM.ResponseTest do
       assert_raise ArgumentError, fn -> struct!(Response, %{}) end
 
       assert_raise ArgumentError, fn ->
-        struct!(Response, %{model: "test", context: Context.new([]), message: nil})
+        struct!(Response, %{id: "test", context: Context.new([]), message: nil})
       end
     end
 
@@ -374,7 +374,7 @@ defmodule ReqLLM.ResponseTest do
     end
 
     test "handles Model struct input directly" do
-      model = %Model{provider: :groq, model: "llama3-8b-8192"}
+      {:ok, model} = ReqLLM.model("groq:llama3-8b-8192")
       data = %{"id" => "test", "choices" => []}
 
       _result = Response.decode_response(data, model)

@@ -108,12 +108,14 @@ defmodule ReqLLM.Providers.GoogleVertex.Anthropic do
 
   For :object operations, extracts the structured output from the tool call.
   """
-  def parse_response(body, %ReqLLM.Model{} = vertex_model, opts) when is_map(body) do
+  def parse_response(body, %LLMDB.Model{} = vertex_model, opts) when is_map(body) do
     # Create an Anthropic model struct for decode_response
     # Use the model ID from the response body, or fall back to the Vertex model
-    anthropic_model = %ReqLLM.Model{
-      provider: :anthropic,
-      model: Map.get(body, "model", vertex_model.model)
+    model_id = Map.get(body, "model", vertex_model.id)
+
+    anthropic_model = %LLMDB.Model{
+      id: model_id,
+      provider: :anthropic
     }
 
     # Delegate to native Anthropic response decoding

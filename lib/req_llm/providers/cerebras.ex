@@ -29,16 +29,12 @@ defmodule ReqLLM.Providers.Cerebras do
       CEREBRAS_API_KEY=csk_...
   """
 
-  @behaviour ReqLLM.Provider
-
-  use ReqLLM.Provider.DSL,
+  use ReqLLM.Provider,
     id: :cerebras,
-    base_url: "https://api.cerebras.ai/v1",
-    metadata: "priv/models_dev/cerebras.json",
-    default_env_key: "CEREBRAS_API_KEY",
-    provider_schema: []
+    default_base_url: "https://api.cerebras.ai/v1",
+    default_env_key: "CEREBRAS_API_KEY"
 
-  use ReqLLM.Provider.Defaults
+  @provider_schema []
 
   @impl ReqLLM.Provider
   def encode_body(request) do
@@ -97,8 +93,8 @@ defmodule ReqLLM.Providers.Cerebras do
 
   defp add_strict_to_tools(body, _model), do: body
 
-  defp supports_strict_tools?(%ReqLLM.Model{} = model) do
-    get_in(model, [Access.key(:_metadata, %{}), "supports_strict_tools"]) == true
+  defp supports_strict_tools?(%LLMDB.Model{} = model) do
+    get_in(model.capabilities, [:tools, :strict]) == true
   end
 
   defp supports_strict_tools?(_), do: false

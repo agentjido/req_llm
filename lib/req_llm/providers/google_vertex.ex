@@ -55,38 +55,34 @@ defmodule ReqLLM.Providers.GoogleVertex do
      - `extract_usage/2` - Extract usage information
   """
 
-  @behaviour ReqLLM.Provider
-
-  use ReqLLM.Provider.DSL,
-    # Constants
+  use ReqLLM.Provider,
     id: :google_vertex_anthropic,
-    base_url: "https://{region}-aiplatform.googleapis.com",
-    metadata: "priv/models_dev/google_vertex_anthropic.json",
-    default_env_key: "GOOGLE_APPLICATION_CREDENTIALS",
-    provider_schema: [
-      service_account_json: [
-        type: :string,
-        doc:
-          "Path to service account JSON file (can also use GOOGLE_APPLICATION_CREDENTIALS env var)"
-      ],
-      project_id: [
-        type: :string,
-        doc: "Google Cloud project ID (can also use GOOGLE_CLOUD_PROJECT env var)"
-      ],
-      region: [
-        type: :string,
-        default: "global",
-        doc:
-          "Google Cloud region where Vertex AI is available (default 'global' for newest models)"
-      ],
-      additional_model_request_fields: [
-        type: :map,
-        doc:
-          "Additional model-specific request fields (e.g., thinking config for extended thinking support)"
-      ]
-    ]
+    default_base_url: "https://{region}-aiplatform.googleapis.com",
+    default_env_key: "GOOGLE_APPLICATION_CREDENTIALS"
 
   require Logger
+
+  @provider_schema [
+    service_account_json: [
+      type: :string,
+      doc:
+        "Path to service account JSON file (can also use GOOGLE_APPLICATION_CREDENTIALS env var)"
+    ],
+    project_id: [
+      type: :string,
+      doc: "Google Cloud project ID (can also use GOOGLE_CLOUD_PROJECT env var)"
+    ],
+    region: [
+      type: :string,
+      default: "global",
+      doc: "Google Cloud region where Vertex AI is available (default 'global' for newest models)"
+    ],
+    additional_model_request_fields: [
+      type: :map,
+      doc:
+        "Additional model-specific request fields (e.g., thinking config for extended thinking support)"
+    ]
+  ]
 
   @default_region "global"
   @vertex_base_url_global "https://aiplatform.googleapis.com"
@@ -110,7 +106,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
   end
 
   defp do_prepare_request(model_input, input, opts) do
-    with {:ok, model} <- ReqLLM.Model.from(model_input),
+    with {:ok, model} <- ReqLLM.model(model_input),
          {:ok, context} <- ReqLLM.Context.normalize(input, opts) do
       # Process and validate options
       operation = opts[:operation] || :chat
@@ -122,14 +118,14 @@ defmodule ReqLLM.Providers.GoogleVertex do
       other_opts = Keyword.put(other_opts, :context, context)
 
       # Build request body using formatter
-      body = formatter.format_request(model.model, context, other_opts)
+      body = formatter.format_request(model.id, context, other_opts)
 
       # Build Vertex AI endpoint URL
       region = gcp_creds[:region] || @default_region
       project_id = gcp_creds[:project_id]
 
       # Vertex AI URL structure depends on model family
-      path = build_model_path(model_family, model.model, project_id, region)
+      path = build_model_path(model_family, model.id, project_id, region)
       base_url = build_base_url(region)
       url = "#{base_url}#{path}"
 
@@ -181,7 +177,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
         request
         |> Req.Request.put_header("authorization", "Bearer #{access_token}")
         |> ReqLLM.Step.Error.attach()
-        |> ReqLLM.Step.Retry.attach()
+        |> ReqLLM.Step.Retry.attach(opts)
         |> Req.Request.append_response_steps(llm_decode_response: &decode_response/1)
         |> ReqLLM.Step.Usage.attach(model)
         |> ReqLLM.Step.Fixture.maybe_attach(model, opts)
@@ -259,7 +255,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
     other_opts = Keyword.merge(other_opts, req_opts)
 
     # Get model family and formatter
-    model_family = get_model_family(model.model)
+    model_family = get_model_family(model.id)
     formatter = get_formatter_module(model_family)
 
     # Clean thinking after translation if incompatible
@@ -322,7 +318,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
   def decode_response({request, response}) do
     # Get formatter for this model
     model = Req.Request.get_private(request, :model)
-    formatter = get_formatter(model.model)
+    formatter = get_formatter(model.id)
 
     # Build opts with operation and context from request.options (which is a map)
     opts =
@@ -358,7 +354,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
   @impl ReqLLM.Provider
   def extract_usage(body, model) do
-    formatter = get_formatter(model.model)
+    formatter = get_formatter(model.id)
 
     if function_exported?(formatter, :extract_usage, 2) do
       formatter.extract_usage(body, model)
@@ -369,7 +365,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
   def pre_validate_options(operation, model, opts) do
     # Delegate to model-specific formatter if it has pre_validate_options
-    formatter = get_formatter(model.model)
+    formatter = get_formatter(model.id)
 
     if function_exported?(formatter, :pre_validate_options, 3) do
       formatter.pre_validate_options(operation, model, opts)
@@ -382,7 +378,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
   def translate_options(operation, model, opts) do
     # Delegate to native Anthropic option translation for Anthropic models
     # This ensures we get all Anthropic-specific handling (temperature/top_p conflicts, etc.)
-    model_family = get_model_family(model.model)
+    model_family = get_model_family(model.id)
 
     case model_family do
       "claude" ->
@@ -404,14 +400,14 @@ defmodule ReqLLM.Providers.GoogleVertex do
       process_and_validate_opts(opts, model, operation)
 
     # Build request body using formatter (with stream: true)
-    body = formatter.format_request(model.model, context, Keyword.put(other_opts, :stream, true))
+    body = formatter.format_request(model.id, context, Keyword.put(other_opts, :stream, true))
 
     # Build Vertex AI endpoint URL for streaming
     region = gcp_creds[:region] || @default_region
     project_id = gcp_creds[:project_id]
 
     # Use streamRawPredict for streaming
-    path = build_stream_path(model_family, model.model, project_id, region)
+    path = build_stream_path(model_family, model.id, project_id, region)
     base_url = build_base_url(region)
     url = "#{base_url}#{path}"
 
@@ -446,7 +442,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
   @impl ReqLLM.Provider
   def decode_stream_event(event, model) do
     # Get formatter for this model
-    formatter = get_formatter(model.model)
+    formatter = get_formatter(model.id)
 
     # Delegate SSE parsing to formatter
     # For Anthropic models, Vertex uses standard Anthropic SSE format

@@ -142,7 +142,7 @@ defmodule ReqLLM.MessageTest do
     test "message with custom metadata" do
       metadata = %{
         timestamp: 1_234_567_890,
-        model: "claude-3",
+        id: "claude-3",
         source: "api",
         extra: %{nested: "value"}
       }

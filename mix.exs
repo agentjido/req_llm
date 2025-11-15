@@ -166,8 +166,9 @@ defmodule ReqLLM.MixProject do
       {:splode, "~> 0.2.3"},
       {:typed_struct, "~> 0.3.0"},
       {:uniq, "~> 0.6"},
-      {:zoi, "~> 0.7"},
+      {:zoi, "~> 0.10"},
       {:jsv, "~> 0.11"},
+      {:llm_db, github: "agentjido/llm_db", branch: "main"},
 
       # Dev/test dependencies
       {:bandit, "~> 1.8", only: :dev, runtime: false},
@@ -206,7 +207,6 @@ defmodule ReqLLM.MixProject do
       ],
       q: ["quality"],
       docs: ["docs --formatter html"],
-      ms: ["req_llm.model_sync"],
       mc: ["req_llm.model_compat"],
       llm: ["req_llm.gen"]
     ]

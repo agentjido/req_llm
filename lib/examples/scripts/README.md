@@ -127,7 +127,7 @@ Examples:
   # Extract structured data from text
   mix run lib/examples/scripts/object_generate.exs \
     "Extract info: John Smith, 35, lawyer in Boston" \
-    -m anthropic:claude-3-5-sonnet-20241022
+    -m anthropic:claude-sonnet-4-5-20250929
 ```
 
 #### `object_stream.exs` - Streaming object generation
@@ -302,7 +302,7 @@ Examples:
   mix run lib/examples/scripts/multimodal_pdf_qa.exs \
     "What are the main conclusions?" \
     --file research_paper.pdf \
-    -m anthropic:claude-3-5-sonnet-20241022
+    -m anthropic:claude-sonnet-4-5-20250929
   
   # Extract specific info
   mix run lib/examples/scripts/multimodal_pdf_qa.exs \
@@ -403,7 +403,7 @@ Only Anthropic Claude models support PDF analysis:
 ```bash
 # ✅ Supported
 -m anthropic:claude-3-5-haiku-20241022
--m anthropic:claude-3-5-sonnet-20241022
+-m anthropic:claude-sonnet-4-5-20250929
 
 # ❌ Not supported
 -m openai:gpt-4o-mini

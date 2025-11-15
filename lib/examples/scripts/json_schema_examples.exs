@@ -24,7 +24,7 @@ defmodule JSONSchemaExamples do
 
   Use a specific model:
 
-      elixir lib/examples/scripts/json_schema_examples.exs -m anthropic:claude-3-5-sonnet-20241022
+      elixir lib/examples/scripts/json_schema_examples.exs -m anthropic:claude-sonnet-4-5-20250929
 
   Enable debug logging:
 

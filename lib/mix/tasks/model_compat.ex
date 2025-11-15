@@ -3,7 +3,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   @moduledoc """
   Validate ReqLLM model coverage using the fixture system.
 
-  Models are sourced from priv/models_dev/*.json (synced via mix req_llm.model_sync).
+  Models are sourced from LLMDB
   Fixture validation state is tracked in priv/supported_models.json (auto-generated).
 
   ## Selection Principles
@@ -20,7 +20,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   - **sample** (optional): Further reduces using `:sample_text_models` or `:sample_embedding_models`.
     If not configured, falls back to one model per provider.
 
-  **Important**: 
+  **Important**:
   - Only **implemented providers** are included (registry models without implementation are skipped)
   - Config lists (`:test_models`, `:test_embedding_models`) are defaults only, not hard filters
   - Explicit specs like `"anthropic:*"` test ALL registry models for that provider
@@ -72,6 +72,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   @impl Mix.Task
   def run(args) do
     Application.ensure_all_started(:req_llm)
+    # LLMDB.load(allow: :all, custom: %{})
 
     {opts, positional, _} =
       OptionParser.parse(args,
@@ -203,12 +204,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     models
     |> Enum.filter(fn {provider, _} -> MapSet.member?(implemented, provider) end)
     |> Enum.map(fn {provider, provider_models} ->
-      allowed_models =
-        Enum.filter(provider_models, fn model ->
-          ReqLLM.Catalog.allowed_spec?(provider, model["id"])
-        end)
-
-      {provider, allowed_models}
+      {provider, provider_models}
     end)
     |> Enum.reject(fn {_provider, models} -> Enum.empty?(models) end)
     |> Enum.sort_by(fn {provider, _} -> provider end)
@@ -274,7 +270,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     )
   end
 
-  defp do_run_coverage(model_spec, opts) do
+  defp do_run_coverage(model_spec, opts) when is_binary(model_spec) do
     Mix.shell().info("\n----------------------------------------------------")
     Mix.shell().info(header(opts[:sample]))
     Mix.shell().info("----------------------------------------------------\n")
@@ -284,6 +280,48 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
     if Enum.empty?(specs) do
       Mix.raise("No models match spec: #{inspect(model_spec)}")
+    end
+
+    total_specs = length(specs)
+
+    recording = opts[:record_all] || opts[:record]
+
+    mode_text = if recording, do: "#{total_specs} to record", else: "replay mode"
+
+    Mix.shell().info("Testing #{total_specs} model(s) (#{mode_text})...\n")
+
+    start_time = System.monotonic_time(:millisecond)
+
+    results =
+      specs
+      |> Task.async_stream(
+        fn {provider, model_id} ->
+          test_model(provider, model_id, opts)
+        end,
+        max_concurrency: System.schedulers_online() * 2,
+        timeout: :infinity,
+        ordered: false
+      )
+      |> Enum.map(fn {:ok, result} -> result end)
+
+    elapsed = System.monotonic_time(:millisecond) - start_time
+
+    run_ts = DateTime.utc_now() |> DateTime.truncate(:second)
+    save_state(results, run_ts)
+
+    print_enhanced_summary(model_spec, results, models, elapsed, opts)
+  end
+
+  defp do_run_coverage(nil, opts) do
+    Mix.shell().info("\n----------------------------------------------------")
+    Mix.shell().info(header(opts[:sample]))
+    Mix.shell().info("----------------------------------------------------\n")
+
+    models = load_registry()
+    specs = select_models(models, nil, opts)
+
+    if Enum.empty?(specs) do
+      Mix.raise("No models match spec")
     end
 
     total_specs = length(specs)
@@ -345,7 +383,16 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
         {"REQ_LLM_INCLUDE_RESPONSES", "1"}
       ] ++ aws_env_vars
 
-    Mix.shell().info("  Testing #{spec} (#{operation})...")
+    display_spec =
+      case LLMDB.model(spec) do
+        {:ok, %LLMDB.Model{id: resolved_id}} when resolved_id != model_id ->
+          "#{spec} " <> IO.ANSI.faint() <> "(#{resolved_id})" <> IO.ANSI.reset()
+
+        _ ->
+          spec
+      end
+
+    Mix.shell().info("  Testing #{display_spec} (#{operation})...")
 
     test_args =
       build_test_args(provider, category, operation)
@@ -439,6 +486,293 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     |> Enum.reject(&is_nil/1)
     |> Enum.uniq()
   end
+
+  defp print_enhanced_summary(model_spec, results, registry, elapsed_ms, opts) do
+    Mix.shell().info("\n" <> String.duplicate("━", 60))
+    Mix.shell().info("  Enhanced Coverage Report")
+    Mix.shell().info(String.duplicate("━", 60) <> "\n")
+
+    state = load_state()
+    operation = parse_operation_type(opts[:type])
+
+    all_matching_models = collect_all_matching_models(model_spec, registry, operation)
+
+    all_matching_models
+    |> Enum.group_by(fn {provider, _model_id, _model_data} -> provider end)
+    |> Enum.sort_by(fn {provider, _} -> provider end)
+    |> Enum.each(fn {provider, provider_models} ->
+      print_provider_enhanced_section(provider, provider_models, results, state)
+    end)
+
+    print_overall_coverage_stats(all_matching_models, results, state, elapsed_ms)
+  end
+
+  defp collect_all_matching_models(model_spec, registry, operation) do
+    registry
+    |> Enum.flat_map(fn {provider, models} ->
+      models
+      |> Enum.filter(fn model ->
+        model_matches_spec?(provider, model["id"], model_spec) and
+          model_supports_operation?(registry, provider, model["id"], operation)
+      end)
+      |> Enum.map(fn model -> {provider, model["id"], model} end)
+    end)
+  end
+
+  defp model_matches_spec?(provider, model_id, spec) do
+    cond do
+      spec == "*:*" ->
+        true
+
+      String.contains?(spec, ":") ->
+        [provider_part, model_part] = String.split(spec, ":", parts: 2)
+        provider_atom = String.to_atom(provider_part)
+
+        cond do
+          provider != provider_atom ->
+            false
+
+          model_part == "*" ->
+            true
+
+          String.ends_with?(model_part, "*") ->
+            prefix = String.trim_trailing(model_part, "*")
+            String.starts_with?(model_id, prefix)
+
+          true ->
+            model_id == model_part
+        end
+
+      true ->
+        provider == String.to_atom(spec)
+    end
+  end
+
+  defp print_provider_enhanced_section(provider, provider_models, results, state) do
+    Mix.shell().info(
+      IO.ANSI.cyan() <>
+        IO.ANSI.bright() <>
+        provider_name(provider) <>
+        " (#{length(provider_models)} models)" <>
+        IO.ANSI.reset()
+    )
+
+    Mix.shell().info(String.duplicate("━", 60) <> "\n")
+
+    grouped = group_models_by_status(provider_models, results, state)
+
+    print_group("PASSING FIXTURES", grouped.passing, :pass)
+    print_group("FAILING FIXTURES", grouped.failing, :fail)
+    print_group("UNTESTED", grouped.untested, :untested)
+    print_group("RETIRED", grouped.retired, :retired)
+
+    print_provider_summary(grouped)
+    Mix.shell().info("")
+  end
+
+  defp group_models_by_status(provider_models, results, state) do
+    results_map = Map.new(results, fn r -> {{r.provider, r.model_id}, r} end)
+
+    provider_models
+    |> Enum.reduce(%{passing: [], failing: [], untested: [], retired: []}, fn {provider, model_id,
+                                                                               model_data},
+                                                                              acc ->
+      spec = "#{provider}:#{model_id}"
+
+      case fetch_model_metadata(spec) do
+        {:ok, llmdb_model} ->
+          lifecycle_status = get_lifecycle_status(llmdb_model)
+
+          cond do
+            lifecycle_status == :retired ->
+              %{acc | retired: [{provider, model_id, model_data, llmdb_model} | acc.retired]}
+
+            Map.has_key?(results_map, {provider, model_id}) ->
+              result = Map.get(results_map, {provider, model_id})
+
+              if result.status == :pass do
+                %{
+                  acc
+                  | passing: [{provider, model_id, model_data, llmdb_model, result} | acc.passing]
+                }
+              else
+                %{
+                  acc
+                  | failing: [{provider, model_id, model_data, llmdb_model, result} | acc.failing]
+                }
+              end
+
+            Map.has_key?(state, spec) ->
+              state_entry = Map.get(state, spec)
+
+              if state_entry["status"] == "pass" and has_fixtures?(provider, model_id) do
+                %{
+                  acc
+                  | passing: [{provider, model_id, model_data, llmdb_model, nil} | acc.passing]
+                }
+              else
+                %{acc | untested: [{provider, model_id, model_data, llmdb_model} | acc.untested]}
+              end
+
+            true ->
+              %{acc | untested: [{provider, model_id, model_data, llmdb_model} | acc.untested]}
+          end
+
+        {:error, _} ->
+          if Map.has_key?(results_map, {provider, model_id}) do
+            result = Map.get(results_map, {provider, model_id})
+
+            if result.status == :pass do
+              %{acc | passing: [{provider, model_id, model_data, nil, result} | acc.passing]}
+            else
+              %{acc | failing: [{provider, model_id, model_data, nil, result} | acc.failing]}
+            end
+          else
+            %{acc | untested: [{provider, model_id, model_data, nil} | acc.untested]}
+          end
+      end
+    end)
+    |> Map.update!(:passing, &Enum.reverse/1)
+    |> Map.update!(:failing, &Enum.reverse/1)
+    |> Map.update!(:untested, &Enum.reverse/1)
+    |> Map.update!(:retired, &Enum.reverse/1)
+  end
+
+  defp print_group(_title, [], _status), do: :ok
+
+  defp print_group(title, models, status) do
+    Mix.shell().info(IO.ANSI.bright() <> title <> " (#{length(models)}):" <> IO.ANSI.reset())
+
+    Enum.each(models, fn item ->
+      case item do
+        {_provider, model_id, _model_data, llmdb_model, result} when status == :pass ->
+          print_model_entry(model_id, llmdb_model, result, "✓", IO.ANSI.green())
+
+        {_provider, model_id, _model_data, llmdb_model, result} when status == :fail ->
+          print_model_entry(model_id, llmdb_model, result, "✗", IO.ANSI.red())
+
+        {_provider, model_id, _model_data, llmdb_model} when status == :untested ->
+          print_model_entry(model_id, llmdb_model, nil, "○", IO.ANSI.yellow())
+
+        {_provider, model_id, _model_data, llmdb_model} when status == :retired ->
+          print_model_entry(model_id, llmdb_model, nil, "❌", IO.ANSI.faint())
+      end
+    end)
+
+    Mix.shell().info("")
+  end
+
+  defp print_model_entry(model_id, llmdb_model, result, icon, color) do
+    lifecycle_info = format_lifecycle_info(llmdb_model)
+
+    Mix.shell().info("  #{color}#{icon}#{IO.ANSI.reset()} #{model_id}#{lifecycle_info}")
+
+    if llmdb_model do
+      if llmdb_model.aliases && not Enum.empty?(llmdb_model.aliases) do
+        aliases_text = Enum.join(llmdb_model.aliases, ", ")
+        Mix.shell().info("      #{IO.ANSI.faint()}aliases: #{aliases_text}#{IO.ANSI.reset()}")
+      end
+
+      if llmdb_model.lifecycle do
+        replacement = Map.get(llmdb_model.lifecycle, :replacement)
+
+        if replacement do
+          Mix.shell().info(
+            "      #{IO.ANSI.faint()}replacement: #{replacement}#{IO.ANSI.reset()}"
+          )
+        end
+      end
+    end
+
+    if result do
+      if result.fixtures && !Enum.empty?(result.fixtures) do
+        fixtures_text = Enum.join(result.fixtures, ", ")
+
+        last_tested =
+          if result[:last_checked], do: " | last tested: #{result[:last_checked]}", else: ""
+
+        Mix.shell().info(
+          "      #{IO.ANSI.faint()}fixtures: #{length(result.fixtures)} (#{fixtures_text})#{last_tested}#{IO.ANSI.reset()}"
+        )
+      end
+
+      if result.error do
+        Mix.shell().info("      #{IO.ANSI.faint()}#{result.error}#{IO.ANSI.reset()}")
+      end
+    end
+  end
+
+  defp format_lifecycle_info(nil), do: ""
+
+  defp format_lifecycle_info(llmdb_model) do
+    case llmdb_model.lifecycle do
+      %{status: "deprecated", retires_at: retires_at} when not is_nil(retires_at) ->
+        " #{IO.ANSI.yellow()}(deprecated, retires #{retires_at})#{IO.ANSI.reset()}"
+
+      %{status: "deprecated"} ->
+        " #{IO.ANSI.yellow()}(deprecated)#{IO.ANSI.reset()}"
+
+      %{status: "retired", retires_at: retires_at} when not is_nil(retires_at) ->
+        " #{IO.ANSI.faint()}(retired #{retires_at})#{IO.ANSI.reset()}"
+
+      %{status: "retired"} ->
+        " #{IO.ANSI.faint()}(retired)#{IO.ANSI.reset()}"
+
+      _ ->
+        ""
+    end
+  end
+
+  defp print_provider_summary(grouped) do
+    active_count = length(grouped.passing) + length(grouped.failing) + length(grouped.untested)
+
+    if active_count > 0 do
+      coverage_pct = Float.round(length(grouped.passing) / active_count * 100, 1)
+
+      Mix.shell().info(
+        IO.ANSI.bright() <>
+          "Summary: #{length(grouped.passing)}/#{active_count} active models tested (#{coverage_pct}% coverage)" <>
+          IO.ANSI.reset()
+      )
+    end
+  end
+
+  defp print_overall_coverage_stats(all_models, results, _state, elapsed_ms) do
+    total_active =
+      Enum.count(all_models, fn {provider, model_id, _} ->
+        case fetch_model_metadata("#{provider}:#{model_id}") do
+          {:ok, model} -> get_lifecycle_status(model) != :retired
+          _ -> true
+        end
+      end)
+
+    passing = Enum.count(results, &(&1.status == :pass))
+
+    if total_active > 0 do
+      pct = Float.round(passing / total_active * 100, 1)
+      color = if pct == 100.0, do: IO.ANSI.green(), else: IO.ANSI.yellow()
+      elapsed_sec = Float.round(elapsed_ms / 1000, 1)
+
+      Mix.shell().info(String.duplicate("━", 60))
+
+      Mix.shell().info(
+        color <>
+          "Overall Coverage: #{passing}/#{total_active} active models passing (#{pct}%)" <>
+          IO.ANSI.reset() <> " in #{elapsed_sec}s\n"
+      )
+
+      if passing != length(results), do: System.halt(1)
+    end
+  end
+
+  defp fetch_model_metadata(spec) do
+    LLMDB.model(spec)
+  end
+
+  defp get_lifecycle_status(%LLMDB.Model{lifecycle: nil}), do: :active
+  defp get_lifecycle_status(%LLMDB.Model{lifecycle: %{status: "retired"}}), do: :retired
+  defp get_lifecycle_status(%LLMDB.Model{lifecycle: %{status: "deprecated"}}), do: :deprecated
+  defp get_lifecycle_status(%LLMDB.Model{}), do: :active
 
   defp print_summary(results, elapsed_ms) do
     Mix.shell().info("\n----------------------------------------------------")
@@ -697,9 +1031,6 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
     |> Enum.flat_map(fn {provider, models} ->
       if MapSet.member?(implemented, provider) do
         models
-        |> Enum.filter(fn m ->
-          ReqLLM.Catalog.allowed_spec?(provider, m["id"])
-        end)
         |> Enum.map(fn m -> {provider, m["id"]} end)
       else
         []
@@ -714,9 +1045,6 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
 
       models ->
         models
-        |> Enum.filter(fn m ->
-          ReqLLM.Catalog.allowed_spec?(provider, m["id"])
-        end)
         |> Enum.map(fn m -> {provider, m["id"]} end)
     end
   end
@@ -761,37 +1089,45 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   end
 
   defp load_registry do
-    priv_dir = :code.priv_dir(:req_llm)
-    models_dir = Path.join(priv_dir, "models_dev")
+    LLMDB.providers()
+    |> Enum.map(fn provider ->
+      models =
+        LLMDB.models(provider.id)
+        |> Enum.map(fn model ->
+          tier = extract_tier(model.tags)
 
-    if !File.dir?(models_dir) do
-      Mix.raise("""
-      Models directory not found: #{models_dir}
+          %{
+            "id" => model.id,
+            "type" => infer_type(model),
+            "tier" => tier,
+            "modalities" => model.modalities
+          }
+        end)
 
-      Run: mix req_llm.model_sync
-      """)
-    end
-
-    models_dir
-    |> File.ls!()
-    |> Enum.filter(&String.ends_with?(&1, ".json"))
-    |> Enum.map(fn filename ->
-      provider = filename |> String.replace_suffix(".json", "") |> String.to_atom()
-      path = Path.join(models_dir, filename)
-
-      case File.read(path) do
-        {:ok, content} ->
-          data = Jason.decode!(content)
-          models = Map.get(data, "models", [])
-          {provider, models}
-
-        {:error, reason} ->
-          Mix.raise("Failed to read #{path}: #{inspect(reason)}")
-      end
+      {provider.id, models}
     end)
     |> Enum.reject(fn {_, models} -> Enum.empty?(models) end)
     |> Map.new()
   end
+
+  defp infer_type(model) do
+    if model.capabilities && model.capabilities.embeddings != false do
+      "embedding"
+    else
+      "text"
+    end
+  end
+
+  defp extract_tier(tags) when is_list(tags) do
+    Enum.find_value(tags, fn tag ->
+      case tag do
+        "tier:" <> tier -> tier
+        _ -> nil
+      end
+    end)
+  end
+
+  defp extract_tier(_), do: nil
 
   defp load_state do
     priv_dir = :code.priv_dir(:req_llm)
@@ -876,19 +1212,23 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   defp find_model(registry, provider, model_id) do
     provider_atom = if is_binary(provider), do: String.to_atom(provider), else: provider
 
-    # Normalize model_id using provider's callback if available
-    # This allows providers to handle model ID aliases (e.g., Bedrock inference profiles)
     normalized_model_id =
-      case ReqLLM.Provider.Registry.get_provider(provider_atom) do
-        {:ok, provider_module} when not is_nil(provider_module) ->
-          if function_exported?(provider_module, :normalize_model_id, 1) do
-            provider_module.normalize_model_id(model_id)
-          else
-            model_id
-          end
+      case LLMDB.model("#{provider_atom}:#{model_id}") do
+        {:ok, %LLMDB.Model{id: resolved_id}} ->
+          resolved_id
 
-        _ ->
-          model_id
+        {:error, _} ->
+          case ReqLLM.provider(provider_atom) do
+            {:ok, provider_module} when not is_nil(provider_module) ->
+              if function_exported?(provider_module, :normalize_model_id, 1) do
+                provider_module.normalize_model_id(model_id)
+              else
+                model_id
+              end
+
+            _ ->
+              model_id
+          end
       end
 
     case Map.get(registry, provider_atom) do
@@ -913,7 +1253,7 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   defp header(_), do: "Model Coverage"
 
   defp get_implemented_providers do
-    providers = ReqLLM.Provider.Registry.list_implemented_providers()
+    providers = ReqLLM.Providers.list()
     MapSet.new(providers)
   end
 

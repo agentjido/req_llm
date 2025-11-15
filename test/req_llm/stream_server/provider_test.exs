@@ -101,7 +101,7 @@ defmodule ReqLLM.StreamServer.ProviderTest do
     ProviderWithState
   }
 
-  alias ReqLLM.{Model, StreamChunk, StreamServer}
+  alias ReqLLM.{StreamChunk, StreamServer}
 
   setup do
     Process.flag(:trap_exit, true)
@@ -148,7 +148,7 @@ defmodule ReqLLM.StreamServer.ProviderTest do
 
   describe "provider state management" do
     test "threads provider state through decode_stream_event/3" do
-      model = %Model{provider: ProviderWithState, model: "test"}
+      model = %LLMDB.Model{provider: ProviderWithState, id: "test"}
       server = start_server(provider_mod: ProviderWithState, model: model)
       _task = mock_http_task(server)
 
@@ -169,7 +169,7 @@ defmodule ReqLLM.StreamServer.ProviderTest do
     end
 
     test "calls flush_stream_state/2 on finalization" do
-      model = %Model{provider: ProviderWithState, model: "test"}
+      model = %LLMDB.Model{provider: ProviderWithState, id: "test"}
       server = start_server(provider_mod: ProviderWithState, model: model)
       _task = mock_http_task(server)
 
@@ -204,7 +204,7 @@ defmodule ReqLLM.StreamServer.ProviderTest do
       server =
         start_server(
           provider_mod: GoogleJsonProvider,
-          model: %ReqLLM.Model{provider: :google, model: "gemini-1.5-pro"}
+          model: %LLMDB.Model{provider: :google, id: "gemini-1.5-pro"}
         )
 
       _task = mock_http_task(server)
@@ -246,7 +246,7 @@ defmodule ReqLLM.StreamServer.ProviderTest do
       server =
         start_server(
           provider_mod: GoogleJsonProvider,
-          model: %ReqLLM.Model{provider: :google, model: "gemini-1.5-pro"}
+          model: %LLMDB.Model{provider: :google, id: "gemini-1.5-pro"}
         )
 
       _task = mock_http_task(server)
@@ -276,7 +276,7 @@ defmodule ReqLLM.StreamServer.ProviderTest do
       server =
         start_server(
           provider_mod: OpenAIJsonProvider,
-          model: %ReqLLM.Model{provider: :openai, model: "gpt-4"}
+          model: %LLMDB.Model{provider: :openai, id: "gpt-4"}
         )
 
       _task = mock_http_task(server)
@@ -304,7 +304,7 @@ defmodule ReqLLM.StreamServer.ProviderTest do
       server =
         start_server(
           provider_mod: GoogleJsonProvider,
-          model: %ReqLLM.Model{provider: :google, model: "gemini-1.5-pro"}
+          model: %LLMDB.Model{provider: :google, id: "gemini-1.5-pro"}
         )
 
       _task = mock_http_task(server)

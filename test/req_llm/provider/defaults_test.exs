@@ -4,7 +4,6 @@ defmodule ReqLLM.Provider.DefaultsTest do
   alias ReqLLM.Context
   alias ReqLLM.Message
   alias ReqLLM.Message.ContentPart
-  alias ReqLLM.Model
   alias ReqLLM.Provider.Defaults
   alias ReqLLM.StreamChunk
 
@@ -71,7 +70,7 @@ defmodule ReqLLM.Provider.DefaultsTest do
 
   describe "decode_response_body_openai_format/2" do
     setup do
-      %{model: %Model{provider: :openai, model: "gpt-4"}}
+      %{model: %LLMDB.Model{provider: :openai, id: "gpt-4"}}
     end
 
     test "decodes responses correctly", %{model: model} do
@@ -156,7 +155,7 @@ defmodule ReqLLM.Provider.DefaultsTest do
 
   describe "default_decode_stream_event/2" do
     setup do
-      %{model: %Model{provider: :openai, model: "gpt-4"}}
+      %{model: %LLMDB.Model{provider: :openai, id: "gpt-4"}}
     end
 
     test "decodes streaming events correctly", %{model: model} do

@@ -3,13 +3,13 @@ defmodule ReqLLM.Streaming.HTTP2ErrorMessageTest do
 
   import ExUnit.CaptureLog
 
-  alias ReqLLM.{Context, Model}
+  alias ReqLLM.Context
 
   describe "HTTP/2 error message formatting" do
     test "logs helpful error message when large body sent to HTTP/2 pool" do
       configure_http2_pools!()
 
-      {:ok, model} = Model.from("openai:gpt-4o")
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
       large_prompt = String.duplicate("Large content ", 5000)
       {:ok, context} = Context.normalize(large_prompt)
 
@@ -33,7 +33,7 @@ defmodule ReqLLM.Streaming.HTTP2ErrorMessageTest do
     test "succeeds with HTTP/1-only pools (default config)" do
       configure_http1_pools!()
 
-      {:ok, model} = Model.from("openai:gpt-4o")
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
       large_prompt = String.duplicate("Large content ", 5000)
       {:ok, context} = Context.normalize(large_prompt)
 

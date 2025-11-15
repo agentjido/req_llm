@@ -10,7 +10,7 @@ defmodule ContextReuse do
   ## Usage
 
       mix run lib/examples/scripts/context_reuse.exs "Tell me a fact about space"
-      mix run lib/examples/scripts/context_reuse.exs "Count from 1 to 3" --model anthropic:claude-3-5-sonnet-20241022
+      mix run lib/examples/scripts/context_reuse.exs "Count from 1 to 3" --model anthropic:claude-sonnet-4-5-20250929
 
   ## Options
 

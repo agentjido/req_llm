@@ -544,8 +544,8 @@ defmodule Mix.Tasks.ReqLlm.Gen do
 
   # Cost calculation using model metadata system
   defp calculate_estimated_cost(model_spec, input_tokens, output_tokens) do
-    case ReqLLM.Model.from(model_spec) do
-      {:ok, %ReqLLM.Model{cost: cost_map}} when is_map(cost_map) ->
+    case ReqLLM.model(model_spec) do
+      {:ok, %LLMDB.Model{cost: cost_map}} when is_map(cost_map) ->
         input_rate = cost_map[:input] || cost_map["input"] || 0.0
         output_rate = cost_map[:output] || cost_map["output"] || 0.0
 
@@ -626,7 +626,7 @@ defmodule Mix.Tasks.ReqLlm.Gen do
   defp parse_log_level(_), do: :info
 
   defp validate_model_spec(model_spec) do
-    case ReqLLM.Model.from(model_spec) do
+    case ReqLLM.model(model_spec) do
       {:ok, model} ->
         {:ok, model}
 
@@ -646,7 +646,7 @@ defmodule Mix.Tasks.ReqLlm.Gen do
     IO.puts("Available providers:")
 
     try do
-      providers = ReqLLM.Provider.Registry.list_implemented_providers()
+      providers = ReqLLM.Providers.list()
 
       Enum.each(providers, fn provider_atom ->
         IO.puts("  • #{provider_atom}")
@@ -694,7 +694,7 @@ defmodule Mix.Tasks.ReqLlm.Gen do
   defp handle_missing_api_key_error(error_message, model_spec, log_level) do
     case parse_provider_from_spec(model_spec) do
       {:ok, provider_id} ->
-        case ReqLLM.Provider.Registry.get_provider(provider_id) do
+        case ReqLLM.provider(provider_id) do
           {:ok, provider_module} ->
             env_var = provider_module.default_env_key([])
             log_puts("Error: API key not found for #{provider_id}", :warning, log_level)
@@ -747,7 +747,7 @@ defmodule Mix.Tasks.ReqLlm.Gen do
   defp parse_provider_from_spec(model_spec) when is_binary(model_spec) do
     case String.split(model_spec, ":", parts: 2) do
       [provider_str, _model] when provider_str != "" ->
-        ReqLLM.Metadata.parse_provider(provider_str)
+        LLMDB.Spec.parse_provider(provider_str)
 
       _ ->
         {:error, :invalid_spec}
@@ -757,19 +757,16 @@ defmodule Mix.Tasks.ReqLlm.Gen do
   defp parse_provider_from_spec(_), do: {:error, :invalid_spec}
 
   defp list_provider_models(provider) do
-    case ReqLLM.Provider.Registry.list_models(provider) do
-      {:ok, models} when models != [] ->
+    case LLMDB.models(provider) do
+      models when models != [] ->
         IO.puts("\nAvailable #{provider} models:")
 
         Enum.each(models, fn model ->
-          IO.puts("  • #{provider}:#{model}")
+          IO.puts("  • #{LLMDB.Model.spec(model)}")
         end)
 
-      {:ok, []} ->
+      [] ->
         IO.puts("\n(No models found for provider #{provider})")
-
-      {:error, _} ->
-        :ok
     end
   end
 

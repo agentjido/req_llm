@@ -15,7 +15,7 @@ defmodule ReqLLM.Providers.Anthropic.Context do
   ## Message Format
 
       %{
-        model: "claude-3-5-sonnet-20241022",
+        model: "claude-sonnet-4-5-20250929",
         system: "You are a helpful assistant",
         messages: [
           %{role: "user", content: "What's the weather?"},
@@ -37,7 +37,7 @@ defmodule ReqLLM.Providers.Anthropic.Context do
   @doc """
   Encode context and model to Anthropic Messages API format.
   """
-  @spec encode_request(ReqLLM.Context.t(), ReqLLM.Model.t() | map()) :: map()
+  @spec encode_request(ReqLLM.Context.t(), LLMDB.Model.t() | map()) :: map()
   def encode_request(context, model) do
     %{
       model: extract_model_name(model)

@@ -365,7 +365,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.AnthropicTest do
 
       formatted =
         Anthropic.format_request(
-          "anthropic.claude-3-5-sonnet-20241022-v1:0",
+          "anthropic.claude-3-5-sonnet-20240620-v2:0",
           context,
           operation: :object,
           compiled_schema: compiled_schema,
@@ -398,7 +398,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.AnthropicTest do
         "id" => "msg_obj123",
         "type" => "message",
         "role" => "assistant",
-        "model" => "claude-3-5-sonnet-20241022",
+        "model" => "claude-3-5-sonnet-20240620",
         "content" => [
           %{
             "type" => "tool_use",
@@ -423,7 +423,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.AnthropicTest do
 
       assert %ReqLLM.Response{} = parsed
       assert parsed.id == "msg_obj123"
-      assert parsed.model == "claude-3-5-sonnet-20241022"
+      assert parsed.model == "claude-3-5-sonnet-20240620"
       assert parsed.finish_reason == :tool_calls
 
       # For :object operation, should extract and set the object field

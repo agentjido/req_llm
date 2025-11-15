@@ -27,7 +27,7 @@ Kino.Layout.grid([openai_key_input, anthropic_key_input, groq_key_input], column
 available_models = [
   {"openai:gpt-4o", "OpenAI GPT-4o"},
   {"openai:gpt-4o-mini", "OpenAI GPT-4o Mini"},
-  {"anthropic:claude-3-5-sonnet-20241022", "Anthropic Claude 3.5 Sonnet"},
+  {"anthropic:claude-sonnet-4-5-20250929", "Anthropic Claude Sonnet 4.5"},
   {"anthropic:claude-3-5-haiku-20241022", "Anthropic Claude 3.5 Haiku"},
   {"groq:llama-3.3-70b-versatile", "Groq Llama 3.3 70B"},
   {"groq:llama-3.1-8b-instant", "Groq Llama 3.1 8B"}

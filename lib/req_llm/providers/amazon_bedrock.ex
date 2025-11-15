@@ -81,7 +81,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   ## Examples
 
       # Simple text generation with Claude on Bedrock
-      model = ReqLLM.Model.from("bedrock:anthropic.claude-3-sonnet-20240229-v1:0")
+      model = ReqLLM.model("bedrock:anthropic.claude-3-sonnet-20240229-v1:0")
       {:ok, response} = ReqLLM.generate_text(model, "Hello!")
 
       # Streaming
@@ -107,54 +107,10 @@ defmodule ReqLLM.Providers.AmazonBedrock do
      - `parse_stream_chunk/2` - Handle streaming responses
   """
 
-  @behaviour ReqLLM.Provider
-
-  use ReqLLM.Provider.DSL,
+  use ReqLLM.Provider,
     id: :amazon_bedrock,
-    base_url: "https://bedrock-runtime.{region}.amazonaws.com",
-    metadata: "priv/models_dev/amazon_bedrock.json",
-    default_env_key: "AWS_ACCESS_KEY_ID",
-    provider_schema: [
-      api_key: [
-        type: :string,
-        doc:
-          "Bedrock API key for simplified authentication (can also use AWS_BEARER_TOKEN_BEDROCK env var). Alternative to IAM credentials."
-      ],
-      region: [
-        type: :string,
-        default: "us-east-1",
-        doc: "AWS region where Bedrock is available"
-      ],
-      access_key_id: [
-        type: :string,
-        doc: "AWS Access Key ID (can also use AWS_ACCESS_KEY_ID env var)"
-      ],
-      secret_access_key: [
-        type: :string,
-        doc: "AWS Secret Access Key (can also use AWS_SECRET_ACCESS_KEY env var)"
-      ],
-      session_token: [
-        type: :string,
-        doc: "AWS Session Token for temporary credentials"
-      ],
-      use_converse: [
-        type: :boolean,
-        doc: "Force use of Bedrock Converse API (default: auto-detect based on tools presence)"
-      ],
-      additional_model_request_fields: [
-        type: :map,
-        doc:
-          "Additional model-specific request fields (e.g., reasoning_config for Claude extended thinking)"
-      ],
-      anthropic_prompt_cache: [
-        type: :boolean,
-        doc: "Enable Anthropic prompt caching for Claude models on Bedrock"
-      ],
-      anthropic_prompt_cache_ttl: [
-        type: :string,
-        doc: "TTL for cache (\"1h\" for one hour; omit for default ~5m)"
-      ]
-    ]
+    default_base_url: "https://bedrock-runtime.{region}.amazonaws.com",
+    default_env_key: "AWS_ACCESS_KEY_ID"
 
   import ReqLLM.Provider.Utils,
     only: [ensure_parsed_body: 1]
@@ -165,6 +121,48 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   alias ReqLLM.Providers.Anthropic
   alias ReqLLM.Providers.Anthropic.PlatformReasoning
   alias ReqLLM.Step
+
+  @provider_schema [
+    api_key: [
+      type: :string,
+      doc:
+        "Bedrock API key for simplified authentication (can also use AWS_BEARER_TOKEN_BEDROCK env var). Alternative to IAM credentials."
+    ],
+    region: [
+      type: :string,
+      default: "us-east-1",
+      doc: "AWS region where Bedrock is available"
+    ],
+    access_key_id: [
+      type: :string,
+      doc: "AWS Access Key ID (can also use AWS_ACCESS_KEY_ID env var)"
+    ],
+    secret_access_key: [
+      type: :string,
+      doc: "AWS Secret Access Key (can also use AWS_SECRET_ACCESS_KEY env var)"
+    ],
+    session_token: [
+      type: :string,
+      doc: "AWS Session Token for temporary credentials"
+    ],
+    use_converse: [
+      type: :boolean,
+      doc: "Force use of Bedrock Converse API (default: auto-detect based on tools presence)"
+    ],
+    additional_model_request_fields: [
+      type: :map,
+      doc:
+        "Additional model-specific request fields (e.g., reasoning_config for Claude extended thinking)"
+    ],
+    anthropic_prompt_cache: [
+      type: :boolean,
+      doc: "Enable Anthropic prompt caching for Claude models on Bedrock"
+    ],
+    anthropic_prompt_cache_ttl: [
+      type: :string,
+      doc: "TTL for cache (\"1h\" for one hour; omit for default ~5m)"
+    ]
+  ]
 
   @dialyzer :no_match
   # Base URL will be constructed with region
@@ -181,7 +179,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
   @impl ReqLLM.Provider
   def prepare_request(:chat, model_input, input, opts) do
-    with {:ok, model} <- ReqLLM.Model.from(model_input),
+    with {:ok, model} <- ReqLLM.model(model_input),
          {:ok, context} <- ReqLLM.Context.normalize(input, opts) do
       http_opts = Keyword.get(opts, :req_http_options, [])
 
@@ -208,7 +206,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   def prepare_request(:object, model_input, input, opts) do
     # Structured output is implemented via tool calling for Claude models
     # We leverage the existing Anthropic tool-based approach
-    with {:ok, model} <- ReqLLM.Model.from(model_input),
+    with {:ok, model} <- ReqLLM.model(model_input),
          {:ok, context} <- ReqLLM.Context.normalize(input, opts) do
       http_opts = Keyword.get(opts, :req_http_options, [])
 
@@ -244,7 +242,12 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
   @impl ReqLLM.Provider
   def attach(%Req.Request{} = request, model_input, user_opts) do
-    %ReqLLM.Model{} = model = ReqLLM.Model.from!(model_input)
+    %LLMDB.Model{} =
+      model =
+      case ReqLLM.model(model_input) do
+        {:ok, m} -> m
+        {:error, err} -> raise err
+      end
 
     if model.provider != provider_id() do
       raise Error.Invalid.Provider.exception(provider: model.provider)
@@ -267,7 +270,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
     # For Anthropic models: Remove thinking from additional_model_request_fields if it was removed by translate_options
     # This handles the case where thinking is incompatible with forced tool_choice
-    opts = maybe_clean_thinking_after_translation(opts, get_model_family(model.model), operation)
+    opts = maybe_clean_thinking_after_translation(opts, get_model_family(model.id), operation)
 
     # Construct the base URL with region
     region =
@@ -281,7 +284,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
     base_url = "https://bedrock-runtime.#{region}.amazonaws.com"
 
-    model_id = model.model
+    model_id = model.id
 
     # Check if we should use Converse API
     # Priority: explicit use_converse option > prompt caching optimization > auto-detect from tools presence
@@ -357,7 +360,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
     request_with_body
     |> Step.Error.attach()
-    |> ReqLLM.Step.Retry.attach()
+    |> ReqLLM.Step.Retry.attach(user_opts)
     |> put_aws_sigv4(aws_creds)
     # No longer attach streaming here - it's handled by attach_stream
     |> Req.Request.append_response_steps(llm_decode_response: &decode_response/1)
@@ -381,7 +384,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     {translated_opts, _warnings} = translate_options(:chat, model, pre_validated_opts)
 
     # Get model ID
-    model_id = model.model
+    model_id = model.id
 
     # Check if we should use Converse API
     # Priority: explicit use_converse option > prompt caching optimization > auto-detect from tools presence
@@ -480,7 +483,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     # IMPORTANT: For inference profiles, we need to route to the Converse formatter
     # because those models MUST use Converse API, which produces events in Converse format.
     # The model family alone isn't sufficient - we need to check if this is an inference profile.
-    model_id = model.model
+    model_id = model.id
 
     formatter =
       if is_inference_profile_model?(model_id) do
@@ -514,7 +517,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   # Translate reasoning_effort/reasoning_token_budget to Bedrock additionalModelRequestFields
   # Only for Claude models that support extended thinking
   defp maybe_translate_reasoning_params(model, opts) do
-    model_id = model.model
+    model_id = model.id
 
     # Check if this is a Claude model with reasoning capability
     # Use model.capabilities.reasoning instead of hardcoding model IDs
@@ -551,7 +554,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   @impl ReqLLM.Provider
   def extract_usage(body, model) when is_map(body) do
     # Delegate to model family formatter
-    model_family = get_model_family(model.model)
+    model_family = get_model_family(model.id)
     formatter = get_formatter_module(model_family)
 
     if function_exported?(formatter, :extract_usage, 2) do
@@ -790,7 +793,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     # Delegate to native Anthropic option translation for Anthropic models
     # This ensures we get all Anthropic-specific handling (temperature/top_p conflicts,
     # reasoning effort, etc.) for free
-    model_family = get_model_family(model.model)
+    model_family = get_model_family(model.id)
 
     case model_family do
       "anthropic" ->

@@ -17,7 +17,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.STS do
       )
 
       # Use temporary credentials with Bedrock
-      model = ReqLLM.Model.from("bedrock:anthropic.claude-3-sonnet-20240229-v1:0",
+      model = ReqLLM.model("bedrock:anthropic.claude-3-sonnet-20240229-v1:0",
         access_key_id: temp_creds.access_key_id,
         secret_access_key: temp_creds.secret_access_key,
         session_token: temp_creds.session_token,

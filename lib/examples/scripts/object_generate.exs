@@ -24,7 +24,7 @@ defmodule ObjectGenerate do
       mix run lib/examples/scripts/object_generate.exs "Create a profile for Alice, a 30 year old software engineer"
 
       # With specific model
-      mix run lib/examples/scripts/object_generate.exs "Generate a person profile" --model anthropic:claude-3-5-sonnet-20241022
+      mix run lib/examples/scripts/object_generate.exs "Generate a person profile" --model anthropic:claude-sonnet-4-5-20250929
 
       # With generation parameters
       mix run lib/examples/scripts/object_generate.exs "Create a person" --temperature 0.5 --max-tokens 150

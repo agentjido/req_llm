@@ -33,12 +33,12 @@ defmodule ReqLLM.Providers.OpenAI.ParamProfiles do
 
   ## Examples
 
-      iex> model = ReqLLM.Model.from!("openai:o3-mini")
+      iex> {:ok, model} = ReqLLM.model("openai:o3-mini")
       iex> steps = ReqLLM.Providers.OpenAI.ParamProfiles.steps_for(:chat, model)
       iex> length(steps) > 0
       true
   """
-  def steps_for(operation, %ReqLLM.Model{} = model) do
+  def steps_for(operation, %LLMDB.Model{} = model) do
     profiles = profiles_for(operation, model)
 
     canonical_steps = [
@@ -55,7 +55,7 @@ defmodule ReqLLM.Providers.OpenAI.ParamProfiles do
   defp translate_reasoning_effort(:default), do: nil
   defp translate_reasoning_effort(other), do: other
 
-  defp profiles_for(:chat, %ReqLLM.Model{} = model) do
+  defp profiles_for(:chat, %LLMDB.Model{} = model) do
     []
     |> add_if(reasoning_model?(model), :reasoning)
     |> add_if(no_sampling_params?(model), :no_sampling_params)
@@ -66,24 +66,24 @@ defmodule ReqLLM.Providers.OpenAI.ParamProfiles do
 
   defp profiles_for(_op, _model), do: []
 
-  defp reasoning_model?(%ReqLLM.Model{capabilities: caps, model: model_name}) when is_map(caps) do
+  defp reasoning_model?(%LLMDB.Model{capabilities: caps, id: model_name}) when is_map(caps) do
     Map.get(caps, :reasoning) == true || Map.get(caps, "reasoning") == true ||
       o_series_model?(model_name) || gpt5_model?(model_name) ||
       reasoning_codex_model?(model_name)
   end
 
-  defp reasoning_model?(%ReqLLM.Model{model: model_name}) do
+  defp reasoning_model?(%LLMDB.Model{id: model_name}) do
     o_series_model?(model_name) || gpt5_model?(model_name) ||
       reasoning_codex_model?(model_name)
   end
 
-  defp no_sampling_params?(%ReqLLM.Model{model: model_name}), do: gpt5_model?(model_name)
+  defp no_sampling_params?(%LLMDB.Model{id: model_name}), do: gpt5_model?(model_name)
 
-  defp temperature_unsupported?(%ReqLLM.Model{model: model_name}) do
+  defp temperature_unsupported?(%LLMDB.Model{id: model_name}) do
     o_series_model?(model_name)
   end
 
-  defp temperature_fixed_one?(%ReqLLM.Model{model: _model_name}), do: false
+  defp temperature_fixed_one?(%LLMDB.Model{id: _model_name}), do: false
 
   defp o_series_model?(<<"o1", _::binary>>), do: true
   defp o_series_model?(<<"o3", _::binary>>), do: true

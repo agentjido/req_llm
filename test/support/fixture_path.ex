@@ -15,25 +15,24 @@ defmodule ReqLLM.Test.FixturePath do
   @doc """
   Build absolute fixture file path from model and test name.
 
-  Accepts either a %ReqLLM.Model{} struct or a "provider:model" string.
+  Accepts either a %LLMDB.Model{} struct or a "provider:model" string.
 
   ## Examples
 
-      iex> model = %ReqLLM.Model{provider: :anthropic, model: "claude-3-5-haiku-20241022"}
+      iex> {:ok, model} = ReqLLM.model("anthropic:claude-3-5-haiku-20241022")
       iex> ReqLLM.Test.FixturePath.file(model, "basic")
       ".../test/support/fixtures/anthropic/claude_3_5_haiku_20241022/basic.json"
 
       iex> ReqLLM.Test.FixturePath.file("openai:gpt-4o", "streaming")
       ".../test/support/fixtures/openai/gpt_4o/streaming.json"
   """
-  @spec file(ReqLLM.Model.t() | String.t(), String.t()) :: String.t()
-  def file(%ReqLLM.Model{provider: provider, model: model}, test_name)
-      when is_binary(test_name) do
+  @spec file(LLMDB.Model.t() | String.t(), String.t()) :: String.t()
+  def file(%LLMDB.Model{provider: provider, id: model}, test_name) when is_binary(test_name) do
     Path.join([@root, to_string(provider), slug(model), "#{test_name}.json"])
   end
 
   def file(model_spec, test_name) when is_binary(model_spec) and is_binary(test_name) do
-    model = ReqLLM.Model.from!(model_spec)
+    {:ok, model} = ReqLLM.model(model_spec)
     file(model, test_name)
   end
 

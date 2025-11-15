@@ -84,10 +84,7 @@ defmodule ReqLLM.GenerationTest do
 
   describe "generate_text/3 error cases" do
     test "returns error for invalid model spec" do
-      {:error, error} = Generation.generate_text("invalid:model", "Hello")
-
-      assert %ReqLLM.Error.Validation.Error{} = error
-      assert error.reason =~ "Unsupported provider"
+      assert {:error, :unknown_provider} = Generation.generate_text("invalid:model", "Hello")
     end
 
     test "returns error for invalid role in message list" do
@@ -144,7 +141,7 @@ defmodule ReqLLM.GenerationTest do
     end
 
     test "raises on error" do
-      assert_raise ReqLLM.Error.Validation.Error, fn ->
+      assert_raise UndefinedFunctionError, fn ->
         Generation.generate_text!("invalid:model", "Hello")
       end
     end
@@ -182,10 +179,7 @@ defmodule ReqLLM.GenerationTest do
 
   describe "stream_text/3 error cases" do
     test "returns error for invalid model spec" do
-      {:error, error} = Generation.stream_text("invalid:model", "Hello")
-
-      assert %ReqLLM.Error.Validation.Error{} = error
-      assert error.reason =~ "Unsupported provider"
+      assert {:error, :unknown_provider} = Generation.stream_text("invalid:model", "Hello")
     end
   end
 

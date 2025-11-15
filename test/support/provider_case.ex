@@ -21,7 +21,7 @@ defmodule ReqLLM.ProviderCase do
 
   import ExUnit.Assertions
 
-  alias ReqLLM.{Context, Model}
+  alias ReqLLM.Context
 
   using(opts) do
     provider = Keyword.get(opts, :provider)
@@ -70,7 +70,8 @@ defmodule ReqLLM.ProviderCase do
   Create a model fixture from a model specification string.
   """
   def model_fixture(model_string) do
-    Model.from!(model_string)
+    {:ok, model} = ReqLLM.model(model_string)
+    model
   end
 
   @doc """

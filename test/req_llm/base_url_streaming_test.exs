@@ -2,7 +2,6 @@ defmodule ReqLLM.BaseURLStreamingTest do
   use ExUnit.Case, async: false
 
   alias ReqLLM.Context
-  alias ReqLLM.Model
 
   setup do
     ReqLLM.TestSupport.FakeKeys.install!()
@@ -19,7 +18,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
 
   describe "OpenAI ChatAPI base_url precedence" do
     setup do
-      {:ok, model} = Model.from("openai:gpt-4o-mini")
+      {:ok, model} = ReqLLM.model("openai:gpt-4o-mini")
       context = Context.new([Context.user("test")])
       {:ok, model: model, context: context}
     end
@@ -72,7 +71,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
 
   describe "Anthropic base_url precedence" do
     setup do
-      {:ok, model} = Model.from("anthropic:claude-3-5-haiku-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-3-haiku")
       context = Context.new([Context.user("test")])
       {:ok, model: model, context: context}
     end
@@ -125,7 +124,8 @@ defmodule ReqLLM.BaseURLStreamingTest do
 
   describe "OpenRouter base_url precedence" do
     setup do
-      {:ok, model} = Model.from("openrouter:anthropic/claude-3.5-sonnet")
+      {:ok, model} = ReqLLM.model("openrouter:anthropic/claude-3-haiku")
+
       context = Context.new([Context.user("test")])
       {:ok, model: model, context: context}
     end
@@ -178,7 +178,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
 
   describe "Google base_url precedence" do
     setup do
-      {:ok, model} = Model.from("google:gemini-2.0-flash-exp")
+      {:ok, model} = ReqLLM.model("google:gemini-2.0-flash-exp")
       context = Context.new([Context.user("test")])
       {:ok, model: model, context: context}
     end
@@ -286,7 +286,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
 
   describe "edge cases and validation" do
     test "handles base_url with trailing slash correctly for OpenAI" do
-      {:ok, model} = Model.from("openai:gpt-4o-mini")
+      {:ok, model} = ReqLLM.model("openai:gpt-4o-mini")
       context = Context.new([Context.user("test")])
       opts = [api_key: "[REDACTED:api-key]", base_url: "https://example.com"]
 
@@ -298,7 +298,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
     end
 
     test "handles base_url without scheme for Anthropic" do
-      {:ok, model} = Model.from("anthropic:claude-3-5-haiku-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-3-haiku")
       context = Context.new([Context.user("test")])
       opts = [api_key: "[REDACTED:api-key]", base_url: "http://example.com"]
 
@@ -310,7 +310,7 @@ defmodule ReqLLM.BaseURLStreamingTest do
     end
 
     test "constructed request includes proper headers and body" do
-      {:ok, model} = Model.from("openai:gpt-4o-mini")
+      {:ok, model} = ReqLLM.model("openai:gpt-4o-mini")
       context = Context.new([Context.user("hello")])
       opts = [api_key: "[REDACTED:api-key]", base_url: "https://custom.example.com"]
 

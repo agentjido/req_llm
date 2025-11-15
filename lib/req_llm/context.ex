@@ -503,14 +503,14 @@ defmodule ReqLLM.Context do
   ## Examples
 
       context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
-      model = ReqLLM.Model.from("anthropic:claude-3-haiku-20240307")
+      model = ReqLLM.model("anthropic:claude-3-haiku-20240307")
       tagged = ReqLLM.Context.wrap(context, model)
       #=> %ReqLLM.Providers.Anthropic.Context{context: context}
 
   """
-  @spec wrap(t(), ReqLLM.Model.t()) :: term()
-  def wrap(%__MODULE__{} = ctx, %ReqLLM.Model{provider: provider_atom}) do
-    case ReqLLM.Provider.Registry.get_provider(provider_atom) do
+  @spec wrap(t(), LLMDB.Model.t()) :: term()
+  def wrap(%__MODULE__{} = ctx, %LLMDB.Model{provider: provider_atom}) do
+    case ReqLLM.provider(provider_atom) do
       {:ok, provider_mod} ->
         if function_exported?(provider_mod, :wrap_context, 1) do
           provider_mod.wrap_context(ctx)

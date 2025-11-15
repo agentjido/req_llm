@@ -60,7 +60,7 @@ defmodule ReqLLM.StreamChunkTest do
     end
 
     test "meta/2 creates metadata chunks" do
-      data = %{finish_reason: "stop", model: "claude-3"}
+      data = %{finish_reason: "stop", id: "claude-3"}
       basic_chunk = StreamChunk.meta(data)
       merged_chunk = StreamChunk.meta(%{status: "ok"}, %{tokens: 42})
 

@@ -26,7 +26,7 @@ defmodule ReqLLM.Response do
 
   use TypedStruct
 
-  alias ReqLLM.{Context, Message, Model}
+  alias ReqLLM.{Context, Message}
 
   @derive {Jason.Encoder, except: [:stream]}
 
@@ -260,13 +260,16 @@ defmodule ReqLLM.Response do
   This is a façade function that accepts raw provider data and a model specification,
   and directly calls the provider's decode_response/1 callback for zero-ceremony decoding.
 
-  Supports both Model struct and string inputs, automatically resolving model
-  strings using Model.from!/1.
+  Supports Model struct, string, and tuple inputs, automatically resolving model
+  specifications using ReqLLM.model/1.
 
   ## Parameters
 
     * `raw_data` - Raw provider response data or Stream
-    * `model` - Model specification (Model struct or string like "anthropic:claude-3-sonnet")
+    * `model_spec` - Model specification in any format supported by ReqLLM.model/1:
+      - String: `"anthropic:claude-3-sonnet"`
+      - Tuple: `{:anthropic, "claude-3-sonnet", temperature: 0.7}`
+      - LLMDB.Model struct: `%LLMDB.Model{provider: :anthropic, id: "claude-3-sonnet"}`
 
   ## Returns
 
@@ -277,41 +280,40 @@ defmodule ReqLLM.Response do
 
       {:ok, response} = ReqLLM.Response.decode_response(raw_json, "anthropic:claude-3-sonnet")
       {:ok, response} = ReqLLM.Response.decode_response(raw_json, model_struct)
+      {:ok, response} = ReqLLM.Response.decode_response(raw_json, {:anthropic, "claude-3-sonnet"})
 
   """
-  @spec decode_response(term(), Model.t() | String.t()) :: {:ok, t()} | {:error, term()}
+  @spec decode_response(
+          term(),
+          LLMDB.Model.t() | String.t() | {atom(), String.t(), keyword()} | {atom(), keyword()}
+        ) :: {:ok, t()} | {:error, term()}
   @dialyzer {:nowarn_function, decode_response: 2}
-  def decode_response(raw_data, model_input) do
-    model = if is_binary(model_input), do: Model.from!(model_input), else: model_input
-
-    case ReqLLM.Provider.Registry.get_provider(model.provider) do
-      {:ok, provider_mod} ->
-        wrapped_data =
-          if function_exported?(provider_mod, :wrap_response, 1) do
-            provider_mod.wrap_response(raw_data)
-          else
-            raw_data
-          end
-
-        fixture_request = %Req.Request{
-          private: %{req_llm_model: model},
-          options: %{model: model.model}
-        }
-
-        fixture_response = %Req.Response{body: wrapped_data, status: 200}
-        {_req, result} = provider_mod.decode_response({fixture_request, fixture_response})
-
-        case result do
-          %Req.Response{body: %ReqLLM.Response{}} = resp ->
-            {_req, final_resp} = ReqLLM.Step.Usage.handle({fixture_request, resp})
-            {:ok, final_resp.body}
-
-          error ->
-            {:error, error}
+  def decode_response(raw_data, model_spec) do
+    with {:ok, model} <- ReqLLM.model(model_spec),
+         {:ok, provider_mod} <- ReqLLM.provider(model.provider) do
+      wrapped_data =
+        if function_exported?(provider_mod, :wrap_response, 1) do
+          provider_mod.wrap_response(raw_data)
+        else
+          raw_data
         end
 
-      {:error, error} ->
-        {:error, error}
+      fixture_request = %Req.Request{
+        private: %{req_llm_model: model},
+        options: %{model: model.id}
+      }
+
+      fixture_response = %Req.Response{body: wrapped_data, status: 200}
+      {_req, result} = provider_mod.decode_response({fixture_request, fixture_response})
+
+      case result do
+        %Req.Response{body: %ReqLLM.Response{}} = resp ->
+          {_req, final_resp} = ReqLLM.Step.Usage.handle({fixture_request, resp})
+          {:ok, final_resp.body}
+
+        error ->
+          {:error, error}
+      end
     end
   end
 
@@ -324,7 +326,7 @@ defmodule ReqLLM.Response do
   ## Parameters
 
     * `raw_data` - Raw provider response data
-    * `model` - Model specification
+    * `model_spec` - Model specification (supports all formats from ReqLLM.model/1)
     * `schema` - Schema definition for validation
 
   ## Returns
@@ -333,9 +335,14 @@ defmodule ReqLLM.Response do
     * `{:error, reason}` on failure
 
   """
-  @spec decode_object(term(), Model.t() | String.t(), keyword()) :: {:ok, t()} | {:error, term()}
-  def decode_object(raw_data, model_input, schema) do
-    with {:ok, response} <- decode_response(raw_data, model_input),
+  @spec decode_object(
+          term(),
+          LLMDB.Model.t() | String.t() | {atom(), String.t(), keyword()} | {atom(), keyword()},
+          keyword()
+        ) ::
+          {:ok, t()} | {:error, term()}
+  def decode_object(raw_data, model_spec, schema) do
+    with {:ok, response} <- decode_response(raw_data, model_spec),
          {:ok, object} <- extract_object_from_response(response, schema) do
       {:ok, %{response | object: object}}
     end
@@ -350,7 +357,7 @@ defmodule ReqLLM.Response do
   ## Parameters
 
     * `raw_data` - Raw provider streaming response data
-    * `model` - Model specification
+    * `model_spec` - Model specification (supports all formats from ReqLLM.model/1)
     * `schema` - Schema definition for validation
 
   ## Returns
@@ -359,12 +366,14 @@ defmodule ReqLLM.Response do
     * `{:error, reason}` on failure
 
   """
-  @spec decode_object_stream(term(), Model.t() | String.t(), keyword()) ::
+  @spec decode_object_stream(
+          term(),
+          LLMDB.Model.t() | String.t() | {atom(), String.t(), keyword()} | {atom(), keyword()},
+          keyword()
+        ) ::
           {:ok, t()} | {:error, term()}
-  def decode_object_stream(raw_data, model_input, _schema) do
-    decode_response(raw_data, model_input)
-    # The response already contains the stream, we just need to ensure
-    # object_stream/1 can extract objects from tool_call chunks
+  def decode_object_stream(raw_data, model_spec, _schema) do
+    decode_response(raw_data, model_spec)
   end
 
   # Helper function to extract structured object from tool calls

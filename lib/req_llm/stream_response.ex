@@ -69,7 +69,7 @@ defmodule ReqLLM.StreamResponse do
 
   use TypedStruct
 
-  alias ReqLLM.{Context, Model, Response, StreamResponse.MetadataHandle}
+  alias ReqLLM.{Context, Response, StreamResponse.MetadataHandle}
 
   typedstruct enforce: true do
     @typedoc """
@@ -82,7 +82,7 @@ defmodule ReqLLM.StreamResponse do
     field(:stream, Enumerable.t(), doc: "Lazy stream of StreamChunk structs")
     field(:metadata_handle, MetadataHandle.t(), doc: "Handle collecting usage and finish_reason")
     field(:cancel, (-> :ok), doc: "Function to cancel streaming and cleanup resources")
-    field(:model, Model.t(), doc: "Model specification that generated this response")
+    field(:model, LLMDB.Model.t(), doc: "Model specification that generated this response")
     field(:context, Context.t(), doc: "Conversation context including new messages")
   end
 
@@ -103,7 +103,7 @@ defmodule ReqLLM.StreamResponse do
   ## Examples
 
       {:ok, stream_response} = ReqLLM.stream_text("anthropic:claude-3-sonnet", "Hello!")
-      
+
       stream_response
       |> ReqLLM.StreamResponse.tokens()
       |> Stream.each(&IO.write/1)
@@ -135,7 +135,7 @@ defmodule ReqLLM.StreamResponse do
   ## Examples
 
       {:ok, stream_response} = ReqLLM.stream_text("anthropic:claude-3-sonnet", "Hello!")
-      
+
       text = ReqLLM.StreamResponse.text(stream_response)
       #=> "Hello! How can I help you today?"
 
@@ -168,7 +168,7 @@ defmodule ReqLLM.StreamResponse do
   ## Examples
 
       {:ok, stream_response} = ReqLLM.stream_text("anthropic:claude-3-sonnet", "Call get_time tool")
-      
+
       stream_response
       |> ReqLLM.StreamResponse.tool_calls()
       |> Stream.each(fn tool_call -> IO.inspect(tool_call.name) end)
@@ -198,7 +198,7 @@ defmodule ReqLLM.StreamResponse do
   ## Examples
 
       {:ok, stream_response} = ReqLLM.stream_text("anthropic:claude-3-sonnet", "Call calculator")
-      
+
       tool_calls = ReqLLM.StreamResponse.extract_tool_calls(stream_response)
       #=> [%{id: "call_123", name: "calculator", arguments: %{"operation" => "add", "a" => 2, "b" => 3}}]
 
@@ -455,7 +455,7 @@ defmodule ReqLLM.StreamResponse do
 
     %Response{
       id: generate_response_id(),
-      model: stream_response.model.model,
+      model: stream_response.model.id,
       context: stream_response.context,
       message: message,
       object: object,
@@ -485,7 +485,7 @@ defmodule ReqLLM.StreamResponse do
   ## Examples
 
       {:ok, stream_response} = ReqLLM.stream_text("anthropic:claude-3-sonnet", "Hello!")
-      
+
       usage = ReqLLM.StreamResponse.usage(stream_response)
       #=> %{input_tokens: 8, output_tokens: 12, total_cost: 0.024}
 
@@ -521,7 +521,7 @@ defmodule ReqLLM.StreamResponse do
   ## Examples
 
       {:ok, stream_response} = ReqLLM.stream_text("anthropic:claude-3-sonnet", "Hello!")
-      
+
       reason = ReqLLM.StreamResponse.finish_reason(stream_response)
       #=> :stop
 
@@ -566,7 +566,7 @@ defmodule ReqLLM.StreamResponse do
 
       {:ok, stream_response} = ReqLLM.stream_text("anthropic:claude-3-sonnet", "Hello!")
       {:ok, response} = ReqLLM.StreamResponse.to_response(stream_response)
-      
+
       # Now compatible with existing Response-based code
       text = ReqLLM.Response.text(response)
       usage = ReqLLM.Response.usage(response)
@@ -601,7 +601,7 @@ defmodule ReqLLM.StreamResponse do
       # Create Response struct
       response = %Response{
         id: generate_response_id(),
-        model: stream_response.model.model,
+        model: stream_response.model.id,
         context: stream_response.context,
         message: message,
         object: object,
@@ -621,8 +621,8 @@ defmodule ReqLLM.StreamResponse do
     :exit, reason -> {:error, reason}
   end
 
-  defp responses_api_model?(%ReqLLM.Model{} = model) do
-    get_in(model, [Access.key(:_metadata, %{}), "api"]) == "responses"
+  defp responses_api_model?(%LLMDB.Model{} = model) do
+    get_in(model, [Access.key(:extra, %{}), :api]) == "responses"
   end
 
   defp responses_api_model?(_), do: false
@@ -632,11 +632,11 @@ defmodule ReqLLM.StreamResponse do
     body =
       ReqLLM.Providers.OpenAI.ResponsesAPI.build_responses_body_from_chunks(
         chunks,
-        stream_response.model.model
+        stream_response.model.id
       )
 
     # Create fake req/resp to pass through existing decode logic
-    req = %{options: %{model: stream_response.model.model, context: stream_response.context}}
+    req = %{options: %{model: stream_response.model.id, context: stream_response.context}}
     resp = %{status: 200, body: body}
 
     # Reuse Responses API decode logic - guarantees format parity!

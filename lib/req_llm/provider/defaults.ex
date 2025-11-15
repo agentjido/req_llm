@@ -219,7 +219,7 @@ defmodule ReqLLM.Provider.Defaults do
   @spec prepare_chat_request(module(), term(), term(), keyword()) ::
           {:ok, Req.Request.t()} | {:error, Exception.t()}
   def prepare_chat_request(provider_mod, model_spec, prompt, opts) do
-    with {:ok, model} <- ReqLLM.Model.from(model_spec),
+    with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, context} <- ReqLLM.Context.normalize(prompt, opts),
          opts_with_context = Keyword.put(opts, :context, context),
          http_opts = Keyword.get(opts, :req_http_options, []),
@@ -241,7 +241,7 @@ defmodule ReqLLM.Provider.Defaults do
         |> Req.Request.merge_options(
           Keyword.take(processed_opts, req_keys) ++
             [
-              model: model.model,
+              model: model.id,
               base_url: Keyword.get(processed_opts, :base_url, provider_mod.default_base_url())
             ]
         )
@@ -283,7 +283,7 @@ defmodule ReqLLM.Provider.Defaults do
   @spec prepare_embedding_request(module(), term(), term(), keyword()) ::
           {:ok, Req.Request.t()} | {:error, Exception.t()}
   def prepare_embedding_request(provider_mod, model_spec, text, opts) do
-    with {:ok, model} <- ReqLLM.Model.from(model_spec),
+    with {:ok, model} <- ReqLLM.model(model_spec),
          opts_with_text = Keyword.merge(opts, text: text, operation: :embedding),
          http_opts = Keyword.get(opts, :req_http_options, []),
          {:ok, processed_opts} <-
@@ -304,7 +304,7 @@ defmodule ReqLLM.Provider.Defaults do
         |> Req.Request.merge_options(
           Keyword.take(processed_opts, req_keys) ++
             [
-              model: model.model,
+              model: model.id,
               base_url: Keyword.get(processed_opts, :base_url, provider_mod.default_base_url())
             ]
         )
@@ -315,11 +315,28 @@ defmodule ReqLLM.Provider.Defaults do
   end
 
   @doc """
-  Default attachment implementation with Bearer token auth and standard pipeline steps.
+  Filters out internal ReqLLM keys that should not be passed to Req.
+
+  These keys are used by ReqLLM for internal processing but are not valid Req options.
   """
+  @spec filter_req_opts(keyword()) :: keyword()
+  def filter_req_opts(opts) do
+    internal_keys = [
+      :on_unsupported,
+      :context,
+      :text,
+      :operation,
+      :receive_timeout,
+      :max_retries,
+      :req_http_options
+    ]
+
+    Keyword.drop(opts, internal_keys)
+  end
+
   @spec default_attach(module(), Req.Request.t(), term(), keyword()) :: Req.Request.t()
   def default_attach(provider_mod, %Req.Request{} = request, model_input, user_opts) do
-    %ReqLLM.Model{} = model = ReqLLM.Model.from!(model_input)
+    {:ok, %LLMDB.Model{} = model} = ReqLLM.model(model_input)
 
     if model.provider != provider_mod.provider_id() do
       raise ReqLLM.Error.Invalid.Provider.exception(provider: model.provider)
@@ -344,7 +361,7 @@ defmodule ReqLLM.Provider.Defaults do
   @doc """
   Fetches API key and extra common option keys
   """
-  @spec fetch_api_key_and_extra_options(module(), ReqLLM.Model.t(), keyword()) ::
+  @spec fetch_api_key_and_extra_options(module(), LLMDB.Model.t(), keyword()) ::
           {binary(), [atom()]}
   def fetch_api_key_and_extra_options(provider_mod, model, user_opts) do
     api_key = ReqLLM.Keys.get!(model, user_opts)
@@ -359,7 +376,19 @@ defmodule ReqLLM.Provider.Defaults do
         :app_referer,
         :app_title,
         :fixture,
-        :api_key
+        :api_key,
+        :on_unsupported,
+        :n,
+        :tools,
+        :tool_choice,
+        :req_http_options,
+        :frequency_penalty,
+        :system_prompt,
+        :top_p,
+        :presence_penalty,
+        :seed,
+        :stop,
+        :user
       ] ++ provider_mod.supported_provider_options()
 
     {api_key, extra_option_keys}
@@ -409,7 +438,7 @@ defmodule ReqLLM.Provider.Defaults do
   @doc """
   Default usage extraction from standard `usage` field.
   """
-  @spec default_extract_usage(term(), ReqLLM.Model.t() | nil) :: {:ok, map()} | {:error, term()}
+  @spec default_extract_usage(term(), LLMDB.Model.t() | nil) :: {:ok, map()} | {:error, term()}
   def default_extract_usage(body, _model) when is_map(body) do
     case body do
       %{"usage" => usage} -> {:ok, usage}
@@ -422,7 +451,7 @@ defmodule ReqLLM.Provider.Defaults do
   @doc """
   Default options translation (pass-through).
   """
-  @spec default_translate_options(atom(), ReqLLM.Model.t(), keyword()) ::
+  @spec default_translate_options(atom(), LLMDB.Model.t(), keyword()) ::
           {keyword(), [String.t()]}
   def default_translate_options(_operation, _model, opts) do
     {opts, []}
@@ -436,7 +465,7 @@ defmodule ReqLLM.Provider.Defaults do
   """
   @spec default_attach_stream(
           module(),
-          ReqLLM.Model.t(),
+          LLMDB.Model.t(),
           ReqLLM.Context.t(),
           keyword(),
           atom()
@@ -626,11 +655,11 @@ defmodule ReqLLM.Provider.Defaults do
   This function moves the logic from ReqLLM.Response.Codec.Map directly into
   Provider.Defaults for the protocol removal refactoring.
   """
-  @spec decode_response_body_openai_format(map(), ReqLLM.Model.t()) ::
+  @spec decode_response_body_openai_format(map(), LLMDB.Model.t()) ::
           {:ok, ReqLLM.Response.t()} | {:error, term()}
   def decode_response_body_openai_format(data, model) when is_map(data) do
     id = Map.get(data, "id", "unknown")
-    model_name = Map.get(data, "model", model.model || "unknown")
+    model_name = Map.get(data, "model", model.id || "unknown")
     usage = parse_openai_usage(Map.get(data, "usage"))
 
     choices = Map.get(data, "choices", [])
@@ -672,18 +701,18 @@ defmodule ReqLLM.Provider.Defaults do
   This function moves the logic from ReqLLM.Response.Codec.Map directly into
   Provider.Defaults for the protocol removal refactoring.
   """
-  @spec default_decode_stream_event(map(), ReqLLM.Model.t()) :: [ReqLLM.StreamChunk.t()]
+  @spec default_decode_stream_event(map(), LLMDB.Model.t()) :: [ReqLLM.StreamChunk.t()]
   def default_decode_stream_event(%{data: data}, model) when is_map(data) do
     case data do
       %{"choices" => [%{"delta" => delta} | _], "usage" => usage} ->
         # Stream chunk with usage metadata
         chunks = decode_openai_delta(delta)
-        usage_chunk = ReqLLM.StreamChunk.meta(%{usage: usage, model: model.model})
+        usage_chunk = ReqLLM.StreamChunk.meta(%{usage: usage, model: model.id})
         chunks ++ [usage_chunk]
 
       %{"choices" => [], "usage" => usage} ->
         # Final usage-only chunk (OpenAI streaming with stream_options.include_usage)
-        [ReqLLM.StreamChunk.meta(%{usage: usage, model: model.model, terminal?: true})]
+        [ReqLLM.StreamChunk.meta(%{usage: usage, model: model.id, terminal?: true})]
 
       %{"choices" => [%{"delta" => delta, "finish_reason" => finish_reason} | _]}
       when finish_reason != nil ->
@@ -1057,19 +1086,12 @@ defmodule ReqLLM.Provider.Defaults do
     # Get provider name using the display_name/0 callback
     provider_name =
       case req.private[:req_llm_model] do
-        %ReqLLM.Model{provider: provider_id} ->
+        %LLMDB.Model{provider: provider_id} ->
           get_provider_display_name(provider_id)
 
         _ ->
-          # Fallback to parsing model name if req_llm_model not available
-          case req.options[:model] do
-            nil ->
-              "Unknown"
-
-            model_str ->
-              provider_id = model_str |> String.split(":") |> List.first() |> String.to_atom()
-              get_provider_display_name(provider_id)
-          end
+          # Fallback: can't determine provider, use generic name
+          "OpenAI"
       end
 
     err =
@@ -1096,21 +1118,21 @@ defmodule ReqLLM.Provider.Defaults do
         nil ->
           # Fallback to private req_llm_model or extract from stored model
           case req.private[:req_llm_model] do
-            %ReqLLM.Model{} = stored_model ->
-              {stored_model.provider, stored_model, stored_model.model}
+            %LLMDB.Model{} = stored_model ->
+              {stored_model.provider, stored_model, stored_model.id}
 
             _ ->
-              {:unknown, %ReqLLM.Model{provider: :unknown, model: "unknown"}, "unknown"}
+              {:unknown, %LLMDB.Model{id: "unknown", provider: :unknown}, "unknown"}
           end
 
-        %ReqLLM.Model{} = model_struct ->
+        %LLMDB.Model{} = model_struct ->
           {model_struct.provider, model_struct, model_struct.model}
 
         model_name when is_binary(model_name) ->
           provider_id =
             String.split(model_name, ":", parts: 2) |> List.first() |> String.to_atom()
 
-          model = %ReqLLM.Model{provider: provider_id, model: model_name}
+          model = %LLMDB.Model{id: model_name, provider: provider_id}
           {provider_id, model, model_name}
       end
 
@@ -1240,7 +1262,7 @@ defmodule ReqLLM.Provider.Defaults do
     # Create a temporary Req request to use existing encode_body logic
     req_opts =
       [
-        model: model.model,
+        model: model.id,
         context: context,
         stream: true
       ] ++ Keyword.delete(opts, :finch_name)
@@ -1283,7 +1305,7 @@ defmodule ReqLLM.Provider.Defaults do
       end)
 
     body = %{
-      model: model.model,
+      model: model.id,
       messages: messages,
       stream: true
     }

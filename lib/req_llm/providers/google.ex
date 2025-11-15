@@ -43,53 +43,51 @@ defmodule ReqLLM.Providers.Google do
       GOOGLE_API_KEY=AIza...
   """
 
-  @behaviour ReqLLM.Provider
-
-  use ReqLLM.Provider.DSL,
+  use ReqLLM.Provider,
     id: :google,
-    base_url: "https://generativelanguage.googleapis.com/v1beta",
-    metadata: "priv/models_dev/google.json",
-    default_env_key: "GOOGLE_API_KEY",
-    provider_schema: [
-      google_api_version: [
-        type: {:in, ["v1", "v1beta"]},
-        doc:
-          "Google API version. Default is 'v1beta'. Set to 'v1' only if you need legacy API behavior. Note: function calling (tools) and grounding require 'v1beta'."
-      ],
-      google_safety_settings: [
-        type: {:list, :map},
-        doc: "Safety filter settings for content generation"
-      ],
-      google_candidate_count: [
-        type: :pos_integer,
-        default: 1,
-        doc: "Number of response candidates to generate"
-      ],
-      google_thinking_budget: [
-        type: :non_neg_integer,
-        doc: "Thinking token budget for Gemini 2.5 models (0 disables thinking, omit for dynamic)"
-      ],
-      google_grounding: [
-        type: :map,
-        doc:
-          "Enable Google Search grounding - allows model to search the web. Set to %{enable: true} for modern models, or %{dynamic_retrieval: %{mode: \"MODE_DYNAMIC\", dynamic_threshold: 0.7}} for Gemini 1.5 legacy support. Requires v1beta (default)."
-      ],
-      dimensions: [
-        type: :pos_integer,
-        doc:
-          "Number of dimensions for the embedding vector (128-3072, recommended: 768, 1536, or 3072)"
-      ],
-      task_type: [
-        type: :string,
-        doc:
-          "Task type for embedding (e.g., RETRIEVAL_QUERY, RETRIEVAL_DOCUMENT, SEMANTIC_SIMILARITY)"
-      ]
-    ]
+    default_base_url: "https://generativelanguage.googleapis.com/v1beta",
+    default_env_key: "GOOGLE_API_KEY"
 
   import ReqLLM.Provider.Utils,
     only: [maybe_put: 3, ensure_parsed_body: 1]
 
   require Logger
+
+  @provider_schema [
+    google_api_version: [
+      type: {:in, ["v1", "v1beta"]},
+      doc:
+        "Google API version. Default is 'v1beta'. Set to 'v1' only if you need legacy API behavior. Note: function calling (tools) and grounding require 'v1beta'."
+    ],
+    google_safety_settings: [
+      type: {:list, :map},
+      doc: "Safety filter settings for content generation"
+    ],
+    google_candidate_count: [
+      type: :pos_integer,
+      default: 1,
+      doc: "Number of response candidates to generate"
+    ],
+    google_thinking_budget: [
+      type: :non_neg_integer,
+      doc: "Thinking token budget for Gemini 2.5 models (0 disables thinking, omit for dynamic)"
+    ],
+    google_grounding: [
+      type: :map,
+      doc:
+        "Enable Google Search grounding - allows model to search the web. Set to %{enable: true} for modern models, or %{dynamic_retrieval: %{mode: \"MODE_DYNAMIC\", dynamic_threshold: 0.7}} for Gemini 1.5 legacy support. Requires v1beta (default)."
+    ],
+    dimensions: [
+      type: :pos_integer,
+      doc:
+        "Number of dimensions for the embedding vector (128-3072, recommended: 768, 1536, or 3072)"
+    ],
+    task_type: [
+      type: :string,
+      doc:
+        "Task type for embedding (e.g., RETRIEVAL_QUERY, RETRIEVAL_DOCUMENT, SEMANTIC_SIMILARITY)"
+    ]
+  ]
 
   defp has_grounding?(opts) do
     provider = Keyword.get(opts, :provider_options, [])
@@ -128,15 +126,21 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp effective_base_url(processed_opts) do
-    case resolve_api_version(processed_opts) do
-      "v1" ->
-        "https://generativelanguage.googleapis.com/v1"
+    base_url = Keyword.get(processed_opts, :base_url)
 
-      "v1beta" ->
-        "https://generativelanguage.googleapis.com/v1beta"
+    if base_url == default_base_url() or base_url == "https://generativelanguage.googleapis.com" do
+      case resolve_api_version(processed_opts) do
+        "v1" ->
+          "https://generativelanguage.googleapis.com/v1"
 
-      nil ->
-        Keyword.get(processed_opts, :base_url, default_base_url())
+        "v1beta" ->
+          "https://generativelanguage.googleapis.com/v1beta"
+
+        nil ->
+          "https://generativelanguage.googleapis.com/v1beta"
+      end
+    else
+      base_url || "https://generativelanguage.googleapis.com/v1beta"
     end
   end
 
@@ -170,7 +174,7 @@ defmodule ReqLLM.Providers.Google do
   """
   @impl ReqLLM.Provider
   def prepare_request(:chat, model_spec, prompt, opts) do
-    with {:ok, model} <- ReqLLM.Model.from(model_spec),
+    with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, context} <- ReqLLM.Context.normalize(prompt, opts),
          opts_with_context = Keyword.put(opts, :context, context),
          {:ok, processed_opts0} <-
@@ -202,7 +206,7 @@ defmodule ReqLLM.Providers.Google do
       request =
         Req.new(
           [
-            url: "/models/#{model.model}#{endpoint}",
+            url: "/models/#{model.id}#{endpoint}",
             method: :post,
             params: base_params,
             receive_timeout: timeout
@@ -212,7 +216,7 @@ defmodule ReqLLM.Providers.Google do
         |> Req.Request.merge_options(
           Keyword.take(processed_opts, req_keys) ++
             [
-              model: model.model,
+              model: model.id,
               base_url: processed_opts[:base_url]
             ]
         )
@@ -230,7 +234,7 @@ defmodule ReqLLM.Providers.Google do
            "tools are not supported with :object operation on Google (JSON mode and tool calling are mutually exclusive on Gemini 2.5)"
        )}
     else
-      with {:ok, model} <- ReqLLM.Model.from(model_spec),
+      with {:ok, model} <- ReqLLM.model(model_spec),
            {:ok, context} <- ReqLLM.Context.normalize(prompt, opts) do
         opts_with_tokens =
           case Keyword.get(opts, :max_tokens) do
@@ -281,7 +285,7 @@ defmodule ReqLLM.Providers.Google do
               request =
                 Req.new(
                   [
-                    url: "/models/#{model.model}#{endpoint}",
+                    url: "/models/#{model.id}#{endpoint}",
                     method: :post,
                     params: base_params,
                     receive_timeout: timeout
@@ -291,7 +295,7 @@ defmodule ReqLLM.Providers.Google do
                 |> Req.Request.merge_options(
                   Keyword.take(processed_opts, req_keys) ++
                     [
-                      model: model.model,
+                      model: model.id,
                       base_url: processed_opts[:base_url]
                     ]
                 )
@@ -319,7 +323,7 @@ defmodule ReqLLM.Providers.Google do
           Keyword.put(rest, :provider_options, updated_provider_options)
       end
 
-    with {:ok, model} <- ReqLLM.Model.from(model_spec),
+    with {:ok, model} <- ReqLLM.model(model_spec),
          opts_with_text = Keyword.merge(opts_normalized, text: text, operation: :embedding),
          {:ok, processed_opts0} <-
            ReqLLM.Provider.Options.process(__MODULE__, :embedding, model, opts_with_text),
@@ -348,7 +352,7 @@ defmodule ReqLLM.Providers.Google do
       request =
         Req.new(
           [
-            url: "/models/#{model.model}#{endpoint}",
+            url: "/models/#{model.id}#{endpoint}",
             method: :post,
             receive_timeout: timeout
           ] ++ http_opts
@@ -357,7 +361,7 @@ defmodule ReqLLM.Providers.Google do
         |> Req.Request.merge_options(
           Keyword.take(processed_opts, req_keys) ++
             [
-              model: model.model,
+              model: model.id,
               base_url: processed_opts[:base_url]
             ]
         )
@@ -374,13 +378,21 @@ defmodule ReqLLM.Providers.Google do
 
   @impl ReqLLM.Provider
   def attach(%Req.Request{} = request, model_input, user_opts) do
-    %ReqLLM.Model{} = model = ReqLLM.Model.from!(model_input)
+    %LLMDB.Model{} =
+      model =
+      case ReqLLM.model(model_input) do
+        {:ok, m} -> m
+        {:error, err} -> raise err
+      end
 
     if model.provider != provider_id() do
       raise ReqLLM.Error.Invalid.Provider.exception(provider: model.provider)
     end
 
     api_key = ReqLLM.Keys.get!(model, user_opts)
+
+    # Filter out internal keys before passing to Req
+    req_opts = ReqLLM.Provider.Defaults.filter_req_opts(user_opts)
 
     # Register extra options that might be passed but aren't standard Req options
     extra_option_keys =
@@ -393,16 +405,29 @@ defmodule ReqLLM.Providers.Google do
         :app_title,
         :fixture,
         :tools,
-        :tool_choice
+        :tool_choice,
+        :n,
+        :top_p,
+        :top_k,
+        :frequency_penalty,
+        :presence_penalty,
+        :seed,
+        :stop,
+        :user,
+        :system_prompt,
+        :reasoning_effort,
+        :reasoning_token_budget,
+        :stream,
+        :provider_options
       ] ++
         __MODULE__.supported_provider_options()
 
     request
     # Google uses query parameter for API key, not Authorization header
     |> Req.Request.register_options(extra_option_keys)
-    |> Req.Request.merge_options([model: model.model, params: [key: api_key]] ++ user_opts)
+    |> Req.Request.merge_options([model: model.id, params: [key: api_key]] ++ req_opts)
     |> ReqLLM.Step.Error.attach()
-    |> ReqLLM.Step.Retry.attach()
+    |> ReqLLM.Step.Retry.attach(user_opts)
     |> Req.Request.append_request_steps(llm_encode_body: &__MODULE__.encode_body/1)
     |> Req.Request.append_response_steps(llm_decode_response: &__MODULE__.decode_response/1)
     |> ReqLLM.Step.Usage.attach(model)
@@ -608,10 +633,11 @@ defmodule ReqLLM.Providers.Google do
 
   defp encode_embedding_body(request) do
     text = request.options[:text]
+    model_id = request.options[:id] || request.options[:model]
 
     build_embedding_body = fn t ->
       %{
-        model: "models/#{request.options[:model]}",
+        model: "models/#{model_id}",
         content: %{parts: [%{text: t}]}
       }
       |> maybe_put(:outputDimensionality, request.options[:dimensions])
@@ -801,7 +827,7 @@ defmodule ReqLLM.Providers.Google do
 
           :object when not is_streaming ->
             model_name = req.options[:model]
-            model = %ReqLLM.Model{provider: :google, model: model_name}
+            model = %LLMDB.Model{id: model_name, provider: :google}
 
             body = ensure_parsed_body(resp.body)
 
@@ -830,7 +856,7 @@ defmodule ReqLLM.Providers.Google do
 
           _ ->
             model_name = req.options[:model]
-            model = %ReqLLM.Model{provider: :google, model: model_name}
+            model = %LLMDB.Model{id: model_name, provider: :google}
 
             body = ensure_parsed_body(resp.body)
 
@@ -1123,7 +1149,7 @@ defmodule ReqLLM.Providers.Google do
 
   defp build_request_url(model_name, opts) do
     api_key = ReqLLM.Keys.get!(opts[:model_struct] || opts[:model], opts)
-    base_url = Keyword.get(opts, :base_url, default_base_url())
+    base_url = Keyword.fetch!(opts, :base_url)
 
     "#{base_url}/models/#{model_name}:streamGenerateContent?key=#{api_key}&alt=sse"
   end
@@ -1134,7 +1160,7 @@ defmodule ReqLLM.Providers.Google do
 
     base_options =
       [
-        model: model.model,
+        model: model.id,
         context: context,
         stream: true,
         operation: operation
@@ -1156,6 +1182,10 @@ defmodule ReqLLM.Providers.Google do
 
   @impl ReqLLM.Provider
   def attach_stream(model, context, opts, _finch_name) do
+    require Logger
+
+    Logger.debug("Google attach_stream - model: #{inspect(model)}")
+
     req_only_keys = [
       :params,
       :model,
@@ -1172,15 +1202,31 @@ defmodule ReqLLM.Providers.Google do
     operation = Keyword.get(user_opts, :operation, :chat)
     opts_to_process = Keyword.merge(user_opts, context: context, stream: true)
 
-    with {:ok, processed_opts} <-
-           ReqLLM.Provider.Options.process(__MODULE__, operation, model, opts_to_process) do
-      base_url = Keyword.get(req_opts, :base_url, effective_base_url(processed_opts))
+    with {:ok, processed_opts0} <-
+           ReqLLM.Provider.Options.process(__MODULE__, operation, model, opts_to_process),
+         :ok <- validate_version_feature_compat(processed_opts0) do
+      require Logger
+
+      Logger.debug(
+        "Google attach_stream - processed_opts0[:base_url]: #{inspect(processed_opts0[:base_url])}, api_version: #{inspect(resolve_api_version(processed_opts0))}"
+      )
+
+      computed_base_url = effective_base_url(processed_opts0)
+      processed_opts = Keyword.put(processed_opts0, :base_url, computed_base_url)
+
+      base_url = Keyword.get(req_opts, :base_url, processed_opts[:base_url])
+
+      Logger.debug(
+        "Google attach_stream - computed_base_url: #{inspect(computed_base_url)}, req_opts[:base_url]: #{inspect(req_opts[:base_url])}, final base_url: #{inspect(base_url)}"
+      )
 
       opts_with_base = Keyword.merge(processed_opts, base_url: base_url, model_struct: model)
 
       headers = build_request_headers(model, opts_with_base) ++ [{"Accept", "text/event-stream"}]
-      url = build_request_url(model.model, opts_with_base)
+      url = build_request_url(model.id, opts_with_base)
       body = build_request_body(model, context, processed_opts)
+
+      Logger.debug("Google attach_stream URL: #{inspect(url)}")
 
       finch_request = Finch.build(:post, url, headers, body)
       {:ok, finch_request}
@@ -1447,7 +1493,7 @@ defmodule ReqLLM.Providers.Google do
           ReqLLM.StreamChunk.meta(%{
             usage: convert_google_usage_for_streaming(usage),
             finish_reason: normalize_google_finish_reason(finish_reason),
-            model: model.model,
+            model: model.id,
             terminal?: true
           })
 
@@ -1473,7 +1519,7 @@ defmodule ReqLLM.Providers.Google do
         usage_chunk =
           ReqLLM.StreamChunk.meta(%{
             usage: convert_google_usage_for_streaming(usage),
-            model: model.model
+            model: model.id
           })
 
         chunks ++ [usage_chunk]
@@ -1485,7 +1531,7 @@ defmodule ReqLLM.Providers.Google do
         [
           ReqLLM.StreamChunk.meta(%{
             usage: convert_google_usage_for_streaming(usage),
-            model: model.model,
+            model: model.id,
             terminal?: true
           })
         ]
