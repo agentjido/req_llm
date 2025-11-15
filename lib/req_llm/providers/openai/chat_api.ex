@@ -208,20 +208,29 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
         true -> {nil, nil}
       end
 
-    type = tool_choice && (Map.get(tool_choice, :type) || Map.get(tool_choice, "type"))
-    name = tool_choice && (Map.get(tool_choice, :name) || Map.get(tool_choice, "name"))
+    case tool_choice do
+      map when is_map(map) ->
+        type = Map.get(tool_choice, :type) || Map.get(tool_choice, "type")
+        name = Map.get(tool_choice, :name) || Map.get(tool_choice, "name")
 
-    if type == "tool" && name do
-      replacement =
-        if is_map_key(tool_choice, :type) do
-          %{type: "function", function: %{name: name}}
+        if type == "tool" && name do
+          replacement =
+            if is_map_key(tool_choice, :type) do
+              %{type: "function", function: %{name: name}}
+            else
+              %{"type" => "function", "function" => %{"name" => name}}
+            end
+
+          Map.put(body, body_key, replacement)
         else
-          %{"type" => "function", "function" => %{"name" => name}}
+          body
         end
 
-      Map.put(body, body_key, replacement)
-    else
-      body
+      atom when not is_nil(atom) and is_atom(atom) ->
+        Map.put(body, body_key, to_string(atom))
+
+      _ ->
+        body
     end
   end
 
