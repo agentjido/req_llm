@@ -67,10 +67,6 @@ defmodule ReqLLM.Providers.Anthropic do
 
   require Logger
 
-  @extra_option_keys ~w(
-    model compiled_schema temperature max_tokens app_referer app_title fixture
-  )a
-
   @req_keys ~w(
     context operation text stream model provider_options
   )a
@@ -176,10 +172,8 @@ defmodule ReqLLM.Providers.Anthropic do
       raise ReqLLM.Error.Invalid.Provider.exception(provider: model.provider)
     end
 
-    api_key = ReqLLM.Keys.get!(model, user_opts)
-
-    # Register options that might be passed by users but aren't standard Req options
-    extra_option_keys = @extra_option_keys ++ supported_provider_options()
+    {api_key, extra_option_keys} =
+      ReqLLM.Provider.Defaults.fetch_api_key_and_extra_options(__MODULE__, model, user_opts)
 
     request
     |> Req.Request.register_options(extra_option_keys ++ [:anthropic_version, :anthropic_beta])
