@@ -32,6 +32,39 @@ defmodule ReqLLM.Providers.Anthropic do
 
   require Logger
 
+  @provider_schema [
+    anthropic_top_k: [
+      type: :pos_integer,
+      doc: "Sample from the top K options for each subsequent token (1-40)"
+    ],
+    anthropic_version: [
+      type: :string,
+      doc: "Anthropic API version to use",
+      default: "2023-06-01"
+    ],
+    stop_sequences: [
+      type: {:list, :string},
+      doc: "Custom sequences that will cause the model to stop generating"
+    ],
+    anthropic_metadata: [
+      type: :map,
+      doc: "Optional metadata to include with the request"
+    ],
+    thinking: [
+      type: :map,
+      doc:
+        "Enable thinking/reasoning for supported models (e.g. %{type: \"enabled\", budget_tokens: 4096})"
+    ],
+    anthropic_prompt_cache: [
+      type: :boolean,
+      doc: "Enable Anthropic prompt caching"
+    ],
+    anthropic_prompt_cache_ttl: [
+      type: :string,
+      doc: "TTL for cache (\"1h\" for one hour; omit for default ~5m)"
+    ]
+  ]
+
   @req_keys ~w(
     context operation text stream model provider_options
   )a
@@ -147,7 +180,7 @@ defmodule ReqLLM.Providers.Anthropic do
     |> Req.Request.put_header("anthropic-version", get_anthropic_version(user_opts))
     |> Req.Request.put_private(:req_llm_model, model)
     |> maybe_add_beta_header(user_opts)
-    |> Req.Request.merge_options(req_opts)
+    |> Req.Request.merge_options([model: model.model] ++ user_opts)
     |> ReqLLM.Step.Error.attach()
     |> ReqLLM.Step.Retry.attach(user_opts)
     |> Req.Request.append_request_steps(llm_encode_body: &encode_body/1)

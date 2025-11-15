@@ -75,7 +75,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
     end
 
     test "attach custom api_key option" do
-      model = ReqLLM.Model.from!("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       custom_key = "custom_api_key_123"
 
       request =

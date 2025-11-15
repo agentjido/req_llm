@@ -361,13 +361,10 @@ defmodule ReqLLM.Provider.Defaults do
   @doc """
   Fetches API key and extra common option keys
   """
-  @spec fetch_api_key_and_extra_options(module(), ReqLLM.Model.t(), keyword()) ::
+  @spec fetch_api_key_and_extra_options(module(), LLMDB.Model.t(), keyword()) ::
           {binary(), [atom()]}
   def fetch_api_key_and_extra_options(provider_mod, model, user_opts) do
     api_key = ReqLLM.Keys.get!(model, user_opts)
-
-    # Filter out internal keys before passing to Req
-    req_opts = filter_req_opts(user_opts)
 
     # Register options that might be passed by users but aren't standard Req options
     extra_option_keys =
@@ -379,7 +376,19 @@ defmodule ReqLLM.Provider.Defaults do
         :app_referer,
         :app_title,
         :fixture,
-        :api_key
+        :api_key,
+        :on_unsupported,
+        :n,
+        :tools,
+        :tool_choice,
+        :req_http_options,
+        :frequency_penalty,
+        :system_prompt,
+        :top_p,
+        :presence_penalty,
+        :seed,
+        :stop,
+        :user
       ] ++ provider_mod.supported_provider_options()
 
     {api_key, extra_option_keys}
