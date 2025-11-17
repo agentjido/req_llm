@@ -491,7 +491,7 @@ defmodule ReqLLM.Test.Helpers do
   """
   def reasoning_overlay(model_spec, base_opts, min_tokens \\ nil) do
     case ReqLLM.model(model_spec) do
-      {:ok, %{capabilities: %{reasoning: true}, provider: provider_id}} ->
+      {:ok, %{capabilities: %{reasoning: %{enabled: true}}, provider: provider_id}} ->
         cfg = param_bundles()
         opts = Keyword.put(base_opts, :reasoning_effort, cfg.reasoning[:reasoning_effort] || :low)
 
