@@ -16,11 +16,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Prevents double-stream consumption bugs through single-pass processing
   - Enables real-time streaming to UIs (Phoenix LiveView, websockets, etc.)
   - No upfront `Enum.to_list` - callbacks fire as chunks arrive from the stream
+- **Provider alias support** via llm_db integration
+  - Google Vertex AI Anthropic models now accessible via `:google_vertex` provider
+  - `google_vertex_anthropic` provider aliased to `google_vertex` implementation
+  - Enables single provider module to serve models from multiple llm_db providers
+  - Complete fixture coverage for all Vertex Claude models (36 fixtures: 12 per model × 3 models)
+- **provider_model_id support** for AWS Bedrock inference profiles
+  - Models can specify API-specific identifiers separate from canonical IDs
+  - Enables Bedrock streaming and on-demand throughput with inference profile prefixes
+  - Applied to Claude Haiku 4.5, Sonnet 4.5, Opus 4.1, Llama 3.3 70B models
+
 ### Enhanced
 
 - **AWS Event Stream parser documentation** clarifying Bedrock specialization
   - Explains performance rationale for single-pass parsing and header specialization
   - Documents non-goals (S3 Select, Transcribe, Kinesis incompatibility)
+- **Object generation detection** updated to recognize tool-based workaround
+  - `supports_object_generation?` now accepts models with `tools.enabled = true`
+  - Enables object generation tests for Vertex Claude models using tool workaround
 
 ### Fixed
 

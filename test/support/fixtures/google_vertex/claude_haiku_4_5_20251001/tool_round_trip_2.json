@@ -1,0 +1,138 @@
+{
+  "model_spec": "google_vertex:claude-haiku-4-5@20251001",
+  "provider": "google_vertex",
+  "request": {
+    "body": {
+      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6InZlcnRleC0yMDIzLTEwLTE2IiwibWF4X3Rva2VucyI6MTUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbeyJpZCI6InRvb2x1X3ZydHhfMDFZMXRqc2NGVHRYRnhuQWNjZmV2MjJuIiwiaW5wdXQiOnsiYSI6MiwiYiI6M30sIm5hbWUiOiJhZGQiLCJ0eXBlIjoidG9vbF91c2UifV0sInJvbGUiOiJhc3Npc3RhbnQifSx7ImNvbnRlbnQiOlt7ImNvbnRlbnQiOiI1IiwidG9vbF91c2VfaWQiOiJ0b29sdV92cnR4XzAxWTF0anNjRlR0WEZ4bkFjY2ZldjIybiIsInR5cGUiOiJ0b29sX3Jlc3VsdCJ9XSwicm9sZSI6InVzZXIifV0sInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "anthropic_version": "vertex-2023-10-16",
+      "max_tokens": 150,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        },
+        {
+          "content": [
+            {
+              "id": "toolu_vrtx_01Y1tjscFTtXFxnAccfev22n",
+              "input": {
+                "a": 2,
+                "b": 3
+              },
+              "name": "add",
+              "type": "tool_use"
+            }
+          ],
+          "role": "assistant"
+        },
+        {
+          "content": [
+            {
+              "content": "5",
+              "tool_use_id": "toolu_vrtx_01Y1tjscFTtXFxnAccfev22n",
+              "type": "tool_result"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ]
+    },
+    "method": "post",
+    "url": "https://aiplatform.googleapis.com/v1/projects/disco-park-312913/locations/global/publishers/anthropic/models/claude-haiku-4-5@20251001:rawPredict"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "text": "sum=5",
+          "type": "text"
+        }
+      ],
+      "id": "msg_vrtx_01366yxsZB83ikMRxb6e54ok",
+      "model": "claude-haiku-4-5-20251001",
+      "role": "assistant",
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 118,
+        "output_tokens": 6
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 17 Nov 2025 06:02:15 GMT"
+      ],
+      "internal-input-tokens": [
+        "118"
+      ],
+      "internal-output-tokens": [
+        "6"
+      ],
+      "pinnacle-error-category": [
+        "no_error"
+      ],
+      "request-id": [
+        "req_vrtx_011CVCxH9tbrW4LywnCyxpzC"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "stream-reported-http-code": [
+        "200"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-vertex-ai-internal-prediction-backend": [
+        "harpoon"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  }
+}

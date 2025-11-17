@@ -3,7 +3,6 @@ import Config
 config :llm_db,
   compile_embed: false,
   integrity_policy: :warn,
-  allow: :all,
   custom: %{
     anthropic: [
       name: "Anthropic",

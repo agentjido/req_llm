@@ -34,9 +34,31 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
       {:ok, model} ->
         caps = model.capabilities || %{}
 
+        # Object generation is supported if:
+        # 1. Model has native JSON mode (json.native)
+        # 2. Model supports JSON schemas (json.schema)
+        # 3. Model has strict tool calling (tools.strict = true)
+        # 4. Model has regular tool calling (tools.enabled = true) - req_llm has workaround
         get_in(caps, [:json, :native]) ||
           get_in(caps, [:json, :schema]) ||
-          (get_in(caps, [:tools, :enabled]) && get_in(caps, [:tools, :strict]))
+          get_in(caps, [:tools, :strict]) == true ||
+          get_in(caps, [:tools, :enabled]) == true
+
+      {:error, _} ->
+        false
+    end
+  end
+
+  def supports_streaming_object_generation?(model_spec) do
+    case ReqLLM.model(model_spec) do
+      {:ok, model} ->
+        caps = model.capabilities || %{}
+
+        # Must support object generation AND streaming tool calls
+        supports_object = supports_object_generation?(model_spec)
+        supports_streaming = get_in(caps, [:streaming, :tool_calls]) != false
+
+        supports_object && supports_streaming
 
       {:error, _} ->
         false
@@ -459,7 +481,9 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                   flunk("Expected object or reasoning tokens but got: #{inspect(object)}")
               end
             end
+          end
 
+          if ReqLLM.ProviderTest.Comprehensive.supports_streaming_object_generation?(model_spec) do
             @tag scenario: :object_streaming
             test "object generation (streaming)" do
               schema = [

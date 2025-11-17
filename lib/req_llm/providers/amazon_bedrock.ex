@@ -270,7 +270,12 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
     # For Anthropic models: Remove thinking from additional_model_request_fields if it was removed by translate_options
     # This handles the case where thinking is incompatible with forced tool_choice
-    opts = maybe_clean_thinking_after_translation(opts, get_model_family(model.id), operation)
+    opts =
+      maybe_clean_thinking_after_translation(
+        opts,
+        get_model_family(model.provider_model_id || model.id),
+        operation
+      )
 
     # Construct the base URL with region
     region =
@@ -284,7 +289,9 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
     base_url = "https://bedrock-runtime.#{region}.amazonaws.com"
 
-    model_id = model.id
+    # Use provider_model_id if set (for models requiring specific API format like inference profiles),
+    # otherwise fall back to canonical model ID
+    model_id = model.provider_model_id || model.id
 
     # Check if we should use Converse API
     # Priority: explicit use_converse option > prompt caching optimization > auto-detect from tools presence
@@ -360,7 +367,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
     request_with_body
     |> Step.Error.attach()
-    |> ReqLLM.Step.Retry.attach(user_opts)
+    |> ReqLLM.Step.Retry.attach()
     |> put_aws_sigv4(aws_creds)
     # No longer attach streaming here - it's handled by attach_stream
     |> Req.Request.append_response_steps(llm_decode_response: &decode_response/1)
@@ -383,8 +390,9 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     # This is critical for streaming requests which bypass the normal Options.process pipeline
     {translated_opts, _warnings} = translate_options(:chat, model, pre_validated_opts)
 
-    # Get model ID
-    model_id = model.id
+    # Get model ID - use provider_model_id if set (for models requiring specific API format),
+    # otherwise fall back to canonical model ID
+    model_id = model.provider_model_id || model.id
 
     # Check if we should use Converse API
     # Priority: explicit use_converse option > prompt caching optimization > auto-detect from tools presence
@@ -483,7 +491,8 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     # IMPORTANT: For inference profiles, we need to route to the Converse formatter
     # because those models MUST use Converse API, which produces events in Converse format.
     # The model family alone isn't sufficient - we need to check if this is an inference profile.
-    model_id = model.id
+    # Use provider_model_id (the API ID) not the canonical ID to check for inference profile
+    model_id = model.provider_model_id || model.id
 
     formatter =
       if is_inference_profile_model?(model_id) do
@@ -517,7 +526,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   # Translate reasoning_effort/reasoning_token_budget to Bedrock additionalModelRequestFields
   # Only for Claude models that support extended thinking
   defp maybe_translate_reasoning_params(model, opts) do
-    model_id = model.id
+    model_id = model.provider_model_id || model.id
 
     # Check if this is a Claude model with reasoning capability
     # Use model.capabilities.reasoning instead of hardcoding model IDs
@@ -554,7 +563,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   @impl ReqLLM.Provider
   def extract_usage(body, model) when is_map(body) do
     # Delegate to model family formatter
-    model_family = get_model_family(model.id)
+    model_family = get_model_family(model.provider_model_id || model.id)
     formatter = get_formatter_module(model_family)
 
     if function_exported?(formatter, :extract_usage, 2) do
@@ -793,7 +802,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     # Delegate to native Anthropic option translation for Anthropic models
     # This ensures we get all Anthropic-specific handling (temperature/top_p conflicts,
     # reasoning effort, etc.) for free
-    model_family = get_model_family(model.id)
+    model_family = get_model_family(model.provider_model_id || model.id)
 
     case model_family do
       "anthropic" ->

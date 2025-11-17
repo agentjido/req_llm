@@ -1,0 +1,169 @@
+{
+  "model_spec": "google_vertex:claude-opus-4-1@20250805",
+  "provider": "google_vertex",
+  "request": {
+    "body": {
+      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6InZlcnRleC0yMDIzLTEwLTE2IiwibWF4X3Rva2VucyI6MTUwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/Iiwicm9sZSI6InVzZXIifV0sInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjAsInRvb2xzIjpbeyJkZXNjcmlwdGlvbiI6IkdldCBjdXJyZW50IHdlYXRoZXIgaW5mb3JtYXRpb24gZm9yIGEgbG9jYXRpb24iLCJpbnB1dF9zY2hlbWEiOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifSwidW5pdCI6eyJlbnVtIjpbImNlbHNpdXMiLCJmYWhyZW5oZWl0Il0sInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifSwibmFtZSI6ImdldF93ZWF0aGVyIn0seyJkZXNjcmlwdGlvbiI6IlRlbGwgYSBmdW5ueSBqb2tlIiwiaW5wdXRfc2NoZW1hIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJ0b3BpYyI6eyJkZXNjcmlwdGlvbiI6IlRvcGljIGZvciB0aGUgam9rZSIsInR5cGUiOiJzdHJpbmcifX0sInR5cGUiOiJvYmplY3QifSwibmFtZSI6InRlbGxfam9rZSJ9LHsiZGVzY3JpcHRpb24iOiJHZXQgdGhlIGN1cnJlbnQgdGltZSIsImlucHV0X3NjaGVtYSI6eyJwcm9wZXJ0aWVzIjp7fSwidHlwZSI6Im9iamVjdCJ9LCJuYW1lIjoiZ2V0X3RpbWUifV19"
+    },
+    "canonical_json": {
+      "anthropic_version": "vertex-2023-10-16",
+      "max_tokens": 150,
+      "messages": [
+        {
+          "content": "What's the weather like in Paris, France?",
+          "role": "user"
+        }
+      ],
+      "stream": false,
+      "temperature": 0.0,
+      "tools": [
+        {
+          "description": "Get current weather information for a location",
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "location": {
+                "type": "string"
+              },
+              "unit": {
+                "enum": [
+                  "celsius",
+                  "fahrenheit"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "location"
+            ],
+            "type": "object"
+          },
+          "name": "get_weather"
+        },
+        {
+          "description": "Tell a funny joke",
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "topic": {
+                "description": "Topic for the joke",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "name": "tell_joke"
+        },
+        {
+          "description": "Get the current time",
+          "input_schema": {
+            "properties": {},
+            "type": "object"
+          },
+          "name": "get_time"
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ]
+    },
+    "method": "post",
+    "url": "https://aiplatform.googleapis.com/v1/projects/disco-park-312913/locations/global/publishers/anthropic/models/claude-opus-4-1@20250805:rawPredict"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "text": "I'll check the current weather in Paris, France for you.",
+          "type": "text"
+        },
+        {
+          "id": "toolu_vrtx_01VsQSUD8X46eRAssbNqSmx7",
+          "input": {
+            "location": "Paris, France"
+          },
+          "name": "get_weather",
+          "type": "tool_use"
+        }
+      ],
+      "id": "msg_vrtx_01QM419kxtrk6DnNfR9RetZG",
+      "model": "claude-opus-4-1-20250805",
+      "role": "assistant",
+      "stop_reason": "tool_use",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 512,
+        "output_tokens": 69
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 17 Nov 2025 06:02:13 GMT"
+      ],
+      "internal-input-tokens": [
+        "512"
+      ],
+      "internal-output-tokens": [
+        "69"
+      ],
+      "pinnacle-error-category": [
+        "no_error"
+      ],
+      "request-id": [
+        "req_vrtx_011CVCxGpgCUnQBjtYJ95Zau"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "stream-reported-http-code": [
+        "200"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-vertex-ai-internal-prediction-backend": [
+        "harpoon"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  }
+}

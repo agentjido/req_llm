@@ -1212,23 +1212,11 @@ defmodule Mix.Tasks.ReqLlm.ModelCompat do
   defp find_model(registry, provider, model_id) do
     provider_atom = if is_binary(provider), do: String.to_atom(provider), else: provider
 
+    # Use LLMDB to resolve aliases and get canonical model ID
     normalized_model_id =
       case LLMDB.model("#{provider_atom}:#{model_id}") do
-        {:ok, %LLMDB.Model{id: resolved_id}} ->
-          resolved_id
-
-        {:error, _} ->
-          case ReqLLM.provider(provider_atom) do
-            {:ok, provider_module} when not is_nil(provider_module) ->
-              if function_exported?(provider_module, :normalize_model_id, 1) do
-                provider_module.normalize_model_id(model_id)
-              else
-                model_id
-              end
-
-            _ ->
-              model_id
-          end
+        {:ok, %LLMDB.Model{id: resolved_id}} -> resolved_id
+        {:error, _} -> model_id
       end
 
     case Map.get(registry, provider_atom) do

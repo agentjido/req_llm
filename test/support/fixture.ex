@@ -60,7 +60,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
 
       dbug(
         fn ->
-          "[Fixture] step: model=#{model.provider}:#{model.model}, name=#{safe_fixture_name}"
+          "[Fixture] step: model=#{model.provider}:#{model.provider_model_id || model.id}, name=#{safe_fixture_name}"
         end,
         component: :fixtures
       )
@@ -73,7 +73,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
       )
 
       Logger.debug(
-        "Fixture step: model=#{model.provider}:#{model.model}, name=#{safe_fixture_name}"
+        "Fixture step: model=#{model.provider}:#{model.provider_model_id || model.id}, name=#{safe_fixture_name}"
       )
 
       Logger.debug("Fixture path: #{path}")
@@ -245,7 +245,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
     Logger.debug("Fixture saving: path=#{Path.relative_to_cwd(path)}")
 
     model = req.private[:req_llm_model]
-    model_spec = "#{model.provider}:#{model.model}"
+    model_spec = "#{model.provider}:#{model.provider_model_id || model.id}"
 
     dbug(fn -> "[Fixture] Model: #{model_spec}" end, component: :fixtures)
     Logger.debug("Fixture model_spec: #{model_spec}")
@@ -329,7 +329,7 @@ defmodule ReqLLM.Step.Fixture.Backend do
          chunks
        )
        when is_list(chunks) do
-    model_spec = "#{model.provider}:#{model.model}"
+    model_spec = "#{model.provider}:#{model.provider_model_id || model.id}"
 
     request_meta = %{
       method: String.upcase(to_string(http_context.method)),

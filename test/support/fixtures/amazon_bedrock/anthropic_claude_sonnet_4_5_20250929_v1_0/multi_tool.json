@@ -1,0 +1,159 @@
+{
+  "model_spec": "amazon_bedrock:global.anthropic.claude-sonnet-4-5-20250929-v1:0",
+  "provider": "amazon_bedrock",
+  "request": {
+    "body": {
+      "b64": "eyJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjoxNTAsInRlbXBlcmF0dXJlIjowLjB9LCJtZXNzYWdlcyI6W3siY29udGVudCI6W3sidGV4dCI6IldoYXQncyB0aGUgd2VhdGhlciBsaWtlIGluIFBhcmlzLCBGcmFuY2U/In1dLCJyb2xlIjoidXNlciJ9XSwidG9vbENvbmZpZyI6eyJ0b29scyI6W3sidG9vbFNwZWMiOnsiZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwiaW5wdXRTY2hlbWEiOnsianNvbiI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsibG9jYXRpb24iOnsidHlwZSI6InN0cmluZyJ9LCJ1bml0Ijp7ImVudW0iOlsiY2Vsc2l1cyIsImZhaHJlbmhlaXQiXSwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibG9jYXRpb24iXSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6ImdldF93ZWF0aGVyIn19LHsidG9vbFNwZWMiOnsiZGVzY3JpcHRpb24iOiJUZWxsIGEgZnVubnkgam9rZSIsImlucHV0U2NoZW1hIjp7Impzb24iOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7InRvcGljIjp7ImRlc2NyaXB0aW9uIjoiVG9waWMgZm9yIHRoZSBqb2tlIiwidHlwZSI6InN0cmluZyJ9fSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6InRlbGxfam9rZSJ9fSx7InRvb2xTcGVjIjp7ImRlc2NyaXB0aW9uIjoiR2V0IHRoZSBjdXJyZW50IHRpbWUiLCJpbnB1dFNjaGVtYSI6eyJqc29uIjp7InByb3BlcnRpZXMiOnt9LCJ0eXBlIjoib2JqZWN0In19LCJuYW1lIjoiZ2V0X3RpbWUifX1dfX0="
+    },
+    "canonical_json": {
+      "inferenceConfig": {
+        "maxTokens": 150,
+        "temperature": 0.0
+      },
+      "messages": [
+        {
+          "content": [
+            {
+              "text": "What's the weather like in Paris, France?"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "toolConfig": {
+        "tools": [
+          {
+            "toolSpec": {
+              "description": "Get current weather information for a location",
+              "inputSchema": {
+                "json": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "location": {
+                      "type": "string"
+                    },
+                    "unit": {
+                      "enum": [
+                        "celsius",
+                        "fahrenheit"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "location"
+                  ],
+                  "type": "object"
+                }
+              },
+              "name": "get_weather"
+            }
+          },
+          {
+            "toolSpec": {
+              "description": "Tell a funny joke",
+              "inputSchema": {
+                "json": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "topic": {
+                      "description": "Topic for the joke",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "name": "tell_joke"
+            }
+          },
+          {
+            "toolSpec": {
+              "description": "Get the current time",
+              "inputSchema": {
+                "json": {
+                  "properties": {},
+                  "type": "object"
+                }
+              },
+              "name": "get_time"
+            }
+          }
+        ]
+      }
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ],
+      "x-amz-content-sha256": [
+        "9b4229715676ff07b6aeae6062d5e2b75157be637ebdc7d854aa81348ba5e5ab"
+      ],
+      "x-amz-date": [
+        "20251117T061133Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/global.anthropic.claude-sonnet-4-5-20250929-v1:0/converse"
+  },
+  "response": {
+    "body": {
+      "metrics": {
+        "latencyMs": 2302
+      },
+      "output": {
+        "message": {
+          "content": [
+            {
+              "toolUse": {
+                "input": {
+                  "location": "Paris, France"
+                },
+                "name": "get_weather",
+                "toolUseId": "tooluse_VwR2c9B4Tru3plRTgZZgbA",
+                "type": "tool_use"
+              }
+            }
+          ],
+          "role": "assistant"
+        }
+      },
+      "stopReason": "tool_use",
+      "usage": {
+        "cacheReadInputTokenCount": 0,
+        "cacheReadInputTokens": 0,
+        "cacheWriteInputTokenCount": 0,
+        "cacheWriteInputTokens": 0,
+        "inputTokens": 695,
+        "outputTokens": 55,
+        "serverToolUsage": {},
+        "totalTokens": 750
+      }
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 17 Nov 2025 06:11:35 GMT"
+      ],
+      "x-amzn-requestid": [
+        "9bc80e32-4977-4272-b184-ecd30eb30700"
+      ]
+    },
+    "status": 200
+  }
+}

@@ -1,4 +1,6 @@
 {
+  "model_spec": "amazon_bedrock:cohere.command-r-plus-v1:0",
+  "provider": "amazon_bedrock",
   "request": {
     "body": {
       "b64": "eyJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjV9LCJtZXNzYWdlcyI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMifV0sInJvbGUiOiJ1c2VyIn1dfQ=="
@@ -31,13 +33,13 @@
         "bedrock-runtime.us-east-1.amazonaws.com"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.16"
       ],
       "x-amz-content-sha256": [
         "af3f637afd9c02d90b55ab65f033e5438add0479d2f6b78eb0e25cc0524c5965"
       ],
       "x-amz-date": [
-        "20251102T171012Z"
+        "20251117T060851Z"
       ]
     },
     "method": "post",
@@ -52,7 +54,7 @@
         "message": {
           "content": [
             {
-              "text": "Title: The Dragon's Legacy\n\nChapter 1: The Dragon Rider\n\nOnce upon a time, in a land shrouded by magic and mystery, there lived a brave and adventurous girl named Lyra. Lyra had always felt a deep connection to the mythical creatures that roamed her world, especially the majestic dragons. She spent her days exploring the enchanted forests, climbing the towering mountains, and dreaming of the day when she would encounter a dragon of her own.\n\nLyra possessed a"
+              "text": "Title: The Dragon's Quest\n\nOnce upon a time, in a land filled with magic and wonder, there lived a brave and adventurous young man named Erik. Erik had always felt a deep connection to the mythical creatures that inhabited their world, especially dragons. He spent his days dreaming of encountering these majestic beasts and often wandered into the nearby forests, imagining himself on grand adventures.\n\nOne fateful day, while exploring a particularly dense part of the forest, Erik stumbled upon a hidden cave."
             }
           ],
           "role": "assistant"
@@ -74,10 +76,10 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:10:15 GMT"
+        "Mon, 17 Nov 2025 06:08:54 GMT"
       ],
       "x-amzn-requestid": [
-        "15389c4a-4c46-4cca-b8af-fe8d089a05f2"
+        "5ac32509-e148-4e8b-bee6-e0ecacb7a4b1"
       ]
     },
     "status": 200

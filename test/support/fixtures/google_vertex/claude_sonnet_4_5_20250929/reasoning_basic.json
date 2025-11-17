@@ -1,0 +1,123 @@
+{
+  "model_spec": "google_vertex:claude-sonnet-4-5@20250929",
+  "provider": "google_vertex",
+  "request": {
+    "body": {
+      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6InZlcnRleC0yMDIzLTEwLTE2IiwibWF4X3Rva2VucyI6NTAwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJTb2x2ZSAxMio3IGFuZCBzaG93IHlvdXIgaW50ZXJuYWwgdGhpbmtpbmcgKGJyaWVmKS4iLCJyb2xlIjoidXNlciJ9XSwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjEuMCwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifX0="
+    },
+    "canonical_json": {
+      "anthropic_version": "vertex-2023-10-16",
+      "max_tokens": 5000,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "stream": false,
+      "temperature": 1.0,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ]
+    },
+    "method": "post",
+    "url": "https://aiplatform.googleapis.com/v1/projects/disco-park-312913/locations/global/publishers/anthropic/models/claude-sonnet-4-5@20250929:rawPredict"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "Ep0DCkgICRACGAIqQJFUyuYqbPzSbyq2fYXcVxNS/JF6ozSyyqh1LLqGot6GqNlozK4U1BZrEUsvc8GPFioT3suMUuXXQyz9NjH7WOISDMdVh1mI+qMH8Q1XMxoMevRCQzKHlLw/OrUJIjDLGnFwRa45fwkIgRpQKV0i0j6TcI47eguhBUtDx4c1nSVObPZ4lWDfc/qsr0qx/yAqggJQ4ipKFkNL4bhmkeYXyFC7LWTz4eWeIHyTluGThm6ubijHWUVr/gI9E/0BUiKRGo6BzyUiqsx6v1ExfLhpyaS5K3TIdPf1JDa4PL4FPV0XcDNy7yib1CA54Nmc6XCobPtKjVvWCphjAXzVLFeBmdN9cIYRV17vvu4VefiHVvpPz1GH8a5ORqPbcXagIseSDG8DaZ+Wfx/VbUHphorZPlVFRW+NVFZPu5RwvduYsXQnBI1bEwtkcYFwDVDK8DWKCNQGyh8h1gMJM4JFTqCCTSER1WNBVcLCIIk/fUoVR39/ETQDBd70nxOBl6USE+C25Q1oL2n4Ps2WbJD+rurbdIEGBF0YAQ==",
+          "thinking": "I need to calculate 12 × 7.\n\n12 × 7 = (10 + 2) × 7 = 10 × 7 + 2 × 7 = 70 + 14 = 84\n\nAlternatively, I can think of it as:\n12 × 7 = 12 × (5 + 2) = 12 × 5 + 12 × 2 = 60 + 24 = 84\n\nOr just directly from multiplication facts: 12 × 7 = 84",
+          "type": "thinking"
+        },
+        {
+          "text": "# 12 × 7 = 84\n\n**Internal thinking:**\n- Break down: (10 + 2) × 7\n- 10 × 7 = 70\n- 2 × 7 = 14\n- 70 + 14 = **84**",
+          "type": "text"
+        }
+      ],
+      "id": "msg_vrtx_01QwouoGHzAfzDi3KCd2eWF5",
+      "model": "claude-sonnet-4-5-20250929",
+      "role": "assistant",
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 50,
+        "output_tokens": 212
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 17 Nov 2025 06:02:38 GMT"
+      ],
+      "internal-input-tokens": [
+        "50"
+      ],
+      "internal-output-tokens": [
+        "212"
+      ],
+      "pinnacle-error-category": [
+        "no_error"
+      ],
+      "request-id": [
+        "req_vrtx_011CVCxJc11mJzupYkgzVwdc"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "stream-reported-http-code": [
+        "200"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-vertex-ai-internal-prediction-backend": [
+        "harpoon"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  }
+}

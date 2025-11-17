@@ -76,7 +76,9 @@ defmodule ReqLLM.Test.Fixtures do
       test_name = Keyword.get(opts, :fixture, Path.basename(path, ".json"))
 
       dbug(
-        fn -> "[Fixture] step: model=#{model.provider}:#{model.model}, name=#{test_name}" end,
+        fn ->
+          "[Fixture] step: model=#{model.provider}:#{model.provider_model_id || model.id}, name=#{test_name}"
+        end,
         component: :fixtures
       )
     end
@@ -131,7 +133,9 @@ defmodule ReqLLM.Test.Fixtures do
       test_name = Keyword.get(opts, :fixture, Path.basename(result, ".json"))
 
       dbug(
-        fn -> "[Fixture] step: model=#{model.provider}:#{model.model}, name=#{test_name}" end,
+        fn ->
+          "[Fixture] step: model=#{model.provider}:#{model.provider_model_id || model.id}, name=#{test_name}"
+        end,
         component: :fixtures
       )
     end

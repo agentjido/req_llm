@@ -1,0 +1,114 @@
+{
+  "model_spec": "google_vertex:claude-sonnet-4-5@20250929",
+  "provider": "google_vertex",
+  "request": {
+    "body": {
+      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6InZlcnRleC0yMDIzLTEwLTE2IiwibWF4X3Rva2VucyI6MTAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiSGkgdGhlcmUhIiwicm9sZSI6InVzZXIifV0sInN0cmVhbSI6ZmFsc2UsInRlbXBlcmF0dXJlIjowLjB9"
+    },
+    "canonical_json": {
+      "anthropic_version": "vertex-2023-10-16",
+      "max_tokens": 10,
+      "messages": [
+        {
+          "content": "Hi there!",
+          "role": "user"
+        }
+      ],
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ]
+    },
+    "method": "post",
+    "url": "https://aiplatform.googleapis.com/v1/projects/disco-park-312913/locations/global/publishers/anthropic/models/claude-sonnet-4-5@20250929:rawPredict"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "text": "Hello! How can I help you today?",
+          "type": "text"
+        }
+      ],
+      "id": "msg_vrtx_017XKffjCnfENqjEUFf44SpV",
+      "model": "claude-sonnet-4-5-20250929",
+      "role": "assistant",
+      "stop_reason": "max_tokens",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 10,
+        "output_tokens": 10
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 17 Nov 2025 06:01:51 GMT"
+      ],
+      "internal-input-tokens": [
+        "10"
+      ],
+      "internal-output-tokens": [
+        "10"
+      ],
+      "pinnacle-error-category": [
+        "no_error"
+      ],
+      "request-id": [
+        "req_vrtx_011CVCxFJxkHhrTqV9qrr1Sf"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "stream-reported-http-code": [
+        "200"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-vertex-ai-internal-prediction-backend": [
+        "harpoon"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  }
+}

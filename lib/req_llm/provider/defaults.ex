@@ -349,7 +349,9 @@ defmodule ReqLLM.Provider.Defaults do
     |> Req.Request.put_header("content-type", "application/json")
     |> Req.Request.put_header("authorization", "Bearer #{api_key}")
     |> Req.Request.register_options(extra_option_keys)
-    |> Req.Request.merge_options([model: model.model, auth: {:bearer, api_key}] ++ user_opts)
+    |> Req.Request.merge_options(
+      [model: model.provider_model_id || model.id, auth: {:bearer, api_key}] ++ user_opts
+    )
     |> ReqLLM.Step.Retry.attach()
     |> ReqLLM.Step.Error.attach()
     |> Req.Request.append_request_steps(llm_encode_body: &provider_mod.encode_body/1)

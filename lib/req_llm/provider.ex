@@ -230,6 +230,7 @@ defmodule ReqLLM.Provider do
   If this callback is not implemented, the model ID is used as-is for metadata lookup.
   """
   @callback normalize_model_id(String.t()) :: String.t()
+
   @doc """
   Translates canonical options to provider-specific parameters (optional).
 

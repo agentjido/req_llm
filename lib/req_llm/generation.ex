@@ -242,7 +242,15 @@ defmodule ReqLLM.Generation do
            provider_module.prepare_request(:object, model, messages, opts_with_schema),
          {:ok, %Req.Response{status: status, body: decoded_response}} when status in 200..299 <-
            Req.request(request) do
-      {:ok, decoded_response}
+      # For models with json.strict = false, coerce response types to match schema
+      response =
+        if get_in(model.capabilities, [:json, :strict]) == false do
+          coerce_object_types(decoded_response, compiled_schema.schema)
+        else
+          decoded_response
+        end
+
+      {:ok, response}
     else
       {:ok, %Req.Response{status: status, body: body}} ->
         {:error,
@@ -286,6 +294,106 @@ defmodule ReqLLM.Generation do
       {:error, error} -> raise error
     end
   end
+
+  # Coerces object types to match schema for models that don't strictly follow schemas
+  # Uses JSV validation but keeps the coerced result instead of discarding it
+  defp coerce_object_types(%Response{object: object} = response, schema)
+       when not is_nil(object) do
+    case coerce_with_schema(object, schema) do
+      {:ok, coerced} -> %{response | object: coerced}
+      # If coercion fails, return original
+      {:error, _} -> response
+    end
+  end
+
+  defp coerce_object_types(response, _schema), do: response
+
+  defp coerce_with_schema(data, schema) do
+    json_schema = ReqLLM.Schema.to_json(schema)
+    built_schema = JSV.build!(json_schema)
+
+    # First try validation - if it passes, data is already correct
+    case JSV.validate(data, built_schema) do
+      {:ok, validated_data} ->
+        {:ok, validated_data}
+
+      {:error, %JSV.ValidationError{errors: errors}} ->
+        # Extract type errors and coerce those fields
+        type_errors = extract_type_errors(errors)
+        coerced_data = apply_type_coercion(data, type_errors, json_schema)
+
+        # Try validation again with coerced data
+        case JSV.validate(coerced_data, built_schema) do
+          {:ok, validated_data} -> {:ok, validated_data}
+          # Return coerced even if still invalid
+          {:error, _} -> {:ok, coerced_data}
+        end
+    end
+  rescue
+    _ -> {:error, :coercion_failed}
+  end
+
+  # Extract type mismatch errors from JSV validation errors
+  defp extract_type_errors(errors) do
+    errors
+    |> Enum.filter(fn error -> error.kind == :type end)
+    |> Enum.map(fn error ->
+      path = error.data_path
+      expected_type = Keyword.get(error.args, :type)
+      {path, expected_type}
+    end)
+  end
+
+  # Apply type coercion to specific fields based on type errors
+  defp apply_type_coercion(data, type_errors, _schema) when is_map(data) do
+    Enum.reduce(type_errors, data, fn {path, expected_type}, acc ->
+      coerce_field(acc, path, expected_type)
+    end)
+  end
+
+  # Coerce a specific field at the given path
+  defp coerce_field(data, [field | rest], expected_type) when is_map(data) do
+    case Map.get(data, field) do
+      nil ->
+        data
+
+      value when rest == [] ->
+        Map.put(data, field, coerce_value(value, expected_type))
+
+      value when is_map(value) ->
+        Map.put(data, field, coerce_field(value, rest, expected_type))
+
+      _ ->
+        data
+    end
+  end
+
+  defp coerce_field(data, [], _expected_type), do: data
+
+  # Coerce individual values based on expected type
+  defp coerce_value(value, :integer) when is_binary(value) do
+    case Integer.parse(value) do
+      {int, ""} -> int
+      _ -> value
+    end
+  end
+
+  defp coerce_value(value, :number) when is_binary(value) do
+    case Float.parse(value) do
+      {float, ""} -> float
+      _ -> value
+    end
+  end
+
+  defp coerce_value(value, :boolean) when is_binary(value) do
+    case String.downcase(value) do
+      "true" -> true
+      "false" -> false
+      _ -> value
+    end
+  end
+
+  defp coerce_value(value, _type), do: value
 
   @doc """
   Streams structured data generation using an AI model with schema validation.

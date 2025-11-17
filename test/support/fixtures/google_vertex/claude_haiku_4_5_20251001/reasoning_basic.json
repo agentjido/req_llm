@@ -1,0 +1,123 @@
+{
+  "model_spec": "google_vertex:claude-haiku-4-5@20251001",
+  "provider": "google_vertex",
+  "request": {
+    "body": {
+      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6InZlcnRleC0yMDIzLTEwLTE2IiwibWF4X3Rva2VucyI6NTAwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJTb2x2ZSAxMio3IGFuZCBzaG93IHlvdXIgaW50ZXJuYWwgdGhpbmtpbmcgKGJyaWVmKS4iLCJyb2xlIjoidXNlciJ9XSwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjEuMCwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifX0="
+    },
+    "canonical_json": {
+      "anthropic_version": "vertex-2023-10-16",
+      "max_tokens": 5000,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "stream": false,
+      "temperature": 1.0,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ]
+    },
+    "method": "post",
+    "url": "https://aiplatform.googleapis.com/v1/projects/disco-park-312913/locations/global/publishers/anthropic/models/claude-haiku-4-5@20251001:rawPredict"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "EvsCCkgICRACGAIqQEQJD+h9KhKG1bKxAYZL1JBVkPQWx/c1ZwKRahYZhdz1swXsp7+U+horh98j6nWnRvfxuDyRWT0vGDLloNXMY2ESDDzRr5nJe2skbU1MvBoMy312eQknH6P+hVNnIjBUQTnE710kFMgDcnKDcRRCKs79BTK6MBwxydDdt6nP6QZjBS+VD8jA1tPgxs/C8CQq4AHqLeXK1+NPqv5X1BEcrvM3ox/TCvajsx1jAHdiChvaZI7l6HeuDsahqLM4JFl0AnhLyA+hQFGvkya6E7nBR99Az2hKenOnKj3B4lFiXjdMJTNG07NiSDUmwxm7MGljNxSOy++3Pag/70Go4zQoRGOUOmS2fHCSCV79OtWCS00k6lJ0btAz39Tqpy3ng+rYyEOFujCD81l0fRHDmzshlFiWHg9R/V6hbhA0Xu5kuNZvaEvU2PDYLn/PMAGpacUGv8+S4BXoKOyrKmO0qHyG1pf3wM3NApDUZILhbA2vYeHXGxgB",
+          "thinking": "I need to multiply 12 by 7.\n\nLet me think about this:\n12 * 7 = (10 + 2) * 7 = 10*7 + 2*7 = 70 + 14 = 84\n\nOr I could do it another way:\n12 * 7 = 12 * (5 + 2) = 12*5 + 12*2 = 60 + 24 = 84\n\nBoth ways give me 84.",
+          "type": "thinking"
+        },
+        {
+          "text": "# 12 × 7\n\n**Internal thinking:**\n- Break down 12 as (10 + 2)\n- 10 × 7 = 70\n- 2 × 7 = 14\n- 70 + 14 = 84\n\n**Answer: 84**",
+          "type": "text"
+        }
+      ],
+      "id": "msg_vrtx_01VJc3kNgvU3wWPu5rX63biZ",
+      "model": "claude-haiku-4-5-20251001",
+      "role": "assistant",
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 50,
+        "output_tokens": 201
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 17 Nov 2025 06:02:31 GMT"
+      ],
+      "internal-input-tokens": [
+        "50"
+      ],
+      "internal-output-tokens": [
+        "201"
+      ],
+      "pinnacle-error-category": [
+        "no_error"
+      ],
+      "request-id": [
+        "req_vrtx_011CVCxJDySm4n5PEi9WQwHy"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "stream-reported-http-code": [
+        "200"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-vertex-ai-internal-prediction-backend": [
+        "harpoon"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  }
+}
