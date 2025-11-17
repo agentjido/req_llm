@@ -80,6 +80,13 @@ defmodule ReqLLM.Step.Fixture.Backend do
       Logger.debug("Fixture mode: #{mode}")
       Logger.debug("Fixture exists: #{File.exists?(path)}")
 
+      # Store fixture metadata for potential credential fallback
+      request =
+        request
+        |> Req.Request.put_private(:llm_fixture_path, path)
+        |> Req.Request.put_private(:llm_fixture_name, safe_fixture_name)
+        |> Req.Request.put_private(:llm_fixture_model, model)
+
       if live?() do
         dbug(
           fn -> "[Fixture] RECORD mode - will save to #{Path.relative_to_cwd(path)}" end,
@@ -87,13 +94,9 @@ defmodule ReqLLM.Step.Fixture.Backend do
         )
 
         Logger.debug("Fixture RECORD mode - will save to #{Path.relative_to_cwd(path)}")
-        # Tag the request and add response steps to capture the response
-        request =
-          request
-          |> Req.Request.put_private(:llm_fixture_path, path)
-          |> Req.Request.put_private(:llm_fixture_name, safe_fixture_name)
 
-        Logger.debug("Fixture request tagged with path")
+        # Add credential fallback error handler FIRST
+        request = insert_credential_fallback_handler(request, path, model)
 
         # For streaming, fixture saving is handled in StreamServer callback
         # For non-streaming, save fixture BEFORE decoding to capture raw response
@@ -155,7 +158,12 @@ defmodule ReqLLM.Step.Fixture.Backend do
   # ---------------------------------------------------------------------------
   # Replay branch
   # ---------------------------------------------------------------------------
-  defp handle_replay(path, model) do
+  @doc """
+  Load a fixture file and return it as a Req.Response.
+
+  This function is public to support credential fallback in generation.ex.
+  """
+  def handle_replay(path, model) do
     if !File.exists?(path) do
       raise """
       Fixture not found: #{path}
@@ -422,4 +430,46 @@ defmodule ReqLLM.Step.Fixture.Backend do
   defp encode_body(bin) when is_binary(bin), do: %{"b64" => Base.encode64(bin)}
   # JSON already
   defp encode_body(other), do: other
+
+  # ---------------------------------------------------------------------------
+  # Credential fallback handler
+  # ---------------------------------------------------------------------------
+  defp insert_credential_fallback_handler(request, fixture_path, model) do
+    # Add an error handler that catches credential errors and falls back to fixture
+    Req.Request.prepend_error_steps(request,
+      llm_credential_fallback: fn {request, exception} ->
+        handle_credential_error(request, exception, fixture_path, model)
+      end
+    )
+  end
+
+  defp handle_credential_error(request, exception, fixture_path, model) do
+    # Get provider module to check if this is a credential error
+    provider_id = model.provider
+    {:ok, provider_module} = ReqLLM.Providers.get(provider_id)
+
+    is_credential_error =
+      function_exported?(provider_module, :credential_missing?, 1) and
+        provider_module.credential_missing?(exception)
+
+    fixture_exists = File.exists?(fixture_path)
+
+    if is_credential_error and fixture_exists do
+      # Log warning and fall back to fixture
+      require Logger
+
+      Logger.warning("""
+      Credentials missing for #{provider_id}:#{model.model} during fixture recording.
+      Falling back to existing fixture: #{Path.relative_to_cwd(fixture_path)}
+      """)
+
+      # Load fixture and return as if we succeeded
+      {:ok, response} = handle_replay(fixture_path, model)
+      # Return success - this stops error propagation
+      {request, response}
+    else
+      # Not a credential error or no fixture - propagate error
+      {request, exception}
+    end
+  end
 end

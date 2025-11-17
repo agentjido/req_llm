@@ -478,4 +478,11 @@ defmodule ReqLLM.Providers.GoogleVertex do
     # Use streamRawPredict for streaming
     "/v1/projects/#{project_id}/locations/#{region}/publishers/anthropic/models/#{model_id}:streamRawPredict"
   end
+
+  @impl ReqLLM.Provider
+  def credential_missing?(%ArgumentError{message: msg}) when is_binary(msg) do
+    String.contains?(msg, "Google Cloud credentials required")
+  end
+
+  def credential_missing?(_), do: false
 end

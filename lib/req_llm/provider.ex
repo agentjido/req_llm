@@ -569,6 +569,33 @@ defmodule ReqLLM.Provider do
   @callback thinking_constraints() ::
               %{required_temperature: float(), min_max_tokens: pos_integer()} | :none
 
+  @doc """
+  Checks if an exception indicates missing credentials for this provider.
+
+  This optional callback allows providers to identify credential-related errors
+  so the fixture system can fall back to existing fixtures during recording when
+  credentials are unavailable.
+
+  ## Parameters
+
+    * `exception` - The exception to check
+
+  ## Returns
+
+    * `true` - Exception indicates missing credentials
+    * `false` - Exception is not credential-related
+
+  ## Examples
+
+      # Google provider checking for missing API key
+      def credential_missing?(%ReqLLM.Error.Invalid.Parameter{parameter: param}) do
+        String.contains?(param, "api_key") and
+          String.contains?(param, "GOOGLE_API_KEY")
+      end
+      def credential_missing?(_), do: false
+  """
+  @callback credential_missing?(Exception.t()) :: boolean()
+
   @optional_callbacks [
     normalize_model_id: 1,
     extract_usage: 2,
@@ -580,7 +607,8 @@ defmodule ReqLLM.Provider do
     flush_stream_state: 2,
     parse_stream_protocol: 2,
     attach_stream: 4,
-    thinking_constraints: 0
+    thinking_constraints: 0,
+    credential_missing?: 1
   ]
 
   defmacro __before_compile__(_env) do

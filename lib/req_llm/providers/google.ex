@@ -1591,4 +1591,12 @@ defmodule ReqLLM.Providers.Google do
   defp convert_google_usage_for_streaming(usage_metadata) do
     normalize_google_usage(usage_metadata)
   end
+
+  @impl ReqLLM.Provider
+  def credential_missing?(%ReqLLM.Error.Invalid.Parameter{parameter: param}) do
+    String.contains?(param, ":api_key") and
+      String.contains?(param, "GOOGLE_API_KEY")
+  end
+
+  def credential_missing?(_), do: false
 end

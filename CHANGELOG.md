@@ -25,6 +25,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Models can specify API-specific identifiers separate from canonical IDs
   - Enables Bedrock streaming and on-demand throughput with inference profile prefixes
   - Applied to Claude Haiku 4.5, Sonnet 4.5, Opus 4.1, Llama 3.3 70B models
+- **Credential fallback for fixture recording** in providers requiring cloud credentials
+  - Automatic fallback to existing fixtures when credentials are missing during RECORD mode
+  - Provider-specific credential detection via optional `credential_missing?/1` callback
+  - Implemented in AWS Bedrock, Google, and Google Vertex AI providers
+  - Enables comprehensive test coverage without requiring all developers to configure cloud credentials
 
 ### Enhanced
 
