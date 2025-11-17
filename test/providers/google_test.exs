@@ -318,6 +318,50 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert List.last(response.context.messages).role == :assistant
     end
 
+    test "decode_response extracts cached token counts" do
+      # Create a mock Google response with cached tokens
+      google_response = %{
+        "candidates" => [
+          %{
+            "content" => %{
+              "parts" => [%{"text" => "Response using cached context"}],
+              "role" => "model"
+            },
+            "finishReason" => "STOP"
+          }
+        ],
+        "usageMetadata" => %{
+          "promptTokenCount" => 1500,
+          "candidatesTokenCount" => 50,
+          "totalTokenCount" => 1550,
+          "cachedContentTokenCount" => 1200
+        }
+      }
+
+      mock_resp = %Req.Response{
+        status: 200,
+        body: google_response
+      }
+
+      {:ok, model} = ReqLLM.model("google:gemini-2.5-flash")
+      context = context_fixture()
+
+      mock_req = %Req.Request{
+        options: [context: context, stream: false, model: model.model]
+      }
+
+      {_req, resp} = Google.decode_response({mock_req, mock_resp})
+
+      assert %ReqLLM.Response{} = resp.body
+      response = resp.body
+
+      # Verify cached tokens are extracted
+      assert response.usage.cached_tokens == 1200
+      assert response.usage.input_tokens == 1500
+      assert response.usage.output_tokens == 50
+      assert response.usage.total_tokens == 1550
+    end
+
     test "decode_response preserves tool calls" do
       google_response = %{
         "candidates" => [

@@ -37,6 +37,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Google provider cached token extraction** from API responses
+  - Extracts `cachedContentTokenCount` from `usageMetadata` for both implicit and explicit caching
+  - Converts to OpenAI-compatible `prompt_tokens_details.cached_tokens` format
+  - Fixes cached tokens always showing as 0 even when caching was active
+  - Affects both `google` and `google-vertex` providers using Gemini models
 - **JSV schema validation** now preserves original data types instead of returning cast values
   - Prevents unwanted type coercion (e.g., 1.0 → 1 for integer schemas)
   - Validation still enforces schema constraints, but returns original input data
