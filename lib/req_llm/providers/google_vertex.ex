@@ -188,9 +188,9 @@ defmodule ReqLLM.Providers.GoogleVertex do
       gcp_vertex_auth: fn req ->
         Logger.debug("Getting GCP access token for Vertex AI")
 
-        case ReqLLM.Providers.GoogleVertex.Auth.get_access_token(service_account_json) do
+        case ReqLLM.Providers.GoogleVertex.TokenCache.get_or_refresh(service_account_json) do
           {:ok, access_token} ->
-            Logger.debug("Successfully obtained GCP access token")
+            Logger.debug("Successfully obtained GCP access token (cached)")
             Req.Request.put_header(req, "authorization", "Bearer #{access_token}")
 
           {:error, reason} ->
@@ -441,7 +441,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
     # Get OAuth2 token
     service_account_json = gcp_creds[:service_account_json]
 
-    case ReqLLM.Providers.GoogleVertex.Auth.get_access_token(service_account_json) do
+    case ReqLLM.Providers.GoogleVertex.TokenCache.get_or_refresh(service_account_json) do
       {:ok, access_token} ->
         headers = [
           {"Authorization", "Bearer #{access_token}"},

@@ -20,7 +20,8 @@ defmodule ReqLLM.Application do
     children =
       [
         {Finch, finch_config},
-        {Task.Supervisor, name: ReqLLM.TaskSupervisor}
+        {Task.Supervisor, name: ReqLLM.TaskSupervisor},
+        ReqLLM.Providers.GoogleVertex.TokenCache
       ] ++ dev_children()
 
     opts = [strategy: :one_for_one, name: ReqLLM.Supervisor]
