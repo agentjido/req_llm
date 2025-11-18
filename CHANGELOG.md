@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Google Vertex AI Gemini model support**
+  - Gemini 2.0 Flash, 2.5 Flash, 2.5 Flash Lite, and 2.5 Pro on Google Vertex AI
+  - Delegates to native Google provider format with Vertex-specific quirks handled
+  - Sanitizes function call IDs (Vertex API rejects them while direct Google API includes them)
+  - Full support for extended thinking/reasoning, context caching, and all Gemini features
 - **Real-time stream processing** with `ReqLLM.StreamResponse.process_stream/2`
   - Process streams incrementally with real-time callbacks
   - `on_result` callback for content chunks (fires immediately as text arrives)

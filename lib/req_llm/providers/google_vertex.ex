@@ -90,7 +90,8 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
   # Model family to formatter module mapping
   @model_families %{
-    "claude" => ReqLLM.Providers.GoogleVertex.Anthropic
+    "claude" => ReqLLM.Providers.GoogleVertex.Anthropic,
+    "gemini" => ReqLLM.Providers.GoogleVertex.Gemini
   }
 
   @impl ReqLLM.Provider
@@ -237,6 +238,11 @@ defmodule ReqLLM.Providers.GoogleVertex do
     "/v1/projects/#{project_id}/locations/#{region}/publishers/anthropic/models/#{model_id}:rawPredict"
   end
 
+  defp build_model_path("gemini", model_id, project_id, region) do
+    # Gemini models on Vertex use the publishers/google path
+    "/v1/projects/#{project_id}/locations/#{region}/publishers/google/models/#{model_id}:generateContent"
+  end
+
   # Build base URL based on region
   defp build_base_url(region) do
     if region == "global" do
@@ -347,7 +353,9 @@ defmodule ReqLLM.Providers.GoogleVertex do
       )
 
     # Parse response using formatter
-    case formatter.parse_response(response.body, model, opts) do
+    result = formatter.parse_response(response.body, model, opts)
+
+    case result do
       {:ok, parsed} ->
         {request, %{response | body: parsed}}
 
@@ -477,6 +485,11 @@ defmodule ReqLLM.Providers.GoogleVertex do
   defp build_stream_path("claude", model_id, project_id, region) do
     # Use streamRawPredict for streaming
     "/v1/projects/#{project_id}/locations/#{region}/publishers/anthropic/models/#{model_id}:streamRawPredict"
+  end
+
+  defp build_stream_path("gemini", model_id, project_id, region) do
+    # Use streamGenerateContent for Gemini streaming
+    "/v1/projects/#{project_id}/locations/#{region}/publishers/google/models/#{model_id}:streamGenerateContent"
   end
 
   @impl ReqLLM.Provider
