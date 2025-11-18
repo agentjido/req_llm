@@ -15,6 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Sanitizes function call IDs (Vertex API rejects them while direct Google API includes them)
   - Full support for extended thinking/reasoning, context caching, and all Gemini features
   - Complete fixture coverage for all Vertex Gemini models (46 fixtures: 10 for 2.0, 12 each for 2.5 variants)
+- **Google Context Caching** for Gemini models with up to 90% cost savings
+  - `ReqLLM.Providers.Google.CachedContent` module for cache CRUD operations
+  - Create, list, update, and delete cached content
+  - Support for both Google AI Studio and Vertex AI (requires Gemini models)
+  - `cached_content` provider option to reference existing caches
+  - Minimum token requirements: 1,024 (Flash) / 4,096 (Pro)
 - **Real-time stream processing** with `ReqLLM.StreamResponse.process_stream/2`
   - Process streams incrementally with real-time callbacks
   - `on_result` callback for content chunks (fires immediately as text arrives)

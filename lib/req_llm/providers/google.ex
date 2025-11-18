@@ -15,11 +15,39 @@ defmodule ReqLLM.Providers.Google do
   - `google_candidate_count` - Number of response candidates to generate (default: 1)
   - `google_grounding` - Enable Google Search grounding (built-in web search). Requires `google_api_version: "v1beta"`
   - `google_thinking_budget` - Thinking token budget for Gemini 2.5 models
+  - `cached_content` - Reference to cached content for 90% cost savings (see Context Caching below)
   - `dimensions` - Number of dimensions for embedding vectors
   - `task_type` - Task type for embeddings (e.g., RETRIEVAL_QUERY)
 
   See `provider_schema/0` for the complete Google-specific schema and
   `ReqLLM.Provider.Options` for inherited OpenAI parameters.
+
+  ## Context Caching
+
+  Gemini models support explicit context caching to reduce costs by up to 90% when reusing large amounts of content:
+
+      # Create a cache with large context
+      {:ok, cache} = ReqLLM.Providers.Google.CachedContent.create(
+        provider: :google,
+        model: "gemini-2.5-flash",
+        api_key: System.get_env("GOOGLE_API_KEY"),
+        contents: [%{role: "user", parts: [%{text: large_document}]}],
+        system_instruction: "You are a helpful assistant.",
+        ttl: "3600s"
+      )
+
+      # Use the cache in requests (90% discount on cached tokens!)
+      {:ok, response} = ReqLLM.generate_text(
+        "google:gemini-2.5-flash",
+        "Question about the document?",
+        provider_options: [cached_content: cache.name]
+      )
+
+      # Check token usage - note the cached_tokens field
+      IO.inspect(response.usage)
+      # %{input_tokens: 50, cached_tokens: 10000, output_tokens: 100, ...}
+
+  See `ReqLLM.Providers.Google.CachedContent` for full API documentation.
 
   ## API Version Selection
 
@@ -86,6 +114,11 @@ defmodule ReqLLM.Providers.Google do
       type: :string,
       doc:
         "Task type for embedding (e.g., RETRIEVAL_QUERY, RETRIEVAL_DOCUMENT, SEMANTIC_SIMILARITY)"
+    ],
+    cached_content: [
+      type: :string,
+      doc:
+        "Reference to a previously created cached content. Use the cache name/ID returned from CachedContent creation API."
     ]
   ]
 
@@ -624,6 +657,7 @@ defmodule ReqLLM.Providers.Google do
       |> maybe_add_thinking_config(request.options[:google_thinking_budget])
 
     %{}
+    |> maybe_put(:cachedContent, request.options[:cached_content])
     |> maybe_put(:systemInstruction, system_instruction)
     |> Map.put(:contents, contents)
     |> Map.merge(tools_data)
@@ -698,6 +732,7 @@ defmodule ReqLLM.Providers.Google do
       |> put_schema_for_model(model_name, compiled_schema)
 
     %{}
+    |> maybe_put(:cachedContent, request.options[:cached_content])
     |> maybe_put(:systemInstruction, system_instruction)
     |> Map.put(:contents, contents)
     |> maybe_put(:generationConfig, generation_config)
