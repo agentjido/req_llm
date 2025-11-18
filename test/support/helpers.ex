@@ -338,10 +338,10 @@ defmodule ReqLLM.Test.Helpers do
   """
   def tool_budget_for(model_spec) do
     case ReqLLM.model(model_spec) do
-      {:ok, {_provider, _id, model}} ->
+      {:ok, model} ->
         cond do
-          is_map(model.limit) and is_integer(model.limit[:output]) and model.limit[:output] > 0 ->
-            max(64, div(model.limit[:output], 10))
+          is_map(model.limits) and is_integer(model.limits[:output]) and model.limits[:output] > 0 ->
+            max(64, div(model.limits[:output], 10))
 
           is_map(model.cost) and is_number(model.cost[:output]) and model.cost[:output] < 0.001 ->
             500
