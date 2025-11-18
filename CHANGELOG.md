@@ -42,6 +42,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Test helper `tool_budget_for/1` pattern match regression** from LLMDB integration
+  - Fixed pattern match to use `{:ok, model}` instead of obsolete `{:ok, {provider, id, model}}`
+  - Fixed field name from `model.limit` to `model.limits`
+  - Regression introduced in v1.1.0 caused test fixtures to use incorrect `maxOutputTokens` values
+  - Primarily affected reasoning-enabled models (Gemini 2.5 Pro) where 150 token default was insufficient
 - **Google provider cached token extraction** from API responses
   - Extracts `cachedContentTokenCount` from `usageMetadata` for both implicit and explicit caching
   - Converts to OpenAI-compatible `prompt_tokens_details.cached_tokens` format

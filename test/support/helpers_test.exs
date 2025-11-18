@@ -3,6 +3,31 @@ defmodule ReqLLM.Test.HelpersTest do
 
   import ReqLLM.Test.Helpers
 
+  describe "tool_budget_for/1" do
+    test "calculates correct budget from model limits (regression test for LLMDB integration)" do
+      # This test would have failed with the buggy pattern match that expected
+      # {:ok, {provider, id, model}} instead of {:ok, model}
+
+      # Gemini 2.5 Pro has limits: %{output: 65536, ...}
+      # Expected calculation: max(64, div(65536, 10)) = 6553
+      # Buggy code would return: 150 (default fallback)
+      assert tool_budget_for("google_vertex:gemini-2.5-pro") == 6553
+
+      # Also test another model to ensure it's not hardcoded
+      # Gemini 2.0 Flash has limits: %{output: 8192, ...}
+      # Expected: max(64, div(8192, 10)) = 819
+      assert tool_budget_for("google:gemini-2.0-flash-exp") == 819
+    end
+
+    test "returns default for models without output limits" do
+      # Models without limits[:output] should fall back to cost-based or default
+      # This ensures we don't break existing behavior
+      result = tool_budget_for("openai:gpt-4o-mini")
+      assert is_integer(result)
+      assert result > 0
+    end
+  end
+
   describe "reasoning_overlay/3" do
     test "applies token constraints for models with reasoning capability" do
       # This test demonstrates the bug: reasoning_overlay should detect models with
