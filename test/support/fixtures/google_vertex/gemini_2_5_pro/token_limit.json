@@ -1,0 +1,115 @@
+{
+  "model_spec": "google_vertex:gemini-2.5-pro",
+  "provider": "google_vertex",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjo0MDAxLCJ0ZW1wZXJhdHVyZSI6MS4wfX0="
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Write a very long story about dragons and adventures"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 4001,
+        "temperature": 1.0
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ]
+    },
+    "method": "post",
+    "url": "https://aiplatform.googleapis.com/v1/projects/disco-park-312913/locations/global/publishers/google/models/gemini-2.5-pro:generateContent"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "avgLogprobs": -0.6203836906926866,
+          "content": {
+            "parts": [
+              {
+                "text": "The wind on the Dragon’s Tooth Mountains had a voice. It was a mournful, ancient sound that whispered through the jagged peaks and over the glacial ice. To the villagers of Oakhaven, nestled in the mountain’s shadow, it was the sigh of forgotten gods. To Lyra, it was a lullaby.\n\nLyra was an outcast, marked by the silver-white streak in her jet-black hair and the far-off look in her grey eyes. She lived on the edge of the village, an apprentice to the cartographer, a man as old and dusty as his maps. While others feared the mountains, Lyra was drawn to them. Her maps were the most detailed, not just because she was skilled, but because she dared to venture where others would not, into the foothills and hidden valleys where the legends were born. The legends of dragons.\n\nDragons were creatures of fireside tales and faded tapestries now. The Age of Fire had ended centuries ago, when the Dragon Riders, in their pride, had challenged the heavens and been struck down. The dragons, bereft of their partners, had dwindled, hunted by fearful men until they became myths. But Lyra didn't believe they were all gone. She felt them in the thrum of the earth beneath her feet and heard their sorrow in the wind's lonely song.\n\nOne day, while charting a new ravine carved by a spring thaw, she found it. Tucked deep within a crystalline cave, behind a waterfall that froze into a curtain of ice in winter, was a nest. It was ancient, woven from petrified trees and lined with what looked like solidified moonlight. And in its center, lay a single egg.\n\nIt was larger than a boulder, its surface a swirling mosaic of bronze and gold, warm to the touch despite the cavern’s chill. It pulsed with a faint, rhythmic light, a slow and steady heartbeat. Lyra knew, with a certainty that shook her to her very soul, what it was. Forgetting her maps, her village, her entire life, she returned day after day, bringing soft mosses to bolster the nest and whispering stories of the world outside into the shell’s smooth surface.\n\nWeeks turned into a month. Then, one evening, as a storm raged outside, the cave was filled with a sound like cracking stone. A network of fiery lines spread across the egg’s surface. Lyra watched, heart hammering, as a small, bronze snout, smoking with nascent heat, punched its way through.\n\nThe creature that emerged was all gangly limbs and oversized wings. Its scales were the colour of a new-minted coin, and its eyes, when they finally blinked open, were pools of molten amber. The hatchling fixed its gaze on Lyra, not with the mindless hunger of a beast, but with an unnerving, ancient intelligence. It chirped, a sound like grinding metal and chiming bells, and nudged its head against her hand.\n\nIn that touch, a jolt, not of electricity, but of pure *knowing*, shot through Lyra. A name bloomed in her mind, unbidden: *Aerion*. At the same time, she felt the dragon’s own nascent consciousness touch hers—a whirlwind of instinct, loneliness, and a startling, profound curiosity. He was the last of his kind, or so he believed, incubated by the earth’s geothermal heat for five hundred years, waiting.\n\nTheir bond was forged in the secrecy of the cave. Lyra stole scraps of meat from the village, which Aerion devoured with alarming speed. He grew impossibly fast. Within months, his head was level with her waist. By the end of the year, he was larger than an ox, his scales hardening into a magnificent bronze armour, his chirps deepening into a resonant, rumbling purr that she felt in her bones.\n\nThey communicated not with words, but with feelings, images, and intent. She showed him her maps, the vast world he had been born into. He showed her flashes of his inherited memories—skies thick with dragons, cities of impossible grandeur, and the terrible, searing pain of a great betrayal. He learned her language by listening to her thoughts, and one day, a voice, deep and resonant as a landslide, echoed not in the cave, but directly in her mind.\n\n*“The world is… small, Lyra-of-the-Stars.”*\n\nThe name startled her. It was how he saw her, a tiny, bright speck in the vast darkness of his solitude.\n\nTheir secret could not last. A shepherd, chasing a stray lamb too high into the foothills, saw the glint of bronze scales in the sun. The news spread through Oakhaven like wildfire. Fear, a venomous and potent thing, took root. They called Lyra a witch, a dragon-sorceress. The village elder, a man whose kindness she had once trusted, looked at her with cold dread.\n\nA detachment of the King’s Iron Legion, stationed in a nearby garrison, was summoned. Their commander was Lord Malakor, a man whose name was synonymous with order and a chilling, zealous hatred for all things magical. His family, it was said, had been wiped out by a rogue dragon in the dying days of the Age of Fire. He had made it his life’s work to purge the world of their legacy.\n\n“Flee,” Aerion’s voice boomed in her head as the glint of armour appeared in the valley below. “They will not cage me.”\n\n“We will flee together,” Lyra said, scrambling onto his broad, warm back. She had never ridden him before, never dared. She wrapped her arms around a thick ridge behind his neck as he unfurled his wings, each one a vast, leathery sail. With a single, earth-shattering downstroke, they launched into the air.\n\nThe force of it stole her breath. The village shrank below them, the soldiers like angry ants. For the first time, Lyra saw the world as a dragon did—a breathtaking tapestry of green forests, silver rivers, and cloud-crowned mountains. It was terrifying and exhilarating. The wind screamed past her ears, whipping her hair, but in the small pocket of air behind Aerion’s head, it was calm. She was safe.\n\nTheir adventure had begun not with a choice, but with a desperate flight.\n\nThey flew east, towards the rising sun, leaving the Dragon’s Tooth Mountains and her old life behind. For weeks, they were nomads of the sky, hunting in the wild, sleeping in remote mountain crags. Lyra learned the language of the clouds and the currents of the wind. Aerion learned of the world through her eyes, a world that both fascinated and disappointed him. The sprawling cities were marvels of stone and ingenuity, but he could feel the coldness of the people, the absence of the old magic.\n\n*“They have forgotten the song of the earth,”* Aerion mused one night as they watched the distant lights of the metropolis of Silvercrest. *“They build cages of stone and convince themselves they are free.”*\n\nTheir journey was not without peril. They were hunted. Malakor was relentless, using scouts and informants to track the “Winged Menace.” They narrowly escaped ambushes in narrow canyons and evaded nets launched from high towers. Lyra, no longer just a cartographer, became a survivor. She learned to forage, to track, to move with a silence that belied her village upbringing. She fashioned a bow and became a decent shot, her sharp eyes as useful for spotting game as they were for spotting Malakor’s legionaries.\n\nDuring their travels, they heard whispers of Malakor’s true goal. He wasn’t just hunting Aerion. He was seeking an artifact of the old wars: the Dragon’s Bane. It was a spear, forged by ancient sorcerers from the heart of a fallen shadow dragon, and it was said to be capable of killing any dragon with a single strike, turning their inner fire to ash. The whispers said he was seeking the Obsidian Spire, the hidden sanctuary of the Lorekeepers, to learn its location.\n\n“The Lorekeepers…” Lyra breathed. “My old master spoke of them. He said they were guardians of all knowledge, living in a tower that scrapes the sky.”\n\n*“If they hold the world’s knowledge, they may know if any others of my kind survive,”* Aerion rumbled, a fragile hope in his mental voice. *“And they may know how to counter this… Bane.”*\n\nTheir new destination was set. The Obsidian Spire lay far to the south, across the Sun-Scorched Plains and beyond the Whispering Marshes. It was a perilous journey, but for the first time, they had a purpose beyond survival. They were no longer just running; they were racing.\n\nThe Sun-Scorched Plains were a shimmering expanse of heat and dust, home to nomadic tribes and giant, sand-swimming serpents. Lyra learned to navigate by the stars, her cartography skills finally proving essential. Aerion, a creature of mountain air, suffered under the oppressive sun, but he endured. It was here their bond deepened into a true partnership. They fought the sand-serpents together, Lyra"
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "MAX_TOKENS"
+        }
+      ],
+      "createTime": "2025-11-18T02:36:56.480701Z",
+      "modelVersion": "gemini-2.5-pro",
+      "responseId": "yNsbab2rHfiZ4_UP3qjZkQs",
+      "usageMetadata": {
+        "candidatesTokenCount": 1916,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1916
+          }
+        ],
+        "promptTokenCount": 9,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 9
+          }
+        ],
+        "thoughtsTokenCount": 2049,
+        "totalTokenCount": 3974,
+        "trafficType": "ON_DEMAND"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Tue, 18 Nov 2025 02:37:49 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  }
+}

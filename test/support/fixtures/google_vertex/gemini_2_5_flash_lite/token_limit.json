@@ -1,0 +1,114 @@
+{
+  "model_spec": "google_vertex:gemini-2.5-flash-lite",
+  "provider": "google_vertex",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjo0MDAxLCJ0ZW1wZXJhdHVyZSI6MS4wfX0="
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Write a very long story about dragons and adventures"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 4001,
+        "temperature": 1.0
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ]
+    },
+    "method": "post",
+    "url": "https://aiplatform.googleapis.com/v1/projects/disco-park-312913/locations/global/publishers/google/models/gemini-2.5-flash-lite:generateContent"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "avgLogprobs": -0.5868047214446859,
+          "content": {
+            "parts": [
+              {
+                "text": "The wind howled across the desolate plains of Eldoria, carrying with it the scent of ancient dust and the whisper of forgotten battles. Here, beneath the shadow of jagged, snow-capped peaks, dwelled the last of the great Sky-Serpents, the dragons. For centuries, their roars had echoed through the canyons, their fiery breaths had melted glaciers, and their scales had glittered like a thousand suns in the midday sky. But now, silence. A chilling, suffocating silence that clung to the land like a shroud.\n\nElara, a young woman with eyes the color of a stormy sea and hair like spun moonlight, felt the absence of the dragons like a gnawing emptiness in her soul. She was a Lorekeeper, tasked with preserving the history and legends of Eldoria, a duty that had become increasingly mournful as the centuries wore on. The dragons, once the guardians of the realm, the arbiters of balance, were fading. Stories of their majestic flights and heroic deeds were relegated to dusty scrolls, their magnificent forms a memory in the minds of a dwindling few.\n\nHer village, nestled in a sheltered valley, was one of the last bastions of dragon reverence. Unlike the burgeoning cities of the lowlands, whose inhabitants had long forgotten their celestial kin, the people of Oakhaven still honored the ancient pacts, still left offerings of the finest smoked meats and rarest herbs at the dragon shrines.\n\nOne crisp autumn morning, as Elara was cataloging an ancient tapestry depicting the Great Wyrm’s descent from the heavens, a shadow, impossibly large and impossibly dark, fell across the parchment. Her heart leaped into her throat. It couldn't be. Not now. Not here.\n\nShe scrambled to the window, her breath catching. Against the bruised twilight sky, a silhouette of impossible grandeur unfolded. A dragon. A dragon, immense and ancient, its scales a deep obsidian, its wings vast as storm clouds, was circling her village. It was a sight that hadn't been witnessed in generations, a phantom made flesh, a legend reborn.\n\nThe village erupted in a mixture of awe and terror. Children cried, elders gasped, and the men, armed with rudimentary spears and bows, stood frozen, their courage battling their disbelief. The dragon landed with a tremor that shook the very foundations of their homes, its colossal form dwarfing the tallest oak. Its eyes, like molten gold, scanned the hushed crowd, a primal intelligence gleaming within their depths.\n\nFrom the depths of its throat, a rumble began, not a roar of aggression, but a mournful, resonant sound that vibrated in Elara’s bones. Then, a voice, ancient and resonant, filled the air, a voice that spoke not with sound waves, but with thoughts directly implanted into their minds.\n\n“*Eldoria weeps,*” the voice boomed, a lament for a dying world. “*The ancient balance falters. The Shadow encroaches.*”\n\nElara, driven by an instinct she couldn't explain, stepped forward. The villagers gasped, pulling at her sleeves, but she could not be deterred. The dragon’s gaze fell upon her, and in those molten depths, she saw not just power, but a weariness that mirrored the fading magic of their land.\n\n“Great one,” Elara’s voice trembled, yet held firm. “What is this Shadow you speak of? And how can we, the humble inhabitants of Oakhaven, help?”\n\nThe dragon lowered its massive head, its obsidian snout just meters from her face. The heat radiating from its scales was palpable. “*The Shadow is not a force, but a void. It feeds on forgotten dreams, on fading belief, on the absence of magic. It has been growing, unseen, in the hearts of men and the veins of the earth. Soon, it will consume all.*”\n\nThe dragon, which introduced itself as Ignis, the Last Guardian, explained that the dragons had been in a deep slumber, their life force intertwined with the fading magic of Eldoria. The encroaching Shadow was weakening them, and if they fully succumbed, so too would the world.\n\n“*The key to rekindling the ancient magic lies in the forgotten heart of the world, in the Sunken City of Aethelgard,*” Ignis projected. “*There, the Heartstone, the source of Eldoria’s vitality, lies dormant. But the path is fraught with peril. The Shadow has corrupted many of the ancient places, and its servants now patrol the old routes.*”\n\nIgnis revealed that he was too weakened to travel the distance alone. He needed a companion, a soul uncorrupted by doubt, a heart filled with the old reverence. He needed Elara.\n\nAnd so began Elara’s epic adventure. Mounted on Ignis’s broad, obsidian back, the wind whipping through her hair, she soared above Eldoria, a sight unseen for centuries. They flew over emerald forests that whispered secrets of the ancients, across sapphire lakes that mirrored the boundless sky, and over desolate, windswept plains that bore the scars of forgotten wars.\n\nTheir first destination was the Whispering Peaks, a treacherous mountain range rumored to be home to the Frostfang Drakes, territorial dragons whose icy breath could freeze a man solid. Ignis, despite his weariness, guided them through treacherous blizzards and sheer ice cliffs. Elara, though terrified, found a strange courage blooming within her. She learned to read the subtle shifts in Ignis’s immense body, to anticipate his movements, to trust in their shared purpose.\n\nIn the heart of the peaks, they encountered not the Frostfangs, but their corrupted kin, twisted by the Shadow into creatures of pure malice. Their scales were a sickly grey, their eyes burned with an unnatural hunger. A fierce battle ensued, Ignis’s dwindling fire clashing with the Frostfangs’ chilling breath. Elara, armed with knowledge from her Lorekeeper scrolls, understood the creatures’ weaknesses. She used her wit and the few defensive enchantments she knew, creating diversions and exploiting openings, her courage a beacon in the icy darkness. Together, they drove back the corrupted drakes, Ignis drawing strength from Elara’s unwavering belief.\n\nTheir journey then led them to the Sunken City of Aethelgard, a legendary metropolis that had been swallowed by the earth millennia ago, its ruins now submerged beneath a vast, shimmering desert. The legends spoke of its inhabitants’ mastery of magic, their creation of the Heartstone, and their ultimate downfall.\n\nThe desert was a brutal test of endurance. The sun beat down relentlessly, the sandstorms were like a thousand scourges, and the very air seemed to shimmer with illusions created by the Shadow. They encountered nomadic tribes, some hostile, others offering cryptic warnings and tales of the desert’s ancient guardians. Elara, ever the Lorekeeper, deciphered their stories, piecing together fragments of forgotten knowledge.\n\nOne such tribe, the Sand-Walkers, told of the Serpent’s Tongue Oasis, a place where the water tasted of pure magic, but was guarded by a creature born of the desert’s deepest fears. Ignis, his strength waning, was barely able to fly. He could no longer carry Elara for extended periods. They had to descend, and Elara had to venture forth on foot, her only companion the increasingly frail dragon’s silent presence.\n\nThe oasis was a mirage, a trap. The guardian was a colossal scorpion, its sting venomous with the Shadow’s corruption, its pincers capable of crushing stone. Elara, remembering a lullaby sung to ward off nightmares, began to hum. The familiar melody, imbued with the last vestiges of Eldoria’s true magic, resonated with the creature. It faltered, its movements slowing. Then, Ignis, gathering his last reserves of strength, let out a searing blast of dragonfire, a desperate, potent attack that scorched the scorpion, driving it back into the sands.\n\nThe Oasis, it turned out, was a true sanctuary, a pocket of untainted magic. Here, Ignis found some respite, his scales regaining a faint sheen. Elara, by drinking the magical water, felt a surge of vitality, her senses sharpening, her mind becoming clearer.\n\nFinally, they reached the entrance to Aethelgard, a colossal maw of stone carved into the side of a colossal mesa, veiled by a shimmering heat haze. The Shadow’s influence was palpable here, the air thick with despair and dread. Twisted guardians, once benevolent protectors, now snarled and clawed at the ancient stone.\n\nElara, with Ignis’s weakened but unwavering guidance, navigated the treacherous ruins. They faced traps of light and shadow, riddles whispered by spectral voices, and illusions designed to break their resolve. Elara’s knowledge of ancient Eldorian lore proved invaluable, allowing her to decipher inscriptions, bypass wards, and understand the purpose of forgotten mechanisms.\n\nDeep within the city, in a chamber bathed in an eerie, pulsating light, they found the Heartstone. It was a colossal crystal, once radiant with life, now dim and lifeless, pulsating with a faint, corrupted glow. Around it, the spectral forms of Aethelgard’s last inhabitants swirled, their faces etched with sorrow.\n\nThe Shadow itself manifested then, not as a creature, but as a suffocating presence, a chilling void that threatened to extinguish all light and hope. It whispered doubts into Elara’s mind, reminding her of every fear she had ever harbored, every loss she had ever endured.\n\n“*You are but a speck of dust,*” it hissed, its voice like the grinding of tombstones. “*Your hope is an illusion. Your courage a fleeting spark. You cannot defeat me. I am the inevitable end.*”\n\nIgnis, sensing Elara’s struggle, let out a weak roar, a sound of defiance that resonated through the chamber. “*She is not alone!*”\n\nElara, remembering the faces of her village, the laughter of children, the stories of her ancestors, the roar of Ignis, found her resolve hardening. She looked at the Heartstone, at the spectral forms of Aethelgard’s people, and understood. The Heartstone wasn’t just a source of magic; it was a mirror of Eldoria’s collective spirit, its dreams, its beliefs, its hopes. And the Shadow fed on the absence of these things.\n\n“*You are wrong!*” Elara projected, her voice ringing with a newfound power, amplified by the residual magic of the chamber and the unwavering spirit of Ignis. “*Hope is not an illusion. It is the foundation upon which worlds are built. Belief is the spark that ignites courage. And courage… courage is the very essence of life!*”\n\nShe reached out, her hand trembling, and placed it upon the Heartstone. Instead of a shock of cold, she felt a flicker of warmth, a faint echo of the stone’s former glory. She began to speak, not reciting lore, but sharing her own memories, her own dreams, her own hopes for Eldoria. She spoke of the vibrant forests, the clear skies, the joyous flights of dragons, the laughter of children. She poured her essence, her belief, her love for her world into the stone.\n\nIgnis, beside her, began to glow, his obsidian scales shimmering with renewed strength. He joined Elara, his own memories of Eldoria’s glory, his own unwavering faith in its resilience, flowing into the Heartstone. The spectral forms of Aethelgard’s inhabitants, drawn by the resurgence of hope, began to coalesce, their whispers turning into murmurs of encouragement.\n\nThe Heartstone began to thrum, a slow, steady beat that grew stronger with each passing moment. The corrupted glow receded, replaced by a radiant, vibrant light that pushed back the encroaching Shadow. The void recoiled, its whispers fading into a frustrated hiss.\n\nThe chamber filled with an incandescent brilliance, a pure, untainted magic that washed over Elara, Ignis, and the spectral souls. The Heartstone pulsed with life, its energy surging, its light radiating outwards, reclaiming the lost magic of Eldoria.\n\nWhen the light subsided, the chamber was transformed. The air was crisp and clean, filled with the scent of blooming flowers. The spectral forms of Aethelgard’s inhabitants were gone, their rest finally earned. And the Heartstone… the Heartstone pulsed with a breathtaking radiance, its light illuminating the entire city.\n\nIgnis, no longer weary but filled with a renewed vigor, stretched his mighty wings. His scales gleamed like polished obsidian, and his eyes burned with a joyous fire.\n\n“*You have done it, Lorekeeper,*” Ignis’s voice resonated, stronger than ever. “*You have rekindled the heart of Eldoria.*”\n\nThey emerged from Aethelgard, not to a desert, but to a land reborn. The sands had receded, revealing lush, vibrant grasslands. The sky was a brilliant azure, and in the distance, they could see the snow-capped peaks of the Whispering Mountains, their surfaces now glistening with fresh snow, not the sickly grey of corruption.\n\nAs they flew, they saw signs of the Heartstone’s influence everywhere. The forests were greener, the rivers clearer, and a sense of vibrant life pulsed through the land. And then, they heard it. A distant roar, a sound that had been absent for too long, a sound that brought tears to Elara’s eyes.\n\nAcross the vast expanse of Eldoria, dragons were awakening. Their roars echoed through the valleys, their mighty wings beat against the wind, and their scales once again glittered like a thousand suns. The Shadow had been banished, its grip broken, and the ancient balance was being restored.\n\nElara, the Lorekeeper who dared to believe, had not only saved her village but had resurrected a world. She had journeyed through darkness and doubt, armed with courage and the echoes of forgotten tales, and had brought back the dawn. And as Ignis, the Last Guardian, soared with her through the skies, accompanied by the majestic flights of his awakened brethren, Elara knew that the adventures of Eldoria were far from over. They were just beginning anew, in a world filled with renewed magic, hope, and the glorious roar of dragons."
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP"
+        }
+      ],
+      "createTime": "2025-11-18T07:25:29.814294Z",
+      "modelVersion": "gemini-2.5-flash-lite",
+      "responseId": "aR8cadbZMeG24_UPg9aEmQo",
+      "usageMetadata": {
+        "candidatesTokenCount": 2992,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2992
+          }
+        ],
+        "promptTokenCount": 9,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 9
+          }
+        ],
+        "totalTokenCount": 3001,
+        "trafficType": "ON_DEMAND"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Tue, 18 Nov 2025 07:25:40 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  }
+}

@@ -31,10 +31,11 @@ defmodule ReqLLM.Providers.GoogleVertex.Gemini do
   """
   def format_request(model_id, context, opts) do
     # Create a temporary request structure that mimics what Google.encode_body expects
-    # Just pass opts through - Google.encode_body reads from request.options
-    temp_request = %Req.Request{
-      options: opts |> Map.new() |> Map.merge(%{context: context, model: model_id})
-    }
+    # Use Req.new() to properly initialize the opaque request structure
+    temp_request =
+      Req.new(method: :post, url: URI.parse("https://example.com/temp"))
+      |> Map.put(:body, {:json, %{}})
+      |> Map.put(:options, opts |> Map.new() |> Map.merge(%{context: context, model: model_id}))
 
     # Let Google provider encode the body
     %Req.Request{body: encoded_body} = Google.encode_body(temp_request)

@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Delegates to native Google provider format with Vertex-specific quirks handled
   - Sanitizes function call IDs (Vertex API rejects them while direct Google API includes them)
   - Full support for extended thinking/reasoning, context caching, and all Gemini features
+  - Complete fixture coverage for all Vertex Gemini models (46 fixtures: 10 for 2.0, 12 each for 2.5 variants)
 - **Real-time stream processing** with `ReqLLM.StreamResponse.process_stream/2`
   - Process streams incrementally with real-time callbacks
   - `on_result` callback for content chunks (fires immediately as text arrives)

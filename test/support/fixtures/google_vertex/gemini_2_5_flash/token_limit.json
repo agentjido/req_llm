@@ -1,0 +1,115 @@
+{
+  "model_spec": "google_vertex:gemini-2.5-flash",
+  "provider": "google_vertex",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjo0MDAxLCJ0ZW1wZXJhdHVyZSI6MS4wfX0="
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Write a very long story about dragons and adventures"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 4001,
+        "temperature": 1.0
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ]
+    },
+    "method": "post",
+    "url": "https://aiplatform.googleapis.com/v1/projects/disco-park-312913/locations/global/publishers/google/models/gemini-2.5-flash:generateContent"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "avgLogprobs": -1.1670992197241272,
+          "content": {
+            "parts": [
+              {
+                "text": "The world of Eldoria was a tapestry woven from emerald valleys, jagged, cloud-piercing peaks, and ancient, whispering forests. For centuries, its human inhabitants had coexisted, however uneasily, with the land’s original, magnificent rulers: dragons. But coexistence was a fragile thing, often shattered by fear, misunderstanding, and the relentless march of human ambition.\n\nOur story begins in the sleepy, verdant valley of Oakhaven, a place seemingly untouched by the growing anxieties of the world beyond its protective mountain range. Here lived Elara, a young woman whose hands, though small, held the wisdom of generations of herbalists. Her cottage, nestled at the edge of the Whispering Woods, was a fragrant sanctuary of drying herbs, simmering poultices, and ancient, leather-bound texts. Elara possessed a quiet intensity, a deep connection to the natural world that few understood, and a pair of eyes the colour of moss after a spring rain, which seemed to see more than most.\n\nThe fragile peace of Oakhaven was, however, beginning to fray. Rumours of dragon attacks on trade caravans, livestock, and even isolated homesteads had grown more frequent and more violent. Lord Kael, the stern, unyielding ruler of the High Citadel, had declared a new era of vigilance, mobilising his finest knights and offering bounties for dragon scales and teeth. Fear, a potent poison, was spreading faster than any plague.\n\nOne blustery autumn evening, a cry, unlike any Elara had ever heard, tore through the stillness of the woods. It was a sound of agony, raw and primal, yet strangely young. Ignoring the ingrained fear of the dark and the dragon legends whispered by her grandmother, Elara grabbed her lantern and her satchel of emergency remedies and ventured into the deepening gloom.\n\nShe found him in a hidden clearing, beneath the gnarled roots of an ancient oak. Not a monstrous beast of legend, but a hatchling, no larger than a warhorse, its scales the colour of dawn-fire, dulled by dirt and dried blood. One wing was twisted at an unnatural angle, impaled by a fallen tree branch. His sapphire eyes, clouded with pain and terror, fixed on Elara. This was Roric.\n\nFear warred with an overwhelming wave of compassion. Lord Kael's decrees flashed in her mind: \"Any who harbour or aid a dragon shall face the gallows.\" But Elara saw only suffering. With trembling hands, she approached, speaking soothing words she barely understood herself, words meant for a frightened animal, not a creature of myth. To her astonishment, the hatchling did not lash out. He whimpered, a sound that tore at her heart.\n\nFor weeks, Elara nursed Roric in the hidden cave she discovered near her cottage, a place known only to her. She used her knowledge of herbs to ease his pain, splinted his wing with cunningly crafted wood and strong vines, and fed him the deer and wild boar she learned to snare. The bond between them grew, wordless but profound. Roric, once a creature of pure instinct, began to respond to her voice, his trust blossoming like a rare, nocturnal flower. She saw not a monster, but a sentient, intelligent being, filled with a vibrant, untamed spirit.\n\nOne day, Roric, now stronger, let out a frustrated rumble, gazing at his still-healing wing. In a flash of insight, Elara realised he wasn't just in pain; he was trapped. He longed for the sky. She knew she couldn't keep him hidden forever. Her secret was too dangerous, her heart too exposed.\n\nThe truth found her sooner than she expected. A young shepherd, searching for a lost lamb, stumbled upon the cave. He fled in terror, but not before seeing Elara tending to the young dragon. By dawn, Kael’s knights were at her door, their stern faces illuminated by the first rays of the sun.\n\n\"Elara of Oakhaven,\" declared Sir Gideon, Kael’s grim-faced captain, \"you are charged with harbouring a creature of fire and shadow, an enemy of Eldoria. You will come with us.\"\n\nBut Roric, alerted by the commotion, burst from the cave, his scales now gleaming, his wing, though still stiff, capable of movement. He roared, a sound that shook the earth, a sound no hatchling should have been able to produce, and shielded Elara with his massive body. The knights, terrified, fell back.\n\n\"Go, Roric!\" Elara cried, pushing him away. \"You must fly!\"\n\nHe nudged her gently, protectively, before launching himself into the air, a breathtaking, if slightly awkward, ascension. But he did not flee. Instead, he circled once, twice, before swooping down, extending a clawed foot.\n\n\"Come,\" his eyes seemed to say, \"trust me.\"\n\nWith a leap of faith that defied all reason, Elara grabbed his leg. The world blurred as Roric soared upwards, leaving the shouts and the fear far below. The wind tore at her hair, but in her heart, a new, fierce courage was kindling. She was no longer just an herbalist; she was a rider, an outcast, a companion to a dragon.\n\nTheir flight took them high above the familiar valleys, towards the treacherous, snow-capped peaks of the Dragon’s Teeth mountains – a place humans rarely dared to tread. Roric, guided by an instinct Elara couldn't comprehend, led them to a hidden aerie, a vast cavern carved into the mountainside, its entrance veiled by a shimmering waterfall.\n\nInside, the air thrummed with ancient power. Dozens of dragons, of every hue and size, rested or flew within the colossal space. And at their centre, a dragon of unimaginable age, its scales like polished obsidian, its eyes pools of molten gold, sat with an air of profound wisdom. This was Aetheria, the matriarch, the eldest of the Sky-Weavers.\n\nRoric landed with a gentle thud, and Elara slid off his back, feeling utterly insignificant amidst these majestic beings. Aetheria’s gaze, ancient and piercing, fell upon her. Elara expected fear, but felt only a deep, resonant calm.\n\n\"Little one,\" Aetheria rumbled, her voice a symphony of stone and wind, \"you bear the scent of compassion, a rare fragrance among your kind.\"\n\nElara explained her story, her fear, her bond with Roric, and the growing human hostility. She spoke of Kael’s decrees, the dwindling wildlands, the fear that consumed Oakhaven.\n\nAetheria listened, her vast head occasionally nodding. \"The balance is broken,\" she sighed. \"Humans forget their place, encroaching on ancient territories, hunting our young, polluting the earth. We do not attack for sport, child. We fight for survival. Our sacred Crystal Veins, the source of our magic and life, are being plundered by human miners, driven by the lure of the ‘sky-metal’ they call it.\"\n\nElara’s mind reeled. Kael’s kingdom was rich due to \"sky-metal\" mining, believed to be the source of Eldoria’s famed enchanted armour and weapons. But if it was also the dragons’ lifeblood… The conflict was far deeper than she had imagined.\n\nOver the next few months, Elara lived among the dragons. She learned their language, a complex blend of growls, whistles, and telepathic images. She studied their culture, their deep connection to the earth's ley lines, their reverence for life. Roric became her shadow, her confidant, her protector. She discovered that dragons were not just fierce predators but complex, intelligent beings with their own sorrows, joys, and ancient wisdom. She met other dragons: Solara, whose golden scales shimmered like the sun; Pyre, a fiery young male full of rebellious energy; and the gentle, reclusive Faelan, whose scales were the colour of deep forest moss.\n\nBut the sanctuary was not truly safe. Kael, obsessed with eliminating the \"dragon menace\" and expanding his mining operations, dispatched hunting parties equipped with new, powerful ballistas and enchanted arrows. The Dragon’s Teeth mountains became a battleground. Elara, using her knowledge of herbalism and the mountain terrain, often helped the dragons avoid traps and heal their wounds.\n\nOne day, Kael’s forces, led by his ruthless general, Valerius, discovered a secondary, less guarded entrance to the aerie. A full-scale assault began. Ballistas rained down bolts, human warriors, driven by terror and zeal, poured into the cavern. Dragons roared, their fiery breath meeting steel and arrow. Roric, now fully grown and a formidable warrior, fought with a ferocity that matched his love for Elara.\n\nAmidst the chaos, Elara saw Kael himself, a grim figure on a armoured warhorse, leading his personal guard towards Aetheria. He held a relic in his hand – a glowing, jagged shard of sky-metal, humming with dark energy. Aetheria, sensing its power, let out a pained shriek.\n\n\"The Heart of Eldoria!\" Aetheria cried telepathically to Elara. \"He means to drain it!\"\n\nElara understood. Kael wasn't just trying to kill dragons; he was aiming for the source of their power, the very life force of the mountains. If the Heart of Eldoria, a massive vein of pure sky-metal deep within the aerie, was drained, it would not only devastate the dragons"
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "MAX_TOKENS"
+        }
+      ],
+      "createTime": "2025-11-18T02:36:27.954654Z",
+      "modelVersion": "gemini-2.5-flash",
+      "responseId": "q9sbaZ6iOqTE4_UPifaJ4QM",
+      "usageMetadata": {
+        "candidatesTokenCount": 2005,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2005
+          }
+        ],
+        "promptTokenCount": 9,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 9
+          }
+        ],
+        "thoughtsTokenCount": 1971,
+        "totalTokenCount": 3985,
+        "trafficType": "ON_DEMAND"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Tue, 18 Nov 2025 02:36:51 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  }
+}
