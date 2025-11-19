@@ -168,6 +168,7 @@ defmodule ReqLLM.MixProject do
       {:uniq, "~> 0.6"},
       {:zoi, "~> 0.10"},
       {:jsv, "~> 0.11"},
+      {:abacus, "~> 0.4"},
       {:llm_db, github: "agentjido/llm_db", branch: "main", override: true},
 
       # Dev/test dependencies
