@@ -4,11 +4,13 @@
 # Goal: Demonstrate the 3-phase "Reason-Act-Answer" loop explicitly.
 #
 # Run with:
-#   mix run tutorial/agents/02_tools_basic_loop.exs
+#   iex -S mix run tutorial/agents/02_tools_basic_loop.exs
 
 import ReqLLM.Context
 
 alias ReqLLM.{Context, Tool, ToolCall}
+
+require IEx
 
 # Ensure dotenvy loads .env file if present
 _ = Dotenvy.source(".env")
@@ -64,9 +66,14 @@ IO.puts(">> Question: Calculate 128 * 32, then divide by 2.\n")
 
 # --- PHASE 1: ASK MODEL ---
 IO.puts(">> [Phase 1] Asking model (with tools)...")
+IO.puts("   (Pausing before Phase 1. Type `continue` or `respawn` to proceed.)")
+IEx.pry()
 {:ok, response1} = ReqLLM.generate_text(model, context, tools: tools)
 
 tool_calls = ReqLLM.Response.tool_calls(response1)
+
+IO.puts(">> [Phase 1] Response received.")
+IEx.pry()
 
 if tool_calls == [] do
   IO.puts(">> No tools called. Answer: #{ReqLLM.Response.text(response1)}")
@@ -100,6 +107,9 @@ else
       Context.append(acc_context, Context.tool_result(call.id, to_string(result)))
     end)
 
+  IO.puts(">> [Phase 2] Tools executed.")
+  IEx.pry()
+
   # --- PHASE 3: FINAL ANSWER ---
   IO.puts(">> [Phase 3] Asking model for final answer...")
   {:ok, response2} = ReqLLM.generate_text(model, context3, tools: [])
@@ -107,4 +117,5 @@ else
   final_text = ReqLLM.Response.text(response2)
   IO.puts("\n>> Final Answer:\n")
   IO.puts(final_text)
+  IEx.pry()
 end

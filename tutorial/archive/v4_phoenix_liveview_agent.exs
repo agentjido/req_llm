@@ -1,7 +1,7 @@
 #!/usr/bin/env elixir
 
 Mix.install([
-  {:req_llm, path: ".."},
+  {:req_llm, path: "../.."},
   {:phoenix_playground, "~> 0.1.8"},
   {:abacus, "~> 2.0"},
   {:jason, "~> 1.4"},

@@ -4,7 +4,7 @@
 # Goal: Show streaming tokens using a simple GenServer. No tools here.
 #
 # Run with:
-#   mix run tutorial/agents/03_streaming_basics.exs
+#   iex -S mix run tutorial/agents/03_streaming_basics.exs
 
 # Ensure dotenvy loads .env file if present
 _ = Dotenvy.source(".env")
@@ -16,6 +16,8 @@ defmodule SimpleAgent.V1 do
   import ReqLLM.Context
 
   alias ReqLLM.Context
+
+  require IEx
 
   # --- STATE ---
   defstruct [:model, :context]
@@ -43,6 +45,9 @@ defmodule SimpleAgent.V1 do
     # 1. Append user message
     context = Context.append(state.context, user(user_text))
 
+    IO.puts("\n(Pausing before streaming. Type `continue` or `respawn` to proceed.)")
+    IEx.pry()
+
     # 2. Call stream_text
     #    We merge our context messages with any request options.
     case ReqLLM.stream_text(state.model, context.messages) do
@@ -63,6 +68,9 @@ defmodule SimpleAgent.V1 do
           end)
 
         IO.write("\n\n")
+
+        IO.puts("(Pausing after streaming. Type `continue` or `respawn` to proceed.)")
+        IEx.pry()
 
         # 4. Update context with the assistant's final response
         new_context = Context.append(context, assistant(final_text))
@@ -89,3 +97,4 @@ IO.puts("\n>> User: #{question}")
 {:ok, _response} = SimpleAgent.V1.ask(pid, question)
 
 IO.puts("Done.")
+IEx.pry()
