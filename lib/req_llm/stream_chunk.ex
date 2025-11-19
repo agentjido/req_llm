@@ -327,8 +327,21 @@ defmodule ReqLLM.StreamChunk do
             chunk.name <> args_preview
 
           :meta ->
-            meta_keys = chunk.metadata |> Map.keys() |> Enum.join(",")
-            "meta: " <> meta_keys
+            case chunk.metadata do
+              %{tool_call_args: %{index: idx, fragment: frag}} ->
+                frag_preview = inspect_text(frag, 30)
+                "tool_call_args[#{idx}]: #{frag_preview}"
+
+              %{finish_reason: reason} ->
+                "finish_reason: #{reason}"
+
+              %{usage: usage} ->
+                "usage: #{inspect(usage)}"
+
+              meta ->
+                meta_keys = meta |> Map.keys() |> Enum.join(",")
+                "meta: " <> meta_keys
+            end
         end
 
       Inspect.Algebra.concat([
