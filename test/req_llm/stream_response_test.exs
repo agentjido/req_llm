@@ -398,7 +398,7 @@ defmodule ReqLLM.StreamResponseTest do
       assert length(Response.tool_calls(response)) == 1
     end
 
-    test "preserves context and model information" do
+    test "preserves context advancement and model information" do
       original_context =
         Context.new([
           Context.system("You are helpful"),
@@ -416,7 +416,7 @@ defmodule ReqLLM.StreamResponseTest do
 
       {:ok, response} = StreamResponse.to_response(stream_response)
 
-      assert response.context == original_context
+      assert response.context == Context.append(original_context, response.message)
       assert response.model == "claude-sonnet-4-5-20250929"
     end
 
@@ -791,6 +791,20 @@ defmodule ReqLLM.StreamResponseTest do
 
       # Response should have the actual text
       assert Response.text(response) == "actual text"
+    end
+
+    test "response context includes assistant message" do
+      user_context = Context.new([Context.user("Hello, how are you?")])
+
+      stream_response =
+        create_stream_response(
+          stream: text_chunks(["Doing well!"]),
+          context: user_context
+        )
+
+      {:ok, response} = StreamResponse.process_stream(stream_response)
+
+      assert response.context == Context.append(user_context, response.message)
     end
 
     test "preserves tool call order" do

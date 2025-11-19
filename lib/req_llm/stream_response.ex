@@ -453,7 +453,7 @@ defmodule ReqLLM.StreamResponse do
     metadata = MetadataHandle.await(stream_response.metadata_handle)
     usage = normalize_usage_fields(Map.get(metadata, :usage))
 
-    %Response{
+    base_response = %Response{
       id: generate_response_id(),
       model: stream_response.model.id,
       context: stream_response.context,
@@ -466,6 +466,8 @@ defmodule ReqLLM.StreamResponse do
       provider_meta: Map.get(metadata, :provider_meta, %{}),
       error: nil
     }
+
+    Context.merge_response(stream_response.context, base_response)
   end
 
   @doc """
@@ -599,7 +601,7 @@ defmodule ReqLLM.StreamResponse do
       usage = normalize_usage_fields(Map.get(metadata, :usage))
 
       # Create Response struct
-      response = %Response{
+      base_response = %Response{
         id: generate_response_id(),
         model: stream_response.model.id,
         context: stream_response.context,
@@ -613,7 +615,7 @@ defmodule ReqLLM.StreamResponse do
         error: nil
       }
 
-      {:ok, response}
+      {:ok, Context.merge_response(stream_response.context, base_response)}
     end
   rescue
     error -> {:error, error}
@@ -649,7 +651,7 @@ defmodule ReqLLM.StreamResponse do
             finish_reason: Map.get(metadata, :finish_reason, response.finish_reason)
         }
 
-        {:ok, response}
+        {:ok, Context.merge_response(stream_response.context, response)}
 
       {_req, error} when is_exception(error) ->
         {:error, error}
