@@ -8,6 +8,7 @@ Logger.configure(level: :warning)
 
 defmodule TutorialAgent do
   use GenServer
+
   alias ReqLLM.Context
 
   defstruct [:model, :context]
@@ -68,9 +69,9 @@ defmodule TutorialAgent do
         IO.inspect(finish_reason)
 
         context =
-          if final_text != "",
-            do: Context.append(context, Context.assistant(final_text)),
-            else: context
+          if final_text == "",
+            do: context,
+            else: Context.append(context, Context.assistant(final_text))
 
         result = %{text: final_text, usage: usage, finish_reason: finish_reason}
         {:reply, {:ok, result}, %{state | context: context}}

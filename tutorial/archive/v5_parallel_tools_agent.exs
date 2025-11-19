@@ -33,8 +33,9 @@ defmodule SimpleAgent.V5 do
 
   use GenServer
 
-  alias ReqLLM.{Context, Tool}
   import ReqLLM.Context
+
+  alias ReqLLM.{Context, Tool}
   alias SimpleAgent.{Core, Prompts}
 
   defstruct [:model, :history, :tools, :supervisor]
@@ -72,7 +73,10 @@ defmodule SimpleAgent.V5 do
   end
 
   @impl true
-  def handle_continue({:stream_response, from}, %{model: model, history: history, tools: tools} = state) do
+  def handle_continue(
+        {:stream_response, from},
+        %{model: model, history: history, tools: tools} = state
+      ) do
     IO.puts("Streaming response...\n")
 
     case Core.stream_with_tools(model, history, tools, temperature: 0.0) do
@@ -114,7 +118,10 @@ defmodule SimpleAgent.V5 do
   end
 
   @impl true
-  def handle_continue({:execute_tools_parallel, from, tool_calls}, %{tools: tools, supervisor: supervisor} = state) do
+  def handle_continue(
+        {:execute_tools_parallel, from, tool_calls},
+        %{tools: tools, supervisor: supervisor} = state
+      ) do
     IO.puts("Executing #{length(tool_calls)} tool call(s) in parallel...\n")
 
     start_time = System.monotonic_time(:millisecond)
@@ -127,7 +134,10 @@ defmodule SimpleAgent.V5 do
       Enum.reduce(results, state, fn {result, elapsed}, acc_state ->
         case result do
           {:ok, call, tool_result} ->
-            IO.puts("Success: #{call.name}(#{inspect(call.arguments)}) → #{inspect(tool_result)} (#{elapsed}ms)")
+            IO.puts(
+              "Success: #{call.name}(#{inspect(call.arguments)}) → #{inspect(tool_result)} (#{elapsed}ms)"
+            )
+
             tool_msg = Context.tool_result_message(call.name, call.id, tool_result)
             update_in(acc_state.history, &Context.append(&1, tool_msg))
 
@@ -145,7 +155,10 @@ defmodule SimpleAgent.V5 do
       end)
 
     IO.puts("\nTime: Total parallel execution time: #{total_elapsed}ms")
-    IO.puts("Note: Sequential would have taken ~#{Enum.sum(Enum.map(results, fn {_, e} -> e end))}ms\n")
+
+    IO.puts(
+      "Note: Sequential would have taken ~#{Enum.sum(Enum.map(results, fn {_, e} -> e end))}ms\n"
+    )
 
     {:noreply, state, {:continue, {:finalize_response, from}}}
   end
@@ -189,7 +202,6 @@ defmodule SimpleAgent.V5 do
         {{:error, nil, "Tool execution timeout (#{timeout_ms}ms)"}, timeout_ms}
     end)
   end
-
 end
 
 model = System.get_env("REQ_LLM_MODEL") || "anthropic:claude-sonnet-4-5"

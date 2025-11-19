@@ -13,8 +13,9 @@ Code.require_file("simpleagent_helpers.ex", __DIR__)
 defmodule SimpleAgent.V2 do
   use GenServer
 
-  alias ReqLLM.Context
   import ReqLLM.Context
+
+  alias ReqLLM.Context
   alias SimpleAgent.Helpers
 
   defstruct [:model, :context, :tools]
@@ -44,7 +45,11 @@ defmodule SimpleAgent.V2 do
   end
 
   @impl true
-  def handle_call({:ask, user_text}, _from, %{model: model, context: context, tools: tools} = state) do
+  def handle_call(
+        {:ask, user_text},
+        _from,
+        %{model: model, context: context, tools: tools} = state
+      ) do
     context = Context.append(context, user(user_text))
 
     case ReqLLM.stream_text(model, context.messages, tools: tools, temperature: 0.0) do
@@ -52,17 +57,20 @@ defmodule SimpleAgent.V2 do
         debug? = System.get_env("DEBUG") == "true"
 
         acc =
-          Enum.reduce(stream_response.stream, %{text: "", calls: [], arg_frags: %{}}, fn chunk, acc ->
+          Enum.reduce(stream_response.stream, %{text: "", calls: [], arg_frags: %{}}, fn chunk,
+                                                                                         acc ->
             if debug?, do: IO.inspect(chunk, label: "Chunk")
 
             cond do
               chunk.type == :content and is_binary(chunk.text) ->
-                unless debug?, do: IO.write(chunk.text)
+                if !debug?, do: IO.write(chunk.text)
                 %{acc | text: acc.text <> chunk.text}
 
               chunk.type == :tool_call ->
-                unless debug? do
-                  args_display = if chunk.arguments in [nil, %{}], do: "...", else: inspect(chunk.arguments)
+                if !debug? do
+                  args_display =
+                    if chunk.arguments in [nil, %{}], do: "...", else: inspect(chunk.arguments)
+
                   IO.puts("\n[tool_call: #{chunk.name}(#{args_display})]")
                 end
 
@@ -85,7 +93,7 @@ defmodule SimpleAgent.V2 do
             end
           end)
 
-        unless debug?, do: IO.write("\n")
+        if !debug?, do: IO.write("\n")
 
         calls =
           Enum.map(acc.calls, fn call ->
@@ -121,8 +129,10 @@ defmodule SimpleAgent.V2 do
               if tool do
                 case ReqLLM.Tool.execute(tool, call.arguments) do
                   {:ok, result} ->
-                    unless debug? do
-                      IO.puts("[tool] #{call.name}(#{inspect(call.arguments)}) -> #{inspect(result)}")
+                    if !debug? do
+                      IO.puts(
+                        "[tool] #{call.name}(#{inspect(call.arguments)}) -> #{inspect(result)}"
+                      )
                     end
 
                     Context.append(ctx, tool_result_message(call.name, call.id, result))
@@ -130,26 +140,26 @@ defmodule SimpleAgent.V2 do
                   {:error, reason} ->
                     err = if is_binary(reason), do: reason, else: inspect(reason)
 
-                    unless debug? do
+                    if !debug? do
                       IO.puts("[error] #{call.name} error: #{err}")
                     end
 
                     Context.append(ctx, tool_result_message(call.name, call.id, %{error: err}))
                 end
               else
-                unless debug?, do: IO.puts("[error] Tool not found: #{call.name}")
+                if !debug?, do: IO.puts("[error] Tool not found: #{call.name}")
                 ctx
               end
             end)
 
           case ReqLLM.generate_text(model, context.messages, max_tokens: 256, temperature: 0.0) do
             {:ok, %{message: %{content: [%{text: t} | _]}}} when is_binary(t) ->
-              unless debug?, do: IO.puts(t)
+              if !debug?, do: IO.puts(t)
               context = Context.append(context, assistant(t))
               {:reply, {:ok, t}, %{state | context: context}}
 
             {:ok, t} when is_binary(t) ->
-              unless debug?, do: IO.puts(t)
+              if !debug?, do: IO.puts(t)
               context = Context.append(context, assistant(t))
               {:reply, {:ok, t}, %{state | context: context}}
 

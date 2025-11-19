@@ -1,6 +1,7 @@
 defmodule SimpleAgent.Helpers do
-  alias ReqLLM.{Context, Tool}
   import ReqLLM.Context
+
+  alias ReqLLM.{Context, Tool}
 
   def system_prompt do
     """
@@ -15,7 +16,8 @@ defmodule SimpleAgent.Helpers do
   def calculator_tool do
     Tool.new!(
       name: "calculator",
-      description: "Safely evaluate a mathematical expression string. Example: {\"expression\":\"(2+3)*7\"}",
+      description:
+        ~s|Safely evaluate a mathematical expression string. Example: {"expression":"(2+3)*7"}|,
       parameter_schema: [
         expression: [type: :string, required: true, doc: "Math expression to evaluate"]
       ],
@@ -38,12 +40,14 @@ defmodule SimpleAgent.Helpers do
 
         IO.write("\n")
 
-        {:ok, %{
-          assistant_text: extract_text(chunks),
-          tool_calls: extract_tool_calls(chunks)
-        }}
+        {:ok,
+         %{
+           assistant_text: extract_text(chunks),
+           tool_calls: extract_tool_calls(chunks)
+         }}
 
-      error -> error
+      error ->
+        error
     end
   end
 
@@ -111,7 +115,9 @@ defmodule SimpleAgent.Helpers do
 
     Enum.map(calls, fn call ->
       case Map.get(arg_fragments, call.index) do
-        nil -> Map.delete(call, :index)
+        nil ->
+          Map.delete(call, :index)
+
         json ->
           case Jason.decode(json) do
             {:ok, m} -> call |> Map.put(:arguments, m) |> Map.delete(:index)

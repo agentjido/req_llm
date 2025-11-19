@@ -8,8 +8,10 @@ Logger.configure(level: :warning)
 
 defmodule SimpleAgent.V1 do
   use GenServer
-  alias ReqLLM.Context
+
   import ReqLLM.Context
+
+  alias ReqLLM.Context
 
   defstruct [:model, :context]
 
@@ -48,7 +50,7 @@ defmodule SimpleAgent.V1 do
             end
 
             if chunk.type == :content do
-              unless debug?, do: IO.write(chunk.text)
+              if !debug?, do: IO.write(chunk.text)
               acc <> chunk.text
             else
               acc
@@ -63,7 +65,9 @@ defmodule SimpleAgent.V1 do
         IO.inspect(usage, label: "Usage")
         IO.inspect(finish_reason, label: "Finish Reason")
 
-        context = if final_text != "", do: Context.append(context, assistant(final_text)), else: context
+        context =
+          if final_text == "", do: context, else: Context.append(context, assistant(final_text))
+
         {:reply, {:ok, final_text}, %{state | context: context}}
 
       {:error, error} ->
@@ -81,6 +85,8 @@ IO.puts("Model: #{model}")
 {:ok, pid} = SimpleAgent.V1.start_link(model: model)
 
 IO.puts("\nQuestion: In 2 short sentences, explain what streaming means for LLM responses.\n")
-{:ok, _response} = SimpleAgent.V1.ask(pid, "In 2 short sentences, explain what streaming means for LLM responses.")
+
+{:ok, _response} =
+  SimpleAgent.V1.ask(pid, "In 2 short sentences, explain what streaming means for LLM responses.")
 
 IO.puts("\n\nV1 Demo Complete!")

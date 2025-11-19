@@ -43,6 +43,7 @@ end
 
 defmodule TutorialAgent do
   use GenServer
+
   alias ReqLLM.Context
 
   defstruct [:model, :context]
@@ -107,33 +108,34 @@ defmodule TutorialAgent do
   defp run_step(model, context, request_opts, prn, debug?, steps_left, acc) do
     prn.say.("\n--- Step 1: Model generates response ---")
 
-    with {:ok, step} <- llm_step(model, context, request_opts, prn, debug?) do
-      case step.type do
-        :tool_calls ->
-          prn.say.("\n--- Step 2: Execute Tools ---")
-          tool_results = execute_tools(step.tool_calls, prn)
+    case llm_step(model, context, request_opts, prn, debug?) do
+      {:ok, step} ->
+        case step.type do
+          :tool_calls ->
+            prn.say.("\n--- Step 2: Execute Tools ---")
+            tool_results = execute_tools(step.tool_calls, prn)
 
-          ctx2 =
-            context
-            |> Context.append(step.message)
-            |> append_messages(tool_results)
+            ctx2 =
+              context
+              |> Context.append(step.message)
+              |> append_messages(tool_results)
 
-          acc2 = %{
-            acc
-            | usage: merge_usage(acc.usage, step.usage),
-              tool_calls: acc.tool_calls ++ step.tool_calls
-          }
+            acc2 = %{
+              acc
+              | usage: merge_usage(acc.usage, step.usage),
+                tool_calls: acc.tool_calls ++ step.tool_calls
+            }
 
-          prn.say.("\n--- Loop: back to Step 1 with tool results ---")
-          run_step(model, ctx2, request_opts, prn, debug?, steps_left - 1, acc2)
+            prn.say.("\n--- Loop: back to Step 1 with tool results ---")
+            run_step(model, ctx2, request_opts, prn, debug?, steps_left - 1, acc2)
 
-        :text ->
-          prn.say.("\n--- Step 3: Done (text) ---")
-          ctx2 = Context.append(context, step.message)
-          acc2 = %{acc | usage: merge_usage(acc.usage, step.usage)}
-          {:ok, step.text, ctx2, acc2.usage, acc2.tool_calls}
-      end
-    else
+          :text ->
+            prn.say.("\n--- Step 3: Done (text) ---")
+            ctx2 = Context.append(context, step.message)
+            acc2 = %{acc | usage: merge_usage(acc.usage, step.usage)}
+            {:ok, step.text, ctx2, acc2.usage, acc2.tool_calls}
+        end
+
       {:error, error} ->
         {:error, error}
     end
@@ -160,13 +162,20 @@ defmodule TutorialAgent do
           final_text =
             chunks
             |> Enum.filter(&(&1.type == :content))
-            |> Enum.map(& &1.text)
-            |> Enum.join()
+            |> Enum.map_join(& &1.text)
 
-          prn.say.("Response type: " <> if(tool_calls != [], do: "TOOL_CALLS", else: "TEXT"))
+          prn.say.("Response type: " <> if(tool_calls == [], do: "TEXT", else: "TOOL_CALLS"))
           prn.inspect.(usage, label: "Usage")
 
-          if tool_calls != [] do
+          if tool_calls == [] do
+            {:ok,
+             %{
+               type: :text,
+               text: final_text,
+               usage: usage,
+               message: Context.assistant(final_text)
+             }}
+          else
             tool_call_structs =
               Enum.map(tool_calls, fn tc ->
                 ReqLLM.ToolCall.new(tc.id, tc.name, Jason.encode!(tc.arguments))
@@ -179,14 +188,6 @@ defmodule TutorialAgent do
                usage: usage,
                message: Context.assistant(final_text, tool_calls: tool_call_structs)
              }}
-          else
-            {:ok,
-             %{
-               type: :text,
-               text: final_text,
-               usage: usage,
-               message: Context.assistant(final_text)
-             }}
           end
 
         {:error, _} = err ->
@@ -198,7 +199,10 @@ defmodule TutorialAgent do
           tool_calls = ReqLLM.Response.tool_calls(response)
           usage = response.usage
 
-          if tool_calls != [] do
+          if tool_calls == [] do
+            text = ReqLLM.Response.text(response)
+            {:ok, %{type: :text, text: text, usage: usage, message: response.message}}
+          else
             {:ok,
              %{
                type: :tool_calls,
@@ -206,9 +210,6 @@ defmodule TutorialAgent do
                usage: usage,
                message: response.message
              }}
-          else
-            text = ReqLLM.Response.text(response)
-            {:ok, %{type: :text, text: text, usage: usage, message: response.message}}
           end
 
         {:error, _} = err ->

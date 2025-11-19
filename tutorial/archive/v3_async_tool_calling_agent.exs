@@ -28,8 +28,9 @@ defmodule SimpleAgent.V3 do
 
   use GenServer
 
-  alias ReqLLM.Context
   import ReqLLM.Context
+
+  alias ReqLLM.Context
   alias SimpleAgent.{Core, Prompts}
 
   defstruct [:model, :history, :tools]
@@ -62,7 +63,10 @@ defmodule SimpleAgent.V3 do
   end
 
   @impl true
-  def handle_continue({:stream_response, from}, %{model: model, history: history, tools: tools} = state) do
+  def handle_continue(
+        {:stream_response, from},
+        %{model: model, history: history, tools: tools} = state
+      ) do
     IO.puts("Streaming response...\n")
 
     case Core.stream_with_tools(model, history, tools, temperature: 0.0) do
@@ -113,7 +117,6 @@ defmodule SimpleAgent.V3 do
         {:noreply, state}
     end
   end
-
 end
 
 model = System.get_env("REQ_LLM_MODEL") || "anthropic:claude-sonnet-4-5"
@@ -138,7 +141,10 @@ IO.puts(String.duplicate("=", 80))
 
 IO.puts("\nQuestion 3: If tickets cost 12.5 dollars each, how much for 7 tickets?\n")
 IO.puts(String.duplicate("-", 80))
-{:ok, _response} = SimpleAgent.V3.ask(pid, "If tickets cost 12.5 dollars each, how much for 7 tickets?")
+
+{:ok, _response} =
+  SimpleAgent.V3.ask(pid, "If tickets cost 12.5 dollars each, how much for 7 tickets?")
+
 IO.puts(String.duplicate("=", 80))
 
 IO.puts("\nV3 Demo Complete!")

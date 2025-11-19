@@ -70,7 +70,7 @@ defmodule SimpleAgent.Tools do
     Tool.new!(
       name: "calculator",
       description:
-        "Safely evaluate a mathematical expression string. Example: {\"expression\":\"(2+3)*7\"}",
+        ~s|Safely evaluate a mathematical expression string. Example: {"expression":"(2+3)*7"}|,
       parameter_schema: [
         expression: [
           type: :string,
@@ -99,7 +99,7 @@ defmodule SimpleAgent.Tools do
     Tool.new!(
       name: "slow_calculator",
       description:
-        "A deliberately slow calculator that sleeps before evaluating. Example: {\"expression\":\"(2+3)*7\"}",
+        ~s|A deliberately slow calculator that sleeps before evaluating. Example: {"expression":"(2+3)*7"}|,
       parameter_schema: [
         expression: [
           type: :string,

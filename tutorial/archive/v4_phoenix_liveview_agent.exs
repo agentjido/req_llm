@@ -28,8 +28,9 @@ defmodule SimpleAgent.V4 do
 
   use Phoenix.LiveView
 
-  alias ReqLLM.{Context, Tool}
   import ReqLLM.Context
+
+  alias ReqLLM.{Context, Tool}
   alias SimpleAgent.{Parser, Prompts}
 
   @model System.get_env("REQ_LLM_MODEL") || "anthropic:claude-sonnet-4-5"
@@ -265,7 +266,13 @@ defmodule SimpleAgent.V4 do
     parent = self()
 
     Task.start(fn ->
-      stream_to_liveview(parent, assistant_id, socket.assigns.model, history, socket.assigns.tools)
+      stream_to_liveview(
+        parent,
+        assistant_id,
+        socket.assigns.model,
+        history,
+        socket.assigns.tools
+      )
     end)
 
     {:noreply, assign(socket, :current_message_id, assistant_id)}
@@ -305,6 +312,7 @@ defmodule SimpleAgent.V4 do
 
   def handle_info({:stream_error, error}, socket) do
     error_text = "Error: #{inspect(error)}"
+
     error_msg = %{
       id: generate_id(),
       role: :assistant,
@@ -381,6 +389,7 @@ defmodule SimpleAgent.V4 do
 
       {:error, err} ->
         error_text = "Error: #{inspect(err)}"
+
         error_msg = %{
           id: generate_id(),
           role: :assistant,

@@ -29,9 +29,10 @@ defmodule SimpleAgent.Core do
   ```
   """
 
+  import ReqLLM.Context
+
   alias ReqLLM.{Context, Tool}
   alias SimpleAgent.Parser
-  import ReqLLM.Context
 
   @doc """
   Phase 1: Stream model response and detect tool calls.
