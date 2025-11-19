@@ -68,6 +68,7 @@ defmodule ReqLLM.Step.Fixture do
     case Code.ensure_loaded(ReqLLM.Step.Fixture.Backend) do
       {:module, ReqLLM.Step.Fixture.Backend} ->
         # Backend.step/2 only exists in test environment
+        # credo:disable-for-next-line Credo.Check.Refactor.Apply
         step_fn = apply(ReqLLM.Step.Fixture.Backend, :step, [provider, name])
         Req.Request.append_request_steps(request, llm_fixture: step_fn)
 

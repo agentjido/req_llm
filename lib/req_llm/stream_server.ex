@@ -757,6 +757,7 @@ defmodule ReqLLM.StreamServer do
             # Pass iodata directly - reversed because we prepended
             iodata = Enum.reverse(state.raw_iodata)
 
+            # credo:disable-for-next-line Credo.Check.Refactor.Apply
             apply(ReqLLM.Step.Fixture.Backend, :save_streaming_fixture, [
               state.http_context,
               state.fixture_path,
