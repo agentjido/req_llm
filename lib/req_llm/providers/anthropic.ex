@@ -909,15 +909,14 @@ defmodule ReqLLM.Providers.Anthropic do
   end
 
   defp extract_and_set_object(response, opts) do
-    provider_opts = Keyword.get(opts, :provider_options, [])
-    output_format = Keyword.get(provider_opts, :output_format)
+    provider_opts = normalize_provider_opts(opts)
+    output_format = get_output_format(provider_opts)
 
     extracted_object =
       if is_map(output_format) and output_format[:type] == "json_schema" do
         # JSON Schema mode: parse text content
         case response.message do
           %ReqLLM.Message{content: content} ->
-            # Find first text part
             text_content =
               Enum.find(content, fn
                 %ReqLLM.Message.ContentPart{type: :text} -> true
@@ -928,23 +927,49 @@ defmodule ReqLLM.Providers.Anthropic do
               %ReqLLM.Message.ContentPart{text: text} ->
                 case Jason.decode(text) do
                   {:ok, json} -> json
-                  _ -> nil
+                  _ -> find_structured_output(response)
                 end
 
               _ ->
-                nil
+                find_structured_output(response)
             end
 
           _ ->
-            nil
+            find_structured_output(response)
         end
       else
-        response
-        |> ReqLLM.Response.tool_calls()
-        |> ReqLLM.ToolCall.find_args("structured_output")
+        find_structured_output(response)
       end
 
     %{response | object: extracted_object}
+  end
+
+  defp normalize_provider_opts(opts) when is_list(opts) do
+    Keyword.get(opts, :provider_options, [])
+  end
+
+  defp normalize_provider_opts(opts) when is_map(opts) do
+    provider_opts = Map.get(opts, :provider_options, [])
+
+    cond do
+      Keyword.keyword?(provider_opts) -> provider_opts
+      is_map(provider_opts) -> Map.to_list(provider_opts)
+      true -> provider_opts
+    end
+  end
+
+  defp get_output_format(provider_opts) when is_list(provider_opts) do
+    Keyword.get(provider_opts, :output_format)
+  end
+
+  defp get_output_format(provider_opts) when is_map(provider_opts) do
+    provider_opts[:output_format]
+  end
+
+  defp find_structured_output(response) do
+    response
+    |> ReqLLM.Response.tool_calls()
+    |> ReqLLM.ToolCall.find_args("structured_output")
   end
 
   defp merge_response_with_context(req, response) do
