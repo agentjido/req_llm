@@ -188,7 +188,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert input1["role"] == "user"
       assert input1["content"] == [%{"type" => "input_text", "text" => "Hello"}]
       assert input2["role"] == "assistant"
-      assert input2["content"] == [%{"type" => "input_text", "text" => "Hi there"}]
+      assert input2["content"] == [%{"type" => "output_text", "text" => "Hi there"}]
     end
 
     test "encodes response_format with keyword list schema (converts to JSON schema)" do
