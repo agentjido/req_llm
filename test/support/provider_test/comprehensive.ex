@@ -285,6 +285,40 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             end
           end
 
+          @tag scenario: :context_append
+          test "context append continues conversation" do
+            ctx = ReqLLM.Context.new([user("Respond with a single word 'Hi'.")])
+
+            opts =
+              param_bundles().deterministic
+              # Required as thinking models like gpt-5-mini or gemini might not fit into the default budget of 50 tokens
+              |> Keyword.put(:max_tokens, 1024)
+
+            {:ok, resp1} =
+              ReqLLM.generate_text(
+                @model_spec,
+                ctx,
+                fixture_opts(@provider, "context_append_1", opts)
+              )
+
+            ctx2 = ReqLLM.Context.append(resp1.context, user("Hi again"))
+
+            {:ok, resp2} =
+              ReqLLM.generate_text(
+                @model_spec,
+                ctx2,
+                fixture_opts(@provider, "context_append_2", opts)
+              )
+
+            text = ReqLLM.Response.text(resp2) || ""
+            reasoning_tokens = Map.get(resp2.usage || %{}, :reasoning_tokens, 0)
+
+            assert text != "" or reasoning_tokens > 0
+            assert length(resp2.context.messages) >= 4
+            assert List.last(resp2.context.messages) == resp2.message
+            assert resp2.message.role == :assistant
+          end
+
           if ReqLLM.ProviderTest.Comprehensive.supports_tool_calling?(model_spec) do
             @tag scenario: :tool_multi
             test "tool calling - multi-tool selection" do

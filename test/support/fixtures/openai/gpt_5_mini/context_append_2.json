@@ -1,0 +1,119 @@
+{
+  "model_spec": "openai:gpt-5-mini",
+  "provider": "openai",
+  "request": {
+    "body": {
+      "b64": "eyJpbnB1dCI6W3siY29udGVudCI6W3sidGV4dCI6IlJlc3BvbmQgd2l0aCBhIHNpbmdsZSB3b3JkICdIaScuIiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbeyJ0ZXh0IjoiSGkiLCJ0eXBlIjoiaW5wdXRfdGV4dCJ9XSwicm9sZSI6ImFzc2lzdGFudCJ9LHsiY29udGVudCI6W3sidGV4dCI6IkhpIGFnYWluIiwidHlwZSI6ImlucHV0X3RleHQifV0sInJvbGUiOiJ1c2VyIn1dLCJtYXhfb3V0cHV0X3Rva2VucyI6MTAyNCwibW9kZWwiOiJncHQtNS1taW5pIiwic3RyZWFtIjpmYWxzZX0="
+    },
+    "canonical_json": {
+      "input": [
+        {
+          "content": [
+            {
+              "text": "Respond with a single word 'Hi'.",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        },
+        {
+          "content": [
+            {
+              "text": "Hi",
+              "type": "input_text"
+            }
+          ],
+          "role": "assistant"
+        },
+        {
+          "content": [
+            {
+              "text": "Hi again",
+              "type": "input_text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "max_output_tokens": 1024,
+      "model": "gpt-5-mini",
+      "stream": false
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ]
+    },
+    "method": "post",
+    "url": "https://api.openai.com/v1/responses"
+  },
+  "response": {
+    "body": {
+      "error": {
+        "code": "invalid_value",
+        "message": "Invalid value: 'input_text'. Supported values are: 'output_text' and 'refusal'.",
+        "param": "input[1].content[0]",
+        "type": "invalid_request_error"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=86400"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9a15fc23acc6ed38-SJC"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Thu, 20 Nov 2025 06:45:31 GMT"
+      ],
+      "openai-organization": [
+        "elani-dev"
+      ],
+      "openai-processing-ms": [
+        "11"
+      ],
+      "openai-project": [
+        "proj_7xm0tTbe0BtZ6VvGnyNl81DN"
+      ],
+      "openai-version": [
+        "2020-10-01"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "set-cookie": [
+        "__cf_bm=xerQPl5slckfERtBpgvOwEVLkNOLvK_pNWYaZPUyL4Q-1763621131-1.0.1.1-xADTSiMO3Vd2txQVlYCFwqlCm_r8fB_G9OKl5oH7ZEd_xnxOSnU.I2DZjdc5k46F1HPRzXVuocWGDtLC48GrjFzbQIREv148VF2hk9R7PGM; path=/; expires=Thu, 20-Nov-25 07:15:31 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=eQ9FS8jFX8CT_e0H5zSp7S8h3nriCl4.GU3WsIuBxnc-1763621131195-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-envoy-upstream-service-time": [
+        "14"
+      ],
+      "x-request-id": [
+        "req_b8bed5c2c6874faa9899f514c2e70501"
+      ]
+    },
+    "status": 400
+  }
+}
