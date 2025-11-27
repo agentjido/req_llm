@@ -390,7 +390,9 @@ defmodule ReqLLM.Provider.Defaults do
         :presence_penalty,
         :seed,
         :stop,
-        :user
+        :user,
+        :reasoning_effort,
+        :reasoning_token_budget
       ] ++ provider_mod.supported_provider_options()
 
     {api_key, extra_option_keys}
