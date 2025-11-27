@@ -165,6 +165,8 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
 
             {:ok, response} = ReqLLM.StreamResponse.to_response(stream_response)
 
+            finish_reason = ReqLLM.StreamResponse.finish_reason(stream_response)
+
             # Assert response structure without context advancement check
             # (streaming doesn't auto-append to context)
             assert %ReqLLM.Response{} = response
@@ -177,6 +179,8 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                    "Expected text or thinking content, got empty (text: #{inspect(text)}, thinking: #{inspect(thinking)})"
 
             assert response.message.role == :assistant
+
+            refute is_nil(finish_reason)
 
             usage = response.usage
             assert is_map(usage)

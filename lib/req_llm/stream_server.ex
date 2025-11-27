@@ -649,15 +649,21 @@ defmodule ReqLLM.StreamServer do
         updated_metadata =
           case chunk.type do
             :meta ->
-              usage =
-                Map.get(chunk.metadata || %{}, :usage) || Map.get(chunk.metadata || %{}, "usage")
+              chunk_meta = chunk.metadata || %{}
 
-              if usage do
-                normalized_usage = normalize_streaming_usage(usage, state.model)
-                Map.update(metadata, :usage, normalized_usage, &Map.merge(&1, normalized_usage))
-              else
-                metadata
-              end
+              # Extract usage for normalization
+              usage = Map.get(chunk_meta, :usage) || Map.get(chunk_meta, "usage")
+
+              meta_with_usage =
+                if usage do
+                  normalized_usage = normalize_streaming_usage(usage, state.model)
+                  Map.update(metadata, :usage, normalized_usage, &Map.merge(&1, normalized_usage))
+                else
+                  metadata
+                end
+
+              # Merge remaining metadata (like finish_reason)
+              Map.merge(meta_with_usage, Map.drop(chunk_meta, [:usage, "usage"]))
 
             _ ->
               metadata
