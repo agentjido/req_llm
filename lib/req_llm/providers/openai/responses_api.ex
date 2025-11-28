@@ -281,8 +281,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     tools = encode_tools_if_any(temp_request) |> ensure_deep_research_tools(temp_request)
 
     tool_choice = encode_tool_choice(opts_map[:tool_choice])
-    # reasoning_effort can be passed at top-level (core option) or in provider_options
-    reasoning = encode_reasoning_effort(opts_map[:reasoning_effort] || provider_opts[:reasoning_effort])
+    reasoning = encode_reasoning_effort(opts_map[:reasoning_effort])
 
     text_format = encode_text_format(provider_opts[:response_format])
 
