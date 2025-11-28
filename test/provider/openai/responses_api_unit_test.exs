@@ -80,8 +80,10 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
 
       assert [encoded_tool] = body["tools"]
       assert encoded_tool["type"] == "function"
-      assert encoded_tool["function"]["name"] == "get_weather"
-      assert encoded_tool["function"]["description"] == "Get weather"
+      assert encoded_tool["name"] == "get_weather"
+      assert encoded_tool["description"] == "Get weather"
+      assert encoded_tool["strict"] == true
+      assert encoded_tool["parameters"]["properties"]["location"]["type"] == "string"
     end
 
     test "omits tools when empty list" do
