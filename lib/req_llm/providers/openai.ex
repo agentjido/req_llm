@@ -171,7 +171,8 @@ defmodule ReqLLM.Providers.OpenAI do
             :model,
             :provider_options,
             :api_mod,
-            :max_completion_tokens
+            :max_completion_tokens,
+            :reasoning_effort
           ]
 
       request =
