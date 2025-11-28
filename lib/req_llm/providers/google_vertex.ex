@@ -29,6 +29,18 @@ defmodule ReqLLM.Providers.GoogleVertex do
         ]
       )
 
+  ### Access Token
+
+      ReqLLM.generate_text(
+        "google-vertex:gemini-2.5-flash",
+        "Hello from Vertex",
+        provider_options: [
+          access_token: "your-access-token",
+          project_id: "your-project-id",
+          region: "us-central1"
+        ]
+      )
+
   ## Examples
 
       # Simple text generation with Claude on Vertex
@@ -60,6 +72,8 @@ defmodule ReqLLM.Providers.GoogleVertex do
     default_base_url: "https://{region}-aiplatform.googleapis.com",
     default_env_key: "GOOGLE_APPLICATION_CREDENTIALS"
 
+  alias ReqLLM.ModelHelpers
+
   require Logger
 
   @provider_schema [
@@ -67,6 +81,11 @@ defmodule ReqLLM.Providers.GoogleVertex do
       type: :string,
       doc:
         "Path to service account JSON file (can also use GOOGLE_APPLICATION_CREDENTIALS env var)"
+    ],
+    access_token: [
+      type: :string,
+      doc:
+        "Pre-existing OAuth2 access token (bypasses service account authentication and token caching)"
     ],
     project_id: [
       type: :string,
@@ -136,7 +155,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
       http_opts = Keyword.get(other_opts, :req_http_options, [])
 
       timeout =
-        if get_in(model, [Access.key(:capabilities), Access.key(:reasoning)]) == true do
+        if ModelHelpers.reasoning_enabled?(model) do
           180_000
         else
           60_000
@@ -182,15 +201,13 @@ defmodule ReqLLM.Providers.GoogleVertex do
   # Attach GCP OAuth2 authentication as a request step
   # This runs AFTER Fixture.maybe_attach so replay mode can intercept before auth
   defp put_gcp_auth(request, gcp_creds) do
-    service_account_json = gcp_creds[:service_account_json]
-
     Req.Request.append_request_steps(request,
       gcp_vertex_auth: fn req ->
         Logger.debug("Getting GCP access token for Vertex AI")
 
-        case ReqLLM.Providers.GoogleVertex.TokenCache.get_or_refresh(service_account_json) do
+        case fetch_access_token(gcp_creds) do
           {:ok, access_token} ->
-            Logger.debug("Successfully obtained GCP access token (cached)")
+            Logger.debug("Successfully obtained GCP access token")
             Req.Request.put_header(req, "authorization", "Bearer #{access_token}")
 
           {:error, reason} ->
@@ -200,6 +217,18 @@ defmodule ReqLLM.Providers.GoogleVertex do
       end
     )
   end
+
+  defp fetch_access_token(%{access_token: token})
+       when is_binary(token) and byte_size(token) > 0 do
+    {:ok, token}
+  end
+
+  defp fetch_access_token(%{service_account_json: service_account_json})
+       when is_binary(service_account_json) do
+    ReqLLM.Providers.GoogleVertex.TokenCache.get_or_refresh(service_account_json)
+  end
+
+  defp fetch_access_token(_), do: {:error, :missing_credentials}
 
   # Get model family from model ID
   defp get_model_family(model_id) do
@@ -289,16 +318,16 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
   # Extract GCP credentials from options
   defp extract_gcp_credentials(opts) do
-    gcp_keys = [:service_account_json, :project_id, :region]
+    gcp_keys = [:service_account_json, :access_token, :project_id, :region]
     {passed_creds, other_opts} = Keyword.split(opts, gcp_keys)
 
-    # Build credentials from options or environment
     creds = %{
       service_account_json:
         passed_creds[:service_account_json] ||
           System.get_env("GOOGLE_APPLICATION_CREDENTIALS"),
       project_id: passed_creds[:project_id] || System.get_env("GOOGLE_CLOUD_PROJECT"),
-      region: passed_creds[:region] || System.get_env("GOOGLE_CLOUD_REGION") || "global"
+      region: passed_creds[:region] || System.get_env("GOOGLE_CLOUD_REGION") || "global",
+      access_token: passed_creds[:access_token]
     }
 
     {creds, other_opts}
@@ -306,7 +335,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
   # Validate GCP credentials
   defp validate_gcp_credentials!(creds) do
-    if !creds[:service_account_json] do
+    if !creds[:service_account_json] and !creds[:access_token] do
       raise ArgumentError, """
       Google Cloud credentials required for Vertex AI. Please provide either:
 
@@ -314,9 +343,15 @@ defmodule ReqLLM.Providers.GoogleVertex do
          GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json
          GOOGLE_CLOUD_PROJECT=your-project-id
 
-      2. Provider options:
+      2. Service account:
          provider_options: [
            service_account_json: "/path/to/service-account.json",
+           project_id: "your-project-id"
+         ]
+
+      3. Access token:
+         provider_options: [
+           access_token: "ya29.ci...",
            project_id: "your-project-id"
          ]
       """
@@ -438,10 +473,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
     base_url = build_base_url(region)
     url = "#{base_url}#{path}"
 
-    # Get OAuth2 token
-    service_account_json = gcp_creds[:service_account_json]
-
-    case ReqLLM.Providers.GoogleVertex.TokenCache.get_or_refresh(service_account_json) do
+    case fetch_access_token(gcp_creds) do
       {:ok, access_token} ->
         headers = [
           {"Authorization", "Bearer #{access_token}"},

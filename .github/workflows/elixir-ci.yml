@@ -68,6 +68,20 @@ jobs:
         run: mix hex.audit
 
       - name: Run tests with coverage
-        run: mix coveralls.github || echo "Coverage upload failed (non-fatal)"
+        run: mix coveralls.github --parallel
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_PARALLEL: true
+          COVERALLS_FLAG_NAME: otp-${{ matrix.otp }}-elixir-${{ matrix.elixir }}
+
+  coverage-finish:
+    name: Finish coverage
+    needs: test
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close parallel build
+        uses: coverallsapp/github-action@v2
+        with:
+          parallel-finished: true
+          carryforward: "otp-27-elixir-1.18,otp-27-elixir-1.19,otp-28-elixir-1.18,otp-28-elixir-1.19"

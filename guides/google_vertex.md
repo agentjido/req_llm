@@ -41,6 +41,13 @@ Passed via `:provider_options` keyword:
 - **Fallback**: `GOOGLE_APPLICATION_CREDENTIALS` env var
 - **Example**: `provider_options: [service_account_json: "/path/to/credentials.json"]`
 
+### `access_token`
+
+- **Type**: String
+- **Purpose**: Use an existing OAuth2 access token generated outside ReqLLM (e.g., via Goth or gcloud)
+- **Behavior**: Bypasses the service account JSON flow and internal token management
+- **Example**: `provider_options: [access_token: "your-access-token"]`
+
 ### `project_id`
 
 - **Type**: String

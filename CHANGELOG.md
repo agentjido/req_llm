@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **ReqLLM.ModelHelpers capability helper functions** for type-safe model capability access
+  - Centralized helpers like `ReqLLM.ModelHelpers.json_schema?/1`, `ReqLLM.ModelHelpers.tools_strict?/1`
+  - Replaces scattered `get_in(model.capabilities, ...)` calls across providers
+  - Fixes bug in Bedrock provider where reasoning capability was checked incorrectly (was checking `capabilities.reasoning` map instead of `capabilities.reasoning.enabled` boolean)
+  - Provides single source of truth for capability access patterns
+  - Compile-time generated functions from capability schema paths
 - **Amazon Bedrock service tier support** for request prioritization
   - `service_tier` option with values: `"priority"`, `"default"`, `"flex"`
   - Priority tier provides faster responses at premium cost for mission-critical workloads

@@ -117,7 +117,7 @@ defmodule ReqLLM.MixProject do
           ],
           Core: [
             ReqLLM,
-            ReqLLM.Model,
+            ReqLLM.ModelHelpers,
             ReqLLM.Model.Metadata,
             ReqLLM.Metadata,
             ReqLLM.Capability,

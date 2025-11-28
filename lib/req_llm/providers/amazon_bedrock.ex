@@ -117,6 +117,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
   alias ReqLLM.Error
   alias ReqLLM.Error.Invalid.Parameter, as: InvalidParameter
+  alias ReqLLM.ModelHelpers
   alias ReqLLM.Providers.AmazonBedrock.AWSEventStream
   alias ReqLLM.Providers.Anthropic
   alias ReqLLM.Providers.Anthropic.PlatformReasoning
@@ -194,7 +195,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
       # Reasoning models with extended thinking need longer timeouts
       timeout =
-        if get_in(model, [Access.key(:capabilities), Access.key(:reasoning)]) == true do
+        if ModelHelpers.reasoning_enabled?(model) do
           180_000
         else
           60_000
@@ -221,7 +222,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
       # Reasoning models with extended thinking need longer timeouts
       timeout =
-        if get_in(model, [Access.key(:capabilities), Access.key(:reasoning)]) == true do
+        if ModelHelpers.reasoning_enabled?(model) do
           180_000
         else
           60_000
@@ -552,9 +553,8 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     model_id = model.provider_model_id || model.id
 
     # Check if this is a Claude model with reasoning capability
-    # Use model.capabilities.reasoning instead of hardcoding model IDs
     is_claude = String.contains?(model_id, "anthropic.claude")
-    has_reasoning = get_in(model, [Access.key(:capabilities), Access.key(:reasoning)]) == true
+    has_reasoning = ModelHelpers.reasoning_enabled?(model)
 
     if is_claude and has_reasoning do
       {reasoning_effort, opts} = Keyword.pop(opts, :reasoning_effort)

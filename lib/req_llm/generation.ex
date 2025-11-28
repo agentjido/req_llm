@@ -244,10 +244,10 @@ defmodule ReqLLM.Generation do
            Req.request(request) do
       # For models with json.strict = false, coerce response types to match schema
       response =
-        if get_in(model.capabilities, [:json, :strict]) == false do
-          coerce_object_types(decoded_response, compiled_schema.schema)
-        else
+        if ReqLLM.ModelHelpers.json_strict?(model) do
           decoded_response
+        else
+          coerce_object_types(decoded_response, compiled_schema.schema)
         end
 
       {:ok, response}
