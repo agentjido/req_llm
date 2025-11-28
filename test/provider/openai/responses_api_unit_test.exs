@@ -141,7 +141,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     end
 
     test "encodes reasoning effort with atom" do
-      request = build_request(provider_options: [reasoning_effort: :medium])
+      request = build_request(reasoning_effort: :medium)
 
       encoded = ResponsesAPI.encode_body(request)
       body = Jason.decode!(encoded.body)
@@ -150,7 +150,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     end
 
     test "encodes reasoning effort with string" do
-      request = build_request(provider_options: [reasoning_effort: "high"])
+      request = build_request(reasoning_effort: "high")
 
       encoded = ResponsesAPI.encode_body(request)
       body = Jason.decode!(encoded.body)
@@ -684,6 +684,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       max_tokens: Keyword.get(opts, :max_tokens),
       tools: Keyword.get(opts, :tools),
       tool_choice: Keyword.get(opts, :tool_choice),
+      reasoning_effort: Keyword.get(opts, :reasoning_effort),
       provider_options: provider_opts
     }
 

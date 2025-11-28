@@ -57,7 +57,6 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   @behaviour ReqLLM.Providers.OpenAI.API
 
   require ReqLLM.Debug, as: Debug
-  require Logger
 
   @impl true
   def path, do: "/responses"
@@ -69,8 +68,6 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     opts = request.options
 
     body = build_request_body(context, model_name, opts, request)
-
-    Logger.debug("OpenAI ResponsesAPI encode_body: #{inspect(body, pretty: true)}")
 
     Map.put(request, :body, Jason.encode!(body))
   end

@@ -57,9 +57,9 @@ Passed via `:provider_options` keyword:
 - **Example**: `provider_options: [openai_parallel_tool_calls: false]`
 
 ### `reasoning_effort`
-- **Type**: `:minimal` | `:low` | `:medium` | `:high`
+- **Type**: `:low` | `:medium` | `:high`
 - **Purpose**: Control reasoning effort (Responses API only)
-- **Example**: `provider_options: [reasoning_effort: :high]`
+- **Example**: `reasoning_effort: :high`
 
 ### `seed`
 - **Type**: Integer

@@ -79,7 +79,7 @@ defmodule ReqLLM.Providers.OpenAI do
       {:ok, response} = ReqLLM.generate_text(
         "openai:gpt-5",
         "Hard problem",
-        provider_options: [reasoning_effort: :high]
+        reasoning_effort: :high
       )
   """
 
