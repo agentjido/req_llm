@@ -245,7 +245,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "encode_body for chat with tool_choice as string" do
-      model = ReqLLM.Model.from!("openai:gpt-4o")
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
       context = context_fixture()
 
       tool =
@@ -277,7 +277,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "encode_body for chat with tool_choice as atom" do
-      model = ReqLLM.Model.from!("openai:gpt-4o")
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
       context = context_fixture()
 
       tool =
