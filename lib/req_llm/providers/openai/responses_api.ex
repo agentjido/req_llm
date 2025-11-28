@@ -233,10 +233,12 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
             {input_acc, [msg | tool_acc]}
 
           _ ->
+            content_type = if msg.role == :assistant, do: "output_text", else: "input_text"
+
             content =
               Enum.flat_map(msg.content, fn part ->
                 case part.type do
-                  :text -> [%{"type" => "input_text", "text" => part.text}]
+                  :text -> [%{"type" => content_type, "text" => part.text}]
                   _ -> []
                 end
               end)

@@ -244,6 +244,70 @@ defmodule ReqLLM.Providers.OpenAITest do
              }
     end
 
+    test "encode_body for chat with tool_choice as string" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+      context = context_fixture()
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "specific_tool",
+          description: "A specific tool",
+          parameter_schema: [
+            value: [type: :string, required: true, doc: "A value parameter"]
+          ],
+          callback: fn _ -> {:ok, "result"} end
+        )
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          tools: [tool],
+          tool_choice: "required"
+        ]
+      }
+
+      updated_request = OpenAI.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      assert is_list(decoded["tools"])
+
+      assert decoded["tool_choice"] == "required"
+    end
+
+    test "encode_body for chat with tool_choice as atom" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+      context = context_fixture()
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "specific_tool",
+          description: "A specific tool",
+          parameter_schema: [
+            value: [type: :string, required: true, doc: "A value parameter"]
+          ],
+          callback: fn _ -> {:ok, "result"} end
+        )
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          tools: [tool],
+          tool_choice: :required
+        ]
+      }
+
+      updated_request = OpenAI.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      assert is_list(decoded["tools"])
+
+      assert decoded["tool_choice"] == "required"
+    end
+
     test "encode_body for o1 models uses max_completion_tokens" do
       {:ok, model} = ReqLLM.model("openai:o1-mini")
       context = context_fixture()

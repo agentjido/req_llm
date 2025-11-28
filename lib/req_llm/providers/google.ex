@@ -895,13 +895,17 @@ defmodule ReqLLM.Providers.Google do
 
             body = ensure_parsed_body(resp.body)
 
+            # Extract grounding metadata before format conversion to avoid duplication
+            grounding_metadata = extract_grounding_metadata(body)
+
             openai_format = convert_google_to_openai_format(body)
 
             {:ok, response} =
               ReqLLM.Provider.Defaults.decode_response_body_openai_format(openai_format, model)
 
+            # Add grounding metadata to provider_meta["google"] if present
             response_with_grounding =
-              case openai_format["grounding_metadata"] do
+              case grounding_metadata do
                 nil ->
                   response
 
@@ -1062,19 +1066,11 @@ defmodule ReqLLM.Providers.Google do
           }
       end
 
-    grounding_metadata = extract_grounding_metadata(body)
-
-    base_response = %{
+    %{
       "id" => body["id"] || "google-#{System.unique_integer([:positive])}",
       "choices" => [choice],
       "usage" => convert_google_usage(body["usageMetadata"])
     }
-
-    if grounding_metadata do
-      Map.put(base_response, "grounding_metadata", grounding_metadata)
-    else
-      base_response
-    end
   end
 
   defp convert_google_to_openai_format(body), do: body
