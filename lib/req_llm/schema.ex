@@ -478,11 +478,17 @@ defmodule ReqLLM.Schema do
   """
   @spec to_anthropic_format(ReqLLM.Tool.t()) :: map()
   def to_anthropic_format(%ReqLLM.Tool{} = tool) do
-    %{
+    base = %{
       "name" => tool.name,
       "description" => tool.description,
       "input_schema" => to_json(tool.parameter_schema)
     }
+
+    if tool.strict do
+      Map.put(base, "strict", true)
+    else
+      base
+    end
   end
 
   @doc """

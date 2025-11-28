@@ -1,0 +1,123 @@
+{
+  "model_spec": "google_vertex:claude-opus-4-1@20250805",
+  "provider": "google_vertex",
+  "request": {
+    "body": {
+      "b64": "eyJhbnRocm9waWNfdmVyc2lvbiI6InZlcnRleC0yMDIzLTEwLTE2IiwibWF4X3Rva2VucyI6NTAwMCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJTb2x2ZSAxMio3IGFuZCBzaG93IHlvdXIgaW50ZXJuYWwgdGhpbmtpbmcgKGJyaWVmKS4iLCJyb2xlIjoidXNlciJ9XSwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjEuMCwidGhpbmtpbmciOnsiYnVkZ2V0X3Rva2VucyI6MTAyNCwidHlwZSI6ImVuYWJsZWQifX0="
+    },
+    "canonical_json": {
+      "anthropic_version": "vertex-2023-10-16",
+      "max_tokens": 5000,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "stream": false,
+      "temperature": 1.0,
+      "thinking": {
+        "budget_tokens": 1024,
+        "type": "enabled"
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ]
+    },
+    "method": "post",
+    "url": "https://aiplatform.googleapis.com/v1/projects/disco-park-312913/locations/global/publishers/anthropic/models/claude-opus-4-1@20250805:rawPredict"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "signature": "Eo0DCkgICRACGAIqQEScCGLY5/6MTYk3GXZg1WzRpQhb0OBnIqEGdVgKKjfeIgYMYHbWjuDFKsNUuyIzngsHpGXKTJPChKopLMF01mMSDNm+77eVZQOQWQoZsRoMjgFIKCmWE9/fWE69IjDct8nvi4f3c1V1Kc7MvKJjoHDMQUrwUGYUbDhQ7hZ6W3LwPfeegNR3JOyeCWnsCEQq8gEQNlHMktGfDFYvC4D0H0KrOLKLau5sd5rAX2uWGjuTLCiUB4VQWdyrDw/QnawB37u2Punluk6dGDcF6HTt6YrbRvxsXNT4ngfwXnrs8yxn8hcLle9Yoak6iRyUgIPVSaCxmp5ZtZsQB57N+A8UjqJ1uWOF3945ujLvlkjp6rwv0NsDf4WA/X+SFuZj9Mf9h+NiEG+MAG9AbzzwLEdoD6uOtDRYy+gt3qyG7lncVf7IRnrjkfqJjR03jiHVPDl9xdzlWr2iKgTUJZqCYvGDH1LF35ToJJhUCZWFu7IGj+QBt7s3jpTy6GHV5nnoVm9480FxmBgB",
+          "thinking": "I need to solve 12 × 7.\n\nLet me break this down:\n12 × 7 = (10 + 2) × 7\n= 10 × 7 + 2 × 7\n= 70 + 14\n= 84\n\nOr I could think of it as:\n12 × 7 = 12 × (5 + 2)\n= 12 × 5 + 12 × 2\n= 60 + 24\n= 84\n\nOr just directly:\n12 × 7 = 84",
+          "type": "thinking"
+        },
+        {
+          "text": "**Internal thinking:**\nBreaking 12 × 7 into easier parts:\n- 12 × 7 = (10 + 2) × 7\n- = 10 × 7 + 2 × 7\n- = 70 + 14\n- = 84\n\n**Answer: 84**",
+          "type": "text"
+        }
+      ],
+      "id": "msg_vrtx_012fs3W7YoU24Vjmo5thKzgG",
+      "model": "claude-opus-4-1-20250805",
+      "role": "assistant",
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "input_tokens": 50,
+        "output_tokens": 222
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 17 Nov 2025 06:02:01 GMT"
+      ],
+      "internal-input-tokens": [
+        "50"
+      ],
+      "internal-output-tokens": [
+        "222"
+      ],
+      "pinnacle-error-category": [
+        "no_error"
+      ],
+      "request-id": [
+        "req_vrtx_011CVCxFnHZRbwNVXCcwTNQ5"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "stream-reported-http-code": [
+        "200"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-vertex-ai-internal-prediction-backend": [
+        "harpoon"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  }
+}

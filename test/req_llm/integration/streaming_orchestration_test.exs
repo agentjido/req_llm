@@ -8,14 +8,14 @@ defmodule ReqLLM.Integration.StreamingOrchestrationTest do
 
   use ExUnit.Case, async: false
 
-  alias ReqLLM.{Context, Model, Streaming}
+  alias ReqLLM.{Context, Streaming}
 
   @moduletag category: :streaming, integration: true
 
   describe "start_stream/4 basic functionality" do
     test "returns proper error structure without valid API setup" do
       # Test with a real provider but no API key - should fail gracefully
-      model = %Model{provider: :openai, model: "gpt-4"}
+      {:ok, model} = ReqLLM.model("openai:gpt-4")
       context = Context.new("Hello, world!")
 
       # Should return error since we don't have real API key setup
@@ -42,7 +42,7 @@ defmodule ReqLLM.Integration.StreamingOrchestrationTest do
     end
 
     test "handles missing provider module gracefully" do
-      model = %Model{provider: :nonexistent, model: "test"}
+      model = %LLMDB.Model{provider: :nonexistent, id: "test"}
       context = Context.new("Test")
 
       # Should fail with proper error when provider doesn't exist
@@ -69,7 +69,7 @@ defmodule ReqLLM.Integration.StreamingOrchestrationTest do
   describe "component coordination" do
     test "StreamServer, FinchClient, and StreamResponse coordination points" do
       # Test the interfaces between components without full HTTP
-      _model = %Model{provider: :openai, model: "gpt-4"}
+      {:ok, _model} = ReqLLM.model("openai:gpt-4")
       _context = Context.new("Hello")
 
       # Verify that the coordination points exist and have proper interfaces
@@ -134,7 +134,7 @@ defmodule ReqLLM.Integration.StreamingOrchestrationTest do
 
   describe "error handling structure" do
     test "error types are properly structured" do
-      model = %Model{provider: :openai, model: "gpt-4"}
+      {:ok, model} = ReqLLM.model("openai:gpt-4")
       context = Context.new("Error test")
 
       # Test with provider that will fail

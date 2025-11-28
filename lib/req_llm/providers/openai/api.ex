@@ -24,9 +24,9 @@ defmodule ReqLLM.Providers.OpenAI.API do
   @callback encode_body(Req.Request.t()) :: Req.Request.t()
   @callback decode_response({Req.Request.t(), Req.Response.t()}) ::
               {Req.Request.t(), Req.Response.t() | Exception.t()}
-  @callback decode_stream_event(map(), ReqLLM.Model.t()) :: [ReqLLM.StreamChunk.t()]
+  @callback decode_stream_event(map(), LLMDB.Model.t()) :: [ReqLLM.StreamChunk.t()]
   @callback attach_stream(
-              ReqLLM.Model.t(),
+              LLMDB.Model.t(),
               ReqLLM.Context.t(),
               keyword(),
               atom()

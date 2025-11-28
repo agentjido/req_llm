@@ -1,0 +1,114 @@
+{
+  "model_spec": "google_vertex:gemini-2.0-flash",
+  "provider": "google_vertex",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJXcml0ZSBhIHZlcnkgbG9uZyBzdG9yeSBhYm91dCBkcmFnb25zIGFuZCBhZHZlbnR1cmVzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjV9fQ=="
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Write a very long story about dragons and adventures"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 100,
+        "temperature": 0.5
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ]
+    },
+    "method": "post",
+    "url": "https://aiplatform.googleapis.com/v1/projects/disco-park-312913/locations/global/publishers/google/models/gemini-2.0-flash:generateContent"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "avgLogprobs": -0.5683295124709004,
+          "content": {
+            "parts": [
+              {
+                "text": "The wind, a constant, biting whisper in the peaks of the Dragon's Tooth Mountains, carried Elara's name like a prayer. She wasn't a knight, nor a sorceress, nor even a particularly skilled hunter. Elara was a goatherd, and a rather clumsy one at that. But she possessed something far more valuable than skill: a heart filled with a stubborn, unwavering hope.\n\nThe Dragon's Tooth Mountains were named for a reason. Jagged"
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "MAX_TOKENS"
+        }
+      ],
+      "createTime": "2025-11-18T07:02:38.718131Z",
+      "modelVersion": "gemini-2.0-flash",
+      "responseId": "DhocabPqK_ee998Pl6LGiQo",
+      "usageMetadata": {
+        "candidatesTokenCount": 99,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 99
+          }
+        ],
+        "promptTokenCount": 9,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 9
+          }
+        ],
+        "totalTokenCount": 108,
+        "trafficType": "ON_DEMAND"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Tue, 18 Nov 2025 07:02:40 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  }
+}

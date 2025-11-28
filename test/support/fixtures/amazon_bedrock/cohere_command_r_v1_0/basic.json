@@ -1,4 +1,6 @@
 {
+  "model_spec": "amazon_bedrock:cohere.command-r-v1:0",
+  "provider": "amazon_bedrock",
   "request": {
     "body": {
       "b64": "eyJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo1MCwidGVtcGVyYXR1cmUiOjAuMH0sIm1lc3NhZ2VzIjpbeyJjb250ZW50IjpbeyJ0ZXh0IjoiSGVsbG8gd29ybGQhIn1dLCJyb2xlIjoidXNlciJ9XX0="
@@ -31,13 +33,13 @@
         "bedrock-runtime.us-east-1.amazonaws.com"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.16"
       ],
       "x-amz-content-sha256": [
         "b5cafe27ce07389960ed7a8c3ac8b1c71f1c73c545b7345e1fb627d95d457e1a"
       ],
       "x-amz-date": [
-        "20251102T171029Z"
+        "20251117T060957Z"
       ]
     },
     "method": "post",
@@ -46,13 +48,13 @@
   "response": {
     "body": {
       "metrics": {
-        "latencyMs": 343
+        "latencyMs": 308
       },
       "output": {
         "message": {
           "content": [
             {
-              "text": "Hello to you too! How's it going? I hope you're having a fantastic day!"
+              "text": "Hello! How's it going? I hope you're having a fantastic day! 😊"
             }
           ],
           "role": "assistant"
@@ -61,9 +63,9 @@
       "stopReason": "end_turn",
       "usage": {
         "inputTokens": 3,
-        "outputTokens": 19,
+        "outputTokens": 18,
         "serverToolUsage": {},
-        "totalTokens": 22
+        "totalTokens": 21
       }
     },
     "headers": {
@@ -74,10 +76,10 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:10:30 GMT"
+        "Mon, 17 Nov 2025 06:09:58 GMT"
       ],
       "x-amzn-requestid": [
-        "086db527-0b62-443c-b68e-f30e81aae957"
+        "61a2ec2f-8ccf-40e0-ba7a-90c358f416d0"
       ]
     },
     "status": 200

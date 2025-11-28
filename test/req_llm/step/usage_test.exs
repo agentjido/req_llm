@@ -1,7 +1,6 @@
 defmodule ReqLLM.Step.UsageTest do
   use ExUnit.Case, async: true
 
-  alias ReqLLM.Model
   alias ReqLLM.Step.Usage
 
   # Shared helpers
@@ -49,7 +48,7 @@ defmodule ReqLLM.Step.UsageTest do
 
   describe "attach/2" do
     test "attaches usage step and preserves request structure" do
-      model = Model.new(:openai, "gpt-4")
+      {:ok, model} = ReqLLM.model("openai:gpt-4")
 
       request = %Req.Request{
         options: [test: "value"],
@@ -101,7 +100,7 @@ defmodule ReqLLM.Step.UsageTest do
     for {format_name, response_body, expected_input, expected_output, expected_reasoning} <-
           @usage_formats do
       test "extracts usage from #{format_name}" do
-        model = Model.new(:test, "test-model")
+        model = %LLMDB.Model{provider: :test, id: "test-model"}
         request = mock_request(model: model)
         response = mock_response(unquote(Macro.escape(response_body)))
 
@@ -115,7 +114,7 @@ defmodule ReqLLM.Step.UsageTest do
     end
 
     test "emits telemetry and calculates cost" do
-      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03})
+      model = %LLMDB.Model{provider: :openai, id: "gpt-4", cost: %{input: 0.01, output: 0.03}}
       request = mock_request(model: model)
       response = mock_response(%{"usage" => %{"prompt_tokens" => 100, "completion_tokens" => 50}})
 
@@ -130,7 +129,7 @@ defmodule ReqLLM.Step.UsageTest do
     end
 
     test "preserves existing private data" do
-      model = Model.new(:test, "test-model")
+      model = %LLMDB.Model{provider: :test, id: "test-model"}
       request = mock_request(model: model)
       existing_private = %{req_llm: %{other_data: "preserved"}, other_key: "also_preserved"}
 
@@ -159,7 +158,12 @@ defmodule ReqLLM.Step.UsageTest do
 
     for {description, cost_map, input_tokens, output_tokens, expected_cost} <- @cost_scenarios do
       test "handles cost calculation: #{description}" do
-        model = Model.new(:test, "test-model", cost: unquote(Macro.escape(cost_map)))
+        model = %LLMDB.Model{
+          provider: :test,
+          id: "test-model",
+          cost: unquote(Macro.escape(cost_map))
+        }
+
         request = mock_request(model: model)
 
         response =
@@ -178,7 +182,12 @@ defmodule ReqLLM.Step.UsageTest do
     end
 
     test "rounds cost to 6 decimal places" do
-      model = Model.new(:test, "test-model", cost: %{input: 0.0033333, output: 0.0066666})
+      model = %LLMDB.Model{
+        provider: :test,
+        id: "test-model",
+        cost: %{input: 0.0033333, output: 0.0066666}
+      }
+
       request = mock_request(model: model)
 
       response =
@@ -197,9 +206,17 @@ defmodule ReqLLM.Step.UsageTest do
   describe "handle/1 - model resolution" do
     test "prefers model from private over options" do
       private_model =
-        Model.new(:anthropic, "claude-3-5-sonnet", cost: %{input: 0.003, output: 0.015})
+        %LLMDB.Model{
+          provider: :anthropic,
+          id: "claude-3-5-sonnet",
+          cost: %{input: 0.003, output: 0.015}
+        }
 
-      options_model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03})
+      options_model = %LLMDB.Model{
+        provider: :openai,
+        id: "gpt-4",
+        cost: %{input: 0.01, output: 0.03}
+      }
 
       request = %Req.Request{
         private: %{req_llm_model: private_model},
@@ -216,8 +233,8 @@ defmodule ReqLLM.Step.UsageTest do
     end
 
     @model_sources [
-      {"from private", %{req_llm_model: Model.new(:test, "test")}, []},
-      {"from options", %{}, [model: Model.new(:test, "test")]}
+      {"from private", %{req_llm_model: %LLMDB.Model{provider: :test, id: "test"}}, []},
+      {"from options", %{}, [model: %LLMDB.Model{provider: :test, id: "test"}]}
     ]
 
     for {source_name, private, options} <- @model_sources do
@@ -249,7 +266,7 @@ defmodule ReqLLM.Step.UsageTest do
 
     for {description, response_body} <- @error_scenarios do
       test "handles #{description}" do
-        model = Model.new(:test, "test-model")
+        model = %LLMDB.Model{provider: :test, id: "test-model"}
         request = mock_request(model: model)
         response = mock_response(unquote(Macro.escape(response_body)))
 
@@ -279,7 +296,7 @@ defmodule ReqLLM.Step.UsageTest do
     end
 
     test "handles invalid model in options" do
-      request = mock_request(model: "not_a_model_struct")
+      request = mock_request(id: "not_a_model_struct")
       response = mock_response(%{"usage" => %{"prompt_tokens" => 100, "completion_tokens" => 50}})
 
       {returned_req, returned_resp} = Usage.handle({request, response})
@@ -299,7 +316,7 @@ defmodule ReqLLM.Step.UsageTest do
 
     for {description, reasoning_value, expected_reasoning} <- @reasoning_scenarios do
       test "handles #{description}" do
-        model = Model.new(:openai, "gpt-4")
+        {:ok, model} = ReqLLM.model("openai:gpt-4")
         request = mock_request(model: model)
 
         response_body = %{
@@ -336,7 +353,12 @@ defmodule ReqLLM.Step.UsageTest do
     end
 
     test "extracts cached tokens from OpenAI usage format" do
-      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03, cached_input: 0.005})
+      model = %LLMDB.Model{
+        provider: :openai,
+        id: "gpt-4",
+        cost: %{input: 0.01, output: 0.03, cached_input: 0.005}
+      }
+
       request = mock_request(model: model)
 
       # OpenAI format with cached tokens in prompt_tokens_details
@@ -379,7 +401,7 @@ defmodule ReqLLM.Step.UsageTest do
     end
 
     test "handles cached tokens without cached_input rate (uses input rate)" do
-      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03})
+      model = %LLMDB.Model{provider: :openai, id: "gpt-4", cost: %{input: 0.01, output: 0.03}}
       request = mock_request(model: model)
 
       response_body = %{
@@ -406,12 +428,17 @@ defmodule ReqLLM.Step.UsageTest do
     end
 
     test "handles Response struct with cached tokens" do
-      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03, cached_input: 0.005})
+      model = %LLMDB.Model{
+        provider: :openai,
+        id: "gpt-4",
+        cost: %{input: 0.01, output: 0.03, cached_input: 0.005}
+      }
+
       request = mock_request(model: model)
 
       response_body = %ReqLLM.Response{
         id: "test-id",
-        model: "gpt-4",
+        model: model,
         context: %ReqLLM.Context{messages: []},
         message: nil,
         usage: %{
@@ -446,7 +473,12 @@ defmodule ReqLLM.Step.UsageTest do
     end
 
     test "uses cache_read pricing when cached_input not specified" do
-      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03, cache_read: 0.005})
+      model = %LLMDB.Model{
+        provider: :openai,
+        id: "gpt-4",
+        cost: %{input: 0.01, output: 0.03, cache_read: 0.005}
+      }
+
       request = mock_request(model: model)
 
       response_body = %{
@@ -481,7 +513,12 @@ defmodule ReqLLM.Step.UsageTest do
     end
 
     test "handles edge cases with cached tokens" do
-      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03, cached_input: 0.005})
+      model = %LLMDB.Model{
+        provider: :openai,
+        id: "gpt-4",
+        cost: %{input: 0.01, output: 0.03, cached_input: 0.005}
+      }
+
       request = mock_request(model: model)
 
       test_cases = [
@@ -527,7 +564,12 @@ defmodule ReqLLM.Step.UsageTest do
     end
 
     test "clamps cached tokens when greater than input tokens" do
-      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03, cached_input: 0.005})
+      model = %LLMDB.Model{
+        provider: :openai,
+        id: "gpt-4",
+        cost: %{input: 0.01, output: 0.03, cached_input: 0.005}
+      }
+
       request = mock_request(model: model)
 
       response_body = %{
@@ -553,7 +595,12 @@ defmodule ReqLLM.Step.UsageTest do
     end
 
     test "clamps cached tokens when less than 0" do
-      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03, cached_input: 0.005})
+      model = %LLMDB.Model{
+        provider: :openai,
+        id: "gpt-4",
+        cost: %{input: 0.01, output: 0.03, cached_input: 0.005}
+      }
+
       request = mock_request(model: model)
 
       response_body = %{
@@ -578,7 +625,12 @@ defmodule ReqLLM.Step.UsageTest do
     end
 
     test "handles input tokens = 0 with cached tokens set to 0" do
-      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03, cached_input: 0.005})
+      model = %LLMDB.Model{
+        provider: :openai,
+        id: "gpt-4",
+        cost: %{input: 0.01, output: 0.03, cached_input: 0.005}
+      }
+
       request = mock_request(model: model)
 
       response_body = %{
@@ -603,7 +655,12 @@ defmodule ReqLLM.Step.UsageTest do
     end
 
     test "handles invalid cached token values by defaulting to 0" do
-      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03, cached_input: 0.005})
+      model = %LLMDB.Model{
+        provider: :openai,
+        id: "gpt-4",
+        cost: %{input: 0.01, output: 0.03, cached_input: 0.005}
+      }
+
       request = mock_request(model: model)
 
       invalid_values = ["string", nil, %{invalid: "map"}, [1, 2, 3]]
@@ -633,7 +690,12 @@ defmodule ReqLLM.Step.UsageTest do
     end
 
     test "truncates float cached token values to integers" do
-      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03, cached_input: 0.005})
+      model = %LLMDB.Model{
+        provider: :openai,
+        id: "gpt-4",
+        cost: %{input: 0.01, output: 0.03, cached_input: 0.005}
+      }
+
       request = mock_request(model: model)
 
       float_test_cases = [
@@ -672,7 +734,12 @@ defmodule ReqLLM.Step.UsageTest do
     end
 
     test "normal valid case with cached tokens between 0 and input tokens" do
-      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03, cached_input: 0.005})
+      model = %LLMDB.Model{
+        provider: :openai,
+        id: "gpt-4",
+        cost: %{input: 0.01, output: 0.03, cached_input: 0.005}
+      }
+
       request = mock_request(model: model)
 
       response_body = %{
@@ -711,13 +778,18 @@ defmodule ReqLLM.Step.UsageTest do
     end
 
     test "clamping works with Response struct usage" do
-      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03, cached_input: 0.005})
+      model = %LLMDB.Model{
+        provider: :openai,
+        id: "gpt-4",
+        cost: %{input: 0.01, output: 0.03, cached_input: 0.005}
+      }
+
       request = mock_request(model: model)
 
       # Test Response struct with cached_tokens > input_tokens
       response_body = %ReqLLM.Response{
         id: "test-id",
-        model: "gpt-4",
+        model: model,
         context: %ReqLLM.Context{messages: []},
         message: nil,
         usage: %{
@@ -754,12 +826,12 @@ defmodule ReqLLM.Step.UsageTest do
     end
 
     test "extracts usage from Response struct and adds cost fields" do
-      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03})
+      model = %LLMDB.Model{provider: :openai, id: "gpt-4", cost: %{input: 0.01, output: 0.03}}
       request = mock_request(model: model)
 
       response_body = %ReqLLM.Response{
         id: "test-id",
-        model: "gpt-4",
+        model: model,
         context: %ReqLLM.Context{messages: []},
         message: nil,
         usage: %{input_tokens: 100, output_tokens: 50, total_tokens: 150},
@@ -799,12 +871,12 @@ defmodule ReqLLM.Step.UsageTest do
 
     test "handles Response struct without cost data gracefully" do
       # no cost map
-      model = Model.new(:openai, "gpt-4")
+      {:ok, model} = ReqLLM.model("openai:gpt-4")
       request = mock_request(model: model)
 
       response_body = %ReqLLM.Response{
         id: "test-id",
-        model: "gpt-4",
+        model: model,
         context: %ReqLLM.Context{messages: []},
         message: nil,
         usage: %{input_tokens: 100, output_tokens: 50, total_tokens: 150},
@@ -826,12 +898,12 @@ defmodule ReqLLM.Step.UsageTest do
     end
 
     test "handles Response struct with malformed usage gracefully" do
-      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03})
+      {:ok, model} = ReqLLM.model("openai:gpt-4")
       request = mock_request(model: model)
 
       response_body = %ReqLLM.Response{
         id: "test-id",
-        model: "gpt-4",
+        model: model,
         context: %ReqLLM.Context{messages: []},
         message: nil,
         usage: %{input_tokens: "not_a_number", output_tokens: 50, total_tokens: 150},
@@ -852,7 +924,7 @@ defmodule ReqLLM.Step.UsageTest do
     end
 
     test "preserves Response fields when adding cost breakdown" do
-      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03})
+      model = %LLMDB.Model{provider: :openai, id: "gpt-4", cost: %{input: 0.01, output: 0.03}}
       request = mock_request(model: model)
 
       original_message = %ReqLLM.Message{
@@ -862,7 +934,7 @@ defmodule ReqLLM.Step.UsageTest do
 
       response_body = %ReqLLM.Response{
         id: "test-id",
-        model: "gpt-4",
+        model: model,
         context: %ReqLLM.Context{messages: []},
         message: original_message,
         usage: %{input_tokens: 100, output_tokens: 50},
@@ -876,7 +948,7 @@ defmodule ReqLLM.Step.UsageTest do
 
       # All original fields should be preserved
       assert updated_resp.body.id == "test-id"
-      assert updated_resp.body.model == "gpt-4"
+      assert updated_resp.body.model == model
       assert updated_resp.body.message == original_message
       assert updated_resp.body.finish_reason == :stop
       assert updated_resp.body.provider_meta == %{custom: "data"}
@@ -890,7 +962,7 @@ defmodule ReqLLM.Step.UsageTest do
 
   describe "integration with Req pipeline" do
     test "usage step works properly in Req pipeline" do
-      model = Model.new(:openai, "gpt-4", cost: %{input: 0.01, output: 0.03})
+      model = %LLMDB.Model{provider: :openai, id: "gpt-4", cost: %{input: 0.01, output: 0.03}}
       request = mock_request(model: model)
       updated_request = Usage.attach(request, model)
 

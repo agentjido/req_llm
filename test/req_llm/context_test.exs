@@ -96,10 +96,10 @@ defmodule ReqLLM.ContextTest do
     end
 
     test "assistant/2 with string content" do
-      message = Context.assistant("Response", %{model: "test"})
+      message = Context.assistant("Response", %{id: "test"})
 
       assert message.role == :assistant
-      assert message.metadata == %{model: "test"}
+      assert message.metadata == %{id: "test"}
       assert [%ContentPart{type: :text, text: "Response"}] = message.content
     end
 

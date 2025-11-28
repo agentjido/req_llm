@@ -6,5 +6,5 @@ defmodule ReqLLM.Coverage.GoogleVertex.ComprehensiveTest do
   Otherwise uses fixtures for fast, reliable testing.
   """
 
-  use ReqLLM.ProviderTest.Comprehensive, provider: :google_vertex_anthropic
+  use ReqLLM.ProviderTest.Comprehensive, provider: :google_vertex
 end

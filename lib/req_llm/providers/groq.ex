@@ -26,37 +26,35 @@ defmodule ReqLLM.Providers.Groq do
       GROQ_API_KEY=gsk_...
   """
 
-  @behaviour ReqLLM.Provider
-
-  use ReqLLM.Provider.DSL,
+  use ReqLLM.Provider,
     id: :groq,
-    base_url: "https://api.groq.com/openai/v1",
-    metadata: "priv/models_dev/groq.json",
-    default_env_key: "GROQ_API_KEY",
-    provider_schema: [
-      service_tier: [
-        type: {:in, ~w(auto on_demand flex performance)},
-        doc: "Performance tier for Groq requests"
-      ],
-      reasoning_format: [
-        type: :string,
-        doc: "Format for reasoning output"
-      ],
-      search_settings: [
-        type: :map,
-        doc: "Web search configuration with include/exclude domains"
-      ],
-      compound_custom: [
-        type: :map,
-        doc: "Custom configuration for Compound systems"
-      ]
-    ]
+    default_base_url: "https://api.groq.com/openai/v1",
+    default_env_key: "GROQ_API_KEY"
 
   use ReqLLM.Provider.Defaults
 
   import ReqLLM.Provider.Utils, only: [maybe_put: 3, maybe_put_skip: 4]
 
   require Logger
+
+  @provider_schema [
+    service_tier: [
+      type: {:in, ~w(auto on_demand flex performance)},
+      doc: "Performance tier for Groq requests"
+    ],
+    reasoning_format: [
+      type: :string,
+      doc: "Format for reasoning output"
+    ],
+    search_settings: [
+      type: :map,
+      doc: "Web search configuration with include/exclude domains"
+    ],
+    compound_custom: [
+      type: :map,
+      doc: "Custom configuration for Compound systems"
+    ]
+  ]
 
   @doc """
   Custom prepare_request for :object operations to maintain Groq-specific max_tokens handling.
@@ -109,7 +107,7 @@ defmodule ReqLLM.Providers.Groq do
     {opts, warnings} =
       if reasoning_effort && !supports_reasoning_effort?(model) do
         warning =
-          "reasoning_effort is not supported for #{model.model} (uses <think> tags instead)"
+          "reasoning_effort is not supported for #{model.id} (uses <think> tags instead)"
 
         {opts, [warning | warnings]}
       else

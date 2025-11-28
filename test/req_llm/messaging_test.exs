@@ -73,13 +73,13 @@ defmodule ReqLLM.MessagingTest do
         name: "bot",
         tool_call_id: "123",
         tool_calls: [%{id: "123"}],
-        metadata: %{model: "gpt-4"}
+        metadata: %{id: "gpt-4"}
       }
 
       assert message.name == "bot"
       assert message.tool_call_id == "123"
       assert message.tool_calls == [%{id: "123"}]
-      assert message.metadata == %{model: "gpt-4"}
+      assert message.metadata == %{id: "gpt-4"}
     end
   end
 end

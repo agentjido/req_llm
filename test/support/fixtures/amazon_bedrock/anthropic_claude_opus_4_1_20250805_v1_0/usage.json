@@ -1,0 +1,71 @@
+{
+  "model_spec": "amazon_bedrock:us.anthropic.claude-opus-4-1-20250805-v1:0",
+  "provider": "amazon_bedrock",
+  "request": {
+    "body": {
+      "b64": "eyJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjoxMCwidGVtcGVyYXR1cmUiOjAuMH0sIm1lc3NhZ2VzIjpbeyJjb250ZW50IjpbeyJ0ZXh0IjoiSGkgdGhlcmUhIn1dLCJyb2xlIjoidXNlciJ9XX0="
+    },
+    "canonical_json": {
+      "inferenceConfig": {
+        "maxTokens": 10,
+        "temperature": 0.0
+      },
+      "messages": [
+        {
+          "content": [
+            {
+              "text": "Hi there!"
+            }
+          ],
+          "role": "user"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "host": [
+        "bedrock-runtime.us-east-1.amazonaws.com"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ],
+      "x-amz-content-sha256": [
+        "08a540b717c10538f53b963be52e7cff049d824d13feb69ea4a3a2ac0c26629e"
+      ],
+      "x-amz-date": [
+        "20251117T063822Z"
+      ]
+    },
+    "method": "post",
+    "url": "https://bedrock-runtime.us-east-1.amazonaws.com/model/us.anthropic.claude-opus-4-1-20250805-v1:0/converse"
+  },
+  "response": {
+    "body": {
+      "message": "Signature expired: 20251117T063822Z is now earlier than 20251117T063849Z (20251117T064349Z - 5 min.)"
+    },
+    "headers": {
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 17 Nov 2025 06:43:49 GMT"
+      ],
+      "x-amzn-errortype": [
+        "InvalidSignatureException:http://internal.amazon.com/coral/com.amazon.coral.service/"
+      ],
+      "x-amzn-requestid": [
+        "7d243dfd-6f43-4621-8425-7192436c60c1"
+      ]
+    },
+    "status": 403
+  }
+}

@@ -14,7 +14,7 @@ defmodule AnthropicPromptCaching do
 
   ## Options
 
-    * `--model` (`-m`) - Anthropic model (default: "anthropic:claude-3-5-sonnet-20241022")
+    * `--model` (`-m`) - Anthropic model (default: "anthropic:claude-sonnet-4-5-20250929")
     * `--ttl` (`-t`) - Cache TTL: "5m" or "1h" (default: 1h)
     * `--max-tokens` - Maximum tokens to generate (default: 256)
     * `--log-level` (`-l`) - Logging level: debug, info, warning, error (default: warning)
@@ -51,13 +51,13 @@ defmodule AnthropicPromptCaching do
         aliases: [m: :model, t: :ttl, l: :log_level]
       )
 
-    model = parsed_opts[:model] || "anthropic:claude-3-5-sonnet-20241022"
+    model = parsed_opts[:model] || "anthropic:claude-sonnet-4-5-20250929"
     ttl = parsed_opts[:ttl] || "1h"
     max_tokens = parsed_opts[:max_tokens] || 256
 
     if !String.starts_with?(model, "anthropic:") do
       raise ArgumentError,
-            "This script requires an Anthropic model (e.g., anthropic:claude-3-5-sonnet-20241022)"
+            "This script requires an Anthropic model (e.g., anthropic:claude-sonnet-4-5-20250929)"
     end
 
     Logger.configure(level: Helpers.log_level(parsed_opts[:log_level] || "warning"))

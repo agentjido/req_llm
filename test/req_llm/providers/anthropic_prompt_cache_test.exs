@@ -14,7 +14,7 @@ defmodule ReqLLM.Providers.AnthropicPromptCacheTest do
 
   describe "prompt caching beta header" do
     test "adds prompt caching beta header when enabled" do
-      model = ReqLLM.Model.from!("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       context = context_fixture()
 
       {:ok, request} =
@@ -32,7 +32,7 @@ defmodule ReqLLM.Providers.AnthropicPromptCacheTest do
     end
 
     test "does not add prompt caching beta header when disabled" do
-      model = ReqLLM.Model.from!("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       context = context_fixture()
 
       {:ok, request} = Anthropic.prepare_request(:chat, model, context, [])
@@ -49,7 +49,7 @@ defmodule ReqLLM.Providers.AnthropicPromptCacheTest do
 
   describe "tool cache_control injection" do
     test "injects cache_control into tools with default TTL" do
-      model = ReqLLM.Model.from!("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       context = context_fixture()
 
       tool =
@@ -79,7 +79,7 @@ defmodule ReqLLM.Providers.AnthropicPromptCacheTest do
     end
 
     test "injects cache_control into tools with 1h TTL" do
-      model = ReqLLM.Model.from!("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       context = context_fixture()
 
       tool =
@@ -108,7 +108,7 @@ defmodule ReqLLM.Providers.AnthropicPromptCacheTest do
     end
 
     test "does not inject cache_control when prompt caching disabled" do
-      model = ReqLLM.Model.from!("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       context = context_fixture()
 
       tool =
@@ -134,7 +134,7 @@ defmodule ReqLLM.Providers.AnthropicPromptCacheTest do
 
   describe "system message cache_control injection" do
     test "converts system string to content block with cache_control" do
-      model = ReqLLM.Model.from!("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       context = context_fixture()
 
       {:ok, request} =
@@ -152,7 +152,7 @@ defmodule ReqLLM.Providers.AnthropicPromptCacheTest do
     end
 
     test "adds cache_control to last system block when already array" do
-      model = ReqLLM.Model.from!("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
 
       system_content = [
         ReqLLM.Message.ContentPart.text("First instruction."),
@@ -182,7 +182,7 @@ defmodule ReqLLM.Providers.AnthropicPromptCacheTest do
     end
 
     test "does not modify system when prompt caching disabled" do
-      model = ReqLLM.Model.from!("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       context = context_fixture()
 
       {:ok, request} = Anthropic.prepare_request(:chat, model, context, [])
@@ -196,7 +196,7 @@ defmodule ReqLLM.Providers.AnthropicPromptCacheTest do
 
   describe "combined prompt caching scenarios" do
     test "applies cache_control to both tools and system" do
-      model = ReqLLM.Model.from!("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       context = context_fixture()
 
       tool =
@@ -227,7 +227,7 @@ defmodule ReqLLM.Providers.AnthropicPromptCacheTest do
     end
 
     test "respects existing cache_control on tools" do
-      model = ReqLLM.Model.from!("anthropic:claude-3-5-sonnet-20241022")
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
 
       context = context_fixture()
 

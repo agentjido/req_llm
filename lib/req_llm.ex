@@ -25,13 +25,13 @@ defmodule ReqLLM do
   Multiple formats supported for maximum flexibility:
 
       # String format: "provider:model"
-      ReqLLM.generate_text("anthropic:claude-3-5-sonnet-20241022", messages)
+      ReqLLM.generate_text("anthropic:claude-sonnet-4-5-20250929", messages)
 
       # Tuple format: {provider, options}
       ReqLLM.generate_text({:anthropic, "claude-3-5-sonnet", temperature: 0.7}, messages)
 
       # Model struct format
-      model = %ReqLLM.Model{provider: :anthropic, model: "claude-3-5-sonnet", temperature: 0.5}
+      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet", temperature: 0.5)
       ReqLLM.generate_text(model, messages)
 
   ## Configuration
@@ -179,7 +179,7 @@ defmodule ReqLLM do
           | {:error,
              ReqLLM.Error.Invalid.Provider.t() | ReqLLM.Error.Invalid.Provider.NotImplemented.t()}
   def provider(provider) when is_atom(provider) do
-    ReqLLM.Provider.Registry.fetch(provider)
+    ReqLLM.Providers.get(provider)
   end
 
   @doc """
@@ -190,41 +190,38 @@ defmodule ReqLLM do
     * `model_spec` - Model specification in various formats:
       - String format: `"anthropic:claude-3-sonnet"`
       - Tuple format: `{:anthropic, "claude-3-sonnet", temperature: 0.7}`
-      - Model struct: `%ReqLLM.Model{}`
+      - Model struct: `%LLMDB.Model{}`
 
   ## Examples
 
       ReqLLM.model("anthropic:claude-3-sonnet")
-      #=> {:ok, %ReqLLM.Model{provider: :anthropic, model: "claude-3-sonnet"}}
+      #=> {:ok, %LLMDB.Model{provider: :anthropic, model: "claude-3-sonnet"}}
 
       ReqLLM.model({:anthropic, "claude-3-sonnet", temperature: 0.5})
-      #=> {:ok, %ReqLLM.Model{provider: :anthropic, model: "claude-3-sonnet", temperature: 0.5}}
+      #=> {:ok, %LLMDB.Model{provider: :anthropic, model: "claude-3-sonnet", temperature: 0.5}}
 
   """
-  @spec model(String.t() | {atom(), keyword()} | struct()) :: {:ok, struct()} | {:error, term()}
-  def model(model_spec) do
-    ReqLLM.Model.from(model_spec)
+  @spec model(String.t() | {atom(), String.t(), keyword()} | {atom(), keyword()} | struct()) ::
+          {:ok, struct()} | {:error, term()}
+  def model(%LLMDB.Model{} = model), do: {:ok, model}
+
+  def model({provider, model_id, _opts}) when is_atom(provider) and is_binary(model_id) do
+    LLMDB.model(provider, model_id)
   end
 
-  @doc """
-  Get all supported capabilities for a model.
+  def model({provider, kw}) when is_atom(provider) and is_list(kw) do
+    case kw[:id] || kw[:model] do
+      id when is_binary(id) -> LLMDB.model(provider, id)
+      _ -> {:error, ReqLLM.Error.Invalid.Parameter.exception(parameter: :model, value: kw)}
+    end
+  end
 
-  Returns a list of capability atoms that the model supports based on provider metadata.
+  def model(spec) when is_binary(spec), do: LLMDB.model(spec)
 
-  ## Parameters
-
-    * `model_spec` - Model specification in various formats
-
-  ## Examples
-
-      ReqLLM.capabilities("anthropic:claude-3-haiku")
-      #=> [:max_tokens, :system_prompt, :temperature, :tools, :streaming]
-
-      model = %ReqLLM.Model{provider: :anthropic, model: "claude-3-sonnet"}
-      ReqLLM.capabilities(model)
-      #=> [:max_tokens, :system_prompt, :temperature, :tools, :streaming, :reasoning]
-  """
-  defdelegate capabilities(model_spec), to: ReqLLM.Capability
+  def model(other) do
+    {:error,
+     ReqLLM.Error.Validation.Error.exception(message: "Invalid model spec: #{inspect(other)}")}
+  end
 
   # ===========================================================================
   # Text Generation API - Delegated to ReqLLM.Generation
@@ -430,9 +427,9 @@ defmodule ReqLLM do
         name: Zoi.string(),
         age: Zoi.number()
       })
-      
+
       array_schema = Zoi.array(person) |> ReqLLM.Schema.to_json()
-      
+
       {:ok, response} = ReqLLM.generate_object(
         "openai:gpt-4o",
         "Generate 3 heroes",

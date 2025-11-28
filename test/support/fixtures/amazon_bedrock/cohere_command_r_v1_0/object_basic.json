@@ -1,4 +1,6 @@
 {
+  "model_spec": "amazon_bedrock:cohere.command-r-v1:0",
+  "provider": "amazon_bedrock",
   "request": {
     "body": {
       "b64": "eyJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjo1MDAsInRlbXBlcmF0dXJlIjowLjB9LCJtZXNzYWdlcyI6W3siY29udGVudCI6W3sidGV4dCI6IkdlbmVyYXRlIGEgc29mdHdhcmUgZW5naW5lZXIgcHJvZmlsZSJ9XSwicm9sZSI6InVzZXIifV0sInRvb2xDb25maWciOnsidG9vbHMiOlt7InRvb2xTcGVjIjp7ImRlc2NyaXB0aW9uIjoiR2VuZXJhdGUgc3RydWN0dXJlZCBvdXRwdXQgbWF0Y2hpbmcgdGhlIHByb3ZpZGVkIHNjaGVtYSIsImlucHV0U2NoZW1hIjp7Impzb24iOnsiYWRkaXRpb25hbFByb3BlcnRpZXMiOmZhbHNlLCJwcm9wZXJ0aWVzIjp7ImFnZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGFnZSBpbiB5ZWFycyIsIm1pbmltdW0iOjEsInR5cGUiOiJpbnRlZ2VyIn0sIm5hbWUiOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBmdWxsIG5hbWUiLCJ0eXBlIjoic3RyaW5nIn0sIm9jY3VwYXRpb24iOnsiZGVzY3JpcHRpb24iOiJQZXJzb24ncyBqb2Igb3IgcHJvZmVzc2lvbiIsInR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbIm5hbWUiLCJhZ2UiXSwidHlwZSI6Im9iamVjdCJ9fSwibmFtZSI6InN0cnVjdHVyZWRfb3V0cHV0In19XX19"
@@ -66,13 +68,13 @@
         "bedrock-runtime.us-east-1.amazonaws.com"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.16"
       ],
       "x-amz-content-sha256": [
         "023a2dce3b08acd7d8e5de8dfc2f46d17b613d6a408e807e4ced55c6a19ed6f2"
       ],
       "x-amz-date": [
-        "20251102T171037Z"
+        "20251117T060354Z"
       ]
     },
     "method": "post",
@@ -81,7 +83,7 @@
   "response": {
     "body": {
       "metrics": {
-        "latencyMs": 970
+        "latencyMs": 956
       },
       "output": {
         "message": {
@@ -97,7 +99,7 @@
                   "occupation": "Software Engineer"
                 },
                 "name": "structured_output",
-                "toolUseId": "tooluse_mambiwM5TLqvYW8TShCqHA"
+                "toolUseId": "tooluse_WGbueMUxQKuz4qdvlQarKw"
               }
             }
           ],
@@ -120,10 +122,10 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:10:38 GMT"
+        "Mon, 17 Nov 2025 06:03:55 GMT"
       ],
       "x-amzn-requestid": [
-        "993f8f0f-e5c0-4705-9291-8e373b555c12"
+        "8647c81f-9679-46f3-9616-7c4a1f16f6c1"
       ]
     },
     "status": 200

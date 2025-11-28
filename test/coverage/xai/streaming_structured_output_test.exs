@@ -25,8 +25,12 @@ defmodule ReqLLM.Coverage.XAI.StreamingStructuredOutputTest do
     occupation: [type: :string, doc: "Person's job or profession"]
   ]
 
+  setup_all do
+    LLMDB.load(allow: :all, custom: %{})
+    :ok
+  end
+
   describe "streaming with json_schema mode (grok-4)" do
-    @describetag model: "grok-4"
     @tag scenario: :object_streaming_json_schema
 
     test "streams object with native response_format json_schema" do
@@ -65,7 +69,6 @@ defmodule ReqLLM.Coverage.XAI.StreamingStructuredOutputTest do
   end
 
   describe "streaming with tool_strict mode (grok-2 legacy)" do
-    @describetag model: "grok-2"
     @tag scenario: :object_streaming_tool_strict
 
     test "streams object with strict tool calling fallback" do
@@ -109,7 +112,6 @@ defmodule ReqLLM.Coverage.XAI.StreamingStructuredOutputTest do
   end
 
   describe "streaming with auto mode selection" do
-    @describetag model: "grok-2-1212"
     @tag scenario: :object_streaming_auto
 
     test "auto-selects json_schema for grok-2-1212+" do
@@ -138,7 +140,6 @@ defmodule ReqLLM.Coverage.XAI.StreamingStructuredOutputTest do
   end
 
   describe "error handling in streaming" do
-    @describetag model: "grok-4"
     @tag scenario: :streaming_error_handling
 
     test "handles interrupted stream gracefully" do

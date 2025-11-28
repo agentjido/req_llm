@@ -1,4 +1,6 @@
 {
+  "model_spec": "amazon_bedrock:cohere.command-r-v1:0",
+  "provider": "amazon_bedrock",
   "request": {
     "body": {
       "b64": "eyJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjoxMDAsInRlbXBlcmF0dXJlIjowLjV9LCJtZXNzYWdlcyI6W3siY29udGVudCI6W3sidGV4dCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMifV0sInJvbGUiOiJ1c2VyIn1dfQ=="
@@ -31,13 +33,13 @@
         "bedrock-runtime.us-east-1.amazonaws.com"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.16"
       ],
       "x-amz-content-sha256": [
         "af3f637afd9c02d90b55ab65f033e5438add0479d2f6b78eb0e25cc0524c5965"
       ],
       "x-amz-date": [
-        "20251102T171031Z"
+        "20251117T060314Z"
       ]
     },
     "method": "post",
@@ -46,13 +48,13 @@
   "response": {
     "body": {
       "metrics": {
-        "latencyMs": 1170
+        "latencyMs": 1186
       },
       "output": {
         "message": {
           "content": [
             {
-              "text": "In a faraway land, a young farmer named Lindor set out on his morning routine, tending to his sheep in the rolling hills surrounding his cottage. But as the sun rose above the majestic mountains in the distance, something extraordinary happened. A gust of wind brought an odd-shaped object down from the sky, landing in the nearby forest with a thundering crash. \n\nCurious, Lindor decided to investigate. As he ventured into the woods, he discovered a strange egg, unlike anything"
+              "text": "In a faraway land, a young boy named Arden dreamed of dragons. He spent his days staring up at the sky, searching for the majestic creatures that few had ever seen. He imagined himself soaring through the clouds on the back of a mighty beast, breath weapon at the ready.\n\n Arden's village was a humble one, nestled at the edge of a vast forest that whispered with ancient secrets. It was a place where legends of dragons were born, and Arden yearned to prove himself a"
             }
           ],
           "role": "assistant"
@@ -74,10 +76,10 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:10:32 GMT"
+        "Mon, 17 Nov 2025 06:03:16 GMT"
       ],
       "x-amzn-requestid": [
-        "068c777b-4fdf-4d90-bf66-06c18cf46ea7"
+        "c24e951f-20fb-4715-ba4a-da9ee87d86a2"
       ]
     },
     "status": 200

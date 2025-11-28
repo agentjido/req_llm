@@ -1,0 +1,137 @@
+{
+  "model_spec": "google_vertex:gemini-2.5-pro",
+  "provider": "google_vertex",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJUZWxsIG1lIGEgam9rZSBhYm91dCBjYXRzIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjoxMzEwNiwidGVtcGVyYXR1cmUiOjEuMH0sInRvb2xzIjpbeyJmdW5jdGlvbkRlY2xhcmF0aW9ucyI6W3siZGVzY3JpcHRpb24iOiJHZXQgY3VycmVudCB3ZWF0aGVyIGluZm9ybWF0aW9uIGZvciBhIGxvY2F0aW9uIiwibmFtZSI6ImdldF93ZWF0aGVyIiwicGFyYW1ldGVycyI6eyJwcm9wZXJ0aWVzIjp7ImxvY2F0aW9uIjp7InR5cGUiOiJzdHJpbmcifX0sInJlcXVpcmVkIjpbImxvY2F0aW9uIl0sInR5cGUiOiJvYmplY3QifX1dfV19"
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Tell me a joke about cats"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 13106,
+        "temperature": 1.0
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "description": "Get current weather information for a location",
+              "name": "get_weather",
+              "parameters": {
+                "properties": {
+                  "location": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "location"
+                ],
+                "type": "object"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ]
+    },
+    "method": "post",
+    "url": "https://aiplatform.googleapis.com/v1/projects/disco-park-312913/locations/global/publishers/google/models/gemini-2.5-pro:generateContent"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "avgLogprobs": -1.7049469266619002,
+          "content": {
+            "parts": [
+              {
+                "text": "Why was the cat so small?\n\nBecause it only drank condensed milk",
+                "thoughtSignature": "CsIFAePx/15UMBKH/ZJ3nRmJtKqV2Pn3Vca8ik44NDQ1oVxeScxMa7oz/tN1eaP4H8xvRQqk3D6/4oQyAkIsrCJpcZAEre43HWdnPiWZNAxMRuQTPHCkmqiadYY8CrycqMLI+mcTQM0k8vVTb2VXycR3vyB1+BzCf18L3x9WFRHUS5tPgtc/F61rtY6zSO2ARPBWbOnwiWuu+WuriCrfsUh04mWkEm/gzJrycR8nMTuJHDkUO6kCa/Z/XRGM0AgT1nHKX+9MVP6qZzDV7/Zy0ggILITCTeC4ku0TQ0rO4RPM1nUeMKnJE59G9Fw59LgY2WAr3mYK0yAyKfmyBe0bALpznVaIuDYFeFV/j2wvBb3eT2jqsK0khbZOOSpwTx6c+QKsZ+1Sq0rK3BWUqjotQ1snCMqEc6HM7c34mN+Gw/8dg6t30tf8XoXW1qtIx/wKisRV6NW27JwW31qkpF8ilQ7tajXp5h5IbDM3QJnilbNVMzRG6Gn4xXQaeuxscrjmcAHcKBKq1kmisJeAfFMjQyrfB/yKSRQ3g+zqB3lY3/+5npAct69+z7KrS/tfdsmsoSbpaPQSpcwb02wgur+5sNCCdcCp46xHaB491nM2UVMO3+HucQ15vk6mrwQmtSWN0Neh3Bih73UQN21DsVuM4xeOSqN++VjbFaFBtV6hphDKPPWR6cDk98vhqnaWYfNvZBvGwsYrfJC2MWJq99gO7TGopfFXw34X1c232rkpvetWQd1DGVJDpxD4RPWpaTJkDqmg5VmasKvLEF9hNKi0ansYz/2TVyTE2DVp6AO93+YdKy87+AitnQPHbTjyVbhjaDsEKf0rHkOFnLxjdGAYJZGuULGNmolu2xL9SlXg2Rxnod/OOe90CAlaCq9VARZj1ArnrwwR6eVl1bfGhNGUksOdPv2cxLpmKP8imjp6i9vdaC3E9Q=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP"
+        }
+      ],
+      "createTime": "2025-11-18T02:36:52.014639Z",
+      "modelVersion": "gemini-2.5-pro",
+      "responseId": "xNsbaa9ys4D33w-Y8d14",
+      "usageMetadata": {
+        "candidatesTokenCount": 14,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 14
+          }
+        ],
+        "promptTokenCount": 20,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 20
+          }
+        ],
+        "thoughtsTokenCount": 153,
+        "totalTokenCount": 187,
+        "trafficType": "ON_DEMAND"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Tue, 18 Nov 2025 02:36:55 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  }
+}

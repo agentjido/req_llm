@@ -84,7 +84,8 @@ defmodule ReqLLM.Tool do
           name: String.t(),
           description: String.t(),
           parameter_schema: keyword() | map(),
-          callback: callback()
+          callback: callback(),
+          strict: boolean()
         ]
 
   # NimbleOptions schema for tool creation validation

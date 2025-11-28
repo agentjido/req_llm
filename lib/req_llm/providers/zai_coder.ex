@@ -25,14 +25,12 @@ defmodule ReqLLM.Providers.ZaiCoder do
       ZAI_API_KEY=your-api-key
   """
 
-  @behaviour ReqLLM.Provider
-
-  use ReqLLM.Provider.DSL,
+  use ReqLLM.Provider,
     id: :zai_coder,
-    base_url: "https://api.z.ai/api/coding/paas/v4",
-    metadata: "priv/models_dev/zai_coder.json",
-    default_env_key: "ZAI_API_KEY",
-    provider_schema: []
+    default_base_url: "https://api.z.ai/api/coding/paas/v4",
+    default_env_key: "ZAI_API_KEY"
+
+  @provider_schema []
 
   @impl ReqLLM.Provider
   def prepare_request(operation, model_spec, input, opts) do
@@ -86,7 +84,7 @@ defmodule ReqLLM.Providers.ZaiCoder do
   def decode_response({req, %{status: 200} = resp}) do
     model =
       req.private[:req_llm_model] ||
-        %ReqLLM.Model{provider: :zai_coder, model: req.options[:model]}
+        %LLMDB.Model{id: req.options[:model], provider: :zai_coder}
 
     body = ensure_parsed_body(resp.body)
 

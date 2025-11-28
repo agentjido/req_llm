@@ -125,7 +125,7 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
 
   defp build_request_url(opts) do
     case Keyword.get(opts, :base_url) do
-      nil -> ReqLLM.Providers.OpenAI.default_base_url() <> path()
+      nil -> ReqLLM.Providers.OpenAI.base_url() <> path()
       base_url -> "#{base_url}#{path()}"
     end
   end
@@ -145,7 +145,7 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
       |> Keyword.put(:stream, true)
       |> Keyword.put(:base_url, base_url)
 
-    body = build_request_body(context, model.model, cleaned_opts)
+    body = build_request_body(context, model.id, cleaned_opts)
     url = build_request_url(cleaned_opts)
 
     {:ok, Finch.build(:post, url, headers, Jason.encode!(body))}

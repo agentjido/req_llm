@@ -29,6 +29,56 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
   Set REQ_LLM_DEBUG=1 to enable verbose fixture output during test runs.
   """
 
+  def supports_object_generation?(model_spec) do
+    case ReqLLM.model(model_spec) do
+      {:ok, model} ->
+        caps = model.capabilities || %{}
+
+        # Object generation is supported if:
+        # 1. Model has native JSON mode (json.native)
+        # 2. Model supports JSON schemas (json.schema)
+        # 3. Model has strict tool calling (tools.strict = true)
+        # 4. Model has regular tool calling (tools.enabled = true) - req_llm has workaround
+        get_in(caps, [:json, :native]) ||
+          get_in(caps, [:json, :schema]) ||
+          get_in(caps, [:tools, :strict]) == true ||
+          get_in(caps, [:tools, :enabled]) == true
+
+      {:error, _} ->
+        false
+    end
+  end
+
+  def supports_streaming_object_generation?(model_spec) do
+    case ReqLLM.model(model_spec) do
+      {:ok, model} ->
+        caps = model.capabilities || %{}
+
+        # Must support object generation AND streaming tool calls
+        supports_object = supports_object_generation?(model_spec)
+        supports_streaming = get_in(caps, [:streaming, :tool_calls]) != false
+
+        supports_object && supports_streaming
+
+      {:error, _} ->
+        false
+    end
+  end
+
+  def supports_tool_calling?(model_spec) do
+    case ReqLLM.model(model_spec) do
+      {:ok, model} -> get_in(model.capabilities, [:tools, :enabled]) == true
+      {:error, _} -> false
+    end
+  end
+
+  def supports_reasoning?(model_spec) do
+    case ReqLLM.model(model_spec) do
+      {:ok, model} -> get_in(model.capabilities, [:reasoning, :enabled]) == true
+      {:error, _} -> false
+    end
+  end
+
   defmacro __using__(opts) do
     provider = Keyword.fetch!(opts, :provider)
 
@@ -48,6 +98,11 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
 
       @provider provider
       @models ModelMatrix.models_for_provider(provider, operation: :text)
+
+      setup_all do
+        LLMDB.load(allow: :all, custom: %{})
+        :ok
+      end
 
       for model_spec <- @models do
         @model_spec model_spec
@@ -177,7 +232,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             )
 
             max_tokens =
-              case ReqLLM.Model.from(@model_spec) do
+              case ReqLLM.model(@model_spec) do
                 {:ok, %{capabilities: %{reasoning: true}}} -> 500
                 {:ok, %{model: "gpt-4.1" <> _}} -> 16
                 {:ok, %{_metadata: %{"api" => "responses"}}} -> 16
@@ -213,8 +268,8 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             assert is_number(response.usage.reasoning_tokens) and
                      response.usage.reasoning_tokens >= 0
 
-            case ReqLLM.Model.from(@model_spec) do
-              {:ok, %ReqLLM.Model{cost: cost_map}} when is_map(cost_map) ->
+            case ReqLLM.model(@model_spec) do
+              {:ok, %LLMDB.Model{cost: cost_map}} when is_map(cost_map) ->
                 assert is_number(response.usage.input_cost) and response.usage.input_cost >= 0
 
                 assert is_number(response.usage.output_cost) and
@@ -230,7 +285,41 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             end
           end
 
-          if :tool_call in ReqLLM.capabilities(model_spec) do
+          @tag scenario: :context_append
+          test "context append continues conversation" do
+            ctx = ReqLLM.Context.new([user("Respond with a single word 'Hi'.")])
+
+            opts =
+              param_bundles().deterministic
+              # Required as thinking models like gpt-5-mini or gemini might not fit into the default budget of 50 tokens
+              |> Keyword.put(:max_tokens, 1024)
+
+            {:ok, resp1} =
+              ReqLLM.generate_text(
+                @model_spec,
+                ctx,
+                fixture_opts(@provider, "context_append_1", opts)
+              )
+
+            ctx2 = ReqLLM.Context.append(resp1.context, user("Hi again"))
+
+            {:ok, resp2} =
+              ReqLLM.generate_text(
+                @model_spec,
+                ctx2,
+                fixture_opts(@provider, "context_append_2", opts)
+              )
+
+            text = ReqLLM.Response.text(resp2) || ""
+            reasoning_tokens = Map.get(resp2.usage || %{}, :reasoning_tokens, 0)
+
+            assert text != "" or reasoning_tokens > 0
+            assert length(resp2.context.messages) >= 4
+            assert List.last(resp2.context.messages) == resp2.message
+            assert resp2.message.role == :assistant
+          end
+
+          if ReqLLM.ProviderTest.Comprehensive.supports_tool_calling?(model_spec) do
             @tag scenario: :tool_multi
             test "tool calling - multi-tool selection" do
               tools = [
@@ -378,7 +467,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             end
           end
 
-          if ReqLLM.Capability.supports_object_generation?(model_spec) do
+          if ReqLLM.ProviderTest.Comprehensive.supports_object_generation?(model_spec) do
             @tag scenario: :object_basic
             test "object generation (non-streaming)" do
               schema = [
@@ -426,7 +515,9 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                   flunk("Expected object or reasoning tokens but got: #{inspect(object)}")
               end
             end
+          end
 
+          if ReqLLM.ProviderTest.Comprehensive.supports_streaming_object_generation?(model_spec) do
             @tag scenario: :object_streaming
             test "object generation (streaming)" do
               schema = [
@@ -483,7 +574,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
             end
           end
 
-          if :reasoning in ReqLLM.capabilities(model_spec) do
+          if ReqLLM.ProviderTest.Comprehensive.supports_reasoning?(model_spec) do
             @tag scenario: :reasoning
             test "reasoning/thinking tokens (non-streaming + streaming)" do
               dbug(
@@ -491,7 +582,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 component: :test
               )
 
-              {:ok, model} = ReqLLM.Model.from(@model_spec)
+              {:ok, model} = ReqLLM.model(@model_spec)
 
               provider_config = param_bundles(@provider)
 

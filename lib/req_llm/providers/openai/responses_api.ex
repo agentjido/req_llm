@@ -64,7 +64,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   @impl true
   def encode_body(request) do
     context = request.options[:context] || %ReqLLM.Context{messages: []}
-    model_name = request.options[:model]
+    model_name = request.options[:model] || request.options[:id]
     opts = request.options
 
     body = build_request_body(context, model_name, opts, request)
@@ -126,7 +126,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
         usage = normalize_responses_usage(raw_usage, data)
 
-        [ReqLLM.StreamChunk.meta(%{usage: usage, model: model.model})]
+        [ReqLLM.StreamChunk.meta(%{usage: usage, model: model.id})]
 
       "response.output_text.done" ->
         []
@@ -213,7 +213,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp build_request_url(opts) do
     case Keyword.get(opts, :base_url) do
-      nil -> ReqLLM.Providers.OpenAI.default_base_url() <> path()
+      nil -> ReqLLM.Providers.OpenAI.base_url() <> path()
       base_url -> "#{base_url}#{path()}"
     end
   end
@@ -233,10 +233,12 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
             {input_acc, [msg | tool_acc]}
 
           _ ->
+            content_type = if msg.role == :assistant, do: "output_text", else: "input_text"
+
             content =
               Enum.flat_map(msg.content, fn part ->
                 case part.type do
-                  :text -> [%{"type" => "input_text", "text" => part.text}]
+                  :text -> [%{"type" => content_type, "text" => part.text}]
                   _ -> []
                 end
               end)
@@ -317,11 +319,11 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> Keyword.delete(:provider_options)
       |> Keyword.merge(provider_opts)
       |> Keyword.put(:stream, true)
-      |> Keyword.put(:model, model.model)
+      |> Keyword.put(:model, model.id)
       |> Keyword.put(:context, context)
       |> Keyword.put(:base_url, base_url)
 
-    body = build_request_body(context, model.model, cleaned_opts, nil)
+    body = build_request_body(context, model.id, cleaned_opts, nil)
     url = build_request_url(cleaned_opts)
 
     {:ok, Finch.build(:post, url, headers, Jason.encode!(body))}
@@ -476,9 +478,9 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp ensure_deep_research_tools(tools, request) do
     model_name = request.options[:model]
 
-    case ReqLLM.Model.from("openai:#{model_name}") do
+    case ReqLLM.model("openai:#{model_name}") do
       {:ok, model} ->
-        category = get_in(model, [Access.key(:_metadata, %{}), "category"])
+        category = get_in(model, [Access.key(:extra, %{}), :category])
 
         case category do
           "deep_research" ->

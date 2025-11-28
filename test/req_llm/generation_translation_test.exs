@@ -1,7 +1,7 @@
 defmodule ReqLLM.Generation.TranslationTest do
   use ExUnit.Case, async: true
 
-  alias ReqLLM.{Generation, Model}
+  alias ReqLLM.Generation
 
   describe "provider translation integration through public API" do
     test "provider with default translate_options/3 callback works normally" do
@@ -25,7 +25,7 @@ defmodule ReqLLM.Generation.TranslationTest do
       assert function_exported?(provider_mod, :translate_options, 3)
 
       # Test the translation directly
-      model = Model.new(:openai, "o1-mini")
+      {:ok, model} = ReqLLM.model("openai:o1-mini")
       opts = [max_tokens: 1000, temperature: 0.7]
 
       {translated, warnings} = provider_mod.translate_options(:chat, model, opts)

@@ -1,0 +1,147 @@
+{
+  "model_spec": "google_vertex:gemini-2.5-pro",
+  "provider": "google_vertex",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJVc2UgdGhlIGFkZCB0b29sIHRvIGNvbXB1dGUgMiArIDMuIEFmdGVyIHRoZSB0b29sIHJlc3VsdCBhcnJpdmVzLCByZXNwb25kIHdpdGggJ3N1bT08dmFsdWU+Jy4ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjY1NTMsInRlbXBlcmF0dXJlIjowLjB9LCJ0b29scyI6W3siZnVuY3Rpb25EZWNsYXJhdGlvbnMiOlt7ImRlc2NyaXB0aW9uIjoiQWRkIHR3byBpbnRlZ2VycyIsIm5hbWUiOiJhZGQiLCJwYXJhbWV0ZXJzIjp7InByb3BlcnRpZXMiOnsiYSI6eyJ0eXBlIjoiaW50ZWdlciJ9LCJiIjp7InR5cGUiOiJpbnRlZ2VyIn19LCJyZXF1aXJlZCI6WyJhIiwiYiJdLCJ0eXBlIjoib2JqZWN0In19XX1dfQ=="
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'."
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 6553,
+        "temperature": 0.0
+      },
+      "tools": [
+        {
+          "functionDeclarations": [
+            {
+              "description": "Add two integers",
+              "name": "add",
+              "parameters": {
+                "properties": {
+                  "a": {
+                    "type": "integer"
+                  },
+                  "b": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "a",
+                  "b"
+                ],
+                "type": "object"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ]
+    },
+    "method": "post",
+    "url": "https://aiplatform.googleapis.com/v1/projects/disco-park-312913/locations/global/publishers/google/models/gemini-2.5-pro:generateContent"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "avgLogprobs": -2.374088668823242,
+          "content": {
+            "parts": [
+              {
+                "functionCall": {
+                  "args": {
+                    "a": 2,
+                    "b": 3
+                  },
+                  "name": "add"
+                },
+                "thoughtSignature": "CqIJAePx/161rY0G/OyBfkbZTnN9JYsqeWIInoKEeQsygd79hpamU8e5AvYKf1IBT7R5N5m3uatR6A89M+lJxADagfptdREB7pajDY/j+QguC1BuXPBT8k4SitzPQA+6n9rtDGPdoUCrpEbfcD2GH7HSorqB2J1un/ButIesnRRrgcQ2JRibHCofWzJYYvq2jX6b4yXPLmB5HlVp5tY8uY6latGBEuIBLBZy/VLAXfdNouqSWKbaGzY5PI71IQbahSb1yoAl6mMPazoqsnXmZKwRosHxMKxIxAOuaZ7/RmMdN7hlNZgX+d1hcJ3fQw1ELBJeWEo9unbLcOnxv+f6EX9y+r0kEHnGRF0ObI9GFLNWZTC1KE2rwC/R1yj8IaFnOHwqpuyZB2MF7s6blzs+1pO0wQwxq2+tSRznJwMrknGbiLxXv5ChUBH2yk1SYjHYyHxmCkd5CXTkhGALoqJMiNz2L2cMadoLxsGYkhlcrNVqw0ILZSU5ddKFLtC98hwMU9w9N7Doc+wfjgUU4zwRKjOS2Sj5uHh33IhHG3OrhKGsHRi4tbP0VIeWdbvSt7hxwwbpsGlBrQ5AUAjf28cZGaoAYBQHJzpF5A509zYKdETQUxluz2Z3bKiIPfgxHGvIUQqUL7Yl0BjF8+sF8R58j0Pun/93zs5YFxopSv1PFficyWJvHugaImIvvGxT/ypmYIkY+7MK1+9OxeTlWdkzTd8eGvC4Z/Q1x4Pe9Rkye4N0ea6vhnCSTRRNPTIFJOeyDvomGNh1y0ykXAaIufI+F4iODlDYUuHIDFbgTURxInsVoZUTBmAaNPm3um/Q91zIF04v9vwpdT2gvYQIhxEkCOTVJkDEwXcOlDdtu2Wg80PMFlI1Cpe7I8yyU0LOQei7HtZTck9Q5+hH9d9JfK5uaBrnS8hGcYou854sejVrbUa81GP6UqYqs+cSscMyastbNMSb/ZY0mbsqWf+Jc6Chyz2zhR9aObgISPkcghYDMLJo8icOgbAgvVWcC2TZ+rjlp94izUFB4BIOGkbNUQ9J8pAT7thhfdSjmGiQYDEQXjQpsR5F7bWe6FMOxiBEDdrrgV5EwOQkqWgt5gh6E30yzunrTaXrFHHaFg/19biXyVqxH3UCLlcmxmqTJUW1SjgX2njQQjhOiR+VzXpuiSegwQwBXcLz13UHH5GPrf7iBnSlnml15rUFWp2AQr5IX20EQ32Ubb+NhNujal3gRFmXZjuFSWSzMwXxs18hwitJmc1/5StZdb0x+HVQsoulqoCwpmj4OTlAeMHlF7niXXMIsxLN+x10jzpGEU2dbRVUC1C6vbHxb/4rGAhVv3SJSkqtE6bJ+hpqAs6M12bc2QbIVc9lpN5P20m0rQDtyjJxCwGlpWmQFWn77aONLZ5VNPdZktvfLuUmCW9k7EuDtVxQqHuHioMKbCpc3pEwLbv3+t5kT4EIuSQKVSiL8xqc4mCLvUMy0rLg8ot0azhxIgJE2QkRebEPANaztw3aOXGAsoL97zt5aWFwHFBE944gCKy9d7cRB0f/hISR9LWji3rc/9Nhvbm9RpoT2xAQ1gyzezAMzA7yMQ=="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP"
+        }
+      ],
+      "createTime": "2025-11-18T02:35:23.481477Z",
+      "modelVersion": "gemini-2.5-pro",
+      "responseId": "a9sbacWxHbOA998PmPHdeA",
+      "usageMetadata": {
+        "candidatesTokenCount": 5,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 5
+          }
+        ],
+        "promptTokenCount": 37,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 37
+          }
+        ],
+        "thoughtsTokenCount": 328,
+        "totalTokenCount": 370,
+        "trafficType": "ON_DEMAND"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Tue, 18 Nov 2025 02:35:28 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  }
+}

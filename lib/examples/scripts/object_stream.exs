@@ -26,7 +26,7 @@ defmodule ObjectStream do
       mix run lib/examples/scripts/object_stream.exs "Extract person info: Jane Smith, 32, architect in Berlin"
 
       # Use a different model
-      mix run lib/examples/scripts/object_stream.exs "Generate a person profile" --model anthropic:claude-3-5-sonnet-20241022
+      mix run lib/examples/scripts/object_stream.exs "Generate a person profile" --model anthropic:claude-sonnet-4-5-20250929
 
       # Control generation parameters
       mix run lib/examples/scripts/object_stream.exs "Person: Alice, 28" --temperature 0.7 --max-tokens 500

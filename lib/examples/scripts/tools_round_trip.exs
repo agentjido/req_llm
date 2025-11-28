@@ -15,7 +15,7 @@ defmodule ToolsRoundTrip do
   ## Usage
 
       mix run lib/examples/scripts/tools_round_trip.exs [PROMPT]
-      mix run lib/examples/scripts/tools_round_trip.exs --model anthropic:claude-3-5-sonnet-20241022 [PROMPT]
+      mix run lib/examples/scripts/tools_round_trip.exs --model anthropic:claude-sonnet-4-5-20250929 [PROMPT]
       mix run lib/examples/scripts/tools_round_trip.exs --max-rounds 5 "What's the weather in Paris?"
 
   ## Options
@@ -35,7 +35,7 @@ defmodule ToolsRoundTrip do
       mix run lib/examples/scripts/tools_round_trip.exs "Check time, get Paris weather, tell weather joke"
 
       # Specific model with more rounds
-      mix run lib/examples/scripts/tools_round_trip.exs --model anthropic:claude-3-5-sonnet-20241022 --max-rounds 5
+      mix run lib/examples/scripts/tools_round_trip.exs --model anthropic:claude-sonnet-4-5-20250929 --max-rounds 5
   """
   @script_name "tools_round_trip.exs"
   @default_max_rounds 3

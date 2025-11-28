@@ -38,7 +38,7 @@ defmodule ReqLLM.Step.Fixture do
       request
       |> ReqLLM.Step.Fixture.maybe_attach(model, fixture: {:openai, "chat_completion"})
   """
-  @spec maybe_attach(Req.Request.t(), ReqLLM.Model.t(), keyword()) :: Req.Request.t()
+  @spec maybe_attach(Req.Request.t(), LLMDB.Model.t(), keyword()) :: Req.Request.t()
   def maybe_attach(%Req.Request{} = request, model, opts) do
     case normalize_fixture_tuple(model, opts[:fixture]) do
       {:ok, {provider, name}} ->
@@ -49,7 +49,7 @@ defmodule ReqLLM.Step.Fixture do
     end
   end
 
-  @spec normalize_fixture_tuple(ReqLLM.Model.t(), any()) :: {:ok, {atom(), String.t()}} | :error
+  @spec normalize_fixture_tuple(LLMDB.Model.t(), any()) :: {:ok, {atom(), String.t()}} | :error
   defp normalize_fixture_tuple(_, nil), do: :error
 
   defp normalize_fixture_tuple(_, {provider, name}) when is_atom(provider) and is_binary(name) do
@@ -68,6 +68,7 @@ defmodule ReqLLM.Step.Fixture do
     case Code.ensure_loaded(ReqLLM.Step.Fixture.Backend) do
       {:module, ReqLLM.Step.Fixture.Backend} ->
         # Backend.step/2 only exists in test environment
+        # credo:disable-for-next-line Credo.Check.Refactor.Apply
         step_fn = apply(ReqLLM.Step.Fixture.Backend, :step, [provider, name])
         Req.Request.append_request_steps(request, llm_fixture: step_fn)
 

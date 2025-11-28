@@ -1,0 +1,82 @@
+{
+  "captured_at": "2025-11-18T02:36:23.148186Z",
+  "chunks": [
+    {
+      "b64": "W3sKICAiY2FuZGlkYXRlcyI6IFsKICAgIHsKICAgICAgImNvbnRlbnQiOiB7CiAgICAgICAgInJvbGUiOiAibW9kZWwiLAogICAgICAgICJwYXJ0cyI6IFsKICAgICAgICAgIHsKICAgICAgICAgICAgInRleHQiOiAie1xuICBcIm5hbWVcIjogXCJBbGV4IFJheVwiLFxuICBcImFnZVwiOiAyOCxcbiAgXCJvY2N1cGF0aW9uXCI6IFwiU29mdHdhcmUgRW5naW5lZXJcIlxufSIKICAgICAgICAgIH0KICAgICAgICBdCiAgICAgIH0sCiAgICAgICJmaW5pc2hSZWFzb24iOiAiU1RPUCIKICAgIH0KICBdLAogICJ1c2FnZU1ldGFkYXRhIjogewogICAgInByb21wdFRva2VuQ291bnQiOiA1LAogICAgImNhbmRpZGF0ZXNUb2tlbkNvdW50IjogMzAsCiAgICAidG90YWxUb2tlbkNvdW50IjogMjUxLAogICAgInRyYWZmaWNUeXBlIjogIk9OX0RFTUFORCIsCiAgICAicHJvbXB0VG9rZW5zRGV0YWlscyI6IFsKICAgICAgewogICAgICAgICJtb2RhbGl0eSI6ICJURVhUIiwKICAgICAgICAidG9rZW5Db3VudCI6IDUKICAgICAgfQogICAgXSwKICAgICJjYW5kaWRhdGVzVG9rZW5zRGV0YWlscyI6IFsKICAgICAgewogICAgICAgICJtb2RhbGl0eSI6ICJURVhUIiwKICAgICAgICAidG9rZW5Db3VudCI6IDMwCiAgICAgIH0KICAgIF0sCiAgICAidGhvdWdodHNUb2tlbkNvdW50IjogMjE2CiAgfSwKICAibW9kZWxWZXJzaW9uIjogImdlbWluaS0yLjUtcHJvIiwKICAiY3JlYXRlVGltZSI6ICIyMDI1LTExLTE4VDAyOjM2OjE5LjQ0NTg5NloiLAogICJyZXNwb25zZUlkIjogIm85c2JhY2liRy1tUDk5OFBoOU81Q1EiCn0K"
+    },
+    {
+      "b64": "XQ=="
+    }
+  ],
+  "model_spec": "google_vertex:gemini-2.5-pro",
+  "provider": "google_vertex",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJHZW5lcmF0ZSBhIHNvZnR3YXJlIGVuZ2luZWVyIHByb2ZpbGUifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjQwMDEsInJlc3BvbnNlSnNvblNjaGVtYSI6eyJhZGRpdGlvbmFsUHJvcGVydGllcyI6ZmFsc2UsInByb3BlcnRpZXMiOnsiYWdlIjp7ImRlc2NyaXB0aW9uIjoiUGVyc29uJ3MgYWdlIGluIHllYXJzIiwibWluaW11bSI6MSwidHlwZSI6ImludGVnZXIifSwibmFtZSI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGZ1bGwgbmFtZSIsInR5cGUiOiJzdHJpbmcifSwib2NjdXBhdGlvbiI6eyJkZXNjcmlwdGlvbiI6IlBlcnNvbidzIGpvYiBvciBwcm9mZXNzaW9uIiwidHlwZSI6InN0cmluZyJ9fSwicmVxdWlyZWQiOlsibmFtZSIsImFnZSJdLCJ0eXBlIjoib2JqZWN0In0sInJlc3BvbnNlTWltZVR5cGUiOiJhcHBsaWNhdGlvbi9qc29uIiwidGVtcGVyYXR1cmUiOjEuMH19"
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Generate a software engineer profile"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 4001,
+        "responseJsonSchema": {
+          "additionalProperties": false,
+          "properties": {
+            "age": {
+              "description": "Person's age in years",
+              "minimum": 1,
+              "type": "integer"
+            },
+            "name": {
+              "description": "Person's full name",
+              "type": "string"
+            },
+            "occupation": {
+              "description": "Person's job or profession",
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "age"
+          ],
+          "type": "object"
+        },
+        "responseMimeType": "application/json",
+        "temperature": 1.0
+      }
+    },
+    "headers": {
+      "accept": "text/event-stream",
+      "authorization": "[REDACTED:authorization]",
+      "content-type": "application/json"
+    },
+    "method": "POST",
+    "url": "https://aiplatform.googleapis.com/v1/projects/disco-park-312913/locations/global/publishers/google/models/gemini-2.5-pro:streamGenerateContent"
+  },
+  "response": {
+    "body": null,
+    "headers": {
+      "accept-ranges": "none",
+      "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+      "content-type": "application/json; charset=UTF-8",
+      "date": "Tue, 18 Nov 2025 02:36:23 GMT",
+      "server": "scaffolding on HTTPServer2",
+      "transfer-encoding": "chunked",
+      "vary": "Origin,Accept-Encoding",
+      "x-content-type-options": "nosniff",
+      "x-frame-options": "SAMEORIGIN",
+      "x-xss-protection": "0"
+    },
+    "status": 200
+  }
+}

@@ -52,7 +52,7 @@ defmodule ReqLLM.Test.ModelMatrixTest do
       refute Enum.empty?(specs)
       assert Enum.all?(specs, &String.starts_with?(&1, "anthropic:"))
       assert length(specs) == 2
-      assert "anthropic:claude-3-5-sonnet-20241022" in specs
+      assert "anthropic:claude-sonnet-4-5-20250929" in specs
       assert "anthropic:claude-3-5-haiku-20241022" in specs
     end
 

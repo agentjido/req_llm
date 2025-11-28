@@ -14,8 +14,8 @@ defmodule ReqLLM.Providers.OpenRouterTest do
   describe "provider contract" do
     test "provider identity and configuration" do
       assert is_atom(OpenRouter.provider_id())
-      assert is_binary(OpenRouter.default_base_url())
-      assert String.starts_with?(OpenRouter.default_base_url(), "http")
+      assert is_binary(OpenRouter.base_url())
+      assert String.starts_with?(OpenRouter.base_url(), "http")
     end
 
     test "provider schema separation from core options" do
@@ -29,14 +29,14 @@ defmodule ReqLLM.Providers.OpenRouterTest do
              "Schema overlap detected: #{inspect(MapSet.to_list(overlap))}"
     end
 
-    test "supported options include core generation keys" do
-      supported = OpenRouter.supported_provider_options()
+    test "provider schema combined with generation schema includes all core keys" do
+      full_schema = OpenRouter.provider_extended_generation_schema()
+      full_keys = Keyword.keys(full_schema.schema)
       core_keys = ReqLLM.Provider.Options.all_generation_keys()
 
-      # All core keys should be supported (except meta-keys like :provider_options)
       core_without_meta = Enum.reject(core_keys, &(&1 == :provider_options))
-      missing = core_without_meta -- supported
-      assert missing == [], "Missing core generation keys: #{inspect(missing)}"
+      missing = core_without_meta -- full_keys
+      assert missing == [], "Missing core generation keys in extended schema: #{inspect(missing)}"
     end
 
     test "provider_extended_generation_schema includes both base and provider options" do
@@ -64,7 +64,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
 
   describe "request preparation & pipeline wiring" do
     test "prepare_request creates configured request" do
-      model = ReqLLM.Model.from!("openrouter:openai/gpt-4")
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
       context = context_fixture()
       opts = [temperature: 0.7, max_tokens: 100]
 
@@ -76,7 +76,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
     end
 
     test "attach configures authentication and pipeline" do
-      model = ReqLLM.Model.from!("openrouter:openai/gpt-4")
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
       opts = [temperature: 0.5, max_tokens: 50]
 
       request = Req.new() |> OpenRouter.attach(model, opts)
@@ -96,7 +96,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
     end
 
     test "error handling for invalid configurations" do
-      model = ReqLLM.Model.from!("openrouter:openai/gpt-4")
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
       context = context_fixture()
 
       # Unsupported operation
@@ -104,7 +104,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
       assert %ReqLLM.Error.Invalid.Parameter{} = error
 
       # Provider mismatch
-      wrong_model = ReqLLM.Model.from!("xai:grok-3")
+      {:ok, wrong_model} = ReqLLM.model("xai:grok-3")
 
       assert_raise ReqLLM.Error.Invalid.Provider, fn ->
         Req.new() |> OpenRouter.attach(wrong_model, [])
@@ -114,7 +114,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
 
   describe "body encoding & context translation" do
     test "encode_body without tools" do
-      model = ReqLLM.Model.from!("openrouter:openai/gpt-4")
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
       context = context_fixture()
 
       # Create a mock request with the expected structure
@@ -144,7 +144,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
     end
 
     test "encode_body with tools but no tool_choice" do
-      model = ReqLLM.Model.from!("openrouter:openai/gpt-4")
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
       context = context_fixture()
 
       tool =
@@ -178,7 +178,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
     end
 
     test "encode_body with tools and tool_choice" do
-      model = ReqLLM.Model.from!("openrouter:openai/gpt-4")
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
       context = context_fixture()
 
       tool =
@@ -215,7 +215,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
     end
 
     test "encode_body with response_format" do
-      model = ReqLLM.Model.from!("openrouter:openai/gpt-4")
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
       context = context_fixture()
 
       response_format = %{type: "json_object"}
@@ -236,7 +236,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
     end
 
     test "encode_body OpenRouter-specific options" do
-      model = ReqLLM.Model.from!("openrouter:anthropic/claude-3-haiku")
+      {:ok, model} = ReqLLM.model("openrouter:anthropic/claude-3-haiku")
       context = context_fixture()
 
       test_cases = [
@@ -299,7 +299,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
         body: response_body
       }
 
-      model = ReqLLM.Model.from!("openrouter:openai/gpt-4")
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
       context = context_fixture()
 
       mock_req = %Req.Request{
@@ -404,10 +404,10 @@ defmodule ReqLLM.Providers.OpenRouterTest do
 
       context = context_fixture()
 
-      model = ReqLLM.Model.from!("openrouter:openai/gpt-4")
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
 
       mock_req = %Req.Request{
-        options: [context: context, model: "openai/gpt-4"],
+        options: [context: context, id: "openai/gpt-4"],
         private: %{req_llm_model: model}
       }
 
@@ -429,7 +429,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
     end
 
     test "translate_options validates openrouter_top_k with OpenAI models" do
-      openai_model = ReqLLM.Model.from!("openrouter:openai/gpt-4")
+      {:ok, openai_model} = ReqLLM.model("openrouter:openai/gpt-4")
 
       opts = [temperature: 0.7, openrouter_top_k: 40]
       {translated_opts, warnings} = OpenRouter.translate_options(:chat, openai_model, opts)
@@ -440,7 +440,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
     end
 
     test "translate_options allows openrouter_top_k for non-OpenAI models" do
-      anthropic_model = ReqLLM.Model.from!("openrouter:anthropic/claude-3-haiku")
+      {:ok, anthropic_model} = ReqLLM.model("openrouter:anthropic/claude-3-haiku")
 
       opts = [temperature: 0.7, openrouter_top_k: 40]
       {translated_opts, warnings} = OpenRouter.translate_options(:chat, anthropic_model, opts)
@@ -450,7 +450,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
     end
 
     test "translate_options handles legacy parameter names with warnings" do
-      model = ReqLLM.Model.from!("openrouter:anthropic/claude-3-haiku")
+      {:ok, model} = ReqLLM.model("openrouter:anthropic/claude-3-haiku")
 
       opts = [
         temperature: 0.7,
@@ -499,7 +499,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
 
   describe "usage extraction" do
     test "extract_usage with valid usage data" do
-      model = ReqLLM.Model.from!("openrouter:openai/gpt-4")
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
 
       body_with_usage = %{
         "usage" => %{
@@ -516,14 +516,14 @@ defmodule ReqLLM.Providers.OpenRouterTest do
     end
 
     test "extract_usage with missing usage data" do
-      model = ReqLLM.Model.from!("openrouter:openai/gpt-4")
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
       body_without_usage = %{"choices" => []}
 
       {:error, :no_usage_found} = OpenRouter.extract_usage(body_without_usage, model)
     end
 
     test "extract_usage with invalid body type" do
-      model = ReqLLM.Model.from!("openrouter:openai/gpt-4")
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
 
       {:error, :invalid_body} = OpenRouter.extract_usage("invalid", model)
       {:error, :invalid_body} = OpenRouter.extract_usage(nil, model)
@@ -533,7 +533,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
 
   describe "object generation edge cases" do
     test "prepare_request for :object with low max_tokens gets adjusted" do
-      model = ReqLLM.Model.from!("openrouter:openai/gpt-4")
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
       context = context_fixture()
       {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string, required: true])
 
@@ -546,7 +546,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
     end
 
     test "prepare_request for :object with nil max_tokens gets default" do
-      model = ReqLLM.Model.from!("openrouter:openai/gpt-4")
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
       context = context_fixture()
       {:ok, schema} = ReqLLM.Schema.compile([])
 
@@ -559,7 +559,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
     end
 
     test "prepare_request for :object with sufficient max_tokens unchanged" do
-      model = ReqLLM.Model.from!("openrouter:openai/gpt-4")
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
       context = context_fixture()
       {:ok, schema} = ReqLLM.Schema.compile(value: [type: :integer])
 
@@ -571,7 +571,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
     end
 
     test "prepare_request rejects unsupported operations" do
-      model = ReqLLM.Model.from!("openrouter:openai/gpt-4")
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
       context = context_fixture()
 
       # Test unsupported operation for 3-arg version
@@ -610,7 +610,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
 
   describe "OpenRouter-specific features" do
     test "model routing parameters are encoded correctly" do
-      model = ReqLLM.Model.from!("openrouter:openai/gpt-4")
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
       context = context_fixture()
 
       routing_opts = %{
@@ -636,7 +636,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
     end
 
     test "transform parameters are encoded correctly" do
-      model = ReqLLM.Model.from!("openrouter:anthropic/claude-3-haiku")
+      {:ok, model} = ReqLLM.model("openrouter:anthropic/claude-3-haiku")
       context = context_fixture()
 
       transforms = ["middle-out", "prompt-simplify"]
@@ -656,7 +656,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
     end
 
     test "sampling parameters are encoded correctly" do
-      model = ReqLLM.Model.from!("openrouter:anthropic/claude-3-haiku")
+      {:ok, model} = ReqLLM.model("openrouter:anthropic/claude-3-haiku")
       context = context_fixture()
 
       sampling_opts = [
@@ -686,7 +686,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
     end
 
     test "app attribution headers are added correctly" do
-      model = ReqLLM.Model.from!("openrouter:openai/gpt-4")
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
 
       opts = [
         temperature: 0.7,

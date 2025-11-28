@@ -10,27 +10,19 @@ defmodule ReqLLM.Embedding do
   Currently only OpenAI models are supported for embeddings.
   """
 
-  alias ReqLLM.Model
+  alias LLMDB.Model
 
-  # Get embedding models dynamically from metadata
+  # Get embedding models dynamically from LLMDB
   defp get_embedding_models do
-    ReqLLM.Provider.Registry.list_providers()
+    ReqLLM.Providers.list()
     |> Enum.flat_map(fn provider ->
-      case ReqLLM.Provider.Registry.get_provider_metadata(provider) do
-        {:ok, %{models: models}} when is_list(models) ->
-          models
-          |> Enum.filter(fn model ->
-            Map.get(model, "type") == "embedding" or Map.get(model, :type) == "embedding"
-          end)
-          |> Enum.map(fn model ->
-            model_id = Map.get(model, :id) || Map.get(model, "id")
-            if model_id, do: "#{provider}:#{model_id}"
-          end)
-          |> Enum.filter(&(!is_nil(&1)))
-
-        _ ->
-          []
-      end
+      LLMDB.models(provider)
+      |> Enum.filter(fn model ->
+        model.capabilities && model.capabilities.embeddings
+      end)
+      |> Enum.map(fn model ->
+        LLMDB.Model.spec(model)
+      end)
     end)
   end
 
@@ -86,7 +78,7 @@ defmodule ReqLLM.Embedding do
   ## Examples
 
       ReqLLM.Embedding.validate_model("openai:text-embedding-3-small")
-      #=> {:ok, %ReqLLM.Model{provider: :openai, model: "text-embedding-3-small"}}
+      #=> {:ok, %LLMDB.Model{provider: :openai, model: "text-embedding-3-small"}}
 
       ReqLLM.Embedding.validate_model("anthropic:claude-3-sonnet")
       #=> {:error, :embedding_not_supported}
@@ -95,8 +87,8 @@ defmodule ReqLLM.Embedding do
   @spec validate_model(String.t() | {atom(), keyword()} | struct()) ::
           {:ok, Model.t()} | {:error, term()}
   def validate_model(model_spec) do
-    with {:ok, model} <- Model.from(model_spec) do
-      model_string = "#{model.provider}:#{model.model}"
+    with {:ok, model} <- ReqLLM.model(model_spec) do
+      model_string = LLMDB.Model.spec(model)
 
       # Check if model is in the embedding models list
       embedding_models = get_embedding_models()

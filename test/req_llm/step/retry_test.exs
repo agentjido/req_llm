@@ -72,7 +72,7 @@ defmodule ReqLLM.Step.RetryTest do
     test "retry configuration is automatically applied to provider requests" do
       # Verify that when we create a request through Provider.Defaults,
       # it has retry configured
-      model = %ReqLLM.Model{provider: :openai, model: "gpt-4"}
+      {:ok, model} = ReqLLM.model("openai:gpt-4")
 
       request =
         ReqLLM.Provider.Defaults.default_attach(
@@ -90,7 +90,7 @@ defmodule ReqLLM.Step.RetryTest do
     end
 
     test "retry function correctly identifies retryable errors" do
-      model = %ReqLLM.Model{provider: :openai, model: "gpt-4"}
+      {:ok, model} = ReqLLM.model("openai:gpt-4")
 
       request =
         ReqLLM.Provider.Defaults.default_attach(

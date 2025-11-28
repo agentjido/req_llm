@@ -1,0 +1,114 @@
+{
+  "model_spec": "google_vertex:gemini-2.5-flash-lite",
+  "provider": "google_vertex",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJTb2x2ZSAxMio3IGFuZCBzaG93IHlvdXIgaW50ZXJuYWwgdGhpbmtpbmcgKGJyaWVmKS4ifV0sInJvbGUiOiJ1c2VyIn1dLCJnZW5lcmF0aW9uQ29uZmlnIjp7ImNhbmRpZGF0ZUNvdW50IjoxLCJtYXhPdXRwdXRUb2tlbnMiOjUwMDAsInRlbXBlcmF0dXJlIjoxLjB9fQ=="
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Solve 12*7 and show your internal thinking (brief)."
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 5000,
+        "temperature": 1.0
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ]
+    },
+    "method": "post",
+    "url": "https://aiplatform.googleapis.com/v1/projects/disco-park-312913/locations/global/publishers/google/models/gemini-2.5-flash-lite:generateContent"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "avgLogprobs": -0.1502826013297678,
+          "content": {
+            "parts": [
+              {
+                "text": "Here's my internal thinking process to solve 12 * 7:\n\n1.  **Recognize the operation:** The operation is multiplication.\n2.  **Break down the problem (if needed):** 12 is a two-digit number. I can break it down into 10 + 2.\n3.  **Apply the distributive property:** (10 + 2) * 7 = (10 * 7) + (2 * 7).\n4.  **Solve the simpler multiplications:**\n    *   10 * 7 = 70 (Multiplying by 10 is easy, just add a zero).\n    *   2 * 7 = 14 (This is a basic multiplication fact I know).\n5.  **Combine the results:** 70 + 14.\n6.  **Add:** 70 + 14 = 84.\n\n**Therefore, 12 * 7 = 84.**"
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP"
+        }
+      ],
+      "createTime": "2025-11-18T07:25:24.784343Z",
+      "modelVersion": "gemini-2.5-flash-lite",
+      "responseId": "ZB8cadfvL6TU4_UPsqzgoA4",
+      "usageMetadata": {
+        "candidatesTokenCount": 214,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 214
+          }
+        ],
+        "promptTokenCount": 14,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 14
+          }
+        ],
+        "totalTokenCount": 228,
+        "trafficType": "ON_DEMAND"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Tue, 18 Nov 2025 07:25:25 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  }
+}

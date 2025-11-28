@@ -3,7 +3,7 @@ defmodule ReqLLM.Providers.Anthropic do
   Provider implementation for Anthropic Claude models.
 
   Supports Claude 3 models including:
-  - claude-3-5-sonnet-20241022
+  - claude-sonnet-4-5-20250929
   - claude-3-5-haiku-20241022
   - claude-3-opus-20240229
 
@@ -18,58 +18,70 @@ defmodule ReqLLM.Providers.Anthropic do
 
   ## Usage
 
-      iex> ReqLLM.generate_text("anthropic:claude-3-5-sonnet-20241022", "Hello!")
+      iex> ReqLLM.generate_text("anthropic:claude-sonnet-4-5-20250929", "Hello!")
       {:ok, response}
 
   """
 
-  @behaviour ReqLLM.Provider
-
-  use ReqLLM.Provider.DSL,
+  use ReqLLM.Provider,
     id: :anthropic,
-    base_url: "https://api.anthropic.com",
-    metadata: "priv/models_dev/anthropic.json",
-    default_env_key: "ANTHROPIC_API_KEY",
-    provider_schema: [
-      anthropic_top_k: [
-        type: :pos_integer,
-        doc: "Sample from the top K options for each subsequent token (1-40)"
-      ],
-      anthropic_version: [
-        type: :string,
-        doc: "Anthropic API version to use",
-        default: "2023-06-01"
-      ],
-      stop_sequences: [
-        type: {:list, :string},
-        doc: "Custom sequences that will cause the model to stop generating"
-      ],
-      anthropic_metadata: [
-        type: :map,
-        doc: "Optional metadata to include with the request"
-      ],
-      thinking: [
-        type: :map,
-        doc:
-          "Enable thinking/reasoning for supported models (e.g. %{type: \"enabled\", budget_tokens: 4096})"
-      ],
-      anthropic_prompt_cache: [
-        type: :boolean,
-        doc: "Enable Anthropic prompt caching"
-      ],
-      anthropic_prompt_cache_ttl: [
-        type: :string,
-        doc: "TTL for cache (\"1h\" for one hour; omit for default ~5m)"
-      ]
-    ]
+    default_base_url: "https://api.anthropic.com",
+    default_env_key: "ANTHROPIC_API_KEY"
 
   import ReqLLM.Provider.Utils, only: [maybe_put: 3, ensure_parsed_body: 1]
 
   require Logger
 
-  @extra_option_keys ~w(
-    model compiled_schema temperature max_tokens app_referer app_title fixture
-  )a
+  @provider_schema [
+    anthropic_top_k: [
+      type: :pos_integer,
+      doc: "Sample from the top K options for each subsequent token (1-40)"
+    ],
+    anthropic_version: [
+      type: :string,
+      doc: "Anthropic API version to use",
+      default: "2023-06-01"
+    ],
+    stop_sequences: [
+      type: {:list, :string},
+      doc: "Custom sequences that will cause the model to stop generating"
+    ],
+    anthropic_metadata: [
+      type: :map,
+      doc: "Optional metadata to include with the request"
+    ],
+    thinking: [
+      type: :map,
+      doc:
+        "Enable thinking/reasoning for supported models (e.g. %{type: \"enabled\", budget_tokens: 4096})"
+    ],
+    anthropic_prompt_cache: [
+      type: :boolean,
+      doc: "Enable Anthropic prompt caching"
+    ],
+    anthropic_prompt_cache_ttl: [
+      type: :string,
+      doc: "TTL for cache (\"1h\" for one hour; omit for default ~5m)"
+    ],
+    anthropic_structured_output_mode: [
+      type: {:in, [:auto, :json_schema, :tool_strict]},
+      default: :auto,
+      doc: """
+      Strategy for structured output generation:
+      - `:auto` - Use json_schema when supported (default)
+      - `:json_schema` - Force output_format with json_schema
+      - `:tool_strict` - Force strict: true on function tools
+      """
+    ],
+    output_format: [
+      type: :map,
+      doc: "Internal use: structured output format configuration"
+    ],
+    anthropic_beta: [
+      type: {:list, :string},
+      doc: "Internal use: beta feature flags"
+    ]
+  ]
 
   @req_keys ~w(
     context operation text stream model provider_options
@@ -95,7 +107,7 @@ defmodule ReqLLM.Providers.Anthropic do
 
   @impl ReqLLM.Provider
   def prepare_request(:chat, model_spec, prompt, opts) do
-    with {:ok, model} <- ReqLLM.Model.from(model_spec),
+    with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, context} <- ReqLLM.Context.normalize(prompt, opts),
          opts_with_context = Keyword.put(opts, :context, context),
          {:ok, processed_opts} <-
@@ -113,7 +125,7 @@ defmodule ReqLLM.Providers.Anthropic do
 
       timeout = Keyword.get(processed_opts, :receive_timeout, default_timeout)
 
-      base_url = Keyword.get(processed_opts, :base_url, default_base_url())
+      base_url = Keyword.get(processed_opts, :base_url, base_url())
 
       request =
         Req.new(
@@ -128,7 +140,7 @@ defmodule ReqLLM.Providers.Anthropic do
         )
         |> Req.Request.register_options(req_keys)
         |> Req.Request.merge_options(
-          Keyword.take(processed_opts, req_keys) ++ [model: model.model]
+          Keyword.take(processed_opts, req_keys) ++ [model: get_api_model_id(model)]
         )
         |> attach(model, processed_opts)
 
@@ -139,23 +151,17 @@ defmodule ReqLLM.Providers.Anthropic do
   @impl ReqLLM.Provider
   def prepare_request(:object, model_spec, prompt, opts) do
     compiled_schema = Keyword.fetch!(opts, :compiled_schema)
+    {:ok, model} = ReqLLM.model(model_spec)
 
-    structured_output_tool =
-      ReqLLM.Tool.new!(
-        name: "structured_output",
-        description: "Generate structured output matching the provided schema",
-        parameter_schema: compiled_schema.schema,
-        callback: fn _args -> {:ok, "structured output generated"} end
-      )
+    mode = determine_output_mode(model, opts)
 
-    opts_with_tool =
-      opts
-      |> Keyword.update(:tools, [structured_output_tool], &[structured_output_tool | &1])
-      |> Keyword.put(:tool_choice, %{type: "tool", name: "structured_output"})
-      |> Keyword.put_new(:max_tokens, 4096)
-      |> Keyword.put(:operation, :object)
+    case mode do
+      :json_schema ->
+        prepare_json_schema_request(model_spec, prompt, compiled_schema, opts)
 
-    prepare_request(:chat, model_spec, prompt, opts_with_tool)
+      :tool_strict ->
+        prepare_strict_tool_request(model_spec, prompt, compiled_schema, opts)
+    end
   end
 
   @impl ReqLLM.Provider
@@ -169,6 +175,65 @@ defmodule ReqLLM.Providers.Anthropic do
      )}
   end
 
+  defp prepare_json_schema_request(model_spec, prompt, compiled_schema, opts) do
+    json_schema = ReqLLM.Schema.to_json(compiled_schema.schema)
+    json_schema = enforce_strict_schema_requirements(json_schema)
+
+    opts_with_format =
+      opts
+      |> Keyword.update(
+        :provider_options,
+        [
+          anthropic_beta: ["structured-outputs-2025-11-13"],
+          output_format: %{
+            type: "json_schema",
+            schema: json_schema
+          }
+        ],
+        fn provider_opts ->
+          provider_opts
+          |> Keyword.update(:anthropic_beta, ["structured-outputs-2025-11-13"], fn betas ->
+            ["structured-outputs-2025-11-13" | betas]
+          end)
+          |> Keyword.put(:output_format, %{
+            type: "json_schema",
+            schema: json_schema
+          })
+        end
+      )
+      |> Keyword.put_new(:max_tokens, 4096)
+      |> Keyword.put(:operation, :object)
+
+    prepare_request(:chat, model_spec, prompt, opts_with_format)
+  end
+
+  @spec prepare_strict_tool_request(LLMDB.Model.t() | String.t(), any(), any(), keyword()) ::
+          {:ok, Req.Request.t()} | {:error, any()}
+  defp prepare_strict_tool_request(model_spec, prompt, compiled_schema, opts) do
+    schema = enforce_strict_schema_requirements(compiled_schema.schema)
+
+    case ReqLLM.Tool.new(
+           name: "structured_output",
+           description: "Generate structured output matching the provided schema",
+           parameter_schema: schema,
+           strict: true,
+           callback: fn _args -> {:ok, "structured output generated"} end
+         ) do
+      {:ok, structured_output_tool} ->
+        opts_with_tool =
+          opts
+          |> Keyword.update(:tools, [structured_output_tool], &[structured_output_tool | &1])
+          |> Keyword.put(:tool_choice, %{type: "tool", name: "structured_output"})
+          |> Keyword.put_new(:max_tokens, 4096)
+          |> Keyword.put(:operation, :object)
+
+        prepare_request(:chat, model_spec, prompt, opts_with_tool)
+
+      {:error, _} = error ->
+        error
+    end
+  end
+
   @impl ReqLLM.Provider
   def attach(request, model, user_opts) do
     # Validate provider compatibility
@@ -176,10 +241,8 @@ defmodule ReqLLM.Providers.Anthropic do
       raise ReqLLM.Error.Invalid.Provider.exception(provider: model.provider)
     end
 
-    api_key = ReqLLM.Keys.get!(model, user_opts)
-
-    # Register options that might be passed by users but aren't standard Req options
-    extra_option_keys = @extra_option_keys ++ supported_provider_options()
+    {api_key, extra_option_keys} =
+      ReqLLM.Provider.Defaults.fetch_api_key_and_extra_options(__MODULE__, model, user_opts)
 
     request
     |> Req.Request.register_options(extra_option_keys ++ [:anthropic_version, :anthropic_beta])
@@ -188,9 +251,9 @@ defmodule ReqLLM.Providers.Anthropic do
     |> Req.Request.put_header("anthropic-version", get_anthropic_version(user_opts))
     |> Req.Request.put_private(:req_llm_model, model)
     |> maybe_add_beta_header(user_opts)
-    |> Req.Request.merge_options([model: model.model] ++ user_opts)
+    |> Req.Request.merge_options([model: get_api_model_id(model)] ++ user_opts)
     |> ReqLLM.Step.Error.attach()
-    |> ReqLLM.Step.Retry.attach()
+    |> ReqLLM.Step.Retry.attach(user_opts)
     |> Req.Request.append_request_steps(llm_encode_body: &encode_body/1)
     |> Req.Request.append_response_steps(llm_decode_response: &decode_response/1)
     |> ReqLLM.Step.Usage.attach(model)
@@ -262,15 +325,23 @@ defmodule ReqLLM.Providers.Anthropic do
     |> Map.put(:max_tokens, max_tokens)
     |> maybe_add_tools(opts)
     |> maybe_apply_prompt_caching(opts)
+    |> maybe_add_output_format(opts)
   end
 
   defp build_request_url(opts) do
-    base_url = get_option(opts, :base_url, default_base_url())
+    base_url = get_option(opts, :base_url, base_url())
     "#{base_url}/v1/messages"
   end
 
   defp build_beta_headers(opts) do
-    beta_features = []
+    provider_opts = get_option(opts, :provider_options, [])
+
+    manual_betas =
+      (List.wrap(Keyword.get(opts, :anthropic_beta)) ++
+         List.wrap(Keyword.get(provider_opts, :anthropic_beta)))
+      |> Enum.reject(&is_nil/1)
+
+    beta_features = manual_betas
 
     beta_features =
       if has_tools?(opts) do
@@ -337,7 +408,7 @@ defmodule ReqLLM.Providers.Anthropic do
     beta_headers = build_beta_headers(translated_opts)
     all_headers = streaming_headers ++ beta_headers
 
-    body = build_request_body(context, model.model, translated_opts ++ [stream: true])
+    body = build_request_body(context, get_api_model_id(model), translated_opts ++ [stream: true])
     url = build_request_url(translated_opts)
 
     finch_request = Finch.build(:post, url, all_headers, Jason.encode!(body))
@@ -377,6 +448,15 @@ defmodule ReqLLM.Providers.Anthropic do
 
   defp maybe_add_beta_header(request, user_opts) do
     beta_features = []
+
+    # Add betas from provider_options (e.g. structured-outputs)
+    provider_betas =
+      user_opts
+      |> Keyword.get(:provider_options, [])
+      |> Keyword.get(:anthropic_beta, [])
+      |> List.wrap()
+
+    beta_features = beta_features ++ provider_betas
 
     beta_features =
       if has_tools?(user_opts) do
@@ -757,12 +837,12 @@ defmodule ReqLLM.Providers.Anthropic do
       case model_name do
         nil ->
           case req.private[:req_llm_model] do
-            %ReqLLM.Model{} = stored_model -> stored_model
-            _ -> %ReqLLM.Model{provider: :anthropic, model: "unknown"}
+            %LLMDB.Model{} = stored_model -> stored_model
+            _ -> %LLMDB.Model{id: "unknown", provider: :anthropic}
           end
 
         model_name when is_binary(model_name) ->
-          %ReqLLM.Model{provider: :anthropic, model: model_name}
+          %LLMDB.Model{id: model_name, provider: :anthropic}
       end
 
     is_streaming = req.options[:stream] == true
@@ -818,7 +898,7 @@ defmodule ReqLLM.Providers.Anthropic do
     final_response =
       case operation do
         :object ->
-          extract_and_set_object(response)
+          extract_and_set_object(response, req.options)
 
         _ ->
           response
@@ -828,13 +908,68 @@ defmodule ReqLLM.Providers.Anthropic do
     {req, %{resp | body: merged_response}}
   end
 
-  defp extract_and_set_object(response) do
+  defp extract_and_set_object(response, opts) do
+    provider_opts = normalize_provider_opts(opts)
+    output_format = get_output_format(provider_opts)
+
     extracted_object =
-      response
-      |> ReqLLM.Response.tool_calls()
-      |> ReqLLM.ToolCall.find_args("structured_output")
+      if is_map(output_format) and output_format[:type] == "json_schema" do
+        # JSON Schema mode: parse text content
+        case response.message do
+          %ReqLLM.Message{content: content} ->
+            text_content =
+              Enum.find(content, fn
+                %ReqLLM.Message.ContentPart{type: :text} -> true
+                _ -> false
+              end)
+
+            case text_content do
+              %ReqLLM.Message.ContentPart{text: text} ->
+                case Jason.decode(text) do
+                  {:ok, json} -> json
+                  _ -> find_structured_output(response)
+                end
+
+              _ ->
+                find_structured_output(response)
+            end
+
+          _ ->
+            find_structured_output(response)
+        end
+      else
+        find_structured_output(response)
+      end
 
     %{response | object: extracted_object}
+  end
+
+  defp normalize_provider_opts(opts) when is_list(opts) do
+    Keyword.get(opts, :provider_options, [])
+  end
+
+  defp normalize_provider_opts(opts) when is_map(opts) do
+    provider_opts = Map.get(opts, :provider_options, [])
+
+    cond do
+      Keyword.keyword?(provider_opts) -> provider_opts
+      is_map(provider_opts) -> Map.to_list(provider_opts)
+      true -> provider_opts
+    end
+  end
+
+  defp get_output_format(provider_opts) when is_list(provider_opts) do
+    Keyword.get(provider_opts, :output_format)
+  end
+
+  defp get_output_format(provider_opts) when is_map(provider_opts) do
+    provider_opts[:output_format]
+  end
+
+  defp find_structured_output(response) do
+    response
+    |> ReqLLM.Response.tool_calls()
+    |> ReqLLM.ToolCall.find_args("structured_output")
   end
 
   defp merge_response_with_context(req, response) do
@@ -843,4 +978,57 @@ defmodule ReqLLM.Providers.Anthropic do
   end
 
   defp default_max_tokens(_model_name), do: 1024
+
+  defp get_api_model_id(%LLMDB.Model{provider_model_id: api_id}) when not is_nil(api_id),
+    do: api_id
+
+  defp get_api_model_id(%LLMDB.Model{id: id}), do: id
+
+  @doc false
+  def determine_output_mode(_model, opts) do
+    provider_opts = Keyword.get(opts, :provider_options, [])
+    explicit_mode = Keyword.get(provider_opts, :anthropic_structured_output_mode, :auto)
+
+    case explicit_mode do
+      :auto ->
+        if has_other_tools?(opts) do
+          :tool_strict
+        else
+          :json_schema
+        end
+
+      mode ->
+        mode
+    end
+  end
+
+  @doc false
+  def has_other_tools?(opts) do
+    tools = Keyword.get(opts, :tools, [])
+    Enum.any?(tools, fn tool -> tool.name != "structured_output" end)
+  end
+
+  defp enforce_strict_schema_requirements(
+         %{"type" => "object", "properties" => properties} = schema
+       ) do
+    all_property_names = Map.keys(properties)
+
+    schema
+    |> Map.put("required", all_property_names)
+    |> Map.put("additionalProperties", false)
+  end
+
+  defp enforce_strict_schema_requirements(schema), do: schema
+
+  defp maybe_add_output_format(body, opts) do
+    provider_opts = get_option(opts, :provider_options, [])
+
+    output_format =
+      get_option(opts, :output_format) || get_option(provider_opts, :output_format)
+
+    case output_format do
+      nil -> body
+      format -> Map.put(body, :output_format, format)
+    end
+  end
 end

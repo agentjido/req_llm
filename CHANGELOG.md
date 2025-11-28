@@ -9,6 +9,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Amazon Bedrock service tier support** for request prioritization
+  - `service_tier` option with values: `"priority"`, `"default"`, `"flex"`
+  - Priority tier provides faster responses at premium cost for mission-critical workloads
+  - Flex tier offers cost-effective processing for non-urgent tasks
+  - Supported on compatible Bedrock models (check AWS documentation for availability)
+- **Google Vertex AI Gemini model support**
+  - Gemini 2.0 Flash, 2.5 Flash, 2.5 Flash Lite, and 2.5 Pro on Google Vertex AI
+  - Delegates to native Google provider format with Vertex-specific quirks handled
+  - Sanitizes function call IDs (Vertex API rejects them while direct Google API includes them)
+  - Full support for extended thinking/reasoning, context caching, and all Gemini features
+  - Complete fixture coverage for all Vertex Gemini models (46 fixtures: 10 for 2.0, 12 each for 2.5 variants)
+- **Google Context Caching** for Gemini models with up to 90% cost savings
+  - `ReqLLM.Providers.Google.CachedContent` module for cache CRUD operations
+  - Create, list, update, and delete cached content
+  - Support for both Google AI Studio and Vertex AI (requires Gemini models)
+  - `cached_content` provider option to reference existing caches
+  - Minimum token requirements: 1,024 (Flash) / 4,096 (Pro)
+- **OAuth2 token caching for Google Vertex AI**
+  - Eliminates 60-180ms auth overhead on every request
+  - Tokens cached for 55 minutes (5 minute safety margin before 1 hour expiry)
+  - GenServer serializes concurrent refresh requests to prevent duplicate fetches
+  - Per-node cache (no distributed coordination needed)
+  - 99.9% reduction in auth overhead for typical workloads
 - **Real-time stream processing** with `ReqLLM.StreamResponse.process_stream/2`
   - Process streams incrementally with real-time callbacks
   - `on_result` callback for content chunks (fires immediately as text arrives)
@@ -16,14 +39,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Prevents double-stream consumption bugs through single-pass processing
   - Enables real-time streaming to UIs (Phoenix LiveView, websockets, etc.)
   - No upfront `Enum.to_list` - callbacks fire as chunks arrive from the stream
+- **Provider alias support** via llm_db integration
+  - Google Vertex AI Anthropic models now accessible via `:google_vertex` provider
+  - `google_vertex_anthropic` provider aliased to `google_vertex` implementation
+  - Enables single provider module to serve models from multiple llm_db providers
+  - Complete fixture coverage for all Vertex Claude models (36 fixtures: 12 per model × 3 models)
+- **provider_model_id support** for AWS Bedrock inference profiles
+  - Models can specify API-specific identifiers separate from canonical IDs
+  - Enables Bedrock streaming and on-demand throughput with inference profile prefixes
+  - Applied to Claude Haiku 4.5, Sonnet 4.5, Opus 4.1, Llama 3.3 70B models
+- **Credential fallback for fixture recording** in providers requiring cloud credentials
+  - Automatic fallback to existing fixtures when credentials are missing during RECORD mode
+  - Provider-specific credential detection via optional `credential_missing?/1` callback
+  - Implemented in AWS Bedrock, Google, and Google Vertex AI providers
+  - Enables comprehensive test coverage without requiring all developers to configure cloud credentials
+
 ### Enhanced
 
 - **AWS Event Stream parser documentation** clarifying Bedrock specialization
   - Explains performance rationale for single-pass parsing and header specialization
   - Documents non-goals (S3 Select, Transcribe, Kinesis incompatibility)
+- **Object generation detection** updated to recognize tool-based workaround
+  - `supports_object_generation?` now accepts models with `tools.enabled = true`
+  - Enables object generation tests for Vertex Claude models using tool workaround
 
 ### Fixed
 
+- **Test helper `tool_budget_for/1` pattern match regression** from LLMDB integration
+  - Fixed pattern match to use `{:ok, model}` instead of obsolete `{:ok, {provider, id, model}}`
+  - Fixed field name from `model.limit` to `model.limits`
+  - Regression introduced in v1.1.0 caused test fixtures to use incorrect `maxOutputTokens` values
+  - Primarily affected reasoning-enabled models (Gemini 2.5 Pro) where 150 token default was insufficient
+- **Google provider cached token extraction** from API responses
+  - Extracts `cachedContentTokenCount` from `usageMetadata` for both implicit and explicit caching
+  - Converts to OpenAI-compatible `prompt_tokens_details.cached_tokens` format
+  - Fixes cached tokens always showing as 0 even when caching was active
+  - Affects both `google` and `google-vertex` providers using Gemini models
 - **JSV schema validation** now preserves original data types instead of returning cast values
   - Prevents unwanted type coercion (e.g., 1.0 → 1 for integer schemas)
   - Validation still enforces schema constraints, but returns original input data

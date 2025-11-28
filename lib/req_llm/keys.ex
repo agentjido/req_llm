@@ -23,7 +23,7 @@ defmodule ReqLLM.Keys do
       ReqLLM.Keys.get(:anthropic, api_key: "sk-ant-...")
 
       # Works with models (extracts provider automatically)
-      model = ReqLLM.Model.from("anthropic:claude-3-sonnet")
+      model = ReqLLM.model("anthropic:claude-3-sonnet")
       key = ReqLLM.Keys.get!(model)
 
       # Debug key source
@@ -37,7 +37,7 @@ defmodule ReqLLM.Keys do
   @doc """
   Retrieves API key for a provider/model, raising on failure.
   """
-  @spec get!(ReqLLM.Model.t() | atom, keyword) :: String.t() | no_return
+  @spec get!(LLMDB.Model.t() | atom, keyword) :: String.t() | no_return
   def get!(provider_or_model, opts \\ []) do
     case get(provider_or_model, opts) do
       {:ok, key, _source} -> key
@@ -48,9 +48,9 @@ defmodule ReqLLM.Keys do
   @doc """
   Retrieves API key for a provider/model with source information.
   """
-  @spec get(ReqLLM.Model.t() | atom, keyword) ::
+  @spec get(LLMDB.Model.t() | atom, keyword) ::
           {:ok, String.t(), key_source} | {:error, String.t()}
-  def get(%ReqLLM.Model{provider: provider}, opts), do: get(provider, opts)
+  def get(%LLMDB.Model{provider: provider}, opts), do: get(provider, opts)
 
   def get(provider, opts) when is_atom(provider) do
     env_var = env_var_name(provider)
@@ -98,13 +98,13 @@ defmodule ReqLLM.Keys do
   @spec env_var_name(atom) :: String.t()
   def env_var_name(provider) when is_atom(provider) do
     # Try provider's default_env_key callback first
-    case ReqLLM.Provider.Registry.get_provider(provider) do
+    case ReqLLM.provider(provider) do
       {:ok, module} ->
         if function_exported?(module, :default_env_key, 0) do
           module.default_env_key()
         else
           # Fall back to registry
-          ReqLLM.Provider.Registry.get_env_key(provider) ||
+          ReqLLM.Providers.get_env_key(provider) ||
             "#{provider |> Atom.to_string() |> String.upcase()}_API_KEY"
         end
 

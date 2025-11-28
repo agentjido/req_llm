@@ -36,7 +36,7 @@ defmodule ReqLLM.Test.Fixtures do
 
   - `:fixture` - Test name only (e.g., "basic", "streaming", "usage")
   """
-  @spec replay_path(ReqLLM.Model.t() | String.t(), keyword()) ::
+  @spec replay_path(LLMDB.Model.t() | String.t(), keyword()) ::
           {:fixture, String.t()} | :no_fixture
   def replay_path(model_or_spec, opts) do
     result =
@@ -65,14 +65,20 @@ defmodule ReqLLM.Test.Fixtures do
 
       model =
         case model_or_spec do
-          %ReqLLM.Model{} = m -> m
-          spec when is_binary(spec) -> ReqLLM.Model.from!(spec)
+          %LLMDB.Model{} = m ->
+            m
+
+          spec when is_binary(spec) ->
+            {:ok, model} = ReqLLM.model(spec)
+            model
         end
 
       test_name = Keyword.get(opts, :fixture, Path.basename(path, ".json"))
 
       dbug(
-        fn -> "[Fixture] step: model=#{model.provider}:#{model.model}, name=#{test_name}" end,
+        fn ->
+          "[Fixture] step: model=#{model.provider}:#{model.provider_model_id || model.id}, name=#{test_name}"
+        end,
         component: :fixtures
       )
     end
@@ -94,7 +100,7 @@ defmodule ReqLLM.Test.Fixtures do
   - `:fixture` - Test name only (e.g., "basic", "streaming", "usage")
   - `:fixture_path` - Explicit override path
   """
-  @spec capture_path(ReqLLM.Model.t() | String.t(), keyword()) :: String.t() | nil
+  @spec capture_path(LLMDB.Model.t() | String.t(), keyword()) :: String.t() | nil
   def capture_path(model_or_spec, opts) do
     result =
       case Keyword.get(opts, :fixture_path) do
@@ -116,14 +122,20 @@ defmodule ReqLLM.Test.Fixtures do
     if result do
       model =
         case model_or_spec do
-          %ReqLLM.Model{} = m -> m
-          spec when is_binary(spec) -> ReqLLM.Model.from!(spec)
+          %LLMDB.Model{} = m ->
+            m
+
+          spec when is_binary(spec) ->
+            {:ok, model} = ReqLLM.model(spec)
+            model
         end
 
       test_name = Keyword.get(opts, :fixture, Path.basename(result, ".json"))
 
       dbug(
-        fn -> "[Fixture] step: model=#{model.provider}:#{model.model}, name=#{test_name}" end,
+        fn ->
+          "[Fixture] step: model=#{model.provider}:#{model.provider_model_id || model.id}, name=#{test_name}"
+        end,
         component: :fixtures
       )
     end

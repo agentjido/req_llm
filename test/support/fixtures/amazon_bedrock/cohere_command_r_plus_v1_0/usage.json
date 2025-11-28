@@ -1,4 +1,6 @@
 {
+  "model_spec": "amazon_bedrock:cohere.command-r-plus-v1:0",
+  "provider": "amazon_bedrock",
   "request": {
     "body": {
       "b64": "eyJpbmZlcmVuY2VDb25maWciOnsibWF4VG9rZW5zIjoxMCwidGVtcGVyYXR1cmUiOjAuMH0sIm1lc3NhZ2VzIjpbeyJjb250ZW50IjpbeyJ0ZXh0IjoiSGkgdGhlcmUhIn1dLCJyb2xlIjoidXNlciJ9XX0="
@@ -31,13 +33,13 @@
         "bedrock-runtime.us-east-1.amazonaws.com"
       ],
       "user-agent": [
-        "req/0.5.15"
+        "req/0.5.16"
       ],
       "x-amz-content-sha256": [
         "08a540b717c10538f53b963be52e7cff049d824d13feb69ea4a3a2ac0c26629e"
       ],
       "x-amz-date": [
-        "20251102T171015Z"
+        "20251117T060432Z"
       ]
     },
     "method": "post",
@@ -46,7 +48,7 @@
   "response": {
     "body": {
       "metrics": {
-        "latencyMs": 357
+        "latencyMs": 366
       },
       "output": {
         "message": {
@@ -74,10 +76,10 @@
         "application/json"
       ],
       "date": [
-        "Sun, 02 Nov 2025 17:10:15 GMT"
+        "Mon, 17 Nov 2025 06:04:33 GMT"
       ],
       "x-amzn-requestid": [
-        "c488af86-eaa1-43f4-b9ad-a0f6333055ec"
+        "1f5d8997-721b-466e-8833-09ce2c288d09"
       ]
     },
     "status": 200

@@ -245,9 +245,11 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
 
         _ ->
           # Create a model struct for SSE decoding
-          model = %ReqLLM.Model{
-            provider: :openai,
-            model: opts[:model] || "bedrock-openai"
+          model_id = opts[:model] || "bedrock-openai"
+
+          model = %LLMDB.Model{
+            id: model_id,
+            provider: :openai
           }
 
           # Delegate to standard OpenAI SSE event parsing

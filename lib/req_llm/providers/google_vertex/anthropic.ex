@@ -108,12 +108,14 @@ defmodule ReqLLM.Providers.GoogleVertex.Anthropic do
 
   For :object operations, extracts the structured output from the tool call.
   """
-  def parse_response(body, %ReqLLM.Model{} = vertex_model, opts) when is_map(body) do
+  def parse_response(body, %LLMDB.Model{} = vertex_model, opts) when is_map(body) do
     # Create an Anthropic model struct for decode_response
     # Use the model ID from the response body, or fall back to the Vertex model
-    anthropic_model = %ReqLLM.Model{
-      provider: :anthropic,
-      model: Map.get(body, "model", vertex_model.model)
+    model_id = Map.get(body, "model", vertex_model.id)
+
+    anthropic_model = %LLMDB.Model{
+      id: model_id,
+      provider: :anthropic
     }
 
     # Delegate to native Anthropic response decoding
@@ -152,7 +154,9 @@ defmodule ReqLLM.Providers.GoogleVertex.Anthropic do
   # Only for Claude models that support extended thinking
   defp maybe_translate_reasoning_params(model, opts) do
     # Check if this model has reasoning capability
-    has_reasoning = get_in(model, [Access.key(:capabilities), Access.key(:reasoning)]) == true
+    has_reasoning =
+      get_in(model, [Access.key(:capabilities), Access.key(:reasoning), Access.key(:enabled)]) ==
+        true
 
     if has_reasoning do
       {reasoning_effort, opts} = Keyword.pop(opts, :reasoning_effort)
@@ -161,12 +165,19 @@ defmodule ReqLLM.Providers.GoogleVertex.Anthropic do
       cond do
         reasoning_budget && is_integer(reasoning_budget) ->
           # Explicit budget_tokens provided
-          PlatformReasoning.add_reasoning_to_additional_fields(opts, reasoning_budget)
+          opts
+          |> PlatformReasoning.add_reasoning_to_additional_fields(reasoning_budget)
+          |> ensure_min_max_tokens(reasoning_budget)
+          |> Keyword.put(:temperature, 1.0)
 
         reasoning_effort ->
           # Map effort to budget using canonical Anthropic mappings
           budget = Anthropic.map_reasoning_effort_to_budget(reasoning_effort)
-          PlatformReasoning.add_reasoning_to_additional_fields(opts, budget)
+
+          opts
+          |> PlatformReasoning.add_reasoning_to_additional_fields(budget)
+          |> ensure_min_max_tokens(budget)
+          |> Keyword.put(:temperature, 1.0)
 
         true ->
           # No reasoning params
@@ -175,6 +186,12 @@ defmodule ReqLLM.Providers.GoogleVertex.Anthropic do
     else
       opts
     end
+  end
+
+  # Ensure max_tokens is at least budget + 201 (Anthropic requirement for thinking)
+  defp ensure_min_max_tokens(opts, budget_tokens) do
+    min_tokens = budget_tokens + 201
+    Keyword.update(opts, :max_tokens, min_tokens, fn current -> max(current, min_tokens) end)
   end
 
   @doc """

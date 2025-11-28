@@ -2,14 +2,13 @@ defmodule ReqLLM.Streaming.HTTP2ValidationTest do
   use ReqLLM.StreamingCase
 
   alias ReqLLM.Context
-  alias ReqLLM.Model
   alias ReqLLM.Streaming.FinchClient
 
   describe "HTTP/2 body size validation" do
     test "allows small request bodies with HTTP/2 pools" do
       configure_http2_pools!()
 
-      {:ok, model} = Model.from("openai:gpt-4o")
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
       small_prompt = "Hello, this is a small prompt"
       {:ok, context} = Context.normalize(small_prompt)
 
@@ -21,7 +20,7 @@ defmodule ReqLLM.Streaming.HTTP2ValidationTest do
     test "blocks large request bodies (>64KB) with HTTP/2 pools" do
       configure_http2_pools!()
 
-      {:ok, model} = Model.from("openai:gpt-4o")
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
       large_prompt = String.duplicate("This is a large prompt. ", 3000)
       {:ok, context} = Context.normalize(large_prompt)
 
@@ -37,7 +36,7 @@ defmodule ReqLLM.Streaming.HTTP2ValidationTest do
     test "allows large request bodies with HTTP/1-only pools (default)" do
       configure_http1_pools!()
 
-      {:ok, model} = Model.from("openai:gpt-4o")
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
       large_prompt = String.duplicate("This is a large prompt. ", 3000)
       {:ok, context} = Context.normalize(large_prompt)
 
@@ -49,7 +48,7 @@ defmodule ReqLLM.Streaming.HTTP2ValidationTest do
     test "error is caught by streaming module and logged" do
       configure_http2_pools!()
 
-      {:ok, model} = Model.from("openai:gpt-4o")
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
       large_prompt = String.duplicate("Large content ", 5000)
       {:ok, context} = Context.normalize(large_prompt)
 

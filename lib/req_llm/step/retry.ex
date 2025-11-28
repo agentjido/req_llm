@@ -43,16 +43,19 @@ defmodule ReqLLM.Step.Retry do
 
   ## Parameters
   - `req` - The Req request struct
+  - `opts` - Options keyword list, may contain `:max_retries` (defaults to 3)
 
   ## Returns
   - Updated Req request struct with the step attached
   """
-  @spec attach(Req.Request.t()) :: Req.Request.t()
-  def attach(%Req.Request{} = req) do
+  @spec attach(Req.Request.t(), keyword()) :: Req.Request.t()
+  def attach(%Req.Request{} = req, opts \\ []) do
+    max_retries = Keyword.get(opts, :max_retries, 3)
+
     req
     |> Req.Request.merge_options(
       retry: &should_retry?/2,
-      max_retries: 3,
+      max_retries: max_retries,
       # Don't set retry_delay since should_retry?/2 returns {:delay, ms}
       # Setting both causes ArgumentError in Req 0.5.15+
       retry_log_level: false

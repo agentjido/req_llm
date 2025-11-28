@@ -19,7 +19,7 @@ defmodule ReqLLM.Step.Usage do
 
   Emits `[:req_llm, :token_usage]` events with:
   * Measurements: `%{tokens: %{input: 123, output: 456, reasoning: 64}, cost: 0.0123}`
-  * Metadata: `%{model: %ReqLLM.Model{}}`
+  * Metadata: `%{model: %LLMDB.Model{}}`
   """
 
   @event [:req_llm, :token_usage]
@@ -38,7 +38,7 @@ defmodule ReqLLM.Step.Usage do
       |> ReqLLM.Step.Usage.attach(model)
 
   """
-  @spec attach(Req.Request.t(), ReqLLM.Model.t() | nil) :: Req.Request.t()
+  @spec attach(Req.Request.t(), LLMDB.Model.t() | nil) :: Req.Request.t()
   def attach(%Req.Request{} = req, model \\ nil) do
     req
     |> Req.Request.append_response_steps(llm_usage: &__MODULE__.handle/1)
@@ -119,8 +119,8 @@ defmodule ReqLLM.Step.Usage do
   @spec get_provider_module(Req.Request.t()) :: module() | nil
   defp get_provider_module(%Req.Request{options: options}) do
     case options[:model] do
-      %ReqLLM.Model{provider: provider_id} ->
-        case ReqLLM.Provider.Registry.get_provider(provider_id) do
+      %LLMDB.Model{provider: provider_id} ->
+        case ReqLLM.provider(provider_id) do
           {:ok, module} -> module
           _ -> nil
         end
@@ -207,24 +207,23 @@ defmodule ReqLLM.Step.Usage do
     clamp_tokens(cached, input_tokens)
   end
 
-  @spec fetch_model(Req.Request.t()) :: {:ok, ReqLLM.Model.t()} | :error
+  @spec fetch_model(Req.Request.t()) :: {:ok, LLMDB.Model.t()} | :error
   defp fetch_model(%Req.Request{private: private, options: options}) do
     case private[:req_llm_model] || options[:model] do
-      %ReqLLM.Model{} = model -> {:ok, model}
+      %LLMDB.Model{} = model -> {:ok, model}
       _ -> :error
     end
   end
 
-  @spec compute_cost_breakdown(map(), ReqLLM.Model.t()) ::
+  @spec compute_cost_breakdown(map(), LLMDB.Model.t()) ::
           {:ok, %{input_cost: float(), output_cost: float(), total_cost: float()} | nil}
-  defp compute_cost_breakdown(_usage, %ReqLLM.Model{cost: nil}) do
+  defp compute_cost_breakdown(_usage, %LLMDB.Model{cost: nil}) do
     {:ok, nil}
   end
 
-  defp compute_cost_breakdown(
-         %{input: input_tokens, output: output_tokens} = usage,
-         %ReqLLM.Model{cost: cost_map}
-       )
+  defp compute_cost_breakdown(%{input: input_tokens, output: output_tokens} = usage, %LLMDB.Model{
+         cost: cost_map
+       })
        when is_map(cost_map) do
     input_rate = cost_map[:input] || cost_map["input"]
     output_rate = cost_map[:output] || cost_map["output"]

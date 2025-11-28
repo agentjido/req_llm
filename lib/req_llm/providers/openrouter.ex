@@ -36,63 +36,61 @@ defmodule ReqLLM.Providers.OpenRouter do
       OPENROUTER_API_KEY=sk-or-...
   """
 
-  @behaviour ReqLLM.Provider
-
-  use ReqLLM.Provider.DSL,
+  use ReqLLM.Provider,
     id: :openrouter,
-    base_url: "https://openrouter.ai/api/v1",
-    metadata: "priv/models_dev/openrouter.json",
-    default_env_key: "OPENROUTER_API_KEY",
-    provider_schema: [
-      openrouter_models: [
-        type: {:list, :string},
-        doc: "Array of model IDs for routing/fallback preferences"
-      ],
-      openrouter_route: [
-        type: :string,
-        doc: "Routing strategy (e.g., 'fallback')"
-      ],
-      openrouter_provider: [
-        type: :map,
-        doc: "Provider preferences object for routing decisions"
-      ],
-      openrouter_transforms: [
-        type: {:list, :string},
-        doc: "Array of prompt transforms to apply"
-      ],
-      openrouter_top_k: [
-        type: :integer,
-        doc: "Top-k sampling (not available for OpenAI models)"
-      ],
-      openrouter_repetition_penalty: [
-        type: :float,
-        doc: "Repetition penalty for reducing repetitive text"
-      ],
-      openrouter_min_p: [
-        type: :float,
-        doc: "Minimum probability threshold for sampling"
-      ],
-      openrouter_top_a: [
-        type: :float,
-        doc: "Top-a sampling parameter"
-      ],
-      openrouter_top_logprobs: [
-        type: :integer,
-        doc: "Number of top log probabilities to return"
-      ],
-      app_referer: [
-        type: :string,
-        doc: "HTTP-Referer header for app identification on OpenRouter"
-      ],
-      app_title: [
-        type: :string,
-        doc: "X-Title header for app title in OpenRouter rankings"
-      ]
-    ]
+    default_base_url: "https://openrouter.ai/api/v1",
+    default_env_key: "OPENROUTER_API_KEY"
 
   import ReqLLM.Provider.Utils, only: [maybe_put: 3]
 
   require Logger
+
+  @provider_schema [
+    openrouter_models: [
+      type: {:list, :string},
+      doc: "Array of model IDs for routing/fallback preferences"
+    ],
+    openrouter_route: [
+      type: :string,
+      doc: "Routing strategy (e.g., 'fallback')"
+    ],
+    openrouter_provider: [
+      type: :map,
+      doc: "Provider preferences object for routing decisions"
+    ],
+    openrouter_transforms: [
+      type: {:list, :string},
+      doc: "Array of prompt transforms to apply"
+    ],
+    openrouter_top_k: [
+      type: :integer,
+      doc: "Top-k sampling (not available for OpenAI models)"
+    ],
+    openrouter_repetition_penalty: [
+      type: :float,
+      doc: "Repetition penalty for reducing repetitive text"
+    ],
+    openrouter_min_p: [
+      type: :float,
+      doc: "Minimum probability threshold for sampling"
+    ],
+    openrouter_top_a: [
+      type: :float,
+      doc: "Top-a sampling parameter"
+    ],
+    openrouter_top_logprobs: [
+      type: :integer,
+      doc: "Number of top log probabilities to return"
+    ],
+    app_referer: [
+      type: :string,
+      doc: "HTTP-Referer header for app identification on OpenRouter"
+    ],
+    app_title: [
+      type: :string,
+      doc: "X-Title header for app title in OpenRouter rankings"
+    ]
+  ]
 
   # Override attach to add app attribution headers
   @impl ReqLLM.Provider
@@ -212,7 +210,7 @@ defmodule ReqLLM.Providers.OpenRouter do
     {top_k, opts} = Keyword.pop(opts, :openrouter_top_k)
 
     {opts, warnings} =
-      if top_k && String.starts_with?(model.model, "openai/") do
+      if top_k && String.starts_with?(model.id, "openai/") do
         warning =
           "openrouter_top_k is not available for OpenAI models on OpenRouter and will be ignored"
 
@@ -403,7 +401,7 @@ defmodule ReqLLM.Providers.OpenRouter do
 
   defp deepseek_model?(req) do
     case req.private[:req_llm_model] do
-      %ReqLLM.Model{model: model} -> String.starts_with?(model, "deepseek/")
+      %LLMDB.Model{model: model} -> String.starts_with?(model, "deepseek/")
       _ -> false
     end
   end

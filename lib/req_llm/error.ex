@@ -117,14 +117,17 @@ defmodule ReqLLM.Error do
 
   defmodule Invalid.Provider do
     @moduledoc "Error for unknown or unsupported providers."
-    use Splode.Error, fields: [:provider], class: :invalid
+    use Splode.Error, fields: [:message, :provider], class: :invalid
 
     @typedoc "Error for unknown provider"
     @type t() :: %__MODULE__{
+            message: String.t(),
             provider: atom()
           }
 
     @spec message(map()) :: String.t()
+    def message(%{message: msg}) when is_binary(msg), do: msg
+
     def message(%{provider: provider}) do
       "Unknown provider: #{provider}"
     end

@@ -201,7 +201,7 @@ defmodule ReqLLM.ErrorTest do
         Error.Validation.Error.exception(
           tag: :invalid_model,
           reason: "Model not found",
-          context: [model: "test"]
+          context: [id: "test"]
         )
 
       assert %Error.Validation.Error{} = error
@@ -209,7 +209,7 @@ defmodule ReqLLM.ErrorTest do
       assert_error_fields(error,
         tag: :invalid_model,
         reason: "Model not found",
-        context: [model: "test"]
+        context: [id: "test"]
       )
 
       assert_message_format(Error.Validation.Error, error, "Model not found")
@@ -229,13 +229,13 @@ defmodule ReqLLM.ErrorTest do
 
   describe "validation_error/3 helper" do
     test "creates validation error with context" do
-      error = Error.validation_error(:invalid_model_spec, "Bad model", model: "test")
+      error = Error.validation_error(:invalid_model_spec, "Bad model", id: "test")
       assert %Error.Validation.Error{} = error
 
       assert_error_fields(error,
         tag: :invalid_model_spec,
         reason: "Bad model",
-        context: [model: "test"]
+        context: [id: "test"]
       )
     end
 

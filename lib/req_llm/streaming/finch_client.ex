@@ -55,7 +55,7 @@ defmodule ReqLLM.Streaming.FinchClient do
   """
   @spec start_stream(
           module(),
-          ReqLLM.Model.t(),
+          LLMDB.Model.t(),
           ReqLLM.Context.t(),
           keyword(),
           pid(),
@@ -74,7 +74,7 @@ defmodule ReqLLM.Streaming.FinchClient do
         Debug.dbug(
           fn ->
             test_name = Keyword.get(opts, :fixture, Path.basename(fixture_path, ".json"))
-            "step: model=#{model.provider}:#{model.model}, name=#{test_name}"
+            "step: model=#{LLMDB.Model.spec(model)}, name=#{test_name}"
           end,
           component: :streaming
         )
@@ -123,8 +123,9 @@ defmodule ReqLLM.Streaming.FinchClient do
   defp start_fixture_replay(fixture_path, stream_server_pid, _model) do
     case Code.ensure_loaded(ReqLLM.Test.VCR) do
       {:module, ReqLLM.Test.VCR} ->
-        {:ok, task_pid} =
-          apply(ReqLLM.Test.VCR, :replay_into_stream_server, [fixture_path, stream_server_pid])
+        args = [fixture_path, stream_server_pid]
+        # credo:disable-for-next-line Credo.Check.Refactor.Apply
+        {:ok, task_pid} = apply(ReqLLM.Test.VCR, :replay_into_stream_server, args)
 
         Process.link(task_pid)
 
@@ -136,6 +137,7 @@ defmodule ReqLLM.Streaming.FinchClient do
           resp_headers: %{}
         }
 
+        # credo:disable-for-next-line Credo.Check.Refactor.Apply
         transcript = apply(ReqLLM.Test.VCR, :load!, [fixture_path])
         canonical_json = Map.get(transcript.request, :canonical_json, %{})
 
