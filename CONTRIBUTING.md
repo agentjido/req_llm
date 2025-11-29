@@ -211,13 +211,9 @@ We use the [`git_hooks`](https://hex.pm/packages/git_hooks) package to manage gi
 mix git_hooks.install
 ```
 
-This installs hooks that:
-- **pre-push**: Runs `mix format --check-formatted` before each push
-- **pre-commit**: Preserves bd/beads auto-flush behavior
+This installs a pre-push hook that runs `mix format --check-formatted` before each push.
 
 This is important because Elixir 1.18 and 1.19 format some code differently (particularly guard clauses), and CI tests against multiple Elixir versions. The hook ensures your code is formatted correctly before pushing, preventing CI failures.
-
-If you already have bd/beads hooks installed, `git_hooks` will back them up and the wrapper module will call them automatically.
 
 ## Testing Requirements
 
