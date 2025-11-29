@@ -114,6 +114,10 @@ ReqLLM uses structured key/value tags for precise test filtering:
 - Use Splode error types: `ReqLLM.Error.API`, `ReqLLM.Error.Parse`, `ReqLLM.Error.Auth`
 - Include helpful error messages and context in error structs
 
+### Dialyzer
+- Only add entries to `.dialyzer_ignore.exs` as an absolute last resort
+- Prefer fixing the underlying type issue or improving type specs
+
 ### Testing & Fixture Workflow
 - Tests are grouped by *capability*, not by individual function-call
 - All suites use `ReqLLM.Test.LiveFixture.use_fixture/3` to abstract live vs cached responses

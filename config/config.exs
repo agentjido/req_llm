@@ -95,6 +95,6 @@ if System.get_env("REQ_LLM_DEBUG") in ~w(1 true yes on) do
   config :req_llm, :debug, true
 end
 
-if config_env() == :test do
+if config_env() in [:dev, :test] do
   import_config "#{config_env()}.exs"
 end
