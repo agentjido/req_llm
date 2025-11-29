@@ -144,6 +144,23 @@ defmodule ReqLLM.Providers.OpenAI do
     end
   end
 
+  defp get_timeout_for_model(api_mod, opts) do
+    user_timeout = Keyword.get(opts, :receive_timeout)
+    default_timeout = Application.get_env(:req_llm, :receive_timeout, 30_000)
+    thinking_timeout = Application.get_env(:req_llm, :thinking_timeout, 300_000)
+
+    cond do
+      user_timeout != nil ->
+        user_timeout
+
+      api_mod == ReqLLM.Providers.OpenAI.ResponsesAPI ->
+        thinking_timeout
+
+      true ->
+        default_timeout
+    end
+  end
+
   @impl ReqLLM.Provider
   @doc """
   Custom prepare_request to route reasoning models to /v1/responses endpoint.
@@ -175,12 +192,16 @@ defmodule ReqLLM.Providers.OpenAI do
             :reasoning_effort
           ]
 
+      timeout = get_timeout_for_model(api_mod, processed_opts)
+
       request =
         Req.new(
           [
             url: path,
             method: :post,
-            receive_timeout: Keyword.get(processed_opts, :receive_timeout, 30_000)
+            receive_timeout: timeout,
+            pool_timeout: timeout,
+            connect_options: [timeout: timeout]
           ] ++ http_opts
         )
         |> Req.Request.register_options(req_keys)

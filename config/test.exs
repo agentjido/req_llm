@@ -93,19 +93,22 @@ config :llm_db,
           name: "GPT-5",
           family: "gpt-5",
           capabilities: %{chat: true, tools: %{enabled: true}},
-          limits: %{context: 200_000, output: 32_768}
+          limits: %{context: 200_000, output: 32_768},
+          extra: %{api: "responses"}
         },
         "gpt-5-mini" => %{
           name: "GPT-5 mini",
           family: "gpt-5",
           capabilities: %{chat: true, tools: %{enabled: true}},
-          limits: %{context: 128_000, output: 16_384}
+          limits: %{context: 128_000, output: 16_384},
+          extra: %{api: "responses"}
         },
         "gpt-5-nano" => %{
           name: "GPT-5 nano",
           family: "gpt-5",
           capabilities: %{chat: true, tools: %{enabled: true}},
-          limits: %{context: 64_000, output: 8192}
+          limits: %{context: 64_000, output: 8192},
+          extra: %{api: "responses"}
         },
         "text-embedding-3-small" => %{
           name: "Text Embedding 3 Small",

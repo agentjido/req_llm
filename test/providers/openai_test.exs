@@ -140,6 +140,30 @@ defmodule ReqLLM.Providers.OpenAITest do
         Req.new() |> OpenAI.attach(wrong_model, [])
       end
     end
+
+    test "prepare_request uses longer timeout for reasoning models (Responses API)" do
+      {:ok, chat_model} = ReqLLM.model("openai:gpt-4o")
+      {:ok, reasoning_model} = ReqLLM.model("openai:gpt-5")
+      context = context_fixture()
+
+      {:ok, chat_request} = OpenAI.prepare_request(:chat, chat_model, context, [])
+      {:ok, reasoning_request} = OpenAI.prepare_request(:chat, reasoning_model, context, [])
+
+      chat_timeout = chat_request.options[:receive_timeout]
+      reasoning_timeout = reasoning_request.options[:receive_timeout]
+
+      assert reasoning_timeout >= chat_timeout
+      assert reasoning_timeout >= 300_000
+    end
+
+    test "prepare_request respects user-specified receive_timeout" do
+      {:ok, model} = ReqLLM.model("openai:gpt-5")
+      context = context_fixture()
+
+      {:ok, request} = OpenAI.prepare_request(:chat, model, context, receive_timeout: 60_000)
+
+      assert request.options[:receive_timeout] == 60_000
+    end
   end
 
   describe "body encoding & context translation" do
