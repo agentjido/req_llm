@@ -332,9 +332,42 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
       end
 
     # Add regular messages
-    encoded_messages = Enum.map(non_system_messages, &encode_message/1)
+    encoded_messages =
+      non_system_messages
+      |> Enum.map(&encode_message/1)
+      |> merge_consecutive_tool_results()
+
     Map.put(request, "messages", encoded_messages)
   end
+
+  defp merge_consecutive_tool_results(messages) do
+    messages
+    |> Enum.reduce([], fn msg, acc ->
+      case {acc, msg} do
+        {[%{"role" => "user", "content" => prev_content} = prev | rest],
+         %{"role" => "user", "content" => curr_content}}
+        when is_list(prev_content) and is_list(curr_content) ->
+          if all_tool_results?(prev_content) and all_tool_results?(curr_content) do
+            [%{prev | "content" => prev_content ++ curr_content} | rest]
+          else
+            [msg | acc]
+          end
+
+        _ ->
+          [msg | acc]
+      end
+    end)
+    |> Enum.reverse()
+  end
+
+  defp all_tool_results?(content) when is_list(content) do
+    Enum.all?(content, fn
+      %{"toolResult" => _} -> true
+      _ -> false
+    end)
+  end
+
+  defp all_tool_results?(_), do: false
 
   defp add_tools(request, [], _formatter_module), do: request
 
