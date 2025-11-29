@@ -122,7 +122,9 @@ defmodule ReqLLM.Application do
       case Dotenvy.source(env_file) do
         {:ok, env_map} ->
           Enum.each(env_map, fn {key, value} ->
-            System.put_env(key, value)
+            if System.get_env(key) == nil do
+              System.put_env(key, value)
+            end
           end)
 
         {:error, _reason} ->
