@@ -103,6 +103,58 @@ defmodule ReqLLM.Providers.AnthropicTest do
   end
 
   describe "body encoding & context translation" do
+    test "encode_body merges consecutive tool results into single user message" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.system("You are helpful."),
+          ReqLLM.Context.user("What's the weather in Paris and London?"),
+          ReqLLM.Context.assistant("",
+            tool_calls: [
+              %ReqLLM.ToolCall{
+                id: "tool_1",
+                type: "function",
+                function: %{name: "get_weather", arguments: ~s({"location":"Paris"})}
+              },
+              %ReqLLM.ToolCall{
+                id: "tool_2",
+                type: "function",
+                function: %{name: "get_weather", arguments: ~s({"location":"London"})}
+              }
+            ]
+          ),
+          ReqLLM.Context.tool_result("tool_1", "22°C and sunny"),
+          ReqLLM.Context.tool_result("tool_2", "18°C and cloudy")
+        ])
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false
+        ]
+      }
+
+      updated_request = Anthropic.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      messages = decoded["messages"]
+
+      user_messages = Enum.filter(messages, &(&1["role"] == "user"))
+      assert length(user_messages) == 2
+
+      tool_result_msg = List.last(user_messages)
+      assert is_list(tool_result_msg["content"])
+      assert length(tool_result_msg["content"]) == 2
+
+      [result1, result2] = tool_result_msg["content"]
+      assert result1["type"] == "tool_result"
+      assert result1["tool_use_id"] == "tool_1"
+      assert result2["type"] == "tool_result"
+      assert result2["tool_use_id"] == "tool_2"
+    end
+
     test "encode_body without tools" do
       {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       context = context_fixture()

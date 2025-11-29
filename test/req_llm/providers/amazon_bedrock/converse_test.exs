@@ -167,6 +167,47 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
                }
              ]
     end
+
+    test "merges consecutive tool results into single user message" do
+      tool_call_1 = ReqLLM.ToolCall.new("call_1", "get_weather", ~s({"location":"Paris"}))
+      tool_call_2 = ReqLLM.ToolCall.new("call_2", "get_weather", ~s({"location":"London"}))
+
+      context = %ReqLLM.Context{
+        messages: [
+          %Message{role: :user, content: "What's the weather in Paris and London?"},
+          %Message{
+            role: :assistant,
+            content: [],
+            tool_calls: [tool_call_1, tool_call_2]
+          },
+          %Message{
+            role: :tool,
+            tool_call_id: "call_1",
+            content: [ContentPart.text("22°C and sunny")]
+          },
+          %Message{
+            role: :tool,
+            tool_call_id: "call_2",
+            content: [ContentPart.text("18°C and cloudy")]
+          }
+        ]
+      }
+
+      result = Converse.format_request("test-model", context, [])
+
+      messages = result["messages"]
+
+      user_messages = Enum.filter(messages, &(&1["role"] == "user"))
+      assert length(user_messages) == 2
+
+      tool_result_msg = List.last(user_messages)
+      assert is_list(tool_result_msg["content"])
+      assert length(tool_result_msg["content"]) == 2
+
+      [result1, result2] = tool_result_msg["content"]
+      assert result1["toolResult"]["toolUseId"] == "call_1"
+      assert result2["toolResult"]["toolUseId"] == "call_2"
+    end
   end
 
   describe "parse_response/2" do
