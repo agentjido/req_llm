@@ -569,7 +569,14 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     end
   end
 
-  defp normalize_parameters_for_strict(nil), do: %{"type" => "object", "properties" => %{}}
+  defp normalize_parameters_for_strict(nil) do
+    %{
+      "type" => "object",
+      "properties" => %{},
+      "required" => [],
+      "additionalProperties" => false
+    }
+  end
 
   defp normalize_parameters_for_strict(params) when is_map(params) do
     properties = params[:properties] || params["properties"] || %{}
