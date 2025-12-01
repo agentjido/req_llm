@@ -532,36 +532,41 @@ defmodule ReqLLM.Providers.Azure do
   """
   @impl ReqLLM.Provider
   def decode_response({request, %{status: status} = response}) when status in 200..299 do
-    model = Req.Request.get_private(request, :model)
-    model_id = effective_model_id(model)
-    formatter = Req.Request.get_private(request, :formatter) || get_formatter(model_id, model)
+    # Embedding responses should return raw body, not parsed ReqLLM.Response
+    if request.options[:operation] == :embedding do
+      {request, response}
+    else
+      model = Req.Request.get_private(request, :model)
+      model_id = effective_model_id(model)
+      formatter = Req.Request.get_private(request, :formatter) || get_formatter(model_id, model)
 
-    opts =
-      []
-      |> then(
-        &if request.options[:operation],
-          do: Keyword.put(&1, :operation, request.options[:operation]),
-          else: &1
-      )
-      |> then(
-        &if request.options[:context],
-          do: Keyword.put(&1, :context, request.options[:context]),
-          else: &1
-      )
+      opts =
+        []
+        |> then(
+          &if request.options[:operation],
+            do: Keyword.put(&1, :operation, request.options[:operation]),
+            else: &1
+        )
+        |> then(
+          &if request.options[:context],
+            do: Keyword.put(&1, :context, request.options[:context]),
+            else: &1
+        )
 
-    result = formatter.parse_response(response.body, model, opts)
+      result = formatter.parse_response(response.body, model, opts)
 
-    case result do
-      {:ok, parsed} ->
-        {request, %{response | body: parsed}}
+      case result do
+        {:ok, parsed} ->
+          {request, %{response | body: parsed}}
 
-      {:error, reason} ->
-        {request,
-         ReqLLM.Error.API.Response.exception(
-           reason: "Failed to parse Azure response: #{inspect(reason)}",
-           status: response.status,
-           response_body: response.body
-         )}
+        {:error, reason} ->
+          {request,
+           ReqLLM.Error.API.Response.exception(
+             reason: "Failed to parse Azure response: #{inspect(reason)}",
+             status: response.status,
+             response_body: response.body
+           )}
+      end
     end
   end
 
