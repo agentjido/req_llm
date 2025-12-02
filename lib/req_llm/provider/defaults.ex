@@ -267,14 +267,35 @@ defmodule ReqLLM.Provider.Defaults do
         callback: fn _args -> {:ok, "structured output generated"} end
       )
 
+    # Check if model supports forced tool choice (specific tool by name)
+    # If not, fall back to "required" which just requires *some* tool call
+    tool_choice = get_tool_choice_for_model(model_spec)
+
     opts_with_tool =
       opts
       |> Keyword.update(:tools, [structured_output_tool], &[structured_output_tool | &1])
-      |> Keyword.put(:tool_choice, %{type: "function", function: %{name: "structured_output"}})
+      |> Keyword.put(:tool_choice, tool_choice)
       |> Keyword.put_new(:max_tokens, 4096)
       |> Keyword.put(:operation, :object)
 
     prepare_chat_request(provider_mod, model_spec, prompt, opts_with_tool)
+  end
+
+  defp get_tool_choice_for_model(model_spec) do
+    case ReqLLM.model(model_spec) do
+      {:ok, model} ->
+        forced_choice = get_in(model.capabilities, [:tools, :forced_choice])
+
+        if forced_choice == false do
+          "required"
+        else
+          %{type: "function", function: %{name: "structured_output"}}
+        end
+
+      _ ->
+        # Default to forced choice if we can't look up the model
+        %{type: "function", function: %{name: "structured_output"}}
+    end
   end
 
   @doc """
@@ -694,9 +715,8 @@ defmodule ReqLLM.Provider.Defaults do
   def decode_response_body_openai_format(data, model) when is_map(data) do
     id = Map.get(data, "id", "unknown")
     model_name = Map.get(data, "model", model.id || "unknown")
-    usage = parse_openai_usage(Map.get(data, "usage"))
-
     choices = Map.get(data, "choices", [])
+    usage = parse_openai_usage(Map.get(data, "usage"), choices)
     first_choice = Enum.at(choices, 0, %{})
 
     finish_reason = parse_openai_finish_reason(Map.get(first_choice, "finish_reason"))
@@ -1002,11 +1022,25 @@ defmodule ReqLLM.Provider.Defaults do
 
   defp openai_chunk_to_tool_call(_), do: nil
 
+  defp parse_openai_usage(usage, choices \\ [])
+
   defp parse_openai_usage(
          %{"prompt_tokens" => input, "completion_tokens" => output, "total_tokens" => total} =
-           usage
+           usage,
+         choices
        ) do
-    reasoning_tokens = get_in(usage, ["completion_tokens_details", "reasoning_tokens"]) || 0
+    reasoning_from_details =
+      get_in(usage, ["completion_tokens_details", "reasoning_tokens"]) || 0
+
+    # For DeepSeek R1 models, Azure returns reasoning_content in message
+    # but doesn't provide reasoning_tokens in usage details
+    reasoning_tokens =
+      if reasoning_from_details > 0 do
+        reasoning_from_details
+      else
+        infer_reasoning_from_choices(choices, output)
+      end
+
     cached_tokens = get_in(usage, ["prompt_tokens_details", "cached_tokens"]) || 0
 
     %{
@@ -1018,7 +1052,7 @@ defmodule ReqLLM.Provider.Defaults do
     }
   end
 
-  defp parse_openai_usage(_),
+  defp parse_openai_usage(_, _choices),
     do: %{
       input_tokens: 0,
       output_tokens: 0,
@@ -1026,6 +1060,22 @@ defmodule ReqLLM.Provider.Defaults do
       cached_tokens: 0,
       reasoning_tokens: 0
     }
+
+  # DeepSeek R1 models return reasoning in "reasoning_content" field
+  # When present, we use completion_tokens as reasoning_tokens
+  defp infer_reasoning_from_choices(choices, completion_tokens) when is_list(choices) do
+    has_reasoning_content =
+      Enum.any?(choices, fn choice ->
+        case get_in(choice, ["message", "reasoning_content"]) do
+          content when is_binary(content) and content != "" -> true
+          _ -> false
+        end
+      end)
+
+    if has_reasoning_content, do: completion_tokens, else: 0
+  end
+
+  defp infer_reasoning_from_choices(_, _), do: 0
 
   defp parse_openai_finish_reason("stop"), do: :stop
   defp parse_openai_finish_reason("length"), do: :length
