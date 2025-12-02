@@ -7,7 +7,7 @@
       "max_tokens": 500,
       "messages": [
         {
-          "content": "Generate a software engineer profile",
+          "content": "Generate a fictional software engineer profile with a made-up name and age",
           "role": "user"
         }
       ],
@@ -80,12 +80,12 @@
           "logprobs": null,
           "message": {
             "content": "",
-            "reasoning": "The user says: \"Generate a software engineer profile\". They likely want a structured output with fields: age, name, occupation. The schema: age: number, name: string, occupation?: string. So we need to produce a JSON object with those fields. The user didn't specify any particular values. We can generate a random profile. Let's produce a plausible software engineer profile. For example: age 29, name \"Alexandra Martinez\", occupation \"Software Engineer\". That matches. We need to call the function.",
+            "reasoning": "The user says: \"Generate a fictional software engineer profile with a made-up name and age\". They likely want a structured output with fields: age, name, occupation. The schema: age: number, name: string, occupation?: string. So we need to produce a JSON object with those fields. The user didn't specify any particular values. We can generate a random profile. Let's produce a plausible software engineer profile. For example: age 29, name \"Alexandra Martinez\", occupation \"Software Engineer\". That matches. We need to call the function.",
             "reasoning_details": [
               {
                 "format": "unknown",
                 "index": 0,
-                "text": "The user says: \"Generate a software engineer profile\". They likely want a structured output with fields: age, name, occupation. The schema: age: number, name: string, occupation?: string. So we need to produce a JSON object with those fields. The user didn't specify any particular values. We can generate a random profile. Let's produce a plausible software engineer profile. For example: age 29, name \"Alexandra Martinez\", occupation \"Software Engineer\". That matches. We need to call the function.",
+                "text": "The user says: \"Generate a fictional software engineer profile with a made-up name and age\". They likely want a structured output with fields: age, name, occupation. The schema: age: number, name: string, occupation?: string. So we need to produce a JSON object with those fields. The user didn't specify any particular values. We can generate a random profile. Let's produce a plausible software engineer profile. For example: age 29, name \"Alexandra Martinez\", occupation \"Software Engineer\". That matches. We need to call the function.",
                 "type": "reasoning.text"
               }
             ],
