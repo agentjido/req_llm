@@ -1,0 +1,145 @@
+{
+  "model_spec": "azure:deepseek-r1",
+  "provider": "azure",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjMwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJuIjoxLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC41fQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "n": 1,
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "api-key": "[REDACTED:api-key]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ]
+    },
+    "method": "post",
+    "url": "https://shelvick-test.cognitiveservices.azure.com/openai/deployments/deepseek-r1/chat/completions?api-version=2025-04-01-preview"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "content_filter_results": {
+            "hate": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "self_harm": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "sexual": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "violence": {
+              "filtered": false,
+              "severity": "safe"
+            }
+          },
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "\n\n**Title: *The Ember Chronicles: Wings of Destiny***  \n\n---\n\n**Prologue: The Last Egg**  \nLong ago, the world of Eldryth was a tapestry of fire and sky, where dragons soared as living storms. Their scales shimmered like gemstones, and their breath could carve mountains or heal forests. But when humans arrived, sailing on ships of iron and ambition, fear turned to war. The Order of the Ashen Blade, a brotherhood of dragonslayers, hunted the great beasts to near extinction. The dragons retreated to the volcanic peaks of the Dragonspine Mountains, their numbers dwindling… until only whispers remained.  \n\nBut legends spoke of a final hope: the *Ember Egg*, said to hold the last dragon queen’s heir. If hatched, it could reignite the ancient bond between human and dragon—or doom both to endless war.  \n\n---\n\n**Chapter 1: The Blacksmith’s Apprentice**  \nIn the shadow of the Dragonspine, the village of Forgeholm clung to life. Its people mined obsidian and forged weapons for the Ashen Blade, believing it their only protection. Among them was **Kael**, a 16-year-old orphan with a knack for trouble and a curiosity as vast as the sky. Raised by the gruff blacksmith Brom, Kael dreamed of adventures beyond soot-stained forges.  \n\nOne night, a quake split the earth near the village. Kael, investigating a strange glow in the fissure, found a cavern pulsing with heat. There, amid veins of molten gold, lay an egg—larger than a man, its shell etched with swirling flames. When he touched it, the egg *sang*, a vibration that seared his palm with the mark of a dragon: a spiraling helix.  \n\n---\n\n**Chapter 2: The Hatchling**  \nThe egg hatched at dawn. From it emerged a creature with scales like liquid sapphire and eyes like twin suns. The dragonet nuzzled Kael, imprinting on him with a purr that shook the ground. Brom, recognizing the mark of the Ember Egg, revealed a secret: Kael’s parents had been scholars who died protecting dragon lore. “That hatchling is **Aethon**,” Brom said. “The last stormdrake. The Ashen Blade will kill him—and you—if they learn he exists.”  \n\nWith the village already suspicious of the quake, Kael fled into the mountains, Aethon clutched to his chest. Their only guide was an old map hidden in Brom’s workshop, leading to the **Sanctum of Scales**, a dragon stronghold lost to time.  \n\n---\n\n**Chapter 3: The Dragon Rider**  \nThe journey was perilous. Aethon grew rapidly, soon the size of a horse, his wings stirring gales. Kael learned to ride him, though their first flight ended in a crash-landing into the **Mirrored Woods**, a labyrinth of glass trees that reflected illusions. There, they met **Lyra**, a thief with a dagger made of dragonfang and a grudge against the Ashen Blade. She joined them, seeking redemption for her brother, who’d been enslaved by the Order.  \n\nLyra revealed the Sanctum’s location: the **Skyrend Valley**, a floating archipelago guarded by storms. But to reach it, they needed the **Breath of Ignarius**, a relic that could calm the tempests. The catch? It was held in the Ashen Blade’s fortress, **Ironreach**.  \n\n---\n\n**Chapter 4: The Siege of Ironreach**  \nDisguised as mercenaries, Kael and Lyra infiltrated Ironreach, a monolithic citadel where dragon skulls adorned the walls. Aethon, hidden nearby, communicated telepathically with Kael—a bond deeper than speech. Inside, they found not just the Breath, but a prisoner: **Vyrin**, an ancient silver dragon chained in the dungeon, his wings shredded.  \n\n“The Order seeks the Ember Egg to destroy it,” Vyrin rasped. “But the egg’s true power is *unity*. You must reach the Sanctum… and awaken the **Elder Wyrms**.”  \n\nTheir escape ignited a battle. Aethon, now lion-sized, breathed lightning that shattered Ironreach’s gates. Vyrin sacrificed himself to hold off the knights, giving them time to flee.  \n\n---\n\n**Chapter 5: The Sanctum of Scales**  \nThe Skyrend Valley was a graveyard of dragon skeletons—and a pulse of life. The Sanctum, a temple fused with crystal and bone, awoke at Aethon’s presence. Within its heart lay the **Elder Wyrms**, three colossal dragons entombed in magma. To wake them, Kael had to undergo the **Trials of Bond**: a test of courage, wisdom, and sacrifice.  \n\n- **Courage**: Kael faced visions of his parents’ deaths, learning they’d died shielding a dragon nest.  \n- **Wisdom**: He solved riddles etched in star-metal, realizing dragons were not conquerors but guardians of Eldryth’s balance.  \n- **Sacrifice**: Aethon, now fully grown, offered a scale to reignite the Sanctum’s forge—a pain that nearly killed him.  \n\nAs the Elders awoke, their roars shook continents. But the Ashen Blade had followed.  \n\n---\n\n**Chapter 6: The Flight of Embers**  \nThe final battle raged across the Skyrend Valley. The Ashen Blade’s leader, **Lord Ignarok**, rode a mechanical dragon fueled by stolen dragonfire. Kael and Aethon dueled him in the clouds, while Lyra led the Elders against the army below.  \n\nIn the clash, Aethon was pierced by Ignarok’s lance. Dying, he unleashed a storm that fused his soul with Kael’s. Reborn as a **Dragonheart**, Kael gained Aethon’s wings and fiery breath. Together, they tore Ignarok from the sky.  \n\n---\n\n**Epilogue: A New Dawn**  \nWith the Ashen Blade shattered, humans and dragons forged an uneasy peace. Kael became a bridge between worlds, his bond with Aethon proving that neither species was meant to rule alone. The Sanctum reopened, a haven for hatchlings and scholars alike.  \n\nBut in the shadows, whispers lingered. A mural in the Sanctum depicted a **Fifth Elder**—one not yet awakened. Some said it slept beneath Forgeholm, waiting for a song only a Dragonheart could sing…  \n\n---  \n\n*And so, the ember of hope glowed anew—a spark in the dark, ready to blaze.* 🐉✨",
+            "reasoning_content": "\nOkay, the user wants a very long story about dragons and adventures. Let me start by brainstorming some key elements. Dragons are a classic fantasy element, so I should include different types, maybe with unique abilities. Adventures usually involve a quest, so the protagonist might need to go on a journey. I should create a vivid world, maybe with different regions like mountains, forests, and ancient ruins.\n\nI need a main character. Maybe a young protagonist, perhaps a blacksmith's apprentice, to give them a humble beginning. They could discover a dragon egg, which sets off the adventure. Including a mentor figure might help, like an elder with knowledge about dragons. \n\nConflict is essential. Maybe the dragonslayer order is a threat, adding tension. The dragons could be wise and ancient, not just mindless beasts. Themes of friendship, courage, and understanding between species could add depth. \n\nI should structure the story in chapters to make it long and detailed. Each chapter can introduce new challenges and develop the characters. The climax might involve a battle with the dragonslayers, and a resolution where humans and dragons coexist peacefully. \n\nNeed to ensure the story has descriptive settings, character growth, and exciting action scenes. Also, include some twists, like the protagonist having a hidden heritage or a dragon's unique ability. Make sure the ending is satisfying, showing the impact of the adventure on the world.\n",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1764634317,
+      "id": "12c01e2cb6994c55ada8e0ee124d20dc",
+      "model": "deepseek-r1",
+      "object": "chat.completion",
+      "prompt_filter_results": [
+        {
+          "content_filter_results": {
+            "hate": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "self_harm": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "sexual": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "violence": {
+              "filtered": false,
+              "severity": "safe"
+            }
+          },
+          "prompt_index": 0
+        }
+      ],
+      "usage": {
+        "completion_tokens": 1715,
+        "prompt_tokens": 14,
+        "total_tokens": 1729
+      }
+    },
+    "headers": {
+      "apim-request-id": [
+        "84c245ca-c788-4626-86c4-094e5a622d86"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 02 Dec 2025 00:12:17 GMT"
+      ],
+      "request-context": [
+        "appId="
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ms-region": [
+        "East US 2"
+      ],
+      "x-ratelimit-limit-requests": [
+        "5000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "5000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "4999"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "4997000"
+      ]
+    },
+    "status": 200
+  }
+}

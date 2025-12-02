@@ -1,0 +1,146 @@
+{
+  "model_spec": "azure:deepseek-r1-0528",
+  "provider": "azure",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiU29sdmUgMTIqNyBhbmQgc2hvdyB5b3VyIGludGVybmFsIHRoaW5raW5nIChicmllZikuIiwicm9sZSI6InVzZXIifV0sIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MS4wfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 5000,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "api-key": "[REDACTED:api-key]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ]
+    },
+    "method": "post",
+    "url": "https://shelvick-test.cognitiveservices.azure.com/openai/deployments/deepseek-r1-0528/chat/completions?api-version=2025-04-01-preview"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "content_filter_results": {
+            "hate": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "self_harm": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "sexual": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "violence": {
+              "filtered": false,
+              "severity": "safe"
+            }
+          },
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "\nTo solve 12 * 7, I break it down using basic multiplication facts:\n- I know that 10 * 7 = 70.\n- Then, 2 * 7 = 14.\n- Adding these together: 70 + 14 = 84.\n\nSo, 12 * 7 = 84.",
+            "reasoning_content": "\nFirst, the user asked me to solve 12 multiplied by 7 and to show my internal thinking briefly. So, I need to calculate 12 times 7 and explain how I'm doing it step by step, but keep it concise.\n\nI know that multiplication is basically repeated addition. So, 12 times 7 means adding 12 seven times? No, that's not right. Actually, it's adding 7 twelve times or adding 12 seven times; both should give the same result. Let me clarify.\n\nIf I have 12 * 7, it means I have seven groups of twelve. So, I can add 12 seven times.\n\nLet me do that: 12 + 12 is 24, then 24 + 12 is 36, then 36 + 12 is 48, then 48 + 12 is 60, then 60 + 12 is 72, and then 72 + 12 is 84. I think I lost count. Let me start over.\n\nBetter to do it systematically:\n\nStart with 0.\n\nAdd 12: 0 + 12 = 12\n\nAdd another 12: 12 + 12 = 24\n\nAdd another 12: 24 + 12 = 36\n\nAdd another 12: 36 + 12 = 48\n\nAdd another 12: 48 + 12 = 60\n\nAdd another 12: 60 + 12 = 72\n\nAdd another 12: 72 + 12 = 84\n\nThat's seven additions: from 1 to 7, so 84.\n\nI could also think of it as 10 times 7 plus 2 times 7, since 12 is 10 + 2.\n\nSo, 10 * 7 = 70\n\n2 * 7 = 14\n\nThen 70 + 14 = 84\n\nThat seems faster and easier.\n\nI know my multiplication tables, and 12 times 7 is 84. I should recall that directly.\n\nBut since the user wants internal thinking, I should show the process.\n\nAnother way: 12 * 7. I can think of it as 12 * 10 = 120, but that's for 10, not 7. No, that doesn't help.\n\nOr, 7 * 12. Same thing.\n\nI think the breaking down into 10 and 2 is efficient.\n\nSince 12 is 6 * 2, but that might not help.\n\n12 * 7 = (6 * 2) * 7 = 6 * (2 * 7) = 6 * 14, and 6 * 14 is 84, but that's similar.\n\n6 * 14: 6 * 10 = 60, 6 * 4 = 24, 60 + 24 = 84.\n\nBut that's more steps.\n\nStick with the first method I thought of.\n\nSo, internally, I'll say: I know that 10 times 7 is 70, and 2 times 7 is 14, so 70 plus 14 is 84.\n\nTherefore, 12 * 7 = 84.\n\nNow, for the response, I need to be brief. So, I'll just state the thought process concisely.\n\nFinal answer is 84.\n",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1764628737,
+      "id": "1778645587e74c2e8f0cbf8621e992e9",
+      "model": "deepseek-r1",
+      "object": "chat.completion",
+      "prompt_filter_results": [
+        {
+          "content_filter_results": {
+            "hate": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "self_harm": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "sexual": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "violence": {
+              "filtered": false,
+              "severity": "safe"
+            }
+          },
+          "prompt_index": 0
+        }
+      ],
+      "usage": {
+        "completion_tokens": 765,
+        "prompt_tokens": 18,
+        "total_tokens": 783
+      }
+    },
+    "headers": {
+      "apim-request-id": [
+        "e56cc08d-81bc-4146-b73e-dce7e2aa8ab7"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Mon, 01 Dec 2025 22:39:04 GMT"
+      ],
+      "request-context": [
+        "appId="
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ms-region": [
+        "East US 2"
+      ],
+      "x-ratelimit-limit-requests": [
+        "5000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "5000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "4997"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "4929464"
+      ]
+    },
+    "status": 200
+  }
+}

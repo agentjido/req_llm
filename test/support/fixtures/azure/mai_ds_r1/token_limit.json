@@ -1,0 +1,156 @@
+{
+  "model_spec": "azure:mai-ds-r1",
+  "provider": "azure",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjMwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiV3JpdGUgYSB2ZXJ5IGxvbmcgc3RvcnkgYWJvdXQgZHJhZ29ucyBhbmQgYWR2ZW50dXJlcyIsInJvbGUiOiJ1c2VyIn1dLCJuIjoxLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC41fQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "n": 1,
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "api-key": "[REDACTED:api-key]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ]
+    },
+    "method": "post",
+    "url": "https://shelvick-test.cognitiveservices.azure.com/openai/deployments/mai-ds-r1/chat/completions?api-version=2025-04-01-preview"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "content_filter_results": {
+            "hate": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "self_harm": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "sexual": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "violence": {
+              "filtered": false,
+              "severity": "low"
+            }
+          },
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "**Title: *The Ember of Eternity***  \n\n**Prologue: The Forgotten Pact**  \nLong before the realms of men were charted, when the skies were ruled by fire and scale, dragons and humans forged an ancient pact. The *Drakonii Accord* bound their fates: dragons would safeguard the mortal kingdoms from the primordial chaos beyond the Veil, while humans vowed to protect the dragons’ sacred nesting grounds. But when greed and fear poisoned the hearts of kings, the accord shattered. Dragons vanished, retreating to the forsaken peaks of the *Ashspire Mountains*, and humanity forgot their winged saviors—until the day the Veil began to tear.  \n\n---\n\n**Chapter 1: The Blacksmith’s Apprentice**  \nIn the shadowed village of Ember Hollow, 16-year-old Kael toiled over a forge, his hands calloused from shaping iron. Orphaned as a child, he knew little of his past, save for the strange, fiery dreams that haunted him: visions of molten skies and a silver-scaled dragon whose roar shook the stars.  \n\nOne frigid night, raiders descended upon Ember Hollow, their armor etched with the sigil of the *Obsidian Crown*—a merciless order bent on eradicating magic. As flames consumed the village, Kael fled into the woods, clutching his only memento: a pendant of dragonbone, left by his mother. Deep in the forest, a low growl halted him. Before him stood a wounded dragon, its obsidian scales cracked and oozing ichor. But instead of fear, Kael felt recognition. The dragon’s voice echoed in his mind: *“You carry her blood… the last of the Emberhearts.”*  \n\n---\n\n**Chapter 2: The Wyrm’s Secret**  \nThe dragon, Vyrinth, revealed a devastating truth: Kael was descended from the Emberheart lineage, dragon-kin who could channel the ancient fire magic of the Drakonii. Centuries ago, his ancestors betrayed the pact, stealing a shard of the *Eternal Ember*—a relic that sustained the Veil. Now, the Obsidian Crown sought the shard to unleash the Void, a realm of endless hunger.  \n\n“The Ember is dying,” Vyrinth rasped. “Only a dragon and an Emberheart united can reignite it. You must find the other shards… and the *Skywarden*.” The Skywarden, a legendary dragon elder, had vanished after the accord’s collapse. With Vyrinth too weak to fly, Kael embarked on a perilous quest, guided only by a cryptic map etched into his pendant.  \n\n---\n\n**Chapter 3: Bonds Forged in Storm**  \nKael’s journey led him to the port city of Windspire, where he encountered Lyria, a sharp-tongued pirate captain with a vendetta against the Obsidian Crown. Her ship, the *Stormdancer*, was crewed by outcasts: Aric, a stoic ex-knight cursed with stone-like skin, and Tamsin, a witch whose laughter hid a mastery of storm magic. Reluctantly, they agreed to aid Kael, drawn by the promise of gold—and the chance to strike back at the Crown.  \n\nAs they sailed toward the *Isle of Whispers*, storms brewed. The Obsidian Crown’s fleet ambushed them, led by Lord Malachar, a sorcerer-king whose blade could sever souls. In the chaos, Vyrinth emerged, sacrificing himself to shield the Stormdancer. With his dying breath, he gifted Kael a scale imbued with his essence. “Find the Skywarden… before the Void consumes us all.”  \n\n---\n\n**Chapter 4: The Labyrinth of Bones**  \nThe Isle of Whispers housed the first shard, hidden within a labyrinth built from the skeletons of dead dragons. As the crew navigated its treacherous paths, they faced spectral drakes and riddles etched in Old Drakonii. Kael’s bond with the Eternal Ember grew, his hands blazing with blue flame. Yet the shard’s guardian, a half-mad dragon spirit, demanded a price: a memory. Kael surrendered the image of his mother’s face, and the shard flared to life.  \n\nBut triumph turned to despair when Malachar ambushed them, seizing the shard. “You delay the inevitable, Emberheart,” he sneered. “The Void comes—and I shall be its king.”  \n\n---\n\n**Chapter 5: The Skywarden’s Price**  \nGuided by visions, Kael led the Stormdancer to the *Frozen Wastes*, where the Skywarden slumbered. The elder dragon, a colossal being of ice and starlight, awoke with a roar that split glaciers. “You dare seek my aid, child of betrayers?” she thundered. Kael pleaded, offering Vyrinth’s scale as proof of his resolve. Moved by his sacrifice, the Skywarden agreed to help—but only if Kael surrendered his mortal form.  \n\nThe ritual was agonizing: Kael’s bones cracked as dragon wings erupted from his back, his eyes burning with dual flames. Now a *Drakonii-Human hybrid*, he felt the Veil’s fragility like a threadbare cloak. Together, they raced to the Ashspire Mountains, where the final shard lay.  \n\n---\n\n**Chapter 6: The Void’s Maw**  \nAt the peak of Ashspire, Malachar awaited, the shards merged into a jagged crown. The Veil tore open, spewing tendrils of darkness that devoured the land. Dragons descended from the skies, answering the Skywarden’s call, while Kael dueled Malachar atop a crumbling spire.  \n\nIn the climax, Kael embraced the Eternal Ember’s full power, his body dissolving into pure flame. He struck Malachar down, but the Void recoiled, threatening to engulf him. The Skywarden intervened, weaving her essence with his to seal the rift. As the Veil healed, Kael fell, his body mortal once more—but alive.  \n\n---\n\n**Epilogue: A New Accord**  \nWith the Obsidian Crown shattered, Kael and his crew became legends. The dragons, no longer shadows, rebuilt their alliances with humanity. In Ember Hollow, a new forge rose, its fires lit by dragonflame. And high in the Ashspire, the Skywarden watched, her voice a whisper on the wind: *“The Ember burns anew.”*  \n\nYet Kael’s journey was far from over. For in the depths of the Void, something stirred—a laughter older than dragons, hungrier than time…  \n\n---  \n*End of Book One*",
+            "reasoning_content": "Okay, the user wants a very long story about dragons and adventures. Let me start by brainstorming some key elements. Dragons are a classic fantasy element, so I should make sure to include different types of dragons, maybe with unique abilities or characteristics. Adventures usually involve a quest, so the protagonist might have a mission to complete. I need a hero, perhaps someone unexpected, to make the story engaging. Maybe a young protagonist who discovers a hidden power or a destiny tied to dragons.\n\nWorld-building is important. The setting could be a kingdom with ancient lore about dragons. Maybe there's a prophecy or an ancient threat that's resurfacing. I should include some allies for the hero—a diverse group with their own skills. A mentor figure could provide guidance. Villains could be dragon hunters, a corrupt ruler, or even a rogue dragon.\n\nConflict is essential. The hero might need to find a legendary dragon to save their kingdom. There could be obstacles like treacherous landscapes, magical barriers, or internal struggles. Character development is key; the hero should grow throughout the story. Maybe they start off unsure and become a confident leader.\n\nI should incorporate action scenes—battles with dragons, escaping traps, maybe a final showdown. Emotional moments will add depth, like loss, friendship, or sacrifice. The ending could be bittersweet or a triumphant victory. I need to ensure the story flows well, with each chapter building up tension and developing the plot. Let me outline a basic structure: introduction of the protagonist and their world, the call to adventure, gathering allies, facing challenges, climax, and resolution. Now, flesh out each part with details, making sure the dragons are integral to the plot and not just background elements. Add some twists to keep it interesting, like a betrayal or a hidden truth about the dragons. Make sure the adventure feels epic in scale but personal to the characters.\n",
+            "role": "assistant",
+            "tool_calls": null
+          },
+          "stop_reason": null
+        }
+      ],
+      "created": 1764634296,
+      "id": "06d3fe55dd5e435390414a9613bafa3a",
+      "model": "MAI-DS-R1",
+      "object": "chat.completion",
+      "prompt_filter_results": [
+        {
+          "content_filter_results": {
+            "hate": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "self_harm": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "sexual": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "violence": {
+              "filtered": false,
+              "severity": "safe"
+            }
+          },
+          "prompt_index": 0
+        }
+      ],
+      "usage": {
+        "audio_prompt_tokens": 0,
+        "completion_tokens": 1830,
+        "prompt_tokens": 14,
+        "prompt_tokens_details": null,
+        "total_tokens": 1844
+      }
+    },
+    "headers": {
+      "apim-request-id": [
+        "cf337d92-a173-455d-9935-32b268182f15"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 02 Dec 2025 00:11:35 GMT"
+      ],
+      "prompt_token_len": [
+        "14"
+      ],
+      "request-context": [
+        "appId="
+      ],
+      "sampling_token_len": [
+        "1830"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ms-region": [
+        "East US 2"
+      ],
+      "x-ratelimit-limit-requests": [
+        "5000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "5000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "4994"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "4982990"
+      ]
+    },
+    "status": 200
+  }
+}

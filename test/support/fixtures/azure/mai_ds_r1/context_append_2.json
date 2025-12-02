@@ -1,0 +1,165 @@
+{
+  "model_spec": "azure:mai-ds-r1",
+  "provider": "azure",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwMjQsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiUmVzcG9uZCB3aXRoIGEgc2luZ2xlIHdvcmQgJ0hpJy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6IkhpIiwicm9sZSI6ImFzc2lzdGFudCJ9LHsiY29udGVudCI6IkhpIGFnYWluIiwicm9sZSI6InVzZXIifV0sIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 1024,
+      "messages": [
+        {
+          "content": "Respond with a single word 'Hi'.",
+          "role": "user"
+        },
+        {
+          "content": "Hi",
+          "role": "assistant"
+        },
+        {
+          "content": "Hi again",
+          "role": "user"
+        }
+      ],
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "api-key": "[REDACTED:api-key]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ]
+    },
+    "method": "post",
+    "url": "https://shelvick-test.cognitiveservices.azure.com/openai/deployments/mai-ds-r1/chat/completions?api-version=2025-04-01-preview"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "content_filter_results": {
+            "hate": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "self_harm": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "sexual": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "violence": {
+              "filtered": false,
+              "severity": "safe"
+            }
+          },
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! How can I assist you today?",
+            "reasoning_content": "Okay, the user just said \"Hi again\". Let me think about how to respond. They started with a test by asking for a single 'Hi', which I did. Now they're greeting again. Maybe they want to check if I can follow up naturally. Since the first response was just 'Hi', maybe they expect another greeting. But the initial instruction was to respond with a single word 'Hi', so perhaps in the first interaction, I followed that strictly. Now, in the second message, they're saying \"Hi again\", which is a bit more casual. Should I stick to the single word or respond more conversationally? The user might be testing if I can adapt beyond the initial instruction. But the original task was to respond with 'Hi' once. However, now that the conversation is ongoing, maybe I should continue the conversation normally. But I need to check if there are any hidden instructions. The user might be evaluating if I can handle follow-up messages after the initial command. Since the first response was 'Hi', and now they're saying \"Hi again\", a natural response would be something like \"Hello! How can I assist you today?\" But the initial task was to respond with a single word. Wait, the first message was a test to respond with 'Hi', and now they're continuing the conversation. Maybe the user wants to see if I can switch modes. But the assistant's guidelines say to be helpful and follow instructions. Since the initial instruction was specific, but now it's a new message, perhaps I should respond normally. However, the user might have expected a different behavior. Let me make sure. The first response was 'Hi' as instructed. Now, the user is engaging again, so I should respond appropriately, not just repeat 'Hi'. So, the correct response here would be a friendly greeting and an offer to help. That makes sense. So, I'll respond with \"Hello! How can I assist you today?\" to keep the conversation going.\n",
+            "role": "assistant",
+            "tool_calls": null
+          },
+          "stop_reason": null
+        }
+      ],
+      "created": 1764634302,
+      "id": "e39c4a3a1e7c4e2e8de48dc1adb82257",
+      "model": "MAI-DS-R1",
+      "object": "chat.completion",
+      "prompt_filter_results": [
+        {
+          "content_filter_results": {
+            "hate": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "self_harm": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "sexual": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "violence": {
+              "filtered": false,
+              "severity": "safe"
+            }
+          },
+          "prompt_index": 0
+        }
+      ],
+      "usage": {
+        "audio_prompt_tokens": 0,
+        "completion_tokens": 418,
+        "prompt_tokens": 20,
+        "prompt_tokens_details": null,
+        "total_tokens": 438
+      }
+    },
+    "headers": {
+      "apim-request-id": [
+        "362f6c09-fe93-4bf8-8b62-77795035a797"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 02 Dec 2025 00:11:41 GMT"
+      ],
+      "prompt_token_len": [
+        "20"
+      ],
+      "request-context": [
+        "appId="
+      ],
+      "sampling_token_len": [
+        "418"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ms-region": [
+        "East US 2"
+      ],
+      "x-ratelimit-limit-requests": [
+        "5000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "5000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "4992"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "4980942"
+      ]
+    },
+    "status": 200
+  }
+}

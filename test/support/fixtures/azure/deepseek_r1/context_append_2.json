@@ -1,0 +1,154 @@
+{
+  "model_spec": "azure:deepseek-r1",
+  "provider": "azure",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjEwMjQsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiUmVzcG9uZCB3aXRoIGEgc2luZ2xlIHdvcmQgJ0hpJy4iLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6IlxuXG5IaSIsInJvbGUiOiJhc3Npc3RhbnQifSx7ImNvbnRlbnQiOiJIaSBhZ2FpbiIsInJvbGUiOiJ1c2VyIn1dLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 1024,
+      "messages": [
+        {
+          "content": "Respond with a single word 'Hi'.",
+          "role": "user"
+        },
+        {
+          "content": "\n\nHi",
+          "role": "assistant"
+        },
+        {
+          "content": "Hi again",
+          "role": "user"
+        }
+      ],
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "api-key": "[REDACTED:api-key]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ]
+    },
+    "method": "post",
+    "url": "https://shelvick-test.cognitiveservices.azure.com/openai/deployments/deepseek-r1/chat/completions?api-version=2025-04-01-preview"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "content_filter_results": {
+            "hate": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "self_harm": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "sexual": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "violence": {
+              "filtered": false,
+              "severity": "safe"
+            }
+          },
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "\n\nHi!",
+            "reasoning_content": "\nOkay, the user just said \"Hi again\". Let me check the history.\n\nIn the previous interaction, they asked me to respond with a single 'Hi', which I did. Now they're greeting again. They might be testing if I remember the context or just being friendly. Since the first response was just 'Hi', maybe they expect a similar brief reply. But \"Hi again\" is a bit more specific. Should I stick to one word again? The user's instruction was strict before, but now they didn't specify. However, to be safe, maybe keep it concise. Alternatively, maybe they want a slightly longer response this time. But the initial instruction was to respond with a single word. Maybe they're checking consistency. Let me just respond with \"Hi!\" to keep it friendly but still short. Or maybe \"Hello!\"? Wait, the user's first message was a bit tricky with the spaces, but they corrected it. Hmm. The user might appreciate a bit more warmth now. But the previous response was 'Hi', so maybe follow the same pattern. But \"Hi again\" could be a prompt for a different reply. However, the user might still want brevity. Let me go with \"Hi!\" to keep it simple and consistent, but with an exclamation for a friendlier tone.\n",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1764634343,
+      "id": "3219711516a14f9495270f11e52c5ef9",
+      "model": "deepseek-r1",
+      "object": "chat.completion",
+      "prompt_filter_results": [
+        {
+          "content_filter_results": {
+            "hate": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "self_harm": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "sexual": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "violence": {
+              "filtered": false,
+              "severity": "safe"
+            }
+          },
+          "prompt_index": 0
+        }
+      ],
+      "usage": {
+        "completion_tokens": 275,
+        "prompt_tokens": 21,
+        "total_tokens": 296
+      }
+    },
+    "headers": {
+      "apim-request-id": [
+        "fef3273d-6bcc-4004-98aa-b18fe9d98706"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 02 Dec 2025 00:12:26 GMT"
+      ],
+      "request-context": [
+        "appId="
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ms-region": [
+        "East US 2"
+      ],
+      "x-ratelimit-limit-requests": [
+        "5000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "5000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "4995"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "4990952"
+      ]
+    },
+    "status": 200
+  }
+}

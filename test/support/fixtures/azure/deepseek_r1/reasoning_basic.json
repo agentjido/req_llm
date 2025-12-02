@@ -1,0 +1,145 @@
+{
+  "model_spec": "azure:deepseek-r1",
+  "provider": "azure",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiU29sdmUgMTIqNyBhbmQgc2hvdyB5b3VyIGludGVybmFsIHRoaW5raW5nIChicmllZikuIiwicm9sZSI6InVzZXIifV0sIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MS4wfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 5000,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "api-key": "[REDACTED:api-key]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ]
+    },
+    "method": "post",
+    "url": "https://shelvick-test.cognitiveservices.azure.com/openai/deployments/deepseek-r1/chat/completions?api-version=2025-04-01-preview"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "content_filter_results": {
+            "hate": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "self_harm": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "sexual": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "violence": {
+              "filtered": false,
+              "severity": "safe"
+            }
+          },
+          "finish_reason": "stop",
+          "index": 0,
+          "message": {
+            "content": "<think>\nOkay, let's see, I need to solve 12 multiplied by 7. Hmm, multiplication. Alright, so 12 times 7. I remember that multiplication is just repeated addition, right? So maybe I can break it down. 12 added 7 times. Let me try that. 12 plus 12 is 24. That's two times. Then another 12 would make 36, that's three times. Adding another 12 gets me 48, four times. Then 60 for five times, 72 for six times, and 84 for seven times. Wait, let me check that again.\n\nAlternatively, maybe breaking it into parts. 10 times 7 is 70, and 2 times 7 is 14. Then add them together: 70 + 14 = 84. Yeah, that seems faster. I think that's correct. Let me verify once more. 12 times 5 is 60, so 12 times 7 is 60 plus 12 times 2, which is 24. 60 +24=84. Yep, that matches. So the answer should be 84.\n</think>\n\nTo solve \\(12 \\times 7\\):\n\n1. **Break down 12 into 10 + 2**:\n   - \\(10 \\times 7 = 70\\)\n   - \\(2 \\times 7 = 14\\)\n\n2. **Add the results**:\n   - \\(70 + 14 = 84\\)\n\n**Answer:** 84",
+            "role": "assistant"
+          }
+        }
+      ],
+      "created": 1764634347,
+      "id": "85a8da18240a4ba28a394f4470afe986",
+      "model": "deepseek-r1",
+      "object": "chat.completion",
+      "prompt_filter_results": [
+        {
+          "content_filter_results": {
+            "hate": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "self_harm": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "sexual": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "violence": {
+              "filtered": false,
+              "severity": "safe"
+            }
+          },
+          "prompt_index": 0
+        }
+      ],
+      "usage": {
+        "completion_tokens": 321,
+        "prompt_tokens": 18,
+        "total_tokens": 339
+      }
+    },
+    "headers": {
+      "apim-request-id": [
+        "c981d79c-6326-4e90-a32a-9d7a052cbe3a"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 02 Dec 2025 00:12:30 GMT"
+      ],
+      "request-context": [
+        "appId="
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ms-region": [
+        "East US 2"
+      ],
+      "x-ratelimit-limit-requests": [
+        "5000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "5000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "4994"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "4985952"
+      ]
+    },
+    "status": 200
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "model_spec": "azure:mai-ds-r1",
+  "provider": "azure",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfY29tcGxldGlvbl90b2tlbnMiOjUwMDAsIm1lc3NhZ2VzIjpbeyJjb250ZW50IjoiU29sdmUgMTIqNyBhbmQgc2hvdyB5b3VyIGludGVybmFsIHRoaW5raW5nIChicmllZikuIiwicm9sZSI6InVzZXIifV0sIm4iOjEsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MS4wfQ=="
+    },
+    "canonical_json": {
+      "max_completion_tokens": 5000,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "api-key": "[REDACTED:api-key]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ]
+    },
+    "method": "post",
+    "url": "https://shelvick-test.cognitiveservices.azure.com/openai/deployments/mai-ds-r1/chat/completions?api-version=2025-04-01-preview"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "content_filter_results": {
+            "hate": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "self_harm": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "sexual": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "violence": {
+              "filtered": false,
+              "severity": "safe"
+            }
+          },
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "To solve \\( 12 \\times 7 \\), break it down:  \n\\( 12 = 10 + 2 \\).  \n\n1. Multiply \\( 10 \\times 7 = 70 \\).  \n2. Multiply \\( 2 \\times 7 = 14 \\).  \n3. Add the results: \\( 70 + 14 = 84 \\).  \n\n**Answer:** 84.",
+            "reasoning_content": "Okay, let's see. I need to solve 12 multiplied by 7. Hmm, multiplication can sometimes be tricky if the numbers are big, but 12 and 7 aren't too bad. Let me break it down. I know that 12 is the same as 10 plus 2. Maybe breaking it down into smaller parts will make it easier to handle. So, 10 times 7... That's straightforward. 10*7 is 70. Then, the other part is 2 times 7. 2*7 is 14. Now, add those two results together. 70 plus 14. Let's do that step by step to avoid mistakes. 70 plus 10 is 80, and then add the remaining 4, which makes 84. Wait, does that make sense? Let me check another way to verify. Maybe count by sevens. 7, 14, 21, 28, 35, 42, 49, 56, 63, 70, 77, 84. Oh, that's 12 sevens. Yep, that lands on 84. So both methods give the same answer. That seems correct. I don't think I've made any mistakes here. So the answer should be 84.\n",
+            "role": "assistant",
+            "tool_calls": null
+          },
+          "stop_reason": null
+        }
+      ],
+      "created": 1764634269,
+      "id": "7c60aa75d0e34be79d60cac8f75c91ac",
+      "model": "MAI-DS-R1",
+      "object": "chat.completion",
+      "prompt_filter_results": [
+        {
+          "content_filter_results": {
+            "hate": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "self_harm": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "sexual": {
+              "filtered": false,
+              "severity": "safe"
+            },
+            "violence": {
+              "filtered": false,
+              "severity": "safe"
+            }
+          },
+          "prompt_index": 0
+        }
+      ],
+      "usage": {
+        "audio_prompt_tokens": 0,
+        "completion_tokens": 359,
+        "prompt_tokens": 18,
+        "prompt_tokens_details": null,
+        "total_tokens": 377
+      }
+    },
+    "headers": {
+      "apim-request-id": [
+        "45db4438-d92d-4c67-b93c-32a8d42361cf"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 02 Dec 2025 00:11:09 GMT"
+      ],
+      "prompt_token_len": [
+        "18"
+      ],
+      "request-context": [
+        "appId="
+      ],
+      "sampling_token_len": [
+        "359"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-ms-region": [
+        "East US 2"
+      ],
+      "x-ratelimit-limit-requests": [
+        "5000"
+      ],
+      "x-ratelimit-limit-tokens": [
+        "5000000"
+      ],
+      "x-ratelimit-remaining-requests": [
+        "4997"
+      ],
+      "x-ratelimit-remaining-tokens": [
+        "4992990"
+      ]
+    },
+    "status": 200
+  }
+}
