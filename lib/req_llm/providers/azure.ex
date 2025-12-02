@@ -231,6 +231,8 @@ defmodule ReqLLM.Providers.Azure do
     "o1" => __MODULE__.OpenAI,
     "o3" => __MODULE__.OpenAI,
     "o4" => __MODULE__.OpenAI,
+    "deepseek" => __MODULE__.OpenAI,
+    "mai-ds" => __MODULE__.OpenAI,
     "claude" => __MODULE__.Anthropic
   }
 
@@ -247,7 +249,9 @@ defmodule ReqLLM.Providers.Azure do
     "codex" => "AZURE_OPENAI_BASE_URL",
     "o1" => "AZURE_OPENAI_BASE_URL",
     "o3" => "AZURE_OPENAI_BASE_URL",
-    "o4" => "AZURE_OPENAI_BASE_URL"
+    "o4" => "AZURE_OPENAI_BASE_URL",
+    "deepseek" => "AZURE_DEEPSEEK_BASE_URL",
+    "mai-ds" => "AZURE_MAI_BASE_URL"
   }
 
   @family_api_key_env_vars %{
@@ -257,7 +261,9 @@ defmodule ReqLLM.Providers.Azure do
     "codex" => "AZURE_OPENAI_API_KEY",
     "o1" => "AZURE_OPENAI_API_KEY",
     "o3" => "AZURE_OPENAI_API_KEY",
-    "o4" => "AZURE_OPENAI_API_KEY"
+    "o4" => "AZURE_OPENAI_API_KEY",
+    "deepseek" => "AZURE_DEEPSEEK_API_KEY",
+    "mai-ds" => "AZURE_MAI_API_KEY"
   }
 
   @doc """
@@ -301,10 +307,19 @@ defmodule ReqLLM.Providers.Azure do
             callback: fn _args -> {:ok, "structured output generated"} end
           )
 
+        # Check if model supports forced tool choice (specific tool by name)
+        # If not, fall back to "required" which just requires *some* tool call
+        tool_choice =
+          if get_in(model.capabilities, [:tools, :forced_choice]) == false do
+            "required"
+          else
+            %{type: "function", function: %{name: "structured_output"}}
+          end
+
         opts_with_tool =
           opts_for_object
           |> Keyword.update(:tools, [structured_output_tool], &[structured_output_tool | &1])
-          |> Keyword.put(:tool_choice, %{type: "function", function: %{name: "structured_output"}})
+          |> Keyword.put(:tool_choice, tool_choice)
 
         do_prepare_chat_request(model_spec, prompt, opts_with_tool)
     end
@@ -689,7 +704,7 @@ defmodule ReqLLM.Providers.Azure do
     model_id = effective_model_id(model)
 
     case get_model_family(model_id) do
-      family when family in ["gpt", "text-embedding", "o1", "o3", "o4"] ->
+      family when family in ["gpt", "text-embedding", "o1", "o3", "o4", "deepseek", "mai-ds"] ->
         synthetic_model = %{model | provider: :openai}
         ReqLLM.Providers.OpenAI.translate_options(operation, synthetic_model, opts)
 
