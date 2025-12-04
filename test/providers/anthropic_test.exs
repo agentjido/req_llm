@@ -253,7 +253,8 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
                role == "assistant" and
                  Enum.any?(List.wrap(content), fn block ->
-                   is_map(block) and (Map.get(block, "type") || Map.get(block, :type)) == "tool_use" and
+                   is_map(block) and
+                     (Map.get(block, "type") || Map.get(block, :type)) == "tool_use" and
                      (Map.get(block, "name") || Map.get(block, :name)) == "get_time" and
                      (Map.get(block, "input") || Map.get(block, :input)) == %{"zone" => "UTC"}
                  end)
@@ -265,7 +266,8 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
                role == "user" and
                  Enum.any?(List.wrap(content), fn block ->
-                   is_map(block) and (Map.get(block, "type") || Map.get(block, :type)) == "tool_result" and
+                   is_map(block) and
+                     (Map.get(block, "type") || Map.get(block, :type)) == "tool_result" and
                      (Map.get(block, "tool_use_id") || Map.get(block, :tool_use_id)) == "call_123"
                  end)
              end)
