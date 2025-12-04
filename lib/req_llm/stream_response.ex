@@ -439,9 +439,7 @@ defmodule ReqLLM.StreamResponse do
     end
   end
 
-  defp normalize_stream_tool_calls(nil), do: []
-
-  defp normalize_stream_tool_calls(tool_calls) do
+  defp normalize_stream_tool_calls(tool_calls) when is_list(tool_calls) do
     Enum.map(tool_calls, fn
       %ToolCall{} = call ->
         call
