@@ -580,6 +580,30 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
     }
   end
 
+  defp encode_tool_call_to_tool_use(%{id: id, name: name, arguments: args}) do
+    %{
+      "toolUse" => %{
+        "toolUseId" => id,
+        "name" => name,
+        "input" => decode_tool_arguments(args)
+      }
+    }
+  end
+
+  defp encode_tool_call_to_tool_use(%{"id" => id, "name" => name, "arguments" => args}) do
+    %{
+      "toolUse" => %{
+        "toolUseId" => id,
+        "name" => name,
+        "input" => decode_tool_arguments(args)
+      }
+    }
+  end
+
+  defp decode_tool_arguments(args) when is_binary(args), do: Jason.decode!(args)
+  defp decode_tool_arguments(args) when is_map(args), do: args
+  defp decode_tool_arguments(nil), do: %{}
+
   # Helper to extract text content from content parts
   defp extract_text_content(content) when is_binary(content), do: content
 

@@ -207,8 +207,20 @@ defmodule ReqLLM.Providers.Anthropic.Context do
   defp encode_content_part(_), do: nil
 
   defp encode_tool_call_to_tool_use(%ToolCall{id: id, function: %{name: name, arguments: args}}) do
-    %{type: "tool_use", id: id, name: name, input: Jason.decode!(args)}
+    %{type: "tool_use", id: id, name: name, input: decode_tool_arguments(args)}
   end
+
+  defp encode_tool_call_to_tool_use(%{id: id, name: name, arguments: args}) do
+    %{type: "tool_use", id: id, name: name, input: decode_tool_arguments(args)}
+  end
+
+  defp encode_tool_call_to_tool_use(%{"id" => id, "name" => name, "arguments" => args}) do
+    %{type: "tool_use", id: id, name: name, input: decode_tool_arguments(args)}
+  end
+
+  defp decode_tool_arguments(args) when is_binary(args), do: Jason.decode!(args)
+  defp decode_tool_arguments(args) when is_map(args), do: args
+  defp decode_tool_arguments(nil), do: %{}
 
   defp combine_content_blocks(text_blocks, tool_blocks) when is_list(text_blocks) do
     text_blocks ++ tool_blocks

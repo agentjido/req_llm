@@ -73,6 +73,7 @@ defmodule ReqLLM.StreamResponse do
   alias ReqLLM.Providers.Anthropic.AdapterHelpers
   alias ReqLLM.Response
   alias ReqLLM.StreamResponse.MetadataHandle
+  alias ReqLLM.ToolCall
 
   typedstruct enforce: true do
     @typedoc """
@@ -438,17 +439,43 @@ defmodule ReqLLM.StreamResponse do
     end
   end
 
+  defp normalize_stream_tool_calls(nil), do: []
+
+  defp normalize_stream_tool_calls(tool_calls) do
+    Enum.map(tool_calls, fn
+      %ToolCall{} = call ->
+        call
+
+      %{id: id, name: name, arguments: args} ->
+        ToolCall.new(id, name, encode_tool_args(args))
+
+      %{"id" => id, "name" => name, "arguments" => args} ->
+        ToolCall.new(id, name, encode_tool_args(args))
+
+      other when is_map(other) ->
+        id = Map.get(other, :id) || Map.get(other, "id")
+        name = Map.get(other, :name) || Map.get(other, "name")
+        args = Map.get(other, :arguments) || Map.get(other, "arguments")
+        ToolCall.new(id, name, encode_tool_args(args))
+    end)
+  end
+
+  defp encode_tool_args(args) when is_binary(args), do: args
+  defp encode_tool_args(nil), do: Jason.encode!(%{})
+  defp encode_tool_args(args), do: Jason.encode!(args)
+
   # Build final Response from accumulated data
   defp build_response_from_accumulated_data(acc_data, reconstructed_tool_calls, stream_response) do
     text_content = acc_data.text_content |> Enum.reverse() |> Enum.join("")
     thinking_content = acc_data.thinking_content |> Enum.reverse() |> Enum.join("")
 
-    content_parts = build_content_parts(text_content, thinking_content, reconstructed_tool_calls)
+    normalized_tool_calls = normalize_stream_tool_calls(reconstructed_tool_calls)
+    content_parts = build_content_parts(text_content, thinking_content, normalized_tool_calls)
 
     message = %ReqLLM.Message{
       role: :assistant,
       content: content_parts,
-      tool_calls: if(reconstructed_tool_calls != [], do: reconstructed_tool_calls),
+      tool_calls: if(normalized_tool_calls != [], do: normalized_tool_calls),
       metadata: %{}
     }
 
