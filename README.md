@@ -295,7 +295,7 @@ This approach gives you full control over the Req pipeline, allowing you to add 
 
 ## Roadmap & Status
 
-ReqLLM is currently in **release candidate** status (v1.0.0-rc.6). The core API is stable and we're actively seeking community feedback before the final 1.0.0 release. We're very close to marking this as production-ready and welcome your input on any issues or improvements.
+ReqLLM has now reached v1.0.0. The core API is stable and ready for production use. We're continuing to refine the library and would love community feedback as we plan the next set of improvements. If you run into anything or have suggestions, please open an issue or PR.
 
 ### Test Coverage & Quality Commitment
 
