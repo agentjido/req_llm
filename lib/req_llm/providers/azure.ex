@@ -26,16 +26,21 @@ defmodule ReqLLM.Providers.Azure do
 
   ## Key Differences from Direct Provider APIs
 
-  1. **Custom endpoints**: Each Azure resource has a unique base URL
-     (`https://{resource}.openai.azure.com/openai`)
+  1. **Custom endpoints**: Each Azure resource has a unique base URL.
+     Azure supports two endpoint formats, auto-detected from the domain:
 
-  2. **Deployment-based routing**: Models are accessed via deployments, not model names.
-     - OpenAI: `/deployments/{deployment}/chat/completions?api-version={version}`
-     - Anthropic: `/deployments/{deployment}/messages?api-version={version}`
+     - **Azure OpenAI Service** (`.cognitiveservices.azure.com` or `.openai.azure.com`):
+       URL: `/deployments/{deployment}/chat/completions?api-version={version}`
+       Model determined by deployment name in URL path.
 
-  3. **API key authentication**: Uses `api-key` header for all model families
+     - **Azure AI Foundry** (`.services.ai.azure.com`):
+       URL: `/models/chat/completions?api-version={version}`
+       Model specified in request body (deployment name used).
 
-  4. **No model field in body**: The deployment ID in the URL determines the model
+  2. **API key authentication**: Uses `api-key` header for all model families
+
+  3. **Deployment names**: The deployment name is used either in the URL path
+     (traditional) or in the request body (Foundry format)
 
   ## Authentication
 
@@ -53,13 +58,22 @@ defmodule ReqLLM.Providers.Azure do
       export AZURE_API_KEY=your-api-key
       export AZURE_BASE_URL=https://your-resource.openai.azure.com/openai
 
-      # Or pass directly in options
+      # Or pass directly in options (Azure OpenAI Service format)
       ReqLLM.generate_text(
         "azure:gpt-4o",
         "Hello!",
         api_key: "your-api-key",
         base_url: "https://my-resource.openai.azure.com/openai",
         deployment: "my-gpt4-deployment"
+      )
+
+      # Azure AI Foundry format (auto-detected from domain)
+      ReqLLM.generate_text(
+        "azure:deepseek-v3",
+        "Hello!",
+        api_key: "your-api-key",
+        base_url: "https://my-resource.services.ai.azure.com",
+        deployment: "deepseek-v3"
       )
 
   ## Examples
@@ -364,13 +378,15 @@ defmodule ReqLLM.Providers.Azure do
 
       formatter = get_formatter(model_id, model)
 
-      path = get_chat_endpoint_path(model_id, model, deployment, api_version)
+      path = get_chat_endpoint_path(model_id, model, deployment, api_version, base_url)
 
       Logger.debug(
         "[Azure prepare_request] model_family=#{model_family}, base_url=#{base_url}, path=#{path}, formatter=#{inspect(formatter)}"
       )
 
-      body = formatter.format_request(model_id, context, processed_opts)
+      body =
+        formatter.format_request(model_id, context, processed_opts)
+        |> maybe_add_model_for_foundry(deployment, base_url)
 
       req_keys = supported_provider_options() ++ @common_req_keys
       default_timeout = default_timeout_for_model(model_id, processed_opts)
@@ -424,8 +440,11 @@ defmodule ReqLLM.Providers.Azure do
 
       formatter = get_formatter(model_id, model)
 
-      path = "/deployments/#{deployment}/embeddings?api-version=#{api_version}"
-      body = formatter.format_embedding_request(model_id, text, processed_opts)
+      path = get_embedding_endpoint_path(deployment, api_version, base_url)
+
+      body =
+        formatter.format_embedding_request(model_id, text, processed_opts)
+        |> maybe_add_model_for_foundry(deployment, base_url)
 
       req_keys = supported_provider_options() ++ @common_req_keys
 
@@ -621,7 +640,7 @@ defmodule ReqLLM.Providers.Azure do
 
     formatter = get_formatter(model_id, model)
 
-    path = get_chat_endpoint_path(model_id, model, deployment, api_version)
+    path = get_chat_endpoint_path(model_id, model, deployment, api_version, base_url)
     url = "#{base_url}#{path}"
 
     Logger.debug(
@@ -647,6 +666,7 @@ defmodule ReqLLM.Providers.Azure do
 
     body =
       formatter.format_request(model_id, context, Keyword.put(translated_opts, :stream, true))
+      |> maybe_add_model_for_foundry(deployment, base_url)
 
     finch_request = Finch.build(:post, url, headers, Jason.encode!(body))
     {:ok, finch_request}
@@ -887,8 +907,12 @@ defmodule ReqLLM.Providers.Azure do
     raise ArgumentError, """
     Azure requires a base_url for your resource.
 
-    Please provide:
+    Please provide one of:
+      # Azure OpenAI Service (traditional)
       base_url: "https://YOUR-RESOURCE-NAME.openai.azure.com/openai"
+
+      # Azure AI Foundry
+      base_url: "https://YOUR-RESOURCE-NAME.services.ai.azure.com"
 
     Or set the AZURE_OPENAI_BASE_URL environment variable.
     """
@@ -968,20 +992,23 @@ defmodule ReqLLM.Providers.Azure do
     end
   end
 
-  # Builds the endpoint path based on model type and family.
-  # Note: base_url already ends with /openai, so paths are relative to that.
+  # Builds the endpoint path based on model type, family, and endpoint format.
+  # Supports two Azure endpoint formats:
+  # - Traditional (cognitiveservices.azure.com): /deployments/{deployment}/chat/completions
+  # - Foundry (services.ai.azure.com): /models/chat/completions (model in body)
+  # Special cases:
   # - Responses API models: /responses (model in body)
   # - Claude: /v1/messages (model in body)
-  # - Other OpenAI: /deployments/{deployment}/chat/completions
-  defp get_chat_endpoint_path(model_id, model, deployment, api_version) when is_struct(model) do
+  defp get_chat_endpoint_path(model_id, model, deployment, api_version, base_url)
+       when is_struct(model) do
     if uses_responses_api?(model) do
       "/responses?api-version=#{api_version}"
     else
-      get_chat_endpoint_path_by_family(model_id, deployment, api_version)
+      get_chat_endpoint_path_by_family(model_id, deployment, api_version, base_url)
     end
   end
 
-  defp get_chat_endpoint_path_by_family(model_id, deployment, api_version) do
+  defp get_chat_endpoint_path_by_family(model_id, deployment, api_version, base_url) do
     model_family = get_model_family(model_id)
 
     case model_family do
@@ -990,8 +1017,24 @@ defmodule ReqLLM.Providers.Azure do
         "/v1/messages"
 
       _ ->
-        # Azure OpenAI Chat Completions: deployment in URL determines model
-        "/deployments/#{deployment}/chat/completions?api-version=#{api_version}"
+        if uses_foundry_format?(base_url) do
+          # Azure AI Foundry: model specified in request body
+          "/models/chat/completions?api-version=#{api_version}"
+        else
+          # Azure OpenAI (traditional): deployment in URL determines model
+          "/deployments/#{deployment}/chat/completions?api-version=#{api_version}"
+        end
+    end
+  end
+
+  # Builds the embedding endpoint path based on endpoint format.
+  defp get_embedding_endpoint_path(deployment, api_version, base_url) do
+    if uses_foundry_format?(base_url) do
+      # Azure AI Foundry: model specified in request body
+      "/models/embeddings?api-version=#{api_version}"
+    else
+      # Azure OpenAI (traditional): deployment in URL determines model
+      "/deployments/#{deployment}/embeddings?api-version=#{api_version}"
     end
   end
 
@@ -1058,4 +1101,31 @@ defmodule ReqLLM.Providers.Azure do
       opts
     end
   end
+
+  # Detects if the base_url uses Azure AI Foundry format based on domain.
+  # Foundry format uses /models/chat/completions with model in request body.
+  # Traditional format uses /deployments/{deployment}/chat/completions.
+  @doc false
+  def uses_foundry_format?(base_url) when is_binary(base_url) do
+    case URI.parse(base_url) do
+      %URI{host: nil} -> false
+      %URI{host: host} -> String.ends_with?(host, ".services.ai.azure.com")
+    end
+  end
+
+  def uses_foundry_format?(_), do: false
+
+  # Adds the model field to request body when using Foundry format.
+  # Traditional Azure OpenAI format doesn't need model in body (deployment in URL determines it).
+  # Foundry format requires model in body since URL is generic /models/chat/completions.
+  defp maybe_add_model_for_foundry(body, deployment, base_url)
+       when is_map(body) and is_binary(deployment) and deployment != "" do
+    if uses_foundry_format?(base_url) do
+      Map.put(body, "model", deployment)
+    else
+      body
+    end
+  end
+
+  defp maybe_add_model_for_foundry(body, _deployment, _base_url), do: body
 end

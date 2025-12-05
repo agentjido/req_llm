@@ -827,4 +827,225 @@ defmodule ReqLLM.Providers.AzureTest do
       nil -> nil
     end
   end
+
+  describe "Azure AI Foundry format detection" do
+    test "detects Foundry format from .services.ai.azure.com domain" do
+      assert Azure.uses_foundry_format?("https://my-resource.services.ai.azure.com")
+      assert Azure.uses_foundry_format?("https://test.services.ai.azure.com/some/path")
+      assert Azure.uses_foundry_format?("https://resource-name.services.ai.azure.com/")
+    end
+
+    test "does not detect Foundry format for traditional Azure OpenAI domains" do
+      refute Azure.uses_foundry_format?("https://my-resource.openai.azure.com/openai")
+      refute Azure.uses_foundry_format?("https://my-resource.cognitiveservices.azure.com")
+      refute Azure.uses_foundry_format?("https://example.com")
+    end
+
+    test "handles edge cases safely" do
+      refute Azure.uses_foundry_format?(nil)
+      refute Azure.uses_foundry_format?("")
+      refute Azure.uses_foundry_format?("not-a-url")
+      refute Azure.uses_foundry_format?(12_345)
+    end
+
+    test "uses Foundry URL path for .services.ai.azure.com domain" do
+      {:ok, model} = ReqLLM.model("azure:deepseek-v3.1")
+
+      {:ok, request} =
+        Azure.prepare_request(
+          :chat,
+          model,
+          "Hello",
+          deployment: "deepseek-v3",
+          base_url: "https://my-resource.services.ai.azure.com",
+          api_key: "test-key"
+        )
+
+      url_string = URI.to_string(request.url)
+      assert url_string =~ "/models/chat/completions"
+      refute url_string =~ "/deployments/"
+    end
+
+    test "uses traditional URL path for .openai.azure.com domain" do
+      {:ok, model} = ReqLLM.model("azure:gpt-4o")
+
+      {:ok, request} =
+        Azure.prepare_request(
+          :chat,
+          model,
+          "Hello",
+          deployment: "my-deployment",
+          base_url: "https://my-resource.openai.azure.com/openai",
+          api_key: "test-key"
+        )
+
+      url_string = URI.to_string(request.url)
+      assert url_string =~ "/deployments/my-deployment/chat/completions"
+      refute url_string =~ "/models/chat/completions"
+    end
+
+    test "adds model to request body for Foundry format" do
+      {:ok, model} = ReqLLM.model("azure:deepseek-v3.1")
+
+      {:ok, request} =
+        Azure.prepare_request(
+          :chat,
+          model,
+          "Hello",
+          deployment: "deepseek-v3-deployment",
+          base_url: "https://my-resource.services.ai.azure.com",
+          api_key: "test-key"
+        )
+
+      # Extract the JSON body from the request
+      body = get_json_body(request)
+      assert body["model"] == "deepseek-v3-deployment"
+    end
+
+    test "does not add model to request body for traditional format" do
+      {:ok, model} = ReqLLM.model("azure:gpt-4o")
+
+      {:ok, request} =
+        Azure.prepare_request(
+          :chat,
+          model,
+          "Hello",
+          deployment: "my-deployment",
+          base_url: "https://my-resource.openai.azure.com/openai",
+          api_key: "test-key"
+        )
+
+      # Extract the JSON body from the request
+      body = get_json_body(request)
+      refute Map.has_key?(body, "model")
+    end
+
+    test "uses Foundry URL path for embeddings on .services.ai.azure.com domain" do
+      model = %LLMDB.Model{
+        id: "text-embedding-3-small",
+        provider: :azure,
+        capabilities: %{embeddings: true}
+      }
+
+      {:ok, request} =
+        Azure.prepare_request(
+          :embedding,
+          model,
+          "Hello",
+          deployment: "my-embedding-deployment",
+          base_url: "https://my-resource.services.ai.azure.com",
+          api_key: "test-key"
+        )
+
+      url_string = URI.to_string(request.url)
+      assert url_string =~ "/models/embeddings"
+      refute url_string =~ "/deployments/"
+    end
+
+    test "uses traditional URL path for embeddings on .openai.azure.com domain" do
+      model = %LLMDB.Model{
+        id: "text-embedding-3-small",
+        provider: :azure,
+        capabilities: %{embeddings: true}
+      }
+
+      {:ok, request} =
+        Azure.prepare_request(
+          :embedding,
+          model,
+          "Hello",
+          deployment: "my-embedding-deployment",
+          base_url: "https://my-resource.openai.azure.com/openai",
+          api_key: "test-key"
+        )
+
+      url_string = URI.to_string(request.url)
+      assert url_string =~ "/deployments/my-embedding-deployment/embeddings"
+      refute url_string =~ "/models/embeddings"
+    end
+
+    test "streaming uses Foundry URL path for .services.ai.azure.com domain" do
+      {:ok, model} = ReqLLM.model("azure:deepseek-v3.1")
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+
+      {:ok, finch_request} =
+        Azure.attach_stream(
+          model,
+          context,
+          [
+            api_key: "test-api-key",
+            deployment: "deepseek-v3-deployment",
+            base_url: "https://my-resource.services.ai.azure.com"
+          ],
+          :req_llm_finch
+        )
+
+      url_string =
+        case finch_request do
+          %{path: path, query: query} when is_binary(query) and query != "" ->
+            path <> "?" <> query
+
+          %{path: path} ->
+            path
+        end
+
+      assert url_string =~ "/models/chat/completions"
+      refute url_string =~ "/deployments/"
+    end
+
+    test "streaming uses traditional URL path for .openai.azure.com domain" do
+      {:ok, model} = ReqLLM.model("azure:gpt-4o")
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+
+      {:ok, finch_request} =
+        Azure.attach_stream(
+          model,
+          context,
+          [
+            api_key: "test-api-key",
+            deployment: "my-deployment",
+            base_url: "https://my-resource.openai.azure.com/openai"
+          ],
+          :req_llm_finch
+        )
+
+      url_string =
+        case finch_request do
+          %{path: path, query: query} when is_binary(query) and query != "" ->
+            path <> "?" <> query
+
+          %{path: path} ->
+            path
+        end
+
+      assert url_string =~ "/deployments/my-deployment/chat/completions"
+      refute url_string =~ "/models/chat/completions"
+    end
+
+    test "streaming adds model to request body for Foundry format" do
+      {:ok, model} = ReqLLM.model("azure:deepseek-v3.1")
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+
+      {:ok, finch_request} =
+        Azure.attach_stream(
+          model,
+          context,
+          [
+            api_key: "test-api-key",
+            deployment: "deepseek-v3-deployment",
+            base_url: "https://my-resource.services.ai.azure.com"
+          ],
+          :req_llm_finch
+        )
+
+      # Decode the JSON body from the Finch request
+      body = Jason.decode!(finch_request.body)
+      assert body["model"] == "deepseek-v3-deployment"
+    end
+  end
+
+  defp get_json_body(%Req.Request{} = request) do
+    # Req stores JSON body in options[:json] before encoding
+    request.options[:json] || %{}
+  end
 end
