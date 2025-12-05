@@ -311,12 +311,20 @@ defmodule ReqLLM.Schema do
     json |> maybe_put_description(meta)
   end
 
-  defp inject_zoi_metadata(%Zoi.Types.String{meta: meta}, json), do: maybe_put_description(json, meta)
-  defp inject_zoi_metadata(%Zoi.Types.Number{meta: meta}, json), do: maybe_put_description(json, meta)
-  defp inject_zoi_metadata(%Zoi.Types.Boolean{meta: meta}, json), do: maybe_put_description(json, meta)
+  defp inject_zoi_metadata(%Zoi.Types.String{meta: meta}, json),
+    do: maybe_put_description(json, meta)
 
-  defp inject_zoi_metadata(%Zoi.Types.Map{meta: meta}, json), do: maybe_put_description(json, meta)
-  defp inject_zoi_metadata(%Zoi.Types.Any{meta: meta}, json), do: maybe_put_description(json, meta)
+  defp inject_zoi_metadata(%Zoi.Types.Number{meta: meta}, json),
+    do: maybe_put_description(json, meta)
+
+  defp inject_zoi_metadata(%Zoi.Types.Boolean{meta: meta}, json),
+    do: maybe_put_description(json, meta)
+
+  defp inject_zoi_metadata(%Zoi.Types.Map{meta: meta}, json),
+    do: maybe_put_description(json, meta)
+
+  defp inject_zoi_metadata(%Zoi.Types.Any{meta: meta}, json),
+    do: maybe_put_description(json, meta)
 
   defp inject_zoi_metadata(_schema, json), do: normalize_json_schema(json)
 
