@@ -709,7 +709,11 @@ defmodule ReqLLM.StreamResponseTest do
       # Should fall back to empty arguments on invalid JSON
       assert length(Response.tool_calls(response)) == 1
       tool_call = hd(Response.tool_calls(response))
-      assert %ReqLLM.ToolCall{id: "call-1", function: %{name: "broken_tool", arguments: args_json}} =
+
+      assert %ReqLLM.ToolCall{
+               id: "call-1",
+               function: %{name: "broken_tool", arguments: args_json}
+             } =
                tool_call
 
       assert Jason.decode!(args_json) == %{}
@@ -851,6 +855,7 @@ defmodule ReqLLM.StreamResponseTest do
         Enum.map(Response.tool_calls(response), fn %ReqLLM.ToolCall{function: %{name: name}} ->
           name
         end)
+
       assert tool_names == ["first", "second", "third"]
     end
 
