@@ -81,6 +81,10 @@ ReqLLM uses structured key/value tags for precise test filtering:
   - `decode_sse_event/2` - Decode provider SSE events to StreamChunk structs (streaming only, optional)
   - `extract_usage/2` - Extract usage/cost data (optional)
   - `translate_options/3` - Provider-specific parameter translation (optional)
+- **Response Assembly**: `ReqLLM.Provider.ResponseBuilder` behaviour centralizes response construction from StreamChunks
+  - `ResponseBuilder.for_model/1` routes to provider-specific builders (Anthropic, Google, OpenAI Responses API)
+  - `Provider.Defaults.ResponseBuilder` handles OpenAI-compatible providers
+  - Custom builders ensure streaming and non-streaming produce identical Response structs
 - Providers use `ReqLLM.Provider.DSL` macro for registration and metadata loading
 - **Non-streaming**: Core API uses provider's `attach/3` to compose Req requests with provider-specific steps
 - **Streaming**: Uses Finch with provider's `attach_stream/4` to build streaming requests and `decode_sse_event/2` to parse SSE events
