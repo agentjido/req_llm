@@ -55,6 +55,7 @@ defmodule ReqLLM.Parity.AnthropicParityTest do
       {:ok, streaming_response} = ReqLLM.StreamResponse.process_stream(streaming)
 
       assert_finish_reason_equal(non_streaming, streaming_response)
+
       assert non_streaming.finish_reason == :tool_calls,
              "Expected :tool_calls, got #{inspect(non_streaming.finish_reason)}"
     end

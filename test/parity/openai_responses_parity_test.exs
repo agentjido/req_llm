@@ -182,17 +182,20 @@ defmodule ReqLLM.Parity.OpenAIResponsesParityTest do
 
       # Non-streaming should have response_id in message metadata
       ns_response_id = non_streaming.message.metadata[:response_id]
+
       assert is_binary(ns_response_id) and ns_response_id != "",
              "Non-streaming response should have response_id in message.metadata, got: #{inspect(non_streaming.message.metadata)}"
 
       # Streaming should also have response_id in message metadata
       s_response_id = streaming_response.message.metadata[:response_id]
+
       assert is_binary(s_response_id) and s_response_id != "",
              "Streaming response should have response_id in message.metadata, got: #{inspect(streaming_response.message.metadata)}"
 
       # Both should start with "resp_" prefix
       assert String.starts_with?(ns_response_id, "resp_"),
              "Non-streaming response_id should start with 'resp_', got: #{ns_response_id}"
+
       assert String.starts_with?(s_response_id, "resp_"),
              "Streaming response_id should start with 'resp_', got: #{s_response_id}"
     end

@@ -173,20 +173,7 @@ defmodule ReqLLM.Parity.TestHelper do
     numbers1 = extract_numbers(text1)
     numbers2 = extract_numbers(text2)
 
-    if expected_values != [] do
-      # Both should contain the expected values
-      for expected <- expected_values do
-        ExUnit.Assertions.assert(
-          expected in numbers1,
-          "Response 1 should contain #{expected}, found: #{inspect(numbers1)} in: #{text1}"
-        )
-
-        ExUnit.Assertions.assert(
-          expected in numbers2,
-          "Response 2 should contain #{expected}, found: #{inspect(numbers2)} in: #{text2}"
-        )
-      end
-    else
+    if expected_values == [] do
       # At minimum, both should have extracted some numbers if math was involved
       # or both should have none
       has_numbers1 = numbers1 != []
@@ -199,7 +186,20 @@ defmodule ReqLLM.Parity.TestHelper do
         Response 1 numbers: #{inspect(numbers1)}
         Response 2 numbers: #{inspect(numbers2)}
         """
+        # Both should contain the expected values
       )
+    else
+      for expected <- expected_values do
+        ExUnit.Assertions.assert(
+          expected in numbers1,
+          "Response 1 should contain #{expected}, found: #{inspect(numbers1)} in: #{text1}"
+        )
+
+        ExUnit.Assertions.assert(
+          expected in numbers2,
+          "Response 2 should contain #{expected}, found: #{inspect(numbers2)} in: #{text2}"
+        )
+      end
     end
   end
 
