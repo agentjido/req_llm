@@ -301,8 +301,6 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
     end)
   end
 
-  defp extract_from_content(_), do: nil
-
   # ============================================================================
   # Metadata Helpers
   # ============================================================================
