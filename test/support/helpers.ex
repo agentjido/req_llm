@@ -222,7 +222,7 @@ defmodule ReqLLM.Test.Helpers do
   end
 
   defp assert_context_advanced(response) do
-    assert length(response.context.messages) >= 1,
+    assert response.context.messages != [],
            "response.context must contain at least one message"
 
     last_message = List.last(response.context.messages)
@@ -423,7 +423,7 @@ defmodule ReqLLM.Test.Helpers do
 
   defp assert_context_advancement(%Response{context: context, message: message} = response)
        when not is_nil(message) do
-    assert length(context.messages) >= 1
+    assert context.messages != []
 
     last_message = List.last(context.messages)
     assert last_message.role == :assistant

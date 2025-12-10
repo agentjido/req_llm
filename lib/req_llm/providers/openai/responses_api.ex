@@ -964,10 +964,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     case body["status"] do
       "completed" ->
         # If tool calls are present, return :tool_calls instead of :stop
-        if tool_calls != nil and tool_calls != [] do
-          :tool_calls
-        else
+        if tool_calls == [] do
           :stop
+        else
+          :tool_calls
         end
 
       "incomplete" ->

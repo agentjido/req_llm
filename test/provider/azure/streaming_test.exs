@@ -615,7 +615,7 @@ defmodule ReqLLM.Providers.Azure.StreamingTest do
 
       result = Azure.decode_stream_event(event, model)
       assert is_list(result)
-      assert length(result) >= 1
+      assert result != []
 
       usage_chunk =
         Enum.find(result, fn chunk ->
@@ -682,7 +682,7 @@ defmodule ReqLLM.Providers.Azure.StreamingTest do
 
       result = Azure.decode_stream_event(event, model)
       assert is_list(result)
-      assert length(result) >= 1
+      assert result != []
 
       usage_chunk =
         Enum.find(result, fn chunk ->

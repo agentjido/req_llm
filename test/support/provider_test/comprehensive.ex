@@ -421,7 +421,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
                 )
 
               tool_calls = ReqLLM.Response.tool_calls(resp1)
-              assert length(tool_calls) >= 1
+              assert tool_calls != []
 
               ctx2 = ReqLLM.Context.execute_and_append_tools(resp1.context, tool_calls, tools)
 
