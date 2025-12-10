@@ -113,7 +113,9 @@ defmodule ReqLLM.MixProject do
             ReqLLM.Provider.Registry,
             ReqLLM.Provider.Options,
             ReqLLM.Provider.Utils,
-            ReqLLM.Provider.Defaults
+            ReqLLM.Provider.Defaults,
+            ReqLLM.Provider.ResponseBuilder,
+            ReqLLM.Provider.Defaults.ResponseBuilder
           ],
           Core: [
             ReqLLM,
