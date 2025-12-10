@@ -341,7 +341,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp handle_function_call_delta(%{"delta" => delta} = data) when is_map(delta) do
-    index = data["index"] || 0
+    # Use output_index to match the tool_call index from response.output_item.added
+    index = data["output_index"] || data["index"] || 0
     call_id = data["call_id"] || data["id"] || "call_#{:erlang.unique_integer([:positive])}"
 
     chunks = []
@@ -376,7 +377,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp handle_function_call_arguments_delta(%{"delta" => fragment} = data)
        when is_binary(fragment) and fragment != "" do
-    index = data["index"] || 0
+    # Use output_index to match the tool_call index from response.output_item.added
+    index = data["output_index"] || data["index"] || 0
 
     [
       ReqLLM.StreamChunk.meta(%{
@@ -389,7 +391,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp handle_function_call_name_delta(%{"delta" => name} = data)
        when is_binary(name) and name != "" do
-    index = data["index"] || 0
+    # Use output_index to match the tool_call index from response.output_item.added
+    index = data["output_index"] || data["index"] || 0
     call_id = data["call_id"] || data["id"] || "call_#{:erlang.unique_integer([:positive])}"
 
     [ReqLLM.StreamChunk.tool_call(name, %{}, %{id: call_id, index: index})]
