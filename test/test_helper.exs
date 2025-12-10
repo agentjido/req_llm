@@ -13,4 +13,6 @@ ReqLLM.TestSupport.FakeKeys.install!()
 
 # Logger level is configured via config/config.exs based on REQ_LLM_DEBUG
 
-ExUnit.start(capture_log: true, exclude: [:coverage])
+# Exclude :coverage and :integration by default
+# Run integration tests with: mix test --include integration
+ExUnit.start(capture_log: true, exclude: [:coverage, :integration])

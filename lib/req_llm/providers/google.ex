@@ -1048,9 +1048,17 @@ defmodule ReqLLM.Providers.Google do
               _ -> Map.put(message, "tool_calls", tool_calls)
             end
 
+          # Google returns "STOP" even when there are function calls
+          # Override to "tool_calls" when function calls are present
+          finish_reason =
+            case {tool_calls, candidate["finishReason"]} do
+              {[_ | _], "STOP"} -> "tool_calls"
+              {_, reason} -> normalize_google_finish_reason(reason)
+            end
+
           %{
             "message" => message,
-            "finish_reason" => normalize_google_finish_reason(candidate["finishReason"])
+            "finish_reason" => finish_reason
           }
 
         %{"content" => content, "finishReason" => finish_reason} when is_map(content) ->

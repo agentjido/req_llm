@@ -2,7 +2,7 @@
 defmodule ReqLLM.StreamResponseTest.Helpers do
   import ExUnit.Assertions
 
-  alias ReqLLM.{Context, StreamChunk, StreamResponse, StreamResponse.MetadataHandle}
+  alias ReqLLM.{Context, StreamChunk, StreamResponse, StreamResponse.MetadataHandle, ToolCall}
 
   @doc """
   Assert multiple struct fields at once for cleaner tests.
@@ -68,7 +68,7 @@ defmodule ReqLLM.StreamResponseTest do
 
   import ReqLLM.StreamResponseTest.Helpers
 
-  alias ReqLLM.{Context, Response, StreamChunk, StreamResponse}
+  alias ReqLLM.{Context, Response, StreamChunk, StreamResponse, ToolCall}
 
   describe "struct validation and defaults" do
     test "creates stream response with required fields" do
@@ -363,8 +363,8 @@ defmodule ReqLLM.StreamResponseTest do
 
       tool_calls = Response.tool_calls(response)
       assert length(tool_calls) == 2
-      assert Enum.find(tool_calls, &(&1.name == "get_weather"))
-      assert Enum.find(tool_calls, &(&1.name == "calculate"))
+      assert Enum.find(tool_calls, &ToolCall.matches_name?(&1, "get_weather"))
+      assert Enum.find(tool_calls, &ToolCall.matches_name?(&1, "calculate"))
     end
 
     test "handles empty stream" do
@@ -451,8 +451,8 @@ defmodule ReqLLM.StreamResponseTest do
       {:ok, response2} = StreamResponse.to_response(stream_response2)
 
       assert response1.id != response2.id
-      assert String.starts_with?(response1.id, "stream_response_")
-      assert String.starts_with?(response2.id, "stream_response_")
+      assert String.starts_with?(response1.id, "resp_")
+      assert String.starts_with?(response2.id, "resp_")
     end
   end
 
@@ -533,9 +533,9 @@ defmodule ReqLLM.StreamResponseTest do
       # Verify response contains both thinking and text
       assert Response.text(response) == "The answer is 42"
       # Check that thinking content is in message
-      thinking_parts = Enum.filter(response.message.content, &(&1[:type] == :thinking))
+      thinking_parts = Enum.filter(response.message.content, &(&1.type == :thinking))
       assert length(thinking_parts) == 1
-      assert hd(thinking_parts)[:text] == "Let me think... about this"
+      assert hd(thinking_parts).text == "Let me think... about this"
     end
 
     test "reconstructs tool calls with fragmented arguments in response" do
