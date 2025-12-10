@@ -613,10 +613,23 @@ defmodule ReqLLM.Providers.Anthropic do
 
         case get_option(options, :tool_choice) do
           nil -> body
-          choice -> Map.put(body, :tool_choice, choice)
+          choice -> Map.put(body, :tool_choice, normalize_tool_choice(choice))
         end
     end
   end
+
+  # Normalize tool_choice to Anthropic's expected format
+  # Anthropic expects: %{type: "auto"}, %{type: "any"}, or %{type: "tool", name: "..."}
+  defp normalize_tool_choice(:auto), do: %{type: "auto"}
+  defp normalize_tool_choice(:required), do: %{type: "any"}
+  defp normalize_tool_choice(:none), do: %{type: "none"}
+  defp normalize_tool_choice("auto"), do: %{type: "auto"}
+  defp normalize_tool_choice("required"), do: %{type: "any"}
+  defp normalize_tool_choice("none"), do: %{type: "none"}
+  defp normalize_tool_choice({:tool, name}) when is_binary(name), do: %{type: "tool", name: name}
+
+  defp normalize_tool_choice(%{type: _} = choice), do: choice
+  defp normalize_tool_choice(%{"type" => _} = choice), do: choice
 
   defp get_option(options, key, default \\ nil)
 

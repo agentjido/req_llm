@@ -29,39 +29,34 @@ defmodule ReqLLM.Parity.AnthropicParityTest do
       prompt = "What is 2 + 3? Use the add tool."
       tools = [add_tool()]
 
-      # Don't use tool_choice: :required - it has a separate formatting bug
-      {:ok, non_streaming} = ReqLLM.generate_text(@model, prompt, tools: tools)
-      {:ok, streaming} = ReqLLM.stream_text(@model, prompt, tools: tools)
+      {:ok, non_streaming} =
+        ReqLLM.generate_text(@model, prompt, tools: tools, tool_choice: :required)
+
+      {:ok, streaming} =
+        ReqLLM.stream_text(@model, prompt, tools: tools, tool_choice: :required)
+
       {:ok, streaming_response} = ReqLLM.StreamResponse.process_stream(streaming)
 
-      # Both should have made tool calls
-      ns_tool_calls = ReqLLM.Response.tool_calls(non_streaming)
-      s_tool_calls = ReqLLM.Response.tool_calls(streaming_response)
-
-      if ns_tool_calls != [] and s_tool_calls != [] do
-        assert_tool_calls_equal(non_streaming, streaming_response)
-        assert_tool_calls_are_structs(non_streaming)
-        assert_tool_calls_are_structs(streaming_response)
-      end
+      assert_tool_calls_equal(non_streaming, streaming_response)
+      assert_tool_calls_are_structs(non_streaming)
+      assert_tool_calls_are_structs(streaming_response)
     end
 
     test "finish_reason is :tool_calls when tools are called" do
-      prompt = "What is 5 + 7? You must use the add tool to compute this."
+      prompt = "What is 5 + 7? Use the add tool."
       tools = [add_tool()]
 
-      {:ok, non_streaming} = ReqLLM.generate_text(@model, prompt, tools: tools)
-      {:ok, streaming} = ReqLLM.stream_text(@model, prompt, tools: tools)
+      {:ok, non_streaming} =
+        ReqLLM.generate_text(@model, prompt, tools: tools, tool_choice: :required)
+
+      {:ok, streaming} =
+        ReqLLM.stream_text(@model, prompt, tools: tools, tool_choice: :required)
+
       {:ok, streaming_response} = ReqLLM.StreamResponse.process_stream(streaming)
 
-      # If both made tool calls, finish_reason should match
-      ns_tool_calls = ReqLLM.Response.tool_calls(non_streaming)
-      s_tool_calls = ReqLLM.Response.tool_calls(streaming_response)
-
-      if ns_tool_calls != [] and s_tool_calls != [] do
-        assert_finish_reason_equal(non_streaming, streaming_response)
-        assert non_streaming.finish_reason == :tool_calls,
-               "Expected :tool_calls, got #{inspect(non_streaming.finish_reason)}"
-      end
+      assert_finish_reason_equal(non_streaming, streaming_response)
+      assert non_streaming.finish_reason == :tool_calls,
+             "Expected :tool_calls, got #{inspect(non_streaming.finish_reason)}"
     end
 
     test "finish_reason is :stop for normal completion" do
