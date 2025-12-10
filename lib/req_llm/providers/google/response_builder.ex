@@ -18,7 +18,7 @@ defmodule ReqLLM.Providers.Google.ResponseBuilder do
   @impl true
   def build_response(chunks, metadata, opts) do
     # Check if any chunks are tool calls
-    has_tool_calls? = Enum.any?(chunks, &is_tool_call_chunk?/1)
+    has_tool_calls? = Enum.any?(chunks, &tool_call_chunk?/1)
 
     # Override finish_reason if we have tool calls but finish_reason is :stop
     # Google returns "STOP" which may be normalized to "stop" (string) or :stop (atom)
@@ -37,6 +37,6 @@ defmodule ReqLLM.Providers.Google.ResponseBuilder do
   defp finish_reason_is_stop?("stop"), do: true
   defp finish_reason_is_stop?(_), do: false
 
-  defp is_tool_call_chunk?(%StreamChunk{type: :tool_call}), do: true
-  defp is_tool_call_chunk?(_), do: false
+  defp tool_call_chunk?(%StreamChunk{type: :tool_call}), do: true
+  defp tool_call_chunk?(_), do: false
 end
