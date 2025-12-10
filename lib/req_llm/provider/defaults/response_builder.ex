@@ -331,14 +331,20 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
   end
 
   # Normalize finish_reason to atoms (providers may emit strings)
+  # Uses explicit mapping to avoid atom table exhaustion from untrusted input
   defp normalize_finish_reason(nil), do: nil
   defp normalize_finish_reason(reason) when is_atom(reason), do: reason
   defp normalize_finish_reason("stop"), do: :stop
   defp normalize_finish_reason("tool_calls"), do: :tool_calls
   defp normalize_finish_reason("length"), do: :length
   defp normalize_finish_reason("max_tokens"), do: :length
+  defp normalize_finish_reason("max_output_tokens"), do: :length
   defp normalize_finish_reason("content_filter"), do: :content_filter
   defp normalize_finish_reason("tool_use"), do: :tool_calls
   defp normalize_finish_reason("end_turn"), do: :stop
-  defp normalize_finish_reason(other) when is_binary(other), do: String.to_atom(other)
+  defp normalize_finish_reason("error"), do: :error
+  defp normalize_finish_reason("cancelled"), do: :cancelled
+  defp normalize_finish_reason("incomplete"), do: :incomplete
+  # Fallback to :unknown for any unrecognized values to prevent atom table exhaustion
+  defp normalize_finish_reason(_other), do: :unknown
 end

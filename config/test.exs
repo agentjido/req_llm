@@ -88,7 +88,11 @@ config :llm_db,
         "o4-mini" => %{
           name: "o4-mini",
           family: "o4",
-          capabilities: %{chat: true, reasoning: %{enabled: true}, tools: %{enabled: true, streaming: true}},
+          capabilities: %{
+            chat: true,
+            reasoning: %{enabled: true},
+            tools: %{enabled: true, streaming: true}
+          },
           limits: %{context: 200_000, output: 100_000},
           extra: %{api: "responses"}
         },
