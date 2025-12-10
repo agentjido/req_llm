@@ -69,6 +69,9 @@ Required vs optional callbacks:
 - `init_stream_state/1` - Initialize stateful streaming
 - `flush_stream_state/2` - Flush accumulated stream state
 
+**Response Assembly (Optional):**
+- `ResponseBuilder.build_response/3` - Custom response assembly from StreamChunks
+
 ### Using Defaults
 
 Prefer `use ReqLLM.Provider.Defaults` to get robust OpenAI-style defaults and override only when needed.
@@ -629,6 +632,81 @@ end
 
 The pipeline will propagate errors consistently to callers.
 
+## Response Assembly with ResponseBuilder
+
+### Why ResponseBuilder Exists
+
+Different LLM providers have subtle differences in how they represent responses, tool calls, finish reasons, and metadata. Previously, these differences were handled in multiple places (streaming vs non-streaming, provider-specific decoders), leading to behavioral inconsistencies.
+
+The `ResponseBuilder` behaviour centralizes provider-specific Response assembly logic, ensuring that:
+
+1. **Streaming and non-streaming produce identical Response structs**
+2. **Provider quirks are handled in one place per provider**
+3. **New providers have a clear extension point**
+
+### How It Works
+
+Both streaming and non-streaming paths converge on `ResponseBuilder`:
+
+1. Decode wire format to `[StreamChunk.t()]`
+2. Collect metadata (usage, finish_reason, provider-specific)
+3. Call the appropriate builder:
+
+```elixir
+builder = ResponseBuilder.for_model(model)
+{:ok, response} = builder.build_response(chunks, metadata, opts)
+```
+
+### Routing Logic
+
+`ResponseBuilder.for_model/1` routes to provider-specific builders:
+
+- Anthropic models → `Anthropic.ResponseBuilder`
+- Google/Vertex models → `Google.ResponseBuilder`
+- OpenAI Responses API models → `OpenAI.ResponsesAPI.ResponseBuilder`
+- All others → `Provider.Defaults.ResponseBuilder`
+
+### When to Implement a Custom ResponseBuilder
+
+Most providers can use `Provider.Defaults.ResponseBuilder`. Implement a custom builder when:
+
+- **Content block requirements**: Anthropic requires content blocks to never be empty
+- **Provider-specific metadata**: OpenAI Responses API needs to propagate `response_id` for stateless multi-turn
+- **Finish reason detection**: Google needs to detect `functionCall` to set correct finish_reason
+- **Custom tool call handling**: Provider has non-standard tool call representation
+
+### Example: Custom ResponseBuilder
+
+```elixir
+defmodule ReqLLM.Providers.Zephyr.ResponseBuilder do
+  @moduledoc "Custom ResponseBuilder for Zephyr provider."
+
+  @behaviour ReqLLM.Provider.ResponseBuilder
+
+  alias ReqLLM.Provider.Defaults.ResponseBuilder, as: DefaultBuilder
+
+  @impl true
+  def build_response(chunks, metadata, opts) do
+    # Delegate to default builder for standard processing
+    with {:ok, response} <- DefaultBuilder.build_response(chunks, metadata, opts) do
+      # Apply provider-specific post-processing
+      response = apply_zephyr_quirks(response, metadata)
+      {:ok, response}
+    end
+  end
+
+  defp apply_zephyr_quirks(response, metadata) do
+    # Example: Zephyr includes session_id in metadata
+    case metadata[:session_id] do
+      nil -> response
+      sid -> %{response | provider_meta: Map.put(response.provider_meta, :session_id, sid)}
+    end
+  end
+end
+```
+
+Then register the builder by adding a clause to `ResponseBuilder.for_model/1` (for built-in providers) or by pattern matching on your model in your provider's streaming/non-streaming paths.
+
 ## Step-by-Step Example
 
 Let's add a fictional provider called "Acme" from start to finish.
@@ -872,14 +950,20 @@ mix mc --available
 **translate_options/3**
 - Rename/drop options per model or operation
 
+**ResponseBuilder.build_response/3**
+- Build final Response struct from accumulated StreamChunks and metadata
+- Defaults handle OpenAI-compatible responses; override for provider-specific quirks
+- Required parameters: `chunks` (list of StreamChunk), `metadata` (map with usage, finish_reason, etc.), `opts` (keyword list with `:context` and `:model`)
+
 ## Summary
 
 Adding a provider to ReqLLM involves:
 
 1. Creating a provider module with the DSL and behavior implementation
 2. Implementing encoding/decoding for the provider's wire format
-3. Adding model metadata and syncing the registry
-4. Writing tests at all three tiers (core, provider, coverage)
-5. Recording fixtures for validation
+3. Optionally implementing a custom `ResponseBuilder` for provider-specific response assembly
+4. Adding model metadata and syncing the registry
+5. Writing tests at all three tiers (core, provider, coverage)
+6. Recording fixtures for validation
 
 By following these guidelines and leveraging the defaults, you can add robust, well-tested provider support that maintains ReqLLM's normalization principles across all AI interactions.
