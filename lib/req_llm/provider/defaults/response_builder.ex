@@ -335,6 +335,7 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
   defp normalize_finish_reason(nil), do: nil
   defp normalize_finish_reason(reason) when is_atom(reason), do: reason
   defp normalize_finish_reason("stop"), do: :stop
+  defp normalize_finish_reason("completed"), do: :stop
   defp normalize_finish_reason("tool_calls"), do: :tool_calls
   defp normalize_finish_reason("length"), do: :length
   defp normalize_finish_reason("max_tokens"), do: :length
