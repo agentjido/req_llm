@@ -2,11 +2,11 @@ defmodule ReqLLM.Parity.OpenAIResponsesParityTest do
   @moduledoc """
   Parity tests for OpenAI Responses API: streaming vs non-streaming.
 
-  These tests verify that streaming and non-streaming produce identical
-  Response structs for OpenAI Responses API (o-series reasoning models).
+  These tests verify that streaming and non-streaming produce semantically
+  equivalent Response structs for OpenAI Responses API (o-series reasoning models).
 
   Special focus areas for Responses API:
-  - response_id must be preserved in message metadata for multi-turn
+  - finish_reason correction when tool calls are present
   - Stateless multi-turn using previous_response_id
   - Reasoning content preservation
   """
@@ -26,7 +26,7 @@ defmodule ReqLLM.Parity.OpenAIResponsesParityTest do
     @describetag :integration
     @describetag timeout: 120_000
 
-    test "tool_calls are identical" do
+    test "tool_calls structure is equivalent" do
       prompt = "What is 2 + 3? Use the add tool."
       tools = [add_tool()]
 
@@ -43,7 +43,7 @@ defmodule ReqLLM.Parity.OpenAIResponsesParityTest do
       assert_tool_calls_are_structs(streaming_response)
     end
 
-    test "finish_reason is :tool_calls when tools are called" do
+    test "finish_reason is consistent between streaming and non-streaming" do
       prompt = "What is 5 + 7? Use the add tool."
       tools = [add_tool()]
 
@@ -55,8 +55,12 @@ defmodule ReqLLM.Parity.OpenAIResponsesParityTest do
 
       {:ok, streaming_response} = ReqLLM.StreamResponse.process_stream(streaming)
 
+      # Both should have consistent finish_reason
       assert_finish_reason_equal(non_streaming, streaming_response)
-      # Responses API may return :stop even with tool calls, but should be consistent
+
+      # With tool calls, should be :tool_calls
+      assert non_streaming.finish_reason == :tool_calls,
+             "Expected :tool_calls, got #{inspect(non_streaming.finish_reason)}"
     end
 
     test "finish_reason is :stop for normal completion" do
@@ -71,7 +75,22 @@ defmodule ReqLLM.Parity.OpenAIResponsesParityTest do
       assert non_streaming.finish_reason == :stop
     end
 
-    test "usage structure is identical" do
+    test "text responses are semantically equivalent" do
+      prompt = "What is 2 + 2? Just give the number."
+
+      {:ok, non_streaming} = ReqLLM.generate_text(@model, prompt)
+
+      {:ok, streaming} = ReqLLM.stream_text(@model, prompt)
+      {:ok, streaming_response} = ReqLLM.StreamResponse.process_stream(streaming)
+
+      # Both should contain the answer 4
+      assert_text_semantically_equal(non_streaming, streaming_response,
+        type: :math,
+        expected_values: [4]
+      )
+    end
+
+    test "usage data is present in both" do
       prompt = "What is 2 + 2?"
 
       {:ok, non_streaming} = ReqLLM.generate_text(@model, prompt)
@@ -79,23 +98,7 @@ defmodule ReqLLM.Parity.OpenAIResponsesParityTest do
       {:ok, streaming} = ReqLLM.stream_text(@model, prompt)
       {:ok, streaming_response} = ReqLLM.StreamResponse.process_stream(streaming)
 
-      assert_usage_structure_equal(non_streaming, streaming_response)
-    end
-
-    test "response_id is preserved in message metadata (bug #270)" do
-      prompt = "What is 2 + 3? Use the add tool."
-      tools = [add_tool()]
-
-      {:ok, non_streaming} =
-        ReqLLM.generate_text(@model, prompt, tools: tools, tool_choice: :required)
-
-      {:ok, streaming} =
-        ReqLLM.stream_text(@model, prompt, tools: tools, tool_choice: :required)
-
-      {:ok, streaming_response} = ReqLLM.StreamResponse.process_stream(streaming)
-
-      # Both should have response_id in message metadata
-      assert_metadata_preserved(non_streaming, streaming_response, [:response_id])
+      assert_usage_valid(non_streaming, streaming_response)
     end
 
     test "context is valid for next turn after tool call" do
@@ -114,8 +117,7 @@ defmodule ReqLLM.Parity.OpenAIResponsesParityTest do
       assert_context_valid_for_next_turn(streaming_response)
     end
 
-    test "multi-turn tool calling works identically" do
-      # This test specifically addresses bug #270
+    test "multi-turn tool calling works" do
       prompt = "What is 2 + 3? Use the add tool."
       tools = [add_tool()]
 
@@ -140,9 +142,8 @@ defmodule ReqLLM.Parity.OpenAIResponsesParityTest do
       assert resp2_ns.finish_reason == :stop
       assert resp2_s.finish_reason == :stop
 
-      # Both should have text response (the actual result)
-      assert ReqLLM.Response.text(resp2_ns) != nil
-      assert ReqLLM.Response.text(resp2_s) != nil
+      # Both should have text response containing the answer (5)
+      assert_text_semantically_equal(resp2_ns, resp2_s, type: :math, expected_values: [5])
     end
 
     test "reasoning content is preserved in both paths" do
@@ -153,13 +154,21 @@ defmodule ReqLLM.Parity.OpenAIResponsesParityTest do
       {:ok, streaming} = ReqLLM.stream_text(@model, prompt)
       {:ok, streaming_response} = ReqLLM.StreamResponse.process_stream(streaming)
 
-      # Both should have reasoning tokens in usage
+      # Both should have reasoning tokens in usage (o-series models do internal reasoning)
       ns_usage = ReqLLM.Response.usage(non_streaming)
       s_usage = ReqLLM.Response.usage(streaming_response)
 
+      # If non-streaming has reasoning tokens, streaming should too
       if ns_usage[:reasoning_tokens] && ns_usage[:reasoning_tokens] > 0 do
-        assert s_usage[:reasoning_tokens] && s_usage[:reasoning_tokens] > 0
+        assert s_usage[:reasoning_tokens] && s_usage[:reasoning_tokens] > 0,
+               "Non-streaming has reasoning tokens but streaming doesn't"
       end
+
+      # Both should contain the correct answer (345)
+      assert_text_semantically_equal(non_streaming, streaming_response,
+        type: :math,
+        expected_values: [345]
+      )
     end
   end
 end

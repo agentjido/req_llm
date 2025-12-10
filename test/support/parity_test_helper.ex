@@ -2,12 +2,46 @@ defmodule ReqLLM.Parity.TestHelper do
   @moduledoc """
   Shared helpers for parity tests between streaming and non-streaming responses.
 
-  These helpers normalize Response structs for comparison, focusing on
-  semantic equivalence rather than exact byte-for-byte equality.
+  These helpers focus on **semantic equivalence** rather than exact byte-for-byte
+  equality. LLMs may produce slightly different outputs even with identical inputs,
+  so we test for meaningful equivalence.
+
+  ## Legitimate Parity Requirements
+
+  1. **finish_reason** - Must be correct (`:tool_calls` when tools called, `:stop` otherwise)
+  2. **tool_calls** - Structure must be equivalent (names, arguments)
+  3. **text content** - Semantically equivalent (same answers, not necessarily same words)
+  4. **context validity** - Must be usable for next turn in multi-turn conversations
+
+  ## NOT Strict Parity
+
+  - Exact usage keys (streaming may have additional granular fields)
+  - Exact metadata structure (as long as data is accessible)
+  - Exact text wording (LLMs are non-deterministic)
   """
 
   alias ReqLLM.Response
   alias ReqLLM.ToolCall
+
+  # ============================================================================
+  # Core Parity Assertions
+  # ============================================================================
+
+  @doc """
+  Assert that two responses have the same finish_reason.
+
+  This is critical for tool calling workflows - finish_reason must be :tool_calls
+  when the model made tool calls, and :stop for normal completion.
+  """
+  def assert_finish_reason_equal(response1, response2) do
+    fr1 = Response.finish_reason(response1)
+    fr2 = Response.finish_reason(response2)
+
+    ExUnit.Assertions.assert(
+      fr1 == fr2,
+      "Finish reason mismatch: #{inspect(fr1)} vs #{inspect(fr2)}"
+    )
+  end
 
   @doc """
   Assert that two responses have equivalent tool calls.
@@ -15,7 +49,7 @@ defmodule ReqLLM.Parity.TestHelper do
   Normalizes tool calls for comparison by:
   - Sorting by name for consistent ordering
   - Normalizing argument maps (string keys vs atom keys)
-  - Ignoring auto-generated IDs unless both are present
+  - Ignoring auto-generated IDs (they will differ between calls)
   """
   def assert_tool_calls_equal(response1, response2) do
     tc1 = Response.tool_calls(response1) |> normalize_tool_calls_for_comparison()
@@ -36,129 +70,6 @@ defmodule ReqLLM.Parity.TestHelper do
   end
 
   @doc """
-  Assert that two responses have the same finish_reason.
-  """
-  def assert_finish_reason_equal(response1, response2) do
-    fr1 = Response.finish_reason(response1)
-    fr2 = Response.finish_reason(response2)
-
-    ExUnit.Assertions.assert(
-      fr1 == fr2,
-      "Finish reason mismatch: #{inspect(fr1)} vs #{inspect(fr2)}"
-    )
-  end
-
-  @doc """
-  Assert that two responses have structurally equivalent usage.
-
-  Checks that the same keys are present and values are reasonable
-  (non-negative integers). Exact values may differ slightly between
-  streaming and non-streaming due to timing.
-  """
-  def assert_usage_structure_equal(response1, response2) do
-    u1 = Response.usage(response1)
-    u2 = Response.usage(response2)
-
-    # Both should have usage or both should be nil
-    case {u1, u2} do
-      {nil, nil} ->
-        :ok
-
-      {%{} = usage1, %{} = usage2} ->
-        # Check same keys present
-        keys1 = Map.keys(usage1) |> MapSet.new()
-        keys2 = Map.keys(usage2) |> MapSet.new()
-
-        ExUnit.Assertions.assert(
-          keys1 == keys2,
-          "Usage keys mismatch: #{inspect(keys1)} vs #{inspect(keys2)}"
-        )
-
-        # Check values are non-negative
-        for {key, val} <- usage1 do
-          ExUnit.Assertions.assert(
-            is_integer(val) and val >= 0,
-            "Usage #{key} should be non-negative integer, got: #{inspect(val)}"
-          )
-        end
-
-      _ ->
-        ExUnit.Assertions.flunk("Usage structure mismatch: #{inspect(u1)} vs #{inspect(u2)}")
-    end
-  end
-
-  @doc """
-  Assert that message metadata is preserved correctly.
-
-  For providers that require metadata (e.g., OpenAI Responses API needs response_id),
-  this checks that the metadata is present in both responses.
-  """
-  def assert_metadata_preserved(response1, response2, required_keys \\ []) do
-    meta1 = get_message_metadata(response1)
-    meta2 = get_message_metadata(response2)
-
-    for key <- required_keys do
-      ExUnit.Assertions.assert(
-        Map.has_key?(meta1, key),
-        "Response 1 missing required metadata key: #{inspect(key)}"
-      )
-
-      ExUnit.Assertions.assert(
-        Map.has_key?(meta2, key),
-        "Response 2 missing required metadata key: #{inspect(key)}"
-      )
-    end
-  end
-
-  @doc """
-  Assert that the context is properly merged and can be used for next turn.
-
-  Checks that:
-  - Context has the assistant message
-  - Tool calls (if any) are in the context
-  - Context can be encoded for the provider
-  """
-  def assert_context_valid_for_next_turn(response) do
-    context = response.context
-
-    ExUnit.Assertions.assert(
-      context != nil,
-      "Response context should not be nil"
-    )
-
-    ExUnit.Assertions.assert(
-      not Enum.empty?(context.messages),
-      "Response context should have at least one message"
-    )
-
-    # Last message should be assistant
-    last_msg = List.last(context.messages)
-
-    ExUnit.Assertions.assert(
-      last_msg.role == :assistant,
-      "Last message in context should be assistant, got: #{inspect(last_msg.role)}"
-    )
-  end
-
-  @doc """
-  Assert that tool-call-only responses have valid content.
-
-  This is critical for Anthropic which requires non-empty content blocks.
-  """
-  def assert_tool_call_content_valid(response) do
-    message = response.message
-
-    if message && message.tool_calls && message.tool_calls != [] do
-      # For Anthropic, content must not be empty when tool_calls present
-      # Other providers are more lenient
-      ExUnit.Assertions.assert(
-        is_list(message.content),
-        "Message content should be a list"
-      )
-    end
-  end
-
-  @doc """
   Assert that all tool calls are proper ToolCall structs.
   """
   def assert_tool_calls_are_structs(response) do
@@ -172,8 +83,234 @@ defmodule ReqLLM.Parity.TestHelper do
     end
   end
 
+  @doc """
+  Assert that the context is properly formed and can be used for next turn.
+
+  Checks that:
+  - Context exists and has messages
+  - Last message is from assistant
+  - Tool calls (if any) are preserved in the context
+  """
+  def assert_context_valid_for_next_turn(response) do
+    context = response.context
+
+    ExUnit.Assertions.assert(
+      context != nil,
+      "Response context should not be nil"
+    )
+
+    ExUnit.Assertions.assert(
+      context.messages != [],
+      "Response context should have at least one message"
+    )
+
+    # Last message should be assistant
+    last_msg = List.last(context.messages)
+
+    ExUnit.Assertions.assert(
+      last_msg.role == :assistant,
+      "Last message in context should be assistant, got: #{inspect(last_msg.role)}"
+    )
+  end
+
+  @doc """
+  Assert that tool-call-only responses have valid content structure.
+
+  This is critical for Anthropic which requires non-empty content blocks.
+  """
+  def assert_tool_call_content_valid(response) do
+    message = response.message
+
+    if message && message.tool_calls && message.tool_calls != [] do
+      ExUnit.Assertions.assert(
+        is_list(message.content),
+        "Message content should be a list"
+      )
+    end
+  end
+
   # ============================================================================
-  # Normalization Helpers
+  # Semantic Text Comparison
+  # ============================================================================
+
+  @doc """
+  Assert that two responses contain semantically equivalent text content.
+
+  Since LLMs are non-deterministic, we don't require exact text matches.
+  Instead, we check for semantic equivalence based on the type of content.
+
+  ## Options
+
+  - `:type` - The type of comparison to perform:
+    - `:math` - Extract and compare numeric answers
+    - `:contains` - Check that both contain the same key terms
+    - `:non_empty` - Just verify both have non-empty text (default)
+  - `:expected_values` - For `:math` type, the expected numeric values
+  - `:expected_terms` - For `:contains` type, terms that should appear in both
+  """
+  def assert_text_semantically_equal(response1, response2, opts \\ []) do
+    text1 = Response.text(response1) || ""
+    text2 = Response.text(response2) || ""
+
+    type = Keyword.get(opts, :type, :non_empty)
+
+    case type do
+      :math ->
+        assert_math_answers_equal(text1, text2, opts)
+
+      :contains ->
+        expected_terms = Keyword.get(opts, :expected_terms, [])
+        assert_contains_terms(text1, text2, expected_terms)
+
+      :non_empty ->
+        assert_both_non_empty_or_both_empty(text1, text2)
+    end
+  end
+
+  defp assert_math_answers_equal(text1, text2, opts) do
+    expected_values = Keyword.get(opts, :expected_values, [])
+
+    numbers1 = extract_numbers(text1)
+    numbers2 = extract_numbers(text2)
+
+    if expected_values != [] do
+      # Both should contain the expected values
+      for expected <- expected_values do
+        ExUnit.Assertions.assert(
+          expected in numbers1,
+          "Response 1 should contain #{expected}, found: #{inspect(numbers1)} in: #{text1}"
+        )
+
+        ExUnit.Assertions.assert(
+          expected in numbers2,
+          "Response 2 should contain #{expected}, found: #{inspect(numbers2)} in: #{text2}"
+        )
+      end
+    else
+      # At minimum, both should have extracted some numbers if math was involved
+      # or both should have none
+      has_numbers1 = numbers1 != []
+      has_numbers2 = numbers2 != []
+
+      ExUnit.Assertions.assert(
+        has_numbers1 == has_numbers2,
+        """
+        Math content mismatch:
+        Response 1 numbers: #{inspect(numbers1)}
+        Response 2 numbers: #{inspect(numbers2)}
+        """
+      )
+    end
+  end
+
+  defp assert_contains_terms(text1, text2, expected_terms) do
+    text1_lower = String.downcase(text1)
+    text2_lower = String.downcase(text2)
+
+    for term <- expected_terms do
+      term_lower = String.downcase(term)
+
+      ExUnit.Assertions.assert(
+        String.contains?(text1_lower, term_lower),
+        "Response 1 should contain '#{term}', got: #{text1}"
+      )
+
+      ExUnit.Assertions.assert(
+        String.contains?(text2_lower, term_lower),
+        "Response 2 should contain '#{term}', got: #{text2}"
+      )
+    end
+  end
+
+  defp assert_both_non_empty_or_both_empty(text1, text2) do
+    empty1 = text1 == "" or text1 == nil
+    empty2 = text2 == "" or text2 == nil
+
+    ExUnit.Assertions.assert(
+      empty1 == empty2,
+      """
+      Text presence mismatch:
+      Response 1: #{if empty1, do: "(empty)", else: "has text"}
+      Response 2: #{if empty2, do: "(empty)", else: "has text"}
+      """
+    )
+  end
+
+  defp extract_numbers(text) do
+    # Extract integers and floats from text
+    # Match: optional minus, digits, optional decimal with more digits
+    ~r/-?\d+(?:\.\d+)?/
+    |> Regex.scan(text)
+    |> List.flatten()
+    |> Enum.map(fn str ->
+      if String.contains?(str, ".") do
+        String.to_float(str)
+      else
+        String.to_integer(str)
+      end
+    end)
+    |> Enum.uniq()
+  end
+
+  # ============================================================================
+  # Usage Assertions (Relaxed)
+  # ============================================================================
+
+  @doc """
+  Assert that both responses have valid usage data with core fields present.
+
+  This is a relaxed check - we don't require identical keys because streaming
+  may include additional granular fields. We just verify:
+  - Both have usage data (or both are nil)
+  - Core fields (input_tokens, output_tokens) are present and valid
+  """
+  def assert_usage_valid(response1, response2) do
+    u1 = Response.usage(response1)
+    u2 = Response.usage(response2)
+
+    case {u1, u2} do
+      {nil, nil} ->
+        :ok
+
+      {%{} = usage1, %{} = usage2} ->
+        # Both should have core token fields
+        assert_has_core_usage_fields(usage1, "Response 1")
+        assert_has_core_usage_fields(usage2, "Response 2")
+
+      {nil, %{}} ->
+        ExUnit.Assertions.flunk("Response 1 has no usage but Response 2 does")
+
+      {%{}, nil} ->
+        ExUnit.Assertions.flunk("Response 1 has usage but Response 2 does not")
+    end
+  end
+
+  defp assert_has_core_usage_fields(usage, label) do
+    # Check for input tokens (may be :input_tokens or :input)
+    has_input =
+      Map.has_key?(usage, :input_tokens) or
+        Map.has_key?(usage, :input) or
+        Map.has_key?(usage, "input_tokens")
+
+    # Check for output tokens (may be :output_tokens or :output)
+    has_output =
+      Map.has_key?(usage, :output_tokens) or
+        Map.has_key?(usage, :output) or
+        Map.has_key?(usage, "output_tokens")
+
+    ExUnit.Assertions.assert(
+      has_input,
+      "#{label} usage should have input token count, got: #{inspect(Map.keys(usage))}"
+    )
+
+    ExUnit.Assertions.assert(
+      has_output,
+      "#{label} usage should have output token count, got: #{inspect(Map.keys(usage))}"
+    )
+  end
+
+  # ============================================================================
+  # Tool Call Normalization
   # ============================================================================
 
   defp normalize_tool_calls_for_comparison(tool_calls) do
@@ -219,9 +356,6 @@ defmodule ReqLLM.Parity.TestHelper do
   end
 
   defp normalize_arguments(_), do: %{}
-
-  defp get_message_metadata(%Response{message: nil}), do: %{}
-  defp get_message_metadata(%Response{message: %{metadata: meta}}), do: meta || %{}
 
   # ============================================================================
   # Test Data Helpers

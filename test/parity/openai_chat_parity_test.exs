@@ -2,8 +2,8 @@ defmodule ReqLLM.Parity.OpenAIChatParityTest do
   @moduledoc """
   Parity tests for OpenAI Chat API: streaming vs non-streaming.
 
-  These tests verify that streaming and non-streaming produce identical
-  Response structs for OpenAI Chat API (legacy models using /chat/completions).
+  These tests verify that streaming and non-streaming produce semantically
+  equivalent Response structs for OpenAI Chat API (legacy models using /chat/completions).
   """
 
   use ExUnit.Case, async: true
@@ -21,7 +21,7 @@ defmodule ReqLLM.Parity.OpenAIChatParityTest do
     @describetag :integration
     @describetag timeout: 60_000
 
-    test "tool_calls are identical" do
+    test "tool_calls structure is equivalent" do
       prompt = "What is 2 + 3? Use the add tool."
       tools = [add_tool()]
 
@@ -66,7 +66,22 @@ defmodule ReqLLM.Parity.OpenAIChatParityTest do
       assert non_streaming.finish_reason == :stop
     end
 
-    test "usage structure is identical" do
+    test "text responses are semantically equivalent" do
+      prompt = "What is the capital of France? Answer in one word."
+
+      {:ok, non_streaming} = ReqLLM.generate_text(@model, prompt)
+
+      {:ok, streaming} = ReqLLM.stream_text(@model, prompt)
+      {:ok, streaming_response} = ReqLLM.StreamResponse.process_stream(streaming)
+
+      # Both should mention Paris
+      assert_text_semantically_equal(non_streaming, streaming_response,
+        type: :contains,
+        expected_terms: ["Paris"]
+      )
+    end
+
+    test "usage data is present in both" do
       prompt = "What is the capital of France?"
 
       {:ok, non_streaming} = ReqLLM.generate_text(@model, prompt)
@@ -74,7 +89,7 @@ defmodule ReqLLM.Parity.OpenAIChatParityTest do
       {:ok, streaming} = ReqLLM.stream_text(@model, prompt)
       {:ok, streaming_response} = ReqLLM.StreamResponse.process_stream(streaming)
 
-      assert_usage_structure_equal(non_streaming, streaming_response)
+      assert_usage_valid(non_streaming, streaming_response)
     end
 
     test "context is valid for next turn after tool call" do
@@ -93,7 +108,7 @@ defmodule ReqLLM.Parity.OpenAIChatParityTest do
       assert_context_valid_for_next_turn(streaming_response)
     end
 
-    test "tool-call-only responses have valid content" do
+    test "tool-call responses have valid content structure" do
       prompt = "Add 10 and 20 using the add tool"
       tools = [add_tool()]
 
@@ -109,7 +124,7 @@ defmodule ReqLLM.Parity.OpenAIChatParityTest do
       assert_tool_call_content_valid(streaming_response)
     end
 
-    test "multi-turn tool calling works identically" do
+    test "multi-turn tool calling works" do
       prompt = "What is 2 + 3? Use the add tool."
       tools = [add_tool()]
 
@@ -134,9 +149,8 @@ defmodule ReqLLM.Parity.OpenAIChatParityTest do
       assert resp2_ns.finish_reason == :stop
       assert resp2_s.finish_reason == :stop
 
-      # Both should have text response (the actual result)
-      assert ReqLLM.Response.text(resp2_ns) != nil
-      assert ReqLLM.Response.text(resp2_s) != nil
+      # Both should have text response containing the answer (5)
+      assert_text_semantically_equal(resp2_ns, resp2_s, type: :math, expected_values: [5])
     end
   end
 end
