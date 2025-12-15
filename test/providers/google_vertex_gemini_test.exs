@@ -11,8 +11,8 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
     ])
   end
 
-  describe "format_request/3 grounding tool transformation" do
-    test "transforms google_search to googleSearch for Vertex AI" do
+  describe "format_request/3 grounding" do
+    test "includes google_search tool when grounding enabled" do
       context = context_fixture("What's the weather today?")
 
       opts = [
@@ -22,13 +22,12 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
 
       body = Gemini.format_request("gemini-2.5-flash", context, opts)
 
-      # Verify grounding tool uses camelCase for Vertex AI
+      # Verify grounding tool uses snake_case (same as Google AI REST API)
       assert %{"tools" => tools} = body
-      assert Enum.any?(tools, &match?(%{"googleSearch" => %{}}, &1))
-      refute Enum.any?(tools, &match?(%{"google_search" => _}, &1))
+      assert Enum.any?(tools, &match?(%{"google_search" => %{}}, &1))
     end
 
-    test "transforms google_search_retrieval with dynamic_retrieval_config to camelCase" do
+    test "includes google_search_retrieval with dynamic_retrieval_config" do
       context = context_fixture("Search something")
 
       opts = [
@@ -38,16 +37,16 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
 
       body = Gemini.format_request("gemini-2.5-flash", context, opts)
 
-      # Verify grounding tool uses camelCase for Vertex AI
+      # Verify grounding tool uses snake_case
       assert %{"tools" => tools} = body
 
-      retrieval_tool = Enum.find(tools, &Map.has_key?(&1, "googleSearchRetrieval"))
+      retrieval_tool = Enum.find(tools, &Map.has_key?(&1, "google_search_retrieval"))
       assert retrieval_tool != nil
-      assert %{"googleSearchRetrieval" => %{"dynamicRetrievalConfig" => config}} = retrieval_tool
-      assert config["mode"] == "MODE_DYNAMIC"
 
-      # Ensure snake_case versions are NOT present
-      refute Enum.any?(tools, &Map.has_key?(&1, "google_search_retrieval"))
+      assert %{"google_search_retrieval" => %{"dynamic_retrieval_config" => config}} =
+               retrieval_tool
+
+      assert config["mode"] == "MODE_DYNAMIC"
     end
 
     test "preserves functionDeclarations when grounding is used with tools" do
@@ -74,7 +73,7 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
       assert %{"tools" => tools} = body
 
       # Should have both grounding and function tools
-      assert Enum.any?(tools, &match?(%{"googleSearch" => %{}}, &1))
+      assert Enum.any?(tools, &match?(%{"google_search" => %{}}, &1))
       assert Enum.any?(tools, &Map.has_key?(&1, "functionDeclarations"))
     end
 
@@ -89,20 +88,22 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
       refute Map.has_key?(body, "tools")
     end
 
-    test "extracts google_grounding from nested provider_options" do
-      # This is how users actually pass it: nested under provider_options
+    test "works with google_grounding at top level (as Options.process provides)" do
+      # After Options.process, google_grounding is hoisted to top level
+      # This test verifies format_request works with that structure
       context = context_fixture("What's the news?")
 
+      # Simulates opts AFTER Options.process (which hoists provider_options to top level)
       opts = [
         max_tokens: 1000,
+        google_grounding: %{enable: true},
         provider_options: [google_grounding: %{enable: true}]
       ]
 
       body = Gemini.format_request("gemini-2.5-flash", context, opts)
 
-      # Should have grounding tools even when nested under provider_options
       assert %{"tools" => tools} = body
-      assert Enum.any?(tools, &match?(%{"googleSearch" => %{}}, &1))
+      assert Enum.any?(tools, &match?(%{"google_search" => %{}}, &1))
     end
   end
 end

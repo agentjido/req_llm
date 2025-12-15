@@ -14,7 +14,6 @@ defmodule ReqLLM.Providers.GoogleVertex.Gemini do
   Vertex AI Gemini has stricter validation than the direct Google API:
 
   1. Rejects the "id" field in functionCall parts - we strip these IDs
-  2. Requires camelCase for grounding tools (`googleSearch` not `google_search`)
 
   ## Features
 
@@ -33,21 +32,13 @@ defmodule ReqLLM.Providers.GoogleVertex.Gemini do
   function call IDs which Vertex AI rejects.
   """
   def format_request(model_id, context, opts) do
-    # Extract google_grounding from provider_options and hoist to top level
-    # Google.encode_body expects it at request.options[:google_grounding], not nested
-    provider_opts = Keyword.get(opts, :provider_options, [])
-    google_grounding = Keyword.get(provider_opts, :google_grounding)
-
+    # Options.process already hoists provider_options (like google_grounding) to top level
     opts_map =
       opts
       |> Map.new()
       |> Map.merge(%{context: context, model: model_id})
-      |> then(fn m ->
-        if google_grounding, do: Map.put(m, :google_grounding, google_grounding), else: m
-      end)
 
     # Create a temporary request structure that mimics what Google.encode_body expects
-    # Use Req.new() to properly initialize the opaque request structure
     temp_request =
       Req.new(method: :post, url: URI.parse("https://example.com/temp"))
       |> Map.put(:body, {:json, %{}})
@@ -60,10 +51,7 @@ defmodule ReqLLM.Providers.GoogleVertex.Gemini do
     body = Jason.decode!(encoded_body)
 
     # Vertex AI has stricter validation: remove "id" from functionCall parts
-    # and convert grounding tool keys from snake_case to camelCase
-    body
-    |> sanitize_function_calls()
-    |> sanitize_grounding_tools()
+    sanitize_function_calls(body)
   end
 
   # Removes "id" field from functionCall parts in contents
@@ -91,37 +79,6 @@ defmodule ReqLLM.Providers.GoogleVertex.Gemini do
   end
 
   defp sanitize_function_calls(body), do: body
-
-  # Converts grounding tool keys from snake_case to camelCase for Vertex AI
-  # Google AI uses: google_search, google_search_retrieval, dynamic_retrieval_config
-  # Vertex AI uses: googleSearch, googleSearchRetrieval, dynamicRetrievalConfig
-  defp sanitize_grounding_tools(%{"tools" => tools} = body) when is_list(tools) do
-    sanitized_tools =
-      Enum.map(tools, fn
-        %{"google_search" => config} ->
-          %{"googleSearch" => config}
-
-        %{"google_search_retrieval" => %{"dynamic_retrieval_config" => drc} = config} ->
-          %{
-            "googleSearchRetrieval" =>
-              Map.put(
-                Map.delete(config, "dynamic_retrieval_config"),
-                "dynamicRetrievalConfig",
-                drc
-              )
-          }
-
-        %{"google_search_retrieval" => config} ->
-          %{"googleSearchRetrieval" => config}
-
-        other ->
-          other
-      end)
-
-    Map.put(body, "tools", sanitized_tools)
-  end
-
-  defp sanitize_grounding_tools(body), do: body
 
   @doc """
   Parses a Gemini response from Vertex AI into ReqLLM format.
