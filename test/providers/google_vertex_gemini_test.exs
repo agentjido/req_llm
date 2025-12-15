@@ -88,5 +88,21 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
       # Should not have tools key if no grounding and no function tools
       refute Map.has_key?(body, "tools")
     end
+
+    test "extracts google_grounding from nested provider_options" do
+      # This is how users actually pass it: nested under provider_options
+      context = context_fixture("What's the news?")
+
+      opts = [
+        max_tokens: 1000,
+        provider_options: [google_grounding: %{enable: true}]
+      ]
+
+      body = Gemini.format_request("gemini-2.5-flash", context, opts)
+
+      # Should have grounding tools even when nested under provider_options
+      assert %{"tools" => tools} = body
+      assert Enum.any?(tools, &match?(%{"googleSearch" => %{}}, &1))
+    end
   end
 end

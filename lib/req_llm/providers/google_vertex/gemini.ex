@@ -33,12 +33,25 @@ defmodule ReqLLM.Providers.GoogleVertex.Gemini do
   function call IDs which Vertex AI rejects.
   """
   def format_request(model_id, context, opts) do
+    # Extract google_grounding from provider_options and hoist to top level
+    # Google.encode_body expects it at request.options[:google_grounding], not nested
+    provider_opts = Keyword.get(opts, :provider_options, [])
+    google_grounding = Keyword.get(provider_opts, :google_grounding)
+
+    opts_map =
+      opts
+      |> Map.new()
+      |> Map.merge(%{context: context, model: model_id})
+      |> then(fn m ->
+        if google_grounding, do: Map.put(m, :google_grounding, google_grounding), else: m
+      end)
+
     # Create a temporary request structure that mimics what Google.encode_body expects
     # Use Req.new() to properly initialize the opaque request structure
     temp_request =
       Req.new(method: :post, url: URI.parse("https://example.com/temp"))
       |> Map.put(:body, {:json, %{}})
-      |> Map.put(:options, opts |> Map.new() |> Map.merge(%{context: context, model: model_id}))
+      |> Map.put(:options, opts_map)
 
     # Let Google provider encode the body
     %Req.Request{body: encoded_body} = Google.encode_body(temp_request)
