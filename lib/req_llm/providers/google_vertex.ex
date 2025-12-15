@@ -100,6 +100,11 @@ defmodule ReqLLM.Providers.GoogleVertex do
       type: :map,
       doc:
         "Additional model-specific request fields (e.g., thinking config for extended thinking support)"
+    ],
+    google_grounding: [
+      type: :map,
+      doc:
+        "Enable Google Search grounding for Gemini models - allows model to search the web. Set to %{enable: true}."
     ]
   ]
 
