@@ -2,7 +2,7 @@
 defmodule ReqLLM.StreamResponseTest.Helpers do
   import ExUnit.Assertions
 
-  alias ReqLLM.{Context, StreamChunk, StreamResponse, StreamResponse.MetadataHandle}
+  alias ReqLLM.{Context, StreamChunk, StreamResponse, StreamResponse.MetadataHandle, ToolCall}
 
   @doc """
   Assert multiple struct fields at once for cleaner tests.
@@ -68,7 +68,7 @@ defmodule ReqLLM.StreamResponseTest do
 
   import ReqLLM.StreamResponseTest.Helpers
 
-  alias ReqLLM.{Context, Response, StreamChunk, StreamResponse}
+  alias ReqLLM.{Context, Response, StreamChunk, StreamResponse, ToolCall}
 
   describe "struct validation and defaults" do
     test "creates stream response with required fields" do
@@ -363,8 +363,8 @@ defmodule ReqLLM.StreamResponseTest do
 
       tool_calls = Response.tool_calls(response)
       assert length(tool_calls) == 2
-      assert Enum.find(tool_calls, &(&1.name == "get_weather"))
-      assert Enum.find(tool_calls, &(&1.name == "calculate"))
+      assert Enum.find(tool_calls, &ToolCall.matches_name?(&1, "get_weather"))
+      assert Enum.find(tool_calls, &ToolCall.matches_name?(&1, "calculate"))
     end
 
     test "handles empty stream" do
@@ -451,8 +451,8 @@ defmodule ReqLLM.StreamResponseTest do
       {:ok, response2} = StreamResponse.to_response(stream_response2)
 
       assert response1.id != response2.id
-      assert String.starts_with?(response1.id, "stream_response_")
-      assert String.starts_with?(response2.id, "stream_response_")
+      assert String.starts_with?(response1.id, "resp_")
+      assert String.starts_with?(response2.id, "resp_")
     end
   end
 
@@ -533,9 +533,9 @@ defmodule ReqLLM.StreamResponseTest do
       # Verify response contains both thinking and text
       assert Response.text(response) == "The answer is 42"
       # Check that thinking content is in message
-      thinking_parts = Enum.filter(response.message.content, &(&1[:type] == :thinking))
+      thinking_parts = Enum.filter(response.message.content, &(&1.type == :thinking))
       assert length(thinking_parts) == 1
-      assert hd(thinking_parts)[:text] == "Let me think... about this"
+      assert hd(thinking_parts).text == "Let me think... about this"
     end
 
     test "reconstructs tool calls with fragmented arguments in response" do
@@ -573,13 +573,23 @@ defmodule ReqLLM.StreamResponseTest do
       assert Response.text(response) == "I'll help with that."
       assert length(Response.tool_calls(response)) == 2
 
-      weather_tool = Enum.find(Response.tool_calls(response), &(&1.name == "get_weather"))
-      assert weather_tool.id == "call-123"
-      assert weather_tool.arguments == %{city: "NYC"}
+      weather_tool =
+        Enum.find(Response.tool_calls(response), fn
+          %ReqLLM.ToolCall{function: %{name: "get_weather"}} -> true
+          _ -> false
+        end)
 
-      calc_tool = Enum.find(Response.tool_calls(response), &(&1.name == "calculator"))
-      assert calc_tool.id == "call-456"
-      assert calc_tool.arguments == %{"operation" => "add", "operands" => [2, 2]}
+      assert %ReqLLM.ToolCall{id: "call-123", function: %{arguments: weather_args}} = weather_tool
+      assert Jason.decode!(weather_args) == %{"city" => "NYC"}
+
+      calc_tool =
+        Enum.find(Response.tool_calls(response), fn
+          %ReqLLM.ToolCall{function: %{name: "calculator"}} -> true
+          _ -> false
+        end)
+
+      assert %ReqLLM.ToolCall{id: "call-456", function: %{arguments: calc_args}} = calc_tool
+      assert Jason.decode!(calc_args) == %{"operation" => "add", "operands" => [2, 2]}
     end
 
     test "handles mixed content, thinking, and tool calls" do
@@ -607,8 +617,11 @@ defmodule ReqLLM.StreamResponseTest do
       # Verify response has everything including tool calls
       assert Response.text(response) == "Let me help.  The result is ready!"
       assert length(Response.tool_calls(response)) == 1
-      assert hd(Response.tool_calls(response)).name == "get_weather"
-      assert hd(Response.tool_calls(response)).arguments == %{city: "SF"}
+
+      assert %ReqLLM.ToolCall{function: %{name: "get_weather", arguments: args_json}} =
+               hd(Response.tool_calls(response))
+
+      assert Jason.decode!(args_json) == %{"city" => "SF"}
     end
 
     test "handles empty stream gracefully" do
@@ -673,9 +686,13 @@ defmodule ReqLLM.StreamResponseTest do
 
       # Response should have the tool call with original arguments
       assert length(Response.tool_calls(response)) == 1
-      assert hd(Response.tool_calls(response)).id == "call-1"
-      assert hd(Response.tool_calls(response)).name == "simple_tool"
-      assert hd(Response.tool_calls(response)).arguments == %{arg: "value"}
+
+      assert %ReqLLM.ToolCall{
+               id: "call-1",
+               function: %{name: "simple_tool", arguments: args_json}
+             } = hd(Response.tool_calls(response))
+
+      assert Jason.decode!(args_json) == %{"arg" => "value"}
     end
 
     test "handles invalid JSON in argument fragments gracefully" do
@@ -692,9 +709,14 @@ defmodule ReqLLM.StreamResponseTest do
       # Should fall back to empty arguments on invalid JSON
       assert length(Response.tool_calls(response)) == 1
       tool_call = hd(Response.tool_calls(response))
-      assert tool_call.id == "call-1"
-      assert tool_call.name == "broken_tool"
-      assert tool_call.arguments == %{}
+
+      assert %ReqLLM.ToolCall{
+               id: "call-1",
+               function: %{name: "broken_tool", arguments: args_json}
+             } =
+               tool_call
+
+      assert Jason.decode!(args_json) == %{}
     end
 
     test "handles multiple tool calls with different fragments" do
@@ -714,13 +736,23 @@ defmodule ReqLLM.StreamResponseTest do
       # Response should have both tool calls with correct arguments
       assert length(Response.tool_calls(response)) == 2
 
-      tool1 = Enum.find(Response.tool_calls(response), &(&1.name == "tool1"))
-      assert tool1.id == "call-1"
-      assert tool1.arguments == %{"key" => "value1"}
+      tool1 =
+        Enum.find(Response.tool_calls(response), fn
+          %ReqLLM.ToolCall{function: %{name: "tool1"}} -> true
+          _ -> false
+        end)
 
-      tool2 = Enum.find(Response.tool_calls(response), &(&1.name == "tool2"))
-      assert tool2.id == "call-2"
-      assert tool2.arguments == %{"key" => "value2"}
+      assert %ReqLLM.ToolCall{id: "call-1", function: %{arguments: args1}} = tool1
+      assert Jason.decode!(args1) == %{"key" => "value1"}
+
+      tool2 =
+        Enum.find(Response.tool_calls(response), fn
+          %ReqLLM.ToolCall{function: %{name: "tool2"}} -> true
+          _ -> false
+        end)
+
+      assert %ReqLLM.ToolCall{id: "call-2", function: %{arguments: args2}} = tool2
+      assert Jason.decode!(args2) == %{"key" => "value2"}
     end
 
     test "processes stream only once (no double consumption)" do
@@ -819,7 +851,11 @@ defmodule ReqLLM.StreamResponseTest do
       {:ok, response} = StreamResponse.process_stream(stream_response)
 
       # Response should preserve tool call order
-      tool_names = Enum.map(Response.tool_calls(response), & &1.name)
+      tool_names =
+        Enum.map(Response.tool_calls(response), fn %ReqLLM.ToolCall{function: %{name: name}} ->
+          name
+        end)
+
       assert tool_names == ["first", "second", "third"]
     end
 

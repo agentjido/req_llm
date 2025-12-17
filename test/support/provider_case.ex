@@ -174,7 +174,7 @@ defmodule ReqLLM.ProviderCase do
   """
   def assert_context_advancement(%ReqLLM.Response{context: context, message: message} = response)
       when not is_nil(message) do
-    assert length(context.messages) >= 1
+    assert context.messages != []
 
     last_message = List.last(context.messages)
     assert last_message.role == :assistant

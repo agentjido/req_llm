@@ -404,7 +404,9 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert [tool_call] = ReqLLM.Response.tool_calls(response)
       assert tool_call.function.name == "demo_tool"
       assert tool_call.id == "call-1"
-      assert ReqLLM.Response.finish_reason(response) == :stop
+      # Bug #271 fix: Google returns "STOP" even with tool calls, but we correctly
+      # detect tool calls and return :tool_calls finish_reason
+      assert ReqLLM.Response.finish_reason(response) == :tool_calls
     end
 
     test "decode_response handles streaming responses" do

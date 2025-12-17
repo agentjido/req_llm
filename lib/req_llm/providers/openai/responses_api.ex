@@ -256,7 +256,15 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         end
       end)
 
-    tool_outputs_from_context = extract_tool_outputs_from_messages(Enum.reverse(tool_messages))
+    # Only send tool outputs if the response we're continuing from has pending tool calls.
+    # Find which tool_call_ids are pending (have a tool call but no subsequent tool result yet).
+    pending_tool_call_ids = find_pending_tool_call_ids(context.messages)
+
+    tool_outputs_from_context =
+      tool_messages
+      |> Enum.reverse()
+      |> Enum.filter(fn msg -> msg.tool_call_id in pending_tool_call_ids end)
+      |> extract_tool_outputs_from_messages()
 
     tool_outputs =
       case provider_opts[:tool_outputs] do
@@ -333,7 +341,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp handle_function_call_delta(%{"delta" => delta} = data) when is_map(delta) do
-    index = data["index"] || 0
+    # Use output_index to match the tool_call index from response.output_item.added
+    index = data["output_index"] || data["index"] || 0
     call_id = data["call_id"] || data["id"] || "call_#{:erlang.unique_integer([:positive])}"
 
     chunks = []
@@ -368,7 +377,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp handle_function_call_arguments_delta(%{"delta" => fragment} = data)
        when is_binary(fragment) and fragment != "" do
-    index = data["index"] || 0
+    # Use output_index to match the tool_call index from response.output_item.added
+    index = data["output_index"] || data["index"] || 0
 
     [
       ReqLLM.StreamChunk.meta(%{
@@ -381,7 +391,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp handle_function_call_name_delta(%{"delta" => name} = data)
        when is_binary(name) and name != "" do
-    index = data["index"] || 0
+    # Use output_index to match the tool_call index from response.output_item.added
+    index = data["output_index"] || data["index"] || 0
     call_id = data["call_id"] || data["id"] || "call_#{:erlang.unique_integer([:positive])}"
 
     [ReqLLM.StreamChunk.tool_call(name, %{}, %{id: call_id, index: index})]
@@ -412,17 +423,52 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp maybe_put_string(map, _key, nil), do: map
   defp maybe_put_string(map, key, value), do: Map.put(map, key, value)
 
+  # Extract the most recent response_id from assistant messages.
+  # This should be the LAST assistant message, not specifically one with tool_calls.
+  # The response_id creates a chain: A -> B -> C, and we need to continue from the
+  # most recent response in the chain.
   defp extract_previous_response_id_from_context(context) do
     context.messages
     |> Enum.reverse()
     |> Enum.find_value(fn msg ->
       case msg do
-        %{role: :assistant, tool_calls: tool_calls, metadata: %{response_id: id}}
-        when not is_nil(tool_calls) and tool_calls != [] ->
+        %{role: :assistant, metadata: %{response_id: id}} when is_binary(id) ->
           id
 
         _ ->
           nil
+      end
+    end)
+  end
+
+  # Find tool_call_ids that need their outputs sent.
+  # A tool output needs to be sent if:
+  # 1. There's a tool message with that call_id
+  # 2. AND there's no assistant message AFTER that tool message (meaning the output hasn't been consumed yet)
+  #
+  # Flow: assistant(tool_calls) → tool(result) → [assistant(answer)] OR [no response yet]
+  # If the assistant(answer) exists, the tool output was already sent.
+  # If it doesn't exist, we need to send the tool output.
+  defp find_pending_tool_call_ids(messages) do
+    # Process messages in reverse order to find:
+    # 1. All tool messages that appear AFTER the last assistant message
+    # These are tool outputs that haven't been sent yet
+    messages
+    |> Enum.reverse()
+    |> Enum.reduce_while([], fn msg, acc ->
+      case msg.role do
+        :tool when is_binary(msg.tool_call_id) ->
+          # This tool message appears before any assistant response
+          # (in reverse order means it's after all assistants in forward order)
+          {:cont, [msg.tool_call_id | acc]}
+
+        :assistant ->
+          # We hit an assistant message - any tool messages before this (in reverse)
+          # have already been sent, so stop collecting
+          {:halt, acc}
+
+        _ ->
+          {:cont, acc}
       end
     end)
   end
@@ -676,7 +722,9 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
     usage = normalize_responses_usage(base_usage, body)
 
-    finish_reason = determine_finish_reason(body)
+    # Determine finish_reason, accounting for tool calls
+    # The Responses API returns "completed" status even when tool calls are present
+    finish_reason = determine_finish_reason(body, tool_calls)
 
     content_parts = build_content_parts(text, thinking)
 
@@ -913,10 +961,17 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     |> Map.put(:reasoning_tokens, reasoning_tokens)
   end
 
-  defp determine_finish_reason(body) do
+  # The Responses API returns "completed" status even when tool calls are present.
+  # We need to check for tool calls and return :tool_calls in that case.
+  defp determine_finish_reason(body, tool_calls) do
     case body["status"] do
       "completed" ->
-        :stop
+        # If tool calls are present, return :tool_calls instead of :stop
+        if tool_calls == [] do
+          :stop
+        else
+          :tool_calls
+        end
 
       "incomplete" ->
         reason = get_in(body, ["incomplete_details", "reason"]) || "length"

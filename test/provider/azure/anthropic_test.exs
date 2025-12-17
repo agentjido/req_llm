@@ -697,7 +697,7 @@ defmodule ReqLLM.Providers.Azure.AnthropicTest do
       content = response.message.content
 
       assert is_list(content)
-      assert length(content) >= 1
+      assert content != []
 
       text_part = Enum.find(content, &(&1.type == :text))
       assert text_part.text == "Here's my answer"

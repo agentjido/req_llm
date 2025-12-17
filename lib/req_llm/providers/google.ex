@@ -77,7 +77,7 @@ defmodule ReqLLM.Providers.Google do
     default_env_key: "GOOGLE_API_KEY"
 
   import ReqLLM.Provider.Utils,
-    only: [maybe_put: 3, ensure_parsed_body: 1]
+    only: [maybe_put: 3, ensure_parsed_body: 1, sanitize_url: 1]
 
   require Logger
 
@@ -1048,9 +1048,17 @@ defmodule ReqLLM.Providers.Google do
               _ -> Map.put(message, "tool_calls", tool_calls)
             end
 
+          # Google returns "STOP" even when there are function calls
+          # Override to "tool_calls" when function calls are present
+          finish_reason =
+            case {tool_calls, candidate["finishReason"]} do
+              {[_ | _], "STOP"} -> "tool_calls"
+              {_, reason} -> normalize_google_finish_reason(reason)
+            end
+
           %{
             "message" => message,
-            "finish_reason" => normalize_google_finish_reason(candidate["finishReason"])
+            "finish_reason" => finish_reason
           }
 
         %{"content" => content, "finishReason" => finish_reason} when is_map(content) ->
@@ -1265,7 +1273,7 @@ defmodule ReqLLM.Providers.Google do
       url = build_request_url(model.id, opts_with_base)
       body = build_request_body(model, context, processed_opts)
 
-      Logger.debug("Google attach_stream URL: #{inspect(url)}")
+      Logger.debug("Google attach_stream URL: #{inspect(sanitize_url(url))}")
 
       finch_request = Finch.build(:post, url, headers, body)
       {:ok, finch_request}
@@ -1520,6 +1528,10 @@ defmodule ReqLLM.Providers.Google do
   # - SSE format: %{data: {...}}
   # - JSON array element: raw map from parsed JSON array
   defp decode_google_event(data, model) when is_map(data) do
+    # Extract grounding metadata if present (for Google Search grounding)
+    grounding_data = extract_grounding_metadata(data)
+    provider_meta = if grounding_data, do: %{"google" => grounding_data}
+
     case data do
       %{
         "candidates" => [%{"content" => %{"parts" => parts}, "finishReason" => finish_reason} | _],
@@ -1528,15 +1540,15 @@ defmodule ReqLLM.Providers.Google do
       when finish_reason != nil ->
         chunks = extract_chunks_from_parts(parts)
 
-        usage_chunk =
-          ReqLLM.StreamChunk.meta(%{
-            usage: convert_google_usage_for_streaming(usage),
-            finish_reason: normalize_google_finish_reason(finish_reason),
-            model: model.id,
-            terminal?: true
-          })
+        meta = %{
+          usage: convert_google_usage_for_streaming(usage),
+          finish_reason: normalize_google_finish_reason(finish_reason),
+          model: model.id,
+          terminal?: true
+        }
 
-        chunks ++ [usage_chunk]
+        meta = if provider_meta, do: Map.put(meta, :provider_meta, provider_meta), else: meta
+        chunks ++ [ReqLLM.StreamChunk.meta(meta)]
 
       %{
         "candidates" => [%{"content" => %{"parts" => parts}, "finishReason" => finish_reason} | _]
@@ -1544,36 +1556,43 @@ defmodule ReqLLM.Providers.Google do
       when finish_reason != nil ->
         chunks = extract_chunks_from_parts(parts)
 
-        meta_chunk =
-          ReqLLM.StreamChunk.meta(%{
-            finish_reason: normalize_google_finish_reason(finish_reason),
-            terminal?: true
-          })
+        meta = %{
+          finish_reason: normalize_google_finish_reason(finish_reason),
+          terminal?: true
+        }
 
-        chunks ++ [meta_chunk]
+        meta = if provider_meta, do: Map.put(meta, :provider_meta, provider_meta), else: meta
+        chunks ++ [ReqLLM.StreamChunk.meta(meta)]
 
       %{"candidates" => [%{"content" => %{"parts" => parts}} | _], "usageMetadata" => usage} ->
         chunks = extract_chunks_from_parts(parts)
 
-        usage_chunk =
-          ReqLLM.StreamChunk.meta(%{
-            usage: convert_google_usage_for_streaming(usage),
-            model: model.id
-          })
+        meta = %{
+          usage: convert_google_usage_for_streaming(usage),
+          model: model.id
+        }
 
-        chunks ++ [usage_chunk]
+        meta = if provider_meta, do: Map.put(meta, :provider_meta, provider_meta), else: meta
+        chunks ++ [ReqLLM.StreamChunk.meta(meta)]
 
       %{"candidates" => [%{"content" => %{"parts" => parts}} | _]} ->
-        extract_chunks_from_parts(parts)
+        chunks = extract_chunks_from_parts(parts)
+
+        if provider_meta do
+          chunks ++ [ReqLLM.StreamChunk.meta(%{provider_meta: provider_meta})]
+        else
+          chunks
+        end
 
       %{"usageMetadata" => usage} ->
-        [
-          ReqLLM.StreamChunk.meta(%{
-            usage: convert_google_usage_for_streaming(usage),
-            model: model.id,
-            terminal?: true
-          })
-        ]
+        meta = %{
+          usage: convert_google_usage_for_streaming(usage),
+          model: model.id,
+          terminal?: true
+        }
+
+        meta = if provider_meta, do: Map.put(meta, :provider_meta, provider_meta), else: meta
+        [ReqLLM.StreamChunk.meta(meta)]
 
       _ ->
         []

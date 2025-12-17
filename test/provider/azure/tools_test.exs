@@ -164,7 +164,7 @@ defmodule ReqLLM.Providers.Azure.ToolsTest do
 
       body = Azure.Anthropic.format_request("claude-3-sonnet", context, stream: false)
 
-      assert length(body.messages) >= 1
+      assert body.messages != []
       user_msg = Enum.find(body.messages, &(&1.role == "user" && is_list(&1.content)))
       assert user_msg, "Expected a user message with list content containing tool_result"
 

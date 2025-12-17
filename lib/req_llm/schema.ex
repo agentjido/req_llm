@@ -229,7 +229,8 @@ defmodule ReqLLM.Schema do
   end
 
   def to_json(%_{} = schema) when is_struct(schema) do
-    Zoi.to_json_schema(schema)
+    schema
+    |> zoi_to_json_with_metadata()
     |> normalize_json_schema()
   end
 
@@ -277,6 +278,72 @@ defmodule ReqLLM.Schema do
   end
 
   defp normalize_json_schema(value), do: value
+
+  defp zoi_to_json_with_metadata(schema) do
+    base = Zoi.to_json_schema(schema)
+    inject_zoi_metadata(schema, base)
+  end
+
+  defp inject_zoi_metadata(%Zoi.Types.Object{meta: meta, fields: fields}, json) do
+    properties = Map.get(json, :properties) || Map.get(json, "properties") || %{}
+
+    updated_props =
+      Enum.reduce(fields, %{}, fn {key, field_schema}, acc ->
+        key_str = to_string(key)
+        field_json = Map.get(properties, key) || Map.get(properties, key_str) || %{}
+        Map.put(acc, key_str, inject_zoi_metadata(field_schema, field_json))
+      end)
+
+    json
+    |> maybe_put_description(meta)
+    |> Map.put("properties", updated_props)
+  end
+
+  defp inject_zoi_metadata(%Zoi.Types.Array{meta: meta, inner: inner}, json) do
+    items = Map.get(json, :items) || Map.get(json, "items") || %{}
+
+    json
+    |> maybe_put_description(meta)
+    |> Map.put("items", inject_zoi_metadata(inner, items))
+  end
+
+  defp inject_zoi_metadata(%Zoi.Types.Enum{meta: meta}, json) do
+    json |> maybe_put_description(meta)
+  end
+
+  defp inject_zoi_metadata(%Zoi.Types.String{meta: meta}, json),
+    do: maybe_put_description(json, meta)
+
+  defp inject_zoi_metadata(%Zoi.Types.Number{meta: meta}, json),
+    do: maybe_put_description(json, meta)
+
+  defp inject_zoi_metadata(%Zoi.Types.Boolean{meta: meta}, json),
+    do: maybe_put_description(json, meta)
+
+  defp inject_zoi_metadata(%Zoi.Types.Map{meta: meta}, json),
+    do: maybe_put_description(json, meta)
+
+  defp inject_zoi_metadata(%Zoi.Types.Any{meta: meta}, json),
+    do: maybe_put_description(json, meta)
+
+  defp inject_zoi_metadata(_schema, json), do: normalize_json_schema(json)
+
+  defp maybe_put_description(json, %Zoi.Types.Meta{} = meta) do
+    case meta_description(meta) do
+      nil -> json |> normalize_json_schema()
+      desc -> json |> normalize_json_schema() |> Map.put("description", desc)
+    end
+  end
+
+  defp meta_description(%Zoi.Types.Meta{metadata: metadata, description: desc}) do
+    md_desc = Keyword.get(metadata, :description)
+
+    cond do
+      is_binary(md_desc) and md_desc != "" -> md_desc
+      is_binary(desc) and desc != "" -> desc
+      true -> nil
+    end
+  end
 
   @doc """
   Converts a NimbleOptions type to JSON Schema property definition.

@@ -215,7 +215,7 @@ defmodule ReqLLM.Test.TranscriptTest do
       json_map = Transcript.to_map(transcript)
       url = json_map["request"]["url"]
 
-      assert url =~ "key=%5BREDACTED%3Akey%5D"
+      assert url =~ "key=[REDACTED]"
       refute url =~ "AIzaSyA8A-ZQ8x7fImehoOYbWtuHelAYzGjH-bw"
     end
 
@@ -234,8 +234,8 @@ defmodule ReqLLM.Test.TranscriptTest do
       json_map = Transcript.to_map(transcript)
       url = json_map["request"]["url"]
 
-      assert url =~ "api_key=%5BREDACTED%3Aapi_key%5D"
-      assert url =~ "token=%5BREDACTED%3Atoken%5D"
+      assert url =~ "api_key=[REDACTED]"
+      assert url =~ "token=[REDACTED]"
       assert url =~ "model=gpt-4"
       assert url =~ "other=value"
       refute url =~ "secret123"

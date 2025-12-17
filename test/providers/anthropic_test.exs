@@ -227,6 +227,138 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert encoded_tool["description"] == "A test tool"
       assert is_map(encoded_tool["input_schema"])
     end
+
+    test "encode_body normalizes tool_choice :required to Anthropic format" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+      context = context_fixture()
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "test_tool",
+          description: "A test tool",
+          parameter_schema: [name: [type: :string, required: true]],
+          callback: fn _ -> {:ok, "result"} end
+        )
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          tools: [tool],
+          tool_choice: :required
+        ]
+      }
+
+      updated_request = Anthropic.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      # :required should be normalized to %{type: "any"} for Anthropic
+      assert decoded["tool_choice"] == %{"type" => "any"}
+    end
+
+    test "encode_body normalizes tool_choice :auto to Anthropic format" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+      context = context_fixture()
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "test_tool",
+          description: "A test tool",
+          parameter_schema: [name: [type: :string, required: true]],
+          callback: fn _ -> {:ok, "result"} end
+        )
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          tools: [tool],
+          tool_choice: :auto
+        ]
+      }
+
+      updated_request = Anthropic.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      # :auto should be normalized to %{type: "auto"} for Anthropic
+      assert decoded["tool_choice"] == %{"type" => "auto"}
+    end
+
+    test "encode_body normalizes tool_choice {:tool, name} to Anthropic format" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+      context = context_fixture()
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "test_tool",
+          description: "A test tool",
+          parameter_schema: [name: [type: :string, required: true]],
+          callback: fn _ -> {:ok, "result"} end
+        )
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          tools: [tool],
+          tool_choice: {:tool, "test_tool"}
+        ]
+      }
+
+      updated_request = Anthropic.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      # {:tool, name} should be normalized to %{type: "tool", name: "..."} for Anthropic
+      assert decoded["tool_choice"] == %{"type" => "tool", "name" => "test_tool"}
+    end
+
+    test "encode_request accepts map-based streaming tool calls" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      streaming_tool_call = %{
+        id: "call_123",
+        name: "get_time",
+        arguments: %{"zone" => "UTC"}
+      }
+
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.user("What time is it?"),
+          %ReqLLM.Message{role: :assistant, content: [], tool_calls: [streaming_tool_call]},
+          ReqLLM.Context.tool_result("call_123", "10:00 UTC")
+        ])
+
+      request = ReqLLM.Providers.Anthropic.Context.encode_request(context, model)
+      messages = request[:messages]
+
+      assert Enum.any?(messages, fn msg ->
+               role = Map.get(msg, "role") || Map.get(msg, :role)
+               content = Map.get(msg, "content") || Map.get(msg, :content)
+
+               role == "assistant" and
+                 Enum.any?(List.wrap(content), fn block ->
+                   is_map(block) and
+                     (Map.get(block, "type") || Map.get(block, :type)) == "tool_use" and
+                     (Map.get(block, "name") || Map.get(block, :name)) == "get_time" and
+                     (Map.get(block, "input") || Map.get(block, :input)) == %{"zone" => "UTC"}
+                 end)
+             end)
+
+      assert Enum.any?(messages, fn msg ->
+               role = Map.get(msg, "role") || Map.get(msg, :role)
+               content = Map.get(msg, "content") || Map.get(msg, :content)
+
+               role == "user" and
+                 Enum.any?(List.wrap(content), fn block ->
+                   is_map(block) and
+                     (Map.get(block, "type") || Map.get(block, :type)) == "tool_result" and
+                     (Map.get(block, "tool_use_id") || Map.get(block, :tool_use_id)) == "call_123"
+                 end)
+             end)
+    end
   end
 
   describe "response decoding & normalization" do

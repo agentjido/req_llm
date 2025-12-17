@@ -70,7 +70,7 @@ defmodule ReqLLM.StreamResponse do
   use TypedStruct
 
   alias ReqLLM.Context
-  alias ReqLLM.Providers.Anthropic.AdapterHelpers
+  alias ReqLLM.Provider.ResponseBuilder
   alias ReqLLM.Response
   alias ReqLLM.StreamResponse.MetadataHandle
 
@@ -330,25 +330,44 @@ defmodule ReqLLM.StreamResponse do
   def process_stream(%__MODULE__{} = stream_response, opts \\ []) do
     callbacks = extract_callbacks(opts)
 
-    # Process stream and accumulate data
-    acc_data = process_stream_chunks(stream_response.stream, callbacks)
+    # Process stream chunks with callbacks, collecting them as we go
+    chunks = process_stream_with_callbacks(stream_response.stream, callbacks)
 
-    # Reconstruct tool calls from accumulated data
-    reconstructed_tool_calls = reconstruct_tool_calls(acc_data)
+    # Await metadata from the concurrent collection task
+    metadata = MetadataHandle.await(stream_response.metadata_handle)
 
-    # Build final response
-    response =
-      build_response_from_accumulated_data(
-        acc_data,
-        reconstructed_tool_calls,
-        stream_response
-      )
+    # Use the appropriate ResponseBuilder for this model
+    builder = ResponseBuilder.for_model(stream_response.model)
 
-    {:ok, response}
+    builder.build_response(
+      chunks,
+      metadata,
+      context: stream_response.context,
+      model: stream_response.model
+    )
   rescue
     error -> {:error, error}
   catch
     :exit, reason -> {:error, reason}
+  end
+
+  # Process stream chunks, invoking callbacks and collecting chunks
+  defp process_stream_with_callbacks(stream, callbacks) do
+    Enum.map(stream, fn chunk ->
+      # Invoke callbacks for real-time streaming
+      case chunk.type do
+        :content ->
+          if callbacks.on_result && chunk.text, do: callbacks.on_result.(chunk.text)
+
+        :thinking ->
+          if callbacks.on_thinking && chunk.text, do: callbacks.on_thinking.(chunk.text)
+
+        _ ->
+          :ok
+      end
+
+      chunk
+    end)
   end
 
   # Extract callbacks from options
@@ -357,120 +376,6 @@ defmodule ReqLLM.StreamResponse do
       on_result: Keyword.get(opts, :on_result),
       on_thinking: Keyword.get(opts, :on_thinking)
     }
-  end
-
-  # Process stream chunks and accumulate data
-  defp process_stream_chunks(stream, callbacks) do
-    Enum.reduce(
-      stream,
-      %{text_content: [], thinking_content: [], tool_calls: [], arg_fragments: %{}},
-      fn chunk, acc -> process_chunk(chunk, acc, callbacks) end
-    )
-  end
-
-  # Process a single chunk
-  defp process_chunk(chunk, acc, callbacks) do
-    case chunk.type do
-      :content -> process_content_chunk(chunk, acc, callbacks.on_result)
-      :thinking -> process_thinking_chunk(chunk, acc, callbacks.on_thinking)
-      :tool_call -> process_tool_call_chunk(chunk, acc)
-      :meta -> process_meta_chunk(chunk, acc)
-    end
-  end
-
-  defp process_content_chunk(chunk, acc, on_result) do
-    if on_result && chunk.text, do: on_result.(chunk.text)
-    %{acc | text_content: [chunk.text | acc.text_content]}
-  end
-
-  defp process_thinking_chunk(chunk, acc, on_thinking) do
-    if on_thinking && chunk.text, do: on_thinking.(chunk.text)
-    %{acc | thinking_content: [chunk.text | acc.thinking_content]}
-  end
-
-  defp process_tool_call_chunk(chunk, acc) do
-    tool_call = %{
-      id: Map.get(chunk.metadata, :id) || "call_#{:erlang.unique_integer()}",
-      name: chunk.name,
-      arguments: chunk.arguments || %{},
-      index: Map.get(chunk.metadata, :index, 0)
-    }
-
-    %{acc | tool_calls: [tool_call | acc.tool_calls]}
-  end
-
-  defp process_meta_chunk(chunk, acc) do
-    if Map.has_key?(chunk.metadata, :tool_call_args) do
-      index = chunk.metadata.tool_call_args.index
-      fragment = chunk.metadata.tool_call_args.fragment
-      existing = Map.get(acc.arg_fragments, index, "")
-      %{acc | arg_fragments: Map.put(acc.arg_fragments, index, existing <> fragment)}
-    else
-      acc
-    end
-  end
-
-  # Reconstruct tool calls with merged arguments
-  defp reconstruct_tool_calls(%{tool_calls: []}), do: []
-
-  defp reconstruct_tool_calls(acc_data) do
-    acc_data.tool_calls
-    |> Enum.reverse()
-    |> Enum.map(&merge_tool_call_arguments(&1, acc_data.arg_fragments))
-  end
-
-  defp merge_tool_call_arguments(tool_call, arg_fragments) do
-    case Map.get(arg_fragments, tool_call.index) do
-      nil -> Map.delete(tool_call, :index)
-      json_str -> parse_and_merge_arguments(tool_call, json_str)
-    end
-  end
-
-  defp parse_and_merge_arguments(tool_call, json_str) do
-    case Jason.decode(json_str) do
-      {:ok, args} ->
-        tool_call
-        |> Map.put(:arguments, args)
-        |> Map.delete(:index)
-
-      {:error, _} ->
-        Map.delete(tool_call, :index)
-    end
-  end
-
-  # Build final Response from accumulated data
-  defp build_response_from_accumulated_data(acc_data, reconstructed_tool_calls, stream_response) do
-    text_content = acc_data.text_content |> Enum.reverse() |> Enum.join("")
-    thinking_content = acc_data.thinking_content |> Enum.reverse() |> Enum.join("")
-
-    content_parts = build_content_parts(text_content, thinking_content, reconstructed_tool_calls)
-
-    message = %ReqLLM.Message{
-      role: :assistant,
-      content: content_parts,
-      tool_calls: if(reconstructed_tool_calls != [], do: reconstructed_tool_calls),
-      metadata: %{}
-    }
-
-    object = extract_object_from_message(message)
-    metadata = MetadataHandle.await(stream_response.metadata_handle)
-    usage = normalize_usage_fields(Map.get(metadata, :usage))
-
-    base_response = %Response{
-      id: generate_response_id(),
-      model: stream_response.model.id,
-      context: stream_response.context,
-      message: message,
-      object: object,
-      stream?: false,
-      stream: nil,
-      usage: usage,
-      finish_reason: Map.get(metadata, :finish_reason),
-      provider_meta: Map.get(metadata, :provider_meta, %{}),
-      error: nil
-    }
-
-    Context.merge_response(stream_response.context, base_response)
   end
 
   @doc """
@@ -584,228 +489,22 @@ defmodule ReqLLM.StreamResponse do
   """
   @spec to_response(t()) :: {:ok, Response.t()} | {:error, term()}
   def to_response(%__MODULE__{} = stream_response) do
-    # Consume stream and build message concurrently with metadata collection
-    stream_chunks = Enum.to_list(stream_response.stream)
+    # Consume stream and collect metadata
+    chunks = Enum.to_list(stream_response.stream)
     metadata = MetadataHandle.await(stream_response.metadata_handle)
 
-    # Check if this is a Responses API model
-    if responses_api_model?(stream_response.model) do
-      # Reconstruct JSON and decode using Responses API logic
-      reconstruct_responses_api_response(stream_chunks, stream_response, metadata)
-    else
-      # Original logic for Chat API models
-      # Build message from stream chunks
-      message = build_message_from_chunks(stream_chunks)
+    # Use the appropriate ResponseBuilder for this model
+    builder = ResponseBuilder.for_model(stream_response.model)
 
-      # Extract object from tool calls if present (for structured output)
-      object = extract_object_from_message(message)
-
-      # Normalize usage to match non-streaming format
-      usage = normalize_usage_fields(Map.get(metadata, :usage))
-
-      # Create Response struct
-      base_response = %Response{
-        id: generate_response_id(),
-        model: stream_response.model.id,
-        context: stream_response.context,
-        message: message,
-        object: object,
-        stream?: false,
-        stream: nil,
-        usage: usage,
-        finish_reason: Map.get(metadata, :finish_reason),
-        provider_meta: Map.get(metadata, :provider_meta, %{}),
-        error: nil
-      }
-
-      {:ok, Context.merge_response(stream_response.context, base_response)}
-    end
+    builder.build_response(
+      chunks,
+      metadata,
+      context: stream_response.context,
+      model: stream_response.model
+    )
   rescue
     error -> {:error, error}
   catch
     :exit, reason -> {:error, reason}
-  end
-
-  defp responses_api_model?(%LLMDB.Model{} = model) do
-    get_in(model, [Access.key(:extra, %{}), :api]) == "responses"
-  end
-
-  defp responses_api_model?(_), do: false
-
-  defp reconstruct_responses_api_response(chunks, stream_response, metadata) do
-    # Build canonical OpenAI JSON from chunks
-    body =
-      ReqLLM.Providers.OpenAI.ResponsesAPI.build_responses_body_from_chunks(
-        chunks,
-        stream_response.model.id
-      )
-
-    # Create fake req/resp to pass through existing decode logic
-    req = %{options: %{model: stream_response.model.id, context: stream_response.context}}
-    resp = %{status: 200, body: body}
-
-    # Reuse Responses API decode logic - guarantees format parity!
-    case ReqLLM.Providers.OpenAI.ResponsesAPI.decode_response({req, resp}) do
-      {_req, %{body: %ReqLLM.Response{} = response}} ->
-        # Merge in metadata from stream
-        response = %{
-          response
-          | usage: Map.get(metadata, :usage, response.usage),
-            finish_reason: Map.get(metadata, :finish_reason, response.finish_reason)
-        }
-
-        # Extract object from structured_output tool call if present
-        response = AdapterHelpers.extract_and_set_object(response)
-
-        {:ok, Context.merge_response(stream_response.context, response)}
-
-      {_req, error} when is_exception(error) ->
-        {:error, error}
-    end
-  end
-
-  # Private helper to build a Message from StreamChunk list
-  defp build_message_from_chunks(chunks) do
-    # Collect all text content
-    text_content =
-      chunks
-      |> Enum.filter(&(&1.type == :content))
-      |> Enum.map_join("", & &1.text)
-
-    # Collect all thinking/reasoning content
-    thinking_content =
-      chunks
-      |> Enum.filter(&(&1.type == :thinking))
-      |> Enum.map_join("", & &1.text)
-
-    # Accumulate JSON fragments from meta chunks
-    json_fragments_by_index =
-      chunks
-      |> Enum.filter(fn
-        %{type: :meta, metadata: %{tool_call_args: %{index: _, fragment: _}}} -> true
-        _ -> false
-      end)
-      |> Enum.group_by(fn chunk -> chunk.metadata.tool_call_args.index end)
-      |> Map.new(fn {index, meta_chunks} ->
-        json =
-          meta_chunks
-          |> Enum.map_join("", & &1.metadata.tool_call_args.fragment)
-
-        {index, json}
-      end)
-
-    # Build tool calls from tool_call chunks, merging accumulated JSON
-    tool_calls =
-      chunks
-      |> Enum.filter(&(&1.type == :tool_call))
-      |> Enum.map(fn chunk ->
-        index = Map.get(chunk.metadata, :index)
-        json_string = Map.get(json_fragments_by_index, index, "")
-
-        arguments =
-          if json_string == "" do
-            chunk.arguments
-          else
-            case Jason.decode(json_string) do
-              {:ok, decoded} -> decoded
-              {:error, _} -> chunk.arguments
-            end
-          end
-
-        %{
-          name: chunk.name,
-          arguments: arguments,
-          id: Map.get(chunk.metadata, :id) || Map.get(chunk.metadata, :tool_call_id)
-        }
-      end)
-
-    # Create content parts - if text is valid JSON and no tool calls, create object part
-    content_parts = build_content_parts(text_content, thinking_content, tool_calls)
-
-    %ReqLLM.Message{
-      role: :assistant,
-      content: content_parts,
-      tool_calls: if(tool_calls != [], do: tool_calls),
-      metadata: %{}
-    }
-  end
-
-  defp build_content_parts(text_content, thinking_content, tool_calls) do
-    parts =
-      if tool_calls == [] and text_content != "" and looks_like_json?(text_content) do
-        case Jason.decode(text_content) do
-          {:ok, parsed_json} when is_map(parsed_json) ->
-            [%{type: :object, object: parsed_json}]
-
-          _ ->
-            []
-            |> maybe_add_text_part(text_content)
-            |> maybe_add_thinking_part(thinking_content)
-        end
-      else
-        []
-        |> maybe_add_text_part(text_content)
-        |> maybe_add_thinking_part(thinking_content)
-      end
-
-    parts
-  end
-
-  defp looks_like_json?(text) do
-    trimmed = String.trim(text)
-    String.starts_with?(trimmed, "{") and String.ends_with?(trimmed, "}")
-  end
-
-  defp maybe_add_text_part(parts, ""), do: parts
-  defp maybe_add_text_part(parts, text), do: parts ++ [%{type: :text, text: text}]
-
-  defp maybe_add_thinking_part(parts, ""), do: parts
-  defp maybe_add_thinking_part(parts, thinking), do: parts ++ [%{type: :thinking, text: thinking}]
-
-  # Extract object from message (for structured output)
-  defp extract_object_from_message(%ReqLLM.Message{content: content, tool_calls: tool_calls}) do
-    with nil <- extract_from_tool_calls(tool_calls) do
-      extract_from_content(content)
-    end
-  end
-
-  defp extract_from_tool_calls(tool_calls) when is_list(tool_calls) do
-    Enum.find_value(tool_calls, &extract_structured_output_args/1)
-  end
-
-  defp extract_from_tool_calls(_), do: nil
-
-  defp extract_structured_output_args(%ReqLLM.ToolCall{} = tc) do
-    if ReqLLM.ToolCall.matches_name?(tc, "structured_output") do
-      ReqLLM.ToolCall.args_map(tc)
-    end
-  end
-
-  defp extract_structured_output_args(%{name: "structured_output", arguments: args})
-       when is_map(args) do
-    args
-  end
-
-  defp extract_structured_output_args(_), do: nil
-
-  defp extract_from_content(content) do
-    case Enum.find(content, fn part -> is_map(part) and part[:type] == :object end) do
-      %{object: obj} when is_map(obj) -> obj
-      _ -> nil
-    end
-  end
-
-  # Generate a unique response ID
-  defp generate_response_id do
-    "stream_response_" <> (:crypto.strong_rand_bytes(8) |> Base.encode16(case: :lower))
-  end
-
-  # Normalize streaming usage field names to match non-streaming format
-  defp normalize_usage_fields(nil), do: nil
-
-  defp normalize_usage_fields(usage) when is_map(usage) do
-    usage
-    |> Map.put_new(:cached_tokens, Map.get(usage, :cached_input, 0))
-    |> Map.put_new(:reasoning_tokens, Map.get(usage, :reasoning, 0))
   end
 end
