@@ -949,5 +949,49 @@ defmodule ReqLLM.Providers.OpenRouterTest do
       response = decoded_resp.body
       assert response.message.reasoning_details == nil
     end
+
+    test "reasoning_details attached to last context message, not duplicated" do
+      fixture_path =
+        Path.join([
+          __DIR__,
+          "..",
+          "support",
+          "fixtures",
+          "openrouter",
+          "google_gemini_2_5_flash",
+          "reasoning_basic.json"
+        ])
+
+      fixture = File.read!(fixture_path) |> Jason.decode!()
+
+      context = %ReqLLM.Context{
+        messages: [
+          %ReqLLM.Message{
+            role: :user,
+            content: [ReqLLM.Message.ContentPart.text("What is 12*7?")]
+          }
+        ]
+      }
+
+      req = %Req.Request{
+        options: [context: context, model: "google/gemini-2.5-flash", stream: false]
+      }
+
+      resp = %Req.Response{status: 200, body: fixture["response"]["body"]}
+
+      {^req, decoded_resp} = OpenRouter.decode_response({req, resp})
+      response = decoded_resp.body
+
+      assert %ReqLLM.Message{reasoning_details: details} = response.message
+      assert is_list(details) and details != []
+
+      assert %ReqLLM.Context{messages: msgs} = response.context
+      assert length(msgs) == 2
+
+      [user_msg, assistant_msg] = msgs
+      assert user_msg.role == :user
+      assert assistant_msg.role == :assistant
+      assert assistant_msg.reasoning_details == details
+    end
   end
 end

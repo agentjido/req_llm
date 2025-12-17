@@ -444,7 +444,6 @@ defmodule ReqLLM.Providers.OpenRouter do
 
   defp extract_reasoning_details(_), do: nil
 
-  # Attach reasoning_details to the message in the Req.Response
   defp attach_reasoning_details_to_response(resp, nil), do: resp
 
   defp attach_reasoning_details_to_response(%Req.Response{body: body} = resp, details)
@@ -454,21 +453,22 @@ defmodule ReqLLM.Providers.OpenRouter do
         resp
 
       message ->
-        # Update the message with reasoning_details
         updated_message = Map.put(message, :reasoning_details, details)
 
-        # Also update the first message in context.messages (which should be the same message)
-        # We need to update it so reasoning_details is preserved for multi-turn conversations
         updated_context =
           case body.context.messages do
-            [first | rest] when is_struct(first, ReqLLM.Message) and first.role == message.role ->
-              # Update the first message with reasoning_details
-              updated_first = Map.put(first, :reasoning_details, details)
-              %{body.context | messages: [updated_first | rest]}
+            [] ->
+              %{body.context | messages: [updated_message]}
 
-            _other ->
-              # If context is empty or doesn't match, create new context with updated message
-              %{body.context | messages: [updated_message | body.context.messages]}
+            msgs ->
+              {init, [last]} = Enum.split(msgs, -1)
+
+              if is_struct(last, ReqLLM.Message) and last.role == message.role do
+                updated_last = Map.put(last, :reasoning_details, details)
+                %{body.context | messages: init ++ [updated_last]}
+              else
+                %{body.context | messages: msgs}
+              end
           end
 
         updated_body = %{body | message: updated_message, context: updated_context}
