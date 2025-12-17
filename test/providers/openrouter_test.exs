@@ -736,7 +736,7 @@ defmodule ReqLLM.Providers.OpenRouterTest do
       # Verify reasoning_details was extracted
       assert response.message.reasoning_details != nil
       assert is_list(response.message.reasoning_details)
-      assert length(response.message.reasoning_details) > 0
+      refute Enum.empty?(response.message.reasoning_details)
 
       # Verify structure matches fixture
       [first_detail | _] = response.message.reasoning_details

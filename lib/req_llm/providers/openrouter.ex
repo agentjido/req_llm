@@ -363,7 +363,10 @@ defmodule ReqLLM.Providers.OpenRouter do
           end
 
         # Decode using default decoder
-        {req, resp_with_decoded} = ReqLLM.Provider.Defaults.default_decode_response({req, %{resp | body: body_with_tool_calls}})
+        {req, resp_with_decoded} =
+          ReqLLM.Provider.Defaults.default_decode_response(
+            {req, %{resp | body: body_with_tool_calls}}
+          )
 
         # Attach reasoning_details to the message if present
         updated_resp = attach_reasoning_details_to_response(resp_with_decoded, reasoning_details)
@@ -433,8 +436,6 @@ defmodule ReqLLM.Providers.OpenRouter do
       # Validate that it's a list of maps (defensive programming)
       if Enum.all?(details, &is_map/1) do
         details
-      else
-        nil
       end
     else
       _ -> nil
@@ -446,7 +447,8 @@ defmodule ReqLLM.Providers.OpenRouter do
   # Attach reasoning_details to the message in the Req.Response
   defp attach_reasoning_details_to_response(resp, nil), do: resp
 
-  defp attach_reasoning_details_to_response(%Req.Response{body: body} = resp, details) when is_struct(body, ReqLLM.Response) do
+  defp attach_reasoning_details_to_response(%Req.Response{body: body} = resp, details)
+       when is_struct(body, ReqLLM.Response) do
     case body.message do
       nil ->
         resp
