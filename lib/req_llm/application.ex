@@ -5,13 +5,24 @@ defmodule ReqLLM.Application do
   Starts and supervises the Finch instance used for streaming LLM APIs.
   Provides optimized connection pools per provider with sensible defaults
   that can be overridden via application configuration.
+
+  ## Configuration
+
+  - `:load_dotenv` - Whether to automatically load `.env` files from the current
+    working directory at startup. Defaults to `true`. Set to `false` if you prefer
+    to manage environment variables yourself or use a different `.env` loading strategy.
+
+        config :req_llm, load_dotenv: false
   """
 
   use Application
 
   @impl true
   def start(_type, _args) do
-    load_dotenv()
+    if Application.get_env(:req_llm, :load_dotenv, true) do
+      load_dotenv()
+    end
+
     initialize_registry()
     initialize_schema_cache()
 

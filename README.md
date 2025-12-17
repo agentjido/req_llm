@@ -146,6 +146,12 @@ ReqLLM.generate_text("anthropic:claude-haiku-4-5", "Hello", api_key: "sk-ant-...
 {:ok, response} = ReqLLM.stream_text("anthropic:claude-haiku-4-5", "Story", api_key: "sk-ant-...")
 ```
 
+By default, ReqLLM loads `.env` files from the current working directory at startup. To disable this behavior (e.g., if you manage environment variables yourself):
+
+```elixir
+config :req_llm, load_dotenv: false
+```
+
 ## Usage Cost Tracking
 
 Every response includes detailed usage and cost information calculated from model metadata:
