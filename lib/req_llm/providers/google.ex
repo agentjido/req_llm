@@ -77,7 +77,7 @@ defmodule ReqLLM.Providers.Google do
     default_env_key: "GOOGLE_API_KEY"
 
   import ReqLLM.Provider.Utils,
-    only: [maybe_put: 3, ensure_parsed_body: 1]
+    only: [maybe_put: 3, ensure_parsed_body: 1, sanitize_url: 1]
 
   require Logger
 
@@ -1273,7 +1273,7 @@ defmodule ReqLLM.Providers.Google do
       url = build_request_url(model.id, opts_with_base)
       body = build_request_body(model, context, processed_opts)
 
-      Logger.debug("Google attach_stream URL: #{inspect(url)}")
+      Logger.debug("Google attach_stream URL: #{inspect(sanitize_url(url))}")
 
       finch_request = Finch.build(:post, url, headers, body)
       {:ok, finch_request}

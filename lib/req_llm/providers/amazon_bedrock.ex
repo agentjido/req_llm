@@ -163,6 +163,15 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       type: :string,
       doc: "TTL for cache (\"1h\" for one hour; omit for default ~5m)"
     ],
+    anthropic_cache_messages: [
+      type: {:or, [:boolean, :integer]},
+      doc: """
+      Add cache breakpoint at a message position (requires anthropic_prompt_cache: true).
+      - `-1` or `true` - last message
+      - `-2` - second-to-last, `-3` - third-to-last, etc.
+      - `0` - first message, `1` - second, etc.
+      """
+    ],
     service_tier: [
       type: {:in, ["priority", "default", "flex"]},
       default: "default",
@@ -964,12 +973,6 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
   # Private helper: Determine whether to use Converse API with caching optimization
   defp determine_use_converse(model_id, opts) do
-    # Check if this is a cross-region inference profile (us., eu., etc.)
-    # These MUST use Converse API
-    is_inference_profile =
-      is_binary(model_id) and
-        String.starts_with?(model_id, ["us.", "eu.", "ap.", "ca.", "global."])
-
     # Check if model's formatter requires Converse API
     model_family = get_model_family(model_id)
     formatter = get_formatter_module(model_family)
@@ -998,10 +1001,6 @@ defmodule ReqLLM.Providers.AmazonBedrock do
         has_caching = get_in(opts, [:provider_options, :anthropic_prompt_cache]) == true
 
         cond do
-          # Inference profiles (cross-region) MUST use Converse API
-          is_inference_profile ->
-            true
-
           # Formatters that require Converse API (like Mistral wrapper)
           requires_converse ->
             true

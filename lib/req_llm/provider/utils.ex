@@ -113,4 +113,54 @@ defmodule ReqLLM.Provider.Utils do
   end
 
   def ensure_parsed_body(body), do: body
+
+  @sensitive_query_params ~w(key api_key apikey access_token token)
+
+  @doc """
+  Sanitizes a URL by redacting sensitive query parameters.
+
+  This prevents API keys and tokens from being leaked in logs or error messages.
+  Redacts common sensitive parameter names: key, api_key, apikey, access_token, token.
+
+  ## Parameters
+
+  - `url` - URL string that may contain sensitive query parameters
+
+  ## Returns
+
+  URL string with sensitive parameters redacted as `[REDACTED]`.
+
+  ## Examples
+
+      iex> ReqLLM.Provider.Utils.sanitize_url("https://api.example.com/v1?key=secret123&alt=sse")
+      "https://api.example.com/v1?key=[REDACTED]&alt=sse"
+
+      iex> ReqLLM.Provider.Utils.sanitize_url("https://api.example.com/v1")
+      "https://api.example.com/v1"
+
+      iex> ReqLLM.Provider.Utils.sanitize_url("https://api.example.com/v1?api_key=abc&format=json")
+      "https://api.example.com/v1?api_key=[REDACTED]&format=json"
+  """
+  @spec sanitize_url(binary()) :: binary()
+  def sanitize_url(url) when is_binary(url) do
+    uri = URI.parse(url)
+
+    if uri.query do
+      sanitized_query =
+        URI.decode_query(uri.query)
+        |> Enum.map_join("&", fn {k, v} ->
+          if String.downcase(k) in @sensitive_query_params do
+            "#{URI.encode_www_form(k)}=[REDACTED]"
+          else
+            "#{URI.encode_www_form(k)}=#{URI.encode_www_form(v)}"
+          end
+        end)
+
+      %{uri | query: sanitized_query} |> URI.to_string()
+    else
+      url
+    end
+  end
+
+  def sanitize_url(url), do: url
 end

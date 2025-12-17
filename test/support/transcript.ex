@@ -429,28 +429,7 @@ defmodule ReqLLM.Test.Transcript do
   defp sanitize_json(list) when is_list(list), do: Enum.map(list, &sanitize_json/1)
   defp sanitize_json(other), do: other
 
-  defp sanitize_url(url) when is_binary(url) do
-    uri = URI.parse(url)
-
-    if uri.query do
-      sanitized_query =
-        URI.decode_query(uri.query)
-        |> Enum.map(fn {k, v} ->
-          if String.downcase(k) in ["key", "api_key", "apikey", "access_token", "token"] do
-            {k, "[REDACTED:#{k}]"}
-          else
-            {k, v}
-          end
-        end)
-        |> URI.encode_query()
-
-      %{uri | query: sanitized_query} |> URI.to_string()
-    else
-      url
-    end
-  end
-
-  defp sanitize_url(url), do: url
+  defp sanitize_url(url), do: ReqLLM.Provider.Utils.sanitize_url(url)
 
   defp normalize_headers(h) when is_list(h), do: h
   defp normalize_headers(h) when is_map(h), do: Enum.to_list(h)

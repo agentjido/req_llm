@@ -100,6 +100,28 @@ defmodule ReqLLM.Providers.GoogleVertex do
       type: :map,
       doc:
         "Additional model-specific request fields (e.g., thinking config for extended thinking support)"
+    ],
+    anthropic_prompt_cache: [
+      type: :boolean,
+      doc: "Enable Anthropic prompt caching for Claude models on Vertex"
+    ],
+    anthropic_prompt_cache_ttl: [
+      type: :string,
+      doc: "TTL for cache (\"1h\" for one hour; omit for default ~5m)"
+    ],
+    anthropic_cache_messages: [
+      type: {:or, [:boolean, :integer]},
+      doc: """
+      Add cache breakpoint at a message position (requires anthropic_prompt_cache: true).
+      - `-1` or `true` - last message
+      - `-2` - second-to-last, `-3` - third-to-last, etc.
+      - `0` - first message, `1` - second, etc.
+      """
+    ],
+    google_grounding: [
+      type: :map,
+      doc:
+        "Enable Google Search grounding for Gemini models - allows model to search the web. Set to %{enable: true}."
     ]
   ]
 
