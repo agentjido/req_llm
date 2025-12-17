@@ -117,6 +117,11 @@ defmodule ReqLLM.Providers.GoogleVertex do
       - `-2` - second-to-last, `-3` - third-to-last, etc.
       - `0` - first message, `1` - second, etc.
       """
+    ],
+    google_grounding: [
+      type: :map,
+      doc:
+        "Enable Google Search grounding for Gemini models - allows model to search the web. Set to %{enable: true}."
     ]
   ]
 

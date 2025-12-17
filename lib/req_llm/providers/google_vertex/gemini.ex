@@ -9,16 +9,18 @@ defmodule ReqLLM.Providers.GoogleVertex.Gemini do
   for all format conversion, with one critical difference: Vertex AI Gemini API
   is stricter and requires sanitizing function call IDs.
 
-  ## Critical Quirk
+  ## Critical Quirks
 
-  Vertex AI Gemini rejects the "id" field in functionCall parts, while the
-  direct Google API includes it. We must strip these IDs before sending requests.
+  Vertex AI Gemini has stricter validation than the direct Google API:
+
+  1. Rejects the "id" field in functionCall parts - we strip these IDs
 
   ## Features
 
   - Extended thinking/reasoning via `google_thinking_budget`
   - Context caching (90% discount on cached tokens!)
-  - All standard Gemini options (safety, grounding, etc.)
+  - Google Search grounding via `google_grounding: %{enable: true}`
+  - All standard Gemini options (safety settings, etc.)
   """
 
   alias ReqLLM.Providers.Google
@@ -30,12 +32,17 @@ defmodule ReqLLM.Providers.GoogleVertex.Gemini do
   function call IDs which Vertex AI rejects.
   """
   def format_request(model_id, context, opts) do
+    # Options.process already hoists provider_options (like google_grounding) to top level
+    opts_map =
+      opts
+      |> Map.new()
+      |> Map.merge(%{context: context, model: model_id})
+
     # Create a temporary request structure that mimics what Google.encode_body expects
-    # Use Req.new() to properly initialize the opaque request structure
     temp_request =
       Req.new(method: :post, url: URI.parse("https://example.com/temp"))
       |> Map.put(:body, {:json, %{}})
-      |> Map.put(:options, opts |> Map.new() |> Map.merge(%{context: context, model: model_id}))
+      |> Map.put(:options, opts_map)
 
     # Let Google provider encode the body
     %Req.Request{body: encoded_body} = Google.encode_body(temp_request)
