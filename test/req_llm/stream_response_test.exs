@@ -872,6 +872,18 @@ defmodule ReqLLM.StreamResponseTest do
       assert response.usage.output_tokens == 20
       assert response.finish_reason == :stop
     end
+
+    test "returns {:error, reason} when metadata contains an error" do
+      chunks = text_chunks(["partial content"])
+      error = ReqLLM.Error.API.Request.exception(reason: "Invalid API key", status: 401)
+      metadata_handle = create_metadata_handle(%{error: error})
+
+      stream_response = create_stream_response(stream: chunks, metadata_handle: metadata_handle)
+
+      result = StreamResponse.process_stream(stream_response)
+
+      assert {:error, ^error} = result
+    end
   end
 
   describe "integration and edge cases" do

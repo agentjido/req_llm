@@ -330,21 +330,23 @@ defmodule ReqLLM.StreamResponse do
   def process_stream(%__MODULE__{} = stream_response, opts \\ []) do
     callbacks = extract_callbacks(opts)
 
-    # Process stream chunks with callbacks, collecting them as we go
     chunks = process_stream_with_callbacks(stream_response.stream, callbacks)
-
-    # Await metadata from the concurrent collection task
     metadata = MetadataHandle.await(stream_response.metadata_handle)
 
-    # Use the appropriate ResponseBuilder for this model
-    builder = ResponseBuilder.for_model(stream_response.model)
+    case metadata do
+      %{error: reason} ->
+        {:error, reason}
 
-    builder.build_response(
-      chunks,
-      metadata,
-      context: stream_response.context,
-      model: stream_response.model
-    )
+      _ ->
+        builder = ResponseBuilder.for_model(stream_response.model)
+
+        builder.build_response(
+          chunks,
+          metadata,
+          context: stream_response.context,
+          model: stream_response.model
+        )
+    end
   rescue
     error -> {:error, error}
   catch
