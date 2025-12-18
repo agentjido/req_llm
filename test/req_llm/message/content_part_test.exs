@@ -35,7 +35,7 @@ defmodule ReqLLM.Message.ContentPartTest do
     end
   end
 
-  describe "image_url/1" do
+  describe "image_url/1 and image_url/2" do
     test "creates image URL content part" do
       url = "https://example.com/image.jpg"
       part = ContentPart.image_url(url)
@@ -44,9 +44,17 @@ defmodule ReqLLM.Message.ContentPartTest do
       assert part.data == nil
       assert part.media_type == nil
     end
+
+    test "creates image URL with metadata" do
+      url = "https://example.com/image.jpg"
+      metadata = %{cache_control: %{type: "ephemeral"}}
+      part = ContentPart.image_url(url, metadata)
+
+      assert %ContentPart{type: :image_url, url: ^url, metadata: ^metadata} = part
+    end
   end
 
-  describe "image/2" do
+  describe "image/2 and image/3" do
     setup do
       %{
         png_data: <<137, 80, 78, 71, 13, 10, 26, 10>>,
@@ -66,6 +74,18 @@ defmodule ReqLLM.Message.ContentPartTest do
       part = ContentPart.image(data, "image/jpeg")
 
       assert %ContentPart{type: :image, data: ^data, media_type: "image/jpeg"} = part
+    end
+
+    test "creates image with metadata", %{png_data: data} do
+      metadata = %{cache_control: %{type: "ephemeral"}}
+      part = ContentPart.image(data, "image/png", metadata)
+
+      assert %ContentPart{
+               type: :image,
+               data: ^data,
+               media_type: "image/png",
+               metadata: ^metadata
+             } = part
     end
   end
 

@@ -595,27 +595,32 @@ defmodule ReqLLM.Provider.Defaults do
     |> maybe_flatten_single_text()
   end
 
-  # Flatten single text content to a string for cleaner wire format
-  defp maybe_flatten_single_text([%{type: "text", text: text}]), do: text
-
   defp maybe_flatten_single_text(content) do
-    # Filter out nil values first
     filtered = Enum.reject(content, &is_nil/1)
 
     case filtered do
-      [%{type: "text", text: text}] -> text
-      _ -> filtered
+      [%{type: "text", text: text} = block] ->
+        if map_size(block) == 2, do: text, else: [block]
+
+      _ ->
+        filtered
     end
   end
 
-  defp encode_openai_content_part(%ReqLLM.Message.ContentPart{type: :text, text: text}) do
+  defp encode_openai_content_part(%ReqLLM.Message.ContentPart{
+         type: :text,
+         text: text,
+         metadata: metadata
+       }) do
     %{type: "text", text: text}
+    |> merge_content_metadata(metadata)
   end
 
   defp encode_openai_content_part(%ReqLLM.Message.ContentPart{
          type: :image,
          data: data,
-         media_type: media_type
+         media_type: media_type,
+         metadata: metadata
        }) do
     base64 = Base.encode64(data)
 
@@ -625,15 +630,21 @@ defmodule ReqLLM.Provider.Defaults do
         url: "data:#{media_type};base64,#{base64}"
       }
     }
+    |> merge_content_metadata(metadata)
   end
 
-  defp encode_openai_content_part(%ReqLLM.Message.ContentPart{type: :image_url, url: url}) do
+  defp encode_openai_content_part(%ReqLLM.Message.ContentPart{
+         type: :image_url,
+         url: url,
+         metadata: metadata
+       }) do
     %{
       type: "image_url",
       image_url: %{
         url: url
       }
     }
+    |> merge_content_metadata(metadata)
   end
 
   defp encode_openai_content_part(%ReqLLM.Message.ContentPart{
@@ -654,6 +665,22 @@ defmodule ReqLLM.Provider.Defaults do
   end
 
   defp encode_openai_content_part(_), do: nil
+
+  @passthrough_metadata_keys [:cache_control, "cache_control"]
+
+  defp merge_content_metadata(base, metadata) when is_map(metadata) and map_size(metadata) > 0 do
+    passthrough =
+      metadata
+      |> Map.take(@passthrough_metadata_keys)
+      |> Map.new(fn
+        {"cache_control", v} -> {:cache_control, v}
+        {k, v} -> {k, v}
+      end)
+
+    Map.merge(base, passthrough)
+  end
+
+  defp merge_content_metadata(base, _), do: base
 
   @doc """
   Decodes OpenAI-format response body to ReqLLM.Response.

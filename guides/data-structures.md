@@ -112,8 +112,11 @@ msg = %ReqLLM.Message{
 
 Typed content elements that compose a `Message`. Common variants:
 - `text/1`: `ContentPart.text("...")`
+- `text/2`: `ContentPart.text("...", metadata)` with metadata map
 - `image_url/1`: `ContentPart.image_url("https://...")`
+- `image_url/2`: `ContentPart.image_url("https://...", metadata)` with metadata
 - `image/2`: `ContentPart.image(binary, "image/png")`
+- `image/3`: `ContentPart.image(binary, "image/png", metadata)` with metadata
 - `file/3`: `ContentPart.file(binary, "name.ext", "mime/type")`
 - `thinking/1`: `ContentPart.thinking("...")` for models that expose reasoning tokens
 - `tool_call/2`: `ContentPart.tool_call("name", %{arg: "value"})` for assistant-issued calls
@@ -127,9 +130,37 @@ parts = [
 ]
 ```
 
+**Metadata field**:
+
+The `metadata` field allows passing provider-specific attributes through to the wire format. Currently supported metadata keys:
+
+- `cache_control`: Anthropic prompt caching control (e.g., `%{type: "ephemeral"}`)
+
+```elixir
+# Enable prompt caching for text content
+cached_text = ContentPart.text(
+  "Long system prompt to cache...",
+  %{cache_control: %{type: "ephemeral"}}
+)
+
+# Enable prompt caching for images
+cached_image = ContentPart.image_url(
+  "https://example.com/large-diagram.png",
+  %{cache_control: %{type: "ephemeral"}}
+)
+
+# Or with binary image data
+cached_binary_image = ContentPart.image(
+  image_data,
+  "image/png",
+  %{cache_control: %{type: "ephemeral"}}
+)
+```
+
 **How this supports normalization**:
 - Discriminated union eliminates polymorphism across providers.
 - New content types can be added without changing the `Message` shape.
+- Metadata enables provider-specific features without breaking the canonical model.
 
 ## 5) ReqLLM.Tool
 

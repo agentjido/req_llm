@@ -32,6 +32,184 @@ defmodule ReqLLM.Provider.DefaultsTest do
       end
     end
 
+    test "preserves cache_control metadata in content blocks" do
+      content_with_cache = %ContentPart{
+        type: :text,
+        text: "Cached content",
+        metadata: %{cache_control: %{type: "ephemeral"}}
+      }
+
+      message = %Message{
+        role: :user,
+        content: [
+          content_with_cache,
+          %ContentPart{type: :text, text: "Normal content"}
+        ]
+      }
+
+      context = %Context{messages: [message]}
+      result = Defaults.encode_context_to_openai_format(context, "gpt-4")
+
+      [encoded_message] = result.messages
+      [cached_block, normal_block] = encoded_message.content
+
+      assert cached_block == %{
+               type: "text",
+               text: "Cached content",
+               cache_control: %{type: "ephemeral"}
+             }
+
+      assert normal_block == %{type: "text", text: "Normal content"}
+    end
+
+    test "handles cache_control with TTL in metadata" do
+      content_with_ttl = %ContentPart{
+        type: :text,
+        text: "Cached with TTL",
+        metadata: %{cache_control: %{type: "ephemeral", ttl: 3600}}
+      }
+
+      message = %Message{role: :system, content: [content_with_ttl]}
+      context = %Context{messages: [message]}
+      result = Defaults.encode_context_to_openai_format(context, "gpt-4")
+
+      [encoded_message] = result.messages
+
+      assert encoded_message.content == [
+               %{
+                 type: "text",
+                 text: "Cached with TTL",
+                 cache_control: %{type: "ephemeral", ttl: 3600}
+               }
+             ]
+    end
+
+    test "handles string key cache_control in metadata" do
+      content_with_string_key = %ContentPart{
+        type: :text,
+        text: "String key cache",
+        metadata: %{"cache_control" => %{"type" => "ephemeral"}}
+      }
+
+      message = %Message{role: :user, content: [content_with_string_key]}
+      context = %Context{messages: [message]}
+      result = Defaults.encode_context_to_openai_format(context, "gpt-4")
+
+      [encoded_message] = result.messages
+
+      assert encoded_message.content == [
+               %{
+                 type: "text",
+                 text: "String key cache",
+                 cache_control: %{"type" => "ephemeral"}
+               }
+             ]
+    end
+
+    test "ignores non-passthrough metadata keys" do
+      content_with_extra_meta = %ContentPart{
+        type: :text,
+        text: "Has extra metadata",
+        metadata: %{
+          cache_control: %{type: "ephemeral"},
+          custom_field: "should be ignored",
+          another_field: 123
+        }
+      }
+
+      message = %Message{role: :user, content: [content_with_extra_meta]}
+      context = %Context{messages: [message]}
+      result = Defaults.encode_context_to_openai_format(context, "gpt-4")
+
+      [encoded_message] = result.messages
+      [content_block] = encoded_message.content
+
+      assert content_block == %{
+               type: "text",
+               text: "Has extra metadata",
+               cache_control: %{type: "ephemeral"}
+             }
+
+      refute Map.has_key?(content_block, :custom_field)
+      refute Map.has_key?(content_block, :another_field)
+    end
+
+    test "empty metadata does not add extra fields" do
+      content_empty_meta = %ContentPart{type: :text, text: "No metadata", metadata: %{}}
+
+      message = %Message{role: :user, content: [content_empty_meta]}
+      context = %Context{messages: [message]}
+      result = Defaults.encode_context_to_openai_format(context, "gpt-4")
+
+      [encoded_message] = result.messages
+      assert encoded_message.content == "No metadata"
+    end
+
+    test "preserves cache_control metadata in image content blocks" do
+      image_data = <<0, 1, 2, 3>>
+
+      image_with_cache =
+        ContentPart.image(
+          image_data,
+          "image/png",
+          %{cache_control: %{type: "ephemeral"}}
+        )
+
+      message = %Message{role: :user, content: [image_with_cache]}
+      context = %Context{messages: [message]}
+      result = Defaults.encode_context_to_openai_format(context, "gpt-4")
+
+      [encoded_message] = result.messages
+      [image_block] = encoded_message.content
+
+      assert image_block.type == "image_url"
+      assert image_block.cache_control == %{type: "ephemeral"}
+      assert image_block.image_url.url =~ "data:image/png;base64,"
+    end
+
+    test "preserves cache_control metadata in image_url content blocks" do
+      image_url_with_cache =
+        ContentPart.image_url(
+          "https://example.com/image.png",
+          %{cache_control: %{type: "ephemeral"}}
+        )
+
+      message = %Message{role: :user, content: [image_url_with_cache]}
+      context = %Context{messages: [message]}
+      result = Defaults.encode_context_to_openai_format(context, "gpt-4")
+
+      [encoded_message] = result.messages
+      [image_block] = encoded_message.content
+
+      assert image_block == %{
+               type: "image_url",
+               image_url: %{url: "https://example.com/image.png"},
+               cache_control: %{type: "ephemeral"}
+             }
+    end
+
+    test "mixed content with cache_control on different types" do
+      text_cached = ContentPart.text("Cached text", %{cache_control: %{type: "ephemeral"}})
+
+      image_cached =
+        ContentPart.image_url("https://example.com/img.png", %{
+          cache_control: %{type: "ephemeral"}
+        })
+
+      text_normal = ContentPart.text("Normal text")
+
+      message = %Message{role: :user, content: [text_cached, image_cached, text_normal]}
+      context = %Context{messages: [message]}
+      result = Defaults.encode_context_to_openai_format(context, "gpt-4")
+
+      [encoded_message] = result.messages
+      [text_block, image_block, normal_block] = encoded_message.content
+
+      assert text_block.cache_control == %{type: "ephemeral"}
+      assert image_block.cache_control == %{type: "ephemeral"}
+      refute Map.has_key?(normal_block, :cache_control)
+    end
+
     test "encodes tool calls correctly" do
       message_tool_calls = %Message{
         role: :assistant,

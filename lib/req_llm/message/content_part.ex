@@ -47,9 +47,16 @@ defmodule ReqLLM.Message.ContentPart do
   @spec image_url(String.t()) :: t()
   def image_url(url), do: %__MODULE__{type: :image_url, url: url}
 
+  @spec image_url(String.t(), map()) :: t()
+  def image_url(url, metadata), do: %__MODULE__{type: :image_url, url: url, metadata: metadata}
+
   @spec image(binary(), String.t()) :: t()
   def image(data, media_type \\ "image/png"),
     do: %__MODULE__{type: :image, data: data, media_type: media_type}
+
+  @spec image(binary(), String.t(), map()) :: t()
+  def image(data, media_type, metadata),
+    do: %__MODULE__{type: :image, data: data, media_type: media_type, metadata: metadata}
 
   @spec file(binary(), String.t(), String.t()) :: t()
   def file(data, filename, media_type \\ "application/octet-stream"),
