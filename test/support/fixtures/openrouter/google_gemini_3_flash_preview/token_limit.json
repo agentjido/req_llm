@@ -1,0 +1,131 @@
+{
+  "model_spec": "openrouter:google/gemini-3-flash-preview",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjozMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IldyaXRlIGEgdmVyeSBsb25nIHN0b3J5IGFib3V0IGRyYWdvbnMgYW5kIGFkdmVudHVyZXMiLCJyb2xlIjoidXNlciJ9XSwibW9kZWwiOiJnb29nbGUvZ2VtaW5pLTMtZmxhc2gtcHJldmlldyIsIm4iOjEsInJlYXNvbmluZ19lZmZvcnQiOiJsb3ciLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC41fQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 3000,
+      "messages": [
+        {
+          "content": "Write a very long story about dragons and adventures",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-3-flash-preview",
+      "n": 1,
+      "reasoning_effort": "low",
+      "stream": false,
+      "temperature": 0.5
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "The peaks of the Iron Mountains were not made of iron, but they were just as cold, unforgiving, and sharp. In the village of Oakhaven, nestled in the shadow of these giants, the wind didn’t just blow; it screamed.\n\nElara was a girl of nineteen with hair the color of autumn leaves and eyes that held the restless spark of a forest fire. While the other villagers were content to weave wool and brew ale, Elara spent her days staring at the \"Forbidden Crest\"—the highest, jagged tooth of the mountain range where the sky turned a bruised purple and the clouds seemed to swirl in unnatural patterns.\n\nThe legends said that the Great Drakes had vanished five hundred years ago, hunted to extinction by the Dragon-Slayers of the Old Empire. But Elara didn’t believe the legends. Every few weeks, she would find a \"gift\" near the treeline: a scorched patch of earth in the shape of a massive footprint, or a translucent scale the size of a dinner plate that shimmered with iridescent light.\n\nOne Tuesday, Elara packed a satchel with dried meat, a coil of rope, and her father’s rusted hunting knife. She didn’t leave a note. In Oakhaven, notes were for people who planned on coming back.\n\n### The Ascent\n\nThe climb took three days. The air grew thin, tasting of ozone and ancient ice. On the third night, as Elara huddled in a shallow cave, the ground began to vibrate. It wasn't an earthquake; it was a rhythmic thrum, like a heartbeat amplified by the stone itself.\n\nShe followed the sound. She crawled through a narrow fissure in the rock and emerged into a hidden caldera, a valley tucked inside the mountain’s crown. It was lush, green, and impossibly warm. Steam rose from geothermal vents, and in the center of the valley lay a lake of liquid silver.\n\nAnd there, draped across a slab of obsidian, was the impossible.\n\nHe was massive—easily the size of a merchant ship. His scales were the color of a stormy sea, shifting from deep navy to electric blue. His wings, folded like a bat’s, were ribbed with silver bone. He was a dragon, but he was dying.\n\nA massive black spear, forged from \"Void-Iron,\" was buried deep in his shoulder. The wound wept golden blood that hissed when it touched the stone.\n\nElara didn't run. She didn't scream. She walked toward him, her heart hammering against her ribs like a trapped bird.\n\nThe dragon’s eye opened. It was a vertical slit of burning gold. A voice, ancient and echoing, filled Elara’s mind—not as words, but as a feeling of immense, crushing sorrow.\n\n*“Little spark,”* the voice resonated. *“Have you come to finish what the Shadow-Stalkers started?”*\n\n\"I've come to help,\" Elara whispered, her voice trembling.\n\n*“Help? A moth helping a mountain?”* The dragon let out a low, rattling growl. *“The spear is cursed. It eats the soul. Leave me to the silence.”*\n\nElara didn't leave. She approached the dragon’s shoulder. The heat radiating from him was enough to blister skin, but she gritted her teeth. She grabbed the hilt of the Void-Iron spear. It felt like ice-cold fire.\n\n\"On the count of three,\" she said, though the dragon hadn't agreed.\n\nShe pulled. The spear didn't budge. She pulled again, screaming with the effort, her boots slipping on the golden blood. With a final, agonizing heave, the spear slid out. A geyser of light erupted from the wound, blinding her.\n\n### The Bond\n\nWhen Elara woke, she wasn't in the cave. She was lying on a bed of soft moss. The dragon was standing over her, his neck arched, his head lowered so his snout was inches from her face.\n\n*“I am Kaelith,”* the dragon said. *“And you, Elara of Oakhaven, have done something very brave and very foolish. By drawing the Void-Iron, you have tasted its poison. And by saving my life, you have bound your thread to mine.”*\n\nElara looked at her hands. Her veins were glowing with a faint, silvery light. \"What does that mean?\"\n\n*“It means the Shadow-King, the one who sent the spear, now knows you exist. It means the Blight is coming for the world of men, and I am the last of the Sky-Guards left to stop it.”* Kaelith spread his wings, and the sheer span of them blocked out the sun. *“Climb on, Little Spark. We have a world to save.”*\n\n### The Journey Across the Shattered Isles\n\nThe adventure that followed was a blur of wind and fire. Elara learned that riding a dragon was nothing like the stories. It was cold, it was terrifying, and it required a core of steel. She learned to tuck herself behind the ridge of Kaelith’s neck to shield herself from the gale.\n\nThey flew south, away from the mountains and toward the Shattered Isles. The Blight—a creeping, oily darkness—was swallowing the land. Forests were turning to ash, and rivers were clogging with black sludge.\n\nIn the city of Aethelgard, they found the first of the Shadow-King’s generals: a Wraith-Knight mounted on a corrupted, skeletal wyvern.\n\nThe battle took place above the clouds. Kaelith dove, his claws extended, ripping through the mist. The wyvern snapped at his throat, its breath a cloud of rotting vapor. Elara, clinging to the saddle Kaelith had fashioned from old leather and magic, realized she couldn't just be a passenger.\n\nShe reached into the bond. She felt Kaelith’s fire—not as heat, but as a reservoir of pure energy. She channeled it. Her father’s rusted knife, tucked in her belt, began to glow with a white-hot intensity.\n\nAs the wyvern lunged, Elara leaped. It was a moment of pure madness. She fell through the air, the wind screaming in her ears, and drove the glowing knife into the Wraith-Knight’s chest. The knight dissolved into shadows, and the wyvern, freed from its master’s will, crumbled into dust.\n\nKaelith caught her in mid-air, his talons gentle as a mother’s touch.\n\n*“You are more than a moth, Elara,”* he mused as they leveled out. *“You are a cinder.”*\n\n### The Citadel of Shadows\n\nTheir journey led them to the Heart of the World—the Star-Fall Spire. It was here the Shadow-King resided, a being of pure void who sought to snuff out the sun and rule a world of eternal winter.\n\nThe Spire was guarded by thousands of Shadow-Wyrms, smaller, mindless cousins of the dragons. The sky was black with them.\n\n\"We can't fight them all,\" Elara said, looking at the swarming mass.\n\n*“We don't have to,”* Kaelith replied. *“We only have to reach the peak. If the Star-Stone is relit, the shadows will vanish.”*\n\nThe final ascent was a gauntlet of teeth and shadow. Kaelith took hit after hit. His scales were cracked, his wings torn. Elara used her magic to deflect bolts of dark energy, her hands glowing so brightly they began to bleed.\n\nThey reached the summit, a flat plateau of white marble. The Shadow-King stood there, a towering figure of smoke and jagged armor. He held the Star-Stone—a diamond the size of a pumpkin—but it was dark, its light smothered.\n\n\"The age of fire is over,\" the Shadow-King hissed. \"The age of the void begins.\"\n\nKaelith crashed onto the plateau, too exhausted to stand. *“Elara... the stone... it needs a catalyst. Not just dragon fire. It needs the spark of a mortal soul that knows hope.”*\n\nElara stepped forward. The Shadow-King raised a hand, and a wave of darkness crashed toward her. She didn't flinch. She thought of Oakhaven. She thought of the smell of pine needles, the sound of the village flute, and the way the sun felt on her face after a long winter.\n\nShe ran. She dived through the darkness, her body wreathed in the silver light of her bond with Kaelith. She slammed her hands onto the Star-Stone.\n\n\"Burn,\" she whispered.\n\nThe explosion of light was seen from every corner of the world. It swept across the Shattered Isles, dissolving the Blight. It raced through the forests, turning the ash back into leaves. It struck the Shadow-King, and he didn't just die; he ceased to have ever been.\n\n### The New Age\n\nWhen the light faded, the Spire was silent.\n\nElara lay on the marble, gasping for air. Her hair had turned permanently white, and her eyes now glowed with a soft, golden hue.\n\nKaelith was beside her. He looked different—his scales were no longer just blue, but shot through with veins of pure gold.\n\n*“The world is changed,”* Kaelith said softly.\n\n\"Are you leaving?\" Elara asked, her heart heavy.\n\nThe dragon let out a sound that might have been a laugh. *“The Sky-Guards are returned, Elara. But a dragon without a rider is just a beast of the air. And a rider without a dragon is just a traveler on the ground.”*\n\nHe lowered his wing, creating a ramp.\n\n*“There are other lands, Little Spark. Other shadows to hunt. Other wonders to see. Shall we go?”*\n\nElara looked back toward the horizon, where the sun was rising over the Iron Mountains. She thought of her small house and her quiet life. Then she looked at the endless sky, the vast, beautiful world waiting for them.\n\nShe climbed onto his back.\n\n\"Let's go,\" she said.\n\nWith a roar that shook the foundations of the earth, Kaelith took flight, and the dragon and the girl vanished into the light of a brand new day.",
+            "reasoning": "**Developing the Dragon**\n\nI've been solidifying the core of the story. Elara, the protagonist, is taking shape as a dragon-hunter who questions her village's traditions. Rather than Ignis, I'm now leaning toward \"Sil\" for the dragon's name. It feels more mysterious. The epic, fantasy elements are really starting to gel.\n\n\n**Charting the Narrative Arc**\n\nI'm now outlining the story's structure more concretely. The plot has taken more shape and I'm looking at individual chapters. I'm focusing on the first chapter, which will involve Elara's discovery of a wounded dragon. I think Ashfell as a setting is starting to feel right, and provides a good contrast to the dragon's presence.\n\n\n**Refining Story Beats**\n\nI'm deep into fleshing out the plot now. Chapter 2 introduces Kaelith, the telepathic Cloud-Stitcher. The world's magic fades as the Aether-Core cracks. Chapter 3's travel montage now has the Sun-Stone MacGuffin and introduces a mercenary, Kaelen. Chapters 4 and 5 bring in the Cult of the Void, Shadow-Wyrms, Elara riding Kaelith, and a city siege. Chapter 6 will be the ascent and a Shadow-King reveal, and the story will conclude with a sacrifice.\n\n\n**Integrating Pacing and Mood**\n\nI'm now focusing on how to control the story's pace. The existing outline feels a bit rushed, so I'm injecting more character development and quiet moments between the major conflicts. I'm focusing on Elara's internal conflicts and how the loss of the Aether-Core is impacting the world's magic. The story is currently feeling a bit too flat, so I'm trying to add more depth.\n\n\n",
+            "reasoning_details": [
+              {
+                "format": "google-gemini-v1",
+                "index": 0,
+                "text": "**Developing the Dragon**\n\nI've been solidifying the core of the story. Elara, the protagonist, is taking shape as a dragon-hunter who questions her village's traditions. Rather than Ignis, I'm now leaning toward \"Sil\" for the dragon's name. It feels more mysterious. The epic, fantasy elements are really starting to gel.\n\n\n**Charting the Narrative Arc**\n\nI'm now outlining the story's structure more concretely. The plot has taken more shape and I'm looking at individual chapters. I'm focusing on the first chapter, which will involve Elara's discovery of a wounded dragon. I think Ashfell as a setting is starting to feel right, and provides a good contrast to the dragon's presence.\n\n\n**Refining Story Beats**\n\nI'm deep into fleshing out the plot now. Chapter 2 introduces Kaelith, the telepathic Cloud-Stitcher. The world's magic fades as the Aether-Core cracks. Chapter 3's travel montage now has the Sun-Stone MacGuffin and introduces a mercenary, Kaelen. Chapters 4 and 5 bring in the Cult of the Void, Shadow-Wyrms, Elara riding Kaelith, and a city siege. Chapter 6 will be the ascent and a Shadow-King reveal, and the story will conclude with a sacrifice.\n\n\n**Integrating Pacing and Mood**\n\nI'm now focusing on how to control the story's pace. The existing outline feels a bit rushed, so I'm injecting more character development and quiet moments between the major conflicts. I'm focusing on Elara's internal conflicts and how the loss of the Aether-Core is impacting the world's magic. The story is currently feeling a bit too flat, so I'm trying to add more depth.\n\n\n",
+                "type": "reasoning.text"
+              },
+              {
+                "data": "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",
+                "format": "google-gemini-v1",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "STOP"
+        }
+      ],
+      "created": 1766525296,
+      "id": "gen-1766525295-4H4wjiMyFW15GLoXxDs5",
+      "model": "google/gemini-3-flash-preview",
+      "object": "chat.completion",
+      "provider": "Google AI Studio",
+      "usage": {
+        "completion_tokens": 2866,
+        "completion_tokens_details": {
+          "image_tokens": 0,
+          "reasoning_tokens": 663
+        },
+        "cost": 0.008603,
+        "cost_details": {
+          "upstream_inference_completions_cost": 0.008598,
+          "upstream_inference_cost": null,
+          "upstream_inference_prompt_cost": 5.0e-6
+        },
+        "is_byok": false,
+        "prompt_tokens": 10,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 2876
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "9b2af29b996a43de-TLV"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 23 Dec 2025 21:28:17 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

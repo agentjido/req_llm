@@ -249,6 +249,17 @@ config :llm_db,
           capabilities: %{chat: true, tools: %{enabled: true}},
           limits: %{context: 200_000, output: 4096},
           aliases: []
+        },
+        "google/gemini-3-flash-preview" => %{
+          name: "Gemini 3 Flash Preview",
+          family: "gemini-3",
+          capabilities: %{
+            chat: true,
+            tools: %{enabled: true, streaming: true},
+            reasoning: %{enabled: true}
+          },
+          limits: %{context: 1_048_576, output: 65_535},
+          cost: %{input: 0.5, output: 3.0}
         }
       }
     ],

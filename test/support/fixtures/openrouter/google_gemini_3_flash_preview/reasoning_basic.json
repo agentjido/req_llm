@@ -1,0 +1,132 @@
+{
+  "model_spec": "openrouter:google/gemini-3-flash-preview",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo1MDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlNvbHZlIDEyKjcgYW5kIHNob3cgeW91ciBpbnRlcm5hbCB0aGlua2luZyAoYnJpZWYpLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMy1mbGFzaC1wcmV2aWV3IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MS4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 5000,
+      "messages": [
+        {
+          "content": "Solve 12*7 and show your internal thinking (brief).",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-3-flash-preview",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 1.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "To solve **12 × 7**, here is my internal thinking:\n\n1.  **Break it down:** Split 12 into 10 and 2.\n2.  **Multiply parts:**\n    *   10 × 7 = 70\n    *   2 × 7 = 14\n3.  **Add them together:** 70 + 14 = 84.\n\n**Result:** 84",
+            "reasoning": "**Exploring Multiplication Methods**\n\nI've been examining different approaches to solve the multiplication problem. So far, I've considered breaking it down using the distributive property, which seems promising. I also started exploring multiples of 12 as a potential alternative, and I'm currently assessing the efficiency of both methods.\n\n\n**Considering Prime Factors**\n\nI'm now contemplating using multiples of 7. Breaking 12 into 10 and 2 seems efficient as a strategy to derive 84. This approach feels more straightforward, but I'm curious if other breakdowns yield more efficient results.\n\n\n",
+            "reasoning_details": [
+              {
+                "format": "google-gemini-v1",
+                "index": 0,
+                "text": "**Exploring Multiplication Methods**\n\nI've been examining different approaches to solve the multiplication problem. So far, I've considered breaking it down using the distributive property, which seems promising. I also started exploring multiples of 12 as a potential alternative, and I'm currently assessing the efficiency of both methods.\n\n\n**Considering Prime Factors**\n\nI'm now contemplating using multiples of 7. Breaking 12 into 10 and 2 seems efficient as a strategy to derive 84. This approach feels more straightforward, but I'm curious if other breakdowns yield more efficient results.\n\n\n",
+                "type": "reasoning.text"
+              },
+              {
+                "data": "EoYFCoMFAXLI2nwFZf4Cx/QUOimSW0JXxy3QSFwe9mlC7w+VEc7k2rTh+WHGIkKtGORqVdCe+0CLmw5IwVZy92/uVbiR7ISc3F2eYjY2HPyG1JkHjGEMQg2141dK1YPPAx/lvo9b+40MozUuUZgsaQ2bgT9rV9wQe0cRyDd9wsHqoSzDSu+hY3TZyzMsh7iLne7eM5nwyP3fwKSKlas+fhrLWEIkfpKLsMI3G2RQRrpxnp157YJnk6++ZzivgDvbtUKFAoWvgUfW8HYJhS/bT0QwKTsRkmxojEgkJVpbFTiA2SDET3vk/eOLRJsW9gwH5/2rLqX9iN25bRfU1vErlo+XvAp4spoU1wO2Tdu/pLhNgLLjXgdlc1e/rQYPrH2+qpXtP/HdTVG9n+SdF4slo2o1HtTujOr7MfBllH74qQgoHen1dlT50HeO3MdF+QcFL95JFa6/yNPuV4IA42O01MORPlOP9JXD1QSWRxIznf7WTSyt5bTGVc0r1PYFJMJRmf60tXefQWok4hOolGq8hwNkdNhG0NWrC0MEx+oQJ+UpFMD+HvgCudzieI9xxq1t7Q4f+QItjUyk0DVnmP0ZPVQ8DJyIsZEyeRRpt00LORueCER+oOttq5C6uaDCwDQzqVktQye93M3MwEzuDF0+u8oMCyn4y7776UPaqkVuW7OM16xfB09X2KYyVl4dfz9mwgy4486udPqByaeWDRMLzkggj1etZPg6tSAJf1DlFIa/cLN2jktwb5MIrbzOlfeFq9VFr7z7W3VFeNBIRRfUthPX9CVGv9Y3MNREldGpDUX4Yq2kFD8Qa8bshlDx7VEAqFMLUWf0bJaKjP8Vw8szrAMh6pf5b9sseg==",
+                "format": "google-gemini-v1",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "STOP"
+        }
+      ],
+      "created": 1766525322,
+      "id": "gen-1766525322-g9NT1KIqTzXeLGCRkYk1",
+      "model": "google/gemini-3-flash-preview",
+      "object": "chat.completion",
+      "provider": "Google AI Studio",
+      "usage": {
+        "completion_tokens": 315,
+        "completion_tokens_details": {
+          "image_tokens": 0,
+          "reasoning_tokens": 218
+        },
+        "cost": 9.525e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 9.45e-4,
+          "upstream_inference_cost": null,
+          "upstream_inference_prompt_cost": 7.5e-6
+        },
+        "is_byok": false,
+        "prompt_tokens": 15,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 330
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "9b2af341efe043de-TLV"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 23 Dec 2025 21:28:44 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

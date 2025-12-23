@@ -1,0 +1,132 @@
+{
+  "model_spec": "openrouter:google/gemini-3-flash-preview",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjoyMDAwLCJtZXNzYWdlcyI6W3siY29udGVudCI6IkhlbGxvIHdvcmxkISIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6Imdvb2dsZS9nZW1pbmktMy1mbGFzaC1wcmV2aWV3IiwibiI6MSwicmVhc29uaW5nX2VmZm9ydCI6ImxvdyIsInNlZWQiOjQyLCJzdHJlYW0iOmZhbHNlLCJ0ZW1wZXJhdHVyZSI6MC4wfQ=="
+    },
+    "canonical_json": {
+      "max_tokens": 2000,
+      "messages": [
+        {
+          "content": "Hello world!",
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-3-flash-preview",
+      "n": 1,
+      "reasoning_effort": "low",
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "Hello! It’s great to meet you. How can I help you today?",
+            "reasoning": "**Acknowledging the Greeting**\n\nI've registered the user's \"Hello world!\" It's a clear signal of initiation, and I understand its significance. My primary goal now is to respond appropriately. I'm focusing on a friendly, helpful, and welcoming response. I'm structuring my reply to acknowledge the greeting and immediately offer assistance.\n\n\n",
+            "reasoning_details": [
+              {
+                "format": "google-gemini-v1",
+                "index": 0,
+                "text": "**Acknowledging the Greeting**\n\nI've registered the user's \"Hello world!\" It's a clear signal of initiation, and I understand its significance. My primary goal now is to respond appropriately. I'm focusing on a friendly, helpful, and welcoming response. I'm structuring my reply to acknowledge the greeting and immediately offer assistance.\n\n\n",
+                "type": "reasoning.text"
+              },
+              {
+                "data": "CiQBjz1rX17FaT9AXNYTVjWrRpLM9PfITNZRiCcBATl8+k1z88sKdAGPPWtfErEBGmRlBci5Y690oG/fVd1UdtdoR3ayJlK08rcF+BWcW2UFaRg+litITBvpBgW2heHdwEmsIId914UT04s5U0mAM425tu5RcubK4pGr3YTvhCcyKdLe3YW+7HYxbyO2DbsxBA+14bWoLD6n3+4jCoQBAY89a1/CWbevza1xHDFEGRueCYhPwuw+VZJS+w75giihYKM0zCB4UnJT1cp6a7tXxc/3Of/9RSUjJhHnSfDAWmOIvXupAVLQXpuIIzNkrZ/nFY81cKBN3jLpRXDwjOkgUoCM25+TVUg5SK/TfMUTiAgd6nOw618+FpYTxETdwiEBV0f7CogBAY89a19YQarbVpuZMMU1GjedyocESDtDylWvJzblLnHnO4bGxQwCRElZIECIf6NPUOhx4yCmizFNyw2LUV+smE7Tbz2HJFjV1/ZsIEjQTHkMdLChV3ypl9eLA6irsTCpjsjii6BZaSrEgR4bJh5SlJRJHKiHu3Q9Vx6m4QnIb5ZmIXsHb2dC3A==",
+                "format": "google-gemini-v1",
+                "index": 0,
+                "type": "reasoning.encrypted"
+              }
+            ],
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "STOP"
+        }
+      ],
+      "created": 1766525329,
+      "id": "gen-1766525329-PwHDER4MTbKf8FPS4rah",
+      "model": "google/gemini-3-flash-preview",
+      "object": "chat.completion",
+      "provider": "Google",
+      "usage": {
+        "completion_tokens": 80,
+        "completion_tokens_details": {
+          "image_tokens": 0,
+          "reasoning_tokens": 63
+        },
+        "cost": 2.415e-4,
+        "cost_details": {
+          "upstream_inference_completions_cost": 2.4e-4,
+          "upstream_inference_cost": null,
+          "upstream_inference_prompt_cost": 1.5e-6
+        },
+        "is_byok": false,
+        "prompt_tokens": 3,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 83
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "9b2af36aebbb43de-TLV"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 23 Dec 2025 21:28:50 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}

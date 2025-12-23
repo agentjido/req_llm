@@ -1,0 +1,146 @@
+{
+  "model_spec": "openrouter:google/gemini-3-flash-preview",
+  "provider": "openrouter",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo2NTUzLCJtZXNzYWdlcyI6W3siY29udGVudCI6IlVzZSB0aGUgYWRkIHRvb2wgdG8gY29tcHV0ZSAyICsgMy4gQWZ0ZXIgdGhlIHRvb2wgcmVzdWx0IGFycml2ZXMsIHJlc3BvbmQgd2l0aCAnc3VtPTx2YWx1ZT4nLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbXSwicmVhc29uaW5nX2RldGFpbHMiOlt7ImRhdGEiOiJFalFLTWdGeXlOcDhoUGxsTXJQNEFMZDhVMFZneWVLTnd5bjdFcXREc05XQlZuYTFHY3lMZ0J6QmpmcXhxczdPcVRUSkd0R0oiLCJmb3JtYXQiOiJnb29nbGUtZ2VtaW5pLXYxIiwiaWQiOiJ0b29sX2FkZF9RcFZhYThwVGRUdGFHOGlBQXZoZSIsImluZGV4IjowLCJ0eXBlIjoicmVhc29uaW5nLmVuY3J5cHRlZCJ9XSwicm9sZSI6ImFzc2lzdGFudCIsInRvb2xfY2FsbHMiOlt7ImZ1bmN0aW9uIjp7ImFyZ3VtZW50cyI6IntcImFcIjoyLFwiYlwiOjN9IiwibmFtZSI6ImFkZCJ9LCJpZCI6InRvb2xfYWRkX1FwVmFhOHBUZFR0YUc4aUFBdmhlIiwidHlwZSI6ImZ1bmN0aW9uIn1dfSx7ImNvbnRlbnQiOiI1IiwibmFtZSI6ImFkZCIsInJvbGUiOiJ0b29sIiwidG9vbF9jYWxsX2lkIjoidG9vbF9hZGRfUXBWYWE4cFRkVHRhRzhpQUF2aGUifV0sIm1vZGVsIjoiZ29vZ2xlL2dlbWluaS0zLWZsYXNoLXByZXZpZXciLCJuIjoxLCJzZWVkIjo0Miwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMH0="
+    },
+    "canonical_json": {
+      "max_tokens": 6553,
+      "messages": [
+        {
+          "content": "Use the add tool to compute 2 + 3. After the tool result arrives, respond with 'sum=<value>'.",
+          "role": "user"
+        },
+        {
+          "content": [],
+          "reasoning_details": [
+            {
+              "data": "EjQKMgFyyNp8hPllMrP4ALd8U0VgyeKNwyn7EqtDsNWBVna1GcyLgBzBjfqxqs7OqTTJGtGJ",
+              "format": "google-gemini-v1",
+              "id": "tool_add_QpVaa8pTdTtaG8iAAvhe",
+              "index": 0,
+              "type": "reasoning.encrypted"
+            }
+          ],
+          "role": "assistant",
+          "tool_calls": [
+            {
+              "function": {
+                "arguments": "{\"a\":2,\"b\":3}",
+                "name": "add"
+              },
+              "id": "tool_add_QpVaa8pTdTtaG8iAAvhe",
+              "type": "function"
+            }
+          ]
+        },
+        {
+          "content": "5",
+          "name": "add",
+          "role": "tool",
+          "tool_call_id": "tool_add_QpVaa8pTdTtaG8iAAvhe"
+        }
+      ],
+      "model": "google/gemini-3-flash-preview",
+      "n": 1,
+      "seed": 42,
+      "stream": false,
+      "temperature": 0.0
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.16"
+      ]
+    },
+    "method": "post",
+    "url": "https://openrouter.ai/api/v1/chat/completions"
+  },
+  "response": {
+    "body": {
+      "choices": [
+        {
+          "finish_reason": "stop",
+          "index": 0,
+          "logprobs": null,
+          "message": {
+            "content": "sum=5",
+            "reasoning": null,
+            "refusal": null,
+            "role": "assistant"
+          },
+          "native_finish_reason": "STOP"
+        }
+      ],
+      "created": 1766525317,
+      "id": "gen-1766525317-pMUzNkl0XIPIoYQPAqik",
+      "model": "google/gemini-3-flash-preview",
+      "object": "chat.completion",
+      "provider": "Google",
+      "usage": {
+        "completion_tokens": 3,
+        "completion_tokens_details": {
+          "image_tokens": 0,
+          "reasoning_tokens": 0
+        },
+        "cost": 2.6e-5,
+        "cost_details": {
+          "upstream_inference_completions_cost": 9.0e-6,
+          "upstream_inference_cost": null,
+          "upstream_inference_prompt_cost": 1.7e-5
+        },
+        "is_byok": false,
+        "prompt_tokens": 34,
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "video_tokens": 0
+        },
+        "total_tokens": 37
+      }
+    },
+    "headers": {
+      "access-control-allow-origin": [
+        "*"
+      ],
+      "cf-ray": [
+        "9b2af322ce7543de-TLV"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Tue, 23 Dec 2025 21:28:38 GMT"
+      ],
+      "permissions-policy": [
+        "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")"
+      ],
+      "referrer-policy": [
+        "no-referrer, strict-origin-when-cross-origin"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Accept-Encoding"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ]
+    },
+    "status": 200
+  }
+}
