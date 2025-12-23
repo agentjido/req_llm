@@ -148,16 +148,6 @@ defmodule ReqLLM.Providers.Google do
     end
   end
 
-  defp resolve_api_version(opts) when is_map(opts) do
-    provider = Map.get(opts, :provider_options, [])
-
-    case Keyword.get(provider, :google_api_version) do
-      "v1" -> "v1"
-      "v1beta" -> "v1beta"
-      _ -> nil
-    end
-  end
-
   defp effective_base_url(processed_opts) do
     base_url = Keyword.get(processed_opts, :base_url)
 
@@ -921,20 +911,14 @@ defmodule ReqLLM.Providers.Google do
 
     generation_config =
       %{
-        candidateCount: 1
+        candidateCount: 1,
+        responseMimeType: "application/json"
       }
       |> maybe_put(:temperature, request.options[:temperature])
       |> maybe_put(:maxOutputTokens, request.options[:max_tokens])
       |> maybe_put(:topP, request.options[:top_p])
       |> maybe_put(:topK, request.options[:top_k])
       |> maybe_add_thinking_config(request.options[:google_thinking_budget])
-      |> then(fn cfg ->
-        if include_response_mime?(request, model_name) do
-          Map.put(cfg, :responseMimeType, "application/json")
-        else
-          cfg
-        end
-      end)
       |> put_schema_for_model(model_name, compiled_schema)
 
     %{}
@@ -950,17 +934,6 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp gemini_2_5?(_), do: false
-
-  defp gemini_2_0?(model_name) when is_binary(model_name) do
-    String.starts_with?(model_name, "gemini-2.0-") or model_name == "gemini-2.0"
-  end
-
-  defp gemini_2_0?(_), do: false
-
-  defp include_response_mime?(request, model_name) do
-    gemini_2_5?(model_name) or gemini_2_0?(model_name) or
-      resolve_api_version(request.options) == "v1beta"
-  end
 
   defp put_schema_for_model(generation_config, model_name, compiled_schema) do
     json_schema = ReqLLM.Schema.to_json(compiled_schema.schema)
