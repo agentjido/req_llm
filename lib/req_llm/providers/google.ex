@@ -929,16 +929,17 @@ defmodule ReqLLM.Providers.Google do
     |> maybe_put(:safetySettings, request.options[:google_safety_settings])
   end
 
-  defp gemini_2_5?(model_name) when is_binary(model_name) do
-    String.starts_with?(model_name, "gemini-2.5-") or model_name == "gemini-2.5"
+  defp json_schema_supported?(model_name) when is_binary(model_name) do
+    String.starts_with?(model_name, "gemini-2.5-") or model_name == "gemini-2.5" or
+      String.starts_with?(model_name, "gemini-3-") or model_name == "gemini-3"
   end
 
-  defp gemini_2_5?(_), do: false
+  defp json_schema_supported?(_), do: false
 
   defp put_schema_for_model(generation_config, model_name, compiled_schema) do
     json_schema = ReqLLM.Schema.to_json(compiled_schema.schema)
 
-    if gemini_2_5?(model_name) and json_schema?(json_schema) do
+    if json_schema_supported?(model_name) and json_schema?(json_schema) do
       Map.put(generation_config, :responseJsonSchema, json_schema)
     else
       google_schema = convert_to_google_schema(json_schema)
