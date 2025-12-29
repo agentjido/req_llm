@@ -501,6 +501,9 @@ defmodule ReqLLM.Response do
           {:ok, object} when is_map(object) ->
             {:ok, object}
 
+          {:ok, array} when is_list(array) ->
+            {:ok, array}
+
           {:ok, _other} ->
             {:error, %ReqLLM.Error.API.Response{reason: "Decoded JSON is not an object"}}
 
