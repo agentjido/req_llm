@@ -44,7 +44,13 @@ defmodule ReqLLM.Providers.ZaiCoder do
     default_base_url: "https://api.z.ai/api/coding/paas/v4",
     default_env_key: "ZAI_API_KEY"
 
-  @provider_schema []
+  @provider_schema [
+    thinking: [
+      type: :map,
+      doc:
+        ~s(Control thinking/reasoning mode. Set to %{type: "disabled"} to disable or %{type: "enabled"} to enable.)
+    ]
+  ]
 
   @impl ReqLLM.Provider
   def prepare_request(operation, model_spec, input, opts) do
