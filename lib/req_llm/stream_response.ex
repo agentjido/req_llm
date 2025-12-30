@@ -72,6 +72,7 @@ defmodule ReqLLM.StreamResponse do
   alias ReqLLM.Context
   alias ReqLLM.Provider.ResponseBuilder
   alias ReqLLM.Response
+  alias ReqLLM.Response.Stream, as: ResponseStream
   alias ReqLLM.StreamResponse.MetadataHandle
 
   typedstruct enforce: true do
@@ -208,61 +209,90 @@ defmodule ReqLLM.StreamResponse do
   """
   @spec extract_tool_calls(t()) :: [map()]
   def extract_tool_calls(%__MODULE__{stream: stream}) do
-    chunks = Enum.to_list(stream)
+    stream
+    |> ResponseStream.summarize()
+    |> Map.fetch!(:tool_calls)
+  end
 
-    # Extract base tool calls
-    tool_calls =
-      chunks
-      |> Enum.filter(&(&1.type == :tool_call))
-      |> Enum.map(fn chunk ->
-        %{
-          id: Map.get(chunk.metadata, :id) || "call_#{:erlang.unique_integer()}",
-          name: chunk.name,
-          arguments: chunk.arguments || %{},
-          index: Map.get(chunk.metadata, :index, 0)
+  @typedoc """
+  Result of classifying a streaming response.
+
+  - `type` - `:tool_calls` if the model requested tool execution, `:final_answer` otherwise
+  - `text` - Accumulated text content from the response
+  - `thinking` - Accumulated thinking/reasoning content (if any)
+  - `tool_calls` - List of complete tool calls with parsed arguments
+  - `finish_reason` - The normalized finish reason (`:stop`, `:tool_calls`, `:length`, etc.)
+  """
+  @type classify_result :: %{
+          type: :tool_calls | :final_answer,
+          text: String.t(),
+          thinking: String.t(),
+          tool_calls: [map()],
+          finish_reason: atom() | nil
         }
-      end)
 
-    # Collect argument fragments from meta chunks
-    arg_fragments =
-      chunks
-      |> Enum.filter(fn
-        %{type: :meta, metadata: %{tool_call_args: _}} -> true
-        _ -> false
-      end)
-      |> Enum.group_by(fn chunk ->
-        chunk.metadata.tool_call_args.index
-      end)
-      |> Map.new(fn {index, fragments} ->
-        accumulated_json =
-          fragments
-          |> Enum.map_join("", & &1.metadata.tool_call_args.fragment)
+  @doc """
+  Classify a streaming response for tool-calling workflows.
 
-        {index, accumulated_json}
-      end)
+  Consumes the stream and returns a structured result indicating whether the model
+  wants to call tools or has provided a final answer. This is the recommended API
+  for ReAct agents and function-calling applications.
 
-    # Merge accumulated arguments back into tool calls
-    tool_calls
-    |> Enum.map(fn tool_call ->
-      case Map.get(arg_fragments, tool_call.index) do
-        nil ->
-          # No accumulated arguments, keep as is
-          Map.delete(tool_call, :index)
+  ## Parameters
 
-        json_str ->
-          # Parse accumulated JSON arguments
-          case Jason.decode(json_str) do
-            {:ok, args} ->
-              tool_call
-              |> Map.put(:arguments, args)
-              |> Map.delete(:index)
+    * `stream_response` - The StreamResponse struct
 
-            {:error, _} ->
-              # Invalid JSON, keep empty arguments
-              Map.delete(tool_call, :index)
-          end
+  ## Returns
+
+  A map with:
+    - `type` - `:tool_calls` if the model requested tool execution, `:final_answer` otherwise
+    - `text` - Accumulated text content from the response
+    - `thinking` - Accumulated thinking/reasoning content
+    - `tool_calls` - List of complete tool calls with parsed arguments
+    - `finish_reason` - The normalized finish reason
+
+  ## Examples
+
+      {:ok, stream_response} = ReqLLM.stream_text(model, messages, tools: tools)
+
+      case ReqLLM.StreamResponse.classify(stream_response) do
+        %{type: :tool_calls, tool_calls: calls} ->
+          # Execute tools and continue conversation
+          results = Enum.map(calls, &execute_tool/1)
+          # Build tool result messages and continue...
+
+        %{type: :final_answer, text: answer} ->
+          # Done - return answer to user
+          {:ok, answer}
       end
-    end)
+
+  ## Classification Logic
+
+  The classification uses multiple signals:
+
+  1. If `tool_calls` is non-empty, type is `:tool_calls`
+  2. If `finish_reason` is `:tool_calls`, type is `:tool_calls`
+  3. Otherwise, type is `:final_answer`
+
+  """
+  @spec classify(t()) :: classify_result()
+  def classify(%__MODULE__{stream: stream}) do
+    summary = ResponseStream.summarize(stream)
+
+    type =
+      cond do
+        summary.tool_calls != [] -> :tool_calls
+        summary.finish_reason == :tool_calls -> :tool_calls
+        true -> :final_answer
+      end
+
+    %{
+      type: type,
+      text: summary.text,
+      thinking: summary.thinking,
+      tool_calls: summary.tool_calls,
+      finish_reason: summary.finish_reason
+    }
   end
 
   @doc """

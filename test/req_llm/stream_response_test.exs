@@ -952,4 +952,154 @@ defmodule ReqLLM.StreamResponseTest do
       assert Agent.get(counter, & &1) == 3
     end
   end
+
+  describe "classify/1" do
+    test "classifies stream with tool calls as :tool_calls" do
+      chunks = [
+        StreamChunk.text("I'll help with that."),
+        StreamChunk.tool_call("get_weather", %{}, %{id: "call_123", index: 0}),
+        StreamChunk.meta(%{tool_call_args: %{index: 0, fragment: ~s({"city": "NYC"})}}),
+        StreamChunk.meta(%{finish_reason: "tool_calls"})
+      ]
+
+      stream_response = create_stream_response(stream: chunks)
+      result = StreamResponse.classify(stream_response)
+
+      assert result.type == :tool_calls
+      assert result.text == "I'll help with that."
+      assert length(result.tool_calls) == 1
+      assert hd(result.tool_calls).name == "get_weather"
+      assert hd(result.tool_calls).arguments == %{"city" => "NYC"}
+      assert result.finish_reason == :tool_calls
+    end
+
+    test "classifies stream without tool calls as :final_answer" do
+      chunks = [
+        StreamChunk.text("Hello, "),
+        StreamChunk.text("how are you?"),
+        StreamChunk.meta(%{finish_reason: "stop"})
+      ]
+
+      stream_response = create_stream_response(stream: chunks)
+      result = StreamResponse.classify(stream_response)
+
+      assert result.type == :final_answer
+      assert result.text == "Hello, how are you?"
+      assert result.tool_calls == []
+      assert result.finish_reason == :stop
+    end
+
+    test "handles multiple parallel tool calls" do
+      chunks = [
+        StreamChunk.tool_call("get_weather", %{}, %{id: "call_1", index: 0}),
+        StreamChunk.tool_call("get_time", %{}, %{id: "call_2", index: 1}),
+        StreamChunk.meta(%{tool_call_args: %{index: 0, fragment: ~s({"city":)}}),
+        StreamChunk.meta(%{tool_call_args: %{index: 1, fragment: ~s({"timezone":)}}),
+        StreamChunk.meta(%{tool_call_args: %{index: 0, fragment: ~s( "NYC"})}}),
+        StreamChunk.meta(%{tool_call_args: %{index: 1, fragment: ~s( "UTC"})}})
+      ]
+
+      stream_response = create_stream_response(stream: chunks)
+      result = StreamResponse.classify(stream_response)
+
+      assert result.type == :tool_calls
+      assert length(result.tool_calls) == 2
+
+      weather_call = Enum.find(result.tool_calls, &(&1.name == "get_weather"))
+      time_call = Enum.find(result.tool_calls, &(&1.name == "get_time"))
+
+      assert weather_call.arguments == %{"city" => "NYC"}
+      assert time_call.arguments == %{"timezone" => "UTC"}
+    end
+
+    test "includes thinking content" do
+      chunks = [
+        StreamChunk.thinking("Let me think about this..."),
+        StreamChunk.thinking(" Okay, I understand."),
+        StreamChunk.text("Here's my answer."),
+        StreamChunk.meta(%{finish_reason: "stop"})
+      ]
+
+      stream_response = create_stream_response(stream: chunks)
+      result = StreamResponse.classify(stream_response)
+
+      assert result.type == :final_answer
+      assert result.thinking == "Let me think about this... Okay, I understand."
+      assert result.text == "Here's my answer."
+    end
+
+    test "handles empty stream" do
+      stream_response = create_stream_response(stream: [])
+      result = StreamResponse.classify(stream_response)
+
+      assert result.type == :final_answer
+      assert result.text == ""
+      assert result.tool_calls == []
+    end
+
+    test "classifies as :tool_calls even without finish_reason if tool calls present" do
+      chunks = [
+        StreamChunk.tool_call("search", %{}, %{id: "call_1", index: 0}),
+        StreamChunk.meta(%{tool_call_args: %{index: 0, fragment: ~s({"q": "test"})}})
+      ]
+
+      stream_response = create_stream_response(stream: chunks)
+      result = StreamResponse.classify(stream_response)
+
+      assert result.type == :tool_calls
+      assert length(result.tool_calls) == 1
+    end
+
+    test "handles finish_reason :tool_use (Anthropic style)" do
+      chunks = [
+        StreamChunk.tool_call("calculator", %{}, %{id: "tc_1", index: 0}),
+        StreamChunk.meta(%{tool_call_args: %{index: 0, fragment: "{}"}}),
+        StreamChunk.meta(%{finish_reason: "tool_use"})
+      ]
+
+      stream_response = create_stream_response(stream: chunks)
+      result = StreamResponse.classify(stream_response)
+
+      assert result.type == :tool_calls
+      assert result.finish_reason == :tool_calls
+    end
+
+    test "handles malformed JSON in tool call args gracefully" do
+      chunks = [
+        StreamChunk.tool_call("broken_tool", %{}, %{id: "call_1", index: 0}),
+        StreamChunk.meta(%{tool_call_args: %{index: 0, fragment: "{not valid json"}}),
+        StreamChunk.meta(%{finish_reason: "tool_calls"})
+      ]
+
+      stream_response = create_stream_response(stream: chunks)
+      result = StreamResponse.classify(stream_response)
+
+      assert result.type == :tool_calls
+      assert length(result.tool_calls) == 1
+      assert hd(result.tool_calls).arguments == %{}
+    end
+
+    test "normalizes various finish_reason strings" do
+      test_cases = [
+        {"stop", :stop},
+        {"end_turn", :stop},
+        {"tool_calls", :tool_calls},
+        {"tool_use", :tool_calls},
+        {"length", :length},
+        {"max_tokens", :length},
+        {"content_filter", :content_filter}
+      ]
+
+      for {input, expected} <- test_cases do
+        chunks = [
+          StreamChunk.text("Text"),
+          StreamChunk.meta(%{finish_reason: input})
+        ]
+
+        stream_response = create_stream_response(stream: chunks)
+        result = StreamResponse.classify(stream_response)
+        assert result.finish_reason == expected, "Expected #{input} to normalize to #{expected}"
+      end
+    end
+  end
 end
