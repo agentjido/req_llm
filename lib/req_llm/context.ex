@@ -747,6 +747,23 @@ defmodule ReqLLM.Context do
     end
   end
 
+  defp convert_loose_map(%{role: :assistant, tool_calls: tool_calls} = msg)
+       when is_list(tool_calls) do
+    content = Map.get(msg, :content, "") || ""
+    {:ok, assistant(content, tool_calls: tool_calls)}
+  end
+
+  defp convert_loose_map(%{role: :tool, tool_call_id: id, content: content} = msg)
+       when is_binary(id) and is_binary(content) do
+    name = Map.get(msg, :name)
+
+    if name do
+      {:ok, tool_result(id, name, content)}
+    else
+      {:ok, tool_result(id, content)}
+    end
+  end
+
   defp convert_loose_map(%{role: role, content: content})
        when is_atom(role) and is_binary(content) do
     {:ok, text(role, content)}

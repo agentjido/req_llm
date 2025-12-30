@@ -601,4 +601,150 @@ defmodule ReqLLM.ContextTest do
                10_000
     end
   end
+
+  describe "normalize/2 with tool messages" do
+    test "normalizes assistant message with tool_calls" do
+      input = [
+        %{
+          role: :assistant,
+          content: "",
+          tool_calls: [
+            %{id: "call_123", name: "get_weather", arguments: %{location: "SF"}}
+          ]
+        }
+      ]
+
+      {:ok, context} = Context.normalize(input, validate: false)
+
+      assert length(context.messages) == 1
+      [msg] = context.messages
+      assert msg.role == :assistant
+      assert [%ReqLLM.ToolCall{} = tc] = msg.tool_calls
+      assert tc.id == "call_123"
+      assert tc.function.name == "get_weather"
+    end
+
+    test "normalizes assistant message with tool_calls and content" do
+      input = [
+        %{
+          role: :assistant,
+          content: "Let me check the weather",
+          tool_calls: [
+            %{id: "call_456", name: "get_weather", arguments: %{location: "NYC"}}
+          ]
+        }
+      ]
+
+      {:ok, context} = Context.normalize(input, validate: false)
+
+      [msg] = context.messages
+      assert msg.role == :assistant
+      assert [%ContentPart{type: :text, text: "Let me check the weather"}] = msg.content
+      assert [%ReqLLM.ToolCall{id: "call_456"}] = msg.tool_calls
+    end
+
+    test "normalizes assistant message with nil content and tool_calls" do
+      input = [
+        %{
+          role: :assistant,
+          content: nil,
+          tool_calls: [%{id: "call_789", name: "search", arguments: %{query: "test"}}]
+        }
+      ]
+
+      {:ok, context} = Context.normalize(input, validate: false)
+
+      [msg] = context.messages
+      assert msg.role == :assistant
+      assert msg.content == []
+      assert length(msg.tool_calls) == 1
+    end
+
+    test "normalizes tool result message with name" do
+      input = [
+        %{
+          role: :tool,
+          tool_call_id: "call_123",
+          name: "get_weather",
+          content: ~s({"temp": 72})
+        }
+      ]
+
+      {:ok, context} = Context.normalize(input, validate: false)
+
+      [msg] = context.messages
+      assert msg.role == :tool
+      assert msg.tool_call_id == "call_123"
+      assert msg.name == "get_weather"
+      assert [%ContentPart{type: :text, text: ~s({"temp": 72})}] = msg.content
+    end
+
+    test "normalizes tool result message without name" do
+      input = [
+        %{
+          role: :tool,
+          tool_call_id: "call_456",
+          content: "Result data"
+        }
+      ]
+
+      {:ok, context} = Context.normalize(input, validate: false)
+
+      [msg] = context.messages
+      assert msg.role == :tool
+      assert msg.tool_call_id == "call_456"
+      assert is_nil(msg.name)
+      assert [%ContentPart{type: :text, text: "Result data"}] = msg.content
+    end
+
+    test "normalizes full tool conversation flow" do
+      input = [
+        %{role: :user, content: "What's the weather in SF?"},
+        %{
+          role: :assistant,
+          content: "",
+          tool_calls: [%{id: "call_1", name: "get_weather", arguments: %{location: "SF"}}]
+        },
+        %{
+          role: :tool,
+          tool_call_id: "call_1",
+          name: "get_weather",
+          content: ~s({"temp": 72, "condition": "sunny"})
+        },
+        %{role: :assistant, content: "The weather in SF is 72°F and sunny!"}
+      ]
+
+      {:ok, context} = Context.normalize(input, validate: false)
+
+      assert length(context.messages) == 4
+
+      [user_msg, assistant_tool_msg, tool_result, final_assistant] = context.messages
+
+      assert user_msg.role == :user
+      assert assistant_tool_msg.role == :assistant
+      assert length(assistant_tool_msg.tool_calls) == 1
+      assert tool_result.role == :tool
+      assert tool_result.tool_call_id == "call_1"
+      assert final_assistant.role == :assistant
+    end
+
+    test "normalizes assistant with multiple tool_calls" do
+      input = [
+        %{
+          role: :assistant,
+          content: "",
+          tool_calls: [
+            %{id: "call_1", name: "get_weather", arguments: %{location: "SF"}},
+            %{id: "call_2", name: "get_weather", arguments: %{location: "NYC"}}
+          ]
+        }
+      ]
+
+      {:ok, context} = Context.normalize(input, validate: false)
+
+      [msg] = context.messages
+      assert length(msg.tool_calls) == 2
+      assert Enum.map(msg.tool_calls, & &1.id) == ["call_1", "call_2"]
+    end
+  end
 end
