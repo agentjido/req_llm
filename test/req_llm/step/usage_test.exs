@@ -512,6 +512,95 @@ defmodule ReqLLM.Step.UsageTest do
       assert usage_data.output_cost == expected_output_cost
     end
 
+    test "extracts Anthropic cache_read_input_tokens format" do
+      # Tests fix for bug where Anthropic's cache_read_input_tokens was not recognized
+      model = %LLMDB.Model{
+        provider: :anthropic,
+        id: "claude-3-5-sonnet",
+        cost: %{input: 3.0, output: 15.0, cache_read: 0.3, cache_write: 3.75}
+      }
+
+      request = mock_request(model: model)
+
+      # Anthropic/Azure/Vertex format with cache tokens
+      response_body = %{
+        "usage" => %{
+          "input_tokens" => 1000,
+          "output_tokens" => 200,
+          "cache_read_input_tokens" => 800,
+          "cache_creation_input_tokens" => 100
+        }
+      }
+
+      response = mock_response(response_body)
+      {_req, updated_resp} = Usage.handle({request, response})
+
+      usage_data = updated_resp.private[:req_llm][:usage]
+      assert usage_data.tokens.input == 1000
+      assert usage_data.tokens.output == 200
+      assert usage_data.tokens.cached_input == 800
+      assert usage_data.tokens.cache_creation == 100
+
+      # Cost breakdown:
+      # Regular tokens: 1000 - 800 - 100 = 100 at $3.0/M = $0.0003
+      # Cache read tokens: 800 at $0.3/M = $0.00024
+      # Cache write tokens: 100 at $3.75/M = $0.000375
+      # Input cost: 0.0003 + 0.00024 + 0.000375 = $0.000915
+      # Output cost: 200 at $15/M = $0.003
+      # Total: $0.003915
+
+      expected_input_cost = Float.round((100 * 3.0 + 800 * 0.3 + 100 * 3.75) / 1_000_000, 6)
+      expected_output_cost = Float.round(200 * 15.0 / 1_000_000, 6)
+      expected_total = Float.round(expected_input_cost + expected_output_cost, 6)
+
+      assert usage_data.input_cost == expected_input_cost
+      assert usage_data.output_cost == expected_output_cost
+      assert usage_data.cost == expected_total
+    end
+
+    test "extracts AWS Bedrock cacheReadInputTokens format" do
+      # Tests that Bedrock's camelCase cache token fields are recognized
+      # Use a generic provider to test fallback extraction (Bedrock provider has special handling)
+      model = %LLMDB.Model{
+        provider: :test,
+        id: "test-model",
+        cost: %{input: 3.0, output: 15.0, cache_read: 0.3, cache_write: 3.75}
+      }
+
+      request = mock_request(model: model)
+
+      # AWS Bedrock format (camelCase) - tests that fallback extractor handles these fields
+      response_body = %{
+        "usage" => %{
+          "input_tokens" => 1000,
+          "output_tokens" => 200,
+          "cacheReadInputTokens" => 600,
+          "cacheWriteInputTokens" => 150
+        }
+      }
+
+      response = mock_response(response_body)
+      {_req, updated_resp} = Usage.handle({request, response})
+
+      usage_data = updated_resp.private[:req_llm][:usage]
+      assert usage_data.tokens.input == 1000
+      assert usage_data.tokens.output == 200
+      assert usage_data.tokens.cached_input == 600
+      assert usage_data.tokens.cache_creation == 150
+
+      # Cost breakdown:
+      # Regular tokens: 1000 - 600 - 150 = 250 at $3.0/M
+      # Cache read tokens: 600 at $0.3/M
+      # Cache write tokens: 150 at $3.75/M
+      expected_input_cost = Float.round((250 * 3.0 + 600 * 0.3 + 150 * 3.75) / 1_000_000, 6)
+      expected_output_cost = Float.round(200 * 15.0 / 1_000_000, 6)
+      expected_total = Float.round(expected_input_cost + expected_output_cost, 6)
+
+      assert usage_data.input_cost == expected_input_cost
+      assert usage_data.output_cost == expected_output_cost
+      assert usage_data.cost == expected_total
+    end
+
     test "handles edge cases with cached tokens" do
       model = %LLMDB.Model{
         provider: :openai,

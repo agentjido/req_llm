@@ -83,7 +83,8 @@ defmodule ReqLLM.Step.Usage do
         case resp.body do
           %ReqLLM.Response{usage: response_usage}
           when is_map(response_usage) and cost_breakdown != nil ->
-            cached_tokens = usage[:cached_input] || 0
+            cached_read_tokens = usage[:cached_input] || 0
+            cache_creation_tokens = usage[:cache_creation] || 0
 
             augmented_usage =
               response_usage
@@ -91,7 +92,8 @@ defmodule ReqLLM.Step.Usage do
               |> Map.put_new(:output_tokens, usage.output)
               |> Map.put_new(:total_tokens, usage.input + usage.output)
               |> Map.put(:reasoning_tokens, usage.reasoning)
-              |> Map.put(:cached_tokens, cached_tokens)
+              |> Map.put(:cached_tokens, cached_read_tokens)
+              |> Map.put(:cache_creation_tokens, cache_creation_tokens)
               |> Map.merge(%{
                 input_cost: cost_breakdown.input_cost,
                 output_cost: cost_breakdown.output_cost,
@@ -153,11 +155,11 @@ defmodule ReqLLM.Step.Usage do
   end
 
   defp fallback_extract_usage(%{"prompt_tokens" => input, "completion_tokens" => output}) do
-    {:ok, %{input: input, output: output, reasoning: 0, cached_input: 0}}
+    {:ok, %{input: input, output: output, reasoning: 0, cached_input: 0, cache_creation: 0}}
   end
 
   defp fallback_extract_usage(%{"input_tokens" => input, "output_tokens" => output}) do
-    {:ok, %{input: input, output: output, reasoning: 0, cached_input: 0}}
+    {:ok, %{input: input, output: output, reasoning: 0, cached_input: 0, cache_creation: 0}}
   end
 
   defp fallback_extract_usage(%ReqLLM.Response{usage: usage}) when is_map(usage) do
@@ -178,7 +180,8 @@ defmodule ReqLLM.Step.Usage do
       reasoning:
         usage[:reasoning] || usage["reasoning"] || usage[:reasoning_tokens] ||
           usage["reasoning_tokens"] || get_reasoning_tokens(usage) || 0,
-      cached_input: get_cached_input_tokens(usage)
+      cached_input: get_cached_input_tokens(usage),
+      cache_creation: get_cache_creation_tokens(usage)
     }
   end
 
@@ -194,8 +197,15 @@ defmodule ReqLLM.Step.Usage do
   end
 
   defp get_cached_input_tokens(usage) do
+    # Anthropic/Azure/Vertex format
+    # AWS Bedrock format (camelCase)
+    # Legacy/normalized formats
+    # OpenAI format
     cached =
-      usage[:cached_input] || usage["cached_input"] ||
+      usage[:cache_read_input_tokens] || usage["cache_read_input_tokens"] ||
+        usage[:cacheReadInputTokens] || usage["cacheReadInputTokens"] ||
+        usage[:cacheReadInputTokenCount] || usage["cacheReadInputTokenCount"] ||
+        usage[:cached_input] || usage["cached_input"] ||
         usage[:cached_tokens] || usage["cached_tokens"] ||
         get_in(usage, ["prompt_tokens_details", "cached_tokens"]) ||
         get_in(usage, [:prompt_tokens_details, :cached_tokens])
@@ -205,6 +215,23 @@ defmodule ReqLLM.Step.Usage do
         usage["input_tokens"] || usage[:input_tokens] || 0
 
     clamp_tokens(cached, input_tokens)
+  end
+
+  defp get_cache_creation_tokens(usage) do
+    # Anthropic/Azure/Vertex format for cache write/creation tokens
+    # AWS Bedrock format (camelCase)
+    # Fallback
+    creation =
+      usage[:cache_creation_input_tokens] || usage["cache_creation_input_tokens"] ||
+        usage[:cacheWriteInputTokens] || usage["cacheWriteInputTokens"] ||
+        usage[:cacheWriteInputTokenCount] || usage["cacheWriteInputTokenCount"] ||
+        usage[:cache_write_input_tokens] || usage["cache_write_input_tokens"]
+
+    input_tokens =
+      usage[:input] || usage["input"] || usage["prompt_tokens"] || usage[:prompt_tokens] ||
+        usage["input_tokens"] || usage[:input_tokens] || 0
+
+    clamp_tokens(creation, input_tokens)
   end
 
   @spec fetch_model(Req.Request.t()) :: {:ok, LLMDB.Model.t()} | :error
@@ -217,49 +244,10 @@ defmodule ReqLLM.Step.Usage do
 
   @spec compute_cost_breakdown(map(), LLMDB.Model.t()) ::
           {:ok, %{input_cost: float(), output_cost: float(), total_cost: float()} | nil}
-  defp compute_cost_breakdown(_usage, %LLMDB.Model{cost: nil}) do
-    {:ok, nil}
-  end
+  defp compute_cost_breakdown(_usage, %LLMDB.Model{cost: nil}), do: {:ok, nil}
 
-  defp compute_cost_breakdown(%{input: input_tokens, output: output_tokens} = usage, %LLMDB.Model{
-         cost: cost_map
-       })
-       when is_map(cost_map) do
-    input_rate = cost_map[:input] || cost_map["input"]
-    output_rate = cost_map[:output] || cost_map["output"]
-
-    cached_rate =
-      cost_map[:cached_input] || cost_map["cached_input"] ||
-        cost_map[:cache_read] || cost_map["cache_read"] ||
-        input_rate
-
-    with {:ok, input_num} <- safe_to_number(input_tokens),
-         {:ok, output_num} <- safe_to_number(output_tokens),
-         true <- input_rate != nil and output_rate != nil do
-      # Extract cached tokens and calculate split
-      cached_tokens = clamp_tokens(Map.get(usage, :cached_input, 0), input_num)
-
-      uncached_tokens = max(input_num - cached_tokens, 0)
-
-      # Calculate costs with cached vs uncached rates (costs are per million tokens)
-      input_cost =
-        Float.round(
-          uncached_tokens / 1_000_000 * input_rate + cached_tokens / 1_000_000 * cached_rate,
-          6
-        )
-
-      output_cost = Float.round(output_num / 1_000_000 * output_rate, 6)
-      total_cost = Float.round(input_cost + output_cost, 6)
-
-      {:ok,
-       %{
-         input_cost: input_cost,
-         output_cost: output_cost,
-         total_cost: total_cost
-       }}
-    else
-      _ -> {:ok, nil}
-    end
+  defp compute_cost_breakdown(usage, %LLMDB.Model{cost: cost_map}) do
+    ReqLLM.Cost.calculate(usage, cost_map)
   end
 
   # Safely clamps a value to a valid token count within bounds.

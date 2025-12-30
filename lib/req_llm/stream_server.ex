@@ -905,8 +905,15 @@ defmodule ReqLLM.StreamServer do
       %{"prompt_tokens" => input, "completion_tokens" => output} ->
         reasoning = reasoning_from_usage(usage)
         cached_input = cached_from_usage(usage)
+        cache_creation = cache_creation_from_usage(usage)
 
-        %{input: input, output: output, reasoning: reasoning, cached_input: cached_input}
+        %{
+          input: input,
+          output: output,
+          reasoning: reasoning,
+          cached_input: cached_input,
+          cache_creation: cache_creation
+        }
         |> add_token_aliases()
         |> add_cost_calculation_if_available(usage)
         |> calculate_cost_if_model_available(model)
@@ -914,21 +921,35 @@ defmodule ReqLLM.StreamServer do
       %{"input_tokens" => input, "output_tokens" => output} ->
         reasoning = reasoning_from_usage(usage)
         cached_input = cached_from_usage(usage)
+        cache_creation = cache_creation_from_usage(usage)
 
-        %{input: input, output: output, reasoning: reasoning, cached_input: cached_input}
+        %{
+          input: input,
+          output: output,
+          reasoning: reasoning,
+          cached_input: cached_input,
+          cache_creation: cache_creation
+        }
         |> add_token_aliases()
         |> add_cost_calculation_if_available(usage)
         |> calculate_cost_if_model_available(model)
 
       %{input_tokens: input, output_tokens: output} ->
-        cached_input = Map.get(usage, :cached_tokens, 0)
         reasoning = Map.get(usage, :reasoning_tokens, 0)
-        cache_read = Map.get(usage, :cache_read_input_tokens, 0)
+        # Prefer cache_read_input_tokens over legacy cached_tokens
+        cached_input =
+          Map.get(usage, :cache_read_input_tokens) ||
+            Map.get(usage, :cached_tokens, 0)
+
         cache_creation = Map.get(usage, :cache_creation_input_tokens, 0)
 
-        %{input: input, output: output, reasoning: reasoning, cached_input: cached_input}
-        |> Map.put(:cache_read_input_tokens, cache_read)
-        |> Map.put(:cache_creation_input_tokens, cache_creation)
+        %{
+          input: input,
+          output: output,
+          reasoning: reasoning,
+          cached_input: cached_input,
+          cache_creation: cache_creation
+        }
         |> add_token_aliases()
         |> add_cost_calculation_if_available(usage)
         |> calculate_cost_if_model_available(model)
@@ -948,10 +969,26 @@ defmodule ReqLLM.StreamServer do
   end
 
   defp cached_from_usage(usage) do
-    get_in(usage, ["prompt_tokens_details", "cached_tokens"]) ||
+    # Anthropic/Azure/Vertex format
+    # AWS Bedrock formats (camelCase)
+    # OpenAI formats (nested)
+    # Legacy
+    Map.get(usage, "cache_read_input_tokens") ||
+      Map.get(usage, "cacheReadInputTokens") ||
+      Map.get(usage, "cacheReadInputTokenCount") ||
+      get_in(usage, ["prompt_tokens_details", "cached_tokens"]) ||
       get_in(usage, ["input_tokens_details", "cached_tokens"]) ||
-      Map.get(usage, "cache_read_input_tokens", 0) ||
       Map.get(usage, "cached_tokens", 0)
+  end
+
+  defp cache_creation_from_usage(usage) do
+    # Anthropic/Azure/Vertex format
+    # AWS Bedrock formats (camelCase)
+    # Fallback
+    Map.get(usage, "cache_creation_input_tokens") ||
+      Map.get(usage, "cacheWriteInputTokens") ||
+      Map.get(usage, "cacheWriteInputTokenCount") ||
+      Map.get(usage, "cache_write_input_tokens", 0)
   end
 
   defp add_token_aliases(usage) do
@@ -978,40 +1015,7 @@ defmodule ReqLLM.StreamServer do
 
   defp calculate_cost_if_model_available(usage, %LLMDB.Model{cost: cost_map})
        when is_map(cost_map) do
-    # Calculate cost using the model's cost rates (mirrors ReqLLM.Step.Usage logic)
-    input_rate = cost_map[:input] || cost_map["input"]
-    output_rate = cost_map[:output] || cost_map["output"]
-
-    cached_rate =
-      cost_map[:cached_input] || cost_map["cached_input"] ||
-        cost_map[:cache_read] || cost_map["cache_read"] ||
-        input_rate
-
-    case usage do
-      %{input: input_tokens, output: output_tokens}
-      when is_number(input_tokens) and is_number(output_tokens) and not is_nil(input_rate) and
-             not is_nil(output_rate) ->
-        cached_tokens = max(0, Map.get(usage, :cached_input, 0))
-        uncached_tokens = max(input_tokens - cached_tokens, 0)
-
-        # Calculate costs (rates are per million tokens)
-        input_cost =
-          Float.round(
-            uncached_tokens / 1_000_000 * input_rate + cached_tokens / 1_000_000 * cached_rate,
-            6
-          )
-
-        output_cost = Float.round(output_tokens / 1_000_000 * output_rate, 6)
-        total_cost = Float.round(input_cost + output_cost, 6)
-
-        usage
-        |> Map.put(:input_cost, input_cost)
-        |> Map.put(:output_cost, output_cost)
-        |> Map.put(:total_cost, total_cost)
-
-      _ ->
-        usage
-    end
+    ReqLLM.Cost.add_cost_to_usage(usage, cost_map)
   end
 
   defp calculate_cost_if_model_available(usage, _), do: usage
