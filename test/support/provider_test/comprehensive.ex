@@ -503,7 +503,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
               {:ok, response} =
                 ReqLLM.generate_object(
                   @model_spec,
-                  "Generate a fictional software engineer profile with a made-up name and age",
+                  "Generate a software engineer profile",
                   schema,
                   fixture_opts(@provider, "object_basic", opts)
                 )
@@ -553,7 +553,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
               {:ok, response} =
                 ReqLLM.stream_object(
                   @model_spec,
-                  "Generate a fictional software engineer profile with a made-up name and age",
+                  "Generate a software engineer profile",
                   schema,
                   fixture_opts(@provider, "object_streaming", opts)
                 )
