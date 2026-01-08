@@ -157,7 +157,11 @@ defmodule ReqLLM.Providers.OpenAI do
   @compile {:no_warn_undefined, [{nil, :path, 0}, {nil, :attach_stream, 4}]}
 
   defp get_api_type(%LLMDB.Model{} = model) do
-    get_in(model, [Access.key(:extra, %{}), :api])
+    case get_in(model, [Access.key(:extra, %{}), :wire, :protocol]) do
+      "openai_responses" -> "responses"
+      "openai_chat" -> "chat"
+      _ -> nil
+    end
   end
 
   defp select_api_mod(%LLMDB.Model{} = model) do

@@ -223,7 +223,7 @@ defmodule ReqLLM.Providers.Azure do
     ]
   ]
 
-  # Default formatters by model family prefix (used when model.extra.api is not "responses")
+  # Default formatters by model family prefix (used when model.extra.wire.protocol is not "openai_responses")
   @model_families %{
     "gpt" => __MODULE__.OpenAI,
     "text-embedding" => __MODULE__.OpenAI,
@@ -895,10 +895,10 @@ defmodule ReqLLM.Providers.Azure do
   # Returns the model ID to use for API calls, preferring provider_model_id if set.
   defp effective_model_id(model), do: model.provider_model_id || model.id
 
-  # Checks if a model uses the Responses API (based on model.extra.api metadata).
-  # The model metadata should have `extra: %{api: "responses"}` for Responses API models.
+  # Checks if a model uses the Responses API (based on model.extra.wire.protocol metadata).
+  # The model metadata should have `extra: %{wire: %{protocol: "openai_responses"}}` for Responses API models.
   defp uses_responses_api?(%LLMDB.Model{} = model) do
-    get_in(model, [Access.key(:extra, %{}), :api]) == "responses"
+    get_in(model, [Access.key(:extra, %{}), :wire, :protocol]) == "openai_responses"
   end
 
   # Determines the model family (claude, gpt-4o, o1, etc.) from a model ID.

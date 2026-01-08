@@ -110,7 +110,7 @@ defmodule ReqLLM.Provider.ResponseBuilder do
   def for_model(%LLMDB.Model{provider: :google_vertex}),
     do: ReqLLM.Providers.Google.ResponseBuilder
 
-  def for_model(%LLMDB.Model{extra: %{api: "responses"}}),
+  def for_model(%LLMDB.Model{extra: %{wire: %{protocol: "openai_responses"}}}),
     do: ReqLLM.Providers.OpenAI.ResponsesAPI.ResponseBuilder
 
   def for_model(_model), do: ReqLLM.Provider.Defaults.ResponseBuilder
