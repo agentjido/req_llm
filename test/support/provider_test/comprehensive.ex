@@ -239,7 +239,7 @@ defmodule ReqLLM.ProviderTest.Comprehensive do
               case ReqLLM.model(@model_spec) do
                 {:ok, %{capabilities: %{reasoning: true}}} -> 500
                 {:ok, %{model: "gpt-4.1" <> _}} -> 16
-                {:ok, %{extra: %{api: "responses"}}} -> 200
+                {:ok, %{extra: %{wire: %{protocol: "openai_responses"}}}} -> 200
                 _ -> 10
               end
 
