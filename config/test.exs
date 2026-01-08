@@ -76,14 +76,14 @@ config :llm_db,
           family: "o1",
           capabilities: %{chat: true, reasoning: %{enabled: true}},
           limits: %{context: 128_000, output: 65_536},
-          extra: %{api: "responses"}
+          extra: %{wire: %{protocol: "openai_responses"}}
         },
         "o3-mini" => %{
           name: "o3-mini",
           family: "o3",
           capabilities: %{chat: true, reasoning: %{enabled: true}},
           limits: %{context: 200_000, output: 100_000},
-          extra: %{api: "responses"}
+          extra: %{wire: %{protocol: "openai_responses"}}
         },
         "o4-mini" => %{
           name: "o4-mini",
@@ -94,28 +94,28 @@ config :llm_db,
             tools: %{enabled: true, streaming: true}
           },
           limits: %{context: 200_000, output: 100_000},
-          extra: %{api: "responses"}
+          extra: %{wire: %{protocol: "openai_responses"}}
         },
         "gpt-5" => %{
           name: "GPT-5",
           family: "gpt-5",
           capabilities: %{chat: true, tools: %{enabled: true}},
           limits: %{context: 200_000, output: 32_768},
-          extra: %{api: "responses"}
+          extra: %{wire: %{protocol: "openai_responses"}}
         },
         "gpt-5-mini" => %{
           name: "GPT-5 mini",
           family: "gpt-5",
           capabilities: %{chat: true, tools: %{enabled: true}},
           limits: %{context: 128_000, output: 16_384},
-          extra: %{api: "responses"}
+          extra: %{wire: %{protocol: "openai_responses"}}
         },
         "gpt-5-nano" => %{
           name: "GPT-5 nano",
           family: "gpt-5",
           capabilities: %{chat: true, tools: %{enabled: true}},
           limits: %{context: 64_000, output: 8192},
-          extra: %{api: "responses"}
+          extra: %{wire: %{protocol: "openai_responses"}}
         },
         "text-embedding-3-small" => %{
           name: "Text Embedding 3 Small",
