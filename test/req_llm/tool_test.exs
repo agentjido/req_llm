@@ -96,7 +96,7 @@ defmodule ReqLLM.ToolTest do
       invalid_names = [
         "invalid name with spaces",
         "123starts_with_number",
-        "special-chars",
+        "special@chars",
         "emoji😊",
         "",
         # > 64 chars
@@ -109,7 +109,7 @@ defmodule ReqLLM.ToolTest do
       end
 
       # Valid names
-      valid_names = ["valid_name", "CamelCase", "_underscore", "a1b2c3", "get_weather_info"]
+      valid_names = ["valid_name", "CamelCase", "_underscore", "a1b2c3", "get_weather_info", "kebab-case", "notion-get-users"]
 
       for name <- valid_names do
         params = [name: name, description: "Test", callback: fn _ -> {:ok, "ok"} end]
@@ -307,6 +307,9 @@ defmodule ReqLLM.ToolTest do
         "name_with_123",
         "a",
         "get_weather_info_v2",
+        "kebab-case",
+        "notion-get-users",
+        "get-response",
         # exactly 64 chars
         String.duplicate("a", 64)
       ]
@@ -319,7 +322,7 @@ defmodule ReqLLM.ToolTest do
       invalid_names = [
         "name with spaces",
         "123starts_with_number",
-        "kebab-case",
+        "-starts-with-hyphen",
         "special@chars",
         "emoji😊name",
         "",
@@ -332,6 +335,30 @@ defmodule ReqLLM.ToolTest do
 
       for name <- invalid_names do
         refute Tool.valid_name?(name), "#{inspect(name)} should be invalid"
+      end
+    end
+
+    test "allows hyphenated tool names for MCP server compatibility" do
+      # These are real-world examples from MCP servers like Notion
+      mcp_tool_names = [
+        "notion-get-users",
+        "notion-create-page",
+        "slack-send-message",
+        "github-create-issue",
+        "get-response"
+      ]
+
+      for name <- mcp_tool_names do
+        assert Tool.valid_name?(name), "MCP tool name #{name} should be valid"
+
+        {:ok, tool} =
+          Tool.new(
+            name: name,
+            description: "MCP tool",
+            callback: fn _ -> {:ok, "result"} end
+          )
+
+        assert tool.name == name
       end
     end
   end
