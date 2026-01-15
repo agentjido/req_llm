@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "id": "001-extend-google-vertex-ai-mime-type-support-to-match",
+  "title": "Extend Google Vertex AI MIME type support to match official documentation",
+  "section": "providers/google",
+  "state": "implementing",
+  "overview": "The Google provider's MIME type inference is incomplete, supporting only 11 of 25+ officially supported MIME types, which may cause valid file formats to fall back to application/octet-stream or fail to work properly with Gemini models.\n\n**Motivation:** Ensure full compatibility with Google Gemini Vertex AI's documented capabilities and provide users with complete multimodal support for all officially supported file types.\n\n**Success criteria:**\n- All 25+ MIME types from official Google Vertex AI documentation are supported\n- File extension to MIME type mapping covers: images (3), video (9), audio (11), documents (2)\n- Comprehensive tests verify correct MIME type inference for all supported extensions\n- Edge cases handled (query params, case sensitivity, unknown extensions)\n\n**Technical constraints:**\n- Must maintain backward compatibility with existing 11 MIME types\n- Must follow Google Vertex AI official documentation (January 2026)\n- Implementation in lib/req_llm/providers/google.ex infer_mime_type_from_url function\n\n**In scope:**\n- Add missing video formats: .flv, .mov, .mpeg, .mpegps, .mpg, .webm, .wmv, .3gp\n- Add missing audio formats: .aac, .flac, .mpga, .opus, .ogg, .webm\n- Add missing document format: .txt\n- Map to correct MIME types: video/x-flv, video/quicktime, video/mpeg, video/mpegps, video/mpg, video/webm, video/wmv, video/3gpp, audio/aac, audio/flac, audio/mpga, audio/opus, audio/webm, text/plain\n- Add tests for all new MIME types\n- Verify against official sources: firebase.google.com/docs/vertex-ai/input-file-requirements\n**Out of scope:**\n- Creating dedicated ContentPart.file_url or ContentPart.file_uri functions\n- Adding MIME types not officially supported by Google Vertex AI\n- Modifying other providers\n- Changing existing image_url API surface\n\n**Signals:** priority: high, urgency: User requested thorough fix with comprehensive testing",
+  "branch": null,
+  "pr_url": null,
+  "pr_number": null,
+  "last_error": "Git pre-flight check failed:\n\n• There are uncommitted changes in the working directory\n    Run `git stash` to temporarily save changes\n    Or run `git commit -am \"message\"` to commit changes\n    Or run `git checkout -- .` to discard changes (destructive)",
+  "created_at": "2026-01-15T14:46:38.356Z",
+  "updated_at": "2026-01-15T15:03:45.807Z",
+  "problem_statement": "The Google provider's MIME type inference is incomplete, supporting only 11 of 25+ officially supported MIME types, which may cause valid file formats to fall back to application/octet-stream or fail to work properly with Gemini models.",
+  "motivation": "Ensure full compatibility with Google Gemini Vertex AI's documented capabilities and provide users with complete multimodal support for all officially supported file types.",
+  "success_criteria": [
+    "All 25+ MIME types from official Google Vertex AI documentation are supported",
+    "File extension to MIME type mapping covers: images (3), video (9), audio (11), documents (2)",
+    "Comprehensive tests verify correct MIME type inference for all supported extensions",
+    "Edge cases handled (query params, case sensitivity, unknown extensions)"
+  ],
+  "technical_constraints": [
+    "Must maintain backward compatibility with existing 11 MIME types",
+    "Must follow Google Vertex AI official documentation (January 2026)",
+    "Implementation in lib/req_llm/providers/google.ex infer_mime_type_from_url function"
+  ],
+  "scope_in_scope": [
+    "Add missing video formats: .flv, .mov, .mpeg, .mpegps, .mpg, .webm, .wmv, .3gp",
+    "Add missing audio formats: .aac, .flac, .mpga, .opus, .ogg, .webm",
+    "Add missing document format: .txt",
+    "Map to correct MIME types: video/x-flv, video/quicktime, video/mpeg, video/mpegps, video/mpg, video/webm, video/wmv, video/3gpp, audio/aac, audio/flac, audio/mpga, audio/opus, audio/webm, text/plain",
+    "Add tests for all new MIME types",
+    "Verify against official sources: firebase.google.com/docs/vertex-ai/input-file-requirements"
+  ],
+  "scope_out_of_scope": [
+    "Creating dedicated ContentPart.file_url or ContentPart.file_uri functions",
+    "Adding MIME types not officially supported by Google Vertex AI",
+    "Modifying other providers",
+    "Changing existing image_url API surface"
+  ],
+  "priority_hint": "high",
+  "urgency_hint": "User requested thorough fix with comprehensive testing"
+}

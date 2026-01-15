@@ -1,0 +1,72 @@
+# Progress Log
+
+## 2026-01-15 - Implementation Complete
+
+### Summary
+Successfully implemented comprehensive MIME type inference for Google Vertex AI provider, supporting all 25+ officially documented MIME types.
+
+### Key Implementation Decisions
+
+1. **Context Preprocessing Approach**
+   - Initially attempted to add MIME type inference in `convert_content_part/1` function
+   - Discovered that ContentPart structs are converted to OpenAI format before reaching `convert_content_part`
+   - Solution: Added preprocessing step in `encode_chat_body` to infer MIME types BEFORE OpenAI format conversion
+   - This preserves filename information needed for inference
+
+2. **Functions Implemented**
+   - `infer_mime_types_in_context/1` - Walks through context and updates file parts
+   - `infer_mime_types_in_message/1` - Processes individual messages
+   - `infer_mime_type_in_content_part/1` - Updates individual ContentPart structs
+   - `infer_mime_type_from_url/1` - Maps extensions to MIME types (25+ types)
+   - `extract_extension_from_url/1` - Robust URL parsing with edge case handling
+
+3. **Testing Strategy**
+   - Initially tried to test private functions directly (failed - UndefinedFunctionError)
+   - Pivoted to comprehensive integration tests through public API
+   - All 25 MIME types tested via end-to-end encoding pipeline
+   - Tests cover edge cases: query params, fragments, case-insensitivity, malformed URLs
+
+4. **Backward Compatibility**
+   - Only infers when `media_type == "application/octet-stream"` (the default)
+   - Explicit media_types always take precedence
+   - No changes to public API surface
+   - No changes to other providers
+
+### Technical Challenges
+
+1. **Data Flow Discovery**
+   - ContentPart → encode_context_to_openai_format → OpenAI format → convert_content_part
+   - Filename lost during OpenAI format conversion
+   - Required preprocessing before OpenAI conversion step
+
+2. **Pattern Matching**
+   - ContentPart structs have all fields defined (even if nil)
+   - Pattern matching works correctly with full struct patterns
+
+3. **Conventional Commits**
+   - Project uses git_ops.check_message hook
+   - Required `feat(google):` prefix for commit message
+
+### Files Modified
+- `lib/req_llm/providers/google.ex` - Added inference functions and preprocessing
+- `test/providers/google_test.exs` - Added 11 comprehensive integration tests
+
+### Test Results
+- All 1802 tests pass
+- All quality checks pass (format, compile, dialyzer, credo)
+- No warnings, no failures
+
+### Ambiguous Extensions Handling
+- `.webm` defaults to `video/webm` (also valid: audio/webm)
+- `.mp4` defaults to `video/mp4` (also valid: audio/mp4)
+- `.mpeg` defaults to `video/mpeg` (also valid: audio/mpeg)
+- Documented in function comments for users who need audio variants
+
+### Official Documentation Reference
+- https://firebase.google.com/docs/vertex-ai/input-file-requirements
+- Verified all 25 MIME types match official Google Vertex AI docs as of January 2026
+
+### Commit
+- SHA: d059c7e1
+- Message: feat(google): add comprehensive MIME type inference for Vertex AI
+[2026-01-15T15:03:45.776Z] Completed iteration 1 for story US-001

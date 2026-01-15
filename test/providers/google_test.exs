@@ -920,4 +920,396 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert Base.decode64!(part["inline_data"]["data"]) == image_content
     end
   end
+
+  describe "MIME type inference integration with ContentPart encoding" do
+    test "infers all image MIME types" do
+      test_cases = [
+        {"photo.png", "image/png"},
+        {"photo.jpg", "image/jpeg"},
+        {"photo.jpeg", "image/jpeg"},
+        {"image.webp", "image/webp"}
+      ]
+
+      for {filename, expected_mime} <- test_cases do
+        file_part = %ReqLLM.Message.ContentPart{
+          type: :file,
+          data: "image content",
+          filename: filename,
+          media_type: "application/octet-stream"
+        }
+
+        message = %ReqLLM.Message{role: :user, content: [file_part]}
+        context = %ReqLLM.Context{messages: [message]}
+
+        request = %Req.Request{
+          options: [context: context, id: "gemini-1.5-flash", stream: false]
+        }
+
+        updated_request = Google.encode_body(request)
+        decoded = Jason.decode!(updated_request.body)
+        [user_msg] = decoded["contents"]
+        [part] = user_msg["parts"]
+
+        assert part["inline_data"]["mime_type"] == expected_mime,
+               "Expected #{expected_mime} for #{filename}, got #{part["inline_data"]["mime_type"]}"
+      end
+    end
+
+    test "infers all video MIME types" do
+      test_cases = [
+        {"video.flv", "video/x-flv"},
+        {"video.mov", "video/quicktime"},
+        {"video.mpeg", "video/mpeg"},
+        {"video.mpegps", "video/mpegps"},
+        {"video.mpg", "video/mpg"},
+        {"video.mp4", "video/mp4"},
+        {"video.webm", "video/webm"},
+        {"video.wmv", "video/wmv"},
+        {"video.3gp", "video/3gpp"}
+      ]
+
+      for {filename, expected_mime} <- test_cases do
+        file_part = %ReqLLM.Message.ContentPart{
+          type: :file,
+          data: "video content",
+          filename: filename,
+          media_type: "application/octet-stream"
+        }
+
+        message = %ReqLLM.Message{role: :user, content: [file_part]}
+        context = %ReqLLM.Context{messages: [message]}
+
+        request = %Req.Request{
+          options: [context: context, id: "gemini-1.5-flash", stream: false]
+        }
+
+        updated_request = Google.encode_body(request)
+        decoded = Jason.decode!(updated_request.body)
+        [user_msg] = decoded["contents"]
+        [part] = user_msg["parts"]
+
+        assert part["inline_data"]["mime_type"] == expected_mime,
+               "Expected #{expected_mime} for #{filename}, got #{part["inline_data"]["mime_type"]}"
+      end
+    end
+
+    test "infers all audio MIME types" do
+      test_cases = [
+        {"audio.aac", "audio/aac"},
+        {"audio.flac", "audio/flac"},
+        {"audio.mp3", "audio/mp3"},
+        {"audio.m4a", "audio/m4a"},
+        {"audio.mpga", "audio/mpga"},
+        {"audio.opus", "audio/opus"},
+        {"audio.pcm", "audio/pcm"},
+        {"audio.wav", "audio/wav"}
+      ]
+
+      for {filename, expected_mime} <- test_cases do
+        file_part = %ReqLLM.Message.ContentPart{
+          type: :file,
+          data: "audio content",
+          filename: filename,
+          media_type: "application/octet-stream"
+        }
+
+        message = %ReqLLM.Message{role: :user, content: [file_part]}
+        context = %ReqLLM.Context{messages: [message]}
+
+        request = %Req.Request{
+          options: [context: context, id: "gemini-1.5-flash", stream: false]
+        }
+
+        updated_request = Google.encode_body(request)
+        decoded = Jason.decode!(updated_request.body)
+        [user_msg] = decoded["contents"]
+        [part] = user_msg["parts"]
+
+        assert part["inline_data"]["mime_type"] == expected_mime,
+               "Expected #{expected_mime} for #{filename}, got #{part["inline_data"]["mime_type"]}"
+      end
+    end
+
+    test "infers all document MIME types" do
+      test_cases = [
+        {"document.pdf", "application/pdf"},
+        {"readme.txt", "text/plain"}
+      ]
+
+      for {filename, expected_mime} <- test_cases do
+        file_part = %ReqLLM.Message.ContentPart{
+          type: :file,
+          data: "document content",
+          filename: filename,
+          media_type: "application/octet-stream"
+        }
+
+        message = %ReqLLM.Message{role: :user, content: [file_part]}
+        context = %ReqLLM.Context{messages: [message]}
+
+        request = %Req.Request{
+          options: [context: context, id: "gemini-1.5-flash", stream: false]
+        }
+
+        updated_request = Google.encode_body(request)
+        decoded = Jason.decode!(updated_request.body)
+        [user_msg] = decoded["contents"]
+        [part] = user_msg["parts"]
+
+        assert part["inline_data"]["mime_type"] == expected_mime,
+               "Expected #{expected_mime} for #{filename}, got #{part["inline_data"]["mime_type"]}"
+      end
+    end
+
+    test "handles ambiguous extensions with video defaults" do
+      # .webm, .mp4, .mpeg default to video when ambiguous
+      test_cases = [
+        {"file.webm", "video/webm"},
+        {"file.mp4", "video/mp4"},
+        {"file.mpeg", "video/mpeg"}
+      ]
+
+      for {filename, expected_mime} <- test_cases do
+        file_part = %ReqLLM.Message.ContentPart{
+          type: :file,
+          data: "content",
+          filename: filename,
+          media_type: "application/octet-stream"
+        }
+
+        message = %ReqLLM.Message{role: :user, content: [file_part]}
+        context = %ReqLLM.Context{messages: [message]}
+
+        request = %Req.Request{
+          options: [context: context, id: "gemini-1.5-flash", stream: false]
+        }
+
+        updated_request = Google.encode_body(request)
+        decoded = Jason.decode!(updated_request.body)
+        [user_msg] = decoded["contents"]
+        [part] = user_msg["parts"]
+
+        assert part["inline_data"]["mime_type"] == expected_mime,
+               "Expected #{expected_mime} for ambiguous #{filename}"
+      end
+    end
+
+    test "is case-insensitive for extensions" do
+      test_cases = [
+        {"image.PNG", "image/png"},
+        {"video.MP4", "video/mp4"},
+        {"Audio.WAV", "audio/wav"},
+        {"DOCUMENT.PDF", "application/pdf"}
+      ]
+
+      for {filename, expected_mime} <- test_cases do
+        file_part = %ReqLLM.Message.ContentPart{
+          type: :file,
+          data: "content",
+          filename: filename,
+          media_type: "application/octet-stream"
+        }
+
+        message = %ReqLLM.Message{role: :user, content: [file_part]}
+        context = %ReqLLM.Context{messages: [message]}
+
+        request = %Req.Request{
+          options: [context: context, id: "gemini-1.5-flash", stream: false]
+        }
+
+        updated_request = Google.encode_body(request)
+        decoded = Jason.decode!(updated_request.body)
+        [user_msg] = decoded["contents"]
+        [part] = user_msg["parts"]
+
+        assert part["inline_data"]["mime_type"] == expected_mime,
+               "Expected #{expected_mime} for #{filename}"
+      end
+    end
+
+    test "handles URLs with query parameters" do
+      test_cases = [
+        {"https://example.com/video.mp4?token=xyz", "video/mp4"},
+        {"https://cdn.com/image.png?size=large&quality=high", "image/png"}
+      ]
+
+      for {filename, expected_mime} <- test_cases do
+        file_part = %ReqLLM.Message.ContentPart{
+          type: :file,
+          data: "content",
+          filename: filename,
+          media_type: "application/octet-stream"
+        }
+
+        message = %ReqLLM.Message{role: :user, content: [file_part]}
+        context = %ReqLLM.Context{messages: [message]}
+
+        request = %Req.Request{
+          options: [context: context, id: "gemini-1.5-flash", stream: false]
+        }
+
+        updated_request = Google.encode_body(request)
+        decoded = Jason.decode!(updated_request.body)
+        [user_msg] = decoded["contents"]
+        [part] = user_msg["parts"]
+
+        assert part["inline_data"]["mime_type"] == expected_mime,
+               "Expected #{expected_mime} for #{filename}"
+      end
+    end
+
+    test "handles URLs with fragments" do
+      test_cases = [
+        {"https://example.com/audio.mp3#section", "audio/mp3"},
+        {"file.wav#timestamp=30", "audio/wav"}
+      ]
+
+      for {filename, expected_mime} <- test_cases do
+        file_part = %ReqLLM.Message.ContentPart{
+          type: :file,
+          data: "content",
+          filename: filename,
+          media_type: "application/octet-stream"
+        }
+
+        message = %ReqLLM.Message{role: :user, content: [file_part]}
+        context = %ReqLLM.Context{messages: [message]}
+
+        request = %Req.Request{
+          options: [context: context, id: "gemini-1.5-flash", stream: false]
+        }
+
+        updated_request = Google.encode_body(request)
+        decoded = Jason.decode!(updated_request.body)
+        [user_msg] = decoded["contents"]
+        [part] = user_msg["parts"]
+
+        assert part["inline_data"]["mime_type"] == expected_mime,
+               "Expected #{expected_mime} for #{filename}"
+      end
+    end
+
+    test "handles encoded URLs" do
+      test_cases = [
+        {"https://example.com/my%20video.mp4", "video/mp4"},
+        {"path/to/my%20file.pdf", "application/pdf"}
+      ]
+
+      for {filename, expected_mime} <- test_cases do
+        file_part = %ReqLLM.Message.ContentPart{
+          type: :file,
+          data: "content",
+          filename: filename,
+          media_type: "application/octet-stream"
+        }
+
+        message = %ReqLLM.Message{role: :user, content: [file_part]}
+        context = %ReqLLM.Context{messages: [message]}
+
+        request = %Req.Request{
+          options: [context: context, id: "gemini-1.5-flash", stream: false]
+        }
+
+        updated_request = Google.encode_body(request)
+        decoded = Jason.decode!(updated_request.body)
+        [user_msg] = decoded["contents"]
+        [part] = user_msg["parts"]
+
+        assert part["inline_data"]["mime_type"] == expected_mime,
+               "Expected #{expected_mime} for #{filename}"
+      end
+    end
+
+    test "falls back to application/octet-stream for unsupported extensions" do
+      test_cases = ["file.unknown", "document.docx", "archive.zip"]
+
+      for filename <- test_cases do
+        file_part = %ReqLLM.Message.ContentPart{
+          type: :file,
+          data: "content",
+          filename: filename,
+          media_type: "application/octet-stream"
+        }
+
+        message = %ReqLLM.Message{role: :user, content: [file_part]}
+        context = %ReqLLM.Context{messages: [message]}
+
+        request = %Req.Request{
+          options: [context: context, id: "gemini-1.5-flash", stream: false]
+        }
+
+        updated_request = Google.encode_body(request)
+        decoded = Jason.decode!(updated_request.body)
+        [user_msg] = decoded["contents"]
+        [part] = user_msg["parts"]
+
+        assert part["inline_data"]["mime_type"] == "application/octet-stream",
+               "Expected fallback to application/octet-stream for #{filename}"
+      end
+    end
+
+    test "handles malformed URLs gracefully" do
+      test_cases = ["not a url", ""]
+
+      for filename <- test_cases do
+        file_part = %ReqLLM.Message.ContentPart{
+          type: :file,
+          data: "content",
+          filename: filename,
+          media_type: "application/octet-stream"
+        }
+
+        message = %ReqLLM.Message{role: :user, content: [file_part]}
+        context = %ReqLLM.Context{messages: [message]}
+
+        request = %Req.Request{
+          options: [context: context, id: "gemini-1.5-flash", stream: false]
+        }
+
+        updated_request = Google.encode_body(request)
+        decoded = Jason.decode!(updated_request.body)
+        [user_msg] = decoded["contents"]
+        [part] = user_msg["parts"]
+
+        assert part["inline_data"]["mime_type"] == "application/octet-stream",
+               "Expected fallback to application/octet-stream for malformed: #{filename}"
+      end
+    end
+
+    test "respects explicit media_type over inference" do
+      file_content = "audio content"
+
+      # Explicitly specify audio/mp4 even though filename suggests video
+      file_part = %ReqLLM.Message.ContentPart{
+        type: :file,
+        data: file_content,
+        filename: "audio.mp4",
+        media_type: "audio/mp4"
+      }
+
+      message_with_file = %ReqLLM.Message{
+        role: :user,
+        content: [file_part]
+      }
+
+      context = %ReqLLM.Context{messages: [message_with_file]}
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          id: "gemini-1.5-flash",
+          stream: false
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      [user_msg] = decoded["contents"]
+      [part] = user_msg["parts"]
+
+      # Should use explicit audio/mp4, not infer video/mp4
+      assert part["inline_data"]["mime_type"] == "audio/mp4"
+    end
+  end
 end

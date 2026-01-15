@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "id": "001-extend-google-vertex-ai-mime-type-support-to-match",
+  "branch_name": "wreckit/001-extend-google-vertex-ai-mime-type-support-to-match",
+  "user_stories": [
+    {
+      "id": "US-001",
+      "title": "Create MIME type inference function with all 25 Google-supported types",
+      "acceptance_criteria": [
+        "Function infer_mime_type_from_url/1 exists as private function in lib/req_llm/providers/google.ex",
+        "Function accepts string URL and returns MIME type string or nil",
+        "All 3 image types supported: .png, .jpg/.jpeg, .webp → correct image/* MIME types",
+        "All 9 video types supported: .flv, .mov, .mpeg, .mpegps, .mpg, .mp4, .webm, .wmv, .3gp → correct video/* MIME types",
+        "All 11 audio types supported: .aac, .flac, .mp3, .m4a, .mpeg, .mpga, .mp4, .opus, .pcm, .wav, .webm → correct audio/* MIME types (note: .mpeg, .mp4, .webm handled as video by default)",
+        "All 2 document types supported: .pdf, .txt → correct MIME types",
+        "Function returns nil for unsupported/unknown extensions",
+        "Function is case-insensitive (.PNG and .png both work)",
+        "@spec type annotation included with correct types",
+        "Documentation comment explains ambiguous extension handling (.webm, .mp4, .mpeg default to video)",
+        "Documentation includes link to official Google Vertex AI documentation"
+      ],
+      "priority": 1,
+      "status": "done",
+      "notes": "Core functionality - must be implemented first. Uses pattern matching style similar to normalize_google_finish_reason/1. Includes helper function extract_extension_from_url/1 for robust URL parsing with URI.parse and Path.extname."
+    },
+    {
+      "id": "US-002",
+      "title": "Create URL extension extraction helper function",
+      "acceptance_criteria": [
+        "Function extract_extension_from_url/1 exists as private function in lib/req_llm/providers/google.ex",
+        "Function uses URI.parse to handle query parameters correctly",
+        "Function uses URI.parse to handle URL fragments correctly",
+        "Function uses Path.extname for extension extraction",
+        "Function handles data URIs by returning empty string (data URIs handled separately)",
+        "Function handles malformed URLs gracefully without crashing",
+        "Function handles URL-encoded filenames (e.g., my%20file.mp4)",
+        "@spec type annotation included"
+      ],
+      "priority": 1,
+      "status": "done",
+      "notes": "Required for US-001. Handles all URL parsing edge cases so inference function can focus on MIME type mapping."
+    },
+    {
+      "id": "US-003",
+      "title": "Add comprehensive unit tests for MIME type inference",
+      "acceptance_criteria": [
+        "Test suite in describe block 'MIME type inference from file extensions' in test/providers/google_test.exs",
+        "Test case covering all 3 image MIME types with assertions",
+        "Test case covering all 9 video MIME types with assertions",
+        "Test case covering all 11 audio MIME types (accounting for ambiguous extensions handled as video)",
+        "Test case covering all 2 document MIME types with assertions",
+        "Test case verifying ambiguous extensions (.webm, .mp4, .mpeg) default to video",
+        "Test case verifying case-insensitive matching (uppercase, lowercase, mixed case)",
+        "Test case verifying URLs with query parameters extract correct extension",
+        "Test case verifying URLs with fragments extract correct extension",
+        "Test case verifying URL-encoded filenames work correctly",
+        "Test case verifying unsupported extensions return nil",
+        "Test case verifying data URIs return empty string from extract_extension_from_url",
+        "Test case verifying malformed URLs handled gracefully",
+        "All tests pass with mix test"
+      ],
+      "priority": 2,
+      "status": "done",
+      "notes": "Comprehensive test coverage for the inference function. Tests private functions directly using @doc false pattern common in Elixir testing."
+    },
+    {
+      "id": "US-004",
+      "title": "Integrate MIME type inference with ContentPart file encoding",
+      "acceptance_criteria": [
+        "Modified convert_content_part/1 function for :file type includes inference logic",
+        "Inference only applied when media_type is 'application/octet-stream' (the default)",
+        "Inference only applied when filename field is present and is binary",
+        "Explicit media_type values always take precedence (no inference override)",
+        "Falls back to provided media_type if inference returns nil",
+        "Maintains backward compatibility with existing ContentPart.file/3 usage",
+        "No changes to public API surface (ContentPart module unchanged)",
+        "Code follows existing pattern matching style in convert_content_part clauses"
+      ],
+      "priority": 2,
+      "status": "done",
+      "notes": "Integration point with existing encoding. Depends on US-001 and US-002. Maintains backward compatibility by only inferring when default media_type is used."
+    },
+    {
+      "id": "US-005",
+      "title": "Add integration tests for ContentPart encoding with MIME inference",
+      "acceptance_criteria": [
+        "Test suite in describe block 'MIME type inference integration with ContentPart encoding' in test/providers/google_test.exs",
+        "Test case verifying inference works for file with default application/octet-stream media_type",
+        "Test case verifying explicit media_type overrides inference (e.g., audio/mp4 explicit even with .mp4 extension)",
+        "Test case verifying inference works for multiple file types (video, audio, document, text)",
+        "Test case verifying unsupported extensions fall back to application/octet-stream",
+        "Test case verifying file without filename field does not trigger inference",
+        "Tests verify encoded JSON structure matches Google API expectations",
+        "Tests verify base64 encoding is correct",
+        "All integration tests pass with mix test"
+      ],
+      "priority": 3,
+      "status": "done",
+      "notes": "End-to-end integration tests. Depends on US-004. Verifies the complete flow from ContentPart creation through Google provider encoding."
+    },
+    {
+      "id": "US-006",
+      "title": "Verify quality checks and documentation",
+      "acceptance_criteria": [
+        "mix format --check-formatted passes (code properly formatted)",
+        "mix compile --warnings-as-errors passes (no compilation warnings)",
+        "mix credo --min-priority higher passes (no high-priority code quality issues)",
+        "mix dialyzer passes (type specifications correct)",
+        "mix quality passes (runs all above checks)",
+        "All new functions have @spec type annotations",
+        "All new functions have documentation comments",
+        "Documentation references official Google Vertex AI documentation URL",
+        "Ambiguous extension behavior documented in function comment",
+        "Code follows existing codebase patterns (pattern matching, private helpers)"
+      ],
+      "priority": 3,
+      "status": "done",
+      "notes": "Final verification and quality assurance. Depends on all previous stories. Ensures code meets project standards."
+    }
+  ]
+}

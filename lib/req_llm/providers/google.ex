@@ -805,8 +805,15 @@ defmodule ReqLLM.Providers.Google do
       case request.options[:context] do
         %ReqLLM.Context{} = ctx ->
           model_name = request.options[:model]
+          # Infer MIME types for file content parts before OpenAI format conversion
+          ctx_with_inferred_types = infer_mime_types_in_context(ctx)
           # Convert OpenAI-style context to Gemini format
-          encoded = ReqLLM.Provider.Defaults.encode_context_to_openai_format(ctx, model_name)
+          encoded =
+            ReqLLM.Provider.Defaults.encode_context_to_openai_format(
+              ctx_with_inferred_types,
+              model_name
+            )
+
           messages = encoded[:messages] || encoded["messages"] || []
           split_messages_for_gemini(messages)
 
@@ -1419,6 +1426,131 @@ defmodule ReqLLM.Providers.Google do
   defp normalize_google_finish_reason("OTHER"), do: "error"
   defp normalize_google_finish_reason(_), do: "error"
 
+  @doc false
+  # Infer MIME types for file content parts in a context.
+  #
+  # Walks through all messages and their content parts, updating file parts
+  # that have the default "application/octet-stream" media type with an
+  # inferred type based on the filename extension.
+  @spec infer_mime_types_in_context(ReqLLM.Context.t()) :: ReqLLM.Context.t()
+  defp infer_mime_types_in_context(%ReqLLM.Context{messages: messages} = context) do
+    updated_messages = Enum.map(messages, &infer_mime_types_in_message/1)
+    %{context | messages: updated_messages}
+  end
+
+  @doc false
+  # Infer MIME types for file content parts in a single message.
+  @spec infer_mime_types_in_message(ReqLLM.Message.t()) :: ReqLLM.Message.t()
+  defp infer_mime_types_in_message(%ReqLLM.Message{content: content} = message)
+       when is_list(content) do
+    updated_content = Enum.map(content, &infer_mime_type_in_content_part/1)
+    %{message | content: updated_content}
+  end
+
+  defp infer_mime_types_in_message(message), do: message
+
+  @doc false
+  # Infer MIME type for a single content part if it's a file with default media type.
+  @spec infer_mime_type_in_content_part(ReqLLM.Message.ContentPart.t() | any()) ::
+          ReqLLM.Message.ContentPart.t() | any()
+  defp infer_mime_type_in_content_part(
+         %ReqLLM.Message.ContentPart{
+           type: :file,
+           media_type: "application/octet-stream",
+           filename: filename
+         } = part
+       )
+       when is_binary(filename) do
+    case infer_mime_type_from_url(filename) do
+      nil -> part
+      inferred_type -> %{part | media_type: inferred_type}
+    end
+  end
+
+  defp infer_mime_type_in_content_part(part), do: part
+
+  @doc false
+  # Infer MIME type from URL file extension.
+  #
+  # Returns the appropriate MIME type for Google Vertex AI based on the file
+  # extension extracted from the URL, or nil if the extension is not supported.
+  #
+  # Supports all 25+ MIME types documented in Google Vertex AI official docs:
+  # https://firebase.google.com/docs/vertex-ai/input-file-requirements
+  #
+  # Note: For ambiguous extensions that map to multiple MIME types:
+  # - .webm defaults to video/webm (also used for audio)
+  # - .mp4 defaults to video/mp4 (also used for audio)
+  # - .mpeg defaults to video/mpeg (also used for audio)
+  #
+  # Users requiring specific audio MIME types should explicitly set media_type
+  # when creating ContentPart.file/3.
+  @spec infer_mime_type_from_url(String.t()) :: String.t() | nil
+  defp infer_mime_type_from_url(url) when is_binary(url) do
+    extension =
+      url
+      |> extract_extension_from_url()
+      |> String.downcase()
+
+    case extension do
+      # Images (3 types)
+      ".png" -> "image/png"
+      ".jpg" -> "image/jpeg"
+      ".jpeg" -> "image/jpeg"
+      ".webp" -> "image/webp"
+      # Video (9 types)
+      ".flv" -> "video/x-flv"
+      ".mov" -> "video/quicktime"
+      ".mpeg" -> "video/mpeg"
+      ".mpegps" -> "video/mpegps"
+      ".mpg" -> "video/mpg"
+      ".mp4" -> "video/mp4"
+      ".webm" -> "video/webm"
+      ".wmv" -> "video/wmv"
+      ".3gp" -> "video/3gpp"
+      # Audio (11 types)
+      ".aac" -> "audio/aac"
+      ".flac" -> "audio/flac"
+      ".mp3" -> "audio/mp3"
+      ".m4a" -> "audio/m4a"
+      ".mpga" -> "audio/mpga"
+      ".opus" -> "audio/opus"
+      ".pcm" -> "audio/pcm"
+      ".wav" -> "audio/wav"
+      # Note: .webm, .mp4, .mpeg already handled above as video (most common use case)
+
+      # Documents (2 types)
+      ".pdf" -> "application/pdf"
+      ".txt" -> "text/plain"
+      # Unsupported extension
+      _ -> nil
+    end
+  end
+
+  @doc false
+  # Extract file extension from a URL, handling query params and fragments.
+  #
+  # Examples:
+  #   "image.png" -> ".png"
+  #   "https://example.com/video.mp4?token=xyz" -> ".mp4"
+  #   "data:image/png;base64,..." -> "" (data URIs handled separately)
+  @spec extract_extension_from_url(String.t()) :: String.t()
+  defp extract_extension_from_url(url) when is_binary(url) do
+    # Handle data URIs - no extension to extract
+    if String.starts_with?(url, "data:") do
+      ""
+    else
+      # Parse URL to handle query params and fragments
+      uri = URI.parse(url)
+
+      # Extract path (could be nil for malformed URLs)
+      path = uri.path || url
+
+      # Get extension using Path.extname which handles edge cases
+      Path.extname(path)
+    end
+  end
+
   defp convert_google_usage(%{"promptTokenCount" => prompt, "totalTokenCount" => total} = usage) do
     thoughts = usage["thoughtsTokenCount"] || 0
     cached = usage["cachedContentTokenCount"] || 0
@@ -1756,13 +1888,26 @@ defmodule ReqLLM.Providers.Google do
   end
 
   # Most specific patterns first (file, image, etc.) - for ContentPart structs
-  defp convert_content_part(%{type: :file, data: data, media_type: media_type})
+  defp convert_content_part(%{
+         type: :file,
+         data: data,
+         media_type: media_type,
+         filename: filename
+       })
        when is_binary(data) do
+    # Infer MIME type if using default fallback
+    inferred_type =
+      if media_type == "application/octet-stream" and is_binary(filename) do
+        infer_mime_type_from_url(filename) || media_type
+      else
+        media_type
+      end
+
     encoded_data = Base.encode64(data)
 
     %{
       inline_data: %{
-        mime_type: media_type,
+        mime_type: inferred_type,
         data: encoded_data
       }
     }
