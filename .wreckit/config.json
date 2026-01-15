@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "base_branch": "main",
+  "branch_prefix": "wreckit/",
+  "merge_mode": "pr",
+  "agent": {
+    "mode": "sdk",
+    "command": "claude",
+    "args": [
+      "--dangerously-skip-permissions",
+      "--print"
+    ],
+    "completion_signal": "<promise>COMPLETE</promise>",
+    "sdk_model": "claude-sonnet-4-20250514"
+  },
+  "max_iterations": 100,
+  "timeout_seconds": 3600
+}
