@@ -111,6 +111,11 @@ defmodule ReqLLM.Providers.Venice do
     :include_venice_system_prompt
   ]
 
+  @doc false
+  def supported_provider_options do
+    Keyword.keys(@provider_schema) ++ [:venice_parameters]
+  end
+
   @impl ReqLLM.Provider
   def translate_options(_operation, _model, opts) do
     venice_opts = Keyword.take(opts, @venice_keys)
