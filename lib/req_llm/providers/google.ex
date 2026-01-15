@@ -1732,26 +1732,54 @@ defmodule ReqLLM.Providers.Google do
   end
 
   # Handle OpenAI-format image_url (from Provider.Defaults.encode_openai_content_part)
-  defp convert_content_part(%{type: "image_url", image_url: %{url: url}}) when is_binary(url) do
-    # Parse data URI format: data:mime/type;base64,<data>
-    case String.split(url, ",", parts: 2) do
-      [header, base64_data] ->
-        mime_type =
-          case Regex.run(~r/data:([^;]+)/, header) do
-            [_, type] -> type
-            _ -> "image/jpeg"
-          end
+  defp convert_content_part(%{type: "image_url", image_url: %{url: url}} = part)
+       when is_binary(url) do
+    cond do
+      # Data URI format: data:mime/type;base64,<data>
+      String.starts_with?(url, "data:") ->
+        case String.split(url, ",", parts: 2) do
+          [header, base64_data] ->
+            mime_type =
+              case Regex.run(~r/data:([^;]+)/, header) do
+                [_, type] -> type
+                _ -> "image/jpeg"
+              end
+
+            %{
+              inline_data: %{
+                mime_type: mime_type,
+                data: base64_data
+              }
+            }
+
+          _ ->
+            %{text: "[Malformed data URI]"}
+        end
+
+      # HTTP/HTTPS URL: use fileData.fileUri (Google-native URL support)
+      String.starts_with?(url, "http://") or String.starts_with?(url, "https://") ->
+        mime_type = get_mime_type_from_part(part, url)
 
         %{
-          inline_data: %{
-            mime_type: mime_type,
-            data: base64_data
+          fileData: %{
+            fileUri: url,
+            mimeType: mime_type
           }
         }
 
-      _ ->
-        # Not a data URI, might be a URL
-        %{text: "[Unsupported image URL]"}
+      # GCS URI: gs://bucket/path
+      String.starts_with?(url, "gs://") ->
+        mime_type = get_mime_type_from_part(part, url)
+
+        %{
+          fileData: %{
+            fileUri: url,
+            mimeType: mime_type
+          }
+        }
+
+      true ->
+        %{text: "[Unsupported URL scheme: #{String.slice(url, 0, 20)}...]"}
     end
   end
 
@@ -1778,6 +1806,35 @@ defmodule ReqLLM.Providers.Google do
   defp convert_content_part(text) when is_binary(text), do: %{text: text}
 
   defp convert_content_part(part), do: %{text: to_string(part)}
+
+  # Helper to extract mime type from part metadata or infer from URL extension
+  defp get_mime_type_from_part(part, url) do
+    # Try metadata first (if passed through from ContentPart)
+    case part do
+      %{image_url: %{media_type: type}} when is_binary(type) -> type
+      _ -> infer_mime_type_from_url(url)
+    end
+  end
+
+  defp infer_mime_type_from_url(url) do
+    # Strip query params and get extension
+    path = url |> URI.parse() |> Map.get(:path, "") |> to_string()
+
+    case Path.extname(path) |> String.downcase() do
+      ".jpg" -> "image/jpeg"
+      ".jpeg" -> "image/jpeg"
+      ".png" -> "image/png"
+      ".gif" -> "image/gif"
+      ".webp" -> "image/webp"
+      ".pdf" -> "application/pdf"
+      ".mp3" -> "audio/mpeg"
+      ".mp4" -> "video/mp4"
+      ".m4a" -> "audio/mp4"
+      ".wav" -> "audio/wav"
+      # Fallback
+      _ -> "application/octet-stream"
+    end
+  end
 
   # Decode Google streaming events.
   #
