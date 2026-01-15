@@ -181,8 +181,19 @@ defmodule ReqLLM.Step.Usage do
         usage[:reasoning] || usage["reasoning"] || usage[:reasoning_tokens] ||
           usage["reasoning_tokens"] || get_reasoning_tokens(usage) || 0,
       cached_input: get_cached_input_tokens(usage),
-      cache_creation: get_cache_creation_tokens(usage)
+      cache_creation: get_cache_creation_tokens(usage),
+      # Only add reasoning to cost for Google Gemini format where thinking tokens
+      # are explicitly separate from output. All other providers: status quo (no change).
+      add_reasoning_to_cost: is_google_gemini_format(usage)
     }
+  end
+
+  # Detect Google Gemini format where thoughtsTokenCount is separate from candidatesTokenCount.
+  # This is the ONLY format where we explicitly add reasoning tokens to cost.
+  # All other providers maintain status quo behavior.
+  defp is_google_gemini_format(usage) do
+    Map.has_key?(usage, "thoughtsTokenCount") or
+      Map.has_key?(usage, :thoughtsTokenCount)
   end
 
   defp get_reasoning_tokens(usage) do

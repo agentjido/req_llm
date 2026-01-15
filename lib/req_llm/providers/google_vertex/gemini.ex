@@ -128,7 +128,7 @@ defmodule ReqLLM.Providers.GoogleVertex.Gemini do
          %{
            input_tokens: Map.get(usage, "promptTokenCount", 0),
            output_tokens: Map.get(usage, "candidatesTokenCount", 0),
-           reasoning_tokens: Map.get(usage, "thinkingTokenCount"),
+           reasoning_tokens: Map.get(usage, "thoughtsTokenCount"),
            cached_tokens: Map.get(usage, "cachedContentTokenCount")
          }}
 
