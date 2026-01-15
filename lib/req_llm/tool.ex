@@ -332,7 +332,8 @@ defmodule ReqLLM.Tool do
   """
   @spec valid_name?(String.t()) :: boolean()
   def valid_name?(name) when is_binary(name) do
-    Regex.match?(~r/^[a-zA-Z_][a-zA-Z0-9_-]*$/, name) and String.length(name) <= 64
+    Regex.match?(~r/^[a-zA-Z_][a-zA-Z0-9_]*(-[a-zA-Z0-9_]+)*$/, name) and
+      String.length(name) <= 64
   end
 
   def valid_name?(_), do: false

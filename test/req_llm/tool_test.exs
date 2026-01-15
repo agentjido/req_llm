@@ -109,7 +109,15 @@ defmodule ReqLLM.ToolTest do
       end
 
       # Valid names
-      valid_names = ["valid_name", "CamelCase", "_underscore", "a1b2c3", "get_weather_info", "kebab-case", "notion-get-users"]
+      valid_names = [
+        "valid_name",
+        "CamelCase",
+        "_underscore",
+        "a1b2c3",
+        "get_weather_info",
+        "kebab-case",
+        "notion-get-users"
+      ]
 
       for name <- valid_names do
         params = [name: name, description: "Test", callback: fn _ -> {:ok, "ok"} end]
@@ -323,6 +331,7 @@ defmodule ReqLLM.ToolTest do
         "name with spaces",
         "123starts_with_number",
         "-starts-with-hyphen",
+        "ends-with-hyphen-",
         "special@chars",
         "emoji😊name",
         "",
