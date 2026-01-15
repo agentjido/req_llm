@@ -1067,4 +1067,110 @@ defmodule ReqLLM.Step.UsageTest do
       assert usage_data.cost == 0.000003
     end
   end
+
+  describe "handle/1 - Google Gemini thinking token costing" do
+    setup do
+      setup_telemetry()
+    end
+
+    test "preserves add_reasoning_to_cost flag from provider-extracted usage" do
+      model = %LLMDB.Model{
+        provider: :google,
+        id: "gemini-2.5-flash",
+        cost: %{input: 0.30, output: 2.50}
+      }
+
+      request = mock_request(model: model)
+
+      response_body = %{
+        "usage" => %{
+          "input_tokens" => 1000,
+          "output_tokens" => 500,
+          "reasoning_tokens" => 200,
+          "add_reasoning_to_cost" => true
+        }
+      }
+
+      response = mock_response(response_body)
+      {_req, updated_resp} = Usage.handle({request, response})
+
+      usage_data = updated_resp.private[:req_llm][:usage]
+      assert usage_data.tokens.input == 1000
+      assert usage_data.tokens.output == 500
+      assert usage_data.tokens.reasoning == 200
+
+      expected_input_cost = Float.round(1000 * 0.30 / 1_000_000, 6)
+      expected_output_cost = Float.round((500 + 200) * 2.50 / 1_000_000, 6)
+      expected_total_cost = Float.round(expected_input_cost + expected_output_cost, 6)
+
+      assert usage_data.input_cost == expected_input_cost
+      assert usage_data.output_cost == expected_output_cost
+      assert usage_data.cost == expected_total_cost
+    end
+
+    test "sets add_reasoning_to_cost flag when thoughtsTokenCount key is present" do
+      model = %LLMDB.Model{
+        provider: :google,
+        id: "gemini-2.5-flash",
+        cost: %{input: 0.30, output: 2.50}
+      }
+
+      request = mock_request(model: model)
+
+      response_body = %{
+        "usage" => %{
+          "input_tokens" => 1000,
+          "output_tokens" => 500,
+          "reasoning_tokens" => 200,
+          "thoughtsTokenCount" => 200
+        }
+      }
+
+      response = mock_response(response_body)
+      {_req, updated_resp} = Usage.handle({request, response})
+
+      usage_data = updated_resp.private[:req_llm][:usage]
+      assert usage_data.tokens.input == 1000
+      assert usage_data.tokens.output == 500
+      assert usage_data.tokens.reasoning == 200
+
+      expected_input_cost = Float.round(1000 * 0.30 / 1_000_000, 6)
+      expected_output_cost = Float.round((500 + 200) * 2.50 / 1_000_000, 6)
+
+      assert usage_data.input_cost == expected_input_cost
+      assert usage_data.output_cost == expected_output_cost
+    end
+
+    test "does not add reasoning to cost for non-Gemini providers by default" do
+      model = %LLMDB.Model{
+        provider: :openai,
+        id: "gpt-4o",
+        cost: %{input: 2.50, output: 10.0}
+      }
+
+      request = mock_request(model: model)
+
+      response_body = %{
+        "usage" => %{
+          "prompt_tokens" => 1000,
+          "completion_tokens" => 700,
+          "completion_tokens_details" => %{"reasoning_tokens" => 200}
+        }
+      }
+
+      response = mock_response(response_body)
+      {_req, updated_resp} = Usage.handle({request, response})
+
+      usage_data = updated_resp.private[:req_llm][:usage]
+      assert usage_data.tokens.input == 1000
+      assert usage_data.tokens.output == 700
+      assert usage_data.tokens.reasoning == 200
+
+      expected_input_cost = Float.round(1000 * 2.50 / 1_000_000, 6)
+      expected_output_cost = Float.round(700 * 10.0 / 1_000_000, 6)
+
+      assert usage_data.input_cost == expected_input_cost
+      assert usage_data.output_cost == expected_output_cost
+    end
+  end
 end

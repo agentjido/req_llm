@@ -589,7 +589,8 @@ defmodule ReqLLM.Providers.Google do
       output_tokens: output,
       total_tokens: total,
       cached_tokens: cached,
-      reasoning_tokens: reasoning
+      reasoning_tokens: reasoning,
+      add_reasoning_to_cost: true
     }
   end
 
