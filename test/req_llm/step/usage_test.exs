@@ -522,7 +522,8 @@ defmodule ReqLLM.Step.UsageTest do
 
       request = mock_request(model: model)
 
-      # Anthropic/Azure/Vertex format with cache tokens
+      # Anthropic format: input_tokens is NEW tokens only (excludes cached)
+      # Detected by presence of cache_read_input_tokens field
       response_body = %{
         "usage" => %{
           "input_tokens" => 1000,
@@ -541,15 +542,13 @@ defmodule ReqLLM.Step.UsageTest do
       assert usage_data.tokens.cached_input == 800
       assert usage_data.tokens.cache_creation == 100
 
+      # Anthropic semantics: input_tokens (1000) is NEW tokens, not total
       # Cost breakdown:
-      # Regular tokens: 1000 - 800 - 100 = 100 at $3.0/M = $0.0003
-      # Cache read tokens: 800 at $0.3/M = $0.00024
-      # Cache write tokens: 100 at $3.75/M = $0.000375
-      # Input cost: 0.0003 + 0.00024 + 0.000375 = $0.000915
-      # Output cost: 200 at $15/M = $0.003
-      # Total: $0.003915
+      # Regular tokens: 1000 at $3.0/M (this IS input_tokens for Anthropic)
+      # Cache read tokens: 800 at $0.3/M
+      # Cache write tokens: 100 at $3.75/M
 
-      expected_input_cost = Float.round((100 * 3.0 + 800 * 0.3 + 100 * 3.75) / 1_000_000, 6)
+      expected_input_cost = Float.round((1000 * 3.0 + 800 * 0.3 + 100 * 3.75) / 1_000_000, 6)
       expected_output_cost = Float.round(200 * 15.0 / 1_000_000, 6)
       expected_total = Float.round(expected_input_cost + expected_output_cost, 6)
 
@@ -569,7 +568,8 @@ defmodule ReqLLM.Step.UsageTest do
 
       request = mock_request(model: model)
 
-      # AWS Bedrock format (camelCase) - tests that fallback extractor handles these fields
+      # AWS Bedrock format (camelCase) uses Anthropic semantics:
+      # input_tokens is NEW tokens only (excludes cached)
       response_body = %{
         "usage" => %{
           "input_tokens" => 1000,
@@ -588,11 +588,12 @@ defmodule ReqLLM.Step.UsageTest do
       assert usage_data.tokens.cached_input == 600
       assert usage_data.tokens.cache_creation == 150
 
+      # Bedrock uses Anthropic semantics: input_tokens (1000) is NEW tokens
       # Cost breakdown:
-      # Regular tokens: 1000 - 600 - 150 = 250 at $3.0/M
+      # Regular tokens: 1000 at $3.0/M (this IS input_tokens for Bedrock)
       # Cache read tokens: 600 at $0.3/M
       # Cache write tokens: 150 at $3.75/M
-      expected_input_cost = Float.round((250 * 3.0 + 600 * 0.3 + 150 * 3.75) / 1_000_000, 6)
+      expected_input_cost = Float.round((1000 * 3.0 + 600 * 0.3 + 150 * 3.75) / 1_000_000, 6)
       expected_output_cost = Float.round(200 * 15.0 / 1_000_000, 6)
       expected_total = Float.round(expected_input_cost + expected_output_cost, 6)
 

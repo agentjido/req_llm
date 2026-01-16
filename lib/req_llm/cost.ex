@@ -68,12 +68,28 @@ defmodule ReqLLM.Cost do
     with {:ok, input_num} <- safe_to_number(input_tokens),
          {:ok, output_num} <- safe_to_number(output_tokens),
          true <- input_rate != nil and output_rate != nil do
-      # Extract cache tokens
-      cache_read_tokens = clamp_tokens(Map.get(usage, :cached_input, 0), input_num)
-      cache_write_tokens = clamp_tokens(Map.get(usage, :cache_creation, 0), input_num)
+      raw_cache_read = safe_add(Map.get(usage, :cached_input, 0))
+      raw_cache_write = safe_add(Map.get(usage, :cache_creation, 0))
+      total_cache = raw_cache_read + raw_cache_write
 
-      # Regular input tokens (not from cache read, not written to cache)
-      regular_tokens = max(input_num - cache_read_tokens - cache_write_tokens, 0)
+      input_includes_cached = Map.get(usage, :input_includes_cached, true)
+
+      total_input =
+        if input_includes_cached do
+          input_num
+        else
+          input_num + total_cache
+        end
+
+      cache_read_tokens = clamp_tokens(raw_cache_read, total_input)
+      cache_write_tokens = clamp_tokens(raw_cache_write, total_input)
+
+      regular_tokens =
+        if input_includes_cached do
+          max(input_num - cache_read_tokens - cache_write_tokens, 0)
+        else
+          max(input_num, 0)
+        end
 
       # Calculate costs (rates are per million tokens)
       input_cost =
@@ -161,4 +177,8 @@ defmodule ReqLLM.Cost do
       :error -> 0
     end
   end
+
+  defp safe_add(nil), do: 0
+  defp safe_add(n) when is_number(n), do: n
+  defp safe_add(_), do: 0
 end

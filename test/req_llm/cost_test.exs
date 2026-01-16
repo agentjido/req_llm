@@ -114,6 +114,75 @@ defmodule ReqLLM.CostTest do
     end
   end
 
+  describe "calculate/2 with Anthropic semantics (input excludes cached)" do
+    test "handles cached tokens correctly when input excludes cached" do
+      # Anthropic: input (500) is NEW tokens only, cached (800) is separate
+      # Total conceptual = 500 + 800 = 1300
+      usage = %{
+        input: 500,
+        output: 200,
+        cached_input: 800,
+        cache_creation: 0,
+        input_includes_cached: false
+      }
+
+      cost_map = %{input: 3.0, output: 15.0, cache_read: 0.3}
+
+      {:ok, breakdown} = Cost.calculate(usage, cost_map)
+
+      # 500 regular at $3/M, 800 cached at $0.3/M
+      expected_input = Float.round((500 * 3.0 + 800 * 0.3) / 1_000_000, 6)
+      expected_output = Float.round(200 * 15.0 / 1_000_000, 6)
+
+      assert breakdown.input_cost == expected_input
+      assert breakdown.output_cost == expected_output
+    end
+
+    test "handles real Anthropic usage pattern" do
+      # Real example: input_tokens: 12 (new only), cache_read_input_tokens: 5484
+      usage = %{
+        input: 12,
+        output: 200,
+        cached_input: 5484,
+        cache_creation: 0,
+        input_includes_cached: false
+      }
+
+      cost_map = %{input: 3.0, output: 15.0, cache_read: 0.3}
+
+      {:ok, breakdown} = Cost.calculate(usage, cost_map)
+
+      # 12 regular at $3/M, 5484 cached at $0.3/M
+      expected_input = Float.round((12 * 3.0 + 5484 * 0.3) / 1_000_000, 6)
+      expected_output = Float.round(200 * 15.0 / 1_000_000, 6)
+
+      assert breakdown.input_cost == expected_input
+      assert breakdown.output_cost == expected_output
+    end
+
+    test "handles cache creation tokens" do
+      # Anthropic: input (100) + cache_read (800) + cache_creation (200) = 1100 total
+      usage = %{
+        input: 100,
+        output: 200,
+        cached_input: 800,
+        cache_creation: 200,
+        input_includes_cached: false
+      }
+
+      cost_map = %{input: 3.0, output: 15.0, cache_read: 0.3, cache_write: 3.75}
+
+      {:ok, breakdown} = Cost.calculate(usage, cost_map)
+
+      # 100 regular at $3/M, 800 cached at $0.3/M, 200 creation at $3.75/M
+      expected_input = Float.round((100 * 3.0 + 800 * 0.3 + 200 * 3.75) / 1_000_000, 6)
+      expected_output = Float.round(200 * 15.0 / 1_000_000, 6)
+
+      assert breakdown.input_cost == expected_input
+      assert breakdown.output_cost == expected_output
+    end
+  end
+
   describe "calculate/2 with Google Gemini thinking tokens" do
     test "adds thinking tokens to output cost when add_reasoning_to_cost is true" do
       # Google Gemini: candidatesTokenCount (500) + thoughtsTokenCount (200) are SEPARATE
