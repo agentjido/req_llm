@@ -55,6 +55,7 @@ defmodule ReqLLM.Provider.Generated.ValidProviders do
     :v0,
     :venice,
     :vercel,
+    :vllm,
     :vultr,
     :wandb,
     :xai,
