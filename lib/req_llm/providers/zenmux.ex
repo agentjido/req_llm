@@ -191,7 +191,8 @@ defmodule ReqLLM.Providers.Zenmux do
       end
 
     body =
-      if !Map.has_key?(body, "tool_choice") and !Map.has_key?(body, :tool_choice) and tool_choice_opt do
+      if !Map.has_key?(body, "tool_choice") and !Map.has_key?(body, :tool_choice) and
+           tool_choice_opt do
         Map.put(body, "tool_choice", tool_choice_opt)
       else
         body
