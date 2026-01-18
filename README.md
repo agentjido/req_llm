@@ -18,7 +18,7 @@ LLM APIs are inconsistent. ReqLLM provides a unified, idiomatic Elixir interface
 - **High-level API** – Vercel AI SDK-inspired functions (`generate_text/3`, `stream_text/3`, `generate_object/4` and more) that work uniformly across providers. Standard features, minimal configuration.
 - **Low-level API** – Direct Req plugin access for full HTTP control. Built around OpenAI Chat Completions baseline with provider-specific callbacks for non-compatible APIs (e.g., Anthropic).
 
-**Supported Providers:** Anthropic, OpenAI, Google, Groq, OpenRouter, xAI, AWS Bedrock, Cerebras, Meta, Z.AI, and more. See provider guides in [documentation](https://hexdocs.pm/req_llm) for details.
+**Supported Providers:** Anthropic, OpenAI, Google, Groq, OpenRouter, xAI, AWS Bedrock, Cerebras, Meta, Z.AI, Zenmux, and more. See provider guides in [documentation](https://hexdocs.pm/req_llm) for details.
 
 \* _Streaming uses Finch directly due to known Req limitations with SSE responses._
 

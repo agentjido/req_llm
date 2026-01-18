@@ -281,6 +281,31 @@ config :llm_db,
           limits: %{context: 4096, output: 4096}
         }
       }
+    ],
+    zenmux: [
+      name: "Zenmux",
+      base_url: "https://zenmux.ai/api/v1",
+      env: ["ZENMUX_API_KEY"],
+      models: %{
+        "openai/gpt-4" => %{
+          name: "GPT-4 (Zenmux)",
+          family: "gpt-4",
+          capabilities: %{chat: true, tools: %{enabled: true}},
+          limits: %{context: 8192, output: 8192}
+        },
+        "openai/o1" => %{
+          name: "o1 (Zenmux)",
+          family: "o1",
+          capabilities: %{chat: true, reasoning: %{enabled: true}},
+          limits: %{context: 128_000, output: 65_536}
+        },
+        "xiaomi/mimo-v2-flash" => %{
+          name: "Mimo V2 Flash",
+          family: "mimo",
+          capabilities: %{chat: true, tools: %{enabled: true}},
+          limits: %{context: 32_768, output: 4096}
+        }
+      }
     ]
   }
 

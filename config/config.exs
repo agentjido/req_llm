@@ -16,7 +16,8 @@ config :llm_db,
       venice: ["*"],
       xai: ["*"],
       zai: ["*"],
-      zai_coder: ["*"]
+      zai_coder: ["*"],
+      zenmux: ["*"]
     },
     deny: %{
       anthropic: [
