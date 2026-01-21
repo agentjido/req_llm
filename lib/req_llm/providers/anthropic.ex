@@ -342,7 +342,141 @@ defmodule ReqLLM.Providers.Anthropic do
     body = build_request_body(context, model_name, opts)
     json_body = Jason.encode!(body)
 
-    %{request | body: json_body}
+    request = %{request | body: json_body}
+
+    # Log the outgoing request for debugging
+    log_outgoing_request(request, body)
+
+    request
+  end
+
+  defp log_outgoing_request(request, body) do
+    if Application.get_env(:req_llm, :debug_requests, false) do
+      # Build full URL
+      base_url = request.options[:base_url] || "https://api.anthropic.com"
+      url = request.url || "/v1/messages"
+
+      full_url =
+        cond do
+          String.starts_with?(to_string(url), "http") -> to_string(url)
+          true -> "#{base_url}#{url}"
+        end
+
+      # Collect headers, masking sensitive values
+      headers =
+        request.headers
+        |> Enum.map(fn {k, v} ->
+          key = to_string(k)
+
+          masked_value =
+            if key in ["authorization", "x-api-key"] do
+              mask_sensitive(List.first(List.wrap(v)))
+            else
+              List.first(List.wrap(v))
+            end
+
+          {key, masked_value}
+        end)
+
+      # Truncate body for logging (messages can be huge)
+      body_preview = truncate_body_for_log(body)
+
+      Logger.debug("""
+      [ReqLLM.Anthropic] Outgoing request:
+        URL: #{full_url}
+        Headers: #{inspect(headers, pretty: true)}
+        Body: #{inspect(body_preview, pretty: true, limit: :infinity)}
+      """)
+    end
+  end
+
+  defp mask_sensitive(nil), do: nil
+
+  defp mask_sensitive(value) when is_binary(value) do
+    len = String.length(value)
+
+    if len > 8 do
+      String.slice(value, 0, 4) <> "..." <> String.slice(value, -4, 4)
+    else
+      "***"
+    end
+  end
+
+  defp truncate_body_for_log(body) when is_map(body) do
+    body
+    |> Map.update(:messages, [], fn messages ->
+      Enum.map(messages, fn msg ->
+        Map.update(msg, :content, msg[:content], &truncate_content/1)
+      end)
+    end)
+    |> Map.update(:system, nil, &truncate_system/1)
+  end
+
+  defp truncate_body_for_log(body), do: body
+
+  defp truncate_content(content) when is_binary(content) and byte_size(content) > 500 do
+    String.slice(content, 0, 500) <> "... [truncated]"
+  end
+
+  defp truncate_content(content) when is_list(content) do
+    Enum.map(content, fn
+      %{type: "text", text: text} = part when byte_size(text) > 500 ->
+        %{part | text: String.slice(text, 0, 500) <> "... [truncated]"}
+
+      %{text: text} = part when is_binary(text) and byte_size(text) > 500 ->
+        %{part | text: String.slice(text, 0, 500) <> "... [truncated]"}
+
+      other ->
+        other
+    end)
+  end
+
+  defp truncate_content(content), do: content
+
+  defp truncate_system(nil), do: nil
+
+  defp truncate_system(system) when is_binary(system) and byte_size(system) > 500 do
+    String.slice(system, 0, 500) <> "... [truncated]"
+  end
+
+  defp truncate_system(system) when is_list(system) do
+    Enum.map(system, fn
+      %{type: "text", text: text} = part when byte_size(text) > 500 ->
+        %{part | text: String.slice(text, 0, 500) <> "... [truncated]"}
+
+      other ->
+        other
+    end)
+  end
+
+  defp truncate_system(system), do: system
+
+  defp log_outgoing_stream_request(url, headers, body) do
+    if Application.get_env(:req_llm, :debug_requests, false) do
+      # Mask sensitive headers
+      masked_headers =
+        Enum.map(headers, fn {k, v} ->
+          key = String.downcase(to_string(k))
+
+          masked_value =
+            if key in ["authorization", "x-api-key"] do
+              mask_sensitive(v)
+            else
+              v
+            end
+
+          {k, masked_value}
+        end)
+
+      body_preview = truncate_body_for_log(body)
+
+      Logger.debug("""
+      [ReqLLM.Anthropic] Outgoing STREAM request:
+        URL: #{url}
+        Headers: #{inspect(masked_headers, pretty: true)}
+        Body: #{inspect(body_preview, pretty: true, limit: :infinity)}
+      """)
+    end
   end
 
   @impl ReqLLM.Provider
@@ -533,6 +667,9 @@ defmodule ReqLLM.Providers.Anthropic do
 
     body = build_request_body(context, get_api_model_id(model), translated_opts ++ [stream: true])
     url = build_request_url(translated_opts)
+
+    # Log the outgoing streaming request for debugging
+    log_outgoing_stream_request(url, all_headers, body)
 
     finch_request = Finch.build(:post, url, all_headers, Jason.encode!(body))
     {:ok, finch_request}
