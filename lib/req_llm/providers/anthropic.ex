@@ -101,6 +101,18 @@ defmodule ReqLLM.Providers.Anthropic do
 
       Example: %{max_uses: 5, allowed_domains: ["example.com"]}
       """
+    ],
+    oauth_mode: [
+      type: :boolean,
+      default: false,
+      doc: """
+      Enable OAuth mode for Anthropic Claude Pro/Max subscriptions.
+      When enabled:
+      - Uses `Authorization: Bearer` header instead of `x-api-key`
+      - Adds `oauth-2025-04-20` beta flag
+      - Adds special user-agent header
+      - Appends `?beta=true` to the API URL
+      """
     ]
   ]
 
@@ -275,11 +287,40 @@ defmodule ReqLLM.Providers.Anthropic do
     {api_key, extra_option_keys} =
       ReqLLM.Provider.Defaults.fetch_api_key_and_extra_options(__MODULE__, model, user_opts)
 
+    oauth_mode = Keyword.get(user_opts, :oauth_mode, false)
+
+    # Build auth header based on OAuth mode
+    request =
+      request
+      |> Req.Request.register_options(
+        extra_option_keys ++ [:anthropic_version, :anthropic_beta, :oauth_mode]
+      )
+      |> Req.Request.put_header("content-type", "application/json")
+      |> Req.Request.put_header("anthropic-version", get_anthropic_version(user_opts))
+
+    request =
+      if oauth_mode do
+        request
+        |> Req.Request.put_header("Authorization", "Bearer #{api_key}")
+        |> Req.Request.put_header("user-agent", "claude-cli/2.1.2 (external, cli)")
+      else
+        Req.Request.put_header(request, "x-api-key", api_key)
+      end
+
+    # Update URL for OAuth mode
+    request =
+      if oauth_mode do
+        url = request.url || "/v1/messages"
+
+        url_with_beta =
+          if String.contains?(url, "?"), do: "#{url}&beta=true", else: "#{url}?beta=true"
+
+        %{request | url: url_with_beta}
+      else
+        request
+      end
+
     request
-    |> Req.Request.register_options(extra_option_keys ++ [:anthropic_version, :anthropic_beta])
-    |> Req.Request.put_header("content-type", "application/json")
-    |> Req.Request.put_header("x-api-key", api_key)
-    |> Req.Request.put_header("anthropic-version", get_anthropic_version(user_opts))
     |> Req.Request.put_private(:req_llm_model, model)
     |> maybe_add_beta_header(user_opts)
     |> Req.Request.merge_options([model: get_api_model_id(model)] ++ user_opts)
@@ -351,12 +392,26 @@ defmodule ReqLLM.Providers.Anthropic do
 
   defp build_request_headers(model, opts) do
     api_key = ReqLLM.Keys.get!(model, opts)
+    oauth_mode = get_option(opts, :oauth_mode, false)
 
-    [
+    auth_header =
+      if oauth_mode do
+        {"Authorization", "Bearer #{api_key}"}
+      else
+        {"x-api-key", api_key}
+      end
+
+    base_headers = [
       {"content-type", "application/json"},
-      {"x-api-key", api_key},
+      auth_header,
       {"anthropic-version", get_anthropic_version(opts)}
     ]
+
+    if oauth_mode do
+      base_headers ++ [{"user-agent", "claude-cli/2.1.2 (external, cli)"}]
+    else
+      base_headers
+    end
   end
 
   defp build_request_body(context, model_name, opts) do
@@ -381,11 +436,20 @@ defmodule ReqLLM.Providers.Anthropic do
 
   defp build_request_url(opts) do
     base_url = get_option(opts, :base_url, base_url())
-    "#{base_url}/v1/messages"
+    oauth_mode = get_option(opts, :oauth_mode, false)
+
+    url = "#{base_url}/v1/messages"
+
+    if oauth_mode do
+      "#{url}?beta=true"
+    else
+      url
+    end
   end
 
   defp build_beta_headers(opts) do
     provider_opts = get_option(opts, :provider_options, [])
+    oauth_mode = get_option(opts, :oauth_mode, false)
 
     manual_betas =
       (List.wrap(Keyword.get(opts, :anthropic_beta)) ++
@@ -393,6 +457,14 @@ defmodule ReqLLM.Providers.Anthropic do
       |> Enum.reject(&is_nil/1)
 
     beta_features = manual_betas
+
+    # Add OAuth beta flag when in OAuth mode
+    beta_features =
+      if oauth_mode do
+        ["oauth-2025-04-20" | beta_features]
+      else
+        beta_features
+      end
 
     beta_features =
       if has_tools?(opts) do
@@ -499,6 +571,7 @@ defmodule ReqLLM.Providers.Anthropic do
 
   defp maybe_add_beta_header(request, user_opts) do
     beta_features = []
+    oauth_mode = Keyword.get(user_opts, :oauth_mode, false)
 
     # Add betas from provider_options (e.g. structured-outputs)
     provider_betas =
@@ -508,6 +581,14 @@ defmodule ReqLLM.Providers.Anthropic do
       |> List.wrap()
 
     beta_features = beta_features ++ provider_betas
+
+    # Add OAuth beta flag when in OAuth mode
+    beta_features =
+      if oauth_mode do
+        ["oauth-2025-04-20" | beta_features]
+      else
+        beta_features
+      end
 
     beta_features =
       if has_tools?(user_opts) do
