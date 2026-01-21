@@ -166,7 +166,7 @@ defmodule ReqLLM.MixProject do
       {:req, "~> 0.5"},
       {:ex_aws_auth, "~> 1.3"},
       {:server_sent_events, "~> 0.2"},
-      {:splode, "~> 0.2.3"},
+      {:splode, "~> 0.3.0"},
       {:typed_struct, "~> 0.3.0"},
       {:uniq, "~> 0.6"},
       {:zoi, "~> 0.14"},

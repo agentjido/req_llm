@@ -17,6 +17,7 @@ config :llm_db,
       xai: ["*"],
       zai: ["*"],
       zai_coder: ["*"],
+      zai_coding_plan: ["*"],
       zenmux: ["*"]
     },
     deny: %{
