@@ -592,34 +592,37 @@ defmodule ReqLLM.Providers.Anthropic do
 
     beta_features = manual_betas
 
-    # Add OAuth beta flag when in OAuth mode
-    beta_features =
-      if oauth_mode do
-        ["oauth-2025-04-20" | beta_features]
-      else
-        beta_features
-      end
-
     beta_features =
       if has_tools?(opts) do
-        [@anthropic_beta_tools | beta_features]
+        [beta_features, @anthropic_beta_tools]
       else
-        beta_features
+        [beta_features]
       end
 
     beta_features =
-      if has_thinking?(opts) do
-        ["interleaved-thinking-2025-05-14" | beta_features]
+      if has_thinking?(opts) or oauth_mode do
+        # Always include interleaved-thinking for OAuth mode (required by Claude Code)
+        [beta_features, "interleaved-thinking-2025-05-14"]
       else
         beta_features
       end
 
     beta_features =
       if has_prompt_caching?(opts) do
-        [@anthropic_beta_prompt_caching | beta_features]
+        [beta_features, @anthropic_beta_prompt_caching]
       else
         beta_features
       end
+
+    # OAuth beta flag must be FIRST in the list (required by Anthropic OAuth)
+    beta_features =
+      if oauth_mode do
+        ["oauth-2025-04-20", beta_features]
+      else
+        beta_features
+      end
+
+    beta_features = List.flatten(beta_features)
 
     case beta_features do
       [] ->
@@ -687,6 +690,18 @@ defmodule ReqLLM.Providers.Anthropic do
 
     Logger.debug("[ReqLLM.Anthropic.attach_stream] Beta headers: #{inspect(beta_headers)}")
 
+    # Log system prompt prefix for OAuth debugging
+    system = Map.get(body, :system)
+
+    system_preview =
+      case system do
+        s when is_binary(s) -> String.slice(s, 0, 200)
+        [%{text: t} | _] when is_binary(t) -> String.slice(t, 0, 200)
+        _ -> inspect(system, limit: 200)
+      end
+
+    Logger.debug("[ReqLLM.Anthropic.attach_stream] System prompt preview: #{system_preview}")
+
     # Log the outgoing streaming request for debugging
     log_outgoing_stream_request(url, all_headers, body)
 
@@ -731,7 +746,6 @@ defmodule ReqLLM.Providers.Anthropic do
   end
 
   defp maybe_add_beta_header(request, user_opts) do
-    beta_features = []
     oauth_mode = Keyword.get(user_opts, :oauth_mode, false)
 
     # Add betas from provider_options (e.g. structured-outputs)
@@ -741,36 +755,39 @@ defmodule ReqLLM.Providers.Anthropic do
       |> Keyword.get(:anthropic_beta, [])
       |> List.wrap()
 
-    beta_features = beta_features ++ provider_betas
-
-    # Add OAuth beta flag when in OAuth mode
-    beta_features =
-      if oauth_mode do
-        ["oauth-2025-04-20" | beta_features]
-      else
-        beta_features
-      end
+    beta_features = provider_betas
 
     beta_features =
       if has_tools?(user_opts) do
-        [@anthropic_beta_tools | beta_features]
+        [beta_features, @anthropic_beta_tools]
       else
-        beta_features
+        [beta_features]
       end
 
     beta_features =
-      if has_thinking?(user_opts) do
-        ["interleaved-thinking-2025-05-14" | beta_features]
+      if has_thinking?(user_opts) or oauth_mode do
+        # Always include interleaved-thinking for OAuth mode (required by Claude Code)
+        [beta_features, "interleaved-thinking-2025-05-14"]
       else
         beta_features
       end
 
     beta_features =
       if has_prompt_caching?(user_opts) do
-        [@anthropic_beta_prompt_caching | beta_features]
+        [beta_features, @anthropic_beta_prompt_caching]
       else
         beta_features
       end
+
+    # OAuth beta flag must be FIRST in the list (required by Anthropic OAuth)
+    beta_features =
+      if oauth_mode do
+        ["oauth-2025-04-20", beta_features]
+      else
+        beta_features
+      end
+
+    beta_features = List.flatten(beta_features)
 
     case beta_features do
       [] ->
