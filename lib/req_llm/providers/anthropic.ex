@@ -691,6 +691,11 @@ defmodule ReqLLM.Providers.Anthropic do
     log_outgoing_stream_request(url, all_headers, body)
 
     finch_request = Finch.build(:post, url, all_headers, Jason.encode!(body))
+
+    Logger.debug(
+      "[ReqLLM.Anthropic.attach_stream] Finch request built - path: #{inspect(finch_request.path)}, query: #{inspect(finch_request.query)}"
+    )
+
     {:ok, finch_request}
   rescue
     error ->
