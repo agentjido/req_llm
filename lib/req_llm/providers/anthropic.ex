@@ -702,6 +702,11 @@ defmodule ReqLLM.Providers.Anthropic do
 
     Logger.debug("[ReqLLM.Anthropic.attach_stream] System prompt preview: #{system_preview}")
 
+    # Log tools for OAuth debugging
+    tools = Map.get(body, :tools, [])
+    tool_names = Enum.map(tools, fn t -> Map.get(t, :name) || Map.get(t, "name") end)
+    Logger.debug("[ReqLLM.Anthropic.attach_stream] Tools in request: #{inspect(tool_names)}")
+
     # Log the outgoing streaming request for debugging
     log_outgoing_stream_request(url, all_headers, body)
 
