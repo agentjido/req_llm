@@ -2,7 +2,7 @@ Mix.install([
   {:phoenix_playground, "~> 0.1.8"},
   # {:jason, "~> 1.4"},
   {:req_llm, path: "."},
-  {:llm_db,path: "./deps/llm_db",override: true},
+  {:llm_db, path: "./deps/llm_db", override: true},
   {:dotenvy, "~> 1.0"}
 ])
 
@@ -15,28 +15,31 @@ defmodule ReqLLMPlaygroundLive do
 
   def mount(_params, _session, socket) do
     saved = load_config()
-    default_key = (System.get_env("ZENMUX_API_KEY") || System.get_env("LB_API_KEY") || System.get_env("OPENAI_API_KEY") || System.get_env("OPENROUTER_API_KEY") || "") |> String.trim()
 
+    default_key =
+      (System.get_env("ZENMUX_API_KEY") || System.get_env("LB_API_KEY") ||
+         System.get_env("OPENAI_API_KEY") || System.get_env("OPENROUTER_API_KEY") || "")
+      |> String.trim()
 
-     initial_mode = Map.get(saved, "base_url_mode") || "openrouter"
-     models = fetch_models(initial_mode)
+    initial_mode = Map.get(saved, "base_url_mode") || "openrouter"
+    models = fetch_models(initial_mode)
 
-     {:ok,
-      assign(socket,
-        api_key: Map.get(saved, "api_key") || default_key,
-        base_url_mode: initial_mode,
-        custom_base_url: Map.get(saved, "custom_base_url") || "",
-        custom_adapter: Map.get(saved, "custom_adapter") || "openai",
-        model: Map.get(saved, "model") || "google/gemma-2-9b-it:free",
-        available_models: models,
-        system_prompt: Map.get(saved, "system_prompt") || "You are a helpful assistant.",
-        user_prompt: Map.get(saved, "user_prompt") || "Tell me a short joke about Elixir.",
-        response: nil,
-        usage: nil,
-        error: nil,
-        loading: false,
-        logs: []
-      )}
+    {:ok,
+     assign(socket,
+       api_key: Map.get(saved, "api_key") || default_key,
+       base_url_mode: initial_mode,
+       custom_base_url: Map.get(saved, "custom_base_url") || "",
+       custom_adapter: Map.get(saved, "custom_adapter") || "openai",
+       model: Map.get(saved, "model") || "google/gemma-2-9b-it:free",
+       available_models: models,
+       system_prompt: Map.get(saved, "system_prompt") || "You are a helpful assistant.",
+       user_prompt: Map.get(saved, "user_prompt") || "Tell me a short joke about Elixir.",
+       response: nil,
+       usage: nil,
+       error: nil,
+       loading: false,
+       logs: []
+     )}
   end
 
   def render(assigns) do
@@ -254,30 +257,30 @@ defmodule ReqLLMPlaygroundLive do
     new_mode = params["base_url_mode"]
 
     # Refresh models if mode changed
-    models = 
-      if new_mode != socket.assigns.base_url_mode do
-        fetch_models(new_mode)
-      else
+    models =
+      if new_mode == socket.assigns.base_url_mode do
         socket.assigns.available_models
+      else
+        fetch_models(new_mode)
       end
 
     # Also update model if mode changed to first available (optional UX improvement)
-    new_model = 
-      if new_mode != socket.assigns.base_url_mode do
-        List.first(models) || params["model"]
-      else
+    new_model =
+      if new_mode == socket.assigns.base_url_mode do
         params["model"]
+      else
+        List.first(models) || params["model"]
       end
 
     new_config = %{
-       api_key: params["api_key"],
-       base_url_mode: new_mode,
-       custom_base_url: custom_base_url,
-       custom_adapter: custom_adapter,
-       model: new_model,
-       system_prompt: params["system_prompt"],
-       user_prompt: params["user_prompt"],
-       available_models: models
+      api_key: params["api_key"],
+      base_url_mode: new_mode,
+      custom_base_url: custom_base_url,
+      custom_adapter: custom_adapter,
+      model: new_model,
+      system_prompt: params["system_prompt"],
+      user_prompt: params["user_prompt"],
+      available_models: models
     }
 
     save_config(new_config)
@@ -288,6 +291,7 @@ defmodule ReqLLMPlaygroundLive do
   def handle_event("refresh_models", _params, socket) do
     mode = socket.assigns.base_url_mode
     models = fetch_models(mode)
+
     {:noreply,
      socket
      |> assign(available_models: models)
@@ -344,8 +348,12 @@ defmodule ReqLLMPlaygroundLive do
                 %ReqLLM.Message.ContentPart{text: text} -> text
                 other -> inspect(other)
               end)
-            text when is_binary(text) -> text
-            other -> inspect(other)
+
+            text when is_binary(text) ->
+              text
+
+            other ->
+              inspect(other)
           end
 
         usage = response.usage
@@ -377,24 +385,28 @@ defmodule ReqLLMPlaygroundLive do
     ]
 
     # Filter empty system prompt if strictly empty to avoid provider errors if any
-    messages = if String.trim(config.system_prompt) == "", do: Enum.filter(messages, & &1.role != :system), else: messages
+    messages =
+      if String.trim(config.system_prompt) == "",
+        do: Enum.filter(messages, &(&1.role != :system)),
+        else: messages
 
     model_arg = config.model_arg
 
     opts = [
       base_url: config.base_url,
       api_key: config.api_key,
-      receive_timeout: 120_000, # 2 mins timeout
+      # 2 mins timeout
+      receive_timeout: 120_000,
       max_tokens: 100
     ]
+
     # Remove nil/empty opts
     opts = Enum.reject(opts, fn {_, v} -> is_nil(v) || v == "" end)
 
-    # Terminal Log
+    # Terminal Log (redact API key)
     IO.puts("\n>>> [ReqLLMPlayground] Executing Request")
     IO.puts("    Model: #{model_arg}")
     IO.puts("    BaseURL: #{config.base_url}")
-    IO.inspect(opts, label: "    Options")
 
     ReqLLM.generate_text(model_arg, messages, opts)
   end
@@ -404,7 +416,8 @@ defmodule ReqLLMPlaygroundLive do
     target_adapter =
       case config.base_url_mode do
         "openrouter" -> "openrouter"
-        "local" -> "openai" # Local usually implies OpenAI-compatible (Ollama, vLLM, etc)
+        # Local usually implies OpenAI-compatible (Ollama, vLLM, etc)
+        "local" -> "openai"
         "openai" -> "openai"
         "zenmux" -> "zenmux"
         "custom" -> config.custom_adapter
@@ -425,7 +438,8 @@ defmodule ReqLLMPlaygroundLive do
       case mode do
         "openrouter" -> :openrouter
         "openai" -> :openai
-        "custom" -> nil # Fetch all? Or nothing? Let's fetch all for custom.
+        # Fetch all? Or nothing? Let's fetch all for custom.
+        "custom" -> nil
         "local" -> :local
         "zenmux" -> :zenmux
         _ -> :openrouter
@@ -436,10 +450,10 @@ defmodule ReqLLMPlaygroundLive do
         provider_filter == :local ->
           # LLMDB doesn't usually track local models. Fallback.
           []
-        
+
         provider_filter ->
           LLMDB.models(provider_filter)
-          
+
         true ->
           # Custom mode: fetch all models
           LLMDB.models()
@@ -456,9 +470,9 @@ defmodule ReqLLMPlaygroundLive do
     end
     |> then(fn list ->
       if provider_filter == :local && list == [] do
-         ["llama3", "mistral", "gemma:2b"]
+        ["llama3", "mistral", "gemma:2b"]
       else
-         list
+        list
       end
     end)
   end
@@ -487,12 +501,16 @@ defmodule ReqLLMPlaygroundLive do
           {:ok, data} -> data
           _ -> %{}
         end
-      _ -> %{}
+
+      _ ->
+        %{}
     end
   end
 
   defp save_config(config) do
-    File.write(config_file(), JSON.encode!(config))
+    # Don't persist API key to disk for security
+    config_without_secrets = Map.delete(config, :api_key) |> Map.delete("api_key")
+    File.write(config_file(), JSON.encode!(config_without_secrets))
   end
 end
 

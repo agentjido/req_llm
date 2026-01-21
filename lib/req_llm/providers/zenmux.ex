@@ -47,8 +47,6 @@ defmodule ReqLLM.Providers.Zenmux do
 
   import ReqLLM.Provider.Utils, only: [maybe_put: 3]
 
-  require Logger
-
   @provider_schema [
     provider: [
       type: :map,
@@ -323,7 +321,7 @@ defmodule ReqLLM.Providers.Zenmux do
 
   defp clean_reasoning_text(reasoning) do
     reasoning
-    |> String.replace(~r/<｜tool▁call▁begin｜>.*<｜tool▁call▁end｜>/s, "")
+    |> String.replace(~r/<｜tool▁call▁begin｜>.*?<｜tool▁call▁end｜>/s, "")
     |> String.trim()
   end
 
