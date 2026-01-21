@@ -639,12 +639,25 @@ defmodule ReqLLM.Providers.Anthropic do
 
   @impl ReqLLM.Provider
   def attach_stream(model, context, opts, _finch_name) do
+    # Debug: log incoming oauth_mode
+    Logger.debug(
+      "[ReqLLM.Anthropic.attach_stream] Incoming opts oauth_mode: #{inspect(Keyword.get(opts, :oauth_mode))}"
+    )
+
     # Extract and merge provider_options for translation
     {provider_options, standard_opts} = Keyword.pop(opts, :provider_options, [])
     flattened_opts = Keyword.merge(standard_opts, provider_options)
 
+    Logger.debug(
+      "[ReqLLM.Anthropic.attach_stream] After flatten oauth_mode: #{inspect(Keyword.get(flattened_opts, :oauth_mode))}"
+    )
+
     # Translate provider options (including reasoning_effort) before building body
     {translated_opts, _warnings} = translate_options(:chat, model, flattened_opts)
+
+    Logger.debug(
+      "[ReqLLM.Anthropic.attach_stream] After translate oauth_mode: #{inspect(Keyword.get(translated_opts, :oauth_mode))}"
+    )
 
     # Set default timeout for reasoning models
     default_timeout =
@@ -667,6 +680,12 @@ defmodule ReqLLM.Providers.Anthropic do
 
     body = build_request_body(context, get_api_model_id(model), translated_opts ++ [stream: true])
     url = build_request_url(translated_opts)
+
+    Logger.debug(
+      "[ReqLLM.Anthropic.attach_stream] Built URL: #{url}, oauth_mode in opts: #{inspect(Keyword.get(translated_opts, :oauth_mode))}"
+    )
+
+    Logger.debug("[ReqLLM.Anthropic.attach_stream] Beta headers: #{inspect(beta_headers)}")
 
     # Log the outgoing streaming request for debugging
     log_outgoing_stream_request(url, all_headers, body)
