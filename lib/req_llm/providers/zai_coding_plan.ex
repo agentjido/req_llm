@@ -58,4 +58,8 @@ defmodule ReqLLM.Providers.ZaiCodingPlan do
   defdelegate translate_options(operation, model, opts), to: ReqLLM.Providers.ZaiCoder
 
   defdelegate extract_usage(data, model), to: ReqLLM.Providers.ZaiCoder
+
+  defdelegate attach_stream(model, context, opts, finch_name), to: ReqLLM.Providers.ZaiCoder
+
+  defdelegate decode_stream_event(event, model), to: ReqLLM.Providers.ZaiCoder
 end
