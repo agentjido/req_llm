@@ -122,11 +122,9 @@ defmodule ReqLLM.Providers.Anthropic do
 
   # Canonical reasoning effort token budgets for Anthropic models
   # These values are used across all providers hosting Anthropic models
-  @reasoning_budget_minimal 512
   @reasoning_budget_low 1_024
   @reasoning_budget_medium 2_048
   @reasoning_budget_high 4_096
-  @reasoning_budget_xhigh 8_192
 
   @impl ReqLLM.Provider
   def prepare_request(:chat, model_spec, prompt, opts) do
@@ -837,18 +835,12 @@ defmodule ReqLLM.Providers.Anthropic do
       iex> ReqLLM.Providers.Anthropic.map_reasoning_effort_to_budget("medium")
       2048
   """
-  def map_reasoning_effort_to_budget(:none), do: nil
-  def map_reasoning_effort_to_budget(:minimal), do: @reasoning_budget_minimal
   def map_reasoning_effort_to_budget(:low), do: @reasoning_budget_low
   def map_reasoning_effort_to_budget(:medium), do: @reasoning_budget_medium
   def map_reasoning_effort_to_budget(:high), do: @reasoning_budget_high
-  def map_reasoning_effort_to_budget(:xhigh), do: @reasoning_budget_xhigh
-  def map_reasoning_effort_to_budget("none"), do: map_reasoning_effort_to_budget(:none)
-  def map_reasoning_effort_to_budget("minimal"), do: map_reasoning_effort_to_budget(:minimal)
   def map_reasoning_effort_to_budget("low"), do: map_reasoning_effort_to_budget(:low)
   def map_reasoning_effort_to_budget("medium"), do: map_reasoning_effort_to_budget(:medium)
   def map_reasoning_effort_to_budget("high"), do: map_reasoning_effort_to_budget(:high)
-  def map_reasoning_effort_to_budget("xhigh"), do: map_reasoning_effort_to_budget(:xhigh)
   def map_reasoning_effort_to_budget(_), do: @reasoning_budget_medium
 
   defp translate_reasoning_effort(opts) do
@@ -856,17 +848,6 @@ defmodule ReqLLM.Providers.Anthropic do
     {reasoning_budget, opts} = Keyword.pop(opts, :reasoning_token_budget)
 
     case reasoning_effort do
-      :none ->
-        opts
-
-      :minimal ->
-        budget = reasoning_budget || map_reasoning_effort_to_budget(:minimal)
-
-        opts
-        |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: budget})
-        |> adjust_max_tokens_for_thinking(budget)
-        |> adjust_top_p_for_thinking()
-
       :low ->
         budget = reasoning_budget || map_reasoning_effort_to_budget(:low)
 
@@ -885,14 +866,6 @@ defmodule ReqLLM.Providers.Anthropic do
 
       :high ->
         budget = reasoning_budget || map_reasoning_effort_to_budget(:high)
-
-        opts
-        |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: budget})
-        |> adjust_max_tokens_for_thinking(budget)
-        |> adjust_top_p_for_thinking()
-
-      :xhigh ->
-        budget = reasoning_budget || map_reasoning_effort_to_budget(:xhigh)
 
         opts
         |> Keyword.put(:thinking, %{type: "enabled", budget_tokens: budget})

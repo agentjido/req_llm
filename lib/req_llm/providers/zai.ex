@@ -23,20 +23,6 @@ defmodule ReqLLM.Providers.Zai do
 
       # Add to .env file (automatically loaded)
       ZAI_API_KEY=your-api-key
-
-  ## Provider Options
-
-  The following options can be passed via `provider_options`:
-
-  - `:thinking` - Map to control the thinking/reasoning mode. Set to
-    `%{type: "disabled"}` to disable thinking mode for faster responses,
-    or `%{type: "enabled"}` to enable extended reasoning.
-
-  Example:
-
-      ReqLLM.generate_text("zai:glm-4.5-flash", context,
-        provider_options: [thinking: %{type: "disabled"}]
-      )
   """
 
   use ReqLLM.Provider,
@@ -44,13 +30,7 @@ defmodule ReqLLM.Providers.Zai do
     default_base_url: "https://api.z.ai/api/paas/v4",
     default_env_key: "ZAI_API_KEY"
 
-  @provider_schema [
-    thinking: [
-      type: :map,
-      doc:
-        ~s(Control thinking/reasoning mode. Set to %{type: "disabled"} to disable or %{type: "enabled"} to enable.)
-    ]
-  ]
+  @provider_schema []
 
   @impl ReqLLM.Provider
   def prepare_request(operation, model_spec, input, opts) do
@@ -312,15 +292,8 @@ defmodule ReqLLM.Providers.Zai do
     provider_opts = request.options[:provider_options] || []
     response_format = request.options[:response_format] || provider_opts[:response_format]
 
-    body =
-      case response_format do
-        format when is_map(format) -> Map.put(body, :response_format, format)
-        _ -> body
-      end
-
-    # Add thinking parameter if provided (for models that support it)
-    case provider_opts[:thinking] do
-      thinking when is_map(thinking) -> Map.put(body, :thinking, thinking)
+    case response_format do
+      format when is_map(format) -> Map.put(body, :response_format, format)
       _ -> body
     end
   end

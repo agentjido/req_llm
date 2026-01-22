@@ -17,11 +17,19 @@ defmodule ReqLLM.Providers.Anthropic.ResponseBuilder do
 
   @impl true
   def build_response(chunks, metadata, opts) do
-    with {:ok, response} <- DefaultBuilder.build_response(chunks, metadata, opts) do
-      {:ok, ensure_non_empty_content(response)}
+    # Build base response using default implementation
+    case DefaultBuilder.build_response(chunks, metadata, opts) do
+      {:ok, response} ->
+        # Apply Anthropic-specific post-processing
+        {:ok, ensure_non_empty_content(response)}
+
+      error ->
+        error
     end
   end
 
+  # Anthropic requires non-empty content blocks when tool_calls are present.
+  # If we have tool calls but no text content, add an empty text part.
   defp ensure_non_empty_content(%{message: %{tool_calls: tc, content: []}} = response)
        when is_list(tc) and tc != [] do
     content = [ContentPart.text("")]

@@ -170,12 +170,9 @@ defmodule ReqLLM.Providers.OpenRouter do
 
     opts =
       case reasoning_effort do
-        :none -> Keyword.put(opts, :reasoning_effort, "none")
-        :minimal -> Keyword.put(opts, :reasoning_effort, "minimal")
         :low -> Keyword.put(opts, :reasoning_effort, "low")
         :medium -> Keyword.put(opts, :reasoning_effort, "medium")
         :high -> Keyword.put(opts, :reasoning_effort, "high")
-        :xhigh -> Keyword.put(opts, :reasoning_effort, "xhigh")
         :default -> opts
         nil -> opts
         other -> Keyword.put(opts, :reasoning_effort, other)
@@ -252,7 +249,6 @@ defmodule ReqLLM.Providers.OpenRouter do
     enhanced_body =
       body
       |> translate_tool_choice_format()
-      |> encode_reasoning_details_in_messages()
       |> maybe_put(:models, request.options[:openrouter_models])
       |> maybe_put(:route, request.options[:openrouter_route])
       |> maybe_put(:provider, request.options[:openrouter_provider])
@@ -432,13 +428,14 @@ defmodule ReqLLM.Providers.OpenRouter do
     |> String.trim()
   end
 
+  # Extract reasoning_details from OpenRouter response body
+  # Returns nil if not present or malformed
   defp extract_reasoning_details(body) when is_map(body) do
     with %{"choices" => [first_choice | _]} <- body,
          %{"message" => %{"reasoning_details" => details}} when is_list(details) <- first_choice do
+      # Validate that it's a list of maps (defensive programming)
       if Enum.all?(details, &is_map/1) do
         details
-        |> Enum.with_index()
-        |> Enum.map(&normalize_reasoning_detail/1)
       end
     else
       _ -> nil
@@ -446,84 +443,6 @@ defmodule ReqLLM.Providers.OpenRouter do
   end
 
   defp extract_reasoning_details(_), do: nil
-
-  defp normalize_reasoning_detail({raw, fallback_index}) do
-    %ReqLLM.Message.ReasoningDetails{
-      text: raw["text"],
-      signature: raw["signature"],
-      encrypted?: raw["signature_encrypted"] || false,
-      provider: :openrouter,
-      format: raw["format"] || "openrouter-v1",
-      index: raw["index"] || fallback_index,
-      provider_data: %{"type" => raw["type"]}
-    }
-  end
-
-  defp encode_reasoning_details_in_messages(%{"messages" => messages} = body)
-       when is_list(messages) do
-    updated_messages = Enum.map(messages, &encode_message_reasoning_details/1)
-    Map.put(body, "messages", updated_messages)
-  end
-
-  defp encode_reasoning_details_in_messages(body), do: body
-
-  defp encode_message_reasoning_details(%{"reasoning_details" => details} = message)
-       when is_list(details) and details != [] do
-    encoded_details =
-      details
-      |> Enum.map(&encode_single_reasoning_detail/1)
-      |> Enum.reject(&is_nil/1)
-
-    if encoded_details == [] do
-      Map.delete(message, "reasoning_details")
-    else
-      Map.put(message, "reasoning_details", encoded_details)
-    end
-  end
-
-  defp encode_message_reasoning_details(message), do: message
-
-  defp encode_single_reasoning_detail(
-         %ReqLLM.Message.ReasoningDetails{provider: :openrouter} = detail
-       ) do
-    base = %{
-      "type" => detail.provider_data["type"] || "reasoning.text",
-      "format" => detail.format,
-      "index" => detail.index,
-      "text" => detail.text
-    }
-
-    if detail.signature, do: Map.put(base, "signature", detail.signature), else: base
-  end
-
-  defp encode_single_reasoning_detail(%ReqLLM.Message.ReasoningDetails{provider: provider}) do
-    Logger.debug("Skipping non-OpenRouter reasoning detail from provider: #{inspect(provider)}")
-    nil
-  end
-
-  defp encode_single_reasoning_detail(%{"provider" => "openrouter"} = decoded_struct) do
-    base = %{
-      "type" => get_in(decoded_struct, ["provider_data", "type"]) || "reasoning.text",
-      "format" => decoded_struct["format"],
-      "index" => decoded_struct["index"],
-      "text" => decoded_struct["text"]
-    }
-
-    if decoded_struct["signature"],
-      do: Map.put(base, "signature", decoded_struct["signature"]),
-      else: base
-  end
-
-  defp encode_single_reasoning_detail(%{"provider" => provider}) when is_binary(provider) do
-    Logger.debug("Skipping non-OpenRouter reasoning detail from provider: #{provider}")
-    nil
-  end
-
-  defp encode_single_reasoning_detail(%{"type" => _} = raw_map) do
-    raw_map
-  end
-
-  defp encode_single_reasoning_detail(_), do: nil
 
   defp attach_reasoning_details_to_response(resp, nil), do: resp
 

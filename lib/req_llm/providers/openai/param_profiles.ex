@@ -51,12 +51,9 @@ defmodule ReqLLM.Providers.OpenAI.ParamProfiles do
     canonical_steps ++ Enum.flat_map(profiles, &Map.get(@profiles, &1, []))
   end
 
-  defp translate_reasoning_effort(:none), do: "none"
-  defp translate_reasoning_effort(:minimal), do: "minimal"
   defp translate_reasoning_effort(:low), do: "low"
   defp translate_reasoning_effort(:medium), do: "medium"
   defp translate_reasoning_effort(:high), do: "high"
-  defp translate_reasoning_effort(:xhigh), do: "xhigh"
   defp translate_reasoning_effort(:default), do: nil
   defp translate_reasoning_effort(other), do: other
 

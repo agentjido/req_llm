@@ -283,7 +283,7 @@ defmodule ReqLLM.Providers.Azure.Anthropic do
         |> ensure_min_max_tokens(reasoning_budget)
         |> set_reasoning_temperature(model)
 
-      has_reasoning && reasoning_effort && reasoning_effort != :none ->
+      has_reasoning && reasoning_effort ->
         budget = Anthropic.map_reasoning_effort_to_budget(reasoning_effort)
 
         opts

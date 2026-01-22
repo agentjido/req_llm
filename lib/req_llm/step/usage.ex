@@ -83,8 +83,7 @@ defmodule ReqLLM.Step.Usage do
         case resp.body do
           %ReqLLM.Response{usage: response_usage}
           when is_map(response_usage) and cost_breakdown != nil ->
-            cached_read_tokens = usage[:cached_input] || 0
-            cache_creation_tokens = usage[:cache_creation] || 0
+            cached_tokens = usage[:cached_input] || 0
 
             augmented_usage =
               response_usage
@@ -92,8 +91,7 @@ defmodule ReqLLM.Step.Usage do
               |> Map.put_new(:output_tokens, usage.output)
               |> Map.put_new(:total_tokens, usage.input + usage.output)
               |> Map.put(:reasoning_tokens, usage.reasoning)
-              |> Map.put(:cached_tokens, cached_read_tokens)
-              |> Map.put(:cache_creation_tokens, cache_creation_tokens)
+              |> Map.put(:cached_tokens, cached_tokens)
               |> Map.merge(%{
                 input_cost: cost_breakdown.input_cost,
                 output_cost: cost_breakdown.output_cost,
@@ -155,11 +153,11 @@ defmodule ReqLLM.Step.Usage do
   end
 
   defp fallback_extract_usage(%{"prompt_tokens" => input, "completion_tokens" => output}) do
-    {:ok, %{input: input, output: output, reasoning: 0, cached_input: 0, cache_creation: 0}}
+    {:ok, %{input: input, output: output, reasoning: 0, cached_input: 0}}
   end
 
   defp fallback_extract_usage(%{"input_tokens" => input, "output_tokens" => output}) do
-    {:ok, %{input: input, output: output, reasoning: 0, cached_input: 0, cache_creation: 0}}
+    {:ok, %{input: input, output: output, reasoning: 0, cached_input: 0}}
   end
 
   defp fallback_extract_usage(%ReqLLM.Response{usage: usage}) when is_map(usage) do
@@ -170,63 +168,18 @@ defmodule ReqLLM.Step.Usage do
 
   @spec normalize_usage(map()) :: map()
   defp normalize_usage(usage) when is_map(usage) do
-    input_includes_cached = detect_input_includes_cached(usage)
-
-    input =
-      usage[:input] || usage["input"] || usage["prompt_tokens"] || usage[:prompt_tokens] ||
-        usage["input_tokens"] || usage[:input_tokens] || 0
-
     %{
-      input: input,
+      input:
+        usage[:input] || usage["input"] || usage["prompt_tokens"] || usage[:prompt_tokens] ||
+          usage["input_tokens"] || usage[:input_tokens] || 0,
       output:
         usage[:output] || usage["output"] || usage["completion_tokens"] ||
           usage[:completion_tokens] || usage["output_tokens"] || usage[:output_tokens] || 0,
       reasoning:
         usage[:reasoning] || usage["reasoning"] || usage[:reasoning_tokens] ||
           usage["reasoning_tokens"] || get_reasoning_tokens(usage) || 0,
-      cached_input: get_cached_input_tokens(usage, input, input_includes_cached),
-      cache_creation: get_cache_creation_tokens(usage, input, input_includes_cached),
-      input_includes_cached: input_includes_cached,
-      add_reasoning_to_cost: get_add_reasoning_to_cost(usage)
+      cached_input: get_cached_input_tokens(usage)
     }
-  end
-
-  defp detect_input_includes_cached(usage) do
-    has_openai_format =
-      get_in(usage, ["prompt_tokens_details", "cached_tokens"]) != nil or
-        get_in(usage, [:prompt_tokens_details, :cached_tokens]) != nil or
-        get_in(usage, ["input_tokens_details", "cached_tokens"]) != nil or
-        get_in(usage, [:input_tokens_details, :cached_tokens]) != nil
-
-    has_anthropic_format =
-      Map.has_key?(usage, "cache_read_input_tokens") or
-        Map.has_key?(usage, :cache_read_input_tokens) or
-        Map.has_key?(usage, "cache_creation_input_tokens") or
-        Map.has_key?(usage, :cache_creation_input_tokens) or
-        Map.has_key?(usage, "cacheReadInputTokens") or
-        Map.has_key?(usage, :cacheReadInputTokens) or
-        Map.has_key?(usage, "cacheWriteInputTokens") or
-        Map.has_key?(usage, :cacheWriteInputTokens) or
-        Map.has_key?(usage, "cacheReadInputTokenCount") or
-        Map.has_key?(usage, :cacheReadInputTokenCount) or
-        Map.has_key?(usage, "cacheWriteInputTokenCount") or
-        Map.has_key?(usage, :cacheWriteInputTokenCount)
-
-    cond do
-      has_openai_format -> true
-      has_anthropic_format -> false
-      true -> true
-    end
-  end
-
-  defp get_add_reasoning_to_cost(usage) do
-    usage[:add_reasoning_to_cost] || usage["add_reasoning_to_cost"] ||
-      is_google_gemini_format(usage)
-  end
-
-  defp is_google_gemini_format(usage) do
-    Map.has_key?(usage, "thoughtsTokenCount") or
-      Map.has_key?(usage, :thoughtsTokenCount)
   end
 
   defp get_reasoning_tokens(usage) do
@@ -240,41 +193,19 @@ defmodule ReqLLM.Step.Usage do
     end
   end
 
-  defp get_cached_input_tokens(usage, input, input_includes_cached) do
+  defp get_cached_input_tokens(usage) do
     cached =
-      usage[:cache_read_input_tokens] || usage["cache_read_input_tokens"] ||
-        usage[:cacheReadInputTokens] || usage["cacheReadInputTokens"] ||
-        usage[:cacheReadInputTokenCount] || usage["cacheReadInputTokenCount"] ||
-        usage[:cached_input] || usage["cached_input"] ||
+      usage[:cached_input] || usage["cached_input"] ||
         usage[:cached_tokens] || usage["cached_tokens"] ||
         get_in(usage, ["prompt_tokens_details", "cached_tokens"]) ||
         get_in(usage, [:prompt_tokens_details, :cached_tokens])
 
-    if input_includes_cached do
-      clamp_tokens(cached, input)
-    else
-      safe_to_int(cached)
-    end
+    input_tokens =
+      usage[:input] || usage["input"] || usage["prompt_tokens"] || usage[:prompt_tokens] ||
+        usage["input_tokens"] || usage[:input_tokens] || 0
+
+    clamp_tokens(cached, input_tokens)
   end
-
-  defp get_cache_creation_tokens(usage, input, input_includes_cached) do
-    creation =
-      usage[:cache_creation_input_tokens] || usage["cache_creation_input_tokens"] ||
-        usage[:cacheWriteInputTokens] || usage["cacheWriteInputTokens"] ||
-        usage[:cacheWriteInputTokenCount] || usage["cacheWriteInputTokenCount"] ||
-        usage[:cache_write_input_tokens] || usage["cache_write_input_tokens"]
-
-    if input_includes_cached do
-      clamp_tokens(creation, input)
-    else
-      safe_to_int(creation)
-    end
-  end
-
-  defp safe_to_int(nil), do: 0
-  defp safe_to_int(n) when is_integer(n), do: max(n, 0)
-  defp safe_to_int(n) when is_float(n), do: max(trunc(n), 0)
-  defp safe_to_int(_), do: 0
 
   @spec fetch_model(Req.Request.t()) :: {:ok, LLMDB.Model.t()} | :error
   defp fetch_model(%Req.Request{private: private, options: options}) do
@@ -286,10 +217,49 @@ defmodule ReqLLM.Step.Usage do
 
   @spec compute_cost_breakdown(map(), LLMDB.Model.t()) ::
           {:ok, %{input_cost: float(), output_cost: float(), total_cost: float()} | nil}
-  defp compute_cost_breakdown(_usage, %LLMDB.Model{cost: nil}), do: {:ok, nil}
+  defp compute_cost_breakdown(_usage, %LLMDB.Model{cost: nil}) do
+    {:ok, nil}
+  end
 
-  defp compute_cost_breakdown(usage, %LLMDB.Model{cost: cost_map}) do
-    ReqLLM.Cost.calculate(usage, cost_map)
+  defp compute_cost_breakdown(%{input: input_tokens, output: output_tokens} = usage, %LLMDB.Model{
+         cost: cost_map
+       })
+       when is_map(cost_map) do
+    input_rate = cost_map[:input] || cost_map["input"]
+    output_rate = cost_map[:output] || cost_map["output"]
+
+    cached_rate =
+      cost_map[:cached_input] || cost_map["cached_input"] ||
+        cost_map[:cache_read] || cost_map["cache_read"] ||
+        input_rate
+
+    with {:ok, input_num} <- safe_to_number(input_tokens),
+         {:ok, output_num} <- safe_to_number(output_tokens),
+         true <- input_rate != nil and output_rate != nil do
+      # Extract cached tokens and calculate split
+      cached_tokens = clamp_tokens(Map.get(usage, :cached_input, 0), input_num)
+
+      uncached_tokens = max(input_num - cached_tokens, 0)
+
+      # Calculate costs with cached vs uncached rates (costs are per million tokens)
+      input_cost =
+        Float.round(
+          uncached_tokens / 1_000_000 * input_rate + cached_tokens / 1_000_000 * cached_rate,
+          6
+        )
+
+      output_cost = Float.round(output_num / 1_000_000 * output_rate, 6)
+      total_cost = Float.round(input_cost + output_cost, 6)
+
+      {:ok,
+       %{
+         input_cost: input_cost,
+         output_cost: output_cost,
+         total_cost: total_cost
+       }}
+    else
+      _ -> {:ok, nil}
+    end
   end
 
   # Safely clamps a value to a valid token count within bounds.

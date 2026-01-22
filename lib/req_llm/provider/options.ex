@@ -98,9 +98,7 @@ defmodule ReqLLM.Provider.Options do
 
                                # Canonical reasoning controls
                                reasoning_effort: [
-                                 type:
-                                   {:in,
-                                    [:none, :minimal, :low, :medium, :high, :xhigh, :default]},
+                                 type: {:in, [:low, :medium, :high, :default]},
                                  doc:
                                    "Computational effort for reasoning models (higher = more thinking)"
                                ],
@@ -509,32 +507,16 @@ defmodule ReqLLM.Provider.Options do
         rest
         |> Keyword.put_new(:reasoning_effort, :medium)
 
-      {"auto", rest} ->
-        rest
-
-      {"none", rest} ->
-        rest
-        |> Keyword.put_new(:reasoning_effort, :none)
-
-      {"minimal", rest} ->
-        rest
-        |> Keyword.put_new(:reasoning_effort, :minimal)
-
       {"low", rest} ->
         rest
         |> Keyword.put_new(:reasoning_effort, :low)
 
-      {"medium", rest} ->
+      {"auto", rest} ->
         rest
-        |> Keyword.put_new(:reasoning_effort, :medium)
 
       {"high", rest} ->
         rest
         |> Keyword.put_new(:reasoning_effort, :high)
-
-      {"xhigh", rest} ->
-        rest
-        |> Keyword.put_new(:reasoning_effort, :xhigh)
     end
   end
 

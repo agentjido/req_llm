@@ -574,13 +574,12 @@ defmodule ReqLLM.Providers.AmazonBedrock do
           # Explicit budget_tokens provided
           PlatformReasoning.add_reasoning_to_additional_fields(opts, reasoning_budget)
 
-        reasoning_effort && reasoning_effort != :none ->
+        reasoning_effort ->
           # Map effort to budget using canonical Anthropic mappings
           budget = Anthropic.map_reasoning_effort_to_budget(reasoning_effort)
           PlatformReasoning.add_reasoning_to_additional_fields(opts, budget)
 
         true ->
-          # No reasoning params or :none (disable reasoning)
           opts
       end
     else

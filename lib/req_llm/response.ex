@@ -13,11 +13,14 @@ defmodule ReqLLM.Response do
 
       # Basic response usage
       {:ok, response} = ReqLLM.generate_text("anthropic:claude-3-sonnet", context)
-      ReqLLM.Response.text(response)  #=> "Hello! I'm Claude."
-      ReqLLM.Response.usage(response)  #=> %{input_tokens: 12, output_tokens: 4, total_cost: 0.016}
+      response.text()  #=> "Hello! I'm Claude."
+      response.usage()  #=> %{input_tokens: 12, output_tokens: 4, total_cost: 0.016}
 
       # Multi-turn conversation (no manual context building)
       {:ok, response2} = ReqLLM.generate_text("anthropic:claude-3-sonnet", response.context)
+
+      # Tool calling loop
+      {:ok, final_response} = ReqLLM.Response.handle_tools(response, tools)
 
   """
 
@@ -497,9 +500,6 @@ defmodule ReqLLM.Response do
         case Jason.decode(text_content) do
           {:ok, object} when is_map(object) ->
             {:ok, object}
-
-          {:ok, array} when is_list(array) ->
-            {:ok, array}
 
           {:ok, _other} ->
             {:error, %ReqLLM.Error.API.Response{reason: "Decoded JSON is not an object"}}

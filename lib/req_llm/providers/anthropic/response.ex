@@ -149,12 +149,12 @@ defmodule ReqLLM.Providers.Anthropic.Response do
     ReqLLM.StreamChunk.text(text)
   end
 
-  defp decode_content_block(%{"type" => "thinking", "thinking" => text} = block) do
-    ReqLLM.StreamChunk.thinking(text, thinking_metadata(block))
+  defp decode_content_block(%{"type" => "thinking", "thinking" => text}) do
+    ReqLLM.StreamChunk.thinking(text)
   end
 
-  defp decode_content_block(%{"type" => "thinking", "text" => text} = block) do
-    ReqLLM.StreamChunk.thinking(text, thinking_metadata(block))
+  defp decode_content_block(%{"type" => "thinking", "text" => text}) do
+    ReqLLM.StreamChunk.thinking(text)
   end
 
   defp decode_content_block(%{"type" => "tool_use", "id" => id, "name" => name, "input" => input}) do
@@ -170,12 +170,12 @@ defmodule ReqLLM.Providers.Anthropic.Response do
 
   defp decode_content_block_delta(%{"type" => "thinking_delta", "thinking" => text}, _index)
        when is_binary(text) do
-    [ReqLLM.StreamChunk.thinking(text, thinking_metadata())]
+    [ReqLLM.StreamChunk.thinking(text)]
   end
 
   defp decode_content_block_delta(%{"type" => "thinking_delta", "text" => text}, _index)
        when is_binary(text) do
-    [ReqLLM.StreamChunk.thinking(text, thinking_metadata())]
+    [ReqLLM.StreamChunk.thinking(text)]
   end
 
   defp decode_content_block_delta(
@@ -194,11 +194,11 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   end
 
   defp decode_content_block_start(%{"type" => "thinking", "thinking" => text}, _index) do
-    [ReqLLM.StreamChunk.thinking(text, thinking_metadata())]
+    [ReqLLM.StreamChunk.thinking(text)]
   end
 
   defp decode_content_block_start(%{"type" => "thinking", "text" => text}, _index) do
-    [ReqLLM.StreamChunk.thinking(text, thinking_metadata())]
+    [ReqLLM.StreamChunk.thinking(text)]
   end
 
   defp decode_content_block_start(%{"type" => "tool_use", "id" => id, "name" => name}, index) do
@@ -223,36 +223,14 @@ defmodule ReqLLM.Providers.Anthropic.Response do
       |> Enum.map(&chunk_to_tool_call/1)
       |> Enum.reject(&is_nil/1)
 
-    reasoning_details = extract_reasoning_details(chunks)
-
     if content_parts != [] or tool_calls != [] do
       %ReqLLM.Message{
         role: :assistant,
         content: content_parts,
         tool_calls: if(tool_calls != [], do: tool_calls),
-        reasoning_details: if(reasoning_details != [], do: reasoning_details),
         metadata: %{}
       }
     end
-  end
-
-  defp extract_reasoning_details(chunks) do
-    chunks
-    |> Enum.filter(&(&1.type == :thinking))
-    |> Enum.with_index()
-    |> Enum.map(fn {chunk, index} ->
-      sig = Map.get(chunk.metadata, :signature)
-
-      %ReqLLM.Message.ReasoningDetails{
-        text: chunk.text,
-        signature: sig,
-        encrypted?: sig != nil,
-        provider: :anthropic,
-        format: "anthropic-thinking-v1",
-        index: index,
-        provider_data: %{"type" => "thinking"}
-      }
-    end)
   end
 
   defp chunk_to_content_part(%ReqLLM.StreamChunk{type: :content, text: text}) do
@@ -310,16 +288,4 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   defp parse_finish_reason("content_filter"), do: :content_filter
   defp parse_finish_reason(reason) when is_binary(reason), do: :error
   defp parse_finish_reason(_), do: nil
-
-  defp thinking_metadata(block \\ %{}) do
-    signature = Map.get(block, "signature")
-
-    %{
-      signature: signature,
-      encrypted?: signature != nil,
-      provider: :anthropic,
-      format: "anthropic-thinking-v1",
-      provider_data: %{"type" => "thinking"}
-    }
-  end
 end

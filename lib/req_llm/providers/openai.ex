@@ -151,21 +151,13 @@ defmodule ReqLLM.Providers.OpenAI do
       type: {:list, :any},
       doc:
         "Tool execution results for Responses API tool resume flow (list of %{call_id, output})"
-    ],
-    service_tier: [
-      type: {:or, [:atom, :string]},
-      doc: "Service tier for request prioritization ('auto', 'default', 'flex' or 'priority')"
     ]
   ]
 
   @compile {:no_warn_undefined, [{nil, :path, 0}, {nil, :attach_stream, 4}]}
 
   defp get_api_type(%LLMDB.Model{} = model) do
-    case get_in(model, [Access.key(:extra, %{}), :wire, :protocol]) do
-      "openai_responses" -> "responses"
-      "openai_chat" -> "chat"
-      _ -> nil
-    end
+    get_in(model, [Access.key(:extra, %{}), :api])
   end
 
   defp select_api_mod(%LLMDB.Model{} = model) do
@@ -299,8 +291,7 @@ defmodule ReqLLM.Providers.OpenAI do
             :provider_options,
             :api_mod,
             :max_completion_tokens,
-            :reasoning_effort,
-            :service_tier
+            :reasoning_effort
           ]
 
       timeout = get_timeout_for_model(api_mod, processed_opts)

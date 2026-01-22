@@ -116,7 +116,6 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
         |> add_token_limits(model_name, opts_map)
         |> add_stream_options(opts_map)
         |> add_reasoning_effort(opts_map)
-        |> add_service_tier(opts_map)
         |> add_response_format(opts_map)
         |> add_parallel_tool_calls(opts_map)
         |> translate_tool_choice_format()
@@ -199,12 +198,6 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
   defp add_reasoning_effort(body, request_options) do
     provider_opts = request_options[:provider_options] || []
     maybe_put(body, :reasoning_effort, provider_opts[:reasoning_effort])
-  end
-
-  defp add_service_tier(body, request_options) do
-    provider_opts = request_options[:provider_options] || []
-    service_tier = request_options[:service_tier] || provider_opts[:service_tier]
-    maybe_put(body, :service_tier, service_tier)
   end
 
   defp translate_tool_choice_format(body) do

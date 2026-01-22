@@ -169,7 +169,7 @@ defmodule ReqLLM.Providers.GoogleVertex.Anthropic do
           |> ensure_min_max_tokens(reasoning_budget)
           |> Keyword.put(:temperature, 1.0)
 
-        reasoning_effort && reasoning_effort != :none ->
+        reasoning_effort ->
           # Map effort to budget using canonical Anthropic mappings
           budget = Anthropic.map_reasoning_effort_to_budget(reasoning_effort)
 
@@ -179,7 +179,7 @@ defmodule ReqLLM.Providers.GoogleVertex.Anthropic do
           |> Keyword.put(:temperature, 1.0)
 
         true ->
-          # No reasoning params or :none (disable reasoning)
+          # No reasoning params
           opts
       end
     else

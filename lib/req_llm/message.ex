@@ -10,7 +10,25 @@ defmodule ReqLLM.Message do
   The `reasoning_details` field contains provider-specific reasoning metadata that must
   be preserved across conversation turns for reasoning models. This field is:
   - `nil` for non-reasoning models or models that don't provide structured reasoning metadata
-  - A list of normalized ReasoningDetails for reasoning models
+  - A list of maps for reasoning models (format varies by provider)
+
+  ### OpenRouter Format
+
+  OpenRouter returns reasoning details for models like Gemini 3, DeepSeek R1:
+  ```elixir
+  [
+    %{
+      "type" => "reasoning.text",
+      "format" => "google-gemini-v1",  # or "unknown"
+      "index" => 0,
+      "text" => "Step-by-step reasoning..."
+    }
+  ]
+  ```
+
+  These details are automatically:
+  - Extracted from provider responses
+  - Preserved and re-sent in multi-turn conversations
 
   For multi-turn reasoning continuity, include the previous assistant message
   (with its reasoning_details) in subsequent requests.
@@ -21,29 +39,6 @@ defmodule ReqLLM.Message do
   alias ReqLLM.Message.ContentPart
   alias ReqLLM.ToolCall
 
-  typedstruct enforce: false, module: ReasoningDetails do
-    @moduledoc """
-    Normalized reasoning/thinking data from LLM providers.
-
-    ## Fields
-    - `text` - Human-readable reasoning/thinking text (may be summarized)
-    - `signature` - Opaque signature/token for multi-turn continuity
-    - `encrypted?` - Whether the signature contains encrypted reasoning tokens
-    - `provider` - Source provider (:anthropic, :google, :openai, :openrouter)
-    - `format` - Provider-specific format version identifier
-    - `index` - Position index for ordered reasoning blocks
-    - `provider_data` - Raw provider-specific fields for lossless round-trips
-    """
-    @derive Jason.Encoder
-    field(:text, String.t())
-    field(:signature, String.t())
-    field(:encrypted?, boolean(), default: false)
-    field(:provider, atom())
-    field(:format, String.t())
-    field(:index, non_neg_integer(), default: 0)
-    field(:provider_data, map(), default: %{})
-  end
-
   @derive Jason.Encoder
   typedstruct enforce: true do
     field(:role, :user | :assistant | :system | :tool, enforce: true)
@@ -52,7 +47,7 @@ defmodule ReqLLM.Message do
     field(:tool_call_id, String.t() | nil, default: nil)
     field(:tool_calls, [ToolCall.t()] | nil, default: nil)
     field(:metadata, map(), default: %{})
-    field(:reasoning_details, [ReasoningDetails.t()] | nil, default: nil)
+    field(:reasoning_details, [map()] | nil, default: nil)
   end
 
   @spec valid?(t()) :: boolean()

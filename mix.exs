@@ -1,7 +1,7 @@
 defmodule ReqLLM.MixProject do
   use Mix.Project
 
-  @version "1.3.0"
+  @version "1.2.0"
   @source_url "https://github.com/agentjido/req_llm"
 
   def project do
@@ -39,7 +39,6 @@ defmodule ReqLLM.MixProject do
           "CHANGELOG.md",
           "CONTRIBUTING.md",
           "guides/getting-started.md",
-          "guides/configuration.md",
           "guides/core-concepts.md",
           "guides/data-structures.md",
           "guides/model-metadata.md",
@@ -65,7 +64,6 @@ defmodule ReqLLM.MixProject do
           ],
           Guides: [
             "guides/getting-started.md",
-            "guides/configuration.md",
             "guides/core-concepts.md",
             "guides/data-structures.md",
             "guides/model-metadata.md"
@@ -168,12 +166,12 @@ defmodule ReqLLM.MixProject do
       {:req, "~> 0.5"},
       {:ex_aws_auth, "~> 1.3"},
       {:server_sent_events, "~> 0.2"},
-      {:splode, "~> 0.3.0"},
-      {:typed_struct, "~> 0.3.0"},
+      {:splode, "~> 0.2.3"},
+      {:typedstruct, "~> 0.5"},
       {:uniq, "~> 0.6"},
       {:zoi, "~> 0.14"},
       {:jsv, "~> 0.11"},
-      {:llm_db, "~> 2026.0"},
+      {:llm_db, "~> 2025.12"},
 
       # Dev/test dependencies
       {:bandit, "~> 1.8", only: :dev, runtime: false},

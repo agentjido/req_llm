@@ -26,24 +26,16 @@ defmodule ReqLLM.Providers.Azure do
 
   ## Key Differences from Direct Provider APIs
 
-  1. **Custom endpoints**: Each Azure resource has a unique base URL.
-     Azure supports two endpoint formats, auto-detected from the domain:
+  1. **Custom endpoints**: Each Azure resource has a unique base URL
+     (`https://{resource}.openai.azure.com/openai`)
 
-     - **Azure OpenAI Service** (`.cognitiveservices.azure.com` or `.openai.azure.com`):
-       URL: `/deployments/{deployment}/chat/completions?api-version={version}`
-       Model determined by deployment name in URL path.
+  2. **Deployment-based routing**: Models are accessed via deployments, not model names.
+     - OpenAI: `/deployments/{deployment}/chat/completions?api-version={version}`
+     - Anthropic: `/deployments/{deployment}/messages?api-version={version}`
 
-  2. **API key authentication**: Uses `api-key` header for all model families
+  3. **API key authentication**: Uses `api-key` header for all model families
 
-  3. **Bearer token authentication**: Prefix api_key with `"Bearer "` to use `Authorization: Bearer` header
-
-  4. **Deployment names**: The deployment name is used either in the URL path
-     (traditional) or in the request body (Foundry format)
-
-  5. **No model field in body**: The deployment ID in the URL determines the model
-     - **Azure AI Foundry** (`.services.ai.azure.com`):
-       URL: `/models/chat/completions?api-version={version}`
-       Model specified in request body (deployment name used).
+  4. **No model field in body**: The deployment ID in the URL determines the model
 
   ## Authentication
 
@@ -61,31 +53,13 @@ defmodule ReqLLM.Providers.Azure do
       export AZURE_API_KEY=your-api-key
       export AZURE_BASE_URL=https://your-resource.openai.azure.com/openai
 
-      # Or pass directly in options (Azure OpenAI Service format)
+      # Or pass directly in options
       ReqLLM.generate_text(
         "azure:gpt-4o",
         "Hello!",
         api_key: "your-api-key",
         base_url: "https://my-resource.openai.azure.com/openai",
         deployment: "my-gpt4-deployment"
-      )
-
-      # Using Bearer token authentication (e.g., Entra ID / Azure AD tokens)
-      ReqLLM.generate_text(
-        "azure:gpt-4o",
-        "Hello!",
-        api_key: "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...",
-        base_url: "https://my-resource.openai.azure.com/openai",
-        deployment: "my-gpt4-deployment"
-      )
-      
-      # Azure AI Foundry format (auto-detected from domain)
-      ReqLLM.generate_text(
-        "azure:deepseek-v3",
-        "Hello!",
-        api_key: "your-api-key",
-        base_url: "https://my-resource.services.ai.azure.com",
-        deployment: "deepseek-v3"
       )
 
   ## Examples
@@ -228,28 +202,10 @@ defmodule ReqLLM.Providers.Azure do
       type: :map,
       doc:
         "Additional model-specific request fields (e.g., thinking config for Claude extended thinking)"
-    ],
-    # OpenAI-specific options - passed through to Azure.OpenAI formatter
-    # These use loose validation (type: :any); actual validation happens at the API level
-    response_format: [
-      type: :any,
-      doc: "Response format configuration (OpenAI models only)"
-    ],
-    openai_structured_output_mode: [
-      type: :any,
-      doc: "Structured output strategy for OpenAI models"
-    ],
-    openai_parallel_tool_calls: [
-      type: :any,
-      doc: "Parallel tool calls setting for OpenAI models"
-    ],
-    max_completion_tokens: [
-      type: :any,
-      doc: "Maximum completion tokens (OpenAI reasoning models)"
     ]
   ]
 
-  # Default formatters by model family prefix (used when model.extra.wire.protocol is not "openai_responses")
+  # Default formatters by model family prefix (used when model.extra.api is not "responses")
   @model_families %{
     "gpt" => __MODULE__.OpenAI,
     "text-embedding" => __MODULE__.OpenAI,
@@ -257,8 +213,6 @@ defmodule ReqLLM.Providers.Azure do
     "o1" => __MODULE__.OpenAI,
     "o3" => __MODULE__.OpenAI,
     "o4" => __MODULE__.OpenAI,
-    "deepseek" => __MODULE__.OpenAI,
-    "mai-ds" => __MODULE__.OpenAI,
     "claude" => __MODULE__.Anthropic
   }
 
@@ -275,9 +229,7 @@ defmodule ReqLLM.Providers.Azure do
     "codex" => "AZURE_OPENAI_BASE_URL",
     "o1" => "AZURE_OPENAI_BASE_URL",
     "o3" => "AZURE_OPENAI_BASE_URL",
-    "o4" => "AZURE_OPENAI_BASE_URL",
-    "deepseek" => "AZURE_DEEPSEEK_BASE_URL",
-    "mai-ds" => "AZURE_MAI_BASE_URL"
+    "o4" => "AZURE_OPENAI_BASE_URL"
   }
 
   @family_api_key_env_vars %{
@@ -287,9 +239,7 @@ defmodule ReqLLM.Providers.Azure do
     "codex" => "AZURE_OPENAI_API_KEY",
     "o1" => "AZURE_OPENAI_API_KEY",
     "o3" => "AZURE_OPENAI_API_KEY",
-    "o4" => "AZURE_OPENAI_API_KEY",
-    "deepseek" => "AZURE_DEEPSEEK_API_KEY",
-    "mai-ds" => "AZURE_MAI_API_KEY"
+    "o4" => "AZURE_OPENAI_API_KEY"
   }
 
   @doc """
@@ -333,19 +283,10 @@ defmodule ReqLLM.Providers.Azure do
             callback: fn _args -> {:ok, "structured output generated"} end
           )
 
-        # Check if model supports forced tool choice (specific tool by name)
-        # If not, fall back to "required" which just requires *some* tool call
-        tool_choice =
-          if get_in(model.capabilities, [:tools, :forced_choice]) == false do
-            "required"
-          else
-            %{type: "function", function: %{name: "structured_output"}}
-          end
-
         opts_with_tool =
           opts_for_object
           |> Keyword.update(:tools, [structured_output_tool], &[structured_output_tool | &1])
-          |> Keyword.put(:tool_choice, tool_choice)
+          |> Keyword.put(:tool_choice, %{type: "function", function: %{name: "structured_output"}})
 
         do_prepare_chat_request(model_spec, prompt, opts_with_tool)
     end
@@ -390,15 +331,13 @@ defmodule ReqLLM.Providers.Azure do
 
       formatter = get_formatter(model_id, model)
 
-      path = get_chat_endpoint_path(model_id, model, deployment, api_version, base_url)
+      path = get_chat_endpoint_path(model_id, model, deployment, api_version)
 
       Logger.debug(
         "[Azure prepare_request] model_family=#{model_family}, base_url=#{base_url}, path=#{path}, formatter=#{inspect(formatter)}"
       )
 
-      body =
-        formatter.format_request(model_id, context, processed_opts)
-        |> maybe_add_model_for_foundry(deployment, base_url)
+      body = formatter.format_request(model_id, context, processed_opts)
 
       req_keys = supported_provider_options() ++ @common_req_keys
       default_timeout = default_timeout_for_model(model_id, processed_opts)
@@ -452,11 +391,8 @@ defmodule ReqLLM.Providers.Azure do
 
       formatter = get_formatter(model_id, model)
 
-      path = get_embedding_endpoint_path(deployment, api_version, base_url)
-
-      body =
-        formatter.format_embedding_request(model_id, text, processed_opts)
-        |> maybe_add_model_for_foundry(deployment, base_url)
+      path = "/deployments/#{deployment}/embeddings?api-version=#{api_version}"
+      body = formatter.format_embedding_request(model_id, text, processed_opts)
 
       req_keys = supported_provider_options() ++ @common_req_keys
 
@@ -488,11 +424,8 @@ defmodule ReqLLM.Providers.Azure do
   @doc """
   Attaches Azure-specific authentication and pipeline steps to a request.
 
-  Authentication is determined by the api_key format:
-  - If api_key starts with "Bearer ", uses `Authorization: Bearer` header
-  - Otherwise, uses `api-key` header for OpenAI models, `x-api-key` for Claude
-
-  Also adds model-family specific headers (e.g., `anthropic-version` for Claude models).
+  Uses `api-key` header authentication (not Bearer token) and adds model-family
+  specific headers (e.g., `anthropic-version` for Claude models).
   """
   @impl ReqLLM.Provider
   def attach(request, model_input, user_opts) do
@@ -507,11 +440,13 @@ defmodule ReqLLM.Providers.Azure do
 
     {api_key, extra_option_keys} = resolve_api_key(model_family, model, user_opts)
     extra_headers = get_anthropic_headers(model_id, user_opts)
-    {auth_header_name, auth_header_value} = build_auth_header(api_key, model_family)
+
+    # Azure Anthropic uses x-api-key (like native Anthropic), Azure OpenAI uses api-key
+    auth_header_name = if model_family == "claude", do: "x-api-key", else: "api-key"
 
     request
     |> Req.Request.put_header("content-type", "application/json")
-    |> Req.Request.put_header(auth_header_name, auth_header_value)
+    |> Req.Request.put_header(auth_header_name, api_key)
     |> then(fn req ->
       Enum.reduce(extra_headers, req, fn {key, value}, acc ->
         Req.Request.put_header(acc, key, value)
@@ -545,41 +480,36 @@ defmodule ReqLLM.Providers.Azure do
   """
   @impl ReqLLM.Provider
   def decode_response({request, %{status: status} = response}) when status in 200..299 do
-    # Embedding responses should return raw body, not parsed ReqLLM.Response
-    if request.options[:operation] == :embedding do
-      {request, response}
-    else
-      model = Req.Request.get_private(request, :model)
-      model_id = effective_model_id(model)
-      formatter = Req.Request.get_private(request, :formatter) || get_formatter(model_id, model)
+    model = Req.Request.get_private(request, :model)
+    model_id = effective_model_id(model)
+    formatter = Req.Request.get_private(request, :formatter) || get_formatter(model_id, model)
 
-      opts =
-        []
-        |> then(
-          &if request.options[:operation],
-            do: Keyword.put(&1, :operation, request.options[:operation]),
-            else: &1
-        )
-        |> then(
-          &if request.options[:context],
-            do: Keyword.put(&1, :context, request.options[:context]),
-            else: &1
-        )
+    opts =
+      []
+      |> then(
+        &if request.options[:operation],
+          do: Keyword.put(&1, :operation, request.options[:operation]),
+          else: &1
+      )
+      |> then(
+        &if request.options[:context],
+          do: Keyword.put(&1, :context, request.options[:context]),
+          else: &1
+      )
 
-      result = formatter.parse_response(response.body, model, opts)
+    result = formatter.parse_response(response.body, model, opts)
 
-      case result do
-        {:ok, parsed} ->
-          {request, %{response | body: parsed}}
+    case result do
+      {:ok, parsed} ->
+        {request, %{response | body: parsed}}
 
-        {:error, reason} ->
-          {request,
-           ReqLLM.Error.API.Response.exception(
-             reason: "Failed to parse Azure response: #{inspect(reason)}",
-             status: response.status,
-             response_body: response.body
-           )}
-      end
+      {:error, reason} ->
+        {request,
+         ReqLLM.Error.API.Response.exception(
+           reason: "Failed to parse Azure response: #{inspect(reason)}",
+           status: response.status,
+           response_body: response.body
+         )}
     end
   end
 
@@ -658,15 +588,23 @@ defmodule ReqLLM.Providers.Azure do
 
     formatter = get_formatter(model_id, model)
 
-    path = get_chat_endpoint_path(model_id, model, deployment, api_version, base_url)
+    path = get_chat_endpoint_path(model_id, model, deployment, api_version)
     url = "#{base_url}#{path}"
 
     Logger.debug(
       "[Azure attach_stream] model_family=#{model_family}, url=#{url}, formatter=#{inspect(formatter)}"
     )
 
+    # Azure Anthropic uses x-api-key (like native Anthropic), Azure OpenAI uses api-key
+    auth_header =
+      if model_family == "claude" do
+        {"x-api-key", api_key}
+      else
+        {"api-key", api_key}
+      end
+
     base_headers = [
-      build_auth_header(api_key, model_family),
+      auth_header,
       {"content-type", "application/json"},
       {"accept", "text/event-stream"}
     ]
@@ -676,7 +614,6 @@ defmodule ReqLLM.Providers.Azure do
 
     body =
       formatter.format_request(model_id, context, Keyword.put(translated_opts, :stream, true))
-      |> maybe_add_model_for_foundry(deployment, base_url)
 
     finch_request = Finch.build(:post, url, headers, Jason.encode!(body))
     {:ok, finch_request}
@@ -734,7 +671,7 @@ defmodule ReqLLM.Providers.Azure do
     model_id = effective_model_id(model)
 
     case get_model_family(model_id) do
-      family when family in ["gpt", "text-embedding", "o1", "o3", "o4", "deepseek", "mai-ds"] ->
+      family when family in ["gpt", "text-embedding", "o1", "o3", "o4"] ->
         synthetic_model = %{model | provider: :openai}
         ReqLLM.Providers.OpenAI.translate_options(operation, synthetic_model, opts)
 
@@ -846,11 +783,8 @@ defmodule ReqLLM.Providers.Azure do
           {nil, "none"}
       end
 
-    auth_mode =
-      if api_key && String.starts_with?(api_key, "Bearer "), do: "bearer", else: "api_key"
-
     Logger.debug(
-      "[Azure resolve_api_key] model_family=#{model_family}, source=#{source}, auth_mode=#{auth_mode}, key_present=#{not is_nil(api_key)}"
+      "[Azure resolve_api_key] model_family=#{model_family}, source=#{source}, key_prefix=#{if api_key, do: String.slice(api_key, 0, 8), else: "nil"}..."
     )
 
     if is_nil(api_key) or api_key == "" do
@@ -899,33 +833,6 @@ defmodule ReqLLM.Providers.Azure do
     end
   end
 
-  defp build_auth_header("Bearer " <> token, _model_family) do
-    token = String.trim(token)
-
-    cond do
-      token == "" ->
-        raise ReqLLM.Error.Invalid.Parameter.exception(
-                parameter: ":api_key - Bearer token cannot be empty"
-              )
-
-      String.contains?(token, ["\r", "\n"]) ->
-        raise ReqLLM.Error.Invalid.Parameter.exception(
-                parameter: ":api_key - Bearer token contains invalid characters"
-              )
-
-      true ->
-        {"authorization", "Bearer #{token}"}
-    end
-  end
-
-  defp build_auth_header(api_key, "claude") do
-    {"x-api-key", api_key}
-  end
-
-  defp build_auth_header(api_key, _model_family) do
-    {"api-key", api_key}
-  end
-
   defp get_deployment_with_warning(model, opts) do
     explicit_deployment =
       get_in(opts, [:provider_options, :deployment]) || Keyword.get(opts, :deployment)
@@ -947,12 +854,8 @@ defmodule ReqLLM.Providers.Azure do
     raise ArgumentError, """
     Azure requires a base_url for your resource.
 
-    Please provide one of:
-      # Azure OpenAI Service (traditional)
+    Please provide:
       base_url: "https://YOUR-RESOURCE-NAME.openai.azure.com/openai"
-
-      # Azure AI Foundry
-      base_url: "https://YOUR-RESOURCE-NAME.services.ai.azure.com"
 
     Or set the AZURE_OPENAI_BASE_URL environment variable.
     """
@@ -974,10 +877,10 @@ defmodule ReqLLM.Providers.Azure do
   # Returns the model ID to use for API calls, preferring provider_model_id if set.
   defp effective_model_id(model), do: model.provider_model_id || model.id
 
-  # Checks if a model uses the Responses API (based on model.extra.wire.protocol metadata).
-  # The model metadata should have `extra: %{wire: %{protocol: "openai_responses"}}` for Responses API models.
+  # Checks if a model uses the Responses API (based on model.extra.api metadata).
+  # The model metadata should have `extra: %{api: "responses"}` for Responses API models.
   defp uses_responses_api?(%LLMDB.Model{} = model) do
-    get_in(model, [Access.key(:extra, %{}), :wire, :protocol]) == "openai_responses"
+    get_in(model, [Access.key(:extra, %{}), :api]) == "responses"
   end
 
   # Determines the model family (claude, gpt-4o, o1, etc.) from a model ID.
@@ -1032,23 +935,20 @@ defmodule ReqLLM.Providers.Azure do
     end
   end
 
-  # Builds the endpoint path based on model type, family, and endpoint format.
-  # Supports two Azure endpoint formats:
-  # - Traditional (cognitiveservices.azure.com): /deployments/{deployment}/chat/completions
-  # - Foundry (services.ai.azure.com): /models/chat/completions (model in body)
-  # Special cases:
+  # Builds the endpoint path based on model type and family.
+  # Note: base_url already ends with /openai, so paths are relative to that.
   # - Responses API models: /responses (model in body)
   # - Claude: /v1/messages (model in body)
-  defp get_chat_endpoint_path(model_id, model, deployment, api_version, base_url)
-       when is_struct(model) do
+  # - Other OpenAI: /deployments/{deployment}/chat/completions
+  defp get_chat_endpoint_path(model_id, model, deployment, api_version) when is_struct(model) do
     if uses_responses_api?(model) do
       "/responses?api-version=#{api_version}"
     else
-      get_chat_endpoint_path_by_family(model_id, deployment, api_version, base_url)
+      get_chat_endpoint_path_by_family(model_id, deployment, api_version)
     end
   end
 
-  defp get_chat_endpoint_path_by_family(model_id, deployment, api_version, base_url) do
+  defp get_chat_endpoint_path_by_family(model_id, deployment, api_version) do
     model_family = get_model_family(model_id)
 
     case model_family do
@@ -1057,24 +957,8 @@ defmodule ReqLLM.Providers.Azure do
         "/v1/messages"
 
       _ ->
-        if uses_foundry_format?(base_url) do
-          # Azure AI Foundry: model specified in request body
-          "/models/chat/completions?api-version=#{api_version}"
-        else
-          # Azure OpenAI (traditional): deployment in URL determines model
-          "/deployments/#{deployment}/chat/completions?api-version=#{api_version}"
-        end
-    end
-  end
-
-  # Builds the embedding endpoint path based on endpoint format.
-  defp get_embedding_endpoint_path(deployment, api_version, base_url) do
-    if uses_foundry_format?(base_url) do
-      # Azure AI Foundry: model specified in request body
-      "/models/embeddings?api-version=#{api_version}"
-    else
-      # Azure OpenAI (traditional): deployment in URL determines model
-      "/deployments/#{deployment}/embeddings?api-version=#{api_version}"
+        # Azure OpenAI Chat Completions: deployment in URL determines model
+        "/deployments/#{deployment}/chat/completions?api-version=#{api_version}"
     end
   end
 
@@ -1141,31 +1025,4 @@ defmodule ReqLLM.Providers.Azure do
       opts
     end
   end
-
-  # Detects if the base_url uses Azure AI Foundry format based on domain.
-  # Foundry format uses /models/chat/completions with model in request body.
-  # Traditional format uses /deployments/{deployment}/chat/completions.
-  @doc false
-  def uses_foundry_format?(base_url) when is_binary(base_url) do
-    case URI.parse(base_url) do
-      %URI{host: nil} -> false
-      %URI{host: host} -> String.ends_with?(host, ".services.ai.azure.com")
-    end
-  end
-
-  def uses_foundry_format?(_), do: false
-
-  # Adds the model field to request body when using Foundry format.
-  # Traditional Azure OpenAI format doesn't need model in body (deployment in URL determines it).
-  # Foundry format requires model in body since URL is generic /models/chat/completions.
-  defp maybe_add_model_for_foundry(body, deployment, base_url)
-       when is_map(body) and is_binary(deployment) and deployment != "" do
-    if uses_foundry_format?(base_url) do
-      Map.put(body, "model", deployment)
-    else
-      body
-    end
-  end
-
-  defp maybe_add_model_for_foundry(body, _deployment, _base_url), do: body
 end

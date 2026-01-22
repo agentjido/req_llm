@@ -316,14 +316,11 @@ defmodule ReqLLM.Tool do
   @doc """
   Validates a tool name for compliance with function calling standards.
 
-  Tool names must be valid identifiers (alphanumeric, underscores, or hyphens, start with letter/underscore).
+  Tool names must be valid identifiers (alphanumeric + underscores, start with letter/underscore).
 
   ## Examples
 
       ReqLLM.Tool.valid_name?("get_weather")
-      #=> true
-
-      ReqLLM.Tool.valid_name?("get-weather")
       #=> true
 
       ReqLLM.Tool.valid_name?("123invalid")
@@ -332,8 +329,7 @@ defmodule ReqLLM.Tool do
   """
   @spec valid_name?(String.t()) :: boolean()
   def valid_name?(name) when is_binary(name) do
-    Regex.match?(~r/^[a-zA-Z_][a-zA-Z0-9_]*(-[a-zA-Z0-9_]+)*$/, name) and
-      String.length(name) <= 64
+    Regex.match?(~r/^[a-zA-Z_][a-zA-Z0-9_]*$/, name) and String.length(name) <= 64
   end
 
   def valid_name?(_), do: false
@@ -345,7 +341,7 @@ defmodule ReqLLM.Tool do
       :ok
     else
       {:error,
-       "Invalid tool name: #{inspect(name)}. Must be valid identifier (alphanumeric, underscore, or hyphen, max 64 chars)"}
+       "Invalid tool name: #{inspect(name)}. Must be valid identifier (alphanumeric + underscore, max 64 chars)"}
     end
   end
 
