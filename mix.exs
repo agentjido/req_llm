@@ -173,7 +173,7 @@ defmodule ReqLLM.MixProject do
       {:uniq, "~> 0.6"},
       {:zoi, "~> 0.14"},
       {:jsv, "~> 0.11"},
-      {:llm_db, "~> 2026.0"},
+      {:llm_db, git: "https://github.com/meanderingstream/llm_db", branch: "support_model_specific_branches"},
 
       # Dev/test dependencies
       {:bandit, "~> 1.8", only: :dev, runtime: false},
