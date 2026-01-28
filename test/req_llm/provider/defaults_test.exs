@@ -381,6 +381,38 @@ defmodule ReqLLM.Provider.DefaultsTest do
         assertion_fn.(result)
       end
     end
+
+    test "decodes tool calls without type field (Mistral format)", %{model: model} do
+      # Mistral API omits the "type" field in tool_calls, unlike OpenAI
+      response_data = %{
+        "id" => "chatcmpl-mistral",
+        "choices" => [
+          %{
+            "message" => %{
+              "tool_calls" => [
+                %{
+                  "id" => "lVauww8VE",
+                  "function" => %{
+                    "name" => "get_weather",
+                    "arguments" => ~s({"city":"Paris"})
+                  }
+                  # Note: NO "type" => "function" field
+                }
+              ]
+            },
+            "finish_reason" => "tool_calls"
+          }
+        ]
+      }
+
+      {:ok, result} = Defaults.decode_response_body_openai_format(response_data, model)
+
+      assert result.finish_reason == :tool_calls
+      assert [tool_call] = result.message.tool_calls
+      assert tool_call.function.name == "get_weather"
+      assert Jason.decode!(tool_call.function.arguments) == %{"city" => "Paris"}
+      assert tool_call.id == "lVauww8VE"
+    end
   end
 
   describe "default_decode_stream_event/2" do
@@ -451,6 +483,37 @@ defmodule ReqLLM.Provider.DefaultsTest do
       [chunk] = Defaults.default_decode_stream_event(invalid_json_event, model)
       assert chunk.type == :tool_call
       assert chunk.arguments == %{}
+    end
+
+    test "decodes streaming tool calls without type field (Mistral format)", %{model: model} do
+      # Mistral API omits the "type" field in streaming tool_calls
+      mistral_event = %{
+        data: %{
+          "choices" => [
+            %{
+              "delta" => %{
+                "tool_calls" => [
+                  %{
+                    "id" => "lVauww8VE",
+                    "index" => 0,
+                    "function" => %{
+                      "name" => "get_weather",
+                      "arguments" => ~s({"city":"Paris"})
+                    }
+                    # Note: NO "type" => "function" field
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+
+      [chunk] = Defaults.default_decode_stream_event(mistral_event, model)
+      assert chunk.type == :tool_call
+      assert chunk.name == "get_weather"
+      assert chunk.arguments == %{"city" => "Paris"}
+      assert chunk.metadata == %{id: "lVauww8VE", index: 0}
     end
 
     test "handles nil tool names in streaming deltas", %{model: model} do
