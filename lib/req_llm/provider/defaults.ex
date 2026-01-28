@@ -885,6 +885,11 @@ defmodule ReqLLM.Provider.Defaults do
     end
   end
 
+  # Mistral API omits "type" field - add it and delegate
+  defp decode_openai_tool_call(%{"id" => _, "function" => %{"name" => _, "arguments" => _}} = call) do
+    decode_openai_tool_call(Map.put(call, "type", "function"))
+  end
+
   defp decode_openai_tool_call(_), do: nil
 
   defp decode_openai_delta(%{"content" => content}) when is_binary(content) and content != "" do
@@ -938,6 +943,14 @@ defmodule ReqLLM.Provider.Defaults do
        })
        when is_binary(name) do
     ReqLLM.StreamChunk.tool_call(name, %{}, %{id: id, index: index})
+  end
+
+  # Mistral API omits "type" field - add it and delegate (must come before partial handlers)
+  defp decode_openai_tool_call_delta(
+         %{"id" => _, "function" => %{"name" => _, "arguments" => _}} = call
+       )
+       when not is_map_key(call, "type") do
+    decode_openai_tool_call_delta(Map.put(call, "type", "function"))
   end
 
   # Handle partial argument chunks by storing them as metadata
