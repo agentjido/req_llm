@@ -81,9 +81,7 @@ defmodule ReqLLM.Providers.Cerebras do
   defp add_strict_to_tools(%{"tools" => tools} = body, model) when is_list(tools) do
     tools =
       if supports_strict_tools?(model) do
-        Enum.map(tools, fn tool ->
-          put_in(tool, ["function", "strict"], true)
-        end)
+        Enum.map(tools, &put_strict_in_tool/1)
       else
         Enum.map(tools, &strip_unsupported_schema_constraints/1)
       end
@@ -91,7 +89,28 @@ defmodule ReqLLM.Providers.Cerebras do
     Map.put(body, "tools", tools)
   end
 
+  defp add_strict_to_tools(%{tools: tools} = body, model) when is_list(tools) do
+    tools =
+      if supports_strict_tools?(model) do
+        Enum.map(tools, &put_strict_in_tool/1)
+      else
+        Enum.map(tools, &strip_unsupported_schema_constraints/1)
+      end
+
+    Map.put(body, :tools, tools)
+  end
+
   defp add_strict_to_tools(body, _model), do: body
+
+  defp put_strict_in_tool(%{"function" => _} = tool) do
+    put_in(tool, ["function", "strict"], true)
+  end
+
+  defp put_strict_in_tool(%{function: _} = tool) do
+    put_in(tool, [:function, :strict], true)
+  end
+
+  defp put_strict_in_tool(tool), do: tool
 
   defp supports_strict_tools?(%LLMDB.Model{} = model) do
     ReqLLM.ModelHelpers.tools_strict?(model)
@@ -99,7 +118,7 @@ defmodule ReqLLM.Providers.Cerebras do
 
   defp supports_strict_tools?(_), do: false
 
-  defp strip_unsupported_schema_constraints(tool) do
+  defp strip_unsupported_schema_constraints(%{"function" => _} = tool) do
     update_in(tool, ["function", "parameters"], fn params ->
       if is_map(params) do
         strip_constraints_recursive(params)
@@ -108,6 +127,18 @@ defmodule ReqLLM.Providers.Cerebras do
       end
     end)
   end
+
+  defp strip_unsupported_schema_constraints(%{function: _} = tool) do
+    update_in(tool, [:function, :parameters], fn params ->
+      if is_map(params) do
+        strip_constraints_recursive(params)
+      else
+        params
+      end
+    end)
+  end
+
+  defp strip_unsupported_schema_constraints(tool), do: tool
 
   defp strip_constraints_recursive(schema) when is_map(schema) do
     schema
@@ -126,26 +157,55 @@ defmodule ReqLLM.Providers.Cerebras do
 
   defp strip_constraints_recursive(value), do: value
 
-  defp normalize_tool_choice(%{"tool_choice" => %{"type" => "function"}} = body) do
-    Map.put(body, "tool_choice", "auto")
+  defp normalize_tool_choice(%{"tool_choice" => %{} = tool_choice} = body) do
+    if tool_choice_type(tool_choice) == "function" do
+      Map.put(body, "tool_choice", "auto")
+    else
+      body
+    end
+  end
+
+  defp normalize_tool_choice(%{tool_choice: %{} = tool_choice} = body) do
+    if tool_choice_type(tool_choice) == "function" do
+      Map.put(body, :tool_choice, "auto")
+    else
+      body
+    end
   end
 
   defp normalize_tool_choice(body), do: body
 
-  defp normalize_assistant_content(%{"messages" => messages} = body) do
-    normalized_messages =
-      Enum.map(messages, fn message ->
-        case message do
-          %{"role" => "assistant", "content" => []} ->
-            Map.put(message, "content", "")
+  defp tool_choice_type(tool_choice) do
+    Map.get(tool_choice, :type) || Map.get(tool_choice, "type")
+  end
 
-          _ ->
-            message
-        end
-      end)
-
+  defp normalize_assistant_content(%{"messages" => messages} = body) when is_list(messages) do
+    normalized_messages = Enum.map(messages, &normalize_assistant_message/1)
     Map.put(body, "messages", normalized_messages)
   end
 
+  defp normalize_assistant_content(%{messages: messages} = body) when is_list(messages) do
+    normalized_messages = Enum.map(messages, &normalize_assistant_message/1)
+    Map.put(body, :messages, normalized_messages)
+  end
+
   defp normalize_assistant_content(body), do: body
+
+  defp normalize_assistant_message(%{"role" => "assistant", "content" => []} = message) do
+    Map.put(message, "content", "")
+  end
+
+  defp normalize_assistant_message(%{role: "assistant", content: []} = message) do
+    Map.put(message, :content, "")
+  end
+
+  defp normalize_assistant_message(%{"role" => :assistant, "content" => []} = message) do
+    Map.put(message, "content", "")
+  end
+
+  defp normalize_assistant_message(%{role: :assistant, content: []} = message) do
+    Map.put(message, :content, "")
+  end
+
+  defp normalize_assistant_message(message), do: message
 end
