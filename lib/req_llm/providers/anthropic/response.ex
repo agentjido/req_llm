@@ -189,8 +189,15 @@ defmodule ReqLLM.Providers.Anthropic.Response do
 
   defp decode_content_block_delta(_, _index), do: []
 
-  defp decode_content_block_start(%{"type" => "text", "text" => text}, _index) do
-    [ReqLLM.StreamChunk.text(text)]
+  defp decode_content_block_start(%{"type" => "text", "text" => text}, index) do
+    # When starting a new text block (index > 0), emit a boundary marker first
+    # This allows the response builder to add separators between distinct content blocks
+    # (e.g., text before and after web_search tool use)
+    if index > 0 do
+      [ReqLLM.StreamChunk.meta(%{text_block_boundary: true}), ReqLLM.StreamChunk.text(text)]
+    else
+      [ReqLLM.StreamChunk.text(text)]
+    end
   end
 
   defp decode_content_block_start(%{"type" => "thinking", "thinking" => text}, _index) do

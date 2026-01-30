@@ -678,5 +678,38 @@ defmodule ReqLLM.Provider.DefaultsTest do
       assert response.message.reasoning_details == reasoning_details
       assert length(response.message.tool_calls) == 1
     end
+
+    test "adds separator between distinct text content blocks", %{model: model, context: context} do
+      # Simulates web_search scenario: text before search, boundary marker, text after search
+      chunks = [
+        StreamChunk.text("I'll search for that."),
+        StreamChunk.meta(%{text_block_boundary: true}),
+        StreamChunk.text("## Results"),
+        StreamChunk.text("\n\nHere are the findings.")
+      ]
+
+      {:ok, response} =
+        ResponseBuilder.build_response(chunks, %{}, model: model, context: context)
+
+      [content_part] = response.message.content
+      assert content_part.text == "I'll search for that.\n\n## Results\n\nHere are the findings."
+    end
+
+    test "text_block_boundary does not add separator when no prior content", %{
+      model: model,
+      context: context
+    } do
+      # Edge case: boundary marker at start (shouldn't happen but should be handled)
+      chunks = [
+        StreamChunk.meta(%{text_block_boundary: true}),
+        StreamChunk.text("Just the results.")
+      ]
+
+      {:ok, response} =
+        ResponseBuilder.build_response(chunks, %{}, model: model, context: context)
+
+      [content_part] = response.message.content
+      assert content_part.text == "Just the results."
+    end
   end
 end
