@@ -6,24 +6,26 @@ defmodule ReqLLM.ToolResult do
   content parts via `content`.
   """
 
-  use TypedStruct
-
-  alias ReqLLM.Message
-  alias ReqLLM.Message.ContentPart
-
   @metadata_key :tool_output
 
-  typedstruct enforce: false do
-    field(:content, [ContentPart.t()] | nil, default: nil)
-    field(:output, term() | nil, default: nil)
-    field(:metadata, map(), default: %{})
-  end
+  @schema Zoi.struct(__MODULE__, %{
+            content: Zoi.list(Zoi.any()) |> Zoi.optional(),
+            output: Zoi.any() |> Zoi.optional(),
+            metadata: Zoi.map() |> Zoi.default(%{})
+          })
+
+  @type t :: unquote(Zoi.type_spec(@schema))
+
+  defstruct Zoi.Struct.struct_fields(@schema)
+
+  @doc "Returns the Zoi schema for this module"
+  def schema, do: @schema
 
   @spec metadata_key() :: atom()
   def metadata_key, do: @metadata_key
 
-  @spec output_from_message(Message.t() | map()) :: term() | nil
-  def output_from_message(%Message{metadata: metadata}) when is_map(metadata) do
+  @spec output_from_message(ReqLLM.Message.t() | map()) :: term() | nil
+  def output_from_message(%ReqLLM.Message{metadata: metadata}) when is_map(metadata) do
     Map.get(metadata, @metadata_key)
   end
 
