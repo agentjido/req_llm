@@ -14,18 +14,23 @@ defmodule ReqLLM.Message.ContentPart do
   - `ReqLLM.Message` - Multi-modal message composition using ContentPart collections
   """
 
-  use TypedStruct
+  @schema Zoi.struct(__MODULE__, %{
+            type: Zoi.enum([:text, :image_url, :image, :file, :thinking]),
+            text: Zoi.string() |> Zoi.nullable() |> Zoi.default(nil),
+            url: Zoi.string() |> Zoi.nullable() |> Zoi.default(nil),
+            data: Zoi.any() |> Zoi.nullable() |> Zoi.default(nil),
+            media_type: Zoi.string() |> Zoi.nullable() |> Zoi.default(nil),
+            filename: Zoi.string() |> Zoi.nullable() |> Zoi.default(nil),
+            metadata: Zoi.map() |> Zoi.default(%{})
+          })
 
-  typedstruct enforce: true do
-    field(:type, :text | :image_url | :image | :file | :thinking, enforce: true)
+  @type t :: unquote(Zoi.type_spec(@schema))
 
-    field(:text, String.t() | nil, default: nil)
-    field(:url, String.t() | nil, default: nil)
-    field(:data, binary() | nil, default: nil)
-    field(:media_type, String.t() | nil, default: nil)
-    field(:filename, String.t() | nil, default: nil)
-    field(:metadata, map(), default: %{})
-  end
+  @enforce_keys Zoi.Struct.enforce_keys(@schema)
+  defstruct Zoi.Struct.struct_fields(@schema)
+
+  @doc "Returns the Zoi schema for this module"
+  def schema, do: @schema
 
   @spec valid?(t()) :: boolean()
   def valid?(%__MODULE__{type: type}) when is_atom(type), do: true
