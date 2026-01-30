@@ -59,7 +59,8 @@ defmodule ReqLLM.MixProject do
           "guides/cerebras.md",
           "guides/meta.md",
           "guides/zai.md",
-          "guides/zai_coder.md"
+          "guides/zai_coder.md",
+          "guides/ollama.md"
         ],
         groups_for_extras: [
           Overview: [
@@ -91,7 +92,8 @@ defmodule ReqLLM.MixProject do
             "guides/cerebras.md",
             "guides/meta.md",
             "guides/zai.md",
-            "guides/zai_coder.md"
+            "guides/zai_coder.md",
+            "guides/ollama.md"
           ],
           Changelog: ["CHANGELOG.md"],
           Contributing: ["CONTRIBUTING.md"]
