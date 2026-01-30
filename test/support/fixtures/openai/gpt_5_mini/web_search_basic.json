@@ -69,7 +69,7 @@
           }
         }
       ],
-      "id": "resp_06661dbd7f86541200697c0475ddc48190a7b9a3e4c9bfeb09",
+      "id": "resp_02bc33d57992389c00697c0d202c308197957605c7d13eb73b",
       "temperature": 1.0,
       "max_output_tokens": 128000,
       "user": null,
@@ -77,59 +77,60 @@
       "error": null,
       "model": "gpt-5-mini-2025-08-07",
       "usage": {
-        "input_tokens": 12514,
+        "input_tokens": 12661,
         "input_tokens_details": {
           "cached_tokens": 0
         },
-        "output_tokens": 930,
+        "output_tokens": 1034,
         "output_tokens_details": {
-          "reasoning_tokens": 768
+          "reasoning_tokens": 896
         },
-        "total_tokens": 13444
+        "total_tokens": 13695
       },
       "safety_identifier": null,
       "object": "response",
       "parallel_tool_calls": true,
       "output": [
         {
-          "id": "rs_06661dbd7f86541200697c047766c481908116dd292ceca5e3",
+          "id": "rs_02bc33d57992389c00697c0d21102081979d98f732ae5f60c4",
           "summary": [],
           "type": "reasoning"
         },
         {
           "action": {
             "queries": [
-              "AI model announcement January 2026 'announced' 'model' '2026'",
-              "OpenAI new model announcement 2026 'announced' 'model' '2026' site:openai.com",
-              "Google new AI model announcement 2026 'announced' 'model' '2026'"
+              "AI model announced January 2026",
+              "recent AI model announcement January 2026 'announced' 'model' '2026' 'AI'",
+              "Anthropic Claude announcement 2026",
+              "OpenAI new model announced 2026 GPT-4o 2026 announcement"
             ],
-            "query": "AI model announcement January 2026 'announced' 'model' '2026'",
+            "query": "AI model announced January 2026",
             "type": "search"
           },
-          "id": "ws_06661dbd7f86541200697c0479b0348190a20b8adc7ea89d83",
+          "id": "ws_02bc33d57992389c00697c0d24f2048197b4105742b3d0410f",
           "status": "completed",
           "type": "web_search_call"
         },
         {
-          "id": "rs_06661dbd7f86541200697c047b928481909a45387a0655ed2e",
+          "id": "rs_02bc33d57992389c00697c0d26b5d081979280342584c0cfcb",
           "summary": [],
           "type": "reasoning"
         },
         {
           "action": {
             "queries": [
-              "Lightricks LTX-2 open source January 2026 LTX-2 announcement press release",
-              "LTX-2 open source Lightricks 'LTX-2' 'January 2026' 'open source'"
+              "Google announces Gemini 1.5 Pro 2026 announcement 'Gemini 1.5' '2026'",
+              "Google Gemini new model announced 2026 'Gemini 1.5 Pro' 'announced'"
             ],
-            "query": "Lightricks LTX-2 open source January 2026 LTX-2 announcement press release",
+            "query": "Google announces Gemini 1.5 Pro 2026 announcement 'Gemini 1.5' '2026'",
             "type": "search"
           },
-          "id": "ws_06661dbd7f86541200697c047dd41881909c8ac2ba4f43b0f0",
+          "id": "ws_02bc33d57992389c00697c0d2878748197a2d973b2345ab102",
           "status": "completed",
           "type": "web_search_call"
         },
         {
-          "id": "rs_06661dbd7f86541200697c047f7b80819089b164f4ace8c78f",
+          "id": "rs_02bc33d57992389c00697c0d2ac2fc8197bb6efed4e1fc4ea2",
           "summary": [],
           "type": "reasoning"
         },
@@ -138,19 +139,19 @@
             {
               "annotations": [
                 {
-                  "end_index": 407,
-                  "start_index": 181,
-                  "title": "Lightricks Open-Sources LTX-2, the First Production-Ready",
+                  "end_index": 241,
+                  "start_index": 149,
+                  "title": "Retiring GPT-4o, GPT-4.1, GPT-4.1 mini, and OpenAI o4-mini in ChatGPT | OpenAI",
                   "type": "url_citation",
-                  "url": "https://www.globenewswire.com/news-release/2026/01/06/3213304/0/en/Lightricks-Open-Sources-LTX-2-the-First-Production-Ready-Audio-and-Video-Generation-Model-With-Truly-Open-Weights.html?utm_source=openai"
+                  "url": "https://openai.com/index/retiring-gpt-4o-and-older-models/?utm_source=openai"
                 }
               ],
               "logprobs": [],
-              "text": "One recent announcement: Lightricks announced the open-source release of LTX-2 — a production-ready audio+video generation model (open weights, training code) — on January 6, 2026. ([globenewswire.com](https://www.globenewswire.com/news-release/2026/01/06/3213304/0/en/Lightricks-Open-Sources-LTX-2-the-First-Production-Ready-Audio-and-Video-Generation-Model-With-Truly-Open-Weights.html?utm_source=openai))",
+              "text": "OpenAI announced on January 29, 2026 that it will retire GPT‑4o, GPT‑4.1, GPT‑4.1 mini, and OpenAI o4‑mini from ChatGPT effective February 13, 2026. ([openai.com](https://openai.com/index/retiring-gpt-4o-and-older-models/?utm_source=openai))",
               "type": "output_text"
             }
           ],
-          "id": "msg_06661dbd7f86541200697c0484d3708190ade0a7be47897b28",
+          "id": "msg_02bc33d57992389c00697c0d30d3a88197bcc0e1a11e0b2d6c",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -164,7 +165,7 @@
         "effort": "medium",
         "summary": null
       },
-      "completed_at": 1769735301,
+      "completed_at": 1769737521,
       "truncation": "disabled",
       "top_p": 1.0,
       "billing": {
@@ -173,7 +174,7 @@
       "prompt_cache_retention": null,
       "metadata": {},
       "prompt_cache_key": null,
-      "created_at": 1769735285,
+      "created_at": 1769737504,
       "max_tool_calls": null
     },
     "headers": {
@@ -184,7 +185,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9c5d137daf62cfac-SJC"
+        "9c5d49a408ab2b10-SJC"
       ],
       "connection": [
         "keep-alive"
@@ -193,13 +194,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 30 Jan 2026 01:08:22 GMT"
+        "Fri, 30 Jan 2026 01:45:21 GMT"
       ],
       "openai-organization": [
         "elani-dev"
       ],
       "openai-processing-ms": [
-        "16248"
+        "17836"
       ],
       "openai-project": [
         "proj_7xm0tTbe0BtZ6VvGnyNl81DN"
@@ -211,8 +212,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=RRbyvKPYK1MIZPr3pghNx_dGsE1xCa0.PC4woatJ_94-1769735302-1.0.1.1-rFFNFFE3U8xENoWgoNHOWPY4OwEECKzNuN98Jl2UOWz37IJJYGI.YtD8qPUg4BnYojA2bgKSZuU1H5Ekw.NzMoY8aGhtZAwIlHFyVFIHC_M; path=/; expires=Fri, 30-Jan-26 01:38:22 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=nZmhDplyBOIHcIQug7HThY6i2yEzZ12iMWs0vtk052g-1769735302131-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=i9HlsIpNJscacEaN0EVE.Tu9wKzVDQlwR.8QC4zmSDc-1769737521-1.0.1.1-p8EzX3SRx86rkAO.Y_VynptMjw6wuATEUg0Ierub3CoaCW1Vp7cnhRbSK.yL59._Ypf_uhL6yCCYF0BcWr.HF2Rim0rhoinQ92o10Sj3OrA; path=/; expires=Fri, 30-Jan-26 02:15:21 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=s34uvPAfmj1nNcTKUO50ZTU3Auu_gYP_czBTc7KVhjA-1769737521987-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -233,16 +234,16 @@
         "499"
       ],
       "x-ratelimit-remaining-tokens": [
-        "491407"
+        "491156"
       ],
       "x-ratelimit-reset-requests": [
         "120ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "1.031s"
+        "1.061s"
       ],
       "x-request-id": [
-        "req_a5a76c40b7d94c73a20c7abb2e0c49a7"
+        "req_bc87cca1b7b14bb49ef2f824b935c52e"
       ]
     },
     "status": 200

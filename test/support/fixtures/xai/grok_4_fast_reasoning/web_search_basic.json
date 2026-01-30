@@ -44,11 +44,11 @@
   "response": {
     "body": {
       "background": false,
-      "completed_at": 1769736169,
-      "created_at": 1769736162,
+      "completed_at": 1769737449,
+      "created_at": 1769737445,
       "error": null,
       "frequency_penalty": 0.0,
-      "id": "aebe2bf0-01c1-9680-b4b7-95ee6893b862",
+      "id": "b88df464-eca8-2e23-f58a-7468aa96e4cb",
       "incomplete_details": null,
       "instructions": null,
       "max_output_tokens": 64000,
@@ -59,21 +59,11 @@
       "output": [
         {
           "action": {
-            "query": "recent AI model announcements 2026",
+            "query": "recent AI model announcement 2026",
             "sources": [],
             "type": "search"
           },
-          "id": "ws_aebe2bf0-01c1-9680-b4b7-95ee6893b862_call_49659719",
-          "status": "completed",
-          "type": "web_search_call"
-        },
-        {
-          "action": {
-            "query": "new AI model announced January 2026",
-            "sources": [],
-            "type": "search"
-          },
-          "id": "ws_aebe2bf0-01c1-9680-b4b7-95ee6893b862_call_12883776",
+          "id": "ws_b88df464-eca8-2e23-f58a-7468aa96e4cb_call_34339040",
           "status": "completed",
           "type": "web_search_call"
         },
@@ -82,19 +72,19 @@
             {
               "annotations": [
                 {
-                  "end_index": 202,
-                  "start_index": 134,
+                  "end_index": 235,
+                  "start_index": 172,
                   "title": "1",
                   "type": "url_citation",
-                  "url": "https://blog.mean.ceo/new-ai-model-releases-news-january-2026"
+                  "url": "https://blogs.nvidia.com/blog/nvidia-earth-2-open-models"
                 }
               ],
               "logprobs": [],
-              "text": "Google recently announced the release of Gemini 3 Flash, a lightweight AI model designed for developers with a massive context window.[[1]](https://blog.mean.ceo/new-ai-model-releases-news-january-2026)",
+              "text": "One recent AI model announcement is NVIDIA's launch of the Earth-2 family of open models, which uses generative AI for weather prediction based on satellite and radar data.[[1]](https://blogs.nvidia.com/blog/nvidia-earth-2-open-models)",
               "type": "output_text"
             }
           ],
-          "id": "msg_aebe2bf0-01c1-9680-b4b7-95ee6893b862",
+          "id": "msg_b88df464-eca8-2e23-f58a-7468aa96e4cb",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -129,26 +119,26 @@
       "top_p": 0.95,
       "truncation": "disabled",
       "usage": {
-        "cost_in_usd_ticks": 109484000,
-        "input_tokens": 5278,
+        "cost_in_usd_ticks": 55258500,
+        "input_tokens": 2798,
         "input_tokens_details": {
-          "cached_tokens": 3328
+          "cached_tokens": 2005
         },
-        "num_server_side_tools_used": 2,
+        "num_server_side_tools_used": 1,
         "num_sources_used": 0,
-        "output_tokens": 784,
+        "output_tokens": 534,
         "output_tokens_details": {
-          "reasoning_tokens": 647
+          "reasoning_tokens": 431
         },
         "server_side_tool_usage_details": {
           "code_interpreter_calls": 0,
           "document_search_calls": 0,
           "file_search_calls": 0,
           "mcp_calls": 0,
-          "web_search_calls": 2,
+          "web_search_calls": 1,
           "x_search_calls": 0
         },
-        "total_tokens": 6062
+        "total_tokens": 3332
       },
       "user": null
     },
@@ -163,7 +153,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9c5d28e7fe985e56-SJC"
+        "9c5d4834e83d67f6-SJC"
       ],
       "connection": [
         "keep-alive"
@@ -172,13 +162,13 @@
         "application/json"
       ],
       "date": [
-        "Fri, 30 Jan 2026 01:22:50 GMT"
+        "Fri, 30 Jan 2026 01:44:09 GMT"
       ],
       "server": [
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=XIrvx94BCansjoe7X.JIVB1grl6ltsLWQQWsY8SBGVY-1769736170-1.0.1.1-c9mF6Mc2NCkVUjkfJGEJMAaRLpmJynyXKm3yF5J88eR8bv0oxPEKZTGZ5fn7H4jpg9relUwsgdYBkJhiN27RMocouw9UnTC_NMmTjt3wjho; path=/; expires=Fri, 30-Jan-26 01:52:50 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=sACZVIqCPz_atElKcTq4uwQ2PE.oxzCmN5yUX_ZlkE4-1769737449-1.0.1.1-DcguOPgL4w4Oa7GCr3Fie1nvJIXJS5U2lAKupV__M5J2W9sIJ6cZabMOunc6vVwV1vnzocOJwTgicib.ik.8y7s1P8S8ELvJnKC1qma3bG0; path=/; expires=Fri, 30-Jan-26 02:14:09 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000"
@@ -202,7 +192,7 @@
         "4000000"
       ],
       "x-request-id": [
-        "00-3388b42c1a9d8b9fad67a975d53ccee1-3c41172b002ab352-01"
+        "00-60f303bb52cd225c327273b5d6f285a2-be3d9a03002d2668-01"
       ],
       "x-zero-data-retention": [
         "false"
