@@ -679,7 +679,7 @@ defmodule ReqLLM.Provider.DefaultsTest do
       assert length(response.message.tool_calls) == 1
     end
 
-    test "adds separator between distinct text content blocks", %{model: model, context: context} do
+    test "adds paragraph break before markdown block starts", %{model: model, context: context} do
       # Simulates web_search scenario: text before search, boundary marker, text after search
       chunks = [
         StreamChunk.text("I'll search for that."),
@@ -693,6 +693,37 @@ defmodule ReqLLM.Provider.DefaultsTest do
 
       [content_part] = response.message.content
       assert content_part.text == "I'll search for that.\n\n## Results\n\nHere are the findings."
+    end
+
+    test "text_block_boundary does not split list items", %{model: model, context: context} do
+      chunks = [
+        StreamChunk.text("Revenue & Earnings:\n- "),
+        StreamChunk.meta(%{text_block_boundary: true}),
+        StreamChunk.text("Revenue: $24.9B")
+      ]
+
+      {:ok, response} =
+        ResponseBuilder.build_response(chunks, %{}, model: model, context: context)
+
+      [content_part] = response.message.content
+      assert content_part.text == "Revenue & Earnings:\n- Revenue: $24.9B"
+    end
+
+    test "text_block_boundary does not insert space before punctuation", %{
+      model: model,
+      context: context
+    } do
+      chunks = [
+        StreamChunk.text("EPS of $0.50"),
+        StreamChunk.meta(%{text_block_boundary: true}),
+        StreamChunk.text(", which beat estimates.")
+      ]
+
+      {:ok, response} =
+        ResponseBuilder.build_response(chunks, %{}, model: model, context: context)
+
+      [content_part] = response.message.content
+      assert content_part.text == "EPS of $0.50, which beat estimates."
     end
 
     test "text_block_boundary does not add separator when no prior content", %{

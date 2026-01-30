@@ -1195,12 +1195,36 @@ defmodule ReqLLM.Providers.AnthropicTest do
       # 1. First text block with intro
       # 2. Second text block with results (after web_search tool executed internally)
       events = [
-        %{data: %{"type" => "content_block_start", "index" => 0, "content_block" => %{"type" => "text", "text" => ""}}},
-        %{data: %{"type" => "content_block_delta", "index" => 0, "delta" => %{"type" => "text_delta", "text" => "I'll search for that."}}},
+        %{
+          data: %{
+            "type" => "content_block_start",
+            "index" => 0,
+            "content_block" => %{"type" => "text", "text" => ""}
+          }
+        },
+        %{
+          data: %{
+            "type" => "content_block_delta",
+            "index" => 0,
+            "delta" => %{"type" => "text_delta", "text" => "I'll search for that."}
+          }
+        },
         %{data: %{"type" => "content_block_stop", "index" => 0}},
         # web_search happens internally (no events visible)
-        %{data: %{"type" => "content_block_start", "index" => 1, "content_block" => %{"type" => "text", "text" => ""}}},
-        %{data: %{"type" => "content_block_delta", "index" => 1, "delta" => %{"type" => "text_delta", "text" => "## Results"}}},
+        %{
+          data: %{
+            "type" => "content_block_start",
+            "index" => 1,
+            "content_block" => %{"type" => "text", "text" => ""}
+          }
+        },
+        %{
+          data: %{
+            "type" => "content_block_delta",
+            "index" => 1,
+            "delta" => %{"type" => "text_delta", "text" => "## Results"}
+          }
+        },
         %{data: %{"type" => "content_block_stop", "index" => 1}},
         %{data: %{"type" => "message_delta", "delta" => %{"stop_reason" => "end_turn"}}}
       ]

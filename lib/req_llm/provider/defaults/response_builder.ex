@@ -120,15 +120,21 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
         thinking_content: [],
         tool_calls: [],
         arg_fragments: %{},
-        reasoning_details: []
+        reasoning_details: [],
+        pending_text_boundary: false,
+        last_text_tail: ""
       },
       &accumulate_chunk/2
     )
   end
 
-  defp accumulate_chunk(%StreamChunk{type: :content, text: text}, acc) do
-    %{acc | text_content: [text | acc.text_content]}
+  defp accumulate_chunk(%StreamChunk{type: :content, text: text}, acc) when is_binary(text) do
+    {text, acc} = maybe_apply_text_boundary(text, acc)
+    last_text_tail = update_text_tail(acc.last_text_tail, text)
+    %{acc | text_content: [text | acc.text_content], last_text_tail: last_text_tail}
   end
+
+  defp accumulate_chunk(%StreamChunk{type: :content}, acc), do: acc
 
   defp accumulate_chunk(%StreamChunk{type: :thinking, text: text}, acc) do
     %{acc | thinking_content: [text | acc.thinking_content]}
@@ -152,14 +158,10 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
           existing = Map.get(acc.arg_fragments, index, "")
           %{acc | arg_fragments: Map.put(acc.arg_fragments, index, existing <> fragment)}
 
-        # Handle text block boundary markers (e.g., between text before/after web_search)
-        # Add a separator if there's already accumulated text content
+        # Track text block boundary markers (e.g., between text before/after web_search)
+        # The separator is chosen when the next text chunk arrives.
         %{text_block_boundary: true} ->
-          if acc.text_content != [] do
-            %{acc | text_content: ["\n\n" | acc.text_content]}
-          else
-            acc
-          end
+          %{acc | pending_text_boundary: true}
 
         _ ->
           acc
@@ -175,6 +177,71 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
   end
 
   defp accumulate_chunk(_chunk, acc), do: acc
+
+  defp maybe_apply_text_boundary(text, %{pending_text_boundary: true} = acc) do
+    if text == "" do
+      {text, acc}
+    else
+      separator =
+        cond do
+          acc.text_content == [] -> ""
+          ends_with_whitespace?(acc.last_text_tail) -> ""
+          starts_with_whitespace_or_punct?(text) -> ""
+          markdown_block_start?(text) -> "\n\n"
+          true -> " "
+        end
+
+      {separator <> text, %{acc | pending_text_boundary: false}}
+    end
+  end
+
+  defp maybe_apply_text_boundary(text, acc), do: {text, acc}
+
+  defp update_text_tail(tail, ""), do: tail
+
+  defp update_text_tail(tail, text) do
+    max = 32
+    combined = tail <> text
+
+    if String.length(combined) <= max do
+      combined
+    else
+      String.slice(combined, -max, max)
+    end
+  end
+
+  defp ends_with_whitespace?(""), do: false
+
+  defp ends_with_whitespace?(text) do
+    case String.last(text) do
+      nil -> false
+      last -> last in [" ", "\n", "\t", "\r"]
+    end
+  end
+
+  defp starts_with_whitespace_or_punct?(text) do
+    String.starts_with?(text, [
+      " ",
+      "\n",
+      "\t",
+      "\r",
+      ",",
+      ".",
+      ";",
+      ":",
+      "!",
+      "?",
+      ")",
+      "]",
+      "}",
+      "\"",
+      "'"
+    ])
+  end
+
+  defp markdown_block_start?(text) do
+    Regex.match?(~r/^(?:\#{1,6}\s|[-*+]\s|\d+[.)]\s|>\s|```|~~~)/, text)
+  end
 
   # ============================================================================
   # Tool Call Reconstruction
