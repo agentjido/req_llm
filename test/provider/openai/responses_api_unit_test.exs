@@ -308,6 +308,60 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert body["text"]["format"]["strict"] == true
       assert body["text"]["format"]["schema"] == json_schema
     end
+
+    test "encodes verbosity when provided as atom" do
+      request = build_request(provider_options: [verbosity: :low])
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded.body)
+
+      assert body["text"]["verbosity"] == "low"
+    end
+
+    test "encodes verbosity when provided as string" do
+      request = build_request(provider_options: [verbosity: "high"])
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded.body)
+
+      assert body["text"]["verbosity"] == "high"
+    end
+
+    test "omits text field when no verbosity or response_format" do
+      request = build_request(provider_options: [])
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded.body)
+
+      refute Map.has_key?(body, "text")
+    end
+
+    test "encodes verbosity alongside response_format in text object" do
+      json_schema = %{
+        "type" => "object",
+        "properties" => %{"name" => %{"type" => "string"}},
+        "required" => ["name"]
+      }
+
+      response_format = %{
+        type: "json_schema",
+        json_schema: %{
+          name: "test_schema",
+          strict: true,
+          schema: json_schema
+        }
+      }
+
+      request =
+        build_request(provider_options: [response_format: response_format, verbosity: :medium])
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded.body)
+
+      assert body["text"]["format"]["type"] == "json_schema"
+      assert body["text"]["format"]["name"] == "test_schema"
+      assert body["text"]["verbosity"] == "medium"
+    end
   end
 
   describe "decode_response/1" do

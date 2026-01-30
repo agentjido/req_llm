@@ -500,6 +500,59 @@ defmodule ReqLLM.Providers.OpenAITest do
 
       assert decoded["service_tier"] == "flex"
     end
+
+    test "encode_body includes verbosity when provided as atom" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          provider_options: [verbosity: :low]
+        ]
+      }
+
+      updated_request = OpenAI.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      assert decoded["verbosity"] == "low"
+    end
+
+    test "encode_body includes verbosity when provided as string" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          provider_options: [verbosity: "high"]
+        ]
+      }
+
+      updated_request = OpenAI.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      assert decoded["verbosity"] == "high"
+    end
+
+    test "encode_body omits verbosity when not provided" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model
+        ]
+      }
+
+      updated_request = OpenAI.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      refute Map.has_key?(decoded, "verbosity")
+    end
   end
 
   describe "response decoding" do
