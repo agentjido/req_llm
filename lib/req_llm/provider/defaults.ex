@@ -886,7 +886,9 @@ defmodule ReqLLM.Provider.Defaults do
   end
 
   # Mistral API omits "type" field - add it and delegate
-  defp decode_openai_tool_call(%{"id" => _, "function" => %{"name" => _, "arguments" => _}} = call) do
+  defp decode_openai_tool_call(
+         %{"id" => _, "function" => %{"name" => _, "arguments" => _}} = call
+       ) do
     decode_openai_tool_call(Map.put(call, "type", "function"))
   end
 
