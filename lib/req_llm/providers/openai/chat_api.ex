@@ -117,6 +117,7 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
         |> add_stream_options(opts_map)
         |> add_reasoning_effort(opts_map)
         |> add_service_tier(opts_map)
+        |> add_verbosity(opts_map)
         |> add_response_format(opts_map)
         |> add_parallel_tool_calls(opts_map)
         |> translate_tool_choice_format()
@@ -206,6 +207,16 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
     service_tier = request_options[:service_tier] || provider_opts[:service_tier]
     maybe_put(body, :service_tier, service_tier)
   end
+
+  defp add_verbosity(body, request_options) do
+    provider_opts = request_options[:provider_options] || []
+    verbosity = provider_opts[:verbosity]
+    maybe_put(body, :verbosity, normalize_verbosity(verbosity))
+  end
+
+  defp normalize_verbosity(nil), do: nil
+  defp normalize_verbosity(v) when is_atom(v), do: Atom.to_string(v)
+  defp normalize_verbosity(v) when is_binary(v), do: v
 
   defp translate_tool_choice_format(body) do
     {tool_choice, body_key} =

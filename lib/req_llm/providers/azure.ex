@@ -246,6 +246,11 @@ defmodule ReqLLM.Providers.Azure do
     max_completion_tokens: [
       type: :any,
       doc: "Maximum completion tokens (OpenAI reasoning models)"
+    ],
+    verbosity: [
+      type: {:or, [:atom, :string]},
+      doc:
+        "Constrains the verbosity of the model's response. Supported values: 'low', 'medium', 'high'. Defaults to 'medium'. (OpenAI models only)"
     ]
   ]
 

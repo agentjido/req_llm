@@ -352,7 +352,7 @@ mix quality  # Runs all of the above
 
 - **No inline comments in function bodies**: Code should be self-documenting through clear naming and structure
 - **Use `@moduledoc` and `@doc`**: All public modules and functions must have documentation
-- **TypedStruct for data structures**: Use TypedStruct with `@type` definitions
+- **Zoi for data structures**: Use Zoi schemas with `@schema` definitions for validation
 - **Splode for errors**: Return `{:ok, result}` or `{:error, %ReqLLM.Error{}}` tuples
 - **NimbleOptions for validation**: Validate public API options with schemas
 - **Pattern matching over conditionals**: Prefer pattern matching when possible

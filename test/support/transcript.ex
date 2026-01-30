@@ -14,8 +14,6 @@ defmodule ReqLLM.Test.Transcript do
   - `{:done, :ok}` - Response complete
   """
 
-  use TypedStruct
-
   @typedoc "HTTP event in the transcript"
   @type event ::
           {:status, pos_integer()}
@@ -23,14 +21,21 @@ defmodule ReqLLM.Test.Transcript do
           | {:data, binary()}
           | {:done, :ok}
 
-  typedstruct do
-    field(:provider, atom(), enforce: true)
-    field(:model_spec, binary(), enforce: true)
-    field(:captured_at, DateTime.t(), enforce: true)
-    field(:request, map(), enforce: true)
-    field(:response_meta, map(), enforce: true)
-    field(:events, [event()], enforce: true)
-  end
+  @schema Zoi.struct(__MODULE__, %{
+            provider: Zoi.atom() |> Zoi.required(),
+            model_spec: Zoi.string() |> Zoi.required(),
+            captured_at: Zoi.any() |> Zoi.required(),
+            request: Zoi.map() |> Zoi.required(),
+            response_meta: Zoi.map() |> Zoi.required(),
+            events: Zoi.list(Zoi.any()) |> Zoi.required()
+          })
+
+  @type t :: unquote(Zoi.type_spec(@schema))
+
+  @enforce_keys Zoi.Struct.enforce_keys(@schema)
+  defstruct Zoi.Struct.struct_fields(@schema)
+
+  def schema, do: @schema
 
   @sensitive_headers ~w(authorization x-api-key api-key)
   # Use exact matches to avoid false positives (e.g., max_tokens matching "token")

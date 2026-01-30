@@ -335,6 +335,84 @@ defmodule ReqLLM.Providers.OpenRouterTest do
       assert List.last(response.context.messages).role == :assistant
     end
 
+    test "prepare_request for :object with openrouter_structured_output_mode: :json_schema uses native schema" do
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
+      context = context_fixture()
+      {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string])
+
+      opts = [
+        compiled_schema: schema,
+        provider_options: [openrouter_structured_output_mode: :json_schema]
+      ]
+
+      {:ok, request} = OpenRouter.prepare_request(:object, model, context, opts)
+
+      assert %{
+               type: "json_schema",
+               json_schema: %{
+                 strict: true,
+                 name: "structured_output",
+                 schema: _
+               }
+             } = request.options[:response_format]
+
+      refute Map.has_key?(request.options, :tools)
+      refute Map.has_key?(request.options, :tool_choice)
+      assert request.options[:max_tokens] == 4096
+    end
+
+    test "prepare_request for :object with json_schema mode respects custom max_tokens" do
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
+      context = context_fixture()
+      {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string])
+
+      opts = [
+        compiled_schema: schema,
+        max_tokens: 8192,
+        provider_options: [openrouter_structured_output_mode: :json_schema]
+      ]
+
+      {:ok, request} = OpenRouter.prepare_request(:object, model, context, opts)
+
+      assert request.options[:max_tokens] == 8192
+    end
+
+    test "prepare_request for :object with json_schema mode enforces minimum max_tokens" do
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
+      context = context_fixture()
+      {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string])
+
+      opts = [
+        compiled_schema: schema,
+        max_tokens: 50,
+        provider_options: [openrouter_structured_output_mode: :json_schema]
+      ]
+
+      {:ok, request} = OpenRouter.prepare_request(:object, model, context, opts)
+
+      assert request.options[:max_tokens] == 200
+    end
+
+    test "prepare_request for :object falls back to tools when mode is not :json_schema" do
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
+      context = context_fixture()
+      {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string])
+
+      opts = [compiled_schema: schema]
+
+      {:ok, request} = OpenRouter.prepare_request(:object, model, context, opts)
+
+      assert Map.has_key?(request.options, :tools)
+
+      assert request.options[:tool_choice] == %{
+               type: "function",
+               function: %{name: "structured_output"}
+             }
+
+      refute Map.has_key?(request.options, :response_format)
+      assert request.options[:max_tokens] == 4096
+    end
+
     test "decode_response handles streaming responses" do
       # Create mock streaming chunks
       stream_chunks = [
