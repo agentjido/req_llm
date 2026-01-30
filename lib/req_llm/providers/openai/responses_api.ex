@@ -847,17 +847,28 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp extract_tool_outputs_from_messages(tool_messages) do
     Enum.map(tool_messages, fn msg ->
-      output_text =
-        msg.content
-        |> Enum.find_value(fn part ->
-          if part.type == :text, do: part.text
-        end) || ""
+      output =
+        case ReqLLM.ToolResult.output_from_message(msg) do
+          nil -> extract_tool_output_text(msg.content)
+          value -> value
+        end
 
       %{
         call_id: msg.tool_call_id,
-        output: output_text
+        output: output
       }
     end)
+  end
+
+  defp extract_tool_output_text(content_parts) do
+    content_parts
+    |> Enum.find_value(fn part ->
+      if part.type == :text, do: part.text
+    end)
+    |> case do
+      nil -> ""
+      text -> text
+    end
   end
 
   defp encode_tool_outputs(outputs) when is_list(outputs) do

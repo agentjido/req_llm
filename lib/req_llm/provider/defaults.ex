@@ -361,6 +361,7 @@ defmodule ReqLLM.Provider.Defaults do
   @spec filter_req_opts(keyword()) :: keyword()
   def filter_req_opts(opts) do
     internal_keys = [
+      :api_key,
       :on_unsupported,
       :context,
       :text,
@@ -622,7 +623,8 @@ defmodule ReqLLM.Provider.Defaults do
          tool_calls: tc,
          tool_call_id: tcid,
          name: name,
-         reasoning_details: rd
+         reasoning_details: rd,
+         metadata: metadata
        }) do
     base_message = %{
       role: to_string(r),
@@ -634,10 +636,12 @@ defmodule ReqLLM.Provider.Defaults do
     |> maybe_add_field(:tool_call_id, tcid)
     |> maybe_add_field(:name, name)
     |> maybe_add_field(:reasoning_details, rd)
+    |> maybe_add_field(:metadata, metadata)
   end
 
   defp maybe_add_field(message, _key, nil), do: message
   defp maybe_add_field(message, _key, []), do: message
+  defp maybe_add_field(message, _key, %{} = value) when map_size(value) == 0, do: message
   defp maybe_add_field(message, key, value), do: Map.put(message, key, value)
 
   defp encode_openai_content(content) when is_binary(content), do: content
@@ -916,6 +920,13 @@ defmodule ReqLLM.Provider.Defaults do
     end
   end
 
+  # Mistral API omits "type" field - add it and delegate
+  defp decode_openai_tool_call(
+         %{"id" => _, "function" => %{"name" => _, "arguments" => _}} = call
+       ) do
+    decode_openai_tool_call(Map.put(call, "type", "function"))
+  end
+
   defp decode_openai_tool_call(_), do: nil
 
   defp decode_openai_delta(%{"content" => content}) when is_binary(content) and content != "" do
@@ -969,6 +980,14 @@ defmodule ReqLLM.Provider.Defaults do
        })
        when is_binary(name) do
     ReqLLM.StreamChunk.tool_call(name, %{}, %{id: id, index: index})
+  end
+
+  # Mistral API omits "type" field - add it and delegate (must come before partial handlers)
+  defp decode_openai_tool_call_delta(
+         %{"id" => _, "function" => %{"name" => _, "arguments" => _}} = call
+       )
+       when not is_map_key(call, "type") do
+    decode_openai_tool_call_delta(Map.put(call, "type", "function"))
   end
 
   # Handle partial argument chunks by storing them as metadata

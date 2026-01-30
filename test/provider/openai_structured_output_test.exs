@@ -3,6 +3,81 @@ defmodule ReqLLM.Providers.OpenAI.StructuredOutputTest do
 
   alias ReqLLM.Tool
 
+  describe "openai_json_schema_strict option" do
+    test "openai_json_schema_strict defaults to true" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o-2024-08-06")
+
+      schema = [name: [type: :string, required: true]]
+      {:ok, compiled_schema} = ReqLLM.Schema.compile(schema)
+
+      {:ok, request} =
+        ReqLLM.Providers.OpenAI.prepare_request(
+          :object,
+          model,
+          "test",
+          compiled_schema: compiled_schema
+        )
+
+      response_format = get_in(request.options, [:provider_options, :response_format])
+      assert response_format[:json_schema][:strict] == true
+    end
+
+    test "openai_json_schema_strict can be set to false" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o-2024-08-06")
+
+      schema = [name: [type: :string, required: true]]
+      {:ok, compiled_schema} = ReqLLM.Schema.compile(schema)
+
+      {:ok, request} =
+        ReqLLM.Providers.OpenAI.prepare_request(
+          :object,
+          model,
+          "test",
+          compiled_schema: compiled_schema,
+          provider_options: [openai_json_schema_strict: false]
+        )
+
+      response_format = get_in(request.options, [:provider_options, :response_format])
+      assert response_format[:json_schema][:strict] == false
+    end
+
+    test "openai_json_schema_strict: false does not enforce strict schema requirements" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o-2024-08-06")
+
+      # Schema with additionalProperties: {} (like Ecto :map fields generate)
+      # This would fail with strict: true because {} lacks a 'type' key
+      json_schema = %{
+        "type" => "object",
+        "properties" => %{
+          "name" => %{"type" => "string"},
+          "metadata" => %{"type" => "object", "additionalProperties" => %{}}
+        },
+        "required" => ["name", "metadata"],
+        "additionalProperties" => false
+      }
+
+      compiled_schema = %{schema: json_schema, name: "test_schema"}
+
+      {:ok, request} =
+        ReqLLM.Providers.OpenAI.prepare_request(
+          :object,
+          model,
+          "test",
+          compiled_schema: compiled_schema,
+          provider_options: [openai_json_schema_strict: false]
+        )
+
+      response_format = get_in(request.options, [:provider_options, :response_format])
+
+      # With strict: false, the schema should pass through without modification
+      assert response_format[:json_schema][:strict] == false
+      # The nested additionalProperties: {} should remain unchanged
+      assert response_format[:json_schema][:schema]["properties"]["metadata"][
+               "additionalProperties"
+             ] == %{}
+    end
+  end
+
   describe "provider options validation" do
     test "openai_structured_output_mode accepts valid modes" do
       {:ok, model} = ReqLLM.model("openai:gpt-4o-2024-08-06")

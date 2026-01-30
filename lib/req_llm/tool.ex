@@ -228,6 +228,7 @@ defmodule ReqLLM.Tool do
 
   Validates input parameters against the tool's schema and calls the callback function.
   The callback is expected to return `{:ok, result}` or `{:error, reason}`.
+  Tool results can be plain text, structured data, content parts, or a `ReqLLM.ToolResult`.
 
   ## Parameters
 

@@ -510,14 +510,14 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
   end
 
   # Tool result message (new ToolCall pattern)
-  defp encode_message(%Message{role: :tool, tool_call_id: id, content: content}) do
+  defp encode_message(%Message{role: :tool, tool_call_id: id} = msg) do
     %{
       "role" => "user",
       "content" => [
         %{
           "toolResult" => %{
             "toolUseId" => id,
-            "content" => [%{"text" => extract_text_content(content)}]
+            "content" => [%{"text" => extract_tool_result_text(msg)}]
           }
         }
       ]
@@ -620,6 +620,24 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
   end
 
   defp extract_text_content(_), do: ""
+
+  defp extract_tool_result_text(%Message{content: content} = msg) do
+    text = extract_text_content(content)
+    output = ReqLLM.ToolResult.output_from_message(msg)
+
+    cond do
+      text != "" -> text
+      output == nil -> ""
+      true -> encode_tool_output(output)
+    end
+  end
+
+  defp encode_tool_output(output) when is_binary(output), do: output
+
+  defp encode_tool_output(output) when is_map(output) or is_list(output),
+    do: Jason.encode!(output)
+
+  defp encode_tool_output(output), do: to_string(output)
 
   defp image_format_from_media_type("image/png"), do: "png"
   defp image_format_from_media_type("image/jpeg"), do: "jpeg"

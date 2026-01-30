@@ -132,6 +132,17 @@ defmodule ReqLLM.Providers.OpenAI do
       - `:tool_strict` - Force strict: true on function tools
       """
     ],
+    openai_json_schema_strict: [
+      type: :boolean,
+      default: true,
+      doc: """
+      Whether to use strict mode for JSON schema response format.
+      When `true` (default), OpenAI enforces strict schema validation which requires
+      all schema properties to have explicit types and `additionalProperties: false`.
+      Set to `false` when using schemas with features incompatible with strict mode
+      (e.g., `additionalProperties: {}` from Ecto :map fields).
+      """
+    ],
     response_format: [
       type: :map,
       doc: "Response format configuration (e.g., json_schema for structured output)"
@@ -410,33 +421,33 @@ defmodule ReqLLM.Providers.OpenAI do
     schema_name = Map.get(compiled_schema, :name, "output_schema")
     json_schema = ReqLLM.Schema.to_json(compiled_schema.schema)
 
-    json_schema = enforce_strict_schema_requirements(json_schema)
+    provider_opts = Keyword.get(opts, :provider_options, [])
+    strict = Keyword.get(provider_opts, :openai_json_schema_strict, true)
+
+    json_schema =
+      if strict do
+        enforce_strict_schema_requirements(json_schema)
+      else
+        json_schema
+      end
+
+    response_format = %{
+      type: "json_schema",
+      json_schema: %{
+        name: schema_name,
+        strict: strict,
+        schema: json_schema
+      }
+    }
 
     opts_with_format =
       opts
       |> Keyword.update(
         :provider_options,
-        [
-          response_format: %{
-            type: "json_schema",
-            json_schema: %{
-              name: schema_name,
-              strict: true,
-              schema: json_schema
-            }
-          },
-          openai_parallel_tool_calls: false
-        ],
-        fn provider_opts ->
-          provider_opts
-          |> Keyword.put(:response_format, %{
-            type: "json_schema",
-            json_schema: %{
-              name: schema_name,
-              strict: true,
-              schema: json_schema
-            }
-          })
+        [response_format: response_format, openai_parallel_tool_calls: false],
+        fn existing_provider_opts ->
+          existing_provider_opts
+          |> Keyword.put(:response_format, response_format)
           |> Keyword.put(:openai_parallel_tool_calls, false)
         end
       )

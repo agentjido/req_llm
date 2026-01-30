@@ -20,14 +20,27 @@ defmodule ReqLLM.TestSupport.FakeKeys do
       providers = ReqLLM.Providers.list()
 
       for provider <- providers do
-        env_var = ReqLLM.Keys.env_var_name(provider)
-        config_key = ReqLLM.Keys.config_key(provider)
-
-        if System.get_env(env_var) in [nil, ""] and
-             Application.get_env(:req_llm, config_key) in [nil, ""] do
-          System.put_env(env_var, "test-key-#{provider}")
-        end
+        install_fake_key_for_provider(provider)
       end
+    end
+  end
+
+  defp install_fake_key_for_provider(:amazon_bedrock) do
+    if System.get_env("AWS_ACCESS_KEY_ID") in [nil, ""] and
+         System.get_env("AWS_BEARER_TOKEN_BEDROCK") in [nil, ""] do
+      System.put_env("AWS_ACCESS_KEY_ID", "AKIAIOSFODNN7EXAMPLE")
+      System.put_env("AWS_SECRET_ACCESS_KEY", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY")
+      System.put_env("AWS_REGION", "us-east-1")
+    end
+  end
+
+  defp install_fake_key_for_provider(provider) do
+    env_var = ReqLLM.Keys.env_var_name(provider)
+    config_key = ReqLLM.Keys.config_key(provider)
+
+    if System.get_env(env_var) in [nil, ""] and
+         Application.get_env(:req_llm, config_key) in [nil, ""] do
+      System.put_env(env_var, "test-key-#{provider}")
     end
   end
 end

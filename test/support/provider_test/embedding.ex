@@ -39,7 +39,7 @@ defmodule ReqLLM.ProviderTest.Embedding do
       @models ModelMatrix.models_for_provider(provider, operation: :embedding)
 
       setup_all do
-        LLMDB.load(allow: :all, custom: %{})
+        LLMDB.load(allow: :all, custom: Application.get_env(:llm_db, :custom, %{}))
         :ok
       end
 

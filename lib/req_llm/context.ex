@@ -22,6 +22,7 @@ defmodule ReqLLM.Context do
   alias ReqLLM.Message
   alias ReqLLM.Message.ContentPart
   alias ReqLLM.ToolCall
+  alias ReqLLM.ToolResult
 
   @schema Zoi.struct(__MODULE__, %{
             messages: Zoi.list(Zoi.any()) |> Zoi.default([]),
@@ -318,8 +319,26 @@ defmodule ReqLLM.Context do
     assistant(text || "", tool_calls: tool_calls)
   end
 
-  @doc "Create a tool result message with tool_call_id and content."
-  @spec tool_result(String.t(), String.t()) :: Message.t()
+  @doc """
+  Create a tool result message with tool_call_id and content.
+
+  Accepts plain text, content parts, or a `ReqLLM.ToolResult` for structured and
+  multi-part outputs.
+  """
+  @spec tool_result(String.t(), String.t() | [ContentPart.t()] | ToolResult.t() | term()) ::
+          Message.t()
+  def tool_result(tool_call_id, %ToolResult{} = result) do
+    tool_result_from_struct(tool_call_id, nil, result)
+  end
+
+  def tool_result(tool_call_id, content) when is_list(content) do
+    %Message{
+      role: :tool,
+      content: normalize_content_parts(content),
+      tool_call_id: tool_call_id
+    }
+  end
+
   def tool_result(tool_call_id, content) when is_binary(content) do
     %Message{
       role: :tool,
@@ -328,8 +347,35 @@ defmodule ReqLLM.Context do
     }
   end
 
-  @doc "Create a tool result message with tool_call_id, name, and content."
-  @spec tool_result(String.t(), String.t(), String.t()) :: Message.t()
+  def tool_result(tool_call_id, output) do
+    tool_result_message(nil, tool_call_id, output)
+  end
+
+  @doc """
+  Create a tool result message with tool_call_id, name, and content.
+
+  Accepts plain text, content parts, or a `ReqLLM.ToolResult` for structured and
+  multi-part outputs.
+  """
+  @spec tool_result(
+          String.t(),
+          String.t(),
+          String.t() | [ContentPart.t()] | ToolResult.t() | term()
+        ) ::
+          Message.t()
+  def tool_result(tool_call_id, name, %ToolResult{} = result) do
+    tool_result_from_struct(tool_call_id, name, result)
+  end
+
+  def tool_result(tool_call_id, name, content) when is_list(content) do
+    %Message{
+      role: :tool,
+      name: name,
+      content: normalize_content_parts(content),
+      tool_call_id: tool_call_id
+    }
+  end
+
   def tool_result(tool_call_id, name, content) when is_binary(content) do
     %Message{
       role: :tool,
@@ -337,6 +383,10 @@ defmodule ReqLLM.Context do
       content: [ContentPart.text(content)],
       tool_call_id: tool_call_id
     }
+  end
+
+  def tool_result(tool_call_id, name, output) do
+    tool_result_message(name, tool_call_id, output)
   end
 
   @deprecated "Use assistant(\"\", tool_calls: [{name, input}]) instead"
@@ -357,18 +407,26 @@ defmodule ReqLLM.Context do
     assistant("", tool_calls: tool_calls, metadata: meta)
   end
 
-  @doc "Build a tool result message."
-  @spec tool_result_message(String.t(), String.t(), term(), map()) :: Message.t()
-  def tool_result_message(tool_name, tool_call_id, output, meta \\ %{}) do
-    content_str = if is_binary(output), do: output, else: Jason.encode!(output)
+  @doc """
+  Build a tool result message.
 
-    %Message{
+  Non-text outputs are stored in metadata to allow provider-specific structured
+  encoding.
+  """
+  @spec tool_result_message(String.t() | nil, String.t(), term(), map()) :: Message.t()
+  def tool_result_message(tool_name, tool_call_id, output, meta \\ %{}) do
+    {content, output_meta} = normalize_tool_result_input(output)
+    metadata = Map.merge(meta, output_meta)
+
+    message = %Message{
       role: :tool,
       name: tool_name,
       tool_call_id: tool_call_id,
-      content: [ContentPart.text(content_str)],
-      metadata: meta
+      content: content,
+      metadata: metadata
     }
+
+    if is_nil(tool_name), do: %{message | name: nil}, else: message
   end
 
   @doc """
@@ -376,6 +434,8 @@ defmodule ReqLLM.Context do
 
   Takes a list of tool call maps (with :id, :name, :arguments keys) and a list
   of available tools, executes each call, and appends the results as tool messages.
+  Tool callbacks may return plain text, structured data, content parts, or a
+  `ReqLLM.ToolResult`.
 
   ## Parameters
 
@@ -403,8 +463,12 @@ defmodule ReqLLM.Context do
           tool_result_msg = tool_result_message(name, id, result)
           append(ctx, tool_result_msg)
 
-        {:error, _error} ->
-          error_result = %{error: "Tool execution failed"}
+        {:error, %ToolResult{} = result} ->
+          tool_result_msg = tool_result_message(name, id, result)
+          append(ctx, tool_result_msg)
+
+        {:error, error} ->
+          error_result = %{error: to_string(error)}
           tool_result_msg = tool_result_message(name, id, error_result)
           append(ctx, tool_result_msg)
       end
@@ -759,6 +823,25 @@ defmodule ReqLLM.Context do
   end
 
   defp convert_loose_map(%{role: :tool, tool_call_id: id, content: content} = msg)
+       when is_binary(id) and is_list(content) do
+    name = Map.get(msg, :name)
+
+    if name do
+      {:ok, tool_result(id, name, content)}
+    else
+      {:ok, tool_result(id, content)}
+    end
+  end
+
+  defp convert_loose_map(%{role: :tool, tool_call_id: id, output: output} = msg)
+       when is_binary(id) do
+    name = Map.get(msg, :name)
+    meta = Map.get(msg, :metadata, %{})
+
+    {:ok, tool_result_message(name, id, output, meta)}
+  end
+
+  defp convert_loose_map(%{role: :tool, tool_call_id: id, content: content} = msg)
        when is_binary(id) and is_binary(content) do
     name = Map.get(msg, :name)
 
@@ -850,4 +933,74 @@ defmodule ReqLLM.Context do
       end
     end)
   end
+
+  defp tool_result_from_struct(tool_call_id, tool_name, %ToolResult{} = result) do
+    {content, output_meta} = normalize_tool_result_struct(result)
+
+    message = %Message{
+      role: :tool,
+      name: tool_name,
+      tool_call_id: tool_call_id,
+      content: content,
+      metadata: output_meta
+    }
+
+    if is_nil(tool_name), do: %{message | name: nil}, else: message
+  end
+
+  defp normalize_tool_result_struct(%ToolResult{} = result) do
+    content = normalize_tool_result_content(result.content, result.output)
+    metadata = ToolResult.put_output_metadata(result.metadata, result.output)
+    {content, metadata}
+  end
+
+  defp normalize_tool_result_input(%ToolResult{} = result) do
+    normalize_tool_result_struct(result)
+  end
+
+  defp normalize_tool_result_input(content) when is_list(content) do
+    {normalize_content_parts(content), %{}}
+  end
+
+  defp normalize_tool_result_input(content) when is_binary(content) do
+    {[ContentPart.text(content)], %{}}
+  end
+
+  defp normalize_tool_result_input(output) do
+    encoded = encode_tool_output(output)
+    {[ContentPart.text(encoded)], %{ToolResult.metadata_key() => output}}
+  end
+
+  defp normalize_tool_result_content(nil, nil), do: []
+
+  defp normalize_tool_result_content(nil, output) do
+    [ContentPart.text(encode_tool_output(output))]
+  end
+
+  defp normalize_tool_result_content(content, _output) when is_list(content) do
+    normalize_content_parts(content)
+  end
+
+  defp normalize_tool_result_content(content, _output) when is_binary(content) do
+    [ContentPart.text(content)]
+  end
+
+  defp normalize_tool_result_content(content, _output) do
+    [ContentPart.text(to_string(content))]
+  end
+
+  defp normalize_content_parts(parts) do
+    Enum.flat_map(parts, fn
+      %ContentPart{} = part -> [part]
+      text when is_binary(text) -> [ContentPart.text(text)]
+      part -> [ContentPart.text(to_string(part))]
+    end)
+  end
+
+  defp encode_tool_output(output) when is_binary(output), do: output
+
+  defp encode_tool_output(output) when is_map(output) or is_list(output),
+    do: Jason.encode!(output)
+
+  defp encode_tool_output(output), do: to_string(output)
 end

@@ -136,14 +136,14 @@ defmodule ReqLLM.Providers.Anthropic.Context do
     }
   end
 
-  defp encode_message(%ReqLLM.Message{role: :tool, tool_call_id: id, content: content}) do
+  defp encode_message(%ReqLLM.Message{role: :tool, tool_call_id: id} = msg) do
     %{
       role: "user",
       content: [
         %{
           type: "tool_result",
           tool_use_id: id,
-          content: extract_text_content(content)
+          content: encode_tool_result_content(msg)
         }
       ]
     }
@@ -283,17 +283,22 @@ defmodule ReqLLM.Providers.Anthropic.Context do
 
   defp encode_single_reasoning_detail(_), do: []
 
-  defp extract_text_content(content_parts) when is_list(content_parts) do
-    content_parts
-    |> Enum.find_value(fn
-      %ReqLLM.Message.ContentPart{type: :text, text: text} -> text
-      _ -> nil
-    end)
-    |> case do
-      nil -> ""
-      text -> text
+  defp encode_tool_result_content(%ReqLLM.Message{content: content} = msg) do
+    output = ReqLLM.ToolResult.output_from_message(msg)
+
+    cond do
+      content != [] -> encode_content(content)
+      output != nil -> encode_tool_output(output)
+      true -> ""
     end
   end
+
+  defp encode_tool_output(output) when is_binary(output), do: output
+
+  defp encode_tool_output(output) when is_map(output) or is_list(output),
+    do: Jason.encode!(output)
+
+  defp encode_tool_output(output), do: to_string(output)
 
   defp add_tools(request, []), do: request
 

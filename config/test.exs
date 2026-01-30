@@ -279,6 +279,11 @@ config :llm_db,
           family: "command",
           capabilities: %{chat: true},
           limits: %{context: 4096, output: 4096}
+        },
+        "cohere.embed-english-v3" => %{
+          name: "Cohere Embed English v3",
+          family: "embed",
+          capabilities: %{embeddings: true}
         }
       }
     ],
@@ -318,6 +323,7 @@ config :req_llm, :sample_embedding_models, ~w(
     openai:text-embedding-3-small
     google:text-embedding-004
     azure:text-embedding-3-small
+    amazon_bedrock:cohere.embed-english-v3
   )
 config :req_llm, :sample_text_models, ~w(
     anthropic:claude-3-5-haiku-20241022

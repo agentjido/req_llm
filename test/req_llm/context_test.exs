@@ -697,6 +697,40 @@ defmodule ReqLLM.ContextTest do
       assert [%ContentPart{type: :text, text: "Result data"}] = msg.content
     end
 
+    test "normalizes tool result message with content parts" do
+      input = [
+        %{
+          role: :tool,
+          tool_call_id: "call_789",
+          content: [ContentPart.text("ok")]
+        }
+      ]
+
+      {:ok, context} = Context.normalize(input, validate: false)
+
+      [msg] = context.messages
+      assert msg.role == :tool
+      assert msg.tool_call_id == "call_789"
+      assert [%ContentPart{type: :text, text: "ok"}] = msg.content
+    end
+
+    test "normalizes tool result message with output field" do
+      input = [
+        %{
+          role: :tool,
+          tool_call_id: "call_999",
+          output: %{ok: true}
+        }
+      ]
+
+      {:ok, context} = Context.normalize(input, validate: false)
+
+      [msg] = context.messages
+      assert msg.role == :tool
+      assert msg.tool_call_id == "call_999"
+      assert msg.metadata[:tool_output] == %{ok: true}
+    end
+
     test "normalizes full tool conversation flow" do
       input = [
         %{role: :user, content: "What's the weather in SF?"},

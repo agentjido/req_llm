@@ -122,6 +122,41 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert body["tool_choice"] == "required"
     end
 
+    test "encodes structured tool outputs from context metadata" do
+      tool_call = %ReqLLM.ToolCall{
+        id: "call_1",
+        type: "function",
+        function: %{name: "get_weather", arguments: ~s({"location":"SF"})}
+      }
+
+      assistant_msg = %ReqLLM.Message{
+        role: :assistant,
+        content: [],
+        tool_calls: [tool_call]
+      }
+
+      tool_result =
+        ReqLLM.Context.tool_result_message(
+          "get_weather",
+          "call_1",
+          %ReqLLM.ToolResult{output: %{temp: 72}}
+        )
+
+      context = %ReqLLM.Context{messages: [assistant_msg, tool_result]}
+      request = build_request(context: context)
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded.body)
+
+      tool_output =
+        Enum.find(body["input"], fn item ->
+          item["type"] == "function_call_output"
+        end)
+
+      assert tool_output["call_id"] == "call_1"
+      assert Jason.decode!(tool_output["output"]) == %{"temp" => 72}
+    end
+
     test "encodes specific tool choice with atom keys" do
       request =
         build_request(tool_choice: %{type: "function", function: %{name: "get_weather"}})

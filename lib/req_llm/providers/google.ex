@@ -1798,25 +1798,14 @@ defmodule ReqLLM.Providers.Google do
 
       tool_result_parts =
         case message do
+          %{tool_call_id: _call_id, role: "tool"} ->
+            [build_tool_result_part(message, raw_content)]
+
           %{"tool_call_id" => _call_id, "role" => "tool"} ->
-            [
-              %{
-                functionResponse: %{
-                  name: "unknown",
-                  response: %{content: extract_content_text(raw_content)}
-                }
-              }
-            ]
+            [build_tool_result_part(message, raw_content)]
 
           %{tool_call_id: _call_id, role: :tool} ->
-            [
-              %{
-                functionResponse: %{
-                  name: "unknown",
-                  response: %{content: extract_content_text(raw_content)}
-                }
-              }
-            ]
+            [build_tool_result_part(message, raw_content)]
 
           _ ->
             []
@@ -1904,6 +1893,37 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp extract_content_text(_), do: ""
+
+  defp build_tool_result_part(message, raw_content) do
+    %{
+      functionResponse: %{
+        name: tool_result_name(message),
+        response: tool_result_response(message, raw_content)
+      }
+    }
+  end
+
+  defp tool_result_name(%{name: name}) when is_binary(name) and name != "", do: name
+  defp tool_result_name(%{"name" => name}) when is_binary(name) and name != "", do: name
+  defp tool_result_name(_), do: "unknown"
+
+  defp tool_result_response(message, raw_content) do
+    output = ReqLLM.ToolResult.output_from_message(message)
+
+    cond do
+      is_map(output) or is_list(output) ->
+        output
+
+      is_binary(output) ->
+        %{content: output}
+
+      output != nil ->
+        %{content: to_string(output)}
+
+      true ->
+        %{content: extract_content_text(raw_content)}
+    end
+  end
 
   # Extract text content from a message for system instruction
   defp extract_text_content(%{content: content}) when is_binary(content), do: content

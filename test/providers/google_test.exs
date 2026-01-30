@@ -201,6 +201,54 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert is_list(tool_def["functionDeclarations"])
     end
 
+    test "encode_body includes tool_result name and structured response" do
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
+
+      tool_result =
+        Context.tool_result_message(
+          "get_weather",
+          "call_1",
+          %ReqLLM.ToolResult{output: %{"temperature" => 72}}
+        )
+
+      context =
+        Context.new([
+          Context.user("What's the weather?"),
+          Context.assistant("",
+            tool_calls: [
+              %ReqLLM.ToolCall{
+                id: "call_1",
+                type: "function",
+                function: %{name: "get_weather", arguments: ~s({"location":"SF"})}
+              }
+            ]
+          ),
+          tool_result
+        ])
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          operation: :chat
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      tool_parts =
+        decoded["contents"]
+        |> Enum.flat_map(& &1["parts"])
+        |> Enum.filter(&Map.has_key?(&1, "functionResponse"))
+
+      [tool_part] = tool_parts
+      function_response = tool_part["functionResponse"]
+      assert function_response["name"] == "get_weather"
+      assert function_response["response"]["temperature"] == 72
+    end
+
     test "encode_body with Google-specific options" do
       {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
       context = context_fixture()

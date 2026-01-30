@@ -4,6 +4,7 @@ defmodule ReqLLM.ContextConversationalTest do
   alias ReqLLM.Context
   alias ReqLLM.Message
   alias ReqLLM.Message.ContentPart
+  alias ReqLLM.ToolResult
 
   describe "append/2" do
     test "appends single message" do
@@ -66,6 +67,14 @@ defmodule ReqLLM.ContextConversationalTest do
                content: [%ContentPart{type: :text, text: "Tool result"}],
                tool_call_id: "call_123"
              } = message
+    end
+
+    test "creates tool result message with content parts" do
+      image = ContentPart.image(<<137, 80, 78, 71>>, "image/png")
+      message = Context.tool_result("call_456", [ContentPart.text("Result"), image])
+
+      assert %Message{role: :tool, tool_call_id: "call_456"} = message
+      assert [%ContentPart{type: :text}, %ContentPart{type: :image}] = message.content
     end
 
     test "creates tool result message with JSON output" do
@@ -137,6 +146,16 @@ defmodule ReqLLM.ContextConversationalTest do
 
       assert [part] = message.content
       assert part.type == :text
+    end
+
+    test "preserves structured output metadata" do
+      result = %ToolResult{output: %{status: "ok"}, metadata: %{source: "tool"}}
+      message = Context.tool_result_message("test_tool", "call_789", result)
+
+      assert message.metadata[:source] == "tool"
+      assert message.metadata[:tool_output] == %{status: "ok"}
+      assert [%ContentPart{type: :text, text: text}] = message.content
+      assert text =~ "status"
     end
 
     test "defaults to empty metadata" do

@@ -8,6 +8,7 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
   use ReqLLM.ProviderCase, provider: ReqLLM.Providers.Anthropic
 
+  alias ReqLLM.Message.ContentPart
   alias ReqLLM.Providers.Anthropic
 
   describe "provider contract" do
@@ -153,6 +154,50 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert result1["tool_use_id"] == "tool_1"
       assert result2["type"] == "tool_result"
       assert result2["tool_use_id"] == "tool_2"
+    end
+
+    test "encode_body preserves multimodal tool_result content blocks" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      image_part = ContentPart.image(<<137, 80, 78, 71>>, "image/png")
+      file_part = ContentPart.file("doc", "note.txt", "text/plain")
+
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.user("Use the tool."),
+          ReqLLM.Context.assistant("",
+            tool_calls: [
+              %ReqLLM.ToolCall{
+                id: "tool_1",
+                type: "function",
+                function: %{name: "get_asset", arguments: ~s({"id":"1"})}
+              }
+            ]
+          ),
+          ReqLLM.Context.tool_result("tool_1", [image_part, file_part])
+        ])
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false
+        ]
+      }
+
+      updated_request = Anthropic.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      tool_result_msg = List.last(decoded["messages"])
+      [tool_result_block] = tool_result_msg["content"]
+      assert tool_result_block["type"] == "tool_result"
+      assert tool_result_block["tool_use_id"] == "tool_1"
+
+      content_blocks = tool_result_block["content"]
+      assert is_list(content_blocks)
+
+      assert Enum.any?(content_blocks, fn block -> block["type"] == "image" end)
+      assert Enum.any?(content_blocks, fn block -> block["type"] == "document" end)
     end
 
     test "encode_body without tools" do
