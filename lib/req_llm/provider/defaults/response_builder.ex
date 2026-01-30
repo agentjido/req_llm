@@ -152,15 +152,6 @@ defmodule ReqLLM.Provider.Defaults.ResponseBuilder do
           existing = Map.get(acc.arg_fragments, index, "")
           %{acc | arg_fragments: Map.put(acc.arg_fragments, index, existing <> fragment)}
 
-        # Handle text block boundary markers (e.g., between text before/after web_search)
-        # Add a separator if there's already accumulated text content
-        %{text_block_boundary: true} ->
-          if acc.text_content != [] do
-            %{acc | text_content: ["\n\n" | acc.text_content]}
-          else
-            acc
-          end
-
         _ ->
           acc
       end
