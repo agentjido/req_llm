@@ -173,6 +173,7 @@ defmodule ReqLLM.Providers.Azure.OpenAI do
       |> maybe_put(:n, opts[:n])
       |> maybe_put(:reasoning_effort, provider_opts[:reasoning_effort])
       |> maybe_put(:service_tier, provider_opts[:service_tier])
+      |> add_verbosity(provider_opts)
       |> add_stream_options(opts)
       |> AdapterHelpers.add_parallel_tool_calls(opts, provider_opts)
       |> AdapterHelpers.translate_tool_choice_format()
@@ -204,6 +205,15 @@ defmodule ReqLLM.Providers.Azure.OpenAI do
       body
     end
   end
+
+  defp add_verbosity(body, provider_opts) do
+    verbosity = provider_opts[:verbosity]
+    maybe_put(body, :verbosity, normalize_verbosity(verbosity))
+  end
+
+  defp normalize_verbosity(nil), do: nil
+  defp normalize_verbosity(v) when is_atom(v), do: Atom.to_string(v)
+  defp normalize_verbosity(v) when is_binary(v), do: v
 
   @doc """
   Formats an embedding request for Azure OpenAI.

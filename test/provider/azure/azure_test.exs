@@ -698,6 +698,45 @@ defmodule ReqLLM.Providers.AzureTest do
     end
   end
 
+  describe "verbosity option" do
+    test "OpenAI models include verbosity when provided as atom" do
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+      opts = [stream: false, provider_options: [verbosity: :low]]
+
+      body = Azure.OpenAI.format_request("gpt-4o", context, opts)
+
+      assert body[:verbosity] == "low"
+    end
+
+    test "OpenAI models include verbosity when provided as string" do
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+      opts = [stream: false, provider_options: [verbosity: "high"]]
+
+      body = Azure.OpenAI.format_request("gpt-4o", context, opts)
+
+      assert body[:verbosity] == "high"
+    end
+
+    test "OpenAI models omit verbosity when not provided" do
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+      opts = [stream: false]
+
+      body = Azure.OpenAI.format_request("gpt-4o", context, opts)
+
+      refute Map.has_key?(body, :verbosity)
+    end
+
+    test "verbosity works with reasoning models" do
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+      opts = [stream: false, provider_options: [verbosity: :medium, reasoning_effort: "high"]]
+
+      body = Azure.OpenAI.format_request("o3-mini", context, opts)
+
+      assert body[:verbosity] == "medium"
+      assert body[:reasoning_effort] == "high"
+    end
+  end
+
   describe "reasoning model features" do
     import ExUnit.CaptureLog
 

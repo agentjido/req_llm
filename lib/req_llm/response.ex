@@ -21,39 +21,39 @@ defmodule ReqLLM.Response do
 
   """
 
-  use TypedStruct
-
-  alias ReqLLM.{Context, Message}
+  alias ReqLLM.Message
 
   @derive {Jason.Encoder, except: [:stream]}
 
-  typedstruct enforce: true do
-    # ---------- Core ----------
-    # Provider id of the turn
-    field(:id, String.t())
-    # Model that produced the turn
-    field(:model, String.t())
-    # History incl. new assistant msg
-    field(:context, Context.t())
-    # The assistant/tool message created by this turn
-    field(:message, Message.t() | nil)
-    # Structured object for object generation
-    field(:object, map() | nil, default: nil)
+  @schema Zoi.struct(__MODULE__, %{
+            id: Zoi.string(),
+            model: Zoi.string(),
+            context: Zoi.any(),
+            message: Zoi.any() |> Zoi.default(nil),
+            object: Zoi.union([Zoi.map(), Zoi.null()]) |> Zoi.default(nil),
+            stream?: Zoi.boolean() |> Zoi.default(false),
+            stream: Zoi.any() |> Zoi.default(nil),
+            usage: Zoi.union([Zoi.map(), Zoi.null()]) |> Zoi.default(nil),
+            finish_reason:
+              Zoi.union([
+                Zoi.literal(:stop),
+                Zoi.literal(:length),
+                Zoi.literal(:tool_calls),
+                Zoi.literal(:content_filter),
+                Zoi.literal(:error),
+                Zoi.null()
+              ])
+              |> Zoi.default(nil),
+            provider_meta: Zoi.map() |> Zoi.default(%{}),
+            error: Zoi.any() |> Zoi.default(nil)
+          })
 
-    # ---------- Streams ----------
-    field(:stream?, boolean(), default: false)
-    # Stream of StreamChunk when stream? == true
-    field(:stream, Enumerable.t() | nil, default: nil)
+  @type t :: unquote(Zoi.type_spec(@schema))
 
-    # ---------- Metadata ----------
-    field(:usage, map() | nil)
-    field(:finish_reason, :stop | :length | :tool_calls | :content_filter | :error | nil)
-    # Raw provider extras
-    field(:provider_meta, map(), default: %{})
+  @enforce_keys Zoi.Struct.enforce_keys(@schema)
+  defstruct Zoi.Struct.struct_fields(@schema)
 
-    # ---------- Errors ----------
-    field(:error, Exception.t() | nil, default: nil)
-  end
+  def schema, do: @schema
 
   @doc """
   Extract text content from the response message.
