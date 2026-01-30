@@ -109,8 +109,13 @@ ReqLLM uses structured key/value tags for precise test filtering:
 - Group deps in mix.exs: runtime deps first, then dev/test deps with `, only: [:dev, :test]`
 
 ### Types & Validation
-- Use TypedStruct for structured data with `@type` definitions
-- Validate options with NimbleOptions schemas in public APIs
+- Use Zoi schemas for structured data with validation:
+  ```elixir
+  @schema [
+    field1: [type: :string, required: true],
+    field2: [type: :integer, default: 0]
+  ]
+  ```
 - Use Splode for structured error handling with specific error types
 
 ### Error Handling

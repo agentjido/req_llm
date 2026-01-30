@@ -69,22 +69,28 @@ defmodule ReqLLM.StreamChunk do
 
   """
 
-  use TypedStruct
-
   @typedoc """
   Chunk type indicating the kind of content in this chunk.
   """
   @type chunk_type :: :content | :thinking | :tool_call | :meta
 
-  typedstruct do
-    @typedoc "A single chunk of streaming response data"
+  @typedoc "A single chunk of streaming response data"
 
-    field(:type, chunk_type(), enforce: true, doc: "Type of chunk content")
-    field(:text, String.t() | nil, doc: "Text content for :content and :thinking chunks")
-    field(:name, String.t() | nil, doc: "Tool/function name for :tool_call chunks")
-    field(:arguments, map() | nil, doc: "Tool arguments for :tool_call chunks")
-    field(:metadata, map(), default: %{}, doc: "Additional metadata for any chunk type")
-  end
+  @schema Zoi.struct(__MODULE__, %{
+            type: Zoi.any(),
+            text: Zoi.string() |> Zoi.nullable() |> Zoi.default(nil),
+            name: Zoi.string() |> Zoi.nullable() |> Zoi.default(nil),
+            arguments: Zoi.map() |> Zoi.nullable() |> Zoi.default(nil),
+            metadata: Zoi.map() |> Zoi.default(%{})
+          })
+
+  @type t :: unquote(Zoi.type_spec(@schema))
+
+  @enforce_keys Zoi.Struct.enforce_keys(@schema)
+  defstruct Zoi.Struct.struct_fields(@schema)
+
+  @doc "Returns the Zoi schema for this module"
+  def schema, do: @schema
 
   @doc """
   Creates a content chunk containing text.

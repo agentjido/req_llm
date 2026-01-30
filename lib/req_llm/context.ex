@@ -19,17 +19,22 @@ defmodule ReqLLM.Context do
       Context.validate!(context)
   """
 
-  use TypedStruct
-
   alias ReqLLM.Message
   alias ReqLLM.Message.ContentPart
   alias ReqLLM.ToolCall
 
+  @schema Zoi.struct(__MODULE__, %{
+            messages: Zoi.list(Zoi.any()) |> Zoi.default([]),
+            tools: Zoi.list(Zoi.any()) |> Zoi.default([])
+          })
+
   @derive Jason.Encoder
-  typedstruct enforce: true do
-    field(:messages, [Message.t()], default: [])
-    field(:tools, [ReqLLM.Tool.t()], default: [])
-  end
+  @type t :: unquote(Zoi.type_spec(@schema))
+
+  @enforce_keys Zoi.Struct.enforce_keys(@schema)
+  defstruct Zoi.Struct.struct_fields(@schema)
+
+  def schema, do: @schema
 
   # Canonical public interface
 

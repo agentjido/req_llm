@@ -63,22 +63,26 @@ defmodule ReqLLM.Tool do
 
   """
 
-  use TypedStruct
-
   @type callback_mfa :: {module(), atom()} | {module(), atom(), list()}
   @type callback_fun :: (map() -> {:ok, term()} | {:error, term()})
   @type callback :: callback_mfa() | callback_fun()
 
-  typedstruct enforce: true do
-    @typedoc "A tool definition for AI model function calling"
+  @schema Zoi.struct(__MODULE__, %{
+            name: Zoi.string() |> Zoi.required(),
+            description: Zoi.string() |> Zoi.required(),
+            parameter_schema: Zoi.any() |> Zoi.default([]),
+            compiled: Zoi.any() |> Zoi.default(nil),
+            callback: Zoi.any() |> Zoi.required(),
+            strict: Zoi.boolean() |> Zoi.default(false)
+          })
 
-    field(:name, String.t(), enforce: true)
-    field(:description, String.t(), enforce: true)
-    field(:parameter_schema, keyword() | map(), default: [])
-    field(:compiled, term() | nil, default: nil)
-    field(:callback, callback(), enforce: true)
-    field(:strict, boolean(), default: false)
-  end
+  @typedoc "A tool definition for AI model function calling"
+  @type t :: unquote(Zoi.type_spec(@schema))
+
+  @enforce_keys Zoi.Struct.enforce_keys(@schema)
+  defstruct Zoi.Struct.struct_fields(@schema)
+
+  def schema, do: @schema
 
   @type tool_opts :: [
           name: String.t(),
