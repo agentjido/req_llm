@@ -67,28 +67,44 @@ defmodule ReqLLM.StreamResponse do
   - Seamless backward compatibility
   """
 
-  use TypedStruct
-
   alias ReqLLM.Context
   alias ReqLLM.Provider.ResponseBuilder
   alias ReqLLM.Response
   alias ReqLLM.Response.Stream, as: ResponseStream
   alias ReqLLM.StreamResponse.MetadataHandle
 
-  typedstruct enforce: true do
-    @typedoc """
-    A streaming response with concurrent metadata processing.
+  @schema Zoi.struct(__MODULE__, %{
+            stream: Zoi.any() |> Zoi.required(),
+            metadata_handle: Zoi.any() |> Zoi.required(),
+            cancel: Zoi.any() |> Zoi.required(),
+            model: Zoi.any() |> Zoi.required(),
+            context: Zoi.any() |> Zoi.required()
+          })
 
-    Contains a stream of chunks, a handle for metadata collection, cancellation function,
-    and contextual information for multi-turn conversations.
-    """
+  @typedoc """
+  A streaming response with concurrent metadata processing.
 
-    field(:stream, Enumerable.t(), doc: "Lazy stream of StreamChunk structs")
-    field(:metadata_handle, MetadataHandle.t(), doc: "Handle collecting usage and finish_reason")
-    field(:cancel, (-> :ok), doc: "Function to cancel streaming and cleanup resources")
-    field(:model, LLMDB.Model.t(), doc: "Model specification that generated this response")
-    field(:context, Context.t(), doc: "Conversation context including new messages")
-  end
+  Contains a stream of chunks, a handle for metadata collection, cancellation function,
+  and contextual information for multi-turn conversations.
+
+  - `stream` - Lazy stream of StreamChunk structs
+  - `metadata_handle` - Handle collecting usage and finish_reason
+  - `cancel` - Function to cancel streaming and cleanup resources
+  - `model` - Model specification that generated this response
+  - `context` - Conversation context including new messages
+  """
+  @type t :: %__MODULE__{
+          stream: Enumerable.t(),
+          metadata_handle: MetadataHandle.t(),
+          cancel: (-> :ok),
+          model: LLMDB.Model.t(),
+          context: Context.t()
+        }
+
+  @enforce_keys Zoi.Struct.enforce_keys(@schema)
+  defstruct Zoi.Struct.struct_fields(@schema)
+
+  def schema, do: @schema
 
   @doc """
   Extract text tokens from the stream, filtering out metadata chunks.

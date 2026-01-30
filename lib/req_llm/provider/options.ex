@@ -56,6 +56,13 @@ defmodule ReqLLM.Provider.Options do
                                  doc: "Maximum number of tokens to generate"
                                ],
 
+                               # Model specific base_url
+                               base_url: [
+                                 type: :string,
+                                 doc:
+                                   "Allows base_url to be specified on a per model basis.  Commonly used for locally hosted llm servers, i.e. vLLM, etc."
+                               ],
+
                                # Advanced sampling (widely supported)
                                top_p: [
                                  type: :float,
@@ -454,6 +461,16 @@ defmodule ReqLLM.Provider.Options do
   end
 
   defp extract_model_options(%LLMDB.Model{} = model, opts) do
+    maybe_extract_max_tokens(model, opts)
+    |> maybe_extract_model_base_url(model)
+  end
+
+  defp maybe_extract_model_options(:image, _model, opts), do: opts
+
+  defp maybe_extract_model_options(_operation, model, opts),
+    do: extract_model_options(model, opts)
+
+  defp maybe_extract_max_tokens(%LLMDB.Model{} = model, opts) do
     cond do
       Keyword.has_key?(opts, :max_tokens) ->
         opts
@@ -466,10 +483,13 @@ defmodule ReqLLM.Provider.Options do
     end
   end
 
-  defp maybe_extract_model_options(:image, _model, opts), do: opts
-
-  defp maybe_extract_model_options(_operation, model, opts),
-    do: extract_model_options(model, opts)
+  defp maybe_extract_model_base_url(opts, %LLMDB.Model{} = model) do
+    if is_bitstring(model.base_url) do
+      Keyword.put(opts, :base_url, model.base_url)
+    else
+      opts
+    end
+  end
 
   defp normalize_stop_sequences(opts) do
     case Keyword.pop(opts, :stop_sequences) do

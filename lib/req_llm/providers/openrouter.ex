@@ -18,6 +18,7 @@ defmodule ReqLLM.Providers.OpenRouter do
   - `openrouter_repetition_penalty` - Repetition penalty for reducing repetitive text
   - `openrouter_min_p` - Minimum probability threshold for sampling
   - `openrouter_top_a` - Top-a sampling parameter
+  - `openrouter_structured_output_mode` - Enables `:json_schema` structured output (when tool calls are not supported)
   - `app_referer` - HTTP-Referer header for app identification
   - `app_title` - X-Title header for app title in rankings
 
@@ -89,6 +90,15 @@ defmodule ReqLLM.Providers.OpenRouter do
     app_title: [
       type: :string,
       doc: "X-Title header for app title in OpenRouter rankings"
+    ],
+    response_format: [
+      type: {:or, [:map, :keyword_list]},
+      doc: "Response format (e.g. %{type: \"json_schema\"})"
+    ],
+    openrouter_structured_output_mode: [
+      type: {:in, [:json_schema]},
+      doc:
+        "Structured output mode. Only :json_schema is supported, which enables JSON schema support instead of using tools. Useful when tool calls are not supported by the endpoint."
     ]
   ]
 
@@ -110,39 +120,61 @@ defmodule ReqLLM.Providers.OpenRouter do
   """
   @impl ReqLLM.Provider
   def prepare_request(:object, model_spec, prompt, opts) do
+    provider_opts = Keyword.get(opts, :provider_options, [])
     compiled_schema = Keyword.fetch!(opts, :compiled_schema)
 
-    structured_output_tool =
-      ReqLLM.Tool.new!(
-        name: "structured_output",
-        description: "Generate structured output matching the provided schema",
-        parameter_schema: compiled_schema.schema,
-        callback: fn _args -> {:ok, "structured output generated"} end
-      )
+    opts =
+      if Keyword.get(provider_opts, :openrouter_structured_output_mode) == :json_schema do
+        json_schema_map = ReqLLM.Schema.to_json(compiled_schema.schema)
 
-    opts_with_tool =
-      opts
-      |> Keyword.update(:tools, [structured_output_tool], &[structured_output_tool | &1])
-      |> Keyword.put(:tool_choice, %{type: "function", function: %{name: "structured_output"}})
+        json_schema_payload = %{
+          type: "json_schema",
+          json_schema: %{
+            name: "structured_output",
+            strict: true,
+            schema: json_schema_map
+          }
+        }
 
-    # Adjust max_tokens for structured output with OpenRouter-specific minimums
-    opts_with_tokens =
-      case Keyword.get(opts_with_tool, :max_tokens) do
-        nil -> Keyword.put(opts_with_tool, :max_tokens, 4096)
-        tokens when tokens < 200 -> Keyword.put(opts_with_tool, :max_tokens, 200)
-        _tokens -> opts_with_tool
+        updated_provider_opts =
+          provider_opts
+          |> Keyword.put(:response_format, json_schema_payload)
+          |> Keyword.delete(:openrouter_structured_output_mode)
+
+        opts
+        |> Keyword.put(:provider_options, updated_provider_opts)
+        |> Keyword.delete(:tools)
+        |> Keyword.delete(:tool_choice)
+      else
+        structured_output_tool =
+          ReqLLM.Tool.new!(
+            name: "structured_output",
+            description: "Generate structured output matching the provided schema",
+            parameter_schema: compiled_schema.schema,
+            callback: fn _args -> {:ok, "structured output generated"} end
+          )
+
+        opts
+        |> Keyword.update(:tools, [structured_output_tool], &[structured_output_tool | &1])
+        |> Keyword.put(:tool_choice, %{type: "function", function: %{name: "structured_output"}})
+        |> Keyword.delete(:response_format)
       end
 
-    # Preserve the :object operation for response decoding
-    opts_with_operation = Keyword.put(opts_with_tokens, :operation, :object)
+    opts =
+      case Keyword.get(opts, :max_tokens) do
+        nil -> Keyword.put(opts, :max_tokens, 4096)
+        tokens when tokens < 200 -> Keyword.put(opts, :max_tokens, 200)
+        _tokens -> opts
+      end
 
-    # Use the default chat preparation with structured output tools
+    opts = Keyword.put(opts, :operation, :object)
+
     ReqLLM.Provider.Defaults.prepare_request(
       __MODULE__,
       :chat,
       model_spec,
       prompt,
-      opts_with_operation
+      opts
     )
   end
 
