@@ -209,7 +209,7 @@ defmodule ReqLLM.Provider.OptionsTest do
       refute Keyword.has_key?(processed, :max_tokens)
     end
 
-    test "handles mocked povider does not have a  base_url" do
+    test "uses provider base_url when model has no base_url" do
       model = %LLMDB.Model{provider: :mock, id: "test-model"}
       opts = []
 
@@ -217,9 +217,14 @@ defmodule ReqLLM.Provider.OptionsTest do
       assert processed[:base_url] == "https://api.mock.com"
     end
 
-    test "handles model base_url overrides provider base_url" do
-      model = %LLMDB.Model{provider: :mock, id: "test-model"}
-      opts = [base_url: "http://localhost:8001/v1"]
+    test "model base_url overrides provider base_url" do
+      model = %LLMDB.Model{
+        provider: :mock,
+        id: "test-model",
+        base_url: "http://localhost:8001/v1"
+      }
+
+      opts = []
 
       assert {:ok, processed} = Options.process(MockProvider, :chat, model, opts)
       assert processed[:base_url] == "http://localhost:8001/v1"
