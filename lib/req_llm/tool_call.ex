@@ -36,13 +36,19 @@ defmodule ReqLLM.ToolCall do
       }
   """
 
-  use TypedStruct
+  @schema Zoi.struct(__MODULE__, %{
+            id: Zoi.string(),
+            type: Zoi.string() |> Zoi.default("function"),
+            function: Zoi.map()
+          })
 
-  typedstruct enforce: true do
-    field(:id, String.t(), enforce: true)
-    field(:type, String.t(), default: "function", enforce: true)
-    field(:function, %{name: String.t(), arguments: String.t()}, enforce: true)
-  end
+  @type t :: unquote(Zoi.type_spec(@schema))
+
+  @enforce_keys Zoi.Struct.enforce_keys(@schema)
+  defstruct Zoi.Struct.struct_fields(@schema)
+
+  @doc "Returns the Zoi schema for this module"
+  def schema, do: @schema
 
   @doc """
   Create a new ToolCall with OpenAI-compatible structure.

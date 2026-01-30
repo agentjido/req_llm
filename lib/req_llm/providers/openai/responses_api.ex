@@ -304,7 +304,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     reasoning = encode_reasoning_effort(opts_map[:reasoning_effort])
     service_tier = opts_map[:service_tier] || provider_opts[:service_tier]
 
-    text_format = encode_text_format(provider_opts[:response_format])
+    text_format = encode_text_format(provider_opts[:response_format], provider_opts[:verbosity])
 
     final_input =
       if previous_response_id == nil and reasoning_items != [] do
@@ -768,33 +768,46 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp encode_reasoning_effort(_), do: nil
 
   @doc false
-  def encode_text_format(nil), do: nil
+  def encode_text_format(response_format, verbosity \\ nil)
 
-  def encode_text_format(response_format) when is_map(response_format) do
-    # Extract type - could be atom or string key
+  def encode_text_format(nil, nil), do: nil
+
+  def encode_text_format(nil, verbosity) do
+    %{"verbosity" => normalize_verbosity(verbosity)}
+  end
+
+  def encode_text_format(response_format, verbosity) when is_map(response_format) do
     type = response_format[:type] || response_format["type"]
 
-    case type do
-      "json_schema" ->
-        json_schema = response_format[:json_schema] || response_format["json_schema"]
-        # Schema.to_json handles both keyword lists (converts) and maps (pass-through)
-        schema = ReqLLM.Schema.to_json(json_schema[:schema] || json_schema["schema"])
+    base =
+      case type do
+        "json_schema" ->
+          json_schema = response_format[:json_schema] || response_format["json_schema"]
+          schema = ReqLLM.Schema.to_json(json_schema[:schema] || json_schema["schema"])
 
-        # ResponsesAPI expects a flattened structure:
-        # text.format.{type, name, strict, schema} instead of text.format.json_schema.{name, strict, schema}
-        %{
-          "format" => %{
-            "type" => "json_schema",
-            "name" => json_schema[:name] || json_schema["name"],
-            "strict" => json_schema[:strict] || json_schema["strict"],
-            "schema" => schema
+          %{
+            "format" => %{
+              "type" => "json_schema",
+              "name" => json_schema[:name] || json_schema["name"],
+              "strict" => json_schema[:strict] || json_schema["strict"],
+              "schema" => schema
+            }
           }
-        }
 
-      _ ->
-        nil
+        _ ->
+          %{}
+      end
+
+    case {base, verbosity} do
+      {b, nil} when map_size(b) == 0 -> nil
+      {b, v} when map_size(b) == 0 -> %{"verbosity" => normalize_verbosity(v)}
+      {b, nil} -> b
+      {b, v} -> Map.put(b, "verbosity", normalize_verbosity(v))
     end
   end
+
+  defp normalize_verbosity(v) when is_atom(v), do: Atom.to_string(v)
+  defp normalize_verbosity(v) when is_binary(v), do: v
 
   defp decode_responses_success({req, resp}) do
     body = ReqLLM.Provider.Utils.ensure_parsed_body(resp.body)

@@ -16,12 +16,7 @@ defmodule ReqLLM.Message do
   (with its reasoning_details) in subsequent requests.
   """
 
-  use TypedStruct
-
-  alias ReqLLM.Message.ContentPart
-  alias ReqLLM.ToolCall
-
-  typedstruct enforce: false, module: ReasoningDetails do
+  defmodule ReasoningDetails do
     @moduledoc """
     Normalized reasoning/thinking data from LLM providers.
 
@@ -35,25 +30,43 @@ defmodule ReqLLM.Message do
     - `provider_data` - Raw provider-specific fields for lossless round-trips
     """
     @derive Jason.Encoder
-    field(:text, String.t())
-    field(:signature, String.t())
-    field(:encrypted?, boolean(), default: false)
-    field(:provider, atom())
-    field(:format, String.t())
-    field(:index, non_neg_integer(), default: 0)
-    field(:provider_data, map(), default: %{})
+
+    @schema Zoi.struct(__MODULE__, %{
+              text: Zoi.string() |> Zoi.nullable() |> Zoi.default(nil),
+              signature: Zoi.string() |> Zoi.nullable() |> Zoi.default(nil),
+              encrypted?: Zoi.boolean() |> Zoi.default(false),
+              provider: Zoi.atom() |> Zoi.nullable() |> Zoi.default(nil),
+              format: Zoi.string() |> Zoi.nullable() |> Zoi.default(nil),
+              index: Zoi.integer() |> Zoi.default(0),
+              provider_data: Zoi.map() |> Zoi.default(%{})
+            })
+
+    @type t :: unquote(Zoi.type_spec(@schema))
+
+    @enforce_keys Zoi.Struct.enforce_keys(@schema)
+    defstruct Zoi.Struct.struct_fields(@schema)
+
+    def schema, do: @schema
   end
 
   @derive Jason.Encoder
-  typedstruct enforce: true do
-    field(:role, :user | :assistant | :system | :tool, enforce: true)
-    field(:content, [ContentPart.t()], default: [])
-    field(:name, String.t() | nil, default: nil)
-    field(:tool_call_id, String.t() | nil, default: nil)
-    field(:tool_calls, [ToolCall.t()] | nil, default: nil)
-    field(:metadata, map(), default: %{})
-    field(:reasoning_details, [ReasoningDetails.t()] | nil, default: nil)
-  end
+
+  @schema Zoi.struct(__MODULE__, %{
+            role: Zoi.enum([:user, :assistant, :system, :tool]),
+            content: Zoi.list(Zoi.any()) |> Zoi.default([]),
+            name: Zoi.string() |> Zoi.nullable() |> Zoi.default(nil),
+            tool_call_id: Zoi.string() |> Zoi.nullable() |> Zoi.default(nil),
+            tool_calls: Zoi.list(Zoi.any()) |> Zoi.nullable() |> Zoi.default(nil),
+            metadata: Zoi.map() |> Zoi.default(%{}),
+            reasoning_details: Zoi.list(Zoi.any()) |> Zoi.nullable() |> Zoi.default(nil)
+          })
+
+  @type t :: unquote(Zoi.type_spec(@schema))
+
+  @enforce_keys Zoi.Struct.enforce_keys(@schema)
+  defstruct Zoi.Struct.struct_fields(@schema)
+
+  def schema, do: @schema
 
   @spec valid?(t()) :: boolean()
   def valid?(%__MODULE__{content: content}) when is_list(content), do: true
