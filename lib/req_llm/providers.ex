@@ -5,7 +5,17 @@ defmodule ReqLLM.Providers do
   Automatically discovers all modules implementing ReqLLM.Provider
   behaviour at startup and stores provider_id → module mapping.
 
-  External packages can register custom providers via `register/1`:
+  ## Custom Providers
+
+  External packages can register custom providers via configuration:
+
+      # In config/config.exs
+      config :req_llm, :custom_providers, [MyApp.CustomProvider]
+
+  Custom providers are loaded automatically at application startup alongside
+  the built-in providers.
+
+  Alternatively, you can register providers at runtime via `register/1`:
 
       defmodule MyApp.Application do
         def start(_type, _args) do
@@ -18,10 +28,13 @@ defmodule ReqLLM.Providers do
   @registry_key :req_llm_providers
 
   def initialize do
-    providers = discover_providers()
+    builtin_providers = discover_providers()
+    custom_providers = Application.get_env(:req_llm, :custom_providers, [])
+
+    all_providers = builtin_providers ++ custom_providers
 
     registry =
-      for module <- providers,
+      for module <- all_providers,
           {:ok, provider_id} <- [get_provider_id(module)],
           into: %{} do
         {provider_id, module}
@@ -120,14 +133,14 @@ defmodule ReqLLM.Providers do
       get_provider_id(module)
     else
       {:error,
-       ReqLLM.Error.Invalid.exception(
+       ReqLLM.Error.Invalid.Provider.exception(
          message: "Module #{inspect(module)} does not implement ReqLLM.Provider behaviour"
        )}
     end
   rescue
     error ->
       {:error,
-       ReqLLM.Error.Invalid.exception(
+       ReqLLM.Error.Invalid.Provider.exception(
          message: "Failed to validate provider module #{inspect(module)}: #{inspect(error)}"
        )}
   end

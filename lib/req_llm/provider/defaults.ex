@@ -9,9 +9,10 @@ defmodule ReqLLM.Provider.Defaults do
   ## Usage
 
       defmodule MyProvider do
-        @behaviour ReqLLM.Provider
-        use ReqLLM.Provider.DSL, [...]
-        use ReqLLM.Provider.Defaults
+        use ReqLLM.Provider,
+          id: :myprovider,
+          default_base_url: "https://api.example.com/v1",
+          default_env_key: "MYPROVIDER_API_KEY"
 
         # All default implementations are available and overridable
         # Override only what you need to customize
