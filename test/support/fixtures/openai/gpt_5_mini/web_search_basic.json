@@ -69,7 +69,7 @@
           }
         }
       ],
-      "id": "resp_07f02f129157fb9f00697997270f68819eadf952356c27a625",
+      "id": "resp_06661dbd7f86541200697c0475ddc48190a7b9a3e4c9bfeb09",
       "temperature": 1.0,
       "max_output_tokens": 128000,
       "user": null,
@@ -77,87 +77,59 @@
       "error": null,
       "model": "gpt-5-mini-2025-08-07",
       "usage": {
-        "input_tokens": 18607,
+        "input_tokens": 12514,
         "input_tokens_details": {
-          "cached_tokens": 3712
+          "cached_tokens": 0
         },
-        "output_tokens": 1464,
+        "output_tokens": 930,
         "output_tokens_details": {
-          "reasoning_tokens": 1216
+          "reasoning_tokens": 768
         },
-        "total_tokens": 20071
+        "total_tokens": 13444
       },
       "safety_identifier": null,
       "object": "response",
       "parallel_tool_calls": true,
       "output": [
         {
-          "id": "rs_07f02f129157fb9f00697997274940819e9ed844d5980b105c",
+          "id": "rs_06661dbd7f86541200697c047766c481908116dd292ceca5e3",
           "summary": [],
           "type": "reasoning"
         },
         {
           "action": {
             "queries": [
-              "recent AI model announcement January 2026 'announced' 'AI model' '2026'",
-              "new AI model announced January 2026 'announced' 'model' 'AI' 'press release'",
-              "latest AI model announcement January 2026 'released' 'announced' 'AI'"
+              "AI model announcement January 2026 'announced' 'model' '2026'",
+              "OpenAI new model announcement 2026 'announced' 'model' '2026' site:openai.com",
+              "Google new AI model announcement 2026 'announced' 'model' '2026'"
             ],
-            "query": "recent AI model announcement January 2026 'announced' 'AI model' '2026'",
+            "query": "AI model announcement January 2026 'announced' 'model' '2026'",
             "type": "search"
           },
-          "id": "ws_07f02f129157fb9f006979972a96a4819e87891706d3f4f0c8",
+          "id": "ws_06661dbd7f86541200697c0479b0348190a20b8adc7ea89d83",
           "status": "completed",
           "type": "web_search_call"
         },
         {
-          "id": "rs_07f02f129157fb9f006979972cd9c0819e81500016fbba1deb",
-          "summary": [],
-          "type": "reasoning"
-        },
-        {
-          "action": {
-            "type": "open_page",
-            "url": "https://en.wikipedia.org/wiki/LTX-2"
-          },
-          "id": "ws_07f02f129157fb9f006979972e14fc819e84b8db42b22f9da5",
-          "status": "completed",
-          "type": "web_search_call"
-        },
-        {
-          "id": "rs_07f02f129157fb9f006979972ec0b0819ea9bdfb1f1459507c",
+          "id": "rs_06661dbd7f86541200697c047b928481909a45387a0655ed2e",
           "summary": [],
           "type": "reasoning"
         },
         {
           "action": {
             "queries": [
-              "Lightricks open sources LTX-2 January 2026 press release 'LTX-2 open source'",
-              "Lightricks open-source LTX-2 released January 2026 'LTX-2 open-source' 'January 2026' 'press'"
+              "Lightricks LTX-2 open source January 2026 LTX-2 announcement press release",
+              "LTX-2 open source Lightricks 'LTX-2' 'January 2026' 'open source'"
             ],
-            "query": "Lightricks open sources LTX-2 January 2026 press release 'LTX-2 open source'",
+            "query": "Lightricks LTX-2 open source January 2026 LTX-2 announcement press release",
             "type": "search"
           },
-          "id": "ws_07f02f129157fb9f00697997304d30819ebc92165e4674f7af",
+          "id": "ws_06661dbd7f86541200697c047dd41881909c8ac2ba4f43b0f0",
           "status": "completed",
           "type": "web_search_call"
         },
         {
-          "id": "rs_07f02f129157fb9f006979973230c0819ea2e75c40d66e3151",
-          "summary": [],
-          "type": "reasoning"
-        },
-        {
-          "action": {
-            "type": "open_page",
-            "url": "https://rss.globenewswire.com/news-release/2026/01/06/3213304/0/en/Lightricks-Open-Sources-LTX-2-the-First-Production-Ready-Audio-and-Video-Generation-Model-With-Truly-Open-Weights.html"
-          },
-          "id": "ws_07f02f129157fb9f0069799735c994819e9227abb523c5aa98",
-          "status": "completed",
-          "type": "web_search_call"
-        },
-        {
-          "id": "rs_07f02f129157fb9f00697997371a38819eba41c444dee15e4f",
+          "id": "rs_06661dbd7f86541200697c047f7b80819089b164f4ace8c78f",
           "summary": [],
           "type": "reasoning"
         },
@@ -166,26 +138,19 @@
             {
               "annotations": [
                 {
-                  "end_index": 311,
-                  "start_index": 99,
+                  "end_index": 407,
+                  "start_index": 181,
                   "title": "Lightricks Open-Sources LTX-2, the First Production-Ready",
                   "type": "url_citation",
-                  "url": "https://rss.globenewswire.com/news-release/2026/01/06/3213304/0/en/Lightricks-Open-Sources-LTX-2-the-First-Production-Ready-Audio-and-Video-Generation-Model-With-Truly-Open-Weights.html"
-                },
-                {
-                  "end_index": 815,
-                  "start_index": 603,
-                  "title": "Lightricks Open-Sources LTX-2, the First Production-Ready",
-                  "type": "url_citation",
-                  "url": "https://rss.globenewswire.com/news-release/2026/01/06/3213304/0/en/Lightricks-Open-Sources-LTX-2-the-First-Production-Ready-Audio-and-Video-Generation-Model-With-Truly-Open-Weights.html"
+                  "url": "https://www.globenewswire.com/news-release/2026/01/06/3213304/0/en/Lightricks-Open-Sources-LTX-2-the-First-Production-Ready-Audio-and-Video-Generation-Model-With-Truly-Open-Weights.html?utm_source=openai"
                 }
               ],
               "logprobs": [],
-              "text": "One recent announcement: Lightricks announced the open-source release of LTX-2 on January 6, 2026. ([rss.globenewswire.com](https://rss.globenewswire.com/news-release/2026/01/06/3213304/0/en/Lightricks-Open-Sources-LTX-2-the-First-Production-Ready-Audio-and-Video-Generation-Model-With-Truly-Open-Weights.html))\n\nBrief summary: LTX-2 is a production-ready audio+video foundation model that Lightricks says can generate synchronized audio and video at native 4K (up to 50 fps) for clips up to ~20 seconds, and the company released the model weights, training code, and tooling as an open-source package. ([rss.globenewswire.com](https://rss.globenewswire.com/news-release/2026/01/06/3213304/0/en/Lightricks-Open-Sources-LTX-2-the-First-Production-Ready-Audio-and-Video-Generation-Model-With-Truly-Open-Weights.html))",
+              "text": "One recent announcement: Lightricks announced the open-source release of LTX-2 — a production-ready audio+video generation model (open weights, training code) — on January 6, 2026. ([globenewswire.com](https://www.globenewswire.com/news-release/2026/01/06/3213304/0/en/Lightricks-Open-Sources-LTX-2-the-First-Production-Ready-Audio-and-Video-Generation-Model-With-Truly-Open-Weights.html?utm_source=openai))",
               "type": "output_text"
             }
           ],
-          "id": "msg_07f02f129157fb9f006979973d5478819eba274a4810408b4b",
+          "id": "msg_06661dbd7f86541200697c0484d3708190ade0a7be47897b28",
           "role": "assistant",
           "status": "completed",
           "type": "message"
@@ -199,7 +164,7 @@
         "effort": "medium",
         "summary": null
       },
-      "completed_at": 1769576254,
+      "completed_at": 1769735301,
       "truncation": "disabled",
       "top_p": 1.0,
       "billing": {
@@ -208,7 +173,7 @@
       "prompt_cache_retention": null,
       "metadata": {},
       "prompt_cache_key": null,
-      "created_at": 1769576231,
+      "created_at": 1769735285,
       "max_tool_calls": null
     },
     "headers": {
@@ -219,7 +184,7 @@
         "DYNAMIC"
       ],
       "cf-ray": [
-        "9c4de853ac96679a-SJC"
+        "9c5d137daf62cfac-SJC"
       ],
       "connection": [
         "keep-alive"
@@ -228,13 +193,13 @@
         "application/json"
       ],
       "date": [
-        "Wed, 28 Jan 2026 04:57:35 GMT"
+        "Fri, 30 Jan 2026 01:08:22 GMT"
       ],
       "openai-organization": [
         "elani-dev"
       ],
       "openai-processing-ms": [
-        "23917"
+        "16248"
       ],
       "openai-project": [
         "proj_7xm0tTbe0BtZ6VvGnyNl81DN"
@@ -246,8 +211,8 @@
         "cloudflare"
       ],
       "set-cookie": [
-        "__cf_bm=yk2hxZw4GBUCjARTk1YRwqOI4KzSG_6MYyEykDmmCE4-1769576255-1.0.1.1-oE7ERaiZzmobwBIl7TgcErONEjJmy1a97RlIgWQ8uFnMlS2gkiHE2LHFyOJjAESGuD4mdzFiqZKaRsTthqbC7I9aZIQaMW76CNAjN4UxhMA; path=/; expires=Wed, 28-Jan-26 05:27:35 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
-        "_cfuvid=Sa_l5akyF_Wrww9O890kqMyNnt.5WNt82sXVeTKCm9U-1769576255002-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        "__cf_bm=RRbyvKPYK1MIZPr3pghNx_dGsE1xCa0.PC4woatJ_94-1769735302-1.0.1.1-rFFNFFE3U8xENoWgoNHOWPY4OwEECKzNuN98Jl2UOWz37IJJYGI.YtD8qPUg4BnYojA2bgKSZuU1H5Ekw.NzMoY8aGhtZAwIlHFyVFIHC_M; path=/; expires=Fri, 30-Jan-26 01:38:22 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+        "_cfuvid=nZmhDplyBOIHcIQug7HThY6i2yEzZ12iMWs0vtk052g-1769735302131-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
       ],
       "strict-transport-security": [
         "max-age=31536000; includeSubDomains; preload"
@@ -268,16 +233,16 @@
         "499"
       ],
       "x-ratelimit-remaining-tokens": [
-        "484780"
+        "491407"
       ],
       "x-ratelimit-reset-requests": [
         "120ms"
       ],
       "x-ratelimit-reset-tokens": [
-        "1.826s"
+        "1.031s"
       ],
       "x-request-id": [
-        "req_2e832a6069b44c099f06a4a47625bbdc"
+        "req_a5a76c40b7d94c73a20c7abb2e0c49a7"
       ]
     },
     "status": 200

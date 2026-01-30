@@ -557,8 +557,24 @@ defmodule ReqLLM.Providers.XAI do
     {translated_opts, _warnings} = translate_options(:chat, model, opts)
     base_url = ReqLLM.Provider.Options.effective_base_url(__MODULE__, model, translated_opts)
     opts_with_base_url = Keyword.put(translated_opts, :base_url, base_url)
+    use_responses = use_responses_api?(opts_with_base_url)
 
-    if use_responses_api?(opts_with_base_url) do
+    opts_with_base_url =
+      if use_responses do
+        tools = List.wrap(Keyword.get(opts_with_base_url, :tools, []))
+        xai_tools = List.wrap(Keyword.get(opts_with_base_url, :xai_tools, []))
+        merged_tools = tools ++ xai_tools
+
+        if merged_tools == [] do
+          opts_with_base_url
+        else
+          Keyword.put(opts_with_base_url, :tools, merged_tools)
+        end
+      else
+        opts_with_base_url
+      end
+
+    if use_responses do
       ReqLLM.Providers.OpenAI.ResponsesAPI.attach_stream(
         model,
         context,
@@ -744,10 +760,17 @@ defmodule ReqLLM.Providers.XAI do
 
   @impl ReqLLM.Provider
   def decode_stream_event(event, model) do
+    {chunks, _state} = decode_stream_event(event, model, nil)
+    chunks
+  end
+
+  @impl ReqLLM.Provider
+  def decode_stream_event(event, model, state) do
     if responses_stream_event?(event) do
-      ReqLLM.Providers.OpenAI.ResponsesAPI.decode_stream_event(event, model)
+      ReqLLM.Providers.OpenAI.ResponsesAPI.decode_stream_event(event, model, state)
     else
-      ReqLLM.Provider.Defaults.default_decode_stream_event(event, model)
+      chunks = ReqLLM.Provider.Defaults.default_decode_stream_event(event, model)
+      {chunks, state}
     end
   end
 

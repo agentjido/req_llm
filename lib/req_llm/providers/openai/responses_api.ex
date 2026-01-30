@@ -205,6 +205,138 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   def decode_stream_event(_event, _model), do: []
 
+  def decode_stream_event(event, model, state) do
+    state = ensure_stream_state(state)
+    {event_type, data} = stream_event_type(event)
+    state = track_web_search_call(state, event_type, data)
+    chunks = decode_stream_event(event, model)
+    {updated_chunks, updated_state} = merge_web_search_usage_into_chunks(chunks, state)
+    {updated_chunks, updated_state}
+  end
+
+  def init_stream_state do
+    %{web_search_call_ids: MapSet.new(), usage_emitted?: false}
+  end
+
+  defp ensure_stream_state(nil), do: init_stream_state()
+  defp ensure_stream_state(state), do: state
+
+  defp stream_event_type(%{data: data} = event) when is_map(data) do
+    type = Map.get(event, :event) || Map.get(event, "event") || data["event"] || data["type"]
+    {type, data}
+  end
+
+  defp stream_event_type(_event), do: {nil, nil}
+
+  defp track_web_search_call(state, "response.output_item.added", %{"item" => item})
+       when is_map(item) do
+    maybe_add_web_search_call_from_item(state, item)
+  end
+
+  defp track_web_search_call(state, "response.output_item.added", %{item: item})
+       when is_map(item) do
+    maybe_add_web_search_call_from_item(state, item)
+  end
+
+  defp track_web_search_call(state, "response.output_item.done", %{"item" => item})
+       when is_map(item) do
+    maybe_add_web_search_call_from_item(state, item)
+  end
+
+  defp track_web_search_call(state, "response.output_item.done", %{item: item})
+       when is_map(item) do
+    maybe_add_web_search_call_from_item(state, item)
+  end
+
+  defp track_web_search_call(state, event_type, data)
+       when is_binary(event_type) and is_map(data) do
+    if String.starts_with?(event_type, "response.web_search_call.") do
+      maybe_add_web_search_call_id(state, extract_web_search_call_id(data))
+    else
+      state
+    end
+  end
+
+  defp track_web_search_call(state, _event_type, _data), do: state
+
+  defp maybe_add_web_search_call_from_item(state, item) do
+    item_type = item["type"] || item[:type]
+
+    if item_type == "web_search_call" do
+      maybe_add_web_search_call_id(state, extract_web_search_call_id(item))
+    else
+      state
+    end
+  end
+
+  defp extract_web_search_call_id(data) when is_map(data) do
+    data["id"] || data[:id] || data["call_id"] || data[:call_id] || data["item_id"] ||
+      data[:item_id] || get_in(data, ["web_search_call", "id"]) ||
+      get_in(data, ["web_search_call", "call_id"]) ||
+      get_in(data, [:web_search_call, :id]) || get_in(data, [:web_search_call, :call_id]) ||
+      get_in(data, ["item", "id"]) || get_in(data, [:item, :id])
+  end
+
+  defp maybe_add_web_search_call_id(state, nil), do: state
+
+  defp maybe_add_web_search_call_id(state, id) do
+    ids = Map.get(state, :web_search_call_ids, MapSet.new())
+    %{state | web_search_call_ids: MapSet.put(ids, id)}
+  end
+
+  defp merge_web_search_usage_into_chunks(chunks, state) do
+    count = web_search_call_count(state)
+
+    {updated_chunks, usage_emitted?} =
+      Enum.map_reduce(chunks, Map.get(state, :usage_emitted?, false), fn
+        %ReqLLM.StreamChunk{type: :meta, metadata: meta} = chunk, emitted? ->
+          {updated_meta, updated_emitted?} =
+            maybe_merge_web_search_usage(meta || %{}, count, emitted?)
+
+          {%{chunk | metadata: updated_meta}, updated_emitted?}
+
+        chunk, emitted? ->
+          {chunk, emitted?}
+      end)
+
+    {updated_chunks, %{state | usage_emitted?: usage_emitted?}}
+  end
+
+  defp web_search_call_count(state) do
+    ids = Map.get(state, :web_search_call_ids, MapSet.new())
+    if is_struct(ids, MapSet), do: MapSet.size(ids), else: 0
+  end
+
+  defp maybe_merge_web_search_usage(meta, count, emitted?) when is_map(meta) and count > 0 do
+    cond do
+      Map.has_key?(meta, :usage) or Map.has_key?(meta, "usage") ->
+        usage = Map.get(meta, :usage) || Map.get(meta, "usage") || %{}
+        updated_usage = merge_web_search_usage(usage, count)
+        {Map.put(meta, :usage, updated_usage), true}
+
+      Map.get(meta, :terminal?) == true and not emitted? ->
+        updated_usage = merge_web_search_usage(%{}, count)
+        {Map.put(meta, :usage, updated_usage), true}
+
+      true ->
+        {meta, emitted?}
+    end
+  end
+
+  defp maybe_merge_web_search_usage(meta, _count, emitted?), do: {meta, emitted?}
+
+  defp merge_web_search_usage(usage, count)
+       when is_map(usage) and is_number(count) and count > 0 do
+    tool_usage = Map.get(usage, :tool_usage) || Map.get(usage, "tool_usage") || %{}
+    existing = Map.get(tool_usage, :web_search) || Map.get(tool_usage, "web_search") || %{}
+    existing_count = Map.get(existing, :count) || Map.get(existing, "count") || 0
+    final_count = max(existing_count, count)
+    updated_tool_usage = Map.put(tool_usage, :web_search, %{count: final_count, unit: :call})
+    Map.put(usage, :tool_usage, updated_tool_usage)
+  end
+
+  defp merge_web_search_usage(usage, _count), do: usage
+
   # ========================================================================
   # Shared Request Building Helpers (used by both encode_body and attach_stream)
   # ========================================================================
@@ -1134,9 +1266,42 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp count_web_search_calls(response_data) do
     output = response_data["output"] || response_data[:output] || []
 
-    Enum.count(output, fn item ->
-      (item["type"] || item[:type]) == "web_search_call"
-    end)
+    count =
+      Enum.count(output, fn item ->
+        (item["type"] || item[:type]) == "web_search_call"
+      end)
+
+    if count > 0 do
+      count
+    else
+      extract_web_search_calls_from_usage(response_data)
+    end
+  end
+
+  defp extract_web_search_calls_from_usage(response_data) do
+    usage = response_data["usage"] || response_data[:usage] || %{}
+
+    details =
+      Map.get(usage, "server_side_tool_usage_details") ||
+        Map.get(usage, :server_side_tool_usage_details) ||
+        Map.get(usage, "server_side_tool_usage") ||
+        Map.get(usage, :server_side_tool_usage) ||
+        %{}
+
+    calls = Map.get(details, "web_search_calls") || Map.get(details, :web_search_calls)
+
+    if is_number(calls) and calls > 0 do
+      calls
+    else
+      server_tool_use =
+        Map.get(usage, "server_tool_use") || Map.get(usage, :server_tool_use) || %{}
+
+      server_calls =
+        Map.get(server_tool_use, "web_search_requests") ||
+          Map.get(server_tool_use, :web_search_requests)
+
+      if is_number(server_calls) and server_calls > 0, do: server_calls, else: 0
+    end
   end
 
   defp normalize_finish_reason("stop"), do: :stop

@@ -563,10 +563,17 @@ defmodule ReqLLM.Providers.OpenAI do
   """
   @impl ReqLLM.Provider
   def decode_stream_event(event, model) do
+    {chunks, _state} = decode_stream_event(event, model, nil)
+    chunks
+  end
+
+  @impl ReqLLM.Provider
+  def decode_stream_event(event, model, state) do
     if get_api_type(model) == "responses" do
-      ReqLLM.Providers.OpenAI.ResponsesAPI.decode_stream_event(event, model)
+      ReqLLM.Providers.OpenAI.ResponsesAPI.decode_stream_event(event, model, state)
     else
-      ReqLLM.Providers.OpenAI.ChatAPI.decode_stream_event(event, model)
+      chunks = ReqLLM.Providers.OpenAI.ChatAPI.decode_stream_event(event, model)
+      {chunks, state}
     end
   end
 
