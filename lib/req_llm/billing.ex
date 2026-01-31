@@ -79,7 +79,8 @@ defmodule ReqLLM.Billing do
       total: total_cost,
       line_items: line_items,
       input_cost: token_costs.input_cost,
-      output_cost: token_costs.output_cost
+      output_cost: token_costs.output_cost,
+      reasoning_cost: token_costs.reasoning_cost
     }
   end
 
@@ -216,12 +217,17 @@ defmodule ReqLLM.Billing do
       |> Enum.filter(&token_input_item?/1)
       |> Enum.reduce(0.0, fn item, acc -> Float.round(acc + item.cost, 6) end)
 
+    reasoning_cost =
+      line_items
+      |> Enum.filter(&token_reasoning_item?/1)
+      |> Enum.reduce(0.0, fn item, acc -> Float.round(acc + item.cost, 6) end)
+
     output_cost =
       line_items
       |> Enum.filter(&token_output_item?/1)
       |> Enum.reduce(0.0, fn item, acc -> Float.round(acc + item.cost, 6) end)
 
-    %{input_cost: input_cost, output_cost: output_cost}
+    %{input_cost: input_cost, output_cost: output_cost, reasoning_cost: reasoning_cost}
   end
 
   defp token_input_item?(%{id: id}) when is_binary(id) do
@@ -229,6 +235,12 @@ defmodule ReqLLM.Billing do
   end
 
   defp token_input_item?(_), do: false
+
+  defp token_reasoning_item?(%{id: id}) when is_binary(id) do
+    String.starts_with?(id, "token.reasoning")
+  end
+
+  defp token_reasoning_item?(_), do: false
 
   defp token_output_item?(%{id: id}) when is_binary(id) do
     String.starts_with?(id, "token.output") or String.starts_with?(id, "token.reasoning")

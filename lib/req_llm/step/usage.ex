@@ -64,6 +64,7 @@ defmodule ReqLLM.Step.Usage do
           Map.merge(meta, %{
             input_cost: cost_breakdown.input_cost,
             output_cost: cost_breakdown.output_cost,
+            reasoning_cost: cost_breakdown.reasoning_cost,
             total_cost: cost_breakdown.total_cost
           })
         else

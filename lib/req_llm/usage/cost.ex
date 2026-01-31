@@ -35,6 +35,7 @@ defmodule ReqLLM.Usage.Cost do
            %{
              input_cost: cost.input_cost,
              output_cost: cost.output_cost,
+             reasoning_cost: cost.reasoning_cost,
              total_cost: cost.total,
              cost: cost
            }}
@@ -57,6 +58,7 @@ defmodule ReqLLM.Usage.Cost do
       |> Map.put(:cost, cost_breakdown.cost)
       |> Map.put(:input_cost, cost_breakdown.input_cost)
       |> Map.put(:output_cost, cost_breakdown.output_cost)
+      |> Map.put(:reasoning_cost, cost_breakdown.reasoning_cost)
 
     if Keyword.get(opts, :preserve_total_cost, false) do
       Map.put_new(usage, :total_cost, cost_breakdown.total_cost)

@@ -141,4 +141,54 @@ defmodule ReqLLM.BillingTest do
     assert cost.tokens == 0.00074
     assert cost.total == 0.00074
   end
+
+  test "calculates reasoning_cost separately when token.reasoning component exists" do
+    model = %LLMDB.Model{
+      provider: :test,
+      id: "m1",
+      pricing: %{
+        components: [
+          %{id: "token.input", kind: "token", per: 1_000_000, rate: 1.0},
+          %{id: "token.output", kind: "token", per: 1_000_000, rate: 2.0},
+          %{id: "token.reasoning", kind: "token", per: 1_000_000, rate: 3.0}
+        ]
+      }
+    }
+
+    usage = %{
+      input_tokens: 1_000_000,
+      output_tokens: 500_000,
+      reasoning_tokens: 200_000
+    }
+
+    assert {:ok, cost} = Billing.calculate(usage, model)
+    assert cost.input_cost == 1.0
+    assert cost.output_cost == 1.6
+    assert cost.reasoning_cost == 0.6
+    assert cost.total == 2.6
+  end
+
+  test "reasoning_cost is zero when no reasoning tokens" do
+    model = %LLMDB.Model{
+      provider: :test,
+      id: "m1",
+      pricing: %{
+        components: [
+          %{id: "token.input", kind: "token", per: 1_000_000, rate: 1.0},
+          %{id: "token.output", kind: "token", per: 1_000_000, rate: 2.0}
+        ]
+      }
+    }
+
+    usage = %{
+      input_tokens: 1_000_000,
+      output_tokens: 500_000
+    }
+
+    assert {:ok, cost} = Billing.calculate(usage, model)
+    assert cost.input_cost == 1.0
+    assert cost.output_cost == 1.0
+    assert cost.reasoning_cost == 0.0
+    assert cost.total == 2.0
+  end
 end
