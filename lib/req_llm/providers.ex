@@ -28,7 +28,21 @@ defmodule ReqLLM.Providers do
       end
 
     :persistent_term.put(@registry_key, registry)
+
+    load_custom_providers()
+
     :ok
+  end
+
+  defp load_custom_providers do
+    custom_providers = Application.get_env(:req_llm, :custom_providers, [])
+
+    Enum.each(custom_providers, fn module ->
+      case register(module) do
+        {:ok, _provider_id} -> :ok
+        {:error, _error} -> :ok
+      end
+    end)
   end
 
   def get(provider_id) when is_atom(provider_id) do
@@ -120,14 +134,14 @@ defmodule ReqLLM.Providers do
       get_provider_id(module)
     else
       {:error,
-       ReqLLM.Error.Invalid.exception(
+       ReqLLM.Error.Invalid.Provider.exception(
          message: "Module #{inspect(module)} does not implement ReqLLM.Provider behaviour"
        )}
     end
   rescue
     error ->
       {:error,
-       ReqLLM.Error.Invalid.exception(
+       ReqLLM.Error.Invalid.Provider.exception(
          message: "Failed to validate provider module #{inspect(module)}: #{inspect(error)}"
        )}
   end

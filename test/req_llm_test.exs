@@ -21,6 +21,27 @@ defmodule ReqLLMTest do
     end
   end
 
+  describe "model/1 with map-based specs (custom providers)" do
+    test "creates model from map with id and provider" do
+      assert {:ok, %LLMDB.Model{provider: :custom, id: "my-model"}} =
+               ReqLLM.model(%{id: "my-model", provider: :custom})
+    end
+
+    test "creates model from map with string keys" do
+      assert {:ok, %LLMDB.Model{provider: :acme, id: "acme-chat"}} =
+               ReqLLM.model(%{"id" => "acme-chat", "provider" => :acme})
+    end
+
+    test "passes through existing LLMDB.Model struct unchanged" do
+      model = LLMDB.Model.new!(%{id: "test-model", provider: :test})
+      assert {:ok, ^model} = ReqLLM.model(model)
+    end
+
+    test "returns error for map missing required fields" do
+      assert {:error, _} = ReqLLM.model(%{id: "no-provider"})
+    end
+  end
+
   describe "provider/1 top-level API" do
     test "returns provider module for valid provider" do
       assert {:ok, ReqLLM.Providers.Groq} = ReqLLM.provider(:groq)

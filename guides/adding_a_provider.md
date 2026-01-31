@@ -78,14 +78,50 @@ Prefer `use ReqLLM.Provider.Defaults` to get robust OpenAI-style defaults and ov
 
 ### Registering Custom Providers
 
-If you are developing a provider outside of the `req_llm` library (e.g., in your own application), you must register it as a custom provider in your application configuration so `req_llm` can discover it.
+If you are developing a provider outside of the `req_llm` library (e.g., in your own application), you must register it so `req_llm` can discover it.
+
+**Option 1: Config-based registration (recommended)**
 
 Add the module to your `config.exs`:
 ```elixir
 # In config/config.exs
-config :req_llm, :custom_providers, [ReqLLM.Providers.Acme]
+config :req_llm, :custom_providers, [MyApp.Providers.Acme]
 ```
-This tells `req_llm` to load `ReqLLM.Providers.Acme` as a valid provider module alongside its built-in providers.
+
+This tells ReqLLM to automatically load your provider at application startup.
+
+**Option 2: Manual registration in Application.start/2**
+
+```elixir
+defmodule MyApp.Application do
+  use Application
+
+  def start(_type, _args) do
+    ReqLLM.Providers.register(MyApp.Providers.Acme)
+    # ... rest of supervision tree
+  end
+end
+```
+
+### Using Custom Provider Models
+
+Custom providers are **not** in the LLMDB catalog, so you cannot use string specs like `"acme:model-name"`. Instead, use map-based model specs:
+
+```elixir
+{:ok, model} = ReqLLM.model(%{id: "acme-chat-mini", provider: :acme})
+{:ok, response} = ReqLLM.generate_text(model, "Hello!")
+```
+
+Or pass the model struct directly:
+
+```elixir
+model = LLMDB.Model.new!(%{id: "acme-chat-mini", provider: :acme})
+{:ok, response} = ReqLLM.generate_text(model, "Hello!")
+```
+
+> **Note**: The `mix mc` (model compatibility) task is for validating models in the LLMDB catalog. It does not apply to custom providers.
+
+> **Version Note**: The `mix mc` alias requires ReqLLM >= 1.1. If you see `** (Mix) The task "mc" could not be found`, use `mix req_llm.model_compat` instead, or upgrade ReqLLM.
 
 ## Core Implementation
 
