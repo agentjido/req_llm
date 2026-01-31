@@ -27,6 +27,12 @@ Passed via `:provider_options` keyword:
 - **Example**: `provider_options: [google_grounding: %{enable: true}]`
 - **Cost tracking**: Usage tracked in `response.usage.tool_usage.web_search` with `unit: "query"`
 
+### `google_url_context`
+- **Type**: `boolean` | `map`
+- **Purpose**: Enable URL context grounding - allows model to fetch and use content from specific URLs
+- **Example**: `provider_options: [google_url_context: true]`
+- **Note**: Requires v1beta (default)
+
 ### `google_thinking_budget`
 - **Type**: Non-negative integer
 - **Purpose**: Control thinking tokens for Gemini 2.5 models

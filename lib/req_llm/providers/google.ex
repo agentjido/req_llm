@@ -105,6 +105,11 @@ defmodule ReqLLM.Providers.Google do
       doc:
         "Enable Google Search grounding - allows model to search the web. Set to %{enable: true} for modern models, or %{dynamic_retrieval: %{mode: \"MODE_DYNAMIC\", dynamic_threshold: 0.7}} for Gemini 1.5 legacy support. Requires v1beta (default)."
     ],
+    google_url_context: [
+      type: {:or, [:boolean, :map]},
+      doc:
+        "Enable URL context grounding - allows model to fetch and use content from specific URLs. Pass `true` or a map with options. Requires v1beta (default)."
+    ],
     dimensions: [
       type: :pos_integer,
       doc:
@@ -896,28 +901,30 @@ defmodule ReqLLM.Providers.Google do
 
     tool_config = build_google_tool_config(request.options[:tool_choice])
 
+    grounding_tools = build_grounding_tools(request.options[:google_grounding])
+    url_context_tools = build_url_context_tools(request.options[:google_url_context])
+    builtin_tools = grounding_tools ++ url_context_tools
+
     tools_data =
       case request.options[:tools] do
         tools when is_list(tools) and tools != [] ->
-          grounding_tools = build_grounding_tools(request.options[:google_grounding])
-
           user_tools = [
             %{functionDeclarations: Enum.map(tools, &ReqLLM.Tool.to_schema(&1, :google))}
           ]
 
-          all_tools = grounding_tools ++ user_tools
+          all_tools = builtin_tools ++ user_tools
 
           %{tools: all_tools}
           |> maybe_put(:toolConfig, tool_config)
 
         _ ->
-          case build_grounding_tools(request.options[:google_grounding]) do
+          case builtin_tools do
             [] ->
               %{}
               |> maybe_put(:toolConfig, tool_config)
 
-            grounding_tools ->
-              %{tools: grounding_tools}
+            tools ->
+              %{tools: tools}
               |> maybe_put(:toolConfig, tool_config)
           end
       end
@@ -1340,6 +1347,10 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp build_grounding_tools(_), do: []
+
+  defp build_url_context_tools(true), do: [%{url_context: %{}}]
+  defp build_url_context_tools(%{} = opts), do: [%{url_context: opts}]
+  defp build_url_context_tools(_), do: []
 
   defp extract_grounding_metadata(%{"candidates" => [candidate | _]}) do
     case candidate do

@@ -305,6 +305,115 @@ defmodule ReqLLM.Providers.GoogleTest do
     end
   end
 
+  describe "google_url_context option" do
+    test "encode_body includes url_context tool when boolean true" do
+      {:ok, model} = ReqLLM.model("google:gemini-2.0-flash")
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          google_url_context: true
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      assert is_list(decoded["tools"])
+      assert length(decoded["tools"]) == 1
+      [tool] = decoded["tools"]
+      assert Map.has_key?(tool, "url_context")
+      assert tool["url_context"] == %{}
+    end
+
+    test "encode_body includes url_context tool with map options" do
+      {:ok, model} = ReqLLM.model("google:gemini-2.0-flash")
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          google_url_context: %{some_option: "value"}
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      assert is_list(decoded["tools"])
+      assert length(decoded["tools"]) == 1
+      [tool] = decoded["tools"]
+      assert Map.has_key?(tool, "url_context")
+      assert tool["url_context"] == %{"some_option" => "value"}
+    end
+
+    test "encode_body combines url_context with user tools" do
+      {:ok, model} = ReqLLM.model("google:gemini-2.0-flash")
+      context = context_fixture()
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "test_tool",
+          description: "A test tool",
+          parameter_schema: [
+            name: [type: :string, required: true, doc: "A name parameter"]
+          ],
+          callback: fn _ -> {:ok, "result"} end
+        )
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          tools: [tool],
+          google_url_context: true,
+          operation: :chat
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      assert is_list(decoded["tools"])
+      assert length(decoded["tools"]) == 2
+
+      tool_types = Enum.map(decoded["tools"], fn t -> Map.keys(t) end) |> List.flatten()
+      assert "url_context" in tool_types
+      assert "functionDeclarations" in tool_types
+    end
+
+    test "encode_body combines url_context with grounding" do
+      {:ok, model} = ReqLLM.model("google:gemini-2.0-flash")
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          google_grounding: %{enable: true},
+          google_url_context: true
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      assert is_list(decoded["tools"])
+      assert length(decoded["tools"]) == 2
+
+      tool_types = Enum.map(decoded["tools"], fn t -> Map.keys(t) end) |> List.flatten()
+      assert "url_context" in tool_types
+      assert "google_search" in tool_types
+    end
+  end
+
   describe "response decoding" do
     test "decode_response handles non-streaming responses" do
       # Create a mock Google response
