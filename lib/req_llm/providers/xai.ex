@@ -191,6 +191,7 @@ defmodule ReqLLM.Providers.XAI do
   defp prepare_chat_request(model_spec, prompt, opts) do
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, context} <- ReqLLM.Context.normalize(prompt, opts),
+         :ok <- validate_attachments(context),
          opts_with_context = Keyword.put(opts, :context, context),
          http_opts = Keyword.get(opts, :req_http_options, []),
          {:ok, processed_opts} <-
@@ -1114,4 +1115,14 @@ defmodule ReqLLM.Providers.XAI do
   end
 
   defp maybe_add_additional_properties(schema, false), do: schema
+
+  defp validate_attachments(context) do
+    case ReqLLM.Provider.Defaults.validate_image_only_attachments(context) do
+      :ok ->
+        :ok
+
+      {:error, message} ->
+        {:error, ReqLLM.Error.Invalid.Parameter.exception(parameter: message)}
+    end
+  end
 end

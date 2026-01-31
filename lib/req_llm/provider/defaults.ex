@@ -739,6 +739,42 @@ defmodule ReqLLM.Provider.Defaults do
 
   defp merge_content_metadata(base, _), do: base
 
+  @image_mimes ~w(image/jpeg image/png image/gif image/webp)
+
+  @doc """
+  Validates that a context contains only image file attachments.
+
+  Returns `:ok` if all file attachments are images (JPEG, PNG, GIF, WebP),
+  or `{:error, reason}` with a descriptive message if non-image files are found.
+
+  This is used by providers like OpenAI and xAI that only support image attachments
+  via their Chat Completions API.
+  """
+  @spec validate_image_only_attachments(ReqLLM.Context.t()) :: :ok | {:error, String.t()}
+  def validate_image_only_attachments(%ReqLLM.Context{messages: messages}) do
+    non_image_parts =
+      messages
+      |> Enum.flat_map(fn msg -> msg.content || [] end)
+      |> Enum.filter(fn part ->
+        part.type == :file and part.media_type not in @image_mimes
+      end)
+
+    case non_image_parts do
+      [] ->
+        :ok
+
+      parts ->
+        mimes = parts |> Enum.map(& &1.media_type) |> Enum.uniq() |> Enum.join(", ")
+
+        {:error,
+         "This provider only supports image attachments (JPEG, PNG, GIF, WebP). " <>
+           "Found unsupported file types: #{mimes}. " <>
+           "Consider using Anthropic or Google for document support."}
+    end
+  end
+
+  def validate_image_only_attachments(_), do: :ok
+
   @doc """
   Decodes OpenAI-format response body to ReqLLM.Response.
 

@@ -8,6 +8,11 @@ Access GPT models including standard chat models and reasoning models (o1, o3, G
 OPENAI_API_KEY=sk-...
 ```
 
+## Attachments
+
+OpenAI Chat Completions API only supports image attachments (JPEG, PNG, GIF, WebP).
+For document support (PDFs, etc.), use Anthropic or Google providers.
+
 ## Dual API Architecture
 
 OpenAI provider automatically routes between two APIs based on model metadata:

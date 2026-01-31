@@ -8,6 +8,11 @@ Access Grok models with real-time web search and reasoning capabilities.
 XAI_API_KEY=xai-...
 ```
 
+## Attachments
+
+xAI Chat Completions API only supports image attachments (JPEG, PNG, GIF, WebP).
+For document support (PDFs, etc.), use Anthropic or Google providers.
+
 ## Provider Options
 
 Passed via `:provider_options` keyword:

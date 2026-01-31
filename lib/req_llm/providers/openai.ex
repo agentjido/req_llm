@@ -295,6 +295,7 @@ defmodule ReqLLM.Providers.OpenAI do
   def prepare_request(:chat, model_spec, prompt, opts) do
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, context} <- ReqLLM.Context.normalize(prompt, opts),
+         :ok <- validate_attachments(context),
          opts_with_context = Keyword.put(opts, :context, context),
          http_opts = Keyword.get(opts, :req_http_options, []),
          {:ok, processed_opts} <-
@@ -653,4 +654,14 @@ defmodule ReqLLM.Providers.OpenAI do
   end
 
   defp enforce_strict_schema_requirements(schema), do: schema
+
+  defp validate_attachments(context) do
+    case ReqLLM.Provider.Defaults.validate_image_only_attachments(context) do
+      :ok ->
+        :ok
+
+      {:error, message} ->
+        {:error, ReqLLM.Error.Invalid.Parameter.exception(parameter: message)}
+    end
+  end
 end

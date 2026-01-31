@@ -1120,6 +1120,69 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
   end
 
+  describe "attachment validation" do
+    test "accepts image attachments" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+
+      image_part = ReqLLM.Message.ContentPart.file(<<1, 2, 3>>, "image.png", "image/png")
+      message = %ReqLLM.Message{role: :user, content: [image_part]}
+      context = %ReqLLM.Context{messages: [message]}
+
+      {:ok, _request} = OpenAI.prepare_request(:chat, model, context, [])
+    end
+
+    test "accepts jpeg, gif, and webp attachments" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+
+      for mime <- ~w(image/jpeg image/gif image/webp) do
+        part = ReqLLM.Message.ContentPart.file(<<1, 2, 3>>, "image", mime)
+        message = %ReqLLM.Message{role: :user, content: [part]}
+        context = %ReqLLM.Context{messages: [message]}
+
+        assert {:ok, _request} = OpenAI.prepare_request(:chat, model, context, [])
+      end
+    end
+
+    test "rejects PDF attachments with clear error" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+
+      pdf_part = ReqLLM.Message.ContentPart.file(<<1, 2, 3>>, "doc.pdf", "application/pdf")
+      message = %ReqLLM.Message{role: :user, content: [pdf_part]}
+      context = %ReqLLM.Context{messages: [message]}
+
+      {:error, error} = OpenAI.prepare_request(:chat, model, context, [])
+
+      assert %ReqLLM.Error.Invalid.Parameter{} = error
+      assert error.parameter =~ "only supports image attachments"
+      assert error.parameter =~ "application/pdf"
+      assert error.parameter =~ "Anthropic or Google"
+    end
+
+    test "rejects text file attachments" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+
+      text_part = ReqLLM.Message.ContentPart.file("content", "file.txt", "text/plain")
+      message = %ReqLLM.Message{role: :user, content: [text_part]}
+      context = %ReqLLM.Context{messages: [message]}
+
+      {:error, error} = OpenAI.prepare_request(:chat, model, context, [])
+
+      assert %ReqLLM.Error.Invalid.Parameter{} = error
+      assert error.parameter =~ "text/plain"
+    end
+
+    test "allows mixed text and image content" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+
+      text_part = ReqLLM.Message.ContentPart.text("Describe this image")
+      image_part = ReqLLM.Message.ContentPart.file(<<1, 2, 3>>, "image.png", "image/png")
+      message = %ReqLLM.Message{role: :user, content: [text_part, image_part]}
+      context = %ReqLLM.Context{messages: [message]}
+
+      {:ok, _request} = OpenAI.prepare_request(:chat, model, context, [])
+    end
+  end
+
   describe "ResponsesAPI tool encoding" do
     test "passes through built-in web_search tool definitions" do
       {:ok, model} = ReqLLM.model("openai:gpt-5-nano")
