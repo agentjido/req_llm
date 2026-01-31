@@ -84,6 +84,18 @@ Passed via `:provider_options` keyword:
 - **Purpose**: Number of top log probabilities to return
 - **Example**: `provider_options: [openrouter_top_logprobs: 5]`
 
+### Usage & Plugins
+
+#### `openrouter_usage`
+- **Type**: Map
+- **Purpose**: Configure usage reporting
+- **Example**: `provider_options: [openrouter_usage: %{include: true}]`
+
+#### `openrouter_plugins`
+- **Type**: List of maps
+- **Purpose**: Enable OpenRouter plugins (e.g., web search)
+- **Example**: `provider_options: [openrouter_plugins: [%{id: "web"}]]`
+
 ### App Attribution
 
 #### `app_referer`

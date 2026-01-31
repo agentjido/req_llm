@@ -19,6 +19,8 @@ defmodule ReqLLM.Providers.OpenRouter do
   - `openrouter_min_p` - Minimum probability threshold for sampling
   - `openrouter_top_a` - Top-a sampling parameter
   - `openrouter_structured_output_mode` - Enables `:json_schema` structured output (when tool calls are not supported)
+  - `openrouter_usage` - Usage options (e.g., `%{include: true}`)
+  - `openrouter_plugins` - Array of plugins (e.g., `[%{id: "web"}]`)
   - `app_referer` - HTTP-Referer header for app identification
   - `app_title` - X-Title header for app title in rankings
 
@@ -99,6 +101,14 @@ defmodule ReqLLM.Providers.OpenRouter do
       type: {:in, [:json_schema]},
       doc:
         "Structured output mode. Only :json_schema is supported, which enables JSON schema support instead of using tools. Useful when tool calls are not supported by the endpoint."
+    ],
+    openrouter_usage: [
+      type: :map,
+      doc: "OpenRouter usage options. Example: %{include: true}"
+    ],
+    openrouter_plugins: [
+      type: {:list, :map},
+      doc: "OpenRouter plugins. Example: [%{id: \"web\"}]"
     ]
   ]
 
@@ -295,6 +305,8 @@ defmodule ReqLLM.Providers.OpenRouter do
     |> maybe_put(:top_a, request.options[:openrouter_top_a])
     |> maybe_put(:top_logprobs, request.options[:openrouter_top_logprobs])
     |> maybe_put(:reasoning_effort, request.options[:reasoning_effort])
+    |> maybe_put(:usage, request.options[:openrouter_usage])
+    |> maybe_put(:plugins, request.options[:openrouter_plugins])
     |> add_openrouter_specific_options(request.options)
     |> add_stream_options(request.options)
   end

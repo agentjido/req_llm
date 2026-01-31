@@ -237,6 +237,63 @@ defmodule ReqLLM.Providers.OpenRouterTest do
       assert decoded["stream_options"] == %{"include_usage" => true}
     end
 
+    test "encode_body with openrouter_usage option" do
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          openrouter_usage: %{include: true}
+        ]
+      }
+
+      updated_request = OpenRouter.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      assert decoded["usage"] == %{"include" => true}
+    end
+
+    test "encode_body with openrouter_plugins option" do
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          openrouter_plugins: [%{id: "web"}]
+        ]
+      }
+
+      updated_request = OpenRouter.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      assert decoded["plugins"] == [%{"id" => "web"}]
+    end
+
+    test "encode_body with multiple openrouter_plugins" do
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          openrouter_plugins: [%{id: "web"}, %{id: "code"}]
+        ]
+      }
+
+      updated_request = OpenRouter.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      assert decoded["plugins"] == [%{"id" => "web"}, %{"id" => "code"}]
+    end
+
     test "encode_body with response_format" do
       {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
       context = context_fixture()
