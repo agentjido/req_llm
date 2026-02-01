@@ -51,6 +51,29 @@ defmodule ReqLLM.ToolCallTest do
     end
   end
 
+  describe "to_map/1" do
+    test "converts ToolCall to flat map with decoded arguments" do
+      tool_call = ToolCall.new("call_123", "get_weather", ~s({"location":"Paris"}))
+      result = ToolCall.to_map(tool_call)
+
+      assert result == %{id: "call_123", name: "get_weather", arguments: %{"location" => "Paris"}}
+    end
+
+    test "returns empty map for invalid JSON arguments" do
+      tool_call = ToolCall.new("call_123", "broken", "invalid json")
+      result = ToolCall.to_map(tool_call)
+
+      assert result == %{id: "call_123", name: "broken", arguments: %{}}
+    end
+
+    test "handles empty arguments" do
+      tool_call = ToolCall.new("call_456", "no_args", "{}")
+      result = ToolCall.to_map(tool_call)
+
+      assert result == %{id: "call_456", name: "no_args", arguments: %{}}
+    end
+  end
+
   describe "args_map/1" do
     test "decodes valid JSON arguments to map" do
       args = ~s({"location":"Paris","unit":"celsius"})
@@ -174,6 +197,59 @@ defmodule ReqLLM.ToolCallTest do
       assert decoded["type"] == "function"
       assert decoded["function"]["name"] == "get_time"
       assert decoded["function"]["arguments"] == ~s({"timezone":"UTC"})
+    end
+  end
+
+  describe "from_map/1" do
+    test "converts a ToolCall struct (delegates to to_map)" do
+      tool_call = ToolCall.new("call_123", "get_weather", ~s({"location":"Paris"}))
+      result = ToolCall.from_map(tool_call)
+
+      assert result == %{id: "call_123", name: "get_weather", arguments: %{"location" => "Paris"}}
+    end
+
+    test "converts a map with string keys" do
+      map = %{"id" => "call_456", "name" => "get_time", "arguments" => ~s({"timezone":"UTC"})}
+      result = ToolCall.from_map(map)
+
+      assert result == %{id: "call_456", name: "get_time", arguments: %{"timezone" => "UTC"}}
+    end
+
+    test "converts a map with atom keys" do
+      map = %{id: "call_789", name: "search", arguments: %{"query" => "elixir"}}
+      result = ToolCall.from_map(map)
+
+      assert result == %{id: "call_789", name: "search", arguments: %{"query" => "elixir"}}
+    end
+
+    test "parses JSON string arguments" do
+      map = %{id: "call_abc", name: "calc", arguments: ~s({"x":1,"y":2})}
+      result = ToolCall.from_map(map)
+
+      assert result == %{id: "call_abc", name: "calc", arguments: %{"x" => 1, "y" => 2}}
+    end
+
+    test "generates id when missing" do
+      map = %{"name" => "no_id_func", "arguments" => "{}"}
+      result = ToolCall.from_map(map)
+
+      assert String.starts_with?(result.id, "call_")
+      assert result.name == "no_id_func"
+      assert result.arguments == %{}
+    end
+
+    test "handles missing arguments" do
+      map = %{id: "call_xyz", name: "no_args"}
+      result = ToolCall.from_map(map)
+
+      assert result == %{id: "call_xyz", name: "no_args", arguments: %{}}
+    end
+
+    test "handles invalid JSON arguments" do
+      map = %{id: "call_bad", name: "broken", arguments: "not valid json"}
+      result = ToolCall.from_map(map)
+
+      assert result == %{id: "call_bad", name: "broken", arguments: %{}}
     end
   end
 
