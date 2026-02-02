@@ -463,15 +463,12 @@ defmodule ReqLLM.StreamServer do
   end
 
   @impl GenServer
-  def handle_info({ref, result}, state) when is_reference(ref) do
-    Logger.debug("HTTP task completed with result: #{inspect(result)}")
+  def handle_info({ref, _result}, state) when is_reference(ref) do
     {:noreply, state}
   end
 
   @impl GenServer
   def handle_info({:EXIT, pid, reason}, %{http_task: pid} = state) do
-    Logger.debug("HTTP task #{inspect(pid)} exited: #{inspect(reason)}")
-
     new_state =
       case reason do
         :normal -> finalize_stream_with_fixture(state)
@@ -491,8 +488,6 @@ defmodule ReqLLM.StreamServer do
 
   @impl GenServer
   def handle_info({:DOWN, _ref, :process, pid, reason}, %{http_task: pid} = state) do
-    Logger.debug("HTTP task #{inspect(pid)} terminated: #{inspect(reason)}")
-
     new_state =
       case reason do
         :normal -> finalize_stream_with_fixture(state)
