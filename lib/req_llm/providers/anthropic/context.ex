@@ -287,11 +287,29 @@ defmodule ReqLLM.Providers.Anthropic.Context do
     output = ReqLLM.ToolResult.output_from_message(msg)
 
     cond do
-      content != [] -> encode_content(content)
-      output != nil -> encode_tool_output(output)
-      true -> ""
+      # Single text content part - treat as tool output (may contain images in JSON)
+      # This handles the common case where tool outputs are JSON strings wrapped in ContentPart.text()
+      single_text_content_part?(content) ->
+        encode_tool_output(extract_text_from_content_part(content))
+
+      # Other list content (multiple parts, images, etc.)
+      is_list(content) and content != [] ->
+        encode_content(content)
+
+      # Fall back to output field
+      output != nil ->
+        encode_tool_output(output)
+
+      true ->
+        ""
     end
   end
+
+  defp single_text_content_part?([%ReqLLM.Message.ContentPart{type: :text}]), do: true
+  defp single_text_content_part?(_), do: false
+
+  defp extract_text_from_content_part([%ReqLLM.Message.ContentPart{type: :text, text: text}]),
+    do: text
 
   defp encode_tool_output(output) when is_binary(output) do
     # Try to parse as JSON and extract images
