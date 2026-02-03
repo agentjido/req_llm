@@ -293,12 +293,84 @@ defmodule ReqLLM.Providers.Anthropic.Context do
     end
   end
 
-  defp encode_tool_output(output) when is_binary(output), do: output
+  defp encode_tool_output(output) when is_binary(output) do
+    # Try to parse as JSON and extract images
+    case Jason.decode(output) do
+      {:ok, decoded} when is_map(decoded) ->
+        encode_tool_output_map(decoded)
 
-  defp encode_tool_output(output) when is_map(output) or is_list(output),
-    do: Jason.encode!(output)
+      _ ->
+        output
+    end
+  end
+
+  defp encode_tool_output(output) when is_map(output), do: encode_tool_output_map(output)
+
+  defp encode_tool_output(output) when is_list(output), do: Jason.encode!(output)
 
   defp encode_tool_output(output), do: to_string(output)
+
+  # Known image fields in tool outputs
+  @image_fields ["screenshot", "image"]
+
+  defp encode_tool_output_map(map) when is_map(map) do
+    # Check if map contains an image field with a data URL
+    image_result =
+      Enum.find_value(@image_fields, fn field ->
+        case Map.get(map, field) do
+          "data:image/" <> _ = data_url -> {field, data_url}
+          _ -> nil
+        end
+      end)
+
+    case image_result do
+      {_field, data_url} ->
+        # Extract image and return as content blocks
+        case decode_data_url(data_url) do
+          {:ok, binary, mime_type} ->
+            base64 = Base.encode64(binary)
+
+            [
+              %{
+                type: "image",
+                source: %{
+                  type: "base64",
+                  media_type: mime_type,
+                  data: base64
+                }
+              }
+            ]
+
+          _ ->
+            # Failed to decode, return as JSON string
+            Jason.encode!(map)
+        end
+
+      nil ->
+        # No image field, return as JSON string
+        Jason.encode!(map)
+    end
+  end
+
+  defp decode_data_url("data:" <> rest) do
+    case String.split(rest, ",", parts: 2) do
+      [header, base64_data] ->
+        mime_type =
+          header
+          |> String.split(";")
+          |> List.first()
+
+        case Base.decode64(base64_data) do
+          {:ok, binary} -> {:ok, binary, mime_type}
+          :error -> :error
+        end
+
+      _ ->
+        :error
+    end
+  end
+
+  defp decode_data_url(_), do: :error
 
   defp add_tools(request, []), do: request
 

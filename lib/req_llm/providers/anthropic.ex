@@ -357,9 +357,10 @@ defmodule ReqLLM.Providers.Anthropic do
       url = request.url || "/v1/messages"
 
       full_url =
-        cond do
-          String.starts_with?(to_string(url), "http") -> to_string(url)
-          true -> "#{base_url}#{url}"
+        if String.starts_with?(to_string(url), "http") do
+          to_string(url)
+        else
+          "#{base_url}#{url}"
         end
 
       # Collect headers, masking sensitive values
