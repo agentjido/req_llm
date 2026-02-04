@@ -581,6 +581,21 @@ defmodule ReqLLM.StreamServer do
     # Use provider's protocol parser (defaults to SSE if not overridden)
     {events, new_buffer} = parse_protocol_events(chunk, state)
 
+    # DEBUG: Log raw SSE events count for tool call debugging
+    if not Enum.empty?(events) do
+      event_types =
+        events
+        |> Enum.map(fn
+          %{data: %{"type" => t}} -> t
+          %{data: data} when is_binary(data) -> "raw:#{String.slice(data, 0, 20)}"
+          _ -> "unknown"
+        end)
+
+      Logger.warning(
+        "[StreamServer] Parsed #{length(events)} SSE events from #{byte_size(chunk)} bytes: #{inspect(event_types)}"
+      )
+    end
+
     # Decode events using provider (with optional state threading)
     {stream_chunks, new_provider_state} =
       events

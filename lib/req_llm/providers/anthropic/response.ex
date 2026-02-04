@@ -75,7 +75,20 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   Decode Anthropic SSE event data into StreamChunks.
   """
   @spec decode_stream_event(map(), LLMDB.Model.t()) :: [ReqLLM.StreamChunk.t()]
-  def decode_stream_event(%{data: data}, _model) when is_map(data) do
+  def decode_stream_event(%{data: data} = event, _model) when is_map(data) do
+    # DEBUG: Log all SSE events for tool call debugging
+    event_type = Map.get(data, "type")
+
+    if event_type in ["content_block_start", "content_block_delta", "content_block_stop"] do
+      require Logger
+
+      Logger.warning(
+        "[Anthropic.Response] SSE event: type=#{event_type}, " <>
+          "index=#{Map.get(data, "index")}, " <>
+          "data=#{inspect(data, limit: 500)}"
+      )
+    end
+
     case data do
       %{"type" => "message_start", "message" => message} ->
         usage_data = Map.get(message, "usage", %{})
@@ -123,12 +136,36 @@ defmodule ReqLLM.Providers.Anthropic.Response do
         # Keep-alive ping, no content
         []
 
+      %{"type" => "content_block_stop"} ->
+        # Content block finished - no chunk needed but log for debugging
+        []
+
+      %{"type" => unknown_type} ->
+        require Logger
+
+        Logger.warning(
+          "[Anthropic.Response] Unknown SSE event type: #{unknown_type}, data=#{inspect(data, limit: 500)}"
+        )
+
+        []
+
       _ ->
+        require Logger
+
+        Logger.warning(
+          "[Anthropic.Response] Unhandled SSE event (no type): #{inspect(data, limit: 500)}"
+        )
+
         []
     end
   end
 
-  def decode_stream_event(_, _model), do: []
+  def decode_stream_event(event, _model) do
+    require Logger
+
+    Logger.warning("[Anthropic.Response] Non-map SSE event: #{inspect(event, limit: 500)}")
+    []
+  end
 
   # Private helper functions
 
@@ -179,15 +216,30 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   end
 
   defp decode_content_block_delta(
-         %{"type" => "input_json_delta", "partial_json" => fragment},
+         %{"type" => "input_json_delta", "partial_json" => fragment} = delta,
          index
        )
        when is_binary(fragment) do
+    require Logger
+
+    Logger.warning(
+      "[Anthropic.Response] input_json_delta: index=#{index}, " <>
+        "fragment_len=#{byte_size(fragment)}, fragment=#{inspect(fragment, limit: 200)}"
+    )
+
     # Accumulate JSON fragments; StreamResponse.extract_tool_calls will merge these
     [ReqLLM.StreamChunk.meta(%{tool_call_args: %{index: index, fragment: fragment}})]
   end
 
-  defp decode_content_block_delta(_, _index), do: []
+  defp decode_content_block_delta(delta, index) do
+    require Logger
+
+    Logger.warning(
+      "[Anthropic.Response] Unhandled delta type: index=#{index}, delta=#{inspect(delta, limit: 500)}"
+    )
+
+    []
+  end
 
   defp decode_content_block_start(%{"type" => "text", "text" => text}, _index) do
     [ReqLLM.StreamChunk.text(text)]
@@ -202,6 +254,10 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   end
 
   defp decode_content_block_start(%{"type" => "tool_use", "id" => id, "name" => name}, index) do
+    require Logger
+
+    Logger.warning("[Anthropic.Response] tool_use START: id=#{id}, name=#{name}, index=#{index}")
+
     # Tool call start - send empty arguments that will be filled by deltas
     [ReqLLM.StreamChunk.tool_call(name, %{}, %{id: id, index: index, start: true})]
   end
