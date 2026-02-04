@@ -385,9 +385,16 @@ defmodule ReqLLM.Provider.Defaults do
     {api_key, extra_option_keys} =
       fetch_api_key_and_extra_options(provider_mod, model_input, user_opts)
 
+    extra_headers = Keyword.get(user_opts, :extra_headers, [])
+
     request
     |> Req.Request.put_header("content-type", "application/json")
     |> Req.Request.put_header("authorization", "Bearer #{api_key}")
+    |> then(fn req ->
+      Enum.reduce(extra_headers, req, fn {key, value}, acc ->
+        Req.Request.put_header(acc, key, value)
+      end)
+    end)
     |> Req.Request.register_options(extra_option_keys)
     |> Req.Request.merge_options(
       [model: model.provider_model_id || model.id, auth: {:bearer, api_key}] ++ user_opts

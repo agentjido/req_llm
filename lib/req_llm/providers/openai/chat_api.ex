@@ -79,11 +79,12 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
 
   defp build_request_headers(model, opts) do
     api_key = ReqLLM.Keys.get!(model, opts)
+    extra = Keyword.get(opts, :extra_headers, [])
 
     [
       {"Authorization", "Bearer " <> api_key},
       {"Content-Type", "application/json"}
-    ]
+    ] ++ extra
   end
 
   defp build_request_body(context, model_name, opts, operation \\ :chat) do
