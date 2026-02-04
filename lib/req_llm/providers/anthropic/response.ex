@@ -111,8 +111,17 @@ defmodule ReqLLM.Providers.Anthropic.Response do
         [ReqLLM.StreamChunk.meta(%{terminal?: true})]
 
       %{"type" => "message_delta", "delta" => delta} ->
+        require Logger
+
+        stop_reason = Map.get(delta, "stop_reason")
+
+        Logger.warning(
+          "[Anthropic.Response] message_delta: stop_reason=#{inspect(stop_reason)}, " <>
+            "delta=#{inspect(delta, limit: 500)}, usage=#{inspect(Map.get(data, "usage"))}"
+        )
+
         finish_reason =
-          case Map.get(delta, "stop_reason") do
+          case stop_reason do
             "end_turn" -> :stop
             "max_tokens" -> :length
             "stop_sequence" -> :stop
