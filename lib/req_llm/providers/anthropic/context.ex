@@ -57,6 +57,29 @@ defmodule ReqLLM.Providers.Anthropic.Context do
     {system_messages, non_system_messages} =
       Enum.split_with(messages, fn %ReqLLM.Message{role: role} -> role == :system end)
 
+    # DEBUG: Log input messages before encoding
+    Logger.debug(
+      "[Anthropic.Context.add_messages] Input messages count: #{length(non_system_messages)}"
+    )
+
+    for {msg, idx} <- Enum.with_index(non_system_messages) do
+      tool_info =
+        case msg do
+          %ReqLLM.Message{tool_calls: tcs} when is_list(tcs) and tcs != [] ->
+            " tool_calls=#{Enum.map(tcs, & &1.id) |> inspect()}"
+
+          %ReqLLM.Message{tool_call_id: id} when not is_nil(id) ->
+            " tool_call_id=#{id}"
+
+          _ ->
+            ""
+        end
+
+      Logger.debug(
+        "[Anthropic.Context.add_messages] input_msg[#{idx}]: role=#{msg.role}#{tool_info}"
+      )
+    end
+
     request =
       case system_messages do
         [] ->
@@ -70,9 +93,90 @@ defmodule ReqLLM.Providers.Anthropic.Context do
     encoded_messages =
       non_system_messages
       |> Enum.map(&encode_message/1)
-      |> merge_consecutive_tool_results()
 
-    Map.put(request, :messages, encoded_messages)
+    # DEBUG: Log encoded messages before merging
+    Logger.debug(
+      "[Anthropic.Context.add_messages] Encoded messages (before merge): #{length(encoded_messages)}"
+    )
+
+    for {msg, idx} <- Enum.with_index(encoded_messages) do
+      tool_info =
+        case msg do
+          %{content: content} when is_list(content) ->
+            tool_uses =
+              content
+              |> Enum.filter(&match?(%{type: "tool_use"}, &1))
+              |> Enum.map(& &1.id)
+
+            tool_results =
+              content
+              |> Enum.filter(&match?(%{type: "tool_result"}, &1))
+              |> Enum.map(& &1.tool_use_id)
+
+            parts = []
+
+            parts =
+              if tool_uses == [], do: parts, else: parts ++ [" tool_uses=#{inspect(tool_uses)}"]
+
+            parts =
+              if tool_results == [],
+                do: parts,
+                else: parts ++ [" tool_results=#{inspect(tool_results)}"]
+
+            Enum.join(parts, "")
+
+          _ ->
+            ""
+        end
+
+      Logger.debug(
+        "[Anthropic.Context.add_messages] encoded[#{idx}]: role=#{msg.role}#{tool_info}"
+      )
+    end
+
+    merged_messages = merge_consecutive_tool_results(encoded_messages)
+
+    # DEBUG: Log messages after merging
+    Logger.debug(
+      "[Anthropic.Context.add_messages] Merged messages (after merge): #{length(merged_messages)}"
+    )
+
+    for {msg, idx} <- Enum.with_index(merged_messages) do
+      tool_info =
+        case msg do
+          %{content: content} when is_list(content) ->
+            tool_uses =
+              content
+              |> Enum.filter(&match?(%{type: "tool_use"}, &1))
+              |> Enum.map(& &1.id)
+
+            tool_results =
+              content
+              |> Enum.filter(&match?(%{type: "tool_result"}, &1))
+              |> Enum.map(& &1.tool_use_id)
+
+            parts = []
+
+            parts =
+              if tool_uses == [], do: parts, else: parts ++ [" tool_uses=#{inspect(tool_uses)}"]
+
+            parts =
+              if tool_results == [],
+                do: parts,
+                else: parts ++ [" tool_results=#{inspect(tool_results)}"]
+
+            Enum.join(parts, "")
+
+          _ ->
+            ""
+        end
+
+      Logger.debug(
+        "[Anthropic.Context.add_messages] merged[#{idx}]: role=#{msg.role}#{tool_info}"
+      )
+    end
+
+    Map.put(request, :messages, merged_messages)
   end
 
   defp merge_consecutive_tool_results(messages) do
