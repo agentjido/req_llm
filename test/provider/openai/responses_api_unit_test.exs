@@ -760,6 +760,29 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert chunk.metadata.finish_reason == :length
     end
 
+    test "decodes incomplete event with usage so metadata includes usage when finish_reason is length",
+         %{model: model} do
+      event = %{
+        data: %{
+          "event" => "response.incomplete",
+          "reason" => "length",
+          "response" => %{
+            "incomplete_details" => %{"reason" => "length"},
+            "usage" => %{
+              "input_tokens" => 8,
+              "output_tokens" => 12
+            }
+          }
+        }
+      }
+
+      assert [chunk] = ResponsesAPI.decode_stream_event(event, model)
+      assert chunk.type == :meta
+      assert chunk.metadata.terminal? == true
+      assert chunk.metadata.finish_reason == :length
+      assert %{input_tokens: 8, output_tokens: 12, total_tokens: 20} = chunk.metadata.usage
+    end
+
     test "handles [DONE] event", %{model: model} do
       event = %{data: "[DONE]"}
 
