@@ -170,36 +170,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         []
 
       "response.completed" ->
-        usage_data = get_in(data, ["response", "usage"])
-        response_id = get_in(data, ["response", "id"])
-
-        meta = %{terminal?: true, finish_reason: :stop}
-
-        meta =
-          if response_id do
-            Map.put(meta, :response_id, response_id)
-          else
-            meta
-          end
-
-        meta =
-          if usage_data do
-            raw_usage = %{
-              input_tokens: usage_data["input_tokens"] || 0,
-              output_tokens: usage_data["output_tokens"] || 0,
-              total_tokens:
-                usage_data["total_tokens"] ||
-                  (usage_data["input_tokens"] || 0) + (usage_data["output_tokens"] || 0)
-            }
-
-            response_data = data["response"] || %{}
-            usage = normalize_responses_usage(raw_usage, response_data)
-            Map.put(meta, :usage, usage)
-          else
-            meta
-          end
-
-        [ReqLLM.StreamChunk.meta(meta)]
+        capture_completion_metadata(data, %{terminal?: true, finish_reason: :stop})
 
       "response.incomplete" ->
         reason =
@@ -207,12 +178,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
             data["reason"] ||
             "incomplete"
 
-        [
-          ReqLLM.StreamChunk.meta(%{
-            terminal?: true,
-            finish_reason: normalize_finish_reason(reason)
-          })
-        ]
+        capture_completion_metadata(data, %{
+          terminal?: true,
+          finish_reason: normalize_finish_reason(reason)
+        })
 
       _ ->
         []
@@ -232,6 +201,37 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   def init_stream_state do
     %{tool_call_ids: %{}, usage_emitted?: false}
+  end
+
+  defp capture_completion_metadata(data, meta) do
+    usage_data = get_in(data, ["response", "usage"])
+    response_id = get_in(data, ["response", "id"])
+
+    meta =
+      if response_id do
+        Map.put(meta, :response_id, response_id)
+      else
+        meta
+      end
+
+    meta =
+      if usage_data do
+        raw_usage = %{
+          input_tokens: usage_data["input_tokens"] || 0,
+          output_tokens: usage_data["output_tokens"] || 0,
+          total_tokens:
+            usage_data["total_tokens"] ||
+              (usage_data["input_tokens"] || 0) + (usage_data["output_tokens"] || 0)
+        }
+
+        response_data = data["response"] || %{}
+        usage = normalize_responses_usage(raw_usage, response_data)
+        Map.put(meta, :usage, usage)
+      else
+        meta
+      end
+
+    [ReqLLM.StreamChunk.meta(meta)]
   end
 
   defp ensure_stream_state(nil), do: init_stream_state()

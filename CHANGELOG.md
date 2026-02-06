@@ -9,6 +9,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- changelog -->
 
+## [v1.5.1](https://github.com/agentjido/req_llm/compare/v1.5.0...v1.5.1) (2026-02-04)
+
+
+
+
+### Bug Fixes:
+
+* Return metadata for incomplete responses (#403) by Tom Duffield
+
+* include metadata with incomplete responses by Tom Duffield
+
+* add missing verbosity documention for openai by Tom Duffield
+
+* improve streaming stability with finch client fixes (#400) by mikehostetler
+
+* req_llm: improve streaming stability with finch client fixes by mikehostetler
+
+* move changelog marker so git_ops inserts in correct position by mikehostetler
+
+### Refactoring:
+
+* Centralize text extraction and update dependencies by mikehostetler
+
 ## [v1.5.0](https://github.com/agentjido/req_llm/compare/v1.4.1...v1.5.0) (2026-02-01)
 
 ### Features:
