@@ -1002,8 +1002,11 @@ defmodule ReqLLM.Provider.Defaults do
        })
        when is_binary(name) do
     case Jason.decode(args_json || "{}") do
-      {:ok, args} -> ReqLLM.StreamChunk.tool_call(name, args, %{id: id, index: index})
-      {:error, _} -> ReqLLM.StreamChunk.tool_call(name, %{}, %{id: id, index: index})
+      {:ok, args} when is_map(args) ->
+        ReqLLM.StreamChunk.tool_call(name, args, %{id: id, index: index})
+
+      _ ->
+        ReqLLM.StreamChunk.tool_call(name, %{}, %{id: id, index: index})
     end
   end
 
@@ -1048,8 +1051,11 @@ defmodule ReqLLM.Provider.Defaults do
        })
        when is_binary(name) do
     case Jason.decode(args_json || "{}") do
-      {:ok, args} -> ReqLLM.StreamChunk.tool_call(name, args, %{id: id})
-      {:error, _} -> ReqLLM.StreamChunk.tool_call(name, %{}, %{id: id})
+      {:ok, args} when is_map(args) ->
+        ReqLLM.StreamChunk.tool_call(name, args, %{id: id})
+
+      _ ->
+        ReqLLM.StreamChunk.tool_call(name, %{}, %{id: id})
     end
   end
 
