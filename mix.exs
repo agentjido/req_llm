@@ -189,7 +189,10 @@ defmodule ReqLLM.MixProject do
       {:excoveralls, "~> 0.18", only: [:dev, :test], runtime: false},
       {:plug, "~> 1.0", only: [:dev, :test], runtime: false},
       {:git_ops, "~> 2.9", only: :dev, runtime: false},
-      {:git_hooks, "~> 0.8", only: :dev, runtime: false}
+      {:git_hooks, "~> 0.8", only: :dev, runtime: false},
+
+      # Optional
+      {:igniter, "~> 0.7", optional: true}
     ]
   end
 
