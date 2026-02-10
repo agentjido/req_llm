@@ -455,12 +455,12 @@ defmodule ReqLLM.Providers.AzureTest do
   end
 
   describe "provider_schema" do
-    test "api_version option has default value" do
+    test "api_version option has no schema-level default (chosen at runtime)" do
       schema = Azure.provider_schema()
       api_version_spec = schema.schema[:api_version]
 
       assert api_version_spec[:type] == :string
-      assert api_version_spec[:default] == "2025-04-01-preview"
+      refute api_version_spec[:default]
     end
 
     test "deployment option is available" do
