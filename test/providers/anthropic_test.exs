@@ -556,6 +556,46 @@ defmodule ReqLLM.Providers.AnthropicTest do
     end
   end
 
+  describe "tool_to_anthropic_format/1 strict mode" do
+    test "includes strict: true when tool has strict enabled" do
+      tool =
+        ReqLLM.Tool.new!(
+          name: "strict_tool",
+          description: "A strict tool",
+          parameter_schema: [
+            name: [type: :string, required: true, doc: "A name"]
+          ],
+          callback: fn _ -> {:ok, "result"} end,
+          strict: true
+        )
+
+      formatted = Anthropic.tool_to_anthropic_format(tool)
+
+      assert formatted[:strict] == true
+      assert formatted[:name] == "strict_tool"
+      assert formatted[:description] == "A strict tool"
+      assert is_map(formatted[:input_schema])
+    end
+
+    test "does not include strict key when tool has strict disabled" do
+      tool =
+        ReqLLM.Tool.new!(
+          name: "non_strict_tool",
+          description: "A non-strict tool",
+          parameter_schema: [
+            name: [type: :string, required: true, doc: "A name"]
+          ],
+          callback: fn _ -> {:ok, "result"} end,
+          strict: false
+        )
+
+      formatted = Anthropic.tool_to_anthropic_format(tool)
+
+      refute Map.has_key?(formatted, :strict)
+      assert formatted[:name] == "non_strict_tool"
+    end
+  end
+
   # Helper functions for Anthropic-specific fixtures
 
   describe "map-based parameter schemas (JSON Schema pass-through)" do

@@ -811,11 +811,17 @@ defmodule ReqLLM.Providers.Anthropic do
   def tool_to_anthropic_format(tool) do
     schema = ReqLLM.Tool.to_schema(tool, :openai)
 
-    %{
+    base = %{
       name: schema["function"]["name"],
       description: schema["function"]["description"],
       input_schema: schema["function"]["parameters"]
     }
+
+    if tool.strict do
+      Map.put(base, :strict, true)
+    else
+      base
+    end
   end
 
   # Builds a web search tool definition for Anthropic API.
