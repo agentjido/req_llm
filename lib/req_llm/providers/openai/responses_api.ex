@@ -605,6 +605,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     service_tier = opts_map[:service_tier] || provider_opts[:service_tier]
 
     text_format = encode_text_format(provider_opts[:response_format], provider_opts[:verbosity])
+    store = provider_opts[:store]
 
     final_input =
       if previous_response_id == nil and reasoning_items != [] do
@@ -624,6 +625,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> maybe_put_string("tools", tools)
       |> maybe_put_string("tool_choice", tool_choice)
       |> maybe_put_string("service_tier", service_tier)
+      |> maybe_put_string("store", store)
       |> maybe_put_string("text", text_format)
 
     if previous_response_id do
