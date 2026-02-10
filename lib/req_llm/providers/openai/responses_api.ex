@@ -506,13 +506,23 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       provider_opts[:previous_response_id] ||
         extract_previous_response_id_from_context(context)
 
-    {input, tool_messages, reasoning_items, system_texts} =
-      Enum.reduce(context.messages, {[], [], [], []}, fn msg,
-                                                         {input_acc, tool_acc, reasoning_acc,
-                                                          system_acc} ->
+    # Build input items and collect system texts in a single pass.
+    # When previous_response_id is available, tool calls/results are handled server-side.
+    # When it's NOT available (e.g. Codex with store:false), we must encode the full
+    # conversation including function_call and function_call_output items inline.
+    {input, reasoning_items, system_texts} =
+      Enum.reduce(context.messages, {[], [], []}, fn msg,
+                                                     {input_acc, reasoning_acc, system_acc} ->
         case msg.role do
           :tool ->
-            {input_acc, [msg | tool_acc], reasoning_acc, system_acc}
+            if previous_response_id do
+              # With previous_response_id, tool results are handled server-side
+              {input_acc, reasoning_acc, system_acc}
+            else
+              # Without previous_response_id, encode tool results inline
+              tool_output = encode_tool_message_inline(msg)
+              {input_acc ++ [tool_output], reasoning_acc, system_acc}
+            end
 
           :system ->
             texts =
@@ -525,7 +535,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
                   []
               end)
 
-            {input_acc, tool_acc, reasoning_acc, system_acc ++ texts}
+            {input_acc, reasoning_acc, system_acc ++ texts}
 
           :assistant ->
             new_reasoning = encode_reasoning_details_from_message(msg)
@@ -536,17 +546,33 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
                 encode_input_content_part(part, content_type)
               end)
 
-            if content == [] and msg.tool_calls == nil do
-              {input_acc, tool_acc, reasoning_acc ++ new_reasoning, system_acc}
-            else
-              if msg.tool_calls != nil and msg.tool_calls != [] do
-                function_calls = encode_tool_calls_as_function_calls(msg.tool_calls)
+            has_tool_calls = msg.tool_calls != nil and msg.tool_calls != []
 
-                {input_acc ++ function_calls, tool_acc, reasoning_acc ++ new_reasoning,
-                 system_acc}
+            if has_tool_calls and not is_nil(previous_response_id) do
+              # With previous_response_id, tool calls are tracked server-side
+              {input_acc, reasoning_acc ++ new_reasoning, system_acc}
+            else
+              if has_tool_calls do
+                # Without previous_response_id, encode function_call items inline
+                # First add assistant content (output_text) if present
+                items =
+                  if content == [] do
+                    []
+                  else
+                    [%{"role" => "assistant", "content" => content}]
+                  end
+
+                # Then add each tool call as a function_call item
+                function_calls = encode_tool_calls_inline(msg.tool_calls)
+
+                {input_acc ++ items ++ function_calls, reasoning_acc ++ new_reasoning, system_acc}
               else
-                {input_acc ++ [%{"role" => "assistant", "content" => content}], tool_acc,
-                 reasoning_acc ++ new_reasoning, system_acc}
+                if content == [] do
+                  {input_acc, reasoning_acc ++ new_reasoning, system_acc}
+                else
+                  {input_acc ++ [%{"role" => "assistant", "content" => content}],
+                   reasoning_acc ++ new_reasoning, system_acc}
+                end
               end
             end
 
@@ -557,10 +583,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
               end)
 
             if content == [] do
-              {input_acc, tool_acc, reasoning_acc, system_acc}
+              {input_acc, reasoning_acc, system_acc}
             else
               {input_acc ++ [%{"role" => Atom.to_string(msg.role), "content" => content}],
-               tool_acc, reasoning_acc, system_acc}
+               reasoning_acc, system_acc}
             end
         end
       end)
@@ -571,25 +597,40 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         texts -> Enum.join(texts, "\n\n")
       end
 
-    pending_tool_call_ids = find_pending_tool_call_ids(context.messages)
-
-    tool_outputs_from_context =
-      tool_messages
-      |> Enum.reverse()
-      |> Enum.filter(fn msg -> msg.tool_call_id in pending_tool_call_ids end)
-      |> extract_tool_outputs_from_messages()
-
-    tool_outputs =
-      case provider_opts[:tool_outputs] do
-        nil -> tool_outputs_from_context
-        [] -> tool_outputs_from_context
-        explicit_outputs -> explicit_outputs
-      end
-
+    # When previous_response_id is NOT set, tool outputs are already inline in `input`.
+    # When it IS set, we still need to send pending (most recent) tool outputs.
     input =
-      case tool_outputs do
-        [] -> input
-        outputs -> input ++ encode_tool_outputs(outputs)
+      if previous_response_id do
+        pending_tool_call_ids = find_pending_tool_call_ids(context.messages)
+
+        tool_messages =
+          context.messages
+          |> Enum.filter(&(&1.role == :tool))
+
+        tool_outputs_from_context =
+          tool_messages
+          |> Enum.reverse()
+          |> Enum.filter(fn msg -> msg.tool_call_id in pending_tool_call_ids end)
+          |> extract_tool_outputs_from_messages()
+
+        tool_outputs =
+          case provider_opts[:tool_outputs] do
+            nil -> tool_outputs_from_context
+            [] -> tool_outputs_from_context
+            explicit_outputs -> explicit_outputs
+          end
+
+        case tool_outputs do
+          [] -> input
+          outputs -> input ++ encode_tool_outputs(outputs)
+        end
+      else
+        # Tool outputs already encoded inline above
+        case provider_opts[:tool_outputs] do
+          nil -> input
+          [] -> input
+          explicit_outputs -> input ++ encode_tool_outputs(explicit_outputs)
+        end
       end
 
     max_output_tokens =
@@ -635,6 +676,47 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     else
       body
     end
+  end
+
+  # Encode a single tool call as a Responses API function_call input item
+  defp encode_tool_calls_inline(nil), do: []
+  defp encode_tool_calls_inline([]), do: []
+
+  defp encode_tool_calls_inline(tool_calls) when is_list(tool_calls) do
+    Enum.map(tool_calls, fn tc ->
+      call_id = tc.id
+      name = tc.function[:name] || tc.function["name"]
+      arguments = tc.function[:arguments] || tc.function["arguments"] || "{}"
+
+      %{
+        "type" => "function_call",
+        "call_id" => call_id,
+        "name" => name,
+        "arguments" => arguments
+      }
+    end)
+  end
+
+  # Encode a tool result message as a Responses API function_call_output input item
+  defp encode_tool_message_inline(%ReqLLM.Message{role: :tool} = msg) do
+    output =
+      case ReqLLM.ToolResult.output_from_message(msg) do
+        nil -> extract_tool_output_text(msg.content)
+        value -> value
+      end
+
+    output_string =
+      cond do
+        is_binary(output) -> output
+        is_map(output) or is_list(output) -> Jason.encode!(output)
+        true -> to_string(output)
+      end
+
+    %{
+      "type" => "function_call_output",
+      "call_id" => msg.tool_call_id,
+      "output" => output_string
+    }
   end
 
   defp encode_input_content_part(%ReqLLM.Message.ContentPart{type: :text, text: text}, type) do
@@ -922,17 +1004,6 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp encode_tool_outputs(_), do: []
-
-  defp encode_tool_calls_as_function_calls(tool_calls) do
-    Enum.map(tool_calls, fn tc ->
-      %{
-        "type" => "function_call",
-        "call_id" => tc.id,
-        "name" => ReqLLM.ToolCall.name(tc),
-        "arguments" => ReqLLM.ToolCall.args_json(tc)
-      }
-    end)
-  end
 
   defp encode_tools_if_any(request) do
     case request.options[:tools] do
