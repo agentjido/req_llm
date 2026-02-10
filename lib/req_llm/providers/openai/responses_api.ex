@@ -506,11 +506,26 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       provider_opts[:previous_response_id] ||
         extract_previous_response_id_from_context(context)
 
-    {input, tool_messages, reasoning_items} =
-      Enum.reduce(context.messages, {[], [], []}, fn msg, {input_acc, tool_acc, reasoning_acc} ->
+    {input, tool_messages, reasoning_items, system_texts} =
+      Enum.reduce(context.messages, {[], [], [], []}, fn msg,
+                                                         {input_acc, tool_acc, reasoning_acc,
+                                                          system_acc} ->
         case msg.role do
           :tool ->
-            {input_acc, [msg | tool_acc], reasoning_acc}
+            {input_acc, [msg | tool_acc], reasoning_acc, system_acc}
+
+          :system ->
+            texts =
+              Enum.flat_map(msg.content, fn
+                %ReqLLM.Message.ContentPart{type: :text, text: text}
+                when is_binary(text) and text != "" ->
+                  [text]
+
+                _ ->
+                  []
+              end)
+
+            {input_acc, tool_acc, reasoning_acc, system_acc ++ texts}
 
           :assistant ->
             new_reasoning = encode_reasoning_details_from_message(msg)
@@ -522,14 +537,16 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
               end)
 
             if content == [] and msg.tool_calls == nil do
-              {input_acc, tool_acc, reasoning_acc ++ new_reasoning}
+              {input_acc, tool_acc, reasoning_acc ++ new_reasoning, system_acc}
             else
               if msg.tool_calls != nil and msg.tool_calls != [] do
                 function_calls = encode_tool_calls_as_function_calls(msg.tool_calls)
-                {input_acc ++ function_calls, tool_acc, reasoning_acc ++ new_reasoning}
+
+                {input_acc ++ function_calls, tool_acc, reasoning_acc ++ new_reasoning,
+                 system_acc}
               else
                 {input_acc ++ [%{"role" => "assistant", "content" => content}], tool_acc,
-                 reasoning_acc ++ new_reasoning}
+                 reasoning_acc ++ new_reasoning, system_acc}
               end
             end
 
@@ -540,13 +557,19 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
               end)
 
             if content == [] do
-              {input_acc, tool_acc, reasoning_acc}
+              {input_acc, tool_acc, reasoning_acc, system_acc}
             else
               {input_acc ++ [%{"role" => Atom.to_string(msg.role), "content" => content}],
-               tool_acc, reasoning_acc}
+               tool_acc, reasoning_acc, system_acc}
             end
         end
       end)
+
+    instructions =
+      case system_texts do
+        [] -> nil
+        texts -> Enum.join(texts, "\n\n")
+      end
 
     pending_tool_call_ids = find_pending_tool_call_ids(context.messages)
 
@@ -594,6 +617,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       Map.new()
       |> Map.put("model", model_name)
       |> Map.put("input", final_input)
+      |> maybe_put_string("instructions", instructions)
       |> maybe_put_string("stream", opts_map[:stream])
       |> maybe_put_string("max_output_tokens", max_output_tokens)
       |> maybe_put_string("reasoning", reasoning)
