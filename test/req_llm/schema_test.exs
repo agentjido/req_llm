@@ -1000,4 +1000,58 @@ defmodule ReqLLM.SchemaTest do
       assert result.compiled == nil
     end
   end
+
+  describe "to_bedrock_converse_format/1 strict mode" do
+    test "includes strict: true in toolSpec when tool has strict enabled" do
+      tool = %Tool{
+        name: "strict_tool",
+        description: "A strict tool",
+        parameter_schema: [
+          name: [type: :string, required: true, doc: "A name"]
+        ],
+        callback: fn _ -> {:ok, "result"} end,
+        strict: true
+      }
+
+      result = Schema.to_bedrock_converse_format(tool)
+
+      assert result["toolSpec"]["strict"] == true
+      assert result["toolSpec"]["name"] == "strict_tool"
+      assert result["toolSpec"]["description"] == "A strict tool"
+      assert is_map(result["toolSpec"]["inputSchema"]["json"])
+    end
+
+    test "does not include strict key in toolSpec when tool has strict disabled" do
+      tool = %Tool{
+        name: "non_strict_tool",
+        description: "A non-strict tool",
+        parameter_schema: [
+          name: [type: :string, required: true, doc: "A name"]
+        ],
+        callback: fn _ -> {:ok, "result"} end,
+        strict: false
+      }
+
+      result = Schema.to_bedrock_converse_format(tool)
+
+      refute Map.has_key?(result["toolSpec"], "strict")
+      assert result["toolSpec"]["name"] == "non_strict_tool"
+    end
+
+    test "does not include strict key in toolSpec by default" do
+      tool = %Tool{
+        name: "default_tool",
+        description: "A default tool",
+        parameter_schema: [
+          name: [type: :string, required: true, doc: "A name"]
+        ],
+        callback: fn _ -> {:ok, "result"} end
+      }
+
+      result = Schema.to_bedrock_converse_format(tool)
+
+      refute Map.has_key?(result["toolSpec"], "strict")
+      assert result["toolSpec"]["name"] == "default_tool"
+    end
+  end
 end
