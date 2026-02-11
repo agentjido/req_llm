@@ -1396,7 +1396,7 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp maybe_add_thinking_config(config, 0) do
-    config
+    Map.put(config, :thinkingConfig, %{thinkingBudget: 0})
   end
 
   defp convert_google_to_openai_format(%{"candidates" => candidates} = body) do
