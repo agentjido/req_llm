@@ -390,6 +390,17 @@ defmodule ReqLLM.Providers.Azure do
         |> maybe_clean_thinking_after_translation(model_family, operation)
         |> maybe_warn_service_tier(model_family, model_id)
 
+      context =
+        ReqLLM.ToolCallIdCompat.apply_context(
+          __MODULE__,
+          operation,
+          model,
+          context,
+          processed_opts
+        )
+
+      processed_opts = Keyword.put(processed_opts, :context, context)
+
       {api_version, deployment, base_url} =
         extract_azure_credentials(model, processed_opts)
 
@@ -680,7 +691,17 @@ defmodule ReqLLM.Providers.Azure do
     headers = base_headers ++ extra_headers
 
     body =
-      formatter.format_request(model_id, context, Keyword.put(translated_opts, :stream, true))
+      formatter.format_request(
+        model_id,
+        ReqLLM.ToolCallIdCompat.apply_context(
+          __MODULE__,
+          operation,
+          model,
+          context,
+          translated_opts
+        ),
+        Keyword.put(translated_opts, :stream, true)
+      )
       |> maybe_add_model_for_foundry(deployment, base_url)
 
     finch_request = Finch.build(:post, url, headers, Jason.encode!(body))
@@ -761,6 +782,23 @@ defmodule ReqLLM.Providers.Azure do
 
       _ ->
         {opts, []}
+    end
+  end
+
+  @impl ReqLLM.Provider
+  def tool_call_id_policy(_operation, model, _opts) do
+    model_id = effective_model_id(model)
+
+    case get_model_family(model_id) do
+      "claude" ->
+        %{
+          mode: :sanitize,
+          invalid_chars_regex: ~r/[^A-Za-z0-9_-]/,
+          enforce_turn_boundary: true
+        }
+
+      _ ->
+        %{mode: :passthrough}
     end
   end
 
@@ -895,6 +933,7 @@ defmodule ReqLLM.Providers.Azure do
         :n,
         :tools,
         :tool_choice,
+        :tool_call_id_compat,
         :req_http_options,
         :frequency_penalty,
         :system_prompt,

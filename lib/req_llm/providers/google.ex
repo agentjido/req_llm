@@ -533,6 +533,7 @@ defmodule ReqLLM.Providers.Google do
         :fixture,
         :tools,
         :tool_choice,
+        :tool_call_id_compat,
         :n,
         :prompt,
         :size,

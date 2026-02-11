@@ -272,6 +272,15 @@ defmodule ReqLLM.Provider do
               {keyword(), [String.t()]}
 
   @doc """
+  Returns tool call ID compatibility policy for this provider (optional).
+
+  Providers can enforce tool call ID constraints when a context built on one
+  provider is sent to a different provider.
+  """
+  @callback tool_call_id_policy(operation(), LLMDB.Model.t() | map(), keyword() | map()) ::
+              map() | keyword()
+
+  @doc """
   Returns the default environment variable name for API authentication.
 
   This callback provides the fallback environment variable name when the
@@ -603,6 +612,7 @@ defmodule ReqLLM.Provider do
     extract_usage: 2,
     default_env_key: 0,
     translate_options: 3,
+    tool_call_id_policy: 3,
     build_body: 1,
     decode_stream_event: 2,
     decode_stream_event: 3,

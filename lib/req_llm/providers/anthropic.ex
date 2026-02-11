@@ -297,6 +297,17 @@ defmodule ReqLLM.Providers.Anthropic do
     context = request.options[:context]
     model_name = request.options[:model]
     opts = request.options
+    operation = request.options[:operation] || :chat
+
+    model =
+      Req.Request.get_private(request, :req_llm_model) || %{
+        id: model_name,
+        model: model_name,
+        provider: :anthropic,
+        provider_model_id: nil
+      }
+
+    context = ReqLLM.ToolCallIdCompat.apply_context(__MODULE__, operation, model, context, opts)
 
     body = build_request_body(context, model_name, opts)
     json_body = Jason.encode!(body)
@@ -459,6 +470,17 @@ defmodule ReqLLM.Providers.Anthropic do
     beta_headers = build_beta_headers(translated_opts)
     all_headers = streaming_headers ++ beta_headers
 
+    operation = opts[:operation] || :chat
+
+    context =
+      ReqLLM.ToolCallIdCompat.apply_context(
+        __MODULE__,
+        operation,
+        model,
+        context,
+        translated_opts
+      )
+
     body = build_request_body(context, get_api_model_id(model), translated_opts ++ [stream: true])
     url = build_request_url(translated_opts)
 
@@ -489,6 +511,15 @@ defmodule ReqLLM.Providers.Anthropic do
       |> translate_unsupported_parameters()
 
     {translated_opts, []}
+  end
+
+  @impl ReqLLM.Provider
+  def tool_call_id_policy(_operation, _model, _opts) do
+    %{
+      mode: :sanitize,
+      invalid_chars_regex: ~r/[^A-Za-z0-9_-]/,
+      enforce_turn_boundary: true
+    }
   end
 
   # Private implementation functions

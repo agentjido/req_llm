@@ -109,7 +109,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
              ]
     end
 
-    test "formats request with tool_call content" do
+    test "rejects contexts ending with unresolved tool calls" do
       tool_call = ReqLLM.ToolCall.new("call_123", "get_weather", Jason.encode!(%{location: "SF"}))
 
       context = %ReqLLM.Context{
@@ -122,22 +122,73 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
         ]
       }
 
-      result = Converse.format_request("test-model", context, [])
+      assert_raise ReqLLM.Error.Invalid.Parameter, fn ->
+        Converse.format_request("test-model", context, [])
+      end
+    end
 
-      assert result["messages"] == [
-               %{
-                 "role" => "assistant",
-                 "content" => [
-                   %{
-                     "toolUse" => %{
-                       "toolUseId" => "call_123",
-                       "name" => "get_weather",
-                       "input" => %{"location" => "SF"}
-                     }
+    test "formats request with sanitized tool call IDs when tool results are present" do
+      tool_call =
+        ReqLLM.ToolCall.new("functions.add:0", "get_weather", Jason.encode!(%{location: "SF"}))
+
+      context = %ReqLLM.Context{
+        messages: [
+          %Message{role: :user, content: "Call the tool"},
+          %Message{role: :assistant, content: [], tool_calls: [tool_call]},
+          %Message{role: :tool, tool_call_id: "functions.add:0", content: "Sunny"}
+        ]
+      }
+
+      result = Converse.format_request("test-model", context, [])
+      [_, assistant_msg, tool_result_msg] = result["messages"]
+
+      assert %{
+               "content" => [
+                 %{
+                   "toolUse" => %{
+                     "toolUseId" => assistant_id
                    }
-                 ]
-               }
-             ]
+                 }
+               ]
+             } = assistant_msg
+
+      assert %{
+               "content" => [
+                 %{
+                   "toolResult" => %{
+                     "toolUseId" => tool_result_id
+                   }
+                 }
+               ]
+             } = tool_result_msg
+
+      assert assistant_id == "functions_add_0"
+      assert tool_result_id == assistant_id
+    end
+
+    test "formats request with tool call IDs capped to Converse max length" do
+      long_id = String.duplicate("a", 80) <> ":0"
+      tool_call = ReqLLM.ToolCall.new(long_id, "get_weather", Jason.encode!(%{location: "SF"}))
+
+      context = %ReqLLM.Context{
+        messages: [
+          %Message{role: :user, content: "Call the tool"},
+          %Message{role: :assistant, content: [], tool_calls: [tool_call]},
+          %Message{role: :tool, tool_call_id: long_id, content: "Sunny"}
+        ]
+      }
+
+      result = Converse.format_request("test-model", context, [])
+      [_, assistant_msg, tool_result_msg] = result["messages"]
+
+      assistant_id = get_in(assistant_msg, ["content", Access.at(0), "toolUse", "toolUseId"])
+
+      tool_result_id =
+        get_in(tool_result_msg, ["content", Access.at(0), "toolResult", "toolUseId"])
+
+      assert assistant_id == tool_result_id
+      assert String.length(assistant_id) == 64
+      refute String.contains?(assistant_id, ":")
     end
 
     test "formats request with tool_result content" do

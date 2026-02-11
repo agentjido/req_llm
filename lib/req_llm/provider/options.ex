@@ -139,6 +139,11 @@ defmodule ReqLLM.Provider.Options do
                                  default: false,
                                  doc: "Enable streaming responses"
                                ],
+                               tool_call_id_compat: [
+                                 type: {:in, [:auto, :sanitize, :strict, :passthrough]},
+                                 default: :auto,
+                                 doc: "Tool call ID compatibility mode for cross-provider contexts"
+                               ],
 
                                # Provider-specific options container
                                provider_options: [

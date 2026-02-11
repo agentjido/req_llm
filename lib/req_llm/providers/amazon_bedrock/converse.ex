@@ -101,6 +101,18 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
         {context, opts}
       end
 
+    context =
+      ReqLLM.ToolCallIdCompat.apply_context_with_policy(
+        context,
+        %{
+          mode: :sanitize,
+          invalid_chars_regex: ~r/[^A-Za-z0-9_-]/,
+          max_length: 64,
+          enforce_turn_boundary: true
+        },
+        opts
+      )
+
     request = %{}
 
     # Add messages

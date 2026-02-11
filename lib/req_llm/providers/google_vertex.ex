@@ -180,6 +180,11 @@ defmodule ReqLLM.Providers.GoogleVertex do
       # Add context to opts so it can be stored in request.options
       other_opts = Keyword.put(other_opts, :context, context)
 
+      context =
+        ReqLLM.ToolCallIdCompat.apply_context(__MODULE__, operation, model, context, other_opts)
+
+      other_opts = Keyword.put(other_opts, :context, context)
+
       # Build request body using formatter
       body = formatter.format_request(model.provider_model_id || model.id, context, other_opts)
 
@@ -490,12 +495,38 @@ defmodule ReqLLM.Providers.GoogleVertex do
   end
 
   @impl ReqLLM.Provider
+  def tool_call_id_policy(_operation, model, _opts) do
+    case get_model_family(model.provider_model_id || model.id) do
+      "claude" ->
+        %{
+          mode: :sanitize,
+          invalid_chars_regex: ~r/[^A-Za-z0-9_-]/,
+          enforce_turn_boundary: true
+        }
+
+      "gemini" ->
+        %{
+          mode: :drop,
+          drop_function_call_ids: true
+        }
+
+      _ ->
+        %{mode: :passthrough}
+    end
+  end
+
+  @impl ReqLLM.Provider
   def attach_stream(model, context, opts, _finch_name) do
     # Process and validate options
     operation = opts[:operation] || :chat
 
     {gcp_creds, other_opts, model_family, formatter} =
       process_and_validate_opts(opts, model, operation)
+
+    context =
+      ReqLLM.ToolCallIdCompat.apply_context(__MODULE__, operation, model, context, other_opts)
+
+    other_opts = Keyword.put(other_opts, :context, context)
 
     # Build request body using formatter (with stream: true)
     body =
