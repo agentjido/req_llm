@@ -142,6 +142,10 @@ defmodule ReqLLM.Providers.GoogleVertex do
       - `0` - first message, `1` - second, etc.
       """
     ],
+    google_thinking_budget: [
+      type: :non_neg_integer,
+      doc: "Thinking token budget for Gemini 2.5 models (0 disables thinking, omit for dynamic)"
+    ],
     google_grounding: [
       type: :map,
       doc:
@@ -621,13 +625,23 @@ defmodule ReqLLM.Providers.GoogleVertex do
   end
 
   def pre_validate_options(operation, model, opts) do
-    # Delegate to model-specific formatter if it has pre_validate_options
-    formatter = get_formatter(model)
+    model_family = get_model_family(model)
 
-    if function_exported?(formatter, :pre_validate_options, 3) do
-      formatter.pre_validate_options(operation, model, opts)
-    else
-      {opts, []}
+    case model_family do
+      "gemini" ->
+        # Delegate to Google provider for Gemini-specific pre-validation
+        # (handles reasoning_effort inside provider_options)
+        ReqLLM.Providers.Google.pre_validate_options(operation, model, opts)
+
+      _ ->
+        # Delegate to model-specific formatter if it has pre_validate_options
+        formatter = get_formatter(model)
+
+        if function_exported?(formatter, :pre_validate_options, 3) do
+          formatter.pre_validate_options(operation, model, opts)
+        else
+          {opts, []}
+        end
     end
   end
 
@@ -642,9 +656,9 @@ defmodule ReqLLM.Providers.GoogleVertex do
         # Delegate to Anthropic provider for Anthropic-specific option handling
         ReqLLM.Providers.Anthropic.translate_options(operation, model, opts)
 
-      _ ->
-        # Other model families: no translation needed yet
-        {opts, []}
+      "gemini" ->
+        # Delegate to Google provider for Gemini-specific option handling
+        ReqLLM.Providers.Google.translate_options(operation, model, opts)
     end
   end
 
