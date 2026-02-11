@@ -142,7 +142,8 @@ defmodule ReqLLM.Provider.Options do
                                tool_call_id_compat: [
                                  type: {:in, [:auto, :sanitize, :strict, :passthrough]},
                                  default: :auto,
-                                 doc: "Tool call ID compatibility mode for cross-provider contexts"
+                                 doc:
+                                   "Tool call ID compatibility mode for cross-provider contexts"
                                ],
 
                                # Provider-specific options container

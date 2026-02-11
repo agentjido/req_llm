@@ -300,12 +300,13 @@ defmodule ReqLLM.Providers.Anthropic do
     operation = request.options[:operation] || :chat
 
     model =
-      Req.Request.get_private(request, :req_llm_model) || %{
-        id: model_name,
-        model: model_name,
-        provider: :anthropic,
-        provider_model_id: nil
-      }
+      Req.Request.get_private(request, :req_llm_model) ||
+        %{
+          id: model_name,
+          model: model_name,
+          provider: :anthropic,
+          provider_model_id: nil
+        }
 
     context = ReqLLM.ToolCallIdCompat.apply_context(__MODULE__, operation, model, context, opts)
 
