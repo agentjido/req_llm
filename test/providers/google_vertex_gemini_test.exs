@@ -377,8 +377,7 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
       opts = [reasoning_token_budget: 16_384]
       {translated, _warnings} = GoogleVertex.translate_options(:chat, model, opts)
 
-      provider_opts = Keyword.get(translated, :provider_options, [])
-      assert Keyword.get(provider_opts, :google_thinking_budget) == 16_384
+      assert Keyword.get(translated, :google_thinking_budget) == 16_384
     end
 
     test "translate_options maps reasoning_effort levels to google_thinking_budget for Gemini" do
@@ -401,9 +400,7 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
         opts = [reasoning_effort: effort]
         {translated, _warnings} = GoogleVertex.translate_options(:chat, model, opts)
 
-        provider_opts = Keyword.get(translated, :provider_options, [])
-
-        assert Keyword.get(provider_opts, :google_thinking_budget) == expected_budget,
+        assert Keyword.get(translated, :google_thinking_budget) == expected_budget,
                "Expected reasoning_effort #{inspect(effort)} to map to budget #{expected_budget}"
       end
     end

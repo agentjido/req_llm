@@ -659,6 +659,10 @@ defmodule ReqLLM.Providers.GoogleVertex do
       "gemini" ->
         # Delegate to Google provider for Gemini-specific option handling
         ReqLLM.Providers.Google.translate_options(operation, model, opts)
+
+      _ ->
+        # Other model families: no translation needed yet
+        {opts, []}
     end
   end
 

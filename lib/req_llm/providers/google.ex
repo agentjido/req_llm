@@ -749,18 +749,16 @@ defmodule ReqLLM.Providers.Google do
     {reasoning_budget, opts} = Keyword.pop(opts, :reasoning_token_budget)
     {reasoning_effort, opts} = Keyword.pop(opts, :reasoning_effort)
 
+    # Put google_thinking_budget at top level (not nested in provider_options).
+    # translate_options operates on flattened opts; Options.process handles re-nesting.
     opts =
       cond do
         reasoning_budget ->
-          provider_opts = Keyword.get(opts, :provider_options, [])
-          provider_opts = Keyword.put(provider_opts, :google_thinking_budget, reasoning_budget)
-          Keyword.put(opts, :provider_options, provider_opts)
+          Keyword.put(opts, :google_thinking_budget, reasoning_budget)
 
         reasoning_effort ->
           budget = translate_reasoning_effort_to_budget(reasoning_effort, nil)
-          provider_opts = Keyword.get(opts, :provider_options, [])
-          provider_opts = Keyword.put(provider_opts, :google_thinking_budget, budget)
-          Keyword.put(opts, :provider_options, provider_opts)
+          Keyword.put(opts, :google_thinking_budget, budget)
 
         true ->
           opts
