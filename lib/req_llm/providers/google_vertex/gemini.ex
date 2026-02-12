@@ -32,9 +32,13 @@ defmodule ReqLLM.Providers.GoogleVertex.Gemini do
   function call IDs which Vertex AI rejects.
   """
   def format_request(model_id, context, opts) do
-    # Options.process already hoists provider_options (like google_grounding) to top level
+    # Hoist provider_options to top level so Google.encode_body can read them
+    # (e.g. google_thinking_budget, google_grounding)
+    {provider_opts, rest} = Keyword.pop(opts, :provider_options, [])
+
     opts_map =
-      opts
+      rest
+      |> Keyword.merge(provider_opts)
       |> Map.new()
       |> Map.merge(%{context: context, model: model_id})
 
