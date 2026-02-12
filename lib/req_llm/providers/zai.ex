@@ -413,9 +413,6 @@ defmodule ReqLLM.Providers.Zai do
     |> maybe_flatten_single_text()
   end
 
-  defp encode_zai_content(content) when is_binary(content), do: content
-  defp encode_zai_content(_), do: []
-
   defp maybe_flatten_single_text([%{type: "text", text: text}]), do: text
 
   defp maybe_flatten_single_text(content) do
