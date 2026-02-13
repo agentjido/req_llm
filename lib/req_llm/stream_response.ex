@@ -327,6 +327,9 @@ defmodule ReqLLM.StreamResponse do
                        Signature: `(String.t() -> any())`
       * `:on_thinking` - Callback invoked immediately for each `:thinking` chunk.
                         Signature: `(String.t() -> any())`
+      * `:on_tool_call` - Callback invoked immediately for each `:tool_call` chunk.
+                         Receives the full `StreamChunk` struct.
+                         Signature: `(StreamChunk.t() -> any())`
 
   ## Returns
 
@@ -410,6 +413,9 @@ defmodule ReqLLM.StreamResponse do
         :thinking ->
           if callbacks.on_thinking && chunk.text, do: callbacks.on_thinking.(chunk.text)
 
+        :tool_call ->
+          if callbacks.on_tool_call, do: callbacks.on_tool_call.(chunk)
+
         _ ->
           :ok
       end
@@ -422,7 +428,8 @@ defmodule ReqLLM.StreamResponse do
   defp extract_callbacks(opts) do
     %{
       on_result: Keyword.get(opts, :on_result),
-      on_thinking: Keyword.get(opts, :on_thinking)
+      on_thinking: Keyword.get(opts, :on_thinking),
+      on_tool_call: Keyword.get(opts, :on_tool_call)
     }
   end
 

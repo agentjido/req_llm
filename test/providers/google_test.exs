@@ -249,6 +249,48 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert function_response["response"]["temperature"] == 72
     end
 
+    test "encode_body excludes id from functionCall parts" do
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
+
+      context =
+        Context.new([
+          Context.user("What's the weather?"),
+          Context.assistant("",
+            tool_calls: [
+              %ReqLLM.ToolCall{
+                id: "call_1",
+                type: "function",
+                function: %{name: "get_weather", arguments: ~s({"location":"SF"})}
+              }
+            ]
+          )
+        ])
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          operation: :chat
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      function_call_parts =
+        decoded["contents"]
+        |> Enum.flat_map(& &1["parts"])
+        |> Enum.filter(&Map.has_key?(&1, "functionCall"))
+
+      assert [function_call_part] = function_call_parts
+      assert function_call_part["functionCall"]["name"] == "get_weather"
+      assert function_call_part["functionCall"]["args"] == %{"location" => "SF"}
+
+      refute Map.has_key?(function_call_part["functionCall"], "id"),
+             "functionCall must not include 'id' — Google API rejects unknown fields"
+    end
+
     test "encode_body with Google-specific options" do
       {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
       context = context_fixture()

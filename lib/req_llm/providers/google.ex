@@ -1895,26 +1895,23 @@ defmodule ReqLLM.Providers.Google do
 
   defp convert_tool_call_to_function_call(%ReqLLM.ToolCall{
          type: "function",
-         function: %{name: name, arguments: args},
-         id: id
+         function: %{name: name, arguments: args}
        }) do
-    %{functionCall: %{name: name, args: Jason.decode!(args), id: id}}
+    %{functionCall: %{name: name, args: Jason.decode!(args)}}
   end
 
   defp convert_tool_call_to_function_call(%{
          "type" => "function",
-         "function" => %{"name" => name, "arguments" => args},
-         "id" => id
+         "function" => %{"name" => name, "arguments" => args}
        }) do
-    %{functionCall: %{name: name, args: Jason.decode!(args), id: id}}
+    %{functionCall: %{name: name, args: Jason.decode!(args)}}
   end
 
   defp convert_tool_call_to_function_call(%{
          type: "function",
-         function: %{name: name, arguments: args},
-         id: id
+         function: %{name: name, arguments: args}
        }) do
-    %{functionCall: %{name: name, args: Jason.decode!(args), id: id}}
+    %{functionCall: %{name: name, args: Jason.decode!(args)}}
   end
 
   defp convert_tool_call_to_function_call(_), do: nil

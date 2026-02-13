@@ -707,15 +707,22 @@ defmodule ReqLLM.Schema do
   """
   @spec to_bedrock_converse_format(ReqLLM.Tool.t()) :: map()
   def to_bedrock_converse_format(%ReqLLM.Tool{} = tool) do
-    %{
-      "toolSpec" => %{
-        "name" => tool.name,
-        "description" => tool.description,
-        "inputSchema" => %{
-          "json" => to_json(tool.parameter_schema)
-        }
+    base = %{
+      "name" => tool.name,
+      "description" => tool.description,
+      "inputSchema" => %{
+        "json" => to_json(tool.parameter_schema)
       }
     }
+
+    tool_spec =
+      if tool.strict do
+        Map.put(base, "strict", true)
+      else
+        base
+      end
+
+    %{"toolSpec" => tool_spec}
   end
 
   @doc """

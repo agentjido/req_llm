@@ -675,6 +675,53 @@ defmodule ReqLLM.StreamResponseTest do
       assert length(Response.tool_calls(response)) == 1
     end
 
+    test "calls on_tool_call callback immediately for tool_call chunks" do
+      chunks = [
+        StreamChunk.text("Let me help."),
+        StreamChunk.tool_call("get_weather", %{city: "NYC"}, %{id: "call-1", index: 0}),
+        StreamChunk.tool_call("calculator", %{expr: "2+2"}, %{id: "call-2", index: 1})
+      ]
+
+      stream_response = create_stream_response(stream: chunks)
+      parent = self()
+
+      {:ok, response} =
+        StreamResponse.process_stream(stream_response,
+          on_result: fn text -> send(parent, {:content, text}) end,
+          on_tool_call: fn chunk -> send(parent, {:tool_call, chunk}) end
+        )
+
+      # Content callback fires
+      assert_received {:content, "Let me help."}
+
+      # Tool call callbacks fire with the full StreamChunk
+      assert_received {:tool_call, %StreamChunk{type: :tool_call, name: "get_weather"}}
+      assert_received {:tool_call, %StreamChunk{type: :tool_call, name: "calculator"}}
+
+      # Response still has the tool calls
+      assert length(Response.tool_calls(response)) == 2
+    end
+
+    test "on_tool_call callback not invoked when not provided" do
+      chunks = [
+        StreamChunk.tool_call("test_tool", %{arg: "value"}, %{id: "call-1", index: 0})
+      ]
+
+      stream_response = create_stream_response(stream: chunks)
+      parent = self()
+
+      {:ok, response} =
+        StreamResponse.process_stream(stream_response,
+          on_result: fn text -> send(parent, {:content, text}) end
+        )
+
+      # No tool call callback messages
+      refute_received {:tool_call, _}
+
+      # Tool calls still in response
+      assert length(Response.tool_calls(response)) == 1
+    end
+
     test "handles tool calls with no argument fragments" do
       chunks = [
         StreamChunk.tool_call("simple_tool", %{arg: "value"}, %{id: "call-1", index: 0})
