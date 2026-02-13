@@ -278,7 +278,16 @@ defmodule ReqLLM.Providers.Azure.OpenAITest do
 
       {:ok, usage} = Azure.OpenAI.extract_usage(body, nil)
 
-      assert usage.reasoning_tokens == 10
+      reasoning_text = "Let me think about 12 * 7..."
+      answer_text = "The answer is 84."
+
+      expected =
+        round(
+          10 * String.length(reasoning_text) /
+            (String.length(reasoning_text) + String.length(answer_text))
+        )
+
+      assert usage.reasoning_tokens == expected
     end
 
     test "prefers completion_tokens_details over reasoning_content inference" do

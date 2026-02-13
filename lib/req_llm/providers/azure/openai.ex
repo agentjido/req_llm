@@ -94,7 +94,6 @@ defmodule ReqLLM.Providers.Azure.OpenAI do
   end
 
   defp warn_and_remove_anthropic_thinking_config(opts, model_id) do
-    # DeepSeek models support thinking config natively; don't strip it
     if AdapterHelpers.deepseek_model?(model_id) do
       opts
     else
@@ -321,15 +320,20 @@ defmodule ReqLLM.Providers.Azure.OpenAI do
   def extract_usage(_, _), do: {:error, :no_usage}
 
   defp infer_reasoning_from_choices(choices, completion_tokens) when is_list(choices) do
-    has_reasoning =
-      Enum.any?(choices, fn choice ->
-        case get_in(choice, ["message", "reasoning_content"]) do
-          content when is_binary(content) and content != "" -> true
-          _ -> false
-        end
+    {reasoning_len, answer_len} =
+      Enum.reduce(choices, {0, 0}, fn choice, {r_acc, a_acc} ->
+        reasoning = get_in(choice, ["message", "reasoning_content"]) || ""
+        answer = get_in(choice, ["message", "content"]) || ""
+        {r_acc + String.length(reasoning), a_acc + String.length(answer)}
       end)
 
-    if has_reasoning, do: completion_tokens, else: 0
+    total_len = reasoning_len + answer_len
+
+    if reasoning_len > 0 and total_len > 0 do
+      round(completion_tokens * reasoning_len / total_len)
+    else
+      0
+    end
   end
 
   defp infer_reasoning_from_choices(_, _), do: 0
