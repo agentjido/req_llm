@@ -344,11 +344,8 @@ defmodule ReqLLM.Providers.GoogleVertex do
     "/v1/projects/#{project_id}/locations/#{region}/publishers/google/models/#{model_id}:generateContent"
   end
 
-  defp build_model_path("openai_compat", model_id, project_id, region) do
-    # MaaS models use publisher/model format (e.g., "zai-org/glm-4.7-maas")
-    {publisher, model_name} = extract_publisher_and_model(model_id)
-
-    "/v1/projects/#{project_id}/locations/#{region}/publishers/#{publisher}/models/#{model_name}:rawPredict"
+  defp build_model_path("openai_compat", _model_id, project_id, region) do
+    "/v1/projects/#{project_id}/locations/#{region}/endpoints/openapi/chat/completions"
   end
 
   defp build_model_path(family, _model_id, _project_id, _region) do
@@ -549,7 +546,6 @@ defmodule ReqLLM.Providers.GoogleVertex do
     region = gcp_creds[:region] || @default_region
     project_id = gcp_creds[:project_id]
 
-    # Use streamRawPredict for streaming
     path =
       build_stream_path(model_family, model.provider_model_id || model.id, project_id, region)
 
@@ -607,28 +603,12 @@ defmodule ReqLLM.Providers.GoogleVertex do
     "/v1/projects/#{project_id}/locations/#{region}/publishers/google/models/#{model_id}:streamGenerateContent"
   end
 
-  defp build_stream_path("openai_compat", model_id, project_id, region) do
-    # MaaS models use publisher/model format for streaming
-    {publisher, model_name} = extract_publisher_and_model(model_id)
-
-    "/v1/projects/#{project_id}/locations/#{region}/publishers/#{publisher}/models/#{model_name}:streamRawPredict"
+  defp build_stream_path("openai_compat", _model_id, project_id, region) do
+    "/v1/projects/#{project_id}/locations/#{region}/endpoints/openapi/chat/completions"
   end
 
   defp build_stream_path(family, _model_id, _project_id, _region) do
     raise ArgumentError, "No stream path builder for Vertex AI model family: #{family}"
-  end
-
-  # Extract publisher and model name from slash-separated model IDs.
-  # e.g., "zai-org/glm-4.7-maas" -> {"zai-org", "glm-4.7-maas"}
-  defp extract_publisher_and_model(model_id) do
-    case String.split(model_id, "/", parts: 2) do
-      [publisher, model_name] ->
-        {publisher, model_name}
-
-      [_model_name] ->
-        raise ArgumentError,
-              "MaaS model ID must include publisher prefix (e.g., \"zai-org/glm-4.7-maas\"), got: #{model_id}"
-    end
   end
 
   @impl ReqLLM.Provider

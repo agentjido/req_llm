@@ -3,15 +3,16 @@ defmodule ReqLLM.Providers.GoogleVertex.OpenAICompat do
   OpenAI-compatible model family support for Google Vertex AI.
 
   Handles third-party MaaS (Model-as-a-Service) models on Vertex AI that use
-  the OpenAI Chat Completions API format through the rawPredict endpoint.
+  the OpenAI Chat Completions API format.
 
   Currently supports:
   - GLM models (zai-org/glm-4.7-maas)
   - OpenAI OSS models (openai/gpt-oss-120b-maas, openai/gpt-oss-20b-maas)
   - Other future MaaS models using OpenAI-compatible format
 
-  These models are accessed via Vertex AI's rawPredict/streamRawPredict endpoints
-  and use standard OpenAI Chat Completions request/response format.
+  These models are accessed via Vertex AI's `endpoints/openapi/chat/completions`
+  endpoint and use standard OpenAI Chat Completions request/response format.
+  The model ID (e.g., `zai-org/glm-4.7-maas`) is included in the request body.
   """
 
   alias ReqLLM.Provider.Defaults

@@ -12,6 +12,62 @@ defmodule ReqLLM.Providers.GoogleVertex.OpenAICompatTest do
     ])
   end
 
+  describe "endpoint routing" do
+    test "openai_compat model routes to endpoints/openapi/chat/completions" do
+      {:ok, model} = ReqLLM.model("google_vertex:zai-org/glm-4.7-maas")
+      context = context_fixture()
+
+      opts = [
+        access_token: "fake-token",
+        project_id: "test-project",
+        region: "us-central1"
+      ]
+
+      {:ok, request} = GoogleVertex.prepare_request(:chat, model, context, opts)
+      url = URI.to_string(request.url)
+
+      assert url =~
+               "endpoints/openapi/chat/completions"
+
+      refute url =~ "publishers/"
+      refute url =~ "rawPredict"
+    end
+
+    test "openai_compat streaming routes to endpoints/openapi/chat/completions" do
+      {:ok, model} = ReqLLM.model("google_vertex:zai-org/glm-4.7-maas")
+      context = context_fixture()
+
+      opts = [
+        access_token: "fake-token",
+        project_id: "test-project",
+        region: "us-central1"
+      ]
+
+      {:ok, finch_request} = GoogleVertex.attach_stream(model, context, opts, nil)
+
+      assert finch_request.path =~ "endpoints/openapi/chat/completions"
+      refute finch_request.path =~ "publishers/"
+      refute finch_request.path =~ "streamRawPredict"
+    end
+
+    test "openai_compat model includes project and region in path" do
+      {:ok, model} = ReqLLM.model("google_vertex:zai-org/glm-4.7-maas")
+      context = context_fixture()
+
+      opts = [
+        access_token: "fake-token",
+        project_id: "my-project",
+        region: "europe-west1"
+      ]
+
+      {:ok, request} = GoogleVertex.prepare_request(:chat, model, context, opts)
+      url = URI.to_string(request.url)
+
+      assert url =~ "projects/my-project"
+      assert url =~ "locations/europe-west1"
+    end
+  end
+
   describe "model family resolution" do
     test "GLM model resolves to openai_compat formatter via extra.family" do
       {:ok, model} = ReqLLM.model("google_vertex:zai-org/glm-4.7-maas")
