@@ -5,6 +5,9 @@ defmodule ReqLLM.Providers.GoogleVertex do
   Supports Vertex AI's unified API for accessing multiple AI models including:
   - Anthropic Claude models (claude-haiku-4-5, claude-sonnet-4-5, claude-opus-4-1)
   - Google Gemini models (gemini-2.0-flash, gemini-2.5-flash, gemini-2.5-pro)
+  - Third-party MaaS models via OpenAI-compatible format:
+    - GLM models (zai-org/glm-4.7-maas)
+    - OpenAI OSS models (openai/gpt-oss-120b-maas, openai/gpt-oss-20b-maas)
   - And more as Google adds them
 
   ## Authentication
@@ -153,7 +156,8 @@ defmodule ReqLLM.Providers.GoogleVertex do
   # Model family to formatter module mapping
   @model_families %{
     "claude" => ReqLLM.Providers.GoogleVertex.Anthropic,
-    "gemini" => ReqLLM.Providers.GoogleVertex.Gemini
+    "gemini" => ReqLLM.Providers.GoogleVertex.Gemini,
+    "openai_compat" => ReqLLM.Providers.GoogleVertex.OpenAICompat
   }
 
   @impl ReqLLM.Provider
@@ -273,13 +277,38 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
   defp fetch_access_token(_), do: {:error, :missing_credentials}
 
-  # Get model family from model ID
-  defp get_model_family(model_id) do
-    # Claude models start with "claude-"
+  # Get model family from LLMDB model struct.
+  # First tries prefix matching on model ID for backward compatibility,
+  # then falls back to LLMDB extra.family metadata for third-party MaaS models.
+  defp get_model_family(%LLMDB.Model{} = model) do
+    model_id = model.provider_model_id || model.id
+
     cond do
       String.starts_with?(model_id, "claude-") -> "claude"
       String.starts_with?(model_id, "gemini-") -> "gemini"
-      true -> raise ArgumentError, "Unknown model family for: #{model_id}"
+      true -> resolve_family_from_metadata(model)
+    end
+  end
+
+  # Resolve model family from LLMDB extra.family metadata.
+  # Maps specific extra.family values (e.g., "claude-haiku", "gemini-flash")
+  # to high-level formatter families. Unknown families default to "openai_compat"
+  # for MaaS models that use the OpenAI Chat Completions format.
+  defp resolve_family_from_metadata(model) do
+    extra_family = get_in(model, [Access.key(:extra, %{}), :family])
+
+    cond do
+      is_binary(extra_family) and String.starts_with?(extra_family, "claude") ->
+        "claude"
+
+      is_binary(extra_family) and String.starts_with?(extra_family, "gemini") ->
+        "gemini"
+
+      is_binary(extra_family) ->
+        "openai_compat"
+
+      true ->
+        raise ArgumentError, "Unknown model family for: #{model.provider_model_id || model.id}"
     end
   end
 
@@ -297,9 +326,9 @@ defmodule ReqLLM.Providers.GoogleVertex do
     end
   end
 
-  # Get formatter module for model ID (combines model_family + formatter lookup)
-  defp get_formatter(model_id) do
-    model_id
+  # Get formatter module for model (combines model_family + formatter lookup)
+  defp get_formatter(%LLMDB.Model{} = model) do
+    model
     |> get_model_family()
     |> get_formatter_module()
   end
@@ -313,6 +342,17 @@ defmodule ReqLLM.Providers.GoogleVertex do
   defp build_model_path("gemini", model_id, project_id, region) do
     # Gemini models on Vertex use the publishers/google path
     "/v1/projects/#{project_id}/locations/#{region}/publishers/google/models/#{model_id}:generateContent"
+  end
+
+  defp build_model_path("openai_compat", model_id, project_id, region) do
+    # MaaS models use publisher/model format (e.g., "zai-org/glm-4.7-maas")
+    {publisher, model_name} = extract_publisher_and_model(model_id)
+
+    "/v1/projects/#{project_id}/locations/#{region}/publishers/#{publisher}/models/#{model_name}:rawPredict"
+  end
+
+  defp build_model_path(family, _model_id, _project_id, _region) do
+    raise ArgumentError, "No model path builder for Vertex AI model family: #{family}"
   end
 
   # Build base URL based on region
@@ -345,7 +385,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
     other_opts = Keyword.merge(other_opts, req_opts)
 
     # Get model family and formatter
-    model_family = get_model_family(model.provider_model_id || model.id)
+    model_family = get_model_family(model)
     formatter = get_formatter_module(model_family)
 
     # Clean thinking after translation if incompatible
@@ -414,7 +454,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
   def decode_response({request, response}) do
     # Get formatter for this model
     model = Req.Request.get_private(request, :model)
-    formatter = get_formatter(model.provider_model_id || model.id)
+    formatter = get_formatter(model)
 
     # Build opts with operation and context from request.options (which is a map)
     opts =
@@ -452,7 +492,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
   @impl ReqLLM.Provider
   def extract_usage(body, model) do
-    formatter = get_formatter(model.provider_model_id || model.id)
+    formatter = get_formatter(model)
 
     if function_exported?(formatter, :extract_usage, 2) do
       formatter.extract_usage(body, model)
@@ -463,7 +503,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
   def pre_validate_options(operation, model, opts) do
     # Delegate to model-specific formatter if it has pre_validate_options
-    formatter = get_formatter(model.provider_model_id || model.id)
+    formatter = get_formatter(model)
 
     if function_exported?(formatter, :pre_validate_options, 3) do
       formatter.pre_validate_options(operation, model, opts)
@@ -476,7 +516,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
   def translate_options(operation, model, opts) do
     # Delegate to native Anthropic option translation for Anthropic models
     # This ensures we get all Anthropic-specific handling (temperature/top_p conflicts, etc.)
-    model_family = get_model_family(model.provider_model_id || model.id)
+    model_family = get_model_family(model)
 
     case model_family do
       "claude" ->
@@ -544,7 +584,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
   @impl ReqLLM.Provider
   def decode_stream_event(event, model) do
     # Get formatter for this model
-    formatter = get_formatter(model.provider_model_id || model.id)
+    formatter = get_formatter(model)
 
     # Delegate SSE parsing to formatter
     # For Anthropic models, Vertex uses standard Anthropic SSE format
@@ -565,6 +605,30 @@ defmodule ReqLLM.Providers.GoogleVertex do
   defp build_stream_path("gemini", model_id, project_id, region) do
     # Use streamGenerateContent for Gemini streaming
     "/v1/projects/#{project_id}/locations/#{region}/publishers/google/models/#{model_id}:streamGenerateContent"
+  end
+
+  defp build_stream_path("openai_compat", model_id, project_id, region) do
+    # MaaS models use publisher/model format for streaming
+    {publisher, model_name} = extract_publisher_and_model(model_id)
+
+    "/v1/projects/#{project_id}/locations/#{region}/publishers/#{publisher}/models/#{model_name}:streamRawPredict"
+  end
+
+  defp build_stream_path(family, _model_id, _project_id, _region) do
+    raise ArgumentError, "No stream path builder for Vertex AI model family: #{family}"
+  end
+
+  # Extract publisher and model name from slash-separated model IDs.
+  # e.g., "zai-org/glm-4.7-maas" -> {"zai-org", "glm-4.7-maas"}
+  defp extract_publisher_and_model(model_id) do
+    case String.split(model_id, "/", parts: 2) do
+      [publisher, model_name] ->
+        {publisher, model_name}
+
+      [_model_name] ->
+        raise ArgumentError,
+              "MaaS model ID must include publisher prefix (e.g., \"zai-org/glm-4.7-maas\"), got: #{model_id}"
+    end
   end
 
   @impl ReqLLM.Provider
