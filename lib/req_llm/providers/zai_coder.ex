@@ -333,45 +333,79 @@ defmodule ReqLLM.Providers.ZaiCoder do
   end
 
   defp encode_zai_message(%ReqLLM.Message{role: r, content: c, tool_calls: tc}) do
-    # Separate tool calls from other content
     {tool_call_parts, other_content} =
-      Enum.split_with(c, fn part -> part.type == :tool_call end)
+      c
+      |> normalize_content_parts()
+      |> Enum.split_with(&(content_part_type(&1) == :tool_call))
 
-    # Encode non-tool-call content
     encoded_content = encode_zai_content(other_content)
 
-    # Build base message with content
     base_message = %{
       role: to_string(r),
       content: encoded_content
     }
 
-    # Add tool_calls array if we have tool call ContentParts
     base_message =
-      if tool_call_parts == [] do
-        base_message
-      else
-        zai_tool_calls =
-          Enum.map(tool_call_parts, fn part ->
-            %{
-              id: part.tool_call_id,
-              type: "function",
-              function: %{
-                name: part.tool_name,
-                arguments: Jason.encode!(part.input)
-              }
-            }
-          end)
-
-        Map.put(base_message, :tool_calls, zai_tool_calls)
+      tool_call_parts
+      |> Enum.map(&encode_zai_tool_call/1)
+      |> Enum.reject(&is_nil/1)
+      |> case do
+        [] -> base_message
+        calls -> Map.put(base_message, :tool_calls, calls)
       end
 
-    # Also add tool_calls field from Message if present (though usually tool calls are in content)
     case tc do
       nil -> base_message
       [] -> base_message
       calls -> Map.put(base_message, :tool_calls, calls)
     end
+  end
+
+  defp normalize_content_parts(content) when is_list(content), do: content
+
+  defp normalize_content_parts(content) when is_binary(content),
+    do: [%{type: :text, text: content}]
+
+  defp normalize_content_parts(_), do: []
+
+  defp content_part_type(%ReqLLM.Message.ContentPart{type: type}), do: type
+  defp content_part_type(%{type: type}) when is_atom(type), do: type
+  defp content_part_type(%{"type" => type}) when is_binary(type), do: normalize_content_type(type)
+  defp content_part_type(_), do: nil
+
+  defp normalize_content_type("text"), do: :text
+  defp normalize_content_type("thinking"), do: :thinking
+  defp normalize_content_type("tool_call"), do: :tool_call
+  defp normalize_content_type("image"), do: :image
+  defp normalize_content_type("image_url"), do: :image_url
+  defp normalize_content_type(_), do: nil
+
+  defp encode_zai_tool_call(part) when is_map(part) do
+    id = fetch_first(part, [:tool_call_id, "tool_call_id", :id, "id"])
+    name = fetch_first(part, [:tool_name, "tool_name", :name, "name"])
+    input = fetch_first(part, [:input, "input", :arguments, "arguments"])
+
+    if is_binary(id) and is_binary(name) do
+      %{
+        id: id,
+        type: "function",
+        function: %{
+          name: name,
+          arguments: encode_tool_call_arguments(input)
+        }
+      }
+    else
+      nil
+    end
+  end
+
+  defp encode_zai_tool_call(_), do: nil
+
+  defp encode_tool_call_arguments(arguments) when is_binary(arguments), do: arguments
+  defp encode_tool_call_arguments(arguments), do: Jason.encode!(arguments)
+
+  defp fetch_first(map, keys) do
+    Enum.find_value(keys, fn key -> Map.get(map, key) end)
   end
 
   defp encode_zai_content(content) when is_list(content) do
@@ -391,20 +425,26 @@ defmodule ReqLLM.Providers.ZaiCoder do
     end
   end
 
-  # ZAI content part encoding (tool calls are handled at message level, not in content)
-  defp encode_zai_content_part(%ReqLLM.Message.ContentPart{type: :text, text: text}) do
+  defp encode_zai_content_part(%ReqLLM.Message.ContentPart{type: :text, text: text})
+       when is_binary(text) do
     %{type: "text", text: text}
   end
 
-  # Skip thinking ContentParts - ZAI doesn't support this type in content
-  defp encode_zai_content_part(%ReqLLM.Message.ContentPart{type: :thinking}) do
-    nil
+  defp encode_zai_content_part(%{type: :text, text: text}) when is_binary(text) do
+    %{type: "text", text: text}
   end
 
-  # Skip tool_call ContentParts - they're handled at message level
-  defp encode_zai_content_part(%ReqLLM.Message.ContentPart{type: :tool_call}) do
-    nil
+  defp encode_zai_content_part(%{"type" => "text", "text" => text}) when is_binary(text) do
+    %{type: "text", text: text}
   end
+
+  defp encode_zai_content_part(%ReqLLM.Message.ContentPart{type: :thinking}), do: nil
+  defp encode_zai_content_part(%{type: :thinking}), do: nil
+  defp encode_zai_content_part(%{"type" => "thinking"}), do: nil
+
+  defp encode_zai_content_part(%ReqLLM.Message.ContentPart{type: :tool_call}), do: nil
+  defp encode_zai_content_part(%{type: :tool_call}), do: nil
+  defp encode_zai_content_part(%{"type" => "tool_call"}), do: nil
 
   defp encode_zai_content_part(%ReqLLM.Message.ContentPart{
          type: :image,
@@ -422,6 +462,34 @@ defmodule ReqLLM.Providers.ZaiCoder do
   end
 
   defp encode_zai_content_part(%ReqLLM.Message.ContentPart{type: :image_url, url: url}) do
+    %{
+      type: "image_url",
+      image_url: %{
+        url: url
+      }
+    }
+  end
+
+  defp encode_zai_content_part(%{type: :image_url, url: url}) when is_binary(url) do
+    %{
+      type: "image_url",
+      image_url: %{
+        url: url
+      }
+    }
+  end
+
+  defp encode_zai_content_part(%{"type" => "image_url", "url" => url}) when is_binary(url) do
+    %{
+      type: "image_url",
+      image_url: %{
+        url: url
+      }
+    }
+  end
+
+  defp encode_zai_content_part(%{"type" => "image_url", "image_url" => %{"url" => url}})
+       when is_binary(url) do
     %{
       type: "image_url",
       image_url: %{

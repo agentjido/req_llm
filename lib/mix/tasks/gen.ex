@@ -584,6 +584,7 @@ defmodule Mix.Tasks.ReqLlm.Gen do
     end)
   end
 
+  defp format_error(:not_found), do: "Model not found"
   defp format_error(%{__struct__: _} = error), do: Exception.message(error)
   defp format_error(error), do: inspect(error)
 
@@ -657,7 +658,7 @@ defmodule Mix.Tasks.ReqLlm.Gen do
 
   defp handle_validation_error({:invalid_spec, error}, model_spec) do
     IO.puts("Error: Invalid model specification '#{model_spec}'")
-    IO.puts("Details: #{Exception.message(error)}")
+    IO.puts("Details: #{format_error(error)}")
   end
 
   defp handle_generation_error(error, model_spec, log_level) do
