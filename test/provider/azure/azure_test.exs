@@ -1254,6 +1254,133 @@ defmodule ReqLLM.Providers.AzureTest do
       body = Jason.decode!(finch_request.body)
       assert body["model"] == "deepseek-v3-deployment"
     end
+
+    test "Foundry endpoint uses Authorization Bearer header instead of api-key" do
+      {:ok, model} = ReqLLM.model("azure:deepseek-v3.1")
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+
+      request =
+        Req.new(url: "/test", method: :post)
+        |> Req.Request.register_options([:context, :api_key, :base_url])
+        |> Req.Request.merge_options(context: context)
+        |> Azure.attach(model,
+          api_key: "test-api-key",
+          context: context,
+          base_url: "https://my-resource.services.ai.azure.com"
+        )
+
+      assert Req.Request.get_header(request, "authorization") == ["Bearer test-api-key"]
+      assert Req.Request.get_header(request, "api-key") == []
+    end
+
+    test "traditional Azure endpoint uses api-key header" do
+      {:ok, model} = ReqLLM.model("azure:gpt-4o")
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+
+      request =
+        Req.new(url: "/test", method: :post)
+        |> Req.Request.register_options([:context, :api_key, :base_url])
+        |> Req.Request.merge_options(context: context)
+        |> Azure.attach(model,
+          api_key: "test-api-key",
+          context: context,
+          base_url: "https://my-resource.openai.azure.com/openai"
+        )
+
+      assert Req.Request.get_header(request, "api-key") == ["test-api-key"]
+      assert Req.Request.get_header(request, "authorization") == []
+    end
+
+    test "streaming Foundry endpoint uses Authorization Bearer header" do
+      {:ok, model} = ReqLLM.model("azure:deepseek-v3.1")
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+
+      {:ok, finch_request} =
+        Azure.attach_stream(
+          model,
+          context,
+          [
+            api_key: "test-api-key",
+            deployment: "deepseek-v3-deployment",
+            base_url: "https://my-resource.services.ai.azure.com"
+          ],
+          :req_llm_finch
+        )
+
+      header_map = Map.new(finch_request.headers)
+      assert header_map["authorization"] == "Bearer test-api-key"
+      refute Map.has_key?(header_map, "api-key")
+    end
+
+    test "Foundry endpoint defaults to 2024-05-01-preview API version" do
+      {:ok, model} = ReqLLM.model("azure:deepseek-v3.1")
+
+      {:ok, request} =
+        Azure.prepare_request(
+          :chat,
+          model,
+          "Hello",
+          deployment: "deepseek-v3",
+          base_url: "https://my-resource.services.ai.azure.com",
+          api_key: "test-key"
+        )
+
+      url_string = URI.to_string(request.url)
+      assert url_string =~ "api-version=2024-05-01-preview"
+    end
+
+    test "traditional Azure endpoint defaults to 2025-04-01-preview API version" do
+      {:ok, model} = ReqLLM.model("azure:gpt-4o")
+
+      {:ok, request} =
+        Azure.prepare_request(
+          :chat,
+          model,
+          "Hello",
+          deployment: "my-deployment",
+          base_url: "https://my-resource.openai.azure.com/openai",
+          api_key: "test-key"
+        )
+
+      url_string = URI.to_string(request.url)
+      assert url_string =~ "api-version=2025-04-01-preview"
+    end
+
+    test "explicit api_version overrides Foundry default" do
+      {:ok, model} = ReqLLM.model("azure:deepseek-v3.1")
+
+      {:ok, request} =
+        Azure.prepare_request(
+          :chat,
+          model,
+          "Hello",
+          deployment: "deepseek-v3",
+          base_url: "https://my-resource.services.ai.azure.com",
+          api_key: "test-key",
+          provider_options: [api_version: "2023-05-15"]
+        )
+
+      url_string = URI.to_string(request.url)
+      assert url_string =~ "api-version=2023-05-15"
+    end
+
+    test "explicit api_version overrides traditional Azure default" do
+      {:ok, model} = ReqLLM.model("azure:gpt-4o")
+
+      {:ok, request} =
+        Azure.prepare_request(
+          :chat,
+          model,
+          "Hello",
+          deployment: "my-deployment",
+          base_url: "https://my-resource.openai.azure.com/openai",
+          api_key: "test-key",
+          provider_options: [api_version: "2023-05-15"]
+        )
+
+      url_string = URI.to_string(request.url)
+      assert url_string =~ "api-version=2023-05-15"
+    end
   end
 
   defp get_json_body(%Req.Request{} = request) do
