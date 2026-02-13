@@ -899,6 +899,52 @@ defmodule ReqLLM.Providers.AzureTest do
 
       assert request.options[:receive_timeout] == 90_000
     end
+
+    test "uses extended timeout for DeepSeek models" do
+      {:ok, model} = ReqLLM.model("azure:deepseek-r1")
+
+      {:ok, request} =
+        Azure.prepare_request(
+          :chat,
+          model,
+          "Hello",
+          base_url: "https://my-resource.services.ai.azure.com/models",
+          deployment: "deepseek-r1"
+        )
+
+      assert request.options[:receive_timeout] == 120_000
+    end
+
+    test "uses extended timeout for mai-ds models" do
+      {:ok, model} = ReqLLM.model("azure:mai-ds-r1")
+
+      {:ok, request} =
+        Azure.prepare_request(
+          :chat,
+          model,
+          "Hello",
+          base_url: "https://my-resource.services.ai.azure.com/models",
+          deployment: "mai-ds-r1"
+        )
+
+      assert request.options[:receive_timeout] == 120_000
+    end
+
+    test "custom timeout overrides default for DeepSeek models" do
+      {:ok, model} = ReqLLM.model("azure:deepseek-r1")
+
+      {:ok, request} =
+        Azure.prepare_request(
+          :chat,
+          model,
+          "Hello",
+          base_url: "https://my-resource.services.ai.azure.com/models",
+          deployment: "deepseek-r1",
+          receive_timeout: 60_000
+        )
+
+      assert request.options[:receive_timeout] == 60_000
+    end
   end
 
   describe "authentication edge cases" do
