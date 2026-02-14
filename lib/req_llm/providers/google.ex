@@ -1524,7 +1524,7 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp extract_tool_calls(parts) do
-    for %{"functionCall" => %{} = call} <- parts do
+    for %{"functionCall" => %{} = call} = part <- parts do
       call_id = Map.get(call, "id", "tool_call_#{System.unique_integer([:positive])}")
 
       encoded_args =
@@ -1532,7 +1532,7 @@ defmodule ReqLLM.Providers.Google do
         |> Map.get("args", %{})
         |> Jason.encode!()
 
-      %{
+      tc = %{
         "id" => call_id,
         "type" => "function",
         "function" => %{
@@ -1540,6 +1540,13 @@ defmodule ReqLLM.Providers.Google do
           "arguments" => encoded_args
         }
       }
+
+      # Preserve thoughtSignature from Gemini response so consumers can
+      # cache and round-trip it for multi-turn tool calling with thinking models
+      case Map.get(part, "thoughtSignature") do
+        nil -> tc
+        sig -> Map.put(tc, "thought_signature", sig)
+      end
     end
   end
 
@@ -1892,25 +1899,42 @@ defmodule ReqLLM.Providers.Google do
 
   defp encode_single_google_reasoning_detail(_), do: []
 
+  # Gemini 3 models require thoughtSignature on functionCall parts in conversation
+  # history. When proxying through OpenAI-compatible format (which has no concept of
+  # thought_signatures), the signatures are lost during round-trip conversion.
+  # Inject Google's recommended dummy value for history originating from non-Gemini
+  # sources. Real signatures are preferred when available (see thought_signature option).
+  # See: https://ai.google.dev/gemini-api/docs/thought-signatures
+  @thought_sig_dummy Base.encode64("skip_thought_signature_validator")
+
   defp convert_tool_call_to_function_call(%ReqLLM.ToolCall{
          type: "function",
          function: %{name: name, arguments: args}
        }) do
-    %{functionCall: %{name: name, args: Jason.decode!(args)}}
+    %{
+      functionCall: %{name: name, args: Jason.decode!(args)},
+      thoughtSignature: @thought_sig_dummy
+    }
   end
 
   defp convert_tool_call_to_function_call(%{
          "type" => "function",
          "function" => %{"name" => name, "arguments" => args}
        }) do
-    %{functionCall: %{name: name, args: Jason.decode!(args)}}
+    %{
+      functionCall: %{name: name, args: Jason.decode!(args)},
+      thoughtSignature: @thought_sig_dummy
+    }
   end
 
   defp convert_tool_call_to_function_call(%{
          type: "function",
          function: %{name: name, arguments: args}
        }) do
-    %{functionCall: %{name: name, args: Jason.decode!(args)}}
+    %{
+      functionCall: %{name: name, args: Jason.decode!(args)},
+      thoughtSignature: @thought_sig_dummy
+    }
   end
 
   defp convert_tool_call_to_function_call(_), do: nil
@@ -2194,7 +2218,16 @@ defmodule ReqLLM.Providers.Google do
           name = call["name"]
           args = call["args"] || %{}
           call_id = Map.get(call, "id", "call_#{System.unique_integer([:positive])}")
-          [ReqLLM.StreamChunk.tool_call(name, args, %{id: call_id})]
+          meta = %{id: call_id}
+          # Preserve thoughtSignature from Gemini response for consumers that
+          # need to cache and round-trip it (e.g., OpenAI-compatible proxies)
+          meta =
+            case Map.get(part, "thoughtSignature") do
+              nil -> meta
+              sig -> Map.put(meta, :thought_signature, sig)
+            end
+
+          [ReqLLM.StreamChunk.tool_call(name, args, meta)]
 
         true ->
           []
