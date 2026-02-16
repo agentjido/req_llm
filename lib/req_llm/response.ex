@@ -22,6 +22,7 @@ defmodule ReqLLM.Response do
   """
 
   alias ReqLLM.Message
+  alias ReqLLM.ToolCall
 
   @derive {Jason.Encoder, except: [:stream]}
 
@@ -41,6 +42,9 @@ defmodule ReqLLM.Response do
                 Zoi.literal(:tool_calls),
                 Zoi.literal(:content_filter),
                 Zoi.literal(:error),
+                Zoi.literal(:cancelled),
+                Zoi.literal(:incomplete),
+                Zoi.literal(:unknown),
                 Zoi.null()
               ])
               |> Zoi.default(nil),
@@ -164,6 +168,70 @@ defmodule ReqLLM.Response do
 
   def tool_calls(%__MODULE__{message: %Message{tool_calls: nil}}), do: []
 
+  @typedoc """
+  Result of classifying a non-streaming response.
+
+  - `type` - `:tool_calls` when tools should be executed, `:final_answer` otherwise
+  - `text` - Assistant text content
+  - `thinking` - Assistant thinking content
+  - `tool_calls` - Normalized tool call maps with `:id`, `:name`, and `:arguments`
+  - `finish_reason` - Normalized finish reason atom
+  """
+  @type classify_result :: %{
+          type: :tool_calls | :final_answer,
+          text: String.t(),
+          thinking: String.t(),
+          tool_calls: [map()],
+          finish_reason:
+            :stop
+            | :length
+            | :tool_calls
+            | :content_filter
+            | :error
+            | :cancelled
+            | :incomplete
+            | :unknown
+            | nil
+        }
+
+  @doc """
+  Classify a non-streaming response for tool-calling workflows.
+
+  Returns a map with stream-parity shape:
+  `%{type, text, thinking, tool_calls, finish_reason}`.
+  """
+  @spec classify(t()) :: classify_result()
+  def classify(%__MODULE__{} = response) do
+    text = text(response) || ""
+    thinking = thinking(response) || ""
+    normalized_tool_calls = normalize_tool_calls_for_classify(tool_calls(response))
+
+    raw_finish_reason =
+      response
+      |> Map.from_struct()
+      |> Map.get(:finish_reason)
+
+    normalized_finish_reason =
+      raw_finish_reason
+      |> reason_to_string_for_classify()
+      |> normalize_finish_reason_for_classify()
+
+    type =
+      cond do
+        normalized_tool_calls != [] -> :tool_calls
+        normalized_finish_reason == :tool_calls -> :tool_calls
+        true -> :final_answer
+      end
+
+    %{
+      type: type,
+      text: text,
+      thinking: thinking,
+      tool_calls: normalized_tool_calls,
+      finish_reason: normalized_finish_reason
+    }
+  end
+
   @doc """
   Get the finish reason for this response.
 
@@ -173,7 +241,16 @@ defmodule ReqLLM.Response do
       :stop
 
   """
-  @spec finish_reason(t()) :: :stop | :length | :tool_calls | :content_filter | :error | nil
+  @spec finish_reason(t()) ::
+          :stop
+          | :length
+          | :tool_calls
+          | :content_filter
+          | :error
+          | :cancelled
+          | :incomplete
+          | :unknown
+          | nil
   def finish_reason(%__MODULE__{finish_reason: reason}), do: reason
 
   @doc """
@@ -512,4 +589,74 @@ defmodule ReqLLM.Response do
         {:error, %ReqLLM.Error.API.Response{reason: "No structured output found in response"}}
     end
   end
+
+  defp normalize_tool_calls_for_classify(tool_calls) when is_list(tool_calls) do
+    tool_calls
+    |> Enum.map(&normalize_tool_call_for_classify/1)
+    |> Enum.filter(&(is_map(&1) and is_binary(Map.get(&1, :name))))
+  end
+
+  defp normalize_tool_call_for_classify(%ToolCall{} = tool_call) do
+    ToolCall.to_map(tool_call)
+  end
+
+  defp normalize_tool_call_for_classify(%{id: id, name: name, arguments: args}) do
+    %{id: normalize_tool_call_id(id), name: name, arguments: parse_tool_call_arguments(args)}
+  end
+
+  defp normalize_tool_call_for_classify(%{"id" => id, "name" => name, "arguments" => args}) do
+    %{id: normalize_tool_call_id(id), name: name, arguments: parse_tool_call_arguments(args)}
+  end
+
+  defp normalize_tool_call_for_classify(%{function: %{name: name, arguments: args}} = tool_call) do
+    id = Map.get(tool_call, :id)
+    %{id: normalize_tool_call_id(id), name: name, arguments: parse_tool_call_arguments(args)}
+  end
+
+  defp normalize_tool_call_for_classify(
+         %{"function" => %{"name" => name, "arguments" => args}} = tool_call
+       ) do
+    id = Map.get(tool_call, "id")
+    %{id: normalize_tool_call_id(id), name: name, arguments: parse_tool_call_arguments(args)}
+  end
+
+  defp normalize_tool_call_for_classify(_), do: nil
+
+  defp normalize_tool_call_id(nil), do: ""
+  defp normalize_tool_call_id(id) when is_binary(id), do: id
+  defp normalize_tool_call_id(id) when is_atom(id), do: Atom.to_string(id)
+  defp normalize_tool_call_id(id) when is_number(id), do: to_string(id)
+  defp normalize_tool_call_id(id), do: inspect(id)
+
+  defp parse_tool_call_arguments(arguments) when is_map(arguments), do: arguments
+
+  defp parse_tool_call_arguments(arguments) when is_binary(arguments) do
+    case Jason.decode(arguments) do
+      {:ok, parsed} when is_map(parsed) -> parsed
+      _ -> %{}
+    end
+  end
+
+  defp parse_tool_call_arguments(_), do: %{}
+
+  defp reason_to_string_for_classify(nil), do: nil
+  defp reason_to_string_for_classify(reason) when is_binary(reason), do: reason
+  defp reason_to_string_for_classify(reason) when is_atom(reason), do: Atom.to_string(reason)
+  defp reason_to_string_for_classify(_), do: "__unknown__"
+
+  defp normalize_finish_reason_for_classify(nil), do: nil
+  defp normalize_finish_reason_for_classify("stop"), do: :stop
+  defp normalize_finish_reason_for_classify("completed"), do: :stop
+  defp normalize_finish_reason_for_classify("tool_calls"), do: :tool_calls
+  defp normalize_finish_reason_for_classify("tool_use"), do: :tool_calls
+  defp normalize_finish_reason_for_classify("length"), do: :length
+  defp normalize_finish_reason_for_classify("max_tokens"), do: :length
+  defp normalize_finish_reason_for_classify("max_output_tokens"), do: :length
+  defp normalize_finish_reason_for_classify("content_filter"), do: :content_filter
+  defp normalize_finish_reason_for_classify("end_turn"), do: :stop
+  defp normalize_finish_reason_for_classify("error"), do: :error
+  defp normalize_finish_reason_for_classify("cancelled"), do: :cancelled
+  defp normalize_finish_reason_for_classify("incomplete"), do: :incomplete
+  defp normalize_finish_reason_for_classify("unknown"), do: :unknown
+  defp normalize_finish_reason_for_classify(_), do: :unknown
 end

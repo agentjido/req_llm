@@ -897,7 +897,7 @@ defmodule ReqLLM.StreamServer do
   # This mirrors the logic in ReqLLM.Step.Usage.fallback_extract_usage/1
   defp normalize_streaming_usage(usage, model) when is_map(usage) do
     usage
-    |> ReqLLM.Usage.Normalize.normalize()
+    |> ReqLLM.Usage.normalize()
     |> ReqLLM.Usage.Cost.apply(model, original_usage: usage, preserve_total_cost: true)
   end
 

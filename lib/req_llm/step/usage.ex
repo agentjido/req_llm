@@ -131,7 +131,7 @@ defmodule ReqLLM.Step.Usage do
   defp provider_extract_usage(body, module, model) when is_atom(module) do
     if function_exported?(module, :extract_usage, 2) do
       case module.extract_usage(body, model) do
-        {:ok, usage} -> {:ok, ReqLLM.Usage.Normalize.normalize(usage)}
+        {:ok, usage} -> {:ok, ReqLLM.Usage.normalize(usage)}
         _ -> nil
       end
     end
@@ -139,19 +139,19 @@ defmodule ReqLLM.Step.Usage do
 
   @spec fallback_extract_usage(any) :: {:ok, map()} | :error
   defp fallback_extract_usage(%{"usage" => usage}) when is_map(usage) do
-    {:ok, ReqLLM.Usage.Normalize.normalize(usage)}
+    {:ok, ReqLLM.Usage.normalize(usage)}
   end
 
   defp fallback_extract_usage(%{"prompt_tokens" => input, "completion_tokens" => output}) do
-    {:ok, ReqLLM.Usage.Normalize.normalize(%{input: input, output: output})}
+    {:ok, ReqLLM.Usage.normalize(%{input: input, output: output})}
   end
 
   defp fallback_extract_usage(%{"input_tokens" => input, "output_tokens" => output}) do
-    {:ok, ReqLLM.Usage.Normalize.normalize(%{input: input, output: output})}
+    {:ok, ReqLLM.Usage.normalize(%{input: input, output: output})}
   end
 
   defp fallback_extract_usage(%ReqLLM.Response{usage: usage}) when is_map(usage) do
-    {:ok, ReqLLM.Usage.Normalize.normalize(usage)}
+    {:ok, ReqLLM.Usage.normalize(usage)}
   end
 
   defp fallback_extract_usage(_), do: :error
