@@ -52,7 +52,7 @@ defmodule ReqLLM.ResponseTest do
 
   import ReqLLM.ResponseTest.Helpers
 
-  alias ReqLLM.{Context, Error, Message, Message.ContentPart, Response, StreamChunk}
+  alias ReqLLM.{Context, Error, Message, Message.ContentPart, Response, StreamChunk, ToolCall}
 
   # Mock provider for testing
   defmodule TestProvider do
@@ -393,6 +393,73 @@ defmodule ReqLLM.ResponseTest do
     test "decode_object_stream/3 delegates to decode_response" do
       data = %{"test" => "streaming_data"}
       _result = Response.decode_object_stream(data, "groq:llama3-8b-8192", [])
+    end
+  end
+
+  describe "classify/1" do
+    test "classifies text-only responses as :final_answer" do
+      content = [
+        %ContentPart{type: :thinking, text: "Let me think."},
+        %ContentPart{type: :text, text: "Final answer"}
+      ]
+
+      message = %Message{role: :assistant, content: content, metadata: %{}}
+      response = create_response(message: message, finish_reason: :stop)
+      result = Response.classify(response)
+
+      assert result.type == :final_answer
+      assert result.text == "Final answer"
+      assert result.thinking == "Let me think."
+      assert result.tool_calls == []
+      assert result.finish_reason == :stop
+    end
+
+    test "classifies tool call responses as :tool_calls and normalizes ToolCall structs" do
+      tool_call = ToolCall.new("call_1", "get_weather", ~s({"city":"NYC"}))
+      response = create_response(message: tool_message([tool_call]), finish_reason: :stop)
+      result = Response.classify(response)
+
+      assert result.type == :tool_calls
+
+      assert result.tool_calls == [
+               %{id: "call_1", name: "get_weather", arguments: %{"city" => "NYC"}}
+             ]
+
+      assert result.finish_reason == :stop
+    end
+
+    test "classifies as :tool_calls when finish_reason indicates tool calls" do
+      response = create_response(message: text_message(""), finish_reason: "tool_use")
+      result = Response.classify(response)
+
+      assert result.type == :tool_calls
+      assert result.tool_calls == []
+      assert result.finish_reason == :tool_calls
+    end
+
+    test "normalizes map-based tool calls with nested function payloads" do
+      message =
+        tool_message([
+          %{"id" => "call_2", "function" => %{"name" => "calculator", "arguments" => ~s({"a":1})}}
+        ])
+
+      response = create_response(message: message, finish_reason: :tool_calls)
+      result = Response.classify(response)
+
+      assert result.type == :tool_calls
+      assert result.tool_calls == [%{id: "call_2", name: "calculator", arguments: %{"a" => 1}}]
+      assert result.finish_reason == :tool_calls
+    end
+
+    test "handles nil message and unknown finish reason safely" do
+      response = create_response(message: nil, finish_reason: "not_a_real_reason")
+      result = Response.classify(response)
+
+      assert result.type == :final_answer
+      assert result.text == ""
+      assert result.thinking == ""
+      assert result.tool_calls == []
+      assert result.finish_reason == :unknown
     end
   end
 

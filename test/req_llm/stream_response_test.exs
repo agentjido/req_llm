@@ -270,10 +270,15 @@ defmodule ReqLLM.StreamResponseTest do
     finish_reason_tests = [
       {:stop, :stop},
       {:length, :length},
-      {:tool_use, :tool_use},
+      {:tool_use, :tool_calls},
+      {:cancelled, :cancelled},
+      {:incomplete, :incomplete},
       {"stop", :stop},
       {"length", :length},
-      {"tool_use", :tool_use}
+      {"tool_use", :tool_calls},
+      {"cancelled", :cancelled},
+      {"incomplete", :incomplete},
+      {"not_real_reason", :unknown}
     ]
 
     for {input, expected} <- finish_reason_tests do

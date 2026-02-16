@@ -130,6 +130,8 @@ defmodule ReqLLM.Response.StreamTest do
         {"tool_use", :tool_calls},
         {"length", :length},
         {"max_tokens", :length},
+        {"cancelled", :cancelled},
+        {"incomplete", :incomplete},
         {"content_filter", :content_filter},
         {"unknown_value", :unknown}
       ]

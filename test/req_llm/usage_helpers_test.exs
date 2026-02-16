@@ -26,6 +26,49 @@ defmodule ReqLLM.UsageHelpersTest do
     end
   end
 
+  describe "ReqLLM.Usage" do
+    test "normalizes provider usage maps with canonical and alias keys" do
+      usage =
+        ReqLLM.Usage.normalize(%{
+          "prompt_tokens" => 10,
+          "completion_tokens" => 5
+        })
+
+      assert usage.input_tokens == 10
+      assert usage.output_tokens == 5
+      assert usage.total_tokens == 15
+      assert usage.input == 10
+      assert usage.output == 5
+    end
+
+    test "preserves explicit total_tokens when provided" do
+      usage =
+        ReqLLM.Usage.normalize(%{
+          input_tokens: 4,
+          output_tokens: 6,
+          total_tokens: 100
+        })
+
+      assert usage.input_tokens == 4
+      assert usage.output_tokens == 6
+      assert usage.total_tokens == 100
+      assert usage.input == 4
+      assert usage.output == 6
+    end
+
+    test "returns zeroed canonical and alias keys for non-map values" do
+      usage = ReqLLM.Usage.normalize(nil)
+
+      assert usage == %{
+               input_tokens: 0,
+               output_tokens: 0,
+               total_tokens: 0,
+               input: 0,
+               output: 0
+             }
+    end
+  end
+
   describe "ReqLLM.Pricing" do
     test "resolves tool unit from pricing components" do
       model = %LLMDB.Model{
