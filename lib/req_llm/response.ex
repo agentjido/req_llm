@@ -182,7 +182,16 @@ defmodule ReqLLM.Response do
           text: String.t(),
           thinking: String.t(),
           tool_calls: [map()],
-          finish_reason: atom() | nil
+          finish_reason:
+            :stop
+            | :length
+            | :tool_calls
+            | :content_filter
+            | :error
+            | :cancelled
+            | :incomplete
+            | :unknown
+            | nil
         }
 
   @doc """
@@ -196,7 +205,11 @@ defmodule ReqLLM.Response do
     text = text(response) || ""
     thinking = thinking(response) || ""
     normalized_tool_calls = normalize_tool_calls_for_classify(tool_calls(response))
-    normalized_finish_reason = normalize_finish_reason_for_classify(response.finish_reason)
+
+    normalized_finish_reason =
+      response.finish_reason
+      |> reason_to_string_for_classify()
+      |> normalize_finish_reason_for_classify()
 
     type =
       cond do
@@ -578,8 +591,6 @@ defmodule ReqLLM.Response do
     |> Enum.filter(&(is_map(&1) and is_binary(Map.get(&1, :name))))
   end
 
-  defp normalize_tool_calls_for_classify(_), do: []
-
   defp normalize_tool_call_for_classify(%ToolCall{} = tool_call) do
     ToolCall.to_map(tool_call)
   end
@@ -623,43 +634,22 @@ defmodule ReqLLM.Response do
 
   defp parse_tool_call_arguments(_), do: %{}
 
+  defp reason_to_string_for_classify(nil), do: nil
+  defp reason_to_string_for_classify(reason) when is_atom(reason), do: Atom.to_string(reason)
+
   defp normalize_finish_reason_for_classify(nil), do: nil
-
-  defp normalize_finish_reason_for_classify(reason) when is_atom(reason),
-    do: normalize_reason_atom(reason)
-
-  defp normalize_finish_reason_for_classify(reason) when is_binary(reason),
-    do: normalize_reason_binary(reason)
-
+  defp normalize_finish_reason_for_classify("stop"), do: :stop
+  defp normalize_finish_reason_for_classify("completed"), do: :stop
+  defp normalize_finish_reason_for_classify("tool_calls"), do: :tool_calls
+  defp normalize_finish_reason_for_classify("tool_use"), do: :tool_calls
+  defp normalize_finish_reason_for_classify("length"), do: :length
+  defp normalize_finish_reason_for_classify("max_tokens"), do: :length
+  defp normalize_finish_reason_for_classify("max_output_tokens"), do: :length
+  defp normalize_finish_reason_for_classify("content_filter"), do: :content_filter
+  defp normalize_finish_reason_for_classify("end_turn"), do: :stop
+  defp normalize_finish_reason_for_classify("error"), do: :error
+  defp normalize_finish_reason_for_classify("cancelled"), do: :cancelled
+  defp normalize_finish_reason_for_classify("incomplete"), do: :incomplete
+  defp normalize_finish_reason_for_classify("unknown"), do: :unknown
   defp normalize_finish_reason_for_classify(_), do: :unknown
-
-  defp normalize_reason_atom(:tool_use), do: :tool_calls
-  defp normalize_reason_atom(:completed), do: :stop
-  defp normalize_reason_atom(:end_turn), do: :stop
-  defp normalize_reason_atom(:max_tokens), do: :length
-  defp normalize_reason_atom(:max_output_tokens), do: :length
-  defp normalize_reason_atom(:stop), do: :stop
-  defp normalize_reason_atom(:tool_calls), do: :tool_calls
-  defp normalize_reason_atom(:length), do: :length
-  defp normalize_reason_atom(:content_filter), do: :content_filter
-  defp normalize_reason_atom(:error), do: :error
-  defp normalize_reason_atom(:cancelled), do: :cancelled
-  defp normalize_reason_atom(:incomplete), do: :incomplete
-  defp normalize_reason_atom(:unknown), do: :unknown
-  defp normalize_reason_atom(_), do: :unknown
-
-  defp normalize_reason_binary("stop"), do: :stop
-  defp normalize_reason_binary("completed"), do: :stop
-  defp normalize_reason_binary("tool_calls"), do: :tool_calls
-  defp normalize_reason_binary("tool_use"), do: :tool_calls
-  defp normalize_reason_binary("length"), do: :length
-  defp normalize_reason_binary("max_tokens"), do: :length
-  defp normalize_reason_binary("max_output_tokens"), do: :length
-  defp normalize_reason_binary("content_filter"), do: :content_filter
-  defp normalize_reason_binary("end_turn"), do: :stop
-  defp normalize_reason_binary("error"), do: :error
-  defp normalize_reason_binary("cancelled"), do: :cancelled
-  defp normalize_reason_binary("incomplete"), do: :incomplete
-  defp normalize_reason_binary("unknown"), do: :unknown
-  defp normalize_reason_binary(_), do: :unknown
 end
