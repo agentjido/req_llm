@@ -234,6 +234,48 @@ defmodule ReqLLM.ToolTest do
 
       assert {:error, %ReqLLM.Error.Invalid.Parameter{}} = Tool.execute(tool, "not a map")
     end
+
+    test "normalizes schema-known string keys safely" do
+      {:ok, tool} =
+        Tool.new(
+          name: "schema_normalization_test",
+          description: "Schema normalization",
+          parameter_schema: [
+            required_field: [type: :string, required: true],
+            optional_field: [type: :integer, default: 42]
+          ],
+          callback: fn args -> {:ok, args} end
+        )
+
+      assert {:ok, validated} = Tool.execute(tool, %{"required_field" => "abc"})
+      assert Map.get(validated, :required_field) == "abc"
+      assert Map.get(validated, :optional_field) == 42
+    end
+
+    test "does not atomize unknown string keys" do
+      {:ok, tool} =
+        Tool.new(
+          name: "unknown_key_safety_test",
+          description: "Unknown key safety",
+          parameter_schema: [
+            required_field: [type: :string, required: true]
+          ],
+          callback: fn args -> {:ok, args} end
+        )
+
+      unknown_key = "unexpected_key_#{System.unique_integer([:positive])}"
+
+      assert_raise ArgumentError, fn ->
+        String.to_existing_atom(unknown_key)
+      end
+
+      assert {:error, %ReqLLM.Error.Validation.Error{}} =
+               Tool.execute(tool, %{"required_field" => "abc", unknown_key => "value"})
+
+      assert_raise ArgumentError, fn ->
+        String.to_existing_atom(unknown_key)
+      end
+    end
   end
 
   describe "to_schema/2" do

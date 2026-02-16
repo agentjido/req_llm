@@ -481,7 +481,7 @@ defmodule ReqLLM.StreamResponse do
 
   ## Returns
 
-  An atom indicating the finish reason (`:stop`, `:length`, `:tool_use`, etc.) or nil.
+  An atom indicating the finish reason (`:stop`, `:length`, `:tool_calls`, etc.) or nil.
 
   ## Examples
 
@@ -501,13 +501,51 @@ defmodule ReqLLM.StreamResponse do
 
     case metadata do
       %{finish_reason: finish_reason} when is_atom(finish_reason) ->
-        finish_reason
+        normalize_finish_reason(finish_reason)
 
       %{finish_reason: finish_reason} when is_binary(finish_reason) ->
-        String.to_existing_atom(finish_reason)
+        normalize_finish_reason(finish_reason)
 
       _ ->
         nil
+    end
+  end
+
+  defp normalize_finish_reason(reason) when is_atom(reason) do
+    case reason do
+      :tool_use -> :tool_calls
+      :completed -> :stop
+      :end_turn -> :stop
+      :max_tokens -> :length
+      :max_output_tokens -> :length
+      :stop -> :stop
+      :tool_calls -> :tool_calls
+      :length -> :length
+      :content_filter -> :content_filter
+      :error -> :error
+      :cancelled -> :cancelled
+      :incomplete -> :incomplete
+      :unknown -> :unknown
+      _ -> :unknown
+    end
+  end
+
+  defp normalize_finish_reason(reason) when is_binary(reason) do
+    case reason do
+      "stop" -> :stop
+      "completed" -> :stop
+      "tool_calls" -> :tool_calls
+      "tool_use" -> :tool_calls
+      "length" -> :length
+      "max_tokens" -> :length
+      "max_output_tokens" -> :length
+      "content_filter" -> :content_filter
+      "end_turn" -> :stop
+      "error" -> :error
+      "cancelled" -> :cancelled
+      "incomplete" -> :incomplete
+      "unknown" -> :unknown
+      _ -> :unknown
     end
   end
 

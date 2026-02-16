@@ -398,14 +398,24 @@ defmodule ReqLLM.Tool do
 
   defp validate_input(%__MODULE__{compiled: nil}, input), do: {:ok, input}
 
-  defp validate_input(%__MODULE__{compiled: schema}, input) do
-    normalized_input = normalize_input_keys(input)
+  defp validate_input(%__MODULE__{compiled: schema, parameter_schema: parameter_schema}, input) do
+    normalized_input = normalize_input_keys(input, parameter_schema)
 
-    case NimbleOptions.validate(normalized_input, schema) do
-      {:ok, validated_input} ->
-        {:ok, validated_input}
+    try do
+      case NimbleOptions.validate(normalized_input, schema) do
+        {:ok, validated_input} ->
+          {:ok, validated_input}
 
-      {:error, error} ->
+        {:error, error} ->
+          {:error,
+           ReqLLM.Error.Validation.Error.exception(
+             tag: :parameter_validation,
+             reason: Exception.message(error),
+             context: [input: input]
+           )}
+      end
+    rescue
+      error ->
         {:error,
          ReqLLM.Error.Validation.Error.exception(
            tag: :parameter_validation,
@@ -415,19 +425,26 @@ defmodule ReqLLM.Tool do
     end
   end
 
-  defp normalize_input_keys(input) when is_map(input) do
+  defp normalize_input_keys(input, parameter_schema)
+       when is_map(input) and is_list(parameter_schema) do
+    schema_key_map =
+      parameter_schema
+      |> Enum.map(fn {key, _opts} -> {Atom.to_string(key), key} end)
+      |> Map.new()
+
     Map.new(input, fn
       {key, value} when is_binary(key) ->
-        try do
-          {String.to_existing_atom(key), value}
-        rescue
-          ArgumentError -> {String.to_atom(key), value}
+        case Map.fetch(schema_key_map, key) do
+          {:ok, atom_key} -> {atom_key, value}
+          :error -> {key, value}
         end
 
       {key, value} ->
         {key, value}
     end)
   end
+
+  defp normalize_input_keys(input, _parameter_schema), do: input
 
   defp call_callback({module, function}, input) do
     apply(module, function, [input])
