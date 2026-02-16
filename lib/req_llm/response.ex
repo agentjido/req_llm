@@ -206,8 +206,13 @@ defmodule ReqLLM.Response do
     thinking = thinking(response) || ""
     normalized_tool_calls = normalize_tool_calls_for_classify(tool_calls(response))
 
+    raw_finish_reason =
+      response
+      |> Map.from_struct()
+      |> Map.get(:finish_reason)
+
     normalized_finish_reason =
-      response.finish_reason
+      raw_finish_reason
       |> reason_to_string_for_classify()
       |> normalize_finish_reason_for_classify()
 
@@ -635,7 +640,9 @@ defmodule ReqLLM.Response do
   defp parse_tool_call_arguments(_), do: %{}
 
   defp reason_to_string_for_classify(nil), do: nil
+  defp reason_to_string_for_classify(reason) when is_binary(reason), do: reason
   defp reason_to_string_for_classify(reason) when is_atom(reason), do: Atom.to_string(reason)
+  defp reason_to_string_for_classify(_), do: "__unknown__"
 
   defp normalize_finish_reason_for_classify(nil), do: nil
   defp normalize_finish_reason_for_classify("stop"), do: :stop
