@@ -359,6 +359,81 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
     end
   end
 
+  describe "option translation for Gemini thinking" do
+    alias ReqLLM.Providers.GoogleVertex
+
+    test "google_thinking_budget is in the Vertex provider schema" do
+      schema_keys = GoogleVertex.provider_schema().schema |> Keyword.keys()
+      assert :google_thinking_budget in schema_keys
+    end
+
+    test "translate_options maps reasoning_token_budget to google_thinking_budget for Gemini" do
+      model = %LLMDB.Model{
+        id: "gemini-2.5-pro",
+        provider: :google_vertex,
+        capabilities: %{chat: true}
+      }
+
+      opts = [reasoning_token_budget: 16_384]
+      {translated, _warnings} = GoogleVertex.translate_options(:chat, model, opts)
+
+      assert Keyword.get(translated, :google_thinking_budget) == 16_384
+    end
+
+    test "translate_options maps reasoning_effort levels to google_thinking_budget for Gemini" do
+      model = %LLMDB.Model{
+        id: "gemini-2.5-flash",
+        provider: :google_vertex,
+        capabilities: %{chat: true}
+      }
+
+      test_cases = [
+        {:none, 0},
+        {:minimal, 2_048},
+        {:low, 4_096},
+        {:medium, 8_192},
+        {:high, 16_384},
+        {:xhigh, 32_768}
+      ]
+
+      for {effort, expected_budget} <- test_cases do
+        opts = [reasoning_effort: effort]
+        {translated, _warnings} = GoogleVertex.translate_options(:chat, model, opts)
+
+        assert Keyword.get(translated, :google_thinking_budget) == expected_budget,
+               "Expected reasoning_effort #{inspect(effort)} to map to budget #{expected_budget}"
+      end
+    end
+
+    test "translate_options still delegates to Anthropic for Claude models" do
+      model = %LLMDB.Model{
+        id: "claude-sonnet-4-5-20250514",
+        provider: :google_vertex,
+        capabilities: %{chat: true}
+      }
+
+      opts = [temperature: 0.7]
+      {translated, _warnings} = GoogleVertex.translate_options(:chat, model, opts)
+
+      # Should pass through without error (Anthropic translation)
+      assert Keyword.get(translated, :temperature) == 0.7
+    end
+
+    test "pre_validate_options handles reasoning_effort in provider_options for Gemini" do
+      model = %LLMDB.Model{
+        id: "gemini-2.5-pro",
+        provider: :google_vertex,
+        capabilities: %{chat: true}
+      }
+
+      opts = [provider_options: [reasoning_effort: :high]]
+      {validated, _warnings} = GoogleVertex.pre_validate_options(:chat, model, opts)
+
+      provider_opts = Keyword.get(validated, :provider_options, [])
+      assert Keyword.get(provider_opts, :google_thinking_budget) == 16_384
+    end
+  end
+
   describe "extract_usage/2" do
     test "maps cachedContentTokenCount to cached_tokens" do
       body = %{

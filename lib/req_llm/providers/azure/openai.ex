@@ -57,10 +57,15 @@ defmodule ReqLLM.Providers.Azure.OpenAI do
   Pre-validates and transforms options for OpenAI models on Azure.
   Warns if Anthropic-specific options are passed.
   """
-  def pre_validate_options(_operation, _model, opts) do
+  def pre_validate_options(_operation, model, opts) do
+    model_id =
+      if is_binary(model),
+        do: model,
+        else: Map.get(model, :provider_model_id) || Map.get(model, :id, "")
+
     opts
     |> warn_and_remove_anthropic_options()
-    |> warn_and_remove_anthropic_thinking_config()
+    |> warn_and_remove_anthropic_thinking_config(model_id)
     |> then(&{&1, []})
   end
 
@@ -88,24 +93,28 @@ defmodule ReqLLM.Providers.Azure.OpenAI do
     end
   end
 
-  defp warn_and_remove_anthropic_thinking_config(opts) do
-    case opts[:provider_options] do
-      provider_opts when is_list(provider_opts) ->
-        amrf = provider_opts[:additional_model_request_fields]
+  defp warn_and_remove_anthropic_thinking_config(opts, model_id) do
+    if AdapterHelpers.deepseek_model?(model_id) do
+      opts
+    else
+      case opts[:provider_options] do
+        provider_opts when is_list(provider_opts) ->
+          amrf = provider_opts[:additional_model_request_fields]
 
-        case amrf do
-          %{thinking: _} ->
-            warn_and_remove_thinking(opts, provider_opts, amrf)
+          case amrf do
+            %{thinking: _} ->
+              warn_and_remove_thinking(opts, provider_opts, amrf)
 
-          %{"thinking" => _} ->
-            warn_and_remove_thinking(opts, provider_opts, amrf)
+            %{"thinking" => _} ->
+              warn_and_remove_thinking(opts, provider_opts, amrf)
 
-          _ ->
-            opts
-        end
+            _ ->
+              opts
+          end
 
-      _ ->
-        opts
+        _ ->
+          opts
+      end
     end
   end
 
@@ -169,6 +178,7 @@ defmodule ReqLLM.Providers.Azure.OpenAI do
       |> maybe_put(:service_tier, provider_opts[:service_tier])
       |> add_verbosity(provider_opts)
       |> add_stream_options(opts)
+      |> add_deepseek_thinking(model_id, provider_opts)
       |> AdapterHelpers.add_parallel_tool_calls(opts, provider_opts)
       |> AdapterHelpers.translate_tool_choice_format()
       |> AdapterHelpers.add_strict_to_tools()
@@ -208,6 +218,20 @@ defmodule ReqLLM.Providers.Azure.OpenAI do
   defp normalize_verbosity(nil), do: nil
   defp normalize_verbosity(v) when is_atom(v), do: Atom.to_string(v)
   defp normalize_verbosity(v) when is_binary(v), do: v
+
+  defp add_deepseek_thinking(body, model_id, provider_opts) do
+    if AdapterHelpers.deepseek_model?(model_id) do
+      amrf = provider_opts[:additional_model_request_fields]
+
+      case amrf do
+        %{thinking: config} -> maybe_put(body, :thinking, config)
+        %{"thinking" => config} -> maybe_put(body, :thinking, config)
+        _ -> body
+      end
+    else
+      body
+    end
+  end
 
   @doc """
   Formats an embedding request for Azure OpenAI.
@@ -261,18 +285,28 @@ defmodule ReqLLM.Providers.Azure.OpenAI do
 
   Includes all available fields: input_tokens, output_tokens, total_tokens,
   cached_tokens (from prompt_tokens_details), and reasoning_tokens
-  (from completion_tokens_details for o1/o3 models).
+  (from completion_tokens_details, or inferred from reasoning_content in choices).
   """
   def extract_usage(body, _model) when is_map(body) do
     case body do
       %{"usage" => usage} ->
         cached = get_in(usage, ["prompt_tokens_details", "cached_tokens"]) || 0
-        reasoning = get_in(usage, ["completion_tokens_details", "reasoning_tokens"]) || 0
+        completion_tokens = Map.get(usage, "completion_tokens", 0)
+
+        reasoning_from_details =
+          get_in(usage, ["completion_tokens_details", "reasoning_tokens"]) || 0
+
+        reasoning =
+          if reasoning_from_details > 0 do
+            reasoning_from_details
+          else
+            infer_reasoning_from_choices(body["choices"], completion_tokens)
+          end
 
         {:ok,
          %{
            input_tokens: Map.get(usage, "prompt_tokens", 0),
-           output_tokens: Map.get(usage, "completion_tokens", 0),
+           output_tokens: completion_tokens,
            total_tokens: Map.get(usage, "total_tokens", 0),
            cached_tokens: cached,
            reasoning_tokens: reasoning
@@ -284,6 +318,25 @@ defmodule ReqLLM.Providers.Azure.OpenAI do
   end
 
   def extract_usage(_, _), do: {:error, :no_usage}
+
+  defp infer_reasoning_from_choices(choices, completion_tokens) when is_list(choices) do
+    {reasoning_len, answer_len} =
+      Enum.reduce(choices, {0, 0}, fn choice, {r_acc, a_acc} ->
+        reasoning = get_in(choice, ["message", "reasoning_content"]) || ""
+        answer = get_in(choice, ["message", "content"]) || ""
+        {r_acc + String.length(reasoning), a_acc + String.length(answer)}
+      end)
+
+    total_len = reasoning_len + answer_len
+
+    if reasoning_len > 0 and total_len > 0 do
+      round(completion_tokens * reasoning_len / total_len)
+    else
+      0
+    end
+  end
+
+  defp infer_reasoning_from_choices(_, _), do: 0
 
   @doc """
   Decodes Server-Sent Events for streaming responses.

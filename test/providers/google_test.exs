@@ -764,9 +764,7 @@ defmodule ReqLLM.Providers.GoogleTest do
         opts = [reasoning_effort: effort]
         {translated_opts, _warnings} = Google.translate_options(:chat, model, opts)
 
-        provider_opts = Keyword.get(translated_opts, :provider_options, [])
-
-        assert Keyword.get(provider_opts, :google_thinking_budget) == expected_budget,
+        assert Keyword.get(translated_opts, :google_thinking_budget) == expected_budget,
                "Expected reasoning_effort #{inspect(effort)} to map to budget #{expected_budget}"
       end
     end

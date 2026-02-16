@@ -4,7 +4,16 @@ This guide covers your first API call, basic configuration, and the core functio
 
 ## Installation
 
-Add ReqLLM to your dependencies:
+### Igniter Installation
+If your project has [Igniter](https://hexdocs.pm/igniter/readme.html) available, 
+you can install ReqLLM using the command 
+
+```bash
+mix igniter.install req_llm
+```
+
+### Manual Installation
+Add `req_llm` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do

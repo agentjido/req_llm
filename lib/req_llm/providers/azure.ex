@@ -1147,6 +1147,7 @@ defmodule ReqLLM.Providers.Azure do
       model_family == "claude" && (has_thinking || reasoning_effort) -> 180_000
       model_family in ["o1", "o3", "o4"] && reasoning_effort -> 180_000
       model_family in ["o1", "o3", "o4"] -> 120_000
+      model_family in ["deepseek", "mai-ds"] -> 120_000
       AdapterHelpers.gpt5_model?(model_id) -> 120_000
       true -> 30_000
     end

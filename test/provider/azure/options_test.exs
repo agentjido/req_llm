@@ -726,4 +726,145 @@ defmodule ReqLLM.Providers.Azure.OptionsTest do
       assert log =~ "thinking config is Anthropic-specific"
     end
   end
+
+  describe "DeepSeek thinking support" do
+    import ExUnit.CaptureLog
+
+    test "pre_validate_options preserves thinking config for DeepSeek models" do
+      model = %LLMDB.Model{id: "deepseek-v3.1", provider: :azure, capabilities: %{}}
+
+      opts = [
+        provider_options: [
+          additional_model_request_fields: %{thinking: %{type: "enabled", budget_tokens: 10_000}}
+        ]
+      ]
+
+      log =
+        capture_log(fn ->
+          {translated, _warnings} = Azure.OpenAI.pre_validate_options(:chat, model, opts)
+          provider_opts = translated[:provider_options] || []
+          amrf = provider_opts[:additional_model_request_fields]
+          assert amrf[:thinking] == %{type: "enabled", budget_tokens: 10_000}
+        end)
+
+      refute log =~ "thinking config is Anthropic-specific"
+    end
+
+    test "pre_validate_options still strips thinking config for non-DeepSeek OpenAI models" do
+      model = %LLMDB.Model{id: "gpt-4o", provider: :azure, capabilities: %{}}
+
+      opts = [
+        provider_options: [
+          additional_model_request_fields: %{thinking: %{type: "enabled"}}
+        ]
+      ]
+
+      log =
+        capture_log(fn ->
+          {translated, _warnings} = Azure.OpenAI.pre_validate_options(:chat, model, opts)
+          provider_opts = translated[:provider_options] || []
+          refute Keyword.has_key?(provider_opts, :additional_model_request_fields)
+        end)
+
+      assert log =~ "thinking config is Anthropic-specific"
+    end
+
+    test "pre_validate_options uses provider_model_id when available" do
+      model = %LLMDB.Model{
+        id: "some-alias",
+        provider: :azure,
+        provider_model_id: "deepseek-v3.1",
+        capabilities: %{}
+      }
+
+      opts = [
+        provider_options: [
+          additional_model_request_fields: %{thinking: %{type: "enabled"}}
+        ]
+      ]
+
+      log =
+        capture_log(fn ->
+          {translated, _warnings} = Azure.OpenAI.pre_validate_options(:chat, model, opts)
+          provider_opts = translated[:provider_options] || []
+          amrf = provider_opts[:additional_model_request_fields]
+          assert amrf[:thinking] == %{type: "enabled"}
+        end)
+
+      refute log =~ "thinking config is Anthropic-specific"
+    end
+
+    test "format_request does not add thinking by default for DeepSeek models" do
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+
+      body = Azure.OpenAI.format_request("deepseek-v3.1", context, stream: false)
+
+      refute Map.has_key?(body, :thinking)
+    end
+
+    test "format_request includes user-provided thinking config for DeepSeek models" do
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+
+      body =
+        Azure.OpenAI.format_request(
+          "deepseek-v3.1",
+          context,
+          stream: false,
+          provider_options: [
+            additional_model_request_fields: %{
+              thinking: %{type: "enabled", budget_tokens: 20_000}
+            }
+          ]
+        )
+
+      assert body[:thinking] == %{type: "enabled", budget_tokens: 20_000}
+    end
+
+    test "format_request allows disabling thinking for DeepSeek models" do
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+
+      body =
+        Azure.OpenAI.format_request(
+          "deepseek-v3.1",
+          context,
+          stream: false,
+          provider_options: [
+            additional_model_request_fields: %{thinking: nil}
+          ]
+        )
+
+      refute Map.has_key?(body, :thinking)
+    end
+
+    test "format_request does not add thinking for non-DeepSeek models" do
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Hello")])
+
+      body = Azure.OpenAI.format_request("gpt-4o", context, stream: false)
+
+      refute Map.has_key?(body, :thinking)
+      refute Map.has_key?(body, "thinking")
+    end
+  end
+
+  describe "deepseek_model?/1" do
+    alias ReqLLM.Providers.OpenAI.AdapterHelpers
+
+    test "returns true for DeepSeek model IDs" do
+      assert AdapterHelpers.deepseek_model?("deepseek-v3")
+      assert AdapterHelpers.deepseek_model?("deepseek-v3.1")
+      assert AdapterHelpers.deepseek_model?("deepseek-r1")
+      assert AdapterHelpers.deepseek_model?("deepseek-r1-0528")
+    end
+
+    test "returns false for non-DeepSeek model IDs" do
+      refute AdapterHelpers.deepseek_model?("gpt-4o")
+      refute AdapterHelpers.deepseek_model?("mai-ds-r1")
+      refute AdapterHelpers.deepseek_model?("o3-mini")
+    end
+
+    test "returns false for non-string inputs" do
+      refute AdapterHelpers.deepseek_model?(nil)
+      refute AdapterHelpers.deepseek_model?(123)
+    end
+  end
 end

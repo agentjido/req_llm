@@ -173,6 +173,11 @@ defmodule ReqLLM.Providers.OpenAI.AdapterHelpers do
   def codex_model?(model_id) when is_binary(model_id), do: String.contains?(model_id, "-codex")
   def codex_model?(_), do: false
 
+  @doc "Checks if model is a DeepSeek model."
+  @spec deepseek_model?(term()) :: boolean()
+  def deepseek_model?(<<"deepseek", _::binary>>), do: true
+  def deepseek_model?(_), do: false
+
   @doc """
   Adds appropriate token limit parameters based on model type.
 

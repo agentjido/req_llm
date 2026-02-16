@@ -524,7 +524,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
               {input_acc, tool_acc, reasoning_acc ++ new_reasoning}
             else
               if msg.tool_calls != nil and msg.tool_calls != [] do
-                {input_acc, tool_acc, reasoning_acc ++ new_reasoning}
+                function_calls = encode_tool_calls_as_function_calls(msg.tool_calls)
+                {input_acc ++ function_calls, tool_acc, reasoning_acc ++ new_reasoning}
               else
                 {input_acc ++ [%{"role" => "assistant", "content" => content}], tool_acc,
                  reasoning_acc ++ new_reasoning}
@@ -601,7 +602,9 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> maybe_put_string("text", text_format)
 
     if previous_response_id do
-      Map.put(body, "previous_response_id", previous_response_id)
+      body
+      |> Map.put("previous_response_id", previous_response_id)
+      |> Map.put("store", true)
     else
       body
     end
@@ -893,6 +896,17 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp encode_tool_outputs(_), do: []
 
+  defp encode_tool_calls_as_function_calls(tool_calls) do
+    Enum.map(tool_calls, fn tc ->
+      %{
+        "type" => "function_call",
+        "call_id" => tc.id,
+        "name" => ReqLLM.ToolCall.name(tc),
+        "arguments" => ReqLLM.ToolCall.args_json(tc)
+      }
+    end)
+  end
+
   defp encode_tools_if_any(request) do
     case request.options[:tools] do
       nil -> nil
@@ -946,17 +960,23 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     end
   end
 
-  defp encode_tool_for_responses_api(%ReqLLM.Tool{} = tool) do
+  defp encode_tool_for_responses_api(%ReqLLM.Tool{strict: strict} = tool) do
     schema = ReqLLM.Tool.to_schema(tool)
     function_def = schema["function"]
-    params = normalize_parameters_for_strict(function_def["parameters"])
+
+    params =
+      if strict do
+        normalize_parameters_for_strict(function_def["parameters"])
+      else
+        normalize_parameters(function_def["parameters"])
+      end
 
     %{
       "type" => "function",
       "name" => function_def["name"],
       "description" => function_def["description"],
       "parameters" => params,
-      "strict" => true
+      "strict" => strict
     }
   end
 
@@ -1022,6 +1042,24 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       "type" => "object",
       "properties" => stringify_keys(properties),
       "required" => all_property_names,
+      "additionalProperties" => false
+    }
+  end
+
+  defp normalize_parameters(nil) do
+    %{
+      "type" => "object",
+      "properties" => %{},
+      "additionalProperties" => false
+    }
+  end
+
+  defp normalize_parameters(params) when is_map(params) do
+    properties = params[:properties] || params["properties"] || %{}
+
+    %{
+      "type" => "object",
+      "properties" => stringify_keys(properties),
       "additionalProperties" => false
     }
   end
