@@ -72,7 +72,7 @@ defmodule ReqLLM.StreamChunk do
   @typedoc """
   Chunk type indicating the kind of content in this chunk.
   """
-  @type chunk_type :: :content | :thinking | :tool_call | :meta
+  @type chunk_type :: :content | :thinking | :tool_call | :meta | :error
 
   @typedoc "A single chunk of streaming response data"
 
@@ -221,6 +221,37 @@ defmodule ReqLLM.StreamChunk do
   end
 
   @doc """
+  Creates an error chunk indicating a stream-level error.
+
+  Used when the LLM API returns an error during streaming (e.g., HTTP 400).
+  Instead of silently halting the stream, this chunk surfaces the error to consumers.
+
+  ## Parameters
+
+    * `reason` - A human-readable error message
+    * `metadata` - Optional additional metadata (default: empty map)
+
+  ## Examples
+
+      chunk = ReqLLM.StreamChunk.error("HTTP 400: image exceeds maximum size")
+      chunk.type #=> :error
+      chunk.text #=> "HTTP 400: image exceeds maximum size"
+
+      # With metadata containing the original error
+      chunk = ReqLLM.StreamChunk.error("HTTP 400", %{status: 400, provider: :anthropic})
+      chunk.metadata #=> %{status: 400, provider: :anthropic}
+
+  """
+  @spec error(String.t(), map()) :: t()
+  def error(reason, metadata \\ %{}) when is_binary(reason) and is_map(metadata) do
+    %__MODULE__{
+      type: :error,
+      text: reason,
+      metadata: metadata
+    }
+  end
+
+  @doc """
   Validates a StreamChunk struct according to its type.
 
   Ensures that required fields are present based on the chunk type:
@@ -308,6 +339,9 @@ defmodule ReqLLM.StreamChunk do
   defp validate_by_type(%{type: :meta, metadata: meta}) when is_map(meta), do: :ok
   defp validate_by_type(%{type: :meta}), do: {:error, "Meta chunks must have metadata map"}
 
+  defp validate_by_type(%{type: :error, text: text}) when is_binary(text), do: :ok
+  defp validate_by_type(%{type: :error}), do: {:error, "Error chunks must have non-nil text"}
+
   defp validate_by_type(%{type: unknown_type}),
     do: {:error, "Unknown chunk type: #{inspect(unknown_type)}"}
 
@@ -335,6 +369,9 @@ defmodule ReqLLM.StreamChunk do
           :meta ->
             meta_keys = chunk.metadata |> Map.keys() |> Enum.join(",")
             "meta: " <> meta_keys
+
+          :error ->
+            "ERROR: " <> inspect_text(chunk.text, 40)
         end
 
       Inspect.Algebra.concat([

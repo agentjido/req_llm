@@ -107,6 +107,31 @@ defmodule ReqLLM.StreamServer.ErrorHandlingTest do
       StreamServer.cancel(server)
     end
 
+    test "detects Anthropic-style top-level error format" do
+      server = start_server()
+      _task = mock_http_task(server)
+
+      # Send 400 status
+      assert :ok = GenServer.call(server, {:http_event, {:status, 400}})
+
+      # Anthropic returns errors at top level: {"type": "error", "message": "..."}
+      # rather than nested under {"error": {"message": "..."}}
+      error_json =
+        Jason.encode!(%{
+          "type" => "error",
+          "message" => "image exceeds the maximum allowed size of 20MB"
+        })
+
+      assert :ok = GenServer.call(server, {:http_event, {:data, error_json}})
+
+      assert {:error, %ReqLLM.Error.API.Request{} = error} = StreamServer.next(server, 100)
+      assert error.status == 400
+      assert error.reason == "image exceeds the maximum allowed size of 20MB"
+      assert error.response_body["type"] == "error"
+
+      StreamServer.cancel(server)
+    end
+
     test "handles non-JSON error responses" do
       server = start_server()
       _task = mock_http_task(server)

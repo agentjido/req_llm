@@ -69,6 +69,25 @@ defmodule ReqLLM.StreamChunkTest do
 
       assert_chunk_fields(merged_chunk, type: :meta, metadata: %{status: "ok", tokens: 42})
     end
+
+    test "error/2 creates error chunks" do
+      basic_chunk = StreamChunk.error("HTTP 400: image too large")
+      with_meta = StreamChunk.error("HTTP 400", %{status: 400, provider: :anthropic})
+
+      assert_chunk_fields(basic_chunk,
+        type: :error,
+        text: "HTTP 400: image too large",
+        metadata: %{}
+      )
+
+      assert_nil_fields(basic_chunk, [:name, :arguments])
+
+      assert_chunk_fields(with_meta,
+        type: :error,
+        text: "HTTP 400",
+        metadata: %{status: 400, provider: :anthropic}
+      )
+    end
   end
 
   describe "validation" do
@@ -77,10 +96,12 @@ defmodule ReqLLM.StreamChunkTest do
       {:thinking, StreamChunk.thinking("valid reasoning")},
       {:tool_call, StreamChunk.tool_call("func", %{arg: "value"})},
       {:meta, StreamChunk.meta(%{key: "value"})},
+      {:error, StreamChunk.error("something went wrong")},
       {:empty_text, StreamChunk.text("")},
       {:empty_thinking, StreamChunk.thinking("")},
       {:empty_args, StreamChunk.tool_call("", %{})},
-      {:empty_meta, StreamChunk.meta(%{})}
+      {:empty_meta, StreamChunk.meta(%{})},
+      {:empty_error, StreamChunk.error("")}
     ]
 
     @invalid_cases [
@@ -94,6 +115,8 @@ defmodule ReqLLM.StreamChunkTest do
        "Tool call chunks must have non-nil name and arguments"},
       {:meta_nil_metadata, %StreamChunk{type: :meta, metadata: nil},
        "Meta chunks must have metadata map"},
+      {:error_nil_text, %StreamChunk{type: :error, text: nil},
+       "Error chunks must have non-nil text"},
       {:unknown_type, %StreamChunk{type: :unknown}, "Unknown chunk type: :unknown"}
     ]
 
@@ -202,6 +225,11 @@ defmodule ReqLLM.StreamChunkTest do
       # meta/2 guards
       assert_raise FunctionClauseError, fn -> StreamChunk.meta(:not_map) end
       assert_raise FunctionClauseError, fn -> StreamChunk.meta(%{}, :not_map) end
+
+      # error/2 guards
+      assert_raise FunctionClauseError, fn -> StreamChunk.error(123) end
+      assert_raise FunctionClauseError, fn -> StreamChunk.error(:not_binary) end
+      assert_raise FunctionClauseError, fn -> StreamChunk.error("error", "not a map") end
     end
   end
 
@@ -237,6 +265,12 @@ defmodule ReqLLM.StreamChunkTest do
       assert meta_inspect =~ "#StreamChunk<:meta meta:"
       assert meta_inspect =~ "finish_reason" or meta_inspect =~ "tokens"
       assert single_inspect =~ "#StreamChunk<:meta meta: status>"
+
+      # Error chunks show ERROR prefix with text
+      error_chunk = StreamChunk.error("image exceeds maximum size")
+      error_inspect = inspect(error_chunk)
+      assert error_inspect =~ "#StreamChunk<:error ERROR:"
+      assert error_inspect =~ "image exceeds maximum size"
     end
 
     test "handles text truncation at 20 characters" do

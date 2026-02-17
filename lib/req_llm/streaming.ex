@@ -229,23 +229,36 @@ defmodule ReqLLM.Streaming do
       # start_fn: return the server pid
       fn -> server_pid end,
       # next_fn: get next chunk from server
-      fn server ->
-        case StreamServer.next(server, timeout) do
-          {:ok, chunk} ->
-            {[chunk], server}
+      fn
+        {:halted, _} ->
+          {:halt, :done}
 
-          :halt ->
-            {:halt, server}
+        server ->
+          case StreamServer.next(server, timeout) do
+            {:ok, chunk} ->
+              {[chunk], server}
 
-          {:error, reason} ->
-            Logger.error("Stream error: #{inspect(reason)}")
-            {:halt, server}
-        end
+            :halt ->
+              {:halt, server}
+
+            {:error, reason} ->
+              Logger.error("Stream error: #{inspect(reason)}")
+
+              error_chunk =
+                ReqLLM.StreamChunk.error(format_error_reason(reason), %{error: reason})
+
+              {[error_chunk], {:halted, server}}
+          end
       end,
       # after_fn: no-op, cleanup handled by cancel function
       fn _server -> :ok end
     )
   end
+
+  defp format_error_reason(%{reason: reason}) when is_binary(reason), do: reason
+  defp format_error_reason(%{message: message}) when is_binary(message), do: message
+  defp format_error_reason(reason) when is_binary(reason), do: reason
+  defp format_error_reason(reason), do: inspect(reason)
 
   defp start_metadata_handle(server_pid, opts) do
     default_metadata_timeout = Application.get_env(:req_llm, :metadata_timeout, 300_000)
