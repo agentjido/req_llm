@@ -747,24 +747,80 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   # Encode a tool result message as a Responses API function_call_output input item
   defp encode_tool_message_inline(%ReqLLM.Message{role: :tool} = msg) do
-    output =
-      case ReqLLM.ToolResult.output_from_message(msg) do
-        nil -> extract_tool_output_text(msg.content)
-        value -> value
-      end
+    if has_image_content?(msg.content) do
+      encode_tool_message_multimodal(msg)
+    else
+      output =
+        case ReqLLM.ToolResult.output_from_message(msg) do
+          nil -> extract_tool_output_text(msg.content)
+          value -> value
+        end
 
-    output_string =
-      cond do
-        is_binary(output) -> output
-        is_map(output) or is_list(output) -> Jason.encode!(output)
-        true -> to_string(output)
-      end
+      output_value = encode_tool_output_value(output)
+
+      %{
+        "type" => "function_call_output",
+        "call_id" => msg.tool_call_id,
+        "output" => output_value
+      }
+    end
+  end
+
+  defp encode_tool_message_multimodal(%ReqLLM.Message{role: :tool} = msg) do
+    output_parts =
+      Enum.flat_map(msg.content, fn part ->
+        encode_input_content_part(part, "input_text")
+      end)
 
     %{
       "type" => "function_call_output",
       "call_id" => msg.tool_call_id,
-      "output" => output_string
+      "output" => output_parts
     }
+  end
+
+  defp has_image_content?(content) when is_list(content) do
+    Enum.any?(content, fn
+      %ReqLLM.Message.ContentPart{type: :image} -> true
+      %ReqLLM.Message.ContentPart{type: :image_url} -> true
+      _ -> false
+    end)
+  end
+
+  defp has_image_content?(_), do: false
+
+  defp encode_tool_output_value(output) when is_binary(output) do
+    case Jason.decode(output) do
+      {:ok, decoded} when is_map(decoded) -> maybe_extract_image_from_output(decoded, output)
+      _ -> output
+    end
+  end
+
+  defp encode_tool_output_value(output) when is_map(output) do
+    maybe_extract_image_from_output(output, Jason.encode!(output))
+  end
+
+  defp encode_tool_output_value(output) when is_list(output), do: Jason.encode!(output)
+  defp encode_tool_output_value(output), do: to_string(output)
+
+  @image_fields ["screenshot", "image"]
+
+  defp maybe_extract_image_from_output(map, fallback) when is_map(map) do
+    image_result =
+      Enum.find_value(@image_fields, fn field ->
+        case Map.get(map, field) do
+          "data:image/" <> _ = data_url -> {field, data_url}
+          _ -> nil
+        end
+      end)
+
+    case image_result do
+      {_field, data_url} ->
+        [%{"type" => "input_image", "image_url" => data_url}]
+
+      nil ->
+        fallback
+    end
   end
 
   defp encode_input_content_part(%ReqLLM.Message.ContentPart{type: :text, text: text}, type) do
@@ -1051,17 +1107,12 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       call_id = output[:call_id] || output["call_id"]
       raw_output = output[:output] || output["output"]
 
-      output_string =
-        cond do
-          is_binary(raw_output) -> raw_output
-          is_map(raw_output) or is_list(raw_output) -> Jason.encode!(raw_output)
-          true -> to_string(raw_output)
-        end
+      output_value = encode_tool_output_value(raw_output)
 
       %{
         "type" => "function_call_output",
         "call_id" => call_id,
-        "output" => output_string
+        "output" => output_value
       }
     end)
   end
