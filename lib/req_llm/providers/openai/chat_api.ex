@@ -39,6 +39,8 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
   """
   @behaviour ReqLLM.Providers.OpenAI.API
 
+  require Logger
+
   import ReqLLM.Provider.Utils, only: [maybe_put: 3]
 
   require ReqLLM.Debug, as: Debug
@@ -54,6 +56,40 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
     opts = if is_map(request.options), do: Map.to_list(request.options), else: request.options
 
     enhanced_body = build_request_body(context, model_name, opts, operation)
+
+    # [image_debug] Log final ChatAPI body message structure
+    messages = enhanced_body[:messages] || enhanced_body["messages"] || []
+
+    messages_summary =
+      Enum.map(messages, fn msg ->
+        role = msg[:role] || msg["role"]
+        content = msg[:content] || msg["content"]
+
+        content_info =
+          case content do
+            parts when is_list(parts) ->
+              types =
+                Enum.map(parts, fn
+                  %{type: t} -> t
+                  %{"type" => t} -> t
+                  _ -> "?"
+                end)
+
+              "#{length(parts)} parts: #{inspect(types)}"
+
+            text when is_binary(text) ->
+              "plain text (#{String.length(text)} chars)"
+
+            _ ->
+              inspect(content, limit: 50)
+          end
+
+        "#{role}[#{content_info}]"
+      end)
+
+    Logger.info(
+      "[image_debug] ChatAPI encode_body model=#{model_name} messages=#{length(messages)} summary=#{inspect(messages_summary)}"
+    )
 
     Debug.dbug(
       fn -> "OpenAI ChatAPI request body: #{Jason.encode!(enhanced_body, pretty: true)}" end,

@@ -80,6 +80,8 @@ defmodule ReqLLM.Provider.Defaults do
       end
   """
 
+  require Logger
+
   import ReqLLM.Provider.Utils, only: [maybe_put: 3, ensure_parsed_body: 1]
 
   @doc """
@@ -615,6 +617,34 @@ defmodule ReqLLM.Provider.Defaults do
   """
   @spec encode_context_to_openai_format(ReqLLM.Context.t(), String.t()) :: map()
   def encode_context_to_openai_format(%ReqLLM.Context{messages: messages}, _model_name) do
+    # [image_debug] Log pre-encoding message structure
+    for msg <- messages do
+      content_summary =
+        case msg.content do
+          parts when is_list(parts) ->
+            Enum.map(parts, fn
+              %{type: :image, data: data, media_type: mt} ->
+                "[image: #{mt}, #{byte_size(data)} bytes]"
+
+              %{type: :image_url, url: url} ->
+                "[image_url: #{String.slice(url, 0, 60)}...]"
+
+              %{type: :text, text: text} ->
+                "[text: #{String.length(text)} chars]"
+
+              %{type: type} ->
+                "[#{type}]"
+            end)
+
+          other ->
+            inspect(other, limit: 50)
+        end
+
+      Logger.info(
+        "[image_debug] encode_openai_format role=#{msg.role} content=#{inspect(content_summary)}"
+      )
+    end
+
     %{
       messages: encode_openai_messages(messages)
     }
@@ -662,9 +692,25 @@ defmodule ReqLLM.Provider.Defaults do
   defp maybe_flatten_single_text(content) do
     filtered = Enum.reject(content, &is_nil/1)
 
+    types =
+      Enum.map(filtered, fn
+        %{type: t} -> t
+        _ -> "unknown"
+      end)
+
+    Logger.info(
+      "[image_debug] maybe_flatten_single_text parts=#{length(filtered)} types=#{inspect(types)}"
+    )
+
     case filtered do
       [%{type: "text", text: text} = block] ->
-        if map_size(block) == 2, do: text, else: [block]
+        result = if map_size(block) == 2, do: text, else: [block]
+
+        Logger.info(
+          "[image_debug] maybe_flatten_single_text FLATTENED to plain text (#{String.length(text)} chars)"
+        )
+
+        result
 
       _ ->
         filtered
@@ -686,7 +732,15 @@ defmodule ReqLLM.Provider.Defaults do
          media_type: media_type,
          metadata: metadata
        }) do
+    Logger.info(
+      "[image_debug] encode_openai_content_part :image media_type=#{media_type} data_size=#{byte_size(data)} bytes"
+    )
+
     base64 = Base.encode64(data)
+
+    Logger.info(
+      "[image_debug] encode_openai_content_part :image base64_length=#{String.length(base64)} url_prefix=data:#{media_type};base64,<#{String.length(base64)} chars>"
+    )
 
     %{
       type: "image_url",
@@ -728,7 +782,13 @@ defmodule ReqLLM.Provider.Defaults do
     }
   end
 
-  defp encode_openai_content_part(_), do: nil
+  defp encode_openai_content_part(unmatched) do
+    Logger.warning(
+      "[image_debug] encode_openai_content_part UNMATCHED content part dropped: #{inspect(unmatched, limit: 200)}"
+    )
+
+    nil
+  end
 
   @passthrough_metadata_keys [:cache_control, "cache_control"]
 

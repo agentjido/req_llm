@@ -513,6 +513,27 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     {input, reasoning_items, system_texts} =
       Enum.reduce(context.messages, {[], [], []}, fn msg,
                                                      {input_acc, reasoning_acc, system_acc} ->
+        # [image_debug] Log each message being encoded for Responses API
+        content_types =
+          (msg.content || [])
+          |> Enum.map(fn
+            %{type: :image, data: data, media_type: mt} ->
+              "image(#{mt}, #{byte_size(data)}B)"
+
+            %{type: :image_url} ->
+              "image_url"
+
+            %{type: :text, text: t} ->
+              "text(#{String.length(t)}c)"
+
+            %{type: type} ->
+              "#{type}"
+          end)
+
+        Logger.info(
+          "[image_debug] ResponsesAPI build_request_body role=#{msg.role} content_types=#{inspect(content_types)} prev_resp_id=#{inspect(previous_response_id != nil)}"
+        )
+
         case msg.role do
           :tool ->
             if previous_response_id do
@@ -521,6 +542,11 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
             else
               # Without previous_response_id, encode tool results inline
               tool_output = encode_tool_message_inline(msg)
+
+              Logger.info(
+                "[image_debug] ResponsesAPI tool result encoded (text only): call_id=#{msg.tool_call_id} output_keys=#{inspect(Map.keys(tool_output))}"
+              )
+
               {input_acc ++ [tool_output], reasoning_acc, system_acc}
             end
 
@@ -581,6 +607,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
               Enum.flat_map(msg.content, fn part ->
                 encode_input_content_part(part, "input_text")
               end)
+
+            Logger.info(
+              "[image_debug] ResponsesAPI user/other msg encoded content_items=#{length(content)} types=#{inspect(Enum.map(content, &Map.get(&1, "type")))}"
+            )
 
             if content == [] do
               {input_acc, reasoning_acc, system_acc}
@@ -655,6 +685,24 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         input
       end
 
+    # [image_debug] Log the final input array structure
+    input_summary =
+      Enum.map(final_input, fn
+        %{"role" => role, "content" => content} when is_list(content) ->
+          content_types = Enum.map(content, &Map.get(&1, "type"))
+          "#{role}(#{inspect(content_types)})"
+
+        %{"type" => type} = item ->
+          "#{type}(call_id=#{Map.get(item, "call_id", "n/a")})"
+
+        other ->
+          inspect(Map.keys(other))
+      end)
+
+    Logger.info(
+      "[image_debug] ResponsesAPI final_input items=#{length(final_input)} summary=#{inspect(input_summary)}"
+    )
+
     body =
       Map.new()
       |> Map.put("model", model_name)
@@ -727,7 +775,16 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
          %ReqLLM.Message.ContentPart{type: :image, data: data, media_type: media_type},
          _type
        ) do
+    Logger.info(
+      "[image_debug] ResponsesAPI encode_input_content_part :image media_type=#{media_type} data_size=#{byte_size(data)} bytes"
+    )
+
     base64 = Base.encode64(data)
+
+    Logger.info(
+      "[image_debug] ResponsesAPI encode_input_content_part :image base64_length=#{String.length(base64)}"
+    )
+
     [%{"type" => "input_image", "image_url" => "data:#{media_type};base64,#{base64}"}]
   end
 
@@ -754,7 +811,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     [file]
   end
 
-  defp encode_input_content_part(_, _type), do: []
+  defp encode_input_content_part(unmatched, _type) do
+    Logger.warning(
+      "[image_debug] ResponsesAPI encode_input_content_part UNMATCHED content part dropped: #{inspect(unmatched, limit: 200)}"
+    )
+
+    []
+  end
 
   defp encode_reasoning_details_from_message(%ReqLLM.Message{reasoning_details: nil}), do: []
   defp encode_reasoning_details_from_message(%ReqLLM.Message{reasoning_details: []}), do: []
