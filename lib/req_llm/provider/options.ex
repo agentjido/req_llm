@@ -491,8 +491,10 @@ defmodule ReqLLM.Provider.Options do
   end
 
   defp maybe_extract_model_base_url(opts, %LLMDB.Model{} = model) do
-    if is_bitstring(model.base_url) do
-      Keyword.put(opts, :base_url, model.base_url)
+    base_url = Map.get(model, :base_url)
+
+    if is_bitstring(base_url) do
+      Keyword.put(opts, :base_url, base_url)
     else
       opts
     end

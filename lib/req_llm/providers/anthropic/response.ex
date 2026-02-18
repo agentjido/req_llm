@@ -75,7 +75,7 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   Decode Anthropic SSE event data into StreamChunks.
   """
   @spec decode_stream_event(map(), LLMDB.Model.t()) :: [ReqLLM.StreamChunk.t()]
-  def decode_stream_event(%{data: data} = event, _model) when is_map(data) do
+  def decode_stream_event(%{data: data} = _event, _model) when is_map(data) do
     # DEBUG: Log all SSE events for tool call debugging
     event_type = Map.get(data, "type")
 
@@ -225,7 +225,7 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   end
 
   defp decode_content_block_delta(
-         %{"type" => "input_json_delta", "partial_json" => fragment} = delta,
+         %{"type" => "input_json_delta", "partial_json" => fragment} = _delta,
          index
        )
        when is_binary(fragment) do
