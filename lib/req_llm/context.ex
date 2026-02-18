@@ -497,12 +497,12 @@ defmodule ReqLLM.Context do
           append(ctx, tool_result_msg)
 
         {:error, %ToolResult{} = result} ->
-          tool_result_msg = tool_result_message(name, id, result)
+          tool_result_msg = tool_result_message(name, id, result, %{is_error: true})
           append(ctx, tool_result_msg)
 
         {:error, error} ->
           error_result = %{error: to_string(error)}
-          tool_result_msg = tool_result_message(name, id, error_result)
+          tool_result_msg = tool_result_message(name, id, error_result, %{is_error: true})
           append(ctx, tool_result_msg)
       end
     end)

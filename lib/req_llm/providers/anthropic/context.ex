@@ -135,16 +135,22 @@ defmodule ReqLLM.Providers.Anthropic.Context do
     }
   end
 
-  defp encode_message(%ReqLLM.Message{role: :tool, tool_call_id: id} = msg) do
+  defp encode_message(%ReqLLM.Message{role: :tool, tool_call_id: id, metadata: metadata} = msg) do
+    tool_result_block =
+      %{
+        type: "tool_result",
+        tool_use_id: id,
+        content: encode_tool_result_content(msg)
+      }
+
+    tool_result_block =
+      if metadata[:is_error],
+        do: Map.put(tool_result_block, :is_error, true),
+        else: tool_result_block
+
     %{
       role: "user",
-      content: [
-        %{
-          type: "tool_result",
-          tool_use_id: id,
-          content: encode_tool_result_content(msg)
-        }
-      ]
+      content: [tool_result_block]
     }
   end
 
