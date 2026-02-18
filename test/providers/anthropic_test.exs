@@ -410,6 +410,95 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert decoded["tool_choice"] == %{"type" => "tool", "name" => "test_tool"}
     end
 
+    test "encode_body emits is_error on tool_result when metadata contains is_error" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      error_tool_msg =
+        ReqLLM.Context.tool_result_message(
+          "get_weather",
+          "tool_err",
+          "ConnectionError: service unavailable",
+          %{is_error: true}
+        )
+
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.user("What's the weather?"),
+          ReqLLM.Context.assistant("",
+            tool_calls: [
+              %ReqLLM.ToolCall{
+                id: "tool_err",
+                type: "function",
+                function: %{name: "get_weather", arguments: ~s({"location":"Paris"})}
+              }
+            ]
+          ),
+          error_tool_msg
+        ])
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false
+        ]
+      }
+
+      updated_request = Anthropic.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      tool_result_msg = List.last(decoded["messages"])
+      [tool_result_block] = tool_result_msg["content"]
+
+      assert tool_result_block["type"] == "tool_result"
+      assert tool_result_block["tool_use_id"] == "tool_err"
+      assert tool_result_block["is_error"] == true
+    end
+
+    test "encode_body omits is_error on successful tool_result" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      ok_tool_msg =
+        ReqLLM.Context.tool_result_message(
+          "get_weather",
+          "tool_ok",
+          "22°C and sunny"
+        )
+
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.user("What's the weather?"),
+          ReqLLM.Context.assistant("",
+            tool_calls: [
+              %ReqLLM.ToolCall{
+                id: "tool_ok",
+                type: "function",
+                function: %{name: "get_weather", arguments: ~s({"location":"Paris"})}
+              }
+            ]
+          ),
+          ok_tool_msg
+        ])
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false
+        ]
+      }
+
+      updated_request = Anthropic.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      tool_result_msg = List.last(decoded["messages"])
+      [tool_result_block] = tool_result_msg["content"]
+
+      assert tool_result_block["type"] == "tool_result"
+      assert tool_result_block["tool_use_id"] == "tool_ok"
+      refute Map.has_key?(tool_result_block, "is_error")
+    end
+
     test "encode_request accepts map-based streaming tool calls" do
       {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
 

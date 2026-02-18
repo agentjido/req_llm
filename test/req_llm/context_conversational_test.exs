@@ -165,5 +165,169 @@ defmodule ReqLLM.ContextConversationalTest do
       assert message.name == "test_tool"
       assert message.tool_call_id == "call_456"
     end
+
+    test "propagates is_error metadata" do
+      message = Context.tool_result_message("failing_tool", "call_err", "boom", %{is_error: true})
+
+      assert message.metadata[:is_error] == true
+      assert message.role == :tool
+      assert message.name == "failing_tool"
+    end
+
+    test "success path does not set is_error" do
+      message = Context.tool_result_message("ok_tool", "call_ok", "all good")
+
+      refute Map.has_key?(message.metadata, :is_error)
+    end
+  end
+
+  describe "execute_and_append_tools/3" do
+    setup do
+      success_tool =
+        ReqLLM.Tool.new!(
+          name: "echo",
+          description: "Echoes input",
+          parameter_schema: [text: [type: :string, required: true, doc: "Text to echo"]],
+          callback: fn args -> {:ok, args["text"]} end
+        )
+
+      error_tool =
+        ReqLLM.Tool.new!(
+          name: "fail",
+          description: "Always fails",
+          parameter_schema: [text: [type: :string, required: true, doc: "Ignored"]],
+          callback: fn _args -> {:error, "something went wrong"} end
+        )
+
+      error_tool_result =
+        ReqLLM.Tool.new!(
+          name: "fail_structured",
+          description: "Fails with ToolResult",
+          parameter_schema: [text: [type: :string, required: true, doc: "Ignored"]],
+          callback: fn _args ->
+            {:error,
+             %ToolResult{output: %{reason: "not found"}, content: [ContentPart.text("not found")]}}
+          end
+        )
+
+      context =
+        Context.new([
+          Context.user("Use the tools"),
+          Context.assistant("",
+            tool_calls: [
+              %ReqLLM.ToolCall{
+                id: "call_1",
+                type: "function",
+                function: %{name: "echo", arguments: ~s({"text":"hello"})}
+              }
+            ]
+          )
+        ])
+
+      %{
+        success_tool: success_tool,
+        error_tool: error_tool,
+        error_tool_result: error_tool_result,
+        context: context
+      }
+    end
+
+    test "success path does not set is_error in metadata", %{success_tool: tool, context: ctx} do
+      tool_calls = [
+        %ReqLLM.ToolCall{
+          id: "call_1",
+          type: "function",
+          function: %{name: "echo", arguments: ~s({"text":"hello"})}
+        }
+      ]
+
+      result = Context.execute_and_append_tools(ctx, tool_calls, [tool])
+      tool_msg = List.last(result.messages)
+
+      assert tool_msg.role == :tool
+      assert tool_msg.name == "echo"
+      refute Map.has_key?(tool_msg.metadata, :is_error)
+    end
+
+    test "error path sets is_error for generic errors", %{error_tool: tool, context: ctx} do
+      tool_calls = [
+        %ReqLLM.ToolCall{
+          id: "call_1",
+          type: "function",
+          function: %{name: "fail", arguments: ~s({"text":"x"})}
+        }
+      ]
+
+      result = Context.execute_and_append_tools(ctx, tool_calls, [tool])
+      tool_msg = List.last(result.messages)
+
+      assert tool_msg.role == :tool
+      assert tool_msg.metadata[:is_error] == true
+    end
+
+    test "error path sets is_error for ToolResult errors", %{
+      error_tool_result: tool,
+      context: ctx
+    } do
+      tool_calls = [
+        %ReqLLM.ToolCall{
+          id: "call_1",
+          type: "function",
+          function: %{name: "fail_structured", arguments: ~s({"text":"x"})}
+        }
+      ]
+
+      result = Context.execute_and_append_tools(ctx, tool_calls, [tool])
+      tool_msg = List.last(result.messages)
+
+      assert tool_msg.role == :tool
+      assert tool_msg.metadata[:is_error] == true
+    end
+
+    test "tool not found sets is_error", %{context: ctx} do
+      tool_calls = [
+        %ReqLLM.ToolCall{
+          id: "call_1",
+          type: "function",
+          function: %{name: "nonexistent", arguments: ~s({"text":"x"})}
+        }
+      ]
+
+      result = Context.execute_and_append_tools(ctx, tool_calls, [])
+      tool_msg = List.last(result.messages)
+
+      assert tool_msg.role == :tool
+      assert tool_msg.metadata[:is_error] == true
+    end
+
+    test "mixed success and error tool calls", %{
+      success_tool: ok_tool,
+      error_tool: fail_tool,
+      context: ctx
+    } do
+      tool_calls = [
+        %ReqLLM.ToolCall{
+          id: "call_ok",
+          type: "function",
+          function: %{name: "echo", arguments: ~s({"text":"hello"})}
+        },
+        %ReqLLM.ToolCall{
+          id: "call_fail",
+          type: "function",
+          function: %{name: "fail", arguments: ~s({"text":"x"})}
+        }
+      ]
+
+      result = Context.execute_and_append_tools(ctx, tool_calls, [ok_tool, fail_tool])
+      tool_messages = Enum.filter(result.messages, &(&1.role == :tool))
+
+      assert length(tool_messages) == 2
+
+      ok_msg = Enum.find(tool_messages, &(&1.tool_call_id == "call_ok"))
+      fail_msg = Enum.find(tool_messages, &(&1.tool_call_id == "call_fail"))
+
+      refute Map.has_key?(ok_msg.metadata, :is_error)
+      assert fail_msg.metadata[:is_error] == true
+    end
   end
 end
