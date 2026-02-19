@@ -344,22 +344,30 @@ defmodule ReqLLM.Providers.OpenRouter do
         true -> {nil, nil}
       end
 
-    type = tool_choice && (Map.get(tool_choice, :type) || Map.get(tool_choice, "type"))
-    name = tool_choice && (Map.get(tool_choice, :name) || Map.get(tool_choice, "name"))
-
-    if type == "tool" && name do
-      replacement =
-        if is_map_key(tool_choice, :type) do
-          %{type: "function", function: %{name: name}}
-        else
-          %{"type" => "function", "function" => %{"name" => name}}
-        end
-
-      Map.put(body, body_key, replacement)
-    else
-      body
+    case normalize_tool_choice(tool_choice) do
+      nil -> if body_key, do: Map.delete(body, body_key), else: body
+      normalized -> if body_key, do: Map.put(body, body_key, normalized), else: body
     end
   end
+
+  # Normalize tool_choice to OpenAI-compatible format for OpenRouter
+  # OpenRouter expects: "none", "required", or %{type: "function", function: %{name: "..."}}
+  defp normalize_tool_choice(nil), do: nil
+  defp normalize_tool_choice(:auto), do: nil
+  defp normalize_tool_choice("auto"), do: nil
+  defp normalize_tool_choice(:none), do: "none"
+  defp normalize_tool_choice(:required), do: "required"
+
+  defp normalize_tool_choice({:tool, name}) when is_binary(name),
+    do: %{type: "function", function: %{name: name}}
+
+  defp normalize_tool_choice(%{type: "tool", name: name}) when is_binary(name),
+    do: %{type: "function", function: %{name: name}}
+
+  defp normalize_tool_choice(%{"type" => "tool", "name" => name}) when is_binary(name),
+    do: %{"type" => "function", "function" => %{"name" => name}}
+
+  defp normalize_tool_choice(choice), do: choice
 
   # Helper function for adding OpenRouter app attribution headers
   defp maybe_add_attribution_headers(request, opts) do

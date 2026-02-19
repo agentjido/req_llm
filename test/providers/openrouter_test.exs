@@ -217,6 +217,41 @@ defmodule ReqLLM.Providers.OpenRouterTest do
              }
     end
 
+    test "encode_body strips tool_choice auto from request body" do
+      {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
+      context = context_fixture()
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "test_tool",
+          description: "A test tool",
+          parameter_schema: [
+            name: [type: :string, required: true, doc: "A name parameter"]
+          ],
+          callback: fn _ -> {:ok, "result"} end
+        )
+
+      for auto <- [:auto, "auto"] do
+        mock_request = %Req.Request{
+          options: [
+            context: context,
+            model: model.model,
+            stream: false,
+            tools: [tool],
+            tool_choice: auto
+          ]
+        }
+
+        updated_request = OpenRouter.encode_body(mock_request)
+        decoded = Jason.decode!(updated_request.body)
+
+        assert is_list(decoded["tools"])
+
+        refute Map.has_key?(decoded, "tool_choice"),
+               "tool_choice #{inspect(auto)} should be stripped from request body"
+      end
+    end
+
     test "encode_body with streaming includes stream_options without duplicates" do
       {:ok, model} = ReqLLM.model("openrouter:openai/gpt-4")
       context = context_fixture()
