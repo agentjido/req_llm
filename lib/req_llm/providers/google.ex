@@ -2112,8 +2112,7 @@ defmodule ReqLLM.Providers.Google do
       ".mp4" -> "video/mp4"
       ".m4a" -> "audio/mp4"
       ".wav" -> "audio/wav"
-      # Fallback
-      _ -> "application/octet-stream"
+      _ -> nil
     end
   end
 
