@@ -99,7 +99,7 @@ usage = ReqLLM.StreamResponse.usage(response)
 ## Features
 
 - **Provider-agnostic model registry**
-  - 45 providers / 665+ models auto-synced from [models.dev](https://models.dev) (`mix req_llm.model_sync`)
+  - 45 providers / 665+ models sourced from [models.dev](https://models.dev) via the `llm_db` dependency
   - Cost, context length, modality, capability and deprecation metadata included
 
 - **Canonical data model**

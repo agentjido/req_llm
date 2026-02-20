@@ -144,7 +144,7 @@ The `cache_control` metadata is passed directly to the underlying Anthropic API,
 
 Browse available models:
 - [OpenRouter Models](https://openrouter.ai/models)
-- `mix req_llm.model_sync openrouter`
+- Model metadata is provided by the `llm_db` dependency
 
 ## Pricing
 

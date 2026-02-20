@@ -26,7 +26,7 @@ ReqLLM is a composable Elixir library for AI interactions built on Req, providin
 - `mix mc --available` - List all models from registry (priv/models_dev/)
 
 **Coverage System Architecture:**
-- **Model Registry**: `priv/models_dev/*.json` (synced via `mix req_llm.model_sync`)
+- **Model Registry**: provided by the `llm_db` dependency (no manual sync needed)
 - **Fixture State**: `priv/supported_models.json` (auto-generated artifact)
 - **Parallel Execution**: Tests run concurrently for speed
 - **State Tracking**: Skips models with passing fixtures unless `--record` or `--record-all`

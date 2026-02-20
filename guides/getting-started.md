@@ -126,4 +126,4 @@ ReqLLM.generate_text!(
 
 ## Available Providers
 
-Run `mix req_llm.model_sync` for up-to-date list of supported models.
+Model metadata is provided by the `llm_db` dependency and is always up-to-date when you update your deps.

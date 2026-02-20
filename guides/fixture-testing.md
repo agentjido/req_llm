@@ -62,7 +62,7 @@ mix mc --sample anthropic
 
 ### Model Registry
 
-Model metadata lives in `priv/models_dev/*.json` files, automatically synced from [models.dev](https://models.dev) via `mix req_llm.model_sync`.
+Model metadata is provided by the `llm_db` dependency, which sources data from [models.dev](https://models.dev). No manual sync is needed.
 
 Each model entry includes:
 - Capabilities (`tool_call`, `reasoning`, `attachment`, `temperature`)
@@ -263,9 +263,9 @@ The fixture system supports parallel test execution:
 
 ### Updating Model Coverage
 
-1. Sync latest model metadata:
+1. Update your deps to get the latest model metadata from `llm_db`:
    ```bash
-   mix req_llm.model_sync
+   mix deps.update llm_db
    ```
 2. Record fixtures for new models:
    ```bash

@@ -94,7 +94,7 @@ Adding a new LLM provider requires implementing the `ReqLLM.Provider` behavior a
 - Follow existing provider patterns (see [Adding a Provider Guide](guides/adding_a_provider.md))
 
 ✅ **Model metadata configured**
-- Provider registry in `priv/models_dev/your_provider.json` (synced via `mix req_llm.model_sync`)
+- Model metadata provided by the `llm_db` dependency (no manual sync needed)
 - All models have proper metadata (capabilities, cost, context length, etc.)
 
 ✅ **Fixtures generated for all supported models**
