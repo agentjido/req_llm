@@ -58,7 +58,7 @@ Add `req_llm` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:req_llm, "~> 1.4"}
+    {:req_llm, "~> 1.6"}
   ]
 end
 ```
