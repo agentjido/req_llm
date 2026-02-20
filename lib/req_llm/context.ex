@@ -32,6 +32,19 @@ defmodule ReqLLM.Context do
   @derive Jason.Encoder
   @type t :: unquote(Zoi.type_spec(@schema))
 
+  @typedoc """
+  Any input accepted by `Context.normalize/2` as a prompt or messages parameter.
+
+  Includes plain strings, single `Message` structs, `Context` structs,
+  loose maps with `:role`/`:content` keys, and lists of any of those types.
+  """
+  @type prompt ::
+          String.t()
+          | Message.t()
+          | t()
+          | map()
+          | [String.t() | Message.t() | t() | map()]
+
   @enforce_keys Zoi.Struct.enforce_keys(@schema)
   defstruct Zoi.Struct.struct_fields(@schema)
 
