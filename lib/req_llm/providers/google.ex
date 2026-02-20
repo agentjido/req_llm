@@ -2036,25 +2036,11 @@ defmodule ReqLLM.Providers.Google do
 
       # HTTP/HTTPS URL: use fileData.fileUri (Google-native URL support)
       String.starts_with?(url, "http://") or String.starts_with?(url, "https://") ->
-        mime_type = get_mime_type_from_part(part, url)
-
-        %{
-          fileData: %{
-            fileUri: url,
-            mimeType: mime_type
-          }
-        }
+        build_file_data(part, url)
 
       # GCS URI: gs://bucket/path
       String.starts_with?(url, "gs://") ->
-        mime_type = get_mime_type_from_part(part, url)
-
-        %{
-          fileData: %{
-            fileUri: url,
-            mimeType: mime_type
-          }
-        }
+        build_file_data(part, url)
 
       true ->
         %{text: "[Unsupported URL scheme: #{String.slice(url, 0, 20)}...]"}
@@ -2085,11 +2071,28 @@ defmodule ReqLLM.Providers.Google do
 
   defp convert_content_part(part), do: %{text: to_string(part)}
 
+  # Builds a fileData map, omitting mimeType when it cannot be reliably inferred.
+  # YouTube and other extensionless URLs need mimeType omitted so Gemini can infer it.
+  defp build_file_data(part, url) do
+    mime_type = get_mime_type_from_part(part, url)
+
+    file_data = %{fileUri: url}
+
+    file_data =
+      case mime_type do
+        nil -> file_data
+        "application/octet-stream" -> file_data
+        known -> Map.put(file_data, :mimeType, known)
+      end
+
+    %{fileData: file_data}
+  end
+
   # Helper to extract mime type from part metadata or infer from URL extension
   defp get_mime_type_from_part(part, url) do
     # Try metadata first (if passed through from ContentPart)
     case part do
-      %{image_url: %{media_type: type}} when is_binary(type) -> type
+      %{image_url: %{media_type: type}} when is_binary(type) and type != "" -> type
       _ -> infer_mime_type_from_url(url)
     end
   end

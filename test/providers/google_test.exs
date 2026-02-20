@@ -1369,8 +1369,7 @@ defmodule ReqLLM.Providers.GoogleTest do
         {"https://example.com/file.mp3", "audio/mpeg"},
         {"https://example.com/file.mp4", "video/mp4"},
         {"https://example.com/file.m4a", "audio/mp4"},
-        {"https://example.com/file.wav", "audio/wav"},
-        {"https://example.com/file.unknown", "application/octet-stream"}
+        {"https://example.com/file.wav", "audio/wav"}
       ]
 
       for {url, expected_mime} <- test_cases do
@@ -1400,6 +1399,52 @@ defmodule ReqLLM.Providers.GoogleTest do
         assert part["fileData"]["mimeType"] == expected_mime,
                "Expected #{expected_mime} for #{url}, got #{part["fileData"]["mimeType"]}"
       end
+    end
+
+    test "encode_body omits mimeType for URLs with unrecognizable extensions" do
+      url = "https://example.com/file.unknown"
+      image_url_part = ReqLLM.Message.ContentPart.image_url(url)
+
+      message = %ReqLLM.Message{role: :user, content: [image_url_part]}
+      context = %ReqLLM.Context{messages: [message]}
+
+      mock_request = %Req.Request{
+        options: [context: context, id: "gemini-1.5-flash", stream: false]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      [user_msg] = decoded["contents"]
+      [part] = user_msg["parts"]
+
+      assert part["fileData"]["fileUri"] == url
+
+      refute Map.has_key?(part["fileData"], "mimeType"),
+             "mimeType should be omitted for unrecognizable extensions"
+    end
+
+    test "encode_body omits mimeType for YouTube URLs" do
+      url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+      image_url_part = ReqLLM.Message.ContentPart.image_url(url)
+
+      message = %ReqLLM.Message{role: :user, content: [image_url_part]}
+      context = %ReqLLM.Context{messages: [message]}
+
+      mock_request = %Req.Request{
+        options: [context: context, id: "gemini-1.5-flash", stream: false]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      [user_msg] = decoded["contents"]
+      [part] = user_msg["parts"]
+
+      assert part["fileData"]["fileUri"] == url
+
+      refute Map.has_key?(part["fileData"], "mimeType"),
+             "mimeType should be omitted for YouTube URLs so Gemini can infer it"
     end
 
     test "encode_body strips query params when inferring mime type from URL" do

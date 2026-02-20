@@ -693,13 +693,21 @@ defmodule ReqLLM.Provider.Defaults do
   defp encode_openai_content_part(%ReqLLM.Message.ContentPart{
          type: :image_url,
          url: url,
+         media_type: media_type,
          metadata: metadata
        }) do
+    image_url_map = %{url: url}
+
+    image_url_map =
+      if is_binary(media_type) and media_type != "" do
+        Map.put(image_url_map, :media_type, media_type)
+      else
+        image_url_map
+      end
+
     %{
       type: "image_url",
-      image_url: %{
-        url: url
-      }
+      image_url: image_url_map
     }
     |> merge_content_metadata(metadata)
   end
