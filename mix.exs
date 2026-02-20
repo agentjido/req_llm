@@ -61,9 +61,7 @@ defmodule ReqLLM.MixProject do
           "guides/amazon_bedrock.md",
           "guides/cerebras.md",
           "guides/meta.md",
-          "guides/zenmux.md",
-          "guides/zai.md",
-          "guides/zai_coder.md"
+          "guides/zenmux.md"
         ],
         groups_for_extras: [
           Overview: [
@@ -98,9 +96,7 @@ defmodule ReqLLM.MixProject do
             "guides/amazon_bedrock.md",
             "guides/cerebras.md",
             "guides/meta.md",
-            "guides/zenmux.md",
-            "guides/zai.md",
-            "guides/zai_coder.md"
+            "guides/zenmux.md"
           ],
           Changelog: ["CHANGELOG.md"],
           Contributing: ["CONTRIBUTING.md"]
