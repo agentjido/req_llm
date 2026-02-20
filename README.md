@@ -41,6 +41,34 @@ LLM APIs are inconsistent. ReqLLM provides a unified, idiomatic Elixir interface
 
 \* _Streaming uses Finch directly due to known Req limitations with SSE responses._
 
+## Installation
+
+### Igniter Installation (Recommended)
+
+The fastest way to get started is with [Igniter](https://hex.pm/packages/igniter):
+
+```bash
+mix igniter.install req_llm
+```
+
+### Manual Installation
+
+Add `req_llm` to your list of dependencies in `mix.exs`:
+
+```elixir
+def deps do
+  [
+    {:req_llm, "~> 1.4"}
+  ]
+end
+```
+
+Then run:
+
+```bash
+mix deps.get
+```
+
 ## Quick Start
 
 ```elixir
