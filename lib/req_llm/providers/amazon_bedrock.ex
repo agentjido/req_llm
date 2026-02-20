@@ -825,9 +825,13 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     end
   end
 
+  # Cross-region inference profile prefixes.
+  # See: https://docs.aws.amazon.com/bedrock/latest/userguide/inference-profiles-support.html
+  @region_prefixes ["us", "eu", "ap", "apac", "ca", "au", "jp", "us-gov", "global"]
+
   defp strip_region_prefix(model_id) do
     case String.split(model_id, ".", parts: 2) do
-      [region, rest] when region in ["us", "eu", "ap", "ca", "global"] -> rest
+      [region, rest] when region in @region_prefixes -> rest
       _ -> model_id
     end
   end
@@ -1021,15 +1025,12 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   def normalize_model_id(model_id) when is_binary(model_id) do
     # Strip region prefixes from inference profile IDs for metadata lookup
     # (e.g., "us.anthropic.claude-3-sonnet" -> "anthropic.claude-3-sonnet")
-    # (e.g., "global.anthropic.claude-sonnet-4-5" -> "anthropic.claude-sonnet-4-5")
+    # (e.g., "au.anthropic.claude-sonnet-4-5" -> "anthropic.claude-sonnet-4-5")
     #
     # Note: This is ONLY for metadata lookup. The preserve_inference_profile? callback
     # controls whether the prefix is kept in API requests (see prepare_request/4).
     case String.split(model_id, ".", parts: 3) do
-      # Pattern: region.provider.rest where region is known
-      [possible_region, _provider, _rest]
-      when possible_region in ["us", "eu", "ap", "ca", "global"] ->
-        # Strip region prefix for metadata lookup
+      [possible_region, _provider, _rest] when possible_region in @region_prefixes ->
         [_region, rest] = String.split(model_id, ".", parts: 2)
         rest
 
