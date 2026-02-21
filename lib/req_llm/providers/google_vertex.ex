@@ -159,6 +159,11 @@ defmodule ReqLLM.Providers.GoogleVertex do
       type: :string,
       doc:
         "Task type for embedding (e.g., RETRIEVAL_QUERY, RETRIEVAL_DOCUMENT, SEMANTIC_SIMILARITY)"
+    ],
+    response_format: [
+      type: :map,
+      doc:
+        "Response format constraint (e.g., %{type: \"json_object\"}) for OpenAI-compatible MaaS models"
     ]
   ]
 
@@ -653,16 +658,32 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
     case model_family do
       "claude" ->
+        opts = warn_and_strip_response_format(opts, "Claude")
         # Delegate to Anthropic provider for Anthropic-specific option handling
         ReqLLM.Providers.Anthropic.translate_options(operation, model, opts)
 
       "gemini" ->
+        opts = warn_and_strip_response_format(opts, "Gemini")
         # Delegate to Google provider for Gemini-specific option handling
         ReqLLM.Providers.Google.translate_options(operation, model, opts)
 
       _ ->
-        # Other model families: no translation needed yet
+        # Other model families (openai_compat): no translation needed
         {opts, []}
+    end
+  end
+
+  # Called from translate_options where opts are already flattened (no :provider_options key)
+  defp warn_and_strip_response_format(opts, family_name) do
+    if opts[:response_format] do
+      Logger.warning(
+        "response_format is not supported for #{family_name} models on Vertex AI. " <>
+          "Use generate_object/4 with a schema instead. Ignoring response_format."
+      )
+
+      Keyword.delete(opts, :response_format)
+    else
+      opts
     end
   end
 

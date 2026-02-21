@@ -68,6 +68,63 @@ defmodule ReqLLM.Providers.GoogleVertex.OpenAICompatTest do
     end
   end
 
+  describe "provider_options validation" do
+    test "response_format is accepted and included in request body for openai_compat models" do
+      {:ok, model} = ReqLLM.model("google_vertex:zai-org/glm-4.7-maas")
+      context = context_fixture()
+
+      opts = [
+        access_token: "fake-token",
+        project_id: "test-project",
+        region: "us-central1",
+        provider_options: [response_format: %{type: "json_object"}]
+      ]
+
+      assert {:ok, request} = GoogleVertex.prepare_request(:chat, model, context, opts)
+
+      body = request.options[:json]
+      assert body[:response_format] == %{type: "json_object"}
+    end
+
+    test "response_format is warned and stripped for Claude models" do
+      {:ok, model} = ReqLLM.model("google_vertex:claude-haiku-4-5@20251001")
+      context = context_fixture()
+
+      opts = [
+        access_token: "fake-token",
+        project_id: "test-project",
+        region: "us-central1",
+        provider_options: [response_format: %{type: "json_object"}]
+      ]
+
+      assert ExUnit.CaptureLog.capture_log(fn ->
+               {:ok, request} = GoogleVertex.prepare_request(:chat, model, context, opts)
+
+               body = request.options[:json]
+               refute Map.has_key?(body, :response_format)
+             end) =~ "response_format is not supported for Claude models on Vertex AI"
+    end
+
+    test "response_format is warned and stripped for Gemini models" do
+      {:ok, model} = ReqLLM.model("google_vertex:gemini-2.5-flash")
+      context = context_fixture()
+
+      opts = [
+        access_token: "fake-token",
+        project_id: "test-project",
+        region: "us-central1",
+        provider_options: [response_format: %{type: "json_object"}]
+      ]
+
+      assert ExUnit.CaptureLog.capture_log(fn ->
+               {:ok, request} = GoogleVertex.prepare_request(:chat, model, context, opts)
+
+               body = request.options[:json]
+               refute Map.has_key?(body, :response_format)
+             end) =~ "response_format is not supported for Gemini models on Vertex AI"
+    end
+  end
+
   describe "model family resolution" do
     test "GLM model resolves to openai_compat formatter via extra.family" do
       {:ok, model} = ReqLLM.model("google_vertex:zai-org/glm-4.7-maas")
@@ -174,6 +231,15 @@ defmodule ReqLLM.Providers.GoogleVertex.OpenAICompatTest do
 
       assert body[:model] == "openai/gpt-oss-120b-maas"
       assert is_list(body[:messages])
+    end
+
+    test "includes response_format when provided via provider_options" do
+      context = context_fixture()
+      opts = [provider_options: [response_format: %{type: "json_object"}]]
+
+      body = OpenAICompat.format_request("zai-org/glm-4.7-maas", context, opts)
+
+      assert body[:response_format] == %{type: "json_object"}
     end
 
     test "injects structured_output tool for :object operation" do
