@@ -62,6 +62,10 @@ defmodule ReqLLM.Providers.GoogleVertex.OpenAICompat do
   an `"error"` key. Otherwise delegates to Provider.Defaults for standard
   OpenAI response decoding.
   """
+  def parse_response([body], model, opts) when is_map(body) do
+    parse_response(body, model, opts)
+  end
+
   def parse_response(%{"error" => _} = body, %LLMDB.Model{} = _model, _opts) do
     {status, reason} = extract_api_error(body)
 
