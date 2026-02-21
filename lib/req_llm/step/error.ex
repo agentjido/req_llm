@@ -108,6 +108,16 @@ defmodule ReqLLM.Step.Error do
     )
   end
 
+  defp convert_exception_to_error(request, %ReqLLM.Error.API.Request{} = exception) do
+    ReqLLM.Error.API.Request.exception(
+      reason: exception.reason,
+      status: exception.status,
+      response_body: exception.response_body,
+      request_body: exception.request_body || request.body,
+      cause: exception.cause
+    )
+  end
+
   defp convert_exception_to_error(request, exception) do
     reason = Exception.message(exception)
 

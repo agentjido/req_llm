@@ -201,6 +201,65 @@ defmodule ReqLLM.Providers.GoogleVertex.OpenAICompatTest do
     end
   end
 
+  describe "parse_response/3 error handling" do
+    test "converts Google Cloud error format to API.Request error" do
+      model = LLMDB.Model.new!(%{id: "zai-org/glm-4.7-maas", provider: :google_vertex})
+
+      body = %{
+        "error" => %{
+          "code" => 429,
+          "message" => "Resource exhausted: quota exceeded",
+          "status" => "RESOURCE_EXHAUSTED"
+        }
+      }
+
+      assert {:error, error} = OpenAICompat.parse_response(body, model, [])
+      assert %ReqLLM.Error.API.Request{} = error
+      assert error.status == 429
+      assert error.reason == "Resource exhausted: quota exceeded"
+      assert error.response_body == body
+    end
+
+    test "converts OpenAI-style error format to API.Request error" do
+      model = LLMDB.Model.new!(%{id: "zai-org/glm-4.7-maas", provider: :google_vertex})
+
+      body = %{
+        "error" => %{
+          "message" => "Rate limit exceeded",
+          "type" => "rate_limit_error"
+        }
+      }
+
+      assert {:error, error} = OpenAICompat.parse_response(body, model, [])
+      assert %ReqLLM.Error.API.Request{} = error
+      assert error.status == nil
+      assert error.reason == "Rate limit exceeded"
+      assert error.response_body == body
+    end
+
+    test "converts simple string error to API.Request error" do
+      model = LLMDB.Model.new!(%{id: "zai-org/glm-4.7-maas", provider: :google_vertex})
+
+      body = %{"error" => "Internal server error"}
+
+      assert {:error, error} = OpenAICompat.parse_response(body, model, [])
+      assert %ReqLLM.Error.API.Request{} = error
+      assert error.reason == "Internal server error"
+      assert error.response_body == body
+    end
+
+    test "handles unknown error structure gracefully" do
+      model = LLMDB.Model.new!(%{id: "zai-org/glm-4.7-maas", provider: :google_vertex})
+
+      body = %{"error" => %{"details" => [%{"reason" => "something"}]}}
+
+      assert {:error, error} = OpenAICompat.parse_response(body, model, [])
+      assert %ReqLLM.Error.API.Request{} = error
+      assert error.reason == "Unknown API error"
+      assert error.response_body == body
+    end
+  end
+
   describe "parse_response/3" do
     test "parses standard OpenAI response format" do
       model = LLMDB.Model.new!(%{id: "zai-org/glm-4.7-maas", provider: :google_vertex})

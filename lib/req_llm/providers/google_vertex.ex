@@ -600,6 +600,9 @@ defmodule ReqLLM.Providers.GoogleVertex do
       {:ok, parsed} ->
         {request, %{response | body: parsed}}
 
+      {:error, %ReqLLM.Error.API.Request{} = error} ->
+        {request, error}
+
       {:error, reason} ->
         raise "Failed to parse Vertex AI response: #{inspect(reason)}"
     end
