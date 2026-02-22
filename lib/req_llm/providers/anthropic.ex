@@ -588,16 +588,16 @@ defmodule ReqLLM.Providers.Anthropic do
   defp maybe_cache_tools(body, cache_meta) do
     case Map.get(body, :tools) do
       tools when is_list(tools) and tools != [] ->
-        updated_tools =
-          Enum.map(tools, fn tool ->
-            if Map.has_key?(tool, :cache_control) or Map.has_key?(tool, "cache_control") do
-              tool
-            else
-              Map.put(tool, :cache_control, cache_meta)
-            end
-          end)
+        {init, [last]} = Enum.split(tools, -1)
 
-        Map.put(body, :tools, updated_tools)
+        updated_last =
+          if Map.has_key?(last, :cache_control) or Map.has_key?(last, "cache_control") do
+            last
+          else
+            Map.put(last, :cache_control, cache_meta)
+          end
+
+        Map.put(body, :tools, init ++ [updated_last])
 
       _ ->
         body
