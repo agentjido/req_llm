@@ -504,6 +504,27 @@ defmodule ReqLLM.Tool do
     Enum.map(value, &normalize_list_item(&1, inner_type))
   end
 
+  defp normalize_typed_value(value, {:or, subtypes}, opts) when is_list(subtypes) do
+    Enum.reduce(subtypes, value, fn subtype, acc ->
+      normalize_typed_value(acc, subtype, opts)
+    end)
+  end
+
+  defp normalize_typed_value(value, {:tuple, subtypes}, _opts)
+       when is_tuple(value) and is_list(subtypes) do
+    tuple_items = Tuple.to_list(value)
+
+    tuple_items
+    |> Enum.with_index()
+    |> Enum.map(fn {item, idx} ->
+      case Enum.fetch(subtypes, idx) do
+        {:ok, subtype} -> normalize_list_item(item, subtype)
+        :error -> item
+      end
+    end)
+    |> List.to_tuple()
+  end
+
   defp normalize_typed_value(value, _type, _opts), do: value
 
   defp normalize_map_with_schema(value, schema) when is_map(value) do
@@ -524,6 +545,27 @@ defmodule ReqLLM.Tool do
 
   defp normalize_list_item(value, {:list, inner_type}) when is_list(value) do
     Enum.map(value, &normalize_list_item(&1, inner_type))
+  end
+
+  defp normalize_list_item(value, {:or, subtypes}) when is_list(subtypes) do
+    Enum.reduce(subtypes, value, fn subtype, acc ->
+      normalize_list_item(acc, subtype)
+    end)
+  end
+
+  defp normalize_list_item(value, {:tuple, subtypes})
+       when is_tuple(value) and is_list(subtypes) do
+    tuple_items = Tuple.to_list(value)
+
+    tuple_items
+    |> Enum.with_index()
+    |> Enum.map(fn {item, idx} ->
+      case Enum.fetch(subtypes, idx) do
+        {:ok, subtype} -> normalize_list_item(item, subtype)
+        :error -> item
+      end
+    end)
+    |> List.to_tuple()
   end
 
   defp normalize_list_item(value, _type), do: value

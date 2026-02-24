@@ -392,6 +392,59 @@ defmodule ReqLLM.ToolTest do
         String.to_existing_atom(unknown_key)
       end
     end
+
+    test "normalizes map keys for :or types that include map" do
+      {:ok, tool} =
+        Tool.new(
+          name: "or_map_normalization_test",
+          description: "OR type map normalization",
+          parameter_schema: [
+            payload: [type: {:or, [:string, :map]}, required: true]
+          ],
+          callback: fn args -> {:ok, args} end
+        )
+
+      assert {:ok, validated} = Tool.execute(tool, %{"payload" => %{"enabled" => true}})
+      assert validated[:payload] == %{enabled: true}
+    end
+
+    test "normalizes list element maps for nested :or types" do
+      {:ok, tool} =
+        Tool.new(
+          name: "list_or_map_normalization_test",
+          description: "List OR type map normalization",
+          parameter_schema: [
+            payloads: [type: {:list, {:or, [:string, :map]}}, required: true]
+          ],
+          callback: fn args -> {:ok, args} end
+        )
+
+      assert {:ok, validated} =
+               Tool.execute(tool, %{
+                 "payloads" => [%{"enabled" => true}]
+               })
+
+      assert validated[:payloads] == [%{enabled: true}]
+    end
+
+    test "normalizes map keys in tuple elements" do
+      {:ok, tool} =
+        Tool.new(
+          name: "tuple_map_normalization_test",
+          description: "Tuple map normalization",
+          parameter_schema: [
+            pair: [type: {:tuple, [:map, :string]}, required: true]
+          ],
+          callback: fn args -> {:ok, args} end
+        )
+
+      assert {:ok, validated} =
+               Tool.execute(tool, %{
+                 "pair" => {%{"enabled" => true}, "ok"}
+               })
+
+      assert validated[:pair] == {%{enabled: true}, "ok"}
+    end
   end
 
   describe "to_schema/2" do
