@@ -115,13 +115,21 @@ defmodule ReqLLM.Providers do
     if function_exported?(module, :provider_id, 0) do
       {:ok, module.provider_id()}
     else
-      module
-      |> Atom.to_string()
-      |> String.split(".")
-      |> List.last()
-      |> String.downcase()
-      |> String.to_atom()
-      |> then(&{:ok, &1})
+      module_name =
+        module
+        |> Atom.to_string()
+        |> String.split(".")
+        |> List.last()
+        |> String.downcase()
+
+      provider_id =
+        try do
+          String.to_existing_atom(module_name)
+        rescue
+          ArgumentError -> module
+        end
+
+      {:ok, provider_id}
     end
   rescue
     _ -> :error

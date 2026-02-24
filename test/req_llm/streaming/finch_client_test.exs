@@ -87,6 +87,31 @@ defmodule ReqLLM.Streaming.FinchClientTest do
       # Safe headers should remain unchanged
       assert context.req_headers["safe-header"] == "safe-value"
     end
+
+    test "builds context from finch request with known method" do
+      request =
+        Finch.build(:post, "https://api.example.com/v1/chat", [
+          {"authorization", "Bearer secret-key"},
+          {"content-type", "application/json"}
+        ])
+
+      context = HTTPContext.from_finch_request(request)
+
+      assert context.url == "https://api.example.com/v1/chat"
+      assert context.method == :post
+      assert String.contains?(context.req_headers["authorization"], "REDACTED")
+      assert context.req_headers["content-type"] == "application/json"
+    end
+
+    test "falls back to :unknown method for non-standard finch method" do
+      request =
+        Finch.build(:get, "https://api.example.com/v1/chat")
+        |> Map.put(:method, "PURGE")
+
+      context = HTTPContext.from_finch_request(request)
+
+      assert context.method == :unknown
+    end
   end
 
   describe "start_stream/5 error handling" do

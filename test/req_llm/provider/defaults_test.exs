@@ -742,4 +742,40 @@ defmodule ReqLLM.Provider.DefaultsTest do
       assert length(response.message.tool_calls) == 1
     end
   end
+
+  describe "default_decode_response/1" do
+    test "handles unknown provider prefix in model string without atomizing" do
+      req =
+        Req.new()
+        |> Map.update!(:options, fn opts ->
+          Map.merge(opts, %{
+            operation: :chat,
+            model: "unknown_provider:model-1",
+            context: %Context{messages: []}
+          })
+        end)
+
+      resp = %Req.Response{
+        status: 200,
+        body: %{
+          "id" => "chatcmpl-unknown",
+          "model" => "unknown_provider:model-1",
+          "choices" => [
+            %{
+              "message" => %{"role" => "assistant", "content" => "Hello"},
+              "finish_reason" => "stop"
+            }
+          ],
+          "usage" => %{"prompt_tokens" => 1, "completion_tokens" => 1, "total_tokens" => 2}
+        }
+      }
+
+      {returned_req, returned_resp} = Defaults.default_decode_response({req, resp})
+
+      assert returned_req == req
+      assert %ReqLLM.Response{} = returned_resp.body
+      assert returned_resp.body.model == "unknown_provider:model-1"
+      assert returned_resp.body.finish_reason == :stop
+    end
+  end
 end

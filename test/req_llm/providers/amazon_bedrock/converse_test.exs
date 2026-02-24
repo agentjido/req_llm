@@ -243,6 +243,27 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
       assert [%ContentPart{type: :text, text: "Hello!"}] = result.message.content
     end
 
+    test "falls back unknown response role to assistant" do
+      response_body = %{
+        "output" => %{
+          "message" => %{
+            "role" => "unexpected_role",
+            "content" => [%{"text" => "Hello!"}]
+          }
+        },
+        "stopReason" => "end_turn",
+        "usage" => %{
+          "inputTokens" => 10,
+          "outputTokens" => 5
+        }
+      }
+
+      {:ok, result} = Converse.parse_response(response_body, model: "test-model")
+
+      assert result.message.role == :assistant
+      assert [%ContentPart{type: :text, text: "Hello!"}] = result.message.content
+    end
+
     test "parses tool_use response" do
       response_body = %{
         "output" => %{

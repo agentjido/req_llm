@@ -1339,9 +1339,7 @@ defmodule ReqLLM.Provider.Defaults do
           {model_struct.provider, model_struct, model_struct.model}
 
         model_name when is_binary(model_name) ->
-          provider_id =
-            String.split(model_name, ":", parts: 2) |> List.first() |> String.to_atom()
-
+          provider_id = provider_id_from_model_name(model_name)
           model = %LLMDB.Model{id: model_name, provider: provider_id}
           {provider_id, model, model_name}
       end
@@ -1408,6 +1406,15 @@ defmodule ReqLLM.Provider.Defaults do
 
     merged_response = merge_response_with_context(req, final_response)
     {req, %{resp | body: merged_response}}
+  end
+
+  defp provider_id_from_model_name(model_name) do
+    provider_part = String.split(model_name, ":", parts: 2) |> List.first()
+
+    ReqLLM.Providers.list()
+    |> Enum.find(:unknown, fn provider ->
+      Atom.to_string(provider) == provider_part
+    end)
   end
 
   defp extract_and_set_object(response, req) do
