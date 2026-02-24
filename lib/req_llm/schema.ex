@@ -657,7 +657,7 @@ defmodule ReqLLM.Schema do
   @spec to_google_format(ReqLLM.Tool.t()) :: map()
   def to_google_format(%ReqLLM.Tool{} = tool) do
     json_schema = to_json(tool.parameter_schema)
-    parameters = Map.delete(json_schema, "additionalProperties")
+    parameters = deep_delete_keys(json_schema, ["$schema", "additionalProperties"])
 
     %{
       "name" => tool.name,
@@ -957,4 +957,16 @@ defmodule ReqLLM.Schema do
 
   defp format_jsv_error(%{"error" => error}), do: error
   defp format_jsv_error(error), do: inspect(error)
+
+  @spec deep_delete_keys(term(), [String.t()]) :: term()
+  defp deep_delete_keys(map, keys) when is_map(map) do
+    map
+    |> Map.drop(keys)
+    |> Map.new(fn {k, v} -> {k, deep_delete_keys(v, keys)} end)
+  end
+
+  defp deep_delete_keys(list, keys) when is_list(list),
+    do: Enum.map(list, &deep_delete_keys(&1, keys))
+
+  defp deep_delete_keys(value, _keys), do: value
 end
