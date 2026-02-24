@@ -276,6 +276,122 @@ defmodule ReqLLM.ToolTest do
         String.to_existing_atom(unknown_key)
       end
     end
+
+    test "normalizes nested string keys in list/map schemas" do
+      {:ok, tool} =
+        Tool.new(
+          name: "nested_schema_normalization_test",
+          description: "Nested schema normalization",
+          parameter_schema: [
+            filters: [
+              type:
+                {:list,
+                 {:map,
+                  [
+                    field: [type: :string, required: true],
+                    comparison: [
+                      type:
+                        {:map,
+                         [
+                           operator: [type: :string, required: true],
+                           value: [type: :integer, required: true]
+                         ]},
+                      required: true
+                    ]
+                  ]}},
+              required: true
+            ]
+          ],
+          callback: fn args -> {:ok, args} end
+        )
+
+      input = %{
+        "filters" => [
+          %{
+            "field" => "status",
+            "comparison" => %{"operator" => "eq", "value" => 3}
+          }
+        ]
+      }
+
+      assert {:ok, validated} = Tool.execute(tool, input)
+
+      assert validated[:filters] == [%{field: "status", comparison: %{operator: "eq", value: 3}}]
+    end
+
+    test "normalizes nested string keys for generic map values using existing atoms" do
+      {:ok, tool} =
+        Tool.new(
+          name: "nested_generic_map_normalization_test",
+          description: "Nested generic map normalization",
+          parameter_schema: [
+            filters: [
+              type:
+                {:list,
+                 {:map,
+                  [
+                    field: [type: :string, required: true],
+                    value: [type: :map, required: true]
+                  ]}},
+              required: true
+            ]
+          ],
+          callback: fn args -> {:ok, args} end
+        )
+
+      input = %{
+        "filters" => [
+          %{
+            "field" => "status",
+            "value" => %{"eq" => "active"}
+          }
+        ]
+      }
+
+      assert {:ok, validated} = Tool.execute(tool, input)
+      assert validated[:filters] == [%{field: "status", value: %{eq: "active"}}]
+    end
+
+    test "does not atomize unknown nested string keys in generic map values" do
+      {:ok, tool} =
+        Tool.new(
+          name: "unknown_nested_key_safety_test",
+          description: "Unknown nested key safety",
+          parameter_schema: [
+            filters: [
+              type:
+                {:list,
+                 {:map,
+                  [
+                    field: [type: :string, required: true],
+                    value: [type: :map, required: true]
+                  ]}},
+              required: true
+            ]
+          ],
+          callback: fn args -> {:ok, args} end
+        )
+
+      unknown_key = "unexpected_nested_#{System.unique_integer([:positive])}"
+
+      assert_raise ArgumentError, fn ->
+        String.to_existing_atom(unknown_key)
+      end
+
+      assert {:error, %ReqLLM.Error.Validation.Error{}} =
+               Tool.execute(tool, %{
+                 "filters" => [
+                   %{
+                     "field" => "status",
+                     "value" => %{unknown_key => "active"}
+                   }
+                 ]
+               })
+
+      assert_raise ArgumentError, fn ->
+        String.to_existing_atom(unknown_key)
+      end
+    end
   end
 
   describe "to_schema/2" do
