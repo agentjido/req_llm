@@ -172,6 +172,11 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       - `0` - first message, `1` - second, etc.
       """
     ],
+    anthropic_beta: [
+      type: {:list, :string},
+      doc:
+        "Beta feature flags for Anthropic models on Bedrock (e.g., [\"context-1m-2025-08-07\"])"
+    ],
     service_tier: [
       type: {:in, ["priority", "default", "flex"]},
       default: "default",

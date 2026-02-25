@@ -766,6 +766,77 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
     end
   end
 
+  describe "anthropic_beta parameter" do
+    setup do
+      System.put_env("AWS_ACCESS_KEY_ID", "AKIATEST")
+      System.put_env("AWS_SECRET_ACCESS_KEY", "secretTEST")
+      :ok
+    end
+
+    test "includes anthropic_beta in request body when provided" do
+      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      context = Context.new([Context.user("Hello")])
+
+      opts = [
+        access_key_id: "AKIATEST",
+        secret_access_key: "secretTEST",
+        anthropic_beta: ["output-128k-2025-02-19"]
+      ]
+
+      {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+
+      body = Jason.decode!(request.body)
+      assert body["anthropic_beta"] == ["output-128k-2025-02-19"]
+    end
+
+    test "omits anthropic_beta from body when not provided" do
+      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      context = Context.new([Context.user("Hello")])
+
+      opts = [
+        access_key_id: "AKIATEST",
+        secret_access_key: "secretTEST"
+      ]
+
+      {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+
+      body = Jason.decode!(request.body)
+      refute Map.has_key?(body, "anthropic_beta")
+    end
+
+    test "supports multiple beta flags" do
+      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      context = Context.new([Context.user("Hello")])
+
+      opts = [
+        access_key_id: "AKIATEST",
+        secret_access_key: "secretTEST",
+        anthropic_beta: ["output-128k-2025-02-19", "another-beta-flag"]
+      ]
+
+      {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+
+      body = Jason.decode!(request.body)
+      assert body["anthropic_beta"] == ["output-128k-2025-02-19", "another-beta-flag"]
+    end
+
+    test "works from provider_options nesting" do
+      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      context = Context.new([Context.user("Hello")])
+
+      opts = [
+        access_key_id: "AKIATEST",
+        secret_access_key: "secretTEST",
+        provider_options: [anthropic_beta: ["output-128k-2025-02-19"]]
+      ]
+
+      {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+
+      body = Jason.decode!(request.body)
+      assert body["anthropic_beta"] == ["output-128k-2025-02-19"]
+    end
+  end
+
   # Helper to build a valid AWS Event Stream message for testing
   defp build_aws_event_stream_message(payload) when is_binary(payload) do
     headers = <<>>
