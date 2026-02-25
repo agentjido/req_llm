@@ -161,6 +161,19 @@ defmodule ReqLLM.Tool do
         callback: {WeatherService, :get_weather}
       )
 
+      # Using Elixir typespec syntax via JSONSpec (https://hex.pm/packages/json_spec)
+      import JSONSpec
+
+      {:ok, tool} = ReqLLM.Tool.new(
+        name: "get_weather",
+        description: "Get current weather",
+        parameter_schema: schema(
+          %{required(:location) => String.t(), optional(:units) => :celsius | :fahrenheit},
+          doc: [location: "City name", units: "Temperature units"]
+        ),
+        callback: {WeatherService, :get_weather}
+      )
+
   """
   @spec new(tool_opts()) :: {:ok, t()} | {:error, term()}
   def new(opts) when is_list(opts) do
