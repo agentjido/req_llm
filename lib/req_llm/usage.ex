@@ -54,6 +54,29 @@ defmodule ReqLLM.Usage do
     }
   end
 
+  @doc """
+  Merge two usage maps, taking the max of numeric fields (to handle
+  cumulative streaming usage) and recomputing derived totals.
+  """
+  @spec merge(map(), map()) :: map()
+  def merge(existing, incoming) when is_map(existing) and is_map(incoming) do
+    existing
+    |> Map.merge(incoming, fn _key, v1, v2 ->
+      if is_number(v1) and is_number(v2), do: max(v1, v2), else: v2
+    end)
+    |> recompute_totals()
+  end
+
+  defp recompute_totals(usage) do
+    input = Map.get(usage, :input_tokens, 0)
+    output = Map.get(usage, :output_tokens, 0)
+
+    usage
+    |> Map.put(:total_tokens, input + output)
+    |> Map.put(:input, input)
+    |> Map.put(:output, output)
+  end
+
   defp derive_total_tokens(input_tokens, output_tokens)
        when is_number(input_tokens) and is_number(output_tokens),
        do: input_tokens + output_tokens

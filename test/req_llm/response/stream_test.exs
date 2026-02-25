@@ -85,7 +85,8 @@ defmodule ReqLLM.Response.StreamTest do
 
       summary = ResponseStream.summarize(chunks)
 
-      assert summary.usage == %{input_tokens: 10, output_tokens: 5}
+      assert summary.usage.input_tokens == 10
+      assert summary.usage.output_tokens == 5
     end
 
     test "merges multiple usage chunks" do
@@ -96,7 +97,39 @@ defmodule ReqLLM.Response.StreamTest do
 
       summary = ResponseStream.summarize(chunks)
 
-      assert summary.usage == %{input_tokens: 10, output_tokens: 5}
+      assert summary.usage.input_tokens == 10
+      assert summary.usage.output_tokens == 5
+      assert summary.usage.total_tokens == 15
+    end
+
+    test "merging usage preserves non-zero values when later chunk has zeros" do
+      chunks = [
+        StreamChunk.meta(%{
+          usage: %{
+            input_tokens: 1500,
+            output_tokens: 0,
+            total_tokens: 1500,
+            cached_tokens: 0,
+            cache_creation_tokens: 12000
+          }
+        }),
+        StreamChunk.meta(%{
+          usage: %{
+            input_tokens: 0,
+            output_tokens: 393,
+            total_tokens: 393,
+            cached_tokens: 0,
+            cache_creation_tokens: 0
+          }
+        })
+      ]
+
+      summary = ResponseStream.summarize(chunks)
+
+      assert summary.usage.input_tokens == 1500
+      assert summary.usage.output_tokens == 393
+      assert summary.usage.total_tokens == 1893
+      assert summary.usage.cache_creation_tokens == 12000
     end
 
     test "handles empty stream" do
