@@ -164,10 +164,10 @@ defmodule ReqLLM.Provider.Options do
                                    "Timeout for receiving HTTP responses in milliseconds (defaults to global config)"
                                ],
                                max_retries: [
-                                 type: :pos_integer,
+                                 type: :non_neg_integer,
                                  default: 3,
                                  doc:
-                                   "Maximum number of retry attempts for transient network errors"
+                                   "Maximum number of retry attempts for transient network errors. Set to 0 to disable retries."
                                ]
                              )
 
