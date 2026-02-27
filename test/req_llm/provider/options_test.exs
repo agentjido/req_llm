@@ -642,6 +642,14 @@ defmodule ReqLLM.Provider.OptionsTest do
       assert processed[:encoding_format] == "float"
     end
 
+    test "does not include return_usage in processed embedding transport options" do
+      model = %LLMDB.Model{provider: :simple, id: "embedding-model"}
+      opts = [dimensions: 512, encoding_format: "float"]
+
+      assert {:ok, processed} = Options.process(SimpleProvider, :embedding, model, opts)
+      refute Keyword.has_key?(processed, :return_usage)
+    end
+
     test "rejects generation-specific options for :embedding operations" do
       model = %LLMDB.Model{provider: :simple, id: "embedding-model"}
       opts = [temperature: 0.7]
