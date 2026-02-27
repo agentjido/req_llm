@@ -3,6 +3,8 @@ import Config
 config :llm_db,
   filter: %{
     allow: %{
+      alibaba: ["*"],
+      alibaba_cn: ["*"],
       amazon_bedrock: ["*"],
       anthropic: ["*"],
       azure: ["*"],
