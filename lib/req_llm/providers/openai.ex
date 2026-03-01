@@ -358,6 +358,57 @@ defmodule ReqLLM.Providers.OpenAI do
     end
   end
 
+  def prepare_request(:transcription, model_spec, audio_data, opts) do
+    with {:ok, model} <- ReqLLM.model(model_spec) do
+      http_opts = Keyword.get(opts, :req_http_options, [])
+      media_type = Keyword.get(opts, :media_type, "audio/mpeg")
+      language = Keyword.get(opts, :language)
+      provider_options = Keyword.get(opts, :provider_options, [])
+      timeout = Keyword.get(opts, :receive_timeout, 120_000)
+
+      ext = ReqLLM.Provider.Defaults.media_type_to_extension(media_type)
+      filename = "audio.#{ext}"
+
+      # Determine response_format based on model
+      response_format =
+        if model.id in ["gpt-4o-transcribe", "gpt-4o-mini-transcribe"] do
+          "json"
+        else
+          "verbose_json"
+        end
+
+      form_parts =
+        [
+          file: {audio_data, filename: filename, content_type: media_type},
+          model: model.id,
+          response_format: response_format
+        ]
+        |> maybe_add_transcription_part(:language, language)
+        |> maybe_add_transcription_provider_parts(provider_options)
+
+      api_key = ReqLLM.Keys.get!(model, opts)
+
+      request =
+        Req.new(
+          [
+            url: "/audio/transcriptions",
+            method: :post,
+            base_url: Keyword.get(opts, :base_url, base_url()),
+            receive_timeout: timeout,
+            pool_timeout: timeout,
+            form_multipart: form_parts,
+            auth: {:bearer, api_key}
+          ] ++ http_opts
+        )
+        |> Req.Request.put_header("authorization", "Bearer #{api_key}")
+        |> ReqLLM.Step.Retry.attach()
+        |> ReqLLM.Step.Error.attach()
+        |> ReqLLM.Step.Fixture.maybe_attach(model, opts)
+
+      {:ok, request}
+    end
+  end
+
   def prepare_request(operation, model_spec, input, opts) do
     case ReqLLM.Provider.Defaults.prepare_request(__MODULE__, operation, model_spec, input, opts) do
       {:error, %ReqLLM.Error.Invalid.Parameter{parameter: param}} ->
@@ -662,4 +713,28 @@ defmodule ReqLLM.Providers.OpenAI do
         {:error, ReqLLM.Error.Invalid.Parameter.exception(parameter: message)}
     end
   end
+
+  defp maybe_add_transcription_part(parts, _key, nil), do: parts
+  defp maybe_add_transcription_part(parts, key, value), do: parts ++ [{key, to_string(value)}]
+
+  defp maybe_add_transcription_provider_parts(parts, opts) when is_list(opts) do
+    Enum.reduce(opts, parts, fn
+      {_key, nil}, acc ->
+        acc
+
+      {:timestamp_granularities, values}, acc when is_list(values) ->
+        Enum.reduce(values, acc, fn v, inner_acc ->
+          inner_acc ++ [{:"timestamp_granularities[]", to_string(v)}]
+        end)
+
+      {key, value}, acc ->
+        acc ++ [{key, to_string(value)}]
+    end)
+  end
+
+  defp maybe_add_transcription_provider_parts(parts, opts) when is_map(opts) do
+    maybe_add_transcription_provider_parts(parts, Map.to_list(opts))
+  end
+
+  defp maybe_add_transcription_provider_parts(parts, _), do: parts
 end

@@ -70,7 +70,7 @@ defmodule ReqLLM do
       provider.generate_text(model, messages, opts)
   """
 
-  alias ReqLLM.{Embedding, Generation, Images, Schema, Tool}
+  alias ReqLLM.{Embedding, Generation, Images, Schema, Speech, Tool, Transcription}
 
   # ===========================================================================
   # Configuration API
@@ -626,6 +626,112 @@ defmodule ReqLLM do
 
   """
   defdelegate embed(model_spec, input, opts \\ []), to: Embedding
+
+  # ===========================================================================
+  # Transcription API - Delegated to ReqLLM.Transcription
+  # ===========================================================================
+
+  @doc """
+  Transcribes audio using an AI model.
+
+  Inspired by the Vercel AI SDK's `transcribe()` function. Returns a
+  `ReqLLM.Transcription.Result` with transcribed text, timing segments,
+  detected language, and duration.
+
+  ## Parameters
+
+    * `model_spec` - Model specification (e.g., `"openai:whisper-1"`, `"groq:whisper-large-v3"`)
+    * `audio` - Audio input:
+      - `String.t()` - File path to an audio file
+      - `{:binary, binary(), String.t()}` - Raw audio data with media type
+      - `{:base64, String.t(), String.t()}` - Base64-encoded audio with media type
+    * `opts` - Additional options (keyword list)
+
+  ## Options
+
+    * `:language` - Language hint in ISO-639-1 format (e.g., "en")
+    * `:provider_options` - Provider-specific options
+    * `:receive_timeout` - HTTP timeout in milliseconds (default: 120_000)
+
+  ## Examples
+
+      # From file path
+      {:ok, result} = ReqLLM.transcribe("openai:whisper-1", "speech.mp3")
+      result.text #=> "Hello world"
+
+      # From binary data
+      data = File.read!("speech.mp3")
+      {:ok, result} = ReqLLM.transcribe("openai:whisper-1", {:binary, data, "audio/mpeg"})
+
+      # With options
+      {:ok, result} = ReqLLM.transcribe("openai:whisper-1", "speech.mp3",
+        language: "en",
+        provider_options: [prompt: "Technical terms: ReqLLM, Elixir"]
+      )
+
+  """
+  defdelegate transcribe(model_spec, audio, opts \\ []), to: Transcription
+
+  @doc """
+  Transcribes audio, raising on error.
+
+  Same as `transcribe/3` but raises on error.
+  """
+  defdelegate transcribe!(model_spec, audio, opts \\ []), to: Transcription
+
+  # ===========================================================================
+  # Speech API - Delegated to ReqLLM.Speech
+  # ===========================================================================
+
+  @doc """
+  Generates speech audio from text using an AI model.
+
+  Inspired by the Vercel AI SDK's `generateSpeech()` function. Returns a
+  `ReqLLM.Speech.Result` with the generated audio binary, media type, and format.
+
+  ## Parameters
+
+    * `model_spec` - Model specification (e.g., `"openai:tts-1"`, `"openai:gpt-4o-mini-tts"`)
+    * `text` - The text to convert to speech
+    * `opts` - Additional options (keyword list)
+
+  ## Options
+
+    * `:voice` - Voice identifier (e.g., "alloy", "echo", "nova", "shimmer")
+    * `:speed` - Speech speed multiplier (0.25 to 4.0)
+    * `:output_format` - Audio format: `:mp3`, `:opus`, `:aac`, `:flac`, `:wav`, `:pcm`
+    * `:language` - ISO-639-1 language code
+    * `:provider_options` - Provider-specific options (e.g., `[instructions: "Speak slowly"]`)
+    * `:receive_timeout` - HTTP timeout in milliseconds (default: 120_000)
+
+  ## Examples
+
+      # Basic usage
+      {:ok, result} = ReqLLM.speak("openai:tts-1", "Hello world", voice: "alloy")
+      File.write!("hello.mp3", result.audio)
+
+      # High quality with options
+      {:ok, result} = ReqLLM.speak("openai:tts-1-hd", "Welcome!",
+        voice: "nova",
+        speed: 1.2,
+        output_format: :wav
+      )
+
+      # With instructions (gpt-4o-mini-tts)
+      {:ok, result} = ReqLLM.speak("openai:gpt-4o-mini-tts", "Breaking news!",
+        voice: "coral",
+        provider_options: [instructions: "Speak in an excited tone"]
+      )
+
+  """
+  defdelegate speak(model_spec, text, opts \\ []), to: Speech
+
+  @doc """
+  Generates speech audio from text, raising on error.
+
+  Same as `speak/3` but raises on error.
+  """
+  defdelegate speak!(model_spec, text, opts \\ []), to: Speech
 
   # ===========================================================================
   # Vercel AI SDK Utility API - Delegated to ReqLLM.Utils

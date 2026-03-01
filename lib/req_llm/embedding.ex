@@ -188,7 +188,8 @@ defmodule ReqLLM.Embedding do
     with {:ok, model} <- validate_model(model_spec),
          :ok <- validate_input(text),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
-         {:ok, request} <- provider_module.prepare_request(:embedding, model, text, provider_opts),
+         {:ok, request} <-
+           provider_module.prepare_request(:embedding, model, text, provider_opts),
          {:ok, %Req.Response{status: status} = response} when status in 200..299 <-
            Req.request(request),
          {:ok, embedding} <- extract_single_embedding(response.body) do
