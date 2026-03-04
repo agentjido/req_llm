@@ -921,7 +921,6 @@ defmodule ReqLLM.Providers.Google do
           case builtin_tools do
             [] ->
               %{}
-              |> maybe_put(:toolConfig, tool_config)
 
             tools ->
               %{tools: tools}
