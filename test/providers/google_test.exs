@@ -201,6 +201,32 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert is_list(tool_def["functionDeclarations"])
     end
 
+    test "encode_body with empty tools list and tool_choice omits toolConfig" do
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
+      context = context_fixture()
+
+      # Create a mock request mimicking Jido AI's default behavior
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          tools: [],
+          tool_choice: :auto,
+          operation: :chat
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      # Ensure both tools and toolConfig are completely omitted when tools is empty
+      refute Map.has_key?(decoded, "tools"), "tools array should be omitted"
+
+      refute Map.has_key?(decoded, "toolConfig"),
+             "toolConfig should not be attached if there are no tools"
+    end
+
     test "encode_body includes tool_result name and structured response" do
       {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
 
