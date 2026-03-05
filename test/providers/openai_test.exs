@@ -86,6 +86,22 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert request.method == :post
     end
 
+    test "prepare_request honors explicit string-key openai_chat wire protocol" do
+      {:ok, model} =
+        ReqLLM.model(%{
+          provider: :openai,
+          id: "gpt-5.3-codex",
+          extra: %{"wire" => %{"protocol" => "openai_chat"}}
+        })
+
+      context = context_fixture()
+      {:ok, request} = OpenAI.prepare_request(:chat, model, context, [])
+
+      assert %Req.Request{} = request
+      assert request.url.path == "/chat/completions"
+      assert request.method == :post
+    end
+
     test "prepare_request creates configured embedding request" do
       {:ok, model} = ReqLLM.model("openai:text-embedding-3-small")
       text = "Hello, world!"

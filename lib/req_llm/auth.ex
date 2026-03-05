@@ -35,16 +35,21 @@ defmodule ReqLLM.Auth do
           {:ok, credential()} | {:error, String.t()}
   def resolve(provider_or_model, opts \\ []) do
     provider_opts = get_option(opts, :provider_options) || []
-    auth_mode = auth_mode(opts, provider_opts)
 
-    case fetch_access_token(opts, provider_opts) do
-      {:ok, token, source} ->
-        {:ok, %{kind: :oauth_access_token, token: token, source: source}}
+    case auth_mode(opts, provider_opts) do
+      :oauth ->
+        case fetch_access_token(opts, provider_opts) do
+          {:ok, token, source} ->
+            {:ok, %{kind: :oauth_access_token, token: token, source: source}}
 
-      :none when auth_mode == :oauth ->
-        {:error, "OAuth mode requires :access_token (top-level or under :provider_options)"}
+          :none ->
+            {:error, "OAuth mode requires :access_token (top-level or under :provider_options)"}
 
-      :none ->
+          {:error, msg} ->
+            {:error, msg}
+        end
+
+      :api_key ->
         key_opts =
           case get_option(opts, :api_key) do
             nil -> []
@@ -55,9 +60,6 @@ defmodule ReqLLM.Auth do
           {:ok, key, source} -> {:ok, %{kind: :api_key, token: key, source: source}}
           {:error, msg} -> {:error, msg}
         end
-
-      {:error, msg} ->
-        {:error, msg}
     end
   end
 

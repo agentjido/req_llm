@@ -289,6 +289,39 @@ defmodule ReqLLM.GenerationTest do
 
       assert %Response{} = response
     end
+
+    test "auth_mode :api_key ignores access_token and uses API key" do
+      custom_key = "test-api-key-explicit-mode-#{System.unique_integer([:positive])}"
+
+      Req.Test.stub(ReqLLM.GenerationTestAPIKeyMode, fn conn ->
+        auth_header = Plug.Conn.get_req_header(conn, "authorization")
+
+        assert auth_header == ["Bearer #{custom_key}"],
+               "Expected Authorization header to use API key when auth_mode is :api_key"
+
+        Req.Test.json(conn, %{
+          "id" => "cmpl_test_123",
+          "model" => "gpt-4o-mini-2024-07-18",
+          "choices" => [
+            %{
+              "message" => %{"role" => "assistant", "content" => "Response"}
+            }
+          ],
+          "usage" => %{"prompt_tokens" => 10, "completion_tokens" => 5, "total_tokens" => 15}
+        })
+      end)
+
+      {:ok, response} =
+        Generation.generate_text(
+          "openai:gpt-4o-mini",
+          "Hello",
+          api_key: custom_key,
+          provider_options: [auth_mode: :api_key, access_token: "stale-oauth-token"],
+          req_http_options: [plug: {Req.Test, ReqLLM.GenerationTestAPIKeyMode}]
+        )
+
+      assert %Response{} = response
+    end
   end
 
   describe "oauth access_token option precedence" do

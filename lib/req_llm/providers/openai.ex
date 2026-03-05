@@ -184,7 +184,11 @@ defmodule ReqLLM.Providers.OpenAI do
   @compile {:no_warn_undefined, [{nil, :path, 0}, {nil, :attach_stream, 4}]}
 
   defp get_api_type(%LLMDB.Model{} = model) do
-    case get_in(model, [Access.key(:extra, %{}), :wire, :protocol]) do
+    protocol =
+      get_in(model, [Access.key(:extra, %{}), :wire, :protocol]) ||
+        get_in(model, [Access.key(:extra, %{}), "wire", "protocol"])
+
+    case protocol do
       "openai_responses" ->
         "responses"
 
