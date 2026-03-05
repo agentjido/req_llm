@@ -86,6 +86,20 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert request.options.api_key == custom_key
     end
 
+    test "attach supports oauth access_token auth" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+      oauth_token = "oauth-anthropic-token-123"
+
+      request =
+        Req.new()
+        |> Anthropic.attach(model,
+          provider_options: [auth_mode: :oauth, access_token: oauth_token]
+        )
+
+      assert request.headers["authorization"] == ["Bearer #{oauth_token}"]
+      refute Map.has_key?(request.headers, "x-api-key")
+    end
+
     test "error handling for invalid configurations" do
       {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       prompt = "Hello world"

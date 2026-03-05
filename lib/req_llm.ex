@@ -222,29 +222,79 @@ defmodule ReqLLM do
           | struct()
         ) ::
           {:ok, struct()} | {:error, term()}
-  def model(%LLMDB.Model{} = model), do: {:ok, model}
+  def model(%LLMDB.Model{} = model), do: {:ok, normalize_model_metadata(model)}
 
   def model(%{} = attrs) when not is_struct(attrs) do
-    LLMDB.Model.new(attrs)
+    attrs
+    |> LLMDB.Model.new()
+    |> normalize_model_result()
   end
 
   def model({provider, model_id, _opts}) when is_atom(provider) and is_binary(model_id) do
-    LLMDB.model(provider, model_id)
+    provider
+    |> LLMDB.model(model_id)
+    |> normalize_model_result()
   end
 
   def model({provider, kw}) when is_atom(provider) and is_list(kw) do
     case kw[:id] || kw[:model] do
-      id when is_binary(id) -> LLMDB.model(provider, id)
-      _ -> {:error, ReqLLM.Error.Invalid.Parameter.exception(parameter: :model, value: kw)}
+      id when is_binary(id) ->
+        provider
+        |> LLMDB.model(id)
+        |> normalize_model_result()
+
+      _ ->
+        {:error, ReqLLM.Error.Invalid.Parameter.exception(parameter: :model, value: kw)}
     end
   end
 
-  def model(spec) when is_binary(spec), do: LLMDB.model(spec)
+  def model(spec) when is_binary(spec) do
+    spec
+    |> LLMDB.model()
+    |> normalize_model_result()
+  end
 
   def model(other) do
     {:error,
      ReqLLM.Error.Validation.Error.exception(message: "Invalid model spec: #{inspect(other)}")}
   end
+
+  defp normalize_model_result({:ok, %LLMDB.Model{} = model}),
+    do: {:ok, normalize_model_metadata(model)}
+
+  defp normalize_model_result(other), do: other
+
+  defp normalize_model_metadata(%LLMDB.Model{provider: :openai} = model) do
+    protocol =
+      get_in(model, [Access.key(:extra, %{}), :wire, :protocol]) ||
+        get_in(model, [Access.key(:extra, %{}), "wire", "protocol"])
+
+    model_id = model.provider_model_id || model.id || model.model
+
+    if is_nil(protocol) and ReqLLM.Providers.OpenAI.AdapterHelpers.reasoning_model?(model_id) do
+      extra = model.extra || %{}
+
+      updated_extra =
+        cond do
+          Map.has_key?(extra, :wire) ->
+            wire = if is_map(extra[:wire]), do: extra[:wire], else: %{}
+            Map.put(extra, :wire, Map.put(wire, :protocol, "openai_responses"))
+
+          Map.has_key?(extra, "wire") ->
+            wire = if is_map(extra["wire"]), do: extra["wire"], else: %{}
+            Map.put(extra, "wire", Map.put(wire, "protocol", "openai_responses"))
+
+          true ->
+            Map.put(extra, :wire, %{protocol: "openai_responses"})
+        end
+
+      %{model | extra: updated_extra}
+    else
+      model
+    end
+  end
+
+  defp normalize_model_metadata(%LLMDB.Model{} = model), do: model
 
   # ===========================================================================
   # Text Generation API - Delegated to ReqLLM.Generation

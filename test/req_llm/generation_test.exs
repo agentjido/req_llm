@@ -291,6 +291,69 @@ defmodule ReqLLM.GenerationTest do
     end
   end
 
+  describe "oauth access_token option precedence" do
+    test "access_token in provider_options takes precedence for generate_text" do
+      oauth_token = "oauth-token-#{System.unique_integer([:positive])}"
+
+      Req.Test.stub(ReqLLM.GenerationTestOAuthAccessToken, fn conn ->
+        auth_header = Plug.Conn.get_req_header(conn, "authorization")
+
+        assert auth_header == ["Bearer #{oauth_token}"],
+               "Expected Authorization header to contain OAuth access_token"
+
+        Req.Test.json(conn, %{
+          "id" => "cmpl_test_123",
+          "model" => "gpt-4o-mini-2024-07-18",
+          "choices" => [
+            %{
+              "message" => %{"role" => "assistant", "content" => "Response"}
+            }
+          ],
+          "usage" => %{"prompt_tokens" => 10, "completion_tokens" => 5, "total_tokens" => 15}
+        })
+      end)
+
+      {:ok, response} =
+        Generation.generate_text(
+          "openai:gpt-4o-mini",
+          "Hello",
+          provider_options: [auth_mode: :oauth, access_token: oauth_token],
+          req_http_options: [plug: {Req.Test, ReqLLM.GenerationTestOAuthAccessToken}]
+        )
+
+      assert %Response{} = response
+    end
+
+    test "access_token in provider_options takes precedence for stream_text" do
+      oauth_token = "oauth-stream-token-#{System.unique_integer([:positive])}"
+
+      Req.Test.stub(ReqLLM.GenerationStreamTestOAuthAccessToken, fn conn ->
+        auth_header = Plug.Conn.get_req_header(conn, "authorization")
+
+        assert auth_header == ["Bearer #{oauth_token}"],
+               "Expected Authorization header to contain OAuth access_token in streaming request"
+
+        sse_body =
+          ~s(data: {"id":"chatcmpl-123","choices":[{"delta":{"content":"Hello"}}]}\n\n) <>
+            "data: [DONE]\n\n"
+
+        conn
+        |> Plug.Conn.put_resp_header("content-type", "text/event-stream")
+        |> Plug.Conn.send_resp(200, sse_body)
+      end)
+
+      {:ok, response} =
+        Generation.stream_text(
+          "openai:gpt-4o-mini",
+          "Hello",
+          provider_options: [auth_mode: :oauth, access_token: oauth_token],
+          req_http_options: [plug: {Req.Test, ReqLLM.GenerationStreamTestOAuthAccessToken}]
+        )
+
+      assert %StreamResponse{} = response
+    end
+  end
+
   describe "stream_text/3 api_key option precedence" do
     test "api_key option takes precedence in streaming requests" do
       custom_key = "test-stream-key-#{System.unique_integer([:positive])}"

@@ -482,10 +482,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   # ========================================================================
 
   defp build_request_headers(model, opts) do
-    api_key = ReqLLM.Keys.get!(model, opts)
+    credential = ReqLLM.Auth.resolve!(model, opts)
 
     [
-      {"Authorization", "Bearer " <> api_key},
+      {"Authorization", "Bearer " <> credential.token},
       {"Content-Type", "application/json"}
     ]
   end

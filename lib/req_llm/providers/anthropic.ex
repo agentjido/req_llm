@@ -33,6 +33,15 @@ defmodule ReqLLM.Providers.Anthropic do
   require Logger
 
   @provider_schema [
+    access_token: [
+      type: :string,
+      doc: "OAuth access token used as Authorization Bearer credential"
+    ],
+    auth_mode: [
+      type: {:in, [:api_key, :oauth]},
+      default: :api_key,
+      doc: "Authentication mode: :api_key (default) or :oauth"
+    ],
     anthropic_top_k: [
       type: :pos_integer,
       doc: "Sample from the top K options for each subsequent token (1-40)"
@@ -271,13 +280,13 @@ defmodule ReqLLM.Providers.Anthropic do
       raise ReqLLM.Error.Invalid.Provider.exception(provider: model.provider)
     end
 
-    {api_key, extra_option_keys} =
-      ReqLLM.Provider.Defaults.fetch_api_key_and_extra_options(__MODULE__, model, user_opts)
+    credential = ReqLLM.Auth.resolve!(model, user_opts)
+    extra_option_keys = ReqLLM.Provider.Defaults.extra_option_keys(__MODULE__)
 
     request
     |> Req.Request.register_options(extra_option_keys ++ [:anthropic_version, :anthropic_beta])
     |> Req.Request.put_header("content-type", "application/json")
-    |> Req.Request.put_header("x-api-key", api_key)
+    |> put_auth_headers(credential)
     |> Req.Request.put_header("anthropic-version", get_anthropic_version(user_opts))
     |> Req.Request.put_private(:req_llm_model, model)
     |> maybe_add_beta_header(user_opts)
@@ -351,13 +360,26 @@ defmodule ReqLLM.Providers.Anthropic do
   # ========================================================================
 
   defp build_request_headers(model, opts) do
-    api_key = ReqLLM.Keys.get!(model, opts)
+    credential = ReqLLM.Auth.resolve!(model, opts)
 
     [
-      {"content-type", "application/json"},
-      {"x-api-key", api_key},
-      {"anthropic-version", get_anthropic_version(opts)}
-    ]
+      {"content-type", "application/json"}
+      | auth_header_list(credential)
+    ] ++ [{"anthropic-version", get_anthropic_version(opts)}]
+  end
+
+  defp put_auth_headers(request, credential) do
+    Enum.reduce(auth_header_list(credential), request, fn {name, value}, req ->
+      Req.Request.put_header(req, name, value)
+    end)
+  end
+
+  defp auth_header_list(%{kind: :oauth_access_token, token: token}) do
+    [{"authorization", "Bearer #{token}"}]
+  end
+
+  defp auth_header_list(%{kind: :api_key, token: token}) do
+    [{"x-api-key", token}]
   end
 
   defp build_request_body(context, model_name, opts) do

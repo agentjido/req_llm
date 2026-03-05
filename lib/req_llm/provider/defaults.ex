@@ -406,44 +406,50 @@ defmodule ReqLLM.Provider.Defaults do
   end
 
   @doc """
-  Fetches API key and extra common option keys
+  Fetches API key and extra common option keys.
   """
   @spec fetch_api_key_and_extra_options(module(), LLMDB.Model.t(), keyword()) ::
           {binary(), [atom()]}
   def fetch_api_key_and_extra_options(provider_mod, model, user_opts) do
     api_key = ReqLLM.Keys.get!(model, user_opts)
+    {api_key, extra_option_keys(provider_mod)}
+  end
 
-    # Register options that might be passed by users but aren't standard Req options
-    extra_option_keys =
-      [
-        :model,
-        :compiled_schema,
-        :temperature,
-        :max_tokens,
-        :app_referer,
-        :app_title,
-        :fixture,
-        :api_key,
-        :on_unsupported,
-        :n,
-        :tools,
-        :tool_choice,
-        :req_http_options,
-        :stream,
-        :frequency_penalty,
-        :system_prompt,
-        :top_p,
-        :presence_penalty,
-        :seed,
-        :stop,
-        :user,
-        :reasoning_effort,
-        :reasoning_token_budget,
-        :dimensions,
-        :encoding_format
-      ] ++ provider_mod.supported_provider_options()
-
-    {api_key, extra_option_keys}
+  @doc """
+  Returns extra option keys that should be registered on Req requests.
+  """
+  @spec extra_option_keys(module()) :: [atom()]
+  def extra_option_keys(provider_mod) do
+    [
+      :model,
+      :compiled_schema,
+      :temperature,
+      :max_tokens,
+      :app_referer,
+      :app_title,
+      :fixture,
+      :api_key,
+      :access_token,
+      :auth_mode,
+      :provider_options,
+      :on_unsupported,
+      :n,
+      :tools,
+      :tool_choice,
+      :req_http_options,
+      :stream,
+      :frequency_penalty,
+      :system_prompt,
+      :top_p,
+      :presence_penalty,
+      :seed,
+      :stop,
+      :user,
+      :reasoning_effort,
+      :reasoning_token_budget,
+      :dimensions,
+      :encoding_format
+    ] ++ provider_mod.supported_provider_options()
   end
 
   @doc """
