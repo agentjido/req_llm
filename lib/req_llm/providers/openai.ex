@@ -113,6 +113,15 @@ defmodule ReqLLM.Providers.OpenAI do
     default_env_key: "OPENAI_API_KEY"
 
   @provider_schema [
+    access_token: [
+      type: :string,
+      doc: "OAuth access token used as Authorization Bearer credential"
+    ],
+    auth_mode: [
+      type: {:in, [:api_key, :oauth]},
+      default: :api_key,
+      doc: "Authentication mode: :api_key (default) or :oauth"
+    ],
     dimensions: [
       type: :pos_integer,
       doc: "Dimensions for embedding models (e.g., text-embedding-3-small supports 512-1536)"
@@ -175,10 +184,27 @@ defmodule ReqLLM.Providers.OpenAI do
   @compile {:no_warn_undefined, [{nil, :path, 0}, {nil, :attach_stream, 4}]}
 
   defp get_api_type(%LLMDB.Model{} = model) do
-    case get_in(model, [Access.key(:extra, %{}), :wire, :protocol]) do
-      "openai_responses" -> "responses"
-      "openai_chat" -> "chat"
-      _ -> nil
+    protocol =
+      get_in(model, [Access.key(:extra, %{}), :wire, :protocol]) ||
+        get_in(model, [Access.key(:extra, %{}), "wire", "protocol"])
+
+    case protocol do
+      "openai_responses" ->
+        "responses"
+
+      "openai_chat" ->
+        "chat"
+
+      _ ->
+        # Fallback for newer OpenAI models whose wire metadata may lag behind.
+        # Reasoning/Codex families should use Responses API.
+        model_id = model.provider_model_id || model.id
+
+        if ReqLLM.Providers.OpenAI.AdapterHelpers.reasoning_model?(model_id) do
+          "responses"
+        else
+          nil
+        end
     end
   end
 
@@ -579,6 +605,37 @@ defmodule ReqLLM.Providers.OpenAI do
 
   def translate_options(_operation, _model, opts) do
     {opts, []}
+  end
+
+  @impl ReqLLM.Provider
+  def attach(request, model_input, user_opts) do
+    {:ok, %LLMDB.Model{} = model} = ReqLLM.model(model_input)
+
+    if model.provider != __MODULE__.provider_id() do
+      raise ReqLLM.Error.Invalid.Provider.exception(provider: model.provider)
+    end
+
+    credential = ReqLLM.Auth.resolve!(model, user_opts)
+    extra_option_keys = ReqLLM.Provider.Defaults.extra_option_keys(__MODULE__)
+
+    request
+    |> Req.Request.put_header("content-type", "application/json")
+    |> Req.Request.put_header("authorization", "Bearer #{credential.token}")
+    |> Req.Request.register_options(extra_option_keys)
+    |> Req.Request.merge_options(
+      [
+        finch: ReqLLM.Application.finch_name(),
+        model: model.provider_model_id || model.id,
+        auth: {:bearer, credential.token}
+      ] ++
+        user_opts
+    )
+    |> ReqLLM.Step.Retry.attach()
+    |> ReqLLM.Step.Error.attach()
+    |> Req.Request.append_request_steps(llm_encode_body: &encode_body/1)
+    |> Req.Request.append_response_steps(llm_decode_response: &decode_response/1)
+    |> ReqLLM.Step.Usage.attach(model)
+    |> ReqLLM.Step.Fixture.maybe_attach(model, user_opts)
   end
 
   @doc """

@@ -8,6 +8,21 @@ Access GPT models including standard chat models and reasoning models (o1, o3, G
 OPENAI_API_KEY=sk-...
 ```
 
+### OAuth Access Token (optional)
+
+If you use OAuth instead of API keys, pass an access token and set auth mode:
+
+```elixir
+ReqLLM.generate_text(
+  "openai:gpt-5-codex",
+  "Write a test",
+  auth_mode: :oauth,
+  access_token: System.fetch_env!("OPENAI_ACCESS_TOKEN")
+)
+```
+
+You can also pass these under `provider_options`.
+
 ## Attachments
 
 OpenAI Chat Completions API only supports image attachments (JPEG, PNG, GIF, WebP).

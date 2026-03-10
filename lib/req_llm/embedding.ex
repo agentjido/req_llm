@@ -105,7 +105,7 @@ defmodule ReqLLM.Embedding do
 
       embedding_models = get_embedding_models()
 
-      if model_string in embedding_models do
+      if model_string in embedding_models or embedding_model_id?(model.id) do
         case ReqLLM.provider(model.provider) do
           {:ok, _provider_module} ->
             {:ok, model}
@@ -123,6 +123,11 @@ defmodule ReqLLM.Embedding do
          )}
       end
     end
+  end
+
+  # Fallback detection for embedding models when LLMDB capabilities metadata is missing/null.
+  defp embedding_model_id?(model_id) when is_binary(model_id) do
+    String.contains?(model_id, "embedding")
   end
 
   @doc """

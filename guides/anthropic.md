@@ -8,6 +8,21 @@ Access Claude models through ReqLLM's unified interface. Supports all Claude 3+ 
 ANTHROPIC_API_KEY=sk-ant-...
 ```
 
+### OAuth Access Token (optional)
+
+If your Anthropic setup uses OAuth, pass an access token and set auth mode:
+
+```elixir
+ReqLLM.generate_text(
+  "anthropic:claude-sonnet-4-5",
+  "Summarize this",
+  auth_mode: :oauth,
+  access_token: System.fetch_env!("ANTHROPIC_ACCESS_TOKEN")
+)
+```
+
+You can also pass these under `provider_options`.
+
 ## Provider Options
 
 Passed via `:provider_options` keyword:

@@ -5,6 +5,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
   Supports Vertex AI's unified API for accessing multiple AI models including:
   - Anthropic Claude models (claude-haiku-4-5, claude-sonnet-4-5, claude-opus-4-1)
   - Google Gemini models (gemini-2.0-flash, gemini-2.5-flash, gemini-2.5-pro)
+  - Mistral AI models (mistral-medium-3, mistral-small-2503, codestral-2)
   - Third-party MaaS models via OpenAI-compatible format:
     - GLM models (zai-org/glm-4.7-maas)
     - OpenAI OSS models (openai/gpt-oss-120b-maas, openai/gpt-oss-20b-maas)
@@ -175,6 +176,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
   @model_families %{
     "claude" => ReqLLM.Providers.GoogleVertex.Anthropic,
     "gemini" => ReqLLM.Providers.GoogleVertex.Gemini,
+    "mistral" => ReqLLM.Providers.GoogleVertex.OpenAICompat,
     "openai_compat" => ReqLLM.Providers.GoogleVertex.OpenAICompat
   }
 
@@ -419,8 +421,14 @@ defmodule ReqLLM.Providers.GoogleVertex do
     cond do
       String.starts_with?(model_id, "claude-") -> "claude"
       String.starts_with?(model_id, "gemini-") -> "gemini"
+      mistral_model?(model_id) -> "mistral"
       true -> resolve_family_from_metadata(model)
     end
+  end
+
+  # Mistral AI model IDs on Vertex: mistral-medium-3, mistral-small-2503, codestral-2, mistral-ocr-2505
+  defp mistral_model?(model_id) do
+    String.starts_with?(model_id, "mistral-") or String.starts_with?(model_id, "codestral")
   end
 
   # Resolve model family from LLMDB extra.family metadata.
@@ -436,6 +444,11 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
       is_binary(extra_family) and String.starts_with?(extra_family, "gemini") ->
         "gemini"
+
+      is_binary(extra_family) and
+          (String.starts_with?(extra_family, "mistral") or
+             String.starts_with?(extra_family, "codestral")) ->
+        "mistral"
 
       is_binary(extra_family) ->
         "openai_compat"
@@ -475,6 +488,11 @@ defmodule ReqLLM.Providers.GoogleVertex do
   defp build_model_path("gemini", model_id, project_id, region) do
     # Gemini models on Vertex use the publishers/google path
     "/v1/projects/#{project_id}/locations/#{region}/publishers/google/models/#{model_id}:generateContent"
+  end
+
+  defp build_model_path("mistral", model_id, project_id, region) do
+    # Mistral AI models on Vertex use the publishers/mistralai path with rawPredict
+    "/v1/projects/#{project_id}/locations/#{region}/publishers/mistralai/models/#{model_id}:rawPredict"
   end
 
   defp build_model_path("openai_compat", _model_id, project_id, region) do
@@ -767,6 +785,11 @@ defmodule ReqLLM.Providers.GoogleVertex do
   defp build_stream_path("gemini", model_id, project_id, region) do
     # Use streamGenerateContent for Gemini streaming
     "/v1/projects/#{project_id}/locations/#{region}/publishers/google/models/#{model_id}:streamGenerateContent"
+  end
+
+  defp build_stream_path("mistral", model_id, project_id, region) do
+    # Mistral AI models on Vertex use streamRawPredict for streaming
+    "/v1/projects/#{project_id}/locations/#{region}/publishers/mistralai/models/#{model_id}:streamRawPredict"
   end
 
   defp build_stream_path("openai_compat", _model_id, project_id, region) do

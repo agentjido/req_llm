@@ -19,6 +19,12 @@ defmodule ReqLLMTest do
     test "returns error for malformed spec" do
       assert {:error, _} = ReqLLM.model("invalid-format")
     end
+
+    test "normalizes codex model wire protocol to openai_responses" do
+      {:ok, model} = ReqLLM.model("openai:gpt-5.3-codex")
+
+      assert get_in(model, [Access.key(:extra, %{}), :wire, :protocol]) == "openai_responses"
+    end
   end
 
   describe "model/1 with map-based specs (custom providers)" do

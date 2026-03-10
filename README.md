@@ -18,10 +18,12 @@ LLM APIs are inconsistent. ReqLLM provides a unified, idiomatic Elixir interface
 - **High-level API** – Vercel AI SDK-inspired functions (`generate_text/3`, `stream_text/3`, `generate_object/4` and more) that work uniformly across providers. Standard features, minimal configuration.
 - **Low-level API** – Direct Req plugin access for full HTTP control. Built around OpenAI Chat Completions baseline with provider-specific callbacks for non-compatible APIs (e.g., Anthropic).
 
-**16 Supported Providers:**
+**18 Supported Providers:**
 
 | Provider | ID | Guide |
 |---|---|---|
+| [Alibaba Cloud Bailian](https://www.alibabacloud.com/help/en/model-studio) | `alibaba` | — |
+| [Alibaba Cloud Bailian (China)](https://www.alibabacloud.com/help/en/model-studio) | `alibaba_cn` | — |
 | [Anthropic](https://anthropic.com) | `anthropic` | [Guide](guides/anthropic.md) |
 | [OpenAI](https://openai.com) | `openai` | [Guide](guides/openai.md) |
 | [Google Gemini](https://ai.google.dev) | `google` | [Guide](guides/google.md) |
