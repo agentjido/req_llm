@@ -47,14 +47,6 @@ defmodule ReqLLM.Providers.AlibabaCN do
 
   @impl ReqLLM.Provider
   def attach_stream(model, context, opts, finch_name) do
-    {translated_opts, _warnings} = translate_options(:chat, model, opts)
-
-    ReqLLM.Provider.Defaults.default_attach_stream(
-      __MODULE__,
-      model,
-      context,
-      translated_opts,
-      finch_name
-    )
+    Shared.attach_stream(__MODULE__, model, context, opts, finch_name)
   end
 end

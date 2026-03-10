@@ -435,6 +435,34 @@ defmodule ReqLLM.Providers.AlibabaCNTest do
       assert decoded["top_k"] == 50
       assert decoded["stream"] == true
     end
+
+    test "attach_stream honors nested provider_options" do
+      model = model_fixture()
+      context = context_fixture()
+
+      {:ok, request} =
+        AlibabaCN.attach_stream(
+          model,
+          context,
+          [
+            provider_options: [
+              enable_search: true,
+              enable_thinking: true,
+              incremental_output: true
+            ],
+            top_k: 50
+          ],
+          ReqLLM.Finch
+        )
+
+      decoded = Jason.decode!(request.body)
+
+      assert decoded["enable_search"] == true
+      assert decoded["enable_thinking"] == true
+      assert decoded["incremental_output"] == true
+      assert decoded["top_k"] == 50
+      assert decoded["stream"] == true
+    end
   end
 
   describe "response decoding" do

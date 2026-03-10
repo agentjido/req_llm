@@ -114,6 +114,27 @@ defmodule ReqLLM.Providers.Alibaba.Shared do
     ReqLLM.Provider.Defaults.encode_body_from_map(request, body)
   end
 
+  @doc """
+  Builds a streaming request with validated and translated options.
+  """
+  def attach_stream(provider_mod, model, context, opts, finch_name) do
+    processed_opts =
+      ReqLLM.Provider.Options.process!(
+        provider_mod,
+        :chat,
+        model,
+        Keyword.merge(opts, stream: true, context: context)
+      )
+
+    ReqLLM.Provider.Defaults.default_attach_stream(
+      provider_mod,
+      model,
+      context,
+      processed_opts,
+      finch_name
+    )
+  end
+
   defp encode_map_param(nil), do: nil
 
   defp encode_map_param(params) when is_map(params) do
