@@ -58,6 +58,11 @@ defmodule ReqLLM.Providers.Alibaba.Shared do
   def dashscope_keys, do: @dashscope_keys
 
   @doc """
+  Returns the provider option keys that must be registered on requests.
+  """
+  def supported_provider_options, do: @dashscope_keys ++ [:dashscope_parameters]
+
+  @doc """
   Translates provider-specific options into DashScope parameters.
 
   Extracts DashScope-specific keys from the options and collects them
@@ -90,6 +95,7 @@ defmodule ReqLLM.Providers.Alibaba.Shared do
     dashscope_params = request.options[:dashscope_parameters]
 
     ReqLLM.Provider.Defaults.default_build_body(request)
+    |> maybe_put(:top_k, request.options[:top_k])
     |> maybe_put(:enable_search, dashscope_params[:enable_search])
     |> maybe_put(:search_options, encode_map_param(dashscope_params[:search_options]))
     |> maybe_put(:enable_thinking, dashscope_params[:enable_thinking])

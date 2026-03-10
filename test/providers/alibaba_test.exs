@@ -120,6 +120,26 @@ defmodule ReqLLM.Providers.AlibabaTest do
       assert :llm_decode_response in response_steps
     end
 
+    test "prepare_request preserves DashScope provider options for encoding" do
+      model = model_fixture()
+
+      {:ok, request} =
+        Alibaba.prepare_request(:chat, model, "Hello world",
+          provider_options: [enable_search: true, enable_thinking: true]
+        )
+
+      assert request.options[:dashscope_parameters] == %{
+               enable_search: true,
+               enable_thinking: true
+             }
+
+      encoded_request = Alibaba.encode_body(request)
+      decoded = Jason.decode!(encoded_request.body)
+
+      assert decoded["enable_search"] == true
+      assert decoded["enable_thinking"] == true
+    end
+
     test "rejects unsupported operations" do
       model = model_fixture()
       prompt = "Hello world"
@@ -304,6 +324,26 @@ defmodule ReqLLM.Providers.AlibabaTest do
       assert decoded["thinking_budget"] == 4096
     end
 
+    test "encode_body with top_k sampling" do
+      model = model_fixture()
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          top_k: 50
+        ]
+      }
+
+      updated_request = Alibaba.encode_body(mock_request)
+      assert_no_duplicate_json_keys(updated_request.body)
+      decoded = Jason.decode!(updated_request.body)
+
+      assert decoded["top_k"] == 50
+    end
+
     test "encode_body with tools" do
       model = model_fixture()
       context = context_fixture()
@@ -366,6 +406,34 @@ defmodule ReqLLM.Providers.AlibabaTest do
       assert is_list(decoded["tools"])
       assert decoded["enable_search"] == true
       assert decoded["repetition_penalty"] == 1.1
+    end
+  end
+
+  describe "streaming request encoding" do
+    test "attach_stream translates DashScope options before encoding" do
+      model = model_fixture()
+      context = context_fixture()
+
+      {:ok, request} =
+        Alibaba.attach_stream(
+          model,
+          context,
+          [
+            enable_search: true,
+            enable_thinking: true,
+            incremental_output: true,
+            top_k: 50
+          ],
+          ReqLLM.Finch
+        )
+
+      decoded = Jason.decode!(request.body)
+
+      assert decoded["enable_search"] == true
+      assert decoded["enable_thinking"] == true
+      assert decoded["incremental_output"] == true
+      assert decoded["top_k"] == 50
+      assert decoded["stream"] == true
     end
   end
 

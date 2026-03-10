@@ -34,6 +34,8 @@ defmodule ReqLLM.Providers.AlibabaCN do
 
   @provider_schema Shared.provider_schema()
 
+  def supported_provider_options, do: Shared.supported_provider_options()
+
   @impl ReqLLM.Provider
   defdelegate translate_options(operation, model, opts), to: Shared
 
@@ -42,4 +44,17 @@ defmodule ReqLLM.Providers.AlibabaCN do
 
   @impl ReqLLM.Provider
   defdelegate encode_body(request), to: Shared
+
+  @impl ReqLLM.Provider
+  def attach_stream(model, context, opts, finch_name) do
+    {translated_opts, _warnings} = translate_options(:chat, model, opts)
+
+    ReqLLM.Provider.Defaults.default_attach_stream(
+      __MODULE__,
+      model,
+      context,
+      translated_opts,
+      finch_name
+    )
+  end
 end
