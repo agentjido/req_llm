@@ -106,4 +106,62 @@ defmodule ReqLLM.Integration.TranscriptionTest do
       end
     end
   end
+
+  describe "ElevenLabs STT (via ElevenLabs TTS)" do
+    @describetag provider: :elevenlabs
+
+    setup do
+      case System.get_env("ELEVENLABS_API_KEY") do
+        nil -> {:ok, skip: true}
+        _key -> :ok
+      end
+    end
+
+    defp generate_elevenlabs_audio!(text, opts \\ []) do
+      {:ok, result} =
+        ReqLLM.speak(
+          "elevenlabs:eleven_multilingual_v2",
+          text,
+          Keyword.merge([voice: "21m00Tcm4TlvDq8ikWAM"], opts)
+        )
+
+      result.audio
+    end
+
+    @tag timeout: 60_000
+    test "transcribes generated audio", context do
+      if context[:skip], do: flunk("ELEVENLABS_API_KEY not set")
+
+      audio = generate_elevenlabs_audio!("The quick brown fox jumps over the lazy dog.")
+
+      assert {:ok, result} =
+               ReqLLM.transcribe(
+                 %{id: "scribe_v2", provider: :elevenlabs},
+                 {:binary, audio, "audio/mpeg"}
+               )
+
+      assert is_binary(result.text)
+      text_lower = String.downcase(result.text)
+      assert text_lower =~ "quick" or text_lower =~ "brown" or text_lower =~ "fox"
+    end
+
+    @tag timeout: 60_000
+    test "transcribes with language hint", context do
+      if context[:skip], do: flunk("ELEVENLABS_API_KEY not set")
+
+      audio =
+        generate_elevenlabs_audio!("Hello, this is a test of ElevenLabs speech recognition.")
+
+      assert {:ok, result} =
+               ReqLLM.transcribe(
+                 %{id: "scribe_v2", provider: :elevenlabs},
+                 {:binary, audio, "audio/mpeg"},
+                 language: "en"
+               )
+
+      assert is_binary(result.text)
+      text_lower = String.downcase(result.text)
+      assert text_lower =~ "hello" or text_lower =~ "test" or text_lower =~ "speech"
+    end
+  end
 end

@@ -107,6 +107,45 @@ defmodule ReqLLM.TranscriptionTest do
     end
   end
 
+  describe "transcribe/3 - ElevenLabs compatibility" do
+    setup do
+      System.put_env("ELEVENLABS_API_KEY", "test-key-123")
+
+      Req.Test.stub(__MODULE__, fn conn ->
+        Req.Test.json(conn, %{
+          "language_code" => "eng",
+          "text" => "Hello world",
+          "words" => [
+            %{"text" => "Hello", "start" => 0.0, "end" => 0.4, "type" => "word"},
+            %{"text" => "world", "start" => 0.5, "end" => 0.9, "type" => "word"}
+          ]
+        })
+      end)
+
+      on_exit(fn -> System.delete_env("ELEVENLABS_API_KEY") end)
+
+      :ok
+    end
+
+    test "parses ElevenLabs transcription responses" do
+      assert {:ok, result} =
+               Transcription.transcribe(
+                 %{id: "scribe_v2", provider: :elevenlabs},
+                 {:binary, "fake audio", "audio/mpeg"},
+                 req_http_options: [plug: {Req.Test, __MODULE__}]
+               )
+
+      assert result.text == "Hello world"
+      assert result.language == "eng"
+      assert result.duration_in_seconds == 0.9
+
+      assert result.segments == [
+               %{text: "Hello", start_second: 0.0, end_second: 0.4},
+               %{text: "world", start_second: 0.5, end_second: 0.9}
+             ]
+    end
+  end
+
   describe "transcribe!/3" do
     test "raises on error" do
       assert_raise ReqLLM.Error.Invalid.Parameter, fn ->

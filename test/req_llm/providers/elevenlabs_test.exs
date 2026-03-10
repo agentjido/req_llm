@@ -44,13 +44,6 @@ defmodule ReqLLM.Providers.ElevenLabsTest do
 
       assert Exception.message(error) =~ "not supported by ElevenLabs"
     end
-
-    test "rejects :transcription operation" do
-      assert {:error, error} =
-               ElevenLabs.prepare_request(:transcription, "elevenlabs:model", "hello", [])
-
-      assert Exception.message(error) =~ "not supported by ElevenLabs"
-    end
   end
 
   describe "prepare_request(:speech, ...)" do
@@ -170,6 +163,64 @@ defmodule ReqLLM.Providers.ElevenLabsTest do
                )
 
       assert request.options.base_url == "https://custom.api.com"
+    end
+  end
+
+  describe "prepare_request(:transcription, ...)" do
+    setup do
+      System.put_env("ELEVENLABS_API_KEY", "test-key-123")
+      on_exit(fn -> System.delete_env("ELEVENLABS_API_KEY") end)
+    end
+
+    test "builds request with correct transcription endpoint" do
+      model = %LLMDB.Model{id: "scribe_v2", provider: :elevenlabs}
+
+      assert {:ok, request} =
+               ElevenLabs.prepare_request(:transcription, model, "audio-bytes", [])
+
+      url = URI.to_string(request.url)
+      assert url =~ "/v1/speech-to-text"
+    end
+
+    test "uses xi-api-key header for transcription" do
+      model = %LLMDB.Model{id: "scribe_v2", provider: :elevenlabs}
+
+      assert {:ok, request} =
+               ElevenLabs.prepare_request(:transcription, model, "audio-bytes", [])
+
+      assert Req.Request.get_header(request, "xi-api-key") == ["test-key-123"]
+      assert Req.Request.get_header(request, "authorization") == []
+    end
+
+    test "includes model_id and language_code in multipart body" do
+      model = %LLMDB.Model{id: "scribe_v2", provider: :elevenlabs}
+
+      assert {:ok, request} =
+               ElevenLabs.prepare_request(:transcription, model, "audio-bytes", language: "en")
+
+      assert request.options.form_multipart[:model_id] == "scribe_v2"
+      assert request.options.form_multipart[:language_code] == "en"
+    end
+
+    test "passes transcription provider_options through multipart and query params" do
+      model = %LLMDB.Model{id: "scribe_v2", provider: :elevenlabs}
+
+      assert {:ok, request} =
+               ElevenLabs.prepare_request(:transcription, model, "audio-bytes",
+                 provider_options: [
+                   enable_logging: false,
+                   diarize: true,
+                   timestamps_granularity: "word",
+                   keyterms: ["ReqLLM", "ElevenLabs"]
+                 ]
+               )
+
+      form_parts = request.options.form_multipart
+
+      assert request.options.params == [enable_logging: false]
+      assert form_parts[:diarize] == "true"
+      assert form_parts[:timestamps_granularity] == "word"
+      assert Keyword.get_values(form_parts, :keyterms) == ["ReqLLM", "ElevenLabs"]
     end
   end
 end

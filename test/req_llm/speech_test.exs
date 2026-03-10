@@ -14,6 +14,19 @@ defmodule ReqLLM.SpeechTest do
   alias ReqLLM.Speech
   alias ReqLLM.Speech.Result
 
+  setup do
+    Req.Test.stub(__MODULE__, fn conn ->
+      conn
+      |> Plug.Conn.put_resp_content_type("application/json")
+      |> Plug.Conn.send_resp(
+        400,
+        Jason.encode!(%{"error" => %{"message" => "bad request"}})
+      )
+    end)
+
+    :ok
+  end
+
   describe "Result struct" do
     test "creates result with defaults" do
       result = %Result{}
@@ -61,9 +74,12 @@ defmodule ReqLLM.SpeechTest do
     end
 
     test "passes text through to provider" do
-      # Will fail at API key level, but validates the pipeline works
-      result = Speech.speak("openai:tts-1", "Hello world")
-      assert {:error, _} = result
+      assert {:error, error} =
+               Speech.speak("openai:tts-1", "Hello world",
+                 req_http_options: [plug: {Req.Test, __MODULE__}]
+               )
+
+      assert Exception.message(error) =~ "Speech generation failed"
     end
   end
 

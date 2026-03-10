@@ -12,6 +12,11 @@ defmodule ReqLLMTest do
                ReqLLM.model("anthropic:claude-3-haiku")
     end
 
+    test "resolves ElevenLabs model string spec" do
+      assert {:ok, %LLMDB.Model{provider: :elevenlabs, id: "eleven_multilingual_v2"}} =
+               ReqLLM.model("elevenlabs:eleven_multilingual_v2")
+    end
+
     test "returns error for invalid provider" do
       assert {:error, _} = ReqLLM.model("invalid_provider:some-model")
     end

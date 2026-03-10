@@ -228,14 +228,20 @@ defmodule ReqLLM.Transcription do
   defp parse_transcription_response(%Result{} = result), do: {:ok, result}
 
   defp parse_transcription_response(body) when is_map(body) do
-    text = body["text"] || ""
+    text = body["text"] || parse_multichannel_text(body["transcripts"]) || ""
 
     segments =
       parse_segments(body["segments"]) ++
-        parse_word_segments(body["words"])
+        parse_word_segments(body["words"]) ++
+        parse_multichannel_segments(body["transcripts"])
 
-    language = normalize_language(body["language"])
-    duration = body["duration"]
+    language =
+      normalize_language(
+        body["language"] || body["language_code"] ||
+          parse_multichannel_language(body["transcripts"])
+      )
+
+    duration = body["duration"] || infer_duration(segments)
 
     {:ok,
      %Result{
@@ -276,11 +282,46 @@ defmodule ReqLLM.Transcription do
   defp parse_word_segments(words) when is_list(words) do
     Enum.map(words, fn word ->
       %{
-        text: word["word"] || "",
+        text: word["word"] || word["text"] || "",
         start_second: word["start"] || 0.0,
         end_second: word["end"] || 0.0
       }
     end)
+  end
+
+  defp parse_multichannel_segments(nil), do: []
+
+  defp parse_multichannel_segments(transcripts) when is_list(transcripts) do
+    Enum.flat_map(transcripts, fn transcript ->
+      parse_word_segments(transcript["words"])
+    end)
+  end
+
+  defp parse_multichannel_text(nil), do: nil
+
+  defp parse_multichannel_text(transcripts) when is_list(transcripts) do
+    texts =
+      transcripts
+      |> Enum.map(&(&1["text"] || ""))
+      |> Enum.reject(&(&1 == ""))
+
+    case texts do
+      [] -> nil
+      _ -> Enum.join(texts, "\n")
+    end
+  end
+
+  defp parse_multichannel_language(nil), do: nil
+
+  defp parse_multichannel_language(transcripts) when is_list(transcripts) do
+    transcripts
+    |> Enum.find_value(&(&1["language"] || &1["language_code"]))
+  end
+
+  defp infer_duration([]), do: nil
+
+  defp infer_duration(segments) do
+    Enum.max_by(segments, &Map.get(&1, :end_second, 0.0), fn -> %{end_second: nil} end).end_second
   end
 
   # Map full language names (as returned by Whisper) to ISO-639-1 codes
