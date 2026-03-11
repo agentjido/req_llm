@@ -7,7 +7,7 @@ This directory contains examples demonstrating ReqLLM capabilities.
 Run the demo to see the agent in action:
 
 ```bash
-mix run lib/examples/demo.exs
+mix run examples/demo.exs
 ```
 
 ## Files
