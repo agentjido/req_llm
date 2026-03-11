@@ -50,7 +50,7 @@ schema = [
 ]
 {:ok, response} = ReqLLM.generate_object("anthropic:claude-haiku-4-5", "Generate a person", schema)
 object = ReqLLM.Response.object(response)
-# object => %{name: "John Doe", age: 30}
+# object => %{"name" => "John Doe", "age" => 30}
 ```
 
 ## Full Response with Usage
