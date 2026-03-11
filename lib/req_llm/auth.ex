@@ -1,19 +1,19 @@
 defmodule ReqLLM.Auth do
-  @moduledoc """
-  Resolves authentication credentials for provider requests.
+  @moduledoc false
 
-  Supports two credential modes:
+  # Resolves authentication credentials for provider requests.
 
-  - API key (`:api_key`) via `ReqLLM.Keys`
-  - OAuth access token (`:oauth_access_token`) via `:access_token`
+  # Supports two credential modes:
 
-  Access token lookup precedence:
+  # - API key (`:api_key`) via `ReqLLM.Keys`
+  # - OAuth access token (`:oauth_access_token`) via `:access_token`
 
-  1. Top-level `:access_token` option
-  2. `:provider_options[:access_token]`
+  # Access token lookup precedence:
 
-  If `:auth_mode` is set to `:oauth`, an `:access_token` is required.
-  """
+  # 1. Top-level `:access_token` option
+  # 2. `:provider_options[:access_token]`
+
+  # If `:auth_mode` is set to `:oauth`, an `:access_token` is required.
 
   @type credential_kind :: :api_key | :oauth_access_token
 

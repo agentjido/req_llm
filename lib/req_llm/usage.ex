@@ -1,10 +1,9 @@
 defmodule ReqLLM.Usage do
-  @moduledoc """
-  Public usage normalization helpers.
+  @moduledoc false
+  # Usage normalization helpers.
 
-  Provides a stable entrypoint for normalizing provider usage maps to ReqLLM's
-  canonical usage shape.
-  """
+  # Provides a stable entrypoint for normalizing provider usage maps to ReqLLM's
+  # canonical usage shape.
 
   alias ReqLLM.MapAccess
   alias ReqLLM.Usage.Normalize

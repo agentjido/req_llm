@@ -1,7 +1,6 @@
 defmodule ReqLLM.Billing do
-  @moduledoc """
-  Component-based billing calculator for token and tool usage.
-  """
+  @moduledoc false
+  # Component-based billing calculator for token and tool usage.
 
   alias ReqLLM.Billing.Component
   alias ReqLLM.MapAccess

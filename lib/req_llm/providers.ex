@@ -1,19 +1,18 @@
 defmodule ReqLLM.Providers do
-  @moduledoc """
-  Provider discovery and dispatch via introspection.
+  @moduledoc false
+  # Provider discovery and dispatch via introspection.
 
-  Automatically discovers all modules implementing ReqLLM.Provider
-  behaviour at startup and stores provider_id → module mapping.
+  # Automatically discovers all modules implementing ReqLLM.Provider
+  # behaviour at startup and stores provider_id → module mapping.
 
-  External packages can register custom providers via `register/1`:
+  # External packages can register custom providers via `register/1`:
 
-      defmodule MyApp.Application do
-        def start(_type, _args) do
-          ReqLLM.Providers.register(MyApp.CustomProvider)
-          # ...
-        end
-      end
-  """
+  #     defmodule MyApp.Application do
+  #       def start(_type, _args) do
+  #         ReqLLM.Providers.register(MyApp.CustomProvider)
+  #         # ...
+  #       end
+  #     end
 
   @registry_key :req_llm_providers
 
