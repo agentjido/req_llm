@@ -99,8 +99,13 @@ defmodule ReqLLM.MixProject do
           Contributing: ["CONTRIBUTING.md"]
         ],
         groups_for_modules: [
-          Core: [
+          "Top-Level API": [
             ReqLLM,
+            ReqLLM.Images,
+            ReqLLM.Context,
+            ReqLLM.Schema
+          ],
+          Utilities: [
             ReqLLM.ModelHelpers,
             ReqLLM.Model.Metadata,
             ReqLLM.Metadata,
@@ -112,7 +117,6 @@ defmodule ReqLLM.MixProject do
             ReqLLM.ParamTransform
           ],
           "Data Structures": [
-            ReqLLM.Images,
             ReqLLM.Message,
             ReqLLM.Message.ContentPart,
             ReqLLM.Message.ReasoningDetails,
@@ -125,15 +129,13 @@ defmodule ReqLLM.MixProject do
             ReqLLM.ToolCall,
             ReqLLM.ToolResult,
             ReqLLM.Generation,
-            ReqLLM.Embedding,
-            ReqLLM.Context,
-            ReqLLM.Schema
+            ReqLLM.Embedding
           ],
           Steps: ~r/ReqLLM\.Step\..*/,
           Streaming: [~r/ReqLLM\.Streaming.*/, ReqLLM.StreamServer],
           Transcription: ~r/ReqLLM\.Transcription.*/,
           Speech: ~r/ReqLLM\.Speech.*/,
-          "Provider API": [
+          "Provider Extension API": [
             ReqLLM.Provider,
             ReqLLM.Provider.DSL,
             ReqLLM.Provider.Registry,
