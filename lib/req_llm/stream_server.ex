@@ -84,6 +84,8 @@ defmodule ReqLLM.StreamServer do
     status: :init,
     consumer_refs: MapSet.new(),
     metadata: %{},
+    metadata_delivered?: false,
+    halt_delivered?: false,
     high_watermark: 500,
     headers: [],
     http_status: nil,
@@ -349,7 +351,12 @@ defmodule ReqLLM.StreamServer do
   @impl GenServer
   def handle_call({:http_event, event}, _from, state) do
     {:reply, reply, new_state} = process_http_event(event, state)
-    {:reply, reply, new_state}
+
+    if ready_to_stop?(new_state) do
+      {:stop, :normal, reply, new_state}
+    else
+      {:reply, reply, new_state}
+    end
   end
 
   @impl GenServer
@@ -361,7 +368,13 @@ defmodule ReqLLM.StreamServer do
       {:empty, new_state} ->
         case state.status do
           :done ->
-            {:reply, :halt, new_state}
+            halted_state = %{new_state | halt_delivered?: true}
+
+            if ready_to_stop?(halted_state) do
+              {:stop, :normal, :halt, halted_state}
+            else
+              {:reply, :halt, halted_state}
+            end
 
           {:error, reason} ->
             {:reply, {:error, reason}, new_state}
@@ -448,19 +461,23 @@ defmodule ReqLLM.StreamServer do
   end
 
   @impl GenServer
-  def handle_call(:await_metadata, from, state) do
-    case state.status do
-      :done ->
-        {:reply, {:ok, state.metadata}, state}
+  def handle_call(:await_metadata, _from, %{status: :done} = state) do
+    new_state = %{state | metadata_delivered?: true}
 
-      {:error, reason} ->
-        {:reply, {:error, reason}, state}
-
-      _ ->
-        # Not done yet, add caller to waiting list
-        new_state = %{state | waiting_callers: state.waiting_callers ++ [{from, :metadata}]}
-        {:noreply, new_state}
+    if ready_to_stop?(new_state) do
+      {:stop, :normal, {:ok, new_state.metadata}, new_state}
+    else
+      {:reply, {:ok, new_state.metadata}, new_state}
     end
+  end
+
+  def handle_call(:await_metadata, _from, %{status: {:error, reason}} = state) do
+    {:reply, {:error, reason}, state}
+  end
+
+  def handle_call(:await_metadata, from, state) do
+    new_state = %{state | waiting_callers: state.waiting_callers ++ [{from, :metadata}]}
+    {:noreply, new_state}
   end
 
   @impl GenServer
@@ -502,6 +519,12 @@ defmodule ReqLLM.StreamServer do
   @impl GenServer
   def handle_info({:DOWN, _ref, :process, _pid, _reason}, state) do
     {:noreply, state}
+  end
+
+  @impl GenServer
+  def terminate(_reason, state) do
+    cleanup_resources(state)
+    :ok
   end
 
   ## Private Functions
@@ -881,7 +904,7 @@ defmodule ReqLLM.StreamServer do
 
       {{:empty, _}, :done} ->
         GenServer.reply(from, :halt)
-        state
+        %{state | halt_delivered?: true}
 
       {{:empty, _}, {:error, reason}} ->
         GenServer.reply(from, {:error, reason})
@@ -893,13 +916,18 @@ defmodule ReqLLM.StreamServer do
     end
   end
 
-  defp reply_to_caller({from, :metadata}, state) do
-    case state.status do
-      :done -> GenServer.reply(from, {:ok, state.metadata})
-      {:error, reason} -> GenServer.reply(from, {:error, reason})
-      _ -> GenServer.reply(from, {:error, :not_ready})
-    end
+  defp reply_to_caller({from, :metadata}, %{status: :done} = state) do
+    GenServer.reply(from, {:ok, state.metadata})
+    %{state | metadata_delivered?: true}
+  end
 
+  defp reply_to_caller({from, :metadata}, %{status: {:error, reason}} = state) do
+    GenServer.reply(from, {:error, reason})
+    state
+  end
+
+  defp reply_to_caller({from, :metadata}, state) do
+    GenServer.reply(from, {:error, :not_ready})
     state
   end
 
@@ -910,6 +938,11 @@ defmodule ReqLLM.StreamServer do
     end
 
     state
+  end
+
+  defp ready_to_stop?(state) do
+    state.status == :done and state.metadata_delivered? and state.halt_delivered? and
+      :queue.is_empty(state.queue)
   end
 
   defp build_http_error(status, chunk) do
