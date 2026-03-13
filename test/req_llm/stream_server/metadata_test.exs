@@ -81,5 +81,22 @@ defmodule ReqLLM.StreamServer.MetadataTest do
 
       StreamServer.cancel(server)
     end
+
+    test "stops after normal HTTP task completion once halt and metadata are delivered" do
+      server = start_server()
+      task = Task.async(fn -> Process.sleep(20) end)
+
+      StreamServer.attach_http_task(server, task.pid)
+
+      next_task = Task.async(fn -> StreamServer.next(server, 200) end)
+      metadata_task = Task.async(fn -> StreamServer.await_metadata(server, 200) end)
+
+      assert :halt = Task.await(next_task)
+      assert {:ok, metadata} = Task.await(metadata_task)
+      assert metadata.finish_reason == :incomplete
+
+      assert_receive {:EXIT, ^server, :normal}, 200
+      refute Process.alive?(server)
+    end
   end
 end

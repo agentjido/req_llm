@@ -148,6 +148,12 @@ defmodule ReqLLM.Streaming do
       provider_mod: provider_mod,
       model: model,
       fixture_path: maybe_capture_fixture(model, opts),
+      completion_cleanup_after:
+        Keyword.get(
+          opts,
+          :completion_cleanup_after,
+          Application.get_env(:req_llm, :stream_completion_cleanup_after, 30_000)
+        ),
       high_watermark: Keyword.get(opts, :high_watermark, 500)
     ]
 

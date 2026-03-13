@@ -155,6 +155,51 @@ defmodule ReqLLM.Integration.StreamingOrchestrationTest do
       assert StreamResponse.finish_reason(stream_response) == :stop
     end
 
+    test "metadata-only access cleans up completed streams after the idle timeout" do
+      {:ok, model} = ReqLLM.model("openrouter:google/gemini-3-flash-preview")
+      before_pids = MapSet.new(Process.list())
+
+      {:ok, stream_response} =
+        Streaming.start_stream(
+          ReqLLM.Providers.OpenRouter,
+          model,
+          Context.new("Hello"),
+          fixture: "streaming",
+          completion_cleanup_after: 20
+        )
+
+      stream_server_pid = await_stream_server(before_pids, model.id)
+
+      assert is_pid(stream_server_pid)
+      assert StreamResponse.finish_reason(stream_response) == :stop
+      assert wait_until(fn -> not Process.alive?(stream_server_pid) end)
+    end
+
+    test "metadata access before streaming still allows consumption before idle cleanup" do
+      {:ok, model} = ReqLLM.model("openrouter:google/gemini-3-flash-preview")
+      before_pids = MapSet.new(Process.list())
+
+      {:ok, stream_response} =
+        Streaming.start_stream(
+          ReqLLM.Providers.OpenRouter,
+          model,
+          Context.new("Hello"),
+          fixture: "streaming",
+          completion_cleanup_after: 1_000
+        )
+
+      stream_server_pid = await_stream_server(before_pids, model.id)
+
+      assert is_pid(stream_server_pid)
+      assert StreamResponse.finish_reason(stream_response) == :stop
+      assert Process.alive?(stream_server_pid)
+
+      text = StreamResponse.text(stream_response)
+
+      assert byte_size(text) > 0
+      assert wait_until(fn -> not Process.alive?(stream_server_pid) end)
+    end
+
     test "partially consumed streams cancel their StreamServer" do
       {:ok, model} = ReqLLM.model("openrouter:google/gemini-3-flash-preview")
       before_pids = MapSet.new(Process.list())
