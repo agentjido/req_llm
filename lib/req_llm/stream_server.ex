@@ -84,6 +84,12 @@ defmodule ReqLLM.StreamServer do
     status: :init,
     consumer_refs: MapSet.new(),
     metadata: %{},
+    stream_requested?: false,
+    metadata_delivered?: false,
+    halt_delivered?: false,
+    completion_cleanup_after: 30_000,
+    completion_cleanup_timer: nil,
+    completion_cleanup_token: nil,
     high_watermark: 500,
     headers: [],
     http_status: nil,
@@ -129,6 +135,12 @@ defmodule ReqLLM.StreamServer do
       model: model,
       provider_state: provider_state,
       fixture_path: Keyword.get(opts, :fixture_path),
+      completion_cleanup_after:
+        Keyword.get(
+          opts,
+          :completion_cleanup_after,
+          Application.get_env(:req_llm, :stream_completion_cleanup_after, 30_000)
+        ),
       high_watermark: Keyword.get(opts, :high_watermark, 500)
     }
 
@@ -349,11 +361,17 @@ defmodule ReqLLM.StreamServer do
   @impl GenServer
   def handle_call({:http_event, event}, _from, state) do
     {:reply, reply, new_state} = process_http_event(event, state)
-    {:reply, reply, new_state}
+
+    case finalize_lifecycle(new_state) do
+      {:stop, final_state} -> {:stop, :normal, reply, final_state}
+      {:continue, final_state} -> {:reply, reply, final_state}
+    end
   end
 
   @impl GenServer
   def handle_call({:next, _timeout}, from, state) do
+    state = cancel_completion_cleanup(%{state | stream_requested?: true})
+
     case dequeue_chunk(state) do
       {:ok, chunk, new_state} ->
         {:reply, {:ok, chunk}, new_state}
@@ -361,7 +379,12 @@ defmodule ReqLLM.StreamServer do
       {:empty, new_state} ->
         case state.status do
           :done ->
-            {:reply, :halt, new_state}
+            halted_state = %{new_state | halt_delivered?: true}
+
+            case finalize_lifecycle(halted_state) do
+              {:stop, final_state} -> {:stop, :normal, :halt, final_state}
+              {:continue, final_state} -> {:reply, :halt, final_state}
+            end
 
           {:error, reason} ->
             {:reply, {:error, reason}, new_state}
@@ -448,19 +471,22 @@ defmodule ReqLLM.StreamServer do
   end
 
   @impl GenServer
-  def handle_call(:await_metadata, from, state) do
-    case state.status do
-      :done ->
-        {:reply, {:ok, state.metadata}, state}
+  def handle_call(:await_metadata, _from, %{status: :done} = state) do
+    new_state = %{state | metadata_delivered?: true}
 
-      {:error, reason} ->
-        {:reply, {:error, reason}, state}
-
-      _ ->
-        # Not done yet, add caller to waiting list
-        new_state = %{state | waiting_callers: state.waiting_callers ++ [{from, :metadata}]}
-        {:noreply, new_state}
+    case finalize_lifecycle(new_state) do
+      {:stop, final_state} -> {:stop, :normal, {:ok, final_state.metadata}, final_state}
+      {:continue, final_state} -> {:reply, {:ok, final_state.metadata}, final_state}
     end
+  end
+
+  def handle_call(:await_metadata, _from, %{status: {:error, reason}} = state) do
+    {:reply, {:error, reason}, state}
+  end
+
+  def handle_call(:await_metadata, from, state) do
+    new_state = %{state | waiting_callers: state.waiting_callers ++ [{from, :metadata}]}
+    {:noreply, new_state}
   end
 
   @impl GenServer
@@ -479,7 +505,11 @@ defmodule ReqLLM.StreamServer do
       end
 
     new_state = reply_to_waiting_callers(new_state)
-    {:noreply, new_state}
+
+    case finalize_lifecycle(new_state) do
+      {:stop, final_state} -> {:stop, :normal, final_state}
+      {:continue, final_state} -> {:noreply, final_state}
+    end
   end
 
   @impl GenServer
@@ -496,12 +526,40 @@ defmodule ReqLLM.StreamServer do
       end
 
     new_state = reply_to_waiting_callers(new_state)
-    {:noreply, new_state}
+
+    case finalize_lifecycle(new_state) do
+      {:stop, final_state} -> {:stop, :normal, final_state}
+      {:continue, final_state} -> {:noreply, final_state}
+    end
   end
 
   @impl GenServer
   def handle_info({:DOWN, _ref, :process, _pid, _reason}, state) do
     {:noreply, state}
+  end
+
+  @impl GenServer
+  def handle_info(
+        {:completion_cleanup, token},
+        %{completion_cleanup_token: token} = state
+      ) do
+    new_state = %{state | completion_cleanup_timer: nil, completion_cleanup_token: nil}
+
+    case should_schedule_completion_cleanup?(new_state) do
+      true -> {:stop, :normal, new_state}
+      false -> {:noreply, new_state}
+    end
+  end
+
+  @impl GenServer
+  def handle_info({:completion_cleanup, _ref}, state) do
+    {:noreply, state}
+  end
+
+  @impl GenServer
+  def terminate(_reason, state) do
+    cleanup_resources(state)
+    :ok
   end
 
   ## Private Functions
@@ -881,7 +939,7 @@ defmodule ReqLLM.StreamServer do
 
       {{:empty, _}, :done} ->
         GenServer.reply(from, :halt)
-        state
+        %{state | halt_delivered?: true}
 
       {{:empty, _}, {:error, reason}} ->
         GenServer.reply(from, {:error, reason})
@@ -893,13 +951,18 @@ defmodule ReqLLM.StreamServer do
     end
   end
 
-  defp reply_to_caller({from, :metadata}, state) do
-    case state.status do
-      :done -> GenServer.reply(from, {:ok, state.metadata})
-      {:error, reason} -> GenServer.reply(from, {:error, reason})
-      _ -> GenServer.reply(from, {:error, :not_ready})
-    end
+  defp reply_to_caller({from, :metadata}, %{status: :done} = state) do
+    GenServer.reply(from, {:ok, state.metadata})
+    %{state | metadata_delivered?: true}
+  end
 
+  defp reply_to_caller({from, :metadata}, %{status: {:error, reason}} = state) do
+    GenServer.reply(from, {:error, reason})
+    state
+  end
+
+  defp reply_to_caller({from, :metadata}, state) do
+    GenServer.reply(from, {:error, :not_ready})
     state
   end
 
@@ -909,7 +972,49 @@ defmodule ReqLLM.StreamServer do
       Process.exit(state.http_task, :cancelled)
     end
 
-    state
+    cancel_completion_cleanup(state)
+  end
+
+  defp ready_to_stop?(state) do
+    state.status == :done and state.metadata_delivered? and state.halt_delivered? and
+      :queue.is_empty(state.queue)
+  end
+
+  defp finalize_lifecycle(state) do
+    cond do
+      ready_to_stop?(state) ->
+        {:stop, cancel_completion_cleanup(state)}
+
+      should_schedule_completion_cleanup?(state) ->
+        {:continue, ensure_completion_cleanup_timer(state)}
+
+      true ->
+        {:continue, cancel_completion_cleanup(state)}
+    end
+  end
+
+  defp should_schedule_completion_cleanup?(state) do
+    state.status == :done and state.metadata_delivered? and not state.stream_requested? and
+      not state.halt_delivered? and is_integer(state.completion_cleanup_after) and
+      state.completion_cleanup_after >= 0
+  end
+
+  defp ensure_completion_cleanup_timer(%{completion_cleanup_timer: nil} = state) do
+    token = make_ref()
+
+    timer =
+      Process.send_after(self(), {:completion_cleanup, token}, state.completion_cleanup_after)
+
+    %{state | completion_cleanup_timer: timer, completion_cleanup_token: token}
+  end
+
+  defp ensure_completion_cleanup_timer(state), do: state
+
+  defp cancel_completion_cleanup(%{completion_cleanup_timer: nil} = state), do: state
+
+  defp cancel_completion_cleanup(%{completion_cleanup_timer: ref} = state) do
+    Process.cancel_timer(ref)
+    %{state | completion_cleanup_timer: nil, completion_cleanup_token: nil}
   end
 
   defp build_http_error(status, chunk) do
