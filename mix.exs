@@ -106,6 +106,7 @@ defmodule ReqLLM.MixProject do
             ReqLLM.Metadata,
             ReqLLM.Capability,
             ReqLLM.Keys,
+            ReqLLM.Usage,
             ReqLLM.Error,
             ReqLLM.Debug,
             ReqLLM.ParamTransform
@@ -138,6 +139,7 @@ defmodule ReqLLM.MixProject do
             ReqLLM.Provider.Registry,
             ReqLLM.Provider.Options,
             ReqLLM.Provider.Utils,
+            ReqLLM.Providers,
             ReqLLM.Provider.Defaults,
             ReqLLM.Provider.ResponseBuilder,
             ReqLLM.Provider.Defaults.ResponseBuilder
