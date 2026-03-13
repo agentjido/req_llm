@@ -499,6 +499,18 @@ defmodule ReqLLM.Providers.AnthropicTest do
     end
   end
 
+  describe "streaming response decoding" do
+    test "decode_stream_event returns keepalive meta chunk for ping events" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+      event = %{data: %{"type" => "ping"}}
+
+      assert [%ReqLLM.StreamChunk{} = chunk] = Anthropic.decode_stream_event(event, model)
+      assert chunk.type == :meta
+      assert chunk.metadata[:keepalive?] == true
+      assert chunk.metadata[:provider_event] == :ping
+    end
+  end
+
   describe "option translation" do
     test "translate_options converts stop to stop_sequences" do
       {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")

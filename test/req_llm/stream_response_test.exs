@@ -707,6 +707,65 @@ defmodule ReqLLM.StreamResponseTest do
       assert length(Response.tool_calls(response)) == 2
     end
 
+    test "calls on_chunk callback for every chunk including meta chunks" do
+      chunks = [
+        StreamChunk.text("Hello"),
+        StreamChunk.thinking("Let me think"),
+        StreamChunk.tool_call("search", %{}, %{id: "call-1", index: 0}),
+        StreamChunk.meta(%{tool_call_args: %{index: 0, fragment: ~s({"q":"test"})}})
+      ]
+
+      stream_response = create_stream_response(stream: chunks)
+      parent = self()
+
+      {:ok, response} =
+        StreamResponse.process_stream(stream_response,
+          on_chunk: fn chunk -> send(parent, {:chunk, chunk}) end
+        )
+
+      assert_receive {:chunk, %StreamChunk{type: :content, text: "Hello"}}
+      assert_receive {:chunk, %StreamChunk{type: :thinking, text: "Let me think"}}
+      assert_receive {:chunk, %StreamChunk{type: :tool_call, name: "search"}}
+
+      assert_receive {:chunk,
+                      %StreamChunk{
+                        type: :meta,
+                        metadata: %{tool_call_args: %{index: 0, fragment: "{\"q\":\"test\"}"}}
+                      }}
+
+      assert Response.text(response) == "Hello"
+      assert length(Response.tool_calls(response)) == 1
+    end
+
+    test "calls on_meta callback only for meta chunks" do
+      chunks = [
+        StreamChunk.text("Hello"),
+        StreamChunk.meta(%{usage: %{input_tokens: 1}}),
+        StreamChunk.thinking("Thinking"),
+        StreamChunk.meta(%{keepalive?: true, provider_event: :ping})
+      ]
+
+      stream_response = create_stream_response(stream: chunks)
+      parent = self()
+
+      {:ok, response} =
+        StreamResponse.process_stream(stream_response,
+          on_meta: fn chunk -> send(parent, {:meta, chunk}) end
+        )
+
+      assert_receive {:meta, %StreamChunk{type: :meta, metadata: %{usage: %{input_tokens: 1}}}}
+
+      assert_receive {:meta,
+                      %StreamChunk{
+                        type: :meta,
+                        metadata: %{keepalive?: true, provider_event: :ping}
+                      }}
+
+      refute_received {:meta, %StreamChunk{type: :content}}
+      refute_received {:meta, %StreamChunk{type: :thinking}}
+      assert Response.text(response) == "Hello"
+    end
+
     test "on_tool_call callback not invoked when not provided" do
       chunks = [
         StreamChunk.tool_call("test_tool", %{arg: "value"}, %{id: "call-1", index: 0})

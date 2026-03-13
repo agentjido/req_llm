@@ -120,8 +120,7 @@ defmodule ReqLLM.Providers.Anthropic.Response do
         end
 
       %{"type" => "ping"} ->
-        # Keep-alive ping, no content
-        []
+        [ReqLLM.StreamChunk.meta(%{keepalive?: true, provider_event: :ping})]
 
       _ ->
         []

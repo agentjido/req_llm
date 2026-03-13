@@ -188,7 +188,7 @@ defmodule ReqLLM.Providers.Azure.StreamingTest do
       assert Azure.decode_stream_event(event, model) == []
     end
 
-    test "Claude: ping event returns empty list" do
+    test "Claude: ping event returns keepalive meta chunk" do
       model = %LLMDB.Model{
         id: "claude-3-5-sonnet-20241022",
         provider: :azure,
@@ -197,7 +197,10 @@ defmodule ReqLLM.Providers.Azure.StreamingTest do
 
       event = %{data: %{"type" => "ping"}}
 
-      assert Azure.decode_stream_event(event, model) == []
+      assert [%ReqLLM.StreamChunk{} = chunk] = Azure.decode_stream_event(event, model)
+      assert chunk.type == :meta
+      assert chunk.metadata[:keepalive?] == true
+      assert chunk.metadata[:provider_event] == :ping
     end
 
     test "Claude: unknown event type returns empty list" do
