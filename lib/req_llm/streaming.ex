@@ -238,8 +238,10 @@ defmodule ReqLLM.Streaming do
             {:halt, server}
 
           {:error, reason} ->
-            Logger.error("Stream error: #{inspect(reason)}")
-            {:halt, server}
+            raise %ReqLLM.Error.API.Stream{
+              reason: "Stream failed: #{inspect(reason)}",
+              cause: reason
+            }
         end
       end,
       # after_fn: no-op, cleanup handled by cancel function

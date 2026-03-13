@@ -936,6 +936,34 @@ defmodule ReqLLM.StreamResponseTest do
 
       assert {:error, ^error} = result
     end
+
+    test "returns {:error, reason} when stream encounters a transport error" do
+      # Simulate a stream that produces some chunks then hits a transport error.
+      # We use Stream.resource to mimic what create_lazy_stream does when
+      # StreamServer.next returns {:error, reason}.
+      error_stream =
+        Stream.resource(
+          fn -> 0 end,
+          fn
+            0 ->
+              {[StreamChunk.text("partial")], 1}
+
+            1 ->
+              raise %ReqLLM.Error.API.Stream{
+                reason: "Stream failed: %Mint.TransportError{reason: :closed}",
+                cause: %Mint.TransportError{reason: :closed}
+              }
+          end,
+          fn _ -> :ok end
+        )
+
+      stream_response = create_stream_response(stream: error_stream)
+
+      result = StreamResponse.process_stream(stream_response)
+
+      assert {:error, %ReqLLM.Error.API.Stream{cause: %Mint.TransportError{reason: :closed}}} =
+               result
+    end
   end
 
   describe "integration and edge cases" do

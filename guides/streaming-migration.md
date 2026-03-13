@@ -130,10 +130,15 @@ def handle_info({:stream_text, model, messages}, socket) do
     {:ok, response} ->
       # Stream tokens to the client
       Task.start(fn ->
-        response
-        |> ReqLLM.StreamResponse.tokens()
-        |> Stream.each(&send(self(), {:token, &1}))
-        |> Stream.run()
+        try do
+          response
+          |> ReqLLM.StreamResponse.tokens()
+          |> Stream.each(&send(self(), {:token, &1}))
+          |> Stream.run()
+        rescue
+          e in ReqLLM.Error.API.Stream ->
+            send(self(), {:stream_error, e})
+        end
       end)
 
       # Handle metadata when available
