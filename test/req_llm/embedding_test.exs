@@ -171,7 +171,9 @@ defmodule ReqLLM.EmbeddingTest do
       assert embedding == [0.1, -0.2, 0.3]
       assert usage.input == 2
 
-      assert_receive {:telemetry_event, [:req_llm, :token_usage], measurements, metadata}
+      assert_receive {:telemetry_event, [:req_llm, :token_usage], measurements,
+                      %{model: %LLMDB.Model{provider: :google_vertex, id: "gemini-embedding-001"}} = metadata}
+
       assert measurements.tokens.input == 2
       assert metadata.model.provider == :google_vertex
       assert metadata.model.id == "gemini-embedding-001"
