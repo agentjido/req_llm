@@ -66,6 +66,47 @@ defmodule ReqLLM.Providers.GoogleVertex.OpenAICompatTest do
       assert url =~ "projects/my-project"
       assert url =~ "locations/europe-west1"
     end
+
+    test "openai_compat model accepts credentials nested under provider_options" do
+      {:ok, model} = ReqLLM.model("google_vertex:zai-org/glm-4.7-maas")
+      context = context_fixture()
+
+      opts = [
+        provider_options: [
+          access_token: "nested-token",
+          project_id: "nested-project",
+          region: "us-central1"
+        ]
+      ]
+
+      {:ok, request} = GoogleVertex.prepare_request(:chat, model, context, opts)
+      url = URI.to_string(request.url)
+
+      assert url =~ "projects/nested-project"
+      assert url =~ "locations/us-central1"
+    end
+
+    test "top-level credentials take precedence over provider_options" do
+      {:ok, model} = ReqLLM.model("google_vertex:zai-org/glm-4.7-maas")
+      context = context_fixture()
+
+      opts = [
+        access_token: "top-level-token",
+        project_id: "top-level-project",
+        region: "europe-west1",
+        provider_options: [
+          access_token: "nested-token",
+          project_id: "nested-project",
+          region: "us-central1"
+        ]
+      ]
+
+      {:ok, request} = GoogleVertex.prepare_request(:chat, model, context, opts)
+      url = URI.to_string(request.url)
+
+      assert url =~ "projects/top-level-project"
+      assert url =~ "locations/europe-west1"
+    end
   end
 
   describe "provider_options validation" do

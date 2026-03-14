@@ -109,6 +109,41 @@ defmodule ReqLLM.Providers.GoogleVertex.EmbeddingTest do
         GoogleVertex.prepare_request(:embedding, @model_spec, "Hello", access_token: "tok")
       end
     end
+
+    test "accepts credentials nested under provider_options" do
+      opts = [
+        provider_options: [
+          access_token: "nested-token",
+          project_id: "nested-project",
+          region: "us-central1"
+        ]
+      ]
+
+      {:ok, request} = GoogleVertex.prepare_request(:embedding, @model_spec, "Hello", opts)
+      url = URI.to_string(request.url)
+
+      assert url =~ "projects/nested-project"
+      assert url =~ "locations/us-central1"
+    end
+
+    test "top-level credentials take precedence over provider_options" do
+      opts = [
+        access_token: "top-level-token",
+        project_id: "top-level-project",
+        region: "europe-west1",
+        provider_options: [
+          access_token: "nested-token",
+          project_id: "nested-project",
+          region: "us-central1"
+        ]
+      ]
+
+      {:ok, request} = GoogleVertex.prepare_request(:embedding, @model_spec, "Hello", opts)
+      url = URI.to_string(request.url)
+
+      assert url =~ "projects/top-level-project"
+      assert url =~ "locations/europe-west1"
+    end
   end
 
   describe "decode_embedding_response/1" do

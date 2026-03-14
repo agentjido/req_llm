@@ -551,18 +551,31 @@ defmodule ReqLLM.Providers.GoogleVertex do
   defp extract_gcp_credentials(opts) do
     gcp_keys = [:service_account_json, :access_token, :project_id, :region]
     {passed_creds, other_opts} = Keyword.split(opts, gcp_keys)
+    provider_opts = normalize_provider_opts(Keyword.get(other_opts, :provider_options, []))
 
     creds = %{
       service_account_json:
         passed_creds[:service_account_json] ||
+          provider_opts[:service_account_json] ||
           System.get_env("GOOGLE_APPLICATION_CREDENTIALS"),
-      project_id: passed_creds[:project_id] || System.get_env("GOOGLE_CLOUD_PROJECT"),
-      region: passed_creds[:region] || System.get_env("GOOGLE_CLOUD_REGION") || "global",
-      access_token: passed_creds[:access_token]
+      project_id:
+        passed_creds[:project_id] ||
+          provider_opts[:project_id] ||
+          System.get_env("GOOGLE_CLOUD_PROJECT"),
+      region:
+        passed_creds[:region] ||
+          provider_opts[:region] ||
+          System.get_env("GOOGLE_CLOUD_REGION") ||
+          "global",
+      access_token: passed_creds[:access_token] || provider_opts[:access_token]
     }
 
     {creds, other_opts}
   end
+
+  defp normalize_provider_opts(opts) when is_list(opts), do: opts
+  defp normalize_provider_opts(opts) when is_map(opts), do: Map.to_list(opts)
+  defp normalize_provider_opts(_), do: []
 
   # Validate GCP credentials
   defp validate_gcp_credentials!(creds) do
