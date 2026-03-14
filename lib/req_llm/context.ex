@@ -832,7 +832,17 @@ defmodule ReqLLM.Context do
   defp convert_loose_map(%{role: :assistant, tool_calls: tool_calls} = msg)
        when is_list(tool_calls) do
     content = Map.get(msg, :content, "") || ""
-    {:ok, assistant(content, tool_calls: tool_calls)}
+    meta = Map.get(msg, :metadata, %{})
+    reasoning_details = Map.get(msg, :reasoning_details)
+
+    {:ok,
+     %Message{
+       role: :assistant,
+       content: to_parts(content),
+       metadata: meta,
+       tool_calls: normalize_tool_calls(tool_calls),
+       reasoning_details: reasoning_details
+     }}
   end
 
   defp convert_loose_map(%{role: :tool, tool_call_id: id, content: content} = msg)
@@ -865,27 +875,35 @@ defmodule ReqLLM.Context do
     end
   end
 
-  defp convert_loose_map(%{role: role, content: content})
+  defp convert_loose_map(%{role: role, content: content} = msg)
        when is_atom(role) and is_binary(content) do
-    {:ok, text(role, content)}
+    {:ok,
+     text(role, content, Map.get(msg, :metadata, %{}))
+     |> maybe_put_reasoning_details(Map.get(msg, :reasoning_details))}
   end
 
-  defp convert_loose_map(%{role: role, content: content})
+  defp convert_loose_map(%{role: role, content: content} = msg)
        when is_binary(role) and is_binary(content) do
+    metadata = Map.get(msg, :metadata, %{})
+    reasoning_details = Map.get(msg, :reasoning_details)
+
     case role do
-      "user" -> {:ok, text(:user, content)}
-      "assistant" -> {:ok, text(:assistant, content)}
-      "system" -> {:ok, text(:system, content)}
+      "user" -> {:ok, text(:user, content, metadata)}
+      "assistant" -> {:ok, text(:assistant, content, metadata) |> maybe_put_reasoning_details(reasoning_details)}
+      "system" -> {:ok, text(:system, content, metadata)}
       _ -> {:error, ReqLLM.Error.Invalid.Role.exception(role: role)}
     end
   end
 
-  defp convert_loose_map(%{"role" => role, "content" => content})
+  defp convert_loose_map(%{"role" => role, "content" => content} = msg)
        when is_binary(role) and is_binary(content) do
+    metadata = Map.get(msg, "metadata", %{})
+    reasoning_details = Map.get(msg, "reasoning_details")
+
     case role do
-      "user" -> {:ok, text(:user, content)}
-      "assistant" -> {:ok, text(:assistant, content)}
-      "system" -> {:ok, text(:system, content)}
+      "user" -> {:ok, text(:user, content, metadata)}
+      "assistant" -> {:ok, text(:assistant, content, metadata) |> maybe_put_reasoning_details(reasoning_details)}
+      "system" -> {:ok, text(:system, content, metadata)}
       _ -> {:error, ReqLLM.Error.Invalid.Role.exception(role: role)}
     end
   end
@@ -1016,4 +1034,10 @@ defmodule ReqLLM.Context do
     do: Jason.encode!(output)
 
   defp encode_tool_output(output), do: to_string(output)
+
+  defp maybe_put_reasoning_details(%Message{} = message, nil), do: message
+
+  defp maybe_put_reasoning_details(%Message{} = message, reasoning_details) do
+    %{message | reasoning_details: reasoning_details}
+  end
 end
