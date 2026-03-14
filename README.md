@@ -173,8 +173,8 @@ usage = ReqLLM.StreamResponse.usage(response)
   - Built-in OpenAI-style encoding/decoding with provider callback overrides for custom formats
 
 - **Flexible model specification**
-  - Accepts `"provider:model"`, tuples, `%LLMDB.Model{}` structs, and inline model maps
-  - `ReqLLM.model!/1` is the recommended way to validate and normalize inline model specs
+  - Accepts `"provider:model"`, tuples, `%LLMDB.Model{}` structs, and plain-map model specs
+  - `ReqLLM.model!/1` is the recommended way to validate and normalize full model specs
 
 - **Secure, layered key management** (`ReqLLM.Keys`)
   - Per-request override → application config → env vars / .env files
@@ -213,10 +213,14 @@ By default, ReqLLM loads `.env` files from the current working directory at star
 config :req_llm, load_dotenv: false
 ```
 
-## Inline Model Specs
+## Model Specs
 
 ReqLLM can call models that are not in LLMDB yet. This is the recommended advanced
 workflow for local development, debugging new releases, and custom provider setups.
+
+See the [Model Specs](guides/model-specs.md) guide for the full explanation of
+string specs, exact dated releases, `%LLMDB.Model{}` structs, and the full explicit
+model specification path.
 
 For backwards compatibility, you can pass a plain map directly to the major APIs.
 The clearer path is to normalize it first with `ReqLLM.model!/1`, which returns an
@@ -233,7 +237,7 @@ model =
 ReqLLM.generate_text!(model, "Hello world")
 ```
 
-You can still pass the inline map directly:
+You can still pass the plain-map model spec directly:
 
 ```elixir
 ReqLLM.generate_text!(
@@ -253,7 +257,7 @@ model =
   })
 ```
 
-ReqLLM hard-fails early when the inline spec is missing required routing data, with
+ReqLLM hard-fails early when the model spec is missing required routing data, with
 errors aimed at advanced users:
 
 - Inline models always need `provider` and `id` (or `model`)

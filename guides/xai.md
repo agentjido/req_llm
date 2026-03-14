@@ -8,6 +8,12 @@ Access Grok models with real-time web search and reasoning capabilities.
 XAI_API_KEY=xai-...
 ```
 
+## Model Specs
+
+For the full model-spec workflow, see [Model Specs](model-specs.md).
+
+Use exact Grok IDs from [LLMDB.xyz](https://llmdb.xyz) when possible. If you need a new or proxied xAI-compatible model ID before it lands in LLMDB, use `ReqLLM.model!/1`.
+
 ## Attachments
 
 xAI Chat Completions API only supports image attachments (JPEG, PNG, GIF, WebP).

@@ -5,7 +5,7 @@
 - Implement a provider module under `lib/req_llm/providers/`, use `ReqLLM.Provider.DSL` + `Defaults`, and only override what the API actually deviates on.
 - The `Default` provider implementation is OpenAI Compatible.
 - Non-streaming requests run through Req with `attach/3` + `encode_body/1` + `decode_response/1`; streaming runs through Finch with `attach_stream/4` + `decode_stream_event/2` or `/3`.
-- Add models via `priv/models_local/`, then add tests using the three-tier strategy and record fixtures with `LIVE=true`. Model metadata is provided by the `llm_db` dependency.
+- Add models via `priv/models_local/` when you want shared registry coverage, then add tests using the three-tier strategy and record fixtures with `LIVE=true`. For one-off invocation or early development, ReqLLM can also use explicit model specs; see [Model Specs](model-specs.md).
 
 ## Overview and Prerequisites
 
@@ -491,7 +491,7 @@ Create `priv/models_local/<provider>.json` to seed/supplement models before sync
 
 ### Register models
 
-Model metadata is provided by the `llm_db` dependency. For custom providers not yet in `llm_db`, add a local patch file in `priv/models_local/` (see above).
+Model metadata is provided by the `llm_db` dependency. For custom providers not yet in `llm_db`, add a local patch file in `priv/models_local/` when you want registry and tooling support. That is not required just to call a model through an explicit `%LLMDB.Model{}` or `ReqLLM.model!/1`.
 
 ### Benefits
 
@@ -523,7 +523,7 @@ defmodule Providers.AcmeTest do
 
   test "encode_body: text + tools into OpenAI shape" do
     ctx = ReqLLM.Context.new([ReqLLM.Context.user([ContentPart.text("Hello")])])
-    {:ok, model} = ReqLLM.Model.from("acme:acme-chat-mini")
+    {:ok, model} = ReqLLM.model("acme:acme-chat-mini")
     
     req =
       Req.new(url: "/chat/completions", method: :post, base_url: "https://example.test")
@@ -827,7 +827,7 @@ defmodule Providers.AcmeTest do
 
   test "encode_body: text + tools into OpenAI shape" do
     ctx = ReqLLM.Context.new([ReqLLM.Context.user([ContentPart.text("Hello")])])
-    {:ok, model} = ReqLLM.Model.from("acme:acme-chat-mini")
+    {:ok, model} = ReqLLM.model("acme:acme-chat-mini")
     
     req =
       Req.new(url: "/chat/completions", method: :post, base_url: "https://example.test")

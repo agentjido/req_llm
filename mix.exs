@@ -42,6 +42,7 @@ defmodule ReqLLM.MixProject do
           "guides/configuration.md",
           "guides/core-concepts.md",
           "guides/data-structures.md",
+          "guides/model-specs.md",
           "guides/usage-and-billing.md",
           "guides/image-generation.md",
           "guides/model-metadata.md",
@@ -51,6 +52,7 @@ defmodule ReqLLM.MixProject do
           "guides/anthropic.md",
           "guides/openai.md",
           "guides/google.md",
+          "guides/azure.md",
           "guides/google_vertex.md",
           "guides/xai.md",
           "guides/groq.md",
@@ -59,6 +61,7 @@ defmodule ReqLLM.MixProject do
           "guides/amazon_bedrock.md",
           "guides/cerebras.md",
           "guides/meta.md",
+          "guides/zenmux.md",
           "guides/zai.md",
           "guides/zai_coder.md"
         ],
@@ -71,6 +74,7 @@ defmodule ReqLLM.MixProject do
             "guides/configuration.md",
             "guides/core-concepts.md",
             "guides/data-structures.md",
+            "guides/model-specs.md",
             "guides/usage-and-billing.md",
             "guides/image-generation.md",
             "guides/model-metadata.md"
@@ -84,6 +88,7 @@ defmodule ReqLLM.MixProject do
             "guides/anthropic.md",
             "guides/openai.md",
             "guides/google.md",
+            "guides/azure.md",
             "guides/google_vertex.md",
             "guides/xai.md",
             "guides/groq.md",
@@ -92,6 +97,7 @@ defmodule ReqLLM.MixProject do
             "guides/amazon_bedrock.md",
             "guides/cerebras.md",
             "guides/meta.md",
+            "guides/zenmux.md",
             "guides/zai.md",
             "guides/zai_coder.md"
           ],

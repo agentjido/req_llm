@@ -66,13 +66,15 @@ usage = ReqLLM.Response.usage(response)
 
 ## Model Specifications
 
-Specify models as strings, tuples, or structs with optional parameters:
+Specify models as strings, tuples, `%LLMDB.Model{}` structs, or plain-map model specs:
 
 ```elixir
 "anthropic:claude-haiku-4-5"
 {:anthropic, "claude-3-sonnet-20240229", temperature: 0.7}
-%ReqLLM.Model{provider: :anthropic, model: "claude-3-sonnet-20240229", temperature: 0.7}
+ReqLLM.model!(%{provider: :openai, id: "gpt-6-mini", base_url: "http://localhost:8000/v1"})
 ```
+
+See the [Model Specs](model-specs.md) guide for the full model-spec workflow, including exact dated releases and models that are not in LLMDB yet.
 
 ## Key Management
 
@@ -126,4 +128,4 @@ ReqLLM.generate_text!(
 
 ## Available Providers
 
-Model metadata is provided by the `llm_db` dependency and is always up-to-date when you update your deps.
+Model metadata is provided by the `llm_db` dependency and browsable on [LLMDB.xyz](https://llmdb.xyz).

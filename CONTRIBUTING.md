@@ -41,7 +41,7 @@ These principles keep the project maintainable and the maintainers sane.
 
 Core library contributions modify the foundational components of ReqLLM including:
 
-- Core modules (`ReqLLM`, `ReqLLM.Model`, `ReqLLM.Provider`, etc.)
+- Core modules (`ReqLLM`, `LLMDB.Model`, `ReqLLM.Provider`, etc.)
 - Data structures (`Context`, `Message`, `StreamChunk`, `Response`, etc.)
 - Shared utilities and helpers
 - Provider behavior and DSL

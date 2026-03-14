@@ -13,7 +13,7 @@ For full type and field details, see the [Data Structures](data-structures.md) g
 ## What normalization means
 
 - **One conversation model**: user/system/assistant messages with typed content parts (text, images, files, tool calls/results).
-- **One model spec**: "provider:model" plus common options; provider-specific options are translated under the hood.
+- **One model spec system**: strings and tuples resolve through LLMDB, while `%LLMDB.Model{}` values can carry a full explicit model specification when needed.
 - **One streaming shape**: unified `StreamChunk` events for content, tool calls, and metadata across providers.
 - **One response shape**: a `Response` that exposes text/object extraction and usage consistently.
 
@@ -22,21 +22,25 @@ For full type and field details, see the [Data Structures](data-structures.md) g
 Models can be specified as:
 - **String**: `"provider:model"` (e.g., `"anthropic:claude-haiku-4-5"`)
 - **Tuple**: `{:provider, "model", opt1: ..., opt2: ...}`
-- **Struct**: `%ReqLLM.Model{...}`
+- **Struct**: `%LLMDB.Model{...}`
+- **Map**: `%{provider: ..., id: ...}` for the full explicit model specification path
 
 Example:
 ```elixir
-{:ok, model} = ReqLLM.Model.from("anthropic:claude-haiku-4-5")
+{:ok, model} = ReqLLM.model("anthropic:claude-haiku-4-5")
 
-# With options
-{:ok, model} = ReqLLM.Model.from({:anthropic, "claude-3-5-sonnet",
-  temperature: 0.7, max_tokens: 1000
-})
+model =
+  ReqLLM.model!(%{
+    provider: :openai,
+    id: "gpt-6-mini",
+    base_url: "http://localhost:8000/v1"
+  })
 ```
 
 **Normalization in practice**:
 - Common options like `temperature` and `max_tokens` are normalized.
 - Provider-specific options are translated by the provider adapter; you still pass them in one place.
+- See the [Model Specs](model-specs.md) guide for when to use exact dated model IDs, `%LLMDB.Model{}` values, and explicit model metadata.
 
 ## 2) Providers
 

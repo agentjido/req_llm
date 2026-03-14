@@ -8,6 +8,12 @@ Enterprise-grade LLM aggregation platform with dual-protocol support (OpenAI and
 ZENMUX_API_KEY=sk-ai-v1-...
 ```
 
+## Model Specs
+
+For the full model-spec workflow, see [Model Specs](model-specs.md).
+
+Zenmux is another good fit for the full explicit model specification path because protocol and `base_url` can vary by deployment. Use exact IDs from [LLMDB.xyz](https://llmdb.xyz) when possible, and use `ReqLLM.model!/1` when you need to pin custom routing metadata.
+
 ## Provider Options
 
 Passed via `:provider_options` keyword:
@@ -139,11 +145,12 @@ ReqLLM.generate_text("zenmux:openai/gpt-4o", "Hello!")
 For Anthropic-compatible tools and integrations, use the Anthropic base URL:
 ```elixir
 # Configure with Anthropic protocol endpoint
-model = ReqLLM.Model.new(
-  provider: :zenmux,
-  id: "anthropic/claude-sonnet-4.5",
-  base_url: "https://zenmux.ai/api/anthropic"
-)
+model =
+  ReqLLM.model!(%{
+    provider: :zenmux,
+    id: "anthropic/claude-sonnet-4.5",
+    base_url: "https://zenmux.ai/api/anthropic"
+  })
 
 ReqLLM.generate_text(model, "Hello!")
 ```
