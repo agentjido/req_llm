@@ -223,7 +223,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
         |> Req.Request.merge_options(operation: :embedding, text: text)
         |> Req.Request.put_private(:gcp_credentials, gcp_creds)
         |> Req.Request.put_private(:model, model)
-        |> attach_embedding(gcp_creds)
+        |> attach_embedding(model, gcp_creds, other_opts)
 
       {:ok, request}
     end
@@ -323,12 +323,14 @@ defmodule ReqLLM.Providers.GoogleVertex do
     )
   end
 
-  defp attach_embedding(request, gcp_creds) do
+  defp attach_embedding(request, model, gcp_creds, opts) do
     request
     |> Req.Request.merge_options(finch: ReqLLM.Application.finch_name())
     |> ReqLLM.Step.Error.attach()
     |> ReqLLM.Step.Retry.attach()
+    |> ReqLLM.Step.Usage.attach(model)
     |> Req.Request.append_response_steps(llm_decode_response: &decode_embedding_response/1)
+    |> ReqLLM.Step.Fixture.maybe_attach(model, opts)
     |> put_gcp_auth(gcp_creds)
   end
 
@@ -643,14 +645,36 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
   @impl ReqLLM.Provider
   def extract_usage(body, model) do
-    formatter = get_formatter(model)
+    case extract_embedding_usage(body) do
+      {:ok, _usage} = usage ->
+        usage
 
-    if function_exported?(formatter, :extract_usage, 2) do
-      formatter.extract_usage(body, model)
-    else
-      {:error, :no_usage_extractor}
+      :error ->
+        formatter = get_formatter(model)
+
+        if function_exported?(formatter, :extract_usage, 2) do
+          formatter.extract_usage(body, model)
+        else
+          {:error, :no_usage_extractor}
+        end
     end
   end
+
+  defp extract_embedding_usage(%{"predictions" => predictions}) when is_list(predictions) do
+    total_tokens =
+      predictions
+      |> Enum.map(&get_in(&1, ["embeddings", "statistics", "token_count"]))
+      |> Enum.filter(&is_integer/1)
+      |> Enum.sum()
+
+    if total_tokens > 0 do
+      {:ok, %{input_tokens: total_tokens, output_tokens: 0, total_tokens: total_tokens}}
+    else
+      :error
+    end
+  end
+
+  defp extract_embedding_usage(_), do: :error
 
   def pre_validate_options(operation, model, opts) do
     model_family = get_model_family(model)

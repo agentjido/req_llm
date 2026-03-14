@@ -14,6 +14,24 @@ defmodule ReqLLM.EmbeddingTest do
 
   alias ReqLLM.Embedding
 
+  defp setup_telemetry do
+    test_pid = self()
+    ref = System.unique_integer([:positive])
+    handler_id = "embedding-usage-handler-#{ref}"
+
+    :telemetry.attach(
+      handler_id,
+      [:req_llm, :token_usage],
+      fn name, measurements, metadata, _ ->
+        send(test_pid, {:telemetry_event, name, measurements, metadata})
+      end,
+      nil
+    )
+
+    on_exit(fn -> :telemetry.detach(handler_id) end)
+    :ok
+  end
+
   describe "supported_models/0" do
     test "returns list of available embedding models" do
       models = Embedding.supported_models()
@@ -103,6 +121,46 @@ defmodule ReqLLM.EmbeddingTest do
 
     test "rejects unsupported providers" do
       assert {:error, :unknown_provider} = Embedding.embed("unsupported:model", "Hello")
+    end
+  end
+
+  describe "embed/3 - Google Vertex usage metadata" do
+    setup do
+      Req.Test.stub(__MODULE__, fn conn ->
+        Req.Test.json(conn, %{
+          "predictions" => [
+            %{
+              "embeddings" => %{
+                "values" => [0.1, -0.2, 0.3],
+                "statistics" => %{"token_count" => 2}
+              }
+            }
+          ]
+        })
+      end)
+
+      setup_telemetry()
+    end
+
+    test "emits telemetry and returns usage for embeddings" do
+      {:ok, %{embedding: embedding, usage: usage}} =
+        Embedding.embed(
+          "google_vertex:gemini-embedding-001",
+          "Hello world",
+          access_token: "test-token",
+          project_id: "test-project",
+          region: "us-central1",
+          return_usage: true,
+          req_http_options: [plug: {Req.Test, __MODULE__}]
+        )
+
+      assert embedding == [0.1, -0.2, 0.3]
+      assert usage.input == 2
+
+      assert_receive {:telemetry_event, [:req_llm, :token_usage], measurements, metadata}
+      assert measurements.tokens.input == 2
+      assert metadata.model.provider == :google_vertex
+      assert metadata.model.id == "gemini-embedding-001"
     end
   end
 

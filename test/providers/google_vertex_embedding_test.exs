@@ -163,4 +163,22 @@ defmodule ReqLLM.Providers.GoogleVertex.EmbeddingTest do
       assert decoded.body == %{"error" => "bad request"}
     end
   end
+
+  describe "extract_usage/2 for embeddings" do
+    test "extracts token counts from prediction statistics" do
+      {:ok, model} = ReqLLM.model(@model_spec)
+
+      body = %{
+        "predictions" => [
+          %{"embeddings" => %{"statistics" => %{"token_count" => 2}}},
+          %{"embeddings" => %{"statistics" => %{"token_count" => 3}}}
+        ]
+      }
+
+      assert {:ok, usage} = GoogleVertex.extract_usage(body, model)
+      assert usage.input_tokens == 5
+      assert usage.output_tokens == 0
+      assert usage.total_tokens == 5
+    end
+  end
 end
