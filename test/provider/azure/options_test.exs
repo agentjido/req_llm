@@ -10,7 +10,7 @@ defmodule ReqLLM.Providers.Azure.OptionsTest do
   - API version validation
   """
 
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
 
   alias ReqLLM.Providers.Azure
 
