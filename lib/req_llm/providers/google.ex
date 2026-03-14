@@ -825,6 +825,7 @@ defmodule ReqLLM.Providers.Google do
     generation_config =
       %{}
       |> maybe_put_google_aspect_ratio(request.options[:aspect_ratio])
+      |> maybe_put_google_output_format(request.options[:output_format])
       |> maybe_put(:candidateCount, image_candidate_count(request.options))
 
     generation_config = if generation_config != %{}, do: generation_config
@@ -863,6 +864,33 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp maybe_put_google_aspect_ratio(config, _), do: config
+
+  defp maybe_put_google_output_format(config, nil), do: config
+
+  defp maybe_put_google_output_format(config, format) do
+    case google_image_output_mime_type(format) do
+      nil ->
+        config
+
+      mime_type ->
+        Map.put(
+          config,
+          "imageConfig",
+          Map.put(Map.get(config, "imageConfig", %{}), "outputMimeType", mime_type)
+        )
+    end
+  end
+
+  defp google_image_output_mime_type(:png), do: "image/png"
+  defp google_image_output_mime_type(:jpeg), do: "image/jpeg"
+  defp google_image_output_mime_type(:webp), do: "image/webp"
+  defp google_image_output_mime_type("png"), do: "image/png"
+  defp google_image_output_mime_type("jpeg"), do: "image/jpeg"
+  defp google_image_output_mime_type("webp"), do: "image/webp"
+  defp google_image_output_mime_type("image/png"), do: "image/png"
+  defp google_image_output_mime_type("image/jpeg"), do: "image/jpeg"
+  defp google_image_output_mime_type("image/webp"), do: "image/webp"
+  defp google_image_output_mime_type(_), do: nil
 
   defp parse_size(size) when is_binary(size) do
     case String.split(size, "x") do

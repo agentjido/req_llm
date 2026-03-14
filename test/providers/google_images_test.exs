@@ -38,7 +38,7 @@ defmodule ReqLLM.Providers.GoogleImagesTest do
 
     assert get_in(body, ["generationConfig", "responseModalities"]) == nil
     assert get_in(body, ["generationConfig", "imageConfig", "aspectRatio"]) == "1:1"
-    assert get_in(body, ["generationConfig", "imageConfig", "mimeType"]) == nil
+    assert get_in(body, ["generationConfig", "imageConfig", "outputMimeType"]) == "image/png"
     assert get_in(body, ["generationConfig", "candidateCount"]) == 2
 
     assert get_in(body, ["contents", Access.at(0), "parts", Access.at(0), "text"]) ==
@@ -84,6 +84,34 @@ defmodule ReqLLM.Providers.GoogleImagesTest do
     body = Jason.decode!(encoded.body)
 
     assert is_nil(body["generationConfig"])
+  end
+
+  test "encode_body/1 maps alternate image output formats" do
+    context = %Context{
+      messages: [
+        %ReqLLM.Message{role: :user, content: "A cat in space"}
+      ]
+    }
+
+    request =
+      Req.new(url: "/models/gemini-2.0-flash-exp-image-generation:generateContent")
+      |> Req.Request.register_options([
+        :operation,
+        :model,
+        :output_format,
+        :context
+      ])
+      |> Req.Request.merge_options(
+        operation: :image,
+        model: "gemini-2.0-flash-exp-image-generation",
+        output_format: :webp,
+        context: context
+      )
+
+    encoded = Google.encode_body(request)
+    body = Jason.decode!(encoded.body)
+
+    assert get_in(body, ["generationConfig", "imageConfig", "outputMimeType"]) == "image/webp"
   end
 
   test "decode_response/1 converts inlineData to ContentPart.image" do
