@@ -1,4 +1,4 @@
-alias ReqLLM.Scripts.Helpers
+alias ReqLLM.Examples.Helpers
 
 defmodule EmbeddingsSingle do
   @moduledoc """
@@ -9,7 +9,7 @@ defmodule EmbeddingsSingle do
 
   ## Usage
 
-      mix run lib/examples/scripts/embeddings_single.exs "Your text here" [options]
+      mix run scripts/embeddings_single.exs "Your text here" [options]
 
   ## Options
 
@@ -19,13 +19,13 @@ defmodule EmbeddingsSingle do
   ## Examples
 
       # Basic embedding
-      mix run lib/examples/scripts/embeddings_single.exs "Elixir is a dynamic, functional language"
+      mix run scripts/embeddings_single.exs "Elixir is a dynamic, functional language"
 
       # With specific model
-      mix run lib/examples/scripts/embeddings_single.exs "Machine learning" --model openai:text-embedding-3-large
+      mix run scripts/embeddings_single.exs "Machine learning" --model openai:text-embedding-3-large
 
       # With debug logging
-      mix run lib/examples/scripts/embeddings_single.exs "Hello world" --log-level debug
+      mix run scripts/embeddings_single.exs "Hello world" --log-level debug
   """
 
   @script_name "embeddings_single.exs"
@@ -78,15 +78,15 @@ defmodule EmbeddingsSingle do
 
       true ->
         IO.puts(:stderr, "Error: Text is required\n")
-        IO.puts("Usage: mix run #{@script_name} \"Your text here\" [options]")
+        IO.puts("Usage: mix run scripts/#{@script_name} \"Your text here\" [options]")
         IO.puts("\nOptions:")
         IO.puts("  --model, -m      Model to use (default: openai:text-embedding-3-small)")
         IO.puts("  --log-level, -l  Log level: debug, info, warning, error")
         IO.puts("\nExample:")
-        IO.puts("  mix run #{@script_name} \"Elixir is a dynamic, functional language\"")
+        IO.puts("  mix run scripts/#{@script_name} \"Elixir is a dynamic, functional language\"")
 
         IO.puts(
-          "  mix run #{@script_name} \"Machine learning\" --model openai:text-embedding-3-large"
+          "  mix run scripts/#{@script_name} \"Machine learning\" --model openai:text-embedding-3-large"
         )
 
         System.halt(1)

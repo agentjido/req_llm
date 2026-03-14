@@ -1,4 +1,4 @@
-defmodule ReqLLM.Scripts.Helpers do
+defmodule ReqLLM.Examples.Helpers do
   @moduledoc """
   Shared utilities for example scripts in `scripts/`.
 

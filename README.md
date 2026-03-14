@@ -255,7 +255,7 @@ response.usage.image_usage
 
 A telemetry event `[:req_llm, :token_usage]` is published on every request with token counts and calculated costs.
 
-See `lib/examples/scripts/usage_cost_search_image.exs` for a multi-provider smoke test that validates search tool and image generation cost metadata. For comprehensive documentation, see the [Usage & Billing Guide](guides/usage-and-billing.md).
+See `examples/scripts/usage_cost_search_image.exs` and run it from `examples/` with `mix run scripts/usage_cost_search_image.exs` for a multi-provider smoke test that validates search tool and image generation cost metadata. For comprehensive documentation, see the [Usage & Billing Guide](guides/usage-and-billing.md).
 
 ## Streaming Configuration
 

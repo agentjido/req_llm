@@ -1,4 +1,4 @@
-alias ReqLLM.Scripts.Helpers
+alias ReqLLM.Examples.Helpers
 
 defmodule AnthropicPromptCaching do
   @moduledoc """
@@ -10,7 +10,7 @@ defmodule AnthropicPromptCaching do
 
   ## Usage
 
-      mix run lib/examples/scripts/anthropic_prompt_caching.exs [options]
+      mix run scripts/anthropic_prompt_caching.exs [options]
 
   ## Options
 
@@ -22,13 +22,13 @@ defmodule AnthropicPromptCaching do
   ## Examples
 
       # Basic usage with default 1h TTL
-      mix run lib/examples/scripts/anthropic_prompt_caching.exs
+      mix run scripts/anthropic_prompt_caching.exs
 
       # With 5-minute cache
-      mix run lib/examples/scripts/anthropic_prompt_caching.exs --ttl 5m
+      mix run scripts/anthropic_prompt_caching.exs --ttl 5m
 
       # Different model
-      mix run lib/examples/scripts/anthropic_prompt_caching.exs --model anthropic:claude-3-5-haiku-20241022
+      mix run scripts/anthropic_prompt_caching.exs --model anthropic:claude-3-5-haiku-20241022
 
   ## Learn More
 

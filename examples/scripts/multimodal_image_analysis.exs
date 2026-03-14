@@ -1,4 +1,4 @@
-alias ReqLLM.Scripts.Helpers
+alias ReqLLM.Examples.Helpers
 
 defmodule MultimodalImageAnalysis do
   @moduledoc """
@@ -10,7 +10,7 @@ defmodule MultimodalImageAnalysis do
 
   ## Usage
 
-      mix run lib/examples/scripts/multimodal_image_analysis.exs [prompt] --file <image_path> [options]
+      mix run scripts/multimodal_image_analysis.exs [prompt] --file <image_path> [options]
 
   ## Options
 
@@ -23,16 +23,16 @@ defmodule MultimodalImageAnalysis do
   ## Examples
 
       # Analyze an image with default prompt
-      mix run lib/examples/scripts/multimodal_image_analysis.exs --file priv/examples/test.jpg
+      mix run scripts/multimodal_image_analysis.exs --file priv/examples/test.jpg
 
       # Ask a specific question about the image
-      mix run lib/examples/scripts/multimodal_image_analysis.exs "What colors are prominent?" --file image.png
+      mix run scripts/multimodal_image_analysis.exs "What colors are prominent?" --file image.png
 
       # Use a different model
-      mix run lib/examples/scripts/multimodal_image_analysis.exs --file photo.jpg --model anthropic:claude-3-5-haiku-20241022
+      mix run scripts/multimodal_image_analysis.exs --file photo.jpg --model anthropic:claude-3-5-haiku-20241022
 
       # Control generation parameters
-      mix run lib/examples/scripts/multimodal_image_analysis.exs --file image.png --max-tokens 500 --temperature 0.7
+      mix run scripts/multimodal_image_analysis.exs --file image.png --max-tokens 500 --temperature 0.7
   """
 
   @script_name "multimodal_image_analysis.exs"
@@ -134,7 +134,7 @@ defmodule MultimodalImageAnalysis do
 
   defp print_usage do
     IO.puts(:stderr, "Error: --file is required\n")
-    IO.puts("Usage: mix run #{@script_name} [prompt] --file <image_path> [options]")
+    IO.puts("Usage: mix run scripts/#{@script_name} [prompt] --file <image_path> [options]")
     IO.puts("\nOptions:")
     IO.puts("  --file <path>           Path to image file (required)")
     IO.puts("  --model, -m <model>     Model to use [default: #{@default_model}]")
@@ -142,10 +142,13 @@ defmodule MultimodalImageAnalysis do
     IO.puts("  --max-tokens <int>      Maximum tokens to generate")
     IO.puts("  --temperature <float>   Sampling temperature")
     IO.puts("\nExamples:")
-    IO.puts("  mix run #{@script_name} \"What do you see?\" --file priv/examples/test.jpg")
 
     IO.puts(
-      "  mix run #{@script_name} --file image.png --model anthropic:claude-3-5-haiku-20241022"
+      "  mix run scripts/#{@script_name} \"What do you see?\" --file priv/examples/test.jpg"
+    )
+
+    IO.puts(
+      "  mix run scripts/#{@script_name} --file image.png --model anthropic:claude-3-5-haiku-20241022"
     )
   end
 

@@ -1,4 +1,4 @@
-alias ReqLLM.Scripts.Helpers
+alias ReqLLM.Examples.Helpers
 
 defmodule ObjectStream do
   @moduledoc """
@@ -11,7 +11,7 @@ defmodule ObjectStream do
 
   ## Usage
 
-      mix run lib/examples/scripts/object_stream.exs "Your prompt here" [options]
+      mix run scripts/object_stream.exs "Your prompt here" [options]
 
   ## Options
 
@@ -23,13 +23,13 @@ defmodule ObjectStream do
   ## Examples
 
       # Extract person information from text
-      mix run lib/examples/scripts/object_stream.exs "Extract person info: Jane Smith, 32, architect in Berlin"
+      mix run scripts/object_stream.exs "Extract person info: Jane Smith, 32, architect in Berlin"
 
       # Use a different model
-      mix run lib/examples/scripts/object_stream.exs "Generate a person profile" --model anthropic:claude-sonnet-4-5-20250929
+      mix run scripts/object_stream.exs "Generate a person profile" --model anthropic:claude-sonnet-4-5-20250929
 
       # Control generation parameters
-      mix run lib/examples/scripts/object_stream.exs "Person: Alice, 28" --temperature 0.7 --max-tokens 500
+      mix run scripts/object_stream.exs "Person: Alice, 28" --temperature 0.7 --max-tokens 500
   """
 
   @script_name "object_stream.exs"

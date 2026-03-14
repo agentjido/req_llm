@@ -1,4 +1,4 @@
-alias ReqLLM.Scripts.Helpers
+alias ReqLLM.Examples.Helpers
 
 defmodule MultimodalPdfQA do
   @moduledoc """
@@ -10,7 +10,7 @@ defmodule MultimodalPdfQA do
 
   ## Usage
 
-      mix run lib/examples/scripts/multimodal_pdf_qa.exs [prompt] --file <pdf_path> [options]
+      mix run scripts/multimodal_pdf_qa.exs [prompt] --file <pdf_path> [options]
 
   ## Options
 
@@ -23,16 +23,16 @@ defmodule MultimodalPdfQA do
   ## Examples
 
       # Summarize a PDF document
-      mix run lib/examples/scripts/multimodal_pdf_qa.exs --file priv/examples/test.pdf
+      mix run scripts/multimodal_pdf_qa.exs --file priv/examples/test.pdf
 
       # Ask a specific question about the document
-      mix run lib/examples/scripts/multimodal_pdf_qa.exs "What is the main conclusion?" --file report.pdf
+      mix run scripts/multimodal_pdf_qa.exs "What is the main conclusion?" --file report.pdf
 
       # Use a different Claude model
-      mix run lib/examples/scripts/multimodal_pdf_qa.exs --file document.pdf --model anthropic:claude-sonnet-4-5-20250929
+      mix run scripts/multimodal_pdf_qa.exs --file document.pdf --model anthropic:claude-sonnet-4-5-20250929
 
       # Extract specific information
-      mix run lib/examples/scripts/multimodal_pdf_qa.exs "List all financial figures" --file report.pdf --max-tokens 1000
+      mix run scripts/multimodal_pdf_qa.exs "List all financial figures" --file report.pdf --max-tokens 1000
   """
 
   @script_name "multimodal_pdf_qa.exs"
@@ -160,7 +160,7 @@ defmodule MultimodalPdfQA do
 
   defp print_usage do
     IO.puts(:stderr, "Error: --file is required\n")
-    IO.puts("Usage: mix run #{@script_name} [prompt] --file <pdf_path> [options]")
+    IO.puts("Usage: mix run scripts/#{@script_name} [prompt] --file <pdf_path> [options]")
     IO.puts("\nOptions:")
     IO.puts("  --file <path>           Path to PDF file (required)")
     IO.puts("  --model, -m <model>     Model to use [default: #{@default_model}]")
@@ -171,11 +171,11 @@ defmodule MultimodalPdfQA do
     IO.puts("\nExamples:")
 
     IO.puts(
-      "  mix run #{@script_name} \"What is this document about?\" --file priv/examples/test.pdf"
+      "  mix run scripts/#{@script_name} \"What is this document about?\" --file priv/examples/test.pdf"
     )
 
     IO.puts(
-      "  mix run #{@script_name} --file document.pdf --model anthropic:claude-sonnet-4-5-20250929"
+      "  mix run scripts/#{@script_name} --file document.pdf --model anthropic:claude-sonnet-4-5-20250929"
     )
   end
 

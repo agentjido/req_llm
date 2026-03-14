@@ -8,7 +8,7 @@ defmodule ReasoningTokensExample do
 
   ## Usage
 
-      mix run lib/examples/scripts/reasoning_tokens.exs --prompt "Solve this puzzle"
+      mix run scripts/reasoning_tokens.exs --prompt "Solve this puzzle"
 
   ## Options
 
@@ -24,21 +24,21 @@ defmodule ReasoningTokensExample do
   ## Examples
 
       # Basic reasoning with default settings
-      mix run lib/examples/scripts/reasoning_tokens.exs --prompt "Explain quantum entanglement"
+      mix run scripts/reasoning_tokens.exs --prompt "Explain quantum entanglement"
 
       # High effort reasoning with token budget
-      mix run lib/examples/scripts/reasoning_tokens.exs \\
+      mix run scripts/reasoning_tokens.exs \\
         --prompt "Solve this logic puzzle" \\
         --reasoning-effort high \\
         --reasoning-token-budget 1000
 
       # Control thinking visibility
-      mix run lib/examples/scripts/reasoning_tokens.exs \\
+      mix run scripts/reasoning_tokens.exs \\
         --prompt "Analyze this code" \\
         --thinking-visibility hidden
   """
 
-  alias ReqLLM.Scripts.Helpers
+  alias ReqLLM.Examples.Helpers
 
   @schema [
     prompt: [

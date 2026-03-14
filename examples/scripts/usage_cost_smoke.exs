@@ -1,4 +1,4 @@
-alias ReqLLM.Scripts.Helpers
+alias ReqLLM.Examples.Helpers
 
 defmodule UsageCostSmoke do
   @moduledoc """
@@ -6,7 +6,7 @@ defmodule UsageCostSmoke do
 
   Usage:
 
-      mix run lib/examples/scripts/usage_cost_smoke.exs [options]
+      mix run scripts/usage_cost_smoke.exs [options]
 
   Options:
 
@@ -17,9 +17,9 @@ defmodule UsageCostSmoke do
 
   Examples:
 
-      mix run lib/examples/scripts/usage_cost_smoke.exs
+      mix run scripts/usage_cost_smoke.exs
 
-      mix run lib/examples/scripts/usage_cost_smoke.exs \\
+      mix run scripts/usage_cost_smoke.exs \\
         --models "openai:gpt-4o-mini,anthropic:claude-3-5-haiku-20241022,google:gemini-2.0-flash" \\
         --prompt "Say hello in one short sentence."
   """

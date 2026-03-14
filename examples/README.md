@@ -1,46 +1,45 @@
 # ReqLLM Examples
 
-This directory contains examples demonstrating ReqLLM capabilities.
+This directory is a nested Mix project for runnable ReqLLM examples.
 
 ## Quick Start
 
-Run the demo to see the agent in action:
+From the repo root:
 
 ```bash
-mix run examples/demo.exs
+cp examples/.env.example examples/.env
+cd examples
+mix deps.get
+mix run demo.exs
 ```
 
-## Files
+Or work directly inside `examples/`:
 
-- **`agent.ex`** - A GenServer-based AI agent with streaming and tool calling
-- **`demo.exs`** - Interactive demonstration of agent capabilities
-- **`scripts/`** - Standalone runnable scripts for all API methods (see [scripts/README.md](scripts/README.md))
-
-## Features Demonstrated
-
-- **Streaming Text Generation** - Real-time output using Claude 3.5
-- **Tool Calling** - Calculator and web search with proper argument parsing  
-- **Conversation History** - Maintains context across interactions
-- **Two-Step Completion** - Handles tool execution then final response
-
-## Agent Usage
-
-```elixir
-# Start the agent
-{:ok, agent} = ReqLLM.Examples.Agent.start_link()
-
-# Send prompts
-ReqLLM.Examples.Agent.prompt(agent, "What's 15 * 7?")
-#=> Streams: "I'll calculate that for you..."
-#=> [Tool: calculator] 105  
-#=> Streams: "15 * 7 = 105"
-#=> {:ok, "15 * 7 = 105"}
-
-# Agent remembers conversation history
-ReqLLM.Examples.Agent.prompt(agent, "What was that result again?")
-#=> {:ok, "The result of 15 * 7 was 105."}
+```bash
+cp .env.example .env
+mix deps.get
+mix run demo.exs
 ```
 
-## Available Tools
+You need a working API key in `examples/.env`.
+Most scripts default to OpenAI models. `demo.exs` uses Anthropic by default.
 
-- **Calculator** - Evaluates mathematical expressions
+## What Is Here
+
+- `demo.exs` runs the interactive agent demo.
+- `lib/req_llm/examples/agent.ex` defines `ReqLLM.Examples.Agent`.
+- `lib/req_llm/examples/helpers.ex` contains shared helpers for the scripts.
+- `scripts/` contains standalone runnable examples for the main APIs.
+- `playground.exs` starts the local playground UI.
+
+## Common Commands
+
+```bash
+mix run demo.exs
+mix run scripts/text_generate.exs "Explain functional programming"
+mix run scripts/text_stream.exs "Write a haiku about code"
+./scripts/run_all.sh
+mix run playground.exs
+```
+
+See [scripts/README.md](scripts/README.md) for the individual script reference.

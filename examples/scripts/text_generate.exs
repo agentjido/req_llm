@@ -1,4 +1,4 @@
-alias ReqLLM.Scripts.Helpers
+alias ReqLLM.Examples.Helpers
 
 defmodule TextGenerate do
   @moduledoc """
@@ -10,7 +10,7 @@ defmodule TextGenerate do
 
   ## Usage
 
-      mix run lib/examples/scripts/text_generate.exs "Your prompt here" [options]
+      mix run scripts/text_generate.exs "Your prompt here" [options]
 
   ## Options
 
@@ -23,15 +23,15 @@ defmodule TextGenerate do
   ## Examples
 
       # Basic usage with default model
-      mix run lib/examples/scripts/text_generate.exs "Explain functional programming in one sentence"
+      mix run scripts/text_generate.exs "Explain functional programming in one sentence"
 
       # Using a specific model with system prompt
-      mix run lib/examples/scripts/text_generate.exs "Write a haiku" \\
+      mix run scripts/text_generate.exs "Write a haiku" \\
         --model anthropic:claude-sonnet-4-5-20250929 \\
         --system "You are a creative poet"
 
       # With generation parameters
-      mix run lib/examples/scripts/text_generate.exs "Tell me a story" \\
+      mix run scripts/text_generate.exs "Tell me a story" \\
         --max-tokens 500 \\
         --temperature 0.7
   """

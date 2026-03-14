@@ -1,4 +1,4 @@
-alias ReqLLM.Scripts.Helpers
+alias ReqLLM.Examples.Helpers
 
 defmodule TextStream do
   @moduledoc """
@@ -10,7 +10,7 @@ defmodule TextStream do
 
   ## Usage
 
-      mix run lib/examples/scripts/text_stream.exs "Your prompt here" [options]
+      mix run scripts/text_stream.exs "Your prompt here" [options]
 
   ## Options
 
@@ -23,16 +23,16 @@ defmodule TextStream do
   ## Examples
 
       # Basic streaming generation
-      mix run lib/examples/scripts/text_stream.exs "Write a haiku about rivers"
+      mix run scripts/text_stream.exs "Write a haiku about rivers"
 
       # With specific model and parameters
-      mix run lib/examples/scripts/text_stream.exs "Explain quantum physics" \\
+      mix run scripts/text_stream.exs "Explain quantum physics" \\
         --model anthropic:claude-sonnet-4-5-20250929 \\
         --max_tokens 500 \\
         --temperature 0.7
 
       # With system message
-      mix run lib/examples/scripts/text_stream.exs "What is 2+2?" \\
+      mix run scripts/text_stream.exs "What is 2+2?" \\
         --system "You are a helpful math tutor"
   """
 

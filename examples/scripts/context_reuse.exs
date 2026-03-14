@@ -1,4 +1,4 @@
-alias ReqLLM.Scripts.Helpers
+alias ReqLLM.Examples.Helpers
 
 defmodule ContextReuse do
   @moduledoc """
@@ -9,8 +9,8 @@ defmodule ContextReuse do
 
   ## Usage
 
-      mix run lib/examples/scripts/context_reuse.exs "Tell me a fact about space"
-      mix run lib/examples/scripts/context_reuse.exs "Count from 1 to 3" --model anthropic:claude-sonnet-4-5-20250929
+      mix run scripts/context_reuse.exs "Tell me a fact about space"
+      mix run scripts/context_reuse.exs "Count from 1 to 3" --model anthropic:claude-sonnet-4-5-20250929
 
   ## Options
 
@@ -23,13 +23,13 @@ defmodule ContextReuse do
   ## Examples
 
       # Basic usage with default model
-      mix run lib/examples/scripts/context_reuse.exs "Tell me a joke"
+      mix run scripts/context_reuse.exs "Tell me a joke"
 
       # With specific model and parameters
-      mix run lib/examples/scripts/context_reuse.exs "Explain recursion" --model openai:gpt-4o --temperature 0.7
+      mix run scripts/context_reuse.exs "Explain recursion" --model openai:gpt-4o --temperature 0.7
 
       # With system message
-      mix run lib/examples/scripts/context_reuse.exs "Hello" --system "You are a helpful assistant"
+      mix run scripts/context_reuse.exs "Hello" --system "You are a helpful assistant"
   """
 
   @script_name "context_reuse.exs"

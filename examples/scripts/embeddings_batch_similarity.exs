@@ -1,4 +1,4 @@
-alias ReqLLM.Scripts.Helpers
+alias ReqLLM.Examples.Helpers
 
 defmodule EmbeddingsBatchSimilarity do
   @moduledoc """
@@ -9,7 +9,7 @@ defmodule EmbeddingsBatchSimilarity do
 
   ## Usage
 
-      mix run lib/examples/scripts/embeddings_batch_similarity.exs [options]
+      mix run scripts/embeddings_batch_similarity.exs [options]
 
   ## Options
 
@@ -19,13 +19,13 @@ defmodule EmbeddingsBatchSimilarity do
   ## Examples
 
       # Run similarity analysis with default texts
-      mix run lib/examples/scripts/embeddings_batch_similarity.exs
+      mix run scripts/embeddings_batch_similarity.exs
 
       # Use specific model
-      mix run lib/examples/scripts/embeddings_batch_similarity.exs --model openai:text-embedding-3-large
+      mix run scripts/embeddings_batch_similarity.exs --model openai:text-embedding-3-large
 
       # Enable debug logging
-      mix run lib/examples/scripts/embeddings_batch_similarity.exs --log-level debug
+      mix run scripts/embeddings_batch_similarity.exs --log-level debug
   """
 
   @script_name "embeddings_batch_similarity.exs"

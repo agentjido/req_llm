@@ -4,7 +4,7 @@ defmodule UsageCostSearchImage do
 
   Usage:
 
-      mix run lib/examples/scripts/usage_cost_search_image.exs [options]
+      mix run scripts/usage_cost_search_image.exs [options]
 
   Options:
 
@@ -30,14 +30,14 @@ defmodule UsageCostSearchImage do
 
   Examples:
 
-      mix run lib/examples/scripts/usage_cost_search_image.exs
+      mix run scripts/usage_cost_search_image.exs
 
-      mix run lib/examples/scripts/usage_cost_search_image.exs \\
+      mix run scripts/usage_cost_search_image.exs \\
         --search-models "xai:grok-4-1-fast-reasoning,google:gemini-3-flash-preview,openai:gpt-5-mini,anthropic:claude-sonnet-4-5" \\
         --image-models "google:gemini-2.5-flash-image,openai:gpt-image-1.5"
   """
 
-  alias ReqLLM.Scripts.Helpers
+  alias ReqLLM.Examples.Helpers
 
   @script_name "usage_cost_search_image.exs"
 

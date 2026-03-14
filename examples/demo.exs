@@ -7,7 +7,7 @@
 # - Tool calling with proper argument parsing
 # - Conversation history maintenance
 #
-# Run with: mix run lib/examples/demo.exs
+# Run with: mix run demo.exs
 
 # Clean startup and suppress debug logging
 Application.ensure_all_started(:req_llm)
@@ -15,6 +15,17 @@ Logger.configure(level: :warning)
 
 # Start the agent
 {:ok, agent} = ReqLLM.Examples.Agent.start_link()
+
+run_prompt = fn prompt ->
+  case ReqLLM.Examples.Agent.prompt(agent, prompt) do
+    {:ok, _response} ->
+      :ok
+
+    {:error, error} ->
+      IO.puts(:stderr, "Demo failed: #{inspect(error)}")
+      System.halt(1)
+  end
+end
 
 IO.puts("ReqLLM Agent Demo")
 IO.puts("═══════════════════════════════════════")
@@ -25,7 +36,7 @@ IO.puts("Basic Conversation")
 IO.puts("─────────────────────")
 IO.puts("User: Hello! What can you help me with?")
 IO.write("Assistant: ")
-{:ok, _response} = ReqLLM.Examples.Agent.prompt(agent, "Hello! What can you help me with?")
+run_prompt.("Hello! What can you help me with?")
 IO.puts("")
 IO.puts("")
 
@@ -38,7 +49,7 @@ num3 = Enum.random(1..999)
 question = "What's #{num1} * #{num2} + #{num3}?"
 IO.puts("User: #{question}")
 IO.write("Assistant: ")
-{:ok, _response} = ReqLLM.Examples.Agent.prompt(agent, question)
+run_prompt.(question)
 IO.puts("")
 IO.puts("")
 

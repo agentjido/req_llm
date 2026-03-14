@@ -77,7 +77,7 @@ if Code.ensure_loaded?(Igniter) do
           https://hexdocs.pm/req_llm/getting-started.html
 
         2. Explore demo usage:
-          https://github.com/agentjido/req_llm/tree/main/lib/examples
+          https://github.com/agentjido/req_llm/tree/main/examples
       """)
     end
   end

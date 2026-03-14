@@ -1,6 +1,6 @@
 #!/usr/bin/env elixir
 
-alias ReqLLM.Scripts.Helpers
+alias ReqLLM.Examples.Helpers
 
 defmodule ContextCrossModel do
   @moduledoc """
@@ -11,8 +11,8 @@ defmodule ContextCrossModel do
 
   ## Usage
 
-      mix run lib/examples/scripts/context_cross_model.exs "Tell me a joke"
-      mix run lib/examples/scripts/context_cross_model.exs "Explain functional programming" --model-a openai:gpt-4o --model-b anthropic:claude-sonnet-4-5-20250929
+      mix run scripts/context_cross_model.exs "Tell me a joke"
+      mix run scripts/context_cross_model.exs "Explain functional programming" --model-a openai:gpt-4o --model-b anthropic:claude-sonnet-4-5-20250929
 
   ## Options
 
@@ -26,13 +26,13 @@ defmodule ContextCrossModel do
   ## Examples
 
       # Basic usage with default models
-      mix run lib/examples/scripts/context_cross_model.exs "What is AI?"
+      mix run scripts/context_cross_model.exs "What is AI?"
 
       # With specific models
-      mix run lib/examples/scripts/context_cross_model.exs "Tell me a joke" --model-a openai:gpt-4o --model-b google:gemini-1.5-flash
+      mix run scripts/context_cross_model.exs "Tell me a joke" --model-a openai:gpt-4o --model-b google:gemini-1.5-flash
 
       # With system message and parameters
-      mix run lib/examples/scripts/context_cross_model.exs "Hello" --system "You are concise" --temperature 0.5
+      mix run scripts/context_cross_model.exs "Hello" --system "You are concise" --temperature 0.5
   """
 
   @script_name "context_cross_model.exs"

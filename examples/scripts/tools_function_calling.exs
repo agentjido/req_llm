@@ -1,6 +1,6 @@
 #!/usr/bin/env elixir
 
-alias ReqLLM.Scripts.Helpers
+alias ReqLLM.Examples.Helpers
 
 defmodule ToolsFunctionCalling do
   @moduledoc """
@@ -16,8 +16,8 @@ defmodule ToolsFunctionCalling do
 
   ## Usage
 
-      mix run lib/examples/scripts/tools_function_calling.exs [PROMPT]
-      mix run lib/examples/scripts/tools_function_calling.exs --model anthropic:claude-sonnet-4-5-20250929 [PROMPT]
+      mix run scripts/tools_function_calling.exs [PROMPT]
+      mix run scripts/tools_function_calling.exs --model anthropic:claude-sonnet-4-5-20250929 [PROMPT]
 
   ## Options
 
@@ -29,13 +29,13 @@ defmodule ToolsFunctionCalling do
   ## Examples
 
       # Default prompt with multiple tool calls
-      mix run lib/examples/scripts/tools_function_calling.exs
+      mix run scripts/tools_function_calling.exs
 
       # Custom prompt
-      mix run lib/examples/scripts/tools_function_calling.exs "What's the weather in Tokyo?"
+      mix run scripts/tools_function_calling.exs "What's the weather in Tokyo?"
 
       # Specific model
-      mix run lib/examples/scripts/tools_function_calling.exs --model anthropic:claude-sonnet-4-5-20250929 "Get current time"
+      mix run scripts/tools_function_calling.exs --model anthropic:claude-sonnet-4-5-20250929 "Get current time"
   """
   @script_name "tools_function_calling.exs"
 

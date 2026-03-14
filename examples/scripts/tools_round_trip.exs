@@ -1,6 +1,6 @@
 #!/usr/bin/env elixir
 
-alias ReqLLM.Scripts.Helpers
+alias ReqLLM.Examples.Helpers
 
 defmodule ToolsRoundTrip do
   @moduledoc """
@@ -14,9 +14,9 @@ defmodule ToolsRoundTrip do
 
   ## Usage
 
-      mix run lib/examples/scripts/tools_round_trip.exs [PROMPT]
-      mix run lib/examples/scripts/tools_round_trip.exs --model anthropic:claude-sonnet-4-5-20250929 [PROMPT]
-      mix run lib/examples/scripts/tools_round_trip.exs --max-rounds 5 "What's the weather in Paris?"
+      mix run scripts/tools_round_trip.exs [PROMPT]
+      mix run scripts/tools_round_trip.exs --model anthropic:claude-sonnet-4-5-20250929 [PROMPT]
+      mix run scripts/tools_round_trip.exs --max-rounds 5 "What's the weather in Paris?"
 
   ## Options
 
@@ -29,13 +29,13 @@ defmodule ToolsRoundTrip do
   ## Examples
 
       # Default complex multi-step prompt
-      mix run lib/examples/scripts/tools_round_trip.exs
+      mix run scripts/tools_round_trip.exs
 
       # Custom prompt with multiple tool calls
-      mix run lib/examples/scripts/tools_round_trip.exs "Check time, get Paris weather, tell weather joke"
+      mix run scripts/tools_round_trip.exs "Check time, get Paris weather, tell weather joke"
 
       # Specific model with more rounds
-      mix run lib/examples/scripts/tools_round_trip.exs --model anthropic:claude-sonnet-4-5-20250929 --max-rounds 5
+      mix run scripts/tools_round_trip.exs --model anthropic:claude-sonnet-4-5-20250929 --max-rounds 5
   """
   @script_name "tools_round_trip.exs"
   @default_max_rounds 3

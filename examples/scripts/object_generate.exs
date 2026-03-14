@@ -1,4 +1,4 @@
-alias ReqLLM.Scripts.Helpers
+alias ReqLLM.Examples.Helpers
 
 defmodule ObjectGenerate do
   @moduledoc """
@@ -9,7 +9,7 @@ defmodule ObjectGenerate do
 
   ## Usage
 
-      mix run lib/examples/scripts/object_generate.exs "Your prompt" [options]
+      mix run scripts/object_generate.exs "Your prompt" [options]
 
   ## Options
 
@@ -21,16 +21,16 @@ defmodule ObjectGenerate do
   ## Examples
 
       # Basic usage
-      mix run lib/examples/scripts/object_generate.exs "Create a profile for Alice, a 30 year old software engineer"
+      mix run scripts/object_generate.exs "Create a profile for Alice, a 30 year old software engineer"
 
       # With specific model
-      mix run lib/examples/scripts/object_generate.exs "Generate a person profile" --model anthropic:claude-sonnet-4-5-20250929
+      mix run scripts/object_generate.exs "Generate a person profile" --model anthropic:claude-sonnet-4-5-20250929
 
       # With generation parameters
-      mix run lib/examples/scripts/object_generate.exs "Create a person" --temperature 0.5 --max-tokens 150
+      mix run scripts/object_generate.exs "Create a person" --temperature 0.5 --max-tokens 150
 
       # With debug logging
-      mix run lib/examples/scripts/object_generate.exs "Generate profile" --log-level debug
+      mix run scripts/object_generate.exs "Generate profile" --log-level debug
   """
 
   @script_name "object_generate.exs"

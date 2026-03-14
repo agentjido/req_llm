@@ -1,4 +1,4 @@
-alias ReqLLM.Scripts.Helpers
+alias ReqLLM.Examples.Helpers
 
 defmodule JSONSchemaExamples do
   @moduledoc """
@@ -9,7 +9,7 @@ defmodule JSONSchemaExamples do
 
   ## Usage
 
-      elixir lib/examples/scripts/json_schema_examples.exs [options]
+      mix run scripts/json_schema_examples.exs [options]
 
   ## Options
 
@@ -20,15 +20,15 @@ defmodule JSONSchemaExamples do
 
   Run with default model:
 
-      elixir lib/examples/scripts/json_schema_examples.exs
+      mix run scripts/json_schema_examples.exs
 
   Use a specific model:
 
-      elixir lib/examples/scripts/json_schema_examples.exs -m anthropic:claude-sonnet-4-5-20250929
+      mix run scripts/json_schema_examples.exs -m anthropic:claude-sonnet-4-5-20250929
 
   Enable debug logging:
 
-      elixir lib/examples/scripts/json_schema_examples.exs -l debug
+      mix run scripts/json_schema_examples.exs -l debug
   """
 
   @script_name "json_schema_examples.exs"
