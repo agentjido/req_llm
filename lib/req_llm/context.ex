@@ -888,10 +888,18 @@ defmodule ReqLLM.Context do
     reasoning_details = Map.get(msg, :reasoning_details)
 
     case role do
-      "user" -> {:ok, text(:user, content, metadata)}
-      "assistant" -> {:ok, text(:assistant, content, metadata) |> maybe_put_reasoning_details(reasoning_details)}
-      "system" -> {:ok, text(:system, content, metadata)}
-      _ -> {:error, ReqLLM.Error.Invalid.Role.exception(role: role)}
+      "user" ->
+        {:ok, text(:user, content, metadata)}
+
+      "assistant" ->
+        {:ok,
+         text(:assistant, content, metadata) |> maybe_put_reasoning_details(reasoning_details)}
+
+      "system" ->
+        {:ok, text(:system, content, metadata)}
+
+      _ ->
+        {:error, ReqLLM.Error.Invalid.Role.exception(role: role)}
     end
   end
 
@@ -901,10 +909,18 @@ defmodule ReqLLM.Context do
     reasoning_details = Map.get(msg, "reasoning_details")
 
     case role do
-      "user" -> {:ok, text(:user, content, metadata)}
-      "assistant" -> {:ok, text(:assistant, content, metadata) |> maybe_put_reasoning_details(reasoning_details)}
-      "system" -> {:ok, text(:system, content, metadata)}
-      _ -> {:error, ReqLLM.Error.Invalid.Role.exception(role: role)}
+      "user" ->
+        {:ok, text(:user, content, metadata)}
+
+      "assistant" ->
+        {:ok,
+         text(:assistant, content, metadata) |> maybe_put_reasoning_details(reasoning_details)}
+
+      "system" ->
+        {:ok, text(:system, content, metadata)}
+
+      _ ->
+        {:error, ReqLLM.Error.Invalid.Role.exception(role: role)}
     end
   end
 
