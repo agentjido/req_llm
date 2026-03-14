@@ -126,7 +126,7 @@ defmodule ReqLLM.Speech do
 
   """
   @spec speak(
-          String.t() | {atom(), keyword()} | struct(),
+          ReqLLM.model_input(),
           String.t(),
           keyword()
         ) :: {:ok, Result.t()} | {:error, term()}
@@ -168,7 +168,7 @@ defmodule ReqLLM.Speech do
   Same as `speak/3` but raises on error.
   """
   @spec speak!(
-          String.t() | {atom(), keyword()} | struct(),
+          ReqLLM.model_input(),
           String.t(),
           keyword()
         ) :: Result.t() | no_return()

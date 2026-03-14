@@ -379,7 +379,7 @@ defmodule ReqLLM.Response do
   This is a façade function that accepts raw provider data and a model specification,
   and directly calls the provider's decode_response/1 callback for zero-ceremony decoding.
 
-  Supports Model struct, string, and tuple inputs, automatically resolving model
+  Supports inline model maps, `%LLMDB.Model{}` structs, strings, and tuples, automatically resolving model
   specifications using ReqLLM.model/1.
 
   ## Parameters
@@ -388,6 +388,7 @@ defmodule ReqLLM.Response do
     * `model_spec` - Model specification in any format supported by ReqLLM.model/1:
       - String: `"anthropic:claude-3-sonnet"`
       - Tuple: `{:anthropic, "claude-3-sonnet", temperature: 0.7}`
+      - Map: `%{provider: :openai, id: "gpt-6-mini"}`
       - LLMDB.Model struct: `%LLMDB.Model{provider: :anthropic, id: "claude-3-sonnet"}`
 
   ## Returns
@@ -404,7 +405,7 @@ defmodule ReqLLM.Response do
   """
   @spec decode_response(
           term(),
-          LLMDB.Model.t() | String.t() | {atom(), String.t(), keyword()} | {atom(), keyword()}
+          ReqLLM.model_input()
         ) :: {:ok, t()} | {:error, term()}
   @dialyzer {:nowarn_function, decode_response: 2}
   def decode_response(raw_data, model_spec) do
@@ -456,7 +457,7 @@ defmodule ReqLLM.Response do
   """
   @spec decode_object(
           term(),
-          LLMDB.Model.t() | String.t() | {atom(), String.t(), keyword()} | {atom(), keyword()},
+          ReqLLM.model_input(),
           keyword()
         ) ::
           {:ok, t()} | {:error, term()}
@@ -487,7 +488,7 @@ defmodule ReqLLM.Response do
   """
   @spec decode_object_stream(
           term(),
-          LLMDB.Model.t() | String.t() | {atom(), String.t(), keyword()} | {atom(), keyword()},
+          ReqLLM.model_input(),
           keyword()
         ) ::
           {:ok, t()} | {:error, term()}

@@ -104,7 +104,7 @@ defmodule ReqLLM.Images do
   Returns a canonical `ReqLLM.Response` where images are represented as message content parts.
   """
   @spec generate_image(
-          String.t() | {atom(), keyword()} | struct(),
+          ReqLLM.model_input(),
           String.t() | list() | ReqLLM.Context.t(),
           keyword()
         ) :: {:ok, Response.t()} | {:error, term()}
@@ -149,13 +149,14 @@ defmodule ReqLLM.Images do
   @doc """
   Validates that a model supports image generation operations.
   """
-  @spec validate_model(String.t() | {atom(), keyword()} | struct()) ::
+  @spec validate_model(ReqLLM.model_input()) ::
           {:ok, Model.t()} | {:error, term()}
   def validate_model(model_spec) do
-    with {:ok, model} <- ReqLLM.model(model_spec) do
+    with {:ok, model} <- ReqLLM.model(model_spec),
+         {:ok, _provider_module} <- ReqLLM.provider(model.provider) do
       model_string = LLMDB.Model.spec(model)
 
-      if model_string in supported_models() do
+      if image_capable_model?(model) do
         {:ok, model}
       else
         {:error,
@@ -172,7 +173,7 @@ defmodule ReqLLM.Images do
     if is_map(capabilities) and Map.get(capabilities, :images) == true do
       true
     else
-      id = to_string(model.id || "")
+      id = to_string(model.provider_model_id || model.id || "")
 
       String.contains?(id, "image") or
         String.contains?(id, "imagen") or

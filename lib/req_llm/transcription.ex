@@ -122,7 +122,7 @@ defmodule ReqLLM.Transcription do
 
   """
   @spec transcribe(
-          String.t() | {atom(), keyword()} | struct(),
+          ReqLLM.model_input(),
           String.t() | {:binary, binary(), String.t()} | {:base64, String.t(), String.t()},
           keyword()
         ) :: {:ok, Result.t()} | {:error, term()}
@@ -157,7 +157,7 @@ defmodule ReqLLM.Transcription do
   Same as `transcribe/3` but raises on error.
   """
   @spec transcribe!(
-          String.t() | {atom(), keyword()} | struct(),
+          ReqLLM.model_input(),
           String.t() | {:binary, binary(), String.t()} | {:base64, String.t(), String.t()},
           keyword()
         ) :: Result.t() | no_return()

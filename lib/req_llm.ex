@@ -28,10 +28,20 @@ defmodule ReqLLM do
       ReqLLM.generate_text("anthropic:claude-sonnet-4-5-20250929", messages)
 
       # Tuple format: {provider, options}
-      ReqLLM.generate_text({:anthropic, "claude-3-5-sonnet", temperature: 0.7}, messages)
+      ReqLLM.generate_text({:anthropic, id: "claude-3-5-sonnet"}, messages)
 
       # Model struct format
-      {:ok, model} = ReqLLM.model("anthropic:claude-3-5-sonnet", temperature: 0.5)
+      model = ReqLLM.model!("anthropic:claude-3-5-sonnet")
+      ReqLLM.generate_text(model, messages)
+
+      # Inline model format for models not yet in LLMDB
+      model =
+        ReqLLM.model!(%{
+          provider: :openai,
+          id: "gpt-6-mini",
+          base_url: "http://localhost:8000/v1"
+        })
+
       ReqLLM.generate_text(model, messages)
 
   ## Configuration
@@ -71,6 +81,25 @@ defmodule ReqLLM do
   """
 
   alias ReqLLM.{Embedding, Generation, Images, Schema, Speech, Tool, Transcription}
+
+  @typedoc """
+  Model input accepted by ReqLLM public APIs.
+
+  Strings and tuples resolve through the LLMDB catalog. `%LLMDB.Model{}` values and
+  plain maps are treated as inline model specs and bypass catalog lookup.
+  """
+  @type model_input ::
+          String.t()
+          | map()
+          | {atom(), String.t(), keyword()}
+          | {atom(), keyword()}
+          | LLMDB.Model.t()
+
+  @inline_model_example "%{provider: :openai, id: \"gpt-4o\"}"
+  @inline_model_fields LLMDB.Model.__struct__(provider: :openai, id: "__inline__")
+                       |> Map.from_struct()
+                       |> Map.keys()
+  @inline_model_field_strings Enum.map(@inline_model_fields, &Atom.to_string/1)
 
   # ===========================================================================
   # Configuration API
@@ -189,18 +218,26 @@ defmodule ReqLLM do
 
     * `model_spec` - Model specification in various formats:
       - String format: `"anthropic:claude-3-sonnet"` (looks up in LLMDB catalog)
-      - Map format: `%{id: "my-model", provider: :my_provider}` (for custom providers)
+      - Map format: `%{id: "my-model", provider: :my_provider}` (inline model spec)
       - Tuple format: `{:anthropic, "claude-3-sonnet", temperature: 0.7}`
       - Model struct: `%LLMDB.Model{}`
 
-  ## Custom Providers
+  ## Inline Models
 
-  For models not in the LLMDB catalog (custom providers), use map format:
+  For models not in the LLMDB catalog yet, use an inline model spec:
 
-      {:ok, model} = ReqLLM.model(%{id: "acme-chat-mini", provider: :acme})
+      model =
+        ReqLLM.model!(%{
+          id: "acme-chat-mini",
+          provider: :acme,
+          base_url: "http://localhost:4000/v1"
+        })
+
       ReqLLM.generate_text(model, "Hello!")
 
-  This bypasses catalog lookup and creates a model struct directly.
+  This bypasses catalog lookup, enriches the model metadata, and returns `%LLMDB.Model{}`.
+  Inline maps are accepted for backwards compatibility, but `model!/1` is the recommended
+  entry point for advanced workflows because it validates the spec up front.
 
   ## Examples
 
@@ -210,24 +247,32 @@ defmodule ReqLLM do
       ReqLLM.model(%{id: "custom-model", provider: :my_provider})
       #=> {:ok, %LLMDB.Model{provider: :my_provider, id: "custom-model"}}
 
-      ReqLLM.model({:anthropic, "claude-3-sonnet", temperature: 0.5})
-      #=> {:ok, %LLMDB.Model{provider: :anthropic, model: "claude-3-sonnet", temperature: 0.5}}
+      ReqLLM.model!({:anthropic, id: "claude-3-sonnet"})
+      #=> %LLMDB.Model{provider: :anthropic, model: "claude-3-sonnet"}
 
   """
-  @spec model(
-          String.t()
-          | map()
-          | {atom(), String.t(), keyword()}
-          | {atom(), keyword()}
-          | struct()
-        ) ::
-          {:ok, struct()} | {:error, term()}
-  def model(%LLMDB.Model{} = model), do: {:ok, normalize_model_metadata(model)}
-
-  def model(%{} = attrs) when not is_struct(attrs) do
-    attrs
+  @spec model(model_input()) :: {:ok, LLMDB.Model.t()} | {:error, term()}
+  def model(%LLMDB.Model{} = model) do
+    model
+    |> Map.from_struct()
+    |> Enum.reject(fn {_key, value} -> is_nil(value) end)
+    |> Map.new()
+    |> LLMDB.Enrich.enrich_model()
     |> LLMDB.Model.new()
     |> normalize_model_result()
+  end
+
+  def model(%{} = attrs) when not is_struct(attrs) do
+    case normalize_inline_model_attrs(attrs) do
+      {:ok, normalized_attrs} ->
+        normalized_attrs
+        |> LLMDB.Enrich.enrich_model()
+        |> LLMDB.Model.new()
+        |> normalize_inline_model_result(normalized_attrs)
+
+      {:error, _} = error ->
+        error
+    end
   end
 
   def model({provider, model_id, _opts}) when is_atom(provider) and is_binary(model_id) do
@@ -259,10 +304,34 @@ defmodule ReqLLM do
      ReqLLM.Error.Validation.Error.exception(message: "Invalid model spec: #{inspect(other)}")}
   end
 
+  @doc """
+  Same as `model/1` but raises on error.
+
+  This is the recommended entry point for advanced inline model workflows because it
+  validates and normalizes the model spec up front.
+  """
+  @spec model!(model_input()) :: LLMDB.Model.t() | no_return()
+  def model!(model_spec) do
+    case model(model_spec) do
+      {:ok, model} -> model
+      {:error, error} -> raise error
+    end
+  end
+
   defp normalize_model_result({:ok, %LLMDB.Model{} = model}),
     do: {:ok, normalize_model_metadata(model)}
 
   defp normalize_model_result(other), do: other
+
+  defp normalize_inline_model_result({:ok, %LLMDB.Model{} = model}, _attrs) do
+    {:ok, normalize_model_metadata(model)}
+  end
+
+  defp normalize_inline_model_result({:error, errors}, attrs) when is_list(errors) do
+    {:error, invalid_inline_model_error(attrs, errors)}
+  end
+
+  defp normalize_inline_model_result(other, _attrs), do: other
 
   defp normalize_model_metadata(%LLMDB.Model{provider: :openai} = model) do
     protocol =
@@ -295,6 +364,105 @@ defmodule ReqLLM do
   end
 
   defp normalize_model_metadata(%LLMDB.Model{} = model), do: model
+
+  defp normalize_inline_model_attrs(attrs) do
+    attrs = atomize_inline_model_keys(attrs)
+    attrs = sync_inline_model_id_and_model(attrs)
+
+    cond do
+      not valid_inline_model_provider?(attrs[:provider]) ->
+        {:error,
+         invalid_model_spec_error(
+           attrs,
+           "Inline model specs require :provider to be an atom or provider string. Example: #{@inline_model_example}"
+         )}
+
+      not valid_inline_model_identifier?(attrs) ->
+        {:error,
+         invalid_model_spec_error(
+           attrs,
+           "Inline model specs require :id or :model. Example: #{@inline_model_example}"
+         )}
+
+      true ->
+        coerce_inline_model_provider(attrs)
+    end
+  end
+
+  defp atomize_inline_model_keys(attrs) do
+    Enum.reduce(attrs, attrs, fn
+      {key, value}, acc when is_binary(key) and key in @inline_model_field_strings ->
+        acc
+        |> Map.delete(key)
+        |> Map.put(String.to_existing_atom(key), value)
+
+      _, acc ->
+        acc
+    end)
+  end
+
+  defp sync_inline_model_id_and_model(attrs) do
+    id = Map.get(attrs, :id)
+    model = Map.get(attrs, :model)
+
+    cond do
+      is_binary(id) and is_nil(model) ->
+        Map.put(attrs, :model, id)
+
+      is_binary(model) and is_nil(id) ->
+        Map.put(attrs, :id, model)
+
+      true ->
+        attrs
+    end
+  end
+
+  defp valid_inline_model_provider?(provider),
+    do: (is_atom(provider) and not is_nil(provider)) or is_binary(provider)
+
+  defp valid_inline_model_identifier?(attrs) do
+    is_binary(Map.get(attrs, :id)) or is_binary(Map.get(attrs, :model))
+  end
+
+  defp coerce_inline_model_provider(%{provider: provider} = attrs) when is_binary(provider) do
+    try do
+      {:ok, Map.put(attrs, :provider, String.to_existing_atom(provider))}
+    rescue
+      ArgumentError ->
+        {:error,
+         invalid_model_spec_error(
+           attrs,
+           "Inline model specs require an existing provider atom or registered provider string. Got: #{inspect(provider)}"
+         )}
+    end
+  end
+
+  defp coerce_inline_model_provider(attrs), do: {:ok, attrs}
+
+  defp invalid_inline_model_error(attrs, errors) do
+    message =
+      errors
+      |> Enum.take(3)
+      |> Enum.map_join(", ", &format_inline_model_error/1)
+
+    invalid_model_spec_error(
+      attrs,
+      "Invalid inline model spec: #{message}. Example: #{@inline_model_example}"
+    )
+  end
+
+  defp format_inline_model_error(%Zoi.Error{path: path, message: message}) do
+    case Enum.map(path, &to_string/1) do
+      [] -> message
+      path_segments -> "#{Enum.join(path_segments, ".")} #{message}"
+    end
+  end
+
+  defp format_inline_model_error(other), do: inspect(other)
+
+  defp invalid_model_spec_error(attrs, reason) do
+    ReqLLM.Error.validation_error(:invalid_model_spec, reason, model: inspect(attrs))
+  end
 
   # ===========================================================================
   # Text Generation API - Delegated to ReqLLM.Generation

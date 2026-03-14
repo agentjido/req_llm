@@ -15,6 +15,11 @@ defmodule ReqLLM.ImagesTest do
     assert {:error, _} = Images.validate_model("openai:gpt-4o")
   end
 
+  test "validate_model/1 accepts inline image models outside the catalog" do
+    assert {:ok, %LLMDB.Model{id: "gpt-image-2"}} =
+             Images.validate_model(%{provider: :openai, id: "gpt-image-2"})
+  end
+
   test "generate_image/3 errors when context has no user text" do
     context = Context.new([Context.system("You are helpful.")])
     assert {:error, _} = Images.generate_image("openai:gpt-image-1", context, fixture: "noop")

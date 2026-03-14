@@ -66,7 +66,7 @@ defmodule ReqLLM.Generation do
   """
 
   @spec generate_text(
-          String.t() | {atom(), keyword()} | struct(),
+          ReqLLM.model_input(),
           Context.prompt(),
           keyword()
         ) :: {:ok, Response.t()} | {:error, term()}
@@ -109,7 +109,7 @@ defmodule ReqLLM.Generation do
 
   """
   @spec generate_text!(
-          String.t() | {atom(), keyword()} | struct(),
+          ReqLLM.model_input(),
           Context.prompt(),
           keyword()
         ) :: String.t() | no_return()
@@ -141,7 +141,7 @@ defmodule ReqLLM.Generation do
 
   """
   @spec stream_text(
-          String.t() | {atom(), keyword()} | struct(),
+          ReqLLM.model_input(),
           Context.prompt(),
           keyword()
         ) :: {:ok, ReqLLM.StreamResponse.t()} | {:error, term()}
@@ -168,7 +168,7 @@ defmodule ReqLLM.Generation do
   """
   @deprecated "Use stream_text/3 with StreamResponse instead"
   @spec stream_text!(
-          String.t() | {atom(), keyword()} | struct(),
+          ReqLLM.model_input(),
           Context.prompt(),
           keyword()
         ) :: Enumerable.t() | no_return()
@@ -227,7 +227,7 @@ defmodule ReqLLM.Generation do
 
   """
   @spec generate_object(
-          String.t() | {atom(), keyword()} | struct(),
+          ReqLLM.model_input(),
           Context.prompt(),
           keyword() | map() | Zoi.Type.t(),
           keyword()
@@ -440,7 +440,7 @@ defmodule ReqLLM.Generation do
 
   """
   @spec stream_object(
-          String.t() | {atom(), keyword()} | struct(),
+          ReqLLM.model_input(),
           Context.prompt(),
           keyword() | Zoi.Type.t(),
           keyword()
@@ -494,7 +494,7 @@ defmodule ReqLLM.Generation do
   """
   @deprecated "Use stream_object/4 with StreamResponse instead"
   @spec stream_object!(
-          String.t() | {atom(), keyword()} | struct(),
+          ReqLLM.model_input(),
           Context.prompt(),
           keyword() | Zoi.Type.t(),
           keyword()

@@ -173,8 +173,8 @@ usage = ReqLLM.StreamResponse.usage(response)
   - Built-in OpenAI-style encoding/decoding with provider callback overrides for custom formats
 
 - **Flexible model specification**
-  - Accepts `"provider:model"`, `{:provider, "model", opts}` tuples, or `%ReqLLM.Model{}` structs
-  - Helper functions for parsing, introspection and default-merging
+  - Accepts `"provider:model"`, tuples, `%LLMDB.Model{}` structs, and inline model maps
+  - `ReqLLM.model!/1` is the recommended way to validate and normalize inline model specs
 
 - **Secure, layered key management** (`ReqLLM.Keys`)
   - Per-request override → application config → env vars / .env files
@@ -212,6 +212,53 @@ By default, ReqLLM loads `.env` files from the current working directory at star
 ```elixir
 config :req_llm, load_dotenv: false
 ```
+
+## Inline Model Specs
+
+ReqLLM can call models that are not in LLMDB yet. This is the recommended advanced
+workflow for local development, debugging new releases, and custom provider setups.
+
+For backwards compatibility, you can pass a plain map directly to the major APIs.
+The clearer path is to normalize it first with `ReqLLM.model!/1`, which returns an
+enriched `%LLMDB.Model{}`.
+
+```elixir
+model =
+  ReqLLM.model!(%{
+    provider: :openai,
+    id: "gpt-6-mini",
+    base_url: "http://localhost:8000/v1"
+  })
+
+ReqLLM.generate_text!(model, "Hello world")
+```
+
+You can still pass the inline map directly:
+
+```elixir
+ReqLLM.generate_text!(
+  %{provider: :openai, id: "gpt-6-mini", base_url: "http://localhost:8000/v1"},
+  "Hello world"
+)
+```
+
+Use additional metadata only when the provider needs it:
+
+```elixir
+model =
+  ReqLLM.model!(%{
+    provider: :google_vertex,
+    id: "zai-org/glm-4.7-maas",
+    extra: %{family: "glm"}
+  })
+```
+
+ReqLLM hard-fails early when the inline spec is missing required routing data, with
+errors aimed at advanced users:
+
+- Inline models always need `provider` and `id` (or `model`)
+- Azure still needs a `base_url`
+- Google Vertex MaaS models may need `extra.family` when the model family cannot be inferred
 
 ## Usage Cost Tracking
 
@@ -349,7 +396,7 @@ For advanced use cases, you can use ReqLLM providers directly as Req plugins. Th
 
 ```elixir
 # The canonical pattern from ReqLLM.Generation.generate_text/3
-with {:ok, model} <- ReqLLM.Model.from("anthropic:claude-haiku-4-5"), # Parse model spec
+with {:ok, model} <- ReqLLM.model("anthropic:claude-haiku-4-5"), # Parse model spec
      {:ok, provider_module} <- ReqLLM.provider(model.provider),        # Get provider module
      {:ok, request} <- provider_module.prepare_request(:chat, model, "Hello!", temperature: 0.7), # Build Req request
      {:ok, %Req.Response{body: response}} <- Req.request(request) do   # Execute HTTP request
@@ -357,7 +404,7 @@ with {:ok, model} <- ReqLLM.Model.from("anthropic:claude-haiku-4-5"), # Parse mo
 end
 
 # Customize the Req pipeline with additional headers or middleware
-{:ok, model} = ReqLLM.Model.from("anthropic:claude-haiku-4-5")
+{:ok, model} = ReqLLM.model("anthropic:claude-haiku-4-5")
 {:ok, provider_module} = ReqLLM.provider(model.provider)
 {:ok, request} = provider_module.prepare_request(:chat, model, "Hello!", temperature: 0.7)
 

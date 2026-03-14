@@ -68,8 +68,15 @@ ReqLLM uses structured key/value tags for precise test filtering:
 - `ReqLLM.Message.ContentPart` - Individual content piece (text, image, tool call, etc.)
 - `ReqLLM.Tool` - Function calling definition with schema and callback
 - `ReqLLM.StreamChunk` - Unified streaming response format across providers
-- `ReqLLM.Model` - AI model configuration with provider and parameters
+- `LLMDB.Model` - Canonical model metadata struct used by ReqLLM
 - `ReqLLM.Response` - High-level LLM response with context and metadata
+
+### Advanced Inline Models
+- ReqLLM supports inline model specs for models that are not in LLMDB yet
+- Keep this path backwards compatible: public APIs may still receive a plain map as `model_spec`
+- Internally, inline maps should be normalized into `%LLMDB.Model{}` as early as possible
+- Prefer documenting advanced examples with `ReqLLM.model!/1` or `LLMDB.Model.new!/1`
+- Do not require LLMDB catalog membership for inline models; only require the metadata needed to route the request
 
 ### Provider Architecture
 - Each provider implements `ReqLLM.Provider` behavior with callbacks:
@@ -105,7 +112,7 @@ ReqLLM uses structured key/value tags for precise test filtering:
 - **No inline comments in method bodies** - code should be self-explanatory through clear naming and structure
 
 ### Imports & Dependencies
-- Minimize imports, prefer explicit module calls (e.g., `ReqLLM.Model.from/1`)
+- Minimize imports, prefer explicit module calls (e.g., `ReqLLM.model!/1`)
 - Group deps in mix.exs: runtime deps first, then dev/test deps with `, only: [:dev, :test]`
 
 ### Types & Validation
