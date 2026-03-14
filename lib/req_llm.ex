@@ -331,8 +331,6 @@ defmodule ReqLLM do
     {:error, invalid_inline_model_error(attrs, errors)}
   end
 
-  defp normalize_inline_model_result(other, _attrs), do: other
-
   defp normalize_model_metadata(%LLMDB.Model{provider: :openai} = model) do
     protocol =
       get_in(model, [Access.key(:extra, %{}), :wire, :protocol]) ||
