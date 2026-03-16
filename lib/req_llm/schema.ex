@@ -654,10 +654,12 @@ defmodule ReqLLM.Schema do
       }
 
   """
+  @google_forbidden_schema_keys ["$schema", "additionalProperties"]
+
   @spec to_google_format(ReqLLM.Tool.t()) :: map()
   def to_google_format(%ReqLLM.Tool{} = tool) do
     json_schema = to_json(tool.parameter_schema)
-    parameters = deep_delete_keys(json_schema, ["$schema", "additionalProperties"])
+    parameters = deep_delete_keys(json_schema, @google_forbidden_schema_keys)
 
     %{
       "name" => tool.name,
@@ -958,10 +960,10 @@ defmodule ReqLLM.Schema do
   defp format_jsv_error(%{"error" => error}), do: error
   defp format_jsv_error(error), do: inspect(error)
 
-  @spec deep_delete_keys(term(), [String.t()]) :: term()
+  @spec deep_delete_keys(term(), [String.t() | atom()]) :: term()
   defp deep_delete_keys(map, keys) when is_map(map) do
     map
-    |> Map.drop(keys)
+    |> Map.drop(key_variants(keys))
     |> Map.new(fn {k, v} -> {k, deep_delete_keys(v, keys)} end)
   end
 
@@ -969,4 +971,8 @@ defmodule ReqLLM.Schema do
     do: Enum.map(list, &deep_delete_keys(&1, keys))
 
   defp deep_delete_keys(value, _keys), do: value
+
+  defp key_variants(keys) when is_list(keys), do: Enum.flat_map(keys, &key_variants/1)
+  defp key_variants(key) when is_binary(key), do: [key, String.to_atom(key)]
+  defp key_variants(key) when is_atom(key), do: [key, Atom.to_string(key)]
 end
