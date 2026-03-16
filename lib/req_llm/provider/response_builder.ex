@@ -113,5 +113,8 @@ defmodule ReqLLM.Provider.ResponseBuilder do
   def for_model(%LLMDB.Model{extra: %{wire: %{protocol: "openai_responses"}}}),
     do: ReqLLM.Providers.OpenAI.ResponsesAPI.ResponseBuilder
 
+  def for_model(%LLMDB.Model{extra: %{wire: %{protocol: "openai_codex_responses"}}}),
+    do: ReqLLM.Providers.OpenAI.ResponsesAPI.ResponseBuilder
+
   def for_model(_model), do: ReqLLM.Provider.Defaults.ResponseBuilder
 end

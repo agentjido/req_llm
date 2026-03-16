@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- changelog -->
 
+### Features:
+
+* auth: load OAuth credentials from oauth/auth JSON files and refresh OpenAI Codex tokens
+* providers: add OAuth-only `openai_codex` ChatGPT backend with Codex SSE support
+
 ## [v1.7.1](https://github.com/agentjido/req_llm/compare/v1.7.0...v1.7.1) (2026-03-14)
 
 

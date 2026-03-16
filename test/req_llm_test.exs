@@ -30,6 +30,27 @@ defmodule ReqLLMTest do
 
       assert get_in(model, [Access.key(:extra, %{}), :wire, :protocol]) == "openai_responses"
     end
+
+    test "resolves openai_codex string spec via openai catalog fallback" do
+      assert {:ok,
+              %LLMDB.Model{
+                provider: :openai_codex,
+                id: "gpt-5.3-codex-spark",
+                provider_model_id: "gpt-5.3-codex-spark"
+              } = model} = ReqLLM.model("openai_codex:gpt-5.3-codex-spark")
+
+      assert get_in(model, [Access.key(:extra, %{}), :wire, :protocol]) ==
+               "openai_codex_responses"
+    end
+
+    test "resolves openai_codex tuple spec via openai catalog fallback" do
+      assert {:ok,
+              %LLMDB.Model{
+                provider: :openai_codex,
+                id: "gpt-5.3-codex-spark"
+              }} =
+               ReqLLM.model({:openai_codex, id: "gpt-5.3-codex-spark"})
+    end
   end
 
   describe "model/1 with map-based specs (custom providers)" do

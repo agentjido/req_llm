@@ -164,6 +164,40 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert request.headers["authorization"] == ["Bearer #{oauth_token}"]
     end
 
+    test "prepare_request supports oauth credentials loaded from file" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+
+      tmp_dir =
+        Path.join(System.tmp_dir!(), "req_llm_openai_oauth_#{System.unique_integer([:positive])}")
+
+      File.mkdir_p!(tmp_dir)
+      path = Path.join(tmp_dir, "oauth.json")
+
+      on_exit(fn -> File.rm_rf(tmp_dir) end)
+
+      File.write!(
+        path,
+        Jason.encode_to_iodata!(
+          %{
+            "openai-codex" => %{
+              "type" => "oauth",
+              "access" => "oauth-file-token-123",
+              "refresh" => "oauth-file-refresh-123",
+              "expires" => System.system_time(:millisecond) + 60_000
+            }
+          },
+          pretty: true
+        )
+      )
+
+      {:ok, request} =
+        OpenAI.prepare_request(:chat, model, "Hello",
+          provider_options: [auth_mode: :oauth, oauth_file: path]
+        )
+
+      assert request.headers["authorization"] == ["Bearer oauth-file-token-123"]
+    end
+
     test "error handling for invalid configurations" do
       {:ok, model} = ReqLLM.model("openai:gpt-4o")
       context = context_fixture()

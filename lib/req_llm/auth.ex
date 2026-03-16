@@ -20,7 +20,8 @@ defmodule ReqLLM.Auth do
   @type credential :: %{
           kind: credential_kind(),
           token: String.t(),
-          source: atom()
+          source: atom(),
+          account_id: String.t() | nil
         }
 
   @spec resolve!(LLMDB.Model.t() | atom, keyword() | map()) :: credential() | no_return()
@@ -40,10 +41,28 @@ defmodule ReqLLM.Auth do
       :oauth ->
         case fetch_access_token(opts, provider_opts) do
           {:ok, token, source} ->
-            {:ok, %{kind: :oauth_access_token, token: token, source: source}}
+            {:ok,
+             %{
+               kind: :oauth_access_token,
+               token: token,
+               source: source,
+               account_id: resolve_account_id(provider_or_model, token, opts, provider_opts)
+             }}
 
           :none ->
-            {:error, "OAuth mode requires :access_token (top-level or under :provider_options)"}
+            case ReqLLM.OAuth.resolve(provider_or_model, opts) do
+              {:ok, credential} ->
+                {:ok,
+                 %{
+                   kind: :oauth_access_token,
+                   token: credential.token,
+                   source: credential.source,
+                   account_id: credential.account_id
+                 }}
+
+              {:error, msg} ->
+                {:error, msg}
+            end
 
           {:error, msg} ->
             {:error, msg}
@@ -57,8 +76,11 @@ defmodule ReqLLM.Auth do
           end
 
         case ReqLLM.Keys.get(provider_or_model, key_opts) do
-          {:ok, key, source} -> {:ok, %{kind: :api_key, token: key, source: source}}
-          {:error, msg} -> {:error, msg}
+          {:ok, key, source} ->
+            {:ok, %{kind: :api_key, token: key, source: source, account_id: nil}}
+
+          {:error, msg} ->
+            {:error, msg}
         end
     end
   end
@@ -97,6 +119,25 @@ defmodule ReqLLM.Auth do
       _ -> :api_key
     end
   end
+
+  defp resolve_account_id(provider_or_model, token, opts, provider_opts) do
+    get_option(opts, :chatgpt_account_id) ||
+      get_option(provider_opts, :chatgpt_account_id) ||
+      derive_account_id(provider_or_model, token)
+  end
+
+  defp derive_account_id(provider_or_model, token) do
+    with {:ok, provider_mod} <- fetch_provider_module(provider_or_model),
+         true <- function_exported?(provider_mod, :account_id_from_token, 1) do
+      provider_mod.account_id_from_token(token)
+    else
+      _ -> nil
+    end
+  end
+
+  defp fetch_provider_module(%LLMDB.Model{provider: provider}), do: ReqLLM.provider(provider)
+  defp fetch_provider_module(provider) when is_atom(provider), do: ReqLLM.provider(provider)
+  defp fetch_provider_module(_provider_or_model), do: {:error, :invalid_provider}
 
   defp get_option(opts, key) when is_list(opts), do: Keyword.get(opts, key)
 

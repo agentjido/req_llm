@@ -497,7 +497,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     end
   end
 
-  defp build_request_body(context, model_name, opts, request) do
+  @doc false
+  def build_request_body(context, model_name, opts, request) do
     opts_map = if is_map(opts), do: opts, else: Map.new(opts)
     provider_opts = opts_map[:provider_options] || []
 

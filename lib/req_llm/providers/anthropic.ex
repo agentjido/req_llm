@@ -42,6 +42,18 @@ defmodule ReqLLM.Providers.Anthropic do
       default: :api_key,
       doc: "Authentication mode: :api_key (default) or :oauth"
     ],
+    oauth_file: [
+      type: :string,
+      doc: "Path to an oauth/auth JSON file with provider credentials"
+    ],
+    auth_file: [
+      type: :string,
+      doc: "Alias for :oauth_file"
+    ],
+    oauth_http_options: [
+      type: {:list, :any},
+      doc: "Req options for OAuth refresh HTTP requests"
+    ],
     anthropic_top_k: [
       type: :pos_integer,
       doc: "Sample from the top K options for each subsequent token (1-40)"

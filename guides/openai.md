@@ -2,6 +2,8 @@
 
 Access GPT models including standard chat models and reasoning models (o1, o3, GPT-5).
 
+ReqLLM also exposes a separate `openai_codex` provider for the ChatGPT Codex backend used by OAuth Codex tokens.
+
 ## Configuration
 
 ```bash
@@ -28,6 +30,73 @@ ReqLLM.generate_text(
 ```
 
 You can also pass these under `provider_options`.
+
+### ChatGPT Codex Backend (`openai_codex`)
+
+Use `openai_codex:*` when your token comes from the ChatGPT/Codex OAuth flow and you want requests routed to `https://chatgpt.com/backend-api/codex/responses` instead of platform OpenAI `/v1/responses`.
+
+This provider is OAuth-only and resolves `chatgpt_account_id` in this order:
+
+- explicit `provider_options: [chatgpt_account_id: "..."]`
+- `accountId` / `account_id` in the oauth/auth JSON file
+- JWT claim extraction from the access token
+
+Example:
+
+```elixir
+ReqLLM.generate_text(
+  "openai_codex:gpt-5.3-codex-spark",
+  "Write a test for this function",
+  provider_options: [
+    auth_mode: :oauth,
+    oauth_file: "/path/to/auth.json"
+  ]
+)
+```
+
+### OAuth Files (`oauth.json` / `auth.json`)
+
+ReqLLM can also read provider credentials from a JSON file using the same shape used by `pi-ai`:
+
+```json
+{
+  "openai-codex": {
+    "type": "oauth",
+    "access": "eyJ...",
+    "refresh": "oai_rt_...",
+    "expires": 1762857415123,
+    "accountId": "user_123"
+  }
+}
+```
+
+When `auth_mode: :oauth` is enabled and no explicit `access_token` is passed, ReqLLM will:
+
+- load credentials from `provider_options: [oauth_file: "..."]`
+- accept `auth_file` as an alias
+- fall back to `oauth.json` or `auth.json` in the current working directory
+- refresh expired `openai-codex` credentials automatically and persist the updated file
+- reuse `accountId` from the file or derive it from the refreshed access token for Codex requests
+
+Example:
+
+```elixir
+ReqLLM.generate_text(
+  "openai:gpt-5-codex",
+  "Write a test",
+  provider_options: [
+    auth_mode: :oauth,
+    oauth_file: "/path/to/oauth.json"
+  ]
+)
+```
+
+If you need to customize the refresh HTTP client, pass `oauth_http_options` under `provider_options`.
+
+For `openai_codex`, you can also override the backend headers with:
+
+- `provider_options: [chatgpt_account_id: "..."]`
+- `provider_options: [codex_originator: "pi"]`
 
 ## Attachments
 

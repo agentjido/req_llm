@@ -357,6 +357,62 @@ defmodule ReqLLM.GenerationTest do
       assert %Response{} = response
     end
 
+    test "oauth_file in provider_options is used for generate_text" do
+      tmp_dir =
+        Path.join(
+          System.tmp_dir!(),
+          "req_llm_generation_oauth_#{System.unique_integer([:positive])}"
+        )
+
+      File.mkdir_p!(tmp_dir)
+      path = Path.join(tmp_dir, "oauth.json")
+
+      on_exit(fn -> File.rm_rf(tmp_dir) end)
+
+      File.write!(
+        path,
+        Jason.encode_to_iodata!(
+          %{
+            "openai-codex" => %{
+              "type" => "oauth",
+              "access" => "oauth-file-token-generate",
+              "refresh" => "oauth-file-refresh-generate",
+              "expires" => System.system_time(:millisecond) + 60_000
+            }
+          },
+          pretty: true
+        )
+      )
+
+      Req.Test.stub(ReqLLM.GenerationTestOAuthFile, fn conn ->
+        auth_header = Plug.Conn.get_req_header(conn, "authorization")
+
+        assert auth_header == ["Bearer oauth-file-token-generate"],
+               "Expected Authorization header to contain OAuth token loaded from oauth file"
+
+        Req.Test.json(conn, %{
+          "id" => "cmpl_test_123",
+          "model" => "gpt-4o-mini-2024-07-18",
+          "choices" => [
+            %{
+              "message" => %{"role" => "assistant", "content" => "Response"}
+            }
+          ],
+          "usage" => %{"prompt_tokens" => 10, "completion_tokens" => 5, "total_tokens" => 15}
+        })
+      end)
+
+      {:ok, response} =
+        Generation.generate_text(
+          "openai:gpt-4o-mini",
+          "Hello",
+          provider_options: [auth_mode: :oauth, oauth_file: path],
+          req_http_options: [plug: {Req.Test, ReqLLM.GenerationTestOAuthFile}]
+        )
+
+      assert %Response{} = response
+    end
+
     test "access_token in provider_options takes precedence for stream_text" do
       oauth_token = "oauth-stream-token-#{System.unique_integer([:positive])}"
 

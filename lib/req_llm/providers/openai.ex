@@ -122,6 +122,18 @@ defmodule ReqLLM.Providers.OpenAI do
       default: :api_key,
       doc: "Authentication mode: :api_key (default) or :oauth"
     ],
+    oauth_file: [
+      type: :string,
+      doc: "Path to an oauth/auth JSON file with provider credentials"
+    ],
+    auth_file: [
+      type: :string,
+      doc: "Alias for :oauth_file"
+    ],
+    oauth_http_options: [
+      type: {:list, :any},
+      doc: "Req options for OAuth refresh HTTP requests"
+    ],
     dimensions: [
       type: :pos_integer,
       doc: "Dimensions for embedding models (e.g., text-embedding-3-small supports 512-1536)"
@@ -636,6 +648,14 @@ defmodule ReqLLM.Providers.OpenAI do
     |> Req.Request.append_response_steps(llm_decode_response: &decode_response/1)
     |> ReqLLM.Step.Usage.attach(model)
     |> ReqLLM.Step.Fixture.maybe_attach(model, user_opts)
+  end
+
+  @impl ReqLLM.Provider
+  def oauth_provider_id, do: "openai-codex"
+
+  @impl ReqLLM.Provider
+  def refresh_oauth_credentials(credentials, opts) do
+    ReqLLM.Providers.OpenAI.OAuth.refresh(credentials, opts)
   end
 
   @doc """

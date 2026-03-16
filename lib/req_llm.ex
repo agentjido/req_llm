@@ -277,7 +277,7 @@ defmodule ReqLLM do
 
   def model({provider, model_id, _opts}) when is_atom(provider) and is_binary(model_id) do
     provider
-    |> LLMDB.model(model_id)
+    |> resolve_catalog_model(model_id)
     |> normalize_model_result()
   end
 
@@ -285,7 +285,7 @@ defmodule ReqLLM do
     case kw[:id] || kw[:model] do
       id when is_binary(id) ->
         provider
-        |> LLMDB.model(id)
+        |> resolve_catalog_model(id)
         |> normalize_model_result()
 
       _ ->
@@ -294,9 +294,15 @@ defmodule ReqLLM do
   end
 
   def model(spec) when is_binary(spec) do
-    spec
-    |> LLMDB.model()
-    |> normalize_model_result()
+    case LLMDB.model(spec) do
+      {:ok, %LLMDB.Model{} = model} ->
+        normalize_model_result({:ok, model})
+
+      {:error, _reason} = error ->
+        spec
+        |> resolve_string_model_fallback(error)
+        |> normalize_model_result()
+    end
   end
 
   def model(other) do
@@ -361,7 +367,78 @@ defmodule ReqLLM do
     end
   end
 
+  defp normalize_model_metadata(%LLMDB.Model{provider: :openai_codex} = model) do
+    extra = model.extra || %{}
+    updated_extra = put_wire_protocol(extra, "openai_codex_responses")
+    %{model | extra: updated_extra}
+  end
+
   defp normalize_model_metadata(%LLMDB.Model{} = model), do: model
+
+  defp resolve_catalog_model(provider, model_id) do
+    case LLMDB.model(provider, model_id) do
+      {:ok, %LLMDB.Model{} = model} ->
+        {:ok, model}
+
+      {:error, _reason} = error ->
+        resolve_provider_model_fallback(provider, model_id, error)
+    end
+  end
+
+  defp resolve_string_model_fallback(spec, original_error) do
+    case String.split(spec, ":", parts: 2) do
+      [provider_name, model_id] ->
+        with {:ok, provider} <- provider_atom_from_string(provider_name) do
+          resolve_provider_model_fallback(provider, model_id, original_error)
+        else
+          _ -> original_error
+        end
+
+      _ ->
+        original_error
+    end
+  end
+
+  defp resolve_provider_model_fallback(:openai_codex, model_id, _original_error) do
+    case LLMDB.model(:openai, model_id) do
+      {:ok, %LLMDB.Model{} = model} ->
+        provider_model_id = model.provider_model_id || model.id || model.model
+        {:ok, %{model | provider: :openai_codex, provider_model_id: provider_model_id}}
+
+      {:error, _reason} ->
+        model(%{provider: :openai_codex, id: model_id})
+    end
+  end
+
+  defp resolve_provider_model_fallback(_provider, _model_id, original_error), do: original_error
+
+  defp provider_atom_from_string(provider_name) when is_binary(provider_name) do
+    try do
+      provider = String.to_existing_atom(provider_name)
+
+      case ReqLLM.provider(provider) do
+        {:ok, _module} -> {:ok, provider}
+        {:error, _} -> :error
+      end
+    rescue
+      ArgumentError -> :error
+    end
+  end
+
+  defp put_wire_protocol(extra, protocol) do
+    cond do
+      Map.has_key?(extra, :wire) ->
+        wire = if is_map(extra[:wire]), do: extra[:wire], else: %{}
+        Map.put(extra, :wire, Map.put(wire, :protocol, protocol))
+
+      Map.has_key?(extra, "wire") ->
+        wire = if is_map(extra["wire"]), do: extra["wire"], else: %{}
+        Map.put(extra, "wire", Map.put(wire, "protocol", protocol))
+
+      true ->
+        Map.put(extra, :wire, %{protocol: protocol})
+    end
+  end
 
   defp normalize_inline_model_attrs(attrs) do
     attrs = atomize_inline_model_keys(attrs)

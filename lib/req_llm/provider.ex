@@ -286,6 +286,21 @@ defmodule ReqLLM.Provider do
   @callback default_env_key() :: String.t()
 
   @doc """
+  Returns the provider key used inside oauth/auth JSON files.
+
+  This is optional and defaults to the provider atom as a string.
+  """
+  @callback oauth_provider_id() :: String.t()
+
+  @doc """
+  Refreshes provider OAuth credentials loaded from an oauth/auth JSON file.
+
+  Returns a map that includes updated `access`, `refresh`, and `expires` fields.
+  """
+  @callback refresh_oauth_credentials(map(), keyword()) ::
+              {:ok, map()} | {:error, String.t()}
+
+  @doc """
   Decode provider streaming event to list of StreamChunk structs for streaming responses.
 
   This is called by ReqLLM.StreamServer during real-time streaming to convert
@@ -611,7 +626,9 @@ defmodule ReqLLM.Provider do
     parse_stream_protocol: 2,
     attach_stream: 4,
     thinking_constraints: 0,
-    credential_missing?: 1
+    credential_missing?: 1,
+    oauth_provider_id: 0,
+    refresh_oauth_credentials: 2
   ]
 
   defmacro __before_compile__(_env) do

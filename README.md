@@ -178,6 +178,10 @@ usage = ReqLLM.StreamResponse.usage(response)
 
 - **Secure, layered key management** (`ReqLLM.Keys`)
   - Per-request override → application config → env vars / .env files
+- **OAuth bearer auth for supported providers**
+  - Direct `access_token` support for OpenAI and Anthropic
+  - OpenAI can load and refresh `openai-codex` credentials from `oauth.json` / `auth.json`
+  - `openai_codex:*` targets the ChatGPT Codex backend with OAuth-only auth and automatic account-id extraction
 
 - **Extensive reliability tooling**
   - Fixture-backed test matrix (`LiveFixture`) supports cached, live, or provider-filtered runs
