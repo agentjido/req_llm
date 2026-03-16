@@ -82,8 +82,52 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert encoded_tool["type"] == "function"
       assert encoded_tool["name"] == "get_weather"
       assert encoded_tool["description"] == "Get weather"
-      assert encoded_tool["strict"] == true
       assert encoded_tool["parameters"]["properties"]["location"]["type"] == "string"
+    end
+
+    test "encodes non-strict tools without required field" do
+      tool =
+        ReqLLM.Tool.new!(
+          name: "get_weather",
+          description: "Get weather",
+          parameter_schema: [
+            location: [type: :string, required: true]
+          ],
+          callback: fn _ -> {:ok, "result"} end,
+          strict: false
+        )
+
+      request = build_request(tools: [tool])
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded.body)
+
+      assert [encoded_tool] = body["tools"]
+      assert encoded_tool["strict"] == false
+      refute Map.has_key?(encoded_tool["parameters"], "required")
+    end
+
+    test "encodes strict tools with required field listing all parameters" do
+      tool =
+        ReqLLM.Tool.new!(
+          name: "get_weather",
+          description: "Get weather",
+          parameter_schema: [
+            location: [type: :string, required: true],
+            units: [type: :string]
+          ],
+          callback: fn _ -> {:ok, "result"} end,
+          strict: true
+        )
+
+      request = build_request(tools: [tool])
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded.body)
+
+      assert [encoded_tool] = body["tools"]
+      assert encoded_tool["strict"] == true
+      assert Enum.sort(encoded_tool["parameters"]["required"]) == ["location", "units"]
     end
 
     test "omits tools when empty list" do

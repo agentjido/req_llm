@@ -71,6 +71,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
 
     body
     |> Map.put(:anthropic_version, "bedrock-2023-05-31")
+    |> maybe_add_anthropic_beta(opts)
     |> AdapterHelpers.maybe_add_param(:max_tokens, opts[:max_tokens] || default_max_tokens)
     |> AdapterHelpers.maybe_add_param(:temperature, opts[:temperature])
     |> AdapterHelpers.maybe_add_param(:top_p, opts[:top_p])
@@ -79,6 +80,16 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
     |> AdapterHelpers.maybe_add_thinking(opts)
     |> maybe_add_tools(opts)
     |> Anthropic.maybe_apply_prompt_caching(opts)
+  end
+
+  defp maybe_add_anthropic_beta(body, opts) do
+    case get_in(opts, [:provider_options, :anthropic_beta]) do
+      betas when is_list(betas) and betas != [] ->
+        Map.put(body, :anthropic_beta, betas)
+
+      _ ->
+        body
+    end
   end
 
   # Add tools from opts to request body (same as native Anthropic provider)

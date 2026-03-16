@@ -8,7 +8,7 @@ defmodule ReqLLM.Integration.StreamingOrchestrationTest do
 
   use ExUnit.Case, async: false
 
-  alias ReqLLM.{Context, Streaming}
+  alias ReqLLM.{Context, StreamResponse, Streaming}
 
   @moduletag category: :streaming, integration: true
 
@@ -130,6 +130,94 @@ defmodule ReqLLM.Integration.StreamingOrchestrationTest do
         send(mock_server_pid, :stop)
       end
     end
+
+    test "fully consumed streams clean up their StreamServer without losing metadata" do
+      {:ok, model} = ReqLLM.model("openrouter:google/gemini-3-flash-preview")
+      before_pids = MapSet.new(Process.list())
+
+      {:ok, stream_response} =
+        Streaming.start_stream(
+          ReqLLM.Providers.OpenRouter,
+          model,
+          Context.new("Hello"),
+          fixture: "streaming"
+        )
+
+      stream_server_pid = await_stream_server(before_pids, model.id)
+
+      assert is_pid(stream_server_pid)
+      assert Process.alive?(stream_server_pid)
+
+      text = StreamResponse.text(stream_response)
+
+      assert byte_size(text) > 0
+      assert wait_until(fn -> not Process.alive?(stream_server_pid) end)
+      assert StreamResponse.finish_reason(stream_response) == :stop
+    end
+
+    test "metadata-only access cleans up completed streams after the idle timeout" do
+      {:ok, model} = ReqLLM.model("openrouter:google/gemini-3-flash-preview")
+      before_pids = MapSet.new(Process.list())
+
+      {:ok, stream_response} =
+        Streaming.start_stream(
+          ReqLLM.Providers.OpenRouter,
+          model,
+          Context.new("Hello"),
+          fixture: "streaming",
+          completion_cleanup_after: 20
+        )
+
+      stream_server_pid = await_stream_server(before_pids, model.id)
+
+      assert is_pid(stream_server_pid)
+      assert StreamResponse.finish_reason(stream_response) == :stop
+      assert wait_until(fn -> not Process.alive?(stream_server_pid) end)
+    end
+
+    test "metadata access before streaming still allows consumption before idle cleanup" do
+      {:ok, model} = ReqLLM.model("openrouter:google/gemini-3-flash-preview")
+      before_pids = MapSet.new(Process.list())
+
+      {:ok, stream_response} =
+        Streaming.start_stream(
+          ReqLLM.Providers.OpenRouter,
+          model,
+          Context.new("Hello"),
+          fixture: "streaming",
+          completion_cleanup_after: 1_000
+        )
+
+      stream_server_pid = await_stream_server(before_pids, model.id)
+
+      assert is_pid(stream_server_pid)
+      assert StreamResponse.finish_reason(stream_response) == :stop
+      assert Process.alive?(stream_server_pid)
+
+      text = StreamResponse.text(stream_response)
+
+      assert byte_size(text) > 0
+      assert wait_until(fn -> not Process.alive?(stream_server_pid) end)
+    end
+
+    test "partially consumed streams cancel their StreamServer" do
+      {:ok, model} = ReqLLM.model("openrouter:google/gemini-3-flash-preview")
+      before_pids = MapSet.new(Process.list())
+
+      {:ok, stream_response} =
+        Streaming.start_stream(
+          ReqLLM.Providers.OpenRouter,
+          model,
+          Context.new("Hello"),
+          fixture: "streaming"
+        )
+
+      stream_server_pid = await_stream_server(before_pids, model.id)
+
+      assert is_pid(stream_server_pid)
+      assert [_chunk | _] = stream_response.stream |> Stream.take(1) |> Enum.to_list()
+      assert wait_until(fn -> not Process.alive?(stream_server_pid) end)
+    end
   end
 
   describe "error handling structure" do
@@ -179,6 +267,45 @@ defmodule ReqLLM.Integration.StreamingOrchestrationTest do
 
       :stop ->
         :ok
+    end
+  end
+
+  defp await_stream_server(before_pids, model_id, attempts \\ 50)
+
+  defp await_stream_server(_before_pids, _model_id, 0), do: nil
+
+  defp await_stream_server(before_pids, model_id, attempts) do
+    stream_server_pid =
+      Process.list()
+      |> Enum.reject(&MapSet.member?(before_pids, &1))
+      |> Enum.find(fn pid ->
+        match?(%ReqLLM.StreamServer{model: %LLMDB.Model{id: ^model_id}}, stream_server_state(pid))
+      end)
+
+    if is_pid(stream_server_pid) do
+      stream_server_pid
+    else
+      Process.sleep(20)
+      await_stream_server(before_pids, model_id, attempts - 1)
+    end
+  end
+
+  defp stream_server_state(pid) do
+    :sys.get_state(pid)
+  catch
+    :exit, _ -> nil
+  end
+
+  defp wait_until(fun, attempts \\ 50)
+
+  defp wait_until(_fun, 0), do: false
+
+  defp wait_until(fun, attempts) do
+    if fun.() do
+      true
+    else
+      Process.sleep(20)
+      wait_until(fun, attempts - 1)
     end
   end
 end

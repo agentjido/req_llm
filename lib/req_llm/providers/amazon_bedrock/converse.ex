@@ -538,12 +538,8 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
 
   # Regular message (user, assistant, system)
   defp encode_message(%Message{role: role, content: content}) do
-    # Converse API only accepts "user" or "assistant" roles
-    # Tool results must be wrapped in a "user" message
-    normalized_role = if role == :tool, do: :user, else: role
-
     %{
-      "role" => Atom.to_string(normalized_role),
+      "role" => Atom.to_string(role),
       "content" => encode_content(content)
     }
   end
@@ -661,7 +657,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
   defp parse_message(nil), do: nil
 
   defp parse_message(message_data) do
-    role = String.to_atom(message_data["role"])
+    role = parse_role(message_data["role"])
     content_blocks = message_data["content"] || []
 
     # Separate tool calls from regular content
@@ -676,6 +672,12 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
       %{message | tool_calls: tool_calls}
     end
   end
+
+  defp parse_role("user"), do: :user
+  defp parse_role("assistant"), do: :assistant
+  defp parse_role("system"), do: :system
+  defp parse_role("tool"), do: :tool
+  defp parse_role(_), do: :assistant
 
   # Parse content and separate tool calls from regular content
   defp parse_content_with_tool_calls(content_blocks) when is_list(content_blocks) do

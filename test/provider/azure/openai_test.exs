@@ -257,6 +257,89 @@ defmodule ReqLLM.Providers.Azure.OpenAITest do
       assert usage.reasoning_tokens == 75
     end
 
+    test "infers reasoning tokens from reasoning_content in choices" do
+      body = %{
+        "usage" => %{
+          "prompt_tokens" => 8,
+          "completion_tokens" => 10,
+          "total_tokens" => 18
+        },
+        "choices" => [
+          %{
+            "index" => 0,
+            "message" => %{
+              "content" => "The answer is 84.",
+              "reasoning_content" => "Let me think about 12 * 7...",
+              "role" => "assistant"
+            }
+          }
+        ]
+      }
+
+      {:ok, usage} = Azure.OpenAI.extract_usage(body, nil)
+
+      reasoning_text = "Let me think about 12 * 7..."
+      answer_text = "The answer is 84."
+
+      expected =
+        round(
+          10 * String.length(reasoning_text) /
+            (String.length(reasoning_text) + String.length(answer_text))
+        )
+
+      assert usage.reasoning_tokens == expected
+    end
+
+    test "prefers completion_tokens_details over reasoning_content inference" do
+      body = %{
+        "usage" => %{
+          "prompt_tokens" => 100,
+          "completion_tokens" => 200,
+          "total_tokens" => 300,
+          "completion_tokens_details" => %{
+            "reasoning_tokens" => 75
+          }
+        },
+        "choices" => [
+          %{
+            "index" => 0,
+            "message" => %{
+              "content" => "Answer",
+              "reasoning_content" => "Some reasoning",
+              "role" => "assistant"
+            }
+          }
+        ]
+      }
+
+      {:ok, usage} = Azure.OpenAI.extract_usage(body, nil)
+
+      assert usage.reasoning_tokens == 75
+    end
+
+    test "does not infer reasoning tokens when no reasoning_content" do
+      body = %{
+        "usage" => %{
+          "prompt_tokens" => 10,
+          "completion_tokens" => 20,
+          "total_tokens" => 30
+        },
+        "choices" => [
+          %{
+            "index" => 0,
+            "message" => %{
+              "content" => "Hello!",
+              "role" => "assistant"
+            }
+          }
+        ]
+      }
+
+      {:ok, usage} = Azure.OpenAI.extract_usage(body, nil)
+
+      assert usage.reasoning_tokens == 0
+    end
+
     test "returns error when no usage data" do
       body = %{"choices" => []}
 

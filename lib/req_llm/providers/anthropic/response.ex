@@ -107,21 +107,20 @@ defmodule ReqLLM.Providers.Anthropic.Response do
             _ -> :unknown
           end
 
-        usage = Map.get(data, "usage", %{})
+        raw_usage = Map.get(data, "usage", %{})
 
         chunks = [ReqLLM.StreamChunk.meta(%{finish_reason: finish_reason, terminal?: true})]
 
         # Add usage chunk if present
-        if usage == %{} do
+        if raw_usage == %{} do
           chunks
         else
-          usage_chunk = ReqLLM.StreamChunk.meta(%{usage: usage})
+          usage_chunk = ReqLLM.StreamChunk.meta(%{usage: parse_usage(raw_usage)})
           [usage_chunk | chunks]
         end
 
       %{"type" => "ping"} ->
-        # Keep-alive ping, no content
-        []
+        [ReqLLM.StreamChunk.meta(%{keepalive?: true, provider_event: :ping})]
 
       _ ->
         []
@@ -278,7 +277,9 @@ defmodule ReqLLM.Providers.Anthropic.Response do
 
   defp chunk_to_tool_call(_), do: nil
 
-  defp parse_usage(%{"input_tokens" => input, "output_tokens" => output} = usage) do
+  defp parse_usage(usage) when is_map(usage) and map_size(usage) > 0 do
+    input = Map.get(usage, "input_tokens", 0)
+    output = Map.get(usage, "output_tokens", 0)
     cache_read = Map.get(usage, "cache_read_input_tokens", 0)
     cache_creation = Map.get(usage, "cache_creation_input_tokens", 0)
     reasoning_tokens = Map.get(usage, "reasoning_output_tokens", 0)

@@ -73,6 +73,37 @@ defmodule ReqLLM.ProviderTest.Embedding do
           end
 
           @tag category: :embedding
+          test "return_usage includes token counts" do
+            dbug(
+              fn -> "\n[Embedding] model_spec=#{@model_spec}, test=embed_basic_usage" end,
+              component: :test
+            )
+
+            result =
+              ReqLLM.embed(
+                @model_spec,
+                "Hello world",
+                fixture_opts(@provider, "embed_basic", return_usage: true)
+              )
+
+            case result do
+              {:ok, %{embedding: embedding, usage: usage}} ->
+                assert is_list(embedding)
+                refute Enum.empty?(embedding)
+                assert Enum.all?(embedding, &is_number/1)
+
+                assert is_map(usage) or is_nil(usage)
+
+                if usage do
+                  assert usage.input > 0
+                end
+
+              {:error, reason} ->
+                flunk("Expected successful embedding, got error: #{inspect(reason)}")
+            end
+          end
+
+          @tag category: :embedding
           test "batch embedding generation" do
             dbug(
               fn -> "\n[Embedding] model_spec=#{@model_spec}, test=batch_embed" end,

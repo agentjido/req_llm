@@ -597,6 +597,14 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
 
       assert attached.response_steps[:llm_decode_embedding] != nil
     end
+
+    test "attaches usage step", %{model: model, opts: opts} do
+      request = Req.new(url: "/model/cohere.embed-english-v3/invoke", method: :post)
+
+      attached = AmazonBedrock.attach_embedding(request, model, opts)
+
+      assert attached.response_steps[:llm_usage] != nil
+    end
   end
 
   describe "Cohere embedding formatter" do
@@ -763,6 +771,77 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
 
       body = Jason.decode!(request.body)
       refute Map.has_key?(body, "service_tier")
+    end
+  end
+
+  describe "anthropic_beta parameter" do
+    setup do
+      System.put_env("AWS_ACCESS_KEY_ID", "AKIATEST")
+      System.put_env("AWS_SECRET_ACCESS_KEY", "secretTEST")
+      :ok
+    end
+
+    test "includes anthropic_beta in request body when provided" do
+      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      context = Context.new([Context.user("Hello")])
+
+      opts = [
+        access_key_id: "AKIATEST",
+        secret_access_key: "secretTEST",
+        anthropic_beta: ["output-128k-2025-02-19"]
+      ]
+
+      {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+
+      body = Jason.decode!(request.body)
+      assert body["anthropic_beta"] == ["output-128k-2025-02-19"]
+    end
+
+    test "omits anthropic_beta from body when not provided" do
+      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      context = Context.new([Context.user("Hello")])
+
+      opts = [
+        access_key_id: "AKIATEST",
+        secret_access_key: "secretTEST"
+      ]
+
+      {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+
+      body = Jason.decode!(request.body)
+      refute Map.has_key?(body, "anthropic_beta")
+    end
+
+    test "supports multiple beta flags" do
+      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      context = Context.new([Context.user("Hello")])
+
+      opts = [
+        access_key_id: "AKIATEST",
+        secret_access_key: "secretTEST",
+        anthropic_beta: ["output-128k-2025-02-19", "another-beta-flag"]
+      ]
+
+      {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+
+      body = Jason.decode!(request.body)
+      assert body["anthropic_beta"] == ["output-128k-2025-02-19", "another-beta-flag"]
+    end
+
+    test "works from provider_options nesting" do
+      {:ok, model} = ReqLLM.model("amazon-bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+      context = Context.new([Context.user("Hello")])
+
+      opts = [
+        access_key_id: "AKIATEST",
+        secret_access_key: "secretTEST",
+        provider_options: [anthropic_beta: ["output-128k-2025-02-19"]]
+      ]
+
+      {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+
+      body = Jason.decode!(request.body)
+      assert body["anthropic_beta"] == ["output-128k-2025-02-19"]
     end
   end
 

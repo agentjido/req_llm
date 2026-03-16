@@ -172,6 +172,11 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       - `0` - first message, `1` - second, etc.
       """
     ],
+    anthropic_beta: [
+      type: {:list, :string},
+      doc:
+        "Beta feature flags for Anthropic models on Bedrock (e.g., [\"context-1m-2025-08-07\"])"
+    ],
     service_tier: [
       type: {:in, ["priority", "default", "flex"]},
       default: "default",
@@ -506,6 +511,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
         |> ReqLLM.Step.Retry.attach()
         |> put_aws_sigv4(aws_creds)
         |> Req.Request.append_response_steps(llm_decode_embedding: &decode_embedding_response/1)
+        |> Step.Usage.attach(model)
         |> ReqLLM.Step.Fixture.maybe_attach(model, user_opts)
 
       {:error, error} ->
@@ -850,9 +856,13 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     end
   end
 
+  # Cross-region inference profile prefixes.
+  # See: https://docs.aws.amazon.com/bedrock/latest/userguide/inference-profiles-support.html
+  @region_prefixes ["us", "eu", "ap", "apac", "ca", "au", "jp", "us-gov", "global"]
+
   defp strip_region_prefix(model_id) do
     case String.split(model_id, ".", parts: 2) do
-      [region, rest] when region in ["us", "eu", "ap", "ca", "global"] -> rest
+      [region, rest] when region in @region_prefixes -> rest
       _ -> model_id
     end
   end
@@ -1073,15 +1083,12 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   def normalize_model_id(model_id) when is_binary(model_id) do
     # Strip region prefixes from inference profile IDs for metadata lookup
     # (e.g., "us.anthropic.claude-3-sonnet" -> "anthropic.claude-3-sonnet")
-    # (e.g., "global.anthropic.claude-sonnet-4-5" -> "anthropic.claude-sonnet-4-5")
+    # (e.g., "au.anthropic.claude-sonnet-4-5" -> "anthropic.claude-sonnet-4-5")
     #
     # Note: This is ONLY for metadata lookup. The preserve_inference_profile? callback
     # controls whether the prefix is kept in API requests (see prepare_request/4).
     case String.split(model_id, ".", parts: 3) do
-      # Pattern: region.provider.rest where region is known
-      [possible_region, _provider, _rest]
-      when possible_region in ["us", "eu", "ap", "ca", "global"] ->
-        # Strip region prefix for metadata lookup
+      [possible_region, _provider, _rest] when possible_region in @region_prefixes ->
         [_region, rest] = String.split(model_id, ".", parts: 2)
         rest
 
@@ -1143,7 +1150,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
   defp decode_embedding_response({req, %{status: 200} = resp}) do
     if req.private[:llm_fixture_replay] do
-      {req, resp}
+      {req, inject_usage_from_headers(resp)}
     else
       parsed_body = ensure_parsed_body(resp.body)
       model_family = req.options[:model_family]
@@ -1151,7 +1158,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
       case formatter.parse_embedding_response(parsed_body) do
         {:ok, normalized_response} ->
-          {req, %{resp | body: normalized_response}}
+          {req, inject_usage_from_headers(%{resp | body: normalized_response})}
 
         {:error, error} ->
           {req, error}
@@ -1169,6 +1176,43 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
     {req, err}
   end
+
+  defp inject_usage_from_headers(%{body: body, headers: headers} = resp)
+       when is_map(body) do
+    case get_header_value(headers, "x-amzn-bedrock-input-token-count") do
+      nil ->
+        resp
+
+      count_str ->
+        case Integer.parse(count_str) do
+          {count, _} ->
+            usage = %{"prompt_tokens" => count, "total_tokens" => count}
+            %{resp | body: Map.put(body, "usage", usage)}
+
+          :error ->
+            resp
+        end
+    end
+  end
+
+  defp inject_usage_from_headers(resp), do: resp
+
+  defp get_header_value(headers, key) when is_map(headers) do
+    case Map.get(headers, key) do
+      [value | _] -> value
+      _ -> nil
+    end
+  end
+
+  defp get_header_value(headers, key) when is_list(headers) do
+    case List.keyfind(headers, key, 0) do
+      {_, [value | _]} -> value
+      {_, value} when is_binary(value) -> value
+      _ -> nil
+    end
+  end
+
+  defp get_header_value(_, _), do: nil
 
   @impl ReqLLM.Provider
   def thinking_constraints do

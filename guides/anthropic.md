@@ -8,6 +8,27 @@ Access Claude models through ReqLLM's unified interface. Supports all Claude 3+ 
 ANTHROPIC_API_KEY=sk-ant-...
 ```
 
+## Model Specs
+
+For the full model-spec workflow, see [Model Specs](model-specs.md).
+
+Use exact Claude IDs from [LLMDB.xyz](https://llmdb.xyz) when possible. If you need to call a new Claude release before it lands in LLMDB, build a full explicit model spec with `ReqLLM.model!/1`.
+
+### OAuth Access Token (optional)
+
+If your Anthropic setup uses OAuth, pass an access token and set auth mode:
+
+```elixir
+ReqLLM.generate_text(
+  "anthropic:claude-sonnet-4-5",
+  "Summarize this",
+  auth_mode: :oauth,
+  access_token: System.fetch_env!("ANTHROPIC_ACCESS_TOKEN")
+)
+```
+
+You can also pass these under `provider_options`.
+
 ## Provider Options
 
 Passed via `:provider_options` keyword:

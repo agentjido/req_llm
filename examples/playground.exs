@@ -1,14 +1,4 @@
-Mix.install([
-  {:phoenix_playground, "~> 0.1.8"},
-  # {:jason, "~> 1.4"},
-  {:req_llm, path: "."},
-  {:llm_db, path: "./deps/llm_db", override: true},
-  {:dotenvy, "~> 1.0"}
-])
-
-# Load .env file
-env_map = Dotenvy.source!([".env", System.user_home!() <> "/.env"])
-System.put_env(env_map)
+{:ok, _} = Application.ensure_all_started(:req_llm)
 
 defmodule ReqLLMPlaygroundLive do
   use Phoenix.LiveView

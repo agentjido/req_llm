@@ -1,16 +1,15 @@
 # Mix Tasks Guide
 
-ReqLLM provides powerful Mix tasks for text generation, model coverage validation, and model synchronization. This guide covers all available tasks, their options, and common workflows.
+ReqLLM provides powerful Mix tasks for text generation and model coverage validation. This guide covers all available tasks, their options, and common workflows.
 
 ## Overview
 
-ReqLLM includes three main Mix tasks:
+ReqLLM includes two main Mix tasks:
 
 | Task | Alias | Purpose |
 |------|-------|---------|
 | `mix req_llm.gen` | `mix llm` | Generate text/objects from the command line |
 | `mix req_llm.model_compat` | `mix mc` | Validate model coverage with fixtures |
-| `mix req_llm.model_sync` | `mix ms` | Sync model metadata from models.dev |
 
 ## mix req_llm.gen
 
@@ -393,8 +392,8 @@ mix mc "newprovider"
 #### Updating Model Coverage
 
 ```bash
-# 1. Sync latest metadata
-mix req_llm.model_sync
+# 1. Update llm_db for latest model metadata
+mix deps.update llm_db
 
 # 2. Record fixtures for new models
 mix mc "openai:gpt-5-mini" --record
@@ -415,145 +414,25 @@ mix mc "*:*" --record
 
 See [Fixture Testing Guide](fixture-testing.md) for complete details.
 
-## mix req_llm.model_sync
-
-Synchronize AI model catalog and pricing data from the models.dev API. Essential for keeping model metadata, pricing, and capabilities up-to-date.
-
-### What It Does
-
-1. **Fetches** complete model catalog from models.dev API
-2. **Processes** providers and extracts model data
-3. **Merges** local patches from `priv/models_local/`
-4. **Generates** JSON files for each provider
-5. **Updates** ValidProviders module with available providers
-
-### Basic Usage
-
-```bash
-# Sync all providers (quiet mode)
-mix req_llm.model_sync
-
-# Detailed output with progress
-mix req_llm.model_sync --verbose
-```
-
-### Options
-
-| Option | Alias | Description |
-|--------|-------|-------------|
-| `--verbose` | `-v` | Show detailed progress and statistics |
-
-### Output Structure
-
-After running, files are created/updated in:
-
-```
-priv/models_dev/
-├── anthropic.json         # Anthropic models (Claude, etc.)
-├── openai.json            # OpenAI models (GPT-4, GPT-3.5, etc.)
-├── google.json            # Google models (Gemini, etc.)
-├── groq.json              # Groq models
-├── xai.json               # xAI models (Grok, etc.)
-├── openrouter.json        # OpenRouter proxy models
-└── .catalog_manifest.json # Auto-generated manifest with hash
-
-lib/req_llm/provider/generated/
-└── valid_providers.ex     # Generated list of valid provider atoms
-```
-
-### Local Patches
-
-Local customizations in `priv/models_local/*.json` are automatically merged during sync. This allows you to:
-
-- Add missing models not yet in models.dev
-- Override pricing for enterprise agreements
-- Include custom or private model deployments
-- Exclude specific models from testing
-
-#### Adding Models
-
-Create a patch file in `priv/models_local/openai_patch.json`:
-
-```json
-{
-  "provider": {
-    "id": "openai"
-  },
-  "models": [
-    {
-      "id": "gpt-4o-mini-2024-07-18",
-      "name": "GPT-4o Mini (2024-07-18)",
-      "provider": "openai",
-      "provider_model_id": "gpt-4o-mini-2024-07-18",
-      "type": "chat",
-      "cost": {
-        "input": 0.00015,
-        "output": 0.0006
-      }
-    }
-  ]
-}
-```
-
-#### Excluding Models
-
-To exclude models from validation:
-
-```json
-{
-  "provider": {
-    "id": "xai"
-  },
-  "exclude": [
-    "grok-vision-beta"
-  ]
-}
-```
-
-### When to Run
-
-- **After library updates**: Ensure model compatibility
-- **New provider support**: When providers add new models
-- **Regular maintenance**: Weekly or monthly for pricing updates
-- **Before production**: Always sync before deploying
-
-### Example Output
-
-```
-Syncing models for openai...
-✓ Fetched 45 models from models.dev
-✓ Found 1 patch file: priv/models_local/openai_patch.json  
-✓ Merged 3 patch models
-✓ Saved 48 models to priv/models_dev/openai.json
-```
-
-See [Model Metadata Guide](model-metadata.md) for more details on the metadata system.
-
 ## Common Workflows
 
 ### Initial Setup
 
 ```bash
-# 1. Sync model metadata
-mix req_llm.model_sync --verbose
-
-# 2. Validate sample models
+# 1. Validate sample models
 mix mc --sample
 
-# 3. Test a quick generation
+# 2. Test a quick generation
 mix req_llm.gen "Hello, world!" --model openai:gpt-4o-mini
 ```
 
 ### Before Deploying
 
 ```bash
-# 1. Sync latest models
-mix req_llm.model_sync
-
-# 2. Validate all models
+# 1. Validate all models
 mix mc "*:*"
 
-# 3. Check coverage report
+# 2. Check coverage report
 mix mc
 ```
 
@@ -577,13 +456,10 @@ cat > priv/models_local/newprovider.json <<EOF
 }
 EOF
 
-# 2. Sync to apply patch
-mix req_llm.model_sync
-
-# 3. Test the model
+# 2. Test the model
 mix req_llm.gen "Hello" --model newprovider:model-v1
 
-# 4. Record fixtures
+# 3. Record fixtures
 mix mc "newprovider:*" --record
 ```
 
@@ -591,14 +467,14 @@ mix mc "newprovider:*" --record
 
 ```bash
 # Weekly maintenance workflow
-mix req_llm.model_sync --verbose
+mix deps.update llm_db
 mix mc --sample --record
 mix mc
 ```
 
 ## Best Practices
 
-1. **Run sync regularly**: Keep model metadata up-to-date
+1. **Update llm_db regularly**: Keep model metadata up-to-date with `mix deps.update llm_db`
 2. **Use samples for development**: Fast validation with `mix mc --sample`
 3. **Record incrementally**: Don't re-record all fixtures at once
 4. **Validate before commits**: Run `mix mc` before pushing code
@@ -607,25 +483,13 @@ mix mc
 
 ## Troubleshooting
 
-### Sync Issues
-
-```bash
-# Network error
-Error: Failed to fetch models.dev data
-# Check internet connection and API status
-
-# Permission error
-Error: Failed to write priv/models_dev/openai.json
-# Ensure write access to priv/ directory
-```
-
 ### Validation Issues
 
 ```bash
 # Missing fixtures
 mix mc anthropic
 Skipping anthropic:claude-3-opus (not in registry)
-# Run: mix req_llm.model_sync
+# Update llm_db: mix deps.update llm_db
 
 # API key missing
 Error: API key not found for anthropic
@@ -660,6 +524,5 @@ ReqLLM's Mix tasks provide a complete toolkit for:
 
 - **Generating** text and objects from any supported model
 - **Validating** model coverage with comprehensive fixture-based tests
-- **Syncing** model metadata from models.dev with local customization
 
 All tasks work together to ensure ReqLLM maintains high-quality support across 135+ models.

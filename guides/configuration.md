@@ -10,8 +10,6 @@ config :req_llm,
   # HTTP timeouts (all values in milliseconds)
   receive_timeout: 120_000,          # Default response timeout
   stream_receive_timeout: 120_000,   # Streaming chunk timeout
-  req_connect_timeout: 60_000,       # TCP connection timeout
-  req_pool_timeout: 120_000,         # Connection pool checkout timeout
   metadata_timeout: 120_000,         # Streaming metadata collection timeout
   thinking_timeout: 300_000,         # Extended timeout for reasoning models
   image_receive_timeout: 120_000,    # Image generation timeout
@@ -74,22 +72,6 @@ Per-request override:
 
 ```elixir
 ReqLLM.stream_text("anthropic:claude-haiku-4-5", "Hello", metadata_timeout: 60_000)
-```
-
-### `req_connect_timeout` (default: 60,000ms)
-
-TCP connection establishment timeout.
-
-```elixir
-config :req_llm, req_connect_timeout: 30_000
-```
-
-### `req_pool_timeout` (default: 120,000ms)
-
-Maximum time to wait for a connection from the pool. Increase for high-concurrency scenarios.
-
-```elixir
-config :req_llm, req_pool_timeout: 180_000
 ```
 
 ### `image_receive_timeout` (default: 120,000ms)

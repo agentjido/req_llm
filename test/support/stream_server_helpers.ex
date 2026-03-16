@@ -41,6 +41,14 @@ defmodule ReqLLM.Test.StreamServerHelpers do
       [StreamChunk.meta(%{usage: usage})]
     end
 
+    def decode_stream_event(
+          %{data: %{"choices" => [%{"finish_reason" => reason}]}},
+          _model
+        )
+        when is_binary(reason) do
+      [StreamChunk.meta(%{finish_reason: reason})]
+    end
+
     def decode_stream_event(_event, _model), do: []
 
     def prepare_request(_op, _model, _data, _opts), do: {:error, :not_implemented}

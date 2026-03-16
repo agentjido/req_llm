@@ -86,6 +86,20 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert request.options.api_key == custom_key
     end
 
+    test "attach supports oauth access_token auth" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+      oauth_token = "oauth-anthropic-token-123"
+
+      request =
+        Req.new()
+        |> Anthropic.attach(model,
+          provider_options: [auth_mode: :oauth, access_token: oauth_token]
+        )
+
+      assert request.headers["authorization"] == ["Bearer #{oauth_token}"]
+      refute Map.has_key?(request.headers, "x-api-key")
+    end
+
     test "error handling for invalid configurations" do
       {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       prompt = "Hello world"
@@ -552,6 +566,18 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert error.status == 401
       assert error.reason =~ "Anthropic API error"
       assert error.response_body == error_body
+    end
+  end
+
+  describe "streaming response decoding" do
+    test "decode_stream_event returns keepalive meta chunk for ping events" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+      event = %{data: %{"type" => "ping"}}
+
+      assert [%ReqLLM.StreamChunk{} = chunk] = Anthropic.decode_stream_event(event, model)
+      assert chunk.type == :meta
+      assert chunk.metadata[:keepalive?] == true
+      assert chunk.metadata[:provider_event] == :ping
     end
   end
 

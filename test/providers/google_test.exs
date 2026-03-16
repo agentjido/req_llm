@@ -201,6 +201,89 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert is_list(tool_def["functionDeclarations"])
     end
 
+    test "encode_body strips atom-keyed forbidden fields from tool schemas" do
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
+      context = context_fixture()
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "register_company",
+          description: "Register company",
+          parameter_schema: %{
+            :type => :object,
+            :required => [:company],
+            :properties => %{
+              :company => %{
+                :type => :object,
+                :required => [:name, :address],
+                :properties => %{
+                  :name => %{type: :string},
+                  :address => %{
+                    :type => :object,
+                    :required => [:city],
+                    :properties => %{city: %{type: :string}},
+                    :additionalProperties => false
+                  }
+                },
+                :additionalProperties => false
+              }
+            },
+            :additionalProperties => false,
+            :"$schema" => "https://json-schema.org/draft/2020-12/schema"
+          },
+          callback: fn _ -> {:ok, %{}} end
+        )
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          tools: [tool],
+          operation: :chat
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+      [tool_def] = decoded["tools"]
+      [function_def] = tool_def["functionDeclarations"]
+      parameters = function_def["parameters"]
+      company = parameters["properties"]["company"]
+      address = company["properties"]["address"]
+
+      refute Map.has_key?(parameters, "$schema")
+      refute Map.has_key?(parameters, "additionalProperties")
+      refute Map.has_key?(company, "additionalProperties")
+      refute Map.has_key?(address, "additionalProperties")
+    end
+
+    test "encode_body with empty tools list and tool_choice omits toolConfig" do
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
+      context = context_fixture()
+
+      # Create a mock request mimicking Jido AI's default behavior
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          tools: [],
+          tool_choice: :auto,
+          operation: :chat
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      # Ensure both tools and toolConfig are completely omitted when tools is empty
+      refute Map.has_key?(decoded, "tools"), "tools array should be omitted"
+
+      refute Map.has_key?(decoded, "toolConfig"),
+             "toolConfig should not be attached if there are no tools"
+    end
+
     test "encode_body includes tool_result name and structured response" do
       {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
 
@@ -764,9 +847,7 @@ defmodule ReqLLM.Providers.GoogleTest do
         opts = [reasoning_effort: effort]
         {translated_opts, _warnings} = Google.translate_options(:chat, model, opts)
 
-        provider_opts = Keyword.get(translated_opts, :provider_options, [])
-
-        assert Keyword.get(provider_opts, :google_thinking_budget) == expected_budget,
+        assert Keyword.get(translated_opts, :google_thinking_budget) == expected_budget,
                "Expected reasoning_effort #{inspect(effort)} to map to budget #{expected_budget}"
       end
     end
@@ -1371,8 +1452,7 @@ defmodule ReqLLM.Providers.GoogleTest do
         {"https://example.com/file.mp3", "audio/mpeg"},
         {"https://example.com/file.mp4", "video/mp4"},
         {"https://example.com/file.m4a", "audio/mp4"},
-        {"https://example.com/file.wav", "audio/wav"},
-        {"https://example.com/file.unknown", "application/octet-stream"}
+        {"https://example.com/file.wav", "audio/wav"}
       ]
 
       for {url, expected_mime} <- test_cases do
@@ -1402,6 +1482,52 @@ defmodule ReqLLM.Providers.GoogleTest do
         assert part["fileData"]["mimeType"] == expected_mime,
                "Expected #{expected_mime} for #{url}, got #{part["fileData"]["mimeType"]}"
       end
+    end
+
+    test "encode_body omits mimeType for URLs with unrecognizable extensions" do
+      url = "https://example.com/file.unknown"
+      image_url_part = ReqLLM.Message.ContentPart.image_url(url)
+
+      message = %ReqLLM.Message{role: :user, content: [image_url_part]}
+      context = %ReqLLM.Context{messages: [message]}
+
+      mock_request = %Req.Request{
+        options: [context: context, id: "gemini-1.5-flash", stream: false]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      [user_msg] = decoded["contents"]
+      [part] = user_msg["parts"]
+
+      assert part["fileData"]["fileUri"] == url
+
+      refute Map.has_key?(part["fileData"], "mimeType"),
+             "mimeType should be omitted for unrecognizable extensions"
+    end
+
+    test "encode_body omits mimeType for YouTube URLs" do
+      url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+      image_url_part = ReqLLM.Message.ContentPart.image_url(url)
+
+      message = %ReqLLM.Message{role: :user, content: [image_url_part]}
+      context = %ReqLLM.Context{messages: [message]}
+
+      mock_request = %Req.Request{
+        options: [context: context, id: "gemini-1.5-flash", stream: false]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      [user_msg] = decoded["contents"]
+      [part] = user_msg["parts"]
+
+      assert part["fileData"]["fileUri"] == url
+
+      refute Map.has_key?(part["fileData"], "mimeType"),
+             "mimeType should be omitted for YouTube URLs so Gemini can infer it"
     end
 
     test "encode_body strips query params when inferring mime type from URL" do

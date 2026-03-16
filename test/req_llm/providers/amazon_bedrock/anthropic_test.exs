@@ -311,7 +311,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.AnthropicTest do
       assert stream_chunk.type == :meta
       # When usage is present, the usage chunk is returned first
       # The finish_reason chunk comes after but we only return the first
-      assert stream_chunk.metadata[:usage]["output_tokens"] == 42
+      assert stream_chunk.metadata[:usage][:output_tokens] == 42
     end
 
     test "parses content block start" do

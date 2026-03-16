@@ -1,47 +1,43 @@
 # Model Metadata
 
-ReqLLM maintains a comprehensive registry of AI models from various providers, automatically synchronized from the [models.dev](https://models.dev) API with support for local patches and overrides.
+LLMDB is the model registry behind ReqLLM. Browse the current catalog on [LLMDB.xyz](https://llmdb.xyz).
+
+This guide is about shared registry metadata. If you only need to call a model that is not in the registry yet, start with the [Model Specs](model-specs.md) guide. You do not need a local patch just to make a request.
 
 ## Overview
 
 The model metadata system provides:
-- **Automatic synchronization** from models.dev for up-to-date model information
+- **Automatic metadata** via the `llm_db` dependency, sourced from models.dev
+- **Browsable catalog** via [LLMDB.xyz](https://llmdb.xyz)
 - **Local patch system** for adding missing models or overriding metadata
+- **Explicit model-spec path** for using models before they land in the registry
 - **Seamless integration** with no provider configuration changes needed
-- **Persistent customizations** that survive sync operations
+- **Persistent customizations** that survive dependency updates
 
 ## Model Metadata Flow
 
-### 1. Upstream Synchronization
+### 1. Upstream Metadata via llm_db
 
-ReqLLM fetches model metadata from the models.dev API, which provides:
+Model metadata is provided by the `llm_db` dependency, which sources data from the models.dev API. This includes:
 - Model capabilities (text generation, embedding, vision, etc.)
 - Pricing information (input/output token costs)
 - Context limits and output limits
 - Supported modalities (text, images, audio)
 - Provider-specific details
 
+To get the latest model metadata, update the dependency:
+
 ```bash
-# Sync all providers from models.dev
-mix req_llm.model_sync
-
-# Sync specific provider only
-mix req_llm.model_sync openai
-
-# Verbose output shows detailed sync process
-mix req_llm.model_sync --verbose
+mix deps.update llm_db
 ```
+
+If the model is still missing after that, use the [Model Specs](model-specs.md) path first. Add or patch registry metadata only when you want the model to be shared, discoverable, and available to tooling like `mix mc`.
 
 ### 2. Local Patch Integration
 
-During sync, ReqLLM automatically discovers and merges local patches:
+ReqLLM automatically discovers and merges local patches from `priv/models_local/` on top of the `llm_db` data.
 
-1. **Fetch** latest metadata from models.dev API
-2. **Discover** patch files in `priv/models_local/`
-3. **Merge** patch models into provider data
-4. **Save** merged result to `priv/models_dev/`
-
-No additional commands or configuration needed!
+Use this when you want missing models to behave like first-class registry entries for the whole codebase, not when you just need to make one request.
 
 ## File Structure
 
@@ -117,7 +113,7 @@ Patch files use the same JSON structure as upstream metadata:
 
 ## Common Use Cases
 
-### Adding Missing Models
+### Adding Missing Models To The Shared Registry
 
 Some models may not be available in the upstream registry yet:
 
@@ -163,7 +159,7 @@ Adjust costs for enterprise pricing or different regions:
 }
 ```
 
-### Adding Custom Models
+### Adding Custom Models To The Shared Registry
 
 Include private or custom model deployments:
 
@@ -192,7 +188,7 @@ Include private or custom model deployments:
 
 ```elixir
 # Get model details
-{:ok, model} = ReqLLM.Model.from("openai:gpt-4o")
+{:ok, model} = ReqLLM.model("openai:gpt-4o")
 
 # Check model capabilities  
 model.capabilities.tool_call  # true
@@ -211,53 +207,16 @@ model.limit.context  # 128000 (input limit)
 
 ```elixir
 # All models for a provider
-models = ReqLLM.Model.list_for_provider(:openai)
-
-# Filter by capability
-embedding_models = ReqLLM.Model.list_for_provider(:openai)
-|> Enum.filter(&(&1._metadata["type"] == "embedding"))
-
-# Filter by cost
-affordable_models = ReqLLM.Model.list_for_provider(:openai)
-|> Enum.filter(&(&1.cost.input < 0.001))
+models = LLMDB.models(:openai)
+specs = Enum.map(models, &LLMDB.Model.spec/1)
 ```
 
-## Sync Command Reference
+## Updating Model Metadata
 
-### Basic Usage
+Model metadata ships with the `llm_db` package dependency. To get the latest models, pricing, and capabilities:
 
 ```bash
-# Sync all providers
-mix req_llm.model_sync
-
-# Sync specific provider
-mix req_llm.model_sync openai
-
-# Multiple providers
-mix req_llm.model_sync openai anthropic
-```
-
-### Advanced Options
-
-```bash
-# Verbose output (shows patch merging)
-mix req_llm.model_sync --verbose
-
-# Force refresh (ignores cache)  
-mix req_llm.model_sync --force
-
-# Dry run (preview changes without saving)
-mix req_llm.model_sync --dry-run
-```
-
-### Sync Output
-
-```
-Syncing models for openai...
-✓ Fetched 45 models from models.dev
-✓ Found 1 patch file: priv/models_local/openai_patch.json  
-✓ Merged 3 patch models
-✓ Saved 48 models to priv/models_dev/openai.json
+mix deps.update llm_db
 ```
 
 
@@ -266,10 +225,12 @@ Syncing models for openai...
 
 ## Integration with Providers
 
-The patch system works transparently with all ReqLLM providers. No code changes needed - just run `mix req_llm.model_sync` and your patches are automatically integrated into the model registry.
+The patch system works transparently with all ReqLLM providers. No code changes needed. Local patches in `priv/models_local/` are automatically integrated into the model registry at runtime.
 
 This enables you to:
 - Add missing models immediately without waiting for upstream updates
 - Override metadata for your specific deployment requirements
 - Include custom or private models alongside public ones
 - Maintain local customizations across sync operations
+
+If your only goal is to call a missing model right now, the [Model Specs](model-specs.md) guide is the simpler path.

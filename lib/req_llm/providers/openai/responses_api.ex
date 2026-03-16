@@ -482,10 +482,10 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   # ========================================================================
 
   defp build_request_headers(model, opts) do
-    api_key = ReqLLM.Keys.get!(model, opts)
+    credential = ReqLLM.Auth.resolve!(model, opts)
 
     [
-      {"Authorization", "Bearer " <> api_key},
+      {"Authorization", "Bearer " <> credential.token},
       {"Content-Type", "application/json"}
     ]
   end
@@ -505,9 +505,37 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       provider_opts[:previous_response_id] ||
         extract_previous_response_id_from_context(context)
 
-    {input, tool_messages, reasoning_items} =
+    {input, _tool_messages, reasoning_items} =
       Enum.reduce(context.messages, {[], [], []}, fn msg, {input_acc, tool_acc, reasoning_acc} ->
         case msg.role do
+          :tool when is_binary(msg.tool_call_id) ->
+            # Encode tool results inline as function_call_output items so that
+            # every function_call in the input array has a matching output.
+            # Previously, tool messages were collected separately and only the
+            # most recent round's outputs were appended, which caused
+            # "No tool output found for function call" errors on multi-turn
+            # tool calling with the Responses API.
+            output =
+              case ReqLLM.ToolResult.output_from_message(msg) do
+                nil -> extract_tool_output_text(msg.content)
+                value -> value
+              end
+
+            output_string =
+              cond do
+                is_binary(output) -> output
+                is_map(output) or is_list(output) -> Jason.encode!(output)
+                true -> to_string(output)
+              end
+
+            encoded = %{
+              "type" => "function_call_output",
+              "call_id" => msg.tool_call_id,
+              "output" => output_string
+            }
+
+            {input_acc ++ [encoded], tool_acc, reasoning_acc}
+
           :tool ->
             {input_acc, [msg | tool_acc], reasoning_acc}
 
@@ -524,7 +552,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
               {input_acc, tool_acc, reasoning_acc ++ new_reasoning}
             else
               if msg.tool_calls != nil and msg.tool_calls != [] do
-                {input_acc, tool_acc, reasoning_acc ++ new_reasoning}
+                function_calls = encode_tool_calls_as_function_calls(msg.tool_calls)
+                {input_acc ++ function_calls, tool_acc, reasoning_acc ++ new_reasoning}
               else
                 {input_acc ++ [%{"role" => "assistant", "content" => content}], tool_acc,
                  reasoning_acc ++ new_reasoning}
@@ -546,25 +575,15 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         end
       end)
 
-    pending_tool_call_ids = find_pending_tool_call_ids(context.messages)
-
-    tool_outputs_from_context =
-      tool_messages
-      |> Enum.reverse()
-      |> Enum.filter(fn msg -> msg.tool_call_id in pending_tool_call_ids end)
-      |> extract_tool_outputs_from_messages()
-
-    tool_outputs =
-      case provider_opts[:tool_outputs] do
-        nil -> tool_outputs_from_context
-        [] -> tool_outputs_from_context
-        explicit_outputs -> explicit_outputs
-      end
-
+    # Only append explicit provider-supplied tool_outputs (e.g. for manual overrides).
+    # Context-based tool outputs are now encoded inline above.
     input =
-      case tool_outputs do
-        [] -> input
-        outputs -> input ++ encode_tool_outputs(outputs)
+      case provider_opts[:tool_outputs] do
+        outputs when is_list(outputs) and outputs != [] ->
+          input ++ encode_tool_outputs(outputs)
+
+        _ ->
+          input
       end
 
     max_output_tokens =
@@ -601,7 +620,9 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> maybe_put_string("text", text_format)
 
     if previous_response_id do
-      Map.put(body, "previous_response_id", previous_response_id)
+      body
+      |> Map.put("previous_response_id", previous_response_id)
+      |> Map.put("store", true)
     else
       body
     end
@@ -813,52 +834,12 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     end)
   end
 
-  # Find tool_call_ids that need their outputs sent.
-  # A tool output needs to be sent if:
-  # 1. There's a tool message with that call_id
-  # 2. AND there's no assistant message AFTER that tool message (meaning the output hasn't been consumed yet)
-  #
-  # Flow: assistant(tool_calls) → tool(result) → [assistant(answer)] OR [no response yet]
-  # If the assistant(answer) exists, the tool output was already sent.
-  # If it doesn't exist, we need to send the tool output.
-  defp find_pending_tool_call_ids(messages) do
-    # Process messages in reverse order to find:
-    # 1. All tool messages that appear AFTER the last assistant message
-    # These are tool outputs that haven't been sent yet
-    messages
-    |> Enum.reverse()
-    |> Enum.reduce_while([], fn msg, acc ->
-      case msg.role do
-        :tool when is_binary(msg.tool_call_id) ->
-          # This tool message appears before any assistant response
-          # (in reverse order means it's after all assistants in forward order)
-          {:cont, [msg.tool_call_id | acc]}
-
-        :assistant ->
-          # We hit an assistant message - any tool messages before this (in reverse)
-          # have already been sent, so stop collecting
-          {:halt, acc}
-
-        _ ->
-          {:cont, acc}
-      end
-    end)
-  end
-
-  defp extract_tool_outputs_from_messages(tool_messages) do
-    Enum.map(tool_messages, fn msg ->
-      output =
-        case ReqLLM.ToolResult.output_from_message(msg) do
-          nil -> extract_tool_output_text(msg.content)
-          value -> value
-        end
-
-      %{
-        call_id: msg.tool_call_id,
-        output: output
-      }
-    end)
-  end
+  # NOTE: find_pending_tool_call_ids/1 and extract_tool_outputs_from_messages/1
+  # were removed. Tool outputs are now encoded inline in build_request_body/4
+  # during the message reduce, ensuring every function_call in the input array
+  # has a matching function_call_output. The previous approach only included
+  # outputs from the most recent tool round, causing "No tool output found"
+  # errors on multi-turn tool calling.
 
   defp extract_tool_output_text(content_parts) do
     content_parts
@@ -892,6 +873,17 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp encode_tool_outputs(_), do: []
+
+  defp encode_tool_calls_as_function_calls(tool_calls) do
+    Enum.map(tool_calls, fn tc ->
+      %{
+        "type" => "function_call",
+        "call_id" => tc.id,
+        "name" => ReqLLM.ToolCall.name(tc),
+        "arguments" => ReqLLM.ToolCall.args_json(tc)
+      }
+    end)
+  end
 
   defp encode_tools_if_any(request) do
     case request.options[:tools] do
@@ -946,17 +938,23 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     end
   end
 
-  defp encode_tool_for_responses_api(%ReqLLM.Tool{} = tool) do
+  defp encode_tool_for_responses_api(%ReqLLM.Tool{strict: strict} = tool) do
     schema = ReqLLM.Tool.to_schema(tool)
     function_def = schema["function"]
-    params = normalize_parameters_for_strict(function_def["parameters"])
+
+    params =
+      if strict do
+        normalize_parameters_for_strict(function_def["parameters"])
+      else
+        normalize_parameters(function_def["parameters"])
+      end
 
     %{
       "type" => "function",
       "name" => function_def["name"],
       "description" => function_def["description"],
       "parameters" => params,
-      "strict" => true
+      "strict" => strict
     }
   end
 
@@ -1022,6 +1020,24 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       "type" => "object",
       "properties" => stringify_keys(properties),
       "required" => all_property_names,
+      "additionalProperties" => false
+    }
+  end
+
+  defp normalize_parameters(nil) do
+    %{
+      "type" => "object",
+      "properties" => %{},
+      "additionalProperties" => false
+    }
+  end
+
+  defp normalize_parameters(params) when is_map(params) do
+    properties = params[:properties] || params["properties"] || %{}
+
+    %{
+      "type" => "object",
+      "properties" => stringify_keys(properties),
       "additionalProperties" => false
     }
   end

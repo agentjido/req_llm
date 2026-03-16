@@ -8,6 +8,12 @@ Ultra-fast inference with OpenAI-compatible API and Cerebras-specific optimizati
 CEREBRAS_API_KEY=csk_...
 ```
 
+## Model Specs
+
+For the full model-spec workflow, see [Model Specs](model-specs.md).
+
+Use exact Cerebras IDs from [LLMDB.xyz](https://llmdb.xyz) when possible. If you need to use a model ID before it lands in the registry, use `ReqLLM.model!/1`.
+
 ## Provider Options
 
 No custom provider options - uses OpenAI-compatible defaults with Cerebras-specific handling.

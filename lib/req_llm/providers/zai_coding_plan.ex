@@ -78,7 +78,6 @@ defmodule ReqLLM.Providers.ZaiCodingPlan do
         opts
         |> Map.put(:receive_timeout, timeout)
         |> Map.put(:pool_timeout, timeout)
-        |> Map.put(:connect_options, timeout: timeout)
       end)
 
     ReqLLM.Provider.Defaults.default_attach(__MODULE__, updated_request, model_input, user_opts)

@@ -109,6 +109,44 @@ defmodule ReqLLM.Providers.AnthropicPromptCacheTest do
       assert encoded_tool["cache_control"] == %{"type" => "ephemeral", "ttl" => "1h"}
     end
 
+    test "only injects cache_control into last tool with multiple tools" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+      context = context_fixture()
+
+      make_tool = fn name ->
+        ReqLLM.Tool.new!(
+          name: name,
+          description: "Tool #{name}",
+          parameter_schema: [
+            param: [type: :string, required: true, doc: "Test parameter"]
+          ],
+          callback: fn _ -> {:ok, "result"} end
+        )
+      end
+
+      tools = Enum.map(~w(tool_a tool_b tool_c tool_d tool_e), make_tool)
+
+      {:ok, request} =
+        Anthropic.prepare_request(:chat, model, context,
+          tools: tools,
+          anthropic_prompt_cache: true
+        )
+
+      updated_request = Anthropic.encode_body(request)
+      decoded = Jason.decode!(updated_request.body)
+
+      assert length(decoded["tools"]) == 5
+
+      {init_tools, [last_tool]} = Enum.split(decoded["tools"], -1)
+
+      for tool <- init_tools do
+        refute Map.has_key?(tool, "cache_control"),
+               "Expected no cache_control on #{tool["name"]}, but found one"
+      end
+
+      assert last_tool["cache_control"] == %{"type" => "ephemeral"}
+    end
+
     test "does not inject cache_control when prompt caching disabled" do
       {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       context = context_fixture()

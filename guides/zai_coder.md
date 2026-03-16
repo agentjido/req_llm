@@ -8,6 +8,12 @@ OpenAI-compatible API for Z.AI GLM models (Coding Endpoint).
 ZAI_API_KEY=your-api-key
 ```
 
+## Model Specs
+
+For the full model-spec workflow, see [Model Specs](model-specs.md).
+
+Use exact Z.AI Coder model IDs from [LLMDB.xyz](https://llmdb.xyz) when possible. If you need to work ahead of the registry, use `ReqLLM.model!/1`.
+
 ## Provider Options
 
 No custom provider options - uses OpenAI-compatible defaults.

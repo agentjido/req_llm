@@ -112,7 +112,7 @@ defmodule ReqLLM.Response.Stream do
   defp handle_finish_reason(_meta, acc), do: acc
 
   defp handle_usage(%{usage: usage}, acc) when is_map(usage) do
-    merged = Map.merge(acc.usage || %{}, usage)
+    merged = ReqLLM.Usage.merge(acc.usage || %{}, usage)
     %{acc | usage: merged}
   end
 
@@ -229,7 +229,7 @@ defmodule ReqLLM.Response.Stream do
       usage =
         Map.get(chunk.metadata || %{}, :usage) || Map.get(chunk.metadata || %{}, "usage") || %{}
 
-      Map.merge(acc || %{}, usage)
+      ReqLLM.Usage.merge(acc || %{}, usage)
     end)
   end
 end

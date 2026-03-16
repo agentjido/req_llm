@@ -23,6 +23,12 @@ ReqLLM.generate_text(
 )
 ```
 
+## Model Specs
+
+For the full model-spec workflow, see [Model Specs](model-specs.md).
+
+Azure is a strong fit for the full explicit model specification path because `base_url` is part of the model metadata. Use exact Azure model IDs from [LLMDB.xyz](https://llmdb.xyz) when possible, and use `ReqLLM.model!/1` when you need to pin `base_url` or work ahead of the registry. `deployment` remains a request option.
+
 ## Key Differences from Direct Provider APIs
 
 1. **Custom endpoints**: Each Azure resource has a unique base URL

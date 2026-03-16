@@ -554,7 +554,9 @@ defmodule ReqLLM.Providers.Google do
         :reasoning_effort,
         :reasoning_token_budget,
         :stream,
-        :provider_options
+        :provider_options,
+        :dimensions,
+        :encoding_format
       ] ++
         __MODULE__.supported_provider_options()
 
@@ -750,18 +752,16 @@ defmodule ReqLLM.Providers.Google do
     {reasoning_budget, opts} = Keyword.pop(opts, :reasoning_token_budget)
     {reasoning_effort, opts} = Keyword.pop(opts, :reasoning_effort)
 
+    # Put google_thinking_budget at top level (not nested in provider_options).
+    # translate_options operates on flattened opts; Options.process handles re-nesting.
     opts =
       cond do
         reasoning_budget ->
-          provider_opts = Keyword.get(opts, :provider_options, [])
-          provider_opts = Keyword.put(provider_opts, :google_thinking_budget, reasoning_budget)
-          Keyword.put(opts, :provider_options, provider_opts)
+          Keyword.put(opts, :google_thinking_budget, reasoning_budget)
 
         reasoning_effort ->
           budget = translate_reasoning_effort_to_budget(reasoning_effort, nil)
-          provider_opts = Keyword.get(opts, :provider_options, [])
-          provider_opts = Keyword.put(provider_opts, :google_thinking_budget, budget)
-          Keyword.put(opts, :provider_options, provider_opts)
+          Keyword.put(opts, :google_thinking_budget, budget)
 
         true ->
           opts
@@ -826,6 +826,7 @@ defmodule ReqLLM.Providers.Google do
     generation_config =
       %{}
       |> maybe_put_google_aspect_ratio(request.options[:aspect_ratio])
+      |> maybe_put_google_output_format(request.options[:output_format])
       |> maybe_put(:candidateCount, image_candidate_count(request.options))
 
     generation_config = if generation_config != %{}, do: generation_config
@@ -864,6 +865,33 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp maybe_put_google_aspect_ratio(config, _), do: config
+
+  defp maybe_put_google_output_format(config, nil), do: config
+
+  defp maybe_put_google_output_format(config, format) do
+    case google_image_output_mime_type(format) do
+      nil ->
+        config
+
+      mime_type ->
+        Map.put(
+          config,
+          "imageConfig",
+          Map.put(Map.get(config, "imageConfig", %{}), "outputMimeType", mime_type)
+        )
+    end
+  end
+
+  defp google_image_output_mime_type(:png), do: "image/png"
+  defp google_image_output_mime_type(:jpeg), do: "image/jpeg"
+  defp google_image_output_mime_type(:webp), do: "image/webp"
+  defp google_image_output_mime_type("png"), do: "image/png"
+  defp google_image_output_mime_type("jpeg"), do: "image/jpeg"
+  defp google_image_output_mime_type("webp"), do: "image/webp"
+  defp google_image_output_mime_type("image/png"), do: "image/png"
+  defp google_image_output_mime_type("image/jpeg"), do: "image/jpeg"
+  defp google_image_output_mime_type("image/webp"), do: "image/webp"
+  defp google_image_output_mime_type(_), do: nil
 
   defp parse_size(size) when is_binary(size) do
     case String.split(size, "x") do
@@ -922,7 +950,6 @@ defmodule ReqLLM.Providers.Google do
           case builtin_tools do
             [] ->
               %{}
-              |> maybe_put(:toolConfig, tool_config)
 
             tools ->
               %{tools: tools}
@@ -1397,7 +1424,7 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp maybe_add_thinking_config(config, 0) do
-    config
+    Map.put(config, :thinkingConfig, %{thinkingBudget: 0})
   end
 
   defp convert_google_to_openai_format(%{"candidates" => candidates} = body) do
@@ -1525,7 +1552,7 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp extract_tool_calls(parts) do
-    for %{"functionCall" => %{} = call} <- parts do
+    for %{"functionCall" => %{} = call} = part <- parts do
       call_id = Map.get(call, "id", "tool_call_#{System.unique_integer([:positive])}")
 
       encoded_args =
@@ -1533,7 +1560,7 @@ defmodule ReqLLM.Providers.Google do
         |> Map.get("args", %{})
         |> Jason.encode!()
 
-      %{
+      tc = %{
         "id" => call_id,
         "type" => "function",
         "function" => %{
@@ -1541,6 +1568,13 @@ defmodule ReqLLM.Providers.Google do
           "arguments" => encoded_args
         }
       }
+
+      # Preserve thoughtSignature from Gemini response so consumers can
+      # cache and round-trip it for multi-turn tool calling with thinking models
+      case Map.get(part, "thoughtSignature") do
+        nil -> tc
+        sig -> Map.put(tc, "thought_signature", sig)
+      end
     end
   end
 
@@ -1893,25 +1927,42 @@ defmodule ReqLLM.Providers.Google do
 
   defp encode_single_google_reasoning_detail(_), do: []
 
+  # Gemini 3 models require thoughtSignature on functionCall parts in conversation
+  # history. When proxying through OpenAI-compatible format (which has no concept of
+  # thought_signatures), the signatures are lost during round-trip conversion.
+  # Inject Google's recommended dummy value for history originating from non-Gemini
+  # sources. Real signatures are preferred when available (see thought_signature option).
+  # See: https://ai.google.dev/gemini-api/docs/thought-signatures
+  @thought_sig_dummy Base.encode64("skip_thought_signature_validator")
+
   defp convert_tool_call_to_function_call(%ReqLLM.ToolCall{
          type: "function",
          function: %{name: name, arguments: args}
        }) do
-    %{functionCall: %{name: name, args: Jason.decode!(args)}}
+    %{
+      functionCall: %{name: name, args: Jason.decode!(args)},
+      thoughtSignature: @thought_sig_dummy
+    }
   end
 
   defp convert_tool_call_to_function_call(%{
          "type" => "function",
          "function" => %{"name" => name, "arguments" => args}
        }) do
-    %{functionCall: %{name: name, args: Jason.decode!(args)}}
+    %{
+      functionCall: %{name: name, args: Jason.decode!(args)},
+      thoughtSignature: @thought_sig_dummy
+    }
   end
 
   defp convert_tool_call_to_function_call(%{
          type: "function",
          function: %{name: name, arguments: args}
        }) do
-    %{functionCall: %{name: name, args: Jason.decode!(args)}}
+    %{
+      functionCall: %{name: name, args: Jason.decode!(args)},
+      thoughtSignature: @thought_sig_dummy
+    }
   end
 
   defp convert_tool_call_to_function_call(_), do: nil
@@ -2015,25 +2066,11 @@ defmodule ReqLLM.Providers.Google do
 
       # HTTP/HTTPS URL: use fileData.fileUri (Google-native URL support)
       String.starts_with?(url, "http://") or String.starts_with?(url, "https://") ->
-        mime_type = get_mime_type_from_part(part, url)
-
-        %{
-          fileData: %{
-            fileUri: url,
-            mimeType: mime_type
-          }
-        }
+        build_file_data(part, url)
 
       # GCS URI: gs://bucket/path
       String.starts_with?(url, "gs://") ->
-        mime_type = get_mime_type_from_part(part, url)
-
-        %{
-          fileData: %{
-            fileUri: url,
-            mimeType: mime_type
-          }
-        }
+        build_file_data(part, url)
 
       true ->
         %{text: "[Unsupported URL scheme: #{String.slice(url, 0, 20)}...]"}
@@ -2064,11 +2101,28 @@ defmodule ReqLLM.Providers.Google do
 
   defp convert_content_part(part), do: %{text: to_string(part)}
 
+  # Builds a fileData map, omitting mimeType when it cannot be reliably inferred.
+  # YouTube and other extensionless URLs need mimeType omitted so Gemini can infer it.
+  defp build_file_data(part, url) do
+    mime_type = get_mime_type_from_part(part, url)
+
+    file_data = %{fileUri: url}
+
+    file_data =
+      case mime_type do
+        nil -> file_data
+        "application/octet-stream" -> file_data
+        known -> Map.put(file_data, :mimeType, known)
+      end
+
+    %{fileData: file_data}
+  end
+
   # Helper to extract mime type from part metadata or infer from URL extension
   defp get_mime_type_from_part(part, url) do
     # Try metadata first (if passed through from ContentPart)
     case part do
-      %{image_url: %{media_type: type}} when is_binary(type) -> type
+      %{image_url: %{media_type: type}} when is_binary(type) and type != "" -> type
       _ -> infer_mime_type_from_url(url)
     end
   end
@@ -2088,8 +2142,7 @@ defmodule ReqLLM.Providers.Google do
       ".mp4" -> "video/mp4"
       ".m4a" -> "audio/mp4"
       ".wav" -> "audio/wav"
-      # Fallback
-      _ -> "application/octet-stream"
+      _ -> nil
     end
   end
 
@@ -2195,7 +2248,16 @@ defmodule ReqLLM.Providers.Google do
           name = call["name"]
           args = call["args"] || %{}
           call_id = Map.get(call, "id", "call_#{System.unique_integer([:positive])}")
-          [ReqLLM.StreamChunk.tool_call(name, args, %{id: call_id})]
+          meta = %{id: call_id}
+          # Preserve thoughtSignature from Gemini response for consumers that
+          # need to cache and round-trip it (e.g., OpenAI-compatible proxies)
+          meta =
+            case Map.get(part, "thoughtSignature") do
+              nil -> meta
+              sig -> Map.put(meta, :thought_signature, sig)
+            end
+
+          [ReqLLM.StreamChunk.tool_call(name, args, meta)]
 
         true ->
           []

@@ -5,6 +5,8 @@ defmodule ReqLLM.StreamServer.StreamingTest do
   Covers:
   - Backpressure handling
   - SSE edge cases (large events, incomplete events, multi-line events)
+  - SSE buffer flushing on stream finalization
+  - Default finish_reason metadata
   - Timeout handling
 
   Uses mocked HTTP tasks and the shared MockProvider for isolated testing.
@@ -116,6 +118,103 @@ defmodule ReqLLM.StreamServer.StreamingTest do
       assert {:ok, chunk} = StreamServer.next(server, 100)
       assert chunk.type == :content
       assert chunk.text == "multiline content"
+    end
+  end
+
+  describe "SSE buffer flushing on finalize" do
+    test "flushes buffered event missing trailing blank line on :done" do
+      server = start_server()
+
+      sse_without_terminator = ~s(data: {"choices": [{"delta": {"content": "buffered"}}]}\n)
+      StreamServer.http_event(server, {:data, sse_without_terminator})
+      StreamServer.http_event(server, :done)
+
+      assert {:ok, chunk} = StreamServer.next(server, 100)
+      assert chunk.type == :content
+      assert chunk.text == "buffered"
+      assert :halt = StreamServer.next(server, 100)
+    end
+
+    test "flushes buffered event split across chunks without trailing blank line" do
+      server = start_server()
+
+      StreamServer.http_event(server, {:data, "data: {\"cho"})
+
+      StreamServer.http_event(
+        server,
+        {:data, "ices\": [{\"delta\": {\"content\": \"split\"}}]}\n"}
+      )
+
+      StreamServer.http_event(server, :done)
+
+      assert {:ok, chunk} = StreamServer.next(server, 100)
+      assert chunk.type == :content
+      assert chunk.text == "split"
+      assert :halt = StreamServer.next(server, 100)
+    end
+
+    test "noop when sse_buffer is empty at finalize" do
+      server = start_server()
+
+      sse_data = ~s(data: {"choices": [{"delta": {"content": "complete"}}]}\n\n)
+      StreamServer.http_event(server, {:data, sse_data})
+      StreamServer.http_event(server, :done)
+
+      assert {:ok, chunk} = StreamServer.next(server, 100)
+      assert chunk.text == "complete"
+      assert :halt = StreamServer.next(server, 100)
+    end
+  end
+
+  describe "finish_reason metadata" do
+    test "defaults to :stop when provider sends termination event without finish_reason" do
+      server = start_server()
+
+      sse_data = ~s(data: {"choices": [{"delta": {"content": "hi"}}]}\n\n)
+      done_event = "data: [DONE]\n\n"
+
+      StreamServer.http_event(server, {:data, sse_data})
+      StreamServer.http_event(server, {:data, done_event})
+      StreamServer.http_event(server, :done)
+
+      assert {:ok, metadata} = StreamServer.await_metadata(server, 500)
+      assert metadata.finish_reason == :stop
+    end
+
+    test "defaults to :stop when buffered done event is missing trailing blank line" do
+      server = start_server()
+
+      StreamServer.http_event(server, {:data, "data: [DONE]\n"})
+      StreamServer.http_event(server, :done)
+
+      assert {:ok, metadata} = StreamServer.await_metadata(server, 500)
+      assert metadata.finish_reason == :stop
+    end
+
+    test "sets finish_reason to :incomplete when stream ends without termination event" do
+      server = start_server()
+
+      sse_data = ~s(data: {"choices": [{"delta": {"content": "hi"}}]}\n\n)
+      StreamServer.http_event(server, {:data, sse_data})
+      StreamServer.http_event(server, :done)
+
+      assert {:ok, metadata} = StreamServer.await_metadata(server, 500)
+      assert metadata.finish_reason == :incomplete
+    end
+
+    test "preserves provider-supplied finish_reason" do
+      server = start_server()
+
+      sse_data = ~s(data: {"choices": [{"delta": {"content": "hi"}}]}\n\n)
+      finish_json = Jason.encode!(%{"choices" => [%{"finish_reason" => "tool_use"}]})
+      finish_event = "data: #{finish_json}\n\n"
+
+      StreamServer.http_event(server, {:data, sse_data})
+      StreamServer.http_event(server, {:data, finish_event})
+      StreamServer.http_event(server, :done)
+
+      assert {:ok, metadata} = StreamServer.await_metadata(server, 500)
+      assert metadata.finish_reason == "tool_use"
     end
   end
 

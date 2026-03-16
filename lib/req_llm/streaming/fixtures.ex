@@ -21,7 +21,7 @@ defmodule ReqLLM.Streaming.Fixtures do
 
     @type t :: %__MODULE__{
             url: String.t(),
-            method: :get | :post | :put | :patch | :delete,
+            method: :get | :post | :put | :patch | :delete | :head | :options | :unknown,
             req_headers: map(),
             status: integer() | nil,
             resp_headers: map() | nil
@@ -30,7 +30,11 @@ defmodule ReqLLM.Streaming.Fixtures do
     @doc """
     Creates a new HTTPContext from request parameters.
     """
-    @spec new(String.t(), :get | :post | :put | :patch | :delete, map()) :: t()
+    @spec new(
+            String.t(),
+            :get | :post | :put | :patch | :delete | :head | :options | :unknown,
+            map()
+          ) :: t()
     def new(url, method, headers) do
       %__MODULE__{
         url: url,
@@ -64,10 +68,28 @@ defmodule ReqLLM.Streaming.Fixtures do
           "#{finch_request.scheme}://#{finch_request.host}:#{finch_request.port}#{finch_request.path}"
         end
 
-      method = String.downcase(finch_request.method) |> String.to_atom()
+      method = normalize_http_method(finch_request.method)
 
       new(url, method, Map.new(finch_request.headers))
     end
+
+    defp normalize_http_method(method) when is_binary(method) do
+      case String.downcase(method) do
+        "get" -> :get
+        "post" -> :post
+        "put" -> :put
+        "patch" -> :patch
+        "delete" -> :delete
+        "head" -> :head
+        "options" -> :options
+        _ -> :unknown
+      end
+    end
+
+    defp normalize_http_method(method) when is_atom(method),
+      do: normalize_http_method(Atom.to_string(method))
+
+    defp normalize_http_method(_), do: :unknown
 
     defp sanitize_headers(headers) when is_map(headers) do
       sensitive_keys = [

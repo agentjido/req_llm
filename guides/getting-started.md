@@ -4,7 +4,16 @@ This guide covers your first API call, basic configuration, and the core functio
 
 ## Installation
 
-Add ReqLLM to your dependencies:
+### Igniter Installation
+If your project has [Igniter](https://hexdocs.pm/igniter/readme.html) available, 
+you can install ReqLLM using the command 
+
+```bash
+mix igniter.install req_llm
+```
+
+### Manual Installation
+Add `req_llm` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
@@ -41,7 +50,7 @@ schema = [
 ]
 {:ok, response} = ReqLLM.generate_object("anthropic:claude-haiku-4-5", "Generate a person", schema)
 object = ReqLLM.Response.object(response)
-# object => %{name: "John Doe", age: 30}
+# object => %{"name" => "John Doe", "age" => 30}
 ```
 
 ## Full Response with Usage
@@ -57,13 +66,15 @@ usage = ReqLLM.Response.usage(response)
 
 ## Model Specifications
 
-Specify models as strings, tuples, or structs with optional parameters:
+Specify models as strings, tuples, `%LLMDB.Model{}` structs, or plain-map model specs:
 
 ```elixir
 "anthropic:claude-haiku-4-5"
 {:anthropic, "claude-3-sonnet-20240229", temperature: 0.7}
-%ReqLLM.Model{provider: :anthropic, model: "claude-3-sonnet-20240229", temperature: 0.7}
+ReqLLM.model!(%{provider: :openai, id: "gpt-6-mini", base_url: "http://localhost:8000/v1"})
 ```
+
+See the [Model Specs](model-specs.md) guide for the full model-spec workflow, including exact dated releases and models that are not in LLMDB yet.
 
 ## Key Management
 
@@ -117,4 +128,4 @@ ReqLLM.generate_text!(
 
 ## Available Providers
 
-Run `mix req_llm.model_sync` for up-to-date list of supported models.
+Model metadata is provided by the `llm_db` dependency and browsable on [LLMDB.xyz](https://llmdb.xyz).

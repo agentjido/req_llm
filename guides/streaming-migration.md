@@ -129,11 +129,18 @@ def handle_info({:stream_text, model, messages}, socket) do
   case ReqLLM.stream_text(model, messages) do
     {:ok, response} ->
       # Stream tokens to the client
+      parent = self()
+
       Task.start(fn ->
-        response
-        |> ReqLLM.StreamResponse.tokens()
-        |> Stream.each(&send(self(), {:token, &1}))
-        |> Stream.run()
+        try do
+          response
+          |> ReqLLM.StreamResponse.tokens()
+          |> Stream.each(&send(parent, {:token, &1}))
+          |> Stream.run()
+        rescue
+          e in ReqLLM.Error.API.Stream ->
+            send(parent, {:stream_error, e})
+        end
       end)
 
       # Handle metadata when available

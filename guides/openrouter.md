@@ -8,6 +8,12 @@ Unified API for hundreds of AI models from multiple providers with intelligent r
 OPENROUTER_API_KEY=sk-or-...
 ```
 
+## Model Specs
+
+For the full model-spec workflow, see [Model Specs](model-specs.md).
+
+Use exact OpenRouter model IDs from [LLMDB.xyz](https://llmdb.xyz) when possible. If you need to route to a model that is not in the registry yet, use `ReqLLM.model!/1` and provide the full explicit model spec.
+
 ## Provider Options
 
 Passed via `:provider_options` keyword:
@@ -144,7 +150,7 @@ The `cache_control` metadata is passed directly to the underlying Anthropic API,
 
 Browse available models:
 - [OpenRouter Models](https://openrouter.ai/models)
-- `mix req_llm.model_sync openrouter`
+- Model metadata is provided by the `llm_db` dependency
 
 ## Pricing
 

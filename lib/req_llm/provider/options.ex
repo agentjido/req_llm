@@ -170,10 +170,10 @@ defmodule ReqLLM.Provider.Options do
                                    "Timeout for receiving HTTP responses in milliseconds (defaults to global config)"
                                ],
                                max_retries: [
-                                 type: :pos_integer,
+                                 type: :non_neg_integer,
                                  default: 3,
                                  doc:
-                                   "Maximum number of retry attempts for transient network errors"
+                                   "Maximum number of retry attempts for transient network errors. Set to 0 to disable retries."
                                ]
                              )
 
@@ -301,6 +301,13 @@ defmodule ReqLLM.Provider.Options do
   end
 
   defp base_schema_for_operation(:image), do: ReqLLM.Images.schema()
+
+  defp base_schema_for_operation(:embedding) do
+    embedding_schema = ReqLLM.Embedding.schema()
+    embedding_keys = Keyword.delete(embedding_schema.schema, :return_usage)
+    NimbleOptions.new!(embedding_keys)
+  end
+
   defp base_schema_for_operation(_operation), do: @generation_options_schema
 
   @doc """
@@ -479,13 +486,16 @@ defmodule ReqLLM.Provider.Options do
   end
 
   defp maybe_extract_model_options(:image, _model, opts), do: opts
+  defp maybe_extract_model_options(:embedding, _model, opts), do: opts
 
   defp maybe_extract_model_options(_operation, model, opts),
     do: extract_model_options(model, opts)
 
   defp maybe_extract_max_tokens(%LLMDB.Model{} = model, opts) do
     cond do
-      Keyword.has_key?(opts, :max_tokens) ->
+      Keyword.has_key?(opts, :max_tokens) or
+        Keyword.has_key?(opts, :max_completion_tokens) or
+          provider_option_present?(opts, :max_completion_tokens) ->
         opts
 
       is_map(model.limits) and is_integer(model.limits[:output]) and model.limits[:output] > 0 ->
@@ -494,6 +504,12 @@ defmodule ReqLLM.Provider.Options do
       true ->
         opts
     end
+  end
+
+  defp provider_option_present?(opts, key) do
+    opts
+    |> Keyword.get(:provider_options, [])
+    |> Keyword.has_key?(key)
   end
 
   defp maybe_extract_model_base_url(opts, %LLMDB.Model{} = model) do

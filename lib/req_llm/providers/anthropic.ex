@@ -33,6 +33,15 @@ defmodule ReqLLM.Providers.Anthropic do
   require Logger
 
   @provider_schema [
+    access_token: [
+      type: :string,
+      doc: "OAuth access token used as Authorization Bearer credential"
+    ],
+    auth_mode: [
+      type: {:in, [:api_key, :oauth]},
+      default: :api_key,
+      doc: "Authentication mode: :api_key (default) or :oauth"
+    ],
     anthropic_top_k: [
       type: :pos_integer,
       doc: "Sample from the top K options for each subsequent token (1-40)"
@@ -157,8 +166,7 @@ defmodule ReqLLM.Providers.Anthropic do
             url: "/v1/messages",
             method: :post,
             receive_timeout: timeout,
-            pool_timeout: timeout,
-            connect_options: [timeout: timeout]
+            pool_timeout: timeout
           ] ++ http_opts
         )
         |> Req.Request.register_options(req_keys)
@@ -272,17 +280,19 @@ defmodule ReqLLM.Providers.Anthropic do
       raise ReqLLM.Error.Invalid.Provider.exception(provider: model.provider)
     end
 
-    {api_key, extra_option_keys} =
-      ReqLLM.Provider.Defaults.fetch_api_key_and_extra_options(__MODULE__, model, user_opts)
+    credential = ReqLLM.Auth.resolve!(model, user_opts)
+    extra_option_keys = ReqLLM.Provider.Defaults.extra_option_keys(__MODULE__)
 
     request
     |> Req.Request.register_options(extra_option_keys ++ [:anthropic_version, :anthropic_beta])
     |> Req.Request.put_header("content-type", "application/json")
-    |> Req.Request.put_header("x-api-key", api_key)
+    |> put_auth_headers(credential)
     |> Req.Request.put_header("anthropic-version", get_anthropic_version(user_opts))
     |> Req.Request.put_private(:req_llm_model, model)
     |> maybe_add_beta_header(user_opts)
-    |> Req.Request.merge_options([model: get_api_model_id(model)] ++ user_opts)
+    |> Req.Request.merge_options(
+      [finch: ReqLLM.Application.finch_name(), model: get_api_model_id(model)] ++ user_opts
+    )
     |> ReqLLM.Step.Error.attach()
     |> ReqLLM.Step.Retry.attach(user_opts)
     |> Req.Request.append_request_steps(llm_encode_body: &encode_body/1)
@@ -362,13 +372,26 @@ defmodule ReqLLM.Providers.Anthropic do
   # ========================================================================
 
   defp build_request_headers(model, opts) do
-    api_key = ReqLLM.Keys.get!(model, opts)
+    credential = ReqLLM.Auth.resolve!(model, opts)
 
     [
-      {"content-type", "application/json"},
-      {"x-api-key", api_key},
-      {"anthropic-version", get_anthropic_version(opts)}
-    ]
+      {"content-type", "application/json"}
+      | auth_header_list(credential)
+    ] ++ [{"anthropic-version", get_anthropic_version(opts)}]
+  end
+
+  defp put_auth_headers(request, credential) do
+    Enum.reduce(auth_header_list(credential), request, fn {name, value}, req ->
+      Req.Request.put_header(req, name, value)
+    end)
+  end
+
+  defp auth_header_list(%{kind: :oauth_access_token, token: token}) do
+    [{"authorization", "Bearer #{token}"}]
+  end
+
+  defp auth_header_list(%{kind: :api_key, token: token}) do
+    [{"x-api-key", token}]
   end
 
   defp build_request_body(context, model_name, opts) do
@@ -620,16 +643,16 @@ defmodule ReqLLM.Providers.Anthropic do
   defp maybe_cache_tools(body, cache_meta) do
     case Map.get(body, :tools) do
       tools when is_list(tools) and tools != [] ->
-        updated_tools =
-          Enum.map(tools, fn tool ->
-            if Map.has_key?(tool, :cache_control) or Map.has_key?(tool, "cache_control") do
-              tool
-            else
-              Map.put(tool, :cache_control, cache_meta)
-            end
-          end)
+        {init, [last]} = Enum.split(tools, -1)
 
-        Map.put(body, :tools, updated_tools)
+        updated_last =
+          if Map.has_key?(last, :cache_control) or Map.has_key?(last, "cache_control") do
+            last
+          else
+            Map.put(last, :cache_control, cache_meta)
+          end
+
+        Map.put(body, :tools, init ++ [updated_last])
 
       _ ->
         body

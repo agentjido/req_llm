@@ -1,6 +1,6 @@
 # Google Vertex AI
 
-Access Claude models through Google Cloud's Vertex AI platform. All Claude 4.x models including Opus, Sonnet, and Haiku with full tool calling and reasoning support.
+Access Claude, Gemini, and MaaS models through Google Cloud's Vertex AI platform.
 
 ## Configuration
 
@@ -20,7 +20,7 @@ GOOGLE_CLOUD_REGION="global"
 
 ```elixir
 ReqLLM.generate_text(
-  "google_vertex_anthropic:claude-sonnet-4-5@20250929",
+  "google_vertex:claude-sonnet-4-5@20250929",
   "Hello",
   provider_options: [
     service_account_json: "/path/to/service-account.json",
@@ -29,6 +29,12 @@ ReqLLM.generate_text(
   ]
 )
 ```
+
+## Model Specs
+
+For the full model-spec workflow, see [Model Specs](model-specs.md).
+
+Use exact Vertex model IDs from [LLMDB.xyz](https://llmdb.xyz) when possible. For MaaS and other OpenAI-compatible Vertex models that are not in the registry yet, build a full explicit model spec with `ReqLLM.model!/1`. Some MaaS model IDs also need `extra.family` when the family cannot be inferred from the ID alone.
 
 ## Provider Options
 
@@ -122,25 +128,25 @@ Vertex AI supports the same Claude options as native Anthropic:
 
 ### Claude 4.5 Family
 
-- **Haiku 4.5**: `google_vertex_anthropic:claude-haiku-4-5@20251001`
+- **Haiku 4.5**: `google_vertex:claude-haiku-4-5@20251001`
   - Fast, cost-effective
   - Full tool calling and reasoning support
 
-- **Sonnet 4.5**: `google_vertex_anthropic:claude-sonnet-4-5@20250929`
+- **Sonnet 4.5**: `google_vertex:claude-sonnet-4-5@20250929`
   - Balanced performance and capability
   - Extended thinking support
 
-- **Opus 4.1**: `google_vertex_anthropic:claude-opus-4-1@20250805`
+- **Opus 4.1**: `google_vertex:claude-opus-4-1@20250805`
   - Highest capability
   - Advanced reasoning
 
 ### Claude 4.0 & Earlier
 
-- **Sonnet 4.0**: `google_vertex_anthropic:claude-sonnet-4@20250514`
-- **Opus 4.0**: `google_vertex_anthropic:claude-opus-4@20250514`
-- **Sonnet 3.7**: `google_vertex_anthropic:claude-3-7-sonnet@20250219`
-- **Sonnet 3.5 v2**: `google_vertex_anthropic:claude-3-5-sonnet@20241022`
-- **Haiku 3.5**: `google_vertex_anthropic:claude-3-5-haiku@20241022`
+- **Sonnet 4.0**: `google_vertex:claude-sonnet-4@20250514`
+- **Opus 4.0**: `google_vertex:claude-opus-4@20250514`
+- **Sonnet 3.7**: `google_vertex:claude-3-7-sonnet@20250219`
+- **Sonnet 3.5 v2**: `google_vertex:claude-3-5-sonnet@20241022`
+- **Haiku 3.5**: `google_vertex:claude-3-5-haiku@20241022`
 
 ### Model ID Format
 

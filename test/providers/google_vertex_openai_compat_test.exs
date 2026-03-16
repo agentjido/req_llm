@@ -12,6 +12,162 @@ defmodule ReqLLM.Providers.GoogleVertex.OpenAICompatTest do
     ])
   end
 
+  describe "endpoint routing" do
+    test "openai_compat model routes to endpoints/openapi/chat/completions" do
+      {:ok, model} = ReqLLM.model("google_vertex:zai-org/glm-4.7-maas")
+      context = context_fixture()
+
+      opts = [
+        access_token: "fake-token",
+        project_id: "test-project",
+        region: "us-central1"
+      ]
+
+      {:ok, request} = GoogleVertex.prepare_request(:chat, model, context, opts)
+      url = URI.to_string(request.url)
+
+      assert url =~
+               "endpoints/openapi/chat/completions"
+
+      refute url =~ "publishers/"
+      refute url =~ "rawPredict"
+    end
+
+    test "openai_compat streaming routes to endpoints/openapi/chat/completions" do
+      {:ok, model} = ReqLLM.model("google_vertex:zai-org/glm-4.7-maas")
+      context = context_fixture()
+
+      opts = [
+        access_token: "fake-token",
+        project_id: "test-project",
+        region: "us-central1"
+      ]
+
+      {:ok, finch_request} = GoogleVertex.attach_stream(model, context, opts, nil)
+
+      assert finch_request.path =~ "endpoints/openapi/chat/completions"
+      refute finch_request.path =~ "publishers/"
+      refute finch_request.path =~ "streamRawPredict"
+    end
+
+    test "openai_compat model includes project and region in path" do
+      {:ok, model} = ReqLLM.model("google_vertex:zai-org/glm-4.7-maas")
+      context = context_fixture()
+
+      opts = [
+        access_token: "fake-token",
+        project_id: "my-project",
+        region: "europe-west1"
+      ]
+
+      {:ok, request} = GoogleVertex.prepare_request(:chat, model, context, opts)
+      url = URI.to_string(request.url)
+
+      assert url =~ "projects/my-project"
+      assert url =~ "locations/europe-west1"
+    end
+  end
+
+  describe "provider_options validation" do
+    test "response_format is accepted and included in request body for openai_compat models" do
+      {:ok, model} = ReqLLM.model("google_vertex:zai-org/glm-4.7-maas")
+      context = context_fixture()
+
+      opts = [
+        access_token: "fake-token",
+        project_id: "test-project",
+        region: "us-central1",
+        provider_options: [response_format: %{type: "json_object"}]
+      ]
+
+      assert {:ok, request} = GoogleVertex.prepare_request(:chat, model, context, opts)
+
+      body = request.options[:json]
+      assert body[:response_format] == %{type: "json_object"}
+    end
+
+    test "response_format is warned and stripped for Claude models" do
+      {:ok, model} = ReqLLM.model("google_vertex:claude-haiku-4-5@20251001")
+      context = context_fixture()
+
+      opts = [
+        access_token: "fake-token",
+        project_id: "test-project",
+        region: "us-central1",
+        provider_options: [response_format: %{type: "json_object"}]
+      ]
+
+      assert ExUnit.CaptureLog.capture_log(fn ->
+               {:ok, request} = GoogleVertex.prepare_request(:chat, model, context, opts)
+
+               body = request.options[:json]
+               refute Map.has_key?(body, :response_format)
+             end) =~ "response_format is not supported for Claude models on Vertex AI"
+    end
+
+    test "response_format is warned and stripped for Gemini models" do
+      {:ok, model} = ReqLLM.model("google_vertex:gemini-2.5-flash")
+      context = context_fixture()
+
+      opts = [
+        access_token: "fake-token",
+        project_id: "test-project",
+        region: "us-central1",
+        provider_options: [response_format: %{type: "json_object"}]
+      ]
+
+      assert ExUnit.CaptureLog.capture_log(fn ->
+               {:ok, request} = GoogleVertex.prepare_request(:chat, model, context, opts)
+
+               body = request.options[:json]
+               refute Map.has_key?(body, :response_format)
+             end) =~ "response_format is not supported for Gemini models on Vertex AI"
+    end
+  end
+
+  describe "credentials in provider_options" do
+    test "accepts credentials inside provider_options for chat" do
+      {:ok, model} = ReqLLM.model("google_vertex:gemini-2.5-pro")
+      context = context_fixture()
+
+      opts = [
+        provider_options: [
+          access_token: "fake-token",
+          project_id: "test-project",
+          region: "us-central1"
+        ]
+      ]
+
+      {:ok, request} = GoogleVertex.prepare_request(:chat, model, context, opts)
+      url = URI.to_string(request.url)
+
+      assert url =~ "us-central1-aiplatform.googleapis.com"
+      assert url =~ "projects/test-project"
+    end
+
+    test "top-level credentials take precedence over provider_options for chat" do
+      {:ok, model} = ReqLLM.model("google_vertex:gemini-2.5-pro")
+      context = context_fixture()
+
+      opts = [
+        access_token: "top-token",
+        project_id: "top-project",
+        region: "eu-west4",
+        provider_options: [
+          access_token: "nested-token",
+          project_id: "nested-project",
+          region: "us-central1"
+        ]
+      ]
+
+      {:ok, request} = GoogleVertex.prepare_request(:chat, model, context, opts)
+      url = URI.to_string(request.url)
+
+      assert url =~ "eu-west4-aiplatform.googleapis.com"
+      assert url =~ "projects/top-project"
+    end
+  end
+
   describe "model family resolution" do
     test "GLM model resolves to openai_compat formatter via extra.family" do
       {:ok, model} = ReqLLM.model("google_vertex:zai-org/glm-4.7-maas")
@@ -120,6 +276,15 @@ defmodule ReqLLM.Providers.GoogleVertex.OpenAICompatTest do
       assert is_list(body[:messages])
     end
 
+    test "includes response_format when provided via provider_options" do
+      context = context_fixture()
+      opts = [provider_options: [response_format: %{type: "json_object"}]]
+
+      body = OpenAICompat.format_request("zai-org/glm-4.7-maas", context, opts)
+
+      assert body[:response_format] == %{type: "json_object"}
+    end
+
     test "injects structured_output tool for :object operation" do
       context = context_fixture("Extract the name")
 
@@ -142,6 +307,65 @@ defmodule ReqLLM.Providers.GoogleVertex.OpenAICompatTest do
 
       # Should force tool_choice to structured_output
       assert body[:tool_choice] == %{type: "function", function: %{name: "structured_output"}}
+    end
+  end
+
+  describe "parse_response/3 error handling" do
+    test "converts Google Cloud error format to API.Request error" do
+      model = LLMDB.Model.new!(%{id: "zai-org/glm-4.7-maas", provider: :google_vertex})
+
+      body = %{
+        "error" => %{
+          "code" => 429,
+          "message" => "Resource exhausted: quota exceeded",
+          "status" => "RESOURCE_EXHAUSTED"
+        }
+      }
+
+      assert {:error, error} = OpenAICompat.parse_response(body, model, [])
+      assert %ReqLLM.Error.API.Request{} = error
+      assert error.status == 429
+      assert error.reason == "Resource exhausted: quota exceeded"
+      assert error.response_body == body
+    end
+
+    test "converts OpenAI-style error format to API.Request error" do
+      model = LLMDB.Model.new!(%{id: "zai-org/glm-4.7-maas", provider: :google_vertex})
+
+      body = %{
+        "error" => %{
+          "message" => "Rate limit exceeded",
+          "type" => "rate_limit_error"
+        }
+      }
+
+      assert {:error, error} = OpenAICompat.parse_response(body, model, [])
+      assert %ReqLLM.Error.API.Request{} = error
+      assert error.status == nil
+      assert error.reason == "Rate limit exceeded"
+      assert error.response_body == body
+    end
+
+    test "converts simple string error to API.Request error" do
+      model = LLMDB.Model.new!(%{id: "zai-org/glm-4.7-maas", provider: :google_vertex})
+
+      body = %{"error" => "Internal server error"}
+
+      assert {:error, error} = OpenAICompat.parse_response(body, model, [])
+      assert %ReqLLM.Error.API.Request{} = error
+      assert error.reason == "Internal server error"
+      assert error.response_body == body
+    end
+
+    test "handles unknown error structure gracefully" do
+      model = LLMDB.Model.new!(%{id: "zai-org/glm-4.7-maas", provider: :google_vertex})
+
+      body = %{"error" => %{"details" => [%{"reason" => "something"}]}}
+
+      assert {:error, error} = OpenAICompat.parse_response(body, model, [])
+      assert %ReqLLM.Error.API.Request{} = error
+      assert error.reason == "Unknown API error"
+      assert error.response_body == body
     end
   end
 

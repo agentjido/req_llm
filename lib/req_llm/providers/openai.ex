@@ -113,6 +113,15 @@ defmodule ReqLLM.Providers.OpenAI do
     default_env_key: "OPENAI_API_KEY"
 
   @provider_schema [
+    access_token: [
+      type: :string,
+      doc: "OAuth access token used as Authorization Bearer credential"
+    ],
+    auth_mode: [
+      type: {:in, [:api_key, :oauth]},
+      default: :api_key,
+      doc: "Authentication mode: :api_key (default) or :oauth"
+    ],
     dimensions: [
       type: :pos_integer,
       doc: "Dimensions for embedding models (e.g., text-embedding-3-small supports 512-1536)"
@@ -175,10 +184,27 @@ defmodule ReqLLM.Providers.OpenAI do
   @compile {:no_warn_undefined, [{nil, :path, 0}, {nil, :attach_stream, 4}]}
 
   defp get_api_type(%LLMDB.Model{} = model) do
-    case get_in(model, [Access.key(:extra, %{}), :wire, :protocol]) do
-      "openai_responses" -> "responses"
-      "openai_chat" -> "chat"
-      _ -> nil
+    protocol =
+      get_in(model, [Access.key(:extra, %{}), :wire, :protocol]) ||
+        get_in(model, [Access.key(:extra, %{}), "wire", "protocol"])
+
+    case protocol do
+      "openai_responses" ->
+        "responses"
+
+      "openai_chat" ->
+        "chat"
+
+      _ ->
+        # Fallback for newer OpenAI models whose wire metadata may lag behind.
+        # Reasoning/Codex families should use Responses API.
+        model_id = model.provider_model_id || model.id
+
+        if ReqLLM.Providers.OpenAI.AdapterHelpers.reasoning_model?(model_id) do
+          "responses"
+        else
+          nil
+        end
     end
   end
 
@@ -270,8 +296,7 @@ defmodule ReqLLM.Providers.OpenAI do
             url: path,
             method: :post,
             receive_timeout: timeout,
-            pool_timeout: timeout,
-            connect_options: [timeout: timeout]
+            pool_timeout: timeout
           ] ++ http_opts
         )
         |> Req.Request.register_options(req_keys)
@@ -326,8 +351,7 @@ defmodule ReqLLM.Providers.OpenAI do
             url: path,
             method: :post,
             receive_timeout: timeout,
-            pool_timeout: timeout,
-            connect_options: [timeout: timeout]
+            pool_timeout: timeout
           ] ++ http_opts
         )
         |> Req.Request.register_options(req_keys)
@@ -357,6 +381,57 @@ defmodule ReqLLM.Providers.OpenAI do
 
       :tool_strict ->
         prepare_strict_tool_request(model_spec, prompt, compiled_schema, opts)
+    end
+  end
+
+  def prepare_request(:transcription, model_spec, audio_data, opts) do
+    with {:ok, model} <- ReqLLM.model(model_spec) do
+      http_opts = Keyword.get(opts, :req_http_options, [])
+      media_type = Keyword.get(opts, :media_type, "audio/mpeg")
+      language = Keyword.get(opts, :language)
+      provider_options = Keyword.get(opts, :provider_options, [])
+      timeout = Keyword.get(opts, :receive_timeout, 120_000)
+
+      ext = ReqLLM.Provider.Defaults.media_type_to_extension(media_type)
+      filename = "audio.#{ext}"
+
+      # Determine response_format based on model
+      response_format =
+        if model.id in ["gpt-4o-transcribe", "gpt-4o-mini-transcribe"] do
+          "json"
+        else
+          "verbose_json"
+        end
+
+      form_parts =
+        [
+          file: {audio_data, filename: filename, content_type: media_type},
+          model: model.id,
+          response_format: response_format
+        ]
+        |> maybe_add_transcription_part(:language, language)
+        |> maybe_add_transcription_provider_parts(provider_options)
+
+      api_key = ReqLLM.Keys.get!(model, opts)
+
+      request =
+        Req.new(
+          [
+            url: "/audio/transcriptions",
+            method: :post,
+            base_url: Keyword.get(opts, :base_url, base_url()),
+            receive_timeout: timeout,
+            pool_timeout: timeout,
+            form_multipart: form_parts,
+            auth: {:bearer, api_key}
+          ] ++ http_opts
+        )
+        |> Req.Request.put_header("authorization", "Bearer #{api_key}")
+        |> ReqLLM.Step.Retry.attach()
+        |> ReqLLM.Step.Error.attach()
+        |> ReqLLM.Step.Fixture.maybe_attach(model, opts)
+
+      {:ok, request}
     end
   end
 
@@ -532,6 +607,37 @@ defmodule ReqLLM.Providers.OpenAI do
     {opts, []}
   end
 
+  @impl ReqLLM.Provider
+  def attach(request, model_input, user_opts) do
+    {:ok, %LLMDB.Model{} = model} = ReqLLM.model(model_input)
+
+    if model.provider != __MODULE__.provider_id() do
+      raise ReqLLM.Error.Invalid.Provider.exception(provider: model.provider)
+    end
+
+    credential = ReqLLM.Auth.resolve!(model, user_opts)
+    extra_option_keys = ReqLLM.Provider.Defaults.extra_option_keys(__MODULE__)
+
+    request
+    |> Req.Request.put_header("content-type", "application/json")
+    |> Req.Request.put_header("authorization", "Bearer #{credential.token}")
+    |> Req.Request.register_options(extra_option_keys)
+    |> Req.Request.merge_options(
+      [
+        finch: ReqLLM.Application.finch_name(),
+        model: model.provider_model_id || model.id,
+        auth: {:bearer, credential.token}
+      ] ++
+        user_opts
+    )
+    |> ReqLLM.Step.Retry.attach()
+    |> ReqLLM.Step.Error.attach()
+    |> Req.Request.append_request_steps(llm_encode_body: &encode_body/1)
+    |> Req.Request.append_response_steps(llm_decode_response: &decode_response/1)
+    |> ReqLLM.Step.Usage.attach(model)
+    |> ReqLLM.Step.Fixture.maybe_attach(model, user_opts)
+  end
+
   @doc """
   Custom attach_stream to route reasoning models to /v1/responses endpoint for streaming.
   """
@@ -664,4 +770,28 @@ defmodule ReqLLM.Providers.OpenAI do
         {:error, ReqLLM.Error.Invalid.Parameter.exception(parameter: message)}
     end
   end
+
+  defp maybe_add_transcription_part(parts, _key, nil), do: parts
+  defp maybe_add_transcription_part(parts, key, value), do: parts ++ [{key, to_string(value)}]
+
+  defp maybe_add_transcription_provider_parts(parts, opts) when is_list(opts) do
+    Enum.reduce(opts, parts, fn
+      {_key, nil}, acc ->
+        acc
+
+      {:timestamp_granularities, values}, acc when is_list(values) ->
+        Enum.reduce(values, acc, fn v, inner_acc ->
+          inner_acc ++ [{:"timestamp_granularities[]", to_string(v)}]
+        end)
+
+      {key, value}, acc ->
+        acc ++ [{key, to_string(value)}]
+    end)
+  end
+
+  defp maybe_add_transcription_provider_parts(parts, opts) when is_map(opts) do
+    maybe_add_transcription_provider_parts(parts, Map.to_list(opts))
+  end
+
+  defp maybe_add_transcription_provider_parts(parts, _), do: parts
 end

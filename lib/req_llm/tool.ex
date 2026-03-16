@@ -161,6 +161,19 @@ defmodule ReqLLM.Tool do
         callback: {WeatherService, :get_weather}
       )
 
+      # Using Elixir typespec syntax via JSONSpec (https://hex.pm/packages/json_spec)
+      import JSONSpec
+
+      {:ok, tool} = ReqLLM.Tool.new(
+        name: "get_weather",
+        description: "Get current weather",
+        parameter_schema: schema(
+          %{required(:location) => String.t(), optional(:units) => :celsius | :fahrenheit},
+          doc: [location: "City name", units: "Temperature units"]
+        ),
+        callback: {WeatherService, :get_weather}
+      )
+
   """
   @spec new(tool_opts()) :: {:ok, t()} | {:error, term()}
   def new(opts) when is_list(opts) do
@@ -398,14 +411,24 @@ defmodule ReqLLM.Tool do
 
   defp validate_input(%__MODULE__{compiled: nil}, input), do: {:ok, input}
 
-  defp validate_input(%__MODULE__{compiled: schema}, input) do
-    normalized_input = normalize_input_keys(input)
+  defp validate_input(%__MODULE__{compiled: schema, parameter_schema: parameter_schema}, input) do
+    normalized_input = normalize_input_keys(input, parameter_schema)
 
-    case NimbleOptions.validate(normalized_input, schema) do
-      {:ok, validated_input} ->
-        {:ok, validated_input}
+    try do
+      case NimbleOptions.validate(normalized_input, schema) do
+        {:ok, validated_input} ->
+          {:ok, validated_input}
 
-      {:error, error} ->
+        {:error, error} ->
+          {:error,
+           ReqLLM.Error.Validation.Error.exception(
+             tag: :parameter_validation,
+             reason: Exception.message(error),
+             context: [input: input]
+           )}
+      end
+    rescue
+      error ->
         {:error,
          ReqLLM.Error.Validation.Error.exception(
            tag: :parameter_validation,
@@ -415,18 +438,204 @@ defmodule ReqLLM.Tool do
     end
   end
 
-  defp normalize_input_keys(input) when is_map(input) do
-    Map.new(input, fn
+  defp normalize_input_keys(input, parameter_schema)
+       when is_map(input) and is_list(parameter_schema) do
+    schema_entries =
+      parameter_schema
+      |> Enum.filter(fn
+        {key, opts} when is_atom(key) and is_list(opts) -> true
+        _ -> false
+      end)
+      |> Map.new()
+
+    schema_key_map =
+      schema_entries
+      |> Map.keys()
+      |> Map.new(fn key -> {Atom.to_string(key), key} end)
+
+    Map.new(input, fn {key, value} ->
+      {normalized_key, field_opts} =
+        normalize_key_and_field_opts(key, schema_key_map, schema_entries)
+
+      {normalized_key, normalize_typed_value(value, field_opts)}
+    end)
+  end
+
+  defp normalize_input_keys(input, _parameter_schema), do: input
+
+  defp normalize_key_and_field_opts(key, schema_key_map, schema_entries) when is_binary(key) do
+    case Map.fetch(schema_key_map, key) do
+      {:ok, atom_key} -> {atom_key, Map.get(schema_entries, atom_key)}
+      :error -> {key, nil}
+    end
+  end
+
+  defp normalize_key_and_field_opts(key, _schema_key_map, schema_entries) when is_atom(key) do
+    {key, Map.get(schema_entries, key)}
+  end
+
+  defp normalize_key_and_field_opts(key, _schema_key_map, _schema_entries), do: {key, nil}
+
+  defp normalize_typed_value(value, opts) when is_list(opts) do
+    normalize_typed_value(value, Keyword.get(opts, :type), opts)
+  end
+
+  defp normalize_typed_value(value, _opts), do: value
+
+  defp normalize_typed_value(value, :map, opts) when is_map(value) do
+    case nested_map_schema(opts) do
+      schema when is_list(schema) -> normalize_input_keys(value, schema)
+      _ -> normalize_existing_atom_map(value)
+    end
+  end
+
+  defp normalize_typed_value(value, {:map, schema}, _opts)
+       when is_map(value) and is_list(schema) do
+    normalize_input_keys(value, schema)
+  end
+
+  defp normalize_typed_value(value, {:map, key_type, value_type}, _opts) when is_map(value) do
+    normalize_typed_map(value, key_type, value_type)
+  end
+
+  defp normalize_typed_value(value, {:list, :map}, opts) when is_list(value) do
+    case nested_map_schema(opts) do
+      schema when is_list(schema) ->
+        Enum.map(value, &normalize_map_with_schema(&1, schema))
+
+      _ ->
+        Enum.map(value, &normalize_list_item(&1, :map))
+    end
+  end
+
+  defp normalize_typed_value(value, {:list, {:map, schema}}, _opts)
+       when is_list(value) and is_list(schema) do
+    Enum.map(value, &normalize_map_with_schema(&1, schema))
+  end
+
+  defp normalize_typed_value(value, {:list, inner_type}, _opts) when is_list(value) do
+    Enum.map(value, &normalize_list_item(&1, inner_type))
+  end
+
+  defp normalize_typed_value(value, {:or, subtypes}, opts) when is_list(subtypes) do
+    Enum.reduce(subtypes, value, fn subtype, acc ->
+      normalize_typed_value(acc, subtype, opts)
+    end)
+  end
+
+  defp normalize_typed_value(value, {:tuple, subtypes}, _opts)
+       when is_tuple(value) and is_list(subtypes) do
+    tuple_items = Tuple.to_list(value)
+
+    tuple_items
+    |> Enum.with_index()
+    |> Enum.map(fn {item, idx} ->
+      case Enum.fetch(subtypes, idx) do
+        {:ok, subtype} -> normalize_list_item(item, subtype)
+        :error -> item
+      end
+    end)
+    |> List.to_tuple()
+  end
+
+  defp normalize_typed_value(value, _type, _opts), do: value
+
+  defp normalize_map_with_schema(value, schema) when is_map(value) do
+    normalize_input_keys(value, schema)
+  end
+
+  defp normalize_map_with_schema(value, _schema), do: value
+
+  defp normalize_list_item(value, :map) when is_map(value), do: normalize_existing_atom_map(value)
+
+  defp normalize_list_item(value, {:map, schema}) when is_map(value) and is_list(schema) do
+    normalize_input_keys(value, schema)
+  end
+
+  defp normalize_list_item(value, {:map, key_type, value_type}) when is_map(value) do
+    normalize_typed_map(value, key_type, value_type)
+  end
+
+  defp normalize_list_item(value, {:list, inner_type}) when is_list(value) do
+    Enum.map(value, &normalize_list_item(&1, inner_type))
+  end
+
+  defp normalize_list_item(value, {:or, subtypes}) when is_list(subtypes) do
+    Enum.reduce(subtypes, value, fn subtype, acc ->
+      normalize_list_item(acc, subtype)
+    end)
+  end
+
+  defp normalize_list_item(value, {:tuple, subtypes})
+       when is_tuple(value) and is_list(subtypes) do
+    tuple_items = Tuple.to_list(value)
+
+    tuple_items
+    |> Enum.with_index()
+    |> Enum.map(fn {item, idx} ->
+      case Enum.fetch(subtypes, idx) do
+        {:ok, subtype} -> normalize_list_item(item, subtype)
+        :error -> item
+      end
+    end)
+    |> List.to_tuple()
+  end
+
+  defp normalize_list_item(value, _type), do: value
+
+  defp normalize_typed_map(map, :atom, value_type) do
+    Map.new(map, fn
       {key, value} when is_binary(key) ->
-        try do
-          {String.to_existing_atom(key), value}
-        rescue
-          ArgumentError -> {String.to_atom(key), value}
-        end
+        {to_existing_atom_or_original(key), normalize_list_item(value, value_type)}
 
       {key, value} ->
-        {key, value}
+        {key, normalize_list_item(value, value_type)}
     end)
+  end
+
+  defp normalize_typed_map(map, _key_type, value_type) do
+    Map.new(map, fn {key, value} ->
+      {key, normalize_list_item(value, value_type)}
+    end)
+  end
+
+  defp normalize_existing_atom_map(map) do
+    Map.new(map, fn
+      {key, value} when is_binary(key) ->
+        {to_existing_atom_or_original(key), normalize_existing_atom_value(value)}
+
+      {key, value} ->
+        {key, normalize_existing_atom_value(value)}
+    end)
+  end
+
+  defp normalize_existing_atom_value(value) when is_map(value),
+    do: normalize_existing_atom_map(value)
+
+  defp normalize_existing_atom_value(value) when is_list(value),
+    do: Enum.map(value, &normalize_existing_atom_value/1)
+
+  defp normalize_existing_atom_value(value), do: value
+
+  defp nested_map_schema(opts) do
+    case Keyword.get(opts, :keys) do
+      schema when is_list(schema) ->
+        schema
+
+      _ ->
+        case Keyword.get(opts, :properties) do
+          schema when is_list(schema) -> schema
+          _ -> nil
+        end
+    end
+  end
+
+  defp to_existing_atom_or_original(key) do
+    try do
+      String.to_existing_atom(key)
+    rescue
+      ArgumentError -> key
+    end
   end
 
   defp call_callback({module, function}, input) do

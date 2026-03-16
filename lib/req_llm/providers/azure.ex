@@ -185,13 +185,14 @@ defmodule ReqLLM.Providers.Azure do
   require Logger
 
   @default_api_version "2025-04-01-preview"
+  @default_foundry_api_version "2024-05-01-preview"
   @anthropic_version "2023-06-01"
 
   @provider_schema [
     api_version: [
       type: :string,
-      default: @default_api_version,
-      doc: "Azure OpenAI API version (e.g., '2025-04-01-preview')"
+      doc:
+        "Azure OpenAI API version. Defaults to '2024-05-01-preview' for Foundry endpoints, '2025-04-01-preview' for traditional Azure OpenAI."
     ],
     anthropic_version: [
       type: :string,
@@ -523,7 +524,8 @@ defmodule ReqLLM.Providers.Azure do
 
     {api_key, extra_option_keys} = resolve_api_key(model_family, model, user_opts)
     extra_headers = get_anthropic_headers(model_id, user_opts)
-    {auth_header_name, auth_header_value} = build_auth_header(api_key, model_family)
+    base_url = resolve_base_url(model_family, user_opts)
+    {auth_header_name, auth_header_value} = build_auth_header(api_key, model_family, base_url)
 
     request
     |> Req.Request.put_header("content-type", "application/json")
@@ -534,7 +536,7 @@ defmodule ReqLLM.Providers.Azure do
       end)
     end)
     |> Req.Request.register_options(extra_option_keys ++ [:deployment])
-    |> Req.Request.merge_options(user_opts)
+    |> Req.Request.merge_options([finch: ReqLLM.Application.finch_name()] ++ user_opts)
     |> ReqLLM.Step.Retry.attach()
     |> ReqLLM.Step.Error.attach()
     |> Req.Request.append_response_steps(llm_decode_response: &decode_response/1)
@@ -682,7 +684,7 @@ defmodule ReqLLM.Providers.Azure do
     )
 
     base_headers = [
-      build_auth_header(api_key, model_family),
+      build_auth_header(api_key, model_family, base_url),
       {"content-type", "application/json"},
       {"accept", "text/event-stream"}
     ]
@@ -858,7 +860,12 @@ defmodule ReqLLM.Providers.Azure do
     base_url = opts[:base_url] || raise "base_url not set - this is a bug"
     validate_base_url!(base_url)
 
-    api_version = get_provider_option(opts, :api_version, @default_api_version)
+    default_version =
+      if uses_foundry_format?(base_url),
+        do: @default_foundry_api_version,
+        else: @default_api_version
+
+    api_version = get_provider_option(opts, :api_version, default_version)
     deployment = get_deployment_with_warning(model, opts)
 
     {api_version, deployment, base_url}
@@ -955,7 +962,7 @@ defmodule ReqLLM.Providers.Azure do
     end
   end
 
-  defp build_auth_header("Bearer " <> token, _model_family) do
+  defp build_auth_header("Bearer " <> token, _model_family, _base_url) do
     token = String.trim(token)
 
     cond do
@@ -974,12 +981,16 @@ defmodule ReqLLM.Providers.Azure do
     end
   end
 
-  defp build_auth_header(api_key, "claude") do
+  defp build_auth_header(api_key, "claude", _base_url) do
     {"x-api-key", api_key}
   end
 
-  defp build_auth_header(api_key, _model_family) do
-    {"api-key", api_key}
+  defp build_auth_header(api_key, _model_family, base_url) do
+    if uses_foundry_format?(base_url) do
+      {"authorization", "Bearer #{api_key}"}
+    else
+      {"api-key", api_key}
+    end
   end
 
   defp get_deployment_with_warning(model, opts) do
@@ -1175,6 +1186,7 @@ defmodule ReqLLM.Providers.Azure do
       model_family == "claude" && (has_thinking || reasoning_effort) -> 180_000
       model_family in ["o1", "o3", "o4"] && reasoning_effort -> 180_000
       model_family in ["o1", "o3", "o4"] -> 120_000
+      model_family in ["deepseek", "mai-ds"] -> 120_000
       AdapterHelpers.gpt5_model?(model_id) -> 120_000
       true -> 30_000
     end

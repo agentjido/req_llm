@@ -312,7 +312,7 @@ defmodule ReqLLM.StreamResponse do
   end
 
   @doc """
-  Process a stream with real-time callbacks for content and thinking.
+  Process a stream with real-time callbacks for chunk activity and visible output.
 
   Unlike `to_response/1`, this function processes the stream incrementally and invokes
   callbacks as chunks arrive, enabling real-time streaming to UIs or other consumers.
@@ -323,6 +323,13 @@ defmodule ReqLLM.StreamResponse do
 
     * `stream_response` - The StreamResponse struct to process
     * `opts` - Keyword list of options:
+      * `:on_chunk` - Callback invoked immediately for every chunk that reaches
+                      `process_stream/2`, including metadata-only chunks.
+                      Receives the full `StreamChunk` struct.
+                      Signature: `(StreamChunk.t() -> any())`
+      * `:on_meta` - Callback invoked immediately for each `:meta` chunk.
+                     Receives the full `StreamChunk` struct.
+                     Signature: `(StreamChunk.t() -> any())`
       * `:on_result` - Callback invoked immediately for each `:content` chunk.
                        Signature: `(String.t() -> any())`
       * `:on_thinking` - Callback invoked immediately for each `:thinking` chunk.
@@ -369,6 +376,7 @@ defmodule ReqLLM.StreamResponse do
 
   ## Implementation Notes
 
+  - Raw chunk callbacks fire immediately as chunks arrive, including metadata/keepalive chunks
   - Content and thinking callbacks fire immediately as chunks arrive (real-time streaming)
   - Tool calls are reconstructed from stream chunks and available in the returned Response
   - The stream is consumed exactly once (no double-consumption bugs)
@@ -405,28 +413,35 @@ defmodule ReqLLM.StreamResponse do
   # Process stream chunks, invoking callbacks and collecting chunks
   defp process_stream_with_callbacks(stream, callbacks) do
     Enum.map(stream, fn chunk ->
-      # Invoke callbacks for real-time streaming
-      case chunk.type do
-        :content ->
-          if callbacks.on_result && chunk.text, do: callbacks.on_result.(chunk.text)
-
-        :thinking ->
-          if callbacks.on_thinking && chunk.text, do: callbacks.on_thinking.(chunk.text)
-
-        :tool_call ->
-          if callbacks.on_tool_call, do: callbacks.on_tool_call.(chunk)
-
-        _ ->
-          :ok
-      end
-
+      invoke_callbacks(chunk, callbacks)
       chunk
     end)
+  end
+
+  defp invoke_callbacks(chunk, callbacks) do
+    if callbacks.on_chunk, do: callbacks.on_chunk.(chunk)
+    if callbacks.on_meta && chunk.type == :meta, do: callbacks.on_meta.(chunk)
+
+    case chunk.type do
+      :content ->
+        if callbacks.on_result && chunk.text, do: callbacks.on_result.(chunk.text)
+
+      :thinking ->
+        if callbacks.on_thinking && chunk.text, do: callbacks.on_thinking.(chunk.text)
+
+      :tool_call ->
+        if callbacks.on_tool_call, do: callbacks.on_tool_call.(chunk)
+
+      _ ->
+        :ok
+    end
   end
 
   # Extract callbacks from options
   defp extract_callbacks(opts) do
     %{
+      on_chunk: Keyword.get(opts, :on_chunk),
+      on_meta: Keyword.get(opts, :on_meta),
       on_result: Keyword.get(opts, :on_result),
       on_thinking: Keyword.get(opts, :on_thinking),
       on_tool_call: Keyword.get(opts, :on_tool_call)
@@ -481,7 +496,7 @@ defmodule ReqLLM.StreamResponse do
 
   ## Returns
 
-  An atom indicating the finish reason (`:stop`, `:length`, `:tool_use`, etc.) or nil.
+  An atom indicating the finish reason (`:stop`, `:length`, `:tool_calls`, etc.) or nil.
 
   ## Examples
 
@@ -501,13 +516,51 @@ defmodule ReqLLM.StreamResponse do
 
     case metadata do
       %{finish_reason: finish_reason} when is_atom(finish_reason) ->
-        finish_reason
+        normalize_finish_reason(finish_reason)
 
       %{finish_reason: finish_reason} when is_binary(finish_reason) ->
-        String.to_existing_atom(finish_reason)
+        normalize_finish_reason(finish_reason)
 
       _ ->
         nil
+    end
+  end
+
+  defp normalize_finish_reason(reason) when is_atom(reason) do
+    case reason do
+      :tool_use -> :tool_calls
+      :completed -> :stop
+      :end_turn -> :stop
+      :max_tokens -> :length
+      :max_output_tokens -> :length
+      :stop -> :stop
+      :tool_calls -> :tool_calls
+      :length -> :length
+      :content_filter -> :content_filter
+      :error -> :error
+      :cancelled -> :cancelled
+      :incomplete -> :incomplete
+      :unknown -> :unknown
+      _ -> :unknown
+    end
+  end
+
+  defp normalize_finish_reason(reason) when is_binary(reason) do
+    case reason do
+      "stop" -> :stop
+      "completed" -> :stop
+      "tool_calls" -> :tool_calls
+      "tool_use" -> :tool_calls
+      "length" -> :length
+      "max_tokens" -> :length
+      "max_output_tokens" -> :length
+      "content_filter" -> :content_filter
+      "end_turn" -> :stop
+      "error" -> :error
+      "cancelled" -> :cancelled
+      "incomplete" -> :incomplete
+      "unknown" -> :unknown
+      _ -> :unknown
     end
   end
 

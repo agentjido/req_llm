@@ -1,7 +1,7 @@
 defmodule ReqLLM.MixProject do
   use Mix.Project
 
-  @version "1.5.1"
+  @version "1.7.1"
   @source_url "https://github.com/agentjido/req_llm"
 
   def project do
@@ -20,7 +20,6 @@ defmodule ReqLLM.MixProject do
       # Dialyzer configuration
       dialyzer: [
         plt_add_apps: [:mix],
-        ignore_warnings: ".dialyzer_ignore.exs",
         exclude_paths: ["test/support"]
       ],
 
@@ -42,6 +41,7 @@ defmodule ReqLLM.MixProject do
           "guides/configuration.md",
           "guides/core-concepts.md",
           "guides/data-structures.md",
+          "guides/model-specs.md",
           "guides/usage-and-billing.md",
           "guides/image-generation.md",
           "guides/model-metadata.md",
@@ -51,6 +51,7 @@ defmodule ReqLLM.MixProject do
           "guides/anthropic.md",
           "guides/openai.md",
           "guides/google.md",
+          "guides/azure.md",
           "guides/google_vertex.md",
           "guides/xai.md",
           "guides/groq.md",
@@ -59,6 +60,7 @@ defmodule ReqLLM.MixProject do
           "guides/amazon_bedrock.md",
           "guides/cerebras.md",
           "guides/meta.md",
+          "guides/zenmux.md",
           "guides/zai.md",
           "guides/zai_coder.md"
         ],
@@ -71,6 +73,7 @@ defmodule ReqLLM.MixProject do
             "guides/configuration.md",
             "guides/core-concepts.md",
             "guides/data-structures.md",
+            "guides/model-specs.md",
             "guides/usage-and-billing.md",
             "guides/image-generation.md",
             "guides/model-metadata.md"
@@ -84,6 +87,7 @@ defmodule ReqLLM.MixProject do
             "guides/anthropic.md",
             "guides/openai.md",
             "guides/google.md",
+            "guides/azure.md",
             "guides/google_vertex.md",
             "guides/xai.md",
             "guides/groq.md",
@@ -92,6 +96,7 @@ defmodule ReqLLM.MixProject do
             "guides/amazon_bedrock.md",
             "guides/cerebras.md",
             "guides/meta.md",
+            "guides/zenmux.md",
             "guides/zai.md",
             "guides/zai_coder.md"
           ],
@@ -99,44 +104,54 @@ defmodule ReqLLM.MixProject do
           Contributing: ["CONTRIBUTING.md"]
         ],
         groups_for_modules: [
-          Providers: ~r/ReqLLM\.Providers\..*/,
-          Steps: ~r/ReqLLM\.Step\..*/,
-          Streaming: ~r/ReqLLM\.Streaming.*/,
-          "Data Structures": [
-            ReqLLM.Message,
-            ReqLLM.Message.ContentPart,
-            ReqLLM.Response,
-            ReqLLM.Response.Stream,
-            ReqLLM.StreamResponse,
-            ReqLLM.StreamChunk,
-            ReqLLM.Tool,
-            ReqLLM.ToolCall,
-            ReqLLM.Generation,
-            ReqLLM.Embedding,
+          "Top-Level API": [
+            ReqLLM,
+            ReqLLM.Images,
             ReqLLM.Context,
             ReqLLM.Schema
           ],
-          "Provider API": [
-            ReqLLM.Provider,
-            ReqLLM.Provider.DSL,
-            ReqLLM.Provider.Registry,
-            ReqLLM.Provider.Options,
-            ReqLLM.Provider.Utils,
-            ReqLLM.Provider.Defaults,
-            ReqLLM.Provider.ResponseBuilder,
-            ReqLLM.Provider.Defaults.ResponseBuilder
-          ],
-          Core: [
-            ReqLLM,
+          Utilities: [
             ReqLLM.ModelHelpers,
             ReqLLM.Model.Metadata,
             ReqLLM.Metadata,
             ReqLLM.Capability,
             ReqLLM.Keys,
+            ReqLLM.Usage,
             ReqLLM.Error,
             ReqLLM.Debug,
             ReqLLM.ParamTransform
-          ]
+          ],
+          "Data Structures": [
+            ReqLLM.Message,
+            ReqLLM.Message.ContentPart,
+            ReqLLM.Message.ReasoningDetails,
+            ReqLLM.Response,
+            ReqLLM.Response.Stream,
+            ReqLLM.StreamResponse,
+            ReqLLM.StreamResponse.MetadataHandle,
+            ReqLLM.StreamChunk,
+            ReqLLM.Tool,
+            ReqLLM.ToolCall,
+            ReqLLM.ToolResult,
+            ReqLLM.Generation,
+            ReqLLM.Embedding
+          ],
+          Steps: ~r/ReqLLM\.Step\..*/,
+          Streaming: [~r/ReqLLM\.Streaming.*/, ReqLLM.StreamServer],
+          Transcription: ~r/ReqLLM\.Transcription.*/,
+          Speech: ~r/ReqLLM\.Speech.*/,
+          "Provider Extension API": [
+            ReqLLM.Provider,
+            ReqLLM.Provider.DSL,
+            ReqLLM.Provider.Registry,
+            ReqLLM.Provider.Options,
+            ReqLLM.Provider.Utils,
+            ReqLLM.Providers,
+            ReqLLM.Provider.Defaults,
+            ReqLLM.Provider.ResponseBuilder,
+            ReqLLM.Provider.Defaults.ResponseBuilder
+          ],
+          Providers: ~r/ReqLLM\.Providers\..*/
         ]
       ]
     ]
@@ -178,7 +193,7 @@ defmodule ReqLLM.MixProject do
       {:uniq, "~> 0.6"},
       {:zoi, "~> 0.14"},
       {:jsv, "~> 0.11"},
-      {:llm_db, "~> 2026.1"},
+      {:llm_db, "~> 2026.3.2"},
 
       # Dev/test dependencies
       {:bandit, "~> 1.8", only: :dev, runtime: false},
@@ -189,7 +204,10 @@ defmodule ReqLLM.MixProject do
       {:excoveralls, "~> 0.18", only: [:dev, :test], runtime: false},
       {:plug, "~> 1.0", only: [:dev, :test], runtime: false},
       {:git_ops, "~> 2.9", only: :dev, runtime: false},
-      {:git_hooks, "~> 0.8", only: :dev, runtime: false}
+      {:git_hooks, "~> 0.8", only: :dev, runtime: false},
+
+      # Optional
+      {:igniter, "~> 0.7", optional: true}
     ]
   end
 

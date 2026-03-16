@@ -1,19 +1,20 @@
 defmodule ReqLLM.Application do
-  @moduledoc """
-  Application supervisor for ReqLLM.
+  @moduledoc false
 
-  Starts and supervises the Finch instance used for streaming LLM APIs.
-  Provides optimized connection pools per provider with sensible defaults
-  that can be overridden via application configuration.
+  # Application supervisor for ReqLLM.
 
-  ## Configuration
+  # Starts and supervises the Finch instance used for all HTTP operations,
+  # both streaming (via `Finch.stream/5`) and non-streaming (via Req).
+  # Provides optimized connection pools with sensible defaults that can be
+  # overridden via application configuration.
 
-  - `:load_dotenv` - Whether to automatically load `.env` files from the current
-    working directory at startup. Defaults to `true`. Set to `false` if you prefer
-    to manage environment variables yourself or use a different `.env` loading strategy.
+  # ## Configuration
 
-        config :req_llm, load_dotenv: false
-  """
+  # - `:load_dotenv` - Whether to automatically load `.env` files from the current
+  #   working directory at startup. Defaults to `true`. Set to `false` if you prefer
+  #   to manage environment variables yourself or use a different `.env` loading strategy.
+
+  #       config :req_llm, load_dotenv: false
 
   use Application
 
@@ -68,7 +69,7 @@ defmodule ReqLLM.Application do
   end
 
   @doc """
-  Gets the default Finch name used by ReqLLM for streaming operations.
+  Gets the default Finch name used by ReqLLM for all HTTP operations.
   """
   @spec finch_name() :: atom()
   def finch_name do

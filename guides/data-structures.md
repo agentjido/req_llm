@@ -7,7 +7,7 @@ ReqLLM's canonical data model is the foundation for provider-agnostic AI interac
 ## Hierarchy
 
 ```
-ReqLLM.Model          # Model configuration and metadata
+LLMDB.Model           # Canonical model metadata struct used by ReqLLM
     ↓
 ReqLLM.Context        # Conversation history
     ↓
@@ -31,39 +31,42 @@ ReqLLM.StreamResponse # Streaming handle with helpers
 - **Composable and immutable**: Build contexts and messages with simple, predictable APIs.
 - **Extensible**: Metadata fields and new content types can be added without breaking shape.
 
-## 1) ReqLLM.Model
+## 1) LLMDB.Model
 
-Represents a model choice for a specific provider plus normalized options and optional metadata.
+Represents a model choice for a specific provider plus optional routing and capability metadata.
 
 **Typical fields**:
 - `provider`: atom, e.g., `:anthropic`
-- `model`: string, e.g., `"claude-haiku-4-5"`
-- `options`: `temperature`, `max_tokens`, etc.
-- `capabilities`, `modalities`, `cost`: optional metadata (often sourced from models.dev)
+- `id`: string, e.g., `"claude-haiku-4-5"`
+- `provider_model_id`: optional provider-facing wire ID
+- `base_url`: optional per-model endpoint metadata
+- `capabilities`, `limits`, `modalities`, `cost`, `pricing`, `extra`: optional metadata (often sourced from LLMDB)
 
 **Constructors**:
 ```elixir
-{:ok, model} = ReqLLM.Model.from("anthropic:claude-haiku-4-5")
+{:ok, model} = ReqLLM.model("anthropic:claude-haiku-4-5")
 
-{:ok, model} = ReqLLM.Model.from({:anthropic, "claude-3-5-sonnet",
-  temperature: 0.7, max_tokens: 1000
-})
+model =
+  ReqLLM.model!(%{
+    provider: :openai,
+    id: "gpt-6-mini",
+    base_url: "http://localhost:8000/v1"
+  })
 
 # Direct struct creation if you need full control
-model = %ReqLLM.Model{
+model = LLMDB.Model.new!(%{
   provider: :anthropic,
-  model: "claude-3-5-sonnet",
-  temperature: 0.3,
-  max_tokens: 4000,
+  id: "claude-3-5-sonnet-20241022",
   capabilities: %{tool_call: true},
   modalities: %{input: [:text, :image], output: [:text]},
   cost: %{input: 3.0, output: 15.0}
-}
+})
 ```
 
 **How this supports normalization**:
 - One way to specify models across providers.
 - Common options are normalized; provider-specific options are translated by the provider adapter.
+- See the [Model Specs](model-specs.md) guide for the full model-spec resolution rules and explicit model-specification path.
 
 ## 2) ReqLLM.Context
 
@@ -324,7 +327,7 @@ end
 ```elixir
 alias ReqLLM.Message.ContentPart
 
-{:ok, model} = ReqLLM.Model.from("anthropic:claude-haiku-4-5")
+{:ok, model} = ReqLLM.model("anthropic:claude-haiku-4-5")
 
 {:ok, tool} = ReqLLM.Tool.new(
   name: "get_weather",

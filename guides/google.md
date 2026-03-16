@@ -8,6 +8,12 @@ Access Gemini models with built-in web grounding and thinking capabilities.
 GOOGLE_API_KEY=AIza...
 ```
 
+## Model Specs
+
+For the full model-spec workflow, see [Model Specs](model-specs.md).
+
+Use exact Gemini IDs from [LLMDB.xyz](https://llmdb.xyz) when possible. If you need to work ahead of the registry, use `ReqLLM.model!/1` to build a full explicit model spec.
+
 ## Provider Options
 
 Passed via `:provider_options` keyword:

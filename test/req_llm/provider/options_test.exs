@@ -1,7 +1,10 @@
 defmodule ReqLLM.Provider.OptionsTest do
   use ExUnit.Case, async: false
 
+  import ExUnit.CaptureLog
+
   alias ReqLLM.Provider.Options
+  alias ReqLLM.Providers.OpenAI
 
   # Mock provider for testing - implements minimal Provider behavior
   defmodule MockProvider do
@@ -265,6 +268,24 @@ defmodule ReqLLM.Provider.OptionsTest do
       # max_tokens: 0 should NOT be extracted
       refute Keyword.has_key?(processed, :max_tokens)
       assert processed[:temperature] == 0.5
+    end
+
+    test "does not synthesize max_tokens when max_completion_tokens is already provided" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4.1-mini")
+
+      log =
+        capture_log(fn ->
+          assert {:ok, processed} =
+                   Options.process(OpenAI, :object, model,
+                     max_completion_tokens: 123,
+                     operation: :object
+                   )
+
+          assert processed[:max_completion_tokens] == 123
+          refute Keyword.has_key?(processed, :max_tokens)
+        end)
+
+      refute log =~ "Renamed :max_tokens to :max_completion_tokens"
     end
   end
 
@@ -629,6 +650,54 @@ defmodule ReqLLM.Provider.OptionsTest do
         other ->
           flunk("Expected enhanced validation error, got: #{inspect(other)}")
       end
+    end
+  end
+
+  describe "Options.process/4 - embedding operation schema" do
+    test "uses embedding schema for :embedding operations" do
+      model = %LLMDB.Model{provider: :simple, id: "embedding-model"}
+      opts = [dimensions: 512, encoding_format: "float"]
+
+      assert {:ok, processed} = Options.process(SimpleProvider, :embedding, model, opts)
+      assert processed[:dimensions] == 512
+      assert processed[:encoding_format] == "float"
+    end
+
+    test "does not include return_usage in processed embedding transport options" do
+      model = %LLMDB.Model{provider: :simple, id: "embedding-model"}
+      opts = [dimensions: 512, encoding_format: "float"]
+
+      assert {:ok, processed} = Options.process(SimpleProvider, :embedding, model, opts)
+      refute Keyword.has_key?(processed, :return_usage)
+    end
+
+    test "rejects generation-specific options for :embedding operations" do
+      model = %LLMDB.Model{provider: :simple, id: "embedding-model"}
+      opts = [temperature: 0.7]
+
+      assert {:error, _} = Options.process(SimpleProvider, :embedding, model, opts)
+    end
+
+    test "accepts embedding options with provider_options" do
+      model = %LLMDB.Model{provider: :mock, id: "embedding-model"}
+
+      opts = [
+        dimensions: 256,
+        provider_options: [custom_option: "test"]
+      ]
+
+      assert {:ok, processed} = Options.process(MockProvider, :embedding, model, opts)
+      assert processed[:dimensions] == 256
+      assert processed[:provider_options][:custom_option] == "test"
+    end
+
+    test "uses generation schema for non-embedding operations" do
+      model = %LLMDB.Model{provider: :simple, id: "test-model"}
+      opts = [temperature: 0.7, max_tokens: 100]
+
+      assert {:ok, processed} = Options.process(SimpleProvider, :chat, model, opts)
+      assert processed[:temperature] == 0.7
+      assert processed[:max_tokens] == 100
     end
   end
 

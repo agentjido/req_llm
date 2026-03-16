@@ -234,6 +234,217 @@ defmodule ReqLLM.ToolTest do
 
       assert {:error, %ReqLLM.Error.Invalid.Parameter{}} = Tool.execute(tool, "not a map")
     end
+
+    test "normalizes schema-known string keys safely" do
+      {:ok, tool} =
+        Tool.new(
+          name: "schema_normalization_test",
+          description: "Schema normalization",
+          parameter_schema: [
+            required_field: [type: :string, required: true],
+            optional_field: [type: :integer, default: 42]
+          ],
+          callback: fn args -> {:ok, args} end
+        )
+
+      assert {:ok, validated} = Tool.execute(tool, %{"required_field" => "abc"})
+      assert Map.get(validated, :required_field) == "abc"
+      assert Map.get(validated, :optional_field) == 42
+    end
+
+    test "does not atomize unknown string keys" do
+      {:ok, tool} =
+        Tool.new(
+          name: "unknown_key_safety_test",
+          description: "Unknown key safety",
+          parameter_schema: [
+            required_field: [type: :string, required: true]
+          ],
+          callback: fn args -> {:ok, args} end
+        )
+
+      unknown_key = "unexpected_key_#{System.unique_integer([:positive])}"
+
+      assert_raise ArgumentError, fn ->
+        String.to_existing_atom(unknown_key)
+      end
+
+      assert {:error, %ReqLLM.Error.Validation.Error{}} =
+               Tool.execute(tool, %{"required_field" => "abc", unknown_key => "value"})
+
+      assert_raise ArgumentError, fn ->
+        String.to_existing_atom(unknown_key)
+      end
+    end
+
+    test "normalizes nested string keys in list/map schemas" do
+      {:ok, tool} =
+        Tool.new(
+          name: "nested_schema_normalization_test",
+          description: "Nested schema normalization",
+          parameter_schema: [
+            filters: [
+              type:
+                {:list,
+                 {:map,
+                  [
+                    field: [type: :string, required: true],
+                    comparison: [
+                      type:
+                        {:map,
+                         [
+                           operator: [type: :string, required: true],
+                           value: [type: :integer, required: true]
+                         ]},
+                      required: true
+                    ]
+                  ]}},
+              required: true
+            ]
+          ],
+          callback: fn args -> {:ok, args} end
+        )
+
+      input = %{
+        "filters" => [
+          %{
+            "field" => "status",
+            "comparison" => %{"operator" => "eq", "value" => 3}
+          }
+        ]
+      }
+
+      assert {:ok, validated} = Tool.execute(tool, input)
+
+      assert validated[:filters] == [%{field: "status", comparison: %{operator: "eq", value: 3}}]
+    end
+
+    test "normalizes nested string keys for generic map values using existing atoms" do
+      {:ok, tool} =
+        Tool.new(
+          name: "nested_generic_map_normalization_test",
+          description: "Nested generic map normalization",
+          parameter_schema: [
+            filters: [
+              type:
+                {:list,
+                 {:map,
+                  [
+                    field: [type: :string, required: true],
+                    value: [type: :map, required: true]
+                  ]}},
+              required: true
+            ]
+          ],
+          callback: fn args -> {:ok, args} end
+        )
+
+      input = %{
+        "filters" => [
+          %{
+            "field" => "status",
+            "value" => %{"eq" => "active"}
+          }
+        ]
+      }
+
+      assert {:ok, validated} = Tool.execute(tool, input)
+      assert validated[:filters] == [%{field: "status", value: %{eq: "active"}}]
+    end
+
+    test "does not atomize unknown nested string keys in generic map values" do
+      {:ok, tool} =
+        Tool.new(
+          name: "unknown_nested_key_safety_test",
+          description: "Unknown nested key safety",
+          parameter_schema: [
+            filters: [
+              type:
+                {:list,
+                 {:map,
+                  [
+                    field: [type: :string, required: true],
+                    value: [type: :map, required: true]
+                  ]}},
+              required: true
+            ]
+          ],
+          callback: fn args -> {:ok, args} end
+        )
+
+      unknown_key = "unexpected_nested_#{System.unique_integer([:positive])}"
+
+      assert_raise ArgumentError, fn ->
+        String.to_existing_atom(unknown_key)
+      end
+
+      assert {:error, %ReqLLM.Error.Validation.Error{}} =
+               Tool.execute(tool, %{
+                 "filters" => [
+                   %{
+                     "field" => "status",
+                     "value" => %{unknown_key => "active"}
+                   }
+                 ]
+               })
+
+      assert_raise ArgumentError, fn ->
+        String.to_existing_atom(unknown_key)
+      end
+    end
+
+    test "normalizes map keys for :or types that include map" do
+      {:ok, tool} =
+        Tool.new(
+          name: "or_map_normalization_test",
+          description: "OR type map normalization",
+          parameter_schema: [
+            payload: [type: {:or, [:string, :map]}, required: true]
+          ],
+          callback: fn args -> {:ok, args} end
+        )
+
+      assert {:ok, validated} = Tool.execute(tool, %{"payload" => %{"enabled" => true}})
+      assert validated[:payload] == %{enabled: true}
+    end
+
+    test "normalizes list element maps for nested :or types" do
+      {:ok, tool} =
+        Tool.new(
+          name: "list_or_map_normalization_test",
+          description: "List OR type map normalization",
+          parameter_schema: [
+            payloads: [type: {:list, {:or, [:string, :map]}}, required: true]
+          ],
+          callback: fn args -> {:ok, args} end
+        )
+
+      assert {:ok, validated} =
+               Tool.execute(tool, %{
+                 "payloads" => [%{"enabled" => true}]
+               })
+
+      assert validated[:payloads] == [%{enabled: true}]
+    end
+
+    test "normalizes map keys in tuple elements" do
+      {:ok, tool} =
+        Tool.new(
+          name: "tuple_map_normalization_test",
+          description: "Tuple map normalization",
+          parameter_schema: [
+            pair: [type: {:tuple, [:map, :string]}, required: true]
+          ],
+          callback: fn args -> {:ok, args} end
+        )
+
+      assert {:ok, validated} =
+               Tool.execute(tool, %{
+                 "pair" => {%{"enabled" => true}, "ok"}
+               })
+
+      assert validated[:pair] == {%{enabled: true}, "ok"}
+    end
   end
 
   describe "to_schema/2" do

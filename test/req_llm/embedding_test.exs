@@ -14,6 +14,24 @@ defmodule ReqLLM.EmbeddingTest do
 
   alias ReqLLM.Embedding
 
+  defp setup_telemetry do
+    test_pid = self()
+    ref = System.unique_integer([:positive])
+    handler_id = "embedding-usage-handler-#{ref}"
+
+    :telemetry.attach(
+      handler_id,
+      [:req_llm, :token_usage],
+      fn name, measurements, metadata, _ ->
+        send(test_pid, {:telemetry_event, name, measurements, metadata})
+      end,
+      nil
+    )
+
+    on_exit(fn -> :telemetry.detach(handler_id) end)
+    :ok
+  end
+
   describe "supported_models/0" do
     test "returns list of available embedding models" do
       models = Embedding.supported_models()
@@ -80,6 +98,20 @@ defmodule ReqLLM.EmbeddingTest do
       # Tuple format (if supported)
       assert {:ok, _} = Embedding.validate_model({:openai, id: "text-embedding-3-small"})
     end
+
+    test "accepts inline embedding models outside the catalog" do
+      assert {:ok, %LLMDB.Model{id: "text-embedding-4"}} =
+               Embedding.validate_model(%{provider: :openai, id: "text-embedding-4"})
+    end
+
+    test "accepts inline embedding models declared via capabilities" do
+      assert {:ok, %LLMDB.Model{id: "custom-embed"}} =
+               Embedding.validate_model(%{
+                 provider: :openai,
+                 id: "custom-embed",
+                 capabilities: %{embeddings: true}
+               })
+    end
   end
 
   describe "embed/3 - basic functionality" do
@@ -103,6 +135,49 @@ defmodule ReqLLM.EmbeddingTest do
 
     test "rejects unsupported providers" do
       assert {:error, :unknown_provider} = Embedding.embed("unsupported:model", "Hello")
+    end
+  end
+
+  describe "embed/3 - Google Vertex usage metadata" do
+    setup do
+      Req.Test.stub(__MODULE__, fn conn ->
+        Req.Test.json(conn, %{
+          "predictions" => [
+            %{
+              "embeddings" => %{
+                "values" => [0.1, -0.2, 0.3],
+                "statistics" => %{"token_count" => 2}
+              }
+            }
+          ]
+        })
+      end)
+
+      setup_telemetry()
+    end
+
+    test "emits telemetry and returns usage for embeddings" do
+      {:ok, %{embedding: embedding, usage: usage}} =
+        Embedding.embed(
+          "google_vertex:gemini-embedding-001",
+          "Hello world",
+          access_token: "test-token",
+          project_id: "test-project",
+          region: "us-central1",
+          return_usage: true,
+          req_http_options: [plug: {Req.Test, __MODULE__}]
+        )
+
+      assert embedding == [0.1, -0.2, 0.3]
+      assert usage.input == 2
+
+      assert_receive {:telemetry_event, [:req_llm, :token_usage], measurements,
+                      %{model: %LLMDB.Model{provider: :google_vertex, id: "gemini-embedding-001"}} =
+                        metadata}
+
+      assert measurements.tokens.input == 2
+      assert metadata.model.provider == :google_vertex
+      assert metadata.model.id == "gemini-embedding-001"
     end
   end
 

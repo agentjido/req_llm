@@ -18,9 +18,58 @@ LLM APIs are inconsistent. ReqLLM provides a unified, idiomatic Elixir interface
 - **High-level API** – Vercel AI SDK-inspired functions (`generate_text/3`, `stream_text/3`, `generate_object/4` and more) that work uniformly across providers. Standard features, minimal configuration.
 - **Low-level API** – Direct Req plugin access for full HTTP control. Built around OpenAI Chat Completions baseline with provider-specific callbacks for non-compatible APIs (e.g., Anthropic).
 
-**Supported Providers:** Anthropic, OpenAI, Google, Groq, OpenRouter, xAI, AWS Bedrock, Cerebras, Meta, Z.AI, Zenmux, and more. See provider guides in [documentation](https://hexdocs.pm/req_llm) for details.
+**18 Supported Providers:**
+
+| Provider | ID | Guide |
+|---|---|---|
+| [Alibaba Cloud Bailian](https://www.alibabacloud.com/help/en/model-studio) | `alibaba` | — |
+| [Alibaba Cloud Bailian (China)](https://www.alibabacloud.com/help/en/model-studio) | `alibaba_cn` | — |
+| [Anthropic](https://anthropic.com) | `anthropic` | [Guide](guides/anthropic.md) |
+| [OpenAI](https://openai.com) | `openai` | [Guide](guides/openai.md) |
+| [Google Gemini](https://ai.google.dev) | `google` | [Guide](guides/google.md) |
+| [Google Vertex AI](https://cloud.google.com/vertex-ai) | `google_vertex` | [Guide](guides/google_vertex.md) |
+| [Amazon Bedrock](https://aws.amazon.com/bedrock/) | `amazon_bedrock` | [Guide](guides/amazon_bedrock.md) |
+| [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) | `azure` | [Guide](guides/azure.md) |
+| [Groq](https://groq.com) | `groq` | [Guide](guides/groq.md) |
+| [xAI](https://x.ai) | `xai` | [Guide](guides/xai.md) |
+| [OpenRouter](https://openrouter.ai) | `openrouter` | [Guide](guides/openrouter.md) |
+| [Cerebras](https://cerebras.ai) | `cerebras` | [Guide](guides/cerebras.md) |
+| [Meta Llama](https://llama.meta.com) | `meta` | [Guide](guides/meta.md) |
+| [Z.AI](https://z.ai) | `zai` | [Guide](guides/zai.md) |
+| [Z.AI Coder](https://z.ai) | `zai_coder` | [Guide](guides/zai_coder.md) |
+| [Zenmux](https://zenmux.ai) | `zenmux` | [Guide](guides/zenmux.md) |
+| [Venice](https://venice.ai) | `venice` | — |
+| [vLLM](https://docs.vllm.ai) | `vllm` | [Ollama](guides/ollama.md) |
 
 \* _Streaming uses Finch directly due to known Req limitations with SSE responses._
+
+## Installation
+
+### Igniter Installation (Recommended)
+
+The fastest way to get started is with [Igniter](https://hex.pm/packages/igniter):
+
+```bash
+mix igniter.install req_llm
+```
+
+### Manual Installation
+
+Add `req_llm` to your list of dependencies in `mix.exs`:
+
+```elixir
+def deps do
+  [
+    {:req_llm, "~> 1.6"}
+  ]
+end
+```
+
+Then run:
+
+```bash
+mix deps.get
+```
 
 ## Quick Start
 
@@ -80,7 +129,7 @@ usage = ReqLLM.StreamResponse.usage(response)
 ## Features
 
 - **Provider-agnostic model registry**
-  - 45 providers / 665+ models auto-synced from [models.dev](https://models.dev) (`mix req_llm.model_sync`)
+  - 45 providers / 665+ models sourced from [models.dev](https://models.dev) via the `llm_db` dependency
   - Cost, context length, modality, capability and deprecation metadata included
 
 - **Canonical data model**
@@ -124,8 +173,8 @@ usage = ReqLLM.StreamResponse.usage(response)
   - Built-in OpenAI-style encoding/decoding with provider callback overrides for custom formats
 
 - **Flexible model specification**
-  - Accepts `"provider:model"`, `{:provider, "model", opts}` tuples, or `%ReqLLM.Model{}` structs
-  - Helper functions for parsing, introspection and default-merging
+  - Accepts `"provider:model"`, tuples, `%LLMDB.Model{}` structs, and plain-map model specs
+  - `ReqLLM.model!/1` is the recommended way to validate and normalize full model specs
 
 - **Secure, layered key management** (`ReqLLM.Keys`)
   - Per-request override → application config → env vars / .env files
@@ -163,6 +212,57 @@ By default, ReqLLM loads `.env` files from the current working directory at star
 ```elixir
 config :req_llm, load_dotenv: false
 ```
+
+## Model Specs
+
+ReqLLM can call models that are not in LLMDB yet. This is the recommended advanced
+workflow for local development, debugging new releases, and custom provider setups.
+
+See the [Model Specs](guides/model-specs.md) guide for the full explanation of
+string specs, exact dated releases, `%LLMDB.Model{}` structs, and the full explicit
+model specification path.
+
+For backwards compatibility, you can pass a plain map directly to the major APIs.
+The clearer path is to normalize it first with `ReqLLM.model!/1`, which returns an
+enriched `%LLMDB.Model{}`.
+
+```elixir
+model =
+  ReqLLM.model!(%{
+    provider: :openai,
+    id: "gpt-6-mini",
+    base_url: "http://localhost:8000/v1"
+  })
+
+ReqLLM.generate_text!(model, "Hello world")
+```
+
+You can still pass the plain-map model spec directly:
+
+```elixir
+ReqLLM.generate_text!(
+  %{provider: :openai, id: "gpt-6-mini", base_url: "http://localhost:8000/v1"},
+  "Hello world"
+)
+```
+
+Use additional metadata only when the provider needs it:
+
+```elixir
+model =
+  ReqLLM.model!(%{
+    provider: :google_vertex,
+    id: "zai-org/glm-4.7-maas",
+    extra: %{family: "glm"}
+  })
+```
+
+ReqLLM hard-fails early when the model spec is missing required routing data, with
+errors aimed at advanced users:
+
+- Inline models always need `provider` and `id` (or `model`)
+- Azure still needs a `base_url`
+- Google Vertex MaaS models may need `extra.family` when the model family cannot be inferred
 
 ## Usage Cost Tracking
 
@@ -206,7 +306,7 @@ response.usage.image_usage
 
 A telemetry event `[:req_llm, :token_usage]` is published on every request with token counts and calculated costs.
 
-See `lib/examples/scripts/usage_cost_search_image.exs` for a multi-provider smoke test that validates search tool and image generation cost metadata. For comprehensive documentation, see the [Usage & Billing Guide](guides/usage-and-billing.md).
+See `examples/scripts/usage_cost_search_image.exs` and run it from `examples/` with `mix run scripts/usage_cost_search_image.exs` for a multi-provider smoke test that validates search tool and image generation cost metadata. For comprehensive documentation, see the [Usage & Billing Guide](guides/usage-and-billing.md).
 
 ## Streaming Configuration
 
@@ -300,7 +400,7 @@ For advanced use cases, you can use ReqLLM providers directly as Req plugins. Th
 
 ```elixir
 # The canonical pattern from ReqLLM.Generation.generate_text/3
-with {:ok, model} <- ReqLLM.Model.from("anthropic:claude-haiku-4-5"), # Parse model spec
+with {:ok, model} <- ReqLLM.model("anthropic:claude-haiku-4-5"), # Parse model spec
      {:ok, provider_module} <- ReqLLM.provider(model.provider),        # Get provider module
      {:ok, request} <- provider_module.prepare_request(:chat, model, "Hello!", temperature: 0.7), # Build Req request
      {:ok, %Req.Response{body: response}} <- Req.request(request) do   # Execute HTTP request
@@ -308,7 +408,7 @@ with {:ok, model} <- ReqLLM.Model.from("anthropic:claude-haiku-4-5"), # Parse mo
 end
 
 # Customize the Req pipeline with additional headers or middleware
-{:ok, model} = ReqLLM.Model.from("anthropic:claude-haiku-4-5")
+{:ok, model} = ReqLLM.model("anthropic:claude-haiku-4-5")
 {:ok, provider_module} = ReqLLM.provider(model.provider)
 {:ok, request} = provider_module.prepare_request(:chat, model, "Hello!", temperature: 0.7)
 
@@ -334,7 +434,7 @@ This approach gives you full control over the Req pipeline, allowing you to add 
 - [Mix Tasks](guides/mix-tasks.md) – model sync, compatibility testing, code generation
 - [Fixture Testing](guides/fixture-testing.md) – model validation and supported models
 - [Adding a Provider](guides/adding_a_provider.md) – extend with new providers
-- Provider Guides: [Anthropic](guides/anthropic.md), [OpenAI](guides/openai.md), [Google](guides/google.md), [xAI](guides/xai.md), [Groq](guides/groq.md), [OpenRouter](guides/openrouter.md), [Amazon Bedrock](guides/amazon_bedrock.md), [Cerebras](guides/cerebras.md), [Meta](guides/meta.md), [Z.AI](guides/zai.md), [Z.AI Coder](guides/zai_coder.md)
+- Provider Guides: [Anthropic](guides/anthropic.md), [OpenAI](guides/openai.md), [Google](guides/google.md), [Google Vertex](guides/google_vertex.md), [xAI](guides/xai.md), [Groq](guides/groq.md), [OpenRouter](guides/openrouter.md), [Amazon Bedrock](guides/amazon_bedrock.md), [Azure](guides/azure.md), [Cerebras](guides/cerebras.md), [Meta](guides/meta.md), [Z.AI](guides/zai.md), [Z.AI Coder](guides/zai_coder.md), [Zenmux](guides/zenmux.md), [Ollama/vLLM](guides/ollama.md)
 
 ## Roadmap & Status
 

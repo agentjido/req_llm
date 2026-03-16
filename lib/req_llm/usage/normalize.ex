@@ -37,7 +37,7 @@ defmodule ReqLLM.Usage.Normalize do
 
     reasoning =
       first_present(usage, [:reasoning, "reasoning", :reasoning_tokens, "reasoning_tokens"]) ||
-        get_reasoning_tokens(usage) || 0
+        get_reasoning_tokens(usage)
 
     cached_input = get_cached_input_tokens(usage, input, input_includes_cached)
     cache_creation = get_cache_creation_tokens(usage, input, input_includes_cached)

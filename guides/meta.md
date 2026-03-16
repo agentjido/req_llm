@@ -24,6 +24,12 @@ For AWS Bedrock, see [Amazon Bedrock Provider Guide](amazon_bedrock.md).
 
 No direct configuration - wrapped by cloud providers using native format.
 
+## Model Specs
+
+For the full model-spec workflow, see [Model Specs](model-specs.md).
+
+Most Llama deployments in ReqLLM are better expressed through another provider's model spec, usually OpenAI-compatible, Bedrock, Azure, or Vertex. Use the provider guide that matches the wire protocol you are actually talking to.
+
 ## Native Format Details
 
 ### Request Format

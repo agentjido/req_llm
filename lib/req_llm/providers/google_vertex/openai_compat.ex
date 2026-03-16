@@ -3,15 +3,16 @@ defmodule ReqLLM.Providers.GoogleVertex.OpenAICompat do
   OpenAI-compatible model family support for Google Vertex AI.
 
   Handles third-party MaaS (Model-as-a-Service) models on Vertex AI that use
-  the OpenAI Chat Completions API format through the rawPredict endpoint.
+  the OpenAI Chat Completions API format.
 
   Currently supports:
   - GLM models (zai-org/glm-4.7-maas)
   - OpenAI OSS models (openai/gpt-oss-120b-maas, openai/gpt-oss-20b-maas)
   - Other future MaaS models using OpenAI-compatible format
 
-  These models are accessed via Vertex AI's rawPredict/streamRawPredict endpoints
-  and use standard OpenAI Chat Completions request/response format.
+  These models are accessed via Vertex AI's `endpoints/openapi/chat/completions`
+  endpoint and use standard OpenAI Chat Completions request/response format.
+  The model ID (e.g., `zai-org/glm-4.7-maas`) is included in the request body.
   """
 
   alias ReqLLM.Provider.Defaults
@@ -57,8 +58,25 @@ defmodule ReqLLM.Providers.GoogleVertex.OpenAICompat do
   @doc """
   Parses OpenAI Chat Completions response from Vertex AI into ReqLLM format.
 
-  Delegates to Provider.Defaults for standard OpenAI response decoding.
+  Returns `{:error, %ReqLLM.Error.API.Request{}}` for responses containing
+  an `"error"` key. Otherwise delegates to Provider.Defaults for standard
+  OpenAI response decoding.
   """
+  def parse_response([body], model, opts) when is_map(body) do
+    parse_response(body, model, opts)
+  end
+
+  def parse_response(%{"error" => _} = body, %LLMDB.Model{} = _model, _opts) do
+    {status, reason} = extract_api_error(body)
+
+    {:error,
+     ReqLLM.Error.API.Request.exception(
+       status: status,
+       reason: reason,
+       response_body: body
+     )}
+  end
+
   def parse_response(body, %LLMDB.Model{} = model, opts) when is_map(body) do
     {:ok, response} = Defaults.decode_response_body_openai_format(body, model)
 
@@ -129,5 +147,28 @@ defmodule ReqLLM.Providers.GoogleVertex.OpenAICompat do
       )
 
     {updated_context, updated_opts}
+  end
+
+  # Extract status code and error message from API error response bodies.
+  # Handles both Google Cloud error format and OpenAI error format.
+  defp extract_api_error(%{"error" => %{"message" => message, "code" => code}})
+       when is_binary(message) and is_integer(code) do
+    {code, message}
+  end
+
+  defp extract_api_error(%{"error" => %{"message" => message}}) when is_binary(message) do
+    {nil, message}
+  end
+
+  defp extract_api_error(%{"error" => %{"code" => code}}) when is_integer(code) do
+    {code, "API error (code: #{code})"}
+  end
+
+  defp extract_api_error(%{"error" => message}) when is_binary(message) do
+    {nil, message}
+  end
+
+  defp extract_api_error(%{"error" => _}) do
+    {nil, "Unknown API error"}
   end
 end

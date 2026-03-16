@@ -338,7 +338,41 @@ defmodule ReqLLM.Tool.ZoiTest do
       assert google_schema["description"] == "Search query"
       assert google_schema["parameters"]["type"] == "object"
       assert google_schema["parameters"]["properties"]["query"]["type"] == "string"
+      refute Map.has_key?(google_schema["parameters"], "$schema")
       refute Map.has_key?(google_schema["parameters"], "additionalProperties")
+    end
+
+    test "removes additionalProperties recursively from nested objects" do
+      schema =
+        Zoi.object(%{
+          company:
+            Zoi.object(%{
+              name: Zoi.string(),
+              address:
+                Zoi.object(%{
+                  city: Zoi.string()
+                })
+            })
+        })
+
+      {:ok, tool} =
+        Tool.new(
+          name: "register_company",
+          description: "Register company",
+          parameter_schema: schema,
+          callback: &TestCallbacks.nested_callback/1
+        )
+
+      google_schema = Schema.to_google_format(tool)
+      parameters = google_schema["parameters"]
+
+      refute Map.has_key?(parameters, "additionalProperties")
+      refute Map.has_key?(parameters["properties"]["company"], "additionalProperties")
+
+      refute Map.has_key?(
+               parameters["properties"]["company"]["properties"]["address"],
+               "additionalProperties"
+             )
     end
   end
 

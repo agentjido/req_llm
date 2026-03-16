@@ -8,24 +8,29 @@ Run local LLMs with [Ollama](https://ollama.ai) using the OpenAI-compatible API.
 2. Pull a model: `ollama pull llama3` or `ollama pull gemma2`
 3. Ensure Ollama is running (default: `http://localhost:11434`)
 
+## Model Specs
+
+For the full model-spec workflow, see [Model Specs](model-specs.md).
+
+Ollama is a good example of the full explicit model specification path: the model may not exist in LLMDB, but ReqLLM can still use it as long as the model spec includes `provider`, `id`, and `base_url`.
+
 ## Usage
 
 Ollama exposes an OpenAI-compatible API, so use the `:openai` provider with a custom `base_url`:
 
 ```elixir
 # Create a model struct for your Ollama model
-{:ok, model} = ReqLLM.model(%{id: "llama3", provider: :openai})
+model = ReqLLM.model!(%{id: "llama3", provider: :openai, base_url: "http://localhost:11434/v1"})
 
-# Generate text with custom base_url
-{:ok, response} = ReqLLM.generate_text(model, "Hello!", base_url: "http://localhost:11434/v1")
+{:ok, response} = ReqLLM.generate_text(model, "Hello!")
 ```
 
 ### Streaming
 
 ```elixir
-{:ok, model} = ReqLLM.model(%{id: "gemma2", provider: :openai})
+model = ReqLLM.model!(%{id: "gemma2", provider: :openai, base_url: "http://localhost:11434/v1"})
 
-{:ok, stream} = ReqLLM.stream_text(model, "Write a haiku", base_url: "http://localhost:11434/v1")
+{:ok, stream} = ReqLLM.stream_text(model, "Write a haiku")
 
 for chunk <- stream do
   IO.write(chunk.text || "")
@@ -41,13 +46,13 @@ defmodule MyApp.Ollama do
   @base_url "http://localhost:11434/v1"
 
   def generate_text(model_name, prompt, opts \\ []) do
-    {:ok, model} = ReqLLM.model(%{id: model_name, provider: :openai})
-    ReqLLM.generate_text(model, prompt, Keyword.put(opts, :base_url, @base_url))
+    model = ReqLLM.model!(%{id: model_name, provider: :openai, base_url: @base_url})
+    ReqLLM.generate_text(model, prompt, opts)
   end
 
   def stream_text(model_name, prompt, opts \\ []) do
-    {:ok, model} = ReqLLM.model(%{id: model_name, provider: :openai})
-    ReqLLM.stream_text(model, prompt, Keyword.put(opts, :base_url, @base_url))
+    model = ReqLLM.model!(%{id: model_name, provider: :openai, base_url: @base_url})
+    ReqLLM.stream_text(model, prompt, opts)
   end
 end
 

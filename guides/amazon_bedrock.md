@@ -17,6 +17,12 @@ AWS_BEARER_TOKEN_BEDROCK=your-api-key
 AWS_REGION=us-east-1
 ```
 
+## Model Specs
+
+For the full model-spec workflow, see [Model Specs](model-specs.md).
+
+Use exact Bedrock IDs from [LLMDB.xyz](https://llmdb.xyz) when possible. For inference profiles, custom deployments, or new Bedrock model IDs, use a full explicit model spec when the registry has not caught up yet.
+
 **Provider Options:**
 
 ```elixir

@@ -32,8 +32,11 @@ defmodule ReqLLM.Providers.GoogleVertex.Gemini do
   shared tool call ID compatibility policy.
   """
   def format_request(model_id, context, opts) do
+    {provider_opts, rest} = Keyword.pop(opts, :provider_options, [])
+
     opts_map =
-      opts
+      rest
+      |> Keyword.merge(provider_opts)
       |> Map.new()
       |> Map.merge(%{context: context, model: model_id})
 
