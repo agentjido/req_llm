@@ -282,25 +282,36 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
   defp fetch_access_token(_), do: {:error, :missing_credentials}
 
-  # Get model family from LLMDB model struct.
+  # Get model family from model metadata.
   # First tries prefix matching on model ID for backward compatibility,
-  # then falls back to LLMDB extra.family metadata for third-party MaaS models.
-  defp get_model_family(%LLMDB.Model{} = model) do
-    model_id = model.provider_model_id || model.id
+  # then falls back to extra.family metadata for third-party MaaS models.
+  defp get_model_family(%LLMDB.Model{} = model),
+    do: classify_model_family(model.provider_model_id || model.id, model)
 
+  defp get_model_family(model) when is_map(model),
+    do: classify_model_family(extract_model_id(model), model)
+
+  defp get_model_family(model_id) when is_binary(model_id),
+    do: classify_model_family(model_id, %{})
+
+  defp classify_model_family(model_id, model) when is_binary(model_id) do
     cond do
       String.starts_with?(model_id, "claude-") -> "claude"
       String.starts_with?(model_id, "gemini-") -> "gemini"
-      true -> resolve_family_from_metadata(model)
+      true -> resolve_family_from_metadata(model, model_id)
     end
   end
 
-  # Resolve model family from LLMDB extra.family metadata.
-  # Maps specific extra.family values (e.g., "claude-haiku", "gemini-flash")
-  # to high-level formatter families. Unknown families default to "openai_compat"
-  # for MaaS models that use the OpenAI Chat Completions format.
-  defp resolve_family_from_metadata(model) do
-    extra_family = get_in(model, [Access.key(:extra, %{}), :family])
+  defp extract_model_id(model) do
+    Map.get(model, :provider_model_id) ||
+      Map.get(model, "provider_model_id") ||
+      Map.get(model, :id) ||
+      Map.get(model, "id")
+  end
+
+  defp resolve_family_from_metadata(model, model_id) do
+    extra = Map.get(model, :extra) || Map.get(model, "extra") || %{}
+    extra_family = Map.get(extra, :family) || Map.get(extra, "family")
 
     cond do
       is_binary(extra_family) and String.starts_with?(extra_family, "claude") ->
@@ -313,7 +324,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
         "openai_compat"
 
       true ->
-        raise ArgumentError, "Unknown model family for: #{model.provider_model_id || model.id}"
+        raise ArgumentError, "Unknown model family for: #{model_id}"
     end
   end
 
