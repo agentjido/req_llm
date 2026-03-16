@@ -487,7 +487,9 @@ defmodule ReqLLM.Provider.Options do
 
   defp maybe_extract_max_tokens(%LLMDB.Model{} = model, opts) do
     cond do
-      Keyword.has_key?(opts, :max_tokens) ->
+      Keyword.has_key?(opts, :max_tokens) or
+        Keyword.has_key?(opts, :max_completion_tokens) or
+          provider_option_present?(opts, :max_completion_tokens) ->
         opts
 
       is_map(model.limits) and is_integer(model.limits[:output]) and model.limits[:output] > 0 ->
@@ -496,6 +498,12 @@ defmodule ReqLLM.Provider.Options do
       true ->
         opts
     end
+  end
+
+  defp provider_option_present?(opts, key) do
+    opts
+    |> Keyword.get(:provider_options, [])
+    |> Keyword.has_key?(key)
   end
 
   defp maybe_extract_model_base_url(opts, %LLMDB.Model{} = model) do

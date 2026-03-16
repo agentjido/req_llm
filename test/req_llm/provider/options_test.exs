@@ -1,7 +1,10 @@
 defmodule ReqLLM.Provider.OptionsTest do
   use ExUnit.Case, async: false
 
+  import ExUnit.CaptureLog
+
   alias ReqLLM.Provider.Options
+  alias ReqLLM.Providers.OpenAI
 
   # Mock provider for testing - implements minimal Provider behavior
   defmodule MockProvider do
@@ -265,6 +268,24 @@ defmodule ReqLLM.Provider.OptionsTest do
       # max_tokens: 0 should NOT be extracted
       refute Keyword.has_key?(processed, :max_tokens)
       assert processed[:temperature] == 0.5
+    end
+
+    test "does not synthesize max_tokens when max_completion_tokens is already provided" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4.1-mini")
+
+      log =
+        capture_log(fn ->
+          assert {:ok, processed} =
+                   Options.process(OpenAI, :object, model,
+                     max_completion_tokens: 123,
+                     operation: :object
+                   )
+
+          assert processed[:max_completion_tokens] == 123
+          refute Keyword.has_key?(processed, :max_tokens)
+        end)
+
+      refute log =~ "Renamed :max_tokens to :max_completion_tokens"
     end
   end
 
