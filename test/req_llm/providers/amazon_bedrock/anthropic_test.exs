@@ -173,6 +173,116 @@ defmodule ReqLLM.Providers.AmazonBedrock.AnthropicTest do
     end
   end
 
+  describe "format_request/3 tool_choice normalization" do
+    test "normalizes atom :auto to Anthropic map format" do
+      tool =
+        ReqLLM.Tool.new!(
+          name: "bash",
+          description: "Run bash",
+          parameter_schema: [command: [type: :string, required: true]],
+          callback: fn _ -> {:ok, "ok"} end
+        )
+
+      context = Context.new([Context.user("hello")])
+
+      body =
+        Anthropic.format_request("test-model", context, tools: [tool], tool_choice: :auto)
+
+      assert body[:tool_choice] == %{type: "auto"}
+    end
+
+    test "normalizes atom :required to Anthropic any format" do
+      tool =
+        ReqLLM.Tool.new!(
+          name: "bash",
+          description: "Run bash",
+          parameter_schema: [command: [type: :string, required: true]],
+          callback: fn _ -> {:ok, "ok"} end
+        )
+
+      context = Context.new([Context.user("hello")])
+
+      body =
+        Anthropic.format_request("test-model", context, tools: [tool], tool_choice: :required)
+
+      assert body[:tool_choice] == %{type: "any"}
+    end
+
+    test "passes through map tool_choice unchanged" do
+      tool =
+        ReqLLM.Tool.new!(
+          name: "bash",
+          description: "Run bash",
+          parameter_schema: [command: [type: :string, required: true]],
+          callback: fn _ -> {:ok, "ok"} end
+        )
+
+      context = Context.new([Context.user("hello")])
+      choice = %{type: "tool", name: "bash"}
+
+      body =
+        Anthropic.format_request("test-model", context, tools: [tool], tool_choice: choice)
+
+      assert body[:tool_choice] == %{type: "tool", name: "bash"}
+    end
+
+    test "omits tool_choice when not specified" do
+      tool =
+        ReqLLM.Tool.new!(
+          name: "bash",
+          description: "Run bash",
+          parameter_schema: [command: [type: :string, required: true]],
+          callback: fn _ -> {:ok, "ok"} end
+        )
+
+      context = Context.new([Context.user("hello")])
+
+      body = Anthropic.format_request("test-model", context, tools: [tool])
+
+      refute Map.has_key?(body, :tool_choice)
+    end
+  end
+
+  describe "format_request/3 tool result with image" do
+    test "image content parts flow through to native Anthropic encoding" do
+      tool_call = ReqLLM.ToolCall.new("call_1", "bash", ~s({"command":"view-image /test.jpg"}))
+
+      context =
+        Context.new([
+          Context.user("What's in this image?"),
+          Context.assistant("", tool_calls: [tool_call]),
+          Context.tool_result("call_1", [
+            ReqLLM.Message.ContentPart.text("Image loaded"),
+            ReqLLM.Message.ContentPart.image(<<0xFF, 0xD8>>, "image/jpeg")
+          ])
+        ])
+
+      body = Anthropic.format_request("test-model", context, [])
+
+      # Find the tool result message
+      tool_msg =
+        Enum.find(body[:messages], fn msg ->
+          case msg do
+            %{content: [%{type: "tool_result"} | _]} -> true
+            _ -> false
+          end
+        end)
+
+      assert tool_msg
+      [%{type: "tool_result", content: content}] = tool_msg[:content]
+
+      assert is_list(content)
+      assert length(content) == 2
+
+      [text_block, image_block] = content
+      assert text_block == %{type: "text", text: "Image loaded"}
+      assert image_block[:type] == "image"
+      assert image_block[:source][:type] == "base64"
+      assert image_block[:source][:media_type] == "image/jpeg"
+      assert image_block[:source][:data] == Base.encode64(<<0xFF, 0xD8>>)
+    end
+  end
+
   describe "parse_response/2" do
     test "parses basic Anthropic response" do
       response_body = %{

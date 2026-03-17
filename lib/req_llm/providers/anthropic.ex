@@ -835,18 +835,16 @@ defmodule ReqLLM.Providers.Anthropic do
     end
   end
 
-  # Normalize tool_choice to Anthropic's expected format
-  # Anthropic expects: %{type: "auto"}, %{type: "any"}, or %{type: "tool", name: "..."}
-  defp normalize_tool_choice(:auto), do: %{type: "auto"}
-  defp normalize_tool_choice(:required), do: %{type: "any"}
-  defp normalize_tool_choice(:none), do: %{type: "none"}
-  defp normalize_tool_choice("auto"), do: %{type: "auto"}
-  defp normalize_tool_choice("required"), do: %{type: "any"}
-  defp normalize_tool_choice("none"), do: %{type: "none"}
-  defp normalize_tool_choice({:tool, name}) when is_binary(name), do: %{type: "tool", name: name}
-
-  defp normalize_tool_choice(%{type: _} = choice), do: choice
-  defp normalize_tool_choice(%{"type" => _} = choice), do: choice
+  @doc false
+  def normalize_tool_choice(:auto), do: %{type: "auto"}
+  def normalize_tool_choice(:required), do: %{type: "any"}
+  def normalize_tool_choice(:none), do: %{type: "none"}
+  def normalize_tool_choice("auto"), do: %{type: "auto"}
+  def normalize_tool_choice("required"), do: %{type: "any"}
+  def normalize_tool_choice("none"), do: %{type: "none"}
+  def normalize_tool_choice({:tool, name}) when is_binary(name), do: %{type: "tool", name: name}
+  def normalize_tool_choice(%{type: _} = choice), do: choice
+  def normalize_tool_choice(%{"type" => _} = choice), do: choice
 
   defp get_option(options, key, default \\ nil)
 

@@ -219,6 +219,70 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
              ]
     end
 
+    test "formats tool_result with image content part" do
+      context = %ReqLLM.Context{
+        messages: [
+          %Message{
+            role: :tool,
+            tool_call_id: "call_img",
+            content: [
+              ContentPart.text("Image loaded: 768x1024"),
+              ContentPart.image(<<0xFF, 0xD8, 0xFF>>, "image/jpeg")
+            ]
+          }
+        ]
+      }
+
+      result = Converse.format_request("test-model", context, [])
+
+      tool_result_content =
+        get_in(result, [
+          "messages",
+          Access.at(0),
+          "content",
+          Access.at(0),
+          "toolResult",
+          "content"
+        ])
+
+      assert length(tool_result_content) == 2
+
+      assert Enum.at(tool_result_content, 0) == %{"text" => "Image loaded: 768x1024"}
+
+      image_block = Enum.at(tool_result_content, 1)
+      assert image_block["image"]["format"] == "jpeg"
+      assert image_block["image"]["source"]["bytes"] == Base.encode64(<<0xFF, 0xD8, 0xFF>>)
+    end
+
+    test "formats tool_result with image-only content" do
+      context = %ReqLLM.Context{
+        messages: [
+          %Message{
+            role: :tool,
+            tool_call_id: "call_img2",
+            content: [
+              ContentPart.image(<<0xFF, 0xD8>>, "image/jpeg")
+            ]
+          }
+        ]
+      }
+
+      result = Converse.format_request("test-model", context, [])
+
+      tool_result_content =
+        get_in(result, [
+          "messages",
+          Access.at(0),
+          "content",
+          Access.at(0),
+          "toolResult",
+          "content"
+        ])
+
+      assert length(tool_result_content) == 1
+      assert Enum.at(tool_result_content, 0)["image"]["format"] == "jpeg"
+    end
+
     test "merges consecutive tool results into single user message" do
       tool_call_1 = ReqLLM.ToolCall.new("call_1", "get_weather", ~s({"location":"Paris"}))
       tool_call_2 = ReqLLM.ToolCall.new("call_2", "get_weather", ~s({"location":"London"}))

@@ -529,7 +529,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
         %{
           "toolResult" => %{
             "toolUseId" => id,
-            "content" => [%{"text" => extract_tool_result_text(msg)}]
+            "content" => encode_tool_result_content(msg)
           }
         }
       ]
@@ -628,6 +628,16 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
   end
 
   defp extract_text_content(_), do: ""
+
+  defp encode_tool_result_content(%Message{content: content})
+       when is_list(content) and content != [] do
+    Enum.map(content, &encode_content_part/1)
+  end
+
+  defp encode_tool_result_content(%Message{} = msg) do
+    text = extract_tool_result_text(msg)
+    [%{"text" => text}]
+  end
 
   defp extract_tool_result_text(%Message{content: content} = msg) do
     text = extract_text_content(content)

@@ -117,7 +117,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.Anthropic do
 
         case Keyword.get(opts, :tool_choice) do
           nil -> body
-          choice -> Map.put(body, :tool_choice, choice)
+          choice -> Map.put(body, :tool_choice, Anthropic.normalize_tool_choice(choice))
         end
     end
   end
