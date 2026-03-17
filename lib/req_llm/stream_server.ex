@@ -962,7 +962,7 @@ defmodule ReqLLM.StreamServer do
       |> Map.put(:status, state.http_status)
       |> Map.put(:headers, state.headers)
       |> maybe_put_request_id(state.telemetry)
-      |> normalize_stream_finish_reason()
+      |> normalize_public_stream_finish_reason()
 
     if state.terminated? do
       Map.put_new(meta, :finish_reason, :stop)
@@ -1126,7 +1126,7 @@ defmodule ReqLLM.StreamServer do
       ReqLLM.Telemetry.stop_request(
         telemetry,
         state.metadata,
-        finish_reason: finish_reason,
+        finish_reason: normalize_telemetry_stream_finish_reason(finish_reason),
         http_status: state.http_status,
         usage: usage,
         emit_token_usage?: is_map(usage)
@@ -1144,23 +1144,25 @@ defmodule ReqLLM.StreamServer do
   defp maybe_put_request_id(meta, nil), do: meta
   defp maybe_put_request_id(meta, telemetry), do: Map.put(meta, :request_id, telemetry.request_id)
 
-  defp normalize_stream_finish_reason(%{finish_reason: "stop"} = meta),
+  defp normalize_public_stream_finish_reason(%{finish_reason: "stop"} = meta),
     do: %{meta | finish_reason: :stop}
 
-  defp normalize_stream_finish_reason(%{finish_reason: "length"} = meta),
+  defp normalize_public_stream_finish_reason(%{finish_reason: "length"} = meta),
     do: %{meta | finish_reason: :length}
 
-  defp normalize_stream_finish_reason(%{finish_reason: "tool_use"} = meta),
-    do: %{meta | finish_reason: :tool_calls}
-
-  defp normalize_stream_finish_reason(%{finish_reason: "tool_calls"} = meta),
-    do: %{meta | finish_reason: :tool_calls}
-
-  defp normalize_stream_finish_reason(%{finish_reason: "cancelled"} = meta),
+  defp normalize_public_stream_finish_reason(%{finish_reason: "cancelled"} = meta),
     do: %{meta | finish_reason: :cancelled}
 
-  defp normalize_stream_finish_reason(%{finish_reason: "incomplete"} = meta),
+  defp normalize_public_stream_finish_reason(%{finish_reason: "incomplete"} = meta),
     do: %{meta | finish_reason: :incomplete}
 
-  defp normalize_stream_finish_reason(meta), do: meta
+  defp normalize_public_stream_finish_reason(meta), do: meta
+
+  defp normalize_telemetry_stream_finish_reason("stop"), do: :stop
+  defp normalize_telemetry_stream_finish_reason("length"), do: :length
+  defp normalize_telemetry_stream_finish_reason("tool_use"), do: :tool_calls
+  defp normalize_telemetry_stream_finish_reason("tool_calls"), do: :tool_calls
+  defp normalize_telemetry_stream_finish_reason("cancelled"), do: :cancelled
+  defp normalize_telemetry_stream_finish_reason("incomplete"), do: :incomplete
+  defp normalize_telemetry_stream_finish_reason(finish_reason), do: finish_reason
 end

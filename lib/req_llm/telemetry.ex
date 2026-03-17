@@ -1198,8 +1198,6 @@ defmodule ReqLLM.Telemetry do
     summary_state[:finish_reason]
   end
 
-  defp finish_reason_from_state(_), do: nil
-
   defp finish_reason_from_response(%Req.Response{body: body}),
     do: finish_reason_from_response(body)
 
