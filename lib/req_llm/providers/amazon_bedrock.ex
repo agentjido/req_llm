@@ -444,6 +444,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     # No longer attach streaming here - it's handled by attach_stream
     |> Req.Request.append_response_steps(llm_decode_response: &decode_response/1)
     |> Step.Usage.attach(model)
+    |> ReqLLM.Step.Telemetry.attach(model, user_opts)
     |> ReqLLM.Step.Fixture.maybe_attach(model, user_opts)
   end
 
@@ -498,6 +499,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
         |> put_aws_sigv4(aws_creds)
         |> Req.Request.append_response_steps(llm_decode_embedding: &decode_embedding_response/1)
         |> Step.Usage.attach(model)
+        |> ReqLLM.Step.Telemetry.attach(model, user_opts)
         |> ReqLLM.Step.Fixture.maybe_attach(model, user_opts)
 
       {:error, error} ->

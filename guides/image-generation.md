@@ -1,6 +1,6 @@
 # Image Generation
 
-> **Interactive Demo:** Try the [Image Generation Livebook](image-generation.livemd) to compare image generation across OpenAI, xAI, and Google in parallel.
+> **Interactive Demo:** An interactive Livebook version of this guide is available at `guides/image-generation.livemd`.
 
 ## Overview
 

@@ -156,6 +156,11 @@ defmodule ReqLLM.Provider.Options do
                                  type: {:list, :any},
                                  doc: "Req HTTP client options"
                                ],
+                               telemetry: [
+                                 type: {:or, [:map, :keyword_list]},
+                                 doc:
+                                   "ReqLLM telemetry options. Currently supports [payloads: :none | :raw]"
+                               ],
 
                                # HTTP client options
                                receive_timeout: [
@@ -178,6 +183,7 @@ defmodule ReqLLM.Provider.Options do
     :on_unsupported,
     :fixture,
     :req_http_options,
+    :telemetry,
     :compiled_schema,
     :operation,
     :text,

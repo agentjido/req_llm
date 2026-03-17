@@ -79,6 +79,7 @@ defmodule ReqLLM.StreamServer do
     :canonical_json,
     :protocol_parser,
     :provider_state,
+    :telemetry,
     sse_buffer: "",
     queue: :queue.new(),
     status: :init,
@@ -315,6 +316,14 @@ defmodule ReqLLM.StreamServer do
   end
 
   @doc """
+  Sets streaming telemetry context for the current stream.
+  """
+  @spec set_telemetry_context(server(), map()) :: :ok
+  def set_telemetry_context(server, telemetry_context) do
+    GenServer.call(server, {:set_telemetry_context, telemetry_context})
+  end
+
+  @doc """
   Block until metadata is available from the completed stream.
 
   ## Parameters
@@ -403,7 +412,11 @@ defmodule ReqLLM.StreamServer do
 
   @impl GenServer
   def handle_call(:cancel, _from, state) do
-    new_state = cleanup_resources(state)
+    new_state =
+      state
+      |> maybe_emit_stream_stop(:cancelled)
+      |> cleanup_resources()
+
     {:stop, :normal, :ok, new_state}
   end
 
@@ -471,6 +484,11 @@ defmodule ReqLLM.StreamServer do
   end
 
   @impl GenServer
+  def handle_call({:set_telemetry_context, telemetry_context}, _from, state) do
+    {:reply, :ok, %{state | telemetry: telemetry_context}}
+  end
+
+  @impl GenServer
   def handle_call(:await_metadata, _from, %{status: :done} = state) do
     new_state = %{state | metadata_delivered?: true}
 
@@ -498,10 +516,19 @@ defmodule ReqLLM.StreamServer do
   def handle_info({:EXIT, pid, reason}, %{http_task: pid} = state) do
     new_state =
       case reason do
-        :normal -> finalize_stream_with_fixture(state)
-        :shutdown -> finalize_stream_with_fixture(state)
-        {:shutdown, _} -> finalize_stream_with_fixture(state)
-        _ -> %{state | status: {:error, {:http_task_failed, reason}}}
+        :normal ->
+          finalize_stream_with_fixture(state)
+
+        :shutdown ->
+          finalize_stream_with_fixture(state)
+
+        {:shutdown, _} ->
+          finalize_stream_with_fixture(state)
+
+        _ ->
+          state
+          |> Map.put(:status, {:error, {:http_task_failed, reason}})
+          |> maybe_emit_stream_exception({:http_task_failed, reason})
       end
 
     new_state = reply_to_waiting_callers(new_state)
@@ -521,8 +548,13 @@ defmodule ReqLLM.StreamServer do
   def handle_info({:DOWN, _ref, :process, pid, reason}, %{http_task: pid} = state) do
     new_state =
       case reason do
-        :normal -> finalize_stream_with_fixture(state)
-        _ -> %{state | status: {:error, {:http_task_failed, reason}}}
+        :normal ->
+          finalize_stream_with_fixture(state)
+
+        _ ->
+          state
+          |> Map.put(:status, {:error, {:http_task_failed, reason}})
+          |> maybe_emit_stream_exception({:http_task_failed, reason})
       end
 
     new_state = reply_to_waiting_callers(new_state)
@@ -587,7 +619,13 @@ defmodule ReqLLM.StreamServer do
   defp process_http_event({:data, chunk}, state) do
     if state.http_status && state.http_status >= 400 do
       error = build_http_error(state.http_status, chunk)
-      new_state = %{state | status: {:error, error}} |> reply_to_waiting_callers()
+
+      new_state =
+        state
+        |> Map.put(:status, {:error, error})
+        |> maybe_emit_stream_exception(error)
+        |> reply_to_waiting_callers()
+
       {:reply, :ok, new_state}
     else
       process_data_chunk(chunk, state)
@@ -600,7 +638,12 @@ defmodule ReqLLM.StreamServer do
   end
 
   defp process_http_event({:error, reason}, state) do
-    new_state = %{state | status: {:error, reason}} |> reply_to_waiting_callers()
+    new_state =
+      state
+      |> Map.put(:status, {:error, reason})
+      |> maybe_emit_stream_exception(reason)
+      |> reply_to_waiting_callers()
+
     {:reply, :ok, new_state}
   end
 
@@ -696,49 +739,63 @@ defmodule ReqLLM.StreamServer do
   defp termination_event?(_), do: false
 
   defp enqueue_chunks(chunks, state) do
-    {new_queue, updated_metadata, new_obj_acc} =
-      Enum.reduce(chunks, {state.queue, state.metadata, state.object_acc}, fn chunk,
-                                                                              {queue, metadata,
-                                                                               obj_acc} ->
-        new_queue = :queue.in(chunk, queue)
+    {new_queue, updated_metadata, new_obj_acc, telemetry} =
+      Enum.reduce(
+        chunks,
+        {state.queue, state.metadata, state.object_acc, state.telemetry},
+        fn chunk, {queue, metadata, obj_acc, telemetry} ->
+          new_queue = :queue.in(chunk, queue)
 
-        updated_metadata =
-          case chunk.type do
-            :meta ->
-              chunk_meta = chunk.metadata || %{}
+          updated_metadata =
+            case chunk.type do
+              :meta ->
+                chunk_meta = chunk.metadata || %{}
 
-              # Extract usage for normalization
-              usage = Map.get(chunk_meta, :usage) || Map.get(chunk_meta, "usage")
+                # Extract usage for normalization
+                usage = Map.get(chunk_meta, :usage) || Map.get(chunk_meta, "usage")
 
-              meta_with_usage =
-                if usage do
-                  normalized_usage = normalize_streaming_usage(usage, state.model)
+                meta_with_usage =
+                  if usage do
+                    normalized_usage = normalize_streaming_usage(usage, state.model)
 
-                  Map.update(metadata, :usage, normalized_usage, fn existing ->
-                    ReqLLM.Usage.merge(existing, normalized_usage)
-                  end)
-                else
-                  metadata
-                end
+                    Map.update(metadata, :usage, normalized_usage, fn existing ->
+                      ReqLLM.Usage.merge(existing, normalized_usage)
+                    end)
+                  else
+                    metadata
+                  end
 
-              # Merge remaining metadata (like finish_reason)
-              Map.merge(meta_with_usage, Map.drop(chunk_meta, [:usage, "usage"]))
+                # Merge remaining metadata (like finish_reason)
+                Map.merge(meta_with_usage, Map.drop(chunk_meta, [:usage, "usage"]))
 
-            _ ->
-              metadata
-          end
+              _ ->
+                metadata
+            end
 
-        obj_acc =
-          if state.object_json_mode? and chunk.type == :content and is_binary(chunk.text) do
-            [obj_acc, chunk.text]
-          else
-            obj_acc
-          end
+          obj_acc =
+            if state.object_json_mode? and chunk.type == :content and is_binary(chunk.text) do
+              [obj_acc, chunk.text]
+            else
+              obj_acc
+            end
 
-        {new_queue, updated_metadata, obj_acc}
-      end)
+          telemetry =
+            case telemetry do
+              nil -> nil
+              context -> ReqLLM.Telemetry.observe_stream_chunk(context, chunk)
+            end
 
-    %{state | queue: new_queue, metadata: updated_metadata, object_acc: new_obj_acc}
+          {new_queue, updated_metadata, obj_acc, telemetry}
+        end
+      )
+
+    %{
+      state
+      | queue: new_queue,
+        metadata: updated_metadata,
+        object_acc: new_obj_acc,
+        telemetry: telemetry
+    }
   end
 
   defp dequeue_chunk(state) do
@@ -796,7 +853,11 @@ defmodule ReqLLM.StreamServer do
       |> then(&enqueue_chunks(flush_chunks ++ extra_flush_chunks, &1))
 
     metadata = extract_final_metadata(state)
-    %{state | status: :done, metadata: metadata}
+
+    state
+    |> Map.put(:status, :done)
+    |> Map.put(:metadata, metadata)
+    |> maybe_emit_stream_stop(metadata[:finish_reason] || :unknown)
   end
 
   defp flush_sse_buffer(%{sse_buffer: buffer} = state) when byte_size(buffer) > 0 do
@@ -900,6 +961,8 @@ defmodule ReqLLM.StreamServer do
       state.metadata
       |> Map.put(:status, state.http_status)
       |> Map.put(:headers, state.headers)
+      |> maybe_put_request_id(state.telemetry)
+      |> normalize_stream_finish_reason()
 
     if state.terminated? do
       Map.put_new(meta, :finish_reason, :stop)
@@ -1053,4 +1116,51 @@ defmodule ReqLLM.StreamServer do
   end
 
   defp normalize_streaming_usage(usage, _model), do: usage
+
+  defp maybe_emit_stream_stop(%{telemetry: nil} = state, _finish_reason), do: state
+
+  defp maybe_emit_stream_stop(%{telemetry: telemetry} = state, finish_reason) do
+    usage = state.metadata[:usage]
+
+    telemetry =
+      ReqLLM.Telemetry.stop_request(
+        telemetry,
+        state.metadata,
+        finish_reason: finish_reason,
+        http_status: state.http_status,
+        usage: usage,
+        emit_token_usage?: is_map(usage)
+      )
+
+    %{state | telemetry: telemetry}
+  end
+
+  defp maybe_emit_stream_exception(%{telemetry: nil} = state, _reason), do: state
+
+  defp maybe_emit_stream_exception(%{telemetry: telemetry} = state, reason) do
+    %{state | telemetry: ReqLLM.Telemetry.exception_request(telemetry, reason)}
+  end
+
+  defp maybe_put_request_id(meta, nil), do: meta
+  defp maybe_put_request_id(meta, telemetry), do: Map.put(meta, :request_id, telemetry.request_id)
+
+  defp normalize_stream_finish_reason(%{finish_reason: "stop"} = meta),
+    do: %{meta | finish_reason: :stop}
+
+  defp normalize_stream_finish_reason(%{finish_reason: "length"} = meta),
+    do: %{meta | finish_reason: :length}
+
+  defp normalize_stream_finish_reason(%{finish_reason: "tool_use"} = meta),
+    do: %{meta | finish_reason: :tool_calls}
+
+  defp normalize_stream_finish_reason(%{finish_reason: "tool_calls"} = meta),
+    do: %{meta | finish_reason: :tool_calls}
+
+  defp normalize_stream_finish_reason(%{finish_reason: "cancelled"} = meta),
+    do: %{meta | finish_reason: :cancelled}
+
+  defp normalize_stream_finish_reason(%{finish_reason: "incomplete"} = meta),
+    do: %{meta | finish_reason: :incomplete}
+
+  defp normalize_stream_finish_reason(meta), do: meta
 end

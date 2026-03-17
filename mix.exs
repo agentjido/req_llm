@@ -39,6 +39,7 @@ defmodule ReqLLM.MixProject do
           "CONTRIBUTING.md",
           "guides/getting-started.md",
           "guides/configuration.md",
+          "guides/telemetry.md",
           "guides/core-concepts.md",
           "guides/data-structures.md",
           "guides/model-specs.md",
@@ -71,6 +72,7 @@ defmodule ReqLLM.MixProject do
           Guides: [
             "guides/getting-started.md",
             "guides/configuration.md",
+            "guides/telemetry.md",
             "guides/core-concepts.md",
             "guides/data-structures.md",
             "guides/model-specs.md",
@@ -114,6 +116,7 @@ defmodule ReqLLM.MixProject do
             ReqLLM.ModelHelpers,
             ReqLLM.Model.Metadata,
             ReqLLM.Metadata,
+            ReqLLM.Telemetry,
             ReqLLM.Capability,
             ReqLLM.Keys,
             ReqLLM.Usage,

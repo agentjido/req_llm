@@ -57,6 +57,11 @@ defmodule ReqLLM.Embedding do
                    doc: "Req-specific options (keyword list or map)",
                    default: []
                  ],
+                 telemetry: [
+                   type: {:or, [:map, {:list, :any}]},
+                   doc: "ReqLLM telemetry options (for example, [payloads: :raw])",
+                   default: []
+                 ],
                  fixture: [
                    type: {:or, [:string, {:tuple, [:atom, :string]}]},
                    doc: "HTTP fixture for testing (provider inferred from model if string)"

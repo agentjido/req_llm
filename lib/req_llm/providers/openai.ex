@@ -429,6 +429,13 @@ defmodule ReqLLM.Providers.OpenAI do
         |> Req.Request.put_header("authorization", "Bearer #{api_key}")
         |> ReqLLM.Step.Retry.attach()
         |> ReqLLM.Step.Error.attach()
+        |> ReqLLM.Step.Telemetry.attach(
+          model,
+          opts
+          |> Keyword.put(:operation, :transcription)
+          |> Keyword.put(:audio_bytes, byte_size(audio_data))
+          |> Keyword.put(:media_type, media_type)
+        )
         |> ReqLLM.Step.Fixture.maybe_attach(model, opts)
 
       {:ok, request}
@@ -635,6 +642,7 @@ defmodule ReqLLM.Providers.OpenAI do
     |> Req.Request.append_request_steps(llm_encode_body: &encode_body/1)
     |> Req.Request.append_response_steps(llm_decode_response: &decode_response/1)
     |> ReqLLM.Step.Usage.attach(model)
+    |> ReqLLM.Step.Telemetry.attach(model, user_opts)
     |> ReqLLM.Step.Fixture.maybe_attach(model, user_opts)
   end
 

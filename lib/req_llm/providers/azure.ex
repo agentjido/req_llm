@@ -530,6 +530,7 @@ defmodule ReqLLM.Providers.Azure do
     |> ReqLLM.Step.Error.attach()
     |> Req.Request.append_response_steps(llm_decode_response: &decode_response/1)
     |> ReqLLM.Step.Usage.attach(model)
+    |> ReqLLM.Step.Telemetry.attach(model, user_opts)
     |> ReqLLM.Step.Fixture.maybe_attach(model, user_opts)
   end
 

@@ -106,8 +106,20 @@ defmodule ReqLLM.Streaming do
           {:ok, StreamResponse.t()} | {:error, term()}
   def start_stream(provider_mod, model, context, opts \\ []) do
     with {:ok, server_pid} <- start_stream_server(provider_mod, model, opts),
-         {:ok, _http_task_pid, _http_context, _canonical_json} <-
+         {:ok, _http_task_pid, _http_context, canonical_json} <-
            start_http_streaming(provider_mod, model, context, opts, server_pid) do
+      stream_context =
+        model
+        |> ReqLLM.Telemetry.new_context(
+          Keyword.put_new(opts, :context, context),
+          mode: :stream,
+          transport: :finch,
+          operation: Keyword.get(opts, :operation, :chat)
+        )
+        |> ReqLLM.Telemetry.start_request(canonical_json)
+
+      :ok = StreamServer.set_telemetry_context(server_pid, stream_context)
+
       # Create lazy stream using Stream.resource
       default_timeout =
         Application.get_env(

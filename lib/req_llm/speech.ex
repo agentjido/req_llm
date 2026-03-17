@@ -65,6 +65,11 @@ defmodule ReqLLM.Speech do
                    doc: "Req-specific options (keyword list or map)",
                    default: []
                  ],
+                 telemetry: [
+                   type: {:or, [:map, {:list, :any}]},
+                   doc: "ReqLLM telemetry options (for example, [payloads: :raw])",
+                   default: []
+                 ],
                  receive_timeout: [
                    type: :pos_integer,
                    doc: "Timeout for receiving HTTP responses in milliseconds",

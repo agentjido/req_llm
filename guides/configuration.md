@@ -19,6 +19,9 @@ config :req_llm,
   # Key management
   load_dotenv: true,                 # Auto-load .env files at startup
 
+  # Telemetry
+  telemetry: [payloads: :none],      # Request payload policy (:none or :raw)
+
   # Debugging
   debug: false                       # Enable verbose logging
 ```
@@ -150,6 +153,37 @@ config :req_llm,
 {:ok, response} = ReqLLM.stream_text(model, messages, finch_name: MyApp.CustomFinch)
 ```
 
+## Telemetry Configuration
+
+ReqLLM emits native `:telemetry` events for request lifecycle, reasoning lifecycle, and token usage. By default, those events are metadata-only:
+
+```elixir
+config :req_llm, telemetry: [payloads: :none]
+```
+
+To include sanitized request and response payloads on request lifecycle events:
+
+```elixir
+config :req_llm, telemetry: [payloads: :raw]
+```
+
+Per-request override:
+
+```elixir
+ReqLLM.generate_text("anthropic:claude-haiku-4-5", "Hello", telemetry: [payloads: :raw])
+
+ReqLLM.stream_text("openai:gpt-5-mini", "Hello", telemetry: [payloads: :raw])
+```
+
+Notes:
+
+- Payload capture only applies to request lifecycle events. Reasoning events are always metadata-only.
+- Thinking and reasoning text is redacted from payloads.
+- Embedding and audio operations stay summarized rather than emitting raw vectors or audio bytes.
+- The default is `:none`, which is the safer choice for multi-tenant systems.
+
+See the [Telemetry Guide](telemetry.md) for the event model and payload semantics.
+
 ## API Key Configuration
 
 Keys are loaded with clear precedence: per-request → in-memory → app config → env vars → .env files.
@@ -225,6 +259,7 @@ config :req_llm,
   stream_receive_timeout: 120_000,
   thinking_timeout: 300_000,
   metadata_timeout: 120_000,
+  telemetry: [payloads: :none],
   load_dotenv: false,  # Use proper secrets management in production
   finch: [
     name: ReqLLM.Finch,

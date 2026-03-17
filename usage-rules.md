@@ -126,9 +126,13 @@ custom_request =
 {:ok, response} = Req.request(custom_request)
 ```
 
+Native ReqLLM telemetry still applies to this low-level Req path, so `provider_module.prepare_request/4` plus `Req.request/1` participates in `[:req_llm, :request, ...]`, `[:req_llm, :reasoning, ...]`, and `[:req_llm, :token_usage]`.
+
 ### Streaming Requests
 
 **IMPORTANT**: Streaming uses Finch, not Req. The `prepare_request/4` and `attach/3` callbacks do NOT work for streaming operations.
+
+If you need observability across both sync and streaming requests, attach to ReqLLM's native telemetry events instead of relying on Req middleware alone.
 
 For custom streaming, use the provider's `attach_stream/4` callback or use `ReqLLM.Streaming.start_stream/4`:
 

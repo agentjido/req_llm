@@ -406,6 +406,13 @@ defmodule ReqLLM.Provider.Defaults do
         |> Req.Request.put_header("authorization", "Bearer #{api_key}")
         |> ReqLLM.Step.Retry.attach()
         |> ReqLLM.Step.Error.attach()
+        |> ReqLLM.Step.Telemetry.attach(
+          model,
+          opts
+          |> Keyword.put(:operation, :transcription)
+          |> Keyword.put(:audio_bytes, byte_size(audio_data))
+          |> Keyword.put(:media_type, media_type)
+        )
         |> ReqLLM.Step.Fixture.maybe_attach(model, opts)
 
       {:ok, request}
@@ -490,6 +497,14 @@ defmodule ReqLLM.Provider.Defaults do
         |> Req.Request.put_header("authorization", "Bearer #{api_key}")
         |> ReqLLM.Step.Retry.attach()
         |> ReqLLM.Step.Error.attach()
+        |> ReqLLM.Step.Telemetry.attach(
+          model,
+          opts
+          |> Keyword.put(:operation, :speech)
+          |> Keyword.put(:text, text)
+          |> Keyword.put(:voice, voice)
+          |> Keyword.put(:output_format, output_format)
+        )
         |> ReqLLM.Step.Fixture.maybe_attach(model, opts)
 
       {:ok, request}
@@ -525,7 +540,8 @@ defmodule ReqLLM.Provider.Defaults do
       :operation,
       :receive_timeout,
       :max_retries,
-      :req_http_options
+      :req_http_options,
+      :telemetry
     ]
 
     Keyword.drop(opts, internal_keys)
@@ -559,6 +575,7 @@ defmodule ReqLLM.Provider.Defaults do
     |> Req.Request.append_request_steps(llm_encode_body: &provider_mod.encode_body/1)
     |> Req.Request.append_response_steps(llm_decode_response: &provider_mod.decode_response/1)
     |> ReqLLM.Step.Usage.attach(model)
+    |> ReqLLM.Step.Telemetry.attach(model, user_opts)
     |> ReqLLM.Step.Fixture.maybe_attach(model, user_opts)
   end
 
@@ -594,6 +611,7 @@ defmodule ReqLLM.Provider.Defaults do
       :tools,
       :tool_choice,
       :req_http_options,
+      :telemetry,
       :stream,
       :frequency_penalty,
       :system_prompt,

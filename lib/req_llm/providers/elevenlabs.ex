@@ -119,6 +119,15 @@ defmodule ReqLLM.Providers.ElevenLabs do
         |> Req.Request.put_header("xi-api-key", api_key)
         |> ReqLLM.Step.Retry.attach()
         |> ReqLLM.Step.Error.attach()
+        |> ReqLLM.Step.Telemetry.attach(
+          model,
+          opts
+          |> Keyword.put(:operation, :speech)
+          |> Keyword.put(:text, text)
+          |> Keyword.put(:voice, voice)
+          |> Keyword.put(:output_format, output_format)
+          |> Keyword.put(:language, language)
+        )
         |> ReqLLM.Step.Fixture.maybe_attach(model, opts)
 
       {:ok, request}
@@ -160,6 +169,14 @@ defmodule ReqLLM.Providers.ElevenLabs do
         |> Req.Request.put_header("xi-api-key", api_key)
         |> ReqLLM.Step.Retry.attach()
         |> ReqLLM.Step.Error.attach()
+        |> ReqLLM.Step.Telemetry.attach(
+          model,
+          opts
+          |> Keyword.put(:operation, :transcription)
+          |> Keyword.put(:audio_bytes, byte_size(audio_data))
+          |> Keyword.put(:media_type, media_type)
+          |> Keyword.put(:language, language)
+        )
         |> ReqLLM.Step.Fixture.maybe_attach(model, opts)
 
       {:ok, request}

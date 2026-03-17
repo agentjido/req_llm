@@ -24,8 +24,6 @@ defmodule ReqLLM.Step.Usage do
 
   alias ReqLLM.Usage.Cost
 
-  @event [:req_llm, :token_usage]
-
   @doc """
   Attaches the Usage step to a Req request.
 
@@ -71,7 +69,15 @@ defmodule ReqLLM.Step.Usage do
           meta
         end
 
-      :telemetry.execute(@event, meta, %{model: model})
+      ReqLLM.Telemetry.emit_token_usage(
+        model,
+        meta,
+        request_id: req.private[:req_llm_request_id],
+        operation: req.options[:operation] || :chat,
+        mode: :sync,
+        provider: model.provider,
+        transport: :req
+      )
 
       req_llm_data = Map.get(resp.private, :req_llm, %{})
       updated_req_llm_data = Map.put(req_llm_data, :usage, meta)

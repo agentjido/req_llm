@@ -304,9 +304,15 @@ response.usage.image_usage
 #=> %{generated: %{count: 1, size_class: "1024x1024"}}
 ```
 
-A telemetry event `[:req_llm, :token_usage]` is published on every request with token counts and calculated costs.
+A native ReqLLM telemetry surface is published for every request, including streaming:
 
-See `examples/scripts/usage_cost_search_image.exs` and run it from `examples/` with `mix run scripts/usage_cost_search_image.exs` for a multi-provider smoke test that validates search tool and image generation cost metadata. For comprehensive documentation, see the [Usage & Billing Guide](guides/usage-and-billing.md).
+- `[:req_llm, :request, :start | :stop | :exception]` for lifecycle timing, summaries, and usage
+- `[:req_llm, :reasoning, :start | :update | :stop]` for standardized thinking and reasoning milestones
+- `[:req_llm, :token_usage]` for backwards-compatible token and cost measurements
+
+All events share a `request_id` so you can correlate request lifecycle, reasoning lifecycle, and billing data across providers.
+
+See `examples/scripts/usage_cost_search_image.exs` and run it from `examples/` with `mix run scripts/usage_cost_search_image.exs` for a multi-provider smoke test that validates search tool and image generation cost metadata. For comprehensive documentation, see the [Telemetry Guide](guides/telemetry.md) and [Usage & Billing Guide](guides/usage-and-billing.md).
 
 ## Streaming Configuration
 
@@ -421,12 +427,13 @@ custom_request =
 {:ok, response} = Req.request(custom_request)
 ```
 
-This approach gives you full control over the Req pipeline, allowing you to add custom middleware, modify requests, or integrate with existing Req-based applications.
+This approach gives you full control over the Req pipeline, allowing you to add custom middleware, modify requests, or integrate with existing Req-based applications. Native ReqLLM telemetry still applies to this low-level Req path, and it is the recommended observability surface if you also need streaming coverage.
 
 ## Documentation
 
 - [Getting Started](guides/getting-started.md) – first call and basic concepts
 - [Configuration](guides/configuration.md) – timeouts, connection pools, and global settings
+- [Telemetry](guides/telemetry.md) – request lifecycle, reasoning lifecycle, payload capture
 - [Core Concepts](guides/core-concepts.md) – architecture & data model
 - [Data Structures](guides/data-structures.md) – detailed type information
 - [Usage & Billing](guides/usage-and-billing.md) – token costs, tool usage, image costs

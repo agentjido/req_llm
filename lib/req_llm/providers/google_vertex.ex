@@ -299,6 +299,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
     |> ReqLLM.Step.Retry.attach()
     |> Req.Request.append_response_steps(llm_decode_response: &decode_response/1)
     |> ReqLLM.Step.Usage.attach(model)
+    |> ReqLLM.Step.Telemetry.attach(model, opts)
     |> ReqLLM.Step.Fixture.maybe_attach(model, opts)
     |> put_gcp_auth(gcp_creds)
   end
@@ -330,6 +331,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
     |> ReqLLM.Step.Retry.attach()
     |> ReqLLM.Step.Usage.attach(model)
     |> Req.Request.append_response_steps(llm_decode_response: &decode_embedding_response/1)
+    |> ReqLLM.Step.Telemetry.attach(model, opts)
     |> ReqLLM.Step.Fixture.maybe_attach(model, opts)
     |> put_gcp_auth(gcp_creds)
   end
