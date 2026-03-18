@@ -612,6 +612,7 @@ defmodule ReqLLM.Provider.Defaults do
       :tool_choice,
       :req_http_options,
       :telemetry,
+      :telemetry_original_opts,
       :stream,
       :frequency_penalty,
       :system_prompt,

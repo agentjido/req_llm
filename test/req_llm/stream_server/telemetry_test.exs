@@ -226,9 +226,47 @@ defmodule ReqLLM.StreamServer.TelemetryTest do
     StreamServer.cancel(server)
   end
 
+  test "preserves public stream finish reasons while telemetry canonicalizes them" do
+    model = reasoning_model()
+    server = start_server(provider_mod: ReqLLM.StreamServer.TelemetryProvider, model: model)
+    _task = mock_http_task(server)
+
+    telemetry_context =
+      model
+      |> ReqLLM.Telemetry.new_context(
+        [context: ReqLLM.Context.new([user("hello")]), reasoning_effort: :high],
+        mode: :stream,
+        transport: :finch,
+        operation: :chat
+      )
+      |> ReqLLM.Telemetry.start_request(%{"thinking" => %{"type" => "enabled"}})
+
+    assert :ok = StreamServer.set_telemetry_context(server, telemetry_context)
+
+    StreamServer.http_event(
+      server,
+      {:data, "data: #{Jason.encode!(%{"type" => "finish", "finish_reason" => "tool_use"})}\n\n"}
+    )
+
+    StreamServer.http_event(server, :done)
+
+    assert {:ok, metadata} = StreamServer.await_metadata(server, 500)
+    assert metadata.finish_reason == "tool_use"
+
+    assert_receive {:telemetry_event, [:req_llm, :request, :start], _, _}
+    assert_receive {:telemetry_event, [:req_llm, :reasoning, :start], _, _}
+    assert_receive {:telemetry_event, [:req_llm, :request, :stop], _, stop_meta}
+    assert_receive {:telemetry_event, [:req_llm, :reasoning, :stop], _, reasoning_stop_meta}
+
+    assert stop_meta.finish_reason == :tool_calls
+    assert reasoning_stop_meta.milestone == :tool_calls
+
+    StreamServer.cancel(server)
+  end
+
   defp reasoning_model do
     %LLMDB.Model{
-      provider: :test,
+      provider: :anthropic,
       id: "test-reasoning-model",
       capabilities: %{reasoning: %{enabled: true}}
     }

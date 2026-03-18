@@ -114,7 +114,13 @@ defmodule ReqLLM.Streaming do
           Keyword.put_new(opts, :context, context),
           mode: :stream,
           transport: :finch,
-          operation: Keyword.get(opts, :operation, :chat)
+          operation: Keyword.get(opts, :operation, :chat),
+          reasoning_contract:
+            ReqLLM.Telemetry.reasoning_contract_for(
+              model,
+              Keyword.put_new(opts, :context, context),
+              canonical_json
+            )
         )
         |> ReqLLM.Telemetry.start_request(canonical_json)
 

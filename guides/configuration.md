@@ -179,7 +179,11 @@ Notes:
 
 - Payload capture only applies to request lifecycle events. Reasoning events are always metadata-only.
 - Thinking and reasoning text is redacted from payloads.
+- Tools are summarized to stable metadata and binary attachments are reduced to byte and media summaries.
+- Unknown payload shapes are recursively sanitized so opaque binaries are summarized instead of passed through.
 - Embedding and audio operations stay summarized rather than emitting raw vectors or audio bytes.
+- Requested and effective reasoning telemetry are tracked separately, so provider translation can be observed when a reasoning setting is dropped or rewritten.
+- If callers provide conflicting reasoning controls, explicit disable signals win in the normalized telemetry snapshot.
 - The default is `:none`, which is the safer choice for multi-tenant systems.
 
 See the [Telemetry Guide](telemetry.md) for the event model and payload semantics.

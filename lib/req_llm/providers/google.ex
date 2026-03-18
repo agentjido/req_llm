@@ -552,6 +552,7 @@ defmodule ReqLLM.Providers.Google do
         :system_prompt,
         :reasoning_effort,
         :reasoning_token_budget,
+        :telemetry_original_opts,
         :stream,
         :provider_options,
         :dimensions,

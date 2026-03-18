@@ -153,7 +153,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     additional_model_request_fields: [
       type: :map,
       doc:
-        "Additional model-specific request fields (e.g., reasoning_config for Claude extended thinking)"
+        "Additional model-specific request fields (e.g., thinking config for Claude extended thinking)"
     ],
     anthropic_prompt_cache: [
       type: :boolean,

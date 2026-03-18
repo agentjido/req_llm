@@ -12,7 +12,8 @@ defmodule ReqLLM.Telemetry do
   - compatibility emission for `[:req_llm, :token_usage]`
   """
 
-  alias ReqLLM.{Context, Message, ModelHelpers, Response}
+  alias ReqLLM.{Context, Message, ModelHelpers, Response, Tool}
+  alias ReqLLM.Message.ContentPart
 
   @request_context_key :req_llm_telemetry
   @token_usage_event [:req_llm, :token_usage]
@@ -26,6 +27,22 @@ defmodule ReqLLM.Telemetry do
   @type payload_mode :: :none | :raw
   @type lifecycle_mode :: :sync | :stream
   @type transport :: :req | :finch
+  @type reasoning_contract ::
+          :openai_effort
+          | :openai_or_thinking
+          | :anthropic_thinking
+          | :platform_anthropic
+          | :google_budget
+          | :alibaba_thinking
+          | :thinking_toggle
+          | :zenmux_reasoning
+          | :unsupported
+
+  @reasoning_operations [:chat, :object]
+  @canonical_reasoning_efforts [:minimal, :low, :medium, :high, :xhigh, :default]
+  @openai_reasoning_providers [:openai, :groq, :openrouter, :xai]
+  @thinking_toggle_providers [:zai, :zai_coder]
+  @alibaba_providers [:alibaba, :alibaba_cn]
 
   @type context :: %{
           request_id: String.t(),
@@ -34,6 +51,7 @@ defmodule ReqLLM.Telemetry do
           mode: lifecycle_mode(),
           transport: transport(),
           payload_mode: payload_mode(),
+          reasoning_contract: reasoning_contract(),
           original_opts: keyword(),
           request_summary: map(),
           request_payload: any(),
@@ -63,9 +81,13 @@ defmodule ReqLLM.Telemetry do
     operation = Keyword.get(extra, :operation, Keyword.get(opts, :operation, :chat))
     mode = Keyword.get(extra, :mode, :sync)
     transport = Keyword.get(extra, :transport, :req)
+
+    reasoning_contract =
+      Keyword.get(extra, :reasoning_contract, reasoning_contract_for(model, opts))
+
     payload_mode = payload_mode(opts)
     request_input = request_input(operation, opts)
-    requested_reasoning = requested_reasoning(model, operation, opts)
+    requested_reasoning = requested_reasoning(model, operation, opts, reasoning_contract)
 
     %{
       request_id: request_id(),
@@ -74,6 +96,7 @@ defmodule ReqLLM.Telemetry do
       mode: mode,
       transport: transport,
       payload_mode: payload_mode,
+      reasoning_contract: reasoning_contract,
       original_opts: opts,
       request_summary: summarize_request(operation, request_input),
       request_payload: request_payload(operation, request_input, payload_mode),
@@ -90,6 +113,14 @@ defmodule ReqLLM.Telemetry do
     }
   end
 
+  @doc false
+  @spec reasoning_contract_for(LLMDB.Model.t(), keyword(), any()) :: reasoning_contract()
+  def reasoning_contract_for(%LLMDB.Model{} = model, opts \\ [], request_source \\ nil) do
+    Keyword.get(opts, :telemetry_reasoning_contract) ||
+      request_reasoning_contract(request_source, model) ||
+      reasoning_contract(model)
+  end
+
   @doc """
   Emits request start telemetry and returns the updated context.
   """
@@ -99,13 +130,33 @@ defmodule ReqLLM.Telemetry do
   def start_request(context, request_source) do
     now = System.monotonic_time()
     measurement = %{system_time: System.system_time()}
-    effective_reasoning = effective_reasoning(context.model, context.operation, request_source)
+
+    reasoning_contract =
+      reasoning_contract_for(context.model, context.original_opts, request_source)
+
+    requested_reasoning =
+      requested_reasoning(
+        context.model,
+        context.operation,
+        context.original_opts,
+        reasoning_contract
+      )
+
+    effective_reasoning =
+      effective_reasoning(
+        context.model,
+        context.operation,
+        request_source,
+        reasoning_contract
+      )
 
     context =
       context
       |> Map.put(:request_started?, true)
       |> Map.put(:started_at, now)
       |> Map.put(:request_measurement, measurement)
+      |> Map.put(:reasoning_contract, reasoning_contract)
+      |> Map.put(:requested_reasoning, requested_reasoning)
       |> Map.put(:effective_reasoning, effective_reasoning)
 
     :telemetry.execute(
@@ -528,7 +579,7 @@ defmodule ReqLLM.Telemetry do
     |> Map.take([:audio_bytes, :media_type, :language])
   end
 
-  defp request_payload(_operation, input, :raw), do: input
+  defp request_payload(_operation, input, :raw), do: sanitize_generic_payload(input)
 
   defp response_payload(_operation, _response, :none), do: nil
 
@@ -573,12 +624,12 @@ defmodule ReqLLM.Telemetry do
     summarize_transcription_map(body)
   end
 
-  defp response_payload(_operation, body, :raw), do: body
+  defp response_payload(_operation, body, :raw), do: sanitize_generic_payload(body)
 
   defp sanitize_context(%Context{messages: messages, tools: tools}) do
     %{
       messages: Enum.map(messages, &sanitize_message/1),
-      tools: tools
+      tools: Enum.map(List.wrap(tools), &sanitize_tool/1)
     }
   end
 
@@ -615,7 +666,81 @@ defmodule ReqLLM.Telemetry do
 
   defp sanitize_message(other), do: other
 
-  defp sanitize_content_part(%{type: :thinking, text: text} = part) do
+  defp sanitize_tool(%Tool{} = tool) do
+    %{
+      name: tool.name,
+      description: tool.description,
+      strict: tool.strict,
+      parameter_schema: sanitize_tool_schema(tool.parameter_schema)
+    }
+  end
+
+  defp sanitize_tool(%{name: name, description: description} = tool) do
+    %{
+      name: name,
+      description: description,
+      strict: Map.get(tool, :strict) || Map.get(tool, "strict", false),
+      parameter_schema:
+        sanitize_tool_schema(
+          Map.get(tool, :parameter_schema) || Map.get(tool, "parameter_schema") ||
+            Map.get(tool, :input_schema) || Map.get(tool, "input_schema")
+        )
+    }
+  end
+
+  defp sanitize_tool(tool), do: tool
+
+  defp sanitize_tool_schema(schema) when is_struct(schema) do
+    schema
+    |> Map.from_struct()
+    |> sanitize_tool_schema()
+  end
+
+  defp sanitize_tool_schema(schema) when is_list(schema) do
+    if Keyword.keyword?(schema) do
+      Map.new(schema, fn {key, value} -> {key, sanitize_tool_schema(value)} end)
+    else
+      Enum.map(schema, &sanitize_tool_schema/1)
+    end
+  end
+
+  defp sanitize_tool_schema(schema) when is_map(schema) do
+    Map.new(schema, fn {key, value} -> {key, sanitize_tool_schema(value)} end)
+  end
+
+  defp sanitize_tool_schema(schema), do: schema
+
+  defp sanitize_generic_payload(%Response{} = response), do: sanitize_response(response)
+  defp sanitize_generic_payload(%Context{} = context), do: sanitize_context(context)
+  defp sanitize_generic_payload(%Message{} = message), do: sanitize_message(message)
+  defp sanitize_generic_payload(%Tool{} = tool), do: sanitize_tool(tool)
+  defp sanitize_generic_payload(%ContentPart{} = part), do: sanitize_content_part(part)
+
+  defp sanitize_generic_payload(value) when is_struct(value) do
+    value
+    |> Map.from_struct()
+    |> sanitize_generic_payload()
+  end
+
+  defp sanitize_generic_payload(value) when is_map(value) do
+    Map.new(value, fn {key, entry} -> {key, sanitize_generic_payload(entry)} end)
+  end
+
+  defp sanitize_generic_payload(value) when is_list(value) do
+    Enum.map(value, &sanitize_generic_payload/1)
+  end
+
+  defp sanitize_generic_payload(value) when is_binary(value) do
+    if String.valid?(value) do
+      value
+    else
+      %{bytes: byte_size(value)}
+    end
+  end
+
+  defp sanitize_generic_payload(value), do: value
+
+  defp sanitize_content_part(%ContentPart{type: :thinking, text: text} = part) do
     part
     |> Map.from_struct()
     |> Map.put(:text, nil)
@@ -623,11 +748,61 @@ defmodule ReqLLM.Telemetry do
     |> Map.put(:text_bytes, byte_size(to_string(text || "")))
   end
 
+  defp sanitize_content_part(%{type: :thinking, text: text} = part) when is_map(part) do
+    part
+    |> Map.put(:text, nil)
+    |> Map.put(:redacted?, true)
+    |> Map.put(:text_bytes, byte_size(to_string(text || "")))
+  end
+
+  defp sanitize_content_part(%ContentPart{type: :image} = part) do
+    %{
+      type: :image,
+      media_type: part.media_type,
+      bytes: binary_size_or_nil(part.data),
+      metadata: part.metadata
+    }
+  end
+
+  defp sanitize_content_part(%ContentPart{type: :file} = part) do
+    %{
+      type: :file,
+      filename: part.filename,
+      media_type: part.media_type,
+      bytes: binary_size_or_nil(part.data),
+      metadata: part.metadata
+    }
+  end
+
+  defp sanitize_content_part(%{type: :image} = part) when is_map(part) do
+    %{
+      type: Map.get(part, :type) || Map.get(part, "type"),
+      media_type: Map.get(part, :media_type) || Map.get(part, "media_type"),
+      bytes: binary_size_or_nil(Map.get(part, :data) || Map.get(part, "data")),
+      metadata: Map.get(part, :metadata) || Map.get(part, "metadata", %{})
+    }
+  end
+
+  defp sanitize_content_part(%{type: :file} = part) when is_map(part) do
+    %{
+      type: Map.get(part, :type) || Map.get(part, "type"),
+      filename: Map.get(part, :filename) || Map.get(part, "filename"),
+      media_type: Map.get(part, :media_type) || Map.get(part, "media_type"),
+      bytes: binary_size_or_nil(Map.get(part, :data) || Map.get(part, "data")),
+      metadata: Map.get(part, :metadata) || Map.get(part, "metadata", %{})
+    }
+  end
+
   defp sanitize_content_part(part) when is_struct(part) do
     Map.from_struct(part)
   end
 
   defp sanitize_content_part(part), do: part
+
+  defp binary_size_or_nil(nil), do: nil
+  defp binary_size_or_nil(data) when is_binary(data), do: byte_size(data)
+  defp binary_size_or_nil(data) when is_list(data), do: IO.iodata_length(data)
+  defp binary_size_or_nil(_data), do: nil
 
   defp sanitize_reasoning_details(nil), do: nil
 
@@ -722,11 +897,11 @@ defmodule ReqLLM.Telemetry do
 
   defp embedding_dimensions(_), do: nil
 
-  defp requested_reasoning(%LLMDB.Model{} = model, operation, opts) do
-    supported? = operation in [:chat, :object] and ModelHelpers.reasoning_enabled?(model)
-    mode = requested_reasoning_mode(opts)
-    effort = requested_reasoning_effort(opts)
-    budget_tokens = requested_reasoning_budget(opts)
+  defp requested_reasoning(%LLMDB.Model{} = model, operation, opts, contract) do
+    supported? = reasoning_supported?(model, operation)
+
+    %{mode: mode, effort: effort, budget_tokens: budget_tokens} =
+      normalize_requested_reasoning(contract, opts)
 
     %{
       supported?: supported?,
@@ -749,12 +924,12 @@ defmodule ReqLLM.Telemetry do
     |> Map.put(:effective_budget_tokens, nil)
   end
 
-  defp effective_reasoning(model, operation, request_source) do
-    supported? = operation in [:chat, :object] and ModelHelpers.reasoning_enabled?(model)
+  defp effective_reasoning(model, operation, request_source, contract) do
+    supported? = reasoning_supported?(model, operation)
     source = request_body_source(request_source)
-    mode = effective_reasoning_mode(source)
-    effort = effective_reasoning_effort(source)
-    budget_tokens = effective_reasoning_budget(source)
+
+    %{mode: mode, effort: effort, budget_tokens: budget_tokens} =
+      normalize_effective_reasoning(contract, source)
 
     %{
       supported?: supported?,
@@ -781,142 +956,662 @@ defmodule ReqLLM.Telemetry do
 
   defp decode_json_body(body), do: body
 
-  defp requested_reasoning_mode(opts) do
+  defp normalize_requested_reasoning(contract, opts) do
+    case contract do
+      :openai_effort ->
+        normalize_effort_requested(opts)
+
+      :openai_or_thinking ->
+        normalize_openai_or_thinking_requested(opts)
+
+      :anthropic_thinking ->
+        normalize_thinking_requested(opts)
+
+      :platform_anthropic ->
+        normalize_platform_anthropic_requested(opts)
+
+      :google_budget ->
+        normalize_google_requested(opts)
+
+      :alibaba_thinking ->
+        normalize_alibaba_requested(opts)
+
+      :thinking_toggle ->
+        normalize_thinking_toggle_requested(opts)
+
+      :zenmux_reasoning ->
+        normalize_zenmux_requested(opts)
+
+      :unsupported ->
+        disabled_reasoning_shape()
+    end
+  end
+
+  defp normalize_effective_reasoning(contract, body) do
+    case contract do
+      :openai_effort ->
+        normalize_effort_effective(body)
+
+      :openai_or_thinking ->
+        normalize_openai_or_thinking_effective(body)
+
+      :anthropic_thinking ->
+        normalize_thinking_effective(body)
+
+      :platform_anthropic ->
+        normalize_platform_anthropic_effective(body)
+
+      :google_budget ->
+        normalize_google_effective(body)
+
+      :alibaba_thinking ->
+        normalize_alibaba_effective(body)
+
+      :thinking_toggle ->
+        normalize_thinking_toggle_effective(body)
+
+      :zenmux_reasoning ->
+        normalize_zenmux_effective(body)
+
+      :unsupported ->
+        disabled_reasoning_shape()
+    end
+  end
+
+  defp normalize_effort_requested(opts) do
+    effort =
+      normalize_reasoning_effort(
+        opts[:reasoning_effort] ||
+          fetch_value(opts[:provider_options], :reasoning_effort)
+      )
+
+    disable? = effort == :none
+    enable? = effort in @canonical_reasoning_efforts
+
+    reasoning_shape(mode_from_signals(enable?, disable?), effort, nil, enable? or disable?)
+  end
+
+  defp normalize_openai_or_thinking_requested(opts) do
+    shape = normalize_effort_requested(opts)
+
+    if shape.mode == :enabled do
+      shape
+    else
+      merge_reasoning_shapes(shape, normalize_platform_anthropic_requested(opts))
+    end
+  end
+
+  defp normalize_thinking_requested(opts) do
+    thinking =
+      opts[:thinking] ||
+        fetch_value(opts[:provider_options], :thinking)
+
+    effort =
+      normalize_reasoning_effort(
+        opts[:reasoning_effort] ||
+          fetch_value(opts[:provider_options], :reasoning_effort)
+      )
+
+    budget_tokens =
+      opts[:reasoning_token_budget] ||
+        fetch_value(thinking, :budget_tokens) ||
+        fetch_value(opts[:provider_options], :reasoning_token_budget)
+
+    disable? =
+      effort == :none or
+        fetch_value(thinking, :type) == "disabled" or
+        budget_tokens == 0
+
+    enable? =
+      effort in @canonical_reasoning_efforts or
+        fetch_value(thinking, :type) == "enabled" or
+        enabled_budget?(budget_tokens)
+
+    reasoning_shape(
+      mode_from_signals(enable?, disable?),
+      effort,
+      normalize_budget(budget_tokens),
+      enable? or disable?
+    )
+  end
+
+  defp normalize_platform_anthropic_requested(opts) do
+    shape = normalize_thinking_requested(opts)
+
+    if shape.mode == :enabled do
+      shape
+    else
+      additional_thinking =
+        fetch_value(opts[:provider_options], :additional_model_request_fields, :thinking)
+
+      budget_tokens = fetch_value(additional_thinking, :budget_tokens)
+
+      disable? =
+        fetch_value(additional_thinking, :type) == "disabled" or
+          budget_tokens == 0
+
+      enable? =
+        fetch_value(additional_thinking, :type) == "enabled" or
+          enabled_budget?(budget_tokens)
+
+      merge_reasoning_shapes(
+        shape,
+        reasoning_shape(
+          mode_from_signals(enable?, disable?),
+          nil,
+          normalize_budget(budget_tokens),
+          enable? or disable?
+        )
+      )
+    end
+  end
+
+  defp normalize_google_requested(opts) do
+    budget_tokens =
+      opts[:google_thinking_budget] ||
+        fetch_value(opts[:provider_options], :google_thinking_budget) ||
+        fetch_value(opts[:provider_options], :thinking_budget)
+
+    effort =
+      normalize_reasoning_effort(
+        opts[:reasoning_effort] ||
+          fetch_value(opts[:provider_options], :reasoning_effort)
+      )
+
+    disable? = budget_tokens == 0 or effort == :none
+    enable? = enabled_budget?(budget_tokens) or effort in @canonical_reasoning_efforts
+
+    reasoning_shape(
+      mode_from_signals(enable?, disable?),
+      effort,
+      normalize_budget(budget_tokens),
+      enable? or disable?
+    )
+  end
+
+  defp normalize_alibaba_requested(opts) do
+    provider_opts = opts[:provider_options] || []
+    budget_tokens = first_present(opts, :thinking_budget, provider_opts, :thinking_budget)
+    enabled? = first_present(opts, :enable_thinking, provider_opts, :enable_thinking)
+    disable? = enabled? == false or budget_tokens == 0
+    enable? = enabled? == true or enabled_budget?(budget_tokens)
+
+    reasoning_shape(
+      mode_from_signals(enable?, disable?),
+      nil,
+      normalize_budget(budget_tokens),
+      enable? or disable?
+    )
+  end
+
+  defp normalize_thinking_toggle_requested(opts) do
+    thinking =
+      opts[:thinking] ||
+        fetch_value(opts[:provider_options], :thinking)
+
+    disable? = fetch_value(thinking, :type) == "disabled"
+    enable? = fetch_value(thinking, :type) == "enabled"
+
+    reasoning_shape(mode_from_signals(enable?, disable?), nil, nil, enable? or disable?)
+  end
+
+  defp normalize_zenmux_requested(opts) do
+    provider_opts = opts[:provider_options] || []
+    reasoning = opts[:reasoning] || fetch_value(provider_opts, :reasoning)
+
+    effort =
+      normalize_reasoning_effort(
+        opts[:reasoning_effort] || fetch_value(provider_opts, :reasoning_effort)
+      )
+
+    depth_effort =
+      normalize_reasoning_effort(fetch_value(reasoning, :depth))
+
+    disable? =
+      fetch_value(reasoning, :enable) == false or
+        effort == :none
+
+    enable? =
+      fetch_value(reasoning, :enable) == true or
+        depth_effort in @canonical_reasoning_efforts or
+        effort in @canonical_reasoning_efforts
+
+    effective_effort =
+      depth_effort ||
+        effort
+
+    reasoning_shape(
+      mode_from_signals(enable?, disable?),
+      effective_effort,
+      nil,
+      enable? or disable?
+    )
+  end
+
+  defp normalize_effort_effective(body) when is_map(body) do
+    effort =
+      normalize_reasoning_effort(
+        fetch_value(body, :reasoning, :effort) ||
+          fetch_value(body, :reasoning_effort)
+      )
+
+    disable? = effort == :none
+    enable? = effort in @canonical_reasoning_efforts
+
+    reasoning_shape(mode_from_signals(enable?, disable?), effort, nil, enable? or disable?)
+  end
+
+  defp normalize_effort_effective(_body), do: disabled_reasoning_shape()
+
+  defp normalize_openai_or_thinking_effective(body) do
+    shape = normalize_effort_effective(body)
+
+    if shape.mode == :enabled do
+      shape
+    else
+      merge_reasoning_shapes(shape, normalize_platform_anthropic_effective(body))
+    end
+  end
+
+  defp normalize_thinking_effective(body) when is_map(body) do
+    thinking = fetch_value(body, :thinking)
+    budget_tokens = fetch_value(thinking, :budget_tokens)
+
+    disable? =
+      fetch_value(thinking, :type) == "disabled" or
+        budget_tokens == 0
+
+    enable? =
+      fetch_value(thinking, :type) == "enabled" or
+        enabled_budget?(budget_tokens)
+
+    reasoning_shape(
+      mode_from_signals(enable?, disable?),
+      nil,
+      normalize_budget(budget_tokens),
+      enable? or disable?
+    )
+  end
+
+  defp normalize_thinking_effective(_body), do: disabled_reasoning_shape()
+
+  defp normalize_platform_anthropic_effective(body) do
+    shape = normalize_thinking_effective(body)
+
+    if shape.mode == :enabled do
+      shape
+    else
+      thinking =
+        fetch_value(body, :additionalModelRequestFields, :thinking) ||
+          fetch_value(body, :additional_model_request_fields, :thinking)
+
+      budget_tokens = fetch_value(thinking, :budget_tokens)
+
+      disable? =
+        fetch_value(thinking, :type) == "disabled" or
+          budget_tokens == 0
+
+      enable? =
+        fetch_value(thinking, :type) == "enabled" or
+          enabled_budget?(budget_tokens)
+
+      merge_reasoning_shapes(
+        shape,
+        reasoning_shape(
+          mode_from_signals(enable?, disable?),
+          nil,
+          normalize_budget(budget_tokens),
+          enable? or disable?
+        )
+      )
+    end
+  end
+
+  defp normalize_google_effective(body) when is_map(body) do
+    budget_tokens =
+      fetch_value(body, :generationConfig, :thinkingConfig, :thinkingBudget) ||
+        fetch_value(body, :thinkingConfig, :thinkingBudget)
+
+    disable? = budget_tokens == 0
+    enable? = enabled_budget?(budget_tokens)
+
+    reasoning_shape(
+      mode_from_signals(enable?, disable?),
+      nil,
+      normalize_budget(budget_tokens),
+      enable? or disable?
+    )
+  end
+
+  defp normalize_google_effective(_body), do: disabled_reasoning_shape()
+
+  defp normalize_alibaba_effective(body) when is_map(body) do
+    enabled? = fetch_value(body, :enable_thinking)
+    budget_tokens = fetch_value(body, :thinking_budget)
+    disable? = enabled? == false or budget_tokens == 0
+    enable? = enabled? == true or enabled_budget?(budget_tokens)
+
+    reasoning_shape(
+      mode_from_signals(enable?, disable?),
+      nil,
+      normalize_budget(budget_tokens),
+      enable? or disable?
+    )
+  end
+
+  defp normalize_alibaba_effective(_body), do: disabled_reasoning_shape()
+
+  defp normalize_thinking_toggle_effective(body) when is_map(body) do
+    thinking = fetch_value(body, :thinking)
+
+    disable? = fetch_value(thinking, :type) == "disabled"
+    enable? = fetch_value(thinking, :type) == "enabled"
+
+    reasoning_shape(mode_from_signals(enable?, disable?), nil, nil, enable? or disable?)
+  end
+
+  defp normalize_thinking_toggle_effective(_body), do: disabled_reasoning_shape()
+
+  defp normalize_zenmux_effective(body) when is_map(body) do
+    reasoning = fetch_value(body, :reasoning)
+
+    direct_effort =
+      fetch_value(body, :reasoning_effort)
+      |> normalize_reasoning_effort()
+
+    depth_effort =
+      fetch_value(reasoning, :depth)
+      |> normalize_reasoning_effort()
+
+    disable? =
+      fetch_value(reasoning, :enable) == false or
+        direct_effort == :none
+
+    enable? =
+      fetch_value(reasoning, :enable) == true or
+        depth_effort in @canonical_reasoning_efforts or
+        direct_effort in @canonical_reasoning_efforts
+
+    reasoning_shape(
+      mode_from_signals(enable?, disable?),
+      depth_effort || direct_effort,
+      nil,
+      enable? or disable?
+    )
+  end
+
+  defp normalize_zenmux_effective(_body), do: disabled_reasoning_shape()
+
+  defp reasoning_shape(mode, effort, budget_tokens, explicit?) do
+    %{
+      mode: mode,
+      effort: effort,
+      budget_tokens: budget_tokens,
+      explicit?: explicit?
+    }
+  end
+
+  defp disabled_reasoning_shape do
+    %{mode: :disabled, effort: nil, budget_tokens: nil, explicit?: false}
+  end
+
+  defp merge_reasoning_shapes(primary, secondary) do
     cond do
-      explicit_disabled_reasoning?(opts) -> :disabled
-      explicit_enabled_reasoning?(opts) -> :enabled
+      primary.explicit? and primary.mode == :disabled -> primary
+      secondary.explicit? and secondary.mode == :disabled -> secondary
+      primary.explicit? and primary.mode == :enabled -> primary
+      secondary.explicit? and secondary.mode == :enabled -> secondary
+      primary.explicit? -> primary
+      secondary.explicit? -> secondary
+      true -> primary
+    end
+  end
+
+  defp mode_from_signals(enable?, disable?) do
+    cond do
+      disable? -> :disabled
+      enable? -> :enabled
       true -> :disabled
     end
   end
 
-  defp requested_reasoning_effort(opts) do
-    opts[:reasoning_effort] ||
-      fetch_value(opts[:provider_options], :reasoning_effort) ||
-      nil
+  defp normalize_reasoning_effort(nil), do: nil
+  defp normalize_reasoning_effort(:none), do: :none
+  defp normalize_reasoning_effort("none"), do: :none
+
+  defp normalize_reasoning_effort(effort) when effort in @canonical_reasoning_efforts do
+    effort
   end
 
-  defp requested_reasoning_budget(opts) do
-    opts[:reasoning_token_budget] ||
-      fetch_value(opts[:thinking], :budget_tokens) ||
-      fetch_value(opts[:provider_options], :google_thinking_budget) ||
-      fetch_value(opts[:provider_options], :thinking_budget) ||
-      fetch_value(opts[:provider_options], :reasoning_token_budget) ||
-      fetch_value(opts[:provider_options], :thinking, :budget_tokens) ||
-      fetch_value(
-        opts[:provider_options],
-        :additional_model_request_fields,
-        :thinking,
-        :budget_tokens
-      )
-  end
+  defp normalize_reasoning_effort(effort) when is_binary(effort) do
+    trimmed = String.trim(effort)
 
-  defp explicit_enabled_reasoning?(opts) do
-    reasoning_effort = requested_reasoning_effort(opts)
+    case trimmed do
+      "" ->
+        nil
 
-    cond do
-      reasoning_effort in [
-        :minimal,
-        :low,
-        :medium,
-        :high,
-        :xhigh,
-        "minimal",
-        "low",
-        "medium",
-        "high",
-        "xhigh"
-      ] ->
-        true
-
-      reasoning_effort not in [nil, :none, "none"] ->
-        true
-
-      fetch_value(opts[:thinking], :type) == "enabled" ->
-        true
-
-      fetch_value(opts[:provider_options], :thinking, :type) == "enabled" ->
-        true
-
-      is_integer(requested_reasoning_budget(opts)) and requested_reasoning_budget(opts) > 0 ->
-        true
-
-      fetch_value(opts[:provider_options], :enable_thinking) == true ->
-        true
-
-      true ->
-        false
+      value ->
+        try do
+          value
+          |> String.to_existing_atom()
+          |> normalize_reasoning_effort()
+        rescue
+          ArgumentError -> nil
+        end
     end
   end
 
-  defp explicit_disabled_reasoning?(opts) do
-    requested_reasoning_effort(opts) in [:none, "none"] or
-      fetch_value(opts[:thinking], :type) == "disabled" or
-      fetch_value(opts[:provider_options], :thinking, :type) == "disabled" or
-      fetch_value(opts[:provider_options], :enable_thinking) == false or
-      requested_reasoning_budget(opts) == 0
-  end
+  defp normalize_reasoning_effort(_effort), do: nil
 
-  defp effective_reasoning_mode(body) when is_map(body) do
-    cond do
-      fetch_value(body, :reasoning, :effort) not in [nil, :none, "none"] ->
-        :enabled
+  defp normalize_budget(budget_tokens) when is_integer(budget_tokens) and budget_tokens > 0,
+    do: budget_tokens
 
-      fetch_value(body, :reasoning_effort) not in [nil, :none, "none"] ->
-        :enabled
-
-      fetch_value(body, :thinking, :type) == "enabled" ->
-        :enabled
-
-      fetch_value(body, :generationConfig, :thinkingConfig, :thinkingBudget)
-      |> enabled_budget?() ->
-        :enabled
-
-      fetch_value(body, :additionalModelRequestFields, :thinking, :type) == "enabled" ->
-        :enabled
-
-      fetch_value(body, :additional_model_request_fields, :thinking, :type) == "enabled" ->
-        :enabled
-
-      fetch_value(body, :enable_thinking) == true ->
-        :enabled
-
-      effective_disabled_reasoning?(body) ->
-        :disabled
-
-      true ->
-        :disabled
-    end
-  end
-
-  defp effective_reasoning_mode(_), do: :disabled
-
-  defp effective_reasoning_effort(body) when is_map(body) do
-    fetch_value(body, :reasoning, :effort) ||
-      fetch_value(body, :reasoning_effort)
-  end
-
-  defp effective_reasoning_effort(_), do: nil
-
-  defp effective_reasoning_budget(body) when is_map(body) do
-    fetch_value(body, :thinking, :budget_tokens) ||
-      fetch_value(body, :generationConfig, :thinkingConfig, :thinkingBudget) ||
-      fetch_value(body, :additionalModelRequestFields, :thinking, :budget_tokens) ||
-      fetch_value(body, :additional_model_request_fields, :thinking, :budget_tokens) ||
-      fetch_value(body, :thinking_budget)
-  end
-
-  defp effective_reasoning_budget(_), do: nil
-
-  defp effective_disabled_reasoning?(body) do
-    fetch_value(body, :reasoning, :effort) in [:none, "none"] or
-      fetch_value(body, :reasoning_effort) in [:none, "none"] or
-      fetch_value(body, :thinking, :type) == "disabled" or
-      fetch_value(body, :generationConfig, :thinkingConfig, :thinkingBudget) == 0 or
-      fetch_value(body, :enable_thinking) == false
-  end
+  defp normalize_budget(_budget_tokens), do: nil
 
   defp enabled_budget?(budget) when is_integer(budget), do: budget > 0
-  defp enabled_budget?(_), do: false
+  defp enabled_budget?(_budget), do: false
+
+  defp reasoning_supported?(model, operation) do
+    operation in @reasoning_operations and ModelHelpers.reasoning_enabled?(model)
+  end
+
+  defp request_reasoning_contract(%Req.Request{} = request, model) do
+    request_contract_from_formatter(Req.Request.get_private(request, :formatter)) ||
+      request_contract_from_model_family(model.provider, request.options[:model_family]) ||
+      request_reasoning_contract(request_body_source(request), model)
+  end
+
+  defp request_reasoning_contract(body, %LLMDB.Model{provider: provider}) when is_map(body) do
+    cond do
+      provider in @openai_reasoning_providers and openai_reasoning_body?(body) ->
+        :openai_effort
+
+      provider == :azure and openai_reasoning_body?(body) ->
+        :openai_or_thinking
+
+      provider == :azure and anthropic_thinking_body?(body) ->
+        :platform_anthropic
+
+      provider == :anthropic and anthropic_thinking_body?(body) ->
+        :anthropic_thinking
+
+      provider == :google and google_reasoning_body?(body) ->
+        :google_budget
+
+      provider == :google_vertex and google_reasoning_body?(body) ->
+        :google_budget
+
+      provider == :google_vertex and anthropic_thinking_body?(body) ->
+        :platform_anthropic
+
+      provider == :amazon_bedrock and anthropic_thinking_body?(body) ->
+        :platform_anthropic
+
+      provider in @alibaba_providers and alibaba_reasoning_body?(body) ->
+        :alibaba_thinking
+
+      provider in @thinking_toggle_providers and thinking_toggle_body?(body) ->
+        :thinking_toggle
+
+      provider == :zenmux and zenmux_reasoning_body?(body) ->
+        :zenmux_reasoning
+
+      true ->
+        nil
+    end
+  end
+
+  defp request_reasoning_contract(_request_source, _model), do: nil
+
+  defp request_contract_from_formatter(ReqLLM.Providers.Azure.OpenAI), do: :openai_or_thinking
+  defp request_contract_from_formatter(ReqLLM.Providers.Azure.Anthropic), do: :platform_anthropic
+  defp request_contract_from_formatter(ReqLLM.Providers.GoogleVertex.Gemini), do: :google_budget
+
+  defp request_contract_from_formatter(ReqLLM.Providers.GoogleVertex.Anthropic),
+    do: :platform_anthropic
+
+  defp request_contract_from_formatter(ReqLLM.Providers.AmazonBedrock.Anthropic),
+    do: :platform_anthropic
+
+  defp request_contract_from_formatter(_formatter), do: nil
+
+  defp request_contract_from_model_family(:azure, family)
+       when family in ["gpt", "text-embedding", "o1", "o3", "o4", "deepseek", "mai-ds"] do
+    :openai_or_thinking
+  end
+
+  defp request_contract_from_model_family(:azure, "claude"), do: :platform_anthropic
+  defp request_contract_from_model_family(:google_vertex, "gemini"), do: :google_budget
+  defp request_contract_from_model_family(:google_vertex, "claude"), do: :platform_anthropic
+  defp request_contract_from_model_family(:amazon_bedrock, "anthropic"), do: :platform_anthropic
+  defp request_contract_from_model_family(:amazon_bedrock, :converse), do: nil
+  defp request_contract_from_model_family(_provider, _family), do: nil
+
+  defp openai_reasoning_body?(body) do
+    not is_nil(fetch_value(body, :reasoning, :effort)) or
+      not is_nil(fetch_value(body, :reasoning_effort))
+  end
+
+  defp anthropic_thinking_body?(body) do
+    not is_nil(fetch_value(body, :thinking, :type)) or
+      not is_nil(fetch_value(body, :thinking, :budget_tokens)) or
+      not is_nil(fetch_value(body, :additionalModelRequestFields, :thinking, :type)) or
+      not is_nil(fetch_value(body, :additionalModelRequestFields, :thinking, :budget_tokens)) or
+      not is_nil(fetch_value(body, :additional_model_request_fields, :thinking, :type)) or
+      not is_nil(fetch_value(body, :additional_model_request_fields, :thinking, :budget_tokens))
+  end
+
+  defp google_reasoning_body?(body) do
+    not is_nil(fetch_value(body, :generationConfig, :thinkingConfig, :thinkingBudget)) or
+      not is_nil(fetch_value(body, :thinkingConfig, :thinkingBudget))
+  end
+
+  defp alibaba_reasoning_body?(body) do
+    not is_nil(fetch_value(body, :enable_thinking)) or
+      not is_nil(fetch_value(body, :thinking_budget))
+  end
+
+  defp thinking_toggle_body?(body) do
+    not is_nil(fetch_value(body, :thinking, :type))
+  end
+
+  defp zenmux_reasoning_body?(body) do
+    not is_nil(fetch_value(body, :reasoning, :enable)) or
+      not is_nil(fetch_value(body, :reasoning, :depth)) or
+      not is_nil(fetch_value(body, :reasoning_effort))
+  end
+
+  defp reasoning_contract(%LLMDB.Model{provider: provider})
+       when provider in @openai_reasoning_providers do
+    :openai_effort
+  end
+
+  defp reasoning_contract(%LLMDB.Model{provider: provider})
+       when provider in @thinking_toggle_providers do
+    :thinking_toggle
+  end
+
+  defp reasoning_contract(%LLMDB.Model{provider: provider}) when provider in @alibaba_providers do
+    :alibaba_thinking
+  end
+
+  defp reasoning_contract(%LLMDB.Model{provider: :anthropic}), do: :anthropic_thinking
+  defp reasoning_contract(%LLMDB.Model{provider: :google}), do: :google_budget
+  defp reasoning_contract(%LLMDB.Model{provider: :zenmux}), do: :zenmux_reasoning
+  defp reasoning_contract(%LLMDB.Model{provider: :zai_coding_plan}), do: :thinking_toggle
+
+  defp reasoning_contract(%LLMDB.Model{provider: :azure} = model) do
+    case hosted_model_family(model) do
+      :claude -> :platform_anthropic
+      :openai -> :openai_or_thinking
+      _ -> :unsupported
+    end
+  end
+
+  defp reasoning_contract(%LLMDB.Model{provider: :google_vertex} = model) do
+    case hosted_model_family(model) do
+      :claude -> :platform_anthropic
+      :gemini -> :google_budget
+      _ -> :unsupported
+    end
+  end
+
+  defp reasoning_contract(%LLMDB.Model{provider: :amazon_bedrock} = model) do
+    case hosted_model_family(model) do
+      :claude -> :platform_anthropic
+      _ -> :unsupported
+    end
+  end
+
+  defp reasoning_contract(_model), do: :unsupported
+
+  defp hosted_model_family(%LLMDB.Model{} = model) do
+    extra_family = hosted_extra_family(model)
+    model_id = model.provider_model_id || model.id || ""
+
+    cond do
+      extra_family == :claude -> :claude
+      extra_family == :gemini -> :gemini
+      extra_family == :openai -> :openai
+      String.starts_with?(model_id, "claude-") -> :claude
+      String.starts_with?(model_id, "anthropic.claude") -> :claude
+      String.starts_with?(model_id, "gemini-") -> :gemini
+      String.starts_with?(model_id, "o1") -> :openai
+      String.starts_with?(model_id, "o3") -> :openai
+      String.starts_with?(model_id, "o4") -> :openai
+      String.starts_with?(model_id, "gpt-") -> :openai
+      String.starts_with?(model_id, "text-embedding") -> :openai
+      String.starts_with?(model_id, "deepseek") -> :openai
+      String.starts_with?(model_id, "mai-ds") -> :openai
+      true -> :unknown
+    end
+  end
+
+  defp hosted_extra_family(%LLMDB.Model{} = model) do
+    extra_family =
+      get_in(model, [Access.key(:extra, %{}), :family]) ||
+        get_in(model, [Access.key(:extra, %{}), "family"])
+
+    cond do
+      is_binary(extra_family) and String.starts_with?(extra_family, "claude") ->
+        :claude
+
+      is_binary(extra_family) and String.starts_with?(extra_family, "gemini") ->
+        :gemini
+
+      is_binary(extra_family) and
+          (String.starts_with?(extra_family, "gpt") or
+             String.starts_with?(extra_family, "o1") or
+             String.starts_with?(extra_family, "o3") or
+             String.starts_with?(extra_family, "o4") or
+             String.starts_with?(extra_family, "deepseek") or
+             String.starts_with?(extra_family, "mai-ds")) ->
+        :openai
+
+      true ->
+        :unknown
+    end
+  end
 
   defp new_reasoning_observation do
     %{
@@ -1274,10 +1969,35 @@ defmodule ReqLLM.Telemetry do
 
   defp token_usage_measurements(_), do: %{tokens: %{}, cost: nil}
 
+  defp first_present(primary, primary_key, secondary, secondary_key) do
+    cond do
+      keyword_has_key?(primary, primary_key) -> Keyword.get(primary, primary_key)
+      has_value_key?(secondary, secondary_key) -> fetch_value(secondary, secondary_key)
+      true -> nil
+    end
+  end
+
+  defp keyword_has_key?(data, key) when is_list(data), do: Keyword.has_key?(data, key)
+  defp keyword_has_key?(_data, _key), do: false
+
+  defp has_value_key?(data, key) when is_map(data) do
+    Map.has_key?(data, key) or Map.has_key?(data, Atom.to_string(key))
+  end
+
+  defp has_value_key?(data, key) when is_list(data) do
+    Keyword.has_key?(data, key)
+  end
+
+  defp has_value_key?(_data, _key), do: false
+
   defp fetch_value(data, key) do
     cond do
       is_map(data) ->
-        Map.get(data, key) || Map.get(data, Atom.to_string(key))
+        cond do
+          Map.has_key?(data, key) -> Map.get(data, key)
+          Map.has_key?(data, Atom.to_string(key)) -> Map.get(data, Atom.to_string(key))
+          true -> nil
+        end
 
       Keyword.keyword?(data) ->
         Keyword.get(data, key)

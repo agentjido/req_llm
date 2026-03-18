@@ -122,6 +122,19 @@ Requested reasoning is normalized from the original ReqLLM options, such as:
 
 Effective reasoning is normalized from the translated provider request so that OpenAI, Anthropic, Google, Vertex, and other providers can be compared through the same telemetry shape.
 
+The normalizer currently covers these provider request shapes:
+
+- OpenAI-style reasoning effort fields such as `reasoning.effort` and `reasoning_effort` on OpenAI, OpenRouter, Groq, and xAI
+- Anthropic-style thinking fields such as `thinking` and `additional_model_request_fields.thinking` on Anthropic, Azure Claude, Bedrock Claude, and Vertex Claude
+- Google-style thinking budgets such as `google_thinking_budget` and `generationConfig.thinkingConfig.thinkingBudget` on Google Gemini and Vertex Gemini
+- Alibaba `enable_thinking` and `thinking_budget`
+- Zenmux `reasoning.enable`, `reasoning.depth`, and `reasoning_effort`
+- Z.AI `thinking.type`
+
+Because `requested` is derived from the original ReqLLM call and `effective` is derived from the translated provider request, they can diverge when provider translation drops, disables, or rewrites a reasoning configuration.
+
+When callers send conflicting reasoning controls, ReqLLM telemetry resolves them conservatively. Explicit disable signals such as `thinking: %{type: "disabled"}`, `reasoning_effort: :none`, or zero-token budgets win over enable hints in the normalized `requested` snapshot.
+
 ## Reasoning Milestones
 
 Reasoning events never include raw thinking text. They are metadata-only, even when payload capture is enabled.
@@ -244,6 +257,9 @@ Payload mode only affects request lifecycle events. Reasoning events stay metada
 Raw payload mode is still sanitized:
 
 - reasoning and thinking text is redacted from payloads
+- tools are emitted as stable metadata only (`name`, `description`, `strict`, `parameter_schema`)
+- binary message parts such as images and files are summarized by byte size, media type, and filename instead of emitting raw bytes
+- unknown payload shapes are recursively sanitized so opaque binaries are summarized instead of passed through
 - speech telemetry reports audio size and format, not raw audio bytes
 - embedding telemetry reports vector counts and dimensions, not the vectors themselves
 - transcription telemetry stays structured and avoids opaque binary payloads

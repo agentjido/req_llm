@@ -17,7 +17,18 @@ defmodule ReqLLM.Step.Telemetry do
         req.options[:operation] || Keyword.get(opts, :operation, :chat)
       )
 
-    context = Telemetry.new_context(model, opts, extra)
+    original_opts = Keyword.get(opts, :telemetry_original_opts, opts)
+
+    context =
+      Telemetry.new_context(
+        model,
+        original_opts,
+        Keyword.put(
+          extra,
+          :reasoning_contract,
+          Telemetry.reasoning_contract_for(model, original_opts, req)
+        )
+      )
 
     req
     |> Telemetry.put_request_context(context)

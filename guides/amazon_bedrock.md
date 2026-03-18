@@ -136,7 +136,7 @@ Passed via `:provider_options` keyword:
 
 - **Type**: Map
 - **Purpose**: Additional model-specific request fields
-- **Example**: `provider_options: [additional_model_request_fields: %{reasoning_config: %{...}}]`
+- **Example**: `provider_options: [additional_model_request_fields: %{thinking: %{type: "enabled", budget_tokens: 4096}}]`
 - **Use Case**: Claude extended thinking configuration
 
 ### Claude-Specific Options

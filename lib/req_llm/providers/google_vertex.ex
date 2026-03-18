@@ -278,10 +278,13 @@ defmodule ReqLLM.Providers.GoogleVertex do
             ]
           ] ++ http_opts
         )
-        |> Req.Request.register_options([:context, :operation])
-        |> Req.Request.merge_options(Keyword.take(other_opts, [:context, :operation]))
+        |> Req.Request.register_options([:context, :operation, :model_family])
+        |> Req.Request.merge_options(
+          Keyword.take(other_opts, [:context, :operation]) ++ [model_family: model_family]
+        )
         |> Req.Request.put_private(:gcp_credentials, gcp_creds)
         |> Req.Request.put_private(:model, model)
+        |> Req.Request.put_private(:formatter, formatter)
         |> attach(model, other_opts)
 
       {:ok, request}

@@ -905,6 +905,7 @@ defmodule ReqLLM.Providers.Azure do
         :tool_choice,
         :req_http_options,
         :telemetry,
+        :telemetry_original_opts,
         :frequency_penalty,
         :system_prompt,
         :top_p,

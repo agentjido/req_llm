@@ -226,6 +226,8 @@ ReqLLM now emits three telemetry families:
 
 For billing and tenant attribution, use `[:req_llm, :request, :stop]` as the source of truth. It includes duration in measurements plus `request_id`, `usage`, `finish_reason`, and normalized `reasoning` metadata in the event metadata. The token usage event remains useful if you only want token and cost totals.
 
+When you audit reasoning-heavy workloads, prefer the normalized `reasoning` snapshot on the request lifecycle events over raw provider payloads. It captures both the originally requested reasoning settings and the effective translated request, so you can see when a provider rewrites or disables a reasoning configuration before you attribute cost or behavior to a tenant.
+
 ```elixir
 :telemetry.attach_many(
   "my-req-llm-billing",
