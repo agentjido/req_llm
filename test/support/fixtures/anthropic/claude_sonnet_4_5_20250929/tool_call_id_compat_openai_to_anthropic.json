@@ -1,0 +1,197 @@
+{
+  "model_spec": "anthropic:claude-sonnet-4-5-20250929",
+  "provider": "anthropic",
+  "request": {
+    "body": {
+      "b64": "eyJtYXhfdG9rZW5zIjo0OCwibWVzc2FnZXMiOlt7ImNvbnRlbnQiOiJVc2UgYWRkIHRvIHN1bSAxIGFuZCAyLiIsInJvbGUiOiJ1c2VyIn0seyJjb250ZW50IjpbeyJpZCI6ImZ1bmN0aW9uc19hZGRfMCIsImlucHV0Ijp7ImEiOjEsImIiOjJ9LCJuYW1lIjoiYWRkIiwidHlwZSI6InRvb2xfdXNlIn1dLCJyb2xlIjoiYXNzaXN0YW50In0seyJjb250ZW50IjpbeyJjb250ZW50IjoiMyIsInRvb2xfdXNlX2lkIjoiZnVuY3Rpb25zX2FkZF8wIiwidHlwZSI6InRvb2xfcmVzdWx0In1dLCJyb2xlIjoidXNlciJ9LHsiY29udGVudCI6IlJlcGx5IHdpdGggT0sgaWYgdGhlIHRvb2wgcmVzdWx0IHdhcyAzLiIsInJvbGUiOiJ1c2VyIn1dLCJtb2RlbCI6ImNsYXVkZS1zb25uZXQtNC01LTIwMjUwOTI5Iiwic3RyZWFtIjpmYWxzZSwidGVtcGVyYXR1cmUiOjAuMCwidG9vbHMiOlt7ImRlc2NyaXB0aW9uIjoiQWRkIHR3byBudW1iZXJzIiwiaW5wdXRfc2NoZW1hIjp7ImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjpmYWxzZSwicHJvcGVydGllcyI6eyJhIjp7InR5cGUiOiJpbnRlZ2VyIn0sImIiOnsidHlwZSI6ImludGVnZXIifX0sInJlcXVpcmVkIjpbImEiLCJiIl0sInR5cGUiOiJvYmplY3QifSwibmFtZSI6ImFkZCJ9XX0="
+    },
+    "canonical_json": {
+      "max_tokens": 48,
+      "messages": [
+        {
+          "content": "Use add to sum 1 and 2.",
+          "role": "user"
+        },
+        {
+          "content": [
+            {
+              "id": "functions_add_0",
+              "input": {
+                "a": 1,
+                "b": 2
+              },
+              "name": "add",
+              "type": "tool_use"
+            }
+          ],
+          "role": "assistant"
+        },
+        {
+          "content": [
+            {
+              "content": "3",
+              "tool_use_id": "functions_add_0",
+              "type": "tool_result"
+            }
+          ],
+          "role": "user"
+        },
+        {
+          "content": "Reply with OK if the tool result was 3.",
+          "role": "user"
+        }
+      ],
+      "model": "claude-sonnet-4-5-20250929",
+      "stream": false,
+      "temperature": 0.0,
+      "tools": [
+        {
+          "description": "Add two numbers",
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "a": {
+                "type": "integer"
+              },
+              "b": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "a",
+              "b"
+            ],
+            "type": "object"
+          },
+          "name": "add"
+        }
+      ]
+    },
+    "headers": {
+      "accept-encoding": [
+        "gzip"
+      ],
+      "anthropic-beta": [
+        "tools-2024-05-16"
+      ],
+      "anthropic-version": [
+        "2023-06-01"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.17"
+      ],
+      "x-api-key": "[REDACTED:x-api-key]"
+    },
+    "method": "post",
+    "url": "https://api.anthropic.com/v1/messages"
+  },
+  "response": {
+    "body": {
+      "content": [
+        {
+          "text": "OK",
+          "type": "text"
+        }
+      ],
+      "id": "msg_01DY2WLB1o6AW1u9T3x7Vp97",
+      "model": "claude-sonnet-4-5-20250929",
+      "role": "assistant",
+      "stop_reason": "end_turn",
+      "stop_sequence": null,
+      "type": "message",
+      "usage": {
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "inference_geo": "not_available",
+        "input_tokens": 681,
+        "output_tokens": 4,
+        "service_tier": "standard"
+      }
+    },
+    "headers": {
+      "anthropic-organization-id": [
+        "a71659e7-a922-4ff7-99de-f3ba615face1"
+      ],
+      "anthropic-ratelimit-input-tokens-limit": [
+        "800000"
+      ],
+      "anthropic-ratelimit-input-tokens-remaining": [
+        "800000"
+      ],
+      "anthropic-ratelimit-input-tokens-reset": [
+        "2026-02-11T22:12:07Z"
+      ],
+      "anthropic-ratelimit-output-tokens-limit": [
+        "160000"
+      ],
+      "anthropic-ratelimit-output-tokens-remaining": [
+        "160000"
+      ],
+      "anthropic-ratelimit-output-tokens-reset": [
+        "2026-02-11T22:12:07Z"
+      ],
+      "anthropic-ratelimit-requests-limit": [
+        "2000"
+      ],
+      "anthropic-ratelimit-requests-remaining": [
+        "1999"
+      ],
+      "anthropic-ratelimit-requests-reset": [
+        "2026-02-11T22:12:07Z"
+      ],
+      "anthropic-ratelimit-tokens-limit": [
+        "960000"
+      ],
+      "anthropic-ratelimit-tokens-remaining": [
+        "960000"
+      ],
+      "anthropic-ratelimit-tokens-reset": [
+        "2026-02-11T22:12:07Z"
+      ],
+      "cf-cache-status": [
+        "DYNAMIC"
+      ],
+      "cf-ray": [
+        "9cc72f992c5feafb-ORD"
+      ],
+      "connection": [
+        "keep-alive"
+      ],
+      "content-security-policy": [
+        "default-src 'none'; frame-ancestors 'none'"
+      ],
+      "content-type": [
+        "application/json"
+      ],
+      "date": [
+        "Wed, 11 Feb 2026 22:12:07 GMT"
+      ],
+      "request-id": [
+        "req_011CY33oUByXxa1bLhB4bh9C"
+      ],
+      "server": [
+        "cloudflare"
+      ],
+      "strict-transport-security": [
+        "max-age=31536000; includeSubDomains; preload"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "x-envoy-upstream-service-time": [
+        "740"
+      ],
+      "x-robots-tag": [
+        "none"
+      ]
+    },
+    "status": 200
+  }
+}

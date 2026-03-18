@@ -418,6 +418,76 @@ defmodule ReqLLM.Providers.AnthropicTest do
                  end)
              end)
     end
+
+    test "encode_body sanitizes OpenAI-style tool call IDs for Anthropic" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.user("Run a tool"),
+          ReqLLM.Context.assistant("",
+            tool_calls: [
+              %{
+                id: "functions.add:0",
+                name: "add",
+                arguments: %{"a" => 1, "b" => 2}
+              }
+            ]
+          ),
+          ReqLLM.Context.tool_result("functions.add:0", "3")
+        ])
+
+      mock_request = %Req.Request{
+        options: [context: context, model: model.model, stream: false]
+      }
+
+      updated_request = Anthropic.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+      messages = decoded["messages"]
+
+      assistant_block =
+        messages
+        |> Enum.find(&(&1["role"] == "assistant"))
+        |> Map.fetch!("content")
+        |> Enum.find(&(&1["type"] == "tool_use"))
+
+      tool_result_block =
+        messages
+        |> Enum.find(&(&1["role"] == "user" and is_list(&1["content"])))
+        |> Map.fetch!("content")
+        |> Enum.find(&(&1["type"] == "tool_result"))
+
+      assert assistant_block["id"] == "functions_add_0"
+      assert tool_result_block["tool_use_id"] == "functions_add_0"
+    end
+
+    test "encode_body rejects contexts ending with unresolved tool calls" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.user("Run a tool"),
+          ReqLLM.Context.assistant("",
+            tool_calls: [
+              %{
+                id: "functions.add:0",
+                name: "add",
+                arguments: %{"a" => 1, "b" => 2}
+              }
+            ]
+          )
+        ])
+
+      mock_request = %Req.Request{
+        options: [context: context, model: model.model, stream: false]
+      }
+
+      assert_raise ReqLLM.Error.Invalid.Parameter,
+                   ~r/Switch providers only after appending tool results/,
+                   fn ->
+                     Anthropic.encode_body(mock_request)
+                   end
+    end
   end
 
   describe "response decoding & normalization" do

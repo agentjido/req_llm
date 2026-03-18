@@ -6,6 +6,10 @@ Code.compiler_options(ignore_module_conflict: true)
 defmodule ReqLLM.Step.Fixture.Backend do
   @moduledoc false
 
+  def step(_provider, _fixture_name) do
+    fn request -> request end
+  end
+
   def save_streaming_fixture(http_context, fixture_path, canonical_json, model, raw_iodata) do
     if Process.whereis(:fixture_calls) do
       Agent.update(:fixture_calls, fn calls ->

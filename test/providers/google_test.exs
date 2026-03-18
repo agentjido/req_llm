@@ -201,6 +201,63 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert is_list(tool_def["functionDeclarations"])
     end
 
+    test "encode_body strips atom-keyed forbidden fields from tool schemas" do
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
+      context = context_fixture()
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "register_company",
+          description: "Register company",
+          parameter_schema: %{
+            :type => :object,
+            :required => [:company],
+            :properties => %{
+              :company => %{
+                :type => :object,
+                :required => [:name, :address],
+                :properties => %{
+                  :name => %{type: :string},
+                  :address => %{
+                    :type => :object,
+                    :required => [:city],
+                    :properties => %{city: %{type: :string}},
+                    :additionalProperties => false
+                  }
+                },
+                :additionalProperties => false
+              }
+            },
+            :additionalProperties => false,
+            :"$schema" => "https://json-schema.org/draft/2020-12/schema"
+          },
+          callback: fn _ -> {:ok, %{}} end
+        )
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          tools: [tool],
+          operation: :chat
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+      [tool_def] = decoded["tools"]
+      [function_def] = tool_def["functionDeclarations"]
+      parameters = function_def["parameters"]
+      company = parameters["properties"]["company"]
+      address = company["properties"]["address"]
+
+      refute Map.has_key?(parameters, "$schema")
+      refute Map.has_key?(parameters, "additionalProperties")
+      refute Map.has_key?(company, "additionalProperties")
+      refute Map.has_key?(address, "additionalProperties")
+    end
+
     test "encode_body with empty tools list and tool_choice omits toolConfig" do
       {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
       context = context_fixture()

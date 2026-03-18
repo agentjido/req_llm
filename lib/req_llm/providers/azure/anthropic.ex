@@ -127,6 +127,15 @@ defmodule ReqLLM.Providers.Azure.Anthropic do
         {context, opts}
       end
 
+    context =
+      ReqLLM.ToolCallIdCompat.apply_context(
+        ReqLLM.Providers.Azure,
+        operation || :chat,
+        %{id: model_id, provider_model_id: model_id, provider: :azure},
+        context,
+        opts
+      )
+
     model = %{model: model_id}
 
     body = Anthropic.Context.encode_request(context, model)

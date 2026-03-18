@@ -150,10 +150,8 @@ defmodule ReqLLM.Providers.Anthropic.Context do
   end
 
   defp encode_message(%ReqLLM.Message{role: role, content: content}) do
-    normalized_role = if role == :tool, do: :user, else: role
-
     %{
-      role: to_string(normalized_role),
+      role: to_string(role),
       content: encode_content(content)
     }
   end

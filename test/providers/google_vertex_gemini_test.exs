@@ -107,6 +107,35 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
     end
   end
 
+  describe "format_request/3 tool call ID compatibility" do
+    test "drops functionCall.id fields for Vertex Gemini" do
+      context =
+        Context.new([
+          Context.user("Add numbers"),
+          Context.assistant("",
+            tool_calls: [
+              %{id: "functions.add:0", name: "add", arguments: %{"a" => 1, "b" => 2}}
+            ]
+          )
+        ])
+
+      body = Gemini.format_request("gemini-2.5-flash", context, max_tokens: 1000)
+
+      function_call =
+        body
+        |> Map.fetch!("contents")
+        |> Enum.flat_map(fn content -> Map.get(content, "parts", []) end)
+        |> Enum.find_value(fn
+          %{"functionCall" => call} -> call
+          _ -> nil
+        end)
+
+      assert is_map(function_call)
+      assert function_call["name"] == "add"
+      refute Map.has_key?(function_call, "id")
+    end
+  end
+
   describe "ResponseBuilder - streaming reasoning_details extraction" do
     alias ReqLLM.Providers.Google.ResponseBuilder
 

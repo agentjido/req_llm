@@ -610,6 +610,7 @@ defmodule ReqLLM.Provider.Defaults do
       :n,
       :tools,
       :tool_choice,
+      :tool_call_id_compat,
       :req_http_options,
       :telemetry,
       :telemetry_original_opts,

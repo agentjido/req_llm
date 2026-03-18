@@ -396,6 +396,20 @@ defmodule ReqLLM.Providers.AmazonBedrock do
         {endpoint, get_formatter_module(family), family}
       end
 
+    operation = opts[:operation] || :chat
+    compat_opts = Keyword.put(opts, :use_converse, use_converse)
+
+    context =
+      ReqLLM.ToolCallIdCompat.apply_context(
+        __MODULE__,
+        operation,
+        model,
+        opts[:context],
+        compat_opts
+      )
+
+    opts = Keyword.put(opts, :context, context)
+
     updated_request =
       request
       |> Map.put(:url, URI.parse(base_url <> endpoint_base))
@@ -420,7 +434,7 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     model_body =
       formatter.format_request(
         model_id,
-        opts[:context],
+        context,
         opts
       )
 
@@ -553,6 +567,17 @@ defmodule ReqLLM.Providers.AmazonBedrock do
         formatter = get_formatter_module(model_family)
         {formatter, "/model/#{model_id}/invoke-with-response-stream"}
       end
+
+    translated_opts = Keyword.put(translated_opts, :use_converse, use_converse)
+
+    context =
+      ReqLLM.ToolCallIdCompat.apply_context(
+        __MODULE__,
+        :chat,
+        model,
+        context,
+        translated_opts
+      )
 
     # Build request body with translated options
     body = formatter.format_request(model_id, context, translated_opts)
@@ -999,6 +1024,33 @@ defmodule ReqLLM.Providers.AmazonBedrock do
       _ ->
         # Other model families: no translation needed yet
         {opts, []}
+    end
+  end
+
+  @impl ReqLLM.Provider
+  def tool_call_id_policy(_operation, model, opts) do
+    model_id = model.provider_model_id || model.id
+    use_converse = determine_use_converse(model_id, opts)
+    family = get_model_family(model_id)
+
+    cond do
+      use_converse ->
+        %{
+          mode: :sanitize,
+          invalid_chars_regex: ~r/[^A-Za-z0-9_-]/,
+          max_length: 64,
+          enforce_turn_boundary: true
+        }
+
+      family == "anthropic" ->
+        %{
+          mode: :sanitize,
+          invalid_chars_regex: ~r/[^A-Za-z0-9_-]/,
+          enforce_turn_boundary: true
+        }
+
+      true ->
+        %{mode: :passthrough}
     end
   end
 

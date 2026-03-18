@@ -192,6 +192,46 @@ defmodule ReqLLM.Providers.GoogleVertex do
   end
 
   @impl ReqLLM.Provider
+  def prepare_request(:ocr, model_input, document_binary, opts) do
+    with {:ok, model} <- ReqLLM.model(model_input),
+         :ok <- validate_ocr_model(model) do
+      {gcp_creds, other_opts} = extract_gcp_credentials(opts)
+      validate_gcp_credentials!(gcp_creds)
+
+      region = gcp_creds[:region] || @default_region
+      project_id = gcp_creds[:project_id]
+      model_id = model.provider_model_id || model.id
+      model_family = get_model_family(model)
+
+      body = ReqLLM.OCR.build_ocr_body(model_id, document_binary, other_opts)
+
+      base_url = build_base_url(region)
+      path = build_model_path(model_family, model_id, project_id, region)
+      url = "#{base_url}#{path}"
+
+      http_opts = Keyword.get(other_opts, :req_http_options, [])
+
+      request =
+        Req.new(
+          [
+            url: url,
+            method: :post,
+            json: body,
+            receive_timeout: 120_000,
+            headers: [{"content-type", "application/json"}]
+          ] ++ http_opts
+        )
+        |> Req.Request.register_options([:operation])
+        |> Req.Request.merge_options(operation: :ocr)
+        |> Req.Request.put_private(:gcp_credentials, gcp_creds)
+        |> Req.Request.put_private(:model, model)
+        |> attach_ocr(model, gcp_creds, other_opts)
+
+      {:ok, request}
+    end
+  end
+
+  @impl ReqLLM.Provider
   def prepare_request(:embedding, model_input, text, opts) do
     with {:ok, model} <- ReqLLM.model(model_input) do
       {gcp_creds, other_opts} = extract_gcp_credentials(opts)
@@ -241,8 +281,15 @@ defmodule ReqLLM.Providers.GoogleVertex do
       # Add context to opts so it can be stored in request.options
       other_opts = Keyword.put(other_opts, :context, context)
 
-      # Build request body using formatter
-      body = formatter.format_request(model.provider_model_id || model.id, context, other_opts)
+      context =
+        ReqLLM.ToolCallIdCompat.apply_context(__MODULE__, operation, model, context, other_opts)
+
+      other_opts = Keyword.put(other_opts, :context, context)
+
+      formatter_opts = Keyword.put(other_opts, :provider_model, model)
+
+      body =
+        formatter.format_request(model.provider_model_id || model.id, context, formatter_opts)
 
       # Build Vertex AI endpoint URL
       region = gcp_creds[:region] || @default_region
@@ -325,6 +372,15 @@ defmodule ReqLLM.Providers.GoogleVertex do
         end
       end
     )
+  end
+
+  defp attach_ocr(request, model, gcp_creds, opts) do
+    request
+    |> Req.Request.merge_options(finch: ReqLLM.Application.finch_name())
+    |> ReqLLM.Step.Error.attach()
+    |> ReqLLM.Step.Retry.attach()
+    |> ReqLLM.Step.Fixture.maybe_attach(model, opts)
+    |> put_gcp_auth(gcp_creds)
   end
 
   defp attach_embedding(request, model, gcp_creds, opts) do
@@ -419,31 +475,41 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
   defp fetch_access_token(_), do: {:error, :missing_credentials}
 
-  # Get model family from LLMDB model struct.
+  # Get model family from model metadata.
   # First tries prefix matching on model ID for backward compatibility,
-  # then falls back to LLMDB extra.family metadata for third-party MaaS models.
-  defp get_model_family(%LLMDB.Model{} = model) do
-    model_id = model.provider_model_id || model.id
+  # then falls back to extra.family metadata for third-party MaaS models.
+  defp get_model_family(%LLMDB.Model{} = model),
+    do: classify_model_family(model.provider_model_id || model.id, model)
 
+  defp get_model_family(model) when is_map(model),
+    do: classify_model_family(extract_model_id(model), model)
+
+  defp get_model_family(model_id) when is_binary(model_id),
+    do: classify_model_family(model_id, %{})
+
+  defp classify_model_family(model_id, model) when is_binary(model_id) do
     cond do
       String.starts_with?(model_id, "claude-") -> "claude"
       String.starts_with?(model_id, "gemini-") -> "gemini"
       mistral_model?(model_id) -> "mistral"
-      true -> resolve_family_from_metadata(model)
+      true -> resolve_family_from_metadata(model, model_id)
     end
   end
 
-  # Mistral AI model IDs on Vertex: mistral-medium-3, mistral-small-2503, codestral-2, mistral-ocr-2505
+  defp extract_model_id(model) do
+    Map.get(model, :provider_model_id) ||
+      Map.get(model, "provider_model_id") ||
+      Map.get(model, :id) ||
+      Map.get(model, "id")
+  end
+
   defp mistral_model?(model_id) do
     String.starts_with?(model_id, "mistral-") or String.starts_with?(model_id, "codestral")
   end
 
-  # Resolve model family from LLMDB extra.family metadata.
-  # Maps specific extra.family values (e.g., "claude-haiku", "gemini-flash")
-  # to high-level formatter families. Unknown families default to "openai_compat"
-  # for MaaS models that use the OpenAI Chat Completions format.
-  defp resolve_family_from_metadata(model) do
-    extra_family = get_in(model, [Access.key(:extra, %{}), :family])
+  defp resolve_family_from_metadata(model, model_id) do
+    extra = Map.get(model, :extra) || Map.get(model, "extra") || %{}
+    extra_family = Map.get(extra, :family) || Map.get(extra, "family")
 
     cond do
       is_binary(extra_family) and String.starts_with?(extra_family, "claude") ->
@@ -461,7 +527,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
         "openai_compat"
 
       true ->
-        raise ArgumentError, "Unknown model family for: #{model.provider_model_id || model.id}"
+        raise ArgumentError, "Unknown model family for: #{model_id}"
     end
   end
 
@@ -707,6 +773,19 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
   defp extract_embedding_usage(_), do: :error
 
+  defp validate_ocr_model(%LLMDB.Model{} = model) do
+    if ReqLLM.OCR.ocr_capable_model?(model) do
+      :ok
+    else
+      model_string = LLMDB.Model.spec(model)
+
+      {:error,
+       ReqLLM.Error.Invalid.Parameter.exception(
+         parameter: "model: #{model_string} does not support OCR operations"
+       )}
+    end
+  end
+
   def pre_validate_options(operation, model, opts) do
     model_family = get_model_family(model)
 
@@ -766,6 +845,27 @@ defmodule ReqLLM.Providers.GoogleVertex do
   end
 
   @impl ReqLLM.Provider
+  def tool_call_id_policy(_operation, model, _opts) do
+    case get_model_family(model) do
+      "claude" ->
+        %{
+          mode: :sanitize,
+          invalid_chars_regex: ~r/[^A-Za-z0-9_-]/,
+          enforce_turn_boundary: true
+        }
+
+      "gemini" ->
+        %{
+          mode: :drop,
+          drop_function_call_ids: true
+        }
+
+      _ ->
+        %{mode: :passthrough}
+    end
+  end
+
+  @impl ReqLLM.Provider
   def attach_stream(model, context, opts, _finch_name) do
     # Process and validate options
     operation = opts[:operation] || :chat
@@ -773,12 +873,18 @@ defmodule ReqLLM.Providers.GoogleVertex do
     {gcp_creds, other_opts, model_family, formatter} =
       process_and_validate_opts(opts, model, operation)
 
-    # Build request body using formatter (with stream: true)
+    context =
+      ReqLLM.ToolCallIdCompat.apply_context(__MODULE__, operation, model, context, other_opts)
+
+    other_opts = Keyword.put(other_opts, :context, context)
+
+    formatter_opts = Keyword.put(other_opts, :provider_model, model)
+
     body =
       formatter.format_request(
         model.provider_model_id || model.id,
         context,
-        Keyword.put(other_opts, :stream, true)
+        Keyword.put(formatter_opts, :stream, true)
       )
 
     # Build Vertex AI endpoint URL for streaming

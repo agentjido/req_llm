@@ -275,4 +275,55 @@ defmodule ReqLLM.Providers.Azure.ToolsTest do
       assert tool_result_content[:content] == "Result data here"
     end
   end
+
+  describe "tool call ID compatibility" do
+    test "Claude: sanitizes incompatible tool call IDs from prior provider contexts" do
+      assistant_msg =
+        ReqLLM.Context.assistant("",
+          tool_calls: [
+            %{id: "functions.add:0", name: "add", arguments: %{"a" => 1, "b" => 2}}
+          ]
+        )
+
+      tool_result = ReqLLM.Context.tool_result("functions.add:0", "add", "3")
+
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.user("Add numbers"),
+          assistant_msg,
+          tool_result
+        ])
+
+      body = Azure.Anthropic.format_request("claude-3-sonnet", context, stream: false)
+
+      assistant_msg = Enum.find(body.messages, &(&1.role == "assistant"))
+      user_msg = Enum.find(body.messages, &(&1.role == "user" and is_list(&1.content)))
+      assistant_tool_use = Enum.find(assistant_msg.content, &(&1[:type] == "tool_use"))
+      user_tool_result = Enum.find(user_msg.content, &(&1[:type] == "tool_result"))
+
+      assert assistant_tool_use[:id] == "functions_add_0"
+      assert user_tool_result[:tool_use_id] == "functions_add_0"
+    end
+
+    test "Claude: rejects unresolved assistant tool calls" do
+      assistant_msg =
+        ReqLLM.Context.assistant("",
+          tool_calls: [
+            %{id: "functions.add:0", name: "add", arguments: %{"a" => 1, "b" => 2}}
+          ]
+        )
+
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.user("Add numbers"),
+          assistant_msg
+        ])
+
+      assert_raise ReqLLM.Error.Invalid.Parameter,
+                   ~r/Switch providers only after appending tool results/,
+                   fn ->
+                     Azure.Anthropic.format_request("claude-3-sonnet", context, stream: false)
+                   end
+    end
+  end
 end

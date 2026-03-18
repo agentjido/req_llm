@@ -371,6 +371,39 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert decoded["tool_choice"] == "required"
     end
 
+    test "encode_body preserves tool call IDs by default" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.user("Add numbers"),
+          ReqLLM.Context.assistant("",
+            tool_calls: [
+              %{id: "functions.add:0", name: "add", arguments: %{"a" => 1, "b" => 2}}
+            ]
+          ),
+          ReqLLM.Context.tool_result("functions.add:0", "add", "3")
+        ])
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false
+        ]
+      }
+
+      updated_request = OpenAI.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+      messages = decoded["messages"]
+
+      assistant_message = Enum.find(messages, &(&1["role"] == "assistant"))
+      tool_message = Enum.find(messages, &(&1["role"] == "tool"))
+
+      assert get_in(assistant_message, ["tool_calls", Access.at(0), "id"]) == "functions.add:0"
+      assert tool_message["tool_call_id"] == "functions.add:0"
+    end
+
     test "encode_body for o1 models uses max_completion_tokens" do
       {:ok, model} = ReqLLM.model("openai:o1-mini")
       context = context_fixture()

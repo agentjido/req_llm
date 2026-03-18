@@ -442,6 +442,48 @@ defmodule ReqLLM.SchemaTest do
       assert result["parameters"]["required"] == ["tags"]
     end
 
+    test "to_google_format/1 strips atom-keyed forbidden fields recursively" do
+      atom_keyed_schema = %{
+        :type => :object,
+        :required => [:company],
+        :properties => %{
+          :company => %{
+            :type => :object,
+            :required => [:name, :address],
+            :properties => %{
+              :name => %{type: :string},
+              :address => %{
+                :type => :object,
+                :required => [:city],
+                :properties => %{city: %{type: :string}},
+                :additionalProperties => false
+              }
+            },
+            :additionalProperties => false
+          }
+        },
+        :additionalProperties => false,
+        :"$schema" => "https://json-schema.org/draft/2020-12/schema"
+      }
+
+      tool = %Tool{
+        name: "register_company",
+        description: "Register company",
+        parameter_schema: atom_keyed_schema,
+        callback: fn _ -> {:ok, %{}} end
+      }
+
+      result = Schema.to_google_format(tool)
+      parameters = result["parameters"]
+      company = parameters[:properties][:company]
+      address = company[:properties][:address]
+
+      refute Map.has_key?(parameters, :"$schema")
+      refute Map.has_key?(parameters, :additionalProperties)
+      refute Map.has_key?(company, :additionalProperties)
+      refute Map.has_key?(address, :additionalProperties)
+    end
+
     test "format consistency across providers", %{basic_tool: tool} do
       anthropic = Schema.to_anthropic_format(tool)
       openai = Schema.to_openai_format(tool)

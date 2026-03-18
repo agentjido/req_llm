@@ -28,13 +28,12 @@ defmodule ReqLLM.Providers.GoogleVertex.Gemini do
   @doc """
   Formats a ReqLLM context into Gemini request format for Vertex AI.
 
-  Delegates to the native Google provider's encoding logic, then sanitizes
-  function call IDs which Vertex AI rejects.
+  Delegates to the native Google provider's encoding logic, then applies
+  shared tool call ID compatibility policy.
   """
   def format_request(model_id, context, opts) do
-    # Hoist provider_options to top level so Google.encode_body can read them
-    # (e.g. google_thinking_budget, google_grounding)
     {provider_opts, rest} = Keyword.pop(opts, :provider_options, [])
+    provider_model = Keyword.get(opts, :provider_model)
 
     opts_map =
       rest
@@ -42,47 +41,23 @@ defmodule ReqLLM.Providers.GoogleVertex.Gemini do
       |> Map.new()
       |> Map.merge(%{context: context, model: model_id})
 
-    # Create a temporary request structure that mimics what Google.encode_body expects
     temp_request =
       Req.new(method: :post, url: URI.parse("https://example.com/temp"))
       |> Map.put(:body, {:json, %{}})
       |> Map.put(:options, opts_map)
 
-    # Let Google provider encode the body
     %Req.Request{body: encoded_body} = Google.encode_body(temp_request)
 
-    # Decode the JSON body
     body = Jason.decode!(encoded_body)
 
-    # Vertex AI has stricter validation: remove "id" from functionCall parts
-    sanitize_function_calls(body)
+    ReqLLM.ToolCallIdCompat.apply_body(
+      ReqLLM.Providers.GoogleVertex,
+      opts[:operation] || :chat,
+      provider_model || %{id: model_id, provider_model_id: model_id, provider: :google_vertex},
+      body,
+      opts
+    )
   end
-
-  # Removes "id" field from functionCall parts in contents
-  # Vertex AI Gemini API does not accept this field, while direct Google API includes it
-  defp sanitize_function_calls(%{"contents" => contents} = body) when is_list(contents) do
-    sanitized_contents =
-      Enum.map(contents, fn
-        %{"parts" => parts} = content when is_list(parts) ->
-          sanitized_parts =
-            Enum.map(parts, fn
-              %{"functionCall" => fc} = part ->
-                Map.put(part, "functionCall", Map.delete(fc, "id"))
-
-              other ->
-                other
-            end)
-
-          Map.put(content, "parts", sanitized_parts)
-
-        other ->
-          other
-      end)
-
-    Map.put(body, "contents", sanitized_contents)
-  end
-
-  defp sanitize_function_calls(body), do: body
 
   @doc """
   Parses a Gemini response from Vertex AI into ReqLLM format.
@@ -93,7 +68,6 @@ defmodule ReqLLM.Providers.GoogleVertex.Gemini do
     operation = opts[:operation]
     context = opts[:context] || %ReqLLM.Context{messages: []}
 
-    # Create temporary request/response pair that mimics what Google.decode_response expects
     temp_req = %Req.Request{
       options: %{
         context: context,
@@ -108,7 +82,6 @@ defmodule ReqLLM.Providers.GoogleVertex.Gemini do
       body: body
     }
 
-    # Let Google provider decode the response
     {_req, decoded_resp} = Google.decode_response({temp_req, temp_resp})
 
     case decoded_resp do
@@ -135,7 +108,6 @@ defmodule ReqLLM.Providers.GoogleVertex.Gemini do
   Gemini uses the same SSE format as the native Google provider.
   """
   def decode_stream_event(event, model) do
-    # Delegate directly to Google provider's decode_stream_event
     Google.decode_stream_event(event, model)
   end
 end

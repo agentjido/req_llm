@@ -91,8 +91,6 @@ config :llm_db,
 config :req_llm,
   receive_timeout: 120_000,
   stream_receive_timeout: 120_000,
-  req_connect_timeout: 60_000,
-  req_pool_timeout: 120_000,
   metadata_timeout: 120_000,
   thinking_timeout: 300_000
 
