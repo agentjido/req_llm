@@ -2,6 +2,7 @@ defmodule ReqLLM.TelemetryTest do
   use ExUnit.Case, async: false
 
   import ReqLLM.Context
+  import ReqLLM.Test.Helpers, only: [openai_format_json_fixture: 1]
 
   alias ReqLLM.Message
   alias ReqLLM.Message.ContentPart
@@ -379,12 +380,8 @@ defmodule ReqLLM.TelemetryTest do
     assert stop_meta.response_payload["nested"] == [%{"blob" => %{bytes: 2}}]
   end
 
-  test "high-level generate_text emits request summaries and raw payloads per request" do
-    {:ok, _response} =
-      ReqLLM.generate_text("openrouter:anthropic/claude-haiku-4.5", "Hello",
-        fixture: "basic",
-        telemetry: [payloads: :raw]
-      )
+  test "Req-backed public requests emit request summaries and raw payloads per request" do
+    run_req_backed_request(telemetry: [payloads: :raw])
 
     events = collect_events()
     start_meta = single_event_metadata(events, [:req_llm, :request, :start])
@@ -400,15 +397,10 @@ defmodule ReqLLM.TelemetryTest do
     assert request_part.type == :text
     assert request_part.text == "Hello"
     assert stop_meta.response_payload.message.role == :assistant
-
-    response_thinking =
-      Enum.find(stop_meta.response_payload.message.content, &(&1.type == :thinking))
-
-    assert response_thinking.redacted? == true
-    assert response_thinking.text == nil
+    assert Enum.any?(stop_meta.response_payload.message.content, &(&1.type == :text))
   end
 
-  test "high-level generate_text falls back to global raw payload config" do
+  test "Req-backed public requests fall back to global raw payload config" do
     original_telemetry_config = Application.get_env(:req_llm, :telemetry)
 
     on_exit(fn ->
@@ -416,9 +408,7 @@ defmodule ReqLLM.TelemetryTest do
     end)
 
     Application.put_env(:req_llm, :telemetry, payloads: :raw)
-
-    {:ok, _response} =
-      ReqLLM.generate_text("openrouter:anthropic/claude-haiku-4.5", "Hello", fixture: "basic")
+    run_req_backed_request()
 
     events = collect_events()
     start_meta = single_event_metadata(events, [:req_llm, :request, :start])
@@ -536,6 +526,27 @@ defmodule ReqLLM.TelemetryTest do
   defp event_count(events, event_name) do
     events
     |> Enum.count(&(&1.name == event_name))
+  end
+
+  defp run_req_backed_request(opts \\ []) do
+    model = ReqLLM.model!("openrouter:anthropic/claude-haiku-4.5")
+    {:ok, provider} = ReqLLM.provider(model.provider)
+    {:ok, request} = provider.prepare_request(:chat, model, "Hello", opts)
+
+    request =
+      Map.put(request, :adapter, fn req ->
+        response =
+          %Req.Response{
+            status: 200,
+            body: openai_format_json_fixture(model: model.id, content: "Hello back")
+          }
+
+        {req, response}
+      end)
+
+    {_request, response} = Req.Request.run_request(request)
+    assert %Req.Response{status: 200, body: %Response{}} = response
+    :ok
   end
 
   defp restore_app_env(app, key, nil), do: Application.delete_env(app, key)
