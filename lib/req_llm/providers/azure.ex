@@ -265,7 +265,8 @@ defmodule ReqLLM.Providers.Azure do
     "o4" => __MODULE__.OpenAI,
     "deepseek" => __MODULE__.OpenAI,
     "mai-ds" => __MODULE__.OpenAI,
-    "claude" => __MODULE__.Anthropic
+    "claude" => __MODULE__.Anthropic,
+    "grok" => __MODULE__.OpenAI
   }
 
   @model_family_prefixes @model_families |> Map.keys() |> Enum.sort_by(&String.length/1, :desc)
