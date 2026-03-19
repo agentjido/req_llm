@@ -321,6 +321,23 @@ defmodule ReqLLM.ContextTest do
       inspected = inspect(context)
       assert inspected == "#Context<1 msgs: system:\"Only system\">"
     end
+
+    test "handles truncated messages field (depth truncation)" do
+      # Simulate Logger depth truncation replacing the messages list with a metadata map
+      context = %Context{messages: %{size: 1, type: :list, __truncated_depth__: 4}}
+
+      inspected = inspect(context)
+      assert inspected == "#Context<(truncated)>"
+    end
+
+    test "handles truncated msg.content field (depth truncation)" do
+      # Simulate depth truncation replacing content list with a metadata map
+      msg = %ReqLLM.Message{role: :user, content: %{size: 1, type: :list, __truncated_depth__: 5}}
+      context = %Context{messages: [msg]}
+
+      inspected = inspect(context)
+      assert inspected == "#Context<1 msgs: user:\"\">"
+    end
   end
 
   describe "normalize/2" do

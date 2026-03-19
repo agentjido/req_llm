@@ -636,24 +636,14 @@ defmodule ReqLLM.Context do
   end
 
   defimpl Inspect do
-    def inspect(%{messages: msgs}, opts) do
+    def inspect(%{messages: msgs}, opts) when is_list(msgs) do
       msg_count = length(msgs)
 
       if msg_count <= 2 do
         role_previews =
           msgs
           |> Enum.map_join(", ", fn msg ->
-            content_preview =
-              case List.first(msg.content) do
-                %{text: text} when is_binary(text) ->
-                  trimmed = String.slice(text, 0, 40)
-                  if String.length(text) > 40, do: trimmed <> "...", else: trimmed
-
-                _ ->
-                  ""
-              end
-
-            "#{msg.role}:\"#{content_preview}\""
+            "#{msg.role}:\"#{content_preview(msg, 40)}\""
           end)
 
         Inspect.Algebra.concat([
@@ -668,17 +658,7 @@ defmodule ReqLLM.Context do
           msgs
           |> Enum.with_index()
           |> Enum.map(fn {msg, idx} ->
-            content_preview =
-              case List.first(msg.content) do
-                %{text: text} when is_binary(text) ->
-                  trimmed = String.slice(text, 0, 60)
-                  if String.length(text) > 60, do: trimmed <> "...", else: trimmed
-
-                _ ->
-                  ""
-              end
-
-            "  [#{idx}] #{msg.role}: \"#{content_preview}\""
+            "  [#{idx}] #{msg.role}: \"#{content_preview(msg, 60)}\""
           end)
 
         Inspect.Algebra.concat([
@@ -690,6 +670,20 @@ defmodule ReqLLM.Context do
           Inspect.Algebra.line(),
           ">"
         ])
+      end
+    end
+
+    def inspect(_context, _opts) do
+      Inspect.Algebra.concat(["#Context<", "(truncated)", ">"])
+    end
+
+    defp content_preview(msg, max_len) do
+      with content when is_list(content) <- msg.content,
+           %{text: text} when is_binary(text) <- List.first(content) do
+        trimmed = String.slice(text, 0, max_len)
+        if String.length(text) > max_len, do: trimmed <> "...", else: trimmed
+      else
+        _ -> ""
       end
     end
   end
