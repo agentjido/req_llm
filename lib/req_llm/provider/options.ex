@@ -262,7 +262,9 @@ defmodule ReqLLM.Provider.Options do
     # Auto-hoist provider-specific top-level options into :provider_options
     user_opts = auto_hoist_provider_options(provider_mod, user_opts)
 
-    telemetry_original_opts = user_opts
+    telemetry_original_opts =
+      user_opts
+      |> Keyword.merge(Keyword.take(internal_opts, [:telemetry, :context, :text, :operation]))
 
     # Apply pre-validation normalization (allows providers to filter/map unsupported options)
     user_opts = apply_pre_validation(provider_mod, operation, model, user_opts)

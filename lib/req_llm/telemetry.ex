@@ -435,10 +435,15 @@ defmodule ReqLLM.Telemetry do
       |> normalize_telemetry_opts()
       |> Map.get(:payloads, :none)
 
-    opts
-    |> Keyword.get(:telemetry, [])
-    |> normalize_telemetry_opts()
-    |> Map.get(:payloads, global_payload_mode)
+    case Keyword.fetch(opts, :telemetry) do
+      {:ok, telemetry_opts} ->
+        telemetry_opts
+        |> normalize_telemetry_opts()
+        |> Map.get(:payloads, :none)
+
+      :error ->
+        global_payload_mode
+    end
   end
 
   defp normalize_telemetry_opts(opts) when is_list(opts) do
