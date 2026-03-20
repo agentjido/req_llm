@@ -720,6 +720,15 @@ defmodule ReqLLM.Context do
     end
   end
 
+  defp to_parts(list) when is_list(list) do
+    Enum.flat_map(list, fn
+      %ContentPart{} = part -> [part]
+      %{type: :thinking, thinking: text} when is_binary(text) and text != "" -> [ContentPart.thinking(text)]
+      %{type: :text, text: text} when is_binary(text) and text != "" -> [ContentPart.text(text)]
+      _ -> []
+    end)
+  end
+
   defp normalize_tool_calls(nil), do: nil
   defp normalize_tool_calls([]), do: nil
 
