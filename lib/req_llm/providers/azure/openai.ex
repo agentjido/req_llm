@@ -45,7 +45,16 @@ defmodule ReqLLM.Providers.Azure.OpenAI do
   require ReqLLM.Debug, as: Debug
 
   # Model prefixes that use OpenAI-compatible API format
-  @openai_compatible_prefixes ["gpt", "o1", "o3", "o4", "text-embedding", "deepseek", "mai-ds", "grok"]
+  @openai_compatible_prefixes [
+    "gpt",
+    "o1",
+    "o3",
+    "o4",
+    "text-embedding",
+    "deepseek",
+    "mai-ds",
+    "grok"
+  ]
 
   @anthropic_specific_options [
     :anthropic_prompt_cache,

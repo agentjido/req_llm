@@ -776,7 +776,8 @@ defmodule ReqLLM.Providers.Azure do
     model_id = effective_model_id(model)
 
     case get_model_family(model_id) do
-      family when family in ["gpt", "text-embedding", "o1", "o3", "o4", "deepseek", "mai-ds", "grok"] ->
+      family
+      when family in ["gpt", "text-embedding", "o1", "o3", "o4", "deepseek", "mai-ds", "grok"] ->
         synthetic_model = %{model | provider: :openai}
         ReqLLM.Providers.OpenAI.translate_options(operation, synthetic_model, opts)
 
