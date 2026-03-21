@@ -557,8 +557,12 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
   end
 
   defp encode_content(content) when is_list(content) do
-    Enum.map(content, &encode_content_part/1)
+    content
+    |> Enum.map(&encode_content_part/1)
+    |> Enum.reject(&is_nil/1)
   end
+
+  defp encode_content_part(%ContentPart{type: :text, text: ""}), do: nil
 
   defp encode_content_part(%ContentPart{type: :text, text: text}) do
     %{"text" => text}

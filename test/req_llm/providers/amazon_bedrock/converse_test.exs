@@ -86,6 +86,29 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
              }
     end
 
+    test "filters empty text ContentParts from assistant message with tool calls" do
+      tool_call = ReqLLM.ToolCall.new("call_123", "add", Jason.encode!(%{a: 2, b: 3}))
+
+      context = %ReqLLM.Context{
+        messages: [
+          %Message{role: :user, content: [ContentPart.text("What is 2+3?")]},
+          %Message{
+            role: :assistant,
+            content: [ContentPart.text("")],
+            tool_calls: [tool_call]
+          },
+          %Message{role: :tool, tool_call_id: "call_123", content: [ContentPart.text("5")]},
+          %Message{role: :user, content: [ContentPart.text("Thanks")]}
+        ]
+      }
+
+      result = Converse.format_request("test-model", context, [])
+      [_user, assistant_msg | _rest] = result["messages"]
+
+      # The empty text block should be filtered out, leaving only the toolUse block
+      assert [%{"toolUse" => _}] = assistant_msg["content"]
+    end
+
     test "formats request with content blocks" do
       context = %ReqLLM.Context{
         messages: [
