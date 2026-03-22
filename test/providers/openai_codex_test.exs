@@ -34,6 +34,34 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
       assert request.headers["originator"] == ["pi"]
     end
 
+    test "prepare_request loads oauth_file without explicit auth_mode" do
+      {:ok, model} = ReqLLM.model("openai_codex:gpt-5.3-codex-spark")
+      path = oauth_file_path("prepare")
+
+      on_exit(fn -> File.rm_rf(Path.dirname(path)) end)
+
+      write_oauth_file(path, %{
+        "openai-codex" => %{
+          "type" => "oauth",
+          "access" => jwt_with_account_id("acct_file_prepare"),
+          "refresh" => "refresh-token-prepare",
+          "expires" => future_expiry(),
+          "accountId" => "acct_file_prepare"
+        }
+      })
+
+      {:ok, request} =
+        OpenAICodex.prepare_request(:chat, model, "Summarize BHP",
+          provider_options: [oauth_file: path]
+        )
+
+      assert request.headers["authorization"] == [
+               "Bearer #{jwt_with_account_id("acct_file_prepare")}"
+             ]
+
+      assert request.headers["chatgpt-account-id"] == ["acct_file_prepare"]
+    end
+
     test "prepare_request rejects api_key auth mode" do
       {:ok, model} = ReqLLM.model("openai_codex:gpt-5.3-codex-spark")
 
@@ -83,6 +111,36 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
       assert body["text"] == %{"verbosity" => "medium"}
       refute Map.has_key?(body, "max_output_tokens")
       assert Enum.all?(body["input"], &(&1["role"] != "system"))
+    end
+
+    test "loads oauth_file without explicit auth_mode for streaming" do
+      {:ok, model} = ReqLLM.model("openai_codex:gpt-5.3-codex-spark")
+      path = oauth_file_path("stream")
+
+      on_exit(fn -> File.rm_rf(Path.dirname(path)) end)
+
+      write_oauth_file(path, %{
+        "openai-codex" => %{
+          "type" => "oauth",
+          "access" => jwt_with_account_id("acct_file_stream"),
+          "refresh" => "refresh-token-stream",
+          "expires" => future_expiry(),
+          "accountId" => "acct_file_stream"
+        }
+      })
+
+      context = ReqLLM.context([ReqLLM.Context.user("Tell me about FMG")])
+
+      {:ok, request} =
+        OpenAICodex.attach_stream(
+          model,
+          context,
+          [provider_options: [oauth_file: path]],
+          nil
+        )
+
+      assert {"authorization", "Bearer #{jwt_with_account_id("acct_file_stream")}"} in request.headers
+      assert {"chatgpt-account-id", "acct_file_stream"} in request.headers
     end
   end
 
@@ -166,5 +224,24 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
       |> Base.url_encode64(padding: false)
 
     "#{header}.#{payload}.sig"
+  end
+
+  defp oauth_file_path(label) do
+    tmp_dir =
+      Path.join(
+        System.tmp_dir!(),
+        "req_llm_openai_codex_#{label}_#{System.unique_integer([:positive])}"
+      )
+
+    File.mkdir_p!(tmp_dir)
+    Path.join(tmp_dir, "oauth.json")
+  end
+
+  defp write_oauth_file(path, payload) do
+    File.write!(path, Jason.encode_to_iodata!(payload, pretty: true))
+  end
+
+  defp future_expiry do
+    System.system_time(:millisecond) + 60_000
   end
 end

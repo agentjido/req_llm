@@ -236,6 +236,7 @@ defmodule ReqLLM.Providers.OpenAICodex do
 
   @impl ReqLLM.Provider
   def attach_stream(model, context, opts, _finch_name) do
+    opts = normalize_stream_opts(opts)
     ensure_oauth_mode!(opts)
 
     credential = ReqLLM.Auth.resolve!(model, opts)
@@ -437,6 +438,19 @@ defmodule ReqLLM.Providers.OpenAICodex do
       true -> normalized <> codex_path()
     end
   end
+
+  defp normalize_stream_opts(opts) when is_list(opts) do
+    provider_opts =
+      opts
+      |> provider_options()
+      |> Keyword.put_new(:auth_mode, :oauth)
+
+    opts
+    |> Keyword.put(:provider_options, provider_opts)
+    |> Keyword.put_new(:auth_mode, :oauth)
+  end
+
+  defp normalize_stream_opts(opts), do: opts
 
   defp get_timeout(opts) do
     Keyword.get(opts, :receive_timeout) ||
