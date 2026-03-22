@@ -474,6 +474,44 @@ defmodule ReqLLM.ContextTest do
       assert [%ContentPart{type: :text, text: "Hi there!"}] = assistant_msg.content
     end
 
+    test "accepts assistant loose maps with content part lists" do
+      input = %{
+        role: :assistant,
+        content: [
+          ContentPart.thinking("internal"),
+          ContentPart.text("hello")
+        ]
+      }
+
+      {:ok, context} = Context.normalize(input, validate: false)
+
+      assert [%Message{role: :assistant, content: content}] = context.messages
+
+      assert [
+               %ContentPart{type: :thinking, text: "internal"},
+               %ContentPart{type: :text, text: "hello"}
+             ] = content
+    end
+
+    test "accepts JSON-decoded assistant loose maps with list content" do
+      input = %{
+        "role" => "assistant",
+        "content" => [
+          %{"type" => "thinking", "text" => "internal"},
+          %{"type" => "text", "text" => "answer"}
+        ]
+      }
+
+      {:ok, context} = Context.normalize(input, validate: false)
+
+      assert [%Message{role: :assistant, content: content}] = context.messages
+
+      assert [
+               %ContentPart{type: :thinking, text: "internal"},
+               %ContentPart{type: :text, text: "answer"}
+             ] = content
+    end
+
     test "rejects invalid input types" do
       {:error, reason} = Context.normalize(:invalid, validate: false)
       assert reason == :invalid_prompt

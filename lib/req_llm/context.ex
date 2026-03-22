@@ -714,6 +714,10 @@ defmodule ReqLLM.Context do
     end
   end
 
+  defp to_parts(list) when is_list(list) do
+    Enum.flat_map(list, &to_part_list/1)
+  end
+
   defp normalize_tool_calls(nil), do: nil
   defp normalize_tool_calls([]), do: nil
 
@@ -870,10 +874,31 @@ defmodule ReqLLM.Context do
   end
 
   defp convert_loose_map(%{role: role, content: content} = msg)
+       when is_atom(role) and is_list(content) do
+    {:ok,
+     %Message{
+       role: role,
+       content: to_parts(content),
+       metadata: Map.get(msg, :metadata, %{})
+     }
+     |> maybe_put_reasoning_details(Map.get(msg, :reasoning_details))}
+  end
+
+  defp convert_loose_map(%{role: role, content: content} = msg)
        when is_atom(role) and is_binary(content) do
     {:ok,
      text(role, content, Map.get(msg, :metadata, %{}))
      |> maybe_put_reasoning_details(Map.get(msg, :reasoning_details))}
+  end
+
+  defp convert_loose_map(%{role: role, content: content} = msg)
+       when is_binary(role) and is_list(content) do
+    convert_loose_role_list_content(
+      role,
+      content,
+      Map.get(msg, :metadata, %{}),
+      Map.get(msg, :reasoning_details)
+    )
   end
 
   defp convert_loose_map(%{role: role, content: content} = msg)
@@ -898,6 +923,16 @@ defmodule ReqLLM.Context do
   end
 
   defp convert_loose_map(%{"role" => role, "content" => content} = msg)
+       when is_binary(role) and is_list(content) do
+    convert_loose_role_list_content(
+      role,
+      content,
+      Map.get(msg, "metadata", %{}),
+      Map.get(msg, "reasoning_details")
+    )
+  end
+
+  defp convert_loose_map(%{"role" => role, "content" => content} = msg)
        when is_binary(role) and is_binary(content) do
     metadata = Map.get(msg, "metadata", %{})
     reasoning_details = Map.get(msg, "reasoning_details")
@@ -919,6 +954,57 @@ defmodule ReqLLM.Context do
   end
 
   defp convert_loose_map(_map), do: {:error, :invalid_loose_map}
+
+  defp to_part_list(%ContentPart{} = part), do: [part]
+
+  defp to_part_list(part) when is_map(part) do
+    case Map.get(part, :type) || Map.get(part, "type") do
+      type when type in [:text, "text"] ->
+        text = Map.get(part, :text) || Map.get(part, "text")
+
+        if is_binary(text) and text != "" do
+          [ContentPart.text(text)]
+        else
+          []
+        end
+
+      type when type in [:thinking, "thinking"] ->
+        text =
+          Map.get(part, :text) ||
+            Map.get(part, "text") ||
+            Map.get(part, :thinking) ||
+            Map.get(part, "thinking")
+
+        if is_binary(text) and text != "" do
+          [ContentPart.thinking(text)]
+        else
+          []
+        end
+
+      _ ->
+        []
+    end
+  end
+
+  defp to_part_list(_part), do: []
+
+  defp convert_loose_role_list_content(role, content, metadata, reasoning_details) do
+    case role do
+      "user" ->
+        {:ok, %Message{role: :user, content: to_parts(content), metadata: metadata}}
+
+      "assistant" ->
+        {:ok,
+         %Message{role: :assistant, content: to_parts(content), metadata: metadata}
+         |> maybe_put_reasoning_details(reasoning_details)}
+
+      "system" ->
+        {:ok, %Message{role: :system, content: to_parts(content), metadata: metadata}}
+
+      _ ->
+        {:error, ReqLLM.Error.Invalid.Role.exception(role: role)}
+    end
+  end
 
   defp maybe_add_system(context, nil), do: context
 
