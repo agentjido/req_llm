@@ -259,34 +259,6 @@ defmodule ReqLLM.TelemetryProviderTest do
         effective_mode: :enabled,
         effective_budget_tokens: 4096
       }
-    },
-    %{
-      name: "Z.AI",
-      provider_mod: ReqLLM.Providers.Zai,
-      model: %{
-        provider: :zai,
-        id: "glm-4.6",
-        capabilities: %{reasoning: %{enabled: true}}
-      },
-      opts: [api_key: "test-key", provider_options: [thinking: %{type: "enabled"}]],
-      expected: %{
-        requested_mode: :enabled,
-        effective_mode: :enabled
-      }
-    },
-    %{
-      name: "Z.AI Coder",
-      provider_mod: ReqLLM.Providers.ZaiCoder,
-      model: %{
-        provider: :zai_coder,
-        id: "glm-4.6",
-        capabilities: %{reasoning: %{enabled: true}}
-      },
-      opts: [api_key: "test-key", provider_options: [thinking: %{type: "enabled"}]],
-      expected: %{
-        requested_mode: :enabled,
-        effective_mode: :enabled
-      }
     }
   ]
 

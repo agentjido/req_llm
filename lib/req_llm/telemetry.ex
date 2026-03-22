@@ -34,14 +34,12 @@ defmodule ReqLLM.Telemetry do
           | :platform_anthropic
           | :google_budget
           | :alibaba_thinking
-          | :thinking_toggle
           | :zenmux_reasoning
           | :unsupported
 
   @reasoning_operations [:chat, :object]
   @canonical_reasoning_efforts [:minimal, :low, :medium, :high, :xhigh, :default]
   @openai_reasoning_providers [:openai, :groq, :openrouter, :xai]
-  @thinking_toggle_providers [:zai, :zai_coder]
   @alibaba_providers [:alibaba, :alibaba_cn]
 
   @type context :: %{
@@ -981,9 +979,6 @@ defmodule ReqLLM.Telemetry do
       :alibaba_thinking ->
         normalize_alibaba_requested(opts)
 
-      :thinking_toggle ->
-        normalize_thinking_toggle_requested(opts)
-
       :zenmux_reasoning ->
         normalize_zenmux_requested(opts)
 
@@ -1011,9 +1006,6 @@ defmodule ReqLLM.Telemetry do
 
       :alibaba_thinking ->
         normalize_alibaba_effective(body)
-
-      :thinking_toggle ->
-        normalize_thinking_toggle_effective(body)
 
       :zenmux_reasoning ->
         normalize_zenmux_effective(body)
@@ -1147,17 +1139,6 @@ defmodule ReqLLM.Telemetry do
       normalize_budget(budget_tokens),
       enable? or disable?
     )
-  end
-
-  defp normalize_thinking_toggle_requested(opts) do
-    thinking =
-      opts[:thinking] ||
-        fetch_value(opts[:provider_options], :thinking)
-
-    disable? = fetch_value(thinking, :type) == "disabled"
-    enable? = fetch_value(thinking, :type) == "enabled"
-
-    reasoning_shape(mode_from_signals(enable?, disable?), nil, nil, enable? or disable?)
   end
 
   defp normalize_zenmux_requested(opts) do
@@ -1306,17 +1287,6 @@ defmodule ReqLLM.Telemetry do
 
   defp normalize_alibaba_effective(_body), do: disabled_reasoning_shape()
 
-  defp normalize_thinking_toggle_effective(body) when is_map(body) do
-    thinking = fetch_value(body, :thinking)
-
-    disable? = fetch_value(thinking, :type) == "disabled"
-    enable? = fetch_value(thinking, :type) == "enabled"
-
-    reasoning_shape(mode_from_signals(enable?, disable?), nil, nil, enable? or disable?)
-  end
-
-  defp normalize_thinking_toggle_effective(_body), do: disabled_reasoning_shape()
-
   defp normalize_zenmux_effective(body) when is_map(body) do
     reasoning = fetch_value(body, :reasoning)
 
@@ -1455,9 +1425,6 @@ defmodule ReqLLM.Telemetry do
       provider in @alibaba_providers and alibaba_reasoning_body?(body) ->
         :alibaba_thinking
 
-      provider in @thinking_toggle_providers and thinking_toggle_body?(body) ->
-        :thinking_toggle
-
       provider == :zenmux and zenmux_reasoning_body?(body) ->
         :zenmux_reasoning
 
@@ -1516,10 +1483,6 @@ defmodule ReqLLM.Telemetry do
       not is_nil(fetch_value(body, :thinking_budget))
   end
 
-  defp thinking_toggle_body?(body) do
-    not is_nil(fetch_value(body, :thinking, :type))
-  end
-
   defp zenmux_reasoning_body?(body) do
     not is_nil(fetch_value(body, :reasoning, :enable)) or
       not is_nil(fetch_value(body, :reasoning, :depth)) or
@@ -1531,11 +1494,6 @@ defmodule ReqLLM.Telemetry do
     :openai_effort
   end
 
-  defp reasoning_contract(%LLMDB.Model{provider: provider})
-       when provider in @thinking_toggle_providers do
-    :thinking_toggle
-  end
-
   defp reasoning_contract(%LLMDB.Model{provider: provider}) when provider in @alibaba_providers do
     :alibaba_thinking
   end
@@ -1543,7 +1501,6 @@ defmodule ReqLLM.Telemetry do
   defp reasoning_contract(%LLMDB.Model{provider: :anthropic}), do: :anthropic_thinking
   defp reasoning_contract(%LLMDB.Model{provider: :google}), do: :google_budget
   defp reasoning_contract(%LLMDB.Model{provider: :zenmux}), do: :zenmux_reasoning
-  defp reasoning_contract(%LLMDB.Model{provider: :zai_coding_plan}), do: :thinking_toggle
 
   defp reasoning_contract(%LLMDB.Model{provider: :azure} = model) do
     case hosted_model_family(model) do
