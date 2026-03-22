@@ -18,9 +18,6 @@ config :llm_db,
       openrouter: ["*"],
       venice: ["*"],
       xai: ["*"],
-      zai: ["*"],
-      zai_coder: ["*"],
-      zai_coding_plan: ["*"],
       zenmux: ["*"]
     },
     deny: %{
