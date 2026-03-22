@@ -128,11 +128,9 @@ defmodule ReqLLM.Providers.Azure.Anthropic do
       end
 
     context =
-      ReqLLM.ToolCallIdCompat.apply_context(
-        ReqLLM.Providers.Azure,
-        operation || :chat,
-        %{id: model_id, provider_model_id: model_id, provider: :azure},
+      ReqLLM.ToolCallIdCompat.apply_context_with_policy(
         context,
+        tool_call_id_policy(),
         opts
       )
 
@@ -186,6 +184,14 @@ defmodule ReqLLM.Providers.Azure.Anthropic do
   end
 
   defp tool_to_anthropic_format(%{name: _, description: _, input_schema: _} = stub), do: stub
+
+  defp tool_call_id_policy do
+    %{
+      mode: :sanitize,
+      invalid_chars_regex: ~r/[^A-Za-z0-9_-]/,
+      enforce_turn_boundary: true
+    }
+  end
 
   @doc """
   Parses Anthropic response from Azure into ReqLLM format.
