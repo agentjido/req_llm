@@ -185,6 +185,7 @@ defmodule ReqLLM.MixProject do
   def application do
     [
       extra_applications: [:logger, :xmerl],
+      included_applications: [:llm_db],
       mod: {ReqLLM.Application, []}
     ]
   end
