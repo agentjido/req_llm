@@ -1134,12 +1134,14 @@ defmodule ReqLLM.Providers.Google do
     raise ReqLLM.Error.Invalid.Parameter, parameter: "schema: #{message}"
   end
 
-  defp normalize_embedding_response(%{"embedding" => %{"values" => values}})
+  defp normalize_embedding_response(%{"embedding" => %{"values" => values}} = body)
        when is_list(values) do
     %{"data" => [%{"index" => 0, "embedding" => values}]}
+    |> maybe_put_embedding_usage_metadata(body)
   end
 
-  defp normalize_embedding_response(%{"embeddings" => embeddings}) when is_list(embeddings) do
+  defp normalize_embedding_response(%{"embeddings" => embeddings} = body)
+       when is_list(embeddings) do
     data =
       embeddings
       |> Enum.with_index()
@@ -1153,9 +1155,20 @@ defmodule ReqLLM.Providers.Google do
       end)
 
     %{"data" => data}
+    |> maybe_put_embedding_usage_metadata(body)
   end
 
   defp normalize_embedding_response(other), do: other
+
+  defp maybe_put_embedding_usage_metadata(normalized, body) do
+    case Map.get(body, "usageMetadata") do
+      usage_metadata when is_map(usage_metadata) ->
+        Map.put(normalized, "usageMetadata", usage_metadata)
+
+      _ ->
+        normalized
+    end
+  end
 
   @impl ReqLLM.Provider
   def decode_response({req, resp}) do

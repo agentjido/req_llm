@@ -747,6 +747,10 @@ defmodule ReqLLM.Providers.GoogleTest do
       embedding_response = %{
         "embedding" => %{
           "values" => [0.1, -0.2, 0.3, 0.4, -0.5]
+        },
+        "usageMetadata" => %{
+          "promptTokenCount" => 2,
+          "totalTokenCount" => 2
         }
       }
 
@@ -764,7 +768,11 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert req == mock_req
 
       assert resp.body == %{
-               "data" => [%{"index" => 0, "embedding" => [0.1, -0.2, 0.3, 0.4, -0.5]}]
+               "data" => [%{"index" => 0, "embedding" => [0.1, -0.2, 0.3, 0.4, -0.5]}],
+               "usageMetadata" => %{
+                 "promptTokenCount" => 2,
+                 "totalTokenCount" => 2
+               }
              }
     end
 

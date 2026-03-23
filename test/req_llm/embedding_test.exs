@@ -181,6 +181,48 @@ defmodule ReqLLM.EmbeddingTest do
     end
   end
 
+  describe "embed/3 - Google usage metadata" do
+    setup do
+      Req.Test.stub(__MODULE__.GoogleEmbedUsage, fn conn ->
+        Req.Test.json(conn, %{
+          "embedding" => %{
+            "values" => [0.1, -0.2, 0.3]
+          },
+          "usageMetadata" => %{
+            "promptTokenCount" => 2,
+            "totalTokenCount" => 2
+          }
+        })
+      end)
+
+      setup_telemetry()
+    end
+
+    test "emits telemetry and returns usage for embeddings" do
+      {:ok, %{embedding: embedding, usage: usage}} =
+        Embedding.embed(
+          "google:gemini-embedding-001",
+          "Hello world",
+          api_key: "test-key",
+          return_usage: true,
+          req_http_options: [plug: {Req.Test, __MODULE__.GoogleEmbedUsage}]
+        )
+
+      assert embedding == [0.1, -0.2, 0.3]
+      assert usage.input == 2
+      assert usage.total_tokens == 2
+
+      assert_receive {:telemetry_event, [:req_llm, :token_usage], measurements,
+                      %{model: %LLMDB.Model{provider: :google, id: "gemini-embedding-001"}} =
+                        metadata}
+
+      assert measurements.tokens.input == 2
+      assert measurements.tokens.total_tokens == 2
+      assert metadata.model.provider == :google
+      assert metadata.model.id == "gemini-embedding-001"
+    end
+  end
+
   describe "embed_many/3 - basic functionality" do
     test "validates model before attempting embedding" do
       case Embedding.validate_model("openai:text-embedding-3-small") do
