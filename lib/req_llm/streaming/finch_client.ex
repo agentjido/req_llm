@@ -26,7 +26,7 @@ defmodule ReqLLM.Streaming.FinchClient do
   requests with proper authentication, headers, and request body formatting.
   """
 
-  alias ReqLLM.Streaming.Fixtures
+  alias ReqLLM.Streaming.{Fixtures, Retry}
   alias ReqLLM.Streaming.Fixtures.HTTPContext
   alias ReqLLM.StreamServer
 
@@ -193,13 +193,18 @@ defmodule ReqLLM.Streaming.FinchClient do
         receive_timeout = Keyword.get(opts, :receive_timeout, default_timeout)
 
         try do
-          case Finch.stream(finch_request, finch_name, :ok, finch_stream_callback,
-                 receive_timeout: receive_timeout
+          case Retry.stream(
+                 finch_request,
+                 finch_name,
+                 :ok,
+                 finch_stream_callback,
+                 receive_timeout: receive_timeout,
+                 max_retries: Keyword.get(opts, :max_retries, 3)
                ) do
             {:ok, _} ->
               :ok
 
-            {:error, reason, _partial_acc} ->
+            {:error, reason, _callback_acc} ->
               Logger.error("Finch streaming failed", reason: reason)
               safe_http_event(stream_server_pid, {:error, reason})
               {:error, reason}
