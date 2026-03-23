@@ -133,8 +133,12 @@ defmodule ReqLLM.Application do
   end
 
   defp sync_llm_db_dotenv_config(req_llm_load_dotenv) do
-    if Application.get_env(:llm_db, :load_dotenv) == nil do
-      Application.put_env(:llm_db, :load_dotenv, req_llm_load_dotenv)
+    case Application.fetch_env(:llm_db, :load_dotenv) do
+      :error ->
+        Application.put_env(:llm_db, :load_dotenv, req_llm_load_dotenv)
+
+      {:ok, _value} ->
+        :ok
     end
   end
 
