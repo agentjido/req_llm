@@ -1,11 +1,14 @@
 defmodule ReqLLM.Integration.BedrockEmptyContentTest do
   @moduledoc """
-  Live integration tests to probe Bedrock's handling of empty/blank assistant
+  Live integration tests to probe Bedrock's handling of empty assistant
   content in multi-turn tool-calling conversations.
 
-  Tests the Converse and native Anthropic encoding paths with a Message struct
-  containing an explicit empty-text ContentPart — the scenario that triggers
-  Bedrock 400 errors when the encoder doesn't filter it out.
+  Tests both encoding paths (Converse and native Anthropic) with:
+    1. Assistant message with tool_calls + empty text ContentPart
+    2. Standalone assistant message with only an empty text ContentPart (no tool_calls)
+
+  The encoder must filter the empty ContentPart in case 1 and drop the
+  entire message in case 2.
 
   Run with:
 
@@ -49,10 +52,13 @@ defmodule ReqLLM.Integration.BedrockEmptyContentTest do
     )
   end
 
-  # Build a context with an explicit %Message{} struct containing an empty-text
-  # ContentPart in the assistant message. This bypasses Context.assistant/2's
-  # to_parts normalization and hits the encoder directly.
-  defp context_with_explicit_empty_text_content_part do
+  # Build a context that matches the production scenario: an agent does a tool
+  # call (empty text + tool_calls), gets the result, then produces an empty
+  # response (empty text, no tool_calls). Context.text/3 wraps "" as
+  # [ContentPart.text("")] — the encoder must handle both cases:
+  #   1. assistant + tool_calls + [ContentPart.text("")] → filter the empty part
+  #   2. assistant + no tool_calls + [ContentPart.text("")] → drop the message
+  defp context_with_empty_assistant_after_tool_call do
     tool_call = ToolCall.new("toolu_test_001", "add", ~s({"a": 2, "b": 3}))
 
     Context.new([
@@ -65,13 +71,16 @@ defmodule ReqLLM.Integration.BedrockEmptyContentTest do
         tool_call_id: "toolu_test_001",
         name: "add"
       },
+      # Empty assistant response (e.g. after no_response_needed tool) —
+      # ContentPart.text("") is what Context.text/3 produces for empty strings
+      %Message{role: :assistant, content: [ContentPart.text("")]},
       %Message{role: :user, content: [ContentPart.text("Now what is 10 + 20?")]}
     ])
   end
 
-  describe "explicit empty-text ContentPart in assistant message" do
-    test "Converse API rejects empty text ContentBlock" do
-      context = context_with_explicit_empty_text_content_part()
+  describe "empty text in assistant messages after tool calls" do
+    test "Converse API" do
+      context = context_with_empty_assistant_after_tool_call()
 
       result =
         ReqLLM.generate_text(
@@ -88,14 +97,14 @@ defmodule ReqLLM.Integration.BedrockEmptyContentTest do
 
         {:error, error} ->
           flunk("""
-          Bedrock Converse API rejected empty text ContentPart:
+          Bedrock Converse API rejected empty assistant content:
           #{inspect(error, pretty: true)}
           """)
       end
     end
 
-    test "native Anthropic API handles empty text ContentPart" do
-      context = context_with_explicit_empty_text_content_part()
+    test "native Anthropic API" do
+      context = context_with_empty_assistant_after_tool_call()
 
       result =
         ReqLLM.generate_text(
@@ -112,7 +121,7 @@ defmodule ReqLLM.Integration.BedrockEmptyContentTest do
 
         {:error, error} ->
           flunk("""
-          Bedrock Anthropic (native) rejected empty text ContentPart:
+          Bedrock native Anthropic API rejected empty assistant content:
           #{inspect(error, pretty: true)}
           """)
       end

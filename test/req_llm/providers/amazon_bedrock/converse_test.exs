@@ -86,6 +86,29 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
              }
     end
 
+    test "drops assistant message with only empty text and no tool calls" do
+      # Production scenario: after a tool call round-trip, the agent produces an
+      # empty response. Context.text/3 wraps "" as [ContentPart.text("")].
+      # The encoder must filter the empty ContentPart AND drop the now-empty message.
+      tool_call = ReqLLM.ToolCall.new("call_123", "add", Jason.encode!(%{a: 2, b: 3}))
+
+      context = %ReqLLM.Context{
+        messages: [
+          %Message{role: :user, content: [ContentPart.text("What is 2+3?")]},
+          %Message{role: :assistant, content: [ContentPart.text("")], tool_calls: [tool_call]},
+          %Message{role: :tool, tool_call_id: "call_123", content: [ContentPart.text("5")]},
+          %Message{role: :assistant, content: [ContentPart.text("")]},
+          %Message{role: :user, content: [ContentPart.text("Thanks")]}
+        ]
+      }
+
+      result = Converse.format_request("test-model", context, [])
+      roles = Enum.map(result["messages"], & &1["role"])
+
+      # The empty assistant message should be dropped
+      assert roles == ["user", "assistant", "user", "user"]
+    end
+
     test "filters empty text ContentParts from assistant message with tool calls" do
       tool_call = ReqLLM.ToolCall.new("call_123", "add", Jason.encode!(%{a: 2, b: 3}))
 

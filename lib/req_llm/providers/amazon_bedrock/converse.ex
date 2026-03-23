@@ -343,10 +343,11 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
           Map.put(request, "system", encode_content_for_system(content))
       end
 
-    # Add regular messages
+    # Add regular messages, dropping any that end up empty after ContentPart filtering
     encoded_messages =
       non_system_messages
       |> Enum.map(&encode_message/1)
+      |> Enum.reject(&is_nil/1)
       |> merge_consecutive_tool_results()
 
     Map.put(request, "messages", encoded_messages)
@@ -536,12 +537,13 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
     }
   end
 
-  # Regular message (user, assistant, system)
+  # Regular message (user, assistant, system) — returns nil if content is
+  # empty after filtering, so the caller can reject it like empty ContentParts.
   defp encode_message(%Message{role: role, content: content}) do
-    %{
-      "role" => Atom.to_string(role),
-      "content" => encode_content(content)
-    }
+    case encode_content(content) do
+      [] -> nil
+      encoded -> %{"role" => Atom.to_string(role), "content" => encoded}
+    end
   end
 
   defp encode_content_for_system(content) when is_binary(content) do
