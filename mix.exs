@@ -126,6 +126,7 @@ defmodule ReqLLM.MixProject do
             ReqLLM.Model.Metadata,
             ReqLLM.Metadata,
             ReqLLM.Telemetry,
+            ReqLLM.OpenTelemetry,
             ReqLLM.Capability,
             ReqLLM.Keys,
             ReqLLM.Usage,

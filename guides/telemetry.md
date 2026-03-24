@@ -266,6 +266,37 @@ Raw payload mode is still sanitized:
 
 Use raw payload capture carefully in multi-tenant systems because request and response payloads may still contain user content, tool call arguments, and structured outputs.
 
+## OpenTelemetry Bridge
+
+ReqLLM also includes a small OpenTelemetry bridge in `ReqLLM.OpenTelemetry`.
+It turns the normalized request lifecycle telemetry above into GenAI client spans
+without adding provider-specific instrumentation paths.
+
+Attach it once during application startup:
+
+```elixir
+case ReqLLM.OpenTelemetry.attach() do
+  :ok -> :ok
+  {:error, :opentelemetry_unavailable} -> :ok
+end
+```
+
+The bridge uses:
+
+- `gen_ai.provider.name`
+- `gen_ai.operation.name`
+- `gen_ai.request.model`
+- `gen_ai.output.type`
+- `gen_ai.response.finish_reasons`
+- `gen_ai.usage.input_tokens`
+- `gen_ai.usage.output_tokens`
+- cache read and cache creation token attributes when available
+- `error.type` for failed requests
+
+ReqLLM does not configure an SDK or exporter for you. To export traces, your host
+application still needs normal OpenTelemetry setup, such as `:opentelemetry`
+and an exporter dependency.
+
 ## Coverage Across APIs
 
 These event families are emitted for:
