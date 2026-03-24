@@ -458,7 +458,7 @@ defmodule ReqLLM.Providers.Google do
       request =
         Req.new(
           [
-            url: "/models/#{model.id}:generateContent",
+            url: "/models/#{model.id}#{google_image_endpoint(model)}",
             method: :post,
             receive_timeout: timeout
           ] ++ http_opts
@@ -508,6 +508,10 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp image_n_forbidden?(_), do: false
+
+  defp google_image_endpoint(%LLMDB.Model{id: id}) do
+    if imagen_model_id?(id), do: ":predict", else: ":generateContent"
+  end
 
   @impl ReqLLM.Provider
   def attach(%Req.Request{} = request, model_input, user_opts) do
@@ -842,6 +846,14 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp encode_image_body(request) do
+    if imagen_model_id?(request.options[:model]) do
+      encode_imagen_image_body(request)
+    else
+      encode_gemini_image_body(request)
+    end
+  end
+
+  defp encode_gemini_image_body(request) do
     {system_instruction, contents} =
       case request.options[:context] do
         %ReqLLM.Context{} = ctx ->
@@ -872,6 +884,27 @@ defmodule ReqLLM.Providers.Google do
     |> maybe_put(:generationConfig, generation_config)
   end
 
+  defp encode_imagen_image_body(request) do
+    prompt = imagen_prompt(request.options[:context])
+
+    if prompt == "" do
+      raise ReqLLM.Error.Invalid.Parameter.exception(
+              parameter: "Google Imagen models require a text prompt"
+            )
+    end
+
+    parameters =
+      %{}
+      |> maybe_put(:sampleCount, image_candidate_count(request.options))
+      |> maybe_put(:aspectRatio, request.options[:aspect_ratio])
+      |> maybe_put(:sampleImageSize, imagen_sample_image_size(request.options[:size]))
+      |> maybe_put(:outputOptions, imagen_output_options(request.options[:output_format]))
+
+    %{}
+    |> Map.put(:instances, [%{prompt: prompt}])
+    |> maybe_put(:parameters, if(parameters == %{}, do: nil, else: parameters))
+  end
+
   defp image_candidate_count(opts) when is_list(opts) do
     if Keyword.get(opts, :image_n_provided, false) do
       case Keyword.fetch(opts, :n) do
@@ -888,6 +921,68 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp image_candidate_count(_), do: nil
+
+  defp imagen_prompt(%ReqLLM.Context{messages: messages}) do
+    messages
+    |> Enum.map(&imagen_message_prompt/1)
+    |> Enum.reject(&(&1 in [nil, ""]))
+    |> Enum.join("\n\n")
+    |> String.trim()
+  end
+
+  defp imagen_prompt(_), do: ""
+
+  defp imagen_message_prompt(%ReqLLM.Message{role: role, content: content}) do
+    prompt =
+      content
+      |> List.wrap()
+      |> Enum.map(&imagen_content_prompt/1)
+      |> Enum.reject(&(&1 in [nil, ""]))
+      |> Enum.join("\n")
+      |> String.trim()
+
+    case {role, prompt} do
+      {_, ""} -> nil
+      {:user, prompt} -> prompt
+      {role, prompt} -> "#{role}: #{prompt}"
+    end
+  end
+
+  defp imagen_message_prompt(_), do: nil
+
+  defp imagen_content_prompt(%ReqLLM.Message.ContentPart{type: :text, text: text})
+       when is_binary(text),
+       do: text
+
+  defp imagen_content_prompt(%{type: :text, text: text}) when is_binary(text), do: text
+  defp imagen_content_prompt(text) when is_binary(text), do: text
+  defp imagen_content_prompt(_), do: nil
+
+  defp imagen_output_options(nil), do: nil
+
+  defp imagen_output_options(output_format) do
+    %{mimeType: google_image_mime_type(output_format)}
+  end
+
+  defp imagen_sample_image_size({w, h}) when is_integer(w) and is_integer(h) do
+    imagen_sample_image_size("#{w}x#{h}")
+  end
+
+  defp imagen_sample_image_size(size) when is_binary(size) do
+    case String.downcase(size) do
+      "1024x1024" -> "1K"
+      "2048x2048" -> "2K"
+      _ -> nil
+    end
+  end
+
+  defp imagen_sample_image_size(_), do: nil
+
+  defp google_image_mime_type(:png), do: "image/png"
+  defp google_image_mime_type(:jpeg), do: "image/jpeg"
+  defp google_image_mime_type(:webp), do: "image/webp"
+  defp google_image_mime_type(format) when is_binary(format), do: format
+  defp google_image_mime_type(_), do: "image/png"
 
   defp maybe_put_google_aspect_ratio(config, nil), do: config
 
@@ -1278,6 +1373,14 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp decode_image_response(req, model_name, %{} = body) do
+    if Map.has_key?(body, "predictions") do
+      decode_imagen_response(req, model_name, body)
+    else
+      decode_gemini_image_response(req, model_name, body)
+    end
+  end
+
+  defp decode_gemini_image_response(req, model_name, %{} = body) do
     parts = extract_candidate_parts(body)
 
     content_parts =
@@ -1314,6 +1417,30 @@ defmodule ReqLLM.Providers.Google do
     ReqLLM.Context.merge_response(base_response.context, base_response)
   end
 
+  defp decode_imagen_response(req, model_name, %{} = body) do
+    content_parts =
+      body
+      |> Map.get("predictions", [])
+      |> Enum.map(&decode_imagen_prediction/1)
+      |> Enum.reject(&is_nil/1)
+
+    base_response = %ReqLLM.Response{
+      id: image_response_id(),
+      model: model_name,
+      context: req.options[:context] || %ReqLLM.Context{messages: []},
+      message: %ReqLLM.Message{role: :assistant, content: content_parts},
+      object: nil,
+      stream?: false,
+      stream: nil,
+      usage: nil,
+      finish_reason: :stop,
+      provider_meta: %{"google" => Map.delete(body, "predictions")},
+      error: nil
+    }
+
+    ReqLLM.Context.merge_response(base_response.context, base_response)
+  end
+
   defp extract_candidate_parts(%{"candidates" => candidates}) when is_list(candidates) do
     Enum.flat_map(candidates, fn
       %{"content" => %{"parts" => parts}} when is_list(parts) -> parts
@@ -1336,6 +1463,18 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp decode_image_part(_), do: nil
+
+  defp decode_imagen_prediction(%{"bytesBase64Encoded" => b64, "mimeType" => mime_type})
+       when is_binary(b64) and is_binary(mime_type) do
+    %ReqLLM.Message.ContentPart{type: :image, data: Base.decode64!(b64), media_type: mime_type}
+  end
+
+  defp decode_imagen_prediction(%{"gcsUri" => uri, "mimeType" => mime_type})
+       when is_binary(uri) and is_binary(mime_type) do
+    ReqLLM.Message.ContentPart.image_url(uri, %{media_type: mime_type})
+  end
+
+  defp decode_imagen_prediction(_), do: nil
 
   defp decode_inline_data(%{"data" => b64, "mimeType" => mime_type})
        when is_binary(b64) and is_binary(mime_type) do
@@ -2199,6 +2338,9 @@ defmodule ReqLLM.Providers.Google do
       _ -> nil
     end
   end
+
+  defp imagen_model_id?(id) when is_binary(id), do: String.contains?(id, "imagen")
+  defp imagen_model_id?(_), do: false
 
   # Decode Google streaming events.
   #
