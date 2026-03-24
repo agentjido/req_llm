@@ -2,7 +2,19 @@
 
 ## Overview
 
-ReqLLM provides comprehensive usage tracking and cost calculation for all API requests. Every response includes normalized usage data that works consistently across providers, with detailed breakdowns for tokens, tools, and images.
+ReqLLM provides normalized usage tracking and best-effort cost calculation for API requests. Every response includes usage data that works consistently across providers, with detailed breakdowns for tokens, tools, and images when the provider exposes enough information.
+
+## Pricing Policy
+
+ReqLLM currently targets **"some assistance, no guarantees"** for pricing.
+
+In practice, that means:
+
+- `response.usage` is intended to be useful for product analytics, tenant attribution, dashboards, and rough billing estimates
+- token, tool, image, and caching costs are calculated from provider usage data plus model pricing metadata when those inputs exist
+- the resulting USD totals are not guaranteed to match provider invoices exactly
+
+When exact billing matters, treat ReqLLM usage as a helpful estimate and reconcile against provider-side reporting. For the full contract, known gaps, and production guidance, see the [Pricing Policy](pricing-policy.md) guide.
 
 ## The Usage Structure
 
@@ -215,6 +227,14 @@ response.usage.cost.line_items
 - **Grounding**: Search via `google_grounding` option
 - **Units**: Reports as `"query"`
 - **Image generation**: Gemini image models supported
+
+## Known Limits
+
+ReqLLM does not currently guarantee support for every provider billing surface. In particular:
+
+- realtime audio/text billing is not modeled yet
+- video generation billing is not modeled yet
+- account-specific discounts, credits, taxes, and regional pricing are outside the public contract
 
 ## Telemetry
 

@@ -64,6 +64,8 @@ usage = ReqLLM.Response.usage(response)
 # usage => %{input_tokens: 10, output_tokens: 8}
 ```
 
+ReqLLM cost fields are best-effort estimates derived from provider usage data and model pricing metadata. See the [Pricing Policy](pricing-policy.md) guide when you need exact expectations around billing accuracy.
+
 ## Model Specifications
 
 Specify models as strings, tuples, `%LLMDB.Model{}` structs, or plain-map model specs:

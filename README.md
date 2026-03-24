@@ -163,7 +163,7 @@ usage = ReqLLM.StreamResponse.usage(response)
   - Works uniformly across providers with internal SSE / chunked-response adaptation
 
 - **Usage & cost tracking**
-  - `response.usage` exposes input/output tokens and USD cost, calculated from model metadata or provider invoices
+  - `response.usage` exposes normalized usage and best-effort USD cost from model metadata and provider response data
 
 - **Schema-driven option validation**
   - All public APIs validate options with NimbleOptions; errors are raised as `ReqLLM.Error.Invalid.*` (Splode)
@@ -270,7 +270,7 @@ errors aimed at advanced users:
 
 ## Usage Cost Tracking
 
-Every response includes detailed usage and cost information calculated from model metadata:
+Every response includes detailed usage and best-effort cost information calculated from normalized provider usage data plus model pricing metadata:
 
 ```elixir
 {:ok, response} = ReqLLM.generate_text("anthropic:claude-haiku-4-5", "Hello")
@@ -285,6 +285,8 @@ response.usage
 #     total_cost: 0.0006
 #   }
 ```
+
+ReqLLM treats pricing as an observability and estimation feature, not an invoice guarantee. When provider billing accuracy matters, compare these values against your own provider-side reporting. See the [Pricing Policy](guides/pricing-policy.md) guide for the full contract and known limitations.
 
 ### Tool & Image Usage
 
@@ -440,6 +442,7 @@ This approach gives you full control over the Req pipeline, allowing you to add 
 - [Telemetry](guides/telemetry.md) – request lifecycle, reasoning lifecycle, payload capture
 - [Core Concepts](guides/core-concepts.md) – architecture & data model
 - [Data Structures](guides/data-structures.md) – detailed type information
+- [Pricing Policy](guides/pricing-policy.md) – cost-calculation scope, guarantees, and known gaps
 - [Usage & Billing](guides/usage-and-billing.md) – token costs, tool usage, image costs
 - [Image Generation](guides/image-generation.md) – generating images with OpenAI and Google
 - [Mix Tasks](guides/mix-tasks.md) – model sync, compatibility testing, code generation
