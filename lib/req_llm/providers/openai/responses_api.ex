@@ -736,6 +736,43 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
        )}
   end
 
+  @impl true
+  def attach_websocket_stream(model, context, opts) do
+    headers = ReqLLM.Providers.OpenAI.WebSocket.headers(model, opts)
+    url = ReqLLM.Providers.OpenAI.WebSocket.responses_url(model, opts)
+
+    cleaned_opts =
+      opts
+      |> Keyword.delete(:finch_name)
+      |> Keyword.delete(:compiled_schema)
+      |> Keyword.put(:provider_options, Keyword.get(opts, :provider_options, []))
+      |> Keyword.put(:stream, nil)
+      |> Keyword.put(:model, model.id)
+      |> Keyword.put(:context, context)
+      |> Keyword.put(
+        :base_url,
+        ReqLLM.Provider.Options.effective_base_url(ReqLLM.Providers.OpenAI, model, opts)
+      )
+
+    body = build_request_body(context, model.id, cleaned_opts, nil)
+    create_event = %{"type" => "response.create", "response" => body}
+
+    {:ok,
+     %{
+       url: url,
+       headers: headers,
+       initial_messages: [Jason.encode!(create_event)],
+       http_context: ReqLLM.Providers.OpenAI.WebSocket.http_context(url, headers),
+       canonical_json: body
+     }}
+  rescue
+    error ->
+      {:error,
+       ReqLLM.Error.API.Request.exception(
+         reason: "Failed to build Responses API websocket request: #{Exception.message(error)}"
+       )}
+  end
+
   defp handle_function_call_delta(%{"delta" => delta} = data) when is_map(delta) do
     # Use output_index to match the tool_call index from response.output_item.added
     index = data["output_index"] || data["index"] || 0

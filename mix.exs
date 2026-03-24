@@ -202,18 +202,20 @@ defmodule ReqLLM.MixProject do
       {:server_sent_events, "~> 0.2"},
       {:splode, "~> 0.3.0"},
       {:uniq, "~> 0.6"},
+      {:websockex, "~> 0.5.1"},
       {:zoi, "~> 0.14"},
       {:jsv, "~> 0.11"},
       {:llm_db, "~> 2026.3.3"},
 
       # Dev/test dependencies
-      {:bandit, "~> 1.8", only: :dev, runtime: false},
+      {:bandit, "~> 1.8", only: [:dev, :test], runtime: false},
       {:tidewave, "~> 0.5", only: :dev, runtime: false},
       {:ex_doc, "~> 0.31", only: :dev, runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.18", only: [:dev, :test], runtime: false},
       {:plug, "~> 1.0", only: [:dev, :test], runtime: false},
+      {:websock_adapter, "~> 0.5.9", only: [:dev, :test], runtime: false},
       {:git_ops, "~> 2.9", only: :dev, runtime: false},
       {:git_hooks, "~> 0.8", only: :dev, runtime: false},
 

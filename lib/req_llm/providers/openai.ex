@@ -177,6 +177,12 @@ defmodule ReqLLM.Providers.OpenAI do
       type: :string,
       doc: "Previous response ID for Responses API tool resume flow"
     ],
+    openai_stream_transport: [
+      type: {:in, [:sse, :websocket]},
+      default: :sse,
+      doc:
+        "Streaming transport for Responses models. Use :websocket for OpenAI WebSocket mode; SSE remains the default."
+    ],
     tool_outputs: [
       type: {:list, :any},
       doc:
@@ -673,6 +679,30 @@ defmodule ReqLLM.Providers.OpenAI do
   def attach_stream(model, context, opts, finch_name) do
     api_mod = select_api_mod(model)
     api_mod.attach_stream(model, context, opts, finch_name)
+  end
+
+  def attach_websocket_stream(model, context, opts) do
+    api_mod = select_api_mod(model)
+
+    if function_exported?(api_mod, :attach_websocket_stream, 3) do
+      apply(api_mod, :attach_websocket_stream, [model, context, opts])
+    else
+      {:error,
+       ReqLLM.Error.API.Request.exception(
+         reason:
+           "OpenAI WebSocket mode is only supported for Responses models. #{LLMDB.Model.spec(model)} routes to #{inspect(api_mod)}."
+       )}
+    end
+  end
+
+  def stream_transport(_model, opts) do
+    provider_opts = Keyword.get(opts, :provider_options, [])
+
+    case Keyword.get(provider_opts, :openai_stream_transport, :sse) do
+      :websocket -> :websocket
+      "websocket" -> :websocket
+      _ -> :http
+    end
   end
 
   @doc """

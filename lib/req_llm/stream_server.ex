@@ -134,6 +134,7 @@ defmodule ReqLLM.StreamServer do
     state = %__MODULE__{
       provider_mod: provider_mod,
       model: model,
+      protocol_parser: Keyword.get(opts, :protocol_parser),
       provider_state: provider_state,
       fixture_path: Keyword.get(opts, :fixture_path),
       completion_cleanup_after:
@@ -358,10 +359,15 @@ defmodule ReqLLM.StreamServer do
     Process.flag(:trap_exit, true)
 
     protocol_parser =
-      if function_exported?(state.provider_mod, :parse_stream_protocol, 2) do
-        fn chunk, buffer -> state.provider_mod.parse_stream_protocol(chunk, buffer) end
-      else
-        &ReqLLM.Provider.parse_stream_protocol/2
+      cond do
+        is_function(state.protocol_parser, 2) ->
+          state.protocol_parser
+
+        function_exported?(state.provider_mod, :parse_stream_protocol, 2) ->
+          fn chunk, buffer -> state.provider_mod.parse_stream_protocol(chunk, buffer) end
+
+        true ->
+          &ReqLLM.Provider.parse_stream_protocol/2
       end
 
     {:ok, %{state | protocol_parser: protocol_parser}}
@@ -422,14 +428,13 @@ defmodule ReqLLM.StreamServer do
 
   @impl GenServer
   def handle_call({:start_http, provider_mod, model, context, opts, finch_name}, _from, state) do
-    case ReqLLM.Streaming.FinchClient.start_stream(
-           provider_mod,
-           model,
-           context,
-           opts,
-           self(),
-           finch_name
-         ) do
+    streamer_mod =
+      case Keyword.get(opts, :stream_transport) do
+        :websocket -> ReqLLM.Streaming.WebSocketClient
+        _ -> ReqLLM.Streaming.FinchClient
+      end
+
+    case streamer_mod.start_stream(provider_mod, model, context, opts, self(), finch_name) do
       {:ok, task_pid, http_context, canonical_json} ->
         Process.monitor(task_pid)
 

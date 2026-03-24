@@ -25,10 +25,14 @@ defmodule ReqLLM.Providers.OpenAI.API do
   @callback decode_response({Req.Request.t(), Req.Response.t()}) ::
               {Req.Request.t(), Req.Response.t() | Exception.t()}
   @callback decode_stream_event(map(), LLMDB.Model.t()) :: [ReqLLM.StreamChunk.t()]
+  @callback attach_websocket_stream(LLMDB.Model.t(), ReqLLM.Context.t(), keyword()) ::
+              {:ok, map()} | {:error, Exception.t()}
   @callback attach_stream(
               LLMDB.Model.t(),
               ReqLLM.Context.t(),
               keyword(),
               atom()
             ) :: {:ok, Finch.Request.t()} | {:error, Exception.t()}
+
+  @optional_callbacks attach_websocket_stream: 3
 end

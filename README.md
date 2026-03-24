@@ -159,8 +159,13 @@ usage = ReqLLM.StreamResponse.usage(response)
 - **Production-grade streaming**
   - `stream_text/3` returns a `StreamResponse` with both real-time tokens and async metadata
   - Finch-based streaming with HTTP/2 multiplexing and automatic connection pooling
+  - OpenAI Responses models can opt into WebSocket mode with `provider_options: [openai_stream_transport: :websocket]`
   - Concurrent metadata collection (usage, finish_reason) without blocking token flow
   - Works uniformly across providers with internal SSE / chunked-response adaptation
+
+- **Experimental OpenAI realtime sessions**
+  - `ReqLLM.OpenAI.Realtime` exposes a low-level WebSocket session API for Realtime models
+  - Designed for explicit event-driven workflows that do not map cleanly to `stream_text/3`
 
 - **Usage & cost tracking**
   - `response.usage` exposes input/output tokens and USD cost, calculated from model metadata or provider invoices
