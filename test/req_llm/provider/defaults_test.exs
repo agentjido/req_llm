@@ -348,6 +348,22 @@ defmodule ReqLLM.Provider.DefaultsTest do
       [encoded_message] = result.messages
       assert encoded_message.content == ""
     end
+
+    test "raises for video_url content parts on unsupported providers" do
+      message = %Message{
+        role: :user,
+        content: [ContentPart.video_url("https://example.com/video.mp4")]
+      }
+
+      context = %Context{messages: [message]}
+
+      error =
+        assert_raise ReqLLM.Error.Invalid.Parameter, fn ->
+          Defaults.encode_context_to_openai_format(context, "gpt-4")
+        end
+
+      assert error.parameter =~ "Video URLs are not supported for this provider"
+    end
   end
 
   describe "decode_response_body_openai_format/2" do

@@ -832,5 +832,29 @@ defmodule ReqLLM.ContextTest do
       assert length(msg.tool_calls) == 2
       assert Enum.map(msg.tool_calls, & &1.id) == ["call_1", "call_2"]
     end
+
+    test "normalizes video_url content maps" do
+      input = [
+        %{
+          role: "user",
+          content: [
+            %{"type" => "text", "text" => "What is happening in this video?"},
+            %{
+              "type" => "video_url",
+              "video_url" => %{"url" => "https://example.com/video.mp4"}
+            }
+          ]
+        }
+      ]
+
+      {:ok, context} = Context.normalize(input, validate: false)
+
+      [msg] = context.messages
+
+      assert [
+               %ContentPart{type: :text, text: "What is happening in this video?"},
+               %ContentPart{type: :video_url, url: "https://example.com/video.mp4"}
+             ] = msg.content
+    end
   end
 end

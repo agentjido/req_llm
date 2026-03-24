@@ -1351,6 +1351,37 @@ defmodule ReqLLM.Providers.GoogleTest do
   end
 
   describe "image_url file URI support" do
+    test "encode_body converts HTTPS video_url to fileData format" do
+      url = "https://example.com/video.mp4"
+
+      video_url_part = ReqLLM.Message.ContentPart.video_url(url)
+
+      message = %ReqLLM.Message{
+        role: :user,
+        content: [video_url_part]
+      }
+
+      context = %ReqLLM.Context{messages: [message]}
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          id: "gemini-1.5-flash",
+          stream: false
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      [user_msg] = decoded["contents"]
+      [part] = user_msg["parts"]
+
+      assert Map.has_key?(part, "fileData")
+      assert part["fileData"]["fileUri"] == url
+      assert part["fileData"]["mimeType"] == "video/mp4"
+    end
+
     test "encode_body converts HTTPS image_url to fileData format" do
       url = "https://example.com/images/photo.jpg"
 

@@ -118,6 +118,8 @@ Typed content elements that compose a `Message`. Common variants:
 - `text/2`: `ContentPart.text("...", metadata)` with metadata map
 - `image_url/1`: `ContentPart.image_url("https://...")`
 - `image_url/2`: `ContentPart.image_url("https://...", metadata)` with metadata
+- `video_url/1`: `ContentPart.video_url("https://...")`
+- `video_url/2`: `ContentPart.video_url("https://...", metadata)` with metadata
 - `image/2`: `ContentPart.image(binary, "image/png")`
 - `image/3`: `ContentPart.image(binary, "image/png", metadata)` with metadata
 - `file/3`: `ContentPart.file(binary, "name.ext", "mime/type")`
@@ -129,7 +131,8 @@ Typed content elements that compose a `Message`. Common variants:
 ```elixir
 parts = [
   ContentPart.text("Analyze:"),
-  ContentPart.image_url("https://example.com/chart.png")
+  ContentPart.image_url("https://example.com/chart.png"),
+  ContentPart.video_url("https://example.com/demo.mp4")
 ]
 ```
 

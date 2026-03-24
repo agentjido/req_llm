@@ -980,12 +980,62 @@ defmodule ReqLLM.Context do
           []
         end
 
+      type when type in [:image_url, "image_url"] ->
+        build_url_content_part(part, :image_url)
+
+      type when type in [:video_url, "video_url"] ->
+        build_url_content_part(part, :video_url)
+
       _ ->
         []
     end
   end
 
   defp to_part_list(_part), do: []
+
+  defp build_url_content_part(part, type) do
+    url = extract_url_content(part, type)
+    media_type = extract_url_media_type(part, type)
+    metadata = Map.get(part, :metadata) || Map.get(part, "metadata") || %{}
+
+    if is_binary(url) and url != "" do
+      [
+        %ContentPart{
+          type: type,
+          url: url,
+          media_type: media_type,
+          metadata: metadata
+        }
+      ]
+    else
+      []
+    end
+  end
+
+  defp extract_url_content(part, type) do
+    nested_key = nested_url_key(type)
+
+    Map.get(part, :url) ||
+      Map.get(part, "url") ||
+      get_in(part, [nested_key, :url]) ||
+      get_in(part, [nested_key, "url"]) ||
+      get_in(part, [Atom.to_string(nested_key), "url"]) ||
+      get_in(part, [Atom.to_string(nested_key), :url])
+  end
+
+  defp extract_url_media_type(part, type) do
+    nested_key = nested_url_key(type)
+
+    Map.get(part, :media_type) ||
+      Map.get(part, "media_type") ||
+      get_in(part, [nested_key, :media_type]) ||
+      get_in(part, [nested_key, "media_type"]) ||
+      get_in(part, [Atom.to_string(nested_key), "media_type"]) ||
+      get_in(part, [Atom.to_string(nested_key), :media_type])
+  end
+
+  defp nested_url_key(:image_url), do: :image_url
+  defp nested_url_key(:video_url), do: :video_url
 
   defp convert_loose_role_list_content(role, content, metadata, reasoning_details) do
     case role do

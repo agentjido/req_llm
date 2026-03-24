@@ -842,17 +842,7 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp encode_image_body(request) do
-    {system_instruction, contents} =
-      case request.options[:context] do
-        %ReqLLM.Context{} = ctx ->
-          model_name = request.options[:model]
-          encoded = ReqLLM.Provider.Defaults.encode_context_to_openai_format(ctx, model_name)
-          messages = encoded[:messages] || encoded["messages"] || []
-          split_messages_for_gemini(messages)
-
-        _ ->
-          split_messages_for_gemini(request.options[:messages] || [])
-      end
+    {system_instruction, contents} = google_messages_from_request(request)
 
     # Note: We intentionally keep the role field in contents.
     # Experiments show that including "role": "user" improves multi-image
@@ -931,18 +921,7 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp encode_chat_body(request) do
-    {system_instruction, contents} =
-      case request.options[:context] do
-        %ReqLLM.Context{} = ctx ->
-          model_name = request.options[:model]
-          # Convert OpenAI-style context to Gemini format
-          encoded = ReqLLM.Provider.Defaults.encode_context_to_openai_format(ctx, model_name)
-          messages = encoded[:messages] || encoded["messages"] || []
-          split_messages_for_gemini(messages)
-
-        _ ->
-          split_messages_for_gemini(request.options[:messages] || [])
-      end
+    {system_instruction, contents} = google_messages_from_request(request)
 
     tool_config = build_google_tool_config(request.options[:tool_choice])
 
@@ -1016,17 +995,7 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp encode_object_body(request) do
-    {system_instruction, contents} =
-      case request.options[:context] do
-        %ReqLLM.Context{} = ctx ->
-          model_name = request.options[:model]
-          encoded = ReqLLM.Provider.Defaults.encode_context_to_openai_format(ctx, model_name)
-          messages = encoded[:messages] || encoded["messages"] || []
-          split_messages_for_gemini(messages)
-
-        _ ->
-          split_messages_for_gemini(request.options[:messages] || [])
-      end
+    {system_instruction, contents} = google_messages_from_request(request)
 
     compiled_schema =
       case request.options do
@@ -2093,42 +2062,103 @@ defmodule ReqLLM.Providers.Google do
     end)
   end
 
+  defp google_messages_from_request(request) do
+    case request.options[:context] do
+      %ReqLLM.Context{} = ctx ->
+        model_name = request.options[:model]
+
+        encoded =
+          ctx
+          |> normalize_video_url_context()
+          |> ReqLLM.Provider.Defaults.encode_context_to_openai_format(model_name)
+
+        messages = encoded[:messages] || encoded["messages"] || []
+        split_messages_for_gemini(messages)
+
+      _ ->
+        (request.options[:messages] || [])
+        |> List.wrap()
+        |> Enum.map(&normalize_video_url_message/1)
+        |> split_messages_for_gemini()
+    end
+  end
+
+  defp normalize_video_url_context(%ReqLLM.Context{messages: messages} = context) do
+    %{context | messages: Enum.map(messages, &normalize_video_url_message/1)}
+  end
+
+  defp normalize_video_url_message(%ReqLLM.Message{content: content} = message)
+       when is_list(content) do
+    %{message | content: Enum.map(content, &normalize_video_url_part/1)}
+  end
+
+  defp normalize_video_url_message(%{content: content} = message) when is_list(content) do
+    Map.put(message, :content, Enum.map(content, &normalize_video_url_part/1))
+  end
+
+  defp normalize_video_url_message(message), do: message
+
+  defp normalize_video_url_part(%ReqLLM.Message.ContentPart{type: :video_url} = part) do
+    %{part | type: :image_url}
+  end
+
+  defp normalize_video_url_part(%{type: :video_url} = part) do
+    %{part | type: :image_url}
+  end
+
+  defp normalize_video_url_part(%{type: "video_url", video_url: video_url} = part) do
+    part
+    |> Map.delete(:video_url)
+    |> Map.put(:type, "image_url")
+    |> Map.put(:image_url, video_url)
+  end
+
+  defp normalize_video_url_part(%{"type" => "video_url", "video_url" => video_url} = part) do
+    part
+    |> Map.delete("video_url")
+    |> Map.put("type", "image_url")
+    |> Map.put("image_url", video_url)
+  end
+
+  defp normalize_video_url_part(part), do: part
+
   # Handle OpenAI-format image_url (from Provider.Defaults.encode_openai_content_part)
   defp convert_content_part(%{type: "image_url", image_url: %{url: url}} = part)
        when is_binary(url) do
-    cond do
-      # Data URI format: data:mime/type;base64,<data>
-      String.starts_with?(url, "data:") ->
-        case String.split(url, ",", parts: 2) do
-          [header, base64_data] ->
-            mime_type =
-              case Regex.run(~r/data:([^;]+)/, header) do
-                [_, type] -> type
-                _ -> "image/jpeg"
-              end
+    convert_url_content_part(part, url, "image/jpeg")
+  end
 
-            %{
-              inline_data: %{
-                mime_type: mime_type,
-                data: base64_data
-              }
-            }
+  defp convert_content_part(%{"type" => "image_url", "image_url" => %{"url" => url}} = part)
+       when is_binary(url) do
+    convert_url_content_part(part, url, "image/jpeg")
+  end
 
-          _ ->
-            %{text: "[Malformed data URI]"}
-        end
+  defp convert_content_part(%{type: "video_url", video_url: %{url: url}} = part)
+       when is_binary(url) do
+    convert_url_content_part(part, url, "video/mp4")
+  end
 
-      # HTTP/HTTPS URL: use fileData.fileUri (Google-native URL support)
-      String.starts_with?(url, "http://") or String.starts_with?(url, "https://") ->
-        build_file_data(part, url)
+  defp convert_content_part(%{"type" => "video_url", "video_url" => %{"url" => url}} = part)
+       when is_binary(url) do
+    convert_url_content_part(part, url, "video/mp4")
+  end
 
-      # GCS URI: gs://bucket/path
-      String.starts_with?(url, "gs://") ->
-        build_file_data(part, url)
+  defp convert_content_part(%ReqLLM.Message.ContentPart{type: :image_url, url: url} = part)
+       when is_binary(url) do
+    convert_url_content_part(part, url, "image/jpeg")
+  end
 
-      true ->
-        %{text: "[Unsupported URL scheme: #{String.slice(url, 0, 20)}...]"}
-    end
+  defp convert_content_part(%ReqLLM.Message.ContentPart{type: :video_url, url: url} = part)
+       when is_binary(url) do
+    convert_url_content_part(part, url, "video/mp4")
+  end
+
+  defp convert_content_part(%{type: :image_url, url: url} = part) when is_binary(url) do
+    convert_url_content_part(part, url, "image/jpeg")
+  end
+
+  defp convert_content_part(%{type: :video_url, url: url} = part) when is_binary(url) do
+    convert_url_content_part(part, url, "video/mp4")
   end
 
   # Most specific patterns first (file, image, etc.) - for ContentPart structs
@@ -2155,6 +2185,39 @@ defmodule ReqLLM.Providers.Google do
 
   defp convert_content_part(part), do: %{text: to_string(part)}
 
+  defp convert_url_content_part(part, url, default_mime_type) do
+    cond do
+      String.starts_with?(url, "data:") ->
+        case String.split(url, ",", parts: 2) do
+          [header, base64_data] ->
+            mime_type =
+              case Regex.run(~r/data:([^;]+)/, header) do
+                [_, type] -> type
+                _ -> default_mime_type
+              end
+
+            %{
+              inline_data: %{
+                mime_type: mime_type,
+                data: base64_data
+              }
+            }
+
+          _ ->
+            %{text: "[Malformed data URI]"}
+        end
+
+      String.starts_with?(url, "http://") or String.starts_with?(url, "https://") ->
+        build_file_data(part, url)
+
+      String.starts_with?(url, "gs://") ->
+        build_file_data(part, url)
+
+      true ->
+        %{text: "[Unsupported URL scheme: #{String.slice(url, 0, 20)}...]"}
+    end
+  end
+
   # Builds a fileData map, omitting mimeType when it cannot be reliably inferred.
   # YouTube and other extensionless URLs need mimeType omitted so Gemini can infer it.
   defp build_file_data(part, url) do
@@ -2176,7 +2239,12 @@ defmodule ReqLLM.Providers.Google do
   defp get_mime_type_from_part(part, url) do
     # Try metadata first (if passed through from ContentPart)
     case part do
+      %{media_type: type} when is_binary(type) and type != "" -> type
+      %{"media_type" => type} when is_binary(type) and type != "" -> type
       %{image_url: %{media_type: type}} when is_binary(type) and type != "" -> type
+      %{"image_url" => %{"media_type" => type}} when is_binary(type) and type != "" -> type
+      %{video_url: %{media_type: type}} when is_binary(type) and type != "" -> type
+      %{"video_url" => %{"media_type" => type}} when is_binary(type) and type != "" -> type
       _ -> infer_mime_type_from_url(url)
     end
   end
