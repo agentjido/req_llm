@@ -740,10 +740,10 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
       formatted = Anthropic.tool_to_anthropic_format(tool)
 
-      assert formatted["strict"] == true
-      assert formatted["name"] == "strict_tool"
-      assert formatted["description"] == "A strict tool"
-      assert is_map(formatted["input_schema"])
+      assert formatted[:strict] == true
+      assert formatted[:name] == "strict_tool"
+      assert formatted[:description] == "A strict tool"
+      assert is_map(formatted[:input_schema])
     end
 
     test "does not include strict key when tool has strict disabled" do
@@ -760,8 +760,8 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
       formatted = Anthropic.tool_to_anthropic_format(tool)
 
-      refute Map.has_key?(formatted, "strict")
-      assert formatted["name"] == "non_strict_tool"
+      refute Map.has_key?(formatted, :strict)
+      assert formatted[:name] == "non_strict_tool"
     end
 
     test "includes anthropic-native tool fields from provider options" do
@@ -778,8 +778,8 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
       formatted = Anthropic.tool_to_anthropic_format(tool)
 
-      assert formatted["defer_loading"] == true
-      assert formatted["name"] == "deferred_tool"
+      assert formatted[:defer_loading] == true
+      assert formatted[:name] == "deferred_tool"
     end
   end
 
