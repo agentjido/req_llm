@@ -383,7 +383,7 @@ defmodule ReqLLM do
 
     model_id = model.provider_model_id || model.id || model.model
 
-    if is_nil(protocol) and ReqLLM.Providers.OpenAI.AdapterHelpers.reasoning_model?(model_id) do
+    if is_nil(protocol) and ReqLLM.Providers.OpenAI.AdapterHelpers.responses_model?(model_id) do
       extra = model.extra || %{}
 
       updated_extra =

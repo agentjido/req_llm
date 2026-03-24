@@ -31,6 +31,12 @@ defmodule ReqLLMTest do
       assert get_in(model, [Access.key(:extra, %{}), :wire, :protocol]) == "openai_responses"
     end
 
+    test "normalizes gpt-4o model wire protocol to openai_responses when metadata lags" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+
+      assert get_in(model, [Access.key(:extra, %{}), :wire, :protocol]) == "openai_responses"
+    end
+
     test "resolves openai_codex string spec via openai catalog fallback" do
       assert {:ok,
               %LLMDB.Model{

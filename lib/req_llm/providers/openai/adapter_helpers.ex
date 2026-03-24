@@ -133,6 +133,19 @@ defmodule ReqLLM.Providers.OpenAI.AdapterHelpers do
   end
 
   @doc """
+  Checks if a model ID should default to the Responses API.
+
+  This includes reasoning/codex families plus GPT-4o models, which support
+  Responses even when older metadata has not been updated yet.
+  """
+  @spec responses_model?(term()) :: boolean()
+  def responses_model?(model_id) when is_binary(model_id) do
+    reasoning_model?(model_id) || gpt4o_model?(model_id)
+  end
+
+  def responses_model?(_), do: false
+
+  @doc """
   Checks if a model ID corresponds to an OpenAI reasoning model.
 
   Reasoning models (o-series, gpt-4.1, gpt-5, codex) require special handling:
@@ -160,6 +173,12 @@ defmodule ReqLLM.Providers.OpenAI.AdapterHelpers do
   @spec gpt41_model?(term()) :: boolean()
   def gpt41_model?(<<"gpt-4.1", _::binary>>), do: true
   def gpt41_model?(_), do: false
+
+  @doc "Checks if model is a GPT-4o family model."
+  @spec gpt4o_model?(term()) :: boolean()
+  def gpt4o_model?(<<"gpt-4o", _::binary>>), do: true
+  def gpt4o_model?("chatgpt-4o-latest"), do: true
+  def gpt4o_model?(_), do: false
 
   @doc "Checks if model is a GPT-5 reasoning model (excludes gpt-5-chat-latest)."
   @spec gpt5_model?(term()) :: boolean()

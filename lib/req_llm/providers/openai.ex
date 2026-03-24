@@ -209,10 +209,10 @@ defmodule ReqLLM.Providers.OpenAI do
 
       _ ->
         # Fallback for newer OpenAI models whose wire metadata may lag behind.
-        # Reasoning/Codex families should use Responses API.
+        # GPT-4o and reasoning/Codex families should use Responses API.
         model_id = model.provider_model_id || model.id
 
-        if ReqLLM.Providers.OpenAI.AdapterHelpers.reasoning_model?(model_id) do
+        if ReqLLM.Providers.OpenAI.AdapterHelpers.responses_model?(model_id) do
           "responses"
         else
           nil
