@@ -17,6 +17,7 @@ defmodule ReqLLM.Cache do
   alias ReqLLM.StreamResponse
   alias ReqLLM.StreamResponse.MetadataHandle
   alias ReqLLM.ToolCall
+  alias ReqLLM.Usage
 
   @type request :: %{
           operation: :chat | :object,
@@ -50,7 +51,7 @@ defmodule ReqLLM.Cache do
          key <- cache_key(backend, model, request, opts) do
       case backend.get(key, cache_opts(opts)) do
         {:ok, %Response{} = response} ->
-          {:hit, merge_cached_response(response, context, opts), %{backend: backend, key: key}}
+          {:hit, cache_hit_response(response, context, opts), %{backend: backend, key: key}}
 
         {:error, :not_found} ->
           {:miss, %{backend: backend, key: key}}
@@ -156,6 +157,17 @@ defmodule ReqLLM.Cache do
     response
     |> Map.put(:context, context)
     |> then(&Context.merge_response(context, &1, tools: Keyword.get(opts, :tools)))
+  end
+
+  defp cache_hit_response(%Response{} = response, %Context{} = context, opts) do
+    merged_response = merge_cached_response(response, context, opts)
+    provider_meta = Map.put(merged_response.provider_meta || %{}, :response_cache_hit, true)
+
+    %{
+      merged_response
+      | usage: Usage.zero(merged_response.usage),
+        provider_meta: provider_meta
+    }
   end
 
   defp response_to_chunks(%Response{message: %Message{} = message}) do

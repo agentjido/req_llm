@@ -9,6 +9,17 @@ defmodule ReqLLM.Usage do
   alias ReqLLM.MapAccess
   alias ReqLLM.Usage.Normalize
 
+  @zero_usage %{
+    input_tokens: 0,
+    output_tokens: 0,
+    total_tokens: 0,
+    input: 0,
+    output: 0,
+    cached_tokens: 0,
+    reasoning_tokens: 0,
+    cache_creation_tokens: 0
+  }
+
   @doc """
   Normalize usage into a canonical map.
 
@@ -45,14 +56,22 @@ defmodule ReqLLM.Usage do
   end
 
   def normalize(_) do
-    %{
-      input_tokens: 0,
-      output_tokens: 0,
-      total_tokens: 0,
-      input: 0,
-      output: 0
-    }
+    Map.take(@zero_usage, [:input_tokens, :output_tokens, :total_tokens, :input, :output])
   end
+
+  @doc """
+  Zero out a usage map for application-layer cache hits.
+
+  Existing keys are preserved where possible, but numeric values are reset so
+  callers can reliably distinguish response-cache hits from provider-native
+  cache reads that still incur an API call.
+  """
+  @spec zero(map() | any()) :: map()
+  def zero(usage) when is_map(usage) do
+    Map.merge(@zero_usage, zero_usage_map(usage))
+  end
+
+  def zero(_), do: @zero_usage
 
   @doc """
   Merge two usage maps, taking the max of numeric fields (to handle
@@ -82,4 +101,13 @@ defmodule ReqLLM.Usage do
        do: input_tokens + output_tokens
 
   defp derive_total_tokens(_, _), do: nil
+
+  defp zero_usage_map(usage) do
+    Map.new(usage, fn {key, value} -> {key, zero_usage_value(value)} end)
+  end
+
+  defp zero_usage_value(value) when is_number(value), do: 0
+  defp zero_usage_value(value) when is_map(value), do: zero_usage_map(value)
+  defp zero_usage_value(value) when is_list(value), do: Enum.map(value, &zero_usage_value/1)
+  defp zero_usage_value(value), do: value
 end

@@ -256,6 +256,11 @@ defmodule ReqLLM.Response do
   @doc """
   Get usage statistics for this response.
 
+  Provider-native cache reads are reported in `usage.cached_tokens` because the
+  request still hit the upstream API. Application-layer response cache hits
+  instead return a zeroed usage map and set
+  `response.provider_meta.response_cache_hit` to `true`.
+
   ## Examples
 
       iex> ReqLLM.Response.usage(response)

@@ -183,7 +183,14 @@ defmodule ReqLLM.GenerationTest do
         )
 
       assert Response.text(first_response) == Response.text(cached_response)
+      assert first_response.usage.total_tokens == 19
+      assert cached_response.usage.total_tokens == 0
+      assert cached_response.usage.input_tokens == 0
+      assert cached_response.usage.output_tokens == 0
+      assert cached_response.usage.cached_tokens == 0
       assert CacheBackend.state(cache_agent).puts == 1
+      assert cached_response.provider_meta.response_cache_hit == true
+      assert cached_response.provider_meta.ttl == 600
       assert cached_response.context.messages |> List.last() |> Map.get(:role) == :assistant
     end
   end
@@ -308,8 +315,14 @@ defmodule ReqLLM.GenerationTest do
         )
 
       assert %StreamResponse{} = response
-      assert StreamResponse.text(response) == "Hello! How can I help you today?"
-      assert StreamResponse.usage(response).total_tokens == 19
+      assert StreamResponse.usage(response).total_tokens == 0
+      assert StreamResponse.usage(response).cached_tokens == 0
+
+      {:ok, materialized_response} = StreamResponse.to_response(response)
+
+      assert Response.text(materialized_response) == "Hello! How can I help you today?"
+      assert materialized_response.usage.total_tokens == 0
+      assert materialized_response.provider_meta.response_cache_hit == true
     end
   end
 
@@ -376,7 +389,10 @@ defmodule ReqLLM.GenerationTest do
         )
 
       assert first_response.object == %{"name" => "Ada"}
+      assert first_response.usage.total_tokens == 14
       assert cached_response.object == %{"name" => "Ada"}
+      assert cached_response.usage.total_tokens == 0
+      assert cached_response.provider_meta.response_cache_hit == true
       assert CacheBackend.state(cache_agent).puts == 1
     end
   end
