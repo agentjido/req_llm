@@ -77,6 +77,9 @@ defmodule ReqLLM.GenerationTest do
   defmodule ObjectHTTP do
   end
 
+  defmodule BrokenObjectHTTP do
+  end
+
   setup do
     # Stub HTTP responses for testing
     Req.Test.stub(ReqLLM.GenerationTest, fn conn ->
@@ -381,6 +384,91 @@ defmodule ReqLLM.GenerationTest do
     end
   end
 
+  describe "generate_object/4 JSON repair" do
+    test "repairs slightly broken structured output arguments by default" do
+      Req.Test.stub(BrokenObjectHTTP, fn conn ->
+        Req.Test.json(conn, %{
+          "id" => "cmpl_object_123",
+          "model" => "gpt-4o-mini-2024-07-18",
+          "choices" => [
+            %{
+              "message" => %{
+                "role" => "assistant",
+                "tool_calls" => [
+                  %{
+                    "id" => "call_123",
+                    "type" => "function",
+                    "function" => %{
+                      "name" => "structured_output",
+                      "arguments" => ~s({"name":"Ada",})
+                    }
+                  }
+                ]
+              },
+              "finish_reason" => "tool_calls"
+            }
+          ],
+          "usage" => %{"prompt_tokens" => 10, "completion_tokens" => 4, "total_tokens" => 14}
+        })
+      end)
+
+      schema = [name: [type: :string, required: true]]
+
+      {:ok, response} =
+        Generation.generate_object(
+          "openai:gpt-4o-mini",
+          "Return a person",
+          schema,
+          openai_structured_output_mode: :tool_strict,
+          req_http_options: [plug: {Req.Test, BrokenObjectHTTP}]
+        )
+
+      assert response.object == %{"name" => "Ada"}
+    end
+
+    test "allows JSON repair to be disabled" do
+      Req.Test.stub(BrokenObjectHTTP, fn conn ->
+        Req.Test.json(conn, %{
+          "id" => "cmpl_object_123",
+          "model" => "gpt-4o-mini-2024-07-18",
+          "choices" => [
+            %{
+              "message" => %{
+                "role" => "assistant",
+                "tool_calls" => [
+                  %{
+                    "id" => "call_123",
+                    "type" => "function",
+                    "function" => %{
+                      "name" => "structured_output",
+                      "arguments" => ~s({"name":"Ada",})
+                    }
+                  }
+                ]
+              },
+              "finish_reason" => "tool_calls"
+            }
+          ],
+          "usage" => %{"prompt_tokens" => 10, "completion_tokens" => 4, "total_tokens" => 14}
+        })
+      end)
+
+      schema = [name: [type: :string, required: true]]
+
+      {:ok, response} =
+        Generation.generate_object(
+          "openai:gpt-4o-mini",
+          "Return a person",
+          schema,
+          json_repair: false,
+          openai_structured_output_mode: :tool_strict,
+          req_http_options: [plug: {Req.Test, BrokenObjectHTTP}]
+        )
+
+      assert response.object == nil
+    end
+  end
+
   describe "option validation and translation" do
     test "validates base schema options" do
       schema = Generation.schema()
@@ -408,6 +496,15 @@ defmodule ReqLLM.GenerationTest do
       assert Keyword.has_key?(schema.schema, :cache_key)
       assert Keyword.has_key?(schema.schema, :cache_ttl)
       assert Keyword.has_key?(schema.schema, :cache_options)
+    end
+
+    test "includes json_repair option in schema" do
+      schema = Generation.schema()
+      json_repair_spec = Keyword.get(schema.schema, :json_repair)
+
+      assert json_repair_spec != nil
+      assert json_repair_spec[:type] == :boolean
+      assert json_repair_spec[:default] == true
     end
 
     test "provider schema composition works" do

@@ -119,6 +119,12 @@ defmodule ReqLLM.Provider.Options do
                                  default: [],
                                  doc: "Options passed through to ReqLLM.Cache callbacks"
                                ],
+                               json_repair: [
+                                 type: :boolean,
+                                 default: true,
+                                 doc:
+                                   "Attempt light JSON repair for structured outputs before failing decode"
+                               ],
 
                                # Canonical reasoning controls
                                reasoning_effort: [

@@ -628,6 +628,7 @@ defmodule ReqLLM.Provider.Defaults do
       :stream,
       :frequency_penalty,
       :system_prompt,
+      :json_repair,
       :top_p,
       :presence_penalty,
       :seed,
@@ -1170,8 +1171,16 @@ defmodule ReqLLM.Provider.Defaults do
          "function" => %{"name" => name, "arguments" => args_json}
        }) do
     case Jason.decode(args_json || "{}") do
-      {:ok, args} -> ReqLLM.StreamChunk.tool_call(name, args, %{id: id})
-      {:error, _} -> nil
+      {:ok, args} ->
+        ReqLLM.StreamChunk.tool_call(name, args, %{id: id})
+
+      {:error, _} ->
+        %ReqLLM.StreamChunk{
+          type: :tool_call,
+          name: name,
+          arguments: %{},
+          metadata: %{id: id, raw_arguments: args_json}
+        }
     end
   end
 
@@ -1320,7 +1329,12 @@ defmodule ReqLLM.Provider.Defaults do
          arguments: args,
          metadata: meta
        }) do
-    args_json = if is_binary(args), do: args, else: Jason.encode!(args)
+    args_json =
+      case Map.get(meta, :raw_arguments) do
+        raw when is_binary(raw) -> raw
+        _ -> if(is_binary(args), do: args, else: Jason.encode!(args))
+      end
+
     id = Map.get(meta, :id)
     ReqLLM.ToolCall.new(id, name, args_json)
   end
@@ -1643,19 +1657,19 @@ defmodule ReqLLM.Provider.Defaults do
     extracted_object =
       case response_format do
         %{type: "json_schema"} ->
-          extract_from_json_schema_content(response)
+          extract_from_json_schema_content(response, req.options)
 
         %{"type" => "json_schema"} ->
-          extract_from_json_schema_content(response)
+          extract_from_json_schema_content(response, req.options)
 
         _ ->
-          extract_from_tool_calls(response)
+          extract_from_tool_calls(response, req.options)
       end
 
     %{response | object: extracted_object}
   end
 
-  defp extract_from_json_schema_content(response) do
+  defp extract_from_json_schema_content(response, opts) do
     %ReqLLM.Message{content: content_parts} = response.message
 
     text_content =
@@ -1670,17 +1684,17 @@ defmodule ReqLLM.Provider.Defaults do
         nil
 
       json_string ->
-        case Jason.decode(json_string) do
+        case ReqLLM.JSON.decode(json_string, opts) do
           {:ok, parsed_object} -> parsed_object
           {:error, _} -> nil
         end
     end
   end
 
-  defp extract_from_tool_calls(response) do
+  defp extract_from_tool_calls(response, opts) do
     response
     |> ReqLLM.Response.tool_calls()
-    |> ReqLLM.ToolCall.find_args("structured_output")
+    |> ReqLLM.ToolCall.find_args("structured_output", opts)
   end
 
   defp merge_response_with_context(req, response) do

@@ -546,6 +546,7 @@ defmodule ReqLLM.Providers.Google do
         :aspect_ratio,
         :output_format,
         :response_format,
+        :json_repair,
         :quality,
         :style,
         :negative_prompt,
@@ -1200,7 +1201,7 @@ defmodule ReqLLM.Providers.Google do
               ReqLLM.Provider.Defaults.decode_response_body_openai_format(openai_format, model)
 
             response_with_object =
-              case ReqLLM.Response.unwrap_object(response) do
+              case ReqLLM.Response.unwrap_object(response, req.options) do
                 {:ok, object} -> %{response | object: object}
                 {:error, _} -> response
               end

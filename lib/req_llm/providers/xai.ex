@@ -1157,7 +1157,7 @@ defmodule ReqLLM.Providers.XAI do
         final_response =
           case operation do
             :object ->
-              extract_and_set_object(response)
+              extract_and_set_object(response, req.options)
 
             _ ->
               response
@@ -1177,42 +1177,42 @@ defmodule ReqLLM.Providers.XAI do
     end
   end
 
-  defp extract_and_set_object(response) do
+  defp extract_and_set_object(response, opts) do
     extracted_object =
       case ReqLLM.Response.tool_calls(response) do
         [] ->
-          extract_from_content(response)
+          extract_from_content(response, opts)
 
         tool_calls ->
-          ReqLLM.ToolCall.find_args(tool_calls, "structured_output")
+          ReqLLM.ToolCall.find_args(tool_calls, "structured_output", opts)
       end
 
     %{response | object: extracted_object}
   end
 
-  defp extract_from_content(response) do
+  defp extract_from_content(response, opts) do
     %ReqLLM.Message{content: content_parts} = response.message
 
     content_parts
     |> Enum.find_value(fn
       %ReqLLM.Message.ContentPart{type: :text, text: text} when is_binary(text) ->
-        parse_json_defensively(text)
+        parse_json_defensively(text, opts)
 
       _ ->
         nil
     end)
   end
 
-  @dialyzer {:nowarn_function, parse_json_defensively: 1}
-  @spec parse_json_defensively(term()) :: map() | nil
-  defp parse_json_defensively(text) when is_binary(text) do
-    case Jason.decode(text) do
+  @dialyzer {:nowarn_function, parse_json_defensively: 2}
+  @spec parse_json_defensively(term(), keyword()) :: map() | nil
+  defp parse_json_defensively(text, opts) when is_binary(text) do
+    case ReqLLM.JSON.decode(text, opts) do
       {:ok, parsed_object} when is_map(parsed_object) -> parsed_object
       _ -> nil
     end
   end
 
-  defp parse_json_defensively(_), do: nil
+  defp parse_json_defensively(_, _opts), do: nil
 
   defp merge_response_with_context(req, response) do
     context = req.options[:context] || %ReqLLM.Context{messages: []}

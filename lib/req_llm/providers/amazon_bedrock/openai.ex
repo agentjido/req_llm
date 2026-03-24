@@ -153,7 +153,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
       # For :object operation, extract structured output from tool call
       final_response =
         if opts[:operation] == :object do
-          extract_and_set_object(response)
+          extract_and_set_object(response, opts)
         else
           response
         end
@@ -166,11 +166,11 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
   end
 
   # Extract structured output from tool call (same logic as native Anthropic provider)
-  defp extract_and_set_object(response) do
+  defp extract_and_set_object(response, opts) do
     extracted_object =
       response
       |> ReqLLM.Response.tool_calls()
-      |> ReqLLM.ToolCall.find_args("structured_output")
+      |> ReqLLM.ToolCall.find_args("structured_output", opts)
 
     %{response | object: extracted_object}
   end

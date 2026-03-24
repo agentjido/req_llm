@@ -1185,7 +1185,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       {:object, text} when is_binary(text) and text != "" ->
         compiled_schema = req.options[:compiled_schema]
 
-        case Jason.decode(text) do
+        case ReqLLM.JSON.decode(text, req.options) do
           {:ok, parsed_object} when is_map(parsed_object) ->
             case validate_object(parsed_object, compiled_schema) do
               {:ok, _} -> {parsed_object, %{}}

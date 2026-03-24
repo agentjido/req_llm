@@ -1296,20 +1296,20 @@ defmodule ReqLLM.Providers.Anthropic do
 
             case text_content do
               %ReqLLM.Message.ContentPart{text: text} ->
-                case Jason.decode(text) do
+                case ReqLLM.JSON.decode(text, opts) do
                   {:ok, json} -> json
-                  _ -> find_structured_output(response)
+                  _ -> find_structured_output(response, opts)
                 end
 
               _ ->
-                find_structured_output(response)
+                find_structured_output(response, opts)
             end
 
           _ ->
-            find_structured_output(response)
+            find_structured_output(response, opts)
         end
       else
-        find_structured_output(response)
+        find_structured_output(response, opts)
       end
 
     %{response | object: extracted_object}
@@ -1337,10 +1337,10 @@ defmodule ReqLLM.Providers.Anthropic do
     provider_opts[:output_format]
   end
 
-  defp find_structured_output(response) do
+  defp find_structured_output(response, opts) do
     response
     |> ReqLLM.Response.tool_calls()
-    |> ReqLLM.ToolCall.find_args("structured_output")
+    |> ReqLLM.ToolCall.find_args("structured_output", opts)
   end
 
   defp merge_response_with_context(req, response) do

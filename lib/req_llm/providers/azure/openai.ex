@@ -272,7 +272,7 @@ defmodule ReqLLM.Providers.Azure.OpenAI do
 
     final_response =
       if operation == :object do
-        extract_and_set_object(merged_response)
+        extract_and_set_object(merged_response, opts)
       else
         merged_response
       end
@@ -280,11 +280,11 @@ defmodule ReqLLM.Providers.Azure.OpenAI do
     {:ok, final_response}
   end
 
-  defp extract_and_set_object(response) do
+  defp extract_and_set_object(response, opts) do
     extracted_object =
       response
       |> ReqLLM.Response.tool_calls()
-      |> ReqLLM.ToolCall.find_args("structured_output")
+      |> ReqLLM.ToolCall.find_args("structured_output", opts)
 
     %{response | object: extracted_object}
   end

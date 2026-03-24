@@ -96,9 +96,9 @@ defmodule ReqLLM.ToolCall do
   Extract and decode the arguments as a map from a ToolCall.
   Returns nil if decoding fails.
   """
-  @spec args_map(t()) :: map() | nil
-  def args_map(%__MODULE__{function: %{arguments: json}}) do
-    case Jason.decode(json) do
+  @spec args_map(t(), keyword()) :: map() | nil
+  def args_map(%__MODULE__{function: %{arguments: json}}, opts \\ []) do
+    case ReqLLM.JSON.decode(json, opts) do
       {:ok, map} -> map
       {:error, _} -> nil
     end
@@ -120,12 +120,12 @@ defmodule ReqLLM.ToolCall do
       iex> ToolCall.to_map(tc)
       %{id: "call_456", name: "get_time", arguments: %{}}
   """
-  @spec to_map(t()) :: %{id: String.t(), name: String.t(), arguments: map()}
-  def to_map(%__MODULE__{id: id, function: %{name: name}} = tc) do
+  @spec to_map(t(), keyword()) :: %{id: String.t(), name: String.t(), arguments: map()}
+  def to_map(%__MODULE__{id: id, function: %{name: name}} = tc, opts \\ []) do
     %{
       id: id,
       name: name,
-      arguments: args_map(tc) || %{}
+      arguments: args_map(tc, opts) || %{}
     }
   end
 
@@ -144,26 +144,28 @@ defmodule ReqLLM.ToolCall do
       iex> ToolCall.from_map(tc)
       %{id: "call_456", name: "get_time", arguments: %{}}
   """
-  @spec from_map(t() | map()) :: %{id: String.t(), name: String.t(), arguments: map()}
-  def from_map(%__MODULE__{} = tc), do: to_map(tc)
+  @spec from_map(t() | map(), keyword()) :: %{id: String.t(), name: String.t(), arguments: map()}
+  def from_map(tool_call, opts \\ [])
 
-  def from_map(map) when is_map(map) do
+  def from_map(%__MODULE__{} = tc, opts), do: to_map(tc, opts)
+
+  def from_map(map, opts) when is_map(map) do
     %{
       id: map[:id] || map["id"] || generate_id(),
       name: map[:name] || map["name"],
-      arguments: parse_arguments(map[:arguments] || map["arguments"] || %{})
+      arguments: parse_arguments(map[:arguments] || map["arguments"] || %{}, opts)
     }
   end
 
-  defp parse_arguments(args) when is_binary(args) do
-    case Jason.decode(args) do
+  defp parse_arguments(args, opts) when is_binary(args) do
+    case ReqLLM.JSON.decode(args, opts) do
       {:ok, parsed} -> parsed
       {:error, _} -> %{}
     end
   end
 
-  defp parse_arguments(args) when is_map(args), do: args
-  defp parse_arguments(_), do: %{}
+  defp parse_arguments(args, _opts) when is_map(args), do: args
+  defp parse_arguments(_, _opts), do: %{}
 
   @doc """
   Check if a ToolCall matches the given function name.
@@ -175,13 +177,13 @@ defmodule ReqLLM.ToolCall do
   Find the first tool call matching the given name and return its decoded arguments.
   Returns nil if no match found or if arguments cannot be decoded.
   """
-  @spec find_args([t()], String.t()) :: map() | nil
-  def find_args(tool_calls, name) do
+  @spec find_args([t()], String.t(), keyword()) :: map() | nil
+  def find_args(tool_calls, name, opts \\ []) do
     tool_calls
     |> Enum.find(&matches_name?(&1, name))
     |> case do
       nil -> nil
-      call -> args_map(call)
+      call -> args_map(call, opts)
     end
   end
 

@@ -548,16 +548,18 @@ defmodule ReqLLM.Response do
       #=> {:ok, %{"name" => "John", "age" => 30}}
 
   """
-  @spec unwrap_object(t()) :: {:ok, map()} | {:error, term()}
-  def unwrap_object(%__MODULE__{object: object}) when not is_nil(object) do
+  @spec unwrap_object(t(), keyword()) :: {:ok, map() | list()} | {:error, term()}
+  def unwrap_object(response, opts \\ [])
+
+  def unwrap_object(%__MODULE__{object: object}, _opts) when not is_nil(object) do
     {:ok, object}
   end
 
-  def unwrap_object(%__MODULE__{message: nil}) do
+  def unwrap_object(%__MODULE__{message: nil}, _opts) do
     {:error, %ReqLLM.Error.API.Response{reason: "No message in response"}}
   end
 
-  def unwrap_object(%__MODULE__{message: %Message{content: content}}) do
+  def unwrap_object(%__MODULE__{message: %Message{content: content}}, opts) do
     text_content =
       content
       |> Enum.filter(&(&1.type == :text))
@@ -572,7 +574,7 @@ defmodule ReqLLM.Response do
         {:ok, tool_call_content.input}
 
       text_content != "" ->
-        case Jason.decode(text_content) do
+        case ReqLLM.JSON.decode(text_content, opts) do
           {:ok, object} when is_map(object) ->
             {:ok, object}
 

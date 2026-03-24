@@ -396,6 +396,26 @@ defmodule ReqLLM.ResponseTest do
     end
   end
 
+  describe "unwrap_object/2" do
+    test "repairs lightly malformed JSON content by default" do
+      content = [%ContentPart{type: :text, text: "```json\n{\"name\":\"Ada\",}\n```"}]
+      message = %Message{role: :assistant, content: content, metadata: %{}}
+      response = create_response(message: message)
+
+      assert Response.unwrap_object(response) == {:ok, %{"name" => "Ada"}}
+    end
+
+    test "allows JSON repair to be disabled" do
+      content = [%ContentPart{type: :text, text: "```json\n{\"name\":\"Ada\",}\n```"}]
+      message = %Message{role: :assistant, content: content, metadata: %{}}
+      response = create_response(message: message)
+
+      assert {:error,
+              %ReqLLM.Error.API.Response{reason: "Failed to parse JSON from text content"}} =
+               Response.unwrap_object(response, json_repair: false)
+    end
+  end
+
   describe "classify/1" do
     test "classifies text-only responses as :final_answer" do
       content = [

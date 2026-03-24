@@ -103,6 +103,18 @@ defmodule ReqLLM.ToolCallTest do
                "unit" => "celsius"
              }
     end
+
+    test "repairs lightly malformed JSON by default" do
+      tool_call = ToolCall.new("call_123", "structured_output", ~s({"name":"Ada",}))
+
+      assert ToolCall.args_map(tool_call) == %{"name" => "Ada"}
+    end
+
+    test "allows JSON repair to be disabled" do
+      tool_call = ToolCall.new("call_123", "structured_output", ~s({"name":"Ada",}))
+
+      assert ToolCall.args_map(tool_call, json_repair: false) == nil
+    end
   end
 
   describe "matches_name?/2" do
@@ -174,6 +186,13 @@ defmodule ReqLLM.ToolCallTest do
       result = ToolCall.find_args(tool_calls, "structured_output")
 
       assert result == %{"name" => "John", "age" => 30}
+    end
+
+    test "respects JSON repair options" do
+      tool_calls = [ToolCall.new("call_1", "structured_output", ~s({"name":"Ada",}))]
+
+      assert ToolCall.find_args(tool_calls, "structured_output") == %{"name" => "Ada"}
+      assert ToolCall.find_args(tool_calls, "structured_output", json_repair: false) == nil
     end
   end
 

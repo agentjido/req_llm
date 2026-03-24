@@ -221,19 +221,19 @@ defmodule ReqLLM.Providers.Zai do
     extracted_object =
       case response_format do
         %{type: "json_schema"} ->
-          extract_from_json_schema_content(response)
+          extract_from_json_schema_content(response, req.options)
 
         %{"type" => "json_schema"} ->
-          extract_from_json_schema_content(response)
+          extract_from_json_schema_content(response, req.options)
 
         _ ->
-          extract_from_tool_calls(response)
+          extract_from_tool_calls(response, req.options)
       end
 
     %{response | object: extracted_object}
   end
 
-  defp extract_from_json_schema_content(response) do
+  defp extract_from_json_schema_content(response, opts) do
     %ReqLLM.Message{content: content_parts} = response.message
 
     text_content =
@@ -248,18 +248,18 @@ defmodule ReqLLM.Providers.Zai do
         nil
 
       json_string ->
-        case Jason.decode(json_string) do
+        case ReqLLM.JSON.decode(json_string, opts) do
           {:ok, parsed_object} -> parsed_object
           {:error, _} -> nil
         end
     end
   end
 
-  defp extract_from_tool_calls(response) do
+  defp extract_from_tool_calls(response, opts) do
     case response.message do
       %ReqLLM.Message{tool_calls: [%ReqLLM.ToolCall{function: %{arguments: args_json}} | _]}
       when is_binary(args_json) ->
-        case Jason.decode(args_json) do
+        case ReqLLM.JSON.decode(args_json, opts) do
           {:ok, args} -> args
           {:error, _} -> nil
         end
