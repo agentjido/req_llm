@@ -1413,6 +1413,36 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert part["fileData"]["mimeType"] == "image/png"
     end
 
+    test "encode_body converts OpenAI-format video_url to fileData format" do
+      url = "https://example.com/videos/clip.mp4"
+
+      mock_request = %Req.Request{
+        options: [
+          messages: [
+            %{
+              "role" => "user",
+              "content" => [
+                %{"type" => "text", "text" => "What happens in this video?"},
+                %{"type" => "video_url", "video_url" => %{"url" => url}}
+              ]
+            }
+          ],
+          id: "gemini-1.5-flash",
+          stream: false
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      [user_msg] = decoded["contents"]
+      [_text_part, part] = user_msg["parts"]
+
+      assert Map.has_key?(part, "fileData")
+      assert part["fileData"]["fileUri"] == url
+      assert part["fileData"]["mimeType"] == "video/mp4"
+    end
+
     test "encode_body converts GCS URI to fileData format" do
       url = "gs://my-bucket/path/to/document.pdf"
 

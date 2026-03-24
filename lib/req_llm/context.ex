@@ -980,12 +980,61 @@ defmodule ReqLLM.Context do
           []
         end
 
+      type when type in [:image_url, "image_url"] ->
+        case url_content_part(part, :image_url) do
+          {:ok, url_part} -> [url_part]
+          :error -> []
+        end
+
+      type when type in [:video_url, "video_url"] ->
+        case url_content_part(part, :video_url) do
+          {:ok, url_part} -> [url_part]
+          :error -> []
+        end
+
       _ ->
         []
     end
   end
 
   defp to_part_list(_part), do: []
+
+  defp url_content_part(part, kind) do
+    metadata = Map.get(part, :metadata) || Map.get(part, "metadata") || %{}
+
+    nested =
+      Map.get(part, kind) ||
+        Map.get(part, Atom.to_string(kind))
+
+    url =
+      Map.get(part, :url) ||
+        Map.get(part, "url") ||
+        if(is_map(nested), do: Map.get(nested, :url) || Map.get(nested, "url"))
+
+    media_type =
+      Map.get(part, :media_type) ||
+        Map.get(part, "media_type") ||
+        if(is_map(nested), do: Map.get(nested, :media_type) || Map.get(nested, "media_type"))
+
+    if is_binary(url) and url != "" do
+      content_part =
+        case kind do
+          :image_url -> ContentPart.image_url(url, metadata)
+          :video_url -> ContentPart.video_url(url, metadata)
+        end
+
+      {:ok, maybe_put_url_media_type(content_part, media_type)}
+    else
+      :error
+    end
+  end
+
+  defp maybe_put_url_media_type(%ContentPart{} = part, media_type)
+       when is_binary(media_type) and media_type != "" do
+    %{part | media_type: media_type}
+  end
+
+  defp maybe_put_url_media_type(%ContentPart{} = part, _media_type), do: part
 
   defp convert_loose_role_list_content(role, content, metadata, reasoning_details) do
     case role do
