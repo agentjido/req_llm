@@ -732,19 +732,15 @@ defmodule ReqLLM.Providers.XAITest do
   end
 
   describe "context validation" do
-    test "multiple system messages should fail" do
-      invalid_context =
+    test "multiple system messages are allowed" do
+      context =
         Context.new([
           Context.system("System 1"),
           Context.system("System 2"),
           Context.user("Hello")
         ])
 
-      assert_raise ReqLLM.Error.Validation.Error,
-                   ~r/should have at most one system message/,
-                   fn ->
-                     Context.validate!(invalid_context)
-                   end
+      assert ^context = Context.validate!(context)
     end
   end
 end

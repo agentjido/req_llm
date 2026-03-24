@@ -541,11 +541,10 @@ defmodule ReqLLM.Context do
 
   # Validation and wrap/encode helpers
 
-  @doc "Validate context: ensures valid messages, at most one system message, and tool message constraints."
+  @doc "Validate context: ensures valid messages and tool message constraints."
   @spec validate(t()) :: {:ok, t()} | {:error, String.t()}
   def validate(%__MODULE__{messages: msgs} = context) do
-    with :ok <- validate_system_messages(msgs),
-         :ok <- validate_message_structure(msgs),
+    with :ok <- validate_message_structure(msgs),
          :ok <- validate_tool_messages(msgs) do
       {:ok, context}
     end
@@ -1020,16 +1019,6 @@ defmodule ReqLLM.Context do
   end
 
   defp maybe_add_system(context, _), do: context
-
-  defp validate_system_messages(messages) do
-    system_count = Enum.count(messages, &(&1.role == :system))
-
-    case system_count do
-      0 -> :ok
-      1 -> :ok
-      n -> {:error, "Context should have at most one system message, found #{n}"}
-    end
-  end
 
   defp validate_message_structure(messages) do
     Enum.reduce_while(messages, :ok, fn msg, :ok ->

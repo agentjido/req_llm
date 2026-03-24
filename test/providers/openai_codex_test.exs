@@ -74,13 +74,14 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
   end
 
   describe "attach_stream/4" do
-    test "builds SSE request against codex backend with instructions" do
+    test "builds SSE request against codex backend with combined instructions" do
       {:ok, model} = ReqLLM.model("openai_codex:gpt-5.3-codex-spark")
 
       context =
         ReqLLM.context([
           ReqLLM.Context.system("You are a mining analyst."),
-          ReqLLM.Context.user("Tell me about FMG")
+          ReqLLM.Context.user("Tell me about FMG"),
+          ReqLLM.Context.system("Use bullet points.")
         ])
 
       {:ok, request} =
@@ -104,7 +105,7 @@ defmodule ReqLLM.Providers.OpenAICodexTest do
 
       body = Jason.decode!(request.body)
 
-      assert body["instructions"] == "You are a mining analyst."
+      assert body["instructions"] == "You are a mining analyst.\n\nUse bullet points."
       assert body["model"] == "gpt-5.3-codex-spark"
       assert body["store"] == false
       assert body["include"] == ["reasoning.encrypted_content"]

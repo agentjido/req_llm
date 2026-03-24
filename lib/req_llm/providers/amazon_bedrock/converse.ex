@@ -332,18 +332,15 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
     {system_messages, non_system_messages} =
       Enum.split_with(messages, fn %Message{role: role} -> role == :system end)
 
-    # Add system messages
     request =
-      case system_messages do
+      case encode_system_messages(system_messages) do
         [] ->
           request
 
-        [%Message{content: content} | _] ->
-          # Converse API accepts system as array of content blocks
-          Map.put(request, "system", encode_content_for_system(content))
+        encoded_system ->
+          Map.put(request, "system", encoded_system)
       end
 
-    # Add regular messages, dropping any that end up empty after ContentPart filtering
     encoded_messages =
       non_system_messages
       |> Enum.map(&encode_message/1)
@@ -352,6 +349,24 @@ defmodule ReqLLM.Providers.AmazonBedrock.Converse do
 
     Map.put(request, "messages", encoded_messages)
   end
+
+  defp encode_system_messages(messages) do
+    messages
+    |> Enum.map(&encode_system_message/1)
+    |> Enum.reject(&(&1 == []))
+    |> Enum.intersperse([%{"text" => "\n\n"}])
+    |> List.flatten()
+  end
+
+  defp encode_system_message(%Message{content: content}) when is_binary(content) do
+    encode_content_for_system(content)
+  end
+
+  defp encode_system_message(%Message{content: content}) when is_list(content) do
+    encode_content_for_system(content)
+  end
+
+  defp encode_system_message(_message), do: []
 
   defp merge_consecutive_tool_results(messages) do
     messages

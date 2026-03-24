@@ -174,7 +174,7 @@ defmodule ReqLLM.ContextTest do
       assert {:ok, ^context} = Context.validate(context)
     end
 
-    test "validate/1 fails with multiple system messages" do
+    test "validate/1 allows multiple system messages" do
       context =
         Context.new([
           Context.system("First system"),
@@ -182,11 +182,10 @@ defmodule ReqLLM.ContextTest do
           Context.user("Hello")
         ])
 
-      assert {:error, "Context should have at most one system message, found 2"} =
-               Context.validate(context)
+      assert {:ok, ^context} = Context.validate(context)
     end
 
-    test "validate!/1 raises with invalid context" do
+    test "validate!/1 returns context with multiple system messages" do
       context =
         Context.new([
           Context.system("First system"),
@@ -194,9 +193,7 @@ defmodule ReqLLM.ContextTest do
           Context.user("Hello")
         ])
 
-      assert_raise ReqLLM.Error.Validation.Error, fn ->
-        Context.validate!(context)
-      end
+      assert ^context = Context.validate!(context)
     end
 
     test "validate/1 fails with invalid messages" do
@@ -439,10 +436,10 @@ defmodule ReqLLM.ContextTest do
       assert system_msg.role == :system
       assert user_msg.role == :user
 
-      # Fails with multiple system messages
+      # Keeps multiple system messages
       input = [Context.system("First system"), Context.system("Second system"), "User message"]
-      {:error, reason} = Context.normalize(input)
-      assert reason == "Context should have at most one system message, found 2"
+      {:ok, context3} = Context.normalize(input)
+      assert Enum.map(context3.messages, & &1.role) == [:system, :system, :user]
     end
 
     test "rejects invalid loose maps when convert_loose: false" do

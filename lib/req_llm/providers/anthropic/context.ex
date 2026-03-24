@@ -58,13 +58,12 @@ defmodule ReqLLM.Providers.Anthropic.Context do
       Enum.split_with(messages, fn %ReqLLM.Message{role: role} -> role == :system end)
 
     request =
-      case system_messages do
-        [] ->
+      case encode_system_messages(system_messages) do
+        nil ->
           request
 
-        [%ReqLLM.Message{content: content} | _] ->
-          # Anthropic only accepts one system message at top level
-          Map.put(request, :system, encode_content(content))
+        encoded_system ->
+          Map.put(request, :system, encoded_system)
       end
 
     encoded_messages =
@@ -155,6 +154,35 @@ defmodule ReqLLM.Providers.Anthropic.Context do
       content: encode_content(content)
     }
   end
+
+  defp encode_system_messages(messages) do
+    messages
+    |> Enum.map(&encode_system_message/1)
+    |> Enum.reject(&(&1 == []))
+    |> Enum.intersperse([%{type: "text", text: "\n\n"}])
+    |> List.flatten()
+    |> normalize_system_content()
+  end
+
+  defp encode_system_message(%ReqLLM.Message{content: content}) when is_binary(content) do
+    if content == "" do
+      []
+    else
+      [%{type: "text", text: content}]
+    end
+  end
+
+  defp encode_system_message(%ReqLLM.Message{content: content}) when is_list(content) do
+    content
+    |> Enum.map(&encode_content_part/1)
+    |> Enum.reject(&is_nil/1)
+  end
+
+  defp encode_system_message(_message), do: []
+
+  defp normalize_system_content([]), do: nil
+  defp normalize_system_content([%{type: "text", text: text}]), do: text
+  defp normalize_system_content(blocks), do: blocks
 
   # Simple text content
   defp encode_content(content) when is_binary(content), do: content

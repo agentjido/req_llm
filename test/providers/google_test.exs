@@ -1228,20 +1228,15 @@ defmodule ReqLLM.Providers.GoogleTest do
   end
 
   describe "error handling & robustness" do
-    test "context validation" do
-      # Multiple system messages should fail
-      invalid_context =
+    test "context validation allows multiple system messages" do
+      context =
         Context.new([
           Context.system("System 1"),
           Context.system("System 2"),
           Context.user("Hello")
         ])
 
-      assert_raise ReqLLM.Error.Validation.Error,
-                   ~r/should have at most one system message/,
-                   fn ->
-                     Context.validate!(invalid_context)
-                   end
+      assert ^context = Context.validate!(context)
     end
   end
 

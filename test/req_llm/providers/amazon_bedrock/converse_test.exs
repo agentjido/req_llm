@@ -34,6 +34,26 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
       assert result["messages"] == [%{"role" => "user", "content" => [%{"text" => "Hello"}]}]
     end
 
+    test "formats request with multiple system messages" do
+      context = %ReqLLM.Context{
+        messages: [
+          %Message{role: :system, content: "Talk like a pirate"},
+          %Message{role: :user, content: "Hello"},
+          %Message{role: :system, content: "Respond in verses"}
+        ]
+      }
+
+      result = Converse.format_request("test-model", context, [])
+
+      assert result["system"] == [
+               %{"text" => "Talk like a pirate"},
+               %{"text" => "\n\n"},
+               %{"text" => "Respond in verses"}
+             ]
+
+      assert result["messages"] == [%{"role" => "user", "content" => [%{"text" => "Hello"}]}]
+    end
+
     test "formats request with tools" do
       {:ok, tool} =
         ReqLLM.Tool.new(
