@@ -3,6 +3,80 @@ defmodule ReqLLM.GenerationTest do
 
   alias ReqLLM.{Context, Generation, Response, StreamResponse}
 
+  defmodule CacheBackend do
+    alias ReqLLM.Context
+    alias ReqLLM.Message
+    alias ReqLLM.Message.ContentPart
+
+    def get(key, opts) do
+      agent = Keyword.fetch!(opts, :agent)
+
+      Agent.get(agent, fn state ->
+        case Map.fetch(state.entries, key) do
+          {:ok, value} -> {:ok, value}
+          :error -> {:error, :not_found}
+        end
+      end)
+    end
+
+    def put(key, value, ttl, opts) do
+      agent = Keyword.fetch!(opts, :agent)
+
+      Agent.update(agent, fn state ->
+        state
+        |> Map.update!(:puts, &(&1 + 1))
+        |> put_in([:entries, key], %{
+          value
+          | provider_meta: Map.put(value.provider_meta, :ttl, ttl)
+        })
+      end)
+
+      :ok
+    end
+
+    def delete(key, opts) do
+      agent = Keyword.fetch!(opts, :agent)
+      Agent.update(agent, fn state -> update_in(state.entries, &Map.delete(&1, key)) end)
+      :ok
+    end
+
+    def generate_key(model, request, opts) do
+      namespace = Keyword.get(opts, :namespace, "default")
+
+      schema =
+        case request.schema do
+          nil -> "none"
+          schema -> :erlang.phash2(schema)
+        end
+
+      text =
+        request.context.messages
+        |> Enum.map_join("|", fn
+          %Message{role: role, content: content} ->
+            content_text =
+              content
+              |> Enum.map_join("", fn
+                %ContentPart{text: text} when is_binary(text) -> text
+                _ -> ""
+              end)
+
+            "#{role}:#{content_text}"
+        end)
+
+      "#{namespace}:#{model.id}:#{request.operation}:#{schema}:#{text}"
+    end
+
+    def state(agent) do
+      Agent.get(agent, & &1)
+    end
+  end
+
+  defmodule FailingHTTP do
+  end
+
+  defmodule ObjectHTTP do
+  end
+
   setup do
     # Stub HTTP responses for testing
     Req.Test.stub(ReqLLM.GenerationTest, fn conn ->
@@ -79,6 +153,38 @@ defmodule ReqLLM.GenerationTest do
       # System prompt gets added to context, which we can verify indirectly
       # system + user at minimum
       assert length(response.context.messages) >= 2
+    end
+
+    test "uses application cache on repeated requests" do
+      {:ok, cache_agent} = Agent.start_link(fn -> %{entries: %{}, puts: 0} end)
+
+      {:ok, first_response} =
+        Generation.generate_text(
+          "openai:gpt-4o-mini",
+          "Hello",
+          cache: CacheBackend,
+          cache_ttl: 600,
+          cache_options: [agent: cache_agent, namespace: "chat"],
+          req_http_options: [plug: {Req.Test, ReqLLM.GenerationTest}]
+        )
+
+      Req.Test.stub(FailingHTTP, fn _conn ->
+        raise "HTTP request should not execute on cache hit"
+      end)
+
+      {:ok, cached_response} =
+        Generation.generate_text(
+          "openai:gpt-4o-mini",
+          "Hello",
+          cache: CacheBackend,
+          cache_ttl: 600,
+          cache_options: [agent: cache_agent, namespace: "chat"],
+          req_http_options: [plug: {Req.Test, FailingHTTP}]
+        )
+
+      assert Response.text(first_response) == Response.text(cached_response)
+      assert CacheBackend.state(cache_agent).puts == 1
+      assert cached_response.context.messages |> List.last() |> Map.get(:role) == :assistant
     end
   end
 
@@ -175,11 +281,103 @@ defmodule ReqLLM.GenerationTest do
       assert %StreamResponse{} = response
       assert is_function(response.stream)
     end
+
+    test "replays cached responses as a stream" do
+      {:ok, cache_agent} = Agent.start_link(fn -> %{entries: %{}, puts: 0} end)
+
+      {:ok, _response} =
+        Generation.generate_text(
+          "openai:gpt-4o-mini",
+          "Tell me a story",
+          cache: CacheBackend,
+          cache_options: [agent: cache_agent, namespace: "stream"],
+          req_http_options: [plug: {Req.Test, ReqLLM.GenerationTest}]
+        )
+
+      Req.Test.stub(FailingHTTP, fn _conn ->
+        raise "HTTP request should not execute on cache hit"
+      end)
+
+      {:ok, response} =
+        Generation.stream_text(
+          "openai:gpt-4o-mini",
+          "Tell me a story",
+          cache: CacheBackend,
+          cache_options: [agent: cache_agent, namespace: "stream"],
+          req_http_options: [plug: {Req.Test, FailingHTTP}]
+        )
+
+      assert %StreamResponse{} = response
+      assert StreamResponse.text(response) == "Hello! How can I help you today?"
+      assert StreamResponse.usage(response).total_tokens == 19
+    end
   end
 
   describe "stream_text/3 error cases" do
     test "returns error for invalid model spec" do
       assert {:error, :unknown_provider} = Generation.stream_text("invalid:model", "Hello")
+    end
+  end
+
+  describe "generate_object/4 cache support" do
+    test "uses schema-aware cache keys" do
+      {:ok, cache_agent} = Agent.start_link(fn -> %{entries: %{}, puts: 0} end)
+
+      Req.Test.stub(ObjectHTTP, fn conn ->
+        Req.Test.json(conn, %{
+          "id" => "cmpl_object_123",
+          "model" => "gpt-4o-mini-2024-07-18",
+          "choices" => [
+            %{
+              "message" => %{
+                "role" => "assistant",
+                "tool_calls" => [
+                  %{
+                    "id" => "call_123",
+                    "type" => "function",
+                    "function" => %{
+                      "name" => "structured_output",
+                      "arguments" => "{\"name\":\"Ada\"}"
+                    }
+                  }
+                ]
+              },
+              "finish_reason" => "tool_calls"
+            }
+          ],
+          "usage" => %{"prompt_tokens" => 10, "completion_tokens" => 4, "total_tokens" => 14}
+        })
+      end)
+
+      schema = [name: [type: :string, required: true]]
+
+      {:ok, first_response} =
+        Generation.generate_object(
+          "openai:gpt-4o-mini",
+          "Return a person",
+          schema,
+          cache: CacheBackend,
+          cache_options: [agent: cache_agent, namespace: "object"],
+          req_http_options: [plug: {Req.Test, ObjectHTTP}]
+        )
+
+      Req.Test.stub(FailingHTTP, fn _conn ->
+        raise "HTTP request should not execute on cache hit"
+      end)
+
+      {:ok, cached_response} =
+        Generation.generate_object(
+          "openai:gpt-4o-mini",
+          "Return a person",
+          schema,
+          cache: CacheBackend,
+          cache_options: [agent: cache_agent, namespace: "object"],
+          req_http_options: [plug: {Req.Test, FailingHTTP}]
+        )
+
+      assert first_response.object == %{"name" => "Ada"}
+      assert cached_response.object == %{"name" => "Ada"}
+      assert CacheBackend.state(cache_agent).puts == 1
     end
   end
 
@@ -201,6 +399,15 @@ defmodule ReqLLM.GenerationTest do
       assert on_unsupported_spec != nil
       assert on_unsupported_spec[:type] == {:in, [:warn, :error, :ignore]}
       assert on_unsupported_spec[:default] == :warn
+    end
+
+    test "includes cache options in schema" do
+      schema = Generation.schema()
+
+      assert Keyword.has_key?(schema.schema, :cache)
+      assert Keyword.has_key?(schema.schema, :cache_key)
+      assert Keyword.has_key?(schema.schema, :cache_ttl)
+      assert Keyword.has_key?(schema.schema, :cache_options)
     end
 
     test "provider schema composition works" do

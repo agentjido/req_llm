@@ -540,6 +540,10 @@ defmodule ReqLLM.Provider.Defaults do
       :operation,
       :receive_timeout,
       :max_retries,
+      :cache,
+      :cache_key,
+      :cache_ttl,
+      :cache_options,
       :req_http_options,
       :telemetry
     ]
@@ -614,6 +618,10 @@ defmodule ReqLLM.Provider.Defaults do
       :tools,
       :tool_choice,
       :tool_call_id_compat,
+      :cache,
+      :cache_key,
+      :cache_ttl,
+      :cache_options,
       :req_http_options,
       :telemetry,
       :telemetry_original_opts,

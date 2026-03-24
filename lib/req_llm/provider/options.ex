@@ -102,6 +102,23 @@ defmodule ReqLLM.Provider.Options do
                                  type: :string,
                                  doc: "System prompt to set context and instructions"
                                ],
+                               cache: [
+                                 type: :any,
+                                 doc: "Application-layer cache backend implementing ReqLLM.Cache"
+                               ],
+                               cache_key: [
+                                 type: :any,
+                                 doc: "Explicit cache key for application-layer response caching"
+                               ],
+                               cache_ttl: [
+                                 type: :non_neg_integer,
+                                 doc: "TTL in seconds for application-layer response caching"
+                               ],
+                               cache_options: [
+                                 type: {:or, [:map, :keyword_list]},
+                                 default: [],
+                                 doc: "Options passed through to ReqLLM.Cache callbacks"
+                               ],
 
                                # Canonical reasoning controls
                                reasoning_effort: [

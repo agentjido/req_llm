@@ -73,19 +73,22 @@ defmodule ReqLLM.Generation do
   def generate_text(model_spec, messages, opts \\ []) do
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
-         {:ok, request} <- provider_module.prepare_request(:chat, model, messages, opts),
-         {:ok, %Req.Response{status: status, body: decoded_response}} when status in 200..299 <-
-           Req.request(request) do
-      {:ok, decoded_response}
-    else
-      {:ok, %Req.Response{status: status, body: body}} ->
-        {:error,
-         ReqLLM.Error.API.Request.exception(
-           reason: "HTTP #{status}: Request failed",
-           status: status,
-           response_body: body
-         )}
+         {:ok, context} <- ReqLLM.Context.normalize(messages, opts) do
+      case ReqLLM.Cache.fetch(model, :chat, context, opts) do
+        {:hit, response, _cache_ref} ->
+          {:ok, response}
 
+        {:miss, cache_ref} ->
+          execute_generate_text(
+            provider_module,
+            model,
+            context,
+            ReqLLM.Cache.request_opts(opts),
+            opts,
+            cache_ref
+          )
+      end
+    else
       {:error, error} ->
         {:error, error}
     end
@@ -149,7 +152,18 @@ defmodule ReqLLM.Generation do
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
          {:ok, context} <- ReqLLM.Context.normalize(messages, opts) do
-      ReqLLM.Streaming.start_stream(provider_module, model, context, opts)
+      case ReqLLM.Cache.fetch(model, :chat, context, opts) do
+        {:hit, response, _cache_ref} ->
+          {:ok, ReqLLM.Cache.stream_response(response, model, context)}
+
+        {:miss, _cache_ref} ->
+          ReqLLM.Streaming.start_stream(
+            provider_module,
+            model,
+            context,
+            ReqLLM.Cache.request_opts(opts)
+          )
+      end
     end
   end
 
@@ -235,30 +249,25 @@ defmodule ReqLLM.Generation do
   def generate_object(model_spec, messages, object_schema, opts \\ []) do
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, provider_module} <- ReqLLM.provider(model.provider),
+         {:ok, context} <- ReqLLM.Context.normalize(messages, opts),
          {:ok, compiled_schema} <- ReqLLM.Schema.compile(object_schema),
-         opts_with_schema = Keyword.put(opts, :compiled_schema, compiled_schema),
-         {:ok, request} <-
-           provider_module.prepare_request(:object, model, messages, opts_with_schema),
-         {:ok, %Req.Response{status: status, body: decoded_response}} when status in 200..299 <-
-           Req.request(request) do
-      # For models with json.strict = false, coerce response types to match schema
-      response =
-        if ReqLLM.ModelHelpers.json_strict?(model) do
-          decoded_response
-        else
-          coerce_object_types(decoded_response, compiled_schema.schema)
-        end
+         opts_with_schema = Keyword.put(opts, :compiled_schema, compiled_schema) do
+      case ReqLLM.Cache.fetch(model, :object, context, opts, compiled_schema.schema) do
+        {:hit, response, _cache_ref} ->
+          {:ok, response}
 
-      {:ok, response}
+        {:miss, cache_ref} ->
+          execute_generate_object(
+            provider_module,
+            model,
+            context,
+            compiled_schema,
+            ReqLLM.Cache.request_opts(opts_with_schema),
+            opts_with_schema,
+            cache_ref
+          )
+      end
     else
-      {:ok, %Req.Response{status: status, body: body}} ->
-        {:error,
-         ReqLLM.Error.API.Request.exception(
-           reason: "HTTP #{status}: Request failed",
-           status: status,
-           response_body: body
-         )}
-
       {:error, error} ->
         {:error, error}
     end
@@ -306,6 +315,60 @@ defmodule ReqLLM.Generation do
   end
 
   defp coerce_object_types(response, _schema), do: response
+
+  defp execute_generate_text(provider_module, model, context, request_opts, cache_opts, cache_ref) do
+    with {:ok, request} <- provider_module.prepare_request(:chat, model, context, request_opts),
+         {:ok, %Req.Response{status: status, body: decoded_response}} when status in 200..299 <-
+           Req.request(request) do
+      {:ok, ReqLLM.Cache.store(cache_ref, decoded_response, cache_opts)}
+    else
+      {:ok, %Req.Response{status: status, body: body}} ->
+        {:error,
+         ReqLLM.Error.API.Request.exception(
+           reason: "HTTP #{status}: Request failed",
+           status: status,
+           response_body: body
+         )}
+
+      {:error, error} ->
+        {:error, error}
+    end
+  end
+
+  defp execute_generate_object(
+         provider_module,
+         model,
+         context,
+         compiled_schema,
+         request_opts,
+         cache_opts,
+         cache_ref
+       ) do
+    with {:ok, request} <-
+           provider_module.prepare_request(:object, model, context, request_opts),
+         {:ok, %Req.Response{status: status, body: decoded_response}} when status in 200..299 <-
+           Req.request(request) do
+      response =
+        if ReqLLM.ModelHelpers.json_strict?(model) do
+          decoded_response
+        else
+          coerce_object_types(decoded_response, compiled_schema.schema)
+        end
+
+      {:ok, ReqLLM.Cache.store(cache_ref, response, cache_opts)}
+    else
+      {:ok, %Req.Response{status: status, body: body}} ->
+        {:error,
+         ReqLLM.Error.API.Request.exception(
+           reason: "HTTP #{status}: Request failed",
+           status: status,
+           response_body: body
+         )}
+
+      {:error, error} ->
+        {:error, error}
+    end
+  end
 
   defp coerce_with_schema(data, schema) do
     json_schema = ReqLLM.Schema.to_json(schema)
