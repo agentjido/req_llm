@@ -266,6 +266,63 @@ Raw payload mode is still sanitized:
 
 Use raw payload capture carefully in multi-tenant systems because request and response payloads may still contain user content, tool call arguments, and structured outputs.
 
+## OpenTelemetry Bridge
+
+`ReqLLM.Telemetry.OpenTelemetry` maps ReqLLM's native request metadata into
+OpenTelemetry GenAI span names, attributes, status hints, and exception events
+without adding an OpenTelemetry dependency to ReqLLM itself.
+
+This is intended as a bridge for applications that already use an
+OpenTelemetry SDK:
+
+```elixir
+defmodule MyApp.ReqLLMOpenTelemetry do
+  alias ReqLLM.Telemetry.OpenTelemetry
+
+  @events [
+    [:req_llm, :request, :start],
+    [:req_llm, :request, :stop],
+    [:req_llm, :request, :exception]
+  ]
+
+  def attach do
+    :telemetry.attach_many("my-app-req-llm-otel", @events, &__MODULE__.handle_event/4, %{})
+  end
+
+  def handle_event([:req_llm, :request, :start], _measurements, metadata, _config) do
+    stub = OpenTelemetry.request_start(metadata, content: :attributes)
+    MyApp.Tracing.start_gen_ai_span(metadata.request_id, stub)
+  end
+
+  def handle_event([:req_llm, :request, :stop], _measurements, metadata, _config) do
+    stub = OpenTelemetry.request_stop(metadata, content: :attributes)
+    MyApp.Tracing.finish_gen_ai_span(metadata.request_id, stub)
+  end
+
+  def handle_event([:req_llm, :request, :exception], _measurements, metadata, _config) do
+    stub = OpenTelemetry.request_exception(metadata, content: :attributes)
+    MyApp.Tracing.finish_gen_ai_span(metadata.request_id, stub)
+  end
+end
+```
+
+The adapter currently focuses on the stable GenAI attributes ReqLLM can derive
+from its own telemetry metadata:
+
+- `gen_ai.provider.name`
+- `gen_ai.operation.name`
+- `gen_ai.request.model`
+- `gen_ai.response.id`
+- `gen_ai.response.model`
+- `gen_ai.usage.input_tokens`
+- `gen_ai.usage.output_tokens`
+- `gen_ai.response.finish_reasons`
+- `gen_ai.input.messages` and `gen_ai.output.messages` when content capture is enabled
+
+Because ReqLLM intentionally redacts reasoning text and binary payload bodies in
+raw telemetry mode, OpenTelemetry content capture omits reasoning parts and only
+includes safe text, URI, tool call, and tool result content.
+
 ## Coverage Across APIs
 
 These event families are emitted for:
