@@ -401,18 +401,24 @@ defmodule ReqLLM do
         end
 
       %{model | extra: updated_extra}
+      |> maybe_merge_native_pricing_components()
     else
       model
+      |> maybe_merge_native_pricing_components()
     end
   end
 
   defp normalize_model_metadata(%LLMDB.Model{provider: :openai_codex} = model) do
     extra = model.extra || %{}
     updated_extra = put_wire_protocol(extra, "openai_codex_responses")
+
     %{model | extra: updated_extra}
+    |> maybe_merge_native_pricing_components()
   end
 
-  defp normalize_model_metadata(%LLMDB.Model{} = model), do: model
+  defp normalize_model_metadata(%LLMDB.Model{} = model) do
+    maybe_merge_native_pricing_components(model)
+  end
 
   defp resolve_catalog_model(provider, model_id) do
     case LLMDB.model(provider, model_id) do
@@ -476,6 +482,190 @@ defmodule ReqLLM do
 
       true ->
         Map.put(extra, :wire, %{protocol: protocol})
+    end
+  end
+
+  defp maybe_merge_native_pricing_components(%LLMDB.Model{} = model) do
+    case native_pricing_model(model) do
+      {:ok, %LLMDB.Model{} = native_model} ->
+        merged_pricing = merge_pricing_components(model.pricing, native_model.pricing)
+
+        if merged_pricing == model.pricing do
+          model
+        else
+          %{model | pricing: merged_pricing}
+        end
+
+      _ ->
+        model
+    end
+  end
+
+  defp native_pricing_model(%LLMDB.Model{} = model) do
+    case native_pricing_source(model) do
+      {provider, model_id} ->
+        model({provider, id: model_id})
+
+      nil ->
+        :error
+    end
+  end
+
+  defp native_pricing_source(%LLMDB.Model{} = model) do
+    model_id = model.provider_model_id || model.id || model.model || ""
+
+    case model.provider do
+      :openrouter ->
+        openrouter_native_pricing_source(model_id)
+
+      :azure ->
+        hosted_native_pricing_source(model_id)
+
+      :google_vertex ->
+        hosted_native_pricing_source(model_id)
+
+      :amazon_bedrock ->
+        amazon_bedrock_native_pricing_source(model_id)
+
+      _ ->
+        nil
+    end
+  end
+
+  defp openrouter_native_pricing_source(model_id) when is_binary(model_id) do
+    case String.split(model_id, "/", parts: 2) do
+      [provider_slug, native_model_id] ->
+        case native_provider_from_slug(provider_slug) do
+          nil ->
+            nil
+
+          provider ->
+            {provider, normalize_native_model_id(provider, strip_variant_suffix(native_model_id))}
+        end
+
+      _ ->
+        nil
+    end
+  end
+
+  defp hosted_native_pricing_source(model_id) when is_binary(model_id) do
+    normalized_model_id = strip_variant_suffix(model_id)
+
+    case native_provider_from_model_id(normalized_model_id) do
+      nil -> nil
+      provider -> {provider, normalize_native_model_id(provider, normalized_model_id)}
+    end
+  end
+
+  defp amazon_bedrock_native_pricing_source(model_id) when is_binary(model_id) do
+    normalized_model_id = ReqLLM.Providers.AmazonBedrock.normalize_model_id(model_id)
+
+    case String.split(normalized_model_id, ".", parts: 2) do
+      [provider_slug, native_model_id] ->
+        case native_provider_from_slug(provider_slug) do
+          nil ->
+            nil
+
+          provider ->
+            native_model_id =
+              native_model_id
+              |> then(&Regex.replace(~r/-v\d+(?::\d+)?$/, &1, ""))
+              |> then(&normalize_native_model_id(provider, &1))
+
+            {provider, native_model_id}
+        end
+
+      _ ->
+        nil
+    end
+  end
+
+  defp native_provider_from_slug("openai"), do: :openai
+  defp native_provider_from_slug("google"), do: :google
+  defp native_provider_from_slug("anthropic"), do: :anthropic
+  defp native_provider_from_slug("x-ai"), do: :xai
+  defp native_provider_from_slug("xai"), do: :xai
+  defp native_provider_from_slug(_), do: nil
+
+  defp native_provider_from_model_id(model_id) do
+    cond do
+      String.starts_with?(model_id, "claude") -> :anthropic
+      String.starts_with?(model_id, "gemini") -> :google
+      String.starts_with?(model_id, "imagen") -> :google
+      String.starts_with?(model_id, "grok") -> :xai
+      openai_native_model_id?(model_id) -> :openai
+      true -> nil
+    end
+  end
+
+  defp openai_native_model_id?(model_id) do
+    Enum.any?(
+      ["gpt", "o1", "o3", "o4", "chatgpt", "dall-e", "text-embedding", "text-moderation"],
+      &String.starts_with?(model_id, &1)
+    )
+  end
+
+  defp normalize_native_model_id(:anthropic, model_id) when is_binary(model_id) do
+    model_id
+    |> String.replace("@", "-")
+    |> String.replace(".", "-")
+  end
+
+  defp normalize_native_model_id(_provider, model_id), do: model_id
+
+  defp strip_variant_suffix(model_id) when is_binary(model_id) do
+    model_id
+    |> String.split(":", parts: 2)
+    |> hd()
+  end
+
+  defp merge_pricing_components(nil, native_pricing), do: native_pricing
+  defp merge_pricing_components(pricing, nil), do: pricing
+
+  defp merge_pricing_components(pricing, native_pricing)
+       when is_map(pricing) and is_map(native_pricing) do
+    existing_components = pricing_components(pricing)
+
+    existing_ids =
+      existing_components
+      |> Enum.map(&pricing_component_id/1)
+      |> MapSet.new()
+
+    additions =
+      native_pricing
+      |> pricing_components()
+      |> Enum.reject(fn component ->
+        component_id = pricing_component_id(component)
+        is_nil(component_id) or MapSet.member?(existing_ids, component_id)
+      end)
+
+    if additions == [] do
+      pricing
+    else
+      put_pricing_components(pricing, existing_components ++ additions)
+    end
+  end
+
+  defp merge_pricing_components(pricing, _native_pricing), do: pricing
+
+  defp pricing_components(pricing) when is_map(pricing) do
+    case Map.get(pricing, :components) || Map.get(pricing, "components") do
+      components when is_list(components) -> components
+      _ -> []
+    end
+  end
+
+  defp pricing_component_id(component) when is_map(component) do
+    Map.get(component, :id) || Map.get(component, "id")
+  end
+
+  defp pricing_component_id(_), do: nil
+
+  defp put_pricing_components(pricing, components) do
+    cond do
+      Map.has_key?(pricing, :components) -> Map.put(pricing, :components, components)
+      Map.has_key?(pricing, "components") -> Map.put(pricing, "components", components)
+      true -> Map.put(pricing, :components, components)
     end
   end
 
