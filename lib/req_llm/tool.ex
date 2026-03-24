@@ -73,7 +73,8 @@ defmodule ReqLLM.Tool do
             parameter_schema: Zoi.any() |> Zoi.default([]),
             compiled: Zoi.any() |> Zoi.default(nil),
             callback: Zoi.any() |> Zoi.required(),
-            strict: Zoi.boolean() |> Zoi.default(false)
+            strict: Zoi.boolean() |> Zoi.default(false),
+            provider_options: Zoi.any() |> Zoi.default(%{})
           })
 
   @typedoc "A tool definition for AI model function calling"
@@ -89,7 +90,8 @@ defmodule ReqLLM.Tool do
           description: String.t(),
           parameter_schema: keyword() | map(),
           callback: callback(),
-          strict: boolean()
+          strict: boolean(),
+          provider_options: keyword() | map()
         ]
 
   # NimbleOptions schema for tool creation validation
@@ -118,6 +120,12 @@ defmodule ReqLLM.Tool do
                    type: :boolean,
                    default: false,
                    doc: "Enable strict mode for OpenAI structured outputs"
+                 ],
+                 provider_options: [
+                   type: :any,
+                   default: %{},
+                   doc:
+                     "Provider-specific tool options keyed by provider, e.g. [anthropic: [defer_loading: true]]"
                  ]
                )
 
@@ -188,7 +196,8 @@ defmodule ReqLLM.Tool do
         parameter_schema: validated_opts[:parameter_schema],
         compiled: compiled_schema,
         callback: validated_opts[:callback],
-        strict: validated_opts[:strict] || false
+        strict: validated_opts[:strict] || false,
+        provider_options: normalize_provider_options(validated_opts[:provider_options])
       }
 
       {:ok, tool}
@@ -212,6 +221,16 @@ defmodule ReqLLM.Tool do
   def new(_) do
     {:error,
      ReqLLM.Error.Invalid.Parameter.exception(parameter: "Tool options must be a keyword list")}
+  end
+
+  @doc """
+  Returns provider-specific tool options for the requested provider.
+  """
+  @spec provider_options(t(), atom() | String.t()) :: map()
+  def provider_options(%__MODULE__{provider_options: options}, provider) do
+    options
+    |> fetch_provider_options(provider)
+    |> normalize_provider_option_value()
   end
 
   @doc """
@@ -399,6 +418,43 @@ defmodule ReqLLM.Tool do
     {:error,
      "Invalid callback: #{inspect(callback)}. Must be {module, function}, {module, function, args}, or function/1"}
   end
+
+  defp normalize_provider_options(options) when is_map(options), do: options
+  defp normalize_provider_options(options) when is_list(options), do: options
+  defp normalize_provider_options(_), do: %{}
+
+  defp fetch_provider_options(options, provider) when is_list(options) and is_atom(provider) do
+    Keyword.get(options, provider) || %{}
+  end
+
+  defp fetch_provider_options(options, provider) when is_list(options) and is_binary(provider) do
+    case existing_atom(provider) do
+      nil -> %{}
+      provider_atom -> Keyword.get(options, provider_atom) || %{}
+    end
+  end
+
+  defp fetch_provider_options(options, provider) when is_map(options) and is_atom(provider) do
+    Map.get(options, provider) || Map.get(options, Atom.to_string(provider)) || %{}
+  end
+
+  defp fetch_provider_options(options, provider) when is_map(options) and is_binary(provider) do
+    Map.get(options, provider) ||
+      case existing_atom(provider) do
+        nil -> %{}
+        provider_atom -> Map.get(options, provider_atom) || %{}
+      end
+  end
+
+  defp fetch_provider_options(_, _), do: %{}
+
+  defp normalize_provider_option_value(value) when is_map(value), do: value
+
+  defp normalize_provider_option_value(value) when is_list(value) do
+    if Keyword.keyword?(value), do: Map.new(value), else: %{}
+  end
+
+  defp normalize_provider_option_value(_), do: %{}
 
   defp compile_parameter_schema([]), do: {:ok, nil}
 
@@ -666,6 +722,12 @@ defmodule ReqLLM.Tool do
        ReqLLM.Error.Unknown.Unknown.exception(
          error: "Callback execution failed: #{Exception.message(error)}"
        )}
+  end
+
+  defp existing_atom(value) when is_binary(value) do
+    String.to_existing_atom(value)
+  rescue
+    ArgumentError -> nil
   end
 
   defimpl Inspect do

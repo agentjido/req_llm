@@ -370,6 +370,24 @@ defmodule ReqLLM.SchemaTest do
       assert result["input_schema"]["properties"]["config"]["type"] == "object"
       assert result["input_schema"]["required"] == ["tags"]
     end
+
+    test "merges anthropic-native tool fields from provider options" do
+      tool = %Tool{
+        name: "search",
+        description: "Search for items",
+        parameter_schema: [
+          query: [type: :string, required: true, doc: "Search query"]
+        ],
+        callback: fn _ -> {:ok, %{}} end,
+        provider_options: [anthropic: [defer_loading: true]]
+      }
+
+      result = Schema.to_anthropic_format(tool)
+
+      assert result["defer_loading"] == true
+      assert result["name"] == "search"
+      assert is_map(result["input_schema"])
+    end
   end
 
   # Consolidated tool format tests using table-driven approach
