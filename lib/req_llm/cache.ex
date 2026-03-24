@@ -161,7 +161,7 @@ defmodule ReqLLM.Cache do
 
   defp cache_hit_response(%Response{} = response, %Context{} = context, opts) do
     merged_response = merge_cached_response(response, context, opts)
-    provider_meta = Map.put(merged_response.provider_meta || %{}, :response_cache_hit, true)
+    provider_meta = Map.put(merged_response.provider_meta, :response_cache_hit, true)
 
     %{
       merged_response
