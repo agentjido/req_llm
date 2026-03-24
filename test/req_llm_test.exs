@@ -51,6 +51,27 @@ defmodule ReqLLMTest do
               }} =
                ReqLLM.model({:openai_codex, id: "gpt-5.3-codex-spark"})
     end
+
+    test "resolves mistral string spec via inline fallback" do
+      assert {:ok,
+              %LLMDB.Model{
+                provider: :mistral,
+                id: "mistral-small-latest",
+                provider_model_id: "mistral-small-latest"
+              } = model} = ReqLLM.model("mistral:mistral-small-latest")
+
+      assert get_in(model.capabilities, [:tools, :enabled]) == true
+      assert get_in(model, [Access.key(:extra, %{}), :wire, :protocol]) == "openai_chat"
+    end
+
+    test "resolves mistral tuple spec via inline fallback" do
+      assert {:ok,
+              %LLMDB.Model{
+                provider: :mistral,
+                id: "mistral-embed",
+                provider_model_id: "mistral-embed"
+              }} = ReqLLM.model({:mistral, id: "mistral-embed"})
+    end
   end
 
   describe "model/1 with map-based specs (custom providers)" do

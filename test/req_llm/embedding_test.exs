@@ -112,6 +112,11 @@ defmodule ReqLLM.EmbeddingTest do
                  capabilities: %{embeddings: true}
                })
     end
+
+    test "accepts mistral embedding models via provider fallback" do
+      assert {:ok, %LLMDB.Model{provider: :mistral, id: "mistral-embed"}} =
+               Embedding.validate_model("mistral:mistral-embed")
+    end
   end
 
   describe "embed/3 - basic functionality" do

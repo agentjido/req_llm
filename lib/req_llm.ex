@@ -449,6 +449,10 @@ defmodule ReqLLM do
     end
   end
 
+  defp resolve_provider_model_fallback(:mistral, model_id, _original_error) do
+    model(mistral_inline_model_attrs(model_id))
+  end
+
   defp resolve_provider_model_fallback(_provider, _model_id, original_error), do: original_error
 
   defp provider_atom_from_string(provider_name) when is_binary(provider_name) do
@@ -477,6 +481,28 @@ defmodule ReqLLM do
       true ->
         Map.put(extra, :wire, %{protocol: protocol})
     end
+  end
+
+  defp mistral_inline_model_attrs(model_id) do
+    base_attrs = %{
+      provider: :mistral,
+      id: model_id,
+      model: model_id,
+      provider_model_id: model_id
+    }
+
+    if mistral_embedding_model?(model_id) do
+      Map.put(base_attrs, :capabilities, %{embeddings: true})
+    else
+      Map.merge(base_attrs, %{
+        capabilities: %{chat: true, tools: %{enabled: true}},
+        extra: %{wire: %{protocol: "openai_chat"}}
+      })
+    end
+  end
+
+  defp mistral_embedding_model?(model_id) when is_binary(model_id) do
+    String.contains?(model_id, "embed")
   end
 
   defp normalize_inline_model_attrs(attrs) do
