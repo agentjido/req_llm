@@ -51,6 +51,15 @@ defmodule ReqLLMTest do
               }} =
                ReqLLM.model({:openai_codex, id: "gpt-5.3-codex-spark"})
     end
+
+    test "resolves litellm string specs via inline provider fallback" do
+      assert {:ok,
+              %LLMDB.Model{
+                provider: :litellm,
+                id: "gpt-5",
+                provider_model_id: "gpt-5"
+              }} = ReqLLM.model("litellm:gpt-5")
+    end
   end
 
   describe "model/1 with map-based specs (custom providers)" do
@@ -119,6 +128,7 @@ defmodule ReqLLMTest do
   describe "provider/1 top-level API" do
     test "returns provider module for valid provider" do
       assert {:ok, ReqLLM.Providers.Groq} = ReqLLM.provider(:groq)
+      assert {:ok, ReqLLM.Providers.LiteLLM} = ReqLLM.provider(:litellm)
     end
 
     test "returns error for invalid provider" do

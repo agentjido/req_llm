@@ -449,6 +449,10 @@ defmodule ReqLLM do
     end
   end
 
+  defp resolve_provider_model_fallback(:litellm, model_id, _original_error) do
+    model(%{provider: :litellm, id: model_id})
+  end
+
   defp resolve_provider_model_fallback(_provider, _model_id, original_error), do: original_error
 
   defp provider_atom_from_string(provider_name) when is_binary(provider_name) do

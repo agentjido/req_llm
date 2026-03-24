@@ -18,7 +18,7 @@ LLM APIs are inconsistent. ReqLLM provides a unified, idiomatic Elixir interface
 - **High-level API** – Vercel AI SDK-inspired functions (`generate_text/3`, `stream_text/3`, `generate_object/4` and more) that work uniformly across providers. Standard features, minimal configuration.
 - **Low-level API** – Direct Req plugin access for full HTTP control. Built around OpenAI Chat Completions baseline with provider-specific callbacks for non-compatible APIs (e.g., Anthropic).
 
-**18 Supported Providers:**
+**19 Supported Providers:**
 
 | Provider | ID | Guide |
 |---|---|---|
@@ -31,6 +31,7 @@ LLM APIs are inconsistent. ReqLLM provides a unified, idiomatic Elixir interface
 | [Amazon Bedrock](https://aws.amazon.com/bedrock/) | `amazon_bedrock` | [Guide](guides/amazon_bedrock.md) |
 | [Azure OpenAI](https://azure.microsoft.com/en-us/products/ai-services/openai-service) | `azure` | [Guide](guides/azure.md) |
 | [Groq](https://groq.com) | `groq` | [Guide](guides/groq.md) |
+| [LiteLLM](https://docs.litellm.ai) | `litellm` | [Guide](guides/litellm.md) |
 | [xAI](https://x.ai) | `xai` | [Guide](guides/xai.md) |
 | [OpenRouter](https://openrouter.ai) | `openrouter` | [Guide](guides/openrouter.md) |
 | [Cerebras](https://cerebras.ai) | `cerebras` | [Guide](guides/cerebras.md) |
@@ -445,7 +446,7 @@ This approach gives you full control over the Req pipeline, allowing you to add 
 - [Mix Tasks](guides/mix-tasks.md) – model sync, compatibility testing, code generation
 - [Fixture Testing](guides/fixture-testing.md) – model validation and supported models
 - [Adding a Provider](guides/adding_a_provider.md) – extend with new providers
-- Provider Guides: [Anthropic](guides/anthropic.md), [OpenAI](guides/openai.md), [Google](guides/google.md), [Google Vertex](guides/google_vertex.md), [xAI](guides/xai.md), [Groq](guides/groq.md), [OpenRouter](guides/openrouter.md), [Amazon Bedrock](guides/amazon_bedrock.md), [Azure](guides/azure.md), [Cerebras](guides/cerebras.md), [Meta](guides/meta.md), [Z.AI](guides/zai.md), [Z.AI Coder](guides/zai_coder.md), [Zenmux](guides/zenmux.md), [Ollama/vLLM](guides/ollama.md)
+- Provider Guides: [Anthropic](guides/anthropic.md), [OpenAI](guides/openai.md), [Google](guides/google.md), [Google Vertex](guides/google_vertex.md), [xAI](guides/xai.md), [Groq](guides/groq.md), [LiteLLM](guides/litellm.md), [OpenRouter](guides/openrouter.md), [Amazon Bedrock](guides/amazon_bedrock.md), [Azure](guides/azure.md), [Cerebras](guides/cerebras.md), [Meta](guides/meta.md), [Z.AI](guides/zai.md), [Z.AI Coder](guides/zai_coder.md), [Zenmux](guides/zenmux.md), [Ollama/vLLM](guides/ollama.md)
 
 ## Roadmap & Status
 

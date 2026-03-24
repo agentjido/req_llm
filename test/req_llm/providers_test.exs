@@ -20,6 +20,7 @@ defmodule ReqLLM.ProvidersTest do
       assert :openai in providers
       assert :anthropic in providers
       assert :groq in providers
+      assert :litellm in providers
     end
   end
 
@@ -27,6 +28,7 @@ defmodule ReqLLM.ProvidersTest do
     test "returns provider module for valid provider" do
       assert {:ok, ReqLLM.Providers.OpenAI} = ReqLLM.Providers.get(:openai)
       assert {:ok, ReqLLM.Providers.Anthropic} = ReqLLM.Providers.get(:anthropic)
+      assert {:ok, ReqLLM.Providers.LiteLLM} = ReqLLM.Providers.get(:litellm)
     end
 
     test "returns error for unknown provider" do
