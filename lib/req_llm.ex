@@ -80,7 +80,17 @@ defmodule ReqLLM do
       provider.generate_text(model, messages, opts)
   """
 
-  alias ReqLLM.{Embedding, Generation, Images, OCR, Schema, Speech, Tool, Transcription}
+  alias ReqLLM.{
+    Availability,
+    Embedding,
+    Generation,
+    Images,
+    OCR,
+    Schema,
+    Speech,
+    Tool,
+    Transcription
+  }
 
   @typedoc """
   Model input accepted by ReqLLM public APIs.
@@ -323,6 +333,35 @@ defmodule ReqLLM do
       {:error, error} -> raise error
     end
   end
+
+  @doc """
+  Returns catalog model specs for providers that are currently configured.
+
+  This is intended for building model selectors or narrowing choices to providers
+  that have usable credentials in the current environment or application config.
+
+  The result is filtered by provider availability first, then by the supplied
+  LLMDB query options.
+
+  ## Options
+
+    * `:scope` - Restrict results to a specific provider, or use `:all` (default)
+    * `:prefer` - Preferred provider ordering, forwarded to `LLMDB.Query.candidates/1`
+    * `:require` - Required capability filters, forwarded to `LLMDB.Query.candidates/1`
+    * `:forbid` - Forbidden capability filters, forwarded to `LLMDB.Query.candidates/1`
+    * `:provider_options` - Optional auth-related provider settings for scoped discovery
+
+  ## Examples
+
+      ReqLLM.available_models()
+      #=> ["openai:gpt-4o", "anthropic:claude-3-5-sonnet-20240620", ...]
+
+      ReqLLM.available_models(scope: :openai, require: [embeddings: true])
+      #=> ["openai:text-embedding-3-small", "openai:text-embedding-3-large", ...]
+
+  """
+  @spec available_models(keyword()) :: [String.t()]
+  defdelegate available_models(opts \\ []), to: Availability
 
   defp normalize_model_result({:ok, %LLMDB.Model{} = model}),
     do: {:ok, normalize_model_metadata(model)}
