@@ -528,6 +528,11 @@ defmodule ReqLLM.Providers.Azure do
     base_url = resolve_base_url(model_family, user_opts)
     {auth_header_name, auth_header_value} = build_auth_header(api_key, model_family, base_url)
 
+    registered_option_keys =
+      (ReqLLM.Provider.Defaults.extra_option_keys(__MODULE__) ++
+         extra_option_keys ++ [:deployment])
+      |> Enum.uniq()
+
     request
     |> Req.Request.put_header("content-type", "application/json")
     |> Req.Request.put_header(auth_header_name, auth_header_value)
@@ -536,7 +541,7 @@ defmodule ReqLLM.Providers.Azure do
         Req.Request.put_header(acc, key, value)
       end)
     end)
-    |> Req.Request.register_options(extra_option_keys ++ [:deployment])
+    |> Req.Request.register_options(registered_option_keys)
     |> Req.Request.merge_options([finch: ReqLLM.Application.finch_name()] ++ user_opts)
     |> ReqLLM.Step.Retry.attach()
     |> ReqLLM.Step.Error.attach()
