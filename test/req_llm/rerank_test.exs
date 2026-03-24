@@ -1,0 +1,143 @@
+defmodule ReqLLM.RerankTest do
+  use ExUnit.Case, async: true
+
+  alias ReqLLM.Rerank
+
+  describe "validate_model/1" do
+    test "accepts inline rerank models outside the catalog" do
+      assert {:ok, %LLMDB.Model{provider: :cohere, id: "rerank-v3.5"}} =
+               Rerank.validate_model("cohere:rerank-v3.5")
+    end
+
+    test "rejects non-rerank models" do
+      assert {:error, error} = Rerank.validate_model("openai:gpt-4o")
+      assert Exception.message(error) =~ "does not support reranking operations"
+    end
+  end
+
+  describe "rerank/2" do
+    setup do
+      Req.Test.stub(__MODULE__.SingleBatch, fn conn ->
+        body = conn.body_params
+
+        assert conn.request_path == "/v2/rerank"
+        assert body["model"] == "rerank-v3.5"
+        assert body["query"] == "capital of the United States?"
+        assert body["documents"] == ["Carson City", "Washington, D.C.", "Saipan"]
+        assert body["top_n"] == 2
+
+        Req.Test.json(conn, %{
+          "id" => "rerank-single",
+          "results" => [
+            %{"index" => 1, "relevance_score" => 0.99},
+            %{"index" => 2, "relevance_score" => 0.22}
+          ],
+          "meta" => %{
+            "billed_units" => %{"search_units" => 1},
+            "tokens" => %{"input_tokens" => 12},
+            "warnings" => ["unit-test"]
+          }
+        })
+      end)
+
+      Req.Test.stub(__MODULE__.Batching, fn conn ->
+        body = conn.body_params
+
+        response =
+          case body["documents"] do
+            ["Doc 1", "Doc 2"] ->
+              %{
+                "id" => "rerank-batch-1",
+                "results" => [
+                  %{"index" => 0, "relevance_score" => 0.6},
+                  %{"index" => 1, "relevance_score" => 0.4}
+                ],
+                "meta" => %{"billed_units" => %{"search_units" => 1}}
+              }
+
+            ["Doc 3", "Doc 4"] ->
+              %{
+                "id" => "rerank-batch-2",
+                "results" => [
+                  %{"index" => 0, "relevance_score" => 0.95},
+                  %{"index" => 1, "relevance_score" => 0.85}
+                ],
+                "meta" => %{
+                  "billed_units" => %{"search_units" => 1},
+                  "warnings" => ["batch-two"]
+                }
+              }
+          end
+
+        Req.Test.json(conn, response)
+      end)
+
+      :ok
+    end
+
+    test "returns reranked results with original documents attached" do
+      {:ok, response} =
+        Rerank.rerank(
+          "cohere:rerank-v3.5",
+          query: "capital of the United States?",
+          documents: ["Carson City", "Washington, D.C.", "Saipan"],
+          top_n: 2,
+          req_http_options: [plug: {Req.Test, __MODULE__.SingleBatch}]
+        )
+
+      assert %ReqLLM.RerankResponse{} = response
+      assert response.id == "rerank-single"
+      assert response.model == "rerank-v3.5"
+      assert response.query == "capital of the United States?"
+
+      assert response.results == [
+               %{index: 1, relevance_score: 0.99, document: "Washington, D.C."},
+               %{index: 2, relevance_score: 0.22, document: "Saipan"}
+             ]
+
+      assert response.meta == %{
+               billed_units: %{search_units: 1},
+               tokens: %{input_tokens: 12},
+               warnings: ["unit-test"],
+               batch_count: 1
+             }
+    end
+
+    test "merges batched rankings into a single global result set" do
+      {:ok, response} =
+        Rerank.rerank(
+          "cohere:rerank-v3.5",
+          query: "best docs",
+          documents: ["Doc 1", "Doc 2", "Doc 3", "Doc 4"],
+          batch_size: 2,
+          top_n: 2,
+          req_http_options: [plug: {Req.Test, __MODULE__.Batching}]
+        )
+
+      assert response.id == "rerank-batch-1, rerank-batch-2"
+
+      assert response.results == [
+               %{index: 2, relevance_score: 0.95, document: "Doc 3"},
+               %{index: 3, relevance_score: 0.85, document: "Doc 4"}
+             ]
+
+      assert response.meta == %{
+               billed_units: %{search_units: 2},
+               warnings: ["batch-two"],
+               batch_count: 2
+             }
+    end
+
+    test "rejects invalid batch_size values" do
+      assert {:error, error} =
+               Rerank.rerank(
+                 "cohere:rerank-v3.5",
+                 query: "x",
+                 documents: ["Doc 1"],
+                 batch_size: 0
+               )
+
+      assert Exception.message(error) =~ "batch_size"
+    end
+  end
+end

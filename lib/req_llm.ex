@@ -86,6 +86,7 @@ defmodule ReqLLM do
     Generation,
     Images,
     OCR,
+    Rerank,
     Schema,
     Speech,
     Tool,
@@ -447,6 +448,10 @@ defmodule ReqLLM do
       {:error, _reason} ->
         model(%{provider: :openai_codex, id: model_id})
     end
+  end
+
+  defp resolve_provider_model_fallback(:cohere, model_id, _original_error) do
+    model(%{provider: :cohere, id: model_id})
   end
 
   defp resolve_provider_model_fallback(_provider, _model_id, original_error), do: original_error
@@ -958,6 +963,24 @@ defmodule ReqLLM do
 
   """
   defdelegate embed(model_spec, input, opts \\ []), to: Embedding
+
+  # ===========================================================================
+  # Rerank API - Delegated to ReqLLM.Rerank
+  # ===========================================================================
+
+  @doc """
+  Reranks documents against a query.
+
+  Returns a `ReqLLM.RerankResponse` with the most relevant documents first.
+  """
+  @spec rerank(model_input(), keyword()) :: {:ok, ReqLLM.RerankResponse.t()} | {:error, term()}
+  defdelegate rerank(model_spec, opts \\ []), to: Rerank
+
+  @doc """
+  Reranks documents against a query, raising on error.
+  """
+  @spec rerank!(model_input(), keyword()) :: ReqLLM.RerankResponse.t() | no_return()
+  defdelegate rerank!(model_spec, opts \\ []), to: Rerank
 
   # ===========================================================================
   # OCR API - Delegated to ReqLLM.OCR

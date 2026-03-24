@@ -51,6 +51,15 @@ defmodule ReqLLMTest do
               }} =
                ReqLLM.model({:openai_codex, id: "gpt-5.3-codex-spark"})
     end
+
+    test "resolves cohere string specs via inline model fallback" do
+      assert {:ok,
+              %LLMDB.Model{
+                provider: :cohere,
+                id: "rerank-v3.5",
+                provider_model_id: "rerank-v3.5"
+              }} = ReqLLM.model("cohere:rerank-v3.5")
+    end
   end
 
   describe "model/1 with map-based specs (custom providers)" do

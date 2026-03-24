@@ -347,6 +347,8 @@ defmodule ReqLLM.Provider.Options do
     NimbleOptions.new!(embedding_keys)
   end
 
+  defp base_schema_for_operation(:rerank), do: ReqLLM.Rerank.schema()
+
   defp base_schema_for_operation(_operation), do: @generation_options_schema
 
   @doc """
@@ -526,6 +528,7 @@ defmodule ReqLLM.Provider.Options do
 
   defp maybe_extract_model_options(:image, _model, opts), do: opts
   defp maybe_extract_model_options(:embedding, _model, opts), do: opts
+  defp maybe_extract_model_options(:rerank, _model, opts), do: opts
 
   defp maybe_extract_model_options(_operation, model, opts),
     do: extract_model_options(model, opts)
