@@ -14,6 +14,9 @@ config :req_llm,
   thinking_timeout: 300_000,         # Extended timeout for reasoning models
   image_receive_timeout: 120_000,    # Image generation timeout
 
+  # Streaming request transforms
+  finch_request_adapter: MyApp.FinchAdapter,  # Module implementing ReqLLM.FinchRequestAdapter
+
   # Key management
   load_dotenv: true,                 # Auto-load .env files at startup
 
@@ -134,6 +137,46 @@ config :req_llm,
 ```elixir
 {:ok, response} = ReqLLM.stream_text(model, messages, finch_name: MyApp.CustomFinch)
 ```
+
+## Streaming Request Transforms
+
+ReqLLM provides two hooks for modifying a `Finch.Request` struct just before a streaming request is sent (to align with a similar ability present in `Req`) — useful for injecting headers, adding tracing metadata, or other environment-specific concerns.
+
+### `finch_request_adapter` (config-level)
+
+Set a module that implements the `ReqLLM.FinchRequestAdapter` behaviour. Because config files cannot hold anonymous functions, this mechanism requires a named module.
+
+```elixir
+# config/test.exs
+config :req_llm, finch_request_adapter: MyApp.TestFinchAdapter
+```
+
+```elixir
+defmodule MyApp.TestFinchAdapter do
+  @behaviour ReqLLM.FinchRequestAdapter
+
+  @impl true
+  def call(%Finch.Request{} = request) do
+    %{request | headers: request.headers ++ [{"x-test-env", "true"}]}
+  end
+end
+```
+
+### `on_finch_request` (per-request)
+
+Pass an anonymous function `(Finch.Request.t() -> Finch.Request.t())` as a per-call option:
+
+```elixir
+ReqLLM.stream_text("openai:gpt-4o", "Hello",
+  on_finch_request: fn req ->
+    %{req | headers: req.headers ++ [{"x-request-id", UUID.generate()}]}
+  end
+)
+```
+
+### Precedence
+
+Both mechanisms can be combined. The config-level adapter is applied first, then the per-request callback. Each step receives the output of the previous one.
 
 ## Telemetry Configuration
 
