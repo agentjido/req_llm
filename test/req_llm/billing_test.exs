@@ -168,6 +168,148 @@ defmodule ReqLLM.BillingTest do
     assert cost.total == 2.6
   end
 
+  test "uses the standard pricing tier when input_tokens is at the threshold" do
+    model = %LLMDB.Model{
+      provider: :test,
+      id: "m1",
+      pricing: %{
+        components: [
+          %{
+            id: "token.input.standard_context",
+            kind: "token",
+            per: 1_000_000,
+            rate: 1.25,
+            max_input_tokens: 200_000
+          },
+          %{
+            id: "token.input.long_context",
+            kind: "token",
+            per: 1_000_000,
+            rate: 2.5,
+            min_input_tokens: 200_001
+          },
+          %{
+            id: "token.output.standard_context",
+            kind: "token",
+            per: 1_000_000,
+            rate: 10.0,
+            max_input_tokens: 200_000
+          },
+          %{
+            id: "token.output.long_context",
+            kind: "token",
+            per: 1_000_000,
+            rate: 15.0,
+            min_input_tokens: 200_001
+          },
+          %{
+            id: "token.cache_read.standard_context",
+            kind: "token",
+            per: 1_000_000,
+            rate: 0.125,
+            max_input_tokens: 200_000
+          },
+          %{
+            id: "token.cache_read.long_context",
+            kind: "token",
+            per: 1_000_000,
+            rate: 0.25,
+            min_input_tokens: 200_001
+          }
+        ]
+      }
+    }
+
+    usage = %{
+      input_tokens: 200_000,
+      output_tokens: 50_000,
+      cached_tokens: 10_000,
+      input_includes_cached: true
+    }
+
+    assert {:ok, cost} = Billing.calculate(usage, model)
+    assert cost.input_cost == 0.23875
+    assert cost.output_cost == 0.5
+    assert cost.total == 0.73875
+
+    assert Enum.map(cost.line_items, & &1.id) == [
+             "token.input.standard_context",
+             "token.output.standard_context",
+             "token.cache_read.standard_context"
+           ]
+  end
+
+  test "uses the long-context pricing tier when input_tokens exceeds the threshold" do
+    model = %LLMDB.Model{
+      provider: :test,
+      id: "m1",
+      pricing: %{
+        components: [
+          %{
+            id: "token.input.standard_context",
+            kind: "token",
+            per: 1_000_000,
+            rate: 1.25,
+            max_input_tokens: 200_000
+          },
+          %{
+            id: "token.input.long_context",
+            kind: "token",
+            per: 1_000_000,
+            rate: 2.5,
+            min_input_tokens: 200_001
+          },
+          %{
+            id: "token.output.standard_context",
+            kind: "token",
+            per: 1_000_000,
+            rate: 10.0,
+            max_input_tokens: 200_000
+          },
+          %{
+            id: "token.output.long_context",
+            kind: "token",
+            per: 1_000_000,
+            rate: 15.0,
+            min_input_tokens: 200_001
+          },
+          %{
+            id: "token.cache_read.standard_context",
+            kind: "token",
+            per: 1_000_000,
+            rate: 0.125,
+            max_input_tokens: 200_000
+          },
+          %{
+            id: "token.cache_read.long_context",
+            kind: "token",
+            per: 1_000_000,
+            rate: 0.25,
+            min_input_tokens: 200_001
+          }
+        ]
+      }
+    }
+
+    usage = %{
+      input_tokens: 250_000,
+      output_tokens: 50_000,
+      cached_tokens: 10_000,
+      input_includes_cached: true
+    }
+
+    assert {:ok, cost} = Billing.calculate(usage, model)
+    assert cost.input_cost == 0.6025
+    assert cost.output_cost == 0.75
+    assert cost.total == 1.3525
+
+    assert Enum.map(cost.line_items, & &1.id) == [
+             "token.input.long_context",
+             "token.output.long_context",
+             "token.cache_read.long_context"
+           ]
+  end
+
   test "reasoning_cost is zero when no reasoning tokens" do
     model = %LLMDB.Model{
       provider: :test,

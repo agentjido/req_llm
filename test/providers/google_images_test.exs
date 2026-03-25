@@ -47,6 +47,31 @@ defmodule ReqLLM.Providers.GoogleImagesTest do
     assert get_in(body, ["contents", Access.at(0), "role"]) == "user"
   end
 
+  test "prepare_request/4 uses predict endpoint for Imagen models" do
+    {:ok, model} = ReqLLM.model("google:imagen-4.0-generate-001")
+
+    {:ok, request} =
+      Google.prepare_request(
+        :image,
+        model,
+        "A cat in space",
+        n: 2,
+        size: "1024x1024",
+        output_format: :jpeg
+      )
+
+    assert request.url.path == "/models/imagen-4.0-generate-001:predict"
+
+    encoded = Google.encode_body(request)
+    body = Jason.decode!(encoded.body)
+
+    assert body["instances"] == [%{"prompt" => "A cat in space"}]
+    assert get_in(body, ["parameters", "sampleCount"]) == 2
+    assert get_in(body, ["parameters", "aspectRatio"]) == "1:1"
+    assert get_in(body, ["parameters", "sampleImageSize"]) == "1K"
+    assert get_in(body, ["parameters", "outputOptions", "mimeType"]) == "image/jpeg"
+  end
+
   test "prepare_request/3 rejects n for gemini image models" do
     {:ok, model} = ReqLLM.model("google:gemini-2.5-flash-image")
 
@@ -175,5 +200,48 @@ defmodule ReqLLM.Providers.GoogleImagesTest do
     assert Response.image_data(updated.body) == "xyz"
     assert Enum.map(Response.images(updated.body), & &1.data) == ["xyz", "abc"]
     assert Response.usage(updated.body)[:total_tokens] == 2
+  end
+
+  test "decode_response/1 converts Imagen predictions to ContentPart.image" do
+    req =
+      Req.new(url: "/models/imagen-4.0-generate-001:predict")
+      |> Req.Request.register_options([:operation, :model, :context])
+      |> Req.Request.merge_options(
+        operation: :image,
+        model: "imagen-4.0-generate-001",
+        context: %Context{messages: []}
+      )
+
+    resp = %Req.Response{
+      status: 200,
+      headers: [],
+      body: %{
+        "predictions" => [
+          %{
+            "mimeType" => "image/png",
+            "bytesBase64Encoded" => Base.encode64("xyz")
+          },
+          %{
+            "mimeType" => "image/jpeg",
+            "bytesBase64Encoded" => Base.encode64("abc")
+          }
+        ],
+        "positivePromptSafetyAttributes" => %{
+          "categories" => ["Violence"],
+          "scores" => [0.1]
+        }
+      }
+    }
+
+    {_req, updated} = Google.decode_response({req, resp})
+
+    assert %Response{} = updated.body
+    assert Response.image_data(updated.body) == "xyz"
+    assert Enum.map(Response.images(updated.body), & &1.data) == ["xyz", "abc"]
+
+    assert get_in(updated.body.provider_meta, ["google", "positivePromptSafetyAttributes"]) == %{
+             "categories" => ["Violence"],
+             "scores" => [0.1]
+           }
   end
 end

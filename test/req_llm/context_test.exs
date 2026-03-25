@@ -509,6 +509,32 @@ defmodule ReqLLM.ContextTest do
              ] = content
     end
 
+    test "accepts JSON-decoded user loose maps with video_url content" do
+      input = %{
+        "role" => "user",
+        "content" => [
+          %{"type" => "text", "text" => "What happens in this video?"},
+          %{
+            "type" => "video_url",
+            "video_url" => %{"url" => "https://example.com/clip.mp4", "media_type" => "video/mp4"}
+          }
+        ]
+      }
+
+      {:ok, context} = Context.normalize(input, validate: false)
+
+      assert [%Message{role: :user, content: content}] = context.messages
+
+      assert [
+               %ContentPart{type: :text, text: "What happens in this video?"},
+               %ContentPart{
+                 type: :video_url,
+                 url: "https://example.com/clip.mp4",
+                 media_type: "video/mp4"
+               }
+             ] = content
+    end
+
     test "rejects invalid input types" do
       {:error, reason} = Context.normalize(:invalid, validate: false)
       assert reason == :invalid_prompt

@@ -497,6 +497,17 @@ defmodule ReqLLM.ToolTest do
         Tool.to_schema(tool, :unknown_provider)
       end
     end
+
+    test "returns provider-specific tool options for a provider", %{simple_tool: tool} do
+      tool = %{
+        tool
+        | provider_options: [anthropic: [defer_loading: true], openai: [strict: true]]
+      }
+
+      assert Tool.provider_options(tool, :anthropic) == %{defer_loading: true}
+      assert Tool.provider_options(tool, :openai) == %{strict: true}
+      assert Tool.provider_options(tool, :google) == %{}
+    end
   end
 
   describe "to_json_schema/1 (backward compatibility)" do

@@ -1191,6 +1191,33 @@ defmodule ReqLLM.Providers.GoogleTest do
       refute Map.has_key?(decoded["generationConfig"], "responseSchema")
     end
 
+    test "encode_object_body uses responseJsonSchema for Gemini 3.1" do
+      context = context_fixture()
+
+      {:ok, schema} =
+        ReqLLM.Schema.compile(
+          name: [type: :string, required: true],
+          age: [type: :pos_integer]
+        )
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: "gemini-3.1-pro-preview",
+          operation: :object,
+          compiled_schema: schema
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      response_json_schema = decoded["generationConfig"]["responseJsonSchema"]
+      assert response_json_schema["type"] == "object"
+      assert Map.has_key?(response_json_schema, "properties")
+      refute Map.has_key?(decoded["generationConfig"], "responseSchema")
+    end
+
     test "prepare_request creates configured embedding request" do
       {:ok, model} = ReqLLM.model("google:gemini-embedding-001")
       text = "Hello, world!"
@@ -1411,6 +1438,36 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert Map.has_key?(part, "fileData")
       assert part["fileData"]["fileUri"] == url
       assert part["fileData"]["mimeType"] == "image/png"
+    end
+
+    test "encode_body converts OpenAI-format video_url to fileData format" do
+      url = "https://example.com/videos/clip.mp4"
+
+      mock_request = %Req.Request{
+        options: [
+          messages: [
+            %{
+              "role" => "user",
+              "content" => [
+                %{"type" => "text", "text" => "What happens in this video?"},
+                %{"type" => "video_url", "video_url" => %{"url" => url}}
+              ]
+            }
+          ],
+          id: "gemini-1.5-flash",
+          stream: false
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      [user_msg] = decoded["contents"]
+      [_text_part, part] = user_msg["parts"]
+
+      assert Map.has_key?(part, "fileData")
+      assert part["fileData"]["fileUri"] == url
+      assert part["fileData"]["mimeType"] == "video/mp4"
     end
 
     test "encode_body converts GCS URI to fileData format" do

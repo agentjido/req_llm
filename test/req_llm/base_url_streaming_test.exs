@@ -52,6 +52,20 @@ defmodule ReqLLM.BaseURLStreamingTest do
       assert finch_request.path == "/chat/completions"
     end
 
+    test "model base_url is used for streaming when present", %{model: model, context: context} do
+      Application.delete_env(:req_llm, :openai)
+
+      model = %{model | base_url: "https://model.example.com/v1"}
+      opts = [api_key: "test-openai"]
+
+      {:ok, finch_request} =
+        ReqLLM.Providers.OpenAI.ChatAPI.attach_stream(model, context, opts, nil)
+
+      assert finch_request.scheme == :https
+      assert finch_request.host == "model.example.com"
+      assert finch_request.path == "/v1/chat/completions"
+    end
+
     test "fallback to provider default when neither opts nor app config set", %{
       model: model,
       context: context

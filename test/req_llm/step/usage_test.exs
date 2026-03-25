@@ -160,7 +160,7 @@ defmodule ReqLLM.Step.UsageTest do
       usage_data = updated_resp.private[:req_llm][:usage]
       assert usage_data.cost == 0.000003
 
-      assert_receive {:telemetry_event, [:req_llm, :token_usage], measurements, metadata}
+      {measurements, metadata} = assert_receive_usage_telemetry(model)
       assert measurements.cost == 0.000003
       assert metadata.model == model
     end
@@ -973,7 +973,7 @@ defmodule ReqLLM.Step.UsageTest do
       assert usage_data.cost == expected_total_cost
 
       # Verify telemetry includes clamped values
-      assert_receive {:telemetry_event, [:req_llm, :token_usage], measurements, _metadata}
+      {measurements, _metadata} = assert_receive_usage_telemetry(model)
       assert measurements.cost == expected_total_cost
       assert measurements.input_cost == expected_input_cost
       assert measurements.output_cost == expected_output_cost
@@ -1068,7 +1068,7 @@ defmodule ReqLLM.Step.UsageTest do
       assert response_usage.total_cost == 0.000003
 
       # Check telemetry includes breakdown
-      assert_receive {:telemetry_event, [:req_llm, :token_usage], measurements, metadata}
+      {measurements, metadata} = assert_receive_usage_telemetry(model)
       assert measurements.cost == 0.000003
       assert measurements.input_cost == 0.000001
       assert measurements.output_cost == 0.000002
@@ -1299,6 +1299,26 @@ defmodule ReqLLM.Step.UsageTest do
 
       assert usage_data.input_cost == expected_input_cost
       assert usage_data.output_cost == expected_output_cost
+    end
+  end
+
+  defp assert_receive_usage_telemetry(model, timeout \\ 1_000) do
+    receive_usage_telemetry(model, System.monotonic_time(:millisecond) + timeout)
+  end
+
+  defp receive_usage_telemetry(model, deadline) do
+    timeout = max(deadline - System.monotonic_time(:millisecond), 0)
+
+    receive do
+      {:telemetry_event, [:req_llm, :token_usage], measurements, metadata} ->
+        if metadata.model == model do
+          {measurements, metadata}
+        else
+          receive_usage_telemetry(model, deadline)
+        end
+    after
+      timeout ->
+        flunk("Expected usage telemetry for model #{inspect(model)}")
     end
   end
 end

@@ -235,3 +235,25 @@ bd automatically syncs with git:
 - ❌ Do NOT create markdown TODO lists
 - ❌ Do NOT use external issue trackers
 - ❌ Do NOT duplicate tracking systems
+
+## GitHub Review Labels
+
+Use GitHub PR labels to track review state after triage:
+
+- `ready_to_merge` - No blocking review findings remain, the PR is merge-clean, and GitHub CI is green
+- `needs_work` - Blocking findings, missing coverage, merge conflicts, or failing CI still need follow-up before merge
+
+### Review Label Rules
+
+1. After every substantive PR review, apply exactly one of `ready_to_merge` or `needs_work`
+2. When setting one review-state label, remove the other one in the same step
+3. Only mark `ready_to_merge` when the reviewer believes the PR can merge without further code changes
+4. Use `needs_work` when there are correctness risks, behavior regressions, missing critical tests, unresolved review comments, merge conflicts, or red GitHub checks
+5. If you push follow-up commits to a PR branch, re-check the label state before finishing; do not leave stale `ready_to_merge` labels on a PR that still needs validation
+
+### Common Commands
+
+```bash
+gh pr edit <number> --add-label ready_to_merge --remove-label needs_work
+gh pr edit <number> --add-label needs_work --remove-label ready_to_merge
+```
