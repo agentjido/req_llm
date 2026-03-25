@@ -14,7 +14,8 @@ defmodule ReqLLM.Providers.Google do
   - `google_safety_settings` - List of safety filter configurations
   - `google_candidate_count` - Number of response candidates to generate (default: 1)
   - `google_grounding` - Enable Google Search grounding (built-in web search). Requires `google_api_version: "v1beta"`
-  - `google_thinking_budget` - Thinking token budget for Gemini 2.5 models
+  - `google_thinking_budget` - Thinking token budget for Gemini 2.5 models (cannot be combined with `google_thinking_level`)
+  - `google_thinking_level` - Thinking level for Gemini 3+ models (`:minimal`, `:low`, `:medium`, `:high`). Cannot be combined with `google_thinking_budget`
   - `cached_content` - Reference to cached content for 90% cost savings (see Context Caching below)
   - `dimensions` - Number of dimensions for embedding vectors
   - `task_type` - Task type for embeddings (e.g., RETRIEVAL_QUERY)
@@ -99,7 +100,13 @@ defmodule ReqLLM.Providers.Google do
     ],
     google_thinking_budget: [
       type: :non_neg_integer,
-      doc: "Thinking token budget for Gemini 2.5 models (0 disables thinking, omit for dynamic)"
+      doc:
+        "Thinking token budget for Gemini 2.5 models (0 disables thinking, omit for dynamic). Cannot be combined with google_thinking_level."
+    ],
+    google_thinking_level: [
+      type: {:or, [:atom, :string]},
+      doc:
+        "Thinking level for Gemini 3+ models (e.g. :low, :medium, :high, or \"low\", \"medium\", \"high\"). Passed directly to the Gemini API. Cannot be combined with google_thinking_budget."
     ],
     google_grounding: [
       type: :map,
@@ -689,11 +696,21 @@ defmodule ReqLLM.Providers.Google do
     provider_opts = normalize_response_modalities(provider_opts)
 
     provider_opts =
-      case effort do
-        nil ->
+      case {effort, gemini_3_or_later?(model)} do
+        {nil, _} ->
           provider_opts
 
-        effort_value ->
+        {effort_value, true} ->
+          case Keyword.fetch(provider_opts, :google_thinking_level) do
+            {:ok, _existing} ->
+              provider_opts
+
+            :error ->
+              level = translate_reasoning_effort_to_level(effort_value)
+              Keyword.put(provider_opts, :google_thinking_level, level)
+          end
+
+        {effort_value, false} ->
           budget = translate_reasoning_effort_to_budget(effort_value, model)
 
           case Keyword.fetch(provider_opts, :google_thinking_budget) do
@@ -764,6 +781,21 @@ defmodule ReqLLM.Providers.Google do
   defp translate_reasoning_effort_to_budget(budget, _model) when is_integer(budget), do: budget
   defp translate_reasoning_effort_to_budget(_unknown, _model), do: 8_192
 
+  defp translate_reasoning_effort_to_level(:none), do: :minimal
+  defp translate_reasoning_effort_to_level(:minimal), do: :minimal
+  defp translate_reasoning_effort_to_level(:low), do: :low
+  defp translate_reasoning_effort_to_level(:medium), do: :medium
+  defp translate_reasoning_effort_to_level(:high), do: :high
+  defp translate_reasoning_effort_to_level(:xhigh), do: :high
+
+  defp translate_reasoning_effort_to_level("none"), do: :minimal
+  defp translate_reasoning_effort_to_level("minimal"), do: :minimal
+  defp translate_reasoning_effort_to_level("low"), do: :low
+  defp translate_reasoning_effort_to_level("medium"), do: :medium
+  defp translate_reasoning_effort_to_level("high"), do: :high
+  defp translate_reasoning_effort_to_level("xhigh"), do: :high
+  defp translate_reasoning_effort_to_level(_unknown), do: :medium
+
   @impl ReqLLM.Provider
   def translate_options(:image, _model, opts) do
     opts =
@@ -787,16 +819,18 @@ defmodule ReqLLM.Providers.Google do
     {opts, []}
   end
 
-  def translate_options(_operation, _model, opts) do
+  def translate_options(_operation, model, opts) do
     {reasoning_budget, opts} = Keyword.pop(opts, :reasoning_token_budget)
     {reasoning_effort, opts} = Keyword.pop(opts, :reasoning_effort)
 
-    # Put google_thinking_budget at top level (not nested in provider_options).
-    # translate_options operates on flattened opts; Options.process handles re-nesting.
     opts =
       cond do
         reasoning_budget ->
           Keyword.put(opts, :google_thinking_budget, reasoning_budget)
+
+        reasoning_effort && gemini_3_or_later?(model) ->
+          level = translate_reasoning_effort_to_level(reasoning_effort)
+          Keyword.put(opts, :google_thinking_level, level)
 
         reasoning_effort ->
           budget = translate_reasoning_effort_to_budget(reasoning_effort, nil)
@@ -1085,7 +1119,10 @@ defmodule ReqLLM.Providers.Google do
       |> maybe_put(:topP, request.options[:top_p])
       |> maybe_put(:topK, request.options[:top_k])
       |> maybe_put(:candidateCount, request.options[:google_candidate_count] || 1)
-      |> maybe_add_thinking_config(request.options[:google_thinking_budget])
+      |> maybe_add_thinking_config(
+        request.options[:google_thinking_budget],
+        request.options[:google_thinking_level]
+      )
 
     %{}
     |> maybe_put(:cachedContent, request.options[:cached_content])
@@ -1158,7 +1195,10 @@ defmodule ReqLLM.Providers.Google do
       |> maybe_put(:maxOutputTokens, request.options[:max_tokens])
       |> maybe_put(:topP, request.options[:top_p])
       |> maybe_put(:topK, request.options[:top_k])
-      |> maybe_add_thinking_config(request.options[:google_thinking_budget])
+      |> maybe_add_thinking_config(
+        request.options[:google_thinking_budget],
+        request.options[:google_thinking_level]
+      )
       |> put_schema_for_model(model_name, compiled_schema)
 
     %{}
@@ -1168,6 +1208,17 @@ defmodule ReqLLM.Providers.Google do
     |> maybe_put(:generationConfig, generation_config)
     |> maybe_put(:safetySettings, request.options[:google_safety_settings])
   end
+
+  defp gemini_3_or_later?(%LLMDB.Model{family: family}) when is_binary(family),
+    do: String.starts_with?(family, "gemini-3")
+
+  defp gemini_3_or_later?(%LLMDB.Model{id: id}) when is_binary(id),
+    do: String.starts_with?(id, "gemini-3")
+
+  defp gemini_3_or_later?(id) when is_binary(id),
+    do: String.starts_with?(id, "gemini-3")
+
+  defp gemini_3_or_later?(_), do: false
 
   defp json_schema_supported?(model_name) when is_binary(model_name) do
     String.starts_with?(model_name, "gemini-2.5-") or model_name == "gemini-2.5" or
@@ -1598,15 +1649,27 @@ defmodule ReqLLM.Providers.Google do
 
   defp extract_grounding_metadata(_), do: nil
 
-  # Helper to add thinking configuration if specified
-  defp maybe_add_thinking_config(config, nil), do: config
+  defp maybe_add_thinking_config(config, budget, level) do
+    case {budget, level} do
+      {b, l} when not is_nil(b) and not is_nil(l) ->
+        raise ArgumentError,
+              "google_thinking_budget and google_thinking_level cannot be combined in the same request"
 
-  defp maybe_add_thinking_config(config, budget) when is_integer(budget) and budget > 0 do
-    Map.put(config, :thinkingConfig, %{thinkingBudget: budget, includeThoughts: true})
-  end
+      {nil, nil} ->
+        config
 
-  defp maybe_add_thinking_config(config, 0) do
-    Map.put(config, :thinkingConfig, %{thinkingBudget: 0})
+      {0, nil} ->
+        Map.put(config, :thinkingConfig, %{thinkingBudget: 0})
+
+      {budget, nil} when is_integer(budget) and budget > 0 ->
+        Map.put(config, :thinkingConfig, %{thinkingBudget: budget, includeThoughts: true})
+
+      {nil, level} ->
+        Map.put(config, :thinkingConfig, %{
+          thinkingLevel: to_string(level),
+          includeThoughts: true
+        })
+    end
   end
 
   defp convert_google_to_openai_format(%{"candidates" => candidates} = body) do

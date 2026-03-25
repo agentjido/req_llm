@@ -1305,22 +1305,39 @@ defmodule ReqLLM.Telemetry do
   end
 
   defp normalize_google_effective(body) when is_map(body) do
+    thinking_level =
+      fetch_value(body, :generationConfig, :thinkingConfig, :thinkingLevel) ||
+        fetch_value(body, :thinkingConfig, :thinkingLevel)
+
     budget_tokens =
       fetch_value(body, :generationConfig, :thinkingConfig, :thinkingBudget) ||
         fetch_value(body, :thinkingConfig, :thinkingBudget)
 
-    disable? = budget_tokens == 0
-    enable? = enabled_budget?(budget_tokens)
+    cond do
+      thinking_level ->
+        effort = thinking_level_to_effort(thinking_level)
+        reasoning_shape(:enabled, effort, nil, true)
 
-    reasoning_shape(
-      mode_from_signals(enable?, disable?),
-      nil,
-      normalize_budget(budget_tokens),
-      enable? or disable?
-    )
+      true ->
+        disable? = budget_tokens == 0
+        enable? = enabled_budget?(budget_tokens)
+
+        reasoning_shape(
+          mode_from_signals(enable?, disable?),
+          nil,
+          normalize_budget(budget_tokens),
+          enable? or disable?
+        )
+    end
   end
 
   defp normalize_google_effective(_body), do: disabled_reasoning_shape()
+
+  defp thinking_level_to_effort("minimal"), do: :minimal
+  defp thinking_level_to_effort("low"), do: :low
+  defp thinking_level_to_effort("medium"), do: :medium
+  defp thinking_level_to_effort("high"), do: :high
+  defp thinking_level_to_effort(_), do: nil
 
   defp normalize_alibaba_effective(body) when is_map(body) do
     enabled? = fetch_value(body, :enable_thinking)

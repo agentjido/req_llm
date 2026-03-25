@@ -410,6 +410,66 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert gen_config["candidateCount"] == 2
     end
 
+    test "encode_body includes thinkingLevel in generationConfig" do
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: "gemini-3-flash",
+          stream: false,
+          google_thinking_level: :medium
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      thinking_config = decoded["generationConfig"]["thinkingConfig"]
+      assert thinking_config["thinkingLevel"] == "medium"
+      assert thinking_config["includeThoughts"] == true
+      refute Map.has_key?(thinking_config, "thinkingBudget")
+    end
+
+    test "encode_body includes thinkingBudget in generationConfig" do
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: "gemini-2.5-flash",
+          stream: false,
+          google_thinking_budget: 8_192
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      thinking_config = decoded["generationConfig"]["thinkingConfig"]
+      assert thinking_config["thinkingBudget"] == 8_192
+      assert thinking_config["includeThoughts"] == true
+      refute Map.has_key?(thinking_config, "thinkingLevel")
+    end
+
+    test "encode_body raises when both google_thinking_level and google_thinking_budget are set" do
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: "gemini-3-flash",
+          stream: false,
+          google_thinking_level: :high,
+          google_thinking_budget: 8_192
+        ]
+      }
+
+      assert_raise ArgumentError,
+                   ~r/google_thinking_budget and google_thinking_level cannot be combined/,
+                   fn -> Google.encode_body(mock_request) end
+    end
+
     test "encode_body for embedding operation" do
       mock_request = %Req.Request{
         options: [
@@ -858,6 +918,40 @@ defmodule ReqLLM.Providers.GoogleTest do
         assert Keyword.get(translated_opts, :google_thinking_budget) == expected_budget,
                "Expected reasoning_effort #{inspect(effort)} to map to budget #{expected_budget}"
       end
+    end
+
+    test "translate_options maps reasoning_effort to google_thinking_level for Gemini 3 models" do
+      {:ok, model} = ReqLLM.model(%{provider: :google, id: "gemini-3-flash"})
+
+      test_cases = [
+        {:none, :minimal},
+        {:minimal, :minimal},
+        {:low, :low},
+        {:medium, :medium},
+        {:high, :high},
+        {:xhigh, :high}
+      ]
+
+      for {effort, expected_level} <- test_cases do
+        opts = [reasoning_effort: effort]
+        {translated_opts, _warnings} = Google.translate_options(:chat, model, opts)
+
+        assert Keyword.get(translated_opts, :google_thinking_level) == expected_level,
+               "Expected reasoning_effort #{inspect(effort)} to map to level #{inspect(expected_level)}"
+
+        assert Keyword.get(translated_opts, :google_thinking_budget) == nil,
+               "Expected no google_thinking_budget for Gemini 3 model"
+      end
+    end
+
+    test "translate_options uses google_thinking_budget for reasoning_token_budget even on Gemini 3" do
+      {:ok, model} = ReqLLM.model(%{provider: :google, id: "gemini-3-flash"})
+
+      opts = [reasoning_token_budget: 10_000]
+      {translated_opts, _warnings} = Google.translate_options(:chat, model, opts)
+
+      assert Keyword.get(translated_opts, :google_thinking_budget) == 10_000
+      assert Keyword.get(translated_opts, :google_thinking_level) == nil
     end
   end
 
