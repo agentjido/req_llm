@@ -189,6 +189,19 @@ defmodule ReqLLM.Provider.DefaultsTest do
              }
     end
 
+    test "raises for unsupported video_url content parts" do
+      video_url_part = ContentPart.video_url("https://example.com/clip.mp4")
+
+      message = %Message{role: :user, content: [video_url_part]}
+      context = %Context{messages: [message]}
+
+      assert_raise ReqLLM.Error.Invalid.Message,
+                   ~r/Video URLs are not supported for this provider/,
+                   fn ->
+                     Defaults.encode_context_to_openai_format(context, "gpt-4")
+                   end
+    end
+
     test "mixed content with cache_control on different types" do
       text_cached = ContentPart.text("Cached text", %{cache_control: %{type: "ephemeral"}})
 

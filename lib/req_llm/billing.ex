@@ -109,7 +109,8 @@ defmodule ReqLLM.Billing do
     per = component.per
     rate = component.rate
 
-    if is_number(per) and per > 0 and is_number(rate) and component.kind != nil do
+    if component_applicable_to_usage?(component, usage) and is_number(per) and per > 0 and
+         is_number(rate) and component.kind != nil do
       case component_count(component, usage) do
         count when is_number(count) and count > 0 ->
           cost = Float.round(count / per * rate, 6)
@@ -121,6 +122,15 @@ defmodule ReqLLM.Billing do
     else
       :skip
     end
+  end
+
+  defp component_applicable_to_usage?(%Component{} = component, usage) do
+    input_tokens = usage_value(usage, "input_tokens")
+    min_input_tokens = component.min_input_tokens
+    max_input_tokens = component.max_input_tokens
+
+    (is_nil(min_input_tokens) or input_tokens >= min_input_tokens) and
+      (is_nil(max_input_tokens) or input_tokens <= max_input_tokens)
   end
 
   defp component_count(%Component{} = component, usage) do

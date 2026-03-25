@@ -88,6 +88,20 @@ defmodule ReqLLMTest do
 
       assert output =~ "Using unverified model: openai:tuple-fallback-model"
     end
+
+    test "resolves cohere string specs via inline model fallback" do
+      output =
+        capture_io(:stderr, fn ->
+          assert {:ok,
+                  %LLMDB.Model{
+                    provider: :cohere,
+                    id: "rerank-v3.5",
+                    provider_model_id: "rerank-v3.5"
+                  }} = ReqLLM.model("cohere:rerank-v3.5")
+        end)
+
+      assert output =~ "Using unverified model: cohere:rerank-v3.5"
+    end
   end
 
   describe "model/1 with map-based specs (custom providers)" do
@@ -163,6 +177,33 @@ defmodule ReqLLMTest do
     end
   end
 
+  describe "model/1 google pricing normalization" do
+    test "adds long-context pricing tiers for google pro preview models" do
+      {:ok, model} = ReqLLM.model("google:gemini-3.1-pro-preview")
+
+      assert pricing_component(model, "token.input.standard_context").rate == 2.0
+      assert pricing_component(model, "token.input.standard_context").max_input_tokens == 200_000
+      assert pricing_component(model, "token.input.long_context").rate == 4.0
+      assert pricing_component(model, "token.input.long_context").min_input_tokens == 200_001
+      assert pricing_component(model, "token.output.standard_context").rate == 12.0
+      assert pricing_component(model, "token.output.long_context").rate == 18.0
+      assert pricing_component(model, "token.cache_read.standard_context").rate == 0.2
+      assert pricing_component(model, "token.cache_read.long_context").rate == 0.4
+      refute pricing_component(model, "token.input")
+    end
+
+    test "backfills missing token pricing for google computer use preview models" do
+      {:ok, model} = ReqLLM.model("google:gemini-2.5-computer-use-preview-10-2025")
+
+      assert model.cost == %{input: 1.25, output: 10.0}
+      assert pricing_component(model, "token.input.standard_context").rate == 1.25
+      assert pricing_component(model, "token.input.long_context").rate == 2.5
+      assert pricing_component(model, "token.output.standard_context").rate == 10.0
+      assert pricing_component(model, "token.output.long_context").rate == 15.0
+      refute pricing_component(model, "token.cache_read.standard_context")
+    end
+  end
+
   describe "provider/1 top-level API" do
     test "returns provider module for valid provider" do
       assert {:ok, ReqLLM.Providers.Groq} = ReqLLM.provider(:groq)
@@ -172,5 +213,10 @@ defmodule ReqLLMTest do
       assert {:error, %ReqLLM.Error.Invalid.Provider{provider: :nonexistent}} =
                ReqLLM.provider(:nonexistent)
     end
+  end
+
+  defp pricing_component(model, id) do
+    model.pricing.components
+    |> Enum.find(fn component -> component.id == id end)
   end
 end

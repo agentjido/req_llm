@@ -5,6 +5,7 @@ defmodule ReqLLM.Message.ContentPart do
   Supports multiple content types:
   - `:text` - Plain text content
   - `:image_url` - Image from URL
+  - `:video_url` - Video from URL
   - `:image` - Image from binary data
   - `:file` - File attachment
   - `:thinking` - Chain-of-thought thinking content
@@ -15,7 +16,7 @@ defmodule ReqLLM.Message.ContentPart do
   """
 
   @schema Zoi.struct(__MODULE__, %{
-            type: Zoi.enum([:text, :image_url, :image, :file, :thinking]),
+            type: Zoi.enum([:text, :image_url, :video_url, :image, :file, :thinking]),
             text: Zoi.string() |> Zoi.nullable() |> Zoi.default(nil),
             url: Zoi.string() |> Zoi.nullable() |> Zoi.default(nil),
             data: Zoi.any() |> Zoi.nullable() |> Zoi.default(nil),
@@ -55,6 +56,12 @@ defmodule ReqLLM.Message.ContentPart do
   @spec image_url(String.t(), map()) :: t()
   def image_url(url, metadata), do: %__MODULE__{type: :image_url, url: url, metadata: metadata}
 
+  @spec video_url(String.t()) :: t()
+  def video_url(url), do: %__MODULE__{type: :video_url, url: url}
+
+  @spec video_url(String.t(), map()) :: t()
+  def video_url(url, metadata), do: %__MODULE__{type: :video_url, url: url, metadata: metadata}
+
   @spec image(binary(), String.t()) :: t()
   def image(data, media_type \\ "image/png"),
     do: %__MODULE__{type: :image, data: data, media_type: media_type}
@@ -74,6 +81,7 @@ defmodule ReqLLM.Message.ContentPart do
           :text -> inspect_text(part.text, opts)
           :thinking -> inspect_text(part.text, opts)
           :image_url -> "url: #{part.url}"
+          :video_url -> "url: #{part.url}"
           :image -> "#{part.media_type} (#{byte_size(part.data)} bytes)"
           :file -> "#{part.media_type} (#{byte_size(part.data || <<>>)} bytes)"
         end

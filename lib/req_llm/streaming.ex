@@ -106,8 +106,9 @@ defmodule ReqLLM.Streaming do
           {:ok, StreamResponse.t()} | {:error, term()}
   def start_stream(provider_mod, model, context, opts \\ []) do
     with {:ok, server_pid} <- start_stream_server(provider_mod, model, opts),
-         {:ok, _http_task_pid, _http_context, canonical_json} <-
-           start_http_streaming(provider_mod, model, context, opts, server_pid) do
+         {:ok, _http_task_pid, http_context, canonical_json} <-
+           start_http_streaming(provider_mod, model, context, opts, server_pid),
+         :ok <- set_fixture_context_if_needed(server_pid, http_context, canonical_json) do
       stream_context =
         model
         |> ReqLLM.Telemetry.new_context(
@@ -244,6 +245,21 @@ defmodule ReqLLM.Streaming do
     case Code.ensure_loaded(ReqLLM.Test.Fixtures) do
       {:module, mod} -> mod.capture_path(model, opts)
       {:error, _} -> nil
+    end
+  end
+
+  defp set_fixture_context_if_needed(server_pid, http_context, canonical_json) do
+    if fixture_mode() == :record do
+      ReqLLM.StreamServer.set_fixture_context(server_pid, http_context, canonical_json)
+    else
+      :ok
+    end
+  end
+
+  defp fixture_mode do
+    case Code.ensure_loaded(ReqLLM.Test.Fixtures) do
+      {:module, mod} -> mod.mode()
+      {:error, _} -> :replay
     end
   end
 

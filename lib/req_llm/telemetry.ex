@@ -12,7 +12,7 @@ defmodule ReqLLM.Telemetry do
   - compatibility emission for `[:req_llm, :token_usage]`
   """
 
-  alias ReqLLM.{Context, Message, ModelHelpers, Response, Tool}
+  alias ReqLLM.{Context, Message, ModelHelpers, Response, RerankResponse, Tool}
   alias ReqLLM.Message.ContentPart
 
   @request_context_key :req_llm_telemetry
@@ -469,6 +469,13 @@ defmodule ReqLLM.Telemetry do
     opts[:text]
   end
 
+  defp request_input(:rerank, opts) do
+    %{
+      query: opts[:query],
+      documents: opts[:documents]
+    }
+  end
+
   defp request_input(:speech, opts) do
     %{
       text: opts[:text],
@@ -501,6 +508,17 @@ defmodule ReqLLM.Telemetry do
     %{
       input_count: length(texts),
       input_bytes: Enum.reduce(texts, 0, &(&2 + byte_size(to_string(&1))))
+    }
+  end
+
+  defp summarize_request(:rerank, input) when is_map(input) do
+    documents = List.wrap(Map.get(input, :documents))
+    query = to_string(Map.get(input, :query, ""))
+
+    %{
+      document_count: length(documents),
+      query_bytes: byte_size(query),
+      document_bytes: Enum.reduce(documents, 0, &(&2 + byte_size(&1)))
     }
   end
 
@@ -572,6 +590,13 @@ defmodule ReqLLM.Telemetry do
 
   defp request_payload(:embedding, text, :raw) do
     %{input: List.wrap(text)}
+  end
+
+  defp request_payload(:rerank, input, :raw) when is_map(input) do
+    %{
+      query: Map.get(input, :query),
+      documents: List.wrap(Map.get(input, :documents))
+    }
   end
 
   defp request_payload(:speech, input, :raw) when is_map(input) do
@@ -847,6 +872,13 @@ defmodule ReqLLM.Telemetry do
     %{
       vector_count: embedding_vector_count(body),
       dimensions: embedding_dimensions(body)
+    }
+  end
+
+  defp summarize_response(:rerank, %RerankResponse{results: results}) do
+    %{
+      result_count: length(results),
+      top_score: results |> List.first() |> then(&if &1, do: &1.relevance_score, else: nil)
     }
   end
 
@@ -1643,6 +1675,7 @@ defmodule ReqLLM.Telemetry do
   end
 
   defp new_response_summary_state(:embedding), do: %{}
+  defp new_response_summary_state(:rerank), do: %{}
   defp new_response_summary_state(:transcription), do: %{}
   defp new_response_summary_state(:speech), do: %{}
   defp new_response_summary_state(_), do: %{}
