@@ -191,6 +191,11 @@ Defines callable functions (aka "tools" or "function calling") with validation.
 **How this supports normalization**:
 - One tool definition is used across providers that support function/tool calling.
 - Tool calls/results appear in `ContentPart` and `StreamChunk` the same way for all providers.
+- Structured tool results should be represented in the content body as JSON when
+  they carry model-visible semantics like `%{ok: true, result: ...}` or
+  `%{ok: false, error: ...}`. Message metadata can preserve the original native
+  output for adapters and local consumers, but it should not be the only source
+  of meaning for follow-up model turns.
 
 ## 6) ReqLLM.StreamChunk
 

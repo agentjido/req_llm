@@ -423,8 +423,19 @@ defmodule ReqLLM.Context do
   @doc """
   Build a tool result message.
 
-  Non-text outputs are stored in metadata to allow provider-specific structured
-  encoding.
+  The model-visible contract lives in the message content. When `output` is a
+  non-text value, ReqLLM encodes it into a JSON text content part and also
+  preserves the original value in metadata for provider adapters and local
+  tooling.
+
+  Prefer putting canonical success/failure semantics in the content body, for
+  example:
+
+      %{ok: true, result: %{temp_f: 72}}
+      %{ok: false, error: %{type: :timeout, message: "Tool timed out"}}
+
+  Metadata is supplementary and should not be the only place a model-facing tool
+  result is represented.
   """
   @spec tool_result_message(String.t() | nil, String.t(), term(), map()) :: Message.t()
   def tool_result_message(tool_name, tool_call_id, output, meta \\ %{}) do

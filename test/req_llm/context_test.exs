@@ -809,6 +809,53 @@ defmodule ReqLLM.ContextTest do
       assert msg.metadata[:tool_output] == %{ok: true}
     end
 
+    test "encodes structured tool result output into content and preserves metadata" do
+      msg =
+        Context.tool_result_message(
+          "get_weather",
+          "call_structured",
+          %{ok: false, error: %{type: "timeout", message: "tool timed out"}},
+          %{request_id: "req_123", origin: :worker_runtime}
+        )
+
+      assert msg.role == :tool
+      assert msg.name == "get_weather"
+      assert msg.tool_call_id == "call_structured"
+      assert [%ContentPart{type: :text, text: encoded}] = msg.content
+
+      assert Jason.decode!(encoded) == %{
+               "ok" => false,
+               "error" => %{"type" => "timeout", "message" => "tool timed out"}
+             }
+
+      assert msg.metadata[:request_id] == "req_123"
+      assert msg.metadata[:origin] == :worker_runtime
+
+      assert msg.metadata[:tool_output] == %{
+               ok: false,
+               error: %{type: "timeout", message: "tool timed out"}
+             }
+    end
+
+    test "preserves explicit tool result content when structured output metadata is also present" do
+      msg =
+        Context.tool_result(
+          "call_explicit",
+          "calculator",
+          %ReqLLM.ToolResult{
+            content: [ContentPart.text(~s({"ok": true, "result": {"sum": 3}}))],
+            output: %{ok: true, result: %{sum: 3}},
+            metadata: %{request_id: "req_explicit"}
+          }
+        )
+
+      assert [%ContentPart{type: :text, text: ~s({"ok": true, "result": {"sum": 3}})}] =
+               msg.content
+
+      assert msg.metadata[:request_id] == "req_explicit"
+      assert msg.metadata[:tool_output] == %{ok: true, result: %{sum: 3}}
+    end
+
     test "normalizes full tool conversation flow" do
       input = [
         %{role: :user, content: "What's the weather in SF?"},
