@@ -1242,21 +1242,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp deep_atomize_keys(map) when is_map(map) do
     Map.new(map, fn {k, v} ->
-      key = atomize_key_safe(k)
+      key = if is_binary(k), do: String.to_existing_atom(k), else: k
       {key, deep_atomize_keys(v)}
     end)
   end
 
   defp deep_atomize_keys(list) when is_list(list), do: Enum.map(list, &deep_atomize_keys/1)
   defp deep_atomize_keys(value), do: value
-
-  defp atomize_key_safe(k) when is_binary(k) do
-    String.to_existing_atom(k)
-  rescue
-    ArgumentError -> k
-  end
-
-  defp atomize_key_safe(k), do: k
 
   defp aggregate_output_segments(body, segments) do
     texts = [

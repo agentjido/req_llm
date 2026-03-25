@@ -88,7 +88,7 @@ defmodule ReqLLM.Streaming.Retry do
           attempt,
           state.callback_acc,
           reason,
-          state.headers
+          state
         )
 
       {:error, _reason, %{status: 429} = state} ->
