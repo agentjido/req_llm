@@ -1,6 +1,8 @@
 defmodule ReqLLMTest do
   use ExUnit.Case, async: true
 
+  import ExUnit.CaptureIO
+
   describe "model/1 top-level API" do
     test "resolves anthropic model string spec" do
       assert {:ok, %LLMDB.Model{provider: :anthropic, id: "claude-3-5-sonnet-20240620"}} =
@@ -57,6 +59,35 @@ defmodule ReqLLMTest do
               }} =
                ReqLLM.model({:openai_codex, id: "gpt-5.3-codex-spark"})
     end
+
+    test "resolves unknown registered provider string specs with a warning" do
+      output =
+        capture_io(:stderr, fn ->
+          assert {:ok,
+                  %LLMDB.Model{
+                    provider: :openai,
+                    id: "brand-new-model",
+                    provider_model_id: "brand-new-model"
+                  }} = ReqLLM.model("openai:brand-new-model")
+        end)
+
+      assert output =~ "Using unverified model: openai:brand-new-model"
+      assert output =~ "To suppress this warning, use an inline model spec"
+    end
+
+    test "resolves unknown registered provider tuple specs with a warning" do
+      output =
+        capture_io(:stderr, fn ->
+          assert {:ok,
+                  %LLMDB.Model{
+                    provider: :openai,
+                    id: "tuple-fallback-model",
+                    provider_model_id: "tuple-fallback-model"
+                  }} = ReqLLM.model({:openai, id: "tuple-fallback-model"})
+        end)
+
+      assert output =~ "Using unverified model: openai:tuple-fallback-model"
+    end
   end
 
   describe "model/1 with map-based specs (custom providers)" do
@@ -73,6 +104,16 @@ defmodule ReqLLMTest do
     test "creates model from map with provider string" do
       assert {:ok, %LLMDB.Model{provider: :openai, id: "gpt-4o"}} =
                ReqLLM.model(%{"id" => "gpt-4o", "provider" => "openai"})
+    end
+
+    test "does not warn for explicit inline model specs" do
+      output =
+        capture_io(:stderr, fn ->
+          assert {:ok, %LLMDB.Model{provider: :openai, id: "quiet-inline-model"}} =
+                   ReqLLM.model(%{id: "quiet-inline-model", provider: :openai})
+        end)
+
+      assert output == ""
     end
 
     test "enriches inline models with derived fields" do
