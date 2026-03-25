@@ -119,6 +119,10 @@ defmodule ReqLLM.OpenTelemetry do
   Span export remains opt-in at the application level. You still need OpenTelemetry
   dependencies and SDK/exporter configuration in your host app. When the OpenTelemetry
   API modules are not available, `attach/2` returns `{:error, :opentelemetry_unavailable}`.
+
+  For custom tracer integrations that want richer message and tool-call mapping
+  without binding ReqLLM to a specific OpenTelemetry SDK, see
+  `ReqLLM.Telemetry.OpenTelemetry`.
   """
 
   @events [
