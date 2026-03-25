@@ -266,6 +266,80 @@ Raw payload mode is still sanitized:
 
 Use raw payload capture carefully in multi-tenant systems because request and response payloads may still contain user content, tool call arguments, and structured outputs.
 
+## OpenTelemetry Bridge
+
+ReqLLM also includes a small OpenTelemetry bridge in `ReqLLM.OpenTelemetry`.
+It turns the normalized request lifecycle telemetry above into GenAI client spans
+without adding provider-specific instrumentation paths.
+
+Attach it once during application startup:
+
+```elixir
+case ReqLLM.OpenTelemetry.attach() do
+  :ok -> :ok
+  {:error, :opentelemetry_unavailable} -> :ok
+end
+```
+
+The bridge uses:
+
+- `gen_ai.provider.name`
+- `gen_ai.operation.name`
+- `gen_ai.request.model`
+- `gen_ai.output.type`
+- `gen_ai.response.finish_reasons`
+- `gen_ai.usage.input_tokens`
+- `gen_ai.usage.output_tokens`
+- cache read and cache creation token attributes when available
+- `error.type` for failed requests
+
+ReqLLM does not configure an SDK or exporter for you. To export traces, your host
+application still needs normal OpenTelemetry setup, such as `:opentelemetry`
+and an exporter dependency.
+
+For advanced integrations, ReqLLM also exposes a dependency-free mapper in
+`ReqLLM.Telemetry.OpenTelemetry`. It builds span stubs from ReqLLM telemetry
+metadata without attaching handlers or depending on an OpenTelemetry SDK.
+
+```elixir
+defmodule MyApp.ReqLLMOpenTelemetry do
+  alias ReqLLM.Telemetry.OpenTelemetry
+
+  @events [
+    [:req_llm, :request, :start],
+    [:req_llm, :request, :stop],
+    [:req_llm, :request, :exception]
+  ]
+
+  def attach do
+    :telemetry.attach_many("my-app-req-llm-otel", @events, &__MODULE__.handle_event/4, %{})
+  end
+
+  def handle_event([:req_llm, :request, :start], _measurements, metadata, _config) do
+    stub = OpenTelemetry.request_start(metadata, content: :attributes)
+    MyApp.Tracing.start_gen_ai_span(metadata.request_id, stub)
+  end
+
+  def handle_event([:req_llm, :request, :stop], _measurements, metadata, _config) do
+    stub = OpenTelemetry.request_stop(metadata, content: :attributes)
+    MyApp.Tracing.finish_gen_ai_span(metadata.request_id, stub)
+  end
+
+  def handle_event([:req_llm, :request, :exception], _measurements, metadata, _config) do
+    stub = OpenTelemetry.request_exception(metadata, content: :attributes)
+    MyApp.Tracing.finish_gen_ai_span(metadata.request_id, stub)
+  end
+end
+```
+
+The low-level mapper includes richer normalized GenAI metadata such as:
+
+- `gen_ai.response.id`
+- `gen_ai.response.model`
+- `gen_ai.input.messages` and `gen_ai.output.messages` when content capture is enabled
+- tool call and tool result payloads in message parts
+- exception event payloads for manual span finishing
+
 ## Coverage Across APIs
 
 These event families are emitted for:

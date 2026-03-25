@@ -553,11 +553,29 @@ defmodule ReqLLM.Schema do
       "input_schema" => to_json(tool.parameter_schema)
     }
 
-    if tool.strict do
-      Map.put(base, "strict", true)
-    else
-      base
-    end
+    base =
+      if tool.strict do
+        Map.put(base, "strict", true)
+      else
+        base
+      end
+
+    anthropic_options =
+      tool
+      |> ReqLLM.Tool.provider_options(:anthropic)
+      |> Map.drop([
+        :name,
+        :description,
+        :input_schema,
+        :strict,
+        "name",
+        "description",
+        "input_schema",
+        "strict"
+      ])
+      |> stringify_tool_option_keys()
+
+    Map.merge(base, anthropic_options)
   end
 
   @doc """
@@ -975,4 +993,26 @@ defmodule ReqLLM.Schema do
   defp key_variants(keys) when is_list(keys), do: Enum.flat_map(keys, &key_variants/1)
   defp key_variants(key) when is_binary(key), do: [key, String.to_atom(key)]
   defp key_variants(key) when is_atom(key), do: [key, Atom.to_string(key)]
+
+  defp stringify_tool_option_keys(value) when is_map(value) do
+    Map.new(value, fn {key, nested_value} ->
+      {stringify_tool_option_key(key), stringify_tool_option_keys(nested_value)}
+    end)
+  end
+
+  defp stringify_tool_option_keys(value) when is_list(value) do
+    if Keyword.keyword?(value) do
+      value
+      |> Map.new()
+      |> stringify_tool_option_keys()
+    else
+      Enum.map(value, &stringify_tool_option_keys/1)
+    end
+  end
+
+  defp stringify_tool_option_keys(value), do: value
+
+  defp stringify_tool_option_key(key) when is_atom(key), do: Atom.to_string(key)
+  defp stringify_tool_option_key(key) when is_binary(key), do: key
+  defp stringify_tool_option_key(key), do: to_string(key)
 end

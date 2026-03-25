@@ -105,15 +105,18 @@ defmodule ReqLLM.Streaming do
   @spec start_stream(module(), LLMDB.Model.t(), Context.t(), keyword()) ::
           {:ok, StreamResponse.t()} | {:error, term()}
   def start_stream(provider_mod, model, context, opts \\ []) do
-    with {:ok, server_pid} <- start_stream_server(provider_mod, model, opts),
-         {:ok, _http_task_pid, _http_context, canonical_json} <-
-           start_http_streaming(provider_mod, model, context, opts, server_pid) do
+    transport = stream_transport(provider_mod, model, opts)
+
+    with {:ok, server_pid} <- start_stream_server(provider_mod, model, transport, opts),
+         {:ok, _http_task_pid, http_context, canonical_json} <-
+           start_transport_streaming(transport, provider_mod, model, context, opts, server_pid),
+         :ok <- set_fixture_context_if_needed(server_pid, http_context, canonical_json) do
       stream_context =
         model
         |> ReqLLM.Telemetry.new_context(
           Keyword.put_new(opts, :context, context),
           mode: :stream,
-          transport: :finch,
+          transport: telemetry_transport(transport),
           operation: Keyword.get(opts, :operation, :chat),
           reasoning_contract:
             ReqLLM.Telemetry.reasoning_contract_for(
@@ -161,10 +164,11 @@ defmodule ReqLLM.Streaming do
   end
 
   # Start StreamServer with provider configuration
-  defp start_stream_server(provider_mod, model, opts) do
+  defp start_stream_server(provider_mod, model, transport, opts) do
     server_opts = [
       provider_mod: provider_mod,
       model: model,
+      protocol_parser: protocol_parser_for_transport(transport),
       fixture_path: maybe_capture_fixture(model, opts),
       completion_cleanup_after:
         Keyword.get(
@@ -186,6 +190,35 @@ defmodule ReqLLM.Streaming do
         Logger.error("Failed to start StreamServer: #{inspect(reason)}")
         {:error, {:stream_server_failed, reason}}
     end
+  end
+
+  defp start_transport_streaming(
+         :websocket,
+         provider_mod,
+         model,
+         context,
+         opts,
+         stream_server_pid
+       ) do
+    case StreamServer.start_http(
+           stream_server_pid,
+           provider_mod,
+           model,
+           context,
+           Keyword.put(opts, :stream_transport, :websocket),
+           ReqLLM.Finch
+         ) do
+      {:ok, task_pid, http_context, canonical_json} ->
+        {:ok, task_pid, http_context, canonical_json}
+
+      {:error, reason} ->
+        Logger.error("Failed to start WebSocket streaming: #{inspect(reason)}")
+        {:error, {:websocket_streaming_failed, reason}}
+    end
+  end
+
+  defp start_transport_streaming(:http, provider_mod, model, context, opts, stream_server_pid) do
+    start_http_streaming(provider_mod, model, context, opts, stream_server_pid)
   end
 
   # Start HTTP streaming through StreamServer
@@ -213,6 +246,22 @@ defmodule ReqLLM.Streaming do
         {:error, {:http_streaming_failed, reason}}
     end
   end
+
+  defp stream_transport(provider_mod, model, opts) do
+    if function_exported?(provider_mod, :stream_transport, 2) do
+      provider_mod.stream_transport(model, opts)
+    else
+      :http
+    end
+  end
+
+  defp telemetry_transport(:websocket), do: :websocket
+  defp telemetry_transport(_transport), do: :finch
+
+  defp protocol_parser_for_transport(:websocket),
+    do: &ReqLLM.Streaming.WebSocketProtocol.parse_message/2
+
+  defp protocol_parser_for_transport(_transport), do: nil
 
   defp format_http2_error_message(body_size, protocols) do
     size_kb = div(body_size, 1024)
@@ -244,6 +293,21 @@ defmodule ReqLLM.Streaming do
     case Code.ensure_loaded(ReqLLM.Test.Fixtures) do
       {:module, mod} -> mod.capture_path(model, opts)
       {:error, _} -> nil
+    end
+  end
+
+  defp set_fixture_context_if_needed(server_pid, http_context, canonical_json) do
+    if fixture_mode() == :record do
+      ReqLLM.StreamServer.set_fixture_context(server_pid, http_context, canonical_json)
+    else
+      :ok
+    end
+  end
+
+  defp fixture_mode do
+    case Code.ensure_loaded(ReqLLM.Test.Fixtures) do
+      {:module, mod} -> mod.mode()
+      {:error, _} -> :replay
     end
   end
 

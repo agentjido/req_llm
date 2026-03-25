@@ -110,6 +110,16 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert request.headers["anthropic-beta"] == ["tools-2024-05-16"]
     end
 
+    test "attach supports manual anthropic beta headers through public provider options" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      request =
+        Req.new()
+        |> Anthropic.attach(model, provider_options: [anthropic_beta: ["advanced-tool-use-test"]])
+
+      assert request.headers["anthropic-beta"] == ["advanced-tool-use-test"]
+    end
+
     test "attach_stream adds beta header for web_fetch server tool" do
       {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
       context = ReqLLM.Context.new([ReqLLM.Context.user("Fetch example.com")])
@@ -752,6 +762,56 @@ defmodule ReqLLM.Providers.AnthropicTest do
 
       refute Map.has_key?(formatted, :strict)
       assert formatted[:name] == "non_strict_tool"
+    end
+
+    test "includes anthropic-native tool fields from provider options" do
+      tool =
+        ReqLLM.Tool.new!(
+          name: "deferred_tool",
+          description: "A deferred tool",
+          parameter_schema: [
+            name: [type: :string, required: true, doc: "A name"]
+          ],
+          callback: fn _ -> {:ok, "result"} end,
+          provider_options: [anthropic: [defer_loading: true]]
+        )
+
+      formatted = Anthropic.tool_to_anthropic_format(tool)
+
+      assert formatted[:defer_loading] == true
+      assert formatted[:name] == "deferred_tool"
+    end
+  end
+
+  describe "encode_body with anthropic-native tool fields" do
+    test "serializes defer_loading on tool definitions" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+      context = context_fixture()
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "deferred_tool",
+          description: "A deferred tool",
+          parameter_schema: [name: [type: :string, required: true]],
+          callback: fn _ -> {:ok, "result"} end,
+          provider_options: [anthropic: [defer_loading: true]]
+        )
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          tools: [tool]
+        ]
+      }
+
+      updated_request = Anthropic.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      [encoded_tool] = decoded["tools"]
+      assert encoded_tool["defer_loading"] == true
+      assert encoded_tool["name"] == "deferred_tool"
     end
   end
 

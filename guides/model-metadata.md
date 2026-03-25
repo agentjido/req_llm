@@ -14,6 +14,8 @@ The model metadata system provides:
 - **Seamless integration** with no provider configuration changes needed
 - **Persistent customizations** that survive dependency updates
 
+Pricing metadata is one input into ReqLLM's best-effort cost calculation. It is useful for normalized application-side billing estimates, but it is not a guarantee of exact provider invoice totals. See the [Pricing Policy](pricing-policy.md) guide for the public contract.
+
 ## Model Metadata Flow
 
 ### 1. Upstream Metadata via llm_db
@@ -159,6 +161,8 @@ Adjust costs for enterprise pricing or different regions:
 }
 ```
 
+This is the recommended path when your account pricing differs from the shared registry. ReqLLM will use the patched values for its own cost calculations.
+
 ### Adding Custom Models To The Shared Registry
 
 Include private or custom model deployments:
@@ -218,6 +222,8 @@ Model metadata ships with the `llm_db` package dependency. To get the latest mod
 ```bash
 mix deps.update llm_db
 ```
+
+Keeping `llm_db` current improves ReqLLM's cost estimates, especially when providers ship new models or pricing changes.
 
 
 

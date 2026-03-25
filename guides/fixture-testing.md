@@ -306,7 +306,7 @@ For each supported model:
 
 - ✅ Text generation (streaming and non-streaming)
 - ✅ Token limits and truncation behavior
-- ✅ Usage metrics and cost calculation
+- ✅ Usage metrics and best-effort cost calculation
 - ✅ Tool calling (if advertised)
 - ✅ Object generation (if advertised)
 - ✅ Reasoning tokens (if advertised)
@@ -317,6 +317,7 @@ For each supported model:
 - Provider-specific features not in model metadata
 - Real-time behavior (fixtures may be cached)
 - Exact API response formats (providers may change)
+- Exact provider billing or invoice parity
 
 ## Troubleshooting
 

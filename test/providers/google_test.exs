@@ -410,6 +410,66 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert gen_config["candidateCount"] == 2
     end
 
+    test "encode_body includes thinkingLevel in generationConfig" do
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: "gemini-3-flash",
+          stream: false,
+          google_thinking_level: :medium
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      thinking_config = decoded["generationConfig"]["thinkingConfig"]
+      assert thinking_config["thinkingLevel"] == "medium"
+      assert thinking_config["includeThoughts"] == true
+      refute Map.has_key?(thinking_config, "thinkingBudget")
+    end
+
+    test "encode_body includes thinkingBudget in generationConfig" do
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: "gemini-2.5-flash",
+          stream: false,
+          google_thinking_budget: 8_192
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      thinking_config = decoded["generationConfig"]["thinkingConfig"]
+      assert thinking_config["thinkingBudget"] == 8_192
+      assert thinking_config["includeThoughts"] == true
+      refute Map.has_key?(thinking_config, "thinkingLevel")
+    end
+
+    test "encode_body raises when both google_thinking_level and google_thinking_budget are set" do
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: "gemini-3-flash",
+          stream: false,
+          google_thinking_level: :high,
+          google_thinking_budget: 8_192
+        ]
+      }
+
+      assert_raise ArgumentError,
+                   ~r/google_thinking_budget and google_thinking_level cannot be combined/,
+                   fn -> Google.encode_body(mock_request) end
+    end
+
     test "encode_body for embedding operation" do
       mock_request = %Req.Request{
         options: [
@@ -859,6 +919,40 @@ defmodule ReqLLM.Providers.GoogleTest do
                "Expected reasoning_effort #{inspect(effort)} to map to budget #{expected_budget}"
       end
     end
+
+    test "translate_options maps reasoning_effort to google_thinking_level for Gemini 3 models" do
+      {:ok, model} = ReqLLM.model(%{provider: :google, id: "gemini-3-flash"})
+
+      test_cases = [
+        {:none, :minimal},
+        {:minimal, :minimal},
+        {:low, :low},
+        {:medium, :medium},
+        {:high, :high},
+        {:xhigh, :high}
+      ]
+
+      for {effort, expected_level} <- test_cases do
+        opts = [reasoning_effort: effort]
+        {translated_opts, _warnings} = Google.translate_options(:chat, model, opts)
+
+        assert Keyword.get(translated_opts, :google_thinking_level) == expected_level,
+               "Expected reasoning_effort #{inspect(effort)} to map to level #{inspect(expected_level)}"
+
+        assert Keyword.get(translated_opts, :google_thinking_budget) == nil,
+               "Expected no google_thinking_budget for Gemini 3 model"
+      end
+    end
+
+    test "translate_options uses google_thinking_budget for reasoning_token_budget even on Gemini 3" do
+      {:ok, model} = ReqLLM.model(%{provider: :google, id: "gemini-3-flash"})
+
+      opts = [reasoning_token_budget: 10_000]
+      {translated_opts, _warnings} = Google.translate_options(:chat, model, opts)
+
+      assert Keyword.get(translated_opts, :google_thinking_budget) == 10_000
+      assert Keyword.get(translated_opts, :google_thinking_level) == nil
+    end
   end
 
   describe "usage extraction" do
@@ -1191,6 +1285,33 @@ defmodule ReqLLM.Providers.GoogleTest do
       refute Map.has_key?(decoded["generationConfig"], "responseSchema")
     end
 
+    test "encode_object_body uses responseJsonSchema for Gemini 3.1" do
+      context = context_fixture()
+
+      {:ok, schema} =
+        ReqLLM.Schema.compile(
+          name: [type: :string, required: true],
+          age: [type: :pos_integer]
+        )
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: "gemini-3.1-pro-preview",
+          operation: :object,
+          compiled_schema: schema
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      response_json_schema = decoded["generationConfig"]["responseJsonSchema"]
+      assert response_json_schema["type"] == "object"
+      assert Map.has_key?(response_json_schema, "properties")
+      refute Map.has_key?(decoded["generationConfig"], "responseSchema")
+    end
+
     test "prepare_request creates configured embedding request" do
       {:ok, model} = ReqLLM.model("google:gemini-embedding-001")
       text = "Hello, world!"
@@ -1411,6 +1532,36 @@ defmodule ReqLLM.Providers.GoogleTest do
       assert Map.has_key?(part, "fileData")
       assert part["fileData"]["fileUri"] == url
       assert part["fileData"]["mimeType"] == "image/png"
+    end
+
+    test "encode_body converts OpenAI-format video_url to fileData format" do
+      url = "https://example.com/videos/clip.mp4"
+
+      mock_request = %Req.Request{
+        options: [
+          messages: [
+            %{
+              "role" => "user",
+              "content" => [
+                %{"type" => "text", "text" => "What happens in this video?"},
+                %{"type" => "video_url", "video_url" => %{"url" => url}}
+              ]
+            }
+          ],
+          id: "gemini-1.5-flash",
+          stream: false
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      [user_msg] = decoded["contents"]
+      [_text_part, part] = user_msg["parts"]
+
+      assert Map.has_key?(part, "fileData")
+      assert part["fileData"]["fileUri"] == url
+      assert part["fileData"]["mimeType"] == "video/mp4"
     end
 
     test "encode_body converts GCS URI to fileData format" do

@@ -917,6 +917,44 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     end
   end
 
+  describe "attach_websocket_stream/3" do
+    test "builds websocket create event from standard responses request body" do
+      original_key = System.get_env("OPENAI_API_KEY")
+      System.put_env("OPENAI_API_KEY", "test-key-12345")
+
+      on_exit(fn ->
+        if original_key do
+          System.put_env("OPENAI_API_KEY", original_key)
+        else
+          System.delete_env("OPENAI_API_KEY")
+        end
+      end)
+
+      {:ok, model} = ReqLLM.model("openai:gpt-5")
+      context = ReqLLM.Context.new([ReqLLM.Context.user("Say hello")])
+
+      {:ok, config} =
+        ResponsesAPI.attach_websocket_stream(
+          model,
+          context,
+          base_url: "http://localhost:4010/v1",
+          provider_options: []
+        )
+
+      assert config.url == "ws://localhost:4010/v1/responses"
+      assert [{"Authorization", "Bearer test-key-12345"}] = config.headers
+      assert %ReqLLM.Streaming.Fixtures.HTTPContext{} = config.http_context
+      assert config.canonical_json["model"] == "gpt-5"
+      refute Map.has_key?(config.canonical_json, "stream")
+
+      [message] = config.initial_messages
+      payload = Jason.decode!(message)
+
+      assert payload["type"] == "response.create"
+      assert payload["response"] == config.canonical_json
+    end
+  end
+
   describe "reasoning details - decode_response/1" do
     test "decodes reasoning items with summary_text array and populates reasoning_details" do
       response_body = %{

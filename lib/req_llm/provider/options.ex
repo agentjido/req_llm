@@ -175,6 +175,13 @@ defmodule ReqLLM.Provider.Options do
                                  doc: "Provider-specific options (nested under this key)"
                                ],
 
+                               # Streaming request hook
+                               on_finch_request: [
+                                 type: {:fun, 1},
+                                 doc:
+                                   "Callback `(Finch.Request.t() -> Finch.Request.t())` applied to the streaming request just before it is sent. Applied after the global `finch_request_adapter` config. See `ReqLLM.FinchRequestAdapter` for the config-level equivalent."
+                               ],
+
                                # Framework options
                                on_unsupported: [
                                  type: {:in, [:warn, :error, :ignore]},
@@ -209,6 +216,7 @@ defmodule ReqLLM.Provider.Options do
   @internal_keys [
     :api_key,
     :access_token,
+    :on_finch_request,
     :auth_mode,
     :oauth_file,
     :auth_file,
@@ -346,6 +354,8 @@ defmodule ReqLLM.Provider.Options do
     embedding_keys = Keyword.delete(embedding_schema.schema, :return_usage)
     NimbleOptions.new!(embedding_keys)
   end
+
+  defp base_schema_for_operation(:rerank), do: ReqLLM.Rerank.schema()
 
   defp base_schema_for_operation(_operation), do: @generation_options_schema
 
@@ -499,12 +509,17 @@ defmodule ReqLLM.Provider.Options do
   """
   @spec effective_base_url(module(), LLMDB.Model.t(), keyword()) :: String.t()
   def effective_base_url(provider_mod, %LLMDB.Model{} = model, opts) do
+    from_model_opts =
+      if is_bitstring(model.base_url) do
+        model.base_url
+      end
+
     from_opts = opts[:base_url]
     from_config = base_url_from_application_config(model.provider)
     from_metadata = base_url_from_provider_metadata(model.provider)
     from_provider_default = provider_mod.default_base_url()
 
-    result = from_opts || from_config || from_metadata || from_provider_default
+    result = from_model_opts || from_opts || from_config || from_metadata || from_provider_default
 
     result
   end
@@ -526,6 +541,7 @@ defmodule ReqLLM.Provider.Options do
 
   defp maybe_extract_model_options(:image, _model, opts), do: opts
   defp maybe_extract_model_options(:embedding, _model, opts), do: opts
+  defp maybe_extract_model_options(:rerank, _model, opts), do: opts
 
   defp maybe_extract_model_options(_operation, model, opts),
     do: extract_model_options(model, opts)

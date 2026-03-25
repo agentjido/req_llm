@@ -3,6 +3,8 @@ defmodule ReqLLM.GenerationTest do
 
   alias ReqLLM.{Context, Generation, Response, StreamResponse}
 
+  @chat_model "openai:gpt-4-turbo"
+
   defmodule CacheBackend do
     alias ReqLLM.Context
     alias ReqLLM.Message
@@ -85,7 +87,7 @@ defmodule ReqLLM.GenerationTest do
     Req.Test.stub(ReqLLM.GenerationTest, fn conn ->
       Req.Test.json(conn, %{
         "id" => "cmpl_test_123",
-        "model" => "gpt-4o-mini-2024-07-18",
+        "model" => "gpt-4-turbo",
         "choices" => [
           %{
             "message" => %{"role" => "assistant", "content" => "Hello! How can I help you today?"}
@@ -102,14 +104,14 @@ defmodule ReqLLM.GenerationTest do
     test "accepts string input format" do
       {:ok, response} =
         Generation.generate_text(
-          "openai:gpt-4o-mini",
+          @chat_model,
           "Hello",
           req_http_options: [plug: {Req.Test, ReqLLM.GenerationTest}]
         )
 
       assert %Response{} = response
       # Model might have version suffix
-      assert response.model =~ "gpt-4o-mini"
+      assert response.model =~ "gpt-4-turbo"
       assert is_binary(Response.text(response))
       assert String.length(Response.text(response)) > 0
     end
@@ -119,7 +121,7 @@ defmodule ReqLLM.GenerationTest do
 
       {:ok, response} =
         Generation.generate_text(
-          "openai:gpt-4o-mini",
+          @chat_model,
           context,
           req_http_options: [plug: {Req.Test, ReqLLM.GenerationTest}]
         )
@@ -135,7 +137,7 @@ defmodule ReqLLM.GenerationTest do
 
       {:ok, response} =
         Generation.generate_text(
-          "openai:gpt-4o-mini",
+          @chat_model,
           messages,
           req_http_options: [plug: {Req.Test, ReqLLM.GenerationTest}]
         )
@@ -146,7 +148,7 @@ defmodule ReqLLM.GenerationTest do
     test "handles system prompt option" do
       {:ok, response} =
         Generation.generate_text(
-          "openai:gpt-4o-mini",
+          @chat_model,
           "Hello",
           system_prompt: "Be helpful",
           req_http_options: [plug: {Req.Test, ReqLLM.GenerationTest}]
@@ -163,7 +165,7 @@ defmodule ReqLLM.GenerationTest do
 
       {:ok, first_response} =
         Generation.generate_text(
-          "openai:gpt-4o-mini",
+          @chat_model,
           "Hello",
           cache: CacheBackend,
           cache_ttl: 600,
@@ -177,7 +179,7 @@ defmodule ReqLLM.GenerationTest do
 
       {:ok, cached_response} =
         Generation.generate_text(
-          "openai:gpt-4o-mini",
+          @chat_model,
           "Hello",
           cache: CacheBackend,
           cache_ttl: 600,
@@ -208,7 +210,7 @@ defmodule ReqLLM.GenerationTest do
         %{role: "invalid_role", content: "Hello"}
       ]
 
-      {:error, error} = Generation.generate_text("openai:gpt-4o-mini", messages)
+      {:error, error} = Generation.generate_text(@chat_model, messages)
 
       # Should get a Role error
       assert %ReqLLM.Error.Invalid.Role{} = error
@@ -218,7 +220,7 @@ defmodule ReqLLM.GenerationTest do
     test "returns validation error for invalid options" do
       {:error, error} =
         Generation.generate_text(
-          "openai:gpt-4o-mini",
+          @chat_model,
           "Hello",
           temperature: "invalid"
         )
@@ -247,7 +249,7 @@ defmodule ReqLLM.GenerationTest do
     test "returns text on success" do
       result =
         Generation.generate_text!(
-          "openai:gpt-4o-mini",
+          @chat_model,
           "Hello",
           req_http_options: [plug: {Req.Test, ReqLLM.GenerationTest}]
         )
@@ -283,7 +285,7 @@ defmodule ReqLLM.GenerationTest do
     test "returns streaming response" do
       {:ok, response} =
         Generation.stream_text(
-          "openai:gpt-4o-mini",
+          @chat_model,
           "Tell me a story",
           req_http_options: [plug: {Req.Test, ReqLLM.GenerationStreamTest}]
         )
@@ -297,7 +299,7 @@ defmodule ReqLLM.GenerationTest do
 
       {:ok, _response} =
         Generation.generate_text(
-          "openai:gpt-4o-mini",
+          @chat_model,
           "Tell me a story",
           cache: CacheBackend,
           cache_options: [agent: cache_agent, namespace: "stream"],
@@ -310,7 +312,7 @@ defmodule ReqLLM.GenerationTest do
 
       {:ok, response} =
         Generation.stream_text(
-          "openai:gpt-4o-mini",
+          @chat_model,
           "Tell me a story",
           cache: CacheBackend,
           cache_options: [agent: cache_agent, namespace: "stream"],
@@ -342,7 +344,7 @@ defmodule ReqLLM.GenerationTest do
       Req.Test.stub(ObjectHTTP, fn conn ->
         Req.Test.json(conn, %{
           "id" => "cmpl_object_123",
-          "model" => "gpt-4o-mini-2024-07-18",
+          "model" => "gpt-4-turbo",
           "choices" => [
             %{
               "message" => %{
@@ -369,7 +371,7 @@ defmodule ReqLLM.GenerationTest do
 
       {:ok, first_response} =
         Generation.generate_object(
-          "openai:gpt-4o-mini",
+          @chat_model,
           "Return a person",
           schema,
           cache: CacheBackend,
@@ -383,7 +385,7 @@ defmodule ReqLLM.GenerationTest do
 
       {:ok, cached_response} =
         Generation.generate_object(
-          "openai:gpt-4o-mini",
+          @chat_model,
           "Return a person",
           schema,
           cache: CacheBackend,
@@ -405,7 +407,7 @@ defmodule ReqLLM.GenerationTest do
       Req.Test.stub(BrokenObjectHTTP, fn conn ->
         Req.Test.json(conn, %{
           "id" => "cmpl_object_123",
-          "model" => "gpt-4o-mini-2024-07-18",
+          "model" => "gpt-4-turbo",
           "choices" => [
             %{
               "message" => %{
@@ -432,7 +434,7 @@ defmodule ReqLLM.GenerationTest do
 
       {:ok, response} =
         Generation.generate_object(
-          "openai:gpt-4o-mini",
+          @chat_model,
           "Return a person",
           schema,
           openai_structured_output_mode: :tool_strict,
@@ -446,7 +448,7 @@ defmodule ReqLLM.GenerationTest do
       Req.Test.stub(BrokenObjectHTTP, fn conn ->
         Req.Test.json(conn, %{
           "id" => "cmpl_object_123",
-          "model" => "gpt-4o-mini-2024-07-18",
+          "model" => "gpt-4-turbo",
           "choices" => [
             %{
               "message" => %{
@@ -473,7 +475,7 @@ defmodule ReqLLM.GenerationTest do
 
       {:ok, response} =
         Generation.generate_object(
-          "openai:gpt-4o-mini",
+          @chat_model,
           "Return a person",
           schema,
           json_repair: false,
@@ -540,7 +542,7 @@ defmodule ReqLLM.GenerationTest do
     test "accepts generation options without errors" do
       {:ok, response} =
         Generation.generate_text(
-          "openai:gpt-4o-mini",
+          @chat_model,
           "Hello",
           temperature: 0.8,
           max_tokens: 50,
@@ -554,7 +556,7 @@ defmodule ReqLLM.GenerationTest do
     test "handles provider-specific options" do
       {:ok, response} =
         Generation.generate_text(
-          "openai:gpt-4o-mini",
+          @chat_model,
           "Hello",
           frequency_penalty: 0.1,
           req_http_options: [plug: {Req.Test, ReqLLM.GenerationTest}]
@@ -570,7 +572,7 @@ defmodule ReqLLM.GenerationTest do
       # Req's internal validation will raise an ArgumentError. This confirms the options are being passed
       # all the way to `Req.new/1` without making a real network request.
       assert_raise ArgumentError, ~r/got unsupported atom method :invalid_method/, fn ->
-        Generation.generate_text("openai:gpt-4o-mini", "Hello",
+        Generation.generate_text(@chat_model, "Hello",
           req_http_options: [method: :invalid_method]
         )
       end
@@ -589,7 +591,7 @@ defmodule ReqLLM.GenerationTest do
 
         Req.Test.json(conn, %{
           "id" => "cmpl_test_123",
-          "model" => "gpt-4o-mini-2024-07-18",
+          "model" => "gpt-4-turbo",
           "choices" => [
             %{
               "message" => %{"role" => "assistant", "content" => "Response"}
@@ -601,7 +603,7 @@ defmodule ReqLLM.GenerationTest do
 
       {:ok, response} =
         Generation.generate_text(
-          "openai:gpt-4o-mini",
+          @chat_model,
           "Hello",
           api_key: custom_key,
           req_http_options: [plug: {Req.Test, ReqLLM.GenerationTestAPIKey}]
@@ -621,7 +623,7 @@ defmodule ReqLLM.GenerationTest do
 
         Req.Test.json(conn, %{
           "id" => "cmpl_test_123",
-          "model" => "gpt-4o-mini-2024-07-18",
+          "model" => "gpt-4-turbo",
           "choices" => [
             %{
               "message" => %{"role" => "assistant", "content" => "Response"}
@@ -633,7 +635,7 @@ defmodule ReqLLM.GenerationTest do
 
       {:ok, response} =
         Generation.generate_text(
-          "openai:gpt-4o-mini",
+          @chat_model,
           "Hello",
           api_key: custom_key,
           provider_options: [auth_mode: :api_key, access_token: "stale-oauth-token"],
@@ -656,7 +658,7 @@ defmodule ReqLLM.GenerationTest do
 
         Req.Test.json(conn, %{
           "id" => "cmpl_test_123",
-          "model" => "gpt-4o-mini-2024-07-18",
+          "model" => "gpt-4-turbo",
           "choices" => [
             %{
               "message" => %{"role" => "assistant", "content" => "Response"}
@@ -668,7 +670,7 @@ defmodule ReqLLM.GenerationTest do
 
       {:ok, response} =
         Generation.generate_text(
-          "openai:gpt-4o-mini",
+          @chat_model,
           "Hello",
           provider_options: [auth_mode: :oauth, access_token: oauth_token],
           req_http_options: [plug: {Req.Test, ReqLLM.GenerationTestOAuthAccessToken}]
@@ -712,7 +714,7 @@ defmodule ReqLLM.GenerationTest do
 
         Req.Test.json(conn, %{
           "id" => "cmpl_test_123",
-          "model" => "gpt-4o-mini-2024-07-18",
+          "model" => "gpt-4-turbo",
           "choices" => [
             %{
               "message" => %{"role" => "assistant", "content" => "Response"}
@@ -724,7 +726,7 @@ defmodule ReqLLM.GenerationTest do
 
       {:ok, response} =
         Generation.generate_text(
-          "openai:gpt-4o-mini",
+          @chat_model,
           "Hello",
           provider_options: [auth_mode: :oauth, oauth_file: path],
           req_http_options: [plug: {Req.Test, ReqLLM.GenerationTestOAuthFile}]
@@ -753,7 +755,7 @@ defmodule ReqLLM.GenerationTest do
 
       {:ok, response} =
         Generation.stream_text(
-          "openai:gpt-4o-mini",
+          @chat_model,
           "Hello",
           provider_options: [auth_mode: :oauth, access_token: oauth_token],
           req_http_options: [plug: {Req.Test, ReqLLM.GenerationStreamTestOAuthAccessToken}]
@@ -784,7 +786,7 @@ defmodule ReqLLM.GenerationTest do
 
       {:ok, response} =
         Generation.stream_text(
-          "openai:gpt-4o-mini",
+          @chat_model,
           "Hello",
           api_key: custom_key,
           req_http_options: [plug: {Req.Test, ReqLLM.GenerationStreamTestAPIKey}]

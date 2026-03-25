@@ -12,6 +12,9 @@ defmodule ReqLLM.MessagingTest do
       assert %ContentPart{type: :image_url, url: "http://ex.com/img.jpg"} =
                ContentPart.image_url("http://ex.com/img.jpg")
 
+      assert %ContentPart{type: :video_url, url: "http://ex.com/video.mp4"} =
+               ContentPart.video_url("http://ex.com/video.mp4")
+
       data = <<1, 2, 3>>
 
       assert %ContentPart{type: :image, data: ^data, media_type: "image/png"} =

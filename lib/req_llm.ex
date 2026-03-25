@@ -85,7 +85,9 @@ defmodule ReqLLM do
     Embedding,
     Generation,
     Images,
+    MapAccess,
     OCR,
+    Rerank,
     Schema,
     Speech,
     Tool,
@@ -110,6 +112,28 @@ defmodule ReqLLM do
                        |> Map.from_struct()
                        |> Map.keys()
   @inline_model_field_strings Enum.map(@inline_model_fields, &Atom.to_string/1)
+  @google_long_context_threshold 200_000
+  @google_tiered_token_pricing %{
+    "gemini-2.5-computer-use-preview-10-2025" => %{
+      input: {1.25, 2.5},
+      output: {10.0, 15.0}
+    },
+    "gemini-2.5-pro" => %{
+      input: {1.25, 2.5},
+      output: {10.0, 15.0},
+      cache_read: {0.125, 0.25}
+    },
+    "gemini-3.1-pro-preview" => %{
+      input: {2.0, 4.0},
+      output: {12.0, 18.0},
+      cache_read: {0.2, 0.4}
+    },
+    "gemini-3.1-pro-preview-customtools" => %{
+      input: {2.0, 4.0},
+      output: {12.0, 18.0},
+      cache_read: {0.2, 0.4}
+    }
+  }
 
   # ===========================================================================
   # Configuration API
@@ -383,7 +407,7 @@ defmodule ReqLLM do
 
     model_id = model.provider_model_id || model.id || model.model
 
-    if is_nil(protocol) and ReqLLM.Providers.OpenAI.AdapterHelpers.reasoning_model?(model_id) do
+    if is_nil(protocol) and ReqLLM.Providers.OpenAI.AdapterHelpers.responses_model?(model_id) do
       extra = model.extra || %{}
 
       updated_extra =
@@ -412,7 +436,105 @@ defmodule ReqLLM do
     %{model | extra: updated_extra}
   end
 
+  defp normalize_model_metadata(%LLMDB.Model{provider: :google} = model) do
+    normalize_google_pricing(model)
+  end
+
   defp normalize_model_metadata(%LLMDB.Model{} = model), do: model
+
+  defp normalize_google_pricing(%LLMDB.Model{id: model_id} = model) do
+    case Map.get(@google_tiered_token_pricing, model_id) do
+      nil ->
+        model
+
+      tiered_rates ->
+        pricing = model.pricing || %{currency: "USD"}
+        components = ReqLLM.Pricing.components(model)
+
+        updated_components =
+          components
+          |> Enum.reject(&google_tiered_component?/1)
+          |> Kernel.++(google_tiered_components(tiered_rates))
+
+        updated_cost = normalize_google_cost(model.cost, tiered_rates)
+
+        %{model | pricing: Map.put(pricing, :components, updated_components), cost: updated_cost}
+    end
+  end
+
+  defp google_tiered_components(tiered_rates) do
+    [:input, :output, :cache_read]
+    |> Enum.flat_map(fn key ->
+      case Map.get(tiered_rates, key) do
+        {standard_rate, long_context_rate} ->
+          [
+            google_tiered_component("#{token_component_id(key)}.standard_context", standard_rate,
+              max_input_tokens: @google_long_context_threshold
+            ),
+            google_tiered_component("#{token_component_id(key)}.long_context", long_context_rate,
+              min_input_tokens: @google_long_context_threshold + 1
+            )
+          ]
+
+        nil ->
+          []
+      end
+    end)
+  end
+
+  defp google_tiered_component(id, rate, opts) do
+    %{
+      id: id,
+      kind: "token",
+      unit: "token",
+      per: 1_000_000,
+      rate: rate
+    }
+    |> maybe_put_map_value(:min_input_tokens, opts[:min_input_tokens])
+    |> maybe_put_map_value(:max_input_tokens, opts[:max_input_tokens])
+  end
+
+  defp normalize_google_cost(cost, tiered_rates) do
+    baseline_cost =
+      Enum.reduce(tiered_rates, %{}, fn {key, {standard_rate, _long_context_rate}}, acc ->
+        Map.put(acc, key, standard_rate)
+      end)
+
+    if is_map(cost), do: Map.merge(cost, baseline_cost), else: baseline_cost
+  end
+
+  defp google_tiered_component?(component) do
+    case pricing_component_id(component) do
+      id when is_binary(id) ->
+        Enum.any?([:input, :output, :cache_read], fn key ->
+          token_component_match?(id, token_component_id(key))
+        end)
+
+      _ ->
+        false
+    end
+  end
+
+  defp pricing_component_id(component) when is_map(component) do
+    case MapAccess.get(component, :id) do
+      id when is_binary(id) -> id
+      id when is_atom(id) -> Atom.to_string(id)
+      _ -> nil
+    end
+  end
+
+  defp token_component_match?(component_id, id) when is_binary(component_id) and is_binary(id) do
+    component_id == id or String.starts_with?(component_id, id <> ".")
+  end
+
+  defp token_component_match?(_, _), do: false
+
+  defp token_component_id(:input), do: "token.input"
+  defp token_component_id(:output), do: "token.output"
+  defp token_component_id(:cache_read), do: "token.cache_read"
+
+  defp maybe_put_map_value(map, _key, nil), do: map
+  defp maybe_put_map_value(map, key, value), do: Map.put(map, key, value)
 
   defp resolve_catalog_model(provider, model_id) do
     case LLMDB.model(provider, model_id) do
@@ -453,7 +575,34 @@ defmodule ReqLLM do
     model(mistral_inline_model_attrs(model_id))
   end
 
-  defp resolve_provider_model_fallback(_provider, _model_id, original_error), do: original_error
+  defp resolve_provider_model_fallback(provider, model_id, _original_error) do
+    with {:ok, _provider_module} <- ReqLLM.provider(provider) do
+      warn_unverified_model(provider, model_id)
+      model(%{provider: provider, id: model_id})
+    else
+      {:error, _} ->
+        {:error,
+         ReqLLM.Error.Invalid.Provider.exception(
+           provider: provider,
+           message:
+             "Provider :#{provider} is not available. Ensure the provider is properly configured or use an inline model spec."
+         )}
+    end
+  end
+
+  defp warn_unverified_model(provider, model_id) do
+    IO.warn("""
+    Using unverified model: #{provider}:#{model_id}
+
+    This model is not in the LLMDB catalog. While it will work if the provider \
+    supports this model ID, some features like pricing, token counting, and \
+    capability detection may be unavailable.
+
+    To suppress this warning, use an inline model spec:
+
+        ReqLLM.model(%{provider: :#{provider}, id: "#{model_id}"})
+    """)
+  end
 
   defp provider_atom_from_string(provider_name) when is_binary(provider_name) do
     try do
@@ -984,6 +1133,24 @@ defmodule ReqLLM do
 
   """
   defdelegate embed(model_spec, input, opts \\ []), to: Embedding
+
+  # ===========================================================================
+  # Rerank API - Delegated to ReqLLM.Rerank
+  # ===========================================================================
+
+  @doc """
+  Reranks documents against a query.
+
+  Returns a `ReqLLM.RerankResponse` with the most relevant documents first.
+  """
+  @spec rerank(model_input(), keyword()) :: {:ok, ReqLLM.RerankResponse.t()} | {:error, term()}
+  defdelegate rerank(model_spec, opts \\ []), to: Rerank
+
+  @doc """
+  Reranks documents against a query, raising on error.
+  """
+  @spec rerank!(model_input(), keyword()) :: ReqLLM.RerankResponse.t() | no_return()
+  defdelegate rerank!(model_spec, opts \\ []), to: Rerank
 
   # ===========================================================================
   # OCR API - Delegated to ReqLLM.OCR

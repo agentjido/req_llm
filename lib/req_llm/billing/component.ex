@@ -4,7 +4,18 @@ defmodule ReqLLM.Billing.Component do
   alias ReqLLM.MapAccess
   alias ReqLLM.Usage.Tool
 
-  defstruct [:id, :kind, :per, :rate, :meter, :tool, :unit, :size_class]
+  defstruct [
+    :id,
+    :kind,
+    :per,
+    :rate,
+    :meter,
+    :tool,
+    :unit,
+    :size_class,
+    :min_input_tokens,
+    :max_input_tokens
+  ]
 
   @type t :: %__MODULE__{
           id: any(),
@@ -14,7 +25,9 @@ defmodule ReqLLM.Billing.Component do
           meter: any(),
           tool: any(),
           unit: String.t() | nil,
-          size_class: any()
+          size_class: any(),
+          min_input_tokens: non_neg_integer() | nil,
+          max_input_tokens: non_neg_integer() | nil
         }
 
   @spec from(map()) :: t()
@@ -27,7 +40,9 @@ defmodule ReqLLM.Billing.Component do
       meter: MapAccess.get(component, :meter),
       tool: MapAccess.get(component, :tool),
       unit: Tool.normalize_unit(MapAccess.get(component, :unit)),
-      size_class: MapAccess.get(component, :size_class)
+      size_class: MapAccess.get(component, :size_class),
+      min_input_tokens: MapAccess.get(component, :min_input_tokens),
+      max_input_tokens: MapAccess.get(component, :max_input_tokens)
     }
   end
 

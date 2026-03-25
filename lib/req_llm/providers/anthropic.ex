@@ -898,20 +898,30 @@ defmodule ReqLLM.Providers.Anthropic do
 
   This is made public so that Bedrock and Vertex formatters can reuse it.
   """
-  def tool_to_anthropic_format(tool) do
-    schema = ReqLLM.Tool.to_schema(tool, :openai)
+  def tool_to_anthropic_format(%ReqLLM.Tool{} = tool) do
+    tool
+    |> ReqLLM.Tool.to_schema(:anthropic)
+    |> Map.new(fn
+      {key, value} when is_binary(key) ->
+        case existing_atom(key) do
+          nil -> {key, value}
+          atom_key -> {atom_key, value}
+        end
 
-    base = %{
-      name: schema["function"]["name"],
-      description: schema["function"]["description"],
-      input_schema: schema["function"]["parameters"]
-    }
+      pair ->
+        pair
+    end)
+  end
 
-    if tool.strict do
-      Map.put(base, :strict, true)
-    else
-      base
-    end
+  def tool_to_anthropic_format(%{name: _, description: _, input_schema: _} = tool), do: tool
+
+  def tool_to_anthropic_format(%{"name" => _, "description" => _, "input_schema" => _} = tool),
+    do: tool
+
+  defp existing_atom(value) when is_binary(value) do
+    String.to_existing_atom(value)
+  rescue
+    ArgumentError -> nil
   end
 
   # Builds a web search tool definition for Anthropic API.

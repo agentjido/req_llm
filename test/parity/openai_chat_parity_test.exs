@@ -15,7 +15,7 @@ defmodule ReqLLM.Parity.OpenAIChatParityTest do
   @moduletag :integration
 
   # Use a model that uses the Chat API (not Responses API)
-  @model "openai:gpt-4o-mini"
+  @model "openai:gpt-4-turbo"
 
   describe "streaming vs non-streaming parity" do
     @describetag :integration

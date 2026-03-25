@@ -64,7 +64,7 @@ defmodule ReqLLM.Providers.OpenAITest do
 
   describe "request preparation & pipeline wiring" do
     test "prepare_request creates configured chat request" do
-      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+      {:ok, model} = ReqLLM.model("openai:gpt-4-turbo")
       context = context_fixture()
       opts = [temperature: 0.7, max_tokens: 100]
 
@@ -72,6 +72,17 @@ defmodule ReqLLM.Providers.OpenAITest do
 
       assert %Req.Request{} = request
       assert request.url.path == "/chat/completions"
+      assert request.method == :post
+    end
+
+    test "prepare_request routes gpt-4o models to Responses API" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+      context = context_fixture()
+
+      {:ok, request} = OpenAI.prepare_request(:chat, model, context, [])
+
+      assert %Req.Request{} = request
+      assert request.url.path == "/responses"
       assert request.method == :post
     end
 
@@ -115,7 +126,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "prepare_request configures authentication and pipeline for chat" do
-      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+      {:ok, model} = ReqLLM.model("openai:gpt-4-turbo")
       prompt = "Hello, world!"
       opts = [temperature: 0.5, max_tokens: 50]
 
@@ -215,7 +226,7 @@ defmodule ReqLLM.Providers.OpenAITest do
     end
 
     test "prepare_request uses longer timeout for reasoning models (Responses API)" do
-      {:ok, chat_model} = ReqLLM.model("openai:gpt-4o")
+      {:ok, chat_model} = ReqLLM.model("openai:gpt-4-turbo")
       {:ok, reasoning_model} = ReqLLM.model("openai:gpt-5")
       context = context_fixture()
 

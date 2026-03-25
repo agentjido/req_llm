@@ -14,7 +14,8 @@ defmodule ReqLLM.Providers.Google do
   - `google_safety_settings` - List of safety filter configurations
   - `google_candidate_count` - Number of response candidates to generate (default: 1)
   - `google_grounding` - Enable Google Search grounding (built-in web search). Requires `google_api_version: "v1beta"`
-  - `google_thinking_budget` - Thinking token budget for Gemini 2.5 models
+  - `google_thinking_budget` - Thinking token budget for Gemini 2.5 models (cannot be combined with `google_thinking_level`)
+  - `google_thinking_level` - Thinking level for Gemini 3+ models (`:minimal`, `:low`, `:medium`, `:high`). Cannot be combined with `google_thinking_budget`
   - `cached_content` - Reference to cached content for 90% cost savings (see Context Caching below)
   - `dimensions` - Number of dimensions for embedding vectors
   - `task_type` - Task type for embeddings (e.g., RETRIEVAL_QUERY)
@@ -99,7 +100,13 @@ defmodule ReqLLM.Providers.Google do
     ],
     google_thinking_budget: [
       type: :non_neg_integer,
-      doc: "Thinking token budget for Gemini 2.5 models (0 disables thinking, omit for dynamic)"
+      doc:
+        "Thinking token budget for Gemini 2.5 models (0 disables thinking, omit for dynamic). Cannot be combined with google_thinking_level."
+    ],
+    google_thinking_level: [
+      type: {:or, [:atom, :string]},
+      doc:
+        "Thinking level for Gemini 3+ models (e.g. :low, :medium, :high, or \"low\", \"medium\", \"high\"). Passed directly to the Gemini API. Cannot be combined with google_thinking_budget."
     ],
     google_grounding: [
       type: :map,
@@ -458,7 +465,7 @@ defmodule ReqLLM.Providers.Google do
       request =
         Req.new(
           [
-            url: "/models/#{model.id}:generateContent",
+            url: "/models/#{model.id}#{google_image_endpoint(model)}",
             method: :post,
             receive_timeout: timeout
           ] ++ http_opts
@@ -508,6 +515,10 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp image_n_forbidden?(_), do: false
+
+  defp google_image_endpoint(%LLMDB.Model{id: id}) do
+    if imagen_model_id?(id), do: ":predict", else: ":generateContent"
+  end
 
   @impl ReqLLM.Provider
   def attach(%Req.Request{} = request, model_input, user_opts) do
@@ -685,11 +696,21 @@ defmodule ReqLLM.Providers.Google do
     provider_opts = normalize_response_modalities(provider_opts)
 
     provider_opts =
-      case effort do
-        nil ->
+      case {effort, gemini_3_or_later?(model)} do
+        {nil, _} ->
           provider_opts
 
-        effort_value ->
+        {effort_value, true} ->
+          case Keyword.fetch(provider_opts, :google_thinking_level) do
+            {:ok, _existing} ->
+              provider_opts
+
+            :error ->
+              level = translate_reasoning_effort_to_level(effort_value)
+              Keyword.put(provider_opts, :google_thinking_level, level)
+          end
+
+        {effort_value, false} ->
           budget = translate_reasoning_effort_to_budget(effort_value, model)
 
           case Keyword.fetch(provider_opts, :google_thinking_budget) do
@@ -760,6 +781,21 @@ defmodule ReqLLM.Providers.Google do
   defp translate_reasoning_effort_to_budget(budget, _model) when is_integer(budget), do: budget
   defp translate_reasoning_effort_to_budget(_unknown, _model), do: 8_192
 
+  defp translate_reasoning_effort_to_level(:none), do: :minimal
+  defp translate_reasoning_effort_to_level(:minimal), do: :minimal
+  defp translate_reasoning_effort_to_level(:low), do: :low
+  defp translate_reasoning_effort_to_level(:medium), do: :medium
+  defp translate_reasoning_effort_to_level(:high), do: :high
+  defp translate_reasoning_effort_to_level(:xhigh), do: :high
+
+  defp translate_reasoning_effort_to_level("none"), do: :minimal
+  defp translate_reasoning_effort_to_level("minimal"), do: :minimal
+  defp translate_reasoning_effort_to_level("low"), do: :low
+  defp translate_reasoning_effort_to_level("medium"), do: :medium
+  defp translate_reasoning_effort_to_level("high"), do: :high
+  defp translate_reasoning_effort_to_level("xhigh"), do: :high
+  defp translate_reasoning_effort_to_level(_unknown), do: :medium
+
   @impl ReqLLM.Provider
   def translate_options(:image, _model, opts) do
     opts =
@@ -783,16 +819,18 @@ defmodule ReqLLM.Providers.Google do
     {opts, []}
   end
 
-  def translate_options(_operation, _model, opts) do
+  def translate_options(_operation, model, opts) do
     {reasoning_budget, opts} = Keyword.pop(opts, :reasoning_token_budget)
     {reasoning_effort, opts} = Keyword.pop(opts, :reasoning_effort)
 
-    # Put google_thinking_budget at top level (not nested in provider_options).
-    # translate_options operates on flattened opts; Options.process handles re-nesting.
     opts =
       cond do
         reasoning_budget ->
           Keyword.put(opts, :google_thinking_budget, reasoning_budget)
+
+        reasoning_effort && gemini_3_or_later?(model) ->
+          level = translate_reasoning_effort_to_level(reasoning_effort)
+          Keyword.put(opts, :google_thinking_level, level)
 
         reasoning_effort ->
           budget = translate_reasoning_effort_to_budget(reasoning_effort, nil)
@@ -842,11 +880,24 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp encode_image_body(request) do
+    if imagen_model_id?(request.options[:model]) do
+      encode_imagen_image_body(request)
+    else
+      encode_gemini_image_body(request)
+    end
+  end
+
+  defp encode_gemini_image_body(request) do
     {system_instruction, contents} =
       case request.options[:context] do
         %ReqLLM.Context{} = ctx ->
           model_name = request.options[:model]
-          encoded = ReqLLM.Provider.Defaults.encode_context_to_openai_format(ctx, model_name)
+
+          encoded =
+            ctx
+            |> normalize_context_video_urls()
+            |> ReqLLM.Provider.Defaults.encode_context_to_openai_format(model_name)
+
           messages = encoded[:messages] || encoded["messages"] || []
           split_messages_for_gemini(messages)
 
@@ -872,6 +923,27 @@ defmodule ReqLLM.Providers.Google do
     |> maybe_put(:generationConfig, generation_config)
   end
 
+  defp encode_imagen_image_body(request) do
+    prompt = imagen_prompt(request.options[:context])
+
+    if prompt == "" do
+      raise ReqLLM.Error.Invalid.Parameter.exception(
+              parameter: "Google Imagen models require a text prompt"
+            )
+    end
+
+    parameters =
+      %{}
+      |> maybe_put(:sampleCount, image_candidate_count(request.options))
+      |> maybe_put(:aspectRatio, request.options[:aspect_ratio])
+      |> maybe_put(:sampleImageSize, imagen_sample_image_size(request.options[:size]))
+      |> maybe_put(:outputOptions, imagen_output_options(request.options[:output_format]))
+
+    %{}
+    |> Map.put(:instances, [%{prompt: prompt}])
+    |> maybe_put(:parameters, if(parameters == %{}, do: nil, else: parameters))
+  end
+
   defp image_candidate_count(opts) when is_list(opts) do
     if Keyword.get(opts, :image_n_provided, false) do
       case Keyword.fetch(opts, :n) do
@@ -888,6 +960,68 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp image_candidate_count(_), do: nil
+
+  defp imagen_prompt(%ReqLLM.Context{messages: messages}) do
+    messages
+    |> Enum.map(&imagen_message_prompt/1)
+    |> Enum.reject(&(&1 in [nil, ""]))
+    |> Enum.join("\n\n")
+    |> String.trim()
+  end
+
+  defp imagen_prompt(_), do: ""
+
+  defp imagen_message_prompt(%ReqLLM.Message{role: role, content: content}) do
+    prompt =
+      content
+      |> List.wrap()
+      |> Enum.map(&imagen_content_prompt/1)
+      |> Enum.reject(&(&1 in [nil, ""]))
+      |> Enum.join("\n")
+      |> String.trim()
+
+    case {role, prompt} do
+      {_, ""} -> nil
+      {:user, prompt} -> prompt
+      {role, prompt} -> "#{role}: #{prompt}"
+    end
+  end
+
+  defp imagen_message_prompt(_), do: nil
+
+  defp imagen_content_prompt(%ReqLLM.Message.ContentPart{type: :text, text: text})
+       when is_binary(text),
+       do: text
+
+  defp imagen_content_prompt(%{type: :text, text: text}) when is_binary(text), do: text
+  defp imagen_content_prompt(text) when is_binary(text), do: text
+  defp imagen_content_prompt(_), do: nil
+
+  defp imagen_output_options(nil), do: nil
+
+  defp imagen_output_options(output_format) do
+    %{mimeType: google_image_mime_type(output_format)}
+  end
+
+  defp imagen_sample_image_size({w, h}) when is_integer(w) and is_integer(h) do
+    imagen_sample_image_size("#{w}x#{h}")
+  end
+
+  defp imagen_sample_image_size(size) when is_binary(size) do
+    case String.downcase(size) do
+      "1024x1024" -> "1K"
+      "2048x2048" -> "2K"
+      _ -> nil
+    end
+  end
+
+  defp imagen_sample_image_size(_), do: nil
+
+  defp google_image_mime_type(:png), do: "image/png"
+  defp google_image_mime_type(:jpeg), do: "image/jpeg"
+  defp google_image_mime_type(:webp), do: "image/webp"
+  defp google_image_mime_type(format) when is_binary(format), do: format
+  defp google_image_mime_type(_), do: "image/png"
 
   defp maybe_put_google_aspect_ratio(config, nil), do: config
 
@@ -936,7 +1070,11 @@ defmodule ReqLLM.Providers.Google do
         %ReqLLM.Context{} = ctx ->
           model_name = request.options[:model]
           # Convert OpenAI-style context to Gemini format
-          encoded = ReqLLM.Provider.Defaults.encode_context_to_openai_format(ctx, model_name)
+          encoded =
+            ctx
+            |> normalize_context_video_urls()
+            |> ReqLLM.Provider.Defaults.encode_context_to_openai_format(model_name)
+
           messages = encoded[:messages] || encoded["messages"] || []
           split_messages_for_gemini(messages)
 
@@ -981,7 +1119,10 @@ defmodule ReqLLM.Providers.Google do
       |> maybe_put(:topP, request.options[:top_p])
       |> maybe_put(:topK, request.options[:top_k])
       |> maybe_put(:candidateCount, request.options[:google_candidate_count] || 1)
-      |> maybe_add_thinking_config(request.options[:google_thinking_budget])
+      |> maybe_add_thinking_config(
+        request.options[:google_thinking_budget],
+        request.options[:google_thinking_level]
+      )
 
     %{}
     |> maybe_put(:cachedContent, request.options[:cached_content])
@@ -1020,7 +1161,12 @@ defmodule ReqLLM.Providers.Google do
       case request.options[:context] do
         %ReqLLM.Context{} = ctx ->
           model_name = request.options[:model]
-          encoded = ReqLLM.Provider.Defaults.encode_context_to_openai_format(ctx, model_name)
+
+          encoded =
+            ctx
+            |> normalize_context_video_urls()
+            |> ReqLLM.Provider.Defaults.encode_context_to_openai_format(model_name)
+
           messages = encoded[:messages] || encoded["messages"] || []
           split_messages_for_gemini(messages)
 
@@ -1049,7 +1195,10 @@ defmodule ReqLLM.Providers.Google do
       |> maybe_put(:maxOutputTokens, request.options[:max_tokens])
       |> maybe_put(:topP, request.options[:top_p])
       |> maybe_put(:topK, request.options[:top_k])
-      |> maybe_add_thinking_config(request.options[:google_thinking_budget])
+      |> maybe_add_thinking_config(
+        request.options[:google_thinking_budget],
+        request.options[:google_thinking_level]
+      )
       |> put_schema_for_model(model_name, compiled_schema)
 
     %{}
@@ -1060,9 +1209,20 @@ defmodule ReqLLM.Providers.Google do
     |> maybe_put(:safetySettings, request.options[:google_safety_settings])
   end
 
+  defp gemini_3_or_later?(%LLMDB.Model{family: family}) when is_binary(family),
+    do: String.starts_with?(family, "gemini-3")
+
+  defp gemini_3_or_later?(%LLMDB.Model{id: id}) when is_binary(id),
+    do: String.starts_with?(id, "gemini-3")
+
+  defp gemini_3_or_later?(id) when is_binary(id),
+    do: String.starts_with?(id, "gemini-3")
+
+  defp gemini_3_or_later?(_), do: false
+
   defp json_schema_supported?(model_name) when is_binary(model_name) do
     String.starts_with?(model_name, "gemini-2.5-") or model_name == "gemini-2.5" or
-      String.starts_with?(model_name, "gemini-3-") or model_name == "gemini-3"
+      String.starts_with?(model_name, "gemini-3")
   end
 
   defp json_schema_supported?(_), do: false
@@ -1278,6 +1438,14 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp decode_image_response(req, model_name, %{} = body) do
+    if Map.has_key?(body, "predictions") do
+      decode_imagen_response(req, model_name, body)
+    else
+      decode_gemini_image_response(req, model_name, body)
+    end
+  end
+
+  defp decode_gemini_image_response(req, model_name, %{} = body) do
     parts = extract_candidate_parts(body)
 
     content_parts =
@@ -1314,6 +1482,30 @@ defmodule ReqLLM.Providers.Google do
     ReqLLM.Context.merge_response(base_response.context, base_response)
   end
 
+  defp decode_imagen_response(req, model_name, %{} = body) do
+    content_parts =
+      body
+      |> Map.get("predictions", [])
+      |> Enum.map(&decode_imagen_prediction/1)
+      |> Enum.reject(&is_nil/1)
+
+    base_response = %ReqLLM.Response{
+      id: image_response_id(),
+      model: model_name,
+      context: req.options[:context] || %ReqLLM.Context{messages: []},
+      message: %ReqLLM.Message{role: :assistant, content: content_parts},
+      object: nil,
+      stream?: false,
+      stream: nil,
+      usage: nil,
+      finish_reason: :stop,
+      provider_meta: %{"google" => Map.delete(body, "predictions")},
+      error: nil
+    }
+
+    ReqLLM.Context.merge_response(base_response.context, base_response)
+  end
+
   defp extract_candidate_parts(%{"candidates" => candidates}) when is_list(candidates) do
     Enum.flat_map(candidates, fn
       %{"content" => %{"parts" => parts}} when is_list(parts) -> parts
@@ -1336,6 +1528,18 @@ defmodule ReqLLM.Providers.Google do
   end
 
   defp decode_image_part(_), do: nil
+
+  defp decode_imagen_prediction(%{"bytesBase64Encoded" => b64, "mimeType" => mime_type})
+       when is_binary(b64) and is_binary(mime_type) do
+    %ReqLLM.Message.ContentPart{type: :image, data: Base.decode64!(b64), media_type: mime_type}
+  end
+
+  defp decode_imagen_prediction(%{"gcsUri" => uri, "mimeType" => mime_type})
+       when is_binary(uri) and is_binary(mime_type) do
+    ReqLLM.Message.ContentPart.image_url(uri, %{media_type: mime_type})
+  end
+
+  defp decode_imagen_prediction(_), do: nil
 
   defp decode_inline_data(%{"data" => b64, "mimeType" => mime_type})
        when is_binary(b64) and is_binary(mime_type) do
@@ -1445,15 +1649,27 @@ defmodule ReqLLM.Providers.Google do
 
   defp extract_grounding_metadata(_), do: nil
 
-  # Helper to add thinking configuration if specified
-  defp maybe_add_thinking_config(config, nil), do: config
+  defp maybe_add_thinking_config(config, budget, level) do
+    case {budget, level} do
+      {b, l} when not is_nil(b) and not is_nil(l) ->
+        raise ArgumentError,
+              "google_thinking_budget and google_thinking_level cannot be combined in the same request"
 
-  defp maybe_add_thinking_config(config, budget) when is_integer(budget) and budget > 0 do
-    Map.put(config, :thinkingConfig, %{thinkingBudget: budget, includeThoughts: true})
-  end
+      {nil, nil} ->
+        config
 
-  defp maybe_add_thinking_config(config, 0) do
-    Map.put(config, :thinkingConfig, %{thinkingBudget: 0})
+      {0, nil} ->
+        Map.put(config, :thinkingConfig, %{thinkingBudget: 0})
+
+      {budget, nil} when is_integer(budget) and budget > 0 ->
+        Map.put(config, :thinkingConfig, %{thinkingBudget: budget, includeThoughts: true})
+
+      {nil, level} ->
+        Map.put(config, :thinkingConfig, %{
+          thinkingLevel: to_string(level),
+          includeThoughts: true
+        })
+    end
   end
 
   defp convert_google_to_openai_format(%{"candidates" => candidates} = body) do
@@ -2093,41 +2309,59 @@ defmodule ReqLLM.Providers.Google do
     end)
   end
 
-  # Handle OpenAI-format image_url (from Provider.Defaults.encode_openai_content_part)
-  defp convert_content_part(%{type: "image_url", image_url: %{url: url}} = part)
-       when is_binary(url) do
-    cond do
-      # Data URI format: data:mime/type;base64,<data>
-      String.starts_with?(url, "data:") ->
-        case String.split(url, ",", parts: 2) do
-          [header, base64_data] ->
-            mime_type =
-              case Regex.run(~r/data:([^;]+)/, header) do
-                [_, type] -> type
-                _ -> "image/jpeg"
-              end
+  defp normalize_context_video_urls(%ReqLLM.Context{messages: messages} = context) do
+    %{
+      context
+      | messages: Enum.map(messages, &normalize_message_video_urls/1)
+    }
+  end
 
-            %{
-              inline_data: %{
-                mime_type: mime_type,
-                data: base64_data
-              }
-            }
+  defp normalize_message_video_urls(%ReqLLM.Message{content: content} = message)
+       when is_list(content) do
+    %{
+      message
+      | content: Enum.map(content, &normalize_content_part_video_url/1)
+    }
+  end
 
-          _ ->
-            %{text: "[Malformed data URI]"}
-        end
+  defp normalize_message_video_urls(message), do: message
 
-      # HTTP/HTTPS URL: use fileData.fileUri (Google-native URL support)
-      String.starts_with?(url, "http://") or String.starts_with?(url, "https://") ->
-        build_file_data(part, url)
+  defp normalize_content_part_video_url(%ReqLLM.Message.ContentPart{
+         type: :video_url,
+         url: url,
+         media_type: media_type,
+         metadata: metadata
+       }) do
+    part = ReqLLM.Message.ContentPart.image_url(url, metadata)
 
-      # GCS URI: gs://bucket/path
-      String.starts_with?(url, "gs://") ->
-        build_file_data(part, url)
+    if is_binary(media_type) and media_type != "" do
+      %{part | media_type: media_type}
+    else
+      part
+    end
+  end
 
-      true ->
-        %{text: "[Unsupported URL scheme: #{String.slice(url, 0, 20)}...]"}
+  defp normalize_content_part_video_url(part), do: part
+
+  defp convert_content_part(%{type: type} = part)
+       when type in ["image_url", "video_url", :image_url, :video_url] do
+    case content_part_url(part) do
+      url when is_binary(url) ->
+        convert_url_content_part(part, url)
+
+      _ ->
+        %{text: to_string(part)}
+    end
+  end
+
+  defp convert_content_part(%{"type" => type} = part)
+       when type in ["image_url", "video_url"] do
+    case content_part_url(part) do
+      url when is_binary(url) ->
+        convert_url_content_part(part, url)
+
+      _ ->
+        %{text: to_string(part)}
     end
   end
 
@@ -2155,6 +2389,39 @@ defmodule ReqLLM.Providers.Google do
 
   defp convert_content_part(part), do: %{text: to_string(part)}
 
+  defp convert_url_content_part(part, url) do
+    cond do
+      String.starts_with?(url, "data:") ->
+        case String.split(url, ",", parts: 2) do
+          [header, base64_data] ->
+            mime_type =
+              case Regex.run(~r/data:([^;]+)/, header) do
+                [_, type] -> type
+                _ -> "image/jpeg"
+              end
+
+            %{
+              inline_data: %{
+                mime_type: mime_type,
+                data: base64_data
+              }
+            }
+
+          _ ->
+            %{text: "[Malformed data URI]"}
+        end
+
+      String.starts_with?(url, "http://") or String.starts_with?(url, "https://") ->
+        build_file_data(part, url)
+
+      String.starts_with?(url, "gs://") ->
+        build_file_data(part, url)
+
+      true ->
+        %{text: "[Unsupported URL scheme: #{String.slice(url, 0, 20)}...]"}
+    end
+  end
+
   # Builds a fileData map, omitting mimeType when it cannot be reliably inferred.
   # YouTube and other extensionless URLs need mimeType omitted so Gemini can infer it.
   defp build_file_data(part, url) do
@@ -2176,10 +2443,26 @@ defmodule ReqLLM.Providers.Google do
   defp get_mime_type_from_part(part, url) do
     # Try metadata first (if passed through from ContentPart)
     case part do
+      %{media_type: type} when is_binary(type) and type != "" -> type
+      %{"media_type" => type} when is_binary(type) and type != "" -> type
       %{image_url: %{media_type: type}} when is_binary(type) and type != "" -> type
+      %{"image_url" => %{"media_type" => type}} when is_binary(type) and type != "" -> type
+      %{video_url: %{media_type: type}} when is_binary(type) and type != "" -> type
+      %{"video_url" => %{"media_type" => type}} when is_binary(type) and type != "" -> type
       _ -> infer_mime_type_from_url(url)
     end
   end
+
+  defp content_part_url(part) do
+    Map.get(part, :url) ||
+      Map.get(part, "url") ||
+      nested_url(Map.get(part, :image_url) || Map.get(part, "image_url")) ||
+      nested_url(Map.get(part, :video_url) || Map.get(part, "video_url"))
+  end
+
+  defp nested_url(%{url: url}) when is_binary(url), do: url
+  defp nested_url(%{"url" => url}) when is_binary(url), do: url
+  defp nested_url(_), do: nil
 
   defp infer_mime_type_from_url(url) do
     # Strip query params and get extension
@@ -2199,6 +2482,9 @@ defmodule ReqLLM.Providers.Google do
       _ -> nil
     end
   end
+
+  defp imagen_model_id?(id) when is_binary(id), do: String.contains?(id, "imagen")
+  defp imagen_model_id?(_), do: false
 
   # Decode Google streaming events.
   #

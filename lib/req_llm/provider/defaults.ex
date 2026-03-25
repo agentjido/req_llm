@@ -920,6 +920,12 @@ defmodule ReqLLM.Provider.Defaults do
     |> merge_content_metadata(metadata)
   end
 
+  defp encode_openai_content_part(%ReqLLM.Message.ContentPart{type: :video_url}) do
+    raise ReqLLM.Error.Invalid.Message.exception(
+            reason: "Video URLs are not supported for this provider."
+          )
+  end
+
   defp encode_openai_content_part(%ReqLLM.Message.ContentPart{
          type: :file,
          data: data,

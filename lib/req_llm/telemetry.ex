@@ -12,7 +12,7 @@ defmodule ReqLLM.Telemetry do
   - compatibility emission for `[:req_llm, :token_usage]`
   """
 
-  alias ReqLLM.{Context, Message, ModelHelpers, Response, Tool}
+  alias ReqLLM.{Context, Message, ModelHelpers, Response, RerankResponse, Tool}
   alias ReqLLM.Message.ContentPart
 
   @request_context_key :req_llm_telemetry
@@ -469,6 +469,13 @@ defmodule ReqLLM.Telemetry do
     opts[:text]
   end
 
+  defp request_input(:rerank, opts) do
+    %{
+      query: opts[:query],
+      documents: opts[:documents]
+    }
+  end
+
   defp request_input(:speech, opts) do
     %{
       text: opts[:text],
@@ -501,6 +508,17 @@ defmodule ReqLLM.Telemetry do
     %{
       input_count: length(texts),
       input_bytes: Enum.reduce(texts, 0, &(&2 + byte_size(to_string(&1))))
+    }
+  end
+
+  defp summarize_request(:rerank, input) when is_map(input) do
+    documents = List.wrap(Map.get(input, :documents))
+    query = to_string(Map.get(input, :query, ""))
+
+    %{
+      document_count: length(documents),
+      query_bytes: byte_size(query),
+      document_bytes: Enum.reduce(documents, 0, &(&2 + byte_size(&1)))
     }
   end
 
@@ -572,6 +590,13 @@ defmodule ReqLLM.Telemetry do
 
   defp request_payload(:embedding, text, :raw) do
     %{input: List.wrap(text)}
+  end
+
+  defp request_payload(:rerank, input, :raw) when is_map(input) do
+    %{
+      query: Map.get(input, :query),
+      documents: List.wrap(Map.get(input, :documents))
+    }
   end
 
   defp request_payload(:speech, input, :raw) when is_map(input) do
@@ -850,6 +875,13 @@ defmodule ReqLLM.Telemetry do
     }
   end
 
+  defp summarize_response(:rerank, %RerankResponse{results: results}) do
+    %{
+      result_count: length(results),
+      top_score: results |> List.first() |> then(&if &1, do: &1.relevance_score, else: nil)
+    }
+  end
+
   defp summarize_response(:transcription, %ReqLLM.Transcription.Result{} = result) do
     %{
       text_bytes: byte_size(result.text || ""),
@@ -1117,11 +1149,21 @@ defmodule ReqLLM.Telemetry do
         fetch_value(opts[:provider_options], :google_thinking_budget) ||
         fetch_value(opts[:provider_options], :thinking_budget)
 
+    google_thinking_level =
+      opts[:google_thinking_level] ||
+        fetch_value(opts[:provider_options], :google_thinking_level)
+
     effort =
-      normalize_reasoning_effort(
-        opts[:reasoning_effort] ||
-          fetch_value(opts[:provider_options], :reasoning_effort)
-      )
+      case google_thinking_level do
+        nil ->
+          normalize_reasoning_effort(
+            opts[:reasoning_effort] ||
+              fetch_value(opts[:provider_options], :reasoning_effort)
+          )
+
+        level ->
+          thinking_level_to_effort(level)
+      end
 
     disable? = budget_tokens == 0 or effort == :none
     enable? = enabled_budget?(budget_tokens) or effort in @canonical_reasoning_efforts
@@ -1273,22 +1315,43 @@ defmodule ReqLLM.Telemetry do
   end
 
   defp normalize_google_effective(body) when is_map(body) do
+    thinking_level =
+      fetch_value(body, :generationConfig, :thinkingConfig, :thinkingLevel) ||
+        fetch_value(body, :thinkingConfig, :thinkingLevel)
+
     budget_tokens =
       fetch_value(body, :generationConfig, :thinkingConfig, :thinkingBudget) ||
         fetch_value(body, :thinkingConfig, :thinkingBudget)
 
-    disable? = budget_tokens == 0
-    enable? = enabled_budget?(budget_tokens)
+    cond do
+      thinking_level ->
+        effort = thinking_level_to_effort(thinking_level)
+        reasoning_shape(:enabled, effort, nil, true)
 
-    reasoning_shape(
-      mode_from_signals(enable?, disable?),
-      nil,
-      normalize_budget(budget_tokens),
-      enable? or disable?
-    )
+      true ->
+        disable? = budget_tokens == 0
+        enable? = enabled_budget?(budget_tokens)
+
+        reasoning_shape(
+          mode_from_signals(enable?, disable?),
+          nil,
+          normalize_budget(budget_tokens),
+          enable? or disable?
+        )
+    end
   end
 
   defp normalize_google_effective(_body), do: disabled_reasoning_shape()
+
+  defp thinking_level_to_effort("minimal"), do: :minimal
+  defp thinking_level_to_effort("low"), do: :low
+  defp thinking_level_to_effort("medium"), do: :medium
+  defp thinking_level_to_effort("high"), do: :high
+  defp thinking_level_to_effort(:minimal), do: :minimal
+  defp thinking_level_to_effort(:low), do: :low
+  defp thinking_level_to_effort(:medium), do: :medium
+  defp thinking_level_to_effort(:high), do: :high
+  defp thinking_level_to_effort(_), do: nil
 
   defp normalize_alibaba_effective(body) when is_map(body) do
     enabled? = fetch_value(body, :enable_thinking)
@@ -1508,7 +1571,9 @@ defmodule ReqLLM.Telemetry do
 
   defp google_reasoning_body?(body) do
     not is_nil(fetch_value(body, :generationConfig, :thinkingConfig, :thinkingBudget)) or
-      not is_nil(fetch_value(body, :thinkingConfig, :thinkingBudget))
+      not is_nil(fetch_value(body, :thinkingConfig, :thinkingBudget)) or
+      not is_nil(fetch_value(body, :generationConfig, :thinkingConfig, :thinkingLevel)) or
+      not is_nil(fetch_value(body, :thinkingConfig, :thinkingLevel))
   end
 
   defp alibaba_reasoning_body?(body) do
@@ -1643,6 +1708,7 @@ defmodule ReqLLM.Telemetry do
   end
 
   defp new_response_summary_state(:embedding), do: %{}
+  defp new_response_summary_state(:rerank), do: %{}
   defp new_response_summary_state(:transcription), do: %{}
   defp new_response_summary_state(:speech), do: %{}
   defp new_response_summary_state(_), do: %{}

@@ -272,6 +272,7 @@ defmodule ReqLLM.MessageTest do
       content_types = [
         ContentPart.text("text"),
         ContentPart.image_url("http://example.com/img.jpg"),
+        ContentPart.video_url("http://example.com/clip.mp4"),
         ContentPart.image(<<1, 2, 3>>, "image/png"),
         ContentPart.file("data", "file.txt", "text/plain"),
         ContentPart.thinking("thinking")
@@ -280,7 +281,7 @@ defmodule ReqLLM.MessageTest do
       message = %Message{role: :user, content: content_types}
       output = inspect(message)
 
-      assert output =~ "text,image_url,image,file,thinking"
+      assert output =~ "text,image_url,video_url,image,file,thinking"
     end
   end
 
