@@ -90,6 +90,7 @@ defmodule ReqLLM.Providers.Cohere do
     |> ReqLLM.Step.Error.attach()
     |> Req.Request.append_request_steps(llm_encode_body: &encode_body/1)
     |> Req.Request.append_response_steps(llm_decode_response: &decode_response/1)
+    |> ReqLLM.Step.Usage.attach(model)
     |> ReqLLM.Step.Telemetry.attach(model, user_opts)
     |> ReqLLM.Step.Fixture.maybe_attach(model, user_opts)
   end
@@ -127,4 +128,24 @@ defmodule ReqLLM.Providers.Cohere do
 
     {req, error}
   end
+
+  @impl ReqLLM.Provider
+  def extract_usage(%{"meta" => meta}, _model) when is_map(meta) do
+    tokens = Map.get(meta, "tokens") || %{}
+    billed_units = Map.get(meta, "billed_units") || %{}
+    search_units = Map.get(billed_units, "search_units") || Map.get(billed_units, :search_units)
+
+    usage =
+      tokens
+      |> maybe_put(:billed_units, billed_units)
+      |> maybe_put(:search_units, search_units)
+
+    if usage == %{} do
+      {:error, :no_usage_found}
+    else
+      {:ok, usage}
+    end
+  end
+
+  def extract_usage(_, _), do: {:error, :invalid_body}
 end

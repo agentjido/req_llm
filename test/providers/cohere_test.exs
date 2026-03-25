@@ -125,4 +125,23 @@ defmodule ReqLLM.Providers.CohereTest do
       assert error.status == 401
     end
   end
+
+  describe "usage extraction" do
+    test "extract_usage reads token and billed unit metadata from responses" do
+      assert {:ok, usage} =
+               Cohere.extract_usage(
+                 %{
+                   "meta" => %{
+                     "tokens" => %{"input_tokens" => 12},
+                     "billed_units" => %{"search_units" => 1}
+                   }
+                 },
+                 rerank_model()
+               )
+
+      assert usage["input_tokens"] == 12
+      assert usage[:search_units] == 1
+      assert usage[:billed_units] == %{"search_units" => 1}
+    end
+  end
 end

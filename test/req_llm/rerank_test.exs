@@ -3,6 +3,38 @@ defmodule ReqLLM.RerankTest do
 
   alias ReqLLM.Rerank
 
+  defp setup_telemetry do
+    test_pid = self()
+    ref = System.unique_integer([:positive])
+    usage_handler_id = "rerank-usage-handler-#{ref}"
+    stop_handler_id = "rerank-stop-handler-#{ref}"
+
+    :telemetry.attach(
+      usage_handler_id,
+      [:req_llm, :token_usage],
+      fn name, measurements, metadata, _ ->
+        send(test_pid, {:telemetry_event, name, measurements, metadata})
+      end,
+      nil
+    )
+
+    :telemetry.attach(
+      stop_handler_id,
+      [:req_llm, :request, :stop],
+      fn name, measurements, metadata, _ ->
+        send(test_pid, {:telemetry_event, name, measurements, metadata})
+      end,
+      nil
+    )
+
+    on_exit(fn ->
+      :telemetry.detach(usage_handler_id)
+      :telemetry.detach(stop_handler_id)
+    end)
+
+    :ok
+  end
+
   describe "validate_model/1" do
     test "accepts inline rerank models outside the catalog" do
       assert {:ok, %LLMDB.Model{provider: :cohere, id: "rerank-v3.5"}} =
@@ -17,6 +49,8 @@ defmodule ReqLLM.RerankTest do
 
   describe "rerank/2" do
     setup do
+      setup_telemetry()
+
       Req.Test.stub(__MODULE__.SingleBatch, fn conn ->
         body = conn.body_params
 
@@ -138,6 +172,30 @@ defmodule ReqLLM.RerankTest do
                )
 
       assert Exception.message(error) =~ "batch_size"
+    end
+
+    test "emits usage telemetry for successful rerank requests" do
+      assert {:ok, response} =
+               Rerank.rerank(
+                 "cohere:rerank-v3.5",
+                 query: "capital of the United States?",
+                 documents: ["Carson City", "Washington, D.C.", "Saipan"],
+                 top_n: 2,
+                 req_http_options: [plug: {Req.Test, __MODULE__.SingleBatch}]
+               )
+
+      assert response.id == "rerank-single"
+
+      assert_receive {:telemetry_event, [:req_llm, :token_usage], measurements, metadata}
+      assert measurements.tokens.input_tokens == 12
+      assert measurements.tokens.total_tokens == 12
+      assert metadata.operation == :rerank
+      assert metadata.provider == :cohere
+
+      assert_receive {:telemetry_event, [:req_llm, :request, :stop], _measurements, stop_meta}
+      assert stop_meta.operation == :rerank
+      assert stop_meta.usage.tokens.input_tokens == 12
+      assert stop_meta.usage.tokens.total_tokens == 12
     end
   end
 end
