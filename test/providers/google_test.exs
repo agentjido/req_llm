@@ -1191,6 +1191,33 @@ defmodule ReqLLM.Providers.GoogleTest do
       refute Map.has_key?(decoded["generationConfig"], "responseSchema")
     end
 
+    test "encode_object_body uses responseJsonSchema for Gemini 3.1" do
+      context = context_fixture()
+
+      {:ok, schema} =
+        ReqLLM.Schema.compile(
+          name: [type: :string, required: true],
+          age: [type: :pos_integer]
+        )
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: "gemini-3.1-pro-preview",
+          operation: :object,
+          compiled_schema: schema
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      response_json_schema = decoded["generationConfig"]["responseJsonSchema"]
+      assert response_json_schema["type"] == "object"
+      assert Map.has_key?(response_json_schema, "properties")
+      refute Map.has_key?(decoded["generationConfig"], "responseSchema")
+    end
+
     test "prepare_request creates configured embedding request" do
       {:ok, model} = ReqLLM.model("google:gemini-embedding-001")
       text = "Hello, world!"
