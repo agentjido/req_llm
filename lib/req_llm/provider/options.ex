@@ -175,6 +175,13 @@ defmodule ReqLLM.Provider.Options do
                                  doc: "Provider-specific options (nested under this key)"
                                ],
 
+                               # Streaming request hook
+                               on_finch_request: [
+                                 type: {:fun, 1},
+                                 doc:
+                                   "Callback `(Finch.Request.t() -> Finch.Request.t())` applied to the streaming request just before it is sent. Applied after the global `finch_request_adapter` config. See `ReqLLM.FinchRequestAdapter` for the config-level equivalent."
+                               ],
+
                                # Framework options
                                on_unsupported: [
                                  type: {:in, [:warn, :error, :ignore]},
@@ -209,6 +216,7 @@ defmodule ReqLLM.Provider.Options do
   @internal_keys [
     :api_key,
     :access_token,
+    :on_finch_request,
     :auth_mode,
     :oauth_file,
     :auth_file,

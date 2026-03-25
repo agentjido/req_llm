@@ -103,6 +103,7 @@ defmodule ReqLLM.Streaming.FinchClient do
     alias ReqLLM.Streaming.Fixtures
 
     with {:ok, finch_request} <- provider_mod.attach_stream(model, context, opts, finch_name),
+         finch_request <- transform_request(finch_request, opts),
          :ok <- validate_http2_body_size(finch_request, finch_name) do
       http_context = Fixtures.HTTPContext.from_finch_request(finch_request)
       canonical_json = Fixtures.canonical_json_from_finch_request(finch_request)
@@ -227,6 +228,27 @@ defmodule ReqLLM.Streaming.FinchClient do
     error ->
       Logger.error("Failed to start streaming task", error: error)
       {:error, {:task_start_failed, error}}
+  end
+
+  # Apply config-level adapter then per-request callback, in that order.
+  defp transform_request(finch_request, opts) do
+    finch_request
+    |> apply_config_adapter()
+    |> apply_per_request_callback(opts)
+  end
+
+  defp apply_config_adapter(finch_request) do
+    case Application.get_env(:req_llm, :finch_request_adapter) do
+      nil -> finch_request
+      adapter -> adapter.call(finch_request)
+    end
+  end
+
+  defp apply_per_request_callback(finch_request, opts) do
+    case Keyword.get(opts, :on_finch_request) do
+      nil -> finch_request
+      fun -> fun.(finch_request)
+    end
   end
 
   defp maybe_replay_fixture(model, opts) do
