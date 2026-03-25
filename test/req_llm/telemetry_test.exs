@@ -139,6 +139,35 @@ defmodule ReqLLM.TelemetryTest do
     assert google_reasoning.requested_mode == :disabled
   end
 
+  test "tracks google thinking levels as requested reasoning" do
+    {:ok, google_model} = ReqLLM.model("google:gemini-3-flash-preview")
+
+    google_reasoning =
+      google_model
+      |> ReqLLM.Telemetry.new_context(
+        [
+          context: ReqLLM.Context.new([user("hello")]),
+          provider_options: [google_thinking_level: :medium]
+        ],
+        operation: :chat
+      )
+      |> ReqLLM.Telemetry.start_request(%{
+        "generationConfig" => %{"thinkingConfig" => %{"thinkingLevel" => "medium"}}
+      })
+      |> ReqLLM.Telemetry.reasoning_metadata()
+      |> Map.fetch!(:reasoning)
+
+    assert google_reasoning[:supported?]
+    assert google_reasoning[:requested?]
+    assert google_reasoning[:effective?]
+    assert google_reasoning.requested_mode == :enabled
+    assert google_reasoning.requested_effort == :medium
+    assert is_nil(google_reasoning.requested_budget_tokens)
+    assert google_reasoning.effective_mode == :enabled
+    assert google_reasoning.effective_effort == :medium
+    assert is_nil(google_reasoning.effective_budget_tokens)
+  end
+
   test "emits correlated sync request and reasoning lifecycle events" do
     model = reasoning_model(:openai, "gpt-5")
 

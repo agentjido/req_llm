@@ -1149,11 +1149,21 @@ defmodule ReqLLM.Telemetry do
         fetch_value(opts[:provider_options], :google_thinking_budget) ||
         fetch_value(opts[:provider_options], :thinking_budget)
 
+    google_thinking_level =
+      opts[:google_thinking_level] ||
+        fetch_value(opts[:provider_options], :google_thinking_level)
+
     effort =
-      normalize_reasoning_effort(
-        opts[:reasoning_effort] ||
-          fetch_value(opts[:provider_options], :reasoning_effort)
-      )
+      case google_thinking_level do
+        nil ->
+          normalize_reasoning_effort(
+            opts[:reasoning_effort] ||
+              fetch_value(opts[:provider_options], :reasoning_effort)
+          )
+
+        level ->
+          thinking_level_to_effort(level)
+      end
 
     disable? = budget_tokens == 0 or effort == :none
     enable? = enabled_budget?(budget_tokens) or effort in @canonical_reasoning_efforts
@@ -1337,6 +1347,10 @@ defmodule ReqLLM.Telemetry do
   defp thinking_level_to_effort("low"), do: :low
   defp thinking_level_to_effort("medium"), do: :medium
   defp thinking_level_to_effort("high"), do: :high
+  defp thinking_level_to_effort(:minimal), do: :minimal
+  defp thinking_level_to_effort(:low), do: :low
+  defp thinking_level_to_effort(:medium), do: :medium
+  defp thinking_level_to_effort(:high), do: :high
   defp thinking_level_to_effort(_), do: nil
 
   defp normalize_alibaba_effective(body) when is_map(body) do
@@ -1557,7 +1571,9 @@ defmodule ReqLLM.Telemetry do
 
   defp google_reasoning_body?(body) do
     not is_nil(fetch_value(body, :generationConfig, :thinkingConfig, :thinkingBudget)) or
-      not is_nil(fetch_value(body, :thinkingConfig, :thinkingBudget))
+      not is_nil(fetch_value(body, :thinkingConfig, :thinkingBudget)) or
+      not is_nil(fetch_value(body, :generationConfig, :thinkingConfig, :thinkingLevel)) or
+      not is_nil(fetch_value(body, :thinkingConfig, :thinkingLevel))
   end
 
   defp alibaba_reasoning_body?(body) do
