@@ -11,32 +11,59 @@ defmodule ReqLLM.Streaming.FixturesTest do
       default_http = Finch.build(:get, "http://api.example.com/v1/chat")
       custom_http = Finch.build(:get, "http://api.example.com:8080/v1/chat")
 
-      assert HTTPContext.from_finch_request(default_https).url == "https://api.example.com/v1/chat"
-      assert HTTPContext.from_finch_request(custom_https).url == "https://api.example.com:8443/v1/chat"
+      assert HTTPContext.from_finch_request(default_https).url ==
+               "https://api.example.com/v1/chat"
+
+      assert HTTPContext.from_finch_request(custom_https).url ==
+               "https://api.example.com:8443/v1/chat"
+
       assert HTTPContext.from_finch_request(default_http).url == "http://api.example.com/v1/chat"
-      assert HTTPContext.from_finch_request(custom_http).url == "http://api.example.com:8080/v1/chat"
+
+      assert HTTPContext.from_finch_request(custom_http).url ==
+               "http://api.example.com:8080/v1/chat"
     end
 
     test "normalizes binary, atom, and unknown methods" do
-      assert HTTPContext.from_finch_request(Finch.build(:get, "https://api.example.com") |> Map.put(:method, "PUT")).method ==
+      assert HTTPContext.from_finch_request(
+               Finch.build(:get, "https://api.example.com")
+               |> Map.put(:method, "PUT")
+             ).method ==
                :put
 
-      assert HTTPContext.from_finch_request(Finch.build(:get, "https://api.example.com") |> Map.put(:method, "PATCH")).method ==
+      assert HTTPContext.from_finch_request(
+               Finch.build(:get, "https://api.example.com")
+               |> Map.put(:method, "PATCH")
+             ).method ==
                :patch
 
-      assert HTTPContext.from_finch_request(Finch.build(:get, "https://api.example.com") |> Map.put(:method, "DELETE")).method ==
+      assert HTTPContext.from_finch_request(
+               Finch.build(:get, "https://api.example.com")
+               |> Map.put(:method, "DELETE")
+             ).method ==
                :delete
 
-      assert HTTPContext.from_finch_request(Finch.build(:get, "https://api.example.com") |> Map.put(:method, "HEAD")).method ==
+      assert HTTPContext.from_finch_request(
+               Finch.build(:get, "https://api.example.com")
+               |> Map.put(:method, "HEAD")
+             ).method ==
                :head
 
-      assert HTTPContext.from_finch_request(Finch.build(:get, "https://api.example.com") |> Map.put(:method, "OPTIONS")).method ==
+      assert HTTPContext.from_finch_request(
+               Finch.build(:get, "https://api.example.com")
+               |> Map.put(:method, "OPTIONS")
+             ).method ==
                :options
 
-      assert HTTPContext.from_finch_request(Finch.build(:get, "https://api.example.com") |> Map.put(:method, :post)).method ==
+      assert HTTPContext.from_finch_request(
+               Finch.build(:get, "https://api.example.com")
+               |> Map.put(:method, :post)
+             ).method ==
                :post
 
-      assert HTTPContext.from_finch_request(Finch.build(:get, "https://api.example.com") |> Map.put(:method, 123)).method ==
+      assert HTTPContext.from_finch_request(
+               Finch.build(:get, "https://api.example.com")
+               |> Map.put(:method, 123)
+             ).method ==
                :unknown
     end
 
@@ -48,11 +75,15 @@ defmodule ReqLLM.Streaming.FixturesTest do
 
   describe "canonical_json_from_finch_request/1" do
     test "handles nil, invalid JSON, streaming, and unknown bodies" do
-      assert Fixtures.canonical_json_from_finch_request(Finch.build(:post, "https://api.example.com") |> Map.put(:body, nil)) ==
+      assert Fixtures.canonical_json_from_finch_request(
+               Finch.build(:post, "https://api.example.com")
+               |> Map.put(:body, nil)
+             ) ==
                %{}
 
       assert Fixtures.canonical_json_from_finch_request(
-               Finch.build(:post, "https://api.example.com") |> Map.put(:body, "{\"oops\"")
+               Finch.build(:post, "https://api.example.com")
+               |> Map.put(:body, "{\"oops\"")
              ) == %{
                raw_body: "{\"oops\""
              }
@@ -63,7 +94,8 @@ defmodule ReqLLM.Streaming.FixturesTest do
              ) == %{streaming_body: true}
 
       assert Fixtures.canonical_json_from_finch_request(
-               Finch.build(:post, "https://api.example.com") |> Map.put(:body, %{unexpected: true})
+               Finch.build(:post, "https://api.example.com")
+               |> Map.put(:body, %{unexpected: true})
              ) ==
                %{unknown_body: "%{unexpected: true}"}
     end

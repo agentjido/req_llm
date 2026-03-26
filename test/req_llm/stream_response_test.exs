@@ -341,7 +341,11 @@ defmodule ReqLLM.StreamResponseTest do
       stream_response = create_stream_response(stream: chunks)
 
       assert [
-               %ReqLLM.StreamChunk{type: :tool_call, name: "search", arguments: %{query: "weather"}}
+               %ReqLLM.StreamChunk{
+                 type: :tool_call,
+                 name: "search",
+                 arguments: %{query: "weather"}
+               }
              ] = StreamResponse.tool_calls(stream_response) |> Enum.to_list()
     end
 

@@ -54,6 +54,7 @@ defmodule ReqLLM.Streaming.FinchClientTest do
   end
 
   defp wait_until(fun, attempts \\ 20)
+
   defp wait_until(fun, attempts) when attempts > 0 do
     if fun.() do
       true
@@ -385,6 +386,7 @@ defmodule ReqLLM.Streaming.FinchClientTest do
 
       assert wait_until(fn ->
                events = EventStreamServer.events(stream_server)
+
                Enum.any?(events, &match?({:status, 200}, &1)) and
                  Enum.any?(events, &match?({:data, _}, &1))
              end)
