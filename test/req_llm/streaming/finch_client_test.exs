@@ -29,13 +29,16 @@ defmodule ReqLLM.Streaming.FinchClientTest do
     adapter_config = Application.get_env(:req_llm, :finch_request_adapter)
     finch_config = Application.get_env(:req_llm, :finch)
     fixtures_mode = System.get_env("REQ_LLM_FIXTURES_MODE")
+    openai_api_key = System.get_env("OPENAI_API_KEY")
 
     System.put_env("REQ_LLM_FIXTURES_MODE", "replay")
+    System.put_env("OPENAI_API_KEY", "test-streaming-key")
 
     on_exit(fn ->
       restore_app_env(:finch_request_adapter, adapter_config)
       restore_app_env(:finch, finch_config)
       restore_system_env("REQ_LLM_FIXTURES_MODE", fixtures_mode)
+      restore_system_env("OPENAI_API_KEY", openai_api_key)
     end)
 
     :ok
