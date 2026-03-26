@@ -71,6 +71,10 @@ defmodule ReqLLM.StreamResponseTest do
   alias ReqLLM.{Context, Response, StreamChunk, StreamResponse, ToolCall}
 
   describe "struct validation and defaults" do
+    test "exposes schema metadata" do
+      refute is_nil(StreamResponse.schema())
+    end
+
     test "creates stream response with required fields" do
       context = Context.new([Context.system("Test")])
       model = %LLMDB.Model{provider: :test, id: "test-model"}
@@ -269,13 +273,27 @@ defmodule ReqLLM.StreamResponseTest do
     # Table-driven tests for finish reason scenarios
     finish_reason_tests = [
       {:stop, :stop},
+      {:completed, :stop},
       {:length, :length},
       {:tool_use, :tool_calls},
+      {:tool_calls, :tool_calls},
+      {:end_turn, :stop},
+      {:max_tokens, :length},
+      {:max_output_tokens, :length},
+      {:content_filter, :content_filter},
+      {:error, :error},
       {:cancelled, :cancelled},
       {:incomplete, :incomplete},
       {"stop", :stop},
+      {"completed", :stop},
       {"length", :length},
+      {"tool_calls", :tool_calls},
       {"tool_use", :tool_calls},
+      {"max_tokens", :length},
+      {"max_output_tokens", :length},
+      {"content_filter", :content_filter},
+      {"end_turn", :stop},
+      {"error", :error},
       {"cancelled", :cancelled},
       {"incomplete", :incomplete},
       {"not_real_reason", :unknown}
@@ -310,6 +328,33 @@ defmodule ReqLLM.StreamResponseTest do
 
       assert StreamResponse.finish_reason(stream_response) == :stop
       assert StreamResponse.finish_reason(stream_response) == :stop
+    end
+  end
+
+  describe "tool call helpers" do
+    test "filters tool call chunks from the stream" do
+      chunks = [
+        StreamChunk.text("hello"),
+        StreamChunk.tool_call("search", %{query: "weather"})
+      ]
+
+      stream_response = create_stream_response(stream: chunks)
+
+      assert [
+               %ReqLLM.StreamChunk{type: :tool_call, name: "search", arguments: %{query: "weather"}}
+             ] = StreamResponse.tool_calls(stream_response) |> Enum.to_list()
+    end
+
+    test "extracts summarized tool calls" do
+      chunks = [
+        StreamChunk.tool_call("search", %{query: "weather"}, %{id: "call_123"}),
+        StreamChunk.meta(%{finish_reason: :tool_use})
+      ]
+
+      stream_response = create_stream_response(stream: chunks)
+
+      assert [%{id: "call_123", name: "search", arguments: %{query: "weather"}}] =
+               StreamResponse.extract_tool_calls(stream_response)
     end
   end
 

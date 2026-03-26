@@ -76,6 +76,22 @@ defmodule ReqLLM.Streaming.SSETest do
       assert [%{id: "123", event: "delta", data: ~s({"text": "hi"})}] = events
       assert remaining == ""
     end
+
+    test "parses complete JSON array chunks as SSE-style events" do
+      chunk = ~s([{"text":"hello"},{"text":"world"}])
+      {events, remaining} = SSE.accumulate_and_parse(chunk, "")
+
+      assert events == [%{data: %{"text" => "hello"}}, %{data: %{"text" => "world"}}]
+      assert remaining == ""
+    end
+
+    test "extracts complete objects from partially invalid JSON arrays" do
+      chunk = ~s([{"text":"hello"},{"text":}])
+      {events, remaining} = SSE.accumulate_and_parse(chunk, "")
+
+      assert events == [%{data: %{"text" => "hello"}}]
+      assert remaining != ""
+    end
   end
 
   describe "process_sse_event/1" do
