@@ -5,11 +5,14 @@
   "created": "2026-03-26T01:19:06Z",
   "description": "Tests-only coverage task for `test/support/provider_test/comprehensive.ex`. Current local coverage is `65.2%`. Add or expand tests to exercise uncovered branches and behaviors without changing production behavior. If a production-code seam is genuinely needed, split that out into a separate task instead of widening this one.",
   "id": "req-p3w.11.8",
-  "labels": [],
+  "labels": [
+    "coverage",
+    "tests-only"
+  ],
   "parent": "req-p3w.11",
   "priority": 2,
   "status": "open",
   "title": "Increase coverage for test/support/provider_test/comprehensive.ex",
   "type": "task",
-  "updated_at": "2026-03-26T01:19:06Z"
+  "updated_at": "2026-03-26T01:19:07Z"
 }
