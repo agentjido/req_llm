@@ -1274,6 +1274,65 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
   describe "ResponseBuilder - streaming reasoning_details extraction" do
     alias ReqLLM.Providers.OpenAI.ResponsesAPI.ResponseBuilder
 
+    test "upgrades stop finish reason to tool_calls when tool chunks are present" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+      context = %ReqLLM.Context{messages: []}
+
+      chunks = [
+        ReqLLM.StreamChunk.tool_call("get_weather", %{"city" => "SF"}),
+        ReqLLM.StreamChunk.text("Calling a tool")
+      ]
+
+      {:ok, response} =
+        ResponseBuilder.build_response(
+          chunks,
+          %{finish_reason: :stop},
+          context: context,
+          model: model
+        )
+
+      assert response.finish_reason == :tool_calls
+      assert [%ReqLLM.ToolCall{function: %{name: "get_weather"}}] = response.message.tool_calls
+    end
+
+    test "upgrades string stop finish reason to tool_calls when tool chunks are present" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+      context = %ReqLLM.Context{messages: []}
+
+      chunks = [
+        ReqLLM.StreamChunk.tool_call("search", %{"query" => "docs"})
+      ]
+
+      {:ok, response} =
+        ResponseBuilder.build_response(
+          chunks,
+          %{finish_reason: "stop"},
+          context: context,
+          model: model
+        )
+
+      assert response.finish_reason == :tool_calls
+    end
+
+    test "preserves non-stop finish reason when tool chunks are present" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+      context = %ReqLLM.Context{messages: []}
+
+      chunks = [
+        ReqLLM.StreamChunk.tool_call("search", %{"query" => "docs"})
+      ]
+
+      {:ok, response} =
+        ResponseBuilder.build_response(
+          chunks,
+          %{finish_reason: :length},
+          context: context,
+          model: model
+        )
+
+      assert response.finish_reason == :length
+    end
+
     test "extracts reasoning_details from thinking chunks" do
       {:ok, model} = ReqLLM.model("openai:gpt-4o")
       context = %ReqLLM.Context{messages: []}
@@ -1362,6 +1421,25 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert context_msg.reasoning_details != nil
       assert length(context_msg.reasoning_details) == 1
       assert hd(context_msg.reasoning_details).text == "Deep thought"
+    end
+
+    test "leaves message metadata unchanged when response_id is absent" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+      context = %ReqLLM.Context{messages: []}
+
+      chunks = [
+        ReqLLM.StreamChunk.text("No response id")
+      ]
+
+      {:ok, response} =
+        ResponseBuilder.build_response(
+          chunks,
+          %{finish_reason: :stop},
+          context: context,
+          model: model
+        )
+
+      assert response.message.metadata == %{}
     end
   end
 end
