@@ -122,7 +122,7 @@ defmodule ReqLLM.Streaming.WebSocketClient do
     {:ok, task_pid.pid}
   rescue
     error ->
-      Logger.error("Failed to start websocket streaming task", error: error)
+      Logger.error("Failed to start websocket streaming task: #{inspect(error)}")
       {:error, {:task_start_failed, error}}
   end
 

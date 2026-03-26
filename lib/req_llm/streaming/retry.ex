@@ -247,18 +247,13 @@ defmodule ReqLLM.Streaming.Retry do
   defp log_retry(reason, attempt, max_retries, delay_ms) do
     if delay_ms > 0 do
       Logger.warning(
-        "Retrying streaming request after rate limit (429), waiting #{delay_ms}ms",
-        reason: inspect(reason),
-        attempt: attempt,
-        max_retries: max_retries,
-        delay_ms: delay_ms
+        "Retrying streaming request after rate limit (429), waiting #{delay_ms}ms " <>
+          "(reason=#{inspect(reason)}, attempt=#{attempt}, max_retries=#{max_retries})"
       )
     else
       Logger.warning(
-        "Retrying streaming request after transient transport error",
-        reason: inspect(reason),
-        attempt: attempt,
-        max_retries: max_retries
+        "Retrying streaming request after transient transport error " <>
+          "(reason=#{inspect(reason)}, attempt=#{attempt}, max_retries=#{max_retries})"
       )
     end
   end
