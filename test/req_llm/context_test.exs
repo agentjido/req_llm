@@ -4,8 +4,13 @@ defmodule ReqLLM.ContextTest do
   alias ReqLLM.Context
   alias ReqLLM.Message
   alias ReqLLM.Message.ContentPart
+  alias ReqLLM.Response
 
   describe "struct creation" do
+    test "exposes the context schema" do
+      refute is_nil(Context.schema())
+    end
+
     test "creates empty context by default" do
       context = Context.new()
       assert %Context{messages: []} = context
@@ -29,6 +34,15 @@ defmodule ReqLLM.ContextTest do
       context = Context.new(messages)
 
       assert Context.to_list(context) == messages
+    end
+
+    test "append, prepend, and concat preserve message ordering" do
+      base = Context.new([Context.user("base")])
+      prepended = Context.prepend(base, Context.system("system"))
+      appended = Context.append(prepended, Context.assistant("reply"))
+      concatenated = Context.concat(appended, Context.new([Context.user("follow up")]))
+
+      assert Enum.map(concatenated.messages, & &1.role) == [:system, :user, :assistant, :user]
     end
   end
 
@@ -128,6 +142,82 @@ defmodule ReqLLM.ContextTest do
       assert message.content == parts
       assert message.metadata == %{config: true}
     end
+
+    test "supports keyword-list metadata for text and content-part constructors" do
+      user_message = Context.user("Hello", metadata: %{request_id: "req_123"})
+      assistant_message = Context.assistant([ContentPart.text("Hi")], metadata: %{step: 1})
+      system_message = Context.system("You are helpful", metadata: %{source: "test"})
+
+      assert user_message.metadata == %{request_id: "req_123"}
+      assert assistant_message.metadata == %{step: 1}
+      assert system_message.metadata == %{source: "test"}
+    end
+  end
+
+  describe "tool-call helpers" do
+    test "builds assistant helper messages with tool calls" do
+      assistant_with_tools =
+        apply(Context, :assistant_with_tools, [
+          [ReqLLM.ToolCall.new("call_1", "clock", "{}")],
+          "Checking"
+        ])
+
+      assistant_tool_call =
+        apply(Context, :assistant_tool_call, [
+          "clock",
+          %{timezone: "UTC"},
+          [id: "call_2", meta: %{request_id: "req_123"}]
+        ])
+
+      assistant_tool_calls =
+        apply(Context, :assistant_tool_calls, [
+          [%{id: "call_3", name: "weather", input: %{city: "Paris"}}]
+        ])
+
+      assert Enum.map(assistant_with_tools.tool_calls, & &1.id) == ["call_1"]
+      assert Enum.map(assistant_tool_call.tool_calls, & &1.id) == ["call_2"]
+      assert assistant_tool_call.metadata == %{request_id: "req_123"}
+      assert Enum.map(assistant_tool_calls.tool_calls, & &1.id) == ["call_3"]
+    end
+
+    test "executes tool calls and appends success and error results" do
+      tool =
+        ReqLLM.Tool.new!(
+          name: "clock",
+          description: "Returns the time",
+          callback: fn _args -> {:ok, %{ok: true, timezone: "UTC"}} end
+        )
+
+      error_tool =
+        ReqLLM.Tool.new!(
+          name: "fails",
+          description: "Fails",
+          callback: fn _args ->
+            {:error, %ReqLLM.ToolResult{output: %{ok: false, reason: "boom"}}}
+          end
+        )
+
+      context = Context.new([Context.user("Run tools")])
+
+      updated =
+        Context.execute_and_append_tools(
+          context,
+          [
+            %{id: "call_1", name: "clock", arguments: %{}},
+            %{id: "call_2", name: "fails", arguments: %{}},
+            %{id: "call_3", name: "missing", arguments: %{}}
+          ],
+          [tool, error_tool]
+        )
+
+      assert Enum.count(updated.messages) == 4
+      assert Enum.at(updated.messages, 1).metadata[:tool_output] == %{ok: true, timezone: "UTC"}
+      assert Enum.at(updated.messages, 2).metadata[:tool_output] == %{ok: false, reason: "boom"}
+
+      assert Enum.at(updated.messages, 3).metadata[:tool_output] == %{
+               error: "Tool missing not found"
+             }
+    end
   end
 
   describe "build/3 message constructor" do
@@ -197,11 +287,52 @@ defmodule ReqLLM.ContextTest do
     end
 
     test "validate/1 fails with invalid messages" do
-      # Create context with invalid message (non-list content)
       invalid_message = %Message{role: :user, content: "not a list", metadata: %{}}
       context = Context.new([Context.system("Test"), invalid_message])
 
       assert {:error, "Context contains invalid messages"} = Context.validate(context)
+    end
+  end
+
+  describe "merge_response/3" do
+    test "appends response messages and preserves context tools by default" do
+      context = %Context{messages: [Context.user("Hello")], tools: [%{name: "existing"}]}
+
+      response = %Response{
+        id: "resp_123",
+        model: "gpt-4o",
+        context: context,
+        message: Context.assistant("Hi there")
+      }
+
+      merged = Context.merge_response(context, response)
+
+      assert Enum.map(merged.context.messages, & &1.role) == [:user, :assistant]
+      assert merged.context.tools == [%{name: "existing"}]
+    end
+
+    test "replaces or clears persisted tools when explicit tool options are provided" do
+      context = %Context{messages: [Context.user("Hello")], tools: [%{name: "existing"}]}
+
+      response = %Response{
+        id: "resp_123",
+        model: "gpt-4o",
+        context: context,
+        message: Context.assistant("Hi there")
+      }
+
+      replaced = Context.merge_response(context, response, tools: [%{name: "replacement"}])
+      cleared = Context.merge_response(context, response, tools: [])
+
+      assert replaced.context.tools == [%{name: "replacement"}]
+      assert cleared.context.tools == []
+    end
+
+    test "returns the original response when there is no assistant message" do
+      context = Context.new([Context.user("Hello")])
+      response = %Response{id: "resp_123", model: "gpt-4o", context: context, message: nil}
+
+      assert Context.merge_response(context, response) == response
     end
   end
 
@@ -904,6 +1035,68 @@ defmodule ReqLLM.ContextTest do
       [msg] = context.messages
       assert length(msg.tool_calls) == 2
       assert Enum.map(msg.tool_calls, & &1.id) == ["call_1", "call_2"]
+    end
+
+    test "normalizes nested image and video url content maps" do
+      input = [
+        %{
+          "role" => "user",
+          "content" => [
+            %{
+              "type" => "image_url",
+              "image_url" => %{
+                "url" => "https://example.com/image.png",
+                "media_type" => "image/png"
+              }
+            },
+            %{
+              "type" => "video_url",
+              "video_url" => %{
+                "url" => "https://example.com/video.mp4",
+                "media_type" => "video/mp4"
+              }
+            }
+          ]
+        }
+      ]
+
+      {:ok, context} = Context.normalize(input, validate: false)
+
+      [message] = context.messages
+      assert Enum.map(message.content, & &1.type) == [:image_url, :video_url]
+      assert Enum.map(message.content, & &1.media_type) == ["image/png", "video/mp4"]
+    end
+
+    test "raises for invalid direct tool call normalization inputs" do
+      assert_raise ArgumentError, ~r/invalid tool_call/, fn ->
+        Context.assistant("", tool_calls: [:invalid])
+      end
+    end
+  end
+
+  describe "wrap/2 and inspect" do
+    test "wrap/2 falls back to the original context when providers do not wrap" do
+      context = Context.new([Context.user("Hello")])
+
+      assert Context.wrap(context, ReqLLM.model!("openai:gpt-4o")) == context
+
+      assert Context.wrap(context, %LLMDB.Model{provider: :unknown_provider, id: "custom"}) ==
+               context
+    end
+
+    test "inspect summarizes short and long contexts" do
+      short_context = Context.new([Context.user("Hello"), Context.assistant("Hi")])
+
+      long_context =
+        Context.new([
+          Context.system("System prompt"),
+          Context.user("Hello"),
+          Context.assistant("Hi"),
+          Context.user("Tell me more")
+        ])
+
+      assert inspect(short_context) =~ "#Context<2 msgs:"
+      assert inspect(long_context) =~ "#Context<4 messages:"
     end
   end
 end

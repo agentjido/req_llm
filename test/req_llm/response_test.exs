@@ -177,6 +177,36 @@ defmodule ReqLLM.ResponseTest do
     end
   end
 
+  describe "image and reasoning helpers" do
+    test "extracts image helpers from mixed content and handles missing images" do
+      image_content = [
+        %ContentPart{type: :text, text: "preview"},
+        %ContentPart{type: :image_url, url: "https://example.com/image.png"},
+        %ContentPart{type: :image, data: <<1, 2, 3>>, media_type: "image/png"}
+      ]
+
+      response = create_response(message: mixed_content_message(image_content))
+      empty_response = create_response(message: text_message("no images"))
+
+      assert Enum.map(Response.images(response), & &1.type) == [:image_url, :image]
+      assert Response.image(response).type == :image_url
+      assert Response.image_url(response) == "https://example.com/image.png"
+      assert Response.image_data(response) == <<1, 2, 3>>
+      assert Response.image(empty_response) == nil
+      assert Response.image_url(empty_response) == nil
+      assert Response.image_data(empty_response) == nil
+    end
+
+    test "extracts reasoning tokens from alternate usage shapes" do
+      response =
+        create_response(usage: %{"completion_tokens_details" => %{"reasoning_tokens" => 17}})
+
+      assert Response.reasoning_tokens(response) == 17
+      assert Response.reasoning_tokens(create_response(usage: %{"reasoning" => 11})) == 11
+      assert Response.reasoning_tokens(create_response(usage: nil)) == 0
+    end
+  end
+
   describe "ok?/1 status check" do
     test "returns true when error is nil" do
       assert Response.ok?(create_response(error: nil))
@@ -397,6 +427,22 @@ defmodule ReqLLM.ResponseTest do
   end
 
   describe "unwrap_object/2" do
+    test "returns object fields without additional parsing when already present" do
+      assert Response.unwrap_object(create_response(object: %{"name" => "Ada"})) ==
+               {:ok, %{"name" => "Ada"}}
+    end
+
+    test "extracts structured output from tool call content parts" do
+      message = %Message{
+        role: :assistant,
+        content: [%{type: :tool_call, tool_name: "structured_output", input: %{"name" => "Ada"}}],
+        metadata: %{}
+      }
+
+      assert Response.unwrap_object(create_response(message: message)) ==
+               {:ok, %{"name" => "Ada"}}
+    end
+
     test "repairs lightly malformed JSON content by default" do
       content = [%ContentPart{type: :text, text: "```json\n{\"name\":\"Ada\",}\n```"}]
       message = %Message{role: :assistant, content: content, metadata: %{}}
@@ -413,6 +459,37 @@ defmodule ReqLLM.ResponseTest do
       assert {:error,
               %ReqLLM.Error.API.Response{reason: "Failed to parse JSON from text content"}} =
                Response.unwrap_object(response, json_repair: false)
+    end
+
+    test "returns arrays parsed from text content" do
+      message = %Message{
+        role: :assistant,
+        content: [%ContentPart{type: :text, text: ~s(["Ada","Grace"])}],
+        metadata: %{}
+      }
+
+      assert Response.unwrap_object(create_response(message: message)) ==
+               {:ok, ["Ada", "Grace"]}
+    end
+
+    test "returns a descriptive error when text decodes to a non-object scalar" do
+      message = %Message{
+        role: :assistant,
+        content: [%ContentPart{type: :text, text: ~s("Ada")}],
+        metadata: %{}
+      }
+
+      assert {:error, %ReqLLM.Error.API.Response{reason: "Decoded JSON is not an object"}} =
+               Response.unwrap_object(create_response(message: message))
+    end
+
+    test "returns descriptive errors when structured output is missing" do
+      assert {:error, %ReqLLM.Error.API.Response{reason: "No message in response"}} =
+               Response.unwrap_object(create_response(message: nil))
+
+      assert {:error,
+              %ReqLLM.Error.API.Response{reason: "No structured output found in response"}} =
+               Response.unwrap_object(create_response(message: text_message("")))
     end
   end
 
@@ -469,6 +546,22 @@ defmodule ReqLLM.ResponseTest do
       assert result.type == :tool_calls
       assert result.tool_calls == [%{id: "call_2", name: "calculator", arguments: %{"a" => 1}}]
       assert result.finish_reason == :tool_calls
+    end
+
+    test "normalizes tool call ids and drops invalid tool call payloads" do
+      message =
+        tool_message([
+          %{id: 123, name: "calculator", arguments: "not-json"},
+          %{id: :atom_id, function: %{name: "clock", arguments: %{timezone: "UTC"}}},
+          %{bad: "payload"}
+        ])
+
+      result = Response.classify(create_response(message: message, finish_reason: :tool_calls))
+
+      assert result.tool_calls == [
+               %{id: "123", name: "calculator", arguments: %{}},
+               %{id: "atom_id", name: "clock", arguments: %{timezone: "UTC"}}
+             ]
     end
 
     test "handles nil message and unknown finish reason safely" do

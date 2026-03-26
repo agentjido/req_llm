@@ -238,6 +238,113 @@ defmodule ReqLLMTest do
     end
   end
 
+  describe "top-level helpers" do
+    test "stores and reads configured keys" do
+      System.put_env("REQ_LLM_TEMP_TEST_KEY", "from-env")
+
+      on_exit(fn ->
+        Application.delete_env(:req_llm, :temporary_api_key)
+        System.delete_env("REQ_LLM_TEMP_TEST_KEY")
+      end)
+
+      assert :ok = ReqLLM.put_key(:temporary_api_key, "from-config")
+      assert ReqLLM.get_key(:temporary_api_key) == "from-config"
+      assert ReqLLM.get_key("REQ_LLM_TEMP_TEST_KEY") == "from-env"
+    end
+
+    test "requires atom keys for put_key/2" do
+      assert_raise ArgumentError, ~r/expects an atom key/, fn ->
+        ReqLLM.put_key("OPENAI_API_KEY", "secret")
+      end
+    end
+
+    test "builds contexts from top-level helpers" do
+      message = ReqLLM.Context.user("Hello")
+
+      assert [%{role: :user}] = ReqLLM.context(message).messages
+      assert [%{role: :user}] = ReqLLM.context("Hi there").messages
+    end
+
+    test "creates top-level tools" do
+      tool =
+        ReqLLM.tool(
+          name: "echo",
+          description: "Echoes arguments",
+          callback: fn args -> {:ok, args} end
+        )
+
+      assert %ReqLLM.Tool{name: "echo"} = tool
+    end
+
+    test "builds json schema helpers with and without validators" do
+      plain = ReqLLM.json_schema(name: [type: :string, required: true])
+
+      assert plain["type"] == "object"
+      assert get_in(plain, ["properties", "name", "type"]) == "string"
+
+      schema =
+        ReqLLM.json_schema(
+          [name: [type: :string, required: true]],
+          validate: fn value -> {:ok, value} end
+        )
+
+      assert is_function(schema[:validate], 1)
+    end
+
+    test "calculates cosine similarity and validates vector shapes" do
+      assert_in_delta ReqLLM.cosine_similarity([1.0, 0.0], [1.0, 0.0]), 1.0, 1.0e-6
+      assert ReqLLM.cosine_similarity([], []) == 0.0
+      assert ReqLLM.cosine_similarity([0.0, 0.0], [1.0, 1.0]) == 0.0
+
+      assert_raise ArgumentError, ~r/same length/, fn ->
+        ReqLLM.cosine_similarity([1.0], [1.0, 0.0])
+      end
+    end
+  end
+
+  describe "top-level delegated APIs" do
+    test "delegate wrappers return provider errors without additional setup" do
+      assert {:error, :unknown_provider} = ReqLLM.generate_text("invalid:model", "Hello")
+      assert {:error, :unknown_provider} = ReqLLM.generate_object("invalid:model", "Hello", [])
+      assert {:error, :unknown_provider} = ReqLLM.stream_object("invalid:model", "Hello", [])
+      assert {:error, :unknown_provider} = ReqLLM.embed("invalid:model", "Hello")
+
+      assert {:error, :unknown_provider} =
+               ReqLLM.rerank("invalid:model", query: "x", documents: ["Doc"])
+
+      assert {:error, :unknown_provider} =
+               ReqLLM.transcribe("invalid:model", {:binary, <<0, 1, 2>>, "audio/mpeg"})
+
+      assert {:error, :unknown_provider} = ReqLLM.speak("invalid:model", "Hello")
+      assert {:error, :unknown_provider} = ReqLLM.generate_image("invalid:model", "Hello")
+    end
+  end
+
+  describe "deprecated top-level streaming helpers" do
+    test "stream_text!/2 emits a warning" do
+      warning =
+        capture_io(:stderr, fn ->
+          assert :ok = apply(ReqLLM, :stream_text!, ["openai:gpt-4o", "Hello"])
+        end)
+
+      assert warning =~ "ReqLLM.stream_text!/3 is deprecated"
+    end
+
+    test "stream_object!/3 emits a warning" do
+      warning =
+        capture_io(:stderr, fn ->
+          assert :ok =
+                   apply(ReqLLM, :stream_object!, [
+                     "openai:gpt-4o",
+                     "Hello",
+                     [name: [type: :string, required: true]]
+                   ])
+        end)
+
+      assert warning =~ "ReqLLM.stream_object!/4 is deprecated"
+    end
+  end
+
   defp pricing_component(model, id) do
     model.pricing.components
     |> Enum.find(fn component -> component.id == id end)

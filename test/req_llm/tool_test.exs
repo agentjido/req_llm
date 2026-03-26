@@ -8,6 +8,7 @@ defmodule ReqLLM.ToolTest do
     def simple_callback(args), do: {:ok, "Simple: #{inspect(args)}"}
     def error_callback(_args), do: {:error, "Intentional error"}
     def exception_callback(_args), do: raise("Boom!")
+    def exception_multi_arg_callback(_extra, _args), do: raise("Boom with args!")
 
     def multi_arg_callback(extra1, extra2, args),
       do: {:ok, "Multi: #{extra1}, #{extra2}, #{inspect(args)}"}
@@ -143,6 +144,17 @@ defmodule ReqLLM.ToolTest do
       end
     end
 
+    test "validates extra-arg callbacks against their expanded arity" do
+      assert {:error, error} =
+               Tool.new(
+                 name: "bad_mfa_args_tool",
+                 description: "MFA with args",
+                 callback: {TestModule, :simple_callback, [:extra]}
+               )
+
+      assert Exception.message(error) =~ "simple_callback/2 does not exist"
+    end
+
     test "validates required fields" do
       assert {:error, _} = Tool.new([])
       assert {:error, _} = Tool.new(name: "test")
@@ -219,6 +231,28 @@ defmodule ReqLLM.ToolTest do
           name: "exception_tool",
           description: "Exception test",
           callback: {TestModule, :exception_callback}
+        )
+
+      assert {:error, %ReqLLM.Error.Unknown.Unknown{}} = Tool.execute(exception_tool, %{})
+    end
+
+    test "callback crash path for anonymous functions" do
+      {:ok, exception_tool} =
+        Tool.new(
+          name: "exception_fun_tool",
+          description: "Exception test",
+          callback: fn _args -> raise("Boom!") end
+        )
+
+      assert {:error, %ReqLLM.Error.Unknown.Unknown{}} = Tool.execute(exception_tool, %{})
+    end
+
+    test "callback crash path for MFAs with extra args" do
+      {:ok, exception_tool} =
+        Tool.new(
+          name: "exception_multi_arg_tool",
+          description: "Exception test",
+          callback: {TestModule, :exception_multi_arg_callback, [:extra]}
         )
 
       assert {:error, %ReqLLM.Error.Unknown.Unknown{}} = Tool.execute(exception_tool, %{})
@@ -507,6 +541,34 @@ defmodule ReqLLM.ToolTest do
       assert Tool.provider_options(tool, :anthropic) == %{defer_loading: true}
       assert Tool.provider_options(tool, :openai) == %{strict: true}
       assert Tool.provider_options(tool, :google) == %{}
+    end
+
+    test "normalizes provider options from string provider names and invalid values", %{
+      simple_tool: tool
+    } do
+      tool = %{
+        tool
+        | provider_options: %{
+            "anthropic" => %{"defer_loading" => true},
+            openai: [strict: true],
+            google: :invalid
+          }
+      }
+
+      assert Tool.provider_options(tool, "anthropic") == %{"defer_loading" => true}
+      assert Tool.provider_options(tool, "openai") == %{strict: true}
+      assert Tool.provider_options(tool, "google") == %{}
+    end
+
+    test "reads keyword-list provider options by string provider name", %{simple_tool: tool} do
+      tool = %{
+        tool
+        | provider_options: [anthropic: [defer_loading: true], google: ["not", "keyword"]]
+      }
+
+      assert Tool.provider_options(tool, "anthropic") == %{defer_loading: true}
+      assert Tool.provider_options(tool, "google") == %{}
+      assert Tool.provider_options(%{tool | provider_options: :invalid}, :anthropic) == %{}
     end
   end
 
@@ -829,6 +891,19 @@ defmodule ReqLLM.ToolTest do
       inspected = inspect(tool)
       assert inspected =~ "#Tool<\"empty_json_tool\""
       assert inspected =~ "no params (JSON Schema)>"
+    end
+  end
+
+  describe "Inspect implementation" do
+    test "inspects tools with unknown schema formats" do
+      tool = %Tool{
+        name: "inspect_tool",
+        description: "Inspect",
+        parameter_schema: :unexpected,
+        callback: fn _ -> {:ok, :ok} end
+      }
+
+      assert inspect(tool) =~ "unknown schema format"
     end
   end
 end

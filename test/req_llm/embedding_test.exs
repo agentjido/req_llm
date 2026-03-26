@@ -258,6 +258,62 @@ defmodule ReqLLM.EmbeddingTest do
       assert {:error, _} = Embedding.embed("invalid:model", ["text"])
     end
 
+    test "rejects empty text input" do
+      assert {:error, error} = Embedding.embed("openai:text-embedding-3-small", "")
+      assert Exception.message(error) =~ "text: cannot be empty"
+    end
+
+    test "rejects empty text lists" do
+      assert {:error, error} = Embedding.embed("openai:text-embedding-3-small", [])
+      assert Exception.message(error) =~ "texts: cannot be empty"
+    end
+
+    test "returns api request errors for non-success responses" do
+      Req.Test.stub(__MODULE__.EmbeddingHTTPError, fn conn ->
+        conn
+        |> Plug.Conn.put_status(429)
+        |> Req.Test.json(%{"error" => %{"message" => "rate limited"}})
+      end)
+
+      assert {:error, %ReqLLM.Error.API.Request{status: 429, response_body: body}} =
+               Embedding.embed(
+                 "openai:text-embedding-3-small",
+                 "Hello",
+                 api_key: "test-key",
+                 req_http_options: [plug: {Req.Test, __MODULE__.EmbeddingHTTPError}]
+               )
+
+      assert body == %{"error" => %{"message" => "rate limited"}}
+    end
+
+    test "returns parse errors for malformed single embedding responses" do
+      Req.Test.stub(__MODULE__.InvalidSingleEmbedding, fn conn ->
+        Req.Test.json(conn, %{"data" => [%{"not_embedding" => [0.1, 0.2]}]})
+      end)
+
+      assert {:error, %ReqLLM.Error.API.Response{reason: "Invalid embedding response format"}} =
+               Embedding.embed(
+                 "openai:text-embedding-3-small",
+                 "Hello",
+                 api_key: "test-key",
+                 req_http_options: [plug: {Req.Test, __MODULE__.InvalidSingleEmbedding}]
+               )
+    end
+
+    test "returns parse errors for malformed batch embedding responses" do
+      Req.Test.stub(__MODULE__.InvalidBatchEmbedding, fn conn ->
+        Req.Test.json(conn, %{"data" => %{"embedding" => [0.1, 0.2]}})
+      end)
+
+      assert {:error, %ReqLLM.Error.API.Response{reason: "Invalid embedding response format"}} =
+               Embedding.embed(
+                 "openai:text-embedding-3-small",
+                 ["Hello", "World"],
+                 api_key: "test-key",
+                 req_http_options: [plug: {Req.Test, __MODULE__.InvalidBatchEmbedding}]
+               )
+    end
+
     test "ensures function exists with correct arity" do
       assert function_exported?(Embedding, :embed, 3)
       assert function_exported?(Embedding, :validate_model, 1)

@@ -82,6 +82,18 @@ defmodule ReqLLM.GenerationTest do
   defmodule BrokenObjectHTTP do
   end
 
+  defmodule ErrorHTTP do
+  end
+
+  defmodule ErrorObjectHTTP do
+  end
+
+  defmodule CoerceObjectHTTP do
+  end
+
+  defmodule ObjectStreamHTTP do
+  end
+
   setup do
     # Stub HTTP responses for testing
     Req.Test.stub(ReqLLM.GenerationTest, fn conn ->
@@ -231,7 +243,6 @@ defmodule ReqLLM.GenerationTest do
     end
 
     test "handles warnings correctly with on_unsupported: :error" do
-      # Use OpenAI o1 model which doesn't support temperature
       {:error, error} =
         Generation.generate_text(
           "openai:o1-mini",
@@ -240,8 +251,24 @@ defmodule ReqLLM.GenerationTest do
           on_unsupported: :error
         )
 
-      # Should get error due to unsupported temperature parameter
       assert is_struct(error)
+    end
+
+    test "returns request errors for non-success responses" do
+      Req.Test.stub(ErrorHTTP, fn conn ->
+        conn
+        |> Plug.Conn.put_status(429)
+        |> Req.Test.json(%{"error" => %{"message" => "rate limited"}})
+      end)
+
+      assert {:error, %ReqLLM.Error.API.Request{status: 429, response_body: body}} =
+               Generation.generate_text(
+                 @chat_model,
+                 "Hello",
+                 req_http_options: [plug: {Req.Test, ErrorHTTP}]
+               )
+
+      assert body == %{"error" => %{"message" => "rate limited"}}
     end
   end
 
@@ -337,6 +364,18 @@ defmodule ReqLLM.GenerationTest do
     end
   end
 
+  describe "stream_text!/3" do
+    test "emits a deprecation warning" do
+      warning =
+        ExUnit.CaptureIO.capture_io(:stderr, fn ->
+          assert :ok = apply(Generation, :stream_text!, [@chat_model, "Hello"])
+        end)
+
+      assert warning =~ "ReqLLM.Generation.stream_text!/3 is deprecated"
+      assert warning =~ "Please migrate to the new streaming API"
+    end
+  end
+
   describe "generate_object/4 cache support" do
     test "uses schema-aware cache keys" do
       {:ok, cache_agent} = Agent.start_link(fn -> %{entries: %{}, puts: 0} end)
@@ -399,6 +438,72 @@ defmodule ReqLLM.GenerationTest do
       assert cached_response.usage.total_tokens == 0
       assert cached_response.provider_meta.response_cache_hit == true
       assert CacheBackend.state(cache_agent).puts == 1
+    end
+  end
+
+  describe "generate_object/4 basic errors and bang helpers" do
+    test "returns an error for invalid model specs" do
+      assert {:error, :unknown_provider} =
+               Generation.generate_object("invalid:model", "Return a person", [])
+    end
+
+    test "returns schema compilation errors" do
+      assert {:error, %ReqLLM.Error.Invalid.Parameter{}} =
+               Generation.generate_object(@chat_model, "Return a person", "invalid")
+    end
+
+    test "generate_object!/4 returns the decoded object on success" do
+      Req.Test.stub(ObjectHTTP, fn conn ->
+        Req.Test.json(conn, %{
+          "id" => "cmpl_object_123",
+          "model" => "gpt-4-turbo",
+          "choices" => [
+            %{
+              "message" => %{
+                "role" => "assistant",
+                "tool_calls" => [
+                  %{
+                    "id" => "call_123",
+                    "type" => "function",
+                    "function" => %{
+                      "name" => "structured_output",
+                      "arguments" => "{\"name\":\"Ada\"}"
+                    }
+                  }
+                ]
+              },
+              "finish_reason" => "tool_calls"
+            }
+          ],
+          "usage" => %{"prompt_tokens" => 10, "completion_tokens" => 4, "total_tokens" => 14}
+        })
+      end)
+
+      schema = [name: [type: :string, required: true]]
+
+      assert Generation.generate_object!(
+               @chat_model,
+               "Return a person",
+               schema,
+               req_http_options: [plug: {Req.Test, ObjectHTTP}]
+             ) == %{"name" => "Ada"}
+    end
+
+    test "generate_object!/4 raises on request errors" do
+      Req.Test.stub(ErrorObjectHTTP, fn conn ->
+        conn
+        |> Plug.Conn.put_status(500)
+        |> Req.Test.json(%{"error" => %{"message" => "server error"}})
+      end)
+
+      assert_raise ReqLLM.Error.API.Request, fn ->
+        Generation.generate_object!(
+          @chat_model,
+          "Return a person",
+          [name: [type: :string, required: true]],
+          req_http_options: [plug: {Req.Test, ErrorObjectHTTP}]
+        )
+      end
     end
   end
 
@@ -484,6 +589,122 @@ defmodule ReqLLM.GenerationTest do
         )
 
       assert response.object == nil
+    end
+  end
+
+  describe "generate_object/4 error handling and coercion" do
+    test "returns request errors for non-success responses" do
+      Req.Test.stub(ErrorObjectHTTP, fn conn ->
+        conn
+        |> Plug.Conn.put_status(500)
+        |> Req.Test.json(%{"error" => %{"message" => "server error"}})
+      end)
+
+      assert {:error, %ReqLLM.Error.API.Request{status: 500, response_body: body}} =
+               Generation.generate_object(
+                 @chat_model,
+                 "Return a person",
+                 [name: [type: :string, required: true]],
+                 req_http_options: [plug: {Req.Test, ErrorObjectHTTP}]
+               )
+
+      assert body == %{"error" => %{"message" => "server error"}}
+    end
+
+    test "coerces primitive values to match the requested schema for non-strict models" do
+      Req.Test.stub(CoerceObjectHTTP, fn conn ->
+        Req.Test.json(conn, %{
+          "id" => "cmpl_object_123",
+          "model" => "gpt-4-turbo",
+          "choices" => [
+            %{
+              "message" => %{
+                "role" => "assistant",
+                "tool_calls" => [
+                  %{
+                    "id" => "call_123",
+                    "type" => "function",
+                    "function" => %{
+                      "name" => "structured_output",
+                      "arguments" => ~s({"count":"42","active":"true","rating":"4.5"})
+                    }
+                  }
+                ]
+              },
+              "finish_reason" => "tool_calls"
+            }
+          ],
+          "usage" => %{"prompt_tokens" => 10, "completion_tokens" => 4, "total_tokens" => 14}
+        })
+      end)
+
+      schema = [
+        count: [type: :integer, required: true],
+        active: [type: :boolean, required: true],
+        rating: [type: :float, required: true]
+      ]
+
+      {:ok, response} =
+        Generation.generate_object(
+          @chat_model,
+          "Return typed values",
+          schema,
+          req_http_options: [plug: {Req.Test, CoerceObjectHTTP}]
+        )
+
+      assert response.object == %{"count" => 42, "active" => true, "rating" => 4.5}
+    end
+  end
+
+  describe "stream_object/4" do
+    test "returns a streaming response for structured output" do
+      Req.Test.stub(ObjectStreamHTTP, fn conn ->
+        sse_body =
+          ~s(data: {"id":"chatcmpl-123","choices":[{"delta":{"role":"assistant","tool_calls":[{"index":0,"id":"call_123","type":"function","function":{"name":"structured_output","arguments":"{\\"name\\":\\"Ada\\"}"}}]},"finish_reason":null}]}\n\n) <>
+            ~s(data: {"id":"chatcmpl-123","choices":[{"delta":{},"finish_reason":"tool_calls"}]}\n\n) <>
+            "data: [DONE]\n\n"
+
+        conn
+        |> Plug.Conn.put_resp_header("content-type", "text/event-stream")
+        |> Plug.Conn.send_resp(200, sse_body)
+      end)
+
+      {:ok, response} =
+        Generation.stream_object(
+          @chat_model,
+          "Return a person",
+          [name: [type: :string, required: true]],
+          req_http_options: [plug: {Req.Test, ObjectStreamHTTP}]
+        )
+
+      assert %StreamResponse{} = response
+
+      {:ok, materialized_response} = StreamResponse.to_response(response)
+
+      assert %{"name" => name} = Response.object(materialized_response)
+      assert is_binary(name)
+    end
+
+    test "returns an error for invalid model specs" do
+      assert {:error, :unknown_provider} =
+               Generation.stream_object("invalid:model", "Hello", [])
+    end
+  end
+
+  describe "stream_object!/4" do
+    test "emits a deprecation warning" do
+      warning =
+        ExUnit.CaptureIO.capture_io(:stderr, fn ->
+          assert :ok =
+                   apply(Generation, :stream_object!, [
+                     @chat_model,
+                     "Hello",
+                     [name: [type: :string, required: true]]
+                   ])
+        end)
+
+      assert warning =~ "ReqLLM.Generation.stream_object!/4 is deprecated"
+      assert warning =~ "Please migrate to the new streaming API"
     end
   end
 

@@ -148,6 +148,97 @@ defmodule ReqLLM.AuthTest do
     end
   end
 
+  describe "OAuth.resolve/2 error handling" do
+    test "rejects unsupported provider input types" do
+      assert {:error, message} = OAuth.resolve("openai", [])
+      assert message =~ "provider atom or model struct"
+    end
+
+    test "returns a helpful error for missing oauth files", %{tmp_dir: tmp_dir} do
+      missing = Path.join(tmp_dir, "missing.json")
+
+      assert {:error, message} =
+               OAuth.resolve(:openai, provider_options: [oauth_file: missing])
+
+      assert message =~ "OAuth file not found"
+      assert message =~ missing
+    end
+
+    test "returns a helpful error for invalid json payloads", %{tmp_dir: tmp_dir} do
+      path = Path.join(tmp_dir, "oauth.json")
+      File.write!(path, "{not valid json")
+
+      assert {:error, message} =
+               OAuth.resolve(:openai, provider_options: [oauth_file: path])
+
+      assert message =~ "is not valid JSON"
+    end
+
+    test "rejects oauth files whose top-level payload is not a json object", %{tmp_dir: tmp_dir} do
+      path = Path.join(tmp_dir, "oauth.json")
+      write_oauth_file(path, [])
+
+      assert {:error, message} =
+               OAuth.resolve(:openai, provider_options: [oauth_file: path])
+
+      assert message =~ "must contain a top-level JSON object"
+    end
+
+    test "rejects oauth files missing provider credentials", %{tmp_dir: tmp_dir} do
+      path = Path.join(tmp_dir, "oauth.json")
+      write_oauth_file(path, %{"anthropic" => %{"access" => "token"}})
+
+      assert {:error, message} =
+               OAuth.resolve(:openai, provider_options: [oauth_file: path])
+
+      assert message =~ "does not contain credentials"
+    end
+
+    test "rejects oauth credentials with no access or refresh token", %{tmp_dir: tmp_dir} do
+      path = Path.join(tmp_dir, "oauth.json")
+      write_oauth_file(path, %{"openai" => %{"access" => " ", "refresh" => " "}})
+
+      assert {:error, message} =
+               OAuth.resolve(:openai, provider_options: [oauth_file: path])
+
+      assert message =~ "do not include access or refresh tokens"
+    end
+
+    test "rejects expired credentials without refresh tokens", %{tmp_dir: tmp_dir} do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+      path = Path.join(tmp_dir, "oauth.json")
+
+      write_oauth_file(path, %{
+        "openai-codex" => %{
+          "access" => "expired-access",
+          "expires" => past_expiry()
+        }
+      })
+
+      assert {:error, message} =
+               OAuth.resolve(model, provider_options: [oauth_file: path])
+
+      assert message =~ "are expired and do not include a refresh token"
+    end
+
+    test "rejects refresh attempts for providers without refresh support", %{tmp_dir: tmp_dir} do
+      path = Path.join(tmp_dir, "oauth.json")
+
+      write_oauth_file(path, %{
+        "google" => %{
+          "access" => "expired-access",
+          "refresh" => "refresh-token",
+          "expires" => past_expiry()
+        }
+      })
+
+      assert {:error, message} =
+               OAuth.resolve(:google, provider_options: [oauth_file: path])
+
+      assert message =~ "does not support OAuth token refresh"
+    end
+  end
+
   defp write_oauth_file(path, payload) do
     File.write!(path, Jason.encode_to_iodata!(payload, pretty: true))
   end

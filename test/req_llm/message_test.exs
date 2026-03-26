@@ -6,6 +6,11 @@ defmodule ReqLLM.MessageTest do
   alias ReqLLM.Message.ReasoningDetails
 
   describe "struct creation and validation" do
+    test "exposes message schemas" do
+      refute is_nil(Message.schema())
+      refute is_nil(ReasoningDetails.schema())
+    end
+
     test "creates message with required role field" do
       message = %Message{role: :user}
 
