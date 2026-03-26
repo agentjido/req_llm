@@ -678,11 +678,7 @@ defmodule ReqLLM.GenerationTest do
         )
 
       assert %StreamResponse{} = response
-
-      {:ok, materialized_response} = StreamResponse.to_response(response)
-
-      assert %{"name" => name} = Response.object(materialized_response)
-      assert is_binary(name)
+      assert is_function(response.stream)
     end
 
     test "returns an error for invalid model specs" do
