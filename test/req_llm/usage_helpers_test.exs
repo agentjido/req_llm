@@ -81,13 +81,13 @@ defmodule ReqLLM.UsageHelpersTest do
 
     test "merge handles cumulative usage from later events" do
       message_start = %{input_tokens: 2679, output_tokens: 3, total_tokens: 2682}
-      message_delta = %{input_tokens: 10682, output_tokens: 510, total_tokens: 11192}
+      message_delta = %{input_tokens: 10_682, output_tokens: 510, total_tokens: 11_192}
 
       merged = ReqLLM.Usage.merge(message_start, message_delta)
 
-      assert merged.input_tokens == 10682
+      assert merged.input_tokens == 10_682
       assert merged.output_tokens == 510
-      assert merged.total_tokens == 11192
+      assert merged.total_tokens == 11_192
     end
 
     test "merge preserves non-zero values when later event has zeros" do
@@ -96,7 +96,7 @@ defmodule ReqLLM.UsageHelpersTest do
         output_tokens: 0,
         total_tokens: 1500,
         cached_tokens: 0,
-        cache_creation_tokens: 12000
+        cache_creation_tokens: 12_000
       }
 
       message_delta = %{
@@ -112,7 +112,7 @@ defmodule ReqLLM.UsageHelpersTest do
       assert merged.input_tokens == 1500
       assert merged.output_tokens == 393
       assert merged.total_tokens == 1893
-      assert merged.cache_creation_tokens == 12000
+      assert merged.cache_creation_tokens == 12_000
     end
 
     test "merge adds keys only present in incoming map" do

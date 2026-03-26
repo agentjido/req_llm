@@ -317,7 +317,7 @@ config :llm_db,
 config :logger, :console,
   level: :warning,
   format: "$time $metadata[$level] $message\n",
-  metadata: [:req_llm, :component]
+  metadata: [:req_llm, :component, :attempt, :delay_ms, :error, :kind, :max_retries, :reason]
 
 config :req_llm, :sample_embedding_models, ~w(
     openai:text-embedding-3-small

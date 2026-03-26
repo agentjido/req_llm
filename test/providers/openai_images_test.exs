@@ -1,8 +1,9 @@
 defmodule ReqLLM.Providers.OpenAIImagesTest do
   use ExUnit.Case, async: true
 
+  alias ReqLLM.Context
   alias ReqLLM.Providers.OpenAI.ImagesAPI
-  alias ReqLLM.{Context, Response}
+  alias ReqLLM.Response
 
   test "encode_body/1 builds OpenAI images request JSON" do
     request =

@@ -170,7 +170,7 @@ defmodule ReqLLM.ToolCallIdCompat do
     invalid_ids = Enum.filter(ids, &(not valid_id?(&1, policy)))
 
     if invalid_ids != [] do
-      rendered = invalid_ids |> Enum.map(&inspect/1) |> Enum.join(", ")
+      rendered = Enum.map_join(invalid_ids, ", ", &inspect/1)
 
       raise ReqLLM.Error.Invalid.Parameter.exception(
               parameter: "tool_call_id values incompatible with provider policy: #{rendered}"

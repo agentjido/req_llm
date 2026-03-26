@@ -108,11 +108,10 @@ defmodule ReqLLM.JSON do
 
     closing =
       stack
-      |> Enum.map(fn
+      |> Enum.map_join(fn
         "{" -> "}"
         "[" -> "]"
       end)
-      |> Enum.join("")
 
     json <> closing
   end

@@ -366,9 +366,11 @@ defmodule ReqLLM.GenerationTest do
 
   describe "stream_text!/3" do
     test "emits a deprecation warning" do
+      stream_text_fun = Function.capture(Generation, :stream_text!, 2)
+
       warning =
         ExUnit.CaptureIO.capture_io(:stderr, fn ->
-          assert :ok = apply(Generation, :stream_text!, [@chat_model, "Hello"])
+          assert :ok = stream_text_fun.(@chat_model, "Hello")
         end)
 
       assert warning =~ "ReqLLM.Generation.stream_text!/3 is deprecated"
@@ -689,14 +691,16 @@ defmodule ReqLLM.GenerationTest do
 
   describe "stream_object!/4" do
     test "emits a deprecation warning" do
+      stream_object_fun = Function.capture(Generation, :stream_object!, 3)
+
       warning =
         ExUnit.CaptureIO.capture_io(:stderr, fn ->
           assert :ok =
-                   apply(Generation, :stream_object!, [
+                   stream_object_fun.(
                      @chat_model,
                      "Hello",
-                     [name: [type: :string, required: true]]
-                   ])
+                     name: [type: :string, required: true]
+                   )
         end)
 
       assert warning =~ "ReqLLM.Generation.stream_object!/4 is deprecated"

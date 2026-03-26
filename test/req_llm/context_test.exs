@@ -156,23 +156,26 @@ defmodule ReqLLM.ContextTest do
 
   describe "tool-call helpers" do
     test "builds assistant helper messages with tool calls" do
+      assistant_with_tools_fun = Function.capture(Context, :assistant_with_tools, 2)
+      assistant_tool_call_fun = Function.capture(Context, :assistant_tool_call, 3)
+      assistant_tool_calls_fun = Function.capture(Context, :assistant_tool_calls, 1)
+
       assistant_with_tools =
-        apply(Context, :assistant_with_tools, [
+        assistant_with_tools_fun.(
           [ReqLLM.ToolCall.new("call_1", "clock", "{}")],
           "Checking"
-        ])
+        )
 
       assistant_tool_call =
-        apply(Context, :assistant_tool_call, [
+        assistant_tool_call_fun.(
           "clock",
           %{timezone: "UTC"},
-          [id: "call_2", meta: %{request_id: "req_123"}]
-        ])
+          id: "call_2",
+          meta: %{request_id: "req_123"}
+        )
 
       assistant_tool_calls =
-        apply(Context, :assistant_tool_calls, [
-          [%{id: "call_3", name: "weather", input: %{city: "Paris"}}]
-        ])
+        assistant_tool_calls_fun.([%{id: "call_3", name: "weather", input: %{city: "Paris"}}])
 
       assert Enum.map(assistant_with_tools.tool_calls, & &1.id) == ["call_1"]
       assert Enum.map(assistant_tool_call.tool_calls, & &1.id) == ["call_2"]

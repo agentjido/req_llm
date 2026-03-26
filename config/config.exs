@@ -94,6 +94,9 @@ config :req_llm,
   metadata_timeout: 120_000,
   thinking_timeout: 300_000
 
+config :logger, :console,
+  metadata: [:req_llm, :component, :attempt, :delay_ms, :error, :kind, :max_retries, :reason]
+
 if System.get_env("REQ_LLM_DEBUG") in ~w(1 true yes on) do
   config :logger, level: :debug
 

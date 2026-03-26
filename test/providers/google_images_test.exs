@@ -1,8 +1,9 @@
 defmodule ReqLLM.Providers.GoogleImagesTest do
   use ExUnit.Case, async: true
 
+  alias ReqLLM.Context
   alias ReqLLM.Providers.Google
-  alias ReqLLM.{Context, Response}
+  alias ReqLLM.Response
 
   test "encode_body/1 builds generateContent image request JSON" do
     # Context with a user message containing the prompt

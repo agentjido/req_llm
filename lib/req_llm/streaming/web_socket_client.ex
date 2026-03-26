@@ -75,17 +75,20 @@ defmodule ReqLLM.Streaming.WebSocketClient do
 
   defp start_fixture_replay(fixture_path, stream_server_pid, _model) do
     case Code.ensure_loaded(ReqLLM.Test.VCR) do
-      {:module, ReqLLM.Test.VCR} ->
-        args = [fixture_path, stream_server_pid]
-        {:ok, task_pid} = apply(ReqLLM.Test.VCR, :replay_into_stream_server, args)
+      {:module, module} ->
+        {:ok, task_pid} =
+          Function.capture(module, :replay_into_stream_server, 2).(
+            fixture_path,
+            stream_server_pid
+          )
 
         Process.link(task_pid)
 
-        transcript = apply(ReqLLM.Test.VCR, :load!, [fixture_path])
+        transcript = Function.capture(module, :load!, 1).(fixture_path)
         canonical_json = Map.get(transcript.request, :canonical_json, %{})
         request_headers = Map.get(transcript.request, :headers, %{})
-        response_headers = apply(ReqLLM.Test.VCR, :headers, [transcript])
-        status = apply(ReqLLM.Test.VCR, :status, [transcript])
+        response_headers = Function.capture(module, :headers, 1).(transcript)
+        status = Function.capture(module, :status, 1).(transcript)
 
         http_context =
           transcript.request.url

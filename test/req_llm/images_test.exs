@@ -1,8 +1,6 @@
 defmodule ReqLLM.ImagesTest do
   use ExUnit.Case, async: true
 
-  alias ReqLLM.Provider.Options
-  alias ReqLLM.Providers.Google
   alias ReqLLM.{Context, Images}
 
   test "supported_models/0 includes known image models by heuristic" do
@@ -30,7 +28,13 @@ defmodule ReqLLM.ImagesTest do
     {:ok, model} = ReqLLM.model(google_image_model_spec())
 
     {:ok, processed} =
-      Options.process(Google, :image, model, aspect_ratio: "16:9", context: Context.new())
+      ReqLLM.Provider.Options.process(
+        ReqLLM.Providers.Google,
+        :image,
+        model,
+        aspect_ratio: "16:9",
+        context: Context.new()
+      )
 
     assert Keyword.get(processed, :aspect_ratio) == "16:9"
   end

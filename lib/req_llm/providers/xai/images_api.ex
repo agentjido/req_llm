@@ -9,8 +9,10 @@ defmodule ReqLLM.Providers.XAI.ImagesAPI do
 
   import ReqLLM.Provider.Utils, only: [ensure_parsed_body: 1]
 
+  alias ReqLLM.Context
+  alias ReqLLM.Message
   alias ReqLLM.Message.ContentPart
-  alias ReqLLM.{Context, Message, Response}
+  alias ReqLLM.Response
 
   @impl true
   def path, do: "/images/generations"

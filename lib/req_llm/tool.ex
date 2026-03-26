@@ -687,11 +687,10 @@ defmodule ReqLLM.Tool do
   end
 
   defp to_existing_atom_or_original(key) do
-    try do
-      String.to_existing_atom(key)
-    rescue
-      ArgumentError -> key
-    end
+    String.to_existing_atom(key)
+  rescue
+    ArgumentError ->
+      key
   end
 
   defp call_callback({module, function}, input) do

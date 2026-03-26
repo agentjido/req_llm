@@ -31,17 +31,30 @@ defmodule ReqLLM.Streaming.Retry do
     max_retries = Keyword.get(opts, :max_retries, 3)
     stream_opts = Keyword.take(opts, [:receive_timeout])
 
-    do_stream(request, finch_name, acc, callback, stream_opts, stream_fun, max_retries, 0)
+    do_stream(
+      %{
+        request: request,
+        finch_name: finch_name,
+        acc: acc,
+        callback: callback,
+        stream_opts: stream_opts,
+        stream_fun: stream_fun,
+        max_retries: max_retries
+      },
+      0
+    )
   end
 
   defp do_stream(
-         request,
-         finch_name,
-         acc,
-         callback,
-         stream_opts,
-         stream_fun,
-         max_retries,
+         %{
+           request: request,
+           finch_name: finch_name,
+           acc: acc,
+           callback: callback,
+           stream_opts: stream_opts,
+           stream_fun: stream_fun,
+           max_retries: max_retries
+         } = params,
          attempt
        ) do
     initial_acc = %{
@@ -56,19 +69,7 @@ defmodule ReqLLM.Streaming.Retry do
 
     case stream_fun.(request, finch_name, initial_acc, wrapped_callback, stream_opts) do
       {:ok, %{status: 429} = state} when attempt < max_retries ->
-        maybe_retry(
-          request,
-          finch_name,
-          acc,
-          callback,
-          stream_opts,
-          stream_fun,
-          max_retries,
-          attempt,
-          state.callback_acc,
-          :rate_limited,
-          state
-        )
+        maybe_retry(params, attempt, state.callback_acc, :rate_limited, state)
 
       {:ok, %{status: 429} = state} ->
         deliver_rate_limit_failure(state, callback)
@@ -77,57 +78,21 @@ defmodule ReqLLM.Streaming.Retry do
         {:ok, callback_acc}
 
       {:error, reason, %{status: 429} = state} when attempt < max_retries ->
-        maybe_retry(
-          request,
-          finch_name,
-          acc,
-          callback,
-          stream_opts,
-          stream_fun,
-          max_retries,
-          attempt,
-          state.callback_acc,
-          reason,
-          state
-        )
+        maybe_retry(params, attempt, state.callback_acc, reason, state)
 
       {:error, _reason, %{status: 429} = state} ->
         deliver_rate_limit_failure(state, callback)
 
       {:error, reason, %{data_received?: false, callback_acc: callback_acc} = state}
       when attempt < max_retries ->
-        maybe_retry(
-          request,
-          finch_name,
-          acc,
-          callback,
-          stream_opts,
-          stream_fun,
-          max_retries,
-          attempt,
-          callback_acc,
-          reason,
-          state
-        )
+        maybe_retry(params, attempt, callback_acc, reason, state)
 
       {:error, reason, %{callback_acc: callback_acc}} ->
         {:error, reason, callback_acc}
     end
   end
 
-  defp maybe_retry(
-         request,
-         finch_name,
-         acc,
-         callback,
-         stream_opts,
-         stream_fun,
-         max_retries,
-         attempt,
-         callback_acc,
-         reason,
-         state
-       ) do
+  defp maybe_retry(%{max_retries: max_retries} = params, attempt, callback_acc, reason, state) do
     case classify_error(reason, state) do
       {:retry, delay_ms} ->
         log_retry(reason, attempt + 1, max_retries, delay_ms)
@@ -136,16 +101,7 @@ defmodule ReqLLM.Streaming.Retry do
           Process.sleep(delay_ms)
         end
 
-        do_stream(
-          request,
-          finch_name,
-          acc,
-          callback,
-          stream_opts,
-          stream_fun,
-          max_retries,
-          attempt + 1
-        )
+        do_stream(params, attempt + 1)
 
       :no_retry ->
         {:error, reason, callback_acc}

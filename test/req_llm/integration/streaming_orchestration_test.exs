@@ -8,7 +8,7 @@ defmodule ReqLLM.Integration.StreamingOrchestrationTest do
 
   use ExUnit.Case, async: false
 
-  alias ReqLLM.{Context, StreamResponse, Streaming}
+  alias ReqLLM.{Context, Streaming, StreamResponse}
 
   @moduletag category: :streaming, integration: true
 

@@ -137,10 +137,8 @@ defmodule ReqLLM.Rerank do
              Keyword.fetch!(opts, :query),
              Keyword.fetch!(opts, :documents),
              opts
-           ),
-         {:ok, response} <-
-           build_response(model, Keyword.fetch!(opts, :query), opts, batch_responses) do
-      {:ok, response}
+           ) do
+      build_response(model, Keyword.fetch!(opts, :query), opts, batch_responses)
     end
   end
 

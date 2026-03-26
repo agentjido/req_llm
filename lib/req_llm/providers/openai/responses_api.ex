@@ -934,22 +934,26 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp ensure_deep_research_tools(tools, request) do
-    model_name = request.options[:model]
+    model_name = request.options[:model] || request.options[:id]
 
-    case ReqLLM.model("openai:#{model_name}") do
-      {:ok, model} ->
-        category = get_in(model, [Access.key(:extra, %{}), :category])
+    if is_binary(model_name) and model_name != "" do
+      case ReqLLM.model("openai:#{model_name}") do
+        {:ok, model} ->
+          category = get_in(model, [Access.key(:extra, %{}), :category])
 
-        case category do
-          "deep_research" ->
-            ensure_deep_research_tool_present(tools)
+          case category do
+            "deep_research" ->
+              ensure_deep_research_tool_present(tools)
 
-          _ ->
-            tools
-        end
+            _ ->
+              tools
+          end
 
-      _ ->
-        tools
+        _ ->
+          tools
+      end
+    else
+      tools
     end
   end
 

@@ -98,11 +98,14 @@ defmodule ReqLLM.Integration.TranscriptionTest do
       assert is_binary(result.text)
       assert is_list(result.segments)
 
-      if length(result.segments) > 0 do
-        segment = hd(result.segments)
-        assert is_binary(segment.text) or is_binary(segment[:text])
-        assert is_number(segment.start_second) or is_number(segment[:start_second])
-        assert is_number(segment.end_second) or is_number(segment[:end_second])
+      case result.segments do
+        [segment | _] ->
+          assert is_binary(segment.text) or is_binary(segment[:text])
+          assert is_number(segment.start_second) or is_number(segment[:start_second])
+          assert is_number(segment.end_second) or is_number(segment[:end_second])
+
+        [] ->
+          :ok
       end
     end
   end

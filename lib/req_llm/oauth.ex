@@ -71,31 +71,29 @@ defmodule ReqLLM.OAuth do
         System.get_env("REQ_LLM_AUTH_FILE")
       ])
 
-    cond do
-      is_binary(explicit_path) ->
-        expanded_path = Path.expand(explicit_path)
+    if is_binary(explicit_path) do
+      expanded_path = Path.expand(explicit_path)
 
-        if File.exists?(expanded_path) do
-          {:ok, expanded_path}
-        else
-          {:error, "OAuth file not found: #{expanded_path}"}
-        end
+      if File.exists?(expanded_path) do
+        {:ok, expanded_path}
+      else
+        {:error, "OAuth file not found: #{expanded_path}"}
+      end
+    else
+      case Enum.find_value(@default_files, fn path ->
+             expanded_path = Path.expand(path)
 
-      true ->
-        case Enum.find_value(@default_files, fn path ->
-               expanded_path = Path.expand(path)
+             if File.exists?(expanded_path) do
+               expanded_path
+             end
+           end) do
+        nil ->
+          {:error,
+           "OAuth mode requires :access_token or an oauth file. Looked for oauth.json and auth.json"}
 
-               if File.exists?(expanded_path) do
-                 expanded_path
-               end
-             end) do
-          nil ->
-            {:error,
-             "OAuth mode requires :access_token or an oauth file. Looked for oauth.json and auth.json"}
-
-          path ->
-            {:ok, path}
-        end
+        path ->
+          {:ok, path}
+      end
     end
   end
 
@@ -144,12 +142,10 @@ defmodule ReqLLM.OAuth do
   end
 
   defp provider_oauth_id(provider, provider_mod) do
-    cond do
-      function_exported?(provider_mod, :oauth_provider_id, 0) ->
-        provider_mod.oauth_provider_id()
-
-      true ->
-        Atom.to_string(provider)
+    if function_exported?(provider_mod, :oauth_provider_id, 0) do
+      provider_mod.oauth_provider_id()
+    else
+      Atom.to_string(provider)
     end
   end
 
@@ -168,20 +164,18 @@ defmodule ReqLLM.OAuth do
     account_id = fetch_field(credentials, ["accountId", "account_id"])
     type = fetch_field(credentials, ["type"]) || "oauth"
 
-    cond do
-      blank?(access) and blank?(refresh) ->
-        {:error,
-         "OAuth credentials for #{provider_key} in #{oauth_file} do not include access or refresh tokens"}
-
-      true ->
-        {:ok,
-         %{
-           type: type,
-           access: normalize_blank(access),
-           refresh: normalize_blank(refresh),
-           expires: expires,
-           account_id: normalize_blank(account_id)
-         }}
+    if blank?(access) and blank?(refresh) do
+      {:error,
+       "OAuth credentials for #{provider_key} in #{oauth_file} do not include access or refresh tokens"}
+    else
+      {:ok,
+       %{
+         type: type,
+         access: normalize_blank(access),
+         refresh: normalize_blank(refresh),
+         expires: expires,
+         account_id: normalize_blank(account_id)
+       }}
     end
   end
 
@@ -301,11 +295,7 @@ defmodule ReqLLM.OAuth do
     map
     |> Enum.reject(fn {_key, value} -> is_nil(value) end)
     |> Map.new(fn {key, value} ->
-      new_value =
-        cond do
-          is_map(value) -> drop_nil_values(value)
-          true -> value
-        end
+      new_value = if is_map(value), do: drop_nil_values(value), else: value
 
       {key, new_value}
     end)

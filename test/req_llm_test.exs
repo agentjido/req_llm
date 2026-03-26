@@ -322,23 +322,27 @@ defmodule ReqLLMTest do
 
   describe "deprecated top-level streaming helpers" do
     test "stream_text!/2 emits a warning" do
+      stream_text_fun = Function.capture(ReqLLM, :stream_text!, 2)
+
       warning =
         capture_io(:stderr, fn ->
-          assert :ok = apply(ReqLLM, :stream_text!, ["openai:gpt-4o", "Hello"])
+          assert :ok = stream_text_fun.("openai:gpt-4o", "Hello")
         end)
 
       assert warning =~ "ReqLLM.stream_text!/3 is deprecated"
     end
 
     test "stream_object!/3 emits a warning" do
+      stream_object_fun = Function.capture(ReqLLM, :stream_object!, 3)
+
       warning =
         capture_io(:stderr, fn ->
           assert :ok =
-                   apply(ReqLLM, :stream_object!, [
+                   stream_object_fun.(
                      "openai:gpt-4o",
                      "Hello",
-                     [name: [type: :string, required: true]]
-                   ])
+                     name: [type: :string, required: true]
+                   )
         end)
 
       assert warning =~ "ReqLLM.stream_object!/4 is deprecated"

@@ -113,7 +113,7 @@ defmodule ReqLLM.Usage.Normalize do
   defp get_add_reasoning_to_cost(usage) do
     MapAccess.get(usage, :add_reasoning_to_cost) ||
       MapAccess.get(usage, "add_reasoning_to_cost") ||
-      is_google_gemini_format(usage)
+      google_gemini_format?(usage)
   end
 
   defp resolve_tool_usage(usage) do
@@ -148,7 +148,7 @@ defmodule ReqLLM.Usage.Normalize do
     end
   end
 
-  defp is_google_gemini_format(usage) do
+  defp google_gemini_format?(usage) do
     Map.has_key?(usage, "thoughtsTokenCount") or
       Map.has_key?(usage, :thoughtsTokenCount)
   end

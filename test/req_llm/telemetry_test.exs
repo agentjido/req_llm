@@ -8,8 +8,8 @@ defmodule ReqLLM.TelemetryTest do
   alias ReqLLM.Message.ContentPart
   alias ReqLLM.Message.ReasoningDetails
   alias ReqLLM.Response
-  alias ReqLLM.Step.Telemetry
   alias ReqLLM.Step.Retry
+  alias ReqLLM.Step.Telemetry
 
   @events [
     [:req_llm, :request, :start],

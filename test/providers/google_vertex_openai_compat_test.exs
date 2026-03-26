@@ -516,7 +516,7 @@ defmodule ReqLLM.Providers.GoogleVertex.OpenAICompatTest do
 
       chunks = OpenAICompat.decode_stream_event(event, model)
       assert is_list(chunks)
-      assert length(chunks) > 0
+      assert chunks != []
     end
 
     test "handles terminal [DONE] event" do
@@ -526,7 +526,7 @@ defmodule ReqLLM.Providers.GoogleVertex.OpenAICompatTest do
 
       chunks = OpenAICompat.decode_stream_event(event, model)
       assert is_list(chunks)
-      assert length(chunks) > 0
+      assert chunks != []
     end
   end
 end

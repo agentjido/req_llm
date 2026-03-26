@@ -549,9 +549,8 @@ defmodule ReqLLM do
   defp resolve_string_model_fallback(spec, original_error) do
     case String.split(spec, ":", parts: 2) do
       [provider_name, model_id] ->
-        with {:ok, provider} <- provider_atom_from_string(provider_name) do
-          resolve_provider_model_fallback(provider, model_id, original_error)
-        else
+        case provider_atom_from_string(provider_name) do
+          {:ok, provider} -> resolve_provider_model_fallback(provider, model_id, original_error)
           _ -> original_error
         end
 
@@ -576,10 +575,11 @@ defmodule ReqLLM do
   end
 
   defp resolve_provider_model_fallback(provider, model_id, _original_error) do
-    with {:ok, _provider_module} <- ReqLLM.provider(provider) do
-      warn_unverified_model(provider, model_id)
-      model(%{provider: provider, id: model_id})
-    else
+    case ReqLLM.provider(provider) do
+      {:ok, _provider_module} ->
+        warn_unverified_model(provider, model_id)
+        model(%{provider: provider, id: model_id})
+
       {:error, _} ->
         {:error,
          ReqLLM.Error.Invalid.Provider.exception(
@@ -605,16 +605,15 @@ defmodule ReqLLM do
   end
 
   defp provider_atom_from_string(provider_name) when is_binary(provider_name) do
-    try do
-      provider = String.to_existing_atom(provider_name)
+    provider = String.to_existing_atom(provider_name)
 
-      case ReqLLM.provider(provider) do
-        {:ok, _module} -> {:ok, provider}
-        {:error, _} -> :error
-      end
-    rescue
-      ArgumentError -> :error
+    case ReqLLM.provider(provider) do
+      {:ok, _module} -> {:ok, provider}
+      {:error, _} -> :error
     end
+  rescue
+    ArgumentError ->
+      :error
   end
 
   defp put_wire_protocol(extra, protocol) do
@@ -714,16 +713,14 @@ defmodule ReqLLM do
   end
 
   defp coerce_inline_model_provider(%{provider: provider} = attrs) when is_binary(provider) do
-    try do
-      {:ok, Map.put(attrs, :provider, String.to_existing_atom(provider))}
-    rescue
-      ArgumentError ->
-        {:error,
-         invalid_model_spec_error(
-           attrs,
-           "Inline model specs require an existing provider atom or registered provider string. Got: #{inspect(provider)}"
-         )}
-    end
+    {:ok, Map.put(attrs, :provider, String.to_existing_atom(provider))}
+  rescue
+    ArgumentError ->
+      {:error,
+       invalid_model_spec_error(
+         attrs,
+         "Inline model specs require an existing provider atom or registered provider string. Got: #{inspect(provider)}"
+       )}
   end
 
   defp coerce_inline_model_provider(attrs), do: {:ok, attrs}

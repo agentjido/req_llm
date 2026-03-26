@@ -348,6 +348,8 @@ mix credo --strict
 mix quality  # Runs all of the above
 ```
 
+GitHub CI uses the same `mix quality` alias for linting, so the local command and the PR quality gate stay aligned.
+
 ### Code Style Conventions
 
 - **No inline comments in function bodies**: Code should be self-documenting through clear naming and structure

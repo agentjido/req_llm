@@ -12,8 +12,13 @@ defmodule ReqLLM.Telemetry do
   - compatibility emission for `[:req_llm, :token_usage]`
   """
 
-  alias ReqLLM.{Context, Message, ModelHelpers, Response, RerankResponse, Tool}
+  alias ReqLLM.Context
+  alias ReqLLM.Message
   alias ReqLLM.Message.ContentPart
+  alias ReqLLM.ModelHelpers
+  alias ReqLLM.RerankResponse
+  alias ReqLLM.Response
+  alias ReqLLM.Tool
 
   @request_context_key :req_llm_telemetry
   @token_usage_event [:req_llm, :token_usage]
@@ -1323,21 +1328,19 @@ defmodule ReqLLM.Telemetry do
       fetch_value(body, :generationConfig, :thinkingConfig, :thinkingBudget) ||
         fetch_value(body, :thinkingConfig, :thinkingBudget)
 
-    cond do
-      thinking_level ->
-        effort = thinking_level_to_effort(thinking_level)
-        reasoning_shape(:enabled, effort, nil, true)
+    if thinking_level do
+      effort = thinking_level_to_effort(thinking_level)
+      reasoning_shape(:enabled, effort, nil, true)
+    else
+      disable? = budget_tokens == 0
+      enable? = enabled_budget?(budget_tokens)
 
-      true ->
-        disable? = budget_tokens == 0
-        enable? = enabled_budget?(budget_tokens)
-
-        reasoning_shape(
-          mode_from_signals(enable?, disable?),
-          nil,
-          normalize_budget(budget_tokens),
-          enable? or disable?
-        )
+      reasoning_shape(
+        mode_from_signals(enable?, disable?),
+        nil,
+        normalize_budget(budget_tokens),
+        enable? or disable?
+      )
     end
   end
 

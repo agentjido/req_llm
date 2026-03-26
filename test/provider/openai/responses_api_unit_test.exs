@@ -130,6 +130,20 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert Enum.sort(encoded_tool["parameters"]["required"]) == ["location", "units"]
     end
 
+    test "does not emit unverified-model warnings when the request uses the id field" do
+      warning =
+        ExUnit.CaptureIO.capture_io(:stderr, fn ->
+          request = build_request([])
+
+          encoded = ResponsesAPI.encode_body(request)
+          body = Jason.decode!(encoded.body)
+
+          assert body["model"] == "gpt-5"
+        end)
+
+      assert warning == ""
+    end
+
     test "omits tools when empty list" do
       request = build_request(tools: [])
 
@@ -1230,7 +1244,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
     provider_opts = Keyword.get(opts, :provider_options, [])
 
     req_opts = %{
-      id: "gpt-5",
+      id: Keyword.get(opts, :id, "gpt-5"),
       context: context,
       stream: Keyword.get(opts, :stream),
       max_output_tokens: Keyword.get(opts, :max_output_tokens),

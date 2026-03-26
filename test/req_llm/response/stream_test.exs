@@ -110,7 +110,7 @@ defmodule ReqLLM.Response.StreamTest do
             output_tokens: 0,
             total_tokens: 1500,
             cached_tokens: 0,
-            cache_creation_tokens: 12000
+            cache_creation_tokens: 12_000
           }
         }),
         StreamChunk.meta(%{
@@ -129,7 +129,7 @@ defmodule ReqLLM.Response.StreamTest do
       assert summary.usage.input_tokens == 1500
       assert summary.usage.output_tokens == 393
       assert summary.usage.total_tokens == 1893
-      assert summary.usage.cache_creation_tokens == 12000
+      assert summary.usage.cache_creation_tokens == 12_000
     end
 
     test "handles empty stream" do

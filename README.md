@@ -477,7 +477,7 @@ mix deps.get
 mix test
 
 # Run quality checks
-mix quality  # format, compile, dialyzer, credo
+mix quality  # format, compile, credo --strict, dialyzer
 
 # Generate documentation
 mix docs

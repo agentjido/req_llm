@@ -64,7 +64,7 @@ defmodule ReqLLM.TranscriptionTest do
     end
 
     test "rejects invalid audio input format" do
-      assert {:error, error} = Transcription.transcribe("openai:whisper-1", 12345)
+      assert {:error, error} = Transcription.transcribe("openai:whisper-1", 12_345)
       assert Exception.message(error) =~ "expected a file path string"
     end
 

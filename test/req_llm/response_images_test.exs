@@ -1,8 +1,10 @@
 defmodule ReqLLM.ResponseImagesTest do
   use ExUnit.Case, async: true
 
+  alias ReqLLM.Context
+  alias ReqLLM.Message
   alias ReqLLM.Message.ContentPart
-  alias ReqLLM.{Context, Message, Response}
+  alias ReqLLM.Response
 
   test "images/1 extracts image and image_url content parts" do
     message = %Message{

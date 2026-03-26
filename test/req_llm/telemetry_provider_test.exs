@@ -65,7 +65,7 @@ defmodule ReqLLM.TelemetryProviderTest do
         requested_mode: :enabled,
         requested_effort: :high,
         effective_mode: :enabled,
-        effective_budget_tokens: 16384
+        effective_budget_tokens: 16_384
       }
     },
     %{
@@ -82,7 +82,7 @@ defmodule ReqLLM.TelemetryProviderTest do
         requested_mode: :enabled,
         requested_effort: :high,
         effective_mode: :enabled,
-        effective_budget_tokens: 16384
+        effective_budget_tokens: 16_384
       }
     },
     %{

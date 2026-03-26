@@ -685,7 +685,7 @@ defmodule ReqLLM.Providers.OpenAI do
     api_mod = select_api_mod(model)
 
     if function_exported?(api_mod, :attach_websocket_stream, 3) do
-      apply(api_mod, :attach_websocket_stream, [model, context, opts])
+      Function.capture(api_mod, :attach_websocket_stream, 3).(model, context, opts)
     else
       {:error,
        ReqLLM.Error.API.Request.exception(
