@@ -2,6 +2,8 @@
   "assignee": "",
   "blocked_by": [],
   "blocks": [],
+  "closed_at": "2026-03-26T11:36:01Z",
+  "close_reason": "Done",
   "created": "2026-03-26T01:18:44Z",
   "description": "Tests-only coverage task for `lib/req_llm/streaming/web_socket_client.ex`. Current local coverage is `49.3%`. Add or expand tests to exercise uncovered branches and behaviors without changing production behavior. If a production-code seam is genuinely needed, split that out into a separate task instead of widening this one.",
   "id": "req-p3w.2.5",
@@ -11,8 +13,8 @@
   ],
   "parent": "req-p3w.2",
   "priority": 0,
-  "status": "open",
+  "status": "closed",
   "title": "Increase coverage for lib/req_llm/streaming/web_socket_client.ex",
   "type": "task",
-  "updated_at": "2026-03-26T01:18:44Z"
+  "updated_at": "2026-03-26T11:36:01Z"
 }
