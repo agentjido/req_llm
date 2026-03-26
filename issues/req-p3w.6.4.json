@@ -5,7 +5,10 @@
   "created": "2026-03-26T01:18:54Z",
   "description": "Tests-only coverage task for `lib/req_llm/providers/amazon_bedrock/meta.ex`. Current local coverage is `65.0%`. Add or expand tests to exercise uncovered branches and behaviors without changing production behavior. If a production-code seam is genuinely needed, split that out into a separate task instead of widening this one.",
   "id": "req-p3w.6.4",
-  "labels": [],
+  "labels": [
+    "coverage",
+    "tests-only"
+  ],
   "parent": "req-p3w.6",
   "priority": 1,
   "status": "open",
