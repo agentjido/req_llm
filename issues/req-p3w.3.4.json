@@ -2,6 +2,8 @@
   "assignee": "",
   "blocked_by": [],
   "blocks": [],
+  "closed_at": "2026-03-26T11:58:55Z",
+  "close_reason": "Covered in PR #570",
   "created": "2026-03-26T01:18:46Z",
   "description": "Tests-only coverage task for `lib/req_llm/providers/openai/oauth.ex`. Current local coverage is `55.6%`. Add or expand tests to exercise uncovered branches and behaviors without changing production behavior. If a production-code seam is genuinely needed, split that out into a separate task instead of widening this one.",
   "id": "req-p3w.3.4",
@@ -11,8 +13,8 @@
   ],
   "parent": "req-p3w.3",
   "priority": 0,
-  "status": "open",
+  "status": "closed",
   "title": "Increase coverage for lib/req_llm/providers/openai/oauth.ex",
   "type": "task",
-  "updated_at": "2026-03-26T01:18:47Z"
+  "updated_at": "2026-03-26T11:58:55Z"
 }
