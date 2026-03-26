@@ -1,0 +1,16 @@
+{
+  "assignee": "",
+  "blocked_by": [],
+  "blocks": [],
+  "created": "2026-03-26T01:16:53Z",
+  "description": "bw 0.11.6 → 0.11.7 is available.\n\n## What's new\n\n## 0.11.7 — 2026-03-25\n\n- **Cyclic dependency rejection** — `bw dep add` now rejects edges that would create circular dependencies (e.g. A blocks B, B blocks C, then C blocks A). Previously only self-loops were caught; transitive cycles were silently accepted, creating logically incoherent state where blocked issues could never become unblocked. The check uses a DFS walk of the reachable subgraph, consistent with the existing parent-child cycle detection.\n\n## To upgrade\n\nRun `bw upgrade --yes` or `bw upgrade` for interactive mode.\n",
+  "id": "req-f2v",
+  "labels": [
+    "beadwork-upgrade"
+  ],
+  "priority": 1,
+  "status": "open",
+  "title": "Upgrade bw to 0.11.7",
+  "type": "task",
+  "updated_at": "2026-03-26T01:16:53Z"
+}
