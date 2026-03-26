@@ -2,6 +2,8 @@
   "assignee": "",
   "blocked_by": [],
   "blocks": [],
+  "closed_at": "2026-03-26T01:40:43Z",
+  "close_reason": "Coverage target reached in batch 01",
   "created": "2026-03-26T01:18:39Z",
   "description": "Tests-only coverage task for `lib/req_llm.ex`. Current local coverage is `65.3%`. Add or expand tests to exercise uncovered branches and behaviors without changing production behavior. If a production-code seam is genuinely needed, split that out into a separate task instead of widening this one.",
   "id": "req-p3w.1.1",
@@ -11,8 +13,8 @@
   ],
   "parent": "req-p3w.1",
   "priority": 0,
-  "status": "open",
+  "status": "closed",
   "title": "Increase coverage for lib/req_llm.ex",
   "type": "task",
-  "updated_at": "2026-03-26T01:18:39Z"
+  "updated_at": "2026-03-26T01:40:43Z"
 }
