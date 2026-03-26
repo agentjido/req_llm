@@ -5,11 +5,14 @@
   "created": "2026-03-26T01:19:02Z",
   "description": "Tests-only coverage task for `test/support/fixture_path.ex`. Current local coverage is `0.0%`. Add or expand tests to exercise uncovered branches and behaviors without changing production behavior. If a production-code seam is genuinely needed, split that out into a separate task instead of widening this one.",
   "id": "req-p3w.11.1",
-  "labels": [],
+  "labels": [
+    "coverage",
+    "tests-only"
+  ],
   "parent": "req-p3w.11",
   "priority": 2,
   "status": "open",
   "title": "Increase coverage for test/support/fixture_path.ex",
   "type": "task",
-  "updated_at": "2026-03-26T01:19:02Z"
+  "updated_at": "2026-03-26T01:19:03Z"
 }
