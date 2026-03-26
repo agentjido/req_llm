@@ -5,7 +5,10 @@
   "created": "2026-03-26T01:19:00Z",
   "description": "Tests-only coverage task for `lib/req_llm/providers/azure/responses_api.ex`. Current local coverage is `0.0%`. Add or expand tests to exercise uncovered branches and behaviors without changing production behavior. If a production-code seam is genuinely needed, split that out into a separate task instead of widening this one.",
   "id": "req-p3w.9.5",
-  "labels": [],
+  "labels": [
+    "coverage",
+    "tests-only"
+  ],
   "parent": "req-p3w.9",
   "priority": 2,
   "status": "open",
