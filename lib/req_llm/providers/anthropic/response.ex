@@ -142,8 +142,9 @@ defmodule ReqLLM.Providers.Anthropic.Response do
         end
 
       %{"type" => "ping"} ->
-        # Keep-alive ping, no content
-        []
+        # Emit a keepalive chunk so stall-timeout monitors see activity
+        # during long-thinking requests (e.g. Opus extended reasoning).
+        [ReqLLM.StreamChunk.meta(%{ping: true})]
 
       %{"type" => "content_block_stop"} ->
         # Content block finished - no chunk needed but log for debugging
