@@ -106,6 +106,7 @@ defmodule ReqLLM.MixProject do
             "guides/ollama.md",
             "guides/amazon_bedrock.md",
             "guides/cerebras.md",
+            "guides/deepseek.md",
             "guides/meta.md",
             "guides/zenmux.md",
             "guides/zai.md",
