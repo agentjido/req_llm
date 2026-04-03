@@ -619,6 +619,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> maybe_put_string("reasoning", reasoning)
       |> maybe_put_string("tools", tools)
       |> maybe_put_string("tool_choice", tool_choice)
+      |> maybe_put_string("parallel_tool_calls", opts_map[:parallel_tool_calls])
       |> maybe_put_string("service_tier", service_tier)
       |> maybe_put_string("text", text_format)
 
