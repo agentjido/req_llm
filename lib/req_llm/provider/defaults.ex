@@ -449,6 +449,55 @@ defmodule ReqLLM.Provider.Defaults do
   end
 
   @doc """
+  Returns the list of extra option keys for a provider module without resolving an API key.
+  Used by providers that handle credential resolution via `ReqLLM.Auth`.
+  """
+  @spec extra_option_keys(module()) :: [atom()]
+  def extra_option_keys(provider_mod) do
+    [
+      :model,
+      :compiled_schema,
+      :temperature,
+      :max_tokens,
+      :app_referer,
+      :app_title,
+      :fixture,
+      :api_key,
+      :access_token,
+      :auth_mode,
+      :oauth_file,
+      :auth_file,
+      :oauth_http_options,
+      :provider_options,
+      :on_unsupported,
+      :n,
+      :tools,
+      :tool_choice,
+      :tool_call_id_compat,
+      :cache,
+      :cache_key,
+      :cache_ttl,
+      :cache_options,
+      :req_http_options,
+      :telemetry,
+      :telemetry_original_opts,
+      :stream,
+      :frequency_penalty,
+      :system_prompt,
+      :json_repair,
+      :top_p,
+      :presence_penalty,
+      :seed,
+      :stop,
+      :user,
+      :reasoning_effort,
+      :reasoning_token_budget,
+      :dimensions,
+      :encoding_format
+    ] ++ provider_mod.supported_provider_options()
+  end
+
+  @doc """
   Default body encoding for OpenAI-compatible APIs.
   """
   @spec default_encode_body(Req.Request.t()) :: Req.Request.t()
