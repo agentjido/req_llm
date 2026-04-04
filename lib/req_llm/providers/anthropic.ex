@@ -102,17 +102,26 @@ defmodule ReqLLM.Providers.Anthropic do
       Example: %{max_uses: 5, allowed_domains: ["example.com"]}
       """
     ],
-    oauth_mode: [
-      type: :boolean,
-      default: false,
-      doc: """
-      Enable OAuth mode for Anthropic Claude Pro/Max subscriptions.
-      When enabled:
-      - Uses `Authorization: Bearer` header instead of `x-api-key`
-      - Adds `oauth-2025-04-20` beta flag
-      - Adds special user-agent header
-      - Appends `?beta=true` to the API URL
-      """
+    access_token: [
+      type: :string,
+      doc: "OAuth access token used as Authorization Bearer credential"
+    ],
+    auth_mode: [
+      type: {:in, [:api_key, :oauth]},
+      default: :api_key,
+      doc: "Authentication mode: :api_key (default) or :oauth"
+    ],
+    oauth_file: [
+      type: :string,
+      doc: "Path to an oauth/auth JSON file with provider credentials"
+    ],
+    auth_file: [
+      type: :string,
+      doc: "Alias for :oauth_file"
+    ],
+    oauth_http_options: [
+      type: {:list, :any},
+      doc: "Req options for OAuth refresh HTTP requests"
     ]
   ]
 
@@ -279,51 +288,43 @@ defmodule ReqLLM.Providers.Anthropic do
 
   @impl ReqLLM.Provider
   def attach(request, model, user_opts) do
-    # Validate provider compatibility
     if model.provider != :anthropic do
       raise ReqLLM.Error.Invalid.Provider.exception(provider: model.provider)
     end
 
-    {api_key, extra_option_keys} =
-      ReqLLM.Provider.Defaults.fetch_api_key_and_extra_options(__MODULE__, model, user_opts)
+    credential = ReqLLM.Auth.resolve!(model, user_opts)
+    extra_option_keys = ReqLLM.Provider.Defaults.extra_option_keys(__MODULE__)
 
-    oauth_mode = Keyword.get(user_opts, :oauth_mode, false)
-
-    # Build auth header based on OAuth mode
     request =
       request
-      |> Req.Request.register_options(
-        extra_option_keys ++ [:anthropic_version, :anthropic_beta, :oauth_mode]
-      )
+      |> Req.Request.register_options(extra_option_keys ++ [:anthropic_version, :anthropic_beta])
       |> Req.Request.put_header("content-type", "application/json")
+      |> put_auth_headers(credential)
       |> Req.Request.put_header("anthropic-version", get_anthropic_version(user_opts))
 
+    # OAuth-specific: user-agent and ?beta=true URL
     request =
-      if oauth_mode do
-        request
-        |> Req.Request.put_header("Authorization", "Bearer #{api_key}")
-        |> Req.Request.put_header("user-agent", "claude-cli/2.1.2 (external, cli)")
-      else
-        Req.Request.put_header(request, "x-api-key", api_key)
-      end
-
-    # Update URL for OAuth mode
-    request =
-      if oauth_mode do
+      if credential.kind == :oauth_access_token do
         url = request.url || "/v1/messages"
 
         url_with_beta =
-          if String.contains?(url, "?"), do: "#{url}&beta=true", else: "#{url}?beta=true"
+          if String.contains?(to_string(url), "?"),
+            do: "#{url}&beta=true",
+            else: "#{url}?beta=true"
 
-        %{request | url: url_with_beta}
+        request
+        |> Req.Request.put_header("user-agent", "claude-cli/2.1.2 (external, cli)")
+        |> Map.put(:url, url_with_beta)
       else
         request
       end
 
     request
     |> Req.Request.put_private(:req_llm_model, model)
-    |> maybe_add_beta_header(user_opts)
-    |> Req.Request.merge_options([model: get_api_model_id(model)] ++ user_opts)
+    |> maybe_add_beta_header(user_opts, credential)
+    |> Req.Request.merge_options(
+      [finch: ReqLLM.Application.finch_name(), model: get_api_model_id(model)] ++ user_opts
+    )
     |> ReqLLM.Step.Error.attach()
     |> ReqLLM.Step.Retry.attach(user_opts)
     |> Req.Request.append_request_steps(llm_encode_body: &encode_body/1)
@@ -331,6 +332,20 @@ defmodule ReqLLM.Providers.Anthropic do
     |> ReqLLM.Step.Usage.attach(model)
     |> ReqLLM.Step.Fixture.maybe_attach(model, user_opts)
     |> Req.Request.put_private(:req_llm_model, model)
+  end
+
+  defp put_auth_headers(request, credential) do
+    Enum.reduce(auth_header_list(credential), request, fn {name, value}, req ->
+      Req.Request.put_header(req, name, value)
+    end)
+  end
+
+  defp auth_header_list(%{kind: :oauth_access_token, token: token}) do
+    [{"authorization", "Bearer #{token}"}]
+  end
+
+  defp auth_header_list(%{kind: :api_key, token: token}) do
+    [{"x-api-key", token}]
   end
 
   @impl ReqLLM.Provider
@@ -526,23 +541,13 @@ defmodule ReqLLM.Providers.Anthropic do
   # ========================================================================
 
   defp build_request_headers(model, opts) do
-    api_key = ReqLLM.Keys.get!(model, opts)
-    oauth_mode = get_option(opts, :oauth_mode, false)
+    credential = ReqLLM.Auth.resolve!(model, opts)
 
-    auth_header =
-      if oauth_mode do
-        {"Authorization", "Bearer #{api_key}"}
-      else
-        {"x-api-key", api_key}
-      end
+    base_headers =
+      [{"content-type", "application/json"} | auth_header_list(credential)] ++
+        [{"anthropic-version", get_anthropic_version(opts)}]
 
-    base_headers = [
-      {"content-type", "application/json"},
-      auth_header,
-      {"anthropic-version", get_anthropic_version(opts)}
-    ]
-
-    if oauth_mode do
+    if credential.kind == :oauth_access_token do
       base_headers ++ [{"user-agent", "claude-cli/2.1.2 (external, cli)"}]
     else
       base_headers
@@ -569,22 +574,20 @@ defmodule ReqLLM.Providers.Anthropic do
     |> maybe_add_output_format(opts)
   end
 
-  defp build_request_url(opts) do
+  defp build_request_url(opts, credential) do
     base_url = get_option(opts, :base_url, base_url())
-    oauth_mode = get_option(opts, :oauth_mode, false)
-
     url = "#{base_url}/v1/messages"
 
-    if oauth_mode do
+    if credential.kind == :oauth_access_token do
       "#{url}?beta=true"
     else
       url
     end
   end
 
-  defp build_beta_headers(opts) do
+  defp build_beta_headers(opts, credential) do
+    is_oauth = credential.kind == :oauth_access_token
     provider_opts = get_option(opts, :provider_options, [])
-    oauth_mode = get_option(opts, :oauth_mode, false)
 
     manual_betas =
       (List.wrap(Keyword.get(opts, :anthropic_beta)) ++
@@ -595,35 +598,32 @@ defmodule ReqLLM.Providers.Anthropic do
 
     beta_features =
       if has_tools?(opts) do
-        [beta_features, @anthropic_beta_tools]
+        [@anthropic_beta_tools | beta_features]
       else
-        [beta_features]
+        beta_features
       end
 
     beta_features =
-      if has_thinking?(opts) or oauth_mode do
-        # Always include interleaved-thinking for OAuth mode (required by Claude Code)
-        [beta_features, "interleaved-thinking-2025-05-14"]
+      if has_thinking?(opts) or is_oauth do
+        ["interleaved-thinking-2025-05-14" | beta_features]
       else
         beta_features
       end
 
     beta_features =
       if has_prompt_caching?(opts) do
-        [beta_features, @anthropic_beta_prompt_caching]
+        [@anthropic_beta_prompt_caching | beta_features]
       else
         beta_features
       end
 
-    # OAuth beta flag must be FIRST in the list (required by Anthropic OAuth)
+    # OAuth beta flag must be FIRST
     beta_features =
-      if oauth_mode do
-        ["oauth-2025-04-20", beta_features]
+      if is_oauth do
+        ["oauth-2025-04-20" | beta_features]
       else
         beta_features
       end
-
-    beta_features = List.flatten(beta_features)
 
     case beta_features do
       [] ->
@@ -643,25 +643,12 @@ defmodule ReqLLM.Providers.Anthropic do
 
   @impl ReqLLM.Provider
   def attach_stream(model, context, opts, _finch_name) do
-    # Debug: log incoming oauth_mode
-    Logger.debug(
-      "[ReqLLM.Anthropic.attach_stream] Incoming opts oauth_mode: #{inspect(Keyword.get(opts, :oauth_mode))}"
-    )
-
     # Extract and merge provider_options for translation
     {provider_options, standard_opts} = Keyword.pop(opts, :provider_options, [])
     flattened_opts = Keyword.merge(standard_opts, provider_options)
 
-    Logger.debug(
-      "[ReqLLM.Anthropic.attach_stream] After flatten oauth_mode: #{inspect(Keyword.get(flattened_opts, :oauth_mode))}"
-    )
-
     # Translate provider options (including reasoning_effort) before building body
     {translated_opts, _warnings} = translate_options(:chat, model, flattened_opts)
-
-    Logger.debug(
-      "[ReqLLM.Anthropic.attach_stream] After translate oauth_mode: #{inspect(Keyword.get(translated_opts, :oauth_mode))}"
-    )
 
     # Set default timeout for reasoning models
     default_timeout =
@@ -676,46 +663,22 @@ defmodule ReqLLM.Providers.Anthropic do
     base_url = ReqLLM.Provider.Options.effective_base_url(__MODULE__, model, translated_opts)
     translated_opts = Keyword.put(translated_opts, :base_url, base_url)
 
+    # Resolve credential for auth headers and OAuth-specific behavior
+    credential = ReqLLM.Auth.resolve!(model, translated_opts)
+
     # Build request using shared helpers
     headers = build_request_headers(model, translated_opts)
     streaming_headers = [{"Accept", "text/event-stream"} | headers]
-    beta_headers = build_beta_headers(translated_opts)
+    beta_headers = build_beta_headers(translated_opts, credential)
     all_headers = streaming_headers ++ beta_headers
 
     body = build_request_body(context, get_api_model_id(model), translated_opts ++ [stream: true])
-    url = build_request_url(translated_opts)
-
-    Logger.debug(
-      "[ReqLLM.Anthropic.attach_stream] Built URL: #{url}, oauth_mode in opts: #{inspect(Keyword.get(translated_opts, :oauth_mode))}"
-    )
-
-    Logger.debug("[ReqLLM.Anthropic.attach_stream] Beta headers: #{inspect(beta_headers)}")
-
-    # Log system prompt prefix for OAuth debugging
-    system = Map.get(body, :system)
-
-    system_preview =
-      case system do
-        s when is_binary(s) -> String.slice(s, 0, 200)
-        [%{text: t} | _] when is_binary(t) -> String.slice(t, 0, 200)
-        _ -> inspect(system, limit: 200)
-      end
-
-    Logger.debug("[ReqLLM.Anthropic.attach_stream] System prompt preview: #{system_preview}")
-
-    # Log tools for OAuth debugging
-    tools = Map.get(body, :tools, [])
-    tool_names = Enum.map(tools, fn t -> Map.get(t, :name) || Map.get(t, "name") end)
-    Logger.debug("[ReqLLM.Anthropic.attach_stream] Tools in request: #{inspect(tool_names)}")
+    url = build_request_url(translated_opts, credential)
 
     # Log the outgoing streaming request for debugging
     log_outgoing_stream_request(url, all_headers, body)
 
     finch_request = Finch.build(:post, url, all_headers, Jason.encode!(body))
-
-    Logger.debug(
-      "[ReqLLM.Anthropic.attach_stream] Finch request built - path: #{inspect(finch_request.path)}, query: #{inspect(finch_request.query)}"
-    )
 
     {:ok, finch_request}
   rescue
@@ -751,8 +714,8 @@ defmodule ReqLLM.Providers.Anthropic do
     Keyword.get(user_opts, :anthropic_version, @default_anthropic_version)
   end
 
-  defp maybe_add_beta_header(request, user_opts) do
-    oauth_mode = Keyword.get(user_opts, :oauth_mode, false)
+  defp maybe_add_beta_header(request, user_opts, credential) do
+    is_oauth = credential.kind == :oauth_access_token
 
     # Add betas from provider_options (e.g. structured-outputs)
     provider_betas =
@@ -765,35 +728,33 @@ defmodule ReqLLM.Providers.Anthropic do
 
     beta_features =
       if has_tools?(user_opts) do
-        [beta_features, @anthropic_beta_tools]
+        [@anthropic_beta_tools | beta_features]
       else
-        [beta_features]
+        beta_features
       end
 
     beta_features =
-      if has_thinking?(user_opts) or oauth_mode do
+      if has_thinking?(user_opts) or is_oauth do
         # Always include interleaved-thinking for OAuth mode (required by Claude Code)
-        [beta_features, "interleaved-thinking-2025-05-14"]
+        ["interleaved-thinking-2025-05-14" | beta_features]
       else
         beta_features
       end
 
     beta_features =
       if has_prompt_caching?(user_opts) do
-        [beta_features, @anthropic_beta_prompt_caching]
+        [@anthropic_beta_prompt_caching | beta_features]
       else
         beta_features
       end
 
     # OAuth beta flag must be FIRST in the list (required by Anthropic OAuth)
     beta_features =
-      if oauth_mode do
-        ["oauth-2025-04-20", beta_features]
+      if is_oauth do
+        ["oauth-2025-04-20" | beta_features]
       else
         beta_features
       end
-
-    beta_features = List.flatten(beta_features)
 
     case beta_features do
       [] ->
