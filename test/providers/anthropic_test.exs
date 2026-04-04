@@ -1453,4 +1453,118 @@ defmodule ReqLLM.Providers.AnthropicTest do
       refute Map.has_key?(structured_tool.parameter_schema["properties"]["value"], "minimum")
     end
   end
+
+  describe "OAuth authentication" do
+    test "oauth mode uses Bearer auth header" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      request =
+        Req.new()
+        |> Anthropic.attach(model,
+          auth_mode: :oauth,
+          access_token: "test-oauth-token"
+        )
+
+      auth_header = Enum.find(request.headers, fn {name, _} -> name == "authorization" end)
+      assert auth_header == {"authorization", ["Bearer test-oauth-token"]}
+
+      api_key_header = Enum.find(request.headers, fn {name, _} -> name == "x-api-key" end)
+      assert api_key_header == nil
+    end
+
+    test "api_key mode uses x-api-key header" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      request =
+        Req.new()
+        |> Anthropic.attach(model, api_key: "sk-test-key")
+
+      api_key_header = Enum.find(request.headers, fn {name, _} -> name == "x-api-key" end)
+      assert api_key_header == {"x-api-key", ["sk-test-key"]}
+
+      auth_header = Enum.find(request.headers, fn {name, _} -> name == "authorization" end)
+      assert auth_header == nil
+    end
+
+    test "oauth mode adds oauth beta flag" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      request =
+        Req.new()
+        |> Anthropic.attach(model,
+          auth_mode: :oauth,
+          access_token: "test-oauth-token"
+        )
+
+      beta_header = Enum.find(request.headers, fn {name, _} -> name == "anthropic-beta" end)
+      assert beta_header != nil
+      {_, [beta_value]} = beta_header
+      assert String.contains?(beta_value, "oauth-2025-04-20")
+    end
+
+    test "oauth mode adds interleaved-thinking beta flag" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      request =
+        Req.new()
+        |> Anthropic.attach(model,
+          auth_mode: :oauth,
+          access_token: "test-oauth-token"
+        )
+
+      beta_header = Enum.find(request.headers, fn {name, _} -> name == "anthropic-beta" end)
+      assert beta_header != nil
+      {_, [beta_value]} = beta_header
+      assert String.contains?(beta_value, "interleaved-thinking-2025-05-14")
+    end
+
+    test "oauth mode adds user-agent header" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      request =
+        Req.new()
+        |> Anthropic.attach(model,
+          auth_mode: :oauth,
+          access_token: "test-oauth-token"
+        )
+
+      ua_header = Enum.find(request.headers, fn {name, _} -> name == "user-agent" end)
+      assert ua_header == {"user-agent", ["claude-cli/2.1.2 (external, cli)"]}
+    end
+
+    test "oauth mode appends ?beta=true to URL" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      request =
+        Req.new()
+        |> Anthropic.attach(model,
+          auth_mode: :oauth,
+          access_token: "test-oauth-token"
+        )
+
+      url_str = to_string(request.url)
+      assert String.contains?(url_str, "beta=true")
+    end
+
+    test "non-oauth mode does not add oauth-specific headers" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      request =
+        Req.new()
+        |> Anthropic.attach(model, api_key: "sk-test-key")
+
+      ua_header = Enum.find(request.headers, fn {name, _} -> name == "user-agent" end)
+      assert ua_header == nil
+
+      beta_header = Enum.find(request.headers, fn {name, _} -> name == "anthropic-beta" end)
+
+      if beta_header do
+        {_, [beta_value]} = beta_header
+        refute String.contains?(beta_value, "oauth-2025-04-20")
+      end
+
+      url_str = to_string(request.url)
+      refute String.contains?(url_str, "beta=true")
+    end
+  end
 end
