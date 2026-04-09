@@ -502,9 +502,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     opts_map = if is_map(opts), do: opts, else: Map.new(opts)
     provider_opts = opts_map[:provider_options] || []
 
+    store = Keyword.get(provider_opts, :store, true)
+
     previous_response_id =
-      provider_opts[:previous_response_id] ||
-        extract_previous_response_id_from_context(context)
+      if store != false do
+        provider_opts[:previous_response_id] ||
+          extract_previous_response_id_from_context(context)
+      end
 
     {input, _tool_messages, reasoning_items} =
       Enum.reduce(context.messages, {[], [], []}, fn msg, {input_acc, tool_acc, reasoning_acc} ->
@@ -620,10 +624,17 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> maybe_put_string("service_tier", service_tier)
       |> maybe_put_string("text", text_format)
 
-    if previous_response_id do
-      body
-      |> Map.put("previous_response_id", previous_response_id)
-      |> Map.put("store", true)
+    body =
+      if previous_response_id do
+        body
+        |> Map.put("previous_response_id", previous_response_id)
+        |> Map.put("store", true)
+      else
+        body
+      end
+
+    if store == false do
+      Map.put(body, "store", false)
     else
       body
     end

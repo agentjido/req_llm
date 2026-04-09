@@ -177,6 +177,12 @@ defmodule ReqLLM.Providers.OpenAI do
       type: :string,
       doc: "Previous response ID for Responses API tool resume flow"
     ],
+    store: [
+      type: :boolean,
+      doc:
+        "Whether to store responses for multi-turn chaining via previous_response_id. " <>
+          "Set to false for Zero Data Retention (ZDR) organizations."
+    ],
     openai_stream_transport: [
       type: {:in, [:sse, :websocket]},
       default: :sse,

@@ -1282,6 +1282,66 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
              end)
     end
 
+    test "store: false suppresses previous_response_id and sets store to false" do
+      assistant_msg = %ReqLLM.Message{
+        role: :assistant,
+        content: [%ReqLLM.Message.ContentPart{type: :text, text: "Previous answer"}],
+        metadata: %{response_id: "resp_prev_123"}
+      }
+
+      user_msg = %ReqLLM.Message{
+        role: :user,
+        content: [%ReqLLM.Message.ContentPart{type: :text, text: "Follow up"}]
+      }
+
+      context = %ReqLLM.Context{messages: [assistant_msg, user_msg]}
+      request = build_request(context: context, provider_options: [store: false])
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded.body)
+
+      refute Map.has_key?(body, "previous_response_id")
+      assert body["store"] == false
+    end
+
+    test "store: true (default) preserves previous_response_id behavior" do
+      assistant_msg = %ReqLLM.Message{
+        role: :assistant,
+        content: [%ReqLLM.Message.ContentPart{type: :text, text: "Previous answer"}],
+        metadata: %{response_id: "resp_prev_456"}
+      }
+
+      user_msg = %ReqLLM.Message{
+        role: :user,
+        content: [%ReqLLM.Message.ContentPart{type: :text, text: "Follow up"}]
+      }
+
+      context = %ReqLLM.Context{messages: [assistant_msg, user_msg]}
+      request = build_request(context: context)
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded.body)
+
+      assert body["previous_response_id"] == "resp_prev_456"
+      assert body["store"] == true
+    end
+
+    test "store: false without prior response_id omits both fields" do
+      user_msg = %ReqLLM.Message{
+        role: :user,
+        content: [%ReqLLM.Message.ContentPart{type: :text, text: "Hello"}]
+      }
+
+      context = %ReqLLM.Context{messages: [user_msg]}
+      request = build_request(context: context, provider_options: [store: false])
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded.body)
+
+      refute Map.has_key?(body, "previous_response_id")
+      assert body["store"] == false
+    end
+
     test "skips non-OpenAI reasoning details with warning" do
       import ExUnit.CaptureLog
 
