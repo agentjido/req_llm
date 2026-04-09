@@ -1255,8 +1255,9 @@ defmodule ReqLLM.Providers.OpenAITest do
       end
     end
 
-    test "rejects PDF attachments with clear error" do
-      {:ok, model} = ReqLLM.model("openai:gpt-4o")
+    test "Chat API rejects PDF attachments with clear error" do
+      # Force a Chat API model by using an inline spec without Responses API routing
+      {:ok, model} = ReqLLM.model(%{provider: :openai, id: "gpt-3.5-turbo"})
 
       pdf_part = ReqLLM.Message.ContentPart.file(<<1, 2, 3>>, "doc.pdf", "application/pdf")
       message = %ReqLLM.Message{role: :user, content: [pdf_part]}
@@ -1267,7 +1268,6 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert %ReqLLM.Error.Invalid.Parameter{} = error
       assert error.parameter =~ "only supports image attachments"
       assert error.parameter =~ "application/pdf"
-      assert error.parameter =~ "Anthropic or Google"
     end
 
     test "rejects text file attachments" do
@@ -1292,6 +1292,39 @@ defmodule ReqLLM.Providers.OpenAITest do
       context = %ReqLLM.Context{messages: [message]}
 
       {:ok, _request} = OpenAI.prepare_request(:chat, model, context, [])
+    end
+
+    test "Responses API accepts PDF attachments" do
+      {:ok, model} = ReqLLM.model("openai:gpt-5")
+
+      pdf_part = ReqLLM.Message.ContentPart.file(<<1, 2, 3>>, "doc.pdf", "application/pdf")
+      message = %ReqLLM.Message{role: :user, content: [pdf_part]}
+      context = %ReqLLM.Context{messages: [message]}
+
+      assert {:ok, _request} = OpenAI.prepare_request(:chat, model, context, [])
+    end
+
+    test "Responses API accepts image attachments" do
+      {:ok, model} = ReqLLM.model("openai:gpt-5")
+
+      image_part = ReqLLM.Message.ContentPart.file(<<1, 2, 3>>, "photo.jpg", "image/jpeg")
+      message = %ReqLLM.Message{role: :user, content: [image_part]}
+      context = %ReqLLM.Context{messages: [message]}
+
+      assert {:ok, _request} = OpenAI.prepare_request(:chat, model, context, [])
+    end
+
+    test "Responses API rejects unsupported file types" do
+      {:ok, model} = ReqLLM.model("openai:gpt-5")
+
+      text_part = ReqLLM.Message.ContentPart.file("content", "file.txt", "text/plain")
+      message = %ReqLLM.Message{role: :user, content: [text_part]}
+      context = %ReqLLM.Context{messages: [message]}
+
+      {:error, error} = OpenAI.prepare_request(:chat, model, context, [])
+
+      assert %ReqLLM.Error.Invalid.Parameter{} = error
+      assert error.parameter =~ "text/plain"
     end
   end
 

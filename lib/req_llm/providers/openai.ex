@@ -112,6 +112,9 @@ defmodule ReqLLM.Providers.OpenAI do
     default_base_url: "https://api.openai.com/v1",
     default_env_key: "OPENAI_API_KEY"
 
+  # The Responses API supports richer file types than the Chat Completions API.
+  @responses_api_mimes ~w(image/jpeg image/png image/gif image/webp application/pdf)
+
   @provider_schema [
     access_token: [
       type: :string,
@@ -344,7 +347,7 @@ defmodule ReqLLM.Providers.OpenAI do
   def prepare_request(:chat, model_spec, prompt, opts) do
     with {:ok, model} <- ReqLLM.model(model_spec),
          {:ok, context} <- ReqLLM.Context.normalize(prompt, opts),
-         :ok <- validate_attachments(context),
+         :ok <- validate_attachments(context, model),
          opts_with_context = Keyword.put(opts, :context, context),
          http_opts = Keyword.get(opts, :req_http_options, []),
          {:ok, processed_opts} <-
@@ -825,15 +828,47 @@ defmodule ReqLLM.Providers.OpenAI do
 
   defp enforce_strict_schema_requirements(schema), do: schema
 
-  defp validate_attachments(context) do
-    case ReqLLM.Provider.Defaults.validate_image_only_attachments(context) do
-      :ok ->
-        :ok
+  defp validate_attachments(context, model) do
+    case select_api_mod(model) do
+      ReqLLM.Providers.OpenAI.ResponsesAPI ->
+        validate_responses_api_attachments(context)
 
-      {:error, message} ->
-        {:error, ReqLLM.Error.Invalid.Parameter.exception(parameter: message)}
+      _ ->
+        case ReqLLM.Provider.Defaults.validate_image_only_attachments(context) do
+          :ok ->
+            :ok
+
+          {:error, message} ->
+            {:error, ReqLLM.Error.Invalid.Parameter.exception(parameter: message)}
+        end
     end
   end
+
+  defp validate_responses_api_attachments(%ReqLLM.Context{messages: messages}) do
+    unsupported =
+      messages
+      |> Enum.flat_map(fn msg -> msg.content || [] end)
+      |> Enum.filter(fn part ->
+        part.type == :file and part.media_type not in @responses_api_mimes
+      end)
+
+    case unsupported do
+      [] ->
+        :ok
+
+      parts ->
+        mimes = parts |> Enum.map(& &1.media_type) |> Enum.uniq() |> Enum.join(", ")
+
+        {:error,
+         ReqLLM.Error.Invalid.Parameter.exception(
+           parameter:
+             "OpenAI Responses API supports image and PDF attachments. " <>
+               "Found unsupported file types: #{mimes}."
+         )}
+    end
+  end
+
+  defp validate_responses_api_attachments(_), do: :ok
 
   defp maybe_add_transcription_part(parts, _key, nil), do: parts
   defp maybe_add_transcription_part(parts, key, value), do: parts ++ [{key, to_string(value)}]
