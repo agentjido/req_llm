@@ -165,6 +165,11 @@ defmodule ReqLLM.Providers.GoogleVertex do
       type: :map,
       doc:
         "Response format constraint (e.g., %{type: \"json_object\"}) for OpenAI-compatible MaaS models"
+    ],
+    labels: [
+      type: {:map, :string, :string},
+      doc:
+        "Custom metadata labels for the request as key-value string pairs. Used for billing and reporting."
     ]
   ]
 

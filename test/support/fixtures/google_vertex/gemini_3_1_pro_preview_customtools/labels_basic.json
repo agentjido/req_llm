@@ -1,0 +1,120 @@
+{
+  "model_spec": "google_vertex:gemini-3.1-pro-preview-customtools",
+  "provider": "google_vertex",
+  "request": {
+    "body": {
+      "b64": "eyJjb250ZW50cyI6W3sicGFydHMiOlt7InRleHQiOiJTYXkgaGVsbG8gaW4gb25lIHdvcmQuIn1dLCJyb2xlIjoidXNlciJ9XSwiZ2VuZXJhdGlvbkNvbmZpZyI6eyJjYW5kaWRhdGVDb3VudCI6MSwibWF4T3V0cHV0VG9rZW5zIjo2NTUzNn0sImxhYmVscyI6eyJlbnZpcm9ubWVudCI6InRlc3QiLCJ0ZWFtIjoiZW5naW5lZXJpbmciLCJ1c2VfY2FzZSI6ImNvdmVyYWdlX3Rlc3QifX0="
+    },
+    "canonical_json": {
+      "contents": [
+        {
+          "parts": [
+            {
+              "text": "Say hello in one word."
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "generationConfig": {
+        "candidateCount": 1,
+        "maxOutputTokens": 65536
+      },
+      "labels": {
+        "environment": "test",
+        "team": "engineering",
+        "use_case": "coverage_test"
+      }
+    },
+    "headers": {
+      "accept": [
+        "application/json"
+      ],
+      "accept-encoding": [
+        "gzip"
+      ],
+      "authorization": "[REDACTED:authorization]",
+      "content-type": [
+        "application/json"
+      ],
+      "user-agent": [
+        "req/0.5.17"
+      ]
+    },
+    "method": "post",
+    "url": "https://aiplatform.googleapis.com/v1/projects/gen-lang-client-0275659966/locations/global/publishers/google/models/gemini-3.1-pro-preview-customtools:generateContent"
+  },
+  "response": {
+    "body": {
+      "candidates": [
+        {
+          "avgLogprobs": -23.63612200097723,
+          "content": {
+            "parts": [
+              {
+                "text": "Hello.",
+                "thoughtSignature": "CoEFAY89a1/cOwDQbKGYPoz0y2ysUVcNfu/ynrwyKvrVVEj/Q2Rec+LxBSDRLNVaPb3dHRGkA4MEx944Zpo8ZPpxoDDo+Qctzzker9wO0Hfc/zgTXrR/myAkTNWHvzK8a21NrH9ou5vXcS7BDA/rFFeLKwT7EoD5ZK5caDY+11vemyEb7GRG707K9RFG3la3/EtSaDxjkUsvSAJ/zBjNqBlZ0+yQustc7z7C0L03XTNljRl0JEumvM3EMtLx2F1Ix2iFJwcWKvX/j1cfO7cktknnqEnAPPqEtqBeuL1pLNj1SmE0I6ZY7KQhQkAyyG5Zwh3acersoUCENG2PuB1B3U009S6lrH7VGp4nvwo9xR6K+irTmHNLKHxaW4fDG+HtJedZIOgAAVqcnSCOdUp7/NVwU1/Q4RuiWbSoEqlVH/VlHG2ied9TeToFi/D1tJ2rsJt1LPmKAW5FMiGWt3Ynt0+CFgZNX79Qzphr7RsMrynsTp6/y01YYEXSwXWUbhk9gk4N08xhNjqgLV/eclwJ/xFP2Oz4hOdYPa8A4PnToHRzNlEX31Pr2OCL+f2PhaO+s2GV/7RRV5ADfJyiR5USyGR8xvP/1bHBce44CKAltY8DlHHgL1iBB8RMVVlY+w3m1T8pYKL5+mATZfOKKlAvjSfKQ4iGuZ7dcGLZ/n6dxDZSjpGJ5P+kMR2uboQCfVH3wjWFjTdH6vQr2lqnKEaboItUm35S1guCBwg0jTV+xKIJTB8li6Fr0h/vuB8x1WP10Dueej3nKWeSxWotLcgpxxvUmH8aCH/Fv0c+JK5AWlyWZ/2JEnkltKwNlYBG3v2fRdN4BvLxkDK8b1btwizW3+eGPuY="
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP"
+        }
+      ],
+      "createTime": "2026-04-10T13:47:20.882931Z",
+      "modelVersion": "gemini-3.1-pro-preview-customtools",
+      "responseId": "aP_YafPxNfeLitYPmcDf0QQ",
+      "usageMetadata": {
+        "candidatesTokenCount": 2,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 2
+          }
+        ],
+        "promptTokenCount": 6,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 6
+          }
+        ],
+        "thoughtsTokenCount": 142,
+        "totalTokenCount": 150,
+        "trafficType": "ON_DEMAND"
+      }
+    },
+    "headers": {
+      "alt-svc": [
+        "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      ],
+      "content-type": [
+        "application/json; charset=UTF-8"
+      ],
+      "date": [
+        "Fri, 10 Apr 2026 13:47:24 GMT"
+      ],
+      "server": [
+        "scaffolding on HTTPServer2"
+      ],
+      "transfer-encoding": [
+        "chunked"
+      ],
+      "vary": [
+        "Origin",
+        "X-Origin",
+        "Referer"
+      ],
+      "x-content-type-options": [
+        "nosniff"
+      ],
+      "x-frame-options": [
+        "SAMEORIGIN"
+      ],
+      "x-xss-protection": [
+        "0"
+      ]
+    },
+    "status": 200
+  }
+}

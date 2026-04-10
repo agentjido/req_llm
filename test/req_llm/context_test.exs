@@ -469,6 +469,48 @@ defmodule ReqLLM.ContextTest do
       inspected = inspect(context)
       assert inspected == "#Context<1 msgs: user:\"\">"
     end
+
+    test "redacts content when :redact_context config is true" do
+      Application.put_env(:req_llm, :redact_context, true)
+
+      context =
+        Context.new([
+          Context.system("Secret system prompt"),
+          Context.user("Secret user message")
+        ])
+
+      inspected = inspect(context)
+      assert inspected == "#Context<2 messages [REDACTED]>"
+    after
+      Application.delete_env(:req_llm, :redact_context)
+    end
+
+    test "redacts content for long contexts when :redact_context config is true" do
+      Application.put_env(:req_llm, :redact_context, true)
+
+      context =
+        Context.new([
+          Context.system("Secret"),
+          Context.user("Hello"),
+          Context.assistant("Hi"),
+          Context.user("More secrets")
+        ])
+
+      inspected = inspect(context)
+      assert inspected == "#Context<4 messages [REDACTED]>"
+    after
+      Application.delete_env(:req_llm, :redact_context)
+    end
+
+    test "redacts empty context when :redact_context config is true" do
+      Application.put_env(:req_llm, :redact_context, true)
+
+      context = Context.new()
+      inspected = inspect(context)
+      assert inspected == "#Context<0 messages [REDACTED]>"
+    after
+      Application.delete_env(:req_llm, :redact_context)
+    end
   end
 
   describe "normalize/2" do

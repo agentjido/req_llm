@@ -23,6 +23,9 @@ config :req_llm,
   # Telemetry
   telemetry: [payloads: :none],      # Request payload policy (:none or :raw)
 
+  # Privacy
+  redact_context: false,             # Hide message contents in inspect output
+
   # Debugging
   debug: false                       # Enable verbose logging
 ```
@@ -277,6 +280,28 @@ Or via environment variable:
 
 ```bash
 REQ_LLM_DEBUG=1 mix test
+```
+
+## Context Redaction
+
+Hide message contents when a `Context` struct is inspected, preventing sensitive prompts or responses from leaking into logs:
+
+```elixir
+config :req_llm, redact_context: true
+```
+
+When enabled, `inspect/2` shows only the message count:
+
+```elixir
+inspect(context)
+#=> "#Context<4 messages [REDACTED]>"
+```
+
+When disabled (the default), the full message preview is shown as normal:
+
+```elixir
+inspect(context)
+#=> "#Context<2 msgs: system:\"You are a helpful assistant\", user:\"Hello\">"
 ```
 
 ## Example: Production Configuration

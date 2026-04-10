@@ -518,6 +518,43 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert tool_result_block["tool_use_id"] == "functions_add_0"
     end
 
+    test "encode_body handles tool calls with empty string arguments" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.user("Take a screenshot"),
+          ReqLLM.Context.assistant("",
+            tool_calls: [
+              %ReqLLM.ToolCall{
+                id: "call_1",
+                type: "function",
+                function: %{name: "take_screenshot", arguments: ""}
+              }
+            ]
+          ),
+          ReqLLM.Context.tool_result("call_1", "screenshot.png")
+        ])
+
+      mock_request = %Req.Request{
+        options: [context: context, model: model.model, stream: false]
+      }
+
+      updated_request = Anthropic.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+      messages = decoded["messages"]
+
+      tool_use_block =
+        messages
+        |> Enum.find(&(&1["role"] == "assistant"))
+        |> Map.fetch!("content")
+        |> Enum.find(&(&1["type"] == "tool_use"))
+
+      assert tool_use_block["id"] == "call_1"
+      assert tool_use_block["name"] == "take_screenshot"
+      assert tool_use_block["input"] == %{}
+    end
+
     test "encode_body rejects contexts ending with unresolved tool calls" do
       {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
 

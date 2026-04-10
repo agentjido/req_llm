@@ -1131,6 +1131,7 @@ defmodule ReqLLM.Providers.Google do
     |> Map.merge(tools_data)
     |> maybe_put(:generationConfig, generation_config)
     |> maybe_put(:safetySettings, request.options[:google_safety_settings])
+    |> maybe_put(:labels, request.options[:labels])
   end
 
   defp encode_embedding_body(request) do
@@ -1207,6 +1208,7 @@ defmodule ReqLLM.Providers.Google do
     |> Map.put(:contents, contents)
     |> maybe_put(:generationConfig, generation_config)
     |> maybe_put(:safetySettings, request.options[:google_safety_settings])
+    |> maybe_put(:labels, request.options[:labels])
   end
 
   defp gemini_3_or_later?(%LLMDB.Model{family: family}) when is_binary(family),

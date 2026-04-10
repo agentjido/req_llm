@@ -42,10 +42,15 @@ defmodule ReqLLM.Providers.Alibaba.Shared do
     incremental_output: [
       type: :boolean,
       doc: "Streaming: send incremental chunks only (no prior content)."
+    ],
+    response_format: [
+      type: :map,
+      doc: "The response_format object (e.g., type: json_schema)."
     ]
   ]
 
-  @dashscope_keys Keyword.keys(@provider_schema)
+  # Exclude 'response_format' here because it's not unique to DashScope but is instead a general provider option
+  @dashscope_keys Keyword.keys(@provider_schema) -- [:response_format]
 
   @doc """
   Returns the DashScope-specific provider schema.
@@ -60,7 +65,7 @@ defmodule ReqLLM.Providers.Alibaba.Shared do
   @doc """
   Returns the provider option keys that must be registered on requests.
   """
-  def supported_provider_options, do: @dashscope_keys ++ [:dashscope_parameters]
+  def supported_provider_options, do: @dashscope_keys ++ [:dashscope_parameters, :response_format]
 
   @doc """
   Translates provider-specific options into DashScope parameters.
@@ -86,6 +91,68 @@ defmodule ReqLLM.Providers.Alibaba.Shared do
       end
 
     {opts_with_dashscope, []}
+  end
+
+  @doc """
+  Overrides the default request preparation for :object operations to inject
+  the appropriate `response_format` for DashScope's native structured output (JSON output).
+  """
+  def prepare_request(provider_mod, operation, model_spec, prompt, opts) do
+    case operation do
+      :object ->
+        prepare_object_request(provider_mod, model_spec, prompt, opts)
+
+      _ ->
+        ReqLLM.Provider.Defaults.prepare_request(
+          provider_mod,
+          operation,
+          model_spec,
+          prompt,
+          opts
+        )
+    end
+  end
+
+  defp prepare_object_request(provider_mod, model_spec, prompt, opts) do
+    # Fetch schema and options
+    compiled_schema = Keyword.fetch!(opts, :compiled_schema)
+
+    # Build json schema from the provided schema struct
+    json_schema = ReqLLM.Schema.to_json(compiled_schema.schema)
+    final_schema = enforce_strict_schema_requirements(json_schema)
+
+    schema_name = Map.get(compiled_schema, :name, "output_schema")
+
+    # Construct response_format
+    response_format = %{
+      type: "json_schema",
+      json_schema: %{
+        name: schema_name,
+        schema: final_schema,
+        strict: true
+      }
+    }
+
+    # Inject 'response_format' into :provider_options so they are passed to the API.
+    opts_with_format =
+      opts
+      |> Keyword.update(
+        :provider_options,
+        [response_format: response_format],
+        fn existing ->
+          existing
+          |> Keyword.put(:response_format, response_format)
+        end
+      )
+      |> Keyword.put(:operation, :object)
+
+    # Note: Fully qualified call to Defaults
+    ReqLLM.Provider.Defaults.prepare_chat_request(
+      provider_mod,
+      model_spec,
+      prompt,
+      opts_with_format
+    )
   end
 
   @doc """
@@ -140,4 +207,16 @@ defmodule ReqLLM.Providers.Alibaba.Shared do
   defp encode_map_param(params) when is_map(params) do
     Map.new(params, fn {k, v} -> {to_string(k), v} end)
   end
+
+  defp enforce_strict_schema_requirements(
+         %{"type" => "object", "properties" => properties} = schema
+       ) do
+    all_property_names = Map.keys(properties)
+
+    schema
+    |> Map.put("required", all_property_names)
+    |> Map.put("additionalProperties", false)
+  end
+
+  defp enforce_strict_schema_requirements(schema), do: schema
 end

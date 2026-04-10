@@ -107,6 +107,48 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
     end
   end
 
+  describe "format_request/3 labels" do
+    test "includes labels as top-level field in request body" do
+      context = context_fixture()
+
+      labels = %{"team" => "engineering", "environment" => "production"}
+
+      opts = [labels: labels, max_tokens: 1000]
+
+      body = Gemini.format_request("gemini-2.5-flash", context, opts)
+
+      # labels must sit at the root of the body, sibling to `contents`
+      assert body["labels"] == %{
+               "team" => "engineering",
+               "environment" => "production"
+             }
+
+      refute Map.has_key?(body["generationConfig"] || %{}, "labels")
+    end
+
+    test "omits labels when not provided" do
+      context = context_fixture()
+
+      body = Gemini.format_request("gemini-2.5-flash", context, max_tokens: 1000)
+
+      refute Map.has_key?(body, "labels")
+    end
+  end
+
+  describe "provider_schema" do
+    alias ReqLLM.Providers.{Google, GoogleVertex}
+
+    test "GoogleVertex schema declares :labels as a provider option" do
+      keys = GoogleVertex.provider_schema().schema |> Keyword.keys()
+      assert :labels in keys
+    end
+
+    test "Google (direct API) schema does NOT declare :labels — Vertex-only feature" do
+      keys = Google.provider_schema().schema |> Keyword.keys()
+      refute :labels in keys
+    end
+  end
+
   describe "format_request/3 tool call ID compatibility" do
     test "drops functionCall.id fields for Vertex Gemini" do
       context =

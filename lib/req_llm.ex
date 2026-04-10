@@ -330,7 +330,9 @@ defmodule ReqLLM do
   def model(spec) when is_binary(spec) do
     case LLMDB.model(spec) do
       {:ok, %LLMDB.Model{} = model} ->
-        normalize_model_result({:ok, model})
+        {:ok, model}
+        |> maybe_restore_inference_prefix(spec)
+        |> normalize_model_result()
 
       {:error, _reason} = error ->
         spec
@@ -391,6 +393,49 @@ defmodule ReqLLM do
     do: {:ok, normalize_model_metadata(model)}
 
   defp normalize_model_result(other), do: other
+
+  # Bedrock cross-region inference profile prefixes.
+  # These are stripped by LLMDB during catalog lookup but must be preserved
+  # in API URLs for models that only support inference profiles (not on-demand).
+  @bedrock_inference_prefixes ~w(us eu ap apac ca au jp us-gov global)
+
+  # When a Bedrock model is resolved from a spec like "amazon_bedrock:global.anthropic.claude-opus-4-6-v1",
+  # the LLMDB catalog lookup strips the inference profile prefix for matching.
+  # This function detects that specific case and restores the original prefixed
+  # model ID as provider_model_id so it's used in API URL construction.
+  #
+  # Scoped to Bedrock inference profile prefixes only — does NOT affect alias
+  # resolution for other providers (e.g., anthropic:claude-3-haiku resolving
+  # to claude-3-haiku-20240307 should NOT set provider_model_id).
+  defp maybe_restore_inference_prefix(
+         {:ok, %LLMDB.Model{provider: :amazon_bedrock} = model},
+         spec
+       )
+       when is_binary(spec) do
+    original_model_id = extract_model_id_from_spec(spec)
+
+    if original_model_id && has_inference_prefix?(original_model_id) do
+      {:ok, %{model | provider_model_id: original_model_id}}
+    else
+      {:ok, model}
+    end
+  end
+
+  defp maybe_restore_inference_prefix({:ok, %LLMDB.Model{}} = result, _spec), do: result
+
+  defp has_inference_prefix?(model_id) do
+    case String.split(model_id, ".", parts: 2) do
+      [prefix, _rest] -> prefix in @bedrock_inference_prefixes
+      _ -> false
+    end
+  end
+
+  defp extract_model_id_from_spec(spec) do
+    case String.split(spec, ":", parts: 2) do
+      [_provider, model_id] -> model_id
+      _ -> nil
+    end
+  end
 
   defp normalize_inline_model_result({:ok, %LLMDB.Model{} = model}, _attrs) do
     {:ok, normalize_model_metadata(model)}

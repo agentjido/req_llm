@@ -567,6 +567,101 @@ defmodule ReqLLM.Providers.AmazonBedrockProviderTest do
       assert response.message.reasoning_details == nil
     end
   end
+
+  describe "inference profile prefix preservation" do
+    test "global prefix is preserved in URL when model spec includes it" do
+      {:ok, model} = ReqLLM.model("amazon_bedrock:global.anthropic.claude-opus-4-6-v1")
+      context = context_fixture()
+
+      opts = [
+        api_key: "test-api-key",
+        region: "us-east-1"
+      ]
+
+      {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+
+      # The URL path must include the "global." prefix
+      assert request.url.path == "/model/global.anthropic.claude-opus-4-6-v1/invoke"
+    end
+
+    test "us prefix is preserved in URL when model spec includes it" do
+      {:ok, model} =
+        ReqLLM.model("amazon_bedrock:us.anthropic.claude-opus-4-1-20250805-v1:0")
+
+      context = context_fixture()
+
+      opts = [
+        api_key: "test-api-key",
+        region: "us-east-1"
+      ]
+
+      {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+
+      # The URL path must include the "us." prefix
+      assert request.url.path ==
+               "/model/us.anthropic.claude-opus-4-1-20250805-v1:0/invoke"
+    end
+
+    test "model without prefix still works normally" do
+      {:ok, model} =
+        ReqLLM.model("amazon_bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+
+      context = context_fixture()
+
+      opts = [
+        api_key: "test-api-key",
+        region: "us-east-1"
+      ]
+
+      {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+
+      # No prefix, so the path should use the base model ID
+      assert request.url.path ==
+               "/model/anthropic.claude-3-haiku-20240307-v1:0/invoke"
+    end
+
+    test "global prefix is preserved in streaming URL" do
+      {:ok, model} = ReqLLM.model("amazon_bedrock:global.anthropic.claude-opus-4-6-v1")
+      context = context_fixture()
+
+      opts = [
+        stream: true,
+        api_key: "test-api-key",
+        region: "us-east-1"
+      ]
+
+      {:ok, request} = AmazonBedrock.prepare_request(:chat, model, context, opts)
+
+      # The streaming URL path must include the "global." prefix
+      assert request.url.path ==
+               "/model/global.anthropic.claude-opus-4-6-v1/invoke-with-response-stream"
+    end
+
+    test "provider_model_id is set to prefixed ID after model resolution" do
+      {:ok, model} = ReqLLM.model("amazon_bedrock:global.anthropic.claude-opus-4-6-v1")
+
+      # provider_model_id should contain the full prefixed model ID
+      assert model.provider_model_id == "global.anthropic.claude-opus-4-6-v1"
+    end
+
+    test "model without prefix has original provider_model_id" do
+      {:ok, model} =
+        ReqLLM.model("amazon_bedrock:anthropic.claude-3-haiku-20240307-v1:0")
+
+      # For models without prefix, provider_model_id should match the id
+      # (or be nil if LLMDB doesn't set it, but id should be the base)
+      effective_id = model.provider_model_id || model.id
+      assert effective_id == "anthropic.claude-3-haiku-20240307-v1:0"
+    end
+
+    test "non-Bedrock alias resolution does not set provider_model_id" do
+      # Alias like anthropic:claude-3-haiku resolves to claude-3-haiku-20240307
+      # provider_model_id should NOT be set to the alias — that would break API calls
+      {:ok, model} = ReqLLM.model("anthropic:claude-3-haiku")
+
+      refute model.provider_model_id == "claude-3-haiku"
+    end
+  end
 end
 
 # Test double for Finch

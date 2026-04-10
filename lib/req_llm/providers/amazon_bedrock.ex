@@ -354,7 +354,9 @@ defmodule ReqLLM.Providers.AmazonBedrock do
     base_url = "https://bedrock-runtime.#{region}.amazonaws.com"
 
     # Use provider_model_id if set (for models requiring specific API format like inference profiles),
-    # otherwise fall back to canonical model ID
+    # otherwise fall back to canonical model ID.
+    # Note: provider_model_id is set by ReqLLM.model/1 to include inference profile prefixes
+    # (e.g., "global.anthropic.claude-opus-4-6-v1") when the original model spec had one.
     model_id = model.provider_model_id || model.id
 
     # Check if we should use Converse API

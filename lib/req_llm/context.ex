@@ -17,6 +17,15 @@ defmodule ReqLLM.Context do
       ])
 
       Context.validate!(context)
+
+  ## Redacting context on inspect
+
+  Set `config :req_llm, redact_context: true` to hide message contents
+  from `inspect/2` output. When enabled, only the message count is shown:
+
+      #Context<4 messages [REDACTED]>
+
+  This prevents sensitive prompts from leaking into logs or crash reports.
   """
 
   alias ReqLLM.Message
@@ -649,42 +658,58 @@ defmodule ReqLLM.Context do
     def inspect(%{messages: msgs}, opts) when is_list(msgs) do
       msg_count = length(msgs)
 
-      if msg_count <= 2 do
-        role_previews =
-          msgs
-          |> Enum.map_join(", ", fn msg ->
-            "#{msg.role}:\"#{content_preview(msg, 40)}\""
-          end)
-
+      if redact_context?() do
         Inspect.Algebra.concat([
           "#Context<",
           Inspect.Algebra.to_doc(msg_count, opts),
-          " msgs: ",
-          role_previews,
-          ">"
+          " messages [REDACTED]>"
         ])
       else
-        msg_docs =
-          msgs
-          |> Enum.with_index()
-          |> Enum.map(fn {msg, idx} ->
-            "  [#{idx}] #{msg.role}: \"#{content_preview(msg, 60)}\""
-          end)
-
-        Inspect.Algebra.concat([
-          "#Context<",
-          Inspect.Algebra.to_doc(msg_count, opts),
-          " messages:",
-          Inspect.Algebra.line(),
-          Inspect.Algebra.concat(Enum.intersperse(msg_docs, Inspect.Algebra.line())),
-          Inspect.Algebra.line(),
-          ">"
-        ])
+        format_messages(msgs, msg_count, opts)
       end
     end
 
     def inspect(_context, _opts) do
       Inspect.Algebra.concat(["#Context<", "(truncated)", ">"])
+    end
+
+    defp format_messages(msgs, msg_count, opts) when msg_count <= 2 do
+      role_previews =
+        msgs
+        |> Enum.map_join(", ", fn msg ->
+          "#{msg.role}:\"#{content_preview(msg, 40)}\""
+        end)
+
+      Inspect.Algebra.concat([
+        "#Context<",
+        Inspect.Algebra.to_doc(msg_count, opts),
+        " msgs: ",
+        role_previews,
+        ">"
+      ])
+    end
+
+    defp format_messages(msgs, msg_count, opts) do
+      msg_docs =
+        msgs
+        |> Enum.with_index()
+        |> Enum.map(fn {msg, idx} ->
+          "  [#{idx}] #{msg.role}: \"#{content_preview(msg, 60)}\""
+        end)
+
+      Inspect.Algebra.concat([
+        "#Context<",
+        Inspect.Algebra.to_doc(msg_count, opts),
+        " messages:",
+        Inspect.Algebra.line(),
+        Inspect.Algebra.concat(Enum.intersperse(msg_docs, Inspect.Algebra.line())),
+        Inspect.Algebra.line(),
+        ">"
+      ])
+    end
+
+    defp redact_context? do
+      Application.get_env(:req_llm, :redact_context, false)
     end
 
     defp content_preview(msg, max_len) do
