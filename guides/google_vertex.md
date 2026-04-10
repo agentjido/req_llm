@@ -83,6 +83,24 @@ Passed via `:provider_options` keyword:
   ]
   ```
 
+### `labels`
+
+- **Type**: Map of strings to strings
+- **Purpose**: Custom metadata labels attached to the request. Used by Google Cloud for billing and reporting — labels are filterable in billing reports and BigQuery exports.
+- **Constraints**: Up to 64 labels per request; keys 1–63 chars starting with a lowercase letter; keys and values may only contain lowercase letters, numbers, underscores, and dashes.
+- **Availability**: Vertex AI only — the direct Gemini API (`generativelanguage.googleapis.com`) does not support this field.
+- **Example**:
+  ```elixir
+  provider_options: [
+    labels: %{
+      "team" => "engineering",
+      "environment" => "production",
+      "use_case" => "contract_analysis"
+    }
+  ]
+  ```
+- **Reference**: [Custom metadata labels](https://cloud.google.com/vertex-ai/generative-ai/docs/multimodal/add-labels-to-api-calls)
+
 ### Claude-Specific Options
 
 Vertex AI supports the same Claude options as native Anthropic:
