@@ -516,4 +516,178 @@ defmodule ReqLLM.Providers.OpenAI.StructuredOutputTest do
       assert kw_schema["function"]["parameters"] == map_schema_result["function"]["parameters"]
     end
   end
+
+  describe "deep schema strict enforcement" do
+    test "ensure_all_properties_required recurses into nested objects" do
+      tool =
+        Tool.new!(
+          name: "create_user",
+          description: "Create user",
+          parameter_schema: %{
+            "type" => "object",
+            "properties" => %{
+              "name" => %{"type" => "string"},
+              "address" => %{
+                "type" => "object",
+                "properties" => %{
+                  "street" => %{"type" => "string"},
+                  "city" => %{"type" => "string"}
+                }
+              }
+            }
+          },
+          strict: true,
+          callback: fn _args -> {:ok, %{}} end
+        )
+
+      body =
+        %{tools: [ReqLLM.Schema.to_openai_format(tool)]}
+        |> ReqLLM.Providers.OpenAI.AdapterHelpers.add_strict_to_tools()
+
+      params = body[:tools] |> hd() |> get_in(["function", "parameters"])
+
+      # Top-level IS enforced
+      assert params["additionalProperties"] == false
+      assert Enum.sort(params["required"]) == ["address", "name"]
+
+      address = params["properties"]["address"]
+      assert address["type"] == "object"
+      assert address["additionalProperties"] == false
+      assert Enum.sort(address["required"]) == ["city", "street"]
+    end
+
+    test "enforce_strict_schema_requirements recurses into nested objects" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4o-2024-08-06")
+
+      compiled_schema = %{
+        schema: %{
+          "type" => "object",
+          "properties" => %{
+            "name" => %{"type" => "string"},
+            "metadata" => %{
+              "type" => "object",
+              "properties" => %{
+                "key" => %{"type" => "string"},
+                "value" => %{"type" => "string"}
+              }
+            }
+          }
+        },
+        name: "test_nested"
+      }
+
+      {:ok, request} =
+        ReqLLM.Providers.OpenAI.prepare_request(
+          :object,
+          model,
+          "test",
+          compiled_schema: compiled_schema,
+          provider_options: [openai_json_schema_strict: true]
+        )
+
+      schema =
+        get_in(request.options, [:provider_options, :response_format, :json_schema, :schema])
+
+      # Top-level IS enforced
+      assert schema["additionalProperties"] == false
+      assert Enum.sort(schema["required"]) == ["metadata", "name"]
+
+      metadata = schema["properties"]["metadata"]
+      assert metadata["type"] == "object"
+      assert metadata["additionalProperties"] == false
+      assert Enum.sort(metadata["required"]) == ["key", "value"]
+    end
+
+    test "enforce_strict_recursive handles array items" do
+      schema = %{
+        "type" => "object",
+        "properties" => %{
+          "items" => %{
+            "type" => "array",
+            "items" => %{
+              "type" => "object",
+              "properties" => %{
+                "name" => %{"type" => "string"},
+                "qty" => %{"type" => "integer"}
+              }
+            }
+          }
+        }
+      }
+
+      result = ReqLLM.Providers.OpenAI.AdapterHelpers.enforce_strict_recursive(schema)
+
+      assert result["additionalProperties"] == false
+      assert result["required"] == ["items"]
+
+      item_schema = result["properties"]["items"]["items"]
+      assert item_schema["additionalProperties"] == false
+      assert Enum.sort(item_schema["required"]) == ["name", "qty"]
+    end
+
+    test "enforce_strict_recursive handles anyOf branches" do
+      schema = %{
+        "type" => "object",
+        "properties" => %{
+          "result" => %{
+            "anyOf" => [
+              %{
+                "type" => "object",
+                "properties" => %{
+                  "value" => %{"type" => "string"}
+                }
+              },
+              %{
+                "type" => "object",
+                "properties" => %{
+                  "error" => %{"type" => "string"}
+                }
+              }
+            ]
+          }
+        }
+      }
+
+      result = ReqLLM.Providers.OpenAI.AdapterHelpers.enforce_strict_recursive(schema)
+
+      assert result["additionalProperties"] == false
+      assert result["required"] == ["result"]
+
+      [branch_a, branch_b] = result["properties"]["result"]["anyOf"]
+      assert branch_a["additionalProperties"] == false
+      assert branch_a["required"] == ["value"]
+      assert branch_b["additionalProperties"] == false
+      assert branch_b["required"] == ["error"]
+    end
+
+    test "enforce_strict_recursive handles $defs" do
+      schema = %{
+        "type" => "object",
+        "properties" => %{
+          "steps" => %{
+            "type" => "array",
+            "items" => %{"$ref" => "#/$defs/step"}
+          }
+        },
+        "$defs" => %{
+          "step" => %{
+            "type" => "object",
+            "properties" => %{
+              "explanation" => %{"type" => "string"},
+              "output" => %{"type" => "string"}
+            }
+          }
+        }
+      }
+
+      result = ReqLLM.Providers.OpenAI.AdapterHelpers.enforce_strict_recursive(schema)
+
+      assert result["additionalProperties"] == false
+      assert result["required"] == ["steps"]
+
+      step_def = result["$defs"]["step"]
+      assert step_def["additionalProperties"] == false
+      assert Enum.sort(step_def["required"]) == ["explanation", "output"]
+    end
+  end
 end

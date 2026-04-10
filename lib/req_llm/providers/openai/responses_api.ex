@@ -1053,19 +1053,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   end
 
   defp normalize_parameters_for_strict(params) when is_map(params) do
-    properties = params[:properties] || params["properties"] || %{}
-
-    all_property_names =
-      properties
-      |> Map.keys()
-      |> Enum.map(&to_string/1)
-
-    %{
-      "type" => "object",
-      "properties" => stringify_keys(properties),
-      "required" => all_property_names,
-      "additionalProperties" => false
-    }
+    stringified = stringify_keys(params)
+    ReqLLM.Providers.OpenAI.AdapterHelpers.enforce_strict_recursive(stringified)
   end
 
   defp normalize_parameters(nil) do

@@ -103,34 +103,49 @@ defmodule ReqLLM.Providers.OpenAI.AdapterHelpers do
     params = function[:parameters] || function["parameters"]
 
     if params do
-      properties = params[:properties] || params["properties"]
+      updated_params = enforce_strict_recursive(params)
 
-      if properties && is_map(properties) do
-        all_property_names = Map.keys(properties)
-
-        updated_params =
-          if is_map_key(params, :properties) do
-            params
-            |> Map.put(:required, all_property_names)
-            |> Map.put(:additionalProperties, false)
-          else
-            params
-            |> Map.put("required", Enum.map(all_property_names, &to_string/1))
-            |> Map.put("additionalProperties", false)
-          end
-
-        if is_map_key(function, :parameters) do
-          Map.put(function, :parameters, updated_params)
-        else
-          Map.put(function, "parameters", updated_params)
-        end
+      if is_map_key(function, :parameters) do
+        Map.put(function, :parameters, updated_params)
       else
-        function
+        Map.put(function, "parameters", updated_params)
       end
     else
       function
     end
   end
+
+  @doc false
+  @spec enforce_strict_recursive(map() | any()) :: map() | any()
+  def enforce_strict_recursive(%{"type" => "object", "properties" => properties} = schema)
+      when is_map(properties) do
+    updated_properties =
+      Map.new(properties, fn {k, v} -> {k, enforce_strict_recursive(v)} end)
+
+    schema
+    |> Map.put("properties", updated_properties)
+    |> Map.put("required", Map.keys(properties) |> Enum.map(&to_string/1))
+    |> Map.put("additionalProperties", false)
+    |> maybe_recurse_defs()
+  end
+
+  def enforce_strict_recursive(%{"type" => "array", "items" => items} = schema)
+      when is_map(items) do
+    Map.put(schema, "items", enforce_strict_recursive(items))
+  end
+
+  def enforce_strict_recursive(%{"anyOf" => variants} = schema) when is_list(variants) do
+    Map.put(schema, "anyOf", Enum.map(variants, &enforce_strict_recursive/1))
+  end
+
+  def enforce_strict_recursive(schema), do: schema
+
+  defp maybe_recurse_defs(%{"$defs" => defs} = schema) when is_map(defs) do
+    updated_defs = Map.new(defs, fn {k, v} -> {k, enforce_strict_recursive(v)} end)
+    Map.put(schema, "$defs", updated_defs)
+  end
+
+  defp maybe_recurse_defs(schema), do: schema
 
   @doc """
   Checks if a model ID should default to the Responses API.

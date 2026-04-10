@@ -328,29 +328,12 @@ defmodule ReqLLM.Providers.OpenAI.ChatAPI do
     params = function[:parameters] || function["parameters"]
 
     if params do
-      properties = params[:properties] || params["properties"]
+      updated_params = ReqLLM.Providers.OpenAI.AdapterHelpers.enforce_strict_recursive(params)
 
-      if properties && is_map(properties) do
-        all_property_names = Map.keys(properties)
-
-        updated_params =
-          if is_map_key(params, :properties) do
-            params
-            |> Map.put(:required, all_property_names)
-            |> Map.put(:additionalProperties, false)
-          else
-            params
-            |> Map.put("required", Enum.map(all_property_names, &to_string/1))
-            |> Map.put("additionalProperties", false)
-          end
-
-        if is_map_key(function, :parameters) do
-          Map.put(function, :parameters, updated_params)
-        else
-          Map.put(function, "parameters", updated_params)
-        end
+      if is_map_key(function, :parameters) do
+        Map.put(function, :parameters, updated_params)
       else
-        function
+        Map.put(function, "parameters", updated_params)
       end
     else
       function

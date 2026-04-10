@@ -569,17 +569,9 @@ defmodule ReqLLM.Providers.OpenAICodex do
     end
   end
 
-  defp enforce_strict_schema_requirements(
-         %{"type" => "object", "properties" => properties} = schema
-       ) do
-    all_property_names = Map.keys(properties)
-
-    schema
-    |> Map.put("required", all_property_names)
-    |> Map.put("additionalProperties", false)
+  defp enforce_strict_schema_requirements(schema) do
+    ReqLLM.Providers.OpenAI.AdapterHelpers.enforce_strict_recursive(schema)
   end
-
-  defp enforce_strict_schema_requirements(schema), do: schema
 
   defp decode_sse_response({req, resp, body}) do
     {:ok, model} =
