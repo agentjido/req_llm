@@ -183,7 +183,7 @@ defmodule ReqLLM.StreamServer do
   """
   @spec next(server(), non_neg_integer()) :: {:ok, StreamChunk.t()} | :halt | {:error, any()}
   def next(server, timeout \\ 30_000) do
-    GenServer.call(server, {:next, timeout}, timeout + 1000)
+    GenServer.call(server, {:next, timeout}, :infinity)
   end
 
   @doc """
@@ -349,7 +349,7 @@ defmodule ReqLLM.StreamServer do
   """
   @spec await_metadata(server(), non_neg_integer()) :: {:ok, map()} | {:error, any()}
   def await_metadata(server, timeout \\ 30_000) do
-    GenServer.call(server, :await_metadata, timeout + 1000)
+    GenServer.call(server, {:await_metadata, timeout}, :infinity)
   end
 
   ## GenServer Callbacks
@@ -384,7 +384,7 @@ defmodule ReqLLM.StreamServer do
   end
 
   @impl GenServer
-  def handle_call({:next, _timeout}, from, state) do
+  def handle_call({:next, timeout}, from, state) do
     state = cancel_completion_cleanup(%{state | stream_requested?: true})
 
     case dequeue_chunk(state) do
@@ -405,13 +405,7 @@ defmodule ReqLLM.StreamServer do
             {:reply, {:error, reason}, new_state}
 
           _ ->
-            # Queue is empty but stream is still active - wait for more data
-            new_state = %{
-              new_state
-              | waiting_callers: new_state.waiting_callers ++ [{from, :next}]
-            }
-
-            {:noreply, new_state}
+            {:noreply, register_waiting_caller(new_state, from, :next, timeout)}
         end
     end
   end
@@ -494,7 +488,7 @@ defmodule ReqLLM.StreamServer do
   end
 
   @impl GenServer
-  def handle_call(:await_metadata, _from, %{status: :done} = state) do
+  def handle_call({:await_metadata, _timeout}, _from, %{status: :done} = state) do
     new_state = %{state | metadata_delivered?: true}
 
     case finalize_lifecycle(new_state) do
@@ -503,18 +497,29 @@ defmodule ReqLLM.StreamServer do
     end
   end
 
-  def handle_call(:await_metadata, _from, %{status: {:error, reason}} = state) do
+  def handle_call({:await_metadata, _timeout}, _from, %{status: {:error, reason}} = state) do
     {:reply, {:error, reason}, state}
   end
 
-  def handle_call(:await_metadata, from, state) do
-    new_state = %{state | waiting_callers: state.waiting_callers ++ [{from, :metadata}]}
-    {:noreply, new_state}
+  def handle_call({:await_metadata, timeout}, from, state) do
+    {:noreply, register_waiting_caller(state, from, :metadata, timeout)}
   end
 
   @impl GenServer
   def handle_info({ref, _result}, state) when is_reference(ref) do
     {:noreply, state}
+  end
+
+  @impl GenServer
+  def handle_info({:caller_timeout, token}, state) do
+    case pop_waiting_caller(state, token) do
+      {nil, new_state} ->
+        {:noreply, new_state}
+
+      {%{from: from, type: _type}, new_state} ->
+        GenServer.reply(from, {:error, :timeout})
+        {:noreply, new_state}
+    end
   end
 
   @impl GenServer
@@ -991,15 +996,17 @@ defmodule ReqLLM.StreamServer do
     %{updated_state | waiting_callers: remaining_callers}
   end
 
-  defp can_reply_to_caller?({_from, :next}, state) do
+  defp can_reply_to_caller?(%{type: :next}, state) do
     not :queue.is_empty(state.queue) or state.status == :done or match?({:error, _}, state.status)
   end
 
-  defp can_reply_to_caller?({_from, :metadata}, state) do
+  defp can_reply_to_caller?(%{type: :metadata}, state) do
     state.status == :done or match?({:error, _}, state.status)
   end
 
-  defp reply_to_caller({from, :next}, state) do
+  defp reply_to_caller(%{from: from, type: :next} = caller, state) do
+    cancel_waiting_caller_timer(caller)
+
     case {dequeue_chunk(state), state.status} do
       {{:ok, chunk, new_state}, _} ->
         GenServer.reply(from, {:ok, chunk})
@@ -1019,19 +1026,44 @@ defmodule ReqLLM.StreamServer do
     end
   end
 
-  defp reply_to_caller({from, :metadata}, %{status: :done} = state) do
+  defp reply_to_caller(%{from: from, type: :metadata} = caller, %{status: :done} = state) do
+    cancel_waiting_caller_timer(caller)
     GenServer.reply(from, {:ok, state.metadata})
     %{state | metadata_delivered?: true}
   end
 
-  defp reply_to_caller({from, :metadata}, %{status: {:error, reason}} = state) do
+  defp reply_to_caller(
+         %{from: from, type: :metadata} = caller,
+         %{status: {:error, reason}} = state
+       ) do
+    cancel_waiting_caller_timer(caller)
     GenServer.reply(from, {:error, reason})
     state
   end
 
-  defp reply_to_caller({from, :metadata}, state) do
+  defp reply_to_caller(%{from: from, type: :metadata} = caller, state) do
+    cancel_waiting_caller_timer(caller)
     GenServer.reply(from, {:error, :not_ready})
     state
+  end
+
+  defp register_waiting_caller(state, from, type, timeout) do
+    token = make_ref()
+    timer = Process.send_after(self(), {:caller_timeout, token}, timeout)
+
+    caller = %{from: from, type: type, token: token, timer: timer}
+    %{state | waiting_callers: state.waiting_callers ++ [caller]}
+  end
+
+  defp pop_waiting_caller(state, token) do
+    {matched, remaining} =
+      Enum.split_with(state.waiting_callers, fn caller -> caller.token == token end)
+
+    {List.first(matched), %{state | waiting_callers: remaining}}
+  end
+
+  defp cancel_waiting_caller_timer(%{timer: timer}) do
+    Process.cancel_timer(timer, async: true, info: false)
   end
 
   defp cleanup_resources(state) do

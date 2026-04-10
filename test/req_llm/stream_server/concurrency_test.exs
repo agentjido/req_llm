@@ -126,14 +126,12 @@ defmodule ReqLLM.StreamServer.ConcurrencyTest do
 
       timeout_task =
         Task.async(fn ->
-          catch_exit(StreamServer.next(server, 50))
+          StreamServer.next(server, 50)
         end)
-
-      :timer.sleep(1200)
 
       result = Task.await(timeout_task, 500)
 
-      assert {:timeout, {GenServer, :call, _}} = result
+      assert {:error, :timeout} = result
 
       assert Process.alive?(server)
 

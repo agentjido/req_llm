@@ -225,12 +225,12 @@ defmodule ReqLLM.StreamServer.StreamingTest do
 
       start_time = :os.system_time(:millisecond)
 
-      catch_exit(StreamServer.next(server, 50))
+      assert {:error, :timeout} = StreamServer.next(server, 50)
 
       elapsed = :os.system_time(:millisecond) - start_time
 
-      assert elapsed >= 1000
-      assert elapsed < 1200
+      assert elapsed >= 50
+      assert elapsed < 250
 
       StreamServer.cancel(server)
     end
@@ -241,12 +241,35 @@ defmodule ReqLLM.StreamServer.StreamingTest do
 
       start_time = :os.system_time(:millisecond)
 
-      catch_exit(StreamServer.await_metadata(server, 50))
+      assert {:error, :timeout} = StreamServer.await_metadata(server, 50)
 
       elapsed = :os.system_time(:millisecond) - start_time
 
-      assert elapsed >= 1000
-      assert elapsed < 1200
+      assert elapsed >= 50
+      assert elapsed < 250
+
+      StreamServer.cancel(server)
+    end
+
+    test "next/2 returns structured timeout when transport error arrives late" do
+      server = start_server()
+      _task = mock_http_task(server)
+
+      timeout_task =
+        Task.async(fn ->
+          StreamServer.next(server, 50)
+        end)
+
+      spawn(fn ->
+        :timer.sleep(1200)
+        GenServer.call(server, {:http_event, {:error, :transport_timeout}})
+      end)
+
+      assert {:error, :timeout} = Task.await(timeout_task, 500)
+
+      :timer.sleep(1250)
+
+      assert {:error, :transport_timeout} = StreamServer.next(server, 100)
 
       StreamServer.cancel(server)
     end
