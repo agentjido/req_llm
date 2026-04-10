@@ -192,6 +192,11 @@ defmodule ReqLLM.Providers.OpenAI do
       doc:
         "Streaming transport for Responses models. Use :websocket for OpenAI WebSocket mode; SSE remains the default."
     ],
+    openai_compatible_backend: [
+      type: {:or, [{:in, [:ollama]}, {:in, ["ollama"]}]},
+      doc:
+        "Explicit OpenAI-compatible backend marker. Set to :ollama to allow missing API keys for unauthenticated local deployments."
+    ],
     tool_outputs: [
       type: {:list, :any},
       doc:
@@ -439,7 +444,7 @@ defmodule ReqLLM.Providers.OpenAI do
         |> maybe_add_transcription_part(:language, language)
         |> maybe_add_transcription_provider_parts(provider_options)
 
-      api_key = ReqLLM.Keys.get!(model, opts)
+      credential = resolve_request_credential!(model, opts)
 
       request =
         Req.new(
@@ -449,11 +454,10 @@ defmodule ReqLLM.Providers.OpenAI do
             base_url: Keyword.get(opts, :base_url, base_url()),
             receive_timeout: timeout,
             pool_timeout: timeout,
-            form_multipart: form_parts,
-            auth: {:bearer, api_key}
-          ] ++ http_opts
+            form_multipart: form_parts
+          ] ++ auth_req_options(credential) ++ http_opts
         )
-        |> Req.Request.put_header("authorization", "Bearer #{api_key}")
+        |> maybe_put_authorization_header(credential)
         |> ReqLLM.Step.Retry.attach()
         |> ReqLLM.Step.Error.attach()
         |> ReqLLM.Step.Telemetry.attach(
@@ -649,19 +653,19 @@ defmodule ReqLLM.Providers.OpenAI do
       raise ReqLLM.Error.Invalid.Provider.exception(provider: model.provider)
     end
 
-    credential = ReqLLM.Auth.resolve!(model, user_opts)
+    credential = resolve_request_credential!(model, user_opts)
     extra_option_keys = ReqLLM.Provider.Defaults.extra_option_keys(__MODULE__)
 
     request
     |> Req.Request.put_header("content-type", "application/json")
-    |> Req.Request.put_header("authorization", "Bearer #{credential.token}")
+    |> maybe_put_authorization_header(credential)
     |> Req.Request.register_options(extra_option_keys)
     |> Req.Request.merge_options(
       [
         finch: ReqLLM.Application.finch_name(),
-        model: model.provider_model_id || model.id,
-        auth: {:bearer, credential.token}
+        model: model.provider_model_id || model.id
       ] ++
+        auth_req_options(credential) ++
         user_opts
     )
     |> ReqLLM.Step.Retry.attach()
@@ -713,6 +717,29 @@ defmodule ReqLLM.Providers.OpenAI do
       _ -> :http
     end
   end
+
+  @doc false
+  def resolve_request_credential!(%LLMDB.Model{} = model, opts) do
+    case ReqLLM.Auth.resolve(model, opts) do
+      {:ok, credential} ->
+        credential
+
+      {:error, message} ->
+        if allow_missing_api_key?(model, opts) and missing_api_key_error?(message) do
+          :none
+        else
+          raise ReqLLM.Error.Invalid.Parameter.exception(parameter: message)
+        end
+    end
+  end
+
+  @doc false
+  def auth_header_list(:none), do: []
+  def auth_header_list(credential), do: [{"Authorization", "Bearer " <> credential.token}]
+
+  @doc false
+  def auth_req_options(:none), do: []
+  def auth_req_options(credential), do: [auth: {:bearer, credential.token}]
 
   @doc """
   Custom body encoding that delegates to the selected API module.
@@ -862,6 +889,61 @@ defmodule ReqLLM.Providers.OpenAI do
 
   defp maybe_add_transcription_part(parts, _key, nil), do: parts
   defp maybe_add_transcription_part(parts, key, value), do: parts ++ [{key, to_string(value)}]
+
+  defp maybe_put_authorization_header(request, :none), do: request
+
+  defp maybe_put_authorization_header(request, credential) do
+    Req.Request.put_header(request, "authorization", "Bearer #{credential.token}")
+  end
+
+  defp allow_missing_api_key?(%LLMDB.Model{} = model, opts) do
+    auth_mode(opts) == :api_key and openai_compatible_backend(model, opts) == :ollama
+  end
+
+  defp auth_mode(opts) do
+    case option_value(opts, :auth_mode) || provider_option_value(opts, :auth_mode) || :api_key do
+      :oauth -> :oauth
+      "oauth" -> :oauth
+      _ -> :api_key
+    end
+  end
+
+  defp openai_compatible_backend(%LLMDB.Model{extra: extra}, opts) do
+    normalize_backend(
+      provider_option_value(opts, :openai_compatible_backend) ||
+        map_option_value(extra, :openai_compatible_backend)
+    )
+  end
+
+  defp normalize_backend(:ollama), do: :ollama
+  defp normalize_backend("ollama"), do: :ollama
+  defp normalize_backend(_), do: nil
+
+  defp missing_api_key_error?(message) when is_binary(message) do
+    String.contains?(
+      message,
+      ":api_key option, config :req_llm, openai_api_key, or OPENAI_API_KEY env var"
+    )
+  end
+
+  defp option_value(opts, key) when is_list(opts), do: Keyword.get(opts, key)
+  defp option_value(opts, key) when is_map(opts), do: map_option_value(opts, key)
+
+  defp provider_option_value(opts, key) do
+    opts
+    |> option_value(:provider_options)
+    |> map_or_keyword_value(key)
+  end
+
+  defp map_option_value(opts, key) when is_map(opts) do
+    Map.get(opts, key) || Map.get(opts, Atom.to_string(key))
+  end
+
+  defp map_option_value(_opts, _key), do: nil
+
+  defp map_or_keyword_value(opts, key) when is_list(opts), do: Keyword.get(opts, key)
+  defp map_or_keyword_value(opts, key) when is_map(opts), do: map_option_value(opts, key)
+  defp map_or_keyword_value(_opts, _key), do: nil
 
   defp maybe_add_transcription_provider_parts(parts, opts) when is_list(opts) do
     Enum.reduce(opts, parts, fn

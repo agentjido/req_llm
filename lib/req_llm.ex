@@ -39,7 +39,8 @@ defmodule ReqLLM do
         ReqLLM.model!(%{
           provider: :openai,
           id: "gpt-6-mini",
-          base_url: "http://localhost:8000/v1"
+          base_url: "http://localhost:8000/v1",
+          extra: %{openai_compatible_backend: :ollama}
         })
 
       ReqLLM.generate_text(model, messages)

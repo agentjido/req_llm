@@ -5,12 +5,12 @@ defmodule ReqLLM.Providers.OpenAI.WebSocket do
 
   @spec headers(LLMDB.Model.t(), keyword()) :: [{String.t(), String.t()}]
   def headers(%LLMDB.Model{} = model, opts) do
-    credential = ReqLLM.Auth.resolve!(model, opts)
     custom_headers = ReqLLM.Provider.Utils.extract_custom_headers(opts[:req_http_options])
 
-    [
-      {"Authorization", "Bearer " <> credential.token}
-    ] ++ custom_headers
+    ReqLLM.Providers.OpenAI.auth_header_list(
+      ReqLLM.Providers.OpenAI.resolve_request_credential!(model, opts)
+    ) ++
+      custom_headers
   end
 
   @spec responses_url(LLMDB.Model.t(), keyword()) :: String.t()
