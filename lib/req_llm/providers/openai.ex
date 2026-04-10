@@ -868,7 +868,6 @@ defmodule ReqLLM.Providers.OpenAI do
     end
   end
 
-
   defp maybe_add_transcription_part(parts, _key, nil), do: parts
   defp maybe_add_transcription_part(parts, key, value), do: parts ++ [{key, to_string(value)}]
 
