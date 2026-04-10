@@ -490,6 +490,73 @@ defmodule ReqLLM.Providers.GoogleTest do
     end
   end
 
+  describe "labels option" do
+    test "encode_body includes labels as a top-level field in chat body" do
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
+      context = context_fixture()
+
+      labels = %{"team" => "engineering", "environment" => "production"}
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false,
+          labels: labels
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      # labels must be top-level, not nested in generationConfig
+      assert decoded["labels"] == labels
+      refute Map.has_key?(decoded["generationConfig"] || %{}, "labels")
+    end
+
+    test "encode_body omits labels when not provided" do
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
+      context = context_fixture()
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      refute Map.has_key?(decoded, "labels")
+    end
+
+    test "encode_body includes labels in object (JSON mode) body" do
+      {:ok, model} = ReqLLM.model("google:gemini-1.5-flash")
+      context = context_fixture()
+      {:ok, schema} = ReqLLM.Schema.compile(name: [type: :string, required: true])
+
+      labels = %{"use_case" => "extraction", "team" => "data"}
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          operation: :object,
+          compiled_schema: schema,
+          max_tokens: 500,
+          labels: labels
+        ]
+      }
+
+      updated_request = Google.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      assert decoded["labels"] == labels
+    end
+  end
+
   describe "google_url_context option" do
     test "encode_body includes url_context tool when boolean true" do
       {:ok, model} = ReqLLM.model("google:gemini-2.0-flash")

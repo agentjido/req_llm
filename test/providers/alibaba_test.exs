@@ -140,6 +140,32 @@ defmodule ReqLLM.Providers.AlibabaTest do
       assert decoded["enable_thinking"] == true
     end
 
+    test "prepare_request for :object includes response_format in final http request" do
+      model = model_fixture()
+
+      {:ok, compiled_schema} =
+        ReqLLM.Schema.compile(
+          name: [type: :string, required: true],
+          age: [type: :integer]
+        )
+
+      {:ok, request} =
+        Alibaba.prepare_request(:object, model, "Generate a person",
+          compiled_schema: Map.put(compiled_schema, :name, "person_schema")
+        )
+
+      encoded_request = Alibaba.encode_body(request)
+      decoded = Jason.decode!(encoded_request.body)
+
+      assert decoded["response_format"]["type"] == "json_schema"
+      assert decoded["response_format"]["json_schema"]["name"] == "person_schema"
+      assert decoded["response_format"]["json_schema"]["strict"] == true
+      assert decoded["response_format"]["json_schema"]["schema"]["additionalProperties"] == false
+
+      assert Enum.sort(decoded["response_format"]["json_schema"]["schema"]["required"]) ==
+               ["age", "name"]
+    end
+
     test "rejects unsupported operations" do
       model = model_fixture()
       prompt = "Hello world"

@@ -40,6 +40,11 @@ defmodule ReqLLM.Providers.AlibabaCN do
   defdelegate translate_options(operation, model, opts), to: Shared
 
   @impl ReqLLM.Provider
+  def prepare_request(operation, model_spec, input, opts) do
+    Shared.prepare_request(__MODULE__, operation, model_spec, input, opts)
+  end
+
+  @impl ReqLLM.Provider
   defdelegate build_body(request), to: Shared
 
   @impl ReqLLM.Provider
