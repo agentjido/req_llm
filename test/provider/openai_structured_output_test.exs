@@ -660,6 +660,36 @@ defmodule ReqLLM.Providers.OpenAI.StructuredOutputTest do
       assert branch_b["required"] == ["error"]
     end
 
+    test "enforce_strict_recursive handles oneOf branches" do
+      schema = %{
+        "type" => "object",
+        "properties" => %{
+          "filter" => %{
+            "oneOf" => [
+              %{"type" => "string"},
+              %{
+                "type" => "object",
+                "properties" => %{
+                  "field" => %{"type" => "string"},
+                  "operator" => %{"type" => "string"}
+                }
+              }
+            ]
+          }
+        }
+      }
+
+      result = ReqLLM.Providers.OpenAI.AdapterHelpers.enforce_strict_recursive(schema)
+
+      assert result["additionalProperties"] == false
+      assert result["required"] == ["filter"]
+
+      [branch_a, branch_b] = result["properties"]["filter"]["oneOf"]
+      assert branch_a["type"] == "string"
+      assert branch_b["additionalProperties"] == false
+      assert Enum.sort(branch_b["required"]) == ["field", "operator"]
+    end
+
     test "enforce_strict_recursive handles $defs" do
       schema = %{
         "type" => "object",

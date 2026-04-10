@@ -138,6 +138,10 @@ defmodule ReqLLM.Providers.OpenAI.AdapterHelpers do
     Map.put(schema, "anyOf", Enum.map(variants, &enforce_strict_recursive/1))
   end
 
+  def enforce_strict_recursive(%{"oneOf" => variants} = schema) when is_list(variants) do
+    Map.put(schema, "oneOf", Enum.map(variants, &enforce_strict_recursive/1))
+  end
+
   def enforce_strict_recursive(schema), do: schema
 
   defp maybe_recurse_defs(%{"$defs" => defs} = schema) when is_map(defs) do
