@@ -267,7 +267,13 @@ defmodule ReqLLM.Providers.Anthropic.Context do
     %{type: "tool_use", id: id, name: name, input: decode_tool_arguments(args)}
   end
 
-  defp decode_tool_arguments(args) when is_binary(args), do: Jason.decode!(args)
+  defp decode_tool_arguments(args) when is_binary(args) do
+    case ReqLLM.JSON.decode(args) do
+      {:ok, map} -> map
+      {:error, _} -> %{}
+    end
+  end
+
   defp decode_tool_arguments(args) when is_map(args), do: args
   defp decode_tool_arguments(nil), do: %{}
 
