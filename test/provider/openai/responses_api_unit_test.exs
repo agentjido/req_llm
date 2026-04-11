@@ -235,6 +235,33 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert body["tool_choice"] == %{"type" => "function", "name" => "search"}
     end
 
+    test "encodes parallel_tool_calls true" do
+      request = build_request(parallel_tool_calls: true)
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded.body)
+
+      assert body["parallel_tool_calls"] == true
+    end
+
+    test "encodes parallel_tool_calls false" do
+      request = build_request(parallel_tool_calls: false)
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded.body)
+
+      assert body["parallel_tool_calls"] == false
+    end
+
+    test "omits parallel_tool_calls when not set" do
+      request = build_request([])
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded.body)
+
+      refute Map.has_key?(body, "parallel_tool_calls")
+    end
+
     test "encodes reasoning effort with atom" do
       request = build_request(reasoning_effort: :medium)
 
@@ -1430,6 +1457,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       max_tokens: Keyword.get(opts, :max_tokens),
       tools: Keyword.get(opts, :tools),
       tool_choice: Keyword.get(opts, :tool_choice),
+      parallel_tool_calls: Keyword.get(opts, :parallel_tool_calls),
       reasoning_effort: Keyword.get(opts, :reasoning_effort),
       provider_options: provider_opts
     }
