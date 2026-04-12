@@ -44,6 +44,13 @@ defmodule ReqLLM.Schema.ZoiTest do
       assert result["properties"]["metadata"]["type"] == "object"
       assert result["properties"]["metadata"]["properties"]["tags"]["type"] == "array"
       assert result["properties"]["metadata"]["properties"]["tags"]["items"]["type"] == "string"
+      assert Enum.sort(result["propertyOrdering"]) == ["metadata", "user"]
+      assert Enum.sort(result["properties"]["user"]["propertyOrdering"]) == ["email", "name"]
+
+      assert Enum.sort(result["properties"]["metadata"]["propertyOrdering"]) == [
+               "created_at",
+               "tags"
+             ]
     end
 
     test "converts Zoi array schemas" do

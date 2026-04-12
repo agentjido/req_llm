@@ -512,8 +512,10 @@ defmodule ReqLLM.Providers.OpenAI.StructuredOutputTest do
       kw_schema = ReqLLM.Schema.to_openai_format(keyword_tool)
       map_schema_result = ReqLLM.Schema.to_openai_format(map_tool)
 
-      # Parameters should be equivalent (ignoring tool names)
-      assert kw_schema["function"]["parameters"] == map_schema_result["function"]["parameters"]
+      assert Map.delete(kw_schema["function"]["parameters"], "propertyOrdering") ==
+               map_schema_result["function"]["parameters"]
+
+      assert kw_schema["function"]["parameters"]["propertyOrdering"] == ["name", "age"]
     end
   end
 

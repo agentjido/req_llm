@@ -204,28 +204,21 @@ defmodule ReqLLM.Schema do
   def to_json([]), do: %{"type" => "object", "properties" => %{}}
 
   def to_json(schema) when is_list(schema) do
-    {properties, required} =
-      Enum.reduce(schema, {%{}, []}, fn {key, opts}, {props_acc, req_acc} ->
+    property_ordering = Enum.map(schema, fn {key, _opts} -> to_string(key) end)
+
+    properties =
+      Map.new(schema, fn {key, opts} ->
         property_name = to_string(key)
         json_prop = nimble_type_to_json_schema(opts[:type] || :string, opts)
-
-        new_props = Map.put(props_acc, property_name, json_prop)
-        new_req = if opts[:required], do: [property_name | req_acc], else: req_acc
-
-        {new_props, new_req}
+        {property_name, json_prop}
       end)
 
-    schema_object = %{
-      "type" => "object",
-      "properties" => properties,
-      "additionalProperties" => false
-    }
+    required =
+      for {key, opts} <- schema, opts[:required] do
+        to_string(key)
+      end
 
-    if required == [] do
-      schema_object
-    else
-      Map.put(schema_object, "required", Enum.reverse(required))
-    end
+    build_object_schema(properties, required, property_ordering)
   end
 
   def to_json(%_{} = schema) when is_struct(schema) do
@@ -287,6 +280,7 @@ defmodule ReqLLM.Schema do
   defp inject_zoi_metadata(%Zoi.Types.Map{meta: meta, fields: fields}, json)
        when is_list(fields) do
     properties = Map.get(json, :properties) || Map.get(json, "properties") || %{}
+    property_ordering = Enum.map(fields, fn {key, _field_schema} -> to_string(key) end)
 
     updated_props =
       Enum.reduce(fields, %{}, fn {key, field_schema}, acc ->
@@ -299,6 +293,7 @@ defmodule ReqLLM.Schema do
     |> maybe_put_description(meta)
     |> Map.put("properties", updated_props)
     |> Map.put("additionalProperties", false)
+    |> maybe_put_nonempty("propertyOrdering", property_ordering)
   end
 
   defp inject_zoi_metadata(%Zoi.Types.Array{meta: meta, inner: inner}, json) do
@@ -447,12 +442,12 @@ defmodule ReqLLM.Schema do
           %{"type" => "object"}
 
         {:map, opts} when is_list(opts) and opts != [] ->
+          property_ordering = Enum.map(opts, fn {key, _prop_opts} -> to_string(key) end)
+
           required_keys =
-            opts
-            |> Enum.filter(fn {_key, prop_opts} ->
-              Keyword.get(prop_opts, :required, false) == true
-            end)
-            |> Enum.map(fn {key, _} -> to_string(key) end)
+            for {key, prop_opts} <- opts, Keyword.get(prop_opts, :required, false) == true do
+              to_string(key)
+            end
 
           properties =
             Map.new(opts, fn {prop_name, prop_opts} ->
@@ -460,17 +455,7 @@ defmodule ReqLLM.Schema do
               {to_string(prop_name), nimble_type_to_json_schema(prop_type, prop_opts)}
             end)
 
-          map_schema = %{
-            "type" => "object",
-            "properties" => properties,
-            "additionalProperties" => false
-          }
-
-          if required_keys == [] do
-            map_schema
-          else
-            Map.put(map_schema, "required", required_keys)
-          end
+          build_object_schema(properties, required_keys, property_ordering)
 
         {:map, _} ->
           %{"type" => "object"}
@@ -977,6 +962,19 @@ defmodule ReqLLM.Schema do
 
   defp format_jsv_error(%{"error" => error}), do: error
   defp format_jsv_error(error), do: inspect(error)
+
+  defp build_object_schema(properties, required, property_ordering) do
+    %{
+      "type" => "object",
+      "properties" => properties,
+      "additionalProperties" => false
+    }
+    |> maybe_put_nonempty("required", required)
+    |> maybe_put_nonempty("propertyOrdering", property_ordering)
+  end
+
+  defp maybe_put_nonempty(map, _key, []), do: map
+  defp maybe_put_nonempty(map, key, value), do: Map.put(map, key, value)
 
   @spec deep_delete_keys(term(), [String.t() | atom()]) :: term()
   defp deep_delete_keys(map, keys) when is_map(map) do

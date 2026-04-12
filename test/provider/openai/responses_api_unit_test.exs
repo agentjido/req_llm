@@ -368,6 +368,7 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert body["text"]["format"]["schema"]["properties"]["age"]["type"] == "integer"
       assert body["text"]["format"]["schema"]["properties"]["age"]["minimum"] == 1
       assert body["text"]["format"]["schema"]["required"] == ["name"]
+      assert body["text"]["format"]["schema"]["propertyOrdering"] == ["name", "age"]
     end
 
     test "encodes response_format with direct JSON schema (pass-through)" do

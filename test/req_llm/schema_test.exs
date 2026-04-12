@@ -64,6 +64,18 @@ defmodule ReqLLM.SchemaTest do
       assert Enum.sort(result["required"]) == ["active", "name"]
     end
 
+    test "adds propertyOrdering in declared field order" do
+      schema = [
+        summary: [type: :string, required: true],
+        details: [type: :string],
+        notes: [type: :string]
+      ]
+
+      result = Schema.to_json(schema)
+
+      assert result["propertyOrdering"] == ["summary", "details", "notes"]
+    end
+
     test "handles lists with a map subtype" do
       tag_schema = {:map, [title: [type: :string, required: true], id: [type: :integer]]}
 
@@ -78,6 +90,7 @@ defmodule ReqLLM.SchemaTest do
       assert result["properties"]["tags"]["items"]["properties"]["title"]["type"] == "string"
       assert result["properties"]["tags"]["items"]["properties"]["id"]["type"] == "integer"
       assert result["properties"]["tags"]["items"]["required"] == ["title"]
+      assert result["properties"]["tags"]["items"]["propertyOrdering"] == ["title", "id"]
     end
 
     test "preserves doc option in nested map properties" do
@@ -325,6 +338,7 @@ defmodule ReqLLM.SchemaTest do
                    }
                  },
                  "required" => ["query"],
+                 "propertyOrdering" => ["query", "limit"],
                  "additionalProperties" => false
                }
              }
@@ -467,7 +481,8 @@ defmodule ReqLLM.SchemaTest do
                      "description" => "Maximum results"
                    }
                  },
-                 "required" => ["query"]
+                 "required" => ["query"],
+                 "propertyOrdering" => ["query", "limit"]
                }
              }
 
@@ -768,6 +783,24 @@ defmodule ReqLLM.SchemaTest do
       assert validated == ["a", "b"]
     end
 
+    test "accepts propertyOrdering as a JSON Schema annotation" do
+      schema = %{
+        "type" => "object",
+        "properties" => %{
+          "name" => %{"type" => "string"},
+          "age" => %{"type" => "integer"}
+        },
+        "propertyOrdering" => ["name", "age"],
+        "required" => ["name"],
+        "additionalProperties" => false
+      }
+
+      data = %{"name" => "Alice", "age" => 30}
+
+      assert {:ok, validated} = Schema.validate(data, schema)
+      assert validated == data
+    end
+
     test "catches embedded JSON string instead of parsed map for property" do
       schema = %{
         "type" => "object",
@@ -1017,7 +1050,8 @@ defmodule ReqLLM.SchemaTest do
       keyword_result = Schema.to_json(keyword_schema)
       map_result = Schema.to_json(json_schema)
 
-      assert keyword_result == json_schema
+      assert Map.delete(keyword_result, "propertyOrdering") == json_schema
+      assert keyword_result["propertyOrdering"] == ["location", "units"]
       assert map_result == json_schema
     end
 
