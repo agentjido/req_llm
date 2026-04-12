@@ -16,6 +16,7 @@ defmodule ReqLLM.Providers.GoogleVertex.OpenAICompat do
   """
 
   alias ReqLLM.Provider.Defaults
+  alias ReqLLM.Providers.OpenAI.AdapterHelpers
 
   @doc """
   Formats a ReqLLM context into OpenAI Chat Completions request format.
@@ -34,7 +35,7 @@ defmodule ReqLLM.Providers.GoogleVertex.OpenAICompat do
       end
 
     # Get tools from context if available
-    tools = Map.get(context, :tools, [])
+    tools = opts[:tools] || Map.get(context, :tools, [])
 
     # Build OpenAI-compatible request body using Defaults helper
     temp_request =
@@ -52,7 +53,9 @@ defmodule ReqLLM.Providers.GoogleVertex.OpenAICompat do
         )
       )
 
-    Defaults.default_build_body(temp_request)
+    temp_request
+    |> Defaults.default_build_body()
+    |> AdapterHelpers.translate_tool_choice_format()
   end
 
   @doc """

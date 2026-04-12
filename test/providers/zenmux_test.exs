@@ -194,6 +194,40 @@ defmodule ReqLLM.Providers.ZenmuxTest do
                "function" => %{"name" => "my_tool"}
              }
     end
+
+    test "encode_body preserves atom tool_choice values" do
+      {:ok, model} = ReqLLM.model("zenmux:xiaomi/mimo-v2-flash")
+      context = context_fixture()
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "specific_tool",
+          description: "A specific tool",
+          parameter_schema: [
+            value: [type: :string, required: true, doc: "A value parameter"]
+          ],
+          callback: fn _ -> {:ok, "result"} end
+        )
+
+      for tool_choice <- [:auto, :none, :required] do
+        mock_request = %Req.Request{
+          options: [
+            context: context,
+            model: model.model,
+            stream: false,
+            tools: [tool],
+            tool_choice: tool_choice
+          ]
+        }
+
+        updated_request = Zenmux.encode_body(mock_request)
+        assert_no_duplicate_json_keys(updated_request.body)
+        decoded = Jason.decode!(updated_request.body)
+
+        assert is_list(decoded["tools"])
+        assert decoded["tool_choice"] == to_string(tool_choice)
+      end
+    end
   end
 
   describe "object generation" do

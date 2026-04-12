@@ -285,6 +285,30 @@ defmodule ReqLLM.Providers.GoogleVertex.OpenAICompatTest do
       assert body[:response_format] == %{type: "json_object"}
     end
 
+    test "translates ReqLLM tool_choice to OpenAI function format" do
+      context = context_fixture("What's the weather?")
+
+      tool =
+        ReqLLM.Tool.new!(
+          name: "get_weather",
+          description: "Get weather info",
+          parameter_schema: [location: [type: :string, required: true]],
+          callback: fn _ -> {:ok, %{}} end
+        )
+
+      opts = [
+        tools: [tool],
+        tool_choice: %{type: "tool", name: "get_weather"}
+      ]
+
+      body = OpenAICompat.format_request("zai-org/glm-4.7-maas", context, opts)
+
+      assert body[:tool_choice] == %{
+               type: "function",
+               function: %{name: "get_weather"}
+             }
+    end
+
     test "injects structured_output tool for :object operation" do
       context = context_fixture("Extract the name")
 

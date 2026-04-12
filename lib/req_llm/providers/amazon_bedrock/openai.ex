@@ -10,6 +10,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
 
   alias ReqLLM.Provider.Defaults
   alias ReqLLM.Providers.AmazonBedrock
+  alias ReqLLM.Providers.OpenAI.AdapterHelpers
 
   @doc """
   Returns whether this model family supports toolChoice in Bedrock Converse API.
@@ -37,7 +38,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
       end
 
     # Get tools from context if available
-    tools = Map.get(context, :tools, [])
+    tools = opts[:tools] || Map.get(context, :tools, [])
 
     # Create a minimal request struct to use default OpenAI encoding
     temp_request =
@@ -55,7 +56,10 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAI do
         )
       )
 
-    body = Defaults.default_build_body(temp_request)
+    body =
+      temp_request
+      |> Defaults.default_build_body()
+      |> AdapterHelpers.translate_tool_choice_format()
 
     messages = body[:messages] || body["messages"]
 

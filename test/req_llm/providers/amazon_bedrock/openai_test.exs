@@ -87,6 +87,33 @@ defmodule ReqLLM.Providers.AmazonBedrock.OpenAITest do
       assert tool["type"] == "function"
       assert tool["function"]["name"] == "get_weather"
     end
+
+    test "translates ReqLLM tool_choice to OpenAI function format" do
+      get_weather =
+        ReqLLM.Tool.new!(
+          name: "get_weather",
+          description: "Get the current weather for a location",
+          parameter_schema: [
+            location: [type: :string, required: true, doc: "City name"]
+          ],
+          callback: fn _args -> {:ok, "sunny"} end
+        )
+
+      context = Context.new([Context.user("What's the weather?")])
+
+      formatted =
+        OpenAI.format_request(
+          "openai.gpt-oss-120b-1:0",
+          context,
+          tools: [get_weather],
+          tool_choice: %{type: "tool", name: "get_weather"}
+        )
+
+      assert formatted[:tool_choice] == %{
+               type: "function",
+               function: %{name: "get_weather"}
+             }
+    end
   end
 
   describe "parse_response/2" do

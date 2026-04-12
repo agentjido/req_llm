@@ -548,6 +548,35 @@ defmodule ReqLLM.Provider.DefaultsTest do
       [chunk] = Defaults.default_decode_stream_event(invalid_json_event, model)
       assert chunk.type == :tool_call
       assert chunk.arguments == %{}
+      assert chunk.metadata.invalid_arguments
+    end
+
+    test "normalizes non-object tool arguments in streaming deltas", %{model: model} do
+      scalar_args_event = %{
+        data: %{
+          "choices" => [
+            %{
+              "delta" => %{
+                "tool_calls" => [
+                  %{
+                    "id" => "call_scalar",
+                    "type" => "function",
+                    "function" => %{"name" => "get_weather", "arguments" => ~s("Paris")}
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+
+      [chunk] = Defaults.default_decode_stream_event(scalar_args_event, model)
+      assert chunk.type == :tool_call
+      assert chunk.arguments == %{}
+      assert chunk.metadata.id == "call_scalar"
+      assert chunk.metadata.invalid_arguments
+      assert chunk.metadata.raw_arguments == ~s("Paris")
+      assert chunk.metadata.decoded_arguments == "Paris"
     end
 
     test "decodes streaming tool calls without type field (Mistral format)", %{model: model} do
@@ -841,6 +870,52 @@ defmodule ReqLLM.Provider.DefaultsTest do
       assert %ReqLLM.Response{} = returned_resp.body
       assert returned_resp.body.model == "unknown_provider:model-1"
       assert returned_resp.body.finish_reason == :stop
+    end
+
+    test "normalizes non-object tool arguments in non-streaming responses" do
+      req =
+        Req.new()
+        |> Map.update!(:options, fn opts ->
+          Map.merge(opts, %{
+            operation: :chat,
+            model: "groq:llama-3.1-8b-instant",
+            context: %Context{messages: []}
+          })
+        end)
+
+      resp = %Req.Response{
+        status: 200,
+        body: %{
+          "id" => "chatcmpl-tool-scalar",
+          "model" => "groq:llama-3.1-8b-instant",
+          "choices" => [
+            %{
+              "message" => %{
+                "role" => "assistant",
+                "tool_calls" => [
+                  %{
+                    "id" => "call_scalar",
+                    "type" => "function",
+                    "function" => %{
+                      "name" => "agent.build_workflow",
+                      "arguments" => ~s("draft")
+                    }
+                  }
+                ]
+              },
+              "finish_reason" => "tool_calls"
+            }
+          ],
+          "usage" => %{"prompt_tokens" => 1, "completion_tokens" => 1, "total_tokens" => 2}
+        }
+      }
+
+      {_returned_req, returned_resp} = Defaults.default_decode_response({req, resp})
+      [tool_call] = returned_resp.body.message.tool_calls
+
+      assert Jason.decode!(tool_call.function.arguments) == %{}
+      assert returned_resp.body.finish_reason == :tool_calls
+      assert returned_resp.body.message.metadata == %{}
     end
   end
 end

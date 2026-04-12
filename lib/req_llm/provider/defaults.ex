@@ -1176,18 +1176,7 @@ defmodule ReqLLM.Provider.Defaults do
          "type" => "function",
          "function" => %{"name" => name, "arguments" => args_json}
        }) do
-    case Jason.decode(args_json || "{}") do
-      {:ok, args} ->
-        ReqLLM.StreamChunk.tool_call(name, args, %{id: id})
-
-      {:error, _} ->
-        %ReqLLM.StreamChunk{
-          type: :tool_call,
-          name: name,
-          arguments: %{},
-          metadata: %{id: id, raw_arguments: args_json}
-        }
-    end
+    build_openai_tool_call_chunk(name, args_json, %{id: id})
   end
 
   # Mistral API omits "type" field - add it and delegate
@@ -1235,10 +1224,7 @@ defmodule ReqLLM.Provider.Defaults do
          "function" => %{"name" => name, "arguments" => args_json}
        })
        when is_binary(name) do
-    case Jason.decode(args_json || "{}") do
-      {:ok, args} -> ReqLLM.StreamChunk.tool_call(name, args, %{id: id, index: index})
-      {:error, _} -> ReqLLM.StreamChunk.tool_call(name, %{}, %{id: id, index: index})
-    end
+    build_openai_tool_call_chunk(name, args_json, %{id: id, index: index})
   end
 
   # Handle tool call delta with only name (arguments may come in later chunks)
@@ -1281,10 +1267,7 @@ defmodule ReqLLM.Provider.Defaults do
          "function" => %{"name" => name, "arguments" => args_json}
        })
        when is_binary(name) do
-    case Jason.decode(args_json || "{}") do
-      {:ok, args} -> ReqLLM.StreamChunk.tool_call(name, args, %{id: id})
-      {:error, _} -> ReqLLM.StreamChunk.tool_call(name, %{}, %{id: id})
-    end
+    build_openai_tool_call_chunk(name, args_json, %{id: id})
   end
 
   # Handle malformed tool call deltas (some APIs send incomplete structures)
@@ -1297,6 +1280,38 @@ defmodule ReqLLM.Provider.Defaults do
   end
 
   defp decode_openai_tool_call_delta(_), do: nil
+
+  defp build_openai_tool_call_chunk(name, args_json, metadata) do
+    case Jason.decode(args_json || "{}") do
+      {:ok, decoded_args} ->
+        {arguments, extra_metadata} = normalize_tool_call_arguments(decoded_args, args_json)
+        ReqLLM.StreamChunk.tool_call(name, arguments, Map.merge(metadata, extra_metadata))
+
+      {:error, _reason} ->
+        ReqLLM.StreamChunk.tool_call(
+          name,
+          %{},
+          Map.merge(metadata, %{
+            invalid_arguments: true,
+            raw_arguments: args_json,
+            unparseable_arguments: true
+          })
+        )
+    end
+  end
+
+  defp normalize_tool_call_arguments(arguments, _raw_arguments) when is_map(arguments) do
+    {arguments, %{}}
+  end
+
+  defp normalize_tool_call_arguments(arguments, raw_arguments) do
+    {%{},
+     %{
+       invalid_arguments: true,
+       raw_arguments: raw_arguments,
+       decoded_arguments: arguments
+     }}
+  end
 
   defp build_openai_message_from_chunks(chunks) when is_list(chunks) do
     content_parts =
@@ -1336,9 +1351,21 @@ defmodule ReqLLM.Provider.Defaults do
          metadata: meta
        }) do
     args_json =
-      case Map.get(meta, :raw_arguments) do
-        raw when is_binary(raw) -> raw
-        _ -> if(is_binary(args), do: args, else: Jason.encode!(args))
+      cond do
+        Map.get(meta, :unparseable_arguments) && is_binary(Map.get(meta, :raw_arguments)) ->
+          Map.get(meta, :raw_arguments)
+
+        Map.get(meta, :invalid_arguments) ->
+          Jason.encode!(args)
+
+        is_binary(Map.get(meta, :raw_arguments)) ->
+          Map.get(meta, :raw_arguments)
+
+        is_binary(args) ->
+          args
+
+        true ->
+          Jason.encode!(args)
       end
 
     id = Map.get(meta, :id)

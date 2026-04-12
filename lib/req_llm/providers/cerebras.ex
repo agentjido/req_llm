@@ -12,7 +12,8 @@ defmodule ReqLLM.Providers.Cerebras do
   - Streaming not supported with reasoning models in JSON mode or tool calling
   - `strict: true` is automatically added to tool schemas when the model supports it
   - Models that don't support `strict: true` (e.g., Qwen, ZAI GLM models) have it automatically excluded
-  - Only supports `tool_choice: "auto"` or `"none"`, not function-specific choices
+  - Supports OpenAI-style tool calling, including `tool_choice: "auto"`, `"none"`, `"required"`, and function-specific choice objects
+  - Supports `parallel_tool_calls` to control whether tools can be requested concurrently
 
   ## Unsupported OpenAI Features
 
@@ -20,8 +21,6 @@ defmodule ReqLLM.Providers.Cerebras do
   - `frequency_penalty`
   - `logit_bias`
   - `presence_penalty`
-  - `parallel_tool_calls`
-  - `service_tier`
 
   ## Configuration
 
@@ -33,6 +32,8 @@ defmodule ReqLLM.Providers.Cerebras do
     id: :cerebras,
     default_base_url: "https://api.cerebras.ai/v1",
     default_env_key: "CEREBRAS_API_KEY"
+
+  import ReqLLM.Provider.Utils, only: [maybe_put: 3]
 
   @provider_schema []
 
@@ -49,7 +50,7 @@ defmodule ReqLLM.Providers.Cerebras do
     ReqLLM.Provider.Defaults.default_build_body(request)
     |> translate_tool_choice_format()
     |> add_strict_to_tools(model)
-    |> normalize_tool_choice()
+    |> maybe_put(:parallel_tool_calls, request.options[:parallel_tool_calls])
     |> normalize_assistant_content()
   end
 
@@ -61,20 +62,29 @@ defmodule ReqLLM.Providers.Cerebras do
         true -> {nil, nil}
       end
 
-    type = tool_choice && (Map.get(tool_choice, :type) || Map.get(tool_choice, "type"))
-    name = tool_choice && (Map.get(tool_choice, :name) || Map.get(tool_choice, "name"))
+    case tool_choice do
+      map when is_map(map) ->
+        type = Map.get(tool_choice, :type) || Map.get(tool_choice, "type")
+        name = Map.get(tool_choice, :name) || Map.get(tool_choice, "name")
 
-    if type == "tool" && name do
-      replacement =
-        if is_map_key(tool_choice, :type) do
-          %{type: "function", function: %{name: name}}
+        if type == "tool" && name do
+          replacement =
+            if is_map_key(tool_choice, :type) do
+              %{type: "function", function: %{name: name}}
+            else
+              %{"type" => "function", "function" => %{"name" => name}}
+            end
+
+          Map.put(body, body_key, replacement)
         else
-          %{"type" => "function", "function" => %{"name" => name}}
+          body
         end
 
-      Map.put(body, body_key, replacement)
-    else
-      body
+      atom when not is_nil(atom) and is_atom(atom) ->
+        Map.put(body, body_key, to_string(atom))
+
+      _ ->
+        body
     end
   end
 
@@ -156,28 +166,6 @@ defmodule ReqLLM.Providers.Cerebras do
   end
 
   defp strip_constraints_recursive(value), do: value
-
-  defp normalize_tool_choice(%{"tool_choice" => %{} = tool_choice} = body) do
-    if tool_choice_type(tool_choice) == "function" do
-      Map.put(body, "tool_choice", "auto")
-    else
-      body
-    end
-  end
-
-  defp normalize_tool_choice(%{tool_choice: %{} = tool_choice} = body) do
-    if tool_choice_type(tool_choice) == "function" do
-      Map.put(body, :tool_choice, "auto")
-    else
-      body
-    end
-  end
-
-  defp normalize_tool_choice(body), do: body
-
-  defp tool_choice_type(tool_choice) do
-    Map.get(tool_choice, :type) || Map.get(tool_choice, "type")
-  end
 
   defp normalize_assistant_content(%{"messages" => messages} = body) when is_list(messages) do
     normalized_messages = Enum.map(messages, &normalize_assistant_message/1)
