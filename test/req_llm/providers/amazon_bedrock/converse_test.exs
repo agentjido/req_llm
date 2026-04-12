@@ -80,6 +80,7 @@ defmodule ReqLLM.Providers.AmazonBedrock.ConverseTest do
                        "properties" => %{
                          "location" => %{"type" => "string"}
                        },
+                       "propertyOrdering" => ["location"],
                        "required" => ["location"],
                        "additionalProperties" => false
                      }

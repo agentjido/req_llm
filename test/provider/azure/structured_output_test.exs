@@ -582,7 +582,8 @@ defmodule ReqLLM.Providers.Azure.StructuredOutputTest do
       kw_params = hd(kw_body[:tools])["function"]["parameters"]
       map_params = hd(map_body[:tools])["function"]["parameters"]
 
-      assert kw_params == map_params
+      assert Map.delete(kw_params, "propertyOrdering") == map_params
+      assert kw_params["propertyOrdering"] == ["name", "age"]
     end
   end
 
