@@ -714,7 +714,8 @@ defmodule ReqLLM.Providers.Azure do
       )
       |> maybe_add_model_for_foundry(deployment, base_url)
 
-    finch_request = Finch.build(:post, url, headers, Jason.encode!(body))
+    encoded = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
+    finch_request = Finch.build(:post, url, headers, encoded)
     {:ok, finch_request}
   rescue
     error ->

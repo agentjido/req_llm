@@ -148,7 +148,7 @@ defmodule ReqLLM.Providers.ZaiCoder do
       end
 
     try do
-      encoded_body = Jason.encode!(body)
+      encoded_body = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
 
       request
       |> Req.Request.put_header("content-type", "application/json")

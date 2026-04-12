@@ -347,7 +347,7 @@ defmodule ReqLLM.Providers.Anthropic do
     context = ReqLLM.ToolCallIdCompat.apply_context(__MODULE__, operation, model, context, opts)
 
     body = build_request_body(context, model_name, opts)
-    json_body = Jason.encode!(body)
+    json_body = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
 
     %{request | body: json_body}
   end
@@ -537,7 +537,8 @@ defmodule ReqLLM.Providers.Anthropic do
     body = build_request_body(context, get_api_model_id(model), translated_opts ++ [stream: true])
     url = build_request_url(translated_opts)
 
-    finch_request = Finch.build(:post, url, all_headers, Jason.encode!(body))
+    encoded = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
+    finch_request = Finch.build(:post, url, all_headers, encoded)
     {:ok, finch_request}
   rescue
     error ->

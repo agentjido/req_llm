@@ -205,7 +205,8 @@ defmodule ReqLLM.Providers.OpenAICodex do
     context = request.options[:context] || %ReqLLM.Context{messages: []}
     model_name = request.options[:model] || request.options[:id]
     body = build_codex_body(context, model_name, request.options, request)
-    Map.put(request, :body, Jason.encode!(body))
+    encoded = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
+    Map.put(request, :body, encoded)
   end
 
   @impl ReqLLM.Provider
@@ -265,7 +266,8 @@ defmodule ReqLLM.Providers.OpenAICodex do
       {"openai-beta", "responses=experimental"}
     ]
 
-    {:ok, Finch.build(:post, url, headers, Jason.encode!(body))}
+    encoded = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
+    {:ok, Finch.build(:post, url, headers, encoded)}
   rescue
     error ->
       {:error,

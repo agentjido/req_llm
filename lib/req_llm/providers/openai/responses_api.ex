@@ -81,7 +81,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   @impl true
   def encode_body(request) do
     body = build_body(request)
-    Map.put(request, :body, Jason.encode!(body))
+    encoded = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
+    Map.put(request, :body, encoded)
   end
 
   def build_body(request) do
@@ -737,7 +738,8 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     body = build_request_body(context, model.id, cleaned_opts, nil)
     url = build_request_url(cleaned_opts)
 
-    {:ok, Finch.build(:post, url, headers, Jason.encode!(body))}
+    encoded = body |> ReqLLM.Schema.apply_property_ordering() |> Jason.encode!()
+    {:ok, Finch.build(:post, url, headers, encoded)}
   rescue
     error ->
       {:error,
@@ -1077,12 +1079,15 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
   defp normalize_parameters(params) when is_map(params) do
     properties = params[:properties] || params["properties"] || %{}
+    ordering = params[:propertyOrdering] || params["propertyOrdering"]
 
-    %{
+    result = %{
       "type" => "object",
       "properties" => stringify_keys(properties),
       "additionalProperties" => false
     }
+
+    if ordering, do: Map.put(result, "propertyOrdering", ordering), else: result
   end
 
   defp stringify_keys(map) when is_map(map) do

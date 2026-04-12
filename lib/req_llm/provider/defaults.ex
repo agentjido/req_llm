@@ -670,7 +670,10 @@ defmodule ReqLLM.Provider.Defaults do
   """
   @spec encode_body_from_map(Req.Request.t(), map()) :: Req.Request.t()
   def encode_body_from_map(request, body) do
-    encoded_body = Jason.encode!(body)
+    encoded_body =
+      body
+      |> ReqLLM.Schema.apply_property_ordering()
+      |> Jason.encode!()
 
     request
     |> Req.Request.put_header("content-type", "application/json")

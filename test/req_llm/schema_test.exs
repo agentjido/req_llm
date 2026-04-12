@@ -1175,4 +1175,150 @@ defmodule ReqLLM.SchemaTest do
       assert result["toolSpec"]["name"] == "default_tool"
     end
   end
+
+  describe "apply_property_ordering/1" do
+    test "converts properties to ordered JSON and strips annotation" do
+      schema = %{
+        "type" => "object",
+        "properties" => %{
+          "name" => %{"type" => "string"},
+          "age" => %{"type" => "integer"},
+          "email" => %{"type" => "string"}
+        },
+        "propertyOrdering" => ["name", "age", "email"],
+        "required" => ["name"]
+      }
+
+      result = Schema.apply_property_ordering(schema)
+
+      assert %Jason.OrderedObject{} = result["properties"]
+
+      assert result["properties"].values == [
+               {"name", %{"type" => "string"}},
+               {"age", %{"type" => "integer"}},
+               {"email", %{"type" => "string"}}
+             ]
+
+      refute Map.has_key?(result, "propertyOrdering")
+      assert result["required"] == ["name"]
+    end
+
+    test "handles nested objects recursively" do
+      schema = %{
+        "type" => "object",
+        "properties" => %{
+          "user" => %{
+            "type" => "object",
+            "properties" => %{
+              "first" => %{"type" => "string"},
+              "last" => %{"type" => "string"}
+            },
+            "propertyOrdering" => ["first", "last"]
+          },
+          "score" => %{"type" => "integer"}
+        },
+        "propertyOrdering" => ["user", "score"]
+      }
+
+      result = Schema.apply_property_ordering(schema)
+
+      # Top level is ordered
+      assert %Jason.OrderedObject{} = result["properties"]
+      {_, user_schema} = Enum.find(result["properties"].values, fn {k, _} -> k == "user" end)
+
+      # Nested level is also ordered
+      assert %Jason.OrderedObject{} = user_schema["properties"]
+
+      assert user_schema["properties"].values == [
+               {"first", %{"type" => "string"}},
+               {"last", %{"type" => "string"}}
+             ]
+
+      refute Map.has_key?(user_schema, "propertyOrdering")
+    end
+
+    test "passes through maps without propertyOrdering unchanged" do
+      schema = %{
+        "type" => "object",
+        "properties" => %{
+          "name" => %{"type" => "string"}
+        }
+      }
+
+      result = Schema.apply_property_ordering(schema)
+      assert result == schema
+    end
+
+    test "appends properties not in ordering at the end" do
+      schema = %{
+        "type" => "object",
+        "properties" => %{
+          "a" => %{"type" => "string"},
+          "b" => %{"type" => "string"},
+          "c" => %{"type" => "string"}
+        },
+        "propertyOrdering" => ["c", "a"]
+      }
+
+      result = Schema.apply_property_ordering(schema)
+      keys = Enum.map(result["properties"].values, fn {k, _} -> k end)
+      assert Enum.take(keys, 2) == ["c", "a"]
+      assert "b" in keys
+    end
+
+    test "produces ordered JSON when encoded" do
+      schema = %{
+        "type" => "object",
+        "properties" => %{
+          "zebra" => %{"type" => "string"},
+          "apple" => %{"type" => "integer"},
+          "mango" => %{"type" => "boolean"}
+        },
+        "propertyOrdering" => ["apple", "mango", "zebra"]
+      }
+
+      json = schema |> Schema.apply_property_ordering() |> Jason.encode!()
+      decoded = Jason.decode!(json, objects: :ordered_objects)
+
+      props =
+        Enum.find_value(decoded.values, fn
+          {"properties", v} -> v
+          _ -> nil
+        end)
+
+      assert Enum.map(props.values, fn {k, _} -> k end) == ["apple", "mango", "zebra"]
+    end
+
+    test "handles lists containing schemas" do
+      tools = [
+        %{
+          "type" => "function",
+          "function" => %{
+            "name" => "search",
+            "parameters" => %{
+              "type" => "object",
+              "properties" => %{
+                "query" => %{"type" => "string"},
+                "limit" => %{"type" => "integer"}
+              },
+              "propertyOrdering" => ["query", "limit"]
+            }
+          }
+        }
+      ]
+
+      [result] = Schema.apply_property_ordering(tools)
+      params = result["function"]["parameters"]
+
+      assert %Jason.OrderedObject{} = params["properties"]
+      assert Enum.map(params["properties"].values, fn {k, _} -> k end) == ["query", "limit"]
+      refute Map.has_key?(params, "propertyOrdering")
+    end
+
+    test "passes through non-map/non-list values" do
+      assert Schema.apply_property_ordering("hello") == "hello"
+      assert Schema.apply_property_ordering(42) == 42
+      assert Schema.apply_property_ordering(nil) == nil
+    end
+  end
 end

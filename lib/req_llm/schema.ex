@@ -976,6 +976,51 @@ defmodule ReqLLM.Schema do
   defp maybe_put_nonempty(map, _key, []), do: map
   defp maybe_put_nonempty(map, key, value), do: Map.put(map, key, value)
 
+  @doc """
+  Converts `"properties"` maps to `Jason.OrderedObject` using `"propertyOrdering"`,
+  then strips the `"propertyOrdering"` annotation.
+
+  This is intended to be called right before `Jason.encode!` so that the JSON
+  wire format has property keys in the declared order. Providers like OpenAI use
+  JSON key order (not a separate annotation) to determine structured output field
+  ordering.
+
+  Google providers should **not** call this — they read `propertyOrdering` natively.
+  """
+  @spec apply_property_ordering(term()) :: term()
+  def apply_property_ordering(data) when is_map(data) and not is_struct(data) do
+    # First, recurse into all values
+    processed = Map.new(data, fn {k, v} -> {k, apply_property_ordering(v)} end)
+
+    case {Map.get(processed, "properties"), Map.get(processed, "propertyOrdering")} do
+      {props, ordering} when is_map(props) and is_list(ordering) and ordering != [] ->
+        ordered_keys = ordering
+        remaining_keys = Map.keys(props) -- ordered_keys
+
+        ordered_values =
+          Enum.flat_map(ordered_keys, fn key ->
+            case Map.fetch(props, key) do
+              {:ok, val} -> [{key, val}]
+              :error -> []
+            end
+          end) ++
+            Enum.map(remaining_keys, fn key -> {key, Map.fetch!(props, key)} end)
+
+        processed
+        |> Map.put("properties", Jason.OrderedObject.new(ordered_values))
+        |> Map.delete("propertyOrdering")
+
+      _ ->
+        processed
+    end
+  end
+
+  def apply_property_ordering(data) when is_list(data) do
+    Enum.map(data, &apply_property_ordering/1)
+  end
+
+  def apply_property_ordering(data), do: data
+
   @spec deep_delete_keys(term(), [String.t() | atom()]) :: term()
   defp deep_delete_keys(map, keys) when is_map(map) do
     map

@@ -368,7 +368,12 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert body["text"]["format"]["schema"]["properties"]["age"]["type"] == "integer"
       assert body["text"]["format"]["schema"]["properties"]["age"]["minimum"] == 1
       assert body["text"]["format"]["schema"]["required"] == ["name"]
-      assert body["text"]["format"]["schema"]["propertyOrdering"] == ["name", "age"]
+
+      # propertyOrdering is consumed during encoding — verify wire order instead
+      refute Map.has_key?(body["text"]["format"]["schema"], "propertyOrdering")
+
+      # Verify the actual JSON wire order of properties
+      assert encoded.body =~ ~r/"properties"\s*:\s*\{\s*"name".*"age"/s
     end
 
     test "encodes response_format with direct JSON schema (pass-through)" do
