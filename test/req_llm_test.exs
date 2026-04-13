@@ -176,6 +176,28 @@ defmodule ReqLLMTest do
               }} = ReqLLM.model(model)
     end
 
+    test "preserves caller-provided fields from LLMDB.Model structs" do
+      model =
+        LLMDB.Model.new!(%{
+          id: "test-model-not-in-catalog",
+          provider: :openai,
+          base_url: "http://my-custom-endpoint.example.com",
+          capabilities: %{
+            chat: true,
+            json: %{schema: true},
+            tools: %{enabled: true, strict: true},
+            reasoning: %{enabled: true}
+          }
+        })
+
+      {:ok, result} = ReqLLM.model(model)
+
+      assert result.base_url == "http://my-custom-endpoint.example.com"
+      assert result.capabilities.json.schema == true
+      assert result.capabilities.tools.enabled == true
+      assert result.capabilities.reasoning.enabled == true
+    end
+
     test "returns error for map missing required fields" do
       assert {:error, error} = ReqLLM.model(%{id: "no-provider"})
       assert Exception.message(error) =~ "Inline model specs require :provider"

@@ -288,11 +288,15 @@ defmodule ReqLLM do
   """
   @spec model(model_input()) :: {:ok, LLMDB.Model.t()} | {:error, term()}
   def model(%LLMDB.Model{} = model) do
-    model
-    |> Map.from_struct()
-    |> Enum.reject(fn {_key, value} -> is_nil(value) end)
-    |> Map.new()
-    |> LLMDB.Enrich.enrich_model()
+    non_nil =
+      model
+      |> Map.from_struct()
+      |> Enum.reject(fn {_key, value} -> is_nil(value) end)
+      |> Map.new()
+
+    enriched = LLMDB.Enrich.enrich_model(non_nil)
+
+    Map.merge(enriched, non_nil)
     |> LLMDB.Model.new()
     |> normalize_model_result()
   end
