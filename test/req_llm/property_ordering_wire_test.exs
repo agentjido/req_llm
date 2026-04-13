@@ -154,6 +154,44 @@ defmodule ReqLLM.PropertyOrderingWireTest do
                ["response_format", "json_schema", "schema", "properties"]
              ) == @expected_order
     end
+
+    test "properties are ordered for raw atom-key schemas" do
+      body = %{
+        model: "test-model",
+        response_format: %{
+          type: "json_schema",
+          json_schema: %{
+            name: "analysis",
+            schema: %{
+              type: "object",
+              properties: %{
+                reasoning: %{"type" => "string"},
+                answer: %{"type" => "string"},
+                confidence: %{"type" => "integer"}
+              },
+              propertyOrdering: @expected_order
+            }
+          }
+        }
+      }
+
+      request = %Req.Request{
+        method: :post,
+        url: URI.parse("https://example.com"),
+        headers: %{},
+        body: nil,
+        options: %{}
+      }
+
+      encoded = ReqLLM.Provider.Defaults.encode_body_from_map(request, body)
+
+      assert_no_property_ordering(encoded.body)
+
+      assert ordered_prop_keys(
+               encoded.body,
+               ["response_format", "json_schema", "schema", "properties"]
+             ) == @expected_order
+    end
   end
 
   # -- Google (should retain propertyOrdering) --------------------------------

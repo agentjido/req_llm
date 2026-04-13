@@ -989,26 +989,32 @@ defmodule ReqLLM.Schema do
   """
   @spec apply_property_ordering(term()) :: term()
   def apply_property_ordering(data) when is_map(data) and not is_struct(data) do
-    # First, recurse into all values
     processed = Map.new(data, fn {k, v} -> {k, apply_property_ordering(v)} end)
 
-    case {Map.get(processed, "properties"), Map.get(processed, "propertyOrdering")} do
-      {props, ordering} when is_map(props) and is_list(ordering) and ordering != [] ->
+    case {
+      fetch_string_or_atom_key(processed, "properties", :properties),
+      fetch_string_or_atom_key(processed, "propertyOrdering", :propertyOrdering)
+    } do
+      {{:ok, properties_key, props}, {:ok, ordering_key, ordering}}
+      when is_map(props) and is_list(ordering) and ordering != [] ->
         ordered_keys = ordering
-        remaining_keys = Map.keys(props) -- ordered_keys
 
         ordered_values =
           Enum.flat_map(ordered_keys, fn key ->
-            case Map.fetch(props, key) do
+            key_string = to_string(key)
+
+            case fetch_property_value(props, key_string) do
               {:ok, val} -> [{key, val}]
               :error -> []
             end
-          end) ++
-            Enum.map(remaining_keys, fn key -> {key, Map.fetch!(props, key)} end)
+          end) ++ remaining_ordered_values(props, ordered_keys)
 
         processed
-        |> Map.put("properties", Jason.OrderedObject.new(ordered_values))
-        |> Map.delete("propertyOrdering")
+        |> Map.put(
+          properties_key,
+          Jason.OrderedObject.new(stringify_ordered_keys(ordered_values))
+        )
+        |> Map.delete(ordering_key)
 
       _ ->
         processed
@@ -1020,6 +1026,40 @@ defmodule ReqLLM.Schema do
   end
 
   def apply_property_ordering(data), do: data
+
+  defp fetch_string_or_atom_key(map, string_key, atom_key) do
+    cond do
+      Map.has_key?(map, string_key) -> {:ok, string_key, Map.fetch!(map, string_key)}
+      Map.has_key?(map, atom_key) -> {:ok, atom_key, Map.fetch!(map, atom_key)}
+      true -> :error
+    end
+  end
+
+  defp fetch_property_value(properties, key_string) do
+    Enum.find_value(properties, :error, fn {key, value} ->
+      if to_string(key) == key_string, do: {:ok, value}
+    end)
+  end
+
+  defp remaining_ordered_values(properties, ordered_keys) do
+    ordered_key_set = MapSet.new(Enum.map(ordered_keys, &to_string/1))
+
+    properties
+    |> Enum.reduce([], fn {key, value}, acc ->
+      key_string = to_string(key)
+
+      if MapSet.member?(ordered_key_set, key_string) do
+        acc
+      else
+        [{key, value} | acc]
+      end
+    end)
+    |> Enum.reverse()
+  end
+
+  defp stringify_ordered_keys(ordered_values) do
+    Enum.map(ordered_values, fn {key, value} -> {to_string(key), value} end)
+  end
 
   @spec deep_delete_keys(term(), [String.t() | atom()]) :: term()
   defp deep_delete_keys(map, keys) when is_map(map) do

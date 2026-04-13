@@ -1237,6 +1237,35 @@ defmodule ReqLLM.SchemaTest do
       refute Map.has_key?(user_schema, "propertyOrdering")
     end
 
+    test "handles raw JSON Schema maps with atom keys" do
+      schema = %{
+        type: "object",
+        properties: %{
+          name: %{"type" => "string"},
+          age: %{"type" => "integer"},
+          email: %{"type" => "string"}
+        },
+        propertyOrdering: ["name", "age", "email"],
+        required: ["name"]
+      }
+
+      result = Schema.apply_property_ordering(schema)
+      json = Jason.encode!(result)
+      decoded = Jason.decode!(json, objects: :ordered_objects)
+
+      assert %Jason.OrderedObject{} = result[:properties]
+      refute Map.has_key?(result, :propertyOrdering)
+      refute json =~ "propertyOrdering"
+
+      props =
+        Enum.find_value(decoded.values, fn
+          {"properties", value} -> value
+          _ -> nil
+        end)
+
+      assert Enum.map(props.values, fn {key, _value} -> key end) == ["name", "age", "email"]
+    end
+
     test "passes through maps without propertyOrdering unchanged" do
       schema = %{
         "type" => "object",
