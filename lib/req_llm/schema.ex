@@ -662,7 +662,11 @@ defmodule ReqLLM.Schema do
   @spec to_google_format(ReqLLM.Tool.t()) :: map()
   def to_google_format(%ReqLLM.Tool{} = tool) do
     json_schema = to_json(tool.parameter_schema)
-    parameters = deep_delete_keys(json_schema, @google_forbidden_schema_keys)
+
+    parameters =
+      json_schema
+      |> deep_delete_keys(@google_forbidden_schema_keys)
+      |> stringify_enums()
 
     %{
       "name" => tool.name,
@@ -1072,6 +1076,21 @@ defmodule ReqLLM.Schema do
     do: Enum.map(list, &deep_delete_keys(&1, keys))
 
   defp deep_delete_keys(value, _keys), do: value
+
+  defp stringify_enums(map) when is_map(map) do
+    Map.new(map, fn
+      {"enum", values} when is_list(values) ->
+        {"enum", Enum.map(values, &to_string/1)}
+
+      {k, v} ->
+        {k, stringify_enums(v)}
+    end)
+  end
+
+  defp stringify_enums(list) when is_list(list),
+    do: Enum.map(list, &stringify_enums/1)
+
+  defp stringify_enums(value), do: value
 
   defp key_variants(keys) when is_list(keys), do: Enum.flat_map(keys, &key_variants/1)
   defp key_variants(key) when is_binary(key), do: [key, String.to_atom(key)]

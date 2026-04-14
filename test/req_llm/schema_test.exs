@@ -502,6 +502,37 @@ defmodule ReqLLM.SchemaTest do
       assert result["parameters"]["required"] == ["tags"]
     end
 
+    test "to_google_format/1 stringifies non-string enum values" do
+      tool = %ReqLLM.Tool{
+        name: "set_level",
+        description: "Set a level",
+        parameter_schema: %{
+          "type" => "object",
+          "properties" => %{
+            "level" => %{
+              "type" => "integer",
+              "enum" => [1, 2, 3],
+              "description" => "The level"
+            },
+            "mode" => %{
+              "type" => "string",
+              "enum" => ["fast", "slow"],
+              "description" => "The mode"
+            }
+          },
+          "required" => ["level"]
+        },
+        callback: fn _ -> {:ok, "ok"} end
+      }
+
+      result = Schema.to_google_format(tool)
+      level = result["parameters"]["properties"]["level"]
+      mode = result["parameters"]["properties"]["mode"]
+
+      assert level["enum"] == ["1", "2", "3"]
+      assert mode["enum"] == ["fast", "slow"]
+    end
+
     test "to_google_format/1 strips atom-keyed forbidden fields recursively" do
       atom_keyed_schema = %{
         :type => :object,
