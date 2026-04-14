@@ -705,6 +705,13 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
         item
       end
 
+    item =
+      if detail.text do
+        Map.put(item, "summary", [%{"type" => "summary_text", "text" => detail.text}])
+      else
+        Map.put(item, "summary", [])
+      end
+
     [item]
   end
 

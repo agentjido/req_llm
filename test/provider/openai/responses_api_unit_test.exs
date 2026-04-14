@@ -1415,6 +1415,42 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert log =~ "Skipping non-OpenAI reasoning detail from provider: :anthropic"
     end
 
+    test "encodes summary from reasoning detail text" do
+      reasoning_detail = %ReqLLM.Message.ReasoningDetails{
+        text: "I need to think about this carefully",
+        signature: "encrypted_sig_abc",
+        encrypted?: true,
+        provider: :openai,
+        format: "openai-responses-v1",
+        index: 0,
+        provider_data: %{"id" => "rs_prev123", "type" => "reasoning"}
+      }
+
+      assistant_msg = %ReqLLM.Message{
+        role: :assistant,
+        content: [%ReqLLM.Message.ContentPart{type: :text, text: "Answer"}],
+        reasoning_details: [reasoning_detail]
+      }
+
+      user_msg = %ReqLLM.Message{
+        role: :user,
+        content: [%ReqLLM.Message.ContentPart{type: :text, text: "Follow up"}]
+      }
+
+      context = %ReqLLM.Context{messages: [assistant_msg, user_msg]}
+      request = build_request(context: context)
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded.body)
+
+      [reasoning_input | _] = body["input"]
+      assert reasoning_input["type"] == "reasoning"
+
+      assert reasoning_input["summary"] == [
+               %{"type" => "summary_text", "text" => "I need to think about this carefully"}
+             ]
+    end
+
     test "encodes reasoning detail without id when provider_data has no id" do
       reasoning_detail = %ReqLLM.Message.ReasoningDetails{
         text: "Reasoning text",
