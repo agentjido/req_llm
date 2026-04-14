@@ -545,7 +545,6 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
 
           :assistant ->
             new_reasoning = encode_reasoning_details_from_message(msg)
-            latest_reasoning = if new_reasoning != [], do: new_reasoning, else: reasoning_acc
             content_type = "output_text"
 
             content =
@@ -554,14 +553,14 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
               end)
 
             if content == [] and msg.tool_calls == nil do
-              {input_acc, tool_acc, latest_reasoning}
+              {input_acc, tool_acc, reasoning_acc ++ new_reasoning}
             else
               if msg.tool_calls != nil and msg.tool_calls != [] do
                 function_calls = encode_tool_calls_as_function_calls(msg.tool_calls)
-                {input_acc ++ function_calls, tool_acc, latest_reasoning}
+                {input_acc ++ function_calls, tool_acc, reasoning_acc ++ new_reasoning}
               else
                 {input_acc ++ [%{"role" => "assistant", "content" => content}], tool_acc,
-                 latest_reasoning}
+                 reasoning_acc ++ new_reasoning}
               end
             end
 

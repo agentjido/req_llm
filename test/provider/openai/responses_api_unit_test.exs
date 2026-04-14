@@ -1451,62 +1451,6 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
              ]
     end
 
-    test "only keeps reasoning details from last assistant message" do
-      old_reasoning = %ReqLLM.Message.ReasoningDetails{
-        text: nil,
-        signature: "old_sig",
-        encrypted?: true,
-        provider: :openai,
-        format: "openai-responses-v1",
-        index: 0,
-        provider_data: %{"id" => "rs_old", "type" => "reasoning"}
-      }
-
-      old_assistant = %ReqLLM.Message{
-        role: :assistant,
-        content: [%ReqLLM.Message.ContentPart{type: :text, text: "First answer"}],
-        reasoning_details: [old_reasoning]
-      }
-
-      new_reasoning = %ReqLLM.Message.ReasoningDetails{
-        text: nil,
-        signature: "new_sig",
-        encrypted?: true,
-        provider: :openai,
-        format: "openai-responses-v1",
-        index: 0,
-        provider_data: %{"id" => "rs_new", "type" => "reasoning"}
-      }
-
-      new_assistant = %ReqLLM.Message{
-        role: :assistant,
-        content: [%ReqLLM.Message.ContentPart{type: :text, text: "Second answer"}],
-        reasoning_details: [new_reasoning]
-      }
-
-      user1 = %ReqLLM.Message{
-        role: :user,
-        content: [%ReqLLM.Message.ContentPart{type: :text, text: "First question"}]
-      }
-
-      user2 = %ReqLLM.Message{
-        role: :user,
-        content: [%ReqLLM.Message.ContentPart{type: :text, text: "Second question"}]
-      }
-
-      context = %ReqLLM.Context{messages: [old_assistant, user1, new_assistant, user2]}
-      request = build_request(context: context)
-
-      encoded = ResponsesAPI.encode_body(request)
-      body = Jason.decode!(encoded.body)
-
-      reasoning_items =
-        Enum.filter(body["input"], fn item -> item["type"] == "reasoning" end)
-
-      assert length(reasoning_items) == 1
-      assert hd(reasoning_items)["id"] == "rs_new"
-    end
-
     test "encodes reasoning detail without id when provider_data has no id" do
       reasoning_detail = %ReqLLM.Message.ReasoningDetails{
         text: "Reasoning text",
