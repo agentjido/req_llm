@@ -468,7 +468,7 @@ defmodule ReqLLM.Schema do
 
         # Handle :in type for enums and ranges
         {:in, choices} when is_list(choices) ->
-          %{"type" => "string", "enum" => choices}
+          %{"type" => infer_enum_type(choices), "enum" => choices}
 
         {:in, first..last//_step} ->
           %{"type" => "integer", "minimum" => first, "maximum" => last}
@@ -1055,6 +1055,10 @@ defmodule ReqLLM.Schema do
       end
     end)
     |> Enum.reverse()
+  end
+
+  defp infer_enum_type(choices) do
+    if Enum.all?(choices, &is_integer/1), do: "integer", else: "string"
   end
 
   defp stringify_ordered_keys(ordered_values) do

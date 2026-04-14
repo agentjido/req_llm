@@ -237,6 +237,14 @@ defmodule ReqLLM.SchemaTest do
       assert result == %{"type" => "string", "enum" => ["small", "medium", "large"]}
     end
 
+    test "converts :in type with integer choices to integer type" do
+      result = Schema.nimble_type_to_json_schema({:in, [1, 2, 3]}, [])
+      assert result == %{"type" => "integer", "enum" => [1, 2, 3]}
+
+      result = Schema.nimble_type_to_json_schema({:in, [1, 2]}, doc: "Level")
+      assert result == %{"type" => "integer", "enum" => [1, 2], "description" => "Level"}
+    end
+
     test "converts :in type with range choices" do
       result = Schema.nimble_type_to_json_schema({:in, 1..10}, [])
       assert result == %{"type" => "integer", "minimum" => 1, "maximum" => 10}
