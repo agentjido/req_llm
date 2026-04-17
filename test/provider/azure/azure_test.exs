@@ -79,6 +79,21 @@ defmodule ReqLLM.Providers.AzureTest do
       assert url_string =~ "api-version=2023-05-15"
     end
 
+    test "preserves custom finch from req_http_options" do
+      {:ok, model} = ReqLLM.model("azure:gpt-4o")
+
+      {:ok, request} =
+        Azure.prepare_request(
+          :chat,
+          model,
+          "Hello",
+          base_url: "https://my-resource.openai.azure.com/openai",
+          req_http_options: [finch: :custom_finch]
+        )
+
+      assert request.options[:finch] == :custom_finch
+    end
+
     test "embedding operation uses correct endpoint" do
       model = %LLMDB.Model{
         id: "text-embedding-3-small",

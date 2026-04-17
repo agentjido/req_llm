@@ -103,6 +103,20 @@ defmodule ReqLLM.Step.RetryTest do
       refute request.options[:retry_delay]
     end
 
+    test "default_attach preserves an existing finch option" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4")
+
+      request =
+        ReqLLM.Provider.Defaults.default_attach(
+          ReqLLM.Providers.OpenAI,
+          Req.new(finch: :custom_finch),
+          model,
+          api_key: "test-key"
+        )
+
+      assert request.options[:finch] == :custom_finch
+    end
+
     test "retry function correctly identifies retryable errors" do
       {:ok, model} = ReqLLM.model("openai:gpt-4")
 

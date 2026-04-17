@@ -349,7 +349,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
     gcp_creds = Req.Request.get_private(request, :gcp_credentials)
 
     request
-    |> Req.Request.merge_options(finch: ReqLLM.Application.finch_name())
+    |> Req.Request.merge_options(ReqLLM.Provider.Defaults.finch_option(request))
     |> ReqLLM.Step.Error.attach()
     |> ReqLLM.Step.Retry.attach()
     |> Req.Request.append_response_steps(llm_decode_response: &decode_response/1)
@@ -381,7 +381,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
   defp attach_ocr(request, model, gcp_creds, opts) do
     request
-    |> Req.Request.merge_options(finch: ReqLLM.Application.finch_name())
+    |> Req.Request.merge_options(ReqLLM.Provider.Defaults.finch_option(request))
     |> ReqLLM.Step.Error.attach()
     |> ReqLLM.Step.Retry.attach()
     |> ReqLLM.Step.Fixture.maybe_attach(model, opts)
@@ -390,7 +390,7 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
   defp attach_embedding(request, model, gcp_creds, opts) do
     request
-    |> Req.Request.merge_options(finch: ReqLLM.Application.finch_name())
+    |> Req.Request.merge_options(ReqLLM.Provider.Defaults.finch_option(request))
     |> ReqLLM.Step.Error.attach()
     |> ReqLLM.Step.Retry.attach()
     |> ReqLLM.Step.Usage.attach(model)

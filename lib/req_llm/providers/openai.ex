@@ -661,12 +661,10 @@ defmodule ReqLLM.Providers.OpenAI do
     |> maybe_put_authorization_header(credential)
     |> Req.Request.register_options(extra_option_keys)
     |> Req.Request.merge_options(
-      [
-        finch: ReqLLM.Application.finch_name(),
-        model: model.provider_model_id || model.id
-      ] ++
-        auth_req_options(credential) ++
-        user_opts
+      ReqLLM.Provider.Defaults.finch_option(request) ++
+        [
+          model: model.provider_model_id || model.id
+        ] ++ auth_req_options(credential) ++ user_opts
     )
     |> ReqLLM.Step.Retry.attach()
     |> ReqLLM.Step.Error.attach()

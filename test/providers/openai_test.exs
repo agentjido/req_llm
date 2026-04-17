@@ -75,6 +75,16 @@ defmodule ReqLLM.Providers.OpenAITest do
       assert request.method == :post
     end
 
+    test "prepare_request preserves custom finch from req_http_options" do
+      {:ok, model} = ReqLLM.model("openai:gpt-4-turbo")
+      context = context_fixture()
+
+      {:ok, request} =
+        OpenAI.prepare_request(:chat, model, context, req_http_options: [finch: :custom_finch])
+
+      assert request.options[:finch] == :custom_finch
+    end
+
     test "prepare_request routes gpt-4o models to Responses API" do
       {:ok, model} = ReqLLM.model("openai:gpt-4o")
       context = context_fixture()

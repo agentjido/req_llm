@@ -316,7 +316,8 @@ defmodule ReqLLM.Providers.Anthropic do
     |> Req.Request.put_private(:req_llm_model, model)
     |> maybe_add_beta_header(user_opts)
     |> Req.Request.merge_options(
-      [finch: ReqLLM.Application.finch_name(), model: get_api_model_id(model)] ++ user_opts
+      ReqLLM.Provider.Defaults.finch_option(request) ++
+        [model: get_api_model_id(model)] ++ user_opts
     )
     |> ReqLLM.Step.Error.attach()
     |> ReqLLM.Step.Retry.attach(user_opts)

@@ -186,11 +186,11 @@ defmodule ReqLLM.Providers.OpenAICodex do
     |> Req.Request.put_header("originator", originator)
     |> Req.Request.register_options(extra_option_keys)
     |> Req.Request.merge_options(
-      [
-        finch: ReqLLM.Application.finch_name(),
-        model: model.provider_model_id || model.id,
-        auth: {:bearer, credential.token}
-      ] ++ user_opts
+      ReqLLM.Provider.Defaults.finch_option(request) ++
+        [
+          model: model.provider_model_id || model.id,
+          auth: {:bearer, credential.token}
+        ] ++ user_opts
     )
     |> attach_retry(user_opts)
     |> ReqLLM.Step.Error.attach()

@@ -567,12 +567,11 @@ defmodule ReqLLM.Provider.Defaults do
     |> Req.Request.put_header("authorization", "Bearer #{api_key}")
     |> Req.Request.register_options(extra_option_keys)
     |> Req.Request.merge_options(
-      [
-        finch: ReqLLM.Application.finch_name(),
-        model: model.provider_model_id || model.id,
-        auth: {:bearer, api_key}
-      ] ++
-        user_opts
+      finch_option(request) ++
+        [
+          model: model.provider_model_id || model.id,
+          auth: {:bearer, api_key}
+        ] ++ user_opts
     )
     |> ReqLLM.Step.Retry.attach()
     |> ReqLLM.Step.Error.attach()
@@ -581,6 +580,11 @@ defmodule ReqLLM.Provider.Defaults do
     |> ReqLLM.Step.Usage.attach(model)
     |> ReqLLM.Step.Telemetry.attach(model, user_opts)
     |> ReqLLM.Step.Fixture.maybe_attach(model, user_opts)
+  end
+
+  @spec finch_option(Req.Request.t()) :: keyword()
+  def finch_option(%Req.Request{} = request) do
+    [finch: request.options[:finch] || ReqLLM.Application.finch_name()]
   end
 
   @doc """
