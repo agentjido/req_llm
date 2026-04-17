@@ -1341,6 +1341,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       |> Enum.filter(&(&1["type"] in ["output_text", "text"]))
       |> Enum.map(&extract_text_field/1)
     end)
+    |> Enum.uniq()
     |> Enum.join("")
     |> case do
       "" -> nil

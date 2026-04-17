@@ -539,6 +539,60 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert part.text == "Part 1 Part 2"
     end
 
+    test "deduplicates identical commentary and final_answer message segments" do
+      text = "Do you want a shortcut for all users or just the current user?"
+
+      response_body = %{
+        "id" => "resp_123",
+        "model" => "gpt-5.4",
+        "output" => [
+          %{
+            "type" => "message",
+            "phase" => "commentary",
+            "content" => [%{"type" => "output_text", "text" => text}]
+          },
+          %{
+            "type" => "message",
+            "phase" => "final_answer",
+            "content" => [%{"type" => "output_text", "text" => text}]
+          }
+        ],
+        "usage" => %{"input_tokens" => 5, "output_tokens" => 10}
+      }
+
+      {_req, resp} = ResponsesAPI.decode_response(build_response(200, response_body))
+
+      assert [part] = resp.body.message.content
+      assert part.type == :text
+      assert part.text == text
+    end
+
+    test "preserves distinct commentary and final_answer message segments" do
+      response_body = %{
+        "id" => "resp_123",
+        "model" => "gpt-5.4",
+        "output" => [
+          %{
+            "type" => "message",
+            "phase" => "commentary",
+            "content" => [%{"type" => "output_text", "text" => "Let me check that. "}]
+          },
+          %{
+            "type" => "message",
+            "phase" => "final_answer",
+            "content" => [%{"type" => "output_text", "text" => "Here is the result."}]
+          }
+        ],
+        "usage" => %{"input_tokens" => 5, "output_tokens" => 10}
+      }
+
+      {_req, resp} = ResponsesAPI.decode_response(build_response(200, response_body))
+
+      assert [part] = resp.body.message.content
+      assert part.type == :text
+      assert part.text == "Let me check that. Here is the result."
+    end
+
     test "decodes response with direct output_text segments" do
       response_body = %{
         "id" => "resp_123",
