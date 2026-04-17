@@ -67,11 +67,12 @@ defmodule ReqLLM.Providers.GoogleVertex.Gemini do
   def parse_response(body, model, opts) do
     operation = opts[:operation]
     context = opts[:context] || %ReqLLM.Context{messages: []}
+    model_id = model.provider_model_id || model.id || model.model
 
     temp_req = %Req.Request{
       options: %{
         context: context,
-        model: model.model,
+        model: model_id,
         operation: operation,
         stream: false
       }

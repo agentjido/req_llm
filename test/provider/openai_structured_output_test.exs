@@ -188,10 +188,10 @@ defmodule ReqLLM.Providers.OpenAI.StructuredOutputTest do
       assert get_in(model.capabilities, [:json, :schema]) == true
     end
 
-    test "supports_json_schema? returns false for gpt-4o-mini" do
+    test "supports_json_schema? returns true for gpt-4o-mini" do
       {:ok, model} = ReqLLM.model("openai:gpt-4o-mini")
 
-      assert get_in(model.capabilities, [:json, :schema]) == false
+      assert get_in(model.capabilities, [:json, :schema]) == true
     end
 
     test "supports_strict_tools? returns true for gpt-4o-2024-08-06" do
@@ -200,10 +200,10 @@ defmodule ReqLLM.Providers.OpenAI.StructuredOutputTest do
       assert get_in(model.capabilities, [:tools, :strict]) == true
     end
 
-    test "supports_strict_tools? returns false for older models" do
+    test "supports_strict_tools? returns true for gpt-4" do
       {:ok, model} = ReqLLM.model("openai:gpt-4")
 
-      refute get_in(model.capabilities, [:tools, :strict])
+      assert get_in(model.capabilities, [:tools, :strict]) == true
     end
   end
 

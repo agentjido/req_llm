@@ -358,6 +358,36 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
 
       assert response.message.reasoning_details == nil
     end
+
+    test "falls back to model id when legacy model field is nil" do
+      model = %LLMDB.Model{
+        id: "gemini-2.5-flash",
+        model: nil,
+        provider: :google_vertex,
+        capabilities: %{chat: true}
+      }
+
+      gemini_response_body = %{
+        "candidates" => [
+          %{
+            "content" => %{
+              "role" => "model",
+              "parts" => [%{"text" => "Hello from Vertex"}]
+            },
+            "finishReason" => "STOP"
+          }
+        ],
+        "usageMetadata" => %{
+          "promptTokenCount" => 5,
+          "candidatesTokenCount" => 4,
+          "totalTokenCount" => 9
+        }
+      }
+
+      {:ok, response} = Gemini.parse_response(gemini_response_body, model, [])
+
+      assert response.model == "gemini-2.5-flash"
+    end
   end
 
   describe "Sync flow - reasoning_details extraction (Claude on Vertex)" do

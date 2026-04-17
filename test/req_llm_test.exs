@@ -39,6 +39,14 @@ defmodule ReqLLMTest do
       assert get_in(model, [Access.key(:extra, %{}), :wire, :protocol]) == "openai_responses"
     end
 
+    test "fills the legacy model field for sparse catalog models" do
+      {:ok, openai_model} = ReqLLM.model("openai:o1-mini")
+      {:ok, google_model} = ReqLLM.model("google:gemini-1.5-flash")
+
+      assert openai_model.model == "o1-mini"
+      assert google_model.model == "gemini-1.5-flash"
+    end
+
     test "resolves openai_codex string spec via openai catalog fallback" do
       assert {:ok,
               %LLMDB.Model{

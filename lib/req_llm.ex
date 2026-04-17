@@ -446,7 +446,13 @@ defmodule ReqLLM do
     {:error, invalid_inline_model_error(attrs, errors)}
   end
 
-  defp normalize_model_metadata(%LLMDB.Model{provider: :openai} = model) do
+  defp normalize_model_metadata(%LLMDB.Model{} = model) do
+    model
+    |> sync_legacy_model_field()
+    |> do_normalize_model_metadata()
+  end
+
+  defp do_normalize_model_metadata(%LLMDB.Model{provider: :openai} = model) do
     protocol =
       get_in(model, [Access.key(:extra, %{}), :wire, :protocol]) ||
         get_in(model, [Access.key(:extra, %{}), "wire", "protocol"])
@@ -476,17 +482,23 @@ defmodule ReqLLM do
     end
   end
 
-  defp normalize_model_metadata(%LLMDB.Model{provider: :openai_codex} = model) do
+  defp do_normalize_model_metadata(%LLMDB.Model{provider: :openai_codex} = model) do
     extra = model.extra || %{}
     updated_extra = put_wire_protocol(extra, "openai_codex_responses")
     %{model | extra: updated_extra}
   end
 
-  defp normalize_model_metadata(%LLMDB.Model{provider: :google} = model) do
+  defp do_normalize_model_metadata(%LLMDB.Model{provider: :google} = model) do
     normalize_google_pricing(model)
   end
 
-  defp normalize_model_metadata(%LLMDB.Model{} = model), do: model
+  defp do_normalize_model_metadata(%LLMDB.Model{} = model), do: model
+
+  defp sync_legacy_model_field(%LLMDB.Model{id: id, model: nil} = model) when is_binary(id) do
+    %{model | model: id}
+  end
+
+  defp sync_legacy_model_field(%LLMDB.Model{} = model), do: model
 
   defp normalize_google_pricing(%LLMDB.Model{id: model_id} = model) do
     case Map.get(@google_tiered_token_pricing, model_id) do
