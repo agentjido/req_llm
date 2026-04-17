@@ -1336,18 +1336,27 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
   defp extract_from_message_segments(segments) do
     segments
     |> Enum.filter(&(&1["type"] == "message"))
+    |> dedupe_phased_messages()
     |> Enum.flat_map(fn seg ->
       (seg["content"] || [])
       |> Enum.filter(&(&1["type"] in ["output_text", "text"]))
       |> Enum.map(&extract_text_field/1)
     end)
-    |> Enum.uniq()
     |> Enum.join("")
     |> case do
       "" -> nil
       text -> text
     end
   end
+
+  defp dedupe_phased_messages([
+         %{"phase" => "commentary", "content" => content} = commentary,
+         %{"phase" => "final_answer", "content" => content} | rest
+       ]) do
+    [%{commentary | "phase" => "final_answer"} | rest]
+  end
+
+  defp dedupe_phased_messages(messages), do: messages
 
   defp extract_direct_output_text(segments) do
     segments
