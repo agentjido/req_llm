@@ -15,7 +15,8 @@ defmodule ReqLLM.Embedding do
       {:ok, %{embedding: vectors, usage: usage}} =
         ReqLLM.embed("openai:text-embedding-3-small", "Hello", return_usage: true)
 
-  Usage availability depends on provider support.
+  Usage maps include canonical token fields and, when model pricing is
+  available, flat cost fields such as `total_cost`.
   """
 
   alias LLMDB.Model
@@ -192,7 +193,8 @@ defmodule ReqLLM.Embedding do
         "Hello world",
         return_usage: true
       )
-      #=> {:ok, %{embedding: [0.1, ...], usage: %{input_tokens: 2, total_tokens: 2}}}
+      Map.has_key?(usage, :total_cost)
+      #=> true
 
   """
   @spec embed(
@@ -309,8 +311,19 @@ defmodule ReqLLM.Embedding do
 
   defp extract_usage(%Req.Response{private: private}) do
     case get_in(private, [:req_llm, :usage]) do
-      %{tokens: tokens} -> tokens
-      _ -> nil
+      %{tokens: tokens} = usage_meta when is_map(tokens) ->
+        usage_meta
+        |> Map.take([:input_cost, :output_cost, :reasoning_cost, :total_cost])
+        |> Enum.reduce(tokens, fn
+          {_key, nil}, acc -> acc
+          {key, value}, acc -> Map.put(acc, key, value)
+        end)
+
+      usage when is_map(usage) ->
+        usage
+
+      _ ->
+        nil
     end
   end
 end

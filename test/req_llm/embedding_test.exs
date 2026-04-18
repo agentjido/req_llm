@@ -228,6 +228,54 @@ defmodule ReqLLM.EmbeddingTest do
     end
   end
 
+  describe "embed/3 - OpenAI cost metadata" do
+    setup do
+      Req.Test.stub(__MODULE__.OpenAIEmbedUsage, fn conn ->
+        Req.Test.json(conn, %{
+          "data" => [
+            %{
+              "embedding" => [0.1, -0.2, 0.3],
+              "index" => 0,
+              "object" => "embedding"
+            }
+          ],
+          "model" => "text-embedding-3-small",
+          "object" => "list",
+          "usage" => %{
+            "prompt_tokens" => 50_000,
+            "total_tokens" => 50_000
+          }
+        })
+      end)
+
+      :ok
+    end
+
+    test "returns canonical usage with cost fields" do
+      {:ok, %{embedding: embedding, usage: usage}} =
+        Embedding.embed(
+          "openai:text-embedding-3-small",
+          "Hello world",
+          api_key: "test-key",
+          return_usage: true,
+          req_http_options: [plug: {Req.Test, __MODULE__.OpenAIEmbedUsage}]
+        )
+
+      assert embedding == [0.1, -0.2, 0.3]
+      assert usage.input == 50_000
+      assert usage.input_tokens == 50_000
+      assert usage.output == 0
+      assert usage.output_tokens == 0
+      assert usage.total_tokens == 50_000
+      assert is_number(usage.input_cost)
+      assert is_number(usage.output_cost)
+      assert is_number(usage.reasoning_cost)
+      assert is_number(usage.total_cost)
+      assert usage.input_cost > 0
+      assert usage.total_cost > 0
+    end
+  end
+
   describe "embed_many/3 - basic functionality" do
     test "validates model before attempting embedding" do
       case Embedding.validate_model("openai:text-embedding-3-small") do

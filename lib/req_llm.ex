@@ -1172,6 +1172,7 @@ defmodule ReqLLM do
 
     * `:dimensions` - Number of dimensions for embeddings
     * `:provider_options` - Provider-specific options
+    * `:return_usage` - Return `%{embedding: vectors, usage: usage_map}` with token and cost metadata
 
   ## Examples
 
@@ -1185,6 +1186,13 @@ defmodule ReqLLM do
         ["Hello", "World"]
       )
       #=> {:ok, [[0.1, -0.2, ...], [0.3, 0.4, ...]]}
+
+      # With usage and cost data
+      {:ok, %{embedding: embedding, usage: usage}} =
+        ReqLLM.embed("openai:text-embedding-3-small", "Hello world", return_usage: true)
+
+      Map.has_key?(usage, :total_cost)
+      #=> true
 
   """
   defdelegate embed(model_spec, input, opts \\ []), to: Embedding
