@@ -243,8 +243,21 @@ defmodule ReqLLM.Providers.Azure.Anthropic do
   Delegates to native Anthropic SSE event parsing since Azure uses the same
   streaming format.
   """
+  def init_stream_state do
+    Anthropic.Response.init_stream_state()
+  end
+
   def decode_stream_event(event, model) do
     Anthropic.Response.decode_stream_event(event, model)
+  end
+
+  def decode_stream_event(event, model, state) do
+    Anthropic.Response.decode_stream_event(event, model, state)
+  end
+
+  def flush_stream_state(state) do
+    model = LLMDB.Model.new!(%{id: "azure-anthropic", provider: :anthropic})
+    Anthropic.Response.flush_stream_state(model, state)
   end
 
   @doc """

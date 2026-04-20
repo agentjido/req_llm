@@ -749,6 +749,16 @@ defmodule ReqLLM.Providers.Azure do
   Delegates to the appropriate model-family formatter for SSE parsing.
   """
   @impl ReqLLM.Provider
+  def init_stream_state(model) do
+    model_id = effective_model_id(model)
+    formatter = get_formatter(model_id, model)
+
+    if function_exported?(formatter, :init_stream_state, 0) do
+      formatter.init_stream_state()
+    end
+  end
+
+  @impl ReqLLM.Provider
   def decode_stream_event(event, model) do
     {chunks, _state} = decode_stream_event(event, model, nil)
     chunks
@@ -764,6 +774,18 @@ defmodule ReqLLM.Providers.Azure do
     else
       chunks = formatter.decode_stream_event(event, model)
       {chunks, state}
+    end
+  end
+
+  @impl ReqLLM.Provider
+  def flush_stream_state(model, state) do
+    model_id = effective_model_id(model)
+    formatter = get_formatter(model_id, model)
+
+    if function_exported?(formatter, :flush_stream_state, 1) do
+      formatter.flush_stream_state(state)
+    else
+      {[], state}
     end
   end
 

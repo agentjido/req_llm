@@ -517,6 +517,68 @@ defmodule ReqLLM.Providers.Azure.StreamingTest do
   end
 
   describe "Claude extended thinking in streaming" do
+    test "signature_delta finalizes a single reasoning detail for Azure Claude" do
+      model = %LLMDB.Model{
+        id: "claude-3-5-sonnet-20241022",
+        provider: :azure,
+        capabilities: %{chat: true, reasoning: %{enabled: true}}
+      }
+
+      events = [
+        %{
+          data: %{
+            "type" => "content_block_start",
+            "index" => 0,
+            "content_block" => %{"type" => "thinking", "thinking" => "", "signature" => ""}
+          }
+        },
+        %{
+          data: %{
+            "type" => "content_block_delta",
+            "index" => 0,
+            "delta" => %{"type" => "thinking_delta", "thinking" => "First part "}
+          }
+        },
+        %{
+          data: %{
+            "type" => "content_block_delta",
+            "index" => 0,
+            "delta" => %{"type" => "thinking_delta", "thinking" => "second part"}
+          }
+        },
+        %{
+          data: %{
+            "type" => "content_block_delta",
+            "index" => 0,
+            "delta" => %{"type" => "signature_delta", "signature" => "sig_test_123"}
+          }
+        },
+        %{data: %{"type" => "content_block_stop", "index" => 0}}
+      ]
+
+      {chunks, _state} =
+        Enum.reduce(events, {[], Azure.init_stream_state(model)}, fn event, {acc, state} ->
+          {event_chunks, next_state} = Azure.decode_stream_event(event, model, state)
+          {acc ++ event_chunks, next_state}
+        end)
+
+      assert Enum.filter(chunks, &(&1.type == :thinking)) |> Enum.map(& &1.text) == [
+               "First part ",
+               "second part"
+             ]
+
+      reasoning_chunks =
+        Enum.filter(chunks, fn
+          %ReqLLM.StreamChunk{type: :meta, metadata: %{reasoning_details: [_detail]}} -> true
+          _ -> false
+        end)
+
+      assert [%ReqLLM.StreamChunk{metadata: %{reasoning_details: [detail]}}] = reasoning_chunks
+      assert detail.text == "First part second part"
+      assert detail.signature == "sig_test_123"
+      assert detail.provider == :anthropic
+    end
+
     test "thinking_delta event returns thinking chunk" do
       model = %LLMDB.Model{
         id: "claude-3-5-sonnet-20241022",

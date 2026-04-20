@@ -1536,7 +1536,7 @@ defmodule ReqLLM.Providers.AzureTest do
       assert second.index == 1
     end
 
-    test "extracts reasoning_details from thinking chunks for Claude models on Azure" do
+    test "prefers finalized reasoning_details from meta chunks for Claude models on Azure" do
       model = %LLMDB.Model{
         id: "claude-3-5-sonnet-20241022",
         provider: :azure,
@@ -1545,15 +1545,20 @@ defmodule ReqLLM.Providers.AzureTest do
 
       context = %ReqLLM.Context{messages: []}
 
-      thinking_meta = %{
+      reasoning_detail = %ReqLLM.Message.ReasoningDetails{
+        text: "Let me think through this carefully",
+        signature: "sig_azure_123",
+        encrypted?: true,
         provider: :anthropic,
         format: "anthropic-thinking-v1",
-        encrypted?: false,
+        index: 0,
         provider_data: %{"type" => "thinking"}
       }
 
       chunks = [
-        ReqLLM.StreamChunk.thinking("Let me think through this", thinking_meta),
+        ReqLLM.StreamChunk.thinking("Let me think through"),
+        ReqLLM.StreamChunk.thinking(" this carefully"),
+        ReqLLM.StreamChunk.meta(%{reasoning_details: [reasoning_detail]}),
         ReqLLM.StreamChunk.text("Here is my answer.")
       ]
 
@@ -1566,10 +1571,55 @@ defmodule ReqLLM.Providers.AzureTest do
       assert length(response.message.reasoning_details) == 1
 
       [first] = response.message.reasoning_details
-      assert first.text == "Let me think through this"
+      assert first.text == reasoning_detail.text
+      assert first.signature == "sig_azure_123"
       assert first.provider == :anthropic
       assert first.format == "anthropic-thinking-v1"
       assert first.index == 0
+    end
+
+    test "Claude streamed reasoning round-trips into Anthropic request blocks on Azure" do
+      alias ReqLLM.Providers.Azure.Anthropic, as: AzureAnthropic
+
+      model = %LLMDB.Model{
+        id: "claude-3-5-sonnet-20241022",
+        provider: :azure,
+        capabilities: %{chat: true}
+      }
+
+      context = %ReqLLM.Context{messages: []}
+
+      reasoning_detail = %ReqLLM.Message.ReasoningDetails{
+        text: "Let me think through this carefully",
+        signature: "sig_azure_123",
+        encrypted?: true,
+        provider: :anthropic,
+        format: "anthropic-thinking-v1",
+        index: 0,
+        provider_data: %{"type" => "thinking"}
+      }
+
+      chunks = [
+        ReqLLM.StreamChunk.thinking("Let me think through"),
+        ReqLLM.StreamChunk.thinking(" this carefully"),
+        ReqLLM.StreamChunk.meta(%{reasoning_details: [reasoning_detail]}),
+        ReqLLM.StreamChunk.text("Here is my answer.")
+      ]
+
+      {:ok, response} =
+        ResponseBuilder.build_response(chunks, %{finish_reason: :stop},
+          context: context,
+          model: model
+        )
+
+      body = AzureAnthropic.format_request(model.id, response.context, [])
+      [assistant_message] = body.messages
+      [thinking_block, text_block] = assistant_message[:content]
+
+      assert thinking_block[:type] == "thinking"
+      assert thinking_block[:thinking] == "Let me think through this carefully"
+      assert thinking_block[:signature] == "sig_azure_123"
+      assert text_block == %{type: "text", text: "Here is my answer."}
     end
 
     test "returns nil reasoning_details when no thinking chunks" do
