@@ -86,7 +86,8 @@ defmodule ReqLLM.Provider.ResponseBuilder do
   Routes to provider-specific builders based on model metadata:
 
     * Anthropic models → `Anthropic.ResponseBuilder`
-    * Google/Vertex models → `Google.ResponseBuilder`
+    * Google/Gemini models → `Google.ResponseBuilder`
+    * Vertex Claude models → `Anthropic.ResponseBuilder`
     * OpenAI Responses API models → `OpenAI.ResponsesAPI.ResponseBuilder`
     * All others → `Provider.Defaults.ResponseBuilder`
 
@@ -107,8 +108,13 @@ defmodule ReqLLM.Provider.ResponseBuilder do
 
   def for_model(%LLMDB.Model{provider: :google}), do: ReqLLM.Providers.Google.ResponseBuilder
 
-  def for_model(%LLMDB.Model{provider: :google_vertex}),
-    do: ReqLLM.Providers.Google.ResponseBuilder
+  def for_model(%LLMDB.Model{provider: :google_vertex} = model) do
+    if vertex_claude_model?(model) do
+      ReqLLM.Providers.Anthropic.ResponseBuilder
+    else
+      ReqLLM.Providers.Google.ResponseBuilder
+    end
+  end
 
   def for_model(%LLMDB.Model{extra: %{wire: %{protocol: "openai_responses"}}}),
     do: ReqLLM.Providers.OpenAI.ResponsesAPI.ResponseBuilder
@@ -117,4 +123,13 @@ defmodule ReqLLM.Provider.ResponseBuilder do
     do: ReqLLM.Providers.OpenAI.ResponsesAPI.ResponseBuilder
 
   def for_model(_model), do: ReqLLM.Provider.Defaults.ResponseBuilder
+
+  defp vertex_claude_model?(%LLMDB.Model{} = model) do
+    model_id = model.provider_model_id || model.id || ""
+    extra = model.extra || %{}
+    extra_family = extra[:family]
+
+    String.starts_with?(model_id, "claude-") or
+      (is_binary(extra_family) and String.starts_with?(extra_family, "claude"))
+  end
 end

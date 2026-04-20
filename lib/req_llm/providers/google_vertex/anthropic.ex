@@ -140,6 +140,36 @@ defmodule ReqLLM.Providers.GoogleVertex.Anthropic do
   end
 
   @doc """
+  Decodes Server-Sent Events for streaming responses.
+
+  Vertex Claude uses Anthropic's native SSE format.
+  """
+  def decode_stream_event(event, model) do
+    Anthropic.Response.decode_stream_event(event, model)
+  end
+
+  @doc """
+  Initializes streaming state for Claude thinking blocks.
+  """
+  def init_stream_state do
+    Anthropic.Response.init_stream_state()
+  end
+
+  @doc """
+  Decodes Server-Sent Events with stateful thinking-block assembly.
+  """
+  def decode_stream_event(event, model, state) do
+    Anthropic.Response.decode_stream_event(event, model, state)
+  end
+
+  @doc """
+  Flushes any buffered streaming thinking blocks.
+  """
+  def flush_stream_state(model, state) do
+    Anthropic.Response.flush_stream_state(model, state)
+  end
+
+  @doc """
   Extracts usage metadata from the response body.
 
   Delegates to the native Anthropic provider.

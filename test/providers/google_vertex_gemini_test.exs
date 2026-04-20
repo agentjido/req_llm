@@ -460,6 +460,116 @@ defmodule ReqLLM.Providers.GoogleVertex.GeminiTest do
     end
   end
 
+  describe "streaming reasoning_details extraction (Claude on Vertex)" do
+    alias ReqLLM.Provider.ResponseBuilder
+    alias ReqLLM.Providers.GoogleVertex
+    alias ReqLLM.Providers.GoogleVertex.Anthropic, as: VertexAnthropic
+
+    test "decode_stream_event/3 preserves a single Anthropic reasoning detail" do
+      {:ok, model} = ReqLLM.model("google_vertex:claude-haiku-4-5@20251001")
+
+      events = [
+        %{
+          data: %{
+            "type" => "content_block_start",
+            "index" => 0,
+            "content_block" => %{"type" => "thinking", "thinking" => "", "signature" => ""}
+          }
+        },
+        %{
+          data: %{
+            "type" => "content_block_delta",
+            "index" => 0,
+            "delta" => %{"type" => "thinking_delta", "thinking" => "First part "}
+          }
+        },
+        %{
+          data: %{
+            "type" => "content_block_delta",
+            "index" => 0,
+            "delta" => %{"type" => "thinking_delta", "thinking" => "second part"}
+          }
+        },
+        %{
+          data: %{
+            "type" => "content_block_delta",
+            "index" => 0,
+            "delta" => %{"type" => "signature_delta", "signature" => "sig_test_123"}
+          }
+        },
+        %{data: %{"type" => "content_block_stop", "index" => 0}}
+      ]
+
+      {chunks, _state} =
+        Enum.reduce(events, {[], GoogleVertex.init_stream_state(model)}, fn event, {acc, state} ->
+          {event_chunks, next_state} = GoogleVertex.decode_stream_event(event, model, state)
+          {acc ++ event_chunks, next_state}
+        end)
+
+      assert Enum.filter(chunks, &(&1.type == :thinking)) |> Enum.map(& &1.text) == [
+               "First part ",
+               "second part"
+             ]
+
+      reasoning_chunks =
+        Enum.filter(chunks, fn
+          %ReqLLM.StreamChunk{type: :meta, metadata: %{reasoning_details: [_detail]}} -> true
+          _ -> false
+        end)
+
+      assert [%ReqLLM.StreamChunk{metadata: %{reasoning_details: [detail]}}] = reasoning_chunks
+      assert detail.text == "First part second part"
+      assert detail.signature == "sig_test_123"
+      assert detail.provider == :anthropic
+      assert detail.format == "anthropic-thinking-v1"
+      assert detail.index == 0
+    end
+
+    test "streamed reasoning round-trips into a single Anthropic thinking block" do
+      {:ok, model} = ReqLLM.model("google_vertex:claude-haiku-4-5@20251001")
+      context = %ReqLLM.Context{messages: []}
+
+      chunks = [
+        ReqLLM.StreamChunk.thinking("First part "),
+        ReqLLM.StreamChunk.thinking("second part"),
+        ReqLLM.StreamChunk.meta(%{
+          reasoning_details: [
+            %ReqLLM.Message.ReasoningDetails{
+              text: "First part second part",
+              signature: "sig_test_123",
+              encrypted?: true,
+              provider: :anthropic,
+              format: "anthropic-thinking-v1",
+              index: 0,
+              provider_data: %{"type" => "thinking"}
+            }
+          ]
+        }),
+        ReqLLM.StreamChunk.text("Answer: 42")
+      ]
+
+      builder = ResponseBuilder.for_model(model)
+      assert builder == ReqLLM.Providers.Anthropic.ResponseBuilder
+
+      {:ok, response} =
+        builder.build_response(chunks, %{finish_reason: :stop}, context: context, model: model)
+
+      assert [detail] = response.message.reasoning_details
+      assert detail.text == "First part second part"
+      assert detail.signature == "sig_test_123"
+      assert detail.provider == :anthropic
+
+      encoded = VertexAnthropic.format_request(model.id, response.context, model: model.id)
+      [assistant_message] = encoded[:messages]
+      [thinking_block, text_block] = assistant_message[:content]
+
+      assert thinking_block[:type] == "thinking"
+      assert thinking_block[:thinking] == "First part second part"
+      assert thinking_block[:signature] == "sig_test_123"
+      assert text_block == %{type: "text", text: "Answer: 42"}
+    end
+  end
+
   describe "option translation for Gemini thinking" do
     alias ReqLLM.Providers.GoogleVertex
 

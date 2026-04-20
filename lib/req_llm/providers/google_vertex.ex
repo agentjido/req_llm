@@ -929,16 +929,53 @@ defmodule ReqLLM.Providers.GoogleVertex do
 
   @impl ReqLLM.Provider
   def decode_stream_event(event, model) do
-    # Get formatter for this model
     formatter = get_formatter(model)
 
-    # Delegate SSE parsing to formatter
-    # For Anthropic models, Vertex uses standard Anthropic SSE format
     if function_exported?(formatter, :decode_stream_event, 2) do
       formatter.decode_stream_event(event, model)
     else
-      # Fall back to Anthropic's stream decoder for models using that format
       ReqLLM.Providers.Anthropic.Response.decode_stream_event(event, model)
+    end
+  end
+
+  @impl ReqLLM.Provider
+  def init_stream_state(model) do
+    formatter = get_formatter(model)
+
+    if function_exported?(formatter, :init_stream_state, 0) do
+      formatter.init_stream_state()
+    end
+  end
+
+  @impl ReqLLM.Provider
+  def decode_stream_event(event, model, state) do
+    formatter = get_formatter(model)
+
+    cond do
+      function_exported?(formatter, :decode_stream_event, 3) ->
+        formatter.decode_stream_event(event, model, state)
+
+      function_exported?(formatter, :decode_stream_event, 2) ->
+        {formatter.decode_stream_event(event, model), state}
+
+      true ->
+        ReqLLM.Providers.Anthropic.Response.decode_stream_event(event, model, state)
+    end
+  end
+
+  @impl ReqLLM.Provider
+  def flush_stream_state(model, state) do
+    formatter = get_formatter(model)
+
+    cond do
+      function_exported?(formatter, :flush_stream_state, 2) ->
+        formatter.flush_stream_state(model, state)
+
+      function_exported?(formatter, :flush_stream_state, 1) ->
+        formatter.flush_stream_state(state)
+
+      true ->
+        {[], state}
     end
   end
 
