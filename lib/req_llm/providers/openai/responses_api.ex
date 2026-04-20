@@ -519,24 +519,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
             # most recent round's outputs were appended, which caused
             # "No tool output found for function call" errors on multi-turn
             # tool calling with the Responses API.
-            output =
-              case ReqLLM.ToolResult.output_from_message(msg) do
-                nil -> extract_tool_output_text(msg.content)
-                value -> value
-              end
-
-            output_string =
-              cond do
-                is_binary(output) -> output
-                is_map(output) or is_list(output) -> Jason.encode!(output)
-                true -> to_string(output)
-              end
-
-            encoded = %{
-              "type" => "function_call_output",
-              "call_id" => msg.tool_call_id,
-              "output" => output_string
-            }
+            encoded = encode_tool_message_inline(msg)
 
             {input_acc ++ [encoded], tool_acc, reasoning_acc}
 
@@ -639,6 +622,50 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
       body
     end
   end
+
+  defp encode_tool_message_inline(%ReqLLM.Message{role: :tool} = msg) do
+    if has_image_content?(msg.content) do
+      output_parts =
+        Enum.flat_map(msg.content, fn part ->
+          encode_input_content_part(part, "input_text")
+        end)
+
+      %{
+        "type" => "function_call_output",
+        "call_id" => msg.tool_call_id,
+        "output" => output_parts
+      }
+    else
+      output =
+        case ReqLLM.ToolResult.output_from_message(msg) do
+          nil -> extract_tool_output_text(msg.content)
+          value -> value
+        end
+
+      output_string =
+        cond do
+          is_binary(output) -> output
+          is_map(output) or is_list(output) -> Jason.encode!(output)
+          true -> to_string(output)
+        end
+
+      %{
+        "type" => "function_call_output",
+        "call_id" => msg.tool_call_id,
+        "output" => output_string
+      }
+    end
+  end
+
+  defp has_image_content?(content) when is_list(content) do
+    Enum.any?(content, fn
+      %ReqLLM.Message.ContentPart{type: :image} -> true
+      %ReqLLM.Message.ContentPart{type: :image_url} -> true
+      _ -> false
+    end)
+  end
+
+  defp has_image_content?(_), do: false
 
   defp encode_input_content_part(%ReqLLM.Message.ContentPart{type: :text, text: text}, type) do
     [%{"type" => type, "text" => text}]

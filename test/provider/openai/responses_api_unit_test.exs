@@ -215,6 +215,49 @@ defmodule Provider.OpenAI.ResponsesAPIUnitTest do
       assert Jason.decode!(tool_output["output"]) == %{"temp" => 72}
     end
 
+    test "encodes multimodal tool results as array function_call_output" do
+      tool_call = %ReqLLM.ToolCall{
+        id: "call_1",
+        type: "function",
+        function: %{name: "take_screenshot", arguments: ~s({})}
+      }
+
+      assistant_msg = %ReqLLM.Message{
+        role: :assistant,
+        content: [],
+        tool_calls: [tool_call]
+      }
+
+      tool_result =
+        ReqLLM.Context.tool_result("call_1", [
+          ReqLLM.Message.ContentPart.text("Captured screenshot"),
+          ReqLLM.Message.ContentPart.image(<<137, 80, 78, 71>>, "image/png")
+        ])
+
+      context = %ReqLLM.Context{messages: [assistant_msg, tool_result]}
+      request = build_request(context: context)
+
+      encoded = ResponsesAPI.encode_body(request)
+      body = Jason.decode!(encoded.body)
+
+      tool_output =
+        Enum.find(body["input"], fn item ->
+          item["type"] == "function_call_output"
+        end)
+
+      assert tool_output["call_id"] == "call_1"
+      assert is_list(tool_output["output"])
+
+      assert Enum.any?(tool_output["output"], fn part ->
+               part["type"] == "input_text" and part["text"] == "Captured screenshot"
+             end)
+
+      assert Enum.any?(tool_output["output"], fn part ->
+               part["type"] == "input_image" and
+                 String.starts_with?(part["image_url"], "data:image/png;base64,")
+             end)
+    end
+
     test "encodes specific tool choice with atom keys" do
       request =
         build_request(tool_choice: %{type: "function", function: %{name: "get_weather"}})
