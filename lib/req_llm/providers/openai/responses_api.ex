@@ -661,6 +661,7 @@ defmodule ReqLLM.Providers.OpenAI.ResponsesAPI do
     Enum.any?(content, fn
       %ReqLLM.Message.ContentPart{type: :image} -> true
       %ReqLLM.Message.ContentPart{type: :image_url} -> true
+      %ReqLLM.Message.ContentPart{type: :file} -> true
       _ -> false
     end)
   end
