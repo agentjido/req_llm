@@ -311,6 +311,117 @@ defmodule ReqLLM.Providers.AmazonBedrockTest do
     end
   end
 
+  describe "decode_stream_event/3" do
+    test "emits one reasoning detail for a native Anthropic thinking block" do
+      model =
+        LLMDB.Model.new!(%{
+          id: "anthropic.claude-3-haiku-20240307-v1:0",
+          provider: :amazon_bedrock
+        })
+
+      events = [
+        %{
+          "type" => "content_block_start",
+          "index" => 0,
+          "content_block" => %{"type" => "thinking", "thinking" => "", "signature" => ""}
+        },
+        %{
+          "type" => "content_block_delta",
+          "index" => 0,
+          "delta" => %{"type" => "thinking_delta", "thinking" => "First part "}
+        },
+        %{
+          "type" => "content_block_delta",
+          "index" => 0,
+          "delta" => %{"type" => "thinking_delta", "thinking" => "second part"}
+        },
+        %{
+          "type" => "content_block_delta",
+          "index" => 0,
+          "delta" => %{"type" => "signature_delta", "signature" => "sig_test_123"}
+        },
+        %{"type" => "content_block_stop", "index" => 0}
+      ]
+
+      {chunks, _state} =
+        Enum.reduce(events, {[], AmazonBedrock.init_stream_state(model)}, fn event,
+                                                                             {acc, state} ->
+          {event_chunks, next_state} = AmazonBedrock.decode_stream_event(event, model, state)
+          {acc ++ event_chunks, next_state}
+        end)
+
+      assert Enum.filter(chunks, &(&1.type == :thinking)) |> Enum.map(& &1.text) == [
+               "First part ",
+               "second part"
+             ]
+
+      reasoning_chunks =
+        Enum.filter(chunks, fn
+          %ReqLLM.StreamChunk{type: :meta, metadata: %{reasoning_details: [_detail]}} -> true
+          _ -> false
+        end)
+
+      assert [%ReqLLM.StreamChunk{metadata: %{reasoning_details: [detail]}}] = reasoning_chunks
+      assert detail.text == "First part second part"
+      assert detail.signature == "sig_test_123"
+      assert detail.provider == :anthropic
+      assert detail.format == "anthropic-thinking-v1"
+      assert detail.index == 0
+    end
+
+    test "native Anthropic streamed reasoning round-trips into a single thinking block" do
+      model =
+        LLMDB.Model.new!(%{
+          id: "anthropic.claude-3-haiku-20240307-v1:0",
+          provider: :amazon_bedrock
+        })
+
+      context = %ReqLLM.Context{messages: []}
+
+      chunks = [
+        ReqLLM.StreamChunk.thinking("First part "),
+        ReqLLM.StreamChunk.thinking("second part"),
+        ReqLLM.StreamChunk.meta(%{
+          reasoning_details: [
+            %ReqLLM.Message.ReasoningDetails{
+              text: "First part second part",
+              signature: "sig_test_123",
+              encrypted?: true,
+              provider: :anthropic,
+              format: "anthropic-thinking-v1",
+              index: 0,
+              provider_data: %{"type" => "thinking"}
+            }
+          ]
+        }),
+        ReqLLM.StreamChunk.text("Answer: 42")
+      ]
+
+      builder = ReqLLM.Provider.ResponseBuilder.for_model(model)
+
+      {:ok, response} =
+        builder.build_response(chunks, %{finish_reason: :stop}, context: context, model: model)
+
+      assert [detail] = response.message.reasoning_details
+      assert detail.text == "First part second part"
+      assert detail.signature == "sig_test_123"
+      assert detail.provider == :anthropic
+
+      encoded =
+        ReqLLM.Providers.AmazonBedrock.Anthropic.format_request(model.id, response.context,
+          model: model.id
+        )
+
+      [assistant_message] = encoded[:messages]
+      [thinking_block, text_block] = assistant_message[:content]
+
+      assert thinking_block[:type] == "thinking"
+      assert thinking_block[:thinking] == "First part second part"
+      assert thinking_block[:signature] == "sig_test_123"
+      assert text_block == %{type: "text", text: "Answer: 42"}
+    end
+  end
+
   describe "AWS session token support" do
     test "includes session token in signed Req request headers" do
       # Test non-streaming path (Req pipeline via put_aws_sigv4)

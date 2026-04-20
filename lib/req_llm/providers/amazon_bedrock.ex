@@ -656,16 +656,6 @@ defmodule ReqLLM.Providers.AmazonBedrock do
 
   @impl ReqLLM.Provider
   def decode_stream_event(event, model) when is_map(event) do
-    # Decode AWS event stream events into StreamChunks
-    # This is called after parse_stream_protocol returns events
-    #
-    # Detect the correct formatter from the event format rather than assuming
-    # based on model ID. The request path (attach_stream) decides whether to use
-    # Converse or InvokeModel API via determine_use_converse/2, but that context
-    # isn't available here. Instead, detect from the event structure:
-    #
-    # - Converse API events use camelCase keys: "contentBlockDelta", "messageStart", etc.
-    # - InvokeModel/native API events use "type" field: "content_block_delta", "message_start", etc.
     model_id = model.provider_model_id || model.id
 
     formatter =
@@ -676,15 +666,52 @@ defmodule ReqLLM.Providers.AmazonBedrock do
         get_formatter_module(model_family)
       end
 
-    case formatter.parse_stream_chunk(event, %{}) do
-      {:ok, nil} -> []
-      {:ok, chunk} -> [chunk]
-      {:error, _} -> []
-    end
+    decode_formatter_stream_event(formatter, event)
   end
 
   def decode_stream_event(_data, _model) do
     []
+  end
+
+  @impl ReqLLM.Provider
+  def init_stream_state(model) do
+    model_id = model.provider_model_id || model.id
+
+    case get_model_family(model_id) do
+      "anthropic" -> ReqLLM.Providers.Anthropic.Response.init_stream_state()
+      _ -> nil
+    end
+  end
+
+  @impl ReqLLM.Provider
+  def decode_stream_event(event, model, state) when is_map(event) do
+    model_id = model.provider_model_id || model.id
+
+    cond do
+      converse_event?(event) ->
+        {decode_formatter_stream_event(ReqLLM.Providers.AmazonBedrock.Converse, event), state}
+
+      get_model_family(model_id) == "anthropic" ->
+        ReqLLM.Providers.Anthropic.Response.decode_stream_event(%{data: event}, model, state)
+
+      true ->
+        formatter = get_formatter_module(get_model_family(model_id))
+        {decode_formatter_stream_event(formatter, event), state}
+    end
+  end
+
+  def decode_stream_event(_event, _model, state) do
+    {[], state}
+  end
+
+  @impl ReqLLM.Provider
+  def flush_stream_state(model, state) do
+    model_id = model.provider_model_id || model.id
+
+    case get_model_family(model_id) do
+      "anthropic" -> ReqLLM.Providers.Anthropic.Response.flush_stream_state(model, state)
+      _ -> {[], state}
+    end
   end
 
   # Note: pre_validate_options is not yet a formal Provider callback
@@ -733,6 +760,14 @@ defmodule ReqLLM.Providers.AmazonBedrock do
   @converse_event_keys ~w(contentBlockDelta contentBlockStart contentBlockStop messageStart messageStop metadata)
   defp converse_event?(event) when is_map(event) do
     Enum.any?(@converse_event_keys, &Map.has_key?(event, &1))
+  end
+
+  defp decode_formatter_stream_event(formatter, event) do
+    case formatter.parse_stream_chunk(event, %{}) do
+      {:ok, nil} -> []
+      {:ok, chunk} -> [chunk]
+      {:error, _} -> []
+    end
   end
 
   @impl ReqLLM.Provider
