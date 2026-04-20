@@ -34,6 +34,8 @@ defmodule ReqLLM.Providers.Anthropic.Response do
 
   """
 
+  alias ReqLLM.Message.ReasoningDetails
+
   @doc """
   Decode Anthropic response data to ReqLLM.Response.
   """
@@ -129,6 +131,56 @@ defmodule ReqLLM.Providers.Anthropic.Response do
 
   def decode_stream_event(_, _model), do: []
 
+  @doc false
+  def init_stream_state do
+    %{thinking_blocks: %{}, next_reasoning_index: 0}
+  end
+
+  @doc false
+  @spec decode_stream_event(map(), LLMDB.Model.t(), map() | nil) ::
+          {[ReqLLM.StreamChunk.t()], map()}
+  def decode_stream_event(%{data: data}, _model, state) when is_map(data) do
+    state = ensure_stream_state(state)
+
+    case data do
+      %{"type" => "message_start", "message" => message} ->
+        {message_start_chunks(message), state}
+
+      %{"type" => "content_block_delta", "index" => index, "delta" => delta} ->
+        decode_content_block_delta(delta, index, state)
+
+      %{"type" => "content_block_start", "index" => index, "content_block" => block} ->
+        decode_content_block_start(block, index, state)
+
+      %{"type" => "content_block_stop", "index" => index} ->
+        finalize_thinking_block(index, state)
+
+      %{"type" => "message_stop"} ->
+        {[ReqLLM.StreamChunk.meta(%{terminal?: true})], state}
+
+      %{"type" => "message_delta", "delta" => delta} ->
+        {message_delta_chunks(data, delta), state}
+
+      %{"type" => "ping"} ->
+        {[ReqLLM.StreamChunk.meta(%{keepalive?: true, provider_event: :ping})], state}
+
+      _ ->
+        {[], state}
+    end
+  end
+
+  def decode_stream_event(_event, _model, state) do
+    {[], ensure_stream_state(state)}
+  end
+
+  @doc false
+  @spec flush_stream_state(LLMDB.Model.t(), map() | nil) :: {[ReqLLM.StreamChunk.t()], map()}
+  def flush_stream_state(_model, state) do
+    state = ensure_stream_state(state)
+    {details, state} = drain_thinking_blocks(state)
+    {reasoning_detail_chunks(details), state}
+  end
+
   # Private helper functions
 
   defp decode_content([]), do: []
@@ -188,6 +240,31 @@ defmodule ReqLLM.Providers.Anthropic.Response do
 
   defp decode_content_block_delta(_, _index), do: []
 
+  defp decode_content_block_delta(%{"type" => "thinking_delta", "thinking" => text}, index, state)
+       when is_binary(text) do
+    chunks = if text == "", do: [], else: [ReqLLM.StreamChunk.thinking(text, thinking_metadata())]
+    {chunks, append_thinking_text(state, index, text)}
+  end
+
+  defp decode_content_block_delta(%{"type" => "thinking_delta", "text" => text}, index, state)
+       when is_binary(text) do
+    chunks = if text == "", do: [], else: [ReqLLM.StreamChunk.thinking(text, thinking_metadata())]
+    {chunks, append_thinking_text(state, index, text)}
+  end
+
+  defp decode_content_block_delta(
+         %{"type" => "signature_delta", "signature" => signature},
+         index,
+         state
+       )
+       when is_binary(signature) do
+    {[], update_thinking_signature(state, index, signature)}
+  end
+
+  defp decode_content_block_delta(delta, index, state) do
+    {decode_content_block_delta(delta, index), state}
+  end
+
   defp decode_content_block_start(%{"type" => "text", "text" => text}, _index) do
     [ReqLLM.StreamChunk.text(text)]
   end
@@ -206,6 +283,19 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   end
 
   defp decode_content_block_start(_, _index), do: []
+
+  defp decode_content_block_start(%{"type" => "thinking"} = block, index, state) do
+    text = extract_thinking_text(block)
+
+    chunks =
+      if text == "", do: [], else: [ReqLLM.StreamChunk.thinking(text, thinking_metadata(block))]
+
+    {chunks, start_thinking_block(state, index, block)}
+  end
+
+  defp decode_content_block_start(block, index, state) do
+    {decode_content_block_start(block, index), state}
+  end
 
   defp build_message_from_chunks([]), do: nil
 
@@ -341,8 +431,136 @@ defmodule ReqLLM.Providers.Anthropic.Response do
   defp parse_finish_reason(reason) when is_binary(reason), do: :error
   defp parse_finish_reason(_), do: nil
 
+  defp ensure_stream_state(nil), do: init_stream_state()
+  defp ensure_stream_state(state), do: state
+
+  defp message_start_chunks(message) do
+    usage_data = Map.get(message, "usage", %{})
+
+    if usage_data == %{} do
+      []
+    else
+      usage = parse_usage(usage_data)
+      [ReqLLM.StreamChunk.meta(%{usage: usage})]
+    end
+  end
+
+  defp message_delta_chunks(data, delta) do
+    finish_reason =
+      case Map.get(delta, "stop_reason") do
+        "end_turn" -> :stop
+        "max_tokens" -> :length
+        "stop_sequence" -> :stop
+        "tool_use" -> :tool_calls
+        _ -> :unknown
+      end
+
+    raw_usage = Map.get(data, "usage", %{})
+    chunks = [ReqLLM.StreamChunk.meta(%{finish_reason: finish_reason, terminal?: true})]
+
+    if raw_usage == %{} do
+      chunks
+    else
+      usage_chunk = ReqLLM.StreamChunk.meta(%{usage: parse_usage(raw_usage)})
+      [usage_chunk | chunks]
+    end
+  end
+
+  defp start_thinking_block(state, index, block) do
+    text = extract_thinking_text(block)
+    signature = normalize_signature(Map.get(block, "signature"))
+
+    update_thinking_block(state, index, fn thinking_block ->
+      %{
+        thinking_block
+        | text: thinking_block.text <> text,
+          signature: signature || thinking_block.signature
+      }
+    end)
+  end
+
+  defp append_thinking_text(state, index, text) do
+    update_thinking_block(state, index, fn thinking_block ->
+      %{thinking_block | text: thinking_block.text <> text}
+    end)
+  end
+
+  defp update_thinking_signature(state, index, signature) do
+    normalized_signature = normalize_signature(signature)
+
+    update_thinking_block(state, index, fn thinking_block ->
+      %{thinking_block | signature: normalized_signature || thinking_block.signature}
+    end)
+  end
+
+  defp update_thinking_block(state, index, fun) do
+    {thinking_block, state} = fetch_thinking_block(state, index)
+    updated_block = fun.(thinking_block)
+    %{state | thinking_blocks: Map.put(state.thinking_blocks, index, updated_block)}
+  end
+
+  defp fetch_thinking_block(%{thinking_blocks: thinking_blocks} = state, index) do
+    case Map.fetch(thinking_blocks, index) do
+      {:ok, thinking_block} ->
+        {thinking_block, state}
+
+      :error ->
+        thinking_block = %{text: "", signature: nil, reasoning_index: state.next_reasoning_index}
+        {thinking_block, %{state | next_reasoning_index: state.next_reasoning_index + 1}}
+    end
+  end
+
+  defp finalize_thinking_block(index, %{thinking_blocks: thinking_blocks} = state) do
+    case Map.pop(thinking_blocks, index) do
+      {nil, _remaining_blocks} ->
+        {[], state}
+
+      {thinking_block, remaining_blocks} ->
+        detail = build_reasoning_detail(thinking_block)
+        chunk = ReqLLM.StreamChunk.meta(%{reasoning_details: [detail]})
+        {[chunk], %{state | thinking_blocks: remaining_blocks}}
+    end
+  end
+
+  defp drain_thinking_blocks(%{thinking_blocks: thinking_blocks} = state) do
+    details =
+      thinking_blocks
+      |> Map.values()
+      |> Enum.sort_by(& &1.reasoning_index)
+      |> Enum.map(&build_reasoning_detail/1)
+
+    {details, %{state | thinking_blocks: %{}}}
+  end
+
+  defp reasoning_detail_chunks([]), do: []
+
+  defp reasoning_detail_chunks(details),
+    do: [ReqLLM.StreamChunk.meta(%{reasoning_details: details})]
+
+  defp build_reasoning_detail(thinking_block) do
+    signature = normalize_signature(thinking_block.signature)
+
+    %ReasoningDetails{
+      text: thinking_block.text,
+      signature: signature,
+      encrypted?: signature != nil,
+      provider: :anthropic,
+      format: "anthropic-thinking-v1",
+      index: thinking_block.reasoning_index,
+      provider_data: %{"type" => "thinking"}
+    }
+  end
+
+  defp extract_thinking_text(block) do
+    cond do
+      is_binary(block["thinking"]) -> block["thinking"]
+      is_binary(block["text"]) -> block["text"]
+      true -> ""
+    end
+  end
+
   defp thinking_metadata(block \\ %{}) do
-    signature = Map.get(block, "signature")
+    signature = normalize_signature(Map.get(block, "signature"))
 
     %{
       signature: signature,
@@ -352,4 +570,10 @@ defmodule ReqLLM.Providers.Anthropic.Response do
       provider_data: %{"type" => "thinking"}
     }
   end
+
+  defp normalize_signature(signature) when is_binary(signature) do
+    if signature == "", do: nil, else: signature
+  end
+
+  defp normalize_signature(_signature), do: nil
 end

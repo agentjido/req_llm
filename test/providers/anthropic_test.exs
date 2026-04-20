@@ -813,6 +813,142 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert chunk.metadata[:keepalive?] == true
       assert chunk.metadata[:provider_event] == :ping
     end
+
+    test "decode_stream_event/3 emits one reasoning detail for a streamed thinking block" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-20250514")
+
+      events = [
+        %{
+          data: %{
+            "type" => "content_block_start",
+            "index" => 0,
+            "content_block" => %{"type" => "thinking", "thinking" => "", "signature" => ""}
+          }
+        },
+        %{
+          data: %{
+            "type" => "content_block_delta",
+            "index" => 0,
+            "delta" => %{"type" => "thinking_delta", "thinking" => "First part "}
+          }
+        },
+        %{
+          data: %{
+            "type" => "content_block_delta",
+            "index" => 0,
+            "delta" => %{"type" => "thinking_delta", "thinking" => "second part"}
+          }
+        },
+        %{
+          data: %{
+            "type" => "content_block_delta",
+            "index" => 0,
+            "delta" => %{"type" => "signature_delta", "signature" => "sig_test_123"}
+          }
+        },
+        %{data: %{"type" => "content_block_stop", "index" => 0}}
+      ]
+
+      {chunks, _state} =
+        Enum.reduce(events, {[], Anthropic.init_stream_state(model)}, fn event, {acc, state} ->
+          {event_chunks, next_state} = Anthropic.decode_stream_event(event, model, state)
+          {acc ++ event_chunks, next_state}
+        end)
+
+      assert Enum.filter(chunks, &(&1.type == :thinking)) |> Enum.map(& &1.text) == [
+               "First part ",
+               "second part"
+             ]
+
+      reasoning_chunks =
+        Enum.filter(chunks, fn
+          %ReqLLM.StreamChunk{type: :meta, metadata: %{reasoning_details: [_detail]}} -> true
+          _ -> false
+        end)
+
+      assert [%ReqLLM.StreamChunk{metadata: %{reasoning_details: [detail]}}] = reasoning_chunks
+      assert detail.text == "First part second part"
+      assert detail.signature == "sig_test_123"
+      assert detail.index == 0
+    end
+
+    test "streamed thinking round-trips as a single Anthropic reasoning block" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-20250514")
+      context = %ReqLLM.Context{messages: []}
+
+      events = [
+        %{
+          data: %{
+            "type" => "content_block_start",
+            "index" => 0,
+            "content_block" => %{"type" => "thinking", "thinking" => "", "signature" => ""}
+          }
+        },
+        %{
+          data: %{
+            "type" => "content_block_delta",
+            "index" => 0,
+            "delta" => %{"type" => "thinking_delta", "thinking" => "First part "}
+          }
+        },
+        %{
+          data: %{
+            "type" => "content_block_delta",
+            "index" => 0,
+            "delta" => %{"type" => "thinking_delta", "thinking" => "second part"}
+          }
+        },
+        %{
+          data: %{
+            "type" => "content_block_delta",
+            "index" => 0,
+            "delta" => %{"type" => "signature_delta", "signature" => "sig_test_123"}
+          }
+        },
+        %{data: %{"type" => "content_block_stop", "index" => 0}},
+        %{
+          data: %{
+            "type" => "content_block_start",
+            "index" => 1,
+            "content_block" => %{"type" => "text", "text" => "Answer: "}
+          }
+        },
+        %{
+          data: %{
+            "type" => "content_block_delta",
+            "index" => 1,
+            "delta" => %{"type" => "text_delta", "text" => "42"}
+          }
+        }
+      ]
+
+      {chunks, _state} =
+        Enum.reduce(events, {[], Anthropic.init_stream_state(model)}, fn event, {acc, state} ->
+          {event_chunks, next_state} = Anthropic.decode_stream_event(event, model, state)
+          {acc ++ event_chunks, next_state}
+        end)
+
+      {:ok, response} =
+        ReqLLM.Providers.Anthropic.ResponseBuilder.build_response(
+          chunks,
+          %{finish_reason: :stop},
+          context: context,
+          model: model
+        )
+
+      assert [detail] = response.message.reasoning_details
+      assert detail.text == "First part second part"
+      assert detail.signature == "sig_test_123"
+
+      encoded = ReqLLM.Providers.Anthropic.Context.encode_request(response.context, model)
+      [assistant_message] = encoded[:messages]
+      [thinking_block, text_block] = assistant_message[:content]
+
+      assert thinking_block[:type] == "thinking"
+      assert thinking_block[:thinking] == "First part second part"
+      assert thinking_block[:signature] == "sig_test_123"
+      assert text_block == %{type: "text", text: "Answer: 42"}
+    end
   end
 
   describe "option translation" do
@@ -1659,20 +1795,24 @@ defmodule ReqLLM.Providers.AnthropicTest do
   describe "ResponseBuilder - streaming reasoning_details extraction" do
     alias ReqLLM.Providers.Anthropic.ResponseBuilder
 
-    test "extracts reasoning_details from thinking chunks" do
+    test "prefers finalized reasoning_details from meta chunks over delta chunks" do
       {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-20250514")
       context = %ReqLLM.Context{messages: []}
 
-      thinking_meta = %{
+      reasoning_detail = %ReqLLM.Message.ReasoningDetails{
+        text: "Let me analyze this step by stepFirst, consider the constraints",
+        signature: "sig_abc123",
+        encrypted?: true,
         provider: :anthropic,
         format: "anthropic-thinking-v1",
-        encrypted?: false,
+        index: 0,
         provider_data: %{"type" => "thinking"}
       }
 
       chunks = [
-        ReqLLM.StreamChunk.thinking("Let me analyze this step by step", thinking_meta),
-        ReqLLM.StreamChunk.thinking("First, consider the constraints", thinking_meta),
+        ReqLLM.StreamChunk.thinking("Let me analyze this step by step"),
+        ReqLLM.StreamChunk.thinking("First, consider the constraints"),
+        ReqLLM.StreamChunk.meta(%{reasoning_details: [reasoning_detail]}),
         ReqLLM.StreamChunk.text("The answer is 42.")
       ]
 
@@ -1682,17 +1822,12 @@ defmodule ReqLLM.Providers.AnthropicTest do
         ResponseBuilder.build_response(chunks, metadata, context: context, model: model)
 
       assert response.message.reasoning_details != nil
-      assert length(response.message.reasoning_details) == 2
-
-      [first, second] = response.message.reasoning_details
-      assert %ReqLLM.Message.ReasoningDetails{} = first
-      assert first.text == "Let me analyze this step by step"
-      assert first.provider == :anthropic
-      assert first.format == "anthropic-thinking-v1"
-      assert first.index == 0
-
-      assert second.text == "First, consider the constraints"
-      assert second.index == 1
+      assert [detail] = response.message.reasoning_details
+      assert detail.text == reasoning_detail.text
+      assert detail.signature == "sig_abc123"
+      assert detail.provider == :anthropic
+      assert detail.format == "anthropic-thinking-v1"
+      assert detail.index == 0
     end
 
     test "returns nil reasoning_details when no thinking chunks" do

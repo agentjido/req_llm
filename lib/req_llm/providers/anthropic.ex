@@ -555,6 +555,21 @@ defmodule ReqLLM.Providers.Anthropic do
   end
 
   @impl ReqLLM.Provider
+  def init_stream_state(_model) do
+    ReqLLM.Providers.Anthropic.Response.init_stream_state()
+  end
+
+  @impl ReqLLM.Provider
+  def decode_stream_event(event, model, state) do
+    ReqLLM.Providers.Anthropic.Response.decode_stream_event(event, model, state)
+  end
+
+  @impl ReqLLM.Provider
+  def flush_stream_state(model, state) do
+    ReqLLM.Providers.Anthropic.Response.flush_stream_state(model, state)
+  end
+
+  @impl ReqLLM.Provider
   def translate_options(operation, _model, opts) do
     # Anthropic-specific parameter translation
     translated_opts =
