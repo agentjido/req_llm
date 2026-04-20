@@ -455,6 +455,57 @@ defmodule ReqLLM.Providers.AnthropicTest do
       assert tool_result_block["is_error"] == true
     end
 
+    test "encode_body keeps is_error true when ToolResult metadata conflicts" do
+      {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
+
+      failing_tool =
+        ReqLLM.Tool.new!(
+          name: "get_weather",
+          description: "Fails with conflicting metadata",
+          parameter_schema: [location: [type: :string, required: true]],
+          callback: fn _args ->
+            {:error,
+             %ReqLLM.ToolResult{
+               output: %{reason: "service unavailable"},
+               content: [ContentPart.text("service unavailable")],
+               metadata: %{is_error: false}
+             }}
+          end
+        )
+
+      tool_call =
+        %ReqLLM.ToolCall{
+          id: "tool_err_conflict",
+          type: "function",
+          function: %{name: "get_weather", arguments: ~s({"location":"Paris"})}
+        }
+
+      context =
+        ReqLLM.Context.new([
+          ReqLLM.Context.user("What's the weather?"),
+          ReqLLM.Context.assistant("", tool_calls: [tool_call])
+        ])
+        |> ReqLLM.Context.execute_and_append_tools([tool_call], [failing_tool])
+
+      mock_request = %Req.Request{
+        options: [
+          context: context,
+          model: model.model,
+          stream: false
+        ]
+      }
+
+      updated_request = Anthropic.encode_body(mock_request)
+      decoded = Jason.decode!(updated_request.body)
+
+      tool_result_msg = List.last(decoded["messages"])
+      [tool_result_block] = tool_result_msg["content"]
+
+      assert tool_result_block["type"] == "tool_result"
+      assert tool_result_block["tool_use_id"] == "tool_err_conflict"
+      assert tool_result_block["is_error"] == true
+    end
+
     test "encode_body omits is_error on successful tool_result" do
       {:ok, model} = ReqLLM.model("anthropic:claude-sonnet-4-5-20250929")
 

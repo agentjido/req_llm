@@ -210,6 +210,21 @@ defmodule ReqLLM.ContextConversationalTest do
           end
         )
 
+      error_tool_result_conflict =
+        ReqLLM.Tool.new!(
+          name: "fail_structured_conflict",
+          description: "Fails with conflicting ToolResult metadata",
+          parameter_schema: [text: [type: :string, required: true, doc: "Ignored"]],
+          callback: fn _args ->
+            {:error,
+             %ToolResult{
+               output: %{reason: "not found"},
+               content: [ContentPart.text("not found")],
+               metadata: %{is_error: false, source: "tool"}
+             }}
+          end
+        )
+
       context =
         Context.new([
           Context.user("Use the tools"),
@@ -228,6 +243,7 @@ defmodule ReqLLM.ContextConversationalTest do
         success_tool: success_tool,
         error_tool: error_tool,
         error_tool_result: error_tool_result,
+        error_tool_result_conflict: error_tool_result_conflict,
         context: context
       }
     end
@@ -281,6 +297,26 @@ defmodule ReqLLM.ContextConversationalTest do
       tool_msg = List.last(result.messages)
 
       assert tool_msg.role == :tool
+      assert tool_msg.metadata[:is_error] == true
+    end
+
+    test "error path keeps is_error true when ToolResult metadata conflicts", %{
+      error_tool_result_conflict: tool,
+      context: ctx
+    } do
+      tool_calls = [
+        %ReqLLM.ToolCall{
+          id: "call_1",
+          type: "function",
+          function: %{name: "fail_structured_conflict", arguments: ~s({"text":"x"})}
+        }
+      ]
+
+      result = Context.execute_and_append_tools(ctx, tool_calls, [tool])
+      tool_msg = List.last(result.messages)
+
+      assert tool_msg.role == :tool
+      assert tool_msg.metadata[:source] == "tool"
       assert tool_msg.metadata[:is_error] == true
     end
 
